@@ -1,430 +1,375 @@
-Return-Path: <linux-usb+bounces-20970-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20971-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52D6BA41A27
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 11:06:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A36AEA41C27
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 12:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAC5E7A3B3A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 10:04:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC743AA659
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 11:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6B92528F5;
-	Mon, 24 Feb 2025 10:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829202586FF;
+	Mon, 24 Feb 2025 11:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="B6nV5yO0"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iHYdAizV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013044.outbound.protection.outlook.com [52.101.67.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753AB2512CE
-	for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2025 10:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740391415; cv=none; b=GqnZPM6FJGRCMFFnL1tRUNk/hgIQkyexpgRBYWCRZxKZxK3qyqiR6XNxvsBD3EIhPXlmNXhGI0zzdSEy4CJsBC3o4YDaziMufZhW45gYxMErNJS2Khq/Yj0fvLEpnmS10lHxzYou2ytQbtdlHpFxawnGG2Fif7+nzeweAVfMq/E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740391415; c=relaxed/simple;
-	bh=zQ7XsbdFsu3kO/Fh8LY3ZiXsewtZevnUGq0TEwL02BI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WZre/isPpRjK4WvXyrYhegWMKz6mrlrN0hDjTUDR+NokF1SaNtyAsvGeZMWl38BRMGTF3hwNPABF53jwImBoyKp/ph9wqY5p1vVsvNrBhjGCx8J9+lc+uNzD9Lh+WcB6RB0zWPfpyWF9PPFHhEkBH00cKw1FjV9WQdOi6FElCH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=B6nV5yO0; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5452c29bacfso4677752e87.3
-        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2025 02:03:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1740391411; x=1740996211; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3m4melpCnWzZDkoEQyxDqJTJzU6ez2FlTtIyhuPHGY=;
-        b=B6nV5yO00oNm1Le/q5GGAXymdOWQUt1LglNNHerwG4ua4e7lJ5y4USbilnsEKra/Iv
-         fW62q3z6Kda3FRHVLMZ6W6fmPa3AJwG3BCt7NxrlcMNXQ0ddxPigzlTj2HB0yV47UMY1
-         aKmDxZXEkQeaHc9ux5R/ruJgo4TndyrmkH11c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740391411; x=1740996211;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i3m4melpCnWzZDkoEQyxDqJTJzU6ez2FlTtIyhuPHGY=;
-        b=Al4bxRk26kYuzxHnFdPqr+fuXufrp+rA4HxbvV80ve/PVkO0uHAkG0VeDY2t55+ZJm
-         FSHdEggys2K7RTBTR6sxTgV0eE3WnLdfhujL9PNdnjwZJTyh0G0cexiZuu/O8WhDXno6
-         QEm3KsMoF7ZryRidwdlv7YOs4rjGc1NZ2e9EkayY4fH8nBlBL/ux0Tlt3AwUf2pqRzwK
-         xpvbazylvxpAL3mTnWWIVUuxUPuiBVj7+4KslYk8OS/lDhlcNY3Hu3pdEOp8WObJJg7/
-         6GDYku7XoWwX9TqPgy8o/PxHUuZCZVjx5lltD4u1iF+r7KindAJcx5jjDZ0xb4gp/Cz9
-         U2YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgJ+FV5JcUuvpHy1Wa024h3UVdiiBmBVEDmxxL5RehqRD+r/THHFxFChd7Dd/bZ+Pbrz3N446NHa0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm97pDc0sfXB3U251de7mpQBX43a84a58ulXgQ9w4ZUCaTKdz4
-	dO/BnUn98TNGU2e7l4POiUYIa0gbfjDRUwbfOAGGECc8iBJsJO4QaZo+k6d5ZGCU4KtDbO4ZEYN
-	r+Nf3JR8P/JcE9DY9q1Op1Utu5X7y157tPhQK
-X-Gm-Gg: ASbGncuCavq/HDzHSUuGG0yvdYY7PeUD1zPYBerniYW1wZ8wrqsu2WuK/BHsdez8554
-	CMrKvLrT8o/4WhfC55YiNZwE4OsPzciuPHzPH0GSoCtMY1hMFfda51tzoS5BpU6fXwfuPuSebRF
-	Tb7MxzAQuh7maY7H8Fn03d9zBxdNSWTUZWkrw=
-X-Google-Smtp-Source: AGHT+IH+opPQW01wmcpoFizx1l90WyOFRxctvcV9XH9wP9MyBr4k33vvvZ5yfnEZS/CIdmIFOBzQKToLr4utqj99bzA=
-X-Received: by 2002:a05:6512:b1f:b0:545:8a1:5377 with SMTP id
- 2adb3069b0e04-54839129b32mr3995806e87.2.1740391411500; Mon, 24 Feb 2025
- 02:03:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA332586ED;
+	Mon, 24 Feb 2025 11:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740395480; cv=fail; b=JNvSUgon3lBLFx9HJ44Xl7GMmsQjwxKnND7w2kmryOqSsZy4erqVuP4BkupBXy6gqjBhM2agvqYmjquG68GZfLdksA19/gpQfqGEzevNruuF3SVGsG2pWTpo51ISiOApJLeHvBepd0upiLvFQs4TqN1RgQ8McpuuItcNHLr8abA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740395480; c=relaxed/simple;
+	bh=tyM7oP76z0Tl1FxTEsRvr+XgHs7dU3iBKonpUZtiduA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dusi4miPAtLwyODTpVmm40HXwkzS0wOnrz1wgU5VaiNUAR4uij/f5/jIgFkBn5sGzpUEG4UeaBMGEh+EKD1sg89F8tBRMElMq2Q/DFvThWHdhtoUF16zpkrQgmz3pxuLu4ET6I/MNv6BPlcS6IJPKsFWEvKWANtLTY4QStDBk6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iHYdAizV; arc=fail smtp.client-ip=52.101.67.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Yjc/NKCVfl53Q8NC6TtOcBe+04o5qpsghkIpnnNj0yo8DEEkm6aGGSIa5hDxoxeRNg3CzsYQ9bGzgSwWP6KxHn9BDBFnIVyI9IpVLJXh9m8OHdDqxgUXtNJRlTMehMOnECnfkmYxmxy76Wcg5BPOApkvgG0fmoorZ1n8Ox2RsLNfgNa72uvXlTDtkv8oc9/uIr9r7npxZZM85SDgwR2oef9uH/Rq9iuU1Nz330S5QrBBjIe5uPuPI4LLMUypgArLo5+xlvZ5Ln93XToBRkSJaQIxCVUEbDhe7nCF2yq/rz7RhfXSmr1TtSZ6J9eoaxTzZU7LgEx+C52jw0K87c4Fgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rVVEVsGB6zA92Y3v591g8HxBXB0akAI5243fq3KzmKk=;
+ b=jZ6u92bwY1SmaD6kccH8g9uTqzb6f93WvElI2qH4AVXDnrMbVbTa9FqSY5WawTechjzbES9vd4Y8piWTNMXafDCYsBpJ6tgL+Mo12VE9MFsxegH1Haj9VldK4IUR5RZRFCte6O3VjH2GRn/BfDHLgNxr6azd4VvSUkCVDDZsw5AgKJcdLAeit9KVNQur+SC0n3TTsOuvHVFyeJ89Q4NaijUajDovK6CxC4mZdZcDK/3HPXNhAd4MUWYW/oWYgn5vbrZVN1rQpcQYLW+uezNV6IUV7OAAnZxM18OUcjdL+/sRaA4Tdpgd5CIzusQe0uoyo9unLmRGNYcCK3YUkvjCSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rVVEVsGB6zA92Y3v591g8HxBXB0akAI5243fq3KzmKk=;
+ b=iHYdAizVEaPXsAddTpn9pXO5ZGse+InutNbq57wHgPdY8hGT8smfBel8vP57wwZrqUNn54s9JYcIxvC9q70hZt9ppx2EKDDIfgfnVmlvMOMGdQDL2D4NB4x+9yZ4EcLchJNsj+N4ApQx9UNRjARzLQK277vy5ljI9mfkIi141vpfG6PYO3oy0DMVLV8QC5ma6P+BF1pmUz5Munh0ageLBakT2n/XE2PBrD3+fl/UP2GkGR/DsSSUFyfZ/3MpT4atSzI85NwIP4h49XeG08l2sTezlgVQgup/jAGN6wCjl1oCF3Io0N8iylRLzpl+ZDceLgY36zcs37WzINnxDp53Cg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by PA3PR04MB11105.eurprd04.prod.outlook.com (2603:10a6:102:4aa::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.24; Mon, 24 Feb
+ 2025 11:11:14 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8466.016; Mon, 24 Feb 2025
+ 11:11:14 +0000
+Date: Mon, 24 Feb 2025 19:07:51 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, peter.chen@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH 3/6] usb: chipidea: imx: add wakeup interrupt handling
+Message-ID: <20250224110751.7666zcafbyakvfb2@hippo>
+References: <20250219093104.2589449-1-xu.yang_2@nxp.com>
+ <20250219093104.2589449-4-xu.yang_2@nxp.com>
+ <Z7Y+gqu75xJyjy6n@lizhi-Precision-Tower-5810>
+ <20250221032348.sncjhnldj6ecgeou@hippo>
+ <Z7iabsMl4ilQqrXN@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7iabsMl4ilQqrXN@lizhi-Precision-Tower-5810>
+X-ClientProxiedBy: AS4P190CA0060.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:656::13) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250220105514.43107-1-angelogioacchino.delregno@collabora.com> <20250220105514.43107-3-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250220105514.43107-3-angelogioacchino.delregno@collabora.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Mon, 24 Feb 2025 18:03:20 +0800
-X-Gm-Features: AWEUYZlFd5lIJJaJ8GXCoFcPly7FtrF4vnwbpBvHnY7fIIWUD-kvOn2uGY2D4Ss
-Message-ID: <CAGXv+5E-mrt2o=b_nxmCdJqX9XbOhWsS+pLzkApS57EKD6kHEA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] arm64: dts: mediatek: mt8188: Add MTU3 nodes and
- correctly describe USB
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel@collabora.com, pablo.sun@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA3PR04MB11105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95e692aa-a513-4c20-57f9-08dd54c3f35a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|52116014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?NEr5/kM5I7b7F1OI+KWLKhQ2cXN5xNxZAICO4KQL+dc6/HmK5Af00q4/tvW5?=
+ =?us-ascii?Q?HcvZ8T6/5EqMFQNdVtzvERfEkL+PIZMJGQwi3wJ4MfQ+GFadjDetFdmX+iSJ?=
+ =?us-ascii?Q?kwK7UkvhSXpI34wuA7B5UmV4pED3UPFQHhr8XXbMUyiQuqwaVjPIUPii1J3x?=
+ =?us-ascii?Q?6BqIM2qjCzsgZzli0LlUeNgD+f6BzffiTlfD9qUaeyMr5NyoEUfdvyT6PUbi?=
+ =?us-ascii?Q?F9Nzp7AydHeR5KO2/Kiejfc9GZyh15BFqWA9Ejm1jPc9glZcgA+EBC9FBeiP?=
+ =?us-ascii?Q?Xq3GNv7Hl8Xk/+uRm2aZCbt6r+T6ixW/z1e498pY26GDLk62o6pyswf/j/Rn?=
+ =?us-ascii?Q?VT422/hnZs8U8FqN3aWogWna4J4iNu7MBSCmmU2PxwV4YcNSjxCDKj/jtocI?=
+ =?us-ascii?Q?/JV6Am0ADgzhlGp/HLQvQ6mmRq23yJj+zB8mk680FsfEwSZIJCkare1aRy1T?=
+ =?us-ascii?Q?0VzAEH8TA2fWT+GWG9ntapEAKRrD8KfE+3pw8QzEMUB83w/Wpf8q4ysBBmdb?=
+ =?us-ascii?Q?Xih3T30Vzq4Y79xqGrv7OicHGo8gJOb2ds6RbcERtJR+Zxu8TRRkKNQDG2U/?=
+ =?us-ascii?Q?nBqTccc0m8cv17Ueno6BFZgPy2khqRUuC/bdh4m5HtbWUPiJrJ1/3cUqivYB?=
+ =?us-ascii?Q?fe+v6uqDM5I/xipUW4cq9Z7xNZXhxI18CHHNmyA7zOuY7yUNO4UhF747nfQx?=
+ =?us-ascii?Q?rnvwFtRHIzNBcEgP/cpEdYoKV6rpEmNmdPR6Pr3dJhKT6HgV2Ic9MT2mFxtg?=
+ =?us-ascii?Q?HnviB1pWjcGcO685gncaO/oPdPs1/YmaE/zLg5BlXQb3XXUjhVe1VNXsCRlv?=
+ =?us-ascii?Q?Ty8LKMlYP06vy91/NE/k8dGLG0XiHNTmtyXAc999I71k5AUlwv4FlpyeXIlS?=
+ =?us-ascii?Q?wQ8dv8jK3uQpHn91D11b3U3NY7DPU1BfbpcuWOBz47moedf7YvKMXkuu9pix?=
+ =?us-ascii?Q?QmwUoxDSRbHYEE+UjClnb4F2qL115JvncIUAQq53ARZdYYCrFtBIn2uTtZHn?=
+ =?us-ascii?Q?y1d1+WDfx81VeFmuQXFI2gBmU1vdJS3F53LqHx6mqPrqfhLU+eT4DoUFcidt?=
+ =?us-ascii?Q?ZzGTu6tLgjJzymYJ/Whlmve0Gw+/2NyipzyV1sv5kSbDBSU/9Ho0IO8aI7HP?=
+ =?us-ascii?Q?E+uupWQY/hkzkE19byROPwZL91+YByUEWi4ayuLrQt9W0Beq5beOsh1yAqoV?=
+ =?us-ascii?Q?UkOnG9aFyjPxv4bi62M/DetFuI8wlZzz7SZ0ML0RBtiTkizsdv+ehc/QQyFj?=
+ =?us-ascii?Q?wqtx0oPcLn7thq4PbtO9FoA5PGx+2YVgAj39HWSHN4TBBDHrbswNJQ9b8wrc?=
+ =?us-ascii?Q?9YF+EeINfpHoYhGxxN5rFIscr5061ZuwoSGGaucYmtkopexF8oB5QasK/xwL?=
+ =?us-ascii?Q?vepUu9/wQ2PnxPuMGU69vKGeea6IcCPXATdG4Er/jHmwkpg+Ebd8gcXVM8ki?=
+ =?us-ascii?Q?s9Xtsp11jdiWYknaYlXWH3LoYTDFRisv?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?t5AwmMflcHxEE0xEyNToc6InimoA7vy5lT1ymXrEw5S9fIYPSs++l/pDjGlu?=
+ =?us-ascii?Q?qKarrwO522h38HbjwJ3UOeTq8FGADr7dEfQNSExczos+pLB3QRA8EygfZA2F?=
+ =?us-ascii?Q?Lk/ZbnpHVN2QVHm1S+JG4m9UbBXEgeMODC6+i3IKYUHtK51mj6hZ60FDZVfy?=
+ =?us-ascii?Q?tUHodH/0tXD6eB7LhVe0npeOPEXSFwQAwLY/Cy9HmAI3bFk9ImFIDqVZvASH?=
+ =?us-ascii?Q?WTsOIw6wofKQgkFp0txd3/wv9d9bH9DvLjGv/1kgjI9qAdiSXgMJD2vv3YAL?=
+ =?us-ascii?Q?VASX5oU48+c2TBiEnHNDReXmjQrkhGOHmqscnTNR2m4dAGn+ez+kQ7uuy6Br?=
+ =?us-ascii?Q?DMzptxHPSWqoMPLXD9FE7ui2unw2l/xv33gu9/i408nk5LALjIdhxDnyOXSr?=
+ =?us-ascii?Q?fZ17eDXDhNCgh2RMkw7vqsSWdLGAq19pRX0vbC31wAGEc4Bo4uSu8GZjtHGz?=
+ =?us-ascii?Q?9Z4PJoiOE1MO2fh8C3Vrg4COinGmsVGqQSGNAK0HVnoguVq3/wfQGDgOianm?=
+ =?us-ascii?Q?s9+WtEeZlBjk5Yo2+DFnl7oWJtQFBAVxe8DaMAqcIC3YDXdlwcmUtzwHV4El?=
+ =?us-ascii?Q?7ZFJz6o+ruxQShb2UiUv5K87CSHtb9wvomgP2sDJ3DM2r/du97Y8d3sa3kbs?=
+ =?us-ascii?Q?AQlmGfwwew8jC84Jj7SCLS8uqBzo//uqKVVKITA6eUKFAWBoxdGSBcoDySUq?=
+ =?us-ascii?Q?Y0ia6pxKfXrhhOaTKirqonqB3jFKKHkchCg1ST6eJW3lBb05ivm+KmUmZny6?=
+ =?us-ascii?Q?x/yj2+g8T+qMlUZkKTd51gPZy/4md9hHfrYxKx8gz8hQtjLbKBLGlpVM7tCH?=
+ =?us-ascii?Q?W2x0IhJSwGgtFfIaBmcLSgnh1CMjgdNo/C7ScVz6X/Z+CPlGcruu4pmCApmr?=
+ =?us-ascii?Q?ZEtaHU14k5Vr1usw+08ho405frrW5BMBB/bgn6JGBwJy0o75v3wpOaltcPAv?=
+ =?us-ascii?Q?6UN/2WCNHYGSqp8pB9UV7A1uQv1MumHdSFjgq7F3IiZkAHRnkvaQ7t69UF72?=
+ =?us-ascii?Q?6W4Ux/BK5lvjg+HR7w0TIAVncGNGz2usjE0B0Ji5BQ+3MqdUKuDtrbD/Ofei?=
+ =?us-ascii?Q?tRgLIlVJvkuC8MIFNIbzcbB6jlTYhWzfVicI98RFD22ennx4zqYa1W/m6a/9?=
+ =?us-ascii?Q?LNqMvwSRymaLmp3U+LWAq8F4R2z7Skgtel+eXyqqWxJX8S22C7DAWKC+tQDI?=
+ =?us-ascii?Q?CERMEMjX7+nUCeOTMeFm9rFoeV15fpxQ9MW7vOHiTJubTHNKL1kLXQAB67Rc?=
+ =?us-ascii?Q?SGpyDfHPfMdtztMNO2WGVnz07Vzr/nYc0jefRhBAyXaRWi1pzYvccDRI3DFb?=
+ =?us-ascii?Q?y6MNjPK8q8xVJ2VA2Jw5E4fmHfFEB2QjkdXBIdQz0I7LQA3UTtH2I/oEcF0w?=
+ =?us-ascii?Q?5Ag4Yxmvjiqr14KdXaTdEajgHNuyrE1eZutnqdwxEns4D4wA+/VTIPHgh/8h?=
+ =?us-ascii?Q?80EtqG7IJIG9Eq2jimEadL3PeBSArBtTlVuxOHFiQpyS+JJJcQ+6fPk0Ql5P?=
+ =?us-ascii?Q?A85qEtYCSgAWUbVecrxfNYHswhXqHyMvTUlpiBULSmYGiaSOm8E/fN2SPtlI?=
+ =?us-ascii?Q?NFzQgtLbvIoyEm0u94rw8HcB64XYDhNzuBgDkjtG?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95e692aa-a513-4c20-57f9-08dd54c3f35a
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 11:11:14.5009
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZSaBOsU/0q+yo3LGwi0TCc/2pTFcCkoLbFmG4jb3dIXwZXeznfrQ9VuO8eFsjYE0VQU9cwG9H241XncSp/5LNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA3PR04MB11105
 
-On Thu, Feb 20, 2025 at 7:00=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The MT8188 SoC has three USB controllers, and all of them are behind
-> the MTU3 DRD controller.
->
-> Add the missing MTU3 nodes, default disabled, for all USB controllers
-> and move the related XHCI nodes to be children of their MTU3 DRD to
-> correctly describe the SoC.
->
-> In order to retain USB functionality on all of the MT8188 and MT8390
-> boards, also move the vusb33 supply and enable the relevant MTU3 nodes
-> with special attention to the MT8188 Geralt Chromebooks, where it was
-> necessary to set the dr_mode of all MTU3 controllers to host to avoid
-> interfering with the EC performing DRD on its own.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+On Fri, Feb 21, 2025 at 10:23:26AM -0500, Frank Li wrote:
+> On Fri, Feb 21, 2025 at 11:23:48AM +0800, Xu Yang wrote:
+> > On Wed, Feb 19, 2025 at 03:26:42PM -0500, Frank Li wrote:
+> > > On Wed, Feb 19, 2025 at 05:31:01PM +0800, Xu Yang wrote:
+> > > > In previous imx platform, normal USB controller interrupt and wakeup
+> > > > interrupt are bound to one irq line. However, it changes on latest
+> > > > i.MX95 platform since it has a dedicated irq line for wakeup interrupt.
+> > > > This will add wakup interrupt handling for i.MX95 to support various
+> > > > wakeup events.
+> > > >
+> > > > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > > ---
+> > > >  drivers/usb/chipidea/ci_hdrc_imx.c | 42 ++++++++++++++++++++++++++++++
+> > > >  1 file changed, 42 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> > > > index 1a7fc638213e..5779568ebcf6 100644
+> > > > --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> > > > +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> > > > @@ -98,9 +98,12 @@ struct ci_hdrc_imx_data {
+> > > >  	struct clk *clk;
+> > > >  	struct clk *clk_wakeup;
+> > > >  	struct imx_usbmisc_data *usbmisc_data;
+> > > > +	/* wakeup interrupt*/
+> > > > +	int irq;
+> > >
+> > > use "wakeup_irq" to avoid confuse with normal controller irq?
+> >
+> > It doesn't matter. It can't be confused since the driver is different. The
+> > controller driver is core.c. This glue driver is ci_hdrc_imx.c.
+> >
+> > >
+> > > >  	bool supports_runtime_pm;
+> > > >  	bool override_phy_control;
+> > > >  	bool in_lpm;
+> > > > +	bool wakeup_pending;
+> > > >  	struct pinctrl *pinctrl;
+> > > >  	struct pinctrl_state *pinctrl_hsic_active;
+> > > >  	struct regulator *hsic_pad_regulator;
+> > > > @@ -336,6 +339,24 @@ static int ci_hdrc_imx_notify_event(struct ci_hdrc *ci, unsigned int event)
+> > > >  	return ret;
+> > > >  }
+> > > >
+> > > > +static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
+> > > > +{
+> > > > +	struct ci_hdrc_imx_data *imx_data = data;
+> > > > +
+> > > > +	if (imx_data->in_lpm) {
+> > > > +		if (imx_data->wakeup_pending)
+> > > > +			return IRQ_HANDLED;
+> > > > +
+> > > > +		disable_irq_nosync(irq);
+> > > > +		imx_data->wakeup_pending = true;
+> > > > +		pm_runtime_resume(&imx_data->ci_pdev->dev);
+> > >
+> > > Not sure why need pm_runtime_resume here? There are not access register
+> > > here.
+> >
+> > It's needed for runtime resume case.
+> > When wakeup event happens, wakeup irq will be triggered. To let controller
+> > resume back, we need enable USB controller clock to trigger controller
+> > irq. So we call pm_runtime_resume() to resume controller's parent back
+> > and the parent device will enable clocks.
+> 
+> Please add comment here. why need in_lpm if we can make sure irq only
+> enable during suspend/resume pharse?
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org> # on MT8188 Ciri
+I have checked again, in_lpm checking is not needed. I will remove the
+if condition later.
 
-> ---
->  .../boot/dts/mediatek/mt8188-geralt.dtsi      |  18 +++
->  arch/arm64/boot/dts/mediatek/mt8188.dtsi      | 121 ++++++++++++------
->  .../dts/mediatek/mt8390-genio-common.dtsi     |  28 ++++
->  3 files changed, 125 insertions(+), 42 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi b/arch/arm64=
-/boot/dts/mediatek/mt8188-geralt.dtsi
-> index b6abecbcfa81..faed5c8bc721 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi
-> @@ -1103,6 +1103,12 @@ &u3phy2 {
->  };
->
->  /* USB detachable base */
-> +&ssusb0 {
-> +       dr_mode =3D "host";
-> +       vusb33-supply =3D <&pp3300_s3>;
-> +       status =3D "okay";
-> +};
-> +
->  &xhci0 {
->         /* controlled by EC */
->         vbus-supply =3D <&pp3300_z1>;
-> @@ -1110,6 +1116,12 @@ &xhci0 {
->  };
->
->  /* USB3 hub */
-> +&ssusb1 {
-> +       dr_mode =3D "host";
-> +       vusb33-supply =3D <&pp3300_s3>;
-> +       status =3D "okay";
-> +};
-> +
->  &xhci1 {
->         vusb33-supply =3D <&pp3300_s3>;
->         vbus-supply =3D <&pp5000_usb_vbus>;
-> @@ -1117,6 +1129,12 @@ &xhci1 {
->  };
->
->  /* USB BT */
-> +&ssusb2 {
-> +       dr_mode =3D "host";
-> +       vusb33-supply =3D <&pp3300_s3>;
-> +       status =3D "okay";
-> +};
-> +
->  &xhci2 {
->         /* no power supply since MT7921's power is controlled by PCIe */
->         /* MT7921's USB BT has issues with USB2 LPM */
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt8188.dtsi
-> index d2e1ff7236b1..c226998b7e47 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> @@ -1649,6 +1649,38 @@ spi5: spi@11019000 {
->                         status =3D "disabled";
->                 };
->
-> +               ssusb1: usb@11201000 {
-> +                       compatible =3D "mediatek,mt8188-mtu3", "mediatek,=
-mtu3";
-> +                       reg =3D <0 0x11201000 0 0x2dff>, <0 0x11203e00 0 =
-0x0100>;
-> +                       reg-names =3D "mac", "ippc";
-> +                       ranges =3D <0 0 0 0x11200000 0 0x3f00>;
-> +                       #address-cells =3D <2>;
-> +                       #size-cells =3D <2>;
-> +                       interrupts =3D <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> +                       assigned-clocks =3D <&topckgen CLK_TOP_USB_TOP>;
-> +                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>;
-> +                       clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB_BUS>,
-> +                                <&topckgen CLK_TOP_SSUSB_TOP_REF>,
-> +                                <&pericfg_ao CLK_PERI_AO_SSUSB_XHCI>;
-> +                       clock-names =3D "sys_ck", "ref_ck", "mcu_ck";
-> +                       phys =3D <&u2port1 PHY_TYPE_USB2>, <&u3port1 PHY_=
-TYPE_USB3>;
-> +                       wakeup-source;
-> +                       mediatek,syscon-wakeup =3D <&pericfg 0x468 2>;
-> +                       status =3D "disabled";
-> +
-> +                       xhci1: usb@0 {
-> +                               compatible =3D "mediatek,mt8188-xhci", "m=
-ediatek,mtk-xhci";
-> +                               reg =3D <0 0 0 0x1000>;
-> +                               reg-names =3D "mac";
-> +                               interrupts =3D <GIC_SPI 129 IRQ_TYPE_LEVE=
-L_HIGH 0>;
-> +                               assigned-clocks =3D <&topckgen CLK_TOP_SS=
-USB_XHCI>;
-> +                               assigned-clock-parents =3D <&topckgen CLK=
-_TOP_UNIVPLL_D5_D4>;
-> +                               clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB=
-_XHCI>;
-> +                               clock-names =3D "sys_ck";
-> +                               status =3D "disabled";
-> +                       };
-> +               };
-> +
->                 eth: ethernet@11021000 {
->                         compatible =3D "mediatek,mt8188-gmac", "mediatek,=
-mt8195-gmac",
->                                      "snps,dwmac-5.10a";
-> @@ -1746,27 +1778,6 @@ queue3 {
->                         };
->                 };
->
-> -               xhci1: usb@11200000 {
-> -                       compatible =3D "mediatek,mt8188-xhci", "mediatek,=
-mtk-xhci";
-> -                       reg =3D <0 0x11200000 0 0x1000>,
-> -                             <0 0x11203e00 0 0x0100>;
-> -                       reg-names =3D "mac", "ippc";
-> -                       interrupts =3D <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> -                       phys =3D <&u2port1 PHY_TYPE_USB2>,
-> -                              <&u3port1 PHY_TYPE_USB3>;
-> -                       assigned-clocks =3D <&topckgen CLK_TOP_USB_TOP>,
-> -                                         <&topckgen CLK_TOP_SSUSB_XHCI>;
-> -                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>,
-> -                                                <&topckgen CLK_TOP_UNIVP=
-LL_D5_D4>;
-> -                       clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB_BUS>,
-> -                                <&topckgen CLK_TOP_SSUSB_TOP_REF>,
-> -                                <&pericfg_ao CLK_PERI_AO_SSUSB_XHCI>;
-> -                       clock-names =3D "sys_ck", "ref_ck", "mcu_ck";
-> -                       mediatek,syscon-wakeup =3D <&pericfg 0x468 2>;
-> -                       wakeup-source;
-> -                       status =3D "disabled";
-> -               };
-> -
->                 mmc0: mmc@11230000 {
->                         compatible =3D "mediatek,mt8188-mmc", "mediatek,m=
-t8183-mmc";
->                         reg =3D <0 0x11230000 0 0x10000>,
-> @@ -1867,42 +1878,68 @@ imp_iic_wrap_c: clock-controller@11283000 {
->                         #clock-cells =3D <1>;
->                 };
->
-> -               xhci2: usb@112a0000 {
-> -                       compatible =3D "mediatek,mt8188-xhci", "mediatek,=
-mtk-xhci";
-> -                       reg =3D <0 0x112a0000 0 0x1000>,
-> -                             <0 0x112a3e00 0 0x0100>;
-> +               ssusb2: usb@112a1000 {
-> +                       compatible =3D "mediatek,mt8188-mtu3", "mediatek,=
-mtu3";
-> +                       reg =3D <0 0x112a1000 0 0x2dff>, <0 0x112a3e00 0 =
-0x0100>;
->                         reg-names =3D "mac", "ippc";
-> -                       interrupts =3D <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> -                       phys =3D <&u2port2 PHY_TYPE_USB2>;
-> -                       assigned-clocks =3D <&topckgen CLK_TOP_SSUSB_XHCI=
-_3P>,
-> -                                         <&topckgen CLK_TOP_USB_TOP_3P>;
-> -                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>,
-> -                                                <&topckgen CLK_TOP_UNIVP=
-LL_D5_D4>;
-> +                       ranges =3D <0 0 0 0x112a0000 0 0x3f00>;
-> +                       #address-cells =3D <2>;
-> +                       #size-cells =3D <2>;
-> +                       interrupts =3D <GIC_SPI 535 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> +                       assigned-clocks =3D <&topckgen CLK_TOP_USB_TOP_3P=
->;
-> +                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>;
->                         clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>=
-,
->                                  <&topckgen CLK_TOP_SSUSB_TOP_P3_REF>,
->                                  <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>;
->                         clock-names =3D "sys_ck", "ref_ck", "mcu_ck";
-> +                       phys =3D <&u2port2 PHY_TYPE_USB2>;
-> +                       wakeup-source;
-> +                       mediatek,syscon-wakeup =3D <&pericfg 0x470 2>;
->                         status =3D "disabled";
-> +
-> +                       xhci2: usb@0 {
-> +                               compatible =3D "mediatek,mt8188-xhci", "m=
-ediatek,mtk-xhci";
-> +                               reg =3D <0 0 0 0x1000>;
-> +                               reg-names =3D "mac";
-> +                               interrupts =3D <GIC_SPI 536 IRQ_TYPE_LEVE=
-L_HIGH 0>;
-> +                               assigned-clocks =3D <&topckgen CLK_TOP_SS=
-USB_XHCI_3P>;
-> +                               assigned-clock-parents =3D <&topckgen CLK=
-_TOP_UNIVPLL_D5_D4>;
-> +                               clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB=
-_3P_XHCI>;
-> +                               clock-names =3D "sys_ck";
-> +                               status =3D "disabled";
-> +                       };
->                 };
->
-> -               xhci0: usb@112b0000 {
-> -                       compatible =3D "mediatek,mt8188-xhci", "mediatek,=
-mtk-xhci";
-> -                       reg =3D <0 0x112b0000 0 0x1000>,
-> -                             <0 0x112b3e00 0 0x0100>;
-> +               ssusb0: usb@112b1000 {
-> +                       compatible =3D "mediatek,mt8188-mtu3", "mediatek,=
-mtu3";
-> +                       reg =3D <0 0x112b1000 0 0x2dff>, <0 0x112b3e00 0 =
-0x0100>;
->                         reg-names =3D "mac", "ippc";
-> -                       interrupts =3D <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> -                       phys =3D <&u2port0 PHY_TYPE_USB2>;
-> -                       assigned-clocks =3D <&topckgen CLK_TOP_SSUSB_XHCI=
-_2P>,
-> -                                         <&topckgen CLK_TOP_USB_TOP_2P>;
-> -                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>,
-> -                                                <&topckgen CLK_TOP_UNIVP=
-LL_D5_D4>;
-> +                       ranges =3D <0 0 0 0x112b0000 0 0x3f00>;
-> +                       #address-cells =3D <2>;
-> +                       #size-cells =3D <2>;
-> +                       interrupts =3D <GIC_SPI 532 IRQ_TYPE_LEVEL_HIGH 0=
->;
-> +                       assigned-clocks =3D <&topckgen CLK_TOP_SSUSB_XHCI=
-_2P>;
-> +                       assigned-clock-parents =3D <&topckgen CLK_TOP_UNI=
-VPLL_D5_D4>;
->                         clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>=
-,
->                                  <&topckgen CLK_TOP_SSUSB_TOP_P2_REF>,
->                                  <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
->                         clock-names =3D "sys_ck", "ref_ck", "mcu_ck";
-> -                       mediatek,syscon-wakeup =3D <&pericfg 0x460 2>;
-> +                       phys =3D <&u2port0 PHY_TYPE_USB2>;
->                         wakeup-source;
-> +                       mediatek,syscon-wakeup =3D <&pericfg 0x460 2>;
->                         status =3D "disabled";
-> +
-> +                       xhci0: usb@0 {
-> +                               compatible =3D "mediatek,mt8188-xhci", "m=
-ediatek,mtk-xhci";
-> +                               reg =3D <0 0 0 0x1000>;
-> +                               reg-names =3D "mac";
-> +                               interrupts =3D <GIC_SPI 533 IRQ_TYPE_LEVE=
-L_HIGH 0>;
-> +                               assigned-clocks =3D <&topckgen CLK_TOP_US=
-B_TOP_2P>;
-> +                               assigned-clock-parents =3D <&topckgen CLK=
-_TOP_UNIVPLL_D5_D4>;
-> +                               clocks =3D <&pericfg_ao CLK_PERI_AO_SSUSB=
-_2P_XHCI>;
-> +                               clock-names =3D "sys_ck";
-> +                               status =3D "disabled";
-> +                       };
->                 };
->
->                 pcie: pcie@112f0000 {
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi b/arch=
-/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-> index a37cf102a6e9..fd977daa4185 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-> @@ -1011,13 +1011,25 @@ &u3phy2 {
->         status =3D "okay";
->  };
->
-> +&ssusb0 {
-> +       dr_mode =3D "host";
-> +       vusb33-supply =3D <&mt6359_vusb_ldo_reg>;
-> +       status =3D "okay";
-> +};
-> +
->  &xhci0 {
->         status =3D "okay";
-> +};
-> +
-> +&ssusb1 {
-> +       dr_mode =3D "host";
->         vusb33-supply =3D <&mt6359_vusb_ldo_reg>;
-> +       status =3D "okay";
->  };
->
->  &xhci1 {
->         status =3D "okay";
-> +       vdd-supply =3D <&usb_hub_fixed_3v3>;
->         vusb33-supply =3D <&mt6359_vusb_ldo_reg>;
->         #address-cells =3D <1>;
->         #size-cells =3D <0>;
-> @@ -1037,6 +1049,22 @@ hub_3_0: hub@2 {
->                 reset-gpios =3D <&pio 7 GPIO_ACTIVE_HIGH>;
->                 vdd-supply =3D <&usb_hub_fixed_3v3>;
->         };
-> +
-> +       port {
-> +               xhci_ss_ep: endpoint {
-> +                       remote-endpoint =3D <&typec_con_ss>;
-> +               };
-> +       };
-> +};
-> +
-> +&ssusb2 {
-> +       interrupts-extended =3D <&gic GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>,
-> +                             <&pio 220 IRQ_TYPE_LEVEL_HIGH>;
-> +       interrupt-names =3D "host", "wakeup";
-> +
-> +       dr_mode =3D "host";
-> +       vusb33-supply =3D <&mt6359_vusb_ldo_reg>;
-> +       status =3D "okay";
->  };
->
->  &xhci2 {
-> --
-> 2.48.1
->
->
+> 
+> >
+> > >
+> > > > +
+> > > > +		return IRQ_HANDLED;
+> > > > +	}
+> > > > +
+> > > > +	return IRQ_NONE;
+> > > > +}
+> > > > +
+> > > >  static int ci_hdrc_imx_probe(struct platform_device *pdev)
+> > > >  {
+> > > >  	struct ci_hdrc_imx_data *data;
+> > > > @@ -476,6 +497,15 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+> > > >  	if (pdata.flags & CI_HDRC_SUPPORTS_RUNTIME_PM)
+> > > >  		data->supports_runtime_pm = true;
+> > > >
+> > > > +	data->irq = platform_get_irq_optional(pdev, 1);
+> > > > +	if (data->irq > 0) {
+> > > > +		ret = devm_request_threaded_irq(dev, data->irq,
+> > > > +				NULL, ci_wakeup_irq_handler,
+> > > > +				IRQF_ONESHOT, pdata.name, data);
+> > > > +		if (ret)
+> > > > +			goto err_clk;
+> > > > +	}
+> > > > +
+> > > >  	ret = imx_usbmisc_init(data->usbmisc_data);
+> > > >  	if (ret) {
+> > > >  		dev_err(dev, "usbmisc init failed, ret=%d\n", ret);
+> > > > @@ -621,6 +651,11 @@ static int imx_controller_resume(struct device *dev,
+> > > >  		goto clk_disable;
+> > > >  	}
+> > > >
+> > > > +	if (data->wakeup_pending) {
+> > > > +		data->wakeup_pending = false;
+> > > > +		enable_irq(data->irq);
+> > > > +	}
+> > > > +
+> > > >  	return 0;
+> > > >
+> > > >  clk_disable:
+> > > > @@ -643,6 +678,10 @@ static int ci_hdrc_imx_suspend(struct device *dev)
+> > > >  		return ret;
+> > > >
+> > > >  	pinctrl_pm_select_sleep_state(dev);
+> > > > +
+> > > > +	if (device_may_wakeup(dev))
+> > > > +		enable_irq_wake(data->irq);
+> > > > +
+> > > >  	return ret;
+> > > >  }
+> > > >
+> > > > @@ -651,6 +690,9 @@ static int ci_hdrc_imx_resume(struct device *dev)
+> > > >  	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
+> > > >  	int ret;
+> > > >
+> > > > +	if (device_may_wakeup(dev))
+> > > > +		disable_irq_wake(data->irq);
+> > > > +
+> > >
+> > > Look like only want enable wakeup irq between suspend and resume. There are
+> > > some questions to understand hehavor.
+> > >
+> > > 1 driver probe --> 2. hdrc suspend -->3 hdrc resume --> 4 controller resume
+> > >
+> > > 1--2,  look like wakeup irq is enabled. maybe controller have some bit to
+> > > disable issue wakeup irq, otherwise flood irq will happen because you check
+> > > lpm in irq handler.
+> >
+> > It's not true.
+> >
+> > We has a bit WAKE_ENABLE to enable/disable wakeup irq. This bit will only be
+> > enabled when do suspend() and disabled when do resume(). So before suspend()
+> > called, the wakeup irq can't be triggered. No flood irq too.
+> >
+> > >
+> > > after 2. wakeup irq enable,  if wakeup irq happen, system resume.
+> > > ci_hdrc_imx_resume() only clear a flags, not any sync problem.
+> > >
+> > > But sequence imx_controller_resume() and ci_wakeup_irq_handler() may not
+> > > guaranteed.
+> > >
+> > > If ci_wakeup_irq_handler() call first, ci_wakeup_irq_handler() disable
+> > > itself. imx_controller_resume() will enable wakeup irq, which will be same
+> > > state 1--2. but if imx_controller_resume() run firstly,
+> >
+> > It's not true too. Because WAKE_ENABLE is disabled after resume().
+> >
+> > > ci_wakeup_irq_handler() will disable wakeup irq, which difference state
+> > > with 1--2.
+> > >
+> > > If there are a bit(WAKEUP_EN) in controller can control wakeup irq
+> > > enable/disable,
+> >
+> > Yes, WAKE_ENABLE bit. It's already used:
+> >
+> > ci_hdrc_imx_suspend()
+> >   imx_controller_suspend() -> enable WAKE_ENABLE
+> >
+> > ci_hdrc_imx_resume()
+> >   imx_controller_resume() -> disable WAKE_ENABLE
+> 
+> Okay,
+> 
+> I think wakeup_pending is not neccesary. ci_wakeup_irq_handler() can
+> simple disable WAKE_ENABLE.
+
+Right, wakeup_pending can be removed. However, it's not that simple to
+control WAKE_ENABLE in ci_hdrc_imx.c due to imx_controller_susepnd/resume()
+do more things expect enable/disable WAKE_ENABLE bit. And usbmisc.c doesn't
+export a function to directly control WAKE_ENABLE. Therefore, I still need
+to use enable/disable_irq() for simplicity.
+
+Due to this wakeup irq is only used in suspend case, I would like to add
+IRQF_NO_AUTOEN flag to request_threaded_irq(), then enable irq in
+ci_hdrc_imx_suspend() and disable irq in ci_hdrc_imx_resume(). 
+
+For example:
+
+ci_wakeup_irq_handler()
+{
+	disable_irq_nosync(data->irq);
+	...
+}
+
+ci_hdrc_imx_suspend()
+{
+	...
+	enable_irq(data->irq);	
+}
+
+ci_hdrc_imx_resume()
+{
+	if (irq disabled)
+		disable_irq_nosync(data->irq);
+	...
+}
+
+Do you think if it's feasible and better than current patch?
+
+Thanks,
+Xu Yang
 
