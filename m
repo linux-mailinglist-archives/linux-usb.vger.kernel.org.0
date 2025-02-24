@@ -1,123 +1,119 @@
-Return-Path: <linux-usb+bounces-20956-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20957-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D227CA4126B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 01:03:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B390A412A3
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 02:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4672A18948E5
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 00:03:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A344B3A2490
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 01:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE314A06;
-	Mon, 24 Feb 2025 00:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqgJGbZh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A795156C74;
+	Mon, 24 Feb 2025 01:34:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BB6802;
-	Mon, 24 Feb 2025 00:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FA01537C8;
+	Mon, 24 Feb 2025 01:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740355374; cv=none; b=XQpXduGN6v/SE4t1w775emr7lTOraZq/UUxcdOKLCLIPqgVOZzJjodsQopJmvCy/OQajlW/pNj+YET6N+8mTu/HiQx2eRr35b+G0nyes5VrK7/O3fhHEsfginVI0z0J+C0m1rIkUOUsW7phiII5S8Ml0Yo6oueB7VYjEn8FEtc4=
+	t=1740360844; cv=none; b=fji8kBDCK/Fby+hJNh163wnq/p7MZsZ3R4qULsskG0dkOYjE8l1k+76TsHN0Q+SGRiVZ3MQLT8dIcZ3ePJggD9UfIt8dzsDT656/sbC8IAEtZuVXPNhhalrPL+h0ffjhkHM1UsmtkvYh5EXtN7W/hRHMBVBdTdha1eppb4cl1bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740355374; c=relaxed/simple;
-	bh=n4VRozAU49BBd38yFZYM8j/lF67NbQ43AdFqChoMvHQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n9V+6zheZgYQY/QK0yE2bC9Ri204KwmI4iPFVHB0Cx7PS3lP/1U7qp7Ob+82WPqTQvWqn3Msn71wN6AwvfyEXBQW7pY0wfmGpw+J5K4O5bi452jMPON6WWfCVL8g0BqXvYMqX+3td9nB5Jf8IbhKL+Q7MAxLmccrt7fG6cKNyCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqgJGbZh; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abbdf897503so839539166b.0;
-        Sun, 23 Feb 2025 16:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740355370; x=1740960170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ku/meeX1O+81D6vyphMnaxR005xNcolriu4IkuswsD4=;
-        b=OqgJGbZhBDjc8xjBJ5ETElETCtHXPoACIUAvC8oD/itdBib+Y+0+SR6qpAob3ac5gq
-         O9OMUa9BVJ32RUb0+C5VAZTBabYMak2VUVWazuco4ywIZRi9z9MGuCl5EG/dcPYDZsf1
-         m07aj2cj1GAbH7RB4wG8f6qtCjOqFHhD81fmnKTwe17t8y3nXjSTq4by9qt9B/38ysYZ
-         EtQXxZYfDmQk0DJASx1k/BPHTy0shBOspFkej5hJzLdNEk3WI6rsgSQyZ1mMDZBfaOl7
-         HSjW7r46NFK3ZIoEtR6RIZjK49RmxoubAzBBuDG/fH0AaZOISxkX/8NPSP/ivjV/ZY06
-         xS/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740355370; x=1740960170;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ku/meeX1O+81D6vyphMnaxR005xNcolriu4IkuswsD4=;
-        b=bbAsDws67uchrXc4u8f6KkPNj6ktwFcVY5dodx07GFMBH++zKD0FCNUgAp0QRpfGxh
-         dE2GrFirDmodCSMSfhPbRiB9DoN79UDzcW3Y9LvdQOZFy2VCK3LV3D48JjMqX48c05uy
-         oyIzlbEow2ye6kJXTPavcK+L3ZcGB+EBiEDm1CTJYePYRsAaV03zLlmFz67ttOgKdvYF
-         hZfSGkcWy9lAE08ZWAvbzru2jU2BC0e4+RiC7dUF8IiE34hzDZCnDOk+SpnyUDtEagWn
-         7m0DwS7+FvQNWM/NOTn1GppgZdaiL6X/oXXwTiINrL0DHZaddtMT9UaX4VUneSNcQq7D
-         UJ/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVFsLpNLkgn88jyPeBFN3DYeySOzNYvNW1Wk5oKd3Pr3xxdujPNkUTaKyQsAtrbk7Ei8pv2j+Jp1RqW@vger.kernel.org, AJvYcCX4yxSRDtRI5mcm43zI/+TkcquV1Xkti/diBzLSsmMky/KfRLt3IPRAKrB5Vh8m3Up7BkWv9g/X6fJ9Fsk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPpYnzq1vbfosDIAM9zKlRezAQjxjiMThvB6XV50euPDSC20Rs
-	6OwUHfzZfN3smJxuJLffJ8d6/ErjAFoz7j7qcLzXU8IEof11nmc9
-X-Gm-Gg: ASbGnctNxImSjIvoSeTApsu1beLDblbObfSloh6vk49Zm2NUupx3tLfXRWaNUsotplV
-	2R71UUHun2pOeTQ8LTr4cXpIQ7csUyx9WBuZNcxM3w6aAscgP1TKAO6PbVp97BltVX4ry3Y0Ltp
-	of+tGgqC0WsLDpfht/0nrruGBdFs8E14/LigGJLR996PtdQVW4ytx+2ccYhXhumNSRjn4qNQQBy
-	lez9q/BQWz66BPJsi4FFt8XWxSHMwPlGwwyUswMqsHjaMuuq+K7jUvX2MXv+wuWcyqNZJb/k2jD
-	AQGX1kYQQDeK7iZR0ReIIcekO2e0FSrWzSCRWwxcdeA=
-X-Google-Smtp-Source: AGHT+IEezF00syEetyw2uOFvXfJIUVrM6aVdCH+YKN/RJ7ZbZW8Kq5R8IfOagPhvDM35M21nT8zv/g==
-X-Received: by 2002:a17:907:8a92:b0:abb:d047:960a with SMTP id a640c23a62f3a-abbeded95d8mr1320737166b.22.1740355370410;
-        Sun, 23 Feb 2025 16:02:50 -0800 (PST)
-Received: from foxbook (adqm166.neoplus.adsl.tpnet.pl. [79.185.146.166])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbaf6ec730sm1244665566b.163.2025.02.23.16.02.48
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 23 Feb 2025 16:02:50 -0800 (PST)
-Date: Mon, 24 Feb 2025 01:02:45 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] usb: xhci: Clean up the TD skipping loop
-Message-ID: <20250224010245.75ba1d2f@foxbook>
-In-Reply-To: <be026374-91d2-4b1d-9eb7-568b376f6e72@linux.intel.com>
-References: <20250210083718.2dd337c3@foxbook>
-	<20250210083940.626c02d9@foxbook>
-	<be026374-91d2-4b1d-9eb7-568b376f6e72@linux.intel.com>
+	s=arc-20240116; t=1740360844; c=relaxed/simple;
+	bh=7XL2h2hW1xBQfS3RvO7aPyzUBxNged97N/J/f0eaYk0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=u2FzfudJL+5WMkv0fw33yy+pUAmQzyP8WrUJk7HLddt63JEFYi122jcr3E/aCAB7kBTbNFYubpgBAFCqUCFQF6EIFw9mpJljPZ+3eyZ8LGOT1hxmIPxudJNDF+LcWXi90Lb90z666zAMORSNKmJnyYFeZC6Ta7gr9k+lwABqhvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-05 (Coremail) with SMTP id zQCowABnbaFozLtn0cGYDw--.27817S2;
+	Mon, 24 Feb 2025 09:33:37 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: gregkh@linuxfoundation.org,
+	make24@iscas.ac.cn,
+	elder@kernel.org,
+	quic_zijuhu@quicinc.com,
+	kekrby@gmail.com,
+	oliver@neukum.org,
+	stern@rowland.harvard.edu
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] USB: Skip resume if pm_runtime_set_active() fails
+Date: Mon, 24 Feb 2025 09:33:25 +0800
+Message-Id: <20250224013325.2928731-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowABnbaFozLtn0cGYDw--.27817S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFykCrW3ZrWrXryDZr1DJrb_yoW8Gw1kpa
+	18JFW0kF47X3Wayw4jvFn2vFy5Ww4rCFW7Cr97Gwn3u3W5Aa48try8Jryag3WqkrnxX3WU
+	ta1DGw1UuFW8GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+	0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
+	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-On Sat, 22 Feb 2025 14:37:58 +0200, Neronin, Niklas wrote:
-> This debug message is now misleading, the TD way or may not be found
-> on non-isochronous.
-> 
-> Before:
-> 	if (ep_seg && ep->skip)
-> 		xhci_dbg(xhci, "Found td. ...
-> After:
-> 	if (ep->skip && (ep_seg || !isoc))
-> 		xhci_dbg(xhci, "Found td. ...
+A race condition occurs during system suspend if interrupted between
+usb_suspend() and the parent device’s PM suspend (e.g., a power
+domain). This triggers PM resume workflows (via usb_resume()), but if
+parent device is already runtime-suspended, pm_runtime_set_active()
+fails. Subsequent operations like pm_runtime_enable() and interface
+unbinding may leave the USB device in an inconsistent state or trigger
+unintended behavior.
 
-Hmm, you're right, the whole block will now execute in this
-pathological edge case and we will clear the flag too.
+Found by code review.
 
-It can be fixed quite easily, but I think I may actually drop this
-patch altogether. It will make the next patch slightly more verbose
-(that's why I included this one), but it will also make it possible
-to backport any of those patches to 6.12-lts if a need arises.
+Cc: stable@vger.kernel.org
+Fixes: 98d9a82e5f75 ("USB: cleanup the handling of the PM complete call")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ drivers/usb/core/driver.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-I also realized that one more skipping pathology is a recent (6.11)
-regression and perhaps it too could be fixed without major rework,
-basically by going back to something similar to pre-6.11 behavior.
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 460d4dde5994..7478fcc11fd4 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1624,11 +1624,17 @@ int usb_resume(struct device *dev, pm_message_t msg)
+ 	status = usb_resume_both(udev, msg);
+ 	if (status == 0) {
+ 		pm_runtime_disable(dev);
+-		pm_runtime_set_active(dev);
++		status = pm_runtime_set_active(dev);
++		if (status) {
++			pm_runtime_enable(dev);
++			goto out;
++		}
++
+ 		pm_runtime_enable(dev);
+ 		unbind_marked_interfaces(udev);
+ 	}
+ 
++out:
+ 	/* Avoid PM error messages for devices disconnected while suspended
+ 	 * as we'll display regular disconnect messages just a bit later.
+ 	 */
+-- 
+2.25.1
 
-I should have v3 ready in a day or a few.
-
-Regards,
-Michal
 
