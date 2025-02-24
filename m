@@ -1,119 +1,150 @@
-Return-Path: <linux-usb+bounces-20957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B390A412A3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 02:34:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F0FA4133A
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 03:13:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A344B3A2490
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 01:34:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D26443B0E7D
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 02:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A795156C74;
-	Mon, 24 Feb 2025 01:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8043C19CC0E;
+	Mon, 24 Feb 2025 02:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="1iP7C4dP";
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="1iP7C4dP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FA01537C8;
-	Mon, 24 Feb 2025 01:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97BCFEED6;
+	Mon, 24 Feb 2025 02:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740360844; cv=none; b=fji8kBDCK/Fby+hJNh163wnq/p7MZsZ3R4qULsskG0dkOYjE8l1k+76TsHN0Q+SGRiVZ3MQLT8dIcZ3ePJggD9UfIt8dzsDT656/sbC8IAEtZuVXPNhhalrPL+h0ffjhkHM1UsmtkvYh5EXtN7W/hRHMBVBdTdha1eppb4cl1bU=
+	t=1740363159; cv=none; b=bFg2vzsMPaLfzauOkHB5FDKL4IsydTW8kxBkJ3+Kbx+xT+juPkAt/tSpcLBGpy2fLKeH8QIu+53FU+ikYU18brxJ/8ijxXoQZK82PWJH93YvHEray9AnPxTsnsYZEC1mBCafHGBrVwsSGCtChy6z8tffF96goqer+qUaZVhT2Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740360844; c=relaxed/simple;
-	bh=7XL2h2hW1xBQfS3RvO7aPyzUBxNged97N/J/f0eaYk0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=u2FzfudJL+5WMkv0fw33yy+pUAmQzyP8WrUJk7HLddt63JEFYi122jcr3E/aCAB7kBTbNFYubpgBAFCqUCFQF6EIFw9mpJljPZ+3eyZ8LGOT1hxmIPxudJNDF+LcWXi90Lb90z666zAMORSNKmJnyYFeZC6Ta7gr9k+lwABqhvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowABnbaFozLtn0cGYDw--.27817S2;
-	Mon, 24 Feb 2025 09:33:37 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	make24@iscas.ac.cn,
-	elder@kernel.org,
-	quic_zijuhu@quicinc.com,
-	kekrby@gmail.com,
-	oliver@neukum.org,
-	stern@rowland.harvard.edu
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] USB: Skip resume if pm_runtime_set_active() fails
-Date: Mon, 24 Feb 2025 09:33:25 +0800
-Message-Id: <20250224013325.2928731-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1740363159; c=relaxed/simple;
+	bh=rxrn8+mXf3oIIANnvwxnu4UhXSDU9zD/XTyconO2D4w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S/NnKQmKUdQT+B9oaAeGpnL91OTXA0ZVeVodHqSnSOFHJeiL8mfbvBlgyHr2KoDDmnCfXYx5YXdZIeaiA/AM4QnU+i247bcLliMNlInTnQ7nGcyebUiHEArtreKOB8qGMxIee43yJ0YW5d0WqOTnRYwkQaRPHgxvjFbsKV9jnYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=1iP7C4dP; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=1iP7C4dP; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1740363153;
+	bh=O4XcWHCpu3h5aG5qDaO09ZjwT9M3Yei0zyY4/p0jwJk=; l=1858;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=1iP7C4dPzmb7E65xMTxqUtTvbhgGeugBVpLObDu8L+USH+xxGCPqex4MRXUY8GsJK
+	 g89kf4GuX26r/gukAvox7hpgUIWBHxtM76lrDqHNVEIvdRgOEv3YpiqOX8UjtPVIOf
+	 oalHVbKfUcw05JHBXifueBVb0iqvrou8X6G1rwbJPTPDow4IX2t5bhwKufCQr+QknE
+	 7Gf7ZvohlAwxlf5qFxekUFUVEPnmFC5MqHi24xHRWnyaaUQftXSD44QHJ3/uiJBqcX
+	 NlWJjEqrJCGfmr0PuTo3n/EmYaZI2U+Q4W6KbxBEGYoUYzyTFM/j2wRLmInsX8Zs6D
+	 OpZwFwUsiMk4Q==
+Received: from 192.168.8.21
+	by mg.richtek.com with MailGates ESMTP Server V3.0(1128077:0:AUTH_RELAY)
+	(envelope-from <prvs=114923349E=cy_huang@richtek.com>); Mon, 24 Feb 2025 10:12:33 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1740363153;
+	bh=O4XcWHCpu3h5aG5qDaO09ZjwT9M3Yei0zyY4/p0jwJk=; l=1858;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=1iP7C4dPzmb7E65xMTxqUtTvbhgGeugBVpLObDu8L+USH+xxGCPqex4MRXUY8GsJK
+	 g89kf4GuX26r/gukAvox7hpgUIWBHxtM76lrDqHNVEIvdRgOEv3YpiqOX8UjtPVIOf
+	 oalHVbKfUcw05JHBXifueBVb0iqvrou8X6G1rwbJPTPDow4IX2t5bhwKufCQr+QknE
+	 7Gf7ZvohlAwxlf5qFxekUFUVEPnmFC5MqHi24xHRWnyaaUQftXSD44QHJ3/uiJBqcX
+	 NlWJjEqrJCGfmr0PuTo3n/EmYaZI2U+Q4W6KbxBEGYoUYzyTFM/j2wRLmInsX8Zs6D
+	 OpZwFwUsiMk4Q==
+Received: from 192.168.10.46
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(3140694:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Mon, 24 Feb 2025 09:53:29 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 24 Feb
+ 2025 09:53:28 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1544.11 via Frontend
+ Transport; Mon, 24 Feb 2025 09:53:28 +0800
+Date: Mon, 24 Feb 2025 09:54:26 +0800
+From: ChiYuan Huang <cy_huang@richtek.com>
+To: Macpaul Lin =?utf-8?B?KOael+aZuuaWjCk=?= <Macpaul.Lin@mediatek.com>
+CC: "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "robh@kernel.org"
+	<robh@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+	Alexandre Mergnat <amergnat@baylibre.com>, "fparent@baylibre.com"
+	<fparent@baylibre.com>, Bear Wang =?utf-8?B?KOiQqeWOn+aDn+W+tyk=?=
+	<bear.wang@mediatek.com>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, Project_Global_Chrome_Upstream_Group
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, "macpaul@gmail.com"
+	<macpaul@gmail.com>, Pablo Sun =?utf-8?B?KOWtq+avk+e/lCk=?=
+	<pablo.sun@mediatek.com>, "simon.sun@yunjingtech.com"
+	<simon.sun@yunjingtech.com>, Yow-shin Liou =?utf-8?B?KOWKieelkOeCmCk=?=
+	<yow-shin.liou@mediatek.com>, Chris-qj Chen =?utf-8?B?KOmZs+Wlh+mAsik=?=
+	<Chris-qj.Chen@mediatek.com>
+Subject: Re: [PATCH v4 1/2] arm64: dts: mediatek: mt8395-genio-1200-evk: add
+ support for TCPC port
+Message-ID: <Z7vRUmETQaYRbEyZ@git-send.richtek.com>
+References: <20250220143354.2532448-1-macpaul.lin@mediatek.com>
+ <cb392432-e452-4460-ace6-54b3649aed52@collabora.com>
+ <f09f880b7f9b642140109f17ed3f89aa44195b99.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowABnbaFozLtn0cGYDw--.27817S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFykCrW3ZrWrXryDZr1DJrb_yoW8Gw1kpa
-	18JFW0kF47X3Wayw4jvFn2vFy5Ww4rCFW7Cr97Gwn3u3W5Aa48try8Jryag3WqkrnxX3WU
-	ta1DGw1UuFW8GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-	0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+In-Reply-To: <f09f880b7f9b642140109f17ed3f89aa44195b99.camel@mediatek.com>
 
-A race condition occurs during system suspend if interrupted between
-usb_suspend() and the parent device’s PM suspend (e.g., a power
-domain). This triggers PM resume workflows (via usb_resume()), but if
-parent device is already runtime-suspended, pm_runtime_set_active()
-fails. Subsequent operations like pm_runtime_enable() and interface
-unbinding may leave the USB device in an inconsistent state or trigger
-unintended behavior.
+On Fri, Feb 21, 2025 at 11:39:09AM +0000, Macpaul Lin (林智斌) wrote:
+> On Thu, 2025-02-20 at 16:58 +0100, AngeloGioacchino Del Regno wrote:
+> > 
+> > 
+> 
+> [snip]
+> 
+> > > +             tcpc {
+> > > +                     compatible = "mediatek,mt6360-tcpc";
+> > > +                     interrupts-extended = <&pio 17
+> > > IRQ_TYPE_LEVEL_LOW>;
+> > > +                     interrupt-names = "PD_IRQB";
+> > > +
+> > > +                     connector {
+> > > +                             compatible = "usb-c-connector";
+> > > +                             label = "USB-C";
+> > > +                             data-role = "dual";
+> > > +                             op-sink-microwatt = <10000000>;
+> > > +                             power-role = "dual";
+> > > +                             try-power-role = "sink";
+> > 
+> > Would be appreciated if you could also complete the node by adding
+> > the pd-revision
+> > property, enabling full USBC Power Delivery for the MT6360 PMIC.
+> > 
+> 
+> Well, I have no idea about the pd-revision of MT6360.
+> I could found MT6360 supports PD 3.0 according to the datasheet,
+> however, I have no idea about the other fields like major and minor
+> values. Dear ChiYuan, could you help to provide the value of pd-
+> revision? The property has been defined in 
+> Documentation/devicetree/bindings/connector/usb-connector.yaml.
+> 
+Hi, Macpaul:
 
-Found by code review.
+You can specify the version information to 3.1 version 1.6.
+Just add the below property into the 'connector' node.
 
-Cc: stable@vger.kernel.org
-Fixes: 98d9a82e5f75 ("USB: cleanup the handling of the PM complete call")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
- drivers/usb/core/driver.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+pd-revision = /bits/ 8 <0x03 0x01 0x01 0x06>;
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 460d4dde5994..7478fcc11fd4 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1624,11 +1624,17 @@ int usb_resume(struct device *dev, pm_message_t msg)
- 	status = usb_resume_both(udev, msg);
- 	if (status == 0) {
- 		pm_runtime_disable(dev);
--		pm_runtime_set_active(dev);
-+		status = pm_runtime_set_active(dev);
-+		if (status) {
-+			pm_runtime_enable(dev);
-+			goto out;
-+		}
-+
- 		pm_runtime_enable(dev);
- 		unbind_marked_interfaces(udev);
- 	}
- 
-+out:
- 	/* Avoid PM error messages for devices disconnected while suspended
- 	 * as we'll display regular disconnect messages just a bit later.
- 	 */
--- 
-2.25.1
-
+Regards,
+ChiYuan
+......
 
