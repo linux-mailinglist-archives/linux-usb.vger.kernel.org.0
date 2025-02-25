@@ -1,139 +1,215 @@
-Return-Path: <linux-usb+bounces-21036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21037-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB467A43F59
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 13:25:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38634A44071
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 14:18:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 742DD1898C31
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 12:25:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C3AF188A7BB
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 13:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AE4267AE8;
-	Tue, 25 Feb 2025 12:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10F72690ED;
+	Tue, 25 Feb 2025 13:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SlcPOlQ1"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="BZbhRsHR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8297419C54F;
-	Tue, 25 Feb 2025 12:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740486310; cv=none; b=k2y7DGlV3oG7mfipkxDNC4pl7vf42NRNftSwYt7mxTKZqNsJnCs+4VzHBf71EytJzI0pCH1koRzdh/THyF/BB9PhBIzHTzzj2x8DF9mNA230AMm0BuMCZ7sIabuLrGuExW/azhLA45i2BOMgmvJkmz6rn3zF9s39jhlLiOcMt+4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740486310; c=relaxed/simple;
-	bh=kbpcK4FCsjeS4/yzXpTsCA1vCB3JiRQU+VHatU2MrvA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QrHQBDVsbhck4WOQPmOuB9zKDgPUkUSzQSkh/aSMGAw3KX9AT+/P0dKABYhIk2WQKbyKkXCXepB6gv7BKdyG7RB+jTEnZdQR83CzEQQOD14cAgdmhKW0mvzoFFcSKladlx0wxRotn/rP427GHTWSIhIA3rBdyO/0PuCUxZ75vzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SlcPOlQ1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08B6EC4CEDD;
-	Tue, 25 Feb 2025 12:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740486310;
-	bh=kbpcK4FCsjeS4/yzXpTsCA1vCB3JiRQU+VHatU2MrvA=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=SlcPOlQ17nYFY2gOmAoNSmkOWb+2KLw4oUPVVDIDyOT3vb3bEYCcVnbp2MDPlADAA
-	 BOF1Ar5OX1dKIf5I2zXTnFbvPnLuwwChRj4z/XEyE0RnR4AXJg30fVyA+bKavcRuL5
-	 BQCqw5T7RKowFziFSMSAmPx6lZ+ErmpS9C69lR0ejSXDOzQhM7Rp3NgZKC7L825g3D
-	 6oIHXt7HZlQzCQp+joddJ0eVBzsX4O6IaujNEU1odNYEPth90806aOT9LKdyAxSIaq
-	 VStvsNaua657fD6uOCechvFUFipfHN04dFonyjikGPd7eWI9ZSLzK3Z7yLFWJZYpJP
-	 oan47uf0pC73Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E33DFC021B2;
-	Tue, 25 Feb 2025 12:25:09 +0000 (UTC)
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_B4_Relay?= <devnull+j.ne.posteo.net@kernel.org>
-Date: Tue, 25 Feb 2025 13:25:03 +0100
-Subject: [PATCH] usb: storage: jumpshot: Use const for constant arrays
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927B0267AE1;
+	Tue, 25 Feb 2025 13:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740489190; cv=pass; b=nZY9EQTYsqi/Wq0dSNyCmvcr1nFs3f0QeYenv+6p33zrh1JHGBpqSP2KizEogCADr8hzoP4sD6e23PeAeYIg9bAawjgAFoXY8PbhFQ38AT0r74Hu/2iaOrXwLsrrB+JSuQrYsy4lDFAOdzwlJWL4MCYWfnaPuauJxEm/oxHCngQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740489190; c=relaxed/simple;
+	bh=Pn/Fx/yuU/lUaA3NedAbSiQkqvsmm1dENaJyUG5J8kw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2zSNLcAMTIsnga7QLovxBTDRAeYbVMtI31YUgSK0biST5Khg1OAnGBcvor2MJbmqjHFIvGMmf99SuL1WwEFx2+BNBFj5G7rKKFaVyzycGfpKNmEKNwdeT/WIbQ3A/T9H/X+1Db5au+tZSsTnqyDoS75yh5cC08ODmYZfXdIkH4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=BZbhRsHR; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740489110; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=NZnfyVR7IyMTyXDLIEUCrMKSCGoTGqsj+069o9fihhvi0eGkpqCRiv1yIih6DatPyzlCBSWvAsLckZwjO9/nbLliRC7JxzVJA+QyiqPD3cZYsiG7DJbvKMqStVYQlixILKLnz5qBzKpwFqyeWef1GwDDsaeQ2d72qVshwNoPClY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740489110; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=xrERTREY6YsrpdfbtuvBlrDzb+rIm9ucee5+fOc7+3s=; 
+	b=X7bylatDMJhFwzJK5XJCxJMbpRaKeNdxWn9zmgwee2JcjP3pxIuzStBLo07Zm+wfPfQpdT8fcBBHjWisd4+4pFSZ83A8/tQpT9Kzmet+b05HUFguneYiG/dsBHrfO36oBqNdsEEYY5JNX2mejJwyfaeqPW4PrA3A2LqKhBLrp2o=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740489110;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=xrERTREY6YsrpdfbtuvBlrDzb+rIm9ucee5+fOc7+3s=;
+	b=BZbhRsHRaCk8oCx4V1IJthqAD0y0f1aA6Jq9zf2qb0ab+nE18X2Bc3s7PUOLdqwP
+	VHKDCjsBwixxUM9KyNmeRpL+tHO6jPqaQjhxFSLOXyJc+d5mNkD6cNqk5v+3YqWtH3N
+	T8L2lHl6rizRn1UcYqljqJYFtXSY5q4dVNz5yrCg=
+Received: by mx.zohomail.com with SMTPS id 1740489106492893.7559376695295;
+	Tue, 25 Feb 2025 05:11:46 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id EB08C180403; Tue, 25 Feb 2025 14:11:39 +0100 (CET)
+Date: Tue, 25 Feb 2025 14:11:39 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
+	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+	Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/7] power: supply: core: get rid of of_node
+Message-ID: <ocbwzuqk56yx34kc5vp6aaxnhxqd4zp2wixlv7p3mex66ibntu@ahigikrf5cg4>
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
+ <491e20bb-5ab4-40e9-bb35-5e05dc7bd46c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250225-misc-const-v1-1-121ff3b86437@posteo.net>
-X-B4-Tracking: v=1; b=H4sIAJ+2vWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDEwND3dzM4mTd5Py84hLdVPMkk+Q0I4MU0zRLJaCGgqLUtMwKsGHRsbW
- 1AOPiNc9cAAAA
-X-Change-ID: 20240401-misc-const-e7b4cf20d5f9
-To: Alan Stern <stern@rowland.harvard.edu>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>, 
- =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740486309; l=1810;
- i=j.ne@posteo.net; s=20240329; h=from:subject:message-id;
- bh=8rz6vHhtFj67IR1PYVzJt/W+sDgjep7yfy8XQRNUyVM=;
- b=xcrvT+n6wVQZdgOquo/5oCozE3BNKpweD3XshACH5KiYMKRKGFNmqrlpzJa9go/5yaUOv/1m6
- J215lkf+nznAm3bUW8JpZvqPnlnHgmQGXmbgm/03EEUBACJssgxzOWh
-X-Developer-Key: i=j.ne@posteo.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Endpoint-Received: by B4 Relay for j.ne@posteo.net/20240329 with
- auth_id=156
-X-Original-From: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Reply-To: j.ne@posteo.net
-
-From: "J. Neuschäfer" <j.ne@posteo.net>
-
-These arrays are not modified. Make them const.
-
-Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
----
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
----
-
-This change was compile-tested with ARCH=powerpc
----
- drivers/usb/storage/jumpshot.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/storage/jumpshot.c b/drivers/usb/storage/jumpshot.c
-index 39ca84d6859122903de4e64b13e697e8b7d4ab31..089c6f8ac85fbb683cca8b03a2ff06c0ca776167 100644
---- a/drivers/usb/storage/jumpshot.c
-+++ b/drivers/usb/storage/jumpshot.c
-@@ -367,16 +367,16 @@ static int jumpshot_handle_mode_sense(struct us_data *us,
- 				      struct scsi_cmnd * srb, 
- 				      int sense_6)
- {
--	static unsigned char rw_err_page[12] = {
-+	static const unsigned char rw_err_page[12] = {
- 		0x1, 0xA, 0x21, 1, 0, 0, 0, 0, 1, 0, 0, 0
- 	};
--	static unsigned char cache_page[12] = {
-+	static const unsigned char cache_page[12] = {
- 		0x8, 0xA, 0x1, 0, 0, 0, 0, 0, 0, 0, 0, 0
- 	};
--	static unsigned char rbac_page[12] = {
-+	static const unsigned char rbac_page[12] = {
- 		0x1B, 0xA, 0, 0x81, 0, 0, 0, 0, 0, 0, 0, 0
- 	};
--	static unsigned char timer_page[8] = {
-+	static const unsigned char timer_page[8] = {
- 		0x1C, 0x6, 0, 0, 0, 0
- 	};
- 	unsigned char pc, page_code;
-@@ -477,7 +477,7 @@ static int jumpshot_transport(struct scsi_cmnd *srb, struct us_data *us)
- 	int rc;
- 	unsigned long block, blocks;
- 	unsigned char *ptr = us->iobuf;
--	static unsigned char inquiry_response[8] = {
-+	static const unsigned char inquiry_response[8] = {
- 		0x00, 0x80, 0x00, 0x01, 0x1F, 0x00, 0x00, 0x00
- 	};
- 
-
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20240401-misc-const-e7b4cf20d5f9
-
-Best regards,
--- 
-J. Neuschäfer <j.ne@posteo.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qokyrq4gcjmy6fsj"
+Content-Disposition: inline
+In-Reply-To: <491e20bb-5ab4-40e9-bb35-5e05dc7bd46c@gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.2/240.466.79
+X-ZohoMailClient: External
 
 
+--qokyrq4gcjmy6fsj
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/7] power: supply: core: get rid of of_node
+MIME-Version: 1.0
+
+Hi,
+
+On Tue, Feb 25, 2025 at 01:14:03PM +0200, Matti Vaittinen wrote:
+> On 25/02/2025 01:21, Sebastian Reichel wrote:
+> > This removes .of_node from 'struct power_supply', since there
+> > is already a copy in .dev.of_node and there is no need to have
+> > two copies.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >   drivers/power/supply/power_supply_core.c | 17 ++++++++---------
+> >   include/linux/power_supply.h             |  1 -
+> >   2 files changed, 8 insertions(+), 10 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/s=
+upply/power_supply_core.c
+> > index d0bb52a7a0367a8e07787be211691cad14a41a54..11030035da6f121ca76bebf=
+800c06cfd5db57578 100644
+> > --- a/drivers/power/supply/power_supply_core.c
+> > +++ b/drivers/power/supply/power_supply_core.c
+> > @@ -200,11 +200,11 @@ static int __power_supply_populate_supplied_from(=
+struct power_supply *epsy,
+> >   	int i =3D 0;
+> >   	do {
+> > -		np =3D of_parse_phandle(psy->of_node, "power-supplies", i++);
+> > +		np =3D of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
+> >   		if (!np)
+> >   			break;
+> > -		if (np =3D=3D epsy->of_node) {
+> > +		if (np =3D=3D epsy->dev.of_node) {
+> >   			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
+> >   				psy->desc->name, epsy->desc->name);
+> >   			psy->supplied_from[i-1] =3D (char *)epsy->desc->name;
+> > @@ -235,7 +235,7 @@ static int  __power_supply_find_supply_from_node(st=
+ruct power_supply *epsy,
+> >   	struct device_node *np =3D data;
+> >   	/* returning non-zero breaks out of power_supply_for_each_psy loop */
+> > -	if (epsy->of_node =3D=3D np)
+> > +	if (epsy->dev.of_node =3D=3D np)
+> >   		return 1;
+> >   	return 0;
+> > @@ -270,13 +270,13 @@ static int power_supply_check_supplies(struct pow=
+er_supply *psy)
+> >   		return 0;
+> >   	/* No device node found, nothing to do */
+> > -	if (!psy->of_node)
+> > +	if (!psy->dev.of_node)
+> >   		return 0;
+> >   	do {
+> >   		int ret;
+> > -		np =3D of_parse_phandle(psy->of_node, "power-supplies", cnt++);
+> > +		np =3D of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
+> >   		if (!np)
+> >   			break;
+> > @@ -606,8 +606,8 @@ int power_supply_get_battery_info(struct power_supp=
+ly *psy,
+> >   	const __be32 *list;
+> >   	u32 min_max[2];
+> > -	if (psy->of_node) {
+> > -		battery_np =3D of_parse_phandle(psy->of_node, "monitored-battery", 0=
+);
+> > +	if (psy->dev.of_node) {
+> > +		battery_np =3D of_parse_phandle(psy->dev.of_node, "monitored-battery=
+", 0);
+> >   		if (!battery_np)
+> >   			return -ENODEV;
+>=20
+> This reminded me of a change I once did to power_supply - but maybe never
+> got it further than RFC stage. Anyways, do you think it would be possible=
+ to
+> decouple the battery info and struct power_suppply (while at it)?
+>
+> I believe that the chargers and especially fuel-gauges which are designed=
+ to
+> operate with different batteries (and which get battery details using sta=
+tic
+> battery nodes), would like to get the battery info _before_ registering t=
+he
+> power_supply (to avoid sending bogus values while operating on defaults,
+> before the battery info is read and before things are set accordingly).
+>=20
+> I know this may be a bit much to ask, but I believe it'd be an improvemen=
+t.
+>=20
+> Other than that, looks good to me.
+
+I was thinking about adding an init function to power_supply_desc,
+which would be called directly before psy->initialized is set to
+true in the power-supply registration phase. I think that would be
+the right place to setup device registers based on battery-info data.
+But it's definitely not a thing for this series.
+
+Greetings,
+
+-- Sebastian
+
+--qokyrq4gcjmy6fsj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAme9wYEACgkQ2O7X88g7
++pqiLw//XIliVc9d8leYVw9Zg1Ou2CIFlkNNs0jNuGp/9lBRbbqU3i1ak4YxVKtX
+Gwz4lsiJCZAACkP7CuEb5IguHkrl/pMT0hWEa+Lt1rwqx+F18FVdoWK5mujphYXK
+oE+4iXNfaU0hYoypPpgqWorMtKs7KKVw7cv7BuIgGp+LYXEeBRdde6W5t9mMYY4y
+IwppeBvxwmOoNc+E0nXErhERfiydaEwm6BFWuBnKfmeHoXPnCL0jVamXJbDVjczE
++1oLmR5iZYfuSrmRczsPiqj1Mcw5iD2avPWX0hi92SEz3KQunNHrsYdfH67nJzw1
+qvCCjn9fnT22fTH5Ttny1Cg//zsOnfmBQsDYuY6WVmQZ6ioXDwV6nXlfydr14ZRT
+66oYdUBsDh/Gxy68lUMaLDiKus2I4WrVgqNNXazlnDaMsSrKn6MRZ0O5JJBtY4yD
+yqByN1yiZLRSfhPmJqXZlCIXBp4PJ19wfMg8HWynQVuHv/T8YgOso15Tbucp+qWf
+IOfMOx8HxTJeDuCezPkCZV7GJeVMsOYHzLrwvLnwk9AHGb+VIFiWu4I+iRzkV8pR
+9cYRHe78FNnqRCnf69jmZd8IBp/qnRIcelg00w4vo1A5mrVLI6YYt2oUuj/6yEqr
+ljWvdVK5cQo/CvXH/3zlL4AZNW/tsPlLT2WKpFyuVqwIOvS1SLw=
+=+mrH
+-----END PGP SIGNATURE-----
+
+--qokyrq4gcjmy6fsj--
 
