@@ -1,98 +1,122 @@
-Return-Path: <linux-usb+bounces-21015-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21016-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 099A5A438DA
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 10:11:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBCDA43994
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 10:34:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B51118865F9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 09:07:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 813FB188865B
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 09:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3214267AE1;
-	Tue, 25 Feb 2025 09:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E7B262812;
+	Tue, 25 Feb 2025 09:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="S/RE2gc5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvuoQ0WY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EADD517;
-	Tue, 25 Feb 2025 09:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E0E2627E6;
+	Tue, 25 Feb 2025 09:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740474159; cv=none; b=QQL0POko5PDcsmgU/OeKX0EjhkKZNkASP7CiJQSj9FFEaGJjPn3HKgN4TQLVYcxaEMsMmMZdle1wOsJCN9CPtJ/NO+lHIIQ1A/gxgszMbYZ8wnnpumGTg6ohert/IzniFQ8EZUXW/58o//2fpuvKHPcfGlry/Yyb2JVjXvwyIz0=
+	t=1740475978; cv=none; b=eb7RX7OjuzfAmBp1EVH6Ui4fT7xKunkudrlc7os9D82bcivaKuuE8v6vHYDRuaJFooIU6GWpSeB+3N8o7Q4ajqOTGTwFR/tMGgCZ7Ta1pG5UQ+hydK09ME5jViDcCC1G7hXtCPtLN06hqYvMazmIRWjfSvQAgLdphiXunNIn/nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740474159; c=relaxed/simple;
-	bh=GFEfTorG2zuWJ97TPko5rQZtvEKeuqQGPMRIfo2OrTw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=pEIQAcVTFDcnWizkoo8/BaB2NyeK0DWS88ApxBvmA3k+SJk5xWplrOCY6hpI6GidtcuDoothHGLv8l6UHhBYqt0a3kvHqEGcxthabS3gcNrIb0mN24P82bhVKD0kb4KZ3YIRtufCNv9TumTmzySyqD3R3fIwNvBi2KNwV2XmdqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=S/RE2gc5; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1740474155;
-	bh=GFEfTorG2zuWJ97TPko5rQZtvEKeuqQGPMRIfo2OrTw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=S/RE2gc5EDyN1SrEb2R9W642N50m8FsfRZ8bRHF3PVg1aUG1WzgVkxIFT6NDriogy
-	 WdnxD5k5YT47acDuj/yQUYBapJvHYIA2nKsriI8rlWRvja3Nq1tjZxsPkYRiLyRC0b
-	 Xv+71o/UZEzvQU6kwD1QM1xsIblLaR7Ff9zxCchBd/ITmzaPbL5jAcRoErtZHdCKk3
-	 ZS2HYEV+Ti/XpOlMdHSKh8LhcU71UEIPdaH9QsbuBZpA9ItcNknmf+oXr19w2OHYzj
-	 7SERwnx3yXbv3++KdygVOM6BvCi0yNR6TVtWjK4tMwK0krpW+R6+2oyX4ce0+sb0/n
-	 8evHq8R3JTM+w==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id BD42117E0E91;
-	Tue, 25 Feb 2025 10:02:34 +0100 (CET)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: chunfeng.yun@mediatek.com, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
- conor+dt@kernel.org, matthias.bgg@gmail.com, linux-usb@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel@collabora.com, pablo.sun@mediatek.com
-In-Reply-To: <20250220105514.43107-1-angelogioacchino.delregno@collabora.com>
-References: <20250220105514.43107-1-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v3 0/3] MediaTek MT8188 MTU3 USB and Genio 510/700
- TypeC
-Message-Id: <174047415469.19243.15192184553085173709.b4-ty@collabora.com>
-Date: Tue, 25 Feb 2025 10:02:34 +0100
+	s=arc-20240116; t=1740475978; c=relaxed/simple;
+	bh=VO+G51UF3rWRuWcNfxbs+DYejBc+3+YybdTX2xscr6w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BR/+yPotzx9VK5yk70G/f0Y91XXortIGYZKrEA+XHB6OP33Ikgqxuq39HM4Ahcj5BSaxChreeW6AfViO6UVt+y3Q/yLWWk2BkoIvhrjZllAnatFzuLjawK+S4di6kacS8ASuCekgh+5O/7aClsN3AKbVD83BrWA4Wj32tbLAVR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvuoQ0WY; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740475978; x=1772011978;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VO+G51UF3rWRuWcNfxbs+DYejBc+3+YybdTX2xscr6w=;
+  b=UvuoQ0WY8M4fGLC642CTCiXlbmmbe105mLrre1/eaNnubHz2rJ2y5Yl6
+   QHw3D8x0ZzZKdCAtLfIELFrFCn3L2NSLIGnuTNXOOnlXjE0zGXLlNEqC0
+   JgPqofpDmbrVUTtDI+fz8Lrvtd181Cb9HbWnOTyCpJr5+UfjMsNrRmiHl
+   OqXfPDoENDNmOeIXsslh2CZi0azBv4/bEuQ2yXvSRiSn4iulHQDBDTd5A
+   SD+GdkmnEd5nlOjRcB/PfElIaayFLRfpELGs6yRhJF0PefxnCdfridljz
+   Di80E3wWmffF1VK1WqmLatOXMX/5b4jNLOtzM5iXlLJEmZYiW4zR+c9Sn
+   g==;
+X-CSE-ConnectionGUID: GwkcIcHKQpKkEn9bibolFA==
+X-CSE-MsgGUID: f00gF9OfS+2N1rRlSq09xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="58693237"
+X-IronPort-AV: E=Sophos;i="6.13,313,1732608000"; 
+   d="scan'208";a="58693237"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 01:32:57 -0800
+X-CSE-ConnectionGUID: KnO1Mn95TQ+LDjIm/0Qzxg==
+X-CSE-MsgGUID: kpGWlHU+T1qtwXP4ZTc38g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="121581434"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa005.jf.intel.com with ESMTP; 25 Feb 2025 01:32:54 -0800
+Message-ID: <7a59ca83-133a-4cd1-b7b4-1e70aa7fb746@linux.intel.com>
+Date: Tue, 25 Feb 2025 11:33:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] usb: xhci: Unify duplicate inc_enq() code
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250220234355.2386cb6d@foxbook>
+ <20250220234719.5dc47877@foxbook>
+ <d59a6694-e0e7-46b7-874e-0c6acd8c9126@linux.intel.com>
+ <20250224004542.5861d4dc@foxbook>
+ <91e9b2f6-d9f6-460e-965a-bf2d5b13878c@linux.intel.com>
+ <20250224220148.4b91de02@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250224220148.4b91de02@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 20 Feb 2025 11:55:11 +0100, AngeloGioacchino Del Regno wrote:
-> This series adds MTU3 nodes to the MT8188 base devicetree, fixes the
-> Geralt Chromebooks to use it, and adds support for all of the USB
-> ports, including TypeC Power Delivery, Alternate Modes, etc, found
-> on the MediaTek Genio 510 and Genio 700 Evaluation Kits.
+On 24.2.2025 23.01, Michał Pecio wrote:
+> On Mon, 24 Feb 2025 13:49:29 +0200, Mathias Nyman wrote:
+>> Interesting, I wonder if setting the link TRB chain bit would
+>> also help with the TRB prefetch issue on VIA VL805 hosts.
 > 
-> This also adds the missing SuperSpeed port to the mtk-xhci binding.
+> Good idea, but unfortunately not.
 > 
-> [...]
+> With xhci_hcd quirks=1, which is XHCI_LINK_TRB_QUIRK:
+> 
+> [    0.543465] pci 0000:0a:00.0: [1106:3483] type 00 class 0x0c0330 PCIe Endpoint
+> 
+> [  406.745905] xhci_hcd 0000:0a:00.0: xHCI Host Controller
+> [  406.745916] xhci_hcd 0000:0a:00.0: new USB bus registered, assigned bus number 11
+> [  406.747265] xhci_hcd 0000:0a:00.0: hcc params 0x002841eb hci version 0x100 quirks 0x0000000000000891
+> 
+> [  407.475672] usb 11-1.4: Found UVC 1.00 device USB2.0 Camera (1e4e:0103)
+> 
+> [  407.697768] usb 11-1.4: Selecting alternate setting 12 (3060 B/frame bandwidth)
+> [  407.700432] usb 11-1.4: Allocated 5 URB buffers of 32x3060 bytes each
+> [  407.732047] xhci_hcd 0000:0a:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffccc000 flags=0x0000]
+> [  407.732122] xhci_hcd 0000:0a:00.0: WARNING: Host System Error
+> [  407.732133] xhci_hcd 0000:0a:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffccc000 flags=0x0000]
+> [  407.732151] xhci_hcd 0000:0a:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffccc000 flags=0x0000]
+> 
+> Link TRBs from debugfs:
+> 
+>   0 0x00000000ffccbff0: LINK 00000000ffcca000 intr 0 type 'Link' flags i:C:t:C
+>   1 0x00000000ffccaff0: LINK 00000000ffccb000 intr 0 type 'Link' flags i:C:T:c
 
-Applied to v6.14-next/dts64, thanks!
+It was worth a shot,
+thanks for trying it out
 
-[1/3] dt-bindings: usb: mediatek,mtk-xhci: Add port for SuperSpeed EP
-      commit: 454a1e3cd36c113341d7b71e8e691c6e47ab4a8a
-[2/3] arm64: dts: mediatek: mt8188: Add MTU3 nodes and correctly describe USB
-      commit: 598c4ad870d3942ea948d2b99c55239acdde3224
-[3/3] arm64: dts: mediatek: mt8390-genio-700: Add USB, TypeC Controller, MUX
-      commit: 1afaeca17238ef6480b1a76e7fd8b3c33d406ef7
+I'll send the original fix to Greg
 
-Cheers,
-Angelo
-
-
+-Mathias
 
