@@ -1,86 +1,123 @@
-Return-Path: <linux-usb+bounces-21044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577D3A4450B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 16:55:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF7AA44895
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 18:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54A86860858
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 15:54:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 727DF7A5E37
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 17:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16227155757;
-	Tue, 25 Feb 2025 15:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188D1199FB0;
+	Tue, 25 Feb 2025 17:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDWXGG6e"
+	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="vQk4+0T0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADA315539D;
-	Tue, 25 Feb 2025 15:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F7A194A59;
+	Tue, 25 Feb 2025 17:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.182.119.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740498892; cv=none; b=DdlFerTx88a2e9/beh+D62JeM+1PcNhHJYdV5ZTyBsEHX7riU8h918bjrdPxOBxT+4rkn47bpBvwcKbt83nwohPkQBFGxzl01JcMp8+gSF+ShUfe79oOHgprJvXwZJBu7OwLrP5AP7ao5FzDVRNRrlVFbLKcYiDHxiUSL7q4+Eg=
+	t=1740505292; cv=none; b=DjwKbYa87nhVqnPBHHA1lfm6gelOdk8AcqpFXwWmbhyQoOM/OzjqXzoDDii00Oam6Hqex4UyFn4KVNGaZ+MpjY/JgSElcM91rqNz1h2CKO66oMNP3qFEEAzrUUAa30VP6Tu5ws4naRmS3lxCx+8bWGQsoLQ0/S9HOs3mlRMUw90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740498892; c=relaxed/simple;
-	bh=JfxDYuUElX0vet5OAT17toee3SRhFOg1uKAsynXvBmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pmZdRkrvefvb7lZbJ8hZ52OIV/o8AOWI2YXvJX1ADOATjf/+a38gjZtOLzaX3KoTx+sgIC/kl02qLBklAX8en3vE97qIPiDugGRNEwmUw6hPPHD6X0kxSb8J/MhcEu+2vfZuw9Un2hHPHVbr0QJj8liTYkHg/nhHM74EmThuusU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDWXGG6e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45E1C4CEDD;
-	Tue, 25 Feb 2025 15:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740498892;
-	bh=JfxDYuUElX0vet5OAT17toee3SRhFOg1uKAsynXvBmQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GDWXGG6eQt1CmWiksbFNg33l9gWCNCB+BiWZ+ZdHhAlCkyusuPv/UEwRlJ6mjphoM
-	 eS7Asrro6qMERpgWFj8JVO2jr7+UiOmoOl4UxhC4BZFY9SxdQmywF4sfLXPiT+13wF
-	 9h+zVTOomluh1PmcnQpfaiJkbA5dwyOsDFHqBgBjD3UwpbLTP86/NwJDqJAKvZkkqc
-	 qNawo8JK+g8pT1P/4N0QzBXzzPljIC/T4Aee5iiJ3CgkFvT75gZqfRRCoDXQaw7YIS
-	 BuPktr1pZyWBjrA+JiX8P4WYiG0Xxph75sal1aycwl0mXghcf2ao3zyRSoCYzImHN+
-	 6Cd6THvyDJgiw==
-Date: Tue, 25 Feb 2025 09:54:49 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: s.hauer@pengutronix.de, peter.chen@kernel.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	conor+dt@kernel.org, shawnguo@kernel.org,
-	gregkh@linuxfoundation.org, kernel@pengutronix.de,
-	festevam@gmail.com, jun.li@nxp.com, krzk+dt@kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: usb: usbmisc-imx: add support for
- i.MX95 platform
-Message-ID: <174049888950.2563045.17446599441921480072.robh@kernel.org>
-References: <20250225053955.3781831-1-xu.yang_2@nxp.com>
- <20250225053955.3781831-3-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1740505292; c=relaxed/simple;
+	bh=gZ9azeov55xkLXY+W2frk6ujUo/ML78OAupnzsnNQ5I=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=VhtydxyWFUvTuEe3v+fwQVlHNkjpVeZT/4ktKO2LwUhLG5G/JaVSxv7rC4M/qXWux4pTkKqbsoEPnChG/gfV7/pzxOv/eSh+O5vD2Ia7hiGLc/5qU/RPJkK97nJ9u1W+TmAysYohDDdFwVSRMEwJuV0GCAg8HHLXclgv4uh9lIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=vQk4+0T0; arc=none smtp.client-ip=217.182.119.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
+Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
+	by relay3.mymailcheap.com (Postfix) with ESMTPS id 0722A3E917;
+	Tue, 25 Feb 2025 17:41:23 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	by nf2.mymailcheap.com (Postfix) with ESMTPSA id E11F2400F0;
+	Tue, 25 Feb 2025 17:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+	t=1740505280; bh=gZ9azeov55xkLXY+W2frk6ujUo/ML78OAupnzsnNQ5I=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=vQk4+0T0pO39EPIqQLmw0e7DKkbyF4Vs3kxxgVJX33WOs4nDDOgat8kjoovATDQia
+	 dU9TspXZKxh2avYay+RvtXQFFj1wRtGpKpa23wjq9qS+y8WSsRLK+lQJZdHnQ9dWHJ
+	 1jT9oZzMAlldzLOqXHdMctW8OeLyKWa1JzviVn5g=
+Received: from [172.29.0.1] (unknown [203.175.14.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id D1B2B401D1;
+	Tue, 25 Feb 2025 17:41:17 +0000 (UTC)
+Message-ID: <c2b8f8af-db2b-4b64-9e45-83e2b0a3d919@aosc.io>
+Date: Wed, 26 Feb 2025 01:41:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225053955.3781831-3-xu.yang_2@nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: core: Enable root_hub's remote wakeup for wakeup
+ sources
+From: Mingcong Bai <jeffbai@aosc.io>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Huacai Chen
+ <chenhuacai@loongson.cn>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Kexy Biscuit <kexybiscuit@aosc.io>
+References: <20250131100630.342995-1-chenhuacai@loongson.cn>
+ <2f583e59-5322-4cac-aaaf-02163084c32c@rowland.harvard.edu>
+ <CAAhV-H7Dt1bEo8qcwfVfcjTOgXSKW71D19k3+418J6CtV3pVsQ@mail.gmail.com>
+ <fbe4a6c4-f8ba-4b5b-b20f-9a2598934c42@rowland.harvard.edu>
+ <61fecc0b-d5ac-4fcb-aca7-aa84d8219493@rowland.harvard.edu>
+ <2a8d65f4-6832-49c5-9d61-f8c0d0552ed4@aosc.io>
+ <06c81c97-7e5f-412b-b6af-04368dd644c9@rowland.harvard.edu>
+ <6838de5f-2984-4722-9ee5-c4c62d13911b@aosc.io>
+ <6363c5ba-c576-42a8-8a09-31d55768618c@rowland.harvard.edu>
+ <9f363d74-24ce-43fe-b0e3-7aef5000abb3@aosc.io>
+ <425bf21b-8aa6-4de0-bbe4-c815b9df51a7@rowland.harvard.edu>
+ <0ca08039-73fb-4c4b-ad10-15be8129d1b7@aosc.io>
+ <5b4349c8-26ae-4c95-8e60-9cccbb1befe6@aosc.io>
+ <6c9b295c-3199-4660-b162-188a9ab5a829@aosc.io>
+Content-Language: en-US
+In-Reply-To: <6c9b295c-3199-4660-b162-188a9ab5a829@aosc.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: E11F2400F0
+X-Rspamd-Server: nf2.mymailcheap.com
+X-Spamd-Result: default: False [-0.10 / 10.00];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Action: no action
 
+Hi Alan,
 
-On Tue, 25 Feb 2025 13:39:51 +0800, Xu Yang wrote:
-> Add compatible string "fsl,imx95-usbmisc" for i.MX95 platform and
-> restriction on reg property.
+在 2025/2/9 18:22, Mingcong Bai 写道:
+> Hi again,
 > 
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - improve subject and add Rb tag
-> ---
->  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 23 ++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
+> Oops. I missed the dmesg.
 > 
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+<snip>
 
+Gentle ping as it has been almost a month since our last correspondence. 
+Can you please advise if you would need any further information and, 
+since the fix is probably incorrect, if you have any suggestions as to 
+how we could move forward with a better fix or platform-specific quirk?
+
+Best Regards,
+Mingcong Bai
 
