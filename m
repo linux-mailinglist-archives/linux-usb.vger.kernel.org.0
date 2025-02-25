@@ -1,79 +1,52 @@
-Return-Path: <linux-usb+bounces-21039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21040-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2828A440BD
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 14:29:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B90E1A44156
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 14:52:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC624163C85
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 13:25:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FCCD1896CEB
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 13:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE64226980F;
-	Tue, 25 Feb 2025 13:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416B1269AEA;
+	Tue, 25 Feb 2025 13:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afghwKL4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hdQ57UjI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5006257420;
-	Tue, 25 Feb 2025 13:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D30E2EB1D;
+	Tue, 25 Feb 2025 13:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740489929; cv=none; b=tSh2RgLvvrEACc9kifMqA/u7CNbzsZT+nuF2cW7jmKoBqORZyIwgteWLuK32OTp0HHkeuYs4QsvEsaAUTZddMWonq65YucSCfH+Yz+BsZnxCE30dcufhZI+Gq/W0x696NIu4s7JrLTRneU8cz3YY2Kpdu/rLIdfzE91OiQO/b/E=
+	t=1740491507; cv=none; b=lgB+BMjzn6+gsq9TX2W9PLUEWN40UY+39QjEzRqUfsF/uAKYx0TTWGccZvVkVUo01Z3XUMAtNmUp86uuyDR1Gk0f29CPu3VaC34uaY53J+DOzbG6UAvdR7iV7b8UQll8MPSPufP8WSJUvcLTXVEy/cGnDHGeduqruZQ1OdG1o+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740489929; c=relaxed/simple;
-	bh=MQ/HzIihWeJrPqBPMrEmNmq8jxK9pS+ZfIERMDAVCWE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k/Na0dcnGrKGqxrSsyMSDEXM8+jgGUh8FINROKSsFHLjMh25dyd1G6rg7Q2iBnE2wgKp0qwlGMBNjLe25+4qg29l55Jz/o8fHWxjm7DLfJAosVkJVz0bJTWJiqs8yh2I48Vv8SFclXJXPEyv4oYJ4WBcBQy3XThjEKsTilk7TBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afghwKL4; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-546210287c1so5713297e87.2;
-        Tue, 25 Feb 2025 05:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740489926; x=1741094726; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S290suCX82CQhBBsqJd9GKbce+6amsZtyfvkT5bRDu0=;
-        b=afghwKL4XzJ6i7UDrTtWE74Q0fgNHfkvzgxD9DfCgeYSMbRxLbchToyzoJaPVC9eUl
-         UP5/wBzmIeA82O03Ksz4u/HQshQcRJV7uL6eDT5ByCFdE+rdSqKULAIwK0DeQORr0OCu
-         tY3cdCaB9uvf7hJ9y/sYyk4Wal17rFR+jLxcadvTafdIUqWYM0axNMDgU/H/QFt9mytG
-         WMGZ/yA/cJY/JHP8wKxmZgDzXmXu+aS82mgpHxMNDlY6/Z30wGmoOqlmr5W708h8ow/N
-         E1yO8UL94sZ4gYTGQ7D3FwtLe/cMBzxjGO0KFWeKMo4IPvZJRgbsW+oUSfWJBpvQhyB4
-         tNhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740489926; x=1741094726;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S290suCX82CQhBBsqJd9GKbce+6amsZtyfvkT5bRDu0=;
-        b=LuLa5vWGAeyqNN+y+3qiWqSlhGCqyYiaC9VUcgjwbII1cxDVtREYGAdd8kS4ampjgD
-         Zv3u6/BheHuKNHv6pZkUmxfmLJjDe71UHIzbC/T7X/7kbOfcGYfm4WT2RC8UnLivEPih
-         8Wjeryf2MmXnY+jN6SMnTufQ2+JaA/2DEIUjAPwnUTNaWaNnrf6+opETYo3/nLojBLIj
-         xU5CLv7hVd1aoiMX/KvtY8QpaPsFpCc64UTbvj7NyFIQh121CaRmK67IODw0NUbgrDC9
-         w4jsOH+YnVQVv7QyPywFBqfPJVOkn405tj+ttVOz6B+fdD/EzVlOgRVrJUa/Jm/g62Tr
-         /Cwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVvm8VzuWGGhyeumdzU8qrk2qvNSuF+6ibqhsy+Mmg/s+ZElTkXQ6TdZAZr4WjM4WiXScnRL/kGuN1X@vger.kernel.org, AJvYcCVzKVwUVMVpqQtWOiGTN5JI/tzs3ICCvn77zFZyhAHwhHEujElbzq/sDSUV1OC5DxRTRTpiyldnwxYi2ZI=@vger.kernel.org, AJvYcCXKKf/3IrkF5OhneC1HiQWVtFVAYXCJieV+rNZ1Nnnenxb6Ac12gsdsOHNtM5VbFp4ciqAG3xK8A8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9f0HpOTi5C2x0xMPc7qk21SuWm7oLb/VIM1fU/g/BkhkR8pLv
-	FYMfYFRSuMnQAPzo+oCgcExG7tCn/TLZnzdKyYHcAvum79QmtBn3
-X-Gm-Gg: ASbGncv9Nveqs+Pc/mpirR7u5kLi2SJHXMqLfoOYIiJGFQteQLsCoD5PDSRE0fKzZ/n
-	FjdQ9NJnbp3xAPysn7Ei73BSSYfw/c9QDXf5dHKvO7wcXtjiQGi07gD4KBi689jj0DYLWKeXGUe
-	o3eI+ro2obmNkHfKim8Hno83XAM+uyfvZjAqqWAm/kulVEU2A4AGnKIYvG/sowHdttUJsRvpMCJ
-	YuwPyPtpHhnYc5xNIoPHl1itsyVvYwHZdPFgSB3pVvDgirM4Kmo+NAIBuoZUuAHxkDxvWmYbaso
-	XOo5r+gd7Z+4Hjon7hoWesWxtK0V5L6B+M9SKhM=
-X-Google-Smtp-Source: AGHT+IFejrBBfOFcU1sAJrwx6tnm7K9qw63EN5U2xbDg42R9CV9q19QCV8RsbFYG3hE/AEwYlTUIUw==
-X-Received: by 2002:a05:6512:3b82:b0:545:2335:6597 with SMTP id 2adb3069b0e04-54839263d23mr6441551e87.50.1740489925388;
-        Tue, 25 Feb 2025 05:25:25 -0800 (PST)
-Received: from [172.16.183.207] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-548514f4d7dsm171988e87.174.2025.02.25.05.25.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2025 05:25:24 -0800 (PST)
-Message-ID: <bf74173f-ccd9-43c0-a190-68512c6f63cc@gmail.com>
-Date: Tue, 25 Feb 2025 15:25:23 +0200
+	s=arc-20240116; t=1740491507; c=relaxed/simple;
+	bh=ZAVYzMsJEOJgAA/Biy5RSY4BLP2yI5AlQv5cyAf3xZI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=A8dYN12OJfQTMW6HaabsYiP3iyYwyGWEoP9xgGWzJ2fEx2aM0Gu3a7+0Hve9dzdc7HUhQK7QA4V7oJqMbHDLTjQIHjyzyEr5W/tnIW42edn9DQZK11nD7+fF31VEFDSiDkcqRR/ZVU+C+H5cgJgKoWqZCI7W4zeO4HKZbJ5WKTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hdQ57UjI; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 538FB441CD;
+	Tue, 25 Feb 2025 13:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1740491503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=PWe4zl1EijyFoVur2uS6+GPMZgL8gygNNdwmilhKe4Y=;
+	b=hdQ57UjInaiyei7rKjMPiKxFdtP2w0xO7fU/nK7jFk6UvS9c7oaylYdGbu9qxNHsBHdFyJ
+	rNHqb/U+68l5jTX5s5CEwVvCeqFTgx/EiWDWXG0BAJC+85sf72iUTc3Q5lzKJ8w43+cBFd
+	4veMFRyvR2e7nEVFLx7axLzhcBSW8d2wcebUKkcpuC4EwAy0NQ5HEfcrA0gmszeP3PZyq3
+	TAkeZBtgB5/meOnPySQaW6IzK9TT7FusHQXdmr3vyU32qUE4kUn7mHRgqD6Y6nHESmepQ8
+	jFawHJCy1Pmez39k4ycxZx6cWSXrEBQShCigcHlFrK5g4SFyQw5k0+y+3315ww==
+Message-ID: <49cd8502-f11e-4ade-a3a0-b16ce0c6282f@bootlin.com>
+Date: Tue, 25 Feb 2025 14:51:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,124 +54,155 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] power: supply: core: get rid of of_node
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Mark Brown <broonie@kernel.org>,
+Subject: Re: [PATCH v4 9/9] drm/vkms: convert to use faux_device
+To: Thomas Zimmermann <tzimmermann@suse.de>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Linus Walleij <linus.walleij@linaro.org>, Hans de Goede
- <hdegoede@redhat.com>, Liam Girdwood <lgirdwood@gmail.com>,
- Chen-Yu Tsai <wens@csie.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>,
- David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
- <491e20bb-5ab4-40e9-bb35-5e05dc7bd46c@gmail.com>
- <ocbwzuqk56yx34kc5vp6aaxnhxqd4zp2wixlv7p3mex66ibntu@ahigikrf5cg4>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ocbwzuqk56yx34kc5vp6aaxnhxqd4zp2wixlv7p3mex66ibntu@ahigikrf5cg4>
+ linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+ Mark Brown <broonie@kernel.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mairacanal@riseup.net>, Robin Murphy <robin.murphy@arm.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Zijun Hu <quic_zijuhu@quicinc.com>,
+ linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Melissa Wen <melissa.srw@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ dri-devel@lists.freedesktop.org
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <2025021029-snout-swivel-9a45@gregkh> <Z6oPNmRo4XQQVEI8@louis-chauvet-laptop>
+ <f1ea30fe-8cb8-41fd-bc85-d511c800e594@suse.de>
+Content-Language: en-US
+From: Louis Chauvet <louis.chauvet@bootlin.com>
+Autocrypt: addr=louis.chauvet@bootlin.com; keydata=
+ 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
+In-Reply-To: <f1ea30fe-8cb8-41fd-bc85-d511c800e594@suse.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttddvjeenucfhrhhomhepnfhouhhishcuvehhrghuvhgvthcuoehlohhuihhsrdgthhgruhhvvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedviedvvefhjedtvdevkedthfelueevgfffudeftdejleefgfevjeeiveehudfggfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrvddtngdpmhgrihhlfhhrohhmpehlohhuihhsrdgthhgruhhvvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedviedprhgtphhtthhopehtiihimhhmvghrmhgrnhhnsehsuhhsvgdruggvpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhihuhguvgesrhgvughhr
+ ghtrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvghkshgrnhguvghrrdhlohgsrghkihhnsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomh
+X-GND-Sasl: louis.chauvet@bootlin.com
 
-On 25/02/2025 15:11, Sebastian Reichel wrote:
-> Hi,
+
+
+Le 25/02/2025 à 12:41, Thomas Zimmermann a écrit :
+> Hi
 > 
-> On Tue, Feb 25, 2025 at 01:14:03PM +0200, Matti Vaittinen wrote:
->> On 25/02/2025 01:21, Sebastian Reichel wrote:
->>> This removes .of_node from 'struct power_supply', since there
->>> is already a copy in .dev.of_node and there is no need to have
->>> two copies.
+> Am 10.02.25 um 15:37 schrieb Louis Chauvet:
+>> On 10/02/25 - 13:30, Greg Kroah-Hartman wrote:
+>>> The vkms driver does not need to create a platform device, as there is
+>>> no real platform resources associated it,  it only did so because it was
+>>> simple to do that in order to get a device to use for resource
+>>> management of drm resources.  Change the driver to use the faux device
+>>> instead as this is NOT a real platform device.
 >>>
->>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>> ---
->>>    drivers/power/supply/power_supply_core.c | 17 ++++++++---------
->>>    include/linux/power_supply.h             |  1 -
->>>    2 files changed, 8 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
->>> index d0bb52a7a0367a8e07787be211691cad14a41a54..11030035da6f121ca76bebf800c06cfd5db57578 100644
->>> --- a/drivers/power/supply/power_supply_core.c
->>> +++ b/drivers/power/supply/power_supply_core.c
->>> @@ -200,11 +200,11 @@ static int __power_supply_populate_supplied_from(struct power_supply *epsy,
->>>    	int i = 0;
->>>    	do {
->>> -		np = of_parse_phandle(psy->of_node, "power-supplies", i++);
->>> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
->>>    		if (!np)
->>>    			break;
->>> -		if (np == epsy->of_node) {
->>> +		if (np == epsy->dev.of_node) {
->>>    			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
->>>    				psy->desc->name, epsy->desc->name);
->>>    			psy->supplied_from[i-1] = (char *)epsy->desc->name;
->>> @@ -235,7 +235,7 @@ static int  __power_supply_find_supply_from_node(struct power_supply *epsy,
->>>    	struct device_node *np = data;
->>>    	/* returning non-zero breaks out of power_supply_for_each_psy loop */
->>> -	if (epsy->of_node == np)
->>> +	if (epsy->dev.of_node == np)
->>>    		return 1;
->>>    	return 0;
->>> @@ -270,13 +270,13 @@ static int power_supply_check_supplies(struct power_supply *psy)
->>>    		return 0;
->>>    	/* No device node found, nothing to do */
->>> -	if (!psy->of_node)
->>> +	if (!psy->dev.of_node)
->>>    		return 0;
->>>    	do {
->>>    		int ret;
->>> -		np = of_parse_phandle(psy->of_node, "power-supplies", cnt++);
->>> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
->>>    		if (!np)
->>>    			break;
->>> @@ -606,8 +606,8 @@ int power_supply_get_battery_info(struct power_supply *psy,
->>>    	const __be32 *list;
->>>    	u32 min_max[2];
->>> -	if (psy->of_node) {
->>> -		battery_np = of_parse_phandle(psy->of_node, "monitored-battery", 0);
->>> +	if (psy->dev.of_node) {
->>> +		battery_np = of_parse_phandle(psy->dev.of_node, "monitored-battery", 0);
->>>    		if (!battery_np)
->>>    			return -ENODEV;
->>
->> This reminded me of a change I once did to power_supply - but maybe never
->> got it further than RFC stage. Anyways, do you think it would be possible to
->> decouple the battery info and struct power_suppply (while at it)?
->>
->> I believe that the chargers and especially fuel-gauges which are designed to
->> operate with different batteries (and which get battery details using static
->> battery nodes), would like to get the battery info _before_ registering the
->> power_supply (to avoid sending bogus values while operating on defaults,
->> before the battery info is read and before things are set accordingly).
->>
->> I know this may be a bit much to ask, but I believe it'd be an improvement.
->>
->> Other than that, looks good to me.
+>>> Cc: Louis Chauvet <louis.chauvet@bootlin.com>
+>>> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+>>> Cc: Simona Vetter <simona@ffwll.ch>
+>>> Cc: Melissa Wen <melissa.srw@gmail.com>
+>>> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+>>> Cc: Maxime Ripard <mripard@kernel.org>
+>>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>>> Cc: David Airlie <airlied@gmail.com>
+>>> Cc: dri-devel@lists.freedesktop.org
+>>> Reviewed-by: Lyude Paul <lyude@redhat.com>
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> I was thinking about adding an init function to power_supply_desc,
-> which would be called directly before psy->initialized is set to
-> true in the power-supply registration phase. I think that would be
-> the right place to setup device registers based on battery-info data.
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+>> Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
+>> Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+>>
+>> Thanks for the modification, it seems to work.
+> 
+> Should this patch be merged through DRM trees? drm-misc-next is at
+> v6.14-rc4 and has struct faux_device.
 
-Hm. I suppose that would work.
+Hi,
 
-> But it's definitely not a thing for this series.
+I was not aware the faux-device was merged, as it is a new feature, I 
+expected it to reach drm-misc-next on 6.15-rc1.
 
-Fair enough. I thought that might be the case but decided to ask 
-anyways, because, AFAIR there were no real problems what comes to not 
-requiring the struct power_supply for reading the battery_info. But yes, 
-I can see why killing the of_nodes is a big enough series, even without 
-added complexity :)
+I plan to merge [1] today/tomorrow (well tested with platform_device), 
+and then I will submit an updated version of this patch (only trivial 
+conflicts, but never tested with multiple VKMS devices).
 
-Yours,
-	-- Matti
+[1]:https://lore.kernel.org/all/20250218101214.5790-1-jose.exposito89@gmail.com/
+
+Thanks,
+Louis Chauvet
+
+> Best regards
+> Thomas
+> 
+> 
+> 
+>>
+>> Louis chauvet
+>>
+> 
+
+-- 
+Louis Chauvet, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
