@@ -1,146 +1,124 @@
-Return-Path: <linux-usb+bounces-21046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7ECEA44EBA
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 22:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3573A44FA2
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 23:18:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E3D13ADDF0
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 21:23:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 269623A4266
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 22:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1705120C48E;
-	Tue, 25 Feb 2025 21:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8461E212D7B;
+	Tue, 25 Feb 2025 22:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="LKrvjzfz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="blpvUsDr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9911DF994
-	for <linux-usb@vger.kernel.org>; Tue, 25 Feb 2025 21:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B5D21ABDF;
+	Tue, 25 Feb 2025 22:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740518630; cv=none; b=LRO+hDNyNQgGP7UWSU/FuOlSRIyL4qYI0JlzYQQqNdQ6hX1cOkxvOkkxGHKdorpCWJ3vHVGf73rpfluvT7o50/HoCNSPyrM9/ZmNfcuoIoTkWTByllxVMOaec3dLOB8CGsXl7V0mIR/XsqZu5Vn7yHB+1YaXhOMbuBKylo6UaD4=
+	t=1740521834; cv=none; b=Jg3LozgNUMt6NanT1m05kmpkqDj167oiEyr2LmS6B5Tvt3C/gH9onWHpDTiEParffZ/jLV6wyaSFFWAkrtvYcjU7rfpCrNYRfPjoRbgfm+g/rcoU7MjjoE7hme9T9P6BaL3zIF4dkuhh+2erxA1s6kDGqbOYU9UueCzsYfTsFmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740518630; c=relaxed/simple;
-	bh=9e5b+ExLgK2p2+BxW6jT8y+FhU5WN164n9eGn9MzGy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtuYmMS6HFTUudpkDkt7SCnggRS8Bz8hFu+8M10POJQeAkYj3uxn+TkowRGarreG/383tofBLZSZyov1mUqqOen7fltgnhPO04ReetA14U8wggOM/xqFi7QEegIiax1yeo4BBDiuQJPFO4yGci2yyx5sH0vgOI2R23Awji3EhoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=LKrvjzfz; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 2A36A240103
-	for <linux-usb@vger.kernel.org>; Tue, 25 Feb 2025 22:23:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1740518621; bh=9e5b+ExLgK2p2+BxW6jT8y+FhU5WN164n9eGn9MzGy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=LKrvjzfzBGciSEIXr2NGc7U8HYBxDDSiCpbsW0MqZQdVO0wYrb7uSxgTPedXkfS0R
-	 4324LQ5SiykN35CStB9V8cXAhKXBx5lvbd0mOc3WI5MZlnf+nheamyc8eEueB2g11j
-	 vGM+lAiJbmP+d1qZVGBDQPh+QhuiJ3ShUYX7yGXbtudWps3/56fnc8ql0Vdv8HXIwf
-	 T9ZyHfROnXLa9avZehvxtL+BMFL/LZvWkNL6ANxD0n05NevESL3ziktg5DA+ZF8NTT
-	 IvtFiC3i/6HmdellNX3LOFuyPlPHOHOD3PPUIsIjqJD1LivqrmhdAgG/3/3+XWXg8o
-	 wwdDLye5lUH3A==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Z2Vvw1c3Wz9rxB;
-	Tue, 25 Feb 2025 22:23:40 +0100 (CET)
-Date: Tue, 25 Feb 2025 21:23:40 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: j.ne@posteo.net, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: Re: [PATCH] usb: storage: jumpshot: Use const for constant arrays
-Message-ID: <Z7403OPZUf7WZ5Ai@probook>
-References: <20250225-misc-const-v1-1-121ff3b86437@posteo.net>
- <a4e81827-b506-491f-8087-204044705c42@rowland.harvard.edu>
+	s=arc-20240116; t=1740521834; c=relaxed/simple;
+	bh=QP19tnSUO6+HLqxH1ELuRp+Rtpr531yPVfYEaoK/1/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q1s1+6KUvsFAHCyr64EO67uYiiw74I7sPzBf0M3UfPGlpx317z+MSIM01Yb2IYHgvSnPB/+rA1lXiW2pAdgF87YvFCY0u/slLSFCJxIOoebmouJ/v1mDZOJ5WjkbjwAiu3nOqIGURscdq7d1f8jmzNhCIpb6NZzjQgs5R22t08U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=blpvUsDr; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-abb7f539c35so1190632466b.1;
+        Tue, 25 Feb 2025 14:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740521831; x=1741126631; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fH1ejT9qluyOxi6z4OMvRkQd0hvbyUhN+fXwbEGK+rc=;
+        b=blpvUsDrPfR4zcqUpzXVcmyhfaclj7t9CFZEh/jnsaNML2YL3KeDqY6bl/ih7bCJQI
+         Fne9peHH4Bn038+q/Qn4Z0fuNsBkXxQw/HUZGrREVHzt3Z5lDbKcv7XEVa0Az0huQAtp
+         THUc02FN8xoGSDraD0ZwlSwFjS6i/KyXHRADqbrYRANp77OyEzo9J4SArNQGi9sp0yF1
+         A1pgin8gWtlvXjX5SusdaB355EjlYWDlNfEMaTZqseIJ0BasFQvn0PeRXBELa8RmkOnb
+         so8SUw3uedgJpCnAIU8mDVEID4X0wiY6yfqiWy5pnJZRWRgTo896N5/p8+1ATl8Nogao
+         BlcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740521831; x=1741126631;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fH1ejT9qluyOxi6z4OMvRkQd0hvbyUhN+fXwbEGK+rc=;
+        b=AKYo9b7H9QyPH9/+FQYmtvgL4bRQpL2RChS1t2jGGS/C6nSDMU/RRcI0iGbQYXo2OX
+         nhDb8Dh6GO6m5qxppW+G1LTkYs5dzS+Wn6kxoeYtJZxOvoed/6bJ3aayC0BFhQtFQXI4
+         RaBPebSpCChbEVlF+y0dXlwgldnqOGl2RhANhJabkZifUYDJtJUa51PIN8gpQinWiQFI
+         FMnCrwDC0Wape2DbuEugHZmYY9NEWlhjdvQGz3jDDM91+kZ1Pjfrpkydmy7omjhP9asX
+         7L/GLfiqPCV6l++CSIO8WPBARuQvzGiPduCEntm8q1J26XkTkOV1qDWi8vi8LA7PSHDW
+         AwSg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/YSmR0xlpIx9s09yRmHjQAwoNjxTLdU6b02MtaORhBflTp6TdPw/Kk99nxnjmFPsOEzMlLPTE2V2WB4I=@vger.kernel.org, AJvYcCXUXXzKN97xgFSJ6i1qGw05AyeFBI9qGKsyt1fYZ/uv+5bFmqEX07R03CobVtnVqaPY8T5Lnh27cvdf@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiQJCqdruf7OkWvw9xAzWV1RqJyckDg2xT2yn0JWlynXuUho42
+	Anre6BkNgun1PEq2m5TfT+Wi0jgRZ/dRwgyUWz0zzmTdcB47z3Cn
+X-Gm-Gg: ASbGncsYATKuRELl/COHz3gJ+e4b6iuaIxJsNxYjUSpGI52ziKxBt0u2B/XxngvYDts
+	lu3XL0Cgq3EmtNb2B1bHql3bS4ZfcOmHOhNwsD81FvnFxgDrv+c208cVjNRDNOUkjcleTKPA6Rq
+	Ua2BUZJJ1LacxbSrZpxMmBiIjDWxkw0duFXxmrs5+efh5doi8gAdeYbtKDYhljjLkfTlWHf4GDI
+	X4MMhH3s/jS6/u37WZh2aPPNmD3EmBKegTXgMC/MK0LvXen+M6tBLhaNjXjcOYsf6+3QrayYEtX
+	iaVC1f/A96vRjG9Dqpcm2Wm5Plnw+3oqn6pO7Taq
+X-Google-Smtp-Source: AGHT+IFv5xQtOyaT5z0hxjQvRhVdVKN5ONoFFGjZjoPiPJ0F+I3C6bLQSwC1YbZ4C+i0+9LQsT29ZA==
+X-Received: by 2002:a17:907:728c:b0:ab7:d481:212e with SMTP id a640c23a62f3a-abed0c7a097mr495602666b.12.1740521830500;
+        Tue, 25 Feb 2025 14:17:10 -0800 (PST)
+Received: from foxbook (adqi59.neoplus.adsl.tpnet.pl. [79.185.142.59])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed20b6a05sm212587966b.174.2025.02.25.14.17.09
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 25 Feb 2025 14:17:10 -0800 (PST)
+Date: Tue, 25 Feb 2025 23:17:05 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: xhci: Simplify moving HW Dequeue Pointer
+ past cancelled TDs
+Message-ID: <20250225231705.3fa7c8bd@foxbook>
+In-Reply-To: <b82f9543-2730-48af-81e8-1612b0d30ed9@linux.intel.com>
+References: <20250225125750.1b345e2c@foxbook>
+	<20250225125939.7a248e38@foxbook>
+	<b82f9543-2730-48af-81e8-1612b0d30ed9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a4e81827-b506-491f-8087-204044705c42@rowland.harvard.edu>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 25, 2025 at 10:11:02AM -0500, Alan Stern wrote:
-> On Tue, Feb 25, 2025 at 01:25:03PM +0100, J. Neuschäfer via B4 Relay wrote:
-> > From: "J. Neuschäfer" <j.ne@posteo.net>
-> > 
-> > These arrays are not modified. Make them const.
+On Tue, 25 Feb 2025 16:55:49 +0200, Mathias Nyman wrote:
+> This new way relies on td_list being in sync and up to date.
+> i.e. hardware dequeue can't be ahead of first TD in list.
 > 
-> This does not explain _why_ you want to declare these arrays const.
+> One bad scenario could be something like:
 > 
-> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > ---
-> > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> class driver queues TD1
+> class driver queues TD2
+> Class driver cancels TD2, queue stop endpoint command
+> (Class driver cancels TD1) (optional)
 > 
-> There should not be two Signed-off-by lines for the same person.  You 
-> should keep only the one with the email address you used for sending the 
-> patch.  And it should have your full name, just like signing a legal 
-> document.
+> xHC hardware just completed TD1 and stop endpoint command at the same
+> time, xHC hw may have advanced the hw dequeue to TD2, write event for
+> stop endpoint command, and then write transfer event for TD1
+> completion. (xHC hardware may do things in odd order)
 
-Ah sorry, editing error on my part (I started the patch a while ago and
-since switched to a different email provider).
+I suppose this would be illegal; per 4.6.9 transfer events are posted
+and EP Context updated before Stop EP cmd completion. HW Dequeue Ptr
+is advanced on subseqent doorbell ring if the stopped TRB is complete.
 
-> 
-> > ---
-> > 
-> > This change was compile-tested with ARCH=powerpc
-> > ---
-> >  drivers/usb/storage/jumpshot.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/usb/storage/jumpshot.c b/drivers/usb/storage/jumpshot.c
-> > index 39ca84d6859122903de4e64b13e697e8b7d4ab31..089c6f8ac85fbb683cca8b03a2ff06c0ca776167 100644
-> > --- a/drivers/usb/storage/jumpshot.c
-> > +++ b/drivers/usb/storage/jumpshot.c
-> > @@ -367,16 +367,16 @@ static int jumpshot_handle_mode_sense(struct us_data *us,
-> >  				      struct scsi_cmnd * srb, 
-> >  				      int sense_6)
-> >  {
-> > -	static unsigned char rw_err_page[12] = {
-> > +	static const unsigned char rw_err_page[12] = {
-> >  		0x1, 0xA, 0x21, 1, 0, 0, 0, 0, 1, 0, 0, 0
-> >  	};
-> > -	static unsigned char cache_page[12] = {
-> > +	static const unsigned char cache_page[12] = {
-> >  		0x8, 0xA, 0x1, 0, 0, 0, 0, 0, 0, 0, 0, 0
-> >  	};
-> > -	static unsigned char rbac_page[12] = {
-> > +	static const unsigned char rbac_page[12] = {
-> >  		0x1B, 0xA, 0, 0x81, 0, 0, 0, 0, 0, 0, 0, 0
-> >  	};
-> > -	static unsigned char timer_page[8] = {
-> > +	static const unsigned char timer_page[8] = {
-> >  		0x1C, 0x6, 0, 0, 0, 0
-> >  	};
-> >  	unsigned char pc, page_code;
-> > @@ -477,7 +477,7 @@ static int jumpshot_transport(struct scsi_cmnd *srb, struct us_data *us)
-> >  	int rc;
-> >  	unsigned long block, blocks;
-> >  	unsigned char *ptr = us->iobuf;
-> > -	static unsigned char inquiry_response[8] = {
-> > +	static const unsigned char inquiry_response[8] = {
-> >  		0x00, 0x80, 0x00, 0x01, 0x1F, 0x00, 0x00, 0x00
-> >  	};
-> 
-> There's nothing wrong with this.  However, several other source files in 
-> this directory also have static arrays that are never written to.  Why 
-> don't you change all of them?
-> 
-> If you do, it will be best to put the changes for each of the files in 
-> its own patch, and then submit them as a series of patches.
+But I can see how this could appear to work fine and then mysteriously
+break on some weird buggy HC. I will abandon this patch for now.
 
-That's a good idea, I'll do it.
+> Now we detect that hw dequeue is in the cancelled TD2 but with TD1 is
+> till in the td_list. This new solution would move dequeue back to TD1
+> beginning, and process it again.
 
-
-> 
-> Alan Stern
 
