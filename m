@@ -1,226 +1,123 @@
-Return-Path: <linux-usb+bounces-21031-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21032-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6168A43DF6
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 12:42:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8785FA43E78
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 12:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77FD617A6C5
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 11:42:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DB89189E01B
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2025 11:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F62268685;
-	Tue, 25 Feb 2025 11:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AE0267B68;
+	Tue, 25 Feb 2025 11:57:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0JZC0Zwt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WN3VmE+C";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0JZC0Zwt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WN3VmE+C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBryZq+X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A307267B7A
-	for <linux-usb@vger.kernel.org>; Tue, 25 Feb 2025 11:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3281E7C0A;
+	Tue, 25 Feb 2025 11:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740483700; cv=none; b=OF57xj7RmY3oi14YhUch9PJlWgSN3TnQzDHxODAYtAAdIijjHbvDeO31rAIizY3cq9o0qj0vb7emq4p8ayy/+RYyHZgLXJyfN6Ks43Sfc6LY/87VkKTe2Tgqv/QCUeO7CjWkCdtK2Bnr4fw+80vj5dFzV5dozrPcTp6MLbzVQ20=
+	t=1740484678; cv=none; b=MtzmPFTwowUZp7a0sBTWy9zZljcWMD5U1pk+ghMJ5y60VJdGi6vhNJV4Wr3pZjihqVQ+nVz+OEPl+ahmhlq0PpswJUGDGlR0ZPqVVCt59EPGulx/bVjO21lP0wpatuiooPGzaIp42UzBhRHlPCFwQ1u3JCcO/ygMfwhhEJSsD1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740483700; c=relaxed/simple;
-	bh=E1V6508zNUccyqy2uSeE8ZccUTOvY3wLWIxatRFbS1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IUtwUNgmKN3bnWrA6kkml4p4IxcOHxHmVontDL9qZirnf9o5zmdBoQhYxS9OU84rA++VNpMP4X90/h/UZ50s03/6c7gcWYRIro0dK6Jp/2EXZItIRxWQrBDLwSWbrm0/jwop8ck1VFUSmHWF5pZqKnHWotnrEdzbx49GrhVb7PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0JZC0Zwt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WN3VmE+C; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0JZC0Zwt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WN3VmE+C; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id ABE7D1F44F;
-	Tue, 25 Feb 2025 11:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1740483696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UbsGQ9aQt0jmmsDa4NSHqjZXwDsdSzxo3e8MlkHByxU=;
-	b=0JZC0ZwtsRG5PNFqFzv2uyjg0djWNy5a7Me6o6HwegoGYfepnjLFxklkIYDTQE8X9CajDM
-	51GbJv4kqWVCbaZiiu9vNE82M0zBQLZxYyuFT7rWNFzVN/sBLl/pAbjNCsIr+Lq+vHiDmP
-	b2AjCEmv1kd3mZP3g/h2nCuz0tjJFcE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1740483696;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UbsGQ9aQt0jmmsDa4NSHqjZXwDsdSzxo3e8MlkHByxU=;
-	b=WN3VmE+C0NweJ5MWe+tstnV3mrGoI5oXyjEKQQ9UOJxYaKYDaARMV+nTFXeRtBNuSh8mWR
-	WTPHyxHoVZSUrnDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1740483696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UbsGQ9aQt0jmmsDa4NSHqjZXwDsdSzxo3e8MlkHByxU=;
-	b=0JZC0ZwtsRG5PNFqFzv2uyjg0djWNy5a7Me6o6HwegoGYfepnjLFxklkIYDTQE8X9CajDM
-	51GbJv4kqWVCbaZiiu9vNE82M0zBQLZxYyuFT7rWNFzVN/sBLl/pAbjNCsIr+Lq+vHiDmP
-	b2AjCEmv1kd3mZP3g/h2nCuz0tjJFcE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1740483696;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=UbsGQ9aQt0jmmsDa4NSHqjZXwDsdSzxo3e8MlkHByxU=;
-	b=WN3VmE+C0NweJ5MWe+tstnV3mrGoI5oXyjEKQQ9UOJxYaKYDaARMV+nTFXeRtBNuSh8mWR
-	WTPHyxHoVZSUrnDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 24F8113332;
-	Tue, 25 Feb 2025 11:41:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id My/YB3CsvWfkQAAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Tue, 25 Feb 2025 11:41:36 +0000
-Message-ID: <f1ea30fe-8cb8-41fd-bc85-d511c800e594@suse.de>
-Date: Tue, 25 Feb 2025 12:41:35 +0100
+	s=arc-20240116; t=1740484678; c=relaxed/simple;
+	bh=L9zvKXRv4c3bXhNyjLzX65AtYdpn8Ffw1O68j1Jvs50=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TMuKkNtA/4oMfg5KbmBoj6aPDXKicnt+TQDVx+13RInSwRe6utLcbi8NRRocyJTKBBwLKpoQ0guij+38mlfw5Ah81q+LgwKROGKxkCCR+Z5abm0luq/MrnXoiDK7lX5qGzfrO7DPnwrl/zcvxVyEPMIQICVdtdK8x4dz76pYkpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBryZq+X; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e0573a84fcso7513297a12.2;
+        Tue, 25 Feb 2025 03:57:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740484675; x=1741089475; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+oQbQtf7tgruZ3SskNuc1XmiV1tLLW5ur3bDpFOqjg=;
+        b=hBryZq+XaEyMuRH4WJ6hcC4Do/hy45WcYhFXnRsYFbNvqjcdR6KQdze7MxUxk9NRBJ
+         MitpcX6PvtCYtNtLgFxz8D4kX+zk9lhx7SWn6YMapW3Iu7MF1qGCjWrvhBdxLMIrI+Mn
+         8G/bljVEfbc2zR3gItIKrQFmkxYSAaVKUKl1ZEe2BJHoqoqudmzyhMdwCFzhsYQLtzUW
+         /3LnsP413Ybwin0qgP5un70hTbEw9R94B1zjlRpKpuCCSX7jooxb5hnEH8IEQgh0W+G2
+         4kJgOtNMB3TZLK6uUrWsJ3W9EZnTRV7sL/gm06YrbmBBwrAJGpyZKoI7v+FCMejbG3Pi
+         HOpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740484675; x=1741089475;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T+oQbQtf7tgruZ3SskNuc1XmiV1tLLW5ur3bDpFOqjg=;
+        b=dKMWdObRxfqr6z8pdjRH5BKBJfLDG1JgheYK8a57WHJUzaRMMfngmPPV5/ytBGTTRl
+         GR1Gw3QJ1SeNsPPGbcF9ieCODcRQv7QZNyX9jluZpez5uNmDk0Z2lRzs0ga2WU4Gnxjd
+         RnXZ2kucZCYzQIgCkiCtPZbm0emURVBB2KuisMJaKPsWx1eXFs5Ge0JyzZ3nVvXSWP+w
+         SgCU8zz2PwSRR3vG2/eGO9f7Gynw0KK3MAoX/9UJ/pEBN/uV7n26d59t5jPlq0+fS1V/
+         SCxlxK+XhaFvfo/H/o2afrq7e7BVJGSe/eph/ASgGWJfhJNjNxoNJz/tv5VkqOiMJso5
+         LddA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxCnlTpW+bRvfE6LR8CiRNFopFbUw/sXjddLHnXMUULLiYRUxnbYWlkA58l1aCMNCfrAHSWBdoifGJkic=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA3NC58yinox73kHN13xbRCl6VwsFWWhr/+CzKSUSux/tXC6jE
+	muc7pf2yC2sXh4Pn0Di+jc2hqAaRO55pdK7D4CBE6vxnP/oxjTMx
+X-Gm-Gg: ASbGnctG5qigSNW9dmrOK5D9hvIhDicb0g8/fhiBFlxDBGkZCd81hfKMZrpU20zszIF
+	Bk+KtJ940yVTosW0YJIn5fMELrYjtPvamlSn4It2bTmU+cE7eAEHgrh34W0zycyt9L68gNT3D/z
+	vBVFPeJ5nhnyzMwh8RUqdb1XJBGMQIrQ8sfSv7w7+HfUHuALyjaCYJNwY0qJGe0NJljcEx2KPiq
+	osJX3B0mTLI9WHzsohFTZ5guvwSz484QrvODw76oTD0dk+T9/BniCeTlIBoAHtNfHrT4sMJuVNb
+	KZxNDLCdYqQm/sIGoL32WM8rkxCJu1uPwKldzdUk8Ik=
+X-Google-Smtp-Source: AGHT+IEvljivfokfnn/Rvjaln73+Fm6SDBkZKg+ngRkTP3BBxizYPRmt9ZxL7LkeNstdm5rUknLCNw==
+X-Received: by 2002:a05:6402:530b:b0:5de:ce71:bacb with SMTP id 4fb4d7f45d1cf-5e0b70f334emr14403735a12.16.1740484674877;
+        Tue, 25 Feb 2025 03:57:54 -0800 (PST)
+Received: from foxbook (adqm166.neoplus.adsl.tpnet.pl. [79.185.146.166])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e461f3e675sm1083423a12.72.2025.02.25.03.57.53
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 25 Feb 2025 03:57:54 -0800 (PST)
+Date: Tue, 25 Feb 2025 12:57:50 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] xhci: ring queuing cleanups plus a quirk
+Message-ID: <20250225125750.1b345e2c@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 9/9] drm/vkms: convert to use faux_device
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
- Mark Brown <broonie@kernel.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mairacanal@riseup.net>, Robin Murphy <robin.murphy@arm.com>,
- Simona Vetter <simona.vetter@ffwll.ch>, Zijun Hu <quic_zijuhu@quicinc.com>,
- linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org,
- Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Melissa Wen <melissa.srw@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- dri-devel@lists.freedesktop.org
-References: <2025021023-sandstorm-precise-9f5d@gregkh>
- <2025021029-snout-swivel-9a45@gregkh> <Z6oPNmRo4XQQVEI8@louis-chauvet-laptop>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <Z6oPNmRo4XQQVEI8@louis-chauvet-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,vger.kernel.org,redhat.com,kernel.org,intel.com,linux.intel.com,google.com,huawei.com,gmail.com,wunner.de,riseup.net,arm.com,ffwll.ch,quicinc.com,lists.freedesktop.org];
-	TAGGED_RCPT(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-Hi
+I was looking at all uses of enqueue/dequeue pointers and I found two
+rather complex loops which appear to be doing really simple things.
 
-Am 10.02.25 um 15:37 schrieb Louis Chauvet:
-> On 10/02/25 - 13:30, Greg Kroah-Hartman wrote:
->> The vkms driver does not need to create a platform device, as there is
->> no real platform resources associated it,  it only did so because it was
->> simple to do that in order to get a device to use for resource
->> management of drm resources.  Change the driver to use the faux device
->> instead as this is NOT a real platform device.
->>
->> Cc: Louis Chauvet <louis.chauvet@bootlin.com>
->> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
->> Cc: Simona Vetter <simona@ffwll.ch>
->> Cc: Melissa Wen <melissa.srw@gmail.com>
->> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
->> Cc: Maxime Ripard <mripard@kernel.org>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: David Airlie <airlied@gmail.com>
->> Cc: dri-devel@lists.freedesktop.org
->> Reviewed-by: Lyude Paul <lyude@redhat.com>
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I don't understand why they were written this way, it seems wasteful
+and I see nothing that should go wrong if they are replaced with much
+simpler code.
 
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+I rewrote them and the driver still works. I exercised Set TR Dequeue
+code by starting/stopping isoc streams, using usb-storage with crappy
+cable (transaction errors, halts) and also the smartctl -x trick that
+results in URB unlinks (both on usb-storage and uas) with some disks.
 
-> Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
->
-> Thanks for the modification, it seems to work.
+The third patch is a dedupe. BTW, that comment there about section
+6.4.4.1 of the 0.95 spec seems to be wrong, I suspect it should say
+that the chain bit cannot be *cleared* because that's how the code
+works and what some commit messages say. But I don't have 0.95 spec.
 
-Should this patch be merged through DRM trees? drm-misc-next is at 
-v6.14-rc4 and has struct faux_device.
+New in v2:
+- dropped the patch for obsolete update_ring_for_set_deq_completion()
+- added a patch to enable the link chain quirk on one more HC
+- don't touch the chain bit in inc_enq_past_link() on quirky HCs
+- don't call inc_enq_past_link() unnecessarily
 
-Best regards
-Thomas
+Michal Pecio (3):
+  usb: xhci: Apply the link chain quirk on NEC isoc endpoints
+  usb: xhci: Simplify moving HW Dequeue Pointer past cancelled TDs
+  usb: xhci: Unify duplicate inc_enq() code
 
-
-
->
-> Louis chauvet
->
+ drivers/usb/host/xhci-ring.c | 198 +++++++++++++----------------------
+ drivers/usb/host/xhci.h      |  13 ++-
+ 2 files changed, 86 insertions(+), 125 deletions(-)
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
+2.48.1
 
