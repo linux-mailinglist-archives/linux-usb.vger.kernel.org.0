@@ -1,92 +1,131 @@
-Return-Path: <linux-usb+bounces-21056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21057-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69E0BA453CD
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 04:12:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E67A4562F
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 08:02:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 876D53B022E
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 03:10:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0BBA188FA45
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 07:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753C9225A48;
-	Wed, 26 Feb 2025 03:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBEE26A0A4;
+	Wed, 26 Feb 2025 07:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0FKR1l1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D559225797
-	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 03:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D189114A62A;
+	Wed, 26 Feb 2025 07:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740539404; cv=none; b=uTOl8zI+x+7ZFp+6wR6GMU+m60v82HJwq8aQgYkSeaIJWpKrpUBTMl0nLrdla0Rbt3kJBlWsB8UmqtplsYZgDAuMk6Zkcp1cW4mKQQlL+dxVjPJ6J5B5+Q66pNNXVUWYop86aijhOTMOT7cwI2lP5hm1vWBIGUbx+YdB9nHdOP4=
+	t=1740553332; cv=none; b=YgdQ+q5VgpF//PENbHsonUeoNX2SdVi9er6EKedmnPOwmEKlMMtRp3VvuzNQBSNnJYv4+blPbU0p3YWT1m8J6O+2WQCvBs1C2VyDMSHUpiUv//oI7FxFskbchgbDt1ZYza8rDDNyYA7ow8l0V6CcDo3YPM1011azKwEdkoOJgfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740539404; c=relaxed/simple;
-	bh=obw1Sax1F2UAMmx1AGGj5gICIC2sjWZ9oZPNwJG9rfg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=uW326bTqP2Lg+hjfBSqQTdbhTlsmf6Xfpws/BZZ4Gsg+ePc8wo9wjqqcxbp9hdlqteQOB6joRV14+qgrIcnIpzMv/yoaiVlRgAnCJBjRPXDbRY6K/p1QyUlj5BJfbov+hBXQDujT/Z5TLZkl6TJ1cgrPtyUWZOQxTM9zBCcbfwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3d060cfe752so52109225ab.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Feb 2025 19:10:02 -0800 (PST)
+	s=arc-20240116; t=1740553332; c=relaxed/simple;
+	bh=uDXwBGdrIm7qpghgbL/Vk7s76fCfqVe+ZETXQbJj50I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dlszCkkLPEJTTZH1HsNieEjQ9/Ssx4JzCNRjVp3kFJ48PlQ1NjFs5r5mTS0llyXRxndxf0Nd8zxk1m30Ei/5xmOW+9bLMRaCoSecfw9pK+Jy90J2Gj3gLndabhNGvqPIBNJujvuMygJOvIf/Wok25UhAFHiNppmyt9NN65ykOws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0FKR1l1; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abb9709b5b5so1175606566b.2;
+        Tue, 25 Feb 2025 23:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740553328; x=1741158128; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=osOTBz6nbHvhI0Pvfa24RzmveeMFkDOLoGn5I2RqJwk=;
+        b=K0FKR1l1exNm7sFBndBYS72nXFwQJpyzVTxhCZjJHcUWy9OKAvsSFR/jiruIBhuR8b
+         7BtQ+F5tsV5LQQAjUEXnk5RElpjt6iAs8r8Su2Jtq8czCm07pe1GAzN9Ly9LvJ/ZrE8O
+         a+T42HZJud48ksrA0A1bzvfzD5QC/WnEr/7E/mp/nwMbEVaFcsCGvjLJTHWkbukxUVZq
+         ZWrXCRaQoqo9PP+E+qJQuErfb3aV1TIMlW4OXSVg5MsriX3heUcawdzJ8Kd3T+I4vbMm
+         KzTcreNFaLr/bTeuiGVxJ+sZqk2wit2TZz9W+A+OLR6/16vqEmko4UH+4q0QZ0Ib/stl
+         ZyoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740539401; x=1741144201;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pI5OF1BLxFeb9UKkgyFgef27z30POH6v7L/twCJv8dk=;
-        b=kY42adox51IJBVJrYPQsVUfwiMccEuCpgv0PDexCpyv2XUUsYa0Tuv+PRHuZsZk2Rr
-         63odJm72Zr1zDb54hWP2tKHJIM/gwqr59SyT99mCJoliW9MABG3FU6GZReCfqqeCmfV6
-         jMO0NX99eynSazxy7HY+oo2GlglCFou2YLzth+tmliWQwriTmYzXuXL1RdFZehWnilyg
-         wHvl4ZohbH5Kyc5p7XocY9posg4BY/ci2CWPrbzQmRy1RrS8xPUcAMLQgmqKrpBc1URR
-         Th7PAz0LriFRx5JkSkkfdHocUNm0usPiiHzn2+gQqjy9DclEGjHCY7XqQ5/+pP5RbRR3
-         8EFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXTq6kIJ6x1BIbFgJEHErZkQXcclB3dL40BSivQwwQEyc2LSM8GSR9F/QyKXu8wPpwx3Au/Yf/Jwlw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB/JD1JlQ4uVo6DdBrJFKzFrmeOdjIqchuwbFcE+MNB6Vl7LBD
-	pB4P7sQoYuXtPU18Pgf1yLKcZqO0lHDYCvA4uTjs/ECslESJscNmeucEAXiBatMZ+0rvDfCEm4m
-	smoj4ymoYzbqkhrl2iepgPeUtphFWKg2Phh2LLYQrUAzJUXq2YhiUvM8=
-X-Google-Smtp-Source: AGHT+IFnMGyYE6QlMavrFjUCDpJgSomAeZEaIsXHwmEdGE2tooAFABLuqmpirNOy8eiHcy3O++/DW6WQtKh7jTmkVkdyLUwNiJ++
+        d=1e100.net; s=20230601; t=1740553328; x=1741158128;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=osOTBz6nbHvhI0Pvfa24RzmveeMFkDOLoGn5I2RqJwk=;
+        b=eeHiErMCd6CU9r46akXhFSa7CIQ9bUwHEOXKiRKsLb7ZFIozBCGKA1eSbM9esZWnzh
+         /NVO3gMjdjJUQQcs8DgySWUK0YtyOLoF5SXDn+2eNgx5el3/in2NWBfbm+HME3NyPuub
+         24LS8tv4M5a1jrk43TwTGbUHabapF2TArY6vNVLVFqzKxrBYLHVrYW6HoNkXf1YZNNVa
+         wvEHa9n2IY3F0SF3Dpnmgo3wdISXlvkm/R0W5y25i16bdA4u7c5LeAP793i3h16Jj/Hv
+         vWF98E3/HlYkNRFOym+YEkbRKx0oNKR+k6tLneJ6OpYmYtyHxJPvj+g6NbIGnnyo5wl6
+         psNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkkdlMIstxIdGe0IC3p5mkNEtNgC0fOqWTKdfsWhjKRBRk1HJU49/KUTSmglTYRHV519lwU+eFJ+sB@vger.kernel.org, AJvYcCWd1g4TsoPUAk4VrLkwCtY2mqA3P+clY9dgATaDEDvWEGRBfP9b8ixe1JzIuVy6dtTfsBAULoTYHMxETVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzqu9eUmAjDgSTI5XG3qdIYbtFXZUEnyrqDy7TQCFBwSKSVElXV
+	g1N1u1q3WDqry2TuFidqABJMzsdfsH8b/EQAOicfr8gKgV6i2m4/
+X-Gm-Gg: ASbGncvGpv3Nbe+r7Kw6ma7gCzBbo17M4gZwJEr3ZOy7W29zJ/IraTYLioEhnl4VuFm
+	3nQfi/kKRlManrz4sYwgjmnKIS5lIcSV7ehkUF4S7vXc2upvCxMMd22uIwraL9/tf1PqfPAMSkJ
+	X5Q8LqeOAdf3Noinu6bFnh69TDGgpmBrJvFSKybfxb+Yr+r75JwFh3+TDUMGoxM52gFwyMrjrb/
+	0r8yBc87qk0pUpbb+LjLXR0Ej8D3ohsO1i4VU9UI5UePfeyMMfhSn79Kednf9cC97aTkfJRK1Yt
+	Yv77nVtQr8cWhdQrnReRv70IZLSy6L6moerHhUH/
+X-Google-Smtp-Source: AGHT+IF8St3wZwYpwaezxeQoVeAIZceaECyTA0opQxgr8T+fxXChedK4Jz9gF06VKm6aZ5G+PI7uZg==
+X-Received: by 2002:a17:907:3f1c:b0:abe:c811:455c with SMTP id a640c23a62f3a-abed0c67b51mr735245066b.12.1740553327527;
+        Tue, 25 Feb 2025 23:02:07 -0800 (PST)
+Received: from foxbook (adqi59.neoplus.adsl.tpnet.pl. [79.185.142.59])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed204647fsm273049266b.124.2025.02.25.23.02.06
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 25 Feb 2025 23:02:07 -0800 (PST)
+Date: Wed, 26 Feb 2025 08:02:02 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] xHCI: Isochronous error handling fixes and
+ improvements
+Message-ID: <20250226080202.7eb5e142@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:368c:b0:3ce:6628:3c4 with SMTP id
- e9e14a558f8ab-3d2cb44f8cfmr179693375ab.6.1740539401708; Tue, 25 Feb 2025
- 19:10:01 -0800 (PST)
-Date: Tue, 25 Feb 2025 19:10:01 -0800
-In-Reply-To: <000000000000c27c9e06197d59c3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67be8609.050a0220.38b081.0000.GAE@google.com>
-Subject: Re: [syzbot] [usb?] [kernfs?] INFO: task hung in kernfs_add_one
-From: syzbot <syzbot+e4804edf2708e8b7d2a5@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-syzbot suspects this issue was fixed by commit:
+These patches reduce latency of error reporting in some cases related
+to 'error mid TD' and Missed Service events and sometimes fix a failure
+to give back such TDs altogether until they are cancelled.
 
-commit 5189df7b8088268012882c220d6aca4e64981348
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Wed Oct 16 15:44:45 2024 +0000
+Also included are fixes for potential packet loss or memory corruption
+due to obscure races. Whether it causes problems IRL is not known and
+the worst case would be hard to reproduce, but exactly for this reason
+if the worst case actually happens, it could be hard to debug too.
 
-    USB: gadget: dummy-hcd: Fix "task hung" problem
+The first three should be safe. The fourth should also be safe, but it
+relies on HC functionality Linux never relied on before, so I placed it
+towards the end in case it would need some tweaks. I tested it on all
+hardware I have and it worked just fine.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17ceffdf980000
-start commit:   2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa0ce06dcc735711
-dashboard link: https://syzkaller.appspot.com/bug?extid=e4804edf2708e8b7d2a5
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ea2012980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ba6851980000
+The last one is perhaps the most controversial, though it should be
+OK with typical "complete -> resubmit" drivers. It's the only one here
+which increases latency in some severe error cases. The intent is to
+avoid potentially giving back URBs not yet executed by hardware.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+New in v3:
+- dropped the cleanup patch
+- added Don't skip on Stopped - Length Invalid
 
-#syz fix: USB: gadget: dummy-hcd: Fix "task hung" problem
+New in v3:
+- fixed spurious empty list warning on xrun
+- clear skip flag if one skipped event was the last
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Michal Pecio (5):
+  usb: xhci: Don't skip on Stopped - Length Invalid
+  usb: xhci: Complete 'error mid TD' transfers when handling Missed
+    Service
+  usb: xhci: Fix isochronous Ring Underrun/Overrun event handling
+  usb: xhci: Expedite skipping missed isoch TDs on modern HCs
+  usb: xhci: Skip only one TD on Ring Underrun/Overrun
+
+ drivers/usb/host/xhci-ring.c | 55 +++++++++++++++++++++++++++++-------
+ 1 file changed, 45 insertions(+), 10 deletions(-)
+
+-- 
+2.48.1
 
