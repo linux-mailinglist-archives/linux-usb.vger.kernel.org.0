@@ -1,142 +1,197 @@
-Return-Path: <linux-usb+bounces-21095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3210DA46458
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 16:16:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F508A465EA
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 17:03:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AC563ACD46
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 15:15:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31B161760CF
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 15:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66DD2222C6;
-	Wed, 26 Feb 2025 15:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90B1222593;
+	Wed, 26 Feb 2025 15:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aj+ZpG3p"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="BXgM6QBV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65A4226CE7
-	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 15:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B221721CC6D;
+	Wed, 26 Feb 2025 15:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740582936; cv=none; b=FCfy2cxHSiJ3/8LWB2QvIUXg0huKaRahvNa6yCbtFT1+zKeN8BSF/Z6VMNdtRAzKLv/eyR3no/45WnPvyIh4ANUxehoTSkIjMAPnHYjgsBSUK/VBaVNhM0Gz+6oVOzzz7F4L3lsen4gap7v3GL74vf+GGuQkqNS1d9khh3afzCc=
+	t=1740584993; cv=none; b=CM2IZxBS5VddB+uziutYGVC9hEpohKYrzdhp1cwO5yKA9VC6a2SB2StmqRgDYeBdM54vJZCTfvntfoBzR5dXZajjxiSdOKbnR25sWLy9l7uPKeWefLPvD/O0gNKmtIFrlV/wZQCTa3xMtl75KFid1ShFgWWf35omAfMyn3yHkfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740582936; c=relaxed/simple;
-	bh=LbE4cDc2pS0xTjL4reeU7NsgnXN2n5Xc3uxRIDOlV9s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nc075y9uHhTtgFyLtPvZsN+nyX5nbsZDHt9seg5c/nhYkzCDhJniItZnpVL95obGAY6Hkz96S74uE4UmC32FhhmZ1gfXxBUKIL9k9U2JJNCJ68it7l1oHgGR1suG34711CBRrNiI9E+d/nyDJU8i5B3SRwLX1FMAMd+YBQBVErA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Aj+ZpG3p; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740582935; x=1772118935;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LbE4cDc2pS0xTjL4reeU7NsgnXN2n5Xc3uxRIDOlV9s=;
-  b=Aj+ZpG3pG5b78+clEYvLXAQU6zb/dHMTEfe/dKmo1M68ow2u72i+ytbZ
-   7KBBBOi2Dtb2GCBORh6gFo2rG/SlqutKRjpgK9/uzXnO+Gqmdp1oGa/7s
-   fcjs3Y8qT6rAczHDGp828jRIcD5GG9euep6aCCsjR2WDTMJthzrhv6dFO
-   bsBZ//0bM0YlTgnpPc+8g1EyZQ4Xi8iO38pPL53gcHjvNkZgxUdDlC66W
-   vcnnmxyu1EXm51BcJeOn6hn9PoV7n0rwfL0WJxBWPO7Bgm/Mmx+LUd0yM
-   T2o0vE6GjN/47d++yv07spxKfcZBkaeQYHpI5psDuhGvjVoRVS5a7IOhW
-   Q==;
-X-CSE-ConnectionGUID: NHARt6UlTP6oRJ90MgDnRQ==
-X-CSE-MsgGUID: 1lrp0MLMS+yUhv1hFXXZBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41687028"
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="41687028"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 07:15:32 -0800
-X-CSE-ConnectionGUID: hsDquoBvSG2j4Ju6QU50DQ==
-X-CSE-MsgGUID: WHWeanw2SHqUgZSBennzsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121984196"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 26 Feb 2025 07:15:31 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id CA7DD4BA; Wed, 26 Feb 2025 17:15:29 +0200 (EET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 3/3] usb: xhci: replace hardcoded Endpoint context masks with corresponding macros
-Date: Wed, 26 Feb 2025 17:14:57 +0200
-Message-ID: <20250226151458.3871867-4-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250226151458.3871867-1-niklas.neronin@linux.intel.com>
-References: <20250226151458.3871867-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1740584993; c=relaxed/simple;
+	bh=Vj5uE4ESzohsxDwURRoN/xqYlLO93wlxFGqvOeU2v0Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YfjR3AllY26UMVzIVCgbwGbLgQiXJpxjvD7J8SezWhnbku6vNfhz/eaxgO80mmXdwr+/oblG/WrFkle+wrKYWvkDp8FxQNSbhTZBojDYfMsQ0O6xhcuiekK1Jny4O6dKy43p3IL6uCuCgLGB+lRRaHfu95GzqqIxSKx939y+RK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=BXgM6QBV; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4Z2z3S3y1QzDSH;
+	Wed, 26 Feb 2025 10:31:48 -0500 (EST)
+Received: from [172.16.225.207] (unknown [47.154.181.182])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z2z3H0zQqz56g5;
+	Wed, 26 Feb 2025 10:31:39 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1740583900; bh=Vj5uE4ESzohsxDwURRoN/xqYlLO93wlxFGqvOeU2v0Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=BXgM6QBVMxwP3HtMLYG4ARsarO/GAmA/r+WnIFR2oNA23NwVHsnuLEh0L+6KLiHzR
+	 zvPLpInkIjwPGTmJI4/IzrWXf4g53/MAVosroZNl6NJj6Ktt0L8HDYhAfCTyifKOC6
+	 BeQOfik9xOSbLC6e4zLTnMNqzX/kh4I44VOrwn4k=
+Message-ID: <7b472880-32d0-4783-b9d2-3d4230403975@panix.com>
+Date: Wed, 26 Feb 2025 07:31:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+ Kenneth Crudup <kenny@panix.com>
+References: <20250210210502.GA15655@bhelgaas>
+ <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
+ <20250211055722.GW3713119@black.fi.intel.com>
+ <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+ <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+ <20250226084404.GM3713119@black.fi.intel.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250226084404.GM3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The Endpoint Context Field at Offset 0x08 is defined as follows:
- - Bit 0:	Dequeue Cycle State (DCS)
- - Bits 3:1:	RsvdZ (Reserved and Zero)
- - Bits 63:4:	TR Dequeue Pointer
 
-Replace hardcoded Endpoint context masks with their corresponding macros.
+Trying to do a "control" test before I try out your bisected commit, and 
+Lukas' changes, but of course now I can't get it to fail (I'm on Linus' 
+master as of this morning (b5799106b4).
 
-In xhci_move_dequeue_past_td() move the use of TR Dequeue Pointer mask out
-of the while loop. The TR dequeue pointer does not change during the loop.
+I'm using my portable USB4 dock (Plugable TBT4-HUB3C) this time (vs. my 
+CalDigit 4 dock) but the same ASMedia USB4-to-NVMe adapter as always; in 
+any case everything is PCIe so it shouldn't matter.
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+I don't normally use "tbauth" (I think that's all done for me via the 
+"boltctl" suite) but I grabbed and built the GIT and ran it anyway, for 
+good measure.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9ff5ca4d5c1c..c45eabe34772 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -657,9 +657,10 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	}
- 
- 	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
-+	new_cycle = hw_dequeue & EP_CTX_CYCLE_MASK;
-+	hw_dequeue &= TR_DEQ_PTR_MASK;
- 	new_seg = ep_ring->deq_seg;
- 	new_deq = ep_ring->dequeue;
--	new_cycle = hw_dequeue & 0x1;
- 
- 	/*
- 	 * We want to find the pointer, segment and cycle state of the new trb
-@@ -669,7 +670,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	 */
- 	do {
- 		if (!cycle_found && xhci_trb_virt_to_dma(new_seg, new_deq)
--		    == (dma_addr_t)(hw_dequeue & ~0xf)) {
-+		    == (dma_addr_t)hw_dequeue) {
- 			cycle_found = true;
- 			if (td_last_trb_found)
- 				break;
-@@ -1012,7 +1013,7 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 		 */
- 		hw_deq = xhci_get_hw_deq(xhci, ep->vdev, ep->ep_index,
- 					 td->urb->stream_id);
--		hw_deq &= ~0xf;
-+		hw_deq &= TR_DEQ_PTR_MASK;
- 
- 		if (td->cancel_status == TD_HALTED || trb_in_td(xhci, td, hw_deq, false)) {
- 			switch (td->cancel_status) {
-@@ -1102,7 +1103,7 @@ static struct xhci_td *find_halted_td(struct xhci_virt_ep *ep)
- 
- 	if (!list_empty(&ep->ring->td_list)) { /* Not streams compatible */
- 		hw_deq = xhci_get_hw_deq(ep->xhci, ep->vdev, ep->ep_index, 0);
--		hw_deq &= ~0xf;
-+		hw_deq &= TR_DEQ_PTR_MASK;
- 		td = list_first_entry(&ep->ring->td_list, struct xhci_td, td_list);
- 		if (trb_in_td(ep->xhci, td, hw_deq, false))
- 			return td;
+I'll keep you updated, I'll be at my CalDigit dock soon enough if I 
+can't get any failures this morning.
+
+-K
+
+On 2/26/25 00:44, Mika Westerberg wrote:
+> Hi Kenneth,
+> 
+> On Fri, Feb 14, 2025 at 09:39:33AM -0800, Kenneth Crudup wrote:
+>>
+>> This is excellent news that you were able to reproduce it- I'd figured this
+>> regression would have been caught already (as I do remember this working
+>> before) and was worried it may have been specific to a particular piece of
+>> hardware (or software setup) on my system.
+>>
+>> I'll see what I can dig up on my end, but as I'm not expert in these
+>> subsystems I may not be able to diagnose anything until your return.
+> 
+> [Back now]
+> 
+> My git bisect ended up to this commit:
+> 
+>    9d573d19547b ("PCI: pciehp: Detect device replacement during system sleep")
+> 
+> Adding Lukas who is the expert.
+> 
+> My steps to reproduce on Intel Meteor Lake based reference system are:
+> 
+> 1. Boot the system up, nothing connected.
+> 2. Once up, connect Thunderbolt 4 dock and Thunderbolt 3 NVMe in a chain:
+> 
+>    [Meteor Lake host] <--> [TB 4 dock] <--> [TB 3 NVMe]
+> 
+> 3. Authorize PCIe tunnels (whatever your distro provides, my buildroot just
+>      has the debugging tools so running 'tbauth -r 301')
+> 
+> 4. Check that the PCIe topology matches the expected (lspci)
+> 
+> 5. Enter s2idle:
+> 
+>    # rtcwake -s 30 -mmem
+> 
+> 6. Once it is suspended, unplug the cable between the host and the dock.
+> 
+> 7. Wait for the resume to happen.
+> 
+> Expectation: The system wakes up fine, notices that the TB and PCIe devices
+> are gone, stays responsive and usable.
+> 
+> Actual result: Resume never completes.
+> 
+> I added "no_console_suspend" to the command line and the did sysrq-w to
+> get list of blocked tasks. I've attached it just in case it is needed.
+> 
+> If I revert the above commit the issue is gone. Now I'm not sure if this is
+> exactly the same issue that you are seeing but nevertheless this is kind of
+> normal use case so definitely something we should get fixed.
+> 
+> Lukas, if you need any more information let me know. I can reproduce this
+> easily.
+> 
+>> I also saw some DRM/connected fixes posted to Linus' master so maybe one of
+>> them corrects this new display-crash issue (I'm not home on my big monitor
+>> to be able to test yet).
+>>
+>> -Kenny
+>>
+>> On 2/14/25 08:29, Mika Westerberg wrote:
+>>> Hi,
+>>>
+>>> On Thu, Feb 13, 2025 at 11:19:35AM -0800, Kenneth Crudup wrote:
+>>>>
+>>>> On 2/13/25 05:59, Mika Westerberg wrote:
+>>>>
+>>>>> Hi,
+>>>>
+>>>> As Murphy's would have it, now my crashes are display-driver related (this
+>>>> is Xe, but I've also seen it with i915).
+>>>>
+>>>> Attached here just for the heck of it, but I'll be better testing the NVMe
+>>>> enclosure-related failures this weekend. Stay tuned!
+>>>
+>>> Okay, I checked quickly and no TB related crash there but I was actually
+>>> able to reproduce hang when I unplug the device chain during suspend. I did
+>>> not yet have time to look into it deeper. I'm sure this has been working
+>>> fine in the past as we tested all kinds of topologies including similar to
+>>> this.
+>>>
+>>> I will be out next week for vacation but will continue after that if the
+>>> problem is not alraedy solved ;-)
+>>>
+>>
+>> -- 
+>> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County
+>> CA
+
 -- 
-2.47.2
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
