@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-21079-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21080-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9ECBA45F93
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:43:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFAA0A45F83
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:40:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5913B1213
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:38:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E2A168C3A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A742153D1;
-	Wed, 26 Feb 2025 12:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5B521576D;
+	Wed, 26 Feb 2025 12:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAy4cr/J"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4M6kLak"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DBD2063FD;
-	Wed, 26 Feb 2025 12:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9752C214803;
+	Wed, 26 Feb 2025 12:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740573511; cv=none; b=JhJYF+7R62uTq9X8pShti8jCXJd4Mka+tv7xLMC112PgLfCfg2UIAwGzSBR2oiZ1aJhGExL2e0jLfW6nbXi39Tf/WpShP2fCrrDsormzBikaYFwx63GF7mNRn6pGmH0dDu72qxijqPw9b3cGM3rlTVFfHix9z3a+n03VA7LSQqE=
+	t=1740573648; cv=none; b=SZQxXA8ytMKr/dgNVXk9aVZSQOfTYgrXPtsv6e6sWGoMqLkmHsToVLim0wzLrRU9arcau5sVZPuUr22l9pW7LD1KAlYbLtEm+BB8qbYAW4Dcz7pS1Ig/fOnAy9Jl8kmEchHT1fe9Zfv9hP62tUPuiDDQ+UrRPDT/perchcvLFXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740573511; c=relaxed/simple;
-	bh=KGFvfxU4db5vtbnoDHtKUfvcsj7Nffzksy8W4HNffuQ=;
+	s=arc-20240116; t=1740573648; c=relaxed/simple;
+	bh=AyX3eeqoqqrJcrTXy8JrokTY4/mNoUqm6EwAoze0Qrc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iDt9cEoO4IAjRKGR5pYc5sz8gJG89PtlwKi2RmtjhoC1Ojpt2ZR98jjuu9xQks6BCs0rB4sCr/TLLPTOoQY4y5PaJPUoyRnyBCMVyA919CTfna9TyKkNJqnt4s9dlf8A7+pwATE9+JIC33Ekm2rRkWLucZF5+JaHoi5GU4z//HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAy4cr/J; arc=none smtp.client-ip=198.175.65.18
+	 In-Reply-To:Content-Type; b=lpH/9ZlEKIrbDEOy1dUOerWYV2ooUcL7pGySjzYI/NUETAIefB8o4dLlMjA/lKWLk/wpIwEKUdGD0MDYazPR03l5fim0wYgRez9w5Iy9V3i3wTCH376SFjy1i9WcK+hIxp8FBR+1v6CV5KijKUk1kD0uuA2jWYrm9jF26U1/H7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4M6kLak; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740573511; x=1772109511;
+  t=1740573647; x=1772109647;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=KGFvfxU4db5vtbnoDHtKUfvcsj7Nffzksy8W4HNffuQ=;
-  b=hAy4cr/JNWWPES9qlI6px7K+TN2FLY8NaSeXnNA/yLyh8t8cZI0iNdVv
-   bJQYoPheDs368nWt2SzFSomn897kwBnO0rAz5c0XFFUfSmTpLw107q/O9
-   xz2ROV97mDtr6OD7rMpNR+p9+g8qF7IRgOw1ajxFUXqE4/ZmUFSzL3db0
-   WL9EGuleAc4lN3B6J2v93BsqtK50Yf+p6cwJjklOJu/aumpIskwZXVsNj
-   XDE0kJeXNofrgtABAe1ilC4jdXXWZgqqEoVJKBv0ntTGGvhLSXOQcfhNp
-   RRh8dok/otHF39neH6QV3VspCrI3NhOUA+Urts65cdBN4qMLoL6KZCy7s
-   g==;
-X-CSE-ConnectionGUID: 4eru/AzjT9e6G33QSaZrRw==
-X-CSE-MsgGUID: +4NrcPpMR3q/2F2h3OF5dw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41611326"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41611326"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 04:38:30 -0800
-X-CSE-ConnectionGUID: L/xqCCUISSWVAQ8L+chRMA==
-X-CSE-MsgGUID: noWgvZioS3qyNglv+20Ajw==
+  bh=AyX3eeqoqqrJcrTXy8JrokTY4/mNoUqm6EwAoze0Qrc=;
+  b=e4M6kLak6JNOaR4quwCawXu0WrUA7M1yPiroOFdAVAG/QZn2GfAuAhJs
+   X2O3LZI4CEIMX+scdvdaYBuuHkhclULomn+lSHVlo48l53R87MfLOtpVh
+   N2OvuMb+R0FP7xbnInjLQ/mlgWDPGVR8QqKftNDTYeuVasZ1RDg9OZGuV
+   /71nWcsURFVkz1f5sblqhsRvu2L46Id3hSNItz1U1LtL8f2L4P936JFL/
+   u0WdPel/zYlU47KTKin7TzMFXHAkD8RsZd+sP2TfK3Jv1FYyvP06OPLyq
+   be14AJz2XJ8s/im8ljxoCoJzl7znnpWiWJjzy2nFsI8xhEshL4TBy1Fqc
+   A==;
+X-CSE-ConnectionGUID: HaLQvjarTg+uEbzl3QsG0g==
+X-CSE-MsgGUID: h7QwXGJ+RsqRzVQh8HQngA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="45065270"
+X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
+   d="scan'208";a="45065270"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 04:40:46 -0800
+X-CSE-ConnectionGUID: AupgKeyPT0WSPrBOkR32oA==
+X-CSE-MsgGUID: kEAa4Lc5Q+iXq/ocPSc+Pw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="116476605"
+   d="scan'208";a="121790490"
 Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa009.jf.intel.com with ESMTP; 26 Feb 2025 04:38:28 -0800
-Message-ID: <72f3b497-ecac-4efe-8010-a77cc232ce30@linux.intel.com>
-Date: Wed, 26 Feb 2025 14:39:28 +0200
+  by fmviesa004.fm.intel.com with ESMTP; 26 Feb 2025 04:40:44 -0800
+Message-ID: <8bf4212a-72af-4c5d-a9b2-f3363d3ee3cd@linux.intel.com>
+Date: Wed, 26 Feb 2025 14:41:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,49 +67,59 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] xhci: ring queuing cleanups plus a quirk
+Subject: Re: [PATCH v3 0/5] xHCI: Isochronous error handling fixes and
+ improvements
 To: Michal Pecio <michal.pecio@gmail.com>,
  Mathias Nyman <mathias.nyman@intel.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250225125750.1b345e2c@foxbook>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250226080202.7eb5e142@foxbook>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250225125750.1b345e2c@foxbook>
+In-Reply-To: <20250226080202.7eb5e142@foxbook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 25.2.2025 13.57, Michal Pecio wrote:
-> I was looking at all uses of enqueue/dequeue pointers and I found two
-> rather complex loops which appear to be doing really simple things.
+On 26.2.2025 9.02, Michal Pecio wrote:
+> These patches reduce latency of error reporting in some cases related
+> to 'error mid TD' and Missed Service events and sometimes fix a failure
+> to give back such TDs altogether until they are cancelled.
 > 
-> I don't understand why they were written this way, it seems wasteful
-> and I see nothing that should go wrong if they are replaced with much
-> simpler code.
+> Also included are fixes for potential packet loss or memory corruption
+> due to obscure races. Whether it causes problems IRL is not known and
+> the worst case would be hard to reproduce, but exactly for this reason
+> if the worst case actually happens, it could be hard to debug too.
 > 
-> I rewrote them and the driver still works. I exercised Set TR Dequeue
-> code by starting/stopping isoc streams, using usb-storage with crappy
-> cable (transaction errors, halts) and also the smartctl -x trick that
-> results in URB unlinks (both on usb-storage and uas) with some disks.
+> The first three should be safe. The fourth should also be safe, but it
+> relies on HC functionality Linux never relied on before, so I placed it
+> towards the end in case it would need some tweaks. I tested it on all
+> hardware I have and it worked just fine.
 > 
-> The third patch is a dedupe. BTW, that comment there about section
-> 6.4.4.1 of the 0.95 spec seems to be wrong, I suspect it should say
-> that the chain bit cannot be *cleared* because that's how the code
-> works and what some commit messages say. But I don't have 0.95 spec.
+> The last one is perhaps the most controversial, though it should be
+> OK with typical "complete -> resubmit" drivers. It's the only one here
+> which increases latency in some severe error cases. The intent is to
+> avoid potentially giving back URBs not yet executed by hardware.
 > 
-> New in v2:
-> - dropped the patch for obsolete update_ring_for_set_deq_completion()
-> - added a patch to enable the link chain quirk on one more HC
-> - don't touch the chain bit in inc_enq_past_link() on quirky HCs
-> - don't call inc_enq_past_link() unnecessarily
+> New in v3:
+> - dropped the cleanup patch
+> - added Don't skip on Stopped - Length Invalid
 > 
-> Michal Pecio (3):
->    usb: xhci: Apply the link chain quirk on NEC isoc endpoints
->    usb: xhci: Simplify moving HW Dequeue Pointer past cancelled TDs
->    usb: xhci: Unify duplicate inc_enq() code
+> New in v3:
+> - fixed spurious empty list warning on xrun
+> - clear skip flag if one skipped event was the last
+> 
+> Michal Pecio (5):
+>    usb: xhci: Don't skip on Stopped - Length Invalid
+>    usb: xhci: Complete 'error mid TD' transfers when handling Missed
+>      Service
+>    usb: xhci: Fix isochronous Ring Underrun/Overrun event handling
+>    usb: xhci: Expedite skipping missed isoch TDs on modern HCs
+>    usb: xhci: Skip only one TD on Ring Underrun/Overrun
 > 
 
-Thanks, adding Patch 1/3 and 3/3, skipping 2/3 for now.
+Updated my for-usb-next branch to this v3 version
 
--Mathias
+Thanks
+Mathias
 
