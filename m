@@ -1,136 +1,101 @@
-Return-Path: <linux-usb+bounces-21077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21078-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F53EA45BD9
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 11:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 291F7A45D05
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:27:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E72F3AE972
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 10:31:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4489E3A4323
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 11:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C8A26E155;
-	Wed, 26 Feb 2025 10:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD59D215779;
+	Wed, 26 Feb 2025 11:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="x/z/PNKy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M2xnckHw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE5724DFFC;
-	Wed, 26 Feb 2025 10:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6A321504E;
+	Wed, 26 Feb 2025 11:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740565856; cv=none; b=dP41ai0jeDahIdNATMEZ2dZlXYdTVHhlOG1byLy/tlEdbkUW/gghBVjBTyaP8toVSziAA6iahv7a3PD0d7ofACczi6M66hkmc1sK6A+2ftZVVvPpFmfCmnTSCgWuJYPIftWEBsBSDpqGm8cE9+XHqfKMPQrK99EVXnheWPHCVAo=
+	t=1740569243; cv=none; b=qgBpeiWBxxm62g3UVxn0Yn7/sEtHeIShY06aJYdc07On1wR6sQKjffOmnco4bEy30BaXi5UmVDBuPTUpj5s0DWG/fmak+yQTrm4Kcr0hl04SV3AJQPZyvT8IxI+wtcaUeYj9yctz2uwR+Nd5jGvYyC6/80RLhQBrQ/zsCbcTzuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740565856; c=relaxed/simple;
-	bh=kBUtFhM8QF9lXl5OpGbCyIrYvEiAU3LRgYh6moTbcNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LIPQbe/ydLSYJpjxLISiYyQUPl0zGtYKbMqJDQRAWPBFIRHPC8AtMWMCD+rAKoMs41vA1o6xNOyqnHaYXZaVZeGdksvGkwjUjMnsnTTpA9aweEugoWJpVx83zdeKdo1t7TQ1ERXIM9iGPIR711p57zQmaVo4hm0sC+RllZYO+R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=x/z/PNKy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C58C4CEE2;
-	Wed, 26 Feb 2025 10:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1740565855;
-	bh=kBUtFhM8QF9lXl5OpGbCyIrYvEiAU3LRgYh6moTbcNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=x/z/PNKyqA4PfaRNvSey27ZTn7J05bWCh1y6AuSHXaKbsuIZbgCgF5SfXl9GxP2Z7
-	 065ngG6haLk6ln7TkkSlWws7pfkhzxlXfPzhpjuytZpJR0F//RpCQLnhkfNJrpJhQK
-	 HRhuiH2KFKxSftKP77aaZn3LBM5y0sTRshzg8quY=
-Date: Wed, 26 Feb 2025 11:07:11 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>, linux-kernel@vger.kernel.org,
-	Lyude Paul <lyude@redhat.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v4 9/9] drm/vkms: convert to use faux_device
-Message-ID: <2025022643-scouting-petticoat-492b@gregkh>
-References: <2025021023-sandstorm-precise-9f5d@gregkh>
- <2025021029-snout-swivel-9a45@gregkh>
- <Z6oPNmRo4XQQVEI8@louis-chauvet-laptop>
- <f1ea30fe-8cb8-41fd-bc85-d511c800e594@suse.de>
- <49cd8502-f11e-4ade-a3a0-b16ce0c6282f@bootlin.com>
+	s=arc-20240116; t=1740569243; c=relaxed/simple;
+	bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fCCdyOBTDC4TEVy4+dVIvY8GgNxYeabK6wiZEnTlGCFZO50BXbVwL07fo17sRyzSmft2x5M1RWfgLiJtmm/vYUkLBOqurYpUMonAGnlDqTsLh62td37Po7Lb0UH6pxOjzl4wCyRVQig9IVNdwhW8SxyiDGV1SDpNbeS1K4q+eNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M2xnckHw; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso41360225e9.0;
+        Wed, 26 Feb 2025 03:27:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740569240; x=1741174040; darn=vger.kernel.org;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
+        b=M2xnckHwhNrPbvZITddWFRF7oU0i3F1oJN8vdtrXkMNTn4dDn2a59hi45fuSuwuqZM
+         dv4W/xZ0jd04ulOOdBLmPOU2rYXIT2xxNuIgISpYSPIWMEq9Y2m9M34vr/JBNUSaUIcn
+         47iH7zI6/8aF8MVvGcO8Bzinh9WKISNN72Z/JAx+GYyMonZ8rQJsj+m1OG5RgEdNXPQS
+         hum+oGlVC/iVd6eww9rtqwO9eJCHmGyWTtehYbW9rTNVq3L0QbTN9/DdQfR/tlMoXzY1
+         VK7zfyXjX6PCU3M7Cxmeg02+XpEECF6L8pY067BGbX/cq4+2YEgxeJ8fgnlfYjPL9RRo
+         pP1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740569240; x=1741174040;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
+        b=rKS3rD0rFWbowrKM2geIzh1SaIFAIr6QjvRl2zLa4676gtrcbh4ZwN+J2Yg8TIlY1p
+         pVMWrQiiIDzBaA+5Ymtgvzx8RGlTDxVkG0IdybMqbUNiWlivWmaGplA/55edAI7BruLW
+         vK5/E1WCrPTd1a+AxvILQ0dEh5cHlULKrHCIW8bOFvuxwrBJKOgKwV/j/VlUR3QHVdMj
+         y6fHHRPPisbo+ABCOnBWqVQ25RreVL6vhpt1eaAYtcDck4idBIa273evp6o7j59JNTgy
+         Jq8JTjE2gEytR7i5qiBg+XX7qiY5WQjih7SI5Nge6G0JSc+v6pTmLSxGKBDdBVnn29Mf
+         /DVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDIwhAzarEj6ACj5i/fEgINUG7weQNfPq9zgGqjHoxlJmQC+1e/N991896hHyQ01JwoUo7CqGH@vger.kernel.org, AJvYcCVNIUtdG1kXJTpGs3wxadEadMRW8YorV+N/EpTwotr7ebaNIqoKVXdIiHxRx1GQZ0sE5GYX6Wji@vger.kernel.org, AJvYcCXGuXzqYhLrpov9WsEMrAPQXMndGw4KJ/MFySFT3GLW/lu8MNx0ohULp9TE0+Os21Z2zMYad7MdvgVEe1Y=@vger.kernel.org, AJvYcCXXqHEpojIhGWZuc6+SevBccMvv+5MyqPg/e6ZGcOI7UKixnQKKcDGkwMDGk98zij0sKisEV1r5AF+d@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGsFiUzrG4XPImFe2jjru3u+29GejI3zKb9s1m7Ktq0+SjnIME
+	hGkOKLXu2Ck0W8rAHUpvzwpZoDc9xSBJZxi2cR6ZUo7+fDtK5YmN
+X-Gm-Gg: ASbGnctZBKeT/ALDal1YJD3clW4a4ZhGknb9OtCjFWsHxg7C7fGjxSLhW+vOJQyjb2X
+	Jx9596D+IyZtMNsflR8GmsWNZMYYDtm6Sq1DjPIo8gEJFDmzNMpkTksbOE56SUhiiQ3G8hyxoj5
+	O7rz17RzTP2Uuxs3RZe9vjYXEDZNCcw0qvA49/ie42Knaf6rKRGmx/SxDj4QJeqRX0acGrqK5SJ
+	gjD2A+oFS4vnU3WAEQTfstSWTdaTZ1OzU5b8wWHf/b692+VgSJbayyvU9+hmE2X+xC4QYoif9tD
+	uufXECSSnwJAXbaKHCmxCHwRqKen
+X-Google-Smtp-Source: AGHT+IFKfUEsVvfSXYEsCwQADOJ2i91RasJteBc0xV5dUODflc4/l4UG2nuGlo6Fve6SSYO1wjpXEA==
+X-Received: by 2002:adf:f511:0:b0:38f:2766:758d with SMTP id ffacd0b85a97d-390cc631000mr4428234f8f.37.1740569239771;
+        Wed, 26 Feb 2025 03:27:19 -0800 (PST)
+Received: from qasdev.system ([2a02:c7c:6696:8300:4b1:eb67:8b45:9659])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390d6a32299sm1701605f8f.55.2025.02.26.03.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 03:27:19 -0800 (PST)
+Date: Wed, 26 Feb 2025 11:27:12 +0000
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart()
+Message-ID: <Z776kB1bbI48k9Cx@qasdev.system>
+Reply-To: cf0d2929-d854-48ce-97eb-69747f0833f2@lunn.ch
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <49cd8502-f11e-4ade-a3a0-b16ce0c6282f@bootlin.com>
 
-On Tue, Feb 25, 2025 at 02:51:40PM +0100, Louis Chauvet wrote:
-> 
-> 
-> Le 25/02/2025 à 12:41, Thomas Zimmermann a écrit :
-> > Hi
-> > 
-> > Am 10.02.25 um 15:37 schrieb Louis Chauvet:
-> > > On 10/02/25 - 13:30, Greg Kroah-Hartman wrote:
-> > > > The vkms driver does not need to create a platform device, as there is
-> > > > no real platform resources associated it,  it only did so because it was
-> > > > simple to do that in order to get a device to use for resource
-> > > > management of drm resources.  Change the driver to use the faux device
-> > > > instead as this is NOT a real platform device.
-> > > > 
-> > > > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
-> > > > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
-> > > > Cc: Simona Vetter <simona@ffwll.ch>
-> > > > Cc: Melissa Wen <melissa.srw@gmail.com>
-> > > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > > > Cc: Maxime Ripard <mripard@kernel.org>
-> > > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > > > Cc: David Airlie <airlied@gmail.com>
-> > > > Cc: dri-devel@lists.freedesktop.org
-> > > > Reviewed-by: Lyude Paul <lyude@redhat.com>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> > 
-> > > Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> > > Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> > > 
-> > > Thanks for the modification, it seems to work.
-> > 
-> > Should this patch be merged through DRM trees? drm-misc-next is at
-> > v6.14-rc4 and has struct faux_device.
-> 
-> Hi,
-> 
-> I was not aware the faux-device was merged, as it is a new feature, I
-> expected it to reach drm-misc-next on 6.15-rc1.
+Hi Andrew,
 
-I added it to Linus's tree just so that DRM could get these changes into
-their tree now :)
+Just following up on my patch from Feb 18 regarding the uninitialised access fix in mii_nway_restart(). Any further feedback would be appreciated.
 
-> I plan to merge [1] today/tomorrow (well tested with platform_device), and
-> then I will submit an updated version of this patch (only trivial conflicts,
-> but never tested with multiple VKMS devices).
-> 
-> [1]:https://lore.kernel.org/all/20250218101214.5790-1-jose.exposito89@gmail.com/
+Thanks,
+Qasim
 
-Great, thanks!
-
-greg k-h
 
