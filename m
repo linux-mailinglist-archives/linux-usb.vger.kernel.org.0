@@ -1,125 +1,114 @@
-Return-Path: <linux-usb+bounces-21080-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21081-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFAA0A45F83
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:40:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E116A46130
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 14:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E2A168C3A
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:40:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC8627A9F59
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5B521576D;
-	Wed, 26 Feb 2025 12:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10F7219E86;
+	Wed, 26 Feb 2025 13:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4M6kLak"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="O+J6C6YS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9752C214803;
-	Wed, 26 Feb 2025 12:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009E041C71;
+	Wed, 26 Feb 2025 13:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740573648; cv=none; b=SZQxXA8ytMKr/dgNVXk9aVZSQOfTYgrXPtsv6e6sWGoMqLkmHsToVLim0wzLrRU9arcau5sVZPuUr22l9pW7LD1KAlYbLtEm+BB8qbYAW4Dcz7pS1Ig/fOnAy9Jl8kmEchHT1fe9Zfv9hP62tUPuiDDQ+UrRPDT/perchcvLFXU=
+	t=1740577421; cv=none; b=FYjjDYxn/fO5Lo+a0J1K3p0B48RvBj/ECYvfw5kBTc8BmT9Gy//GFO3E4EePS0cvXT9m0jDwhe6heFvdXfCxRBFAFM66NXEmNNJv/YNm3zCe6qkZ+TKmtIJrpNyMDKI13rC/VR5AEFsJ3j6Ei519cuO9LEzhKrfXIS3Btgt86ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740573648; c=relaxed/simple;
-	bh=AyX3eeqoqqrJcrTXy8JrokTY4/mNoUqm6EwAoze0Qrc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lpH/9ZlEKIrbDEOy1dUOerWYV2ooUcL7pGySjzYI/NUETAIefB8o4dLlMjA/lKWLk/wpIwEKUdGD0MDYazPR03l5fim0wYgRez9w5Iy9V3i3wTCH376SFjy1i9WcK+hIxp8FBR+1v6CV5KijKUk1kD0uuA2jWYrm9jF26U1/H7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4M6kLak; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740573647; x=1772109647;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AyX3eeqoqqrJcrTXy8JrokTY4/mNoUqm6EwAoze0Qrc=;
-  b=e4M6kLak6JNOaR4quwCawXu0WrUA7M1yPiroOFdAVAG/QZn2GfAuAhJs
-   X2O3LZI4CEIMX+scdvdaYBuuHkhclULomn+lSHVlo48l53R87MfLOtpVh
-   N2OvuMb+R0FP7xbnInjLQ/mlgWDPGVR8QqKftNDTYeuVasZ1RDg9OZGuV
-   /71nWcsURFVkz1f5sblqhsRvu2L46Id3hSNItz1U1LtL8f2L4P936JFL/
-   u0WdPel/zYlU47KTKin7TzMFXHAkD8RsZd+sP2TfK3Jv1FYyvP06OPLyq
-   be14AJz2XJ8s/im8ljxoCoJzl7znnpWiWJjzy2nFsI8xhEshL4TBy1Fqc
-   A==;
-X-CSE-ConnectionGUID: HaLQvjarTg+uEbzl3QsG0g==
-X-CSE-MsgGUID: h7QwXGJ+RsqRzVQh8HQngA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="45065270"
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="45065270"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 04:40:46 -0800
-X-CSE-ConnectionGUID: AupgKeyPT0WSPrBOkR32oA==
-X-CSE-MsgGUID: kEAa4Lc5Q+iXq/ocPSc+Pw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="121790490"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa004.fm.intel.com with ESMTP; 26 Feb 2025 04:40:44 -0800
-Message-ID: <8bf4212a-72af-4c5d-a9b2-f3363d3ee3cd@linux.intel.com>
-Date: Wed, 26 Feb 2025 14:41:44 +0200
+	s=arc-20240116; t=1740577421; c=relaxed/simple;
+	bh=C1RgbLR6GSfvgGMUX8LxeDVo7GdVzjmW06YGox9WhSA=;
+	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Md+QrwwDR005Mwl2QpnxTVImF9KRaAQsRWAc9yETJXQu6GpLzN6DmT7/UgEK+yPAuQkWDFCFqV8VsKQjzsEBPbWaVYw9Eb5jwdKIx52+n3+4tN6xUrxax4Q70xiRbmfFocgTVH1XB9nXLkF4mhv9BzCN2tLUDpMqaPCawSwhmeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=O+J6C6YS; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:From:Date:From:Sender:Reply-To:Subject:Date:
+	Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=+RM9fCd/pH/t1kXOr5ohz3w+lMtjBfCOedTcP39zAaM=; b=O+J6C6YSUoR+qkSnbq3xnBv7kq
+	TK4+SebVazszU6RcdBlkTq5CUyf3NmIhIhYO4MGohY316oVlXE0KLvs6ss0yQ3ky3nYPY3QhgpeF9
+	eE9Sc7oXJ+d8EeSJgvEf/0+iAexlZBH/QGnIn08RsEP67gXc1wGFh+n+8SXiFA7yLrgA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tnHhD-000Gqa-Mm; Wed, 26 Feb 2025 14:43:31 +0100
+Date: Wed, 26 Feb 2025 14:43:31 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart()
+Message-ID: <418ddcf6-e7c9-4a8e-ba1a-38a83cb2b5f8@lunn.ch>
+References: <Z7R6uet1dJ1UJsJ1@qasdev.system>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] xHCI: Isochronous error handling fixes and
- improvements
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250226080202.7eb5e142@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250226080202.7eb5e142@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7R6uet1dJ1UJsJ1@qasdev.system>
 
-On 26.2.2025 9.02, Michal Pecio wrote:
-> These patches reduce latency of error reporting in some cases related
-> to 'error mid TD' and Missed Service events and sometimes fix a failure
-> to give back such TDs altogether until they are cancelled.
+On Tue, Feb 18, 2025 at 12:19:57PM +0000, Qasim Ijaz wrote:
+> On Tue, Feb 18, 2025 at 02:10:08AM +0100, Andrew Lunn wrote:
+> > On Tue, Feb 18, 2025 at 12:24:43AM +0000, Qasim Ijaz wrote:
+> > > In mii_nway_restart() during the line:
+> > > 
+> > > 	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+> > > 
+> > > The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+> > > 
+> > > ch9200_mdio_read() utilises a local buffer, which is initialised 
+> > > with control_read():
+> > > 
+> > > 	unsigned char buff[2];
+> > > 	
+> > > However buff is conditionally initialised inside control_read():
+> > > 
+> > > 	if (err == size) {
+> > > 		memcpy(data, buf, size);
+> > > 	}
+> > > 
+> > > If the condition of "err == size" is not met, then buff remains 
+> > > uninitialised. Once this happens the uninitialised buff is accessed 
+> > > and returned during ch9200_mdio_read():
+> > > 
+> > > 	return (buff[0] | buff[1] << 8);
+> > > 	
+> > > The problem stems from the fact that ch9200_mdio_read() ignores the
+> > > return value of control_read(), leading to uinit-access of buff.
+> > > 
+> > > To fix this we should check the return value of control_read()
+> > > and return early on error.
+> > 
+> > What about get_mac_address()?
+> > 
+> > If you find a bug, it is a good idea to look around and see if there
+> > are any more instances of the same bug. I could be wrong, but it seems
+> > like get_mac_address() suffers from the same problem?
 > 
-> Also included are fixes for potential packet loss or memory corruption
-> due to obscure races. Whether it causes problems IRL is not known and
-> the worst case would be hard to reproduce, but exactly for this reason
-> if the worst case actually happens, it could be hard to debug too.
-> 
-> The first three should be safe. The fourth should also be safe, but it
-> relies on HC functionality Linux never relied on before, so I placed it
-> towards the end in case it would need some tweaks. I tested it on all
-> hardware I have and it worked just fine.
-> 
-> The last one is perhaps the most controversial, though it should be
-> OK with typical "complete -> resubmit" drivers. It's the only one here
-> which increases latency in some severe error cases. The intent is to
-> avoid potentially giving back URBs not yet executed by hardware.
-> 
-> New in v3:
-> - dropped the cleanup patch
-> - added Don't skip on Stopped - Length Invalid
-> 
-> New in v3:
-> - fixed spurious empty list warning on xrun
-> - clear skip flag if one skipped event was the last
-> 
-> Michal Pecio (5):
->    usb: xhci: Don't skip on Stopped - Length Invalid
->    usb: xhci: Complete 'error mid TD' transfers when handling Missed
->      Service
->    usb: xhci: Fix isochronous Ring Underrun/Overrun event handling
->    usb: xhci: Expedite skipping missed isoch TDs on modern HCs
->    usb: xhci: Skip only one TD on Ring Underrun/Overrun
-> 
+> Thank you for the feedback Andrew. I checked get_mac_address() before
+> sending this patch and to me it looks like it does check the return value of
+> control_read(). It accumulates the return value of each control_read() call into 
+> rd_mac_len and then checks if it not equal to what is expected (ETH_ALEN which is 6),
+> I believe each call should return 2.
 
-Updated my for-usb-next branch to this v3 version
+It is unlikely a real device could trigger an issue, but a USB Rubber
+Ducky might be able to. So the question is, are you interested in
+protecting against malicious devices, or just making a static analyser
+happy? Feel free to submit the patch as is.
 
-Thanks
-Mathias
+	Andrew
 
