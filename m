@@ -1,114 +1,124 @@
-Return-Path: <linux-usb+bounces-21081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E116A46130
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 14:43:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B93AA46229
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 15:17:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC8627A9F59
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:42:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EDFD17AFD8
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 14:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10F7219E86;
-	Wed, 26 Feb 2025 13:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A95221DAE;
+	Wed, 26 Feb 2025 14:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="O+J6C6YS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtU0fFzl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009E041C71;
-	Wed, 26 Feb 2025 13:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D636218AC8;
+	Wed, 26 Feb 2025 14:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740577421; cv=none; b=FYjjDYxn/fO5Lo+a0J1K3p0B48RvBj/ECYvfw5kBTc8BmT9Gy//GFO3E4EePS0cvXT9m0jDwhe6heFvdXfCxRBFAFM66NXEmNNJv/YNm3zCe6qkZ+TKmtIJrpNyMDKI13rC/VR5AEFsJ3j6Ei519cuO9LEzhKrfXIS3Btgt86ZU=
+	t=1740579452; cv=none; b=XKWm4F7/iewotrX1g+H4bk/WkxdnW2IGlJzjfPI7pLW165Vp3qD78BCVcIiz/XYjtCsHDzyxUZkwzNl3RLvhy2JMBaBp1spJ6CFv9+FefvbBWFE7T7+mYdJGPs2w8obmCeTpseb4Y10b3HPLLFHEYbnGL8RvdJOKOynSjdZgU4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740577421; c=relaxed/simple;
-	bh=C1RgbLR6GSfvgGMUX8LxeDVo7GdVzjmW06YGox9WhSA=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Md+QrwwDR005Mwl2QpnxTVImF9KRaAQsRWAc9yETJXQu6GpLzN6DmT7/UgEK+yPAuQkWDFCFqV8VsKQjzsEBPbWaVYw9Eb5jwdKIx52+n3+4tN6xUrxax4Q70xiRbmfFocgTVH1XB9nXLkF4mhv9BzCN2tLUDpMqaPCawSwhmeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=O+J6C6YS; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:From:Date:From:Sender:Reply-To:Subject:Date:
-	Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=+RM9fCd/pH/t1kXOr5ohz3w+lMtjBfCOedTcP39zAaM=; b=O+J6C6YSUoR+qkSnbq3xnBv7kq
-	TK4+SebVazszU6RcdBlkTq5CUyf3NmIhIhYO4MGohY316oVlXE0KLvs6ss0yQ3ky3nYPY3QhgpeF9
-	eE9Sc7oXJ+d8EeSJgvEf/0+iAexlZBH/QGnIn08RsEP67gXc1wGFh+n+8SXiFA7yLrgA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tnHhD-000Gqa-Mm; Wed, 26 Feb 2025 14:43:31 +0100
-Date: Wed, 26 Feb 2025 14:43:31 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart()
-Message-ID: <418ddcf6-e7c9-4a8e-ba1a-38a83cb2b5f8@lunn.ch>
-References: <Z7R6uet1dJ1UJsJ1@qasdev.system>
+	s=arc-20240116; t=1740579452; c=relaxed/simple;
+	bh=fwV5Igl0YjoYekgCo39bGuXYUSU/ztIwTAkRyvKRrqw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QVisu0Zaa6ClnXi7cbtMFU4DVjSCXQ818YfG/3OxREemCL9+ZXHiCz8QWc0n6ue70NrMY9xX2ZZofARug43Hgv7m7BGqU0PElOcIDZcb24pV7BS145a8y9mMgwe8u2FeqXxYnVwjZl6vkldXReBrX0mlZoUPbbsFKKJBnOz51aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtU0fFzl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FE9CC4CEE4;
+	Wed, 26 Feb 2025 14:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740579451;
+	bh=fwV5Igl0YjoYekgCo39bGuXYUSU/ztIwTAkRyvKRrqw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=dtU0fFzlkNAnroJ8Hauv5Ufq27f20TXvDHzv3Pfe0zqZfge8c34DYUj6z7zRv7ZSL
+	 8h7l0fwuTFYfz9QZ/sFhF+vXviJzRYm20jzL4uK0SuFEAGwwulqkJujtzoUI5U5R7Y
+	 rN5l4Q2yWg3BfgG4PucMvYgfkHh1uxb81U87vuR+h8LsoBa9jxdFiDoohzVQ6s/FPA
+	 kXGiecXjjKbA2wg753z789J2IATGfswPLPPgrC2w0wObJDOkqYZFgyeF1P33A65HKa
+	 Usrv1ezqQzuhW1OuuvrZ0S3xy7v3WdFENQLn7ONH2fb/V8Vz4iaYPpMFfAmygw/Tyf
+	 mcILK8rlCoKPQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 662EAC021B8;
+	Wed, 26 Feb 2025 14:17:31 +0000 (UTC)
+From: =?utf-8?q?Jonathan_Neusch=C3=A4fer_via_B4_Relay?= <devnull+j.ne.posteo.net@kernel.org>
+Subject: [PATCH v2 0/9] usb: storage: Mark various arrays as const
+Date: Wed, 26 Feb 2025 15:17:22 +0100
+Message-Id: <20250226-misc-const-v2-0-ab655a4a29cc@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z7R6uet1dJ1UJsJ1@qasdev.system>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHIiv2cC/03MwQ6CMAzG8VchPTuzlSHKyfcwHGR00oMbWReiI
+ by7g5Pp6d/k+60glJgEumqFRAsLx1ACTxW46RlepHgsDajRaquNerM45WKQrKgdrPOox8bfoAz
+ mRJ4/B/boS08sOabvYS9m/+5MoxGbf2Yxqhwa7+vherF1e5+jZIrnQBn6bdt+jdaCTqUAAAA=
+X-Change-ID: 20240401-misc-const-e7b4cf20d5f9
+To: Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.ne@posteo.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740579450; l=1711;
+ i=j.ne@posteo.net; s=20240329; h=from:subject:message-id;
+ bh=fwV5Igl0YjoYekgCo39bGuXYUSU/ztIwTAkRyvKRrqw=;
+ b=cAY4Rp6m9M3AvBzybF691EpSlg/bOe3SSQGlpgxsasvXQbedMVBuVulj6Zf+ouOBi6nKXQE0k
+ QdsBdhUC+08AxBp3ev6/NJGILI74xu5IsDqO2kQcONXgyBdj8x00U9A
+X-Developer-Key: i=j.ne@posteo.net; a=ed25519;
+ pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
+X-Endpoint-Received: by B4 Relay for j.ne@posteo.net/20240329 with
+ auth_id=156
+X-Original-From: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Reply-To: j.ne@posteo.net
 
-On Tue, Feb 18, 2025 at 12:19:57PM +0000, Qasim Ijaz wrote:
-> On Tue, Feb 18, 2025 at 02:10:08AM +0100, Andrew Lunn wrote:
-> > On Tue, Feb 18, 2025 at 12:24:43AM +0000, Qasim Ijaz wrote:
-> > > In mii_nway_restart() during the line:
-> > > 
-> > > 	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
-> > > 
-> > > The code attempts to call mii->mdio_read which is ch9200_mdio_read().
-> > > 
-> > > ch9200_mdio_read() utilises a local buffer, which is initialised 
-> > > with control_read():
-> > > 
-> > > 	unsigned char buff[2];
-> > > 	
-> > > However buff is conditionally initialised inside control_read():
-> > > 
-> > > 	if (err == size) {
-> > > 		memcpy(data, buf, size);
-> > > 	}
-> > > 
-> > > If the condition of "err == size" is not met, then buff remains 
-> > > uninitialised. Once this happens the uninitialised buff is accessed 
-> > > and returned during ch9200_mdio_read():
-> > > 
-> > > 	return (buff[0] | buff[1] << 8);
-> > > 	
-> > > The problem stems from the fact that ch9200_mdio_read() ignores the
-> > > return value of control_read(), leading to uinit-access of buff.
-> > > 
-> > > To fix this we should check the return value of control_read()
-> > > and return early on error.
-> > 
-> > What about get_mac_address()?
-> > 
-> > If you find a bug, it is a good idea to look around and see if there
-> > are any more instances of the same bug. I could be wrong, but it seems
-> > like get_mac_address() suffers from the same problem?
-> 
-> Thank you for the feedback Andrew. I checked get_mac_address() before
-> sending this patch and to me it looks like it does check the return value of
-> control_read(). It accumulates the return value of each control_read() call into 
-> rd_mac_len and then checks if it not equal to what is expected (ETH_ALEN which is 6),
-> I believe each call should return 2.
+While reading code, I noticed that some arrays in USB mass storage
+drivers are declared static but not const, even though they are not
+modified. This patchset marks them const.
 
-It is unlikely a real device could trigger an issue, but a USB Rubber
-Ducky might be able to. So the question is, are you interested in
-protecting against malicious devices, or just making a static analyser
-happy? Feel free to submit the patch as is.
+All patches were compile-tested.
 
-	Andrew
+Signed-off-by: Jonathan Neuschäfer <j.ne@posteo.net>
+---
+Changes in v2:
+- Add new patches 2-9
+- Use consistent authorship information
+- Link to v1: https://lore.kernel.org/r/20250225-misc-const-v1-1-121ff3b86437@posteo.net
+
+---
+Jonathan Neuschäfer (9):
+      usb: storage: jumpshot: Use const for constant arrays
+      usb: storage: transport: Use const for constant array
+      usb: storage: alauda: Use const for card ID array
+      usb: storage: datafab: Use const for constant arrays
+      usb: storage: initializers: Use const for constant array
+      usb: storage: realtek_cr: Use const for constant arrays
+      usb: storage: sddr09: Use const for constant arrays
+      usb: storage: sddr55: Use const for constant arrays
+      usb: storage: shuttle_usbat: Use const for constant array
+
+ drivers/usb/storage/alauda.c        |  8 ++++----
+ drivers/usb/storage/datafab.c       | 14 +++++++-------
+ drivers/usb/storage/initializers.c  |  2 +-
+ drivers/usb/storage/jumpshot.c      | 10 +++++-----
+ drivers/usb/storage/realtek_cr.c    |  6 +++---
+ drivers/usb/storage/sddr09.c        | 14 +++++++-------
+ drivers/usb/storage/sddr55.c        |  4 ++--
+ drivers/usb/storage/shuttle_usbat.c |  2 +-
+ drivers/usb/storage/transport.c     |  2 +-
+ 9 files changed, 31 insertions(+), 31 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20240401-misc-const-e7b4cf20d5f9
+
+Best regards,
+-- 
+Jonathan Neuschäfer <j.ne@posteo.net>
+
+
 
