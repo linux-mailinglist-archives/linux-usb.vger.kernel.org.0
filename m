@@ -1,145 +1,170 @@
-Return-Path: <linux-usb+bounces-21062-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21063-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E143A45655
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 08:06:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0636A4567C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 08:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54C3316CE92
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 07:06:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1FBF3A5F2C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 07:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6832926E161;
-	Wed, 26 Feb 2025 07:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA4B194A66;
+	Wed, 26 Feb 2025 07:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkeLbFeJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H4BYT5Et"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8AD192D84;
-	Wed, 26 Feb 2025 07:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90D218DB11;
+	Wed, 26 Feb 2025 07:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740553543; cv=none; b=c+f5iWTDmi3pdl3yLSC3VINSJj5efs9TdF3KVtoDbARVGYKjyydNKIV8Tuu36zJMzQGLAl4Lqgb9rXeiBGZIAAioxAY2w2kcIGtPqGr+AxVPZGzLu7pMofh+BZwFt4k1kTvd0TYN2kiiX2ZbB7pV+kwWwPXOVPszPWtR8US0Du8=
+	t=1740554219; cv=none; b=ouXU4XQ/NQtYdd9UY3udt0KQ06JzaPQ7uEWNsNIc0jOpJu1aN8XyF+pvg+wezQ9Z2PVBbJum1GbS4h+/yoCu5infV4jCsFUk6TXPfJEuPNoIMiqyzcryGK3mByZNldUVtTgaK7aI5DBdlDEd4dMt+9Q7oUtVs11v0FlzR4tnIi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740553543; c=relaxed/simple;
-	bh=Gk2NOsd/J//xRxLUPvfvBLSPupHBrxHxFuGx3y8W788=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HTkHVl7pt+F8AwMj69axyl3aS9WLY75/twqp0ZiOlZyVVq9YBLEMVGZ58Q1MJEVuTXIoPDqZdidGoWFAIvx0uCEO32yaJlSRi/+mZ73pKx+iBmnC39oj4jYRnFTUZ+yYMFRJSwMWvQjQqNj04GKJP7L0zvLZjsDJlHrAM2Ix+bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AkeLbFeJ; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e0b70fb1daso8704811a12.1;
-        Tue, 25 Feb 2025 23:05:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740553540; x=1741158340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mkJ817mz5egdhi58ZIWEmLBtlaoU7i9Gaj/7Bxj66wY=;
-        b=AkeLbFeJ9JPG+2L18jh9izAuDMXQcFA21wGLPZQwkKSnIHGywaux9O7DFx0LGxGOr/
-         /tlexjHKwlYKObTuc0tpMUrXQlH06U8z1bGOOuC4tx+1eW4oN8gN2Lyi9zfX7R2jHUP8
-         ntJEm1WnmztAtabi0XuCyglgX+OXV7N1LG3fihdL+g0kPvJ7Jndk7FC3MZL/mpI4kGer
-         labZ7oVySoOqw74u8zWdpCrw+Ma1klJ2szmokaghYglgYp7DNdnbWPQnJHNqT+4MGlnF
-         aqXiXohOQNhN3S8e5SYvXg1s6YEfpweUSgdbIf4F6X/v/+NBzfMeO4uIpr80qIT+Sf3m
-         sqEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740553540; x=1741158340;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mkJ817mz5egdhi58ZIWEmLBtlaoU7i9Gaj/7Bxj66wY=;
-        b=tioeg8Ba5wUUIk9gYvfNUJ/wCDeOo+VG1KkB51ZwRayA/YF/Jj/u/qaZjzXb3l7eTg
-         V/sbf9Ay09yUopOlXp5RlWSCmXtJElho1cNid/eHaZj+z3ELDSI0qCHlrAawUwX7Gnpc
-         ch4BHcRVQ0bG2n+ldyXIQ8F9QDW2NwLJ64rFINLwyqlrlZMtKEP7TKTmGgQ9xcxONAie
-         L1BWjZg6+MjSGKr0sJC9iFW+6/45JUWDw36ZgiWsEMnsqDcLy4J1qPp7mPw6eGatA/z3
-         Lp503WRPglWezTO1O2zNguU6venNsFcG1mhiHZmLd3wrBzJhZVO5FRpyLrhGgS7UpEAS
-         GYGA==
-X-Forwarded-Encrypted: i=1; AJvYcCWj5fMp25RWLRCU3J6SEQHbH4IAugSTeayIILyhfPwg3i2JQ1KYSzTIVKQTf67cwzsZnL/M/p9cOWjw9IM=@vger.kernel.org, AJvYcCX90NalwsG/Z3lengqxcbF5gxEvGGp5vsKwz8aGQWjYd5qZHnFwtxinhM1RNhz2q0VsUmxGzGpXmJe6@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhjxZrO5CHAuIjRuduU53TH3UG0YoGLsg4xbtPNxD/i6IUJHxC
-	oWYROC2fCXthHJQWViOJZ5Rab0O1nbRKmGrMjFrXMKYg+6STR+OV
-X-Gm-Gg: ASbGncuXMz5ovmwYmbSggRCcXAi4GM0+0fsI4Rw9DkoH35w22orl+/bCdqV6XRM/yRW
-	LpA1KV8hywAHARrtVmITFV8s/lTjApOXhA9M0FdXlhHll+2Y6z8AFgaHkPvj795bjFam1D7WyES
-	+IBSfRjlOZkuck0/NKTVmaKeIbp2gTHX9bP1nnGGhWpxSlfg6Ifj9yT1GoUD9Ii7KQbCU+KGwJn
-	ShlIYyASzlrg4TFl7K1U7DSS65Ty0Hk83vM/UimbtYgDLCyXZyC2e+zZm/i/X1G1ntMKepkYMGX
-	tv9vWow53im4SqmI6Cj1yNenTyeEvbCVq3VeiZCJ
-X-Google-Smtp-Source: AGHT+IEC1/k6GzG+zCvlAtOOJEZgDQR+mHRxEYNcXErOnLu63oM3/CoHm7JPuq/yW42KPJGGuf3kKw==
-X-Received: by 2002:a17:906:b2c4:b0:abe:e2ac:62db with SMTP id a640c23a62f3a-abeeed11204mr189466466b.7.1740553540289;
-        Tue, 25 Feb 2025 23:05:40 -0800 (PST)
-Received: from foxbook (adqi59.neoplus.adsl.tpnet.pl. [79.185.142.59])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed20ac11bsm268083666b.163.2025.02.25.23.05.39
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 25 Feb 2025 23:05:40 -0800 (PST)
-Date: Wed, 26 Feb 2025 08:05:36 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] usb: xhci: Skip only one TD on Ring Underrun/Overrun
-Message-ID: <20250226080536.4f6f7e93@foxbook>
-In-Reply-To: <20250226080202.7eb5e142@foxbook>
-References: <20250226080202.7eb5e142@foxbook>
+	s=arc-20240116; t=1740554219; c=relaxed/simple;
+	bh=1Kb0KQQpe86zLyyYFwC5pDOTMSMspwB5NAM1OebGI9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q+YWfyxlIlcFdcMrNhGyY7+lx/0oNygLFuqyS6ick9RoQ0soT7n39fn2Nw3Ic0GeUFZLfmLdQAUkA6gMl+g7zIprJIQMQMK/XXtiuFONWoMaHTHfPfnDxBj5bEIRBBYGOkJlXid5yH4mdUhJX2g6grewE12AqefFGa+gG72NhPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H4BYT5Et; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740554218; x=1772090218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1Kb0KQQpe86zLyyYFwC5pDOTMSMspwB5NAM1OebGI9E=;
+  b=H4BYT5EtdB2qMF32HWwqyjT/Q2Ez4vEBu3kam09Fh/WUVPdBYRZqZGGO
+   issIENybDJmGcsLicpEo2L/DlKqw4PMJ/K54LlDw0jfXeqb7ONq7VzuG4
+   Ztq5clEmEyjXfQ36S6nmfr0hpOJ4+NG4s2Fe9D2y9v2KeZfMkBSzckAc5
+   88N1B6WLg6gS+bocOD6n073Cn9P+yhGaeLmz3PYH3V8BfABAqZekLKir6
+   4/S4V+PSBsZJ2HE/j7WgjRT4r8DTqbh78Mb1sq1nMAle3coRF9hq6N8pp
+   Y6CODl2mHwgY7hB6AftZPWD7LbLG6WBZnFvsk1JUe4vVn0zAxEeFaNc9E
+   Q==;
+X-CSE-ConnectionGUID: qrvJwF3qS6WswJ4N0PGlwQ==
+X-CSE-MsgGUID: 1qsHGcDlRlyarc322u53yQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="40623205"
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="40623205"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 23:16:57 -0800
+X-CSE-ConnectionGUID: sTb0f3sYRs6tMWCGyOF8nw==
+X-CSE-MsgGUID: 5us5yGZDS+mZTJyldJmxsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="147448898"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 25 Feb 2025 23:16:53 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnBf0-000BK7-3D;
+	Wed, 26 Feb 2025 07:16:50 +0000
+Date: Wed, 26 Feb 2025 15:16:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, peter.chen@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 4/6] usb: chipidea: imx: add wakeup interrupt handling
+Message-ID: <202502261559.XexYUCXi-lkp@intel.com>
+References: <20250225053955.3781831-5-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225053955.3781831-5-xu.yang_2@nxp.com>
 
-If skipping is deferred to events other than Missed Service Error itsef,
-it means we are running on an xHCI 1.0 host and don't know how many TDs
-were missed until we reach some ordinary transfer completion event.
+Hi Xu,
 
-And in case of ring xrun, we can't know where the xrun happened either.
+kernel test robot noticed the following build errors:
 
-If we skip all pending TDs, we may prematurely give back TDs added after
-the xrun had occurred, risking data loss or buffer UAF by the xHC.
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.14-rc4 next-20250225]
+[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If we skip none, a driver may become confused and stop working when all
-its URBs are missed and appear to be "in flight" forever.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/dt-bindings-usb-chipidea-Add-i-MX95-compatible-string-fsl-imx95-usb/20250225-134215
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250225053955.3781831-5-xu.yang_2%40nxp.com
+patch subject: [PATCH v2 4/6] usb: chipidea: imx: add wakeup interrupt handling
+config: x86_64-buildonly-randconfig-003-20250226 (https://download.01.org/0day-ci/archive/20250226/202502261559.XexYUCXi-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250226/202502261559.XexYUCXi-lkp@intel.com/reproduce)
 
-Skip exactly one TD on each xrun event - the first one that was missed,
-as we can now be sure that the HC has finished processing it. Provided
-that one more TD is queued before any subsequent doorbell ring, it will
-become safe to skip another TD by the time we get an xrun again.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502261559.XexYUCXi-lkp@intel.com/
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci-ring.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ad5f0e439200..2749ebe23a33 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2885,8 +2885,21 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 					return 0;
- 
- 				skip_isoc_td(xhci, td, ep, status);
--				if (!list_empty(&ep_ring->td_list))
-+
-+				if (!list_empty(&ep_ring->td_list)) {
-+					if (ring_xrun_event) {
-+						/*
-+						 * If we are here, we are on xHCI 1.0 host with no
-+						 * idea how many TDs were missed or where the xrun
-+						 * occurred. New TDs may have been added after the
-+						 * xrun, so skip only one TD to be safe.
-+						 */
-+						xhci_dbg(xhci, "Skipped one TD for slot %u ep %u",
-+								slot_id, ep_index);
-+						return 0;
-+					}
- 					continue;
-+				}
- 
- 				xhci_dbg(xhci, "All TDs skipped for slot %u ep %u. Clear skip flag.\n",
- 					 slot_id, ep_index);
+   drivers/usb/chipidea/ci_hdrc_imx.c: In function 'imx_controller_resume':
+>> drivers/usb/chipidea/ci_hdrc_imx.c:633:14: error: implicit declaration of function 'irqd_irq_disabled'; did you mean 'arch_irqs_disabled'? [-Werror=implicit-function-declaration]
+     633 |         if (!irqd_irq_disabled(irq_get_irq_data(data->wakeup_irq)))
+         |              ^~~~~~~~~~~~~~~~~
+         |              arch_irqs_disabled
+>> drivers/usb/chipidea/ci_hdrc_imx.c:633:32: error: implicit declaration of function 'irq_get_irq_data'; did you mean 'irq_set_irq_wake'? [-Werror=implicit-function-declaration]
+     633 |         if (!irqd_irq_disabled(irq_get_irq_data(data->wakeup_irq)))
+         |                                ^~~~~~~~~~~~~~~~
+         |                                irq_set_irq_wake
+   cc1: some warnings being treated as errors
+
+
+vim +633 drivers/usb/chipidea/ci_hdrc_imx.c
+
+   616	
+   617	static int imx_controller_resume(struct device *dev,
+   618							pm_message_t msg)
+   619	{
+   620		struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
+   621		int ret = 0;
+   622	
+   623		dev_dbg(dev, "at %s\n", __func__);
+   624	
+   625		if (!data->in_lpm) {
+   626			WARN_ON(1);
+   627			return 0;
+   628		}
+   629	
+   630		if (data->plat_data->flags & CI_HDRC_PMQOS)
+   631			cpu_latency_qos_add_request(&data->pm_qos_req, 0);
+   632	
+ > 633		if (!irqd_irq_disabled(irq_get_irq_data(data->wakeup_irq)))
+   634			disable_irq_nosync(data->wakeup_irq);
+   635	
+   636		ret = imx_prepare_enable_clks(dev);
+   637		if (ret)
+   638			return ret;
+   639	
+   640		data->in_lpm = false;
+   641	
+   642		ret = imx_usbmisc_resume(data->usbmisc_data,
+   643					 PMSG_IS_AUTO(msg) || device_may_wakeup(dev));
+   644		if (ret) {
+   645			dev_err(dev, "usbmisc resume failed, ret=%d\n", ret);
+   646			goto clk_disable;
+   647		}
+   648	
+   649		return 0;
+   650	
+   651	clk_disable:
+   652		imx_disable_unprepare_clks(dev);
+   653		return ret;
+   654	}
+   655	
+
 -- 
-2.48.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
