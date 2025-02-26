@@ -1,101 +1,115 @@
-Return-Path: <linux-usb+bounces-21078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 291F7A45D05
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9ECBA45F93
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 13:43:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4489E3A4323
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 11:27:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5913B1213
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 12:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD59D215779;
-	Wed, 26 Feb 2025 11:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A742153D1;
+	Wed, 26 Feb 2025 12:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M2xnckHw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAy4cr/J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6A321504E;
-	Wed, 26 Feb 2025 11:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DBD2063FD;
+	Wed, 26 Feb 2025 12:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740569243; cv=none; b=qgBpeiWBxxm62g3UVxn0Yn7/sEtHeIShY06aJYdc07On1wR6sQKjffOmnco4bEy30BaXi5UmVDBuPTUpj5s0DWG/fmak+yQTrm4Kcr0hl04SV3AJQPZyvT8IxI+wtcaUeYj9yctz2uwR+Nd5jGvYyC6/80RLhQBrQ/zsCbcTzuA=
+	t=1740573511; cv=none; b=JhJYF+7R62uTq9X8pShti8jCXJd4Mka+tv7xLMC112PgLfCfg2UIAwGzSBR2oiZ1aJhGExL2e0jLfW6nbXi39Tf/WpShP2fCrrDsormzBikaYFwx63GF7mNRn6pGmH0dDu72qxijqPw9b3cGM3rlTVFfHix9z3a+n03VA7LSQqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740569243; c=relaxed/simple;
-	bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fCCdyOBTDC4TEVy4+dVIvY8GgNxYeabK6wiZEnTlGCFZO50BXbVwL07fo17sRyzSmft2x5M1RWfgLiJtmm/vYUkLBOqurYpUMonAGnlDqTsLh62td37Po7Lb0UH6pxOjzl4wCyRVQig9IVNdwhW8SxyiDGV1SDpNbeS1K4q+eNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M2xnckHw; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso41360225e9.0;
-        Wed, 26 Feb 2025 03:27:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740569240; x=1741174040; darn=vger.kernel.org;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
-        b=M2xnckHwhNrPbvZITddWFRF7oU0i3F1oJN8vdtrXkMNTn4dDn2a59hi45fuSuwuqZM
-         dv4W/xZ0jd04ulOOdBLmPOU2rYXIT2xxNuIgISpYSPIWMEq9Y2m9M34vr/JBNUSaUIcn
-         47iH7zI6/8aF8MVvGcO8Bzinh9WKISNN72Z/JAx+GYyMonZ8rQJsj+m1OG5RgEdNXPQS
-         hum+oGlVC/iVd6eww9rtqwO9eJCHmGyWTtehYbW9rTNVq3L0QbTN9/DdQfR/tlMoXzY1
-         VK7zfyXjX6PCU3M7Cxmeg02+XpEECF6L8pY067BGbX/cq4+2YEgxeJ8fgnlfYjPL9RRo
-         pP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740569240; x=1741174040;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qwvqSfT1lFNy/9NdzeDks+gFqld8ltqBx1YYsUg/OBk=;
-        b=rKS3rD0rFWbowrKM2geIzh1SaIFAIr6QjvRl2zLa4676gtrcbh4ZwN+J2Yg8TIlY1p
-         pVMWrQiiIDzBaA+5Ymtgvzx8RGlTDxVkG0IdybMqbUNiWlivWmaGplA/55edAI7BruLW
-         vK5/E1WCrPTd1a+AxvILQ0dEh5cHlULKrHCIW8bOFvuxwrBJKOgKwV/j/VlUR3QHVdMj
-         y6fHHRPPisbo+ABCOnBWqVQ25RreVL6vhpt1eaAYtcDck4idBIa273evp6o7j59JNTgy
-         Jq8JTjE2gEytR7i5qiBg+XX7qiY5WQjih7SI5Nge6G0JSc+v6pTmLSxGKBDdBVnn29Mf
-         /DVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDIwhAzarEj6ACj5i/fEgINUG7weQNfPq9zgGqjHoxlJmQC+1e/N991896hHyQ01JwoUo7CqGH@vger.kernel.org, AJvYcCVNIUtdG1kXJTpGs3wxadEadMRW8YorV+N/EpTwotr7ebaNIqoKVXdIiHxRx1GQZ0sE5GYX6Wji@vger.kernel.org, AJvYcCXGuXzqYhLrpov9WsEMrAPQXMndGw4KJ/MFySFT3GLW/lu8MNx0ohULp9TE0+Os21Z2zMYad7MdvgVEe1Y=@vger.kernel.org, AJvYcCXXqHEpojIhGWZuc6+SevBccMvv+5MyqPg/e6ZGcOI7UKixnQKKcDGkwMDGk98zij0sKisEV1r5AF+d@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGsFiUzrG4XPImFe2jjru3u+29GejI3zKb9s1m7Ktq0+SjnIME
-	hGkOKLXu2Ck0W8rAHUpvzwpZoDc9xSBJZxi2cR6ZUo7+fDtK5YmN
-X-Gm-Gg: ASbGnctZBKeT/ALDal1YJD3clW4a4ZhGknb9OtCjFWsHxg7C7fGjxSLhW+vOJQyjb2X
-	Jx9596D+IyZtMNsflR8GmsWNZMYYDtm6Sq1DjPIo8gEJFDmzNMpkTksbOE56SUhiiQ3G8hyxoj5
-	O7rz17RzTP2Uuxs3RZe9vjYXEDZNCcw0qvA49/ie42Knaf6rKRGmx/SxDj4QJeqRX0acGrqK5SJ
-	gjD2A+oFS4vnU3WAEQTfstSWTdaTZ1OzU5b8wWHf/b692+VgSJbayyvU9+hmE2X+xC4QYoif9tD
-	uufXECSSnwJAXbaKHCmxCHwRqKen
-X-Google-Smtp-Source: AGHT+IFKfUEsVvfSXYEsCwQADOJ2i91RasJteBc0xV5dUODflc4/l4UG2nuGlo6Fve6SSYO1wjpXEA==
-X-Received: by 2002:adf:f511:0:b0:38f:2766:758d with SMTP id ffacd0b85a97d-390cc631000mr4428234f8f.37.1740569239771;
-        Wed, 26 Feb 2025 03:27:19 -0800 (PST)
-Received: from qasdev.system ([2a02:c7c:6696:8300:4b1:eb67:8b45:9659])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390d6a32299sm1701605f8f.55.2025.02.26.03.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 03:27:19 -0800 (PST)
-Date: Wed, 26 Feb 2025 11:27:12 +0000
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart()
-Message-ID: <Z776kB1bbI48k9Cx@qasdev.system>
-Reply-To: cf0d2929-d854-48ce-97eb-69747f0833f2@lunn.ch
+	s=arc-20240116; t=1740573511; c=relaxed/simple;
+	bh=KGFvfxU4db5vtbnoDHtKUfvcsj7Nffzksy8W4HNffuQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iDt9cEoO4IAjRKGR5pYc5sz8gJG89PtlwKi2RmtjhoC1Ojpt2ZR98jjuu9xQks6BCs0rB4sCr/TLLPTOoQY4y5PaJPUoyRnyBCMVyA919CTfna9TyKkNJqnt4s9dlf8A7+pwATE9+JIC33Ekm2rRkWLucZF5+JaHoi5GU4z//HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAy4cr/J; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740573511; x=1772109511;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KGFvfxU4db5vtbnoDHtKUfvcsj7Nffzksy8W4HNffuQ=;
+  b=hAy4cr/JNWWPES9qlI6px7K+TN2FLY8NaSeXnNA/yLyh8t8cZI0iNdVv
+   bJQYoPheDs368nWt2SzFSomn897kwBnO0rAz5c0XFFUfSmTpLw107q/O9
+   xz2ROV97mDtr6OD7rMpNR+p9+g8qF7IRgOw1ajxFUXqE4/ZmUFSzL3db0
+   WL9EGuleAc4lN3B6J2v93BsqtK50Yf+p6cwJjklOJu/aumpIskwZXVsNj
+   XDE0kJeXNofrgtABAe1ilC4jdXXWZgqqEoVJKBv0ntTGGvhLSXOQcfhNp
+   RRh8dok/otHF39neH6QV3VspCrI3NhOUA+Urts65cdBN4qMLoL6KZCy7s
+   g==;
+X-CSE-ConnectionGUID: 4eru/AzjT9e6G33QSaZrRw==
+X-CSE-MsgGUID: +4NrcPpMR3q/2F2h3OF5dw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41611326"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41611326"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 04:38:30 -0800
+X-CSE-ConnectionGUID: L/xqCCUISSWVAQ8L+chRMA==
+X-CSE-MsgGUID: noWgvZioS3qyNglv+20Ajw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
+   d="scan'208";a="116476605"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa009.jf.intel.com with ESMTP; 26 Feb 2025 04:38:28 -0800
+Message-ID: <72f3b497-ecac-4efe-8010-a77cc232ce30@linux.intel.com>
+Date: Wed, 26 Feb 2025 14:39:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] xhci: ring queuing cleanups plus a quirk
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250225125750.1b345e2c@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250225125750.1b345e2c@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Andrew,
+On 25.2.2025 13.57, Michal Pecio wrote:
+> I was looking at all uses of enqueue/dequeue pointers and I found two
+> rather complex loops which appear to be doing really simple things.
+> 
+> I don't understand why they were written this way, it seems wasteful
+> and I see nothing that should go wrong if they are replaced with much
+> simpler code.
+> 
+> I rewrote them and the driver still works. I exercised Set TR Dequeue
+> code by starting/stopping isoc streams, using usb-storage with crappy
+> cable (transaction errors, halts) and also the smartctl -x trick that
+> results in URB unlinks (both on usb-storage and uas) with some disks.
+> 
+> The third patch is a dedupe. BTW, that comment there about section
+> 6.4.4.1 of the 0.95 spec seems to be wrong, I suspect it should say
+> that the chain bit cannot be *cleared* because that's how the code
+> works and what some commit messages say. But I don't have 0.95 spec.
+> 
+> New in v2:
+> - dropped the patch for obsolete update_ring_for_set_deq_completion()
+> - added a patch to enable the link chain quirk on one more HC
+> - don't touch the chain bit in inc_enq_past_link() on quirky HCs
+> - don't call inc_enq_past_link() unnecessarily
+> 
+> Michal Pecio (3):
+>    usb: xhci: Apply the link chain quirk on NEC isoc endpoints
+>    usb: xhci: Simplify moving HW Dequeue Pointer past cancelled TDs
+>    usb: xhci: Unify duplicate inc_enq() code
+> 
 
-Just following up on my patch from Feb 18 regarding the uninitialised access fix in mii_nway_restart(). Any further feedback would be appreciated.
+Thanks, adding Patch 1/3 and 3/3, skipping 2/3 for now.
 
-Thanks,
-Qasim
-
+-Mathias
 
