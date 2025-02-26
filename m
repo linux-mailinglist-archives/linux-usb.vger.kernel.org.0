@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-21106-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21107-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B14DA46E89
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 23:28:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B39CDA46E9D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 23:31:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13C0E188B4D1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 22:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE47B3A85CA
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 22:31:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010D725D8F0;
-	Wed, 26 Feb 2025 22:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D53125BAC6;
+	Wed, 26 Feb 2025 22:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldVYF/nL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M0RBSd/J"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E28025D8E6
-	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 22:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083B325D905
+	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 22:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740608901; cv=none; b=KBVbVpWEU+aEg5xQSZmuyHdFDeVeFSr5R9KMjnlZoLRD6A+AaSBol+lC/s1szr40XF6R713FZkQ1QHKPfuCMkBjMc4FI9reUJ4MIJDaYB3/Zw8Rm57zZ8BkUKhF1IYFc7r8vrC4U6+9oQ2MAeD9LBJq20ZMINw9njm3nq8y4RTU=
+	t=1740609086; cv=none; b=daaAf3aLO8sDP92pU1ACocJwYRen4luyve7yutIbI0331SLOzbntPvOqdXLw0ObiXW2ggwhFrWbNI6qNNdvhHPC6+tsHv67lzQSKYu9WBFdFbjYMbRPQ5DAyUO7whwa8b9o5sg0kZrpDahyCEbGfGxS+2PAqkejWbxl2tMWrAqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740608901; c=relaxed/simple;
-	bh=PczaervxjuwhOCoMW6awI6F3BggzexHKyAXKt/mq1VU=;
+	s=arc-20240116; t=1740609086; c=relaxed/simple;
+	bh=qTvHMhNateJ26tVlCz6mTebCLy5Y07OZpWJtnblGNIc=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ErKQm6RqRrkUOzEBsU3f0ECbrBceeGytvpIv4WjG03C2fyZcjT2W65Y6dJJ6PmGMZKFUSF6gJ7Hhsl6iIUpNtO8W5FQcPQpO6C2wpl0FeaQwyF354Yfjopx9wOZumEYE65X1jo6I0C7z/THier/OHNWxkSTR1iUAVVZA+zgueho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldVYF/nL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 06747C4CED6
-	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 22:28:21 +0000 (UTC)
+	 Content-Type:MIME-Version; b=MIv+ihD4F6t/5gW2l1jN9nU/FQlXaTIlyFZx/01QbxZVJAVRd286sjFZ4cTusqEXGppqUWeZfnJNDMGvSGryv5hB4Xg494AEzHUUNhtnAfwNDHr3iSyO9tkLVpw95adWypzeBKrSDQbrKZy3d2PRRk+JgVPUQD1yZfzrRoF3A9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M0RBSd/J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D61CC4CED6
+	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 22:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740608901;
-	bh=PczaervxjuwhOCoMW6awI6F3BggzexHKyAXKt/mq1VU=;
+	s=k20201202; t=1740609085;
+	bh=qTvHMhNateJ26tVlCz6mTebCLy5Y07OZpWJtnblGNIc=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ldVYF/nLfbBwq4O2+oraL/YRw8faKehfTkQlTJoTqviZNDOXYUznnpW8IQgO491IP
-	 jvJA3gapyAjsOXAHp4XPBpBUD21krp2UbJcMHeR97nfVNJ46ovIq0Q95FCehSbliuk
-	 wYJScMQBwnOoOscJOh3txKF6rPSZ+y+1RgDYIeVJ9Tt33Xqa/Mji7ROQh0+SdWzLZw
-	 SjHChJIKaXfVGqRVTGxOPRmnCVhK3RBne73J0QgVl6iN+SI24lSzn+dhZEqDpz3KU/
-	 2DPZ85EMJdlNCMBlrMvayiGOzhSJ7CAz2jktlHhIV/LDLL+pM3ArSlxeFgXQVK7MOu
-	 3u95Lmt2EA+RA==
+	b=M0RBSd/JSwZX/yRgQXtriCXZylodKSzuC4wK+Bbbe5STQyerxHCwiavNJeTEbcval
+	 x2XBCTWBxYUGyjsEiO5Opzc/ju3jHR1JHolIEY0nPv0UPE4wopk55RcJqJx3c1bync
+	 wb1J+xbZcNDKi081dU0LurCvckrBIeRtwDXZ6pdpbGk3f42GkiEMe/9FysPO29blIF
+	 +6S1Qh+9rKSGrYm/Sj4We7gUmFX7As4DxFnycIprTKJKmh4VQj9bogoaiKespviMHQ
+	 x3N4dbWO/Dvj4hMTSFaglW4hYdxLcWuBnZMPqGxjJ6aXSk/qZSxgsPmefYwuFtNVGE
+	 kySaHD+W/Nqsw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EE911C3279F; Wed, 26 Feb 2025 22:28:20 +0000 (UTC)
+	id 684E6C3279F; Wed, 26 Feb 2025 22:31:25 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219824] [6.13 regression] USB controller just died
-Date: Wed, 26 Feb 2025 22:28:20 +0000
+Date: Wed, 26 Feb 2025 22:31:25 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,7 +62,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219824-208809-KygN2xbvXt@https.bugzilla.kernel.org/>
+Message-ID: <bug-219824-208809-4EmFwGXN8j@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
 References: <bug-219824-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,14 +78,14 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
---- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
-I'm utterly confused as to why the kernel decided to "xHCI host not respond=
-ing
-to stop endpoint command".
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+This was reported in the SUSE bug tracker earlier:
 
-I didn't do anything at the time. Wasn't even using the mouse.
+https://bugzilla.suse.com/show_bug.cgi?id=3D1236992
 
-Something funky is going on with 6.13.
+I don't see it being reported here, so the issue is not new.
+
+Yet I see no patches queued for 6.13.5.
 
 --=20
 You may reply to this email to add a comment.
