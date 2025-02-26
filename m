@@ -1,63 +1,47 @@
-Return-Path: <linux-usb+bounces-21100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8369EA46C44
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 21:24:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C043EA46D2F
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 22:14:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B15718884FE
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 20:24:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31D0516BE88
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 21:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247FB21CC54;
-	Wed, 26 Feb 2025 20:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8925125A2DB;
+	Wed, 26 Feb 2025 21:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XSaxc3cd"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="FcAHGQWH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE20921CC42;
-	Wed, 26 Feb 2025 20:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1979D2586CD;
+	Wed, 26 Feb 2025 21:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740601434; cv=none; b=Dpp2VwPjsF+ctHw//IrJAQAMkjqYbLqSLcuqTAHqLBsVdcZQVQrX16Itoo+CdFIPb/d9pTCr7+448j8jTEHkSZk9Uth0pCato1i04RU1K3kTp0HhMo0EcS60O8ylfhhnzexwtYqL6V0RbgSw4yc9tdUNXMS9zz3RO6sYQX3CvKk=
+	t=1740604407; cv=none; b=hvbQLKpZf5Qk8Rr8vcjTEN+3oZkM/9EiQ+N4Gl9WVYH5EqGjNe9P1LfCeRLXd+pUHQ81tegJy03upQ3bl8+Vag+u7qfJIIfj1yLXey3R0bkDdQxuadKE650McnfgfoQDN/VVsIynRsJb76IzEPeqpFoFL1xWZNWKxYXQeVyd+kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740601434; c=relaxed/simple;
-	bh=hm/wgxxi0lHL/QH2ap0QFgsHLbP9pJSlJM6pGPzTN+8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=aPxcbMaWyqEptc09OlDjWlRlk9sX4PQrJSEu4A8Hl5+yJy+0OADbRuHFfCZiLw/hmrDsGnH+1EeqAQ9LUUjTNMiefbLd1nY+aXMhz1Bf+4i/i9lSYQkGIfWi+UwBP2SjbIVwe5Pt25jcQaaG+gvR4Gkr3FUttctvsqS4WYthz5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XSaxc3cd; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51QK58ud015362;
-	Wed, 26 Feb 2025 20:23:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	paKREfFwbHcqbZjvwNKBMo99QStMmHRBvEVzzuo6WgI=; b=XSaxc3cdzmzdP5Fi
-	SKm722C1Er0lXPLTpmtRyIkFXAH9iF1oj3iIjI++A8KX9BTAvVl6tXEVZLdVqOdY
-	jF5NHV2QkO/F5h31DdggNAif9laaArjkAG21mzVu7C6v/AE1nSWtBXRdexFSXRKG
-	EH0V88n5WYSCdjrTeOx2GvHW4KcukFFFcVH0ZnkhlCfyG12xYu8k6qZXAdkq+7vZ
-	n/StJIrfELoEl9RmmXhtE9vGeQEyu9W6I1G7YdMk/hmg3PEx93j3A/J6oDNHZdF3
-	VChXX5PWe7/LxRiM0h834N1TG6Quedd8W1xLrEqymqR7al7zX6nnM5XwGMsNJq32
-	5PuqGQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 451prnk7u8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 20:23:37 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51QKNa6k023169
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 20:23:36 GMT
-Received: from [10.110.48.1] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 26 Feb
- 2025 12:23:34 -0800
-Message-ID: <92b42216-c409-4e21-a33e-54c29fa5f8a0@quicinc.com>
-Date: Wed, 26 Feb 2025 12:23:34 -0800
+	s=arc-20240116; t=1740604407; c=relaxed/simple;
+	bh=E/dJ5Y8bdjQYw6GSaDq5ATC1vAkUsCnMT24XUYEUe58=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r+4rHq+3Gk8+OJsFvDgHot6aPCqW2K6gLe8YRJxAvsNJqvJDrHTPl/+QPsTIwD0JmC1SqjIiRpwBJIBEUQ+ojWwFGg7mSRxSACoVpagrV3LlTd8KMaVSUaLqOGww4AV5XC/PQ5vanzkNc76fZfWyDTci1b8WP1NvTt/FQwvwz1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=FcAHGQWH; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.36] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z36dZ4mptz4LNC;
+	Wed, 26 Feb 2025 16:13:22 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1740604403; bh=E/dJ5Y8bdjQYw6GSaDq5ATC1vAkUsCnMT24XUYEUe58=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=FcAHGQWHKjqkf1gEBknZTkBriUmj4/KselbymUNOXdbCUMbFQpsUyIt1KAXSDRCiA
+	 jRx6wWobWlxMQgrHammlMVBUD+67ka69vBG4yIUi0ivc4wLUmRU/3LE2tg9pZ4VTtS
+	 dWGKXGGE1rCibfFCVUNRSYVSi6D/ZLmJxLkAjoGI=
+Message-ID: <a984f2c9-43c9-4c27-b346-a8654901c7f2@panix.com>
+Date: Wed, 26 Feb 2025 13:13:21 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,230 +49,143 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] phy: qcom: Add M31 based eUSB2 PHY driver
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>
-CC: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com>
- <20250113-sm8750_usb_master-v1-5-09afe1dc2524@quicinc.com>
- <rpwm6gimdb4zyvyusovfbfaw4uxrossm6elayebvt2gusb7zwk@67w7672qpcto>
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Kenneth Crudup <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <20250210210502.GA15655@bhelgaas>
+ <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
+ <20250211055722.GW3713119@black.fi.intel.com>
+ <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+ <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+ <20250226084404.GM3713119@black.fi.intel.com>
 Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <rpwm6gimdb4zyvyusovfbfaw4uxrossm6elayebvt2gusb7zwk@67w7672qpcto>
-Content-Type: text/plain; charset="UTF-8"
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250226084404.GM3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0QGtOvo9xVU4Chq5LxxVUDyTndPOpUeC
-X-Proofpoint-ORIG-GUID: 0QGtOvo9xVU4Chq5LxxVUDyTndPOpUeC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-26_06,2025-02-26_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502260160
+
+Trying to do a "control" test before I try out your bisected commit, and
+Lukas' changes, but of course now I can't get it to fail (I'm on Linus'
+master as of this morning (b5799106b4).
+
+I'm using my portable USB4 dock (Plugable TBT4-HUB3C) this time (vs. my
+CalDigit 4 dock) but the same ASMedia USB4-to-NVMe adapter as always; in
+any case everything is PCIe so it shouldn't matter.
+
+I don't normally use "tbauth" (I think that's all done for me via the
+"boltctl" suite) but I grabbed and built the GIT and ran it anyway, for
+good measure.
+
+I'll keep you updated, I'll be at my CalDigit dock soon enough if I
+can't get any failures this morning.
+
+-K
 
 
-
-On 1/14/2025 2:34 AM, Dmitry Baryshkov wrote:
-> On Mon, Jan 13, 2025 at 01:52:11PM -0800, Melody Olvera wrote:
->> From: Wesley Cheng <quic_wcheng@quicinc.com>
+On 2/26/25 00:44, Mika Westerberg wrote:
+> Hi Kenneth,
+> 
+> On Fri, Feb 14, 2025 at 09:39:33AM -0800, Kenneth Crudup wrote:
 >>
->> On SM8750, the eUSB2 PHY used is M31 based. Add the initialization
->> sequences to bring it out of reset, and to initialize the associated eUSB2
->> repeater as well.
-> 
-> What does M31 mean? What is the relationship between the eUSB and USB
-> M31 PHYs?
-> 
-
-M31 is the vendor.  I'll reword this to make it a bit clearer.  There's no
-relationship between eUSB2 and USB2 PHY drivers, as the eUSB2 based driver
-would require some additional components such as a USB repeater.
-
+>> This is excellent news that you were able to reproduce it- I'd figured this
+>> regression would have been caught already (as I do remember this working
+>> before) and was worried it may have been specific to a particular piece of
+>> hardware (or software setup) on my system.
 >>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  drivers/phy/qualcomm/Kconfig              |  12 +-
->>  drivers/phy/qualcomm/Makefile             |   1 +
->>  drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 269 ++++++++++++++++++++++++++++++
->>  3 files changed, 281 insertions(+), 1 deletion(-)
+>> I'll see what I can dig up on my end, but as I'm not expert in these
+>> subsystems I may not be able to diagnose anything until your return.
 > 
-> Please run the patch through checkpatch.pl --strict
+> [Back now]
 > 
+> My git bisect ended up to this commit:
+> 
+>    9d573d19547b ("PCI: pciehp: Detect device replacement during system sleep")
+> 
+> Adding Lukas who is the expert.
+> 
+> My steps to reproduce on Intel Meteor Lake based reference system are:
+> 
+> 1. Boot the system up, nothing connected.
+> 2. Once up, connect Thunderbolt 4 dock and Thunderbolt 3 NVMe in a chain:
+> 
+>    [Meteor Lake host] <--> [TB 4 dock] <--> [TB 3 NVMe]
+> 
+> 3. Authorize PCIe tunnels (whatever your distro provides, my buildroot just
+>      has the debugging tools so running 'tbauth -r 301')
+> 
+> 4. Check that the PCIe topology matches the expected (lspci)
+> 
+> 5. Enter s2idle:
+> 
+>    # rtcwake -s 30 -mmem
+> 
+> 6. Once it is suspended, unplug the cable between the host and the dock.
+> 
+> 7. Wait for the resume to happen.
+> 
+> Expectation: The system wakes up fine, notices that the TB and PCIe devices
+> are gone, stays responsive and usable.
+> 
+> Actual result: Resume never completes.
+> 
+> I added "no_console_suspend" to the command line and the did sysrq-w to
+> get list of blocked tasks. I've attached it just in case it is needed.
+> 
+> If I revert the above commit the issue is gone. Now I'm not sure if this is
+> exactly the same issue that you are seeing but nevertheless this is kind of
+> normal use case so definitely something we should get fixed.
+> 
+> Lukas, if you need any more information let me know. I can reproduce this
+> easily.
+> 
+>> I also saw some DRM/connected fixes posted to Linus' master so maybe one of
+>> them corrects this new display-crash issue (I'm not home on my big monitor
+>> to be able to test yet).
 >>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..e15529673e358db914936a60fa605c872cd2511a
->> --- /dev/null
->> +++ b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
->> @@ -0,0 +1,269 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/phy/phy.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/reset.h>
->> +#include <linux/slab.h>
->> +
->> +#define USB_PHY_UTMI_CTRL0		(0x3c)
->> +
->> +#define USB_PHY_UTMI_CTRL5		(0x50)
->> +
->> +#define USB_PHY_HS_PHY_CTRL_COMMON0	(0x54)
->> +#define FSEL				(0x7 << 4)
-> 
-> GENMASK()
-> 
->> +#define FSEL_38_4_MHZ_VAL		(0x6 << 4)
-> 
-> FIELD_PREP
-> 
->> +
->> +#define USB_PHY_HS_PHY_CTRL2		(0x64)
->> +
->> +#define USB_PHY_CFG0			(0x94)
->> +#define USB_PHY_CFG1			(0x154)
->> +
->> +#define USB_PHY_FSEL_SEL		(0xb8)
->> +
->> +#define USB_PHY_XCFGI_39_32		(0x16c)
->> +#define USB_PHY_XCFGI_71_64		(0x17c)
->> +#define USB_PHY_XCFGI_31_24		(0x168)
->> +#define USB_PHY_XCFGI_7_0		(0x15c)
->> +
->> +#define M31_EUSB_PHY_INIT_CFG(o, b, v)	\
->> +{				\
->> +	.off = o,		\
->> +	.mask = b,		\
->> +	.val = v,		\
->> +}
->> +
->> +struct m31_phy_tbl_entry {
->> +	u32 off;
->> +	u32 mask;
->> +	u32 val;
->> +};
->> +
->> +struct m31_eusb2_priv_data {
->> +	const struct m31_phy_tbl_entry	*setup_seq;
->> +	unsigned int			setup_seq_nregs;
->> +	const struct m31_phy_tbl_entry	*override_seq;
->> +	unsigned int			override_seq_nregs;
->> +	const struct m31_phy_tbl_entry	*reset_seq;
->> +	unsigned int			reset_seq_nregs;
->> +	unsigned int			fsel;
->> +};
->> +
->> +static const struct m31_phy_tbl_entry m31_eusb2_setup_tbl[] = {
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, BIT(1), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, BIT(1), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG1, BIT(0), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_FSEL_SEL, BIT(0), 1),
->> +};
->> +
->> +static const struct m31_phy_tbl_entry m31_eusb_phy_override_tbl[] = {
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_39_32, GENMASK(3, 2), 0),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_71_64, GENMASK(3, 0), 7),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_31_24, GENMASK(2, 0), 0),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_7_0, GENMASK(1, 0), 0),
->> +};
->> +
->> +static const struct m31_phy_tbl_entry m31_eusb_phy_reset_tbl[] = {
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(3), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(2), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL0, BIT(0), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, BIT(1), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, BIT(2), 0),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, BIT(1), 0),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(3), 0),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, BIT(1), 0),
->> +};
->> +
->> +struct m31eusb2_phy {
->> +	struct phy			*phy;
->> +	void __iomem			*base;
->> +	const struct m31_eusb2_priv_data	*data;
->> +
->> +	struct regulator		*vreg;
->> +	struct clk			*clk;
->> +	struct reset_control		*reset;
->> +
->> +	struct phy *repeater;
->> +};
->> +
->> +static void msm_m31_eusb2_write_readback(void __iomem *base, u32 offset,
->> +					const u32 mask, u32 val)
->> +{
->> +	u32 write_val, tmp = readl_relaxed(base + offset);
->> +
->> +	tmp &= ~mask;
->> +	write_val = tmp | val;
->> +
->> +	writel_relaxed(write_val, base + offset);
->> +
->> +	tmp = readl_relaxed(base + offset);
->> +	tmp &= mask;
->> +
->> +	if (tmp != val)
->> +		pr_err("write: %x to offset: %x FAILED\n", val, offset);
->> +}
->> +
->> +static void m31eusb2_phy_write_sequence(struct m31eusb2_phy *phy,
->> +					const struct m31_phy_tbl_entry *tbl,
->> +					int num)
->> +{
->> +	int i;
->> +
->> +	for (i = 0 ; i < num; i++, tbl++) {
->> +		dev_dbg(&phy->phy->dev, "Offset:%x BitMask:%x Value:%x",
->> +					tbl->off, tbl->mask, tbl->val);
->> +
->> +		msm_m31_eusb2_write_readback(phy->base,
->> +					tbl->off, tbl->mask,
->> +					tbl->val << __ffs(tbl->mask));
-> 
-> could you please check, what actually gets written? I suspect there
-> should be a -1 here.
-> 
+>> -Kenny
+>>
+>> On 2/14/25 08:29, Mika Westerberg wrote:
+>>> Hi,
+>>>
+>>> On Thu, Feb 13, 2025 at 11:19:35AM -0800, Kenneth Crudup wrote:
+>>>>
+>>>> On 2/13/25 05:59, Mika Westerberg wrote:
+>>>>
+>>>>> Hi,
+>>>>
+>>>> As Murphy's would have it, now my crashes are display-driver related (this
+>>>> is Xe, but I've also seen it with i915).
+>>>>
+>>>> Attached here just for the heck of it, but I'll be better testing the NVMe
+>>>> enclosure-related failures this weekend. Stay tuned!
+>>>
+>>> Okay, I checked quickly and no TB related crash there but I was actually
+>>> able to reproduce hang when I unplug the device chain during suspend. I did
+>>> not yet have time to look into it deeper. I'm sure this has been working
+>>> fine in the past as we tested all kinds of topologies including similar to
+>>> this.
+>>>
+>>> I will be out next week for vacation but will continue after that if the
+>>> problem is not alraedy solved ;-)
+>>>
+>>
+>> -- 
+>> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County
+>> CA
 
-The __ffs  uses the ctz/ctzl built in, which counts leading zeros, so the
--1 should already be accounted for.  FIELD_PREP uses the ffs builtin
-directly, which would require the -1.  Confirmed that the writes are being
-done as expected from the programming tables above.
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
-Thanks
-Wesley Cheng
 
