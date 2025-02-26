@@ -1,201 +1,123 @@
-Return-Path: <linux-usb+bounces-21096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21098-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FC11A465C6
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 16:58:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB3BBA46790
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 18:12:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F20BF18966B8
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 15:49:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DEA4440B25
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 17:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD9421CC5E;
-	Wed, 26 Feb 2025 15:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7876F22371F;
+	Wed, 26 Feb 2025 17:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="cNjkJU2i"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ewGg9k3z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5681D21CA01
-	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 15:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37E021CA1B
+	for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 17:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740584839; cv=none; b=aLm3gWDmOhId0sVSyo/MzCTyxS9ehPoKOHRwRmcIHNmpn1q52WOpohxO504ciPQ2w+MaLWe2Q0rOUCfUj+NPiAglkhqdQ8eket/j/aec2cCun/VJwnCjVUaeT6rWaVYsPJs8MehOq59S7be6KDdK2hSdyxI18qjoUCDwNsjxqIM=
+	t=1740589330; cv=none; b=ZBwsGbZRzhjhs5t9g09GeLZueMkjbSm1fEXM4AwCfNocAJBI4Zo7Hqm3gPVwxDnoNrmgRVmX5pxq4R96gSFEuNoqFwOpeEMOEtttmOM1eyAnRLHqFUlkNbGOZUkN1ro3Qpd0WYFMIyJz49wYGrcwr1r8fb+Gu4OmIpjyYdfjXGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740584839; c=relaxed/simple;
-	bh=KkcDFKGNORF8N3ndYvi8Zu1GWOK+AXO7JtJDxvpy1n8=;
+	s=arc-20240116; t=1740589330; c=relaxed/simple;
+	bh=e5NiXp9FYAQo8RmgI6NQ6gPt2AVfMiz6r0xfJUYuKrk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=InN3LinExzYDPl4mWhY1aVgFG+dc5yRbP35ZfE7y4NRpij3sFoVtMIjpLM1QNI2cPg53bpulgtsaBm69rRlhsTi1hdsd4FRzh2f/W6oKsjva/mw6EsZtNpEpUFZNJlFh4G0HY0/Kz47rTBfVgdJcXhQNMS/F+chLOKUhrvl1fg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=cNjkJU2i; arc=none smtp.client-ip=209.85.219.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=dMQFF9Er8TlqFDiq0E5LGuJUWZMbXoULegZN3SDs08D5Eo9fC92yqdmM8Sml2FuMYZGhqiLDvzC7HDWUuvpexlWjiLta1FO5WLFqWGPjwR/y+DTo81kizZJzi1ZtY2ppWXt8a9OMFoVcR7lV1ew3UJqpzH0u5jYjvXLwTAxQZRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ewGg9k3z; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e41e17645dso71121416d6.2
-        for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 07:47:17 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c0a3d6a6e4so631485a.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 09:02:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1740584836; x=1741189636; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VONNoJ/cBoc8MLsKjGDT1kUXif3zX3VU1i8UHB4Qh0g=;
-        b=cNjkJU2i/JHsPEYSW46WkL0qF+cFBAF3tXTvPpCatAK3H/mx0+BiEN//aLlgof9fh1
-         wXZNApVqDq7T4QPKXp74pJlNHeRjSMZzke8LPmORQKwpjlKhREy/Y16xAoMuq9tzllDU
-         1gen8VuDJjO8B7fWPBbUbv5PZwBakDPejOHWjqCetIsZqfCdc5R8JAxXY0fP83IJdXQO
-         anM77tWI61jUKaLEIlqnVRI2EIkP1htxz9iE18oxR9Ec6YSCyhX1tgTPF3NRdEQVfCwd
-         6t65ZMHJNCe+i4oL+E9gsjjwD4lfyY7wVmfx7lPTvE0jRKQ/A5LPJg25VH6czR4slb7g
-         yW0A==
+        d=rowland.harvard.edu; s=google; t=1740589326; x=1741194126; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6gDpJWiIqmqRiAR05CBdJHy9M1E970vBLzOxyspapRA=;
+        b=ewGg9k3z5si26WBJQSk2PhTrDtlkW4iM0Ye+lFWaKhfbAFyfQ+Nd0FdVkOOQP3QU0i
+         36560fSkSvDlCZs9aLLAKiZkPCO95S7CLE45qui7e+LwnSXiaP9si7Ha2wWzbeUEqZv3
+         4sDCec61zt9v9MUQT2N3hlmbbPJzJDblDCzl9V1xwv70zDHzDpgz58quD3+LC1aETmcU
+         dY+bGCMAHCtPOl6krW3/0i8ni+pf4InMqjIbb9vTasQcFArOJLsKrYoS+eW3lawHrTRW
+         TsQSN4GSE6F6tU2DxR4YV9MQdPgc4Jlblvp+W3NEb+A072KEckBEmEgfdsdYBfGbDO/d
+         3E9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740584836; x=1741189636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VONNoJ/cBoc8MLsKjGDT1kUXif3zX3VU1i8UHB4Qh0g=;
-        b=gAlsL3e3h3ai9XNrSpczRc0Ya5DB6elh9KE7Ml8rqU82JYqRIuJVp/18kokGGsokM2
-         rjLiK7/bwGgnSDerhFcDJ2fxlKGoM0IDr/hdZQwTJTso2lqhJF5moQjdUBZKJfh7I72s
-         K6qhTq5wRS9z3goDH9K5O2ukN+k9mKpdmFxjrgDNTgv1VIw7bzRzjL2jwafuadis8Bfn
-         P3eL9M0G9YJo/CuMAHiTtM3MJtfIhNGrnAgrVcCjPZOV+xF19G2Bxtle2OrKKg6YPi5W
-         JRCLHQFLfd+hWY8VHkSjVTVeJd5xy7SuWwWiI0PffJMURJTl48vMlwfpwvporx8JYvCA
-         /4GQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVGa3d950MjhHrkWssd6xH13PGTPBAzQglCDTDJbn8zuoK9z9HekR2idU/BtMQNkI/PDsiKtSu57A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh0cANHEwxpGFO04nPbolA/Oro1rm5fLp2Mpwx6JriUsZIeq/h
-	AQxuxlJxbNVFVpC4pNV9SbhiS2Fv1XEAH+dQSanhU3ZiHXI6SNHpG4SCVjV3AQ==
-X-Gm-Gg: ASbGncuN250YDfOiTMslukarhqnOeHXTNdKUQAWhI1VWPgedCLa6SzfUlgAVa/dppxu
-	XwfBmEMR1Sd4Q+ZYGoaSj3K5SEE+qaz95pXtr/hP9EtHmSug4nomfiuEIZPkc5PRAZvNIff33cq
-	cTV+EWrWLS5WwBUPqV82IvRWq045UR8q+fFyRBY+QvXKqPCaoUzNUQfX+JgzF1NVToihQDh/dtB
-	jy9qLyWBPdq2PUProQd+0uWCieL83WOSmBBsBIi+9skVRlvsnLduE4n2i17SL5YWGstsIJArY2g
-	fp34Jqfvh4Y+En2VUWAGnbJG5kr9hYO6dnot7uleququwBdF95S8+c5A7q77W2C9LTUZPPP1uM7
-	6p11UB5bzDp7w53/C05I=
-X-Google-Smtp-Source: AGHT+IF84oRPv24RC/bqUZFf9WpN3z/FuXo7ShtrwcYRvstSANP/wjsBQF7bNpavDspgemd7XCgxtQ==
-X-Received: by 2002:a05:6214:2482:b0:6e6:606b:a7be with SMTP id 6a1803df08f44-6e8868fd4c1mr56444906d6.34.1740584836173;
-        Wed, 26 Feb 2025 07:47:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740589326; x=1741194126;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6gDpJWiIqmqRiAR05CBdJHy9M1E970vBLzOxyspapRA=;
+        b=ZkMPMGF3v9hhXaMepM1kXGQ2rvw3rU3deGn+JHSJutN0PCJlkwUAmqv+6VMic6G3hb
+         JW2/C3hRCIE6TvTBPSINQvfHn0u2NTX60gXzXGF3OO3UiKVRDuB+b/XhpjyU8YPBbx9d
+         7NIFottg3ffypNI25LER7ZivXlcEbQyfsrvZyK6/Y0hdzV7pPOt+FJBo6HReKU2LqUgC
+         yRpWQeod33Nk2vUrFqg5WXY/8z5nLndYexIt02knKC0UQIvI8fvm5YRIGU6sL3SfWxPv
+         hnFP7eqchiu7y0gmlDH408Wta3WqInMuawxSFo4+TRJzMAT+NL9syhniJPdMZzkLXtlh
+         iyvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUMDM9UTXeKzB/NaOPTMMNHOQZuY7LPSG8qOr68rGWwsjtuPJLz7RbOE1labWMos3WbNI+aTpBk1JE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpTbwMcfhG4MXQ5svTkGn6w565F+TBB1w1FXiclHebUU14DP8G
+	QaLlQ7shyeIvYEfq7/0IVVaDh0ZfFBXSLv56ZhiP4HtrjV+XQg1tvjEn4Kmoa7aNWCLVdsz13Nk
+	=
+X-Gm-Gg: ASbGnctLzbXR5NlpgN1WdiRWVLmY270lpOARqni33L6Nx+tPYX6JY8fBlF7aB+IM/Lt
+	d/g0afG0woOXmn3M1wl8IMObl+3i/DKI0U//annQJBgZ1HP2ToeQKc53fUA75vep7u2UK6EW5nl
+	xeM3G9ndXFaQvRkyCogxXp1mGh9A8grLfzKZb9SB4XJ3xdwKQg1SKje8F2bRbcksdWsmCLnV888
+	8mJhqOWRes21yIWS6kWVG1VeFripkWHdoHl1e79DYUJ4NSTl65F3N3aI9S8JjTKHc9hsIRr/pwY
+	hZIuG7FDQYRhzcnc3mn5JV+Kj1A4qQdSFGjqDzRrydNKcsNLeDnaDQXqaUGqk6z5wQFaGYcd1/G
+	M2R5bSLq3UNuw4CKTTzM=
+X-Google-Smtp-Source: AGHT+IGV/gWuJnQclFU8ZteMOSQCELX/mpo4Tyj2Sn/PZ7XKzflnRkNxcemJufnJWgcG73GfCcYYUQ==
+X-Received: by 2002:a05:620a:1b8f:b0:7c0:b368:5d8b with SMTP id af79cd13be357-7c0ceee5f8fmr2639224985a.11.1740589326574;
+        Wed, 26 Feb 2025 09:02:06 -0800 (PST)
 Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e87b06dc0esm23754866d6.22.2025.02.26.07.47.15
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c34f633sm269044585a.117.2025.02.26.09.02.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 07:47:15 -0800 (PST)
-Date: Wed, 26 Feb 2025 10:47:13 -0500
-From: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-	"christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-	"javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
-	"make_ruc2021@163.com" <make_ruc2021@163.com>,
-	"peter.chen@nxp.com" <peter.chen@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Pawel Eichler <peichler@cadence.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: xhci: lack of clearing xHC resources
-Message-ID: <a78164bc-67c4-4f31-bbe1-609e19134ddf@rowland.harvard.edu>
-References: <20250226071646.4034220-1-pawell@cadence.com>
- <PH7PR07MB95385E2766D01F3741D418ABDDC22@PH7PR07MB9538.namprd07.prod.outlook.com>
+        Wed, 26 Feb 2025 09:02:05 -0800 (PST)
+Date: Wed, 26 Feb 2025 12:02:02 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: j.ne@posteo.net
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] usb: storage: Mark various arrays as const
+Message-ID: <ea5c2735-cfb3-4e5f-a7f9-40d4493bd05a@rowland.harvard.edu>
+References: <20250226-misc-const-v2-0-ab655a4a29cc@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95385E2766D01F3741D418ABDDC22@PH7PR07MB9538.namprd07.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250226-misc-const-v2-0-ab655a4a29cc@posteo.net>
 
-On Wed, Feb 26, 2025 at 07:23:16AM +0000, Pawel Laszczak wrote:
-> The xHC resources allocated for USB devices are not released in correct
-> order after resuming in case when while suspend device was reconnected.
+On Wed, Feb 26, 2025 at 03:17:22PM +0100, 'Jonathan Neuschäfer via B4 Relay' via USB Mass Storage on Linux wrote:
+> While reading code, I noticed that some arrays in USB mass storage
+> drivers are declared static but not const, even though they are not
+> modified. This patchset marks them const.
 > 
-> This issue has been detected during the fallowing scenario:
-> - connect hub HS to root port
-> - connect LS/FS device to hub port
-> - wait for enumeration to finish
-> - force host to suspend
-> - reconnect hub attached to root port
-> - wake host
+> All patches were compile-tested.
 > 
-> For this scenario during enumeration of USB LS/FS device the Cadence xHC
-> reports completion error code for xHC commands because the xHC resources
-> used for devices has not been property released.
-
-s/property/properly/
-
-> XHCI specification doesn't mention that device can be reset in any order
-> so, we should not treat this issue as Cadence xHC controller bug.
-> Similar as during disconnecting in this case the device resources should
-> be cleared starting form the last usb device in tree toward the root hub.
-> To fix this issue usbcore driver should call hcd->driver->reset_device
-> for all USB devices connected to hub which was reconnected while
-> suspending.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> 
+> Signed-off-by: Jonathan Neuschäfer <j.ne@posteo.net>
 > ---
-> Changelog:
-> v2:
-> - Replaced disconnection procedure with releasing only the xHC resources
-> 
->  drivers/usb/core/hub.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a76bb50b6202..d3f89528a414 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -6065,6 +6065,36 @@ void usb_hub_cleanup(void)
->  	usb_deregister(&hub_driver);
->  } /* usb_hub_cleanup() */
->  
-> +/**
-> + * hub_hc_release_resources - clear resources used by host controller
-> + * @pdev: pointer to device being released
-> + *
-> + * Context: task context, might sleep
-> + *
-> + * Function releases the host controller resources in correct order before
-> + * making any operation on resuming usb device. The host controller resources
-> + * allocated for devices in tree should be released starting from the last
-> + * usb device in tree toward the root hub. This function is used only during
-> + * resuming device when usb device require reinitialization - that is, when
-> + * flag udev->reset_resume is set.
-> + *
-> + * This call is synchronous, and may not be used in an interrupt context.
-> + */
-> +static void hub_hc_release_resources(struct usb_device *udev)
-> +{
-> +	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-> +	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-> +	int i;
-> +
-> +	/* Release up resources for all children before this device */
-> +	for (i = 0; i < udev->maxchild; i++)
-> +		if (hub->ports[i]->child)
-> +			hub_hc_release_resources(hub->ports[i]->child);
-> +
-> +	if (hcd->driver->reset_device)
-> +		hcd->driver->reset_device(hcd, udev);
-> +}
-> +
->  /**
->   * usb_reset_and_verify_device - perform a USB port reset to reinitialize a device
->   * @udev: device to reset (not in SUSPENDED or NOTATTACHED state)
-> @@ -6131,6 +6161,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
->  
->  	mutex_lock(hcd->address0_mutex);
->  
-> +	if (udev->reset_resume)
-> +		hub_hc_release_resources(udev);
+> Changes in v2:
+> - Add new patches 2-9
+> - Use consistent authorship information
+> - Link to v1: https://lore.kernel.org/r/20250225-misc-const-v1-1-121ff3b86437@posteo.net
 
-Don't you want to do this before taking the address0_mutex lock?
+The patches themselves look good, but I still think you should explain 
+in the patch descriptions why declaring these arrays const is worth 
+doing.
 
-> +
->  	for (i = 0; i < PORT_INIT_TRIES; ++i) {
->  		if (hub_port_stop_enumerate(parent_hub, port1, i)) {
->  			ret = -ENODEV;
+Merely saying _what_ you are doing isn't good enough.  We can tell what 
+a patch does just by reading it.  What we can't always tell is _why_ you 
+would want to do it.  That is what needs to be explained.
 
-Doing it this way, you will call hcd->driver->reset_device() multiple 
-times for the same device: once for the hub(s) above the device and then 
-once for the device itself.  But since this isn't a hot path, maybe that 
-doesn't matter.
+The explanation doesn't have to be terribly long or detailed, but you 
+should not omit it entirely.
 
 Alan Stern
 
