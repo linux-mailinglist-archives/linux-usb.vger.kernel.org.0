@@ -1,121 +1,121 @@
-Return-Path: <linux-usb+bounces-21069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B13A459D5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 10:20:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16EEFA45AD0
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 10:55:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 473593AA207
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 09:20:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C24C4188B2BE
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2025 09:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779C7225416;
-	Wed, 26 Feb 2025 09:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D031824E017;
+	Wed, 26 Feb 2025 09:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KdZk546r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aUdzRG8E"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543D21E5B85;
-	Wed, 26 Feb 2025 09:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E25189B91;
+	Wed, 26 Feb 2025 09:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740561606; cv=none; b=OGSixK4hGGyvnOniUMeSmuQm2Cs0osGGet/irGyTSFIjf3vt2MhVH6T1UDTQfBDUK6XpI4ErtpzX5dGpBjhJAeezc4mxgd7LuZqqdyMyPAryetZY4L0vYpcO0XSTUqaKzlBBx0ZEbQCH5Mm1NKFMU2rSBGZO/26+g22pzq6sHTE=
+	t=1740563573; cv=none; b=H/jsDdvqthTsi20iSjthRtQIYH9PFucNOvqXmjtQEfWjxk0uwEYkGtLFaKOQNoXw3ZmSBfgqTb+4aEBwjtTqm1VB44CuH3raFSxRjUXF1kuTQJh+5ubjDTuAZ7+vnBreCHUmtE+27rK/Cs6c8DSIYOvGVKDIKuID1fQxAkrEANM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740561606; c=relaxed/simple;
-	bh=24vtFRKNjBqptcl97/HocSl/lK2e+Ib0xTWtLuTQxVI=;
+	s=arc-20240116; t=1740563573; c=relaxed/simple;
+	bh=ciorLijCDPE3/xsYPkft10tMODFy17X/YsQ/RQhLc8Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bPMSqWC5wDTcM2bpDl7cc+OruKzo00S4rAuY7Mq5wKFRXJoJ+2Criupv00XGI2ZLPgTluYAUmYfECUOzscLz1RdlWlA2Po3dv6wVkIetR0THFbJjGorkbCmRzhCdvkOdwL20mZIbKNDGUrloMAPoNTSUDVu9Exl/HS+/E3xXLRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KdZk546r; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=jzynie8tQ/+PkVEdLPYNONy5b71F36LOxhPjrRO5z0KXwoWUcc0eAbLruKJ1PVf53GWEw/1d4pc5XQ23gQRgp/cV5egI2RE38z53y25ERpMi/4aDP2KX/SnaqzW/zwCcmQH5Cg3jHOlLfBuKqjUAmSaFB6uCX6e35iGu3ZIh2lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aUdzRG8E; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740561604; x=1772097604;
+  t=1740563572; x=1772099572;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=24vtFRKNjBqptcl97/HocSl/lK2e+Ib0xTWtLuTQxVI=;
-  b=KdZk546rRQPnBrxh49mIU9RfsvMCSFbfunvVhyQEg0UknS0M3DJEX57V
-   4eblprwFnZqQdMJJJyRfEQm/SVZPxuX+rMOL4ulpPVLhGx47IG+IRQzsg
-   Jl4NU93udNXxdfmlxG21RhTZfdHmxKDAwCQUjWAI6CJX/QkAT/cRik2YZ
-   +K9GnmewrpLZTI1VPd6PkgxvIKK+cYht7BD+q63uHTLBqoimVCkSOKM5N
-   r00UTO6b15whfr8vFfpgQ4PM3VSngK5EpluQZ9jA1upOv6+OKhvTROgbr
-   rhYDPkn6Br0744yYaYcEfH/UAf/76Xvlv+ZGz3q/krJS0dIe72F2+SuiH
-   w==;
-X-CSE-ConnectionGUID: UWEhTeHsQgGDNqs8hk03GQ==
-X-CSE-MsgGUID: Oc9c+kroR2GG4ZWiBHrCcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52034580"
+  bh=ciorLijCDPE3/xsYPkft10tMODFy17X/YsQ/RQhLc8Y=;
+  b=aUdzRG8E7HXYhO065kwX25yMBAIyvwwLXY4xfeQ2Kuh4K/zSeelsa449
+   jSNhlK7bvx2Uey6Au0wbfDQoXS/Oz56BOuqcTESgukWDbrTnLmlDwndL/
+   S6TNO/tqd1jLeJuOslMsMELyDBlo7NQvTYkIsc0vBVsCgX11xNIDITZae
+   OBgNfgO6IR/yOgIuudwNG/dzQ2TCtaPIx4jt//uZUAXc+KmVWFsl4I1sS
+   Gclm6ThYJsVzhI++DFi6AIbfEQU2tYsWJrshrtbBdJV8kOq2pZAfFivSi
+   SfrfMr3Y5O+SSvlE5L2M8UW1NjOpgmXFExYPTiF5A9awEJUKT/FwmpE3q
+   Q==;
+X-CSE-ConnectionGUID: c/JRXZEUSYONl8Mil28o5Q==
+X-CSE-MsgGUID: N9Y6F9nQQbaJt4w/H9tRyg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52037602"
 X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="52034580"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 01:20:03 -0800
-X-CSE-ConnectionGUID: wKK8ga4UTGSDhn9l/jSoAA==
-X-CSE-MsgGUID: PdOqyUDORV+syCxYFE6Ncw==
+   d="scan'208";a="52037602"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 01:52:51 -0800
+X-CSE-ConnectionGUID: TGlmJ6xORTOhT/xH2DNDFQ==
+X-CSE-MsgGUID: 6BXYpYZHQD+YRrFY281gdA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="121580275"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa003.jf.intel.com with ESMTP; 26 Feb 2025 01:20:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 6183B1FF; Wed, 26 Feb 2025 11:19:58 +0200 (EET)
-Date: Wed, 26 Feb 2025 11:19:58 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Kenneth Crudup <kenny@panix.com>, Bjorn Helgaas <helgaas@kernel.org>,
-	ilpo.jarvinen@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-	Jian-Hong Pan <jhp@endlessos.org>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
- Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
-Message-ID: <20250226091958.GN3713119@black.fi.intel.com>
-References: <20250210210502.GA15655@bhelgaas>
- <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
- <20250211055722.GW3713119@black.fi.intel.com>
- <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
- <20250213135911.GG3713119@black.fi.intel.com>
- <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
- <20250214162948.GJ3713119@black.fi.intel.com>
- <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com>
- <Z77ak-4YsdAKXbHr@wunner.de>
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="153831882"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa001.jf.intel.com with SMTP; 26 Feb 2025 01:52:48 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 26 Feb 2025 11:52:47 +0200
+Date: Wed, 26 Feb 2025 11:52:47 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: [PATCH] usb: typec: ps883x: fix probe error handling
+Message-ID: <Z77kb2a_Vhln0reU@kuha.fi.intel.com>
+References: <20250218082243.9318-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z77ak-4YsdAKXbHr@wunner.de>
+In-Reply-To: <20250218082243.9318-1-johan+linaro@kernel.org>
 
-On Wed, Feb 26, 2025 at 10:10:43AM +0100, Lukas Wunner wrote:
-> On Wed, Feb 26, 2025 at 10:44:04AM +0200, Mika Westerberg wrote:
-> >   [Meteor Lake host] <--> [TB 4 dock] <--> [TB 3 NVMe]
-> [...]
-> > I added "no_console_suspend" to the command line and the did sysrq-w to
-> > get list of blocked tasks. I've attached it just in case it is needed.
-> [...]
+On Tue, Feb 18, 2025 at 09:22:43AM +0100, Johan Hovold wrote:
+> Fix the probe error handling to avoid unbalanced clock disable or
+> leaving regulators on after probe failure.
 > 
-> This looks like the deadlock we've had for years when hot-removing
-> nested hotplug ports.
+> Note that the active-low reset pin should also be asserted to avoid
+> leaking current after disabling the regulators.
 > 
-> If you attach only a single device to the host, I guess the issue
-> does not occur, right?
+> Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C Retimer")
+> Cc: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Yes.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> Previous attempts to fix this:
+> ---
+>  drivers/usb/typec/mux/ps883x.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> https://lore.kernel.org/all/4c882e25194ba8282b78fe963fec8faae7cf23eb.1529173804.git.lukas@wunner.de/
-> 
-> https://lore.kernel.org/all/20240612181625.3604512-1-kbusch@meta.com/
+> diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883x.c
+> index 10e407ab6b7f..ef086989231f 100644
+> --- a/drivers/usb/typec/mux/ps883x.c
+> +++ b/drivers/usb/typec/mux/ps883x.c
+> @@ -387,10 +387,11 @@ static int ps883x_retimer_probe(struct i2c_client *client)
+>  
+>  err_switch_unregister:
+>  	typec_switch_unregister(retimer->sw);
+> -err_vregs_disable:
+> -	ps883x_disable_vregs(retimer);
+>  err_clk_disable:
+>  	clk_disable_unprepare(retimer->xo_clk);
+> +err_vregs_disable:
+> +	gpiod_set_value(retimer->reset_gpio, 1);
+> +	ps883x_disable_vregs(retimer);
+>  err_mux_put:
+>  	typec_mux_put(retimer->typec_mux);
+>  err_switch_put:
+> -- 
+> 2.45.3
 
-Well, it does not happen if I revert the commit so isn't that a
-regresssion?
+-- 
+heikki
 
