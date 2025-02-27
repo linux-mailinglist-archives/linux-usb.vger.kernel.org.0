@@ -1,92 +1,136 @@
-Return-Path: <linux-usb+bounces-21148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14663A47F3E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 14:35:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AED64A47FF0
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 14:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 072AF16EF62
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 13:28:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC6FE3B6C3E
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 13:48:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383E623814D;
-	Thu, 27 Feb 2025 13:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A326323236F;
+	Thu, 27 Feb 2025 13:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDOWJSEP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7PEQG2j"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CC622FE13
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 13:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8D723024D;
+	Thu, 27 Feb 2025 13:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740662760; cv=none; b=JhhHwriYZ8YzTpx4/d+v22maaT3aSPpL3wZ6zFLOuDze4D2twUenn3TwDorLyUUsNJAgIGQXVo8NNaS6A4FCX8/sICDqmWryDPJfRVDSO/9/kjMu53Zzvs211dqEaO93cffnxcj06uyLfo+Cq7iIyEszZwybttZz1YqUdTg6Ypw=
+	t=1740664104; cv=none; b=GVzhsVCbEhYvgPMYTvvYKfqfNQbeJM9gXcG7l12ePwjm32M2ryDtyzMX4Y5zK8fo4nhzeL3RUrKPrisc4kNPdxQOYVB18bbg0PYCFcDaLzBi/8UPT3Q0Go1TLFfgL5J+fuaKMzU6J+M5yOevhwl50voAigF+SRpy9H8zXlTo2rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740662760; c=relaxed/simple;
-	bh=R+hjDK1kxYNbTUIybq4mrWxdVjXy8izFnj8NbhC6qp8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ASkz2Lgc1Qm6N6NjNPNNaGMJViuKxGRSIUmpRQrNL5sImG7F8mxY+8//kkgopJTJna9IJapBNU++4sViBLvkSXn6/ewnZvbe0zpCEPejQJ4BQ+nohJSO+eD4lZR3y1cQci0tisD7B2jCunM26h+ju0WPaOH2FYEP1NNVeZns040=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDOWJSEP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3550FC4CEE6
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 13:26:00 +0000 (UTC)
+	s=arc-20240116; t=1740664104; c=relaxed/simple;
+	bh=+0o56Rl9c9XlxO66ciG8cF7751qtwRokbDOXu3oKKI4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FMFKyocHrZSA/TlKZnIb1X6A/TMi9N72lH4SDCKr0X1bCQ9bRXaqP+vqJFFSNOgakaqqzfJtpSNC4vXHeX+UMliVpgXdUTTIMcG9/x89fjLp8Yuz1BAaN5Q78qwrfrWim6cKeGuXMIAaAJ3N7uclDuMSaxvK+lNQ0x/WI3dUwzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7PEQG2j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E80BC4CEDD;
+	Thu, 27 Feb 2025 13:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740662760;
-	bh=R+hjDK1kxYNbTUIybq4mrWxdVjXy8izFnj8NbhC6qp8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=cDOWJSEPqquZZQcpIMhODU4asAMl7D+ngmrhPYwsZWH7BRGyrByeYFUrGK8JvmyMi
-	 LsiPsFKjruUjhlPEVqsPjvlCin/4IswqKg4oqZs51jr+QbebAlJtSnPB7IrvtzFr0L
-	 CflAHmc3ptSKSyLC6Jgp8CpSK1tsbn0/o+Y8sceYY3DW6vgo3bKyzjfuzWeuQP6R8w
-	 bvOsxJ5UmNtBn6yKleGFTPzhAnQjK772FHPz30o+YzkqdEQ13XYmFFpJoEZyS+R+v5
-	 3e+4AUDK+Paerr4xUPxRfodIJx+KiInohwsiYH0cYv2aBMRdfS23fFufbSe5L78tp5
-	 lfzjvFgMK7EmQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 34A61C41613; Thu, 27 Feb 2025 13:25:58 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219773] External USB disk drive and SSD corruption while
- connected to USB 3 ports.
-Date: Thu, 27 Feb 2025 13:25:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: fredbezies@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219773-208809-5gu0d39d7t@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
-References: <bug-219773-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1740664103;
+	bh=+0o56Rl9c9XlxO66ciG8cF7751qtwRokbDOXu3oKKI4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=u7PEQG2j83U1EUgccAsv7ZZeyzoXGP5E3eyEnhw4NoElI1P1PQduAFpk3Aw26XQga
+	 MU1FsSM2xWeVk3888IvozG2rU0czOy6ksHQKL+ms88vEKd69Oz3Wn/JfI5RXTFTwNk
+	 wfGNc/kEM3DNOFtXZ34ZRYeTDGKQ9rq2QA/8JJ070MZrbICKSyOueWiZTR8CewZk/4
+	 YNa2OgN5lkcQjeMyprtE571tUFUuQFiRLywSCD55mJu1bl6w3MNEN7o1f2vw9759LK
+	 TWM2LHQPLAcDuMVzwA6GP/6GMrZpDf8H3uZGfG3Gq2L3gj60l5E8fYaRb6MO8wqJWV
+	 z16TlfgV2NvRQ==
+From: Mark Brown <broonie@kernel.org>
+To: heiko@sntech.de, Kever Yang <kever.yang@rock-chips.com>
+Cc: linux-rockchip@lists.infradead.org, Simon Xue <xxm@rock-chips.com>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org, 
+ Chris Morgan <macromorgan@hotmail.com>, 
+ Frank Wang <frank.wang@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, 
+ Jonas Karlman <jonas@kwiboo.se>, Johan Jonker <jbx6244@gmail.com>, 
+ David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
+ linux-i2c@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>, 
+ Simona Vetter <simona@ffwll.ch>, Elaine Zhang <zhangqing@rock-chips.com>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Finley Xiao <finley.xiao@rock-chips.com>, 
+ Maxime Ripard <mripard@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ FUKAUMI Naoki <naoki@radxa.com>, linux-pwm@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-serial@vger.kernel.org, 
+ Michael Riesch <michael.riesch@wolfvision.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, ulf.hansson@linaro.org, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Detlev Casanova <detlev.casanova@collabora.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, devicetree@vger.kernel.org, 
+ Diederik de Haas <didi.debian@cknow.org>, linux-watchdog@vger.kernel.org, 
+ Rob Herring <robh@kernel.org>, 
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Shresth Prasad <shresthprasad7@gmail.com>, Tim Lunn <tim@feathertop.org>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ linux-arm-kernel@lists.infradead.org, Jisheng Zhang <jszhang@kernel.org>, 
+ Dragan Simic <dsimic@manjaro.org>, linux-mmc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ Andy Yan <andy.yan@rock-chips.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+In-Reply-To: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+Subject: Re: (subset) [PATCH v3 00/15] rockchip: Add rk3562 SoC and evb
+ support
+Message-Id: <174066409262.43847.18143301735398340521.b4-ty@kernel.org>
+Date: Thu, 27 Feb 2025 13:48:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
+On Thu, 27 Feb 2025 19:18:58 +0800, Kever Yang wrote:
+> This patch set adds rk3562 SoC and its evb support.
+> 
+> I have split out patches need driver change for different subsystem.
+> And all the modules with dt-binding document update in this patch set
+> do not need any driver change. I put them together to make it clear we
+> have a new SoC and board to use the new compatible. Please pick up the
+> patch for your subsystem, or please let me know if the patch has to
+> send separate.
+> 
+> [...]
 
---- Comment #22 from Frederic Bezies (fredbezies@gmail.com) ---
-Created attachment 307721
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307721&action=3Dedit
-usbmon output
+Applied to
 
---=20
-You may reply to this email to add a comment.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks!
+
+[07/15] dt-bindings: spi: Add rk3562 support
+        commit: 825687c1662c53ecda991adf0ecfd8dd3d864043
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
