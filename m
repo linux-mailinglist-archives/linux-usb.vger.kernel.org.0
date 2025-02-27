@@ -1,75 +1,51 @@
-Return-Path: <linux-usb+bounces-21155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11FAAA482C7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 16:21:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17785A482FC
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 16:31:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D6651889AE0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 15:18:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4C357A4931
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 15:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A11526AAB2;
-	Thu, 27 Feb 2025 15:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD3E25F790;
+	Thu, 27 Feb 2025 15:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gwtj2mKv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CvPZfcZD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F8324E00D;
-	Thu, 27 Feb 2025 15:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A804B25742F;
+	Thu, 27 Feb 2025 15:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740669509; cv=none; b=ry0CsM/eauJEduIutbRjtwN6eaXNwugJX1lZKmNC05jQgsQkwFStFZVi5Nb1WAwbM3jd1uQPa7wk/FAcgLtC6HZ9qZMGjpyFDc9yGfbFtI848t4CtFKdjmKlI+sT2nw4ZMPmuwNX70dvQhZnZt95Z0lgoW0JjIYwnbej8cQCA+Q=
+	t=1740670299; cv=none; b=C0CNedWbF3Qx0F+9rAFFK/GY6PTW42FOttz10GtAnW1ssiQOrO/SCFJNM5oIb7KJXcv/8sIsjnTTwICO07NTpE23tsT2l79qxb5N8Z6Pe2CQDCTRyBpRgsz5/qOOq+/hxRJaJWbmHhWQL98R6zwrDudewZyO0RQJ+HEJCDLIUxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740669509; c=relaxed/simple;
-	bh=mSWt4b4ZxXi0KA9FBMo646RcxHQZCFNqS+JJR+o5VK8=;
+	s=arc-20240116; t=1740670299; c=relaxed/simple;
+	bh=Q3lRWLaWxbeTrZTVVmnpz4D86xLuv8RWW2vivnHRv/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B7ZDEkZssBmfOqIxIp90JmsHJqcFvaVPkuLE5ODEGsthIkeLfxfU1kHRXrjmpwD/7tCYrdkGrp9sRtKGIgsx2YM5q5CTDmJlJHkyyI70bDFdBL6BYjbrJ4dcFWYj0/jcUObAe45ftkwxNFcnTHJQAwwz6aegfSfaEYGGuG0TuNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gwtj2mKv; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740669509; x=1772205509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=mSWt4b4ZxXi0KA9FBMo646RcxHQZCFNqS+JJR+o5VK8=;
-  b=gwtj2mKv7QxCBskdXVBB/Y9TzifwnM4PJyyc0kTGByDYBukP5X5RVPqY
-   cqomEg0XTnu57b+hiEzOtU8tQszzPjnSHscbsK6OTccqA7EdvEpwGxRv3
-   JlGDk1NDX6SVR/75/9543rgPB63FEeQUPhBLUbC8cD2p587xHwWVGeynG
-   jNui7pDyS8cicNJsgEKDIsJQMn4khPwUiMf0uY567cjVxKscnmbakOITl
-   iNjzko8nftbq1nPU0a8sY6mxWTIsemO/Hhehv5XIaQ9hfnWxqlkCjzjaR
-   XzZKTZuuOIZpudwHne8EXdIjiEtTmHC6nPf/MdHhjclCu73ZWfhs99jF6
-   A==;
-X-CSE-ConnectionGUID: N/RJTBv3TVGGeTouL6v7Cg==
-X-CSE-MsgGUID: Iplg1hfYToSEcLrpwxHTqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="64032279"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="64032279"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 07:18:28 -0800
-X-CSE-ConnectionGUID: 42btFfALSlOSBTUcCnaUxg==
-X-CSE-MsgGUID: YOti/ze+SqG/lhBilM5wOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="147972350"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 07:18:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tnfeW-0000000Fd9t-1ddb;
-	Thu, 27 Feb 2025 17:18:20 +0200
-Date: Thu, 27 Feb 2025 17:18:20 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=crOk9s2zMuTOVapXxP5EkymKqR4yUOurizjaGGYxRhxxfOJI7ZWYxY7e5aBsC4++vmz52VjI1ha8fY6cSZV0xfWhoG28d9+jShoKJaeBDezHuZaHZ/h9ikzPJ29I1sWaE6vevMR94taI4xL6gZ5qXBoq7iE3npN8Y6WIwN3gsb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CvPZfcZD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A045C4CEDD;
+	Thu, 27 Feb 2025 15:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1740670299;
+	bh=Q3lRWLaWxbeTrZTVVmnpz4D86xLuv8RWW2vivnHRv/Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CvPZfcZDeH+L36p6g94hOMY7MuDA6i3eoVtEoTeLgSFjC/k1mdI/RZ3Kn6ZiWVGAn
+	 EYKNeDkUOdxB11ZadqNYXHk3ILkS3Z8HXPGifSj1zXflDGrdXqetqVK0qcGvDDXam7
+	 vQFYNxBe42hTJLlSFqBVuC5dMKhBAxea3S+P3gkg=
+Date: Thu, 27 Feb 2025 07:30:29 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+Cc: linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Danilo Krummrich <dakr@kernel.org>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
@@ -81,7 +57,7 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	rust-for-linux@vger.kernel.org,
 	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
 Subject: Re: [PATCH v4 0/9] Driver core: Add faux bus devices
-Message-ID: <Z8CCPIoeNoG6m7FT@smile.fi.intel.com>
+Message-ID: <2025022719-papaya-resample-0b59@gregkh>
 References: <2025021023-sandstorm-precise-9f5d@gregkh>
  <7d196a91-220a-41a5-8577-198b436d8440@bootlin.com>
 Precedence: bulk
@@ -94,9 +70,10 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <7d196a91-220a-41a5-8577-198b436d8440@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
 On Thu, Feb 27, 2025 at 02:06:21PM +0100, Louis Chauvet wrote:
+> 
+> 
 > Le 10/02/2025 à 13:30, Greg Kroah-Hartman a écrit :
 > > For years/decades now, I've been complaining when I see people use
 > > platform devices for things that are obviously NOT platform devices.
@@ -142,21 +119,15 @@ On Thu, Feb 27, 2025 at 02:06:21PM +0100, Louis Chauvet wrote:
 > host1x buses [1], so at least for the vgem and vkms driver, this library
 > will be broken (it will not crash, but previously detected devices will
 > suddenly disappear).
-> 
-> I don't know what are the rules for /sys/bus, but changing a device from one
-> bus to another seems to break userspace programs. How should we handle this
-> situation? Should we fix the existing drivers? Or only new drivers should
-> use it?
-> 
-> +CC: José Expósito
 
-My 2 cents is that. The library should be prepared for the change. AFAIU
-the concept of sys/bus the user space is supposed to check all as the same
-device theoretically may float from one bus to another.
+Why does a userspace tool want to walk bus types?  Shouldn't it just be
+iterating over the userspace class type instead?  classes are how
+devices are exposed to userspace, not through a bus.  That way if there
+is a new bus type tomorrow (like this one), code will just keep working.
 
--- 
-With Best Regards,
-Andy Shevchenko
+What does the tool actually do in the platform device's directory?
 
+thanks,
 
+greg k-h
 
