@@ -1,308 +1,304 @@
-Return-Path: <linux-usb+bounces-21124-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21125-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D54A475CB
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 07:04:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77DDA475FD
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 07:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8867116FE69
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 06:03:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFD6A7A3DE5
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 06:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FFF21B9CB;
-	Thu, 27 Feb 2025 06:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B6E21C9FB;
+	Thu, 27 Feb 2025 06:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJEY7UlC"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Jhc+g2DB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2076.outbound.protection.outlook.com [40.107.249.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BAA2E403;
-	Thu, 27 Feb 2025 06:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740636216; cv=none; b=GLVtlWAjgavgDtdMgn97ow/xsf3n7PIFPKv71m2xpd1gJHJ3wnplG5j7rcQwceoA4Cx1qN4fJm8O+daiEiWdxKGFjRAGguY14WMhnsi6IAH0zBe1+0EuvJ4MDrMirbq50td9Wg5aje3DrX2895vYRDD7UkI+UjZVl9RtSjH769k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740636216; c=relaxed/simple;
-	bh=5bQCSUlFL3cNMzqJxwc4JWiUDzaWUIigVUibvHYYM8I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U7SInUxPaGpd2jQFdRtBR+mvuLdJ8quUbMU4EccYQf87GYQZpNK/BE9Y59v5Cofzcy4nESetdhPSFi9rX2Hq1jdMOzSMqP27wFV0BAlX4syV1K/TrMCSCDOLM2jnfzimqL0g2sRtOPOZ7CoI09LfOktqsiw3S3BTKQUGrRNBqeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJEY7UlC; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f77b9e0a34so4445677b3.2;
-        Wed, 26 Feb 2025 22:03:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740636213; x=1741241013; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=BJEY7UlCawcICN9hVZhAMc9HiM/0JQxlBPGTwH08R0Ww+FNqclbWPmcOTE4RRPhF0u
-         LED6rA0XaiNmrLspCLhzl1S84RR8jK6xsy0RQ/ZxbP9O1AeArYrPdA5Jlpzf3gICQSf8
-         Rd+4H+slRTWLe7gllg/9kgyOLJcZiRr52484ppJzArcXVq2MZaza5D4+RTz9NpLAEPNQ
-         wkL6NPkfSbr2H0wa1AiW/TeZnVTRawDEtwBbghIximLZIco3yZNrhcakoJ254xHgPE5K
-         PsmmE65dU37D32EuAx8jJKrvWIfTwG5hf+bsh0aEHW8S08DIZLvau89c2AHhPR0iK2e2
-         kXBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740636213; x=1741241013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=D+XUxTE5cI9ICx5WE1Qt2w7+v+PuPlLdKVSNJxyw88qU25y2qcbulPwFaJHPv+1jHN
-         Zn9Y7AkGwlUTZ/nQkjDPLmah0+n8NhVeJlUrcjL/2S3mdjn5/vJTjMLANL9+LWg9eL6b
-         4GnU2Dt7SbCC15q0Pshoe+ulCa6ydSOnNIBI+KWy4mySxYcny+DtljtmIhW5kpcqNAxo
-         +hMrGNuqFgFJ07GhaUajGSwH1khseK5kZquDxKMepSlq7UE2sfEfjs1iupVv34KyWWJ/
-         fYN89odGWZ9k9FyE8OOockziLdYZz+P6YK4DtM6qt99kIu8KEqCHDv42L+F0+jul734r
-         PZgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCtpnbkPZqSSB90WJefVbF3UVGQg1vuOoULWpks/KSegecs4RbzDBqo4T73nJ7bE92vogJQLHLbgBU@vger.kernel.org, AJvYcCV+j6l6tZuN9AVBB7ZlkSkMNcE5O/CXnV5eKhgAO9Pq4lpf7sgm+f0aYWhuTD3hg5yyYggNuz6Tx8Y=@vger.kernel.org, AJvYcCVH0DJ55Mp9tfAwnGUegXwh0FcCxpffMTN24DubxzEukfS1QhEy2zPyGOE0yO7gLiARd4rcydKx@vger.kernel.org, AJvYcCVzFgwizoGpVPBuhgS78hyO9DE4onasxNiQHnO5ZlV8KQUj2f1dW4k0YwPdJT/kD2Qb9bfJ5FfcD8iSOA==@vger.kernel.org, AJvYcCW+hu2Rtr8Ks6A7o7TXB/zuHSlhpca7YR5yRR9jrRPsTqOvPXXxaHC+eSMSdrNHiP9eYw24zNmb89B5GobPy/8=@vger.kernel.org, AJvYcCW6bShUpiRSE8tdp+f3gVzDs6zQw6FvQxLjKRpdTx4u8HkZLVd3RvPJZce77guIDcc4A/8W05nbM7N8@vger.kernel.org, AJvYcCWIMyWYsWWOplUd4GM/tDE6eB40P19p9cj9vLKsf0eKyBPHZ9U3sdWEEjKFloTIU3TzPUdECCQQ9wdB@vger.kernel.org, AJvYcCWirC+hJdMP1c9kTaWzdyg9ETkQ6G6UbLWkF30DZH9ORqKlIUmBb45NhAsuiU/BKaA3LN9PBFVS31RPABY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7SxDqufp/AVuD3yLIvceMmgVIdlll+a1ycvLteY1quqaKQUvg
-	KIee2VS+LdVq3/+StNizNzxeWUWD+sGoGVe7JjerUKSzf4KGjP0rp3/T4+fE8yz22Hvd3LaMlJs
-	Kq3d0zlXXdZ732+sQgMAvTg2kKQgx42Pl
-X-Gm-Gg: ASbGnctx+olhuQtj5eanz+KcTeYbh7l5aFoFP/oH1x8eRwxTUPIV53UKdOi/lj74w3V
-	Okjr4+Hb3n9n4ZQjP2vDWyHgEwEOy1n3gb7XjxSHmJMTewv0OX3Da/41v8f5juKh+99VlsUyUmw
-	7Gfj1c11NLltB6RprIDauce9hbc/7eV+oqQqI1m8HqIA==
-X-Google-Smtp-Source: AGHT+IHhW5RmOkI7gkOjlnGO69YlG3Snu/7w3uKIK+tMNwqUqsl2+cEq6+/+Jh1ycoF05KXQ4giGB5nQbc+/Fln9Lv8=
-X-Received: by 2002:a05:690c:6402:b0:6fd:359a:8fd2 with SMTP id
- 00721157ae682-6fd359aa0f1mr37893927b3.26.1740636213413; Wed, 26 Feb 2025
- 22:03:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC9EBE65;
+	Thu, 27 Feb 2025 06:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740638166; cv=fail; b=LuIMbwf7LClwsseOr7XZuKbQRcAWPAmbLwwqivu5kton6GpsWIbNF3S2wlQBmTrzo9sJnogfxVX2Ti2OXnySl9FB8bRPOMEhEJ9t9YJN0HnxiJk9F8ZYw8GCIeQWfqxGkrw9xJhHAoAQjpxpM4vD4uLd/nNdmx6zkHpl6V9z+B0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740638166; c=relaxed/simple;
+	bh=YrD3rvi2aIWNx0+hmXiI7CNDEpbjRO+5YOUSwkM0pGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=NSbnewwSnLN6KSV7PS75cugU5pWuH/Ad8IymOaB6+m5Ab2lc19RUA0UnGH7mhf+PqDBqmEradi28qLkBxZG+TRn5DXFkzhU5H8AjdEKlQCdW44+KenbPczPwtaDj8RctP5+FcCx4xsRYea6B8kgca6/Gvihi6Bx9o5/3dtQDXOc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Jhc+g2DB; arc=fail smtp.client-ip=40.107.249.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=U/QBDmqLMpYh9m5Mw0qkqlcx0rDOc/uGcIxAXWL2wJHef7zAHTv2DZu1ksSW9LdA7fOBcNpIxodNqnoJFSYTysIdwloxkD/XPHPN9ZrbIprOiH8+dZjVqeXN8PLoKqz72CrYI0lz+t0XMN3IVzHADSUbo7cK9AgXKDAbY02m0uqZXPCpAMXO2aDvtIZIdvbYqpOl6W98OLRLXuKoWnzPpXeO3/BoLmUiQujD9ep9Vk/8xkMN2URch/ch/PKk03AlqVbHveb+jAGbZ3kBzRvtTT9wpFckMp3YptNDI9XsUZ+kCHBXGhSuVZX3oGjzWSbpyC+jjrERqWfvzy3NVutytQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4fgvBqqvch4nf3PvfqnfNOTf9RgUsmGf4Z/sNrh9bZo=;
+ b=LnOJVewZivivwfhP9TJvQ9b0t2i7O9Jq7WzemJsEfT09C4au9K/DzzjscwOj8zuh3u2vhJL1VSkUws2II8SVVlmv3fAjScr7UOepC75d7+OfvVBX+UB8r1iAS4fqSonUtcnLqPAYICzc6/zDASyEmh6ZmgcNLK8jB0ZndH/LtsMB6Suw1NFUIrD9WGeOaB2jppRZHkgMqc0KC0Og3NagS/iJ3HuFDTkvPEaCvpnfW8DYalqXrDdJ7bWvqya4PIQHF5dNsDRcT9DRGiIKk1jHOGld4dxtc+ITVnbv73/lITECI4wftr3aqRgGEpQaI1Kq7oZ/UQOgl4PvQmReM4ikUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4fgvBqqvch4nf3PvfqnfNOTf9RgUsmGf4Z/sNrh9bZo=;
+ b=Jhc+g2DB1htCCbn2BkzbRmrtQjCz8Yx+QtFRk6hkLs+BAeLzc5bGYNtuSBxwjrc/oa9x93PXIQqJkGWDD5s6Fue5hrTrYbyxN0xnXfJg2fJxOJvaL8FlPYRflPWFVlu17i2vYF5Mf6QerrK/DMVK+Zi8Ry62NGOzuLuikALDXZgZWMU3ketnCPzokKJPQOEJ5QelWYBenlzW7UlsKy6PTGTI8UH3R6DkW7TmB1wi8rjWGbAzx7gM4t5gDRl5an88oj9RwyArH0UVQfEskhF89BKfBM/arpQ/a9Z3++dtjM2Ixwd9GKtD59EGTp2C4HBZI0DDUiiyTLeNRc9Q29E1uw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AM8PR04MB7873.eurprd04.prod.outlook.com (2603:10a6:20b:247::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.21; Thu, 27 Feb
+ 2025 06:36:00 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8489.021; Thu, 27 Feb 2025
+ 06:36:00 +0000
+Date: Thu, 27 Feb 2025 14:32:35 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Peter Chen <peter.chen@kernel.org>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 3/6] usb: chipidea: imx: add HSIO Block Control wakeup
+ setting
+Message-ID: <20250227063235.kwfr4cixcleqbydf@hippo>
+References: <20250225053955.3781831-1-xu.yang_2@nxp.com>
+ <20250225053955.3781831-4-xu.yang_2@nxp.com>
+ <Z7_Y3KIsyKBOqx3K@nchen-desktop>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7_Y3KIsyKBOqx3K@nchen-desktop>
+X-ClientProxiedBy: SI2PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:4:195::20) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com> <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 27 Feb 2025 14:03:22 +0800
-X-Gm-Features: AQ5f1JqT0RaRfdM1W6C9qCDjKis5nvigOw3vz5qmtqucCho9jlDXbeZ2UgpSNeA
-Message-ID: <CAOoeyxXax83oNg1MpC7N4B6TrLMeg8z53SaHGqsej8ZDMP1SLA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
-	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM8PR04MB7873:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96ea5ed6-b5e7-4b2d-8fd1-08dd56f8ff7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|52116014|366016|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?xswMLIubAuBK8WMDM3fJuDrndDEnmYgX1zxv91+czqSlt1xk3C6c8fS3wcb1?=
+ =?us-ascii?Q?vYcxRm0kIixlso1ifqkP1Aaik1wzUCE6VofALFu8jfTOXZEkgS6pczzb4CP0?=
+ =?us-ascii?Q?lSZNGuU5mxgC3au83VQjSRCDQPYYFEVcOAUc7xBmc1UqcMohDnGRTVJhyW5g?=
+ =?us-ascii?Q?BE4QBjHK8huFc/4alyScThV+oUl9btzPVh9E+mBmatz/dQj/CZpx3S9WjsK8?=
+ =?us-ascii?Q?NJE4rq4+aNFrWD95MsOTkj+WXadU3d/9p7Wl0t/6q6l5UMF4kW8+xduCBjgu?=
+ =?us-ascii?Q?4L1L56Hc/583cUSG0F5QCRkctDr1HhRd7Z4ClRYe6VFSlqAaYoSahdFdAxW5?=
+ =?us-ascii?Q?JZ8PhrB9yLbd8KdT6h/WyGT2CVtZEe0IZ9W9Fh7mg3R43woyIEVIyNJXA0Ge?=
+ =?us-ascii?Q?wTz383NbfhdaniKIIjNqauRHUj8rpWJZA1JOyzfLS0Wg/kb5a1TYiHIltPCf?=
+ =?us-ascii?Q?ubCaoOE1OpWDj545bAexr6SOyude2IYlllUgOXS4s9WUpn6bAngXN5mL8RO7?=
+ =?us-ascii?Q?aGmJJqJlFug+VH4pJaodI/HE7jjoaPvBpUp5tkoKhvBpLH+Ih4qjXhJGOAlz?=
+ =?us-ascii?Q?jkjp1l3YxeAqgK7JvdbGR7lQpCStGchNl+xTGTyJkMCKBSDSGMS+ljnYbX6a?=
+ =?us-ascii?Q?sHabqCLJAPALbd0EG8Fme2Sne5fJAHjOm0EPkbB/Drt62LuNpo1yIRevv+L+?=
+ =?us-ascii?Q?rY5NDLajiv9hjAUn85IH5bNEYzW7wfOLlUUQA39jwirqaCp8oSkq+QHwr/nA?=
+ =?us-ascii?Q?frgF9cZ2tTfgfyu9SY2yFX4Oh+IoWTNpTOq+K2p5b5HeqXUOfYYTriJc62B7?=
+ =?us-ascii?Q?OjfvoQKrVNXSZRMbVkh02UxC/wWfWDUt9OmmxXlWJUNGl4Cbb12LhanMkFik?=
+ =?us-ascii?Q?QCVjO+47kuT3IqS+mpwhl3P5rxNttp7YhIMAs+9lQIEyYjW4+fbnmTBXI9th?=
+ =?us-ascii?Q?gldVLRjcEWv5ZTbgweFZpMMDGdsOOCjTFjtSuGn4nEIgReeYcB7bROvck5Sn?=
+ =?us-ascii?Q?Lt5Jh9X2lUcgn0FUf8AFQq5EfSYlJF+KZXkSyUgKJEbvD2c5RNR08FYZsQo2?=
+ =?us-ascii?Q?s814IkEZK6e1PNjLUjHHGDBW/5A4FQGutPsvLjXVoyDC1/lwgvhVS09o5z0d?=
+ =?us-ascii?Q?NzqGb9mGo5YX1+6ootzYht/iVmxarVvw3meJvAVQd5uT8hQ+8c6tUfLaTl9d?=
+ =?us-ascii?Q?6Ak2Egcw2Xg6KZen++4OlaRTRcPfq68e50Xg1SCZ3RZPv5Tc/hwBerCUsaC7?=
+ =?us-ascii?Q?8T3b10MIhWm3xVrcpP8IGudCPmsENV0m/Ow29UaK3swcOeIK14e0ShlwMPUx?=
+ =?us-ascii?Q?tU8BAmHX5JxnU0QRUYQ1N1nB5pFeSzFNPNomuqkrs4AirSDE8GQHLStJ4jKi?=
+ =?us-ascii?Q?n9S/HgHKA6rHAna9yMb/yU5fMD3LgJ1Kt8xZWTL0eyK1/mTQe6dYedAAkUZN?=
+ =?us-ascii?Q?ei3FdK1sUDAMEtvBQ33cRsvqMT0cNTaT?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(52116014)(366016)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0/XzPxSaeUpenEp0mN1VJDWWoLipqpD3g+i/KkDc+SBVU08Eq4EAgbzf3lsc?=
+ =?us-ascii?Q?3yMo9KId/ljdauJaLPPCr3LhxExZDX8SgkWQ2qa9jrJ/wxM38s3DLD7OgPMG?=
+ =?us-ascii?Q?KTMWD0nCmMh54gQ06wFc9zizBLCS56sADo/hFZ/ZNIWezWVMDNGORtM+ZcR6?=
+ =?us-ascii?Q?KxSPG2+Tm7oyrGyak3QBV7ndlfZzPTNrlPfA2HgopkuhKU+jGu14XiDbyS+M?=
+ =?us-ascii?Q?+3Nxqtb3L8hGyx9TeYzsVu64PlgCKRJBp2bfwXReU4ARz9UI/diGpzqsBai+?=
+ =?us-ascii?Q?qVXL7BGOoxMfhwWGIGwGHzxGuJHmzYeFGvoCkEntbRp44ALn+IuqosT0lmNa?=
+ =?us-ascii?Q?JoKrVUkJxeATvpEEcmDVbfWrGhzQ/ALEMdmvWkTuyecifpbmLC/e+2+Yr9pv?=
+ =?us-ascii?Q?kwqisioJcsU6veiaxbjTifonUH/Tk0dSSe70HeUnl1ZBDDdM32lmDayQGoKv?=
+ =?us-ascii?Q?Jk85jc+2NAWBKHRm/BXTjwuQULushY+OSJ2DQuOsfaqqQeyNMgrHz+JC5Kw+?=
+ =?us-ascii?Q?eXFsRLSBHUCprwce9cANSIeHdrbUJFH3nJb6NIWbsg4Mkpa0FJetmQiCuPXD?=
+ =?us-ascii?Q?xYZwwHav1UrgIbIjEY0Y//of7QxsZ4ch47MP2/Ar2D4KBvdn96q+sSTuDg6C?=
+ =?us-ascii?Q?wkhZXAfwuVHc6RGcIWawnX7bNjNCQYGIqiY+P3zWgASD8uucn9+fPaQbvwcb?=
+ =?us-ascii?Q?CZziH5wk9kIQpCpFM3iuhGDroQAmOpNpNK6thp8siieU0OkfqgMLYr14irkY?=
+ =?us-ascii?Q?6422jEMID1fQERDitUKt9AI3c9790AJnIDuBa/DStllpJzxgm2n1GQ/DE9Aq?=
+ =?us-ascii?Q?CmheFIImVM7DkZYcqGtWSx8eoJjicizQFIvwxBm9rmyqq9qTW51/tc1Fy+Gu?=
+ =?us-ascii?Q?RUxiuq0RVgDq7osA428awsdvdQxIAmJuXPrbOGEmHcuyq2rgppwK5gurVRat?=
+ =?us-ascii?Q?flKNIthRagyMeylAduyHPbK3cng2qFs/akpYruayfraZTdnrG/ArgTU/b44Y?=
+ =?us-ascii?Q?KQe6eMcE/ll0Sbba/cAxNAXnlOFx7Rv51NgVmoMCRYsnSYVm8hM/WTzDiqBn?=
+ =?us-ascii?Q?ybvfBlD52O0cSn7Bi4JF/i2Fg7gdTXjVV9wojHgdVQkv5ug8B9waRaFEtuK2?=
+ =?us-ascii?Q?SrM+LWSs4gjEX06ATwZYYDXZ2Pbcno8onKMQ4MP1juYYsVA586iopTpDCUoM?=
+ =?us-ascii?Q?pCoS1VRemwrAseUqaAOZfDuhxLi681xVdD8mUcceMHfF986i+/0ir9rf1DYH?=
+ =?us-ascii?Q?rax/qBjCjKuZNerTd0SJWI/QpvhtqBAdbr3jzBbzYDZsrvcCt9a1Ndsb3uhb?=
+ =?us-ascii?Q?XBsB1OtJgKdEA01xfwCrSZQiGb9aqIWrTqbQspQiuOXfZCNkbejma/7EdofR?=
+ =?us-ascii?Q?Jgsyl04I/qws4dzNRTMnHj/vyfGz9JGcCJ3xFRBUnQt0hxGUqoiwxAzHE/CP?=
+ =?us-ascii?Q?gJ5inAVFl+ajr6Gq+MovD1q0VIzoD77nBm9XgaKjxxulTHYAWZxS2wAH4T/k?=
+ =?us-ascii?Q?N9T/PW8Jq7WYHY2SFil6jbQskb2rF5YBPoHsrcJxAXxi1dizyNd6UywKgeQc?=
+ =?us-ascii?Q?QFMD+3zQCPrRs+N8rOxdZ7DbxqyOcBiN3OEcXnD4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96ea5ed6-b5e7-4b2d-8fd1-08dd56f8ff7f
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2025 06:36:00.1288
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i29BZgleT7sG07sEkfTrf0WHtQo0KxD7FVPyEcBvLl2uxD7J/DcLnpM3zvBTR6GXxzpyYjTIhyeqR9h6yzO96A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7873
 
-Dear Vincent,
-
-Thank you for reviewing,
-
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=E6=9C=
-=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8810:09=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-...
-> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
-> > +                                         enum can_state new_state)
+On Thu, Feb 27, 2025 at 11:15:40AM +0800, Peter Chen wrote:
+> On 25-02-25 13:39:52, Xu Yang wrote:
+> > On i.MX95 platform, USB wakeup setting is controlled by HSIO Block
+> > Control:
+> > 
+> > HSIO Block Control Overview:
+> > - The HSIO block control include configuration and status registers that
+> >   provide miscellaneous top-level controls for clocking, beat limiter
+> >   enables, wakeup signal enables and interrupt status for the PCIe and USB
+> >   interfaces.
+> > 
+> > The wakeup function of HSIO blkctl is basically same as non-core, except
+> > improvements about power lost cases. This will add the wakeup setting for
+> > HSIO blkctl on i.MX95. It will firstly ioremap hsio blkctl memory, then do
+> > wakeup setting as needs.
+> > 
+> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > 
+> > ---
+> > Changes in v2:
+> >  - add Rb tag
+> > ---
+> >  drivers/usb/chipidea/usbmisc_imx.c | 107 +++++++++++++++++++++++++++++
+> >  1 file changed, 107 insertions(+)
+> > 
+> > diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+> > index 1394881fde5f..f933fc70be66 100644
+> > --- a/drivers/usb/chipidea/usbmisc_imx.c
+> > +++ b/drivers/usb/chipidea/usbmisc_imx.c
+> > @@ -139,6 +139,22 @@
+> >  #define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKEUP | \
+> >  				 MX6_BM_ID_WAKEUP | MX6SX_BM_DPDM_WAKEUP_EN)
+> >  
+> > +/*
+> > + * HSIO Block Control Register
+> > + */
+> > +
+> > +#define BLKCTL_USB_WAKEUP_CTRL		0x0
+> > +#define BLKCTL_OTG_WAKE_ENABLE		BIT(31)
+> > +#define BLKCTL_OTG_VBUS_SESSVALID	BIT(4)
+> > +#define BLKCTL_OTG_ID_WAKEUP_EN		BIT(2)
+> > +#define BLKCTL_OTG_VBUS_WAKEUP_EN	BIT(1)
+> > +#define BLKCTL_OTG_DPDM_WAKEUP_EN	BIT(0)
+> > +
+> > +#define BLKCTL_WAKEUP_SOURCE		(BLKCTL_OTG_WAKE_ENABLE	   | \
+> > +					 BLKCTL_OTG_ID_WAKEUP_EN   | \
+> > +					 BLKCTL_OTG_VBUS_WAKEUP_EN | \
+> > +					 BLKCTL_OTG_DPDM_WAKEUP_EN)
+> > +
+> >  struct usbmisc_ops {
+> >  	/* It's called once when probe a usb device */
+> >  	int (*init)(struct imx_usbmisc_data *data);
+> > @@ -159,6 +175,7 @@ struct usbmisc_ops {
+> >  
+> >  struct imx_usbmisc {
+> >  	void __iomem *base;
+> > +	void __iomem *blkctl;
+> >  	spinlock_t lock;
+> >  	const struct usbmisc_ops *ops;
+> >  };
+> > @@ -1016,6 +1033,76 @@ static int usbmisc_imx6sx_power_lost_check(struct imx_usbmisc_data *data)
+> >  		return 0;
+> >  }
+> >  
+> > +static u32 usbmisc_blkctl_wakeup_setting(struct imx_usbmisc_data *data)
 > > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +     struct can_berr_counter bec;
-> > +     struct can_frame *cf;
-> > +     struct sk_buff *skb;
+> > +	u32 wakeup_setting = BLKCTL_WAKEUP_SOURCE;
 > > +
-> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +	if (data->ext_id || data->available_role != USB_DR_MODE_OTG)
+> > +		wakeup_setting &= ~BLKCTL_OTG_ID_WAKEUP_EN;
 > > +
-> > +     nct6694_can_get_berr_counter(ndev, &bec);
+> > +	if (data->ext_vbus || data->available_role == USB_DR_MODE_HOST)
+> > +		wakeup_setting &= ~BLKCTL_OTG_VBUS_WAKEUP_EN;
 > > +
-> > +     switch (new_state) {
-> > +     case CAN_STATE_ERROR_ACTIVE:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +             if (cf)
->
-> Set the CAN_ER_CRTL flag:
->
->                 if (cf) {
->                         cf->can_id |=3D CAN_ERR_CRTL;
->                         cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
->                 }
->
-
-Fix it in the v9.
-
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
-> > +             break;
-> > +     case CAN_STATE_ERROR_WARNING:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_WARNING;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
-
-Fix it in the v9.
-
-> > +                     if (bec.txerr > bec.rxerr)
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_TX_WARNING;
-> > +                     else
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_RX_WARNING;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_ERROR_PASSIVE:
-> > +             priv->can.can_stats.error_passive++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_PASSIVE;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
-
-Fix it in the v9.
-
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
-> > +                     if (bec.txerr >=3D CAN_ERROR_PASSIVE_THRESHOLD)
-> > +                             cf->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_BUS_OFF:
-> > +             priv->can.state =3D CAN_STATE_BUS_OFF;
-> > +             priv->can.can_stats.bus_off++;
-> > +             if (cf)
-> > +                     cf->can_id |=3D CAN_ERR_BUSOFF;
-> > +             can_free_echo_skb(ndev, 0, NULL);
-> > +             netif_stop_queue(ndev);> +              can_bus_off(ndev)=
-;
-> > +             break;
-> > +     default:
-> > +             break;
-> > +     }
+> > +	/* Select session valid as VBUS wakeup source */
+> > +	wakeup_setting |= BLKCTL_OTG_VBUS_SESSVALID;
 > > +
-> > +     nct6694_can_rx_offload(&priv->offload, skb);
+> > +	return wakeup_setting;
 > > +}
 > > +
-...
-> > +static int nct6694_can_stop(struct net_device *ndev)
+> > +static int usbmisc_imx95_set_wakeup(struct imx_usbmisc_data *data, bool enabled)
 > > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> > +	unsigned long flags;
+> > +	u32 val;
 > > +
-> > +     priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
->
-> Hmmm, when Marc asked you to put the device in listen only mode, I think
-> he meant that you set it on the device side (i.e. flag
-> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
-> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
-> interface. So you should not change that flag.
->
-> But before that, did you check the datasheet? Don't you have a device
-> flag to actually turn the device off (e.g. sleep mode)?
->
-
-Our firmware currently does not provide an interface to turn the
-device off, I will put the device in listen-only mode as an
-alternative.
-
-> > +     netif_stop_queue(ndev);
-> > +     free_irq(ndev->irq, ndev);
-> > +     destroy_workqueue(priv->wq);
-> > +     can_rx_offload_disable(&priv->offload);
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
-> > +     close_candev(ndev);
+> > +	spin_lock_irqsave(&usbmisc->lock, flags);
+> > +	val = readl(usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> > +	val &= ~BLKCTL_WAKEUP_SOURCE;
 > > +
-> > +     return 0;
+> > +	if (enabled)
+> > +		val |= usbmisc_blkctl_wakeup_setting(data);
+> > +
+> > +	writel(val, usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
+> > +
+> > +	return 0;
 > > +}
 > > +
-...
-> > +static int nct6694_can_probe(struct platform_device *pdev)
+> > +static int usbmisc_imx95_init(struct imx_usbmisc_data *data)
 > > +{
-> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +     struct nct6694_can_priv *priv;
-> > +     struct net_device *ndev;
-> > +     int ret, irq, can_clk;
+> > +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> > +	unsigned long flags;
+> > +	u32 reg;
 > > +
-> > +     irq =3D irq_create_mapping(nct6694->domain,
-> > +                              NCT6694_IRQ_CAN0 + cell->id);
-> > +     if (!irq)
-> > +             return irq;
+> > +	if (data->index >= 1)
+> > +		return -EINVAL;
 > > +
-> > +     ndev =3D alloc_candev(sizeof(struct nct6694_can_priv), 1);
-> > +     if (!ndev)
-> > +             return -ENOMEM;
+> > +	spin_lock_irqsave(&usbmisc->lock, flags);
+> > +	reg = readl(usbmisc->base);
 > > +
-> > +     ndev->irq =3D irq;
-> > +     ndev->flags |=3D IFF_ECHO;
-> > +     ndev->dev_port =3D cell->id;
-> > +     ndev->netdev_ops =3D &nct6694_can_netdev_ops;
-> > +     ndev->ethtool_ops =3D &nct6694_can_ethtool_ops;
+> > +	if (data->disable_oc) {
+> > +		reg |= MX6_BM_OVER_CUR_DIS;
+> > +	} else {
+> > +		reg &= ~MX6_BM_OVER_CUR_DIS;
 > > +
-> > +     priv =3D netdev_priv(ndev);
-> > +     priv->nct6694 =3D nct6694;
-> > +     priv->ndev =3D ndev;
+> > +		if (data->oc_pol_configured && data->oc_pol_active_low)
+> > +			reg |= MX6_BM_OVER_CUR_POLARITY;
+> > +		else if (data->oc_pol_configured)
+> > +			reg &= ~MX6_BM_OVER_CUR_POLARITY;
+> > +	}
 > > +
-> > +     can_clk =3D nct6694_can_get_clock(priv);
-> > +     if (can_clk < 0) {
-> > +             ret =3D dev_err_probe(&pdev->dev, can_clk,
-> > +                                 "Failed to get clock\n");
-> > +             goto free_candev;
-> > +     }
+> > +	if (data->pwr_pol == 1)
+> > +		reg |= MX6_BM_PWR_POLARITY;
 > > +
-> > +     INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
+> > +	writel(reg, usbmisc->base);
+> > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
 > > +
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
->
-> Marc asked you to remove this line during the v7 review.
->
-
-Sorry, drop it in the v9.
-
-> > +     priv->can.clock.freq =3D can_clk;
-> > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_cons=
-t;
-> > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_data_co=
-nst;
-> > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counter;
-> > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > +	/* use HSIO blkctl wakeup as source, disable usbmisc setting*/
+> > +	usbmisc_imx7d_set_wakeup(data, false);
 > > +
-> > +     ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
-> > +                                     NCT6694_NAPI_WEIGHT);
-> > +     if (ret) {
-> > +             dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\=
-n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     platform_set_drvdata(pdev, priv);
-> > +     SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> > +
-> > +     ret =3D register_candev(priv->ndev);
-> > +     if (ret)
-> > +             goto rx_offload_del;
-> > +
-> > +     return 0;
-> > +
-> > +rx_offload_del:
-> > +     can_rx_offload_del(&priv->offload);
-> > +free_candev:
-> > +     free_candev(ndev);
-> > +     return ret;
+> > +	return 0;
 > > +}
-> > +
+> 
+> Above code has duplicated with some imx7d and imx7ulp init code,
+> Is it possible abstract some common code for all these three platforms?
 
+Sure. Thanks for your suggestion. I'll do it.
 
-Best regards,
-Ming
+Thanks,
+Xu Yang
 
