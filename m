@@ -1,125 +1,109 @@
-Return-Path: <linux-usb+bounces-21173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA89BA489B9
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 21:21:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E633A48A48
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 22:07:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 459C8166D74
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 20:21:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13B0F188FA93
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 21:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFBA626FA4E;
-	Thu, 27 Feb 2025 20:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E788526E966;
+	Thu, 27 Feb 2025 21:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CvlEYPyq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qhqvMKYK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1B71D6182;
-	Thu, 27 Feb 2025 20:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0FD1A9B2A
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 21:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740687707; cv=none; b=fRmdOzSz19kx0mO5iA6DVQKhnOCxdgc8GN0j/KHWkdGWF93wWQP1ffaU5KSyRXIeqDUxUOzB+iKZUe2V26pfG2bqqWE5eFbXEnGfwxDSt0+TqBMlKVogUYsqYvJxkxo9hYvzyizS0lMRm2kYTJnw7Na+yRGC97gXHyfmHfR2EJA=
+	t=1740690467; cv=none; b=AimDi2d5ZeXcQrjHTUazporkSMhtEELpRQqCNvou4SsxmfinuDwpvIKibnTxs1dituPoLevqhpZw8MmLd0Tx5NgXVQ/Y3tJgoKkya7Qa/QG680WteCNEnF1A2Lio/Wth3XZ2BK2BE90mbdzY1ecZjMzkMUAg56SrFvcP8E/ngt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740687707; c=relaxed/simple;
-	bh=yJLvp2oI0sbx31hYDIXLNAAq0hg/gtAY3C68UTWPF8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBCpu4gmKEoAR8/g1CAH2WRHFlaKJ0J8L5n2HrQN47GrlzEO0iosB89Tw73hm0SwKRJha2OmYnVX0BzSR3Wa15O3Ur1WSGF+ofYuphxFYLslqCNhtOmiA26X0Sbw4PZhshp4RS+Z4ZjUaK3V3M0vRKtMvJDWbSoCKiDGwgsIujI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CvlEYPyq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CCFC4CEDD;
-	Thu, 27 Feb 2025 20:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1740687706;
-	bh=yJLvp2oI0sbx31hYDIXLNAAq0hg/gtAY3C68UTWPF8A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CvlEYPyqID3xG6JZnddwKCBj86r3Ccp80AYP8Ur+fzaXY/aU9kwpIhJiV7j0AEFfC
-	 ikcFpnhFkTSSMgHP+SXGqfjt9zHxjNb7cz9GA8d1V9by1Vo7X4ytcXHk0q7Rxzzs97
-	 f0YbwqkoW1aVPUHeNo9CPAAGczlcJVUYyF5h0YEk=
-Date: Thu, 27 Feb 2025 12:20:36 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] xhci: Restrict USB4 tunnel detection for USB3 devices to
- Intel hosts
-Message-ID: <2025022709-unread-mystified-ddf1@gregkh>
-References: <20250227194529.2288718-1-maz@kernel.org>
+	s=arc-20240116; t=1740690467; c=relaxed/simple;
+	bh=5B2CWdoMKDzqdJ6bS4jl87k7JmlNpGTvqQBRflAnPAY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bMdiQrEY4xBZLl8xjkTaRnbsNij2/Yufh7lSzVOYIUyPTQFkLtQoEtma8YklNoMpUDxnRFgKffsqSQqcZMxZWcW/453ZVNCKuvEHyvt24OtUtxZOZ0dU5nqbfAY9+VTlJNSCDbvpeh6a2AJvDLKXhA7QXF9RZN3WASSW7kS5T0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qhqvMKYK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CD299C4CEE4
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 21:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740690465;
+	bh=5B2CWdoMKDzqdJ6bS4jl87k7JmlNpGTvqQBRflAnPAY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=qhqvMKYK6qnkni81bjrvIPlupuPjzoIUL8ZCriHrRUUuF72WZwX9gfS6WY/aa8IsT
+	 W2Jp2hT+j6oIB7/R7Xs91nkzMh7fkpO7Ch7wUaZhaWeuDMZXZbSHjHyQO8iJWUhzxP
+	 jFj5vuTJztchVjocteejxrwgloKf16nszhK/B7fKGa3WkZvVRZCUDMTCvjHwhWTad9
+	 89hHIjMuCOd+tFaqo/J7BJ60q8WSVphjhMMncoaOOPmOcaQHHOvG5jMqo1clCc6zzy
+	 ckIUVtDCkJgTshjMFtXRs7EXhkmX3k5adIpf9BPPM45HFHzfHJQHEwprnfKaSp1z5J
+	 8UeL2Iv//GGJQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B7831C433E1; Thu, 27 Feb 2025 21:07:45 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Thu, 27 Feb 2025 21:07:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219824-208809-SogPLnCPmN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250227194529.2288718-1-maz@kernel.org>
 
-On Thu, Feb 27, 2025 at 07:45:29PM +0000, Marc Zyngier wrote:
-> When adding support for USB3-over-USB4 tunnelling detection, a check
-> for an Intel-specific capability was added. This capability, which
-> goes by ID 206, is used without any check that we are actually
-> dealing with an Intel host.
-> 
-> As it turns out, the Cadence XHCI controller *also* exposes an
-> extended capability numbered 206 (for unknown purposes), but of
-> course doesn't have the Intel-specific registers that the tunnelling
-> code is trying to access. Fun follows.
-> 
-> The core of the problems is that the tunnelling code blindly uses
-> vendor-specific capabilities without any check (the Intel-provided
-> documentation I have at hand indicates that 192-255 are indeed
-> vendor-specific).
-> 
-> Restrict the detection code to Intel HW for real, preventing any
-> further explosion on my (non-Intel) HW.
-> 
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: stable@vger.kernel.org
-> Fixes: 948ce83fbb7df ("xhci: Add USB4 tunnel detection for USB3 devices on Intel hosts")
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->  drivers/usb/host/xhci-hub.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index 9693464c05204..69c278b64084b 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -12,6 +12,7 @@
->  #include <linux/slab.h>
->  #include <linux/unaligned.h>
->  #include <linux/bitfield.h>
-> +#include <linux/pci.h>
->  
->  #include "xhci.h"
->  #include "xhci-trace.h"
-> @@ -770,9 +771,16 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
->  enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
->  						struct xhci_port *port)
->  {
-> +	struct usb_hcd *hcd;
->  	void __iomem *base;
->  	u32 offset;
->  
-> +	/* Don't try and probe this capability for non-Intel hosts */
-> +	hcd = xhci_to_hcd(xhci);
-> +	if (!dev_is_pci(hcd->self.controller) ||
-> +	    to_pci_dev(hcd->self.controller)->vendor != PCI_VENDOR_ID_INTEL)
-> +		return USB_LINK_UNKNOWN;
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Ugh, nice catch.
+--- Comment #8 from Artem S. Tashkinov (aros@gmx.com) ---
+> Which exact versions were you running successfully and for how long?
 
-Mathias, want me to just take this directly for now and not wait for you
-to resend it?
+Kernel 6.12.14 that I was running earlier didn't have this issue.
 
-thanks,
+Used software suspend/resume multiple times successfully.
 
-greg k-h
+> Any chance that hibernation is indeed a (delayed) trigger and you weren't
+> doing it as often in the past?
+
+Not using hibernation, just software suspend.
+
+I've not changed anything software-wise except installing a new kernel on t=
+his
+laptop.
+
+> Did you come across similar reports from stable kernel branches in this y=
+ear?
+
+I've Googled a couple of times already for this exact error message and not=
+hing
+turned up.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
