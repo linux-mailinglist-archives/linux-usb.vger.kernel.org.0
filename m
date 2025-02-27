@@ -1,159 +1,313 @@
-Return-Path: <linux-usb+bounces-21128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94DBBA4775D
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 09:11:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 925F8A47982
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 10:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 920281671E1
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 08:11:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 378EF7A3868
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 09:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57C4223308;
-	Thu, 27 Feb 2025 08:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B67227EA0;
+	Thu, 27 Feb 2025 09:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="egKs6a1z"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iB6SF1PP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2073.outbound.protection.outlook.com [40.107.249.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD621E832D;
-	Thu, 27 Feb 2025 08:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740643895; cv=none; b=VxL+lq8vnkRAlO9HRxUUSWLemFDDhmfWuYhcQjqKd9fsUYJRH1dFWuhh+EDjI8c1bMS9tdgwrsLgv5+bsbR0JWuHHzlWtPN9ndjoHIpOqWUXAUZZZVWupNb8ig/ujTJX1rHC7xQNOT0Hbjo9IgvIvtBbsN7Y1e25JMMwhmjEpM0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740643895; c=relaxed/simple;
-	bh=IdCm04ZJ5+6kP/DdU6oVxNDhEQ69k1U/iHKNasH+QxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tHECf1HDjrGF3RnuXdnuVhUIOPMZbB8ln5eFE3pkOa1wEsYnTJlm5J2WizzwKEvAYPvfDOvR47JoCj/cxNfDtuN3vVB+2ryrJqd2Ajh8QhQ3795+efAvsAP6F5sM5kH5UM2XbUO8sX9wrOVQ2cLcK74732Yri4G/jOEM0GTvaQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=egKs6a1z; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740643894; x=1772179894;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IdCm04ZJ5+6kP/DdU6oVxNDhEQ69k1U/iHKNasH+QxI=;
-  b=egKs6a1zj0UxWAiy1d3NYG9gPRNHNKAMWt595clTRECfaYOQznyA7zbm
-   YQdUZt9ncsUWMX3kNuzMf7oT0F8D6Mz9wWn1u1sswAWbJI6qDkjssCQJh
-   TdnHqmw4TzahmxJNDztXRl3OVxq8J+HJjDXKf1XavG9wgN9ABK3AZgK4n
-   j2PqSnwFDuyJkvCrkNomYUKfxV29a9KwvmCFU7wk6OiRWfoFWNu15aBVW
-   pq6oQ0yknt5LmEhrG/KPIc6G+mal4ZugL3aXdw/l7FeALBOLNxnqvarvm
-   5xo8RFas2U8MRg+0jNdEm00538jkeQ9ct7SSmHsi/J/fu9FaUE6nrGfsK
-   Q==;
-X-CSE-ConnectionGUID: ApxikBYHSRq8lRUFOUpq5w==
-X-CSE-MsgGUID: m6nf0hPJTwaeG6Lf2ZlSUA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="63989828"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="63989828"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 00:11:33 -0800
-X-CSE-ConnectionGUID: KtBs/9o6T2u55FQRHBb1vg==
-X-CSE-MsgGUID: lMWsWV+kTYSd39whBQRkhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117864502"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 27 Feb 2025 00:11:30 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnYzP-000D4E-22;
-	Thu, 27 Feb 2025 08:11:27 +0000
-Date: Thu, 27 Feb 2025 16:10:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawel Laszczak <pawell@cadence.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	"stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-	"krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-	"christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-	"javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
-	"make_ruc2021@163.com" <make_ruc2021@163.com>,
-	"peter.chen@nxp.com" <peter.chen@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Pawel Eichler <peichler@cadence.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: xhci: lack of clearing xHC resources
-Message-ID: <202502271523.jt3l4VVu-lkp@intel.com>
-References: <PH7PR07MB95385E2766D01F3741D418ABDDC22@PH7PR07MB9538.namprd07.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33715270024;
+	Thu, 27 Feb 2025 09:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740649517; cv=fail; b=VX+bCtO5CX6n//09LIZP3/IOyrWGV79CyAvJGfYGlrFHdgafcJf/Y6tl80rBp8diwHYzgweMHtJ0IhnhQSWoh21PaYt+va6BPkAjAM1YIIivlcVHZTlucQrGWysN+a1xbKaTU3frMDdzOFEXRfwW/kAAxcdqJ1FlRLx4CdGMVfA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740649517; c=relaxed/simple;
+	bh=TbBfUe1hfgMtJ2IDclzMSUSl9U0bph1OvnF5btLw4kU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jB4WgGz8iH60xcARMWHKUJoM099cCdzwW0z2sMBx8VVkXitwlpbV16qC3WNNgm/cRN072PJQxqnrI7POIiOgIxMXckZ106xhDZ5ZfpGH3OHkWyfy+CqtvfHAHrpYDCk1EenKnNnO/B7wUb74HwwZL72imFoBdjxMsNnKRiR2VK8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iB6SF1PP; arc=fail smtp.client-ip=40.107.249.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=r0/Vr8O68XDBm7tfE6YAwL0SuOGdHqPFFht3/uE2vc/YH/ENmgd6q54OLHym4sUaXNDIxyi6B4l6S1PeFFm4129g+IMqRZOk3CN3/dgwschTQCbsckXwZyd2HcpEDtJAd3pPU9rLkOmV3uckosCyIBGbBxJqzZNpa89wePUlE7V4isZiuf6SBz/REohEvzs82U+KpoGYg2hztEh3IhEZ4GLqAOjWQO9jh7IXu6vBm00/VBUU355vF5HHA73qmIPyjE5GTLpE5epU6KoU90SXpZkXf2EBVmwUlLxqfJNwf1tB96o3aBynTYoQVpBCK2mwb6zhD8q3VpttD5+laS/w/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bGXRgd18cd2c1jtB7OQ8WgKt/xFGBRAsICCp8wjoVCQ=;
+ b=yCHYc7iTR4e2V3qMLGYjfscHKfdQNQ3fbHHtGwFOxhtQcCy2KJXVmt24tXP7tU6pqruxXk1gwDhtPmYAxk+hFVMEJfXSsGumTrhpldKYvVeWXn5ytikyZxDLrVmy5nokunCYTPnumPK9DqzhnJv9VZ8cMv4LG5RWF3SpsWiysByeg1QTQZmf1VJRUuq2a6uo9Qgsu5B7Ayr77JwN0HKzg9B05vsWTZLhszlEMqSGgtNRn68LkQoYHy0JSgE9sQDgF7KUHfQzw16wwevlXTgH8ljfUwVJUxRCN550tr9Q7MQejwkGa/z8YDlGzqAqDyCc5A9z7pGp/zfbd21hMCTFWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bGXRgd18cd2c1jtB7OQ8WgKt/xFGBRAsICCp8wjoVCQ=;
+ b=iB6SF1PPN6coGsw6v/qZRADg4udTa80dbx4Kyu8e8XREl4u52kBlyLWU43CHvdtobvMfChgHu++BnWwYtJhB28YXVIdEQjtHKw8wYom7zPzIYv0JY3HoM7n167IudHTfAcQ0/uqxjw6Y0w3HICitP0Wxq1bWZ9YqHQw6YsNf+15sf0YjIbFqsACvK3O8sTTnqr+ZDWGVhtJahQFHUlRAwURyfy34+JMyE81dQhPyRNUf7ILLRaZoXLNmxC/tQbP9B7BAIZiLcSvuXeYaDBysJVcQsqI4Hn7aOF93i6AHM32xJwuKTZKvLTpPxYawBUq/P1z8zPF3FL1IcxTKzs5FKQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AS8PR04MB7878.eurprd04.prod.outlook.com (2603:10a6:20b:2af::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.21; Thu, 27 Feb
+ 2025 09:45:12 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8489.021; Thu, 27 Feb 2025
+ 09:45:12 +0000
+Date: Thu, 27 Feb 2025 17:41:48 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Peter Chen <peter.chen@kernel.org>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 3/6] usb: chipidea: imx: add HSIO Block Control wakeup
+ setting
+Message-ID: <20250227094148.ovg25ofxuoe454vb@hippo>
+References: <20250225053955.3781831-1-xu.yang_2@nxp.com>
+ <20250225053955.3781831-4-xu.yang_2@nxp.com>
+ <Z7_Y3KIsyKBOqx3K@nchen-desktop>
+ <20250227063235.kwfr4cixcleqbydf@hippo>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250227063235.kwfr4cixcleqbydf@hippo>
+X-ClientProxiedBy: SG2PR02CA0104.apcprd02.prod.outlook.com
+ (2603:1096:4:92::20) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95385E2766D01F3741D418ABDDC22@PH7PR07MB9538.namprd07.prod.outlook.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB7878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15140a7b-0ebc-46dc-6cf0-08dd57136e2d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?NS5lTVJAllFZKojEX9C3XznYF7qUdzCl87MlGyMxye53KuHw4zfFj6ic1Rof?=
+ =?us-ascii?Q?HNrDY5trmvQc2U3OCOqdTcbsQlSYnh2GPSy14hH4EC2DgckDCueYZN/8OftJ?=
+ =?us-ascii?Q?OkxJR19JRUQGDEEZjgQQGL4mFFFaQsAkJN838sTLWv/Yu4boIZxaT5XUMPsP?=
+ =?us-ascii?Q?y+1BAkGw2MBpEBw5M13DAUT2I0mAd4OZSUFaGpXxWEw9bs+hg6KwFtDB7Q4u?=
+ =?us-ascii?Q?d/6zB6WB5odZl3BwFHrNBj9Sa/OUcpENml/gE+pFIGRsbyW26LDW5CkjMla2?=
+ =?us-ascii?Q?s1SuT+fmm6D2SPrUvjABnD49tN94uej9SzEnxaPuSicKp4bUIY6jQ4HdiqbI?=
+ =?us-ascii?Q?MowAq5MvaLEECKH1RkteEaovllLMMRk9lkM/NeEoyqL6CAr/X8/7KqdHj16d?=
+ =?us-ascii?Q?aCKejDEn7Sn1L0EhdN0iI2aKpMsU6EV1XIH0QF06MttSjiDcAD8vMMYpzvV5?=
+ =?us-ascii?Q?dl27rZizy7nQ3hAZ1C3180UiC3wYGXmQkxPVFZ77RfNee9h/6hg0s6ehsOv3?=
+ =?us-ascii?Q?Ld7lsxGju3ynw078aw435YI6UX8R822V3GH8n1ImZ5ZmWb7JsgostfQXurEE?=
+ =?us-ascii?Q?4aa4d4ZROquXgHc9NMXxzsLwpeu7G+4fP4u12pkK5RwOzgcdXzZKLK/7/map?=
+ =?us-ascii?Q?RCgI2CWnIXIOzFxruFFGlFYRNP4dJKFAXU61+VszGXvjCkPVHKRg6ZhW7R9j?=
+ =?us-ascii?Q?cFX4yRrAQzQ1kQdZoBs8AnNqWLEj0I3JSWm7urLW+F7uhXLQzJfB8b+SSYKl?=
+ =?us-ascii?Q?vsdeIcXNVvbG9RdyPzUh8oHqJTzQxs/FFmdrAXk5g28e3uTeybkY2lRY80JA?=
+ =?us-ascii?Q?2hL3oPTm5txAs2aONoqrZNgg44LwPXsrhTI88U8XGw+uOQjnpWUfeQFXBpyF?=
+ =?us-ascii?Q?vaMq6qp8mWfQCbKZ9zUcCNkUacwBhH1RxNTtegdEGkLKG6/OBWa7N8rkEzk9?=
+ =?us-ascii?Q?jOOA9L8WjpsFhY5CCMWyJucNBG7/nXCTJ7wUnPueczc3OqL0+/slDgU+uqfz?=
+ =?us-ascii?Q?RhnE06tQw9fxDJs085hY3fhwLAj0VJ+0XUUT3Zl2E2AndJTA6BRbH41Ry7MB?=
+ =?us-ascii?Q?NiCVLMZntClq5TVGUsWwt8RjvVok5GQis4HytD4NDJV6zDyEgRACu/PKOI46?=
+ =?us-ascii?Q?xP2mCzNocXfg6oplFu2LC6yZG6HjqpgwjNsQpn2ByRYrw/R9HWiOvVeVsOCO?=
+ =?us-ascii?Q?co+5i+FDRNMDn/eDtaR8tpAtjuT6aM2O19344jiEaVugTh7Qhr4OE8iRmMQP?=
+ =?us-ascii?Q?83okK38J2orkhyOY+ez2EcBc4NgdnqTu9Jfd/PDWTJNjmtDvIZgkO40ErYM2?=
+ =?us-ascii?Q?uKzEEFfBrrjUX9z3pZyEq2EWtPoOEgO9IdCVFgVN5VzpFIpZo2TKhA3DcOnH?=
+ =?us-ascii?Q?OVxG6XX/g2S8ol73ZD2JBr4NbQ2hSbHiL1fhPA2dt97dCgYtzdAPUmbqlLGo?=
+ =?us-ascii?Q?FbVbO9gw2PPmBR07ULECZA1L0ezjql8n?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?vviNeHNqdvn5AglAsnzmY6b82nu72eguoTpJ37i6d3WHSLQ3Gh9JP2T13eC1?=
+ =?us-ascii?Q?YOcwIV9o4mpbWIO/T/Fzjgc4WcVA3DZ2aR0ik2XRDBQRpb0Z9gmFRw7z5KjB?=
+ =?us-ascii?Q?PZRNGw7mSEWQAfuc7kURCrEQVPCESXAP79DwV8GAv4IrGiiO1uA6Aoo+I2LY?=
+ =?us-ascii?Q?blW6AeKW7qblEjagl1cJapk/HXZxXu9eR4+uoDmQ8PK8kQmBCiCBRkQ/fKqE?=
+ =?us-ascii?Q?ixx3XUaderBSvFmOSah7Lmi0tqSe/Y13WTfZf83sjGXhfdKndkKWkN8hfm+3?=
+ =?us-ascii?Q?IQ+EnJGfPJrtpIFKCeotJ34dQjDg+jTD2pxBebSs50impUu0c+YWypJvAWpN?=
+ =?us-ascii?Q?lq56rbjS4heu3WEB2JfjpXQCTUlQWqcpsBwiTtGpo5+GzTrar5/w8GbNJbCx?=
+ =?us-ascii?Q?oTHUSA1eO1T7zMJ1GlyqxKd6c+S6hGptRgn8IUBu8T7jOWEDjb7JSat71Ze6?=
+ =?us-ascii?Q?soIBnWaPYe+FdUEkTb4BMFAik+7AHuqjxF934pWqFA4m4QziLZAS64c7ibSc?=
+ =?us-ascii?Q?JMbnNesDwzwE8rIPaKTV6pXqEr7UkHPz7dEq2sVK/BoCwUrlrp3NgCBjkeCj?=
+ =?us-ascii?Q?UsEcJuVs8LFChp3XeJnuA7oX2HF0oSebkZhGxAeEIXawDHKhC8RbE4Xoo4gl?=
+ =?us-ascii?Q?02P74pZSkjhFlrbbktCy0rtkB0smG9MHma7g758nG2WYqOioruBtbTRJrVu2?=
+ =?us-ascii?Q?bv0YEwCEbSDemOeF27PHLIpJUNK8xFdBc0yKIXC6gZ2I4wU6lvCXmc6LUgfa?=
+ =?us-ascii?Q?g+N5opHgAObaw3RtIFG4jKOFDVzJcH9+Ei9TDShtEjfVXpXOoms8D5V5tI3a?=
+ =?us-ascii?Q?H4GS842GXlbA2xAyiolCGD5epZxLLTmAMjaWFF7FT8FclXY/DErqbAyP5boa?=
+ =?us-ascii?Q?tCO1hdcO8Jg5dcEucGXT2peR4sQ4mA4VimketmDrYRTLPaW43mypsFiKRcCX?=
+ =?us-ascii?Q?0zn1NRmgNZvpyZsI6ZHremjc6IJmzq93DiEg64S4Xp7nvk3rtc+2M0c+vfOI?=
+ =?us-ascii?Q?GC0GbmfgrS5aEzwtwCQxcfxAKmxNqJzkX14BQwcVmLVyPVvCOb/wJBLQpR3j?=
+ =?us-ascii?Q?doMDccSEGzQf7jcmsg31kwc4ohyzZ/xLv2Hwv5w+/dBqNukhEzRi9+bm0ZN8?=
+ =?us-ascii?Q?6fiCNliQKWmFy3mc9ymo51niKTBh0l6f49Qv29Ey3jaOB8xlwHHdB/lO7Xty?=
+ =?us-ascii?Q?BncO8Rr2G1FV2HVHScGdpunkXZ5pII/AyHiwTMVAjSaI1V5RkmZDsJZC8Y+g?=
+ =?us-ascii?Q?ZnsImX83lk6ARvsaP6jUkaibqqa9nAqQu2PuVzwgiUcX5wFgTNpEbBg2cpti?=
+ =?us-ascii?Q?c7moTN9OprQNPURqGVdbIGP/KBn8ULZrXBFve5KLuP6Hb9lUcYILhX+/G8m/?=
+ =?us-ascii?Q?xwfe8CQvntI0X3Ze+Rn+v+xmiwWf+6mshG4hpPE492M4UUTc5PO9eJzXLsOg?=
+ =?us-ascii?Q?djK4tGsuM9OO0Eg57UWhMySRUolftEk0F/N/67OwW1Ft9n70XOoRWvP1Qebf?=
+ =?us-ascii?Q?f08gusd+U4vunJioyfNE5DhM//YG+F7+AX3nJfZ7Xl8CX9WzCgaUaikhq/Vj?=
+ =?us-ascii?Q?eyfIdqh/cZ4/JqyhQxt5PeuFKpkfJdFYLwLadmcp?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15140a7b-0ebc-46dc-6cf0-08dd57136e2d
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2025 09:45:12.4299
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L/BJPt3cTw7N09gTfDYcFE8a0kkQmznbZtOAoQ0/ctfM30mxifPPG6Q2Z3BZhNZGVEMr8oV6DEPXA4kLJ8o8OA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7878
 
-Hi Pawel,
+On Thu, Feb 27, 2025 at 02:32:35PM +0800, Xu Yang wrote:
+> On Thu, Feb 27, 2025 at 11:15:40AM +0800, Peter Chen wrote:
+> > On 25-02-25 13:39:52, Xu Yang wrote:
+> > > On i.MX95 platform, USB wakeup setting is controlled by HSIO Block
+> > > Control:
+> > > 
+> > > HSIO Block Control Overview:
+> > > - The HSIO block control include configuration and status registers that
+> > >   provide miscellaneous top-level controls for clocking, beat limiter
+> > >   enables, wakeup signal enables and interrupt status for the PCIe and USB
+> > >   interfaces.
+> > > 
+> > > The wakeup function of HSIO blkctl is basically same as non-core, except
+> > > improvements about power lost cases. This will add the wakeup setting for
+> > > HSIO blkctl on i.MX95. It will firstly ioremap hsio blkctl memory, then do
+> > > wakeup setting as needs.
+> > > 
+> > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > 
+> > > ---
+> > > Changes in v2:
+> > >  - add Rb tag
+> > > ---
+> > >  drivers/usb/chipidea/usbmisc_imx.c | 107 +++++++++++++++++++++++++++++
+> > >  1 file changed, 107 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+> > > index 1394881fde5f..f933fc70be66 100644
+> > > --- a/drivers/usb/chipidea/usbmisc_imx.c
+> > > +++ b/drivers/usb/chipidea/usbmisc_imx.c
+> > > @@ -139,6 +139,22 @@
+> > >  #define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKEUP | \
+> > >  				 MX6_BM_ID_WAKEUP | MX6SX_BM_DPDM_WAKEUP_EN)
+> > >  
+> > > +/*
+> > > + * HSIO Block Control Register
+> > > + */
+> > > +
+> > > +#define BLKCTL_USB_WAKEUP_CTRL		0x0
+> > > +#define BLKCTL_OTG_WAKE_ENABLE		BIT(31)
+> > > +#define BLKCTL_OTG_VBUS_SESSVALID	BIT(4)
+> > > +#define BLKCTL_OTG_ID_WAKEUP_EN		BIT(2)
+> > > +#define BLKCTL_OTG_VBUS_WAKEUP_EN	BIT(1)
+> > > +#define BLKCTL_OTG_DPDM_WAKEUP_EN	BIT(0)
+> > > +
+> > > +#define BLKCTL_WAKEUP_SOURCE		(BLKCTL_OTG_WAKE_ENABLE	   | \
+> > > +					 BLKCTL_OTG_ID_WAKEUP_EN   | \
+> > > +					 BLKCTL_OTG_VBUS_WAKEUP_EN | \
+> > > +					 BLKCTL_OTG_DPDM_WAKEUP_EN)
+> > > +
+> > >  struct usbmisc_ops {
+> > >  	/* It's called once when probe a usb device */
+> > >  	int (*init)(struct imx_usbmisc_data *data);
+> > > @@ -159,6 +175,7 @@ struct usbmisc_ops {
+> > >  
+> > >  struct imx_usbmisc {
+> > >  	void __iomem *base;
+> > > +	void __iomem *blkctl;
+> > >  	spinlock_t lock;
+> > >  	const struct usbmisc_ops *ops;
+> > >  };
+> > > @@ -1016,6 +1033,76 @@ static int usbmisc_imx6sx_power_lost_check(struct imx_usbmisc_data *data)
+> > >  		return 0;
+> > >  }
+> > >  
+> > > +static u32 usbmisc_blkctl_wakeup_setting(struct imx_usbmisc_data *data)
+> > > +{
+> > > +	u32 wakeup_setting = BLKCTL_WAKEUP_SOURCE;
+> > > +
+> > > +	if (data->ext_id || data->available_role != USB_DR_MODE_OTG)
+> > > +		wakeup_setting &= ~BLKCTL_OTG_ID_WAKEUP_EN;
+> > > +
+> > > +	if (data->ext_vbus || data->available_role == USB_DR_MODE_HOST)
+> > > +		wakeup_setting &= ~BLKCTL_OTG_VBUS_WAKEUP_EN;
+> > > +
+> > > +	/* Select session valid as VBUS wakeup source */
+> > > +	wakeup_setting |= BLKCTL_OTG_VBUS_SESSVALID;
+> > > +
+> > > +	return wakeup_setting;
+> > > +}
+> > > +
+> > > +static int usbmisc_imx95_set_wakeup(struct imx_usbmisc_data *data, bool enabled)
+> > > +{
+> > > +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> > > +	unsigned long flags;
+> > > +	u32 val;
+> > > +
+> > > +	spin_lock_irqsave(&usbmisc->lock, flags);
+> > > +	val = readl(usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> > > +	val &= ~BLKCTL_WAKEUP_SOURCE;
+> > > +
+> > > +	if (enabled)
+> > > +		val |= usbmisc_blkctl_wakeup_setting(data);
+> > > +
+> > > +	writel(val, usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> > > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int usbmisc_imx95_init(struct imx_usbmisc_data *data)
+> > > +{
+> > > +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> > > +	unsigned long flags;
+> > > +	u32 reg;
+> > > +
+> > > +	if (data->index >= 1)
+> > > +		return -EINVAL;
+> > > +
+> > > +	spin_lock_irqsave(&usbmisc->lock, flags);
+> > > +	reg = readl(usbmisc->base);
+> > > +
+> > > +	if (data->disable_oc) {
+> > > +		reg |= MX6_BM_OVER_CUR_DIS;
+> > > +	} else {
+> > > +		reg &= ~MX6_BM_OVER_CUR_DIS;
+> > > +
+> > > +		if (data->oc_pol_configured && data->oc_pol_active_low)
+> > > +			reg |= MX6_BM_OVER_CUR_POLARITY;
+> > > +		else if (data->oc_pol_configured)
+> > > +			reg &= ~MX6_BM_OVER_CUR_POLARITY;
+> > > +	}
+> > > +
+> > > +	if (data->pwr_pol == 1)
+> > > +		reg |= MX6_BM_PWR_POLARITY;
+> > > +
+> > > +	writel(reg, usbmisc->base);
+> > > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
+> > > +
+> > > +	/* use HSIO blkctl wakeup as source, disable usbmisc setting*/
+> > > +	usbmisc_imx7d_set_wakeup(data, false);
+> > > +
+> > > +	return 0;
+> > > +}
+> > 
+> > Above code has duplicated with some imx7d and imx7ulp init code,
+> > Is it possible abstract some common code for all these three platforms?
+> 
+> Sure. Thanks for your suggestion. I'll do it.
 
-kernel test robot noticed the following build warnings:
+I just double-checked imx95 is totally compatible with imx7d. Therefore,
+usbmisc_imx95_init() is not needed anymore. I'll use usbmisc_imx7d_init()
+for imx95 too. 
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.14-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For duplicated code on some platform's init() function, I may improve them
+later.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak/usb-xhci-lack-of-clearing-xHC-resources/20250226-153837
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/PH7PR07MB95385E2766D01F3741D418ABDDC22%40PH7PR07MB9538.namprd07.prod.outlook.com
-patch subject: [PATCH v2] usb: xhci: lack of clearing xHC resources
-config: i386-buildonly-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271523.jt3l4VVu-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271523.jt3l4VVu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502271523.jt3l4VVu-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/core/hub.c:6084: warning: Function parameter or struct member 'udev' not described in 'hub_hc_release_resources'
->> drivers/usb/core/hub.c:6084: warning: Excess function parameter 'pdev' description in 'hub_hc_release_resources'
-
-
-vim +6084 drivers/usb/core/hub.c
-
-  6067	
-  6068	/**
-  6069	 * hub_hc_release_resources - clear resources used by host controller
-  6070	 * @pdev: pointer to device being released
-  6071	 *
-  6072	 * Context: task context, might sleep
-  6073	 *
-  6074	 * Function releases the host controller resources in correct order before
-  6075	 * making any operation on resuming usb device. The host controller resources
-  6076	 * allocated for devices in tree should be released starting from the last
-  6077	 * usb device in tree toward the root hub. This function is used only during
-  6078	 * resuming device when usb device require reinitialization - that is, when
-  6079	 * flag udev->reset_resume is set.
-  6080	 *
-  6081	 * This call is synchronous, and may not be used in an interrupt context.
-  6082	 */
-  6083	static void hub_hc_release_resources(struct usb_device *udev)
-> 6084	{
-  6085		struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-  6086		struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-  6087		int i;
-  6088	
-  6089		/* Release up resources for all children before this device */
-  6090		for (i = 0; i < udev->maxchild; i++)
-  6091			if (hub->ports[i]->child)
-  6092				hub_hc_release_resources(hub->ports[i]->child);
-  6093	
-  6094		if (hcd->driver->reset_device)
-  6095			hcd->driver->reset_device(hcd, udev);
-  6096	}
-  6097	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Xu Yang
 
