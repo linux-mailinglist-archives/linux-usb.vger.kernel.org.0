@@ -1,654 +1,286 @@
-Return-Path: <linux-usb+bounces-21117-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21118-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EAAFA46FFC
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 01:13:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC6DEA471CE
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 02:56:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25E7E16287E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 00:13:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5C5D3A2269
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 01:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C93414A619;
-	Thu, 27 Feb 2025 00:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD04839F4;
+	Thu, 27 Feb 2025 01:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j3l93BQs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xu7j209p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9358A5A79B
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 00:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E3F374FF
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 01:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740615118; cv=none; b=GOi/o10kv5kYMKZ8Nsat+dwR53lnYLFv6m76LWtdsMXpo5yvCMHqvTCkV0wZTZeioIrAngVf6ziJUf/32z/hC2VQ05z0TzERI0ojLGnsuvD1BTLoenjQKknpSkrzkvBYn8FvcsliLIY/lV2rQ6DiTC8F387Ukzr1yHVJbBydOfA=
+	t=1740621350; cv=none; b=kc4u46Qg0ycAcCcXph45mGkAfhgwUtPFiR/+pvuZ0uyQSdF/7c+mUGc0rl1p1Un1teG/bI1T8sF0uuFHKXplue1I4iEjG6Hv+M53GsueC3z0rKAd0jVSOltsyfjVo9ClsSCBN8OadBTrawIbrJ8lrLoK3R2eVwT1evR7UKK8JkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740615118; c=relaxed/simple;
-	bh=QZCpZlu53quw6nL6TnKxy5fmS1nRzhqSoUP2GUKX9/c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P6JU1jcDP81Q9Mx/KANAU3wCQsi15AgeuMZ175EVdIWj5NLH9Ce2IIHos32PDogXtSx7dj6S4iH1PycrKr3gTTUjqst6/OGDnb+7Hza5MUcQhh/02x7BIs7iPmEWE6yh7OqHL4r8wnkg7Jzl9nlIOnXi1HCFasUg28K2pCw7DHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j3l93BQs; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51QLF6Xb012055
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 00:11:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	7sVaiMs2t/yghLl4ZXum6gfPzebES0AYVlGI7YtV98s=; b=j3l93BQsPmbKgFo8
-	yXqGtSddVGsD3+Stq+UeW0xH4AKzvjwA4bdIfSWE6zbZUL0gwx915eoV2KtYNSuo
-	jXSIl0bkL2+Af50RjhkVJ+DycC/hGN4T7gxs/+FQlnBKeAe4JWVELod8X1+ZtWtI
-	qOZSPYR9aGMIStZh9dIznfdKKcVO0w2CZKKyLdQW8bMRCyj15NBSg32IbzLbE3nR
-	HfHbNtDOcXpQ/2orUSvShYze+OXYE7rdJG9r0Mt93UmJ1jqqAOYEpQO1rw8BRN36
-	JptxV6cGBRO96m/1LucfmdIYqMkaHOG5QXabwHQnxgGNsmyngzN+Pe/03rQfx/pi
-	m/5DIA==
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 451prkbp4g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 00:11:54 +0000 (GMT)
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3f40d3bee5eso456112b6e.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 16:11:54 -0800 (PST)
+	s=arc-20240116; t=1740621350; c=relaxed/simple;
+	bh=DC0eGp9v8d1QZfBU9fMOar1qrRj1i2mRnNeM6GJiBVo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BU8A9IDGicC7rd1VeUcsCW0lSULR35F1ORPI6V4auO4kdvtpG35NhQuDd4hNK2ZbmjS2JBX8vjLMm653CvEWHp+iZSQgI+J6OvGPXXMUtk0WsNDXA249mFCC+SGCUBqJOFxQl4ZnzUMHq2R/HmSJlZfrkOciYERbEhtMRY+XRNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xu7j209p; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6fb9dae0125so4722767b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2025 17:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740621347; x=1741226147; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k7ylmtH1h1K8CyuUFBBRJ+T9/XYWZO25bwG+O3oh1H0=;
+        b=Xu7j209peftU5weHwQO+Mrog9ooBGx8UIogelSH2jhI0RGhBbs3hUOtK+N0EWoklSZ
+         LrjnnO8osBrjd3F6qRP+nfq/FcIiX6dPWLFFcG9F4XT/eMArAmbIKHRkKYqM9ewYvo8l
+         UafmbOzNVXla+MpY8W6kSFFA07JtjPWEO5hbkfz6SYcmKO30L478mecwLLPaBDj4K3A0
+         PekRFJDuh0z+Q6MDvdyB9u79dbxcdBgCtEbUlYXksXu08mV11cpnD9dn4sT+KQpGX8I8
+         YuUvnYN9ogjIzg8ItkIFVUIWk1YJl28MQZouInDDTRNhZNZUen4s3iNP4A1PvvFP6hAr
+         tf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740615113; x=1741219913;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7sVaiMs2t/yghLl4ZXum6gfPzebES0AYVlGI7YtV98s=;
-        b=HZ8SfDMZ82MoU+vKVdUlFBt5SKDYET0Pgmwmx/kwRUxWzniZTgBGPzLoxG98aEgk7X
-         HKD6LyTq5UbcuD4ceSgi12uBixNvhI07yLWaUhB1BWhaNd0BnA9Ng3u7quESRrdury+W
-         ZlWhHxm9Xgl3e7dmokr4teU5wCd7f3vgMLgwdjJmVjXeWwTi7ZdA89q7xj0+irNrnFRp
-         HVgI4A/4sDhgxXt9dB2bS9ygH52g+8uwpksuevIlJ5AR4uy3Xopa7vxRzru7Wvv+q5t9
-         hjdGhKMfc7ZHmyvTtbvdwJQnBQed+XZAuOazbV9HrytvgBX2LKRY3t8oDIfYFW1UT0Tu
-         m4tA==
-X-Forwarded-Encrypted: i=1; AJvYcCUN8eylyhCLNel0e7b2+zDKIuMzFVoMTGBr42sqDcyOl82OtVTjYXX08UHMSwaOJW42cqqvybyZEpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqAFWvuUZIjb/CrToPJrOb9FthQlXwVrh8AwNa50NqDqgs15wu
-	3du51Yw8OmUyp4NBez0IEexzEXAG71MKfHoAJwEeT1Zs468GpkS7MK5y/eEOQc2O0Wh2Q1KOjEA
-	j8IxqcC6pBdYIoBXh7Nsym9t2ctVKuW8cicI46ghtxjN2I4bfY630GO+CEyw=
-X-Gm-Gg: ASbGncu2p4wKA4XgTSq6r0eoVVS4/laNxwJo7RNfPusfzmhAtAiYfz5hoZ1VG+VOzFC
-	unXmgD9pTW5OZSB3NBEqwoDRDfzp/EECNMO6eese4p1iMt84BtTXFAX/wm/cFbEypGFt0nC7O0w
-	ix9twSTsiL4dqb2yZplrcBTWHFfbOc9LXdRFkrm7Jb18isTIv9I/T+kDHgyYMwuvozmJZKFUHJS
-	01y6cXNPkOOcVi340B4RQFq9/g8Rzc8TJpJBe/Fdn7ogfI4hXUxiobS4BZBztJfSZpjzUgw4Tw1
-	3RUYiSZCjyBKH/2tA64KA9fG+WwKKFExATi4FR/QCi0dz0EIAN4sU7DFFQOl2j0RoSZ1VvDBbFP
-	kJmXsLKBSjUb65MM=
-X-Received: by 2002:a05:6808:2f1b:b0:3f4:1d3:b64e with SMTP id 5614622812f47-3f547e3a51cmr3153547b6e.28.1740615113496;
-        Wed, 26 Feb 2025 16:11:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEz12bIBQsr4nK93FSyPKMSCUl2KIJYpv2rvkY4dotioPJA0yGhdMzQznWTdCf6EYAGzyKhQQ==
-X-Received: by 2002:a05:6808:2f1b:b0:3f4:1d3:b64e with SMTP id 5614622812f47-3f547e3a51cmr3153538b6e.28.1740615113147;
-        Wed, 26 Feb 2025 16:11:53 -0800 (PST)
-Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f5507c40c6sm33988b6e.45.2025.02.26.16.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 16:11:52 -0800 (PST)
-From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Date: Wed, 26 Feb 2025 16:17:54 -0800
-Subject: [PATCH v4 7/7] arm64: dts: qcom: sc8280x: Flatten the USB nodes
+        d=1e100.net; s=20230601; t=1740621347; x=1741226147;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k7ylmtH1h1K8CyuUFBBRJ+T9/XYWZO25bwG+O3oh1H0=;
+        b=UeTbS8Y3yT3QLPgMy2JeGvR7MRZ3rOjA5o0+9PeOyOQ/7q2kmGrmQndbBIeR/wRteF
+         O9twfyBYkhwGJAV0z7DnYAku/adLrULSIkY1Jh6gkStQLpTfogcNfXbzQa3aRBd1xEqe
+         vgnkcFQXYtvh6a8RcwtL7RG9JoSQbC4OmBqdtakPqKUcG/Nfralc+KWJvpIa6+D5Fk5k
+         r4dfMrZgX7ZaFCziw1vJCV6neiKaXwzL8SIm6XzJ39pQzaWkpQ0LYIJx3k6UMcBF2Wxb
+         BI3sWgbazX1xSmXs+DQrXsGA+ocprSIWVfEvmz8KcqcL8MZAkoT2QcQI0RBrjoTIrcMy
+         DVVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRF336TKWJDByp0EGEiKVAPVzGLH8VKh+XdDxpGzIsb3cB+n7KN/2oZI6C9VByJLOX5rOtEi15FdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8N/GRar5jcM9PPl80shoAM/dsWEuOL5QyqQ86A0GZuB1WubGx
+	K4mn0vABvJ/Fz7YBHa1elW17IM2SDD3WJCxOflD/TH+CG1Cc+itZjqkEpcfVp05tQE1Ms0yFFOO
+	4zRRl/jxRltY2Fd04tgPRA13YJmhn0voekAyV6A==
+X-Gm-Gg: ASbGnctyyJu1KiYSNGInAbg0eARmnamTVp+DVkJb6TXZUX0arqGHJubFyW0OAQ8RkJF
+	cq4cew118EvGAdUNgYsXaYK6klk2CvzJgTF1ZyIJrVoJbBGxPBC1M+6/KB0AD7EMLSDWftGFp+Q
+	Cuv8boZwQ=
+X-Google-Smtp-Source: AGHT+IHzvdnR1jDhSTQ8qilflEhVDXXhrfQPEbKHX390Tv5HVxnb5kCDP/uDUeA+G1lHLQvrrevPA0tkD3CkUNLb6+w=
+X-Received: by 2002:a0d:e543:0:b0:6fd:2587:cb32 with SMTP id
+ 00721157ae682-6fd2587ce9amr37319607b3.31.1740621347348; Wed, 26 Feb 2025
+ 17:55:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250226-dwc3-refactor-v4-7-4415e7111e49@oss.qualcomm.com>
-References: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
-In-Reply-To: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13628;
- i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
- bh=QZCpZlu53quw6nL6TnKxy5fmS1nRzhqSoUP2GUKX9/c=;
- b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBnv684HKcj/LU0YRimWXlZfb1oENn1uGyR9QiHP
- XsReIu6WwaJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZ7+vOBUcYW5kZXJzc29u
- QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcVggg/9HcXAYm1W+vm4lNilU8Ehnfpa4mENzQW+vaCfJrp
- 3QjWETR5BVYQEDD34Jwi4gn05OeV8r/m4M174d7ZZITe40/q+4LOy3cYOkGWtGimmCJ5R3hiOnf
- caCg1TxsSFiwUbDgJxwFswATsFiRR/D9vOFq2slk6npxEFpBRzQIsyMJAh8YAH8JCpg1KeOFpGt
- dpIkd6guBufBtB5251JjHPBYMOHSILvKFlq5fiBsMSOGCKueC9Rszdll3kEWy6suyDEgEhmzXg0
- n9agYZjKa/qTG/VmfOJZFpBYawTQZZS/5suPBnC5RsEBND9eybeHbSScP8GD7L6PNElNPk5WRbG
- roM/uz9Ua2wiRBSU2liyPiHPLZtDP76nEMOA4lieRJSRk2F1PSdGezK5RHOSRI5fMO4A/xC7AXr
- SZRkQHELwVUQbuSZSRrIQOHvkr3mV79CkSSyyxbfkZ8A3bqQR47d2oyhFOJ16Kf2F5FG8sbkt/1
- oymLVDaejE68XudZqMwv4mUZe40QUls52jcpNbtE3GoHDcPOMIe9wMshFB+cAWPjHljurqIxPI/
- ISy1Tv/wOh/m9kG7/Ar6lDELOeQSNV1fstKbAxMCZXvH1g0ckAQh17KrBtlPLhXrQZKnbCw7dEd
- BX7mTtua7Hs9+m4Pm1ZadQjISFom5xvS+qtQkhTS3fm4=
-X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
- fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
-X-Proofpoint-GUID: W1JuXx3DJkS2qcsEz9NFFEGtzUnOn367
-X-Proofpoint-ORIG-GUID: W1JuXx3DJkS2qcsEz9NFFEGtzUnOn367
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-26_07,2025-02-26_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015 malwarescore=0
- impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502270000
+References: <20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com>
+ <20250113-sm8750_usb_master-v1-5-09afe1dc2524@quicinc.com>
+ <rpwm6gimdb4zyvyusovfbfaw4uxrossm6elayebvt2gusb7zwk@67w7672qpcto> <92b42216-c409-4e21-a33e-54c29fa5f8a0@quicinc.com>
+In-Reply-To: <92b42216-c409-4e21-a33e-54c29fa5f8a0@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Thu, 27 Feb 2025 03:55:36 +0200
+X-Gm-Features: AQ5f1JoWpbR4msT08jh6oiWBnd9arDDGPKh6dQcrHSO5lw25XXPxGsD4vcj6_h4
+Message-ID: <CAA8EJpobfKD=WjapG7Vx0mMFrGYSbadsrsakWs65Lpt43z7wVg@mail.gmail.com>
+Subject: Re: [PATCH 5/7] phy: qcom: Add M31 based eUSB2 PHY driver
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Melody Olvera <quic_molvera@quicinc.com>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Trilok Soni <quic_tsoni@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Transition the three USB controllers found in sc8280xp to the newly
-introduced, flattened representation of the Qualcomm USB block, i.e.
-qcom,snps-dwc3, to show the end result.
+On Wed, 26 Feb 2025 at 22:23, Wesley Cheng <quic_wcheng@quicinc.com> wrote:
+>
+>
+>
+> On 1/14/2025 2:34 AM, Dmitry Baryshkov wrote:
+> > On Mon, Jan 13, 2025 at 01:52:11PM -0800, Melody Olvera wrote:
+> >> From: Wesley Cheng <quic_wcheng@quicinc.com>
+> >>
+> >> On SM8750, the eUSB2 PHY used is M31 based. Add the initialization
+> >> sequences to bring it out of reset, and to initialize the associated eUSB2
+> >> repeater as well.
+> >
+> > What does M31 mean? What is the relationship between the eUSB and USB
+> > M31 PHYs?
+> >
+>
+> M31 is the vendor.  I'll reword this to make it a bit clearer.  There's no
+> relationship between eUSB2 and USB2 PHY drivers, as the eUSB2 based driver
+> would require some additional components such as a USB repeater.
+>
+> >>
+> >> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> >> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> >> ---
+> >>  drivers/phy/qualcomm/Kconfig              |  12 +-
+> >>  drivers/phy/qualcomm/Makefile             |   1 +
+> >>  drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 269 ++++++++++++++++++++++++++++++
+> >>  3 files changed, 281 insertions(+), 1 deletion(-)
+> >
+> > Please run the patch through checkpatch.pl --strict
+> >
+> >>
+> >> diff --git a/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
+> >> new file mode 100644
+> >> index 0000000000000000000000000000000000000000..e15529673e358db914936a60fa605c872cd2511a
+> >> --- /dev/null
+> >> +++ b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
+> >> @@ -0,0 +1,269 @@
+> >> +// SPDX-License-Identifier: GPL-2.0+
+> >> +/*
+> >> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> >> + */
+> >> +
+> >> +#include <linux/clk.h>
+> >> +#include <linux/delay.h>
+> >> +#include <linux/err.h>
+> >> +#include <linux/io.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/of.h>
+> >> +#include <linux/phy/phy.h>
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/reset.h>
+> >> +#include <linux/slab.h>
+> >> +
+> >> +#define USB_PHY_UTMI_CTRL0          (0x3c)
+> >> +
+> >> +#define USB_PHY_UTMI_CTRL5          (0x50)
+> >> +
+> >> +#define USB_PHY_HS_PHY_CTRL_COMMON0 (0x54)
+> >> +#define FSEL                                (0x7 << 4)
+> >
+> > GENMASK()
+> >
+> >> +#define FSEL_38_4_MHZ_VAL           (0x6 << 4)
+> >
+> > FIELD_PREP
+> >
+> >> +
+> >> +#define USB_PHY_HS_PHY_CTRL2                (0x64)
+> >> +
+> >> +#define USB_PHY_CFG0                        (0x94)
+> >> +#define USB_PHY_CFG1                        (0x154)
+> >> +
+> >> +#define USB_PHY_FSEL_SEL            (0xb8)
+> >> +
+> >> +#define USB_PHY_XCFGI_39_32         (0x16c)
+> >> +#define USB_PHY_XCFGI_71_64         (0x17c)
+> >> +#define USB_PHY_XCFGI_31_24         (0x168)
+> >> +#define USB_PHY_XCFGI_7_0           (0x15c)
+> >> +
+> >> +#define M31_EUSB_PHY_INIT_CFG(o, b, v)      \
+> >> +{                           \
+> >> +    .off = o,               \
+> >> +    .mask = b,              \
+> >> +    .val = v,               \
+> >> +}
+> >> +
+> >> +struct m31_phy_tbl_entry {
+> >> +    u32 off;
+> >> +    u32 mask;
+> >> +    u32 val;
+> >> +};
+> >> +
+> >> +struct m31_eusb2_priv_data {
+> >> +    const struct m31_phy_tbl_entry  *setup_seq;
+> >> +    unsigned int                    setup_seq_nregs;
+> >> +    const struct m31_phy_tbl_entry  *override_seq;
+> >> +    unsigned int                    override_seq_nregs;
+> >> +    const struct m31_phy_tbl_entry  *reset_seq;
+> >> +    unsigned int                    reset_seq_nregs;
+> >> +    unsigned int                    fsel;
+> >> +};
+> >> +
+> >> +static const struct m31_phy_tbl_entry m31_eusb2_setup_tbl[] = {
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, BIT(1), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, BIT(1), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG1, BIT(0), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_FSEL_SEL, BIT(0), 1),
+> >> +};
+> >> +
+> >> +static const struct m31_phy_tbl_entry m31_eusb_phy_override_tbl[] = {
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_39_32, GENMASK(3, 2), 0),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_71_64, GENMASK(3, 0), 7),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_31_24, GENMASK(2, 0), 0),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_7_0, GENMASK(1, 0), 0),
+> >> +};
+> >> +
+> >> +static const struct m31_phy_tbl_entry m31_eusb_phy_reset_tbl[] = {
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(3), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(2), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL0, BIT(0), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, BIT(1), 1),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, BIT(2), 0),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, BIT(1), 0),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, BIT(3), 0),
+> >> +    M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, BIT(1), 0),
+> >> +};
+> >> +
+> >> +struct m31eusb2_phy {
+> >> +    struct phy                      *phy;
+> >> +    void __iomem                    *base;
+> >> +    const struct m31_eusb2_priv_data        *data;
+> >> +
+> >> +    struct regulator                *vreg;
+> >> +    struct clk                      *clk;
+> >> +    struct reset_control            *reset;
+> >> +
+> >> +    struct phy *repeater;
+> >> +};
+> >> +
+> >> +static void msm_m31_eusb2_write_readback(void __iomem *base, u32 offset,
+> >> +                                    const u32 mask, u32 val)
+> >> +{
+> >> +    u32 write_val, tmp = readl_relaxed(base + offset);
+> >> +
+> >> +    tmp &= ~mask;
+> >> +    write_val = tmp | val;
+> >> +
+> >> +    writel_relaxed(write_val, base + offset);
+> >> +
+> >> +    tmp = readl_relaxed(base + offset);
+> >> +    tmp &= mask;
+> >> +
+> >> +    if (tmp != val)
+> >> +            pr_err("write: %x to offset: %x FAILED\n", val, offset);
+> >> +}
+> >> +
+> >> +static void m31eusb2_phy_write_sequence(struct m31eusb2_phy *phy,
+> >> +                                    const struct m31_phy_tbl_entry *tbl,
+> >> +                                    int num)
+> >> +{
+> >> +    int i;
+> >> +
+> >> +    for (i = 0 ; i < num; i++, tbl++) {
+> >> +            dev_dbg(&phy->phy->dev, "Offset:%x BitMask:%x Value:%x",
+> >> +                                    tbl->off, tbl->mask, tbl->val);
+> >> +
+> >> +            msm_m31_eusb2_write_readback(phy->base,
+> >> +                                    tbl->off, tbl->mask,
+> >> +                                    tbl->val << __ffs(tbl->mask));
+> >
+> > could you please check, what actually gets written? I suspect there
+> > should be a -1 here.
+> >
+>
+> The __ffs  uses the ctz/ctzl built in, which counts leading zeros, so the
+> -1 should already be accounted for.  FIELD_PREP uses the ffs builtin
+> directly, which would require the -1.  Confirmed that the writes are being
+> done as expected from the programming tables above.
 
-The reg and interrupts properties from the usb child node are merged
-with their counterpart in the outer node, remaining properties and child
-nodes are simply moved.
+Ack, thanks.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts           |  12 +-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |   5 +-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  12 +-
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts      |  10 +-
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |  11 +-
- .../boot/dts/qcom/sc8280xp-microsoft-arcata.dts    |  10 +-
- .../boot/dts/qcom/sc8280xp-microsoft-blackrock.dts |  18 +--
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 157 ++++++++++-----------
- 8 files changed, 95 insertions(+), 140 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-index 2fd1dafe63ce..3d84cbf5af31 100644
---- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-@@ -631,12 +631,10 @@ &ufs_card_phy {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	/* TODO: Define USB-C connector properly */
- 	dr_mode = "peripheral";
-+
-+	status = "okay";
- };
- 
- &usb_0_hsphy {
-@@ -655,12 +653,10 @@ &usb_0_qmpphy {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	/* TODO: Define USB-C connector properly */
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_1_hsphy {
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 177b9dad6ff7..7be803fb7cbe 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -466,11 +466,8 @@ &ufs_mem_phy {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "peripheral";
-+	status = "okay";
- };
- 
- &usb_0_hsphy {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index 75adaa19d1c3..05fe5793f1f1 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -795,11 +795,9 @@ &ufs_mem_phy {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_0_dwc3_hs {
-@@ -832,11 +830,9 @@ &usb_0_qmpphy_out {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_1_dwc3_hs {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-index 09b95f89ee58..300c7dc999a4 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-@@ -997,11 +997,8 @@ bluetooth {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "host";
-+	status = "okay";
- };
- 
- &usb_0_hsphy {
-@@ -1026,11 +1023,8 @@ &usb_0_qmpphy_dp_in {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	dr_mode = "host";
-+	status = "okay";
- };
- 
- &usb_1_hsphy {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index f3190f408f4b..1b9501cc82f4 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -1343,11 +1343,9 @@ bluetooth {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_0_dwc3_hs {
-@@ -1380,11 +1378,8 @@ &usb_0_qmpphy_out {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	dr_mode = "host";
-+	status = "okay";
- };
- 
- &usb_1_dwc3_hs {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-arcata.dts b/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-arcata.dts
-index ae5daeac8fe2..82672f441ea2 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-arcata.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-arcata.dts
-@@ -749,11 +749,8 @@ embedded-controller {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "host";
-+	status = "okay";
- };
- 
- &usb_0_dwc3_hs {
-@@ -786,11 +783,8 @@ &usb_0_qmpphy_out {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	dr_mode = "host";
-+	status = "okay";
- };
- 
- &usb_1_dwc3_hs {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-blackrock.dts b/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-blackrock.dts
-index fa9d94105052..eeb69cfd4422 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-blackrock.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-microsoft-blackrock.dts
-@@ -982,11 +982,9 @@ bluetooth {
- };
- 
- &usb_0 {
--	status = "okay";
--};
--
--&usb_0_dwc3 {
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_0_dwc3_hs {
-@@ -1019,11 +1017,9 @@ &usb_0_qmpphy_out {
- };
- 
- &usb_1 {
--	status = "okay";
--};
--
--&usb_1_dwc3 {
- 	dr_mode = "host";
-+
-+	status = "okay";
- };
- 
- &usb_1_dwc3_hs {
-@@ -1059,12 +1055,10 @@ &usb_2 {
- 	pinctrl-0 = <&usb2_en_state>;
- 	pinctrl-names = "default";
- 
--	status = "okay";
--};
--
--&usb_2_dwc3 {
- 	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
- 	phy-names = "usb2-0", "usb3-0";
-+
-+	status = "okay";
- };
- 
- &usb_2_hsphy0 {
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 01501acb1790..3dea86b0e13d 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -3457,12 +3457,9 @@ system-cache-controller@9200000 {
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		usb_2: usb@a4f8800 {
--			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
--			reg = <0 0x0a4f8800 0 0x400>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
-+		usb_2: usb@a400000 {
-+			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,snps-dwc3";
-+			reg = <0 0x0a400000 0 0x10000>;
- 
- 			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
- 				 <&gcc GCC_USB30_MP_MASTER_CLK>,
-@@ -3480,7 +3477,8 @@ usb_2: usb@a4f8800 {
- 					  <&gcc GCC_USB30_MP_MASTER_CLK>;
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
--			interrupts-extended = <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
-+			interrupts-extended = <&intc GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
-@@ -3499,7 +3497,8 @@ usb_2: usb@a4f8800 {
- 					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
- 
--			interrupt-names = "pwr_event_1", "pwr_event_2",
-+			interrupt-names = "dwc_usb3",
-+					  "pwr_event_1", "pwr_event_2",
- 					  "pwr_event_3", "pwr_event_4",
- 					  "hs_phy_1",	 "hs_phy_2",
- 					  "hs_phy_3",	 "hs_phy_4",
-@@ -3509,6 +3508,7 @@ usb_2: usb@a4f8800 {
- 					  "dp_hs_phy_4", "dm_hs_phy_4",
- 					  "ss_phy_1",	 "ss_phy_2";
- 
-+			iommus = <&apps_smmu 0x800 0x0>;
- 			power-domains = <&gcc USB30_MP_GDSC>;
- 			required-opps = <&rpmhpd_opp_nom>;
- 
-@@ -3518,35 +3518,28 @@ usb_2: usb@a4f8800 {
- 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_MP 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
-+			phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
-+			       <&usb_2_hsphy1>, <&usb_2_qmpphy1>,
-+			       <&usb_2_hsphy2>,
-+			       <&usb_2_hsphy3>;
-+			phy-names = "usb2-0", "usb3-0",
-+				    "usb2-1", "usb3-1",
-+				    "usb2-2",
-+				    "usb2-3";
-+
- 			wakeup-source;
- 
-+			dr_mode = "host";
-+
-+			snps,dis-u1-entry-quirk;
-+			snps,dis-u2-entry-quirk;
-+
- 			status = "disabled";
-+		};
- 
--			usb_2_dwc3: usb@a400000 {
--				compatible = "snps,dwc3";
--				reg = <0 0x0a400000 0 0xcd00>;
--				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
--				iommus = <&apps_smmu 0x800 0x0>;
--				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
--				       <&usb_2_hsphy1>, <&usb_2_qmpphy1>,
--				       <&usb_2_hsphy2>,
--				       <&usb_2_hsphy3>;
--				phy-names = "usb2-0", "usb3-0",
--					    "usb2-1", "usb3-1",
--					    "usb2-2",
--					    "usb2-3";
--				dr_mode = "host";
--				snps,dis-u1-entry-quirk;
--				snps,dis-u2-entry-quirk;
--			};
--		};
--
--		usb_0: usb@a6f8800 {
--			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
--			reg = <0 0x0a6f8800 0 0x400>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
-+		usb_0: usb@a600000 {
-+			compatible = "qcom,sc8280xp-dwc3", "qcom,snps-dwc3";
-+			reg = <0 0x0a600000 0 0x20000>;
- 
- 			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
- 				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-@@ -3564,17 +3557,20 @@ usb_0: usb@a6f8800 {
- 					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
--			interrupts-extended = <&intc GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
-+			interrupts-extended = <&intc GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&intc GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
- 					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
- 					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "pwr_event",
-+			interrupt-names = "dwc_usb3",
-+					  "pwr_event",
- 					  "hs_phy_irq",
- 					  "dp_hs_phy_irq",
- 					  "dm_hs_phy_irq",
- 					  "ss_phy_irq";
- 
-+			iommus = <&apps_smmu 0x820 0x0>;
- 			power-domains = <&gcc USB30_PRIM_GDSC>;
- 			required-opps = <&rpmhpd_opp_nom>;
- 
-@@ -3584,45 +3580,40 @@ usb_0: usb@a6f8800 {
- 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
-+			phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
-+			phy-names = "usb2-phy", "usb3-phy";
-+
- 			wakeup-source;
- 
--			status = "disabled";
-+			snps,dis-u1-entry-quirk;
-+			snps,dis-u2-entry-quirk;
- 
--			usb_0_dwc3: usb@a600000 {
--				compatible = "snps,dwc3";
--				reg = <0 0x0a600000 0 0xcd00>;
--				interrupts = <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>;
--				iommus = <&apps_smmu 0x820 0x0>;
--				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
--				phy-names = "usb2-phy", "usb3-phy";
--				snps,dis-u1-entry-quirk;
--				snps,dis-u2-entry-quirk;
-+			status = "disabled";
- 
--				ports {
--					#address-cells = <1>;
--					#size-cells = <0>;
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 
--					port@0 {
--						reg = <0>;
-+				port@0 {
-+					reg = <0>;
- 
--						usb_0_dwc3_hs: endpoint {
--						};
-+					usb_0_dwc3_hs: endpoint {
- 					};
-+				};
- 
--					port@1 {
--						reg = <1>;
-+				port@1 {
-+					reg = <1>;
- 
--						usb_0_dwc3_ss: endpoint {
--							remote-endpoint = <&usb_0_qmpphy_usb_ss_in>;
--						};
-+					usb_0_dwc3_ss: endpoint {
-+						remote-endpoint = <&usb_0_qmpphy_usb_ss_in>;
- 					};
- 				};
- 			};
- 		};
- 
--		usb_1: usb@a8f8800 {
--			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
--			reg = <0 0x0a8f8800 0 0x400>;
-+		usb_1: usb@a800000 {
-+			compatible = "qcom,sc8280xp-dwc3", "qcom,snps-dwc3";
-+			reg = <0 0x0a800000 0 0x10000>;
- 			#address-cells = <2>;
- 			#size-cells = <2>;
- 			ranges;
-@@ -3643,17 +3634,20 @@ usb_1: usb@a8f8800 {
- 					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
--			interrupts-extended = <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
-+			interrupts-extended = <&intc GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&intc GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
- 					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
- 					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "pwr_event",
-+			interrupt-names = "dwc_usb3",
-+					  "pwr_event",
- 					  "hs_phy_irq",
- 					  "dp_hs_phy_irq",
- 					  "dm_hs_phy_irq",
- 					  "ss_phy_irq";
- 
-+			iommus = <&apps_smmu 0x860 0x0>;
- 			power-domains = <&gcc USB30_SEC_GDSC>;
- 			required-opps = <&rpmhpd_opp_nom>;
- 
-@@ -3663,37 +3657,32 @@ usb_1: usb@a8f8800 {
- 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
-+			phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
-+			phy-names = "usb2-phy", "usb3-phy";
-+
- 			wakeup-source;
- 
--			status = "disabled";
-+			snps,dis-u1-entry-quirk;
-+			snps,dis-u2-entry-quirk;
- 
--			usb_1_dwc3: usb@a800000 {
--				compatible = "snps,dwc3";
--				reg = <0 0x0a800000 0 0xcd00>;
--				interrupts = <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>;
--				iommus = <&apps_smmu 0x860 0x0>;
--				phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
--				phy-names = "usb2-phy", "usb3-phy";
--				snps,dis-u1-entry-quirk;
--				snps,dis-u2-entry-quirk;
-+			status = "disabled";
- 
--				ports {
--					#address-cells = <1>;
--					#size-cells = <0>;
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 
--					port@0 {
--						reg = <0>;
-+				port@0 {
-+					reg = <0>;
- 
--						usb_1_dwc3_hs: endpoint {
--						};
-+					usb_1_dwc3_hs: endpoint {
- 					};
-+				};
- 
--					port@1 {
--						reg = <1>;
-+				port@1 {
-+					reg = <1>;
- 
--						usb_1_dwc3_ss: endpoint {
--							remote-endpoint = <&usb_1_qmpphy_usb_ss_in>;
--						};
-+					usb_1_dwc3_ss: endpoint {
-+						remote-endpoint = <&usb_1_qmpphy_usb_ss_in>;
- 					};
- 				};
- 			};
 
 -- 
-2.45.2
-
+With best wishes
+Dmitry
 
