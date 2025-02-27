@@ -1,132 +1,107 @@
-Return-Path: <linux-usb+bounces-21169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21170-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016B2A4892E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 20:46:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C691A48994
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 21:11:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E245A7A68FD
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 19:45:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 433BF16DD2B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 20:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F51226E96A;
-	Thu, 27 Feb 2025 19:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D18C26FA6F;
+	Thu, 27 Feb 2025 20:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NEuqgdWk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMNSlluZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CD61B0425;
-	Thu, 27 Feb 2025 19:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD23B26F46E;
+	Thu, 27 Feb 2025 20:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740685550; cv=none; b=VuhBSY2Qk+Xq1E5qpKujChGXJVFA2UBLs3AxuFpEjT1AN3mKEvuJQrohtWRr4HcV7NyH5uDqAejQKiPjrHTJc6tSyyvAxZq7MttG8ZVEvXqEvKriQSCtoIWWijlnna5mFMiSQh8ppqw9Sp92oxHG4DDVyHcJHujhC5Bg2kQDoPI=
+	t=1740687089; cv=none; b=fq4O3e5VQ+73VJ4ULXWqO5DLf3ifgQLj9cW1roCWVvJi90NoUKKYij/h0Vy6z2XlCPPA3UCRxJ9vkv2S3F16838GMhz5MBhMjYJL7BTzkHza+S80Q9PcPD9QZhMs3iz9ixdEW9piTMGDcGC5eWKpNcilSR/HikeXof4HgK9gzlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740685550; c=relaxed/simple;
-	bh=ZXCrKOq4STAxpn0LbqL3XX+FU8M05shAqCoEyXVf51c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=abmkYW0EewewGQJlbUNZHvclXhmTsSaDBfzLXybCSNArrUSMO27Xp+D+k2rwp6d57g/gj7L1yZJjpUdaEQb20EYwsiCcy8VfP16uq4T1xVbiTUXnZ1Bv2fJAZBwgRgCGOn5cQ8deQbbvLHNYT7EqQijspAkrU0aoHSAphIaH13A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NEuqgdWk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14510C4FF0C;
-	Thu, 27 Feb 2025 19:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740685550;
-	bh=ZXCrKOq4STAxpn0LbqL3XX+FU8M05shAqCoEyXVf51c=;
-	h=From:To:Cc:Subject:Date:From;
-	b=NEuqgdWkYFoBCCqxldonqLYcPxKv9sZv8t8kW4ywOwltwMJwLwDUuOdWpYMiTmGAY
-	 76pN2jBy4lwiRma0WXn2O4u7Su5hVJ2g8VFnmeQgUYOBj3f0RcH+Zl2OLalokyvcMS
-	 V39hJFKeJi98vs2l3e49Dk2AQTcgMHXVC0vw4oORGEwwrvcO1uFeubVG+gIFx1LZst
-	 9IC/K+5QkL6SSZtmcyuz2KAg69DYT5d+MKWVnAemN+cek9l4SG0SEql5zrwWivciPx
-	 qVaH3gcX0BS+X7di5rWVjIOfjmVJ1VyQI7dQ5lSdZeAYxgNhBAv0pXMkXlIfIm3Abh
-	 Y7AwH0ik/OPxg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tnjpL-008o1r-S4;
-	Thu, 27 Feb 2025 19:45:47 +0000
-From: Marc Zyngier <maz@kernel.org>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] xhci: Restrict USB4 tunnel detection for USB3 devices to Intel hosts
-Date: Thu, 27 Feb 2025 19:45:29 +0000
-Message-Id: <20250227194529.2288718-1-maz@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1740687089; c=relaxed/simple;
+	bh=DnWd/E0xczaoDEIgI+I55eU7RCGoOyvxz0buRmpQb9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a71IE9VjH5YufBMon1RsSYx1aEes9cBRdjS2cTEeApMFP/NLTdOn6tpIjligq9atn6uXj8Wy2xt5XKKDGf0h1pv+MVfDasvccxflvl9v8EL+y17FhTpaKPEdkII3y1E31XMXEolM0nDyMjcuvLPs9TsxSGUpFCqKvG3FgLWOEao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YMNSlluZ; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2f9d3d0f55dso2353853a91.1;
+        Thu, 27 Feb 2025 12:11:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740687087; x=1741291887; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RtRBTV9UKR+OGw3dJKUiMPVCp52egxrnRethKoRX62Q=;
+        b=YMNSlluZh6p0FYvrcqOHoPd28capt7PhPP5iyJF+Wwm/E0WqVmOV/gURpOtGcRG6R8
+         grH2mY0qsWTgCnNUE0gM9q5H2dbV7LxiX+7OtuTvmCldp0F/XwnyF8+j2z6aDRkCiKZ6
+         L97X39D8Yn7+TkmWVg9F6iAiCSFPeYok0HAxl++OkXHvMocKkLntBtY3BkhGub6wOPOn
+         EY6Q0xA7WNMIaJgKjd6SukXayb9r9IYfoOkMgG9oe/JJDvtc/Gi4uepJPHhI3m0BEiZZ
+         R4dUfWGVNpfgs8mHkxOckBqYG2ogey+4oABkQVylmxGNtdAcXNGG/7o1ESd7ZKfHo65H
+         zdnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740687087; x=1741291887;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RtRBTV9UKR+OGw3dJKUiMPVCp52egxrnRethKoRX62Q=;
+        b=Li/p0wHlDiCopPMXRTFKEomleisJZ+wCv1Q6TLFgmci0RU4HWZdQeAu6bnAqy1Gep5
+         bnlWuILR/MtHPq7WcGU9M1iY/4NiDNugQ22YU/4BRhbdZA0lTqVwwDhnobXANlK9wFhN
+         VmgdAKIgaMOLBZaicQcFW0zxfBfQ+3/rmRnjA8AuguL6BRsULz9rKygGye1H2pi+GP7g
+         DMcxAY3EnZGljk1TSOFzvlKU/FxIpy0xL+tZ2QXQhij8nu2IIoeLIxScVGiSLSNr6dSs
+         2lDLlfqeCOfQnKsOGuJga97naFjX/RD2///hbtFaOk4inQdYBeG79n4kBiDY3hnRX1Ax
+         bOdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWfIdG+fwTLyI0kcMleBxc6iW0M63+SYKf70ZYhRXfyaZcVY0Q5xGzwP/f+b+oBsk2U8D3s26wgsj53@vger.kernel.org, AJvYcCXDeP0g2YV6PQEU01TUi8gKgasArikzW5UR+Tp74guYAHLqR0qdB2hv5YmamRzuOJE182Y3N0RQ34foI4k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaUQwSVFEZMdGWjrYNFlw4xLRSY3nlyZXSYtcP3i7Aq5rzhLKs
+	74C22dkEGgUMHRqjamC2id5zA8dcAcm1gpF8xCpz6UcKJSsNKKH5
+X-Gm-Gg: ASbGncuYAGwBe8nlVCtObg0MEe8icP06N2MWpLsoI3HduflLjSB7m3eg1K6pInN2ywm
+	5HR0mWG7944QmlP5bEITsukRpM9WDZh6cIN6fUsJNhCiEs0sIXwzSwRzE7b5J2uH9ahtRgY2Bup
+	4Lly0+5AbNcojP1J8V2CMuiPJyZiK+KsQDa/kai1F/HEgAIHvDbgH/GSjvpW7RVGRv1Ob6Pi8xu
+	MxlM/SdFkrYAZyYaC1+bhGuFp8VM1rFiibSuw11Wa5Ph194YjyhWOUuqYyzVk30pB43ACuejxcF
+	oz6EqZBngiSG7rUnkAPJen36KI0e3v/dpQ==
+X-Google-Smtp-Source: AGHT+IF3ctquER88QUePhseS75+E0p/QHwJwJmAEL1HQNd2e5ZIyU0Ayi2LIjBjv8ihie8XLSXm58Q==
+X-Received: by 2002:a17:90a:d605:b0:2ee:bbe0:98c6 with SMTP id 98e67ed59e1d1-2febab56ffemr964338a91.8.1740687086863;
+        Thu, 27 Feb 2025 12:11:26 -0800 (PST)
+Received: from embed-PC ([2401:4900:1cb5:84b:96dd:21a7:7ff3:7964])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7349fe4cd89sm2195510b3a.66.2025.02.27.12.11.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 12:11:26 -0800 (PST)
+Date: Fri, 28 Feb 2025 01:41:20 +0530
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dan.carpenter@linaro.org
+Subject: Re: [PATCH] xhci: Fix bcdUSB initialization
+Message-ID: <Z8DG6A76HFWs3hlD@embed-PC>
+References: <20250227193400.109593-1-abhishektamboli9@gmail.com>
+ <2025022757-extrude-carpenter-5bec@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, oliver.upton@linux.dev, mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org, stable@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025022757-extrude-carpenter-5bec@gregkh>
 
-When adding support for USB3-over-USB4 tunnelling detection, a check
-for an Intel-specific capability was added. This capability, which
-goes by ID 206, is used without any check that we are actually
-dealing with an Intel host.
+Hi Greg,
+Thanks for the review.
+> On Fri, Feb 28, 2025 at 01:04:00AM +0530, Abhishek Tamboli wrote:
+> > Initialize bcdUSB to 0 to prevent undefined behaviour
+> > if accessed without being explicitly set.
+> 
+> Is it actually accessed without being set?  If so, please explain it and
+> also how the compiler is somehow missing this already?
+I added bcdUSB = 0 based on a Smatch warning about potential uninitialized access. 
+However, given that bcdUSB is always set in the first loop iteration, 
+this might be a false positive.
 
-As it turns out, the Cadence XHCI controller *also* exposes an
-extended capability numbered 206 (for unknown purposes), but of
-course doesn't have the Intel-specific registers that the tunnelling
-code is trying to access. Fun follows.
-
-The core of the problems is that the tunnelling code blindly uses
-vendor-specific capabilities without any check (the Intel-provided
-documentation I have at hand indicates that 192-255 are indeed
-vendor-specific).
-
-Restrict the detection code to Intel HW for real, preventing any
-further explosion on my (non-Intel) HW.
-
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org
-Fixes: 948ce83fbb7df ("xhci: Add USB4 tunnel detection for USB3 devices on Intel hosts")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/usb/host/xhci-hub.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 9693464c05204..69c278b64084b 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -12,6 +12,7 @@
- #include <linux/slab.h>
- #include <linux/unaligned.h>
- #include <linux/bitfield.h>
-+#include <linux/pci.h>
- 
- #include "xhci.h"
- #include "xhci-trace.h"
-@@ -770,9 +771,16 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
- enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
- 						struct xhci_port *port)
- {
-+	struct usb_hcd *hcd;
- 	void __iomem *base;
- 	u32 offset;
- 
-+	/* Don't try and probe this capability for non-Intel hosts */
-+	hcd = xhci_to_hcd(xhci);
-+	if (!dev_is_pci(hcd->self.controller) ||
-+	    to_pci_dev(hcd->self.controller)->vendor != PCI_VENDOR_ID_INTEL)
-+		return USB_LINK_UNKNOWN;
-+
- 	base = &xhci->cap_regs->hc_capbase;
- 	offset = xhci_find_next_ext_cap(base, 0, XHCI_EXT_CAPS_INTEL_SPR_SHADOW);
- 
--- 
-2.39.2
-
+Regards,
+Abhishek
 
