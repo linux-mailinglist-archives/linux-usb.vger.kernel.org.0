@@ -1,159 +1,120 @@
-Return-Path: <linux-usb+bounces-21175-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21176-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BC34A48ABB
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 22:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE38A48B73
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 23:25:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15B1C16B184
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 21:44:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94ECF16D0A9
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 22:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A81F27128C;
-	Thu, 27 Feb 2025 21:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6BA23E35C;
+	Thu, 27 Feb 2025 22:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cBdxJtgH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GSr5EiiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46C427127A
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 21:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0F723E34E
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 22:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740692661; cv=none; b=tu9vj3Z2eYwiz/udj7LGYU9qRko3aoYqzILcPqqtmLQq5gwCCOA2dn1VV2iltjaHAwrQNPyvCd17AnB7vINp5pSdVgPiiV2PcOt3LgBJMU6SnQCQXuAj4FpcWPnu6oRzAaqLwP2W66PocU5L4XpwOWNYz6tQqd+ixSGAwBxMGEg=
+	t=1740695009; cv=none; b=NDPfJCBLHpVf9I6XTBBlsRajnNX1HR6pFdNeBsR9iLfZrGevJdEDFjs7rAJIh428S7E887gkzeybR5RU7j14Kcxf8HRrX53yQMe41Z6OQW62rT5YCCR/XjclSf/Y7u8BwBFfjzI5CHGm1qoAlZ6ZRMhDTqnbUkR4sXqW+tGXy6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740692661; c=relaxed/simple;
-	bh=zhary5ZcaWw3wa6GpcmY+2q6nb98UXLVXCIn9OpXRU8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NyDVbLMr8We5BhV4+UzmfeTrAF4Z2U2a8acdqDFrs6dSJ/xUKOMkhoTK8zGL0FKIwuepKr/uUY6/Ni/fLa2KHYk+QnBu7ImckA5tXIaZNBUVhyZ/PSJU515x1Ts2oG0912oC8/UZrKwQpEfFUXneBLlcL/UGtwFXxG3Hlvs8nrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cBdxJtgH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F3C3C4CEE7
-	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 21:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740692660;
-	bh=zhary5ZcaWw3wa6GpcmY+2q6nb98UXLVXCIn9OpXRU8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=cBdxJtgHVAZOjndkOR+q9RBF75qGmqY5g9pcW/GQsQfdcw6mHlf2KGPzAKYAMJQpB
-	 agzxBUZGLZ05/Qa5SfgO9qLkTSKIjUochtQrcjv4E2oDhoGMOKofzqe2nMDU5rqB97
-	 E63NLUkE3K/jqAT/6iWn3dkHU8GjkIbB8qNJpZPOMFR9akyiSCA3Q5p81zhtzlDEvt
-	 q+to0p25/DGkyb10lyFt9vBr8qFpt1RUkr+qJQ0HnIInjv4hTrEyMfTHkrrSGRsnJ5
-	 jrs91h11B7xeNMz7q8u6dTDv0JILwJPt8ZmqcHE3ZP5xgl5LR22H/LCmgJ3RTuuDFv
-	 6x88LQmqgP0zw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 230F1C53BC5; Thu, 27 Feb 2025 21:44:20 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218695] Datadump for error `ERROR Transfer event TRB DMA ptr
- not part of current TD ep_index 1 comp_code 1`
-Date: Thu, 27 Feb 2025 21:44:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218695-208809-5u31g9WhDl@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218695-208809@https.bugzilla.kernel.org/>
-References: <bug-218695-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1740695009; c=relaxed/simple;
+	bh=0YNPSWTQpWa/D7GXeK/2uRq3i3eL4O93TsB5Vt1ZrbI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H1iDWbNawIYLDeXBO5ngpOeCjuHa+4uQZ/WYas4wI6u4bYIhTbN47yx/YE75JOIqy966xBCoSPPJHs1RqOXC+6afl1cSAWuYDeBrJQbVPXfgLdt9PBCJgD68Su7UAvNgNmVJjoZNkBZhM0AlFgN69v82KT0eLBvQS8yfHqd0rpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GSr5EiiN; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3cfc8772469so6139205ab.3
+        for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 14:23:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1740695007; x=1741299807; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WZGLdBAP4UrHwr4pwKCt5KapJuR+y6gbHDi1DCQWdcY=;
+        b=GSr5EiiNc3IGIsq3xZaFvkHePID4hJpiDago/iR6MeyJvY+CnPwDhksatyKDzQiaVj
+         +KtedjqXogUOS0ascY4nL/RBd/1yscrGPVrlbxZ36OEt/kHMannHfGFFexjVfHGBUw4e
+         uPLYDqgNKNyppEzSuc1bKjCH7e0VKeyA2gupc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740695007; x=1741299807;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WZGLdBAP4UrHwr4pwKCt5KapJuR+y6gbHDi1DCQWdcY=;
+        b=G/z+fNyYMkQGxQsFML0mkEABsbknE9nc3gTiAaoj0T9fXOEvQ9MuJnd1bhRSOZ0GSU
+         1UhonqoBqyOJyMawoexrQvvOUS8JmLhjSNrSkn7ktwR9YPtR9+oSmvmr/o7sl1aR5dxW
+         36ewQrjS2IlgRnrtM/G0MW8pz2h3bc3e4I8770IfC9YrcNfYV2T7W1ePiRxbveWTAN7S
+         w2623h4g2EocshhYCoQ46hhJ44tyM/ZmxtiNqPat/AUHFJjObhsN4+dz/zU014gh39dx
+         mpM0AocXjkkIpRIH0Umu7qos79qaltFiPeSJK3JsuBYvOWVvuqyKkdomHcoieFnBQYQr
+         6Qlw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6mkJY/lN0UZ8K5T/UkU/m97YFikPJGz7lwOnuzRx7TLXgYmaNOr0EhyDgmBbiRr3J8tqiKvYX/ck=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeehmKgDjyh7io5/IRqYpTeL13O5QRdBgO7RjQ9TzEHrTCQkSf
+	TCX+gwNDMmwefp5oufD0yM5+440iTYTUUgZAlCC5T6NogSRtaICe1ix6tdiafF/nNxd4Dr5U88U
+	2
+X-Gm-Gg: ASbGncvhj2Piu2kx45hR1nDbeBCgCjSsDNWIitIlCaXB1wopFLexEJ+FbGzwnY3oeIW
+	g0SKrXXmwB2bqiLl6IMNu7XTuldn8pbrPHJLCGni1Q2SjEvLhmOAVzcwqh/L1KaIO9wQ8vlxY3w
+	BhIIGXJGDkCu8dCQF2lKtYhoyfoy79G9Jmz28zp55f2Bg/0+dLBRLRrUxpLtETa0mpLjTytdT3E
+	EG9tLIlEcnIUwULiheuFbJgef3DR4cZfycZGXjzVVOX2hRC5rT53vQho8Jyn9npfdBxRaHE3YoI
+	d6rnY4pECwMlR/aPjIQEvWYqEM/bxv2mkscW
+X-Google-Smtp-Source: AGHT+IEKZr3NGXPy1Tv5y66C8yGg4ClACZyJG7v4CYzLbHYBMX19ZoriO50XGMis7tUv/ZwDiVzyTQ==
+X-Received: by 2002:a05:6e02:184a:b0:3d3:dd32:73d5 with SMTP id e9e14a558f8ab-3d3e6e23403mr11186115ab.4.1740695006941;
+        Thu, 27 Feb 2025 14:23:26 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d3deee5d4fsm5165025ab.62.2025.02.27.14.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 14:23:26 -0800 (PST)
+Message-ID: <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
+Date: Thu, 27 Feb 2025 15:23:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
+ usbip device
+To: Zongmin Zhou <min_halo@163.com>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250219092555.112631-1-min_halo@163.com>
+ <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
+ <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218695
+On 2/24/25 01:36, Zongmin Zhou wrote:
+> Dear Shuah,
+> 
+> 
+> Yes，the usbip server get the real USB controller message send to usbip client vhci-hcd，
+> 
+> must have to changethe API between the kernel and user-space.
+> 
+> The easiest way is to simply set vhci-hcd dma mask to 64 by default,
+> 
+> but not all USB controllers support 64bit，That doesn't look good？
 
---- Comment #4 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
- ---
-Today, this also happened disconnecting a Logitech Logitech G430 Gaming
-Headset.
+This is an expetnsive change to fix the problem. In addition this change
+is unnecessary for non-storage devices where USB over IP is used.
+You mentioned this happens only in swiotlb cases? Can you explain the
+configuration on host and client side.
 
-```
-Feb 27 09:08:49 abreu kernel: Linux version 6.14.0-rc4-00052-gac9c34d1e45a
-(build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-17) 14.2.0, GNU =
-ld
-(GNU Binutils for Debian) 2.44) #93 SMP PREEMPT_DYNAMIC Wed Feb 26 08:31:56=
- CET
-2025
-Feb 27 09:08:49 abreu kernel: Command line:
-BOOT_IMAGE=3D/vmlinuz-6.14.0-rc4-00052-gac9c34d1e45a
-root=3DUUID=3D32e29882-d94d-4a92-9ee4-4d03002bfa29 ro quiet pci=3Dnoaer
-mem_sleep_default=3Ddeep log_buf_len=3D8M cryptomgr.notests
-[=E2=80=A6]
-Feb 27 09:08:49 abreu kernel: DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0
-06/02/2022
-[=E2=80=A6]
-Feb 27 11:40:59 abreu kernel: usb 1-2: USB disconnect, device number 6
-Feb 27 11:41:15 abreu kernel: usb 1-2: new full-speed USB device number 7 u=
-sing
-xhci_hcd
-Feb 27 11:41:15 abreu kernel: usb 1-2: New USB device found, idVendor=3D046=
-d,
-idProduct=3D0a4d, bcdDevice=3D 1.19
-Feb 27 11:41:16 abreu kernel: usb 1-2: New USB device strings: Mfr=3D1,
-Product=3D2, SerialNumber=3D0
-Feb 27 11:41:16 abreu kernel: usb 1-2: Product: Logitech G430 Gaming Headset
-Feb 27 11:41:16 abreu kernel: usb 1-2: Manufacturer: Logitech
-Feb 27 11:41:16 abreu kernel: input: Logitech Logitech G430 Gaming Headset =
-as
-/devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.3/0003:046D:0A4D.0005/input=
-/input45
-Feb 27 11:41:16 abreu kernel: hid-generic 0003:046D:0A4D.0005: input,hidraw=
-2:
-USB HID v1.00 Device [Logitech Logitech G430 Gaming Headset] on
-usb-0000:00:14.0-2/input3
-Feb 27 12:11:13 abreu kernel: uvcvideo 1-5:1.1: Failed to resubmit video URB
-(-1).
-Feb 27 12:18:07 abreu kernel: usb 1-2: USB disconnect, device number 7
-Feb 27 12:18:07 abreu kernel: xhci_hcd 0000:00:14.0: ERROR Transfer event T=
-RB
-DMA ptr not part of current TD ep_index 1 comp_code 1
-Feb 27 12:18:07 abreu kernel: xhci_hcd 0000:00:14.0: Looking for event-dma
-00000003fd5a5710 trb-start 00000003fd5a5720 trb-end 00000003fd5a5720 seg-st=
-art
-00000003fd5a5000 seg-end 00000003fd5a5ff0
-Feb 27 12:18:13 abreu kernel: usb 1-2: new full-speed USB device number 8 u=
-sing
-xhci_hcd
-Feb 27 12:18:13 abreu kernel: usb 1-2: New USB device found, idVendor=3D046=
-d,
-idProduct=3D0a4d, bcdDevice=3D 1.19
-Feb 27 12:18:13 abreu kernel: usb 1-2: New USB device strings: Mfr=3D1,
-Product=3D2, SerialNumber=3D0
-Feb 27 12:18:13 abreu kernel: usb 1-2: Product: Logitech G430 Gaming Headset
-Feb 27 12:18:13 abreu kernel: usb 1-2: Manufacturer: Logitech
-Feb 27 12:18:13 abreu kernel: input: Logitech Logitech G430 Gaming Headset =
-as
-/devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.3/0003:046D:0A4D.0006/input=
-/input46
-Feb 27 12:18:13 abreu kernel: hid-generic 0003:046D:0A4D.0006: input,hidraw=
-2:
-USB HID v1.00 Device [Logitech Logitech G430 Gaming Headset] on
-usb-0000:00:14.0-2/input3
-Feb 27 12:42:09 abreu kernel: usb 1-2: USB disconnect, device number 8
-Feb 27 12:48:29 abreu kernel: r8152 4-1.1.3:1.0 enx00e04cf4ead4: carrier off
-Feb 27 12:48:29 abreu kernel: PM: suspend entry (deep)
-```
+I would like to explore fixes that are simpler than what is proposed
+in this patch.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+thanks,
+-- Shuah
 
