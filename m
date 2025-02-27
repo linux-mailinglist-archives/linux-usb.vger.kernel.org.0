@@ -1,148 +1,171 @@
-Return-Path: <linux-usb+bounces-21142-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21143-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4DE9A47CAA
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 12:55:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF5D2A47D04
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 13:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A59867A30FA
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 11:54:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73333188E9E0
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 12:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF6B22D4ED;
-	Thu, 27 Feb 2025 11:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E211222D7B1;
+	Thu, 27 Feb 2025 12:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="e+iDDjl/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i1z+dFJk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m1973187.qiye.163.com (mail-m1973187.qiye.163.com [220.197.31.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CE622B8A5;
-	Thu, 27 Feb 2025 11:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF14B22D4E4;
+	Thu, 27 Feb 2025 12:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740657309; cv=none; b=JCWGYuAjnVRu9TarRNKtTS05aFmnDWNFJUqjhIxh+Zo132kVi2ZfY4xuzsn+62B9qhrTgFExfxNKhuW4BXRJ1EjKFjKYSzz754Dn3eqjjsHV/vv2pYetM354w13/dgBmGIkzqHmk9g3gEc5GDNgfWL2JeocausVvzKSC7pk9YOY=
+	t=1740658148; cv=none; b=iS0fdqkQQ0jIx5/lVkMeDSFQKUcFM2cclrJR10zbl0d2mPSvWXY9cifGsCkYr6W0LSxQEj/mrV4x22HexBn+p4Eb5kKgaXR/NMIWcfTT3EYbxQYTsELW/b278rldPpYNpw7Qc2xykEL6lmmwymacXJqNNKsnUViNqLysYOOirWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740657309; c=relaxed/simple;
-	bh=+t8rTNducXDOmIEk+muLa7BrvKIgO1U0U3OhHhJ151U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i5xYJpyy8mDG8WKwgGBgyd1JDwgylXX9aacdm7NEbf/7XhDrx+vafB/VXi9F+TLjQqDbLUFIzVpyecpQ/36BB+yurLWQ1Tg40lAaS0TgEROzR54NMphiMAvtnFeN2tCYivVThU/1hRs9G665dv7BF8ul0QgCk0HxqHGRKl9+7HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=e+iDDjl/; arc=none smtp.client-ip=220.197.31.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id c65f97e6;
-	Thu, 27 Feb 2025 19:19:34 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Kever Yang <kever.yang@rock-chips.com>,
-	devicetree@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 09/15] dt-bindings: usb: dwc3: Add support for rk3562
-Date: Thu, 27 Feb 2025 19:19:07 +0800
-Message-Id: <20250227111913.2344207-10-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250227111913.2344207-1-kever.yang@rock-chips.com>
-References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+	s=arc-20240116; t=1740658148; c=relaxed/simple;
+	bh=iw6gpxgNgCBOUaRo1oW1+W4WQuHahR7DBounBYF4vHc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Qz/RDyAeFe24VZuD9cFfTHHcau6Z72w9M0KRRxPJIF3j8lfv3FWP4hU8BTDKrMu68FW2MsJZgIY7cE0aE5a63/ws0yoP43QZvpzqHznyiMZKVygvlgv9eKsUEp+OtBpfNn3pZo1kHNxzwP0GD3TGA9BY+ZramOwJEYlxL/vhnfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i1z+dFJk; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740658147; x=1772194147;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iw6gpxgNgCBOUaRo1oW1+W4WQuHahR7DBounBYF4vHc=;
+  b=i1z+dFJkNMbp2dMKrC/8cQ8AxBwOid9YxSQo9TbLyZzmpkQg1LL4tInV
+   C807tczT4OIodgvBeNwYYdekW5MVKGRIVjnHWo39p8a17T/XHu7MEd24d
+   ZyEr44Xzabc/YlKIuvONUgOTYqhR19BXiiz38MHFg0hCH2FhM3ExgyOJg
+   r6sru+/QMmt63PE5C5YHLfB/e1mtSu1uvDttmTY7mA1lo0ykfdswu81f0
+   CNaqcqiUKswdinP3Ifk6qaHOXVbqJ3PFm34K/MGUNrgY8LHA+Pfb+5YbX
+   GccBZ88wMaUpNUT/gNf4cWhWUEKoDZxxwWGlNB30NrTcPKAtQIq8gE+3I
+   g==;
+X-CSE-ConnectionGUID: 2u07U76hTp6CoUNCIdCQog==
+X-CSE-MsgGUID: xNt9RaO0QyOODRYBV4EmKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41670733"
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="41670733"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 04:09:05 -0800
+X-CSE-ConnectionGUID: gWMO6CD3SEmDG5AGc8J93w==
+X-CSE-MsgGUID: 8P5oN2CVRLGHqI8lceCkXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="121611696"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Feb 2025 04:09:03 -0800
+Message-ID: <0bce0b2f-1b74-4ffb-b34d-601ff5bd5490@linux.intel.com>
+Date: Thu, 27 Feb 2025 14:10:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/5] xHCI: Isochronous error handling fixes and
+ improvements
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Niklas Neronin <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250226080202.7eb5e142@foxbook>
+ <8bf4212a-72af-4c5d-a9b2-f3363d3ee3cd@linux.intel.com>
+ <20250226230501.48e8b23a@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250226230501.48e8b23a@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUxMSVYZQxlMTBgdGEgYQ0hWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a95472221ca03afkunmc65f97e6
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6P006Dww6AzIKAQ0dEkIUHkg8
-	PQkKChxVSlVKTE9LTU5OSkxOT0tOVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJS05KNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=e+iDDjl/x7ZbXubeWx1k4MgxsD6ndE8Nfe363mzseOFU6ybbxCcSFdet+kRoEGwGGRwG1KyXrXzNGRzlhuYNpP74UoFkxX9H4fJtFpbd4xNwwxEB+k1WjTUqkwn59t2BWG88fUmo9P1Iwy+B3CLwx8aDLlhw7ddd2c2vVH63rG4=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=uBdOgROO7htXLJg3uHYGlDDd8v+5cdQZJyOdo4kszRw=;
-	h=date:mime-version:subject:message-id:from;
 
-The USB dwc3 core on Rockchip's RK3562 is the same as the one already
-included in generic snps,dwc3. Extend the binding accordingly to allow
+On 27.2.2025 0.05, Michał Pecio wrote:
+> On Wed, 26 Feb 2025 14:41:44 +0200, Mathias Nyman wrote:
+>> Updated my for-usb-next branch to this v3 version
+> 
+> 
+> A few remarks regarding "Add helper to find trb from its dma address":
+> 
+> xhci_dma_to_trb():
+> This function could use xhci_for_each_ring_seg.
 
-	compatible = "rockchip,rk3562-dwc3", "snps,dwc3";
+Good point
 
-There are 4 clocks with different name sequency, add schema for it.
+> The use of in_range() perhaps deserves a comment, because its
+> correctness is not as obvious as it might seem.
+> 
+> Long story short, my own version:
+> 
+> /*
+>   * Look up a TRB on the ring by its DMA address, return NULL if not found.
+>   * Start from deq_seg to optimize for event handling use.
+>   *
+>   * Note: false positive is possible if dma < TRB_SEGMENT_SIZE *and*
+>   * seg->dma > (dma_addr_t) 0 - TRB_SEGMENT_SIZE, but that shouldn't
+>   * happen if seg->dma is an allocation of size TRB_SEGMENT_SIZE.
+>   */
 
-Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
----
+True, but as you said this shouldn't happen as we allocate TRB_SEGMENT_SIZE bytes
+starting at seg->dma, so seg->dma should be at least TRB_SEGMENT_SIZE bytes from
+max u64 (or u32)
 
-Changes in v3:
-- Update commit message and add per device schema for clock name change
+We can also use "if (dma >= seg->dma && (dma - seg->dma) < TRB_SEGMENT_SIZE)"
+instead of in_range(). It's a bit uglier, but we can skip additional notes.
+    
+> static union xhci_trb *xhci_dma_to_trb(struct xhci_ring *ring, dma_addr_t dma)
+> {
+>         struct xhci_segment *seg;
+> 
+>         xhci_for_each_ring_seg(ring->deq_seg, seg)
+>                 if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE))
+>                         return seg->trbs + (dma - seg->dma) / sizeof(seg->trbs[0]);
+> 
+>         return NULL;
+> }
+> 
+>> +       struct xhci_td *matched_td;
+> 
+> This variable is only used as bool so it could be declared as such.
+> Other places still use 'td' and assume that it equals 'matched_td'.
+> And that's OK because there is no need for iterating further after
+> the matching TD is found.
 
-Changes in v2: None
+True, it could be just a bool
 
- .../bindings/usb/rockchip,dwc3.yaml           | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> 
+>> +       /* find the transfer trb this events points to */
+>> +       if (ep_trb_dma)
+>> +               ep_trb = xhci_dma_to_trb(ep_ring, ep_trb_dma);
+> 
+> This may deserve a dedicated warning. It's a pathology. Either the
+> event is bogus due to internal corruption in the HC, or it's executing
+> TRBs from a wrong ring due to damaged/ignored Link TRB or bad Set Deq.
+> Or we completely screwed up and are looking at a wrong ep_ring here.
+> 
+>> -       if (trb_comp_code == COMP_MISSED_SERVICE_ERROR && !ep_trb_dma)
+>> +       if (trb_comp_code == COMP_MISSED_SERVICE_ERROR && !ep_trb)
+>>                 return 0;
+> 
+> Good idea. I think I would go further and refuse to handle anything
+> when (ep_trb_dma && !ep_trb). Nothing is going to match, nothing good
+> will come from trying as far as I see.
+> 
+> But that's a behavior change, so maybe material for a separate patch.
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index a21cc098542d..fba2cb05ecba 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -26,6 +26,7 @@ select:
-       contains:
-         enum:
-           - rockchip,rk3328-dwc3
-+          - rockchip,rk3562-dwc3
-           - rockchip,rk3568-dwc3
-           - rockchip,rk3576-dwc3
-           - rockchip,rk3588-dwc3
-@@ -37,6 +38,7 @@ properties:
-     items:
-       - enum:
-           - rockchip,rk3328-dwc3
-+          - rockchip,rk3562-dwc3
-           - rockchip,rk3568-dwc3
-           - rockchip,rk3576-dwc3
-           - rockchip,rk3588-dwc3
-@@ -72,6 +74,7 @@ properties:
-       - enum:
-           - grf_clk
-           - utmi
-+          - pipe
-       - const: pipe
- 
-   power-domains:
-@@ -111,6 +114,22 @@ allOf:
-             - const: suspend_clk
-             - const: bus_clk
-             - const: grf_clk
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: rockchip,rk3562-dwc3
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 4
-+          maxItems: 4
-+        clock-names:
-+          items:
-+            - const: ref_clk
-+            - const: suspend_clk
-+            - const: bus_clk
-+            - const: pipe
-   - if:
-       properties:
-         compatible:
--- 
-2.25.1
+Idea of this patch is to slowly migrate handle_tx_event() towards the
+vision in my feature_transfer_event_rework branch
+
+https://web.git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_transfer_event_rework
+
+Niklas is working towards a similar goal, and he just informed me that this
+patch conflicts a bit with his plan to get there, so I might drop this.
+
+Thanks for looking at it.
+
+-Mathias
 
 
