@@ -1,171 +1,128 @@
-Return-Path: <linux-usb+bounces-21143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF5D2A47D04
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 13:10:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60A5FA47E6A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 13:59:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73333188E9E0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 12:10:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5B4B174BA0
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2025 12:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E211222D7B1;
-	Thu, 27 Feb 2025 12:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4177222E3F0;
+	Thu, 27 Feb 2025 12:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i1z+dFJk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="miFKa9gf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF14B22D4E4;
-	Thu, 27 Feb 2025 12:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCB022DFB0
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 12:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740658148; cv=none; b=iS0fdqkQQ0jIx5/lVkMeDSFQKUcFM2cclrJR10zbl0d2mPSvWXY9cifGsCkYr6W0LSxQEj/mrV4x22HexBn+p4Eb5kKgaXR/NMIWcfTT3EYbxQYTsELW/b278rldPpYNpw7Qc2xykEL6lmmwymacXJqNNKsnUViNqLysYOOirWc=
+	t=1740661121; cv=none; b=KM9Y3Zovx2n26ZPZah4RobnBhh6VS5ULLxP1BjKl6gAJBmKLYb43w4orEndglNkLejchzjiM9Km+7/IPeYC0vv7HBIB7tOk+PMuUGgvv3Ssg4IbpHfzdCj1OOUeUwBtIwJWEI4klI4G3ya1QrMnquW3i20hSQ7rY8ult8aa62Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740658148; c=relaxed/simple;
-	bh=iw6gpxgNgCBOUaRo1oW1+W4WQuHahR7DBounBYF4vHc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qz/RDyAeFe24VZuD9cFfTHHcau6Z72w9M0KRRxPJIF3j8lfv3FWP4hU8BTDKrMu68FW2MsJZgIY7cE0aE5a63/ws0yoP43QZvpzqHznyiMZKVygvlgv9eKsUEp+OtBpfNn3pZo1kHNxzwP0GD3TGA9BY+ZramOwJEYlxL/vhnfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i1z+dFJk; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740658147; x=1772194147;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iw6gpxgNgCBOUaRo1oW1+W4WQuHahR7DBounBYF4vHc=;
-  b=i1z+dFJkNMbp2dMKrC/8cQ8AxBwOid9YxSQo9TbLyZzmpkQg1LL4tInV
-   C807tczT4OIodgvBeNwYYdekW5MVKGRIVjnHWo39p8a17T/XHu7MEd24d
-   ZyEr44Xzabc/YlKIuvONUgOTYqhR19BXiiz38MHFg0hCH2FhM3ExgyOJg
-   r6sru+/QMmt63PE5C5YHLfB/e1mtSu1uvDttmTY7mA1lo0ykfdswu81f0
-   CNaqcqiUKswdinP3Ifk6qaHOXVbqJ3PFm34K/MGUNrgY8LHA+Pfb+5YbX
-   GccBZ88wMaUpNUT/gNf4cWhWUEKoDZxxwWGlNB30NrTcPKAtQIq8gE+3I
-   g==;
-X-CSE-ConnectionGUID: 2u07U76hTp6CoUNCIdCQog==
-X-CSE-MsgGUID: xNt9RaO0QyOODRYBV4EmKA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41670733"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="41670733"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 04:09:05 -0800
-X-CSE-ConnectionGUID: gWMO6CD3SEmDG5AGc8J93w==
-X-CSE-MsgGUID: 8P5oN2CVRLGHqI8lceCkXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="121611696"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 27 Feb 2025 04:09:03 -0800
-Message-ID: <0bce0b2f-1b74-4ffb-b34d-601ff5bd5490@linux.intel.com>
-Date: Thu, 27 Feb 2025 14:10:04 +0200
+	s=arc-20240116; t=1740661121; c=relaxed/simple;
+	bh=A4XTIjqe+Rb0drEX7WvPw1buBFomorbTpjf0HYiG5Cg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fI3E3o09m+KyRYKxV5eLdGyq54Hqpx+HC6IR5rmWyATOLYrUFQkp8vupSwMfhsR1lhxGK5prwUA8GmUCvRUd5zya9fF1vpR5w9V9qEV00K3sSYMw3W+ZO4lF38Q4xwGbtsg83CoHtU+M2tXVQ/EhYQun1e2uX/8jodbw2n/9NYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=miFKa9gf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96B46C4CEE6
+	for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2025 12:58:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740661121;
+	bh=A4XTIjqe+Rb0drEX7WvPw1buBFomorbTpjf0HYiG5Cg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=miFKa9gfHUGydq4mbxWtWI0mOWYtvGdNFSsymr7OEXIZoZRasbp7xxbwUXd6Lrigt
+	 cjLvznLL+BdggRRVkEb48Zs98yE7r9dXhYQ9MCAPFz6QA6/geriilq9d2J4Z0QQ25l
+	 ptrZHgMg7yWd0qSG1bbxxfUCC8qwTTJKqagMb42mYaHV8TbcPEgoij5oPD3T6hP3wC
+	 IRNUrdpIydSN5pAxFyOQer6Fq0jOqOnxOlQT4Sq6NHBxN5MdFTuTnTfjIUqE4XCvdc
+	 W21X1RUQjbm+YVrAuItjkSAzzAqH8v+tj+Dqci5gaY2jFxLc+uhcWPnWzACzZs2Zmr
+	 7e8vPZl4BN0mA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 619FBC433E1; Thu, 27 Feb 2025 12:58:39 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Thu, 27 Feb 2025 12:58:38 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219824-208809-I4pHVRrwH9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] xHCI: Isochronous error handling fixes and
- improvements
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Niklas Neronin <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250226080202.7eb5e142@foxbook>
- <8bf4212a-72af-4c5d-a9b2-f3363d3ee3cd@linux.intel.com>
- <20250226230501.48e8b23a@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250226230501.48e8b23a@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 27.2.2025 0.05, Michał Pecio wrote:
-> On Wed, 26 Feb 2025 14:41:44 +0200, Mathias Nyman wrote:
->> Updated my for-usb-next branch to this v3 version
-> 
-> 
-> A few remarks regarding "Add helper to find trb from its dma address":
-> 
-> xhci_dma_to_trb():
-> This function could use xhci_for_each_ring_seg.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Good point
+--- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
+This just happened again:
 
-> The use of in_range() perhaps deserves a comment, because its
-> correctness is not as obvious as it might seem.
-> 
-> Long story short, my own version:
-> 
-> /*
->   * Look up a TRB on the ring by its DMA address, return NULL if not found.
->   * Start from deq_seg to optimize for event handling use.
->   *
->   * Note: false positive is possible if dma < TRB_SEGMENT_SIZE *and*
->   * seg->dma > (dma_addr_t) 0 - TRB_SEGMENT_SIZE, but that shouldn't
->   * happen if seg->dma is an allocation of size TRB_SEGMENT_SIZE.
->   */
+[161470.836493] PM: resume devices took 0.547 seconds
+[161470.836720] OOM killer enabled.
+[161470.836721] Restarting tasks ... done.
+[161470.839715] random: crng reseeded on system resumption
+[161470.845090] PM: suspend exit
+[161471.322491] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: DSP1: Firmware: 4=
+00a4
+vendor: 0x2 v0.43.1, 2 algorithms
+[161471.324469] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: DSP1:
+cirrus/cs35l41-dsp1-spk-prot-103c8b72.bin: v0.43.1
+[161471.324480] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: DSP1: spk-prot:
+D:\Amp Tuning\HP\840\0930\103C8B45_220930.bin
+[161471.403951] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1: Calibration appli=
+ed:
+R0=3D10446
+[161471.407392] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: Calibration appli=
+ed:
+R0=3D10526
+[161471.432157] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1: Firmware Loaded -
+Type: spk-prot, Gain: 17
+[161471.433916] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: Firmware Loaded -
+Type: spk-prot, Gain: 17
+[161471.523827] hp_wmi: Unknown event_id - 131073 - 0x0
+[162644.637587] xhci_hcd 0000:c3:00.3: xHCI host not responding to stop
+endpoint command
+[162644.651068] xhci_hcd 0000:c3:00.3: xHCI host controller not responding,
+assume dead
+[162644.651076] xhci_hcd 0000:c3:00.3: HC died; cleaning up
+[162644.651099] xhci_hcd 0000:c3:00.3: Timeout while waiting for stop endpo=
+int
+command
+[162644.651102] usb 1-2: USB disconnect, device number 4
+[162644.678374] usb 1-3: USB disconnect, device number 2
+[162644.678748] usb 1-4: USB disconnect, device number 3
 
-True, but as you said this shouldn't happen as we allocate TRB_SEGMENT_SIZE bytes
-starting at seg->dma, so seg->dma should be at least TRB_SEGMENT_SIZE bytes from
-max u64 (or u32)
+Shortly after resume all the USB ports are disabled.
 
-We can also use "if (dma >= seg->dma && (dma - seg->dma) < TRB_SEGMENT_SIZE)"
-instead of in_range(). It's a bit uglier, but we can skip additional notes.
-    
-> static union xhci_trb *xhci_dma_to_trb(struct xhci_ring *ring, dma_addr_t dma)
-> {
->         struct xhci_segment *seg;
-> 
->         xhci_for_each_ring_seg(ring->deq_seg, seg)
->                 if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE))
->                         return seg->trbs + (dma - seg->dma) / sizeof(seg->trbs[0]);
-> 
->         return NULL;
-> }
-> 
->> +       struct xhci_td *matched_td;
-> 
-> This variable is only used as bool so it could be declared as such.
-> Other places still use 'td' and assume that it equals 'matched_td'.
-> And that's OK because there is no need for iterating further after
-> the matching TD is found.
+I'm reverting back to Linux 6.11. I cannot use my device like this.
 
-True, it could be just a bool
+--=20
+You may reply to this email to add a comment.
 
-> 
->> +       /* find the transfer trb this events points to */
->> +       if (ep_trb_dma)
->> +               ep_trb = xhci_dma_to_trb(ep_ring, ep_trb_dma);
-> 
-> This may deserve a dedicated warning. It's a pathology. Either the
-> event is bogus due to internal corruption in the HC, or it's executing
-> TRBs from a wrong ring due to damaged/ignored Link TRB or bad Set Deq.
-> Or we completely screwed up and are looking at a wrong ep_ring here.
-> 
->> -       if (trb_comp_code == COMP_MISSED_SERVICE_ERROR && !ep_trb_dma)
->> +       if (trb_comp_code == COMP_MISSED_SERVICE_ERROR && !ep_trb)
->>                 return 0;
-> 
-> Good idea. I think I would go further and refuse to handle anything
-> when (ep_trb_dma && !ep_trb). Nothing is going to match, nothing good
-> will come from trying as far as I see.
-> 
-> But that's a behavior change, so maybe material for a separate patch.
-
-Idea of this patch is to slowly migrate handle_tx_event() towards the
-vision in my feature_transfer_event_rework branch
-
-https://web.git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_transfer_event_rework
-
-Niklas is working towards a similar goal, and he just informed me that this
-patch conflicts a bit with his plan to get there, so I might drop this.
-
-Thanks for looking at it.
-
--Mathias
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
