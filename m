@@ -1,214 +1,83 @@
-Return-Path: <linux-usb+bounces-21206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E645DA49E84
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 17:17:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC195A49FB4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 18:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7729175504
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 16:17:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 791E3164FDA
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 17:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360C52702C1;
-	Fri, 28 Feb 2025 16:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208AC146D65;
+	Fri, 28 Feb 2025 17:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G81ZoidY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VMh90KSX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108A026A1A9;
-	Fri, 28 Feb 2025 16:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7511F09A8;
+	Fri, 28 Feb 2025 17:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740759462; cv=none; b=ipSReIPPy+w0XKpSKG6/BKlCDhes13vawK2n6dbLmCrx1ozIwoivbrnOJbmaSFoNZbGVLWx6pB5vOm6FZb0Gk9saartaw6/Dq4kl5395j0FD2p+SGe5yc7yPFLE7USPs/uVWI2dAofcLV9I8WD5g0k98t99HMDLWEoqouG/0iS0=
+	t=1740762213; cv=none; b=nbTt348Y1N18UBwCOInVpXg1sGTIcLp5ygXFcgHx+QMiKyx6/gmd7zPpPbyNGRns1LwWPFhEfm206dhfZWNe6Ew1lx1LPFYCNspdC7cNUAgyvdl1B9gCpesRSOWTgv2HIQme5mpYM/9YX3wwZjIPizoYZPql4XHn/yqxKmrdDbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740759462; c=relaxed/simple;
-	bh=uVQYl/FGt5qUqkrCI1KgjT4jsxGm7eJodSmGjovP57M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iiw5XsTd6twaBfAQfYsKj3JrHnLW5fnwcmNL3jLjhTeZp70r5WQNA36sWr8v0EFDAy+HwjBLL777e5gWrGGZF8x5o20mjaQtULnvk0Sep+eG7Sd7zzs44aPsiN3eRYAeh9eqEqUwVwtsK7g30PVu4dp35yKmZCQ1b8at0gTmFu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G81ZoidY; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740759461; x=1772295461;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uVQYl/FGt5qUqkrCI1KgjT4jsxGm7eJodSmGjovP57M=;
-  b=G81ZoidYQKbwAgWB1yvfk3WJBIhU0NruqJJV58oXiGthj8mPdivDaaSh
-   7fzoEKVtVGMcXH2Fdl8ZGbY56jhdZaL91w9Q6cFyfbNLwaaid3U6KdSRb
-   blm11c/T1JO/o2xdmx5bNafNaPMKvHDDCd8l4uAFehtlNZItE8+a6Vc1f
-   Y86kzWd9Jdp/JTAVTwXYJGoHT9oQpbAFZQp512uuoZkefYOOOs4+taAEH
-   XsDQ57uRf6KvUqBRBPNnoQveU+/9VephKGdw4XvawXWVH9SfiqCBCGWcL
-   jx+gB4l7y/OnLkbs1jFKkUP1YTqEA68LUQ+m14Q3lU9wWQRvTI+P84sOx
-   A==;
-X-CSE-ConnectionGUID: jUu8TiITTqOXaVTZV8AyoQ==
-X-CSE-MsgGUID: SY9uRyLES9eX7ig6TCcDpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="53080474"
-X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
-   d="scan'208";a="53080474"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 08:17:40 -0800
-X-CSE-ConnectionGUID: 4GYkvk58SCmL11QXlcdRVQ==
-X-CSE-MsgGUID: AW0btBUvQ4eEjMsmYWgaxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
-   d="scan'208";a="117401062"
-Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by orviesa006.jf.intel.com with ESMTP; 28 Feb 2025 08:17:39 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: michal.pecio@gmail.com,
-	ki.chiang65@gmail.com
-Cc: <gregkh@linuxfoundation.org>,
-	<linux-usb@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [RFT PATCH] xhci: Handle spurious events on Etron host isoc enpoints
-Date: Fri, 28 Feb 2025 18:18:24 +0200
-Message-ID: <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
+	s=arc-20240116; t=1740762213; c=relaxed/simple;
+	bh=87MeIyTnCh42lvIVh/gUDVDz6THw0IS0/ekXuG8Yp9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dg9ApH9dC4RZtjJVBToMovEANUek0FxT0aUE2mAVJONJTH+APzpCrG9lHUJ4UWulfoyNIbySoPqyw4obn/P5jIeadF4pXdEnr5gVyrS0rk8jYxiqA1QuZGN9gBPdWBTOd4ayjptAUHWplO2bji37iSQXtzWksMg9y5sWf4vhH8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VMh90KSX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB13C4CEE5;
+	Fri, 28 Feb 2025 17:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1740762212;
+	bh=87MeIyTnCh42lvIVh/gUDVDz6THw0IS0/ekXuG8Yp9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VMh90KSX/qkhcZk//yf1Huc/CHYyS1ct0ZwCI1hUItnPu0xfocWwEeJhWKUlxrUsc
+	 m8lMS5KZQQSRVSlWmu5pjWAyYbWZXtIvVxf6NQGADM8nf8CwyHh9dWbAP7CHtBeiMy
+	 UhadyHL0qs1ei5gL7x9GZ3PM0UhekqSBq5I/txXc=
+Date: Fri, 28 Feb 2025 09:02:10 -0800
+From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To: Aditya Garg <gargaditya08@live.com>
+Cc: "castet.matthieu@free.fr" <castet.matthieu@free.fr>,
+	"stf_xl@wp.pl" <stf_xl@wp.pl>, "b-liu@ti.com" <b-liu@ti.com>,
+	"johan@kernel.org" <johan@kernel.org>,
+	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+	"valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"i@zenithal.me" <i@zenithal.me>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] usb: replace strcpy() with strscpy()
+Message-ID: <2025022833-unawake-barricade-7bb8@gregkh>
+References: <DEF7EF73-12C4-4F30-BC14-DD829F0C6884@live.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DEF7EF73-12C4-4F30-BC14-DD829F0C6884@live.com>
 
-Unplugging a USB3.0 webcam from Etron hosts while streaming results
-in errors like this:
+On Fri, Feb 28, 2025 at 03:07:03PM +0000, Aditya Garg wrote:
+> From: Aditya Garg <gargaditya08@live.com>
+> 
+> The strcpy() function has been deprecated and replaced with strscpy().
+> This patch shall replace it in the whole USB tree.
+> 
+> Link: https://github.com/KSPP/linux/issues/88
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
 
-[ 2.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-[ 2.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8630 trb-start 000000002fdf8640 trb-end 000000002fdf8650
-[ 2.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-[ 2.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8660 trb-start 000000002fdf8670 trb-end 000000002fdf8670
+As the two functions do different things, are you sure it is safe to
+just do a search/replace here?  If so, you need to explain that in the
+changelog why this is ok, and if not, please document that as well :)
 
-Etron xHC generates two transfer events for the TRB if an error is
-detected while processing the last TRB of an isoc TD.
+thanks,
 
-The first event can be any sort of error (like USB Transaction or
-Babble Detected, etc), and the final event is Success.
-
-The xHCI driver will handle the TD after the first event and remove it
-from its internal list, and then print an "Transfer event TRB DMA ptr
-not part of current TD" error message after the final event.
-
-Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
-transaction error mid TD.") is designed to address isoc transaction
-errors, but unfortunately it doesn't account for this scenario.
-
-This issue is similar to the XHCI_SPURIOUS_SUCCESS case where a success
-event follows a 'short transfer' event, but the TD the event points to
-is already given back.
-
-Expand the spurious success 'short transfer' event handling to cover
-the spurious success after error on Etron hosts.
-
-Kuangyi Chiang reported this issue and submitted a different solution
-based on using error_mid_td. This commit message is mostly taken
-from that patch.
-
-Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 36 +++++++++++++++++++++++++-----------
- drivers/usb/host/xhci.h      |  2 +-
- 2 files changed, 26 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 965bffce301e..3d3e6cd69019 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2644,6 +2644,22 @@ static int handle_transferless_tx_event(struct xhci_hcd *xhci, struct xhci_virt_
- 	return 0;
- }
- 
-+static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
-+					   struct xhci_ring *ring)
-+{
-+	switch (ring->old_trb_comp_code) {
-+	case COMP_SHORT_PACKET:
-+		return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
-+	case COMP_USB_TRANSACTION_ERROR:
-+	case COMP_BABBLE_DETECTED_ERROR:
-+	case COMP_ISOCH_BUFFER_OVERRUN:
-+		return xhci->quirks & XHCI_ETRON_HOST &&
-+			ring->type == TYPE_ISOC;
-+	default:
-+		return false;
-+	}
-+}
-+
- /*
-  * If this function returns an error condition, it means it got a Transfer
-  * event with a corrupted Slot ID, Endpoint ID, or TRB DMA address.
-@@ -2697,8 +2713,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	case COMP_SUCCESS:
- 		if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) != 0) {
- 			trb_comp_code = COMP_SHORT_PACKET;
--			xhci_dbg(xhci, "Successful completion on short TX for slot %u ep %u with last td short %d\n",
--				 slot_id, ep_index, ep_ring->last_td_was_short);
-+			xhci_dbg(xhci, "Successful completion on short TX for slot %u ep %u with last td comp code %d\n",
-+				 slot_id, ep_index, ep_ring->old_trb_comp_code);
- 		}
- 		break;
- 	case COMP_SHORT_PACKET:
-@@ -2846,7 +2862,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		 */
- 		if (trb_comp_code != COMP_STOPPED &&
- 		    trb_comp_code != COMP_STOPPED_LENGTH_INVALID &&
--		    !ep_ring->last_td_was_short) {
-+		    !xhci_spurious_success_tx_event(xhci, ep_ring)) {
- 			xhci_warn(xhci, "Event TRB for slot %u ep %u with no TDs queued\n",
- 				  slot_id, ep_index);
- 		}
-@@ -2890,11 +2906,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 
- 			/*
- 			 * Some hosts give a spurious success event after a short
--			 * transfer. Ignore it.
-+			 * transfer or error on last TRB. Ignore it.
- 			 */
--			if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
--			    ep_ring->last_td_was_short) {
--				ep_ring->last_td_was_short = false;
-+			if (xhci_spurious_success_tx_event(xhci, ep_ring)) {
-+				xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
-+					 &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
-+				ep_ring->old_trb_comp_code = trb_comp_code;
- 				return 0;
- 			}
- 
-@@ -2922,10 +2939,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	 */
- 	} while (ep->skip);
- 
--	if (trb_comp_code == COMP_SHORT_PACKET)
--		ep_ring->last_td_was_short = true;
--	else
--		ep_ring->last_td_was_short = false;
-+	ep_ring->old_trb_comp_code = trb_comp_code;
- 
- 	ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*ep_trb)];
- 	trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *) ep_trb, ep_trb_dma);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8c164340a2c3..c75c2c12ce53 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1371,7 +1371,7 @@ struct xhci_ring {
- 	unsigned int		num_trbs_free; /* used only by xhci DbC */
- 	unsigned int		bounce_buf_len;
- 	enum xhci_ring_type	type;
--	bool			last_td_was_short;
-+	u32			last_td_comp_code;
- 	struct radix_tree_root	*trb_address_map;
- };
- 
--- 
-2.43.0
-
+greg k-h
 
