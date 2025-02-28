@@ -1,376 +1,129 @@
-Return-Path: <linux-usb+bounces-21192-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21194-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A02CA49CCB
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 16:07:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4770AA49CDF
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 16:11:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46FB7188C435
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 15:07:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54825172386
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 15:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C851EF375;
-	Fri, 28 Feb 2025 15:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28F62500CD;
+	Fri, 28 Feb 2025 15:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b="GRmiFAA2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUirnxra"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazolkn19011026.outbound.protection.outlook.com [52.103.67.26])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97051EF367;
-	Fri, 28 Feb 2025 15:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.67.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740755231; cv=fail; b=liWyLss/qqfmMi+rYcryz8yaYSgdnDTxI17v0jYOJqt8yd7afwNfbbYFULYSnwfBMrzvQGpDYSvIZbOszz45ZJ+jyrwegoPWINIhlxFjzRPLtO203h9dXgsqFOBnMmTqBfl3j+WcslsAccyJmW5iDZ5S/GK5fi3feQKqA2lH/CA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740755231; c=relaxed/simple;
-	bh=QxABZ2H5tZSDboFytw2Eh7mpnXIp2Jv+juAPQlHNr60=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=h+4Gp2Xa2Hnt0NxJWXPyLnxBE1qV+wwog5M5AubJdhLESNiVw1wfTcYU3Bxv8j8F9suCmQXQvqEVpX+/7xYJaoMQT6tAl8nKP9CaJyBWpnTNRKTN/ZdmIj1fsg6LSDp50tnnOzKVjF1+3JipgmBJgG/SEuGebqGkdwNpYz+ksDs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com; spf=pass smtp.mailfrom=live.com; dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b=GRmiFAA2; arc=fail smtp.client-ip=52.103.67.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=live.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kFMZcSzek8aJBxRkEpSskIyag8j9rfAA68KAECpvymBlkmzEpF1HIUSIwLf9XYZxF66/a9+yJW27N0A49vvCLUrkKxqGxZog+wTKj7aJCCi31MI9+6QtAzGOh6pZ9I8zHAKHFgtWU3cZp7wQj3z8drwRoWJMVDk6yPBA7yWSlXt9fFIG/illli3niMIGIxpP/P4J9i2s6jlpazOV1eNhGxnxPLOCfss3SmBy8o+gYmgVZxITBIAwMXemPY6p9J9wBHWbOeHxguuC3XhRGWBCwhIlhJWzGyI2eJarQs4Sa6uIKR2HA209OwSTRXZkT5hc8pY5v0+hhAinUYaGLLikAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vO8RLkdun0eu2LcrZP+WAPRoXCAQErF/+P2JF4H7XFU=;
- b=RRe6JLJkVmiSuVQyp1PD8xTiri9PQnJTYxa1iT+gx7n1xCDxFOlI/TNpd1IHG/t12WnteVf/F1+LQMps/XAU/wxZFW8q/HZvy3qEZgqpIyYBGd+1AfvGZ1JI8rEF8NFMDCxAptzLXOr1thVz2wo6UNIUf5lDLu38h4uZMwcD942WKXKH/1Uv4OgFveou1DZVqR2vpa2Acvq/QbinVN/m0v4LfPNMaFxNhu0ZiGeHh02orevfTEDwZDkMIZr4kDfbN0HZw0y/Vs7HtVobSzI6uOkvDIbBVkPLBgGe3tJ0VqJGyxT/4jVT4iWIgdLMpa6BYJbJjSvMacromG/1RURpsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vO8RLkdun0eu2LcrZP+WAPRoXCAQErF/+P2JF4H7XFU=;
- b=GRmiFAA2bJG1tbwb/5d2kmibPJFM195fgz/Vq6P3GHZXnc0G5ywEuXGMOh9B/TtcRVeUJeh+vqbVet4105uvMW3z4Be0d0OTW0HMUTDjy7LO7WeZac2nX9ppeQ7y80R4S6Ntv60tWcXHupnEStWrqeF6ael7f9illtOvLcOK8ScP6TUFpK0Ptxzn4CjOQPeFwqlt00HBktIWAOkQuDII6MXymv+PVJpJ8cBRsYGuDXvuR03+Gq3xJBuLHivo2enR59o9GwTdBCdNxnF2GDcLA79KQON+gif0Y9IcvFX76i6o1UohkbNNsKYQi/nvxYXnojiq1LH8q9MsLPW7AxpBNQ==
-Received: from PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:f7::14)
- by PN0PR01MB6153.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:76::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.23; Fri, 28 Feb
- 2025 15:07:03 +0000
-Received: from PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::324:c085:10c8:4e77]) by PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::324:c085:10c8:4e77%7]) with mapi id 15.20.8489.021; Fri, 28 Feb 2025
- 15:07:03 +0000
-From: Aditya Garg <gargaditya08@live.com>
-To: "castet.matthieu@free.fr" <castet.matthieu@free.fr>, "stf_xl@wp.pl"
-	<stf_xl@wp.pl>, "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"b-liu@ti.com" <b-liu@ti.com>, "johan@kernel.org" <johan@kernel.org>,
-	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-	"valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "i@zenithal.me" <i@zenithal.me>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH] usb: replace strcpy() with strscpy()
-Thread-Topic: [PATCH] usb: replace strcpy() with strscpy()
-Thread-Index: AQHbifJs1uyH9jYjVk6FIi4JiLsd3A==
-Date: Fri, 28 Feb 2025 15:07:03 +0000
-Message-ID: <DEF7EF73-12C4-4F30-BC14-DD829F0C6884@live.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN3PR01MB9597:EE_|PN0PR01MB6153:EE_
-x-ms-office365-filtering-correlation-id: 2d9a01dd-062f-4e2c-c460-08dd58098ef5
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8062599003|7092599003|19110799003|461199028|8060799006|15080799006|10035399004|102099032|4302099013|3412199025|440099028|41001999003|1602099012;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?8+zY0U6PvzkxuWDFHyUxV6Bhug7TAccwP11H/fpMq/VybUTAGqwxqT5w+AXZ?=
- =?us-ascii?Q?jDocq8Po9tr4MHCTLpgQE076hFfkhIQvU5nqdT3oibC45Z/Vvg623hTRTEeu?=
- =?us-ascii?Q?QJlPWL/FZVLA643KoaHKeZ7X9C1W/YpmcbOrVRtcPU0mldHMDfwlDtL8dUIb?=
- =?us-ascii?Q?gtvdF8t9nMuFCbp5TgZU/MXI+QyoqaY7CGIE//Q8tzO94wfCG7cJXOAsqDcq?=
- =?us-ascii?Q?fdG8m35GDMze8mmGZr3W08HRrPo438zrepByEd9dW8UZ0BOzvLQJBS7KLQsH?=
- =?us-ascii?Q?D4fEzC3U7F2dCHEHtp4gOPMJblpsbXoOfnJy+8/ztEo2uafcXBpi2AMhyM2j?=
- =?us-ascii?Q?fzeW8jlpbAgEa9NDkr/WnQen2s7wkH5flHlFg2Av5PEyjexSL/8UF3ZRLovR?=
- =?us-ascii?Q?8ShkHcS95iGS3kw1ypL+/A10i6K4fql/wdl9KriK4XRvdH5DVJf8B1g2WnjX?=
- =?us-ascii?Q?E39mICYuj9jiiidsMhaj2SjjrJtwtQJkW2esFFZ0Dx0KI5SoaUEKIgy70EEK?=
- =?us-ascii?Q?HjCKSvEx1ugi204pZlP/uRmhLu2Wjv77QDCOYsUOgxU/ASz+sh/3Lifltcyh?=
- =?us-ascii?Q?9Z2rLrNC7wnCxlbL4zR5W+uaMQ2NzmhSHnsUdlaX29v8s7jWK+psh9EZJTVk?=
- =?us-ascii?Q?CWIZ8ULASkBuJNHxpNQbFRbIMcRt+yWqwdMAlE1P6sDaMcPumskPah/BlN5y?=
- =?us-ascii?Q?dodGHnLLw6KlcsGbi8+UkK7aQXh0r+k/IqricTDUO3n/HKE5KWtH+8czBlR1?=
- =?us-ascii?Q?hQLXMu7N+82Zfk73kMux3VwG2axYjb58UnZBSscXGUXpKJRT1A7T8bnbfuOr?=
- =?us-ascii?Q?61xFad+bfarYB5frrOsl/9FG6D9WEwekKm6Fmmr3+0olK6urw8to1fzoA+f4?=
- =?us-ascii?Q?BqXMTIUKykjH0472WXtjyMYXz2YEseijlplfwBNXJP1keuuhCVGC0XZpdU+u?=
- =?us-ascii?Q?I3VxAX6zfZTiA+p8o2SYacebwl+ugiTTKKMnvF/2g9/Maas1XUlZvT3EYcdR?=
- =?us-ascii?Q?tKR+L+P0YcSbk/Ap5fteK19v/PHN9GI34Qcx7XvEWlbrO8da68aeDHzCK0Cj?=
- =?us-ascii?Q?pzyz/S/7oQphjyjhg3ToB72DC624Yt5c33CyNK0KMhA5qozZNlKezrZp8Wnc?=
- =?us-ascii?Q?ewL0haTLhwk//TbtESBA6xaD6kNCokM3hVMBFSE7/4j9ytnWLUDbElb5pg3L?=
- =?us-ascii?Q?DyQ/r///F1XbE7bHJjbb6KeXf5mgru2+zS9chw=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?EhqK9gI7v8VrKbc5lhagEsMklnAupFwmDuWuGlZfTczObznSWI0jT7o3+Gsw?=
- =?us-ascii?Q?+wp2J4Wg9EHFvLHvQQ8jJGZ6/wvbBvbDN91LW801uwvfJJQRMKGfuwofllPA?=
- =?us-ascii?Q?aK5elFlAUtcGwDb8gYcUTJyH6LBeAfIj7SOWuEMi+nfLDj/xDa2KuCfEbLPf?=
- =?us-ascii?Q?BG7zfrLXivWgDsqbpP87fxXVnIQBVzxm3QfXq2Wn9NLEnNA8fanPk88OnI8r?=
- =?us-ascii?Q?ry1U8vYeQBCpav83D7HG94trhPe/+mlzaQjnDDmZYtI3WzoL8rVEOeyjX+BC?=
- =?us-ascii?Q?COMeUPPlw58bMVQF8evKaeOhmLOTSluj2CECIQKqVBaplWOxDPPdF65TYlWG?=
- =?us-ascii?Q?ekaXnf3UsVEvRzxsrPX58MdlU4o6Pcrg2XIoKks23SllhImL96OwZg/znHI/?=
- =?us-ascii?Q?no2zc0Fambra8Lb5Dvo0yvvrOUUrhmJPajTgm3cxTza6gwph2vJQHtmDrY86?=
- =?us-ascii?Q?pV5TTcuhck6385YeetthT6vCvUbZ/ci7HfUI4yDu+cQJTUAl14LO48vP2cZ2?=
- =?us-ascii?Q?deKj3lmvcJWau0vnog/s8EVgv/ASeBoKovUrX/o6MrAbrv3YJnwyNs6KUspJ?=
- =?us-ascii?Q?c2/sX5Bp1bqX8OxYQRCyF4E5ZLonxuWrV9MMxcifcqmwty2tATCPgsmTusRd?=
- =?us-ascii?Q?VtzrFAD3arfGUhG8UcB8m3824XoR47g9QbRKUi1aCNLYuaQf1xugmnGn95ov?=
- =?us-ascii?Q?bjuQ9Aaa1/ikgFjdygcqWgLOBZE1pj8B8UyjnxlvG3xKyBFCKHbGY/KkOIaL?=
- =?us-ascii?Q?Dn9hpU+5HkABCwp7RnqKpemNyIGdECCo9J5KOKqfshT/8PhPWbir94bCURzK?=
- =?us-ascii?Q?zl5CTa+HLe+DmSMqCECr4rInQRo9cyQ4QcRiluf3xFghzxXglFhq1ciS84mD?=
- =?us-ascii?Q?V2RGIK9+oIr2JP9Bm3Pq920FEmmtlDULB0FPuVSP2eCqpVBG8f1qU9qferwO?=
- =?us-ascii?Q?xLnyH317yXm5L4wwGrkGf6wjp6F4d5snThuKXT2ISlaxexZvL4EnIGRP0nt2?=
- =?us-ascii?Q?ium7+jx27k9QPnJPhKteJy1sKLEcPCP05H/zqdaGsAvwH6qUrUY8u6AaslcO?=
- =?us-ascii?Q?4N6MBwWkxBvDOTSilT2IZB8rztAfuOxW15EMZLQnvBx48djezASoujsI4kdL?=
- =?us-ascii?Q?4jvxloZO3hPdxxL5J1od9703myrpRJcepgkLNK7HaKEt/KQtUzC3fl77nFGe?=
- =?us-ascii?Q?+gw3SZ9hBzgNA95RYmDEZDOyg8BnDh2gcSoLZfmqx567oHQpqi99lBrn12BH?=
- =?us-ascii?Q?TlAmjXSkAYUOm6AnrElZ7VYBtMc2AdzLrb8AtZbJJCTZHXWjbJPonftu43Ke?=
- =?us-ascii?Q?3gUwKNdsBQXe1yO0wiD4sIWv?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <09541ADC0F9B5C41B643ADE5EBE726B0@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2181EF36E;
+	Fri, 28 Feb 2025 15:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740755495; cv=none; b=rCe98RED96uc+b9Vv1f6T/95DWt2Gp2PpcsiBfOydRM72E8k547iEqQuNijscFjRuYWijvvbVev1vAHZI+haEX7QyoK8VDRfRCl8EdqcrVkDgypb5KkbY/k08BAjLbTUqLI37AFFOhkjaqmCY51sow4N+VZXk3boE2C9SuuqlQs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740755495; c=relaxed/simple;
+	bh=d6jAc3qib5tSgD8hCc1ZWLfDLKrBDtNf4sx4KR6R/lE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IRK4fdtDYQtvyCVbHkLvobXb0BdS8kkQk83CCeLa646AYetA+/uU8BrunU8D/+eBKruT9LN9VBFrOnt/WbWegNuHnKkd4LgpYc2gyeruPGkO9GyXHpOjl9JL8whA0nAwKyfBYIagzskzXMPxZR+ipmnVedB6xxP/bJ1uBQVDZjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUirnxra; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B4F19C4CED6;
+	Fri, 28 Feb 2025 15:11:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740755494;
+	bh=d6jAc3qib5tSgD8hCc1ZWLfDLKrBDtNf4sx4KR6R/lE=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=aUirnxra45BPpfceFpoSZpphkANWAwG202uEbtJixI+8GSw7gP8XoAwl6CUmOX8uO
+	 Gwc9u7nf/OLYuoE/+uYYw8O0t2LbLE85UkGomYmwbV3MDOruWrzQRHxQu42RsikB69
+	 +m6MxvMrdTNxNQxhh5MVv/9Bjrtcy84Lb+FEoltMCE/ciH6SDJua4j6dWwlR8xGnjL
+	 pTP4PylTyxOfYdG7YgWMAOi4G1/JMv+cuap5Oie11Vr2i3KaesB8m9eTF6iy2QjoH4
+	 bfq/Ojx1V4SQb8/Q1c0kgYwl/zkkn5MUv4YvSpx3ssAchsozpKYNpUOGCXU8EE7vic
+	 /OEOqSYr6SOJg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3067C282C1;
+	Fri, 28 Feb 2025 15:11:34 +0000 (UTC)
+From: =?utf-8?q?Jonathan_Neusch=C3=A4fer_via_B4_Relay?= <devnull+j.ne.posteo.net@kernel.org>
+Subject: [PATCH v3 0/9] usb: storage: Mark various arrays as const
+Date: Fri, 28 Feb 2025 16:11:15 +0100
+Message-Id: <20250228-misc-const-v3-0-09b417ded9c4@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-ae5c4.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d9a01dd-062f-4e2c-c460-08dd58098ef5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2025 15:07:03.2287
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB6153
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABPSwWcC/1WMQQ6DIBQFr2JYlwY+oLWr3qPpAvFTWRQMENLGe
+ PeiK81bzUtmFpIwOkzk3iwkYnHJBV9BXBpiJu3fSN1YmQADySTj9OOSoSb4lCl2gzQW2KhsT6o
+ wR7Tuu8eer8qTSznE394ufHu3jGIA6pgpnNYBt1YMt1aK7jGHlDFcPWaydQoc3fbkAmVUD61SW
+ mrojTm567r+AWlKhIThAAAA
+X-Change-ID: 20240401-misc-const-e7b4cf20d5f9
+To: Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.ne@posteo.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740755487; l=1859;
+ i=j.ne@posteo.net; s=20240329; h=from:subject:message-id;
+ bh=d6jAc3qib5tSgD8hCc1ZWLfDLKrBDtNf4sx4KR6R/lE=;
+ b=F1afqBPYnJvF2KHLnpWOeY0Wgv1HJz8SL1YNWW21594n+LoTJHkJbeiJqMzW0ZSYkTlZ4R4Ll
+ uG0qOvsQfcmBKjWrAS8sBGv5haqqScp8LVDTjxiz8fxunnwF4BYl3Ji
+X-Developer-Key: i=j.ne@posteo.net; a=ed25519;
+ pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
+X-Endpoint-Received: by B4 Relay for j.ne@posteo.net/20240329 with
+ auth_id=156
+X-Original-From: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Reply-To: j.ne@posteo.net
 
-From: Aditya Garg <gargaditya08@live.com>
+While reading code, I noticed that some arrays in USB mass storage
+drivers are declared static but not const, even though they are not
+modified. This patchset marks them const.
 
-The strcpy() function has been deprecated and replaced with strscpy().
-This patch shall replace it in the whole USB tree.
+All patches were compile-tested.
 
-Link: https://github.com/KSPP/linux/issues/88
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Signed-off-by: Jonathan Neuschäfer <j.ne@posteo.net>
 ---
- drivers/usb/atm/ueagle-atm.c           |  2 +-
- drivers/usb/gadget/configfs.c          |  2 +-
- drivers/usb/gadget/function/f_midi2.c  |  6 +++---
- drivers/usb/gadget/function/u_serial.c |  2 +-
- drivers/usb/gadget/udc/fsl_qe_udc.c    |  2 +-
- drivers/usb/gadget/udc/fsl_udc_core.c  |  2 +-
- drivers/usb/gadget/udc/snps_udc_core.c |  2 +-
- drivers/usb/musb/musb_core.c           |  2 +-
- drivers/usb/serial/ti_usb_3410_5052.c  | 16 ++++++++--------
- drivers/usb/typec/tcpm/tcpm.c          |  6 +++---
- drivers/usb/usbip/vhci_sysfs.c         |  2 +-
- 11 files changed, 22 insertions(+), 22 deletions(-)
+Changes in v3:
+- Elaborate *why* const is a good idea
+- Link to v2: https://lore.kernel.org/r/20250226-misc-const-v2-0-ab655a4a29cc@posteo.net
 
-diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
-index cd0f7b4bd..04f114d0f 100644
---- a/drivers/usb/atm/ueagle-atm.c
-+++ b/drivers/usb/atm/ueagle-atm.c
-@@ -1571,7 +1571,7 @@ static void cmvs_file_name(struct uea_softc *sc, char=
- *const cmv_name, int ver)
- 	} else
- 		file =3D cmv_file[sc->modem_index];
-=20
--	strcpy(cmv_name, FW_DIR);
-+	strscpy(cmv_name, FW_DIR);
- 	strlcat(cmv_name, file, UEA_FW_NAME_MAX);
- 	if (ver =3D=3D 2)
- 		strlcat(cmv_name, ".v2", UEA_FW_NAME_MAX);
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index fba2a56da..0c80a4011 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -129,7 +129,7 @@ static int usb_string_copy(const char *s, char **s_copy=
-)
- 		if (!str)
- 			return -ENOMEM;
- 	}
--	strcpy(str, s);
-+	strscpy(str, s);
- 	if (str[ret - 1] =3D=3D '\n')
- 		str[ret - 1] =3D '\0';
- 	*s_copy =3D str;
-diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/fun=
-ction/f_midi2.c
-index 12e866fb3..72d034e78 100644
---- a/drivers/usb/gadget/function/f_midi2.c
-+++ b/drivers/usb/gadget/function/f_midi2.c
-@@ -1542,9 +1542,9 @@ static int f_midi2_create_card(struct f_midi2 *midi2)
- 		return err;
- 	midi2->card =3D card;
-=20
--	strcpy(card->driver, "f_midi2");
--	strcpy(card->shortname, "MIDI 2.0 Gadget");
--	strcpy(card->longname, "MIDI 2.0 Gadget");
-+	strscpy(card->driver, "f_midi2");
-+	strscpy(card->shortname, "MIDI 2.0 Gadget");
-+	strscpy(card->longname, "MIDI 2.0 Gadget");
-=20
- 	id =3D 0;
- 	for (i =3D 0; i < midi2->num_eps; i++) {
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/fu=
-nction/u_serial.c
-index 36fff45e8..053b1f2a0 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1054,7 +1054,7 @@ static int gs_console_init(struct gs_port *port)
- 	if (!cons)
- 		return -ENOMEM;
-=20
--	strcpy(cons->console.name, "ttyGS");
-+	strscpy(cons->console.name, "ttyGS");
- 	cons->console.write =3D gs_console_write;
- 	cons->console.device =3D gs_console_device;
- 	cons->console.flags =3D CON_PRINTBUFFER;
-diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/f=
-sl_qe_udc.c
-index aacfde063..b12d2441c 100644
---- a/drivers/usb/gadget/udc/fsl_qe_udc.c
-+++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
-@@ -2410,7 +2410,7 @@ static int qe_ep_config(struct qe_udc *udc, unsigned =
-char pipe_num)
- 	struct qe_ep *ep =3D &udc->eps[pipe_num];
-=20
- 	ep->udc =3D udc;
--	strcpy(ep->name, ep_name[pipe_num]);
-+	strscpy(ep->name, ep_name[pipe_num]);
- 	ep->ep.name =3D ep_name[pipe_num];
-=20
- 	if (pipe_num =3D=3D 0) {
-diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc=
-/fsl_udc_core.c
-index 4dea8bc30..eb64aa96c 100644
---- a/drivers/usb/gadget/udc/fsl_udc_core.c
-+++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-@@ -2321,7 +2321,7 @@ static int struct_ep_setup(struct fsl_udc *udc, unsig=
-ned char index,
- 	struct fsl_ep *ep =3D &udc->eps[index];
-=20
- 	ep->udc =3D udc;
--	strcpy(ep->name, name);
-+	strscpy(ep->name, name);
- 	ep->ep.name =3D ep->name;
-=20
- 	ep->ep.ops =3D &fsl_ep_ops;
-diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/ud=
-c/snps_udc_core.c
-index 1f8a99d2a..ad12b5c16 100644
---- a/drivers/usb/gadget/udc/snps_udc_core.c
-+++ b/drivers/usb/gadget/udc/snps_udc_core.c
-@@ -3151,7 +3151,7 @@ int udc_probe(struct udc *dev)
- 			 tmp, dev->phys_addr, dev->chiprev,
- 			 (dev->chiprev =3D=3D UDC_HSA0_REV) ?
- 			 "A0" : "B1");
--		strcpy(tmp, UDC_DRIVER_VERSION_STRING);
-+		strscpy(tmp, UDC_DRIVER_VERSION_STRING);
- 		if (dev->chiprev =3D=3D UDC_HSA0_REV) {
- 			dev_err(dev->dev, "chip revision is A0; too old\n");
- 			retval =3D -ENODEV;
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index 7f349f5e7..b3a943eca 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -1600,7 +1600,7 @@ static int musb_core_init(u16 musb_type, struct musb =
-*musb)
- 	/* log core options (read using indexed model) */
- 	reg =3D musb_read_configdata(mbase);
-=20
--	strcpy(aInfo, (reg & MUSB_CONFIGDATA_UTMIDW) ? "UTMI-16" : "UTMI-8");
-+	strscpy(aInfo, (reg & MUSB_CONFIGDATA_UTMIDW) ? "UTMI-16" : "UTMI-8");
- 	if (reg & MUSB_CONFIGDATA_DYNFIFO) {
- 		strcat(aInfo, ", dyn FIFOs");
- 		musb->dyn_fifo =3D true;
-diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_=
-usb_3410_5052.c
-index a0c244bc7..50d76205b 100644
---- a/drivers/usb/serial/ti_usb_3410_5052.c
-+++ b/drivers/usb/serial/ti_usb_3410_5052.c
-@@ -1605,29 +1605,29 @@ static int ti_download_firmware(struct ti_device *t=
-dev)
- 		if (le16_to_cpu(dev->descriptor.idVendor) =3D=3D MTS_VENDOR_ID) {
- 			switch (le16_to_cpu(dev->descriptor.idProduct)) {
- 			case MTS_CDMA_PRODUCT_ID:
--				strcpy(buf, "mts_cdma.fw");
-+				strscpy(buf, "mts_cdma.fw");
- 				break;
- 			case MTS_GSM_PRODUCT_ID:
--				strcpy(buf, "mts_gsm.fw");
-+				strscpy(buf, "mts_gsm.fw");
- 				break;
- 			case MTS_EDGE_PRODUCT_ID:
--				strcpy(buf, "mts_edge.fw");
-+				strscpy(buf, "mts_edge.fw");
- 				break;
- 			case MTS_MT9234MU_PRODUCT_ID:
--				strcpy(buf, "mts_mt9234mu.fw");
-+				strscpy(buf, "mts_mt9234mu.fw");
- 				break;
- 			case MTS_MT9234ZBA_PRODUCT_ID:
--				strcpy(buf, "mts_mt9234zba.fw");
-+				strscpy(buf, "mts_mt9234zba.fw");
- 				break;
- 			case MTS_MT9234ZBAOLD_PRODUCT_ID:
--				strcpy(buf, "mts_mt9234zba.fw");
-+				strscpy(buf, "mts_mt9234zba.fw");
- 				break;			}
- 		}
- 		if (buf[0] =3D=3D '\0') {
- 			if (tdev->td_is_3410)
--				strcpy(buf, "ti_3410.fw");
-+				strscpy(buf, "ti_3410.fw");
- 			else
--				strcpy(buf, "ti_5052.fw");
-+				strscpy(buf, "ti_5052.fw");
- 		}
- 		status =3D request_firmware(&fw_p, buf, &dev->dev);
- 	}
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 6bf1a22c7..461240086 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -710,7 +710,7 @@ static void _tcpm_log(struct tcpm_port *port, const cha=
-r *fmt, va_list args)
-=20
- 	if (tcpm_log_full(port)) {
- 		port->logbuffer_head =3D max(port->logbuffer_head - 1, 0);
--		strcpy(tmpbuffer, "overflow");
-+		strscpy(tmpbuffer, "overflow");
- 	}
-=20
- 	if (port->logbuffer_head < 0 ||
-@@ -813,10 +813,10 @@ static void tcpm_log_source_caps(struct tcpm_port *po=
-rt)
- 					  pdo_pps_apdo_max_voltage(pdo),
- 					  pdo_pps_apdo_max_current(pdo));
- 			else
--				strcpy(msg, "undefined APDO");
-+				strscpy(msg, "undefined APDO");
- 			break;
- 		default:
--			strcpy(msg, "undefined");
-+			strscpy(msg, "undefined");
- 			break;
- 		}
- 		tcpm_log(port, " PDO %d: type %d, %s",
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.=
-c
-index d5865460e..4d6be26db 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -463,7 +463,7 @@ static void set_status_attr(int id)
-=20
- 	status =3D status_attrs + id;
- 	if (id =3D=3D 0)
--		strcpy(status->name, "status");
-+		strscpy(status->name, "status");
- 	else
- 		snprintf(status->name, MAX_STATUS_NAME+1, "status.%d", id);
- 	status->attr.attr.name =3D status->name;
---=20
-2.43.0
+Changes in v2:
+- Add new patches 2-9
+- Use consistent authorship information
+- Link to v1: https://lore.kernel.org/r/20250225-misc-const-v1-1-121ff3b86437@posteo.net
+
+---
+Jonathan Neuschäfer (9):
+      usb: storage: jumpshot: Use const for constant arrays
+      usb: storage: transport: Use const for constant array
+      usb: storage: alauda: Use const for card ID array
+      usb: storage: datafab: Use const for constant arrays
+      usb: storage: initializers: Use const for constant array
+      usb: storage: realtek_cr: Use const for constant arrays
+      usb: storage: sddr09: Use const for constant arrays
+      usb: storage: sddr55: Use const for constant arrays
+      usb: storage: shuttle_usbat: Use const for constant array
+
+ drivers/usb/storage/alauda.c        |  8 ++++----
+ drivers/usb/storage/datafab.c       | 14 +++++++-------
+ drivers/usb/storage/initializers.c  |  2 +-
+ drivers/usb/storage/jumpshot.c      | 10 +++++-----
+ drivers/usb/storage/realtek_cr.c    |  6 +++---
+ drivers/usb/storage/sddr09.c        | 14 +++++++-------
+ drivers/usb/storage/sddr55.c        |  4 ++--
+ drivers/usb/storage/shuttle_usbat.c |  2 +-
+ drivers/usb/storage/transport.c     |  2 +-
+ 9 files changed, 31 insertions(+), 31 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20240401-misc-const-e7b4cf20d5f9
+
+Best regards,
+-- 
+Jonathan Neuschäfer <j.ne@posteo.net>
+
 
 
