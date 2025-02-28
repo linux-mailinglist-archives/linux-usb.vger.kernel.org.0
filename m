@@ -1,151 +1,232 @@
-Return-Path: <linux-usb+bounces-21183-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21184-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81B1EA4950D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 10:32:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D25BCA4977E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 11:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D33C9161766
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 09:32:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B88341887137
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 10:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 231D625C6E7;
-	Fri, 28 Feb 2025 09:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3SAatq9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24F425F961;
+	Fri, 28 Feb 2025 10:35:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D07F257434;
-	Fri, 28 Feb 2025 09:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE525F7AA
+	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 10:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740735022; cv=none; b=jDD99HwcxxCZI7AABMCdrHaDxVzxdXRQdOOI00dk9yGdBdvYZTOkMhTEq375zy9w1WsLgOmStr/IXbC/p5Ib993SqhxlVKmGYaD/VX3VJmsEctxE495l/OjFlYCpYjUnLPHrOCvk4MORX8aV3wHVgO71iDk6wJSN75T+F+O3JdQ=
+	t=1740738900; cv=none; b=lsSu4WzrRR3J4p0N9sOGjEymdvniM+eOEjPFhFLIPMZJ40/+ISO049L3npQlJJxjuMWavLHtjAoGbooPfaWC9S02fUKUDTIH2YMCEQGeApE22ZPrRbMGScZ36ciPTA3V2+Q78ENSS+kZ/MiPnIYXBv8fIBqlDiNEQ8cMMxBu4VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740735022; c=relaxed/simple;
-	bh=vueB8glrxQlRjIMAss1r71kAHRNbnxrNli+SINmYOp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BA8oySEp73XwDOfAh9zaKKz33RdJUv0j5tZ3WKittKLw0ph4mXl6ZSLUDHakalFeJskaC4GveyV5fCy23DsBpYDNzFCDIcgx8FxWRCdBWefORDQopE5h8IxIPRidGfkljzOgkj6SRCbT/zyQ62UNy53C2DRah55muDjFuM6Ulfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3SAatq9; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740735021; x=1772271021;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vueB8glrxQlRjIMAss1r71kAHRNbnxrNli+SINmYOp4=;
-  b=V3SAatq9sX9FRNKYU0bJMvcASKVdC9DCqqhE4+2DD3MzKyK2+IT0lLDY
-   CZfhrQ0gIA58TaBaa0utRIe1goat3FRj/4U5Ovll48PrRt/zOBoIYvwNf
-   ThTTem4qAuVD4fgsveuAyaIZkKJkmZ43RIq7Flv71wQwIaEWWi/THoyw/
-   AvNk2A2Eui7j1i1gKjYbeDiE7MFOJTyGazYbLU4i6Y7wFXwnR4dYxYKyZ
-   Htk5kDipPQQJ14vG7aLBDTGrYwPFqof6hkvg3bNNK019GWmvwhwVrqw8D
-   JkEEBSgFHW/VVjuKB0yNJeqxR4o7fhtnb7TtSrgAhfFULpbORZ1DCwyMG
-   A==;
-X-CSE-ConnectionGUID: 8Mdr2y6LRNiWYHY8Saejzg==
-X-CSE-MsgGUID: 0VqJnVbaTtKxb/h+roQNAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45438694"
-X-IronPort-AV: E=Sophos;i="6.13,321,1732608000"; 
-   d="scan'208";a="45438694"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 01:30:21 -0800
-X-CSE-ConnectionGUID: Ql+YnlPFR8mAYyWI4sxNoQ==
-X-CSE-MsgGUID: wfjEbwY/SauCZb3PqK/3UA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148214038"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Feb 2025 01:30:19 -0800
-Message-ID: <31b489db-9028-4eea-b84d-9497d49fdddc@linux.intel.com>
-Date: Fri, 28 Feb 2025 11:31:20 +0200
+	s=arc-20240116; t=1740738900; c=relaxed/simple;
+	bh=tEvnyaMU3oSs/ueZnSN+9o+Po1ID/44xfiu3e/Usr6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pWr/ZMaI7melPRerFFh9cOLqLBEptCZmVja5jL0nI7fTGVGG1Qfs2jhaO37orCrgr6qTNS7ZL7sIyK5FJgqUAkvIEcEqD1hqn5US19LCP2pf093EhjEdZWnUOytpzTZ7kTmRkQAXbwT/prEB7nJnOEPLEMKTJKvkJwiXx9lYv8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnxhM-0002hu-RK; Fri, 28 Feb 2025 11:34:28 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnxhK-003HLv-02;
+	Fri, 28 Feb 2025 11:34:26 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 9701F3CE1FD;
+	Fri, 28 Feb 2025 10:34:25 +0000 (UTC)
+Date: Fri, 28 Feb 2025 11:34:25 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250228-magic-seahorse-of-abracadabra-f2a402-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+ <CAOoeyxWKWA=OJB_MdWPdJQDic8=AXEbJiu2qW5u=CvphyAykzQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] xhci: Restrict USB4 tunnel detection for USB3 devices to
- Intel hosts
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Marc Zyngier <maz@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Oliver Upton <oliver.upton@linux.dev>,
- stable@vger.kernel.org
-References: <20250227194529.2288718-1-maz@kernel.org>
- <2025022709-unread-mystified-ddf1@gregkh>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <2025022709-unread-mystified-ddf1@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="h2qx7abh3roax2kn"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxWKWA=OJB_MdWPdJQDic8=AXEbJiu2qW5u=CvphyAykzQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On 27.2.2025 22.20, Greg Kroah-Hartman wrote:
-> On Thu, Feb 27, 2025 at 07:45:29PM +0000, Marc Zyngier wrote:
->> When adding support for USB3-over-USB4 tunnelling detection, a check
->> for an Intel-specific capability was added. This capability, which
->> goes by ID 206, is used without any check that we are actually
->> dealing with an Intel host.
->>
->> As it turns out, the Cadence XHCI controller *also* exposes an
->> extended capability numbered 206 (for unknown purposes), but of
->> course doesn't have the Intel-specific registers that the tunnelling
->> code is trying to access. Fun follows.
->>
->> The core of the problems is that the tunnelling code blindly uses
->> vendor-specific capabilities without any check (the Intel-provided
->> documentation I have at hand indicates that 192-255 are indeed
->> vendor-specific).
->>
->> Restrict the detection code to Intel HW for real, preventing any
->> further explosion on my (non-Intel) HW.
->>
->> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: stable@vger.kernel.org
->> Fixes: 948ce83fbb7df ("xhci: Add USB4 tunnel detection for USB3 devices on Intel hosts")
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
->> ---
->>   drivers/usb/host/xhci-hub.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
->> index 9693464c05204..69c278b64084b 100644
->> --- a/drivers/usb/host/xhci-hub.c
->> +++ b/drivers/usb/host/xhci-hub.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/slab.h>
->>   #include <linux/unaligned.h>
->>   #include <linux/bitfield.h>
->> +#include <linux/pci.h>
->>   
->>   #include "xhci.h"
->>   #include "xhci-trace.h"
->> @@ -770,9 +771,16 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
->>   enum usb_link_tunnel_mode xhci_port_is_tunneled(struct xhci_hcd *xhci,
->>   						struct xhci_port *port)
->>   {
->> +	struct usb_hcd *hcd;
->>   	void __iomem *base;
->>   	u32 offset;
->>   
->> +	/* Don't try and probe this capability for non-Intel hosts */
->> +	hcd = xhci_to_hcd(xhci);
->> +	if (!dev_is_pci(hcd->self.controller) ||
->> +	    to_pci_dev(hcd->self.controller)->vendor != PCI_VENDOR_ID_INTEL)
->> +		return USB_LINK_UNKNOWN;
-> 
-> Ugh, nice catch.
-> 
-> Mathias, want me to just take this directly for now and not wait for you
-> to resend it?
 
-Yes, please, take it directly
+--h2qx7abh3roax2kn
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+On 12.02.2025 10:49:43, Ming Yu wrote:
+> > > +static void nct6694_can_handle_state_errors(struct net_device *ndev,=
+ u8 status)
+> > > +{
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> >
+> > It seems you don't have dedicated RX and TX states, so call
+> > nct6694_can_get_berr_counter() and use can_state_get_by_berr_counter()
+> > to get the states. Then basically do that what what
+> > mcp251xfd_handle_cerrif() does, starting with "new_state =3D max(tx_sta=
+te, rx_state);"
+> >
+>=20
+> Excuse me, do you mean that nct6694_can_handle_state_change() the flow
+> should like v5?
+> https://lore.kernel.org/linux-can/CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP=
+01VzZ0S_9H8g@mail.gmail.com/
 
-Thanks
-Mathias
+The handling of
+CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com in v5
+was better, but there were some questions by Vincent...
+
+So let's continue the discussion from v5 here:
+
+> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
+> > +                                           u8 status)
+> > +{
+> > +       struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +       enum can_state new_state =3D priv->can.state;
+> > +       enum can_state rx_state, tx_state;
+> > +       struct can_berr_counter bec;
+> > +       struct can_frame *cf;
+> > +       struct sk_buff *skb;
+> > +
+> > +       nct6694_can_get_berr_counter(ndev, &bec);
+> > +       can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+>=20
+> Here, you set up tx_state and rx_state...
+>=20
+
+remove the switch (status)...
+
+> > +       switch (status) {
+> > +       case NCT6694_CAN_EVT_STS_ERROR_ACTIVE:
+> > +               new_state =3D CAN_STATE_ERROR_ACTIVE;
+> > +               break;
+> > +       case NCT6694_CAN_EVT_STS_ERROR_PASSIVE:
+> > +               new_state =3D CAN_STATE_ERROR_PASSIVE;
+> > +               break;
+> > +       case NCT6694_CAN_EVT_STS_BUS_OFF:
+> > +               new_state =3D CAN_STATE_BUS_OFF;
+> > +               break;
+> > +       case NCT6694_CAN_EVT_STS_WARNING:
+> > +               new_state =3D CAN_STATE_ERROR_WARNING;
+> > +               break;
+> > +       default:
+> > +               netdev_err(ndev, "Receive unknown CAN status event.\n");
+> > +               return;
+> > +       }
+
+replace it by:
+
+	new_state =3D max(tx_state, rx_state);
+
+> > +
+> > +       /* state hasn't changed */
+> > +       if (new_state =3D=3D priv->can.state)
+> > +               return;
+> > +
+> > +       skb =3D alloc_can_err_skb(ndev, &cf);
+> > +
+
+remove this VVV
+> > +       tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
+> > +       rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
+            ^^^
+
+>=20
+> ... but you never used the values returned by
+> can_state_get_by_berr_counter() and just overwrote the tx and rx
+> state.
+>=20
+> What is the logic here? Why do you need to manually adjust those two
+> values? Isn't the logic in can_change_state() sufficient?
+>=20
+> > +       can_change_state(ndev, cf, tx_state, rx_state);
+> > +
+> > +       if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+
+if (priv->can.state =3D=3D CAN_STATE_BUS_OFF) {
+
+>=20
+> Same for the new_state. The function can_change_state() calculate the
+> new state from tx_state and rx_state and save it under
+> can_priv->state. But here, you do your own calculation.
+>=20
+> Only keep one of the two. If your device already tells you the state,
+> then fine! Just use the information from your device and do not use
+> can_change_state(). Here, you are doing double work resulting in a
+> weird mix.
+>
+
+what does your device do when it goes into bus off?
+
+> > +               can_bus_off(ndev);
+> > +       } else if (skb) {
+> > +               cf->can_id |=3D CAN_ERR_CNT;
+> > +               cf->data[6] =3D bec.txerr;
+> > +               cf->data[7] =3D bec.rxerr;
+> > +       }
+> > +
+
+if (skb)
+
+> > +       nct6694_can_rx_offload(&priv->offload, skb);
+> > +}
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--h2qx7abh3roax2kn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfBkS4ACgkQDHRl3/mQ
+kZx8rAf/YwHWaPQeJt2a23AqQMCRA4js5IxIDrKEDC6om3BvkuibxwOwYh8vEl8Y
+IZOCA5tIkrQvRDZxSCQBe4yb3qkd8xVWeOR02lqIz5ZmYH9TjRuF4DrxXeustZpz
+ik5+osAJwCt6OaWhClj8hyGFb4koVa2usLbi71ynDPW9RfOcfHyNvkgEgqS838LV
+gP14GLvw7MaoruLgV4B+hAbA56cST7RLm+F9aQehMUej1lVU7G2vQTgcDGgIyN6j
+tRT7p6+EplB3uVCDU/aq3iB5hY1R6hZY1im0aYqfg1p1UzzYN4pK8Z5C63KmHfr8
+3gWlCeaQJC5+CDfvtp9fm3La49zFcQ==
+=3lgQ
+-----END PGP SIGNATURE-----
+
+--h2qx7abh3roax2kn--
 
