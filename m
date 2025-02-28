@@ -1,232 +1,205 @@
-Return-Path: <linux-usb+bounces-21184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D25BCA4977E
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 11:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E617BA49792
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 11:39:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B88341887137
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 10:35:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F398E1890F95
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 10:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24F425F961;
-	Fri, 28 Feb 2025 10:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50D725F790;
+	Fri, 28 Feb 2025 10:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="CMSeZuDJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE525F7AA
-	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 10:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51BA25DAF4
+	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 10:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740738900; cv=none; b=lsSu4WzrRR3J4p0N9sOGjEymdvniM+eOEjPFhFLIPMZJ40/+ISO049L3npQlJJxjuMWavLHtjAoGbooPfaWC9S02fUKUDTIH2YMCEQGeApE22ZPrRbMGScZ36ciPTA3V2+Q78ENSS+kZ/MiPnIYXBv8fIBqlDiNEQ8cMMxBu4VU=
+	t=1740739142; cv=none; b=t0SLbDIyKeySVC0i1HEx9UYzmwsXVr3nqzgtXY2fbc9Qg8orKyvT7i/NR+dUUYT5kTkybpQDT+k/doxpd+z5jYSZzVQsRO5urmBxgXwsWde1wgZSi+Arh3l5Yq2mLEIuVQF330UM9QxmjTuwVHvlWYyONoxP7HfNDhLfU8PhRoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740738900; c=relaxed/simple;
-	bh=tEvnyaMU3oSs/ueZnSN+9o+Po1ID/44xfiu3e/Usr6o=;
+	s=arc-20240116; t=1740739142; c=relaxed/simple;
+	bh=QUNDLB9wIz3SgB5nupTBapjW2yLDITrKMtGbCrusmeI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWr/ZMaI7melPRerFFh9cOLqLBEptCZmVja5jL0nI7fTGVGG1Qfs2jhaO37orCrgr6qTNS7ZL7sIyK5FJgqUAkvIEcEqD1hqn5US19LCP2pf093EhjEdZWnUOytpzTZ7kTmRkQAXbwT/prEB7nJnOEPLEMKTJKvkJwiXx9lYv8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnxhM-0002hu-RK; Fri, 28 Feb 2025 11:34:28 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnxhK-003HLv-02;
-	Fri, 28 Feb 2025 11:34:26 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 9701F3CE1FD;
-	Fri, 28 Feb 2025 10:34:25 +0000 (UTC)
-Date: Fri, 28 Feb 2025 11:34:25 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250228-magic-seahorse-of-abracadabra-f2a402-mkl@pengutronix.de>
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com>
- <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
- <CAOoeyxWKWA=OJB_MdWPdJQDic8=AXEbJiu2qW5u=CvphyAykzQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WmArMpTI5rviX+akptc6cjXMubGl/SEyCMc/eoh4UdCH1w9T1PZvxY805OSAzxFP15f+HxMzwAm745Ev2NHD2OBbUJYyyfxl8YuRAMeNxGh5CQZkfnsmD8Gr/7innb0G2ap1WyGtwTNYE/rBPxOfxYwriNC+fLJH/3D0PSSggXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=CMSeZuDJ; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-390e6ac844fso1659395f8f.3
+        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 02:39:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1740739139; x=1741343939; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oG39+hcRe3mRE9YuhXueuN+tcV1/Sxrh6Deyz13CYHQ=;
+        b=CMSeZuDJALTJrLrDXO1MaSNxV3UC1hTJpYXe1sp9tFdjIbeYFI7Ls5FhMomMcEARe9
+         b25+CK0qxcJFHgPT3EgrzsrqgXuB64t0E82Vasr3nzWOWXs3nql0cb5AZ/8crBpCgMJn
+         mUkYvqVsNepeJiOGZ7RD2NxPp0dAbJfxBtBS0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740739139; x=1741343939;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oG39+hcRe3mRE9YuhXueuN+tcV1/Sxrh6Deyz13CYHQ=;
+        b=iwetV4MSStKaMSPCkL0jlf/uHBa9vRokuU7SBauzCrmYGotJBZRK4RPcl7MBfYq/VR
+         R2TeLNkG44eaL+mdAPp379DyHof+lqwdbik0VvhikkbxWWT06cpolgiPHmSkOa7flie2
+         c5zviI2vObWSNELGN5TzJwJF4SQ18rpvStf3nt1nBt9dIryN81op+sveghi5eH1Ky6Q7
+         h67vI6xbD/ULR72rgJGLYhvgbeFZto+mPSZPVAZqCN6F6yLo1lD7TaL9a7zhqmC+eujH
+         JEQWNf8BU9LkBo9+3UGPa96umZMwMfOCDzNq8as+qx6CnWdMAfuo90BIWjQ67yFwMHsb
+         59Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUllUSYCfUZyzo13TnarOR0DmmqehEDVbeX+FkRNLH038q9TyaXiVyJhRxF4v5OgBSveRKSPZrqbQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSyRA6bYFIHqlLYQ4zfQy4+LzRa4vwMVd2ARPlKAR47X95Vap7
+	r75VqDCOZ9OH2jDbXilyvDhBBpnoQYCh1CUEo+FPu5mSm3aoFkBEFcq/mcfrvsk=
+X-Gm-Gg: ASbGncuKyGT7s82wxGobrjcj2O/W9QwnLNIJdkro0piQPV43YlW3Fc7fg+itAGihrBi
+	HlGhp6MS3ZEWEuE2RqnbJ8mvU4TqIFt9WbGkgtFUqT+f3yiW7pYt946jb6gXq3O1WiTCgNCcTiR
+	RUioFHBwLTywZbf9FgilvxkNolt4IrZ1iMU4XYVM9DNGMG3FUKZvPvRqt8g+n9/W91MnyqWVt33
+	68G71EYSyI/7oaKS4vB4UyvLORpSNM18IsksFuwWJEix+tEUbA1UNQTP0RdDAJ2u+4Y4xCxfGYD
+	gw3mxHc+1Alca57N23dxCAjswvp1gAylbph8+g==
+X-Google-Smtp-Source: AGHT+IHKtGVsCgsiQqYoRp4tUgxKTTuuX/6KEMlk0ndg4zFgqUK2TcWKSSYGEO9DYxuDiwTWH64tCQ==
+X-Received: by 2002:a5d:64cf:0:b0:38a:8906:6b66 with SMTP id ffacd0b85a97d-390eca2793dmr2679060f8f.38.1740739138696;
+        Fri, 28 Feb 2025 02:38:58 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:5485:d4b2:c087:b497])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba53945bsm84503875e9.23.2025.02.28.02.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2025 02:38:58 -0800 (PST)
+Date: Fri, 28 Feb 2025 11:38:55 +0100
+From: Simona Vetter <simona.vetter@ffwll.ch>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Louis Chauvet <louis.chauvet@bootlin.com>, linux-kernel@vger.kernel.org,
+	Lyude Paul <lyude@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v4 0/9] Driver core: Add faux bus devices
+Message-ID: <Z8GSPwC7hqFFwAVi@phenom.ffwll.local>
+Mail-Followup-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Louis Chauvet <louis.chauvet@bootlin.com>,
+	linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <7d196a91-220a-41a5-8577-198b436d8440@bootlin.com>
+ <2025022719-papaya-resample-0b59@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h2qx7abh3roax2kn"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAOoeyxWKWA=OJB_MdWPdJQDic8=AXEbJiu2qW5u=CvphyAykzQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2025022719-papaya-resample-0b59@gregkh>
+X-Operating-System: Linux phenom 6.12.11-amd64 
 
+On Thu, Feb 27, 2025 at 07:30:29AM -0800, Greg Kroah-Hartman wrote:
+> On Thu, Feb 27, 2025 at 02:06:21PM +0100, Louis Chauvet wrote:
+> > 
+> > 
+> > Le 10/02/2025 à 13:30, Greg Kroah-Hartman a écrit :
+> > > For years/decades now, I've been complaining when I see people use
+> > > platform devices for things that are obviously NOT platform devices.
+> > > To finally fix this up, here is a "faux bus" that should be used instead
+> > > of a platform device for these tiny and "fake" devices that people
+> > > create all over the place.
+> > > 
+> > > The api is even simpler than the normal platform device api, just two
+> > > functions, one to create a device and one to remove it.  When a device
+> > > is created, if a probe/release callback is offered, they will be called
+> > > at the proper time in the device's lifecycle.  When finished with the
+> > > device, just destroy it and all should be good.
+> > > 
+> > > This simple api should also hopefully provide for a simple rust binding
+> > > to it given the simple rules and lifecycle of the pointer passed back
+> > > from the creation function (i.e. it is alive and valid for as long as
+> > > you have not called destroy on it.)
+> > > 
+> > > I've also converted four different examples of platform device abuse, the
+> > > dummy regulator driver, the USB phy code, the x86 microcode dvice, and
+> > > the "regulator" device that wifi uses to load the firmware tables, to
+> > > use this api.  In all cases, the logic either was identical, or became
+> > > simpler, than before, a good sign (side note, a bug was fixed in the usb
+> > > phy code that no one ever noticed before).
+> > > 
+> > > Note, unless there are major objections, I'm leaning toward getting
+> > > patch 1 and 2 of this series merged during this -rc cycle so that all of
+> > > the individual driver subsystem cleanups can go through those subsystems
+> > > as needed, as well as allowing the rust developers to create a binding
+> > > and get that merged easier.  Having patch 1 merged on its own isn't
+> > > going to cause any changes if no one uses it, so that should be fine.
+> > 
+> > Hi all,
+> > 
+> > I have a maybe dumb question regarding the patches 3..9: do they break the
+> > UAPI?
+> > 
+> > With a platform device, the drivers appear under /sys/bus/platform, but with
+> > faux device, they appear under /sys/bus/faux.
+> > 
+> > I ask because I found out that one (see my reply to [2]) of the main drm
+> > library expects to find all the devices under pci, usb, platform, virtio and
+> > host1x buses [1], so at least for the vgem and vkms driver, this library
+> > will be broken (it will not crash, but previously detected devices will
+> > suddenly disappear).
+> 
+> Why does a userspace tool want to walk bus types?  Shouldn't it just be
+> iterating over the userspace class type instead?  classes are how
+> devices are exposed to userspace, not through a bus.  That way if there
+> is a new bus type tomorrow (like this one), code will just keep working.
+> 
+> What does the tool actually do in the platform device's directory?
 
---h2qx7abh3roax2kn
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Yeah this should work. In the past, mostly for historical reasons (pci
+enumeration in Xserver due to everything being userspace drivers) this
+wasn't the case. But modern drm drivers should go hunt for a compatible
+drm_driver name, enumerating all drm devices of the right class (legacy
+aka display or render or accel), because that string name is the uapi
+promise for the driver-specific uapi.
 
-On 12.02.2025 10:49:43, Ming Yu wrote:
-> > > +static void nct6694_can_handle_state_errors(struct net_device *ndev,=
- u8 status)
-> > > +{
-> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> >
-> > It seems you don't have dedicated RX and TX states, so call
-> > nct6694_can_get_berr_counter() and use can_state_get_by_berr_counter()
-> > to get the states. Then basically do that what what
-> > mcp251xfd_handle_cerrif() does, starting with "new_state =3D max(tx_sta=
-te, rx_state);"
-> >
->=20
-> Excuse me, do you mean that nct6694_can_handle_state_change() the flow
-> should like v5?
-> https://lore.kernel.org/linux-can/CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP=
-01VzZ0S_9H8g@mail.gmail.com/
+Anything that uses generic drm apis like kernel modesetting shouldn't
+care, unless you've managed to hard-code your device path in your config
+somewhere. But almost everything does automatic setup nowadays, at least
+as a fallback.
 
-The handling of
-CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com in v5
-was better, but there were some questions by Vincent...
+Plus vgem and vkms are mostly for validation, that stuff we can fix
+without annoying real users. It's kinda like breaking debugfs, which you
+need anyway for running most of the igt testcases.
 
-So let's continue the discussion from v5 here:
+tldr; I'm not worried, and if something breaks we need and can fix it.
 
-> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
-> > +                                           u8 status)
-> > +{
-> > +       struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +       enum can_state new_state =3D priv->can.state;
-> > +       enum can_state rx_state, tx_state;
-> > +       struct can_berr_counter bec;
-> > +       struct can_frame *cf;
-> > +       struct sk_buff *skb;
-> > +
-> > +       nct6694_can_get_berr_counter(ndev, &bec);
-> > +       can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
->=20
-> Here, you set up tx_state and rx_state...
->=20
-
-remove the switch (status)...
-
-> > +       switch (status) {
-> > +       case NCT6694_CAN_EVT_STS_ERROR_ACTIVE:
-> > +               new_state =3D CAN_STATE_ERROR_ACTIVE;
-> > +               break;
-> > +       case NCT6694_CAN_EVT_STS_ERROR_PASSIVE:
-> > +               new_state =3D CAN_STATE_ERROR_PASSIVE;
-> > +               break;
-> > +       case NCT6694_CAN_EVT_STS_BUS_OFF:
-> > +               new_state =3D CAN_STATE_BUS_OFF;
-> > +               break;
-> > +       case NCT6694_CAN_EVT_STS_WARNING:
-> > +               new_state =3D CAN_STATE_ERROR_WARNING;
-> > +               break;
-> > +       default:
-> > +               netdev_err(ndev, "Receive unknown CAN status event.\n");
-> > +               return;
-> > +       }
-
-replace it by:
-
-	new_state =3D max(tx_state, rx_state);
-
-> > +
-> > +       /* state hasn't changed */
-> > +       if (new_state =3D=3D priv->can.state)
-> > +               return;
-> > +
-> > +       skb =3D alloc_can_err_skb(ndev, &cf);
-> > +
-
-remove this VVV
-> > +       tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
-> > +       rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
-            ^^^
-
->=20
-> ... but you never used the values returned by
-> can_state_get_by_berr_counter() and just overwrote the tx and rx
-> state.
->=20
-> What is the logic here? Why do you need to manually adjust those two
-> values? Isn't the logic in can_change_state() sufficient?
->=20
-> > +       can_change_state(ndev, cf, tx_state, rx_state);
-> > +
-> > +       if (new_state =3D=3D CAN_STATE_BUS_OFF) {
-
-if (priv->can.state =3D=3D CAN_STATE_BUS_OFF) {
-
->=20
-> Same for the new_state. The function can_change_state() calculate the
-> new state from tx_state and rx_state and save it under
-> can_priv->state. But here, you do your own calculation.
->=20
-> Only keep one of the two. If your device already tells you the state,
-> then fine! Just use the information from your device and do not use
-> can_change_state(). Here, you are doing double work resulting in a
-> weird mix.
->
-
-what does your device do when it goes into bus off?
-
-> > +               can_bus_off(ndev);
-> > +       } else if (skb) {
-> > +               cf->can_id |=3D CAN_ERR_CNT;
-> > +               cf->data[6] =3D bec.txerr;
-> > +               cf->data[7] =3D bec.rxerr;
-> > +       }
-> > +
-
-if (skb)
-
-> > +       nct6694_can_rx_offload(&priv->offload, skb);
-> > +}
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---h2qx7abh3roax2kn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfBkS4ACgkQDHRl3/mQ
-kZx8rAf/YwHWaPQeJt2a23AqQMCRA4js5IxIDrKEDC6om3BvkuibxwOwYh8vEl8Y
-IZOCA5tIkrQvRDZxSCQBe4yb3qkd8xVWeOR02lqIz5ZmYH9TjRuF4DrxXeustZpz
-ik5+osAJwCt6OaWhClj8hyGFb4koVa2usLbi71ynDPW9RfOcfHyNvkgEgqS838LV
-gP14GLvw7MaoruLgV4B+hAbA56cST7RLm+F9aQehMUej1lVU7G2vQTgcDGgIyN6j
-tRT7p6+EplB3uVCDU/aq3iB5hY1R6hZY1im0aYqfg1p1UzzYN4pK8Z5C63KmHfr8
-3gWlCeaQJC5+CDfvtp9fm3La49zFcQ==
-=3lgQ
------END PGP SIGNATURE-----
-
---h2qx7abh3roax2kn--
+Cheers, Sima
+-- 
+Simona Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 
