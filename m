@@ -1,123 +1,135 @@
-Return-Path: <linux-usb+bounces-21213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 351E3A4A2E0
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:41:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13CBA4A30B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1DCE3BBC0E
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 19:41:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90817188A5E3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 19:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDC0230BC2;
-	Fri, 28 Feb 2025 19:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A190230BE5;
+	Fri, 28 Feb 2025 19:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="R5T1sqae"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzO6N1I+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED32230BE0;
-	Fri, 28 Feb 2025 19:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FE6230BD9
+	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740771682; cv=none; b=eBymowVvuE/wq0Zv9kQcukZM06ifur+IbrQ4MgUH2TCt+rhFr6PbTK895NgFv6EWvvwElfMxpaUZ6sy0ECg9njI6OOtGlVhClLPiNVyas9UTObHNsl5EVsoeEhs4AIUUf+gKxE1chHCxJX8jYwARfdpIjt96/Q9QzbRJq6zJjAk=
+	t=1740772145; cv=none; b=Vo4l+8uWi/In3E/Tb6AFWwTCiPnbTHhwgPU3p15ii05svurKfP8+cBVP6XcjOgh6uugH3En5PJN5jGg2UOUGJmlmMBH2pfUbUQv8huhBpnHat38dNqazJiIdl/sTvlWM0aDE1nVKxLM4kTwzEkqGmmhvW14wqzZHtzWlpVGdxVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740771682; c=relaxed/simple;
-	bh=BiBigTqt8TxXxiRZ0NYHm86L7pUNCmwu0CPsw+p8UqU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UDViUiyPWmz8Om3ZhqRo4nySkl4o1TG8CwwajPgNpqgZ/3pmi+9i0gJkXsBtlfxnpQayVe+2hrEio9fajWDE4tqd3qZMVjfHZGnizTssaHfr7wDuvVHAKssxbUPPB7KimwzJkghkoiMTscn7xjJQEtRblZl1AWAZOGwdHcx4CVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=R5T1sqae; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id B6D8A25CD9;
-	Fri, 28 Feb 2025 20:41:19 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPnDd409B9_6; Fri, 28 Feb 2025 20:41:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1740771666; bh=BiBigTqt8TxXxiRZ0NYHm86L7pUNCmwu0CPsw+p8UqU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=R5T1sqaeEwRSA3aKrXdM6bg0s9JriYy5R1fmUMz2JZlyaZbmuJKsEB/TRAUQNtEXD
-	 OST4sZojIjlkefktL7Z+LiMtZz2fRUYTVItKcsVFJ/ekh8z46A0KvweRsHvEaFbiAN
-	 xtlSDQEb0KxhwzXR0ibh8opBFhCjvlVba7+0THhIEPKDNlOvaBpV/+rMlX9Ya7DRmP
-	 d+XAlh+xxwru+M+QksmAFiLfQQsspdoNnMEI0OyPdnyo3vTphKdASXR35XqjxJC+aL
-	 dqgPdHOmbQdARUzTbrPaOrDJPNk/9C/VyMCFtVgJr3qwuA2yemdcgr0NsHzl65oFaW
-	 HxHpmwfDLA/sw==
-From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Sat, 01 Mar 2025 01:10:34 +0530
-Subject: [PATCH v3 2/2] usb: dwc3: exynos: add support for exynos7870
+	s=arc-20240116; t=1740772145; c=relaxed/simple;
+	bh=x5tPgVYZiho6Jf9Qv2JEXOFnEuf9SH+JK0jkinBhoCA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=d0ArARBt3QrXJFCslzSbVAfKm7jLhGAvhL/PYIHEPqL71Lpzt0KWzzTER4Htrkrhu31LKvaIN2Q+yy0ku8sBxqcYDcGdZZ+soyZJls5Y8M+mA9oAknNQORu2grUoUOAn1j5VPOPeQlMs2FfhjXB8vnlqcb3QxH6i5+/9whQTeV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzO6N1I+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55EABC4CEE5
+	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740772144;
+	bh=x5tPgVYZiho6Jf9Qv2JEXOFnEuf9SH+JK0jkinBhoCA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=fzO6N1I+kqL/lH7kpbWvGRnqSZx8ChSXs7HSub+p6J4qxNhxH8Ri3a41y/5ShZkxZ
+	 67C1UO2kkXvLCpXkDHR7SuyXW0uXVgekYrRq+oqY8t9xkILhqPeg32hjRiD3HMhDJ6
+	 XyrAPgp8MqAt+Y47YdNf+yddxU7vkvaf2uj7Pq42wa9ZvGIUNA7PBr0CxqdRPuXnTA
+	 XMVLX86W+UtIG3v+BGp51HN0/FJ3cz31i0c1zPKB3Nxocuiq8CRVRT4PrEfY38cCkV
+	 ggPsiMULOG1tkfuNIOUL3v2IF+nIZtGMQhZCho+f17aw19P6Aw/LbJkL7OLpPCY+z/
+	 xBaQuQYrdsvvg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 45F5CC433E1; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Fri, 28 Feb 2025 19:49:03 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219824-208809-fX0MMehMUt@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250301-exynos7870-usb-v3-2-f01697165d19@disroot.org>
-References: <20250301-exynos7870-usb-v3-0-f01697165d19@disroot.org>
-In-Reply-To: <20250301-exynos7870-usb-v3-0-f01697165d19@disroot.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Kaustabh Chakraborty <kauschluss@disroot.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740771646; l=1481;
- i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
- bh=BiBigTqt8TxXxiRZ0NYHm86L7pUNCmwu0CPsw+p8UqU=;
- b=l0L0dn1tIo7hFnxq4a00quf2NREVzikRU26jic1aXw3waKV/qaUPKdq5+/xCNMIeGD/ZfQuia
- ba9V6DJBF4BAZ+QMRMtQJDTOZmiR9ChOCiPYMKl/N/0fLEj3HrMcB4g
-X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
- pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
-Exynos7870 devices have a DWC3 compatible USB 2.0 controller.
-Add support in the driver by:
- - Adding its own compatible string, "samsung,exynos7870-dwusb3".
- - Adding three USBDRD clocks named "bus_early", "ref", and "ctrl", to
-   be controlled by the driver.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+--- Comment #9 from Artem S. Tashkinov (aros@gmx.com) ---
+Created attachment 307725
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307725&action=3Dedit
+xhci_hcd and usb debug log
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index f5d963fae9e069e1bd145ff5bd1b704da89fb74c..de686b9e64046be12e52c87d80282558ac5b5f52 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -163,6 +163,12 @@ static const struct dwc3_exynos_driverdata exynos7_drvdata = {
- 	.suspend_clk_idx = 1,
- };
- 
-+static const struct dwc3_exynos_driverdata exynos7870_drvdata = {
-+	.clk_names = { "bus_early", "ref", "ctrl" },
-+	.num_clks = 3,
-+	.suspend_clk_idx = -1,
-+};
-+
- static const struct dwc3_exynos_driverdata exynos850_drvdata = {
- 	.clk_names = { "bus_early", "ref" },
- 	.num_clks = 2,
-@@ -185,6 +191,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	}, {
- 		.compatible = "samsung,exynos7-dwusb3",
- 		.data = &exynos7_drvdata,
-+	}, {
-+		.compatible = "samsung,exynos7870-dwusb3",
-+		.data = &exynos7870_drvdata,
- 	}, {
- 		.compatible = "samsung,exynos850-dwusb3",
- 		.data = &exynos850_drvdata,
+(In reply to Mathias Nyman from comment #5)
+> 6.13 has a lot of changes related to endpoint stopping:
+>=20
+> e21ebe51af68 xhci: Turn NEC specific quirk for handling Stop Endpoint err=
+ors
+> generic
+> 474538b8dd1c usb: xhci: Avoid queuing redundant Stop Endpoint commands
+> 484c3bab2d5d usb: xhci: Fix TD invalidation under pending Set TR Dequeue
+> 42b758137601 usb: xhci: Limit Stop Endpoint retries
+>=20
+> Endpoints are stopped in order to cancel transfers, before suspend, and to
+> soft reset an endpoint after clearing a halt.=20
+>=20
+> I understand that bisecting an issue like this that triggers rarely isn't=
+ an
+> option, but can I ask you to try running 6.13 with xhci dynamic debug
+> enabled.
+>=20
+> mount -t debugfs none /sys/kernel/debug
+> echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
+> echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
+> and send dmesg after issue is triggered.
+>=20
+> It could reveal a bit more what's going on
 
--- 
-2.48.1
+I'm confused.
 
+If I resume the laptop and don't run these three commands immediately, all =
+the
+USB ports eventually die (usually under 5 minutes).
+
+If I resume the laptop and run these commands immediately, USB ports contin=
+ue
+working like they always did before. So, weirdly and unexpectedly, when
+debugging is on ... it fixes the issue.
+
+If I resume the laptop, don't run these commands, and then when the USB por=
+ts
+die I run them, there are no further messages from the xhci_hcd module.
+
+I'm attaching the debug log (again, no bug here) regardless. Maybe it conta=
+ins
+something that will let you understand what is going on.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
