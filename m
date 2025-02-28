@@ -1,127 +1,112 @@
-Return-Path: <linux-usb+bounces-21210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00310A4A00A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 18:15:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50C9BA4A2D7
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72BBC16F94E
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 17:15:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDE8F3B2AD7
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 19:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C9A1F0990;
-	Fri, 28 Feb 2025 17:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ABB2230BC2;
+	Fri, 28 Feb 2025 19:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Neb2MXZO"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="E7yY5a1Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EF41F4CB8;
-	Fri, 28 Feb 2025 17:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80BD1C175A;
+	Fri, 28 Feb 2025 19:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740762908; cv=none; b=EB4OnXdw0hQQbYJbiKmxKFUCCKOzaA0DAY1S5ojOcN8Vdw5dTVMwgfd86891m4SKSHuNr819xQNSbRWsUU7/tT/Pz6vvBa/e0us7O65uSOc9GPS+D8YEPG1t4a9SCR2M24dNJS3fDlFZ99NM7NvfM7EHVG6wqkJSUVpjyAeIeBo=
+	t=1740771663; cv=none; b=CvxdhDMyjNOpYuXI8TIhAP3++yZUvbMx+sWg6ZaOqOzie8jpo8A6mSW4Hs+4KuECfASKPRDQ/a6oUh416m98RapQ3R7pfj+NSaJc+otF8LTgzDVoH7swL5xP76g2dZVN0B0GBAjjUTuR6FEIBMpT1mql1R7m0u8etRXq9BjYd3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740762908; c=relaxed/simple;
-	bh=yw56OOcc4mOBuuj6ITPf/bufZr7+wEV6mWmgXwpcuAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A56NWSrX6w9/NikfWXyGo8RgRn2b9uQ1EIhJITfy/r8JdY/vEpp/cNXXkCQwZ/oahLZtTTJCHlAzzX0ICZ3gTrPpQnwfjbtxAHLgG3yR2/wqdNJbosP1p1JSKxz61pRsJz0j4mHL4Inw9Wn3S+nraIa98nYiZe2oR4zMnerR3dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Neb2MXZO; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aaee2c5ee6eso334597266b.1;
-        Fri, 28 Feb 2025 09:15:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740762904; x=1741367704; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=afeonSAlFod4Wwm3A9Q0iIl/boL2tdt0YRRgmGv2+Wc=;
-        b=Neb2MXZOBiQOHw2W4MtkDC712Qs1vTzhK9tgByQLumV+FiPiEYlioMsW59rtBwAk1Q
-         NqGaV1TypMnXVSu+XAbNMK7AX/NyWJO48oCEaOlU4cDhg6LIsdH1O+CNZ1fjB/lMGNln
-         sOtCyhlg7Ctiq+J30Vz9cXI640mKtNb1YXAAKih1y8zmB/p122n6wc0mUblNlWu9zLSp
-         HUAFDYyDGvmYh2RL2H2d7MOsA3/5oTwOWuMYFWL1fSQPlnkMuuXEz5Gs6FSQIIVASNv0
-         ZxqahzUZi1oOT3P7ANS9S4HVUXeNEa2Szf9JHgqM/NoLnil+Ni0Csxhuj/DZbUwcMfXG
-         rf0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740762904; x=1741367704;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=afeonSAlFod4Wwm3A9Q0iIl/boL2tdt0YRRgmGv2+Wc=;
-        b=Xr9h9BcAIA/IpdBGCLyxUdvBL5b5mG5Qe6UPHtvg85F1K8KWeEisUs1iX89771468c
-         5Q5LIJ2H0PeZ+9KKhO575Wrb6+B/iqdfxy56qQTmdEy58QAwBdZ3+KONzpNrmxxg0fd4
-         pMTssKbD9bTL3+FQxg0takAmVKlc0VTcPpL5x9Ib5cpWweVPUgl18nMCpcrR6Cpp11LX
-         G2zkhBcZunc8WObA4AS2kbpDu+HZXvh+WuK1jVHtaZm1RMB6thWZllxvx1HNZAHCHrEw
-         kMqA8446MH6nXLoaEPkcsDzpIUhg7Zu/7in9zqMJ07S62wpYlCQGR/n0ywwd4TOqHifd
-         tT0g==
-X-Forwarded-Encrypted: i=1; AJvYcCW2vIHAYHkco+aON0PmKqurOrI1jlrZBqHx5LHwnJk4d5RWLlnqgy/cvs8lXU5JJH6R+rBFNagF@vger.kernel.org, AJvYcCXWDRnomg6u+UTtIJlm4gu4k6g3ogUJ9pZGlXMxClrKmlxBNAIKJnuZAeF3pFyrVx5R5oxk+cZQ5OZBRxM=@vger.kernel.org, AJvYcCXcDnn5XqzoI806pd2wQu80mR5SrsQ5bt9uCQ8TMCUkRbq7y0bDuz8w82Kye9tzlLQGqURlhjCNLCac@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYR+nvaftkojlQDIqhoyoD2NrTYaEoWtG0FhShZ/FfgSIqzwkB
-	by4EXxCtW8F6u5UPm2Vr00qSrg3ok6yf/JHflV2D+VmKHALrUg2O
-X-Gm-Gg: ASbGncsQxSLdV1SznRtCcuQR54C3+z1ldjhJb1s2rK6YRL9EPJp7sK1Hlx4tBfwx0hm
-	pWHFwbNzt5u27a8dlY03plDLy/yvf8rXmE+abOoinVU3hqwHN/vd9eslcJvjcc3w2tku7YLmNBn
-	ZY7v6+6h6LhWhFv7D3tNdC//N4LR+ebOFqsQSEHSiPedp5vzWZRU+FYJUVHrwUUZnORDaxtGVNb
-	RLqZ/QeB/MhStArVtRyxeTGxH5uQnw+PmkuLSbG/sKVULZ1dv3+36MoB+cfcR8ceFl/ngctYAyR
-	ag+bypVhhPmC2NLaPhsVmj8ecQ3T/b12vt5zsCSm
-X-Google-Smtp-Source: AGHT+IFcwu5SgE7uaz6+ha2R6PQoBv6tsHMNfhGt4zl4vNELvAtuToKwfhdiqEMFcNgr+0yERYGfAA==
-X-Received: by 2002:a17:907:96a5:b0:ab7:eaf7:2bd6 with SMTP id a640c23a62f3a-abf269b8941mr492833766b.49.1740762903970;
-        Fri, 28 Feb 2025 09:15:03 -0800 (PST)
-Received: from foxbook (adqi59.neoplus.adsl.tpnet.pl. [79.185.142.59])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c75d31csm316464266b.157.2025.02.28.09.15.02
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 28 Feb 2025 09:15:03 -0800 (PST)
-Date: Fri, 28 Feb 2025 18:14:59 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Kuangyi Chiang <ki.chiang65@gmail.com>, gregkh@linuxfoundation.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Handle quirky SuperSpeed isoc error
- reporting by Etron HCs
-Message-ID: <20250228181459.2ec1d29c@foxbook>
-In-Reply-To: <20250228181146.5188fcdb@foxbook>
-References: <20250205234205.73ca4ff8@foxbook>
-	<b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
-	<20250210095736.6607f098@foxbook>
-	<20250211133614.5d64301f@foxbook>
-	<CAHN5xi05h+4Fz2SwD=4xjU=Yq7=QuQfnnS01C=Ur3SqwTGxy9A@mail.gmail.com>
-	<20250212091254.50653eee@foxbook>
-	<41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
-	<20250228181146.5188fcdb@foxbook>
+	s=arc-20240116; t=1740771663; c=relaxed/simple;
+	bh=qU9iA+vOEzeMzvDuuOahSaEm6XWe+bK8zvzRf3k0HB8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tAYPdXaiMNMPTjt7+wkHlQNNtqlUiQwcvvj2Z/9YX1rJAMiFHOQNE7OZiKI42708VzmE0BNfyEaIzjRTr/dkUqE6kThKArsQS85P/7rAVthE4pfxe+O+/B7em5z/0XitiX+LbQBr/j8UhmDKQbr4C3XY5AG8oRAOH948Z39eWNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=E7yY5a1Q; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 4575C25E98;
+	Fri, 28 Feb 2025 20:41:00 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CP8WZkex-2mA; Fri, 28 Feb 2025 20:40:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1740771653; bh=qU9iA+vOEzeMzvDuuOahSaEm6XWe+bK8zvzRf3k0HB8=;
+	h=From:Subject:Date:To:Cc;
+	b=E7yY5a1Q7oZfqavegTjbD/PLDQRnN6cc4E8ASgnqLVOSJ4SW/RsuiztIjb+/xqCVg
+	 Jx4/rSJ6wtutrloYrYvAUNKZUWhY7epgvDfoPEh4ZxVi5MyZemazZfu4Ajx9+IjzBP
+	 OLPnqPnJk3UIrRsHRweq+vHybMq7UM+kwDGO1Da7kp3aRRwHUvRHmEnWevvKP6DafZ
+	 PepAH1Nrr3Uwme+dF0MtOcJCrsCQOaiZcC1EAPdQXrG0XsE/1+/M4DRLPEKZdodvwj
+	 ZBYOUkq94KvtAUTMfT7g7qFzNaFzf963hbrWGrfg3BeWSzwyjvYAeu9n9RPZg8vrgU
+	 98WcoRpQFrkMA==
+From: Kaustabh Chakraborty <kauschluss@disroot.org>
+Subject: [PATCH v3 0/2] Introduce DWC3 support for Exynos7870
+Date: Sat, 01 Mar 2025 01:10:32 +0530
+Message-Id: <20250301-exynos7870-usb-v3-0-f01697165d19@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADARwmcC/2XMSwqDMBSF4a1Ixk3Jw5CkI/dROkjNVe/ElMQGR
+ dx7o1AodvgfON9KEkSERG7VSiJkTBjGEvJSkXZwYw8UfWkimFBMMElhXsaQtNGMvtOT2k46BV4
+ DWEXK6RWhw/kA74/SA6YpxOXwM9/XL1Wfqcwpo05rJTvDjXR14zHFEKZriD3ZsSx+AG7/AFEA7
+ qHmztjW+hOwbdsH31MVuO8AAAA=
+X-Change-ID: 20250203-exynos7870-usb-9f3a5ed7ee95
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Kaustabh Chakraborty <kauschluss@disroot.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740771646; l=1071;
+ i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
+ bh=qU9iA+vOEzeMzvDuuOahSaEm6XWe+bK8zvzRf3k0HB8=;
+ b=HdyHH2oS4+fYxV/sBoU6KiRXywgEMncCSjxdSQ5dnur8HRqdnsL+GcHXAMImN9MhWfJuuPBNK
+ CYqkKhHcxjJCvtXlpprtMcSWBFEGN0yGLvgEbPKTVM2NiVFnG00KQ6/
+X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
+ pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
-On Fri, 28 Feb 2025 18:11:46 +0100, Micha=C5=82 Pecio wrote:
-> What are your thoughts about killing error_mid_td completely and using
-> a similar mechanism to deal with those final events?
->=20
-> 1. The events would be taken care of.
->=20
-> 2. It should be OK wrt DMA, because the HC has no reason to touch data
-> buffers after an error. Short Packet is done this way and it works.
->=20
-> 3. A remaining problem is that dequeue is advanced to end_trb too soon
-> and "tail" of the TD could be overwritten. Already a problem with
-> Short Packet and I think it can be solved by replacing most
-> xhci_dequeue_td() calls with xhci_td_cleanup() and adding to
-> handle_tx_event():
->=20
->     ep_ring->dequeue =3D ep_trb;
->     ep_ring->deq_seg =3D ep_seg;
+This patch series is a part of Exynos7870 upstreaming.
 
-Forgot to add:
+Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+---
+Changes in v3:
+- Switch positions of "ctrl" and "ref" clock names.
+- Link to v2: https://lore.kernel.org/r/20250219-exynos7870-usb-v2-0-1de41a89c9d4@disroot.org
 
-4. Guaranteed low latency of error reporting.
+Changes in v2:
+- Change compatible string (s/dwusb2/dwusb3).
+- Rename clocks to "bus_early", "ctrl", and "ref".
+- Set 3.0V regulator as mandatory.
+- Link to v1: https://lore.kernel.org/r/20250204-exynos7870-usb-v1-0-a7753f8183a4@disroot.org
 
-5. Some annoying code for giving back 'error_mid_td' URBs under weird
-corner cases that I recently spent a few hours writing could be thrown
-out and handle_tx_event() would become a little simpler.
+---
+Kaustabh Chakraborty (2):
+      dt-bindings: usb: samsung,exynos-dwc3: add exynos7870 support
+      usb: dwc3: exynos: add support for exynos7870
+
+ .../bindings/usb/samsung,exynos-dwc3.yaml          | 28 +++++++++++++++++++++-
+ drivers/usb/dwc3/dwc3-exynos.c                     |  9 +++++++
+ 2 files changed, 36 insertions(+), 1 deletion(-)
+---
+base-commit: be5c7bbb3a64baf884481a1ba0c2f8fb2f93f7c3
+change-id: 20250203-exynos7870-usb-9f3a5ed7ee95
+
+Best regards,
+-- 
+Kaustabh Chakraborty <kauschluss@disroot.org>
+
 
