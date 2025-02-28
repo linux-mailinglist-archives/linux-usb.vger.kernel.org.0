@@ -1,47 +1,65 @@
-Return-Path: <linux-usb+bounces-21204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DB38A49E47
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 17:05:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33887A49E66
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 17:13:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2983B1898C15
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 16:05:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33EC71737F5
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 16:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F30272920;
-	Fri, 28 Feb 2025 16:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332FF271277;
+	Fri, 28 Feb 2025 16:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="QvwzTtHG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Re77xIoP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA5018CBFE;
-	Fri, 28 Feb 2025 16:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A228221348;
+	Fri, 28 Feb 2025 16:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740758680; cv=none; b=QWIvvSWHehW6AWUqMqs2OShXfMdZsulYjlzXwHtYLsbUrIT+NEVeuuGVuMygYFGB0h508HjbxrWpYB+UG8d+MlBd68nxeqGlnRYWhsB4n5n0Df7gId3ph2UNiMml75/o6zoJ1Ki3SSQNfwi4G4+CcCC0Ku9Xt/kexZa1r3ORNAg=
+	t=1740759174; cv=none; b=F48LeHND1cWds8nEUYanuWgtF4DHoDH3ofsMvy0Z/jqbSljfpHaW4/ARITjgRDwQErv7PyoiAqLgOSTRItrbqBRw1UED/UB1vYm1buERF1FwSFQglhd416ODKRdqKgFe/LTX1gKCtRdtr1Ww9NI1Zhe0dBhkbq/BUG7uUTNaq1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740758680; c=relaxed/simple;
-	bh=woTai9LiAziQ+4jY6qec3hdV9cbf93oJqaAR5gjFPqw=;
+	s=arc-20240116; t=1740759174; c=relaxed/simple;
+	bh=uUPIQAo2p0/zk7/2PTZ/u7XnicP4q7wfRlfM5Bg6coE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KVObQFeL2ZETxxxUJ9kTtBl+/3moKtr9Ura1c1VIPohqOzXLV47UQOqSO0Zr8dO8B2b0mil5o3LT7KH5hmZnKRtvSjWc23nKX7lXMXZXT9dXwl09hMOFJWMXbgLyjlMYaZwVmgze2Hn0PUrw0O/jHX1IirAutJFi3a/ey5zXyS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=QvwzTtHG; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.8.249] (unknown [107.127.24.18])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z4ChL495wz4Rv0;
-	Fri, 28 Feb 2025 11:04:34 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1740758677; bh=woTai9LiAziQ+4jY6qec3hdV9cbf93oJqaAR5gjFPqw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=QvwzTtHGOEVAexRJ1Mrk/8nLcObzquf286sNDx9DDjw7oo35hNGCIcPUJy2r+GJbd
-	 uQfqDaN/ycfU1SJRk6VsFnnfRsoHOT6cZfMc3bSrMpKqC5lpyoi37pIwBSG3lAGprU
-	 t116CDPstv1XE3F3SQQjGtcAaX0T6hQlenoglSnA=
-Message-ID: <1f214d95-61c0-4be9-8b19-5aef76631c0e@panix.com>
-Date: Fri, 28 Feb 2025 08:04:32 -0800
+	 In-Reply-To:Content-Type; b=fG7HaFxY+syaLU7gqHkpTjHitEt27lJMJvZw/C13PYWmdD0ArNq25jaOxFceLFJRePBbNNZIcOZ/3CZsynWdOzHKxYRujuW9+gCC5HPuIeMRVK15DlaHhOWpFoll6E+NmjmPMGgjjqa9NGHvJJHFDaddEwBNJKpYQmtE8FR69iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Re77xIoP; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740759173; x=1772295173;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uUPIQAo2p0/zk7/2PTZ/u7XnicP4q7wfRlfM5Bg6coE=;
+  b=Re77xIoPYS/zhfvrvK+TBGNInTH7zKewyCX6R6IczCba4RyiSwIPMZBc
+   YgfSyjgbIivblAP5HFWGGSvi7m23v5pKGJsEQl3gh6/0GSXHmYSFXR1FQ
+   mlIzxBi7ihMUeCrzoa6Fhe0CGwRgbyTjoxIh9BfdBdIMBh3axDLHllLal
+   uh5nQXVuumNZ4iMGDYBnGrp2QG+6u3pXBAm1W+uZcpFxfXmPjrI+JVwbe
+   djgZcDKrGEvzWUyFy9R5UFOi0AxDZjj/XnwDqt1gVX8XTkCX09UM1vgBl
+   iGM9Asp/Ze+0d9luiIr/K4KRgbZqVyQ+tRjS+BFrTEsytxmmFpJQspS9B
+   A==;
+X-CSE-ConnectionGUID: 61tDOdoRR8GywWXyl4QKCg==
+X-CSE-MsgGUID: F93Y9aHwSqiMWayMWglOTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="53101009"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="53101009"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 08:12:51 -0800
+X-CSE-ConnectionGUID: tIvet7CqTLOKPPU2qDcMqg==
+X-CSE-MsgGUID: 6icOC5B7TvC93dMTx7qGDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
+   d="scan'208";a="122382014"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa004.jf.intel.com with ESMTP; 28 Feb 2025 08:12:50 -0800
+Message-ID: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
+Date: Fri, 28 Feb 2025 18:13:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,110 +67,57 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
- Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
-To: Mika Westerberg <mika.westerberg@linux.intel.com>,
- Kenneth Crudup <kenny@panix.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
- Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-References: <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
- <20250211055722.GW3713119@black.fi.intel.com>
- <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
- <20250213135911.GG3713119@black.fi.intel.com>
- <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
- <20250214162948.GJ3713119@black.fi.intel.com>
- <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com>
- <b6eff06e-1a8c-48c3-b536-39b567015d0c@panix.com>
- <5c131927-87c1-4e21-90f8-8e3a34cd6dbf@panix.com>
- <20250228104925.GO3713119@black.fi.intel.com>
+Subject: Re: [PATCH] usb: xhci: Handle quirky SuperSpeed isoc error reporting
+ by Etron HCs
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ Kuangyi Chiang <ki.chiang65@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
+References: <20250205234205.73ca4ff8@foxbook>
+ <b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
+ <20250210095736.6607f098@foxbook> <20250211133614.5d64301f@foxbook>
+ <CAHN5xi05h+4Fz2SwD=4xjU=Yq7=QuQfnnS01C=Ur3SqwTGxy9A@mail.gmail.com>
+ <20250212091254.50653eee@foxbook>
 Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20250228104925.GO3713119@black.fi.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250212091254.50653eee@foxbook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 12.2.2025 10.12, Michał Pecio wrote:
+> On Wed, 12 Feb 2025 13:59:49 +0800, Kuangyi Chiang wrote:
+>>> +       if (xhci->quirks & XHCI_ETRON_HOST && td->urb->dev->speed == USB_SPEED_SUPER) {
+>>> +               td->error_mid_td |= error_event;
+>>> +               etron_quirk |= error_event;
+>>
+>> This would be the same as etron_quirk = error_event; right?
+> 
+> Yeah, same thing I guess.
+> 
+>> I tested this with Etron EJ168 and EJ188 under Linux-6.13.1. It works.
+> 
+> Well, I found one case where it doesn't work optimally. There is a
+> separate patch to skip "Missed Service Error" TDs immediately when the
+> error is reported and also to treat MSE as another 'error mid TD', so
+> with this Etron patch we would end up expecting spurious success after
+> an MSE on the last TRB.
+> 
+> Well, AFAIS, no such event is generated by Etron in this case so we are
+> back to waiting till next event and then giving back the missed TD.
+> 
+> 
+> Maybe I will seriously look into decoupling giveback and dequeue ptr
+> tracking, not only for those spurious Etron events but everywhere.
+> 
+> Mathias is right that HW has no sensible reason to touch DMA buffers
+> after an error, I will look if the spec is very explicit about it.
+> If so, we could give back TDs after the first event and merely keep
+> enough information to recognize and silently ignore further events.
 
-I'm still several hundred miles from the consistently-reproducible 
-hardware for another couple of days yet, so I've been logging the other 
-failures as they happen.
+This issue was left hanging, I'll clean up my proposal and send it as
+a proper RFT PATCH.
 
-Don't worry about the printk()s WRT to the code; a couple of weeks ago 
-I'd seen an NPE on resume in __tb_path_deactivate_hop so threw in a 
-bunch of tb_port_info(port, "%s(): %d\n", __func__, __LINE__); so I 
-could get an idea of where the crash was.
-
-I'll have more info Sunday with the original kernel, one with the 
-revert, and with some of Lukas' proposed(? not sure if they made it in 
-there) changes from his previous E-mail.
-
--K
-
-On 2/28/25 02:49, Mika Westerberg wrote:
-> Hi,
-> 
-> On Thu, Feb 27, 2025 at 09:46:07AM -0800, Kenneth Crudup wrote:
->> So I think, the failure mode may be related in some part to DP/Tunneling,
->> too- I finally got another lockup (this time, after a hibernate, which I
->> guess is some of the same facility) but what was different about this time
->> where I couldn't reproduce the lockups (and what happens when I use my
->> CalDigit dock) was I had an external USB-C monitor connected when I resumed,
->> and when I'm home (where I sometimes forget to remove the NVMe USB4 adaptor)
->> I always have my monitor connected to the dock.
-> 
-> It would be good to stick with a "proven" use-case so that the steps are
-> always the same. This may involve several issues in various parts of the
-> kernel and we need to track them one by one. If you change the steps in the
-> middle then we may end up finding completely different issues and it is not
-> helping the debugging effort.
-> 
-> The steps at the moment would be simply this:
-> 
-> 1. Boot the system up, nothing connected.
-> 2. Connect Thunderbolt dock and make sure UI authorizes it.
-> 3. Connect Thunderbolt NVMe to the Thunderbolt dock and make sure UI authorizes it.
-> 4. Verify that the devices behind PCIe tunnels are visible and functional (lspci for example)
-> 5. Suspend the laptop by closing lid.
-> 6. Unplug the dock (and the NVMe).
-> 7. Resume the laptop by opening the lid.
-> 
-> Expectation: The system resumes just fine, finds the devices gone and stays functional.
-> Actual result: The system does not resume properly, seems to crash and burn the screen
-> 	       is black.
-> 
-> Please correct me if I got something wrong. This is essentially that you go
-> from work to home, unplugging the dock and then resuming it at home.
-> 
-> The other thing is that in the pstore I see these:
-> 
-> thunderbolt 0000:00:0d.2: 0:5: __tb_path_deactivate_hop(): 401
-> 
-> but there is no such log in the mainline. If you have done some local
-> changes I suggest to drop all them to make sure we are looking at the same
-> source code.
-> 
->> See attached dump log. I'm using the (somewhat still experimental) Xe
->> display driver, but I've seen this same lockup happen with i915.
-> 
-> Please also keep using tha same graphics driver.
-> 
->> In any case, I've now reverted 9d573d19, and when I get back to my CalDigit
->> I can try instrumenting the code paths in the commit and see exactly where
->> we're locking up.
-> 
-> No need to add any changes. Just try with the revert and see if that at
-> least makes the system resume properly. If it does then there could be
-> other issues but then you can take full dmesg and send to us instead of
-> those pstore snippets.
-> 
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Thanks
+Mathias
 
 
