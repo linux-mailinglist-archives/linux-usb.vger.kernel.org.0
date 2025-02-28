@@ -1,135 +1,178 @@
-Return-Path: <linux-usb+bounces-21214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B13CBA4A30B
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F76FA4A34B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 21:00:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90817188A5E3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 19:50:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEFC189DE29
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A190230BE5;
-	Fri, 28 Feb 2025 19:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91507286284;
+	Fri, 28 Feb 2025 19:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzO6N1I+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="elTX4Fxc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FE6230BD9
-	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754DA280A25;
+	Fri, 28 Feb 2025 19:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740772145; cv=none; b=Vo4l+8uWi/In3E/Tb6AFWwTCiPnbTHhwgPU3p15ii05svurKfP8+cBVP6XcjOgh6uugH3En5PJN5jGg2UOUGJmlmMBH2pfUbUQv8huhBpnHat38dNqazJiIdl/sTvlWM0aDE1nVKxLM4kTwzEkqGmmhvW14wqzZHtzWlpVGdxVM=
+	t=1740772674; cv=none; b=lc3bjLs3a3Qe1Ky1C8e/Ru0T0+sh6xQaDy+7b0WPUjh+eKlMYy/caypik0HLtP+dFEnc05FrNU9eiCqcgaO/YEwRRcO7oIk4vRohE4AEl8lR2jbDepVlZtDU1d6zbjemFSvhkaWws8hkiWgt8xarz456BIAhUIUBhFHcyaIgdy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740772145; c=relaxed/simple;
-	bh=x5tPgVYZiho6Jf9Qv2JEXOFnEuf9SH+JK0jkinBhoCA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=d0ArARBt3QrXJFCslzSbVAfKm7jLhGAvhL/PYIHEPqL71Lpzt0KWzzTER4Htrkrhu31LKvaIN2Q+yy0ku8sBxqcYDcGdZZ+soyZJls5Y8M+mA9oAknNQORu2grUoUOAn1j5VPOPeQlMs2FfhjXB8vnlqcb3QxH6i5+/9whQTeV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzO6N1I+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55EABC4CEE5
-	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740772144;
-	bh=x5tPgVYZiho6Jf9Qv2JEXOFnEuf9SH+JK0jkinBhoCA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=fzO6N1I+kqL/lH7kpbWvGRnqSZx8ChSXs7HSub+p6J4qxNhxH8Ri3a41y/5ShZkxZ
-	 67C1UO2kkXvLCpXkDHR7SuyXW0uXVgekYrRq+oqY8t9xkILhqPeg32hjRiD3HMhDJ6
-	 XyrAPgp8MqAt+Y47YdNf+yddxU7vkvaf2uj7Pq42wa9ZvGIUNA7PBr0CxqdRPuXnTA
-	 XMVLX86W+UtIG3v+BGp51HN0/FJ3cz31i0c1zPKB3Nxocuiq8CRVRT4PrEfY38cCkV
-	 ggPsiMULOG1tkfuNIOUL3v2IF+nIZtGMQhZCho+f17aw19P6Aw/LbJkL7OLpPCY+z/
-	 xBaQuQYrdsvvg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 45F5CC433E1; Fri, 28 Feb 2025 19:49:04 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219824] [6.13 regression] USB controller just died
-Date: Fri, 28 Feb 2025 19:49:03 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219824-208809-fX0MMehMUt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
-References: <bug-219824-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1740772674; c=relaxed/simple;
+	bh=fW9kkI7u67nrHJc3lzSRVjomgU+mDe9ldQVXaTVjb8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l3e4+F58WKqM2vpKep4Ghej8+wPd/QZc28XNiFF33STXtKFebOgx+J6fBIXhFy7V8MZl/4OxjksDqQ1SFzFQz90tyEyzoQ1qVK342ciZbRlCIaqJor7Jo7uCS50CuaerxjkfgUYXM0Pbm96FMZceuEYEkh+C2RD2zWTCVKIDtzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=elTX4Fxc; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740772672; x=1772308672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fW9kkI7u67nrHJc3lzSRVjomgU+mDe9ldQVXaTVjb8Y=;
+  b=elTX4Fxc9gC6cRRg/gp6kAPzFoNAfCn0uIdBC34x9/iUdlG+thTwJzP5
+   bVzHST6piwiKH4zf1lPCP8V0mH68hTrnPU4It6MmqcTqNQKF9+d0RLgoS
+   xAbyAjegiRZniSEr0BDEby5DwystKuIwnuDbg+ZTUSwF6GGs9lut/f/j7
+   NzbmqML2jgaibsqoN9fWppLiyec5QNZVc3Mku/mPBb7nMqKyu15cQRmpi
+   ypdrv3RXgWKjb4FfGz5uzMVVgwfkYw5np4soOFU39zLv3rcL8h/kG4qHA
+   LuCkWSdBQxYW9kWnXjhd9WzkwHKt23bgvWk6+8E0gJNm9c1dXADnEfGUS
+   g==;
+X-CSE-ConnectionGUID: FP3s8V1hRjmgvv/74DOk/A==
+X-CSE-MsgGUID: /mqnuT7WQNOKKiiG9KAAPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45364528"
+X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
+   d="scan'208";a="45364528"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 11:57:51 -0800
+X-CSE-ConnectionGUID: u2Gd4QlOQZyvTPciEgycwg==
+X-CSE-MsgGUID: RzQuk0WZQsWN6bI0CwDa7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
+   d="scan'208";a="117418930"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 28 Feb 2025 11:57:48 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1to6UU-000FRe-2i;
+	Fri, 28 Feb 2025 19:57:46 +0000
+Date: Sat, 1 Mar 2025 03:57:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, michal.pecio@gmail.com,
+	ki.chiang65@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
+ enpoints
+Message-ID: <202503010346.46nbVSmT-lkp@intel.com>
+References: <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
+Hi Mathias,
 
---- Comment #9 from Artem S. Tashkinov (aros@gmx.com) ---
-Created attachment 307725
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307725&action=3Dedit
-xhci_hcd and usb debug log
+kernel test robot noticed the following build errors:
 
-(In reply to Mathias Nyman from comment #5)
-> 6.13 has a lot of changes related to endpoint stopping:
->=20
-> e21ebe51af68 xhci: Turn NEC specific quirk for handling Stop Endpoint err=
-ors
-> generic
-> 474538b8dd1c usb: xhci: Avoid queuing redundant Stop Endpoint commands
-> 484c3bab2d5d usb: xhci: Fix TD invalidation under pending Set TR Dequeue
-> 42b758137601 usb: xhci: Limit Stop Endpoint retries
->=20
-> Endpoints are stopped in order to cancel transfers, before suspend, and to
-> soft reset an endpoint after clearing a halt.=20
->=20
-> I understand that bisecting an issue like this that triggers rarely isn't=
- an
-> option, but can I ask you to try running 6.13 with xhci dynamic debug
-> enabled.
->=20
-> mount -t debugfs none /sys/kernel/debug
-> echo 'module xhci_hcd =3Dp' >/sys/kernel/debug/dynamic_debug/control
-> echo 'module usbcore =3Dp' >/sys/kernel/debug/dynamic_debug/control
-> and send dmesg after issue is triggered.
->=20
-> It could reveal a bit more what's going on
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.14-rc4 next-20250228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'm confused.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathias-Nyman/xhci-Handle-spurious-events-on-Etron-host-isoc-enpoints/20250301-001842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250228161824.3164826-1-mathias.nyman%40linux.intel.com
+patch subject: [RFT PATCH] xhci: Handle spurious events on Etron host isoc enpoints
+config: sh-randconfig-002-20250301 (https://download.01.org/0day-ci/archive/20250301/202503010346.46nbVSmT-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503010346.46nbVSmT-lkp@intel.com/reproduce)
 
-If I resume the laptop and don't run these three commands immediately, all =
-the
-USB ports eventually die (usually under 5 minutes).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503010346.46nbVSmT-lkp@intel.com/
 
-If I resume the laptop and run these commands immediately, USB ports contin=
-ue
-working like they always did before. So, weirdly and unexpectedly, when
-debugging is on ... it fixes the issue.
+All error/warnings (new ones prefixed by >>):
 
-If I resume the laptop, don't run these commands, and then when the USB por=
-ts
-die I run them, there are no further messages from the xhci_hcd module.
+   drivers/usb/host/xhci-ring.c: In function 'xhci_spurious_success_tx_event':
+>> drivers/usb/host/xhci-ring.c:2650:21: error: 'struct xhci_ring' has no member named 'old_trb_comp_code'
+    2650 |         switch (ring->old_trb_comp_code) {
+         |                     ^~
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:5,
+                    from drivers/usb/host/xhci-ring.c:59:
+   drivers/usb/host/xhci-ring.c: In function 'handle_tx_event':
+   drivers/usb/host/xhci-ring.c:2717:60: error: 'struct xhci_ring' has no member named 'old_trb_comp_code'
+    2717 |                                  slot_id, ep_index, ep_ring->old_trb_comp_code);
+         |                                                            ^~
+   include/linux/dev_printk.h:139:56: note: in definition of macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                        ^~~~~~~~~~~
+   drivers/usb/host/xhci.h:1733:9: note: in expansion of macro 'dev_dbg'
+    1733 |         dev_dbg(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
+         |         ^~~~~~~
+   drivers/usb/host/xhci-ring.c:2716:25: note: in expansion of macro 'xhci_dbg'
+    2716 |                         xhci_dbg(xhci, "Successful completion on short TX for slot %u ep %u with last td comp code %d\n",
+         |                         ^~~~~~~~
+   drivers/usb/host/xhci-ring.c:2913:77: error: 'struct xhci_ring' has no member named 'old_trb_comp_code'
+    2913 |                                          &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
+         |                                                                             ^~
+   include/linux/dev_printk.h:139:56: note: in definition of macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                        ^~~~~~~~~~~
+   drivers/usb/host/xhci.h:1733:9: note: in expansion of macro 'dev_dbg'
+    1733 |         dev_dbg(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
+         |         ^~~~~~~
+   drivers/usb/host/xhci-ring.c:2912:33: note: in expansion of macro 'xhci_dbg'
+    2912 |                                 xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
+         |                                 ^~~~~~~~
+   drivers/usb/host/xhci-ring.c:2914:40: error: 'struct xhci_ring' has no member named 'old_trb_comp_code'
+    2914 |                                 ep_ring->old_trb_comp_code = trb_comp_code;
+         |                                        ^~
+   drivers/usb/host/xhci-ring.c:2942:16: error: 'struct xhci_ring' has no member named 'old_trb_comp_code'
+    2942 |         ep_ring->old_trb_comp_code = trb_comp_code;
+         |                ^~
+   drivers/usb/host/xhci-ring.c: In function 'xhci_spurious_success_tx_event':
+>> drivers/usb/host/xhci-ring.c:2661:1: warning: control reaches end of non-void function [-Wreturn-type]
+    2661 | }
+         | ^
 
-I'm attaching the debug log (again, no bug here) regardless. Maybe it conta=
-ins
-something that will let you understand what is going on.
 
---=20
-You may reply to this email to add a comment.
+vim +2650 drivers/usb/host/xhci-ring.c
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+  2646	
+  2647	static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
+  2648						   struct xhci_ring *ring)
+  2649	{
+> 2650		switch (ring->old_trb_comp_code) {
+  2651		case COMP_SHORT_PACKET:
+  2652			return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
+  2653		case COMP_USB_TRANSACTION_ERROR:
+  2654		case COMP_BABBLE_DETECTED_ERROR:
+  2655		case COMP_ISOCH_BUFFER_OVERRUN:
+  2656			return xhci->quirks & XHCI_ETRON_HOST &&
+  2657				ring->type == TYPE_ISOC;
+  2658		default:
+  2659			return false;
+  2660		}
+> 2661	}
+  2662	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
