@@ -1,93 +1,90 @@
-Return-Path: <linux-usb+bounces-21217-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21218-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B69A4A3C0
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 21:15:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A790A4A423
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 21:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C7303AF1B6
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:14:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4BAD3A2DB4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2025 20:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF398251780;
-	Fri, 28 Feb 2025 20:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B31C25DAFB;
+	Fri, 28 Feb 2025 20:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PN6/Xx+x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xdd3ObyG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7535B251781
-	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 20:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D04623F391;
+	Fri, 28 Feb 2025 20:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740773437; cv=none; b=Of548DEejKr/w+BOt6r8YQ08CZ7jskFH2MUnvryQZx5WLqki2/0a0rviXGnhnF4Sw5hNB5aRUTo1HJq7wmojSsrVj8LEzYI7DeXUbxqtYFwloHP2BHyltZ+CN/D0yuQGq0iB8/BP+Nl2Y5gYEQsu4RrALFP89NRla19aHSBDrS8=
+	t=1740773909; cv=none; b=Gi0jvuiFqsQw915vyrwcIyyRsHdu5ADAz5jNU/wXnjC9VSxEXD1gCSCa+lwWLB93P/hlDz7C0OPtNdaArwArYSQj8pwD6LuDBdmf48Gxra3U1+iG+tn7vl5p/w3E6cb5UguRpUl3e5llUMg2m+ktcx+l5ZV/HgPVMv1rkO6zONk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740773437; c=relaxed/simple;
-	bh=XJDP4A0zjbfTywDx5KANXQcM54xpRfVlrLudDCYpdcY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RBrgQpo96y/cy+KD3LSrstYlqimgaG00Bb7RU6jeK6b0oK1kbWu56I74n45z4kJh99Wk5kH8oQJJZi8ETE5j94DTDB9csRwuIUU/pMzyhVvlS7EXYXzB7Oudy7UhRzv6gsJOIAAaSZr/dYyBo/uMjKtpn6i38c0ozN/BylTIczQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PN6/Xx+x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4502C4CED6
-	for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2025 20:10:36 +0000 (UTC)
+	s=arc-20240116; t=1740773909; c=relaxed/simple;
+	bh=iGXo8WuPz9MZWdQEJLs/fObp9RRJtO0HVz65gpRrNrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2KSuM7DxiFDAVSOYl1n1DTzhDi7w9TEPv/93iOdz/bn9UnTqrzlqgUcniqZW6LdRpLVu8iDUwSohUfdm7tN8o0hLAJACcEWXRWTtADWgZbMocZJLms1cj9Seb+bFxUSKPzWh2Q7G+S6XfuHvpFNkS19d7OD7bx+XuWYBImvch0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xdd3ObyG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC07C4CED6;
+	Fri, 28 Feb 2025 20:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740773436;
-	bh=XJDP4A0zjbfTywDx5KANXQcM54xpRfVlrLudDCYpdcY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PN6/Xx+xvnvBQrlsfc2+1JdpAbYWAx/flEfrI5yuCEgGureh26DFiz3gkuWPMuson
-	 hN5b+cn03d51MZU4QWAXKB2dffGLj+Q65Hlqf+4mwruRoNKwF1EK4S53AlBOCKlkDc
-	 Z0J8yQuRJm0m2Ap5kJMLbvp2vHrUNHxb1M2Zo7GigYQmSrJZz225NhNgTlI9si5iUI
-	 13Z2m9qugCvX+wLgMxDECJ9pJRWdawjuupamMGBcvBuMQO6/hyYVpbxbREiidXSbYu
-	 8SQXBlyVgG91UNdEY/7xy9uJtMnxGg989eLD0iv0hxmdlEl0cHcMjic4IIRnUSgPKv
-	 2y1V/wFHzpHow==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D18AEC433E1; Fri, 28 Feb 2025 20:10:36 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219824] [6.13 regression] USB controller just died
-Date: Fri, 28 Feb 2025 20:10:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219824-208809-UnQSgIZwZ2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
-References: <bug-219824-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1740773909;
+	bh=iGXo8WuPz9MZWdQEJLs/fObp9RRJtO0HVz65gpRrNrk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xdd3ObyGaW7wnwxC0xX59J+sWL/dpxUy2gx8HZEqHrL9wyU8vHMmiO1PO0IOvVavr
+	 fiBG/YMCTAMgYg7ITRUxpuXAwafWcsvpny4jV/B7AnOFamhQfzssPBbQW1m6tfoFue
+	 wMHP5/TiOLamAWilT22Ha8DpuyONTW9/TGWeixT5rqTPNkU2oPiPyPEJVLVlKpOvDM
+	 CAzWZ460RnuoDIFTUD5hFNOhZCPcp0t/PZx6guDububQw5VWnUId2VdEpTcVi0yTiI
+	 tjp/3poqj7mzcozd1FqHM+INiwn/HjuiXHnhaXbA9T6+5IdXVn69U6iUqyKK3BV08W
+	 V4smjBnxhgzrw==
+Date: Fri, 28 Feb 2025 14:18:27 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	heiko@sntech.de, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH v3 09/15] dt-bindings: usb: dwc3: Add support for rk3562
+Message-ID: <174077390696.3604658.16411681325263588112.robh@kernel.org>
+References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+ <20250227111913.2344207-10-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250227111913.2344207-10-kever.yang@rock-chips.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
---- Comment #10 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-What if you enable only this one thing? Does anything show up under normal =
-use
-or before the HC dies (if it still does)?
+On Thu, 27 Feb 2025 19:19:07 +0800, Kever Yang wrote:
+> The USB dwc3 core on Rockchip's RK3562 is the same as the one already
+> included in generic snps,dwc3. Extend the binding accordingly to allow
+> 
+> 	compatible = "rockchip,rk3562-dwc3", "snps,dwc3";
+> 
+> There are 4 clocks with different name sequency, add schema for it.
+> 
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> ---
+> 
+> Changes in v3:
+> - Update commit message and add per device schema for clock name change
+> 
+> Changes in v2: None
+> 
+>  .../bindings/usb/rockchip,dwc3.yaml           | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
 
-echo 'func xhci_handle_cmd_stop_ep +p' >/proc/dynamic_debug/control
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
