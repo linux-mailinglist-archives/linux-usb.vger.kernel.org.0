@@ -1,258 +1,160 @@
-Return-Path: <linux-usb+bounces-21225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21227-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33AFDA4A7D6
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 03:05:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7320A4A820
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 03:33:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66A9C3BC3CD
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 02:05:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A658C3B1997
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 02:33:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA73014A0BC;
-	Sat,  1 Mar 2025 02:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B22C42048;
+	Sat,  1 Mar 2025 02:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WLdRVc61"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GUqUTuv4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6D222087;
-	Sat,  1 Mar 2025 02:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F89D35976;
+	Sat,  1 Mar 2025 02:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740794725; cv=none; b=JY/1M2CxQNXJEoe1pVZwGCik9Zc+3G1FOdjHavCaNVSlFtyaIVrrOKrhY/JBGKW3xR314T5KgmJKUpQplpWmEGEpMov4vFtg3ySakRUwJXhZps/MaKUuhnuuZOAsncvt3MtrRGroM2eliwYSxWMjIzgfJuW3jZXduXxYl96w2mM=
+	t=1740796425; cv=none; b=jPtH6dd2VAobkliSVfykEKGc6+DcQrTsYt1P1d6M0KlmCbtwDnDY4YW+8jgUyDsUqxtCOpg94TCuro4A0nmbAYmdq5F8Lj5JSa9RU8U/RCixyoFHsfK7Oy0Soe9lEHZjW3lo2LmCcoQ6WZfZDkdCKb291JVxbEYezPI9r1wJqLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740794725; c=relaxed/simple;
-	bh=m+ygO2tcknG8sblxk7ujAKGzVcl1OORFp0lLOwIDTEU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EbtqW1KXcbsQcHa64DdEMfHmItQ1lVX2j+EqDa0RD5P5FZoKJNxSuZgBbtjxzs+EswlNQF7+ZTY1Xtwa9QQmnCELq1tV484G/Ay5PPU2v9pVwBTQQjuq6IuCWcQtgv5WCo8rVTA5PcQRNxBROVoP/87bCLaicoZeJtlr/Jkn5ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WLdRVc61; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5fe9c1c14baso1645819eaf.0;
-        Fri, 28 Feb 2025 18:05:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740794722; x=1741399522; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dl1Ha5BhbfiW1ZQNVbip8NiE2DRjxBPB6ldGIH/dPlw=;
-        b=WLdRVc61eXcwmSupW4LF1Ip3sWXTKw9aZq2/JCAbAyCuFEW0xnzWJ9Z4gSQ1thXdpl
-         eTl0tDElUDp6UTfN1XcqtgJ8TtgukPgRUqgfHcc22BUzGEgOz3G27eL47ezEnxkS71B+
-         dQ8nCuQSndvblfL1WsvccPJNAjAI6RaSTXYY7MhL+2Fe+Za9Wxi7WxxB/Lyn+29GuuQT
-         dFNqdBwlX2rAqJjwcqHB5XKAnL0ToEQWJpB/h+NQ2eTDB6NhQYbFGTtAS4YPPqSFg2KQ
-         Fcv2ldPw7anP9AnIKZt4V31zVNUhk+gTp9qzlDAyeMd56OeVY4FVwZsLG1riAUuzwQXj
-         7Jow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740794722; x=1741399522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dl1Ha5BhbfiW1ZQNVbip8NiE2DRjxBPB6ldGIH/dPlw=;
-        b=CAqI/eKFVU9U1hCwxpVKwzFjmsZhmvamWPCeBT1m6zwCA/ypEjkrXQ+slorjpUowHa
-         JV1XY0NRmW9l2Jx6DEV4tjpEYW6a70cdh+KCrxUNqqbbdJz5R4t4YmqygYfDuOwIE9w9
-         rJXQ3jD2BtEKTO7j0+TnMpwdY0yBgAqg3haYnT702WW2qCG0HwPW1goovZmHZkrdUDNw
-         xRWYu/G4ao5xXpN2NZTRjVWgO7TVS9r1r3FSGFFBtW9ChCywxvvCpynFWG6jeNBIMJs/
-         WHl/geh/UTEho2ZCn+mem3FPlPwnLF/98wINHTwZqrKP6yDeP8fryDfdyYH2CZ+tWfBb
-         6B4g==
-X-Forwarded-Encrypted: i=1; AJvYcCV8agOcJFBv0lzN/RP4k0MizovIIvW/NI08v79nUl3KR81JPKBTgyPVw4O/hu9spX3TxvYe6OjvzrPFfX8=@vger.kernel.org, AJvYcCVB/7y6LOKKtDjhFazRbebbreaCKmfv9TSTrCta/ZI3sj/nGTqYVkcvwhYd+BQXuXfmr71NCnCXV5fL@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzzb0Yn78iTYZO3qEnuJ40zIaet1LqzEO2MoXK+GqufeUabsJvh
-	4qJiJQSKOUUwaGWD9M1Fx2qAzQIpRNmotKt+oWMwcI5m984s7BXkWiXc09zFR1rE7BdsotjJN8t
-	oBC/kLQUvIgnXb48Jav0g+maO0yw=
-X-Gm-Gg: ASbGnctanOAF5wsouvjxwwPo/e+A+g1uErhmPkAhzw5kFr7ewSBoABgU4K5pJAj4AVv
-	8EB9HMGXWkNWQ02c5GzLpOJ0IozUU2VIDnAyJaz3gjzW4n3zi2yDPUdMJL5AtgzFy0bQEdrCoqv
-	HZ3lMD5fECTyEXaN5dNXwYi+UCAmQ=
-X-Google-Smtp-Source: AGHT+IHk8X3H0cDV3irm0FqHyRRW4ZKx+25qxp8Mopli3+Kruo9jL2ZKwahev2zYgDK6dRSxyKae1c7Ejks/OLhscy0=
-X-Received: by 2002:a05:6820:553:b0:5fc:a89b:a339 with SMTP id
- 006d021491bc7-5feb355f64bmr2871950eaf.4.1740794722554; Fri, 28 Feb 2025
- 18:05:22 -0800 (PST)
+	s=arc-20240116; t=1740796425; c=relaxed/simple;
+	bh=j+nAxlIa8zrVOHInhC+fPrfi6cTnZ9jAP9nRoUvTYcM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gOud/AIPM3XF2RkO2lOcrvAvtXwQgyFZdpbVaOsjgauH0esBMMweudb9oXLH+mOJvbzs+l5D+lOxARpr6y+O2/ayJTbqLWjMK4lBG1Ke+nv7LNet1xti+oD+yrJypLzAmDzWMKzyWDQpvHdfMelK+D0pGZ7Q4iw3WCPHknleFv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GUqUTuv4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5210gmKu002203;
+	Sat, 1 Mar 2025 02:33:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	83FS6EnfdClfnvfUQxbXHhXsBOrVg7fOHbXnT0FmYtg=; b=GUqUTuv45dj1zWwO
+	u1u8wyhjCjAezTGkzlU91Axr9mheYE1YAz+emqetlN43PUH/5XUwVHOvfgvYYB+Q
+	2eHAbILvK+RNcxCvhnHu5xMLZnUcHkcGw6Rc58WCB95Mrwp1Mlycr8Jj535G75Fs
+	wLLio5bxWaiw/JijlKIsUI5dfmI3rVVTaaFvp35OYV/byg9zu2veYk/HSJSlWu1B
+	5dYAhfYHrblOzr/6AX6Ep0Z+SKg6i4uxWKxa+gvrWojy2fjcbwjEwcD9AyZM6Jse
+	mae2SgLb3Ph2Han8bPX5Kxigq6apFX8Vakf4AkVUVd40kudUz4RMtPyzgZagyP+j
+	5QHkHw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453qxdr5g0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 01 Mar 2025 02:33:39 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5212XdwT004298
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 1 Mar 2025 02:33:39 GMT
+Received: from [10.71.114.206] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 28 Feb
+ 2025 18:33:38 -0800
+Message-ID: <109547e4-fc2a-42b6-9f16-6e0979b9a49b@quicinc.com>
+Date: Fri, 28 Feb 2025 18:33:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com> <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
-In-Reply-To: <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-Date: Sat, 1 Mar 2025 10:05:11 +0800
-X-Gm-Features: AQ5f1Jp-KQGCCnxHpXg1OX-unCd8Je_ZMxb-54_GY7vHnGJ3yj1fOBZU29MLcNo
-Message-ID: <CAHN5xi0mf8G4ODMQ9jDXAM4CRXtafZeMh_2KF7efbiFJahO4bw@mail.gmail.com>
-Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc enpoints
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: michal.pecio@gmail.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] Revert "usb: dwc3: gadget: Fix incorrect UDC state
+ after manual deconfiguration"
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20250301003452.2675360-1-quic_wcheng@quicinc.com>
+ <20250301003452.2675360-2-quic_wcheng@quicinc.com>
+ <20250301020131.z7osit3xcqhwrl3n@synopsys.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20250301020131.z7osit3xcqhwrl3n@synopsys.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RlQqd01vPdaKZgBwN2cllCEy4UYpZ48_
+X-Proofpoint-ORIG-GUID: RlQqd01vPdaKZgBwN2cllCEy4UYpZ48_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-01_01,2025-02-28_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503010016
 
-Hi,
+Hi Thinh,
 
-Thanks for the patch.
+On 2/28/2025 6:01 PM, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Fri, Feb 28, 2025, Wesley Cheng wrote:
+>> This reverts commit 1ff24d40b3c3c673d833c546f898133b80dffc39.
+>>
+>> The following change creates a potential use after freed scenario within
+>> the UDC core level.  When transitioning from peripheral to host mode, the
+>> DWC3 DRD will remove the USB UDC using usb_del_gadget().  As part of the
+>> UDC removal routine, the UDC core will issue a pullup disable call back to
+>> the DWC3 gadget driver, which will now call usb_gadget_set_state(), and
+>> queues gadget->work.  If gadget->work is unable to complete before the USB
+>> gadget is freed, then we will run into the use after freed situation.
+>>
+>> Below is the callstack in question:
+>>
+>> dwc3_gadget_exit()
+>>  --> usb_del_gadget()
+>>  --> gadget_unbind_driver()
+>>   --> device_del()
+>>    --> gadget_unbind_driver()
+>>     --> usb_gadget_disconnect_locked()
+>>      --> pullup(0)
+>>       --> dwc3_gadget_soft_disconnect()
+>>        --> usb_gadget_set_state(UNATTACHED)
+>>         --> queue_work(gadget->work) --> async
+>>   --> device_unregister()
+>>
+>> Unfortunately, the flush_work() call within usb_del_gadget() doesn't work
+>> in this situation, as it happens before the device_del() and soft
+>> disconnect sequence.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>  drivers/usb/dwc3/gadget.c | 2 --
+>>  1 file changed, 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 5156fafbda6c..921f72995dbf 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2781,8 +2781,6 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>  	__dwc3_gadget_stop(dwc);
+>>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>>  
+>> -	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
+>> -
+>>  	return ret;
+>>  }
+>>  
+> 
+> Have you tried with this fix?
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=399a45e5237ca14037120b1b895bd38a3b4492ea
+> 
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E6=96=BC 2025=E5=B9=B43=E6=
-=9C=881=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8812:17=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-> Unplugging a USB3.0 webcam from Etron hosts while streaming results
-> in errors like this:
->
-> [ 2.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not p=
-art of current TD ep_index 18 comp_code 13
-> [ 2.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8630=
- trb-start 000000002fdf8640 trb-end 000000002fdf8650
-> [ 2.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not p=
-art of current TD ep_index 18 comp_code 13
-> [ 2.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8660=
- trb-start 000000002fdf8670 trb-end 000000002fdf8670
->
-> Etron xHC generates two transfer events for the TRB if an error is
-> detected while processing the last TRB of an isoc TD.
->
-> The first event can be any sort of error (like USB Transaction or
-> Babble Detected, etc), and the final event is Success.
->
-> The xHCI driver will handle the TD after the first event and remove it
-> from its internal list, and then print an "Transfer event TRB DMA ptr
-> not part of current TD" error message after the final event.
->
-> Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
-> transaction error mid TD.") is designed to address isoc transaction
-> errors, but unfortunately it doesn't account for this scenario.
->
-> This issue is similar to the XHCI_SPURIOUS_SUCCESS case where a success
-> event follows a 'short transfer' event, but the TD the event points to
-> is already given back.
->
-> Expand the spurious success 'short transfer' event handling to cover
-> the spurious success after error on Etron hosts.
->
-> Kuangyi Chiang reported this issue and submitted a different solution
-> based on using error_mid_td. This commit message is mostly taken
-> from that patch.
->
-> Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 36 +++++++++++++++++++++++++-----------
->  drivers/usb/host/xhci.h      |  2 +-
->  2 files changed, 26 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 965bffce301e..3d3e6cd69019 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2644,6 +2644,22 @@ static int handle_transferless_tx_event(struct xhc=
-i_hcd *xhci, struct xhci_virt_
->         return 0;
->  }
->
-> +static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
-> +                                          struct xhci_ring *ring)
-> +{
-> +       switch (ring->old_trb_comp_code) {
-> +       case COMP_SHORT_PACKET:
-> +               return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
-> +       case COMP_USB_TRANSACTION_ERROR:
-> +       case COMP_BABBLE_DETECTED_ERROR:
-> +       case COMP_ISOCH_BUFFER_OVERRUN:
-> +               return xhci->quirks & XHCI_ETRON_HOST &&
-> +                       ring->type =3D=3D TYPE_ISOC;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
->  /*
->   * If this function returns an error condition, it means it got a Transf=
-er
->   * event with a corrupted Slot ID, Endpoint ID, or TRB DMA address.
-> @@ -2697,8 +2713,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->         case COMP_SUCCESS:
->                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) !=3D =
-0) {
->                         trb_comp_code =3D COMP_SHORT_PACKET;
-> -                       xhci_dbg(xhci, "Successful completion on short TX=
- for slot %u ep %u with last td short %d\n",
-> -                                slot_id, ep_index, ep_ring->last_td_was_=
-short);
-> +                       xhci_dbg(xhci, "Successful completion on short TX=
- for slot %u ep %u with last td comp code %d\n",
-> +                                slot_id, ep_index, ep_ring->old_trb_comp=
-_code);
->                 }
->                 break;
->         case COMP_SHORT_PACKET:
-> @@ -2846,7 +2862,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->                  */
->                 if (trb_comp_code !=3D COMP_STOPPED &&
->                     trb_comp_code !=3D COMP_STOPPED_LENGTH_INVALID &&
-> -                   !ep_ring->last_td_was_short) {
-> +                   !xhci_spurious_success_tx_event(xhci, ep_ring)) {
->                         xhci_warn(xhci, "Event TRB for slot %u ep %u with=
- no TDs queued\n",
->                                   slot_id, ep_index);
->                 }
-> @@ -2890,11 +2906,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->
->                         /*
->                          * Some hosts give a spurious success event after=
- a short
-> -                        * transfer. Ignore it.
-> +                        * transfer or error on last TRB. Ignore it.
->                          */
-> -                       if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
-> -                           ep_ring->last_td_was_short) {
-> -                               ep_ring->last_td_was_short =3D false;
-> +                       if (xhci_spurious_success_tx_event(xhci, ep_ring)=
-) {
-> +                               xhci_dbg(xhci, "Spurious event dma %pad, =
-comp_code %u after %u\n",
-> +                                        &ep_trb_dma, trb_comp_code, ep_r=
-ing->old_trb_comp_code);
-> +                               ep_ring->old_trb_comp_code =3D trb_comp_c=
-ode;
->                                 return 0;
->                         }
->
-> @@ -2922,10 +2939,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->          */
->         } while (ep->skip);
->
-> -       if (trb_comp_code =3D=3D COMP_SHORT_PACKET)
-> -               ep_ring->last_td_was_short =3D true;
-> -       else
-> -               ep_ring->last_td_was_short =3D false;
-> +       ep_ring->old_trb_comp_code =3D trb_comp_code;
->
->         ep_trb =3D &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*ep_=
-trb)];
->         trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *) e=
-p_trb, ep_trb_dma);
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 8c164340a2c3..c75c2c12ce53 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1371,7 +1371,7 @@ struct xhci_ring {
->         unsigned int            num_trbs_free; /* used only by xhci DbC *=
-/
->         unsigned int            bounce_buf_len;
->         enum xhci_ring_type     type;
-> -       bool                    last_td_was_short;
-> +       u32                     last_td_comp_code;
+Thanks for pointing that out.  Looks like its working fine for me.  Bit odd
+that we're still potentially utilizing the usb gadget after calling
+device_del(), but I guess that should be fine.
 
-Should be changed to old_trb_comp_code.
-
->         struct radix_tree_root  *trb_address_map;
->  };
->
-> --
-> 2.43.0
->
-
-I'll test this later.
-
-Thanks,
-Kuangyi Chiang
+Thanks
+Wesley Cheng
 
