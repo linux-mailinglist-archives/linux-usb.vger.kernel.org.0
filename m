@@ -1,160 +1,167 @@
-Return-Path: <linux-usb+bounces-21227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21228-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7320A4A820
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 03:33:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEDC0A4A9A1
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 09:11:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A658C3B1997
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 02:33:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC4EB7A9B34
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Mar 2025 08:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B22C42048;
-	Sat,  1 Mar 2025 02:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43911D514B;
+	Sat,  1 Mar 2025 08:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GUqUTuv4"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z/eZcQgN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F89D35976;
-	Sat,  1 Mar 2025 02:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7351C1AB4
+	for <linux-usb@vger.kernel.org>; Sat,  1 Mar 2025 08:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740796425; cv=none; b=jPtH6dd2VAobkliSVfykEKGc6+DcQrTsYt1P1d6M0KlmCbtwDnDY4YW+8jgUyDsUqxtCOpg94TCuro4A0nmbAYmdq5F8Lj5JSa9RU8U/RCixyoFHsfK7Oy0Soe9lEHZjW3lo2LmCcoQ6WZfZDkdCKb291JVxbEYezPI9r1wJqLM=
+	t=1740816679; cv=none; b=chgLOHqE7Sa8787LFBw9u6g9WYRTf2RAzhjio1tzPNRJNqxGmSVC1wXINy6UpkLwoXWcUQR7ggFFUxcd0UepV0ORm8JPEyXPiXMUkkHF+IPOMczFZhw0sl2wXhtaN7HiRkjtXA5RB4GS2aC8wweg4ZnqwusFWKhBpmY5AUGvmn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740796425; c=relaxed/simple;
-	bh=j+nAxlIa8zrVOHInhC+fPrfi6cTnZ9jAP9nRoUvTYcM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gOud/AIPM3XF2RkO2lOcrvAvtXwQgyFZdpbVaOsjgauH0esBMMweudb9oXLH+mOJvbzs+l5D+lOxARpr6y+O2/ayJTbqLWjMK4lBG1Ke+nv7LNet1xti+oD+yrJypLzAmDzWMKzyWDQpvHdfMelK+D0pGZ7Q4iw3WCPHknleFv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GUqUTuv4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5210gmKu002203;
-	Sat, 1 Mar 2025 02:33:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	83FS6EnfdClfnvfUQxbXHhXsBOrVg7fOHbXnT0FmYtg=; b=GUqUTuv45dj1zWwO
-	u1u8wyhjCjAezTGkzlU91Axr9mheYE1YAz+emqetlN43PUH/5XUwVHOvfgvYYB+Q
-	2eHAbILvK+RNcxCvhnHu5xMLZnUcHkcGw6Rc58WCB95Mrwp1Mlycr8Jj535G75Fs
-	wLLio5bxWaiw/JijlKIsUI5dfmI3rVVTaaFvp35OYV/byg9zu2veYk/HSJSlWu1B
-	5dYAhfYHrblOzr/6AX6Ep0Z+SKg6i4uxWKxa+gvrWojy2fjcbwjEwcD9AyZM6Jse
-	mae2SgLb3Ph2Han8bPX5Kxigq6apFX8Vakf4AkVUVd40kudUz4RMtPyzgZagyP+j
-	5QHkHw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453qxdr5g0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 01 Mar 2025 02:33:39 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5212XdwT004298
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 1 Mar 2025 02:33:39 GMT
-Received: from [10.71.114.206] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 28 Feb
- 2025 18:33:38 -0800
-Message-ID: <109547e4-fc2a-42b6-9f16-6e0979b9a49b@quicinc.com>
-Date: Fri, 28 Feb 2025 18:33:38 -0800
+	s=arc-20240116; t=1740816679; c=relaxed/simple;
+	bh=y/PM0okwX0Ed7bixbKlSzQClxakMqEJ6aJ39DwnMPLA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jN0Lc3TVq9blie4riY0btsyHdorLa0SE74TUlzSbpV81QAsUSGNS8Sq3sYato3oiiq97xfdu/2/Ai/oNqkx+LqGarKhwoy5bl2mjThPbCpeFZh/HXd7wul40c6jHJN84Bh/h4lvF1auxNLwzAd3yaM3c7o6AZFiXQqKisME6eCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Z/eZcQgN; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5deb1266031so4994191a12.2
+        for <linux-usb@vger.kernel.org>; Sat, 01 Mar 2025 00:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1740816674; x=1741421474; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mjLt20YjMampy8+UMdDtqCZbrxv2nFX7rkyDyefUrns=;
+        b=Z/eZcQgNQ097JWDwDqvnIci2SU/Ku4BgxnoJkBBQjIzVy0QMKo+UMg4MFQSnqc3rVe
+         o02JAbEtx47BJbwGvMDtR/7FSnaKBI7YBNAJktnkeZoH8/OuZijzJ67P4G2SxasxO3Oe
+         KdGfEeM45IhIKsKmWXwZN3akgVehXALkSDkNU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740816674; x=1741421474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mjLt20YjMampy8+UMdDtqCZbrxv2nFX7rkyDyefUrns=;
+        b=qkLy6z98mNx7AFDG6VdJPMTxICdiM3ye8NxnWPOcS4PGsU2JXD/qCYJnm8lx60LRfw
+         A0Hj2JDJEGLEps94aeYZNsDJswygBe7weTROImqBrnUhEdY1a5f648UD8N920HhjQ5hy
+         1sjCMXadWr4uE4IpXkl55RvIV16ja3rjqUSHCdeL+hW7tCQWWQZlIc7AIvHYoG/kjT1S
+         g1yPW4hfsNTJTNXkAILwu5FQQan7s2CDU5XjOhlWS3dvqFI/sMTtF27FPgkLRO0abBi5
+         xEi+M7CUAc+QpOSSMocLO1NQZKgYNF6eggFplNimgY9e+6w2lMBSOEQ/qfKuKGy31bKm
+         DARg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmUDsN0w1dP5S7aOfBAPBW42pkkVYHUGVTAgsSBxEpfzN+G+ei6HC7cZoKWbysCelpY9MxLiDbYUI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIT99tu0tBZ++Cq+zl6gtP9ZnmfScarG3rgqERwVXTuHslAUoc
+	MzQ4SaOJeih6kORKC+svJiZ1hD+hrez/ksePGmKig7YICpm5+FEKquzBTEZF/A==
+X-Gm-Gg: ASbGncvE5c75beqyhOKfMfDaRXw6hJ0JZEcPF5geW/0xIz3kat4Iko9tm3HKBzxPLiq
+	y8hSMP86bHRr+W2ni/NtqIWzuhjTUTYBbLLt5jmBWEkfuvtP9dUOBCTiB/jH8iSFwjNJlpGVOij
+	7ZoLahppsn0ZXtnocYM2TjHNM+MjMhGRdo/dNWuppCMjh4YvUAlxffFLfKrVjC3PvVsdbbtR6KM
+	NTO+p+HVRuCQh0Xhm9a0iK2yHe1DIVfyDFgLNWPotqZrCuuCK7sb6NGQyeOrGThbaP512cm35tG
+	Ocoy7fYGW4axCOfoBvD218F2OLpKhsmO7IV24R4dHjw8ImeLEo0uv930uuNtVJgAN1Qp1SLR4qc
+	EIGCg3M+qrSFu8vu91v1vSr0eYt1Q33fS/P4=
+X-Google-Smtp-Source: AGHT+IFWGjTqEOE7iDv+KUg8YX7v2GdNhxUdYlf7Mvz5UaXeO7udGrcXIKLthgLSbZd5OCdVON4QnQ==
+X-Received: by 2002:a05:6402:5214:b0:5e4:d192:2373 with SMTP id 4fb4d7f45d1cf-5e4d6af23a4mr6484482a12.10.1740816673887;
+        Sat, 01 Mar 2025 00:11:13 -0800 (PST)
+Received: from akuchynski.c.googlers.com.com (140.20.91.34.bc.googleusercontent.com. [34.91.20.140])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c3b4aa5dsm3693641a12.14.2025.03.01.00.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Mar 2025 00:11:12 -0800 (PST)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Jameson Thies <jthies@google.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH 0/1] Fix race condition causing NULL pointer dereference
+Date: Sat,  1 Mar 2025 08:10:55 +0000
+Message-ID: <20250301081057.1952519-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.48.1.711.g2feabab25a-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] Revert "usb: dwc3: gadget: Fix incorrect UDC state
- after manual deconfiguration"
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20250301003452.2675360-1-quic_wcheng@quicinc.com>
- <20250301003452.2675360-2-quic_wcheng@quicinc.com>
- <20250301020131.z7osit3xcqhwrl3n@synopsys.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20250301020131.z7osit3xcqhwrl3n@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RlQqd01vPdaKZgBwN2cllCEy4UYpZ48_
-X-Proofpoint-ORIG-GUID: RlQqd01vPdaKZgBwN2cllCEy4UYpZ48_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-01_01,2025-02-28_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503010016
+Content-Transfer-Encoding: 8bit
 
-Hi Thinh,
+The kernel crashes during UCSI initialization due to a race condition.
+In ucsi_init():
+1. ucsi_register_port() sets up a work queue and schedules
+ucsi_check_connector_capability task.
+2. "PPM policy conflict" causes ucsi_send_command to fail.
+3. The error path (err_unregister) deallocates resources,
+setting con->partner to NULL.
+4. After that, ucsi_init() waits for the work queue to finish its task.
+5. ucsi_check_connector_capability task, running in the work queue,
+attempts to dereference the con->partner pointer, resulting in the crash.
 
-On 2/28/2025 6:01 PM, Thinh Nguyen wrote:
-> Hi,
-> 
-> On Fri, Feb 28, 2025, Wesley Cheng wrote:
->> This reverts commit 1ff24d40b3c3c673d833c546f898133b80dffc39.
->>
->> The following change creates a potential use after freed scenario within
->> the UDC core level.  When transitioning from peripheral to host mode, the
->> DWC3 DRD will remove the USB UDC using usb_del_gadget().  As part of the
->> UDC removal routine, the UDC core will issue a pullup disable call back to
->> the DWC3 gadget driver, which will now call usb_gadget_set_state(), and
->> queues gadget->work.  If gadget->work is unable to complete before the USB
->> gadget is freed, then we will run into the use after freed situation.
->>
->> Below is the callstack in question:
->>
->> dwc3_gadget_exit()
->>  --> usb_del_gadget()
->>  --> gadget_unbind_driver()
->>   --> device_del()
->>    --> gadget_unbind_driver()
->>     --> usb_gadget_disconnect_locked()
->>      --> pullup(0)
->>       --> dwc3_gadget_soft_disconnect()
->>        --> usb_gadget_set_state(UNATTACHED)
->>         --> queue_work(gadget->work) --> async
->>   --> device_unregister()
->>
->> Unfortunately, the flush_work() call within usb_del_gadget() doesn't work
->> in this situation, as it happens before the device_del() and soft
->> disconnect sequence.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>  drivers/usb/dwc3/gadget.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 5156fafbda6c..921f72995dbf 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2781,8 +2781,6 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
->>  	__dwc3_gadget_stop(dwc);
->>  	spin_unlock_irqrestore(&dwc->lock, flags);
->>  
->> -	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
->> -
->>  	return ret;
->>  }
->>  
-> 
-> Have you tried with this fix?
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=399a45e5237ca14037120b1b895bd38a3b4492ea
-> 
+The core issue is that con->partner is set to NULL before
+the work queue task is guaranteed to have finished using it.
 
-Thanks for pointing that out.  Looks like its working fine for me.  Bit odd
-that we're still potentially utilizing the usb gadget after calling
-device_del(), but I guess that should be fine.
+The crash log:
 
-Thanks
-Wesley Cheng
+cros_ec_ucsi cros_ec_ucsi.3.auto: PPM Policy conflict
+ BUG: kernel NULL pointer dereference, address: 000000000000030c
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 8 UID: 0 PID: 13 Comm: kworker/u64:1 Tainted: G     U  W          
+ 6.12.0-g15b373ee5573-dirty #1 b5276ebf6ba85f471d9524ce34509877165c9f58
+ Tainted: [U]=USER, [W]=WARN
+ Hardware name: Google Fatcat/Fatcat, BIOS Google_Fatcat.16163.0.0 01/15/2025
+ Workqueue: cros_ec_ucsi.3.auto-con1 ucsi_poll_worker [typec_ucsi]
+ RIP: 0010:typec_partner_set_pd_revision+0x5/0x80 [typec]
+ Code: cc cc cc b8 ea ff ff ff c3 cc cc cc cc cc 0f 1f 80 00 00 00 00 90 90 90
+ 90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 <66> 39 b7 0c 03 00 00
+ 75 06 c3 cc cc cc cc cc 55 48 89 e5 41 56 53
+ RSP: 0018:ffffb532400c7dd8 EFLAGS: 00010206
+ RAX: 0000000000000004 RBX: 0000000000000004 RCX: 0000000000000000
+ RDX: ffffb532400c7cc0 RSI: 0000000000000300 RDI: 0000000000000000
+ RBP: ffffb532400c7de8 R08: ffffa3ab042d28f0 R09: 0000000000000080
+ R10: 0000000000000080 R11: 00000000000000c0 R12: ffffa3ab01dc6480
+ R13: ffffa3ab120d12c0 R14: ffffa3ab120d12c0 R15: ffffa3ab12074000
+ FS:  0000000000000000(0000) GS:ffffa3ae6f800000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 000000000000030c CR3: 000000010700e004 CR4: 0000000000772ef0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 0000000000000400
+ PKRU: 55555554
+ Call Trace:
+  <TASK>
+  ? __die_body+0x6a/0xb0
+  ? page_fault_oops+0x38e/0x400
+  ? work_grab_pending+0x56/0x230
+  ? exc_page_fault+0x5b/0xb0
+  ? asm_exc_page_fault+0x22/0x30
+  ? typec_partner_set_pd_revision+0x5/0x80 
+  [typec bc1e7c7e089f4aaed440a0a5388387e3ef1ca2cb]
+  ucsi_check_connector_capability+0x71/0xa0 \
+  [typec_ucsi 843b0396f746abb17c01f8d4d12ead8b09b88609]
+  ucsi_poll_worker+0x3c/0x110 
+  [typec_ucsi 843b0396f746abb17c01f8d4d12ead8b09b88609]
+  process_scheduled_works+0x20e/0x450
+  worker_thread+0x2e0/0x390
+  kthread+0xee/0x110
+  ? __pfx_worker_thread+0x10/0x10
+  ? __pfx_kthread+0x10/0x10
+  ret_from_fork+0x38/0x50
+  ? __pfx_kthread+0x10/0x10
+  ret_from_fork_asm+0x1a/0x30
+  </TASK>
+
+Andrei Kuchynski (1):
+  usb: typec: ucsi: Fix NULL pointer access
+
+ drivers/usb/typec/ucsi/ucsi.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+-- 
+2.48.1.711.g2feabab25a-goog
+
 
