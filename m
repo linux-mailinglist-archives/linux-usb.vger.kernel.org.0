@@ -1,128 +1,106 @@
-Return-Path: <linux-usb+bounces-21234-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21235-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67014A4B1E5
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 14:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 32C03A4B301
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 17:15:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC0C43B2889
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 13:34:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B65D43B0893
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 16:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6011E5739;
-	Sun,  2 Mar 2025 13:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC321EA7E8;
+	Sun,  2 Mar 2025 16:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="sLvdYjX2"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="qok9IWfG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAB27E110;
-	Sun,  2 Mar 2025 13:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6EE1EA7D2;
+	Sun,  2 Mar 2025 16:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740922503; cv=none; b=fy0jY2fomEIY+SdaBXwIAjD8aK3hxzrNIqAJfjv6Ykte61Qm9DVuzx9M//Z6/pvMEQWeP5+MRB08Et0V92HVZS2tuCfnclcFxyjgd3gnNQIKfn8o7u9UssE6Ousj3nDw3nGk05z+SBgDho6z61HfNyz9UbK0qRJfH+DQwZszWEU=
+	t=1740932037; cv=none; b=qLe5EzZl8LNMualteFE4g84cGeZLHYZgbJq28vQ5SAuQDclnD51Q3jG8O/d6SRnwfuIg0ydj3MP9v2XLFP6cPLFSvmyUHM5oLbv5b54fOW9QQ7xb3jB8ge8p7aFruxC8I9Dcn2CcOMmrfayZ6+Nt3hamTVb9qY7r3bQrdtzNOCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740922503; c=relaxed/simple;
-	bh=MSQ2cKPPkPjmDrmJy/FLeiPBxlbYekvi38q/5qc4FFc=;
+	s=arc-20240116; t=1740932037; c=relaxed/simple;
+	bh=R44zS5UstGW/mbwuvd3eia/RIOCoDdVVzI52z01wnuE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YQH67QbbxWMvyz8JKa2PGYHydU/YuuPG9+LirryVv4DXOp3FUxr9Qosl6piCvUXpSmPBDLL9W0sD8OOGUuJd8sBTHh4r7h4TEqF8ShsSPxPIGymVk3KyaX1TW+kcSIKgZs/OSLPl85hN1nciA49E0AlIOa7Hv5pee6IAF6OkCIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=sLvdYjX2; arc=none smtp.client-ip=212.227.17.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1740922482; x=1741527282;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=nTJClktE5S3QxaECergyaKe3EYsuCTuLnJ+cWLyTAko=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=sLvdYjX2fVCY0heiOxqBy/peKGfkFzF4u/g0W8aLZPs8SKXgZhUeO4bSlpAEj2zq
-	 DSMK49CItU2RTi446G/bDBrn9hX3GLwqORCXNDIkOnOxVCYvMxcreLjEggiSLWDDV
-	 uKe5/L/2an8+XHcrAGTXBr3cOM0sIXK3WgjU/qYN34ePvObRyR0IFUP3AD13/S7hq
-	 SbhppjYyaRAI5skaYB1LyTjO5a9degu+OYv1Dg+bgf+LTzJBl4iOl8QvdcsO3Fo63
-	 Qymv9PMkddj6BWvNDDqfKSogZsSiiOtcj4deeHgNaMMu/jgmaqFgNj8+RA2a5BhzR
-	 MQ771Y5oQgglA+6NXA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.174] ([62.226.41.231]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N4hBx-1t6Yez34nH-017qyN; Sun, 02 Mar 2025 14:34:42 +0100
-Message-ID: <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
-Date: Sun, 2 Mar 2025 14:34:41 +0100
+	 In-Reply-To:Content-Type; b=Vg0PWBXVnVvQNPy2uCBAB32iARD5bPX/cVCV6K82WQ081J26Dn2p50VVmuWAq+Obby+mokUX/R1h2n1x4Fp936NukHVVlIPL8d2iviNqD4pHx0IDNJaUJXvrzm0I0zGazAWHj5IY4Yo6H8sHd/ALGtSghXdeHdXaSNie3bzf46U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=qok9IWfG; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z5Rp76ZvVz49rv;
+	Sun,  2 Mar 2025 11:13:51 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1740932033; bh=R44zS5UstGW/mbwuvd3eia/RIOCoDdVVzI52z01wnuE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=qok9IWfGHF/F7P/onSSsmeJCBeB78J/opqxwNdyzCWIhiV9yQzAky+sb41aREomKx
+	 w7JI6ATSTJ8p2nve7jFMPmNSq9FcS2R0RIYATEi0mPb9d+C0lAqUQ/dXGW+ObaUI7B
+	 kRofCB2aPbCOaFw/cqjt/JqcRukI/TzG6ItPb1tQ=
+Message-ID: <e5badaa8-20e2-4160-be20-75e174d241bc@panix.com>
+Date: Sun, 2 Mar 2025 08:13:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH 2/3] usb: typec: ps883x: fix missing accessibility check
-To: Johan Hovold <johan+linaro@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Abel Vesa <abel.vesa@linaro.org>,
- Stephan Gerhold <stephan.gerhold@linaro.org>, linux-arm-msm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250218152933.22992-1-johan+linaro@kernel.org>
- <20250218152933.22992-3-johan+linaro@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Kenneth Crudup <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
+ <20250211055722.GW3713119@black.fi.intel.com>
+ <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+ <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+ <20250226084404.GM3713119@black.fi.intel.com>
+ <b6eff06e-1a8c-48c3-b536-39b567015d0c@panix.com>
+ <5c131927-87c1-4e21-90f8-8e3a34cd6dbf@panix.com>
+ <20250228104925.GO3713119@black.fi.intel.com>
+ <1f214d95-61c0-4be9-8b19-5aef76631c0e@panix.com>
 Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <20250218152933.22992-3-johan+linaro@kernel.org>
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <1f214d95-61c0-4be9-8b19-5aef76631c0e@panix.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4UxoOcT8+yz/0EC6f0+pYJva2U5iIsfbA6Qx4EkaG0kJwbIjL8m
- vV1zDRA1mQtmFSOzDTMUfi2DfrrvO+cYXZVS4k8J8VKRRNXetzdaAUeUyemJGvix2qF4QBn
- 9C4v4lYWBrfQfiMq5yV+CmT/YJg4nl+FYL1Mm9sBaSvYISD9JJduwzR8YU9SWS30NlRnvkw
- vUvWFPIerripu5+L1OoTw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:uBKyAR++kJg=;56OUr16z7fYfQd5r7RK6dOmPuPk
- 73EoC6UI+4sLkTIw25uNcMD8ygJVxm4ipsZNym+xPGAjPiYF0AFVEkJxC9YPNQ4sUZUWYfk9B
- 9igW1mZUZxzXE5Vfb8ehMoODE7iz+/4M9BaGaSM+WiHoTM9YzV3kuhqjZQX3s2sYMkDEvHgNm
- TWklYGkJhwjsn/FnGAvoVw7yhrz7a8TlaOZ7ckX9Ak8zJ7UpOP31QyXCBibZJWFt7RmBINDA5
- B4PvYn/4Us8ASofOOKQJvTQTLQ7jMMYlxTGeDZ+ONCM4WXutvni3lk6z91oocxcDy4ggk4EI6
- 79iJ7YXSbHkNEbLi8pYabsTvlvm+6TQ3BuqRDJH7/0BnW4ZSjesHYFtr1XmYNFCkKsGKhW/We
- 0+2JxV73Is1swXGQbkwgOGSfAUSnjZZA0l85lrP5SkPYuE+kkRbivzqJN9FueyA7ra944GkRU
- 61yDOElsj/4IQ9VKQSZ1oJuQS/TTWZJVkI+gLabd7DBAlYdaWRPRZ3oKEZRDvbq0jiC4+iLTp
- 417z/DujamsJZVvQO8LBVcC7Fg/hIBMjyp+oE2YyQc4QMqB9JRKt6BApULxDqQ12hFL7U9mOT
- wh2duWeKXhNOosMZGYpuctRr5tO7kkNfxbmd0pOAI6avcFgcXKlT3IA4UhgjEmWj0WHob+hWB
- nZ4/dq8nZW87LYXjz3LrpERODP24s4tpezUlypV18QzgqGmJGthXRrKLVvTq1QHC5qu5ZbZvy
- 50Fu4yvdYkLv7O/EuMhyiKW1lDroY0S/xMzbwCTwpQDNJ5OLpFdMwiSnSBaaW2uRc1ODVitOJ
- 0g2eqg0ZaBtnRVwRjQdMa9RTds3RX7SqDnfHU8lSNB0mLzmC749dA9nS00stTMz+q24YKE4w2
- jVKZvRH7dv/JC8tiIZJJoleFZtHZn2ibRh0TJgq6mhKVccAiVMx4j2qdXxeghhQD/j65hd34M
- GoNqdkIOpq9EFjFhTfUqSY3DqqIeDRlsPuHVqyjiQjtTtIp4uoQd8nPkZ6o9tJwG5/Qzzlq5w
- t1T3sQeByfyP65/PexI7PrajzBV8kLQir63GgSUWdzECiE1XR+0OJVuCUfAeytkYaO8wSvgqX
- BI1KclswrgS5QF9xGy/hDU+o+0i47e0uq114eyjh+HlXmAZ8co9cU3pWsPVF5O0Qg58adVTud
- thxGaY5py7HaVvCsJnlWq/MvyotT7V2qaPdzO+Bwg/nHsNiA/RgP7Za+gH3eAivTgJnq8MYvO
- BRQXu2Z7i4/u2K0wOGq1uGCIXUQuWyKlwrXlTWoOQMDgltqRRDcqJu9u/5X0CnmNJ1yYbJPal
- 17+6IEBKM6+dGva7rpse0HEyyUZW5Vmj8P6cWu3hTpfntdwElIMhfpWY43pJlGeDfkaglvJzL
- TuvJaYK0yptc5Nrg==
+Content-Transfer-Encoding: 7bit
 
-Hi Johan,
 
-On 2/18/25 16:29, Johan Hovold wrote:
-> Make sure that the retimer is accessible before registering to avoid
-> having later consumer calls fail to configure it, something which, for
-> example, can lead to a hotplugged display not being recognised:
->
-> 	[drm:msm_dp_panel_read_sink_caps [msm]] *ERROR* read dpcd failed -110
->
-> Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C R=
-etimer")
-> Cc: Abel Vesa <abel.vesa@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On 2/28/25 08:04, Kenneth Crudup wrote:
 
-unfortunately, this one goes south on the HP Omnibook X14, and also on
-the Elitebook G1Q. After excluding a lot of other causes, like inverted
-resets and wrong i2c channels, I did a bisect and landed at this commit.
+> Don't worry about the printk()s WRT to the code; a couple of weeks ago 
+> I'd seen an NPE on resume in __tb_path_deactivate_hop so threw in a 
+> bunch of tb_port_info(port, "%s(): %d\n", __func__, __LINE__); so I 
+> could get an idea of where the crash was.
 
-Looking at it, I speculatively increased the firmware initialization
-delay to 200ms. To no effect. Reverting this patch "resolves" the issue.
+I've started a separate E-mail about this, but I'd determined those 
+crashes were due to d6d458d42e1 ("Handle DisplayPort tunnel activation 
+asynchronously").
 
-with best regards
+Since reverting 9d573d1954 and d6d458d42e1 I've been testing several 
+resume scenarios (NVMe connected/disconnected and/or external 
+DP-tunneled monitor connected/disconnected and have yet to have a resume 
+or hibernate failure over several cycles.
 
-Jens
+Now, how do I help you guys go about fixing these commits?
+
+-K
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
