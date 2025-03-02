@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-21235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32C03A4B301
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 17:15:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1EF3A4B320
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 17:27:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B65D43B0893
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 16:14:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7D35188F698
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Mar 2025 16:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC321EA7E8;
-	Sun,  2 Mar 2025 16:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A4AA1E9B1D;
+	Sun,  2 Mar 2025 16:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="qok9IWfG"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="a+Ia5vwS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6EE1EA7D2;
-	Sun,  2 Mar 2025 16:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F8C1DF25C
+	for <linux-usb@vger.kernel.org>; Sun,  2 Mar 2025 16:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740932037; cv=none; b=qLe5EzZl8LNMualteFE4g84cGeZLHYZgbJq28vQ5SAuQDclnD51Q3jG8O/d6SRnwfuIg0ydj3MP9v2XLFP6cPLFSvmyUHM5oLbv5b54fOW9QQ7xb3jB8ge8p7aFruxC8I9Dcn2CcOMmrfayZ6+Nt3hamTVb9qY7r3bQrdtzNOCc=
+	t=1740932821; cv=none; b=pZe0UVUUEb2cQ9IlzXlf96Iq3JMfFJllqno/Ddzl/b4JuyAPGrDZ9iZ+pAeyRGzhyn0OuaOe7yY72J89EKjAtcyOQBezzC10s5v3Qci9foF2N01tb/RRnEPtkDhgxmGucIlhqPZkRDNtGFRXDoCPf5rH/5SXCeKaWwDgY2RDHVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740932037; c=relaxed/simple;
-	bh=R44zS5UstGW/mbwuvd3eia/RIOCoDdVVzI52z01wnuE=;
+	s=arc-20240116; t=1740932821; c=relaxed/simple;
+	bh=Yn+k/V/ItCHeQ/6H2kM2tcbljXu9sXeAU0nvOEqhInQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vg0PWBXVnVvQNPy2uCBAB32iARD5bPX/cVCV6K82WQ081J26Dn2p50VVmuWAq+Obby+mokUX/R1h2n1x4Fp936NukHVVlIPL8d2iviNqD4pHx0IDNJaUJXvrzm0I0zGazAWHj5IY4Yo6H8sHd/ALGtSghXdeHdXaSNie3bzf46U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=qok9IWfG; arc=none smtp.client-ip=166.84.1.89
+	 In-Reply-To:Content-Type; b=HRSN1Lhu19KcUM/AmH8XlPN0SNHKmeWJKhftrc10PAPOoKKPZZgVTc729R2FPtjjWfg3EnAA+SkGeS2so8QxSqfMO9vQLd8cYi9Kp4JqPFjwQWKvOC5Gble7Jks/Xo1uwCKVEqBzz0pVDJUaZ33izEwW9MO7bRGVdbcQpJicVKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=a+Ia5vwS; arc=none smtp.client-ip=166.84.1.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
 Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z5Rp76ZvVz49rv;
-	Sun,  2 Mar 2025 11:13:51 -0500 (EST)
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z5S5G4Mlvz4BD1;
+	Sun,  2 Mar 2025 11:26:58 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1740932033; bh=R44zS5UstGW/mbwuvd3eia/RIOCoDdVVzI52z01wnuE=;
+	t=1740932818; bh=Yn+k/V/ItCHeQ/6H2kM2tcbljXu9sXeAU0nvOEqhInQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=qok9IWfGHF/F7P/onSSsmeJCBeB78J/opqxwNdyzCWIhiV9yQzAky+sb41aREomKx
-	 w7JI6ATSTJ8p2nve7jFMPmNSq9FcS2R0RIYATEi0mPb9d+C0lAqUQ/dXGW+ObaUI7B
-	 kRofCB2aPbCOaFw/cqjt/JqcRukI/TzG6ItPb1tQ=
-Message-ID: <e5badaa8-20e2-4160-be20-75e174d241bc@panix.com>
-Date: Sun, 2 Mar 2025 08:13:51 -0800
+	b=a+Ia5vwSKoWKx70I7/egrc7qG/m9BR7NlvK5ZT6jtBI+V0s9fmxiPQ7PxAT5ZpPyG
+	 BSg+jrXJMY8tO1fpkcE4YhexFoRTq/8gAHzONysYUwyoCVG5RGO7i036n2y0V64y0U
+	 71C0w2qrI4CEZvTnPIRr38X19auLd3zNAS28U9M0=
+Message-ID: <992dba2a-4919-4f76-ac48-986792d5843c@panix.com>
+Date: Sun, 2 Mar 2025 08:26:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,53 +49,41 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
- Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
+ activation asynchronously") too, to stop my resume crashes
 To: Mika Westerberg <mika.westerberg@linux.intel.com>,
  Kenneth Crudup <kenny@panix.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
- Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>, Lukas Wunner <lukas@wunner.de>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-References: <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
- <20250211055722.GW3713119@black.fi.intel.com>
- <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
- <20250213135911.GG3713119@black.fi.intel.com>
- <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
- <20250214162948.GJ3713119@black.fi.intel.com>
- <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com>
- <b6eff06e-1a8c-48c3-b536-39b567015d0c@panix.com>
- <5c131927-87c1-4e21-90f8-8e3a34cd6dbf@panix.com>
- <20250228104925.GO3713119@black.fi.intel.com>
- <1f214d95-61c0-4be9-8b19-5aef76631c0e@panix.com>
+Cc: linux-usb@vger.kernel.org
+References: <8e175721-806f-45d6-892a-bd3356af80c9@panix.com>
+ <bd731ba2-5509-44e6-a419-814ef5329bbd@panix.com>
 Content-Language: en-US
 From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <1f214d95-61c0-4be9-8b19-5aef76631c0e@panix.com>
+In-Reply-To: <bd731ba2-5509-44e6-a419-814ef5329bbd@panix.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 2/28/25 08:04, Kenneth Crudup wrote:
+FWIW, seeing a Metric F'ton (13171) of these after testing a hibernate 
+cycle- I guess now that my resumes are completing these are occurring now:
 
-> Don't worry about the printk()s WRT to the code; a couple of weeks ago 
-> I'd seen an NPE on resume in __tb_path_deactivate_hop so threw in a 
-> bunch of tb_port_info(port, "%s(): %d\n", __func__, __LINE__); so I 
-> could get an idea of where the crash was.
+thunderbolt 0000:00:0d.3: hotplug event from non existent switch 1:d 
+(unplug: 0)
 
-I've started a separate E-mail about this, but I'd determined those 
-crashes were due to d6d458d42e1 ("Handle DisplayPort tunnel activation 
-asynchronously").
+This is one of my onboard ports (presumably the right one I use all the 
+time at home):
 
-Since reverting 9d573d1954 and d6d458d42e1 I've been testing several 
-resume scenarios (NVMe connected/disconnected and/or external 
-DP-tunneled monitor connected/disconnected and have yet to have a resume 
-or hibernate failure over several cycles.
-
-Now, how do I help you guys go about fixing these commits?
+----
+0000:00:0d.3 USB controller [0c03]: Intel Corporation Alder Lake-P 
+Thunderbolt 4 NHI #1 [8086:466d] (rev 02) (prog-if 40 [USB4 Host Interface])
+         Subsystem: Dell Device [1028:0af3]
+         Flags: bus master, fast devsel, latency 0, IRQ 16, IOMMU group 8
+         Memory at 6040200000 (64-bit, non-prefetchable) [size=256K]
+         Memory at 60402e3000 (64-bit, non-prefetchable) [size=4K]
+         Capabilities: [80] Power Management version 3
+         Capabilities: [88] MSI: Enable- Count=1/1 Maskable- 64bit+
+         Capabilities: [a0] MSI-X: Enable+ Count=16 Masked-
+         Kernel driver in use: thunderbolt
+----
 
 -K
 
