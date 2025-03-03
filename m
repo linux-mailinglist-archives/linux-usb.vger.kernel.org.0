@@ -1,106 +1,108 @@
-Return-Path: <linux-usb+bounces-21249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30FCBA4B818
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 08:07:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BCDA4B93D
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 09:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35CDB7A637F
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 07:06:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A214189348C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 08:27:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B11D1E8854;
-	Mon,  3 Mar 2025 07:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA491EF091;
+	Mon,  3 Mar 2025 08:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tAyuPAfk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AWWw2ljQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088321D6DDC;
-	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9C81EB192;
+	Mon,  3 Mar 2025 08:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740985631; cv=none; b=FA3Ib/5b5m+pDhvtfXyAYX/YO0uGGVG/tYn3n5VPvYusogSxUBKxAg7euGQ7bBJZHOyhYlq72mOxv2eQBZ4xIhAgI2hFpCbf9IjS9bcOo+vAC1LgbWxa3cbyQijAUJ/SRK0QO75muQKEhrW44dxexuUr/6ezWxEWly4UYLfOJPY=
+	t=1740990440; cv=none; b=ksjeSJFTqZFNgHIaGiH+2nqTk+Tk2d9Zivw6fbCa6/HVmUxXQo5jhc/PKBhqcxoDhVOD+ejP0Knz9FAb0v0xA5sVwnRmy9K899/NNfccKrH0ZkN26bGYvyCAiwBthdlFR3N1AdkJxlJoVNg5i1q12WEYNNtr1XjRO2wBIHgckMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740985631; c=relaxed/simple;
-	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uI1k15hN3RBjiF56mv2SxNlbDA4D3jRPN21ac9gYycFLiTyFwTJ4QrOrOUXapfvrPWscC5ZOdm3P2WBK7Y9or2x1Kaa5cEVONX3wQSYtE1r6KXxguW8faLOUeH2w8Rg1qXFXRszSAo/lo4UMMSx5J6RPVoBRKgVyAI8Wa4mArug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B851C4CED6;
-	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740985630;
-	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tAyuPAfkzxDlkoVT6p1/oh+xXrJGTYE6EdI0DU87OVwF//74VuTdBJCTbe0T4vda9
-	 x5K1Hzui0kzCcm1V/zY6j6+0LIlJmjBTeEm61+9qmkJqf9dqHVS8i2m9aqcAXsuTm5
-	 QDlt5BclX1ItesBeefNrRS2PBWsTTGCIJ9eGU0bOYP59WrMyVWSex+QAcrW7dYKnjq
-	 hPZgSyXb6WBBjgkcDCUTSexa192ADNFORVm3c2prOTHcW6dLghZ0+cM2zZe2OeLI0i
-	 R5OSLYBFpdWaLSGlR2ClHpZDIY3JdVwRWnDlG6lnU8DrzGgEvi0aMdU0q8grfSH0js
-	 HSkYnSyNWulNw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1toztI-0000000055w-2SHu;
-	Mon, 03 Mar 2025 08:07:04 +0100
-Date: Mon, 3 Mar 2025 08:07:04 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: ps883x: fix missing accessibility check
-Message-ID: <Z8VVGBDh2VnxyHw0@hovoldconsulting.com>
-References: <20250218152933.22992-1-johan+linaro@kernel.org>
- <20250218152933.22992-3-johan+linaro@kernel.org>
- <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
+	s=arc-20240116; t=1740990440; c=relaxed/simple;
+	bh=gfkLZLX0yooK4MMPMKN+Ae9vAFIEBayZf/3aAJEh/Xc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YkbUYwmE7YKMBfTgFELPfXQUQ2myLiCQbZhXPTs+HVihnpeUMTbXzsLhEhWWeXo4MnxHExbLfbJ0FU4dLRu6RaOtlWbLAA0S0CHqDB+Z/f7m+R+z+hPYq/vRj52dIuhExDHXpsj2TyzDh9SiLxA1ObKqOJSvOCG8YpH5vxCObL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AWWw2ljQ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740990438; x=1772526438;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gfkLZLX0yooK4MMPMKN+Ae9vAFIEBayZf/3aAJEh/Xc=;
+  b=AWWw2ljQGSHaLKiuV4dEamox3kXMKYex7ULDn4B89hyn5brtnkXtpUSE
+   yQaFDhmPV4RRmpPCxiCnsd5+KnqFdWIphi4E1rBscaelDk7+Y/hh6HQP+
+   5fghrQoDY4JabduN1aA+C3cMKDPDAw3Kvrt0qmSg2Vidu7StUbdzldCGE
+   WwuxZNAHYvu6OrDeVGciY3jhWuzqoaL9XwZBU8WKNlMr1NUvXr22EgooH
+   tL3aqWcsVQH6gQR+Ip9cL9zKQEnkoh0coKh2AFd8o7Syfm4CsOg3pHv11
+   jthDL8gvx50vZYb+kRj3s6vy3lVXYDBsBA8++9PA+GLOj+5Pi7gymab2N
+   Q==;
+X-CSE-ConnectionGUID: sRSWvC2kSWu6vvn2cdgZgA==
+X-CSE-MsgGUID: LTN6fn5lSiSIJSX2/h6rdA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="29442383"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="29442383"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 00:27:17 -0800
+X-CSE-ConnectionGUID: VbCv2Ah+RvqqRPOSiOzT+A==
+X-CSE-MsgGUID: 8hCEqOGWQzW9ywrFdbgxhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="117963136"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa006.jf.intel.com with ESMTP; 03 Mar 2025 00:27:16 -0800
+Message-ID: <53a7a698-410f-47b2-b50b-9368e4f02cf9@linux.intel.com>
+Date: Mon, 3 Mar 2025 10:28:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
+ enpoints
+To: Kuangyi Chiang <ki.chiang65@gmail.com>
+Cc: michal.pecio@gmail.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
+ <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
+ <CAHN5xi0mf8G4ODMQ9jDXAM4CRXtafZeMh_2KF7efbiFJahO4bw@mail.gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <CAHN5xi0mf8G4ODMQ9jDXAM4CRXtafZeMh_2KF7efbiFJahO4bw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Jens,
-
-On Sun, Mar 02, 2025 at 02:34:41PM +0100, Jens Glathe wrote:
-> On 2/18/25 16:29, Johan Hovold wrote:
-> > Make sure that the retimer is accessible before registering to avoid
-> > having later consumer calls fail to configure it, something which, for
-> > example, can lead to a hotplugged display not being recognised:
-> >
-> > 	[drm:msm_dp_panel_read_sink_caps [msm]] *ERROR* read dpcd failed -110
-> >
-> > Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C Retimer")
-> > Cc: Abel Vesa <abel.vesa@linaro.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On 1.3.2025 4.05, Kuangyi Chiang wrote:
+> Hi,
 > 
-> unfortunately, this one goes south on the HP Omnibook X14, and also on
-> the Elitebook G1Q. After excluding a lot of other causes, like inverted
-> resets and wrong i2c channels, I did a bisect and landed at this commit.
+> Thanks for the patch.
+> 
+> Mathias Nyman <mathias.nyman@linux.intel.com> 於 2025年3月1日 週六 上午12:17寫道：
 
-According to the X14 ACPI tables there is no ps8830 on &i2c7i (I2C8),
-which means that the devicetree is broken.
+>> index 8c164340a2c3..c75c2c12ce53 100644
+>> --- a/drivers/usb/host/xhci.h
+>> +++ b/drivers/usb/host/xhci.h
+>> @@ -1371,7 +1371,7 @@ struct xhci_ring {
+>>          unsigned int            num_trbs_free; /* used only by xhci DbC */
+>>          unsigned int            bounce_buf_len;
+>>          enum xhci_ring_type     type;
+>> -       bool                    last_td_was_short;
+>> +       u32                     last_td_comp_code;
+> 
+> Should be changed to old_trb_comp_code.
+> 
 
-> Looking at it, I speculatively increased the firmware initialization
-> delay to 200ms. To no effect. Reverting this patch "resolves" the issue.
+Thanks, forgot to add that last xhci.h change to the patch
 
-This patch (series) only makes sure that there actually is a retimer at
-the described address so it appears to work as intended.
+-Mathias
 
-You may unknowingly have been relying on firmware configuration or reset
-values. Does orientation switching (SuperSpeed in both orientations) and
-DP altmode work at all on the second USB-C port with this patch
-reverted?
-
-Johan
 
