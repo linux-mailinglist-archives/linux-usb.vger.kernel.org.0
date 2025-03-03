@@ -1,47 +1,65 @@
-Return-Path: <linux-usb+bounces-21282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FDB1A4C366
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:33:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC439A4C43C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 16:07:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C844188D54B
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 14:33:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56ECD188FB8A
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7250D1F4C8A;
-	Mon,  3 Mar 2025 14:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F45213E9C;
+	Mon,  3 Mar 2025 15:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="Iq5GHZxx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sd6bWjEW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C337212D63
-	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 14:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A8084D13;
+	Mon,  3 Mar 2025 15:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741012393; cv=none; b=XZha+c6IiwcUc89ZlSOuihKz/Y+gz4jqdm8Jel9PqWao2taNcVTC4Ff2YCKXc1bnRrye7afobW5oKlSqsyLkpHhD4pHVMTeiXB8QuWjNC+VLKqQ2EYp0KUFZEwBJevwy3JiTSAWe6j6baf2pgw/TWHouqsqr8/0dTLCDPv3iWS4=
+	t=1741014462; cv=none; b=pqS0Z7GuCInGq8toMlR5z1s7IiJ4Za7ssbYs1bJEaPPxZAiCwiqzLSV3qqnZR6NYsPlGedloc7u33avN0+5bc1TEHHwZDFKYIyxv4cfyg662Ae7gFC87azSHVw3OZSiso3CsUiiM3qNp2ci5gNpzbRSwNm2JkKgWKnqwwPBFwnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741012393; c=relaxed/simple;
-	bh=s+FoJtKmlgMw/QXOaHBp8YK4f5PUwp9gJxhG2Vu4l/0=;
+	s=arc-20240116; t=1741014462; c=relaxed/simple;
+	bh=hiybgUw9KPpv22AWcOejdFM7b/sDSPS48X0e2YDcPyc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iZm08Y05eI0KQA2pYBT+wmnRmeay1m7YK6pOpx8jOR5Rc4t4sCpEm3fYOTw8a5yEO/uHazvZUqw073PzQRcmg+YKp9OW3aAqXi0rKaTjxzBVCGLxVSiO4Me9Y3alYoodTXcU+5xiTRvXGoiRrXyF6JYYtGxMla9r32fFGpbG60k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=Iq5GHZxx; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z61WS5Sqtz16d5;
-	Mon,  3 Mar 2025 09:33:08 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1741012389; bh=s+FoJtKmlgMw/QXOaHBp8YK4f5PUwp9gJxhG2Vu4l/0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Iq5GHZxxiqUFFk05OtmCmCVM+fDJL5w6LKPip8QhSRNPfp7x4h7WkHUq/ZasNP09Y
-	 cSgLfjowjKfvfoBATZxSezVlt6g+L+A3e9HANywGP3LN32TpRrSfAL+ecIpGcJs7HZ
-	 DvrG32zQCzMgztRApdwWRfsszPQIgXmojOCjqrMs=
-Message-ID: <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
-Date: Mon, 3 Mar 2025 06:33:06 -0800
+	 In-Reply-To:Content-Type; b=url3G8MnRKOKuCWSWZRK4Uw5zzDGkCDSh2zQhIU+BAI37CqDFd9t0EqH6G/cQh6c+4Xya5F3MK5Hvfd1/VUWl+Airp/X4tguH6eOqCbtevvx92/aHAq48+hPg1o7dolgX7yjEB5DbSe/tOiRxfcQb76Dg1OjOqbK+HP7/isnXZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sd6bWjEW; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741014460; x=1772550460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hiybgUw9KPpv22AWcOejdFM7b/sDSPS48X0e2YDcPyc=;
+  b=Sd6bWjEWZ5EfoiCR8gdMExMmjI275tARdd0GknYKPruPzdGzKMQVI3MV
+   TbMBtDs/kj+QWhq1dyjONeA5+KA3+8aZr6oigX+lB6svtK+htAMln/q0Q
+   yVdlgEcj/ZN/ZXDnqVqq6y6uzGqARDD7LY+jJ6xCHVkqvsqltpdEb6U9w
+   qTMmnN02tadlKRZhGLd4GAPlP5DNkMNQYH7L47CiHj3diFZuFYt9QmJ00
+   05HVvM43GiFUor7p4CQ5mlaV097RBW1H4Nveux6shsicMMwrzQqFrOexa
+   qf9+lrDlcXqWNBVTwrhjyFg75QS5GSCKAQYnNRRtAPOr5J2r/7IInjXSX
+   Q==;
+X-CSE-ConnectionGUID: EsLrz8WeTGutOnRopRA2Ig==
+X-CSE-MsgGUID: iVBOJIJET6SXD0XRO3A/hg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="53287147"
+X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
+   d="scan'208";a="53287147"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 07:07:39 -0800
+X-CSE-ConnectionGUID: nPip6LAQRc6hvgyjY4I86g==
+X-CSE-MsgGUID: qN4SGlI4RUK5ASjhqIWpfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
+   d="scan'208";a="148858310"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa002.jf.intel.com with ESMTP; 03 Mar 2025 07:07:38 -0800
+Message-ID: <2a44ee96-25e4-4693-8f43-913942091c51@linux.intel.com>
+Date: Mon, 3 Mar 2025 17:08:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,44 +67,80 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
- activation asynchronously") too, to stop my resume crashes
-To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
-Cc: linux-usb@vger.kernel.org
-References: <d56fcd99-433e-4670-8388-7035812a78d9@panix.com>
- <20250303115329.GT3713119@black.fi.intel.com>
- <68cec31a-0132-43bd-8a61-29e0ac23b326@panix.com>
- <20250303131359.GV3713119@black.fi.intel.com>
- <744090aa-074e-443f-8a94-567dadff4c7d@panix.com>
- <20250303132327.GW3713119@black.fi.intel.com>
- <20250303134618.GX3713119@black.fi.intel.com>
- <24ef839c-8fa5-4a19-b9c6-0a267aab84f5@panix.com>
- <20250303140156.GY3713119@black.fi.intel.com>
- <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
- <20250303142058.GA3713119@black.fi.intel.com>
+Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
+ enpoints
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: ki.chiang65@gmail.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
+ <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
+ <20250303113401.280cb911@foxbook>
 Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20250303142058.GA3713119@black.fi.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250303113401.280cb911@foxbook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 3.3.2025 12.34, Michał Pecio wrote:
+> 
+> Works here too, modulo the obvious build problem.
 
-On 3/3/25 06:20, Mika Westerberg wrote:
+Thanks for testing on both Etron and Renesas hosts.
 
-> Actually just managed to reproduce this with hibernate \o/ so debugging
-> now.
+> 
+> Etron with errors:
+> [ 1064.865311] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
+> [ 1064.865322] xhci_hcd 0000:06:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 4
+> [ 1064.865326] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ffef88c0, comp_code 13 after 4
+> 
+> Renesas with short packets:
+> [ 1365.299218] xhci_hcd 0000:08:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 13
+> [ 1365.299223] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffbbf870, comp_code 13 after 13
+> 
+> BTW, it says "comp_code 13 after something" because of this crazy
+> TRUST_TX_LENGTH hack, which changes trb_comp_code if it's success
+> but the residual is nonzero. If I remove the hack,
+> 
+> Etron:
+> [ 2713.630443] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ff3b6130, comp_code 1 after 4
+> 
+> Renesas:
+> [ 4033.652300] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffcd1b80, comp_code 1 after 13
+> 
+> 
+> The hack could almost be removed now, but if there really are HCs
+> which report Success on the first event, this won't work for them:
 
-OK, this is good ... but now you've got me wondering if I indeed saw it 
-during suspend cycles as well (I usually suspend only, then systemd will 
-initiate a hibernation after 4H so just going back/forth to the office 
-shouldn't trigger this).
+This looks better, and I agree that the hack/quirk is annoying, but in fear of regression I
+don't want to touch that in this patch yet.
 
-Waiting to see what you find,
+> 
+>> +static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
+>> +					   struct xhci_ring *ring)
+>> +{
+>> +	switch (ring->old_trb_comp_code) {
+>> +	case COMP_SHORT_PACKET:
+>> +		return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
+> 
+> Could it work without relying on fictional COMP_SHORT_PACKET events?
+> 
+>> +			if (xhci_spurious_success_tx_event(xhci, ep_ring)) {
+>> +				xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
+>> +					 &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
+>> +				ep_ring->old_trb_comp_code = trb_comp_code;
+> 
+> This part will (quite arbitrarily IMO) not execute if td_list is empty.
 
--Kenny
+Yes, if td_list is empty we don't take this path, and we don't print any
+"ERROR Transfer event TRB DMA ptr not part of current TD..." message either,
+just like before.
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+> 
+> I had this idea that "empty td_list" and "no matching TD on td_list"
+> are practically identical cases, and their code could be merged.'
 
+Possibly, but not in this patch.
+
+Thanks
+Mathias
 
