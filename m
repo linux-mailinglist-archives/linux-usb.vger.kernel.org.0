@@ -1,151 +1,123 @@
-Return-Path: <linux-usb+bounces-21263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75739A4BEB6
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 12:33:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DACCA4BE74
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 12:28:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7FFA3BC54A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 11:23:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83F72188E4D5
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 11:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25971F0E44;
-	Mon,  3 Mar 2025 11:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ARNHaKdR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9FB1F4618;
+	Mon,  3 Mar 2025 11:25:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C54A1EE008
-	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 11:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC281F4194
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 11:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000913; cv=none; b=pBhMn8rOclzgYg/ZrSZPnWEGU+4omZiqogBC+siGwgmYHzLG8ayokkVjakFU2aJgIrpd4mvav9wJk/2tvEyByMJmL2ptsJ8VUe8mFS7A6TKR2mEGX/2PG8d3OfIszumg4GPnBwa4SFuBroOYZgxMrwtAOzN/VcUNmQzZXsu/Vfg=
+	t=1741001141; cv=none; b=C+mKUZMxNqeAqEOpvy8/VnqvLXzuw2PCOnhWFgwEvvbGh0opJ6QlrcfUa9EPlE1vcuSSUX5w+ZRgb8DHbGM9Ckd8XuVkgDGRfM7U1C9DLXKw/Y7YT9X06nRaaDDXh4oEqZrthBJMUeou8wxtw4PwXPRDoDiTPNbiad1Mbr0GmKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000913; c=relaxed/simple;
-	bh=YQ9AWIA5csSTtqRC4hSwybQs5m8bYpjGAxqLpyeyHDo=;
+	s=arc-20240116; t=1741001141; c=relaxed/simple;
+	bh=3+YMU5QVO8O5inRiM0lXe5oV4sm6tHhKvfipqFyuCeE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iCJ0OCnfGv0UZ31YFI5Yl++ZtXM55ilDVRQS4hIkz0/jpa7W+5p/8P+bt0rtdeALUBykhez0eYM1fx0bfeEmomnex82bqzH0q+cwuLDGujhg8CPQ6hfSMSYvfUGQLAJrXb4hsYDXqJv3xNMA0sQ9uwJGfLkTGX329lbB96CFtLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ARNHaKdR; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741000913; x=1772536913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YQ9AWIA5csSTtqRC4hSwybQs5m8bYpjGAxqLpyeyHDo=;
-  b=ARNHaKdRMkJrk9RqzQQ7MVE2Niw4D4b6eYypZ6ikUoVtO46DbjliL58+
-   FFZYRCJY/7ekiyI3FOpcH80Wg5kKJXaHZs7luIFDxwuLPuLZmCmFS3HRh
-   85o1hCzH1EaLpu/jHWurrU9decpXD29MJzVXGRJzXnAwuzRfU5OKF4sDg
-   dCk+JTkbBDTU2VOD/CtSQCvc7TK3wbrdqLESRTYhHqSOYYkqFZyCb0SUy
-   oaWkvgSOn6yXleGQMDV3D6HF7GMyN4TE18GJ2nytbFZiQlj1oRut2CZlF
-   SiAFzMlp/feIR+M6HIYTAzTaT5bfKPgdUK4zgdWhTf99mz3U7/E/jqTrk
-   A==;
-X-CSE-ConnectionGUID: r5/lRhsFSumltTw/6R5aVQ==
-X-CSE-MsgGUID: ApPY343FQTex+2DXjs2u2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="41783399"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="41783399"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 03:21:52 -0800
-X-CSE-ConnectionGUID: 3+m5nx1pR+Os15vEzfR+AQ==
-X-CSE-MsgGUID: en5pT4qMSDqsGamMB4qGfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="123198406"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 03 Mar 2025 03:21:51 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 86BC9125; Mon, 03 Mar 2025 13:21:49 +0200 (EET)
-Date: Mon, 3 Mar 2025 13:21:49 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Kenneth Crudup <kenny@panix.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
- activation asynchronously") too, to stop my resume crashes
-Message-ID: <20250303112149.GS3713119@black.fi.intel.com>
-References: <8e175721-806f-45d6-892a-bd3356af80c9@panix.com>
- <bd731ba2-5509-44e6-a419-814ef5329bbd@panix.com>
- <992dba2a-4919-4f76-ac48-986792d5843c@panix.com>
- <2b55ab09-8389-4916-8acc-abc73f234d21@panix.com>
- <20250303104618.GP3713119@black.fi.intel.com>
- <f31309e4-6ce5-48cf-910e-cd74f818aac8@panix.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/CE+eKUNBu0p1crL2IMj7bK6wl8vRF40pedbovHwiRTbO7vtXeAIYaHG1UQ7hL/NoqOV1ydmNSB2lnRnWCqgohWvLCI5zaZXfwdKTI3McC1Lg6WwCeNdNmfrhT/A93pqIO27wBZ+EA2Bg8qCJ2chyq82nKpDEBzm5cjgugdoj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp3vO-0005VN-TN; Mon, 03 Mar 2025 12:25:30 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp3vO-003mo5-22;
+	Mon, 03 Mar 2025 12:25:30 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp3vO-00AihB-1j;
+	Mon, 03 Mar 2025 12:25:30 +0100
+Date: Mon, 3 Mar 2025 12:25:30 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rob Herring <robh@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB-Serial serdev support
+Message-ID: <20250303112530.igosjo3s5uocndxj@pengutronix.de>
+References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
+ <20241001072453.3xv5sqxaj4zjprnz@pengutronix.de>
+ <2024100109-maker-ravine-7c65@gregkh>
+ <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f31309e4-6ce5-48cf-910e-cd74f818aac8@panix.com>
+In-Reply-To: <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Mon, Mar 03, 2025 at 03:02:30AM -0800, Kenneth Crudup wrote:
-> > For the second issue, I'm not sure I know the steps but since you mention
-> > reverting d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation
-> > asynchronously"), it should trigger pretty much any time you plug in
-> > monitor so we can follow different and hopefully simpler steps:
-> > 
-> > 1. Boot the system up, nothing connected.
-> > 2. Connect TBT 4 dock to the system.
-> > 3. Connect monitor to the TBT 4 dock.
-> > 
-> > Expectation: Monitor shows the screen properly.
-> > Actual result: Blank screen.
+Hi,
+
+On 24-10-28, Marco Felsch wrote:
+> Hi Greg,
 > 
-> Actually, what was happening was connecting a monitor at any time worked as
-> expected. The issue was approximately most of the time after a resume from
-> suspend/hibernate, if I had an external (DP tunneled) monitor connected, I'd
-> get OOPSes in the line mentioned in my first E-mail, which appeared from
-> tracing to come from trying to write to a TB tunnel(?) which no longer
-> existed; my (totally wild) guess was that some race condition between:
-> resuming the machine and reenumerating the tunnels, my monitors taking their
-> time coming out of sleep, and "something" happening with the async tunnel
-> activation means it was hitting an NPE somewhere.
+> On 24-10-01, Greg Kroah-Hartman wrote:
+> > On Tue, Oct 01, 2024 at 09:24:53AM +0200, Marco Felsch wrote:
+> > > Hi,
+> > > 
+> > > gentle ping as this is series is two months old now.
+> > 
+> > And it was rejected as serdev does not support hotplug which of course,
+> > usb-serial does.
+> 
+> I hoped to get some feedback on my answer [1]. Regarding hotplug
+> support: serdev _requires_ some sort of firmware like OF (not sure if it
+> does work with ACPI too). That said, if serdev finds no firmware a
+> fallback is provided to the standard serial handling.
+> 
+> The firmware could either be added directly by the platform OF file or
+> via OF-overlays. By making use of overlays we could gain some kind of
+> hotplug: Once a usb devices was detected and the driver has an
+> overlay, the overlay gets applied and the probe continues, like we do it
+> for PCIe devices now [2]. For devices which don't have a registered
+> overlay the standard usb-serial setup is done by exposing the serial
+> interface to the userspace.
 
-Let's not guess, let's try to figure out the root cause.
+is this idea worth to give it a try for a v2 or do you have something
+different in mind?
 
-> Bottom line is I've done quite a bit of testing with these reverts and have
-> yet to get any resume from S/H failures since.
+I'm happy for any input.
 
-Okay that's good.
+Regards,
+  Marco
 
-Now you say that you don't reproduce the DP tunnel issue if you simply plug
-in monitor so let's try to figure out reliable steps to repro so we can
-investigate.
-
-In theory it should trigger any time you plug in monitor since the paths
-are the same but okay. Then let's try to limit this to single monitor (the
-one you see this most reliably and let's stick with suspend since hibernate
-is more complex).
-
-So with 9d573d19547b3 only reverted, no other changes to the kernel and
-"thunderbolt.dyndbg=+p" in the command line do following steps:
-
-1. Boot the system up, nothing connected.
-2. Connect TBT 4 dock to the system.
-3. Connect monitor to the TBT 4 dock.
-4. Suspend the system by closing lid.
-5. Resume the system by openling lid.
-
-Expectation: Monitor over Thunderbolt still shows picture.
-Actual result: Screen is blank.
-
-If these are not accurate, can you in the same format write down your steps
-how it reproduces (try to keep it minimal). Then since now resume at least
-completes you can provide full dmesg to me and I can try to figure out what
-is wrong there.
-
-> ... and as with 9d573d19, I'd like to help fix this underlying issue, as
-> maybe there's something unique to my laptop's chipset(?) (as I have
-> different docks and monitors at home and when on the road but it happens in
-> both scenarios).
-
-I don't think this is hardware issue, I see it too in my hardware so the
-commit just somehow ends up in a deadlock and of course needs to be
-investigated but for the time being we can use the workaround revert and
-concentrate on the DP issue at hand.
+> > So until serdev is fixed up to handle that correctly, this is not going
+> > anywhere, nor should you want it to as then you would be in charge of
+> > code that does not work properly :)
+> 
+> Regards,
+>   Marco
+> 
+> [1] https://lore.kernel.org/all/20240917044948.i2eog4ondf7vna7q@pengutronix.de/
+> [2] https://lore.kernel.org/all/7512cbb7911b8395d926e9e9e390fbb55ce3aea9.camel@pengutronix.de/
+> 
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
 
