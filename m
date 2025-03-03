@@ -1,146 +1,101 @@
-Return-Path: <linux-usb+bounces-21283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC439A4C43C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 16:07:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5648A4C578
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 16:42:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56ECD188FB8A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:07:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18D2E160E9C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F45213E9C;
-	Mon,  3 Mar 2025 15:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1496C211261;
+	Mon,  3 Mar 2025 15:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sd6bWjEW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RBYsYzAF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A8084D13;
-	Mon,  3 Mar 2025 15:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91225145348
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 15:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741014462; cv=none; b=pqS0Z7GuCInGq8toMlR5z1s7IiJ4Za7ssbYs1bJEaPPxZAiCwiqzLSV3qqnZR6NYsPlGedloc7u33avN0+5bc1TEHHwZDFKYIyxv4cfyg662Ae7gFC87azSHVw3OZSiso3CsUiiM3qNp2ci5gNpzbRSwNm2JkKgWKnqwwPBFwnA=
+	t=1741016573; cv=none; b=oi75HdrpMIgJBQfnmLA0YrwwORdWFtZ6UD029thPuoSaaMIPtWKyq2cnL2hJdQCl5dXVgTLY2KG5Uj9v6Q8RhXcSWrxcLFSFZYo/+bV2e1veyw5gPqXJpIHYwRWoYB4yriSZ7buQNMLky/UvUeUtGhMBLGeQHt+UAh+7MVIrf2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741014462; c=relaxed/simple;
-	bh=hiybgUw9KPpv22AWcOejdFM7b/sDSPS48X0e2YDcPyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=url3G8MnRKOKuCWSWZRK4Uw5zzDGkCDSh2zQhIU+BAI37CqDFd9t0EqH6G/cQh6c+4Xya5F3MK5Hvfd1/VUWl+Airp/X4tguH6eOqCbtevvx92/aHAq48+hPg1o7dolgX7yjEB5DbSe/tOiRxfcQb76Dg1OjOqbK+HP7/isnXZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sd6bWjEW; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741014460; x=1772550460;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hiybgUw9KPpv22AWcOejdFM7b/sDSPS48X0e2YDcPyc=;
-  b=Sd6bWjEWZ5EfoiCR8gdMExMmjI275tARdd0GknYKPruPzdGzKMQVI3MV
-   TbMBtDs/kj+QWhq1dyjONeA5+KA3+8aZr6oigX+lB6svtK+htAMln/q0Q
-   yVdlgEcj/ZN/ZXDnqVqq6y6uzGqARDD7LY+jJ6xCHVkqvsqltpdEb6U9w
-   qTMmnN02tadlKRZhGLd4GAPlP5DNkMNQYH7L47CiHj3diFZuFYt9QmJ00
-   05HVvM43GiFUor7p4CQ5mlaV097RBW1H4Nveux6shsicMMwrzQqFrOexa
-   qf9+lrDlcXqWNBVTwrhjyFg75QS5GSCKAQYnNRRtAPOr5J2r/7IInjXSX
-   Q==;
-X-CSE-ConnectionGUID: EsLrz8WeTGutOnRopRA2Ig==
-X-CSE-MsgGUID: iVBOJIJET6SXD0XRO3A/hg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="53287147"
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="53287147"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 07:07:39 -0800
-X-CSE-ConnectionGUID: nPip6LAQRc6hvgyjY4I86g==
-X-CSE-MsgGUID: qN4SGlI4RUK5ASjhqIWpfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="148858310"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 03 Mar 2025 07:07:38 -0800
-Message-ID: <2a44ee96-25e4-4693-8f43-913942091c51@linux.intel.com>
-Date: Mon, 3 Mar 2025 17:08:39 +0200
+	s=arc-20240116; t=1741016573; c=relaxed/simple;
+	bh=qK8MnH8FNUu7EdPjKXDF05HjAr6mmgXf5v+1EhCv3Lg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TotUQfrfG987SnP6gudXZhzH94jcIMNc0z/j2ZDrjdYc9oemY2jjLY3I1NkIYbiC8/kiU9450bkeJJCqTHwjBV9alR/bBeWaphrWkOaadW4QZ3adRpomNK2K0oG+1olJ8c031jROT59CoOVX/aowQiuhYcTz0riD8cIj7BZKLl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RBYsYzAF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11AD5C4CEE6
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 15:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741016573;
+	bh=qK8MnH8FNUu7EdPjKXDF05HjAr6mmgXf5v+1EhCv3Lg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=RBYsYzAF+y4IxTEpGp4TJvMHXaU2CWP2ZvqDCnrghDMme86INSciJxw8TwoiJ7nMO
+	 pZdoRo6anbxQW8l03UrRR0gJm664SNPurjMlWEEMLehVQ5nNKIPoqjeDTOa9ICaw59
+	 rkRUCxaKHGxQAemJv2igGn+nQDxBSKAUxXXU4JezRRicW3p2fei5jrWJl+gzqLZYIM
+	 OZG5IjQpVDcHmp3RFPoVOcza+Gr+mIyFvP6xLULZHTPf/mUdxb/cgxswzqN7/q3Y58
+	 pVphqbxIS0K6e1z3anVSVXFYwo15plCHzfESMVwPN67N37W2K8AFQR5JI+fU6b/+oH
+	 uM8b26Lg0YP1Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F135CC53BBF; Mon,  3 Mar 2025 15:42:52 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Mon, 03 Mar 2025 15:42:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219824-208809-vRyqYcQbOM@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
- enpoints
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: ki.chiang65@gmail.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
- <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
- <20250303113401.280cb911@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250303113401.280cb911@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 3.3.2025 12.34, Michał Pecio wrote:
-> 
-> Works here too, modulo the obvious build problem.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Thanks for testing on both Etron and Renesas hosts.
+--- Comment #12 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Micha=C5=82 Pecio from comment #10)
+> What if you enable only this one thing? Does anything show up under normal
+> use or before the HC dies (if it still does)?
+>=20
+> echo 'func xhci_handle_cmd_stop_ep +p' >/proc/dynamic_debug/control
 
-> 
-> Etron with errors:
-> [ 1064.865311] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
-> [ 1064.865322] xhci_hcd 0000:06:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 4
-> [ 1064.865326] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ffef88c0, comp_code 13 after 4
-> 
-> Renesas with short packets:
-> [ 1365.299218] xhci_hcd 0000:08:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 13
-> [ 1365.299223] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffbbf870, comp_code 13 after 13
-> 
-> BTW, it says "comp_code 13 after something" because of this crazy
-> TRUST_TX_LENGTH hack, which changes trb_comp_code if it's success
-> but the residual is nonzero. If I remove the hack,
-> 
-> Etron:
-> [ 2713.630443] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ff3b6130, comp_code 1 after 4
-> 
-> Renesas:
-> [ 4033.652300] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffcd1b80, comp_code 1 after 13
-> 
-> 
-> The hack could almost be removed now, but if there really are HCs
-> which report Success on the first event, this won't work for them:
+The same issue. Without debug the USB controller dies in a few minutes, with
+just this line it is working just fine.
 
-This looks better, and I agree that the hack/quirk is annoying, but in fear of regression I
-don't want to touch that in this patch yet.
+> Can you still run one more try with xhci tracing instead of dynamic debug?
+It does not affect timing as much:
 
-> 
->> +static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
->> +					   struct xhci_ring *ring)
->> +{
->> +	switch (ring->old_trb_comp_code) {
->> +	case COMP_SHORT_PACKET:
->> +		return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
-> 
-> Could it work without relying on fictional COMP_SHORT_PACKET events?
-> 
->> +			if (xhci_spurious_success_tx_event(xhci, ep_ring)) {
->> +				xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
->> +					 &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
->> +				ep_ring->old_trb_comp_code = trb_comp_code;
-> 
-> This part will (quite arbitrarily IMO) not execute if td_list is empty.
+I will try this ASAP.
 
-Yes, if td_list is empty we don't take this path, and we don't print any
-"ERROR Transfer event TRB DMA ptr not part of current TD..." message either,
-just like before.
+--=20
+You may reply to this email to add a comment.
 
-> 
-> I had this idea that "empty td_list" and "no matching TD on td_list"
-> are practically identical cases, and their code could be merged.'
-
-Possibly, but not in this patch.
-
-Thanks
-Mathias
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
