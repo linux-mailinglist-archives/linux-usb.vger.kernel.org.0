@@ -1,95 +1,106 @@
-Return-Path: <linux-usb+bounces-21248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97AAEA4B810
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 08:01:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30FCBA4B818
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 08:07:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22561890F09
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 07:01:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35CDB7A637F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 07:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BBA1E7C07;
-	Mon,  3 Mar 2025 07:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B11D1E8854;
+	Mon,  3 Mar 2025 07:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PMjky6qx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tAyuPAfk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CA75684;
-	Mon,  3 Mar 2025 07:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088321D6DDC;
+	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740985268; cv=none; b=owoRtFLjss3MtIiUnW6qPReyRLaDp7ylD/rNgA0Za6jgVK97DInt4y2Bdgzyi5KrS/bh16mpVvbG3N7+UbbmnguU90PJ4DNxo4VzVBu0mIPrKodzb6JdsUazhFsmKgL39ofX7GFdDgX9cfMBT+wDAbIQ6iO80ssDbHe4+esQqxc=
+	t=1740985631; cv=none; b=FA3Ib/5b5m+pDhvtfXyAYX/YO0uGGVG/tYn3n5VPvYusogSxUBKxAg7euGQ7bBJZHOyhYlq72mOxv2eQBZ4xIhAgI2hFpCbf9IjS9bcOo+vAC1LgbWxa3cbyQijAUJ/SRK0QO75muQKEhrW44dxexuUr/6ezWxEWly4UYLfOJPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740985268; c=relaxed/simple;
-	bh=06/lFsI+jRiJfxa1MNxYK6jt9nzUM276nC+0ai3Lqu8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mhORt8PqHkGXnQMChVydTFBmkJ7hFQGyHvnrrlmIgoQ540+B9hcfhsUPWLGwUlYQImk/YZshgOK1ohIOMi7cGt1jJm5mvOIaTT8gtqyiUNQxJvbaiDo9nTTNLV2xxRwQK9VuNTBi89t+OXIJPxqDiDyyGUHXzDhHnEEU7vpFSX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PMjky6qx; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nFsyP
-	1HLyJu4C2yuVvpg4ClcQGgSmKQc6q3wf7J3EK4=; b=PMjky6qxNHQd85tZZCATp
-	sl6rsUn8g34co6ZSzLtkDojlhN3ew0ELA051+snzc9AFW0JZ6cwl7AxsJD4hVYcq
-	KK+P1RUW7nxu6RS5GIHH5clZvCmIRfV28L8M6mKnRpHGnILYJbA8b9Ul1GBVzDu1
-	rYYzQrXghxRRpWbmABS9Fg=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDn1d2kU8VnvlsCQA--.28777S2;
-	Mon, 03 Mar 2025 15:00:53 +0800 (CST)
-From: Miao Li <limiao870622@163.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	limiao870622@163.com,
-	Miao Li <limiao@kylinos.cn>
-Subject: [PATCH] usb: quirks: Add DELAY_INIT and NO_LPM for Prolific PL2303 Serial Port
-Date: Mon,  3 Mar 2025 15:00:47 +0800
-Message-Id: <20250303070047.153591-1-limiao870622@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1740985631; c=relaxed/simple;
+	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uI1k15hN3RBjiF56mv2SxNlbDA4D3jRPN21ac9gYycFLiTyFwTJ4QrOrOUXapfvrPWscC5ZOdm3P2WBK7Y9or2x1Kaa5cEVONX3wQSYtE1r6KXxguW8faLOUeH2w8Rg1qXFXRszSAo/lo4UMMSx5J6RPVoBRKgVyAI8Wa4mArug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B851C4CED6;
+	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740985630;
+	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tAyuPAfkzxDlkoVT6p1/oh+xXrJGTYE6EdI0DU87OVwF//74VuTdBJCTbe0T4vda9
+	 x5K1Hzui0kzCcm1V/zY6j6+0LIlJmjBTeEm61+9qmkJqf9dqHVS8i2m9aqcAXsuTm5
+	 QDlt5BclX1ItesBeefNrRS2PBWsTTGCIJ9eGU0bOYP59WrMyVWSex+QAcrW7dYKnjq
+	 hPZgSyXb6WBBjgkcDCUTSexa192ADNFORVm3c2prOTHcW6dLghZ0+cM2zZe2OeLI0i
+	 R5OSLYBFpdWaLSGlR2ClHpZDIY3JdVwRWnDlG6lnU8DrzGgEvi0aMdU0q8grfSH0js
+	 HSkYnSyNWulNw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1toztI-0000000055w-2SHu;
+	Mon, 03 Mar 2025 08:07:04 +0100
+Date: Mon, 3 Mar 2025 08:07:04 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Cc: Johan Hovold <johan+linaro@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: ps883x: fix missing accessibility check
+Message-ID: <Z8VVGBDh2VnxyHw0@hovoldconsulting.com>
+References: <20250218152933.22992-1-johan+linaro@kernel.org>
+ <20250218152933.22992-3-johan+linaro@kernel.org>
+ <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDn1d2kU8VnvlsCQA--.28777S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XFyfuFyDZw4UCF15Zr15XFb_yoWDCwbEkr
-	1UWa93u3W8GFZ7trn7Za1fZrZ5Kw429rykua4qqa43Ja1UCw1kJF4xArWUZr1UGry8tF4D
-	Kan7u34DZr1v9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRiNeO5UUUUU==
-X-CM-SenderInfo: 5olpxtbryxiliss6il2tof0z/1tbiShAFzWfFTX7fnwAAsD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
 
-From: Miao Li <limiao@kylinos.cn>
+Hi Jens,
 
-When used on Huawei hisi platforms, Prolific PL2303 Serial Port which
-the VID:PID is in 067b:2731 might fail to enumerate at boot time and
-doesn't work well with LPM enabled, combination quirks:
-USB_QUIRK_DELAY_INIT + USB_QUIRK_NO_LPM
-fixed the problems.
+On Sun, Mar 02, 2025 at 02:34:41PM +0100, Jens Glathe wrote:
+> On 2/18/25 16:29, Johan Hovold wrote:
+> > Make sure that the retimer is accessible before registering to avoid
+> > having later consumer calls fail to configure it, something which, for
+> > example, can lead to a hotplugged display not being recognised:
+> >
+> > 	[drm:msm_dp_panel_read_sink_caps [msm]] *ERROR* read dpcd failed -110
+> >
+> > Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C Retimer")
+> > Cc: Abel Vesa <abel.vesa@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> 
+> unfortunately, this one goes south on the HP Omnibook X14, and also on
+> the Elitebook G1Q. After excluding a lot of other causes, like inverted
+> resets and wrong i2c channels, I did a bisect and landed at this commit.
 
-Signed-off-by: Miao Li <limiao@kylinos.cn>
----
- drivers/usb/core/quirks.c | 4 ++++
- 1 file changed, 4 insertions(+)
+According to the X14 ACPI tables there is no ps8830 on &i2c7i (I2C8),
+which means that the devicetree is broken.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index dfcfc142bd5e..8aca5518e003 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -341,6 +341,10 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0638, 0x0a13), .driver_info =
- 	  USB_QUIRK_STRING_FETCH_255 },
- 
-+	/* Prolific PL2303 Serial Port */
-+	{ USB_DEVICE(0x067b, 0x2731), .driver_info = USB_QUIRK_DELAY_INIT |
-+	  USB_QUIRK_NO_LPM },
-+
- 	/* Saitek Cyborg Gold Joystick */
- 	{ USB_DEVICE(0x06a3, 0x0006), .driver_info =
- 			USB_QUIRK_CONFIG_INTF_STRINGS },
--- 
-2.25.1
+> Looking at it, I speculatively increased the firmware initialization
+> delay to 200ms. To no effect. Reverting this patch "resolves" the issue.
 
+This patch (series) only makes sure that there actually is a retimer at
+the described address so it appears to work as intended.
+
+You may unknowingly have been relying on firmware configuration or reset
+values. Does orientation switching (SuperSpeed in both orientations) and
+DP altmode work at all on the second USB-C port with this patch
+reverted?
+
+Johan
 
