@@ -1,116 +1,163 @@
-Return-Path: <linux-usb+bounces-21339-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21348-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478F1A4DFBB
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 14:52:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A10CAA4E6F6
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:54:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13F857ABDAC
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 13:51:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2BA63BE441
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 16:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510242046AD;
-	Tue,  4 Mar 2025 13:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9745A291FBA;
+	Tue,  4 Mar 2025 16:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cyuefeOr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tAyuPAfk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3082868B
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 13:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741096312; cv=none; b=gilD7epWJJQVETAg4nhcuXRSAa2HrNfXJY2aWVdEAU4OnhEswzthm8vW0PFd8J99Be+q5D8gAEMCToJwigrMs2GMp9/nqWyk/sRfdKeTnT4i/CvloEn1khZmkrGSFJYeztJDET4hA5dYAWl6i6O+CNP4CYUkVKGGYACaTXoqZss=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741096312; c=relaxed/simple;
-	bh=s925eKS8tZshzhJmPwOQ6qWR7gxnFUlWhpCUEoZU0A8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA55B28F949
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 16:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741104162; cv=pass; b=WkN+gkWT+eOLTxJ9TBXKK/I4WTu1Ls3J68mdXXv+tBIdV6uzV9Skvg6nsk89vqFCzLCDN7YBuSUFN4TF3bf3Zhvb40u3qVW7V2KvJZr3oMsJ+tT+aHEVyxKDJ4XKMCdygS7bQpMTe5mBv3JvsmqGaK0TTJclKacQMnmnDJPGiwY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741104162; c=relaxed/simple;
+	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OH+WOJFsVpxrYOSH+eB0PStDhbgUIDvzBRkA47D8mNe+Lsq+9OMA+FjZl3FSBdKLzUeYoIC/OYwGGsm1aQG5J2Z9B8IbGaTnruVhp3M+2yzvBuyirt8oYXS1vPEHfEUhNqdPP5dxoRhKllrIxG3nzXbSepsZtAJf4BS7wQrYhNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cyuefeOr; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741096311; x=1772632311;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s925eKS8tZshzhJmPwOQ6qWR7gxnFUlWhpCUEoZU0A8=;
-  b=cyuefeOreuUsqcmh8a/QLisS3WF1s+6jAKhyT1xIKJf2X1bN2/LBUEXs
-   Mg+UnJY3mBt6YZA1Ws6IG8pk+lecGTw7N8j7Lw53jy4DT6wv5EyaUHigV
-   g9RGFFsVv0jFVaYtbbEJtpaq50RMdD3aatPckUikMa5jjtm9JM2RpG/Ej
-   iQa6S5akzOIXki53ezkOoqWcEJt+crGvAI6lylfB2ByFFb7otTxyzD7/a
-   MEujwJsRWe2rJ79SAxwv3Om4YwMf5LbNG13XFy3ChfpercY7dYHAZ3rnO
-   ba6pykIkVb9qHLPtN89d5Y2hgdp2OCgnTLe6Jj1UVGed1+P10I0Gnoism
-   Q==;
-X-CSE-ConnectionGUID: nX+DTPWHS9yOJf3RBmqP5Q==
-X-CSE-MsgGUID: pOxU2EbQTBG3SQ8QclZD7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="59563273"
-X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
-   d="scan'208";a="59563273"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 05:51:51 -0800
-X-CSE-ConnectionGUID: F/jzQ0U4RMaa98V+PLSP5w==
-X-CSE-MsgGUID: CJA5h61MRgm0VntLYnvtvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118898919"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 04 Mar 2025 05:51:49 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 8F70F2EF; Tue, 04 Mar 2025 15:51:48 +0200 (EET)
-Date: Tue, 4 Mar 2025 15:51:48 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Kenneth Crudup <kenny@panix.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
- activation asynchronously") too, to stop my resume crashes
-Message-ID: <20250304135148.GM3713119@black.fi.intel.com>
-References: <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
- <20250303142058.GA3713119@black.fi.intel.com>
- <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
- <20250303175818.GB3713119@black.fi.intel.com>
- <007b005f-a6d1-44a2-9795-036c8f397274@panix.com>
- <48ef4c14-55d5-4baa-b862-f9e7368ed950@panix.com>
- <20250304082731.GF3713119@black.fi.intel.com>
- <14351945-fcde-4088-b7b3-542c6e4b7d0e@panix.com>
- <20250304134017.GL3713119@black.fi.intel.com>
- <7c5ec580-9b1c-40b7-9a8d-64bc95c41432@panix.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BucbrrtXg7F5cfbxbULLInB82rWNJrI0FGuol+Z7RdesC9aDHfz+tG47XByebA1hQZEBo6c1ufy0Yw+qP+M8aN/ycxpatscXkoyABJ1EMVw1BFfBy1lmxxcAdSX74w0bOdtwqFJh2O13O58PyrOzUuLCkgl317vY8wGnrKvQw38=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk; arc=none smtp.client-ip=10.30.226.201; arc=pass smtp.client-ip=160.75.25.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id E91B140CECA8
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 19:02:38 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=tAyuPAfk
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6g965ZsZzG1Yq
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 18:49:30 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 979E34274A; Tue,  4 Mar 2025 18:49:22 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk
+X-Envelope-From: <linux-kernel+bounces-541073-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 96A5E41F7E
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:07:32 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id E2BCA2DCDE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:07:31 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A10647A27D8
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 07:06:30 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF7B21E9B3A;
+	Mon,  3 Mar 2025 07:07:13 +0000 (UTC)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088321D6DDC;
+	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740985631; cv=none; b=FA3Ib/5b5m+pDhvtfXyAYX/YO0uGGVG/tYn3n5VPvYusogSxUBKxAg7euGQ7bBJZHOyhYlq72mOxv2eQBZ4xIhAgI2hFpCbf9IjS9bcOo+vAC1LgbWxa3cbyQijAUJ/SRK0QO75muQKEhrW44dxexuUr/6ezWxEWly4UYLfOJPY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740985631; c=relaxed/simple;
+	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uI1k15hN3RBjiF56mv2SxNlbDA4D3jRPN21ac9gYycFLiTyFwTJ4QrOrOUXapfvrPWscC5ZOdm3P2WBK7Y9or2x1Kaa5cEVONX3wQSYtE1r6KXxguW8faLOUeH2w8Rg1qXFXRszSAo/lo4UMMSx5J6RPVoBRKgVyAI8Wa4mArug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAyuPAfk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B851C4CED6;
+	Mon,  3 Mar 2025 07:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740985630;
+	bh=MaU/9J4rYZguLJRFREIL4lOXQ5ryYtil1v54eokO2nY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tAyuPAfkzxDlkoVT6p1/oh+xXrJGTYE6EdI0DU87OVwF//74VuTdBJCTbe0T4vda9
+	 x5K1Hzui0kzCcm1V/zY6j6+0LIlJmjBTeEm61+9qmkJqf9dqHVS8i2m9aqcAXsuTm5
+	 QDlt5BclX1ItesBeefNrRS2PBWsTTGCIJ9eGU0bOYP59WrMyVWSex+QAcrW7dYKnjq
+	 hPZgSyXb6WBBjgkcDCUTSexa192ADNFORVm3c2prOTHcW6dLghZ0+cM2zZe2OeLI0i
+	 R5OSLYBFpdWaLSGlR2ClHpZDIY3JdVwRWnDlG6lnU8DrzGgEvi0aMdU0q8grfSH0js
+	 HSkYnSyNWulNw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1toztI-0000000055w-2SHu;
+	Mon, 03 Mar 2025 08:07:04 +0100
+Date: Mon, 3 Mar 2025 08:07:04 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Cc: Johan Hovold <johan+linaro@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: ps883x: fix missing accessibility check
+Message-ID: <Z8VVGBDh2VnxyHw0@hovoldconsulting.com>
+References: <20250218152933.22992-1-johan+linaro@kernel.org>
+ <20250218152933.22992-3-johan+linaro@kernel.org>
+ <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c5ec580-9b1c-40b7-9a8d-64bc95c41432@panix.com>
+In-Reply-To: <8c6f9c8c-3d03-45d3-b601-989e6c441501@oldschoolsolutions.biz>
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6g965ZsZzG1Yq
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741708823.96877@LcEcR5+APgeNC4+7Y+71xw
+X-ITU-MailScanner-SpamCheck: not spam
 
-On Tue, Mar 04, 2025 at 05:48:12AM -0800, Kenneth Crudup wrote:
-> 
-> 
-> On 3/4/25 05:40, Mika Westerberg wrote:
-> 
-> > On Tue, Mar 04, 2025 at 04:52:19AM -0800, Kenneth Crudup wrote:
-> 
-> > > But I have been doing a fair amount of testing of the kernel with your patch
-> > > and Lucas' NVMe adaptor (etc.) patch and am concerned that you're still
-> > > seeing his issue, as it (at least as of now) hasn't occurred here since
-> > > applying it.
-> 
-> > It only happens if you have TBT dock and the NVMe connected and you
-> > disconnect them while the system is suspended. I suggest trying that a
-> > couple times and see if that happens. For me it
-> > happened pretty much on first suspend cycle.
-> 
-> That's exactly the failure mode I was testing for, though ... I've run a few
-> iterations with the fix (and about to do one more as I'm about to head to a
-> clients' office) and so far, so good.
-> 
-> Is your patch from yesterday applied as well? It is here.
+Hi Jens,
 
-Yes it is.
+On Sun, Mar 02, 2025 at 02:34:41PM +0100, Jens Glathe wrote:
+> On 2/18/25 16:29, Johan Hovold wrote:
+> > Make sure that the retimer is accessible before registering to avoid
+> > having later consumer calls fail to configure it, something which, for
+> > example, can lead to a hotplugged display not being recognised:
+> >
+> > 	[drm:msm_dp_panel_read_sink_caps [msm]] *ERROR* read dpcd failed -110
+> >
+> > Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C Retimer")
+> > Cc: Abel Vesa <abel.vesa@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> 
+> unfortunately, this one goes south on the HP Omnibook X14, and also on
+> the Elitebook G1Q. After excluding a lot of other causes, like inverted
+> resets and wrong i2c channels, I did a bisect and landed at this commit.
 
-I don't have display tunneled though, only PCIe (well and USB 3.x).
+According to the X14 ACPI tables there is no ps8830 on &i2c7i (I2C8),
+which means that the devicetree is broken.
+
+> Looking at it, I speculatively increased the firmware initialization
+> delay to 200ms. To no effect. Reverting this patch "resolves" the issue.
+
+This patch (series) only makes sure that there actually is a retimer at
+the described address so it appears to work as intended.
+
+You may unknowingly have been relying on firmware configuration or reset
+values. Does orientation switching (SuperSpeed in both orientations) and
+DP altmode work at all on the second USB-C port with this patch
+reverted?
+
+Johan
+
 
