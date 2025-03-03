@@ -1,47 +1,48 @@
-Return-Path: <linux-usb+bounces-21279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21280-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A565CA4C2E6
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:10:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F172A4C32F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB378188601E
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 14:10:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D7C117162E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 14:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1321C213E7D;
-	Mon,  3 Mar 2025 14:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D0F21423A;
+	Mon,  3 Mar 2025 14:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="PjNnbAXr"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="ZNLveYei"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE60B2139D4
-	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 14:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685F721423C
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 14:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741011014; cv=none; b=vDCk7hJF8dO5kWJxAaxmN3Y8olV8u7wl20iz3HhmVPfUA7bLtxyXS7htv0z5jqHfbH5C3+SxqoLqFsxyANl+VmOlpQH2/aKmiZmbbkBDE52WosbASPxFNSVHaaoXn7+vS6AI+Tzb3L6U+KX1EF6x4jazN8Q2mS5sOea+BEQ7pjI=
+	t=1741011431; cv=none; b=r7ZbxKNF2LPRCHcLVmTdkcXGkYX+q+y2QdlaZmbV0X+FrSGuBRDUs/GiaJZq95tqfsKimXyddll75FwyZAp7InN1ivqTUH786a+r8uVKxjKz6KQ2IDFHdykYCsKrppISN2fQJ+AGIGVS6jkjMTP2nlX1waUt/WgkzHvYmIJFpgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741011014; c=relaxed/simple;
-	bh=n+mOKLyLS2tjQgKUQ3QMXV1zxyUv+PMhPnidZOYfXlg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CaFP5NRx83+hthxxZl1jb0RGu4OCHpGgbpEzB/0gpJI0lKrkvexL37EdtM+/UxZwc3dFvMrUexoTG4vWXb0UI8yo+n6EN0FzlzD0DnNoBKuviwMQU7O37NyYiPAHZC27rXbP4uBByY3tfXBmEGsrRooS8ZDhnsbNVr2n42RAuYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=PjNnbAXr; arc=none smtp.client-ip=166.84.1.89
+	s=arc-20240116; t=1741011431; c=relaxed/simple;
+	bh=QeGGfrk74QEvMsc/FL/OUZpqjVQlEV05ZCsiyxs3AUE=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=plam9nQidp2xq8E2MxwDs/m1lkfa71Ndui7rJDsebVuE9F1211VVW2FuXAb7VzneIUhMUf6c6qg2aAO2/RKp6QaHHA8oIGp8RHypKWuPoYYmrJdq1B34KqNhHakiuf5/VNa5+2hOywVj4MTtyht23NpaYy8qaLQGvjyMDgVzDIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=ZNLveYei; arc=none smtp.client-ip=166.84.1.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
 Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z610z2hxlz14Kr;
-	Mon,  3 Mar 2025 09:10:11 -0500 (EST)
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z61900Kr6z15dS;
+	Mon,  3 Mar 2025 09:17:07 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1741011011; bh=n+mOKLyLS2tjQgKUQ3QMXV1zxyUv+PMhPnidZOYfXlg=;
+	t=1741011428; bh=QeGGfrk74QEvMsc/FL/OUZpqjVQlEV05ZCsiyxs3AUE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=PjNnbAXrqA6a8rpb8znYmOdMOeYzmE83/iIk2kCdcw6h5GQXAIsuu2tt2YIEBTswn
-	 uDenjJFfhKMzBeozYgFoka0BI8pywpCn76fTDkRmnCn9y+gSrasn976wOVhx4Y9tLK
-	 WzJ2Dsm9HT/mxkalZIyX31wA4Eyp8y8yHbPzTP3E=
-Message-ID: <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
-Date: Mon, 3 Mar 2025 06:10:09 -0800
+	b=ZNLveYei1N5WlFunyQoFLml5EC6M/nICGFYJCcyTDXeajn5EOY577N+mxDg6gCNrn
+	 tfTudlQ1ZR1UVKceP1eswAIRJ44n5tlZnMFmVVkaEBzrUmO8VN5V/0A0TI3ighiCVh
+	 irEST3HbahNWrA1wzFBWdQ6LshQNNSTNo+/USN4U=
+Content-Type: multipart/mixed; boundary="------------Iv0MqMyOw3Mg9lSuzZhb1O70"
+Message-ID: <7c42c094-83c5-453b-a229-c435d89d5ecc@panix.com>
+Date: Mon, 3 Mar 2025 06:17:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,29 +68,21 @@ References: <f31309e4-6ce5-48cf-910e-cd74f818aac8@panix.com>
 Content-Language: en-US
 From: Kenneth Crudup <kenny@panix.com>
 In-Reply-To: <20250303140156.GY3713119@black.fi.intel.com>
+
+This is a multi-part message in MIME format.
+--------------Iv0MqMyOw3Mg9lSuzZhb1O70
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
->> And my system recognizes all new TB devices automatically
->> (no manual intervention required).
+Oh, and to be complete I should point out I have the following attached 
+commit against Linus' master, else I don't get full power savings during 
+s0ix sleep.
 
-On 3/3/25 06:01, Mika Westerberg wrote:
+(I've been trying to get the PM people to get a version of this in for 
+nearly a year now.)
 
-> Right it does that if you have screen unlocked.
-
-I'm running Kubuntu (24.10); AFAIK it just allows them anyway. The 
-"System Settings" dialog is just an Enable/Disable toggle.
-
-> If you "forget" them then it should in theory at least keep from creating
-> PCIe tunnels, so keeping them out of the equation (we just want to
-> concentrate on the TB/DP side here).
-
-But what I can try is just connecting the monitors directly; the 
-portable monitor directly to one of the laptop's USB-Cs, and the 
-Odyssey's USB-C-to-DP w/o using the dock.
-
-Now I'm curious, and may take an hour or so to try this stuff out.
+I don't think it's relevant here, but just-in-case ....
 
 -Kenny
 
@@ -97,4 +90,53 @@ Now I'm curious, and may take an hour or so to try this stuff out.
 Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
 County CA
 
+--------------Iv0MqMyOw3Mg9lSuzZhb1O70
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-PCI-ASPM-Fixup-ASPM-for-VMD-bridges.patch"
+Content-Disposition: attachment;
+ filename="0001-PCI-ASPM-Fixup-ASPM-for-VMD-bridges.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA4NDllMjcwNTJkNWExZTI3OWNjZTdiNmFiMTRlNDBhMzljM2IyYjI0IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiAiS2VubmV0aCBSLiBDcnVkdXAiIDxrZW5ueUBwYW5p
+eC5jb20+CkRhdGU6IEZyaSwgMTMgRGVjIDIwMjQgMTU6Mjg6NDIgLTA4MDAKU3ViamVjdDog
+W1BBVENIXSBQQ0kvQVNQTTogRml4dXAgQVNQTSBmb3IgVk1EIGJyaWRnZXMKCkVmZmVjdGl2
+ZWx5IGEgc3F1YXNoZWQgY29tbWl0IG9mOgpVQlVOVFU6IFNBVUNFOiBQQ0kvQVNQTTogRW5h
+YmxlIEFTUE0gZm9yIGxpbmtzIHVuZGVyIFZNRCBkb21haW4KVUJVTlRVOiBTQVVDRTogUENJ
+L0FTUE06IEVuYWJsZSBMVFIgZm9yIGVuZHBvaW50cyBiZWhpbmQgVk1EClVCVU5UVTogU0FV
+Q0U6IHZtZDogZml4dXAgYnJpZGdlIEFTUE0gYnkgZHJpdmVyIG5hbWUgaW5zdGVhZAotLS0K
+IGRyaXZlcnMvcGNpL3BjaWUvYXNwbS5jIHwgMjggKysrKysrKysrKysrKysrKysrKysrKysr
+KysrLQogMSBmaWxlIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkK
+CmRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9wY2llL2FzcG0uYyBiL2RyaXZlcnMvcGNpL3Bj
+aWUvYXNwbS5jCmluZGV4IDI4NTY3ZDQ1NzYxMy4uYTVkZjYyMzBjZjNjIDEwMDY0NAotLS0g
+YS9kcml2ZXJzL3BjaS9wY2llL2FzcG0uYworKysgYi9kcml2ZXJzL3BjaS9wY2llL2FzcG0u
+YwpAQCAtNzY4LDYgKzc2OCwzMSBAQCBzdGF0aWMgdm9pZCBhc3BtX2wxc3NfaW5pdChzdHJ1
+Y3QgcGNpZV9saW5rX3N0YXRlICpsaW5rKQogCQlhc3BtX2NhbGNfbDEyX2luZm8obGluaywg
+cGFyZW50X2wxc3NfY2FwLCBjaGlsZF9sMXNzX2NhcCk7CiB9CiAKKy8qCisgKiBCSU9TIG1h
+eSBub3QgYmUgYWJsZSB0byBhY2Nlc3MgY29uZmlnIHNwYWNlIG9mIGRldmljZXMgdW5kZXIg
+Vk1EIGRvbWFpbiwgc28KKyAqIGl0IHJlbGllcyBvbiBzb2Z0d2FyZSB0byBlbmFibGUgQVNQ
+TSBmb3IgbGlua3MgdW5kZXIgVk1ELgorICovCitzdGF0aWMgYm9vbCBwY2lfZml4dXBfdm1k
+X2JyaWRnZV9lbmFibGVfYXNwbShzdHJ1Y3QgcGNpX2RldiAqcGRldikKK3sKKyAgICAgICBz
+dHJ1Y3QgcGNpX2J1cyAqYnVzID0gcGRldi0+YnVzOworICAgICAgIHN0cnVjdCBkZXZpY2Ug
+KmRldjsKKyAgICAgICBzdHJ1Y3QgcGNpX2RyaXZlciAqcGRydjsKKworICAgICAgIGlmICgh
+cGNpX2lzX3Jvb3RfYnVzKGJ1cykpCisgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7CisK
+KyAgICAgICBkZXYgPSBidXMtPmJyaWRnZS0+cGFyZW50OworICAgICAgIGlmIChkZXYgPT0g
+TlVMTCkKKyAgICAgICAgICAgICAgIHJldHVybiBmYWxzZTsKKworICAgICAgIHBkcnYgPSBw
+Y2lfZGV2X2RyaXZlcih0b19wY2lfZGV2KGRldikpOworICAgICAgIGlmIChwZHJ2ID09IE5V
+TEwgfHwgc3RyY21wKCJ2bWQiLCBwZHJ2LT5uYW1lKSkKKyAgICAgICAgICAgICAgIHJldHVy
+biBmYWxzZTsKKworICAgICAgIHBjaV9pbmZvKHBkZXYsICJlbmFibGUgQVNQTSBmb3IgcGNp
+IGJyaWRnZSBiZWhpbmQgdm1kIik7CisgICAgICAgcmV0dXJuIHRydWU7Cit9CisKIHN0YXRp
+YyB2b2lkIHBjaWVfYXNwbV9jYXBfaW5pdChzdHJ1Y3QgcGNpZV9saW5rX3N0YXRlICpsaW5r
+LCBpbnQgYmxhY2tsaXN0KQogewogCXN0cnVjdCBwY2lfZGV2ICpjaGlsZCA9IGxpbmstPmRv
+d25zdHJlYW0sICpwYXJlbnQgPSBsaW5rLT5wZGV2OwpAQCAtODQ2LDcgKzg3MSw4IEBAIHN0
+YXRpYyB2b2lkIHBjaWVfYXNwbV9jYXBfaW5pdChzdHJ1Y3QgcGNpZV9saW5rX3N0YXRlICps
+aW5rLCBpbnQgYmxhY2tsaXN0KQogCX0KIAogCS8qIFNhdmUgZGVmYXVsdCBzdGF0ZSAqLwot
+CWxpbmstPmFzcG1fZGVmYXVsdCA9IGxpbmstPmFzcG1fZW5hYmxlZDsKKwlsaW5rLT5hc3Bt
+X2RlZmF1bHQgPSBwY2lfZml4dXBfdm1kX2JyaWRnZV9lbmFibGVfYXNwbShwYXJlbnQpID8K
+KwkJUENJRV9MSU5LX1NUQVRFX0FTUE1fQUxMIDogbGluay0+YXNwbV9lbmFibGVkOwogCiAJ
+LyogU2V0dXAgaW5pdGlhbCBjYXBhYmxlIHN0YXRlLiBXaWxsIGJlIHVwZGF0ZWQgbGF0ZXIg
+Ki8KIAlsaW5rLT5hc3BtX2NhcGFibGUgPSBsaW5rLT5hc3BtX3N1cHBvcnQ7Ci0tIAoyLjQ1
+LjIKCg==
+
+--------------Iv0MqMyOw3Mg9lSuzZhb1O70--
 
