@@ -1,137 +1,110 @@
-Return-Path: <linux-usb+bounces-21351-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36901A4E95F
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:40:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE41FA4EA22
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:56:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB26D17EC73
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:35:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94C1B3BD4CD
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D326E294F3F;
-	Tue,  4 Mar 2025 17:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8503F292F85;
+	Tue,  4 Mar 2025 17:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgNI8YtR"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="i9nmNf8A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E0518B470
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C77324EA8B
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741108112; cv=pass; b=TXbi022hW0v8N72A1o1UOf2wlCc+bwB6tGwjtMMNkqAnSToBilfN2IBnh8ukKAGApAc+5FbhZ+yEay3IveblLyZuLcoGHmyF1x3d0i/qmjB9Yw8xHxg9vRS7c0djcnpHrO3N69kAq4gQlVsRTLxEuO6bqtV8HP4nln7QvKydxoI=
+	t=1741108053; cv=fail; b=ks950O3B+6vfFlRu15G8EfcEKPI1Co7Af7X9qlwxVJMFpZ3LCu+P8axsn0DqKCY7uX03F5gH8x09WTKZmUICXa1eNv7U7kT/osUqyNex0CiDsCkjfgM1GFbeg5FkFPoMcnZYz3SWDbGAgZfV3Y7r4cqwbo8YtCYLC/9tm4E0s5M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741108112; c=relaxed/simple;
-	bh=wsYDpicRkA/VSCmc2cmDn+wPKl7RPDx3BLK4UIISPP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l917JObPdnBEAnX4ado3+1XGj9I2J9iRUQcmXV0eygZtScwmksJwZhQF8qWUU+32gkNeujrQQ6QWQNQ2hyhKcSiczkAoUj7/ufXSfbQrKHU23HYZ7PLxMLxde7SPO4BUXZ8TnpGm4eUo39//7/ISc1x7lazuJBPHDUx89ORghn0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgNI8YtR; arc=none smtp.client-ip=209.85.218.53; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1741108053; c=relaxed/simple;
+	bh=uHWAZIPnGtPJ1xzl/wHTnNv5ycuRFrLaRDER5etlkDI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TU37CpNvufQcrnFvH3y4VBu4tpO84oG0QZweIxhv+cGZyAzxrpK6djCqTg0ZpCOXMs6fbgyOnJ5vUFGcTM/FIQEnMDDU7XMbezPNqFUWtYCwi4IJ/R6pwAzNoZpnNH130ikkuJ3OeV18vYb1MzL0EBrc+P6W/SFWqx9mTWjYdq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A reason="signature verification failed"; arc=none smtp.client-ip=52.59.177.22; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=fail smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id B793D40D1F43
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 20:08:28 +0300 (+03)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 8BD8D40D0B9A
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 20:07:28 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20230601 header.b=CgNI8YtR
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=i9nmNf8A
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6h181xs3zG335
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 19:27:40 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fh24G5dzG021
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 18:27:46 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id B1B9F42732; Tue,  4 Mar 2025 19:27:29 +0300 (+03)
+	id 50A3742727; Tue,  4 Mar 2025 18:27:43 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgNI8YtR
-X-Envelope-From: <linux-kernel+bounces-541391-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A
+X-Envelope-From: <linux-kernel+bounces-541465-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgNI8YtR
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id D3D3642DB0
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:35:16 +0300 (+03)
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 73F1241BF9
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:00:36 +0300 (+03)
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id AC0ED3063EFE
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:35:16 +0300 (+03)
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 49DB32DCE1
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:00:36 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D54918833C9
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:35:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B433188C095
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62041F3D58;
-	Mon,  3 Mar 2025 10:34:13 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144F51F5429;
+	Mon,  3 Mar 2025 10:57:20 +0000 (UTC)
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4F91EE002;
-	Mon,  3 Mar 2025 10:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF45015539A;
+	Mon,  3 Mar 2025 10:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740998050; cv=none; b=sbHVl3jmja4H1lxPQiKBx1XvGS0trbURaI21ytC+CfbnWmdwDRMFn5MXJSgk/nDmrGsbbVPj44LNyhgxC5NxvtNRTxfw+b01/PmMZbFzSmhN7X4FFmDNDI6Vx+qsHzuDySE/5QDJyh/Ora5P9GgllUS4zo9D0RaTuCQO16Hu24c=
+	t=1740999436; cv=none; b=g94W9GT/oI8aXp0UF+PLD0hLzSzx0y+Sf9KzIIhDjfaFdkRJT8EAwtm2u5vX4cVyDx00iAH9p1iH1b48RppVH6Mq5f4e5BzBdPKFkn7h/1BMREV96rWkDh19MrnUJOfHmxR9LfhdcMWMrlYZ6rOKCs6p/7vG0/U1MB6EKDd4YHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740998050; c=relaxed/simple;
-	bh=wsYDpicRkA/VSCmc2cmDn+wPKl7RPDx3BLK4UIISPP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kVBUQCdlaKBWZ5l1BHVfD4c5XmvYKJWLDKiLjCwdPwdYWeitiKtBwfo0shiqNsRau8KAO7BIZmX+iDrdKsiddoW3LUjvJYnlB7PgvS1PRKa3x+cBI7Ej4TOaM+dpTo3jFidr+s3gHvxYvjWfjrqi1XWSSMZabuv1s0+eS5Sfhh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgNI8YtR; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-abf518748cbso314895566b.2;
-        Mon, 03 Mar 2025 02:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740998047; x=1741602847; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l+N70zPsfvBAx0+/xoB2M8AGZ0n2FkZQFMe5fceFHgA=;
-        b=CgNI8YtROze4Zn1+s/oyx3aiw4PgMJO96ZVPBTxLtQBrCN0pdBIf91fS3QJfFNSCul
-         9tugkYwobSL5SxEOTjfnz9fi6vluL4VeptQ6FYc/Kf2wi0mJKNnmhNXgAAJofzvy2l40
-         uTvI+kWP+2jmChPTipCWnUlj6H7kX/05lxhwxgfBEI8nbUhVs3Yh3xI7VR0HJITK66RT
-         0LMoXL3H0g75EU3R7eoUG7K/XTYKsvn5F8W9yHnvT/JsSbUevlPNfKk1MYdla+/J4s8w
-         DxqZvLmZQQjmcJq1/jxpF8qT6gKDV8NX1avA714gINFKj20xn/PUOZsB0vN8BRv6999h
-         lc7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740998047; x=1741602847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l+N70zPsfvBAx0+/xoB2M8AGZ0n2FkZQFMe5fceFHgA=;
-        b=PZTCm4emaRQTLYyMxzBfzhcc8mbv3+O9sHhKV5pYlsSa0nvZjywq1Vooj+yApj9BbM
-         prSuLuqEfxvz2aDlkV2SngYUZT3clj4W2bih31jx7Yb8GxSd6JiCaywCQPSJBqdqOOAS
-         if2XML4wLd7g5TFhXu9yS5Guz4rXsJPAmi2h9KRq8xaQAnveVvFRbg9tXOlvuCo5c27g
-         ry6TWW08ggxLD5bkb/fMnGtJPANTNjWW/YJS0ta03VkOKwlUIobFVUmYZYzDldG+mbSm
-         m8RlZw9HKyu6zHo0QRUEQ20KtaYEMY2+hIBJ2yiJO2pjk32whZotOdSllh6xzcr45IPQ
-         PTBw==
-X-Forwarded-Encrypted: i=1; AJvYcCVE1HREOYKQoln1EXsMhpoZ8xCaa1R7avE6zKP4RdyLvhMRmanVxZPQihFzkhuWWYh+p91z6JXaFMZS@vger.kernel.org, AJvYcCVzRQG9/2ixXuMFoZ1Pp3az5B6QXqGJOmMTNS4hwDIN7m5g0/dR+tk/xKf35VAoLGQqZyViruMBs4UyrVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywhf8HHtDZPKHxzlj3Yl8jgKEWlWo7hbtrRNxtbvqj3G4JZ1iqy
-	Lrz5q1+cLpafV85X3yRn4ZTEsYdysceLoOdiarTA/FKiPzVcXDRtMmRz9Q==
-X-Gm-Gg: ASbGncvu+mTW8KsrpW1ErCr7K0FoU0wdUbucqmZfR3BdKo6MnWymqgq03lzUmaNR+VF
-	34kJLsgrihgDMAjTqW+eq+fOd+ueZq8+t/a3Xzfo6gldpv9/u+Aqi34q1hXXaKNsCnp86TRxZ8/
-	yxH9hdmBIUf9UXBvEJIqFshyEVr3BuSFkiLDmZPgEc23+vCQQBYH5JuCPCUGeviOrg3XJM0LTyV
-	gvETSRzivT1iNVyveFqlxTtUt+61Mh6RFkGo3iXZwo6/831DExvoP0ZDMr+RAeanD+wkOmHU9JB
-	qo/1Q4C0ouX99EzVWyJIFApFG7AtPfR5J0os6sx1oe6rYQsK2HBWCtAT/zfO8Q==
-X-Google-Smtp-Source: AGHT+IFrR2cGXgM/hFcyyC3ZiDTsVS3aLPLxtBeIz1vddb0CtUae6L/b8/yBjAMVWTLGUcYCVGXiPQ==
-X-Received: by 2002:a17:906:4fca:b0:abf:6ede:dce1 with SMTP id a640c23a62f3a-abf6ededffcmr504996466b.24.1740998046553;
-        Mon, 03 Mar 2025 02:34:06 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf55e88748sm419117766b.54.2025.03.03.02.34.05
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 03 Mar 2025 02:34:06 -0800 (PST)
-Date: Mon, 3 Mar 2025 11:34:01 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: ki.chiang65@gmail.com, <gregkh@linuxfoundation.org>,
- <linux-usb@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
- enpoints
-Message-ID: <20250303113401.280cb911@foxbook>
-In-Reply-To: <20250228161824.3164826-1-mathias.nyman@linux.intel.com>
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
-	<20250228161824.3164826-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1740999436; c=relaxed/simple;
+	bh=Dgx0WmiWWJVJFOYXROEjC9QhshtwPpwi2bA+QbGxJUk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L4Yn207AapPfPE5LHfZtxWqa9gSI6h7jl3fArXPvHbiVtffx8IwL87EgVtXOjujQxmR7oazNe4ARtNFuf1VLcixkXh10w2UjjM6k5ASU6hoslleOzZVC2panlBuJlBA5YOzWfr/dRQ/qsVyGrPtKFigXprULC9NvWHjAD2CsYlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1740999407;
+	bh=K/zA0N8M3Fo/mbM8RcyqXqLjJSa3rFqpG7w6gFb91fI=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=i9nmNf8AhJfMBwhRtzT7/lV/xC2r7jw/6l+OuCD9BbMGOPv6JVFj/BtYhKlMHlPK7
+	 lZLeYwI3OS7nNv+Pgy++3iW1Opyjp/hn+BaKos20DOhf6kpmRoMmwTSskAwifqrDXz
+	 wYrMotOoiIiq6dNEY9uYDvLAVPMRD0w5Np6/wwkE=
+X-QQ-mid: bizesmtpip3t1740999399tyh9d5x
+X-QQ-Originating-IP: BU3UX6VjTov91M/jEpSx5w+TyFJYBoNmFwGIDgHvKlU=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 03 Mar 2025 18:56:37 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 2151004315678109412
+From: raoxu <raoxu@uniontech.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	wangyuli@uniontech.com,
+	zhanjun@uniontech.com,
+	Xu Rao <raoxu@uniontech.com>
+Subject: [PATCH V2] usb: xhci: Add debugfs support for xHCI port bandwidth
+Date: Mon,  3 Mar 2025 18:56:35 +0800
+Message-Id: <20250303105635.21290-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -139,98 +112,299 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
+X-QQ-XMAILINFO: MSm4SkBtgodDRJNSz3JVOU14EB5DUY74QUSPdMluwdMWIwOFwqI7LgJo
+	BfRffHIIpatJ0Gmm0U/g3HKbNY8dLW/Bd2VYBnPR8vW0YcQyaCszJDIaky8lldBDSU4J1W1
+	s666NHXOTKrElnqG+7kvG0j0yeUEQX6oljXKVU6V0E0FHDeI/2XEUX/wg0iKcYPagPqNoE1
+	Fb0DuFrRzSautyAS267px7q65t4oATyG1PG6dd6XrKslvih7ygYpv7P4GSf2zqyR4uegrh9
+	v27Ofzfhoj+CVmOmk0+hJ//AVhaMRr3CmR7I42yXp8WnpHAV9GtdNwIO8P19Ue3JJlIjdjN
+	LK3UeGGxvKZGavrUs9l5vQTGntqwgaQSSSuvB0LGxPGNXbhjlPDDVcke3Gfin4aNFberDQm
+	0dm1kqsXPi0pwhxXGy8kR9AycMU3+WylEPc6yXwAoMVQrQJsQH9WrTOY9xg1vDTHoAV2OVn
+	EnKdFc5fCSjgKKksAD3OPZ8+YNs3Auu4jsyT2UyvJsCofS3LcsMNiz5iWN0xUoJIuX2LCu3
+	FfdKoQ877GSm2KLIcIz9g6HdVV5+ZaFe4oqZmw3OkoKp+HXUgMpXs6ohf7hwTGMb7ieIfUJ
+	E+S+J11S0ugWAVgm0Ox7pvwcyfub2NLRpHhPCgWx1c7UvnJT1RAXMbgClT5oqGu06S6tdLy
+	4W/euUC9v+BV0M3Aktvtv7DMHzdAE3YE1pEnvEbAtau8x8drtbqyKAzSKfhjG71VwOhu3xH
+	L4j7Io+M9SQKnxVpFSZB6YUOf/WcnqJhllTx51ursRzR/8RHe7CnNnrZQOknZW+gLOncZIk
+	3gGCgsKtdy0ToGsX+G6z7BuQYgT0DDsCF8/r+ldGalJSicorLP/v6qnmKxmKc8K26ioNG2Y
+	CJ5ijeJV+1RIDYVm/M804gcmOhQwEG5GCgS0wPu+khXgtvQ7Nu0v1ANqc0HmrDYZsywpPd4
+	hSAF7FLw16OXBCZhaSrPQnWCpS8XONmd2Hx4UBOhDGg2pl5OCJBwevZQHNORHc/G6hM+p3t
+	9CcorfuJqjrzmJuFrvmblUixCr9oPGr7PzC2mNrw==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6h181xs3zG335
+X-ITU-Libra-ESVA-ID: 4Z6fh24G5dzG021
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741712814.17965@wj21ugNUshSpWxkiHDNPSQ
+X-ITU-Libra-ESVA-Watermark: 1741712758.64362@QM6s7jaNrQQfc+4Jm1lRqA
 X-ITU-MailScanner-SpamCheck: not spam
 
-On Fri, 28 Feb 2025 18:18:24 +0200, Mathias Nyman wrote:
-> Unplugging a USB3.0 webcam from Etron hosts while streaming results
-> in errors like this:
-> 
-> [ 2.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr
-> not part of current TD ep_index 18 comp_code 13 [ 2.646446] xhci_hcd
-> 0000:03:00.0: Looking for event-dma 000000002fdf8630 trb-start
-> 000000002fdf8640 trb-end 000000002fdf8650 [ 2.646560] xhci_hcd
-> 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD
-> ep_index 18 comp_code 13 [ 2.646568] xhci_hcd 0000:03:00.0: Looking
-> for event-dma 000000002fdf8660 trb-start 000000002fdf8670 trb-end
-> 000000002fdf8670
-> 
-> Etron xHC generates two transfer events for the TRB if an error is
-> detected while processing the last TRB of an isoc TD.
-> 
-> The first event can be any sort of error (like USB Transaction or
-> Babble Detected, etc), and the final event is Success.
-> 
-> The xHCI driver will handle the TD after the first event and remove it
-> from its internal list, and then print an "Transfer event TRB DMA ptr
-> not part of current TD" error message after the final event.
-> 
-> Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
-> transaction error mid TD.") is designed to address isoc transaction
-> errors, but unfortunately it doesn't account for this scenario.
-> 
-> This issue is similar to the XHCI_SPURIOUS_SUCCESS case where a
-> success event follows a 'short transfer' event, but the TD the event
-> points to is already given back.
-> 
-> Expand the spurious success 'short transfer' event handling to cover
-> the spurious success after error on Etron hosts.
-> 
-> Kuangyi Chiang reported this issue and submitted a different solution
-> based on using error_mid_td. This commit message is mostly taken
-> from that patch.
-> 
-> Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Xu Rao <raoxu@uniontech.com>
 
-Works here too, modulo the obvious build problem.
+In many projects, you need to obtain the available bandwidth of the
+xhci roothub port. Refer to xhci rev1_2 and use the TRB_GET_BW
+command to obtain it.
 
-Etron with errors:
-[ 1064.865311] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
-[ 1064.865322] xhci_hcd 0000:06:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 4
-[ 1064.865326] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ffef88c0, comp_code 13 after 4
+hardware tested:
+03:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1
+(prog-if 30 [XHCI])
+Subsystem: Huawei Technologies Co., Ltd. Raven USB 3.1
+Flags: bus master, fast devsel, latency 0, IRQ 30
+Memory at c0300000 (64-bit, non-prefetchable) [size=3D1M]
+Capabilities: [48] Vendor Specific Information: Len=3D08 <?>
+Capabilities: [50] Power Management version 3
+Capabilities: [64] Express Endpoint, MSI 00
+Capabilities: [a0] MSI: Enable- Count=3D1/8 Maskable- 64bit+
+Capabilities: [c0] MSI-X: Enable+ Count=3D8 Masked-
+Kernel driver in use: xhci_hcd
 
-Renesas with short packets:
-[ 1365.299218] xhci_hcd 0000:08:00.0: Successful completion on short TX for slot 1 ep 2 with last td comp code 13
-[ 1365.299223] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffbbf870, comp_code 13 after 13
+test progress:
+1.cd /sys/kernel/debug/usb/xhci/0000:03:00.3
+cat port_bandwidth
+/sys/kernel/debug/usb/xhci/0000:03:00.3# cat port_bandwidth
+port[1] available bw: 79%.
+port[2] available bw: 79%.
+port[3] available bw: 79%.
+port[4] available bw: 79%.
+port[5] available bw: 90%.
+port[6] available bw: 90%.
+port[7] available bw: 90%.
+port[8] available bw: 90%.
+2.plug in usb video cammer open it
+cat port_bandwidth
+port[1] available bw: 39%.
+port[2] available bw: 39%.
+port[3] available bw: 39%.
+port[4] available bw: 39%.
+port[5] available bw: 90%.
+port[6] available bw: 90%.
+port[7] available bw: 90%.
+port[8] available bw: 90%.
 
-BTW, it says "comp_code 13 after something" because of this crazy
-TRUST_TX_LENGTH hack, which changes trb_comp_code if it's success
-but the residual is nonzero. If I remove the hack,
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
+---
+ drivers/usb/host/xhci-debugfs.c | 42 +++++++++++++++++++
+ drivers/usb/host/xhci-ring.c    | 14 +++++++
+ drivers/usb/host/xhci.c         | 74 +++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci.h         |  7 ++++
+ 4 files changed, 137 insertions(+)
 
-Etron:
-[ 2713.630443] xhci_hcd 0000:06:00.0: Spurious event dma 0x00000000ff3b6130, comp_code 1 after 4
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debu=
+gfs.c
+index 1f5ef174abea..573b6c25f3af 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -631,6 +631,46 @@ static void xhci_debugfs_create_ports(struct xhci_hc=
+d *xhci,
+ 	}
+ }
 
-Renesas:
-[ 4033.652300] xhci_hcd 0000:08:00.0: Spurious event dma 0x00000000ffcd1b80, comp_code 1 after 13
++static int xhci_port_bw_show(struct seq_file *s, void *unused)
++{
++	struct xhci_hcd		*xhci =3D (struct xhci_hcd *)s->private;
++	unsigned int		num_ports;
++	unsigned int		i;
++	int			ret;
++	u8			bw_table[MAX_HC_PORTS] =3D {0};
++
++	num_ports =3D HCS_MAX_PORTS(xhci->hcs_params1);
++
++	/* get roothub port bandwidth */
++	ret =3D xhci_get_port_bandwidth(xhci, bw_table);
++	if (ret)
++		return ret;
++
++	/* print all roothub ports available bandwidth */
++	for (i =3D 1; i < num_ports+1; i++)
++		seq_printf(s, "port[%d] available bw: %d%%.\n", i, bw_table[i]);
++
++	return ret;
++}
++
++static int bw_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, xhci_port_bw_show, inode->i_private);
++}
++
++static const struct file_operations bw_fops =3D {
++	.open			=3D bw_open,
++	.read			=3D seq_read,
++	.llseek			=3D seq_lseek,
++	.release		=3D single_release,
++};
++
++static void xhci_debugfs_create_bandwidth(struct xhci_hcd *xhci,
++					struct dentry *parent)
++{
++	debugfs_create_file("port_bandwidth", 0644, parent, xhci, &bw_fops);
++}
++
+ void xhci_debugfs_init(struct xhci_hcd *xhci)
+ {
+ 	struct device		*dev =3D xhci_to_hcd(xhci)->self.controller;
+@@ -681,6 +721,8 @@ void xhci_debugfs_init(struct xhci_hcd *xhci)
+ 	xhci->debugfs_slots =3D debugfs_create_dir("devices", xhci->debugfs_roo=
+t);
 
+ 	xhci_debugfs_create_ports(xhci, xhci->debugfs_root);
++
++	xhci_debugfs_create_bandwidth(xhci, xhci->debugfs_root);
+ }
 
-The hack could almost be removed now, but if there really are HCs
-which report Success on the first event, this won't work for them:
+ void xhci_debugfs_exit(struct xhci_hcd *xhci)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 965bffce301e..af1cd4f8ace9 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1867,6 +1867,8 @@ static void handle_cmd_completion(struct xhci_hcd *=
+xhci,
+ 	case TRB_NEC_GET_FW:
+ 		xhci_handle_cmd_nec_get_fw(xhci, event);
+ 		break;
++	case TRB_GET_BW:
++		break;
+ 	default:
+ 		/* Skip over unknown commands on the event ring */
+ 		xhci_info(xhci, "INFO unknown command type %d\n", cmd_type);
+@@ -4414,6 +4416,18 @@ int xhci_queue_configure_endpoint(struct xhci_hcd =
+*xhci,
+ 			command_must_succeed);
+ }
 
-> +static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
-> +					   struct xhci_ring *ring)
-> +{
-> +	switch (ring->old_trb_comp_code) {
-> +	case COMP_SHORT_PACKET:
-> +		return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
++/* Queue a get root hub port bandwidth command TRB */
++int xhci_queue_get_rh_port_bw(struct xhci_hcd *xhci,
++		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
++		u8 dev_speed, u32 slot_id, bool command_must_succeed)
++{
++	return queue_command(xhci, cmd, lower_32_bits(in_ctx_ptr),
++		upper_32_bits(in_ctx_ptr), 0,
++		TRB_TYPE(TRB_GET_BW) | DEV_SPEED_FOR_TRB(dev_speed) |
++		SLOT_ID_FOR_TRB(slot_id),
++		command_must_succeed);
++}
++
+ /* Queue an evaluate context command TRB */
+ int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_comma=
+nd *cmd,
+ 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed)
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 45653114ccd7..84092fe981e8 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3088,6 +3088,80 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, str=
+uct usb_device *udev)
+ }
+ EXPORT_SYMBOL_GPL(xhci_reset_bandwidth);
 
-Could it work without relying on fictional COMP_SHORT_PACKET events?
++/* Get the available bandwidth of the ports under the xhci roothub,
++ * including USB 2.0 port and USB 3.0 port.
++ */
++int xhci_get_port_bandwidth(struct xhci_hcd *xhci, u8 *bw_table)
++{
++	unsigned int		num_ports;
++	unsigned int		i;
++	struct xhci_command	*cmd;
++	dma_addr_t		dma_handle;
++	void			*dma_buf;
++	int			ret;
++	unsigned long		flags;
++	struct device		*dev  =3D xhci_to_hcd(xhci)->self.sysdev;
++
++	num_ports =3D HCS_MAX_PORTS(xhci->hcs_params1);
++
++	cmd =3D xhci_alloc_command(xhci, true, GFP_KERNEL);
++	if (!cmd)
++		return -ENOMEM;
++
++	dma_buf =3D dma_alloc_coherent(dev, xhci->page_size, &dma_handle,
++					GFP_KERNEL);
++	if (!dma_buf) {
++		xhci_free_command(xhci, cmd);
++		return -ENOMEM;
++	}
++
++	/* get xhci hub usb3 port bandwidth */
++	/* refer to xhci rev1_2 protocol 4.6.15*/
++	spin_unlock_irqrestore(&xhci->lock, flags);
++	ret =3D xhci_queue_get_rh_port_bw(xhci, cmd, dma_handle, USB_SPEED_SUPE=
+R,
++					0, false);
++	if (ret < 0) {
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		goto out;
++	}
++	xhci_ring_cmd_db(xhci);
++	spin_unlock_irqrestore(&xhci->lock, flags);
++
++	wait_for_completion(cmd->completion);
++
++	/* refer to xhci rev1_2 protocol 6.2.6 , byte 0 is reserved */
++	for (i =3D 1; i < num_ports+1; i++) {
++		if (((u8 *)dma_buf)[i])
++			bw_table[i] =3D ((u8 *)dma_buf)[i];
++	}
++
++	/* get xhci hub usb2 port bandwidth */
++	/* refer to xhci rev1_2 protocol 4.6.15*/
++	spin_unlock_irqrestore(&xhci->lock, flags);
++	ret =3D xhci_queue_get_rh_port_bw(xhci, cmd, dma_handle, USB_SPEED_HIGH=
+,
++					0, false);
++	if (ret < 0) {
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		goto out;
++	}
++	xhci_ring_cmd_db(xhci);
++	spin_unlock_irqrestore(&xhci->lock, flags);
++
++	wait_for_completion(cmd->completion);
++
++	/* refer to xhci rev1_2 protocol 6.2.6 , byte 0 is reserved */
++	for (i =3D 1; i < num_ports+1; i++) {
++		if (((u8 *)dma_buf)[i])
++			bw_table[i] =3D ((u8 *)dma_buf)[i];
++	}
++
++out:
++	dma_free_coherent(dev, xhci->page_size, dma_buf, dma_handle);
++	xhci_free_command(xhci, cmd);
++
++	return ret;
++}
++
+ static void xhci_setup_input_ctx_for_config_ep(struct xhci_hcd *xhci,
+ 		struct xhci_container_ctx *in_ctx,
+ 		struct xhci_container_ctx *out_ctx,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 8c164340a2c3..a137097b0404 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -999,6 +999,9 @@ enum xhci_setup_dev {
+ /* bits 16:23 are the virtual function ID */
+ /* bits 24:31 are the slot ID */
 
-> +			if (xhci_spurious_success_tx_event(xhci, ep_ring)) {
-> +				xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
-> +					 &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
-> +				ep_ring->old_trb_comp_code = trb_comp_code;
++/* bits 19:16 are the dev speed */
++#define DEV_SPEED_FOR_TRB(p)    ((p) << 16)
++
+ /* Stop Endpoint TRB - ep_index to endpoint ID for this TRB */
+ #define SUSPEND_PORT_FOR_TRB(p)		(((p) & 1) << 23)
+ #define TRB_TO_SUSPEND_PORT(p)		(((p) & (1 << 23)) >> 23)
+@@ -1907,6 +1910,10 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xh=
+ci, gfp_t mem_flags,
+ int xhci_queue_configure_endpoint(struct xhci_hcd *xhci,
+ 		struct xhci_command *cmd, dma_addr_t in_ctx_ptr, u32 slot_id,
+ 		bool command_must_succeed);
++int xhci_queue_get_rh_port_bw(struct xhci_hcd *xhci,
++		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
++		u8 dev_speed, u32 slot_id, bool command_must_succeed);
++int xhci_get_port_bandwidth(struct xhci_hcd *xhci, u8 *bw_table);
+ int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_comma=
+nd *cmd,
+ 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed);
+ int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
+--
+2.43.4
 
-This part will (quite arbitrarily IMO) not execute if td_list is empty.
-
-I had this idea that "empty td_list" and "no matching TD on td_list"
-are practically identical cases, and their code could be merged.
 
 
