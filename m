@@ -1,315 +1,207 @@
-Return-Path: <linux-usb+bounces-21239-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21241-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7738A4B688
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 04:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CED1A4B6AF
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 04:33:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7243B3A2699
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 03:29:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A69C13AA082
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 03:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D40F1C84D4;
-	Mon,  3 Mar 2025 03:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386481DE4CE;
+	Mon,  3 Mar 2025 03:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AM1zBnwc"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="M/too4sg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE2BAD27;
-	Mon,  3 Mar 2025 03:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740972598; cv=none; b=TyWZVnhSbSmrnB3DUwdVVPwOgXQ1dlXEaHI76r/YK4hAh59IT1wUQF4jzZMBdGeBnCcJrUDh2EC8MSWlXY4lgO6L0VDjKKcsAmmfo9T3PnKsRhjNuM4vK+p4mhdjVR9Bby1GalfC9fDfyxa0o1BaNKHztn3PHz17G5G5IsmyUss=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740972598; c=relaxed/simple;
-	bh=WtisgUpe8nKNcHbVQ8d3kt1UOEUUroeDbfP37vsyDmE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=elLNhA4NWbzNQjoEwCnkhw1G4seSbP+YkIEiQtYaqqzQHUbOyDq3kW+fjMf0GwqwTl2kWaWymH/M/eP8NaOXcyeKbYQfdIM2uZMAjcSGQkDq+I7wudCoFVJLH4QayDp/T9D/NgkSx1MF/BShUwnc1KKhqVw5nSVOugjNkmi3e1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AM1zBnwc; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5fc6fe05460so2392157eaf.1;
-        Sun, 02 Mar 2025 19:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740972596; x=1741577396; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TpLoS55VvHYT2ILHdOJH5ho8KuNQfaCMBpbxTBAx2Sk=;
-        b=AM1zBnwcNufI9CVu9wCH2mkjCn+nCxCMaWcBc6bjVfk5fn9xdJdU1Ly0I2q7QM3xEN
-         F0EtDFLY0E0YK31twsIudwYT6Pcfh21QMO7I1MhxOPDmDwQC+Z3XtzjuLbQaUk2Z1cUG
-         E+7S/OInRyahET4Wwwquwza/aSn+bSBYuEI5ZbhEFb9vU9f2bnsisMET44+MfkkKqQye
-         5wxN7pXxzw2DTQpTofzuEWQLFLaN/7upnVbGXYkFk+GKXhqWx3plqv3A8fI4I9oR/zSy
-         NrllHAfVMFWqsh5wV6LbxhECQlfNIpdGWIbBUnuwLjSxagmxebVT7Fs7IFF4xLAGdO72
-         r+Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740972596; x=1741577396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TpLoS55VvHYT2ILHdOJH5ho8KuNQfaCMBpbxTBAx2Sk=;
-        b=c5P624XlYInJRmpvX3jw+xPEeHN7J3cIfUkZhisSJdgrjIANL52QA3L9hAoiIaKd5l
-         iC5Tw1b3PHrOiYAB4/CoSW8GPYTJqqRrV99G+leJqVdHYwPwGPzscsZFwtBul3nLadLg
-         uHxUlEEZ6n6g8hTilQy4C0e9croREQOSJaR8sswn7/0lCOeGHj71uauBRBs8sz5M6++k
-         DQhuwfckBpHexWGJ0hnJzXr9bGXdIFmQoTbiadYrpZZYZvSQFbmAr3rGYgX572ITl6zH
-         hHv17fwDFKL61hwXn2nHWtGKJYVX1Y6zEh2R6A7gGEIxgilcddXqM+R09CxGAThctWgZ
-         JyiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZlKAM3Smf9gFtTpzoOinuQZkko4uYMk5HnJOl1LiY7KQCXQCzpLQ6sdd4GypQgLzODj5oTInC08ND@vger.kernel.org, AJvYcCXCtgNYwTuZiPCS77xJf54Emu/zDFVfDqPgACncImIubn+g7qZZoBfIPh9URMizn6oQpKaL9f6vju4EK8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDcoWukv33EhzThq4j2voq4fu7ckE6+loeVgHa9tecvDL6JJ2R
-	F5I8/Qlk+WBRZmsIrLpvVDTK0rdXc6nAdzCdlWvD03baEWcUfZ5P17W4Fm7Khax8y/9aeCZM7qe
-	Yf0+GvoKkDIlMxm1DejkJyPfftoVQIcTu
-X-Gm-Gg: ASbGnctquMDjZSxG0O4/tKvDYDeOTWBvp9bFQK2AvW1Irb6HnGW+QMaXDcB2Toq5EG8
-	CM1JRExPO5m5bdlfMG69dxDitZUZPTiXcMq7JUNB14H51Wji5wt3hKm+HvECrdBY+hUefB1y/VW
-	RRzbv5yEHCQ1t5GNGX4gwF+k8fuNRl
-X-Google-Smtp-Source: AGHT+IEYgGovWbNBz5I7Q6NnrFCor20ZSkULZEF0q+jKb3DiruilW0eh3BWAG/rPfq3NMRO854lBki3HhIfSIBSXFHE=
-X-Received: by 2002:a05:6808:1590:b0:3f3:ff05:6d17 with SMTP id
- 5614622812f47-3f5585004a5mr7823518b6e.5.1740972595914; Sun, 02 Mar 2025
- 19:29:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93581DC9B5;
+	Mon,  3 Mar 2025 03:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740972757; cv=fail; b=a5A3lO1oaSZkJS6kb2B+S1yiXlzdfvJPlcpd4A1Yw3YutM5psKZ7kKkJwTuW2Vr22OYeykuTRRHZ0Zb6qyQrl29Q+HpJmxm6E36SngN4b5+btywnGsMBNI9VGcnxt3TkE20lPnvAI9r0viIY9L2oDt+bOQBxqrv5jH2OBiH13zE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740972757; c=relaxed/simple;
+	bh=QnJ7P2QmMQ6h9diEnhtkacpgc/ZrC2WjKRCz2udpWIk=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=J9Xz0fTPUnha5Xakazx4d0p2ko4KaQQdjkKrAKOfZZZlYfjKTys3Jm9ZjBAFIsfPy0J4g18zBKW4lPIhFHEVenWDfGpvh864y2fe4V3YtknWMiBI0juYxhHl50SLowyy2c2+huw5QYoJT8dxY6tQ16Srf86WJcjFvVpH5gpRdfI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=M/too4sg; arc=fail smtp.client-ip=40.107.22.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=A9UJHk5Lgbd87vMHkpuYqUt90GHBZo1dLZCbz5dpzAa01frOEfuMlCg4uR1zk8oIkcDoWmkNsJLhhOKsbutSQEz8rWPjCUlQOwG7xqh9d3O2aAUAffCNtq06uKy7sIB5rr022nH3V+MmlwzWANvxxcVLfOVWKVjuk7J3yguY4dlw6TS5E3jsR1WasEQlCSXSRJ/rZucAUAUT/AMnamS4Pnq0wcPS7hKZQkUB3Ba30VF0JnNSAo8E86V4Gtr/MZcKtxgtVfuDbAimS+0swP5g4fWlYuRH5YeEGu5kQNNrM9ZlCoy2/mKG16yS2StWA3g+iaAGV28LRGievNGHZZ3P9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LE+OWrQw0SKm8fMS047m7v04qN6PrLvllHqeF31dp8E=;
+ b=TwfSXW4bngZEtmJJ2UoWccV43/dvIMgyUb1VTX6Is7s+EHeO4BjqgEthTO+DJxhL9IytBI3uUHwsTLDvFq2wkurE/Dv77O6cxM9F9gxlzJ/W/MZHcgFO3H6EU27Qk5CaggHJKQfOxxCp60Vd1zd/fXXYLwAuPobXGTjEbAYgupymt6YgyOtLRZe/GCxb7EVHSzUtwZwuSyPXlitIR8qjj3kgAcbDIyNCx9rOQcYpe9e5m3hMRySWB1YR8dHePjO++N6DUNMkRkrOAkJtvN1j8tgTFEhcWOHx42gFPeZ7NO+F3L9R7F5c/lJPDkAhyNAUf6/nDRImZ52NXLy4zl+f2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LE+OWrQw0SKm8fMS047m7v04qN6PrLvllHqeF31dp8E=;
+ b=M/too4sg8DPgLMTInzHHusKbkS52PeZlUG6uI3ftHbZ7MSopMLTKdRMPDlVfIdm7exL4ccqN5oZzl3QjrwaLY3g+255pyDTh85a0EENwDWpqoQmRZDaKTdwMHRp4PUnAg6rgFzEXIloFHgDOJd0Lip//j1W5evEf8g1hp6902AS/EEjnrlNIc2yn/z50IWXBSfp/+16zksZmPM2rQWai+qblyTNR0/xMKZuQq+e4/hf1vEyrcoD9bbIULfihu9HbN9Ml+qU0PAL9T+n5HFZo0DK55DV33UrGG4yc7WASXOfjSeSr8H1MOTd3h/6EMCjI2qsMIdx5wv3Rwl6w0VQ6Ew==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
+ by VI1PR04MB10026.eurprd04.prod.outlook.com (2603:10a6:800:1df::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.27; Mon, 3 Mar
+ 2025 03:32:32 +0000
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad]) by PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad%7]) with mapi id 15.20.8489.025; Mon, 3 Mar 2025
+ 03:32:32 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	peter.chen@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	jun.li@nxp.com
+Subject: [PATCH v4 0/6] add USB2.0 support for i.MX95-19x19 EVK board
+Date: Mon,  3 Mar 2025 11:33:38 +0800
+Message-Id: <20250303033344.1251076-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0014.APCP153.PROD.OUTLOOK.COM (2603:1096::24) To
+ PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
- <20250228161824.3164826-1-mathias.nyman@linux.intel.com> <CAHN5xi0mf8G4ODMQ9jDXAM4CRXtafZeMh_2KF7efbiFJahO4bw@mail.gmail.com>
-In-Reply-To: <CAHN5xi0mf8G4ODMQ9jDXAM4CRXtafZeMh_2KF7efbiFJahO4bw@mail.gmail.com>
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-Date: Mon, 3 Mar 2025 11:29:49 +0800
-X-Gm-Features: AQ5f1Jq1ZN-223eChXIw2tYABHxIWApQ9yctPB1j-GtoOZwfiN4U-IozyV-UZuc
-Message-ID: <CAHN5xi0ZCRu-3MyY36MpUDpJOtjTBc2QUY-s+rtLdBUrrHGOaw@mail.gmail.com>
-Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc enpoints
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: michal.pecio@gmail.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|VI1PR04MB10026:EE_
+X-MS-Office365-Filtering-Correlation-Id: 408f4d0d-ae99-49f6-9ba7-08dd5a040891
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|52116014|376014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?yc4AMqfyA2xgDk3IQIJ2UoT/Tz0oTSyY+QyGVgd+TO6lG3kuVIdIXQAM7xqO?=
+ =?us-ascii?Q?Qx3Rqqzi4k+4cW8hPXVv2L6vtvMbyd5+v4AZW2t55z5VVGzw+W15k2OUlXh7?=
+ =?us-ascii?Q?OoOCwcroZmy/g2yJu0lu3jEVMSFxjAIH67ReSO9CZcUNHfPw7Dr1ouH8VCbU?=
+ =?us-ascii?Q?Swiz9e2Jkl3AsCosYjR5Smx0l2v9Va5Cflb0iT37bAG6VtIzR7xPllwqrbfv?=
+ =?us-ascii?Q?U13xUtpULraDMExMvfsMsDj1ko8nKRIX5B8o65sJGjpBNidVNY4r1U6RQarp?=
+ =?us-ascii?Q?kAB1YwZuP/CvTZBpdAL00Zo8fE2CfhR5FuitaRpxTziW4hmNO9UaVUencAmn?=
+ =?us-ascii?Q?fZAhp+TpgCX59e75sm/aCc1ZjbvTDqRKEeD26aIgdw5tYs8zDiI3iPLh3JWe?=
+ =?us-ascii?Q?d5GtXnDmPFR2+GxjBhdkkxeVXLbmuVzGeKaCr4sMInqsCC1e2y2IPsu4GRIp?=
+ =?us-ascii?Q?mFmd48BHCNPUBxicvKPr1DwDA597V61RL2KTIm3eSwHqTfzZjddwDJ3m5brw?=
+ =?us-ascii?Q?QJyrnrFDjahd9gJonKGbuMxg8ygxqosllKbDbfifMRB6E6SRFu9kqbpwzKTC?=
+ =?us-ascii?Q?CH7ERZnjOOoZfn7p7DtkIuvR6JnLZepUZnyTcjayJKgl+LaUW1rjGrmbW+uG?=
+ =?us-ascii?Q?oTnmqKbLwQLOV5zCSRy1N4oMhophBe0au2zzA2jusNzwtR9BIf2Qponog+7E?=
+ =?us-ascii?Q?NmEHGO1su+Rr2WrNCnAA50rLUx6zbC9AnON0QLfQaUKHgSuoFUAlKgXz9ofY?=
+ =?us-ascii?Q?R9onGH6z6W2bO8EDoMwnQhU/u4Nd+ObL2C+URZWtRb2GzVJvLfxKNnn3kp7p?=
+ =?us-ascii?Q?bK1o/4RujKi96xV4dwDqQeMEnVl9otERm0V/DxfZ1d2NvoRT/GIpqJM7ITo9?=
+ =?us-ascii?Q?4AlZCWRZRYzmPPb+T+1AicsfiiZ8l9ms2v+vbHkga/02VcEyS3YKB8eK+aPB?=
+ =?us-ascii?Q?BV+mruJWcnVB94JCkcG3TOq8+j8Y146HWa30vR9K5GoYZNVc6XuijDhzlmVC?=
+ =?us-ascii?Q?9+5I2iT7l1AV5Hq1PJfZlKMxLbEoAZZi2QuXaeoqTk9F/xtOHkWyhWrbhr8s?=
+ =?us-ascii?Q?bY4Wp3IlFcNScsjwZfhLaNkXJQVA7xZr/TVwsYxVB7Qts7rMlFUT/HGLwbqe?=
+ =?us-ascii?Q?VUpl0p5FK2qUlsZEb8qw/lsSIO5GYa5HjV/tTF0oGwzkl4l3w2M6IwyN2xQg?=
+ =?us-ascii?Q?BjlJGOSW2MOd7olBUXa2N6U1BpkcPlsVXuwqv2Hb9ReIykSahzZHxTKgqNEB?=
+ =?us-ascii?Q?n6yjveTCkZ+oqp+cygus4O8RnCqDB8bK+LQ1vcgQxV1FIwxKQocxVk9lv6St?=
+ =?us-ascii?Q?TsXmDmIuvxF+9RoUF9JmuZESZLw+YiLM1Al2NgvZ9X0gLvT3vDWGsXStQj3Z?=
+ =?us-ascii?Q?cQcR7gTXnMuT5LiPIM03vMOrkG2V02ZPI4m0HxnxnvZoN13bozlfAWEBCevN?=
+ =?us-ascii?Q?WqZc7sDcSM757jTpegNNsRRtklTM3uRi?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?EVljpXJawwnP3kvkPvdlyc704KfV9QlNj+bY+A271Sbo2Tq+pNyYv3nRlmhK?=
+ =?us-ascii?Q?C0I3Fs1LW1pM5DowLL4boPwB2l29M5J8ki62bXZ5W9DSNvUTlBAT3XhS0ynT?=
+ =?us-ascii?Q?OkJTwEeoG3uvH6ym2tZlvjY0MESWUFeGpXgyiNvfL9MvW66QR0fWxrWuLrep?=
+ =?us-ascii?Q?cpcASDVP7RhUe51Xyl+IUfzUsw/afHYBfYq8rxXGYxWIPVFf2wvNSDwT+Ksr?=
+ =?us-ascii?Q?q/bKnvChuD/3ninco9YD59vEpvZgdySX1Xq3aTplug5rB+/AiNRmQJFuzvrO?=
+ =?us-ascii?Q?wxF5btvFsJbrhpMndYxwebnrOnb1qNPYsmCXoF/F25vagwyZlYUJJnnZL3YL?=
+ =?us-ascii?Q?cplnttTcK3v2HxO5S96Pb9vo8Uk6xh6T+wx3OFVp0W7S/7Z+qZdixuzQ4f0Z?=
+ =?us-ascii?Q?TDw2qe8cjwzvuDeUL0cBzqmfcrvgloTBjEEIlvShVKt6mVoqse7Hq1G1/wnD?=
+ =?us-ascii?Q?oVcRLDAJN33tu0xvQyMkyMxrHswMvyVEAv34wUkn4M0dgadvXXtkZBx00Pa8?=
+ =?us-ascii?Q?G7g9hf1buST2eDvoq6PAw/8oY6egR9DcxjQ4GWUryeIqGqfNy7xp14FOIzcY?=
+ =?us-ascii?Q?HNIW1XL/4mQv8ggWs4E6Tj1/76TMqPclIQOg79V7pQeoxbLQn8hfJueZu483?=
+ =?us-ascii?Q?L68xVDlOyHMvOOMtRv9uRNBAi9Yv6uN5zgD5EoZQzmrumsFW7x1S5KdGcMy1?=
+ =?us-ascii?Q?UqlndanA8cq0LKHHHRoBJj+84fG4PkaQZKv26FjOIxxeR/S7JG+4oUdNdUTI?=
+ =?us-ascii?Q?u/O/rY6R1b/6Ldwj0uabWEcBkQ6H+FYZvOb+ektuRQG4j3HyX/sIJ8RIXGZ3?=
+ =?us-ascii?Q?jP6jcAYwFt2l9BpdUx/LtkkxR5DmCCvm0jwmQe6GtXi+tzRCVlu8D52CoFij?=
+ =?us-ascii?Q?sADWE++279OWG91RaSW4VYZtC9PrtXbyd7a/grGY9CWk/nx/RsSBwdZ9bnEk?=
+ =?us-ascii?Q?Ab2NMAt3RXeqqLmLfU9F3XNWnhtZl8YOKf8Arne0xkh5C9BHgFFijBwKGzpc?=
+ =?us-ascii?Q?pg5pqx3vLG8RYnLIINUyK/8+4FvO/WckehTFQOngeLprJkxRGvziTFtqjnD1?=
+ =?us-ascii?Q?f04h2UCiAHRlOv/rj/0AV4GBMKo/coBsjoVK4xL5m7dbI/yWN1Emp+uVP1sp?=
+ =?us-ascii?Q?uJGzixKmoAWIvZ5woqWb4IXtkapdOj/KowS5+dpdZGaBDB/+2GSM4Ejjamne?=
+ =?us-ascii?Q?tlY+v3AWDqorqvv/NNA/Ygenzy3SakV55+iEAfXdDzcpdtCyW9cxjIiSdRrM?=
+ =?us-ascii?Q?ozSUWE8tfhTDRW2NCjkNlYaGWyeySxyKm4xxt9+Y+XT7BuVGWrhzgbcSiGg0?=
+ =?us-ascii?Q?ZAPJoaldFs6ypTaDqSUDNuziyaEpDr8nb5LomY7dhkh84df+5h04Je21OHoy?=
+ =?us-ascii?Q?YdVFrzAAxtGxZAJX8LVG1wV6iTJnO7hVG+/TVeiRB0mNi5Wc0uJv6SHRxgfJ?=
+ =?us-ascii?Q?VHpYp8xUuCoevF5sM5sy+4G1cv6IyYr50WrfhdXtLwQWYMPzYB32+Sies/Cj?=
+ =?us-ascii?Q?Vn0LeNrchzmMolB1l3o6XkcJT9fcwYHOq7zzzrj2xlHp7D+huM/S9DU6EsXY?=
+ =?us-ascii?Q?jBl77Y5AxE4VeUyATkrC61mMNnh+z8p2RVnIoHSL?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 408f4d0d-ae99-49f6-9ba7-08dd5a040891
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2025 03:32:32.8125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nrmbUdk+xVQonG7oBsdw2dhlqk1Wkt12LP6FZ1c41N8TiTfpaoMRipc/j2axUiQkTIQKztp4lXrLgmdSkhTBwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB10026
 
-Hi,
+The i.MX95-19x19 EVK board features a USB 2.0 Type-A port, with this
+series primarily introducing USB 2.0 support. In the i.MX95 architecture,
+the USB wake-up handling mechanism is integrated within the HSIO block
+control module, utilizing a dedicated wake-up interrupt. Therefore, we
+also implemented corresponding wake-up logic code to properly manage this
+functionality.
 
-Kuangyi Chiang <ki.chiang65@gmail.com> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8810:05=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Hi,
->
-> Thanks for the patch.
->
-> Mathias Nyman <mathias.nyman@linux.intel.com> =E6=96=BC 2025=E5=B9=B43=E6=
-=9C=881=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8812:17=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> >
-> > Unplugging a USB3.0 webcam from Etron hosts while streaming results
-> > in errors like this:
-> >
-> > [ 2.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not=
- part of current TD ep_index 18 comp_code 13
-> > [ 2.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf86=
-30 trb-start 000000002fdf8640 trb-end 000000002fdf8650
-> > [ 2.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not=
- part of current TD ep_index 18 comp_code 13
-> > [ 2.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf86=
-60 trb-start 000000002fdf8670 trb-end 000000002fdf8670
-> >
-> > Etron xHC generates two transfer events for the TRB if an error is
-> > detected while processing the last TRB of an isoc TD.
-> >
-> > The first event can be any sort of error (like USB Transaction or
-> > Babble Detected, etc), and the final event is Success.
-> >
-> > The xHCI driver will handle the TD after the first event and remove it
-> > from its internal list, and then print an "Transfer event TRB DMA ptr
-> > not part of current TD" error message after the final event.
-> >
-> > Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
-> > transaction error mid TD.") is designed to address isoc transaction
-> > errors, but unfortunately it doesn't account for this scenario.
-> >
-> > This issue is similar to the XHCI_SPURIOUS_SUCCESS case where a success
-> > event follows a 'short transfer' event, but the TD the event points to
-> > is already given back.
-> >
-> > Expand the spurious success 'short transfer' event handling to cover
-> > the spurious success after error on Etron hosts.
-> >
-> > Kuangyi Chiang reported this issue and submitted a different solution
-> > based on using error_mid_td. This commit message is mostly taken
-> > from that patch.
-> >
-> > Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > ---
-> >  drivers/usb/host/xhci-ring.c | 36 +++++++++++++++++++++++++-----------
-> >  drivers/usb/host/xhci.h      |  2 +-
-> >  2 files changed, 26 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.=
-c
-> > index 965bffce301e..3d3e6cd69019 100644
-> > --- a/drivers/usb/host/xhci-ring.c
-> > +++ b/drivers/usb/host/xhci-ring.c
-> > @@ -2644,6 +2644,22 @@ static int handle_transferless_tx_event(struct x=
-hci_hcd *xhci, struct xhci_virt_
-> >         return 0;
-> >  }
-> >
-> > +static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
-> > +                                          struct xhci_ring *ring)
-> > +{
-> > +       switch (ring->old_trb_comp_code) {
-> > +       case COMP_SHORT_PACKET:
-> > +               return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
-> > +       case COMP_USB_TRANSACTION_ERROR:
-> > +       case COMP_BABBLE_DETECTED_ERROR:
-> > +       case COMP_ISOCH_BUFFER_OVERRUN:
-> > +               return xhci->quirks & XHCI_ETRON_HOST &&
-> > +                       ring->type =3D=3D TYPE_ISOC;
-> > +       default:
-> > +               return false;
-> > +       }
-> > +}
-> > +
-> >  /*
-> >   * If this function returns an error condition, it means it got a Tran=
-sfer
-> >   * event with a corrupted Slot ID, Endpoint ID, or TRB DMA address.
-> > @@ -2697,8 +2713,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-> >         case COMP_SUCCESS:
-> >                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) !=
-=3D 0) {
-> >                         trb_comp_code =3D COMP_SHORT_PACKET;
-> > -                       xhci_dbg(xhci, "Successful completion on short =
-TX for slot %u ep %u with last td short %d\n",
-> > -                                slot_id, ep_index, ep_ring->last_td_wa=
-s_short);
-> > +                       xhci_dbg(xhci, "Successful completion on short =
-TX for slot %u ep %u with last td comp code %d\n",
-> > +                                slot_id, ep_index, ep_ring->old_trb_co=
-mp_code);
-> >                 }
-> >                 break;
-> >         case COMP_SHORT_PACKET:
-> > @@ -2846,7 +2862,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-> >                  */
-> >                 if (trb_comp_code !=3D COMP_STOPPED &&
-> >                     trb_comp_code !=3D COMP_STOPPED_LENGTH_INVALID &&
-> > -                   !ep_ring->last_td_was_short) {
-> > +                   !xhci_spurious_success_tx_event(xhci, ep_ring)) {
-> >                         xhci_warn(xhci, "Event TRB for slot %u ep %u wi=
-th no TDs queued\n",
-> >                                   slot_id, ep_index);
-> >                 }
-> > @@ -2890,11 +2906,12 @@ static int handle_tx_event(struct xhci_hcd *xhc=
-i,
-> >
-> >                         /*
-> >                          * Some hosts give a spurious success event aft=
-er a short
-> > -                        * transfer. Ignore it.
-> > +                        * transfer or error on last TRB. Ignore it.
-> >                          */
-> > -                       if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
-> > -                           ep_ring->last_td_was_short) {
-> > -                               ep_ring->last_td_was_short =3D false;
-> > +                       if (xhci_spurious_success_tx_event(xhci, ep_rin=
-g)) {
-> > +                               xhci_dbg(xhci, "Spurious event dma %pad=
-, comp_code %u after %u\n",
-> > +                                        &ep_trb_dma, trb_comp_code, ep=
-_ring->old_trb_comp_code);
-> > +                               ep_ring->old_trb_comp_code =3D trb_comp=
-_code;
-> >                                 return 0;
-> >                         }
-> >
-> > @@ -2922,10 +2939,7 @@ static int handle_tx_event(struct xhci_hcd *xhci=
-,
-> >          */
-> >         } while (ep->skip);
-> >
-> > -       if (trb_comp_code =3D=3D COMP_SHORT_PACKET)
-> > -               ep_ring->last_td_was_short =3D true;
-> > -       else
-> > -               ep_ring->last_td_was_short =3D false;
-> > +       ep_ring->old_trb_comp_code =3D trb_comp_code;
-> >
-> >         ep_trb =3D &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*e=
-p_trb)];
-> >         trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *)=
- ep_trb, ep_trb_dma);
-> > diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> > index 8c164340a2c3..c75c2c12ce53 100644
-> > --- a/drivers/usb/host/xhci.h
-> > +++ b/drivers/usb/host/xhci.h
-> > @@ -1371,7 +1371,7 @@ struct xhci_ring {
-> >         unsigned int            num_trbs_free; /* used only by xhci DbC=
- */
-> >         unsigned int            bounce_buf_len;
-> >         enum xhci_ring_type     type;
-> > -       bool                    last_td_was_short;
-> > +       u32                     last_td_comp_code;
->
-> Should be changed to old_trb_comp_code.
->
-> >         struct radix_tree_root  *trb_address_map;
-> >  };
-> >
-> > --
-> > 2.43.0
-> >
->
-> I'll test this later.
+For detailed changes can refer to patch commit log.
 
-It works. See the below dynamic debug messages:
+v4:
+ - add blkctl NULL checking
+ - warning if wakeup setting is missing for imx95
+ - add Tb tag 
 
-[ 1138.281772] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 13
-[ 1138.281777] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba600, comp_code 13 after 13
-[ 1138.282013] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 13
-[ 1138.282019] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba630, comp_code 13 after 13
-[ 1138.282271] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 13
-[ 1138.282277] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba660, comp_code 13 after 13
-[ 1138.282420] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 13
-[ 1138.282425] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba680, comp_code 13 after 13
-[ 1138.282653] xhci_hcd 0000:04:00.0: Transfer error for slot 1 ep 18
-on endpoint
-[ 1138.282659] xhci_hcd 0000:04:00.0: Error mid isoc TD, wait for
-final completion event
-[ 1138.282779] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 4
-[ 1138.282785] xhci_hcd 0000:04:00.0: Transfer error for slot 1 ep 18
-on endpoint
-[ 1138.282911] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 4
-[ 1138.282916] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba6c0, comp_code 13 after 4
-[ 1138.282920] xhci_hcd 0000:04:00.0: Transfer error for slot 1 ep 18
-on endpoint
-[ 1138.282923] xhci_hcd 0000:04:00.0: Error mid isoc TD, wait for
-final completion event
-[ 1138.283039] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 4
-[ 1138.283045] xhci_hcd 0000:04:00.0: Transfer error for slot 1 ep 18
-on endpoint
-[ 1138.283163] xhci_hcd 0000:04:00.0: Successful completion on short
-TX for slot 1 ep 18 with last td comp code 4
-[ 1138.283167] xhci_hcd 0000:04:00.0: Spurious event dma
-0x000000010b5ba6f0, comp_code 13 after 4
+v3:
+ - fix possible build break
+ - remove usbmisc_imx95_init()
+ - add Rb tag in some patches
 
->
-> Thanks,
-> Kuangyi Chiang
+v2:
+ - apply some suggestions
+ - improve wakeup interrupt handling
+ - add Rb tag in some patches
 
-Thanks,
-Kuangyi Chiang
+Xu Yang (6):
+  dt-bindings: usb: chipidea: Add i.MX95 compatible string
+    'fsl,imx95-usb'
+  dt-bindings: usb: usbmisc-imx: add support for i.MX95 platform
+  usb: chipidea: imx: add wakeup interrupt handling
+  usb: chipidea: imx: add HSIO Block Control wakeup setting
+  arm64: dts: imx95: add USB2.0 nodes
+  arm64: dts: imx95-19x19-evk: enable USB2.0 node
+
+ .../bindings/usb/chipidea,usb2-common.yaml    |  3 +
+ .../bindings/usb/chipidea,usb2-imx.yaml       | 24 +++++-
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 23 +++++-
+ .../boot/dts/freescale/imx95-19x19-evk.dts    | 16 ++++
+ arch/arm64/boot/dts/freescale/imx95.dtsi      | 30 ++++++++
+ drivers/usb/chipidea/ci_hdrc_imx.c            | 35 +++++++++
+ drivers/usb/chipidea/usbmisc_imx.c            | 77 +++++++++++++++++++
+ 7 files changed, 206 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
 
