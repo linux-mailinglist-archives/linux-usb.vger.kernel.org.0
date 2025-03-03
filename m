@@ -1,72 +1,58 @@
-Return-Path: <linux-usb+bounces-21278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21279-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EBC0A4C2AE
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:02:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A565CA4C2E6
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 15:10:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8066B7AA1D7
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 14:01:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB378188601E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 14:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52C2212B2B;
-	Mon,  3 Mar 2025 14:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1321C213E7D;
+	Mon,  3 Mar 2025 14:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MsezEC15"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="PjNnbAXr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BD41F4183
-	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 14:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE60B2139D4
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 14:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741010530; cv=none; b=Fw1B0fwuLc5uspTQgwKV3bD6TNz5PfjkFLmWmWUGazzGmlCqnB3oxAKvAd6QUHIIHDAlnM0+vtCRI70/J5znkk9LGjxGxmiqZxQibVxGv1j9S3pKkD2w1elKBfxDoiBMrHcxl7zLsUlIi48dLa5DFr8KGrmlcXTndnMwi68NoR8=
+	t=1741011014; cv=none; b=vDCk7hJF8dO5kWJxAaxmN3Y8olV8u7wl20iz3HhmVPfUA7bLtxyXS7htv0z5jqHfbH5C3+SxqoLqFsxyANl+VmOlpQH2/aKmiZmbbkBDE52WosbASPxFNSVHaaoXn7+vS6AI+Tzb3L6U+KX1EF6x4jazN8Q2mS5sOea+BEQ7pjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741010530; c=relaxed/simple;
-	bh=Jufy7M4Kztcpw5rJP6Hlxdy24/cw9McZr0Hv/YnG6E0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LOP3L7znVIWk2oXjppsZpaHTwq44/cpRVgrHXFUeDTfWVvDBSxBhSlKcejS7kg9O0ispdC70R770A0bdAmGfPqss2eP+3d9P7lEJ+CpknsdgzEIi/J1htcuZtXFWTsZUS0NCYMu4DzQoXMMUp8Jcc2WZrhug4IegTknTbx1gWg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MsezEC15; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741010529; x=1772546529;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jufy7M4Kztcpw5rJP6Hlxdy24/cw9McZr0Hv/YnG6E0=;
-  b=MsezEC15kqSk2LX9z98iGD5owAw0kjL8bMzbHr36uJuuSEvd2ead4KUB
-   LwkHCI+xjS8rhhs3KC8ZI6Vtp7LyDKHUVDyg6iQPWBXZdAmBcMOQZXT2O
-   6qU9nVSX0phnwPSrihm0/AhYqd5BQlKbt0MvT/DquMSoBeWoUn3xS4uI0
-   ysCwfx5bieweRfv+FGKVr+yjcRQtpg14TTiEYCz6zCJec7wn2leHh5Ei+
-   eZvVKblxrrNyjpaXzed3sALseoywmij3hpUUbKK5cJkCD43xHNajonT4w
-   Lag1FfijzXUUiZTePmVOXKo9WqZRxEKZ2wuOtigkC+BFEvEH8OFzUU0lY
-   w==;
-X-CSE-ConnectionGUID: x1+VXWp8TCW7m0SbTjlEuQ==
-X-CSE-MsgGUID: hRCABhhCTXWxcoi8HO2IyQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="52863394"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="52863394"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 06:02:00 -0800
-X-CSE-ConnectionGUID: ht2MA6fsTxysszBXSIYWZw==
-X-CSE-MsgGUID: 4KP6+ftNQdCgMqoPk4Pw9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="123235261"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 03 Mar 2025 06:01:58 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 115C7151; Mon, 03 Mar 2025 16:01:56 +0200 (EET)
-Date: Mon, 3 Mar 2025 16:01:56 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Kenneth Crudup <kenny@panix.com>
-Cc: linux-usb@vger.kernel.org
+	s=arc-20240116; t=1741011014; c=relaxed/simple;
+	bh=n+mOKLyLS2tjQgKUQ3QMXV1zxyUv+PMhPnidZOYfXlg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CaFP5NRx83+hthxxZl1jb0RGu4OCHpGgbpEzB/0gpJI0lKrkvexL37EdtM+/UxZwc3dFvMrUexoTG4vWXb0UI8yo+n6EN0FzlzD0DnNoBKuviwMQU7O37NyYiPAHZC27rXbP4uBByY3tfXBmEGsrRooS8ZDhnsbNVr2n42RAuYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=PjNnbAXr; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z610z2hxlz14Kr;
+	Mon,  3 Mar 2025 09:10:11 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1741011011; bh=n+mOKLyLS2tjQgKUQ3QMXV1zxyUv+PMhPnidZOYfXlg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=PjNnbAXrqA6a8rpb8znYmOdMOeYzmE83/iIk2kCdcw6h5GQXAIsuu2tt2YIEBTswn
+	 uDenjJFfhKMzBeozYgFoka0BI8pywpCn76fTDkRmnCn9y+gSrasn976wOVhx4Y9tLK
+	 WzJ2Dsm9HT/mxkalZIyX31wA4Eyp8y8yHbPzTP3E=
+Message-ID: <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
+Date: Mon, 3 Mar 2025 06:10:09 -0800
+Precedence: bulk
+X-Mailing-List: linux-usb@vger.kernel.org
+List-Id: <linux-usb.vger.kernel.org>
+List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
  activation asynchronously") too, to stop my resume crashes
-Message-ID: <20250303140156.GY3713119@black.fi.intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: linux-usb@vger.kernel.org
 References: <f31309e4-6ce5-48cf-910e-cd74f818aac8@panix.com>
  <20250303112149.GS3713119@black.fi.intel.com>
  <d56fcd99-433e-4670-8388-7035812a78d9@panix.com>
@@ -77,36 +63,38 @@ References: <f31309e4-6ce5-48cf-910e-cd74f818aac8@panix.com>
  <20250303132327.GW3713119@black.fi.intel.com>
  <20250303134618.GX3713119@black.fi.intel.com>
  <24ef839c-8fa5-4a19-b9c6-0a267aab84f5@panix.com>
-Precedence: bulk
-X-Mailing-List: linux-usb@vger.kernel.org
-List-Id: <linux-usb.vger.kernel.org>
-List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <24ef839c-8fa5-4a19-b9c6-0a267aab84f5@panix.com>
+ <20250303140156.GY3713119@black.fi.intel.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250303140156.GY3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 03, 2025 at 05:53:22AM -0800, Kenneth Crudup wrote:
-> 
-> No failures for you at all? OK. It'll take me a couple of days to do all the
-> steps, but I'll get on it and get back to you.
-> 
-> > "Forget" all devices from boltctl to make sure PCIe is not involved.
-> 
-> What's this do? And my system recognizes all new TB devices automatically
-> (no manual intervention required).
 
-Right it does that if you have screen unlocked.
+>> And my system recognizes all new TB devices automatically
+>> (no manual intervention required).
 
-If you "forget" them then it should in theory at least keep from creating
-PCIe tunnels, so keeping them out of the equation (we just want to
-concentrate on the TB/DP side here).
+On 3/3/25 06:01, Mika Westerberg wrote:
 
-Actually if you use GNOME there is a better way, same dialog but switch off
+> Right it does that if you have screen unlocked.
 
-  "Allow direct access to devices such as docks and external GPUs."
+I'm running Kubuntu (24.10); AFAIK it just allows them anyway. The 
+"System Settings" dialog is just an Enable/Disable toggle.
 
-this will temporarily stop authorizing PCIe tunnels. You can switch it back
-on when you are done reproducing.
+> If you "forget" them then it should in theory at least keep from creating
+> PCIe tunnels, so keeping them out of the equation (we just want to
+> concentrate on the TB/DP side here).
+
+But what I can try is just connecting the monitors directly; the 
+portable monitor directly to one of the laptop's USB-Cs, and the 
+Odyssey's USB-C-to-DP w/o using the dock.
+
+Now I'm curious, and may take an hour or so to try this stuff out.
+
+-Kenny
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
