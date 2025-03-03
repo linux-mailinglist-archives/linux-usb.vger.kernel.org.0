@@ -1,57 +1,65 @@
-Return-Path: <linux-usb+bounces-21292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33402A4CC58
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 21:00:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B87CA4CD19
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 21:57:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CA821896697
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 20:00:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5EED173F5E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 20:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31EFC23496F;
-	Mon,  3 Mar 2025 20:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A738E23770C;
+	Mon,  3 Mar 2025 20:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="ekIOcJeh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9059D3BBD8;
-	Mon,  3 Mar 2025 20:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB16215041;
+	Mon,  3 Mar 2025 20:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741032039; cv=none; b=iMEYImQmWOl8r0uhG67Yqk4LjjZzCkKn/e3rQ/nJqi7mfoVmHmn+38lwpeM3pwgnq17M9DhoHfWPMrN9MlmgSJ6bU9TT2K3DQ4X2f97KG7ihX83erOOcSlT47/fgunZ6QBw0jDrCn/yd+O5zGy9zXcWXDARM64RRXELITl72lhQ=
+	t=1741035428; cv=none; b=Po1UvbL/IzzrM/qdhgQHAA3uUCSoKgtk7PNg6d6vBaDyBJnq89wvHLRATgMBUAJaSnNmxLdCCja5yMw3mxvp42F/zA4oqkaF8aVfuMFcTPgX8M+JponcNKVk7FxJUPwDnDApgEiJAPf57bnKxZEdiatv1ADsdJa8wsCo9SJaInI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741032039; c=relaxed/simple;
-	bh=fuKfx+52mOKNtlZjc5ULPHxnRDn1ChhMsm0q83VOu28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mTx1YnzX673k7x0VcIi0GlK1d5jKju+O+iOcccJYOT3CJEi1VgGdXvFOAqlkhdGgsKM/V9JTV0pC8qsNGELA8rfj5KBvLkyz11wSzmyLKS/VYMsVvyAhyTwA+6oyO5BpGOc360qGe7Wt/atd12rKiAzkUHAnzJFiO1MyJjeWz2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 8016230015867;
-	Mon,  3 Mar 2025 21:00:28 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 6792D4A3B; Mon,  3 Mar 2025 21:00:28 +0100 (CET)
-Date: Mon, 3 Mar 2025 21:00:28 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Kenneth Crudup <kenny@panix.com>, Bjorn Helgaas <helgaas@kernel.org>,
-	ilpo.jarvinen@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-	Jian-Hong Pan <jhp@endlessos.org>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+	s=arc-20240116; t=1741035428; c=relaxed/simple;
+	bh=LkpixxwH6q6MHKb7xRRxpFfYub1ipaUt6GP6QhkgSrM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J0pKVQ5sVs/i2kJP+OnS9lCKgBA247BBGzKSYomDrQf2Qkb6KuwkPWYDYICkoKZnkfwCWlrsOwVRPLgfTrQM74DFZdZuy6gAOdMRCvt00lUrLLGsPXYwVDwV5QMhsd2Td3LgBFYruOvWsqx3KpaMlZhCAL72KUYCmx8+JY9YACc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=ekIOcJeh; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z6B2R25V4z4MR5;
+	Mon,  3 Mar 2025 15:57:03 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1741035424; bh=LkpixxwH6q6MHKb7xRRxpFfYub1ipaUt6GP6QhkgSrM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=ekIOcJeh9Ssoc58bfP6BAuJI++uyeUDXpV4vuBSDEoCk2flD2+mfNgFrNFOWVQbf/
+	 +R4upKBgfknLtEOmDcdt2dTHAh8ZfYdD/bYRgToNuHIFvJqXQO7p+tQlkh0jLSn+fT
+	 xo8uS+sRefvvy/FB8GSMtH1DO3pGNfG4/GsF2wac=
+Message-ID: <244806e5-f8f9-4fad-a4aa-bf031c84748e@panix.com>
+Date: Mon, 3 Mar 2025 12:57:01 -0800
+Precedence: bulk
+X-Mailing-List: linux-usb@vger.kernel.org
+List-Id: <linux-usb.vger.kernel.org>
+List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
  Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
-Message-ID: <Z8YKXC1IXYXctQrZ@wunner.de>
+To: Lukas Wunner <lukas@wunner.de>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
 References: <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
  <20250211055722.GW3713119@black.fi.intel.com>
  <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
@@ -59,85 +67,32 @@ References: <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
  <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
  <20250214162948.GJ3713119@black.fi.intel.com>
  <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com>
- <Z77ak-4YsdAKXbHr@wunner.de>
- <20250226091958.GN3713119@black.fi.intel.com>
-Precedence: bulk
-X-Mailing-List: linux-usb@vger.kernel.org
-List-Id: <linux-usb.vger.kernel.org>
-List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226091958.GN3713119@black.fi.intel.com>
+ <20250226084404.GM3713119@black.fi.intel.com> <Z77ak-4YsdAKXbHr@wunner.de>
+ <20250226091958.GN3713119@black.fi.intel.com> <Z8YKXC1IXYXctQrZ@wunner.de>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <Z8YKXC1IXYXctQrZ@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 26, 2025 at 11:19:58AM +0200, Mika Westerberg wrote:
-> On Wed, Feb 26, 2025 at 10:10:43AM +0100, Lukas Wunner wrote:
-> > On Wed, Feb 26, 2025 at 10:44:04AM +0200, Mika Westerberg wrote:
-> > >   [Meteor Lake host] <--> [TB 4 dock] <--> [TB 3 NVMe]
-> > [...]
-> > > I added "no_console_suspend" to the command line and the did sysrq-w to
-> > > get list of blocked tasks. I've attached it just in case it is needed.
-> > 
-> > This looks like the deadlock we've had for years when hot-removing
-> > nested hotplug ports.
-> > 
-> > If you attach only a single device to the host, I guess the issue
-> > does not occur, right?
-> 
-> Yes.
-> 
-> > Previous attempts to fix this:
-> > 
-> > https://lore.kernel.org/all/4c882e25194ba8282b78fe963fec8faae7cf23eb.1529173804.git.lukas@wunner.de/
-> > 
-> > https://lore.kernel.org/all/20240612181625.3604512-1-kbusch@meta.com/
-> 
-> Well, it does not happen if I revert the commit so isn't that a
-> regresssion?
 
-Does the below fix the issue?
 
--- >8 --
+On 3/3/25 12:00, Lukas Wunner wrote:
 
-diff --git a/drivers/pci/hotplug/pciehp_core.c b/drivers/pci/hotplug/pciehp_core.c
-index ff458e6..b0b4d46 100644
---- a/drivers/pci/hotplug/pciehp_core.c
-+++ b/drivers/pci/hotplug/pciehp_core.c
-@@ -287,24 +287,26 @@ static int pciehp_suspend(struct pcie_device *dev)
- static bool pciehp_device_replaced(struct controller *ctrl)
- {
- 	struct pci_dev *pdev __free(pci_dev_put);
-+	u64 dsn;
- 	u32 reg;
- 
- 	pdev = pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0));
- 	if (!pdev)
--		return true;
-+		return false;
- 
--	if (pci_read_config_dword(pdev, PCI_VENDOR_ID, &reg) ||
--	    reg != (pdev->vendor | (pdev->device << 16)) ||
--	    pci_read_config_dword(pdev, PCI_CLASS_REVISION, &reg) ||
--	    reg != (pdev->revision | (pdev->class << 8)))
-+	if ((pci_read_config_dword(pdev, PCI_VENDOR_ID, &reg) == 0 &&
-+	     reg != (pdev->vendor | (pdev->device << 16))) ||
-+	    (pci_read_config_dword(pdev, PCI_CLASS_REVISION, &reg) == 0 &&
-+	     reg != (pdev->revision | (pdev->class << 8))))
- 		return true;
- 
- 	if (pdev->hdr_type == PCI_HEADER_TYPE_NORMAL &&
--	    (pci_read_config_dword(pdev, PCI_SUBSYSTEM_VENDOR_ID, &reg) ||
--	     reg != (pdev->subsystem_vendor | (pdev->subsystem_device << 16))))
-+	    pci_read_config_dword(pdev, PCI_SUBSYSTEM_VENDOR_ID, &reg) == 0 &&
-+	    reg != (pdev->subsystem_vendor | (pdev->subsystem_device << 16)))
- 		return true;
- 
--	if (pci_get_dsn(pdev) != ctrl->dsn)
-+	dsn = pci_get_dsn(pdev);
-+	if ((dsn || ctrl->dsn) && dsn != ctrl->dsn)
- 		return true;
- 
- 	return false;
+> Does the below fix the issue?
+
+So far, so good! But, part of why it was so hard for me to bisect to the 
+Subject: commit was 'cause it didn't always OOPS; but I'll continue to 
+test on the most-likely failure mode (CalDigit TS4 to TB NVMe adaptor 
+connected at suspend, then nothing (or USB-C dock) on resume).
+
+But if this does indeed fix it, this will make TWO crash bugs on resume 
+squashed in less than 12 hours- gotta love Open Source Software!
+
+-Kenny
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
