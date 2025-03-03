@@ -1,97 +1,108 @@
-Return-Path: <linux-usb+bounces-21349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21354-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA26CA4EA8A
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 19:07:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53891A4EB53
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 19:23:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEDE884D70
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:25:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AA6F18978C5
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8BCB29238A;
-	Tue,  4 Mar 2025 17:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5Fsc1d+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80B527CB3E;
+	Tue,  4 Mar 2025 18:04:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B892D4F87
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DDD209F56
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 18:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107631; cv=pass; b=SuW4MWibajbTpVspguttmmRVxByW+SK9AsufXNLRju+BrZGL5F20G63tDjCct3CxuqMyo7Ol7wmq12W6blx2oZkf2xm64YWPEiCQgwFe/BH6fpsydV7dNWlxxgh+lSKwtwfklLD4ux45BSX/6yovMfbu3L4LTcGNS8OjwiZXx/Q=
+	t=1741111470; cv=pass; b=nlxKCpYOZZlecvieJdtETBN+f1J78PN/MPrKqN6857nzhU81i45mnA+Stq3jcwmHHrfEbUrr6HjbOuEAx9UEtiruEI4ERKMStNo0sDvahmZgyQqjEY7wUN/4vdNLanLFaKsv3pyjINndrqaS/dP5pVhbbZ7vRrqxVXDKHwHPfow=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107631; c=relaxed/simple;
-	bh=obB2ljcIPGtP0VJhm54WRUhHb1nNmOp3J/J2QdoPBuo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lPfxCxkvJm2cO0/vSeCKE/CW6j5ikBZCelM79xcNJmEzPENKznW4v+7oSdSQ6rrdAiuHNDhWDDNxVJw7gIfnAkPjRtT/xk4diiVeLpUNi2OwUJIizhyW55VSz1ZZ0PPnp7AlnthDOl/nfg8nt0Woap8ThugpVokNWUipzVIHj8I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5Fsc1d+; arc=none smtp.client-ip=10.30.226.201; arc=pass smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org
+	s=arc-20240116; t=1741111470; c=relaxed/simple;
+	bh=4ybMusj+3erW2An8KjCkmALT3RbeQvIrvwKF/FIQxHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LAfsNoQxsoF4lcgSMpXCmO2+Yu+LhH7bOmvoDx+pXImmQNXdJkea4vEcrAG5SH3Zs9dBDRIPe/+alHVI1qPsHUoo/HZLEJjgYXp7FKCkQQDGnNB7/Ge7cwhhQxZjlb0MVS1+4kwpFh674IiWU/Bd4xR7OCZstbGH60XmqkaZrpE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=none smtp.mailfrom=cc.itu.edu.tr; arc=none smtp.client-ip=185.203.201.7; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id EA68B40D9766
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 20:00:27 +0300 (+03)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 27E5740D977F
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 21:04:26 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=L5Fsc1d+
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fd34hcrzG0C0
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 18:25:11 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dLR2gsdzFw6c
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:27:27 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 2BFF742720; Tue,  4 Mar 2025 18:25:06 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5Fsc1d+
-X-Envelope-From: <linux-kernel+bounces-541159-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5Fsc1d+
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 6F764426D8
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:30:02 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 493A83064C1E
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:30:02 +0300 (+03)
+	id ABCB742749; Tue,  4 Mar 2025 17:27:19 +0300 (+03)
+X-Envelope-From: <linux-kernel+bounces-541364-bozkiru=itu.edu.tr@vger.kernel.org>
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 138A8433E8
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:26:13 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 9E7852DCE3
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:26:12 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD73A188A4B7
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:29:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42FE43A4C35
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F1A1EFFA0;
-	Mon,  3 Mar 2025 08:29:32 +0000 (UTC)
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2391F237D;
+	Mon,  3 Mar 2025 10:25:59 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E981DE3A4;
-	Mon,  3 Mar 2025 08:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137671EB187
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990570; cv=none; b=IsIL6Q+MdipDfdDUqUI3wHgWmtech38persq2c4IHa0qE7pK4PR50/3xphm0wdC1Q4GMRhEe7nA7LwQph4NLqm5I3LV/sWpV8oaNPEE8fYO5gN7lcrrRHosI9O7QSFTdpXlg+X+nNyDIfjsVXBJUfPo27aMa8bpPPSDtLvHX/Ms=
+	t=1740997558; cv=none; b=OEPEGoAoK8PUvbR/ayBv435SUcxYmyYJZ6FlUHf8ajEW0Y7W8+4YIAm6et+kp5OVi3OvsohT9zxPATU91to7fpLJX/4u/YUjaGwe+9hHumvzTqyZgN6rvfz8f+bK+7hIUrh0lRgVYrsl0mtqJbLvr1V/vLhtzKdtEahVfTAOK/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990570; c=relaxed/simple;
-	bh=obB2ljcIPGtP0VJhm54WRUhHb1nNmOp3J/J2QdoPBuo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jEe06paRKu/FfVdJsxB7pXJzdjfDKuHautoxv3Tptnto/jhFbevIu+UU0gHd+rnVCw506TnhWvICjO7/9YEtsFCF4jAdWUFLBfML/dw+qfTz81Dy6pcszprNrh8ugjKkirSQ78g9M6irHtnZMyxsn1Vx4y9mwAZlKSNc/oF3tFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5Fsc1d+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D6C8C4CED6;
-	Mon,  3 Mar 2025 08:29:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740990569;
-	bh=obB2ljcIPGtP0VJhm54WRUhHb1nNmOp3J/J2QdoPBuo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L5Fsc1d+BT3zlKoAvBi301/7lNQasBdGMjxy/bahG5gw9C2PhtdMds2Iks/K0vAYe
-	 Iv51saEZ1KNYkpulm9MfT97RNhx7uBEcsBq8cO6fnYfbb18iAtRpkxUUUILC23eiEF
-	 d9LScttTam79NgrVIW0q45mfu2FygdvM8Y3cw9bmAopH1YSHHeuzxsAT0rEpffJRU5
-	 xCmxo+7bkBn8/2sN4t0RZ/i+76ZscytuML7vdooupcPLSgOHIsthFQ5dMje/vZo+PS
-	 iK0PIUtlo1r0LV3k94CYaUrv9HLaJ3VA1EtNIUt1E18nlNPVmhAKZw0epCkQ3UvgF/
-	 Y3A0gihRihCyA==
-Message-ID: <929ed565-f842-49e6-9c7a-6d1df5266a62@kernel.org>
-Date: Mon, 3 Mar 2025 09:29:23 +0100
+	s=arc-20240116; t=1740997558; c=relaxed/simple;
+	bh=4ybMusj+3erW2An8KjCkmALT3RbeQvIrvwKF/FIQxHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WTD+jDyeQ41GcpXP6fizZLnMwADgP8eeBu/B449+pk22qOR5is0uTlvVh+moi0sGjmr7q4+vsJX67+YfSj8dJdRBDJPzBE8pwxLDlkaTgtfKDmkw1OcCBmX2EFeIfvGPUl75jqM87n3GTw+/UpsXSVT2TDKyEFuHNZscFl8/iuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp2zX-0005YR-DZ; Mon, 03 Mar 2025 11:25:43 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp2zW-003mIZ-0w;
+	Mon, 03 Mar 2025 11:25:42 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1tp2zW-00AhSx-0W;
+	Mon, 03 Mar 2025 11:25:42 +0100
+Date: Mon, 3 Mar 2025 11:25:42 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Junzhong Pan <panjunzhong@outlook.com>
+Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	festevam@gmail.com, gregkh@linuxfoundation.org,
+	kernel@pengutronix.de, krzk@kernel.org, lgirdwood@gmail.com,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	lkp@intel.com, matthias@kaehlcke.net, mka@chromium.org,
+	oe-kbuild-all@lists.linux.dev, robh@kernel.org
+Subject: Re: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev
+ port features
+Message-ID: <20250303102542.gbzhvnygj5ve5qrf@pengutronix.de>
+References: <20241028214956.gmefpvcvm3zrfout@pengutronix.de>
+ <ME0P300MB055370E97AB98D221B2E0782A60A2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <20250106065202.d2qdd7zmwk4h645h@pengutronix.de>
+ <ME0P300MB055308B1FC5F1544F906B72DA61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -99,92 +110,58 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: samsung,exynos-dwc3: add
- exynos7870 support
-To: Kaustabh Chakraborty <kauschluss@disroot.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250301-exynos7870-usb-v3-0-f01697165d19@disroot.org>
- <20250301-exynos7870-usb-v3-1-f01697165d19@disroot.org>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250301-exynos7870-usb-v3-1-f01697165d19@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ME0P300MB055308B1FC5F1544F906B72DA61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fd34hcrzG0C0
+X-ITU-Libra-ESVA-ID: 4Z6dLR2gsdzFw6c
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741712330.49075@BAOi2BqVRgoQNtV5zkd6BQ
+X-ITU-Libra-ESVA-Watermark: 1741716126.44686@kHo84LMFK3/S/DYYin0/7w
 X-ITU-MailScanner-SpamCheck: not spam
 
-On 28/02/2025 20:40, Kaustabh Chakraborty wrote:
-> Document compatible string for Exynos7870 DWC3-compatible USB 2.0
-> driver. The devicetree node requires three clocks, named "bus_early",
-> "ref", and "ctrl".
-> 
-> Unlike other variants, Exynos7870's USB controller requires a single
-> 3.0V regulator. Assert that the other 1.0V regulator requirement is
-> enforced on variants individually other than Exynos7870's.
-> 
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
->  .../bindings/usb/samsung,exynos-dwc3.yaml          | 28 +++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
-> 
+Hi,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+sorry for the late response...
 
-Best regards,
-Krzysztof
+On 25-01-10, Junzhong Pan wrote:
+> Hi Marco,
+> 
+> Thank you for your reply!
+> 
+> On 2025/1/6 14:52, Marco Felsch Wrote:
+> > On 24-12-31, Junzhong Pan wrote:
+> > > 
+> > > I recently encountered some kind of platforms using an existing onboard
+> > > hub yet their HW don't utilize the USBPE port power control feature
+> > > while the hub support it.
+> > > Instead, we have another GPIO for controlling the vbus of those ports
+> > > to cut the cost.
+> > 
+> > That's exactly our use-case too.
+> > 
+> > > Wonder any idea could use this driver considering the limitation of
+> > > the usb compatible set the properties of onboard_dev_pdata hard coded?
+> > 
+> > Sorry but I don't get this.
+> If the hub have 4 ports, but board only have one gpio to controll all those
+> vbus at once, implemented as some kind of gang mode.
+> 
+> In this case, the onboard_dev driver may not respond to the
+> USB_PORT_FEAT_POWER, but keep the supply always on except for the suspend
+> states.
+> 
+> Do you have any idea how we handle this?
+
+I can think of one crude workaround. Adding 4-regulators which use the
+same shared gpio. This requires the gpio to be requested as shared if
+that is possible.
+
+Regards,
+  Marco
 
 
