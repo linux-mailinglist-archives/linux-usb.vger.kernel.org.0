@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-21270-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21271-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21961A4C079
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 13:39:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 348F7A4C0FF
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 13:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38B53188B75E
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 12:39:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B45D83A1E3F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Mar 2025 12:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A92A20370A;
-	Mon,  3 Mar 2025 12:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB93420CCD9;
+	Mon,  3 Mar 2025 12:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="LQEWFeZo"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="AQqxjEP8"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B64200BB7
-	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 12:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DA11F19A
+	for <linux-usb@vger.kernel.org>; Mon,  3 Mar 2025 12:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741005568; cv=none; b=nNFbtSU6ptTZqJcTxsW7CIuUSMFdsB0Ghbm3VZOsdrME7Y+pUN/JeESvX28gbGdenh6nsIEv/uE2y2ExuIKyRYYmxydYTroXux2dj0qscC75THBqjc39xdkbqS/4P9r3NdF0mbpqiS/mrfZV8uJ3Y++EbfNApXQSRNy47D3hr9U=
+	t=1741006314; cv=none; b=Tb3921yJW+u/Ta1zygIFH+uX0xUXlkTVE7TcjYbH0+xnmI9ECrUmuQx1E/y3Cq7G7tECLOJ+d4KIRNi1U+JA3uVIWciIS0OaiRFEjQKYFqP9twcqyI9LFGZl3fX8YVJACXO+sk3UA1QN4B8up62OKINEXA8iYCCw0zytu6fC3hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741005568; c=relaxed/simple;
-	bh=nIEaVIY+mrGjIAE5IPQHmPXZwlEwAfaec6yFMQlTNyM=;
+	s=arc-20240116; t=1741006314; c=relaxed/simple;
+	bh=BFD2M/szFlNvjEW75LhAtqzivuok/9xM9idwONnGPww=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QQGPneE4gbLEMHYE11ZV0eK0dKCkE0xBzpSTuaTpP5InRFN7YTbJS8U7nFVCoNtWPbdcQcTwkOAui1RTNi2Lv6YeNtUBV0ktjD8ijitP6NEe6waLKP+v+G5azfyJRstDMuqR3pXQmXCSCdcXFYIPB348sLCFmUv+vbBGPgSgi60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=LQEWFeZo; arc=none smtp.client-ip=166.84.1.89
+	 In-Reply-To:Content-Type; b=Exep5U3RfBgeHkinjJy/sDbHLv9o5TkaqOdxposo4UFI6wvy/1Z1cc62bCoK23Jqhh3t/LTELxUSjiLwmnVh2jdHosda/xGhOvgbQuALUJyOpDa2ke4fl/d86G6aojv3ExNPGZyjPcF4gBvFGMFOz5NKeMBOQk8EWmrZScALVVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=AQqxjEP8; arc=none smtp.client-ip=166.84.1.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
 Received: from [192.168.126.189] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z5z0D5Qr9z4vpM;
-	Mon,  3 Mar 2025 07:39:24 -0500 (EST)
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z5zGb2H1rzyvq;
+	Mon,  3 Mar 2025 07:51:51 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1741005565; bh=nIEaVIY+mrGjIAE5IPQHmPXZwlEwAfaec6yFMQlTNyM=;
+	t=1741006311; bh=BFD2M/szFlNvjEW75LhAtqzivuok/9xM9idwONnGPww=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=LQEWFeZoakvTqu9FfBPrV+1SGum7Zn2gF3lD9sDCImQrzWgto/zYt07DUVQ1Tkmt7
-	 Ea6p/wkaAcDGjsO26HeYX8pkEl7HJbSPIYNF5VfCBi5V4l4zijhX+YiBxoeAisl2G5
-	 g/avmP7tgdTQhcoCpyNH72o9VX58QSG0aWtddZGU=
-Message-ID: <6193f04f-d878-49db-9038-005d4f7bb04d@panix.com>
-Date: Mon, 3 Mar 2025 04:39:23 -0800
+	b=AQqxjEP8FIl9ivjWMnwXM0F6t5n5072gmhDWd6+z1J5K61rKbd2PKb8sxSjO0bQrU
+	 Bz9ggtChj1+AkNLoWEsiymq8yT2XqZnKB2035Hh2RyLeFE28RzCArghETipU7eSmYN
+	 xoaLAaAdRA6GjydwRNU90dIzo/KpDVPPGqSSKbeA=
+Message-ID: <25859cf7-9b5c-47e0-885f-3b7523a642f4@panix.com>
+Date: Mon, 3 Mar 2025 04:51:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,27 +63,29 @@ References: <8e175721-806f-45d6-892a-bd3356af80c9@panix.com>
  <d56fcd99-433e-4670-8388-7035812a78d9@panix.com>
  <e557db09-2fe8-4a85-8d0a-4493aaa4f198@panix.com>
  <20250303115557.GU3713119@black.fi.intel.com>
+ <6193f04f-d878-49db-9038-005d4f7bb04d@panix.com>
 Content-Language: en-US
 From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20250303115557.GU3713119@black.fi.intel.com>
+In-Reply-To: <6193f04f-d878-49db-9038-005d4f7bb04d@panix.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 3/3/25 03:55, Mika Westerberg wrote:
+... and FWIW I've been tempting fate while writing these emails this 
+morning too, as I've found nothing breaks a thing faster than declaring 
+it fixed.
 
->> I should clarify this to read "... as resume doesn't usually complete with
->> d6d... if an external USB-C DP tunneled monitor is connected."
-> 
-> Okay and this "external USB-C DP tunneled" monitor you have it connected to
-> the TBT dock during the suspend? So you don't unplug plug or anything like
-> that, just suspend the system and then resume?
+With both reverts on Linus master (14-rc5) I've since moved from the 
+CalDigit setup (with attached NVMe) to resuming from hibernate into 
+nothing connected to the laptop at all, to finally suspending then 
+moving to the downstairs setup, which is a standard LED monitor 
+connected via a DP cable to a Belkin TB dock; been 3 for 3 with no failures.
 
-While figuring it out, the issue only manifested itself if a USB-C DP 
-monitor was connected on resume; it didn't matter if it were connected 
-on suspend or not (nor which monitor).
+LMK if there's anything I can do to help diagnose d6d4... ; having seen 
+the commit message it looks like quite a useful commit (and maybe 
+solvable with a race-condition fix?).
 
--Kenny
+-K
 
 -- 
 Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
