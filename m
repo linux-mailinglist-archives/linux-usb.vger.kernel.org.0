@@ -1,53 +1,57 @@
-Return-Path: <linux-usb+bounces-21308-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21309-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EB71A4D2FA
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 06:26:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1785A4D306
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 06:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FD887A4B78
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 05:25:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 587423ABD1A
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 05:32:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9AD91F461A;
-	Tue,  4 Mar 2025 05:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799E71EB5D4;
+	Tue,  4 Mar 2025 05:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xpmFtpN9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lXMmK82y"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484D9186E26;
-	Tue,  4 Mar 2025 05:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19562905;
+	Tue,  4 Mar 2025 05:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741065982; cv=none; b=fSBFZdkCGJ/tgkFeJry524hGiTTepShhmx8qZjjCrZNDkhOWdccn1aMFmlxV0pjwsKGU5ToyMCS1c1GZziFtmNLvn/9O6PzID8jItY0LhzqiTVrNQwjY5c0zxoRFEVwjnNPBUnYudtMI54GPxe2pUjQf+YKyYCGb9qUSFwY2ZOA=
+	t=1741066370; cv=none; b=Nis//QNEfC9AL3YXjry1bTgqTptFNSZmn2oPZfLKzEjJ2qdZnvgS68/LWlUahRvvFtAech5PiJFGMjLU2AZ6lOZiwWnjJTOR2h7Et90Y3GAu3urmpbRNu3KKHY07fJfbURGnKZAcEGBd4aglVNhhXJFyEONjGjrDSATiuvFunwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741065982; c=relaxed/simple;
-	bh=fomfybpAZCIekiHAArI106hF+X2YJ2tj5d6mshgMMIg=;
+	s=arc-20240116; t=1741066370; c=relaxed/simple;
+	bh=Czmo0lHkTJP/JPuzLGITKE4t4wNcW1o67IGDWuYFQZU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q4OUBTvGWWkLCY+p0xa0Xua0XgY4175QDI6cgxVB1grDDuiX3u8RibbSuA2qcUkc6JgC4jpOGTE5lmztglrCY/0tjY+DWI0PlUdoih7Aabg0NjlwxptgYzMtgztYlTj8Er94P8n0v66p679tB1mb3SJV2/xZXecA4i233dBR0xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xpmFtpN9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643C3C4CEE5;
-	Tue,  4 Mar 2025 05:26:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=eHCXQkqvJtFZO4w0YYiSxn3S69OlkgvE2H8pmyB4vfHXUnhiqlLlHDT7BOY/Rt7jrRrEUg0AzIIfUGdAtpkExbFpEXLLZBUx+HyEn6PD6ztPzjX4Ms99iFnfntjjcPBEV47f/gN+HBmYo1Ih4Mk8g1PrLHqMZNnGeESl04xzwVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lXMmK82y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06ACC4CEE5;
+	Tue,  4 Mar 2025 05:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741065981;
-	bh=fomfybpAZCIekiHAArI106hF+X2YJ2tj5d6mshgMMIg=;
+	s=korg; t=1741066369;
+	bh=Czmo0lHkTJP/JPuzLGITKE4t4wNcW1o67IGDWuYFQZU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=xpmFtpN9X4J7DSInOx04KB0UphkG56mnGEPcKc2Gjf+YTPL7wDDxarWCvb/lVe9Xa
-	 H0evui4uquATSzddRls9A0o8E2L/7wnHXHqZQMEQMbLJzGurYaxrJQvRNlk/lNu24w
-	 OQk1axn63MP45/SGEb05WgqRjPVoVGmQpwNViPRI=
-Date: Tue, 4 Mar 2025 06:26:18 +0100
+	b=lXMmK82yVJfPQEa8vEo2Da5H5EFSJ7OjxC/3T0hsYo8bax+2SSt9hcLEcFk5PqhmE
+	 ZWdTVYQ2Bifs+DAHfIUJU810NqeuNQW5Pa2LZCQOKybt/OfTnpi20ZmEQCEX8tLqpA
+	 0N41Z0u6zD5E9zmNoMDTIVuq5+M0LgydL8YNdgNY=
+Date: Tue, 4 Mar 2025 06:32:46 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: John Youn <John.Youn@synopsys.com>,
+To: "Ng, Boon Khai" <boon.khai.ng@intel.com>
+Cc: Johan Hovold <johan@kernel.org>,
 	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: Set SUSPENDENABLE soon after phy init
-Message-ID: <2025030405-worst-strenuous-ca31@gregkh>
-References: <633aef0afee7d56d2316f7cc3e1b2a6d518a8cc9.1738280911.git.Thinh.Nguyen@synopsys.com>
- <20250303224706.wzvsf4nw2swzelaw@synopsys.com>
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Ang, Tien Sung" <tien.sung.ang@intel.com>,
+	Tien Sung Ang <tien.sung.ang@altera.com>,
+	Boon Khai Ng <boon.khai.ng@altera.com>
+Subject: Re: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB
+ Blaster 3
+Message-ID: <2025030429-saddlebag-acrobat-21d8@gregkh>
+References: <20250203084822.18356-1-boon.khai.ng@intel.com>
+ <DM8PR11MB5751CB62C7A68840F9AC7F9DC1C82@DM8PR11MB5751.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,39 +60,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303224706.wzvsf4nw2swzelaw@synopsys.com>
+In-Reply-To: <DM8PR11MB5751CB62C7A68840F9AC7F9DC1C82@DM8PR11MB5751.namprd11.prod.outlook.com>
 
-On Mon, Mar 03, 2025 at 10:47:19PM +0000, Thinh Nguyen wrote:
-> Hi Greg,
+On Tue, Mar 04, 2025 at 05:25:38AM +0000, Ng, Boon Khai wrote:
+> Hi Greg, Johan,
 > 
-> On Thu, Jan 30, 2025, Thinh Nguyen wrote:
-> > After phy initialization, some phy operations can only be executed while
-> > in lower P states. Ensure GUSB3PIPECTL.SUSPENDENABLE and
-> > GUSB2PHYCFG.SUSPHY are set soon after initialization to avoid blocking
-> > phy ops.
-> > 
-> > Previously the SUSPENDENABLE bits are only set after the controller
-> > initialization, which may not happen right away if there's no gadget
-> > driver or xhci driver bound. Revise this to clear SUSPENDENABLE bits
-> > only when there's mode switching (change in GCTL.PRTCAPDIR).
-> > 
-> > Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > ---
-> >  drivers/usb/dwc3/core.c | 69 +++++++++++++++++++++++++----------------
-> >  drivers/usb/dwc3/core.h |  2 +-
-> >  drivers/usb/dwc3/drd.c  |  4 +--
-> >  3 files changed, 45 insertions(+), 30 deletions(-)
-> > 
+> I hope you are doing well.
 > 
+> I'm writing to follow up on this patch I submitted for the USB FDTI driver to update the VID and PID about a month ago. 
 > 
-> Just checking, I hope this patch isn't lost in your inbox. If not, then
-> you can ignore this message.
+> I wanted to kindly check in and inquire if there are any updates regarding the review or integration of the patch.
+> If there are any issues or additional information required from my side, please let me know how I can assist in moving it forward.
+> 
+> I completely understand that you have a lot on your plates, but I would appreciate any guidance on the next steps to get the patch reviewed and potentially merged.
+> 
+> Thank you for your time and attention to this, and I look forward to your feedback.
 
-Odd, yes, this did get lost, sorry.
 
-I'll go queue this up right now...
+Should be in Johan's queue somewhere, if not, please just resend it.
+
+thanks,
 
 greg k-h
 
