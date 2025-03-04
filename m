@@ -1,111 +1,95 @@
-Return-Path: <linux-usb+bounces-21332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2120BA4DE5B
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 13:52:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABD6FA4DE5C
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 13:52:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7FF73A1AD1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 12:52:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C29B7A2959
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 12:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88510202976;
-	Tue,  4 Mar 2025 12:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664D0202996;
+	Tue,  4 Mar 2025 12:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="WkYmpMPD"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="IJb1/Fa0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B869F1FC7FD;
-	Tue,  4 Mar 2025 12:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CD378F33
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 12:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741092731; cv=none; b=pk0mZXd0ajm21Exvc8KPUZlD1KNNoKZ4NYKpA63f969BXoR3kp7M7F9OZo5URCHfnw8k6WQ09HjXVrSvkz4JhNLaqb6Hg59vyPDtqcJArR6xuCQ3bpwYl+E1aGieYmQpR0SAaawErDkjAFEcKEK/u43N2UDmhP9ZMxS0+X6RruQ=
+	t=1741092749; cv=none; b=uKju39XMMTZUT4z6RZOq7CjVVFhJVWy+arHZ/mduDOUInbM2+YUMugxq4zNTKF0TL2Wc7I+Fhyy+9iJzqv7dd0fpujWzRREDQer+uXl1q2Qoua8Ovgeshm/1VouCS5PuktRsQO/uwVQPkkn3XWVr7ThzF70ceq1RhC0u7PKdo5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741092731; c=relaxed/simple;
-	bh=jNXj/hM908lbIGT/rEay9SEHPUga9srW3xe5hIv0S4I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D2y2qWNgLlvigKBdUDUBcbJbLxTjAc1ewoLUWbQJ50bhh89zIfqngQmH+nxhlvBM8vOXukK2DfDkq3JIxrVMAwkX4t0cmRWgVh2YgtIPecr8258Rz5PjRqlh5FjxCKzkwQLPhr2bi5ZyHZnrhJtN2kF8IkIVB/g14CSYdm4tfQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=WkYmpMPD; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1741092686;
-	bh=uqbrItG4RF2iGWowQ1HAIeAWIrLWX/XtAcPaXldbM9U=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=WkYmpMPDliAQbHjKRg0TBEH9LUROFq9jOJXC3K+edpNJckfhotE7Dzpzk6dQWfE8A
-	 prijyE8NeIDj2xnEfpzvFcoygxjespqaU8Ash7Fmo10yvAI6oD2c5ILajs19kMCMwC
-	 Jm+qdnJXI3twqbhHKsp2G3xZuZTQzFoFLeKaX74w=
-X-QQ-mid: bizesmtpip2t1741092678tcj7lod
-X-QQ-Originating-IP: N/MK0n+jARevcIz76CPcyl4YeOuRDsR2KzdfonEkqv8=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 04 Mar 2025 20:51:16 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9723207296368819461
-From: raoxu <raoxu@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	wangyuli@uniontech.com,
-	zhanjun@uniontech.com,
-	raoxu@uniontech.com
-Subject: Re:[PATCH V2] usb: xhci: Add debugfs support for xHCI port bandwidth
-Date: Tue,  4 Mar 2025 20:51:15 +0800
-Message-Id: <20250304125115.29332-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1741092749; c=relaxed/simple;
+	bh=wKQ05ObrWkXsatBufh17Vu9B98vi+WI8OCfLEQ5bDRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZz6Tkr6j8W44pwITQ6fbGSRImzfYjLLxUnjfxQmrrMWYcSSLRUoXQUcEcz8nJiI/IopwqFYtg26B63r/6g6+wXP7TYa8FduL7BpWCy7+laRlf4jQEUZIlO2zQshAdyDPH6oFxQESs6VPtbwXTtUiDwEjLOTWGKodAB/ERmPImk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=IJb1/Fa0; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z6bDh0q6xz40GJ;
+	Tue,  4 Mar 2025 07:52:20 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1741092740; bh=wKQ05ObrWkXsatBufh17Vu9B98vi+WI8OCfLEQ5bDRo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=IJb1/Fa0wXvS2UM1ZRQwdwzNTNDulvudv9SwDrIBkdo4PlCDaYhNLz1STD8sxWKG9
+	 PNpH22oCECkcXJJv1nf2bejFRKOoz9midQuXPxCCAXxaILklBgZ3Gv6DZEGlAXxYpj
+	 xWMRNn5sDP6mzeoaV0RDuSEWSK8URYb8HSR0KcI8=
+Message-ID: <14351945-fcde-4088-b7b3-542c6e4b7d0e@panix.com>
+Date: Tue, 4 Mar 2025 04:52:19 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: OdexiAf7tcY2bVPH384jGr4mGD+SH+WbD52RF935rULBRBGFY/bvH+yw
-	6f4Qh57ZwG6nlQrFqSYJrQukcc8pleZbeSqU5DrTSZ1iw0qro+VmX1Vwqoz9YzVj05UMn+N
-	xgnBfdFzxmd6HUIW4VwcZlgw0yZpIB0c9NesUleLSI+OKgPaP1fJ8VKNw1nRH6u2Tk8ZJnT
-	oInPrfHM3eM2pjhafrSQLLR7CFBhiCQ9e3nLJ+mf93SiI4y+UTEBr8ud6bxLmoXnplMeo46
-	1sNxLfOIf7lEP7yr3Wvy7pX/xP4YdEEhL7YZhP3iWo/ptLRP/Q1OAkJnk9tJShEuMGhN/rH
-	bWsHNTAg6hprT164nLPPAHM/rRuPJdlzk0h7EvQQcT+Rlnu6znAFmoHgcA2MX+67Umgyksu
-	HG72c5vZKCjXSbO945KndyhpHGEigpjegra9AehTg2ex05UIUwCNZnSY9/UKyWWqCHQ3cuv
-	ho6gOIMt66JP6I6fAQdGtakeK7lLFYtTochA68JuwlVmytaT1D/5VgIbA4yKWlH9K9ouTFz
-	MVFgbTBMNGSK9AF7bsEIU4Jm7AX8jOq4cb/ckUEhp+/PuegfOTbUIRgzseABlsYDl3CrJK8
-	k1ED5DBKrH7YxfGrmC0smya/mlm5jZiJZ6I5zirEphd/SH28YtZSJsz8ptGUHZjUv5/3lVq
-	ij2G+wXqalNoe1OuyCXj20tZ8hP6GJ3A7YvYeH9mabIS38vKp7Jir4aKFe7qJLLpkmGIQaq
-	kKf744STZ6WKjMCkagfozpS68RT5r+g7GkWbCJnJpWmiyGXBlOLRtQ61QshNvYl1hlnh8WH
-	p+pB6QG6cTSUOqjbdS1Y0z3XCnrcrUzm5J/hUXhMs0cR6ghqBgR0ABpxn+u+7avtrLuDLdm
-	nlLli4gdLaM0lpbVmbmeaKn1YB6r9jCWVk5kZv4h3j/CDd5Y70KQksGjMLvtR/lp7sTZVyU
-	g3wK252k9cT7iqFsY01EKc6OcE9HLy5wsh0ji2IaMZsnXfq4RjHGcpVjCB2OfV2HqemMT8y
-	5spOEQsvnxvkqYKr2B12NEPYfq0NVvuPDauck+7kzKk2XaRPNpDjb2gTX+kGbI0GJMnHM2z
-	TQdEDp8vKY0kCW36RMF2VTTaHPC4BOTfA==
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
+ activation asynchronously") too, to stop my resume crashes
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: linux-usb@vger.kernel.org
+References: <20250303132327.GW3713119@black.fi.intel.com>
+ <20250303134618.GX3713119@black.fi.intel.com>
+ <24ef839c-8fa5-4a19-b9c6-0a267aab84f5@panix.com>
+ <20250303140156.GY3713119@black.fi.intel.com>
+ <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
+ <20250303142058.GA3713119@black.fi.intel.com>
+ <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
+ <20250303175818.GB3713119@black.fi.intel.com>
+ <007b005f-a6d1-44a2-9795-036c8f397274@panix.com>
+ <48ef4c14-55d5-4baa-b862-f9e7368ed950@panix.com>
+ <20250304082731.GF3713119@black.fi.intel.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250304082731.GF3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2025/3/4 20:31, Mathias Nyman  wrote:
 
->I do however have some larger rework suggestions to this.
->
->Instead of queuing three commands on one file read, parsing and
->copy the content from each context dma into an array on stack, we could
->have separate files in debugfs for each speed, and queue one command
->for each. we could also skip the array on stack and print values from context
->directly.
->
->Something is also very off with the locks in this patch.
->Looks like every lock/unlock got replaced with an unlock
+On 3/4/25 00:27, Mika Westerberg wrote:
 
-thanks Mathias Nyman,
+> If possible add "thunderbolt.dyndbg=+p" now to your kernel command line so
+> if this happens again, we hopefully have full dmesg to investigate.
 
-Thank you for your valuable suggestions.I will separate files in debugfs for each speed.
-skipping the array on stack and print values from context directly sounds good. looks is a error and i will fix it.
-According to your suggestion i will send patch v3
+I've not seen any further instances of weird behavior, but I've added 
+that to the command line going further.
 
-thanks,
+But I have been doing a fair amount of testing of the kernel with your 
+patch and Lucas' NVMe adaptor (etc.) patch and am concerned that you're 
+still seeing his issue, as it (at least as of now) hasn't occurred here 
+since applying it.
 
-raoxu
+In any case, on the next reboot it'll be applied.
+
+-Kenny
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
