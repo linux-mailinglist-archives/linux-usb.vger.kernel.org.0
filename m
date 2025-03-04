@@ -1,316 +1,232 @@
-Return-Path: <linux-usb+bounces-21326-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21327-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73023A4D8F3
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 10:43:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89BC6A4D93F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 10:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A33A7A2858
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 09:41:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46C571636C5
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 09:51:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 411EA1FF1B8;
-	Tue,  4 Mar 2025 09:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377E71FDA7B;
+	Tue,  4 Mar 2025 09:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="di+IuFYJ"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="MnDyjMKs";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Q+fCkgkM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC38E1FBC86;
-	Tue,  4 Mar 2025 09:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C33B1FDA85;
+	Tue,  4 Mar 2025 09:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741081307; cv=none; b=YbLVkrqbpWtMke3i7CmhYImCWYfLy3OU0BDVr/dXN518H2ox8qM6uJKia39csZM8wb47iGunmrU/LEaLcYgWtPgQkhyDFGcioe2+bN3OCkSvfLf8NORljaLTbaZ+ssPnRPCwrkwuNGqU4zlQXv8bWR7kXM3mHlzXe049Mp9CYBI=
+	t=1741081889; cv=none; b=fuy2nNOL/RODgNoEX6Bs9XCdA7kJRDtBm5Gxrj0T6lxT9NSXpG5GZyEdjpqzByYmhfmvhoRQbnrTEx2/jPfsaF40kAkmKPN+gNv86wbCGvFHd5UawSajpeLh6gxLQA1Ltct4hLcqqRkuNigNirEBdcMnfgcUfX6++xGMhbJtQoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741081307; c=relaxed/simple;
-	bh=xqsWT290M08CL9TfqmTijnS7u9W7Ls3lecKi2A/4lc0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bguHbPJQpu0AvvwnwHx/Wp4YgtWuA6Vn4MnJJSVqNItVVJvMpia3TseIWb08Lh7eVqIp8IW1plw9p5pjOz0OrmtK1p/6RVMZ7WOkD+IzAM/nfMRPEU7GBIgglxTLrt/vPZOiu2giUD1cnTAUBEPI2FPw8Y+dHgTSIxGOUx6CqAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=di+IuFYJ; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3cfc8772469so21017825ab.3;
-        Tue, 04 Mar 2025 01:41:45 -0800 (PST)
+	s=arc-20240116; t=1741081889; c=relaxed/simple;
+	bh=2x9I3P3U+OVZLNZ1nZmMds2DdCgCnQFPMLPvfWGgvAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MXcGuAySFT0EFgQtFHzzqSHdWrZCMESNPXiy+OqTMsAI7JAngLfhFCkf3tnQUaYgWqrfYHB6i85vI0/j/61GD1ndOhnDtTQzTNiwg2uMooVDGIEabQKYCnv1prUs8X3XRRNT/ildpScyKQmMcgrwST3Rq9cxoOHpczpmpSOqetE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=MnDyjMKs; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Q+fCkgkM reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741081305; x=1741686105; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KqJ6is3klbnHIEdUEP9fSmANqPzhnkKCP/eVyghMXgI=;
-        b=di+IuFYJLFL1t8zxn71NpZO+IyFSdI1p/WyVWCn2DlqatquNHMPpoxdLVhQmQ0DAKE
-         lD5lJW6bjfJ/YNbIRUHuJDKLyaU595yOb2zUxy+BEC6jqYOCm1rGtMIjqZtFifqVE+OF
-         YlmeramS862E/IibfyizNRyUFmHgj7Ed+SdKulZ27gmDyUhXXHP8XDIgC9P7fVn5R9kC
-         X+y8U1lQHIqP9T95cFCAhrhpgb6jViJ3p/YzxyxO6yNYB8ic+EL6dvjLBScHgCC7AgNn
-         3qD2ohWphVZFQILUbKq8yXh8zJzqP96qWJv+JcILUqcmhDYpht5fJ4ifaw3QVuVCuQlT
-         RT9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741081305; x=1741686105;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KqJ6is3klbnHIEdUEP9fSmANqPzhnkKCP/eVyghMXgI=;
-        b=D1s1Lyqg8BBiE9+H0UvYzLvoxFVbJn/6ORhWM+x/CRmBw41BCMrHgPuXIigq17e95e
-         rGsQ8ADIkEM/3RQe8wFHPzSGKORIejV78xDguJBdR+tTgKx0lmkk6e9jdTlAUnkcR0U3
-         PvxQpx6nGWILNkzQoM2BABsI0nXiYKvwwFuVEGLj0eDuwAtP5ag+0i/VgrCVGGTaCVzI
-         RGGWdr9F11WE7B5KAhOcLAK+S6izRRwFgq1eAyFX2ltbhd2l2kBHA9mWG4/+2YMRMwTp
-         f3RXwHVCPiEsATcDacY/15qxskvmdy1E+wh10cDdCFrW5QXUdDX9ZJ/q0Q5uFhxyjq6e
-         w9wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVBDyhA+/FCjzPnWQ0kKnVcGP5GU83Ds5PTNG9F2iGzfk1Ktg99UCSnh3lHdyARVSn+hccUCNREpE=@vger.kernel.org, AJvYcCWSN56m6H5iBqqWbaX4G+rz6KN40HEDn43RbimfN9ogQyKVl2iVFAd/Gi3lPxUqAnmSrcRhYXG1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLsqpD5L0IhCGDZFUYJBqlhvA5Jb44dgBevF5Ux64K8YK+E1MK
-	rYuXfgyl3MK/EiAICayZkO08Qx3f1Zg5pQIkDmEc1mKFqChhCODppEVAcrmpDY2z19o9T+G54KQ
-	dOQHihRdjXrVxzO8JpmR89XBzWbk=
-X-Gm-Gg: ASbGncsNqwu53pYV8PQ6TqaUZjqQog0bEIxAlkbslMAhEte4hMxfTmxYcYdDghrOlFY
-	q+qyaObdCqlnN+T4jcp1At+vNPztEstnM1OQ38WxdqgSgJenZp4t8FJ/TtURrcH//aXkkre7TDb
-	gFYE0HkTcAqoZPEn+Mjxg+MHA=
-X-Google-Smtp-Source: AGHT+IE3vdkxSYK6KG6AlDmGhqqyxgbOen/huKO+dya/8FMZzvG7nz/UTG3zZUqejoq0sXfKfmKnYrPYB+urr7dSZ9I=
-X-Received: by 2002:a05:6e02:180d:b0:3d3:dcc4:a58e with SMTP id
- e9e14a558f8ab-3d3e6e42ed7mr174490545ab.8.1741081304527; Tue, 04 Mar 2025
- 01:41:44 -0800 (PST)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1741081886; x=1772617886;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0U0lGs7WpN5bzMDdr2hYg/hjI2BrsoigYq6t/slDM0Q=;
+  b=MnDyjMKsOfinh3aeHfAIfPZebj1oI72yFJcFx28yw4VGePBQot1TXEWZ
+   N7YFUvVbzG7AUBZ3Cp1ObY8W23wS0TxRuKHIKHBeiOhDXNc2IRjWPYDjb
+   lxmgNEulX/u4J7aH5jwrAI9gGrBe3jSGiF0wwjTDhHEL1dYKUfBDSxEM5
+   nW5EyqUnpGjNFe9MuA4GfI2Vl+yuKXwNKxDN+xIu2QX8SXmsHXT+EDMWL
+   +LEStqPGYVhk7n2mzPiwc5EYcqxer5sx62/L+T4vhtaIWCt16Yr8bc58E
+   Ion6MAGjusFOhquyjoBEHcWUyehsjhHqGTbYFrj+q/9Yf9aXbVS7Tk/DC
+   g==;
+X-CSE-ConnectionGUID: d5qkUfK5RBGvEqNHcKyEAA==
+X-CSE-MsgGUID: AF5Dx6k/RMWASpBQy7rdTQ==
+X-IronPort-AV: E=Sophos;i="6.13,331,1732575600"; 
+   d="scan'208";a="42262083"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 04 Mar 2025 10:50:14 +0100
+X-CheckPoint: {67C6CCD6-F-A886F308-CE21D9DB}
+X-MAIL-CPID: C699F4D445EE5CF8D3B21DD2C9AF3AC4_2
+X-Control-Analysis: str=0001.0A002107.67C6CCD4.0073,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BC001160A39;
+	Tue,  4 Mar 2025 10:50:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1741081809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0U0lGs7WpN5bzMDdr2hYg/hjI2BrsoigYq6t/slDM0Q=;
+	b=Q+fCkgkMLEQHAJ91rbKy8LU76nniTY/qmYumb8uW684qiHINn/TA4ToRjcxZPusuhjcf5S
+	XP3212bqkOthfGgb22J+atsOb+wOlsuaswwcorf8+xkx+t/Gmy6vGHt4kEdhLteIY8jDjp
+	kDN82+/WHj+Fauury7EFhKSZxlrkz//cdOB53RC5JszoVfV+1mTHHWsferkPS6lDQ63OTV
+	pjQOT0TKglmCx3Y1k4TQKnHhBlBJgZs1q1TqgirMadH3fqZwUUcN/t11pvnWo65FgBViPb
+	/MQxi7C0wb8ZFYfHNUZvpMYkb2CL4cA/6QUAQadIyDDrhFLualdDhWcWy5KTSA==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, peter.chen@kernel.org,
+ Xu Yang <xu.yang_2@nxp.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v4 3/6] usb: chipidea: imx: add wakeup interrupt handling
+Date: Tue, 04 Mar 2025 10:50:06 +0100
+Message-ID: <3342061.aeNJFYEL58@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20250303033344.1251076-4-xu.yang_2@nxp.com>
+References:
+ <20250303033344.1251076-1-xu.yang_2@nxp.com>
+ <20250303033344.1251076-4-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250227110655.3647028-1-fabio.porcedda@gmail.com>
- <20250227110655.3647028-2-fabio.porcedda@gmail.com> <CAGRyCJFA4zjYt-h7nDkL9VAfe3=TN9MytrmwU4bpLUTHWjnTmw@mail.gmail.com>
-In-Reply-To: <CAGRyCJFA4zjYt-h7nDkL9VAfe3=TN9MytrmwU4bpLUTHWjnTmw@mail.gmail.com>
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 4 Mar 2025 10:41:08 +0100
-X-Gm-Features: AQ5f1JoPigUuY2YaIfAghDvy-dVFZz80kG8UizUYWIDTSqYBcEdBhtdgfh-Ot2c
-Message-ID: <CAHkwnC8p+3ZYPzPwarW4yzqczKOOZN0URKz_qwL=0fr1tyxgxg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] USB: serial: option: add Telit Cinterion FE990B compositions
-To: Daniele Palmas <dnlplm@gmail.com>
-Cc: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Last-TLS-Session-Version: TLSv1.3
 
-Il giorno mar 4 mar 2025 alle ore 09:56 Daniele Palmas
-<dnlplm@gmail.com> ha scritto:
->
-> Hello Fabio,
->
-> Il giorno gio 27 feb 2025 alle ore 12:08 Fabio Porcedda
-> <fabio.porcedda@gmail.com> ha scritto:
-> >
-> > Add the following Telit Cinterion FE990B40 compositions:
-> >
-> > 0x10b0: rmnet + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (AT) +
-> >         tty (diag) + DPL + QDSS (Qualcomm Debug SubSystem) + adb
-> > T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=480  MxCh= 0
-> > D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > P:  Vendor=1bc7 ProdID=10b0 Rev=05.15
-> > S:  Manufacturer=Telit Cinterion
-> > S:  Product=FE990
-> > S:  SerialNumber=28c2595e
-> > C:  #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> > I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> > E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-> > E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-> > E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> > E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> >
-> > 0x10b1: MBIM + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (AT) +
-> >         tty (diag) + DPL + QDSS (Qualcomm Debug SubSystem) + adb
-> > T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
-> > D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > P:  Vendor=1bc7 ProdID=10b1 Rev=05.15
-> > S:  Manufacturer=Telit Cinterion
-> > S:  Product=FE990
-> > S:  SerialNumber=28c2595e
-> > C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> > E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> > I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> > E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-> > E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 8 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-> > E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> > E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> >
-> > 0x10b2: RNDIS + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (AT) +
-> >         tty (diag) + DPL + QDSS (Qualcomm Debug SubSystem) + adb
-> > T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  9 Spd=480  MxCh= 0
-> > D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > P:  Vendor=1bc7 ProdID=10b2 Rev=05.15
-> > S:  Manufacturer=Telit Cinterion
-> > S:  Product=FE990
-> > S:  SerialNumber=28c2595e
-> > C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-> > E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> > I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> > E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-> > E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 8 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-> > E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> > E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> >
-> > 0x10d3: ECM + tty (AT/NMEA) + tty (AT) + tty (AT) + tty (AT) +
-> >         tty (diag) + DPL + QDSS (Qualcomm Debug SubSystem) + adb
->
-> Shouldn't this be 0x10b3 ?
+Am Montag, 3. M=E4rz 2025, 04:33:41 CET schrieb Xu Yang:
+> In previous imx platform, normal USB controller interrupt and wakeup
+> interrupt are bound to one irq line. However, it changes on latest
+> i.MX95 platform since it has a dedicated irq line for wakeup interrupt.
+> This will add wakeup interrupt handling for i.MX95 to support various
+> wakeup events.
+>=20
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+> Changes in v4:
+>  - warning if no irq provided for imx95
+> Changes in v3:
+>  - include <linux/irq.h> to fix possible build issue
+> Changes in v2:
+>  - rename irq to wakeup_irq
+>  - disable irq by default
+>  - enable irq when suspend, disable irq when resume
+> ---
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 35 ++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>=20
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci=
+_hdrc_imx.c
+> index 1a7fc638213e..2baae9e6e673 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -6,6 +6,7 @@
+>   */
+> =20
+>  #include <linux/module.h>
+> +#include <linux/irq.h>
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> @@ -98,6 +99,7 @@ struct ci_hdrc_imx_data {
+>  	struct clk *clk;
+>  	struct clk *clk_wakeup;
+>  	struct imx_usbmisc_data *usbmisc_data;
+> +	int wakeup_irq;
+>  	bool supports_runtime_pm;
+>  	bool override_phy_control;
+>  	bool in_lpm;
+> @@ -336,6 +338,16 @@ static int ci_hdrc_imx_notify_event(struct ci_hdrc *=
+ci, unsigned int event)
+>  	return ret;
+>  }
+> =20
+> +static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
+> +{
+> +	struct ci_hdrc_imx_data *imx_data =3D data;
+> +
+> +	disable_irq_nosync(irq);
+> +	pm_runtime_resume(&imx_data->ci_pdev->dev);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  {
+>  	struct ci_hdrc_imx_data *data;
+> @@ -476,6 +488,18 @@ static int ci_hdrc_imx_probe(struct platform_device =
+*pdev)
+>  	if (pdata.flags & CI_HDRC_SUPPORTS_RUNTIME_PM)
+>  		data->supports_runtime_pm =3D true;
+> =20
+> +	data->wakeup_irq =3D platform_get_irq_optional(pdev, 1);
+> +	if (data->wakeup_irq > 0) {
+> +		ret =3D devm_request_threaded_irq(dev, data->wakeup_irq,
+> +						NULL, ci_wakeup_irq_handler,
+> +						IRQF_ONESHOT | IRQF_NO_AUTOEN,
+> +						pdata.name, data);
+> +		if (ret)
+> +			goto err_clk;
+> +	} else if (device_is_compatible(dev, "fsl,imx95-usb")) {
+> +		dev_warn(dev, "wakeup irq is missing\n");
+> +	}
+> +
+>  	ret =3D imx_usbmisc_init(data->usbmisc_data);
+>  	if (ret) {
+>  		dev_err(dev, "usbmisc init failed, ret=3D%d\n", ret);
+> @@ -584,6 +608,7 @@ static int imx_controller_suspend(struct device *dev,
+>  	}
+> =20
+>  	imx_disable_unprepare_clks(dev);
+> +	enable_irq(data->wakeup_irq);
+>  	if (data->plat_data->flags & CI_HDRC_PMQOS)
+>  		cpu_latency_qos_remove_request(&data->pm_qos_req);
+> =20
+> @@ -608,6 +633,9 @@ static int imx_controller_resume(struct device *dev,
+>  	if (data->plat_data->flags & CI_HDRC_PMQOS)
+>  		cpu_latency_qos_add_request(&data->pm_qos_req, 0);
+> =20
+> +	if (!irqd_irq_disabled(irq_get_irq_data(data->wakeup_irq)))
+> +		disable_irq_nosync(data->wakeup_irq);
+> +
 
-Yes, I've sent a v2 to fix it.
+if (data->wakeup_irq > 0) is necessary. I'll get a NULL-pointer
+dereference on imx93.
 
-Thanks,
-Fabio
+Best regards
+Alexander
 
-> The rest looks good to me.
->
-> Regards,
-> Daniele
->
-> > T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 11 Spd=480  MxCh= 0
-> > D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > P:  Vendor=1bc7 ProdID=10b3 Rev=05.15
-> > S:  Manufacturer=Telit Cinterion
-> > S:  Product=FE990
-> > S:  SerialNumber=28c2595e
-> > C:  #Ifs=10 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-> > E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> > I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> > E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> > I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> > E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 7 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-> > E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 8 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-> > E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> > E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> > ---
-> >  drivers/usb/serial/option.c | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> > index 58bd54e8c483..8660f7a89b01 100644
-> > --- a/drivers/usb/serial/option.c
-> > +++ b/drivers/usb/serial/option.c
-> > @@ -1388,6 +1388,22 @@ static const struct usb_device_id option_ids[] = {
-> >           .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),    /* Telit FN920C04 (MBIM) */
-> >           .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b0, 0x60) },       /* Telit FE990B (rmnet) */
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b0, 0x40) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b0, 0x30),
-> > +         .driver_info = NCTRL(5) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b1, 0x60) },       /* Telit FE990B (MBIM) */
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b1, 0x40) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b1, 0x30),
-> > +         .driver_info = NCTRL(6) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b2, 0x60) },       /* Telit FE990B (RNDIS) */
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b2, 0x40) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b2, 0x30),
-> > +         .driver_info = NCTRL(6) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b3, 0x60) },       /* Telit FE990B (ECM) */
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b3, 0x40) },
-> > +       { USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10b3, 0x30),
-> > +         .driver_info = NCTRL(6) },
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c0, 0xff),    /* Telit FE910C04 (rmnet) */
-> >           .driver_info = RSVD(0) | NCTRL(3) },
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c4, 0xff),    /* Telit FE910C04 (rmnet) */
-> > --
-> > 2.48.1
-> >
+>  	ret =3D imx_prepare_enable_clks(dev);
+>  	if (ret)
+>  		return ret;
+> @@ -643,6 +671,10 @@ static int ci_hdrc_imx_suspend(struct device *dev)
+>  		return ret;
+> =20
+>  	pinctrl_pm_select_sleep_state(dev);
+> +
+> +	if (device_may_wakeup(dev))
+> +		enable_irq_wake(data->wakeup_irq);
+> +
+>  	return ret;
+>  }
+> =20
+> @@ -651,6 +683,9 @@ static int ci_hdrc_imx_resume(struct device *dev)
+>  	struct ci_hdrc_imx_data *data =3D dev_get_drvdata(dev);
+>  	int ret;
+> =20
+> +	if (device_may_wakeup(dev))
+> +		disable_irq_wake(data->wakeup_irq);
+> +
+>  	pinctrl_pm_select_default_state(dev);
+>  	ret =3D imx_controller_resume(dev, PMSG_RESUME);
+>  	if (!ret && data->supports_runtime_pm) {
+>=20
 
 
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
--- 
-Fabio Porcedda
+
 
