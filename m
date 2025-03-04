@@ -1,145 +1,194 @@
-Return-Path: <linux-usb+bounces-21315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFB2A4D55B
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 08:51:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34227A4D625
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 09:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89321171C75
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 07:51:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35CEE1893F5B
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 08:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F791F8731;
-	Tue,  4 Mar 2025 07:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E832C1FBE8A;
+	Tue,  4 Mar 2025 08:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZyU+aaq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tKLIHTuS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0411E2847;
-	Tue,  4 Mar 2025 07:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710271F8BB5
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 08:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741074707; cv=none; b=NYD11xwUnkteZKpz5tBp+KfPKBQPKMQ4BIEGKWrIXd8HoJDtOrrZhxkdWF6fbT9NL1OJ8O5VwB1zcwqUOnYISGuvKdh40zifhFfzcA6ahggHZ/c4+7eRjVXPKLCRH8mzu9BpPZGUZqQwW/FoNm96uxC9X6KwZSXOGCV961mEK4w=
+	t=1741076583; cv=none; b=g6VHTtpxWuGJZwSitOUgnSUewPuidfYCH443qLU/kQ5rLhyNeeuKPYVK6ZXxoVD9Rqhljxb+gDqBFBy82O7FawtU6psQQzrT3sZzQ4ZhvwChzS5jB49AikN1oSKJ2epxj9kFfM6ipkWcjckB8YDOSDQlNN8jWy9mJJ7HKapy3vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741074707; c=relaxed/simple;
-	bh=3TpNgotXXXws56CMvycct3iSNi0ygaBLcIYxqa2zBRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dVzyC36olOUMHCXTUu/QKftTJMJ5FE25P8fcuP1y84YHOSgaEcmOGNUNEnaJtarg7rMN7kyoN2Db1Ka+1Pe8rU3v+BwBm9+uNlI5cvv0QEWavqyg99eh3b+c/FXX/C6KxHEv0u0JOfFec1lDp0Kuc7P3rwc6mwEoNYkNM9noUyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZyU+aaq; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaec111762bso973016966b.2;
-        Mon, 03 Mar 2025 23:51:45 -0800 (PST)
+	s=arc-20240116; t=1741076583; c=relaxed/simple;
+	bh=oJRocjVxvG8aocBlf5vT9fLjx9PJTOnjpaP9NfdgLoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VTE4Pev7Z/FPVTMTnGJrKgyo/ByEssW1BvvZtQ8le6rFPG4eLs1VB8tlo/NCcoqrYHr/Z94ArpDT4mM3M7Af2JlBTBsiJN9XaaKQvuMMHzqQXq5kdhnpfOnTRIHhipDRDkaTTNBPYp2qmBoVj9LATdZGovr8bfTCfBaVMDbzd5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tKLIHTuS; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e04064af07so9957972a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 04 Mar 2025 00:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741074704; x=1741679504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejFSo8OEvE0ZO3UcRk2jROT18Sr7YS00DdCsHMeAq4U=;
-        b=IZyU+aaqNkFkc/lMJInMBpBN0PP9CYW4NARoci/QGuvo/UMJGol+ogzh9r2H/w8GZN
-         SKRoGTsSth6Lm/XvHb0Y6qOt29nj0gcJLw5mdvxZLiVIx0qTZfdBvS08WWCYMzGyBlkc
-         sLEBdgX9zuKh91wrEWAyl4cdyUQPPRMZIw432s44goFF4T5LFgtT8gubBCqHAC48cMmu
-         2n4v6Z2HNX/8dGM1y9eDNAB6bRaeJTXi3NkkShsFPpU3oXexSzBLhS0SnSHhP702I6bM
-         9S5Tb4vPmqyWDtTa0URq522QgWiM8g77eLdt9FWyEYRmQFoOGfrGJ070lPdxRQfUUWyE
-         +82w==
+        d=linaro.org; s=google; t=1741076580; x=1741681380; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T6vsEs0w+2fpN2o1KS8VIE9clQoUeLM/QArYwjwqcY0=;
+        b=tKLIHTuSb8EsCI1KkpfUsVKCJmmjnPjmWq6aBgxmRlJtqHk8ikuDpQ8pHQReaI2mzY
+         hSRuBoHrplNxKm+Y4AUGV9s/rpZi3ab7HTGhJPL3UL+H4U4sUbErG02SGoa5LSgQ49lJ
+         EK907gmP/2Nd2Rx9WKHHzLvL/Hayd2zCx/SsnRoV6+qLW0QbLmyVmqKpmmFIgpZi/d+P
+         oOyVrYPQC8+ZdXGCZHDzxOYUHCOpJgGTP8f8IZC2o38X08eQfmkCkksKnHW0A9U/jHsu
+         UF0pqcYRChbbFpJq4Bo5lX4ZWHo5VqiJXAXUKvRfft6HvLeJM3L4MsQVeRM6sf+t+cpL
+         Mbew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741074704; x=1741679504;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ejFSo8OEvE0ZO3UcRk2jROT18Sr7YS00DdCsHMeAq4U=;
-        b=guZZCq2Gw3XEtTPDGXyVLQMCve5w+HEYz+CcdEDU77CVJTlrhDd8K6DkCj42G4MRLF
-         CL2JsKzZWh40taFzU5Lc5401yp/Qo1WNx/8fAjzQf6m77Uk00Xmb0isSrRTWXftjwz0N
-         En7MFjeO+0RAgCvKGeejEidP96K87los2Ph8t/zX9ReY+4/XFjmM+XVewwJtRRKO1aoK
-         QD331aU+2b4Lgwcg1tTbbWiLyuUx4X3W38dkYH8LMw/Eh2O3O75jEfGYa32gAhVWEAzq
-         WRo3rIpn81Qd8Mjt/FLV9NbF6TrmrDl4GhoCAQw0RDR2lUMnfncJLy4ZOgJoU+Y55Vvn
-         vfHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXcD6wQAfB8k3RXFSmR5XGx4YNhbY24lsXI657eXCul8Y+ZTcK1FlUBtln0pB4teK5TSQvhrWcAiWDdMto=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLNKOxZPGji3JJNPzJUt8mllsNdHtnUcYGTJb6IrjhY88iohYo
-	vJ8hlQKlbFPWa0PgrVr7ZP+PjnNEBvVMzKqKuzNZFY+QY8opYfdu
-X-Gm-Gg: ASbGncs9inAc+wbPn7NxACZ0Dm/2645luUZxulNvD63TrB9dP4x+EvP6NtkypZjiZQZ
-	+ToaeCDUEXVjkeiulp/EMs+9yGtnAH5ABENmvYMegr8upjDo+HG66lEQeyUyNOEcgiS6bNayrfv
-	vGdAqMVWCRDH2uGkjGIUv5njNcCiHMgXsGMrbkU7BiUG5t3187D2bK9Z1esWwc56rX+M9BxRYAG
-	dUhnIIZGPU5HB+P/mwIrZbIOEJf7ChugZcSHte7SuwMLzrw65EehPP7xQg0bZa4uQC9Wo90+Ysa
-	ajk/zdIHO7bVSp7j1LMnSh/gNTCY8dFmsBMxg0mBHIgLDpQWr6PY0z8xnDC4PQ==
-X-Google-Smtp-Source: AGHT+IEU6uOxnBzRpc2rr8JL/GPBOrFpD7dFy2K738H0sIbKWD7Az+d9BbDPL4ebRRymRAZugOLWcQ==
-X-Received: by 2002:a17:907:7b8c:b0:ac1:d878:f87d with SMTP id a640c23a62f3a-ac1d878fbbemr501062666b.56.1741074703641;
-        Mon, 03 Mar 2025 23:51:43 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf58fe64f5sm525816466b.133.2025.03.03.23.51.42
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 03 Mar 2025 23:51:43 -0800 (PST)
-Date: Tue, 4 Mar 2025 08:51:39 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci: Fix host controllers "dying" after suspend and
- resume
-Message-ID: <20250304085139.4610e8ff@foxbook>
+        d=1e100.net; s=20230601; t=1741076580; x=1741681380;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T6vsEs0w+2fpN2o1KS8VIE9clQoUeLM/QArYwjwqcY0=;
+        b=iwK5Mrt7iqxixkfFPd4PY28hzjxI+0udA9WkPO55Fr9ACM2dCTmgsq/2oFgJoY8FC2
+         o3VkWxx9OGuj8xUKz06z2D3K3PmjJwgilEVQhv/9uS2yb7ZUTVpL0Yx/XQsJDwHbQykI
+         aH8jWqeE3ik5GAURYghyUFXCzhB/x9Jte7IO1ioJ+XkJAndDG4TsaV4cWXK8JuG4WIpZ
+         Q08XslnPK0mshbJo8h6uPXwM6LllEfx2eTLtWrZ92OUj5IFv4bcVZWuPPOS/vJCSTqwj
+         Nzs1ZSFRXwed124Q8euJJ7J80xRuOTeCVz49JNNVkL/pKAlNzR93f62+ThHzGY2peK7t
+         sIBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWTHFsgSV/IxddwsQmF1BgWK5cdxBZGYMcp6G8sPDEoD7/c3kO/bdg7BNn0R8Jmw6aJxLX0gEXS4lI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnehYNUfHxFFCdAXBAl9ZqMBiDQbbkrJQ3WE1MjLi+EEr2mF1q
+	O/PgprNoQlo+YswBDKKWdH8tNBgD9tNQcS3MUl+kx1JhBh1izhzHiZr4Ubj5H+w=
+X-Gm-Gg: ASbGncv3/ZLW15m390/kiNaYETdligc+V/24AiQjtAHu1u1Y5hLMoRp4jCLoJpFpDJf
+	KrE+Y06FFbn2Zee9X1fYEZMZWpBZug2lEsc6a9vRqqukT6+gZMKbPiBMOlNNU9EFeQLVUVBWwDR
+	TtVZF/843lL1xfOfG37UeJ/1Y/sj/OV1DFG/iAo8SwZUkUswgAHmaeNxt2IOJkgu3CfTeglDaiZ
+	AdflIyeLY1euxTgdLcXT1OF2JUqFLOdS/3M4tTWrCsuLCnW7kv+vwbYFxD/hFFmzoEJKDA0zaaW
+	GBQsDJ55tLEQGvXNtqz5GHdQlOlQygYmnG1itu2yoTfID5vYU3QbuoOZ
+X-Google-Smtp-Source: AGHT+IH0Xb393ctWLRXZSas7YgLXGqNPTHNCJsQolq/B1J5pMVs0L4gi+m3eIifTOO2YP/AzGBdjxw==
+X-Received: by 2002:a05:6402:3891:b0:5e0:8c55:531 with SMTP id 4fb4d7f45d1cf-5e4d6af98d1mr18864132a12.14.1741076579579;
+        Tue, 04 Mar 2025 00:22:59 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff21:ef30:ea7e:cb1f:99c6:de2d])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5925ff875sm332907a12.20.2025.03.04.00.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 00:22:58 -0800 (PST)
+Date: Tue, 4 Mar 2025 09:22:49 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, srinivas.kandagatla@linaro.org,
+	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
+	lgirdwood@gmail.com, tiwai@suse.com, krzk+dt@kernel.org,
+	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
+	robh@kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v35 00/31] Introduce QC USB SND audio offloading support
+Message-ID: <Z8a4WYq4GqWBVNyX@linaro.org>
+References: <20250219004754.497985-1-quic_wcheng@quicinc.com>
+ <Z7W_Vz_kVDjIcp5N@linaro.org>
+ <82ce69a3-d248-494f-6ddb-098f392c78a0@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82ce69a3-d248-494f-6ddb-098f392c78a0@quicinc.com>
 
-A recent cleanup went a bit too far and dropped clearing the cycle bit
-of link TRBs, so it stays different from the rest of the ring half of
-the time. Then a race occurs: if the xHC reaches such link TRB before
-more commands are queued, the link's cycle bit uintentionally matches
-the xHC's cycle so it follows the link and waits for further commands.
-If more commands are queued before the xHC gets there, inc_enq() flips
-the bit so the xHC later sees a mismatch and stops executing commands.
+On Mon, Mar 03, 2025 at 06:39:52PM -0800, Wesley Cheng wrote:
+> 
+> 
+> On 2/19/2025 3:24 AM, Stephan Gerhold wrote:
+> > On Tue, Feb 18, 2025 at 04:47:23PM -0800, Wesley Cheng wrote:
+> > > Requesting to see if we can get some Acked-By tags, and merge on usb-next.
+> > > 
+> > > Several Qualcomm based chipsets can support USB audio offloading to a
+> > > dedicated audio DSP, which can take over issuing transfers to the USB
+> > > host controller.  The intention is to reduce the load on the main
+> > > processors in the SoC, and allow them to be placed into lower power modes.
+> > > There are several parts to this design:
+> > >   1. Adding ASoC binding layer
+> > >   2. Create a USB backend for Q6DSP
+> > >   3. Introduce XHCI interrupter support
+> > >   4. Create vendor ops for the USB SND driver
+> > > 
+> > >       USB                          |            ASoC
+> > > --------------------------------------------------------------------
+> > >                                    |  _________________________
+> > >                                    | |sm8250 platform card     |
+> > >                                    | |_________________________|
+> > >                                    |         |           |
+> > >                                    |      ___V____   ____V____
+> > >                                    |     |Q6USB   | |Q6AFE    |
+> > > |     |"codec" | |"cpu"    |
+> > >                                    |     |________| |_________|
+> > >                                    |         ^  ^        ^
+> > >                                    |         |  |________|
+> > >                                    |      ___V____    |
+> > >                                    |     |SOC-USB |   |
+> > >    ________       ________               |        |   |
+> > >   |USB SND |<--->|QC offld|<------------>|________|   |
+> > >   |(card.c)|     |        |<----------                |
+> > >   |________|     |________|___     | |                |
+> > >       ^               ^       |    | |    ____________V_________
+> > >       |               |       |    | |   |APR/GLINK             |
+> > >    __ V_______________V_____  |    | |   |______________________|
+> > >   |USB SND (endpoint.c)     | |    | |              ^
+> > >   |_________________________| |    | |              |
+> > >               ^               |    | |   ___________V___________
+> > >               |               |    | |->|audio DSP              |
+> > >    ___________V_____________  |    |    |_______________________|
+> > >   |XHCI HCD                 |<-    |
+> > >   |_________________________|      |
+> > > 
+> > 
+> > As I noted on v34 [1], this version is still missing instructions and
+> > changes needed for testing this series. The device tree changes don't
+> > need to be part of the same series, but there should be at least a link
+> > provided to give other people the chance to provide Tested-by tags.
+> > 
+> > IMO we shouldn't merge this series without those instructions, otherwise
+> > we risk that this just ends up being dead code that no one can use.
+> > 
+> > Can you please share the device tree changes for a board upstream and
+> > any other changes needed to be able to test this series? E.g. for
+> > sm8250-mtp.dts, based on the examples in your cover letter.
+> > 
+> 
+> To clarify I'm testing this on sm8350 in recent times, but utilizing sm8250
+> definitions for the ASoC platform card, as the platform sound card is more
+> or less the same between the two SoCs.  Back
+> when I started this series, sm8350 was missing a bunch of dependent
+> components, such as aDSP not being loaded, and missing platform sound card
+> definition, so I had to define and enable those on my own, which required a
+> slew of new DT nodes, hence why it wasn't as straight forward to include
+> the DT definitions yet for sm8350.  Not thinking that this series would
+> take as long as it did, I was planning on separating out the DT changes in
+> a different series to enable offloading for the devices I have tested with.
+> (sm8150, sm8250 and sm8350)
+> 
+> There's still a pretty big chunk of dependencies missing from sm8350, so
+> those would also be handled in the follow up DT submission.  For now, its a
+> much bigger hurdle to get the main/functional changes in, and that was
+> taking a significant amount of time from my end to manage.
+> 
+> If you want, I can give you the changes I have offline to enable this for
+> sm8350, since I haven't spent time formatting/prepping the changes for
+> submission yet.
+> 
 
-This function is called before suspend and 50% of times after resuming
-the xHC is doomed to get stuck sooner or later. Then some Stop Endpoint
-command fails to complete in 5 seconds and this shows up
+Can you push it to a public branch somewhere (e.g. on CodeLinaro)? I was
+talking to some people from the community about testing this on some of
+the smartphones we have in upstream, so it wouldn't help if I just have
+the changes privately.
 
-xhci_hcd 0000:00:10.0: xHCI host not responding to stop endpoint command
-xhci_hcd 0000:00:10.0: xHCI host controller not responding, assume dead
-xhci_hcd 0000:00:10.0: HC died; cleaning up
+It doesn't have to be perfectly clean as far as I'm concerned, as long
+as it allows to see the whole picture of the additional changes we need
+to make use of this series.
 
-followed by loss of all USB decives on the affected bus. That's if you
-are lucky, because if Set Deq gets stuck instead, the failure is silent. 
-
-Likely responsible for kernel bug 219824. I found this while searching
-for possible causes of that regression and reproduced it locally before
-hearing back from the reporter. To repro, simply wait for link cycle to
-become set (debugfs), then suspend, resume and wait. To accelerate the
-failure I used a script which repeatedly starts and stops a UVC camera.
-
-Some HCs get fully reinitialized on resume and they are not affected.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=219824
-Fixes: 36b972d4b7ce ("usb: xhci: improve xhci_clear_command_ring()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 45653114ccd7..0099f504c86a 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -780,8 +780,12 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
- 	struct xhci_segment *seg;
- 
- 	ring = xhci->cmd_ring;
--	xhci_for_each_ring_seg(ring->first_seg, seg)
-+	xhci_for_each_ring_seg(ring->first_seg, seg) {
-+		/* erase all TRBs before the link */
- 		memset(seg->trbs, 0, sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
-+		/* clear link cycle bit */
-+		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= cpu_to_le32(~TRB_CYCLE);
-+	}
- 
- 	xhci_initialize_ring_info(ring);
- 	/*
--- 
-2.48.1
+Thanks,
+Stephan
 
