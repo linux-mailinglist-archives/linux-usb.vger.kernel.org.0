@@ -1,410 +1,105 @@
-Return-Path: <linux-usb+bounces-21350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21352-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE41FA4EA22
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:56:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CF61A4EA0C
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94C1B3BD4CD
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:34:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DD1F17C513
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8503F292F85;
-	Tue,  4 Mar 2025 17:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C6D27F4EC;
+	Tue,  4 Mar 2025 17:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="i9nmNf8A"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="vPvc4aTx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C77324EA8B
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741108053; cv=fail; b=ks950O3B+6vfFlRu15G8EfcEKPI1Co7Af7X9qlwxVJMFpZ3LCu+P8axsn0DqKCY7uX03F5gH8x09WTKZmUICXa1eNv7U7kT/osUqyNex0CiDsCkjfgM1GFbeg5FkFPoMcnZYz3SWDbGAgZfV3Y7r4cqwbo8YtCYLC/9tm4E0s5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741108053; c=relaxed/simple;
-	bh=uHWAZIPnGtPJ1xzl/wHTnNv5ycuRFrLaRDER5etlkDI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TU37CpNvufQcrnFvH3y4VBu4tpO84oG0QZweIxhv+cGZyAzxrpK6djCqTg0ZpCOXMs6fbgyOnJ5vUFGcTM/FIQEnMDDU7XMbezPNqFUWtYCwi4IJ/R6pwAzNoZpnNH130ikkuJ3OeV18vYb1MzL0EBrc+P6W/SFWqx9mTWjYdq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A reason="signature verification failed"; arc=none smtp.client-ip=52.59.177.22; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=fail smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 8BD8D40D0B9A
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 20:07:28 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=i9nmNf8A
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fh24G5dzG021
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 18:27:46 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 50A3742727; Tue,  4 Mar 2025 18:27:43 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A
-X-Envelope-From: <linux-kernel+bounces-541465-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 73F1241BF9
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:00:36 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 49DB32DCE1
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:00:36 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B433188C095
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:59:45 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144F51F5429;
-	Mon,  3 Mar 2025 10:57:20 +0000 (UTC)
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF45015539A;
-	Mon,  3 Mar 2025 10:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA0C24EAB9
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740999436; cv=none; b=g94W9GT/oI8aXp0UF+PLD0hLzSzx0y+Sf9KzIIhDjfaFdkRJT8EAwtm2u5vX4cVyDx00iAH9p1iH1b48RppVH6Mq5f4e5BzBdPKFkn7h/1BMREV96rWkDh19MrnUJOfHmxR9LfhdcMWMrlYZ6rOKCs6p/7vG0/U1MB6EKDd4YHA=
+	t=1741109394; cv=none; b=hCB1EVp+AGWThKisJ+X8ZHRhDHdbYkY84rdXXIDu96vr3n1nzLNPO5nZARTPi7KvDxHt78RESVcg6I5BxCmxu49u09fsSjXrCXu4K2QDZS0e2hfSVslS3EUX3EbKteZl6bDcQ+IAhJk87h1+RUBlsaxG0e1LE8TtHvR3VByWKg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740999436; c=relaxed/simple;
-	bh=Dgx0WmiWWJVJFOYXROEjC9QhshtwPpwi2bA+QbGxJUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L4Yn207AapPfPE5LHfZtxWqa9gSI6h7jl3fArXPvHbiVtffx8IwL87EgVtXOjujQxmR7oazNe4ARtNFuf1VLcixkXh10w2UjjM6k5ASU6hoslleOzZVC2panlBuJlBA5YOzWfr/dRQ/qsVyGrPtKFigXprULC9NvWHjAD2CsYlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=i9nmNf8A; arc=none smtp.client-ip=52.59.177.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1740999407;
-	bh=K/zA0N8M3Fo/mbM8RcyqXqLjJSa3rFqpG7w6gFb91fI=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=i9nmNf8AhJfMBwhRtzT7/lV/xC2r7jw/6l+OuCD9BbMGOPv6JVFj/BtYhKlMHlPK7
-	 lZLeYwI3OS7nNv+Pgy++3iW1Opyjp/hn+BaKos20DOhf6kpmRoMmwTSskAwifqrDXz
-	 wYrMotOoiIiq6dNEY9uYDvLAVPMRD0w5Np6/wwkE=
-X-QQ-mid: bizesmtpip3t1740999399tyh9d5x
-X-QQ-Originating-IP: BU3UX6VjTov91M/jEpSx5w+TyFJYBoNmFwGIDgHvKlU=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 03 Mar 2025 18:56:37 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 2151004315678109412
-From: raoxu <raoxu@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	wangyuli@uniontech.com,
-	zhanjun@uniontech.com,
-	Xu Rao <raoxu@uniontech.com>
-Subject: [PATCH V2] usb: xhci: Add debugfs support for xHCI port bandwidth
-Date: Mon,  3 Mar 2025 18:56:35 +0800
-Message-Id: <20250303105635.21290-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-Precedence: bulk
+	s=arc-20240116; t=1741109394; c=relaxed/simple;
+	bh=ERNhdDABOVobVdLtVqDh2yN8tQw2AsRk3DIxBUjAZZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m5s7sPc0M5olKznHxF53ZrXubq1SZTrIa+Tqce6fW179fQStnnCtb4cyZ/OCz591C5qxxWOdIKOEJIMZGe+pToHAhf0wL0YVOv1zYw+i6ehexkwrsO/QcZXmoRbWVcPE366cT7c2nxPv3zzXRlKJ60bnoo+dEAzd02OCRm4nics=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=vPvc4aTx; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.36] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z6jNt6jfNz4PcD;
+	Tue,  4 Mar 2025 12:29:50 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1741109391; bh=ERNhdDABOVobVdLtVqDh2yN8tQw2AsRk3DIxBUjAZZY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=vPvc4aTxDmh+xNFlewJYffrgtF4vPx5CYD89tmgn1pz5Lo6ZoPpNTEpCRM1M9/fkD
+	 JbsNmM7RQJLUEYcNlafGJz+59gVvDOZ8b0cLa46KEcEQtn6L+QKYhTKd6tSrmJvXnv
+	 igD3sXfqV450GE9iUDc2SFVVcNqCacBTBDv87+XI=
+Message-ID: <ae9cfc12-99ba-4c40-b698-e2b12eb22ab8@panix.com>
+Date: Tue, 4 Mar 2025 09:29:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: MSm4SkBtgodDRJNSz3JVOU14EB5DUY74QUSPdMluwdMWIwOFwqI7LgJo
-	BfRffHIIpatJ0Gmm0U/g3HKbNY8dLW/Bd2VYBnPR8vW0YcQyaCszJDIaky8lldBDSU4J1W1
-	s666NHXOTKrElnqG+7kvG0j0yeUEQX6oljXKVU6V0E0FHDeI/2XEUX/wg0iKcYPagPqNoE1
-	Fb0DuFrRzSautyAS267px7q65t4oATyG1PG6dd6XrKslvih7ygYpv7P4GSf2zqyR4uegrh9
-	v27Ofzfhoj+CVmOmk0+hJ//AVhaMRr3CmR7I42yXp8WnpHAV9GtdNwIO8P19Ue3JJlIjdjN
-	LK3UeGGxvKZGavrUs9l5vQTGntqwgaQSSSuvB0LGxPGNXbhjlPDDVcke3Gfin4aNFberDQm
-	0dm1kqsXPi0pwhxXGy8kR9AycMU3+WylEPc6yXwAoMVQrQJsQH9WrTOY9xg1vDTHoAV2OVn
-	EnKdFc5fCSjgKKksAD3OPZ8+YNs3Auu4jsyT2UyvJsCofS3LcsMNiz5iWN0xUoJIuX2LCu3
-	FfdKoQ877GSm2KLIcIz9g6HdVV5+ZaFe4oqZmw3OkoKp+HXUgMpXs6ohf7hwTGMb7ieIfUJ
-	E+S+J11S0ugWAVgm0Ox7pvwcyfub2NLRpHhPCgWx1c7UvnJT1RAXMbgClT5oqGu06S6tdLy
-	4W/euUC9v+BV0M3Aktvtv7DMHzdAE3YE1pEnvEbAtau8x8drtbqyKAzSKfhjG71VwOhu3xH
-	L4j7Io+M9SQKnxVpFSZB6YUOf/WcnqJhllTx51ursRzR/8RHe7CnNnrZQOknZW+gLOncZIk
-	3gGCgsKtdy0ToGsX+G6z7BuQYgT0DDsCF8/r+ldGalJSicorLP/v6qnmKxmKc8K26ioNG2Y
-	CJ5ijeJV+1RIDYVm/M804gcmOhQwEG5GCgS0wPu+khXgtvQ7Nu0v1ANqc0HmrDYZsywpPd4
-	hSAF7FLw16OXBCZhaSrPQnWCpS8XONmd2Hx4UBOhDGg2pl5OCJBwevZQHNORHc/G6hM+p3t
-	9CcorfuJqjrzmJuFrvmblUixCr9oPGr7PzC2mNrw==
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fh24G5dzG021
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741712758.64362@QM6s7jaNrQQfc+4Jm1lRqA
-X-ITU-MailScanner-SpamCheck: not spam
+User-Agent: Mozilla Thunderbird
+Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
+ activation asynchronously") too, to stop my resume crashes
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: linux-usb@vger.kernel.org
+References: <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
+ <20250303142058.GA3713119@black.fi.intel.com>
+ <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
+ <20250303175818.GB3713119@black.fi.intel.com>
+ <007b005f-a6d1-44a2-9795-036c8f397274@panix.com>
+ <48ef4c14-55d5-4baa-b862-f9e7368ed950@panix.com>
+ <20250304082731.GF3713119@black.fi.intel.com>
+ <14351945-fcde-4088-b7b3-542c6e4b7d0e@panix.com>
+ <20250304134017.GL3713119@black.fi.intel.com>
+ <7c5ec580-9b1c-40b7-9a8d-64bc95c41432@panix.com>
+ <20250304135148.GM3713119@black.fi.intel.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250304135148.GM3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Xu Rao <raoxu@uniontech.com>
 
-In many projects, you need to obtain the available bandwidth of the
-xhci roothub port. Refer to xhci rev1_2 and use the TRB_GET_BW
-command to obtain it.
+On 3/4/25 05:51, Mika Westerberg wrote:
 
-hardware tested:
-03:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1
-(prog-if 30 [XHCI])
-Subsystem: Huawei Technologies Co., Ltd. Raven USB 3.1
-Flags: bus master, fast devsel, latency 0, IRQ 30
-Memory at c0300000 (64-bit, non-prefetchable) [size=3D1M]
-Capabilities: [48] Vendor Specific Information: Len=3D08 <?>
-Capabilities: [50] Power Management version 3
-Capabilities: [64] Express Endpoint, MSI 00
-Capabilities: [a0] MSI: Enable- Count=3D1/8 Maskable- 64bit+
-Capabilities: [c0] MSI-X: Enable+ Count=3D8 Masked-
-Kernel driver in use: xhci_hcd
+>>> It only happens if you have TBT dock and the NVMe connected and you
+>>> disconnect them while the system is suspended. I suggest trying that a
+>>> couple times and see if that happens. For me it
+>>> happened pretty much on first suspend cycle.
 
-test progress:
-1.cd /sys/kernel/debug/usb/xhci/0000:03:00.3
-cat port_bandwidth
-/sys/kernel/debug/usb/xhci/0000:03:00.3# cat port_bandwidth
-port[1] available bw: 79%.
-port[2] available bw: 79%.
-port[3] available bw: 79%.
-port[4] available bw: 79%.
-port[5] available bw: 90%.
-port[6] available bw: 90%.
-port[7] available bw: 90%.
-port[8] available bw: 90%.
-2.plug in usb video cammer open it
-cat port_bandwidth
-port[1] available bw: 39%.
-port[2] available bw: 39%.
-port[3] available bw: 39%.
-port[4] available bw: 39%.
-port[5] available bw: 90%.
-port[6] available bw: 90%.
-port[7] available bw: 90%.
-port[8] available bw: 90%.
+So I've tried it twice again today-
 
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
- drivers/usb/host/xhci-debugfs.c | 42 +++++++++++++++++++
- drivers/usb/host/xhci-ring.c    | 14 +++++++
- drivers/usb/host/xhci.c         | 74 +++++++++++++++++++++++++++++++++
- drivers/usb/host/xhci.h         |  7 ++++
- 4 files changed, 137 insertions(+)
+1 - CalDigit dock, NVMe adaptor. Put it to sleep, disconnected 
+everything, even waited a while (call me crazy, but I swear how long the 
+system is suspended seems to make a difference). Opened the lid, and it 
+came right up.
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debu=
-gfs.c
-index 1f5ef174abea..573b6c25f3af 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -631,6 +631,46 @@ static void xhci_debugfs_create_ports(struct xhci_hc=
-d *xhci,
- 	}
- }
+2 - CalDigit dock, NVMe adaptor. Hibernated, drove to clients' offices. 
+Resumed, came up OK.
 
-+static int xhci_port_bw_show(struct seq_file *s, void *unused)
-+{
-+	struct xhci_hcd		*xhci =3D (struct xhci_hcd *)s->private;
-+	unsigned int		num_ports;
-+	unsigned int		i;
-+	int			ret;
-+	u8			bw_table[MAX_HC_PORTS] =3D {0};
-+
-+	num_ports =3D HCS_MAX_PORTS(xhci->hcs_params1);
-+
-+	/* get roothub port bandwidth */
-+	ret =3D xhci_get_port_bandwidth(xhci, bw_table);
-+	if (ret)
-+		return ret;
-+
-+	/* print all roothub ports available bandwidth */
-+	for (i =3D 1; i < num_ports+1; i++)
-+		seq_printf(s, "port[%d] available bw: %d%%.\n", i, bw_table[i]);
-+
-+	return ret;
-+}
-+
-+static int bw_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, xhci_port_bw_show, inode->i_private);
-+}
-+
-+static const struct file_operations bw_fops =3D {
-+	.open			=3D bw_open,
-+	.read			=3D seq_read,
-+	.llseek			=3D seq_lseek,
-+	.release		=3D single_release,
-+};
-+
-+static void xhci_debugfs_create_bandwidth(struct xhci_hcd *xhci,
-+					struct dentry *parent)
-+{
-+	debugfs_create_file("port_bandwidth", 0644, parent, xhci, &bw_fops);
-+}
-+
- void xhci_debugfs_init(struct xhci_hcd *xhci)
- {
- 	struct device		*dev =3D xhci_to_hcd(xhci)->self.controller;
-@@ -681,6 +721,8 @@ void xhci_debugfs_init(struct xhci_hcd *xhci)
- 	xhci->debugfs_slots =3D debugfs_create_dir("devices", xhci->debugfs_roo=
-t);
+Now I'm curious what difference the "4. Authorize both PCIe tunnels, 
+verify devices are there." makes to your system, as I have "boltd" 
+running and that handles it for me.
 
- 	xhci_debugfs_create_ports(xhci, xhci->debugfs_root);
-+
-+	xhci_debugfs_create_bandwidth(xhci, xhci->debugfs_root);
- }
+Tell ya what- if Linus pushes anything to master today, I'll 
+pull/build/boot it and since the TB dyndbg is on, I'll post the dmesg 
+from the runs so you can see them when you get in tomorrow.
 
- void xhci_debugfs_exit(struct xhci_hcd *xhci)
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 965bffce301e..af1cd4f8ace9 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1867,6 +1867,8 @@ static void handle_cmd_completion(struct xhci_hcd *=
-xhci,
- 	case TRB_NEC_GET_FW:
- 		xhci_handle_cmd_nec_get_fw(xhci, event);
- 		break;
-+	case TRB_GET_BW:
-+		break;
- 	default:
- 		/* Skip over unknown commands on the event ring */
- 		xhci_info(xhci, "INFO unknown command type %d\n", cmd_type);
-@@ -4414,6 +4416,18 @@ int xhci_queue_configure_endpoint(struct xhci_hcd =
-*xhci,
- 			command_must_succeed);
- }
+-Kenny
 
-+/* Queue a get root hub port bandwidth command TRB */
-+int xhci_queue_get_rh_port_bw(struct xhci_hcd *xhci,
-+		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
-+		u8 dev_speed, u32 slot_id, bool command_must_succeed)
-+{
-+	return queue_command(xhci, cmd, lower_32_bits(in_ctx_ptr),
-+		upper_32_bits(in_ctx_ptr), 0,
-+		TRB_TYPE(TRB_GET_BW) | DEV_SPEED_FOR_TRB(dev_speed) |
-+		SLOT_ID_FOR_TRB(slot_id),
-+		command_must_succeed);
-+}
-+
- /* Queue an evaluate context command TRB */
- int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_comma=
-nd *cmd,
- 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 45653114ccd7..84092fe981e8 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3088,6 +3088,80 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, str=
-uct usb_device *udev)
- }
- EXPORT_SYMBOL_GPL(xhci_reset_bandwidth);
-
-+/* Get the available bandwidth of the ports under the xhci roothub,
-+ * including USB 2.0 port and USB 3.0 port.
-+ */
-+int xhci_get_port_bandwidth(struct xhci_hcd *xhci, u8 *bw_table)
-+{
-+	unsigned int		num_ports;
-+	unsigned int		i;
-+	struct xhci_command	*cmd;
-+	dma_addr_t		dma_handle;
-+	void			*dma_buf;
-+	int			ret;
-+	unsigned long		flags;
-+	struct device		*dev  =3D xhci_to_hcd(xhci)->self.sysdev;
-+
-+	num_ports =3D HCS_MAX_PORTS(xhci->hcs_params1);
-+
-+	cmd =3D xhci_alloc_command(xhci, true, GFP_KERNEL);
-+	if (!cmd)
-+		return -ENOMEM;
-+
-+	dma_buf =3D dma_alloc_coherent(dev, xhci->page_size, &dma_handle,
-+					GFP_KERNEL);
-+	if (!dma_buf) {
-+		xhci_free_command(xhci, cmd);
-+		return -ENOMEM;
-+	}
-+
-+	/* get xhci hub usb3 port bandwidth */
-+	/* refer to xhci rev1_2 protocol 4.6.15*/
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+	ret =3D xhci_queue_get_rh_port_bw(xhci, cmd, dma_handle, USB_SPEED_SUPE=
-R,
-+					0, false);
-+	if (ret < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		goto out;
-+	}
-+	xhci_ring_cmd_db(xhci);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+
-+	wait_for_completion(cmd->completion);
-+
-+	/* refer to xhci rev1_2 protocol 6.2.6 , byte 0 is reserved */
-+	for (i =3D 1; i < num_ports+1; i++) {
-+		if (((u8 *)dma_buf)[i])
-+			bw_table[i] =3D ((u8 *)dma_buf)[i];
-+	}
-+
-+	/* get xhci hub usb2 port bandwidth */
-+	/* refer to xhci rev1_2 protocol 4.6.15*/
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+	ret =3D xhci_queue_get_rh_port_bw(xhci, cmd, dma_handle, USB_SPEED_HIGH=
-,
-+					0, false);
-+	if (ret < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		goto out;
-+	}
-+	xhci_ring_cmd_db(xhci);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+
-+	wait_for_completion(cmd->completion);
-+
-+	/* refer to xhci rev1_2 protocol 6.2.6 , byte 0 is reserved */
-+	for (i =3D 1; i < num_ports+1; i++) {
-+		if (((u8 *)dma_buf)[i])
-+			bw_table[i] =3D ((u8 *)dma_buf)[i];
-+	}
-+
-+out:
-+	dma_free_coherent(dev, xhci->page_size, dma_buf, dma_handle);
-+	xhci_free_command(xhci, cmd);
-+
-+	return ret;
-+}
-+
- static void xhci_setup_input_ctx_for_config_ep(struct xhci_hcd *xhci,
- 		struct xhci_container_ctx *in_ctx,
- 		struct xhci_container_ctx *out_ctx,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8c164340a2c3..a137097b0404 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -999,6 +999,9 @@ enum xhci_setup_dev {
- /* bits 16:23 are the virtual function ID */
- /* bits 24:31 are the slot ID */
-
-+/* bits 19:16 are the dev speed */
-+#define DEV_SPEED_FOR_TRB(p)    ((p) << 16)
-+
- /* Stop Endpoint TRB - ep_index to endpoint ID for this TRB */
- #define SUSPEND_PORT_FOR_TRB(p)		(((p) & 1) << 23)
- #define TRB_TO_SUSPEND_PORT(p)		(((p) & (1 << 23)) >> 23)
-@@ -1907,6 +1910,10 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xh=
-ci, gfp_t mem_flags,
- int xhci_queue_configure_endpoint(struct xhci_hcd *xhci,
- 		struct xhci_command *cmd, dma_addr_t in_ctx_ptr, u32 slot_id,
- 		bool command_must_succeed);
-+int xhci_queue_get_rh_port_bw(struct xhci_hcd *xhci,
-+		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
-+		u8 dev_speed, u32 slot_id, bool command_must_succeed);
-+int xhci_get_port_bandwidth(struct xhci_hcd *xhci, u8 *bw_table);
- int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_comma=
-nd *cmd,
- 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed);
- int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
---
-2.43.4
-
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
