@@ -1,165 +1,213 @@
-Return-Path: <linux-usb+bounces-21304-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21305-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 612D9A4D1F6
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 04:13:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0464FA4D21A
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 04:38:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7B51886A63
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 03:13:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B7DC16CC4D
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 03:38:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28EA51DDA3C;
-	Tue,  4 Mar 2025 03:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED801DC046;
+	Tue,  4 Mar 2025 03:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyfgLJYb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XGY8k/vB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE53194080;
-	Tue,  4 Mar 2025 03:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11EF2AE8C
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 03:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741058000; cv=none; b=sFyNAsgc01rx2vhYQSJn41KC9bDJ1ONhs57c0J/BsYzsyvcPQFuKV0M3qRy3BqqMNndn157cm5QA5uG3rXWMRYUaBnvtLwtW366gnO7UTZZK3bmOro83afQdo+0gJFAbMFQjL+obJdlbwus+KBNbKhvebOx05rpy/+xMvEdPZNk=
+	t=1741059506; cv=none; b=GVfNYAnF7pPLx521EKM9qFAsJEyaMCQJqIEUmNMSpKROXDNNMSxRnGm3WC9sU57MCJIjqT7H2NbtIVoOE1BSzLIxu2sgJdSYZudmB7AAQJhJmnoRvifZzlbxxBbadsIStKyQLYgtAemzDHy+s+loTHaChvmvdSmzXA47F8tjoi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741058000; c=relaxed/simple;
-	bh=JIj+/tr9TcRP5XhO/iLdeKqe04P1XWqfEvK8p1Y3Nm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QbX9JEbR1VAYeGl+4fqkizAuJ5GE4FN6qREr5PDKCQsDHTwLS7DbJsacaPDTLJndS+WxlwgDyHhieb21/dCaQnwMg/DdRYlSAQ6CVA+nBeJ86LtVX4jUtP2J3SqBMvyX7ZOEMWEY8qpv+RgXoM42ZIl1dtv6Wbw+x7UDBqsGVYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyfgLJYb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D16C4CEE8;
-	Tue,  4 Mar 2025 03:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741058000;
-	bh=JIj+/tr9TcRP5XhO/iLdeKqe04P1XWqfEvK8p1Y3Nm4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lyfgLJYbuEuCn3kETuOm0igYrIuR8EE55vkdXqL0wHQSrw5doOIzySdMPam3sIzwr
-	 pmVXGFQHDe9dLnAlOE8fnr/SarDaMIwzu4zv6Uwz1CNYsIYnuowUhZKkVzto2yq6A3
-	 oTHeo4sXq4zDIibz53K1gEXj9HsAlvrI7sxUM4goe3g/Ch1U/0tUi3RbKbObbabRCu
-	 XeDajTZ9dyXjGHxz/TT7TiSB29JmmZ8pBQPGBRNdQYx/zSwSalUBCWy26s3l7RXe9Y
-	 dB1roGm1Fh7Hz/VAUO1ZOxhqncLkQfYFcTt65Qq4QvuJKSBGhtWHSnxmAVd0Fnwm4u
-	 TSuI4vrvx2Xsg==
-Date: Mon, 3 Mar 2025 21:13:16 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Felipe Balbi <balbi@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
-	Saravana Kannan <saravanak@google.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, 
-	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 5/7] usb: dwc3: qcom: Snapshot driver for backwards
- compatibilty
-Message-ID: <zr6qdi3gtjaj3gyalpspzej33q356bs5ynchcmtr73765gjel5@c5ijv7czkhqt>
-References: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
- <20250226-dwc3-refactor-v4-5-4415e7111e49@oss.qualcomm.com>
- <20250304000527.ybxfdjx5xzypcals@synopsys.com>
- <20250304003913.bsn5sucnofq6d6jo@synopsys.com>
+	s=arc-20240116; t=1741059506; c=relaxed/simple;
+	bh=WjD7RwZvKVObqm8YLT2ag2VvkY0oyEGQrCM0o0SV4xw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BuMzFUkQlm0nZ2WojCCt2xeGamfvVunAkWr0e7HNZbPnFr2UQ660WCmGthwFHMDk4O4ntiyqDXa5/mkyMIWO4iLOzrWJ36csnu8DfeZKO63IKJ7QUbL/pyF6RLoedtVDNyE+jvxMjQxhj63xbuTylPusQudruV/djjRR0OcWz/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XGY8k/vB; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741059505; x=1772595505;
+  h=date:from:to:cc:subject:message-id;
+  bh=WjD7RwZvKVObqm8YLT2ag2VvkY0oyEGQrCM0o0SV4xw=;
+  b=XGY8k/vBUOquPSo8hr4Lfp2whmniHwLXW7LpUB8elVz7E68+vcRKWBhL
+   9JfHsM8Aj/FfldhGpGBe3OvRDX9pYCo5+6lVEx/wENc0w2WyC9xPm6g2s
+   nOMxvAvZV0EuGycri16rJSHFCvlTzlhxd3JSR/gKaQ14t9mh4es4OIgSH
+   9qoXH5E6iMvzZXiq5P8cocsqmImyu8LOJbHlx7u6LTFsi0XzMcrWNremF
+   wK6tdRMUrPBrb2tgn2J9CYKhKC6ZVqzyyPZmGRt43SZI0rUZ1oLWuwtd9
+   uAYCGd9MdCgyujXNdC999EKET/J0Ky1x05geOokcs+nzaMl1xWd9ULl6a
+   w==;
+X-CSE-ConnectionGUID: gMWGm/TRQQWF+JuDf02lPw==
+X-CSE-MsgGUID: O79Hms4TQlu9UPnAFPtC6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="52601784"
+X-IronPort-AV: E=Sophos;i="6.13,331,1732608000"; 
+   d="scan'208";a="52601784"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 19:38:24 -0800
+X-CSE-ConnectionGUID: ec3qEo9GS7mPB9Nq0BZ+Pw==
+X-CSE-MsgGUID: rLpP1LujRqulIe+WJZSNmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,331,1732608000"; 
+   d="scan'208";a="117978654"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 03 Mar 2025 19:38:23 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpJ6r-000JE6-00;
+	Tue, 04 Mar 2025 03:38:21 +0000
+Date: Tue, 04 Mar 2025 11:37:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2b66ef84d0d2a0ea955b40bd306f5e3abbc5cf9c
+Message-ID: <202503041124.ZI3n0sKY-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304003913.bsn5sucnofq6d6jo@synopsys.com>
 
-On Tue, Mar 04, 2025 at 12:39:12AM +0000, Thinh Nguyen wrote:
-> On Tue, Mar 04, 2025, Thinh Nguyen wrote:
-> > On Wed, Feb 26, 2025, Bjorn Andersson wrote:
-> > > In order to more tightly integrate the Qualcomm glue driver with the
-> > > dwc3 core the driver is redesigned to avoid splitting the implementation
-> > > using the driver model. But due to the strong coupling to the Devicetree
-> > > binding needs to be updated as well.
-> > > 
-> > > Various ways to provide backwards compatibility with existing Devicetree
-> > > blobs has been explored, but migrating the Devicetree information
-> > > between the old and the new binding is non-trivial.
-> > > 
-> > > For the vast majority of boards out there, the kernel and Devicetree are
-> > > generated and handled together, which in practice means that backwards
-> > > compatibility needs to be managed across about 1 kernel release.
-> > > 
-> > > For some though, such as the various Snapdragon laptops, the Devicetree
-> > > blobs live a life separate of the kernel. In each one of these, with the
-> > > continued extension of new features, it's recommended that users would
-> > > upgrade their Devicetree somewhat frequently.
-> > > 
-> > > With this in mind, simply carrying a snapshot/copy of the current driver
-> > > is simpler than creating and maintaining the migration code.
-> > > 
-> > > The driver is kept under the same Kconfig option, to ensure that Linux
-> > > distributions doesn't drop USB support on these platforms.
-> > > 
-> > > The driver, which is going to be refactored to handle the newly
-> > > introduced qcom,snps-dwc3 compatible, is updated to temporarily not
-> > > match against any compatible.
-> > > 
-> > > This driver should be removed after 2 LTS releases.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-> > > ---
-> > >  drivers/usb/dwc3/Makefile           |   1 +
-> > >  drivers/usb/dwc3/dwc3-qcom-legacy.c | 934 ++++++++++++++++++++++++++++++++++++
-> > >  drivers/usb/dwc3/dwc3-qcom.c        |   1 -
-> > >  3 files changed, 935 insertions(+), 1 deletion(-)
-> > > 
-> > 
-> > This is a bit concerning if there's no matching compatible string. ie.
-> > we don't have user for the new driver without downstream dependencies
-> > (or some workaround in the driver binding).
-> 
-> Ignore the comment above, I missed the "temporarily" in your log
-> above. However, the comment below still stands.
-> 
-> > 
-> > While I understand the intention, I'm afraid we may have to support and
-> > maintain this much longer than the proposed 2 LTS releases (as seen with
-> > anything tagged with "legacy" in the upstream kernel).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 2b66ef84d0d2a0ea955b40bd306f5e3abbc5cf9c  usb: hub: lack of clearing xHC resources
 
-There are no products shipping today using dwc3-qcom where Devicetree is
-considered firmware. The primary audience for a longer transition is
-users of the various laptops with Qualcomm-chip in them. But given the
-rapid development in a variety of functional areas, these users will be
-highly compelled to update their DTBs within 2 years.
+elapsed time: 1065m
 
-The other obvious user group is to make sure us upstream developers
-don't loose USB when things get out of sync.
+configs tested: 120
+configs skipped: 5
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-That said, if the model defined here is to be followed in other cases
-(or my other vendors) where Devicetree is treated as firmware, your
-concerns are valid - and it might be worth taking the cost of managing
-the live-migration code.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-13.2.0
+arc                   randconfig-001-20250303    gcc-13.2.0
+arc                   randconfig-002-20250303    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                          ixp4xx_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250303    clang-15
+arm                   randconfig-002-20250303    gcc-14.2.0
+arm                   randconfig-003-20250303    gcc-14.2.0
+arm                   randconfig-004-20250303    clang-17
+arm                           u8500_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250303    clang-21
+arm64                 randconfig-002-20250303    clang-19
+arm64                 randconfig-003-20250303    gcc-14.2.0
+arm64                 randconfig-004-20250303    clang-19
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250303    gcc-14.2.0
+csky                  randconfig-002-20250303    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250303    clang-21
+hexagon               randconfig-002-20250303    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250303    gcc-12
+i386        buildonly-randconfig-002-20250303    clang-19
+i386        buildonly-randconfig-003-20250303    clang-19
+i386        buildonly-randconfig-004-20250303    gcc-12
+i386        buildonly-randconfig-005-20250303    gcc-12
+i386        buildonly-randconfig-006-20250303    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250303    gcc-14.2.0
+loongarch             randconfig-002-20250303    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                       bvme6000_defconfig    gcc-14.2.0
+m68k                       m5208evb_defconfig    gcc-14.2.0
+m68k                        m5272c3_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250303    gcc-14.2.0
+nios2                 randconfig-002-20250303    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250303    gcc-14.2.0
+parisc                randconfig-002-20250303    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                   lite5200b_defconfig    clang-21
+powerpc                      mgcoge_defconfig    clang-21
+powerpc                 mpc837x_rdb_defconfig    gcc-14.2.0
+powerpc                     rainier_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250303    clang-15
+powerpc               randconfig-002-20250303    clang-21
+powerpc               randconfig-003-20250303    clang-21
+powerpc                    sam440ep_defconfig    gcc-14.2.0
+powerpc64             randconfig-002-20250303    gcc-14.2.0
+powerpc64             randconfig-003-20250303    clang-21
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-21
+riscv                 randconfig-001-20250303    gcc-14.2.0
+riscv                 randconfig-002-20250303    gcc-14.2.0
+s390                             alldefconfig    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250303    clang-18
+s390                  randconfig-002-20250303    clang-16
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250303    gcc-14.2.0
+sh                    randconfig-002-20250303    gcc-14.2.0
+sh                           se7619_defconfig    gcc-14.2.0
+sh                           sh2007_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250303    gcc-14.2.0
+sparc                 randconfig-002-20250303    gcc-14.2.0
+sparc64               randconfig-001-20250303    gcc-14.2.0
+sparc64               randconfig-002-20250303    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250303    gcc-12
+um                    randconfig-002-20250303    clang-21
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250303    clang-19
+x86_64      buildonly-randconfig-002-20250303    gcc-12
+x86_64      buildonly-randconfig-003-20250303    clang-19
+x86_64      buildonly-randconfig-004-20250303    gcc-12
+x86_64      buildonly-randconfig-005-20250303    gcc-12
+x86_64      buildonly-randconfig-006-20250303    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250303    gcc-14.2.0
+xtensa                randconfig-002-20250303    gcc-14.2.0
 
-> > If possible, I'd
-> > prefer the complications of maintenance of the migration code be handled
-> > downstream.
-> > 
-
-I'm sorry, but here it sounds like you're saying that you don't want any
-migration code upstream at all? This is not possible, as this will break
-USB for developers and users short term. We can of course discuss the 2
-LTS though, if you want a shorter life span for this migration.
-
-
-In my view, setting a flag date when the dwc3-qcom-legacy.c will be
-removed will provide upstream users a transition period, at a very low
-additional cost (934 lines of already tested code). If someone
-downstream after that flag date wants to retain support for qcom,dwc3
-they can just revert the removal of dwc3-qcom-legacy.c.
-
-The alternative is that I try to get the migration code suggested in v3
-to a state where it can be merged (right now it's 6x larger) and then
-keep investing indefinitely in making sure it's not bit-rotting
-(although Rob Herring did request a flag date of the migration code in
-v3 as well...).
-
-Regards,
-Bjorn
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
