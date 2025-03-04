@@ -1,143 +1,111 @@
-Return-Path: <linux-usb+bounces-21331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67AE6A4DDF8
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 13:31:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2120BA4DE5B
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 13:52:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 885CD178A45
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 12:31:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7FF73A1AD1
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 12:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC39202C2E;
-	Tue,  4 Mar 2025 12:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88510202976;
+	Tue,  4 Mar 2025 12:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fsCFCsfy"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="WkYmpMPD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7D78472;
-	Tue,  4 Mar 2025 12:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B869F1FC7FD;
+	Tue,  4 Mar 2025 12:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741091505; cv=none; b=ia9+Zk5CjbB+DpZo8lMYYid7Kcg0DleJ8LbO32GFCHZD+WnzbWmCLX38Ybtcq5cklBQ/rxN1cYZTmd7opjKJ+7EmmEC3Cey6mMWmmuk/MVmAql1E2nuTsPFTDQ0EQBsFut19cMPaZVCOBdyY7qPFTlp0gnGgnMM0SGPCs1900/o=
+	t=1741092731; cv=none; b=pk0mZXd0ajm21Exvc8KPUZlD1KNNoKZ4NYKpA63f969BXoR3kp7M7F9OZo5URCHfnw8k6WQ09HjXVrSvkz4JhNLaqb6Hg59vyPDtqcJArR6xuCQ3bpwYl+E1aGieYmQpR0SAaawErDkjAFEcKEK/u43N2UDmhP9ZMxS0+X6RruQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741091505; c=relaxed/simple;
-	bh=ch5HuCNaSbBnRrFzcfCE8Js6kll47DRucNUGWtDz8Uo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A97FtcAtWbtapUtIfOMWTmj5MSvyUzGijiZPLQntxyKdpIBnZOblhydGiAiQJFQdiHYJU9QK8bKSMsS82lQdVW1fJMEpt2LWy/iI+FMewEub9ehqArC8vB8qy9vdlOYDU6qRKusFACieNWrobsG6OnEe7ZO04SyNLwmh0TvgDaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fsCFCsfy; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741091504; x=1772627504;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ch5HuCNaSbBnRrFzcfCE8Js6kll47DRucNUGWtDz8Uo=;
-  b=fsCFCsfysbXu9ELDMDfgBzh/ZCgn0TRLB8a4Bxmu205WW+KZ23Ws8u0I
-   1U8mKTwOpAUAc4RU18/F0EDsq0geF2unBdIqq+FEQWaO+x478PnHzKQjf
-   9HDkzRfRUWthJLdeqvtquvxED+BJ4qAWvafOZUfURla+I7D2s7xC9IT5O
-   KQoWsvZ6Seu8mtaKbcgkywcEmAocYxo9B2jh0LGuB4XPqAD1pyYtyvPBS
-   D87NzpU1Lnpv41oDHSDgC2YalnrnMGdbkwShDP86sI6pmO+FWgNqhX+k3
-   YNA+GK5J2aAYf+kILhmY+c1M0U1m9W4DBQUdi1k+NKsS8Q2uKGRsC+y1A
-   g==;
-X-CSE-ConnectionGUID: bsjl6KcnSV2faoLruAaXVw==
-X-CSE-MsgGUID: 5mHGIu6WRy+KadY1OU2ARA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="52212322"
-X-IronPort-AV: E=Sophos;i="6.13,331,1732608000"; 
-   d="scan'208";a="52212322"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 04:31:43 -0800
-X-CSE-ConnectionGUID: GNZ7DyeVQieqBGQjFMgPAw==
-X-CSE-MsgGUID: hfgsoOjpRnaaHRCY0h85oQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="123557789"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa005.jf.intel.com with ESMTP; 04 Mar 2025 04:31:41 -0800
-Message-ID: <7f231ac1-69de-43ce-a9f6-23beade42fc8@intel.com>
-Date: Tue, 4 Mar 2025 14:32:43 +0200
+	s=arc-20240116; t=1741092731; c=relaxed/simple;
+	bh=jNXj/hM908lbIGT/rEay9SEHPUga9srW3xe5hIv0S4I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D2y2qWNgLlvigKBdUDUBcbJbLxTjAc1ewoLUWbQJ50bhh89zIfqngQmH+nxhlvBM8vOXukK2DfDkq3JIxrVMAwkX4t0cmRWgVh2YgtIPecr8258Rz5PjRqlh5FjxCKzkwQLPhr2bi5ZyHZnrhJtN2kF8IkIVB/g14CSYdm4tfQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=WkYmpMPD; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1741092686;
+	bh=uqbrItG4RF2iGWowQ1HAIeAWIrLWX/XtAcPaXldbM9U=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=WkYmpMPDliAQbHjKRg0TBEH9LUROFq9jOJXC3K+edpNJckfhotE7Dzpzk6dQWfE8A
+	 prijyE8NeIDj2xnEfpzvFcoygxjespqaU8Ash7Fmo10yvAI6oD2c5ILajs19kMCMwC
+	 Jm+qdnJXI3twqbhHKsp2G3xZuZTQzFoFLeKaX74w=
+X-QQ-mid: bizesmtpip2t1741092678tcj7lod
+X-QQ-Originating-IP: N/MK0n+jARevcIz76CPcyl4YeOuRDsR2KzdfonEkqv8=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 04 Mar 2025 20:51:16 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9723207296368819461
+From: raoxu <raoxu@uniontech.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	wangyuli@uniontech.com,
+	zhanjun@uniontech.com,
+	raoxu@uniontech.com
+Subject: Re:[PATCH V2] usb: xhci: Add debugfs support for xHCI port bandwidth
+Date: Tue,  4 Mar 2025 20:51:15 +0800
+Message-Id: <20250304125115.29332-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] usb: xhci: Add debugfs support for xHCI port bandwidth
-To: raoxu <raoxu@uniontech.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- wangyuli@uniontech.com, zhanjun@uniontech.com
-References: <20250303105635.21290-1-raoxu@uniontech.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20250303105635.21290-1-raoxu@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
+X-QQ-XMAILINFO: OdexiAf7tcY2bVPH384jGr4mGD+SH+WbD52RF935rULBRBGFY/bvH+yw
+	6f4Qh57ZwG6nlQrFqSYJrQukcc8pleZbeSqU5DrTSZ1iw0qro+VmX1Vwqoz9YzVj05UMn+N
+	xgnBfdFzxmd6HUIW4VwcZlgw0yZpIB0c9NesUleLSI+OKgPaP1fJ8VKNw1nRH6u2Tk8ZJnT
+	oInPrfHM3eM2pjhafrSQLLR7CFBhiCQ9e3nLJ+mf93SiI4y+UTEBr8ud6bxLmoXnplMeo46
+	1sNxLfOIf7lEP7yr3Wvy7pX/xP4YdEEhL7YZhP3iWo/ptLRP/Q1OAkJnk9tJShEuMGhN/rH
+	bWsHNTAg6hprT164nLPPAHM/rRuPJdlzk0h7EvQQcT+Rlnu6znAFmoHgcA2MX+67Umgyksu
+	HG72c5vZKCjXSbO945KndyhpHGEigpjegra9AehTg2ex05UIUwCNZnSY9/UKyWWqCHQ3cuv
+	ho6gOIMt66JP6I6fAQdGtakeK7lLFYtTochA68JuwlVmytaT1D/5VgIbA4yKWlH9K9ouTFz
+	MVFgbTBMNGSK9AF7bsEIU4Jm7AX8jOq4cb/ckUEhp+/PuegfOTbUIRgzseABlsYDl3CrJK8
+	k1ED5DBKrH7YxfGrmC0smya/mlm5jZiJZ6I5zirEphd/SH28YtZSJsz8ptGUHZjUv5/3lVq
+	ij2G+wXqalNoe1OuyCXj20tZ8hP6GJ3A7YvYeH9mabIS38vKp7Jir4aKFe7qJLLpkmGIQaq
+	kKf744STZ6WKjMCkagfozpS68RT5r+g7GkWbCJnJpWmiyGXBlOLRtQ61QshNvYl1hlnh8WH
+	p+pB6QG6cTSUOqjbdS1Y0z3XCnrcrUzm5J/hUXhMs0cR6ghqBgR0ABpxn+u+7avtrLuDLdm
+	nlLli4gdLaM0lpbVmbmeaKn1YB6r9jCWVk5kZv4h3j/CDd5Y70KQksGjMLvtR/lp7sTZVyU
+	g3wK252k9cT7iqFsY01EKc6OcE9HLy5wsh0ji2IaMZsnXfq4RjHGcpVjCB2OfV2HqemMT8y
+	5spOEQsvnxvkqYKr2B12NEPYfq0NVvuPDauck+7kzKk2XaRPNpDjb2gTX+kGbI0GJMnHM2z
+	TQdEDp8vKY0kCW36RMF2VTTaHPC4BOTfA==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
 
-On 3.3.2025 12.56, raoxu wrote:
-> From: Xu Rao <raoxu@uniontech.com>
-> 
-> In many projects, you need to obtain the available bandwidth of the
-> xhci roothub port. Refer to xhci rev1_2 and use the TRB_GET_BW
-> command to obtain it.
-> 
-> hardware tested:
-> 03:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1
-> (prog-if 30 [XHCI])
-> Subsystem: Huawei Technologies Co., Ltd. Raven USB 3.1
-> Flags: bus master, fast devsel, latency 0, IRQ 30
-> Memory at c0300000 (64-bit, non-prefetchable) [size=1M]
-> Capabilities: [48] Vendor Specific Information: Len=08 <?>
-> Capabilities: [50] Power Management version 3
-> Capabilities: [64] Express Endpoint, MSI 00
-> Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
-> Capabilities: [c0] MSI-X: Enable+ Count=8 Masked-
-> Kernel driver in use: xhci_hcd
-> 
-> test progress:
-> 1.cd /sys/kernel/debug/usb/xhci/0000:03:00.3
-> cat port_bandwidth
-> /sys/kernel/debug/usb/xhci/0000:03:00.3# cat port_bandwidth
-> port[1] available bw: 79%.
-> port[2] available bw: 79%.
-> port[3] available bw: 79%.
-> port[4] available bw: 79%.
-> port[5] available bw: 90%.
-> port[6] available bw: 90%.
-> port[7] available bw: 90%.
-> port[8] available bw: 90%.
-> 2.plug in usb video cammer open it
-> cat port_bandwidth
-> port[1] available bw: 39%.
-> port[2] available bw: 39%.
-> port[3] available bw: 39%.
-> port[4] available bw: 39%.
-> port[5] available bw: 90%.
-> port[6] available bw: 90%.
-> port[7] available bw: 90%.
-> port[8] available bw: 90%.
-> 
-> Signed-off-by: Xu Rao <raoxu@uniontech.com>
+On 2025/3/4 20:31, Mathias Nyman  wrote:
 
-Thanks Xy Rao,
-Nice to see support for 'Get Port Bandwidth' feature in xhci.
+>I do however have some larger rework suggestions to this.
+>
+>Instead of queuing three commands on one file read, parsing and
+>copy the content from each context dma into an array on stack, we could
+>have separate files in debugfs for each speed, and queue one command
+>for each. we could also skip the array on stack and print values from context
+>directly.
+>
+>Something is also very off with the locks in this patch.
+>Looks like every lock/unlock got replaced with an unlock
 
-I do however have some larger rework suggestions to this.
+thanks Mathias Nyman,
 
-Instead of queuing three commands on one file read, parsing and
-copy the content from each context dma into an array on stack, we could
-have separate files in debugfs for each speed, and queue one command
-for each. we could also skip the array on stack and print values from context
-directly.
+Thank you for your valuable suggestions.I will separate files in debugfs for each speed.
+skipping the array on stack and print values from context directly sounds good. looks is a error and i will fix it.
+According to your suggestion i will send patch v3
 
-Something is also very off with the locks in this patch.
-Looks like every lock/unlock got replaced with an unlock
+thanks,
 
-Thanks
-Mathias
-
+raoxu
 
