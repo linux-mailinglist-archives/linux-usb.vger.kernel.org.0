@@ -1,47 +1,76 @@
-Return-Path: <linux-usb+bounces-21352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21355-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF61A4EA0C
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 18:55:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A74C7A4EDC2
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 20:46:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DD1F17C513
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 17:50:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A03A7AA6D0
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Mar 2025 19:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C6D27F4EC;
-	Tue,  4 Mar 2025 17:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E7325F794;
+	Tue,  4 Mar 2025 19:45:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="vPvc4aTx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h50HTGRH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA0C24EAB9
-	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92061C84DB
+	for <linux-usb@vger.kernel.org>; Tue,  4 Mar 2025 19:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741109394; cv=none; b=hCB1EVp+AGWThKisJ+X8ZHRhDHdbYkY84rdXXIDu96vr3n1nzLNPO5nZARTPi7KvDxHt78RESVcg6I5BxCmxu49u09fsSjXrCXu4K2QDZS0e2hfSVslS3EUX3EbKteZl6bDcQ+IAhJk87h1+RUBlsaxG0e1LE8TtHvR3VByWKg4=
+	t=1741117532; cv=none; b=cvsLch4yqmAVjfl8zrPg4ZUMXQ7ah+Rq7sCTOGzCy7ZOzRzMxWakCqYbOCQf38tSjShwRgSGqnY7N1WD3aDZkX0/3AV2TNfb8+BXXGS1f1+4g3yHfXaiFAv5RJre4sc0Py8u5ItlBWhMnIZjlZZCHCuqlc6ygE/ZZSptUmgDeIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741109394; c=relaxed/simple;
-	bh=ERNhdDABOVobVdLtVqDh2yN8tQw2AsRk3DIxBUjAZZY=;
+	s=arc-20240116; t=1741117532; c=relaxed/simple;
+	bh=cRxreIV1tABCpL9fRZfH6KzlR/VZYK1SWoxTM7CPHC8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m5s7sPc0M5olKznHxF53ZrXubq1SZTrIa+Tqce6fW179fQStnnCtb4cyZ/OCz591C5qxxWOdIKOEJIMZGe+pToHAhf0wL0YVOv1zYw+i6ehexkwrsO/QcZXmoRbWVcPE366cT7c2nxPv3zzXRlKJ60bnoo+dEAzd02OCRm4nics=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=vPvc4aTx; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [10.50.4.36] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z6jNt6jfNz4PcD;
-	Tue,  4 Mar 2025 12:29:50 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1741109391; bh=ERNhdDABOVobVdLtVqDh2yN8tQw2AsRk3DIxBUjAZZY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=vPvc4aTxDmh+xNFlewJYffrgtF4vPx5CYD89tmgn1pz5Lo6ZoPpNTEpCRM1M9/fkD
-	 JbsNmM7RQJLUEYcNlafGJz+59gVvDOZ8b0cLa46KEcEQtn6L+QKYhTKd6tSrmJvXnv
-	 igD3sXfqV450GE9iUDc2SFVVcNqCacBTBDv87+XI=
-Message-ID: <ae9cfc12-99ba-4c40-b698-e2b12eb22ab8@panix.com>
-Date: Tue, 4 Mar 2025 09:29:49 -0800
+	 In-Reply-To:Content-Type; b=Mf9Ja7R1kTqWY6wkFP/VuI9TRegVXuf0HW8V+iUkYpiQRTOnpag7zOjCfW/x/A4kbp+tGYQZlFeoKJPLc/3t6oxg6Q6yuyPBOuDi6oruV9s7AwjYzBV/Pd2D/YO+gnPF1sYeaMC5HbC7XreOKgsd/olq1sBeZiUcdWNb3flvZ7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h50HTGRH; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-85ae4dc67e5so65671539f.2
+        for <linux-usb@vger.kernel.org>; Tue, 04 Mar 2025 11:45:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1741117530; x=1741722330; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wlj6wsu/JSvBM4RPZykaf7UYl5o6YxQI8N0Xp4ZZi8E=;
+        b=h50HTGRHn++xPcga7XKV7ytlYY8x5eYFCWtFqy2mTTl0YViEl/LNWPbZnXbIqB0W6o
+         lB5O/3f+Q+XNPGomBlX0EWuYtZMIPiG8JWAp72QOcGx5oN9O3iZLuUaGWOOOX2ogM9Ww
+         oajmw45dFoNY9fLkyuotzestgQh1PErUkrwlE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741117530; x=1741722330;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wlj6wsu/JSvBM4RPZykaf7UYl5o6YxQI8N0Xp4ZZi8E=;
+        b=U2luUhzXTAynnTyTAeEcGhQvX0SCWEq7yE6qH96xzCvDL/V6CKjCm9LJupG3yDhHT4
+         /87OcCw7xI0gCrrjgTOtfKgFDLtp/ILmGAFTpxzvuM9SHF1cHo2Lp0hXLa8Mmq1885yg
+         Kks7yhcRmZzgXYlc+MrXxngjGixXQ3Hwj0K482jRGwUfS944KzMmfYpWezL9+IST1SIh
+         6fUJoGrr/xw2qsQLHI7kh/EaDY0IumXYsfgS8W1PPAVZTcIQRfc1ANnqbfCQ8n5tvkv9
+         VcueH7rfNbce4EuJfRWhn90QK+29IO3O536BXlj5xAjCWFtf6Q8fj5+gYzoV7m4okJAk
+         999g==
+X-Forwarded-Encrypted: i=1; AJvYcCW/PQeXqEqLq3ZxCHUg+FtPvhJ+1zApeng9HBny2yflatm9Chkr7KDW514GFz0XnPZjhOI3nktqxtE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO6Raw4EMBMlG0HfW7yyaoZk+OyISRepHIWaWg+7TbSdYMnvgk
+	BR3d++IgPIAz2s8Nk2D3+gjtBmsrZa2reOKzbT+htIl0VnMomBmibdNuzQfxo+I=
+X-Gm-Gg: ASbGncubpaS8+7csvfEwsuTOv9HiYMKKNjcVWkn/oEvjI64GNef5Y3daEWGPUFpHdEe
+	benlvRcWoBZHvjnMf50rhaWcTDT4WslP19auEgAqLynb7vHQy6ABCJASmmcjeF3bcEhF28ZHwSh
+	dOlw3jvr7iJZVEeT/9S2dmDbYd9quu6shkTe6grSc5zbq0fxBJ4HTR8XwptLzVFPKFfgV8gkesn
+	oa1LsMOY9nmnsSdwH2VOAYxXJjQ6DRtoPS5yCiisv8JIV827wyekKN705S2lmV6TLa8mf0cyhVf
+	4v+zcNwbyVK/xAdxYcsTA0PsMc0D/ty16f7u/Q17JfQucqQeoZNGOsE=
+X-Google-Smtp-Source: AGHT+IGkXVbMrjLGRFRcGTX+Z6vuj8MvARSqYVSsiUwnZt/gjJ0RAXPrIhj1KuEyYDn119fg33fmwQ==
+X-Received: by 2002:a05:6602:b84:b0:85a:fdf4:f429 with SMTP id ca18e2360f4ac-85affb97f71mr40405939f.12.1741117529977;
+        Tue, 04 Mar 2025 11:45:29 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85afc905722sm22022339f.13.2025.03.04.11.45.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Mar 2025 11:45:29 -0800 (PST)
+Message-ID: <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
+Date: Tue, 4 Mar 2025 12:45:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,57 +78,62 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
- activation asynchronously") too, to stop my resume crashes
-To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
-Cc: linux-usb@vger.kernel.org
-References: <567725a5-f984-4ea1-bd38-8815825c1211@panix.com>
- <20250303142058.GA3713119@black.fi.intel.com>
- <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
- <20250303175818.GB3713119@black.fi.intel.com>
- <007b005f-a6d1-44a2-9795-036c8f397274@panix.com>
- <48ef4c14-55d5-4baa-b862-f9e7368ed950@panix.com>
- <20250304082731.GF3713119@black.fi.intel.com>
- <14351945-fcde-4088-b7b3-542c6e4b7d0e@panix.com>
- <20250304134017.GL3713119@black.fi.intel.com>
- <7c5ec580-9b1c-40b7-9a8d-64bc95c41432@panix.com>
- <20250304135148.GM3713119@black.fi.intel.com>
+Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
+ usbip device
+To: Zongmin Zhou <min_halo@163.com>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250219092555.112631-1-min_halo@163.com>
+ <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
+ <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
+ <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
+ <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
 Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <20250304135148.GM3713119@black.fi.intel.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 3/2/25 05:37, Zongmin Zhou wrote:
+> Dear shuah,
+> 
+> 
+> Yes, I agree with you.It would be better if there have a more simpler fixes than This patch.
+> 
+> I can just think of the two possible solutions that mentioned before.
 
-On 3/4/25 05:51, Mika Westerberg wrote:
+What are the two possible solutions?
+> 
+> 
+> If SWIOTLB disabled,dma_max_mapping_size() return SIZE_MAX.
 
->>> It only happens if you have TBT dock and the NVMe connected and you
->>> disconnect them while the system is suspended. I suggest trying that a
->>> couple times and see if that happens. For me it
->>> happened pretty much on first suspend cycle.
+Right when CONFIG_HAS_DMA, if not it returns 0. Perhaps we
+can ignore CONFIG_HAS_DMA=n for this for this discussion.
 
-So I've tried it twice again today-
+> 
+> Only if SWIOTLB is active and dma addressing limited will return the swiotlb max mapping size.
+> 
+> 
+> The swiotlb config seems rely on many other config options like x86_64/IOMMU_SUPPORT and so on,
+> 
+> and the configuration on host and client side only use the default at all,Like the default ubuntu release version.
+> 
+> It seems that switlb is enabled by default on most platforms.
 
-1 - CalDigit dock, NVMe adaptor. Put it to sleep, disconnected 
-everything, even waited a while (call me crazy, but I swear how long the 
-system is suspended seems to make a difference). Opened the lid, and it 
-came right up.
+If understand correctly the problem happens only when SWIOTLB
+is enabled on client or host?
 
-2 - CalDigit dock, NVMe adaptor. Hibernated, drove to clients' offices. 
-Resumed, came up OK.
+The following combinations are possible:
 
-Now I'm curious what difference the "4. Authorize both PCIe tunnels, 
-verify devices are there." makes to your system, as I have "boltd" 
-running and that handles it for me.
+SWILTLB enabled on client and disabled on host - rate limited?
+SWILTLB enabled on client and enabled on host - rate limited?
+SWILTLB disabled on client and enabled on host - rate limited?
+SWILTLB disabled on client and disabled on host - not a problem
 
-Tell ya what- if Linus pushes anything to master today, I'll 
-pull/build/boot it and since the TB dyndbg is on, I'll post the dmesg 
-from the runs so you can see them when you get in tomorrow.
+thanks,
+-- Shuah
 
--Kenny
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
 
 
