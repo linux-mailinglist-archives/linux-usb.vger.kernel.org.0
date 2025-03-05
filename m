@@ -1,102 +1,176 @@
-Return-Path: <linux-usb+bounces-21396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21397-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D239DA50244
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 15:38:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F9C5A50382
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 16:32:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC4133B4238
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 14:36:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC9F6188B942
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 15:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F3C24BC17;
-	Wed,  5 Mar 2025 14:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAFE424BD14;
+	Wed,  5 Mar 2025 15:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AunEmELJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CgnfwRsS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18323FB31
-	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 14:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F1017BEC5
+	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 15:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741185260; cv=none; b=Mf0P0bqihapGcn4lMntfnA7z3vCDDPQlXpgK2xIlThNY3Dxbu1iQOOPa1bnNPvNx8cXJMxDGnjedSNSUGpLJ2Lt0yvFdyDM8ETKlXfs2BF+zPb6xKSJ2gY/JWhwW/NRFtYrMgclQf/VkBSMZa8Mub0+JXXzvGnPa9zbWwkIVJk0=
+	t=1741188737; cv=none; b=g/tSKpZDQI0Y8VXBCQmDHnE90J9pIc2Z3chA/Df+AI/sMbA/CCSVMRHRu2wK+Ny6EkIAkAA53Vydo+WTOTwXxjlJZ1kqiQnMNaSDYzKp791JYWmr88ySfMKLPM9w1iHFkXAIFxdnUo8jFJ3L0Tux3ozaPzQGhzAfFpNmpQVPfjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741185260; c=relaxed/simple;
-	bh=lMqZGrrM7Ygih2aalQQiVJmm8qLOWdJFkHa+w2RbMtc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nSp7R1dt3rMPs0KdibOXYhKcAbkqJuSNsmm2cyT2xDAzW96ng7S1eWX3gTfDaUY1MgvWfsi8Q7m7zWtohl9sL89J5j8R/ZKfRBMMQ+u0XA8uNjlJUz9lHU6S9d/VME8+gGyDqUUYXrTtzMJ77JuvvldNYQBUZ75QqASREm0q6so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AunEmELJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5DF15C4CEE9
-	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 14:34:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741185259;
-	bh=lMqZGrrM7Ygih2aalQQiVJmm8qLOWdJFkHa+w2RbMtc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=AunEmELJ8jYHdZ16ckUONI8UPfkdjUqmgtabDpakbBD/z/FACRSjSxHi2ddCjNVue
-	 poar7Bped2rpbu0VbWV03xHwx8+V0FjFziMjb4CIZiZSMlumWX6zJgH8g2t6kyidDh
-	 cDy75o4eP9ONEJzjFrSNbx1BwxM66b/8wH6zcd6fP1/GEG4AR7QQfmDC0txAsgt1wF
-	 OKrjBNTUInSCcjxSjkWQQ4pxKe1+4SEqHSqCvr/dR9cyf0yN1X7rKl3y9goySPr+Ua
-	 Bc3R+Hj5uPxuW/rnywFkVs6FWv5g6/Dt1yVIx01zzYVKOmjghFGaRZVttzLGxq+nel
-	 hNxjfu1ZBTnzQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4C9C2C433E1; Wed,  5 Mar 2025 14:34:19 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
- with AMD AI 365
-Date: Wed, 05 Mar 2025 14:34:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219748-208809-MYOO6VwVpw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
-References: <bug-219748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1741188737; c=relaxed/simple;
+	bh=2kIYwCOuHPQLxjrsje3E22mwIT9louoQN5UFs1Q5u8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RCqzk4UMQI9u7Uvm7TN4yR0DQOWDQmIHUJznfh1HFLGgvAFHCA1tIavy1w41iSjWJ5GrsxT8N7FdalqDh7JfZqefU9AdCpkBDo7Q0wqdTdhaJEZuqQ/ejLlfUhU4cbxGwAKidR7TLjK1pObfPpHpHbxD+LqV8GRy3dYnhh+a+YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CgnfwRsS; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741188735; x=1772724735;
+  h=date:from:to:cc:subject:message-id;
+  bh=2kIYwCOuHPQLxjrsje3E22mwIT9louoQN5UFs1Q5u8Q=;
+  b=CgnfwRsSYyi0csNBMG38QbCWaWmHqdLu2SpPbVpaZbRW81FHXFO7jFlQ
+   XsUSQmNii8WtgPqrYHQdApehtyWKrRl0Nrux84I/dTRbOQ0rJ1MqW0ocH
+   WFDRnMOnx3lfETos82ahq48JgPE7Ei+liKSl5yEL8BdGpKPinFw/VcxEG
+   osj4PseGTlxggKjkmV+ddoV9U5OpJG2hukabrVRfkaEvcb2hyn9w5BO6I
+   DiP/jHXVzY4EsRfctu3GFoiSQnEepaleUJNm8075Nf8rn/BREzN9/L2wc
+   ZPzWyyRGEfPCV93w/+d17fks+tZHd50M/GpjvtegPKm3KEs75MjgElDWA
+   Q==;
+X-CSE-ConnectionGUID: fTmuOJXWTXmrxSKfCu9Ffg==
+X-CSE-MsgGUID: 9SMypHfNS5qb81yIYABJBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="29740310"
+X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
+   d="scan'208";a="29740310"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 07:32:14 -0800
+X-CSE-ConnectionGUID: uVRt3pH2TXSV2xoXSTTwKg==
+X-CSE-MsgGUID: bDeuiw8nTuKSBmJzLn2wgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
+   d="scan'208";a="118730622"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 05 Mar 2025 07:32:13 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpqjC-000LA4-25;
+	Wed, 05 Mar 2025 15:32:10 +0000
+Date: Wed, 05 Mar 2025 23:31:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ c7c1f3b05c67173f462d73d301d572b3f9e57e3b
+Message-ID: <202503052332.rs7lbS2H-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: c7c1f3b05c67173f462d73d301d572b3f9e57e3b  usb: xhci: Fix host controllers "dying" after suspend and resume
 
---- Comment #25 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Comment on attachment 307772
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307772
-Scan downstream retimers after the router has been enumerated v2
+elapsed time: 1456m
 
-That patch looks good to me Mika.  Feel free to add:
+configs tested: 83
+configs skipped: 1
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Also since Sean mentions this helps a different issue on his Pluggable dock=
- (no
-EDID read) I think you can also add:
+tested configs:
+alpha                            allnoconfig    gcc-14.2.0
+alpha                           allyesconfig    gcc-14.2.0
+arc                             allmodconfig    gcc-13.2.0
+arc                              allnoconfig    gcc-13.2.0
+arc                             allyesconfig    gcc-13.2.0
+arc                  randconfig-001-20250305    gcc-13.2.0
+arc                  randconfig-002-20250305    gcc-13.2.0
+arm                             allmodconfig    gcc-14.2.0
+arm                              allnoconfig    clang-17
+arm                             allyesconfig    gcc-14.2.0
+arm                  randconfig-001-20250305    gcc-14.2.0
+arm                  randconfig-002-20250305    clang-19
+arm                  randconfig-003-20250305    gcc-14.2.0
+arm                  randconfig-004-20250305    gcc-14.2.0
+arm64                           allmodconfig    clang-18
+arm64                            allnoconfig    gcc-14.2.0
+arm64                randconfig-001-20250305    clang-15
+arm64                randconfig-002-20250305    gcc-14.2.0
+arm64                randconfig-003-20250305    clang-21
+arm64                randconfig-004-20250305    gcc-14.2.0
+csky                             allnoconfig    gcc-14.2.0
+csky                 randconfig-001-20250305    gcc-14.2.0
+csky                 randconfig-002-20250305    gcc-14.2.0
+hexagon                         allmodconfig    clang-21
+hexagon                          allnoconfig    clang-21
+hexagon                         allyesconfig    clang-18
+hexagon              randconfig-001-20250305    clang-21
+hexagon              randconfig-002-20250305    clang-18
+i386                             allnoconfig    gcc-12
+i386       buildonly-randconfig-001-20250305    clang-19
+i386       buildonly-randconfig-002-20250305    clang-19
+i386       buildonly-randconfig-003-20250305    clang-19
+i386       buildonly-randconfig-004-20250305    clang-19
+i386       buildonly-randconfig-005-20250305    clang-19
+i386       buildonly-randconfig-006-20250305    gcc-12
+loongarch                        allnoconfig    gcc-14.2.0
+loongarch            randconfig-001-20250305    gcc-14.2.0
+loongarch            randconfig-002-20250305    gcc-14.2.0
+nios2                randconfig-001-20250305    gcc-14.2.0
+nios2                randconfig-002-20250305    gcc-14.2.0
+openrisc                         allnoconfig    gcc-14.2.0
+parisc                           allnoconfig    gcc-14.2.0
+parisc               randconfig-001-20250305    gcc-14.2.0
+parisc               randconfig-002-20250305    gcc-14.2.0
+powerpc                          allnoconfig    gcc-14.2.0
+powerpc              randconfig-001-20250305    clang-17
+powerpc              randconfig-002-20250305    gcc-14.2.0
+powerpc              randconfig-003-20250305    gcc-14.2.0
+powerpc64            randconfig-001-20250305    clang-19
+powerpc64            randconfig-002-20250305    clang-17
+powerpc64            randconfig-003-20250305    clang-19
+riscv                            allnoconfig    gcc-14.2.0
+riscv                randconfig-001-20250305    clang-19
+riscv                randconfig-002-20250305    gcc-14.2.0
+s390                            allmodconfig    clang-19
+s390                             allnoconfig    clang-15
+s390                            allyesconfig    gcc-14.2.0
+s390                 randconfig-001-20250305    gcc-14.2.0
+s390                 randconfig-002-20250305    gcc-14.2.0
+sh                              allmodconfig    gcc-14.2.0
+sh                              allyesconfig    gcc-14.2.0
+sh                   randconfig-001-20250305    gcc-14.2.0
+sh                   randconfig-002-20250305    gcc-14.2.0
+sparc                           allmodconfig    gcc-14.2.0
+sparc                randconfig-001-20250305    gcc-14.2.0
+sparc                randconfig-002-20250305    gcc-14.2.0
+sparc64              randconfig-001-20250305    gcc-14.2.0
+sparc64              randconfig-002-20250305    gcc-14.2.0
+um                              allmodconfig    clang-21
+um                               allnoconfig    clang-18
+um                              allyesconfig    gcc-12
+um                   randconfig-001-20250305    clang-19
+um                   randconfig-002-20250305    gcc-12
+x86_64                           allnoconfig    clang-19
+x86_64     buildonly-randconfig-001-20250305    clang-19
+x86_64     buildonly-randconfig-002-20250305    gcc-12
+x86_64     buildonly-randconfig-003-20250305    clang-19
+x86_64     buildonly-randconfig-004-20250305    gcc-12
+x86_64     buildonly-randconfig-005-20250305    clang-19
+x86_64     buildonly-randconfig-006-20250305    clang-19
+x86_64                             defconfig    gcc-11
+xtensa               randconfig-001-20250305    gcc-14.2.0
+xtensa               randconfig-002-20250305    gcc-14.2.0
 
-Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/3050
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
