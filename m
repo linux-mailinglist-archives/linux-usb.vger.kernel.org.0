@@ -1,119 +1,113 @@
-Return-Path: <linux-usb+bounces-21384-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21385-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A08A6A4F9BE
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 10:18:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97E9DA4F9EB
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 10:26:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45B0316EE10
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6443188BC27
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:26:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D765C204866;
-	Wed,  5 Mar 2025 09:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960D12045B3;
+	Wed,  5 Mar 2025 09:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CLGS2Qq8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L10ScAJg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0452045A8
-	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 09:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFF01CD21C
+	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 09:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741166302; cv=none; b=LzOiPA0V7HQXytAf10xqV7NB6xb8fvFhvVSXSZqVT5ik+XKUDw0Lhu72e6aqXyh9qaoW526tnn6+s3V5YLvE021nCUS6dmi6wFsDey5ImkX9Q9/LjYDZpQpCtV72KqBdi2isBGAQAPDKs3XsuoEayzOVEwIfDLb97X9qlxfJs4w=
+	t=1741166794; cv=none; b=Eo7RzaZA9FFn1TTeSmjJWa8k9NpqHq9xbKg2ZT2QQNWIT2DTp5sske/aLceJKbWbrGuuB1kXnhFHKbt4bWNqAW1VLyM0FDXJyRLl/Bs/OoUdM/Wmwurd5CPLsN66lx5F5S3TPs0Ct91/iV67mU1yeZYOUIALryVKDgpI5KtwPMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741166302; c=relaxed/simple;
-	bh=41rHq4LcT+kEj1Ao5fN++nyt2AhhfVPMRimX9o7AK+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HwryHSCq3hsgSdzSzxYqa571jVsWX01D58caoZPm/sxN9ySMb7NuyywJJ4Zb6IwuOpJsqkwYHTPvyK31qZ14FGnr99NYu5yYEKhyAWFbyWAlGP6kIlwbSX2ttBq1pph2+Jwc5R3RMNfi63jPzTpf00NVoaqWuedQOCyp2QVgVW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CLGS2Qq8; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741166301; x=1772702301;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=41rHq4LcT+kEj1Ao5fN++nyt2AhhfVPMRimX9o7AK+I=;
-  b=CLGS2Qq8Rfw4XxcQyhfJR8EnVkoYr2D4WcLJhwQhKxYw41NSkN8yKVi3
-   NN8J+YQHuZKMnIGJRAOZGuzIjg2Rqk0sr7X1ZDNmucKfYq6n3qrRhiyBd
-   g8/ADFMcMpseOtpDhl+CDfUsVC0synF0yo5FaSYqDQhZCXxRY+6ZmvKmp
-   valKjiYzNiNQUx6OWJMdzC7Jg4s1KhIw0coqOCHjug/AHr+gGTmqLlIV8
-   IHZ/6vakZQF2MeIY++xTRUkgxzZDk8WKYVBtk9898/mw+p7bdRjLelFIV
-   ISgmePDQROXkP5dQihgBozGlWLmwi0VfzS/GJuzqUD1OMm43BxQdoy0q2
-   A==;
-X-CSE-ConnectionGUID: xjbLBDf4QlCl5GuTaNGMjw==
-X-CSE-MsgGUID: TPc1EML9TDGnrT3qZCGNfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="41979354"
-X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="41979354"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 01:18:20 -0800
-X-CSE-ConnectionGUID: ycFz6sZ7RACjWZcNzZOwMQ==
-X-CSE-MsgGUID: NPYpjyVPSqqlMzh7j0VILg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="141881963"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.120.28]) ([10.245.120.28])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 01:18:18 -0800
-Message-ID: <5144b2b1-997a-4c4e-befe-43a21d357c1b@linux.intel.com>
-Date: Wed, 5 Mar 2025 11:17:58 +0200
+	s=arc-20240116; t=1741166794; c=relaxed/simple;
+	bh=sU0fSylaU76cuDe5aWk8AUIpQqbv17sczJZZq37bMU0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Z6ichwR+dH6nXWoyzghH0C0xpbZTAIqD12KMd67H1fZ0nLzTHB90YQ32ro7GEodIqYUx7e7HJIgRZB1S4pjweIENglY9Ky2hwit1l+mqPIuS4fCDgk97rXQvrwhKPM/eaW+cgWU06y4bQtcfOGKX7CCNqEKB5Gct5TadpwjwJN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L10ScAJg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72114C4CEE9
+	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 09:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741166793;
+	bh=sU0fSylaU76cuDe5aWk8AUIpQqbv17sczJZZq37bMU0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=L10ScAJg3tpS8j9I79ym856rtRuKzSUIGwlnM5LDADv+7O1WIXfveC7DnBsrFmrDR
+	 dpmnw4UnRAxyroSve5Tfi0Z+p05/d3MvUlNGtlSyYm8mMlKLztO+jsRn/ZTg7S7oaO
+	 RcINnAQsFosvG5yu4QAP0Kb7UiyrvpGXEvzx7nJ/XhJu0SsMtbkMW7VTWIyqnOWOon
+	 ks1Von+hHEArg2ZFyGk8ddjSUjxmy6b7ZKBionsWhOgDIVPhkcSrP783k/I9stfg0M
+	 HMB5sn5MDBRts6ecC+LoHGm1dzAKd4cVyWrX1TRb8JKWe3xPpR/o8kJgTAaG6evpSP
+	 L64c2tXEfWFhw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5D812C41612; Wed,  5 Mar 2025 09:26:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
+ with AMD AI 365
+Date: Wed, 05 Mar 2025 09:26:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219748-208809-mUnog8ZSSX@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
+References: <bug-219748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] usb: xhci: move debug capabilities from trb_in_td()
- to handle_tx_event()
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
-References: <20250305094600.1630ef54@foxbook>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250305094600.1630ef54@foxbook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
+--- Comment #20 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+(In reply to Sean from comment #18)
+> Created attachment 307767 [details]
+> dmesg after Scan downstream retimers after the router patch
+>=20
+> While this topic is related to a Plugable dock, the Thunderbolt
+> implementation is having some issues for AMD GPUs where display EDIDs can=
+'t
+> be read (https://gitlab.freedesktop.org/drm/amd/-/issues/3050).  This lat=
+est
+> patch appears to have  helped that issue, as my TB3 Lenovo dock on a
+> Framework 16 with an AMD 7840HS CPU is now able to use its display outputs
+> at the correct resolutions.  I'll be testing with addition TB docks I have
+> access to in the near future as well.
 
-On 05/03/2025 10.46, Michał Pecio wrote:
->> +debug_finding_td:
->> +	xhci_err(xhci, "Transfer event %u ep %d dma %016llx not part of current TD start %016llx end %016llx\n",
->> +		 trb_comp_code, ep_index, (unsigned long long)ep_trb_dma,
->> +		 (unsigned long long)xhci_trb_virt_to_dma(td->start_seg, td->start_trb),
->> +		 (unsigned long long)xhci_trb_virt_to_dma(td->end_seg, td->end_trb)); +
->> +	xhci_for_each_ring_seg(ep_ring->first_seg, ep_seg) {
->> +		xhci_warn(xhci, "Ring seg %u trb start %016llx end %016llx\n", ep_seg->num,
->> +			  (unsigned long long)ep_seg->dma,
->> +			  (unsigned long long)(ep_seg->dma + TRB_SEGMENT_SIZE));
->> +	}
->> +	return -ESHUTDOWN;
-> 
-> Cleaning up trb_in_td() is obviously the right thing to do, but one
-> thing I always disliked about this message is how long and verbose it
-> is. Not sure if dumping all ring segments is useful here, seg->dma can
-> generally be deduced by looking at the DMA pointers involved.
-> 
-> As far as improvements go, IMO it would be much more useful to decode
-> those pointers into seg-number/trb-index pairs. I wrote a PoC and the
-> result is quite encouraging, I may submit it if there is interest.
-> 
+I suggest opening separate issue for this. I don't see how this patch could
+affect GPU reading EDID from monitor. Assuming it is over DisplayPort tunne=
+l,
+at that point the device router is already enumerated. This patch just spee=
+ds
+up the enumeration to cope with the Pluggable device internal timeout.
 
-Agreed, printing the segment number and TRB index is a better approach.
-This is my plan for the future, but in my opinion, the format for common
-values should be consistent. Therefore, the change to segment number and
-index should be implemented simultaneously across all xHCI driver prints,
-except for some specific places. Thus, it's not changed in this patch set.
+Please attach full dmesg with "thunderbolt.dyndbg=3D+p" in the command line=
+ too
+to that new issue.
 
-I plan to make this change after the rework of trb_in_td(). Currently,
-I am testing a new trb_in_td() version suggested by Mathias, which would
-make the number/index change even more logical.
+--=20
+You may reply to this email to add a comment.
 
-Regards,
-Niklas
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
