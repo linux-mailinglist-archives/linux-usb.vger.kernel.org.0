@@ -1,122 +1,135 @@
-Return-Path: <linux-usb+bounces-21379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0D8FA4F8B6
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:24:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F689A4F8D4
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:31:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3A8A3A32F0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 08:24:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD54D189275A
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 08:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879461F7098;
-	Wed,  5 Mar 2025 08:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CED1F4194;
+	Wed,  5 Mar 2025 08:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O1XopWia"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q62L6lOM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5A11EF0BC;
-	Wed,  5 Mar 2025 08:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DEA1C8603
+	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 08:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741163060; cv=none; b=Q555if6t37M6Tiui5aWwEEjiqxwjI9qTT8AQV4WVI56zFYr58r+iZowiLCGlSjccIXbE5NfPsN+bBrcCkL6EyeWmC6MF7vEQQuUSrKsqL+tp5NhaZe4xTb+tO9XmNBIKD/INQiCeeibPQCoC6UAwyyhe5rIabgMiZGG4vHmqSXY=
+	t=1741163477; cv=none; b=m6W6+hDWBxrUn/oOoBOCtQ8q3Mum4RHLSXrmrxYCcPMK1v8fx/H5ym2NyFUF7mdKLDbo4ZTMd8KmBrr+O1W1YaQmG4Ze5D2DOS653oC2iOc9gVQqyo+Qxw2nz7IDZiZ01oRHn60Av6hSIsRo+l5U6+IgCz/fDxNFUDDlkLY/SaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741163060; c=relaxed/simple;
-	bh=lN03K1xi9Y3putlUZDpoOokl0I2oO4EryAlBT2dG9pY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sObzbGFc7CZGc5FAVf9BUmrWTFCH470F8jFfOr27IEaVedRZcD7m3OjNMlxPBslX3xFMLRNjjo0J2JjFdEtRx/1hk3yQdIXNT+VcSJCksn3URvH9lI3v1oz07Z8OyGHvMC4s55L2hQx3Ie6tt5knUaCWyynZYY99rVlgTiLz/DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O1XopWia; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-abf518748cbso732006566b.2;
-        Wed, 05 Mar 2025 00:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741163056; x=1741767856; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=79BK+e10AB+bKa/Vm8u0ZrB5eghyHNaMvjiP7yjTkx0=;
-        b=O1XopWia+lyGSSh9RLBXfVpjC0HkBzcqmIX8y6cc+cvqGShn7RSHczp2Kfp2YtCGA/
-         eLJjoSwm+sD+HX/rM++f/tiNCZeeiXiINXI4vAPd3LJ8dp2xL02/ImJusZ/lwbWaaMag
-         tAdt/nEVcRAJSfa/aRzDxz7NrnxK7OvfYR8af86zoDySJcyyLilh9uUF5T0iyvuY74G3
-         vEhUS9UtLBywp/IBdklKbADDZlcsgj+cOcxOT4wvxty3Z+WvvxV17erXpffIXdfqkUT2
-         iF7a9AfDs+PbKfaW67Qs40vv/GvcSU8CokHdEXCTV2xPuV462ydRqYTBaqEtA5++A7wf
-         PrBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741163056; x=1741767856;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=79BK+e10AB+bKa/Vm8u0ZrB5eghyHNaMvjiP7yjTkx0=;
-        b=nRY50wV1vX/F9vFClzUfNNifpNueqN/Pb+G7Hgm+CD4Jpdr9aLb0smosHKra/VD7ne
-         GAUR8lcOYXXHBHx0MeFcoL10m99yNEGrkcbCQYLVYsrosTrQmkDBhAmt/Ffr+LvK7+d1
-         Y9vYG7hWF68PkACa+tZBdJna5pznxgF6I3jL01Cq9EL+5antaeS9qPSqEv+wD+us5Rr+
-         71y4G1CwP2TfvstdSfqt3Ifen6dWa3YvHO9p2sbl3SWq3IksIXddloacLnxd6qb4dtE1
-         Qp9Amji+xD0qNnhLSG4uVWtf58m8H/JE5Act7Z0bMsBnckyDSbGybjivyOrhQse8dSXD
-         eikg==
-X-Forwarded-Encrypted: i=1; AJvYcCWxC4vGLbyzwGxzp4ocFsXIwu+Kvh8gczkw46iGOUGpPVZPOz/4t+1T5Y4GLxGltfdVyAwoqXJMkLnb@vger.kernel.org, AJvYcCXLwHQy0QQvh4Sj41mgtn6FApE2tAj76860K2afGZkuXceQjzOTLgGMndvDYqTJ0K/anVLdBrputLz3Q5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyI7y97HxUXv9FqaQA/hZMkFT1VWuzHsJ9xqChoYYAQJOqYZ2Un
-	rsOuxrc8ks+//vwBhinkanCbaLhMXZWMTMicJGo1O3EqlFWv++qd
-X-Gm-Gg: ASbGncujfRPvQTFmx+GvTpeBAUjevrlKIcf+dYjgXF6KXOtCvrp8KMTf7WEhzdMwBDo
-	5oi1FJDLKyLnkkp5lXJ7JnpjaZnp05P2SBrrp1VkYvc/e1Rig1Uxa8hMoc1xN0enboz2HJL6mD9
-	wUsGYXyEcKRyfwdVBJ3xdrL/xStaPkhQnh4DsR08Hyzih7hYVXWLT161N7mgSiUQuMlhg4xSy1e
-	LULvDDx68bD3O1WP4S2xPOCRoVRptRnpK+yByiDe1CsnITtcwPEfcc3dY1+o2/5dnRgVMe8SlOx
-	RKtuye3dtU7RwXgOw1hjMxbkmMDRm+1V49KVnBprvdmCHB9L8TXSK79NDrxeZg==
-X-Google-Smtp-Source: AGHT+IEtxIzWvwbu/sjMdy/JH/3B/d9l7iHGPaVCZ9SqGqtQO5HDFFWtMh+qdeZHjYrm3KXFGpdhBg==
-X-Received: by 2002:a17:906:c149:b0:ac1:ea9f:a6ad with SMTP id a640c23a62f3a-ac20da8a2d8mr247263566b.36.1741163056230;
-        Wed, 05 Mar 2025 00:24:16 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf64dd565dsm633513066b.101.2025.03.05.00.24.15
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 05 Mar 2025 00:24:15 -0800 (PST)
-Date: Wed, 5 Mar 2025 09:24:11 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Niklas Neronin
- <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH 1/3] usb: xhci: Simplify
- update_ring_for_set_deq_completion()
-Message-ID: <20250305092411.6962ca52@foxbook>
-In-Reply-To: <e3ca349d-c77d-4643-9865-f9991b34540f@linux.intel.com>
-References: <20250220234355.2386cb6d@foxbook>
-	<20250220234458.4bf8dcba@foxbook>
-	<e3ca349d-c77d-4643-9865-f9991b34540f@linux.intel.com>
+	s=arc-20240116; t=1741163477; c=relaxed/simple;
+	bh=cfNiG+ZHDFCD3IthfVbGMMpx8csQJ+tVDYJf4y5itj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g5ys2pIvKlY/DbpsGmdM2VbPWRkWL6/IQ119i/hh7rwp4lc3UMpKuBzwiZ6Qd5AHdzH71OwLBosCHV9xYwSZqyp5bMlQZ7n7tQ9LQ+E3pscrPbuFbBL881hSm4bKSQbwwfKE7DWiOQgy4K0prNiun0xWBIhch9RPf2e0q21bBfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q62L6lOM; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741163476; x=1772699476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cfNiG+ZHDFCD3IthfVbGMMpx8csQJ+tVDYJf4y5itj8=;
+  b=Q62L6lOMHCS8smRunVEuL0EyKwbzJlTKXtHOETF/GU0+MMPlIf7cv2IA
+   kaekzWkH1XaK4MBXMOCyeNTOh098th4kPAxivxjkTScp496SXJyXDVVIz
+   I0q7ZBxUi/NxG7tbSj4s9pYmSbfqAikyfDtGD/0Bj2xjTla93pspvd6r4
+   0xSBt38ZhcmNFiDEYwdq8YUMqQ4f8T4xaLihGGlJbu42kr8/ht7/y/QDc
+   IWeZrmEKn8ZBQhNdcmRrn0VAezmC4djPJIGAj+DWuEabkDkMytc8ZWyvI
+   Aw5GL34c8Q0rkoIloAKq5hdl+7aJOgvGq9400S8pUdRSThOauH3rb+WZR
+   Q==;
+X-CSE-ConnectionGUID: CezXOOzYTyi8Z3b5qgQN7g==
+X-CSE-MsgGUID: bQ2B3oo+QKWBxB5RiyKmYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42136453"
+X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
+   d="scan'208";a="42136453"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 00:31:14 -0800
+X-CSE-ConnectionGUID: FK6jX6LBTsqrCP7MN2WTmw==
+X-CSE-MsgGUID: efWe6nmkQoW8NzVj7zJ2BA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
+   d="scan'208";a="119115228"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa010.fm.intel.com with ESMTP; 05 Mar 2025 00:31:13 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id C687518F; Wed, 05 Mar 2025 10:31:11 +0200 (EET)
+Date: Wed, 5 Mar 2025 10:31:11 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Kenneth Crudup <kenny@panix.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: So, I had to revert d6d458d42e1 ("Handle DisplayPort tunnel
+ activation asynchronously") too, to stop my resume crashes
+Message-ID: <20250305083111.GP3713119@black.fi.intel.com>
+References: <402bcee8-030a-45bf-834b-ea4baf5eed3c@panix.com>
+ <20250303175818.GB3713119@black.fi.intel.com>
+ <007b005f-a6d1-44a2-9795-036c8f397274@panix.com>
+ <48ef4c14-55d5-4baa-b862-f9e7368ed950@panix.com>
+ <20250304082731.GF3713119@black.fi.intel.com>
+ <14351945-fcde-4088-b7b3-542c6e4b7d0e@panix.com>
+ <20250304134017.GL3713119@black.fi.intel.com>
+ <7c5ec580-9b1c-40b7-9a8d-64bc95c41432@panix.com>
+ <20250304135148.GM3713119@black.fi.intel.com>
+ <ae9cfc12-99ba-4c40-b698-e2b12eb22ab8@panix.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ae9cfc12-99ba-4c40-b698-e2b12eb22ab8@panix.com>
 
-On Fri, 21 Feb 2025 15:23:11 +0200, Mathias Nyman wrote:
-> update_ring_for_set_deq_completion() isn't needed anymore.
-> Niklas already wrote a patch to remove it.
+On Tue, Mar 04, 2025 at 09:29:49AM -0800, Kenneth Crudup wrote:
 > 
-> It's sitting in my for-usb-next branch
+> On 3/4/25 05:51, Mika Westerberg wrote:
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-next&id=ee7dab196a7dfc48a1608274329323cb10b4340d
+> > > > It only happens if you have TBT dock and the NVMe connected and you
+> > > > disconnect them while the system is suspended. I suggest trying that a
+> > > > couple times and see if that happens. For me it
+> > > > happened pretty much on first suspend cycle.
+> 
+> So I've tried it twice again today-
+> 
+> 1 - CalDigit dock, NVMe adaptor. Put it to sleep, disconnected everything,
+> even waited a while (call me crazy, but I swear how long the system is
+> suspended seems to make a difference). Opened the lid, and it came right up.
+> 
+> 2 - CalDigit dock, NVMe adaptor. Hibernated, drove to clients' offices.
+> Resumed, came up OK.
+> 
+> Now I'm curious what difference the "4. Authorize both PCIe tunnels, verify
+> devices are there." makes to your system, as I have "boltd" running and that
+> handles it for me.
 
-I know that it's pure paranoia, but this patch removes a quiet debug
-message about an obviously abnormal and likely harmful condition.
+It should not matter the underlying mechanism is the same. boltd is fine
+here.
 
-My patch turned it into a nice red error.
+Can you try the more "synthetic" way if that makes any difference? E.g do
+exactly following steps. Do not connect any monitors to keep DP out of
+this.
 
-This will be something to keep in mind, for example somebody could
-write a patch which reclaims an empty transfer ring segment without
-chceking if there is a Set TR Dequeue pending to this segemnt. That
-could lead to very interesting outcomes if all TRBs in the segment
-are No-Op'ed and the next page is a transfer ring of other endpoint.
+Also do this first without the latest patch from Lukas so you can see that
+the issue actually triggers. Then apply the patch, just that patch nothing
+else and try again.
 
-Other than that, I suppose there is currently no problem. The loop
-for finding new dequeue position doesn't seem prone to jumping off
-the ring as long as the ring itself isn't corrupted.
+1. Boot the system up, nothing connected.
+2. Plug in TBT 4 dock to the host.
+3. Plug in TBT NVMe to the TBT 4 dock.
+4. Verify that the devices are there (lspci)
+5. Enter s2idle:
 
-Michal
+  # rtcwake -s 30 -mmem
+
+6. Once the system suspends, unplug the device chain.
+7. Wait for the system to wake up (it wakes up automatically in 30s).
+
+Repeat steps 2. - 7. several times in a row (say 10).
 
