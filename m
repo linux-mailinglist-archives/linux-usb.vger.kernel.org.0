@@ -1,87 +1,83 @@
-Return-Path: <linux-usb+bounces-21381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60363A4F8E2
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:33:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0FDBA4F919
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 09:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DF001892731
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 08:33:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 187B01892933
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 08:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792431F5850;
-	Wed,  5 Mar 2025 08:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC591FCFD3;
+	Wed,  5 Mar 2025 08:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3AX9MIt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YNseqXHk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7284D1C8FBA
-	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 08:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011661FBCB4
+	for <linux-usb@vger.kernel.org>; Wed,  5 Mar 2025 08:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741163577; cv=none; b=Ocfy206ZysYuYR0FBKAklyfJtwDhaT52r+2fFUzWoOx6jO+tQyOLnFvQbv00GvlAE0D4jCJooYhL4zGNaPp1pm7GS3USxU8hScOAarhJWDjknZ37HjRj1KL5+wyiQMeBUosKhKuOY0GM9UiRNmOtNZpgctwe+ShXjN82Br6CdiU=
+	t=1741164367; cv=none; b=ukQ5M+OrgNhFj++1ptpy0XYkbPr2vDLXBtvC4PeJcXvsK2b0dW1WtPHGDf8+oxQwUGkmuDnC6vcsmxsJBWVWwO5isyrPJ0zWYp0T8nKX3c+Tp7wBOn/nq1OGdYyM+mqRPqTFaChFGU7DtenlgRDPMR8LOgiZMMKJ0yUI+SVyeWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741163577; c=relaxed/simple;
-	bh=LyLkFpOaJc4TdmuEaBouKO1t9DPNNrXvGQxe+2c8NTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WTO2R5VlzxaLfJzxpj8eG3rLfoEqK4cxNNSRHsFTHJD4I1QsQ8DDqiEnLwSzbzPDMYzyFJBy9hiuVH9i/EzWgPvfOei+87A2vOctEI3WlMR0SPf2nSZQskJXZXi69QKGNPYpJTU4db/r8mqAAKdzR/mUJ1md8PF7Vu0/GJRrong=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3AX9MIt; arc=none smtp.client-ip=209.85.208.45
+	s=arc-20240116; t=1741164367; c=relaxed/simple;
+	bh=1Q0aiy4GYFO00IdYtE1uHKKE/o8arTtTSEvHpAHtgUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=oJUYS5QmJj59n2LhFLCFVx4+Ye7gf3EOzMVNiY5pmJbwATxMKGX7ZC5OdHJdw+5aAtRhqbrS6kHSOJcw5vKAGLI4MRpQ4gP3kSzAxueDaOihMT+LV1EsbdUAaPDUNdBhzGR7gr5rPSdArylbLeRSk7Y2NlIzgTt16o6a7CRASkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YNseqXHk; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e4bed34bccso9192396a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 05 Mar 2025 00:32:54 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aaf900cc7fbso1189051766b.3
+        for <linux-usb@vger.kernel.org>; Wed, 05 Mar 2025 00:46:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741163573; x=1741768373; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=06t/jHR8Fitj3+jLFowoEUFdYv5bqa/LQh30s6hftvw=;
-        b=D3AX9MItjBRq9BqzNC2w78lfcWjceUau5wPbp7LSt+yKPlyRn/0fVnkyLVcYyegVww
-         bIdyQ7N3Tck8eezoGTrR47C02VroJE9k52mdJNtAojTyy6972/4LAlNiYCbQenP5efJg
-         rfNYpgpL0xcEVwIW/QpoT/kQuhvOlESCe72axsKP+2oqP+Fld8LdGB6b87K/50nJshGf
-         jN0OErOKvChVJLS7x4KdEJ8e5mtH17beMU0Z55Ts3nX2jUncJIeiYpE6TkCuq57q+/f9
-         CoK/+iWRDE0tDYEvsROLtsXFDSK2WMXFwswRUg/ftrU8VuxGEE3CL4zBa65PDEDTA7Dq
-         ZAUw==
+        d=gmail.com; s=20230601; t=1741164364; x=1741769164; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+OKsbQwDnWtCDSoKcenLz38M3e9X3dRLjgBVoiOVQ/c=;
+        b=YNseqXHkSd+4wVpFf3ieBuSNrTP4vE6c72rovwT7Dlcyo05MvANTW9zhBH9K2yzs6s
+         RUnxKIa11E6VuhdGbs0hfiZmCP/VlbDgI0QGU0Miw2BLFefDZ17F56pKRLgAwGNOeSah
+         NZ1BXplC7cpzZzGFk+PO8xGL2LRkMgibZJoz57hRikjoJIm13tkvx5oalrfS/ydu3lUZ
+         qb3ndmy4s6MJSXauQhDMY/A+4M1P21Hyj6FZRFiIJAKbFbDmle/aRrM7YNs2FtSRRavI
+         61zYB4ioPJyaPuvb5EQePhtUb6hbn4yPXRseS50jj72UiB+kBHv7epmzHOPZbKsGgBm3
+         xazg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741163573; x=1741768373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=06t/jHR8Fitj3+jLFowoEUFdYv5bqa/LQh30s6hftvw=;
-        b=LBRjh9n0BxuFVKaBBRqHY1B9AbYyBCOqT6tQtcaClIcv8VNSBAdVPlsU4C6WS+WNvv
-         QPD6ADetgQgg6gPeYpJHdZc08f9fCZI0R/rxp8F6Pq4TBy7kbJ24l+0MaBZBoQiWVR+Z
-         EXq6vgjylTZ4OYRa8kauie3zCafKwNUqcgVg9MUBZtKF5EthrEVPVvZ52omyaLkHM68S
-         wzCWvKd1SEFXmhB7X3jWSayJ9CmrBs8r5dOvqCUuWz9/2JrHqdOdCrtmxtjgc6qAxL5n
-         I8MHDTUdV+RiLLu6z3Lu5ri5ApeMCzCWpcBxBnhjZasuAAvbNTtbYDPS0KzUm3384hXt
-         HSvw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcQ86ShiqgzWh4VCxS326WX7pobaVMiQ8Gu5CGxGstHdCy8QdkU5wtP0bUsDHaXoB8EiMyoBCIOhU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxibqHZOKP19Lop5HIotHOuYsCLVw0fc5V3Cm4vrv0ZEiCoausA
-	93xYdDnVsESAi7cpuZ4NE/VSgqKhv6gRW326N0x50QFQw8C0/ZVp
-X-Gm-Gg: ASbGncsFkN4NhNDpYEtEDEVyhSkG0/26L99vnhffWqV9I8sUJBpBlWfhECy8M55WmP/
-	f+HrdAjvj29vEvaiuHYJhmJuuTLRzsT53CyHyMhfVgD6/EABFSJGejwTZaJ/ErrtZiv+JCx+jXt
-	HBR5ZvWJVa42M5ghwbJow/Uhwex/it4crLH1XCf0HgRVSNGw0vSsuKjWO+44sKXBmnzbAlwYN4O
-	NR4m449Q9B1AzC2OlnGA0izlxWTSw+zHZIE2c4SlFNOI7Iqy3cGSvIeUx7vSqaEvALA+h4SRkor
-	hqv8++DOfrzWPkuyT+af90LBB1VXLHHd6c/NHsUsNtYQggWk2pRmLQ0QjczqQw==
-X-Google-Smtp-Source: AGHT+IGzOzSnocmuw0Czj4aJSX3W4hvRsBmR5GCE2QkNzV5bMC2HVX3Gfj9zE2xv7EvYXBnhO0AwBw==
-X-Received: by 2002:a17:907:6d0a:b0:abf:63fa:43d4 with SMTP id a640c23a62f3a-ac20da94820mr209085966b.44.1741163572369;
-        Wed, 05 Mar 2025 00:32:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741164364; x=1741769164;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+OKsbQwDnWtCDSoKcenLz38M3e9X3dRLjgBVoiOVQ/c=;
+        b=szA1dt5hS1W2FfqwuIkbV5dSPkazb2GxaFrv+NJuFUtr4TDE6D7RKjXBLX1TWmCxh8
+         GyQqTph8fML/0cpMg9cUhqj6YSOEPMsfHAYrm1aQEmr/iXvArEamfSmrUfcmTFXATrdY
+         +y/jDkUdoyYlI7TWmATgMgvj9wvZbKjU9/qhb1qyesk/MS9VDXhpWvbTJ+akfUFty0m0
+         WqfYJe6xIVs3NOCm3jKTZ/Fx9BIeYXPY19tlygKcw7uPWAaG5cWBO1nmET0eg+KUqZCv
+         S3dyp3IaT7IVNMRwtAyUz0tMUMSyTzwFNN5TUHXgvn+It5MU7ghLINTPGdX7/SgYsuBX
+         abCw==
+X-Gm-Message-State: AOJu0YyH0PjIE6rSSggOraYNXyW8Yin73rZafib3esW2d3xiPcNfOMcY
+	ov9y5+HvOorz6PQb0iOi2q4XlWbeym/e2BMS/3pKnfdCVbhyXj9E+xTtbA==
+X-Gm-Gg: ASbGncvu+EmmJsSOaHDa2mtzlJWx9EqoYtgsbPVZvO6HXscbVhSNa5OGye/Cgkvq33u
+	1ZEyf+aw2CHyy9TUW70Tg1dZ0cqNS60wO0rWX5Qt4QFKEUY8HzjYVqQswgyNqeN+DPNvaZnVzjo
+	g5CQmnf8stIbDosHWM4C0dILY/wA++xiTPD/MZuo4c8kaEbELNgunLxkdtjA4xVdWJorVGPHkJR
+	k+o7eDBHQ6Ew4qxwUUlK4oRK5+Z+BUyyh2m05oFoz5uBSf4oM4NfxxPoUVH3GlnNh1RRrl5wO3g
+	K2mpb/th6vzocAkueI5YZEuHAXeoLQrRLOI6jGinpoDsf+bI3vFjxg2XdXldFg==
+X-Google-Smtp-Source: AGHT+IHqRSR+1CXJK8Nzzm5mkzHbhxeY/t6expsBskZZPNhTWU4/TPnCIH63cI2owbFUa69x5BIamg==
+X-Received: by 2002:a17:907:6ea1:b0:ac1:deb0:5c3e with SMTP id a640c23a62f3a-ac20d8bc948mr223693066b.16.1741164363763;
+        Wed, 05 Mar 2025 00:46:03 -0800 (PST)
 Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac165223834sm413426766b.165.2025.03.05.00.32.51
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac104bbbd2csm431067166b.175.2025.03.05.00.46.03
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 05 Mar 2025 00:32:52 -0800 (PST)
-Date: Wed, 5 Mar 2025 09:32:48 +0100
+        Wed, 05 Mar 2025 00:46:03 -0800 (PST)
+Date: Wed, 5 Mar 2025 09:46:00 +0100
 From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] usb: xhci: correct debug message page size
- calculation
-Message-ID: <20250305093248.3cc6c066@foxbook>
-In-Reply-To: <20250204124145.3998098-2-niklas.neronin@linux.intel.com>
-References: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
-	<20250204124145.3998098-2-niklas.neronin@linux.intel.com>
+To: niklas.neronin@linux.intel.com
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: Re: [PATCH 2/4] usb: xhci: move debug capabilities from trb_in_td()
+ to handle_tx_event()
+Message-ID: <20250305094600.1630ef54@foxbook>
+In-Reply-To: <20250206103428.1034784-3-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,27 +87,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue,  4 Feb 2025 14:41:43 +0200, Niklas Neronin wrote:
-> The ffs() function returns the index of the first set bit, starting
-> from 1. If no bits are set, it returns zero. This behavior causes an
-> off-by-one page size in the debug message, as the page size
-> calculation [1] is zero-based, while ffs() is one-based.
-> 
-> Fix this by subtracting one from the result of ffs(). Note that since
-> variable 'val' is unsigned, subtracting one from zero will result in
-> the maximum unsigned integer value. Consequently, the condition 'if
-> (val < 16)' will still function correctly.
-> 
-> [1], Page size: (2^(n+12)), where 'n' is the set page size bit.
-> 
-> Fixes: 81720ec5320c ("usb: host: xhci: use ffs() in xhci_mem_init()")
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> +debug_finding_td:
+> +	xhci_err(xhci, "Transfer event %u ep %d dma %016llx not part of current TD start %016llx end %016llx\n",
+> +		 trb_comp_code, ep_index, (unsigned long long)ep_trb_dma,
+> +		 (unsigned long long)xhci_trb_virt_to_dma(td->start_seg, td->start_trb),
+> +		 (unsigned long long)xhci_trb_virt_to_dma(td->end_seg, td->end_trb)); +
+> +	xhci_for_each_ring_seg(ep_ring->first_seg, ep_seg) {
+> +		xhci_warn(xhci, "Ring seg %u trb start %016llx end %016llx\n", ep_seg->num,
+> +			  (unsigned long long)ep_seg->dma,
+> +			  (unsigned long long)(ep_seg->dma + TRB_SEGMENT_SIZE));
+> +	}
+> +	return -ESHUTDOWN;
 
-Actually, is it useful to fix this code if the next patch in the series
-removes it completely?
+Cleaning up trb_in_td() is obviously the right thing to do, but one
+thing I always disliked about this message is how long and verbose it
+is. Not sure if dumping all ring segments is useful here, seg->dma can
+generally be deduced by looking at the DMA pointers involved.
 
-I thought that you perhaps meant this simple fix to go to stable, but
-it isn't marked as such.
+As far as improvements go, IMO it would be much more useful to decode
+those pointers into seg-number/trb-index pairs. I wrote a PoC and the
+result is quite encouraging, I may submit it if there is interest.
 
 Regards,
 Michal
