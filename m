@@ -1,77 +1,62 @@
-Return-Path: <linux-usb+bounces-21394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62203A50131
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 14:59:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 236B2A501E2
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 15:27:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A35F3188EAB4
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 13:59:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33FA13B43DC
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 14:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D529624A067;
-	Wed,  5 Mar 2025 13:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E2024C077;
+	Wed,  5 Mar 2025 14:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjKuOcl+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KIfVq7Zz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49FB230BC6;
-	Wed,  5 Mar 2025 13:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739D124BD03;
+	Wed,  5 Mar 2025 14:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741183168; cv=none; b=E0a3R/cpDloo0Sk+f6FPHfPO/hvNIOpu9venjale/vbm6DCaFfKcAMJFqcdfD5EwDIMQVGIlk+adVBYoxL/xKgoiJrlrnprDLy6tEgEvsTHSDzF1tWwKLNsrlFzPlrGlFe9MG2hh0dX2WXcVWDP/DkJih4d07fdb3VID16tNhkU=
+	t=1741184697; cv=none; b=n1sKjn1mTYaPoWKILJRcJUTEQNquvyhF2XYKexOFCBx9wKXdrBT1VN5hmTUUTIcvEUy9z86LVY9kKPZE9ff/wADEdOCXPoANo83Wn6k7t8tENzaO/uHstL6xUWYQdkvAYlgWCUDWnNUFcfu1qfHKz5P3t9Wjd/Na9QA3B3mua88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741183168; c=relaxed/simple;
-	bh=5Bahw/UEbQRmZLJ4nhahFmsFs36Yex+SORkHSl0yfsw=;
+	s=arc-20240116; t=1741184697; c=relaxed/simple;
+	bh=RdrC8JpMPbq4iRjfidFPlFhX8tB6nCx0HHU1SIDbDz4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nSLhLucrBfNyDd4xEwFcfl1Ugtys3GOaUeswf7AiM1p2GTIKvXMqmnwOhChfG9tjsgTkhijygh2lZfO/WOYvUIf0nh3pnW0ygSKx71P0VWoNv+5Xs9v9ahyy1rIoRhOYlJ3MJYYAqJeobUzcMWPhoaEOU5yjPPkDsjo4mLH9xGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjKuOcl+; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741183167; x=1772719167;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Bahw/UEbQRmZLJ4nhahFmsFs36Yex+SORkHSl0yfsw=;
-  b=OjKuOcl+JHIhZ0Y36z/i2qEzOV2ruNrnYSCSry1/48qRiPZVNSfpIHWw
-   KkZor4LYJgsQx59IowHpH1w6Oc8oliaemakV8ThC+CRVICuiOQ5n/hnXO
-   xmXeMwnrotiI2oAzNpSgo7J2/522T6aqgOYPnvdxtnJ/jYyq4s50RTKVP
-   4uphZB/o4hZ7dFkx7I2QnG/OIzeHy761J0T4Mcz+vcpWpgJyFZ1gb+U6F
-   UI1F3IUYbzMaxuUzWG7eJExGejy2qZf1eJNwwvi/lBjLtPAXAwyxIU7Cx
-   dzYfOxvgqhcgRAInxiu18NHdpaPuWy6H6xL6X3vFh3N3HyMEj4gi2ecIy
-   Q==;
-X-CSE-ConnectionGUID: peMnrPvRT7u7FxOY+RRCEw==
-X-CSE-MsgGUID: saaTBf7yRgCYnCJY0A9qig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42055561"
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="42055561"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 05:59:26 -0800
-X-CSE-ConnectionGUID: B92M/0eFRUuxIvNT67XwrQ==
-X-CSE-MsgGUID: xFPHFuS7TCOG/nnpmZz9PA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="119197584"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa010.fm.intel.com with SMTP; 05 Mar 2025 05:59:23 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 05 Mar 2025 15:59:21 +0200
-Date: Wed, 5 Mar 2025 15:59:21 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZM2oSsTEOhYuytci6AwbvGhW+qBMB3qptafgur6afVnXH0Z/6fzppumfgrE++xyrLjQ9OBXrk3tLRNOs0FS/e6X1Ip7D4KIjR1V1H1NNIAo8XhhgKXEq5a0FYaeC24QfaC5Uz1dSEoV8x2gRsQey/N5paj0QcwjPwNwk3d0L9TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIfVq7Zz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E68C4CED1;
+	Wed,  5 Mar 2025 14:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741184696;
+	bh=RdrC8JpMPbq4iRjfidFPlFhX8tB6nCx0HHU1SIDbDz4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KIfVq7ZzLZ/U+V/zRiI+W00RHdKb1L3HG3gEObvHZt0fgg7u8Ww8FDGAkM0bJGHWv
+	 KWNLwAG2xqWvdRoiTKjEa8Nx+qSXFXfnAlkdlESje7Y0epYxSwZiTn/ovQd9Wy3/XW
+	 xPA8Aeg6zBBpS2yLFwuXhckJju9oMD2yJv6uoK1g8v2ciF5R2xfjPdSPrkdF5hl3+W
+	 Q0YgE/8aXq0eXfMtQdZ5O9PrxYNYR3zsNQs87C2oK3KbryLi0wOUjn3LPTNVyxlPfE
+	 vt9LzSgIWqiGHpNRYnX6ueR+WgCm2v0kaHvRedTb+oQxayq5FH8i7diyPhew/TbTa0
+	 0yEr550bLUsFw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tppg5-000000002m1-2owT;
+	Wed, 05 Mar 2025 15:24:53 +0100
+Date: Wed, 5 Mar 2025 15:24:53 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Boon Khai Ng <boon.khai.ng@intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Fix NULL pointer access
-Message-ID: <Z8hYuaesOQgmnfQ8@kuha.fi.intel.com>
-References: <20250305111739.1489003-1-akuchynski@chromium.org>
- <20250305111739.1489003-2-akuchynski@chromium.org>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Tien Sung Ang <tien.sung.ang@intel.com>,
+	Tien Sung Ang <tien.sung.ang@altera.com>,
+	Boon Khai Ng <boon.khai.ng@altera.com>
+Subject: Re: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB
+ Blaster 3
+Message-ID: <Z8hetcRinFXXVAdy@hovoldconsulting.com>
+References: <20250203084822.18356-1-boon.khai.ng@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,68 +65,86 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250305111739.1489003-2-akuchynski@chromium.org>
+In-Reply-To: <20250203084822.18356-1-boon.khai.ng@intel.com>
 
-On Wed, Mar 05, 2025 at 11:17:39AM +0000, Andrei Kuchynski wrote:
-> Resources should be released only after all threads that utilize them
-> have been destroyed.
-> This commit ensures that resources are not released prematurely by waiting
-> for the associated workqueue to complete before deallocating them.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+On Mon, Feb 03, 2025 at 04:48:22PM +0800, Boon Khai Ng wrote:
+> The Altera on board USB Blaster 3 utilizes a FT2232 and FT4232
+> chip.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I assume it's either an FT2243 or an FT4232 and not both?
 
+> Add VID/PID for the on board USB Blaster 3 so it can be used
+> as a serial device via ftdi_sio.
+
+Can you say something more about these devices? I guess they are used
+for programming FPGAs? Are they embedded in other products? And can the
+same PID be used for more than one type of device that they are embedded
+in?
+
+Or are the PIDs tied to different types of "USB Blaster 3"s? If so this,
+should also be reflected in the naming of the defines.
+
+> Signed-off-by: Boon Khai Ng <boon.khai.ng@intel.com>
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+>  drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++++
+>  drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++++
+>  2 files changed, 27 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index fcf499cc9458..43b4f8207bb3 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1825,11 +1825,11 @@ static int ucsi_init(struct ucsi *ucsi)
+> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+> index e07c5e3eb18c..3edce9c62213 100644
+> --- a/drivers/usb/serial/ftdi_sio.c
+> +++ b/drivers/usb/serial/ftdi_sio.c
+> @@ -1079,6 +1079,20 @@ static const struct usb_device_id id_table_combined[] = {
+>  		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
+>  	/* GMC devices */
+>  	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
+> +	/* Altera USB Blaster 3 */
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6022_PID, 1) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6025_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6026_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6026_PID, 3) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6029_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602A_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602A_PID, 3) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602C_PID, 1) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602D_PID, 1) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602D_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 1) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 2) },
+> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 3) },
+>  	{ }					/* Terminating entry */
+>  };
 >  
->  err_unregister:
->  	for (con = connector; con->port; con++) {
-> +		if (con->wq)
-> +			destroy_workqueue(con->wq);
->  		ucsi_unregister_partner(con);
->  		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
->  		ucsi_unregister_port_psy(con);
-> -		if (con->wq)
-> -			destroy_workqueue(con->wq);
->  
->  		usb_power_delivery_unregister_capabilities(con->port_sink_caps);
->  		con->port_sink_caps = NULL;
-> @@ -2013,10 +2013,6 @@ void ucsi_unregister(struct ucsi *ucsi)
->  
->  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
->  		cancel_work_sync(&ucsi->connector[i].work);
-> -		ucsi_unregister_partner(&ucsi->connector[i]);
-> -		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -					 UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
->  
->  		if (ucsi->connector[i].wq) {
->  			struct ucsi_work *uwork;
-> @@ -2032,6 +2028,11 @@ void ucsi_unregister(struct ucsi *ucsi)
->  			destroy_workqueue(ucsi->connector[i].wq);
->  		}
->  
-> +		ucsi_unregister_partner(&ucsi->connector[i]);
-> +		ucsi_unregister_altmodes(&ucsi->connector[i],
-> +					 UCSI_RECIPIENT_CON);
-> +		ucsi_unregister_port_psy(&ucsi->connector[i]);
+> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+> index 5ee60ba2a73c..673e0cf84bdc 100644
+> --- a/drivers/usb/serial/ftdi_sio_ids.h
+> +++ b/drivers/usb/serial/ftdi_sio_ids.h
+> @@ -1612,3 +1612,16 @@
+>   */
+>  #define GMC_VID				0x1cd7
+>  #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
 > +
->  		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sink_caps);
->  		ucsi->connector[i].port_sink_caps = NULL;
->  		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_source_caps);
-> -- 
-> 2.49.0.rc0.332.g42c0ae87b1-goog
+> +/*
+> + *  Altera USB Blaster 3 (http://www.altera.com).
+> + */
+> +#define ALTR_UB3_VID			0x09fb
 
--- 
-heikki
+This is a generic Altera VID so should just be name ALTERA_VID.
+
+> +#define ALTR_UB3_6022_PID		0x6022
+> +#define ALTR_UB3_6025_PID		0x6025
+> +#define ALTR_UB3_6026_PID		0x6026
+> +#define ALTR_UB3_6029_PID		0x6029
+> +#define ALTR_UB3_602A_PID		0x602A
+> +#define ALTR_UB3_602C_PID		0x602C
+> +#define ALTR_UB3_602D_PID		0x602D
+> +#define ALTR_UB3_602E_PID		0x602E
+
+Please use lower case hex notation consistently for the values here.
+
+But depending on the answer to my questions above, either these defines
+should be renamed to reflect the Blaster type or product they are part
+of, or just be dropped.
+
+Johan
 
