@@ -1,215 +1,137 @@
-Return-Path: <linux-usb+bounces-21400-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21401-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E2E3A50B77
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 20:28:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C11BFA50C02
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 20:56:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D3A73A6815
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 19:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC0DA18954BA
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Mar 2025 19:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04EE0253F24;
-	Wed,  5 Mar 2025 19:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158962561BA;
+	Wed,  5 Mar 2025 19:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DyMfLyM2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kd29LuLx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BB519F438;
-	Wed,  5 Mar 2025 19:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E492561B8;
+	Wed,  5 Mar 2025 19:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741202914; cv=none; b=TDHoQC9dQfwFKV775VdSGA8pwH/5jNTJRBYxYd2gxTk/ET9DSYnvk4TzSvpCU9o+dknkjaNUyk8Sf2v5jFaHo8jINN3qvZj5xV0Ovrp3pBcfIpAoiRkm2mil6kvYpDmRtHp8rxK36Xq+kIJ5o6kd14gmDnX7jkw3zUBSNZZAwHk=
+	t=1741204566; cv=none; b=snDU2iUx2or62K+L0z9Hpsa4Uim0vs8x5tHnr6xrVnbrOKcGkC3j6aN+kXVZrFR2mOjUHepqS0aBVBb9yRRquwvaOMm6/RcBRRHPF2Taw19ZXcgxx3Ter1+tMzT9RB/udIx3s6txDsUQciWViYavuso2Uz6BXX26uHRX0JjJnpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741202914; c=relaxed/simple;
-	bh=GNL0K+Zm8sPa6uZ6xJkLDdmfP36t6ZfM3ghJIcH1dXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZhTBvFsO579Gy/nphkfLTfpdTTnH0N1UePSW/jusC9iNN83ycwCldYd4KyvASsYZFBIERnxoA/EX1fNjyKsaROG1Ij4T37/pQdkwhOggPzmeWPcC1YRcq4ciQQJDNw/1NGg7QTHox8iYrOBBTdAZ4vTKSRBcBUbRRJgxFxdLgZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DyMfLyM2; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 525B4W0u025488;
-	Wed, 5 Mar 2025 19:28:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Kyw5fiMLd0ITsHzLG43UR740fhNTgpgXfvtAkSdLCfU=; b=DyMfLyM2E7+R1PyS
-	1s/qSu7MT6bhg475Rh/9DG/hbFefFcjfxBeDV/kQWG+5NN7LGDAd0fo23QI8ta7z
-	VHa1WmHb3QNu3peEOiLzMlmXPRsgi+s51T8zJxTGUvH/WfJQzpdMOYB4YuZU3d7+
-	+r0RDoRvHHBIR/T2Gfr93zXf92xr/pXeza6ualSd9OxWLq8haSv/hILeaVU6Vza3
-	CIFa1pp2d8hMM1mxT+4eF8BuuI6QY7Czw5RH8Uy3uakMvenPMdFPLyeXnjVzhPws
-	tvhtbdr1LXgSB/TgE/Oe7EQyDaVPHC3NRTbOzMa6nyA/jLEXyn3cnaUBJLjWcDjw
-	1JFPog==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 455p6txhpk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Mar 2025 19:28:13 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 525JSCgv026672
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 5 Mar 2025 19:28:12 GMT
-Received: from [10.110.60.163] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 5 Mar 2025
- 11:28:11 -0800
-Message-ID: <0dfca6b2-2875-4aef-be95-9ed0a33beebd@quicinc.com>
-Date: Wed, 5 Mar 2025 11:28:10 -0800
+	s=arc-20240116; t=1741204566; c=relaxed/simple;
+	bh=UnaG/Y3D2RaEknxGey8mFGsnuniQGtB239GqK+8Ei7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FXsoKLnsM8myU6zYJd1pA8mXAST3jDvcXj5XA+dV6cpxSCFL6O/4/85xWWKpZCoE41+PFyXqCvfmZaoSffPD566zsjmmGIpGzTNv40T0ILc/cpuBdTelTmHIixzfIGGuSBrTisF/mYNqrfzwdE4x6rIJyIpRkyRL6bSqUGBEC38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kd29LuLx; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-390e3b3d432so4792195f8f.2;
+        Wed, 05 Mar 2025 11:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741204563; x=1741809363; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=obQQoluSZXQiJyFNJHehlGp6Bxo7iUgFTG6ZT/ix8QI=;
+        b=Kd29LuLx2M7WX/iALMjoWRlshEhGaL5FlyXMAAtCOqBHXQjw/yFZ/ETm469sfK2WZs
+         ezpKhWeIjB8r1cOxvMzD2WA6TjbYAfk3F9l6IQXWCHV8N6o4aslM0IwavlAMtD3FAGQ/
+         viGgc3vQWDAq2nin/NbhQVVrcPsxoNrVlus3toUEWIQN1f6armwIJSf6YPExxre3VPMv
+         BNYwUyg0hK9AHOd/YDt2KW2q/GwoiFraj0QlkhuIqNaBmuFBtrEVcE1SFMVELQEDVkCk
+         hs1F7TIIlyH7Wd+1yuagFuEXc8lcN2wGF+yIJW2JYPBuLtzpjrHbw0bvu82m+1a2ZHbr
+         G1JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741204563; x=1741809363;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=obQQoluSZXQiJyFNJHehlGp6Bxo7iUgFTG6ZT/ix8QI=;
+        b=a5fDnYd/UPVc3Fl/MxLdV+udDY2VIt+jdn1z9fjENUGjXbevYYCjQhCBB/efiMScnv
+         lppwcpxkztoNHyGHd/ZIAqaSiGW04h3w76iW6QcqVzMjEG0DHFkr5eALYN5akYa9GVAq
+         P8Ai0KCNdPVe93XaDh+VhmyLdDVoT7GQL+iSS7AxataBs6dJ62KSsOFh6ymNEyMc00xA
+         /Ske2fAAWy9E6Fdo6eGq7UmtZRFyNqAWVS+VH1YdDsAiXaXZoEk3iX2x6bkHYwi541Uo
+         8K4v9+OLngzz7EXMkaTQGql5QEgihPev21sNrFQzfxArHgN4gxpT47Juncweb1pFMyUy
+         b2Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCVT9LU8/8TTXN0vvf0i61++2Bj11/eNEvkJuUWHZPnfLy/n4GhiKpJDN8ktHGHGO1ztU+z26WjgLOvhDSs=@vger.kernel.org, AJvYcCXTkcLXUDS3bFYsIxroVTQZWoE0Wv1p08PMKqmpKKMRkvamsOPtpKvigzqXmuUcI0RPj36wNyoyE6c1@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYe7GkaJQ3pldzYk+Uy6fAtSh40AcMkPgxhsLjRE47WsdumVwM
+	J9ZfsmydHSUSqXY8Lx9Ut1aj7WJvnwzV7KpA5G7j6K7YpHzil0n4HhA0YA==
+X-Gm-Gg: ASbGncszmwIgPbHfJSrz0w1NyH6PQm/hR8duUI/nbnLrDYLo6fJZxvOazk8LdKMuWcJ
+	GZTV0hikf5MC1n+FUJj3/fWnF3h25I0tyHNUhF/AXyTAg6DhmM43V6QrIj3uZzjZcoZkTdjvCYE
+	/LDrkdcIknRhpQ9hA+SECM6ASzDDkkoLnRbgV7rtd6nj6L6+kYU+CVULfeNfPwJyYhSgl7LAS+L
+	yE+pwilMi+DF60RdWVNyDf69FBYZDx8o/SH4xs12HEHxDWoCzJyII61xwUtINs0k9f/JxrmeCh3
+	8ehp6tKTBPxf4V7arDA/VqBBtlF5QFT7WQnuHEGU2xEvidkDP47qFRj/wwgjsEu/5kRGCHeGXJA
+	FwoT9VMU=
+X-Google-Smtp-Source: AGHT+IHwhwN03Rano/W7g7TpcC3KAu4AHu8XRY4nSHbUDqGpseFs6elK+kPo9+eCu78mIs5dhyNNNA==
+X-Received: by 2002:a05:6000:2cd:b0:390:ea34:7d83 with SMTP id ffacd0b85a97d-3911f76f519mr4587194f8f.31.1741204562674;
+        Wed, 05 Mar 2025 11:56:02 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd42c588dsm26580635e9.21.2025.03.05.11.56.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Mar 2025 11:56:02 -0800 (PST)
+Date: Wed, 5 Mar 2025 19:56:01 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Boon Khai Ng <boon.khai.ng@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Tien Sung Ang <tien.sung.ang@intel.com>, Tien
+ Sung Ang <tien.sung.ang@altera.com>, Boon Khai Ng <boon.khai.ng@altera.com>
+Subject: Re: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB
+ Blaster 3
+Message-ID: <20250305195601.1dc6a1f6@pumpkin>
+In-Reply-To: <Z8hetcRinFXXVAdy@hovoldconsulting.com>
+References: <20250203084822.18356-1-boon.khai.ng@intel.com>
+	<Z8hetcRinFXXVAdy@hovoldconsulting.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v35 00/31] Introduce QC USB SND audio offloading support
-To: Stephan Gerhold <stephan.gerhold@linaro.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-CC: Greg KH <gregkh@linuxfoundation.org>, <srinivas.kandagatla@linaro.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <tiwai@suse.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>
-References: <20250219004754.497985-1-quic_wcheng@quicinc.com>
- <Z7W_Vz_kVDjIcp5N@linaro.org>
- <82ce69a3-d248-494f-6ddb-098f392c78a0@quicinc.com>
- <Z8a4WYq4GqWBVNyX@linaro.org>
- <ee5cb6bc-963a-4e31-8ac4-07120fb9ff70@quicinc.com>
- <Z8ikt2K0uekU2dVZ@linaro.org>
-Content-Language: en-US
-From: Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <Z8ikt2K0uekU2dVZ@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XEk_VzWDUbK1S4q_1dOj7KYELWxNwc_i
-X-Proofpoint-ORIG-GUID: XEk_VzWDUbK1S4q_1dOj7KYELWxNwc_i
-X-Authority-Analysis: v=2.4 cv=Sf4NduRu c=1 sm=1 tr=0 ts=67c8a5cd cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=qC_FGOx9AAAA:8 a=HTecfl5s7U67J0CcF8QA:9 a=QEXdDO2ut3YA:10
- a=fsdK_YakeE02zTmptMdW:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-05_08,2025-03-05_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
- suspectscore=0 clxscore=1011 malwarescore=0 bulkscore=0 mlxlogscore=999
- mlxscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503050148
 
-On 3/5/2025 11:23 AM, Stephan Gerhold wrote:
-> On Tue, Mar 04, 2025 at 02:46:28PM -0800, Wesley Cheng wrote:
->> On 3/4/2025 12:22 AM, Stephan Gerhold wrote:
->>> On Mon, Mar 03, 2025 at 06:39:52PM -0800, Wesley Cheng wrote:
->>>> On 2/19/2025 3:24 AM, Stephan Gerhold wrote:
->>>>> On Tue, Feb 18, 2025 at 04:47:23PM -0800, Wesley Cheng wrote:
->>>>>> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
->>>>>>
->>>>>> Several Qualcomm based chipsets can support USB audio offloading to a
->>>>>> dedicated audio DSP, which can take over issuing transfers to the USB
->>>>>> host controller.  The intention is to reduce the load on the main
->>>>>> processors in the SoC, and allow them to be placed into lower power modes.
->>>>>> There are several parts to this design:
->>>>>>   1. Adding ASoC binding layer
->>>>>>   2. Create a USB backend for Q6DSP
->>>>>>   3. Introduce XHCI interrupter support
->>>>>>   4. Create vendor ops for the USB SND driver
->>>>>>
->>>>>>       USB                          |            ASoC
->>>>>> --------------------------------------------------------------------
->>>>>>                                    |  _________________________
->>>>>>                                    | |sm8250 platform card     |
->>>>>>                                    | |_________________________|
->>>>>>                                    |         |           |
->>>>>>                                    |      ___V____   ____V____
->>>>>>                                    |     |Q6USB   | |Q6AFE    |
->>>>>> |     |"codec" | |"cpu"    |
->>>>>>                                    |     |________| |_________|
->>>>>>                                    |         ^  ^        ^
->>>>>>                                    |         |  |________|
->>>>>>                                    |      ___V____    |
->>>>>>                                    |     |SOC-USB |   |
->>>>>>    ________       ________               |        |   |
->>>>>>   |USB SND |<--->|QC offld|<------------>|________|   |
->>>>>>   |(card.c)|     |        |<----------                |
->>>>>>   |________|     |________|___     | |                |
->>>>>>       ^               ^       |    | |    ____________V_________
->>>>>>       |               |       |    | |   |APR/GLINK             |
->>>>>>    __ V_______________V_____  |    | |   |______________________|
->>>>>>   |USB SND (endpoint.c)     | |    | |              ^
->>>>>>   |_________________________| |    | |              |
->>>>>>               ^               |    | |   ___________V___________
->>>>>>               |               |    | |->|audio DSP              |
->>>>>>    ___________V_____________  |    |    |_______________________|
->>>>>>   |XHCI HCD                 |<-    |
->>>>>>   |_________________________|      |
->>>>>>
->>>>>
->>>>> As I noted on v34 [1], this version is still missing instructions and
->>>>> changes needed for testing this series. The device tree changes don't
->>>>> need to be part of the same series, but there should be at least a link
->>>>> provided to give other people the chance to provide Tested-by tags.
->>>>>
->>>>> IMO we shouldn't merge this series without those instructions, otherwise
->>>>> we risk that this just ends up being dead code that no one can use.
->>>>>
->>>>> Can you please share the device tree changes for a board upstream and
->>>>> any other changes needed to be able to test this series? E.g. for
->>>>> sm8250-mtp.dts, based on the examples in your cover letter.
->>>>>
->>>>
->>>> To clarify I'm testing this on sm8350 in recent times, but utilizing sm8250
->>>> definitions for the ASoC platform card, as the platform sound card is more
->>>> or less the same between the two SoCs.  Back
->>>> when I started this series, sm8350 was missing a bunch of dependent
->>>> components, such as aDSP not being loaded, and missing platform sound card
->>>> definition, so I had to define and enable those on my own, which required a
->>>> slew of new DT nodes, hence why it wasn't as straight forward to include
->>>> the DT definitions yet for sm8350.  Not thinking that this series would
->>>> take as long as it did, I was planning on separating out the DT changes in
->>>> a different series to enable offloading for the devices I have tested with.
->>>> (sm8150, sm8250 and sm8350)
->>>>
->>>> There's still a pretty big chunk of dependencies missing from sm8350, so
->>>> those would also be handled in the follow up DT submission.  For now, its a
->>>> much bigger hurdle to get the main/functional changes in, and that was
->>>> taking a significant amount of time from my end to manage.
->>>>
->>>> If you want, I can give you the changes I have offline to enable this for
->>>> sm8350, since I haven't spent time formatting/prepping the changes for
->>>> submission yet.
->>>>
->>>
->>> Can you push it to a public branch somewhere (e.g. on CodeLinaro)? I was
->>> talking to some people from the community about testing this on some of
->>> the smartphones we have in upstream, so it wouldn't help if I just have
->>> the changes privately.
->>
->> Which CLO project/branch did you want me to push it to?  Sorry, I haven't
->> worked too much with the CLO open branches.  I have an account though.
->>
+On Wed, 5 Mar 2025 15:24:53 +0100
+Johan Hovold <johan@kernel.org> wrote:
+
+> On Mon, Feb 03, 2025 at 04:48:22PM +0800, Boon Khai Ng wrote:
+> > The Altera on board USB Blaster 3 utilizes a FT2232 and FT4232
+> > chip.  
 > 
-> Any project/branch is fine for me, I suggested CLO only because I
-> assumed you already have an account there.
+> I assume it's either an FT2243 or an FT4232 and not both?
 > 
-> You should be able to create a personal project and push it there. You
-> could also use the fork button on
-> https://git.codelinaro.org/linaro/linux/kernel/torvalds/linux to avoid
-> having to push the full history yourself. It should result in a project
-> similar to mine: https://git.codelinaro.org/stephan.gerhold/linux
+> > Add VID/PID for the on board USB Blaster 3 so it can be used
+> > as a serial device via ftdi_sio.  
+> 
+> Can you say something more about these devices? I guess they are used
+> for programming FPGAs? Are they embedded in other products? And can the
+> same PID be used for more than one type of device that they are embedded
+> in?
 
-Wesley - if not CLO, feel free to use the github. We can help you offline. 
+Also, is there any actual software that can use them through this driver?
+The Altera 'quartus' software that is usually used to program (etc) the
+fpga is pretty proprietary.
+I think some bits have been reverse engineered, but only for a few simple
+actions.
 
--- 
----Trilok Soni
+I'm not even sure the Altera code even loads a driver - just uses the userspace
+USB library.
+I'll have used it on a system with a custom kernel to program (etc) a CycloneV.
+No hint of needing to recompile a driver.
+(The sheer amount of software you need to command-line program a device is
+stunning! - I had to parcel it all up so we could use a usb to jtag cable
+to in-situ program one of the smaller PLD devices on a small board.)
+
+So what is the real 'use case'?
+
+	David
+
+> 
+> Or are the PIDs tied to different types of "USB Blaster 3"s? If so this,
+> should also be reflected in the naming of the defines.
 
