@@ -1,132 +1,239 @@
-Return-Path: <linux-usb+bounces-21414-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D37A54553
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 09:50:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8604FA5456B
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 09:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D16183A82DB
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 08:50:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1B967A3CCD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 08:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78E62063DB;
-	Thu,  6 Mar 2025 08:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D422080C4;
+	Thu,  6 Mar 2025 08:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="im0/b2Aa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxdVf8ha"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7FD2E3369;
-	Thu,  6 Mar 2025 08:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5B919D880;
+	Thu,  6 Mar 2025 08:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741251028; cv=none; b=k/99RPkH/wXjIn/Xdj8xJW5KwR3Z2Ok13JLWoOAO1QKm9j3hB17eQkD8ENPd2vp378SIV2ntL7lu+eCrHG2+ekqtSIpiAwNjnmZx9Oytnxs1CNcoxu2mKO4Ct9zZ8cTMK+uWDUYZ1y6mCHD7HFEI/C0IcEsXJh8BuZf+P7VpvAM=
+	t=1741251194; cv=none; b=DxtFGERFXgV3FWLecVGfGoEpyYmknNS75FwfNsNKWVXnt1Kep2CbsSIh86+e2lrqVaYzIczc4VefOEA2VwpucFJfIFsYXPEuIOYUB6iMBqe5mvxCUaafRnVfcHOqBYnR7TdXAJIr2+d1Bn0ZxcAA1+JQh9UCq1MVEyExHJgAZbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741251028; c=relaxed/simple;
-	bh=48yO3J3+siY7ATLtE0ddXjtLybSDlrSr5KtoJ1IapD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z8M++z8dt5IKV7epc9jOG6P8w35t+Y5tjpg2sg+HddT8KOrALNkvQhaxRyU1bHDA+TfxJT0k4NjVfP6wcXAvOYCryGUleX3HySsZaNCiBn5KJagZLfTC14W6RAkuBo5TRA4vYHJZa4AzbhAtPrCycvHyjedkIJEaZOyrR1dnEQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=im0/b2Aa; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e058ca6806so641613a12.3;
-        Thu, 06 Mar 2025 00:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741251025; x=1741855825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0orzevFKofVCF3fLmry3ssqra7W/C6VJgcuX8QJRVqo=;
-        b=im0/b2AansSJQEb1ArpoPXBiG9s/w7YRBOeUm9OZk4cz88uf6z9RvEqybGKskgBpo+
-         5NV8WFtoakAaoRqPyEu+UvxLrSCfuaqaSfw1pf+jOxnk8FSVE/Xho0VvDPbTCBm08SsV
-         hJpbjCpbzXe1Ne6wDk8IGmqcKZZI8XJ0a9xQOVb5Hk/ElpKgv3BIjWTjrR9eWZm2Qz0u
-         kBNk/Wf5TDao4njh1Qe354PByKFIuUnjw3zBKKAnmL+eVmjTZgN32RQjgmDsk0UC4WCk
-         TZUZcPG4Zolf+gYYxQHWygzEEl0EhK3oqFy/xENH1oWJfK7BXSrCBec3Qn/Qms3b0PCV
-         vpMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741251025; x=1741855825;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0orzevFKofVCF3fLmry3ssqra7W/C6VJgcuX8QJRVqo=;
-        b=BqldsA7bPhRfdEFmCHh9S5LVCARi/EFtfGu7smOgPoK5LnH2knjXhDcUXsZzdDeiEH
-         ihZfRRwhvZs2052FAhwTmNNn22k2iEic7SVs99/f9uEmPeE99NZCWeVtwmilhalRS9Xw
-         ofbGumwSVXVAkF1namKdKo4sH4OsXlDvZdaQxmj4sIfXcZPM4iuLdz7Rr3TDKWNVT3/X
-         F6RVJGzXxm8SZkf1kVWHKiaPMijQPAR/+FlFW1t3uYFCjsC5Gb9fvyaYvtUQldW8v6N7
-         3tkZRQT60j2vaR8ocE+IouyTpuK+zRDXgK1aPcvvhEnj0w7y1MjIK02PebnnwyJ1gJ0y
-         uJhA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWWXsKiGToBM/YXieuYqSElP8+mbDKvzzOatsKFLVWusZC64S0wBPZcj/Cqp3//XW/4DKKqGc3MTrH@vger.kernel.org, AJvYcCVn/r/2Z8iIZUPEzTe0MArwxPPVxpljK+5pou6oRNGpz1h4MgAGiRhMP734TQ8t3VseYtQCPrG4e2Sbkwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6dVr620Stnd9Anoi+CzQJp0eoTNSXg3OyOKh3ltCRmftK2il/
-	SNVEFtjKn/Z5ADreMOmOdisJGa3KoyW4khdiX//AuL5rkDf/pmhM
-X-Gm-Gg: ASbGncujLosS5JqSoc+TVHtiILBEiE4tGm4aCfnq5/UWXmEUWHf7E8kr/sAsuA19wwB
-	Oa/zi4d/LPPtBVy3N6dsQ6u16dT38uA7kj/IdvJ7vLLy/XHhixt5Fhn7CaGUjVozL3l2rD4ebHt
-	nmCUtHV4wmURqtjv+b8pYmrxdn7lVhcTpDSu72QnMwUbnE6Vq0QcSCvWRcA19atWysONVLbpkpJ
-	b/3AsxZOdfnxW1EguQGz1kxYsc2Ak9Za3f1aYFaKHN4g24Byr/eYvgmgldHZ8ZEW7QKZI9NMatf
-	QcYT2IfbiuU16I39ONAj0H5z3EzxpU+9hW31s58Wl01f8HLzLgxZcTFcqQTTpA==
-X-Google-Smtp-Source: AGHT+IH11m+G5fg7q9nL4VgnNwtmhA8S8Gavr29gxnvuDDmRIaQiwKNbSdXoVwVJd0AVqXxib7OLEw==
-X-Received: by 2002:a17:907:2d20:b0:abf:56e3:e899 with SMTP id a640c23a62f3a-ac20e1d898amr590333466b.40.1741251024200;
-        Thu, 06 Mar 2025 00:50:24 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239888261sm57214366b.127.2025.03.06.00.50.23
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 06 Mar 2025 00:50:23 -0800 (PST)
-Date: Thu, 6 Mar 2025 09:50:19 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: ki.chiang65@gmail.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH] xhci: Handle spurious events on Etron host isoc
- enpoints
-Message-ID: <20250306095019.2e354de3@foxbook>
-In-Reply-To: <2a44ee96-25e4-4693-8f43-913942091c51@linux.intel.com>
-References: <41847336-9111-4aaa-b3dc-f3c18bb03508@linux.intel.com>
-	<20250228161824.3164826-1-mathias.nyman@linux.intel.com>
-	<20250303113401.280cb911@foxbook>
-	<2a44ee96-25e4-4693-8f43-913942091c51@linux.intel.com>
+	s=arc-20240116; t=1741251194; c=relaxed/simple;
+	bh=EEomdBKt+X/5n5ZchX8hINjV+Sy90VhkmeD4NnK1f8I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8tIyXBekz7CxyfOjLm09nK+LYQ9CdP99KL0+1apGBtqMXaUnRgjbP2zxFqfAyMuJ7lTaWhMAan4CshFU1+ScqD/Bt80nb9Wn61r+6HAhVjeTfUCXhHbYVUf7DDSWIjvPkCWxfcStQcaslSs+qmwHTZYL+sdqBZbp9Fg/BY4slw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxdVf8ha; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FE8C4CEE0;
+	Thu,  6 Mar 2025 08:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741251193;
+	bh=EEomdBKt+X/5n5ZchX8hINjV+Sy90VhkmeD4NnK1f8I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YxdVf8ha9HeBX99xcCS7N7otPMXkxCLLLIapHLItazmsbZJ/wQDu9Ydp4fzi24RVE
+	 AwbQaMdxYbszJ0gXz243pvuk3xlZGSBU4Y1mgk9ewLVtVrb8YvhGRwqmHh+tu+yX6E
+	 QMV3aVp2WYZRsmJRXWHSHnuYxIt7OSms0ZA+ra4gyW5D2lEvgH5zI/mS9injn9hAb2
+	 c7E7KHxHmZGz1zjbR+oCGD7B/UyNc2HC/XWLNvN8NPTrNnSd8VBAkOdVPW6iGCs6FF
+	 K4UwS7+3LBQSRKva458uhxr5RKV7ICSAMwIZBAzfC3X+nzTw168OizlL/w78FcOAUP
+	 vtljFxTBIZQiQ==
+Date: Thu, 6 Mar 2025 16:53:05 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v4 4/6] usb: chipidea: imx: add HSIO Block Control wakeup
+ setting
+Message-ID: <Z8licaX8M_Nz6Dmz@nchen-desktop>
+References: <20250303033344.1251076-1-xu.yang_2@nxp.com>
+ <20250303033344.1251076-5-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303033344.1251076-5-xu.yang_2@nxp.com>
 
-On Mon, 3 Mar 2025 17:08:39 +0200, Mathias Nyman wrote:
-> > The hack could almost be removed now, but if there really are HCs
-> > which report Success on the first event, this won't work for them:  
+On 25-03-03 11:33:42, Xu Yang wrote:
+> On i.MX95 platform, USB wakeup setting is controlled by HSIO Block
+> Control:
 > 
-> This looks better, and I agree that the hack/quirk is annoying, but
-> in fear of regression I don't want to touch that in this patch yet.
+> HSIO Block Control Overview:
+> - The HSIO block control include configuration and status registers that
+>   provide miscellaneous top-level controls for clocking, beat limiter
+>   enables, wakeup signal enables and interrupt status for the PCIe and USB
+>   interfaces.
+> 
+> The wakeup function of HSIO blkctl is basically same as non-core, except
+> improvements about power lost cases. This will add the wakeup setting for
+> HSIO blkctl on i.MX95. It will firstly ioremap hsio blkctl memory, then do
+> wakeup setting as needs.
+> 
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> Reviewed-by: Jun Li <jun.li@nxp.com>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-For the record, I didn't mean removing support for HCs reporting
-Success with nonzero residual, the problem may be real and the commit
-which introduced this code describes plausible symptoms.
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-But handle_tx_event() part of this workaround could be done without
-changing trb_comp_code, like process_xxx_td() are. You are replacing
-practically all of this code already, so it's an opportunity.
+> 
+> ---
+> Changes in v4:
+>  - add blkctl NULL checking
+>  - warning if no blkctl reg provided for imx95
+> Changes in v3:
+>  - remove usbmisc_imx95_init(), use usbmisc_imx7d_init()
+> Changes in v2:
+>  - add Rb tag
+> ---
+>  drivers/usb/chipidea/usbmisc_imx.c | 77 ++++++++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+> 
+> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+> index 1394881fde5f..3b35efd95cdb 100644
+> --- a/drivers/usb/chipidea/usbmisc_imx.c
+> +++ b/drivers/usb/chipidea/usbmisc_imx.c
+> @@ -139,6 +139,22 @@
+>  #define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKEUP | \
+>  				 MX6_BM_ID_WAKEUP | MX6SX_BM_DPDM_WAKEUP_EN)
+>  
+> +/*
+> + * HSIO Block Control Register
+> + */
+> +
+> +#define BLKCTL_USB_WAKEUP_CTRL		0x0
+> +#define BLKCTL_OTG_WAKE_ENABLE		BIT(31)
+> +#define BLKCTL_OTG_VBUS_SESSVALID	BIT(4)
+> +#define BLKCTL_OTG_ID_WAKEUP_EN		BIT(2)
+> +#define BLKCTL_OTG_VBUS_WAKEUP_EN	BIT(1)
+> +#define BLKCTL_OTG_DPDM_WAKEUP_EN	BIT(0)
+> +
+> +#define BLKCTL_WAKEUP_SOURCE		(BLKCTL_OTG_WAKE_ENABLE	   | \
+> +					 BLKCTL_OTG_ID_WAKEUP_EN   | \
+> +					 BLKCTL_OTG_VBUS_WAKEUP_EN | \
+> +					 BLKCTL_OTG_DPDM_WAKEUP_EN)
+> +
+>  struct usbmisc_ops {
+>  	/* It's called once when probe a usb device */
+>  	int (*init)(struct imx_usbmisc_data *data);
+> @@ -159,6 +175,7 @@ struct usbmisc_ops {
+>  
+>  struct imx_usbmisc {
+>  	void __iomem *base;
+> +	void __iomem *blkctl;
+>  	spinlock_t lock;
+>  	const struct usbmisc_ops *ops;
+>  };
+> @@ -1016,6 +1033,44 @@ static int usbmisc_imx6sx_power_lost_check(struct imx_usbmisc_data *data)
+>  		return 0;
+>  }
+>  
+> +static u32 usbmisc_blkctl_wakeup_setting(struct imx_usbmisc_data *data)
+> +{
+> +	u32 wakeup_setting = BLKCTL_WAKEUP_SOURCE;
+> +
+> +	if (data->ext_id || data->available_role != USB_DR_MODE_OTG)
+> +		wakeup_setting &= ~BLKCTL_OTG_ID_WAKEUP_EN;
+> +
+> +	if (data->ext_vbus || data->available_role == USB_DR_MODE_HOST)
+> +		wakeup_setting &= ~BLKCTL_OTG_VBUS_WAKEUP_EN;
+> +
+> +	/* Select session valid as VBUS wakeup source */
+> +	wakeup_setting |= BLKCTL_OTG_VBUS_SESSVALID;
+> +
+> +	return wakeup_setting;
+> +}
+> +
+> +static int usbmisc_imx95_set_wakeup(struct imx_usbmisc_data *data, bool enabled)
+> +{
+> +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> +	unsigned long flags;
+> +	u32 val;
+> +
+> +	if (!usbmisc->blkctl)
+> +		return 0;
+> +
+> +	spin_lock_irqsave(&usbmisc->lock, flags);
+> +	val = readl(usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> +	val &= ~BLKCTL_WAKEUP_SOURCE;
+> +
+> +	if (enabled)
+> +		val |= usbmisc_blkctl_wakeup_setting(data);
+> +
+> +	writel(val, usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
+> +	spin_unlock_irqrestore(&usbmisc->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct usbmisc_ops imx25_usbmisc_ops = {
+>  	.init = usbmisc_imx25_init,
+>  	.post = usbmisc_imx25_post,
+> @@ -1068,6 +1123,14 @@ static const struct usbmisc_ops imx7ulp_usbmisc_ops = {
+>  	.power_lost_check = usbmisc_imx7d_power_lost_check,
+>  };
+>  
+> +static const struct usbmisc_ops imx95_usbmisc_ops = {
+> +	.init = usbmisc_imx7d_init,
+> +	.set_wakeup = usbmisc_imx95_set_wakeup,
+> +	.charger_detection = imx7d_charger_detection,
+> +	.power_lost_check = usbmisc_imx7d_power_lost_check,
+> +	.vbus_comparator_on = usbmisc_imx7d_vbus_comparator_on,
+> +};
+> +
+>  static inline bool is_imx53_usbmisc(struct imx_usbmisc_data *data)
+>  {
+>  	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+> @@ -1289,6 +1352,10 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
+>  		.compatible = "fsl,imx8ulp-usbmisc",
+>  		.data = &imx7ulp_usbmisc_ops,
+>  	},
+> +	{
+> +		.compatible = "fsl,imx95-usbmisc",
+> +		.data = &imx95_usbmisc_ops,
+> +	},
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+> @@ -1296,6 +1363,7 @@ MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+>  static int usbmisc_imx_probe(struct platform_device *pdev)
+>  {
+>  	struct imx_usbmisc *data;
+> +	struct resource *res;
+>  
+>  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -1307,6 +1375,15 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
+>  	if (IS_ERR(data->base))
+>  		return PTR_ERR(data->base);
+>  
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (res) {
+> +		data->blkctl = devm_ioremap_resource(&pdev->dev, res);
+> +		if (IS_ERR(data->blkctl))
+> +			return PTR_ERR(data->blkctl);
+> +	} else if (device_is_compatible(&pdev->dev, "fsl,imx95-usbmisc")) {
+> +		dev_warn(&pdev->dev, "wakeup setting is missing");
+> +	}
+> +
+>  	data->ops = of_device_get_match_data(&pdev->dev);
+>  	platform_set_drvdata(pdev, data);
+>  
+> -- 
+> 2.34.1
+> 
 
-And one more thing:
+-- 
 
-> -				ep_ring->last_td_was_short = false;
-...
-> +				ep_ring->old_trb_comp_code = trb_comp_code;
-
-This is a behavior change, due to the aforementioned hack. You are
-replacing comp_code 13 with 13 and the mechanism stays "armed". It
-will continue silently ignoring arbitrary events because there is
-no validation if they really came from the "old" TD's TRB.
-
-It's a pet peeve of mine, because I have already seen cases when the
-old mechanism "swallows" illegal events which should be reported, and
-now this problem may only get worse.
-
-You can preserve behavior by clearing old_trb_comp_code to 0 or -1
-or otherwise marking this entry as "inactive".
-
-Regards,
-Michal
+Best regards,
+Peter
 
