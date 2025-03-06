@@ -1,106 +1,89 @@
-Return-Path: <linux-usb+bounces-21450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C504CA54F25
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:32:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF7DA54F63
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:42:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7223F176D3F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:31:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F84B3A7919
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:42:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0415620FA94;
-	Thu,  6 Mar 2025 15:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830DC20E704;
+	Thu,  6 Mar 2025 15:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JVdFBJAv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uZd+fYIo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799B420F08C;
-	Thu,  6 Mar 2025 15:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A591148FF5;
+	Thu,  6 Mar 2025 15:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741274934; cv=none; b=FCPqSVFWN7UFpTtSKJBEqgU3NF9tqZDGLk3JMKTQDeRAuFRuObkV96YkuRzH2Ed6aK9rBX9mwFTE+mJCQET5KyWromjMnOBxa/rOQBS8pCCU3ycsDxxcH+wp3VfB2sIrdK7KG2k7fu7otUTD5MYwEgcNvlBrkasQZXxtiwLhgJE=
+	t=1741275737; cv=none; b=VLGiuow+Q7nOWPavFct3QnhSjUHPwuiqZ7R8kaP4pMi9p5RH0T2wuN/yUblU0eLbcfld/YfVzOAnlXaA4oPWoeoUlUOPiD74LBgGhwMisIddnOVO82aKS+0xGCx2IayaVgMjVnBzuKzFJ7YN1NdCm+jxby9hKfMw02vBKdChO3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741274934; c=relaxed/simple;
-	bh=aQePbAYdZXrXbAi42yBry4e/Wzyfvuk6yi8cLF4DVrA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RBc/QcXudW9BNAulT4aGTO07ORU8TyL7xxanRzwRlTt4jH9A4ANslJRPfrjhRTSUOBsU7y1IVQKhCyWFSlCMAOuGnf8s6k1pEb8dalwRKRcGUifMlRdc4rS+ETt3MAnpvJAdniFuX3ilEKptK/fNv0Pspdj6hxRCx99xw97Smi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JVdFBJAv; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741274932; x=1772810932;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aQePbAYdZXrXbAi42yBry4e/Wzyfvuk6yi8cLF4DVrA=;
-  b=JVdFBJAv/2+8QabO0JHgPEWeZKXiD1cI9bWryE+p/Z/F+mPrIAndgecw
-   cFkATHQFOPcGdzU37e/BjjuC/wG19jb2DBEQAmSO0Mo6hOd9xUJd1uu8y
-   nw+TdhybFEr0SV1inODwhZaIUyfeIDsTygnQA0DlkT0H+Nqpt2FbBe6UJ
-   YphCkzizLiNMfvjNQsdR4KQJe+8Q6neFDOk36fg0VVTuLUeVxVy731WKn
-   pMuuYx0XTRm/a6zBlo+MEZcSdMyOqCvT1wBuv76NSuymNRY6MMJnP7xiw
-   JXHSFcXHp1VZGAPTOgLNcbyqGTRGbJtVV8uyLoWIqofCHnWhn31pany1y
-   A==;
-X-CSE-ConnectionGUID: gprz+VCuSwGtTAS0K3qxZg==
-X-CSE-MsgGUID: yddHbs4ATeOMNEr3JVHDVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="52934889"
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="52934889"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 07:28:29 -0800
-X-CSE-ConnectionGUID: kUJrh9qhSHSEAUO6xIXRkQ==
-X-CSE-MsgGUID: Q1S6lfyHTLi8Yj4rLsKI5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="119058098"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa006.jf.intel.com with ESMTP; 06 Mar 2025 07:28:28 -0800
-Message-ID: <22876af7-4f9a-40ce-aa9d-2bcab89ce8ae@linux.intel.com>
-Date: Thu, 6 Mar 2025 17:29:30 +0200
+	s=arc-20240116; t=1741275737; c=relaxed/simple;
+	bh=UUBhF9NhePQ1mVan/otMRee77cWY/IkkhCCKPaz9a6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iI+osrOT86KsIIrrCIlRGp/hHvvMfT21RZKoxkRzAeWUirFxWPj8614xHoNiDdQSInxR0AFMk5xUOS1hh4jpfmlVtTCO+ljfv1A98yznSJht1sBqjwJ1DbD1TNWLyIZQsgue3MUbofi6gkX0rRDynddshiMggW53LiLtGINS39A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uZd+fYIo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCF9C4CEE0;
+	Thu,  6 Mar 2025 15:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1741275736;
+	bh=UUBhF9NhePQ1mVan/otMRee77cWY/IkkhCCKPaz9a6w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uZd+fYIofyzzEfe4sEkk3nTv0MWNzWuQxkEVVw7iOMsV7aJcR1VcDOIJ4Y5YXNg3L
+	 FOf6WQ5J2T3TG41C3VZUA4/c2VcR1+2Nvryz3j7fqjdDuuCbofbPVZWCwa/BNaK2te
+	 1HLchGAcCyZXprZUN6/IFBdYz9P3XzEES57NVJYw=
+Date: Thu, 6 Mar 2025 16:42:13 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Michal Pecio <michal.pecio@gmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 03/15] usb: xhci: Don't skip on Stopped - Length Invalid
+Message-ID: <2025030650-defiling-grit-869e@gregkh>
+References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
+ <20250306144954.3507700-4-mathias.nyman@linux.intel.com>
+ <2025030611-twister-synapse-8a99@gregkh>
+ <22876af7-4f9a-40ce-aa9d-2bcab89ce8ae@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/15] usb: xhci: Don't skip on Stopped - Length Invalid
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Michal Pecio <michal.pecio@gmail.com>,
- stable@vger.kernel.org
-References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
- <20250306144954.3507700-4-mathias.nyman@linux.intel.com>
- <2025030611-twister-synapse-8a99@gregkh>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <2025030611-twister-synapse-8a99@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22876af7-4f9a-40ce-aa9d-2bcab89ce8ae@linux.intel.com>
 
-On 6.3.2025 16.52, Greg KH wrote:
-> On Thu, Mar 06, 2025 at 04:49:42PM +0200, Mathias Nyman wrote:
-> Why is a patch cc: stable burried here in a series for linux-next?  It
-> will be many many weeks before it gets out to anyone else, is that
-> intentional?
+On Thu, Mar 06, 2025 at 05:29:30PM +0200, Mathias Nyman wrote:
+> On 6.3.2025 16.52, Greg KH wrote:
+> > On Thu, Mar 06, 2025 at 04:49:42PM +0200, Mathias Nyman wrote:
+> > Why is a patch cc: stable burried here in a series for linux-next?  It
+> > will be many many weeks before it gets out to anyone else, is that
+> > intentional?
+> > 
+> > Same for the other commit in this series tagged that way.
 > 
-> Same for the other commit in this series tagged that way.
+> These are both kind of half theoretical issues that have been
+> around for years without more complaints. No need to rush them to
+> stable. Balance between regression risk vs adding them to stable.
+> 
+> This patch for example states:
+> 
+> "I had no luck producing this sequence of completion events so there
+>  is no compelling demonstration of any resulting disaster. It may be
+>  a very rare, obscure condition. The sole motivation for this patch
+>  is that if such unlikely event does occur, I'd rather risk reporting
+>  a cancelled partially done isoc frame as empty than gamble with UA"
 
-These are both kind of half theoretical issues that have been
-around for years without more complaints. No need to rush them to
-stable. Balance between regression risk vs adding them to stable.
+Ok, fair enough, just seeing patches languish in -next that are tagged
+for stable looks odd.
 
-This patch for example states:
+thanks,
 
-"I had no luck producing this sequence of completion events so there
-  is no compelling demonstration of any resulting disaster. It may be
-  a very rare, obscure condition. The sole motivation for this patch
-  is that if such unlikely event does occur, I'd rather risk reporting
-  a cancelled partially done isoc frame as empty than gamble with UA"
-
-Thanks
-Mathias
-
+greg k-h
 
