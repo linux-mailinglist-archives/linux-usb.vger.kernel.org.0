@@ -1,173 +1,151 @@
-Return-Path: <linux-usb+bounces-21427-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21428-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80C7BA54C2A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:29:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E234A54C75
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:44:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE3C77A8F8B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 13:28:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77A353AE07E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 13:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3162920E6E0;
-	Thu,  6 Mar 2025 13:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8540E20F089;
+	Thu,  6 Mar 2025 13:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="WtYsCFSV"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="S6lVwSsk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BA420CCC8
-	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 13:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AF920D4F8
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 13:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741267754; cv=none; b=P8H5medqa/D8GHqdPUEgGB7aTsKeP5n1+wIFd4UoJYyXQy6AyH7Y4VcwfFshqLHgMMuKBbCC2KxNcBNGsMZp78J4PyvmXOCBdEogwA6e9wawbdTcCxXtGfiOFi3fsNbGwRaLzA4tWHrWYTaMEzbY3Ve2+2D8wunYSoHBTgPgKaU=
+	t=1741268659; cv=none; b=QQ+NCNyDMuwZIknAa+zEYV6NN9s9QRaIe7LUmS8Db/oTowVN79fPe1bM1Chyb7J9Vek4i3M+nO8flE/EpkVGOeleduy4exszvXcCHwL/q757eOuoOFAhmU73y9igoqkrgW6OJHX1xxfpQZzsg0JqdVdRU5FP3Gzf637a/G/N1Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741267754; c=relaxed/simple;
-	bh=Zk6KznM1Mny3IifnHC66rR/yxzf5hcz/58qW1fHNFzw=;
+	s=arc-20240116; t=1741268659; c=relaxed/simple;
+	bh=A2My8BDMQF8VFr+4sgwGBz/rcCSkVwtLYDvDB+wZbtQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bry6UybnLwWk9k/kBZUjFSXRYh0weeUeONPWfNf9bq1V4AVap6W6JtFuviiE22OXjSVctajI5HiH4BaaOL/SYqAIldipmS8s6PJu2SPU996TKVYQIgw1ovTXMBasS+n88j/RDvgufG+/Ie5dCzHG0p7cm7+RjIKQzYLbrkxq+FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=WtYsCFSV; arc=none smtp.client-ip=209.85.222.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=ntpviPi6LZL/+DLGfg+bnmlb6SZLgnrPKrrIrbbvIoh6C6eclBXbsluwLt8sM7JP0eG2lGO4SU7Vr8g237x9oHDWi2yZhtjQ8AZpJ3liTkezMOsUz9zQmk0g7Vy6bKKVEFOzdcMyZ5XEcv0d8LXuFzNf2/VOUleEFXJQQTOglNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=S6lVwSsk; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c089b2e239so57114885a.0
-        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 05:29:12 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c3c91060d0so81703085a.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 05:44:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1741267752; x=1741872552; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TO273gAYQ0oUb9YC0Kv4nC2xrHAVYrUP62Xzo8si0Uw=;
-        b=WtYsCFSVWhhtSCYH1osSgbgSDODlO+pseYZ8PDoJ7ZtIZXCvVe1bHvtazsLLqa+4Pv
-         TSmhtudLi9/tzvdvaixJJ99FLuU7vd65/AkjLdnPi/4h5/+3waaLqP1eVTgaLctMA5Ir
-         UZapzOek0/n8MErWvTldVeqAxc8Gub2x/a+pyHwKSLog9sk5EVnytI0M12M6eQe3o9AN
-         lcjvj+6t4bPngx3U0Bz5zFb7bh+JyluchjPfASqeXqfKVHkZBiYau+pxVgC4KZWMWVzC
-         ykgc2EQnJuswMbmAOmTmtKRRKYtSBcpYTUKFhWMhTY2p8WbcMMc5scpzGTYO7YDPClpv
-         A+bw==
+        d=rowland.harvard.edu; s=google; t=1741268655; x=1741873455; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WwgjDPu5gQ57J7qpYXbCmGMvklNaQu3hyIrZ9bRfd44=;
+        b=S6lVwSsk8ucJquJ+3M+Tiyid9mwG6Wgs0wpWG2gB+uQCcJvpXeTcrS6c3hL/Pg1KY6
+         v5f4AxzU9BnyUXEEXV7iQIrAVnTa5eCr5HfwlwEnWHzeBi0l3vCmQkzYmqMdctVetatw
+         NyDcuLhTuIMERvZ+pL0CeoRdkrbpXTWg54i77FHUW47fH64IWk7UxKC6YkIq/0DL3A6B
+         Qv9Ka4aP+WoHWsKEhjkOLATLdMVPz6eM4eg0AJ1kunDB3KjjwDmb+50uh8TSpi4M7kVd
+         UhMF2GlZwmXHjm/Cm15BU4YZDX8sOSgUO4duwsA6yE7COXRu9vj4nwuCjSaB/069h0xk
+         Yu+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741267752; x=1741872552;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TO273gAYQ0oUb9YC0Kv4nC2xrHAVYrUP62Xzo8si0Uw=;
-        b=t+u1TjBMeMvaC2Cgd5YZ+F9Z21ek1Joc1K8AXjcLaRV6wDEzOoUH9hRSArDj6IgRkY
-         vEZn0Y3RgKD6zLMa6U7+OYohmE66t561VL6iwKQQ07tqWjlPevPHM3WybElTOSdbpqNC
-         zEpuFbksF3gG7joHh5fWkckSQggVv7RcXDIsYj/FkewB9lfnjVOXSjc1watuuxt4owMz
-         Pw5txOFx64xMMVBKUjeXYBVa0UtvC7yBJDip8nFE+uCTvl4KNNmAD4Qwi/qq40chCX/K
-         g0SDy14I6G2keXZyAkTjShAsz8PCaVOtTd4/14+n7e5rSz/Ow0K5J6at95NYOKoyOmRV
-         T35A==
-X-Forwarded-Encrypted: i=1; AJvYcCXy070HK31ACE5V7XebbUgO0Hq0Nm+lMpuKY+opyNFw22lyz+AoYb1oBTt0RNW8SXEMbBXE4CaRXZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy49zWij4wPYPPlKS2jPjhFRtfaD0rCK3/EF7pgh1Ljx6qqXcwE
-	dV4/VWt/scEjwdqJrG1z6XHCP20DpYIj4qHFOxY18o8PNkrqyP4gAKrWUARJvw==
-X-Gm-Gg: ASbGncujfJxK7lG/q1xXnPAbZyMJ3mqGVuLCu6nbfUKCGCgDXp1h5FT4DYUajWw3sT9
-	+X2i9rn050PHZXLuKNQil5LUpkn5lQZxKkiZ0XH26TXWb7Fq/gERAL1LsfvmathWZHRzVaLXuT5
-	PBsEnVKaJ4bnJfTWq5CvTUbfsc2gvpEurw80TFZVVWw8qOYTiy/IlqF9hThyd4Kpnu1hVPvud//
-	UP8Jp3q5ObHhqX0aLQtP+6k+kP3+IM/3IhfLQVjJR3eRSp1VrhjgZEu64MKE5dyu8Jh/Mkr9+XI
-	G2bHJNBQJpgTYfdgA9CeZP1gYgvSLKJH5Ipy80CZFzDr2A==
-X-Google-Smtp-Source: AGHT+IG8tT1+AXlJX2np1Pv8ZLeKeVEq894Sr4SIQ9hI43LDy8VQzN1drOvtY/uAtno3oVS/H4tnyQ==
-X-Received: by 2002:a05:620a:6087:b0:7c3:ca29:c87e with SMTP id af79cd13be357-7c3e3a1c978mr415437085a.21.1741267751741;
-        Thu, 06 Mar 2025 05:29:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741268655; x=1741873455;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WwgjDPu5gQ57J7qpYXbCmGMvklNaQu3hyIrZ9bRfd44=;
+        b=Uyp1e5LRUDH1tawDhAKO7MsSppBZ4HLnaBP/M203ALBNMicbHy45Lsvg89uR7wb3Gc
+         KGcr4V8uQg7WdRTpeLAxpYFmQPaxM+G0egg8Qnd1d8NiPWNyHNR28xZUIHopDcr580OT
+         tEl31rODydW4RqjaLDqnFJya2B0GVTndZ+RJNZiev9stOLyZ7T2KbVMr//bwfhIVKcyb
+         HhSfq7QCV7M9gZKS+dfP/hDZXn0+0fzuT2B+8TZMTLIZtTJ5hJz9T8/eIFNda3slsm6I
+         qpakgxmnfAFQeWTvA218NazUfi508zDyVY+gKim8ZjjSYJfOjRDsJZfnmbyyrzQLgmcg
+         fnkw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5gko2Oyw05SjWhHCL8bpW+disDvsJUCkOVUo8mgIszGe2OAHDJI4PRLwPtmh5no6d9rvPqfViB5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4e8uwcUui+/K9xRYi9E6Uuy69SDcrAZBiDKSKp9TfAfvm6AMX
+	MdKhZzXC60T563AkKI+msyNtxZnCG7Z9IEZhtoS3YNqKtVh8uQtq7AzU+9G3Ng==
+X-Gm-Gg: ASbGncsbnQU0YZr7SyQlkdspmEdzIIPYMTcqIlUPV1R+m0Nv/6g3uM+xNY9rjdkINcX
+	g6BFFTZoK/tnFFDr2pdtR4kLXsnz3WOkFjYNt35vuTPrLK/xvJOH/a/utP5UEH5vDP7eBHsnyfC
+	sDeDcPoRqCGXvEq6yi4stBjrAYgKeT6yjrOY4EGVy/eb+zie733Ke6L4Sg06jto09FKDXJFbWEB
+	9MprOB5WIrOW8Zn3X241lmjEu70+Zeq/eMM6c590F1YyvCCpnqBSzny9UQ5rhy9ZuwXdd/QY3Jj
+	o6xKQxp5IPgoUEkeq3aA3pfmeIkn9hwXIFkV/YhPDN/1Vw==
+X-Google-Smtp-Source: AGHT+IFEipRBi3b1Lbw6KErxXrLIwaAdjxI5V6kG1WF27EYioXALQ7PyJP14C34zZXLZBr80yPK9Iw==
+X-Received: by 2002:a05:620a:4c8b:b0:7c0:9df3:a0cb with SMTP id af79cd13be357-7c3d8f10b02mr922493685a.53.1741268655321;
+        Thu, 06 Mar 2025 05:44:15 -0800 (PST)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::3ca7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e551d075sm90283285a.112.2025.03.06.05.29.10
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e533a1b7sm93507085a.5.2025.03.06.05.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 05:29:11 -0800 (PST)
-Date: Thu, 6 Mar 2025 08:29:08 -0500
+        Thu, 06 Mar 2025 05:44:14 -0800 (PST)
+Date: Thu, 6 Mar 2025 08:44:11 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Jiayi Li <lijiayi@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, stefan.eichenberger@toradex.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jiayi_dec@163.com
-Subject: Re: [PATCH v1] usb: core: Add boot delay for DH34 board in restore
- mode
-Message-ID: <d3b12542-4919-45e7-b2a5-28742a6c7943@rowland.harvard.edu>
-References: <20250306061749.1502029-1-lijiayi@kylinos.cn>
+To: incansvl <colin.evans.parkstone@gmail.com>
+Cc: eichest@gmail.com, francesco.dolcini@toradex.com,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org,
+	stefan.eichenberger@toradex.com
+Subject: Re: [PATCH v1] usb: core: fix pipe creation for get_bMaxPacketSize0
+Message-ID: <1005263f-0a07-4dae-b74f-28e6ae3952bf@rowland.harvard.edu>
+References: <Z6HxHXrmeEuTzE-c@eichest-laptop>
+ <857c8982-f09f-4788-b547-1face254946d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250306061749.1502029-1-lijiayi@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <857c8982-f09f-4788-b547-1face254946d@gmail.com>
 
-On Thu, Mar 06, 2025 at 02:17:49PM +0800, Jiayi Li wrote:
-> On certain DH34-model motherboards, USB keyboards may fail to respond
-> during the restore mode confirmation prompt due to the usbhid driver
-> not being fully initialized when device registration occurs.
-
-Why does that make any difference?  The driver core will probe the 
-usbhid driver when it is fully registered (assuming the keyboard device 
-hasn't been bound to a different driver in the meantime).
-
->  This
-> results in inability to input 'y'/'n' confirmation.
+On Wed, Mar 05, 2025 at 10:02:15PM +0000, incansvl wrote:
+> Team,
 > 
-> Detect this scenario by:
-> 1. Checking DMI_BOARD_NAME for "DH34" substring
-> 2. Verifying "restore" in kernel command line
+>     I am experiencing a problem on multiple versions of the 6.x kernel, where initialisation
+> of a motherboard usb hub device fails and causes a stream of errors. The performance of the
+> machine is badly affected.
 > 
-> Introduce a 200ms delay before device registration when both conditions
-> are met. This allows sufficient time for the usbhid driver to properly
-> initialize before user interaction is required.
+> I would have considered this most likely a hardware fault except-
+> 
+> 1) I am seeing the same issue on 2 machines of very different age and spec.
 
-Why does delaying device registration help?  In theory it should make 
-things worse: When user interaction is required, the keyboard device 
-won't even be registered yet, let alone bound to the usbhid driver.  
+The differences may not matter if they use similar hardware components.
 
-Furthermore, your patch delays registration of _all_ devices, not just 
-the keyboard device.  This will slow down the restore-mode boot 
-procedure considerably.
+> 2) In each case the hub generating errors has no external devices connected to it, so
+>    the error can't be caused by an external device that has failed. In fact on
+>    "machine 2", having no devices plugged in seems to be a necessary condition for the
+>    error to occur (see details below).
+> 
+> I found the discussion of this patch, but I am not clear about this description-
 
-It sounds like what you really need to do is delay the user interaction, 
-leaving the device and driver initialization and registration unchanged.
+I suspect that patch has nothing to do with your problem.  Have you 
+tried applying (or reverting) it to see if that causes the problem to go 
+away?
+
+> 4) On both machines the errors relate to a USB root hub that has NO DEVICES connected to it.
+>    On "machine 2", having a powered USB3.0 hub (which has a number of downstream devices
+>    connected) plugged in to one port on the hub is enough to suppress the errors, although
+>    I note the that "bad" port number (hub 2 : port 3) is not enumerated (skipped?).
+
+> (tail of "dmesg -w")
+> [  781.020436] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+> [  784.990637] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+...
+
+Please try collecting a usbmon trace for bus 2 showing the problem.  
+Ideally the trace should show what happens from system boot-up, but 
+there's no way to do that.  Instead, you can do this (the first command 
+below disables the bus, the second starts the usbmon trace, and the 
+third re-enables the bus):
+
+	echo 0 >/sys/bus/usb/devices/usb2/bConfigurationValue
+	cat /sys/kernel/debug/usb/usbmon/2u >usbmon.txt &
+	echo 1 >/sys/bus/usb/devices/usb2/bConfigurationValue
+
+Then after enough time has passed for the errors to show up, kill the 
+"cat" process and post the resulting trace file.  (Note: If your 
+keyboard is attached to bus 2, you won't be able to use it to issue the 
+second and third commands.  You could use a network login, or put the 
+commands into a shell file and run them that way.)
+
+In fact, you should do this twice: The second time, run it on machine 2 
+with the powered hub plugged in to suppress the errors.
 
 Alan Stern
-
-> Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
-> ---
->  drivers/usb/core/hub.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a76bb50b6202..b81b518f438b 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -36,6 +36,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/uaccess.h>
->  #include <asm/byteorder.h>
-> +#include <linux/dmi.h>
->  
->  #include "hub.h"
->  #include "phy.h"
-> @@ -2610,6 +2611,7 @@ static void set_usb_port_removable(struct usb_device *udev)
->  int usb_new_device(struct usb_device *udev)
->  {
->  	int err;
-> +	const char *board_name;
->  
->  	if (udev->parent) {
->  		/* Initialize non-root-hub device wakeup to disabled;
-> @@ -2656,6 +2658,17 @@ int usb_new_device(struct usb_device *udev)
->  	/* check whether the hub or firmware marks this port as non-removable */
->  	set_usb_port_removable(udev);
->  
-> +	/* get board manufacturer information (DMI_BOARD_VENDOR) */
-> +	board_name = dmi_get_system_info(DMI_BOARD_NAME);
-> +
-> +	/* In order to load the usbhid driver on a specific model motherboards
-> +	 * before the restore mode confirmation, add 200ms of latancy.
-> +	 */
-> +	if (board_name && strstr(board_name, "DH34") &&
-> +		(strstr(saved_command_line, "restore") != NULL))
-> +		msleep(200);
-> +
-> +
->  	/* Register the device.  The device driver is responsible
->  	 * for configuring the device and invoking the add-device
->  	 * notifier chain (used by usbfs and possibly others).
-> -- 
-> 2.47.1
-> 
 
