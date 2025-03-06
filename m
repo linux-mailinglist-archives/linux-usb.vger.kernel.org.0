@@ -1,185 +1,137 @@
-Return-Path: <linux-usb+bounces-21472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21473-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D4DEA5576D
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 21:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F346AA55789
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 21:38:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6D6B3B503F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 20:28:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13D1F3AB256
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 20:38:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CE92755E5;
-	Thu,  6 Mar 2025 20:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A828C27426C;
+	Thu,  6 Mar 2025 20:38:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sl6MefK3"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="JbTCmFOu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD3814F9FF
-	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 20:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360EB1448E3;
+	Thu,  6 Mar 2025 20:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741292891; cv=none; b=hkfB9K1EWUEvdiPzgqpRtagbgKoSowe60v8mGHsbLFNGyzOaBhWn2TPHbeQEnEPJKCuQYqgI83V52YJgdk0W2OeuIjt9wsXN2xmW6i6mPRu0uEdI5MY8d5BHjlWb0wkjojTvjtSMER2mkZn9NBUTB3FbGIVJMI345cRc2eK8ESw=
+	t=1741293516; cv=none; b=E7WD3Mv4Q0gXHolkCG632/DP5SDFngh/Wzz3C+20FnUmoPdrj2iMFXb5KDhCmqDBQjHH04Upv3rALNOCpPeqQNlqHD/KKVWCb6DqQRdyQPGGuK5BuO/63PxdS4KMvM0rDFMqwGf9x90boucICEM2WmeEfQBdvtu9jToBMEoo1lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741292891; c=relaxed/simple;
-	bh=9r+fgi7YcM+OL8YzPJvXm3Tu+DUfhRSJTGCEsOmaks8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aLJ7EfK8KlGOkCN0OvPZ8Scf8D6Zra/PVoPmz+qJgJAVYc9bGB8FR1fFKKOejgZ4QTTM0YPC6ec9hEvcES5mQ9ZykBjQyyrQJ78KjlJ2z6Icx4pylF6iw7a3U8LMJYKMXwTwGdJ0YZMc1+JMM6HX3oniHBZ00BxKewwwdLAHbXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sl6MefK3; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22423adf751so11046045ad.2
-        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 12:28:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741292889; x=1741897689; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GctVpXPllCHYWuu9hUwNfCuRYyncGsuqbdCvzTlEz48=;
-        b=sl6MefK3MtTdAeJS2XOh1/FXZgS6w+Z9Y5mE+VQbBE8xZITjJG46CegOrVxm4DOFcO
-         9vjnWBzclMwieDcH3CPJFDppVoWIf+LOsYp6ox3H1Z0gElhGVRB+tXWoXOSolyLPbQlU
-         bXG8zCLWHjyPINYwhKK4PeUSqV8gBicvO147bfQkFEC5qWoxDRkqNiKOuyzeD5ZlXWGT
-         yCL9ixVGmKlDLGXXuE7gdgl0BScra55pLOsf3JZFFdE8D6pE8nlYIKtWvXxqJk2BJi5k
-         KbMuOLnhn71mc+goufmrhGLN3WbT7mIOlGs7WdBABqkZ7AoKScsK+wmh4Q3p3STng5Lu
-         RUPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741292889; x=1741897689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GctVpXPllCHYWuu9hUwNfCuRYyncGsuqbdCvzTlEz48=;
-        b=bnvQSBL7TPO/YXBagYNoFd6pa2MBNFcBVr0JBt+qNdyGhixjpmRyhloH1K8tHKbDxr
-         pJKoUJjh0X7Ce/0DciUoexPtb3vy55SmsZStasNaSSwmkG546i7PiJYVga53Lg829+MR
-         WCGzhDYpDpxLPIRjhRf6DCUtzTZB6j81RfeSkCCBt8gRUwYwtif4ph5XnTtTZk9nWHOt
-         mFkEN2ThMGF6WuQvi3nVg7Ik0zc4+2MQZxRYomzPUpBu6GyP7PgzBEjJKK25oz2/Bt+O
-         ZNarv+CAE/1PPNp+zzsoddIGrnfyv3rL+NnLkop8gaAb8T17/XS0qvG0Sk4bn8gg2ZWC
-         lKgg==
-X-Forwarded-Encrypted: i=1; AJvYcCWghNAcPacEamLrRlHPfqFKy2LqsgO/jSUZnQHQi+Q6m4JPN6fqVRHsSpAxauTTbOAWeaLk5slND9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFnhc5ec1ElQFPCV8OXRDaMRGOsjmR/vyVCzMAK3km8qeEwTq8
-	SViS5gePlnbsI7DThU3rgStdNxkuoIcEXJZcISgRn8eNePx9t7b2g1FYvIq/5w==
-X-Gm-Gg: ASbGncvw4Nvg+BMhRH0u5pRA/t+Gw65ThtoSA19/hQvFX0tlzccBQCImVqQTscryM+G
-	vW7538v+dNPaP09fzOm4TGnW/x1YPHEzFV8dZoh7Okpkgdf1ZXAJmbeUL5ixRCUq4h8/VRmbCDF
-	iVxdcxpGeh5vNVN1WfUeAG2lXUvxoYq3/1stSvn+7UD2sLezB7oGGvnpsKNyfW8hFiuP2ePfDv2
-	RwrLufH7z3iup5R0/6VJ3ySB9ENX7Y7ZHzeOm8XdCwuiaudqhTtMtL8lLAVa4zM1nMokUU1NhgJ
-	+NYcfp/HrI+0jRuZR0okDsiof93bCn8cYqIb45y26ZZ5KAl+itUvpRgUbVUc7K4iCB0ffNzwmbV
-	U1fIn
-X-Google-Smtp-Source: AGHT+IFiSHnSkJOs/EER/kwvfX8Ds31VHyJZRbQKYI8qPXYDZiuyjKY9f0E3k62CA9zP4luRElVERw==
-X-Received: by 2002:a05:6a21:2d08:b0:1ee:dcd3:80d7 with SMTP id adf61e73a8af0-1f54493353emr1884457637.0.1741292888662;
-        Thu, 06 Mar 2025 12:28:08 -0800 (PST)
-Received: from google.com (65.185.125.34.bc.googleusercontent.com. [34.125.185.65])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736985387d3sm1837619b3a.172.2025.03.06.12.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 12:28:07 -0800 (PST)
-Date: Thu, 6 Mar 2025 20:28:02 +0000
-From: Benson Leung <bleung@google.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Fix NULL pointer access
-Message-ID: <Z8oFUiazzBTKnGRB@google.com>
-References: <20250305111739.1489003-1-akuchynski@chromium.org>
- <20250305111739.1489003-2-akuchynski@chromium.org>
+	s=arc-20240116; t=1741293516; c=relaxed/simple;
+	bh=qnoXiEkk5n6/KIxOU4pLw61ipm/zP5dR4OPIi0DeCzo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BC6nOMJ4EaRhGXqMY7lbo7YKfij8AkP7QoUP4zXjjic2sc9Rdu0OBV9fpXt5CnjTJFnvl2GFsYOB5Talhr/EU+IkKA743TLEeShiGsjs+MlWmJVVS2olk9QgiQTYYiWjzSE7h/HJ3MBX+nTJUVcetY5zWdFKmXXAK4ZU+BxNPgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=JbTCmFOu; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.49] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z81Tg5Mf6z4JYX;
+	Thu,  6 Mar 2025 15:38:31 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1741293513; bh=qnoXiEkk5n6/KIxOU4pLw61ipm/zP5dR4OPIi0DeCzo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=JbTCmFOuvaAF+WEJLsMMmjdYU2ERE7Dj9XrwPtB2Jx6YLzYQt6B79o34R1tcBE6tZ
+	 SLiUxC0DSLy6YA18cnQGsval8x960npt/75L41AmMs0Ed7BaqONLX6BUfgCvt6kECd
+	 GUk7gSouMlK6eMsjLzkRJFqfngIKpo/6ufhos6Tw=
+Message-ID: <8c485ed6-85e0-4d8f-b6dc-2e5c9115b116@panix.com>
+Date: Thu, 6 Mar 2025 12:38:30 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="VDE8sWMpSlokQIQ6"
-Content-Disposition: inline
-In-Reply-To: <20250305111739.1489003-2-akuchynski@chromium.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+To: Lukas Wunner <lukas@wunner.de>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+ <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+ <20250226084404.GM3713119@black.fi.intel.com> <Z77ak-4YsdAKXbHr@wunner.de>
+ <20250226091958.GN3713119@black.fi.intel.com> <Z8YKXC1IXYXctQrZ@wunner.de>
+ <20250304082314.GE3713119@black.fi.intel.com> <Z8nRI6xjGl3frMe5@wunner.de>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <Z8nRI6xjGl3frMe5@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---VDE8sWMpSlokQIQ6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll do more testing but it's been a couple of attempts and it hasn't 
+locked up on me.
 
-Hi Andrei,
+Curious to see how Mika fares with it.
 
-On Wed, Mar 05, 2025 at 11:17:39AM +0000, Andrei Kuchynski wrote:
-> Resources should be released only after all threads that utilize them
-> have been destroyed.
-> This commit ensures that resources are not released prematurely by waiting
-> for the associated workqueue to complete before deallocating them.
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner=
- tasks like alt mode checking")
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
+-Kenny
 
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index fcf499cc9458..43b4f8207bb3 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1825,11 +1825,11 @@ static int ucsi_init(struct ucsi *ucsi)
-> =20
->  err_unregister:
->  	for (con =3D connector; con->port; con++) {
-> +		if (con->wq)
-> +			destroy_workqueue(con->wq);
->  		ucsi_unregister_partner(con);
->  		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
->  		ucsi_unregister_port_psy(con);
-> -		if (con->wq)
-> -			destroy_workqueue(con->wq);
-> =20
->  		usb_power_delivery_unregister_capabilities(con->port_sink_caps);
->  		con->port_sink_caps =3D NULL;
-> @@ -2013,10 +2013,6 @@ void ucsi_unregister(struct ucsi *ucsi)
-> =20
->  	for (i =3D 0; i < ucsi->cap.num_connectors; i++) {
->  		cancel_work_sync(&ucsi->connector[i].work);
-> -		ucsi_unregister_partner(&ucsi->connector[i]);
-> -		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -					 UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
-> =20
->  		if (ucsi->connector[i].wq) {
->  			struct ucsi_work *uwork;
-> @@ -2032,6 +2028,11 @@ void ucsi_unregister(struct ucsi *ucsi)
->  			destroy_workqueue(ucsi->connector[i].wq);
->  		}
-> =20
-> +		ucsi_unregister_partner(&ucsi->connector[i]);
-> +		ucsi_unregister_altmodes(&ucsi->connector[i],
-> +					 UCSI_RECIPIENT_CON);
-> +		ucsi_unregister_port_psy(&ucsi->connector[i]);
+On 3/6/25 08:45, Lukas Wunner wrote:
+> On Tue, Mar 04, 2025 at 10:23:14AM +0200, Mika Westerberg wrote:
+>> Unfortunately I still see the same hang. I double checked, with revert the
+>> problem goes a way and with this patch I still see it.
+>>
+>> Steps:
+>>
+>> 1. Boot the system, nothing connected.
+>> 2. Connect TBT 4 dock to the host.
+>> 3. Connect TBT 3 NVMe to the TBT4 doc.
+>> 4. Authorize both PCIe tunnels, verify devices are there.
+>> 5. Enter s2idle.
+>> 6. Unplug the TBT 4 dock from the host.
+>> 7. Exit s2idle.
+> 
+> Thanks for testing.  Would you mind giving the below a spin?
+> 
+> I've realized this can likely be solved in a much easier way:
+> 
+> The ->resume_noirq callback is invoked while traversing down
+> the hierarchy and the topmost slot which detects device replacement
+> already marks everything below as disconnected.  Hence any nested
+> hotplug ports can just skip the replacement check because they're
+> disconnected as well.
+> 
+> -- >8 --
+> 
+> diff --git a/drivers/pci/hotplug/pciehp_core.c b/drivers/pci/hotplug/pciehp_core.c
+> index ff458e6..997841c 100644
+> --- a/drivers/pci/hotplug/pciehp_core.c
+> +++ b/drivers/pci/hotplug/pciehp_core.c
+> @@ -286,9 +286,12 @@ static int pciehp_suspend(struct pcie_device *dev)
+>   
+>   static bool pciehp_device_replaced(struct controller *ctrl)
+>   {
+> -	struct pci_dev *pdev __free(pci_dev_put);
+> +	struct pci_dev *pdev __free(pci_dev_put) = NULL;
+>   	u32 reg;
+>   
+> +	if (pci_dev_is_disconnected(ctrl->pcie->port))
+> +		return false;
 > +
->  		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sin=
-k_caps);
->  		ucsi->connector[i].port_sink_caps =3D NULL;
->  		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sou=
-rce_caps);
-> --=20
-> 2.49.0.rc0.332.g42c0ae87b1-goog
->=20
+>   	pdev = pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0));
+>   	if (!pdev)
+>   		return true;
+> 
 
---VDE8sWMpSlokQIQ6
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ8oFUgAKCRBzbaomhzOw
-wshkAP9k51Btf5PLARneuF9jO3cYwi1O6adrJbgGw5ruHc53pAD9E7feIK9I8n4/
-Py+0rXhG6xMiyiRaA6KCf6/Q9iXhpQ8=
-=l0KK
------END PGP SIGNATURE-----
-
---VDE8sWMpSlokQIQ6--
 
