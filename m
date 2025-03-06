@@ -1,113 +1,106 @@
-Return-Path: <linux-usb+bounces-21449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE388A54E4D
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C504CA54F25
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:32:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EABD165D6E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:53:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7223F176D3F
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214C21EA7C5;
-	Thu,  6 Mar 2025 14:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0415620FA94;
+	Thu,  6 Mar 2025 15:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oiQkuxhB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JVdFBJAv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C29502BE;
-	Thu,  6 Mar 2025 14:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799B420F08C;
+	Thu,  6 Mar 2025 15:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741272771; cv=none; b=ajBwqRMZcronOtiMmT9UnBBOxVzepOsor2q+U90pYjzAJLZNda4qnMg4bdk4tXUiozSk9oWGfzP8dMH/98BxHxDh5irpiutX8v0MbxTW3YLQLzcMQ9YLsHcIk0PccRcH/QqSyy20nVcHkflth1jOvVGpM3JfrD63Preb7/6Zdi4=
+	t=1741274934; cv=none; b=FCPqSVFWN7UFpTtSKJBEqgU3NF9tqZDGLk3JMKTQDeRAuFRuObkV96YkuRzH2Ed6aK9rBX9mwFTE+mJCQET5KyWromjMnOBxa/rOQBS8pCCU3ycsDxxcH+wp3VfB2sIrdK7KG2k7fu7otUTD5MYwEgcNvlBrkasQZXxtiwLhgJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741272771; c=relaxed/simple;
-	bh=SUL+ucWKrpjs4swUg+H65xiM1N2WpJde2yr8apUzAp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PN4+FpyNK7r9emxwOy51cbMsx7GggT3fnMVD/T1Cc9yAKVXMmpsQFx3nHkqbR24hQHCdAr3+oIAn9utueIxTCjtPG40UrnIK115dSTfbPpRiwziRkpuqVrbEol2QSY7uTrpeNwXUob9O/JEsQu9fv9UFDG2T9AfytscPMIlgIjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oiQkuxhB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E03C4CEE0;
-	Thu,  6 Mar 2025 14:52:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741272771;
-	bh=SUL+ucWKrpjs4swUg+H65xiM1N2WpJde2yr8apUzAp0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oiQkuxhB75KDwwkFO3GswIkPzYDS8WbA/cv9wsZm4WbaqQv/O73UGTWYcU29Pl/oS
-	 Qnx1txDwoq498DkPIBwE95BsTOUGYaoIhHXN0uEcXwDf/LnFAvb2giVmwqAoh9QmC1
-	 Ulu/qd5CPxlfCfPYCjU4xoUjlxUSnDszEmTs1JNY=
-Date: Thu, 6 Mar 2025 15:52:48 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Michal Pecio <michal.pecio@gmail.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 03/15] usb: xhci: Don't skip on Stopped - Length Invalid
-Message-ID: <2025030611-twister-synapse-8a99@gregkh>
-References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
- <20250306144954.3507700-4-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1741274934; c=relaxed/simple;
+	bh=aQePbAYdZXrXbAi42yBry4e/Wzyfvuk6yi8cLF4DVrA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RBc/QcXudW9BNAulT4aGTO07ORU8TyL7xxanRzwRlTt4jH9A4ANslJRPfrjhRTSUOBsU7y1IVQKhCyWFSlCMAOuGnf8s6k1pEb8dalwRKRcGUifMlRdc4rS+ETt3MAnpvJAdniFuX3ilEKptK/fNv0Pspdj6hxRCx99xw97Smi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JVdFBJAv; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741274932; x=1772810932;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aQePbAYdZXrXbAi42yBry4e/Wzyfvuk6yi8cLF4DVrA=;
+  b=JVdFBJAv/2+8QabO0JHgPEWeZKXiD1cI9bWryE+p/Z/F+mPrIAndgecw
+   cFkATHQFOPcGdzU37e/BjjuC/wG19jb2DBEQAmSO0Mo6hOd9xUJd1uu8y
+   nw+TdhybFEr0SV1inODwhZaIUyfeIDsTygnQA0DlkT0H+Nqpt2FbBe6UJ
+   YphCkzizLiNMfvjNQsdR4KQJe+8Q6neFDOk36fg0VVTuLUeVxVy731WKn
+   pMuuYx0XTRm/a6zBlo+MEZcSdMyOqCvT1wBuv76NSuymNRY6MMJnP7xiw
+   JXHSFcXHp1VZGAPTOgLNcbyqGTRGbJtVV8uyLoWIqofCHnWhn31pany1y
+   A==;
+X-CSE-ConnectionGUID: gprz+VCuSwGtTAS0K3qxZg==
+X-CSE-MsgGUID: yddHbs4ATeOMNEr3JVHDVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="52934889"
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="52934889"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 07:28:29 -0800
+X-CSE-ConnectionGUID: kUJrh9qhSHSEAUO6xIXRkQ==
+X-CSE-MsgGUID: Q1S6lfyHTLi8Yj4rLsKI5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="119058098"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa006.jf.intel.com with ESMTP; 06 Mar 2025 07:28:28 -0800
+Message-ID: <22876af7-4f9a-40ce-aa9d-2bcab89ce8ae@linux.intel.com>
+Date: Thu, 6 Mar 2025 17:29:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250306144954.3507700-4-mathias.nyman@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/15] usb: xhci: Don't skip on Stopped - Length Invalid
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Michal Pecio <michal.pecio@gmail.com>,
+ stable@vger.kernel.org
+References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
+ <20250306144954.3507700-4-mathias.nyman@linux.intel.com>
+ <2025030611-twister-synapse-8a99@gregkh>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <2025030611-twister-synapse-8a99@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 06, 2025 at 04:49:42PM +0200, Mathias Nyman wrote:
-> From: Michal Pecio <michal.pecio@gmail.com>
+On 6.3.2025 16.52, Greg KH wrote:
+> On Thu, Mar 06, 2025 at 04:49:42PM +0200, Mathias Nyman wrote:
+> Why is a patch cc: stable burried here in a series for linux-next?  It
+> will be many many weeks before it gets out to anyone else, is that
+> intentional?
 > 
-> Up until commit d56b0b2ab142 ("usb: xhci: ensure skipped isoc TDs are
-> returned when isoc ring is stopped") in v6.11, the driver didn't skip
-> missed isochronous TDs when handling Stoppend and Stopped - Length
-> Invalid events. Instead, it erroneously cleared the skip flag, which
-> would cause the ring to get stuck, as future events won't match the
-> missed TD which is never removed from the queue until it's cancelled.
-> 
-> This buggy logic seems to have been in place substantially unchanged
-> since the 3.x series over 10 years ago, which probably speaks first
-> and foremost about relative rarity of this case in normal usage, but
-> by the spec I see no reason why it shouldn't be possible.
-> 
-> After d56b0b2ab142, TDs are immediately skipped when handling those
-> Stopped events. This poses a potential problem in case of Stopped -
-> Length Invalid, which occurs either on completed TDs (likely already
-> given back) or Link and No-Op TRBs. Such event won't be recognized
-> as matching any TD (unless it's the rare Link TRB inside a TD) and
-> will result in skipping all pending TDs, giving them back possibly
-> before they are done, risking isoc data loss and maybe UAF by HW.
-> 
-> As a compromise, don't skip and don't clear the skip flag on this
-> kind of event. Then the next event will skip missed TDs. A downside
-> of not handling Stopped - Length Invalid on a Link inside a TD is
-> that if the TD is cancelled, its actual length will not be updated
-> to account for TRBs (silently) completed before the TD was stopped.
-> 
-> I had no luck producing this sequence of completion events so there
-> is no compelling demonstration of any resulting disaster. It may be
-> a very rare, obscure condition. The sole motivation for this patch
-> is that if such unlikely event does occur, I'd rather risk reporting
-> a cancelled partially done isoc frame as empty than gamble with UAF.
-> 
-> This will be fixed more properly by looking at Stopped event's TRB
-> pointer when making skipping decisions, but such rework is unlikely
-> to be backported to v6.12, which will stay around for a few years.
-> 
-> Fixes: d56b0b2ab142 ("usb: xhci: ensure skipped isoc TDs are returned when isoc ring is stopped")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Same for the other commit in this series tagged that way.
 
-Why is a patch cc: stable burried here in a series for linux-next?  It
-will be many many weeks before it gets out to anyone else, is that
-intentional?
+These are both kind of half theoretical issues that have been
+around for years without more complaints. No need to rush them to
+stable. Balance between regression risk vs adding them to stable.
 
-Same for the other commit in this series tagged that way.
+This patch for example states:
 
-thanks,
+"I had no luck producing this sequence of completion events so there
+  is no compelling demonstration of any resulting disaster. It may be
+  a very rare, obscure condition. The sole motivation for this patch
+  is that if such unlikely event does occur, I'd rather risk reporting
+  a cancelled partially done isoc frame as empty than gamble with UA"
 
-greg k-h
+Thanks
+Mathias
+
 
