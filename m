@@ -1,53 +1,55 @@
-Return-Path: <linux-usb+bounces-21452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B44A54F66
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 826B1A54F6D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:45:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF13A169DA9
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:44:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B21AA169D0E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB7D20E71E;
-	Thu,  6 Mar 2025 15:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB071FDE37;
+	Thu,  6 Mar 2025 15:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1SGHsnrj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ix0hdXvR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E8720E337;
-	Thu,  6 Mar 2025 15:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E0218EFED
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 15:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741275877; cv=none; b=M/hDLgBjda9H/phrNtwb3UWriT0We4jFufRdXYaKQWbJVq5UOR8+J3ruNC6tS52ungi1s9R274c/LzErii67VgdYnvWOEZ2mqWR8NoiOyeS3KrF2JwqXu8jbCYv/WEKy0PH2RCGbyyM1pT5QjLSXRyQgwdb0Q55X3+d2KB4EfC4=
+	t=1741275925; cv=none; b=sivDPQnOkWOzzI7j0i+fhqcKB2jO0sOyvz0G+qgSxNfGWixdNH9M53bwmR5lHTjeCKDEhGGC/8KD5LU7r1ZqwCd+LBaZ29TCHQ/NG1OMktyKKOQrDTHfuKxG5cTXaXIC2Mn2c/MRiyKFpZ9395LHdsla9Q8tQRGpTSG3yADFW3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741275877; c=relaxed/simple;
-	bh=YQkVNE2kK5y/jABEGO2F2R52sP4k+FaEHFvrY5kyfiw=;
+	s=arc-20240116; t=1741275925; c=relaxed/simple;
+	bh=7YLxwGdoCDEI6VVCmm0XBS0IFXfkWEeXQ4c4RsNxnXM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YThoGYEbAxt72ldyCm05pqk2DGI6L7HwS8HcFqPvjlhtSlLT0RmjlTBRy3SVmPBG+LiTMRJXtq8IxYY6ugguKa5/ebQCtMw2EG7zO8utITS7fZSvAKuGAFvBUG55UBom4qFM3TmggmhCn8bEPM5CerSCnxpfPBQxi3zR2Fshq3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1SGHsnrj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94BAC4CEE8;
-	Thu,  6 Mar 2025 15:44:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MniiRJEQHITro8zr0uij4Wz+EQdspBDiJrwmHE6X/cDRnGp/yyu6flp95SnzqGxIBQI1SGhhoIYx9RzFvsRL1ApOH+QdV56qZ5Yr34whCvcNfdMClPQpgEXPhPWq+WIRXNP58Xh/nY0aSVRH8fE7bLK09kyf2PwIRYCUteu4570=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ix0hdXvR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9B9C4CEE0;
+	Thu,  6 Mar 2025 15:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741275876;
-	bh=YQkVNE2kK5y/jABEGO2F2R52sP4k+FaEHFvrY5kyfiw=;
+	s=korg; t=1741275925;
+	bh=7YLxwGdoCDEI6VVCmm0XBS0IFXfkWEeXQ4c4RsNxnXM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1SGHsnrj8WCz5S+6yZh1hAW59jb+n6t4M39Zs1IH40DSJ0fYDFnFdxXjceAregFQY
-	 VFv16JYsyXzLoh4Gyi6TvSlzrOJYTcycPXVsAA4cHZrnD9vBK/i7NAxRFgwjSTVuud
-	 viWJnVqi96eoRPQnH2teBH5himIjPlj8nLyWxQ2Y=
-Date: Thu, 6 Mar 2025 16:44:28 +0100
+	b=ix0hdXvRyi6B22m/PiDWNxMTVATQcjVo2doYBBTnL7ixMEDcAq8ZxauvmsAC8gdLU
+	 C4fgGpnmDkffUkW1mgizq5lRc9DB0KnzPxmmkwh7GTsx2YvD11q1bj6SrtjDNlVXoI
+	 wtbHkNmwClGWqsvQBMcdrpWiQrhxC/wCAGduQhes=
+Date: Thu, 6 Mar 2025 16:45:22 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Jiayi Li <lijiayi@kylinos.cn>
-Cc: stern@rowland.harvard.edu, stefan.eichenberger@toradex.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jiayi_dec@163.com
-Subject: Re: [PATCH v1] usb: core: Add boot delay for DH34 board in restore
- mode
-Message-ID: <2025030659-backspace-skimmer-2f01@gregkh>
-References: <20250306061749.1502029-1-lijiayi@kylinos.cn>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Kenneth Crudup <kenny@panix.com>
+Subject: Re: [PATCH] thunderbolt: Prevent use-after-free in resume from
+ hibernate
+Message-ID: <2025030644-unbraided-drool-647f@gregkh>
+References: <20250306084145.373237-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,67 +58,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250306061749.1502029-1-lijiayi@kylinos.cn>
+In-Reply-To: <20250306084145.373237-1-mika.westerberg@linux.intel.com>
 
-On Thu, Mar 06, 2025 at 02:17:49PM +0800, Jiayi Li wrote:
-> On certain DH34-model motherboards, USB keyboards may fail to respond
-> during the restore mode confirmation prompt due to the usbhid driver
-> not being fully initialized when device registration occurs. This
-> results in inability to input 'y'/'n' confirmation.
+On Thu, Mar 06, 2025 at 10:41:45AM +0200, Mika Westerberg wrote:
+> Kenneth noticed that his laptop crashes randomly when resuming from
+> hibernate if there is device connected and display tunneled. I was able
+> to reproduce this as well with the following steps:
 > 
-> Detect this scenario by:
-> 1. Checking DMI_BOARD_NAME for "DH34" substring
-> 2. Verifying "restore" in kernel command line
+>   1. Boot the system up, nothing connected.
+>   2. Connect Thunderbolt 4 dock to the host.
+>   3. Connect monitor to the Thunderbolt 4 dock.
+>   4. Verify that there is picture on the screen.
+>   5. Enter hibernate.
+>   6. Exit hibernate.
+>   7. Wait for the system to resume.
 > 
-> Introduce a 200ms delay before device registration when both conditions
-> are met. This allows sufficient time for the usbhid driver to properly
-> initialize before user interaction is required.
+>   Expectation: System resumes just fine, the connected monitor still
+>                shows screen.
+>   Actual result: There is crash during resume, screen is blank.
 > 
-> Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
+> What happens is that during resume from hibernate we tear down any
+> existing tunnels created by the boot kernel and this ends up calling
+> tb_dp_dprx_stop() which calls tb_tunnel_put() dropping the reference
+> count to zero even though we never called tb_dp_dprx_start() for it (we
+> never do that for discovery). This makes the discovered DP tunnel memory
+> to be released and any access after that causes use-after-free and
+> possible crash.
+> 
+> Fix this so that we only stop DPRX flow if it has been started in the
+> first place.
+> 
+> Reported-by: Kenneth Crudup <kenny@panix.com>
+> Closes: https://lore.kernel.org/linux-usb/8e175721-806f-45d6-892a-bd3356af80c9@panix.com/
+> Cc: stable@vger.kernel.org
+> Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > ---
->  drivers/usb/core/hub.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a76bb50b6202..b81b518f438b 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -36,6 +36,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/uaccess.h>
->  #include <asm/byteorder.h>
-> +#include <linux/dmi.h>
->  
->  #include "hub.h"
->  #include "phy.h"
-> @@ -2610,6 +2611,7 @@ static void set_usb_port_removable(struct usb_device *udev)
->  int usb_new_device(struct usb_device *udev)
->  {
->  	int err;
-> +	const char *board_name;
->  
->  	if (udev->parent) {
->  		/* Initialize non-root-hub device wakeup to disabled;
-> @@ -2656,6 +2658,17 @@ int usb_new_device(struct usb_device *udev)
->  	/* check whether the hub or firmware marks this port as non-removable */
->  	set_usb_port_removable(udev);
->  
-> +	/* get board manufacturer information (DMI_BOARD_VENDOR) */
-> +	board_name = dmi_get_system_info(DMI_BOARD_NAME);
+>  drivers/thunderbolt/tunnel.c | 11 ++++++++---
+>  drivers/thunderbolt/tunnel.h |  2 ++
+>  2 files changed, 10 insertions(+), 3 deletions(-)
 
-What about platforms that do not have DMI?
-
-> +
-> +	/* In order to load the usbhid driver on a specific model motherboards
-> +	 * before the restore mode confirmation, add 200ms of latancy.
-> +	 */
-> +	if (board_name && strstr(board_name, "DH34") &&
-> +		(strstr(saved_command_line, "restore") != NULL))
-> +		msleep(200);
-> +
-> +
-
-Always use scripts/checkpatch.pl before sending patches out.
+Want me to take this now?  Or are you going to send it on in a later
+pull request to me?  Whichever is easier for you is fine with me.
 
 thanks,
 
