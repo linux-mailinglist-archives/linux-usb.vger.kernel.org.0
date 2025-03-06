@@ -1,72 +1,71 @@
-Return-Path: <linux-usb+bounces-21446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F9BA54E37
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:50:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00C9A54E38
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:50:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F27F2188D9DF
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:50:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 007EB3A9889
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2211F1DDC1A;
-	Thu,  6 Mar 2025 14:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABDA1FCD05;
+	Thu,  6 Mar 2025 14:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VSULzDA5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="joZp3jTy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E5F188736;
-	Thu,  6 Mar 2025 14:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC481188012
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 14:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741272589; cv=none; b=rgH0YdKYLEcPun692XDHWoawYTuN4MaYG9pY4ZrCx/7+XQxzueJqePbpMM+5w6dT/3dbXPfywpNtLqaTUqeqM4r2NWHdyrHkKiG1Pj2fewM9vfZ/VC+IFgAGlTYg45Rx5uI7jb487JdA+IzSBVwN+ezApfmn1O0Kbt42gsCidyI=
+	t=1741272591; cv=none; b=H9vIUhCgYo5PxJI7DnpclfVJYuA2FhuiTvDxWuC1UQ6pKfkfOG4BTboP+pk4viTz4FVWiN7GjmvwPeak3uvtGsW9us9537fsVVg5bVYu3NflngWSMVeZdw8GmXMG2L5616WKO9RAN1GNeKB5ApJIPQ6ISiXl32v+bPGNLcj+WMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741272589; c=relaxed/simple;
-	bh=npN7YT+FCGZDJdKq2GDB5Y0sUZvaHfkB+s20EmA/Lko=;
+	s=arc-20240116; t=1741272591; c=relaxed/simple;
+	bh=QaIqd/aAOjm82oUjsmHWxXEkA2zfHO0WeYg2sFbSqJY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KSqvQZK7j3OoqmWSCLNDFTB1HnBAXgc7by39gF1TJrNCzbaTew6gBC0nj85ENnb+D6BzZrNeqKhyq6MuzIiCOt0CM7VT8IJiLExhs/QlNIiCURXBGVXz9gfYxXfXDQWkyfQeOU9Ad+fiNF8p2SvSfypwHbT3vRM3lBcJ58fjVLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VSULzDA5; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=ur6tTFIw7GUstblV7pfd24lBjbLWGUm0t87V/8i34uJ5mzfoGEUpy4ICfgsnbcl/OuiAUzfhJykCvk4XT7+pR59ylDWMqdQ4sH/0yje41/Pq0TY5puY+aWeXvnyQ67aEL9N6/m/JwrF4axjRAjZYkChL8jBvTp15QhBbilmuZtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=joZp3jTy; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741272588; x=1772808588;
+  t=1741272589; x=1772808589;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=npN7YT+FCGZDJdKq2GDB5Y0sUZvaHfkB+s20EmA/Lko=;
-  b=VSULzDA5PQsTmLoxPnbH/6R5kskL3nhDgnjzo2dRlFlxAh5ZFyJZ4LyD
-   KhaFh65KOG4ZSR6uqtJNFvTgmqRGSqjQZBTt+JI0Z4Vu76KW/Sm4OoRZM
-   ZR5L5ciLIXMMFvECItMXUELHVyvidbl7lnaFLE8bpcnpJoKRpqHfaYuas
-   KgjlR9Li4RsLzbg31q8BxSFklOlJGi3iICoTXbvn3uNhh6h4cIKJbGXGQ
-   xl6KYbVh1JxpRxDL6ICJqYOomJSqHi1Av4R53fP2d3vISqLez1hrbnfNW
-   vETeshcxK9nOlGNw8H8EuOFoaBC1zxtsRwptFV8RfSt5VfbdTovy5c1A7
-   g==;
-X-CSE-ConnectionGUID: 5HG65KBmTYmXVzQd/ya/Xg==
-X-CSE-MsgGUID: 25cMcOz8T/GipWR4Pxyj2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67657135"
+  bh=QaIqd/aAOjm82oUjsmHWxXEkA2zfHO0WeYg2sFbSqJY=;
+  b=joZp3jTyYE31jdCiXX9pO1MvQfV3SmKe3lc1vbdKAvZwQCWyytO+mssG
+   4KepBBc9zYPO2V2ygWQEeGDVqStUWfY9oYVPrjP6rwhH611n2QXyBzlt/
+   NO0AK53T5bHl8J2CEjLjtwDc35e66QfaNWt6I6y+EjeoGcA6RfXNBrOOI
+   O1pSnxFfOeXfJgVGHXyh0YlhBJHsTTOpobwrk0VmPIPDRKMV7T1xrmc9h
+   ixJSvDiXP0oSAVMy0ttxQan9LP/NUNxFnHJGImQ8DtgV8NG4OtEbaWVt5
+   Gco5QsgHN19DrbyYynhh0di9Lc/NPsdeFo+zu7287zjrwwK3MiP52HqEl
+   w==;
+X-CSE-ConnectionGUID: u2KE7CYfQYquvp453ixGPg==
+X-CSE-MsgGUID: YWA7IdoWRZGRTkzDJmqR2g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67657146"
 X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="67657135"
+   d="scan'208";a="67657146"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 06:49:47 -0800
-X-CSE-ConnectionGUID: ON07u6UFRgiOG38Jq9Zv6Q==
-X-CSE-MsgGUID: tZ1x9r6NQdqCwf6YynPCZw==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 06:49:49 -0800
+X-CSE-ConnectionGUID: 7pDB5363T1KAs2/nVTF5og==
+X-CSE-MsgGUID: zJyQvk/ERkO0kGhrDV+oeg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119954865"
+   d="scan'208";a="119954867"
 Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by orviesa008.jf.intel.com with ESMTP; 06 Mar 2025 06:49:45 -0800
+  by orviesa008.jf.intel.com with ESMTP; 06 Mar 2025 06:49:47 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Michal Pecio <michal.pecio@gmail.com>,
-	stable@vger.kernel.org,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 13/15] usb: xhci: Apply the link chain quirk on NEC isoc endpoints
-Date: Thu,  6 Mar 2025 16:49:52 +0200
-Message-ID: <20250306144954.3507700-14-mathias.nyman@linux.intel.com>
+Subject: [PATCH 14/15] usb: xhci: Unify duplicate inc_enq() code
+Date: Thu,  6 Mar 2025 16:49:53 +0200
+Message-ID: <20250306144954.3507700-15-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
 References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
@@ -80,106 +79,204 @@ Content-Transfer-Encoding: 8bit
 
 From: Michal Pecio <michal.pecio@gmail.com>
 
-Two clearly different specimens of NEC uPD720200 (one with start/stop
-bug, one without) were seen to cause IOMMU faults after some Missed
-Service Errors. Faulting address is immediately after a transfer ring
-segment and patched dynamic debug messages revealed that the MSE was
-received when waiting for a TD near the end of that segment:
+Extract a block of code copied from inc_enq() into a separate function
+and call it from inc_enq() and the other function which used this code.
+Remove the pointless 'next' variable which only aliases ring->enqueue.
 
-[ 1.041954] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ffa08fe0
-[ 1.042120] xhci_hcd: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffa09000 flags=0x0000]
-[ 1.042146] xhci_hcd: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffa09040 flags=0x0000]
+Note: I don't know if any 0.95 xHC ever reached series production, but
+"AMD 0.96 host" appears to be the "Llano" family APU. Example dmesg at
+https://linux-hardware.org/?probe=79d5cfd4fd&log=dmesg
 
-It gets even funnier if the next page is a ring segment accessible to
-the HC. Below, it reports MSE in segment at ff1e8000, plows through a
-zero-filled page at ff1e9000 and starts reporting events for TRBs in
-page at ff1ea000 every microframe, instead of jumping to seg ff1e6000.
+pci 0000:00:10.0: [1022:7812] type 00 class 0x0c0330
+hcc params 0x014042c3 hci version 0x96 quirks 0x0000000000000608
 
-[ 7.041671] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ff1e8fe0
-[ 7.041999] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ff1e8fe0
-[ 7.042011] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
-[ 7.042028] xhci_hcd: All TDs skipped for slot 1 ep 2. Clear skip flag.
-[ 7.042134] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
-[ 7.042138] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 31
-[ 7.042144] xhci_hcd: Looking for event-dma 00000000ff1ea040 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
-[ 7.042259] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
-[ 7.042262] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 31
-[ 7.042266] xhci_hcd: Looking for event-dma 00000000ff1ea050 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
-
-At some point completion events change from Isoch Buffer Overrun to
-Short Packet and the HC finally finds cycle bit mismatch in ff1ec000.
-
-[ 7.098130] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 13
-[ 7.098132] xhci_hcd: Looking for event-dma 00000000ff1ecc50 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
-[ 7.098254] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 13
-[ 7.098256] xhci_hcd: Looking for event-dma 00000000ff1ecc60 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
-[ 7.098379] xhci_hcd: Overrun event on slot 1 ep 2
-
-It's possible that data from the isochronous device were written to
-random buffers of pending TDs on other endpoints (either IN or OUT),
-other devices or even other HCs in the same IOMMU domain.
-
-Lastly, an error from a different USB device on another HC. Was it
-caused by the above? I don't know, but it may have been. The disk
-was working without any other issues and generated PCIe traffic to
-starve the NEC of upstream BW and trigger those MSEs. The two HCs
-shared one x1 slot by means of a commercial "PCIe splitter" board.
-
-[ 7.162604] usb 10-2: reset SuperSpeed USB device number 3 using xhci_hcd
-[ 7.178990] sd 9:0:0:0: [sdb] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=DRIVER_OK cmd_age=0s
-[ 7.179001] sd 9:0:0:0: [sdb] tag#0 CDB: opcode=0x28 28 00 04 02 ae 00 00 02 00 00
-[ 7.179004] I/O error, dev sdb, sector 67284480 op 0x0:(READ) flags 0x80700 phys_seg 5 prio class 0
-
-Fortunately, it appears that this ridiculous bug is avoided by setting
-the chain bit of Link TRBs on isochronous rings. Other ancient HCs are
-known which also expect the bit to be set and they ignore Link TRBs if
-it's not. Reportedly, 0.95 spec guaranteed that the bit is set.
-
-The bandwidth-starved NEC HC running a 32KB/uframe UVC endpoint reports
-tens of MSEs per second and runs into the bug within seconds. Chaining
-Link TRBs allows the same workload to run for many minutes, many times.
-
-No negative side effects seen in UVC recording and UAC playback with a
-few devices at full speed, high speed and SuperSpeed.
-
-The problem doesn't reproduce on the newer Renesas uPD720201/uPD720202
-and on old Etron EJ168 and VIA VL805 (but the VL805 has other bug).
-
-[shorten line length of log snippets in commit messge -Mathias]
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Cc: stable@vger.kernel.org
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci.h | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-ring.c | 130 +++++++++++++++--------------------
+ 1 file changed, 55 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 4ee14f651d36..d9d7cd1906f3 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1760,11 +1760,20 @@ static inline void xhci_write_64(struct xhci_hcd *xhci,
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 7643ab9ec3b4..2df94ed3152c 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -204,79 +204,84 @@ void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring)
  }
  
- 
--/* Link TRB chain should always be set on 0.95 hosts, and AMD 0.96 ISOC rings */
-+/*
-+ * Reportedly, some chapters of v0.95 spec said that Link TRB always has its chain bit set.
-+ * Other chapters and later specs say that it should only be set if the link is inside a TD
-+ * which continues from the end of one segment to the next segment.
-+ *
-+ * Some 0.95 hardware was found to misbehave if any link TRB doesn't have the chain bit set.
-+ *
-+ * 0.96 hardware from AMD and NEC was found to ignore unchained isochronous link TRBs when
-+ * "resynchronizing the pipe" after a Missed Service Error.
-+ */
- static inline bool xhci_link_chain_quirk(struct xhci_hcd *xhci, enum xhci_ring_type type)
+ /*
+- * See Cycle bit rules. SW is the consumer for the event ring only.
+- *
+- * If we've just enqueued a TRB that is in the middle of a TD (meaning the
+- * chain bit is set), then set the chain bit in all the following link TRBs.
+- * If we've enqueued the last TRB in a TD, make sure the following link TRBs
+- * have their chain bit cleared (so that each Link TRB is a separate TD).
+- *
+- * Section 6.4.4.1 of the 0.95 spec says link TRBs cannot have the chain bit
+- * set, but other sections talk about dealing with the chain bit set.  This was
+- * fixed in the 0.96 specification errata, but we have to assume that all 0.95
+- * xHCI hardware can't handle the chain bit being cleared on a link TRB.
+- *
+- * @more_trbs_coming:	Will you enqueue more TRBs before calling
+- *			prepare_transfer()?
++ * If enqueue points at a link TRB, follow links until an ordinary TRB is reached.
++ * Toggle the cycle bit of passed link TRBs and optionally chain them.
+  */
+-static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
+-			bool more_trbs_coming)
++static void inc_enq_past_link(struct xhci_hcd *xhci, struct xhci_ring *ring, u32 chain)
  {
- 	return (xhci->quirks & XHCI_LINK_TRB_QUIRK) ||
--	       (type == TYPE_ISOC && (xhci->quirks & XHCI_AMD_0x96_HOST));
-+	       (type == TYPE_ISOC && (xhci->quirks & (XHCI_AMD_0x96_HOST | XHCI_NEC_HOST)));
+-	u32 chain;
+-	union xhci_trb *next;
+ 	unsigned int link_trb_count = 0;
+ 
+-	chain = le32_to_cpu(ring->enqueue->generic.field[3]) & TRB_CHAIN;
+-
+-	if (last_trb_on_seg(ring->enq_seg, ring->enqueue)) {
+-		xhci_err(xhci, "Tried to move enqueue past ring segment\n");
+-		return;
+-	}
+-
+-	next = ++(ring->enqueue);
+-
+-	/* Update the dequeue pointer further if that was a link TRB */
+-	while (trb_is_link(next)) {
++	while (trb_is_link(ring->enqueue)) {
+ 
+ 		/*
+-		 * If the caller doesn't plan on enqueueing more TDs before
+-		 * ringing the doorbell, then we don't want to give the link TRB
+-		 * to the hardware just yet. We'll give the link TRB back in
+-		 * prepare_ring() just before we enqueue the TD at the top of
+-		 * the ring.
+-		 */
+-		if (!chain && !more_trbs_coming)
+-			break;
+-
+-		/* If we're not dealing with 0.95 hardware or isoc rings on
+-		 * AMD 0.96 host, carry over the chain bit of the previous TRB
+-		 * (which may mean the chain bit is cleared).
++		 * Section 6.4.4.1 of the 0.95 spec says link TRBs cannot have the chain bit
++		 * set, but other sections talk about dealing with the chain bit set. This was
++		 * fixed in the 0.96 specification errata, but we have to assume that all 0.95
++		 * xHCI hardware can't handle the chain bit being cleared on a link TRB.
++		 *
++		 * On 0.95 and some 0.96 HCs the chain bit is set once at segment initalization
++		 * and never changed here. On all others, modify it as requested by the caller.
+ 		 */
+ 		if (!xhci_link_chain_quirk(xhci, ring->type)) {
+-			next->link.control &= cpu_to_le32(~TRB_CHAIN);
+-			next->link.control |= cpu_to_le32(chain);
++			ring->enqueue->link.control &= cpu_to_le32(~TRB_CHAIN);
++			ring->enqueue->link.control |= cpu_to_le32(chain);
+ 		}
++
+ 		/* Give this link TRB to the hardware */
+ 		wmb();
+-		next->link.control ^= cpu_to_le32(TRB_CYCLE);
++		ring->enqueue->link.control ^= cpu_to_le32(TRB_CYCLE);
+ 
+ 		/* Toggle the cycle bit after the last ring segment. */
+-		if (link_trb_toggles_cycle(next))
++		if (link_trb_toggles_cycle(ring->enqueue))
+ 			ring->cycle_state ^= 1;
+ 
+ 		ring->enq_seg = ring->enq_seg->next;
+ 		ring->enqueue = ring->enq_seg->trbs;
+-		next = ring->enqueue;
+ 
+ 		trace_xhci_inc_enq(ring);
+ 
+ 		if (link_trb_count++ > ring->num_segs) {
+-			xhci_warn(xhci, "%s: Ring link TRB loop\n", __func__);
++			xhci_warn(xhci, "Link TRB loop at enqueue\n");
+ 			break;
+ 		}
+ 	}
  }
  
- /* xHCI debugging */
++/*
++ * See Cycle bit rules. SW is the consumer for the event ring only.
++ *
++ * If we've just enqueued a TRB that is in the middle of a TD (meaning the
++ * chain bit is set), then set the chain bit in all the following link TRBs.
++ * If we've enqueued the last TRB in a TD, make sure the following link TRBs
++ * have their chain bit cleared (so that each Link TRB is a separate TD).
++ *
++ * @more_trbs_coming:	Will you enqueue more TRBs before calling
++ *			prepare_transfer()?
++ */
++static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
++			bool more_trbs_coming)
++{
++	u32 chain;
++
++	chain = le32_to_cpu(ring->enqueue->generic.field[3]) & TRB_CHAIN;
++
++	if (last_trb_on_seg(ring->enq_seg, ring->enqueue)) {
++		xhci_err(xhci, "Tried to move enqueue past ring segment\n");
++		return;
++	}
++
++	ring->enqueue++;
++
++	/*
++	 * If we are in the middle of a TD or the caller plans to enqueue more
++	 * TDs as one transfer (eg. control), traverse any link TRBs right now.
++	 * Otherwise, enqueue can stay on a link until the next prepare_ring().
++	 * This avoids enqueue entering deq_seg and simplifies ring expansion.
++	 */
++	if (trb_is_link(ring->enqueue) && (chain || more_trbs_coming))
++		inc_enq_past_link(xhci, ring, chain);
++}
++
+ /*
+  * If the suspect DMA address is a TRB in this TD, this function returns that
+  * TRB's segment. Otherwise it returns 0.
+@@ -3213,7 +3218,6 @@ static void queue_trb(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ static int prepare_ring(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
+ 		u32 ep_state, unsigned int num_trbs, gfp_t mem_flags)
+ {
+-	unsigned int link_trb_count = 0;
+ 	unsigned int new_segs = 0;
+ 
+ 	/* Make sure the endpoint has been added to xHC schedule */
+@@ -3261,33 +3265,9 @@ static int prepare_ring(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
+ 		}
+ 	}
+ 
+-	while (trb_is_link(ep_ring->enqueue)) {
+-		/* If we're not dealing with 0.95 hardware or isoc rings
+-		 * on AMD 0.96 host, clear the chain bit.
+-		 */
+-		if (!xhci_link_chain_quirk(xhci, ep_ring->type))
+-			ep_ring->enqueue->link.control &=
+-				cpu_to_le32(~TRB_CHAIN);
+-		else
+-			ep_ring->enqueue->link.control |=
+-				cpu_to_le32(TRB_CHAIN);
+-
+-		wmb();
+-		ep_ring->enqueue->link.control ^= cpu_to_le32(TRB_CYCLE);
+-
+-		/* Toggle the cycle bit after the last ring segment. */
+-		if (link_trb_toggles_cycle(ep_ring->enqueue))
+-			ep_ring->cycle_state ^= 1;
+-
+-		ep_ring->enq_seg = ep_ring->enq_seg->next;
+-		ep_ring->enqueue = ep_ring->enq_seg->trbs;
+-
+-		/* prevent infinite loop if all first trbs are link trbs */
+-		if (link_trb_count++ > ep_ring->num_segs) {
+-			xhci_warn(xhci, "Ring is an endless link TRB loop\n");
+-			return -EINVAL;
+-		}
+-	}
++	/* Ensure that new TRBs won't overwrite a link */
++	if (trb_is_link(ep_ring->enqueue))
++		inc_enq_past_link(xhci, ep_ring, 0);
+ 
+ 	if (last_trb_on_seg(ep_ring->enq_seg, ep_ring->enqueue)) {
+ 		xhci_warn(xhci, "Missing link TRB at end of ring segment\n");
 -- 
 2.43.0
 
