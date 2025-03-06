@@ -1,134 +1,117 @@
-Return-Path: <linux-usb+bounces-21456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 054C8A5520E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 18:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56C60A552FB
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 18:25:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3474D3A0461
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 16:59:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4EE43AF016
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 17:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6887275601;
-	Thu,  6 Mar 2025 16:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB4225CC85;
+	Thu,  6 Mar 2025 17:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="d6dnVDEZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n55ddoTW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41F8274264;
-	Thu,  6 Mar 2025 16:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A2425C6E6
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 17:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741280209; cv=none; b=R+zsl3kUpoO+67fA5Mp4Tk0V4F9QJQpNXXKUz6bUVLlMq0fHwNuVaU3PPQecPCm9jHISuXE5veaIYbrfvBHmy0dt2VXYsldOxEIe691WegcL2XBugt1k4tF/+fo7KPEojwhTTGuMLHhd38KKsA3RxLiK5ELDdAgSD2li/XRqxfA=
+	t=1741281863; cv=none; b=EePy2DwfKTA8mqkvGi1rmKzYcn0XW0RDvTXPOv5b5qOJEyu87CTaLnEDIwmrwiaSepSl1bafnsTQK5FrOR65zUbJBwOPCwqSuqMWxPXyX8UiI2cQBY2+Sk7bN5xDMzMoFLrrfbTTuHtFof89YkUXtuM5Z1Eyl3Fuxrc7NjH257Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741280209; c=relaxed/simple;
-	bh=Z2ypabXvCGArSPxy33xEOYc3fcdzWS3UPjpoZPRI7dg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V1bggTM2jOKboYowjnYLneSF/fuxnqv2VhU8C5MdCN6zSafF1Jbmepf+MF+wIFlxV8W+n2ESa+3zxZCeIneIK7b+3Xt8AE2uVKGy9FJuhACMyljXzAnCbXk36Jv+ksq3hFWZLAJJGPl1svmcpof0Ki7hscRPfT8CRpMTvw+wtE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=d6dnVDEZ; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Z7wYn1FPGz10Wf;
-	Thu,  6 Mar 2025 11:56:45 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1741280206; bh=Z2ypabXvCGArSPxy33xEOYc3fcdzWS3UPjpoZPRI7dg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=d6dnVDEZh1crd2fx+MkvXufuOZmwIx2y7eztdYir7mgWyRSr67jDMdiVo5cbkdtl1
-	 9GkkNLxLFnWNnQMO2WOD+tnr9XcU5X3W1V5MEqq6G7WfS18Y/ztU1cF6pvjCw+bEHG
-	 Vz6PVEcI5yjWx4xZYWhfzrLXvS6tAWtDmXCtIgok=
-Message-ID: <8d270603-4604-4c1c-b3a9-f596e2e8af6d@panix.com>
-Date: Thu, 6 Mar 2025 08:56:44 -0800
+	s=arc-20240116; t=1741281863; c=relaxed/simple;
+	bh=QYaCr7uodfT4Id7A7Zux4V/scFxDlVxuM2fFSEcBAvQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WcCZXG3uOru7Z9v7XsA8kdEImUq+DY87FgqbmxjgFAZfmfEfvkVREAUFnMOKzZmqhpriDHdW1+cpIaWZ/jcMUrL9Wvd0JYj7xZ3FVaxUXITCLZCcigOL+bwzi+v4R41Swpqg2b7YAZk8MNGFlSgv0qCZahUFSdkbxttPP8gGnAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n55ddoTW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43C08C4CEE0
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 17:24:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741281863;
+	bh=QYaCr7uodfT4Id7A7Zux4V/scFxDlVxuM2fFSEcBAvQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=n55ddoTWjq7SeDpTUT9u1S7kR8B5WzaAKJ8jGeYfe5cMwsVK7T6rs9E+QsvkfTiSL
+	 uw6RDfwsl6QSpEeXNGoAX5N7p5zYcvB08GvLXY/SlqDQc/OIdxhBja8z+4UEhJCwhB
+	 sdS7s2NcLdcrYSxKBD9ULgi5t1YkXdft47O3QLcwirJ/OvnpeEBuk22v71Cy2iPXxv
+	 rFsZcyOAh18GcLzoijHi9esRijagCbkZ33CfMnwnMi++qGEJgMJdoDz4Mimad89P8y
+	 QU53h9cuVNneJd/GohMnv+/uZ+JuQgGFj79l+CrjGN5yhJgn5f11zUGgaovrByAn5v
+	 MvF3ANqJLkv7w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 29516C41613; Thu,  6 Mar 2025 17:24:23 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
+ with AMD AI 365
+Date: Thu, 06 Mar 2025 17:24:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219748-208809-8f3uN8Xyt3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
+References: <bug-219748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
- Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
-To: Lukas Wunner <lukas@wunner.de>,
- Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
- Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-References: <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
- <20250213135911.GG3713119@black.fi.intel.com>
- <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
- <20250214162948.GJ3713119@black.fi.intel.com>
- <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com> <Z77ak-4YsdAKXbHr@wunner.de>
- <20250226091958.GN3713119@black.fi.intel.com> <Z8YKXC1IXYXctQrZ@wunner.de>
- <20250304082314.GE3713119@black.fi.intel.com> <Z8nRI6xjGl3frMe5@wunner.de>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <Z8nRI6xjGl3frMe5@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
+--- Comment #30 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+> I'm leaving the graphics side for Mario to comment on as I'm not qualifie=
+d. I
+> do see MST and that seem to be problematic in Linux IIRC.
 
-Is this a separate commit on top of master, or along with your previous fix?
+My main worry is if the retimer scan is the reason for the DPIA issues too.=
+=20
+The report that Sean linked in was a failing to read an EDID which got fixe=
+d by
+pushing the scan later.
 
--Kenny
+So if you can reproduce the display issues try with it commented out entire=
+ly
+(maybe we want that for debugging as a module parameter Mika?).
 
-On 3/6/25 08:45, Lukas Wunner wrote:
-> On Tue, Mar 04, 2025 at 10:23:14AM +0200, Mika Westerberg wrote:
->> Unfortunately I still see the same hang. I double checked, with revert the
->> problem goes a way and with this patch I still see it.
->>
->> Steps:
->>
->> 1. Boot the system, nothing connected.
->> 2. Connect TBT 4 dock to the host.
->> 3. Connect TBT 3 NVMe to the TBT4 doc.
->> 4. Authorize both PCIe tunnels, verify devices are there.
->> 5. Enter s2idle.
->> 6. Unplug the TBT 4 dock from the host.
->> 7. Exit s2idle.
-> 
-> Thanks for testing.  Would you mind giving the below a spin?
-> 
-> I've realized this can likely be solved in a much easier way:
-> 
-> The ->resume_noirq callback is invoked while traversing down
-> the hierarchy and the topmost slot which detects device replacement
-> already marks everything below as disconnected.  Hence any nested
-> hotplug ports can just skip the replacement check because they're
-> disconnected as well.
-> 
-> -- >8 --
-> 
-> diff --git a/drivers/pci/hotplug/pciehp_core.c b/drivers/pci/hotplug/pciehp_core.c
-> index ff458e6..997841c 100644
-> --- a/drivers/pci/hotplug/pciehp_core.c
-> +++ b/drivers/pci/hotplug/pciehp_core.c
-> @@ -286,9 +286,12 @@ static int pciehp_suspend(struct pcie_device *dev)
->   
->   static bool pciehp_device_replaced(struct controller *ctrl)
->   {
-> -	struct pci_dev *pdev __free(pci_dev_put);
-> +	struct pci_dev *pdev __free(pci_dev_put) = NULL;
->   	u32 reg;
->   
-> +	if (pci_dev_is_disconnected(ctrl->pcie->port))
-> +		return false;
-> +
->   	pdev = pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0));
->   	if (!pdev)
->   		return true;
-> 
+With it commented out if they're cleared up, I think we still need to push =
+it
+to a delayed work queue.
+If they're still happening, then this should be a GPU driver or GPU microco=
+de
+issue.  We can talk about that on a drm/amd Gitlab issue.
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+> Now, this is something outside of what software can fix. Typically it's t=
+he
+> Power Delivery firmware that handles this but most cases simply unplug pl=
+ug
+> or flipping the cable makes it work.
 
+Yup agree.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
