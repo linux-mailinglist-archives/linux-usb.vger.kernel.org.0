@@ -1,70 +1,72 @@
-Return-Path: <linux-usb+bounces-21445-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B09BA54E35
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:50:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4F9BA54E37
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 15:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 550673A883F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:49:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F27F2188D9DF
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 14:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8527318DB21;
-	Thu,  6 Mar 2025 14:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2211F1DDC1A;
+	Thu,  6 Mar 2025 14:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N73VWpHx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VSULzDA5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9828218DF81
-	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 14:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E5F188736;
+	Thu,  6 Mar 2025 14:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741272587; cv=none; b=WwFUkKMnWbMb5nWL+IJLJTrxymZ/HyxQ5ZXeBG7bJ8vD3l0gKLpbHn9hU6+dI3XIOD76n2JFemiKVZ8LPNSSRaLXSQUr5fMbQFtwR0E9rY0nvUPL3VlNuyNAOSd80BU9gz4AzDSyWpIjkMLmgeOBDqiNVUEZ2UBlH+8ElRDQ+4M=
+	t=1741272589; cv=none; b=rgH0YdKYLEcPun692XDHWoawYTuN4MaYG9pY4ZrCx/7+XQxzueJqePbpMM+5w6dT/3dbXPfywpNtLqaTUqeqM4r2NWHdyrHkKiG1Pj2fewM9vfZ/VC+IFgAGlTYg45Rx5uI7jb487JdA+IzSBVwN+ezApfmn1O0Kbt42gsCidyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741272587; c=relaxed/simple;
-	bh=v+Mk99ZnZEQmPQ5kDPchn9OHkgy2n4/m7U5IopKQ5rY=;
+	s=arc-20240116; t=1741272589; c=relaxed/simple;
+	bh=npN7YT+FCGZDJdKq2GDB5Y0sUZvaHfkB+s20EmA/Lko=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mElxSG42TWfVtJ2XVaUWDkE616VOz4PlWJcuhCadLwZ0/e+h0rG9GyX0e1FL8ePaAeQw6CT7/22FC4o+iU9QXGPvbWmPwzadsY4oeRg5dwEj/29ueuFjHk9VxJy7dxZnCAddj7xR61+LVRjNGq2b9P2u7uxcTQQl94HndVVYRdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N73VWpHx; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=KSqvQZK7j3OoqmWSCLNDFTB1HnBAXgc7by39gF1TJrNCzbaTew6gBC0nj85ENnb+D6BzZrNeqKhyq6MuzIiCOt0CM7VT8IJiLExhs/QlNIiCURXBGVXz9gfYxXfXDQWkyfQeOU9Ad+fiNF8p2SvSfypwHbT3vRM3lBcJ58fjVLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VSULzDA5; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741272585; x=1772808585;
+  t=1741272588; x=1772808588;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=v+Mk99ZnZEQmPQ5kDPchn9OHkgy2n4/m7U5IopKQ5rY=;
-  b=N73VWpHxyJhWaZcEkiTUiboMy1yUIKd3Q5h5YVdCUKpV/j2RJd3E3mMZ
-   WX7xkon4zq1CAzJD+K6nzgWki1SnQRlmF6tLLCfFxy77PqdE3Z4y0L+uG
-   9y8bqUkFs62ap7XTyhCaaTC88KWji1FoMDrEdrKXS1gzFLD3heMQgcz/h
-   oSeWZM8VXi6e+1V+siyU3M7hC0miTxAMdVL/hQUD58Wozj7UpyW89nzE1
-   ID1QKpo3Xv8V/mVrdndPBCRhxDQ/CI95KMCyZ4UPfUSsin8/32O6C/8Z6
-   oi6CygxVrspJtWwfwa21NSAfosThIYdD4xUrsymJxtQk5guGGGcp9mG6S
-   Q==;
-X-CSE-ConnectionGUID: VHaSpRpVTo+RjDHmBs6oWw==
-X-CSE-MsgGUID: Hd2H0mq+Qy2YhMFVrPChHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67657127"
+  bh=npN7YT+FCGZDJdKq2GDB5Y0sUZvaHfkB+s20EmA/Lko=;
+  b=VSULzDA5PQsTmLoxPnbH/6R5kskL3nhDgnjzo2dRlFlxAh5ZFyJZ4LyD
+   KhaFh65KOG4ZSR6uqtJNFvTgmqRGSqjQZBTt+JI0Z4Vu76KW/Sm4OoRZM
+   ZR5L5ciLIXMMFvECItMXUELHVyvidbl7lnaFLE8bpcnpJoKRpqHfaYuas
+   KgjlR9Li4RsLzbg31q8BxSFklOlJGi3iICoTXbvn3uNhh6h4cIKJbGXGQ
+   xl6KYbVh1JxpRxDL6ICJqYOomJSqHi1Av4R53fP2d3vISqLez1hrbnfNW
+   vETeshcxK9nOlGNw8H8EuOFoaBC1zxtsRwptFV8RfSt5VfbdTovy5c1A7
+   g==;
+X-CSE-ConnectionGUID: 5HG65KBmTYmXVzQd/ya/Xg==
+X-CSE-MsgGUID: 25cMcOz8T/GipWR4Pxyj2A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67657135"
 X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="67657127"
+   d="scan'208";a="67657135"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 06:49:45 -0800
-X-CSE-ConnectionGUID: Uq2vwelKQ2ui/AA60bK5uw==
-X-CSE-MsgGUID: F49EXsQpQmOr/pPeai8NKQ==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 06:49:47 -0800
+X-CSE-ConnectionGUID: ON07u6UFRgiOG38Jq9Zv6Q==
+X-CSE-MsgGUID: tZ1x9r6NQdqCwf6YynPCZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119954861"
+   d="scan'208";a="119954865"
 Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by orviesa008.jf.intel.com with ESMTP; 06 Mar 2025 06:49:44 -0800
+  by orviesa008.jf.intel.com with ESMTP; 06 Mar 2025 06:49:45 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
+	Michal Pecio <michal.pecio@gmail.com>,
+	stable@vger.kernel.org,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 12/15] xhci: Prevent early endpoint restart when handling STALL errors.
-Date: Thu,  6 Mar 2025 16:49:51 +0200
-Message-ID: <20250306144954.3507700-13-mathias.nyman@linux.intel.com>
+Subject: [PATCH 13/15] usb: xhci: Apply the link chain quirk on NEC isoc endpoints
+Date: Thu,  6 Mar 2025 16:49:52 +0200
+Message-ID: <20250306144954.3507700-14-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
 References: <20250306144954.3507700-1-mathias.nyman@linux.intel.com>
@@ -76,99 +78,108 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Ensure that an endpoint halted due to device STALL is not
-restarted before a Clear_Feature(ENDPOINT_HALT) request is sent to
-the device.
+From: Michal Pecio <michal.pecio@gmail.com>
 
-The host side of the endpoint may otherwise be started early by the
-'Set TR Deq' command completion handler which is called if dequeue
-is moved past a cancelled or halted TD.
+Two clearly different specimens of NEC uPD720200 (one with start/stop
+bug, one without) were seen to cause IOMMU faults after some Missed
+Service Errors. Faulting address is immediately after a transfer ring
+segment and patched dynamic debug messages revealed that the MSE was
+received when waiting for a TD near the end of that segment:
 
-Prevent this with a new flag set for bulk and interrupt endpoints
-when a Stall Error is received. Clear it in hcd->endpoint_reset()
-which is called after Clear_Feature(ENDPOINT_HALT) is sent.
+[ 1.041954] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ffa08fe0
+[ 1.042120] xhci_hcd: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffa09000 flags=0x0000]
+[ 1.042146] xhci_hcd: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0005 address=0xffa09040 flags=0x0000]
 
-Also add a debug message if a class driver queues a new URB after the
-STALL. Note that class driver might not be aware of the STALL
-yet when it submits the URB as URBs are given back in BH.
+It gets even funnier if the next page is a ring segment accessible to
+the HC. Below, it reports MSE in segment at ff1e8000, plows through a
+zero-filled page at ff1e9000 and starts reporting events for TRBs in
+page at ff1ea000 every microframe, instead of jumping to seg ff1e6000.
 
+[ 7.041671] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ff1e8fe0
+[ 7.041999] xhci_hcd: Miss service interval error for slot 1 ep 2 expected TD DMA ff1e8fe0
+[ 7.042011] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
+[ 7.042028] xhci_hcd: All TDs skipped for slot 1 ep 2. Clear skip flag.
+[ 7.042134] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
+[ 7.042138] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 31
+[ 7.042144] xhci_hcd: Looking for event-dma 00000000ff1ea040 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
+[ 7.042259] xhci_hcd: WARN: buffer overrun event for slot 1 ep 2 on endpoint
+[ 7.042262] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 31
+[ 7.042266] xhci_hcd: Looking for event-dma 00000000ff1ea050 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
+
+At some point completion events change from Isoch Buffer Overrun to
+Short Packet and the HC finally finds cycle bit mismatch in ff1ec000.
+
+[ 7.098130] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 13
+[ 7.098132] xhci_hcd: Looking for event-dma 00000000ff1ecc50 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
+[ 7.098254] xhci_hcd: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 13
+[ 7.098256] xhci_hcd: Looking for event-dma 00000000ff1ecc60 trb-start 00000000ff1e6820 trb-end 00000000ff1e6820
+[ 7.098379] xhci_hcd: Overrun event on slot 1 ep 2
+
+It's possible that data from the isochronous device were written to
+random buffers of pending TDs on other endpoints (either IN or OUT),
+other devices or even other HCs in the same IOMMU domain.
+
+Lastly, an error from a different USB device on another HC. Was it
+caused by the above? I don't know, but it may have been. The disk
+was working without any other issues and generated PCIe traffic to
+starve the NEC of upstream BW and trigger those MSEs. The two HCs
+shared one x1 slot by means of a commercial "PCIe splitter" board.
+
+[ 7.162604] usb 10-2: reset SuperSpeed USB device number 3 using xhci_hcd
+[ 7.178990] sd 9:0:0:0: [sdb] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=DRIVER_OK cmd_age=0s
+[ 7.179001] sd 9:0:0:0: [sdb] tag#0 CDB: opcode=0x28 28 00 04 02 ae 00 00 02 00 00
+[ 7.179004] I/O error, dev sdb, sector 67284480 op 0x0:(READ) flags 0x80700 phys_seg 5 prio class 0
+
+Fortunately, it appears that this ridiculous bug is avoided by setting
+the chain bit of Link TRBs on isochronous rings. Other ancient HCs are
+known which also expect the bit to be set and they ignore Link TRBs if
+it's not. Reportedly, 0.95 spec guaranteed that the bit is set.
+
+The bandwidth-starved NEC HC running a 32KB/uframe UVC endpoint reports
+tens of MSEs per second and runs into the bug within seconds. Chaining
+Link TRBs allows the same workload to run for many minutes, many times.
+
+No negative side effects seen in UVC recording and UAC playback with a
+few devices at full speed, high speed and SuperSpeed.
+
+The problem doesn't reproduce on the newer Renesas uPD720201/uPD720202
+and on old Etron EJ168 and VIA VL805 (but the VL805 has other bug).
+
+[shorten line length of log snippets in commit messge -Mathias]
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 7 +++++--
- drivers/usb/host/xhci.c      | 6 ++++++
- drivers/usb/host/xhci.h      | 3 ++-
- 3 files changed, 13 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci.h | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index c2e15a27338b..7643ab9ec3b4 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -556,8 +556,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
- 	 * pointer command pending because the device can choose to start any
- 	 * stream once the endpoint is on the HW schedule.
- 	 */
--	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
--	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
-+	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
-+			EP_CLEARING_TT | EP_STALLED))
- 		return;
- 
- 	trace_xhci_ring_ep_doorbell(slot_id, DB_VALUE(ep_index, stream_id));
-@@ -2555,6 +2555,9 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 
- 		xhci_handle_halted_endpoint(xhci, ep, td, EP_SOFT_RESET);
- 		return;
-+	case COMP_STALL_ERROR:
-+		ep->ep_state |= EP_STALLED;
-+		break;
- 	default:
- 		/* do nothing */
- 		break;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 3f2cd546a7a2..0c22b78358b9 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1604,6 +1604,11 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 		goto free_priv;
- 	}
- 
-+	/* Class driver might not be aware ep halted due to async URB giveback */
-+	if (*ep_state & EP_STALLED)
-+		dev_dbg(&urb->dev->dev, "URB %p queued before clearing halt\n",
-+			urb);
-+
- 	switch (usb_endpoint_type(&urb->ep->desc)) {
- 
- 	case USB_ENDPOINT_XFER_CONTROL:
-@@ -3202,6 +3207,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		return;
- 
- 	ep = &vdev->eps[ep_index];
-+	ep->ep_state &= ~EP_STALLED;
- 
- 	/* Bail out if toggle is already being cleared by a endpoint reset */
- 	spin_lock_irqsave(&xhci->lock, flags);
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index cd96e0a8c593..4ee14f651d36 100644
+index 4ee14f651d36..d9d7cd1906f3 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -664,7 +664,7 @@ struct xhci_virt_ep {
- 	unsigned int			err_count;
- 	unsigned int			ep_state;
- #define SET_DEQ_PENDING		(1 << 0)
--#define EP_HALTED		(1 << 1)	/* For stall handling */
-+#define EP_HALTED		(1 << 1)	/* Halted host ep handling */
- #define EP_STOP_CMD_PENDING	(1 << 2)	/* For URB cancellation */
- /* Transitioning the endpoint to using streams, don't enqueue URBs */
- #define EP_GETTING_STREAMS	(1 << 3)
-@@ -675,6 +675,7 @@ struct xhci_virt_ep {
- #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
- /* usb_hub_clear_tt_buffer is in progress */
- #define EP_CLEARING_TT		(1 << 8)
-+#define EP_STALLED		(1 << 9)	/* For stall handling */
- 	/* ----  Related to URB cancellation ---- */
- 	struct list_head	cancelled_td_list;
- 	struct xhci_hcd		*xhci;
+@@ -1760,11 +1760,20 @@ static inline void xhci_write_64(struct xhci_hcd *xhci,
+ }
+ 
+ 
+-/* Link TRB chain should always be set on 0.95 hosts, and AMD 0.96 ISOC rings */
++/*
++ * Reportedly, some chapters of v0.95 spec said that Link TRB always has its chain bit set.
++ * Other chapters and later specs say that it should only be set if the link is inside a TD
++ * which continues from the end of one segment to the next segment.
++ *
++ * Some 0.95 hardware was found to misbehave if any link TRB doesn't have the chain bit set.
++ *
++ * 0.96 hardware from AMD and NEC was found to ignore unchained isochronous link TRBs when
++ * "resynchronizing the pipe" after a Missed Service Error.
++ */
+ static inline bool xhci_link_chain_quirk(struct xhci_hcd *xhci, enum xhci_ring_type type)
+ {
+ 	return (xhci->quirks & XHCI_LINK_TRB_QUIRK) ||
+-	       (type == TYPE_ISOC && (xhci->quirks & XHCI_AMD_0x96_HOST));
++	       (type == TYPE_ISOC && (xhci->quirks & (XHCI_AMD_0x96_HOST | XHCI_NEC_HOST)));
+ }
+ 
+ /* xHCI debugging */
 -- 
 2.43.0
 
