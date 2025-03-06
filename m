@@ -1,132 +1,87 @@
-Return-Path: <linux-usb+bounces-21470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D947AA5548E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 19:15:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6ACFA554DD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 19:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38F1C1899BE3
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 18:15:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BF987A3686
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 18:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AA425CC6D;
-	Thu,  6 Mar 2025 18:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2kdLc9v"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A9B25D52E;
+	Thu,  6 Mar 2025 18:25:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748E02698BD;
-	Thu,  6 Mar 2025 18:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEFD1A01B9;
+	Thu,  6 Mar 2025 18:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741284797; cv=none; b=L6w4V43mdAIWeZCrhwbqN7uCfhvwEUF8KM8lZ3oCa53UZSRYxm63y0999o3fuSTSWHIELqZqs5Mam2DI7AkWZSAMu34jgqo9rvAcwG6cwXzmr0Gw+WzeAdHBcwFCtn07WvCGMgvpkn5kobbaWPOnQEAmI2/n21y30jWcNnc6mjo=
+	t=1741285517; cv=none; b=ss/qSQBBflFOSFOYsEtIqJy59X3GDGazp+R2X0zXyDuXWbwYlH017TRHFX3OCqcTkcRTZ2isfLYtdsRdWKBoDlZyxfDAeiuMtn57iLrzrEVF/honIfnEpdJWr3Jzx2szzzsQqLUdLID/AF+1+MLHTHXL58Jzlzylh8JK/RlI2YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741284797; c=relaxed/simple;
-	bh=V9H185IolkXGrMv0yDeTgeTZjT8H3BkkpxepgLhl15Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j3ESYOEEC6lUlwue/LS9Xyrosmr4y1A8UrD8AfEIcjGvNRTEu2HuXeat4SAnYXvALzy3EBpIn+0RmqkZCwClPyetitjqn9UQbUya1xX7DsmxJ9SrLvYYBF07I93Y99nzL90hKEUcK6Uh2mJhLk6UZFjWynA+AeWK6LfEIwaqAd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2kdLc9v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF9BFC4CEE8;
-	Thu,  6 Mar 2025 18:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741284794;
-	bh=V9H185IolkXGrMv0yDeTgeTZjT8H3BkkpxepgLhl15Y=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=o2kdLc9vQQ1cGNg8H+JtdjvAp/s0j+FUkrAgV683yNJcPw8JoeIo04pLGV5VuW8V8
-	 f9Zpqgp9buF7RtJxrodYBaB/mjfW3QN+BGds414e3o5jq7q43lMrivcubXB0tcQgt/
-	 k8+N8h9scBvDvcsoqWdBwV/KwaFEsfzY0MpQQq2KBMoSB9vU1AkLFf34AVHyoLfEW3
-	 UNDmlnl6GRx7ot6A4L4JgA8K+EjYOTqfpUnvsvxmeDOXh2xcDAFPU1gWyDk+zi52cn
-	 yzBzYATI9EGyzKJHoEVKLbPmjdMrMhsMGXI1ZDe3nUMqz/6KVfNd7/EedEBFEqk158
-	 eiiKLxWp3OSrA==
-From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Thu, 06 Mar 2025 19:11:23 +0100
-Subject: [PATCH 11/11] arm64: dts: qcom: x1e001de-devkit: Drop clock-names
- from PS8830
+	s=arc-20240116; t=1741285517; c=relaxed/simple;
+	bh=Xq+XQYMHYGkmTz8iLRFLigF6QisLFRgLCNzHoNhQ3cA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C49A9wBjTKKbnVVd8EnJEm4wefI/G6TUsA+xVKi0lHoLWwa1cc7+crnEa+jHbOVWfUsP6t6GSJw7Rxa9nczODQd/pSl4cynPphkGt6l3U7+Bt7LDw98eRBAUJy9c1aeuYVcMjSdVebrWVpsjMDVuOrEG2s5+oOzAUGsx4wnS+Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id C2547100D9429;
+	Thu,  6 Mar 2025 19:18:53 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 9AC1825EB1; Thu,  6 Mar 2025 19:18:53 +0100 (CET)
+Date: Thu, 6 Mar 2025 19:18:53 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Kenneth Crudup <kenny@panix.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jian-Hong Pan <jhp@endlessos.org>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+Message-ID: <Z8nnDTfGCUvl8K9I@wunner.de>
+References: <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+ <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+ <20250226084404.GM3713119@black.fi.intel.com>
+ <Z77ak-4YsdAKXbHr@wunner.de>
+ <20250226091958.GN3713119@black.fi.intel.com>
+ <Z8YKXC1IXYXctQrZ@wunner.de>
+ <20250304082314.GE3713119@black.fi.intel.com>
+ <Z8nRI6xjGl3frMe5@wunner.de>
+ <8d270603-4604-4c1c-b3a9-f596e2e8af6d@panix.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250306-topic-dt_bindings_fixups-v1-11-0c84aceb0ef9@oss.qualcomm.com>
-References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
-In-Reply-To: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
-To: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
- Rob Clark <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Robert Foss <rfoss@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Wesley Cheng <quic_wcheng@quicinc.com>, 
- Christian Marangi <ansuelsmth@gmail.com>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Rohit Agarwal <quic_rohiagar@quicinc.com>, 
- Kyle Deng <quic_chunkaid@quicinc.com>, Vinod Koul <vkoul@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-usb@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741284679; l=1160;
- i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=ohEmbayu2LsT1id4h533hC8kGW2KXwVmCy3qoWajQvY=;
- b=4aIxanukVplVRHvn1zCChM9eaau0QidU2RP7g1GtwCrds6llxAy+yOc/LeaWvnOE5W0DyRBTV
- 23BM8GcQOkMCnULh4Bf7jZ/gqTLzXDVluSPkf/Qkejwp0XSRIusE74j
-X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d270603-4604-4c1c-b3a9-f596e2e8af6d@panix.com>
 
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+On Thu, Mar 06, 2025 at 08:56:44AM -0800, Kenneth Crudup wrote:
+> On 3/6/25 08:45, Lukas Wunner wrote:
+> > Thanks for testing.  Would you mind giving the below a spin?
+> 
+> Is this a separate commit on top of master, or along with your previous fix?
 
-The preemptively-merged node contains a property absent from the final
-bindings. Remove it.
+It's a separate commit on top of master.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/x1e001de-devkit.dts | 3 ---
- 1 file changed, 3 deletions(-)
+Thanks,
 
-diff --git a/arch/arm64/boot/dts/qcom/x1e001de-devkit.dts b/arch/arm64/boot/dts/qcom/x1e001de-devkit.dts
-index 602bd793e09cc9e7d8447af593e934010fc0c789..f87730f4b63fffc88d07eedef33cdab9bca759f5 100644
---- a/arch/arm64/boot/dts/qcom/x1e001de-devkit.dts
-+++ b/arch/arm64/boot/dts/qcom/x1e001de-devkit.dts
-@@ -777,7 +777,6 @@ typec-mux@8 {
- 		reg = <0x08>;
- 
- 		clocks = <&rpmhcc RPMH_RF_CLK5>;
--		clock-names = "xo";
- 
- 		vdd-supply = <&vreg_rtmr2_1p15>;
- 		vdd33-supply = <&vreg_rtmr2_3p3>;
-@@ -832,7 +831,6 @@ typec-mux@8 {
- 		reg = <0x08>;
- 
- 		clocks = <&rpmhcc RPMH_RF_CLK3>;
--		clock-names = "xo";
- 
- 		vdd-supply = <&vreg_rtmr0_1p15>;
- 		vdd33-supply = <&vreg_rtmr0_3p3>;
-@@ -887,7 +885,6 @@ typec-mux@8 {
- 		reg = <0x8>;
- 
- 		clocks = <&rpmhcc RPMH_RF_CLK4>;
--		clock-names = "xo";
- 
- 		vdd-supply = <&vreg_rtmr1_1p15>;
- 		vdd33-supply = <&vreg_rtmr1_3p3>;
-
--- 
-2.48.1
-
+Lukas
 
