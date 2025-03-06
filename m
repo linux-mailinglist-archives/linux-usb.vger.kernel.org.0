@@ -1,132 +1,171 @@
-Return-Path: <linux-usb+bounces-21412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 219A3A5437B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 08:16:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B8EA5452A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 09:42:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F10918952DE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 07:16:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE8773AB604
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 08:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5721A2846;
-	Thu,  6 Mar 2025 07:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C8D207A2E;
+	Thu,  6 Mar 2025 08:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QwCbAsGj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gQ5RHz9h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D0718DB04
-	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 07:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B0A207A04
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 08:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741245399; cv=none; b=MlPA6Igrn7SbPxpeBfVNbswOTl6v9lsFUB7dc/eOfHQKJfaGcNIl8Cr2wl636j39axbtqIjtucphS4S8Ibq3bXFLNOz96gDfJhEoLGzD1Yi3xslIq+iagoJRS3II83/GA55dSqfYvhCAXm5wY0HD6pYzeErpdserUyTEwa6CR+A=
+	t=1741250518; cv=none; b=iqxjjttYxdj0c04nLpjMlyzqJ45QLsjuuxjgt84MMYrNedsRbNnLUWt4eTAnUZrgB3njNMIPDo3hLg0pacvP9vDe1VCZhXnl+bbpBXyjrkDDUH5w5IHqmiBwTuwtNDzwrqNPJnnW5lrOZdkT3dkff5APbKoIZAaSekAD5Y78eKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741245399; c=relaxed/simple;
-	bh=cEcVQb7oUX3E1V8qSb0ECUyJkpbfdPK6F01NLcJ59Z0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EWSAxrUUGetdGOCwiUdmZnOkFbgRYNJpI+eI2o2RJqvsGJYD5OU/IlGp3yqw35iEP9ojadcTFr+tGhSYUKgfFc1QNgynMO3RAi/fpgsImuiLLgmJcjJQUvPaywAVUy/AQCsUu8jroCTsM+R0UjRLOqs9RDxc828MlxANgRkjEpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QwCbAsGj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A718BC4CEE5
-	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 07:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741245398;
-	bh=cEcVQb7oUX3E1V8qSb0ECUyJkpbfdPK6F01NLcJ59Z0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=QwCbAsGjSrjZ50Rv/dc2yP/uCTJHFinI08Aq4Sszt1QK444gyO+ctp7z+/y55O3vV
-	 PTkqkxONQs19ZyI6kgc9r1/cJHFNLXE0pbPXQkYFY8HdzFpw5FHwilU3dwxbET5rKB
-	 /mjVFljGDPve4WrbXRgotzzD05ED8tUsL+B4vJvAHzXm6EKoa+EhI6wMdHxuG/ofUe
-	 xrQFtlg1950FMxtBvopbLwwho4rKxuOu0QdDyCXnI2BLBKH3a4eIrr4InAzp9GR5xP
-	 JI24L05CWdUzGsWFgk/yDplV7uESHl9dcI4eNOhmyTDL7cWpp6sla+4OrSXlrDOvvI
-	 G3tieBzCfAYYg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 90C85C433E1; Thu,  6 Mar 2025 07:16:38 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
+	s=arc-20240116; t=1741250518; c=relaxed/simple;
+	bh=6YY82g2Rg3FLDbzRkJlMZ6EZ60mewsmjGXnyYWQH38I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eABUc4XGAvvycPC3HKjzp/FwaRApJco6cq1PgZPetZaGG34Mki7Frf3bN3Ujx5BPYtVkdlpU0kDeBZTaBojnALyOJcGqhHDojZU1Xp+ieeFaJEI0TYALa098OTvdIOC+oVv9IeDiEPv+OjaPtWBcOH1qskSMLBJEvGKvuxFDVYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gQ5RHz9h; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741250517; x=1772786517;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6YY82g2Rg3FLDbzRkJlMZ6EZ60mewsmjGXnyYWQH38I=;
+  b=gQ5RHz9hqBflWownk+LMHF3kHaLTkuuIHi4jUl6tQdJW204br1fRu5UT
+   N48YBJp1Xe5/aBs4HvseBjdCzjWqRGrUdydWCDKW+jZYgcM19MZpDJf+4
+   1gpdWSCMbXp8Mu/2Gr55B3/2/Ns60thzqVLaN59r4qoK4SezXr86Z+PJ/
+   8yWN7zVGTeQqeJuG/uffbm6nvvfJerr+IwpFG9IbfmWX4p0/cMykrQLDg
+   rzVe6pEtK1H3SUp/VGTxGqwtOMonTwpYr9BWmftXeRr2AHqX3Y3jWSzzl
+   vKRdZTNjTOx6waGwsRoM3/woMIIIeSNscb7aA7sxPBM7JopjK9gN3kk/T
+   A==;
+X-CSE-ConnectionGUID: g/Ld3kG2SNqg8M9LJIAdag==
+X-CSE-MsgGUID: kA53PzJmSLyBVb85hg+pNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="53647088"
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="53647088"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 00:41:56 -0800
+X-CSE-ConnectionGUID: Y1eljSSfT5i4BOfRZulReA==
+X-CSE-MsgGUID: ZuXiMGC2SW2FJeK0+UqPbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="142181576"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 06 Mar 2025 00:41:47 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 8D21520B; Thu, 06 Mar 2025 10:41:45 +0200 (EET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
-Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
- with AMD AI 365
-Date: Thu, 06 Mar 2025 07:16:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219748-208809-hJd3ETPfvf@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
-References: <bug-219748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Kenneth Crudup <kenny@panix.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] thunderbolt: Prevent use-after-free in resume from hibernate
+Date: Thu,  6 Mar 2025 10:41:45 +0200
+Message-ID: <20250306084145.373237-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
+Kenneth noticed that his laptop crashes randomly when resuming from
+hibernate if there is device connected and display tunneled. I was able
+to reproduce this as well with the following steps:
 
---- Comment #29 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-For the first dmesg with "undetected" display the enumeration goes fine and=
- the
-DP tunnel is created however:
+  1. Boot the system up, nothing connected.
+  2. Connect Thunderbolt 4 dock to the host.
+  3. Connect monitor to the Thunderbolt 4 dock.
+  4. Verify that there is picture on the screen.
+  5. Enter hibernate.
+  6. Exit hibernate.
+  7. Wait for the system to resume.
 
-[   54.496699] [drm] DPIA AUX failed on 0x0(1), error 3
-[   54.579780] [drm] DM_MST: starting TM on aconnector: 00000000a96810d6 [i=
-d:
-133]
-[   54.587986] [drm] DM_MST: DP14, 4-lane link detected
-[   54.591410] [drm] DPIA AUX failed on 0x1000(5), error 3
-[   54.596690] [drm] DMUB HPD RX IRQ callback: link_index=3D7
-[   54.605700] [drm] DMUB HPD RX IRQ callback: link_index=3D7
-[   54.612512] [drm] DPIA AUX failed on 0x2003(1), error 3
-[   54.616646] [drm] DMUB HPD RX IRQ callback: link_index=3D7
-[   54.624654] [drm] DMUB HPD RX IRQ callback: link_index=3D7
-[   54.631037] [drm] DPIA AUX failed on 0x2002(4), error 3
+  Expectation: System resumes just fine, the connected monitor still
+               shows screen.
+  Actual result: There is crash during resume, screen is blank.
 
-Looks to me some sort of link training issue but as far as I can tell the DP
-tunnel is up just fine. Immediately after this there is unplug:
+What happens is that during resume from hibernate we tear down any
+existing tunnels created by the boot kernel and this ends up calling
+tb_dp_dprx_stop() which calls tb_tunnel_put() dropping the reference
+count to zero even though we never called tb_dp_dprx_start() for it (we
+never do that for discovery). This makes the discovered DP tunnel memory
+to be released and any access after that causes use-after-free and
+possible crash.
 
-[   54.632887] thunderbolt 0000:c6:00.6: acking hot unplug event on 0:2
-[   54.632987] thunderbolt 1-0:2.1: retimer disconnected
+Fix this so that we only stop DPRX flow if it has been started in the
+first place.
 
-I think this done by you and then replug. If that's the case then from USB4
-perspective it looks okay (let me know if this is not the case). I'm leaving
-the graphics side for Mario to comment on as I'm not qualified. I do see MST
-and that seem to be problematic in Linux IIRC.
+Reported-by: Kenneth Crudup <kenny@panix.com>
+Closes: https://lore.kernel.org/linux-usb/8e175721-806f-45d6-892a-bd3356af80c9@panix.com/
+Cc: stable@vger.kernel.org
+Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/tunnel.c | 11 ++++++++---
+ drivers/thunderbolt/tunnel.h |  2 ++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-There is one more thing that need to check. Do you have
-CONFIG_USB4_DEBUGFS_MARGINING=3Dy set in your kernel .config? I ask because=
- the
-driver exposes the AMD retimer from the dock upstream port side too. It is =
-okay
-if you have that set but if not something is not right then.
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index 8229a6fbda5a..717b31d78728 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -1009,6 +1009,8 @@ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+ 	 */
+ 	tb_tunnel_get(tunnel);
+ 
++	tunnel->dprx_started = true;
++
+ 	if (tunnel->callback) {
+ 		tunnel->dprx_timeout = dprx_timeout_to_ktime(dprx_timeout);
+ 		queue_delayed_work(tunnel->tb->wq, &tunnel->dprx_work, 0);
+@@ -1021,9 +1023,12 @@ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+ 
+ static void tb_dp_dprx_stop(struct tb_tunnel *tunnel)
+ {
+-	tunnel->dprx_canceled = true;
+-	cancel_delayed_work(&tunnel->dprx_work);
+-	tb_tunnel_put(tunnel);
++	if (tunnel->dprx_started) {
++		tunnel->dprx_started = false;
++		tunnel->dprx_canceled = true;
++		cancel_delayed_work(&tunnel->dprx_work);
++		tb_tunnel_put(tunnel);
++	}
+ }
+ 
+ static int tb_dp_activate(struct tb_tunnel *tunnel, bool active)
+diff --git a/drivers/thunderbolt/tunnel.h b/drivers/thunderbolt/tunnel.h
+index 7f6d3a18a41e..8a0a0cb21a89 100644
+--- a/drivers/thunderbolt/tunnel.h
++++ b/drivers/thunderbolt/tunnel.h
+@@ -63,6 +63,7 @@ enum tb_tunnel_state {
+  * @allocated_down: Allocated downstream bandwidth (only for USB3)
+  * @bw_mode: DP bandwidth allocation mode registers can be used to
+  *	     determine consumed and allocated bandwidth
++ * @dprx_started: DPRX negotiation was started (tb_dp_dprx_start() was called for it)
+  * @dprx_canceled: Was DPRX capabilities read poll canceled
+  * @dprx_timeout: If set DPRX capabilities read poll work will timeout after this passes
+  * @dprx_work: Worker that is scheduled to poll completion of DPRX capabilities read
+@@ -100,6 +101,7 @@ struct tb_tunnel {
+ 	int allocated_up;
+ 	int allocated_down;
+ 	bool bw_mode;
++	bool dprx_started;
+ 	bool dprx_canceled;
+ 	ktime_t dprx_timeout;
+ 	struct delayed_work dprx_work;
+-- 
+2.47.2
 
-Regarding the missing network adapter, what happened there is that the USB4
-link did not come up at all so all you got is the USB 2.x wires and devices.
-You see them "High Speed" and "Full Speed" in the dmesg. Now, this is somet=
-hing
-outside of what software can fix. Typically it's the Power Delivery firmware
-that handles this but most cases simply unplug plug or flipping the cable m=
-akes
-it work.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
