@@ -1,125 +1,104 @@
-Return-Path: <linux-usb+bounces-21422-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21423-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9316EA548BA
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 12:07:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECA59A548DB
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 12:15:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4129188DCBE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 11:07:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B0B07A5BB9
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Mar 2025 11:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04CF2204F6E;
-	Thu,  6 Mar 2025 11:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B098204879;
+	Thu,  6 Mar 2025 11:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0AsMR23"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpgdWYUe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790392E339F;
-	Thu,  6 Mar 2025 11:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849971FF1A2
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 11:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741259260; cv=none; b=KjXS7F+HxbxO07bkz5oCRddy2UiBZXBt9UR9VoS90ULbqw/guMli/+HaI1e2OFqeN00kh8O9G2U+8Y25K+ofMaVAgkEWqOE/KOBQ6/2cF51PjIkzIr8T+33TUwtgi0s/pBHO3kEIdjJ9Sy7kMZijW6w6rUUM6n3bM11IMB6hXEY=
+	t=1741259717; cv=none; b=R72cnnihM5GueKqBGq/HhaMekia9hwHgHCdMUq6MLLlscVnrXQ2r/YSs1JRjmHZGaFVgxgEikO9MhRJIFbVpnkhMjRE08Z8OttKXcY5AXQgppmWJvESqRL+EAWTkgdKfXkCmrfHHkWByM0RNgjf2lFjSwNC0ED98Io2kgIrBk7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741259260; c=relaxed/simple;
-	bh=Qcxo/DoicDHC+bB71KTQ3zd68ADRh2MeqhcxhbWBSH0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ww1Mcq2u51M0DSUZ//x4+3vguOQbxJRN8q50dhOkyUDA+JcmTMHoIbC6crq0BTAM8y2wpHcw2TXeFFxbTbU+WPSsaXrtKTA5ojoLEnk/3074QaFZEISooK9xzyfuKFyalAxtukFBYAoxCof1QWQyg0YgeR8CVzpA9SGAxl07tHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0AsMR23; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76E0C4CEE0;
-	Thu,  6 Mar 2025 11:07:39 +0000 (UTC)
+	s=arc-20240116; t=1741259717; c=relaxed/simple;
+	bh=wKGJXw7TV93rD51PexWZjiOm4mcjqpTcfymQFYrvYgY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hvkHsEWt4A5ZXPJeqF26Pq5s1e/4KvK3xnWVGK6UDj0zvQKCbdPphoI08392CcqpFLAgb233p7aJp4tdIAWsTli/vEFiXtJg84kyKAwUWD7Q2g1NfQdFyOO5KtOhsRrm9v4X00n2UYAMbDoaN5AgW4RQSlTeO7+8rqIhvsPxh1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpgdWYUe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF116C4CEE2
+	for <linux-usb@vger.kernel.org>; Thu,  6 Mar 2025 11:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741259260;
-	bh=Qcxo/DoicDHC+bB71KTQ3zd68ADRh2MeqhcxhbWBSH0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=a0AsMR23a9Wr6BlWHMBfDzVfbm0k9gRb/en9fY26q/IWu3XKpUijUuQVYGMIhb96R
-	 eDHqsUJDanC5ZvQkci6JpySxeETr1x94pi4e7b0hTA7/6k6yNe/hLhcY84xBblj+JD
-	 oZu9OSgMGUjROl+hiN9Rr59Q58RzjG80mppWc7Z4ndIw/SmPbqg61Qib00wCiAAXTr
-	 3QwY3wdfmDmWN5j6YTrp2I9KYj2b/h3g/XoIQMRHNXZKS3ENZKnAQAH7c0vI2UHhTD
-	 y+bCiD64JAWj0Y1DRecM/SbddPen+FwIHnfpFtTBK+8Hd7MsXrHici3YiR/sCXetbM
-	 qRYrNCZ62/UxQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tq94i-000000004mu-3yoU;
-	Thu, 06 Mar 2025 12:07:37 +0100
-From: Johan Hovold <johan@kernel.org>
+	s=k20201202; t=1741259716;
+	bh=wKGJXw7TV93rD51PexWZjiOm4mcjqpTcfymQFYrvYgY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=VpgdWYUe6E7g6OVoH5W1i3KCe3BkgG8qirz/cKIDfbjyQju/H6orRwJJ35OMhtVtx
+	 IPVN/twDovamnUkBVNw/wcvHIEEscXbZP2SrPNSDDxi7npfOCtLq7Haarotq5D+89O
+	 E2xD6ERRCTT/s+S08Ja43Tn/yV0hc2cq0gElvnR5nb1kwCjfReNjnQWo8//t2kNc4E
+	 2jkyT/hGR92DcP6P002YPYrb7+s/Qr95Xbixr2e4dKWcJNvlmf+Qv7sEqG/hGWfbLM
+	 DhVV9s5LrOQp4WQISkqa1HD8aysL0xNmM09ys0yBvrQstXP36su/jPxBKP6//3lLY5
+	 rg/hQyonyrV8w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E7000C3279F; Thu,  6 Mar 2025 11:15:15 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>,
-	Fabio Porcedda <fabio.porcedda@gmail.com>,
-	Daniele Palmas <dnlplm@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] USB: serial: option: match on interface class for Telit FN990B
-Date: Thu,  6 Mar 2025 12:07:14 +0100
-Message-ID: <20250306110714.18369-1-johan@kernel.org>
-X-Mailer: git-send-email 2.45.3
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Thu, 06 Mar 2025 11:15:15 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: bugzilla@academo.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219824-208809-7sxfpJSLm6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The device id entries for Telit FN990B ended up matching only on the
-interface protocol. While this works, the protocol is qualified by the
-interface class (and subclass) which should have been included.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Switch to matching using USB_DEVICE_AND_INTERFACE_INFO() while keeping
-the entries sorted also by protocol for consistency.
+bugzilla@academo.me changed:
 
-Link: https://lore.kernel.org/20250227110655.3647028-2-fabio.porcedda@gmail.com/
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Daniele Palmas <dnlplm@gmail.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/option.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bugzilla@academo.me
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 58bd54e8c483..1ea2870725ac 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1394,22 +1394,22 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(0) | NCTRL(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c8, 0xff),	/* Telit FE910C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d0, 0x60) },	/* Telit FN990B (rmnet) */
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d0, 0x40) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d0, 0x30),
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x30),	/* Telit FN990B (rmnet) */
- 	  .driver_info = NCTRL(5) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d1, 0x60) },	/* Telit FN990B (MBIM) */
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d1, 0x40) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d1, 0x30),
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x60) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x30),	/* Telit FN990B (MBIM) */
- 	  .driver_info = NCTRL(6) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d2, 0x60) },	/* Telit FN990B (RNDIS) */
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d2, 0x40) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d2, 0x30),
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x60) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d2, 0xff, 0xff, 0x30),	/* Telit FN990B (RNDIS) */
- 	  .driver_info = NCTRL(6) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d3, 0x60) },	/* Telit FN990B (ECM) */
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d3, 0x40) },
--	{ USB_DEVICE_INTERFACE_PROTOCOL(TELIT_VENDOR_ID, 0x10d3, 0x30),
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d2, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d2, 0xff, 0xff, 0x60) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d3, 0xff, 0xff, 0x30),	/* Telit FN990B (ECM) */
- 	  .driver_info = NCTRL(6) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d3, 0xff, 0xff, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d3, 0xff, 0xff, 0x60) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
--- 
-2.45.3
+--- Comment #15 from bugzilla@academo.me ---
+I found this issue happening this after resuming from sleep. Downgrading to
+Kernel 6.12.9 (6.12.9-arch1-1) removed the issue completely. The error mess=
+age
+was the same.
 
+I am not much knowledgeable in reporting or helping with kernel issues but =
+if
+you give me instructions of what I can do to maybe test a patch and report =
+back
+I can help.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
