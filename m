@@ -1,169 +1,220 @@
-Return-Path: <linux-usb+bounces-21488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21489-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC53A56108
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:41:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36215A5613B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:54:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E7D17A492C
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 06:40:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 296BC3A6480
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 06:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A53719D8BC;
-	Fri,  7 Mar 2025 06:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECF61A01B9;
+	Fri,  7 Mar 2025 06:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q6VcyteD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4Vj11Xe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41CA19DF8B
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 06:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDFF1632D9
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 06:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741329699; cv=none; b=gS1lby8KfWrlBtKChp/O21kZkdZeCVQjHqLRu7MLBpzmWL34RqJcTOpecgd/bf3/ocKdZw66Pm6aIW0/2ds2bdIVtTjvd0fu2GyfLNCSVeDAerj+vlHgUz6uZ1K1H8L428OQeFHaQAD5nZgr94gUz2gYp8cBSZ6aHNyjqgHsu20=
+	t=1741330478; cv=none; b=r8ZR7ZU7cXRa9RJCmQqESfGApp4xmUbwin019ok6d+3IqMldI7u8UpXV83iKL28uoUnGIFY9uoJRLgTsHqIJpvhhPxSTQmSuZC+MY2zwY9Gjf+qz2wYLD/qoY0wdC1Y38ZU+un7/3K74ibLWA1gSQexn6wr8DWJyhqw9CSmcWco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741329699; c=relaxed/simple;
-	bh=TRWtes6REx9fpjvGKBezR7PGkeZGzXkctsT928ul9Qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hJnYpcH07bjU31wROr12X+Se1N6cDJK7w73p3PQlWFhS0HUGdgEgk1SRy10f/nfSAKq1QqiU0mCFnbH+G0PclKkH1Fkanu1AOJ04licK+Ju8sozlS4QzHrqYIYpdXHfF4Z+mtBBKd7vGjQuuInjgudsBLi4P4CeThWcHZ0UwqF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q6VcyteD; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-543e4bbcd86so1830482e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 22:41:37 -0800 (PST)
+	s=arc-20240116; t=1741330478; c=relaxed/simple;
+	bh=AKghzo/remdqLzBtmlDM0OwR+8Oom6OzauCQ2+74DW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=iUaDqDYlotiOMDDixRMkXrCWmDebZ3HHpTuajWupsyE8CewpORJ+YBdRcFmOmW/pQQtMyEQg3mnfN54mP9y7gQgCiIzUu2MU3xcHEUmu5jZSJUahRT9N5cF7clh9By44/FXUfWq92sqi76Dm0wjikd2yEl705z6+LLzz1g3yF1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4Vj11Xe; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2400d1c01so228761466b.1
+        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 22:54:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741329696; x=1741934496; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
+        d=gmail.com; s=20230601; t=1741330475; x=1741935275; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sg7uo0UiAnIp5rbGvtSfWreO0/p9lKiVld9AZeLT0t8=;
-        b=q6VcyteDk9TFpFCf3kl6wr/ZR0BCpfwMFVyJgCMVxGp+6sdIHYEQAqt0GroYcIpff0
-         tqsSnNdWmbtqGp7x8DRBrkwLk+5V0gOrlFVzI7/V8sMFQUaJ5Zk/g94AFTjhhAUbAvzE
-         Yi9cPKflulYwSI3LnjGLQS7a0rDz4/2hMByuwvV8EnnUOb8uCIu8XAtx9JFXEpZ9/KED
-         4ZiP2mYkDWm9t4XNObRM56iqPskCXqwu8oe3dySGwIxdOgJmxK7tp2yu+TBEDZ5g1iT/
-         2MCiio3X0V3JsI265WML92NTNvfX2es1el+TbGwlfn4c/au71g1gCf5LYFJ7whlDbao+
-         JknQ==
+        bh=W6+rTYATyv2XGgl7JWmxpG4EjK1JvnmpFHAe58ZWswM=;
+        b=M4Vj11XedzWnNkFDZc8MYH1yH9Dbg3NHEgvfioYZ5krSx4TT2gUmjqJ0ytZCKp/9Br
+         DEc4GCeoZXtEJTUl8X/lqFPhZz11XKP5hXnpbOHy3/hKTyS5C8ks5ar3NblvAieuNZyN
+         bPIt8uQg4qq2Fj98f1rLv+TFtty3ohhb3appRoSx2yjemfS+/qFqSKh0Hc883eYpiNLK
+         hc/nMxVyYeIgq0bRa6NzgSRaOzPSjwRuJCOisL4+HsTv4gS6MKa3XuZtIS45CuDh+zd7
+         vR86fl32jVssFkUkh31nlmjU8mIZvmJ+UmMzQTYbl0YZ8JRhkeCLcrGi86zoCril2qB6
+         OtnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741329696; x=1741934496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
+        d=1e100.net; s=20230601; t=1741330475; x=1741935275;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sg7uo0UiAnIp5rbGvtSfWreO0/p9lKiVld9AZeLT0t8=;
-        b=KSLhv2gIhf9dHiYvVMhgjHV3al8RxdtikwT6CyYV4L+xkGOlSTna5WtNBBjgVD29X2
-         f4cUaP830c9tcRe7IG0SfeB9aY5KCNRUbZ3g0KaITBiHUUjkphewM0jlh23zjQPe48Hj
-         eftyNc/8BqRmumWK+2YH3joB2avzFeZij3BoEOg3J+j/Vy5D6ml3JEHgRIddYRZ7FKMj
-         i2rO8phnQbkXJ7s+9t8LEAVteyQX8qtsljOctVi3DsSOMb1BVirKjpJ8wXBWLvG89Wud
-         gwgvvW+d3esaFoxvaGxZUU/n78UdzOk3J6U3a3IgUnYsd9wCMURpb/xxN3kMX+AE2VXX
-         1XVw==
-X-Forwarded-Encrypted: i=1; AJvYcCX06fWD498Cg9na7h5ahRa6OwW7250l5VfJDJGxV159qbVdg/SWNmLaEGSxKyjoEi4vFwxmwu5myK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxahKdPcd/AR7ut7P7ko2IYcYrAcqwp6+nzeMuinoIj61jAzkmA
-	cx0KEX48YjlMYRBL+dgP0OGugaZBKnmUlTHscarhF9R2DUcrM/vd9ozDBD2cjs0=
-X-Gm-Gg: ASbGncuNixh6icel6J/L4fqFW/6Nr3i4+cRJ84NskNo7r2M10y5ArT3bc9lgw/sPPKm
-	+byZ7stIwHsziQDdiZvH6zuq7dGVJ3Rzk99Pze96owqL33jXqm7cZ2hfhzCRNYohMfBCmkSxefx
-	ozbix1YSfEv6xk6IjsxHWr5ZJ/Iw99QnH1c86jQk13OaSDic3Ou3tpqssmPpKzcRFFEI/MF5zSM
-	HiEsE1C1/PRtj96zhhRC5CsLybYv95rB0HtdvEuKZz/IdQZpmkXShoxBxq4dl4kADnGtE2AJ+AA
-	qtS2NLsMgVVZ4QSE3tBg0Azw+OxQrbadnRBvH5zANttlIk5slyhmNpNmbNZMqN/64Ybc4TgAGc2
-	OVapSSQcl76yLBzmY7y6lM6h0
-X-Google-Smtp-Source: AGHT+IF+MTb9tXtu+1OgKMNSWIWoZ7U3qjuft/CpkXtvP8nnazpT685yA6mq2aNmwtQkuAkDdTf0IQ==
-X-Received: by 2002:a05:6512:3993:b0:549:792a:a382 with SMTP id 2adb3069b0e04-549910b59bdmr679603e87.32.1741329695881;
-        Thu, 06 Mar 2025 22:41:35 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5498ae59084sm394476e87.74.2025.03.06.22.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 22:41:34 -0800 (PST)
-Date: Fri, 7 Mar 2025 08:41:33 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/7] usb: dwc3: qcom: Transition to flattened model
-Message-ID: <vn7nrxpga7ewyqr7hpiczsn63qo2z4qzenif6powryqrtmnwjs@23jp6c7qdvxt>
-References: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
- <20250226-dwc3-refactor-v4-6-4415e7111e49@oss.qualcomm.com>
+        bh=W6+rTYATyv2XGgl7JWmxpG4EjK1JvnmpFHAe58ZWswM=;
+        b=wrxqKXDJmd9/PtxIQ98NerFUd4Vua5kqFeg7DB4BXNwhj7BZKUNBcPYttVu/qRAlfB
+         NrisrUgZIAXsx3QHItYdy/6WONfzaX4iWfh6V36GDg+3TcdLv4K4gVpVlyPHzjrxvEiZ
+         8BjvGmcDFXKM3qDz9IymJhtm6rQBku/lbT1qszdEuUY+iu74Sq/+Z0b4Bp+R/xMHQhs8
+         48g8NRIUg1CjtI2WygCW8D0ozF21MuC41W8j4aolmEMrHNVsCJaVjo1bbhxO+eoqqui2
+         eHY5EbwJqk4Hh4tDKRcRCSLimWVPi2xNT3f4j2tnRINAqqwzRkDtm/HuzK9rm0Kb2ClL
+         bIsg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4Lh6ykJuYvRKGuGwNgtr1Yz+l0fSoO9WYoGq/4vfruEBFux6cjc4k3YK+08yvKfVsFKcF/OGPJhw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxm7QkS5siOpr+oTExGzlgwjsIIaVOX0UeyuAyZZkSGjkNv0F0T
+	MksLxY+fSoVW9iq3dntdhnk7aFQrV/kvepoiXShLKmNAre5hwARG
+X-Gm-Gg: ASbGncuG4vkCx/OQWKjJqQLbx3rxUV98o0DttUjdrT3WKKuSph0oTzU1ca+DN6CwhOx
+	A9k+lu398rXwxBbZgJJGYvA/KyfgdfXJV0lKC8c0gUnIvsSdzGblW1vsL4hQlLH2yfSGCXYaH5n
+	q7bG8DuvH9eYEnaMI/nb3iQlIxupz3qgkhbUO4zA64p9ljQOz4MwAxtx2CXFtuhNroXz0y0w48q
+	vOm+USL240UvUSbTPC/7pn4XCOv4pKTH1W/i3jlLIep3J8HGycFzJo7H65YM4lNz9wpp0NzSS8S
+	5Wz7QnBTsM4eStAjoGX/LExyX8Tyzo5OEOEM5q15ParQiunKuZ/RvqrKJutuyQ==
+X-Google-Smtp-Source: AGHT+IEvOusod9PWkPOMmDp4oZ/a0r2KsD+57zluntHiTvEhIUuwuhYlUiO5SQLQ4ki5lRYakRzlTA==
+X-Received: by 2002:a17:907:7b03:b0:ac2:5b78:9694 with SMTP id a640c23a62f3a-ac25b78bf03mr108813466b.9.1741330474183;
+        Thu, 06 Mar 2025 22:54:34 -0800 (PST)
+Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2394feddbsm220884366b.76.2025.03.06.22.54.33
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 06 Mar 2025 22:54:33 -0800 (PST)
+Date: Fri, 7 Mar 2025 07:54:29 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 12/15] xhci: Prevent early endpoint restart when
+ handling STALL errors.
+Message-ID: <20250307075429.5f9d1d4e@foxbook>
+In-Reply-To: <20250306144954.3507700-13-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226-dwc3-refactor-v4-6-4415e7111e49@oss.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 26, 2025 at 04:17:53PM -0800, Bjorn Andersson wrote:
-> The USB IP-block found in most Qualcomm platforms is modelled in the
-> Linux kernel as 3 different independent device drivers, but as shown by
-> the already existing layering violations in the Qualcomm glue driver
-> they can not be operated independently.
+> Ensure that an endpoint halted due to device STALL is not
+> restarted before a Clear_Feature(ENDPOINT_HALT) request is sent to
+> the device.
 > 
-> With the current implementation, the glue driver registers the core and
-> has no way to know when this is done. As a result, e.g. the suspend
-> callbacks needs to guard against NULL pointer dereferences when trying
-> to peek into the struct dwc3 found in the drvdata of the child.
-> Even with these checks, there are no way to fully protect ourselves from
-> the race conditions that occur if the DWC3 is unbound.
+> The host side of the endpoint may otherwise be started early by the
+> 'Set TR Deq' command completion handler which is called if dequeue
+> is moved past a cancelled or halted TD.
 > 
-> Missing from the upstream Qualcomm USB support is handling of role
-> switching, in which the glue needs to be notified upon DRD mode changes.
-> Several attempts has been made through the years to register callbacks
-> etc, but they always fall short when it comes to handling of the core's
-> probe deferral on resources etc.
+> Prevent this with a new flag set for bulk and interrupt endpoints
+> when a Stall Error is received. Clear it in hcd->endpoint_reset()
+> which is called after Clear_Feature(ENDPOINT_HALT) is sent.
 > 
-> Moving to a model where the DWC3 core is instantiated in a synchronous
-> fashion avoids above described race conditions.
+> Also add a debug message if a class driver queues a new URB after
+> the STALL. Note that class driver might not be aware of the STALL
+> yet when it submits the URB as URBs are given back in BH.
 > 
-> It is however not feasible to do so without also flattening the
-> DeviceTree binding, as assumptions are made in the DWC3 core and
-> frameworks used that the device's associated of_node will the that of
-> the core. Furthermore, the DeviceTree binding is a direct
-> representation of the Linux driver model, and doesn't necessarily
-> describe "the USB IP-block".
-> 
-> The Qualcomm DWC3 glue driver is therefor transitioned to initialize and
-> operate the DWC3 within the one device context, in synchronous fashion.
-> 
-> To provide a limited time backwards compatibility, a snapshot of the
-> driver is retained in a previous commit. As such no care is taken in the
-> dwc3-qcom driver for the qcom,dwc3 backwards compatibility.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 138 +++++++++++++++++++++----------------------
->  1 file changed, 69 insertions(+), 69 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9d04c2457433..63e60f15ceaa 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -4,7 +4,6 @@
->   * Inspired by dwc3-of-simple.c
->   */
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+
+Sorry for coming this late, but I haven't looked closely at some
+of those xhci/for-next patches before.
+
+This one is unfortunately incomplete, as follows:
+
+> drivers/usb/host/xhci-ring.c | 7 +++++--
+> drivers/usb/host/xhci.c      | 6 ++++++
+> drivers/usb/host/xhci.h      | 3 ++-
+> 3 files changed, 13 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>index c2e15a27338b..7643ab9ec3b4 100644
+>--- a/drivers/usb/host/xhci-ring.c
+>+++ b/drivers/usb/host/xhci-ring.c
+>@@ -556,8 +556,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
+> 	 * pointer command pending because the device can choose to start any
+> 	 * stream once the endpoint is on the HW schedule.
+> 	 */
+>-	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
+>-	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
+>+	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
+>+			EP_CLEARING_TT | EP_STALLED))
+> 		return;
+
+Any flag added to this list needs to be added to xhci_urb_dequeue() too
+so it knowns that the endpoint is held in Stopped state and URBs can be
+unlinked without trying to stop it again.
+
+There really should be a helper function used both here and there, but
+those Stop EP patches were meant for stable and I strived to make them
+small and noninvasive. Then I forgot about this cleanup.
+
+NB: I also forgot about a bunch of low-impact halted EP handling bugs,
+I will try to rebase and send them out today or over the weekend.
+
+>  	trace_xhci_ring_ep_doorbell(slot_id, DB_VALUE(ep_index, stream_id));
+> @@ -2555,6 +2555,9 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
 >  
-> -#include <linux/cleanup.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
->  #include <linux/clk.h>
-> @@ -14,7 +13,6 @@
->  #include <linux/kernel.h>
->  #include <linux/extcon.h>
+>  		xhci_handle_halted_endpoint(xhci, ep, td, EP_SOFT_RESET);
+>  		return;
+> +	case COMP_STALL_ERROR:
+> +		ep->ep_state |= EP_STALLED;
+> +		break;
+>  	default:
+>  		/* do nothing */
+>  		break;
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 3f2cd546a7a2..0c22b78358b9 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1604,6 +1604,11 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>  		goto free_priv;
+>  	}
+>  
+> +	/* Class driver might not be aware ep halted due to async URB giveback */
+> +	if (*ep_state & EP_STALLED)
+> +		dev_dbg(&urb->dev->dev, "URB %p queued before clearing halt\n",
+> +			urb);
+> +
+>  	switch (usb_endpoint_type(&urb->ep->desc)) {
+>  
+>  	case USB_ENDPOINT_XFER_CONTROL:
+> @@ -3202,6 +3207,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+>  		return;
+>  
+>  	ep = &vdev->eps[ep_index];
+> +	ep->ep_state &= ~EP_STALLED;
 
-As a heads up, would it make sense to also drop extcon support while we
-are transitioning to the new driver / DT bindings?
+... and clearing any of those flags has always been followed by calling
+xhci_ring_ep_doorbell() again, to ensure that the endpoint is restarted
+if it has URBs on it but restart was held off due to the flag.
 
->  #include <linux/interconnect.h>
-> -#include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/usb/of.h>
+xhci_urb_dequeue() relies on this too, because it looked lke sensible
+design: if you have reasons not to run the EP, you set a flag. Reasons
+are gone, you clear the flag and it's running again.
 
--- 
-With best wishes
-Dmitry
+> 	/* Bail out if toggle is already being cleared by a endpoint reset */
+> 	spin_lock_irqsave(&xhci->lock, flags);
+>diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>index cd96e0a8c593..4ee14f651d36 100644
+>--- a/drivers/usb/host/xhci.h
+>+++ b/drivers/usb/host/xhci.h
+>@@ -664,7 +664,7 @@ struct xhci_virt_ep {
+> 	unsigned int			err_count;
+> 	unsigned int			ep_state;
+> #define SET_DEQ_PENDING		(1 << 0)
+>-#define EP_HALTED		(1 << 1)	/* For stall handling */
+>+#define EP_HALTED		(1 << 1)	/* Halted host ep handling */
+> #define EP_STOP_CMD_PENDING	(1 << 2)	/* For URB cancellation */
+> /* Transitioning the endpoint to using streams, don't enqueue URBs */
+> #define EP_GETTING_STREAMS	(1 << 3)
+>@@ -675,6 +675,7 @@ struct xhci_virt_ep {
+> #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
+> /* usb_hub_clear_tt_buffer is in progress */
+> #define EP_CLEARING_TT		(1 << 8)
+>+#define EP_STALLED		(1 << 9)	/* For stall handling */
+
+I guess usage rules of those flags should be documented somewhere here
+and helpers added such as:
+
+xhci_ep_cancel_pending()
+xhci_ep_held_stopped()
+
+to improve maintainability and prevent similar problems in the future.
+
+
+I could sit and write something, I still have this stuff quite fresh
+in memory after spending a few weeks debugging those crazy HW races.
+
+Regards,
+Michal
 
