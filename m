@@ -1,162 +1,163 @@
-Return-Path: <linux-usb+bounces-21490-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21491-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A747A56159
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 08:01:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 620AEA561FA
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 08:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E5833B3A99
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:01:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 839321759A6
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DA81A3155;
-	Fri,  7 Mar 2025 07:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25521AA1EC;
+	Fri,  7 Mar 2025 07:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TFDqGcHY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g0JScyGF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3878F1A3148
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 07:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1B21A83FB
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 07:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741330874; cv=none; b=FCQK8Tk4EhgAqrGzlgHHpwPRaOQr6G9IJ0mhzJX0QPxTEUMDHIzdeKaC5dOk+e9l/dGIQv8hrgD1VurOtGgCGcyqXUxxutVAxcIH7srf2fQS1wOeW1bHl2AZDY2WhcEVXp9cNTmIRVyhT5x4XH/mg+5mVeOOX07+hRcrZr3GnlE=
+	t=1741333425; cv=none; b=V1dhuvCqwsg9JbOlG9/oOG5FJ9+nG3cjVyKdnWXfJAQvJcQacyCHezqnOmcssv3vOLqsIcvXlEBvneYsVP1CcIqqk5ywqhSH3GczmP9WV583wcDAKg4HihVFa30FRona9Dg4TOfzt5kJZmDj6KsuH03wR0+bhfLICVf8ksj2I6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741330874; c=relaxed/simple;
-	bh=X/1WIt4m62AnsW9clW0kmKnhiadtF9DhwD0siHnB6AU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fWwQr7dUDA5SxjidqxauvbbgDqtbxO/PQkubJtjNQcbJhoc4XZQU+F1CaOUzMib42oob4sRutBw1bPPclj7PR7xPp4+INfkmEeeyxOAJuYDWkkWluKMvbEwsjwdPFnSsb7YxX85+zTOOQmJg9K6M2MiI8TrCqIu2zWrCYGK/MII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TFDqGcHY; arc=none smtp.client-ip=209.85.218.54
+	s=arc-20240116; t=1741333425; c=relaxed/simple;
+	bh=q9EjPrsiTkSrrCSkftDQ0XVhghk2mMj/z1pgIRJ8EFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=IML1NJ+NI3C775TR5o0cMMuuqia4V5Tgfl7vS95fWd/9INihm1lBgBIb9cDDbLbBEnvvFwwQQoeDG16bqyTrsoxVBmmN5QHPG9N1ggcATdBLPV+zAMl4GPuw4wQ93JnCmVo1h8jJaaT7P/9eeNA9QD2h3itx+1kF8mhCE62nsDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g0JScyGF; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac25d12935fso3367766b.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 23:01:11 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43bc38bb6baso8881125e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 23:43:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741330870; x=1741935670; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nj3ICwfsh5ahAZoKIfoUbUTllZ0ZuMzKTnzon9oJUZs=;
-        b=TFDqGcHY8B3I2H/DRp2MO8fua09d6QGv8WIJg7xMKYl89QsfhcP9eNnsyzCrmF695C
-         L7CTgs/sYMikN4z0b4xsh+qj9LkDLygvjpRc/ngabu1x4Dyc1fqlN8VqeOnU/+vOiPIM
-         rlRji5OIr7tU1X0Kw6AWhZQF2LfAvUnMCpOMUamVxFh5/yPWSbPX2zqdTHSXDlqeeiaL
-         30cnNlUO492h0qNiFu8LdAIBCGwWG+xfnf8Fo347KOFsXDIkINj0UD3N5lZ3HXdmo4gY
-         FEqqsJNqlsgQmFs/cVfjo40X4GaqVJ4V6h8q4wrHJrCt4mpjwTh8foCcKXvVy2Eti9NI
-         h7mw==
+        d=linaro.org; s=google; t=1741333421; x=1741938221; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAiX7ZoQFnaQDtZJKG3FPxlAfD7LyYqjF8yJgV4SPk0=;
+        b=g0JScyGF9mMil1ppIe/JeBw8imJ/Ed0YLcAaY4pRPPKUMkBsKRLiPldb9cNhlGHqu6
+         oiwlHR07riEFSnxIcQS6Gw+NMthFczQCob1cbDKkYPx60wL0YeSa8kyx0/Yr/U11LnW+
+         Ti4ZMTnSN3ahKW91ml4+XRtOIDdMK2CV9E5DvMhoQVeMbmSmy56N68DM4YN/tz9DfUEX
+         3IxWCL39drwPshP/D5tOV+MA0m63otp1ART6Itx7YHa2hkitJmDi7hftSnc+Sk1GvssM
+         lTz2YbLAd6r6cYV8aowoX4Zuzu4V34FTrX2zlCFhcvmspxWVnjdWozxqB0a3N3nvMJf4
+         O7rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741330870; x=1741935670;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1741333421; x=1741938221;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Nj3ICwfsh5ahAZoKIfoUbUTllZ0ZuMzKTnzon9oJUZs=;
-        b=UQuDAiYK2BpP7oC+IApYhSWB/VVu/ezcJtEugXXUZs69zHs+cTDsKTKrTmbAieCNyx
-         mlpuWBvEHxjx07cgn3J4ynPA3uOkrSub4biTCteMJKe+sVfqcaezOIkVZvMLAVukc4BF
-         Rrvp0yvI1enLgJMfFbuoYJ5S0gAhuJxuIUiATSTBzeE6aEsfOXMAT6lzyoR5hsOVlefd
-         kyNpsSWGCD5mkeGwdpBg8kbMGp/6JmkuR9M9ECA1DwLDB4sSWPF+snLM12U0Uy1E6B77
-         +JEkbCO+PLP0MhwxRQvcHjAkParVsA1OI7rxtMJyPTcBLk1YU/JRDHFPoV1OIBkZe77g
-         Bc6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXsEPmipo4ft3Y27w8DtoGNLfR5Fcwi5BFxWxngRvnD34RVebAFp7v6RWJAKFr/xlgZmCvUkrxVz2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNA/CdYOAz1wd2zkGk6vqOMwepa/dNfWCrAsxEQpFy6GeoaAhG
-	svb92vAca01DFjhYYnPu/5BIGVP2A7yRZNGrmdp+sQjN5jzLHkxWjQSkgEQFFHs=
-X-Gm-Gg: ASbGnctXOJTOYuIcEFvgQ3Q57OuZWrtYVs8XisH30LC6OYKNNeZepe6qyQAASzRlFMW
-	nZ4v2B7AuAw4hCYahd848c78BzCJMWtHbzOwl2DfaurwJi19aPkrRjRKi7gVVTFkXPJzKrWSJ/w
-	3tn6Qk9PfSLY5/jEy5TssrIDWUiDzCA1rbxFIaAO4xbGgUdEKlnj59WtbnFKgf3fHeYjxTWTu5T
-	toiOWUJIwUOfBy8mK4RGZ0KjGRJV8xhEUXS5bbzo/dgwXvwUxJkob2FXIiatU0OSXkgJXyEaZyQ
-	zR3fjoaeRExmWT1L+UAkEvQlP6zAtItJCyOP4Y7kt3D95Q6gZqSUrsqc6v52U3HW
-X-Google-Smtp-Source: AGHT+IF+M/xZPpIeRG9RDSy5qax/tGXYxnvtE8mW0s2b/f4NLMlUiRZ4R5LHomszFoqRKC1ASyqiOA==
-X-Received: by 2002:a17:907:9691:b0:abf:5d56:7a50 with SMTP id a640c23a62f3a-ac252b9d9d3mr86747866b.10.1741330865519;
-        Thu, 06 Mar 2025 23:01:05 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.206.225])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239439a7csm226025266b.6.2025.03.06.23.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 23:01:04 -0800 (PST)
-Message-ID: <c5ac8c5f-1654-41ad-9a0c-d4af5f1c0859@linaro.org>
-Date: Fri, 7 Mar 2025 08:01:03 +0100
+        bh=FAiX7ZoQFnaQDtZJKG3FPxlAfD7LyYqjF8yJgV4SPk0=;
+        b=OHxvJTEEH5TiwD9niOH0NwpcHZedbJ9YEy4JNh+zkfgj8xgBnyQKYkNt4e+ei6SJze
+         EnwwoTDWAzSFyqx2Y6iNme+3slhpC6PaTRry/qslSijp+QA3v670VSBD+nnel1V71yw/
+         ZO5XybSord8LXDwT5IKkI23Qbub9CGm6k+0JaOLANa2UcjDn7iAkAYkgi1bEpvii7E2L
+         2hx0qKCoO54x0yhajLJYEjC8/T/6LLx/K2TTxTna/A4D/yvUEZ3OgVrfHb/PZcVdajTF
+         VctFNesbP8W78TBwJb2edw44Jvi1tzSGhRV1tH9a6To8AWbrmMjKawfbw2QhDVYJW1/o
+         BCDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVDzVDvrQD9lKT/VvjM0WRUIb9wsmeag9FReKJhFmIGG7afWr7NxS084ISox0CRMaiAbb+21stmXh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIeiOJp9YWfHz9U5+M94F3sR5e+lXH/XV3sCRTIGdUAN4DgBCE
+	s3LrXX49C/Su47+uGAL5l6SObVwt4ZBDUkBE1GJY4CiGuQUwHSOFF2cvja+vjYA=
+X-Gm-Gg: ASbGncsVv0fIdrIzc7fJu35zlG37suScPEmbqhwfLpqRkaUukmFI5jRTGA4oflwmIWA
+	XMJc9qj6R5W5sI3/sFzcMMjkHysfE9jIoS2lvV9RDXtzd7cRie7SZTe12gpezhL7IjjnYY1hC/N
+	a+kkpdCbvdIuZ7BZsvv6xMUeHJYZX6Q0hQSU+3c/vzxqfP8lXp0Acy8OeuUQXg9Bc/OT7ojqbGg
+	5tNCn+rutWLXeNDlUFkn0iV0jV0WpADnGfkfxu6TZAgxiJ/cJqTkfnf+5gdyBzabuwRo2tSTKkW
+	Bt0xE6X8gcMakI95v6SjFuCuGjNoCb2Y5NbFfZL+tOQ2u+g+aA==
+X-Google-Smtp-Source: AGHT+IFk6A8C/ZntqwxTrlUz2PFzjZZpFVU9KCl3S1emNKm9UtBgGjkFq3dnBk02LPS/zX7/WThaAQ==
+X-Received: by 2002:a05:6000:381:b0:391:4ca:490 with SMTP id ffacd0b85a97d-39132d76e70mr1285143f8f.29.1741333420618;
+        Thu, 06 Mar 2025 23:43:40 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43bd4352fa3sm72716925e9.30.2025.03.06.23.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 23:43:40 -0800 (PST)
+Date: Fri, 7 Mar 2025 10:43:36 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, raoxu <raoxu@uniontech.com>,
+	mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, wangyuli@uniontech.com,
+	zhanjun@uniontech.com, Xu Rao <raoxu@uniontech.com>
+Subject: Re: [PATCH] From: Xu Rao <raoxu@uniontech.com> Subject: [PATCH] usb:
+ xhci: Add debugfs support for xHCI port bandwidth
+Message-ID: <8318dbc1-1c15-4a11-abba-23f917e8b176@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Synchronize minItems for
- interrupts and -names
-To: Konrad Dybcio <konradybcio@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20250306-topic-dt_bindings_fixes_usb-v1-1-e1e6a5bde871@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20250306-topic-dt_bindings_fixes_usb-v1-1-e1e6a5bde871@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303095837.16332-1-raoxu@uniontech.com>
 
-On 06/03/2025 19:10, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> 
-> It makes sense that ARRAY_SIZE(prop) should == ARRAY_SIZE(prop-names),
-> so allow that to happen with interrupts.
-> 
-> Fixes bogus warnings such as:
-> usb@c2f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
-> 
-> Fixes: 7db25e95589e ("dt-bindings: usb: qcom,dwc3: Fix SDM660 clock description")
+Hi raoxu,
 
+kernel test robot noticed the following build warnings:
 
-I don't see this commit causing it. It touched only clocks.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Best regards,
-Krzysztof
+url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/From-Xu-Rao-raoxu-uniontech-com-Subject-PATCH-usb-xhci-Add-debugfs-support-for-xHCI-port-bandwidth/20250303-180107
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250303095837.16332-1-raoxu%40uniontech.com
+patch subject: [PATCH] From: Xu Rao <raoxu@uniontech.com> Subject: [PATCH] usb: xhci: Add debugfs support for xHCI port bandwidth
+config: riscv-randconfig-r072-20250306 (https://download.01.org/0day-ci/archive/20250307/202503071516.tj5UBRqT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202503071516.tj5UBRqT-lkp@intel.com/
+
+New smatch warnings:
+drivers/usb/host/xhci.c:3120 xhci_get_port_bandwidth() error: uninitialized symbol 'flags'.
+
+Old smatch warnings:
+arch/riscv/include/asm/atomic.h:218 arch_atomic_fetch_add_unless() warn: inconsistent indenting
+
+vim +/flags +3120 drivers/usb/host/xhci.c
+
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3094  int xhci_get_port_bandwidth(struct xhci_hcd *xhci, u8 *bw_table)
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3095  {
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3096  	unsigned int		num_ports;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3097  	unsigned int		i;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3098  	struct xhci_command	*cmd;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3099  	dma_addr_t		dma_handle;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3100  	void			*dma_buf;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3101  	int			ret;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3102  	unsigned long		flags;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3103  	struct device		*dev  = xhci_to_hcd(xhci)->self.sysdev;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3104  
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3105  	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3106  
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3107  	cmd = xhci_alloc_command(xhci, true, GFP_KERNEL);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3108  	if (!cmd)
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3109  		return -ENOMEM;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3110  
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3111  	dma_buf = dma_alloc_coherent(dev, xhci->page_size, &dma_handle,
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3112  					GFP_KERNEL);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3113  	if (!dma_buf) {
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3114  		xhci_free_command(xhci, cmd);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3115  		return -ENOMEM;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3116  	}
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3117  
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3118  	/* get xhci hub usb3 port bandwidth */
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3119  	/* refer to xhci rev1_2 protocol 4.6.15*/
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03 @3120  	spin_unlock_irqrestore(&xhci->lock, flags);
+
+This was supposed to be spin_lock_save().
+
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3121  	ret = xhci_queue_get_rh_port_bw(xhci, cmd, dma_handle, USB_SPEED_SUPER,
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3122  					0, false);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3123  	if (ret < 0) {
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3124  		spin_unlock_irqrestore(&xhci->lock, flags);
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3125  		goto out;
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3126  	}
+01a36d597b1902 drivers/usb/host/xhci.c     Xu Rao      2025-03-03  3127  	xhci_ring_cmd_db(xhci);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
