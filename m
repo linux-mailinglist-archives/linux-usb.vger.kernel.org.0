@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-21506-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B19EA56D63
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 17:18:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C109A56D70
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 17:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2555C1646ED
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 16:18:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6615416C809
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 16:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F220723A986;
-	Fri,  7 Mar 2025 16:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE1423A9AE;
+	Fri,  7 Mar 2025 16:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="INwqtojw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQx5qNL2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB0623817D
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 16:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7731238D22
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 16:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741364278; cv=none; b=IzzPA0EM3wOJN5gw4SiGFcM9cdK7qQRny/Ki18EOb4RjdBKrZn0KHCLxzsAUPB1sAwCJTOLgkG+CXHlevXdMIqsBbe3VM64WkBOmIbfix+xxlRHStuf/eEYc5b7LfloEo/DXgXGFG2/WdyS73D4Qj6sY1hKA4CeMNdbAGVtedg4=
+	t=1741364386; cv=none; b=AE/ijLDQyO1cyASbfFC8ntlppvpj71B6IWzdnL6/Tg5VMF3/uqjZd5D2gKUjCUIV5f8H3qtGUNnYngOBCMBK+rqeZNk0Zqo+fGni3+l5AEva19BrGsObgvgZjjsDGnyH3ye2eTrpHaLa2HX7Jshxw56cYKoNb1hYPyMTvUQIbxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741364278; c=relaxed/simple;
-	bh=UmaCbsVIr/PLohZeqxyvZ5fYO+gTTDmhLkxS/dfaRqM=;
+	s=arc-20240116; t=1741364386; c=relaxed/simple;
+	bh=qjCTbatshrL1vjxmrqhFyhVe7mf061U+CX4ZH3sX95U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=irAoTjgOo2L43TSHYXJI3iEX2qlYBTDw8zR8TvY0M03u0waOhl6AraSfBFYFxEJ6JQcRWG22i4u2+PzpOwFyY4AvKo24pcXTqvQi3HXCKY+T7BqwRAzE1LrFt+gXyjAkV6Gg5LX8WCcCNNmeMcY+pkNtH8uvV9brdCbGUSFeAJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=INwqtojw; arc=none smtp.client-ip=198.175.65.12
+	 In-Reply-To:Content-Type; b=h8yjT7NrL32XxOtHjj8VKzA4xCJKdOwW1Vf19NbOA+W5qahCk13HD04m5sRpyp2HBwRqmq5ZbNkUTkwS01Viw/xa/CSBt9gETNHXdn3iJ7vtS0tKor3NAWa16R+8tNdWj5o1idKI7PSB8CnurWq6qgd91gXNhEOKtFnwsZq+KAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQx5qNL2; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741364277; x=1772900277;
+  t=1741364385; x=1772900385;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=UmaCbsVIr/PLohZeqxyvZ5fYO+gTTDmhLkxS/dfaRqM=;
-  b=INwqtojwSIrLmyo0S+VMFdMOMAEQEee29Bmd0zQUl0QC30uNZoySkx0c
-   WV8o/EbcLGvmmpSjidMTBJwJD1g1D8u/ijVxX4xdhObz7Z6XeOadCmWsJ
-   kv1pk2C3zA2jLjGlxyheQYOU3kzQ0Yu9CNE/BectvSCAlanfURJ6nTr1a
-   f+3mxfyQTA7EG1arv58iaWdlSPeeQsAvq593ySaUyVC7E587iThhYEOra
-   DTVYsSqQYuFoq0jaqVqeSa9iCkqnzl1w69IB337pAt//5BXfpes/0XXZN
-   bJcSktzKFAK39Uq+RLRjQb9TIwxj5pUj67Da+X3C+/6m58RrpNxMKbTCi
-   g==;
-X-CSE-ConnectionGUID: QO/lCxG7SluLMgZcJZ4+hA==
-X-CSE-MsgGUID: dstUTrIFTm6dZK/rrLDjCA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53807356"
+  bh=qjCTbatshrL1vjxmrqhFyhVe7mf061U+CX4ZH3sX95U=;
+  b=FQx5qNL2Gb+L5ZUx0rL/JZj3UWT15WFF5Q8QR3LmRIEM8/5NE0WV20g0
+   Vn4AndV1RWJm8wJFJ7nfaFQ6Mh3a7M1mFe8H6onTTyAgFpxmSCyohhdz3
+   OG/W4dWnUJhb2P6B2cBaqnlTO0M5fR22iBV47hzZu959u/CRL9l2aRFkf
+   /VdGhXww+UiHojA3mPtHqGYACYAGMibIL0GZTc7+90F2eECb/udGwlYM1
+   IqTKZdHHRM4gfkFZWfuwerKE6iaQapQLSY/G0GPlLD+bBTLXasOE9JTs/
+   n4WIE5nNb2CcF2YFAASaxOEPlexCWpUuqC2nD4KgcssOFy/zSs9lJldQH
+   Q==;
+X-CSE-ConnectionGUID: 25lzkcj8RPm/xN/q410Z/A==
+X-CSE-MsgGUID: aHtG37rmStSLaCPfBNlyEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53807488"
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="53807356"
+   d="scan'208";a="53807488"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 08:17:56 -0800
-X-CSE-ConnectionGUID: AC3TtO7DR6K5HznnSLTh+g==
-X-CSE-MsgGUID: bltCVfFoRKmI/NDQp0jMjQ==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 08:19:44 -0800
+X-CSE-ConnectionGUID: COvpiPaORt6TaDb8w6A4jA==
+X-CSE-MsgGUID: D5/v7ySNSEiQhwiJsZjlxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="119114974"
+   d="scan'208";a="119115428"
 Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa009.jf.intel.com with ESMTP; 07 Mar 2025 08:17:55 -0800
-Message-ID: <47aa1978-dd66-420d-82d3-0b93404ce8f3@linux.intel.com>
-Date: Fri, 7 Mar 2025 18:18:58 +0200
+  by orviesa009.jf.intel.com with ESMTP; 07 Mar 2025 08:19:40 -0800
+Message-ID: <d12c09e6-79f6-4490-ae24-a5c8f30c94a8@linux.intel.com>
+Date: Fri, 7 Mar 2025 18:20:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,65 +67,62 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/15] xhci: Prevent early endpoint restart when handling
- STALL errors.
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20250307075429.5f9d1d4e@foxbook>
- <1c369ecc-a935-4c3e-ba8a-80e7d8894a92@linux.intel.com>
- <20250307164426.08720aca@foxbook>
+Subject: Re: [PROBLEM] usb: xhci_bus_resume cause irq lost issue
+To: liudingyuan <liudingyuan@huawei.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "greg@kroah.com" <greg@kroah.com>,
+ "patchwork-bot@kernel.org" <patchwork-bot@kernel.org>,
+ "mricon@kernel.org" <mricon@kernel.org>
+Cc: "Fangjian (Jay)" <f.fangjian@huawei.com>,
+ Kangfenglong <kangfenglong@huawei.com>, yangxingui <yangxingui@huawei.com>,
+ "fengsheng (A)" <fengsheng5@huawei.com>,
+ lingmingqiang <lingmingqiang@huawei.com>,
+ liulongfang <liulongfang@huawei.com>,
+ zhonghaoquan <zhonghaoquan@hisilicon.com>,
+ "yanzhili (A)" <yanzhili7@huawei.com>, "huyihua (A)" <huyihua4@huawei.com>,
+ "Zengtao (B)" <prime.zeng@hisilicon.com>,
+ "shenjian (K)" <shenjian15@huawei.com>, liuyonglong
+ <liuyonglong@huawei.com>, Jonathan Cameron <jonathan.cameron@huawei.com>
+References: <520cb5bb27b640e588f898ac60a52c0a@huawei.com>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250307164426.08720aca@foxbook>
+In-Reply-To: <520cb5bb27b640e588f898ac60a52c0a@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7.3.2025 17.44, Michał Pecio wrote:
-> On Fri, 7 Mar 2025 16:23:17 +0200, Mathias Nyman wrote:
->>> Any flag added to this list needs to be added to xhci_urb_dequeue()
->>> too so it knowns that the endpoint is held in Stopped state and
->>> URBs can be unlinked without trying to stop it again.
->>
->> In this case it's intentional.
->>
->> If we prevent xhci_urb_dequeue() from queuing a stop endpoint command
->> due to a flag, then we must make sure the cancelled URB is given back
->> in the same place we clear the flag, like we do in the command
->> completion handlers that clear EP_HALTED and SET_DEQ_PENDING.
+On 6.3.2025 16.29, liudingyuan wrote:
 > 
-> I'm not sure why this would be, what's the problem with the approach
-> used for EP_CLEARING_TT currently? And if there is a problem, doesn't
-> EP_CLEARING_TT also have this problem?
+> I compiled a new kernel based on the fix code you provided below and conducted some preliminary tests.> In the repeated unregister/register tests of the xHCI controller that previously caused issues,  both the driver and USB-related functionalities are now working normally.
+> (Moreover, this fix code, in theory, should completely resolve the issues we encountered in our USB3-USB2 device-only scenario.)
 > 
-> In this case, xhci_urb_dequeue() simply takes xhci->lock and calls:
+> Based on the logic mentioned in analysis, we currently may not have implemented a better solution to avoid disabling interrupts during the USB2 resume process. I would like to ask if we need to
+> be concerned about the issue of interrupt loss caused by disabling interrupts in other scenarios where resume and enumeration processes or transfer operations might conflict?
 > 
-> void xhci_process_cancelled_tds(struct xhci_virt_ep *ep)
-> {
->          xhci_invalidate_cancelled_tds(ep);
->          xhci_giveback_invalidated_tds(ep);
-> }
+> For example, when a user inserts a device during the USB2/USB3 port resume, or when the USB3 controller is only connected to a USB3 devices, and the USB2 port enters this resume flow due to auto-suspend?
+>   (However, it seems that the probability of these two scenarios is very low, as we have not yet been able to reproduce errors under these conditions.)
 > 
-> Unlinked URBs are either given back instantly, or Set TR Dequeue is
-> queued (and flagged on ep->ep_state) and the rest of the process goes
-> same way as usual when called from xhci_handle_cmd_stop_ep().
+> This fix indeed helps us avoid the current issue, so I would like to ask if it is possible to push this modification as a patch to the mainline code?
+> If possible, we also plan to conduct a comprehensive test of USB functionality based on this modification to further validate it.
 > 
-> The EP will be restarted when the last flag is cleared, which may be
-> either SET_DEQ_PENDING or EP_CLEARING_TT/EP_STALLED.
 > 
-> It's practically an optimization which eliminates the dummy Stop EP
-> command from the process. I thought EP_STALLED could use it.
+> Considering that the fix cannot completely avoid all possible scenarios where interrupts might be lost due to the hardware IE (Interrupt Enable) being turned off.
+> I would like to ask whether the hardware design is reasonable in the following case:
+> when a hardware edge-triggered interrupt is lost due to IE being disabled, and the subsequent interrupts cannot be triggered because the software didn't
+> clear the EHB (Event Handler Busy) bit.
 > 
 
-This should work, and avoid that unnecessary stop endpoint command.
+I think we can avoid this situation by disabling the primary interrupter instead of all interrupts.
+Meaning we would clear the 'Interrupt enable (IE)' bit:1  in  Interrupter Management Register (IMAN)
+instead of the 'Interrupter Enable' (INTE) bit:2 in USBCMD register.
 
-Just need to make sure we check for EP_STALLED flag after the other
-(EP_STOP_CMD_PENDING | EP_HALTED | SET_DEQ_PENDING) flags in
-xhci_urb_dequeue(), just like EP_CLEARING_TT case.
+This way EHB and IP shouldn't be set at all, and thus not prevent future interrupts.
 
-Also need to protect clearing the EP_STALLED flag with the lock
+In practice this just means calling xhci_disable_interrupter() xhci_enable_interrupter()
+instead of clearing and setting CMD_EIE bit.
 
-I'll either send an update patch next week, or during rc cycle if
-that's too late.
+I'll write a patch for this next week
+Grateful if you could run the more comprehensive test before I queue it for
+upstream (mainline)
 
 Thanks
 Mathias
