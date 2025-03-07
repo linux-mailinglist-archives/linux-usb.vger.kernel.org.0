@@ -1,220 +1,162 @@
-Return-Path: <linux-usb+bounces-21489-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21490-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36215A5613B
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:54:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A747A56159
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 08:01:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 296BC3A6480
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 06:54:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E5833B3A99
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 07:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECF61A01B9;
-	Fri,  7 Mar 2025 06:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DA81A3155;
+	Fri,  7 Mar 2025 07:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4Vj11Xe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TFDqGcHY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDFF1632D9
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 06:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3878F1A3148
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 07:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741330478; cv=none; b=r8ZR7ZU7cXRa9RJCmQqESfGApp4xmUbwin019ok6d+3IqMldI7u8UpXV83iKL28uoUnGIFY9uoJRLgTsHqIJpvhhPxSTQmSuZC+MY2zwY9Gjf+qz2wYLD/qoY0wdC1Y38ZU+un7/3K74ibLWA1gSQexn6wr8DWJyhqw9CSmcWco=
+	t=1741330874; cv=none; b=FCQK8Tk4EhgAqrGzlgHHpwPRaOQr6G9IJ0mhzJX0QPxTEUMDHIzdeKaC5dOk+e9l/dGIQv8hrgD1VurOtGgCGcyqXUxxutVAxcIH7srf2fQS1wOeW1bHl2AZDY2WhcEVXp9cNTmIRVyhT5x4XH/mg+5mVeOOX07+hRcrZr3GnlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741330478; c=relaxed/simple;
-	bh=AKghzo/remdqLzBtmlDM0OwR+8Oom6OzauCQ2+74DW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=iUaDqDYlotiOMDDixRMkXrCWmDebZ3HHpTuajWupsyE8CewpORJ+YBdRcFmOmW/pQQtMyEQg3mnfN54mP9y7gQgCiIzUu2MU3xcHEUmu5jZSJUahRT9N5cF7clh9By44/FXUfWq92sqi76Dm0wjikd2yEl705z6+LLzz1g3yF1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4Vj11Xe; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2400d1c01so228761466b.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 22:54:36 -0800 (PST)
+	s=arc-20240116; t=1741330874; c=relaxed/simple;
+	bh=X/1WIt4m62AnsW9clW0kmKnhiadtF9DhwD0siHnB6AU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fWwQr7dUDA5SxjidqxauvbbgDqtbxO/PQkubJtjNQcbJhoc4XZQU+F1CaOUzMib42oob4sRutBw1bPPclj7PR7xPp4+INfkmEeeyxOAJuYDWkkWluKMvbEwsjwdPFnSsb7YxX85+zTOOQmJg9K6M2MiI8TrCqIu2zWrCYGK/MII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TFDqGcHY; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac25d12935fso3367766b.1
+        for <linux-usb@vger.kernel.org>; Thu, 06 Mar 2025 23:01:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741330475; x=1741935275; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6+rTYATyv2XGgl7JWmxpG4EjK1JvnmpFHAe58ZWswM=;
-        b=M4Vj11XedzWnNkFDZc8MYH1yH9Dbg3NHEgvfioYZ5krSx4TT2gUmjqJ0ytZCKp/9Br
-         DEc4GCeoZXtEJTUl8X/lqFPhZz11XKP5hXnpbOHy3/hKTyS5C8ks5ar3NblvAieuNZyN
-         bPIt8uQg4qq2Fj98f1rLv+TFtty3ohhb3appRoSx2yjemfS+/qFqSKh0Hc883eYpiNLK
-         hc/nMxVyYeIgq0bRa6NzgSRaOzPSjwRuJCOisL4+HsTv4gS6MKa3XuZtIS45CuDh+zd7
-         vR86fl32jVssFkUkh31nlmjU8mIZvmJ+UmMzQTYbl0YZ8JRhkeCLcrGi86zoCril2qB6
-         OtnQ==
+        d=linaro.org; s=google; t=1741330870; x=1741935670; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nj3ICwfsh5ahAZoKIfoUbUTllZ0ZuMzKTnzon9oJUZs=;
+        b=TFDqGcHY8B3I2H/DRp2MO8fua09d6QGv8WIJg7xMKYl89QsfhcP9eNnsyzCrmF695C
+         L7CTgs/sYMikN4z0b4xsh+qj9LkDLygvjpRc/ngabu1x4Dyc1fqlN8VqeOnU/+vOiPIM
+         rlRji5OIr7tU1X0Kw6AWhZQF2LfAvUnMCpOMUamVxFh5/yPWSbPX2zqdTHSXDlqeeiaL
+         30cnNlUO492h0qNiFu8LdAIBCGwWG+xfnf8Fo347KOFsXDIkINj0UD3N5lZ3HXdmo4gY
+         FEqqsJNqlsgQmFs/cVfjo40X4GaqVJ4V6h8q4wrHJrCt4mpjwTh8foCcKXvVy2Eti9NI
+         h7mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741330475; x=1741935275;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W6+rTYATyv2XGgl7JWmxpG4EjK1JvnmpFHAe58ZWswM=;
-        b=wrxqKXDJmd9/PtxIQ98NerFUd4Vua5kqFeg7DB4BXNwhj7BZKUNBcPYttVu/qRAlfB
-         NrisrUgZIAXsx3QHItYdy/6WONfzaX4iWfh6V36GDg+3TcdLv4K4gVpVlyPHzjrxvEiZ
-         8BjvGmcDFXKM3qDz9IymJhtm6rQBku/lbT1qszdEuUY+iu74Sq/+Z0b4Bp+R/xMHQhs8
-         48g8NRIUg1CjtI2WygCW8D0ozF21MuC41W8j4aolmEMrHNVsCJaVjo1bbhxO+eoqqui2
-         eHY5EbwJqk4Hh4tDKRcRCSLimWVPi2xNT3f4j2tnRINAqqwzRkDtm/HuzK9rm0Kb2ClL
-         bIsg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4Lh6ykJuYvRKGuGwNgtr1Yz+l0fSoO9WYoGq/4vfruEBFux6cjc4k3YK+08yvKfVsFKcF/OGPJhw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm7QkS5siOpr+oTExGzlgwjsIIaVOX0UeyuAyZZkSGjkNv0F0T
-	MksLxY+fSoVW9iq3dntdhnk7aFQrV/kvepoiXShLKmNAre5hwARG
-X-Gm-Gg: ASbGncuG4vkCx/OQWKjJqQLbx3rxUV98o0DttUjdrT3WKKuSph0oTzU1ca+DN6CwhOx
-	A9k+lu398rXwxBbZgJJGYvA/KyfgdfXJV0lKC8c0gUnIvsSdzGblW1vsL4hQlLH2yfSGCXYaH5n
-	q7bG8DuvH9eYEnaMI/nb3iQlIxupz3qgkhbUO4zA64p9ljQOz4MwAxtx2CXFtuhNroXz0y0w48q
-	vOm+USL240UvUSbTPC/7pn4XCOv4pKTH1W/i3jlLIep3J8HGycFzJo7H65YM4lNz9wpp0NzSS8S
-	5Wz7QnBTsM4eStAjoGX/LExyX8Tyzo5OEOEM5q15ParQiunKuZ/RvqrKJutuyQ==
-X-Google-Smtp-Source: AGHT+IEvOusod9PWkPOMmDp4oZ/a0r2KsD+57zluntHiTvEhIUuwuhYlUiO5SQLQ4ki5lRYakRzlTA==
-X-Received: by 2002:a17:907:7b03:b0:ac2:5b78:9694 with SMTP id a640c23a62f3a-ac25b78bf03mr108813466b.9.1741330474183;
-        Thu, 06 Mar 2025 22:54:34 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2394feddbsm220884366b.76.2025.03.06.22.54.33
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 06 Mar 2025 22:54:33 -0800 (PST)
-Date: Fri, 7 Mar 2025 07:54:29 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 12/15] xhci: Prevent early endpoint restart when
- handling STALL errors.
-Message-ID: <20250307075429.5f9d1d4e@foxbook>
-In-Reply-To: <20250306144954.3507700-13-mathias.nyman@linux.intel.com>
+        d=1e100.net; s=20230601; t=1741330870; x=1741935670;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nj3ICwfsh5ahAZoKIfoUbUTllZ0ZuMzKTnzon9oJUZs=;
+        b=UQuDAiYK2BpP7oC+IApYhSWB/VVu/ezcJtEugXXUZs69zHs+cTDsKTKrTmbAieCNyx
+         mlpuWBvEHxjx07cgn3J4ynPA3uOkrSub4biTCteMJKe+sVfqcaezOIkVZvMLAVukc4BF
+         Rrvp0yvI1enLgJMfFbuoYJ5S0gAhuJxuIUiATSTBzeE6aEsfOXMAT6lzyoR5hsOVlefd
+         kyNpsSWGCD5mkeGwdpBg8kbMGp/6JmkuR9M9ECA1DwLDB4sSWPF+snLM12U0Uy1E6B77
+         +JEkbCO+PLP0MhwxRQvcHjAkParVsA1OI7rxtMJyPTcBLk1YU/JRDHFPoV1OIBkZe77g
+         Bc6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXsEPmipo4ft3Y27w8DtoGNLfR5Fcwi5BFxWxngRvnD34RVebAFp7v6RWJAKFr/xlgZmCvUkrxVz2I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNA/CdYOAz1wd2zkGk6vqOMwepa/dNfWCrAsxEQpFy6GeoaAhG
+	svb92vAca01DFjhYYnPu/5BIGVP2A7yRZNGrmdp+sQjN5jzLHkxWjQSkgEQFFHs=
+X-Gm-Gg: ASbGnctXOJTOYuIcEFvgQ3Q57OuZWrtYVs8XisH30LC6OYKNNeZepe6qyQAASzRlFMW
+	nZ4v2B7AuAw4hCYahd848c78BzCJMWtHbzOwl2DfaurwJi19aPkrRjRKi7gVVTFkXPJzKrWSJ/w
+	3tn6Qk9PfSLY5/jEy5TssrIDWUiDzCA1rbxFIaAO4xbGgUdEKlnj59WtbnFKgf3fHeYjxTWTu5T
+	toiOWUJIwUOfBy8mK4RGZ0KjGRJV8xhEUXS5bbzo/dgwXvwUxJkob2FXIiatU0OSXkgJXyEaZyQ
+	zR3fjoaeRExmWT1L+UAkEvQlP6zAtItJCyOP4Y7kt3D95Q6gZqSUrsqc6v52U3HW
+X-Google-Smtp-Source: AGHT+IF+M/xZPpIeRG9RDSy5qax/tGXYxnvtE8mW0s2b/f4NLMlUiRZ4R5LHomszFoqRKC1ASyqiOA==
+X-Received: by 2002:a17:907:9691:b0:abf:5d56:7a50 with SMTP id a640c23a62f3a-ac252b9d9d3mr86747866b.10.1741330865519;
+        Thu, 06 Mar 2025 23:01:05 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.206.225])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239439a7csm226025266b.6.2025.03.06.23.01.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Mar 2025 23:01:04 -0800 (PST)
+Message-ID: <c5ac8c5f-1654-41ad-9a0c-d4af5f1c0859@linaro.org>
+Date: Fri, 7 Mar 2025 08:01:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Synchronize minItems for
+ interrupts and -names
+To: Konrad Dybcio <konradybcio@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+References: <20250306-topic-dt_bindings_fixes_usb-v1-1-e1e6a5bde871@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250306-topic-dt_bindings_fixes_usb-v1-1-e1e6a5bde871@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> Ensure that an endpoint halted due to device STALL is not
-> restarted before a Clear_Feature(ENDPOINT_HALT) request is sent to
-> the device.
+On 06/03/2025 19:10, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> The host side of the endpoint may otherwise be started early by the
-> 'Set TR Deq' command completion handler which is called if dequeue
-> is moved past a cancelled or halted TD.
+> It makes sense that ARRAY_SIZE(prop) should == ARRAY_SIZE(prop-names),
+> so allow that to happen with interrupts.
 > 
-> Prevent this with a new flag set for bulk and interrupt endpoints
-> when a Stall Error is received. Clear it in hcd->endpoint_reset()
-> which is called after Clear_Feature(ENDPOINT_HALT) is sent.
+> Fixes bogus warnings such as:
+> usb@c2f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
 > 
-> Also add a debug message if a class driver queues a new URB after
-> the STALL. Note that class driver might not be aware of the STALL
-> yet when it submits the URB as URBs are given back in BH.
-> 
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-
-Sorry for coming this late, but I haven't looked closely at some
-of those xhci/for-next patches before.
-
-This one is unfortunately incomplete, as follows:
-
-> drivers/usb/host/xhci-ring.c | 7 +++++--
-> drivers/usb/host/xhci.c      | 6 ++++++
-> drivers/usb/host/xhci.h      | 3 ++-
-> 3 files changed, 13 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->index c2e15a27338b..7643ab9ec3b4 100644
->--- a/drivers/usb/host/xhci-ring.c
->+++ b/drivers/usb/host/xhci-ring.c
->@@ -556,8 +556,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
-> 	 * pointer command pending because the device can choose to start any
-> 	 * stream once the endpoint is on the HW schedule.
-> 	 */
->-	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
->-	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
->+	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
->+			EP_CLEARING_TT | EP_STALLED))
-> 		return;
-
-Any flag added to this list needs to be added to xhci_urb_dequeue() too
-so it knowns that the endpoint is held in Stopped state and URBs can be
-unlinked without trying to stop it again.
-
-There really should be a helper function used both here and there, but
-those Stop EP patches were meant for stable and I strived to make them
-small and noninvasive. Then I forgot about this cleanup.
-
-NB: I also forgot about a bunch of low-impact halted EP handling bugs,
-I will try to rebase and send them out today or over the weekend.
-
->  	trace_xhci_ring_ep_doorbell(slot_id, DB_VALUE(ep_index, stream_id));
-> @@ -2555,6 +2555,9 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
->  
->  		xhci_handle_halted_endpoint(xhci, ep, td, EP_SOFT_RESET);
->  		return;
-> +	case COMP_STALL_ERROR:
-> +		ep->ep_state |= EP_STALLED;
-> +		break;
->  	default:
->  		/* do nothing */
->  		break;
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 3f2cd546a7a2..0c22b78358b9 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1604,6 +1604,11 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->  		goto free_priv;
->  	}
->  
-> +	/* Class driver might not be aware ep halted due to async URB giveback */
-> +	if (*ep_state & EP_STALLED)
-> +		dev_dbg(&urb->dev->dev, "URB %p queued before clearing halt\n",
-> +			urb);
-> +
->  	switch (usb_endpoint_type(&urb->ep->desc)) {
->  
->  	case USB_ENDPOINT_XFER_CONTROL:
-> @@ -3202,6 +3207,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
->  		return;
->  
->  	ep = &vdev->eps[ep_index];
-> +	ep->ep_state &= ~EP_STALLED;
-
-... and clearing any of those flags has always been followed by calling
-xhci_ring_ep_doorbell() again, to ensure that the endpoint is restarted
-if it has URBs on it but restart was held off due to the flag.
-
-xhci_urb_dequeue() relies on this too, because it looked lke sensible
-design: if you have reasons not to run the EP, you set a flag. Reasons
-are gone, you clear the flag and it's running again.
-
-> 	/* Bail out if toggle is already being cleared by a endpoint reset */
-> 	spin_lock_irqsave(&xhci->lock, flags);
->diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->index cd96e0a8c593..4ee14f651d36 100644
->--- a/drivers/usb/host/xhci.h
->+++ b/drivers/usb/host/xhci.h
->@@ -664,7 +664,7 @@ struct xhci_virt_ep {
-> 	unsigned int			err_count;
-> 	unsigned int			ep_state;
-> #define SET_DEQ_PENDING		(1 << 0)
->-#define EP_HALTED		(1 << 1)	/* For stall handling */
->+#define EP_HALTED		(1 << 1)	/* Halted host ep handling */
-> #define EP_STOP_CMD_PENDING	(1 << 2)	/* For URB cancellation */
-> /* Transitioning the endpoint to using streams, don't enqueue URBs */
-> #define EP_GETTING_STREAMS	(1 << 3)
->@@ -675,6 +675,7 @@ struct xhci_virt_ep {
-> #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
-> /* usb_hub_clear_tt_buffer is in progress */
-> #define EP_CLEARING_TT		(1 << 8)
->+#define EP_STALLED		(1 << 9)	/* For stall handling */
-
-I guess usage rules of those flags should be documented somewhere here
-and helpers added such as:
-
-xhci_ep_cancel_pending()
-xhci_ep_held_stopped()
-
-to improve maintainability and prevent similar problems in the future.
+> Fixes: 7db25e95589e ("dt-bindings: usb: qcom,dwc3: Fix SDM660 clock description")
 
 
-I could sit and write something, I still have this stuff quite fresh
-in memory after spending a few weeks debugging those crazy HW races.
+I don't see this commit causing it. It touched only clocks.
 
-Regards,
-Michal
+Best regards,
+Krzysztof
 
