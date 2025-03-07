@@ -1,174 +1,212 @@
-Return-Path: <linux-usb+bounces-21501-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21502-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1846A56C65
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 16:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF3BCA56CFE
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 17:02:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCFD81663F1
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 15:44:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF26D16629C
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 16:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB9221D3FD;
-	Fri,  7 Mar 2025 15:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6403C221572;
+	Fri,  7 Mar 2025 16:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGxR/Kkh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PLCDB6kx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA65F2E822
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 15:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741362274; cv=none; b=fmFxCjhPkQk+gB1Aa3qRy1ZM7DfuMpDQaTBFgNTAHe4V9BWhGPRUGXYMxWF/DU5BXZ4DAxRGlHZkZ9+37T1v9ROuiH3nm1PmZdra0Dcnb7MY1PD1oZHpr4kDpxm62S52hGtknKaCS0U9KuzsOxrdf01n+1HaMyzNREM5pKUb6Os=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741362274; c=relaxed/simple;
-	bh=TJaBvt5MSyEyREOARe6Pl9AO8dF+86UizkoC+G1AIS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=stQkXmoB7BiSsNDc5DeRYBuXLiEOu88hseA1YogRpoe8ZDXMQQyIQuSOfZHY6SjU4hgOcw1NVvEQsr42LGk2ZCT7+1HtQgdQjWhAMGXDEffy9xN7w77v9TDHbsUHN4o7DWQuwq70rmTAb5pSnmSEvylKALxyDe+myCT/atwREyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NGxR/Kkh; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e5e22e6ed2so1764386a12.3
-        for <linux-usb@vger.kernel.org>; Fri, 07 Mar 2025 07:44:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741362271; x=1741967071; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DkTkMs7tt5Yj/GBmq8KIe6xzxPIthwO/Bica5AM7aXw=;
-        b=NGxR/Kkh5CPhq1SDYO7DdtlYhB40TPGKjJFVUzW5RwI+1M+iaC0gxvb3y5+B4e/bdW
-         KYIvTZxuebWVEWPEcDfZxyeB7Ubjmqhla6YodpeSZ9t7ka+yGMdfIvylir4ztg7A5IuG
-         m4/DHhgvaEaHzRAdgcFjKWFofaOf/P6LaqsMF99KJHEMmUIU48OFyVF2CWQJcpAlb2Xa
-         z3Dxtu01YxUInFg30R7d4eMxS6x81l8YGQhf4aicUwNDWX7cThjTzAleTKLn+3HmQS/5
-         42Bs40PWW2iAHyn31TN/5ReG+OlzM2hwAIH0zntW3rkjab1Mox/cPIuMD5WmMH7uru8r
-         dIOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741362271; x=1741967071;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DkTkMs7tt5Yj/GBmq8KIe6xzxPIthwO/Bica5AM7aXw=;
-        b=HE3qMzcUh2RjDkZUJu799faGKS3qcCi+H1uV8h8ICaU7erbCyDeRz45Ovgx/WD+zUR
-         lRu9SJgGvgSskn+wv1Zi9E/UWz0x8Nz3dz21Y36qv/s7GOPa+Ke0oUZCTdi+Asysrovm
-         u0jwBzSkXtx9nSOK8XX9LbzMDQj3JAjVt8FEYXUgu3CDyLmK+9vOAS77h9rDZINeUhkb
-         ItZm6kOy1sFvSJKVGScUReCcgsAp0M7wk8V4b3GAJirXcZlAZcJ+lSJyIdFP6135Iumg
-         zUYXOOrbxhEwTYgBgF7eO0ElauomB2Bi9tJr81ncvsswSqrKhwtzSjNMeRVZvJS3odfA
-         5s7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXSDOHxcTTsFJ3R2QPZm90+ilDTqCG2YJLsSCB8/WuIt9HSy2nJe4QFmsu9eCurqUTS62U3wmLujhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc8tUexDBw4dITtmSGFbcgFEeu/6vxY1P7cHEoVP1OrUSVDXxO
-	KuyJwspmAM5IzGWRvxiWKdNu112GdaUbp283XxXOLYUPpfF5Ft1PfMgPeA==
-X-Gm-Gg: ASbGncvqsXpaIvYYyBrDblWcg9GPQGs0Uten57f1zHoHV3LWnmuyklmC9h3TiFIJcRk
-	+J4P8GK8ouaVgXQ9IysuJ5yct32VoJi3o75PmOXAvfSK5HAbaP2R0l9g6fxPkBAlCfrG0EZgVmF
-	pNQcQf9BuRyPDepm0I9S+ao2+vT8tKxwal7SILitpKon05M2yftpk8WSskeErloJhS6Ho5CL7Wn
-	s+HGT3bDlvKlwxoWtxporHlKITy9JF/EHbqW/MIbSqISIBFYO/4IuUdpx4dHA7JmhDrBRKgWtSI
-	JFVsIPq+2il95uOwoC6PNGViZziDQ/N15lg9U6J/YB5qziB4ZoTjww9m6AGRJQ==
-X-Google-Smtp-Source: AGHT+IGcDi3rSIcB8/QaY+sBxZTLhmXHYgBWrgVqmnyO2x/H2Zd4joZMHIc/HGG/fTBxU7YkRbPU/w==
-X-Received: by 2002:a17:907:7e9c:b0:abf:4521:eb2a with SMTP id a640c23a62f3a-ac25301fff7mr484236466b.49.1741362270715;
-        Fri, 07 Mar 2025 07:44:30 -0800 (PST)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac24960553fsm204345366b.147.2025.03.07.07.44.29
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 07 Mar 2025 07:44:30 -0800 (PST)
-Date: Fri, 7 Mar 2025 16:44:26 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 12/15] xhci: Prevent early endpoint restart when
- handling STALL errors.
-Message-ID: <20250307164426.08720aca@foxbook>
-In-Reply-To: <1c369ecc-a935-4c3e-ba8a-80e7d8894a92@linux.intel.com>
-References: <20250307075429.5f9d1d4e@foxbook>
-	<1c369ecc-a935-4c3e-ba8a-80e7d8894a92@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C732206BC;
+	Fri,  7 Mar 2025 16:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741363280; cv=fail; b=BMUyPo8qOO7iLDGEmy3xer7KUpFqzPvsdlFTrwFD0SltyD+bTBR47mww2RZHbfvYmNMHXIMaf8jAfkM2T8UxkrKQfvc61lF+4uFxvVU1JH+YrU5FQFTrGZt65AY7EItA5Cg4BE2aqZxrNolyWwymkviOPAVef5vykF+QVOinpU0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741363280; c=relaxed/simple;
+	bh=ruayrNmtZKztt8WbrfimcRJyJbC8yZAV4qYt7j2hMaM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=mko02S4osTeA6cO7OAM2jZoO+S6cuBgD1mZrmo+g7xg/sNRrXE6cGpb0scMO5NzdFvVmj/86je9F0fFMc4zo0Y+2cQuN82by3aQrd8e1FeNHY+IDNgHPE9NE8q5MzbN6zb5h1YrbaFE3PG5opw+tqmeaMa1JDlxzL7TJD2lxtEA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PLCDB6kx; arc=fail smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741363279; x=1772899279;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ruayrNmtZKztt8WbrfimcRJyJbC8yZAV4qYt7j2hMaM=;
+  b=PLCDB6kxs44B8aUDitevOL8CM5J8E13QaFaDJ9ELvcJFuLBGMsUz4IDf
+   N3wf9402HpCE9SzXHmdacxr0naeVSyrOpH1pXPH8ht1qUptEdyqdmGW3+
+   cO5SSYugdUxvTnvRyySaWozofa18kmfLaZr1dxYRIf1J80gBHm3ZD6zjA
+   7r4Ht3z3M3EC54WhwszsEJIhhPa7Qukz/t+OlDSxe6DEOYwsmNA5jP9in
+   p20iLta53hjbw5YqvLLnVPA2zOqKxVQPt8DPHI0iXFnvUmVvNm5NPDUfi
+   eZ6kddbkU2sjIwDcSagbV5miiSp6npo1ClUqDHxO3Erhc5ay7vUdGkdnt
+   A==;
+X-CSE-ConnectionGUID: m7vRthkSRiGbWnlovIPDfg==
+X-CSE-MsgGUID: DIrpP7X0SHWC6QTRPE2JyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53809509"
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="53809509"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 08:01:19 -0800
+X-CSE-ConnectionGUID: PQfhswNUSACM3hSJABUg8Q==
+X-CSE-MsgGUID: UABhP4/LRpSBVcAChyyneQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="119185290"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 08:01:18 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Fri, 7 Mar 2025 08:01:17 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Fri, 7 Mar 2025 08:01:17 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Fri, 7 Mar 2025 08:01:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dmY92aSFIAG/dskDDJgr77GYJ/Bo7FgrHTO4JnhV3FKm9zpmmIE+RZJpg/HyBGbp+S2Tpff6HVkx0vnliNDAcDIcU+5gjpbUv4X2W82seqd4PawxaZVk/U0gFgQa2pOofoMnCrL/RTgtUczC+NoleUWKDGp1UxQpdUCqC3GxBn6klH/1yLPEaacuDDXQXsoCoKACoMJuuSrQLfxfZ5SlXRO3iKjjLfcB1hg9U6OvGUq8nGOT97Whwh3JS+1A1HpW3RNJkJEP4kw0EFRl28ry8898MpdIP7zDRKnvelMFLDl0vRY+jkPwnvjPuNJmxpqmmCckpsm0aZYCC02lIXiK6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ruayrNmtZKztt8WbrfimcRJyJbC8yZAV4qYt7j2hMaM=;
+ b=VTe+oirFjzuUBeyumXRmrDgf1PT6rpM57x2MQRs+XO/BJ9LlSajAKYuu+xmbZlqGU1HsrFEb6adJez5xKuHtDTVv5X2bQPkr9VXEjHyWUFtvnFahRc3TnVyQYY6cS6DJiXO0Qrqpani+QLzBmaQZz/tglYGQl95sP1/j1VOuvMbNr9p7mCnj8vaYdfVdS2cV2Vfor6+vBtoKgFbgFKIRAIgQcsR5xXsoul32GTFGx8OUENYOFTDdpuJFcgD2kOz74lSBXrh18RlPgC6skGeL9Jhg+JgAcInbNSUGBIw9LGhFJx4AdxzuTx1wxy0yz/aWON/iz4FAUzunJppMmiwxNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) by
+ PH0PR11MB7636.namprd11.prod.outlook.com (2603:10b6:510:26f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.19; Fri, 7 Mar
+ 2025 16:00:45 +0000
+Received: from DM8PR11MB5751.namprd11.prod.outlook.com
+ ([fe80::4046:430d:f16c:b842]) by DM8PR11MB5751.namprd11.prod.outlook.com
+ ([fe80::4046:430d:f16c:b842%5]) with mapi id 15.20.8511.017; Fri, 7 Mar 2025
+ 16:00:45 +0000
+From: "Ng, Boon Khai" <boon.khai.ng@intel.com>
+To: Johan Hovold <johan@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Ang, Tien
+ Sung" <tien.sung.ang@intel.com>, Tien Sung Ang <tien.sung.ang@altera.com>,
+	Boon Khai Ng <boon.khai.ng@altera.com>
+Subject: RE: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB
+ Blaster 3
+Thread-Topic: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB
+ Blaster 3
+Thread-Index: AQHbdhhxthJ4AiCvMUCJLGSIXsfkL7NkyIeAgADAZHCAAH99AIAADRTwgAHxN2A=
+Date: Fri, 7 Mar 2025 16:00:45 +0000
+Message-ID: <DM8PR11MB57512E7ED48836F275E5BFB3C1D52@DM8PR11MB5751.namprd11.prod.outlook.com>
+References: <20250203084822.18356-1-boon.khai.ng@intel.com>
+ <Z8hetcRinFXXVAdy@hovoldconsulting.com>
+ <DM8PR11MB5751D2151A9FAC30E8647389C1CA2@DM8PR11MB5751.namprd11.prod.outlook.com>
+ <Z8lrCnCie923f0-_@hovoldconsulting.com>
+ <DM8PR11MB5751B5E8FAD650C31AE12410C1CA2@DM8PR11MB5751.namprd11.prod.outlook.com>
+In-Reply-To: <DM8PR11MB5751B5E8FAD650C31AE12410C1CA2@DM8PR11MB5751.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR11MB5751:EE_|PH0PR11MB7636:EE_
+x-ms-office365-filtering-correlation-id: 062f022a-ed78-4d8d-55d1-08dd5d91387a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?PwOHvx8RX5OkLONCnCyZov1EbZYHT+G5u6Bln/bF9aWv8weI3WUlEVxsUW19?=
+ =?us-ascii?Q?9LPTzMhJ48C4UIl7/q7LEDQvd5s3vmUT0/4hzgCog/uUTaF+/On8NFzLFkkU?=
+ =?us-ascii?Q?6IS1BGRNKsGrXL8NxVrSNh/5w2g5nyhA2xUXxK6BAj2sjLuRJ3ZppCTCXFep?=
+ =?us-ascii?Q?4LwOVPUY5boLFDQNtyobkpcqZ4viUqPqB58oiLAOzFXtKUIxDRMNKF7Is4PG?=
+ =?us-ascii?Q?loYRJbPpJDi/Lc2ojMiiiaZ3UFE9I332ZWb9VRuZp0UGdM+5hhupDp6qn0h5?=
+ =?us-ascii?Q?4jn01uAQ1PJUwngn8gaVMJX3V7bFfNNc86p6ztzWMLp7LCPbLZwAkSaHyfsf?=
+ =?us-ascii?Q?uWLqdO5Qrh23/sjldqxmQLhRsKOASVqQBr3TVWhct9OKzIsuwzqIPZRsgDji?=
+ =?us-ascii?Q?9Ey+hYucr8tC3auvj59uGrnXhFPqhUsR8rbUzKR77DMM4k7Hknsroxuno3sg?=
+ =?us-ascii?Q?CIH2p3g47B67POqSmY/Xhpob/AmDsz1o11gum8KN8msV8ufFb9lvb5rs/+ZU?=
+ =?us-ascii?Q?bgAjLV1l3ngYrj2qhe32CXjzxN5OQS3VQ9qPwZbRlWHD9kkIvs5OLQdvzZNe?=
+ =?us-ascii?Q?14thLq1MlOLlgDwCOtOE0oIj5COhsiFxrWdjda5iY38gd3U4tWO+//28i+09?=
+ =?us-ascii?Q?B85XIscdbyq5lZcQr/m1jn7FXxXTh+OZrN91CuyIg5Gpox5Cm7DE1F9tOKyR?=
+ =?us-ascii?Q?7CsICmJU8+Sj8uBFn3opjqpGYNl4mAhafIqi0EnJJPONpFKvZKd/lS53uDhN?=
+ =?us-ascii?Q?lH0zLmTg/daVBLf/uJa30G8aOrVRmlOHHdNd4k7gtmg2jZxEuiUF2mbu+zxz?=
+ =?us-ascii?Q?oaYjUaJYUhH9caaAL9G76IQoQxtRsJBHeYfpM8JnJDhZ4JwT3HFIRiOx6FLe?=
+ =?us-ascii?Q?rvrYroco+fDhuC0mz01gaBEye56gHwnNEe/VaKjjwDe6mZNU6wgkkrWFbJ8e?=
+ =?us-ascii?Q?8npYl0F0bvsmCt99+PEIJmRd9bv1zaUz6j1He9njPyCZTCOvJ0wps7RWPkij?=
+ =?us-ascii?Q?Qe8TVOodrMmAu2MZFktO98mRiMi4P6xeXM1faDroKUcwZZoKHkg8F9Hd6Cir?=
+ =?us-ascii?Q?pkrMe3Xb1xeG5citgyy23DCmO55oT7W4eKaJktr8X9KEagy5//dbA9+TL4sO?=
+ =?us-ascii?Q?1m6FawmnjBf3SoTVpz7YP2hVbjT8Qe98BzjNrTsudKrePGkDcSdU7H4lBC9w?=
+ =?us-ascii?Q?TWN8NItY3ukJ4YQ7QkPD7XFCvT+mPpOG9NLpvkxrkDIzZsD2n0vlWhq66p2S?=
+ =?us-ascii?Q?uPGu7uN7MY+ptqTwiyVeEYOZTs0AzVvdzimypQS7UV8lzSXrG4b9Fz1wo567?=
+ =?us-ascii?Q?GNGG0u2zcNbuPLEXjiouP9QaMhhK7crvdV1AP9IJxRgTqXzLVDrRz32tLQiP?=
+ =?us-ascii?Q?UIebRZpS4f4Veuc7VpV6mJmtW30GC6Tcx729Uc4Gx42tbJR9fU8stfykWbHw?=
+ =?us-ascii?Q?FC6fT/XJy4AUHBSb6zUlHIqUeFklpZ/z?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5751.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TdCrGVLjZPSaCY8hweXERS7fFml4FIwCFg2NLWFLVfwT6EKoomfKNjVQTiWL?=
+ =?us-ascii?Q?O38Ze7DqXwuQw515AGAdgdigytiD06pR8fdd2nFF70yQEp9QgBnn1w28XND4?=
+ =?us-ascii?Q?5aasfQoPBJrzL7ukt78YRidt5ojt0YMC8HRWZqiC+6Wp8wH4fJi0ZBKmZ0d9?=
+ =?us-ascii?Q?HDoSMa+eP7zc86h8RJi8ar99WksFORiKlUigKgBn25d4uFp4YP2uW4qGCMuO?=
+ =?us-ascii?Q?htLW9H3sSGsRwFzhjj8rSl2r9SRbgeLJsfYf3WX2E9NcTlHYLpNKLgebKk8C?=
+ =?us-ascii?Q?N7vXBZsQvAyMviej01bzQKVFVxQ4kMPiySYISAYKTkV8ZCL1jZF+NO4fW24k?=
+ =?us-ascii?Q?OViEasp4SFSJYifB1FUe9sdrL46lSVsol3cDzNjLyXCJTTCIQKD09kUzNtRg?=
+ =?us-ascii?Q?RTA5tfZfnI30gprwjdeiKgo/27lsb0B9S0tE4ldFDi7HWn1nflU6IbKs+MpP?=
+ =?us-ascii?Q?I5o0//wsl7OflBoL/iqXn/a/VqAUlkEaStpkZdk8KI1CWeS5NA1HzTFQSp+z?=
+ =?us-ascii?Q?iL28kh//UN3FJpe/Bv49MAQZNxYAWFu5Uko9D6QZzEFG0SocVsWHSYdaaskj?=
+ =?us-ascii?Q?JZvoQ9qGAHU3l9M88FkdvdrbnUZ74tKayB3sTXe7fmSdjVJSCPoXXS71aT+s?=
+ =?us-ascii?Q?GlenMTpxg05/v6ImHUViVhqEXfJ/tlxdfYkBTgsb+4hpxg7NR/2eSZ370kt1?=
+ =?us-ascii?Q?XRJmHoTzS5DVTwsk+99D2s5V7bAoNd3UjX67N//0dxQRM3M8RH5nSNqXqTf2?=
+ =?us-ascii?Q?gSJ84rN/EJlMQBO3iTcDAKYyt3DF5Dz/9XhrdkpJDuQh+EegYxQJ/2CaRdlt?=
+ =?us-ascii?Q?lFCzRbWrXObXIeP2idKW11xJd0LMpllMuecM4fZxySgcehqAKntujzuW2/zC?=
+ =?us-ascii?Q?BLri06dDmXyKgSZBlqNYE1M2ZoACpbjD9/C3sp28/MgtK9Q6XCFkJISopJj1?=
+ =?us-ascii?Q?xbYcmqrbSgU6hzZzhGetDfQ64IpV9jNFZ5+UwgRRKK3fWRV/X2h8dm4ZJrCx?=
+ =?us-ascii?Q?poTN1qquxf5vD0o7g56CbENz/fXcg9+gvyHSe/52zxilNDs6P2KCahGGKQVc?=
+ =?us-ascii?Q?WqE2C5Uz/rxkPOOqqtHHC9kXTzHoRUnm1+ynW2jehBg6gGQJNAt1gD114Mwf?=
+ =?us-ascii?Q?3Yk58xt99mxxfcJ59oEy5E0uY9fcycpPUwr/wggm2l8HpoNvRB4Sr956LJhn?=
+ =?us-ascii?Q?HJ6VbPJVv4UwSx/LeVh3p0BQmyF/ywsp6AcFhzsHbrO35o1D5QHNlHy1nXOh?=
+ =?us-ascii?Q?tR1NQy4KL+AS9APzWt9nsG7UGcXnA9kwiYq4H79RU3w1H5RYUG0XxRhz/s6l?=
+ =?us-ascii?Q?aBi0aL/OZhjbrQGWonrLB4aNVJ3JJECaBuBtUDqzTjB2qZ5zempoapysBrVa?=
+ =?us-ascii?Q?lKQoVE3lW4YrGYXxF+xfpkxTrQMLdeXwJmY2IAGv+jZKKA3i9fir0SW7JkbQ?=
+ =?us-ascii?Q?vpbvXdaZWRp6YtU/7UkL99cZy6X/vTeECECj2nXob9Woul4IABe0LUj4nT7B?=
+ =?us-ascii?Q?uTlXMP2RJK6Meozpb6nUSh7r8ZQe54wn0WLrQ/yzfHjsyl2ZX9zzX/CbbfBc?=
+ =?us-ascii?Q?sFuRmGMHAEgHZZqxzEdYCsrG/XWMAUdjzrNz/san?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5751.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 062f022a-ed78-4d8d-55d1-08dd5d91387a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2025 16:00:45.5067
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: C0Vx67bSncH4XpVAF/BWDV6kc0YYmRwW+oNh+PfW9avwA3q+ofZyB/wyNU9+xg/gD/XwKKKXNnnMiKQgRov1gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7636
+X-OriginatorOrg: intel.com
 
-On Fri, 7 Mar 2025 16:23:17 +0200, Mathias Nyman wrote:
-> > Any flag added to this list needs to be added to xhci_urb_dequeue()
-> > too so it knowns that the endpoint is held in Stopped state and
-> > URBs can be unlinked without trying to stop it again.  
-> 
-> In this case it's intentional.
-> 
-> If we prevent xhci_urb_dequeue() from queuing a stop endpoint command
-> due to a flag, then we must make sure the cancelled URB is given back
-> in the same place we clear the flag, like we do in the command
-> completion handlers that clear EP_HALTED and SET_DEQ_PENDING.
+Hi All,
 
-I'm not sure why this would be, what's the problem with the approach
-used for EP_CLEARING_TT currently? And if there is a problem, doesn't
-EP_CLEARING_TT also have this problem?
+Thank you for the kind review and for your patience in going through the pa=
+tch.
+Really appreciate the feedback, and based on the comments I have submitted
+a v2 patch at the link below with the necessary improvements. Let me know i=
+f=20
+if there is anything else I should refine.=20
+=20
+https://patchwork.kernel.org/project/linux-usb/patch/20250307154355.30772-1=
+-boon.khai.ng@intel.com/
 
-In this case, xhci_urb_dequeue() simply takes xhci->lock and calls:
-
-void xhci_process_cancelled_tds(struct xhci_virt_ep *ep)
-{
-        xhci_invalidate_cancelled_tds(ep);
-        xhci_giveback_invalidated_tds(ep);
-}
-
-Unlinked URBs are either given back instantly, or Set TR Dequeue is
-queued (and flagged on ep->ep_state) and the rest of the process goes
-same way as usual when called from xhci_handle_cmd_stop_ep(). 
-
-The EP will be restarted when the last flag is cleared, which may be
-either SET_DEQ_PENDING or EP_CLEARING_TT/EP_STALLED.
-
-It's practically an optimization which eliminates the dummy Stop EP
-command from the process. I thought EP_STALLED could use it.
-
-> The EP_STALLED flag is cleared after a ClearFeature(ENDPOINT_HALT)
-> control transfer request is (successfully?) sent to the device.
-> If we only give back those cancelled URBs after this then we create a
-> situation where cancelled urb giveback is blocked and depend on the
-> completion of another transfer on a different endpoint.
-> I don't want this dependency.
-
-No doubt, that would be unbounded latency and asking for trouble.
-
-> It's possible that this could create some type of deadlock where
-> class driver ends up waiting for cancelled URBs to be given back
-> before it sends the request to clear the halt, and  xhci won't give
-> back the cancelld URBs before the ClearFeature(ENDPOINT_HALT) request
-> completes..
-> 
-> Lets look at the cases where xhci_urb_dequeue() is called between
-> setting and clearing this new EP_STALLED flag.
-> 
-> The EP_HALTED is set during same spinlock as EP_STALLED, so urbs
-> dequeued during this time will be added to cancelled list, and given
-> back in xhci_handle_cmd_reset_ep() completion handler where also
-> EP_HALTED is cleared. If dequeue needs to be moved then
-> SET_DEQ_PENDING is set, and cancelled urbs will be given back in
-> xhci_handle_cmd_set_deq() completion handler.
-> 
-> At this stage we know endpoint is in stopped state. and will remauin
-> so until EP_STALLED is cleared. if xhci_urb_dequeue() is called now
-> then a stop endpoint command will ne queued, it will complete with a
-> context state error due to endpoint already being stopped, but URB
-> will be given back in one of the completion handlers. mentioned
-> before.
-
-Yes, it works, but in this case the "shortcut" will also work.
-
-One problems with pointless Stop EP commands I remember is that there
-is code in xhci-hub.c:xhci_stop_device() which avoids queuing Stop EP
-on stopped endpoints, supposedly because it triggers some HW bug.
-
-So the idea of these Stop EP patches was to eliminate such cases. It
-also simplifies the completion handler and avoids needing:
-
-> We could improve this codepath a bit by adding:
-> [...]
-
-
-Michal
+Regards,
+Boon Khai.
 
