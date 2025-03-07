@@ -1,151 +1,120 @@
-Return-Path: <linux-usb+bounces-21495-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21496-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15059A56582
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 11:35:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFDF7A5659D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 11:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4044617518D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 10:35:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B48B518983D3
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 10:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24D420E039;
-	Fri,  7 Mar 2025 10:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A328D20E70B;
+	Fri,  7 Mar 2025 10:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Woi8Qtih"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cPpQCzkL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE993398B;
-	Fri,  7 Mar 2025 10:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD3420E302
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 10:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741343703; cv=none; b=qaT7hYmlsM5fkhhC4oBEQN+//YPNJJfcFomqYtP+zpTQ1MGXCZNZD9RGyWyYtJVYCPcE+eVwTgTPhhvdx8lWvs338p75Gg72hceWcL0MHK3mk/mwHvKjIJ02PqkdcnPgDvh74rj337RXf1h7ZwWulcDfued9PxQNsQcPt0UW9RM=
+	t=1741343988; cv=none; b=QxSPMuDgIJQXN9EDnaw+kSOnIJnI7Z5gBBkB2k7gejPbdbIG//JTs7N/4T1MzQ1/wDTG36Sle30sD/spAV3nnTYUxYAX++G63KMTaDLmO5klY8L6cDimB8pKHsJvQ+/MDo0raj7DefnzuYU7PV7e+VVRKAW4KpLpHc0QbwU6cSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741343703; c=relaxed/simple;
-	bh=xjae9IY5NUoQoSh58YJCTzAFqEQ1hyZz6whVqzqCRPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FobLqxeaJx6fzMICRGOdxWvYpl/urxkzfBb/Skq/IXb9oAUGGFrDP9YW/saT7G8fIGxQI/P3uXUofIMSDPwXiH5+eySs2rZh5g3xijYy9V2V28k/1gEhuox16Q7XHV/pkWIcMDL2UlvAxVBNJf3UXSVJmzpRpjmLN9xJ3XlLoK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Woi8Qtih; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741343701; x=1772879701;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xjae9IY5NUoQoSh58YJCTzAFqEQ1hyZz6whVqzqCRPg=;
-  b=Woi8QtihHoirpS7OTVTxhsDNCQEkmQnIqEi8A6T8vHT8hLyXbxF+a57Z
-   NRH1nbeiKqg7KCctXlv/xUTW5uAbz2wG1U6/amn+Hj6F6NDYjRczd4adu
-   ygZ6LKyvTLiPLHHgnQjLjlLBocf1SBchiHCav4BC+cNPwo7q4fpZ6YM7e
-   hGIIyBJVUd2gYql+Cy6ZvZVc34hUnLkCOUA1XhlDF/g/ySBnCVIOnsXZ2
-   IpZvOA+aIjgpHBuWYOJmDNm01tFmV+0HbgjS/Ww4dZO5EpvkX5zdrBQ8q
-   zjJ2mozNWfk0xNK2S+pxl9413aodk91JdO87u6U+pvelHrkurY6m3PF3q
-   Q==;
-X-CSE-ConnectionGUID: qvonheUWQOy+YlH/NnxqMw==
-X-CSE-MsgGUID: V7f8n9FhTjK1HwDdd4ob+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="59945889"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="59945889"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 02:35:01 -0800
-X-CSE-ConnectionGUID: hJ4L0/sIRFyP61Myb029pA==
-X-CSE-MsgGUID: 1G8ulXDaR8WIdXvCYlOhcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119812746"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 07 Mar 2025 02:34:58 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id CD1ED1FC; Fri, 07 Mar 2025 12:34:56 +0200 (EET)
-Date: Fri, 7 Mar 2025 12:34:56 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Kenneth Crudup <kenny@panix.com>, Bjorn Helgaas <helgaas@kernel.org>,
-	ilpo.jarvinen@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-	Jian-Hong Pan <jhp@endlessos.org>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nikl??vs Ko??es??ikovs <pinkflames.linux@gmail.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
- Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
-Message-ID: <20250307103456.GX3713119@black.fi.intel.com>
-References: <20250213135911.GG3713119@black.fi.intel.com>
- <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
- <20250214162948.GJ3713119@black.fi.intel.com>
- <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
- <20250226084404.GM3713119@black.fi.intel.com>
- <Z77ak-4YsdAKXbHr@wunner.de>
- <20250226091958.GN3713119@black.fi.intel.com>
- <Z8YKXC1IXYXctQrZ@wunner.de>
- <20250304082314.GE3713119@black.fi.intel.com>
- <Z8nRI6xjGl3frMe5@wunner.de>
+	s=arc-20240116; t=1741343988; c=relaxed/simple;
+	bh=vTFALzJHvqSRWCUmzec7tD0RX9eMEy3rRxFTYtZDRLw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fFbneYjbfAkjyYToMDJvdHwyCl/0yCXw0htRWZdO9OX8QjU9214ukyGQ7J1U3kOXDHMsDqONBhPPFZ1ehdYF0S8L3KrTd7mQ6wdUi7bAAc1PeUcV/7yTL1pX/gkOJAfTkmOPsNC+/8g3lt75xkfNfqguh4mAOJJMexHj8iXv+44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cPpQCzkL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 965B7C4CEE7
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 10:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741343987;
+	bh=vTFALzJHvqSRWCUmzec7tD0RX9eMEy3rRxFTYtZDRLw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=cPpQCzkL1oMKekmOujVvsAKD6feAuU22sHrfc4d12Dmat460WB6udlKMpRsK4mty2
+	 A5QRAF3FW1aSaBo5UKYj9oOeZ0JvK/506kXQ0RaxHS5p4BHTI2ft5lh0vOD18CHt85
+	 8jOmRD2jBdtat37MAd3aa2nj74LxSgI/z1AFfnpumplsET/pF1t41Hi2dQMmsk+Pcj
+	 JtQli28R1Di1PsvuDlLAoyiGfqMejmBRJNwzU2hBS11Cqsjw8Dum7CFI5m/1EVeIfc
+	 C2lXsMhYewb+5XFXhsmzxaWKz1O+xi+i2lzd3pBOlJ9MuNKWHpeYzh2/Acqn4ZDkjy
+	 Wl+zecpzMlbIQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8332FC41614; Fri,  7 Mar 2025 10:39:47 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
+ with AMD AI 365
+Date: Fri, 07 Mar 2025 10:39:47 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219748-208809-wWekAo6P5y@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
+References: <bug-219748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Z8nRI6xjGl3frMe5@wunner.de>
 
-On Thu, Mar 06, 2025 at 05:45:23PM +0100, Lukas Wunner wrote:
-> On Tue, Mar 04, 2025 at 10:23:14AM +0200, Mika Westerberg wrote:
-> > Unfortunately I still see the same hang. I double checked, with revert the
-> > problem goes a way and with this patch I still see it.
-> > 
-> > Steps:
-> > 
-> > 1. Boot the system, nothing connected.
-> > 2. Connect TBT 4 dock to the host.
-> > 3. Connect TBT 3 NVMe to the TBT4 doc.
-> > 4. Authorize both PCIe tunnels, verify devices are there.
-> > 5. Enter s2idle.
-> > 6. Unplug the TBT 4 dock from the host.
-> > 7. Exit s2idle.
-> 
-> Thanks for testing.  Would you mind giving the below a spin?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
-Sure.
+--- Comment #31 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+(In reply to Mario Limonciello (AMD) from comment #30)
+> > I'm leaving the graphics side for Mario to comment on as I'm not qualif=
+ied.
+> I
+> > do see MST and that seem to be problematic in Linux IIRC.
+>=20
+> My main worry is if the retimer scan is the reason for the DPIA issues to=
+o.=20
+> The report that Sean linked in was a failing to read an EDID which got fi=
+xed
+> by pushing the scan later.
+>=20
+> So if you can reproduce the display issues try with it commented out
+> entirely (maybe we want that for debugging as a module parameter Mika?).
 
-> I've realized this can likely be solved in a much easier way:
-> 
-> The ->resume_noirq callback is invoked while traversing down
-> the hierarchy and the topmost slot which detects device replacement
-> already marks everything below as disconnected.  Hence any nested
-> hotplug ports can just skip the replacement check because they're
-> disconnected as well.
+I'm not convinced that retimer scanning has anything to do with that issue.=
+ It
+does affect timing when the device router is enumerated and that's the issue
+with Pluggable, they have implemented some sort of non-standard timeout the=
+re.
 
-Makes sense.
+The other issue happens long after device router is already enumerated and =
+the
+DP tunnels are established. The patch may seem to "solve" the issue but it
+probably just hides the real one and this is what we need to understand.
 
-Tried the patch now and it solves the issue. Thanks!
+Therefore I suggest to open a separate issue for that one with appropriate =
+full
+dmesg and the repro steps, CC me too I can take a look. We can defer this f=
+ix
+until we understand the real problem but let's keep the two separate.
 
-Tested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+--=20
+You may reply to this email to add a comment.
 
-> 
-> -- >8 --
-> 
-> diff --git a/drivers/pci/hotplug/pciehp_core.c b/drivers/pci/hotplug/pciehp_core.c
-> index ff458e6..997841c 100644
-> --- a/drivers/pci/hotplug/pciehp_core.c
-> +++ b/drivers/pci/hotplug/pciehp_core.c
-> @@ -286,9 +286,12 @@ static int pciehp_suspend(struct pcie_device *dev)
->  
->  static bool pciehp_device_replaced(struct controller *ctrl)
->  {
-> -	struct pci_dev *pdev __free(pci_dev_put);
-> +	struct pci_dev *pdev __free(pci_dev_put) = NULL;
->  	u32 reg;
->  
-> +	if (pci_dev_is_disconnected(ctrl->pcie->port))
-> +		return false;
-> +
->  	pdev = pci_get_slot(ctrl->pcie->port->subordinate, PCI_DEVFN(0, 0));
->  	if (!pdev)
->  		return true;
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
