@@ -1,203 +1,160 @@
-Return-Path: <linux-usb+bounces-21499-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21500-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBFAFA56A3A
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 15:22:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9D91A56C66
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 16:44:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE03E16C4F1
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 14:22:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0BC53AED4B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 15:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8D021B909;
-	Fri,  7 Mar 2025 14:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D9621D583;
+	Fri,  7 Mar 2025 15:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UgZE5PIu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6x5hrqv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDCD2185BC
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 14:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AA218DB09;
+	Fri,  7 Mar 2025 15:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741357338; cv=none; b=b8hZs4VEymAES/tv3URY94KrHni4Ue/Mb378RdFzlFWPT22dI+pygawYcU4B/JTBAHEg3JyiBth7DTDedlmK6AqspTmga+jKr7Lv4oJPkHnjsEud40/sY5Msqpfg8wxis/YyPG72yv9hKGqAmbtqWCds5fJV4EPaJkzf1pMSzkY=
+	t=1741362265; cv=none; b=UnktEPxNMDvIkv9vjla8wnAUt8o1uWKBBi1M9OnR5b/HwGcXBsRzGb14lwv85/3RnmowP2QYLi4VXbn6GgiQAyaZIfym/JxRIUKXYXHbCJv36p95MkkOFzQzuLhae/Yfx9PIAoOUrbhTC5melMDZQYWkxqY5mmZ+BZnl8EZn2uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741357338; c=relaxed/simple;
-	bh=M6rDqG64KWShndH2QzixSAB737/UaxkzKp13gGxgOZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E0rNc+b840UtCJzIer8nii3TJq6HvM5oRgwur4YfPHQXOKLRzRXFLMqLTiavFikz+N8sizmal5bHDEZWA+y/qXAtnjm+EiIScgOYa1bKvE+m0ePwPPVYvq211Xu9vmtWabFScLieTScxsUrQbONvbD1roH64Zw+dgyLRJQqKB04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UgZE5PIu; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1741362265; c=relaxed/simple;
+	bh=4d4YhX86AxePC24DFJMicsIc618HFk7dC28ZbtPJuM4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N+GysHzJb/5CIs2bDeIPMqkHHesUvTxbwWM5Aa1liYjVim6CthVhECRJVgHvYw/j2AU6bCLGyLge4fzGxjvq+wTUY28HRX34FbF1uX1ehFCXUelTxqZjGX5L59FJxFmSGgiyvGS2vXdHvva7B7K4qVsr8KSAnmGtEz3tVxH1p3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z6x5hrqv; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741357337; x=1772893337;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M6rDqG64KWShndH2QzixSAB737/UaxkzKp13gGxgOZA=;
-  b=UgZE5PIukwfRKKlwHO8so+uSMsj7wxXoXKErGCYNof82fTKMy13+WP8K
-   7otwZTThiO1HscxOfMWSlOCzGxkyKUMat2N4uXJMUfdF6ex5cqDl3c8yW
-   yhpcb6prW8HrIr0xXMXottcqPUDiyKmLg8muHVMb1fPfjbOylqbS66zOu
-   fPP1vio5QUfxVOWbK6f638c55CjZ9bLZ/0biFHc0yqDhtSsgWEsxSthT4
-   duMaxhS9VNRJb+64PCZNlcssqW1IMtBYwPXJr/x8e/3n4gBfoD9OXpeBM
-   tm0UJBvZCgsMTKPNPo6DWJpNNqoMolcPHIKs0ngEnzidCt/Hq4XXdiB42
+  t=1741362264; x=1772898264;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4d4YhX86AxePC24DFJMicsIc618HFk7dC28ZbtPJuM4=;
+  b=Z6x5hrqv+VVFVv2i5xR1pIFyPxAt1oUyAHYKy+muTCXAOu90LiGO6TRl
+   8rPvO4UXWOtS0mG8o3VDCfNjlqdruVdeLmTcByPhb+2crF7zFTdseBKay
+   Iz8p0l4ZMMAWlYWmG5gRlTSBC7U8Xk1ne3CQ3JjKUq+p209JXfJv0S5Io
+   nT12ROG2GIhQUI+b+xzjIo7O+n32Ey4LqCwSrNfGgjsgbDMuh6XndvU4Y
+   LCBOFgQuU7tUzsp2W/XQD2DfPPVyPG6BmH+FGB7xBlGo0qdyvq72IMouL
+   2YRRYMhVBixoTgtnyZoG00S1Ii/aGaZ4a6ecr2tQ/wTahCd2+vp5FSQ4Q
    g==;
-X-CSE-ConnectionGUID: bZ87XkEaT/6H4JHxM8+sWA==
-X-CSE-MsgGUID: sHN1N1InRLChYT+D9wtYhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42317195"
+X-CSE-ConnectionGUID: QU4dACmITN68QB8ge7iCNQ==
+X-CSE-MsgGUID: 9iQFZpCeRfa4IImYPTrRWA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="59970455"
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42317195"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 06:22:15 -0800
-X-CSE-ConnectionGUID: 9txyjnUCRuq0Vg9j8qxw4g==
-X-CSE-MsgGUID: mlc16D68QGKmRzdpcDgeLw==
+   d="scan'208";a="59970455"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 07:44:23 -0800
+X-CSE-ConnectionGUID: ijITPfdvTzyhioCdygfWow==
+X-CSE-MsgGUID: nFHE9sfuQiWLv6tsSuMgwA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119861628"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa007.jf.intel.com with ESMTP; 07 Mar 2025 06:22:15 -0800
-Message-ID: <1c369ecc-a935-4c3e-ba8a-80e7d8894a92@linux.intel.com>
-Date: Fri, 7 Mar 2025 16:23:17 +0200
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="124443993"
+Received: from apgcp0h572501.png.altera.com ([10.244.73.227])
+  by fmviesa004.fm.intel.com with ESMTP; 07 Mar 2025 07:44:21 -0800
+From: Boon Khai Ng <boon.khai.ng@intel.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb <linux-usb@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Cc: Boon Khai Ng <boon.khai.ng@altera.com>,
+	Tien Sung Ang <tien.sung.ang@altera.com>,
+	Boon Khai Ng <boon.khai.ng@intel.com>
+Subject: [PATCH v2] USB: serial: ftdi_sio: add support for Altera USB Blaster 3
+Date: Fri,  7 Mar 2025 23:43:55 +0800
+Message-Id: <20250307154355.30772-1-boon.khai.ng@intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/15] xhci: Prevent early endpoint restart when handling
- STALL errors.
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20250307075429.5f9d1d4e@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250307075429.5f9d1d4e@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7.3.2025 8.54, Michał Pecio wrote:
->> Ensure that an endpoint halted due to device STALL is not
->> restarted before a Clear_Feature(ENDPOINT_HALT) request is sent to
->> the device.
->>
->> The host side of the endpoint may otherwise be started early by the
->> 'Set TR Deq' command completion handler which is called if dequeue
->> is moved past a cancelled or halted TD.
->>
->> Prevent this with a new flag set for bulk and interrupt endpoints
->> when a Stall Error is received. Clear it in hcd->endpoint_reset()
->> which is called after Clear_Feature(ENDPOINT_HALT) is sent.
->>
->> Also add a debug message if a class driver queues a new URB after
->> the STALL. Note that class driver might not be aware of the STALL
->> yet when it submits the URB as URBs are given back in BH.
->>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> 
-> Sorry for coming this late, but I haven't looked closely at some
-> of those xhci/for-next patches before.
-> 
-> This one is unfortunately incomplete, as follows:
-> 
->> drivers/usb/host/xhci-ring.c | 7 +++++--
->> drivers/usb/host/xhci.c      | 6 ++++++
->> drivers/usb/host/xhci.h      | 3 ++-
->> 3 files changed, 13 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->> index c2e15a27338b..7643ab9ec3b4 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -556,8 +556,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
->> 	 * pointer command pending because the device can choose to start any
->> 	 * stream once the endpoint is on the HW schedule.
->> 	 */
->> -	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
->> -	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
->> +	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
->> +			EP_CLEARING_TT | EP_STALLED))
->> 		return;
-> 
-> Any flag added to this list needs to be added to xhci_urb_dequeue() too
-> so it knowns that the endpoint is held in Stopped state and URBs can be
-> unlinked without trying to stop it again.
+The Altera USB Blaster 3, available as both a cable and an on-board
+solution, is primarily used for programming and debugging FPGAs.
 
-In this case it's intentional.
+It interfaces with host software such as Quartus Programmer,
+System Console, SignalTap, and Nios Debugger. The device utilizes
+either an FT2232 or FT4232 chip.
 
-If we prevent xhci_urb_dequeue() from queuing a stop endpoint command due to a flag,
-then we must make sure the cancelled URB is given back in the same place we clear
-the flag, like we do in the command completion handlers that clear EP_HALTED and
-  SET_DEQ_PENDING.
+Enabling support for various configurations of the USB Blaster 3
+by including the appropriate VID/PID pairs, allowing it to function
+as a serial device via ftdi_sio. The configurations are determined
+by the hardware design and include:
 
-The EP_STALLED flag is cleared after a ClearFeature(ENDPOINT_HALT) control transfer
-request is (successfully?) sent to the device.
-If we only give back those cancelled URBs after this then we create a situation where
-cancelled urb giveback is blocked and depend on the completion of another transfer
-on a different endpoint.
-I don't want this dependency.
+1) PID 0x6020, FT2232, 1 JTAG port
+2) PID 0x6021, FT2232, 2 JTAG ports
+3) PID 0x6022, FT2232, 1 JTAG port + Port B as UART
+4) PID 0x6023, FT2232, Cable USB-Blaster 3
+5) PID 0x6024, FT4232, 1 JTAG port
+6) PID 0x6025, FT4232, 1 JTAG port + Port C as UART
+7) PID 0x6026, FT4232, 1 JTAG port + Port C, D as UART
+8) PID 0x602e, FT4232, 1 JTAG port + Port B, C, D as UART
 
-It's possible that this could create some type of deadlock where class driver ends
-up waiting for cancelled URBs to be given back before it sends the request to clear
-the halt, and  xhci won't give back the cancelld URBs before the
-ClearFeature(ENDPOINT_HALT) request completes..
+These configurations allow for flexibility in how the
+USB Blaster 3 is used, depending on the specific needs of the
+hardware design.
 
-Lets look at the cases where xhci_urb_dequeue() is called between setting and clearing
-this new EP_STALLED flag.
+Signed-off-by: Boon Khai Ng <boon.khai.ng@intel.com>
+---
+ drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++++
+ drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++++
+ 2 files changed, 27 insertions(+)
 
-The EP_HALTED is set during same spinlock as EP_STALLED, so urbs dequeued during this time
-will be added to cancelled list, and given back in xhci_handle_cmd_reset_ep() completion
-handler where also EP_HALTED is cleared. If dequeue needs to be moved then SET_DEQ_PENDING
-is set, and cancelled urbs will be given back in xhci_handle_cmd_set_deq() completion handler.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index e07c5e3eb18c..9b34e23b7091 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1079,6 +1079,20 @@ static const struct usb_device_id id_table_combined[] = {
+ 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
+ 	/* GMC devices */
+ 	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
++	/* Altera USB Blaster 3 */
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6022_PID, 1) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6025_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 3) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6029_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 3) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602C_PID, 1) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 1) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 1) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 3) },
+ 	{ }					/* Terminating entry */
+ };
+ 
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+index 5ee60ba2a73c..52be47d684ea 100644
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -1612,3 +1612,16 @@
+  */
+ #define GMC_VID				0x1cd7
+ #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
++
++/*
++ *  Altera USB Blaster 3 (http://www.altera.com).
++ */
++#define ALTERA_VID			0x09fb
++#define ALTERA_UB3_6022_PID		0x6022
++#define ALTERA_UB3_6025_PID		0x6025
++#define ALTERA_UB3_6026_PID		0x6026
++#define ALTERA_UB3_6029_PID		0x6029
++#define ALTERA_UB3_602A_PID		0x602a
++#define ALTERA_UB3_602C_PID		0x602c
++#define ALTERA_UB3_602D_PID		0x602d
++#define ALTERA_UB3_602E_PID		0x602e
+-- 
+2.25.1
 
-At this stage we know endpoint is in stopped state. and will remauin so until EP_STALLED is cleared.
-if xhci_urb_dequeue() is called now then a stop endpoint command will ne queued,
-it will complete with a context state error due to endpoint already being stopped, but
-URB will be given back in one of the completion handlers. mentioned before.
-
-We could improve this codepath a bit by adding:
-
-iff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 0f8acbb9cd21..c8d1651c9703 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1244,7 +1244,7 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
-                          * Endpoint later. EP state is now Stopped and EP_HALTED
-                          * still set because Reset EP handler will run after us.
-                          */
--                       if (ep->ep_state & EP_HALTED)
-+                       if (ep->ep_state & (EP_HALTED | EP_STALLED)
-                                 break;
-                         /*
-                          * On some HCs EP state remains Stopped for some tens of
-
->>   	case USB_ENDPOINT_XFER_CONTROL:
->> @@ -3202,6 +3207,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
->>   		return;
->>   
->>   	ep = &vdev->eps[ep_index];
->> +	ep->ep_state &= ~EP_STALLED;
-> 
-> ... and clearing any of those flags has always been followed by calling
-> xhci_ring_ep_doorbell() again, to ensure that the endpoint is restarted
-> if it has URBs on it but restart was held off due to the flag.
-> 
-
-Probably no harm in ringing the doorbell here. Should not be needed as there
-shouldn't be any pending URBs, see usb core message.c comment for usb_clear_halt():
-
-  * This is used to clear halt conditions for bulk and interrupt endpoints,
-  * as reported by URB completion status.  Endpoints that are halted are
-  * sometimes referred to as being "stalled".  Such endpoints are unable
-  * to transmit or receive data until the halt status is cleared.  Any URBs
-  * queued for such an endpoint should normally be unlinked by the driver
-  * before clearing the halt condition, as described in sections 5.7.5
-  * and 5.8.5 of the USB 2.0 spec.
-
-But I don't see any harm in ringing the doorbell here either.
-
-Thanks
-Mathias
 
