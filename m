@@ -1,111 +1,77 @@
-Return-Path: <linux-usb+bounces-21497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9210A5663D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 12:07:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 757E8A56774
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 13:03:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6871883FC7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 11:07:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2E83B6E1B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 12:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E982153CE;
-	Fri,  7 Mar 2025 11:07:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB82217F31;
+	Fri,  7 Mar 2025 12:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bUilmfFz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hRfrv76M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDFB215197
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 11:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A5621771F
+	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 12:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741345637; cv=none; b=Vxo2XZdOQIeWphPaPnuSN9M4pF5sdE29KAD02jYtTPNuiRutN4A8urTgSkJdpfqr4DAZCuR7v7HbRqGUNuXiFbNNX28f6H8A30bE8cdsaqcDMmS9onxnav4gLQQgBN9J858MAz/T7qTyfgTNYRIF8GpM5k37Ma3HY1c4iXtcvLM=
+	t=1741348977; cv=none; b=O3s2NJXbF4YBlJuVbCQrsGMpei9fFjy7inb7cjK8Y+SK/2XSkaIM4p/kKWqtk5rfgXNZOSqPpJ1j4d7/wW8ZA9rOl139muqH+DWna+JOFyAHYRS74YaW9wXyZ5EB8ofFAeLhzfvaJyh1dZ5gSg+sXuUswGRLbpttZX+SglHbFek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741345637; c=relaxed/simple;
-	bh=HPiNzXTTHqoN0cuKMmWCn9O3pvGZPQvws6UsejGOLII=;
+	s=arc-20240116; t=1741348977; c=relaxed/simple;
+	bh=WDQ/J35VeQiU6EiLcZEAtMBmE6VPU7FDeMEznRUQJf4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VyrAtZ2GY/CNCDYgHD+NbDqYXslrEEQiovtuAhUKwOR/8yuhTnWKm5bF48vg3hfh6utOdcQlV+1PlzItAc0PcQwI7V7S86h2/vVouJN+fvcvrgQT2hxMgz0HVBMQOi/LU5kQFPULyP2J9qWTlu+Aog8ZC0nqBXTpIgwOtQxuVdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bUilmfFz; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abbd96bef64so264168766b.3
-        for <linux-usb@vger.kernel.org>; Fri, 07 Mar 2025 03:07:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741345634; x=1741950434; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yfDn9FH6gBIL3kasCeeYhlqgNKvkAd8JgXjYP0PTb+0=;
-        b=bUilmfFz7vdQaUcWEcIMefdQ8tcllfhalTXjcQuO7pi6omynsQI5WzuXI8lgi0bqpr
-         QLT+jnTdMZAwoioFcNhEQ9/0ciVV6NjsV8S3+8eFtvAD03RsHMnh5szl7QH6+10fCUAL
-         JEN+GkhItbbSUE4ERU5t0Ru6aSIw7x1t5Tr2A/bD1O/eZthgRjsScDyr7YO4zyHWOJLa
-         wxLfM6/QbYCFQhMb0LKdr/2Q09od3wHstqU5ERycaC1JtxQW46LHJlSngNd4JAQO55k3
-         8wDc41JRhBs+22/US681irq+C/1SE7hjvwAzI4y6er4ZJYYx+rXIY2wC/XkPgCzRZwHi
-         EwCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741345634; x=1741950434;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yfDn9FH6gBIL3kasCeeYhlqgNKvkAd8JgXjYP0PTb+0=;
-        b=r11jmtCS5SM6X5Z628bTHmBiNXHRenB/Kig7E8M/xM329E7KrGxkLM/KgsxSKvCW7P
-         8f8DnhCHC8sZqHNAOPzmHP/xv4PBAZi/wdel6z1mRZUcf/xVouwpTPpWNDVK7SS8464g
-         WcljkxoinzableGauhK5jq2VFI2gAJfll1CxI2HK7CetVjZx5WVQfHyF+N9qhxmN0A1T
-         mH+vPaVKK6nUNbn2JGCWSngv+qBnddEpwlOlsV8bT0CGWhzL23dY6VZ9mPtied6KOGPA
-         Tx5BXourMhDuAMtqtkNBHBvLwWvjSztVj3ScYDpzA8366N9NQKQ9Oefk7J+En1KcDOjG
-         EMwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOClHu8pbUC4raV0FrX2Rxg8MLBsaAVXD8Lry0+hLlJQSzJm+RHDTM7w365IUjlQ6nd4sGq117rFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3DYvYJ5JtcC7hWmtg5OJ2U7ZO2/vRfjihmD52cByXD7Yz5Yvh
-	DX9GdgTQI9oO+fUcJCmFBkCgI0o3n6Pa6bY80Vyy5bSqsCofB7C9G+UpTZ9Q4wg=
-X-Gm-Gg: ASbGncuRqn/ZpbBhGcSkcF7JhqgrsT2vUU5GJSqzKYuA8xWxbrtfMUkRr3U2tEdNIQd
-	IEBxXxKH8xdxYTqmPuRltSW6o0PZfGA+z9W1nqSzfNbCKbRApEtg1RFMFwxlzyoAGjTY8JhAy6v
-	A7fH1LtTnHPczrPW75I69V6Miy6opKwtNctwPdeo6JaPJIqIusaJdnbf4NJSTWEfzA5KEneyitO
-	6veOOvjgVAEKEf3qjZ263v2iB1pIwzoWBYV5vUDWa/drLz9L6T6USEi/cxUrsRLFR2YoDKH9g6V
-	8CTPdrZ2o9B5nNgmj2kaNZppknWJDZpS2d7RcKOvxSajpMmfBAcj
-X-Google-Smtp-Source: AGHT+IGgkdI1f8j3o1gNtZn8e4RQmGqfj9SGVx8IYAmQaeWhqRp49yPnbjkO8kd42BMMr1gZ+zPEWw==
-X-Received: by 2002:a17:906:f59c:b0:abf:fb7b:8d09 with SMTP id a640c23a62f3a-ac252ed8b2cmr349617466b.51.1741345633855;
-        Fri, 07 Mar 2025 03:07:13 -0800 (PST)
-Received: from linaro.org ([2a02:2454:ff21:ef30:c140:2ce9:b81:70])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239481685sm264956366b.58.2025.03.07.03.07.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 03:07:13 -0800 (PST)
-Date: Fri, 7 Mar 2025 12:07:07 +0100
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Robert Foss <rfoss@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rohit Agarwal <quic_rohiagar@quicinc.com>,
-	Kyle Deng <quic_chunkaid@quicinc.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-usb@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH 03/11] dt-bindings: power: qcom,kpss-acc-v2: Add MSM8916
- compatible
-Message-ID: <Z8rTW3fQObiZ7del@linaro.org>
-References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
- <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=H3t08tJWyYoh8w0eiDwX9Pixdnq15ZOPD8ZJhf9zjmpJqhqBPf2vOTS6MWOXmqejo2hCEzB8MKhM6TDUGEHvxEd1+e4Kh0ev8iVcxNxZJqlp8vWe0rYi1REfjbL4HOhe9DOosNOZB4BMgyvHpc8PnwQED7AqZ7v8qjaMD+ciULI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hRfrv76M; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741348975; x=1772884975;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=WDQ/J35VeQiU6EiLcZEAtMBmE6VPU7FDeMEznRUQJf4=;
+  b=hRfrv76MjHLuWVeUaZUXHfUDlVvkz5YUCVdxIVbBbl6LJ9aCXPPAIEld
+   6CzzlB4RbS9iEPe6Yto/Zl/iTWpu+Ss6fstFt2Gp+76rGdj07AVLtEmmS
+   hWNzxpK41x8GniPCr/J6C+F3b44j+UpWWRs/X2BIxwVUua4HrydwlWB0d
+   5m6umDlMsgt3+ZrA5sDDE/De42ICP/Wa2TT6e0yHdUUzv/m2Dz85LtW/u
+   UBZ4zApye/F8ZZI5LnH5yECSZL0lHRuruqSAKkusk1wfpIp10sdYlgahr
+   SXEFzPyDbnymOXs95fImq9OBvQMlSC6q3X28YNiOjAnQjIA0A692N0MgK
+   A==;
+X-CSE-ConnectionGUID: 5raeXew4TWiznlrR0+E6qQ==
+X-CSE-MsgGUID: 7Usj3ngLRUia9v/5tBcS4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42306631"
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="42306631"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:02:55 -0800
+X-CSE-ConnectionGUID: sKUhsPegTrS3P/O64P4NKQ==
+X-CSE-MsgGUID: z+2sClncRuSnbmbwFuTOeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="119809832"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa010.fm.intel.com with ESMTP; 07 Mar 2025 04:02:53 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id D0F40224; Fri, 07 Mar 2025 14:02:51 +0200 (EET)
+Date: Fri, 7 Mar 2025 14:02:51 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <yehezkelshb@gmail.com>
+Cc: linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Kenneth Crudup <kenny@panix.com>
+Subject: Re: [PATCH] thunderbolt: Prevent use-after-free in resume from
+ hibernate
+Message-ID: <20250307120251.GY3713119@black.fi.intel.com>
+References: <20250306084145.373237-1-mika.westerberg@linux.intel.com>
+ <CA+CmpXtBaaqzyJ8E8G7f5DA4AQ=6XFGk28h7LvNLHaG2ubwjKw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -115,43 +81,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
+In-Reply-To: <CA+CmpXtBaaqzyJ8E8G7f5DA4AQ=6XFGk28h7LvNLHaG2ubwjKw@mail.gmail.com>
 
-On Thu, Mar 06, 2025 at 07:11:15PM +0100, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+On Thu, Mar 06, 2025 at 12:29:14PM +0200, Yehezkel Bernat wrote:
+> On Thu, Mar 6, 2025 at 10:41 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > Kenneth noticed that his laptop crashes randomly when resuming from
+> > hibernate if there is device connected and display tunneled. I was able
+> > to reproduce this as well with the following steps:
+> >
+> >   1. Boot the system up, nothing connected.
+> >   2. Connect Thunderbolt 4 dock to the host.
+> >   3. Connect monitor to the Thunderbolt 4 dock.
+> >   4. Verify that there is picture on the screen.
+> >   5. Enter hibernate.
+> >   6. Exit hibernate.
+> >   7. Wait for the system to resume.
+> >
+> >   Expectation: System resumes just fine, the connected monitor still
+> >                shows screen.
+> >   Actual result: There is crash during resume, screen is blank.
+> >
+> > What happens is that during resume from hibernate we tear down any
+> > existing tunnels created by the boot kernel and this ends up calling
+> > tb_dp_dprx_stop() which calls tb_tunnel_put() dropping the reference
+> > count to zero even though we never called tb_dp_dprx_start() for it (we
+> > never do that for discovery). This makes the discovered DP tunnel memory
+> > to be released and any access after that causes use-after-free and
+> > possible crash.
+> >
+> > Fix this so that we only stop DPRX flow if it has been started in the
+> > first place.
+> >
+> > Reported-by: Kenneth Crudup <kenny@panix.com>
+> > Closes: https://lore.kernel.org/linux-usb/8e175721-806f-45d6-892a-bd3356af80c9@panix.com/
+> > Cc: stable@vger.kernel.org
+> > Fixes: d6d458d42e1e ("thunderbolt: Handle DisplayPort tunnel activation asynchronously")
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
 > 
-> MSM8916 seems to reuse the same hardware as MSM8974 and friends (for
-> whom this binding document was created). Add a new compatible for it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> index 202a5d51ee88c7190805efe8f1bf493bdb69ec45..27dae49163fa0790ceb6fda8a5c674f739d4a41a 100644
-> --- a/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> +++ b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> @@ -18,7 +18,9 @@ description:
->  
->  properties:
->    compatible:
-> -    const: qcom,kpss-acc-v2
-> +    enum:
-> +      - qcom,msm8916-kpss-acc
+> Reviewed-by: Yehezkel Bernat <YehezkelShB@gmail.com>
 
-Hm, MSM8916 doesn't have a *K*PSS (Krait Processor SubSystem), it has an
-*A*PSS (ARM Cortex – A53 SubSystem, or Application Processor SubSystem).
-
-I think this should be either qcom,msm8916-apss-acc, or you just keep
-the qcom,msm8916-acc we already use. I'm guessing ACC stands for
-"Application Clock Controller", so it would be unique enough already.
-
-There is actually a patch from Rayyan already with a R-b from Krzysztof.
-Maybe you, or whoever is responsible, can pick it up?
-
-https://lore.kernel.org/linux-arm-msm/20240710155226.130086-1-rayyan.ansari@linaro.org/
-
-Thanks,
-Stephan
+Thanks! Applied to thunderbolt.git/fixes.
 
