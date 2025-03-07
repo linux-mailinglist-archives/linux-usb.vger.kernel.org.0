@@ -1,92 +1,103 @@
-Return-Path: <linux-usb+bounces-21512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F03A5733D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 22:02:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83FB8A5741A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 22:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FE73A6A7D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 21:02:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6312F3B1150
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Mar 2025 21:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C1119DF8B;
-	Fri,  7 Mar 2025 21:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CC22561DC;
+	Fri,  7 Mar 2025 21:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eHmAF17X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BO8+HRZH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D99A192B7F
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 21:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84F120C01A;
+	Fri,  7 Mar 2025 21:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741381337; cv=none; b=ld4mo0q66myfe0PwSC1q6y68zi9TJYVlRNu66qDYd3CxNH/5Ve6mgcO4wAZQ6H6n4xtqZ8V/OhcPjI2AC1UtveMbx+aXh3EIvQWzytEMc57B09RCC1Xgzzy3Ou0mva4uvyTHaV7K/PSkE03PM9TZpg9bHho7ucGit7Q1Y1s52dY=
+	t=1741384546; cv=none; b=CuL6C7ChW3iC8aJoavVPpw+3UBM1gybLmzyeMiBr39sn0yMw1CATzd7I4GS0uCG8/NbVPVCzVF1JcedNMjc2Sxjr8ZMPFvCxHb/DYaUWT+9LkHK4p64+GaWDTOBgoFI1+PE7q8sar7cW4fto8WvC8TtcSuPsEldCWonKvNzDClo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741381337; c=relaxed/simple;
-	bh=m8ypfytStsyDsRfNN4mFXcX40gvUGmCEEHrEbnMt/nU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fyTrNKD90Jb+W2e/QMeatWb/+5SlHgp/SyeIRvJkhf8+yWMei7OP8I3g+UIzGUgxfSXWmZ0WCr2Z+sQPMOKzVqScaYmEIqflFbnGsT/SjZ661GyDynRYJQR77OFyEgIaq2TYk/ASiHdm1zChkQgp+lECMSA230I9GJu4WwbXbFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eHmAF17X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CD092C4CEE8
-	for <linux-usb@vger.kernel.org>; Fri,  7 Mar 2025 21:02:16 +0000 (UTC)
+	s=arc-20240116; t=1741384546; c=relaxed/simple;
+	bh=HHaLvWmewEA0UB1/ZT/LTbWWfHBvq2qa7R4z05u++JU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ieGwSwnk+j1U8VHhkDWB3ShouqD6SGOnmudTF/VAlzflFzxSG1feXwgAfK99k4xdrepZFSngQq+krb7lNN62WNtsCCPiYue/yjLux3Ldosi3PIq7MQVx4WX1ftZwgRFDNRNTUwLIPFcA7i2TerSM7euFY/6D6w1jqpt6rsGFPP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BO8+HRZH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F3F9C4CED1;
+	Fri,  7 Mar 2025 21:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741381336;
-	bh=m8ypfytStsyDsRfNN4mFXcX40gvUGmCEEHrEbnMt/nU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=eHmAF17X7chB/N+D2xxTvMkZRNDt5d19oJNTueyq2RA4ZRGQUTeqprYveDjC9akjo
-	 HX9rZavUi2LcHq917JyI8iGLlTK33+5WomLDz+I5e1a41lXL+wAPP2DEjqIm1qg60m
-	 jVQRSg+sVxnLDPe2NF6BVBoHD8K9ChT9o3raAqUUoXkj8dDacp+EIAIApEUveCtnf5
-	 Uzusm6kAlkZxCIuGA09nLn/Cx/DiJ7cSxrO4AjqcUFeiYcSQ38ShLkfp6aIXdcgBo+
-	 hZX+XzvxalQYTdfT4XBLONb3S1PFRyKKkfH85qkRAQAhzitDqRp1jeLHerBjfoHHD/
-	 mugmFYg7y67QA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BF057C53BBF; Fri,  7 Mar 2025 21:02:16 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
- with AMD AI 365
-Date: Fri, 07 Mar 2025 21:02:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219748-208809-ClSOlKrsMY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
-References: <bug-219748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1741384545;
+	bh=HHaLvWmewEA0UB1/ZT/LTbWWfHBvq2qa7R4z05u++JU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BO8+HRZHaRE5kBHYT5HbpF7Opg3fQElryBtTp79LF07A/DKXJqfN1cBNszyyLOZLp
+	 Zj/UXPE/cnP+e1xIVF4dASEHoSMqTI7lluUu8NU92nhImuS417cLyVFasX2YQMzUic
+	 YntmikDx2twsr+L8tnb+7HTCbaB7d+IyjtvEVFtEcF6jzuXO6Z7dbfvynPPfAWDWOf
+	 kCHS3DX+UD7q5dyC6Rg5pK+O42N3h0IZjjuXJ14StHMBGdmHHRMCpOut2u9e5+BZOd
+	 refk7J2V+p1cayr1hOWGseGVZOtr3QHuGI4MTnCgwfk0N/nuNcgAfJfQ4llGrtREjC
+	 ROgVzbuJzoNTw==
+Date: Fri, 7 Mar 2025 15:55:43 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: dri-devel@lists.freedesktop.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, linux-usb@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Kyle Deng <quic_chunkaid@quicinc.com>,
+	Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Simona Vetter <simona@ffwll.ch>, iommu@lists.linux.dev,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Robert Foss <rfoss@kernel.org>,
+	David Airlie <airlied@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>, linux-arm-msm@vger.kernel.org,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Rohit Agarwal <quic_rohiagar@quicinc.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH 01/11] dt-bindings: iommu: qcom,iommu: Add optional TBU
+ clock
+Message-ID: <174138454322.672545.5612308446106419533.robh@kernel.org>
+References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
+ <20250306-topic-dt_bindings_fixups-v1-1-0c84aceb0ef9@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250306-topic-dt_bindings_fixups-v1-1-0c84aceb0ef9@oss.qualcomm.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
---- Comment #33 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-OK considering that I think this patch is correct, I feel we shouldn't dig =
-any
-further from a CM perspective at this time.
+On Thu, 06 Mar 2025 19:11:13 +0100, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> Some MMU instances feature a Translation Buffer Unit (TBU), which comes
+> with its own clock. Allow describing it.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/iommu/qcom,iommu.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
---=20
-You may reply to this email to add a comment.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
