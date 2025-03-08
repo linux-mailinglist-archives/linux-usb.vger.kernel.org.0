@@ -1,223 +1,100 @@
-Return-Path: <linux-usb+bounces-21534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E820A57F05
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 22:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE7B6A57FD5
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Mar 2025 00:16:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC306188F5A2
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 21:49:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59838188C1D4
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 23:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD9220B803;
-	Sat,  8 Mar 2025 21:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081901AB6DE;
+	Sat,  8 Mar 2025 23:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gw+iAH3r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AziU1q+u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0394549620;
-	Sat,  8 Mar 2025 21:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B74A199BC
+	for <linux-usb@vger.kernel.org>; Sat,  8 Mar 2025 23:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741470556; cv=none; b=dYonMs77+J72zow/jqWrMojVQ8ZJyuWKc/AACkeVnc3zBO/uouOlwjusQsbOUDoVG13a2Lrn6N3Po97u1EfcDQiWi4kLYbHICEzYaz2afT5NrMRfU/LwlUTCp4s6sB6j2D9cIbxNAkRu0KEoYZCbUbdFwXBjAgiuBfNS2HU9Ito=
+	t=1741475776; cv=none; b=Ob/ltuM9GW8lNKEih1OIyQJakp+e0e87X1WAYxdB8CmNyNqbz/URnxFWhKb6yaj3mBPdABVZ54kffchsqrTftussw2y4RFcnDLLfB/A3RX8dBi0Kn1W9kTvqbjZ2kAOoRfe+u7AXD5vKE/IAey7Ovr70dd8DBfplAYlMy2pXdcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741470556; c=relaxed/simple;
-	bh=ogZX1Fgf0emz5/XgrE7Jdv5XjH7+aPutVc/+AUG8ok4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZck+DK0UCssg75aP1GpIZbM3f/ugABpwKEO+UnuPqm1HDMJZRF9kNMuU3jzvtha02z8V+J6NlZBXsTWYKMT6yYngehsHoWEVxfQQEdvLGi7pT241ApP1Sr8F+w7uiuSUDkd4GpGq0csz9w/g6GkT2OLFXTgDq2xLfpS6bphB8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gw+iAH3r; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741470555; x=1773006555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogZX1Fgf0emz5/XgrE7Jdv5XjH7+aPutVc/+AUG8ok4=;
-  b=Gw+iAH3raUMyQy7OAKWtJ8Ka9tZ/Z2KkBf68tcX94RIePeGdUN9njJc3
-   exc02j2jvEPbJ3rozwJiWOlispnIIIxKpKVhAx0uU1qFvPprvCjlx+j4k
-   +NWNkQ7/FZG9GF9tGBUQwUO5btdx4lEeSijg/2LFOVg6DBNs02UMXf4aP
-   JvSeW+yMK0KSYzrdwKnLMG40c2YdQuKJkLPSgdEVShTyEmeBqRtQ2acGp
-   kOK2aiWLfa5XNEXE4idV8/wlrLkBc04Km0JnNwG7DFokfmkxuFDjWEmZ4
-   E23BvIgl3KcPfNrSXHBVgXKSp2aUhoNqUVYVoOn9kL7NEeZkW5SC1IaEU
-   g==;
-X-CSE-ConnectionGUID: sCJ57nLET3+3LYKzuTSg7w==
-X-CSE-MsgGUID: OIvyMOrPTSqmfgSpaCFlrQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42638753"
-X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
-   d="scan'208";a="42638753"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 13:49:14 -0800
-X-CSE-ConnectionGUID: TZmFUD+/TReB/RTeelOYBQ==
-X-CSE-MsgGUID: L14Hls9FQ+yTxKkK2KpU5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
-   d="scan'208";a="142863193"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Mar 2025 13:49:11 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tr22e-0002Mw-0F;
-	Sat, 08 Mar 2025 21:49:08 +0000
-Date: Sun, 9 Mar 2025 05:49:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Terry Junge <linuxhid@cosmicgizmosystems.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Terry Junge <linuxhid@cosmicgizmosystems.com>,
-	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	Alan Stern <stern@rowland.harvard.edu>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	lvc-project@linuxtesting.org,
-	syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1] HID: usbhid: Eliminate recurrent out-of-bounds bug in
- usbhid_parse()
-Message-ID: <202503090701.715nV1DW-lkp@intel.com>
-References: <20250307045449.745634-1-linuxhid@cosmicgizmosystems.com>
+	s=arc-20240116; t=1741475776; c=relaxed/simple;
+	bh=z6H9a5G0BjuFxefqh+u+00XxgalVEKxWxNnkMuUn1iA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=c7I7JRL7aeA7sFCMP8ScGLLG1sW8JObCO6M0hX6TkMDiLAaN7DIyoayoaqmkoSICGuIS83NzgqxZiDK2axPrO42CWy7aZTZWjCuxmJKOg0ho4x6mVjJzZkUzy8krmHWLQFxDQeJpwcOVokM3wcYc+Y8OzDkCgmYZ4rG5lQAz9yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AziU1q+u; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abfe7b5fbe8so437467266b.0
+        for <linux-usb@vger.kernel.org>; Sat, 08 Mar 2025 15:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741475772; x=1742080572; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oOg7WSGS6fQ0152nsQH54Rg97RgtkSzIh17S+3ovAFc=;
+        b=AziU1q+uA7r1wp7/ksVZ8XxiMrNds1DSlvJUoDWFW16Di5x8sXVAGVjWzBdnUYqgfF
+         M2Fv+fmfqHL+3fqWV88j8VRCOvZ1TeiZsMH6tiroL0rRjCNFJ+6RRmgSExmxF6Dq1TCw
+         nbyJRAQQUa+EpS2yn87qP1KZ93sQNtMRJXeC8XCqeRLEQFDaX0Z6DYfdJrZ22CYbssei
+         ZUFtBoYr0uMGCzT6nukN5HaNN605QnjhuVF3QghE1SJuriCrdSDGiTE6z4hZfzCJY9Mz
+         MfCyNHIQl/QQ7HsJ4/qyMfzndXWSbaGEgdPz6GX7IBrmsvVYeRZnTLjVn6Q+CzchiaH+
+         9jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741475772; x=1742080572;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oOg7WSGS6fQ0152nsQH54Rg97RgtkSzIh17S+3ovAFc=;
+        b=wfadjJ3MLeZuYIHDrXKvhAuRl43xt2m4schf+6ytfOrxGzcA0fWaVZlrOoj1J3zvwE
+         Npn1+V+P0P7aBwCIJBCHgUl6Jo4wgr42idyIGZaiLUm9gcxeZbxg9VXdI1BCxpd2QHQZ
+         WwMIz1+AwOXS1jhOEV9VjSHROfZLjeoM8LVq+6BluEKJjhrXNnyRsnpnE+Tae1SSwJuY
+         8KZ21Q08+t3e05dPTyaKYU75O6tAvPrmONWHqy4NfynF1/6NFR6MqB5kGQRUGK+YTrLu
+         mhbODgD8H+23pZZfTPribgNKW2izC4hrZs7ShzZroMU+PJHNP3Xc2c4xkLI7hXuJOtSg
+         T2nA==
+X-Gm-Message-State: AOJu0YyHhbWnIxnKmph5AzOaPDBf/hf2sEFxu9IfDk+bG4wrPFvwQrIV
+	6NSoTgfBssJoZubfuUK84UEzdPNDNBaRa/PF9PvmN9SwD30uFPyK5T57CDkE9WUZ0+uHrlIRZF3
+	ImIb8XBEnMPblU0SWOPTscx3GoAZvUg==
+X-Gm-Gg: ASbGncsDZB8aL/Q3CJqYBpay5+XgcvYTpak3Sln0AUlJYyPqS88SVWDEbm5apFwNwXO
+	BVKh3l+Zye+ur2Dp8mOBBKPttHjIfq+Nk7/p18Q/6JTJmjxSjhQ2xTuepS7IkiMXz50ohFLN7KB
+	JkBUukW4YR5CB9oQAEtQ7w404JhQ==
+X-Google-Smtp-Source: AGHT+IFcQJKW2VVZxCWZFw+ELNjKtLK7iSabIseX0JCBX8I4NH5hEqd3d0+ZgCKQldLjLFNy3iXiX1ENlXePZuIWBXw=
+X-Received: by 2002:a05:6402:518a:b0:5e5:b572:a6d7 with SMTP id
+ 4fb4d7f45d1cf-5e5e229bc4cmr23975747a12.6.1741475771450; Sat, 08 Mar 2025
+ 15:16:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250307045449.745634-1-linuxhid@cosmicgizmosystems.com>
+From: James Dutton <james.dutton@gmail.com>
+Date: Sat, 8 Mar 2025 23:15:35 +0000
+X-Gm-Features: AQ5f1JpxrD4r_HSsKSi4BMSaChTg3XsTjDgF4p0fMc03rLrZZWPeEDY9hdnWbXE
+Message-ID: <CAAMvbhHOzPFBtbE9w1oZUWSWY4NX6ZKhpfNzzV0eOjw+eQ6-DA@mail.gmail.com>
+Subject: USB PD typec EPR Mode
+To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Terry,
+Hi,
 
-kernel test robot noticed the following build warnings:
+I can see that the Linux kernel supports Fixed and Variable PD modes,
+but I cannot see any support for typec EPR Mode  (Bit 23 set of the
+PDO)
 
-[auto build test WARNING on 58c9bf3363e596d744f56616d407278ef5f97f5a]
+Are there any plans to add EPR Mode support?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Junge/HID-usbhid-Eliminate-recurrent-out-of-bounds-bug-in-usbhid_parse/20250307-130514
-base:   58c9bf3363e596d744f56616d407278ef5f97f5a
-patch link:    https://lore.kernel.org/r/20250307045449.745634-1-linuxhid%40cosmicgizmosystems.com
-patch subject: [PATCH v1] HID: usbhid: Eliminate recurrent out-of-bounds bug in usbhid_parse()
-config: s390-randconfig-r133-20250308 (https://download.01.org/0day-ci/archive/20250309/202503090701.715nV1DW-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20250309/202503090701.715nV1DW-lkp@intel.com/reproduce)
+Symptoms:
+lm-sensors:
+sensors  reports a PSU connected with a source of  5000mV when the PSU
+is actually sourcing 36 Volts
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503090701.715nV1DW-lkp@intel.com/
+I will probably implement it myself, but wished to check, in case
+someone else had already done it?
 
-All warnings (new ones prefixed by >>):
+Kind Regards
 
->> drivers/hid/usbhid/hid-core.c:1055:4: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-                           hdesc->bNumDescriptors - 1);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1239:31: note: expanded from macro 'hid_warn'
-           dev_warn(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                 ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +1055 drivers/hid/usbhid/hid-core.c
-
-   979	
-   980	static int usbhid_parse(struct hid_device *hid)
-   981	{
-   982		struct usb_interface *intf = to_usb_interface(hid->dev.parent);
-   983		struct usb_host_interface *interface = intf->cur_altsetting;
-   984		struct usb_device *dev = interface_to_usbdev (intf);
-   985		struct hid_descriptor *hdesc;
-   986		struct hid_class_descriptor *hcdesc;
-   987		u32 quirks = 0;
-   988		unsigned int rsize = 0;
-   989		char *rdesc;
-   990		int ret;
-   991	
-   992		quirks = hid_lookup_quirk(hid);
-   993	
-   994		if (quirks & HID_QUIRK_IGNORE)
-   995			return -ENODEV;
-   996	
-   997		/* Many keyboards and mice don't like to be polled for reports,
-   998		 * so we will always set the HID_QUIRK_NOGET flag for them. */
-   999		if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-  1000			if (interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_KEYBOARD ||
-  1001				interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
-  1002					quirks |= HID_QUIRK_NOGET;
-  1003		}
-  1004	
-  1005		if (usb_get_extra_descriptor(interface, HID_DT_HID, &hdesc) &&
-  1006		    (!interface->desc.bNumEndpoints ||
-  1007		     usb_get_extra_descriptor(&interface->endpoint[0], HID_DT_HID, &hdesc))) {
-  1008			dbg_hid("class descriptor not present\n");
-  1009			return -ENODEV;
-  1010		}
-  1011	
-  1012		if (!hdesc->bNumDescriptors ||
-  1013		    hdesc->bLength != sizeof(*hdesc) +
-  1014				      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
-  1015			dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
-  1016				hdesc->bLength, hdesc->bNumDescriptors);
-  1017			return -EINVAL;
-  1018		}
-  1019	
-  1020		hid->version = le16_to_cpu(hdesc->bcdHID);
-  1021		hid->country = hdesc->bCountryCode;
-  1022	
-  1023		if (hdesc->rpt_desc.bDescriptorType == HID_DT_REPORT)
-  1024			rsize = le16_to_cpu(hdesc->rpt_desc.wDescriptorLength);
-  1025	
-  1026		if (!rsize || rsize > HID_MAX_DESCRIPTOR_SIZE) {
-  1027			dbg_hid("weird size of report descriptor (%u)\n", rsize);
-  1028			return -EINVAL;
-  1029		}
-  1030	
-  1031		rdesc = kmalloc(rsize, GFP_KERNEL);
-  1032		if (!rdesc)
-  1033			return -ENOMEM;
-  1034	
-  1035		hid_set_idle(dev, interface->desc.bInterfaceNumber, 0, 0);
-  1036	
-  1037		ret = hid_get_class_descriptor(dev, interface->desc.bInterfaceNumber,
-  1038				HID_DT_REPORT, rdesc, rsize);
-  1039		if (ret < 0) {
-  1040			dbg_hid("reading report descriptor failed\n");
-  1041			kfree(rdesc);
-  1042			goto err;
-  1043		}
-  1044	
-  1045		ret = hid_parse_report(hid, rdesc, rsize);
-  1046		kfree(rdesc);
-  1047		if (ret) {
-  1048			dbg_hid("parsing report descriptor failed\n");
-  1049			goto err;
-  1050		}
-  1051	
-  1052		if (hdesc->bNumDescriptors > 1)
-  1053			hid_warn(intf,
-  1054				"%hhu unsupported optional hid class descriptors\n",
-> 1055				hdesc->bNumDescriptors - 1);
-  1056	
-  1057		hid->quirks |= quirks;
-  1058	
-  1059		return 0;
-  1060	err:
-  1061		return ret;
-  1062	}
-  1063	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+James
 
