@@ -1,129 +1,109 @@
-Return-Path: <linux-usb+bounces-21521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9EFA578B5
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 06:57:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62854A578D5
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 07:57:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BA153ABE7A
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 05:57:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D32931892ABE
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Mar 2025 06:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6BD18CC10;
-	Sat,  8 Mar 2025 05:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28F119047C;
+	Sat,  8 Mar 2025 06:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yZXZnV9A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yz9nVeH5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D3415E5B8;
-	Sat,  8 Mar 2025 05:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE58137E
+	for <linux-usb@vger.kernel.org>; Sat,  8 Mar 2025 06:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741413442; cv=none; b=Xym0oEg5ZAF4IKfFqSl/15rIH0+ME6lRavCgPt7UhkSuA35aSGUKoEuZi9qpEp7uw1D/RILMV5Yi8Wctuv0eJhO59KO6V80FrPMmUSQpFW8t0jd3EQgqAaRDGhVNu/bL5+PYj64FfnVgz0War9CkL15HG6/jDtlt+jpvv1u6iFw=
+	t=1741417020; cv=none; b=oA3truIaGXtMRwTWCNzH/APQyBPNkXEkh3b9ql3O9KV0JND6OIL3ve3hpNEbsofTMbpI6BHH2P4WCmn0ol7i7HfSiL6kjVTYTEhzOdVPfAm5rqQL1Rq8jPRuxOVtdoNEUUL9+EXcxj1d43+Se8lTHTCmZFn3ur0aTUYCNJWu4S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741413442; c=relaxed/simple;
-	bh=JzmsDg9DtrYfYPjoGVH8JHEuPvWz63npzYi59wS/Dbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VPv98TnPkVAorrlZITNLDIHrPJJPWDp5yB14BL71+jC1pZ5t5sztdqRzVmP0QeUUdSTadSK46QTaExlkGd2I45bz04aACWCDCMX2gVPhZf4uTAjauvG/G4eE7SwKHWbOc6kMvVj9DpA8296xvcqy0LzAKfVeyjgLwUc8asXWCuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yZXZnV9A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44473C4CEE0;
-	Sat,  8 Mar 2025 05:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741413441;
-	bh=JzmsDg9DtrYfYPjoGVH8JHEuPvWz63npzYi59wS/Dbo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yZXZnV9AmVNu6/JIAb7/rajXcgFg/OOZi5E/jFwrcbUN3gk6TfQ5whJXfXQDSEmF0
-	 6sLCxGLENX/sRKHsXBt1IHqRqQEezypOjXL7g1V/m8qbcwbz7Bv7G34cpBOLglpaCj
-	 b8n7VDOqPs/KqxnDYAz+lripf6iaSPcuLFU8lvEc=
-Date: Sat, 8 Mar 2025 06:57:18 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Samuel Holland <samuel@sholland.org>,
-	David Lechner <david@lechnology.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
- of_node to fwnode
-Message-ID: <2025030845-pectin-facility-a474@gregkh>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
- <2025022542-recital-ebony-d9b5@gregkh>
- <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
+	s=arc-20240116; t=1741417020; c=relaxed/simple;
+	bh=zcOY4R6DRMfQEKfcCOMs1wkAtyKJWXYKTNpAl8YW+Tw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NhOdCtNrSpPtABbQMPuO9FGeRM8o3dm9j8RTm5EYoWmEffw7t/efKk4De23cnH2PsNGYS7iok2DnrOOvVF4vIj5iaaF3XzOBEeXYIrnrikaEWQQzPKub6u9V7+nUQGB6tO6BV7fykCQFFTncOtXauKhqdj54XUg6dvKJFxFLu/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yz9nVeH5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2A3FC4CEE8
+	for <linux-usb@vger.kernel.org>; Sat,  8 Mar 2025 06:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741417019;
+	bh=zcOY4R6DRMfQEKfcCOMs1wkAtyKJWXYKTNpAl8YW+Tw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Yz9nVeH5f6FKRa5SBqJyAybyhu71yeN3KbKUfiiREyHiCnoY4bPQwOb90acum9m1x
+	 BuchzBLNyWticTlnUB19UHaMb0y8eL1JcOuMvXramaonYmsBNjfJNxLCWqzMOBS2sO
+	 IlIiYCyU4DRte6AdfMvx6LZDkUrEHl4xsB3pCX6kkUS5mWrJ7TEIEieuwVXNPkX+/E
+	 AXrEl9Omi2vrFHQHTAiv/3ba8Nr6Sdz8qsUJ2G9aJ3xm1/bE2fOlEr0GDDbXqfykcv
+	 hnt2MoaTTvPZ4L7P63BIvz3tcXUAYoxpBoHjPvnv388dZm05r2alCH64CuxcHhJI5J
+	 yud21fIR2T9WA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 9C94BC53BC5; Sat,  8 Mar 2025 06:56:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219824] [6.13 regression] USB controller just died
+Date: Sat, 08 Mar 2025 06:56:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219824-208809-b2SPRg4yY6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219824-208809@https.bugzilla.kernel.org/>
+References: <bug-219824-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
 
-On Sat, Mar 08, 2025 at 02:10:29AM +0100, Sebastian Reichel wrote:
-> Hello Greg,
-> 
-> On Tue, Feb 25, 2025 at 04:32:50AM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Feb 25, 2025 at 12:21:36AM +0100, Sebastian Reichel wrote:
-> > > In order to remove .of_node from the power_supply_config struct,
-> > > use .fwnode instead.
-> > > 
-> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > > ---
-> > >  drivers/usb/common/usb-conn-gpio.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-> > > index aa710b50791b0282be0a6a26cffdd981b794acaa..1e36be2a28fd5ca5e1495b7923e4d3e25d7cedef 100644
-> > > --- a/drivers/usb/common/usb-conn-gpio.c
-> > > +++ b/drivers/usb/common/usb-conn-gpio.c
-> > > @@ -158,7 +158,7 @@ static int usb_conn_psy_register(struct usb_conn_info *info)
-> > >  	struct device *dev = info->dev;
-> > >  	struct power_supply_desc *desc = &info->desc;
-> > >  	struct power_supply_config cfg = {
-> > > -		.of_node = dev->of_node,
-> > > +		.fwnode = dev_fwnode(dev),
-> > >  	};
-> > >  
-> > >  	desc->name = "usb-charger";
-> > > 
-> > > -- 
-> > > 2.47.2
-> > 
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Please just merge this patch through the USB tree.
-> 
-> There are no dependencies and I will send a new version for the
-> later patches, but they won't make it to 6.15 as I want enough
-> time in linux-next for them. This patch is rather simple and
-> getting it merged now means we avoid immutable branches or
-> merging through the wrong tree in the 6.16 cycle.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219824
 
-Attempting to merge a single patch out of a series is hard with our
-current tools, you know that.  Please resend just the single patch if
-you want that applied.
+--- Comment #20 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Sorry about Reported-by, but if I added that then they would also want a Cl=
+oses
+and I wasn't sure if it really is this bug. It's something I produced on my
+machine under my workload, using knowledge of how one commit is broken.
 
-thanks,
+I guess I could have taken a gamble and tagged it anyway because it seemed
+likely, but I had no confirmation and no idea if I would get any by the end=
+ of
+the week. Indeed, to this day the best I've seen is reports that downgradin=
+g to
+6.12 helps, I haven't heard from anyone previously affected reverting the
+suspect patch.
 
-greg k-h
+Like Mathias, I was expecting some nightmare scenario and not that. I hope =
+that
+this is all there was to it, but we will really know next week.
+
+My patch made it to Greg's usb-linus branch, which normally means it will l=
+and
+in the next -rc tomorrow and then propagate to stable. No other -rc has it
+because they were released before it existed.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
