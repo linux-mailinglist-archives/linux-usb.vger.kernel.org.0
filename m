@@ -1,150 +1,229 @@
-Return-Path: <linux-usb+bounces-21603-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21604-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F732A59A29
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 16:38:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 701F1A59B1D
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 17:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90E0E188361C
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 15:38:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 111113A53FF
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 16:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C4322E00A;
-	Mon, 10 Mar 2025 15:38:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD7A230269;
+	Mon, 10 Mar 2025 16:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ogurQhMQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lO0UrGtg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUxACk1P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5305E2206BE;
-	Mon, 10 Mar 2025 15:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C724122FF25;
+	Mon, 10 Mar 2025 16:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741621110; cv=none; b=Qvz2AgUM5uHikFqh8Hj4w7/FAM8OX1PRuSv8kvUwGuGlDCMuGK3qwXwKuPaaFDspKv6U0GTRjNJSpoN7sWM9g/hB/Ln2fv0A3rewmW4wy40jMK4OS3KQRV6Ndl8PJFuhQTwN4I1aKIMg5Q474fYIrOAXGK9hxJKcpjqAidPTkpE=
+	t=1741624505; cv=none; b=M2SVpoTd5SwrZyZwbnNolOZ8PpGE2LCnVqiM1UFETZBs2GXuYd398V3abkydT3v8rJhWAiBf0sPu/uZyBvmacLBopwFYbRKTWwKRkg1TztT+wskTsy89L+vBbL9EEiRK0qReh6CA2wjORk8cHoCj3GNV/ArV2jRtYd72rj8qCB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741621110; c=relaxed/simple;
-	bh=Nu0N+dD6APuQdLDWm6wIHVPj7WkCuoQLnQ5wWO5nfTM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B0OP8rVnGxgLTz0PAl/UHs6Kv7wD/yaHDdw7PC8zbsNJ9mFYO8o18S8pYvjrMFesheRJCIB0KdfT2mDz/sSE7YXe9JIelMH/5YiPQqAs3ke/Kb8LPPqDVaKpJIMY3wGVXeJynb9OInlgyyuWW1LIyH3Z5Xyd92vGz+lLYLcXO+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ogurQhMQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lO0UrGtg; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741621107;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K14g7P5Sc0PtDGYG0K97zMcD1wLmc9SWms5AZ+7zf6U=;
-	b=ogurQhMQelGRkCIAZJ4P6n1THgbSalyU4S35z+WCTF4GYkCYuWeG9rs9xK1P4mXavCpDFa
-	VW9mPenIxwXWRlRofe8qSx1Y0rJuNziCufpEe8WQKocoii89Z7lg3hLWfPX2BIzP59lmxl
-	kcZer8d/acvYycW3BcBYCKwvZanzCVeeYq5QVDzU5m6xiHcefzSOFRqDUvKcOl2CfyZTOC
-	m+s+iLLh7V3n4lzP3RQW6uq3sqLj/g91wsX6BhznLyYR+8C5wf6H9TyUDUqHHs+otaA6+w
-	DUNl4e+52esp+3xVjECU4H5jmtsjjE19ZDRQQ8JNjuPeGKiVjMFj4Q/vaBTFpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741621107;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K14g7P5Sc0PtDGYG0K97zMcD1wLmc9SWms5AZ+7zf6U=;
-	b=lO0UrGtguucyRqXXsvhFDCbU594/VCO662mMwOebhwaT29nXqgsBBpk49QdHSZTXI6p+Ci
-	8sfOZnwHR0STmkBA==
-Date: Mon, 10 Mar 2025 16:38:24 +0100
-Subject: [PATCH v2 2/2] usb: dwc3: Don't use %pK through printk
+	s=arc-20240116; t=1741624505; c=relaxed/simple;
+	bh=FARdNy+91G1MdfluD+38ATYSmorCg4dYlxOvx7IorOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=TJUdEVuZcXgpeB1XV8b1FBWew+JlJa/XfmwANzTS210DGMfT3Qpn/YMx8QqtdrtgaJxbSXg8/r+KbdXy3TE/3lYVmZddgUEhLQ/tqVmXMO5q33gpnBu6E7LWP0+HZnW2Jx1lL+fz8Nc3GNTp0Pa9Jn9FLikxsyB7PMu8fgrgCK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUxACk1P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E47C4CEE5;
+	Mon, 10 Mar 2025 16:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741624505;
+	bh=FARdNy+91G1MdfluD+38ATYSmorCg4dYlxOvx7IorOM=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=QUxACk1P7GQWq6Zzy9+tc9rATcxE3jQm2rwoJra0ZaHQl+AssBm6kAjAF1sNrgqlg
+	 bPTaZqNHIgIkfBPbO2YACvGfYWmp5lKzRF0CHfp3Xiamr4hwI2cmj3NWhHMLmYH2R9
+	 hEwTeulJdDclYZoZR01jvELBAXdGq3j/ZlAZq7A1GZyzsSIn+pwF+GkbOeJGIP/5co
+	 WQ3ODm+bTU7Io8PlvIERGJZ0Kl3W2YNMN31U9XsoXqLB1WSFRGhafRorTokyVu1Vsm
+	 52t/K5Sz5wkTsbX8M2Pm0AQDmHfi5sIzeUUYu525hps06NgE/3/SadSn5VFWCaaUp9
+	 0u+fhx6r4pCNA==
+Message-ID: <4f16d239-f540-45d5-b67a-767b09f1c70c@kernel.org>
+Date: Mon, 10 Mar 2025 17:34:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250310-restricted-pointers-usb-v2-2-a7598e2d47d1@linutronix.de>
-References: <20250310-restricted-pointers-usb-v2-0-a7598e2d47d1@linutronix.de>
-In-Reply-To: <20250310-restricted-pointers-usb-v2-0-a7598e2d47d1@linutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Patrice Chotard <patrice.chotard@foss.st.com>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741621105; l=2586;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Nu0N+dD6APuQdLDWm6wIHVPj7WkCuoQLnQ5wWO5nfTM=;
- b=tlLMau6RpGLelX0xHjgc05oEUAK1+WfYuqDerDGMsQPeFxlMW2j6X66HABJ8+rbIsoPILb4Im
- /iIEGCY7TfJCBMLMNmThhuP9ukor1R55YOrlhka4s+6tBm0+GQ+Madc
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/13] dt-bindings: phy: Add documentation for Airoha
+ AN7581 USB PHY
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Daniel Danzberger <dd@embedd.com>,
+ Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, Guo Ren <guoren@kernel.org>,
+ Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
+ Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+ upstream@airoha.com
+References: <20250309132959.19045-1-ansuelsmth@gmail.com>
+ <20250309132959.19045-10-ansuelsmth@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250309132959.19045-10-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is a revert of
-commit 04fb365c453e ("usb: dwc3: replace %p with %pK")
+On 09/03/2025 14:29, Christian Marangi wrote:
+> Add documentation for Airoha AN7581 USB PHY that describe the USB PHY
+> for the USB controller.
+> 
+> Airoha AN7581 SoC support a maximum of 2 USB port. The USB 2.0 mode is
+> always supported. The USB 3.0 mode is optional and depends on the Serdes
+> mode currently configured on the system for the USB port. If USB 3.0 node
+> is defined, then airoha,scu-ssr property is required for Serdes mode
+> validation.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/phy/airoha,an7581-usb-phy.yaml   | 106 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml b/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+> new file mode 100644
+> index 000000000000..39127cfb63a7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+> @@ -0,0 +1,106 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/airoha,an7581-usb-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Airoha AN7581 SoC USB PHY
+> +
+> +maintainers:
+> +  - Christian Marangi <ansuelsmth@gmail.com>
+> +
+> +description: >
+> +  The Airoha AN7581 SoC USB PHY describes the USB PHY for the USB controller.
+> +
+> +  Airoha AN7581 SoC support a maximum of 2 USB port. The USB 2.0 mode is
+> +  always supported. The USB 3.0 mode is optional and depends on the Serdes
+> +  mode currently configured on the system for the USB port. If USB 3.0 node
+> +  is defined, then airoha,scu-ssr property is required for Serdes mode
+> +  validation.
+> +
+> +properties:
+> +  compatible:
+> +    const: airoha,an7581-usb-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  airoha,port-id:
+> +    description: Describe the physical port this USB PHY refer to. A dedicated
+> +      osciallator is used for each port for the USB 2.0 Slew Rate calibration.
 
-When the formatting was changed from %p to %pK that was a security
-improvement, as %p would leak raw pointer values to the kernel log.
-Since commit ad67b74d2469 ("printk: hash addresses printed with %p")
-the regular %p has been improved to avoid this issue.
-On the other hand, restricted pointers ("%pK") were never meant to be used
-through printk(). They can unintentionally still leak raw pointers or
-acquire sleeping looks in atomic contexts.
+typo
 
-Switch back to regular %p again.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1]
 
-Link: https://lore.kernel.org/lkml/20250113171731-dc10e3c1-da64-4af0-b767-7c7070468023@linutronix.de/
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- drivers/usb/dwc3/dwc3-st.c | 2 +-
- drivers/usb/dwc3/gadget.c  | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I don't understand why do you need index property here (which are
+usually not allowed).
 
-diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index ef7c43008946e15b72d88aba4941dc52bf0788d7..5d513decaacd22de15825dc061c2747cf09fef07 100644
---- a/drivers/usb/dwc3/dwc3-st.c
-+++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -225,7 +225,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 
- 	dwc3_data->syscfg_reg_off = res->start;
- 
--	dev_vdbg(dev, "glue-logic addr 0x%pK, syscfg-reg offset 0x%x\n",
-+	dev_vdbg(dev, "glue-logic addr 0x%p, syscfg-reg offset 0x%x\n",
- 		 dwc3_data->glue_base, dwc3_data->syscfg_reg_off);
- 
- 	struct device_node *child __free(device_node) = of_get_compatible_child(node,
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89a4dc8ebf948244a719f21cbbcce565cc1d8610..9a1ec31b6ab46077d3635d1bff3fa5b362bdd9ba 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1971,12 +1971,12 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- 		return -ESHUTDOWN;
- 	}
- 
--	if (WARN(req->dep != dep, "request %pK belongs to '%s'\n",
-+	if (WARN(req->dep != dep, "request %p belongs to '%s'\n",
- 				&req->request, req->dep->name))
- 		return -EINVAL;
- 
- 	if (WARN(req->status < DWC3_REQUEST_STATUS_COMPLETED,
--				"%s: request %pK already in flight\n",
-+				"%s: request %p already in flight\n",
- 				dep->name, &req->request))
- 		return -EINVAL;
- 
-@@ -2165,7 +2165,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 		}
- 	}
- 
--	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-+	dev_err(dwc->dev, "request %p was not queued to %s\n",
- 		request, ep->name);
- 	ret = -EINVAL;
- out:
+> +
+> +  airoha,scu-ssr:
+> +    description: Phandle to the SCU SSR node for USB 3.0 Serdes mode validation.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  usb2-phy:
+> +    type: object
+> +
+> +    properties:
+> +      '#phy-cells':
+> +        const: 1
+> +
+> +    required:
+> +      - '#phy-cells'
+> +
+> +    additionalProperties: false
 
--- 
-2.48.1
+Also no resources in usb[23]-phy, so this goes to the parent level and
+you have phy-cells=2. Your DTS gives some hint that devices actually
+differ but the commit msg contradicts it, so I don't get. Do you have
+same IP block here or two different?
 
+> +
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe34c80b8d52..c2dd385e9165 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -753,6 +753,12 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
+>  F:	drivers/spi/spi-airoha-snfi.c
+>  
+> +AIROHA USB PHY DRIVER
+> +M:	Christian Marangi <ansuelsmth@gmail.com>
+> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yam
+
+Typo in extension/missing l.
+
+
+
+Best regards,
+Krzysztof
 
