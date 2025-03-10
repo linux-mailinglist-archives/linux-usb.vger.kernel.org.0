@@ -1,112 +1,80 @@
-Return-Path: <linux-usb+bounces-21586-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21587-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD85A59229
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 12:02:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75A13A592C9
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 12:35:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90CA37A2615
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 11:00:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CD9C188D9C6
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 11:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3D3224230;
-	Mon, 10 Mar 2025 11:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3085220697;
+	Mon, 10 Mar 2025 11:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KzitvD+5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e596ZNS/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AB122EE4
-	for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 11:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1AA28EA
+	for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 11:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741604513; cv=none; b=idza0xQeek4VmftJV8BhbfTeujRV6azFoGYsvywVSRmK3ZuoskPAPAuh8NcZD5dM223HbhKiDuaT+zdr6MGhB+zmPfuRktjlbsMc+DftIsq2rm9hPCUwgu+0sbPxTVCV/+Oi9FTFhaj1NXuonmeR+XivO76L98FluzU18z+cm4g=
+	t=1741606553; cv=none; b=gOSrw4Z/cDHAK47fTSz7w/YqyNzFk26X0BrnXKOIvHaLbE74N2RtxFCNaUqKOSt85KEEB/anpUI5MXMsNJJ3WDnl+gon4NtWuYmhw7qlDMeyX2efEENkzsElGrs37tlVp2YUVPlNhSHniBvgx9IUlZKfkSsBrXHSeWU6AX99Kpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741604513; c=relaxed/simple;
-	bh=1b9j3hKSMAJRTK+OFlqaIAKSPQcFCUTmvbd9VOTde5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iyH3UtgISXREqZuRMd+yAmO16LU50ydkHjcPL3g4fphWHPF3+ujXlDzkE2sVotHTiiZ4QjZH76LCn/8ESUm+FAjHaJNQerlmEjwymvBXetmzFOBisVsB8Em1aAdbQs0Y/kIGLM9TLgFG/wbQeIIsE9Oy9WSwxGR3GffYch85MqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KzitvD+5; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741604512; x=1773140512;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1b9j3hKSMAJRTK+OFlqaIAKSPQcFCUTmvbd9VOTde5Q=;
-  b=KzitvD+5i5Et9QdQ9Hv8xePSlfXEw++W3kb09tBLooOKuEkZ4kDq4WwO
-   nqgYPsUzhN53il6FoS4J94YKI5yUCQ/BZ2+7llPRgGut9MRcUcGlMkM/g
-   SgNhVTmyZ8CviXE6pB0hG5rl4Wc9QrYUyNgKxcNgsJPeCD0IqgXjmloOz
-   2qon2zp9IaYWl5cygAu1h3RE6qZd7q4z8eMah5t0fQpR4w9IjG0jhbvmM
-   1NAhDSFAOJaT1UP9Euz+2CxVtnV12FOC4RgJdTQRdyHXIrvmlNfllwzSP
-   Lqc73Tr6kmeTAYXSHBtpmOR54cxeXUQw8MzWyoMQJoPSQjPCBPFWPlnHZ
-   A==;
-X-CSE-ConnectionGUID: 1J0NKDUHSjuZUPAvfXLs9g==
-X-CSE-MsgGUID: +rpd3Bc/TqeIX8gs7WjqDg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="52802712"
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="52802712"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 04:01:52 -0700
-X-CSE-ConnectionGUID: CxTwmJSWRROD/zANMPr8MA==
-X-CSE-MsgGUID: sE7/PiuaQhWNeiR5fIHo6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="120860962"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 10 Mar 2025 04:01:50 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id E33D41F2; Mon, 10 Mar 2025 13:01:48 +0200 (EET)
-Date: Mon, 10 Mar 2025 13:01:48 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1741606553; c=relaxed/simple;
+	bh=e4/CNaRL1BoG/giqEP5yJ3djvUceivhW5nbAXb7lYpk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fKX3vH87ZxjV8TiM90lb9cwcoD1po24KFRObGgLVJDayfuD9Vyrk/wZBeYLYi0i9CyT/3CEMEToc9TXMD+Zp9zEeIwizhnATkw6lsifp8rVARourVWOGjLyY/XnXb+jV3l7bLzdeb660zj+Jjw5NRchRTWaMbiSHltJin2ll8lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e596ZNS/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3741DC4CEE5;
+	Mon, 10 Mar 2025 11:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1741606552;
+	bh=e4/CNaRL1BoG/giqEP5yJ3djvUceivhW5nbAXb7lYpk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e596ZNS/xE2Znw4EiVDBwbbuQyX9nexyYjdTcp1C9mCeIJA5hLGA5XKR4Rwr5WfsI
+	 OprXUkrLiNbw9BOokLFmac8dY2MA+VuNy6M0CJiTADft3Tgf02eAUvZFOHc8ft/Qr0
+	 K8t41Kac0uAep7FceHCYTcvIPLdc6bkimSpAT6J8=
+Date: Mon, 10 Mar 2025 12:35:49 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
 	Lukas Wunner <lukas@wunner.de>,
 	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt fix for v6.14-rc7
-Message-ID: <20250310110148.GZ3713119@black.fi.intel.com>
+	linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB4/Thunderbolt fix for v6.14-rc7
+Message-ID: <2025031042-shrank-magnesium-de43@gregkh>
+References: <20250310110148.GZ3713119@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250310110148.GZ3713119@black.fi.intel.com>
 
-Hi Greg,
+On Mon, Mar 10, 2025 at 01:01:48PM +0200, Mika Westerberg wrote:
+> Hi Greg,
+> 
+> The following changes since commit 7eb172143d5508b4da468ed59ee857c6e5e01da6:
+> 
+>   Linux 6.14-rc5 (2025-03-02 11:48:20 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.14-rc7
+> 
+> for you to fetch changes up to 502843396ec2a3eb4f58a2e4618a4a85fc5e0f46:
+> 
+>   thunderbolt: Prevent use-after-free in resume from hibernate (2025-03-07 14:00:58 +0200)
 
-The following changes since commit 7eb172143d5508b4da468ed59ee857c6e5e01da6:
+Pulled and pushed out, thanks.
 
-  Linux 6.14-rc5 (2025-03-02 11:48:20 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.14-rc7
-
-for you to fetch changes up to 502843396ec2a3eb4f58a2e4618a4a85fc5e0f46:
-
-  thunderbolt: Prevent use-after-free in resume from hibernate (2025-03-07 14:00:58 +0200)
-
-----------------------------------------------------------------
-thunderbolt: Fix for v6.14-rc7
-
-This includes single USB4/Thunderbolt fix for v6.14-rc7:
-
-  - Fix use-after-free in resume from hibernate.
-
-This has been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Mika Westerberg (1):
-      thunderbolt: Prevent use-after-free in resume from hibernate
-
- drivers/thunderbolt/tunnel.c | 11 ++++++++---
- drivers/thunderbolt/tunnel.h |  2 ++
- 2 files changed, 10 insertions(+), 3 deletions(-)
+greg k-h
 
