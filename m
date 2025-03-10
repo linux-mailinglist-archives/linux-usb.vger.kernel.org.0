@@ -1,201 +1,94 @@
-Return-Path: <linux-usb+bounces-21590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21589-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46FF0A59520
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 13:51:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC51A59517
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 13:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A90A77A5D90
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 12:50:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E847F1888C6F
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 12:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAE9227E8C;
-	Mon, 10 Mar 2025 12:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABCF6228CB0;
+	Mon, 10 Mar 2025 12:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KOXorH2E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nX2LXMqE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9545224252;
-	Mon, 10 Mar 2025 12:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F6C226D1B;
+	Mon, 10 Mar 2025 12:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741611076; cv=none; b=UmA1+DiYfKQA7sjgdv41tUtOmzgdYEvlY+Z2c1ASUhv8jN5Mf0TxoIFmviRRRW9pczTpc5iIY9rkihdSHJenRVuPGR/IhsU0cAa49X+VIReqGJvXP5U0pyocr36Fvt8BBthQYfHUVilcH8Crpfr4x+Xxd2OiXnzEOUkegSwjO0I=
+	t=1741611027; cv=none; b=VP1mlKH7JTGLm42v6i+s0USt1EY9rY2jnKj++WeHA1j5i1hf8RZ8kykTbHB1Bl1Wvkq9dcQZDP9blJaWAkagyoyLjIjvbBKEgQthuPz5Ta6ue8+WfGTWfymUhS+gFYeqtk7QUAjQsWxxKFDshFsLi8my2dlS/3rqCi+Zz0UFb2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741611076; c=relaxed/simple;
-	bh=UjM8Ysu6ITSvttk3Hg0lMsBTnl6G5ZsqoiI8lIaMSfY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R94VrfqwYY28QfNzdu+Yqnk61B+WRWjTcGhntSz7fHAzfKrSHFZHOnJiGvgsRHm79awL2nZHTimOcJJSCq9K9O4ldiwRImIhFUTBbIU7tNrxjJrzorWe1+mB/XwgUm3LEI/H3I190Y9YoZurk9VzJZmIdtASwDUCPAGW/+iyKPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KOXorH2E; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 79C3E4418C;
-	Mon, 10 Mar 2025 12:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741611065;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cpwv+O/rfjVyEucu2QcSsIfXnrXMI0PIlcx95yddQ+Y=;
-	b=KOXorH2EviOwBX90oHYpCRsMCj5LPdVecXFwNLwwVwj0tkggBUk9NnZmOXbFHYvcnqlght
-	O7PjNZB4jiUBlpGnwp/tP/DFhgwD/y9k1Ts+6/kKGgMztyKC0YpelTXZTzIRlcIfgONt9c
-	XADOnzvueAuVfDDnfLJHN5gLupxCBUS+VEyt4G8UtBQSiEypJoMB76sDusPvnJiHillDlH
-	LuyNVlreD0iTJ9Cs5I1UFi4oKGR9vxzIpULWuQCludb3PRHIVP8Qkz8lN5S9if6lz55CO4
-	6h0TbAjNfgRqyIAet1J+zopSykvBCRHFS0kUmHGZL8EmATS1+nv9/orTQL244g==
-Date: Mon, 10 Mar 2025 13:50:12 +0100
-From: Kory Maincent <kory.maincent@bootlin.com>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, Leon Schuermann
- <leon@is.currently.online>, Jakub Kicinski <kuba@kernel.org>, Oliver Neukum
- <oliver@neukum.org>
-Subject: Re: [PATCH] cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
-Message-ID: <20250310135012.0e5a0791@kmaincent-XPS-13-7390>
-In-Reply-To: <484336aad52d14ccf061b535bc19ef6396ef5120.1741601523.git.p.hahn@avm.de>
-References: <484336aad52d14ccf061b535bc19ef6396ef5120.1741601523.git.p.hahn@avm.de>
-Organization: bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741611027; c=relaxed/simple;
+	bh=cwRxbSYGPKZURVn4Ulz5UQrnvelO0Eq/qUFVt1xOCi8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HibQ5hn6b8CzJ4Kv9VHdQkUS4PxUJ92WhBFm0UzKedbHMnAX5e9b603Jn7stlhsx04UZvYo4sgVMy6kp7L+MXCCQPV7VIZEPf50duYUGEyJcMw463ZqoUj6KrDDuyKOAIUjuNKXSp6RIVJHSYFxKZBZV3rzw7OWO7NUngfd2GVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nX2LXMqE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C40CC4CEE5;
+	Mon, 10 Mar 2025 12:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741611026;
+	bh=cwRxbSYGPKZURVn4Ulz5UQrnvelO0Eq/qUFVt1xOCi8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nX2LXMqEKvvhandPRi5CCpzEZSMwiY3SyDANr1bp1xCcCzJI+qpr37uJZGupLOBW/
+	 9lihcf6CYjnHHGicwkahaA1zmO4+JXuoPjRCRgoYyXFw+myxw7D0HTc+u+hnu9f32x
+	 Szxx2IITjFpbY96qm+/YpmdpwqDFVCR6JFvQi9U2R3wrB5fSu5QD7J9H9mecgONG/5
+	 /emb+uicouqoGUWc5ZY0LL4X7hPTvGhPuEwXlME9fHMXvKsRpQ664dal7RS3e4ybPk
+	 K6LL/ZvQaYpxXhp89VdWJjS4XdDbScvNMWXQ9UoFCQ55gaXQDi3sd4qEXJarVufhJB
+	 kQ7MFckkj9NBg==
+Date: Mon, 10 Mar 2025 07:50:24 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH v2] dt-bindings: usb: qcom,dwc3: Synchronize minItems for
+ interrupts and -names
+Message-ID: <174161102447.3880921.7318967910714477223.robh@kernel.org>
+References: <20250308-topic-dt_bindings_fixes_usb-v2-1-3169a3394d5b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudelgedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefmohhrhicuofgrihhntggvnhhtuceokhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetgeeghfduhefhleelueeuueejjeegueegffdviedtheejieekhedvveejteehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhgvnhhovhhordgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppeegiedrudekkedrvdefledruddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepgeeirddukeekrddvfeelrddutddphhgvlhhopehkmhgrihhntggvnhhtqdgirffuqddufedqjeefledtpdhmrghilhhfrhhomhepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepjedprhgtphhtthhopehphhgrhhhnqdhoshhssegrvhhmrdguvgdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepl
- hgvohhnsehishdrtghurhhrvghnthhlhidrohhnlhhinhgvpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeholhhivhgvrhesnhgvuhhkuhhmrdhorhhgpdhrtghpthhtohepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomh
-X-GND-Sasl: kory.maincent@bootlin.com
-
-On Mon, 10 Mar 2025 11:17:35 +0100
-Philipp Hahn <phahn-oss@avm.de> wrote:
-
-> Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
-> the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
-> Both are based on the Realtek RTL8153B chip used to use the cdc_ether
-> driver. However, using this driver, with the system suspended the device
-> constantly sends pause-frames as soon as the receive buffer fills up.
-> This causes issues with other devices, where some Ethernet switches stop
-> forwarding packets altogether.
->=20
-> Using the Realtek driver (r8152) fixes this issue. Pause frames are no
-> longer sent while the host system is suspended.
-
-Please add net-next prefix to your patch as it is not a fix.
-
-Also several net maintainers are missing in the Cc. Please use the
-get_maintainers scripts like the following to get list of maintainers:
-./scripts/get_maintainer.pl --norolestats --nogit-fallback *.patch
-
-With these changes:
-Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
-
-Thank you!
-
-> Cc: Leon Schuermann <leon@is.currently.online>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Oliver Neukum <oliver@neukum.org> (maintainer:USB CDC ETHERNET DRIVER)
-> Cc: netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
-> Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
-> Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
-> Link:
-> https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-u=
-sb-docks/40af0135eu
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de> ---
->  drivers/net/usb/cdc_ether.c | 7 +++++++
->  drivers/net/usb/r8152.c     | 6 ++++++
->  drivers/net/usb/r8153_ecm.c | 6 ++++++
->  3 files changed, 19 insertions(+)
->=20
-> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-> index a6469235d904..a032c1ded406 100644
-> --- a/drivers/net/usb/cdc_ether.c
-> +++ b/drivers/net/usb/cdc_ether.c
-> @@ -783,6 +783,13 @@ static const struct usb_device_id	products[] =3D {
->  	.driver_info =3D 0,
->  },
-> =20
-> +/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on
-> Realtek RTL8153) */ +{
-> +	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359,
-> USB_CLASS_COMM,
-> +			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-> +	.driver_info =3D 0,
-> +},
-> +
->  /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
->  {
->  	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 468c73974046..96fa3857d8e2 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -785,6 +785,7 @@ enum rtl8152_flags {
->  #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
->  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
->  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
-> +#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
-> =20
->  struct tally_counter {
->  	__le64	tx_packets;
-> @@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(str=
-uct
-> usb_device *udev) case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
->  		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-> +		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
->  			return 1;
->  		}
->  	} else if (vendor_id =3D=3D VENDOR_ID_REALTEK && parent_vendor_id =3D=3D
-> VENDOR_ID_LENOVO) { @@ -10064,6 +10066,8 @@ static const struct usb_devic=
-e_id
-> rtl8152_table[] =3D { { USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
->  	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
->  	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
-> +
-> +	/* Lenovo */
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
-> @@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[]=
- =3D {
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
-> +	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
-> +
->  	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
->  	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
->  	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
-> diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
-> index 20b2df8d74ae..8d860dacdf49 100644
-> --- a/drivers/net/usb/r8153_ecm.c
-> +++ b/drivers/net/usb/r8153_ecm.c
-> @@ -135,6 +135,12 @@ static const struct usb_device_id products[] =3D {
->  				      USB_CDC_SUBCLASS_ETHERNET,
-> USB_CDC_PROTO_NONE), .driver_info =3D (unsigned long)&r8153_info,
->  },
-> +/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on
-> Realtek RTL8153) */ +{
-> +	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359,
-> USB_CLASS_COMM,
-> +				      USB_CDC_SUBCLASS_ETHERNET,
-> USB_CDC_PROTO_NONE),
-> +	.driver_info =3D (unsigned long)&r8153_info,
-> +},
-> =20
->  	{ },		/* END */
->  };
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250308-topic-dt_bindings_fixes_usb-v2-1-3169a3394d5b@oss.qualcomm.com>
 
 
+On Sat, 08 Mar 2025 17:24:15 +0100, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> It makes sense that ARRAY_SIZE(prop) should == ARRAY_SIZE(prop-names),
+> so allow that to happen with interrupts.
+> 
+> Fixes bogus warnings such as:
+> usb@c2f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
+> 
+> Fixes: 53c6d854be4e ("dt-bindings: usb: dwc3: Clean up hs_phy_irq in binding")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> Changes in v2:
+> - Use a better reference in the Fixes tag
+> - Link to v1: https://lore.kernel.org/r/20250306-topic-dt_bindings_fixes_usb-v1-1-e1e6a5bde871@oss.qualcomm.com
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
---=20
-K=C3=B6ry Maincent, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
 
