@@ -1,153 +1,146 @@
-Return-Path: <linux-usb+bounces-21605-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21606-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2622A59B99
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A421A59BDE
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 18:00:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19D2816EE95
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 16:52:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 907A416427F
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 17:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E94B238155;
-	Mon, 10 Mar 2025 16:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BCA23371B;
+	Mon, 10 Mar 2025 16:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MhgCgACk"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b="lEr+B2TM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4267233725
-	for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 16:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50881230988;
+	Mon, 10 Mar 2025 16:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741625367; cv=none; b=lTcc5z+UdPjMgcaGLxshg+HqR2yhX4KGDZEH/oq9bqyj/2R2cToyJh85689eaNHkuff1kAEJvRIqzACUN0xxPsi8nSyINDndS5q1Yikl+u1WHjvqYjMQc6wd7j+wZdwIBw94pEWSbtkKQ7F9ulliUTjb1+/7NLxFTXVbEimnGow=
+	t=1741625992; cv=none; b=lf5H+EPNv01Y0Hd7CQKg/Lqan0G0mBhqXKl/5C3mWJ18dcRS7EuDgeAH4PBQKpPqGRxnFNjjbRuVTKsKmpVVG9m/llu2HpKiwJRaQ5FB3ivR5yi1mHuhnjsBztgZMAD4cM0y1uHOuXfhHlJpcoAlcZl3fMcFNo/f8ncx7Aefs9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741625367; c=relaxed/simple;
-	bh=4eZz5t8TmyBMoGlxRqvWrcvr4CS9phpiK7yt0a+8Obk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=stA4peJOE83y5hGRPH9U1Bj1eJE8eT25o8JM2sbFbMNQkjTfQ01QhaM0/O04j5Sik0/WjfDHydjnP+ku5Z6CH0xEVu86C67i/nVJejrB91nDr+KZHrAs2jZQkjViJasZcbCCqmhScubCxId8/CIkOHHoGjuEz6POzyRtT2rFROk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MhgCgACk; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-85b3f92c866so19581539f.3
-        for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 09:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1741625364; x=1742230164; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZH6ZP4MFWU7A9nUkRxA5hx+hpyq7yda/wp2Or2UB93U=;
-        b=MhgCgACk2fIjNdxt+dynZWlyznDsGvSVTE1u5M55sjdfARgkAmqrcpcgUCSua/6uCC
-         bKhXEfS6FkX1/wLuQ7S1zBJy2yBCfjvdIvHR3AghDkKAaIFYOkuHzS43KOaGV8zJ9l+6
-         6bInzwIVb1NddKRYVv7AHXSvfVqvXqhvZtWxI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741625364; x=1742230164;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZH6ZP4MFWU7A9nUkRxA5hx+hpyq7yda/wp2Or2UB93U=;
-        b=MUYOMgygg7IZGDmD+/P6S7WU3wq9ev6PjoTAdHbBYDgLfu0t6i/J7d1JsrsfqphOc4
-         1KjGIZaNEk8Cx1sXqqd/LaLA93Jm6/xpft+8RX7X7lf61VAFPnKiOljAkBonMCJCWJoI
-         cQiDe2xLQWryy6BWXeWUSeXJJf/lirAnN1tt9Gl+mUcjjxghmgfFK1/TDuAZftXrPsZV
-         EdSZPePtaoCKw4qmvQ7yFAlDlJD+TybpFDiLtEpgjTDNm3OjjPw9bv229MJncLirGgwU
-         R0ZkYdsG5dbsSF0yR2z3jND9mpLdU/bRheyTqozHrXbJLXW4V7CRWz7eBR5lfMLJBA74
-         nFtg==
-X-Forwarded-Encrypted: i=1; AJvYcCXwrR6Cz2QaR3f4UjX1yvxqpr4krQidQN3CU99fslIBaeBC8OK5lF8vhD6CYMZaw154cxcIiC8xnwE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8/6uHTRh26ogWW/mqWoJwr9XX8Trd0Yo1TR/xoxMR/Fg5WJA7
-	uBq84ARgVR0jraQ2n8ugCN8aHRkPuCYz2eJZOAisKEUW6NwJNFpMkxdAOlkfwW4=
-X-Gm-Gg: ASbGncs+seIOyvDDSx/ezmJ+7twgWZS+oo0A9NFc15VquyzRGXASnv0cpYPcuCQjo8C
-	atJqUvubeHO325T5snOdJvFrxrWjnArfp/8ArhznUrczcf+hcE08xZS1ycp5H+V1uQY80gxTy6r
-	wmPyBcd7yLKG3hDoJFCRt6yAi45zghQ4lCg01eG1XtKErQs0F+AQQLLUymCxuC5+ZdSJF9Cie7K
-	ph2LFNW4zCICUb8wbPtSHW3DXAni8NKTdRGLvmKT2pohlX6CHjh5F7DWMS+rotzcOIRkE3cjozH
-	ly9Q2UiqBLOlEPDrtr0y8Yo0jLWqlS0T5v4qVu5pJw0zwLxWQc2T0es=
-X-Google-Smtp-Source: AGHT+IGLDbRYGP1wg1ZeFwOFD6XsJvCaWS9YFdaCgt+vrDCYBV37HnxlKh3y8F5V50/QJOi38l3Fsg==
-X-Received: by 2002:a05:6602:388c:b0:85b:3885:159e with SMTP id ca18e2360f4ac-85b388516e9mr1121116939f.3.1741625364455;
-        Mon, 10 Mar 2025 09:49:24 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f23a01ef9dsm592827173.125.2025.03.10.09.49.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Mar 2025 09:49:23 -0700 (PDT)
-Message-ID: <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
-Date: Mon, 10 Mar 2025 10:49:22 -0600
+	s=arc-20240116; t=1741625992; c=relaxed/simple;
+	bh=km2IGdJt2Zt2W/qgfZG1Lab7vtwETfZ7Ls52FOlKepE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S0k/p8bvr7MYrEOKumr5zcxTg954mDA/OWi0IF2SrUcZJDKGULPkF+CiTZmN6mN5WZrWSOe8RvwDA6rseuOqYlQ4ViPHbQHziTNzNitsdZBOPLxeNKhVisqbwRrFaEOkSP0VEg90MpsqTX+fDUJn/dPrji+l0WGxf/QoJWiAy08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b=lEr+B2TM; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1741625981; x=1742230781; i=fiona.klute@gmx.de;
+	bh=km2IGdJt2Zt2W/qgfZG1Lab7vtwETfZ7Ls52FOlKepE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=lEr+B2TM1og/6h/R/DnZdw0KAubAPCXD6CmmBFRJkoBa/AOYay1Txdn/g1o+y4K3
+	 oXtnPx/5qwXIr6cqzSq3GgMYXbhMN6lPlEqF1NjKEszAEvrsnN3vJmFOJIFZO19ct
+	 7Ck9eH19W+nrOU5zqstS/R4DpAz5T8jiS2+G40KPammcEKzXUqv+smnGqZAZGLcrZ
+	 Ld74SXCrnFQhYGkjj7VAnFky/TjWwHPC4B4klm7p+RK+tHfXcYq23CRcis6tdmWxy
+	 WR7g1h4zttFF5eXZgAYZsjRzUAjN753IlEz0jK/4nmO2Zr/uG9DWmBUCtgbKqRFNo
+	 DCKG1KxKbvUrDSCXIA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.124.30]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGhyc-1u4LeA3Hne-000h9z; Mon, 10
+ Mar 2025 17:59:40 +0100
+From: Fiona Klute <fiona.klute@gmx.de>
+To: netdev@vger.kernel.org
+Cc: Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fiona Klute <fiona.klute@gmx.de>,
+	kernel-list@raspberrypi.com,
+	stable@vger.kernel.org
+Subject: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling period
+Date: Mon, 10 Mar 2025 17:59:31 +0100
+Message-ID: <20250310165932.1201702-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
- usbip device
-To: Zongmin Zhou <min_halo@163.com>
-Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250219092555.112631-1-min_halo@163.com>
- <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
- <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
- <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
- <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
- <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
- <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:YYGO+4uzgBGjMBAgVnoBmWV0/iNMfrX+PvlpPtClFX82DXYtx/t
+ V0hQLs/Lg7kApN6BGiEWA2n61AMZfA6qQ2HRixcdn8FMqrckdrIS7msv3MwjsuNTBT6VVVw
+ ezeEhMzwrdrEDhv1Vh7om3hdSPLUi9GdScYkxG4fKFH/9/vQ9MG2WmoEmnW3QufDVST5mIl
+ OgTNEL0HEhBDmFpQBM9kg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:xX8wuS/r/h4=;d3UWide7pAM7x2u3z4E84qqiQ5x
+ zTF/zGW9SAqyXGT7WMtqYfz1BzXB2bI2Lvlb5KDs+kByY2s7VNwDvbq/o+UjI0kjd+GbW8Nwp
+ SRW/wtSCbA3z0+vC/XHVLQkJvm3meHrdwzUcg9Hx/k+Fdl5SblIwMEiloMaXR0JX9i7nxdsU4
+ cSDHar6Pcu51kaYOhT7NOOKM3IIn6SutZYBerYbaxFziII5UzI7WTMHdip6fB9SxVZDOr1k7+
+ OoS/L+e2+TZOuCKc9ix0zHspFlX0at0ZQSvpgXNhSnfmkR8Yq/dTF+v7EY4f+FsgbJX0CFzdM
+ fhRheSQmLq/99dhgsIJmi+NufP1dyG902rT6xuQJ6odF03O3lwdTRTkxnWOWZpN2pnWmUBK1C
+ 4nI5eXidryEpYi4ARlmYxjhN9vMlv4PGhEEMSp4CcMe0SQvquNQ/YzB6CPFkgnZNXjeTpBW0m
+ eBf5kD8tSXGlwuQW+vORm7emELY7VyKHDQHte0GRn9preQENFhPev9uQvEVBNzLlk6MHFBTg8
+ OmPq4sCqRCdNC3KXKwUvxabN2unP37NjfDjCIUcKnBGD/m4Pgafg/ymrG2isIWGTz2eR2MC+a
+ O0iaUdO5qRID0mvN9+jFfk/yqngkZRdFDUhuksYvoLLl1CFz1zU2SgLiSeHgnNB5GsbN0A6ye
+ 6B9eHQYjjq1EKmRsQQpweOiT8j0zrlvKT8x2bSoCN6X9OpPbWU3z+YNpjM0UkkTMF9A70iXvR
+ voPJwwCcTUD2e2gFaDi96wXKTE3QIvB7zJS+Gxr7ao73R+oIlUfLI7hzsVSx08jy/R88JOncN
+ hmT3XnK+XTz9+iOpy8CmF57ktIYKWDzCYbIf4pTniCN8MndXIDJ0mMzepeBQSUz+jwvtvr5Bd
+ j0BfyDl9mo+vE+XIcL87TBZDQLryOlf5dwDFIagNLzY0WWrjfbdHho0Pwb6uN87mMPfhLZpVQ
+ vTwLWV/hL5X+zuoMLATMbRx2zTg5oVUroB0SYNNHPftpQGCeYPfTBeqFMr8LpKSgD+GgyUmyY
+ e0PrOkb+2s/Rqox3SAmeDoGebRTYZg2lj50lYPepP6uGPeA0ucFPe6nQouNYO3Qzr/Fynm+BB
+ t6JUy20vmod5O55FsBRMNADKL9UsktvjnV2N0Y/y9VnbtRvr/Et8hL4uOWKoAmTMPZkphkCp/
+ KUcFbROOX6OJcsgawpC2GZEVrcJ683iEJGTwKDIPdabCIglh4ovZd1l20gEaqTtdDnH3X9LS0
+ Gw+mBZkKugO9oP1WP9hj5sDvkrZtz56v0I6ipZ7xOi0hf/d1llzGZOdS0Jq7UYRRODSd0vH2s
+ lnUJT8CKrPbdU46wBPOYDu6KkueS/KedqsHTvvxxrYLTm53Gl+idGzNzDTUTkeRMAXbCg2xDV
+ zC6RiRc0YlQYBWZ+G4y0MrHP+k7zA7+Yw6S5I9/6iCLtghs/oEM/bfqJI3O17KSqmYOP7y0h2
+ D1jC8zyznKx00Gob7FCyw//fXS0RW6tXXv0yziycjBiql+/Ii
 
-On 3/5/25 03:03, Zongmin Zhou wrote:
-> At 2025-03-05 03:45:28, "Shuah Khan" <skhan@linuxfoundation.org> wrote:
-> 
->>On 3/2/25 05:37, Zongmin Zhou wrote:
->>> Dear shuah,
->>> 
->>> 
->>> Yes, I agree with you.It would be better if there have a more simpler fixes than This patch.
->>> 
->>> I can just think of the two possible solutions that mentioned before.
->>
->  >What are the two possible solutions?
-> 1. The patch we are discussing now,have to change the API between the kernel and user-space.
-
-2. Simply set vhci-hcd dma mask to 64 by default,just modify the vhci-hcd driver. Then dma_max_mapping_size() will always return SIZE_MAX.
-
-I prefer option #2 - What are the downsides if any with this option?
-
->>> 
->>> 
->>> If SWIOTLB disabled,dma_max_mapping_size() return SIZE_MAX.
->>
->>Right when CONFIG_HAS_DMA, if not it returns 0. Perhaps we
->  >can ignore CONFIG_HAS_DMA=n for this for this discussion.
-> Yeah, let's ignore that.
->>
->>> 
->>> Only if SWIOTLB is active and dma addressing limited will return the swiotlb max mapping size.
->>> 
->>> 
->>> The swiotlb config seems rely on many other config options like x86_64/IOMMU_SUPPORT and so on,
->>> 
->>> and the configuration on host and client side only use the default at all,Like the default ubuntu release version.
->>> 
->>> It seems that switlb is enabled by default on most platforms.
->>
->>If understand correctly the problem happens only when SWIOTLB
->>is enabled on client or host?
->>
->>The following combinations are possible:
->>
->>SWILTLB enabled on client and disabled on host - rate limited?
->>SWILTLB enabled on client and enabled on host - rate limited?
->>SWILTLB disabled on client and enabled on host - rate limited?
->>SWILTLB disabled on client and disabled on host - not a problem
->  >
-> This problem happens only when SWIOTLB is enabled on client,have nothing to do with host setting. Because the USB xhci controller may set dma mask to 64bit if controllers support. The combinations may like below: SWILTLB enabled on client and enabled/disabled on host - rate limited SWILTLB disabled on client and enabled/disabled on host - not a problem
-
-Got it. So the problem happens only when SWILTLB enabled on client
-
-thanks,
--- Shuah
+SWYgYSBuZXcgcmVzZXQgZXZlbnQgYXBwZWFycyBiZWZvcmUgdGhlIHByZXZpb3VzIG9uZSBoYXMg
+YmVlbgpwcm9jZXNzZWQsIHRoZSBkZXZpY2UgY2FuIGdldCBzdHVjayBpbnRvIGEgcmVzZXQgbG9v
+cC4gVGhpcyBoYXBwZW5zCnJhcmVseSwgYnV0IGJsb2NrcyB0aGUgZGV2aWNlIHdoZW4gaXQgZG9l
+cywgYW5kIGZsb29kcyB0aGUgbG9nIHdpdGgKbWVzc2FnZXMgbGlrZSB0aGUgZm9sbG93aW5nOgoK
+ICBsYW43OHh4IDItMzoxLjAgZW5wMXMwdTM6IGtldmVudCA0IG1heSBoYXZlIGJlZW4gZHJvcHBl
+ZAoKVGhlIG9ubHkgYml0IHRoYXQgdGhlIGRyaXZlciBwYXlzIGF0dGVudGlvbiB0byBpbiB0aGUg
+aW50ZXJydXB0IGRhdGEKaXMgImxpbmsgd2FzIHJlc2V0Ii4gSWYgdGhlcmUncyBhIGZsYXBwaW5n
+IHN0YXR1cyBiaXQgaW4gdGhhdCBlbmRwb2ludApkYXRhIChzdWNoIGFzIGlmIFBIWSBuZWdvdGlh
+dGlvbiBuZWVkcyBhIGZldyB0cmllcyB0byBnZXQgYSBzdGFibGUKbGluayksIHBvbGxpbmcgYXQg
+YSBzbG93ZXIgcmF0ZSBhbGxvd3MgdGhlIHN0YXRlIHRvIHNldHRsZS4KClRoaXMgaXMgYSBzaW1w
+bGlmaWVkIHZlcnNpb24gb2YgYSBwYXRjaCB0aGF0J3MgYmVlbiBpbiB0aGUgUmFzcGJlcnJ5ClBp
+IGRvd25zdHJlYW0ga2VybmVsIHNpbmNlIHRoZWlyIDQuMTQgYnJhbmNoLCBzZWUgYWxzbzoKaHR0
+cHM6Ly9naXRodWIuY29tL3Jhc3BiZXJyeXBpL2xpbnV4L2lzc3Vlcy8yNDQ3CgpTaWduZWQtb2Zm
+LWJ5OiBGaW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPgpDYzoga2VybmVsLWxpc3RAcmFz
+cGJlcnJ5cGkuY29tCkNjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnCi0tLQpGb3IgdGhlIHN0YWJs
+ZSBjcmV3OiBJJ3ZlICp0ZXN0ZWQqIHRoZSBwYXRjaCB3aXRoIDYuMTIuNyBhbmQgNi4xMy41IG9u
+CmEgUmV2b2x1dGlvbiBQaSBDb25uZWN0IDQgKFJhc3BiZXJyeSBQaSBDTTQgYmFzZWQgZGV2aWNl
+IHdpdGggYnVpbHQtaW4KTEFONzgwMCBhcyBzZWNvbmQgZXRoZXJuZXQgcG9ydCksIGFjY29yZGlu
+ZyB0byB0aGUgbGlua2VkIGlzc3VlIGZvcgp0aGUgUlBpIGRvd25zdHJlYW0ga2VybmVsIHRoZSBw
+cm9ibGVtIHNob3VsZCBiZSBwcmVzZW50IGluIGFsbAptYWludGFpbmVkIGxvbmd0ZXJtIGtlcm5l
+bCB2ZXJzaW9ucywgdG9vIChiYXNlZCBvbiBob3cgbG9uZyB0aGV5J3ZlCmNhcnJpZWQgYSBwYXRj
+aCkuCgogZHJpdmVycy9uZXQvdXNiL2xhbjc4eHguYyB8IDEyICsrKysrKysrKysrLQogMSBmaWxl
+IGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9k
+cml2ZXJzL25ldC91c2IvbGFuNzh4eC5jIGIvZHJpdmVycy9uZXQvdXNiL2xhbjc4eHguYwppbmRl
+eCBhOTFiZjljN2UzMWQuLjdiZjAxYTMxYTkzMiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNi
+L2xhbjc4eHguYworKysgYi9kcml2ZXJzL25ldC91c2IvbGFuNzh4eC5jCkBAIC0xNzMsNiArMTcz
+LDEyIEBACiAjZGVmaW5lIElOVF9FUF9HUElPXzEJCQkoMSkKICNkZWZpbmUgSU5UX0VQX0dQSU9f
+MAkJCSgwKQogCisvKiBoaWdoc3BlZWQgZGV2aWNlLCBzbyBwb2xsaW5nIGludGVydmFsIGlzIGlu
+IG1pY3JvZnJhbWVzIChlaWdodCBwZXIKKyAqIG1pbGxpc2Vjb25kKQorICovCisjZGVmaW5lIElO
+VF9VUkJfTUlDUk9GUkFNRVNfUEVSX01TCTgKKyNkZWZpbmUgTUlOX0lOVF9VUkJfSU5URVJWQUxf
+TVMJCTgKKwogc3RhdGljIGNvbnN0IGNoYXIgbGFuNzh4eF9nc3RyaW5nc1tdW0VUSF9HU1RSSU5H
+X0xFTl0gPSB7CiAJIlJYIEZDUyBFcnJvcnMiLAogCSJSWCBBbGlnbm1lbnQgRXJyb3JzIiwKQEAg
+LTQ1MjcsNyArNDUzMywxMSBAQCBzdGF0aWMgaW50IGxhbjc4eHhfcHJvYmUoc3RydWN0IHVzYl9p
+bnRlcmZhY2UgKmludGYsCiAJaWYgKHJldCA8IDApCiAJCWdvdG8gb3V0NDsKIAotCXBlcmlvZCA9
+IGVwX2ludHItPmRlc2MuYkludGVydmFsOworCXBlcmlvZCA9IG1heChlcF9pbnRyLT5kZXNjLmJJ
+bnRlcnZhbCwKKwkJICAgICBNSU5fSU5UX1VSQl9JTlRFUlZBTF9NUyAqIElOVF9VUkJfTUlDUk9G
+UkFNRVNfUEVSX01TKTsKKwlkZXZfaW5mbygmaW50Zi0+ZGV2LAorCQkgImludGVycnVwdCB1cmIg
+cGVyaW9kIHNldCB0byAlZCwgYkludGVydmFsIGlzICVkXG4iLAorCQkgcGVyaW9kLCBlcF9pbnRy
+LT5kZXNjLmJJbnRlcnZhbCk7CiAJbWF4cCA9IHVzYl9tYXhwYWNrZXQoZGV2LT51ZGV2LCBkZXYt
+PnBpcGVfaW50cik7CiAKIAlkZXYtPnVyYl9pbnRyID0gdXNiX2FsbG9jX3VyYigwLCBHRlBfS0VS
+TkVMKTsKCmJhc2UtY29tbWl0OiBkZDgzNzU3ZjZlNjg2YTIxODg5OTdjYjU4YjU5NzVmNzQ0YmI3
+Nzg2Ci0tIAoyLjQ3LjIKCg==
 
