@@ -1,190 +1,174 @@
-Return-Path: <linux-usb+bounces-21581-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21582-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D99EA59041
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 10:50:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C714A5910C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 11:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC4DE188E7D2
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 09:50:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 253C83AC655
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 10:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEAE17A2E7;
-	Mon, 10 Mar 2025 09:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F9222655F;
+	Mon, 10 Mar 2025 10:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U/8Kl8jR"
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="YjnKU/Y5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4259225774;
-	Mon, 10 Mar 2025 09:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24C2226529;
+	Mon, 10 Mar 2025 10:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741600230; cv=none; b=erNNgQ2mE8ChDspdn3tM7sBiZ2OuPpcKAsw9QY4HwtSdgbnitq3u70nB4HI/0tcOVJ5k114adRDImOR/kzXj1JknVzeAgE2MVUpV+jig0Su/Z7cjN4eclRT/+NrqERwQLEoP88nHt1aI9uEMnhnvzM/gbUVfRtu0Zfzv6D7vF5I=
+	t=1741602229; cv=none; b=b7qdJZ4GDSH9P794hgv5qfTwJNBmaJ4qCtflKRVPEMaWH/5/iUVtbNVlgDEK+yw2O4a8KYx859q1DRuLI82F6YI1nqMo7MSfE5Rl2AmCTJxcrR1je40l/1FAI3uDfPCkV89ZTFW4BnjzOVGvkgaFQpCa6oAl5mYVvX0bNxfqlJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741600230; c=relaxed/simple;
-	bh=Ic5/BUg0zh3v22Lvr4sbgdYXGDaROThhXoV+hio8QiE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YuGbni7Se6k1q09YiG/OO7WSHElWsrLJxFlUkiEnufw51VOAxEHN0+x7gA74KOGq3xPiMHRiiJI/8tHzRNuadEJv53mihHpamAh0WBA7h3Aao80m2ODGX45HHBilRmgrmtEmpMqd0ERhinKKdygeCVUpvEeh4qm7SAnvff50IFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U/8Kl8jR; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741600229; x=1773136229;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ic5/BUg0zh3v22Lvr4sbgdYXGDaROThhXoV+hio8QiE=;
-  b=U/8Kl8jRlKIicVm5y9GHfN6UMWHp0aq5jcnbJ6qs5I36xj7vP5fLbcHN
-   IRQdsXPkvo3pC9waBal1ObC8d9tyCBybqj+C4rNbtl4OXzszG/tEvaSPw
-   aUW+ywPf4WTbRWQyNjL7Y5CFJCDUzZaYlaUsqOpW4q/bjDkVguVxE+Xna
-   hiGEsC774JNSx6hj5Y2arqJOpCEZiOZquPJz/4M8OfzJmWisOYN9LguYA
-   LLuH3rmvZYxtIBUJsLcF4+BaCvlQoJQYrF8DXARzZQBqan/JUDXkgbXcy
-   OI0C1AUhxIQOxInm7BJvMrKOJ+TejlsBzA2nT5sFRVCLHOMtifO+OstqH
-   w==;
-X-CSE-ConnectionGUID: /UJFzOQjQdWz5fatHTNm2A==
-X-CSE-MsgGUID: vineWTDWSHyw8jfB8ZJXeA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="46498783"
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="46498783"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 02:50:28 -0700
-X-CSE-ConnectionGUID: lQSeG3ktS+mf3OQx7EXdKA==
-X-CSE-MsgGUID: SAmL73QMQuq761dMl7aLZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="120150306"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa008.fm.intel.com with ESMTP; 10 Mar 2025 02:50:26 -0700
-Message-ID: <dabb1140-b26e-4f90-8e65-85e16d99aa49@linux.intel.com>
-Date: Mon, 10 Mar 2025 11:51:30 +0200
+	s=arc-20240116; t=1741602229; c=relaxed/simple;
+	bh=fWUenZNEUS4s/igS+j2N6X5It+o6P6j0gtBDEBVlD2Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BjNMmJOFXeqA8OxObUqq/x26ujGpzN6mnBj8xFgqKGdaY61KU6S23iZojxhXgKC6alfnw8CgzZJfXYXnYXGZ3QPT3LKHiZw5E5DyIreUOScJDOP9qwlUtf9/+gCBrAZ4n7raSPf4fmSEgs42Xs0/VqWUyMxKgSaNi+sEsv9DMjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=YjnKU/Y5; arc=none smtp.client-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1741601887; bh=fWUenZNEUS4s/igS+j2N6X5It+o6P6j0gtBDEBVlD2Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YjnKU/Y5wu9UZurybEO8c7226Q7fjlL3GXrt8LIEpSLeFbznQk12O32mg8eg795Qw
+	 A0e3Sn58H6iBD4UOy4pFjwdjCDEEduH2VJE007D6Ev+jMR5Tyqmg0xGh1E4COjs+8+
+	 s6SAmO0lI/3I2G1u6cXKPbWPMpemK88FfE4qDmNw=
+Received: from [212.42.244.71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.52.1)
+	(envelope-from <phahn-oss@avm.de>)
+	id 67cebc5f-94fe-7f0000032729-7f00000194d4-1
+	for <multiple-recipients>; Mon, 10 Mar 2025 11:18:07 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Mon, 10 Mar 2025 11:18:07 +0100 (CET)
+From: Philipp Hahn <phahn-oss@avm.de>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Philipp Hahn <phahn-oss@avm.de>,
+	Leon Schuermann <leon@is.currently.online>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Oliver Neukum <oliver@neukum.org>
+Subject: [PATCH] cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
+Date: Mon, 10 Mar 2025 11:17:35 +0100
+Message-Id: <484336aad52d14ccf061b535bc19ef6396ef5120.1741601523.git.p.hahn@avm.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] usb: xhci: Deduplicate some endpoint state flag lists
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250310093605.2b3d0425@foxbook>
- <20250310093748.201e87cd@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250310093748.201e87cd@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Organization: AVM GmbH, Berlin, Germany
+Content-Transfer-Encoding: 8bit
+X-purgate-ID: 149429::1741601887-6B5F5945-5472ED96/0/0
+X-purgate-type: clean
+X-purgate-size: 4277
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-On 10.3.2025 10.37, Michal Pecio wrote:
-> xhci_ring_endpoint_doorbell() needs a list of flags which prohibit
-> running the endpoint.
-> 
-> xhci_urb_dequeue() needs the same list, split in two parts, to know
-> whether the endpoint is running and how to cancel TDs.
-> 
-> Define the two partial lists in xhci.h and use them in both functions.
-> 
-> Add a comment about the AMD Stop Endpoint bug, see commit 28a2369f7d72
-> ("usb: xhci: Issue stop EP command only when the EP state is running")
-> 
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> --->   drivers/usb/host/xhci-ring.c | 10 ++--------
->   drivers/usb/host/xhci.c      | 16 +++++++++++-----
->   drivers/usb/host/xhci.h      | 16 +++++++++++++++-
->   3 files changed, 28 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 0f8acbb9cd21..8aab077d6183 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -555,14 +555,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
->   	struct xhci_virt_ep *ep = &xhci->devs[slot_id]->eps[ep_index];
->   	unsigned int ep_state = ep->ep_state;
->   
-> -	/* Don't ring the doorbell for this endpoint if there are pending
-> -	 * cancellations because we don't want to interrupt processing.
-> -	 * We don't want to restart any stream rings if there's a set dequeue
-> -	 * pointer command pending because the device can choose to start any
-> -	 * stream once the endpoint is on the HW schedule.
-> -	 */
-> -	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
-> -			EP_CLEARING_TT | EP_STALLED))
-> +	/* Don't start yet if certain endpoint operations are ongoing */
-> +	if (ep_state & (EP_CANCEL_PENDING | EP_MISC_OPS_PENDING))
->   		return;
->   >   	trace_xhci_ring_ep_doorbell(slot_id, DB_VALUE(ep_index, stream_id));
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 7492090fad5f..c33134a3003a 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1762,16 +1762,22 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
->   		}
->   	}
->   
-> -	/* These completion handlers will sort out cancelled TDs for us */
-> -	if (ep->ep_state & (EP_STOP_CMD_PENDING | EP_HALTED | SET_DEQ_PENDING)) {
-> +	/*
-> +	 * We have a few strategies to give back the cancelled TDs. If the endpoint is running,
-> +	 * no other choice - it must be stopped. But if it's not, we avoid queuing Stop Endpoint
-> +	 * because this triggers a bug in "AMD SNPS 3.1 xHC" and because our completion handler
-> +	 * is complex enough already without having to worry about such things.
-> +	 */
-> +
-> +	/* If cancellation is already running, giveback of all cancelled TDs is guaranteed */
-> +	if (ep->ep_state & EP_CANCEL_PENDING) {
->   		xhci_dbg(xhci, "Not queuing Stop Endpoint on slot %d ep %d in state 0x%x\n",
->   				urb->dev->slot_id, ep_index, ep->ep_state);
->   		goto done;
->   	}
->   
-> -	/* In this case no commands are pending but the endpoint is stopped */
-> -	if (ep->ep_state & (EP_CLEARING_TT | EP_STALLED)) {
-> -		/* and cancelled TDs can be given back right away */
-> +	/* Cancel immediately if no commands are pending but the endpoint is held stopped */
-> +	if (ep->ep_state & EP_MISC_OPS_PENDING) {
->   		xhci_dbg(xhci, "Invalidating TDs instantly on slot %d ep %d in state 0x%x\n",
->   				urb->dev->slot_id, ep_index, ep->ep_state);
->   		xhci_process_cancelled_tds(ep);
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 46bbdc97cc4b..87d87ed08b8b 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -718,9 +718,23 @@ struct xhci_virt_ep {
->    * xhci_ring_ep_doorbell() inspects the flags to decide if the endpoint can be restarted. Another
->    * user is xhci_urb_dequeue(), which must not attempt to stop a Stopped endpoint, due to HW bugs.
->    * An endpoint with pending URBs and no flags preventing restart must be Running for this to work.
-> - * Call xhci_ring_doorbell_for_active_rings() or similar after clearing any such flag.
-> + * Call xhci_ring_doorbell_for_active_rings() or similar after clearing flags on the lists below.
->    */
->   
-> +/*
-> + * TD cancellation is in progress. New TDs can be marked as cancelled without further action and
-> + * indeed no such action is possible until these commands complete. Their handlers must check for
-> + * more cancelled TDs and continue until all are given back. The endpoint must not be restarted.
-> + */
-> +#define EP_CANCEL_PENDING (SET_DEQ_PENDING | EP_HALTED | EP_STOP_CMD_PENDING)
-> +
-> +/*
-> + * Some other operations are pending which preclude restarting the endpoint. If the endpoint isn't
-> + * transitioning to the Stopped state, it has already reached this state and stays in it.
-> + */
-> +#define EP_MISC_OPS_PENDING (EP_CLEARING_TT | EP_STALLED)
-> +
+Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
+the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
+Both are based on the Realtek RTL8153B chip used to use the cdc_ether
+driver. However, using this driver, with the system suspended the device
+constantly sends pause-frames as soon as the receive buffer fills up.
+This causes issues with other devices, where some Ethernet switches stop
+forwarding packets altogether.
 
-Not sure this helps readability
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
 
-It defines even more macros to abstract away something that is not complex enough.
+Cc: Leon Schuermann <leon@is.currently.online>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Oliver Neukum <oliver@neukum.org> (maintainer:USB CDC ETHERNET DRIVER)
+Cc: netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
+Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
+Link: https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-usb-docks/40af0135eu
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+---
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 6 ++++++
+ drivers/net/usb/r8153_ecm.c | 6 ++++++
+ 3 files changed, 19 insertions(+)
 
-It also gives false impression that EP_HALTED would somehow be more part of cancelling a
-TD than EP_STALLED, when both of those are about returning a TD with an error due to
-transfer issues detected by host, not class driver cancelling URBs
-
-Thanks
-Mathias
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index a6469235d904..a032c1ded406 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -783,6 +783,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
+ 
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 468c73974046..96fa3857d8e2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -785,6 +785,7 @@ enum rtl8152_flags {
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
++#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
+ 
+ struct tally_counter {
+ 	__le64	tx_packets;
+@@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+ 		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
++		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
+ 			return 1;
+ 		}
+ 	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
+@@ -10064,6 +10066,8 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
+ 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
++
++	/* Lenovo */
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
+@@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
++	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
++
+ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
+index 20b2df8d74ae..8d860dacdf49 100644
+--- a/drivers/net/usb/r8153_ecm.c
++++ b/drivers/net/usb/r8153_ecm.c
+@@ -135,6 +135,12 @@ static const struct usb_device_id products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&r8153_info,
+ },
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&r8153_info,
++},
+ 
+ 	{ },		/* END */
+ };
+-- 
+2.34.1
 
 
