@@ -1,174 +1,142 @@
-Return-Path: <linux-usb+bounces-21582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21583-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C714A5910C
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 11:24:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7402BA5913A
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 11:31:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 253C83AC655
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 10:24:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECC513A69D9
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 10:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F9222655F;
-	Mon, 10 Mar 2025 10:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7D2226887;
+	Mon, 10 Mar 2025 10:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="YjnKU/Y5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXuI27M1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24C2226529;
-	Mon, 10 Mar 2025 10:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E188B22578F;
+	Mon, 10 Mar 2025 10:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741602229; cv=none; b=b7qdJZ4GDSH9P794hgv5qfTwJNBmaJ4qCtflKRVPEMaWH/5/iUVtbNVlgDEK+yw2O4a8KYx859q1DRuLI82F6YI1nqMo7MSfE5Rl2AmCTJxcrR1je40l/1FAI3uDfPCkV89ZTFW4BnjzOVGvkgaFQpCa6oAl5mYVvX0bNxfqlJc=
+	t=1741602657; cv=none; b=dXdWVlEWNmYkpNsptkT1DvWZFWlsROA3ZTLobUU40v/F0d+m7ylNy6A0iTGPoZ66CrQECZ3Nk6JFk1HVJ4hSnHpZoeWNgeeyebht5mTKmIVA6N81MHTHHimwniZpQYh5w8yOlD0uIn18mXMipg8zcVzjtWa5oAgqbKB+vtZq4II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741602229; c=relaxed/simple;
-	bh=fWUenZNEUS4s/igS+j2N6X5It+o6P6j0gtBDEBVlD2Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BjNMmJOFXeqA8OxObUqq/x26ujGpzN6mnBj8xFgqKGdaY61KU6S23iZojxhXgKC6alfnw8CgzZJfXYXnYXGZ3QPT3LKHiZw5E5DyIreUOScJDOP9qwlUtf9/+gCBrAZ4n7raSPf4fmSEgs42Xs0/VqWUyMxKgSaNi+sEsv9DMjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=YjnKU/Y5; arc=none smtp.client-ip=212.42.244.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-	t=1741601887; bh=fWUenZNEUS4s/igS+j2N6X5It+o6P6j0gtBDEBVlD2Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=YjnKU/Y5wu9UZurybEO8c7226Q7fjlL3GXrt8LIEpSLeFbznQk12O32mg8eg795Qw
-	 A0e3Sn58H6iBD4UOy4pFjwdjCDEEduH2VJE007D6Ev+jMR5Tyqmg0xGh1E4COjs+8+
-	 s6SAmO0lI/3I2G1u6cXKPbWPMpemK88FfE4qDmNw=
-Received: from [212.42.244.71] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.52.1)
-	(envelope-from <phahn-oss@avm.de>)
-	id 67cebc5f-94fe-7f0000032729-7f00000194d4-1
-	for <multiple-recipients>; Mon, 10 Mar 2025 11:18:07 +0100
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Mon, 10 Mar 2025 11:18:07 +0100 (CET)
-From: Philipp Hahn <phahn-oss@avm.de>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Philipp Hahn <phahn-oss@avm.de>,
-	Leon Schuermann <leon@is.currently.online>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Oliver Neukum <oliver@neukum.org>
-Subject: [PATCH] cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
-Date: Mon, 10 Mar 2025 11:17:35 +0100
-Message-Id: <484336aad52d14ccf061b535bc19ef6396ef5120.1741601523.git.p.hahn@avm.de>
+	s=arc-20240116; t=1741602657; c=relaxed/simple;
+	bh=NgEc5/eyDsM2hrEW1RmGOqc9E+kFy+95H4SiztZ6Hnk=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTmRmVjk7zuUqFNH5nofjHQiAc+EnPYMvfkZYsW1bqYac4h/h3dy+XRLWmz35pKtVb5n0n8/JVGd7q0PH9lGjqOpRI4BmkNseIiZGkwZk6MXqsLJedW17U/eQLxCQl9uXuwzg4Dw1Qy02NCxIxmkSLCNh9C58s0wxaq/Z/2xgX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXuI27M1; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e66407963fso2235499a12.2;
+        Mon, 10 Mar 2025 03:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741602654; x=1742207454; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kNhM/0IjcjblchV98Qq8e/1t6zgAbQVQNq8rXKMpriY=;
+        b=RXuI27M1ZZ2EDK+NwW/jLNuulYzmFql3mQ2Qk9avvK+qmcHO4LucBTvhUerCEhgG5J
+         rcIJcN8CSB3TMEd5it/uPQuV619eI8Zw2CH3TZ1VWwCj/leFbALYNmNbW4E/5fa+r5Yw
+         Va7v2YwzKU+c9VQU1yP+tRPSHiSRxLqKs0mlsxpa71iBSvSp3aBNfnq6MxAToMIm6xXH
+         jgq507Pk/yDzEUak8FqtPceMqusnsahOBO5q8DyjjNNOBGsat305Y6OF8omzNvn3a5GW
+         zneW3SbyzQRFHqS0n0w7sgUBIy6vtxLGkfE/piMFkQ/c3qh3cVDg+o07Q9s0Ly2Fn/Qj
+         fsuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741602654; x=1742207454;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kNhM/0IjcjblchV98Qq8e/1t6zgAbQVQNq8rXKMpriY=;
+        b=lovOuE3B8mwi4r/Frrz75aH48n87ktkrwkdKkmge6enrk+PSoRtEWBGpIgEgoy3BHq
+         nCTIeYNbev7RhuP1Q6dydbQVE+XkbXXS3wcVpnv+9pWoKfY9wyEL4hqxOOnCF4QOM0iX
+         RrTxwnr2x608H/jcEI+qd0pyby9QftIbKLCBds32MZUL0Av8+E/opNnSGWhp0g177c1o
+         wjoWnFeM4Lar1NnNuZPr6GoYEJoQNNxji+bAdcpqUP3lnIUlGjxMfXMDvwQ661udAE4B
+         r7kiGFuRbngM8+SSPgBghgdOsHeXNwPk1MQ1JSzWELbbouZUvlzcbvH5tUA6NZdVoC+w
+         4A7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVaCJmVWWAZGGt7NVMikEy6+BRO4h0Rn9ZwGBaftmwn818ouy/BQOq7I/mkrgr9ujfdd0pHGxuRCNPxBAvO@vger.kernel.org, AJvYcCVqQvsvFG/dYcetrt8nWbruRixO1Is6zbIK/5mwA6avRHPbJHyoHk6W9TPqngwyFPqqRM2LT/41Zucl@vger.kernel.org, AJvYcCWRK4CHOruCOpPnw4+y0KiBW+oQ3HjAIKKJny9XiJKkeN6yR8e4jCQVe+JAQz2hqX5tO7JCkGdD89d7@vger.kernel.org, AJvYcCWTNMWcD/CbUhf//+4U2QCXm02idP8FCkhktA1nxYSR/WycLWkOUD/soyFLPI8j3cvYr5+BL4BgNakz@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeELg9YWD1sdET90gGOV80ZyT6KkM3/v1313+mzMzetCJje5IS
+	Q/kGPDC72Xn0OTnZq1o/8JqMYSukyyFm5BwIRrhN0FJqDAFErK4b
+X-Gm-Gg: ASbGncv8yBe6C8kaT2hZtXuT+so8xQ9uk7I+7arRw96IpfxzE2iCExhlnSQNeWclKs5
+	itobLAnQdx3nvnSCyzlxnBC3eZcIEAjkFpoo6Na/qSGEnanTU3V5ZN0jLpT4pyvKL7lHHeGUpXR
+	Mx3wFKiCvGfJNZNG+lQwkySqbIK5K9zgJdfcykaRYFnTFElpd54DRKaaofrhs5PJ7RCSVZA1inE
+	/EndJVCb39yDvPIKBSbzuqeBME1h7GTJPSFHdeX+99EOU77mR+RlU0pj9qFP5QASeT3ueht8jUL
+	uHGnfqYloG72B2w+T1ezLNFNj0Z+Y+nFP4PjujKd3w==
+X-Google-Smtp-Source: AGHT+IHOgY/2k2K6r8nbyooLCIqhLZNyi8g28UASQ2a6eAtRtlwzSxaLJolXF0bJ1EZNYwNFw8sjfA==
+X-Received: by 2002:a05:6402:518a:b0:5d9:82bc:ad06 with SMTP id 4fb4d7f45d1cf-5e5e22bf16amr15660909a12.3.1741602653855;
+        Mon, 10 Mar 2025 03:30:53 -0700 (PDT)
+Received: from Ansuel-XPS. ([85.119.46.8])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c733f9d4sm6630840a12.10.2025.03.10.03.30.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 03:30:53 -0700 (PDT)
+Message-ID: <67cebf5d.a70a0220.fe6c9.6ad3@mx.google.com>
+X-Google-Original-Message-ID: <Z86_WkfgZk_HLWuy@Ansuel-XPS.>
+Date: Mon, 10 Mar 2025 11:30:50 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Guo Ren <guoren@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
+	Ben Hutchings <ben@decadent.org.uk>, Felix Fietkau <nbd@nbd.name>,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-phy@lists.infradead.org, linux-mediatek@lists.infradead.org,
+	linux-usb@vger.kernel.org, upstream@airoha.com
+Subject: Re: [PATCH 03/13] dt-bindings: soc: airoha: add SCU SSR Serdes port
+ binding
+References: <20250309132959.19045-1-ansuelsmth@gmail.com>
+ <20250309132959.19045-4-ansuelsmth@gmail.com>
+ <20250310-ultraviolet-earthworm-of-honor-df114b@krzk-bin>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Organization: AVM GmbH, Berlin, Germany
-Content-Transfer-Encoding: 8bit
-X-purgate-ID: 149429::1741601887-6B5F5945-5472ED96/0/0
-X-purgate-type: clean
-X-purgate-size: 4277
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310-ultraviolet-earthworm-of-honor-df114b@krzk-bin>
 
-Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
-the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
-Both are based on the Realtek RTL8153B chip used to use the cdc_ether
-driver. However, using this driver, with the system suspended the device
-constantly sends pause-frames as soon as the receive buffer fills up.
-This causes issues with other devices, where some Ethernet switches stop
-forwarding packets altogether.
+On Mon, Mar 10, 2025 at 08:54:14AM +0100, Krzysztof Kozlowski wrote:
+> On Sun, Mar 09, 2025 at 02:29:34PM +0100, Christian Marangi wrote:
+> > Add Airoha AN7581 SCU SSR Serdes port binding to define what mode is
+> > supported by each Serdes port. These special binding are needed to
+> > identify and provide the port mode from any user driver.
+> > 
+> > These modes are mutually exclusive and driver needs to correctly
+> > validate the current mode for the Serdes port in use.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  MAINTAINERS                              |  6 ++++++
+> >  include/dt-bindings/soc/airoha,scu-ssr.h | 24 ++++++++++++++++++++++++
+> 
+> This should be squashed with the binding for the device.
+>
 
-Using the Realtek driver (r8152) fixes this issue. Pause frames are no
-longer sent while the host system is suspended.
+I split them to mute checkpatch warning
 
-Cc: Leon Schuermann <leon@is.currently.online>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Oliver Neukum <oliver@neukum.org> (maintainer:USB CDC ETHERNET DRIVER)
-Cc: netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
-Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
-Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
-Link: https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-usb-docks/40af0135eu
-Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
----
- drivers/net/usb/cdc_ether.c | 7 +++++++
- drivers/net/usb/r8152.c     | 6 ++++++
- drivers/net/usb/r8153_ecm.c | 6 ++++++
- 3 files changed, 19 insertions(+)
+"DT binding docs and includes should be a separate patch. See:
+Documentation/devicetree/bindings/submitting-patches.rst"
 
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index a6469235d904..a032c1ded406 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -783,6 +783,13 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
- 
-+/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359, USB_CLASS_COMM,
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info = 0,
-+},
-+
- /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 468c73974046..96fa3857d8e2 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -785,6 +785,7 @@ enum rtl8152_flags {
- #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
- #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
- #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
-+#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
- 
- struct tally_counter {
- 	__le64	tx_packets;
-@@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
- 		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-+		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
- 			return 1;
- 		}
- 	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
-@@ -10064,6 +10066,8 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
- 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
- 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
-+
-+	/* Lenovo */
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
-@@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
-+	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
- 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
-+
- 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
- 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
- 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
-diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
-index 20b2df8d74ae..8d860dacdf49 100644
---- a/drivers/net/usb/r8153_ecm.c
-+++ b/drivers/net/usb/r8153_ecm.c
-@@ -135,6 +135,12 @@ static const struct usb_device_id products[] = {
- 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
- 	.driver_info = (unsigned long)&r8153_info,
- },
-+/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359, USB_CLASS_COMM,
-+				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info = (unsigned long)&r8153_info,
-+},
- 
- 	{ },		/* END */
- };
+But I think I always took it wrong and with "docs and includes" it's
+intended in a single patch.
+
+Ok will squash!
+
 -- 
-2.34.1
-
+	Ansuel
 
