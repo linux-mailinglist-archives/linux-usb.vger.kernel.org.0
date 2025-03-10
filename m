@@ -1,146 +1,175 @@
-Return-Path: <linux-usb+bounces-21606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A421A59BDE
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 18:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 973F9A5A1A2
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 19:06:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 907A416427F
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 17:00:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B165170581
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 18:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BCA23371B;
-	Mon, 10 Mar 2025 16:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAED0233D7C;
+	Mon, 10 Mar 2025 18:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b="lEr+B2TM"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="seh49vo2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50881230988;
-	Mon, 10 Mar 2025 16:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AA42206BD
+	for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 18:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741625992; cv=none; b=lf5H+EPNv01Y0Hd7CQKg/Lqan0G0mBhqXKl/5C3mWJ18dcRS7EuDgeAH4PBQKpPqGRxnFNjjbRuVTKsKmpVVG9m/llu2HpKiwJRaQ5FB3ivR5yi1mHuhnjsBztgZMAD4cM0y1uHOuXfhHlJpcoAlcZl3fMcFNo/f8ncx7Aefs9U=
+	t=1741629996; cv=none; b=AplzUHLGlKjBTaJXhaaOXw2+BPdBkMRNRgsj0kKitUh78BTYEEj4r5Q3Lpr9QHrFiD5+ThjMKOCXzwE8rqQ/9Pt5wyyZn2XO3lT98fhZPTsGW+vwe9joB9D3aCeZd+uW9oh9jmNVDuYwJK+2svzlLHRzKW6AfAzLQUgyRzqdJ+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741625992; c=relaxed/simple;
-	bh=km2IGdJt2Zt2W/qgfZG1Lab7vtwETfZ7Ls52FOlKepE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S0k/p8bvr7MYrEOKumr5zcxTg954mDA/OWi0IF2SrUcZJDKGULPkF+CiTZmN6mN5WZrWSOe8RvwDA6rseuOqYlQ4ViPHbQHziTNzNitsdZBOPLxeNKhVisqbwRrFaEOkSP0VEg90MpsqTX+fDUJn/dPrji+l0WGxf/QoJWiAy08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b=lEr+B2TM; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1741625981; x=1742230781; i=fiona.klute@gmx.de;
-	bh=km2IGdJt2Zt2W/qgfZG1Lab7vtwETfZ7Ls52FOlKepE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=lEr+B2TM1og/6h/R/DnZdw0KAubAPCXD6CmmBFRJkoBa/AOYay1Txdn/g1o+y4K3
-	 oXtnPx/5qwXIr6cqzSq3GgMYXbhMN6lPlEqF1NjKEszAEvrsnN3vJmFOJIFZO19ct
-	 7Ck9eH19W+nrOU5zqstS/R4DpAz5T8jiS2+G40KPammcEKzXUqv+smnGqZAZGLcrZ
-	 Ld74SXCrnFQhYGkjj7VAnFky/TjWwHPC4B4klm7p+RK+tHfXcYq23CRcis6tdmWxy
-	 WR7g1h4zttFF5eXZgAYZsjRzUAjN753IlEz0jK/4nmO2Zr/uG9DWmBUCtgbKqRFNo
-	 DCKG1KxKbvUrDSCXIA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.124.30]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGhyc-1u4LeA3Hne-000h9z; Mon, 10
- Mar 2025 17:59:40 +0100
-From: Fiona Klute <fiona.klute@gmx.de>
-To: netdev@vger.kernel.org
-Cc: Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	s=arc-20240116; t=1741629996; c=relaxed/simple;
+	bh=79NoslWFokmPF3M7/bKxqWenIFPB3+bRkcmISSkX+ao=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nBislVlo1WmyKom9uZBXeAMoB9HblSTrwoS6j8rplDOWDoLBeFVcDklmnMd5DapP/SI9FWk25Qh0sTFK3IbJyP/Jyektj7JN3ap5XpPWbGwF9TkcKPomA9E7VzUr6Aeoa1SE2yH6eUFySxE5kb7Ypr5dEKGFODw0d7DR6clR/QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=seh49vo2; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c3c91060d0so529670685a.0
+        for <linux-usb@vger.kernel.org>; Mon, 10 Mar 2025 11:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1741629993; x=1742234793; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XCbplbGo+wXAErff6OKF5gDHtfLPjvXhdrCE0hTtOQY=;
+        b=seh49vo2icOw7VzqrPiotl5ZTi9vDAfyUOdsDz/mdeHfmvCxLlGiWj4gj+qVFGxjYZ
+         fe+jvgC+u9Bd4vvsTejtyEyrIwlFji5dP8StviOmbjR2PB7mmNqF0PNqIL4B87AUb6JS
+         I0o0EgOYV8o8gQiLWjjaNwVas+KuWtMeSbeyJAnSZLsxNVZSajwp0DtE0EeyFyPOXA6H
+         EdhuQTZcG6AaeauaLvtVoE2gH4ZolAlJfsB0KEyDYtK8gf69VWkU6vkiL9zje/EOsxRd
+         ZXKcl194pWd9Jg3YxXklQYTWOxcSVoBgH6DH4FvzWaMgxYmP8/vdBXGpgSrnlLRwPyz8
+         RB+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741629993; x=1742234793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XCbplbGo+wXAErff6OKF5gDHtfLPjvXhdrCE0hTtOQY=;
+        b=s9BRufBcZXO3pFhUMvIWIHLtbfCqgZKstEvzxDuxxjVBqsmsse43i4ewvEvVU0EZDZ
+         HF+C0LMjvEcc/XZSdyga1nVL4bNMDXauz57jm6viLGBnabCqubya1k7weQpcJCl1Hrzn
+         kxiAOsHZqaggWSFObZxuapI1RHLoCSTyjXRFwdgqiy2Nl3UXggR8hUtl+FqLzABBU7In
+         xay5L0aruYmhutv5x5g5LuUxQ+iVynfV9uZIzTrWjSGi6/UicHlQrnsDH+2zHlG2iSrT
+         Abl1kdd0bBRySG8PGyT/yObx+H5LyhaMztTLEDG2FXQKzoL9shTGSVp1sehmgZSjhUPm
+         TAQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcqWRxoJj1vibdUme4VtjN3cX9luT5PL2uMbVleGZwT0m/cAUxVXrvjGwTN2FaxaXyyMnrT23ZgAw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG04yw8JtAo0bRtEofqssn7SQVQ/stf5CFPPRpFaGMpIaC/WtQ
+	y30ZhBSRd8AKfamOcYD4xTvB6L92rrXfsDsp73yYdRKQbBKSY5GS+er/lojOgg==
+X-Gm-Gg: ASbGncvO14HeRNc5nDDQVo5D1l04NUBTI+j+N1UjznXNnXVKdXH3zY+K393ywxNyp+0
+	y2y5dbKo6KrV9bfrysL7vaF0ulPpwtuY6D7W+LFHEUL/Tbn88w7vEBq8EtHYIGFS+ns6+UT5PbL
+	OdXmXxTzdGLWE97Bv96bcUnRD6+bKiPZNqK8uPHWMpyJ+2sksU/2A6xucS7U3hwguO8CKS9eb8F
+	9ODYa1KFMRFx7gT4kclbAGlixKZso6Q+BDDYgd8Ex1Fn5MnxHYloluXFqUNXzvtc/TJRDT0cOvT
+	2dIUONJk9qnwiix3LikbkN8lE2z/X8eFG+SgXsbDnrXrfqiYH/UL86LxYnnpZh4DOTrhOd9sGfD
+	HclaG1nfUA4AJPariFVTZzN/sNj0Sfsg5OlZFnA==
+X-Google-Smtp-Source: AGHT+IGBXTLd9FGucbRKIujIIutoo5xIGlcogc24jO38Y8DB5mhjUv+LLAgNLG3yRzzvwDJkN5rqHg==
+X-Received: by 2002:a05:620a:84c4:b0:7c5:5a51:d2c0 with SMTP id af79cd13be357-7c55a51d82emr378482285a.52.1741629992671;
+        Mon, 10 Mar 2025 11:06:32 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e54ffa55sm703579985a.81.2025.03.10.11.06.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 11:06:32 -0700 (PDT)
+Date: Mon, 10 Mar 2025 14:06:29 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: netdev@vger.kernel.org,
+	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
 	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fiona Klute <fiona.klute@gmx.de>,
-	kernel-list@raspberrypi.com,
-	stable@vger.kernel.org
-Subject: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling period
-Date: Mon, 10 Mar 2025 17:59:31 +0100
-Message-ID: <20250310165932.1201702-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.47.2
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-list@raspberrypi.com, stable@vger.kernel.org
+Subject: Re: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling
+ period
+Message-ID: <d52e460d-2c73-4117-95b9-bed3892ac41d@rowland.harvard.edu>
+References: <20250310165932.1201702-1-fiona.klute@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:YYGO+4uzgBGjMBAgVnoBmWV0/iNMfrX+PvlpPtClFX82DXYtx/t
- V0hQLs/Lg7kApN6BGiEWA2n61AMZfA6qQ2HRixcdn8FMqrckdrIS7msv3MwjsuNTBT6VVVw
- ezeEhMzwrdrEDhv1Vh7om3hdSPLUi9GdScYkxG4fKFH/9/vQ9MG2WmoEmnW3QufDVST5mIl
- OgTNEL0HEhBDmFpQBM9kg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:xX8wuS/r/h4=;d3UWide7pAM7x2u3z4E84qqiQ5x
- zTF/zGW9SAqyXGT7WMtqYfz1BzXB2bI2Lvlb5KDs+kByY2s7VNwDvbq/o+UjI0kjd+GbW8Nwp
- SRW/wtSCbA3z0+vC/XHVLQkJvm3meHrdwzUcg9Hx/k+Fdl5SblIwMEiloMaXR0JX9i7nxdsU4
- cSDHar6Pcu51kaYOhT7NOOKM3IIn6SutZYBerYbaxFziII5UzI7WTMHdip6fB9SxVZDOr1k7+
- OoS/L+e2+TZOuCKc9ix0zHspFlX0at0ZQSvpgXNhSnfmkR8Yq/dTF+v7EY4f+FsgbJX0CFzdM
- fhRheSQmLq/99dhgsIJmi+NufP1dyG902rT6xuQJ6odF03O3lwdTRTkxnWOWZpN2pnWmUBK1C
- 4nI5eXidryEpYi4ARlmYxjhN9vMlv4PGhEEMSp4CcMe0SQvquNQ/YzB6CPFkgnZNXjeTpBW0m
- eBf5kD8tSXGlwuQW+vORm7emELY7VyKHDQHte0GRn9preQENFhPev9uQvEVBNzLlk6MHFBTg8
- OmPq4sCqRCdNC3KXKwUvxabN2unP37NjfDjCIUcKnBGD/m4Pgafg/ymrG2isIWGTz2eR2MC+a
- O0iaUdO5qRID0mvN9+jFfk/yqngkZRdFDUhuksYvoLLl1CFz1zU2SgLiSeHgnNB5GsbN0A6ye
- 6B9eHQYjjq1EKmRsQQpweOiT8j0zrlvKT8x2bSoCN6X9OpPbWU3z+YNpjM0UkkTMF9A70iXvR
- voPJwwCcTUD2e2gFaDi96wXKTE3QIvB7zJS+Gxr7ao73R+oIlUfLI7hzsVSx08jy/R88JOncN
- hmT3XnK+XTz9+iOpy8CmF57ktIYKWDzCYbIf4pTniCN8MndXIDJ0mMzepeBQSUz+jwvtvr5Bd
- j0BfyDl9mo+vE+XIcL87TBZDQLryOlf5dwDFIagNLzY0WWrjfbdHho0Pwb6uN87mMPfhLZpVQ
- vTwLWV/hL5X+zuoMLATMbRx2zTg5oVUroB0SYNNHPftpQGCeYPfTBeqFMr8LpKSgD+GgyUmyY
- e0PrOkb+2s/Rqox3SAmeDoGebRTYZg2lj50lYPepP6uGPeA0ucFPe6nQouNYO3Qzr/Fynm+BB
- t6JUy20vmod5O55FsBRMNADKL9UsktvjnV2N0Y/y9VnbtRvr/Et8hL4uOWKoAmTMPZkphkCp/
- KUcFbROOX6OJcsgawpC2GZEVrcJ683iEJGTwKDIPdabCIglh4ovZd1l20gEaqTtdDnH3X9LS0
- Gw+mBZkKugO9oP1WP9hj5sDvkrZtz56v0I6ipZ7xOi0hf/d1llzGZOdS0Jq7UYRRODSd0vH2s
- lnUJT8CKrPbdU46wBPOYDu6KkueS/KedqsHTvvxxrYLTm53Gl+idGzNzDTUTkeRMAXbCg2xDV
- zC6RiRc0YlQYBWZ+G4y0MrHP+k7zA7+Yw6S5I9/6iCLtghs/oEM/bfqJI3O17KSqmYOP7y0h2
- D1jC8zyznKx00Gob7FCyw//fXS0RW6tXXv0yziycjBiql+/Ii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310165932.1201702-1-fiona.klute@gmx.de>
 
-SWYgYSBuZXcgcmVzZXQgZXZlbnQgYXBwZWFycyBiZWZvcmUgdGhlIHByZXZpb3VzIG9uZSBoYXMg
-YmVlbgpwcm9jZXNzZWQsIHRoZSBkZXZpY2UgY2FuIGdldCBzdHVjayBpbnRvIGEgcmVzZXQgbG9v
-cC4gVGhpcyBoYXBwZW5zCnJhcmVseSwgYnV0IGJsb2NrcyB0aGUgZGV2aWNlIHdoZW4gaXQgZG9l
-cywgYW5kIGZsb29kcyB0aGUgbG9nIHdpdGgKbWVzc2FnZXMgbGlrZSB0aGUgZm9sbG93aW5nOgoK
-ICBsYW43OHh4IDItMzoxLjAgZW5wMXMwdTM6IGtldmVudCA0IG1heSBoYXZlIGJlZW4gZHJvcHBl
-ZAoKVGhlIG9ubHkgYml0IHRoYXQgdGhlIGRyaXZlciBwYXlzIGF0dGVudGlvbiB0byBpbiB0aGUg
-aW50ZXJydXB0IGRhdGEKaXMgImxpbmsgd2FzIHJlc2V0Ii4gSWYgdGhlcmUncyBhIGZsYXBwaW5n
-IHN0YXR1cyBiaXQgaW4gdGhhdCBlbmRwb2ludApkYXRhIChzdWNoIGFzIGlmIFBIWSBuZWdvdGlh
-dGlvbiBuZWVkcyBhIGZldyB0cmllcyB0byBnZXQgYSBzdGFibGUKbGluayksIHBvbGxpbmcgYXQg
-YSBzbG93ZXIgcmF0ZSBhbGxvd3MgdGhlIHN0YXRlIHRvIHNldHRsZS4KClRoaXMgaXMgYSBzaW1w
-bGlmaWVkIHZlcnNpb24gb2YgYSBwYXRjaCB0aGF0J3MgYmVlbiBpbiB0aGUgUmFzcGJlcnJ5ClBp
-IGRvd25zdHJlYW0ga2VybmVsIHNpbmNlIHRoZWlyIDQuMTQgYnJhbmNoLCBzZWUgYWxzbzoKaHR0
-cHM6Ly9naXRodWIuY29tL3Jhc3BiZXJyeXBpL2xpbnV4L2lzc3Vlcy8yNDQ3CgpTaWduZWQtb2Zm
-LWJ5OiBGaW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPgpDYzoga2VybmVsLWxpc3RAcmFz
-cGJlcnJ5cGkuY29tCkNjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnCi0tLQpGb3IgdGhlIHN0YWJs
-ZSBjcmV3OiBJJ3ZlICp0ZXN0ZWQqIHRoZSBwYXRjaCB3aXRoIDYuMTIuNyBhbmQgNi4xMy41IG9u
-CmEgUmV2b2x1dGlvbiBQaSBDb25uZWN0IDQgKFJhc3BiZXJyeSBQaSBDTTQgYmFzZWQgZGV2aWNl
-IHdpdGggYnVpbHQtaW4KTEFONzgwMCBhcyBzZWNvbmQgZXRoZXJuZXQgcG9ydCksIGFjY29yZGlu
-ZyB0byB0aGUgbGlua2VkIGlzc3VlIGZvcgp0aGUgUlBpIGRvd25zdHJlYW0ga2VybmVsIHRoZSBw
-cm9ibGVtIHNob3VsZCBiZSBwcmVzZW50IGluIGFsbAptYWludGFpbmVkIGxvbmd0ZXJtIGtlcm5l
-bCB2ZXJzaW9ucywgdG9vIChiYXNlZCBvbiBob3cgbG9uZyB0aGV5J3ZlCmNhcnJpZWQgYSBwYXRj
-aCkuCgogZHJpdmVycy9uZXQvdXNiL2xhbjc4eHguYyB8IDEyICsrKysrKysrKysrLQogMSBmaWxl
-IGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9k
-cml2ZXJzL25ldC91c2IvbGFuNzh4eC5jIGIvZHJpdmVycy9uZXQvdXNiL2xhbjc4eHguYwppbmRl
-eCBhOTFiZjljN2UzMWQuLjdiZjAxYTMxYTkzMiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNi
-L2xhbjc4eHguYworKysgYi9kcml2ZXJzL25ldC91c2IvbGFuNzh4eC5jCkBAIC0xNzMsNiArMTcz
-LDEyIEBACiAjZGVmaW5lIElOVF9FUF9HUElPXzEJCQkoMSkKICNkZWZpbmUgSU5UX0VQX0dQSU9f
-MAkJCSgwKQogCisvKiBoaWdoc3BlZWQgZGV2aWNlLCBzbyBwb2xsaW5nIGludGVydmFsIGlzIGlu
-IG1pY3JvZnJhbWVzIChlaWdodCBwZXIKKyAqIG1pbGxpc2Vjb25kKQorICovCisjZGVmaW5lIElO
-VF9VUkJfTUlDUk9GUkFNRVNfUEVSX01TCTgKKyNkZWZpbmUgTUlOX0lOVF9VUkJfSU5URVJWQUxf
-TVMJCTgKKwogc3RhdGljIGNvbnN0IGNoYXIgbGFuNzh4eF9nc3RyaW5nc1tdW0VUSF9HU1RSSU5H
-X0xFTl0gPSB7CiAJIlJYIEZDUyBFcnJvcnMiLAogCSJSWCBBbGlnbm1lbnQgRXJyb3JzIiwKQEAg
-LTQ1MjcsNyArNDUzMywxMSBAQCBzdGF0aWMgaW50IGxhbjc4eHhfcHJvYmUoc3RydWN0IHVzYl9p
-bnRlcmZhY2UgKmludGYsCiAJaWYgKHJldCA8IDApCiAJCWdvdG8gb3V0NDsKIAotCXBlcmlvZCA9
-IGVwX2ludHItPmRlc2MuYkludGVydmFsOworCXBlcmlvZCA9IG1heChlcF9pbnRyLT5kZXNjLmJJ
-bnRlcnZhbCwKKwkJICAgICBNSU5fSU5UX1VSQl9JTlRFUlZBTF9NUyAqIElOVF9VUkJfTUlDUk9G
-UkFNRVNfUEVSX01TKTsKKwlkZXZfaW5mbygmaW50Zi0+ZGV2LAorCQkgImludGVycnVwdCB1cmIg
-cGVyaW9kIHNldCB0byAlZCwgYkludGVydmFsIGlzICVkXG4iLAorCQkgcGVyaW9kLCBlcF9pbnRy
-LT5kZXNjLmJJbnRlcnZhbCk7CiAJbWF4cCA9IHVzYl9tYXhwYWNrZXQoZGV2LT51ZGV2LCBkZXYt
-PnBpcGVfaW50cik7CiAKIAlkZXYtPnVyYl9pbnRyID0gdXNiX2FsbG9jX3VyYigwLCBHRlBfS0VS
-TkVMKTsKCmJhc2UtY29tbWl0OiBkZDgzNzU3ZjZlNjg2YTIxODg5OTdjYjU4YjU5NzVmNzQ0YmI3
-Nzg2Ci0tIAoyLjQ3LjIKCg==
+On Mon, Mar 10, 2025 at 05:59:31PM +0100, Fiona Klute wrote:
+> If a new reset event appears before the previous one has been
+> processed, the device can get stuck into a reset loop. This happens
+> rarely, but blocks the device when it does, and floods the log with
+> messages like the following:
+> 
+>   lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+> 
+> The only bit that the driver pays attention to in the interrupt data
+> is "link was reset". If there's a flapping status bit in that endpoint
+> data (such as if PHY negotiation needs a few tries to get a stable
+> link), polling at a slower rate allows the state to settle.
+> 
+> This is a simplified version of a patch that's been in the Raspberry
+> Pi downstream kernel since their 4.14 branch, see also:
+> https://github.com/raspberrypi/linux/issues/2447
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> Cc: kernel-list@raspberrypi.com
+> Cc: stable@vger.kernel.org
+> ---
+> For the stable crew: I've *tested* the patch with 6.12.7 and 6.13.5 on
+> a Revolution Pi Connect 4 (Raspberry Pi CM4 based device with built-in
+> LAN7800 as second ethernet port), according to the linked issue for
+> the RPi downstream kernel the problem should be present in all
+> maintained longterm kernel versions, too (based on how long they've
+> carried a patch).
+> 
+>  drivers/net/usb/lan78xx.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+> index a91bf9c7e31d..7bf01a31a932 100644
+> --- a/drivers/net/usb/lan78xx.c
+> +++ b/drivers/net/usb/lan78xx.c
+> @@ -173,6 +173,12 @@
+>  #define INT_EP_GPIO_1			(1)
+>  #define INT_EP_GPIO_0			(0)
+>  
+> +/* highspeed device, so polling interval is in microframes (eight per
+> + * millisecond)
+> + */
+> +#define INT_URB_MICROFRAMES_PER_MS	8
+> +#define MIN_INT_URB_INTERVAL_MS		8
+> +
+>  static const char lan78xx_gstrings[][ETH_GSTRING_LEN] = {
+>  	"RX FCS Errors",
+>  	"RX Alignment Errors",
+> @@ -4527,7 +4533,11 @@ static int lan78xx_probe(struct usb_interface *intf,
+>  	if (ret < 0)
+>  		goto out4;
+>  
+> -	period = ep_intr->desc.bInterval;
+> +	period = max(ep_intr->desc.bInterval,
+> +		     MIN_INT_URB_INTERVAL_MS * INT_URB_MICROFRAMES_PER_MS);
+
+This calculation is completely wrong.  For high-speed interrupt 
+endpoints, the bInterval value is encoded using a logarithmic scheme.  
+The actual interval in microframes is given by 2^(bInterval - 1) (see 
+Table 9-13 in the USB 2.0 spec).  Furthermore, when the value is passed 
+to usb_fill_int_urb(), the interval argument must be encoded in the same 
+way (see the kerneldoc for usb_fill_int_urb() in include/linux/usb.h).
+
+The encoded value corresponding to 8 ms is 7, not 64, since 8 ms = 64 
+uframes and 64 = 2^(7-1).
+
+> +	dev_info(&intf->dev,
+> +		 "interrupt urb period set to %d, bInterval is %d\n",
+> +		 period, ep_intr->desc.bInterval);
+
+I doubt that this dev_info() will be very helpful to anyone (in addition 
+to being wrong since the value in "period" is not the actual period).
+
+Alan Stern
 
