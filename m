@@ -1,63 +1,108 @@
-Return-Path: <linux-usb+bounces-21659-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21660-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5981FA5CE88
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 20:02:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0726CA5CEFB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 20:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E63FD189DADA
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 19:02:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3901817283A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 19:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C36726461D;
-	Tue, 11 Mar 2025 19:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F80A2641C6;
+	Tue, 11 Mar 2025 19:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeVu9ef8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bdb9Gojx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D792641C2;
-	Tue, 11 Mar 2025 19:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6960A25EF8E;
+	Tue, 11 Mar 2025 19:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741719730; cv=none; b=flj+rWb32JwtA3uOZL7pH9K6eGrx+F1kC0VnHy0UpQOaiDxT6aDZaqnDh61z3a4glDuvf2dX62ivx5HQNiyRXQnbSqgc2iYk3l3NEC6N9pvOfpjrJoZRr6AnTCRZKbstaa46oyUFpH+/le3CcPCrqWJX4v35OYo4Ekis/kU53w0=
+	t=1741720148; cv=none; b=hS535lED0TFYd6Beq4cReG+b0gi/m0VygtRzdL5zqNctwFtl8KrlBA55KAzy6asVlfQpxujAAPzHJ1LFVKmppNoR5Ttf09ju3sTsf9/mqu9Ke81xC0aTdbC9+2lptpz7RsGVqk+7BH42retDmOvuBDwhQWUqtf2FmIY+CyRUXXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741719730; c=relaxed/simple;
-	bh=5tQ4tOGvRVCC3nq2qbLABFsKu7e+eG53DjiLLC1Zobc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MKsn2hW1klyzvm9jbNZegAdjm/m6IYNyR4o8pmnh+rQM03ZNTVZRp0uyzhadK3mu5v8TJ6RQ7I4XTYcNAcVinQ7BaZ0IZcfpySR5DPUSJWuRIsFnRUNmxXV5UiOxNFuGlfYzYG/7lgXvmnGjrnKZ0oSfenGFD8FeNc11ur9TDYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeVu9ef8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E39C4CEE9;
-	Tue, 11 Mar 2025 19:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741719729;
-	bh=5tQ4tOGvRVCC3nq2qbLABFsKu7e+eG53DjiLLC1Zobc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JeVu9ef8rWptgoNQ70LP1k1n6whR56k6I5zwVOp9pJc3jeKAiOklkp30vwOvoPOF/
-	 h7pPMRAgnDxuaXYo6UAgWotYn6PkxU/Nj51a1vX6Er68IaH9gVX+cvHOBrPT4oLPin
-	 Y64d2Bs5QKT6DRSbsk/OEgJjDK72kb4uBn3+SVt2gEl+kOvf64qBVRP2IlwB2Ts9br
-	 bU6YSUdOJpfbZjp9Lw3DkmD815+0pNsjkCZRhW8xnUeiOFwzzCthfIcrzUcfEtbjKg
-	 igtclMp9HC6K5YPz4bEabOvqQiggpiY5xcPOVqP0TufBsNHdVp/hOhSjDbcEICnaBb
-	 WY3swmsF5Kvsg==
-Date: Tue, 11 Mar 2025 21:02:03 +0200
-From: Dmitry Baryshkov <lumag@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/7] usb: dwc3: qcom: Transition to flattened model
-Message-ID: <ffm23zhsp4ksbgmk6slehc2pcy47i5xb7eqhuf6ixlphoj7lbv@o524z6na3mtr>
-References: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
- <20250226-dwc3-refactor-v4-6-4415e7111e49@oss.qualcomm.com>
- <vn7nrxpga7ewyqr7hpiczsn63qo2z4qzenif6powryqrtmnwjs@23jp6c7qdvxt>
- <u2u3mkybodsk3neura7nvhgd6iwky5cjkbqwpcs3rn3tm7dzpq@ecah6hnm4t6g>
+	s=arc-20240116; t=1741720148; c=relaxed/simple;
+	bh=ALgeYULD97jCKLsl3qy0loXJ7HEmXrOCIreJopYWrd0=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oqc71rPC9M4VvCrrjvqV1y+6XKmDeqwrjS2j6qV3GXZo/PHs6EU7GD9RwOQ5MyvIrtNOYiBEOeS/oxJoTKgMQqqV0C4B+D36DkrNdrNGXrUX3c7WytaCgGsOYY9AcDBTU0vkeA7qcu7XrNmaUkrOYDRsDb+AyV6X2GZYvZVitvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bdb9Gojx; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso64989455e9.1;
+        Tue, 11 Mar 2025 12:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741720144; x=1742324944; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QBYt0BHsxul+nTaYflhpms2js1nZoTfEFczz9ZKES00=;
+        b=Bdb9GojxgdD60vEMRrrtiwfHwxC19pjYgxqZwImc5G5a/vqAzrE+bJ7ecly9Hb8uFA
+         3ojZyy0N3iBcp2RIfTY6tuzWEY8Q7653C4qM8W9UfJ6LKcOGNXfy4qwZYs2w/1qPViqG
+         1S5+BZGDMMfPZf6kLLCdusbFZU/Fr5uN5N/ZA3MgypUzIz+Wnd9v8hWiKBBVlYvQAPlC
+         wRwN+VJc39VuhHTQm9kPZOWpce7/X9IViJdGKWSZMwnrB4ks7IYYw1cvBG1mbpdFashF
+         PwKZOHa5a+3RF1pM4dwOpX+U8iWWwhhj+XYPEs4jGSksxV0HulFz9gfyuCfdL4NSaMxf
+         YTQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741720144; x=1742324944;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QBYt0BHsxul+nTaYflhpms2js1nZoTfEFczz9ZKES00=;
+        b=ah6kPeVsFfVX9agZOAVsgiMrYHT49GqgzL5O3+cPTcV55fW2mnDEIJVcp03c+BT51Q
+         EBsQDmhN7+Bj+d9ESuAFnzvU9OuS8FxXs2WMECHAiWNh4u9aHpIlP3aKM52kN3nv+lah
+         JDzUBi3UG2PEG79mcFVxztlQr1W7Mt/ZCfu20JoC39+NAknaLEpx+u0vUxA+nfCz+yhA
+         6SdXkNnrVBA98oqChvNUMX8M5XJoN1Y+LOcQAaVfGpordX4hWrEbP3eQu9jJOyM69qMP
+         kbl8VpOEr+NOqZx8VxOtsbH8CTSvtGqbJTQ/PPgAcPRNceSikvb5xW2FhYDUxC9j1874
+         xRlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxYndxkIvm7H52a3qSE3zG1ZlIfxpv2jVM2BgY5+WJHHSTwLtzLfgZu4g+eSFJYXrNzZOiDiiaIKaYNaO7@vger.kernel.org, AJvYcCVQxtuQ6+9QucF+0mz95tBTzX95TmyxuKQZnhF3B3jzakcGLcCPZuibsitenK/Uyw66H1P1kHG7lWgx@vger.kernel.org, AJvYcCX+yEikgLk+V7jQG/w7xvfZt5MB/D/yV4ccVylpOR7NoEleURQ8lAHmH3pNDZ8IAqlVHfHn7rVLT+SL@vger.kernel.org, AJvYcCXPCFziVBOqeZgYHigfXaELkOcGR1n6+gB0/SkT93eBAAxz8wRHD0hxlDGcXDe9qUmn8arm+QceAr5g@vger.kernel.org
+X-Gm-Message-State: AOJu0YynmZsfBxd3vtFNj2FnLOM2PXfjGYvbZw5cXTvQh2QiSpURq5gH
+	QQgmFYr/jxRIMfOi4uJNRBlG1FIbhUtBr8QJ9Go4EPu31EsvWU8C
+X-Gm-Gg: ASbGnctLpXKShySXuoVvElfJFf2M3yxFwOWZ3NHRVI6LL76UhhMheXjgsfMsKAEoQ8Y
+	8Ct9BpQIFU7/yWHZF/19juUEF9GaqFj4vdZU/nXQViGmBNpzGJz7Z5M3y+0ztIPEClimeYNYb9h
+	N5lNWdrXLa4dFeL4Lhx3yHopI89MRV7tz6EosLWt9O/ynfoWTJe/0IoQ3NaOdepUbyo51qBqs5C
+	OuvZkzA8BNXxIuDvporxJP76KaDNSwydlhfDOBYpvfQMxWteNOzX2v4Y0DxBQkT63Lza98NCQIk
+	tzJabLlgSis08jJNf7XoOcOxkiIjjM0vZOz5UmstYmEwfv8Mgc+ZBznofgAdNQNYhuRPNub0tZl
+	gfqxNV5MJE9/H
+X-Google-Smtp-Source: AGHT+IEVvLB1J5PdZXBMZwLdi5Sfx5U8w2F5CDI5YD3a5o/Tqdo42jSaYp7CF55JMp1UKEuKA0N/8w==
+X-Received: by 2002:a05:600c:5618:b0:439:9a40:aa0b with SMTP id 5b1f17b1804b1-43cdfb7e4b1mr144023345e9.25.1741720144407;
+        Tue, 11 Mar 2025 12:09:04 -0700 (PDT)
+Received: from Ansuel-XPS. (58.43.196.178.dynamic.cust.swisscom.net. [178.196.43.58])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43cf7c8249bsm81906155e9.7.2025.03.11.12.09.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 12:09:03 -0700 (PDT)
+Message-ID: <67d08a4f.7b0a0220.8fe9e.44fd@mx.google.com>
+X-Google-Original-Message-ID: <Z9CKTrERYllmbczJ@Ansuel-XPS.>
+Date: Tue, 11 Mar 2025 20:09:02 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Guo Ren <guoren@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
+	Ben Hutchings <ben@decadent.org.uk>, Felix Fietkau <nbd@nbd.name>,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-phy@lists.infradead.org, linux-mediatek@lists.infradead.org,
+	linux-usb@vger.kernel.org, upstream@airoha.com
+Subject: Re: [PATCH 05/13] dt-bindings: mfd: add Documentation for Airoha
+ EN7581 SCU
+References: <20250309132959.19045-1-ansuelsmth@gmail.com>
+ <20250309132959.19045-6-ansuelsmth@gmail.com>
+ <c1227083-a4ea-4dac-a9db-d6a5386c0437@kernel.org>
+ <67cec328.170a0220.27ecbc.9c6e@mx.google.com>
+ <026296c8-a460-43ca-a423-0fa38269fbc2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,94 +111,173 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <u2u3mkybodsk3neura7nvhgd6iwky5cjkbqwpcs3rn3tm7dzpq@ecah6hnm4t6g>
+In-Reply-To: <026296c8-a460-43ca-a423-0fa38269fbc2@kernel.org>
 
-On Mon, Mar 10, 2025 at 09:46:24PM -0500, Bjorn Andersson wrote:
-> On Fri, Mar 07, 2025 at 08:41:33AM +0200, Dmitry Baryshkov wrote:
-> > On Wed, Feb 26, 2025 at 04:17:53PM -0800, Bjorn Andersson wrote:
-> > > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > > Linux kernel as 3 different independent device drivers, but as shown by
-> > > the already existing layering violations in the Qualcomm glue driver
-> > > they can not be operated independently.
-> > > 
-> > > With the current implementation, the glue driver registers the core and
-> > > has no way to know when this is done. As a result, e.g. the suspend
-> > > callbacks needs to guard against NULL pointer dereferences when trying
-> > > to peek into the struct dwc3 found in the drvdata of the child.
-> > > Even with these checks, there are no way to fully protect ourselves from
-> > > the race conditions that occur if the DWC3 is unbound.
-> > > 
-> > > Missing from the upstream Qualcomm USB support is handling of role
-> > > switching, in which the glue needs to be notified upon DRD mode changes.
-> > > Several attempts has been made through the years to register callbacks
-> > > etc, but they always fall short when it comes to handling of the core's
-> > > probe deferral on resources etc.
-> > > 
-> > > Moving to a model where the DWC3 core is instantiated in a synchronous
-> > > fashion avoids above described race conditions.
-> > > 
-> > > It is however not feasible to do so without also flattening the
-> > > DeviceTree binding, as assumptions are made in the DWC3 core and
-> > > frameworks used that the device's associated of_node will the that of
-> > > the core. Furthermore, the DeviceTree binding is a direct
-> > > representation of the Linux driver model, and doesn't necessarily
-> > > describe "the USB IP-block".
-> > > 
-> > > The Qualcomm DWC3 glue driver is therefor transitioned to initialize and
-> > > operate the DWC3 within the one device context, in synchronous fashion.
-> > > 
-> > > To provide a limited time backwards compatibility, a snapshot of the
-> > > driver is retained in a previous commit. As such no care is taken in the
-> > > dwc3-qcom driver for the qcom,dwc3 backwards compatibility.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-> > > ---
-> > >  drivers/usb/dwc3/dwc3-qcom.c | 138 +++++++++++++++++++++----------------------
-> > >  1 file changed, 69 insertions(+), 69 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > index 9d04c2457433..63e60f15ceaa 100644
-> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > @@ -4,7 +4,6 @@
-> > >   * Inspired by dwc3-of-simple.c
-> > >   */
-> > >  
-> > > -#include <linux/cleanup.h>
-> > >  #include <linux/io.h>
-> > >  #include <linux/of.h>
-> > >  #include <linux/clk.h>
-> > > @@ -14,7 +13,6 @@
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/extcon.h>
+On Mon, Mar 10, 2025 at 12:41:06PM +0100, Krzysztof Kozlowski wrote:
+> On 10/03/2025 11:47, Christian Marangi wrote:
+> > On Mon, Mar 10, 2025 at 10:21:45AM +0100, Krzysztof Kozlowski wrote:
+> >> On 09/03/2025 14:29, Christian Marangi wrote:
+> >>> Add Documentation for Airoha EN7581 SCU.
+> >>>
+> >>> Airoha EN7581 SoC expose registers to control miscellaneous pheriperals
+> >>> via the SCU (System Controller Unit).
+> >>>
+> >>> Example of these pheriperals are reset-controller, clock-controller,
+> >>> PCIe line speed controller and bits to configure different Serdes ports
+> >>> for USB or Ethernet usage.
+> >>>
+> >>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> >>> ---
+> >>>  .../mfd/airoha,en7581-scu-sysctl.yaml         | 68 +++++++++++++++++++
+> >>>  1 file changed, 68 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml b/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..d7dc66f912c1
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
+> >>> @@ -0,0 +1,68 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/mfd/airoha,en7581-scu-sysctl.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Airoha EN7581 SCU (System Controller Unit)
+> >>> +
+> >>> +maintainers:
+> >>> +  - Christian Marangi <ansuelsmth@gmail.com>
+> >>> +
+> >>> +description:
+> >>> +  Airoha EN7581 SoC expose registers to control miscellaneous
+> >>> +  pheriperals via the SCU (System Controller Unit).
+> >>> +
+> >> One more comment - there is no such thing as "sysctl" in your hardware.
+> >> Look at the SCU binding which clearly says that it is the hardware you
+> >> are duplicating here, so the "System Control Unit".
+> >>
+> >> So you have existing "This node defines the System Control Unit of the
+> >> EN7523 SoC" and you add one more node which defines the "System Control
+> >> Unit", so you have two "System Control Unit" device nodes?
+> >>
+> >> Look also what Stephen asked for:
+> >>
+> >> https://lore.kernel.org/all/20220106013100.842FCC36AEB@smtp.kernel.org/
+> >>
+> >> so how system-controller can now became clock-controller? Now, it was
+> >> the system controller since the beginning.
+> >>
 > > 
-> > As a heads up, would it make sense to also drop extcon support while we
-> > are transitioning to the new driver / DT bindings?
+> > The main problem here (and we had a similar problem with GPIO and PWM)
+> > is that the Vendor (Airoha) wasn't so bright in placing the different
+> > registers for the SoC so we have case where everything is mixed and not
+> > one after another... 
+> > 
+> > Example we have 
+> > - CLK register part 1
+> > - Some bits that configure PCIe
+> > - CLK register part 2
+> > - GPIO
+> > - CLK register part 3
+> > - ...
+> 
+> This does not explain that binding said "This node defines the System
+> Control Unit".
+> 
+> So what are you adding here if not SCU?
+>
+
+With "This node defines the System Control Unit" I mean, the entire
+register space of the IP block is defined and each child specifically
+define each part of the IP block.
+
+> > 
+> > The driver solution for this is syscon and the simple-mfd node
+> > structure.
+> 
+> Let's keep driver entirely separate, we don't talk about them and mixing
+> arguments won't make it easier.
+> 
+
+Ok.
+
+> > 
+> > Now the main problem is how to modle this in DT. There are lots of case
+> > where the simple-mfd model is used (like the one proposed) but probably
+> > this is not accepted anymore. But again this should be clearly stated or
+> > we have a chicken-egg problem when other devs implement similar thing and
+> > have to implement simple MFD driver to handle this. (and driver
+> > maintainers say "Use the simple-mfd model like it was already done)
+> 
+> simple-mfd has nothing to do here. Describe the hardware - what is the SCU?
+> 
+> 
+
+As I said below, SCU is just the name used in Airoha Documentation for
+this IP block. In this register space there are multiple things so it's
+not strictly a clock-controller (as it's currently defined)
+
+It was proposed as clock-controller previously as we weren't aware this
+IP block was used also for other usage that a strict clock controller.
+
+> > 
+> > For this specific case (and to give an answer to the clock patch after
+> > this) the problem is that this register space was originally used only
+> > to control the clock and I wasn't aware that it was also used to control
+> > USB. Now that I'm implementing support for it, the disaster happened.
+> > 
+> > So In short SCU is lots of thing, both a system-controller, a
+> > clock-controller and even a reset-controller.
+> 
+> And you have bindings for that already. Done.
+> 
+
+It's currently defined in DTS as clock-controller, should we change it
+to system-controller to make it more clear?
+
+> > 
+> > To make it short, 2 different solution:
+> > 1. We can keep the current node structure of the node-controller and add a
+> > child node for the SSR part (with a dedicated compatible).
+> 
+> No, you do not add child nodes just because you want some drivers.
+> 
+> What is SSR? How is it a device?
+
+SSR is the name used in Documentation for the register used to configure
+the Serdes and PCIe port.
+
+> 
+> > 2. Those property need to be be defined in the clock-controller node?
+> 
+> In the SCU node. Do you have only one SCU or more?
+
+Strictly speaking it's one register space. One clock-controller, one
+reset-controller and one set of SSR registers, and from what I can
+understand it's ALWAYS "One device/compatible for Register space"
+
+The simple-mfd pattern can't really work for case like this where in one
+register space there are multiple stuff.
+
+Is everything clear now?
+
+To summarize:
+- no child nodes
+- add additional property for SSR in the SCU .yaml
+
+> 
+> > 
+> > The ideal solution is 1. Does it work for you?
+> > 
+> > Sorry for the long post and hope you understand why this mess of
+> > reworking the binding.
 > > 
 > 
-> Yes, I believe this code should be cleaned out in favor of relying on
-> the core's implementation thereof and callbacks into the qcom-code for
-> configuration the glue hardware - which looks to be the same callback we
-> want to add for the usb_role_switch.
-
-Hmm. So do you want to clean it later? Or do you plan to drop extcon
-from the next iteration?
-
 > 
-> Regards,
-> Bjorn
-> 
-> > >  #include <linux/interconnect.h>
-> > > -#include <linux/of_platform.h>
-> > >  #include <linux/platform_device.h>
-> > >  #include <linux/phy/phy.h>
-> > >  #include <linux/usb/of.h>
-> > 
-> > -- 
-> > With best wishes
-> > Dmitry
+> Best regards,
+> Krzysztof
 
 -- 
-With best wishes
-Dmitry
+	Ansuel
 
