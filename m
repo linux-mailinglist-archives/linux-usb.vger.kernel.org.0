@@ -1,283 +1,345 @@
-Return-Path: <linux-usb+bounces-21660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0726CA5CEFB
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 20:09:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD3ABA5D00D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 20:56:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3901817283A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 19:09:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 465A8189F20E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 19:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F80A2641C6;
-	Tue, 11 Mar 2025 19:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72E4264612;
+	Tue, 11 Mar 2025 19:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bdb9Gojx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mek/6VyV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6960A25EF8E;
-	Tue, 11 Mar 2025 19:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E292627E3
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 19:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741720148; cv=none; b=hS535lED0TFYd6Beq4cReG+b0gi/m0VygtRzdL5zqNctwFtl8KrlBA55KAzy6asVlfQpxujAAPzHJ1LFVKmppNoR5Ttf09ju3sTsf9/mqu9Ke81xC0aTdbC9+2lptpz7RsGVqk+7BH42retDmOvuBDwhQWUqtf2FmIY+CyRUXXc=
+	t=1741722969; cv=none; b=GUsDADX1tYyr5pqPM8EBJpttovaSojJWb7WKUXTaHYTyhva46EDqbtLnO4jT88d9XA4/vRZ9IFnMMEjik3MXm2yCT5zGM5hxLQCEdg0cga6Pdx1xizdKG3G88Ifx1fnLwy3CIYETOAT/ElQgDG5UdgGeJjAagRfRmpYqUNyWFsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741720148; c=relaxed/simple;
-	bh=ALgeYULD97jCKLsl3qy0loXJ7HEmXrOCIreJopYWrd0=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Oqc71rPC9M4VvCrrjvqV1y+6XKmDeqwrjS2j6qV3GXZo/PHs6EU7GD9RwOQ5MyvIrtNOYiBEOeS/oxJoTKgMQqqV0C4B+D36DkrNdrNGXrUX3c7WytaCgGsOYY9AcDBTU0vkeA7qcu7XrNmaUkrOYDRsDb+AyV6X2GZYvZVitvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bdb9Gojx; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso64989455e9.1;
-        Tue, 11 Mar 2025 12:09:06 -0700 (PDT)
+	s=arc-20240116; t=1741722969; c=relaxed/simple;
+	bh=NSP51JkzDr1wqNpJgHnxtGrvxwbE+LKdl2O1eR1bKMc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VAaQxfuTwrxurWdt09tKbjn/o4HhjUK99jv3SzmcGHmjm7N73iSxOKh+YS/Y9HbXSKyQeOD584SgHkyBdL5nGEMw1h1T/8sfxSzByYjSwpDDgoKAYL/A200dz8K3+bPj9832zm3Ev14Xw+8fZ5EtCSW7xOXKRtAF2T8EMnT3HMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mek/6VyV; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6e8ffa00555so37150206d6.0
+        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 12:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741720144; x=1742324944; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QBYt0BHsxul+nTaYflhpms2js1nZoTfEFczz9ZKES00=;
-        b=Bdb9GojxgdD60vEMRrrtiwfHwxC19pjYgxqZwImc5G5a/vqAzrE+bJ7ecly9Hb8uFA
-         3ojZyy0N3iBcp2RIfTY6tuzWEY8Q7653C4qM8W9UfJ6LKcOGNXfy4qwZYs2w/1qPViqG
-         1S5+BZGDMMfPZf6kLLCdusbFZU/Fr5uN5N/ZA3MgypUzIz+Wnd9v8hWiKBBVlYvQAPlC
-         wRwN+VJc39VuhHTQm9kPZOWpce7/X9IViJdGKWSZMwnrB4ks7IYYw1cvBG1mbpdFashF
-         PwKZOHa5a+3RF1pM4dwOpX+U8iWWwhhj+XYPEs4jGSksxV0HulFz9gfyuCfdL4NSaMxf
-         YTQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741720144; x=1742324944;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1741722965; x=1742327765; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QBYt0BHsxul+nTaYflhpms2js1nZoTfEFczz9ZKES00=;
-        b=ah6kPeVsFfVX9agZOAVsgiMrYHT49GqgzL5O3+cPTcV55fW2mnDEIJVcp03c+BT51Q
-         EBsQDmhN7+Bj+d9ESuAFnzvU9OuS8FxXs2WMECHAiWNh4u9aHpIlP3aKM52kN3nv+lah
-         JDzUBi3UG2PEG79mcFVxztlQr1W7Mt/ZCfu20JoC39+NAknaLEpx+u0vUxA+nfCz+yhA
-         6SdXkNnrVBA98oqChvNUMX8M5XJoN1Y+LOcQAaVfGpordX4hWrEbP3eQu9jJOyM69qMP
-         kbl8VpOEr+NOqZx8VxOtsbH8CTSvtGqbJTQ/PPgAcPRNceSikvb5xW2FhYDUxC9j1874
-         xRlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxYndxkIvm7H52a3qSE3zG1ZlIfxpv2jVM2BgY5+WJHHSTwLtzLfgZu4g+eSFJYXrNzZOiDiiaIKaYNaO7@vger.kernel.org, AJvYcCVQxtuQ6+9QucF+0mz95tBTzX95TmyxuKQZnhF3B3jzakcGLcCPZuibsitenK/Uyw66H1P1kHG7lWgx@vger.kernel.org, AJvYcCX+yEikgLk+V7jQG/w7xvfZt5MB/D/yV4ccVylpOR7NoEleURQ8lAHmH3pNDZ8IAqlVHfHn7rVLT+SL@vger.kernel.org, AJvYcCXPCFziVBOqeZgYHigfXaELkOcGR1n6+gB0/SkT93eBAAxz8wRHD0hxlDGcXDe9qUmn8arm+QceAr5g@vger.kernel.org
-X-Gm-Message-State: AOJu0YynmZsfBxd3vtFNj2FnLOM2PXfjGYvbZw5cXTvQh2QiSpURq5gH
-	QQgmFYr/jxRIMfOi4uJNRBlG1FIbhUtBr8QJ9Go4EPu31EsvWU8C
-X-Gm-Gg: ASbGnctLpXKShySXuoVvElfJFf2M3yxFwOWZ3NHRVI6LL76UhhMheXjgsfMsKAEoQ8Y
-	8Ct9BpQIFU7/yWHZF/19juUEF9GaqFj4vdZU/nXQViGmBNpzGJz7Z5M3y+0ztIPEClimeYNYb9h
-	N5lNWdrXLa4dFeL4Lhx3yHopI89MRV7tz6EosLWt9O/ynfoWTJe/0IoQ3NaOdepUbyo51qBqs5C
-	OuvZkzA8BNXxIuDvporxJP76KaDNSwydlhfDOBYpvfQMxWteNOzX2v4Y0DxBQkT63Lza98NCQIk
-	tzJabLlgSis08jJNf7XoOcOxkiIjjM0vZOz5UmstYmEwfv8Mgc+ZBznofgAdNQNYhuRPNub0tZl
-	gfqxNV5MJE9/H
-X-Google-Smtp-Source: AGHT+IEVvLB1J5PdZXBMZwLdi5Sfx5U8w2F5CDI5YD3a5o/Tqdo42jSaYp7CF55JMp1UKEuKA0N/8w==
-X-Received: by 2002:a05:600c:5618:b0:439:9a40:aa0b with SMTP id 5b1f17b1804b1-43cdfb7e4b1mr144023345e9.25.1741720144407;
-        Tue, 11 Mar 2025 12:09:04 -0700 (PDT)
-Received: from Ansuel-XPS. (58.43.196.178.dynamic.cust.swisscom.net. [178.196.43.58])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43cf7c8249bsm81906155e9.7.2025.03.11.12.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 12:09:03 -0700 (PDT)
-Message-ID: <67d08a4f.7b0a0220.8fe9e.44fd@mx.google.com>
-X-Google-Original-Message-ID: <Z9CKTrERYllmbczJ@Ansuel-XPS.>
-Date: Tue, 11 Mar 2025 20:09:02 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Guo Ren <guoren@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
-	Ben Hutchings <ben@decadent.org.uk>, Felix Fietkau <nbd@nbd.name>,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-phy@lists.infradead.org, linux-mediatek@lists.infradead.org,
-	linux-usb@vger.kernel.org, upstream@airoha.com
-Subject: Re: [PATCH 05/13] dt-bindings: mfd: add Documentation for Airoha
- EN7581 SCU
-References: <20250309132959.19045-1-ansuelsmth@gmail.com>
- <20250309132959.19045-6-ansuelsmth@gmail.com>
- <c1227083-a4ea-4dac-a9db-d6a5386c0437@kernel.org>
- <67cec328.170a0220.27ecbc.9c6e@mx.google.com>
- <026296c8-a460-43ca-a423-0fa38269fbc2@kernel.org>
+        bh=31VOcLmm9fDn4onPCz8nw3m5WfGa6pmjNlwRDXAKVBw=;
+        b=mek/6VyVqrp2q9z7kd1KonLsYD9VVrx5NZpSoUUkF6xlnq8J9yWKJ7jASkJISpL/Bg
+         fJsNmS/BiQAcYbQ/E/F/DQhbOl0CxTnDEzU+nEiiOciy9A0SuQ1uREqFj5/3JyUBTUb6
+         yUd8Ma7CnMgGTJYNgpVAfXWYEnOmvlKymU6DvsJlrEQecevxObt1IPxFRg6jNiMsd65P
+         7g4wz5hiXFup2pqxnJbo2xzsL/+rEMbY/K6IA5+SDDTWC+wj4LjN+XJCbriNBNyPyAX8
+         /x09+3Hvc5TduO1DfgIjSi0WzIwtMN7VUnZQYMVp8EZ1XnZM0PMLr99zpQzvtGNOPDEU
+         ziTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741722965; x=1742327765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=31VOcLmm9fDn4onPCz8nw3m5WfGa6pmjNlwRDXAKVBw=;
+        b=CoN8R1DBsYCpExFPel9k8gi9O5RpEfabrzima6lJDhGEYQNcjrd6YKk3JnP1YMlblo
+         A3pg2ffQkTdEYTWZrL4P1FkJv/oAP6P512PTEVnbiGTBajruBA/CiXPHVgOJ1sXDP7CU
+         OIlQFpgoUqfHe/w3viAWwB28r4YvcHGhnJg9QwCNsyJgKYW+qVG2enzRUZZGzIng9gGY
+         UGo8LYif18uSNBy34fsDZpB1mO9+vI/Ajda5zYlWPuF5JKZHKCB5J74iVzB9+w0eOJEV
+         hVPVMpufjGO69cO9/cSBr9DgLGiFT4e/ODFZvGFewqDaOfHssZrxN8yIZeIkyaV+8z51
+         HpcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgkVWyTNyzyj+MyT2Xco6BhJcPiL2zrjNc6aTtQbPcOVy4DfAjfZcQ2ae7EBgYHxATqHOHtmfLCyU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLysHD6ayNgL+82K1Fa7+eiQ2jxp0+btyUgnHMgmAqYlV5+JdG
+	AVdmBMGVhIKnBYml/0dsKBQCgby/HpdAqrZ3TNDoMkqqQRtSejTTL/kRTxsxlbpymg0YjMaB3L+
+	IThM/tqjz8A/iWfC4w1/nI4sLekNJ8O70c+8X
+X-Gm-Gg: ASbGncsGlNY56Xuu9NNozxEaP6hM6zJU1iVbELuK1wMJK0Sm1qDsXv20vycuKc+2Fcz
+	MDBcY+fZwqh8IGueoxuWV6b43n/PGuwnmcTje/vxupJhkkZWZJOpOSeTo3vsu7yDMb+i0lPmN08
+	xGOYjFfrr2KYs2wQjjlQuTLafUEAki7EMfenaneRPpqgD/ZPweG1yiefs=
+X-Google-Smtp-Source: AGHT+IH9gTxRRVZurcx3e26Hp+fZKO67d6CNS5S/S3DuF2W4E5YBfDGSPgWN7xZQJzrS2FfR4qUjQdM040JpDDFDCJE=
+X-Received: by 2002:a05:6214:268b:b0:6d8:b115:76a6 with SMTP id
+ 6a1803df08f44-6e9004fa164mr313351926d6.0.1741722965136; Tue, 11 Mar 2025
+ 12:56:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <026296c8-a460-43ca-a423-0fa38269fbc2@kernel.org>
+References: <20250304000458.1826450-1-royluo@google.com> <20250308010409.n55ivdubj7ylkr7j@synopsys.com>
+ <CA+zupgzB2aKRn_KDcqSLctqmvnEW1923XQPDwDzfDVZxU70ORg@mail.gmail.com>
+In-Reply-To: <CA+zupgzB2aKRn_KDcqSLctqmvnEW1923XQPDwDzfDVZxU70ORg@mail.gmail.com>
+From: Roy Luo <royluo@google.com>
+Date: Tue, 11 Mar 2025 12:55:29 -0700
+X-Gm-Features: AQ5f1JpDaJKKRTioXXjj44HVtzY57c-FJzL5oQeDpxM-yGm2Us0vUxsM44D1878
+Message-ID: <CA+zupgzw0Fr-PHzj0PPRQGuvxB+py0EMseiToq5iPKe=iRNtgg@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: dwc3: core: Avoid redundant system suspend/resume callbacks
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 10, 2025 at 12:41:06PM +0100, Krzysztof Kozlowski wrote:
-> On 10/03/2025 11:47, Christian Marangi wrote:
-> > On Mon, Mar 10, 2025 at 10:21:45AM +0100, Krzysztof Kozlowski wrote:
-> >> On 09/03/2025 14:29, Christian Marangi wrote:
-> >>> Add Documentation for Airoha EN7581 SCU.
-> >>>
-> >>> Airoha EN7581 SoC expose registers to control miscellaneous pheriperals
-> >>> via the SCU (System Controller Unit).
-> >>>
-> >>> Example of these pheriperals are reset-controller, clock-controller,
-> >>> PCIe line speed controller and bits to configure different Serdes ports
-> >>> for USB or Ethernet usage.
-> >>>
-> >>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> >>> ---
-> >>>  .../mfd/airoha,en7581-scu-sysctl.yaml         | 68 +++++++++++++++++++
-> >>>  1 file changed, 68 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml b/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..d7dc66f912c1
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/mfd/airoha,en7581-scu-sysctl.yaml
-> >>> @@ -0,0 +1,68 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/mfd/airoha,en7581-scu-sysctl.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Airoha EN7581 SCU (System Controller Unit)
-> >>> +
-> >>> +maintainers:
-> >>> +  - Christian Marangi <ansuelsmth@gmail.com>
-> >>> +
-> >>> +description:
-> >>> +  Airoha EN7581 SoC expose registers to control miscellaneous
-> >>> +  pheriperals via the SCU (System Controller Unit).
-> >>> +
-> >> One more comment - there is no such thing as "sysctl" in your hardware.
-> >> Look at the SCU binding which clearly says that it is the hardware you
-> >> are duplicating here, so the "System Control Unit".
-> >>
-> >> So you have existing "This node defines the System Control Unit of the
-> >> EN7523 SoC" and you add one more node which defines the "System Control
-> >> Unit", so you have two "System Control Unit" device nodes?
-> >>
-> >> Look also what Stephen asked for:
-> >>
-> >> https://lore.kernel.org/all/20220106013100.842FCC36AEB@smtp.kernel.org/
-> >>
-> >> so how system-controller can now became clock-controller? Now, it was
-> >> the system controller since the beginning.
-> >>
-> > 
-> > The main problem here (and we had a similar problem with GPIO and PWM)
-> > is that the Vendor (Airoha) wasn't so bright in placing the different
-> > registers for the SoC so we have case where everything is mixed and not
-> > one after another... 
-> > 
-> > Example we have 
-> > - CLK register part 1
-> > - Some bits that configure PCIe
-> > - CLK register part 2
-> > - GPIO
-> > - CLK register part 3
-> > - ...
-> 
-> This does not explain that binding said "This node defines the System
-> Control Unit".
-> 
-> So what are you adding here if not SCU?
+Apologies, I noticed the formatting in my previous email was incorrect.
+Please find the same content below, reformatted for improved readability.
+
+On Fri, Mar 7, 2025 at 5:04=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys.=
+com> wrote:
+>
+> On Tue, Mar 04, 2025, Roy Luo wrote:
+> > dwc3 device suspend/resume callbacks were being triggered during system
+> > suspend and resume even if the device was already runtime-suspended.
+> > This is redundant for device mode because the suspend and resume routin=
+es
+> > are essentially identical for system PM and runtime PM. The minor
+> > difference in pinctrl state changes has been moved to the common sectio=
+n
+> > in this patch.
+> > To prevent these unnecessary callbacks, indicate to the PM core that it
+> > can safely leave the device in runtime suspend if it's already
+> > runtime-suspended in device mode by returning a positive value in
+> > prepare() callback.
+> >
+> > Signed-off-by: Roy Luo <royluo@google.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 27 ++++++++++++++++++++++-----
+> >  1 file changed, 22 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index dfa1b5fe48dc..b83f094ff1c5 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2398,10 +2398,12 @@ static int dwc3_suspend_common(struct dwc3 *dwc=
+, pm_message_t msg)
+> >               dwc3_gadget_suspend(dwc);
+> >               synchronize_irq(dwc->irq_gadget);
+> >               dwc3_core_exit(dwc);
+> > +             pinctrl_pm_select_sleep_state(dwc->dev);
+> >               break;
+> >       case DWC3_GCTL_PRTCAP_HOST:
+> >               if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> >                       dwc3_core_exit(dwc);
+> > +                     pinctrl_pm_select_sleep_state(dwc->dev);
+> >                       break;
+> >               }
+> >
+> > @@ -2436,6 +2438,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >
+> >               dwc3_otg_exit(dwc);
+> >               dwc3_core_exit(dwc);
+> > +             pinctrl_pm_select_sleep_state(dwc->dev);
+> >               break;
+> >       default:
+> >               /* do nothing */
+> > @@ -2453,6 +2456,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, p=
+m_message_t msg)
+> >
+> >       switch (dwc->current_dr_role) {
+> >       case DWC3_GCTL_PRTCAP_DEVICE:
+> > +             pinctrl_pm_select_default_state(dwc->dev);
+> >               ret =3D dwc3_core_init_for_resume(dwc);
+> >               if (ret)
+> >                       return ret;
+> > @@ -2462,6 +2466,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, p=
+m_message_t msg)
+> >               break;
+> >       case DWC3_GCTL_PRTCAP_HOST:
+> >               if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> > +                     pinctrl_pm_select_default_state(dwc->dev);
+> >                       ret =3D dwc3_core_init_for_resume(dwc);
+> >                       if (ret)
+> >                               return ret;
+> > @@ -2490,6 +2495,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, p=
+m_message_t msg)
+> >               if (PMSG_IS_AUTO(msg))
+> >                       break;
+> >
+> > +             pinctrl_pm_select_default_state(dwc->dev);
+> >               ret =3D dwc3_core_init_for_resume(dwc);
+> >               if (ret)
+> >                       return ret;
+> > @@ -2608,8 +2614,6 @@ static int dwc3_suspend(struct device *dev)
+> >       if (ret)
+> >               return ret;
+> >
+> > -     pinctrl_pm_select_sleep_state(dev);
+> > -
+> >       return 0;
+> >  }
+> >
+> > @@ -2618,8 +2622,6 @@ static int dwc3_resume(struct device *dev)
+> >       struct dwc3     *dwc =3D dev_get_drvdata(dev);
+> >       int             ret =3D 0;
+> >
+> > -     pinctrl_pm_select_default_state(dev);
+> > -
+> >       pm_runtime_disable(dev);
+> >       ret =3D pm_runtime_set_active(dev);
+> >       if (ret)
+> > @@ -2647,14 +2649,29 @@ static void dwc3_complete(struct device *dev)
+> >               dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
+> >       }
+> >  }
+> > +
+> > +static int dwc3_prepare(struct device *dev)
+> > +{
+> > +     struct dwc3     *dwc =3D dev_get_drvdata(dev);
+> > +
+> > +     /*
+> > +      * Indicate to the PM core that it may safely leave the device in
+> > +      * runtime suspend if runtime-suspended already in device mode.
+> > +      */
+> > +     if (dwc->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_DEVICE)
+> > +             return 1;
+>
+> Why are you skipping suspend for all cases when in device mode? Don't we
+> need to check for current runtime suspend status?
+> (ie. check pm_runtime_status_suspended()).
 >
 
-With "This node defines the System Control Unit" I mean, the entire
-register space of the IP block is defined and each child specifically
-define each part of the IP block.
+I was looking at drivers/base/power/main.c device_suspend() to see how
+direct complete works, and there are a bunch of checks in the function to
+determine direct complete eligibility, including pm_runtime_status_suspende=
+d().
+That's why I thought it's already taken care of by the PM framework.
+However, looking at the documentation
+https://docs.kernel.org/power/runtime_pm.html
+again "Namely, if a system suspend .prepare() callback returns a positive
+number for a device, that indicates to the PM core that the device appears =
+to
+be runtime-suspended and its state is fine.". You're right, we should also
+do the check inside our .prepare callback. Will fix it in the next patch.
 
-> > 
-> > The driver solution for this is syscon and the simple-mfd node
-> > structure.
-> 
-> Let's keep driver entirely separate, we don't talk about them and mixing
-> arguments won't make it easier.
-> 
+> I'm also a bit concernt about moving pinctrl_pm_select* to the
+> suspend/resume_common function. Is your device using pinctrl? If not,
+> how did you validate this?
+>
+> Thanks,
+> Thinh
+>
 
-Ok.
+I couldn't find any device node that's actually utilizing the pinctrl "slee=
+p"
+state in upstream. I digged into the patch that introduced pinctrl to dwc3,=
+ i.e.
+https://lore.kernel.org/all/9dd70870cfee40154a37186d4cf3ae0e9a452cbd.144102=
+9572.git.nsekhar@ti.com/
+The intention was to control DRVVBUS pins using the pinctrl API so
+that VBUS can be turned off to conserve power when device is suspended
+(which also implies this is only relevant in host mode, at least in the ini=
+tial
+patch). Since there was no runtime PM support in dwc3 at that time, the
+code was only added in the system suspend/resume path. Yet I don't see
+why this cannot be extended to the runtime suspend/resume path,
+ultimately it should be safe to turn off VBUS once the controller is
+completely torn down with dwc3_core_exit() regardless of which suspend
+path it's taking.
 
-> > 
-> > Now the main problem is how to modle this in DT. There are lots of case
-> > where the simple-mfd model is used (like the one proposed) but probably
-> > this is not accepted anymore. But again this should be clearly stated or
-> > we have a chicken-egg problem when other devs implement similar thing and
-> > have to implement simple MFD driver to handle this. (and driver
-> > maintainers say "Use the simple-mfd model like it was already done)
-> 
-> simple-mfd has nothing to do here. Describe the hardware - what is the SCU?
-> 
-> 
+Besides looking at how pinctrl in dwc3 is intended to be used, I did
+an inventory on how it actually is used. There are 3 major players:
+ti, qcom and socionext that has pinctrl property set in their dwc3 device n=
+ode.
+1. ti/omap
+The pinctrl property is only set when dr_mode is host or otg.
+Only the "default" state is defined, none of boards has "sleep" state
+defined, not even the first user
+arch/arm/boot/dts/omap/am437x-gp-evm.dts
+that introduced the API to dwc3.
+(https://lore.kernel.org/all/4a8a072030c2a82867c6548627739146681b35a5.14410=
+29572.git.nsekhar@ti.com/)
+Setting pinctrl "default" state seems to be pretty common in ti/omap,
+and the usage is aligned with the original intention: control DRVVBUS.
+It's unclear why "sleep" state is no longer used though.
 
-As I said below, SCU is just the name used in Airoha Documentation for
-this IP block. In this register space there are multiple things so it's
-not strictly a clock-controller (as it's currently defined)
+2. qcom
+The following 2 boards have pinctrl property defined, dr_mode are all
+host and also only the "default" state is defined.
+- sa8155p-adp.dts  &usb_1_dwc3 {
+                               dr_mode =3D "host";
+                               pinctrl-names =3D "default";
+                               pinctrl-0 =3D <&usb2phy_ac_en1_default>;
+                               };
+                               &usb_2_dwc3 {
+                               dr_mode =3D "host";
+                               pinctrl-names =3D "default";
+                               pinctrl-0 =3D <&usb2phy_ac_en2_default>;
+                               };
+- sm8350-hdk.dts  &usb_2_dwc3 {
+                              dr_mode =3D "host";
+                              pinctrl-names =3D "default";
+                              pinctrl-0 =3D <&usb_hub_enabled_state>;
+                              };
+It seems the pinctrl is used to control phy and perhaps downstream usb hub.
+Nothing is turned off explicitly during sleep as "sleep" state isn't define=
+d.
+It's more like setting the required pins for host mode to work.
 
-It was proposed as clock-controller previously as we weren't aware this
-IP block was used also for other usage that a strict clock controller.
+3. socionext
+The pinctrl property is set on controllers with dr_mode peripheral or host.
+Still, only the "default" state is defined.
+The pin is assigned according to its dr_mode, controllers with dr_mode
+host will be assigned with pinctrl_usb* pin, while controllers with dr_mode
+peripheral will get pinctrl_usb*_device pin.
+        pinctrl_usb0: usb0 {
+                groups =3D "usb0";
+                function =3D "usb0";
+        };
+        pinctrl_usb0_device: usb0-device {
+                groups =3D "usb0_device";
+                function =3D "usb0";
+        };
+Again, these pins are not related to power management, it's tied to dr_mode=
+.
 
-> > 
-> > For this specific case (and to give an answer to the clock patch after
-> > this) the problem is that this register space was originally used only
-> > to control the clock and I wasn't aware that it was also used to control
-> > USB. Now that I'm implementing support for it, the disaster happened.
-> > 
-> > So In short SCU is lots of thing, both a system-controller, a
-> > clock-controller and even a reset-controller.
-> 
-> And you have bindings for that already. Done.
-> 
+To summarize the current pinctrl usage in dwc3:
+1. No user of "sleep" state, meaning it's unlikely to cause any impact
+on suspend flow.
+2. Typically, the default pin state reflects the controller's dr_mode,
+acting as a pre-configuration step to set the operational mode.
 
-It's currently defined in DTS as clock-controller, should we change it
-to system-controller to make it more clear?
+Based on the above observation, the code change on the pinctrl is
+unlikely to introduce a regression as it aligns with the original intention
+of the pinctrl property, and the pinctrl_pm_select_sleep_state() is
+essentially an NOP in upstream as of now. Besides,
+pinctrl_pm_select_default_state() is called whenever we try to
+re-initialize the controller.
+I hope this addresses your concern.
 
-> > 
-> > To make it short, 2 different solution:
-> > 1. We can keep the current node structure of the node-controller and add a
-> > child node for the SSR part (with a dedicated compatible).
-> 
-> No, you do not add child nodes just because you want some drivers.
-> 
-> What is SSR? How is it a device?
+Best,
+Roy
 
-SSR is the name used in Documentation for the register used to configure
-the Serdes and PCIe port.
-
-> 
-> > 2. Those property need to be be defined in the clock-controller node?
-> 
-> In the SCU node. Do you have only one SCU or more?
-
-Strictly speaking it's one register space. One clock-controller, one
-reset-controller and one set of SSR registers, and from what I can
-understand it's ALWAYS "One device/compatible for Register space"
-
-The simple-mfd pattern can't really work for case like this where in one
-register space there are multiple stuff.
-
-Is everything clear now?
-
-To summarize:
-- no child nodes
-- add additional property for SSR in the SCU .yaml
-
-> 
-> > 
-> > The ideal solution is 1. Does it work for you?
-> > 
-> > Sorry for the long post and hope you understand why this mess of
-> > reworking the binding.
-> > 
-> 
-> 
-> Best regards,
-> Krzysztof
-
--- 
-	Ansuel
+> > +
+> > +     return 0;
+> > +}
+> >  #else
+> >  #define dwc3_complete NULL
+> > +#define dwc3_prepare NULL
+> >  #endif /* CONFIG_PM_SLEEP */
+> >
+> >  static const struct dev_pm_ops dwc3_dev_pm_ops =3D {
+> >       SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
+> >       .complete =3D dwc3_complete,
+> > -
+> > +     .prepare =3D dwc3_prepare,
+> >       /*
+> >        * Runtime suspend halts the controller on disconnection. It reli=
+es on
+> >        * platforms with custom connection notification to start the con=
+troller
+> >
+> > base-commit: 99fa936e8e4f117d62f229003c9799686f74cebc
+> > --
+> > 2.48.1.711.g2feabab25a-goog
+> >
+> >
 
