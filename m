@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-21619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 300A4A5BA4D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 08:58:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0093BA5BA88
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 09:12:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE1FE3AB040
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 07:58:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC49618964C8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 08:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617CA22259A;
-	Tue, 11 Mar 2025 07:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3859F223324;
+	Tue, 11 Mar 2025 08:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSZaGWjb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2/x3Srp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5111386DA;
-	Tue, 11 Mar 2025 07:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1C41DE894;
+	Tue, 11 Mar 2025 08:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741679890; cv=none; b=DLYESjsl0EEKnCK4evsSMffyPOGLulQ66Ucn+4nPmGcpdguIBmngBWHkkSfe/WyZAgqlgasl+n6+uY1gpuznzuiY06krT6aU9XoKBKbLylNWWqjd5+BjPamHCbvTQhUhJQcIXGALZ/91FenHwqlkqHC2bifAv2H9hYsRX2mUkew=
+	t=1741680758; cv=none; b=O5DJ0RN2eveDhOhegisiR+XRkgF2gPf8PdnDvaiMlG8zzgJJDdAQmpujcww/QcA0GRZPlhD5OhHritJwrxcLlisZiV2W2dppA8ze+Dc/ZHTu/IU8b6Fxq14ru6u6sg43GEhYNzZEy/K9427aFqSJtSWL4YFgiCpNJ1CkmRlvc7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741679890; c=relaxed/simple;
-	bh=2WbVJoFf68m1W0NkgahgwhwEdneyV1dwcI0GcRVm4kk=;
+	s=arc-20240116; t=1741680758; c=relaxed/simple;
+	bh=zSb95WPbrPnw9lIVPKI1mGrHrwXfgKMta+gE6HnBjFk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YH7okryve5O57vdiSk5MZ34/0fC5wxkvBMp3eqwUAhorf3fCwAu+7bo+AZRBHI+2svtlb7t8Wch/asBxM18ZM/8Lj+eLBUeSCjO4GgIlN/1EEpKeXaXOx0BMeD4j1PRfTsUuafhSf7On+KQ3U0CO6VH9MLNws1VbsLLyKWcnCmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSZaGWjb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC6DC4CEE9;
-	Tue, 11 Mar 2025 07:58:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=S9b/z96V0C7olIlNTkByAlHmS6mDQ0L55w2bKP09QGksHFkqQ4ubya1ljB19QwfPkLOOSkhZL8KTsswB55DUQpJ2YMvdu15C6dhBwhyXBNaG58xbAPdG4bK5ECGocS1qB6aX4gCOKNEfUiJEKnfkUJGxuRf84Yo046mDOhIpnuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2/x3Srp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079D3C4CEE9;
+	Tue, 11 Mar 2025 08:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741679889;
-	bh=2WbVJoFf68m1W0NkgahgwhwEdneyV1dwcI0GcRVm4kk=;
+	s=k20201202; t=1741680758;
+	bh=zSb95WPbrPnw9lIVPKI1mGrHrwXfgKMta+gE6HnBjFk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PSZaGWjbz6+Vx96JFfeyErCOa+yl//QyJzpD0Mp8W5DnKHg7gbfBvXOmJLLs74Qcd
-	 8+pCaB/J0hfNNeZKNqNyksuXtfrNe8vDeNOSBRjr3SAR78lff3ofPV9ZAMDqLSSZEl
-	 dNoMK5zyu2mOyJqVyIlkd8EUd90vN18MWRmxwsp0S99VMoKnYQWFQ+xVz5qSWQklt9
-	 +x3IeXPiXTiZ+b4zb5mUsmvCPunJDBZDnHx1e5J3XX3bYrIgq2lgbSIuTrAsBLVD4J
-	 T+dkCWcdHaWx8jZkAVKJ/C2iscasW4MavhbXpiJY2BeWqrhnk7NH7HWl9lJ2keEvqp
-	 7swMtzt8AJt5A==
+	b=D2/x3SrpbcR/fKO+XbKMcevqY3MB3HbCVkHenncnj6Lv2H1NaAptAWniZHDURh3ra
+	 toVmeiF0DpLGKrz3GazLkoEwxeilvPv6Ao4s98WtG0P76XGnMudXu3DyY7NN9AX6d7
+	 dnQd6mlYpL1cSXUHKPzrWqeLBn62FjouoflPzrWLBweaOwgWNGXUyEeIFPzAZrE+Rw
+	 6NuCptaALSBhTbWqsXX6ygO4IP5GOEAQMQmCL88D1C3X5lxsA5yfQW6T0WIjFonx9F
+	 pBpWpxyUM2qTf/V3sWH4N7UMqrq1H1gRcVVoo9E7xvLlGxUg2ydEJ9TCDAW0JLZcK+
+	 m63eptsXx9KbA==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1truV2-000000003vJ-0yFg;
-	Tue, 11 Mar 2025 08:58:04 +0100
-Date: Tue, 11 Mar 2025 08:58:04 +0100
+	id 1truj2-0000000048n-2YC5;
+	Tue, 11 Mar 2025 09:12:33 +0100
+Date: Tue, 11 Mar 2025 09:12:32 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Boon Khai Ng <boon.khai.ng@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb <linux-usb@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	Boon Khai Ng <boon.khai.ng@altera.com>,
-	Tien Sung Ang <tien.sung.ang@altera.com>
-Subject: Re: [PATCH v2] USB: serial: ftdi_sio: add support for Altera USB
- Blaster 3
-Message-ID: <Z8_tDGssqs9DBaPU@hovoldconsulting.com>
-References: <20250307154355.30772-1-boon.khai.ng@intel.com>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB-Serial serdev support
+Message-ID: <Z8_wcASfJ8SeAQ8l@hovoldconsulting.com>
+References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
+ <Zt7kCxawoszunWq3@hovoldconsulting.com>
+ <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,75 +65,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250307154355.30772-1-boon.khai.ng@intel.com>
+In-Reply-To: <20240917044948.i2eog4ondf7vna7q@pengutronix.de>
 
-On Fri, Mar 07, 2025 at 11:43:55PM +0800, Boon Khai Ng wrote:
-> The Altera USB Blaster 3, available as both a cable and an on-board
-> solution, is primarily used for programming and debugging FPGAs.
+On Tue, Sep 17, 2024 at 06:49:48AM +0200, Marco Felsch wrote:
+> On 24-09-09, Johan Hovold wrote:
+> > On Wed, Aug 07, 2024 at 04:08:47PM +0200, Marco Felsch wrote:
+> > > this patchset is based on Johan's patches [1] but dropped the need of
+> > > the special 'serial' of-node [2].
+> > 
+> > That's great that you found and referenced my proof-of-concept patches,
+> > but it doesn't seem like you tried to understand why this hasn't been
+> > merged yet.
+
+> > First, as the commit message you refer to below explain, we need some
+> > way to describe multiport controllers. Just dropping the 'serial' node
+> > does not make that issue go away.
 > 
-> It interfaces with host software such as Quartus Programmer,
-> System Console, SignalTap, and Nios Debugger. The device utilizes
-> either an FT2232 or FT4232 chip.
+> Sorry for asking but isn't the current OF abstraction [1] enough? As far
+> as I understood we can describe the whole USB tree within OF. I used [1]
+> and the this patchset to describe the following hierarchy:
 > 
-> Enabling support for various configurations of the USB Blaster 3
-> by including the appropriate VID/PID pairs, allowing it to function
-> as a serial device via ftdi_sio. The configurations are determined
-> by the hardware design and include:
+>  usb-root -> usb-hub port-1 -> usb-serial interface-0 -> serial
+>                                                          bt-module
 > 
-> 1) PID 0x6020, FT2232, 1 JTAG port
-> 2) PID 0x6021, FT2232, 2 JTAG ports
-> 3) PID 0x6022, FT2232, 1 JTAG port + Port B as UART
-> 4) PID 0x6023, FT2232, Cable USB-Blaster 3
-> 5) PID 0x6024, FT4232, 1 JTAG port
-> 6) PID 0x6025, FT4232, 1 JTAG port + Port C as UART
-> 7) PID 0x6026, FT4232, 1 JTAG port + Port C, D as UART
-> 8) PID 0x602e, FT4232, 1 JTAG port + Port B, C, D as UART
+> [1] Documentation/devicetree/bindings/usb/usb-device.yaml
+
+Again, you still need to consider devices with multiple serial ports
+(and they do not always map neatly to one port per interface either).
+
+> > Second, and more importantly, you do not address the main obstacle for
+> > enabling serdev for USB serial which is that the serdev cannot handle
+> > hotplugging.
 > 
-> These configurations allow for flexibility in how the
-> USB Blaster 3 is used, depending on the specific needs of the
-> hardware design.
-> 
-> Signed-off-by: Boon Khai Ng <boon.khai.ng@intel.com>
-> ---
+> Hotplugging is a good point but out-of-scope IMHO (at least for now)
+> since the current serdev implementation rely on additional firmware
+> information e.g OF node to be present. E.g. if the above mentioned setup
+> would connect the "serial bt-module" directly to the UART port you still
+> need an OF node to bind the serdev driver. If the node isn't present
+> user-space would need to do the hci handling.
 
-Thanks for the update, I've applied this one now.
+There's nothing preventing you from adding a devicetree node for a USB
+device that can be unplugged.
 
-But for your future contributions, remember to put a short changelog
-here under the cut-off (---) line when revising patches.
+> So from my POV the serdev abstraction is for manufacturers which make
+> use of "onboard" usb-devices which are always present at the same USB
+> tree location. Serdev is not made for general purpose USB ports (yet)
+> where a user can plug-in all types of USB devices.
 
->  drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++++
->  drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++++
->  2 files changed, 27 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-> index e07c5e3eb18c..9b34e23b7091 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
-> @@ -1079,6 +1079,20 @@ static const struct usb_device_id id_table_combined[] = {
->  		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
->  	/* GMC devices */
->  	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
-> +	/* Altera USB Blaster 3 */
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6022_PID, 1) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6025_PID, 2) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 2) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 3) },
+Right, but someone need to make sure that serdev can handle devices
+going away first as nothing is currently preventing that from happening.
 
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6029_PID, 2) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 2) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 3) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602C_PID, 1) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 1) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 2) },
-
-These configurations were not mentioned in the commit message. Are they
-also used for embedded designs?
-
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 1) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 2) },
-> +	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 3) },
->  	{ }					/* Terminating entry */
->  };
+> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=usb-serial-of
+> > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-serial-of&id=b19239022c92567a6a9ed40e8522e84972b0997f
 
 Johan
 
