@@ -1,208 +1,231 @@
-Return-Path: <linux-usb+bounces-21643-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21644-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87763A5C3D8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 15:33:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E1EA5C3FD
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 15:37:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CA7B3B46F2
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 14:32:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E3071778D6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 14:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC0525C719;
-	Tue, 11 Mar 2025 14:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C017425D1E2;
+	Tue, 11 Mar 2025 14:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NyjgEq5u"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b="TfMw8114"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C643F1D516C;
-	Tue, 11 Mar 2025 14:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90B325CC77;
+	Tue, 11 Mar 2025 14:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741703569; cv=none; b=ulzxFRnNxxgto8Wr12CKQCmATOrLcNMp4QI3P/ziNmqcKr5tUfT1qhoMM0aNGSxWySYMq+NQz7r4HreYnlqi6AHl0DwA+4yIuXryQbfo8Ofg2q5HKRj8jewksVx3H/5g7Rog1mJlKWX5E3qa3J9/Xmbaif0bA+tRLv2cWIOBJdo=
+	t=1741703810; cv=none; b=J3uRkzOF5AKtQ03oUsczUy4KrYNiwSRYszL+J+AD2C9HcXeA9VXBr1MfNdyhxfw/ubq/spJmyDGvc8SoOymhQU0FiaG8FnYqLQ+3N6Im/u4imvJ+8tRX9+vahRlfrXa5BdQZR72HYpMngxUBbmyp2rbLIOeT0yiy2amkGtLe4KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741703569; c=relaxed/simple;
-	bh=6LRWqagH50pWtOvWLzmPECzX8JInGE4+p6WZsOeip2o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y3PJJ5lhUQOQwtbhgm4u9NUl5vPh7RuPLetBCRKJkDWTFQu5rrXmD0BEcK9jfujLxV9Z7iBhMKagLLXb1FXU+NxxTlTdVKpNvPqlcx/xtL4fnDYTXXzpmfXxym+ofsSyhyt7drq76CR6V1o/01A+ZEPdvK7xF2OyRmo//n1gT2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NyjgEq5u; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 689B844293;
-	Tue, 11 Mar 2025 14:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741703559;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=03SEpe76buerxO1Tyt/a95sW01GQX/8qXbwOFtLXNuw=;
-	b=NyjgEq5uNCMIvDFGJV4PzI9PBcADaiZ+rts7F1XijZiBRgxbhADNqb4p0IdN4cEJu6WMpi
-	JxUHcKEk/q2Pdw/oF/ikapdSxAyUThyvIWkCUCFakseQp8l45mVbcXUilmvFTzhBA7UWLC
-	PfvzwTymO1lcAjJzoafWUpNjDfGZ7XIrxIzaOOLdLLxruovnbTEiaupjv0tMPiRjNh2xJz
-	owTVU6I/Ndid2IM4CRuC0Y0pqkdhvJhqbPOO+4h/RO+DVyXePQ4miKTXZjFaWyKhW6B6Yo
-	gJN5eJtTocgxk7BGSc3dA3oSbs6fCxcuQZ0B4DsR7Y64QwyEaAuRw5mRJMo6XQ==
-Date: Tue, 11 Mar 2025 15:32:35 +0100
-From: Kory Maincent <kory.maincent@bootlin.com>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: netdev@vger.kernel.org, Oliver Neukum <oliver@neukum.org>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Leon Schuermann <leon@is.currently.online>
-Subject: Re: [PATCH v2] net-next: cdc_ether|r8152: ThinkPad Hybrid USB-C/A
- Dock quirk
-Message-ID: <20250311153235.6cae893a@kmaincent-XPS-13-7390>
-In-Reply-To: <f736f5bd20e465656ebe2cc2e7be69c0ada852e3.1741627632.git.p.hahn@avm.de>
-References: <f736f5bd20e465656ebe2cc2e7be69c0ada852e3.1741627632.git.p.hahn@avm.de>
-Organization: bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741703810; c=relaxed/simple;
+	bh=mC/5J7Ya9VRj3TG8oIfCpNT8VWsPU/gApt0oe4jH43U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G0QMryTEnQVNWCIcdwizf7j8V7r7j2J/GBrsBofY5VqibCgERLsw8whlJLvPLSbRYXuYwWiFX5bf9IIzc2usa5XiR1tNH+LzVsdXEahMzOpN+XMElPm30V9dvybK0oZ3/IfcL9/7iu3c1ORs9FOuW10Y9EuCmMigVEqM/vF/yBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b=TfMw8114; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1741703804; x=1742308604; i=fiona.klute@gmx.de;
+	bh=7T2Eg25mErZe40rj8TyAYOGzmsWuKdrSGJHWaZx+Q8s=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=TfMw8114RB24F7ztJ9T4OQOly1wRMxWyq43c7beDx7XhJLqkqR13dIp5Qazg/ASI
+	 DO1i3BbiSQgusdjd0SJhG1f9yluj4soUjDogyW1hkmqwUeiG4cH9inxZy3AY7hiKJ
+	 PinTJx15VCMn1bKipKxV5DzxlQzngrJP8tIQaSlkbNZtUcGe0YW735sRMgZ2IaDF0
+	 Z+e9DMms+XNiXtFARUl/U6iA7JMSHLEJW7BM/0Qni7RyNVkBoJVKU9XxB5/gpiVIN
+	 UXBWVwh8fJK07mH1XJd0gCQckDsBNhUAxgSGSlCIRgyIwJZ+GVnbpAJNvLqCfeNfg
+	 rlQusdTj207pjLDuzA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.124.191]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5G9t-1tBUsL2SQv-00weus; Tue, 11
+ Mar 2025 15:36:44 +0100
+Message-ID: <83b8ec69-0f7b-4ede-bf4f-f35b5d4fa4b2@gmx.de>
+Date: Tue, 11 Mar 2025 15:36:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling
+ period
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: netdev@vger.kernel.org, Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+ Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+ UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-list@raspberrypi.com,
+ stable@vger.kernel.org
+References: <20250310165932.1201702-1-fiona.klute@gmx.de>
+ <11f5be1d-9250-4aba-8f51-f231b09d3992@lunn.ch>
+ <4577e7d7-cadc-41c6-b93f-eca7d5a8eb46@gmx.de>
+ <42b5d49b-caf8-492d-8dba-b5292279478a@lunn.ch>
+Content-Language: en-US, de-DE-1901, de-DE
+From: Fiona Klute <fiona.klute@gmx.de>
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <42b5d49b-caf8-492d-8dba-b5292279478a@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddvgeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefmohhrhicuofgrihhntggvnhhtuceokhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetgeeghfduhefhleelueeuueejjeegueegffdviedtheejieekhedvveejteehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhgvnhhovhhordgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppeduleehrddvledrheegrddvgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrvdelrdehgedrvdegfedphhgvlhhopehkmhgrihhntggvnhhtqdgirffuqddufedqjeefledtpdhmrghilhhfrhhomhepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtohepphhhrghhnhdqohhsshesrghvmhdruggvpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhlihhvvghrsehnvghukhhumhdrohhrghdprhgtphhtthhopegrnhgurhgvfidon
- hgvthguvghvsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhm
-X-GND-Sasl: kory.maincent@bootlin.com
+X-Provags-ID: V03:K1:Y5lSVKyec42DqzTu9KXl+1p64Hiv3BOm5Ij4FQIqfJDN830PoOc
+ aNDa0PpzlmCobpwFKVktXCS6NuQB4JhiCHo5NnoNBOIOFJ8lfIWa9dxYVQ7t4TtMYdHc0yQ
+ NesTdvAPVIgTcp4fHcGUH/glod4PUdN9hYBy+i7POLxjm45GGl6Rvk0Dq8mArX6rvQwceEb
+ 3csNvPn4W/Ebj5YaNybcg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:0cL0Ug/OdVc=;H5g+wwiR5FzkTIk5YpgDcnh2XVh
+ ukpI9WmiAL3aT24CojMXwYdK/qaeFbvLdrG82eyOGELUJxUqZOCrEP4GYuJ5+WQkiFalwBSSW
+ ccyVe0veSaID+LRcbGUi39O+Ac7SQI5sKu4A0WNFawJPSZ8OQRwEaZwbQ17Nl4uk7TGPriKVV
+ 1P+bK5mwcghETEvMWxqm+pGJFiRZ5gFC59mCkF9+6+Mx8bCl08JXnKwrWF3J57D2QLLMTrS8K
+ 42WcNonj5jr8USsqJlEgbnm7LPu5oN4qZQQ0XwnJ6ZEMhouo4rfI/ea6qsTbrMGLjl5Me7fiu
+ DDew1moYjAJvlPT3gH46UUmTO71BarNhh2zN3I7/YByPzAMaiWLFxN/00HgicHXh7yBIWKpWD
+ G3ZWxrTP+QbGxPfRJw7ddx/oIod37HX8+z/7WItP5Dw0uysq40Rewl7RQraLV2rISVYCsx5F6
+ cqXpXvHZDOFIUH0SNyS1Q7LFgMwoGK5zLq3wa8wPWj5HqOSPpZgdFikYkvSNuz9nStwIBT2Sq
+ OjrZA+vigMWSpUSe1IYYdQZtOxu80PDzxuyXLjSJm067bMMilTzVIwFScMayclc3yb5F9MOqB
+ AXmTSTw9hDsEunqnYZT40KXQDLOjnmiWU19veYYhLYcgjqLXEOOCKX98s3wdiXy2EB6m6ACcO
+ 4EYhJY8c71H5D3rXbt7ADxd4s8QbzGfo+OEU78IRZhavy7WD4tcXMIe7CslRTkNASxUhwBo7P
+ N6MHPXwtOYZmr1ZEBBIBTnnFBJIRgNQODYJ4mOHCl2c+R+Kc5tFsc/ky2nbcQ++A5lDSqdDO1
+ juQyuOIYxOhwN+H+stbpe4RWse8JzeXWYUimfyFmr/R86NNJ7nlAycZKE/UzJ9YC1HE3E4txm
+ OpKYwHjGDBUPoKuj/X128jDnjiBJzQGCidFq9pRw4oD82MVf+xrWyw91BHXzDmoyluMaVqZxD
+ fMzwo/7jeJmTlbERsBn4dTAp2EYGHNmDp1JTf32FKo0AeEHhUoKhlOomk99mSmqaHaXdatFRX
+ RjAJK5zmUuw7BAeQ4TFizoA2MPehYqBcHJdh444e9CnbsE11lcHQoCSaA8OhAFtJhuk0W7GFo
+ GRbs5CFgkhoo9wEUd/R5GIlGcZvHa0osBvZqjXuho1a3eEAUxVZmGQHWQZS/at2boOwI9PPal
+ +fCI5Bzi4FcuL7I4HvqHiuGZSrOUbfsL33SLo1lXRWUyNH/1N5KeafdvC3EUGVHfrtUtK93zT
+ 8+mRmVVUCifElqC61IBuA89VV1dzJyD/dkDMq/rqbJ5TprNkZwDiEkc1xfsU1hFxnKqXFMTQH
+ Je+D3xp7gEfemy/40MxNEUFSzXFO7c9G+L14wDQJkR11trDAoIhzDKwUWiDPxhxG9Fc75PjHQ
+ 9WZqTVKdpqRcznrJQkiTd2T7q/Aw+E8i3ncFZ6cZpmTTl4XTyv3t59UWuheTOnRT7pUfcj8ro
+ 7SLMQcg==
 
-On Tue, 11 Mar 2025 11:21:34 +0100
-Philipp Hahn <phahn-oss@avm.de> wrote:
+Am 11.03.25 um 14:22 schrieb Andrew Lunn:
+> On Tue, Mar 11, 2025 at 01:30:54PM +0100, Fiona Klute wrote:
+>> Am 10.03.25 um 22:27 schrieb Andrew Lunn:
+>>> On Mon, Mar 10, 2025 at 05:59:31PM +0100, Fiona Klute wrote:
+>>>> If a new reset event appears before the previous one has been
+>>>> processed, the device can get stuck into a reset loop. This happens
+>>>> rarely, but blocks the device when it does, and floods the log with
+>>>> messages like the following:
+>>>>
+>>>>     lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+>>>>
+>>>> The only bit that the driver pays attention to in the interrupt data
+>>>> is "link was reset". If there's a flapping status bit in that endpoin=
+t
+>>>> data (such as if PHY negotiation needs a few tries to get a stable
+>>>> link), polling at a slower rate allows the state to settle.
+>>>
+>>> Could you expand on this a little bit more. What is the issue you are
+>>> seeing?
+>>
+>> What happens is that *sometimes* when the interface is activated (up, i=
+m
+>> my case via NetworkManager) during boot, the "kevent 4 may have been
+>> dropped" message starts to be emitted about every 6 or 7 ms.
+>
+> This sounding a bit like an interrupt storm. The PHY interrupt is not
+> being cleared correctly. PHY interrupts are level interrupts, so if
+> you don't clear the interrupt at the source, it will fire again as
+> soon as you re-enable it.
+>
+> So which PHY driver is being used? If you look for the first kernel
+> message about the lan78xx it probably tells you.
+>
+>> [   27.918335] Call trace:
+>> [   27.918338]  console_flush_all+0x2b0/0x4f8 (P)
+>> [   27.918346]  console_unlock+0x8c/0x170
+>> [   27.918352]  vprintk_emit+0x238/0x3b8
+>> [   27.918357]  dev_vprintk_emit+0xe4/0x1b8
+>> [   27.918364]  dev_printk_emit+0x64/0x98
+>> [   27.918368]  __netdev_printk+0xc8/0x228
+>> [   27.918376]  netdev_info+0x70/0xa8
+>> [   27.918382]  phy_print_status+0xcc/0x138
+>> [   27.918386]  lan78xx_link_status_change+0x78/0xb0
+>> [   27.918392]  phy_link_change+0x38/0x70
+>> [   27.918398]  phy_check_link_status+0xa8/0x110
+>> [   27.918405]  _phy_start_aneg+0x5c/0xb8
+>> [   27.918409]  lan88xx_link_change_notify+0x5c/0x128
+>> [   27.918416]  _phy_state_machine+0x12c/0x2b0
+>> [   27.918420]  phy_state_machine+0x34/0x80
+>> [   27.918425]  process_one_work+0x150/0x3b8
+>> [   27.918432]  worker_thread+0x2a4/0x4b8
+>> [   27.918438]  kthread+0xec/0xf8
+>> [   27.918442]  ret_from_fork+0x10/0x20
+>> [   27.918534] lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+>> [   27.924985] lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+>
+> Ah, O.K. This tells me the PHY is a lan88xx. And there is a workaround
+> involved for an issue in this PHY. Often PHYs are driven by polling
+> for status changes once per second. Not all PHYs/boards support
+> interrupts. It could be this workaround has only been tested with
+> polling, not interrupts, and so is broken when interrupts are used.
+>
+> As a quick hack test, in lan78xx_phy_init()
+>
+> 	/* if phyirq is not set, use polling mode in phylib */
+> 	if (dev->domain_data.phyirq > 0)
+> 		phydev->irq =3D dev->domain_data.phyirq;
+> 	else
+> 		phydev->irq =3D PHY_POLL;
+>
+> Hard code phydev->irq to PHY_POLL, so interrupts are not used.
+>
+> See if you can reproduce the issue when interrupts are not used.
+Thank you, I'll test that. Given the issue appears rarely it'll
+unfortunately take a while to be (mostly) sure.
 
-> Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
-> the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
-> Both are based on the Realtek RTL8153B chip used to use the cdc_ether
-> driver. However, using this driver, with the system suspended the device
-> constantly sends pause-frames as soon as the receive buffer fills up.
-> This causes issues with other devices, where some Ethernet switches stop
-> forwarding packets altogether.
->=20
-> Using the Realtek driver (r8152) fixes this issue. Pause frames are no
-> longer sent while the host system is suspended.
+Best regards,
+Fiona
 
-It seems patchwork detects it for net-next tree but nonetheless the subject
-of your patch should look like this:
-[PATCH net-next v2] cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
-
-Regards,
-
-> Cc: Oliver Neukum <oliver@neukum.org>
-> Cc: Andrew Lunn <andrew+netdev@lunn.ch>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Leon Schuermann <leon@is.currently.online>
-> Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
-> Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
-> Link:
-> https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-u=
-sb-docks/40af0135eu
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de> Reviewed-by: Kory Maincent
-> <kory.maincent@bootlin.com> ---
-> V1 -> V2: Prefix subject with `net-next:`
-> V1 -> V2: Add additional Cc:s
->  drivers/net/usb/cdc_ether.c | 7 +++++++
->  drivers/net/usb/r8152.c     | 6 ++++++
->  drivers/net/usb/r8153_ecm.c | 6 ++++++
->  3 files changed, 19 insertions(+)
->=20
-> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-> index a6469235d904..a032c1ded406 100644
-> --- a/drivers/net/usb/cdc_ether.c
-> +++ b/drivers/net/usb/cdc_ether.c
-> @@ -783,6 +783,13 @@ static const struct usb_device_id	products[] =3D {
->  	.driver_info =3D 0,
->  },
-> =20
-> +/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on
-> Realtek RTL8153) */ +{
-> +	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359,
-> USB_CLASS_COMM,
-> +			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-> +	.driver_info =3D 0,
-> +},
-> +
->  /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
->  {
->  	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 468c73974046..96fa3857d8e2 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -785,6 +785,7 @@ enum rtl8152_flags {
->  #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
->  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
->  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
-> +#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
-> =20
->  struct tally_counter {
->  	__le64	tx_packets;
-> @@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(str=
-uct
-> usb_device *udev) case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
->  		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-> +		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
->  			return 1;
->  		}
->  	} else if (vendor_id =3D=3D VENDOR_ID_REALTEK && parent_vendor_id =3D=3D
-> VENDOR_ID_LENOVO) { @@ -10064,6 +10066,8 @@ static const struct usb_devic=
-e_id
-> rtl8152_table[] =3D { { USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
->  	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
->  	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
-> +
-> +	/* Lenovo */
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
-> @@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[]=
- =3D {
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
-> +	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
->  	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
-> +
->  	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
->  	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
->  	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
-> diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
-> index 20b2df8d74ae..8d860dacdf49 100644
-> --- a/drivers/net/usb/r8153_ecm.c
-> +++ b/drivers/net/usb/r8153_ecm.c
-> @@ -135,6 +135,12 @@ static const struct usb_device_id products[] =3D {
->  				      USB_CDC_SUBCLASS_ETHERNET,
-> USB_CDC_PROTO_NONE), .driver_info =3D (unsigned long)&r8153_info,
->  },
-> +/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on
-> Realtek RTL8153) */ +{
-> +	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359,
-> USB_CLASS_COMM,
-> +				      USB_CDC_SUBCLASS_ETHERNET,
-> USB_CDC_PROTO_NONE),
-> +	.driver_info =3D (unsigned long)&r8153_info,
-> +},
-> =20
->  	{ },		/* END */
->  };
-
-
-
---=20
-K=C3=B6ry Maincent, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
 
