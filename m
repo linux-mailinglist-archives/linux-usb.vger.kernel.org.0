@@ -1,105 +1,105 @@
-Return-Path: <linux-usb+bounces-21645-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21646-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9556BA5C881
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 16:45:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 139B8A5C8A2
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 16:46:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1760162DAF
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 15:41:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D856D166912
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 15:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC0925F7BD;
-	Tue, 11 Mar 2025 15:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E70625E821;
+	Tue, 11 Mar 2025 15:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g+APva9G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GylNZycx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F0A25EFA9;
-	Tue, 11 Mar 2025 15:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB0F255E37
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 15:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741707644; cv=none; b=hd9iIBltph1oL2uB9NCRvyC+Lnd7y1Yihxaami95TzvcJWZzcaslbWWQKj6DycMsuBRdHrdjzPXeSLF8xLSTsyHW7WrNlSZuzJi3Ml0C0eNH7jVKql5oyJmCL5+JNtqEJlc9vyWgV/FnmOORyMWTlbh7jKj5/NX2D5JeACMz/R8=
+	t=1741707892; cv=none; b=TZoBMIXWACAQrofoafjIOUKBs+v3sHhao2sYmCsszAOZXfGtMksO23m5VFqXE3GO2jUULqVnvebHzbYuXxab5HToaohto1N7geVkhU3YxqGphM6j8RVeGVMS/EUdPBD1sRbWJnVqSkuPbNawngIhdFQddyhO0pSA4xP8MO/JvaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741707644; c=relaxed/simple;
-	bh=WcKRe4L0l1+bomdpAASB5V5cOcgURqGiz54kAs3oai0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lIRI8jaVvclkLtpDC7kyjxAXrdC8pG5vvrV6v5UK9P9Y/+zjVPxzNLZatJ5DS3LIBoRTXGXf649OinB/ZYK5FWS5vEvnhN82M9V/rDbuxsIw0Go2GOxkgU9/pDnx165GHO4bwIboVu4y6DjG/arHH/P6VTkoPQBQlSyWDkED3l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g+APva9G; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1741707892; c=relaxed/simple;
+	bh=Ol8kNrsdmmlf8cTjPIPWFl6CLuFSFnhAFspRn974LoQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kjU6HK9kmBebfOSaWnYmvaLaIo8TNdMkbAcY4PCx7JmFm8lk1unA5nhe9GeiSpnKDjaYamFM+901nrPLFrYUH1GyuKTxR6QwRuKGB5OK2E2AHPiIa4GZdKhwTZYrr9+YeCLMUt5l98a8w8Z0WvkH5FkWmRJKbz2LLJRBLa4L/xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GylNZycx; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741707643; x=1773243643;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WcKRe4L0l1+bomdpAASB5V5cOcgURqGiz54kAs3oai0=;
-  b=g+APva9G9/2xZz8bTtBUhS3YchCEFKFQdOXVaYKct/0dpfEjnvITsxw5
-   40/jZj8hiEJpjjKwF+aOF3cIrhleo7DdbMZRwsQ9mzP9yVGVdJN1NJWJF
-   jTO2DNH5wQ9XB4Lk7eLivPgfCCkTGOaGY5FTwdde3OfwnDUA+FEd+uSdF
-   xlyq6CvO9mLfuwobrDoyqcfmSFHHyJ53tzvusf+JOYXG+H/aKXhKRFvWM
-   RDxE+0nTJyVe5FCMMFLEre1VXekQBliO5QS1wIF4bm0Y8zp9rUo8X7gHy
-   rTlr/gmgcC2yXXMhHaY+c6vPWdzeCEmIPoGdkFPUPpVWpO7jBp++E3hI9
-   A==;
-X-CSE-ConnectionGUID: a4vcnmb3QLeSVJVmjetFlQ==
-X-CSE-MsgGUID: XMRXdvtIR++oTKSLnaYafA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="45535761"
+  t=1741707890; x=1773243890;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ol8kNrsdmmlf8cTjPIPWFl6CLuFSFnhAFspRn974LoQ=;
+  b=GylNZycxazOblB5WqtwxzLUyDuNg+4sQFYZQlQ5bztmK16vMCkJ3NYSZ
+   YUBmxtLgW+7pTA6uLau4L6s+9XPbEtzSBtUFXrEpDS/+UizAJ6qdGDKFT
+   bhYBeKS2j8dvB3WJ7AzcuuC7hKp0kWcwmq0O7wbsj0GQUSK5ah6neR98e
+   K5aoiFIi5fe4RNnGepiuyOeKgkObVwqqkd+bGy/J72N+I9fU2XApik7WD
+   ySTgwxyrIUQ90UrM+r0kDKiU2bJhn730B3efsHtHyyqW4go+hWpyu3b+S
+   9ow2L+376A4KdQTzOYft8oMp55kt/AxE00f1+T6vaQwEX9Idoadf4DRLK
+   g==;
+X-CSE-ConnectionGUID: ZlK4lpAWSTOBuvu3CJt7ww==
+X-CSE-MsgGUID: hV7QbtmQQkehK4E71jcx6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="30327893"
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="45535761"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:40:42 -0700
-X-CSE-ConnectionGUID: L1QGywQIT0+ZNJMhrMXa4g==
-X-CSE-MsgGUID: +XzLw+EvQnia3bXQIVj/8A==
+   d="scan'208";a="30327893"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:44:50 -0700
+X-CSE-ConnectionGUID: oewu5XNKQjCpMPvSLn+trw==
+X-CSE-MsgGUID: FPLzXmJ/R8O9AVPW6hWUAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="120188371"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Mar 2025 08:40:42 -0700
-Message-ID: <bff2ac48-3e97-4bc7-8c92-2aa676a0dc15@linux.intel.com>
-Date: Tue, 11 Mar 2025 17:41:45 +0200
+   d="scan'208";a="125396686"
+Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
+  by orviesa004.jf.intel.com with ESMTP; 11 Mar 2025 08:44:49 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci features for usb-next
+Date: Tue, 11 Mar 2025 17:45:48 +0200
+Message-ID: <20250311154551.4035726-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] xHCI: endpoint state maintainability and small fixes
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250310093605.2b3d0425@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250310093605.2b3d0425@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10.3.2025 10.36, Michal Pecio wrote:
-> These patches are mostly independent, except
-> - 2/6 depends on 1/6
-> - 6/6 depends on 4/5 and 5/6
-> 
-> It is assumed that issues with EP_STALLED are resolved like below.
-> 
-> They document assumptions currently made by xhci_urb_dequeue() and
-> xhci_handle_cmd_stop_ep() and clean up this code a little to make it
-> more maintainable.
-> 
-> Some potential issues with no known significant impact are fixed.
-> I haven't tagged them for stable. Maybe 5/6 could go, just in case?
-> 
-> Michal
+Hi Greg
 
-I'll send a small fixup series to Greg for usb-next (6.15).
+A small fixup series on top of previous series for usb-next.
 
-We are getting late in the cycle so I'll try to keep is as short as
-possible. I'll cherry-pick 4/6 and 5/6 from this series to it.
-  
+Improves URB cancel during endpoint stall code in previous series
+PATCH 12/15 "xhci: Prevent early endpoint restart when handling STALL errors."
+
+Also has a couple more patches just submitted by Michal that touches code
+relatad to URB cancel and endpoint stop.
+
 Thanks
 Mathias
+
+Mathias Nyman (1):
+  xhci: Avoid queuing redundant Stop Endpoint command for stalled
+    endpoint
+
+Michal Pecio (2):
+  usb: xhci: Don't change the status of stalled TDs on failed Stop EP
+  usb: xhci: Avoid Stop Endpoint retry loop if the endpoint seems
+    Running
+
+ drivers/usb/host/xhci-ring.c | 23 ++++++++++++++++++-----
+ drivers/usb/host/xhci.c      |  8 +++++---
+ 2 files changed, 23 insertions(+), 8 deletions(-)
+
+-- 
+2.43.0
+
 
