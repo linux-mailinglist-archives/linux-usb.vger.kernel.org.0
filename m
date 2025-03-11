@@ -1,98 +1,125 @@
-Return-Path: <linux-usb+bounces-21610-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21611-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D675EA5A624
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 22:27:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A54CA5B1CE
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 01:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09AB9189421E
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Mar 2025 21:27:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11E23AD926
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 00:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21D91E1A33;
-	Mon, 10 Mar 2025 21:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE6A33E1;
+	Tue, 11 Mar 2025 00:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="iQmDEC8E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZN3pMG9Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D406C1DF72D;
-	Mon, 10 Mar 2025 21:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4CB360;
+	Tue, 11 Mar 2025 00:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741642041; cv=none; b=eOoZyTN8owLfTJf+MVGYYyR+pp+o4SovtAivKZnhMRBF0S0BQ/vGQe2KJICqdwIjL2ZKLttpBJA3qNobayRL6XXxSGgfYuHERCtYVK2Ndte/roUAvjgwgVWQbjZ9LaXbsTNrzlfm6L0JnEF2AWmH9EmfxbSMJg/U8kaaFfn/cZs=
+	t=1741652003; cv=none; b=IffH7xF3pTF5OoqjVfE3DfpNafadsLtjVHzhJxohgYppajlLYgP4Pm/posupyITmTHPzjP9TTj7HBeE+tmKb5mDaoKCIhDEPWDrOCyCJKdbnoxqieHN2xZMiU8XT1MOkMrwNsS34hoQmTh7E7cAkk8khhdFecwddVS9XxkuT4QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741642041; c=relaxed/simple;
-	bh=DvazVX0g80o/XqqnPHhoDEhonQprDhV2KvjSM2hR+t0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z7AvZzjNqHG/XQeeCO6UWWTMSo79lnEC9Z9KmKi8ldUuPtfKV5fK8FwyWIE9p4JBYnvPnz6KP1BW6RMMQv9EY0FrOzuA4Knyj6dlQt5fRT9eIQ+Sg7dCGooE9JOsX6nsj3DHb6krM2MPjDUadtAAtGDgpunHelS7C3aAxA+nOZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=iQmDEC8E; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=4gvNFaVt7SP8lVgM6g77SePTU6ZZWH3MPFK4OksX/QQ=; b=iQmDEC8EGow0Md5fTAv3RCVgRI
-	Yw+FwHamSz5gLPm0YjX9chpb+8a+BEbl8lCYNJThLM2H5mAypAQ0H9ZHCthKAfsxyRKOmVBOnUrfu
-	gouWN4yVK4fceh+hf1eFYuefUSbYg1PijazS9ikUMqFKZP9wMEkT8geBOeoitubF8Ed8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1trkeN-0048cC-Th; Mon, 10 Mar 2025 22:27:03 +0100
-Date: Mon, 10 Mar 2025 22:27:03 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: netdev@vger.kernel.org,
-	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
-	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-list@raspberrypi.com, stable@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling
- period
-Message-ID: <11f5be1d-9250-4aba-8f51-f231b09d3992@lunn.ch>
-References: <20250310165932.1201702-1-fiona.klute@gmx.de>
+	s=arc-20240116; t=1741652003; c=relaxed/simple;
+	bh=kzvAE9rkC0BaUIFVLg3gP7gcqs+gIUGEHk2OpCg+0f0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F9o58luS0yO5iWaSpQIX0Rf4NBMId5ieAy+fECsGJ3lz9673hHwwZEHFX0/a1+Jxj2RHcWDFCO7+00mYIsvl9KrIxV+vNLZJQlL9CXQOU7ABgMN1EcPnhxrGoR5fSaSDLfLBgIYbXwVPndaauika9u55/5MeYYpvFuR8qo7JdHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZN3pMG9Z; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso7802924a12.3;
+        Mon, 10 Mar 2025 17:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741652000; x=1742256800; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EXwnIJXW3efUwD1JuKOIjFDSE0Lnv/lNewJCUEgk+Vo=;
+        b=ZN3pMG9ZYs2QQkkQnBawNYSWio+33cuWYNBjej85zFkiGwEX98NanBQYunMK5CAtxV
+         f/T9+FitqoT4xrplDpPMkgtAoexvG5KBzn0cr9jMUtwUvGDFWCQecibYb4bqeN5ZJpmt
+         1lFt+vvxQ2Kgi4pje7UZJ+R5pGvlZLR6BCCbJAO3A5mF2uDTmpqErzWUOZyzYBcpm0bJ
+         hv7qvAvXF5i6JrpGKk5OkdV7Ux2uMw94NAbu2tJiT4qDZeZF8e4FgGQq90SsfT+E7A82
+         O9HcEIFXFYxFNn+SbSMUT3vPume7y8Knd8+HbWKJYtlBq2tzmOk8bSD2D7dRK7MAcHvz
+         UUzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741652000; x=1742256800;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EXwnIJXW3efUwD1JuKOIjFDSE0Lnv/lNewJCUEgk+Vo=;
+        b=LcPu80eefQZDI+D9u+KV+BGy+r1WyUWOSzfg1fmu5MmGyReYV7Y01wCHQl2/CFufi7
+         Q6BaBo+a3CTZWJUH1Z7y5qY0q7R9NSUQncAarym8zl2GeeYYava0Dke+fkf0kLDDVf+I
+         3HFatv5nfzPFL04Ccg6CT0vBpE1FAH3DkO7sZa53mBJZj78WkQlfB4rNsrE0T+tRpYfV
+         fkbwmkVCkRObNTw2IObLD4h69n0kIWACw4xEbPrfOWzZgIAUtpvnODkjHzT2Jk+izL7B
+         vQffntT+HaMvjxo9JyAL5P76WFM5WxX9Vu/89S7htEVti3RmMBUaT1023Fkj/FNupbx0
+         FJAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgDipVokuBYWGZELkhUT3VrTG5SKl4gZDJioHX1StoVz2sengxoMntoDyhT4EuHE56H6NqJmQDoJBe@vger.kernel.org, AJvYcCXfThCvCsPFH8rRJCfDAcfdkPe/LXGGBP24J10W9hnHdyYT1ppCspMByjKORuWBUPFcwmsrHFK1SJDWitU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCQpl+pdtGub9pgviXzevi2302AurA2IDRjum7YiInkZFj8v+i
+	Z/0CGqDfHdW43/bcKxcMrA9W+oHNAryKOG81S/0fcUQy9oDiYPSC
+X-Gm-Gg: ASbGncuec/dkoTUVbud5wDnq6VDdAmxFVr2DlNZd5YUFju2chjlDDqoi5mNT2lGSfYY
+	xMs9uvL2DDjH3i5VZTiKvIE1tdyd/gyD3A/gnEvoYKxaqO00N8mxbyqhCN57crDxv661/GKM+wG
+	gg3hJEE7zNmLBF8H0mxnqp1m8qK084XIuA9kd0xYUYLtHHvaNKFGfw0HGr84yBQGhGSDtQ3B254
+	FoAMkvTNRfozLINYZah/Cv/8sAiA0oNbbH8Mv7QDfAwvfuNdbjqzE7Npq4b7Cy6m/BQhGGUNdWr
+	dYrBk5ZII9HWFsKo8Bip6aFu7oj/3EL1ggFkVoty+DPa7x3/030I3c/aUuxA8Bz/NR2scKEy
+X-Google-Smtp-Source: AGHT+IFbZ+/+BB3T1PKNtpO4SqdvqZ/ZhrscBb34h5uigf+A2bGn64uE7LAut4lL+QsFjZON9rB3xg==
+X-Received: by 2002:a05:6402:278a:b0:5e5:ebc7:f63 with SMTP id 4fb4d7f45d1cf-5e5ebc71081mr14273970a12.2.1741652000202;
+        Mon, 10 Mar 2025 17:13:20 -0700 (PDT)
+Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c74a9303sm7639065a12.42.2025.03.10.17.13.18
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 10 Mar 2025 17:13:19 -0700 (PDT)
+Date: Tue, 11 Mar 2025 01:13:15 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] usb: xhci: Deduplicate some endpoint state flag
+ lists
+Message-ID: <20250311011315.4b3efbfe@foxbook>
+In-Reply-To: <dabb1140-b26e-4f90-8e65-85e16d99aa49@linux.intel.com>
+References: <20250310093605.2b3d0425@foxbook>
+	<20250310093748.201e87cd@foxbook>
+	<dabb1140-b26e-4f90-8e65-85e16d99aa49@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250310165932.1201702-1-fiona.klute@gmx.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 10, 2025 at 05:59:31PM +0100, Fiona Klute wrote:
-> If a new reset event appears before the previous one has been
-> processed, the device can get stuck into a reset loop. This happens
-> rarely, but blocks the device when it does, and floods the log with
-> messages like the following:
+On Mon, 10 Mar 2025 11:51:30 +0200, Mathias Nyman wrote:
+> Not sure this helps readability
 > 
->   lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
-> 
-> The only bit that the driver pays attention to in the interrupt data
-> is "link was reset". If there's a flapping status bit in that endpoint
-> data (such as if PHY negotiation needs a few tries to get a stable
-> link), polling at a slower rate allows the state to settle.
+> It defines even more macros to abstract away something that is not
+> complex enough.
 
-Could you expand on this a little bit more. What is the issue you are
-seeing?
+It was less about readability, but keeping these lists in one place
+so that they don't get out of sync and trigger the double-stop bug.
 
-I had a quick look at the PHY handling code, and it looks broken. The
-only time a MAC driver should look at members of phydev is during the
-adjust link callback, so lan78xx_link_status_change(). Everything is
-guaranteed to be consistent at this time. However, the current
-lan78xx_link_status_change() only adjusts EEE setting. The PHY code in
-lan78xx_link_reset() looks wrong. MAC drivers should not be reading
-PHY registers, or calling functions like phy_read_status(). Setting
-flow control should be performed in lan78xx_link_status_change() using
-phydev->pause and phydev->asym_pause.
+With this change, a new flag like EP_STALLED only needs to be added
+in one place and it's picked up by both functions which need it.
 
-	Andrew
+OTOH, maybe such flags aren't being added very often...
+
+> It also gives false impression that EP_HALTED would somehow be more
+> part of cancelling a TD than EP_STALLED, when both of those are about
+> returning a TD with an error due to transfer issues detected by host,
+> not class driver cancelling URBs.
+
+I think EP_HALTED is about cancellation (among other things), because
+it indicates that Reset EP handler will run and finish cancellation of
+the halted TD and also any other TDs unlinked by class driver.
+
+EP_STALLED and EP_CLEARING_TT are less about the halted TD and more
+about ensuring full reset of the pipe before new TDs are executed.
+
+
+Michal
 
