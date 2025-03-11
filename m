@@ -1,114 +1,128 @@
-Return-Path: <linux-usb+bounces-21622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21623-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28D9A5BAF4
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 09:42:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FAD1A5BBE6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 10:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 847133AE6D6
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 08:41:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A36C81885D70
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 09:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9CA4225771;
-	Tue, 11 Mar 2025 08:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MAF5BcII"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B9B22B59D;
+	Tue, 11 Mar 2025 09:19:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEDD0223704;
-	Tue, 11 Mar 2025 08:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from shell.v3.sk (mail.v3.sk [167.172.186.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960A91BDCF;
+	Tue, 11 Mar 2025 09:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.172.186.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741682521; cv=none; b=lyd9EpM+Ya73J5m52l2UVl72L2/CoZwCXsui2e2ywzYYqHv8Op+L4HyDjX0a9VYLSynBLE/7X+lMH9iLbCN9b7DCrDbkGcwYt/LJRaw2zhasBj0acahbUOQfHvFWgF9I3UyouZKifQcU/6d7Bdn7yIfntkansTM4onFWs/qZegc=
+	t=1741684762; cv=none; b=cHCpht1tqNjXfcOrDt1siw6z913jWAnk7QiSreEwnyBOeTGWFD2kEOHnzldLkbcEYOVcaSAKPk7LnrFjUtAi4HYXEQFmCgS5HLB6D3BcCO1y7QME0vUvxhn/Av5swpKTRDdC5DRUP5f2aotPUsTIKzht/KF01YlOosFlWc5mZRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741682521; c=relaxed/simple;
-	bh=1nrLmnGlm1+0YYFQ6DxqrnnhJZkHgndItSvq7Q+Cjnw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MWOr0Mfq3ab4NYyq/zn9LHPX7yuB5wBOqZtAXcwiOpkNfsHQAHSv1oQe4+41A2J7l4Tg0HsoXTXyp14Frpp0Afn9p4kqKDeAW4K0xUnUtLQFOXkYzWnfugzmE3U+rLUUrsUqtaFUsTYYTtYhYARpjjPTY3eQrMSSPDSK52wBEis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MAF5BcII; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=o+FJF
-	a5kaj7HLyvn685I1Z/X9V0EfvMQq597XWpW6uI=; b=MAF5BcIIFECKGLeW2TjsT
-	hVoos6jT8K2WOERLHASzg6y0xVaSQSGH31p6SYJJB9CL3wUTFxeLs6w3pZcKl7MM
-	Fe2ZNGenZ+8OePZH/HqjDPx1X9b4S6axlPAcjA3h23EYmJLn9fHbtvI58OEXjztH
-	6h+WwdpbZsk6RPtCjrZkK8=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAH3uJJ989nKrBDRA--.23607S2;
-	Tue, 11 Mar 2025 16:41:47 +0800 (CST)
-From: Xin Dai <daixin_tkzc@163.com>
-To: stern@rowland.harvard.edu
-Cc: linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Xin Dai <daixin_tkzc@163.com>
-Subject: [PATCH] usb: storage: Fix `us->iobuf` size for BOT transmission to prevent memory overflow
-Date: Tue, 11 Mar 2025 16:41:11 +0800
-Message-Id: <20250311084111.322351-1-daixin_tkzc@163.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1741684762; c=relaxed/simple;
+	bh=aLnNnVYd8qwdahT9fPWWAMzvcIEAF1CIYMOZPUuqAW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lainTpK3FlOIGF2af4843bQHxLVJnnOFJcvImRe4EszkjwxV1OR/iYSUj5ilA6WXwjjsssYGbMPu7NT7iLMMamOZGaEil8IduSA+wCkoi//PWtYIzaGofC1po/FbpUiYpn/sq8U7DNh0VBMxsZis/JnSbRSZEaW7+kAcP7E6DZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk; spf=pass smtp.mailfrom=v3.sk; arc=none smtp.client-ip=167.172.186.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=v3.sk
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by zimbra.v3.sk (Postfix) with ESMTP id 56EB6DFE32;
+	Tue, 11 Mar 2025 09:04:48 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id iXLQUw6eGoAh; Tue, 11 Mar 2025 09:04:47 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by zimbra.v3.sk (Postfix) with ESMTP id 048FEDFE33;
+	Tue, 11 Mar 2025 09:04:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id rKAX3WYt8V26; Tue, 11 Mar 2025 09:04:46 +0000 (UTC)
+Received: from demiurge.local (unknown [109.183.109.54])
+	by zimbra.v3.sk (Postfix) with ESMTPSA id D9A81DFE32;
+	Tue, 11 Mar 2025 09:04:45 +0000 (UTC)
+From: Lubomir Rintel <lkundrak@v3.sk>
+To: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH] rndis_host: Flag RNDIS modems as WWAN devices
+Date: Tue, 11 Mar 2025 10:10:35 +0100
+Message-ID: <20250311091035.2523903-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAH3uJJ989nKrBDRA--.23607S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy7trWrtF1kAFyxGr1DAwb_yoW8tF18pF
-	WYgFZ0yryDXFWS9r17Ww40vFyrXasxJry7K3ykt3s8ZFs8Ca48Wr17tFyYqa4xGr1fu3WF
-	vrn09ryUWF1DXFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ptjgo8UUUUU=
-X-CM-SenderInfo: xgdl5xpqbwy6rf6rljoofrz/xtbB0hUN1WfP7sX50QAAs0
+Content-Transfer-Encoding: quoted-printable
 
-When the DWC2 controller detects a packet Babble Error, where a device
-transmits more data over USB than the host controller anticipates for a
-transaction. It follows this process:
+Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
+Broadband Modems, as opposed to regular Ethernet adapters.
 
-1. The interrupt handler marks the transfer result of the URB as
-   `OVERFLOW` and returns it to the USB storage driver.
-2. The USB storage driver interprets the data phase transfer result of
-   the BOT (Bulk-Only Transport) as `USB_STOR_XFER_LONG`.
-3. The USB storage driver initiates the CSW (Command Status Wrapper)
-   phase of the BOT, requests an IN transaction, and retrieves the
-   execution status of the corresponding CBW (Command Block Wrapper)
-   command.
-4. The USB storage driver evaluates the CSW and finds it does not meet
-   expectations. It marks the entire BOT transfer result as
-   `USB_STOR_XFER_ERROR` and notifies the SCSI layer that a `DID_ERROR`
-   has occurred during the transfer.
-5. The USB storage driver requests the DWC2 controller to initiate a
-   port reset, notifying the device of an issue with the previous
-   transmission.
-6. The SCSI layer implements a retransmission mechanism.
+Otherwise NetworkManager gets confused, misjudges the device type,
+and wouldn't know it should connect a modem to get the device to work.
+What would be the result depends on ModemManager version -- older
+ModemManager would end up disconnecting a device after an unsuccessful
+probe attempt (if it connected without needing to unlock a SIM), while
+a newer one might spawn a separate PPP connection over a tty interface
+instead, resulting in a general confusion and no end of chaos.
 
-In step 3, the device remains unaware of the Babble Error until the
-connected port is reset. We observed that the device continues to send
-512 bytes of data to the host (according to the BBB Transport protocol,
-it should send only 13 bytes). However, the USB storage driver
-pre-allocates a default buffer size of 64 bytes for CBW/CSW, posing a
-risk of memory overflow. To mitigate this risk, we have adjusted the
-buffer size to 512 bytes to prevent potential errors.
+The only way to get this work reliably is to fix the device type
+and have good enough version ModemManager (or equivalent).
 
-Signed-off-by: Xin Dai <daixin_tkzc@163.com>
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- drivers/usb/storage/usb.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/rndis_host.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-index 97c6196d639b..fd8dcb21137a 100644
---- a/drivers/usb/storage/usb.h
-+++ b/drivers/usb/storage/usb.h
-@@ -71,7 +71,7 @@ struct us_unusual_dev {
-  * size we'll allocate.
-  */
-
--#define US_IOBUF_SIZE		64	/* Size of the DMA-mapped I/O buffer */
-+#define US_IOBUF_SIZE		512	/* Size of the DMA-mapped I/O buffer */
- #define US_SENSE_SIZE		18	/* Size of the autosense data buffer */
-
- typedef int (*trans_cmnd)(struct scsi_cmnd *, struct us_data*);
---
-2.34.1
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index 7b3739b29c8f..bb0bf1415872 100644
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -630,6 +630,16 @@ static const struct driver_info	zte_rndis_info =3D {
+ 	.tx_fixup =3D	rndis_tx_fixup,
+ };
+=20
++static const struct driver_info	wwan_rndis_info =3D {
++	.description =3D	"Mobile Broadband RNDIS device",
++	.flags =3D	FLAG_WWAN | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SE=
+TINT,
++	.bind =3D		rndis_bind,
++	.unbind =3D	rndis_unbind,
++	.status =3D	rndis_status,
++	.rx_fixup =3D	rndis_rx_fixup,
++	.tx_fixup =3D	rndis_tx_fixup,
++};
++
+ /*----------------------------------------------------------------------=
+---*/
+=20
+ static const struct usb_device_id	products [] =3D {
+@@ -666,9 +676,11 @@ static const struct usb_device_id	products [] =3D {
+ 	USB_INTERFACE_INFO(USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
+ 	.driver_info =3D (unsigned long) &rndis_info,
+ }, {
+-	/* Novatel Verizon USB730L */
++	/* Mobile Broadband Modem, seen in Novatel Verizon USB730L and
++	 * Telit FN990A (RNDIS)
++	 */
+ 	USB_INTERFACE_INFO(USB_CLASS_MISC, 4, 1),
+-	.driver_info =3D (unsigned long) &rndis_info,
++	.driver_info =3D (unsigned long)&wwan_rndis_info,
+ },
+ 	{ },		// END
+ };
+--=20
+2.48.1
 
 
