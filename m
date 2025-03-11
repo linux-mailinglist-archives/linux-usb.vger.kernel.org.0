@@ -1,138 +1,149 @@
-Return-Path: <linux-usb+bounces-21613-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21614-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E24A5B698
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 03:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 540C1A5B6E8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 03:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5B0A3AA484
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 02:19:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0381D3AF6D0
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 02:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002A21E4929;
-	Tue, 11 Mar 2025 02:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D8FF1E7C27;
+	Tue, 11 Mar 2025 02:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ba0lMRoX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAqwJO7G"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7148C15820C;
-	Tue, 11 Mar 2025 02:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D6817741;
+	Tue, 11 Mar 2025 02:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741659566; cv=none; b=Zk0vJpaMK9Oq14zdCtELF9KnaqwunXtPwqC6FfxOudFSFZ2vt+hwG9dTEaUa8XBOHnw3r4tlQTpT198rYCbhM7HRr8cOxQL8OsKKxpfP4S5Nra0AjYqYlEb47ss9aL4iDTjssJnI2OhLSfOSsRAQx13CLQ+kMb4QzKugx08ucws=
+	t=1741661188; cv=none; b=Yi+iYYiWzAMxRE1/Mp6waxv+EWjZv99xdIdOdpgxG1but/eHIaM+gN8M9PcjByRib3hEaNDYgwX5MhRBbn4iUbR2CWxwEkr8Yzw9tJdBWHVn5r9+sJySYCHWxt3hxZk0wzEZ9BU2SjBn8rwN9HKzwF8uLKs2VxxrkOXGk0y9f0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741659566; c=relaxed/simple;
-	bh=mfAmdbFQbLlMZDckT+cuqEi3rf2Re5oZ+lu2lZ/dX1Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PWhLSn2eQqu8BTIiriw2kUwcMVxO8TO9ex+oJwWCl78B7ljP3illJvHBq+2YwCRoZf6pe+ggzETMLkK/kCG0AsjGUqDbZGtXJK82WPFyy8Yjk5EKTlY7QzxN/A4AalRMue5S1Iu0u27n3Zz92psPq986Cpi7koYkwT8dJuO50DI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ba0lMRoX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCC8DC4CEE5;
-	Tue, 11 Mar 2025 02:19:25 +0000 (UTC)
+	s=arc-20240116; t=1741661188; c=relaxed/simple;
+	bh=1aXVJSg11Eua7rWuqBBKCBKhT/CKhXCrfzRERrw6jnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LKXW3Fn+3uRbejSpr6lHX2ro9F+yOlsQPypZdtqdPeEhw2ZKRyqiVZT1arGTL2KVfmsumuAVSIbL7UpNGqJFLCrs1Nb7TKi3k1LrKKhEvPnujN5MP7T/+Hx/jbWx8wX05tGF8M8rucazPhxw04PhQGMus2CIxECBLK+nnPi4E0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAqwJO7G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD47EC4CEE5;
+	Tue, 11 Mar 2025 02:46:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741659565;
-	bh=mfAmdbFQbLlMZDckT+cuqEi3rf2Re5oZ+lu2lZ/dX1Q=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ba0lMRoXy/XRrv3mYJAKFSr3WPmRFH+7UUaL7GFJYFSfW9bWCxbbAAii4MBnE6CPe
-	 G8SuKgd+ObzFc6TWDRbQrG2NW+3eQlFdp8dXTvw7KNEipn2ooVhKj1CPhzD1Tq7ri0
-	 BDN6erjXK3ZfpDTeZUusbFL9QA+QzbOvsZw8WRiI/Lk6IR9TtuzTodgPa0Ho+FYV8s
-	 hW7l51R14P+h37qy15TH+nkXcCQST3piLUuJ9R7zELbnBVgdWvi/qVTRASgqWPzvLc
-	 xJVYA08Erp7/WJUnrwgR7Q//s7kwi7PnJuBdF0kmTv1VMxmn68aKxm6ThBrGgKfRsH
-	 eNwpvMh1yMjEA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D17FBC282DE;
-	Tue, 11 Mar 2025 02:19:25 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Mon, 10 Mar 2025 19:19:07 -0700
-Subject: [PATCH] usb: typec: tcpm: fix state transition for
- SNK_WAIT_CAPABILITIES state in run_state_machine()
+	s=k20201202; t=1741661188;
+	bh=1aXVJSg11Eua7rWuqBBKCBKhT/CKhXCrfzRERrw6jnk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MAqwJO7GDdbdroAYybh0rlmoK3CpCPAUsiBffBzXicQu2UuxQ3s3exPw4PCy7rSLX
+	 SaY6DU9voTfVm7pj0EXd6RNcSftbd1Mbh0x3QdKRgNokJzqCUQxq1AV1nPNWBjZrzg
+	 kQIKBi9a8/Y20ercE8xoSWPex7aHcSEqkWk8QPZmLRvaE3ZgNvn5AeF4juUlJ0V6Tf
+	 +fQr+VTmQHfMnSY3iEccF+T5K/JElHHcInpX2wCLRWGmc2HQUm+z+pjHzpmxIIKA1X
+	 oqhu1aAfHSDo+oNFuJC7cu89FpCwyxNtgSOn4WuYmQ+qd2Ny4WWxghI/SnK+amjJYl
+	 aVc1IRK4xVo7w==
+Date: Mon, 10 Mar 2025 21:46:24 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Felipe Balbi <balbi@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	Saravana Kannan <saravanak@google.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] usb: dwc3: qcom: Transition to flattened model
+Message-ID: <u2u3mkybodsk3neura7nvhgd6iwky5cjkbqwpcs3rn3tm7dzpq@ecah6hnm4t6g>
+References: <20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com>
+ <20250226-dwc3-refactor-v4-6-4415e7111e49@oss.qualcomm.com>
+ <vn7nrxpga7ewyqr7hpiczsn63qo2z4qzenif6powryqrtmnwjs@23jp6c7qdvxt>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250310-fix-snk-wait-timeout-v6-14-rc6-v1-1-5db14475798f@google.com>
-X-B4-Tracking: v=1; b=H4sIAJqdz2cC/x2NQQqDMBQFryJ/7YPEWiW9irgw8Vs/pbEkqQri3
- Q0uZzEzB0UOwpFexUGBV4my+Ay6LMjNg38zZMxMlaqe6qEVJtkR/QfbIAlJvrz8E9YGukZwDVp
- bj2ayxjpjKEd+gbNxD7r+PC8ebybscAAAAA==
-X-Change-ID: 20250310-fix-snk-wait-timeout-v6-14-rc6-7b4d9fb9bc99
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- Xu Yang <xu.yang_2@nxp.com>, stable@vger.kernel.org, 
- Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741659565; l=1869;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=XWKs46l6MPTHMIBPMpAx7vxNIqzh3Rjw4va51+i3hu0=;
- b=mOi/HQ11Z/dzJ5PxxlT67S+U9on/YeTBQANmHH5IF/SogEd0hxlPmReJW7KBH8mte5yaCXODy
- Z0P5YiKv/lqDw0c7ak5BFfx5wnO/acB2v7BH7AEhFAbAbhHPwrtfGqe
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <vn7nrxpga7ewyqr7hpiczsn63qo2z4qzenif6powryqrtmnwjs@23jp6c7qdvxt>
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+On Fri, Mar 07, 2025 at 08:41:33AM +0200, Dmitry Baryshkov wrote:
+> On Wed, Feb 26, 2025 at 04:17:53PM -0800, Bjorn Andersson wrote:
+> > The USB IP-block found in most Qualcomm platforms is modelled in the
+> > Linux kernel as 3 different independent device drivers, but as shown by
+> > the already existing layering violations in the Qualcomm glue driver
+> > they can not be operated independently.
+> > 
+> > With the current implementation, the glue driver registers the core and
+> > has no way to know when this is done. As a result, e.g. the suspend
+> > callbacks needs to guard against NULL pointer dereferences when trying
+> > to peek into the struct dwc3 found in the drvdata of the child.
+> > Even with these checks, there are no way to fully protect ourselves from
+> > the race conditions that occur if the DWC3 is unbound.
+> > 
+> > Missing from the upstream Qualcomm USB support is handling of role
+> > switching, in which the glue needs to be notified upon DRD mode changes.
+> > Several attempts has been made through the years to register callbacks
+> > etc, but they always fall short when it comes to handling of the core's
+> > probe deferral on resources etc.
+> > 
+> > Moving to a model where the DWC3 core is instantiated in a synchronous
+> > fashion avoids above described race conditions.
+> > 
+> > It is however not feasible to do so without also flattening the
+> > DeviceTree binding, as assumptions are made in the DWC3 core and
+> > frameworks used that the device's associated of_node will the that of
+> > the core. Furthermore, the DeviceTree binding is a direct
+> > representation of the Linux driver model, and doesn't necessarily
+> > describe "the USB IP-block".
+> > 
+> > The Qualcomm DWC3 glue driver is therefor transitioned to initialize and
+> > operate the DWC3 within the one device context, in synchronous fashion.
+> > 
+> > To provide a limited time backwards compatibility, a snapshot of the
+> > driver is retained in a previous commit. As such no care is taken in the
+> > dwc3-qcom driver for the qcom,dwc3 backwards compatibility.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+> > ---
+> >  drivers/usb/dwc3/dwc3-qcom.c | 138 +++++++++++++++++++++----------------------
+> >  1 file changed, 69 insertions(+), 69 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index 9d04c2457433..63e60f15ceaa 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -4,7 +4,6 @@
+> >   * Inspired by dwc3-of-simple.c
+> >   */
+> >  
+> > -#include <linux/cleanup.h>
+> >  #include <linux/io.h>
+> >  #include <linux/of.h>
+> >  #include <linux/clk.h>
+> > @@ -14,7 +13,6 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/extcon.h>
+> 
+> As a heads up, would it make sense to also drop extcon support while we
+> are transitioning to the new driver / DT bindings?
+> 
 
-A subtle error got introduced while manually fixing merge conflict in
-tcpm.c for commit 85c4efbe6088 ("Merge v6.12-rc6 into usb-next"). As a
-result of this error, the next state is unconditionally set to
-SNK_WAIT_CAPABILITIES_TIMEOUT while handling SNK_WAIT_CAPABILITIES state
-in run_state_machine(...).
+Yes, I believe this code should be cleaned out in favor of relying on
+the core's implementation thereof and callbacks into the qcom-code for
+configuration the glue hardware - which looks to be the same callback we
+want to add for the usb_role_switch.
 
-Fix this by setting new state of TCPM state machine to `upcoming_state`
-(that is set to different values based on conditions).
+Regards,
+Bjorn
 
-Cc: stable@vger.kernel.org
-Fixes: 85c4efbe60888 ("Merge v6.12-rc6 into usb-next")
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 47be450d2be352698e9dee2e283664cd4db8081b..758933d4ac9e4e55d45940b068f3c416e7e51ee8 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5117,16 +5117,16 @@ static void run_state_machine(struct tcpm_port *port)
- 		 */
- 		if (port->vbus_never_low) {
- 			port->vbus_never_low = false;
--			tcpm_set_state(port, SNK_SOFT_RESET,
--				       port->timings.sink_wait_cap_time);
-+			upcoming_state = SNK_SOFT_RESET;
- 		} else {
- 			if (!port->self_powered)
- 				upcoming_state = SNK_WAIT_CAPABILITIES_TIMEOUT;
- 			else
- 				upcoming_state = hard_reset_state(port);
--			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
--				       port->timings.sink_wait_cap_time);
- 		}
-+
-+		tcpm_set_state(port, upcoming_state,
-+			       port->timings.sink_wait_cap_time);
- 		break;
- 	case SNK_WAIT_CAPABILITIES_TIMEOUT:
- 		/*
-
----
-base-commit: 5c8c229261f14159b54b9a32f12e5fa89d88b905
-change-id: 20250310-fix-snk-wait-timeout-v6-14-rc6-7b4d9fb9bc99
-
-Best regards,
--- 
-Amit Sunil Dhamne <amitsd@google.com>
-
-
+> >  #include <linux/interconnect.h>
+> > -#include <linux/of_platform.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/phy/phy.h>
+> >  #include <linux/usb/of.h>
+> 
+> -- 
+> With best wishes
+> Dmitry
 
