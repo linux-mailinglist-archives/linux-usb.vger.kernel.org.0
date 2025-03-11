@@ -1,124 +1,138 @@
-Return-Path: <linux-usb+bounces-21612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2A52A5B5D8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 02:27:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E24A5B698
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 03:19:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA7D91893E30
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 01:27:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5B0A3AA484
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 02:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E0D1DF26A;
-	Tue, 11 Mar 2025 01:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002A21E4929;
+	Tue, 11 Mar 2025 02:19:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KjQiePPY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ba0lMRoX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37DA923;
-	Tue, 11 Mar 2025 01:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7148C15820C;
+	Tue, 11 Mar 2025 02:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741656441; cv=none; b=mfkg6vlEi8Ak7tC9r8HkDfQZTavBRp7a8IECbhHQlmuWb/Jf1ZCY1UE8rGXBcw9D4Iciyjj3zkyNiKQXgzVpaNAoLtC61H0hBkPvt6RmOOFalU/MZtuZ3EShcjy3x3CF/QBbCEfa6zo+sjIjNVpRJDnMB0hTKyho9vQXFalX3+A=
+	t=1741659566; cv=none; b=Zk0vJpaMK9Oq14zdCtELF9KnaqwunXtPwqC6FfxOudFSFZ2vt+hwG9dTEaUa8XBOHnw3r4tlQTpT198rYCbhM7HRr8cOxQL8OsKKxpfP4S5Nra0AjYqYlEb47ss9aL4iDTjssJnI2OhLSfOSsRAQx13CLQ+kMb4QzKugx08ucws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741656441; c=relaxed/simple;
-	bh=ht9scaUwYIWY/isuqrXAqzg0A5wR6NjSNdeQzdpWLP4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aHHJ/2c6V5pncq7tuvOTMjQCroGPM+mvwMNgfwpN5EGmscTfjvaGt8c7/lRGWkRq8GKj22ysUaEKT/qO4hFHHZePKqIscVs6DPA7BHhwE0KQvzSB70qNxL1+eNyrD/Zs6lLH0NTX4sBi9yNudnpOVfeBVQ0wmrG7ZdsDOBYNOpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KjQiePPY; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c0ca5e6d45so60938085a.3;
-        Mon, 10 Mar 2025 18:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741656439; x=1742261239; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mYu4oax/thewz4e+p/abSxr+bcjcos4iMdBqH/7SF5g=;
-        b=KjQiePPYX4PrudbXPwGHsevGCJQ0cDci9pldlxpbs2NL2TRYoQ1spxbZ1LhZJ6LOP6
-         OtQnONB0J/1gHJLywaF/IIMkJ4xVlE8obS6Fxu7pf2BThuLcS0yrbih8hMlL8a6r0glu
-         VPFrOekY6nfSsgD6jBfacUVrYs4PIpOMB4WxKejrm+4NSbAIiTEwGDdDMZq49BZRV+/1
-         Jd2FrFRREbGkdBTHaPJhjX1aHFYpKdwwB+RMqdwD7jBGNZMVVxKPrJNjGlv7M33RycLR
-         TsGsb3eqGgb8E4gKf6IOnPvFvhQj74seTj8m2y5yoZubRdt9uQlZY4u+Ntaq80JKFQ9x
-         mmbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741656439; x=1742261239;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mYu4oax/thewz4e+p/abSxr+bcjcos4iMdBqH/7SF5g=;
-        b=jddfyyCPH08XC98xFNVgEBag+rEIrGmxh7EshkFh0lIhb/AZp1q2k0BRDcjAEHulHf
-         YUZ53lwRRt/LQzyqDk5l/0+6U9Xyjs7d81wEY32Hc47gEAfUOFNE3dV08Wkmi4TcX6Ib
-         7KuipRsAy0Jr01DfJL9IzYncndjmRyxszNjIWpCMuAAf794PwCyRe1Q4vxKBdRoQp5Rn
-         V16jrDY2VDXbOUNY0wwmXEYPpFCSiSiZ+itvX2/yhpp8fWn1jSofSATQrJGzMRbfC5z3
-         rgfoPOLzCifFFfhggBZ+pTjP96pcxjXPVAsmhjj3IUCXAFzcrfJnhsNury6j6EL03Llj
-         Mo6g==
-X-Forwarded-Encrypted: i=1; AJvYcCV1zlstLYQIArZHYFkG6CsHhoW1SRccUFDjwbg74VX9zvetXfmXXp35OPsH3DS7SP0m+jQH0TiGv6UEz3Q=@vger.kernel.org, AJvYcCW6ZNO5mfvnbbBgykNq4nxG60clieU35rCQZDrKWmbOU60d+t380bOznU/81aaMo0JRBZgL+ckQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/3ehcXXkbHyo2/M5QWE097EKugZCXFQPGVvtCTWoiCLb04qBm
-	6wQSTJ4gSLCs2JIVRkquhS+6cyVefAiFEmMtHvJcAE8j59Zz3zw=
-X-Gm-Gg: ASbGncuwB5uECbwMqdpt6OxBdBCM1pmFcmsJZIq9ySYB0nQybrZC7IE/BpdZRAgzaj0
-	Ub2PC3OM4EllRUHxO7Op39hz3EmlomwUbQhHjeyicSY0ReMedVrJ9sdYuejmR3J7tnS8K+Si5eF
-	gC7C9qLeD+KG37ZvcuM5VqbpRS4QtyWlmZbmIYP1BBG57cqDpxSEVjY2JXPThHmykOYJ2Qk52vb
-	eaPBQysnlYIWUDdKbDDFPyrbkfSr/EWeO7HudV22NwI1G2+UtqwP9CTf30Wi90YBOrXJ48mDRZu
-	GzD18d+6OjKZkMqGFoBkMj4d0Zu/FpDMz4AaMxsyNQ==
-X-Google-Smtp-Source: AGHT+IG1lIg0zhgXXdip9xAmm17KRNm/AUw5DrBkAQ32s9Cq80PSZ7xrsQWtT87xxvnN7LcqufT+vA==
-X-Received: by 2002:a05:6214:d06:b0:6e8:f645:2639 with SMTP id 6a1803df08f44-6ea2dd1e540mr10215056d6.5.1741656438961;
-        Mon, 10 Mar 2025 18:27:18 -0700 (PDT)
-Received: from ise-alpha.. ([2620:0:e00:550a:642:1aff:fee8:511b])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f70a2dd6sm65178346d6.61.2025.03.10.18.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 18:27:17 -0700 (PDT)
-From: Chenyuan Yang <chenyuan0y@gmail.com>
-To: gregkh@linuxfoundation.org,
-	joel@jms.id.au,
-	andrew@codeconstruct.com.au
-Cc: linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Chenyuan Yang <chenyuan0y@gmail.com>
-Subject: [PATCH] usb: gadget: aspeed: Add NULL pointer check in ast_vhub_init_dev()
-Date: Mon, 10 Mar 2025 20:27:05 -0500
-Message-Id: <20250311012705.1233829-1-chenyuan0y@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1741659566; c=relaxed/simple;
+	bh=mfAmdbFQbLlMZDckT+cuqEi3rf2Re5oZ+lu2lZ/dX1Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PWhLSn2eQqu8BTIiriw2kUwcMVxO8TO9ex+oJwWCl78B7ljP3illJvHBq+2YwCRoZf6pe+ggzETMLkK/kCG0AsjGUqDbZGtXJK82WPFyy8Yjk5EKTlY7QzxN/A4AalRMue5S1Iu0u27n3Zz92psPq986Cpi7koYkwT8dJuO50DI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ba0lMRoX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DCC8DC4CEE5;
+	Tue, 11 Mar 2025 02:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741659565;
+	bh=mfAmdbFQbLlMZDckT+cuqEi3rf2Re5oZ+lu2lZ/dX1Q=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=ba0lMRoXy/XRrv3mYJAKFSr3WPmRFH+7UUaL7GFJYFSfW9bWCxbbAAii4MBnE6CPe
+	 G8SuKgd+ObzFc6TWDRbQrG2NW+3eQlFdp8dXTvw7KNEipn2ooVhKj1CPhzD1Tq7ri0
+	 BDN6erjXK3ZfpDTeZUusbFL9QA+QzbOvsZw8WRiI/Lk6IR9TtuzTodgPa0Ho+FYV8s
+	 hW7l51R14P+h37qy15TH+nkXcCQST3piLUuJ9R7zELbnBVgdWvi/qVTRASgqWPzvLc
+	 xJVYA08Erp7/WJUnrwgR7Q//s7kwi7PnJuBdF0kmTv1VMxmn68aKxm6ThBrGgKfRsH
+	 eNwpvMh1yMjEA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D17FBC282DE;
+	Tue, 11 Mar 2025 02:19:25 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Date: Mon, 10 Mar 2025 19:19:07 -0700
+Subject: [PATCH] usb: typec: tcpm: fix state transition for
+ SNK_WAIT_CAPABILITIES state in run_state_machine()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250310-fix-snk-wait-timeout-v6-14-rc6-v1-1-5db14475798f@google.com>
+X-B4-Tracking: v=1; b=H4sIAJqdz2cC/x2NQQqDMBQFryJ/7YPEWiW9irgw8Vs/pbEkqQri3
+ Q0uZzEzB0UOwpFexUGBV4my+Ay6LMjNg38zZMxMlaqe6qEVJtkR/QfbIAlJvrz8E9YGukZwDVp
+ bj2ayxjpjKEd+gbNxD7r+PC8ebybscAAAAA==
+X-Change-ID: 20250310-fix-snk-wait-timeout-v6-14-rc6-7b4d9fb9bc99
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Xu Yang <xu.yang_2@nxp.com>, stable@vger.kernel.org, 
+ Amit Sunil Dhamne <amitsd@google.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741659565; l=1869;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=XWKs46l6MPTHMIBPMpAx7vxNIqzh3Rjw4va51+i3hu0=;
+ b=mOi/HQ11Z/dzJ5PxxlT67S+U9on/YeTBQANmHH5IF/SogEd0hxlPmReJW7KBH8mte5yaCXODy
+ Z0P5YiKv/lqDw0c7ak5BFfx5wnO/acB2v7BH7AEhFAbAbhHPwrtfGqe
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 
-The variable d->name, returned by devm_kasprintf(), could be NULL.
-A pointer check is added to prevent potential NULL pointer dereference.
-This is similar to the fix in commit 3027e7b15b02
-("ice: Fix some null pointer dereference issues in ice_ptp.c").
+From: Amit Sunil Dhamne <amitsd@google.com>
 
-This issue is found by our static analysis tool
+A subtle error got introduced while manually fixing merge conflict in
+tcpm.c for commit 85c4efbe6088 ("Merge v6.12-rc6 into usb-next"). As a
+result of this error, the next state is unconditionally set to
+SNK_WAIT_CAPABILITIES_TIMEOUT while handling SNK_WAIT_CAPABILITIES state
+in run_state_machine(...).
 
-Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
+Fix this by setting new state of TCPM state machine to `upcoming_state`
+(that is set to different values based on conditions).
+
+Cc: stable@vger.kernel.org
+Fixes: 85c4efbe60888 ("Merge v6.12-rc6 into usb-next")
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index 573109ca5b79..a09f72772e6e 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -548,6 +548,9 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
- 	d->vhub = vhub;
- 	d->index = idx;
- 	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-+	if (!d->name)
-+		return -ENOMEM;
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 47be450d2be352698e9dee2e283664cd4db8081b..758933d4ac9e4e55d45940b068f3c416e7e51ee8 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5117,16 +5117,16 @@ static void run_state_machine(struct tcpm_port *port)
+ 		 */
+ 		if (port->vbus_never_low) {
+ 			port->vbus_never_low = false;
+-			tcpm_set_state(port, SNK_SOFT_RESET,
+-				       port->timings.sink_wait_cap_time);
++			upcoming_state = SNK_SOFT_RESET;
+ 		} else {
+ 			if (!port->self_powered)
+ 				upcoming_state = SNK_WAIT_CAPABILITIES_TIMEOUT;
+ 			else
+ 				upcoming_state = hard_reset_state(port);
+-			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
+-				       port->timings.sink_wait_cap_time);
+ 		}
 +
- 	d->regs = vhub->regs + 0x100 + 0x10 * idx;
- 
- 	ast_vhub_init_ep0(vhub, &d->ep0, d);
++		tcpm_set_state(port, upcoming_state,
++			       port->timings.sink_wait_cap_time);
+ 		break;
+ 	case SNK_WAIT_CAPABILITIES_TIMEOUT:
+ 		/*
+
+---
+base-commit: 5c8c229261f14159b54b9a32f12e5fa89d88b905
+change-id: 20250310-fix-snk-wait-timeout-v6-14-rc6-7b4d9fb9bc99
+
+Best regards,
 -- 
-2.34.1
+Amit Sunil Dhamne <amitsd@google.com>
+
 
 
