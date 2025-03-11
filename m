@@ -1,65 +1,85 @@
-Return-Path: <linux-usb+bounces-21641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21642-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98810A5C281
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 14:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB67DA5C369
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 15:13:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05D693B396B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 13:22:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440B93A4E5F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 14:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71A21BF33F;
-	Tue, 11 Mar 2025 13:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2324425BAC5;
+	Tue, 11 Mar 2025 14:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="IVhwc+ZA"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wQfCsdhL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367CE1B85C5;
-	Tue, 11 Mar 2025 13:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189F3253F13
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 14:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741699372; cv=none; b=OsHt31XNqYv8tXo+jkTYX8Tc8eiU60jabKQVLJfjGMBY8oeHD8lmHTjzx5/xwgVUAnFL1+A8+r/2ra4KeKYqMzCexh9ydLcfbce9VkjG/1bQNH7qsW99Sr+ciY0N025jZnXXXQS4GDcLm3k5xciC40uh4mUV2Xq7zXplqm3D7Xg=
+	t=1741702360; cv=none; b=Pr8iZ1wmsraJeuXzq8OgCpVMOObWHGAe7yEq1KxeC4m4C0o1LxTBtQ8ZAXCKU9fpHqOkZa+TDKnWUk6bLkV6nOhHxMjGP6JNiamjQ3lqe9WnxATmsmlmGyxyw/Cu+BZPNbyk1ztZERrOgJuhe8gierwgoaZti/wOiaFvqDuh+PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741699372; c=relaxed/simple;
-	bh=I+SCe9MX6V3blbxDTOuaalfFAo7Cc3wjzO0ktOoJzk8=;
+	s=arc-20240116; t=1741702360; c=relaxed/simple;
+	bh=aSiRFGz9D35mrAPWQkuBnfHc989qYrNXBTYMoWctP7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H0SVUinQcCGqZ8O7F5uS4p+t9cM2+C0gnBv5vHSPAqb1xIV7p/+cOH6o2s4h2zaEe3DkYYZ7ukd7yao7W/s2I6koSxTqXG8HA/UaaEi3ww6jcEKfVFDoMgVDVLBbw+KcmlxdHMZa1+G+a+jNX2IqZfs2sa79Tf4UQTqyhXc+4Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=IVhwc+ZA; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=q2lRJqxioOkDdgMU0m5I8o/nVWV18+O78LM9RQ0Z25c=; b=IVhwc+ZAAZYERH3aWpS/qKKgSL
-	GLdw9NG8k6Y0LXQyJEFMnB4JGYiiD8w+jWjY3TpwE6Vl2IKq+TT8Kr1VzvQrEFec/cXRAKuzjZr10
-	PUapSgnzpwnOncMnx0owt40uKNXh831iHGYxpOMx1JCaPZOZCwDDKg7Ydl3BpSl9uwQc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1trzZA-004LfG-0m; Tue, 11 Mar 2025 14:22:40 +0100
-Date: Tue, 11 Mar 2025 14:22:40 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: netdev@vger.kernel.org,
-	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
-	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-list@raspberrypi.com, stable@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: Enforce a minimum interrupt polling
- period
-Message-ID: <42b5d49b-caf8-492d-8dba-b5292279478a@lunn.ch>
-References: <20250310165932.1201702-1-fiona.klute@gmx.de>
- <11f5be1d-9250-4aba-8f51-f231b09d3992@lunn.ch>
- <4577e7d7-cadc-41c6-b93f-eca7d5a8eb46@gmx.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oTgOoFcrrjw1PVJHWTQoeLFPVgDzJOsIeR7lZSgvxMKT4s2sL5ODdO5fDqI2cAioHPNf3L0VWvYrfvW8yBaadutdQSodv8tYRbVnAI0ht3VoW4j0/CI09P6UFBk5vbFYXssqOzzi6Fa+Jmg/tLzPpUE1QnC5WPd/n2iihSijOjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wQfCsdhL; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6e1b11859a7so22365996d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 07:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1741702358; x=1742307158; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kqS90eFGJ7/q/06uqKRGMnqOqUkTAtZXlVsfnwLorTA=;
+        b=wQfCsdhLiwERXFdv6X6BsxDRjN7B6y6gxFpkIbbfNEGZOn5ivp5LJ4GquzHbL3y0kg
+         jZ2aACKE+SJts4+SV8yQbCbJFaqXrM8wMeAsXBQwl0CrYH1ULC9tUUBJGh5Dl+coQ1uT
+         hl1KLrUZPnaT1PV7aX/2qqpkmeJxr7//Y/yyLsdYk0WsXQRphb45T9A4htaBOKCidDrK
+         jE6RX/eTn49A8PpDf5np0hQwG6Yk0CdgSA/Iv3nsxTAff7G4ejg3e19F+0txXKH5XO+3
+         BzZ/ZJJI+gZONWbKgyGwiKs6tReZb4DHwkAMDDJH81nRGZSXmq6jilOZHXHux1hTWFN2
+         c4Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741702358; x=1742307158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kqS90eFGJ7/q/06uqKRGMnqOqUkTAtZXlVsfnwLorTA=;
+        b=dTeC3y1hUlAOnW0zXMH7ipB2s3yEueKljbUZO4Yhj3aGlFlGdP6eL7Bh0okCpOCXKB
+         x++nAo/BxrFod8hdFpuzDSfea7kUlPEFOD0uK+F1ItFHMjFrkG6z11BGcDu3Mx8qqwbX
+         msu5kwc6kUGal5T+eXcTDl21F6Whgv3EH64FFuoJ8VmU59/ac9D/H/mue7yoQLRVsmb2
+         BypxyytwenE48gz4yvnT5s0OqDQ5CZI5JDwkeCYCiOsuCRjzeaPAJY7XHHFSaWPKnscZ
+         uc5UIV69EWlQDQmtscA5/wip8CDqedhdOB4yz/2Z87ALzwowj6jN808Rfb7GH928dWMm
+         E3Mg==
+X-Gm-Message-State: AOJu0YwwPF2Hu+2S1StTw3/wOyK1qIjw0QwAnrXO3egxL8RGryfsrDUT
+	/Q6RS8WRDgxWPbZf8is8NiF+4dZl0RgURBoXjydGYtna7GTcy0OOgwdCcEXQi1ZJQzTjNFqiXJs
+	=
+X-Gm-Gg: ASbGncshLgOhsI6SHa8teR0bPbQG974bSBnWtZ8K52XsiQHGw7fXxJtvrUn2aqwG2mm
+	GtL8LMyjZCf1XvGknLA0+Ie9kSxCF6KoCKbmhayU1iS0BKnFARpNjZzd5ji351rXkxKTlTMxkUX
+	/DF6xoqrft8dgMq1t6fB9m2i2YeHJ7cLTKeeg9YlOOvT2Qs7C1PX99zRQ2kplMfZVJ1x3lx0n5q
+	KQRpsxBqpfsf0GCJnUjoXuuA436hE9qq9HQgERZqPmLClnMPt12/R9q/ql5MWcVK0NTWuUacqKo
+	S8GpCDDBuP7N7YRFdsR6xOonE5XW9iH+IBybUr1m/RPP+40LRKjsa7gUSUV54VI=
+X-Google-Smtp-Source: AGHT+IG9OcRAVr85+6mryYW0AABpehp6sfpdYUxay7oilkgQGXomiBnCuZqNDdPtDuWmRcmZHyKWsw==
+X-Received: by 2002:a05:6214:4113:b0:6e8:f60b:9bf8 with SMTP id 6a1803df08f44-6e9006c8774mr209755866d6.33.1741702357937;
+        Tue, 11 Mar 2025 07:12:37 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f707bf47sm73501706d6.25.2025.03.11.07.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 07:12:37 -0700 (PDT)
+Date: Tue, 11 Mar 2025 10:12:35 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xin Dai <daixin_tkzc@163.com>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: storage: Fix `us->iobuf` size for BOT transmission
+ to prevent memory overflow
+Message-ID: <6a266eb7-0150-43e9-a712-b9e6fe8c71ea@rowland.harvard.edu>
+References: <20250311084111.322351-1-daixin_tkzc@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,78 +88,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4577e7d7-cadc-41c6-b93f-eca7d5a8eb46@gmx.de>
+In-Reply-To: <20250311084111.322351-1-daixin_tkzc@163.com>
 
-On Tue, Mar 11, 2025 at 01:30:54PM +0100, Fiona Klute wrote:
-> Am 10.03.25 um 22:27 schrieb Andrew Lunn:
-> > On Mon, Mar 10, 2025 at 05:59:31PM +0100, Fiona Klute wrote:
-> > > If a new reset event appears before the previous one has been
-> > > processed, the device can get stuck into a reset loop. This happens
-> > > rarely, but blocks the device when it does, and floods the log with
-> > > messages like the following:
-> > > 
-> > >    lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
-> > > 
-> > > The only bit that the driver pays attention to in the interrupt data
-> > > is "link was reset". If there's a flapping status bit in that endpoint
-> > > data (such as if PHY negotiation needs a few tries to get a stable
-> > > link), polling at a slower rate allows the state to settle.
-> > 
-> > Could you expand on this a little bit more. What is the issue you are
-> > seeing?
+On Tue, Mar 11, 2025 at 04:41:11PM +0800, Xin Dai wrote:
+> When the DWC2 controller detects a packet Babble Error, where a device
+> transmits more data over USB than the host controller anticipates for a
+> transaction. It follows this process:
 > 
-> What happens is that *sometimes* when the interface is activated (up, im
-> my case via NetworkManager) during boot, the "kevent 4 may have been
-> dropped" message starts to be emitted about every 6 or 7 ms.
+> 1. The interrupt handler marks the transfer result of the URB as
+>    `OVERFLOW` and returns it to the USB storage driver.
+> 2. The USB storage driver interprets the data phase transfer result of
+>    the BOT (Bulk-Only Transport) as `USB_STOR_XFER_LONG`.
+> 3. The USB storage driver initiates the CSW (Command Status Wrapper)
+>    phase of the BOT, requests an IN transaction, and retrieves the
+>    execution status of the corresponding CBW (Command Block Wrapper)
+>    command.
+> 4. The USB storage driver evaluates the CSW and finds it does not meet
+>    expectations. It marks the entire BOT transfer result as
+>    `USB_STOR_XFER_ERROR` and notifies the SCSI layer that a `DID_ERROR`
+>    has occurred during the transfer.
+> 5. The USB storage driver requests the DWC2 controller to initiate a
+>    port reset, notifying the device of an issue with the previous
+>    transmission.
+> 6. The SCSI layer implements a retransmission mechanism.
+> 
+> In step 3, the device remains unaware of the Babble Error until the
+> connected port is reset. We observed that the device continues to send
+> 512 bytes of data to the host (according to the BBB Transport protocol,
+> it should send only 13 bytes). However, the USB storage driver
+> pre-allocates a default buffer size of 64 bytes for CBW/CSW, posing a
+> risk of memory overflow. To mitigate this risk, we have adjusted the
+> buffer size to 512 bytes to prevent potential errors.
 
-This sounding a bit like an interrupt storm. The PHY interrupt is not
-being cleared correctly. PHY interrupts are level interrupts, so if
-you don't clear the interrupt at the source, it will fire again as
-soon as you re-enable it.
+There is no risk of memory overflow.  The length of the transfer for the 
+CSW is limited to US_BULK_CS_WRAP_LEN, which is 13.  And the length of a 
+CBW transfer is limited to US_BULK_CB_WRAP_LEN, which is 31 (or to 32 
+if the US_FL_BULK32 quirk flag is set).  Therefore a 64-byte buffer is 
+more than enough.
 
-So which PHY driver is being used? If you look for the first kernel
-message about the lan78xx it probably tells you.
-
-> [   27.918335] Call trace:
-> [   27.918338]  console_flush_all+0x2b0/0x4f8 (P)
-> [   27.918346]  console_unlock+0x8c/0x170
-> [   27.918352]  vprintk_emit+0x238/0x3b8
-> [   27.918357]  dev_vprintk_emit+0xe4/0x1b8
-> [   27.918364]  dev_printk_emit+0x64/0x98
-> [   27.918368]  __netdev_printk+0xc8/0x228
-> [   27.918376]  netdev_info+0x70/0xa8
-> [   27.918382]  phy_print_status+0xcc/0x138
-> [   27.918386]  lan78xx_link_status_change+0x78/0xb0
-> [   27.918392]  phy_link_change+0x38/0x70
-> [   27.918398]  phy_check_link_status+0xa8/0x110
-> [   27.918405]  _phy_start_aneg+0x5c/0xb8
-> [   27.918409]  lan88xx_link_change_notify+0x5c/0x128
-> [   27.918416]  _phy_state_machine+0x12c/0x2b0
-> [   27.918420]  phy_state_machine+0x34/0x80
-> [   27.918425]  process_one_work+0x150/0x3b8
-> [   27.918432]  worker_thread+0x2a4/0x4b8
-> [   27.918438]  kthread+0xec/0xf8
-> [   27.918442]  ret_from_fork+0x10/0x20
-> [   27.918534] lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
-> [   27.924985] lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
-
-Ah, O.K. This tells me the PHY is a lan88xx. And there is a workaround
-involved for an issue in this PHY. Often PHYs are driven by polling
-for status changes once per second. Not all PHYs/boards support
-interrupts. It could be this workaround has only been tested with
-polling, not interrupts, and so is broken when interrupts are used.
-
-As a quick hack test, in lan78xx_phy_init()
-
-	/* if phyirq is not set, use polling mode in phylib */
-	if (dev->domain_data.phyirq > 0)
-		phydev->irq = dev->domain_data.phyirq;
-	else
-		phydev->irq = PHY_POLL;
-
-Hard code phydev->irq to PHY_POLL, so interrupts are not used.
-
-See if you can reproduce the issue when interrupts are not used.
-
-	Andrew
+Alan Stern
 
