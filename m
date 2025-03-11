@@ -1,228 +1,172 @@
-Return-Path: <linux-usb+bounces-21630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21631-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEBC7A5BDF5
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 11:34:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 241FBA5BEC1
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 12:19:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 526EC3B10B8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 10:34:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C0EF16F1ED
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 11:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055BD2356A4;
-	Tue, 11 Mar 2025 10:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AB3254865;
+	Tue, 11 Mar 2025 11:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LyKk3UnV"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZnMDEV2b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21AF1EDA3A;
-	Tue, 11 Mar 2025 10:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741689279; cv=fail; b=OYHKRefE7gxsxo+vGQegUwhmuGuWWRGULqTYQlT0XPjQezPnW694ZKOmSOjOGTz+I/IyMnVa0wplIYpsADywxx6CbYFWxME2i1RUQQqL+DtTWAl0Fm11AzhSI+/vmgVPuvNL3QHWNUf6KCKgbzAr2xQzCSOKh/xXQP3IZPZdo+k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741689279; c=relaxed/simple;
-	bh=42VTHdIJxGlg9b5Tp6hN6Ffi1hqa2I3JlLJyRnLV+PI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=i41AQN5WWXb7vE/XPveLQqBfKnFTh4EuxSvkdVDgoTRAJs0/ktFhbhjOAgX878oXlALxOUFI82LY3QElHYvDqSUiDtzNDvYCbJUwdlhnMWmKgckHnLXyfMhKvJX9PdVgl9XlIHuWKgrRC3Ct5x1SN++wO29O8Jc8MyWACJJuRg4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LyKk3UnV; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741689277; x=1773225277;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=42VTHdIJxGlg9b5Tp6hN6Ffi1hqa2I3JlLJyRnLV+PI=;
-  b=LyKk3UnVghdoREebsQWbLcuZEmAJ3iLcu1KWoleeBO+iF3bQA6mMCips
-   de4bbA58AImXOdj88Ah6ZPZ14E0ei2UIEw2ErMGDvkTLekGmEWl8Yt3mx
-   38FY5WtRjPTujQt3Fd8a1fBLeA8SF3cV7+KgY86DahBlWm7h3jjU8Hur2
-   yb+HcjOsvv0l9OA7IeM+BRtfRJVaZ5V+l5g8Ve0gefEuPYqrBVIJa1Jc1
-   TCogebAna+YWZQL1KRs95uIr8tLv7SPrp8F1zTVAXOT5pExW112N+ICGW
-   W9H4kvXcwkFCq4V7S5S/9nAaEXrZk71pQbeY5DPUlUU2Di8UQ/SUt/yb5
-   w==;
-X-CSE-ConnectionGUID: 0hHKSwF1RGKFKBL6VQ3Mbg==
-X-CSE-MsgGUID: 1awno05vSTi0nhMrd7oFbg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="42848419"
-X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
-   d="scan'208";a="42848419"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 03:34:36 -0700
-X-CSE-ConnectionGUID: yxRTqv/pS2S4sx9tvv8H7w==
-X-CSE-MsgGUID: ru5E/XhiRGymfjMH+hVabQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
-   d="scan'208";a="125329850"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 03:34:36 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Tue, 11 Mar 2025 03:34:35 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Tue, 11 Mar 2025 03:34:35 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Tue, 11 Mar 2025 03:34:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TR0DPm/DZEoV/Fh5ye5MsAYIT2aaFa/65vJlwWRr0qtLBFWBp8mGz38DZFPlqVFtMlhonMRFFSJwMyaPkWRymH3EigeLEd6s1R5ceRXUEBLILVg9lkpgEn+CmsGoUyOwgaehfvi5sVgzADg7KZiw7gAHv9vk5NICjuQlASne6VmTkpqawwCzvTwd1YNJSYRaSqhTeOgjXqpbF0wISmloF9cLZLrofDWkkVtGlYX2nhO2X5mfMAU5ARhtgHAveRLxacWOQbnWOOhsnnMBVPeF3cUABLdbVQKeGMeuTUp5rhXNHXwgXxP55k6tPDiU0/D2qACWXV1uT+Mzy0zazaI8ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=42VTHdIJxGlg9b5Tp6hN6Ffi1hqa2I3JlLJyRnLV+PI=;
- b=tQFS+NoxMY9BUJrIyCewCCha1dTA+1vHK6ap/ctcM1Bi9qV3do90jFqrYKkzeOQt773WOImDH5BOgn5BhbcEaRO0fwfn7jQLpAtVXQE5siPabRObJYXCJqPushjEk1EPphxINpfM/CQxBS5dlWZQJwWaSxb3YAb78HEMFrev2aaqbLy7PXeuCO/08GFcHelCrGM+OaAeEcP0+q1N83ra2BH7oxP5ZuIXqo2DJDDYJx/z8A46IP3fB6B9VbY1fsiMqQhZJ3suei0ASl+sBKwMIDWCfegosnEg2Rk0qM/Pe6J4MJPHv4ektEfy8TBLGOnw3jZ5uG66uQ08NRu21Y8+zA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) by
- SJ0PR11MB5815.namprd11.prod.outlook.com (2603:10b6:a03:426::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8511.27; Tue, 11 Mar 2025 10:34:34 +0000
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::4046:430d:f16c:b842]) by DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::4046:430d:f16c:b842%5]) with mapi id 15.20.8511.026; Tue, 11 Mar 2025
- 10:34:34 +0000
-From: "Ng, Boon Khai" <boon.khai.ng@intel.com>
-To: Johan Hovold <johan@kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb
-	<linux-usb@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
-	Boon Khai Ng <boon.khai.ng@altera.com>, Tien Sung Ang
-	<tien.sung.ang@altera.com>
-Subject: RE: [PATCH v2] USB: serial: ftdi_sio: add support for Altera USB
- Blaster 3
-Thread-Topic: [PATCH v2] USB: serial: ftdi_sio: add support for Altera USB
- Blaster 3
-Thread-Index: AQHbj3fR7rxGNFLiLEuxz/BjkbEixrNtl7IAgAAmBoA=
-Date: Tue, 11 Mar 2025 10:34:33 +0000
-Message-ID: <DM8PR11MB5751B33EF33ED26FD8E63508C1D12@DM8PR11MB5751.namprd11.prod.outlook.com>
-References: <20250307154355.30772-1-boon.khai.ng@intel.com>
- <Z8_tDGssqs9DBaPU@hovoldconsulting.com>
-In-Reply-To: <Z8_tDGssqs9DBaPU@hovoldconsulting.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR11MB5751:EE_|SJ0PR11MB5815:EE_
-x-ms-office365-filtering-correlation-id: 857bfa57-de6c-4a0d-1946-08dd6088508e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?gdB37FdpMP28eKXPexL+mj9tcrBOAlAzcEcRTLl3YpWtsUzi96S59XYFluVF?=
- =?us-ascii?Q?GBKQsTkgZy5gp8ZlN/3nCYoEYU0BubLUQ40UijJI5i+IE/RUnaALiJsRZHvZ?=
- =?us-ascii?Q?O1ZbEEGLjUwd28/+qLMBwtoLIt7WCGY9MUiIb+V3HkANYRHbaI/loX1Suek1?=
- =?us-ascii?Q?M/NAM/QKM0BrmXSxGUeMJdgy927KQo4PXzV9QRsfaT8XCcbPcUhWXuY7PEFe?=
- =?us-ascii?Q?QmjxSSC2zikSKMxV3+rruoNINB7aX10SapTOzXgPTNllue4gE0yAVqnnd1zU?=
- =?us-ascii?Q?ClPEzA9DyRdiv0jkxrrmmf7uuApUNaR4OKTz00CUPgTJYH78F7gMEr1oCkQe?=
- =?us-ascii?Q?nvaK25cQqbmSDtPbNg7VATeaIcB6ClFHaH5e6YsSQYI2keYLdZzGROG6u+MS?=
- =?us-ascii?Q?RovPO38T9f1SJYFqCllLHov+LPUd3gNMc5ZI6zn70zh6SYj11nj+IP60USaS?=
- =?us-ascii?Q?hCy9LJu/E/5pb+EE17/BWWtHuwDPLmVXwAFoU9uxgHQJ44nFdEi3JMRpJLvW?=
- =?us-ascii?Q?5Uc0AvW+hg4PbcGe6C1XkPej85b3cMw3VJSlD0KlXQjE20KOZe3znEzQTKcG?=
- =?us-ascii?Q?Ef8tPOFlC9K3AAeN1nV46wxesf55Af5swo70WmhwgzvE2Q4DOMlBRW/ZrqEr?=
- =?us-ascii?Q?K+u7M5QxZfTL9GSgS7lvT7hqc8vBrSBVca8D/KBM/Cs983Vs8xOgHpLUH5mu?=
- =?us-ascii?Q?H7TQGj3tocyC1fqqh97sTZSzeAl16+Tk6HNoONC4+X8Gvmf4lx/5iyFnNbCP?=
- =?us-ascii?Q?yT+EoT4BCVh83YfYEEZ5t2/+PQYw9IImeaCYnZVkUe2xwlMZbC6GL2YTF4ZT?=
- =?us-ascii?Q?nMe9/UiwhmRgppLIiWYaK0w6zWjT7byXwBvI4LhFKbPWTost9sCsyf8aTr2a?=
- =?us-ascii?Q?F9awnksAwXbysmAphgjzIPv2eloV8fwY7tT9c/OywvBa3KxbwDROLZQKDs5i?=
- =?us-ascii?Q?HmKEQmfqfyRbwZI5LF0gLLg3QlvfT+BXkl+tMGLE/UWg7vP4l6bOgZU/Fyaq?=
- =?us-ascii?Q?Pvu2FGYRK9riyYmlgA9oevtKSmo7fXttUSAB4VmKrvnMgrYiAcnXNkl945AU?=
- =?us-ascii?Q?lTVHqXsaXWcZyPQ+NtX9Hb/ARZER0FBROMGVD7Wxihfswt0mc/47CQ7kzasx?=
- =?us-ascii?Q?MlGuXVzifg285+OhedQPiV/v28ocT2OTUGbbDvwcyvKM3wNad3AcBBk1o9rs?=
- =?us-ascii?Q?n4y1lU8FXkHfWHhknkKROZrgD06UNua1xqjF9VfzuPzOGOYz49ujvAVp11yq?=
- =?us-ascii?Q?fQwLBJ0mQ6oYy+UnSDC23t34JtaIUTlmrPJW2yu+PLPmGv1RCU/oOBL13/K+?=
- =?us-ascii?Q?4p7CdVtHWG46JucUKwl1xrr+E0UhAJj8glmyj3iPzQ/oFWZgaOaJquiT7FZk?=
- =?us-ascii?Q?iplOZPsMBKwh3IAJAUcUVOuZlZMF9hMc201yqMn4AnKJs4oD9OJvYvhHKNTB?=
- =?us-ascii?Q?TKlKzqo3z9JYxjZQfPdUy98x0W6wYglw?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5751.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?glpfrNPxNsGChNf99yVzOaNOPRv/ZxaDqYbQPR5ONhye/tqRqvjvMOLZ0hyT?=
- =?us-ascii?Q?ar0NJ5xSXuu8hCxR0zM/1q1jMPJk9rIO6krjaTghwWqOfIAFOwCT/79B9lor?=
- =?us-ascii?Q?vLFgbFSlXnisod8Im5zV/9kNsFdZqhMvhMwWv2QxOD5edve+p1g72dYkRwK5?=
- =?us-ascii?Q?A90l50dqJNWh0RAKhR0M2lH5QXgNYpR7jCTrFCIOSw5FJ3zrU6jpj/znE2qT?=
- =?us-ascii?Q?cxo2jzvUXkd4UqH+Dhvi6h2yoNDaDYcD9p8k4YZxZXW/b4StM4Mow7n48gQI?=
- =?us-ascii?Q?0wpYdhniahWLqQ0UfX2IVi50R+XfVaAiBsTNQQvH9c4aUpVLoqaBsGacH5nY?=
- =?us-ascii?Q?jbce9WSiadHVkQ3bQ9y4u3Er77VDID3xWl4vqmTD+nVsyFwtKh8nqOUl3wTG?=
- =?us-ascii?Q?OwtVFp90z/wXAXPV8y00M7kWAQ5d5Nf1fKYQBnOXtAAAH40A4aNAXMQg2Xrm?=
- =?us-ascii?Q?P3MUif9Z8A0TWfA8oa7Xpcq6ugPaDWKePUkEHXmGZ2iaaFYjWeqAwf+NXyXq?=
- =?us-ascii?Q?qGs6aJzKt1J7LshcTT2XVK2n1svSjwyR7FlxJByef7n74mXC3FUGFu5qOYz+?=
- =?us-ascii?Q?uh9+lWloaTK6y+/3W3wu5iGe8KWv6JvLKQDv1A0PBlkfXhQvPwqPtRsj0C3+?=
- =?us-ascii?Q?Uy0OLQ7/xSh89u2VdqH/tbWfHGqeg47bDoKNMx0e+X4gdOTA2qgnX9ZgjMLP?=
- =?us-ascii?Q?F1Q8pzrtEIPrx0LnrAWx7EFq4ZocTEm5kS6z2UAG4Ew+jrWXF82aUFdBgh84?=
- =?us-ascii?Q?XXuNjTbM3LdHVEw4Agyl7gSjkBIJJXew7ATjY7b74KM8efrTDhaFThwXKB4e?=
- =?us-ascii?Q?C3TobdyWsYwZwjSrIsrZ1GZqBO+VkNsxQVYJANGGR/+Fdb36wkT8VgW/u+Rs?=
- =?us-ascii?Q?BQahD7yHCyE8WHnb/C1mWZx+N6mVPlj7pnVRXAHiNzum2Z86/RBgOln+/lUi?=
- =?us-ascii?Q?d2r5+iMGszhBiQwdDw4YjlZa/PrW7MqZjA4t8b2VvfLo2l3aaySJagfr3iD7?=
- =?us-ascii?Q?/mnm7/GkkjtkhEKl9YI/AV/S+pof3gP74Yum2MrZgDKlZIBLjoXbLGp7cHjW?=
- =?us-ascii?Q?KpA3qtAj4t0s2wVAQ1GS3WPWGf+v9InugQ4OxVgfCfP9UhqWMQlviErNwatH?=
- =?us-ascii?Q?xP3AzhS8xdMpVBqnJ1+NsPSZdMHHOjnvO/f9OSC9Jdx2/gdBDnrVTTWBlGbW?=
- =?us-ascii?Q?Jq05AZiqrcaG1h4OrSK8s+IVdsf64QzjKlkgLx77Ao+qSDiiIsnnlaKW9Yo1?=
- =?us-ascii?Q?WQ8kh0qEIlvIR55fTkOGIzw4UJDbFmxZbqx7agJdCXfIKIY867x4g9+ebBof?=
- =?us-ascii?Q?0R519o3YP6PDQzfJRugiG8EsWuYZ0/NeydIhlCfizgC9v8fXnGITBQf2aAxH?=
- =?us-ascii?Q?Kd+Vj0OdrQnBUW3YD7GZyfC8xnYoNsThBq7yvGJF4zQICtf6gka5iH9HpgoG?=
- =?us-ascii?Q?FXrh/0VmWRlsI70NF9I0zMCDGv1OJZLxOPBDbekaFJCJNQmFkzJ0KSJ9Q/Mq?=
- =?us-ascii?Q?EFQkFSeEfdKoOoaH0ICr3AhP8KvtkJ+YYVmL8fSLbXpbKvyaAx3IIq9AYNg9?=
- =?us-ascii?Q?vRdSQ3A1bIPyEzm5Yzfrb8HAja4U8x4nxATB788b?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E35238D39
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 11:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741691950; cv=none; b=F+CYQqeowF4WpbZvSc37q9OW9LrPd8pkI7mqsFx43MfcI60tvVZuIKA+5WsY1x5ZBfoNkVcl60FY1DHb5hLNLN+IAwLvFzk/vNzF+eHod0KBkWi0pbvzRlyXPiixHpZTyvrVJfBzNcAJdR9E5SEbZOJbHs/3xjM8onIgjfw7R7M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741691950; c=relaxed/simple;
+	bh=KG2B2zG131J/s0YjenddE96hvagPtolWZ0k0Q1oZF9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sMIEK5wnDLhAf+rZ7AXdWJUffnyNN4x7+zIvQkUoxwTIW0oEqBw+QVZJBZDp+HtIDlYSvLmhujUsxpJBeIDyxtcfRfWQOTgomNOyEWuDawjyaa80EkcsgqktvSV2EQmRsLsP2tROhhQ8WVgV2yLzJ+C3jhB6tUuBJq/KtuH3Xwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZnMDEV2b; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52B7xmpF027434
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 11:19:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	v/zsrPomSGC1iO5LSmQ+QJBzaniKLt0k5UGEjWJYgjM=; b=ZnMDEV2blLkM1v6j
+	yz+sUf2hDI0q+GO8vzhQ4koX6CWHGWxt+USTTF7vdAR8pG5Pun5GL0xLGPYlFpHm
+	VCercVTpc2OZNFgq1Sll8rcPHuSEMSkeUXkTWwDIC4JETfBANvLUmqAYvzEXbNb9
+	9PXbp6u4k0bNY1+uhh6mTp377KkHSGDJ7g7unANHauZe+W5vIQGOoy9wXbYSKLRB
+	fo8rNQvZvA1oRQ97U1Hbp4+soJs1FaqcTKjZIGA5CB1at82gqINh9OYZ9yy/44cZ
+	BHksC5VzdSSS0lnRNBQ951k31rSH+lz+RdeKhnGtQakSzCUmmd0fdXHhUehU1Q32
+	ygPmEQ==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 458f6agd76-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 11:19:07 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6e906c422a9so11235816d6.2
+        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 04:19:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741691946; x=1742296746;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v/zsrPomSGC1iO5LSmQ+QJBzaniKLt0k5UGEjWJYgjM=;
+        b=ZY87gzXVYH8PalCqbykpeyF6Xh/O66yJEXlmj7FXfaXKOD+8FRPmu+/pTXFGpZQlKU
+         kSsCKMwI8GGqiKagIIRwe8sqa1RTBeMGHk10HYPAOH1JlmCpu4XIu3kb4bguBpzDXEIJ
+         0u27DMcRDB295dddsISpNpT9CT0DCMLPEzAQEI/nmQGmzeDfk2ADQlOPnbyj6pkIosp5
+         yPe5OaImUnwBMYoFJ4iaYiVUOOj3m+2et9a16DphiW7JRgHftvT2ITCgl//coKcvRrMm
+         HHjgMl+YiUR9gzP6CR5bP46dgB+mOFzR67KNIGjTrG3J1R1B/BQ9pQgvhzL7nQycY9+l
+         DRmw==
+X-Forwarded-Encrypted: i=1; AJvYcCWSlxWP7leJ6CBwq8Y9JINqyZ5urWSifFlPxmM8GYEN0E6SB/qajkgMAXo/1p0tlh3wR4y4m8ppYpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSiZIyRBqlf0YzvnRdDaGF5+IFb80SOXqnV/Bbaq6400Yvqegz
+	uP/m7GHqwdwYeYe1dB69ZKuQijCgTxTBpBdMdzgpbMrieA72234s6Xf6ys6V1SpFx5NTr8rhr2g
+	8Sxy98h+3zDPXXivmfFSI+yDAwdzWUgljicvWoX2vf+yse5XIJgFhYkQVufw=
+X-Gm-Gg: ASbGncs4CGanuPNlE/3InCSCFHy+t3wdJqVNSGRVr7jbG4is0J4oYbD6x7x+ZjBanN5
+	La8OA5yS6pqAJpc5yW/7qHo8Rcm9aLugrUKG4SWe1xdiGp1Z5x85680o3bZokLRh9PYUHdL9Evk
+	b8ptzTmoKghurClqLVfgddWhVeTNWq6Pib8WqNZNVdXf3t4MQImgRdpXh0Xs6AVXC+31LWSSFgt
+	dppahxrYbOnWSie6p6bvj9VmI5XHC0zav0jWJmdVAwUXSn12HfMvLA6blhiKYPOL3oq1alc5fBh
+	gxn06Qz6h9Icdkuq841hRfu/mSwqIqchPLhKg30mkfyhDfI+X8pVKPpBkLOgkgQkpryleA==
+X-Received: by 2002:a05:620a:1d03:b0:7c5:18b7:506d with SMTP id af79cd13be357-7c53e05f9c9mr737227485a.9.1741691945870;
+        Tue, 11 Mar 2025 04:19:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFMbOo9/SytOGUrUMo2XFyejsZDSP+j5JNs4kPwfKJu5yFVYu9xbBZSRIJg5VV2VeLv97QvVA==
+X-Received: by 2002:a05:620a:1d03:b0:7c5:18b7:506d with SMTP id af79cd13be357-7c53e05f9c9mr737225285a.9.1741691945534;
+        Tue, 11 Mar 2025 04:19:05 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2394fda1asm904961866b.78.2025.03.11.04.19.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 04:19:05 -0700 (PDT)
+Message-ID: <69fa7f33-e957-4dac-93dc-6fd40167873c@oss.qualcomm.com>
+Date: Tue, 11 Mar 2025 12:19:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5751.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 857bfa57-de6c-4a0d-1946-08dd6088508e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2025 10:34:33.9173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0jwZJ4/TP8e4pBpGaFBsBfcbkUg0yjS+8F3i1qdcsRbj2JALPkTJYQnO0KzB6SK4DO1UgB5kH5zebCOSsG8CjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5815
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/9] phy: qcom: Add M31 based eUSB2 PHY driver
+To: Melody Olvera <quic_molvera@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20250304-sm8750_usb_master-v2-0-a698a2e68e06@quicinc.com>
+ <20250304-sm8750_usb_master-v2-6-a698a2e68e06@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250304-sm8750_usb_master-v2-6-a698a2e68e06@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=WsDRMcfv c=1 sm=1 tr=0 ts=67d01c2b cx=c_pps a=wEM5vcRIz55oU/E2lInRtA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=obrcSLqBe2MPJ_po3l0A:9 a=QEXdDO2ut3YA:10
+ a=T1PIRxOFuHhLvSGs3xkl:22 a=OIgjcC2v60KrkQgK7BGD:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: iY0JFrinUWbn6W0TkJGJ0aRVsG3QSjpC
+X-Proofpoint-ORIG-GUID: iY0JFrinUWbn6W0TkJGJ0aRVsG3QSjpC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_01,2025-03-11_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ impostorscore=0 phishscore=0 mlxscore=0 mlxlogscore=797 clxscore=1015
+ spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503110075
 
+On 3/4/25 10:56 PM, Melody Olvera wrote:
+> From: Wesley Cheng <quic_wcheng@quicinc.com>
+> 
+> SM8750 utilizes an eUSB2 PHY from M31.  Add the initialization
+> sequences to bring it out of reset and into an operational state.  This
+> differs to the M31 USB driver, in that the M31 eUSB2 driver will
+> require a connection to an eUSB2 repeater.  This PHY driver will handle
+> the initialization of the associated eUSB2 repeater when required.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
 
-> But for your future contributions, remember to put a short changelog here
-> under the cut-off (---) line when revising patches.
+[...]
 
-My apology will include that next time.
+> +static int msm_m31_eusb2_write_readback(void __iomem *base, u32 offset,
+> +					const u32 mask, u32 val)
+> +{
+> +	u32 write_val;
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(base + offset);
+> +	tmp &= ~mask;
+> +	write_val = tmp | val;
+> +
+> +	writel_relaxed(write_val, base + offset);
+> +
+> +	tmp = readl_relaxed(base + offset);
+> +	tmp &= mask;
+> +
+> +	if (tmp != val) {
+> +		pr_err("write: %x to offset: %x FAILED\n", val, offset);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
 
->=20
-> These configurations were not mentioned in the commit message. Are they
-> also used for embedded designs?
+Is there a reason we need to read back every write?
 
-Looks like the table I provided in the commit message is mismatched with=20
-the one that I intended to check in for upstream.
+Does this have to do with some funny write buffering?
 
-Let me correct this, the one that I published for upstream was the actual t=
-ested
-code, whereby we want the UART to be exposed to the ftdi_sio driver.
-
-Below is the updated table,=20
-1) PID 0x6022, FT2232, 1 JTAG port(Port A) + Port B as UART
-2) PID 0x6025, FT4232, 1 JTAG port(Port A) + Port C as UART
-3) PID 0x6026, FT4232, 1 JTAG port(Port A) + Port C, D as UART
-4) PID 0x6029, FT4232, 1 JTAG port(Port B) + Port C as UART
-5) PID 0x602a, FT4232, 1 JTAG port(Port B) + Port C, D as UART
-6) PID 0x602c, FT4232, 1 JTAG port(Port A) + Port B as UART
-7) PID 0x602d, FT4232, 1 JTAG port(Port A) + Port B, C as UART
-8) PID 0x602e, FT4232, 1 JTAG port(Port A) + Port B, C, D as UART
-
-Since we need UART to be exposed to the ftdi_sio driver and the cable USB B=
-laster
-does not support UART, will reword that on the commit message to remove the=
-=20
-cable USB Blaster and left only the on-board USB Blaster.
-
-Will submit a v3 on this, with the reworded commit message plus the change =
-log.
+Konrad
 
