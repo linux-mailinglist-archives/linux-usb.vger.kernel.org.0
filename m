@@ -1,125 +1,124 @@
-Return-Path: <linux-usb+bounces-21611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A54CA5B1CE
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 01:13:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A52A5B5D8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 02:27:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11E23AD926
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 00:13:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA7D91893E30
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 01:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE6A33E1;
-	Tue, 11 Mar 2025 00:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E0D1DF26A;
+	Tue, 11 Mar 2025 01:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZN3pMG9Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KjQiePPY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4CB360;
-	Tue, 11 Mar 2025 00:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37DA923;
+	Tue, 11 Mar 2025 01:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741652003; cv=none; b=IffH7xF3pTF5OoqjVfE3DfpNafadsLtjVHzhJxohgYppajlLYgP4Pm/posupyITmTHPzjP9TTj7HBeE+tmKb5mDaoKCIhDEPWDrOCyCJKdbnoxqieHN2xZMiU8XT1MOkMrwNsS34hoQmTh7E7cAkk8khhdFecwddVS9XxkuT4QY=
+	t=1741656441; cv=none; b=mfkg6vlEi8Ak7tC9r8HkDfQZTavBRp7a8IECbhHQlmuWb/Jf1ZCY1UE8rGXBcw9D4Iciyjj3zkyNiKQXgzVpaNAoLtC61H0hBkPvt6RmOOFalU/MZtuZ3EShcjy3x3CF/QBbCEfa6zo+sjIjNVpRJDnMB0hTKyho9vQXFalX3+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741652003; c=relaxed/simple;
-	bh=kzvAE9rkC0BaUIFVLg3gP7gcqs+gIUGEHk2OpCg+0f0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F9o58luS0yO5iWaSpQIX0Rf4NBMId5ieAy+fECsGJ3lz9673hHwwZEHFX0/a1+Jxj2RHcWDFCO7+00mYIsvl9KrIxV+vNLZJQlL9CXQOU7ABgMN1EcPnhxrGoR5fSaSDLfLBgIYbXwVPndaauika9u55/5MeYYpvFuR8qo7JdHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZN3pMG9Z; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1741656441; c=relaxed/simple;
+	bh=ht9scaUwYIWY/isuqrXAqzg0A5wR6NjSNdeQzdpWLP4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aHHJ/2c6V5pncq7tuvOTMjQCroGPM+mvwMNgfwpN5EGmscTfjvaGt8c7/lRGWkRq8GKj22ysUaEKT/qO4hFHHZePKqIscVs6DPA7BHhwE0KQvzSB70qNxL1+eNyrD/Zs6lLH0NTX4sBi9yNudnpOVfeBVQ0wmrG7ZdsDOBYNOpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KjQiePPY; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso7802924a12.3;
-        Mon, 10 Mar 2025 17:13:21 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c0ca5e6d45so60938085a.3;
+        Mon, 10 Mar 2025 18:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741652000; x=1742256800; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EXwnIJXW3efUwD1JuKOIjFDSE0Lnv/lNewJCUEgk+Vo=;
-        b=ZN3pMG9ZYs2QQkkQnBawNYSWio+33cuWYNBjej85zFkiGwEX98NanBQYunMK5CAtxV
-         f/T9+FitqoT4xrplDpPMkgtAoexvG5KBzn0cr9jMUtwUvGDFWCQecibYb4bqeN5ZJpmt
-         1lFt+vvxQ2Kgi4pje7UZJ+R5pGvlZLR6BCCbJAO3A5mF2uDTmpqErzWUOZyzYBcpm0bJ
-         hv7qvAvXF5i6JrpGKk5OkdV7Ux2uMw94NAbu2tJiT4qDZeZF8e4FgGQq90SsfT+E7A82
-         O9HcEIFXFYxFNn+SbSMUT3vPume7y8Knd8+HbWKJYtlBq2tzmOk8bSD2D7dRK7MAcHvz
-         UUzA==
+        d=gmail.com; s=20230601; t=1741656439; x=1742261239; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mYu4oax/thewz4e+p/abSxr+bcjcos4iMdBqH/7SF5g=;
+        b=KjQiePPYX4PrudbXPwGHsevGCJQ0cDci9pldlxpbs2NL2TRYoQ1spxbZ1LhZJ6LOP6
+         OtQnONB0J/1gHJLywaF/IIMkJ4xVlE8obS6Fxu7pf2BThuLcS0yrbih8hMlL8a6r0glu
+         VPFrOekY6nfSsgD6jBfacUVrYs4PIpOMB4WxKejrm+4NSbAIiTEwGDdDMZq49BZRV+/1
+         Jd2FrFRREbGkdBTHaPJhjX1aHFYpKdwwB+RMqdwD7jBGNZMVVxKPrJNjGlv7M33RycLR
+         TsGsb3eqGgb8E4gKf6IOnPvFvhQj74seTj8m2y5yoZubRdt9uQlZY4u+Ntaq80JKFQ9x
+         mmbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741652000; x=1742256800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EXwnIJXW3efUwD1JuKOIjFDSE0Lnv/lNewJCUEgk+Vo=;
-        b=LcPu80eefQZDI+D9u+KV+BGy+r1WyUWOSzfg1fmu5MmGyReYV7Y01wCHQl2/CFufi7
-         Q6BaBo+a3CTZWJUH1Z7y5qY0q7R9NSUQncAarym8zl2GeeYYava0Dke+fkf0kLDDVf+I
-         3HFatv5nfzPFL04Ccg6CT0vBpE1FAH3DkO7sZa53mBJZj78WkQlfB4rNsrE0T+tRpYfV
-         fkbwmkVCkRObNTw2IObLD4h69n0kIWACw4xEbPrfOWzZgIAUtpvnODkjHzT2Jk+izL7B
-         vQffntT+HaMvjxo9JyAL5P76WFM5WxX9Vu/89S7htEVti3RmMBUaT1023Fkj/FNupbx0
-         FJAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgDipVokuBYWGZELkhUT3VrTG5SKl4gZDJioHX1StoVz2sengxoMntoDyhT4EuHE56H6NqJmQDoJBe@vger.kernel.org, AJvYcCXfThCvCsPFH8rRJCfDAcfdkPe/LXGGBP24J10W9hnHdyYT1ppCspMByjKORuWBUPFcwmsrHFK1SJDWitU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCQpl+pdtGub9pgviXzevi2302AurA2IDRjum7YiInkZFj8v+i
-	Z/0CGqDfHdW43/bcKxcMrA9W+oHNAryKOG81S/0fcUQy9oDiYPSC
-X-Gm-Gg: ASbGncuec/dkoTUVbud5wDnq6VDdAmxFVr2DlNZd5YUFju2chjlDDqoi5mNT2lGSfYY
-	xMs9uvL2DDjH3i5VZTiKvIE1tdyd/gyD3A/gnEvoYKxaqO00N8mxbyqhCN57crDxv661/GKM+wG
-	gg3hJEE7zNmLBF8H0mxnqp1m8qK084XIuA9kd0xYUYLtHHvaNKFGfw0HGr84yBQGhGSDtQ3B254
-	FoAMkvTNRfozLINYZah/Cv/8sAiA0oNbbH8Mv7QDfAwvfuNdbjqzE7Npq4b7Cy6m/BQhGGUNdWr
-	dYrBk5ZII9HWFsKo8Bip6aFu7oj/3EL1ggFkVoty+DPa7x3/030I3c/aUuxA8Bz/NR2scKEy
-X-Google-Smtp-Source: AGHT+IFbZ+/+BB3T1PKNtpO4SqdvqZ/ZhrscBb34h5uigf+A2bGn64uE7LAut4lL+QsFjZON9rB3xg==
-X-Received: by 2002:a05:6402:278a:b0:5e5:ebc7:f63 with SMTP id 4fb4d7f45d1cf-5e5ebc71081mr14273970a12.2.1741652000202;
-        Mon, 10 Mar 2025 17:13:20 -0700 (PDT)
-Received: from foxbook (adts246.neoplus.adsl.tpnet.pl. [79.185.230.246])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c74a9303sm7639065a12.42.2025.03.10.17.13.18
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 10 Mar 2025 17:13:19 -0700 (PDT)
-Date: Tue, 11 Mar 2025 01:13:15 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] usb: xhci: Deduplicate some endpoint state flag
- lists
-Message-ID: <20250311011315.4b3efbfe@foxbook>
-In-Reply-To: <dabb1140-b26e-4f90-8e65-85e16d99aa49@linux.intel.com>
-References: <20250310093605.2b3d0425@foxbook>
-	<20250310093748.201e87cd@foxbook>
-	<dabb1140-b26e-4f90-8e65-85e16d99aa49@linux.intel.com>
+        d=1e100.net; s=20230601; t=1741656439; x=1742261239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mYu4oax/thewz4e+p/abSxr+bcjcos4iMdBqH/7SF5g=;
+        b=jddfyyCPH08XC98xFNVgEBag+rEIrGmxh7EshkFh0lIhb/AZp1q2k0BRDcjAEHulHf
+         YUZ53lwRRt/LQzyqDk5l/0+6U9Xyjs7d81wEY32Hc47gEAfUOFNE3dV08Wkmi4TcX6Ib
+         7KuipRsAy0Jr01DfJL9IzYncndjmRyxszNjIWpCMuAAf794PwCyRe1Q4vxKBdRoQp5Rn
+         V16jrDY2VDXbOUNY0wwmXEYPpFCSiSiZ+itvX2/yhpp8fWn1jSofSATQrJGzMRbfC5z3
+         rgfoPOLzCifFFfhggBZ+pTjP96pcxjXPVAsmhjj3IUCXAFzcrfJnhsNury6j6EL03Llj
+         Mo6g==
+X-Forwarded-Encrypted: i=1; AJvYcCV1zlstLYQIArZHYFkG6CsHhoW1SRccUFDjwbg74VX9zvetXfmXXp35OPsH3DS7SP0m+jQH0TiGv6UEz3Q=@vger.kernel.org, AJvYcCW6ZNO5mfvnbbBgykNq4nxG60clieU35rCQZDrKWmbOU60d+t380bOznU/81aaMo0JRBZgL+ckQ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/3ehcXXkbHyo2/M5QWE097EKugZCXFQPGVvtCTWoiCLb04qBm
+	6wQSTJ4gSLCs2JIVRkquhS+6cyVefAiFEmMtHvJcAE8j59Zz3zw=
+X-Gm-Gg: ASbGncuwB5uECbwMqdpt6OxBdBCM1pmFcmsJZIq9ySYB0nQybrZC7IE/BpdZRAgzaj0
+	Ub2PC3OM4EllRUHxO7Op39hz3EmlomwUbQhHjeyicSY0ReMedVrJ9sdYuejmR3J7tnS8K+Si5eF
+	gC7C9qLeD+KG37ZvcuM5VqbpRS4QtyWlmZbmIYP1BBG57cqDpxSEVjY2JXPThHmykOYJ2Qk52vb
+	eaPBQysnlYIWUDdKbDDFPyrbkfSr/EWeO7HudV22NwI1G2+UtqwP9CTf30Wi90YBOrXJ48mDRZu
+	GzD18d+6OjKZkMqGFoBkMj4d0Zu/FpDMz4AaMxsyNQ==
+X-Google-Smtp-Source: AGHT+IG1lIg0zhgXXdip9xAmm17KRNm/AUw5DrBkAQ32s9Cq80PSZ7xrsQWtT87xxvnN7LcqufT+vA==
+X-Received: by 2002:a05:6214:d06:b0:6e8:f645:2639 with SMTP id 6a1803df08f44-6ea2dd1e540mr10215056d6.5.1741656438961;
+        Mon, 10 Mar 2025 18:27:18 -0700 (PDT)
+Received: from ise-alpha.. ([2620:0:e00:550a:642:1aff:fee8:511b])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f70a2dd6sm65178346d6.61.2025.03.10.18.27.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 18:27:17 -0700 (PDT)
+From: Chenyuan Yang <chenyuan0y@gmail.com>
+To: gregkh@linuxfoundation.org,
+	joel@jms.id.au,
+	andrew@codeconstruct.com.au
+Cc: linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Chenyuan Yang <chenyuan0y@gmail.com>
+Subject: [PATCH] usb: gadget: aspeed: Add NULL pointer check in ast_vhub_init_dev()
+Date: Mon, 10 Mar 2025 20:27:05 -0500
+Message-Id: <20250311012705.1233829-1-chenyuan0y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, 10 Mar 2025 11:51:30 +0200, Mathias Nyman wrote:
-> Not sure this helps readability
-> 
-> It defines even more macros to abstract away something that is not
-> complex enough.
+The variable d->name, returned by devm_kasprintf(), could be NULL.
+A pointer check is added to prevent potential NULL pointer dereference.
+This is similar to the fix in commit 3027e7b15b02
+("ice: Fix some null pointer dereference issues in ice_ptp.c").
 
-It was less about readability, but keeping these lists in one place
-so that they don't get out of sync and trigger the double-stop bug.
+This issue is found by our static analysis tool
 
-With this change, a new flag like EP_STALLED only needs to be added
-in one place and it's picked up by both functions which need it.
+Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-OTOH, maybe such flags aren't being added very often...
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+index 573109ca5b79..a09f72772e6e 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+@@ -548,6 +548,9 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
+ 	d->vhub = vhub;
+ 	d->index = idx;
+ 	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
++	if (!d->name)
++		return -ENOMEM;
++
+ 	d->regs = vhub->regs + 0x100 + 0x10 * idx;
+ 
+ 	ast_vhub_init_ep0(vhub, &d->ep0, d);
+-- 
+2.34.1
 
-> It also gives false impression that EP_HALTED would somehow be more
-> part of cancelling a TD than EP_STALLED, when both of those are about
-> returning a TD with an error due to transfer issues detected by host,
-> not class driver cancelling URBs.
-
-I think EP_HALTED is about cancellation (among other things), because
-it indicates that Reset EP handler will run and finish cancellation of
-the halted TD and also any other TDs unlinked by class driver.
-
-EP_STALLED and EP_CLEARING_TT are less about the halted TD and more
-about ensuring full reset of the pipe before new TDs are executed.
-
-
-Michal
 
