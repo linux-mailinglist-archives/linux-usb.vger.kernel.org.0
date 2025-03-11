@@ -1,100 +1,117 @@
-Return-Path: <linux-usb+bounces-21633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76216A5BF75
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 12:43:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66793A5BFEB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 13:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424883B3F6F
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 11:42:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C290E7A4980
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 12:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9079B255E3E;
-	Tue, 11 Mar 2025 11:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD2D1CDA0B;
+	Tue, 11 Mar 2025 12:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUXhwXQL"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="DFYWG/si"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE1D254861;
-	Tue, 11 Mar 2025 11:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3073597C;
+	Tue, 11 Mar 2025 12:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741693333; cv=none; b=mdodtUZgocFd0TZXWUWUix1xxskq/eUJuE3rKS7vADFKuHSh6YiZ7+HHIwQcmx9QByye1IYKtxQ9sWPhYMlGJ7Xat8Lgqop0IxYK27L7e1T5W7nN9uGFc/FoPry/EGMppFFGAbO/hy1wu+DvUuGY8O2wf4X7uF+LIVHCAB02Mdw=
+	t=1741694462; cv=none; b=ASGBK845XRmsI91DvfOsMw6ZgvsQiPKecTUQu8zPsbnYP+mV540gVl75VA76/1eGsXuvTrZfJ/NAGR0vSIa9V67wb2pe8hvojeBBCdvuB6C+6eeDYxEsNScsTyXesgqhjVnJtsNAubBJT+d9JJdAjO7UVKXCqiRnxJ5A0kaPLlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741693333; c=relaxed/simple;
-	bh=0cT+g/6WFHRo97S8MzNd/drxoZXKifddanz+n4Uem64=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D83IQBorCdey99LBtEgzsKLMgQqYzkUioOUSVfKOzE35B+SlLJRaxzFGshumYIcVjd99kKlRUyF90LlWRihOjx6R7zTMdJTheQjRTVVPYBKWfw9QXsyqgXZdc3kzz4kUtaYmL10ZB3h9YmS1yxkLGtqd5Je6nZRIufCUgrRS13A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUXhwXQL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE5DC4CEEB;
-	Tue, 11 Mar 2025 11:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741693332;
-	bh=0cT+g/6WFHRo97S8MzNd/drxoZXKifddanz+n4Uem64=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gUXhwXQLYpC885YJdW2TRx7RUjZm5rSn13EHYURan6o2jQC3pgD+e2hKRnYvENUev
-	 IoPstSAUq6ZbXhledQeIrrlmuOGplzdFM1g8h52AMbNS2RN6NK66yvHRSlMg8wX8FO
-	 FCPl/kZqLxUF+z1+oPfxJRZo6aRMd0lLFbbrHDqeWeBS5jYgku6BK34y1E8ambTZfo
-	 OM2Cy1Z5ZJ8VAZce1vPKhK2/JbXCBZPNeoLJQJ2V7+WW2ethWoFp5rqjolTGskUcSm
-	 TQOzVOGlkbYV9Ho9jsztzeW4fkWX8mLb5QS4yKdedn86e7qDzpe615WK+R8unxCa1d
-	 RsALeUlcGrUBA==
-Date: Tue, 11 Mar 2025 12:42:08 +0100
-From: Vinod Koul <vkoul@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Guo Ren <guoren@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
-	Ben Hutchings <ben@decadent.org.uk>, Felix Fietkau <nbd@nbd.name>,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-phy@lists.infradead.org, linux-mediatek@lists.infradead.org,
-	linux-usb@vger.kernel.org, upstream@airoha.com
-Subject: Re: [PATCH 10/13] phy: airoha: Add support for Airoha AN7581 USB PHY
-Message-ID: <Z9AhkByegWQgC9YE@vaman>
-References: <20250309132959.19045-1-ansuelsmth@gmail.com>
- <20250309132959.19045-11-ansuelsmth@gmail.com>
- <Z9AhN9T8s1oogCUn@vaman>
+	s=arc-20240116; t=1741694462; c=relaxed/simple;
+	bh=1po9kPpQ5NSe95BZBG3yLS0Kw6JEa7dbgysMQJ2FGYA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C05xlg0lRYTNdYa96GGzt2rASu3dS8HDAaZf5rmwhwxC48apN1FCZWta3I83BPM6u/Srr+sw79rCT5LKM/+J7oz+5T4p6dDsHK77gl2gjxnu1gMNNy/PTjV++9IUGcjw7QxjoBu8RMnxMpZrhahXOWI0jbJ2zrdiDfTpDO6jbcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=DFYWG/si; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1741694421; x=1742299221; i=markus.elfring@web.de;
+	bh=1po9kPpQ5NSe95BZBG3yLS0Kw6JEa7dbgysMQJ2FGYA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=DFYWG/siRh0Mh/2be3tAPCHYrqeeu0/+cHC14EWXnBOem63oJzDXMoohArMYAT0P
+	 utdEpb3PlH/NH4mHcvvApNBhWZyEMXqUx66l8VnTqDt+9zkMgHlZ2Svmh5LslMC9H
+	 CsAst5VWlRAYT/3McvxAmqzg9G3Z3XUfEix1etePWq3elzVe6U34HhS/iqRb/Zrwg
+	 pUu9tyoyiM9n0QTYUnEV9vq+nWLo81HkG6caRbHxeE0oxIFrQ0X2y0mXWBB+b52vc
+	 aduFyui07XuG+hVWr0vOpUhp0ijBP3VBkt2TDCK2oTqmD84qSxArWhWQj8ZgFUrCG
+	 mfa5++zL1WOlYlXcAQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.93.40]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MP3CC-1tZMWv1jqO-00VlJ9; Tue, 11
+ Mar 2025 13:00:21 +0100
+Message-ID: <bf26ba74-ff44-4642-864e-2c54d49ead74@web.de>
+Date: Tue, 11 Mar 2025 13:00:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9AhN9T8s1oogCUn@vaman>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] device property: Split fwnode_get_child_node_count()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-acpi@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Jakob Riepler <jakob+lkml@paranoidlabs.org>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, Rob Herring <robh@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lee Jones <lee@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>,
+ Pavel Machek <pavel@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
+ <20250310150835.3139322-2-andriy.shevchenko@linux.intel.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250310150835.3139322-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Q/a3GCeWD3iUFv6+3kpvObqx+Bs4+4nh6EgTLERJ3lTZ1L52yrg
+ Q2VwG9XADV/Ol9rBvkHE9v7/VSYnZeBq+K12f5MpvIUNTVqFeExkLvdolfJKEN1vU5XPP1I
+ oeEf8/hlStMfKsV6QZRn7ejw42fIEuDEbzUmonLDw+2E03UJ7UkHaBHIt6wvvfOazNW4Wem
+ q3vahFzBH9NvO9iYRb5CA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:M0Vtme7G86E=;Z4oV0SEqDKd1dI2BbPj5sTxr7dv
+ 9kx9rhCJNbUFO7cYtCYt12hgM20h1d5bcYz9n/9Z5XW0shX9AJZ78iKFb4wcH9Ir2rdUcTVVo
+ PRz2SysCb/frPHYUA/TNQoPI91FJzflnEvtLj3DvX3v+ULH1qtgUzcLroRWOGm7GdFFjL2lYT
+ s2aqDca1l4mGYB9J4MyxdmPykJtpFtnZRzSnlu+w6KdvgZX+k8jA4sYX2Ad0Ba3NHWlrZqB4x
+ IjZMOnqNJBEiSN8lbfYPsUL0C3M5UEQwIZlBX4iVc5qcX/K42ChZudsL7JlC19sNIESmCMcLv
+ wZn9AXGROECKN9JtDnuLJtXTl3Imkos7T6pROa7YaJo1JfcWS11dTeR20ovhHXquLkZz35YJV
+ vVKnxittJ6rv4xfYcoey1sFk0yVPGa09OzzkyLniYoOo6hBfmRkjEn3PQ/0BPzpI/tNs+4kHb
+ YC9a9gIaIGVYBsJEEzXltXqOhlH2kAm5Ai+uD74LTatv+rX5URneTV9jddiXggcSmoBa56SvT
+ 60yRlhwWsA5gWRnDPsWDHYTimTqTz24ARvRgWmJ6f05QGdtrC9YYxs4uFz/Twga1h1XSov7VO
+ 4otoTQDBh2KWhX64CsC7/bq3HSrHAeAOELyPGm2CA+xXnNnSPem735RzBgMqTdvCt/Mtf4/e+
+ JVy8K7QJkUEAInDt66QZUrSYpZVH9WecY9TLD6QAai7D9mAqUDGcMEb+PKATbua/zpzMCy3w/
+ TixFfrOJNpQvTpsrSREN+hzn1XVuISafELT5B4xUkQFYVXGS8P7SQhLaR7QUKd2APX81fqD1A
+ J56oET7hkOFagf2Jo7kx4NBy/bd1gKzh8R5n1A1A8k0hKwaHmGZOXa7hoTiWiWCVVBfVnOuo/
+ 8dxm5R+2nS5MO0nU5CHrfNACy55eSUCNcZEvEYPwJd1V7Pv5V9/QqCosA6D4hU2/z/HUjAf4M
+ b/x2EQJyJVWuS8h38RNPrDSqwLOhMOTE/MFIQ0mmKcZJ2i1SNM3vdTDN7qGLdTCpopG5/J6j+
+ FNQlw4NjtoS9eMo1rrD5q7Loe1QhXleQ34VdP1iXs5x87i4AzjYWoc7PmbEitItF64UAgKfP3
+ TpGUCz+4Nju6sKJsVBs6TbitlVQNmQ18xXGnXMnD4AAATq5BH4nyhEL9zxirrufwRJEdeyQA3
+ is2CXBAERevsmiSGxF0MhTrHvX2QJC8OfoKi17zo4sXSZ3g5c0D4LY875A8rJkcF0X/qjrHJa
+ CTFA7kD4NueAwZodu9RxIJmrm3jr2xOCNXlKE6O7E1e7R0m3qJ+H+kiNkQUE4cB2vSQ9SG9Ko
+ Jiq3qZCOlWVD6om6KyH/jM8TbpOkHDnMHmbbfHYnFNr6NWJ22L8SlfqLdhX0JikbxQgTNVrr0
+ RDE4B3D8TgHKlT0sT8AfeB9zyU7HeSmjRZp9tSNKMFSpGs2RITDORU5oNSmCta+LN6WcdWJS9
+ 8xaNWEg==
 
-On 11-03-25, 12:40, Vinod Koul wrote:
-> On 09-03-25, 14:29, Christian Marangi wrote:
-> > Add support for Airoha AN7581 USB PHY driver. AN7581 supports up to 2
-> > USB port with USB 2.0 mode always supported and USB 3.0 mode available
-> > only if the Serdes port is correctly configured for USB 3.0.
-> > 
-> > On xLate probe, the Serdes mode is validated and the driver return error
-> > if the Serdes mode doesn't reflect the expected mode. This is required
-> > as Serdes mode are controlled by the SCU SSR bits and can be either USB
-> > 3.0 mode or HSGMII or PCIe 2. In such case USB 3.0 won't work.
-> > 
-> > If the USB 3.0 mode is not supported, the modes needs to be also
-> > disabled in the xHCI node or the driver will report unsable clock and
-> > fail probe.
+> The new helper is introduced to allow counting the child firmware nodes
+> of their parent without requiring a device to be passed. =E2=80=A6
 
-Also I dont see phy depends on rest. Please split this and post phy bits
-separately at least..
+See also:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/process/submitting-patches.rst?h=3Dv6.14-rc6#n94
 
--- 
-~Vinod
+Regards,
+Markus
 
