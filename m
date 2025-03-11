@@ -1,103 +1,114 @@
-Return-Path: <linux-usb+bounces-21621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BAB6A5BAB2
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 09:20:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E28D9A5BAF4
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 09:42:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC00D170174
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 08:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 847133AE6D6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Mar 2025 08:41:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF002224AEF;
-	Tue, 11 Mar 2025 08:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9CA4225771;
+	Tue, 11 Mar 2025 08:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPTHEgBE"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MAF5BcII"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8101E7C2B;
-	Tue, 11 Mar 2025 08:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEDD0223704;
+	Tue, 11 Mar 2025 08:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741681226; cv=none; b=Hpg04h+VN/kWjTsqkE91oe6Qcayh93DiZWGFDNy7YKJsYaN00owM2Jj5TnxEiaEYC+TnkLKtNogW7yZJUyrAf//ihOO6lQFRnX0GZ7STdm/1MGhEQp8of4407RaQUpzgesYBbhEaXOVntwsqn0bDzkGjZR+IcqeSwQRmMM/h19c=
+	t=1741682521; cv=none; b=lyd9EpM+Ya73J5m52l2UVl72L2/CoZwCXsui2e2ywzYYqHv8Op+L4HyDjX0a9VYLSynBLE/7X+lMH9iLbCN9b7DCrDbkGcwYt/LJRaw2zhasBj0acahbUOQfHvFWgF9I3UyouZKifQcU/6d7Bdn7yIfntkansTM4onFWs/qZegc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741681226; c=relaxed/simple;
-	bh=gaGVYX0NNOaIcaCq6wPZv9fxpNdPOdTR8URu/LPwxus=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+TGFLUClvDa3XKL6Gbx1jOBWpGfGFPT35BwWY5IGV5UXkr77A9hOnuxMABSnQdmVidxii6pwYKd8FxFwhn2EpfIc2APxubtqb3FTBymeTrogPQ9egvKZS07dzwLT2qxfP4fuW/vZ6V/DW2DT1d66/rjCLPRir0ZeD5vUKvVfSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPTHEgBE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E64AC4CEEF;
-	Tue, 11 Mar 2025 08:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741681225;
-	bh=gaGVYX0NNOaIcaCq6wPZv9fxpNdPOdTR8URu/LPwxus=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DPTHEgBEaigvAitgVNeQ5F6kP2BP+sjQkfPwZ+DWbHyC//fBTuj280Ds7/H5uor4d
-	 y+AMnjeIRniwEOdALym7aNeBUhyrdbQmVzbN8MNmVTUoHLIhbIS6YmBlcXQls2XubU
-	 fUnx1tygHDYNSX5khc094R3JZV5FQnMhwrKjM/o9q5MOcn6wTTtJ9Pm2nBPJLqL7Kz
-	 aIemnq76eJpcetTu9JAS0kVRZchzJUD129eGUBbLB/ETZt/QWF8hBqcMsSZ8ULNrbb
-	 u9F6WaICJVWRvsg6kshqgK8BP7xEDURWa/kDsbNU2UAiI1zRzhVsV9n0SgNXoKcLNx
-	 E3ZyD2tAqmEFg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1truqa-000000004FQ-16rC;
-	Tue, 11 Mar 2025 09:20:20 +0100
-Date: Tue, 11 Mar 2025 09:20:20 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB-Serial serdev support
-Message-ID: <Z8_yRFZrb6WFp5Y2@hovoldconsulting.com>
-References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
- <20241001072453.3xv5sqxaj4zjprnz@pengutronix.de>
- <2024100109-maker-ravine-7c65@gregkh>
- <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
+	s=arc-20240116; t=1741682521; c=relaxed/simple;
+	bh=1nrLmnGlm1+0YYFQ6DxqrnnhJZkHgndItSvq7Q+Cjnw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MWOr0Mfq3ab4NYyq/zn9LHPX7yuB5wBOqZtAXcwiOpkNfsHQAHSv1oQe4+41A2J7l4Tg0HsoXTXyp14Frpp0Afn9p4kqKDeAW4K0xUnUtLQFOXkYzWnfugzmE3U+rLUUrsUqtaFUsTYYTtYhYARpjjPTY3eQrMSSPDSK52wBEis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MAF5BcII; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=o+FJF
+	a5kaj7HLyvn685I1Z/X9V0EfvMQq597XWpW6uI=; b=MAF5BcIIFECKGLeW2TjsT
+	hVoos6jT8K2WOERLHASzg6y0xVaSQSGH31p6SYJJB9CL3wUTFxeLs6w3pZcKl7MM
+	Fe2ZNGenZ+8OePZH/HqjDPx1X9b4S6axlPAcjA3h23EYmJLn9fHbtvI58OEXjztH
+	6h+WwdpbZsk6RPtCjrZkK8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAH3uJJ989nKrBDRA--.23607S2;
+	Tue, 11 Mar 2025 16:41:47 +0800 (CST)
+From: Xin Dai <daixin_tkzc@163.com>
+To: stern@rowland.harvard.edu
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Xin Dai <daixin_tkzc@163.com>
+Subject: [PATCH] usb: storage: Fix `us->iobuf` size for BOT transmission to prevent memory overflow
+Date: Tue, 11 Mar 2025 16:41:11 +0800
+Message-Id: <20250311084111.322351-1-daixin_tkzc@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAH3uJJ989nKrBDRA--.23607S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy7trWrtF1kAFyxGr1DAwb_yoW8tF18pF
+	WYgFZ0yryDXFWS9r17Ww40vFyrXasxJry7K3ykt3s8ZFs8Ca48Wr17tFyYqa4xGr1fu3WF
+	vrn09ryUWF1DXFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ptjgo8UUUUU=
+X-CM-SenderInfo: xgdl5xpqbwy6rf6rljoofrz/xtbB0hUN1WfP7sX50QAAs0
 
-On Mon, Oct 28, 2024 at 11:57:02PM +0100, Marco Felsch wrote:
+When the DWC2 controller detects a packet Babble Error, where a device
+transmits more data over USB than the host controller anticipates for a
+transaction. It follows this process:
 
-> On 24-10-01, Greg Kroah-Hartman wrote:
-> > On Tue, Oct 01, 2024 at 09:24:53AM +0200, Marco Felsch wrote:
+1. The interrupt handler marks the transfer result of the URB as
+   `OVERFLOW` and returns it to the USB storage driver.
+2. The USB storage driver interprets the data phase transfer result of
+   the BOT (Bulk-Only Transport) as `USB_STOR_XFER_LONG`.
+3. The USB storage driver initiates the CSW (Command Status Wrapper)
+   phase of the BOT, requests an IN transaction, and retrieves the
+   execution status of the corresponding CBW (Command Block Wrapper)
+   command.
+4. The USB storage driver evaluates the CSW and finds it does not meet
+   expectations. It marks the entire BOT transfer result as
+   `USB_STOR_XFER_ERROR` and notifies the SCSI layer that a `DID_ERROR`
+   has occurred during the transfer.
+5. The USB storage driver requests the DWC2 controller to initiate a
+   port reset, notifying the device of an issue with the previous
+   transmission.
+6. The SCSI layer implements a retransmission mechanism.
 
-> > > gentle ping as this is series is two months old now.
-> > 
-> > And it was rejected as serdev does not support hotplug which of course,
-> > usb-serial does.
-> 
-> I hoped to get some feedback on my answer [1]. Regarding hotplug
-> support: serdev _requires_ some sort of firmware like OF (not sure if it
-> does work with ACPI too). That said, if serdev finds no firmware a
-> fallback is provided to the standard serial handling.
+In step 3, the device remains unaware of the Babble Error until the
+connected port is reset. We observed that the device continues to send
+512 bytes of data to the host (according to the BBB Transport protocol,
+it should send only 13 bytes). However, the USB storage driver
+pre-allocates a default buffer size of 64 bytes for CBW/CSW, posing a
+risk of memory overflow. To mitigate this risk, we have adjusted the
+buffer size to 512 bytes to prevent potential errors.
 
-It's devices going away not being supported which is the main concern.
-The serdev ttyport implementation does not implement hangup() which is
-used for serial port tear down.
+Signed-off-by: Xin Dai <daixin_tkzc@163.com>
+---
+ drivers/usb/storage/usb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> The firmware could either be added directly by the platform OF file or
-> via OF-overlays. By making use of overlays we could gain some kind of
-> hotplug: Once a usb devices was detected and the driver has an
-> overlay, the overlay gets applied and the probe continues, like we do it
-> for PCIe devices now [2]. For devices which don't have a registered
-> overlay the standard usb-serial setup is done by exposing the serial
-> interface to the userspace.
+diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
+index 97c6196d639b..fd8dcb21137a 100644
+--- a/drivers/usb/storage/usb.h
++++ b/drivers/usb/storage/usb.h
+@@ -71,7 +71,7 @@ struct us_unusual_dev {
+  * size we'll allocate.
+  */
 
-Then it would also be nice to have a way to describe hotplugged devices
-on the fly, and overlays could indeed be used for that. But that's a
-separate story.
+-#define US_IOBUF_SIZE		64	/* Size of the DMA-mapped I/O buffer */
++#define US_IOBUF_SIZE		512	/* Size of the DMA-mapped I/O buffer */
+ #define US_SENSE_SIZE		18	/* Size of the autosense data buffer */
 
-Johan
+ typedef int (*trans_cmnd)(struct scsi_cmnd *, struct us_data*);
+--
+2.34.1
+
 
