@@ -1,77 +1,59 @@
-Return-Path: <linux-usb+bounces-21684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543F8A5DBB9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 12:38:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A069A5DD44
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 14:03:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C752175339
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 11:38:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A0997A5784
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 13:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D349C23F28B;
-	Wed, 12 Mar 2025 11:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cqmfjosm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D22E243947;
+	Wed, 12 Mar 2025 13:03:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from birdy.pmhahn.de (birdy.pmhahn.de [88.198.22.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A331D63FF;
-	Wed, 12 Mar 2025 11:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C7A1E7C2B;
+	Wed, 12 Mar 2025 13:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.198.22.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741779506; cv=none; b=sGt2V68ZoY7K3lCEMhs2/+9y7yyEM8UA7a3EBObNCwPnZ+7UtC59xIGaTwhpfHOOqXNca7bQFup/PCdCi34f06Am43pks+kTgGRjNUnVFad9mcri1HnPkzfy//iKLJISOoq9l5+w3YaTuGKtGR64f6+hMSYvxq1C7JmSWmrpcvQ=
+	t=1741784612; cv=none; b=kU4oU7zLwJ0v37mH6W0kbNZhWGFT6wGz6VbkbaXo3d9a0vDSyyxuZJBqFx9/hVYCN37Qs1owpFPafCcT34mi7TEGCv+LPYgRL8vbg9qmHgJfNkUkN8HFSS1mbulK9viLQ8C4HwvfAx/FmVcVUUj4CagoCO7PV5CEaNeb2iIEDdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741779506; c=relaxed/simple;
-	bh=SCeea2IRJiR43RYeMEeub5/6lUzFMZzZEgZTvdDWAhg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z6pW/I9oBnCzhOPLG3L/cU0bhZZoClEWQX4BmbiGhtJtifTq3Yt1Qap4zlq2lXnQ7VWrZmb0UokMYtAfzUkky+IHwDbwlUmi3K4ixJIHJjLLI62QoHC3vo6CoxGXn5scCSfyBJdV8siW48S9mlmjMzP1iJcTAstHTq84boVpsmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cqmfjosm; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741779505; x=1773315505;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SCeea2IRJiR43RYeMEeub5/6lUzFMZzZEgZTvdDWAhg=;
-  b=CqmfjosmFGmsBiwhpHnZa8fUWEpRj2GZtIQAhKURiTZ2DEiPb9/Qk8SK
-   g0wZgw2+3w6Yfn4U23R+AlawUASZgmFXtx0mM1J04CMfAikmSlM1D7ivd
-   HAHoi5A8/2xMbBR+rMMVfJFCgJVOOBBVJWYsvVhMftQ8bcLOtuCCVT9Il
-   SoCviKUxbyOrSHrZaU2Zo7eTRgk4oVEszZWkhPXs56HcdXT3mMB7d1x4C
-   YyjTdI0tr5pXK0yiMT9E0/vTMA0ZeLcjSmrDMrgFdK/GWqBJxfQM1OsXl
-   8HI18sGCrRzE1W/DfcW+yTK6ZhpeLBhSWwbPiuYTiL96p2udrPWvVJhkv
-   A==;
-X-CSE-ConnectionGUID: 6S/joLDPQiSuAz5wlRjcbg==
-X-CSE-MsgGUID: /UHQdmCmQMqILnIs67fICQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42727961"
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="42727961"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 04:38:24 -0700
-X-CSE-ConnectionGUID: UnkrbVrbTZ2lpnbuvBUWTQ==
-X-CSE-MsgGUID: 3RX7qHIpQDqIVAKIXSM4mQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="120829136"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa008.fm.intel.com with SMTP; 12 Mar 2025 04:38:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Mar 2025 13:38:20 +0200
-Date: Wed, 12 Mar 2025 13:38:20 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: amitsd@google.com
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1741784612; c=relaxed/simple;
+	bh=urFl68uoAji+L/OZmu9MC+PGlUjZURSh42gOnWDdFzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jhKlx+K/SEp3eTO2dhQBkH+R4ZDB8QF50XDTX8q3Yqo1zIlzUraXULTbt/5/4jX9KX/mnbjXEqumcQERZGI1gRFBBO81y3+N1DvsAlqgLAsTjIcUZuBTGBGMUgSYujlna4rYhwZ6UUSjZ6DD99T9B5Dei6fODsQ9BwFN4iUfdl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=avm.de; spf=fail smtp.mailfrom=avm.de; arc=none smtp.client-ip=88.198.22.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=avm.de
+Received: from birdy.pmhahn.de (p200300e2774a7B00F7f5672D647b4c86.dip0.t-ipconnect.de [IPv6:2003:e2:774a:7b00:f7f5:672d:647b:4c86])
+	by birdy.pmhahn.de (Postfix) with ESMTPSA id 4565B220261D;
+	Wed, 12 Mar 2025 13:55:29 +0100 (CET)
+Date: Wed, 12 Mar 2025 13:55:27 +0100
+From: Philipp Hahn <phahn-oss@avm.de>
+To: netdev@vger.kernel.org
+Cc: Philipp Hahn <phahn-oss@avm.de>, Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Xu Yang <xu.yang_2@nxp.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: fix state transition for
- SNK_WAIT_CAPABILITIES state in run_state_machine()
-Message-ID: <Z9FyLNcHHczSvpAq@kuha.fi.intel.com>
-References: <20250310-fix-snk-wait-timeout-v6-14-rc6-v1-1-5db14475798f@google.com>
+	Leon Schuermann <leon@is.currently.online>,
+	Kory Maincent <kory.maincent@bootlin.com>
+Subject: [PATCH net-next v3]: cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock
+ quirk
+Message-ID: <Z9GEP/TksqEWFbkd@birdy.pmhahn.de>
+Mail-Followup-To: netdev@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Leon Schuermann <leon@is.currently.online>,
+	Kory Maincent <kory.maincent@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,66 +62,117 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250310-fix-snk-wait-timeout-v6-14-rc6-v1-1-5db14475798f@google.com>
 
-On Mon, Mar 10, 2025 at 07:19:07PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
-> 
-> A subtle error got introduced while manually fixing merge conflict in
-> tcpm.c for commit 85c4efbe6088 ("Merge v6.12-rc6 into usb-next"). As a
-> result of this error, the next state is unconditionally set to
-> SNK_WAIT_CAPABILITIES_TIMEOUT while handling SNK_WAIT_CAPABILITIES state
-> in run_state_machine(...).
-> 
-> Fix this by setting new state of TCPM state machine to `upcoming_state`
-> (that is set to different values based on conditions).
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 85c4efbe60888 ("Merge v6.12-rc6 into usb-next")
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
+the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
+Both are based on the Realtek RTL8153B chip used to use the cdc_ether
+driver. However, using this driver, with the system suspended the device
+constantly sends pause-frames as soon as the receive buffer fills up.
+This causes issues with other devices, where some Ethernet switches stop
+forwarding packets altogether.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 47be450d2be352698e9dee2e283664cd4db8081b..758933d4ac9e4e55d45940b068f3c416e7e51ee8 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5117,16 +5117,16 @@ static void run_state_machine(struct tcpm_port *port)
->  		 */
->  		if (port->vbus_never_low) {
->  			port->vbus_never_low = false;
-> -			tcpm_set_state(port, SNK_SOFT_RESET,
-> -				       port->timings.sink_wait_cap_time);
-> +			upcoming_state = SNK_SOFT_RESET;
->  		} else {
->  			if (!port->self_powered)
->  				upcoming_state = SNK_WAIT_CAPABILITIES_TIMEOUT;
->  			else
->  				upcoming_state = hard_reset_state(port);
-> -			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
-> -				       port->timings.sink_wait_cap_time);
->  		}
-> +
-> +		tcpm_set_state(port, upcoming_state,
-> +			       port->timings.sink_wait_cap_time);
->  		break;
->  	case SNK_WAIT_CAPABILITIES_TIMEOUT:
->  		/*
-> 
-> ---
-> base-commit: 5c8c229261f14159b54b9a32f12e5fa89d88b905
-> change-id: 20250310-fix-snk-wait-timeout-v6-14-rc6-7b4d9fb9bc99
-> 
-> Best regards,
-> -- 
-> Amit Sunil Dhamne <amitsd@google.com>
-> 
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Leon Schuermann <leon@is.currently.online>
+Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
+Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
+Link: https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-usb-docks/40af0135eu
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+V2 -> V3: Move `net-next` in subject.
+V1 -> V2: Prefix subject with `net-next:`
+V1 -> V2: Add additional Cc:s
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 6 ++++++
+ drivers/net/usb/r8153_ecm.c | 6 ++++++
+ 3 files changed, 19 insertions(+)
 
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index a6469235d904..a032c1ded406 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -783,6 +783,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
+ 
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 468c73974046..96fa3857d8e2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -785,6 +785,7 @@ enum rtl8152_flags {
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
++#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
+ 
+ struct tally_counter {
+ 	__le64	tx_packets;
+@@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+ 		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
++		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
+ 			return 1;
+ 		}
+ 	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
+@@ -10064,6 +10066,8 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
+ 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
++
++	/* Lenovo */
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
+@@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
++	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
++
+ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
+index 20b2df8d74ae..8d860dacdf49 100644
+--- a/drivers/net/usb/r8153_ecm.c
++++ b/drivers/net/usb/r8153_ecm.c
+@@ -135,6 +135,12 @@ static const struct usb_device_id products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&r8153_info,
+ },
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&r8153_info,
++},
+ 
+ 	{ },		/* END */
+ };
 -- 
-heikki
+2.34.1
+
 
