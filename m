@@ -1,111 +1,93 @@
-Return-Path: <linux-usb+bounces-21665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74858A5D3D9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 02:09:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6957A5D409
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 02:32:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEF851796B1
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 01:09:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75F2A1897F64
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 01:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D278635B;
-	Wed, 12 Mar 2025 01:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=one-eyed-alien.net header.i=@one-eyed-alien.net header.b="o6io00gU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BA38634D;
+	Wed, 12 Mar 2025 01:32:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AFE2F24
-	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 01:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF230288BA
+	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 01:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741741757; cv=none; b=TZrybecHe0eZJ70z3fPnDHOGHuq0ogRpQaX+MTnjebD++oy0OOMY4j4XGJxZ6IqDG6tDNFcdAmuNUrEC81NhOrcZB7FPXCQzC4/gg56jHa/DiYbfBlYDNjlhl4S4fbennRAEirxkoT6LskqLR7cBhge4vdr5fHlpGvep5lB9Yrs=
+	t=1741743125; cv=none; b=ZwcABKg9fZennf6b7BsLj+tD8uMgSQXqswmwAwMuj2K0Q25XBU/UNS9LEubgpTyud2E2qV5AzM+V2pOOGdgQoL9XIe+BH6KtJ+mVpYVOvpzBgMDqyhucffMyudofeLDpXXj/QtDyLrf2PHAYKiJjczZKZF7KxLAhQ2QBGZS9pW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741741757; c=relaxed/simple;
-	bh=8v10IauO9+ZYWShfiIg8lWU0cAyNhQMaXPvPDC9VdPM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VTe+juVY40Lv3h0kIJA5y18IUYgg1IBKg7qpO6cIIWECXPPcdiuBWXyj38uye6Tpug1BlxfubbPO08OGOitgm+pLnMupisBBMIyi1IfnfvOZ6aYngFZF89hQoN8GYyjRHmir9gdn9NaHKLps6odx8AqE6urCgJthL7tIkfXFNzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=one-eyed-alien.net; spf=pass smtp.mailfrom=one-eyed-alien.net; dkim=pass (1024-bit key) header.d=one-eyed-alien.net header.i=@one-eyed-alien.net header.b=o6io00gU; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=one-eyed-alien.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=one-eyed-alien.net
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so36719695e9.3
-        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 18:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=one-eyed-alien.net; s=google; t=1741741753; x=1742346553; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MA1s+CFJcoptHGHTr4whY7uZy+Mb8KOq82ve4XvNd6U=;
-        b=o6io00gUxRHmtE7NO/pMvwq/rJ2XppfTXupRns3Fs2A9g5ug/HR5bIXfrKiErix2T3
-         Upnx1WWjESXB1wuQ6YXs3jeqeJzyWL1f7ZPp8zncwxzo0b3r8ysoxskiqOfaiOzHHw7e
-         RNXkS2V4bwurkLqUUE4n0wJYtyknxiB4xWQSs=
+	s=arc-20240116; t=1741743125; c=relaxed/simple;
+	bh=F4l7NZLB0Rm6adwPa4hHZJV6NQ9v9upadFqBynFDWg0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=UKAMAoZgw/1HdGhu0SYlvgggviBrnKEe7Gn7Tv7ms/1Oz78XuGfRgHFjo147xmLwiV2m1zUrP7wYSKxQyBMF2vptuIvbhYceXpDz7iH9SjTeGzOu4IjI2swXuO+o70cur8XcKou15Ev5JbiennQEE4plh/8OPKD5mvTRITaykI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-85b345c7197so329649239f.3
+        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 18:32:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741741753; x=1742346553;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MA1s+CFJcoptHGHTr4whY7uZy+Mb8KOq82ve4XvNd6U=;
-        b=LkGr3aDs4rmw5JRDH0WLZY617m5aVW+qZzsVfb+6eCQQ2gpfeAwXKSOnDuql8Q4Myw
-         I97rXhagLbdLuveOpy1uNyIPvYnVkkHWKA+Ph2UKsw1XPluU0Fjr5Of1+PMzMTa2/29v
-         vUxMCzl0MLtfvWnS8fBuBWZuZEe6AbNywo4K1mRJ57Kk0sdQ13CaUS9tjZ/aZWKDIzJp
-         K7Rfoncek13PhbixevX2rj8UG0bk24moRJlYvS5T9EsaatVlR2UYL2v2umE8IrWKvV9G
-         5nQ8CkczfBvyUGxI44s8bQvLWy+LbUQOUJblKhQWRlsmLlabJ7d7dRrT7rTD7prNg21g
-         W16Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWvLl9Z+2csZRA2pAbcXHx73pOubGuNzVv85XQmVv9KVgP2XPAIfoYWO1jsdpt9yfVrb4I/aVZaYgA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl5ZcryYh73LLU2MxaW+PxCK8uJHwAOEqp/QaUaRAIAcmf57L9
-	ZR2/uOrKnNpNAnd17CIkPseg5w6prKsLrZWrP7NXAM8b5dCVak32M5EyfvfBp1eqdZ9N+6LMHrw
-	d6G0v8UFATXfugT8uq2hcmMPQ9gTf6/kgPrX+ew==
-X-Gm-Gg: ASbGncv69EceeXFAnJJupknOfA0yQnVE7UjkIWlfhoEyPq+GS8j6S0F/XgTMXuqnEpq
-	cAqHETuvhodhpFiG05UhBDd/FGnlcSQ5p66yuGUo1mxOivV8Ix3RbTKj3P4j63bxi+MRnUF+zkC
-	iCUuP/0mhdfYx0nRz2xJQ4rbc=
-X-Google-Smtp-Source: AGHT+IEzF0ireum6/FPbkjs402SHBM0UMUqmkV5EVVKUF1OpBtqyx/4FZi728uAGKSmhUDjUErnfEpjvsDzmXXOOq/s=
-X-Received: by 2002:a05:600c:198e:b0:43c:e478:889 with SMTP id
- 5b1f17b1804b1-43d01b85209mr71117685e9.0.1741741753407; Tue, 11 Mar 2025
- 18:09:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1741743123; x=1742347923;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAb8u3Wz9Zo/YhLhIkXP826nMoU4uGw8wY7NG1Aw4u0=;
+        b=O6NtN4+YEThCZARggtXILnehjoO5AyCDtHLE/IcccHO2FFMfW4X+EqcA9/sw88Hd+/
+         u5kyrdSuvki98aq1Fc7pSqa905fYTHWTKpBJC2QBQz5RP7oPQBYT6dZrnhd70xKx6/bu
+         hyXRpXu7jBAjDB7wvRWaKPBNiJ0aYE2rF7szeRs5Dd9R6qLCgcgBdZwDClLJ/YKAYS+M
+         x+cXwDGjjGLNPJcjVxaKOFTpSEDMssvJt0PR28ocXiyvjfHkvA+jxyxHxkN/F2fJAYj0
+         5Evsq+vmjerEgbe2Hyr1s+c03YxT0BWxJ9J/8RFKVl21531kQ/TJa69EtTxzpfiIOIla
+         BR9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXKYnjrBuOkaWSzKDbbzDJhiPHNNfOdiFiklSa0SSB7FbmhNjjtSQoNvPhsSBx7NH8y2ZIde81y8sI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQZVq/FXzWUlOqDfFhTjr3m0C8IvYyx/tfkpGD2Py5PLRWS6fB
+	fFvhOQwUbqb00Ub5G2OeMxAfECr7LFS6/bkRha3t+PUCDupTjSrJpPc/S41YBtBi2/ucaTIZA4Y
+	nxOg65IACo94f3AJ+ef+/GG7JMi1niSJ3zmnl/rsFiOJtUXJ1eoT55y0=
+X-Google-Smtp-Source: AGHT+IFVesQKcXqzbhSDZRVb3dMC47FpyAhRu+PzTx/pQcJli2sL7nUnmtuGIpcf1Zg9eOmXXDj12iJY4Jv6k1EUegT7+Z6OEBJa
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250311084111.322351-1-daixin_tkzc@163.com> <6a266eb7-0150-43e9-a712-b9e6fe8c71ea@rowland.harvard.edu>
-In-Reply-To: <6a266eb7-0150-43e9-a712-b9e6fe8c71ea@rowland.harvard.edu>
-From: Matthew Dharm <mdharm-usb@one-eyed-alien.net>
-Date: Tue, 11 Mar 2025 18:09:02 -0700
-X-Gm-Features: AQ5f1JrKnODlP4cRLeJ-QLQyz0b3tuL4cGZxHXaD9UPY5m6VAbrBbZF7y7QAN1A
-Message-ID: <CAA6KcBDjRPjrfQpYYHtqc6tnpFoLz9QAESqkaOLK5Hi1HbpQHw@mail.gmail.com>
-Subject: Re: [usb-storage] Re: [PATCH] usb: storage: Fix `us->iobuf` size for
- BOT transmission to prevent memory overflow
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Xin Dai <daixin_tkzc@163.com>, linux-usb@vger.kernel.org, 
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:2142:b0:3cf:c7d3:e4b with SMTP id
+ e9e14a558f8ab-3d441a12ceemr254723385ab.21.1741743122823; Tue, 11 Mar 2025
+ 18:32:02 -0700 (PDT)
+Date: Tue, 11 Mar 2025 18:32:02 -0700
+In-Reply-To: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67d0e412.050a0220.14e108.0020.GAE@google.com>
+Subject: Re: [syzbot] [usb?] [input?] WARNING: ODEBUG bug in devres_release_group
+From: syzbot <syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, gregkh@linuxfoundation.org, jikos@kernel.org, 
+	jkosina@suse.com, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, lizhi.xu@windriver.com, rafael@kernel.org, 
+	stuart.a.hayhurst@gmail.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 11, 2025 at 7:12=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Mar 11, 2025 at 04:41:11PM +0800, Xin Dai wrote:
-> > When the DWC2 controller detects a packet Babble Error, where a device
-> > transmits more data over USB than the host controller anticipates for a
-> > transaction. It follows this process:
-> >
-> There is no risk of memory overflow.  The length of the transfer for the
-> CSW is limited to US_BULK_CS_WRAP_LEN, which is 13.  And the length of a
-> CBW transfer is limited to US_BULK_CB_WRAP_LEN, which is 31 (or to 32
-> if the US_FL_BULK32 quirk flag is set).  Therefore a 64-byte buffer is
-> more than enough.
+syzbot suspects this issue was fixed by commit:
 
-There is no risk of memory overflow *unless* the DWC controller
-doesn't respect the buffer length as given in the URB.  If there is an
-overflow issue here, it is an issue with the controller level.
-Matt
+commit 48e487b002891eb0aeaec704c9bed51f028deff1
+Author: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Date:   Tue Jan 21 20:00:07 2025 +0000
 
+    HID: corsair-void: Add missing delayed work cancel for headset status
 
---=20
-Matthew Dharm
-Former Maintainer, USB Mass Storage driver for Linux
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16abd478580000
+start commit:   c4b9570cfb63 Merge tag 'audit-pr-20250121' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d46425e33fe266e
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf5f2dd02bbd4d2d411c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1233c9f8580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147eb618580000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: HID: corsair-void: Add missing delayed work cancel for headset status
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
