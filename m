@@ -1,184 +1,231 @@
-Return-Path: <linux-usb+bounces-21690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCEEAA5E381
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 19:13:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 301D2A5E3C1
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 19:39:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DFBE17C157
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 18:13:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADEFC3BC31A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 18:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E454256C9D;
-	Wed, 12 Mar 2025 18:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A86257450;
+	Wed, 12 Mar 2025 18:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I6Nj6BFF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DRt50Gpe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD9D24FC1F
-	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 18:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B7F1E2823
+	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 18:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741803221; cv=none; b=dpUAMU7tD2zZ66h2IZeB5zsRGWKJPWSjeui0uVa7II51nXoYbaxjEBjAnqg5v86L8aKE+7E46al1AN9KMHmO679S7S4LeGPOkTRcTrgMZt+4x/1lCA6lEB9HDv4e7cFYo2DeG3zppYGPgU1VqWDA2Y/sJBXiULgEKAMxeR14+3Y=
+	t=1741804741; cv=none; b=S+Rwt2CbrQqPGemcJN3f1bv2aETGpTOuFFCN0/EqMdRd+mE6HRy/jo+CRALRFaGqDe2Q1LvyDlIL+VfgyhtuQCQsl2HBbszrGrIp0E/E0+AFSARyQWSYy6kwGorkmFkTnqQ5MvzBIMcJnNj9OYzbj0JXkVK5fiiLpEDW3hOokHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741803221; c=relaxed/simple;
-	bh=5qrxehBTll3ZX+Zc/KbkPT2WaVQb0+jKC6M+Iut0Gk4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jgSPyXvoyBZsw2zt6U+0psdy64blZaOVmoiwPAWT618Ub930XZsrRUWuGn1maPph7BDR1iHZL6XNJanJ1C7mHdfstHGw4KX6HmyoU5VZ/09Pqgy0v172L/5q7V9FIxiJK60HHR7Ah4P+Wxakb0K0EjaYF977of4ZAHVtfEJ/Jmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I6Nj6BFF; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741803220; x=1773339220;
-  h=date:from:to:cc:subject:message-id;
-  bh=5qrxehBTll3ZX+Zc/KbkPT2WaVQb0+jKC6M+Iut0Gk4=;
-  b=I6Nj6BFFKj+VCW/zll48WA168hprZa+a1MdvBGGRvDew6qwZ0mG1WaCO
-   Aqrc6IEvqEU+N5aixMnBkKML7HsMh0eood8lIMwSMCeqyNcwkp+G/PWyQ
-   feTaYhFtF0fAdwfbbpapgsuOXD2iJ92z7gUrQoJa+qWe7Bs4UfxgvX0sj
-   1PQAxQ4ME0g4Oxvs+MijRMznmEWynTZKJtRoo2ALhgHjTYGrGGFdEPLsg
-   sOziyTW1+XsZyAEAMMWq3JJX2c4s15w/vZbq4WfLKXd4jQcPI5dmgUBrk
-   Dr3sSEXpdUP7HJjRUmcfG0INGtLpEIr840+UMz65OJdBrf3g0S6K8Cb3T
-   w==;
-X-CSE-ConnectionGUID: quxlmaSdSnajRm9jubl4Zg==
-X-CSE-MsgGUID: 6ldMQo0fRIiyK8bkyZPwAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42808227"
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="42808227"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 11:13:38 -0700
-X-CSE-ConnectionGUID: hV7Lu7yxSWGYqc4hDYQ+9A==
-X-CSE-MsgGUID: yxsiaBL6RvaKJ6gE12sG3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="121211499"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Mar 2025 11:13:37 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsQaE-0008nI-0K;
-	Wed, 12 Mar 2025 18:13:34 +0000
-Date: Thu, 13 Mar 2025 02:13:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 28a76fcc4c85dd39633fb96edb643c91820133e3
-Message-ID: <202503130226.xDTL2aeW-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1741804741; c=relaxed/simple;
+	bh=CLMgVqyOT0i+H9rQsHK05ZXsd9MqAU6KXohodkkMyY4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KU9WxjWLU9G3GjFV8wZp3KmzbKrPHmnUD9toOyhDIJvL0l2cFCWYCrbpSdQvgoJ0LM+NyFAvnsNygrsquk0q2OVoArikO3+xQ7JLVlODB+4rbhVD+r1uV+G5k37n3DuN881yHjhn8oZ0EmKFLshUsOSKGZrikiyWbtyOisI60Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DRt50Gpe; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6dd01781b56so2649726d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 11:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741804738; x=1742409538; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y9eDTRmveeftlzdwnQM78EcvmMZWZ3IJwIxihtK2Uy4=;
+        b=DRt50GpeAcdmM8VS74pt1ccf+un1HeM/WInifA9ICjUX5Pz4ITDMcpiL5jlhCid3/T
+         iyp/ypWtbhPxZ9IBfchENl2aoK757X6/XHb3412Excls0wKI8Ff5gYG4d5wirkN1Cf/N
+         /C8yKfQ69/9ohRfNqBl0oi4cit7LcDZHHmBdu6ynZdrcExs/2rWezKywp62fPXsci7QW
+         SZufVSPavvtIrO+75N8ORcaPh8lfan6a+wum30L3e7C74cQJMIFrM3M+V77LfrSgsbyD
+         LFRE5VdvgN9N5Ymb9RwshiRciI4pzpjWkvcQEQBRfZqQmeGRNU2rUDZRPbIV+ueNp+G/
+         KF5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741804738; x=1742409538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y9eDTRmveeftlzdwnQM78EcvmMZWZ3IJwIxihtK2Uy4=;
+        b=qqYWleu9URu45fpzr2h3HtLlB6GM4Cxrp6e0SUliM+m666hEdOH00BTA0xZJqOOolJ
+         NjsTBxaMGCczWndqOrNeIRLVEBrxsojdPyHlU0wByr//IedUnS6hb/hQIzPC648QhAE+
+         xcMvRg2aVFO1nvEqsD3mJPdcFT+vevcvQuBRZz3LW55h2IxKER3/N5+x/zY1vwDvZK3D
+         2jzv57/05ZZ665BhQBwhcE34WRyurhzBDCXGnkmErHDRI4mYbgMQXBBNzFmzlskvZhjY
+         BaLpy2/l+wPqO+JJqvldvvIQmXUfcvR7S9SYjRixwaHEpOrKXYQbKQZioDkuHNeaWhiA
+         Vy8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUPc7+vIE4HsutHuwzQ4eFWxiwHJjJyu3Sy9DI8npZG65FKJixKZI9YlamUbuYFGbUSWHyGVdQJqRs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7pcJPsXVXIl5oTGTisDHT/mNIBJGQq33ASHLbjVDDZbsY4D/E
+	gjNx9kRNi47QevGFXOFP97dRKg2HeygVYWPLKVaJwzNEGdFJSUFAYf0j6LyOGYWhzt8LcdLDa41
+	CxJzfK0PwWZ078MJtBKLpZJSEh/1AWVflMZDGYuu4ub2gJUwsIg==
+X-Gm-Gg: ASbGncvK5ldy4FSbqawYdBaxKDTfjYYe7MbiPCRzroEJ/PyYNqdvvP72vBG/1Q0jANy
+	2dqo8ivJXJsI6WNDkN4eyF/UZlEhvZjfa1pgYha7kTNLoQibhiEeQFdlu6HsHxwyCnld/B68iYF
+	0wkwwLBnca0kTPtQ7iuheEyDawJdl0ijpEne7WnUJ/9iw0MH4b1zHAuYZkr22aatfUQA==
+X-Google-Smtp-Source: AGHT+IEZW+IQU8C8ccEmFiiK4dy4yOLgd2WhpSx8zYGYEihrinEdZP2gSQUG2r7ZGKNmwPk346O5Z8kAh95oCdlgXMM=
+X-Received: by 2002:ad4:5aa2:0:b0:6e4:42c2:dd91 with SMTP id
+ 6a1803df08f44-6e900691fb0mr399690546d6.37.1741804737883; Wed, 12 Mar 2025
+ 11:38:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250304000458.1826450-1-royluo@google.com> <20250308010409.n55ivdubj7ylkr7j@synopsys.com>
+ <CA+zupgzB2aKRn_KDcqSLctqmvnEW1923XQPDwDzfDVZxU70ORg@mail.gmail.com>
+ <CA+zupgzw0Fr-PHzj0PPRQGuvxB+py0EMseiToq5iPKe=iRNtgg@mail.gmail.com> <20250311234436.dtpkfvnwuwqhw5jr@synopsys.com>
+In-Reply-To: <20250311234436.dtpkfvnwuwqhw5jr@synopsys.com>
+From: Roy Luo <royluo@google.com>
+Date: Wed, 12 Mar 2025 11:38:21 -0700
+X-Gm-Features: AQ5f1JprQvoM-iGZfRi7eO-R4Gm04cmK1rf5VvBgfMgAVbIUHRKik85GGyuGp4U
+Message-ID: <CA+zupgwV3f9gkyFtZLK7H5Li5WW_HuDd5zwKSo4fh6h8xqW6EQ@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: dwc3: core: Avoid redundant system suspend/resume callbacks
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 28a76fcc4c85dd39633fb96edb643c91820133e3  usb: xhci: Avoid Stop Endpoint retry loop if the endpoint seems Running
+On Tue, Mar 11, 2025 at 4:44=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> On Tue, Mar 11, 2025, Roy Luo wrote:
+> > On Fri, Mar 7, 2025 at 5:04=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synop=
+sys.com> wrote:
+> >
+> > > I'm also a bit concernt about moving pinctrl_pm_select* to the
+> > > suspend/resume_common function. Is your device using pinctrl? If not,
+> > > how did you validate this?
+> > >
+> > > Thanks,
+> > > Thinh
+> > >
+> >
+> > I couldn't find any device node that's actually utilizing the pinctrl "=
+sleep"
+> > state in upstream. I digged into the patch that introduced pinctrl to d=
+wc3, i.e.
+> > https://urldefense.com/v3/__https://lore.kernel.org/all/9dd70870cfee401=
+54a37186d4cf3ae0e9a452cbd.1441029572.git.nsekhar@ti.com/__;!!A4F2R9G_pg!chK=
+bE4OVWBGIEQnHmj7n-VFIKaiyjgdJSmP7lqMx1N4pT1gpIz_qYMiI_vSwCRa6IzMHJ41eq9wkN3=
+N8HE4$
+> > The intention was to control DRVVBUS pins using the pinctrl API so
+> > that VBUS can be turned off to conserve power when device is suspended
+> > (which also implies this is only relevant in host mode, at least in the=
+ initial
+> > patch). Since there was no runtime PM support in dwc3 at that time, the
+> > code was only added in the system suspend/resume path. Yet I don't see
+> > why this cannot be extended to the runtime suspend/resume path,
+> > ultimately it should be safe to turn off VBUS once the controller is
+> > completely torn down with dwc3_core_exit() regardless of which suspend
+> > path it's taking.
+>
+> If this pin drives the VBUS, changing this will also change how often we
+> turning on/off VBUS. Unfortunately, I don't know enough about these
+> platforms to know whether this change may impact its timing and
+> stability.
+>
+> >
+> > Besides looking at how pinctrl in dwc3 is intended to be used, I did
+> > an inventory on how it actually is used. There are 3 major players:
+> > ti, qcom and socionext that has pinctrl property set in their dwc3 devi=
+ce node.
+> > 1. ti/omap
+> > The pinctrl property is only set when dr_mode is host or otg.
+> > Only the "default" state is defined, none of boards has "sleep" state
+> > defined, not even the first user
+> > arch/arm/boot/dts/omap/am437x-gp-evm.dts
+> > that introduced the API to dwc3.
+> > (https://urldefense.com/v3/__https://lore.kernel.org/all/4a8a072030c2a8=
+2867c6548627739146681b35a5.1441029572.git.nsekhar@ti.com/__;!!A4F2R9G_pg!ch=
+KbE4OVWBGIEQnHmj7n-VFIKaiyjgdJSmP7lqMx1N4pT1gpIz_qYMiI_vSwCRa6IzMHJ41eq9wkf=
+d77zMg$ )
+>
+> Hm... this link to the patch above seems never made it upstream.
+>
+> > Setting pinctrl "default" state seems to be pretty common in ti/omap,
+> > and the usage is aligned with the original intention: control DRVVBUS.
+> > It's unclear why "sleep" state is no longer used though.
+> >
+> > 2. qcom
+> > The following 2 boards have pinctrl property defined, dr_mode are all
+> > host and also only the "default" state is defined.
+> > - sa8155p-adp.dts  &usb_1_dwc3 {
+> >                                dr_mode =3D "host";
+> >                                pinctrl-names =3D "default";
+> >                                pinctrl-0 =3D <&usb2phy_ac_en1_default>;
+> >                                };
+> >                                &usb_2_dwc3 {
+> >                                dr_mode =3D "host";
+> >                                pinctrl-names =3D "default";
+> >                                pinctrl-0 =3D <&usb2phy_ac_en2_default>;
+> >                                };
+> > - sm8350-hdk.dts  &usb_2_dwc3 {
+> >                               dr_mode =3D "host";
+> >                               pinctrl-names =3D "default";
+> >                               pinctrl-0 =3D <&usb_hub_enabled_state>;
+> >                               };
+> > It seems the pinctrl is used to control phy and perhaps downstream usb =
+hub.
+> > Nothing is turned off explicitly during sleep as "sleep" state isn't de=
+fined.
+> > It's more like setting the required pins for host mode to work.
+> >
+> > 3. socionext
+> > The pinctrl property is set on controllers with dr_mode peripheral or h=
+ost.
+> > Still, only the "default" state is defined.
+> > The pin is assigned according to its dr_mode, controllers with dr_mode
+> > host will be assigned with pinctrl_usb* pin, while controllers with dr_=
+mode
+> > peripheral will get pinctrl_usb*_device pin.
+> >         pinctrl_usb0: usb0 {
+> >                 groups =3D "usb0";
+> >                 function =3D "usb0";
+> >         };
+> >         pinctrl_usb0_device: usb0-device {
+> >                 groups =3D "usb0_device";
+> >                 function =3D "usb0";
+> >         };
+> > Again, these pins are not related to power management, it's tied to dr_=
+mode.
+> >
+> > To summarize the current pinctrl usage in dwc3:
+> > 1. No user of "sleep" state, meaning it's unlikely to cause any impact
+> > on suspend flow.
+> > 2. Typically, the default pin state reflects the controller's dr_mode,
+> > acting as a pre-configuration step to set the operational mode.
+>
+> Thanks for the investigation.
+>
+> >
+> > Based on the above observation, the code change on the pinctrl is
+> > unlikely to introduce a regression as it aligns with the original inten=
+tion
+> > of the pinctrl property, and the pinctrl_pm_select_sleep_state() is
+> > essentially an NOP in upstream as of now. Besides,
+> > pinctrl_pm_select_default_state() is called whenever we try to
+> > re-initialize the controller.
+> > I hope this addresses your concern.
+> >
+>
+> This still doesn't sit easy for me. I would prefer a change to the
+> pinctrl logic be a separate commit.
+>
+> For the particular intention of your patch, can you just do a check if
+> dev->pins exists and leave that alone. Create a separate patch should
+> you think pinctrl logic be set somewhere else.
+>
+> Thanks,
+> Thinh
 
-elapsed time: 1458m
+SGTM, will do it in v2.
+Thanks a lot for the suggestion!
 
-configs tested: 91
-configs skipped: 1
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250312    gcc-13.2.0
-arc                   randconfig-002-20250312    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250312    clang-19
-arm                   randconfig-002-20250312    clang-21
-arm                   randconfig-003-20250312    clang-19
-arm                   randconfig-004-20250312    clang-21
-arm64                            allmodconfig    clang-18
-arm64                 randconfig-001-20250312    clang-21
-arm64                 randconfig-002-20250312    gcc-14.2.0
-arm64                 randconfig-003-20250312    gcc-14.2.0
-arm64                 randconfig-004-20250312    gcc-14.2.0
-csky                  randconfig-001-20250312    gcc-14.2.0
-csky                  randconfig-002-20250312    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250312    clang-21
-hexagon               randconfig-002-20250312    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250312    clang-19
-i386        buildonly-randconfig-002-20250312    clang-19
-i386        buildonly-randconfig-003-20250312    gcc-12
-i386        buildonly-randconfig-004-20250312    gcc-12
-i386        buildonly-randconfig-005-20250312    gcc-12
-i386        buildonly-randconfig-006-20250312    clang-19
-i386                                defconfig    clang-19
-loongarch             randconfig-001-20250312    gcc-14.2.0
-loongarch             randconfig-002-20250312    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250312    gcc-14.2.0
-nios2                 randconfig-002-20250312    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250312    gcc-14.2.0
-parisc                randconfig-002-20250312    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250312    clang-21
-powerpc               randconfig-002-20250312    clang-21
-powerpc               randconfig-003-20250312    clang-21
-powerpc64             randconfig-001-20250312    clang-17
-powerpc64             randconfig-002-20250312    clang-15
-powerpc64             randconfig-003-20250312    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250312    clang-21
-riscv                 randconfig-002-20250312    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250312    clang-15
-s390                  randconfig-002-20250312    clang-16
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250312    gcc-14.2.0
-sh                    randconfig-002-20250312    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250312    gcc-14.2.0
-sparc                 randconfig-002-20250312    gcc-14.2.0
-sparc64               randconfig-001-20250312    gcc-14.2.0
-sparc64               randconfig-002-20250312    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250312    gcc-12
-um                    randconfig-002-20250312    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250312    clang-19
-x86_64      buildonly-randconfig-002-20250312    clang-19
-x86_64      buildonly-randconfig-003-20250312    gcc-12
-x86_64      buildonly-randconfig-004-20250312    clang-19
-x86_64      buildonly-randconfig-005-20250312    clang-19
-x86_64      buildonly-randconfig-006-20250312    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250312    gcc-14.2.0
-xtensa                randconfig-002-20250312    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Roy
 
