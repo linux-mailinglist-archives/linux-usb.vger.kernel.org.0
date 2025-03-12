@@ -1,65 +1,80 @@
-Return-Path: <linux-usb+bounces-21686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAC45A5DE1F
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 14:36:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5491EA5DFE3
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 16:12:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 560F53A76FC
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 13:36:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F01201894090
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 15:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B2324501B;
-	Wed, 12 Mar 2025 13:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FD22505DF;
+	Wed, 12 Mar 2025 15:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YK0TSDnk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DpSuZWv9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14115474C
-	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 13:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDB924EF95
+	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 15:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741786572; cv=none; b=j3d09sJKuSvu/pgPlGUfa28H6lFMjy8xy/tjX3P5bRbuuIxfxpB1GEfk2KrdBCKdeZL0vS5G1QuD57UiIWejj9TBIC0fVX8Cj6NwxcuNIMMEuem3IVg1N9J6I5T0FFMXjNdwu6SQeS21YmDueR8PdYgoya/YYc8VwDHDnSC110E=
+	t=1741792342; cv=none; b=o8sr3F0MrEh/ov8KD9r0E8w2nU+fLUR1qWfId3z7mdHMl0Ag1HsaOtysi6VQKUR5cGqwXEO4pSpccXrGpk2hxoEeG77zDVP1F+N5P0XPGMV7zydzpffbhqvQ26ZgpnURTugPMLL6dbj0x6XD7J+xhwan2Kd9j+ikQOskubAiVhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741786572; c=relaxed/simple;
-	bh=mjfUI6p6kO2zcH3+vVJi/h0XoLidlcIyXbY+VbT6u54=;
+	s=arc-20240116; t=1741792342; c=relaxed/simple;
+	bh=Fwnafj2/JsX+dgniOXtloZvo05Wbw+uLmathEsHRqvE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QQQHpPprXkG9PkXJ4IBlCDsDo4lgw1nmgjQq+ki74/5ll51U52+XHIhCMd4qr5DHCHicm99cCC6gimISKdoBnrkjAJ3B4n3Bn9uENyVtCyB5envKfgeHZ0KCk082zULEXwH8SSXxqdMWMh+Tuq0+X0o9p/V1fW/rk1xGowIReMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YK0TSDnk; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741786571; x=1773322571;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mjfUI6p6kO2zcH3+vVJi/h0XoLidlcIyXbY+VbT6u54=;
-  b=YK0TSDnk0+27R+GfzrzIcw6Wi9Fkok0//STCEXkCYwlzLJWhKDitHf2B
-   ksIir7wUcsSUaHBM5sffSqxFvhD0yqijzncv3wr/nVyriDPdXH0LLEq69
-   ygvyfiUoU8R5jDZyLEMq6x8E7iTvkPAFnL1pQSl32Vw7OqaWS21ZfBmOx
-   RFCLK2YG+ASj/dKOA8QdcgZdINvAuW6SvIhEVnmzWppCzoBzhuZ/Gxwbe
-   0dm17IobY1Dn8rcWMttpgL/r/Cc3HHJkMVFta0m6vYUQ35W3Mv0gDG7Im
-   TpzJjyQJABuMXJvHJtlga4vrUj5pXzDWEqleCpqPrbwH9VwUCoKD08/O6
-   A==;
-X-CSE-ConnectionGUID: F2835ESiSXa5mflEnsVVqQ==
-X-CSE-MsgGUID: 2x9LL4x8SNCt3wwiqxMNig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="65324824"
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="65324824"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 06:36:09 -0700
-X-CSE-ConnectionGUID: mln/H5kkRDuTMhEeM7ZXhw==
-X-CSE-MsgGUID: 53I/+QYVQdWuezY9vSnDYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="120340098"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa009.jf.intel.com with ESMTP; 12 Mar 2025 06:36:07 -0700
-Message-ID: <c6866ac0-9a08-4b21-b620-5dcc9ae70611@linux.intel.com>
-Date: Wed, 12 Mar 2025 15:37:12 +0200
+	 In-Reply-To:Content-Type; b=GmMcJoSasnvmJuUXGHCFrNV8TMHfv9X8b6tINS44LNggIxeBZI/6nCAhjxFdpY9mZd4974m+nlWw+GR2rGNPmxepHwegqhwdtzUNH5OPU+SyBC+XhqdgT5raSP2W/rtl5mnqRU6Bcqw2BDRC4z/om6FgtUK3anPME4CicpSs7ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DpSuZWv9; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac24ec112fcso107064466b.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 08:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741792339; x=1742397139; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ai224AG0UWnAUrmxyCW54tQ4sjFdyvGoEQaTEjPSL6c=;
+        b=DpSuZWv9YzXCJIcGZbpJDIbQj2rsFVNwFIOrIOVgsI3sWHDPO56WSWEjz+Gqi3Nufw
+         ENzQkCShyJERhffnlmBu5WfYopKJIp0BS/apanL11TbMwDvh4UD8i51HqZYRykom8LXB
+         mvy/0LRBIxe1N+cQusjPeQCvBvplJxDkDHVyf1xJF+TJ8sA7iUPlGHTovYnLj9JaqIZp
+         4/zsh31nEMGCvmH3fRoZ43hYxDdISecfqJ5gUKu0PqIQlIcBqXH0zSq8UcWEHzPUjjwj
+         yp0XY5XSn+qXpWpTgX20pSEm3HjJIkUoe6yrlqg/CpE3AsXdlfhisneWY8QXVDdeQtd/
+         1+xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741792339; x=1742397139;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ai224AG0UWnAUrmxyCW54tQ4sjFdyvGoEQaTEjPSL6c=;
+        b=AsPnLvGE6Kinq87Ma04wkayPRcJrbfl1fwRzger6kpZzdjwZ61Jbj5B9+ejaQgDql+
+         jUD0kX5KNZC9B+LOsKG4YLn8u0vJQYsLvH6fkSTSFiZUp5qnKhrOu8VGBnDlnppJBx6s
+         gowdd08v6P+rpyfAqz0WpCnFdbiTN2ajdDcgpV8exf7qmEr+78mqPMNUtGvXgId6Ukcu
+         /BGWN6HD0Gyle0AYFM/EEQIQpsBqszRnqh77EdnHgVaQCED7VkGMRVQdevBp+8gxobE2
+         LPy3Pw0JQsrvOcKzXpJBA4JWgbmH4G1uoIo6Jwt0bK7kGHUwuiQKvDNYk7pi2wsJrUhj
+         kQbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVHdIm66520ab/BDqRDUIgQs0eTgZdOmn8Ydr8y+MODRcb+/9du351gl3UjxyEFDnHka+FmnvmZaks=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxcx8C6W4AJTfDrxkJUXta6b16rqPheterlqI6xs6yio6d+ZU2Q
+	S3t47bMEq5TD+KiOIXA/svr1FolSNo8+JMVgDko9vzRvKuRl7rqcbxMPXw+9JKs=
+X-Gm-Gg: ASbGncsMPyvoUQhnDD9hcfjsndt/lozii+vhHVUUsyhBy0xmpy7JfBxxxW7sywE/Y01
+	U1kBnMI6616BqvP09E5tJAwBGEHZxSz6mhlswi4cJHqpr43AxE1gjs3TPRSx+rWzV9XPO0k3skw
+	7n4Qa15LkSUWjIz0vMvXyKCjkP90NI9RcsXFXfsg0P9ALBN6vV2m6+s9ZAkGnnIKxE2th6qVo0b
+	8cQoTkQHmBjoz1Tc/1yzu2SEO19yYGAo6Rv9zscLaQwncs+jerWVXlnEbsN6jSVJNxjAx8TfXsM
+	Dn1aRMzeDtjUAXH4bZGIU3jNgzsc2a3HgwBWR+AbMilt5kBB0IVNRgpgnW3hU0s=
+X-Google-Smtp-Source: AGHT+IF54dA0AaE+1TsfB95PBH+EtOz2rUbp5Hoeon5QLKSTuYGIM+dQ6kw1krKJv5MNokJbEGeDZA==
+X-Received: by 2002:a17:907:3e8f:b0:abf:7a26:c489 with SMTP id a640c23a62f3a-ac2b9ea164cmr315941266b.9.1741792338638;
+        Wed, 12 Mar 2025 08:12:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2ab8298b0sm420361066b.89.2025.03.12.08.12.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Mar 2025 08:12:17 -0700 (PDT)
+Message-ID: <a7d76aff-0dc2-4b0e-9ee8-f433d8e745f6@linaro.org>
+Date: Wed, 12 Mar 2025 16:12:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,92 +82,97 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: My transfer ring grew to 740 segments
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <20250311234139.0e73e138@foxbook>
+Subject: Re: [PATCH 03/11] dt-bindings: power: qcom,kpss-acc-v2: Add MSM8916
+ compatible
+To: Konrad Dybcio <konradybcio@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Rob Clark <robdclark@gmail.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Robert Foss <rfoss@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Wesley Cheng <quic_wcheng@quicinc.com>,
+ Christian Marangi <ansuelsmth@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Rohit Agarwal <quic_rohiagar@quicinc.com>,
+ Kyle Deng <quic_chunkaid@quicinc.com>, Vinod Koul <vkoul@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-usb@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
+ <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250311234139.0e73e138@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 12.3.2025 0.41, Michał Pecio wrote:
-> Hi,
+On 06/03/2025 19:11, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> This happened under a simple test meant to check if AMD "Promontory"
-> chipset (from ASMedia) has the delayed restart bug (it does, rarely).
+> MSM8916 seems to reuse the same hardware as MSM8974 and friends (for
+> whom this binding document was created). Add a new compatible for it.
 > 
-> Two pl2303 serial dongles were connected to a hub, loops were opening
-> and closing /dev/ttyUSBn to enqueue/dequeue some IN URBs which would
-> never complete with any data (nothing was fed to UART RX).
-> 
-> The test was running unattended for a few hours and it seems that at
-> some point the hub stopped working and transfers to downstream devices
-> were all returning Transaction Error. dmesg was full of this:
-> 
-> [102711.994235] xhci_hcd 0000:02:00.0: Event dma 0x00000000ffef4a50 for ep 6 status 4 not part of TD at 00000000eb22b790 - 00000000eb22b790
-> [102711.994243] xhci_hcd 0000:02:00.0: Ring seg 0 dma 0x00000000ffef4000
-> [102711.994246] xhci_hcd 0000:02:00.0: Ring seg 1 dma 0x00000000ffeee000
-> [102711.994249] xhci_hcd 0000:02:00.0: Ring seg 2 dma 0x00000000ffc4e000
-> 
-> [ ... 735 lines omitted for brevity ... ]
-> 
-> [102711.995935] xhci_hcd 0000:02:00.0: Ring seg 738 dma 0x00000000eb2e2000
-> [102711.995937] xhci_hcd 0000:02:00.0: Ring seg 739 dma 0x00000000eb22b000
-> 
-> Looking through debugfs, ffef4a50 is indeed a normal TD, apparently no
-> longer on td_list for some reason and hence the errors. The rest of the
-> ring is No-Ops.
-> 
-> Class driver enqueues its URBs, rings the doorbell and triggers this
-> error message. The endpoint halts, but that is ignored. Serial device
-> is closed, URBs are unlinked, Stop EP sees Halted, resests. No Set Deq
-> because HW Dequeue doesn't match any known TD. Rinse, repeat.
-
-Ok, so this means endpoint does get reset, and once restarted it
-tries to transfer the same TRB, which again fails with Transaction error.
-
-> 
-> At some point end of the segment is reached, new segment is allocated
-> because ep_ring->dequeue is still in the first segment.
-> 
-> 
-> Sow how does the driver enter this screwed up state? Apparently due to
-> a HW bug. More detailed debug log from a different run:
-> 
-> [39607.305224] xhci_hcd 0000:02:00.0: 2/6 (040/3) ring_ep_doorbell stream 0
-> [39607.305235] xhci_hcd 0000:02:00.0: 2/6 (040/3) ring_ep_doorbell stream 0
-> [39607.305413] xhci_hcd 0000:02:00.0: 2/6 (040/1) handle_tx_event comp_code 4 trb_dma 0x00000000ffa80050
-> 
-> The 1 in (040/1) is EP Ctx state, i.e. Running, despite Trans. Error.
-> It looks like finish_td() sees it, ignores the error and gives back
-> normally. EP Ctx is still wrong later when the next URB is unlinked:
-> 
-> [39607.398526] xhci_hcd 0000:02:00.0: 2/6 (040/1) xhci_urb_dequeue cancel TD at 0x00000000ffa80060 stream 0
-> [39607.398531] xhci_hcd 0000:02:00.0: 2/6 (044/1) queue_stop_endpoint suspend 0
-> 
-> But Stop EP fails and updates it properly to 2=Halted:
-> 
-> [39607.398655] xhci_hcd 0000:02:00.0: 2/6 (044/2) handle_cmd_completion cmd_type 15 comp_code 19
-> 
-> Then the EP is reset without Set Deq or clearing and ffa80050 becomes
-> "stuck and forgotten", initiating the above problem.
-> 
-> 
-> The fact that EP Ctx state is Running for >90ms suggests that it's
-> a bug. But a race could have similar effect, and I can't find any
-> guarantee in the spec that EP Ctx is updated before posting an error
-> transfer event. 4.8.3 guarantees that it becomes Running before normal
-> transfer events are posted, but suggests not to trust EP Ctx too much.
-> 
-> Maybe finish_td() should be more cautious?
-
-Good point, finish_td() should probably trust ep_state flags set by driver
-first.
-
-Thanks
-Mathias
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml | 4 +
 
 
+Folks, please merge Ryan work instead... I keep carrying this patch for
+half a year:
+
+https://lore.kernel.org/all/20240710155226.130086-1-rayyan.ansari@linaro.org/
+
+Best regards,
+Krzysztof
 
