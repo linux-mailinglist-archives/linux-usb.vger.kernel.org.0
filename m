@@ -1,180 +1,145 @@
-Return-Path: <linux-usb+bounces-21667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21668-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2435EA5D49F
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 04:06:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82641A5D4BD
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 04:30:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C1977AB061
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 03:05:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4E187AA5D5
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Mar 2025 03:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBFA198E8C;
-	Wed, 12 Mar 2025 03:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FC11B87EE;
+	Wed, 12 Mar 2025 03:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUn/17+6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SCdnctzN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630A379EA;
-	Wed, 12 Mar 2025 03:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13161B2186
+	for <linux-usb@vger.kernel.org>; Wed, 12 Mar 2025 03:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741748806; cv=none; b=qB2ahs52Kdl6DpmfvdlZQDgzEVaP8m5abI0xCSpVdvYKErHABcTN+Wl2GzNy/9oqh3IjDBm75XrOL1mserVeXj06aFBfSuNVAVP+RcNTzeivzyA225JMPn0NspcBM0o4Hy4mWPbrtZtLwmfaSCF2MPdPX9XN29ZClJQE5rjFomA=
+	t=1741750205; cv=none; b=AVhUP+eZkb+U+r/e8i5f8De1brbmQH1vrz+wbqXsnuGzJuPq9EtHetLMoR3TbG5lfho3Yn8UB+DnQ53OginXh9QHDkTjxnjMcBjr+FeiVWPbX8vsKD+2e32fx9k0rJ18YZLFOFQou8wx6Hw8pwHJ9O2xKUd6rlghhR33k/AzRa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741748806; c=relaxed/simple;
-	bh=cE3Lg4wiMp/bYX9sJx/WM2EsltMUHJc2wAE1pJn/KRY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kch3KhSzNQ506xdnIgPgctQlQS33yU0N2GnJTdY3SXbjQyZqZvOK+8MbEC1GNZtY7+F4E3oUtnMjGu1Q5pCBGqhFVeoLFR4PoNnuytjOlGz1a6KZg4nlCSpdD83CcI9oXEZ0BrrIP3oxpyKZGHgj2xgSgX8Nz2ogwLkWGc1bAXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUn/17+6; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741748804; x=1773284804;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cE3Lg4wiMp/bYX9sJx/WM2EsltMUHJc2wAE1pJn/KRY=;
-  b=NUn/17+6jHTyjXQgc0kkPLYsEDwP4urqUHz4DmZwhoEapPfmSc9+3Om7
-   V6J17tCHcEcFmghUnvXzPqejOyKRk3DTSyEv5zAcGS3XlOsLTXwrKCDqh
-   IutvWgtIJ/jy/T+pGk/Nqew/6UMAP41BDfzN4PqOFN8w+ZJ6iYpZKmuSj
-   pT2DrNjag6G/mWEAbaRpktwoOwsBHARa2X1j4nk++kkcx0BKPZluW2qhx
-   1mkObfscqnGfErBW6ztrYMzX95lln5EI1J0ngtb7TaipIuv8RWgkS+boy
-   N/Pv5Ddgx6FcO4TRfK6EzWsygouxjB1zlCscZRJVWC+LEnJHNnNXgJw1x
-   A==;
-X-CSE-ConnectionGUID: 1w8Ghp/9RR2rIirHzR55vw==
-X-CSE-MsgGUID: BWhQVu5ATj2+PBXHa3Xw9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="43018874"
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="43018874"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 20:06:43 -0700
-X-CSE-ConnectionGUID: Y8TqGRjXSoOQZr7as5sCcA==
-X-CSE-MsgGUID: ipu5uyMxSwKzcjv+OK3lCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="120528479"
-Received: from apgcp0h572501.png.altera.com ([10.244.73.227])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Mar 2025 20:06:42 -0700
-From: Boon Khai Ng <boon.khai.ng@intel.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb <linux-usb@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Cc: Boon Khai Ng <boon.khai.ng@altera.com>,
-	Tien Sung Ang <tien.sung.ang@altera.com>,
-	Boon Khai Ng <boon.khai.ng@intel.com>
-Subject: [PATCH v3] USB: serial: ftdi_sio: add support for Altera USB Blaster 3
-Date: Wed, 12 Mar 2025 11:05:44 +0800
-Message-Id: <20250312030544.4967-1-boon.khai.ng@intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1741750205; c=relaxed/simple;
+	bh=8lKtlD878CpQP9xdYqFaFtx3UJlB12BxxXmMp7FSGqs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZYclgDj+cewShO4L9tGWcSNvQT4hPBm0xn9Rq1M3bDH8aV4aYHdK/6GXBEHm/kMfiynlEA0ygoWNJGSEqk6AnQGsFRJC0z2MvkMwHXm+R/ZuN2fwT8QWmAcicWJkI0f3734LBw96NuplRGK0xoGZYQwwryGXhU1GU4D5BF/A2c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SCdnctzN; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-549a2997973so2824e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Mar 2025 20:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741750202; x=1742355002; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RTC6q0jJyCwm0Ms6LHn8x6WPWhr3FL+RLBtkQPmtIBA=;
+        b=SCdnctzNnSQ6OV94jeyRzz30MMnwKbd/5DR3O/n9/ZAEWRmHwSq23ZieiscVfXd2k3
+         XfDPJcXyI2Uh8RWOWMcINcUSEi3w8miJif/NMwqoe0UtaeFSnZGhiQ354mOz47F0p31l
+         W/QEpUcu2lHpBvpzhHyADnj9J6nnw1xqCBquRj064VT3P57hjd3UZmuXiDkXsbpwD7WY
+         RUn73/+1gs0JdvtLneFsbO9XZ0+m1/oufcO8FxdUIRlgsi7kVvX0rPj31/zpSqbZc961
+         VGFQdIm0flEBAuAqgblCOp6SXqv1qj5NrFd7mdUO61wO01BqhrPl1mCk/6501yb6wtHB
+         sorA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741750202; x=1742355002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RTC6q0jJyCwm0Ms6LHn8x6WPWhr3FL+RLBtkQPmtIBA=;
+        b=q+WC8Aiqcdc4JR0kEqHEBuF54Frvx5q1vFRG8/6BfWdIXraT569ezRbiypJBwAfhex
+         dCT8KnpeNI3oOiI01igy5xd/QlXQbauKKIVv0yNEnccm0qakn3xIHe7vSqKg7/4ludc3
+         o/YBFj6wjLSEqa/a0WDtw2nRl8Ipu63geDszoZXj8aMJ79xzvHVdrZnpzE2WY+zy1mh1
+         mmsWPHFFoVI0ESy7qcgBupdSzozx0oRh5MAKtkD+f9LJZOer8cdgGB0jgBvTYayC0vGS
+         TfpAPucDjmqAq6TwUNyLG1rdlWswOMULxFQqJEUpQdVwavPGZ61SXum+xcTa5P14Z+8y
+         phug==
+X-Forwarded-Encrypted: i=1; AJvYcCVhgLM2EKP8Pb0OMrftVapPZl1K8GsyEzxx4L2bBmGLnYZf1FiwQuBH4zrGK3l/9PXfZSwAU91DtPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMlDq2BMnt3VoMoh+MliXRbnOyiGyprJ7ZV3XBiXB+uNkt4bU/
+	Ok7Khoj8mAueVnMDrOrmpSkOpO0TI76JguD48ep+/IVQRo5JVl0P6SzkloORDzA9h+wfZUycvYl
+	9hp4NuT7Hn1jLhzWQ2KHskgcoSVHe8kjxqkyb3fBiSqUjKAwABDik
+X-Gm-Gg: ASbGnctLQGGgUk67xViVe0Y8PReae4p5BgB8roF385zoASY0+h/biU1ovwF8gy9DM0o
+	4Vj0N1vkMmwh68Gughrg5x21y+G2mC+l9blCFzzFXNIQNFgusktw7V3p9DIQLCfyUAwImDbp2fC
+	0k54+y4eM1fNCoixc2Wa5b7Xseixhv7cWUbw7bXlXrQF5dDTc8ZNm/h6VM
+X-Google-Smtp-Source: AGHT+IGP1YVSO5G5A7NPOF9hu8UMZmUxtP+Fj7fvYTNYvV5zNSe928DhT3IQzPqsLEwOPja96dJF23KWfgwjHorjZPM=
+X-Received: by 2002:a05:6512:3c96:b0:545:1dea:7b2e with SMTP id
+ 2adb3069b0e04-549b1c370camr195846e87.6.1741750201654; Tue, 11 Mar 2025
+ 20:30:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com> <20250310150835.3139322-5-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250310150835.3139322-5-andriy.shevchenko@linux.intel.com>
+From: Kyle Tso <kyletso@google.com>
+Date: Wed, 12 Mar 2025 11:29:45 +0800
+X-Gm-Features: AQ5f1JqezutAuLR9RCiDwHugv6YDAlJdEYt9fLJCmtrMads3aQIZSAKhgQtQ5Ys
+Message-ID: <CAGZ6i=0GuBvEU41Offobn1MzMuFumn9F6JLHXsKppPidkjCLVw@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] usb: typec: tcpm: Use fwnode_get_child_node_count()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rob Herring (Arm)" <robh@kernel.org>, 
+	Markus Elfring <elfring@users.sourceforge.net>, Jakob Riepler <jakob+lkml@paranoidlabs.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Jonathan Cameron <jic23@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Altera USB Blaster 3, available as both a cable and an on-board
-solution, is primarily used for programming and debugging FPGAs.
+On Mon, Mar 10, 2025 at 11:09=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Since fwnode_get_child_node_count() was split from its device property
+> counterpart, we may utilise it in the driver and drop custom implementati=
+on.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-It interfaces with host software such as Quartus Programmer,
-System Console, SignalTap, and Nios Debugger. The device utilizes
-either an FT2232 or FT4232 chip.
+Acked-by: Kyle Tso <kyletso@google.com>
 
-Enabling the support for various configurations of the on-board
-USB Blaster 3 by including the appropriate VID/PID pairs,
-allowing it to function as a serial device via ftdi_sio.
-
-Note that this check-in does not include support for the
-cable solution, as it does not support UART functionality.
-The supported configurations are determined by the
-hardware design and include:
-
-1) PID 0x6022, FT2232, 1 JTAG port (Port A) + Port B as UART
-2) PID 0x6025, FT4232, 1 JTAG port (Port A) + Port C as UART
-3) PID 0x6026, FT4232, 1 JTAG port (Port A) + Port C, D as UART
-4) PID 0x6029, FT4232, 1 JTAG port (Port B) + Port C as UART
-5) PID 0x602a, FT4232, 1 JTAG port (Port B) + Port C, D as UART
-6) PID 0x602c, FT4232, 1 JTAG port (Port A) + Port B as UART
-7) PID 0x602d, FT4232, 1 JTAG port (Port A) + Port B, C as UART
-8) PID 0x602e, FT4232, 1 JTAG port (Port A) + Port B, C, D as UART
-
-These configurations allow for flexibility in how the USB Blaster 3 is
-used, depending on the specific needs of the hardware design.
-
----
-
-v3: Updated PID table.
-
-PID table in the commit message in v2 missmatched with the PID macro
-defined in the header file, updated the correct table in v3.
-
----
-
-v2: Update commit message, added PID table, updated the macro name
-
-Updated the commit message to include more information about the
-background of what is this change about. Added the PID table to
-clarify that the PID associated to the specific hardware configuration
-Updated the macro name in header file from ALTR to ALTERA and also
-the VID's macro name to ALTERA_VID
-
-Signed-off-by: Boon Khai Ng <boon.khai.ng@intel.com>
----
- drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++++
- 2 files changed, 27 insertions(+)
-
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index e07c5e3eb18c..9b34e23b7091 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1079,6 +1079,20 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	/* GMC devices */
- 	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
-+	/* Altera USB Blaster 3 */
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6022_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6025_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6026_PID, 3) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_6029_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602A_PID, 3) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602C_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602D_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTERA_VID, ALTERA_UB3_602E_PID, 3) },
- 	{ }					/* Terminating entry */
- };
- 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 5ee60ba2a73c..52be47d684ea 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1612,3 +1612,16 @@
-  */
- #define GMC_VID				0x1cd7
- #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
-+
-+/*
-+ *  Altera USB Blaster 3 (http://www.altera.com).
-+ */
-+#define ALTERA_VID			0x09fb
-+#define ALTERA_UB3_6022_PID		0x6022
-+#define ALTERA_UB3_6025_PID		0x6025
-+#define ALTERA_UB3_6026_PID		0x6026
-+#define ALTERA_UB3_6029_PID		0x6029
-+#define ALTERA_UB3_602A_PID		0x602a
-+#define ALTERA_UB3_602C_PID		0x602c
-+#define ALTERA_UB3_602D_PID		0x602d
-+#define ALTERA_UB3_602E_PID		0x602e
--- 
-2.25.1
-
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
+c
+> index 9c455f073233..8ca2e26752fb 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -7166,7 +7166,7 @@ static void tcpm_fw_get_timings(struct tcpm_port *p=
+ort, struct fwnode_handle *fw
+>
+>  static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle=
+ *fwnode)
+>  {
+> -       struct fwnode_handle *capabilities, *child, *caps =3D NULL;
+> +       struct fwnode_handle *capabilities, *caps =3D NULL;
+>         unsigned int nr_src_pdo, nr_snk_pdo;
+>         const char *opmode_str;
+>         u32 *src_pdo, *snk_pdo;
+> @@ -7232,9 +7232,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,=
+ struct fwnode_handle *fwnode
+>         if (!capabilities) {
+>                 port->pd_count =3D 1;
+>         } else {
+> -               fwnode_for_each_child_node(capabilities, child)
+> -                       port->pd_count++;
+> -
+> +               port->pd_count =3D fwnode_get_child_node_count(capabiliti=
+es);
+>                 if (!port->pd_count) {
+>                         ret =3D -ENODATA;
+>                         goto put_capabilities;
+> --
+> 2.47.2
+>
+>
 
