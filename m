@@ -1,158 +1,190 @@
-Return-Path: <linux-usb+bounces-21716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F33FFA5F026
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 11:03:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B907A5F094
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 11:23:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE103B925A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 10:02:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4029019C153C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 10:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF49262D0F;
-	Thu, 13 Mar 2025 10:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626E3265CDC;
+	Thu, 13 Mar 2025 10:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="DWQy/Hfj"
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="L4siQE+R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F0431D5154;
-	Thu, 13 Mar 2025 10:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C59624EF69;
+	Thu, 13 Mar 2025 10:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741860181; cv=none; b=LyWtkg/L0P2cqkdk+Lh4hd60WwuYoYOXyVPgzO1hReqYJVi88fEjTspi6g0uvXH4XYmYyiPAGdMPUkGcCqGvDJcg+G/5ZLu+z0/OCOYxyyCGM+VLMZg3NuL8J+6fi2eQrEAKtaRDyBGvAHY2+Stm9P0ZlpOygbptOUy7uz39r6c=
+	t=1741861328; cv=none; b=U30zVosxQd75ew3KaOdK/Y5f322FBEsBlEgp1NgcUpQ6IIeXfdaQMD+3wIV0+SXw+ebEvMTs7ciL2xy6+GNo0rPJoYeKYjQ/EHkXrVusoHbK8zhdLHNTqTyEfyP13VQlpJ6/llzDKEsePqWpU0Rw542WEPhHh2mM4QxKNctDAyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741860181; c=relaxed/simple;
-	bh=l0fumYIg0NYCdhTh3a1qt9G3CuZK2lteX+DZEbj+6ZY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BPmW1sXpn02xw+bCAup6iLuWTfayrphC1p77T71SfxcY2wvW2wvzAgkmXAUuPLwIys639Y9JII19gygHPRDPNWHJusp5CaNYpUM8yHfyTLILweW99T9jlNa+vTgnNzPmUUKJepoSPUTYq2Pw7EDK6/QcXqH1fVfpFpf4yKrYVgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=DWQy/Hfj; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-	Content-Type; bh=Oqs1UZTlRHa6oFrEBtaWOF/mZRqIvWmGezxzzASYwe4=;
-	b=DWQy/HfjO2PcRXIvF4fneEjFCLMWxChmsLupmC0kwSvg+ve/pMSABY+hdXg7s7
-	0kWhI009abuerHYQUCKJbVdr6nZirdLzLv2PNZFjijob4GMtNe3KZ+24uw5veLZ+
-	qbPuIwfMKZVSxSR4yhC2bi69caM6EYVR99G1YIrRV6oCY=
-Received: from [10.42.12.155] (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wAHA2A3rdJniQ73SA--.14057S2;
-	Thu, 13 Mar 2025 18:02:33 +0800 (CST)
-Message-ID: <7e9db4d9-0a22-44b4-a981-0de25d6a2aa4@163.com>
-Date: Thu, 13 Mar 2025 18:02:31 +0800
+	s=arc-20240116; t=1741861328; c=relaxed/simple;
+	bh=zjrVRltHZymqX24ps5h+266z2VbwHonEl5iwYUVv+IA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iH7k2etr/Imsw7PjOMc/O3zXQIhbGt1Df58IxKzPgWBwROdEYMjDoiVkF80vww8GpVzxrimFbKgQZXVhC8IRTEhDgdkcM9+ruLw4wA6xp03zRL7jxYfOiZhgKtawI1XtgJfHfyg/b95N29uykCLR1UyS+xzNzQ5AP7yt1V8k5Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=L4siQE+R; arc=none smtp.client-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1741861316; bh=zjrVRltHZymqX24ps5h+266z2VbwHonEl5iwYUVv+IA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=L4siQE+RvEVW+RzLBl/er7124JbN2fwagNQXux2is1UGclr84mw295IyaCrT2B5kx
+	 7wazt18+TJFDyvI69Sj4KiCgk89hsq0Ou0fOYjw1PiXwZQzWBXE6VLVDEBAlGmp4pi
+	 BiDQdWcoJT+J295tlq53tyOxbG7XeoNDxS9hMAvY=
+Received: from [2001:bf0:244:244::71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.52.1)
+	(envelope-from <phahn-oss@avm.de>)
+	id 67d2b1c4-94fe-7f0000032729-7f000001cad4-1
+	for <multiple-recipients>; Thu, 13 Mar 2025 11:21:56 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [IPv6:2001:bf0:244:244::71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Thu, 13 Mar 2025 11:21:56 +0100 (CET)
+From: Philipp Hahn <phahn-oss@avm.de>
+To: netdev@vger.kernel.org
+Cc: Philipp Hahn <phahn-oss@avm.de>,
+	Oliver Neukum <oliver@neukum.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Leon Schuermann <leon@is.currently.online>,
+	Kory Maincent <kory.maincent@bootlin.com>
+Subject: [PATCH net-next v3]: cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
+Date: Thu, 13 Mar 2025 11:21:46 +0100
+Message-Id: <f736f5bd20e465656ebe2cc2e7be69c0ada852e3.1741627632.git.p.hahn@avm.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
- usbip device
-Content-Language: en-US
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
-References: <20250219092555.112631-1-min_halo@163.com>
- <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
- <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
- <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
- <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
- <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
- <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
- <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
-From: Zongmin Zhou <min_halo@163.com>
-In-Reply-To: <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Organization: AVM GmbH, Berlin, Germany
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAHA2A3rdJniQ73SA--.14057S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZry5uFy7Gw4UurykKF4Uurg_yoW5Ww4fpa
-	s3XFWxKFsrtFyFyFsFkw1rXa4YqrW7KFyUWryDCw1UZws09r1UKrs2k3Z5uFyxXF13Ww12
-	vr4qyF9xurWqyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U3UUbUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixwEPq2fSpjyrWgAAs8
+X-purgate-ID: 149429::1741861316-A1DA0945-62C14C62/0/0
+X-purgate-type: clean
+X-purgate-size: 4605
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
+Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
+the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
+Both are based on the Realtek RTL8153B chip used to use the cdc_ether
+driver. However, using this driver, with the system suspended the device
+constantly sends pause-frames as soon as the receive buffer fills up.
+This causes issues with other devices, where some Ethernet switches stop
+forwarding packets altogether.
 
-On 2025/3/11 00:49, Shuah Khan wrote:
-> On 3/5/25 03:03, Zongmin Zhou wrote:
->> At 2025-03-05 03:45:28, "Shuah Khan" <skhan@linuxfoundation.org> wrote:
->>
->>> On 3/2/25 05:37, Zongmin Zhou wrote:
->>>> Dear shuah,
->>>>
->>>>
->>>> Yes, I agree with you.It would be better if there have a more 
->>>> simpler fixes than This patch.
->>>>
->>>> I can just think of the two possible solutions that mentioned before.
->>>
->>  >What are the two possible solutions?
->> 1. The patch we are discussing now,have to change the API between the 
->> kernel and user-space.
->
-> 2. Simply set vhci-hcd dma mask to 64 by default,just modify the 
-> vhci-hcd driver. Then dma_max_mapping_size() will always return SIZE_MAX.
->
-> I prefer option #2 - What are the downsides if any with this option?
->
-If set vhci-hcd dma mask to 64 by default,I can't predict what will 
-happen when the real USB controller support less than 64bit?
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
 
-After all, the data flows from vhci-hcd to usbip-host and finally to the 
-USB controller to which the device is actually connected.
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Leon Schuermann <leon@is.currently.online>
+Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
+Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
+Link: https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-usb-docks/40af0135eu
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+V2 -> V3: Move `net-next` in subject
+V1 -> V2: Prefix subject with `net-next:`
+V1 -> V2: Add additional Cc:s
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 6 ++++++
+ drivers/net/usb/r8153_ecm.c | 6 ++++++
+ 3 files changed, 19 insertions(+)
 
-the data is ultimately processed through the real USB controller?
-
-However, the default setting to 64-bit is equivalent to eliminating the 
-impact of
-
-the patch(commit d74ffae8b8dd) on usbip protocol devices, sounds feasible?
-
-I am not very professional in this field, waiting for your evaluation.
-
->>>>
->>>>
->>>> If SWIOTLB disabled,dma_max_mapping_size() return SIZE_MAX.
->>>
->>> Right when CONFIG_HAS_DMA, if not it returns 0. Perhaps we
->>  >can ignore CONFIG_HAS_DMA=n for this for this discussion.
->> Yeah, let's ignore that.
->>>
->>>>
->>>> Only if SWIOTLB is active and dma addressing limited will return 
->>>> the swiotlb max mapping size.
->>>>
->>>>
->>>> The swiotlb config seems rely on many other config options like 
->>>> x86_64/IOMMU_SUPPORT and so on,
->>>>
->>>> and the configuration on host and client side only use the default 
->>>> at all,Like the default ubuntu release version.
->>>>
->>>> It seems that switlb is enabled by default on most platforms.
->>>
->>> If understand correctly the problem happens only when SWIOTLB
->>> is enabled on client or host?
->>>
->>> The following combinations are possible:
->>>
->>> SWILTLB enabled on client and disabled on host - rate limited?
->>> SWILTLB enabled on client and enabled on host - rate limited?
->>> SWILTLB disabled on client and enabled on host - rate limited?
->>> SWILTLB disabled on client and disabled on host - not a problem
->>  >
->> This problem happens only when SWIOTLB is enabled on client,have 
->> nothing to do with host setting. Because the USB xhci controller may 
->> set dma mask to 64bit if controllers support. The combinations may 
->> like below: SWILTLB enabled on client and enabled/disabled on host - 
->> rate limited SWILTLB disabled on client and enabled/disabled on host 
->> - not a problem
->
-> Got it. So the problem happens only when SWILTLB enabled on client
->
-Yes.
-> thanks,
-> -- Shuah
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index a6469235d904..a032c1ded406 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -783,6 +783,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
+ 
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 468c73974046..96fa3857d8e2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -785,6 +785,7 @@ enum rtl8152_flags {
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
++#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
+ 
+ struct tally_counter {
+ 	__le64	tx_packets;
+@@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+ 		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
++		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
+ 			return 1;
+ 		}
+ 	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
+@@ -10064,6 +10066,8 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
+ 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
++
++	/* Lenovo */
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
+@@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
++	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
++
+ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
+index 20b2df8d74ae..8d860dacdf49 100644
+--- a/drivers/net/usb/r8153_ecm.c
++++ b/drivers/net/usb/r8153_ecm.c
+@@ -135,6 +135,12 @@ static const struct usb_device_id products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&r8153_info,
+ },
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&r8153_info,
++},
+ 
+ 	{ },		/* END */
+ };
+-- 
+2.34.1
 
 
