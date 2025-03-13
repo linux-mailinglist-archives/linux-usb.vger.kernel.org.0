@@ -1,149 +1,112 @@
-Return-Path: <linux-usb+bounces-21736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21737-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5238A60353
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 22:19:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 577FBA604C7
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 23:54:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF1E3A9C7A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 21:19:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 792C517AD67
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 22:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F5C1F4C8C;
-	Thu, 13 Mar 2025 21:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6BA1F8BBC;
+	Thu, 13 Mar 2025 22:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR4lUDqG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5117747F;
-	Thu, 13 Mar 2025 21:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90FD1F585F;
+	Thu, 13 Mar 2025 22:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741900761; cv=none; b=dBR5JZN3/qs2BsCWwmRaom7m1iivALgngG89km+GGAlh5WiGGGUd9X+EsCXJILzz2T38Eg/1SU6bQ1eVPfsIuV6T8K1atEloGw0mxYHRzQ6mxMIcfWrSbHT1DKKx5fY5/y8uqgYAbwV4zyc5k2bEQAUqM/rrUcLHLDdJO0R1vvg=
+	t=1741906428; cv=none; b=YeXfXfXgsddTI/FeOU6QuglUSDUXXFrSDgPd06YaHvhucAUIfFtRU/IGnmduUGtEhS3+/2Qt50k8n1bo0GGh6OEcXbxddrJUmq1tXSnS87OpqLNCgLChIM0el1IS9vZ7/LKRpF2Cm+SSG4J3JRu0xuM6fuCr8Qu378PLx1Z6TsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741900761; c=relaxed/simple;
-	bh=0MJzd9VskY95xlDDwzDUQR2rJ0WzgQU/F/H9pYC4Ys0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J69vWdM7PTfPIzgNLHYrP+Rb1d6a/qVijJojkwdP0e+irunAR1IrQ6MNRmQKUJ5DrnwFg0ztVgDiTmg+u3HWS2qfuKKxuRebjVTaou1VGJJp7CD/MYG6QVQl6Kne02Y4EAxIXS0Q+Mb8d7szlYiXdTdpi8bYAHU0gUF0o5t3eeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=193.43.8.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from altlinux.ipa.basealt.ru (unknown [178.76.204.78])
-	(Authenticated sender: kovalevvv)
-	by air.basealt.ru (Postfix) with ESMTPSA id 3EF9E233CA;
-	Fri, 14 Mar 2025 00:19:08 +0300 (MSK)
-From: Vasiliy Kovalev <kovalev@altlinux.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Dave Penkler <dpenkler@gmail.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: lvc-project@linuxtesting.org,
-	kovalev@altlinux.org
-Subject: [PATCH] usbtmc: Fix slab-out-of-bounds access in usbtmc_interrupt
-Date: Fri, 14 Mar 2025 00:19:07 +0300
-Message-Id: <20250313211907.1179173-1-kovalev@altlinux.org>
-X-Mailer: git-send-email 2.33.8
+	s=arc-20240116; t=1741906428; c=relaxed/simple;
+	bh=0Pf79xoJpzsJKbZvjRgGpD+kGcnppedrNyCyTFyrZ+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RauABJMuiuCPJdT9QzRWJtd+M5lL9rnaGEv+4Te6Ex9AfY7wmZu4w/1id418dtgC9U/1HSgdtuw7LUTJq8IWim2A5CkGdeOaHAw7QuxN4AxiouQiczr0nMhUAOCzrrvW40KaC4/79Y8VzPlxV4MdrWKmWJ77vx9cS/9JvZpCaJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR4lUDqG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF321C4CEDD;
+	Thu, 13 Mar 2025 22:53:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741906428;
+	bh=0Pf79xoJpzsJKbZvjRgGpD+kGcnppedrNyCyTFyrZ+4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OR4lUDqGKa8K11KB9m04s8Fltfpsuu/T7KPfj6The4utms9vZKgeAaZOrZcPRyJgO
+	 IDix8/iIo8LVI6euP+cKYxMiGyI9Ygwe46YdK90uIao5U9+ZW1Ey32A4q3/1wIpZ0b
+	 8HGjfwW5hWsAC6fbUMxfZ1mByvJ7y91UwwbJ8pDPd8qDxCj7HqY/yl6y0MG0AI3nu6
+	 a2Vn93UlvMjpV5++L1cucgJIZxb5KFINYniX+9HalRFdFiyGOSi5ewERbFoCCejx8O
+	 vKQTe6l0gz74E+BRUkQsY8S2sclChItyN+BA0MpbADrXjGTa/1sD4QKRm0A5ifS3ng
+	 EX0rET3Q++fkw==
+Date: Thu, 13 Mar 2025 17:53:44 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Joerg Roedel <joro@8bytes.org>, 
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Rob Clark <robdclark@gmail.com>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Robert Foss <rfoss@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Christian Marangi <ansuelsmth@gmail.com>, 
+	Rohit Agarwal <quic_rohiagar@quicinc.com>, Kyle Deng <quic_chunkaid@quicinc.com>, 
+	Vinod Koul <vkoul@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-usb@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH 03/11] dt-bindings: power: qcom,kpss-acc-v2: Add MSM8916
+ compatible
+Message-ID: <wccjda6emgvsgn3t5qj7kfsih2stcelnvwu45qok4bbln5kk74@drqp7wrrges4>
+References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
+ <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
+ <a7d76aff-0dc2-4b0e-9ee8-f433d8e745f6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a7d76aff-0dc2-4b0e-9ee8-f433d8e745f6@linaro.org>
 
-Prevent buffer overflow in usbtmc_interrupt by ensuring interrupt IN
-endpoint packets are at least 2 bytes (1 byte ID + 1 byte data), as
-required by the driver. Without this, short packets could lead to
-out-of-bounds reads of iin_buffer.
+On Wed, Mar 12, 2025 at 04:12:14PM +0100, Krzysztof Kozlowski wrote:
+> On 06/03/2025 19:11, Konrad Dybcio wrote:
+> > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> > 
+> > MSM8916 seems to reuse the same hardware as MSM8974 and friends (for
+> > whom this binding document was created). Add a new compatible for it.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> > ---
+> >  Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml | 4 +
+> 
+> 
+> Folks, please merge Ryan work instead...
 
-- In usbtmc_probe(), reject devices with wMaxPacketSize < 2 bytes to
-  ensure the allocated iin_buffer is large enough.
-- In usbtmc_interrupt(), skip processing and log a warning if
-  actual_length < 2 bytes, avoiding invalid memory access.
+I'm not sure which "folks" you're referring to and neither is
+get_maintainer (well it points to Rob and yourself).
 
-This fixes a KASAN slab-out-of-bounds error:
+> I keep carrying this patch for
+> half a year:
+> 
 
-BUG: KASAN: slab-out-of-bounds in usbtmc_interrupt (drivers/usb/class/usbtmc.c:2297)
-Read of size 1 at addr ffff88800a41b2e1 by task kworker/0:1/11
-CPU: 0 UID: 0 PID: 11 Comm: kworker/0:1 Not tainted 6.14.0-un-def-alt0.rc6.kasan #1
-Call Trace:
- <IRQ>
- dump_stack_lvl (lib/dump_stack.c:122)
- print_report (mm/kasan/report.c:521)
- kasan_report (mm/kasan/report.c:636)
- usbtmc_interrupt (drivers/usb/class/usbtmc.c:2297)
- __usb_hcd_giveback_urb (drivers/usb/core/hcd.c:1650)
- usb_hcd_giveback_urb (drivers/usb/core/hcd.c:1735)
- dummy_timer (drivers/usb/gadget/udc/dummy_hcd.c:1995)
- __hrtimer_run_queues (kernel/time/hrtimer.c:1865)
- hrtimer_run_softirq (kernel/time/hrtimer.c:1884)
- handle_softirqs (kernel/softirq.c:561)
- __irq_exit_rcu (kernel/softirq.c:662)
- irq_exit_rcu (kernel/softirq.c:680)
- sysvec_apic_timer_interrupt (arch/x86/kernel/apic/apic.c:1049)
- </IRQ>
+Where are you carrying these? Are there any other patches on your list
+that have fallen through the cracks?
 
-Found by Linux Verification Center (linuxtesting.org) with
-'USB Gadget Tests'[1]:
+> https://lore.kernel.org/all/20240710155226.130086-1-rayyan.ansari@linaro.org/
+> 
 
-$ make usbtmc
-$ sudo src/usbtmc/usbtmc --invalid_ep_int_len
+I'm picking Ryan's patch through the Qualcomm tree...
 
-[1] Link: https://github.com/kovalev0/usb-gadget-tests
-Fixes: dbf3e7f654c0 ("Implement an ioctl to support the USMTMC-USB488 READ_STATUS_BYTE operation.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
----
- drivers/usb/class/usbtmc.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Regards,
+Bjorn
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 34e46ef308abf..8a3ba90f32455 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -47,6 +47,9 @@
-  */
- #define USBTMC_MAX_READS_TO_CLEAR_BULK_IN	100
- 
-+/* Minimum packet size for interrupt IN endpoint */
-+#define USBTMC_MIN_INT_IN_PACKET_SIZE 2	// 1 byte ID + 1 byte data
-+
- static const struct usb_device_id usbtmc_devices[] = {
- 	{ USB_INTERFACE_INFO(USB_CLASS_APP_SPEC, 3, 0), },
- 	{ USB_INTERFACE_INFO(USB_CLASS_APP_SPEC, 3, 1), },
-@@ -2291,6 +2294,14 @@ static void usbtmc_interrupt(struct urb *urb)
- 
- 	switch (status) {
- 	case 0: /* SUCCESS */
-+		/* check for valid length */
-+		if (urb->actual_length < USBTMC_MIN_INT_IN_PACKET_SIZE) {
-+			dev_warn(dev, "short interrupt packet: %d bytes, min %d required\n",
-+				 urb->actual_length,
-+				 USBTMC_MIN_INT_IN_PACKET_SIZE);
-+			goto exit;
-+		}
-+
- 		/* check for valid STB notification */
- 		if (data->iin_buffer[0] > 0x81) {
- 			data->bNotify1 = data->iin_buffer[0];
-@@ -2426,6 +2437,15 @@ static int usbtmc_probe(struct usb_interface *intf,
- 		dev_err(&intf->dev, "can't read capabilities\n");
- 
- 	if (data->iin_ep_present) {
-+		if (data->iin_wMaxPacketSize < USBTMC_MIN_INT_IN_PACKET_SIZE) {
-+			dev_err(&intf->dev,
-+				"Int in endpoint wMaxPacketSize too small: %d, minimum %d required\n",
-+				data->iin_wMaxPacketSize,
-+				USBTMC_MIN_INT_IN_PACKET_SIZE);
-+			retcode = -EINVAL;
-+			goto error_register;
-+		}
-+
- 		/* allocate int urb */
- 		data->iin_urb = usb_alloc_urb(0, GFP_KERNEL);
- 		if (!data->iin_urb) {
--- 
-2.42.2
-
+> Best regards,
+> Krzysztof
 
