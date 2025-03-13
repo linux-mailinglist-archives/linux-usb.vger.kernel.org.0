@@ -1,65 +1,45 @@
-Return-Path: <linux-usb+bounces-21715-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21716-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79ABCA5EFD7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 10:45:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F33FFA5F026
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 11:03:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55620188B8BF
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 09:46:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE103B925A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 10:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F07B22F150;
-	Thu, 13 Mar 2025 09:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF49262D0F;
+	Thu, 13 Mar 2025 10:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bDADD7m8"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="DWQy/Hfj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7994A01
-	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 09:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F0431D5154;
+	Thu, 13 Mar 2025 10:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741859147; cv=none; b=pCfFe5A6hvmf0TVX4pL2laXK+rhMBRnrxOu59QYo4TpWRyey+8o8gPDk4tsx9/TZTbPdD4ViSwqPPZ1NTvbhq3ZGKHBOuhw4HKhAiVhrDvOENaqjmRWrj3LhG7mTKPTJ2SfCZpd6Tnqrpc1eyPs3a2EVXJ1epDxXFRlCYFYKYLs=
+	t=1741860181; cv=none; b=LyWtkg/L0P2cqkdk+Lh4hd60WwuYoYOXyVPgzO1hReqYJVi88fEjTspi6g0uvXH4XYmYyiPAGdMPUkGcCqGvDJcg+G/5ZLu+z0/OCOYxyyCGM+VLMZg3NuL8J+6fi2eQrEAKtaRDyBGvAHY2+Stm9P0ZlpOygbptOUy7uz39r6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741859147; c=relaxed/simple;
-	bh=SxXFWWiYuj5wAozQRb3gT2x435AhO4PjRFdtqpJKj/o=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=bPpsKX3oW/5pAXTZfLJDPRo5/I+ravGx/gP/kaiMqj3bpwrtJYym7yllqhotcx3iL20UDu8NyF7bewWibaFFCYh5nODycA5A6MAz4pIivDOtkFUMdCcGnJtscJF/TT4CYUxgcHVCDovv3OZblctIp7tCVURzbQsMq8br0cBNNYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bDADD7m8; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741859145; x=1773395145;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=SxXFWWiYuj5wAozQRb3gT2x435AhO4PjRFdtqpJKj/o=;
-  b=bDADD7m8KKO4Va3BMPHrBo0yDxsEScbBQ8lc91HXzZhDEm/nrOTvHv/v
-   LroKjS/ZxXd1qvyikBae4z8uijHSSmfYSnS6v/+tdHFT72rdDUtd8grpr
-   6dvxLhQN02rZ+FEUDfxTMiyiEyiNFjLT3CUMvhaVcKS+JQNQdYvrb5bf4
-   eQNV8mghANR2D9OyxoAqNu9EglEqhrU+Q6W0KVRCwJY6CifVcG0aqOhLP
-   Z7153IbGdnmG5OAz2oU/3VX5aH0ZNiDpX7DqVfDspaQTgNEQXr/KIPV6a
-   pOAYSRrA8qBMSCjkuIRXMjYGImj4vbnIw9uIMOOz72sx81EjOEpqqeozz
-   A==;
-X-CSE-ConnectionGUID: T/XdyVpKSc2M+ZSPOneOAQ==
-X-CSE-MsgGUID: DRpJ+J82Qxi2BbuMbisVLA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42136957"
-X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="42136957"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 02:45:45 -0700
-X-CSE-ConnectionGUID: 3/VR0gqCTMWukPngtjEe9g==
-X-CSE-MsgGUID: ZTzxlUwYRJCXCRtzvGX+Lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="120868826"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.80.116]) ([10.245.80.116])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 02:45:43 -0700
-Message-ID: <f72545d9-a892-4101-9d06-c75979aecbe6@linux.intel.com>
-Date: Thu, 13 Mar 2025 11:45:30 +0200
+	s=arc-20240116; t=1741860181; c=relaxed/simple;
+	bh=l0fumYIg0NYCdhTh3a1qt9G3CuZK2lteX+DZEbj+6ZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BPmW1sXpn02xw+bCAup6iLuWTfayrphC1p77T71SfxcY2wvW2wvzAgkmXAUuPLwIys639Y9JII19gygHPRDPNWHJusp5CaNYpUM8yHfyTLILweW99T9jlNa+vTgnNzPmUUKJepoSPUTYq2Pw7EDK6/QcXqH1fVfpFpf4yKrYVgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=DWQy/Hfj; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=Oqs1UZTlRHa6oFrEBtaWOF/mZRqIvWmGezxzzASYwe4=;
+	b=DWQy/HfjO2PcRXIvF4fneEjFCLMWxChmsLupmC0kwSvg+ve/pMSABY+hdXg7s7
+	0kWhI009abuerHYQUCKJbVdr6nZirdLzLv2PNZFjijob4GMtNe3KZ+24uw5veLZ+
+	qbPuIwfMKZVSxSR4yhC2bi69caM6EYVR99G1YIrRV6oCY=
+Received: from [10.42.12.155] (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wAHA2A3rdJniQ73SA--.14057S2;
+	Thu, 13 Mar 2025 18:02:33 +0800 (CST)
+Message-ID: <7e9db4d9-0a22-44b4-a981-0de25d6a2aa4@163.com>
+Date: Thu, 13 Mar 2025 18:02:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,84 +47,112 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-Subject: Re: My transfer ring grew to 740 segments
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-References: <20250311234139.0e73e138@foxbook>
- <20250313094632.037db6b3@foxbook>
+Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
+ usbip device
 Content-Language: en-US
-In-Reply-To: <20250313094632.037db6b3@foxbook>
-Content-Type: text/plain; charset=UTF-8
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
+References: <20250219092555.112631-1-min_halo@163.com>
+ <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
+ <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
+ <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
+ <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
+ <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
+ <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
+ <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAHA2A3rdJniQ73SA--.14057S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZry5uFy7Gw4UurykKF4Uurg_yoW5Ww4fpa
+	s3XFWxKFsrtFyFyFsFkw1rXa4YqrW7KFyUWryDCw1UZws09r1UKrs2k3Z5uFyxXF13Ww12
+	vr4qyF9xurWqyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U3UUbUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixwEPq2fSpjyrWgAAs8
 
 
-
-On 13/03/2025 10.46, Michał Pecio wrote:
-> On Tue, 11 Mar 2025 23:41:39 +0100, Michał Pecio wrote:
->> [102711.994235] xhci_hcd 0000:02:00.0: Event dma 0x00000000ffef4a50 for ep 6 status 4 not part of TD at 00000000eb22b790 - 00000000eb22b790
->> [102711.994243] xhci_hcd 0000:02:00.0: Ring seg 0 dma 0x00000000ffef4000
->> [102711.994246] xhci_hcd 0000:02:00.0: Ring seg 1 dma 0x00000000ffeee000
->> [102711.994249] xhci_hcd 0000:02:00.0: Ring seg 2 dma 0x00000000ffc4e000
+On 2025/3/11 00:49, Shuah Khan wrote:
+> On 3/5/25 03:03, Zongmin Zhou wrote:
+>> At 2025-03-05 03:45:28, "Shuah Khan" <skhan@linuxfoundation.org> wrote:
 >>
->> [ ... 735 lines omitted for brevity ... ]
->>
->> [102711.995935] xhci_hcd 0000:02:00.0: Ring seg 738 dma 0x00000000eb2e2000
->> [102711.995937] xhci_hcd 0000:02:00.0: Ring seg 739 dma 0x00000000eb22b000
-> 
-> And what are your thoughts about this noise? It's absurd to print such
-> long debug dumps under failure conditions (and hold a spinlock for 2ms
-> to do so), and I would argue that it is pointless even normally:
-> 
-> 1. Almost always exactly two segments exist, and either
->   a. the event and the TD are in the same segment, so who cares where
->      the other segment is
->   b. they are in different segments, and you can deduce both segments
->      from dma pointers so the dump tells you absolutely nothing new
-> 
-> 2. With more segments, the dump can tell if there were other segments
->    between the event and the TD, but is it really important?
-> 
-> 3. It might help with finding out-of-ring events, but this is extremely
->    rare and should be done automatically (xhci_dma_to_trb() or similar).
-> 
-> 
-> Bottom line, the driver never printed it and no one other than Niklas
-> (Cc) seemed to really miss such a feature. 
-
-IMO the driver used to print a long and repetitive debug message,
-which is why I changed it.
-Admittedly, my design does not handle hundreds of segments well.
-
-Before:
-  For each segment or until the segment containing the TD end TRB:
-	"Looking for event-dma %016llx trb-start %016llx trb-end %016llx seg-start %016llx seg-end %016llx"
-
-After:
-  "Event dma %pad for ep %d status %d not part of TD at %016llx - %016llx"
-  For each segment:
-	"Ring seg %u dma %pad"
-
-Probably, would have been better to loop from TD start seg to end seg.
-
+>>> On 3/2/25 05:37, Zongmin Zhou wrote:
+>>>> Dear shuah,
+>>>>
+>>>>
+>>>> Yes, I agree with you.It would be better if there have a more 
+>>>> simpler fixes than This patch.
+>>>>
+>>>> I can just think of the two possible solutions that mentioned before.
+>>>
+>>  >What are the two possible solutions?
+>> 1. The patch we are discussing now,have to change the API between the 
+>> kernel and user-space.
 >
-> I would be inclined to submit a small patch which removes this segment
-> dump, as I have already done so locally. Or at least make it xhci_dbg()
-> if somebody can present a convincing case for having it around.
+> 2. Simply set vhci-hcd dma mask to 64 by default,just modify the 
+> vhci-hcd driver. Then dma_max_mapping_size() will always return SIZE_MAX.
+>
+> I prefer option #2 - What are the downsides if any with this option?
+>
+If set vhci-hcd dma mask to 64 by default,I can't predict what will 
+happen when the real USB controller support less than 64bit?
 
-My patch was only meant to move the debugging out of trb_in_td() and shorten it.
-Before, trb_in_td() was called twice, once for its primary functionality and a
-second time solely for debugging purposes. This was what I wanted to remove.
+After all, the data flows from vhci-hcd to usbip-host and finally to the 
+USB controller to which the device is actually connected.
 
-Otherwise, I don't object to modifying or removing the debugs.
+the data is ultimately processed through the real USB controller?
 
-Best Regards,
-Niklas
+However, the default setting to 64-bit is equivalent to eliminating the 
+impact of
 
-> 
-> Note that debugfs exists and provides this and much more information,
-> at least so long as the class driver doesn't disable the endpoint.
-> 
+the patch(commit d74ffae8b8dd) on usbip protocol devices, sounds feasible?
+
+I am not very professional in this field, waiting for your evaluation.
+
+>>>>
+>>>>
+>>>> If SWIOTLB disabled,dma_max_mapping_size() return SIZE_MAX.
+>>>
+>>> Right when CONFIG_HAS_DMA, if not it returns 0. Perhaps we
+>>  >can ignore CONFIG_HAS_DMA=n for this for this discussion.
+>> Yeah, let's ignore that.
+>>>
+>>>>
+>>>> Only if SWIOTLB is active and dma addressing limited will return 
+>>>> the swiotlb max mapping size.
+>>>>
+>>>>
+>>>> The swiotlb config seems rely on many other config options like 
+>>>> x86_64/IOMMU_SUPPORT and so on,
+>>>>
+>>>> and the configuration on host and client side only use the default 
+>>>> at all,Like the default ubuntu release version.
+>>>>
+>>>> It seems that switlb is enabled by default on most platforms.
+>>>
+>>> If understand correctly the problem happens only when SWIOTLB
+>>> is enabled on client or host?
+>>>
+>>> The following combinations are possible:
+>>>
+>>> SWILTLB enabled on client and disabled on host - rate limited?
+>>> SWILTLB enabled on client and enabled on host - rate limited?
+>>> SWILTLB disabled on client and enabled on host - rate limited?
+>>> SWILTLB disabled on client and disabled on host - not a problem
+>>  >
+>> This problem happens only when SWIOTLB is enabled on client,have 
+>> nothing to do with host setting. Because the USB xhci controller may 
+>> set dma mask to 64bit if controllers support. The combinations may 
+>> like below: SWILTLB enabled on client and enabled/disabled on host - 
+>> rate limited SWILTLB disabled on client and enabled/disabled on host 
+>> - not a problem
+>
+> Got it. So the problem happens only when SWILTLB enabled on client
+>
+Yes.
+> thanks,
+> -- Shuah
 
 
