@@ -1,164 +1,196 @@
-Return-Path: <linux-usb+bounces-21731-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21732-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6A1A5FCCB
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 17:59:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C29A5FD96
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 18:21:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6337516B92F
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 16:59:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23E3A3A4960
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 17:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31AE26A0A2;
-	Thu, 13 Mar 2025 16:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41811624CC;
+	Thu, 13 Mar 2025 17:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="brL/9/F+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C1A268FED
-	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 16:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED6B136347;
+	Thu, 13 Mar 2025 17:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741885173; cv=none; b=CmOJzOiRN7ZODIzQ5sS4bC743oy3e6/lHgpgPMr0hGaCWxPMZTaekB9EDO0Lr9eqmAaVe5XrnQC4UVTw9MbqXWsaqgW1Vh762VVBQVmOkBG9iVKgyu0nBbaZ/eE9NS+kubBGItPitMIOaFwe5lOb51lObM0Sz9ZVFpgVXn2v3DI=
+	t=1741886434; cv=none; b=bdgUqCoVoy5SIaGmDV7a6kABfNRC+tfr8ScoiMkEfEgxCtk7TEBGVShLn/XVcfvzSLVxp2+A3h+upQIiYKAoSmHaKk4ZgbIlD/vRaJ0TUQcI+GqgC433UI4xRFKL4RRGvejtkJIYMuoW4p94gHn0E/0qTHyFHvPQK/MRyMtEzfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741885173; c=relaxed/simple;
-	bh=5plUZokiGNszsQd5jMdJREBDilijqjztiPfhbU0oomI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AFyjtJ0k19cgfh/kBdJBH4GrBqM0wQjKCdMclL8HVOXsRUTVtQKlOunOruQZgwHHUeu1Z0w5INxW12zZXEPRfuxxBiARS4OLIw1ngQDyLBPEOfunINtAf7C7iH9tYuyIfnJoIlCOxOceobS+gXIJc53H5iBBS7Usa+Q6NOaVRBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d054d79dacso20630365ab.2
-        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 09:59:31 -0700 (PDT)
+	s=arc-20240116; t=1741886434; c=relaxed/simple;
+	bh=/7BK6Z1rcheCGf59Fx2YSAGnN8TkcYgAYRtEEbdVd3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCdWo4WaNIro0HzEqdUDlnrDg8AwPJGv59CioKj0C05QI5COf6EeeBI6+Hd1ZGEECLFfsFtK2umK+XjY+ARYRas97CxP4I8zwTjJl1MG4E9P1v8Rep739SzPywcOgmgsYB48fc+l88udVfCuhlfhAum5LKT5NYaFj0yOWAeW9gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=brL/9/F+; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso11690675e9.2;
+        Thu, 13 Mar 2025 10:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741886431; x=1742491231; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5n5FOrDMxIl7+CKikAilniGBcZDmRdoDO+HttS3RzGI=;
+        b=brL/9/F+x55YZjvB4Z4pAUcmF66oN4G1sSeTEYU/Xvt+CWf+Ldmlq0ZdmSB0QxWKze
+         7zUfzsTcb5VMf8lhi5RNqdp+cBLZdi4S2BgQuvzOXp/6gY2wl9kNgg54IFcCIb37xbVd
+         JGJw3XQpibe/gNHm47jBfDguya5sqZmD1A+DM2bp5WkvBt1ndfx9hQOvVcvSAgF8z/Su
+         +3JAqRChpb2bie47zFixWHUB3C1MEPhvL9+SGGAOpK0FXoOqEkPFdeOZgZidBliXrudG
+         0tu/NMDS1yhLz12mW19l0Jrh5Uy9ck8XlhHAB76rriMfJ1tPJFwTtqc7qErzaebBrnmm
+         7RNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741885171; x=1742489971;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CAVyUdjA1Fi7LXzB/oZslQ8tsF7/jZYEXnsjntzroqE=;
-        b=lOSqo9qGvtttNimLXjDGCcs1+r9tucuRkMc3+/YgrDGR0RYIpG6pPPVaHuJMiAQNNM
-         XGz9zcthMZWpON6n+3iKhBxjKsY43sVZkX/GAu0A4/OvW0ctnJtPWfnFBul9KJ4hAg75
-         G/nN0NMVNABIBcn7butudsMzL/1nOLDmdvP2Ui/kyK93Z4iBFRDzCo9HhntlfVwulMDi
-         L2Di1XkimSFbaXzwQi3dat195MZBWewIzMVnQK892X9fI8On2hLQw3jwk0HWfJsUONGT
-         WEET+U883skgxlZLkjwrdFi9p7YxLNPl1+nJ8VX10EuO4RVmnaj2cItA4XaAh+LhmWpj
-         SP/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXeriqbV7JlHiOdv5jmDRCyOFS4Qiw0Jm93xnpYVfJIr+Nn3Jhypvimznxv1M8Y2m6uOCmoCzDC6Gg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqCA2N3MzKoGKKrICU4GQ0/eruwCmfgRvX7PhxWOGIHlqCb1Mc
-	4CBTUR/A5N8ggpxc7FxKVs+OKoKCtUUsNlzpaElC6ZMk5tONVHXSFDygI9KJsVOttE/cE8hi+d+
-	8/Vou2FQGE1/a6XapjBOq/BX2OkHPx/wP4yIxeTgqEgIZRItoyMqr7cQ=
-X-Google-Smtp-Source: AGHT+IGaGZzlBUeOGaoLnZmW9bgDBCxgtJaE55nziPEvab/sw8+W63R2zUJ4P/BgZbmd5Zz4Rq0ngyXdUb7Mlq/C3Db/n3UoXyQz
+        d=1e100.net; s=20230601; t=1741886431; x=1742491231;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5n5FOrDMxIl7+CKikAilniGBcZDmRdoDO+HttS3RzGI=;
+        b=N1LcTRIwFHRnZ5GgODj/fS+8poY8Id7je0ZaO3GSPOaQBdsshSYoXlDaAAKbBV9nRo
+         VnhgmoyLtBeVrtZG1l3jlXSUeIzQ2TM8OOtpfzDa17h9YyamL0TuVHX9BIV45QL43a0v
+         7xTNS/ZzthmRQgvo9eFttRhMWNIWJz7twO1fhLCgkzra5Oe3o4+QffNEH5RSxLBZl6Pv
+         nLh9Bijp4DihDRtFD7u9s73K09b5TSC1UT5chBiSzIlIlbqAJMpsc/8/krSNn2rjfW2O
+         nSn3hfR8CCSBEXgzJP3jXq8Hpk9WQZYoZeqVNhoh5GJuYLLSaCAL3sxo0jKkvLL/1OhS
+         JjnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMeNG4SrRizsdXgIh+ovuDMS7UYBfwbQF8PIEUpQlLDdnrS9TrdhDZ9EsE7ou7NmYorXsWov4xzL0YvPvQjvw=@vger.kernel.org, AJvYcCWINcO96xhSUN35PTSlgsr0d2Rxjlzwp3/44Ax+AcYcyc70f7ICt7KpmNqtuehiqByiN9Sj8DnR9/c7gTI=@vger.kernel.org, AJvYcCX4rJ3V93btRPZMMeZbXzHShjeKWXf2zSCJPacJ88Vo1TUbtMiWu1M0tKn0i2S0BzlMTJPR/MRDxvMF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1ICkXeqkie2LUzBr24xzrl0KKAkNV+Twg1R9jDrGR/XpKDjm5
+	7/MT9nC0veADhfdZGPzPfejQm2hDrdP0FYbUuj73nc+pB4KYyKfK
+X-Gm-Gg: ASbGncts4XbyzJKOgHPOzVs8lHLAjvfPrwVSlY9x8J781UuxSVKGiqSBDFIpm+ijiox
+	8nap07pbWuTZP7mKsKywzYqzDKvgehlb4qr7TCxfuuGwDcQ8/1ftMcDDcrm1gAJVtQXb2RCtFKC
+	0DOwmHTCwY8BXwoU8SdB4r7ik+3ezNvsMiPHZd7K9D4y23iSBlXZbSg3fkzVafW7TAoDvq3Wftr
+	xGXpqSDcpzlmBjEKiFeAwl2rp6g35CXspEbnYFsKDFuUxe2CHqeaCYAv7DB72Qh/gUBC/uZVODS
+	h20nRDhCXG0CQzky0T4XRJUFWKNc1oXQTIyrqmQHaQ==
+X-Google-Smtp-Source: AGHT+IGY1dnvqu4GFNk7LQUmWmVG9IqWcp0nb9/axOK/G/ANmQOX6qhs7T+74c8yk2G/jRPLATat1g==
+X-Received: by 2002:a05:600c:4f01:b0:43d:683:8cb2 with SMTP id 5b1f17b1804b1-43d1d8b1477mr5823695e9.14.1741886430553;
+        Thu, 13 Mar 2025 10:20:30 -0700 (PDT)
+Received: from fedora ([94.73.34.87])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a73127esm61367695e9.8.2025.03.13.10.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Mar 2025 10:20:30 -0700 (PDT)
+Date: Thu, 13 Mar 2025 18:20:27 +0100
+From: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To: Simona Vetter <simona.vetter@ffwll.ch>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Jonathan.Cameron@huawei.com,
+	airlied@gmail.com, aleksander.lobakin@intel.com,
+	andriy.shevchenko@linux.intel.com, bhelgaas@google.com,
+	broonie@kernel.org, dakr@kernel.org,
+	dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+	lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, louis.chauvet@bootlin.com,
+	lukas@wunner.de, lyude@redhat.com,
+	maarten.lankhorst@linux.intel.com, mairacanal@riseup.net,
+	melissa.srw@gmail.com, mripard@kernel.org, quic_zijuhu@quicinc.com,
+	rafael@kernel.org, robin.murphy@arm.com,
+	rust-for-linux@vger.kernel.org, simona@ffwll.ch,
+	tzimmermann@suse.de
+Subject: Re: [PATCH v4 9/9] drm/vkms: convert to use faux_device
+Message-ID: <Z9MT23hgX2c21xNA@fedora>
+References: <2025022643-scouting-petticoat-492b@gregkh>
+ <20250311172054.2903-1-jose.exposito89@gmail.com>
+ <2025031218-oxidize-backing-e278@gregkh>
+ <Z9LqHcj4n7Dd8A-H@phenom.ffwll.local>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c262:0:b0:3d4:712e:29eb with SMTP id
- e9e14a558f8ab-3d482051ea1mr6445ab.5.1741885170964; Thu, 13 Mar 2025 09:59:30
- -0700 (PDT)
-Date: Thu, 13 Mar 2025 09:59:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67d30ef2.050a0220.14e108.003a.GAE@google.com>
-Subject: [syzbot] [input?] [usb?] WARNING in hanwang_open/usb_submit_urb
-From: syzbot <syzbot+9fe8f6caeb5661802ca2@syzkaller.appspotmail.com>
-To: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z9LqHcj4n7Dd8A-H@phenom.ffwll.local>
 
-Hello,
+On Thu, Mar 13, 2025 at 03:22:21PM +0100, Simona Vetter wrote:
+> On Wed, Mar 12, 2025 at 07:22:07AM +0100, Greg KH wrote:
+> > On Tue, Mar 11, 2025 at 06:20:53PM +0100, José Expósito wrote:
+> > > Hi everyone,
+> > > 
+> > > > On Tue, Feb 25, 2025 at 02:51:40PM +0100, Louis Chauvet wrote:
+> > > > > 
+> > > > > 
+> > > > > Le 25/02/2025 à 12:41, Thomas Zimmermann a écrit :
+> > > > > > Hi
+> > > > > > 
+> > > > > > Am 10.02.25 um 15:37 schrieb Louis Chauvet:
+> > > > > > > On 10/02/25 - 13:30, Greg Kroah-Hartman wrote:
+> > > > > > > > The vkms driver does not need to create a platform device, as there is
+> > > > > > > > no real platform resources associated it,  it only did so because it was
+> > > > > > > > simple to do that in order to get a device to use for resource
+> > > > > > > > management of drm resources.  Change the driver to use the faux device
+> > > > > > > > instead as this is NOT a real platform device.
+> > > > > > > > 
+> > > > > > > > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+> > > > > > > > Cc: Simona Vetter <simona@ffwll.ch>
+> > > > > > > > Cc: Melissa Wen <melissa.srw@gmail.com>
+> > > > > > > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > > > > > > > Cc: Maxime Ripard <mripard@kernel.org>
+> > > > > > > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > > > > > > > Cc: David Airlie <airlied@gmail.com>
+> > > > > > > > Cc: dri-devel@lists.freedesktop.org
+> > > > > > > > Reviewed-by: Lyude Paul <lyude@redhat.com>
+> > > > > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > 
+> > > > > > Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> > > > > > 
+> > > > > > > Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > 
+> > > > > > > Thanks for the modification, it seems to work.
+> > > > > > 
+> > > > > > Should this patch be merged through DRM trees? drm-misc-next is at
+> > > > > > v6.14-rc4 and has struct faux_device.
+> > > > > 
+> > > > > Hi,
+> > > > > 
+> > > > > I was not aware the faux-device was merged, as it is a new feature, I
+> > > > > expected it to reach drm-misc-next on 6.15-rc1.
+> > > > 
+> > > > I added it to Linus's tree just so that DRM could get these changes into
+> > > > their tree now :)
+> > > > 
+> > > > > I plan to merge [1] today/tomorrow (well tested with platform_device), and
+> > > > > then I will submit an updated version of this patch (only trivial conflicts,
+> > > > > but never tested with multiple VKMS devices).
+> > > > > 
+> > > > > [1]:https://lore.kernel.org/all/20250218101214.5790-1-jose.exposito89@gmail.com/
+> > > > 
+> > > > Great, thanks!
+> > > > 
+> > > > greg k-h
+> > > 
+> > > Testing this patch again as part of some IGT tests I'm working on,
+> > > I noticed that, applying this patch on top of the latest drm-misc-next
+> > > triggers a warning at drivers/gpu/drm/drm_gem.c:571, in
+> > > drm_gem_get_pages():
+> > > 
+> > >     if (WARN_ON(!obj->filp))
+> > >             return ERR_PTR(-EINVAL);
+> > 
+> > I don't see how the faux bus change would have anything to do with a
+> > filp as that's not related as far as I can tell.  But I don't know the
+> > drm layer at all, where does that filp come from?
+> 
+> Yeah that filp is the shmem file that backs gem bo. That's very far away
+> from anything device/driver related datastrctures. If this is a new
+> failure due to the aux bux conversion then it would be really surprising.
 
-syzbot found the following issue on:
+Agreed, I find it surprising, but reverting the patch removes the warning.
 
-HEAD commit:    b331a3d8097f xhci: Handle spurious events on Etron host is..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=17db1fa0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f429368eda610a89
-dashboard link: https://syzkaller.appspot.com/bug?extid=9fe8f6caeb5661802ca2
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164a34b7980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f04664580000
+It's most likely an issue on my side, but I decided to double check just
+in case someone else is also seeing this warning.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6dd3e4d1c59b/disk-b331a3d8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/58f91d593dc0/vmlinux-b331a3d8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6cbf2795aa43/bzImage-b331a3d8.xz
+Jose
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9fe8f6caeb5661802ca2@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 2827 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
-Modules linked in:
-CPU: 0 UID: 0 PID: 2827 Comm: acpid Not tainted 6.14.0-rc3-syzkaller-00071-gb331a3d8097f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-RIP: 0010:usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
-Code: 84 3c 02 00 00 e8 65 93 ee fc 4c 89 ef e8 fd ca d4 fe 45 89 e0 89 e9 4c 89 f2 48 89 c6 48 c7 c7 00 53 a2 87 e8 f6 a8 b2 fc 90 <0f> 0b 90 90 e9 e9 f8 ff ff e8 37 93 ee fc 49 81 c4 c0 05 00 00 e9
-RSP: 0018:ffffc90001617818 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888104e85600 RCX: ffffffff813f4dd9
-RDX: ffff8881163eba80 RSI: ffffffff813f4de6 RDI: 0000000000000001
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
-R13: ffff88810138b0b0 R14: ffff888113321760 R15: ffff888104e8567c
-FS:  00007fd474ef6740(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055c4f0adf170 CR3: 00000001163ca000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hanwang_open+0xa8/0xf0 drivers/input/tablet/hanwang.c:284
- input_open_device+0x230/0x390 drivers/input/input.c:600
- evdev_open_device drivers/input/evdev.c:391 [inline]
- evdev_open+0x52d/0x690 drivers/input/evdev.c:478
- chrdev_open+0x237/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x6cb/0x1390 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3830 [inline]
- path_openat+0x1e88/0x2d80 fs/namei.c:3989
- do_filp_open+0x20c/0x470 fs/namei.c:4016
- do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
- do_sys_open fs/open.c:1443 [inline]
- __do_sys_openat fs/open.c:1459 [inline]
- __se_sys_openat fs/open.c:1454 [inline]
- __x64_sys_openat+0x175/0x210 fs/open.c:1454
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fd474fc09a4
-Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffd7571ff60 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007ffd75720248 RCX: 00007fd474fc09a4
-RDX: 0000000000080800 RSI: 00007ffd75720148 RDI: 00000000ffffff9c
-RBP: 00007ffd75720148 R08: 00000000000000f4 R09: 00007ffd75720148
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000080800
-R13: 0000000000000020 R14: 00007ffd75720248 R15: 00007ffd75720148
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> -Sima
+> 
+> -- 
+> Simona Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
