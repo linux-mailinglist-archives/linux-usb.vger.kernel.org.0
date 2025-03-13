@@ -1,314 +1,207 @@
-Return-Path: <linux-usb+bounces-21706-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21707-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFEF5A5E9A7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 03:13:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4152BA5EC84
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 08:10:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 707B51898728
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 02:13:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A77673A4997
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 07:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A4577104;
-	Thu, 13 Mar 2025 02:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0B91FBEA8;
+	Thu, 13 Mar 2025 07:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Eeb/c1/f"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CfJ1lAcd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39FFEC4
-	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 02:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3DD1FBE8D
+	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 07:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741831979; cv=none; b=sUfu93AseNcwJpLYb3cHo9xfOLMjWyssa0YhiV5wJx52MRn477lc1ZpNgytJu8Sr6tMDKLc+64kRvISd7aTYSKe8OvAVTiW0wBplorBj86Q+avu1H3IFV1xBCbZpZYD/pk+UcAOHM0PBIZVjKy5IYZH8E3Y0dFXJoY9I1/S0ZTg=
+	t=1741849821; cv=none; b=VVrvgQZrGpuwhT5tESYzQYOiuQfkHCFYc36zPG+r38BwZ5jZ8Dy3hPHNjUJ8sbYBv1lCNAnQwPB7oVgRzRysTBCnTxZ1IGYBUmxbzLEDc0d3HO4mL7R4q6t6NTSlB+/gRPbFqA+BgriOu2vBKmCrWdEn7femQhLeES25rWE+0RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741831979; c=relaxed/simple;
-	bh=urlgLqvDiogZJxi7LKcjuJGbQr0RUqAHZ2fqkHShHGA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tFZfJSpw9X7AABSDBmNlG/qJYqisVcNt5OTWO8yRt74IjxmWFK5s3yRJM0XQVw/gzlVv11eS1Q5Dib0XRWoWoyj8Ti4kpuzyPVSoWFLpzkqZ5+po1XDOmi9oWRRND5RzBFEBJUrpBojHy+UzcRRXVGRhCj7A//XnQQAO/PWy3og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Eeb/c1/f; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: aaac4d5affb011ef8eb9c36241bbb6fb-20250313
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=o+R+TtVhCJzsi6fca5mKxBt11HGGbKJuyWjAS8q4keE=;
-	b=Eeb/c1/fRm7TREFW7z6Li/Z8KNn2JUOuKcl9eEcDA0KZwX8gajYasj7ka/NyfCTBO/whCEqyACwfWXuFcQ0kHfrXVeAcvYDrLdzOGggDmMreu+n2eIamka4kuYFc2sFW2hT1GmKDOvW1BmHibwM5sJvnFEGuqktiCC0wA1LPqvc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:8ded1d5b-b363-48b8-b21c-bdabac24a815,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:0ef645f,CLOUDID:2de94d8c-f5b8-47d5-8cf3-b68fe7530c9a,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
-	l,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: aaac4d5affb011ef8eb9c36241bbb6fb-20250313
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 813332132; Thu, 13 Mar 2025 10:12:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Thu, 13 Mar 2025 10:12:50 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Thu, 13 Mar 2025 10:12:50 +0800
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: Anuj Mittal <anuj.mittal@intel.com>, Steve Sakoman <steve@sakoman.com>,
-	"Alexander Kanavin via lists . openembedded . org"
-	<alex.kanavin=gmail.com@lists.openembedded.org>,
-	<openembedded-core@lists.openembedded.org>,
-	=?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
-CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Ramax Lo <ramax.lo@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
-	Macpaul Lin <macpaul@gmail.com>, <linux-usb@vger.kernel.org>, Richard Purdie
-	<richard.purdie@linuxfoundation.org>
-Subject: [scarthgap][PATCH] bluez5: upgrade 5.72 -> 5.77
-Date: Thu, 13 Mar 2025 10:12:43 +0800
-Message-ID: <20250313021247.2615117-1-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1741849821; c=relaxed/simple;
+	bh=nudi+TGQps9XlV6V0TrOSaI78he7hxB5cdI2VNYI98s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SUBi9+f4DCo6Oer72k118c8NvgGmC7HS6+84oqvT5hle+Bh4Mtr7snGTOwj+e0APJg7EunnxSeKRGMbKFbCCzVdJ1y1mVC0Hwf8sA9DBKF3+AN3QNjE4isFoAsmIAY1ZF1UY5woztAKqJaEYCRQq4T6qwGeBNjmApLCgmTipNdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CfJ1lAcd; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5dbf5fb2c39so126956a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 00:10:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741849817; x=1742454617; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TIPNMpgvaQACUq81WXkhf23EdKNGR/5Qd6zG9mSv7sE=;
+        b=CfJ1lAcdyNPb2j3nbIuCojdprnp+bgYEta4ze6HVZJyjn/0ViVi+keZwNnwHo5GcA8
+         4624mwNjFnrt/X79zMcKiElHuaH//Rc+vVot2Cgm+qtnLS4EMdXtSGVdLi1SVt/BXy7d
+         OyX5ngfDb2nsmvZOiMBOv/E/+17w2KSURsJnO85CGq2Fxgp1q1TipO2bWxppu+syLwaM
+         V9m2MpwpxAleiyIGwc86yhe/TxKG2UDRTc9nG/Y7y8SH4KT0cza0xES+YYoGqE9qUmh3
+         0/jAdJjUJyWxfJ/NJPXoM4J8/jVGuTK5GGoYBbgLiaQ5w4SFvqIhKyjtXmtiCu28QN/D
+         gilg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741849817; x=1742454617;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TIPNMpgvaQACUq81WXkhf23EdKNGR/5Qd6zG9mSv7sE=;
+        b=PyXklJ3ZH4EEZmIyNEw7ETQ4N/2VfHKOoDfTP8Gi18QTKdZGa/zX5gVRfmtsuRkKvF
+         bNnlR3RBYg8i9TeHZmYmHYp5iJ+Gt3/GRg3HQQGFrO8vzV1WTDyqlbRwmJ6tdG3m6p16
+         lUY+aRVxVPaj6F/YtGIJPAFVH8Rbpq/XH2tHA01aeMY/gGbYtpLa4dC4TJ2LpviI0/yF
+         b1xo8dT3LxFFPUPaSlrV+jQfy0l+ZvQkxpy3CHNRLbkx4B79IyYyGWS5VNpe3gHslnNt
+         lOYPNrHMoZH2C8Qn+UvByBpgi3Fq9/wC7WTDPzqjwAl5vBs/ubZlV7pH/BjUD8tcLiTe
+         EjiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGFXWI60pzjtV8IVjcNwLeLIyDUqc2sAy3HKorENZ+MYtryRVijXEHuXElJIcYQZS7fHz9j3qKaDA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIveCPIu3UOR+03OLgITy05wwRLjCgLXyFq1nz5UYsQtxe7s5H
+	0zPrHqEnsvm9+wxCzko786mF+60fWIY9+ngmb2yx+ChKZCmghg7rZ6grhsDWqnY=
+X-Gm-Gg: ASbGncsAtf3TakIeT+JHeXB1Fd8ehectelPZgqBFStN1Qd0jEHeNQ9oyUQlJK8vuV3j
+	BNMC7p74p+qs/FA7+i91umzeM5AcfupkRifpnsfihx97Yet/2TYoUUpkuXPYePBKuksyk9Du85i
+	t/hq7WJTlmH9pFs/bcJ/M87hWv28vTqj3PU/4B4LwicOedCQS+mulu/zZkth2vj8q4E+nurcWkk
+	3aJvYfCHVR6mvBtoKukAuoBpiWADm04RwAz4bvPYvLC/A8JuIvqwGaIXXj67eb3di28hnL28No2
+	UOhrbB+wmHesTPJQezvWX6vkiQjAtYcgrZ3no2StpIsbZn51/P0kbS9X8b4P0FY=
+X-Google-Smtp-Source: AGHT+IHwNh8Lx8mi4327vSGxzOotD8FcetvPsnqbMqLzIH73o66Q5vduqsZMQbIghSXMFWU9TTgjQA==
+X-Received: by 2002:a05:6402:268f:b0:5e0:36fa:ac1c with SMTP id 4fb4d7f45d1cf-5e75f983d16mr4935457a12.9.1741849817597;
+        Thu, 13 Mar 2025 00:10:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e81692e67bsm402988a12.15.2025.03.13.00.10.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Mar 2025 00:10:17 -0700 (PDT)
+Message-ID: <f6b84c52-b0f7-4ab4-b05a-dc78e1d7556f@linaro.org>
+Date: Thu, 13 Mar 2025 08:10:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] dt-bindings: Add cros-ec-ucsi to cros-ec-typec
+ device tree documentation
+To: Jameson Thies <jthies@google.com>, tzungbi@kernel.org,
+ ukaszb@chromium.org, bleung@chromium.org, heikki.krogerus@linux.intel.com,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, groeck@chromium.org,
+ swboyd@chromium.org, akuchynski@chromium.org
+Cc: devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250312195951.1579682-1-jthies@google.com>
+ <20250312195951.1579682-2-jthies@google.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250312195951.1579682-2-jthies@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-MTK: N
 
-From: gudnimg <gudni.m.g@gmail.com>
+On 12/03/2025 20:59, Jameson Thies wrote:
+> Add documentation for the cros-ec-ucsi device tree definition. Defining
+> this node will load the cros_ec_ucsi driver which is used for USB-C port
 
-Changelog:
-* https://github.com/bluez/bluez/releases/tag/5.77
-* https://github.com/bluez/bluez/releases/tag/5.76
-* https://github.com/bluez/bluez/releases/tag/5.75
-* https://github.com/bluez/bluez/releases/tag/5.74
-* https://github.com/bluez/bluez/releases/tag/5.73
+Your patch does not do it at all.
 
-Changes relevant to the build:
-* One patch file is dropped.
-* /etc/bluetooth is now installed with 555 permission bits when systemd
-is not enabled. The do_install function was edited to change it back to
-755. This was causing test failure when testing SDK packaging
-* Added a few missing PACKAGECONFIGs which are enabled by default.
-- asha-profiles: new in BlueZ 5.77
-- ccp-profiles: new in BlueZ 5.73
-- micp-profiles: new in BlueZ 5.70
-- csip-profiles: new in BlueZ 5.67
-- bass-profiles: new in BlueZ 5.67
-- vcp-profiles: new in BlueZ 5.66
-- mcp-profiles: new in BlueZ 5.66
-- bap-profiles: new in BlueZ 5.66
+> control on PDC based ChromeOS systems. Additionally, update mantainers
+> list to reflect changes to the ChromeOS USB owners.
+> 
+> Signed-off-by: Jameson Thies <jthies@google.com>
 
-(From OE-Core rev: ebbdb7cf5c0a3f0e6773704d4c4cc570358ec611)
+You need to work on upstream, not downstream trees.
 
-Signed-off-by: Guðni Már Gilbert <gudni.m.g@gmail.com>
-Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
----
- meta/recipes-connectivity/bluez5/bluez5.inc   | 22 +++++++-
- ...d-without-systemd-in-the-user-sessio.patch | 56 -------------------
- .../0001-test-gatt-Fix-hung-issue.patch       |  7 +--
- ...et-for-building-tests-without-runnin.patch |  7 +--
- .../bluez5/{bluez5_5.72.bb => bluez5_5.77.bb} |  2 +-
- 5 files changed, 28 insertions(+), 66 deletions(-)
- delete mode 100644 meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
- rename meta/recipes-connectivity/bluez5/{bluez5_5.72.bb => bluez5_5.77.bb} (94%)
+You CC-ed an address, which suggests you do not work on mainline kernel
+or you do not use get_maintainers.pl/b4/patman. Please rebase and always
+work on mainline or start using mentioned tools, so correct addresses
+will be used.
 
-diff --git a/meta/recipes-connectivity/bluez5/bluez5.inc b/meta/recipes-connectivity/bluez5/bluez5.inc
-index 39e1bf389ce4..e927d3071e5d 100644
---- a/meta/recipes-connectivity/bluez5/bluez5.inc
-+++ b/meta/recipes-connectivity/bluez5/bluez5.inc
-@@ -18,6 +18,14 @@ PACKAGECONFIG ??= "obex-profiles \
-     ${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
-     a2dp-profiles \
-     avrcp-profiles \
-+    bap-profiles \
-+    bass-profiles \
-+    mcp-profiles \
-+    ccp-profiles \
-+    vcp-profiles \
-+    micp-profiles \
-+    csip-profiles \
-+    asha-profiles \
-     network-profiles \
-     hid-profiles \
-     hog-profiles \
-@@ -39,6 +47,14 @@ PACKAGECONFIG[network-profiles] = "--enable-network,--disable-network"
- PACKAGECONFIG[hid-profiles] = "--enable-hid,--disable-hid"
- PACKAGECONFIG[hog-profiles] = "--enable-hog,--disable-hog"
- PACKAGECONFIG[health-profiles] = "--enable-health,--disable-health"
-+PACKAGECONFIG[bap-profiles] = "--enable-bap,--disable-bap"
-+PACKAGECONFIG[bass-profiles] = "--enable-bass,--disable-bass"
-+PACKAGECONFIG[mcp-profiles] = "--enable-mcp,--disable-mcp"
-+PACKAGECONFIG[ccp-profiles] = "--enable-ccp,--disable-ccp"
-+PACKAGECONFIG[vcp-profiles] = "--enable-vcp,--disable-vcp"
-+PACKAGECONFIG[micp-profiles] = "--enable-micp,--disable-micp"
-+PACKAGECONFIG[csip-profiles] = "--enable-csip,--disable-csip"
-+PACKAGECONFIG[asha-profiles] = "--enable-asha,--disable-asha"
- PACKAGECONFIG[sixaxis] = "--enable-sixaxis,--disable-sixaxis"
- PACKAGECONFIG[tools] = "--enable-tools,--disable-tools"
- PACKAGECONFIG[threads] = "--enable-threads,--disable-threads"
-@@ -51,7 +67,6 @@ PACKAGECONFIG[manpages] = "--enable-manpages,--disable-manpages,python3-docutils
- SRC_URI = "${KERNELORG_MIRROR}/linux/bluetooth/bluez-${PV}.tar.xz \
-            file://init \
-            file://run-ptest \
--           ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '', 'file://0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch', d)} \
-            file://0001-tests-add-a-target-for-building-tests-without-runnin.patch \
-            file://0001-test-gatt-Fix-hung-issue.patch \
-            file://0001-adapter-Fix-up-address-type-when-loading-keys.patch \
-@@ -107,6 +122,11 @@ do_install:append() {
- 	# Patch python tools to use Python 3; they should be source compatible, but
- 	# still refer to Python 2 in the shebang
- 	sed -i -e '1s,#!.*python.*,#!${bindir}/python3,' ${D}${libdir}/bluez/test/*
-+
-+	# Fix the /etc/bluetooth directory permissions when systemd is disabled
-+	if ${@bb.utils.contains('PACKAGECONFIG', 'systemd', 'false', 'true', d)}; then
-+		chmod 0755 ${D}${sysconfdir}/bluetooth
-+	fi
- }
- 
- PACKAGES =+ "${PN}-testtools ${PN}-obex ${PN}-noinst-tools"
-diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch b/meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
-deleted file mode 100644
-index 618ed734a96a..000000000000
---- a/meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From f74eb97c9fb3c0ee2895742e773ac6a3c41c999c Mon Sep 17 00:00:00 2001
--From: Giovanni Campagna <gcampagna-cNUdlRotFMnNLxjTenLetw@public.gmane.org>
--Date: Sat, 12 Oct 2013 17:45:25 +0200
--Subject: [PATCH] Allow using obexd without systemd in the user session
--
--Not all sessions run systemd --user (actually, the majority
--doesn't), so the dbus daemon must be able to spawn obexd
--directly, and to do so it needs the full path of the daemon.
--
--Upstream-Status: Denied
--
--Not accepted by upstream maintainer for being a distro specific
--configuration. See thread:
--
--http://thread.gmane.org/gmane.linux.bluez.kernel/38725/focus=38843
--
--Signed-off-by: Javier Viguera <javier.viguera@digi.com>
--
-----
-- Makefile.obexd                                                | 4 ++--
-- .../src/{org.bluez.obex.service => org.bluez.obex.service.in} | 2 +-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
-- rename obexd/src/{org.bluez.obex.service => org.bluez.obex.service.in} (76%)
--
--diff --git a/Makefile.obexd b/Makefile.obexd
--index de59d29..73004a3 100644
----- a/Makefile.obexd
--+++ b/Makefile.obexd
--@@ -1,12 +1,12 @@
-- if SYSTEMD
-- systemduserunitdir = $(SYSTEMD_USERUNITDIR)
-- systemduserunit_DATA = obexd/src/obex.service
--+endif
-- 
-- dbussessionbusdir = $(DBUS_SESSIONBUSDIR)
-- dbussessionbus_DATA = obexd/src/org.bluez.obex.service
---endif
-- 
---EXTRA_DIST += obexd/src/obex.service.in obexd/src/org.bluez.obex.service
--+EXTRA_DIST += obexd/src/obex.service.in obexd/src/org.bluez.obex.service.in
-- 
-- if OBEX
-- 
--diff --git a/obexd/src/org.bluez.obex.service b/obexd/src/org.bluez.obex.service.in
--similarity index 76%
--rename from obexd/src/org.bluez.obex.service
--rename to obexd/src/org.bluez.obex.service.in
--index a538088..9c815f2 100644
----- a/obexd/src/org.bluez.obex.service
--+++ b/obexd/src/org.bluez.obex.service.in
--@@ -1,4 +1,4 @@
-- [D-BUS Service]
-- Name=org.bluez.obex
---Exec=/bin/false
--+Exec=@libexecdir@/obexd
-- SystemdService=dbus-org.bluez.obex.service
-diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-issue.patch b/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-issue.patch
-index b1e93dbe19ef..ae113a9a6d7a 100644
---- a/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-issue.patch
-+++ b/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-issue.patch
-@@ -1,4 +1,4 @@
--From fb583a57f9f4ab956a09e9bb96d89aa13553bf21 Mon Sep 17 00:00:00 2001
-+From eeb62ab04b3789a27074236cd0bed7cc64759f4d Mon Sep 17 00:00:00 2001
- From: Mingli Yu <Mingli.Yu@windriver.com>
- Date: Fri, 24 Aug 2018 12:04:03 +0800
- Subject: [PATCH] test-gatt: Fix hung issue
-@@ -21,16 +21,15 @@ no action.
- Upstream-Status: Submitted [https://marc.info/?l=linux-bluetooth&m=153508881804635&w=2]
- 
- Signed-off-by: Mingli Yu <Mingli.Yu@windriver.com>
--
- ---
-  unit/test-gatt.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/unit/test-gatt.c b/unit/test-gatt.c
--index 5e06d4e..4864d36 100644
-+index 1613fbc..25dd614 100644
- --- a/unit/test-gatt.c
- +++ b/unit/test-gatt.c
--@@ -4546,7 +4546,7 @@ int main(int argc, char *argv[])
-+@@ -4547,7 +4547,7 @@ int main(int argc, char *argv[])
-  			test_server, service_db_1, NULL,
-  			raw_pdu(0x03, 0x00, 0x02),
-  			raw_pdu(0xbf, 0x00),
-diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for-building-tests-without-runnin.patch b/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for-building-tests-without-runnin.patch
-index 881494a3543e..37253b9725b2 100644
---- a/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for-building-tests-without-runnin.patch
-+++ b/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for-building-tests-without-runnin.patch
-@@ -1,20 +1,19 @@
--From 738e73b386352fd90f1f26cc1ee75427cf4dc23b Mon Sep 17 00:00:00 2001
-+From c06fecbb009f4c42f01d86383d4571c96ba872f0 Mon Sep 17 00:00:00 2001
- From: Alexander Kanavin <alex.kanavin@gmail.com>
- Date: Fri, 1 Apr 2016 17:07:34 +0300
- Subject: [PATCH] tests: add a target for building tests without running them
- 
- Upstream-Status: Inappropriate [oe specific]
- Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
--
- ---
-  Makefile.am | 3 +++
-  1 file changed, 3 insertions(+)
- 
- diff --git a/Makefile.am b/Makefile.am
--index e738eb3..dab17dd 100644
-+index 0ae7211..c8bcaca 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -710,6 +710,9 @@ endif
-+@@ -713,6 +713,9 @@ endif
-  TESTS = $(unit_tests)
-  AM_TESTS_ENVIRONMENT = MALLOC_CHECK_=3 MALLOC_PERTURB_=69
-  
-diff --git a/meta/recipes-connectivity/bluez5/bluez5_5.72.bb b/meta/recipes-connectivity/bluez5/bluez5_5.77.bb
-similarity index 94%
-rename from meta/recipes-connectivity/bluez5/bluez5_5.72.bb
-rename to meta/recipes-connectivity/bluez5/bluez5_5.77.bb
-index 9fda960ea72e..55264fd6b760 100644
---- a/meta/recipes-connectivity/bluez5/bluez5_5.72.bb
-+++ b/meta/recipes-connectivity/bluez5/bluez5_5.77.bb
-@@ -1,6 +1,6 @@
- require bluez5.inc
- 
--SRC_URI[sha256sum] = "499d7fa345a996c1bb650f5c6749e1d929111fa6ece0be0e98687fee6124536e"
-+SRC_URI[sha256sum] = "5d032fdc1d4a085813554f57591e2e1fb0ceb2b3616ee56f689bc00e1d150812"
- 
- CVE_STATUS[CVE-2020-24490] = "cpe-incorrect: This issue has kernel fixes rather than bluez fixes"
- 
--- 
-2.45.2
+> ---
+>  .../bindings/chrome/google,cros-ec-typec.yaml       | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> index 9f9816fbecbc..ab39c5280681 100644
+> --- a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> +++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> @@ -8,17 +8,24 @@ title: Google Chrome OS EC(Embedded Controller) Type C port driver.
+>  
+>  maintainers:
+>    - Benson Leung <bleung@chromium.org>
+> -  - Prashant Malani <pmalani@chromium.org>
+> +  - Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> +  - Łukasz Bartosik <ukaszb@chromium.org>
+> +  - Jameson Thies <jthies@google.com>
+> +  - Andrei Kuchynski <akuchynski@chromium.org>
+>  
+>  description:
+>    Chrome OS devices have an Embedded Controller(EC) which has access to
+>    Type C port state. This node is intended to allow the host to read and
+>    control the Type C ports. The node for this device should be under a
+> -  cros-ec node like google,cros-ec-spi.
+> +  cros-ec node like google,cros-ec-spi. On TCPC systems, ChromeOS should
+> +  use cros-ec-typec. On PDC systems, ChromeOS should use cros-ec-ucsi.
 
+What does it mean? How is it related to description?
+
+>  
+>  properties:
+>    compatible:
+> -    const: google,cros-ec-typec
+> +    oneOf:
+> +      - items:
+> +          - const: google,cros-ec-typec
+> +          - const: google,cros-ec-ucsi
+
+I don't understand at all why you are growing now this with fallback.
+And if you tested your patch, you would see it does not make any sense.
+
+NAK, test your patches before posting.
+
+Best regards,
+Krzysztof
 
