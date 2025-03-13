@@ -1,368 +1,164 @@
-Return-Path: <linux-usb+bounces-21730-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21731-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F8BA5FC65
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 17:45:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D6A1A5FCCB
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 17:59:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 594551886D44
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 16:45:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6337516B92F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 16:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3893026A086;
-	Thu, 13 Mar 2025 16:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakoman-com.20230601.gappssmtp.com header.i=@sakoman-com.20230601.gappssmtp.com header.b="ekqFSkE7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31AE26A0A2;
+	Thu, 13 Mar 2025 16:59:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7012690E6
-	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 16:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C1A268FED
+	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 16:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741884307; cv=none; b=WlbilgdEtSBJH82GplPnCn907Q7DVTwP/bvna7rwihkR+Me2yeoDNmhbbwFP7R0U2DmE7V2mhYezcHecTY/i/JLjNQ0PH/olw8BzPUWSmYDJh6VujLn/6JiqXnoTqvkanWjCmjHkwVbCYevrO+mk7dtbRmPSYQkZacAWSq72zEk=
+	t=1741885173; cv=none; b=CmOJzOiRN7ZODIzQ5sS4bC743oy3e6/lHgpgPMr0hGaCWxPMZTaekB9EDO0Lr9eqmAaVe5XrnQC4UVTw9MbqXWsaqgW1Vh762VVBQVmOkBG9iVKgyu0nBbaZ/eE9NS+kubBGItPitMIOaFwe5lOb51lObM0Sz9ZVFpgVXn2v3DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741884307; c=relaxed/simple;
-	bh=HkS1q8y5FqY7o7YJnYnqWet5/skABDd/w5Leo/BqTdw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W+YsapTf+OItisd4gUxXcz0ORYbJKg1Xv/yMybkuHVFy5LAKe1XF4nBKJMDWYv3USieQH4dxdF6vEy9xT/spkOuWpmYrnNTlmTEL9mSoKh264m1PnQYJ3gb+x3rN+vIjDbm+PHsOcxfibFLkDweoGP2By4a+vouPjXdUr/FvK4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sakoman.com; spf=fail smtp.mailfrom=sakoman.com; dkim=pass (2048-bit key) header.d=sakoman-com.20230601.gappssmtp.com header.i=@sakoman-com.20230601.gappssmtp.com header.b=ekqFSkE7; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sakoman.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sakoman.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e63504bedd0so867556276.0
-        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 09:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sakoman-com.20230601.gappssmtp.com; s=20230601; t=1741884304; x=1742489104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3RAUHCKi0x77lXSS1nnZ0KC7DP4cZYeVQWVqcGuY5g=;
-        b=ekqFSkE7hpAxSEhV4rTHtceVaq9mgkInbfum4PcN3KDXvK5gGye5uwY2KKpgvhMMm2
-         mcMqEeisC76ezDet724S/Vl3rZFAmL74MFWko7A2GJkIJlyuafLBR6ApIo/Nm/BDH5H7
-         a10l7IrXgFKzbKVyt6/mj2tkqo/fv/56a392PiOxMayrn/8jtQ9BBjF6BBoz6I6MSS2i
-         ERCI3IoBWpKyQ4kw6kyt7xgmvSv3NRzZwrekj4HH/0G+7F+9zLBFIVG9+7iUS5bRwdyB
-         MUajd+UZ24WbGoUVINMAn+WyuFN6cZn4+ohBR22Nd9n/JDLKUJ+lKEp6cIqJ971rU1uY
-         KoTA==
+	s=arc-20240116; t=1741885173; c=relaxed/simple;
+	bh=5plUZokiGNszsQd5jMdJREBDilijqjztiPfhbU0oomI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AFyjtJ0k19cgfh/kBdJBH4GrBqM0wQjKCdMclL8HVOXsRUTVtQKlOunOruQZgwHHUeu1Z0w5INxW12zZXEPRfuxxBiARS4OLIw1ngQDyLBPEOfunINtAf7C7iH9tYuyIfnJoIlCOxOceobS+gXIJc53H5iBBS7Usa+Q6NOaVRBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d054d79dacso20630365ab.2
+        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 09:59:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741884304; x=1742489104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O3RAUHCKi0x77lXSS1nnZ0KC7DP4cZYeVQWVqcGuY5g=;
-        b=nFuj8XQum32X5wSJomub+HwXTnyKE225q1Px1dcL4vO0nd03qJSAgqtOh+fjdIiuYC
-         1Tuzc8VFr1n1MRPc/jmMqtOD/PQPS6D2czUNFhLsAqTV1PbuOh9kXg2tOalusPQjZbVE
-         yBhk2PPAUXmX/6nWyQDraU3GlgCu8ARvBMfS+Y0Y9gED6nqW5/1AkkpX6jwZfebbk39j
-         huclianp87+yRw/a383pNq3+AJpkyK4YYNRnAQUir+ME6JoQuzNZMo84h+GUKtAwVkLJ
-         2qwNr+479Mgxkkbu3pF6yIdmfj4AcIL1UFAiYLHUUs63rD97G6VyBWLOrB6fTn8ikQkK
-         oYfg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqVNR/QQvDBjm0QSOj0Ws+YHifzbD9TxRMqEK+QAg9eWboSCr+cJeqAfUQFVapOM6iwR0Bv18aAjY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+ZVO7wr9mzhy1/bv9uCP2vZwzrNOff7wh0i/9XK0JKVMIzr1P
-	dVkoVpXB+BqIevrRxkqd4L3EVwTkKNYBeY/UT8bMIJkvUGh1D48oRNWv3QgW0r7aih+lp6Ptm8a
-	cJkLWtrI+XORE09gPR3nNxIVsEpaRFLBJroN9ITA2iHP8+sDH
-X-Gm-Gg: ASbGncvsjO1PRPXhVA3apZ2gQ4C9ZUPqML+M3+xxeOesuIAuPw4xPC4B6JQO0dIsaK+
-	bi8IZTZvO31hrDXa4sl2eDq8bxqSM31MF7YAOJCkzuvrQBfr7QhMmUbzkSwwVdIczWT5tFigWUK
-	GcoVL2xGDuOeeeCTuQzyH6+622VRA9+jSLvH/zoHTRiflefEloH3eQs8A15Q==
-X-Google-Smtp-Source: AGHT+IGutNpkXyficPjJ5h93uA3OSMx2hjYNuGIaAqq2FHYGsyfK2PXKoEhA04wkHW4vzbG9x9dYGnW0O2DSMZWne+E=
-X-Received: by 2002:a05:6902:220f:b0:e63:4b42:6940 with SMTP id
- 3f1490d57ef6-e63b5158790mr15737633276.2.1741884303797; Thu, 13 Mar 2025
- 09:45:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1741885171; x=1742489971;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CAVyUdjA1Fi7LXzB/oZslQ8tsF7/jZYEXnsjntzroqE=;
+        b=lOSqo9qGvtttNimLXjDGCcs1+r9tucuRkMc3+/YgrDGR0RYIpG6pPPVaHuJMiAQNNM
+         XGz9zcthMZWpON6n+3iKhBxjKsY43sVZkX/GAu0A4/OvW0ctnJtPWfnFBul9KJ4hAg75
+         G/nN0NMVNABIBcn7butudsMzL/1nOLDmdvP2Ui/kyK93Z4iBFRDzCo9HhntlfVwulMDi
+         L2Di1XkimSFbaXzwQi3dat195MZBWewIzMVnQK892X9fI8On2hLQw3jwk0HWfJsUONGT
+         WEET+U883skgxlZLkjwrdFi9p7YxLNPl1+nJ8VX10EuO4RVmnaj2cItA4XaAh+LhmWpj
+         SP/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXeriqbV7JlHiOdv5jmDRCyOFS4Qiw0Jm93xnpYVfJIr+Nn3Jhypvimznxv1M8Y2m6uOCmoCzDC6Gg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqCA2N3MzKoGKKrICU4GQ0/eruwCmfgRvX7PhxWOGIHlqCb1Mc
+	4CBTUR/A5N8ggpxc7FxKVs+OKoKCtUUsNlzpaElC6ZMk5tONVHXSFDygI9KJsVOttE/cE8hi+d+
+	8/Vou2FQGE1/a6XapjBOq/BX2OkHPx/wP4yIxeTgqEgIZRItoyMqr7cQ=
+X-Google-Smtp-Source: AGHT+IGaGZzlBUeOGaoLnZmW9bgDBCxgtJaE55nziPEvab/sw8+W63R2zUJ4P/BgZbmd5Zz4Rq0ngyXdUb7Mlq/C3Db/n3UoXyQz
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313021247.2615117-1-macpaul.lin@mediatek.com>
-In-Reply-To: <20250313021247.2615117-1-macpaul.lin@mediatek.com>
-From: Steve Sakoman <steve@sakoman.com>
-Date: Thu, 13 Mar 2025 09:44:52 -0700
-X-Gm-Features: AQ5f1JrX16nqzANaYaVUM0qJ-yUkx7F2Q-dk5l6_7IOhys9xU1SlhUYrfDdkLFU
-Message-ID: <CAOSpxdZJjZwGg2oKzjKnbkBnCu4O_2Vr2fOVK7bPTGvmP9GX4w@mail.gmail.com>
-Subject: Re: [scarthgap][PATCH] bluez5: upgrade 5.72 -> 5.77
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Anuj Mittal <anuj.mittal@intel.com>, 
-	"Alexander Kanavin via lists . openembedded . org" <alex.kanavin=gmail.com@lists.openembedded.org>, 
-	openembedded-core@lists.openembedded.org, 
-	=?UTF-8?Q?Gu=C3=B0ni_M=C3=A1r_Gilbert?= <gudni.m.g@gmail.com>, 
-	Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>, 
-	Ramax Lo <ramax.lo@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, linux-usb@vger.kernel.org, 
-	Richard Purdie <richard.purdie@linuxfoundation.org>
+X-Received: by 2002:a92:c262:0:b0:3d4:712e:29eb with SMTP id
+ e9e14a558f8ab-3d482051ea1mr6445ab.5.1741885170964; Thu, 13 Mar 2025 09:59:30
+ -0700 (PDT)
+Date: Thu, 13 Mar 2025 09:59:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67d30ef2.050a0220.14e108.003a.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] WARNING in hanwang_open/usb_submit_urb
+From: syzbot <syzbot+9fe8f6caeb5661802ca2@syzkaller.appspotmail.com>
+To: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Sorry, I can't take these version bumps since policy only allows
-bug/security fix releases.  These version bumps also include new
-features and hence aren't allowed.
+Hello,
 
-Steve
+syzbot found the following issue on:
 
-On Wed, Mar 12, 2025 at 7:12=E2=80=AFPM Macpaul Lin <macpaul.lin@mediatek.c=
-om> wrote:
->
-> From: gudnimg <gudni.m.g@gmail.com>
->
-> Changelog:
-> * https://github.com/bluez/bluez/releases/tag/5.77
-> * https://github.com/bluez/bluez/releases/tag/5.76
-> * https://github.com/bluez/bluez/releases/tag/5.75
-> * https://github.com/bluez/bluez/releases/tag/5.74
-> * https://github.com/bluez/bluez/releases/tag/5.73
->
-> Changes relevant to the build:
-> * One patch file is dropped.
-> * /etc/bluetooth is now installed with 555 permission bits when systemd
-> is not enabled. The do_install function was edited to change it back to
-> 755. This was causing test failure when testing SDK packaging
-> * Added a few missing PACKAGECONFIGs which are enabled by default.
-> - asha-profiles: new in BlueZ 5.77
-> - ccp-profiles: new in BlueZ 5.73
-> - micp-profiles: new in BlueZ 5.70
-> - csip-profiles: new in BlueZ 5.67
-> - bass-profiles: new in BlueZ 5.67
-> - vcp-profiles: new in BlueZ 5.66
-> - mcp-profiles: new in BlueZ 5.66
-> - bap-profiles: new in BlueZ 5.66
->
-> (From OE-Core rev: ebbdb7cf5c0a3f0e6773704d4c4cc570358ec611)
->
-> Signed-off-by: Gu=C3=B0ni M=C3=A1r Gilbert <gudni.m.g@gmail.com>
-> Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  meta/recipes-connectivity/bluez5/bluez5.inc   | 22 +++++++-
->  ...d-without-systemd-in-the-user-sessio.patch | 56 -------------------
->  .../0001-test-gatt-Fix-hung-issue.patch       |  7 +--
->  ...et-for-building-tests-without-runnin.patch |  7 +--
->  .../bluez5/{bluez5_5.72.bb =3D> bluez5_5.77.bb} |  2 +-
->  5 files changed, 28 insertions(+), 66 deletions(-)
->  delete mode 100644 meta/recipes-connectivity/bluez5/bluez5/0001-Allow-us=
-ing-obexd-without-systemd-in-the-user-sessio.patch
->  rename meta/recipes-connectivity/bluez5/{bluez5_5.72.bb =3D> bluez5_5.77=
-.bb} (94%)
->
-> diff --git a/meta/recipes-connectivity/bluez5/bluez5.inc b/meta/recipes-c=
-onnectivity/bluez5/bluez5.inc
-> index 39e1bf389ce4..e927d3071e5d 100644
-> --- a/meta/recipes-connectivity/bluez5/bluez5.inc
-> +++ b/meta/recipes-connectivity/bluez5/bluez5.inc
-> @@ -18,6 +18,14 @@ PACKAGECONFIG ??=3D "obex-profiles \
->      ${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
->      a2dp-profiles \
->      avrcp-profiles \
-> +    bap-profiles \
-> +    bass-profiles \
-> +    mcp-profiles \
-> +    ccp-profiles \
-> +    vcp-profiles \
-> +    micp-profiles \
-> +    csip-profiles \
-> +    asha-profiles \
->      network-profiles \
->      hid-profiles \
->      hog-profiles \
-> @@ -39,6 +47,14 @@ PACKAGECONFIG[network-profiles] =3D "--enable-network,=
---disable-network"
->  PACKAGECONFIG[hid-profiles] =3D "--enable-hid,--disable-hid"
->  PACKAGECONFIG[hog-profiles] =3D "--enable-hog,--disable-hog"
->  PACKAGECONFIG[health-profiles] =3D "--enable-health,--disable-health"
-> +PACKAGECONFIG[bap-profiles] =3D "--enable-bap,--disable-bap"
-> +PACKAGECONFIG[bass-profiles] =3D "--enable-bass,--disable-bass"
-> +PACKAGECONFIG[mcp-profiles] =3D "--enable-mcp,--disable-mcp"
-> +PACKAGECONFIG[ccp-profiles] =3D "--enable-ccp,--disable-ccp"
-> +PACKAGECONFIG[vcp-profiles] =3D "--enable-vcp,--disable-vcp"
-> +PACKAGECONFIG[micp-profiles] =3D "--enable-micp,--disable-micp"
-> +PACKAGECONFIG[csip-profiles] =3D "--enable-csip,--disable-csip"
-> +PACKAGECONFIG[asha-profiles] =3D "--enable-asha,--disable-asha"
->  PACKAGECONFIG[sixaxis] =3D "--enable-sixaxis,--disable-sixaxis"
->  PACKAGECONFIG[tools] =3D "--enable-tools,--disable-tools"
->  PACKAGECONFIG[threads] =3D "--enable-threads,--disable-threads"
-> @@ -51,7 +67,6 @@ PACKAGECONFIG[manpages] =3D "--enable-manpages,--disabl=
-e-manpages,python3-docutils
->  SRC_URI =3D "${KERNELORG_MIRROR}/linux/bluetooth/bluez-${PV}.tar.xz \
->             file://init \
->             file://run-ptest \
-> -           ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '', 'file:=
-//0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch', d)} \
->             file://0001-tests-add-a-target-for-building-tests-without-run=
-nin.patch \
->             file://0001-test-gatt-Fix-hung-issue.patch \
->             file://0001-adapter-Fix-up-address-type-when-loading-keys.pat=
-ch \
-> @@ -107,6 +122,11 @@ do_install:append() {
->         # Patch python tools to use Python 3; they should be source compa=
-tible, but
->         # still refer to Python 2 in the shebang
->         sed -i -e '1s,#!.*python.*,#!${bindir}/python3,' ${D}${libdir}/bl=
-uez/test/*
-> +
-> +       # Fix the /etc/bluetooth directory permissions when systemd is di=
-sabled
-> +       if ${@bb.utils.contains('PACKAGECONFIG', 'systemd', 'false', 'tru=
-e', d)}; then
-> +               chmod 0755 ${D}${sysconfdir}/bluetooth
-> +       fi
->  }
->
->  PACKAGES =3D+ "${PN}-testtools ${PN}-obex ${PN}-noinst-tools"
-> diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obe=
-xd-without-systemd-in-the-user-sessio.patch b/meta/recipes-connectivity/blu=
-ez5/bluez5/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
-> deleted file mode 100644
-> index 618ed734a96a..000000000000
-> --- a/meta/recipes-connectivity/bluez5/bluez5/0001-Allow-using-obexd-with=
-out-systemd-in-the-user-sessio.patch
-> +++ /dev/null
-> @@ -1,56 +0,0 @@
-> -From f74eb97c9fb3c0ee2895742e773ac6a3c41c999c Mon Sep 17 00:00:00 2001
-> -From: Giovanni Campagna <gcampagna-cNUdlRotFMnNLxjTenLetw@public.gmane.o=
-rg>
-> -Date: Sat, 12 Oct 2013 17:45:25 +0200
-> -Subject: [PATCH] Allow using obexd without systemd in the user session
-> -
-> -Not all sessions run systemd --user (actually, the majority
-> -doesn't), so the dbus daemon must be able to spawn obexd
-> -directly, and to do so it needs the full path of the daemon.
-> -
-> -Upstream-Status: Denied
-> -
-> -Not accepted by upstream maintainer for being a distro specific
-> -configuration. See thread:
-> -
-> -http://thread.gmane.org/gmane.linux.bluez.kernel/38725/focus=3D38843
-> -
-> -Signed-off-by: Javier Viguera <javier.viguera@digi.com>
-> -
-> ----
-> - Makefile.obexd                                                | 4 ++--
-> - .../src/{org.bluez.obex.service =3D> org.bluez.obex.service.in} | 2 +-
-> - 2 files changed, 3 insertions(+), 3 deletions(-)
-> - rename obexd/src/{org.bluez.obex.service =3D> org.bluez.obex.service.in=
-} (76%)
-> -
-> -diff --git a/Makefile.obexd b/Makefile.obexd
-> -index de59d29..73004a3 100644
-> ---- a/Makefile.obexd
-> -+++ b/Makefile.obexd
-> -@@ -1,12 +1,12 @@
-> - if SYSTEMD
-> - systemduserunitdir =3D $(SYSTEMD_USERUNITDIR)
-> - systemduserunit_DATA =3D obexd/src/obex.service
-> -+endif
-> -
-> - dbussessionbusdir =3D $(DBUS_SESSIONBUSDIR)
-> - dbussessionbus_DATA =3D obexd/src/org.bluez.obex.service
-> --endif
-> -
-> --EXTRA_DIST +=3D obexd/src/obex.service.in obexd/src/org.bluez.obex.serv=
-ice
-> -+EXTRA_DIST +=3D obexd/src/obex.service.in obexd/src/org.bluez.obex.serv=
-ice.in
-> -
-> - if OBEX
-> -
-> -diff --git a/obexd/src/org.bluez.obex.service b/obexd/src/org.bluez.obex=
-.service.in
-> -similarity index 76%
-> -rename from obexd/src/org.bluez.obex.service
-> -rename to obexd/src/org.bluez.obex.service.in
-> -index a538088..9c815f2 100644
-> ---- a/obexd/src/org.bluez.obex.service
-> -+++ b/obexd/src/org.bluez.obex.service.in
-> -@@ -1,4 +1,4 @@
-> - [D-BUS Service]
-> - Name=3Dorg.bluez.obex
-> --Exec=3D/bin/false
-> -+Exec=3D@libexecdir@/obexd
-> - SystemdService=3Ddbus-org.bluez.obex.service
-> diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-h=
-ung-issue.patch b/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fi=
-x-hung-issue.patch
-> index b1e93dbe19ef..ae113a9a6d7a 100644
-> --- a/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-iss=
-ue.patch
-> +++ b/meta/recipes-connectivity/bluez5/bluez5/0001-test-gatt-Fix-hung-iss=
-ue.patch
-> @@ -1,4 +1,4 @@
-> -From fb583a57f9f4ab956a09e9bb96d89aa13553bf21 Mon Sep 17 00:00:00 2001
-> +From eeb62ab04b3789a27074236cd0bed7cc64759f4d Mon Sep 17 00:00:00 2001
->  From: Mingli Yu <Mingli.Yu@windriver.com>
->  Date: Fri, 24 Aug 2018 12:04:03 +0800
->  Subject: [PATCH] test-gatt: Fix hung issue
-> @@ -21,16 +21,15 @@ no action.
->  Upstream-Status: Submitted [https://marc.info/?l=3Dlinux-bluetooth&m=3D1=
-53508881804635&w=3D2]
->
->  Signed-off-by: Mingli Yu <Mingli.Yu@windriver.com>
-> -
->  ---
->   unit/test-gatt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
->  diff --git a/unit/test-gatt.c b/unit/test-gatt.c
-> -index 5e06d4e..4864d36 100644
-> +index 1613fbc..25dd614 100644
->  --- a/unit/test-gatt.c
->  +++ b/unit/test-gatt.c
-> -@@ -4546,7 +4546,7 @@ int main(int argc, char *argv[])
-> +@@ -4547,7 +4547,7 @@ int main(int argc, char *argv[])
->                         test_server, service_db_1, NULL,
->                         raw_pdu(0x03, 0x00, 0x02),
->                         raw_pdu(0xbf, 0x00),
-> diff --git a/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-tar=
-get-for-building-tests-without-runnin.patch b/meta/recipes-connectivity/blu=
-ez5/bluez5/0001-tests-add-a-target-for-building-tests-without-runnin.patch
-> index 881494a3543e..37253b9725b2 100644
-> --- a/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for=
--building-tests-without-runnin.patch
-> +++ b/meta/recipes-connectivity/bluez5/bluez5/0001-tests-add-a-target-for=
--building-tests-without-runnin.patch
-> @@ -1,20 +1,19 @@
-> -From 738e73b386352fd90f1f26cc1ee75427cf4dc23b Mon Sep 17 00:00:00 2001
-> +From c06fecbb009f4c42f01d86383d4571c96ba872f0 Mon Sep 17 00:00:00 2001
->  From: Alexander Kanavin <alex.kanavin@gmail.com>
->  Date: Fri, 1 Apr 2016 17:07:34 +0300
->  Subject: [PATCH] tests: add a target for building tests without running =
-them
->
->  Upstream-Status: Inappropriate [oe specific]
->  Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-> -
->  ---
->   Makefile.am | 3 +++
->   1 file changed, 3 insertions(+)
->
->  diff --git a/Makefile.am b/Makefile.am
-> -index e738eb3..dab17dd 100644
-> +index 0ae7211..c8bcaca 100644
->  --- a/Makefile.am
->  +++ b/Makefile.am
-> -@@ -710,6 +710,9 @@ endif
-> +@@ -713,6 +713,9 @@ endif
->   TESTS =3D $(unit_tests)
->   AM_TESTS_ENVIRONMENT =3D MALLOC_CHECK_=3D3 MALLOC_PERTURB_=3D69
->
-> diff --git a/meta/recipes-connectivity/bluez5/bluez5_5.72.bb b/meta/recip=
-es-connectivity/bluez5/bluez5_5.77.bb
-> similarity index 94%
-> rename from meta/recipes-connectivity/bluez5/bluez5_5.72.bb
-> rename to meta/recipes-connectivity/bluez5/bluez5_5.77.bb
-> index 9fda960ea72e..55264fd6b760 100644
-> --- a/meta/recipes-connectivity/bluez5/bluez5_5.72.bb
-> +++ b/meta/recipes-connectivity/bluez5/bluez5_5.77.bb
-> @@ -1,6 +1,6 @@
->  require bluez5.inc
->
-> -SRC_URI[sha256sum] =3D "499d7fa345a996c1bb650f5c6749e1d929111fa6ece0be0e=
-98687fee6124536e"
-> +SRC_URI[sha256sum] =3D "5d032fdc1d4a085813554f57591e2e1fb0ceb2b3616ee56f=
-689bc00e1d150812"
->
->  CVE_STATUS[CVE-2020-24490] =3D "cpe-incorrect: This issue has kernel fix=
-es rather than bluez fixes"
->
-> --
-> 2.45.2
->
+HEAD commit:    b331a3d8097f xhci: Handle spurious events on Etron host is..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=17db1fa0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f429368eda610a89
+dashboard link: https://syzkaller.appspot.com/bug?extid=9fe8f6caeb5661802ca2
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164a34b7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f04664580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6dd3e4d1c59b/disk-b331a3d8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/58f91d593dc0/vmlinux-b331a3d8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6cbf2795aa43/bzImage-b331a3d8.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9fe8f6caeb5661802ca2@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 0 PID: 2827 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+Modules linked in:
+CPU: 0 UID: 0 PID: 2827 Comm: acpid Not tainted 6.14.0-rc3-syzkaller-00071-gb331a3d8097f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
+RIP: 0010:usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+Code: 84 3c 02 00 00 e8 65 93 ee fc 4c 89 ef e8 fd ca d4 fe 45 89 e0 89 e9 4c 89 f2 48 89 c6 48 c7 c7 00 53 a2 87 e8 f6 a8 b2 fc 90 <0f> 0b 90 90 e9 e9 f8 ff ff e8 37 93 ee fc 49 81 c4 c0 05 00 00 e9
+RSP: 0018:ffffc90001617818 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888104e85600 RCX: ffffffff813f4dd9
+RDX: ffff8881163eba80 RSI: ffffffff813f4de6 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
+R13: ffff88810138b0b0 R14: ffff888113321760 R15: ffff888104e8567c
+FS:  00007fd474ef6740(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055c4f0adf170 CR3: 00000001163ca000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ hanwang_open+0xa8/0xf0 drivers/input/tablet/hanwang.c:284
+ input_open_device+0x230/0x390 drivers/input/input.c:600
+ evdev_open_device drivers/input/evdev.c:391 [inline]
+ evdev_open+0x52d/0x690 drivers/input/evdev.c:478
+ chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+ do_dentry_open+0x6cb/0x1390 fs/open.c:956
+ vfs_open+0x82/0x3f0 fs/open.c:1086
+ do_open fs/namei.c:3830 [inline]
+ path_openat+0x1e88/0x2d80 fs/namei.c:3989
+ do_filp_open+0x20c/0x470 fs/namei.c:4016
+ do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
+ do_sys_open fs/open.c:1443 [inline]
+ __do_sys_openat fs/open.c:1459 [inline]
+ __se_sys_openat fs/open.c:1454 [inline]
+ __x64_sys_openat+0x175/0x210 fs/open.c:1454
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd474fc09a4
+Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffd7571ff60 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007ffd75720248 RCX: 00007fd474fc09a4
+RDX: 0000000000080800 RSI: 00007ffd75720148 RDI: 00000000ffffff9c
+RBP: 00007ffd75720148 R08: 00000000000000f4 R09: 00007ffd75720148
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000080800
+R13: 0000000000000020 R14: 00007ffd75720248 R15: 00007ffd75720148
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
