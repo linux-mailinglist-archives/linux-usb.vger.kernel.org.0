@@ -1,81 +1,80 @@
-Return-Path: <linux-usb+bounces-21708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21709-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974CBA5EC8C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 08:11:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39BD8A5EC90
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 08:13:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBFF7166F6F
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 07:11:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F4B716D02C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 07:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030801FC0EE;
-	Thu, 13 Mar 2025 07:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3409C1FBEB3;
+	Thu, 13 Mar 2025 07:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZqJ2TxVQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fDubTPKP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD671FBE9F
-	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 07:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0718812B17C
+	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 07:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741849906; cv=none; b=lry77+NSnSjsuiNuBa5ln+Mu05ECkTC6xA8vQfUzfufPGfVfpqYa+7lxhSVz+JEIck60YlTIHpSt7iAoJjfwjLY7bI3HboyW2iM3N0gKZxo60TpSqNqSIRtrcPGT6s58h5gGY3byOYP9gmhwSrxjg/dFDu8jfhLMgSsi+nVTQck=
+	t=1741849992; cv=none; b=oqHPE52KQczleTQfON5xZSjZpTy+Jnlp0SspSM5YNLMdm3AHLtk8+0hGKbGmT09HNiq0m38MH9HHUTVQSkcxD65AkuI5d1MC8HXR2yMlYmUPVH3lGXHYYqBDxoJuMbJIraqhUtDaE7kofusQ98+LnG/haiYCfCrzC+b8cCJcwIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741849906; c=relaxed/simple;
-	bh=gOCEcaOm4eg+X9g2FjfIO3JavsstQR67oggC/rHb/Jg=;
+	s=arc-20240116; t=1741849992; c=relaxed/simple;
+	bh=RlkKnSO9Op5zAuttnqf+oaANcdhLjxjpG9k30kOAXL4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=krBDKTqPl+g/0X+ulQdspN3ZY3t3/f/5irqnbqzEZOuGJ+knRVYSHrpU8dVT+YE8OC4IHdldbwoyAqGu09Muq+qkx0lmftiKOfasBsEU6OWntQD3TX4kHF1AvXK3uePXAhFTEaBricklrJM3dp8l1034KDlNvuwDHTezOJEews4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZqJ2TxVQ; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:Content-Type; b=IpgoZswTjjuQiCb4uLiT5GXFu/iPQ9yRPiIqjvroFcFATg2pMl/FUb6RgV/cCcjuZsnSC1D+klUC135NtwsuRoFAnhIDIxZz18iqbQyhtWOlWcOaPod5d29A/bbCwvbc0f2zrclCaDdNFBR3IE5E6W4kiRVzRAlugixXhqYoMtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fDubTPKP; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e5b736b3fcso105560a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 00:11:44 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac250d158a8so7625966b.2
+        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 00:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741849903; x=1742454703; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741849988; x=1742454788; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOCEcaOm4eg+X9g2FjfIO3JavsstQR67oggC/rHb/Jg=;
-        b=ZqJ2TxVQgnCmbdYI//mYGHSKQKw6cNFRg/Y6FeKgyM4q4pcubYRiXwzMN/i6tNC2os
-         0++tUgO+kPUi/zw0589dQuja5Zl+jRA+iZ91B3Ja4KZbw2ZOFt5aIakrcY4l2o2vHhdA
-         8xiDhL63YOYoGC3GYZrQmTrOR1mr8EhvHU0C26vx6GUo/sR+hiWxg7tP67+0lcTfRRwE
-         fKnRdpDfHtDcHVW8ioml9M6MVWkmtv5HzqUUfcblO3n2VUFvJ/2/BgScS1gZ7FYJycDA
-         2pfXv2tiauxuvyYbY8nxuuGaM9Mne/pm68p86qYzg9ftJrg0nFGPHly3UkN7O3yxfkgk
-         to4A==
+        bh=Oxpm2eADKTJ0HNPt8dE5MWzYOLLZtxS5F6staQWLbBs=;
+        b=fDubTPKPRCta2Kj1PUeWnQE4aWrLBJ/NIeYkMy7Od6OeHzyEVK1Oe5uEQHwZ/eRG8e
+         UGf8RhXCfQZp378rK4PXl28GQTd4WPzWPqB1C8bNCtCIJivTF7h9XuuQLMEHwJP2kFBj
+         rSs3/J4kGIzzXS1mAINPa6GStEfDX1Larz1PXZ3eikbmfialrJ9f4tek8Y7RcoO5HsmW
+         v8zx9p3VkeR090s9qyRMrv25V7VIRc1wgaZgfisyYcADisEeINIzyvpPuI9wjkvT2SEs
+         u68GrH+StgJN/daN1fcvJc6O7Y2YbSuMnp/FxdknqkethS2qDmcM3JGRaTHktQbP5q/J
+         MmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741849903; x=1742454703;
+        d=1e100.net; s=20230601; t=1741849988; x=1742454788;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gOCEcaOm4eg+X9g2FjfIO3JavsstQR67oggC/rHb/Jg=;
-        b=tPt04dvMOyI/m6b4agj3cKQU3Xuk9YYelkbFQKfdfR6g52LtdmQIez/9w1bje+HDuJ
-         8+cd9jv3FKpVZVbFfRCKsWxl29+joJis2PsMjurgBRadPZZ0VUn0bzUiXWoFD8uG3SMt
-         YQmgVGvZOCkV7kOiNRucAqruBybmbyyqDglSfekIMDh2mopXjzEtwuM2UE/wu+G93at8
-         B7yxurK7LnwlYHGp5ez4fpVd9x9qP2t4zCcc94W6Skff/4iXOn+WIBOyAu1GPfeXT4iH
-         U7VO+r+2yBVXP3kc4EEsAB7qaumeVSUsWtTapIbGicLxFnTD4Jn/QkWSC0AXs1PX+blP
-         2ZdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUtDySuywNWDyAXLyAghvDbohR/11woQ9AwLuGQcznp4rWde53naD/FYpye9Uza52KQGodO61kNLNY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxu54qRZOI5mP3C9Af9fw2Gr7umnWr0aIrV7dVtPFw5ME6x6d6T
-	Cyx5zqXmmlVnIOns/ZI7orSyCAhq62MlyrcBMWLfz8/E5OLPiU8br+dtBnZmLZ8=
-X-Gm-Gg: ASbGncv/4ia6yilNTJGIuz7U+bnYO/s2doJn0YjoGLTXfv83KnYDkr/wLn/0O8sF+kP
-	nfB8ryA7oLxYZEj7s90oRJuzm9h3myspGHNM41uQdQv//k7Jkjea2glJ/nnM9a9oejr54qEaQU4
-	q09igXUo1SB4LSatte5Cxh3jgt400kKg6dEhgE6Vw4JO41QK+8wHfbHgnivScs08DoY6w1D7qJi
-	9NW2//r+9Rv6Bo1yUdnTmQvZDh9KxFNMN9jN+Kmy8V7wKTI8XHO2F55S6pzkxUntlz9dA+6Dw3W
-	R9s/4oaLOttqb/BrHeuZXrn9j0GR0UWHVrreL3N+HJlr+huVu0ttmwVJ5FxKGWWIM8bP34zIkg=
-	=
-X-Google-Smtp-Source: AGHT+IHf+zTLxwilMFVAfGkK4qptdBvl1euTGV3k7WvO0Y7yIjyV+YJp/OXPip+JVtdHHXI0I4Dvxw==
-X-Received: by 2002:a17:907:3e8f:b0:abf:7a26:c489 with SMTP id a640c23a62f3a-ac2b9ea164cmr398284566b.9.1741849903224;
-        Thu, 13 Mar 2025 00:11:43 -0700 (PDT)
+        bh=Oxpm2eADKTJ0HNPt8dE5MWzYOLLZtxS5F6staQWLbBs=;
+        b=PbKodyqINtUbvCSh0O5krhOAMHREKgFwycElCD8hDQojFUskRbMkAGdBbXnEa6dstZ
+         tBwENd/WAtYbYdcLelnpfIUYSIe0yjBabOCvtnJiQSMg/J6P4IKjo6kpjCHl0iYUli4R
+         r/RbPSeZ11EHB1uaagTxpcjxtMIsOl25fNWQps5Pvn6tWLkJ9pMS7XhAcUxj60oX7JUS
+         lK1IJ3S1ngoajVEC113wNeN3EIZmDPDIN6MXGxxDr7ZwR/RiE9ro1ivU4cJ4Y+RIoaC2
+         rlyx9TF7urnrAnXOySxFosxSYg38QYWYsKB+GSEFFNMDYkgUTb8DSaZfGu/qOtu6YHi0
+         bzQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVbRaM52ilKX+9ur/s4AseSC1jG+8ibwYj/o2clCmuxVIbDbft21g4SnUYrpdamfiQ553nYqIByGLY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvf1E9eIwt67xTdKOa24AFHgV/NBjg5XYGCX5I1wlXY77ocTiI
+	wyMdLuiIA9VglMPUIa1voa4DMOpyhW6MSRX2+tu7p02nbXhgfNWqK3jRu3HOCQw=
+X-Gm-Gg: ASbGncuGlkGfHmC9Y5JKk6Zdrdkk1q4Q8b7BO4NlH3xUcrvEm9kTgRZM+upjilfSnXb
+	x4YPQI6piBF7e5JQlE12ldROEuUe5d7T+DgKmrA4JMpz8BkHhNL2Z+o9VhKW9znzid51g9TTTvh
+	tIMg17REEUBafh14NXftOHciKJfERpj7PMWtnarrtB7Tw29oyfeu6csMmQ/zwrWcsAneCEkR/BL
+	ZbJkrpcJZKJtJwMKPLXDflQ2sxB82sxe+X01iMJ9VeiWzz+fEFNEMzXmt1sw9pZm2fsXvmI5oL7
+	u9GZ5YK+964oP05/vLuox8LwQC9UEkh5Qz+uImtA46GGHmwEuPuKO/vv8lNrvoA=
+X-Google-Smtp-Source: AGHT+IFUhUiFu/mjetItfFFKDDSk1YQbc4560vtLNugH5OGNSZVSqwqkrR3M4x4BmHABYaUJnnfcLA==
+X-Received: by 2002:a17:907:3e0a:b0:ac0:b71e:44e7 with SMTP id a640c23a62f3a-ac2b9ee628fmr460280266b.12.1741849988300;
+        Thu, 13 Mar 2025 00:13:08 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac314a9dafcsm45512366b.170.2025.03.13.00.11.41
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac31484b234sm45565866b.77.2025.03.13.00.13.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Mar 2025 00:11:42 -0700 (PDT)
-Message-ID: <52e592c5-7f97-4b7b-bcf1-1bca34c716e1@linaro.org>
-Date: Thu, 13 Mar 2025 08:11:40 +0100
+        Thu, 13 Mar 2025 00:13:06 -0700 (PDT)
+Message-ID: <13c6d57b-0235-4c8d-95ef-111f87d6c25d@linaro.org>
+Date: Thu, 13 Mar 2025 08:13:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,8 +82,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] mfd: cros_ec: Don't add cros_ec_ucsi if it is
- defined in OF or ACPI
+Subject: Re: [PATCH v1 1/3] dt-bindings: Add cros-ec-ucsi to cros-ec-typec
+ device tree documentation
 To: Jameson Thies <jthies@google.com>, tzungbi@kernel.org,
  ukaszb@chromium.org, bleung@chromium.org, heikki.krogerus@linux.intel.com,
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, groeck@chromium.org,
@@ -92,7 +91,7 @@ To: Jameson Thies <jthies@google.com>, tzungbi@kernel.org,
 Cc: devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20250312195951.1579682-1-jthies@google.com>
- <20250312195951.1579682-4-jthies@google.com>
+ <20250312195951.1579682-2-jthies@google.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -139,18 +138,29 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20250312195951.1579682-4-jthies@google.com>
+In-Reply-To: <20250312195951.1579682-2-jthies@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/03/2025 20:59, Jameson Thies wrote:
-> Check for cros_ec_ucsi to be defined in the OF device tree or an ACPI
-> node. If it is defined by either OF or ACPI, it does not need to be
-> added as a subdevice of cros_ec_dev.
+> Add documentation for the cros-ec-ucsi device tree definition. Defining
+> this node will load the cros_ec_ucsi driver which is used for USB-C port
+> control on PDC based ChromeOS systems. Additionally, update mantainers
+> list to reflect changes to the ChromeOS USB owners.
+> 
+> Signed-off-by: Jameson Thies <jthies@google.com>
+> ---
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
-No, it does not have to. You just populate the children and appropriate
-devices will be created automatically. None of parent devices should
-ever check if the child exist to create a child - it makes no sense.
+A nit, subject: drop second/last, redundant "device tree documentation".
+The "dt-bindings" prefix is already stating that these are "device tree
+documentation".
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
 Best regards,
 Krzysztof
