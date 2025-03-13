@@ -1,112 +1,116 @@
-Return-Path: <linux-usb+bounces-21737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577FBA604C7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 23:54:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2A7A6053F
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 00:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 792C517AD67
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 22:53:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 048541889A9A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Mar 2025 23:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6BA1F8BBC;
-	Thu, 13 Mar 2025 22:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71AF21F8EF7;
+	Thu, 13 Mar 2025 23:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR4lUDqG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ExDf4pjQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90FD1F585F;
-	Thu, 13 Mar 2025 22:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A15C1F4CB0
+	for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 23:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741906428; cv=none; b=YeXfXfXgsddTI/FeOU6QuglUSDUXXFrSDgPd06YaHvhucAUIfFtRU/IGnmduUGtEhS3+/2Qt50k8n1bo0GGh6OEcXbxddrJUmq1tXSnS87OpqLNCgLChIM0el1IS9vZ7/LKRpF2Cm+SSG4J3JRu0xuM6fuCr8Qu378PLx1Z6TsM=
+	t=1741908227; cv=none; b=YZybxGOPCBgMZKTtVghaG7pWhIYbjKv4Wn9PgiseiigAu6/CqbQ6mIRIhOapetmNmeSEfJqQfZwdvmWaBJiFXLtSe8hi5j2leCEIN3IrmxMJJZHzumryPjf48TK9HvYPaW0rcsl4UZCrdwcCbvRqonUWdAF6Srv4u0kgxFDYikE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741906428; c=relaxed/simple;
-	bh=0Pf79xoJpzsJKbZvjRgGpD+kGcnppedrNyCyTFyrZ+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RauABJMuiuCPJdT9QzRWJtd+M5lL9rnaGEv+4Te6Ex9AfY7wmZu4w/1id418dtgC9U/1HSgdtuw7LUTJq8IWim2A5CkGdeOaHAw7QuxN4AxiouQiczr0nMhUAOCzrrvW40KaC4/79Y8VzPlxV4MdrWKmWJ77vx9cS/9JvZpCaJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR4lUDqG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF321C4CEDD;
-	Thu, 13 Mar 2025 22:53:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741906428;
-	bh=0Pf79xoJpzsJKbZvjRgGpD+kGcnppedrNyCyTFyrZ+4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OR4lUDqGKa8K11KB9m04s8Fltfpsuu/T7KPfj6The4utms9vZKgeAaZOrZcPRyJgO
-	 IDix8/iIo8LVI6euP+cKYxMiGyI9Ygwe46YdK90uIao5U9+ZW1Ey32A4q3/1wIpZ0b
-	 8HGjfwW5hWsAC6fbUMxfZ1mByvJ7y91UwwbJ8pDPd8qDxCj7HqY/yl6y0MG0AI3nu6
-	 a2Vn93UlvMjpV5++L1cucgJIZxb5KFINYniX+9HalRFdFiyGOSi5ewERbFoCCejx8O
-	 vKQTe6l0gz74E+BRUkQsY8S2sclChItyN+BA0MpbADrXjGTa/1sD4QKRm0A5ifS3ng
-	 EX0rET3Q++fkw==
-Date: Thu, 13 Mar 2025 17:53:44 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Joerg Roedel <joro@8bytes.org>, 
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Rob Clark <robdclark@gmail.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Robert Foss <rfoss@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Christian Marangi <ansuelsmth@gmail.com>, 
-	Rohit Agarwal <quic_rohiagar@quicinc.com>, Kyle Deng <quic_chunkaid@quicinc.com>, 
-	Vinod Koul <vkoul@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	linux-usb@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH 03/11] dt-bindings: power: qcom,kpss-acc-v2: Add MSM8916
- compatible
-Message-ID: <wccjda6emgvsgn3t5qj7kfsih2stcelnvwu45qok4bbln5kk74@drqp7wrrges4>
-References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
- <20250306-topic-dt_bindings_fixups-v1-3-0c84aceb0ef9@oss.qualcomm.com>
- <a7d76aff-0dc2-4b0e-9ee8-f433d8e745f6@linaro.org>
+	s=arc-20240116; t=1741908227; c=relaxed/simple;
+	bh=03hqJnuK1CVGKDG0J1rE6YrOQUCHMsfOL+m7YMiPdhw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aMPfDBeGVMx6cec6rn6LZdkFijQh8whXkbEed2BUsoETDOn/8kAnqLGgFwPV5SyogTfc2nO7As8Ath9uDrMSVfSTlZf5XgkD0TGtGpH3sUe2ni5xGTtFABs2mG4lC1doH0kOEHrjxV9i85XGVvq2RWzzAZQBiE1gmADIHYrY3W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ExDf4pjQ; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e6ff035e9aso3063941a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 13 Mar 2025 16:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741908223; x=1742513023; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UCMudYCsiUfPpJxSCb7AZiMA+eXp5wJ3W7GXcaA01zk=;
+        b=ExDf4pjQfp1STxOGaFOIKKu4iAilipjbozgjiF/RFIso1rPGbNSGanyHv2vImj4CWm
+         i2ujErX2mh+OUafSLw8ucqF8hKLPZ3C+YsqqsbvuM37EoxyOCe2R8b4RDARUHY2j1MAo
+         KqjZnFjhIAVyYMgpkSMpReNE4IICwU7rUYl6+8ONH/bKexu9FP5PEqdqfk9+QjZF41Uz
+         NrYr2XnB7kNw5jEpyj58WH15GIhV+qxIK8GnEPHJSUCq8LBrHdzM6wJV2c6VZ6HJfw02
+         kw0sLJOyCEX8KwYlaBQNfe5foYjzFRHzan8aXTnqWpAGqJ9IZE0CTZNQGJTVb3AZGKSU
+         Vcqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741908223; x=1742513023;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UCMudYCsiUfPpJxSCb7AZiMA+eXp5wJ3W7GXcaA01zk=;
+        b=CpR2ZQQ4dwbFyxPzwWJbJk5yVTmfX9Kyss+0D1JA6xkKAWs3p2P9LpxG+AC8hpPuJO
+         /ZFegJUWsjmTMJTLBfIqh/hFvCgaLbBMIdbADAwJCS2FoDNRv22ttqNo2AL9gHrG6yJp
+         nHqxGIXlBk35i0JcUgs6+KzLpORX+8LK8Xr5UOd6x1nj8qHGX3E3kKRYMVApW+ODZIiN
+         1Sqm2GMmYRK/zX//S1+IT76CNzs8dh6F2G3SfBklihuKdgLp1LonOy1o3pEuFjFKlfMz
+         LpULCXHFGIhzXDJ/NpVQF8RNeHg2deKF9b2peD9SrxjV6minHm+RUgn4wLC/IbABwS6m
+         H4kg==
+X-Forwarded-Encrypted: i=1; AJvYcCV74F+E0uBcYIES6h/Gd/gDrUyPv50SRdgsCTiftaWesgs8Bdc4s0pRcyBiCZUGers39tes/DT3eWc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgZ/wutWmrrObdQ+Wn1m9J8soyy/98H4KhSxrRcpQfnXg+IpAa
+	U5GQGWfdExtdV7B+szWr98rPj5Bxh0AXQ88QZMw57TIn1QRV4oND0mBW0o1bYRMtwmiswJCx3e8
+	6wf0jzgYwUjb6uMEKiMJG0qi6mty46D6d0hvB
+X-Gm-Gg: ASbGncvJSCC9AoFvRJsfHhL1N6drTcW3GpIsQeY1UYfpZ/2v5LI30eSFafAJJm50X4d
+	1KxqKnC1uV1rOlsYvey5imcr0i4yvp0c2q4vdPBm68dc4CHsjRwD1CWgHy31AqtNxhIt+mDHVBB
+	29+TY2Fb+3Ujq5x71T5YUasBunCoO/VeeJzHf6ciOWxOQdHZXzEdENrmQ=
+X-Google-Smtp-Source: AGHT+IHjRZmiFK4Q9ZkNGdZSuSwWBLKWpzjANTknswcUF/yqPrUOK+YMTqHc4G39LZMn33UVLCx9GiofUg2Ysz20FDE=
+X-Received: by 2002:a17:907:9694:b0:ac2:d2f3:6c30 with SMTP id
+ a640c23a62f3a-ac3303db128mr36303566b.49.1741908222584; Thu, 13 Mar 2025
+ 16:23:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7d76aff-0dc2-4b0e-9ee8-f433d8e745f6@linaro.org>
+References: <20250312195951.1579682-1-jthies@google.com> <20250312195951.1579682-2-jthies@google.com>
+ <13c6d57b-0235-4c8d-95ef-111f87d6c25d@linaro.org>
+In-Reply-To: <13c6d57b-0235-4c8d-95ef-111f87d6c25d@linaro.org>
+From: Jameson Thies <jthies@google.com>
+Date: Thu, 13 Mar 2025 16:23:30 -0700
+X-Gm-Features: AQ5f1Jp4TvsDR3UGIWQbuMD6uRPeohSBsXrCOM-uSTZZYdf4-rx0RWVAFEBnFIQ
+Message-ID: <CAMFSAReJpppA5eb2mxf8ZCwrR1HcBeGWaNXBoFmKq5swKboMJw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: Add cros-ec-ucsi to cros-ec-typec
+ device tree documentation
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: tzungbi@kernel.org, ukaszb@chromium.org, bleung@chromium.org, 
+	heikki.krogerus@linux.intel.com, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, groeck@chromium.org, swboyd@chromium.org, 
+	akuchynski@chromium.org, devicetree@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 12, 2025 at 04:12:14PM +0100, Krzysztof Kozlowski wrote:
-> On 06/03/2025 19:11, Konrad Dybcio wrote:
-> > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> > 
-> > MSM8916 seems to reuse the same hardware as MSM8974 and friends (for
-> > whom this binding document was created). Add a new compatible for it.
-> > 
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> > ---
-> >  Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml | 4 +
-> 
-> 
-> Folks, please merge Ryan work instead...
+Hi Krzysztof, thank you for taking a look at this series. Clearly it
+needs some more work. I=E2=80=99ll follow up with a v2 addressing your
+comments.
 
-I'm not sure which "folks" you're referring to and neither is
-get_maintainer (well it points to Rob and yourself).
+> > -  cros-ec node like google,cros-ec-spi.
+> > +  cros-ec node like google,cros-ec-spi. On TCPC systems, ChromeOS shou=
+ld
+> > +  use cros-ec-typec. On PDC systems, ChromeOS should use cros-ec-ucsi.
+>
+> What does it mean? How is it related to description?
 
-> I keep carrying this patch for
-> half a year:
-> 
+TCPCs and PDCs are different components which can be used for power
+delivery messaging on USB-C ports. On ChromeOS devices, they are
+mutually exclusive. This line is just saying which driver should be
+chosen based on the USB-C port hardware. But, I see that type of
+information isn=E2=80=99t really relevant for the device tree documentation=
+.
 
-Where are you carrying these? Are there any other patches on your list
-that have fallen through the cracks?
-
-> https://lore.kernel.org/all/20240710155226.130086-1-rayyan.ansari@linaro.org/
-> 
-
-I'm picking Ryan's patch through the Qualcomm tree...
-
-Regards,
-Bjorn
-
-> Best regards,
-> Krzysztof
+Thanks,
+Jameson
 
