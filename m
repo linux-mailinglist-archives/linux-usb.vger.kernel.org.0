@@ -1,119 +1,160 @@
-Return-Path: <linux-usb+bounces-21782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B69A61B73
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 21:04:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2C4AA61C3C
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 21:15:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 509A87AF401
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 20:03:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC30619C7E03
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 20:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0811420A5D6;
-	Fri, 14 Mar 2025 20:01:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CFD207679;
+	Fri, 14 Mar 2025 20:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1c3GE/F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWvsYNgj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A40209693;
-	Fri, 14 Mar 2025 20:01:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EB7204C2B;
+	Fri, 14 Mar 2025 20:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741982498; cv=none; b=RzaMJvDE4DTBfJAExD2BaGUNnv+MlNJ4Csv5B35MaUMLOYcHep3dOZGUOZQdq5glS1iGuCncp3bKdO5wpYa9wwO9mpa8BxukKOADECvuvM8EwaX2iIgkjO9nWO3biUiO7oc0K6etvkmW+gQ2UQAdxl45NDarFnmEthgqo7Y6qo4=
+	t=1741983191; cv=none; b=F3ASRmYkLdwjHawYTkiMzytutqBuvnZrTO/bnxMgSmjCGZDDkecsGW8XzM1PKnIDMlVAloZjdwHd+IhqdQhKLgJIfT+DNKd3xSy3UEeGLWh8ZSIDCbrBmJmLpk07x16cVfVD74BIm3ufyr5nvyht3SSeZLyI733sZjKUS0Eg8Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741982498; c=relaxed/simple;
-	bh=4xBcotl8pJzTMj0Jsqp+amff/4VTyaDG9wXsvY9BiZM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=guDG+c+b0um4KNwZQHawgCjzjHSj7EPtTbPMFAdA+rYdcKCWBXJ2dd0aRE9GfVh0209TF3yLqubhNF9AnRRV5Tpr9W3Nc6ISmY0snDBXNSBEbjEYd5WN5M7ESohQgVDqZiZVt/YswanPfVhES/e3NEOcNT/P9fA0FHzn1nc9MWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1c3GE/F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B901C4CEE9;
-	Fri, 14 Mar 2025 20:01:35 +0000 (UTC)
+	s=arc-20240116; t=1741983191; c=relaxed/simple;
+	bh=SRZhjkmehzZBEvC3oDCw/sRygUrcVGuFKOmk99vqfVA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=raVNpsp4hTo575/HwswrsRqC5n3V1BcbgSHngEyIj1IOikCUyB/Ernh1p+zVjxa4e0Mb1F1tT3mCI0wBfHyFfJ0iKoaDT0hnyP5Fg8xuhGAfCEnpx8jYkaw11Y7QrmKp7EKsGnFFmgAFhq1/CZLsb1xXYqU+YMOtsOqWaD0KzaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWvsYNgj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80F2C4CEEF;
+	Fri, 14 Mar 2025 20:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741982498;
-	bh=4xBcotl8pJzTMj0Jsqp+amff/4VTyaDG9wXsvY9BiZM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P1c3GE/FQ9nXFVg3ofquunNAv8v8Z1dnYhayTCgabuO1r41J4KWwMdFoA0QSYAiHK
-	 SX/PeItHN+7dDErarMX7psDTJiIdwS3UCKZ0/XegDlhZcvfCOkEdlooAqthnwA7aHM
-	 QSqwk3YeyF6zkwaxpzzhiR4bG63eMfHxilFcdL0/vu6Ze14l3FPOArkCRk+tdyvAfa
-	 55ngKn3tUiFMjIqOF2REexYoP82GHKRhtwKvAYpY2qP/YkQ/7qNB7rrFPPgDKEYO7V
-	 anAps1UeQOIVkz/DfrP6cgTsY7aDpfCfleM+Mab4JQtYY935tNyiU1UL1+pHmAkLgy
-	 uzSe9zpTIk2xA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Robert Foss <rfoss@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Rohit Agarwal <quic_rohiagar@quicinc.com>,
-	Kyle Deng <quic_chunkaid@quicinc.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org,
-	iommu@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-usb@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH 00/11] Various dt-bindings fixes
-Date: Fri, 14 Mar 2025 15:00:52 -0500
-Message-ID: <174198247894.1604753.10471572024781965640.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
-References: <20250306-topic-dt_bindings_fixups-v1-0-0c84aceb0ef9@oss.qualcomm.com>
+	s=k20201202; t=1741983190;
+	bh=SRZhjkmehzZBEvC3oDCw/sRygUrcVGuFKOmk99vqfVA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZWvsYNgjITiLsZdrePpvv4CT67dqQ6hEUqye9FvJRdvxZ4W+chZq1KUDQ7O3O+Twp
+	 fKGNbDqle/CKOZLWFonJrcvM5Sol34jmlJwin6l83EvVNpbBSYmlokZc7FBdY+S/Ls
+	 zYfXxQj7mCTcBDYyrdgXg/BgSbr5hMDxm+SM1VP+3K51nlcHr2GyTNPrQChuhriHFX
+	 qOsnM/2tzA7JEVWGgW3N1b3tDR1SqLy2gvUbxkj772PlP0bBAw1vZz2pDqj8d80/py
+	 XvszV+FY7hxcPzkmBG7Bf3dynEYkLZ7MK5dUxKoT95i7XPXr6/zYZWGueEfu/zAhQW
+	 LrTHZLyEZWIEg==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2bcbd92d5dbso1351142fac.2;
+        Fri, 14 Mar 2025 13:13:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUez7rHefhnujfUf3IMtcQa+Ox64l3KNAoJX7b/yqSs4k/uCZTTs6aoXt5TnSEioEQIhtARI+KHktgTiw==@vger.kernel.org, AJvYcCVT52RWW1Zfekt/Pv9Fz+juHLLu+/dTnYhDBUDoLP1ld90KI5VD311DN93ktU2Ac57O88VLjB1PMFMB@vger.kernel.org, AJvYcCWdXzryswf4rnCdxy5j1eZiY1VOolDlFfXxY7AtxwyFIOpgs1FFYoH05Nhrqa0RTzvOciG/kITJ6Ijbptyp@vger.kernel.org, AJvYcCXdMHgn7g7t/gyHeQIfcMwu4vXoysCtkkL/7bxGLGwjMBjrn1CbJpq8jwsEzFjEA445hpoPBOQuL02P@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJC6k+K48IlWTY4JFtFObvDGGFmD3eIieIy0UIFS2FbamAo92O
+	CQB8c5RIyIseOuh9Nec8mHH6Vq7++uLbOTDt6MLKU241qyu/kK6OQ1yj2VNJj/tWBQa/PhYbKYN
+	D31Kfu2Lq6tfkmSMAmqd3dsD5CDo=
+X-Google-Smtp-Source: AGHT+IGmABUgq93wpmmAX1OWd3S8vWyNXtmmbOZA3gPdYnN68o8ZqrNHt+4lqcxj/RC+Zxg7dvl5ge06ELPI4Pgy6zA=
+X-Received: by 2002:a05:6871:4145:b0:2c2:5028:70bd with SMTP id
+ 586e51a60fabf-2c691140b7fmr2149180fac.24.1741983189940; Fri, 14 Mar 2025
+ 13:13:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com> <20250310150835.3139322-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250310150835.3139322-2-andriy.shevchenko@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Mar 2025 21:12:58 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ia-K1bPT-A3TbmZ6T18nbrJ8aUsdU2zbbTfvS0eGbwOw@mail.gmail.com>
+X-Gm-Features: AQ5f1JpD27XX7GKH0JoAJhN4-R5SwlqrRghlvbqZvTkUxcM_j5DPO_HuD4OL0N4
+Message-ID: <CAJZ5v0ia-K1bPT-A3TbmZ6T18nbrJ8aUsdU2zbbTfvS0eGbwOw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] device property: Split fwnode_get_child_node_count()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rob Herring (Arm)" <robh@kernel.org>, 
+	Markus Elfring <elfring@users.sourceforge.net>, Jakob Riepler <jakob+lkml@paranoidlabs.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Jonathan Cameron <jic23@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Mar 10, 2025 at 4:08=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The new helper is introduced to allow counting the child firmware nodes
+> of their parent without requiring a device to be passed. This also makes
+> the fwnode and device property API more symmetrical with the rest.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On Thu, 06 Mar 2025 19:11:12 +0100, Konrad Dybcio wrote:
-> A set of not quite related bindings warnings fixes.
-> 
-> 
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Applied, thanks!
-
-[05/11] arm64: dts: qcom: sdx75: Fix up the USB interrupt description
-        commit: 6810ecd57eb4ba9e09bac851d5b9d56c5e5acc1a
-[06/11] arm64: dts: qcom: sdx75: Rename AOSS_QMP to power-management
-        commit: a3715ce8650928e2da7060957a7e9b962d8bb7be
-[07/11] arm64: dts: qcom: qcs615: Rename AOSS_QMP to power-management
-        commit: bc09537f4745aae561f56daad0353d1b876bc096
-[08/11] arm64: dts: qcom: sc8180x: Rename AOSS_QMP to power-management
-        commit: 9ea77c65b7b0357c54899a24ffd37d0430c90913
-[09/11] arm64: dts: qcom: x1e80100-dell-xps13-9345: Drop clock-names from PS8830
-        commit: 6d617082867d4789ea4dcc67fc483460e2ac1d05
-[10/11] arm64: dts: qcom: x1e80100-romulus: Drop clock-names from PS8830
-        commit: 57aac7bd091cd7a1f43c852ce3703ce6c2433b21
-[11/11] arm64: dts: qcom: x1e001de-devkit: Drop clock-names from PS8830
-        commit: 8cd4b0f6bc71b2bf4f5c3fb8ec2857192182cb23
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> ---
+>  drivers/base/property.c  | 12 ++++++------
+>  include/linux/property.h |  7 ++++++-
+>  2 files changed, 12 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index c1392743df9c..805f75b35115 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -928,22 +928,22 @@ bool fwnode_device_is_available(const struct fwnode=
+_handle *fwnode)
+>  EXPORT_SYMBOL_GPL(fwnode_device_is_available);
+>
+>  /**
+> - * device_get_child_node_count - return the number of child nodes for de=
+vice
+> - * @dev: Device to count the child nodes for
+> + * fwnode_get_child_node_count - return the number of child nodes for a =
+given firmware node
+> + * @fwnode: Pointer to the parent firmware node
+>   *
+> - * Return: the number of child nodes for a given device.
+> + * Return: the number of child nodes for a given firmware node.
+>   */
+> -unsigned int device_get_child_node_count(const struct device *dev)
+> +unsigned int fwnode_get_child_node_count(const struct fwnode_handle *fwn=
+ode)
+>  {
+>         struct fwnode_handle *child;
+>         unsigned int count =3D 0;
+>
+> -       device_for_each_child_node(dev, child)
+> +       fwnode_for_each_child_node(fwnode, child)
+>                 count++;
+>
+>         return count;
+>  }
+> -EXPORT_SYMBOL_GPL(device_get_child_node_count);
+> +EXPORT_SYMBOL_GPL(fwnode_get_child_node_count);
+>
+>  bool device_dma_supported(const struct device *dev)
+>  {
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index e214ecd241eb..bc5bfc98176b 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -208,7 +208,12 @@ DEFINE_FREE(fwnode_handle, struct fwnode_handle *, f=
+wnode_handle_put(_T))
+>  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int inde=
+x);
+>  int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char=
+ *name);
+>
+> -unsigned int device_get_child_node_count(const struct device *dev);
+> +unsigned int fwnode_get_child_node_count(const struct fwnode_handle *fwn=
+ode);
+> +
+> +static inline unsigned int device_get_child_node_count(const struct devi=
+ce *dev)
+> +{
+> +       return fwnode_get_child_node_count(dev_fwnode(dev));
+> +}
+>
+>  static inline int device_property_read_u8(const struct device *dev,
+>                                           const char *propname, u8 *val)
+> --
+> 2.47.2
+>
 
