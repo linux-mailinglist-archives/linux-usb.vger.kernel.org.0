@@ -1,48 +1,37 @@
-Return-Path: <linux-usb+bounces-21750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B1EAA60A0C
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:29:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E041BA60A11
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:32:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D77A17D727
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:29:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6FE43AB124
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A51116F0FE;
-	Fri, 14 Mar 2025 07:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tltUgyLn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1455F16BE17;
+	Fri, 14 Mar 2025 07:32:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A227953AC;
-	Fri, 14 Mar 2025 07:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.nfschina.com (unknown [42.101.60.213])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id F3F861547FE;
+	Fri, 14 Mar 2025 07:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741937372; cv=none; b=WHzOOk7vPYvCNNyBr3mvAA4HnF41pu9BTY3KCQeGw2jKjiWeCx5jgveLrCLxIgVhO85iooq987F7/AjqprwqK6nLGeUiTSeS3KZ2AUPxIm4b+k9t8AAUSh/ZBLZT6Ki10pt9+kQ36gxAcrze74VemyQfnmEKHuQy7uqrmf0xfv0=
+	t=1741937552; cv=none; b=ADD2roZI7Wc2Dnf71FjCAPLPQKPmSRpatyhsZKBGpBTlq6jgWeziGDwWOs67vNgAw5Iq3OlYFUXX+BlmGP4iwJ6B6Gs9lqxa+otwAI0TWcK00VJDalwwmQtpwVoMMcr+EMA4G/5jzOQrE5hwXT/b4yCR+RkeKhZxDzgh8HoSpTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741937372; c=relaxed/simple;
-	bh=iXZn74SnGKgCnvn0uRyciX1vg53vA4YnYvhLgRyA+AE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sN066n9PL8J2MZfE0EDKEbESe4fgLhLOqqaEbJnFYw5PPizVU40Gp458o/bUpXSEiXlkoUz1gYaPYBBcRarSUbeepM8ZbntoTnXNHchWZ6GglcqpdvB79BciwX6qPVAsXai8bFrllgfq+NmKF7ElZEbUeSoy3/hCV0ootR+Y3xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tltUgyLn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0995C4CEE3;
-	Fri, 14 Mar 2025 07:29:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741937372;
-	bh=iXZn74SnGKgCnvn0uRyciX1vg53vA4YnYvhLgRyA+AE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tltUgyLn0V9c1IK61pwGtl/QCl6IdJ3hGFP3IS25fkMrhy4CtBWL6ChLTCl3w1rsa
-	 mIAc190XMSaEq4Mp9FLyJkV+drEugyoEe/67/Awns642z7nwOYVn8SzCmsiOf6xp+d
-	 KB8CT2iiLCMOzdE95HS812BNf7FIViEeuiQTSUgGHJz0DfFja8pVJO8AvFTZBWWixs
-	 EjKUXf1O5NO1fIR/kp2kA0ggp5Ir0fQ/ad6doCDB+GQ22dl5eK3O5pAEckyhvkbfQX
-	 3L+0zDYRuXU3EUPfSrjjYy8USjgOvyjIwMIrMEaCFRxn7PHkQmfGJ1N4SXrlYyDfSz
-	 Jws9TA+Zt2ZmA==
-Message-ID: <ea5c1a8a-cfbb-4334-91a9-1c2cc9e07ae8@kernel.org>
-Date: Fri, 14 Mar 2025 08:29:24 +0100
+	s=arc-20240116; t=1741937552; c=relaxed/simple;
+	bh=4+pfU638D48FU26m3cPCpULW+afosPLPOQoa3lAjbjw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type; b=SAz2lJMZO13CucLS7hhSXU+zS52YTUcVD+tu/3IexSJJtQ7NhPuZjRQoJsrG6LktVAWhPf90DehRHSylieG/v9Mpck57f44o/nP4+5gdvp2HK/26zuVXlrBhaI56t7c0TmRJ9ESMG18poRtj1HcXvAjJoDW6hxkcFFeODpQOWmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from [172.30.20.100] (unknown [180.167.10.98])
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 1D694606A5D33;
+	Fri, 14 Mar 2025 15:32:26 +0800 (CST)
+Message-ID: <57885b0a-eb21-4eea-9b85-71a1fd8cd6a0@nfschina.com>
+Date: Fri, 14 Mar 2025 15:32:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,71 +39,39 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: ucsi: acpi: Add Null check for adev
-To: Chenyuan Yang <chenyuan0y@gmail.com>, heikki.krogerus@linux.intel.com,
- gregkh@linuxfoundation.org, lk@c--e.de, dmitry.baryshkov@linaro.org,
- u.kleine-koenig@baylibre.com, diogo.ivo@tecnico.ulisboa.pt,
- saranya.gopal@intel.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250313162211.3650958-1-chenyuan0y@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: remove the invalid comments
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250313162211.3650958-1-chenyuan0y@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Roger Quadros <rogerq@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+X-MD-Sfrom: liqiong@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: liqiong <liqiong@nfschina.com>
+In-Reply-To: <2025031430-poncho-aviator-8131@gregkh>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 13/03/2025 17:22, Chenyuan Yang wrote:
-> Not all devices have an ACPI companion fwnode, so adev might be NULL.
-> This is similar to the commit cd2fd6eab480
-> ("platform/x86: int3472: Check for adev == NULL").
-
-Read that commit carefully and provide steps how can we reproduce it -
-bind this driver to different platform device or i2c device via sysfs?
+Content-Transfer-Encoding: 8bit
 
 
-Best regards,
-Krzysztof
+
+在 2025/3/14 15:12, Greg Kroah-Hartman 写道:
+> On Fri, Mar 14, 2025 at 03:09:21PM +0800, Li Qiong wrote:
+>> These function don't return value, remove the invalid comments.
+>>
+>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+>> ---
+>>  drivers/usb/cdns3/cdns3-plat.c      | 2 --
+>>  drivers/usb/gadget/udc/udc-xilinx.c | 2 --
+> This should be 2 different patches, right?
+Yeah, I will split this patch and send again.
+thanks.
+
+
+
+>
+> thanks,
+>
+> greg k-h
+
 
