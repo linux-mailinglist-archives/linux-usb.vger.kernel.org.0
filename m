@@ -1,77 +1,70 @@
-Return-Path: <linux-usb+bounces-21751-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21752-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E041BA60A11
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:32:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39311A60A62
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:51:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6FE43AB124
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:32:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72E2819C0053
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1455F16BE17;
-	Fri, 14 Mar 2025 07:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21F331A0BFE;
+	Fri, 14 Mar 2025 07:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="r/rCDGnp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id F3F861547FE;
-	Fri, 14 Mar 2025 07:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833E119D06A;
+	Fri, 14 Mar 2025 07:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741937552; cv=none; b=ADD2roZI7Wc2Dnf71FjCAPLPQKPmSRpatyhsZKBGpBTlq6jgWeziGDwWOs67vNgAw5Iq3OlYFUXX+BlmGP4iwJ6B6Gs9lqxa+otwAI0TWcK00VJDalwwmQtpwVoMMcr+EMA4G/5jzOQrE5hwXT/b4yCR+RkeKhZxDzgh8HoSpTo=
+	t=1741938642; cv=none; b=CSF1gsXPqUqWrC2Dn0rRCC7gHYIogdO5hScW2Htj9XdDybYdvWvthYMXRYS0jg65o8W/Q9VkDBGMDT2fXlYjOuJaRY3Mp/gC624n3IxY3GvbL3+3QvBwSQIZqrdztcdTJI1DoM+DQSsaL8zB1F97H8WGb8vaVEV0RV6BRbDQNEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741937552; c=relaxed/simple;
-	bh=4+pfU638D48FU26m3cPCpULW+afosPLPOQoa3lAjbjw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type; b=SAz2lJMZO13CucLS7hhSXU+zS52YTUcVD+tu/3IexSJJtQ7NhPuZjRQoJsrG6LktVAWhPf90DehRHSylieG/v9Mpck57f44o/nP4+5gdvp2HK/26zuVXlrBhaI56t7c0TmRJ9ESMG18poRtj1HcXvAjJoDW6hxkcFFeODpQOWmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from [172.30.20.100] (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 1D694606A5D33;
-	Fri, 14 Mar 2025 15:32:26 +0800 (CST)
-Message-ID: <57885b0a-eb21-4eea-9b85-71a1fd8cd6a0@nfschina.com>
-Date: Fri, 14 Mar 2025 15:32:25 +0800
+	s=arc-20240116; t=1741938642; c=relaxed/simple;
+	bh=My0VdKrSEOPLa4gBGlIMgdJzO1L3iy3brX9NlIYPvC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KDwGxV4/W84jWwVwoWMdfk4xqw/SCBec4c0tPaTo7+K0pf7lL4Qn6XifCklnNVRmCbVrBIrKcSwcTknSN1fm3+0snQLHPArmjrJt/WA3PEz3zzwz2USKdgcantPJla1did6RFMYPeSy4S8Cvx7blRl6MdftJNXfoRY8Sr+/URGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=r/rCDGnp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A685AC4CEEC;
+	Fri, 14 Mar 2025 07:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1741938641;
+	bh=My0VdKrSEOPLa4gBGlIMgdJzO1L3iy3brX9NlIYPvC0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r/rCDGnpFWMGCUYJqfrvFhcq9lNBr8E0sCuzexykRadyPmhNUIQvJDJu5Pa4RrQEt
+	 K7m3jD3OFj91sbNP44zdT2r7Pos+nDt25JKvPgd2c8kRGZeqmoGpRx8rB5WvVSRCOo
+	 q+EPBeMjNfMKHvyGnDqBPN9DTCUHxoI7FCEIKPFg=
+Date: Fri, 14 Mar 2025 08:44:05 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial device ids for 6.14-rc7
+Message-ID: <2025031458-mounted-linguini-264b@gregkh>
+References: <Z9PW5tkuTH6oRG6X@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: remove the invalid comments
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Roger Quadros <rogerq@kernel.org>, Michal Simek <michal.simek@amd.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-X-MD-Sfrom: liqiong@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: liqiong <liqiong@nfschina.com>
-In-Reply-To: <2025031430-poncho-aviator-8131@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9PW5tkuTH6oRG6X@hovoldconsulting.com>
 
+On Fri, Mar 14, 2025 at 08:12:38AM +0100, Johan Hovold wrote:
+> The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+> 
+>   Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.14-rc7
 
+Pulled and pushed out, thanks.
 
-在 2025/3/14 15:12, Greg Kroah-Hartman 写道:
-> On Fri, Mar 14, 2025 at 03:09:21PM +0800, Li Qiong wrote:
->> These function don't return value, remove the invalid comments.
->>
->> Signed-off-by: Li Qiong <liqiong@nfschina.com>
->> ---
->>  drivers/usb/cdns3/cdns3-plat.c      | 2 --
->>  drivers/usb/gadget/udc/udc-xilinx.c | 2 --
-> This should be 2 different patches, right?
-Yeah, I will split this patch and send again.
-thanks.
-
-
-
->
-> thanks,
->
-> greg k-h
-
+greg k-h
 
