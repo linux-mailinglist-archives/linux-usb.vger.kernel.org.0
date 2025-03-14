@@ -1,70 +1,117 @@
-Return-Path: <linux-usb+bounces-21752-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21753-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39311A60A62
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:51:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47960A60AAE
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 09:02:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72E2819C0053
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:51:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F9707AAC28
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21F331A0BFE;
-	Fri, 14 Mar 2025 07:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D037191F66;
+	Fri, 14 Mar 2025 08:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="r/rCDGnp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bs8aineQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833E119D06A;
-	Fri, 14 Mar 2025 07:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FC18635C;
+	Fri, 14 Mar 2025 08:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741938642; cv=none; b=CSF1gsXPqUqWrC2Dn0rRCC7gHYIogdO5hScW2Htj9XdDybYdvWvthYMXRYS0jg65o8W/Q9VkDBGMDT2fXlYjOuJaRY3Mp/gC624n3IxY3GvbL3+3QvBwSQIZqrdztcdTJI1DoM+DQSsaL8zB1F97H8WGb8vaVEV0RV6BRbDQNEg=
+	t=1741939305; cv=none; b=N+T4fZiewZxx4VPl+vfPLdpDhHNUs2RkYyE/5vjhokj02UUJ4gzULDrAA5e4vj3RYubDq1m9RC6qCmY5wa0YtIe1cGj75xhvSdpUJ0M2itIrvcEfbBQTR6WysEB2N5FMpjkgJX2BZPzhD7dv1mIXkANoIGVAFAadCTX54ALkNv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741938642; c=relaxed/simple;
-	bh=My0VdKrSEOPLa4gBGlIMgdJzO1L3iy3brX9NlIYPvC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KDwGxV4/W84jWwVwoWMdfk4xqw/SCBec4c0tPaTo7+K0pf7lL4Qn6XifCklnNVRmCbVrBIrKcSwcTknSN1fm3+0snQLHPArmjrJt/WA3PEz3zzwz2USKdgcantPJla1did6RFMYPeSy4S8Cvx7blRl6MdftJNXfoRY8Sr+/URGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=r/rCDGnp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A685AC4CEEC;
-	Fri, 14 Mar 2025 07:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741938641;
-	bh=My0VdKrSEOPLa4gBGlIMgdJzO1L3iy3brX9NlIYPvC0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r/rCDGnpFWMGCUYJqfrvFhcq9lNBr8E0sCuzexykRadyPmhNUIQvJDJu5Pa4RrQEt
-	 K7m3jD3OFj91sbNP44zdT2r7Pos+nDt25JKvPgd2c8kRGZeqmoGpRx8rB5WvVSRCOo
-	 q+EPBeMjNfMKHvyGnDqBPN9DTCUHxoI7FCEIKPFg=
-Date: Fri, 14 Mar 2025 08:44:05 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial device ids for 6.14-rc7
-Message-ID: <2025031458-mounted-linguini-264b@gregkh>
-References: <Z9PW5tkuTH6oRG6X@hovoldconsulting.com>
+	s=arc-20240116; t=1741939305; c=relaxed/simple;
+	bh=JpGPRDc7nnVcoAJacMPhOc8NkDnRElCXTviLvnwRYaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hOeeIfNOp8NIA199UnR/7GDM0U8HiGo1Z6a93/cjiHyJ4E4TM1z1zTUj0Lk3X305C0qg2fmJz/ZoauCML8Pmsw1cAkBQdD74KTw0m8POe//1IWHzr0y1PBeezwsFHlvERgWwH5ocdwgptvrhPsxTWLF39L4kjLZuLWmg0UJO/v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bs8aineQ; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ac2dfdf3c38so340802866b.3;
+        Fri, 14 Mar 2025 01:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741939301; x=1742544101; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dtd6hqF4/E4JMFJ16QzaCVJ4wE2X+zxDo5+FAqtoRKc=;
+        b=bs8aineQ8Nut0oyNnAR8OmZlE94j7L0OarDd1JEH81MXHc4OMPDJ53tmyuIFjt2OQp
+         xfck5BqhwL0MfmRKEEkAt8k6AEzPy9fG2JdAvWrzS/pHgYTOxf/z9KavJSqS9r6qTccs
+         qC2YLaET4xjeMK8q48OepVG3YEVRpFvnleGMJrfEVsf6b7M/mp5S+rdwFMp+iOSd5atZ
+         f1ZVPKst05ezcMng7at0VFP3cII5f7lmlLm2SZNL7f1xNPcWHkAWHKdVXdiqDtTsv0Ug
+         tR+JGxniWOIQLE7XT6HREk+4QyQEimP/susNNAbyQ3NiP0MdF/OFztkKmiQHD53Ga7iS
+         MvNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741939301; x=1742544101;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dtd6hqF4/E4JMFJ16QzaCVJ4wE2X+zxDo5+FAqtoRKc=;
+        b=HfAy/6Tv6ne9CiP+TnW7fomE/ptpLRzMT0dCdLanFLqcRYm+dzVyVxoIUGEXpjxKwa
+         VThZY+UDb525tpZ4oma2Q53Ia/MxI1hfehw/D+Uxnl+JhvZwLXuzWRpH1h/+G3hG7hlZ
+         252GSK0nLFePyGKUnNBc7r3Pa8XuMuNhA+3ZhD1s5v2s3wsDL12MZEElRLNMsSQcmGzj
+         rnQqRGtBzbU4aCV7SX0rsJHdfR3dc4kPZsk+dW7QGQz9Qg8GpTUDznFPu/ipxJ8AqOBH
+         jjz+TnF+L2fhRyjfaFUlBsUBr7r1uw/Bq1yk7kvrQ5C/mj0vq2hm64S8skj02PcvCQcQ
+         0IsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWDhTIfygOJfZBAfYk+bAPTWjgeVp9J1qAYm/1xp36pR8NZ0xvoGNw78avjtDR4i/m0LO8eEQqd7PkW@vger.kernel.org, AJvYcCWWW3AmoRrZZsx2QpuAypfcJzZe57G+gkzyvxcoYBqGRUBsnm4i7QQGX0txzTRnFvp6wqfejNyAU5smcpE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFjf7p81VOdUiN72itXxZyXDTSRPk/H/njnF33LgdpE7xySU1e
+	aPP1t6eMk/tzvhcRmPDgU4btaHvD/xPnvTsTwI9juUBSEw9WQdyV
+X-Gm-Gg: ASbGnctYioDbxpms2y7m0nJ9DAlzkD9Osy4F63xfAUYF5ApJ+c5TM1HYimVPXyw843L
+	Bo9dxh/Tzuls4U5Ljk4Zwo233lBBNBz4eaIbT1Xdmpms/XjOoUEGQn2Bt4VJNNfH+wpWRAWZMWf
+	MiKaBpv0ZgBvIjwWRkKXQ6EPnB0NtS5yWvgKagaDvyZtUzK8SIq7L3wBBWi+YmKJmgG+QnufpTY
+	fiKMwDUMcMlQeSzhohuD/L5YH5HgxnmJftcsED0lHJPeIX9X5/APH+EiRfM1+/CwaKywqBnNz6R
+	nh/ZmAF6JC1YRpSQg/tilTnxiBcFGt4gcCWL3zZnnxR9r7iwJPSYxn6+h2w=
+X-Google-Smtp-Source: AGHT+IFNobPJFaed1+rR6hdGon196mZiYWLUxTSwQeUt8YADrztqOpZ/Ia+chgn1nwo6LSAllzH9xA==
+X-Received: by 2002:a17:907:7e8e:b0:ab3:2b85:5d5 with SMTP id a640c23a62f3a-ac330401c0bmr175291666b.49.1741939301139;
+        Fri, 14 Mar 2025 01:01:41 -0700 (PDT)
+Received: from foxbook (adth23.neoplus.adsl.tpnet.pl. [79.185.219.23])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aea4csm188637566b.33.2025.03.14.01.01.39
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 14 Mar 2025 01:01:40 -0700 (PDT)
+Date: Fri, 14 Mar 2025 09:01:35 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Don't log transfer ring segment list on errors
+Message-ID: <20250314090135.61f1f656@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9PW5tkuTH6oRG6X@hovoldconsulting.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 14, 2025 at 08:12:38AM +0100, Johan Hovold wrote:
-> The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
-> 
->   Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.14-rc7
+The error message above used to span two lines, rarely more. A recent
+cleanup concentrated useful information from it in one line, but then
+it added printing the list of all ring segments, which is even longer
+than before. It provides no new information in usual cases and little
+in unusual ones, but adds noise to the log. Drop it.
 
-Pulled and pushed out, thanks.
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
+ drivers/usb/host/xhci-ring.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 5d64c297721c..9e50cc3354cb 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2981,9 +2981,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		 (unsigned long long)xhci_trb_virt_to_dma(td->start_seg, td->start_trb),
+ 		 (unsigned long long)xhci_trb_virt_to_dma(td->end_seg, td->end_trb));
+ 
+-	xhci_for_each_ring_seg(ep_ring->first_seg, ep_seg)
+-		xhci_warn(xhci, "Ring seg %u dma %pad\n", ep_seg->num, &ep_seg->dma);
+-
+ 	return -ESHUTDOWN;
+ 
+ err_out:
+-- 
+2.48.1
 
