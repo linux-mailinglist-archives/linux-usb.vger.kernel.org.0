@@ -1,77 +1,93 @@
-Return-Path: <linux-usb+bounces-21744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA5BDA60866
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 06:45:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C55A6096A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BC147A825D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 05:44:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B8119C2A91
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE3414884C;
-	Fri, 14 Mar 2025 05:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nXRSvBpY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7081C1624FC;
+	Fri, 14 Mar 2025 07:09:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF7E13D26B;
-	Fri, 14 Mar 2025 05:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.nfschina.com (unknown [42.101.60.213])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 7391014900B;
+	Fri, 14 Mar 2025 07:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741931097; cv=none; b=hdEJQwNlBK8VxgxoSM48Gi1dkC7hSWLXzKmMW75AaHwEpA/8I2X3P3wd8LYRtqkBWKSs+CSJ2RJSomqisBXH2GjwtB6MiV4lunw9uLM8aW/4/iO/95yqjUDxdPKf36fZyaVToR3PqyD9V7RLCrcBYFVl3FrrG8Mk21HlA6WzKaA=
+	t=1741936183; cv=none; b=OrZFGi+f23RcbBCk0SFO5tiJJCffCKrVtu4RDoaTs+j6x+p0zNx9KZEUrYgaphpv6Il6EUD0SaPnrVNhq/UKlB5tQstq1KuMQsirc0rwk1PthJtup0bL9JVCnzdpvkojWRSVzFp+BsV74pXWRjs2Sosfg/MWTFAlwofraVeW/x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741931097; c=relaxed/simple;
-	bh=ynZmVmnnH3wDdQhCAfoEwSbQtHLV4LlYau1xMCJnN7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwthFgdHqsRLBUdI5Q7Y9/QwAYn9SrgAZ9skXIXTWETQykBInKUUaU/Fpwr/iifS5cxZ2ci+gqyXcLA3hsaT9/uFPjGt6zsodBvCd5jzsK8d7x5IyKLNL78WhgCePRDpL2EuKiG6QPXFnPrJsYz2++yYmuwel6Lf3dk3qRhiD3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nXRSvBpY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90197C4CEE3;
-	Fri, 14 Mar 2025 05:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741931096;
-	bh=ynZmVmnnH3wDdQhCAfoEwSbQtHLV4LlYau1xMCJnN7A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nXRSvBpYTK5iFkmzzii2qimWyfKpsxlb+mVEO0glrbMWpfyDKf5fNuyc2XUfQnrjv
-	 5LLypG3/LqfvYR/W4jXO4oUC+YlzcCmg5CeVOI2Bve02fWhX7ixWFXRhZ0kIfnoMmv
-	 gCQqsUqY2W3kRo6nEeaNj7e/qmB5geq0uV1oeXtI=
-Date: Fri, 14 Mar 2025 06:44:54 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: daixin_tkzc <daixin_tkzc@163.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	matthew dharm <mdharm-usb@one-eyed-alien.net>,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org
-Subject: Re: Re:[PATCH] usb: storage: Fix `us->iobuf` size for BOT
- transmission to prevent memory overflow
-Message-ID: <2025031402-fastness-humming-e87c@gregkh>
-References: <20250311084111.322351-1-daixin_tkzc@163.com>
- <2b6c4aa7.b165.1958f6b7a3a.Coremail.daixin_tkzc@163.com>
- <814316b6-013b-4735-995d-b6c0c616c71b@rowland.harvard.edu>
- <1681f087.2727.195927b7ccb.Coremail.daixin_tkzc@163.com>
+	s=arc-20240116; t=1741936183; c=relaxed/simple;
+	bh=5tIgY+fOrIQ6fiEkuy1fCF82z8dA2pESaus1YHeKH9o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RsCik2M4TLt2E9G9BGcpJVGoK0aXjD5m6D8uMRVAyU9T+1/ZaWA/wq3XZPEhk5RrDu307YXrtguHIJ6qvB0gk7fjZOfeeo9KcdWt3cSuuH+hxn0aoPn82zk873LoJKmqEsmCOn5Q/gAAS52YE26nUj52QjL3FL03IvYwULGlVlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from liqiong-suma.shanghai.nfschina.local (unknown [180.167.10.98])
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 90FF36068096E;
+	Fri, 14 Mar 2025 15:09:30 +0800 (CST)
+X-MD-Sfrom: liqiong@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Li Qiong <liqiong@nfschina.com>
+To: Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>
+Cc: Roger Quadros <rogerq@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Li Qiong <liqiong@nfschina.com>
+Subject: [PATCH] usb: remove the invalid comments
+Date: Fri, 14 Mar 2025 15:09:21 +0800
+Message-Id: <20250314070921.355986-1-liqiong@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681f087.2727.195927b7ccb.Coremail.daixin_tkzc@163.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 14, 2025 at 10:28:41AM +0800, daixin_tkzc wrote:
-> How us->iobuf overflow could occur?
-> 
-> For 1), the USB device does not know that a Babble Error has occurred at this time (DWC_otg knows what happened), It actually continuously returns 512 bytes data through DMA write to CSW address (As can be seen in the waveform in the appendix document before). The DWC_otg controller driver cannot control how much data the device returns(13 or 512 bytes). However, the USB storage driver pre-allocates a default buffer size of 64 bytes for CBW/CSW.
+These function don't return value, remove the invalid comments.
 
-If this really is true, it is a bug in the dwc driver.  Please fix it
-there, otherwise you will have to modify every single USB driver in
-Linux to have a larger buffer size, not just the storage one.
+Signed-off-by: Li Qiong <liqiong@nfschina.com>
+---
+ drivers/usb/cdns3/cdns3-plat.c      | 2 --
+ drivers/usb/gadget/udc/udc-xilinx.c | 2 --
+ 2 files changed, 4 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+index 59ec505e198a..735df88774e4 100644
+--- a/drivers/usb/cdns3/cdns3-plat.c
++++ b/drivers/usb/cdns3/cdns3-plat.c
+@@ -179,8 +179,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+ /**
+  * cdns3_plat_remove() - unbind drd driver and clean up
+  * @pdev: Pointer to Linux platform device
+- *
+- * Returns 0 on success otherwise negative errno
+  */
+ static void cdns3_plat_remove(struct platform_device *pdev)
+ {
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index ae2aeb271897..fa94cc065274 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -2178,8 +2178,6 @@ static int xudc_probe(struct platform_device *pdev)
+ /**
+  * xudc_remove - Releases the resources allocated during the initialization.
+  * @pdev: pointer to the platform device structure.
+- *
+- * Return: 0 always
+  */
+ static void xudc_remove(struct platform_device *pdev)
+ {
+-- 
+2.30.2
 
-greg k-h
 
