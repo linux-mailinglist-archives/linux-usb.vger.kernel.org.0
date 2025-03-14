@@ -1,91 +1,105 @@
-Return-Path: <linux-usb+bounces-21768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4EDCA6117D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 13:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E747DA61199
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 13:40:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFF433B2E25
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 12:37:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D7523BDA54
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 12:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506911FECAB;
-	Fri, 14 Mar 2025 12:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBF11FF5FB;
+	Fri, 14 Mar 2025 12:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vbIQgj8T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXdFeT/U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66BC1FDA89;
-	Fri, 14 Mar 2025 12:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5ADB1FF1D7;
+	Fri, 14 Mar 2025 12:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741955842; cv=none; b=tzQGauUusfZkAJArMLBCz3nU69g4SoRU+w1ai6/lhJux9oXpNrqpHYGxTk7GvEAwUte+/yK0qtd/6Z0Gpxtj5koi6guUN8HpizNmv2m70DcGxIow6hnfe+SQcqQ4P566ZM8/wVAhHhCz4JNWWJsJDJ0jRL4Y/EQ0eq00z9r3mmM=
+	t=1741955924; cv=none; b=mdc77gIpigRACTNtvPhvfx1ea5hM3x83d7EEmRUrLzf89nQMw9Bc2Q29K+I/E/9AKEi7EjQcxW3dgPUoED77UzsXQu068g4L2EmnFaG1Z0yuxNTgPUIJz774mpE0cXyzR4FodN0kvgRsL7kU9D8GewSbKY5JWU6xwrXzhfxRlGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741955842; c=relaxed/simple;
-	bh=S3esJdqF5lpQHu09B96cKlik0uJVTaNez4lDgMbLHPA=;
+	s=arc-20240116; t=1741955924; c=relaxed/simple;
+	bh=DJufqgG1qpP+BO+nmANaDfx563WohqASVbzA0uYrDAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p6RDR0echJv1zWis2+e/lRHpRyhWnZcZNG/1Zdlt6PlJt6ujfo0KW7bq0vZIgd0VmP+v8alC46HT8z00FyfGsx1/62bAIClXaisS8ilnoXZlE46W1LvExpSZ7NmSX72HPGpJnLq6Xiua5zk68O1l40OJFYZ8sKzgenJitlAzFxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vbIQgj8T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99125C4CEEB;
-	Fri, 14 Mar 2025 12:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741955842;
-	bh=S3esJdqF5lpQHu09B96cKlik0uJVTaNez4lDgMbLHPA=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=BcAaEnDkDsJYpF9BZQi97cMAu7NuJ6/YQ0FNv4Xkd4SbOiJ1fY4ztkhbg2J4vt5A5nULl5COyBEI4u3wxDs+P6dmVqAKCsYEdvQO1feDLLqAyXeXrNrU9RACbHcAwnAE/x6Xe0klEZnk8SUbgsiOFaV3vYNRTdx85hI+FQSc3wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXdFeT/U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEBD2C4CEF0;
+	Fri, 14 Mar 2025 12:38:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741955924;
+	bh=DJufqgG1qpP+BO+nmANaDfx563WohqASVbzA0uYrDAo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vbIQgj8TSE4lQeZ2PT7fb2JoEj93MnLv3QU989Xgjmisv8UwUYj8PXvwPkzjVymog
-	 8gWijKRL0MImk406Plv157O/N55Rr5qeNPMS2pATpUslbkUSDMH5p2NdLlCUTJXPsN
-	 lhnzmeihtIy4WezdZjx3RjsYqhE8uPUVy4eVz4jY=
-Date: Fri, 14 Mar 2025 13:37:19 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-	festevam@gmail.com, peter.chen@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v5 0/6] add USB2.0 support for i.MX95-19x19 EVK board
-Message-ID: <2025031404-elite-critter-05b7@gregkh>
-References: <20250312082700.260260-1-xu.yang_2@nxp.com>
- <2025031443-rounding-subject-1f60@gregkh>
- <20250314092137.6m3gmj4irxqwpy22@hippo>
+	b=UXdFeT/UMJut3kEQPKrGWf9dZUlrk5GrB61hyJQUZHH6CGRIA1qYeOLkF62QOiI8s
+	 2DEHcqHSBlHiUp6QJGjVmw3zOkvHdY8GTAOjEnDq5LWazyRFpD9aSq2i7Xok4thlhx
+	 dTk90YNyANpW3EtO6uq06caZux8hGc3Zxgb/LQ/h0FfwsSJbn7O9tn9WhjWvjx62dI
+	 pc2QvUKo5J00p3SfoKAhcosrE/qyJWU8OKqJGqmdWs0AzPD9UgAHSQIme+ymiQm5UM
+	 GoOtEAwxZaNvwbCLzOesc+TdlygDMed5wKMibTOfh+61K/yHe85pivYPJdNF01xMdJ
+	 AJSjkQ4CgeWiQ==
+Date: Fri, 14 Mar 2025 12:38:38 +0000
+From: Lee Jones <lee@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>,
+	Markus Elfring <elfring@users.sourceforge.net>,
+	Jakob Riepler <jakob+lkml@paranoidlabs.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-usb@vger.kernel.org,
+	Daniel Scally <djrscally@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1 0/4] leds: Introduce and use
+ fwnode_get_child_node_count()
+Message-ID: <20250314123838.GN3890718@google.com>
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250314092137.6m3gmj4irxqwpy22@hippo>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
 
-On Fri, Mar 14, 2025 at 05:21:37PM +0800, Xu Yang wrote:
-> Hi Greg,
+On Mon, 10 Mar 2025, Andy Shevchenko wrote:
+
+> This series was inspired during review of "Support ROHM BD79124 ADC" [1].
+> The three conversion patches are the examples of the new API in use.
 > 
-> On Fri, Mar 14, 2025 at 09:18:51AM +0100, Greg KH wrote:
-> > On Wed, Mar 12, 2025 at 04:26:54PM +0800, Xu Yang wrote:
-> > > The i.MX95-19x19 EVK board features a USB 2.0 Type-A port, with this
-> > > series primarily introducing USB 2.0 support. In the i.MX95 architecture,
-> > > the USB wake-up handling mechanism is integrated within the HSIO block
-> > > control module, utilizing a dedicated wake-up interrupt. Therefore, we
-> > > also implemented corresponding wake-up logic code to properly manage this
-> > > functionality.
-> > > 
-> > > For detailed changes can refer to patch commit log.
-> > 
-> > Does not apply to my tree :(
+> Since the first two examples of LEDS, in case of posotove response it may
+> be routed via that tree and immutable branch/tag shared with others, e.g.,
+> IIO which Matti's series is targeting and might be dependent on. The USB
+> patch can be applied later separately, up to the respective maintainers.
 > 
-> It'd due to below dts patch #2,3 not in usb tree. However, linux-next already
-> have them. I see Shawn just send pull request for 6.15. To make it easy,
-> let me ping you when usb tree have them, is it ok?
+> Link: https://lore.kernel.org/r/cover.1741610847.git.mazziesaccount@gmail.com> [1]
 > 
-> https://lore.kernel.org/linux-usb/20241204050907.1081781-1-xu.yang_2@nxp.com/#t
+> Andy Shevchenko (4):
+>   device property: Split fwnode_get_child_node_count()
+>   leds: pwm-multicolor: Use fwnode_get_child_node_count()
+>   leds: ncp5623: Use fwnode_get_child_node_count()
+>   usb: typec: tcpm: Use fwnode_get_child_node_count()
+> 
+>  drivers/base/property.c                | 12 ++++++------
+>  drivers/leds/rgb/leds-ncp5623.c        |  5 ++---
+>  drivers/leds/rgb/leds-pwm-multicolor.c |  7 +++----
+>  drivers/usb/typec/tcpm/tcpm.c          |  6 ++----
+>  include/linux/property.h               |  7 ++++++-
+>  5 files changed, 19 insertions(+), 18 deletions(-)
 
-That will not be until after 6.15-rc1 is out.
+What's the proposed merge strategy here Andy?
 
-thanks,
-
-greg k-h
+-- 
+Lee Jones [李琼斯]
 
