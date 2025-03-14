@@ -1,93 +1,98 @@
-Return-Path: <linux-usb+bounces-21745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C55A6096A
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:09:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ACA7A609CA
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:18:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B8119C2A91
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:09:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AECBE880E92
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 07:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7081C1624FC;
-	Fri, 14 Mar 2025 07:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C1E1F7561;
+	Fri, 14 Mar 2025 07:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LS/bSaW5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 7391014900B;
-	Fri, 14 Mar 2025 07:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6277A1F63C1;
+	Fri, 14 Mar 2025 07:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741936183; cv=none; b=OrZFGi+f23RcbBCk0SFO5tiJJCffCKrVtu4RDoaTs+j6x+p0zNx9KZEUrYgaphpv6Il6EUD0SaPnrVNhq/UKlB5tQstq1KuMQsirc0rwk1PthJtup0bL9JVCnzdpvkojWRSVzFp+BsV74pXWRjs2Sosfg/MWTFAlwofraVeW/x0=
+	t=1741936362; cv=none; b=fFz0TR5mDKTKDG/ZH0GWIelrlxARzj4SOCwONZM/wub/mWOX2solkX9BLrNgkOZxPrfE6HheECLGS6UWwlgKSYUqA6Rz5K9r2vjC+3DtGAov0IakcIXYsK0fr76euSH4xncbqUrR/6Xv4GJbxW/Lyb2C7scmqqT4kJ9eI4exi8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741936183; c=relaxed/simple;
-	bh=5tIgY+fOrIQ6fiEkuy1fCF82z8dA2pESaus1YHeKH9o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RsCik2M4TLt2E9G9BGcpJVGoK0aXjD5m6D8uMRVAyU9T+1/ZaWA/wq3XZPEhk5RrDu307YXrtguHIJ6qvB0gk7fjZOfeeo9KcdWt3cSuuH+hxn0aoPn82zk873LoJKmqEsmCOn5Q/gAAS52YE26nUj52QjL3FL03IvYwULGlVlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from liqiong-suma.shanghai.nfschina.local (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 90FF36068096E;
-	Fri, 14 Mar 2025 15:09:30 +0800 (CST)
-X-MD-Sfrom: liqiong@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Li Qiong <liqiong@nfschina.com>
-To: Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>
-Cc: Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michal Simek <michal.simek@amd.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Li Qiong <liqiong@nfschina.com>
-Subject: [PATCH] usb: remove the invalid comments
-Date: Fri, 14 Mar 2025 15:09:21 +0800
-Message-Id: <20250314070921.355986-1-liqiong@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1741936362; c=relaxed/simple;
+	bh=nS/cziBIvv+b35t6+Auwrud3hAAQAUm55EYNaw5/odE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=V2CsDKP5TNbB3Ok9hOvtLV0PSH68rKugUqNRkWunXnsz/8PEfW9VfYnDoa0aG1atr/AECj+gtv51ii28GnO7MTk6m0bpFSpOBSIr3ZjRWOkpKGwU0gy6tr58SnZCnmMyzLdX9eLzkvXdvDpGrQrVviZWQ80GKul1TBjWKEH/C4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LS/bSaW5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF024C4CEE3;
+	Fri, 14 Mar 2025 07:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741936359;
+	bh=nS/cziBIvv+b35t6+Auwrud3hAAQAUm55EYNaw5/odE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LS/bSaW5/rXOiR1sLi3fUKjWbJ2VTVEeRS8Wq6yVmsX+CgndTmRBcE0FbLLaChBIV
+	 MgGHgPvI30nwsdAlivTdaChobcr00HpfYtB6+UMJ/i89LcKAZBpiki5zEvGvdWp0T3
+	 2kpkzIWopiUFsVwBVcgqkIhRZ4Jwj0pkUOWLXYzuA3k+Rtsa3vkbmdtJ2KKjFSRN7X
+	 2pKjE8wlF1Rs75kGZk+koyx59s6IWn+xYQNEdx3PuvS9A12SHTRQTbwYvGlkmOWcFl
+	 gx7GLCbdhYb2A2T0gbJu2nUyDWZUyzl4AaP5fZgjwJkuEAbguTPJAZXQCLbnUf5GXC
+	 yClN5szZWT6yg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tszDi-000000001Lq-09ns;
+	Fri, 14 Mar 2025 08:12:38 +0100
+Date: Fri, 14 Mar 2025 08:12:38 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial device ids for 6.14-rc7
+Message-ID: <Z9PW5tkuTH6oRG6X@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-These function don't return value, remove the invalid comments.
+The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
 
-Signed-off-by: Li Qiong <liqiong@nfschina.com>
----
- drivers/usb/cdns3/cdns3-plat.c      | 2 --
- drivers/usb/gadget/udc/udc-xilinx.c | 2 --
- 2 files changed, 4 deletions(-)
+  Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
 
-diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-index 59ec505e198a..735df88774e4 100644
---- a/drivers/usb/cdns3/cdns3-plat.c
-+++ b/drivers/usb/cdns3/cdns3-plat.c
-@@ -179,8 +179,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
- /**
-  * cdns3_plat_remove() - unbind drd driver and clean up
-  * @pdev: Pointer to Linux platform device
-- *
-- * Returns 0 on success otherwise negative errno
-  */
- static void cdns3_plat_remove(struct platform_device *pdev)
- {
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index ae2aeb271897..fa94cc065274 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -2178,8 +2178,6 @@ static int xudc_probe(struct platform_device *pdev)
- /**
-  * xudc_remove - Releases the resources allocated during the initialization.
-  * @pdev: pointer to the platform device structure.
-- *
-- * Return: 0 always
-  */
- static void xudc_remove(struct platform_device *pdev)
- {
--- 
-2.30.2
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.14-rc7
+
+for you to fetch changes up to 18e0885bd2ca738407036434418a26a58394a60e:
+
+  USB: serial: ftdi_sio: add support for Altera USB Blaster 3 (2025-03-12 17:51:16 +0100)
+
+----------------------------------------------------------------
+USB-serial device ids for 6.14-rc7
+
+Here are some new modem device ids and a couple of related fixes, and
+support for Altera USB Blaster 3.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Boon Khai Ng (1):
+      USB: serial: ftdi_sio: add support for Altera USB Blaster 3
+
+Fabio Porcedda (2):
+      USB: serial: option: add Telit Cinterion FE990B compositions
+      USB: serial: option: fix Telit Cinterion FE990A name
+
+Johan Hovold (1):
+      USB: serial: option: match on interface class for Telit FN990B
+
+ drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++
+ drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++
+ drivers/usb/serial/option.c       | 48 ++++++++++++++++++++++++++-------------
+ 3 files changed, 59 insertions(+), 16 deletions(-)
 
