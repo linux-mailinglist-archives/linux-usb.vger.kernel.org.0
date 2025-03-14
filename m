@@ -1,54 +1,53 @@
-Return-Path: <linux-usb+bounces-21758-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21759-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B395A60B18
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 09:19:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04684A60B1A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 09:19:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72D913A480A
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:18:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C502F7AC627
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Mar 2025 08:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9C01A23BF;
-	Fri, 14 Mar 2025 08:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0EB1A23BF;
+	Fri, 14 Mar 2025 08:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a3kqwwQR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UcvFpkS0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFE3EAD7;
-	Fri, 14 Mar 2025 08:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B19EAD7;
+	Fri, 14 Mar 2025 08:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741940335; cv=none; b=K23ZCsJrBPIOcmIbTvWHWz1AQlhzMQez9v5U+VZXdCb5ouxCo17jt0ZYN0a0KMcn1yjX0/zmDiiHN6+kFMzYSTkm9SiYIAp1GbKlRJ7hpIXLoCqTh/w3pl3WslnM7LkepJJ1hdIKk4bng6iGXz9A/aLvuYO2mEWKJMVLvnp8oxw=
+	t=1741940390; cv=none; b=YsvLvSnBXM3PY17ODbJt+bjwQabF2v97FxUS4QTz1H/zzCPqV5t3T6oLMVEXjRsPmPCbeK23/rqTPM63zlTYPJyXbtSNnpGfBEAf8VbAjHbK52SKj6ajQabgh48ZOplVycoT070s21uLW1ncuADgstExVkM2pxZf+cpayv+rkwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741940335; c=relaxed/simple;
-	bh=tI0vTWKsMll0jdi/NKmbG4tSxmIKPnhKv6J/KH+XOzs=;
+	s=arc-20240116; t=1741940390; c=relaxed/simple;
+	bh=kdFwwWX7uw9irI3XUeb7K1Tm67CdTCvgOj59eYAoB+Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=inNe7KVghILR7WjvcPVPpNbUTMeWV5ae3QkBN+HUyBXOWq92ffuYfrJsBqjWwWFQKyR0AWcC80D7ildPsCuTBZ1SvKkqDdB5H53cqynawILoz3vebQoj3PKX8MzoBhJQw8rflip2oDB/OisB7OMXCTK7ibrd3LlM07I2RueCJ/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a3kqwwQR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD6EC4CEE3;
-	Fri, 14 Mar 2025 08:18:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MDPs7b5XYvfZQFzefDaEKYE2X77UVD3/KbmTrDqqRxeM4F2oTFJOwdNtHvIpZf0ut3NBy/+/2suV8DzIJ8DgmGMenUc/kc8TsPtf5m11O7kvp/ty8dYgpbsZ0hqXqdGppxxfjOBbV3R+wKP6Jnu15Cp+bGqdO1XjdTkHKsNCu8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UcvFpkS0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFCAC4CEE3;
+	Fri, 14 Mar 2025 08:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741940334;
-	bh=tI0vTWKsMll0jdi/NKmbG4tSxmIKPnhKv6J/KH+XOzs=;
+	s=korg; t=1741940389;
+	bh=kdFwwWX7uw9irI3XUeb7K1Tm67CdTCvgOj59eYAoB+Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a3kqwwQRWqf5O3pCiXGfkNxDN4q87FrBgOUhcZE7IwylEdukGJHa/a75LIax911x+
-	 hl40fuEH+9aEgkXYPm5mXMiMabV3Kz2ufN6RtTc7HxA6G4TBCb4OjIPVHEHZAIYOFF
-	 hpAOMz65/tXOqnfS4nqI6PM7VlLpnE6lwQXtCMSI=
-Date: Fri, 14 Mar 2025 09:18:51 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-	festevam@gmail.com, peter.chen@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v5 0/6] add USB2.0 support for i.MX95-19x19 EVK board
-Message-ID: <2025031443-rounding-subject-1f60@gregkh>
-References: <20250312082700.260260-1-xu.yang_2@nxp.com>
+	b=UcvFpkS0poDhkXhpSzSyE7nwPlSeWDphVaJCLDBBr/DPFKJ0ZRKLDVyCvkijUzcaz
+	 aaDAc9hg7htE0YsnUhQ+0tXs3C/3LCQflA6IMamcPnkmQjE5JfcXagwSQe9KSa4h7J
+	 CLjzfsM3JgdzoGurVUvaaqdX13++ymgVUq1vHNvA=
+Date: Fri, 14 Mar 2025 09:19:47 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Li Qiong <liqiong@nfschina.com>
+Cc: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: cdns3: Remove the invalid comment
+Message-ID: <2025031435-candy-tacking-1c7a@gregkh>
+References: <20250314070921.355986-1-liqiong@nfschina.com>
+ <20250314080249.469307-1-liqiong@nfschina.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,17 +56,59 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250312082700.260260-1-xu.yang_2@nxp.com>
+In-Reply-To: <20250314080249.469307-1-liqiong@nfschina.com>
 
-On Wed, Mar 12, 2025 at 04:26:54PM +0800, Xu Yang wrote:
-> The i.MX95-19x19 EVK board features a USB 2.0 Type-A port, with this
-> series primarily introducing USB 2.0 support. In the i.MX95 architecture,
-> the USB wake-up handling mechanism is integrated within the HSIO block
-> control module, utilizing a dedicated wake-up interrupt. Therefore, we
-> also implemented corresponding wake-up logic code to properly manage this
-> functionality.
+On Fri, Mar 14, 2025 at 04:02:48PM +0800, Li Qiong wrote:
+> The function don't return value, remove the invalid comment.
 > 
-> For detailed changes can refer to patch commit log.
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> ---
+>  drivers/usb/cdns3/cdns3-plat.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+> index 59ec505e198a..735df88774e4 100644
+> --- a/drivers/usb/cdns3/cdns3-plat.c
+> +++ b/drivers/usb/cdns3/cdns3-plat.c
+> @@ -179,8 +179,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>  /**
+>   * cdns3_plat_remove() - unbind drd driver and clean up
+>   * @pdev: Pointer to Linux platform device
+> - *
+> - * Returns 0 on success otherwise negative errno
+>   */
+>  static void cdns3_plat_remove(struct platform_device *pdev)
+>  {
+> -- 
+> 2.30.2
+> 
+> 
 
-Does not apply to my tree :(
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
