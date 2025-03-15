@@ -1,199 +1,290 @@
-Return-Path: <linux-usb+bounces-21786-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21787-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B83A62381
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Mar 2025 01:56:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18DA1A629EE
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Mar 2025 10:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC5DB420A9F
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Mar 2025 00:56:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DBB53AC3DD
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Mar 2025 09:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72CB517C68;
-	Sat, 15 Mar 2025 00:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675B01F4607;
+	Sat, 15 Mar 2025 09:22:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="00AEhJey"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NxJcCYDR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B65F10F1
-	for <linux-usb@vger.kernel.org>; Sat, 15 Mar 2025 00:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5AFD531
+	for <linux-usb@vger.kernel.org>; Sat, 15 Mar 2025 09:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742000204; cv=none; b=mgBOqJn0vwOx1OeefY4zp2GhAyiRWHK6MVS1yvUOQ//P/kVOQwPxheycn8hFfbmt+O8sltaI9d/HSnqB0cRARL4Pj2xn8WjLI9zS0r4oOUBdiJo2N4pwLI+xhqNMc6eXumyqF683DR2uDbB6W/hCeOH8MqPHl+ehOM7A2rwyaDo=
+	t=1742030534; cv=none; b=QRN6/xAO9SYHL8cLjzd2TUK05R8q2mLSaCy915Qnk6307EQneB7QMaLaNLY2oFV6kTy626JjwEM0ORRuPJ4oW93XSWK87wYWuo7LOWU5cWhshV+DrB3LmOM8F61LJoEp4zKTYxNEJTGQ4YcJoVvpR8/a4zcHs6QprDSmN5KMzdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742000204; c=relaxed/simple;
-	bh=dFv//A/N53hUD/dKk0EKx9Sd5ho6SwDR5GWOeJGznwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R0XUv7Re/7GTEspO/um22FSaSIl4Ux5iD8GME4uSGHkVaDbtS3H+8YyLk3arpXGLdaAfAYZcoi1lSCBcM30gDcwMUJB2WnU4jhEFiYnx4DejRWemthlcZUuj+FxXjZASJINswYCZ2D1ZIVpkCNGeKK6fWI2WErOlmvnKrCcwnaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=00AEhJey; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2254e0b4b79so67867155ad.2
-        for <linux-usb@vger.kernel.org>; Fri, 14 Mar 2025 17:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742000200; x=1742605000; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jlPzh6p1/5lGDsISw1+G4tFXT2WVaPLY/RSip+CLZfo=;
-        b=00AEhJeyHoC7TUYh0Es8UhYq8q/4iGYgJSXNWRgqPBTcNiAKtibh5POQA35s/4Xqcj
-         NKe703McvRb69PzQbFBJhfsu7LkfGBI7ibXbBtfb1QN4k05wz6SqNMyklkqRD8Wsn/il
-         CGrJdnAVXBE1OvBSzC6GkLSl4KB0RKaTs60+p8eCXpFKkM9+g78pMf73aCxnkaJ4VEAO
-         knpqzaw3NMNcdbAEIQr7wmRPqptGaSn9ZJfpTIOBORK/euDt7SBp+OQpuXLxr6hDTmiz
-         A3oTZT/y5R6WlEgq7krBNkIeGVLMOy9PzQjbfTsQRUxI0X6lmflPO1VqPKzherZpjJpq
-         CY1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742000200; x=1742605000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlPzh6p1/5lGDsISw1+G4tFXT2WVaPLY/RSip+CLZfo=;
-        b=SJqAQeTMEEmjlwOC7+0ifa/gNL1K8PqayeGEX+WvipbUBD2Cc5ja1Chp2E1uwELoSb
-         HmmVBw8c1MY4yH/mhK5jy55WQQKnA2HGzW4CjCXpADbC/l9+HxqKmKkHb1azCUzWvWSK
-         mAwPsm8biOscbX491OBphsvejV+XgqsEEsY3iah/s1x3EsNH3PgYnEykbAtGh9qRBPOp
-         o3DQ59ZxdcGZHvVuF8Xg6Z0EGXfiOFG/Wravg3vL6VcG1lkIACSAxSqjvYj6g580lbOn
-         t/ryZ9xc54KwCpiqDIOudGYDcqskFN0LJvAVtQaEhWr4aLD/OpmwkO1oVGiUUyHN/BoI
-         393g==
-X-Forwarded-Encrypted: i=1; AJvYcCVtnqzSaml0XW0cX8XkjixgkeDZz88pdTqfMHkRSOVm89SXZBtIgLEZp7EmChHZCBLTqLN7KV9XL4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygJkZJp5RTQfyIYppk4irp6fi9f3DGeDK1Jrkh2+7Pt9IiwcK+
-	hS+mPcILN9gxmVVtBspFFZxi8C4NABIl0jte1mWT0WdyPkQmbbEljXOqPETy1g==
-X-Gm-Gg: ASbGncuA9lXMnYNsZdW9MnrWUsSBnsvl6NMmugIFF8RRVU1iqw+fYBHQw/lxMkE46Op
-	XrsiZwzgGP1AwCJFRfqnvcjjKluVp4uERIsUgGe2H6cOZ3O9b/CQrmY92pPO7eSF8UFZedVif4D
-	HhYYGcQOHvqTNDth+vWXrQTueUDBMub1BHRSnbDfWIsUols6b1imX9HqoeVGqmMcM97haY232EZ
-	lHBLeqAtpSvQgct6qN0MvD0oE6qKWZtvUokSq7VXHVwD0HcpJfuWbWtyJypUTsFOUkVbzK9hfmp
-	xTawl4tSq5L7Kfa713PXC9EWNgC3f2WeYRy5ukniwhkiLvCXaPzIDjWNM0eDa5NgHfYv4R6GJRm
-	WDUYog3MjN0MIH0TVtk1w8C3J8g0hg+0C0ckKPHQo6XA=
-X-Google-Smtp-Source: AGHT+IGLAZyr9y6XFIkao+qhVXq299qSBu0NyjP0SxDe+I/hBmyjWfLdod7q25DFZQQHCPjxfpF0Vg==
-X-Received: by 2002:a17:902:ecc5:b0:223:f7ec:f834 with SMTP id d9443c01a7336-225e0a840camr50486775ad.31.1742000199456;
-        Fri, 14 Mar 2025 17:56:39 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:1790:6e62:92ba:cb2b? ([2a00:79e0:2e14:7:1790:6e62:92ba:cb2b])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68883d0sm34730585ad.10.2025.03.14.17.56.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 17:56:39 -0700 (PDT)
-Message-ID: <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
-Date: Fri, 14 Mar 2025 17:56:37 -0700
+	s=arc-20240116; t=1742030534; c=relaxed/simple;
+	bh=u1vAmA00g9udqnuoEjRB7dD2iPEsKfPe9JpN0H5IrMU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=eMcAhRqwFGPnQh59+ukXnhfXZ3VNFCtfljp6+qHgpl6+5Ya/e5jg3+UKJ/hWwBDQa6QBhOMwEFjQdTEab2iSDRGwh3qh7stUmAQxl6gbFuTTlqENbjNZyHt+HKlTc4w3nrEzHjRtkrELgWwPrLAAAMnFIuOxvjSAQrqZtvIRZZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NxJcCYDR; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742030532; x=1773566532;
+  h=date:from:to:cc:subject:message-id;
+  bh=u1vAmA00g9udqnuoEjRB7dD2iPEsKfPe9JpN0H5IrMU=;
+  b=NxJcCYDRW30bmyv9xD/8mPMGFKERS68SEo+7o4Plgq39ENc4c3n2fTd1
+   IxDbczuQLCYxH9KTlgi0YiYB7B4f3nFfwlnv8587qKQxS+g8doiShGcXv
+   f36P1XG3P4Kf3bLWSK5GwpS1CeBtbg9EzbMKf8yRqTwY04m+BDeR5YPTf
+   s+XJ5XYkvUscr1mjpE6o3qwgSYAraB4FNwXXSr/Pch2TYQeAxUJQgRalO
+   uC4CGUanMOhgui1vOwpGCM8HdJiStfGIGuM2TU0mafGWv+wGUcXvhz2pK
+   CJBMpZTS1eCxSmSX4R4V3c9GlN5pUlPCR2E0SAMd3pd0+g58wL0eRqyT0
+   Q==;
+X-CSE-ConnectionGUID: 7cX+Ql3zTlCSOu60cVkTvA==
+X-CSE-MsgGUID: 4pd6GqyPRcGX6ipkSnh5Cw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="46968025"
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="46968025"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 02:22:11 -0700
+X-CSE-ConnectionGUID: KXocCyJyQDaCDGCSsqHSrw==
+X-CSE-MsgGUID: +krKwX5GQea2wTiOJrrX9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="122443209"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 15 Mar 2025 02:22:11 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttNia-000BD5-18;
+	Sat, 15 Mar 2025 09:22:08 +0000
+Date: Sat, 15 Mar 2025 17:21:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 3a85c10115407588fad696d6c121d54cd5ba5d72
+Message-ID: <202503151735.ed8RQVdB-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: connector: add fixed-batteries property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250312-batt_ops-v1-1-88e0bb3129fd@google.com>
- <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 3a85c10115407588fad696d6c121d54cd5ba5d72  usb: host: cdns3: forward lost power information to xhci
 
-On 3/13/25 1:48 AM, Krzysztof Kozlowski wrote:
-> On Wed, Mar 12, 2025 at 04:42:01PM -0700, Amit Sunil Dhamne wrote:
->> Add a new "fixed-batteries" DT property to connector class. This
->> property is populated with nodes associated with battery type power
->> supplies powering the USB PD connector. This is needed by the Type-C
->> Port Manager (TCPM) to query psy properties which are used to feed
-> What is "psy" in terms of bindings?
-In terms of bindings this should be a phandle to a device that 
-owns/manages the battery (whose driver will eventually call 
-devm_power_supply_register to register the battery). This could be a 
-fuel-guage ("sprd,sc2731-fgu", say), charger ("ti,bq24190") or a 
-platform device ("cw2015") containing "monitored-battery" property to 
-manage the simple battery.
->> Battery_Status & Battery_Capacity AMS.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 8 ++++++++
->>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->>   2 files changed, 9 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..5e15bc060f5a2cfce842f83de738f1e8bae3ce2d 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -300,6 +300,14 @@ properties:
->>       $ref: /schemas/types.yaml#/definitions/uint8-array
->>       maxItems: 4
->>   
->> +  fixed-batteries:
->> +    description: Contains references to nodes associated with battery type power
->> +      supplies powering the USB PD device. These batteries are fixed type and
-> What is a "battery type power supply"? If you just link here batteries,
-> then we have type for it - monitored-battery - but I doubt connector has
-> direct connection to the battery.
-Regarding "nodes associated with battery type power supplies", I meant 
-something like a fuel guage or a charger OR platform device with 
-"monitored-battery" that will manage the battery lifecycle. If I use 
-monitored-battery for this, I will be restricted to only querying 1 
-simple battery. Also, I don't mean PD connector device to be a fuel 
-guage or charger that manages a specific battery. It should just be able 
-to query any FG/Chg for the battery status to relay that info to the 
-connector's port partner.
+elapsed time: 1449m
 
-The intent of the patchset & this change is for the USB Type C protocol 
-manager module (that consumes these bindings) to be able to get info 
-(such as State of charge, design capacity, etc) from drivers that manage 
-the battery/batteries in the system. In order for such info to propagate 
-I need to hook up the references of these battery manager devices (fuel 
-guages, etc.) to connector.
+configs tested: 197
+configs skipped: 1
 
-I have addressed the connector <-> battery question in the cover letter.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250314    gcc-13.2.0
+arc                   randconfig-001-20250315    gcc-14.2.0
+arc                   randconfig-002-20250314    gcc-13.2.0
+arc                   randconfig-002-20250315    gcc-14.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    gcc-14.2.0
+arm                          exynos_defconfig    clang-21
+arm                            hisi_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250314    clang-21
+arm                   randconfig-001-20250315    gcc-14.2.0
+arm                   randconfig-002-20250314    gcc-14.2.0
+arm                   randconfig-002-20250315    gcc-14.2.0
+arm                   randconfig-003-20250314    gcc-14.2.0
+arm                   randconfig-003-20250315    gcc-14.2.0
+arm                   randconfig-004-20250314    gcc-14.2.0
+arm                   randconfig-004-20250315    gcc-14.2.0
+arm                        vexpress_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250314    gcc-14.2.0
+arm64                 randconfig-001-20250315    gcc-14.2.0
+arm64                 randconfig-002-20250314    clang-21
+arm64                 randconfig-002-20250315    gcc-14.2.0
+arm64                 randconfig-003-20250314    clang-15
+arm64                 randconfig-003-20250315    gcc-14.2.0
+arm64                 randconfig-004-20250314    clang-21
+arm64                 randconfig-004-20250315    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250314    gcc-14.2.0
+csky                  randconfig-001-20250315    gcc-14.2.0
+csky                  randconfig-002-20250314    gcc-14.2.0
+csky                  randconfig-002-20250315    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250314    clang-21
+hexagon               randconfig-001-20250315    gcc-14.2.0
+hexagon               randconfig-002-20250314    clang-21
+hexagon               randconfig-002-20250315    gcc-14.2.0
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250314    clang-19
+i386        buildonly-randconfig-001-20250315    clang-19
+i386        buildonly-randconfig-002-20250314    clang-19
+i386        buildonly-randconfig-002-20250315    clang-19
+i386        buildonly-randconfig-003-20250314    gcc-12
+i386        buildonly-randconfig-003-20250315    clang-19
+i386        buildonly-randconfig-004-20250314    gcc-12
+i386        buildonly-randconfig-004-20250315    clang-19
+i386        buildonly-randconfig-005-20250314    gcc-12
+i386        buildonly-randconfig-005-20250315    clang-19
+i386        buildonly-randconfig-006-20250314    gcc-12
+i386        buildonly-randconfig-006-20250315    clang-19
+i386                                defconfig    clang-19
+i386                  randconfig-001-20250315    clang-19
+i386                  randconfig-002-20250315    clang-19
+i386                  randconfig-003-20250315    clang-19
+i386                  randconfig-004-20250315    clang-19
+i386                  randconfig-005-20250315    clang-19
+i386                  randconfig-006-20250315    clang-19
+i386                  randconfig-007-20250315    clang-19
+i386                  randconfig-011-20250315    gcc-12
+i386                  randconfig-012-20250315    gcc-12
+i386                  randconfig-013-20250315    gcc-12
+i386                  randconfig-014-20250315    gcc-12
+i386                  randconfig-015-20250315    gcc-12
+i386                  randconfig-016-20250315    gcc-12
+i386                  randconfig-017-20250315    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250314    gcc-14.2.0
+loongarch             randconfig-001-20250315    gcc-14.2.0
+loongarch             randconfig-002-20250314    gcc-14.2.0
+loongarch             randconfig-002-20250315    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                          multi_defconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                      mmu_defconfig    clang-21
+mips                              allnoconfig    gcc-14.2.0
+mips                        bcm63xx_defconfig    clang-21
+mips                        qi_lb60_defconfig    clang-21
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250314    gcc-14.2.0
+nios2                 randconfig-001-20250315    gcc-14.2.0
+nios2                 randconfig-002-20250314    gcc-14.2.0
+nios2                 randconfig-002-20250315    gcc-14.2.0
+openrisc                          allnoconfig    clang-15
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-15
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250314    gcc-14.2.0
+parisc                randconfig-001-20250315    gcc-14.2.0
+parisc                randconfig-002-20250314    gcc-14.2.0
+parisc                randconfig-002-20250315    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-15
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                       holly_defconfig    clang-21
+powerpc                    mvme5100_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250314    clang-21
+powerpc               randconfig-001-20250315    gcc-14.2.0
+powerpc               randconfig-002-20250314    gcc-14.2.0
+powerpc               randconfig-002-20250315    gcc-14.2.0
+powerpc               randconfig-003-20250314    gcc-14.2.0
+powerpc               randconfig-003-20250315    gcc-14.2.0
+powerpc64             randconfig-001-20250314    gcc-14.2.0
+powerpc64             randconfig-001-20250315    gcc-14.2.0
+powerpc64             randconfig-002-20250314    clang-17
+powerpc64             randconfig-002-20250315    gcc-14.2.0
+powerpc64             randconfig-003-20250314    clang-21
+powerpc64             randconfig-003-20250315    gcc-14.2.0
+riscv                             allnoconfig    clang-15
+riscv                             allnoconfig    gcc-14.2.0
+riscv                 randconfig-001-20250314    clang-19
+riscv                 randconfig-001-20250315    gcc-14.2.0
+riscv                 randconfig-002-20250314    gcc-14.2.0
+riscv                 randconfig-002-20250315    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250314    gcc-14.2.0
+s390                  randconfig-001-20250315    gcc-14.2.0
+s390                  randconfig-002-20250314    gcc-14.2.0
+s390                  randconfig-002-20250315    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250314    gcc-14.2.0
+sh                    randconfig-001-20250315    gcc-14.2.0
+sh                    randconfig-002-20250314    gcc-14.2.0
+sh                    randconfig-002-20250315    gcc-14.2.0
+sh                           se7619_defconfig    gcc-14.2.0
+sh                           se7724_defconfig    clang-21
+sh                   secureedge5410_defconfig    gcc-14.2.0
+sh                           sh2007_defconfig    clang-21
+sh                   sh7770_generic_defconfig    gcc-14.2.0
+sh                            shmin_defconfig    clang-21
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250314    gcc-14.2.0
+sparc                 randconfig-001-20250315    gcc-14.2.0
+sparc                 randconfig-002-20250314    gcc-14.2.0
+sparc                 randconfig-002-20250315    gcc-14.2.0
+sparc64               randconfig-001-20250314    gcc-14.2.0
+sparc64               randconfig-001-20250315    gcc-14.2.0
+sparc64               randconfig-002-20250314    gcc-14.2.0
+sparc64               randconfig-002-20250315    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-15
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250314    gcc-12
+um                    randconfig-001-20250315    gcc-14.2.0
+um                    randconfig-002-20250314    gcc-12
+um                    randconfig-002-20250315    gcc-14.2.0
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250314    clang-19
+x86_64      buildonly-randconfig-001-20250315    clang-19
+x86_64      buildonly-randconfig-002-20250314    clang-19
+x86_64      buildonly-randconfig-002-20250315    clang-19
+x86_64      buildonly-randconfig-003-20250314    gcc-12
+x86_64      buildonly-randconfig-003-20250315    clang-19
+x86_64      buildonly-randconfig-004-20250314    clang-19
+x86_64      buildonly-randconfig-004-20250315    clang-19
+x86_64      buildonly-randconfig-005-20250314    gcc-12
+x86_64      buildonly-randconfig-005-20250315    clang-19
+x86_64      buildonly-randconfig-006-20250314    gcc-12
+x86_64      buildonly-randconfig-006-20250315    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20250315    clang-19
+x86_64                randconfig-002-20250315    clang-19
+x86_64                randconfig-003-20250315    clang-19
+x86_64                randconfig-004-20250315    clang-19
+x86_64                randconfig-005-20250315    clang-19
+x86_64                randconfig-006-20250315    clang-19
+x86_64                randconfig-007-20250315    clang-19
+x86_64                randconfig-008-20250315    clang-19
+x86_64                               rhel-9.4    clang-19
+xtensa                           alldefconfig    gcc-14.2.0
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250314    gcc-14.2.0
+xtensa                randconfig-001-20250315    gcc-14.2.0
+xtensa                randconfig-002-20250314    gcc-14.2.0
+xtensa                randconfig-002-20250315    gcc-14.2.0
 
-> If you mean chargers, the OF graph is already there for this and no need
-> for this patch.
-
-No I don't mean just chargers in this case. Also, I didn't follow you on 
-the OF graph. Please can you explain further?
-
-
->
->> +      not hot swappable.
->> +    minItems: 1
->> +    maxItems: 4
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +
->>   dependencies:
->>     sink-vdos-v1: [ sink-vdos ]
->>     sink-vdos: [ sink-vdos-v1 ]
->> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> index 3de4dc40b79192b60443421b557bd2fb18683bf7..66c99f0131f074f1c08e31d7481f555647e3b2f8 100644
->> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> @@ -75,6 +75,7 @@ examples:
->>                                          PDO_FIXED(9000, 2000, 0)>;
->>                   sink-bc12-completion-time-ms = <500>;
->>                   pd-revision = /bits/ 8 <0x03 0x01 0x01 0x08>;
->> +                fixed-batteries = <&batt1 &batt2>;
-> Two phandles, so two <>.
-
-Ack. Will fix it in the next revision.
-
-Thanks,
-
-Amit
-
-> Best regards,
-> Krzysztof
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
