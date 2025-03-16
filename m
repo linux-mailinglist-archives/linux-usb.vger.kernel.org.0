@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-21803-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21804-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48933A63687
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Mar 2025 17:55:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEDCAA63697
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Mar 2025 18:01:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D303188E0DB
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Mar 2025 16:55:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D919B3A661F
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Mar 2025 17:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318591D9A41;
-	Sun, 16 Mar 2025 16:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCE1B1AA7BF;
+	Sun, 16 Mar 2025 17:01:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pYI1RJWV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQFd3hPe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE6B18CC1C;
-	Sun, 16 Mar 2025 16:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB7239ACC;
+	Sun, 16 Mar 2025 17:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742144119; cv=none; b=od6aQ69ckhyBqxN3t8owx72kS22hhb+F12ujOKt2p1WiLgZ9KeqesgOiligycAfqlB2Qp7a93sQMDn1XawVVtf9JpKPPunSN6Q9kS9ThuMV03LHnn116AUwK/hwtdZBNLcEoQzoLw9l9DyBx3yDJE3sbfp6+i9HbYVl/Q+wYWr0=
+	t=1742144475; cv=none; b=CgZTA8e5scDm5ne66ccJvlH8RVGQWI5LLOsLOsHvP7inK5B+F33Cc3yBtjtULudg3D/Pv09rYCjgp94I6Z79nXg3aaF3AJeVeHepccUigV2GzcsdzErSGk1j0le9i3s3oY6d43OQa1rTh3vLkF5sAgtt2dPNqpOR4W9gTWLUKBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742144119; c=relaxed/simple;
-	bh=mjkLZ+lA7rjqORYBW3KwW8ZvEgRGEaFBJqvLDjZ1svg=;
+	s=arc-20240116; t=1742144475; c=relaxed/simple;
+	bh=6PfcJBRNV/52O2N067Qc1dkAL6g6RK6AiGmwAbAH68c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=od9BWaKmFiQ8ZoqCo/Cfxwwodk6ZAwxZLfz7i5hNNQ4akoEgH9HP5eo1E4Zjbk4HRnnAmgqLaO5UIEwaJRoALKZDDZLqMoPsc3kloIR8VzGUx2ktAhFA/5yCsXdESgHqxuQLTXl8G7PC5/MzbwCaYPWb9Dpr5tbxb4mJxOb6KbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pYI1RJWV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C25CC4CEDD;
-	Sun, 16 Mar 2025 16:55:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=cYEm1e1VjiVTiy/9UUz6jtbn9oOtbj7DKKzjx+wnufM6E+vdwTaPLe9qrDtj65FPCWH3kBsAxRJDAxqsFcg4L/SpmYKLNRkqUETtkupu8wZWJPEPRXRYipQeSnUerTZuxg9Rv/xRTI3UrDQLiCzBFKuSdT4VhzROz5IZIjQUBcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQFd3hPe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B71B8C4CEDD;
+	Sun, 16 Mar 2025 17:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742144119;
-	bh=mjkLZ+lA7rjqORYBW3KwW8ZvEgRGEaFBJqvLDjZ1svg=;
+	s=k20201202; t=1742144474;
+	bh=6PfcJBRNV/52O2N067Qc1dkAL6g6RK6AiGmwAbAH68c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pYI1RJWVhlgTLht+DIOS5uTBB8MVmc52E89NgJpRlHtyPaiS2g+IMMiV00aHcq2x0
-	 lRGEPBJ3n9dSuFs0s1HsTKGBTBNv+iIUFqnlwxy3NS/uxL1Nykv6O0jgBdpde7j69K
-	 5kMj2Rq9PiZlycq3fT2f0IOYNfxjZqD9bDuXG3XCdzBXYnGJLss4xo5wy2JF1TNNmM
-	 UKb7GM3grNEFRHZfSrI29IKd61OHvYxuOQw1Ykv/TSboJ4u48vsOTHBB/8yzsT+7nz
-	 69ckrr4oV4/ifhjEl+XKn9fsLgndy+jyNYQtaci1GqkzTb5f28vq9uWmY4vxwvx+9b
-	 2tkcTblgd9KmA==
-Message-ID: <0e654a26-91de-4218-bd60-64e996d5378a@kernel.org>
-Date: Sun, 16 Mar 2025 17:55:09 +0100
+	b=qQFd3hPeTpDx+jH+Bro2QsnUm9+dxfhPOHdVTYI1JJjYKY7Ha7ozZMMDrb8dnSYPM
+	 x15Pd3uLBOq4kPEm4GgF+NGN5ylbMFJmzVn8D3MGCQk1Ss+bpARjrZqwL34qLeK9oD
+	 t5CJOZ6eVDnHVvORXRN+jSBf0kCQEtr0eAa6O77xU+XDKSEXv5w9+X724ivizupDHy
+	 ZGP7iSzAr5ZomED03ma0S8Vcb+g2BPT+wrXH5meJn+YIkoC97P0zfLRXwXOOrtMWQz
+	 iQnLSrbiQHqJMmf6Cat7TZl5no1MNNPqtlRaC5ogSsLgCt9vPA7YMOyUincL9m584U
+	 +JmBXWV6kJjDA==
+Message-ID: <4a9ac302-dfbe-4d76-a634-a445957c313c@kernel.org>
+Date: Sun, 16 Mar 2025 18:01:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,23 +50,30 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: connector: add fixed-batteries property
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
+Subject: Re: [PATCH 09/13] dt-bindings: phy: Add documentation for Airoha
+ AN7581 USB PHY
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250312-batt_ops-v1-1-88e0bb3129fd@google.com>
- <20250313-tidy-kakapo-of-abundance-eebf91@krzk-bin>
- <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
+ Lorenzo Bianconi <lorenzo@kernel.org>, Daniel Danzberger <dd@embedd.com>,
+ Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, Guo Ren <guoren@kernel.org>,
+ Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
+ Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+ upstream@airoha.com
+References: <20250309132959.19045-1-ansuelsmth@gmail.com>
+ <20250309132959.19045-10-ansuelsmth@gmail.com>
+ <4f16d239-f540-45d5-b67a-767b09f1c70c@kernel.org>
+ <67d0862f.df0a0220.375bd.6b15@mx.google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,33 +119,47 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <85c6de6a-f8b4-4e4e-8fa2-da53816abc89@google.com>
+In-Reply-To: <67d0862f.df0a0220.375bd.6b15@mx.google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/03/2025 01:56, Amit Sunil Dhamne wrote:
-> The intent of the patchset & this change is for the USB Type C protocol 
-> manager module (that consumes these bindings) to be able to get info 
-> (such as State of charge, design capacity, etc) from drivers that manage 
-> the battery/batteries in the system. In order for such info to propagate 
-> I need to hook up the references of these battery manager devices (fuel 
-> guages, etc.) to connector.
+On 11/03/2025 19:51, Christian Marangi wrote:
+>>
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    enum: [0, 1]
+>>
+>> I don't understand why do you need index property here (which are
+>> usually not allowed).
+>>
 > 
-> I have addressed the connector <-> battery question in the cover letter.
+> Eh... As said in the description this is really to differentiate the 2
+> different physical port...
 > 
-> 
->> If you mean chargers, the OF graph is already there for this and no need
->> for this patch.
-> 
-> No I don't mean just chargers in this case. Also, I didn't follow you on 
-> the OF graph. Please can you explain further?
-> 
-You are duplicating existing bindings and existing practice of
-describing the actual connections via OF graph. And the binding already
-has the OF graph. What to explain more? Please open the binding and look
-at the ports. Maybe they are incomplete? Look how other USB and USB
-Type-C connections are represented.
+> Each port have a dedicated oscillator for calibration and these
+> calibration are identified by an offset (all placed one after another in
+> a separate register space).
 
+So different oscillators? Then describe the oscillator and its differences.
+
+Different programing model? Different compatible.
+
+Other difference? Depending what is the difference.
+
+But there is no such thing as "different port ID" based on your
+description above. You just claimed that they are different, but you do
+not put that difference to hardware description. Instead you encode that
+difference in the drivers and it should be opposite. The DTS, so the
+hardware description, should tell you the difference. And I am sorry,
+but in 99% of cases "I am the first phy" and "I am the second" is not
+the actual difference we are interested in.
+
+> 
+> Oscillator 0 for physical port 0
+> Oscillator 1 for physcial port 1
+> 
+> And model this is a bit problematic without an additional property, any
+> hint for this?
+> 
 Best regards,
 Krzysztof
 
