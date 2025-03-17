@@ -1,207 +1,133 @@
-Return-Path: <linux-usb+bounces-21823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70C1BA64DCB
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 13:03:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90CF2A65517
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 16:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 443387A3B75
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 12:02:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5138816B6B3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 15:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB4C23E320;
-	Mon, 17 Mar 2025 12:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFF724886D;
+	Mon, 17 Mar 2025 15:07:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from shell.v3.sk (mail.v3.sk [167.172.186.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68CAC23E235
-	for <linux-usb@vger.kernel.org>; Mon, 17 Mar 2025 12:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD082459FE;
+	Mon, 17 Mar 2025 15:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.172.186.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742212929; cv=none; b=cAJsQdtzXKMCuyaneDnM9Q7vR2Y4+hJYqcxbKy73TwKzpZ7U/7eaMXhqU2fwA+x1ouR21vIA1sHD1jekz4PotzT6ed3w02v2OmxSqwDSKqHrRD4SI37Jxh8as+AnstYwVEObgXgnCF1KrzW+2d3gvaKdT8+v6PJmQd/K3oB19qA=
+	t=1742224079; cv=none; b=ivlMbqoJ6RrXV7amrAVB0k533JCuGa05JgNBDtizCH1ys7hfhToj6v7ATz9N4WcWnf0HlelVsvjNmWVbRFL3vOAea6M9vbQY5nshJqE8PjMQIj/8JuBigf4qfxtrPQ8/YFxN8I6lCMzvvOrbtSf7kDi0tUgLf3CtwRgX6PVWjos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742212929; c=relaxed/simple;
-	bh=PlMEiEJDam59+aty2oFc2pESN+enaEybP02730+FEq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=exzXaFePjoRBcbIVYOmT/WcUslrSi2kb9mX5yLUMAXj/lzuloVnAi6Y7RSas062fRtKDqL/a/Rsl2/nyUVN54PdKChfaS03Mi1fyJkCyHbH7sLonuBTIcQ/WOjSpDqrVcMkOhwXvLnUJvU9sQINA19SDhjZFMfmFyiBk66Vvz4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tu99w-00020y-0U; Mon, 17 Mar 2025 13:01:32 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tu99t-000EuM-0g;
-	Mon, 17 Mar 2025 13:01:29 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A87EC3DE480;
-	Mon, 17 Mar 2025 10:41:48 +0000 (UTC)
-Date: Mon, 17 Mar 2025 11:41:48 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
+	s=arc-20240116; t=1742224079; c=relaxed/simple;
+	bh=bP4LPTW0Td8wCHxT0VEifpuO44bbCtEGvCwDTu/Ad0E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CiohxCNFMxPWIQlwt1VHMlghjolZrxn0v/c34tf6ATJ/VmwZuM16wPnYstt/3gloEtISI5guhzi92JDOQ4kEyR31i84Jtx2kFK/COsy0+QARXzRii9rR4cf2MdWdI2HPJ2BdyQJ3tKn+Cgx3ZSZmfrsae1JVvtZ766OYX79jz2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk; spf=pass smtp.mailfrom=v3.sk; arc=none smtp.client-ip=167.172.186.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=v3.sk
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by zimbra.v3.sk (Postfix) with ESMTP id 53EB2DD213;
+	Mon, 17 Mar 2025 15:01:51 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id tpBHPEh84aQP; Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by zimbra.v3.sk (Postfix) with ESMTP id D4ED5DFEFD;
+	Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 6PRRIPVEMHUl; Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
+Received: from localhost (unknown [109.183.109.54])
+	by zimbra.v3.sk (Postfix) with ESMTPSA id 92AD9DD213;
+	Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
+From: Lubomir Rintel <lkundrak@v3.sk>
+To: linux-usb@vger.kernel.org
+Cc: Lubomir Rintel <lkundrak@v3.sk>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>
+Subject: [PATCH v2 net-next] rndis_host: Flag RNDIS modems as WWAN devices
+Date: Mon, 17 Mar 2025 16:07:37 +0100
+Message-ID: <20250317150739.2986057-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vzg54m2aeg5i4qkb"
-Content-Disposition: inline
-In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---vzg54m2aeg5i4qkb
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
 
-On 25.02.2025 16:16:41, Ming Yu wrote:
-[...]
+Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
+Broadband Modems, as opposed to regular Ethernet adapters.
 
-> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nc=
-t6694_canfd.c
-> new file mode 100644
-> index 000000000000..d97fce5cdf32
-> --- /dev/null
-> +++ b/drivers/net/can/usb/nct6694_canfd.c
+Otherwise NetworkManager gets confused, misjudges the device type,
+and wouldn't know it should connect a modem to get the device to work.
+What would be the result depends on ModemManager version -- older
+ModemManager would end up disconnecting a device after an unsuccessful
+probe attempt (if it connected without needing to unlock a SIM), while
+a newer one might spawn a separate PPP connection over a tty interface
+instead, resulting in a general confusion and no end of chaos.
 
-[...]
+The only way to get this work reliably is to fix the device type
+and have good enough version ModemManager (or equivalent).
 
-> +static const struct can_bittiming_const nct6694_can_bittiming_nominal_co=
-nst =3D {
-> +	.name =3D DRVNAME,
-> +	.tseg1_min =3D 2,
-> +	.tseg1_max =3D 256,
-> +	.tseg2_min =3D 2,
-> +	.tseg2_max =3D 128,
-> +	.sjw_max =3D 128,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 511,
-> +	.brp_inc =3D 1,
-> +};
-> +
-> +static const struct can_bittiming_const nct6694_can_bittiming_data_const=
- =3D {
-> +	.name =3D DRVNAME,
-> +	.tseg1_min =3D 1,
-> +	.tseg1_max =3D 32,
-> +	.tseg2_min =3D 1,
-> +	.tseg2_max =3D 16,
-> +	.sjw_max =3D 16,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 31,
-> +	.brp_inc =3D 1,
-> +};
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Fixes: 475ddf05ce2d ("rndis_host: Flag RNDIS modems as WWAN devices")
 
-[...]
+---
+Changes since v1:
+* Added Fixes tag, as suggested by Paolo Abeni
 
-> +static int nct6694_can_start(struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> +	const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
-> +	const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> +	struct nct6694_can_setting *setting __free(kfree) =3D NULL;
-> +	const struct nct6694_cmd_header cmd_hd =3D {
-> +		.mod =3D NCT6694_CAN_MOD,
-> +		.cmd =3D NCT6694_CAN_SETTING,
-> +		.sel =3D ndev->dev_port,
-> +		.len =3D cpu_to_le16(sizeof(*setting))
-> +	};
-> +	int ret;
-> +
-> +	setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> +	if (!setting)
-> +		return -ENOMEM;
-> +
-> +	setting->nbr =3D cpu_to_le32(n_bt->bitrate);
-> +	setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+ drivers/net/usb/rndis_host.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-I just noticed one thing that needs clarification/documentation.
-
-You have nct6694_can_bittiming_nominal_const and
-nct6694_can_bittiming_data_const, but only pass the bit rates to your
-device.
-
-Do the bit timing const really reflect the HW limitations of your
-device?
-
-Are you sure your device uses the same algorithm as the kernel and
-calculates the same bit timing parameters as the kernel, so that the
-values given to the user space reflects the bit timing parameter chosen
-by your device?
-
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
-> +
-> +	ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> +
-> +	return 0;
-> +}
-
-regards,
-Marc
-
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index 7b3739b29c8f..bb0bf1415872 100644
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -630,6 +630,16 @@ static const struct driver_info	zte_rndis_info =3D {
+ 	.tx_fixup =3D	rndis_tx_fixup,
+ };
+=20
++static const struct driver_info	wwan_rndis_info =3D {
++	.description =3D	"Mobile Broadband RNDIS device",
++	.flags =3D	FLAG_WWAN | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SE=
+TINT,
++	.bind =3D		rndis_bind,
++	.unbind =3D	rndis_unbind,
++	.status =3D	rndis_status,
++	.rx_fixup =3D	rndis_rx_fixup,
++	.tx_fixup =3D	rndis_tx_fixup,
++};
++
+ /*----------------------------------------------------------------------=
+---*/
+=20
+ static const struct usb_device_id	products [] =3D {
+@@ -666,9 +676,11 @@ static const struct usb_device_id	products [] =3D {
+ 	USB_INTERFACE_INFO(USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
+ 	.driver_info =3D (unsigned long) &rndis_info,
+ }, {
+-	/* Novatel Verizon USB730L */
++	/* Mobile Broadband Modem, seen in Novatel Verizon USB730L and
++	 * Telit FN990A (RNDIS)
++	 */
+ 	USB_INTERFACE_INFO(USB_CLASS_MISC, 4, 1),
+-	.driver_info =3D (unsigned long) &rndis_info,
++	.driver_info =3D (unsigned long)&wwan_rndis_info,
+ },
+ 	{ },		// END
+ };
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+2.48.1
 
---vzg54m2aeg5i4qkb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfX/GkACgkQDHRl3/mQ
-kZzJDgf8DgOIcr0MWwz7wlhWys5Fxw4Vtn5MszTN3NLbf2p+jPRy/TQKbi3A7p+B
-PZFdTyo+sYOdG9csQChfdGGqWEA5cd6vIMYmIbUO1401s5U+bYudq1+h68pyfOhf
-XOKXDxnSWXlzFLw2vu2SsZ3M4svT1cU0S6NRSxPx/o4QuFfsG7KLFqwdMK+MEc8P
-CcqcJKo47KwOEcWuQm/eTq4LQFvmmKz8/6PCcrY2P99PQ9bqTkoiC7R+KMONa1p3
-f2/q875xuTHckepTB7slLcXA9K7ikoT7T865z4jHsZt5ClD3+L/j5pSa82E1kcxN
-nv4xvBHXTSmzW8wtGa6VrUWOif5cYg==
-=GQzc
------END PGP SIGNATURE-----
-
---vzg54m2aeg5i4qkb--
 
