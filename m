@@ -1,133 +1,170 @@
-Return-Path: <linux-usb+bounces-21824-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21825-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90CF2A65517
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 16:09:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A42A65B88
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 18:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5138816B6B3
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 15:08:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41512177EC8
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 17:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFF724886D;
-	Mon, 17 Mar 2025 15:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153901B0F30;
+	Mon, 17 Mar 2025 17:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arrb2wum"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from shell.v3.sk (mail.v3.sk [167.172.186.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD082459FE;
-	Mon, 17 Mar 2025 15:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.172.186.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E491A3171;
+	Mon, 17 Mar 2025 17:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742224079; cv=none; b=ivlMbqoJ6RrXV7amrAVB0k533JCuGa05JgNBDtizCH1ys7hfhToj6v7ATz9N4WcWnf0HlelVsvjNmWVbRFL3vOAea6M9vbQY5nshJqE8PjMQIj/8JuBigf4qfxtrPQ8/YFxN8I6lCMzvvOrbtSf7kDi0tUgLf3CtwRgX6PVWjos=
+	t=1742233882; cv=none; b=f/v30mJRdCnfvyxpXLLXefsikX5WE7ux3nmfcdaYA2h4qUVhHI+Y47dmM6AbUunkHfbL9WTB1P5Z4OUZerEudHrxDu+n9DJlxDnxO2r7yRGz+3FCTa9FqKVq3Z0f/CzJz1kE1VCp22l9m2WQHhEYzAoalJTgIMgG3JuD9+gLqEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742224079; c=relaxed/simple;
-	bh=bP4LPTW0Td8wCHxT0VEifpuO44bbCtEGvCwDTu/Ad0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CiohxCNFMxPWIQlwt1VHMlghjolZrxn0v/c34tf6ATJ/VmwZuM16wPnYstt/3gloEtISI5guhzi92JDOQ4kEyR31i84Jtx2kFK/COsy0+QARXzRii9rR4cf2MdWdI2HPJ2BdyQJ3tKn+Cgx3ZSZmfrsae1JVvtZ766OYX79jz2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk; spf=pass smtp.mailfrom=v3.sk; arc=none smtp.client-ip=167.172.186.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=v3.sk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=v3.sk
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by zimbra.v3.sk (Postfix) with ESMTP id 53EB2DD213;
-	Mon, 17 Mar 2025 15:01:51 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id tpBHPEh84aQP; Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by zimbra.v3.sk (Postfix) with ESMTP id D4ED5DFEFD;
-	Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-	by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 6PRRIPVEMHUl; Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
-Received: from localhost (unknown [109.183.109.54])
-	by zimbra.v3.sk (Postfix) with ESMTPSA id 92AD9DD213;
-	Mon, 17 Mar 2025 15:01:50 +0000 (UTC)
-From: Lubomir Rintel <lkundrak@v3.sk>
-To: linux-usb@vger.kernel.org
-Cc: Lubomir Rintel <lkundrak@v3.sk>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>
-Subject: [PATCH v2 net-next] rndis_host: Flag RNDIS modems as WWAN devices
-Date: Mon, 17 Mar 2025 16:07:37 +0100
-Message-ID: <20250317150739.2986057-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1742233882; c=relaxed/simple;
+	bh=/cKV0Fyi6T03lXlvNH38U4UTUiANpMHFR7ZBQzIISmc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qKKbFFm580N0sp73uAwgHnecmry4bEaeIDn3m6uGx1ZrM+8ut5IBDfNRpa1sLxQCTFlN+4Z+8cfst2TSxeIt7VTx7Wjn8Z2MjdfYBJf987EJ+qdxZayd8minoKHG+DpkZAO/0b8as1HAwysh+3/nmGas6yUce1feruacOED48eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arrb2wum; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BC9C4CEE3;
+	Mon, 17 Mar 2025 17:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742233881;
+	bh=/cKV0Fyi6T03lXlvNH38U4UTUiANpMHFR7ZBQzIISmc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=arrb2wumol6HA37c5JOUXQf10sXU/GN+zJFEfCtDCiaKqg/WN2FG50ycPyMY59aS4
+	 Z/7BYhHlwL4BMFqrv9HEs6MRf6WmpFNzvKFbKy/VwLFbRVS3OBVnumwoV7KfxydqqY
+	 i8YgmHNAci1IUoDcEtT43m1elrMU9JejrLRzwxFJgePhcuWwu4gjYk5JsgAElu3xwq
+	 otcjlKsHUVJf0aaOp4dq90YdEvZfOx6vbnzT7l+qosELAXeGdUzAYNgC09R9aGHkW9
+	 rn45UNgoNC/qQjg0lm4Auv+z5gppF+pDmfiwoRvE1rKwTbMkUS1dCFtkSfsiEBLHxR
+	 iMQ8bCZ+9TnWg==
+Date: Mon, 17 Mar 2025 17:51:17 +0000
+From: Simon Horman <horms@kernel.org>
+To: Qasim Ijaz <qasdev00@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart() and
+ cleanup error handling
+Message-ID: <20250317175117.GI688833@kernel.org>
+References: <20250311161157.49065-1-qasdev00@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311161157.49065-1-qasdev00@gmail.com>
 
-Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
-Broadband Modems, as opposed to regular Ethernet adapters.
+On Tue, Mar 11, 2025 at 04:11:57PM +0000, Qasim Ijaz wrote:
+> In mii_nway_restart() during the line:
+> 
+>         bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+> 
+> The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+> 
+> ch9200_mdio_read() utilises a local buffer, which is initialised
+> with control_read():
+> 
+>         unsigned char buff[2];
+> 
+> However buff is conditionally initialised inside control_read():
+> 
+>         if (err == size) {
+>                 memcpy(data, buf, size);
+>         }
+> 
+> If the condition of "err == size" is not met, then buff remains
+> uninitialised. Once this happens the uninitialised buff is accessed
+> and returned during ch9200_mdio_read():
+> 
+>         return (buff[0] | buff[1] << 8);
+> 
+> The problem stems from the fact that ch9200_mdio_read() ignores the
+> return value of control_read(), leading to uinit-access of buff.
+> 
+> To fix this we should check the return value of control_read()
+> and return early on error.
+> 
+> Furthermore the get_mac_address() function has a similar problem where
+> it does not directly check the return value of each control_read(),
+> instead it sums up the return values and checks them all at the end
+> which means if any call to control_read() fails the function just 
+> continues on.
+> 
+> Handle this by validating the return value of each call and fail fast
+> and early instead of continuing.
+> 
+> Lastly ch9200_bind() ignores the return values of multiple 
+> control_write() calls.
+> 
+> Validate each control_write() call to ensure it succeeds before
+> continuing with the next call.
 
-Otherwise NetworkManager gets confused, misjudges the device type,
-and wouldn't know it should connect a modem to get the device to work.
-What would be the result depends on ModemManager version -- older
-ModemManager would end up disconnecting a device after an unsuccessful
-probe attempt (if it connected without needing to unlock a SIM), while
-a newer one might spawn a separate PPP connection over a tty interface
-instead, resulting in a general confusion and no end of chaos.
+Hi Qasim,
 
-The only way to get this work reliably is to fix the device type
-and have good enough version ModemManager (or equivalent).
+I see that these problems are related, but this is quite a lot
+of fixes for one patch: the rule of thumb is one fix per patch.
+Could you consider splitting it up along those lines?
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-Fixes: 475ddf05ce2d ("rndis_host: Flag RNDIS modems as WWAN devices")
+> 
+> Reported-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Closes: https://syzkaller.appspot.com/bug?extid=3361c2d6f78a3e0892f9
+> Tested-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Fixes: 4a476bd6d1d9 ("usbnet: New driver for QinHeng CH9200 devices")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
 
----
-Changes since v1:
-* Added Fixes tag, as suggested by Paolo Abeni
+...
 
- drivers/net/usb/rndis_host.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+> diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
+> index f69d9b902da0..e938501a1fc8 100644
+> --- a/drivers/net/usb/ch9200.c
+> +++ b/drivers/net/usb/ch9200.c
+> @@ -178,6 +178,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
+>  {
+>  	struct usbnet *dev = netdev_priv(netdev);
+>  	unsigned char buff[2];
+> +	int ret;
+>  
+>  	netdev_dbg(netdev, "%s phy_id:%02x loc:%02x\n",
+>  		   __func__, phy_id, loc);
+> @@ -185,8 +186,10 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
+>  	if (phy_id != 0)
+>  		return -ENODEV;
+>  
+> -	control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
+> -		     CONTROL_TIMEOUT_MS);
+> +	ret = control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
+> +			   CONTROL_TIMEOUT_MS);
+> +	if (ret != 2)
+> +		return ret;
 
-diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
-index 7b3739b29c8f..bb0bf1415872 100644
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -630,6 +630,16 @@ static const struct driver_info	zte_rndis_info =3D {
- 	.tx_fixup =3D	rndis_tx_fixup,
- };
-=20
-+static const struct driver_info	wwan_rndis_info =3D {
-+	.description =3D	"Mobile Broadband RNDIS device",
-+	.flags =3D	FLAG_WWAN | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SE=
-TINT,
-+	.bind =3D		rndis_bind,
-+	.unbind =3D	rndis_unbind,
-+	.status =3D	rndis_status,
-+	.rx_fixup =3D	rndis_rx_fixup,
-+	.tx_fixup =3D	rndis_tx_fixup,
-+};
-+
- /*----------------------------------------------------------------------=
----*/
-=20
- static const struct usb_device_id	products [] =3D {
-@@ -666,9 +676,11 @@ static const struct usb_device_id	products [] =3D {
- 	USB_INTERFACE_INFO(USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
- 	.driver_info =3D (unsigned long) &rndis_info,
- }, {
--	/* Novatel Verizon USB730L */
-+	/* Mobile Broadband Modem, seen in Novatel Verizon USB730L and
-+	 * Telit FN990A (RNDIS)
-+	 */
- 	USB_INTERFACE_INFO(USB_CLASS_MISC, 4, 1),
--	.driver_info =3D (unsigned long) &rndis_info,
-+	.driver_info =3D (unsigned long)&wwan_rndis_info,
- },
- 	{ },		// END
- };
---=20
-2.48.1
+If I understand things correctly, control_read() can (only) return:
 
+* 2: success
+* negative error value: a different failure mode
+
+If so, I think it would be more idiomatic to write this as:
+
+	if (ret < 0)
+		return ret;
+
+This makes it easier for those reading the code to see that
+an error value is being returns on error.
+
+Likewise elsewhere in this patch.
+
+>  
+>  	return (buff[0] | buff[1] << 8);
+>  }
+
+...
 
