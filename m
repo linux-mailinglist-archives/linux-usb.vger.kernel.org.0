@@ -1,133 +1,299 @@
-Return-Path: <linux-usb+bounces-21818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5237A63F5D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 06:17:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFDBBA6414F
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 07:21:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1505B7A5E8E
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 05:16:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9519F3B0073
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 06:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CCF218AA5;
-	Mon, 17 Mar 2025 05:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F49218AC7;
+	Mon, 17 Mar 2025 06:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c0UHhTF2"
+	dkim=pass (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b="SYSIHYGQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2104.outbound.protection.outlook.com [40.107.241.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B751DA61D;
-	Mon, 17 Mar 2025 05:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742188642; cv=none; b=MSS3GxNL4DK600BauPy3shDCPsHeD7RwiM6L+hTeXOPQOzPHxOyKht/98AXTI2c8MQDAR9hoVmPb3fta7nMDWbxHYfulNfjgYcnO9yqk8jqse01pK1xAiFyRgkuu176Pk5UME50DJ69OK8QA24AFEGOVoKVXJKe06Ts8H2gdJY4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742188642; c=relaxed/simple;
-	bh=vLi1Y671MAsh1r15QlDQ4G8er01KxAKWFFKOKWwZTso=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XKQyW+U7RIfj1vrOBTX81E6VWdycQLhNL5VOniuy0utBSeWeWJFZe7iNST9OTLrMvLrnhRWNBLIstUgdECrrARAtY/dm0rhBvE/J8VWq381hcAbq25OqLqI5HaewoWVzy85YBbdUyBIqdux7yvI5fGuumxEeDsTagTehs/AuvbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c0UHhTF2; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e5bc066283so5531825a12.0;
-        Sun, 16 Mar 2025 22:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742188639; x=1742793439; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FviiEizNsPrswvoF1WtZ4IxURDJ9d85H3lSIXGoQ6I0=;
-        b=c0UHhTF28rfg+cesuXkc9aGl/1cCO/Htduy2AQKZtFKrWl/GBNCWC9pkooDSkEHB2N
-         A/Phko2MKWzO9ENNR10ajDy1+a6zagVjoLfJ+62aJNQqN8yCQqooGAS0ceMh5YqajMO9
-         nY87TKK3TpTQSmrez/JGU69iBQj05Jy7NcMX6a+HWTXNjit3iDNuc8BM1roOuZNhKtdW
-         EWWSXvcPdBzWuguXAPgAEu2WjDF55SFmu+jn5yMCoada6bhZp5MIsvSwbKZr0rQ8/Opg
-         QkuWNAjS/fjRdLmNh3mNOLwDmqViaFYQcJh5DR3exUCYPED73nmsMqjNjz73XP/J+Nh9
-         MTiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742188639; x=1742793439;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FviiEizNsPrswvoF1WtZ4IxURDJ9d85H3lSIXGoQ6I0=;
-        b=Vx3L49zbDjtPViAFzfuXV42sxsWw1EfZpXu/9JeJnHJmzWOkzMBFVxvlyI2DhtIN5R
-         YcEYIXYRScMg4vbEaEgPIhadChTqBgi8rmOh+qQxHTTgFfUVqu7E+y54T8mXFwTpFr/A
-         dsi7yvaEMTQ724XsKM+hAvAtNSUjuef+jVt/Z6jA83g2ho7qKXIQGHLSkXEFAKFUENEh
-         uhpYfa8DNENElsOiE9PRWtU1/1yhelASMLU0LPlISxkncaWVc9ZW1+SVvyEv3qiliBZN
-         +Z2MzJzJD4JvF0uRs0CIiypdJYlP/3pyqUnx8F8oFz8XmKB7r8f3GX9yK0PPCXdD4L85
-         ovlw==
-X-Forwarded-Encrypted: i=1; AJvYcCU56WgsGj8aGZ8E7JMXSSi9zmvCkLWA32RjisWbavoDiH3P+nLP7+oRP+9rfjnOYWYOqfLL4uTROb6W@vger.kernel.org, AJvYcCWWRyq4SA8X+2uLbX+muAr73ODAfrNLikKXbXuWNDlFs3tW91jjFlOpOJ5DDHzoy4CoMczRdjW2aqRRFs8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTTP6p86xk9T4krSsA6E11C3MaZ/CgEBSEQrx/nr9FSdJRR2gY
-	fjStJDdNfbb++nuuquAZ8J8nHpFeInAbDT6Ky3miKE2c4H3szbft
-X-Gm-Gg: ASbGncutnwg1Bpgz7c4vU5kaIXWAMVWiuQlOyRj+EIPugQ7nLpUIpnL5NY+ZBFCXji4
-	lDNGOjPMJk9FHxmkyz04t5uTqT+Y25oBVgsusIbb2hgKoUBkRX2+Q3aABWFf1hsO+uKTR/8JMcQ
-	dwCAxrg+ppxQwKisTpLWctLnoghXbNv5fbRfb6umsI54ZXRnYM54tfWtqYtQRLF+BO9sTpF3vSx
-	sDnsbNbJePrIAXL7EZ7OGcRp0P8Rmjcq14h37CLGiDxmzvwm2JnFFkQ1lR2vo7YO+4twCXe5aj4
-	k5yGEG2hDZyuFkIa1ZAMF6A8VhBme6GFzdJJaswqcA2w2Oe5NXt8Td+06F+Lvd4nztYR4rnk1eb
-	hhwSESIGzOWhbOvMkWHP5O/KwxA==
-X-Google-Smtp-Source: AGHT+IHCJDbslQRk+xyipAV1mKRrF+/+NV16nsiZd9UURhUECsvo0H8J4RQvmsaDs2dCB74Kirz0ZQ==
-X-Received: by 2002:a05:6402:4405:b0:5e7:8503:1a4b with SMTP id 4fb4d7f45d1cf-5e89f6430b1mr12304682a12.18.1742188639269;
-        Sun, 16 Mar 2025 22:17:19 -0700 (PDT)
-Received: from veno.localdomain (213-47-47-110.cable.dynamic.surfer.at. [213.47.47.110])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e816b2a683sm5253103a12.81.2025.03.16.22.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Mar 2025 22:17:18 -0700 (PDT)
-Date: Mon, 17 Mar 2025 06:17:15 +0100
-From: Michael Ehrenreich <michideep@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: ftdi_sio: add support for Abacus Electrics
- Optical Probe
-Message-ID: <Z9ewW-63F212DcV7@veno.localdomain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776D7219A97;
+	Mon, 17 Mar 2025 06:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.104
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742192494; cv=fail; b=gt1hnDgGI72GyF+F1ZHFxiS1RaNxn4XG/7NQPOewiB+tsikC3Q3iY73SJQty8ZFCVW8ZzFsIPapA6iZ3/eopDn0TR+KgNUOop9QBLYOMjwPETK8giDk8g2qiZcRoZKPlQJExGt21zjCZlKGBDXPVta/ENF5c5okCYHz9qXnh5yI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742192494; c=relaxed/simple;
+	bh=bebS+W3IzQbFV9w9Nsvb9xuShspcIzjMhAgC2ybRc8s=;
+	h=Message-ID:Date:From:Subject:To:CC:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=IQMx/f8BmFHC7GarutzTPjh9oFxZnq7IrVgEXh3dXXAYDmAZnFHu1fNhytHTkUGHqxR2iUP675CEcwiPJj3UedxlJeWAYzp48dKj5nPz2XgZ+zboI+vSOJPOqiULYediVtKVTEczoi9ln1FZ3t8VlzM1MD2ufKCDql1Gn6SOo+U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=topic.nl; spf=pass smtp.mailfrom=topic.nl; dkim=pass (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b=SYSIHYGQ; arc=fail smtp.client-ip=40.107.241.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=topic.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=topic.nl
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cvrSsxizLpNKZ67s5R0mBdOjgSbYxOSRvzqsVVINxm4+LhSxWx2SQNo69+ZyqOx+NGoB/rugtxj/FvKisr88tjmJU04ty3eYIHH658EtBvhGGhAy7wRhDkKBtQTPfOuOTUJjzPmKVEmXEt34aSbs1veD5zkctOZviJntoLpiNDaqmlh7XhGggdqjsDVF+gkwtrA8+d47191OgwiTaPO3+y1D+uLSbtJpwc4NYoJdzDrHwtWgb7bkG6MRdDYXIKFYYo03Svs2c0INweCwnJhd73tuo22cC5WAdzRzUfBDJuolcD3T+i1Uaf864n+pKj89IuAWNPEnJZ4c3jLuPX4oOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z8FyBc79WHIE8WRpjgsEMQ6AtEcYFohelBsiriGVRgQ=;
+ b=kcAqeTWRd4gpiWrK0p6m37vl8CGrHj3el+b2+IcwkRbx7rGbLZbEe3ntQXL4j1V2hT6qOb7x67hzfRu/LyinLOFx8NiKtCiHxiIIRMMD5wik8ypChUl2Xfb7oQVZqKpAMV2FUNgFFdm+cYKGSRgH+7gG1FPyihjlZnrvia1dpQoesEEruaAQEe6jLbKc/Z3+iiBFxd0iVFOtb4EqOh4k0ZDj9fwJlXnHvv4KOllUBs/uLS+858tKeb6EREUEZ0rilcV7hc4n6z7RdsoM4JEoaQ73bIusCi2Vdsu/VWuvgepZg4QtHhe1STBlNeWDJLPEY7GJsfGfJUl4G7EwVGig9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 13.93.42.39) smtp.rcpttodomain=synopsys.com smtp.mailfrom=topic.nl;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=topic.nl;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z8FyBc79WHIE8WRpjgsEMQ6AtEcYFohelBsiriGVRgQ=;
+ b=SYSIHYGQeLkB7rOPNigEd+lyfd3Sf1t6IXLWqgUfNl6bKql8druWuhN6udHixTX8wDPCNN8YqA8JXqjgm+Sa7HrCG5Q1cSw583eSDGCROxResBX+Da/qXdvKe1yNEXZimVoSqpCUCjrQzgDeVgtkrW87kzcpnj3go1aCbVk/9EhwmnThNX8wMSa2miOUMwbaCjQepKYY67/wA7IaJ99EVFLcrhXwrX/oqY+ambCDwDQq5G666u90gcD0Xkh3DCSXYuNzV7ewQELDT97iYjpUKs1LXhwMtPp1q4+l+9XnrfR4Q2s7tDJ55YS5N0RmDuNqgY1lfm3penEsDSaXLkLMyQ==
+Received: from AM8P189CA0030.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:218::35)
+ by VI2PR04MB10619.eurprd04.prod.outlook.com (2603:10a6:800:26d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Mon, 17 Mar
+ 2025 06:21:26 +0000
+Received: from AMS0EPF000001A4.eurprd05.prod.outlook.com
+ (2603:10a6:20b:218:cafe::aa) by AM8P189CA0030.outlook.office365.com
+ (2603:10a6:20b:218::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.33 via Frontend Transport; Mon,
+ 17 Mar 2025 06:21:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
+ smtp.mailfrom=topic.nl; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=topic.nl;
+Received-SPF: Pass (protection.outlook.com: domain of topic.nl designates
+ 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
+ client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
+ AMS0EPF000001A4.mail.protection.outlook.com (10.167.16.229) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8534.20 via Frontend Transport; Mon, 17 Mar 2025 06:21:25 +0000
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (104.47.51.171) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 17 Mar 2025 06:21:24 +0000
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received: from AS8PR04MB8644.eurprd04.prod.outlook.com (2603:10a6:20b:42b::12)
+ by PA2PR04MB10336.eurprd04.prod.outlook.com (2603:10a6:102:41c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Mon, 17 Mar
+ 2025 06:21:22 +0000
+Received: from AS8PR04MB8644.eurprd04.prod.outlook.com
+ ([fe80::e86d:f110:534e:480a]) by AS8PR04MB8644.eurprd04.prod.outlook.com
+ ([fe80::e86d:f110:534e:480a%5]) with mapi id 15.20.8534.031; Mon, 17 Mar 2025
+ 06:21:22 +0000
+Message-ID: <8ee2ce74-dc6b-463a-ba95-ad25669a1179@topic.nl>
+Date: Mon, 17 Mar 2025 07:21:21 +0100
+User-Agent: Mozilla Thunderbird
+From: Mike Looijmans <mike.looijmans@topic.nl>
+Subject: Re: [PATCH] usb: dwc3: xilinx: Prevent spike in reset signal
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Michal Simek <michal.simek@amd.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.323aeebd-1577-4c21-85a6-ff9262fb6cb7@emailsignatures365.codetwo.com>
+ <20250314155706.31058-1-mike.looijmans@topic.nl>
+ <20250314211411.l5taj5nysvcalfyz@synopsys.com>
+Content-Language: en-US, nl
+Organization: Topic
+In-Reply-To: <20250314211411.l5taj5nysvcalfyz@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AM0PR08CA0015.eurprd08.prod.outlook.com
+ (2603:10a6:208:d2::28) To AS8PR04MB8644.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42b::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-TrafficTypeDiagnostic:
+	AS8PR04MB8644:EE_|PA2PR04MB10336:EE_|AMS0EPF000001A4:EE_|VI2PR04MB10619:EE_
+X-MS-Office365-Filtering-Correlation-Id: efc3a47e-aeb8-44c6-3b0a-08dd651bf202
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|52116014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?c01SU2tSTnYxK1c1S25HM201Qi80UC95Wnl2U3E1Nkh1OVBTQ0NjWTN4dUhT?=
+ =?utf-8?B?ZUxhM0htQ0txMWgza3lLUngraG40aUVVTE82VkJhcXdndEhPNm1rSUhLcmMr?=
+ =?utf-8?B?UTYyN2Jxc3E0S0hvVm14aEFYOEw4ZURwdjZLOGRRT3dkY1habGM5Z2pHaDkx?=
+ =?utf-8?B?M2FjS1ZtSVZKOE93UEl5bkZSSUJpME52QUhuVGJlOE9IMWxKU2VxMzUwSHlp?=
+ =?utf-8?B?WUhwYVhaNGE4MjByU1ljc2IwSWJIUUtRaWNFcktpSVJweWlRRlpYSTRVZ05K?=
+ =?utf-8?B?bGZ6STROZ1BudVloMEFzWkZoRmpib2hEeWJ0QnUxY2FlMTFJUFJKM2RxRkNM?=
+ =?utf-8?B?Smx2UGNLa1I1V3FyOVlqS2NmVHBKMG9PTmtWM1FOeUpMVTRVenF5S2NwV3hi?=
+ =?utf-8?B?eHZ2MWhNZDFrU2liN1R3NXlWaXpPT3NKelFFZUNrVDVLamFIN1NhVDlxZUdJ?=
+ =?utf-8?B?d2RHTTB4K2l0OHF0T2tLb0ZMVDV6NzZzOFZsb0ptSURFVkFhdENtTEpLNDVl?=
+ =?utf-8?B?SEg3QnM2TmIvT2JXUHJVZ0xKY3VSWjRZVndqTjdyTGhPRGg0Y3JmOUhyVFZp?=
+ =?utf-8?B?OU5hSTkxMy9vREdIM1VyYkVxTjVTSXhOa0NqVDMveU1FY2d2NEhZNllmdHFy?=
+ =?utf-8?B?WmdtUXdDMVRDNnBuYTB0SGJVZzQvUkRLb2VWS3NDalRYa0VIM2RWTXhKNUJu?=
+ =?utf-8?B?NzB4TFRsbEEwVFF0UzE0cmlaTzNRWlU2dC9xN2xXWGZrWGdrSVBUeUw0Nm05?=
+ =?utf-8?B?UVd0ZzVEbml3VDVjRTFXeVBiMnBYMVlRS1FaVTk0UUV4VmptekhGQ0E4anFS?=
+ =?utf-8?B?UUpFVzRaREd5d2NHNG1EVkJ2bXlGUFRrMWdUTWpmRXB2aWRKK1RVRWlEaWg4?=
+ =?utf-8?B?Rll4K2grRk0zdWljOGhpNDZncTltbUtBcEtkWjNsSklwalQwNCtCMHdFdExx?=
+ =?utf-8?B?b3JNSWdDdW9BWGFNbU5aUWR6MXVKUC9pdWtEQ1NvT3ZFaEVJZWhxY21xZnYw?=
+ =?utf-8?B?eFBKN2V4SitzYzR3R0UzcHczaXNLU0dETVIwL21tTzBtalQ4SHBVUUUvcElN?=
+ =?utf-8?B?NzFneWp3MmpOR1BRZXFpQ01od1UvREtCZ2QwTFlHcTB3ZFZnOGxQTXB4S29z?=
+ =?utf-8?B?RXVkTzBvbCt6UU01bDRoQ3lDNVpPMVFPd3NzUjFPNmJJM0dqRGNXZ0lQank5?=
+ =?utf-8?B?dVB6MmxMOHY2b3FlTG0zenRudjByMUpadDN0Ykx6U1Q0NEJSb2NOUlJmNWZP?=
+ =?utf-8?B?MUhPVFNGeHhBVDROVFBCc0swZ2ZjZURRbDVCZkJpeEdYRmdxNk1EVjJ0TjFh?=
+ =?utf-8?B?TFNFMFRFZVcxc2kzRmlGdDVEcksyNHNnWXFEeFNPbkk5QkxieGZJSXIxb2Jj?=
+ =?utf-8?B?VHJKMk9neGd3ZTNWMjhqMXdNU1MwbGNvQzJnZ1JjM1R3bktSL3JUamphZnFl?=
+ =?utf-8?B?SEo1bGJoVnJyZkVSbDFqNHk0cjVod1QzSGFtWGpLMTIvMk01NUx5aDhyc3V2?=
+ =?utf-8?B?MXJXMVpqVmdObjRuTkJzL2hIeGljbzZGS2U0N2dTTGVSeU1BNFpCWmlXNS9X?=
+ =?utf-8?B?dHVFK2YxSE5lbDdObVlvVGZIRDZpS3NsanJFYUhWdGRPTDhROUtkZzV3eFFQ?=
+ =?utf-8?B?L0VJUm10VHMvQ09nQVRWNUtSZDhOUmlEZWJWbHVyOVVqbHZRazlVeGJpd0ds?=
+ =?utf-8?B?NzNmdW5lT21SZXR6T0hwWVZ0OWhXcThkSy9sS3Vnb0xrSGVMZzFpU0hBcGNu?=
+ =?utf-8?B?bGFtU2Qxd3dBOEZzVlZIQlRBaDErK1VWS2lsYVQrc1FOaU55QjFrd0tQR0Rj?=
+ =?utf-8?B?WExGSENhK0tOajlBNG5FSGJDam9MNkJVV0pNbVM0T3J3QWY3N0cyNk56UUFH?=
+ =?utf-8?Q?4sW4dGAQa+lA5?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8644.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA2PR04MB10336
+X-CodeTwo-MessageID: 65fbc353-f6c8-4a52-93c0-ec28f7724d14.20250317062124@westeu12-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS0EPF000001A4.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	2e55f105-2612-4eeb-3b14-08dd651bf022
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|35042699022|1800799024|36860700013|14060799003|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Ykl2SVZvSlh3SXBwOWVrWUZCZnJqbXpiN21yT0lRL2FCNFJJOUxiZnpuUTZr?=
+ =?utf-8?B?N21ES3UzK3QvZjJQUEhtbTAyRU1TWlZub0F6aWpEQWtwczhZRnBZSFUyWmtI?=
+ =?utf-8?B?YURRY2NZY3NVQnRJbHRXZGxQeklTeWgwVFdoUGVNSDRINUtrR1Z4TjhjamE0?=
+ =?utf-8?B?U1ZKT3RQSHMyVmhocEc2eG45ZlhSa0R0aExwdVFoUHVUa3ZBWnFURzZJNHh6?=
+ =?utf-8?B?THh4aXpxbmlVUmw2R0VsbW5CVzcrOSsvNUFoTkhkOTd3N21qRWVFWjV2UTcx?=
+ =?utf-8?B?R052WjdhaVk0VUhTUThXYmhDbEYwZ0QrVnlGMFNybURMSytMYy9zTk5STnJn?=
+ =?utf-8?B?dklySUZpYVd3bXdVSkxKSERpL2hpakR3aXhLbG5XYm55QWpjV1AyeWdqZTNU?=
+ =?utf-8?B?dXRxR1BPNU1waUNoSHVOVG9BMWJjVmFLQng1R1pqb013ZzhQYkZPekVwMm1O?=
+ =?utf-8?B?RUZVZWZaaEMzUUpHcEhGOTNlWktiMEZlN2o2czZYRlMxWll1RDFtTmtRLzJz?=
+ =?utf-8?B?aUJKcHBkT0gxd05pbHJyRTQ1dEVGTWpqaWVJT1ZZVTI5bFh4eHVvTUVaWkhE?=
+ =?utf-8?B?MjJKa0llR3VGZGxmbDB4VFlGM3VtbHk0OHhkUkdmVGNNVlVjMUZnTlJ0ZmlD?=
+ =?utf-8?B?dldLQnVQMFB6UWNNZjFNUmZCV1k1V29DSDRVK2VtZ1BUSGNpOUpZejNpNXky?=
+ =?utf-8?B?eGdrTkJWM0NQckNNRG1HcldpRXVzenFlbmU5VzV4MkQ4dWRsOUR1YVFXeitC?=
+ =?utf-8?B?NDdYUnI3c29icm9SK3pqek5hQWhEL2dLQ0pTbitHdFNQLy90SUNIbm9iMGR1?=
+ =?utf-8?B?MVZJNldwQUY1aDQvbGFrcTdUYlFIZGdOaDdnZEJ6TFNUc3hpV1pTNWxCSUtu?=
+ =?utf-8?B?WGhKR01DaG9LcDQvemRYYlZtakJYMmFpdXFGVFBoTHJkancrcEJNdmdub1Nq?=
+ =?utf-8?B?YjQ0ZGdwRDBXR0ZPbm9XSEpNQ0dTVTdRaXZwQjQwRXdrR0JOdFE1WTFoRFFm?=
+ =?utf-8?B?ZmVMSVhCQWI0bklvQ2Z5YnVGeEVsUTVHMDVGSi80YWk2enMzSW80YjZ6ekZT?=
+ =?utf-8?B?NFBaaVNZUkNUM3JpZkpqUlhycFhJcVRsUk1oRWlKNnQ1QkZqdGVRWi9TZVFD?=
+ =?utf-8?B?L1oxdlBucy9RckdXSS9kZGdHL1JaM3pmVFdnZkVCQUVvK3JJVUtHN05SWFNa?=
+ =?utf-8?B?eWNYd2ZVdTJZUmpYMXpQZGNpYzNHVnViL1ZhN3NqL3U4MEwvS1JOQWF0NWc0?=
+ =?utf-8?B?NzBNcXpZOUxxS1k2NUF0MFRsM1k2cEM2eVQyVFgxT1FTYkdHK25sNm5OSzlx?=
+ =?utf-8?B?L0hnc0Jsayt6QlI2WEhBcVBPeVNVTmlkd3dLZDJ0ZzVJRlI3eHNDMUM1Zkdj?=
+ =?utf-8?B?L1ZnSWQweXdiTXgwVVNWSC9xanJuRlNaUDR2Z1JhalNUNXl1VWZZakJIa2Zu?=
+ =?utf-8?B?d2t4VW5BRGlpd1VoeVZpUlRvMWJYVUNVTThKVUF4OUtmTlRvOEV1ajdNaGhy?=
+ =?utf-8?B?UGdhYjh0ZHlBN2g1V1VBTmY0bzl0UTFCN01wZE91Zll3NVFYOFpVSTB6NHhi?=
+ =?utf-8?B?UEhVTS9HdlR4NXJBbUlpTmxON05FdTZNRlZUYVFSNlB3cTVwcEw2TzJEbVFP?=
+ =?utf-8?B?V3F2bUhiS1ZzdkxLZEgrMVZRNnlBTWRZQUx5Mk1UME42RkRsU3hGQlE2amU1?=
+ =?utf-8?B?WmdVeUZDQ0lBS3JBOXdIMUNVMkY3OFlIV0RDdkhzR0k5cFVOcUNONVdMWmxV?=
+ =?utf-8?B?RHllVDEyK2VzcVBMcFZPTnRpcWY0THh6bHlIRDE4VFNpRkFLOEliRDhVRjJE?=
+ =?utf-8?B?ajRnYzVLamcwNEpIUGV6VXZDa0pBOVA1YjRuTkVyUTdWTG9tR1BxeWM0SGM5?=
+ =?utf-8?B?Q1ZTN0daQ0hqemFUL3diekMweW9EZC9JekxWcXB1UTZPcmNjTG5hN3pteWZH?=
+ =?utf-8?Q?Ybxd7pcO88Y=3D?=
+X-Forefront-Antispam-Report:
+	CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230040)(376014)(35042699022)(1800799024)(36860700013)(14060799003)(82310400026)(13003099007);DIR:OUT;SFP:1102;
+X-OriginatorOrg: topic.nl
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2025 06:21:25.5077
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: efc3a47e-aeb8-44c6-3b0a-08dd651bf202
+X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF000001A4.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10619
 
-Abacus Electrics makes optical probes for interacting with smart meters
-over an optical interface.
+On 14-03-2025 22:14, Thinh Nguyen wrote:
+> On Fri, Mar 14, 2025, Mike Looijmans wrote:
+>> Set the gpio to "high" on acquisition, instead of acquiring it in low
+>> state and then immediately setting it high again. This prevents a
+>> short "spike" on the reset signal.
+> How does this affect the current programming flow beside preventing a
+> spike to the reset signal?
 
-At least one version uses an FT232B chip (as detected by ftdi_sio) with
-a custom USB PID, which needs to be added to the list to make the device
-work in a plug-and-play fashion.
+I don't understand your question. What "programming flow" are you=20
+referring to?
 
-Signed-off-by: Michael Ehrenreich <michideep@gmail.com>
----
- drivers/usb/serial/ftdi_sio.c     | 2 ++
- drivers/usb/serial/ftdi_sio_ids.h | 5 +++++
- 2 files changed, 7 insertions(+)
+The reset sequence was just plain wrong, the issue is almost the same as=20
+the one described in this commit:
+e0183b974d30 "net: mdiobus: Prevent spike on MDIO bus reset signal"
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index e07c5e3eb..7bf46104e 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1079,6 +1079,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	/* GMC devices */
- 	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
-+	/* Abacus Electrics */
-+	{ USB_DEVICE(FTDI_VID, ABACUS_OPTICAL_PROBE_PID) },
- 	{ }					/* Terminating entry */
- };
- 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 5ee60ba2a..5de8067be 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1612,3 +1612,8 @@
-  */
- #define GMC_VID				0x1cd7
- #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
-+
-+/*
-+ * Abacus Electrics
-+ */
-+#define ABACUS_OPTICAL_PROBE_PID	0xf458 /* ABACUS ELECTRICS Optical Probe */
--- 
-2.48.1
+Note that I see this high-low-high-low double reset toggle in many=20
+Xilinx software drivers, they seem to teach that at the Xilinx academy=20
+or so.
+
+
+>> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+>> ---
+>>
+>>   drivers/usb/dwc3/dwc3-xilinx.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xili=
+nx.c
+>> index a33a42ba0249..a159a511483b 100644
+>> --- a/drivers/usb/dwc3/dwc3-xilinx.c
+>> +++ b/drivers/usb/dwc3/dwc3-xilinx.c
+>> @@ -207,7 +207,7 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *p=
+riv_data)
+>>  =20
+>>   skip_usb3_phy:
+>>   	/* ulpi reset via gpio-modepin or gpio-framework driver */
+>> -	reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+>> +	reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+>>   	if (IS_ERR(reset_gpio)) {
+>>   		return dev_err_probe(dev, PTR_ERR(reset_gpio),
+>>   				     "Failed to request reset GPIO\n");
+>> @@ -215,7 +215,6 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *p=
+riv_data)
+>>  =20
+>>   	if (reset_gpio) {
+>>   		/* Toggle ulpi to reset the phy. */
+> Does the comment above still apply?
+Now you mention it, the comment never made any sense anyway.
+
+
+>> -		gpiod_set_value_cansleep(reset_gpio, 1);
+>>   		usleep_range(5000, 10000);
+> Do we still need this usleep_range here?
+
+Yes, this is the "reset active" time.
+
+
+
+>
+> BR,
+> Thinh
+>
+>>   		gpiod_set_value_cansleep(reset_gpio, 0);
+>>   		usleep_range(5000, 10000);
+>> --=20
+>> 2.43.0
+>>
+>>
+>> Met vriendelijke groet / kind regards,
+>>
+>> Mike Looijmans
+>>
+>>
+
+--=20
+Mike Looijmans
+System Expert
+
+TOPIC Embedded Products B.V.
+Materiaalweg 4, 5681 RJ Best
+The Netherlands
+
+T: +31 (0) 499 33 69 69
+E: mike.looijmans@topic.nl
+W: www.topic.nl
+
+
 
 
