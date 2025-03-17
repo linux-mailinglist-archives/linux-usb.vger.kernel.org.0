@@ -1,95 +1,131 @@
-Return-Path: <linux-usb+bounces-21829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36789A65F59
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 21:40:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCBBEA66072
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 22:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A17C27A91A8
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 20:39:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0D6C189A4FC
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Mar 2025 21:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E705C1F9A91;
-	Mon, 17 Mar 2025 20:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69997202F96;
+	Mon, 17 Mar 2025 21:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urPPQhA2"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="UFmKUQ++";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cPOhIKkE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E9D1F866A;
-	Mon, 17 Mar 2025 20:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C437201278;
+	Mon, 17 Mar 2025 21:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742244002; cv=none; b=U1y1cz8HCQ/gVacAbgahOInHmsAyGCNsVctBuiJWQZaK6b15crUQ24/BUQxRfPPOw+8R4+qHJ7ESNxzp/p0l9deDsi+jj/8almPvHFHc5zxDGOQLERgO3UQLHAY6I86ZL3dTTEQrXZerDT5aU9bJ2cmVdFiLKqwIhkNkKun9y+s=
+	t=1742246757; cv=none; b=OlwJS7vpFC9B1rrB7x4GvznEQSGiPQG8DxUDHOy3KYdPHRnaycBTEbp+lY/yY1eKGiYdtDcQ5UH6b4fEY4PSD9uaRa9B+0dOxDPNaoE+TLk5AYU5sx2l/dIBa9rYblYdGhaTgraMOWUDvathec7v/SsrOgVPMzhDA/e7SH6gQvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742244002; c=relaxed/simple;
-	bh=bg8zh7pHi9WV+Xqo4nnuI4GgxJupgiswX+PxbWPVGNo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TAMCqZIOjpct5fYFR04QBV+3Kur1vdugbrWI8T//0jCrqdAJyMXJqehHFd3AcLJRV8O90QBmz6GJTH3Im40f4H6MTGZJB3NSA53zrguuBjKatLCiRh+iegKVFMuMReAXNcaLuhFWTF1cAGA9kBZ2l72hiJqR3lf2JIpd0CJwJTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=urPPQhA2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3356AC4CEEE;
-	Mon, 17 Mar 2025 20:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742244002;
-	bh=bg8zh7pHi9WV+Xqo4nnuI4GgxJupgiswX+PxbWPVGNo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=urPPQhA2v9OINE6Qmu6tByZbozfJtvAywl/I6VI1eUn1zTL3TxVTBNf1BW4kBb8L3
-	 91VuIvdFFRqyfujXWhBHpxn7L8+7CncOEslBXJeAyztIPEDZPfTrACSvvd7wwQoGzv
-	 VwfSxwhdlpKyaMxXdObKns5NVXwxEvXjHLgr30rjTGFi9JJ8il1jPY1LuG+EC+hiGr
-	 zRO8EqE0WnG5wFC2ItdiGut97bCiXdynQNky+IZWg3HLCGIX+kV4nknHOav20L1rK+
-	 ZhdU+v/C+3A05lwgqq6SQ+oLAZ88EJFcruWQ77zK3thjhYlC8zzyzhJPrylxWMJ3uG
-	 LOgNj64eUohOg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE30C380DBE4;
-	Mon, 17 Mar 2025 20:40:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1742246757; c=relaxed/simple;
+	bh=hidze6Lmm2kEBDShJAmbSCXjiyYDNNZa1xFsxR7Xits=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=rgK+08MJ4HYBkzPXZGauV51OdyNHIqkXcukN0/3Rv1+xRf6Kn9AFAjyb/mYoGnCWqVuRa0deurOJlQWnH0QDjO9NQXJE4vRRIeAL1JzGvTxdWBQruMCb9HVk/SEMFY6HOxJtxN1aMCW9kGa/ik+bSLf8AW36HitHd2sc4HJxZPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=UFmKUQ++; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cPOhIKkE; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 286141140274;
+	Mon, 17 Mar 2025 17:25:55 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Mon, 17 Mar 2025 17:25:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742246755;
+	 x=1742333155; bh=hidze6Lmm2kEBDShJAmbSCXjiyYDNNZa1xFsxR7Xits=; b=
+	UFmKUQ++TBS2I3IIsIXwAXRy9Sq8XRu05gL8aG/W6NDl+zLH8k81CrCjZMAYFeLI
+	OtY3QDcz/ZTPCzH9CDJOd3VZNoXH84fdUMFe1g1kB3TucdtleQPoCnnLufRb0acA
+	HOuwwBG9UUmGdwolZG0oHngWDpmti/0PX7NhuRApPymwFVBmZ5JAI76dxCq14PsL
+	P7PLnSCbHB7Sy6Pf/wOX7ZqE65HWoHf4msAx2ktEsGfiJxWT8WIXJljG+QNQIUbd
+	zxvhqDKoaX0uqupvCb1HDyXJNLQrYpi/AmXMjKoK9zlS2bTjIr0GOWL4ChARx6TR
+	VVo2EOvUJWtMAWJdXgR73w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742246755; x=
+	1742333155; bh=hidze6Lmm2kEBDShJAmbSCXjiyYDNNZa1xFsxR7Xits=; b=c
+	POhIKkEx1gqYmHDwULePhMJI3H5VrJHyp9Cp2eYDRvVmYN6S9NigCWb6VcH6LX2n
+	TswyW9pcXqISrYYdQi5cfnj1wEZkuCLtaVVMV0D4RHBz0yco0rpn+KPE54dzID3l
+	rO6Eq2lcAHDWvGRdCr1wuJVy+DK4Ufbh7z96AhwrLtA7Ham1knTXAniDwr/CWRam
+	n0XWNY7gTaejt7dK6HebRdSmmcrB/7iW55D+z+3+KfkukU8kaXEJ3UFwqogKuHam
+	kpcwKY2nMGMwEzlBase2kgzEpXn7QLmZLDfRdpjTVy+BteFhkUuCqwq2GEq4F5au
+	NlD0XO4BsrdDBDI9UjB6w==
+X-ME-Sender: <xms:YpPYZ_qqGQZQOPRTRzKVjOZp3bTqqQPXQgdQ5kduSmVfGYIiZwt7WA>
+    <xme:YpPYZ5qE-FpB3Ple67LdTYaC3MQawx4M2GXnrGfO3E8v4JvLkmw2xab-f2tZAKX7B
+    S_wh90MA7ruNjPAh0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugedtiedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhr
+    ghdprhgtphhtthhopehlkhhunhgurhgrkhesvhefrdhskhdprhgtphhtthhopehlihhnuh
+    igqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
+    uhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:YpPYZ8MpS8QW-Kukar9pKO723yLpHAm0rzRI9AMgySBLmK-tdlJ_iQ>
+    <xmx:YpPYZy5mLfoa6ymnDOE9hYoon-cCCCZxzwn4d_cZYjHKEpZQBaUBbw>
+    <xmx:YpPYZ-6ZzaE0LZtjT_nAfg2WXlDRELpdoe7N0T2lRTgT39FHguXznQ>
+    <xmx:YpPYZ6j6JGm2xe2EbYkOUySj2UU0kWlu5mp-Aoxh07AG5EIdOm9U4Q>
+    <xmx:Y5PYZ53d-0b6GdHUVkSaxQ7xzW8-QQFRtFFe2I1nRLW1ALfEevVuvsHw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 814CC2220072; Mon, 17 Mar 2025 17:25:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3]: cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock
- quirk
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174224403749.3906420.14528772392136964974.git-patchwork-notify@kernel.org>
-Date: Mon, 17 Mar 2025 20:40:37 +0000
-References: <Z9GEP/TksqEWFbkd@birdy.pmhahn.de>
-In-Reply-To: <Z9GEP/TksqEWFbkd@birdy.pmhahn.de>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: netdev@vger.kernel.org, oliver@neukum.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- leon@is.currently.online, kory.maincent@bootlin.com
+Date: Mon, 17 Mar 2025 22:25:33 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Rob Herring" <robh@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: "Lubomir Rintel" <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Message-Id: <a46ecbcd-4c1d-4a04-8c7f-6d7e97670ccd@app.fastmail.com>
+In-Reply-To: <20250317200941.563287-1-robh@kernel.org>
+References: <20250317200941.563287-1-robh@kernel.org>
+Subject: Re: [PATCH] usb: Remove orphaned Marvell UDC drivers
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Mon, Mar 17, 2025, at 21:09, Rob Herring (Arm) wrote:
+> These drivers have no way to probe as there are no match tables nor
+> devices created with a matching name in the kernel tree.
+>
+> UDC was only ever supported by board files which were removed in 2022.
+>
+> For U3D, which was added in 2012, the PXA2128 aka MMP3 support was
+> never upstreamed with board files and only revived in 2019 with DT
+> support. No U3D DT support has been added since then.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Lubomir Rintel <lkundrak@v3.sk>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Looks ok to me,
 
-On Wed, 12 Mar 2025 13:55:27 +0100 you wrote:
-> Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
-> the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
-> Both are based on the Realtek RTL8153B chip used to use the cdc_ether
-> driver. However, using this driver, with the system suspended the device
-> constantly sends pause-frames as soon as the receive buffer fills up.
-> This causes issues with other devices, where some Ethernet switches stop
-> forwarding packets altogether.
-> 
-> [...]
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Here is the summary with links:
-  - [net-next,v3] : cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
-    https://git.kernel.org/netdev/net-next/c/a07f23ad9baf
+I see two additional udc drivers without users:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+drivers/usb/gadget/udc/fusb300_udc.c (could not find any users)
+drivers/usb/gadget/udc/net2272.c (formerly used on blackfin)
 
 
