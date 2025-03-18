@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-21861-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5CD4A67CA3
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 20:06:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66FB0A67CB0
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 20:06:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 137754213D5
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 19:06:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F2F3A8775
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 19:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B4D21422A;
-	Tue, 18 Mar 2025 19:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D9B214812;
+	Tue, 18 Mar 2025 19:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="eIza6hXQ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d6LUS1h2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FDC212F8A
-	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3980211A3D
+	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742324721; cv=none; b=LA6M+XpRCutmCUQKQHJZcFQK81tTHloFLaJxjqMXrr+Ab7eDRtBv4EPCThDB4Mq+fyjw7ATcXEJeSWmyhL+Mzmj2Rw79bt5lxNJ8XwrXBnaY5r5XO1zBZXcTanaK81MKUcQZyuSfuso+wmS8do9TwPGA1Zf7xFIuqXYoOz5RIGo=
+	t=1742324725; cv=none; b=PBiHiftZFNy4tsv5B2p0G5iSCAzewe2XrjlyQvUnEOhXSXI9vuOcNU0xNX/Lw/xQVe1uEpv9zyjzEThI8BYzDqo3qHD4FULpeItGVJDEXXX6JSVVueDPVC2NqWzmJV5q+LHSAarEPlX9gdNaVPLSWGF+qPegORuQCvobVgPr2+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742324721; c=relaxed/simple;
-	bh=wAWUM3ffucxW+1g6lHY+OoHFAYGy2yWiORLWyxjTwt4=;
+	s=arc-20240116; t=1742324725; c=relaxed/simple;
+	bh=eQkqYxpWSanYKxPhcGDRdC42rK/h4DBAcc6ryt80h+Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GtPABAhn6dT/2s3hBQoB8xeU6+bBXm7GjtQNIuyuwVplMhfI4Lv+6fqVQx0zWlDWhdfhVuyoYTJFgAm5GR4zwCPr0TDSxCISzmkSpJY+LJXTh9XFN/HDzTeer7JqqjCDpKy2drzD5tD2RIWctwywFKE0bszNYHNcT1V5GatGHgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=eIza6hXQ; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:Cc; b=FJSxYECklXAvmVkXQMcHSNBUCX+Ht8SD8gRBhFQIbBhqBrFEwHt3I1yP/FHJxsH3PS+zKCho2Gz9ZbJMcozTsyblPSpQ0d7N919aWy+huuL8XH/k2PXbWVlyHY9POFjYCjaiIYre0eWmnXelqSTwWuxyqOuFzWQ7MzM8n/UPyPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d6LUS1h2; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52IIBL19004551
-	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:15 GMT
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52IAClWv000505
+	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HMZC9VkGCoUU7Q/SeMHW2tCY+RJpQ+s8b+qSPkLUVkA=; b=eIza6hXQ0PWfNukR
-	zrVS+RJmSoA3Ka0+oIhPUMHaqCOJQozyTWzXJshqH3Efy1z90pMsUuxX4gOwtVIw
-	Z+udJn9rFsUb7sYMPx6Mz5nrFsLA8C5IL6hEwn/w1gK6dHf6fle4vdv5Pgq48G8X
-	CISUJLOIXkHfvpZpNlAIj+jqfRQS0Gg6k2gPxITXrpqqkuOgHBIRtg/7rBZPk8Wh
-	ptOLK5+YAur0t9TZ8q1aL0GF+5Hy5dYyRlu3fY4vG6THSnTvzyJnSYuCqRhJR8uc
-	ii2eQ0i/pRCis6azmA1i3uADEwOhzLYBbFHRDoPNrA/FBPkqQhXM7Km+OuMMhBW2
-	juG2zg==
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45fdvxg457-1
+	ZKt7fy4k+zqCf24blu7hfnZkf8U4C+xUpHuJMgA8+D0=; b=d6LUS1h2tAhJOwmt
+	xjbjgDuiIKtVs8vf0n+10D/QQJy7xDWkbCXg3kgI0I1yHmYarN+UfOc95bbimK5p
+	t1rUtAhDwv/KhgJo5Od4RxIH0wQd1Q6WDUTZwh2C2ePF/RoKIBvBkHQLlcxg10NK
+	8JtC51wDUyk6psHoLmjyO8MYpS1y2n0e8hAyFBrFP0gVsYXRkVdd5XhxUYcuYgTB
+	6/2QlhDZwn6Ehu3XPRtn0TRungtEnbNo7ihipnYbdqd+4y7dG/CrbCFptWfkKbWa
+	1AWDEJ90WM5ztGNpdY0VMhjv82jBGtRK0r0gTi1DwdGbQBwmorN/9bP9WgYI0QMw
+	/RNx3w==
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45d1sy1a6v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:14 +0000 (GMT)
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3fdc9dc5c9dso945930b6e.3
-        for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 12:05:14 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 19:05:18 +0000 (GMT)
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3f9ce53ab0bso5243102b6e.2
+        for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 12:05:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742324714; x=1742929514;
+        d=1e100.net; s=20230601; t=1742324718; x=1742929518;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HMZC9VkGCoUU7Q/SeMHW2tCY+RJpQ+s8b+qSPkLUVkA=;
-        b=LOmlScur6rcxuvgUJoAm+OlOLPL9ygLxTTdBZE6Knn7fURPc+ujJWff8jkHIxm+kGD
-         lt1n1ysBlbc5Nykjrfj1T/uZGxWucer3yOzw/zROTNKeFpw4BanrOeaB2aqWCLYoOr+P
-         b1Pz25iDLahOmQIvhW2SzVHqiQXYkzojlTrdOhdZM12KKp7LbjW9UB9DaiMu7X3Xem5+
-         aEEqJYkkI8CnavVziCiw6hI5AoNMzfuWo50Jl2IIprx3AaPleoJ1fMfqAMrXbhDdV28i
-         isN27T6cVO468RJ/rdYHjpnGAur429mxZ+I/t4TSiZhSVVH+pPIZDlkrBoOupz9jFJRN
-         EWaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXt/wSxQO+CqWYd2FwOlnQipdxK6DEDFz3qVyqegBYYwjw1DmWmxfpNQSEtxIIN8/nPRvMWfuWX0z4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhQBbWigJDyKHzeePGf0mCZ0P9dfUkknJ58x7r+LdzgMFrqF1e
-	PFRvwaumyQeDW/JzVndkFCaCR4XmBqQryCj+l53nHVCP1nGcc/68zjIdefcHZSpS4tdi7vCV3H6
-	zz/svzQyN1OdDAGP2MjTTvwJyKKDm+Y+y9BkxnHmYIy41XTuOhGtw2jXsQOM=
-X-Gm-Gg: ASbGncs8SrrlxNIiSBfaIWz6Kn9IP8de4T0LAtoKMFbLYzQPnJGj07+bu/RMty7RpRH
-	ixt9pzhl1/NJYwBSXa0UHZcYdMat/+t5UDC5QxffbcDQyyrxyeX10z6xd4yCyAhneYmBGuZs77f
-	6vbWzu8SjvV2W7vlKsmW5p5sudIKs8P3BUGt6DHQ+ODl6vi+dS1XGfUX24HQlN6jQaxZ6ZCqvt8
-	H72UWNhSt8WffYsJ9ApY4KGXQSVDhagnzopvNoe6BC5DlnNjtuvpsN5hwBBJ3Srj/O0+xi8yGxa
-	py9er7juyvslPN5bpM6Q5knZYVhd4/fy9QQYynqki/3cheixiP60aLbz3/xgO3ympmyPvcNAFJK
-	gvdr3gItruFNw/V0=
-X-Received: by 2002:a05:6808:1801:b0:3fa:1d22:6d2c with SMTP id 5614622812f47-3feac2a3786mr131258b6e.15.1742324713853;
-        Tue, 18 Mar 2025 12:05:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGvXyY2S5sGQHTlkQZEMYhM770zfAZyAg2bYMmMZTua9oAMTCBz5g5U/8JKmUdCYUo6ZH7cAA==
-X-Received: by 2002:a05:6808:1801:b0:3fa:1d22:6d2c with SMTP id 5614622812f47-3feac2a3786mr131240b6e.15.1742324713465;
-        Tue, 18 Mar 2025 12:05:13 -0700 (PDT)
+        bh=ZKt7fy4k+zqCf24blu7hfnZkf8U4C+xUpHuJMgA8+D0=;
+        b=DtSIaWvEzxwYPQH4JbfKrroX9UkB/hxZ4UlDC8zudKbit8OEcrR0xfF1+V7Jt0mimB
+         PlvhOs6D/kNKYRePTwsX71XrdIiTPwd5AgTUBHGuK37+N3g4lWMSFMzTQXkhUITSnuht
+         zXt9nsaAkpGaq+zYxklMkMybyzSTPGYORKnR3HMI4MtQiRgyStTiJi9TSIHo0VLGsJ4G
+         fiY+JCOunGPwZZJrwKZbZOYmcZsFIjOggIa5IwgywMaIJzJw5rfzSiXOzVBUZi0ceO5B
+         3QgmGQWKbj5VF//842+qpF6KC4fw2JiNzhNq0SseOx00i1hRSgari32uReQaKR+XFfCX
+         RIIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAnQ8QKzFVXItqjJntHR/d0A5CXAUWwvvjFn5G2nvDzMLJ/d2qcwS5ClpYKQ4MEm6Z5tkHTIzp0dg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz8YV5zHu2cWdJrwGhdEyj1t1Yqoheg3ueQEfmvqSloiEnauNK
+	Xx64jLnU5yqIqBB+qdjTfKn24euzHhNKgmI37YqlhAcBCMFM2fxVqp7X3jrYiXRQh2RxIW0bf3O
+	IZmsCnNIm7VMrV1VcN+CcVvznvNYNuSROWfJA9f9kPVCuw79NAuC0ewgL7Tk=
+X-Gm-Gg: ASbGncs4IymekGLIDRU0KK3Y8ZmO1ZkGPpkUdnletes3PdPlPoJom0r5DN8WI7T9Rj+
+	rocxIMPTL2LZ9TDLcDnC3JyehEBleyvRsd4gMGKGv83N3z4FVW2kYRDVQivFJsfBs40c81KpZRP
+	T1fEnNCmQaPm3rfGpF/9ZQk8iGK/9XmpVaCOEh3QCskClJPtxMArl2D1WuES9m5bYnsshdFfbLx
+	ZK1HMwbkmjTtaKGF92zqgf2eVYPA9hzH7fXZXprrxHZvBGNhjDfVQhJliNICZD5lbO6yvg25RKj
+	EpHwFqLsO+g4fjdD2vbyJX5YhSRT3tNYgvUmz/o+mpWTdwACSw9B2HgjUopJRpxT0C59hYV6uU4
+	8k0xvCJGWtAm5iN4=
+X-Received: by 2002:a05:6808:211c:b0:3fb:174f:821d with SMTP id 5614622812f47-3fea18d164bmr3175577b6e.35.1742324717544;
+        Tue, 18 Mar 2025 12:05:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF0oPFytHnSwWiWEyE0i6Zq6g46JKWsbktjeJE5tWF7seB8gkd1dk4wmLOs9B2mofGvogFQdw==
+X-Received: by 2002:a05:6808:211c:b0:3fb:174f:821d with SMTP id 5614622812f47-3fea18d164bmr3175542b6e.35.1742324717114;
+        Tue, 18 Mar 2025 12:05:17 -0700 (PDT)
 Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3fcd403b065sm2264273b6e.4.2025.03.18.12.05.12
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3fcd403b065sm2264273b6e.4.2025.03.18.12.05.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 12:05:12 -0700 (PDT)
+        Tue, 18 Mar 2025 12:05:16 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Date: Tue, 18 Mar 2025 14:05:03 -0500
-Subject: [PATCH v5 3/7] usb: dwc3: core: Expose core driver as library
+Date: Tue, 18 Mar 2025 14:05:06 -0500
+Subject: [PATCH v5 6/7] usb: dwc3: qcom: Transition to flattened model
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,7 +92,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250318-dwc3-refactor-v5-3-90ea6e5b3ba4@oss.qualcomm.com>
+Message-Id: <20250318-dwc3-refactor-v5-6-90ea6e5b3ba4@oss.qualcomm.com>
 References: <20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com>
 In-Reply-To: <20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -109,381 +109,402 @@ Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10136;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11907;
  i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
- bh=wAWUM3ffucxW+1g6lHY+OoHFAYGy2yWiORLWyxjTwt4=;
- b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBn2cPjSJPDlDww96zN6653/MWcszDD3Ic5NpH1/
- 1zAAvo3+T+JAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZ9nD4xUcYW5kZXJzc29u
- QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcWgwRAAiyAVa0WXvVjJ8Bh1bb10NmIubWgXCVppAZGAO5b
- BGgJ/04dnqpCK72+1157yGxIG4OKUtfqrtZYgWPTdcS+LCDTLuu30fNwK9DDb+AnrCC1Tf/Pvld
- /SDxqU5bOutmmP68X0wspgerAcMigaMsx8soKdeWr1QHWChNwGr5qkpDxJBqkqOCavHAsJ3RyjG
- LzzIk4qJ6dk7XsgnsQROvLkBh4LiTXHuH2oEBB3hI0Q6+p7M/xfM/zsapIF7uBxiL048I0AmG/s
- SRxSXSsg7vt2r99KqGOBpYDu20HTZso7ngarfVmVbtG7mDUQwfqco5kwb+A4xuzWmd7PxLKAAPZ
- h/TlwPFj70GlrDW2zqO6tjebud4gToUtRHRCDha7gRDuHbZSLU7X/cvUzWD65J3W4lVKfsRbhkK
- 9CU0A0raxjn8nPK7+FJ7oReymYRJgewImKc69pvjcliDgP32mmeVgIeXOfvePYfZKMZedDMF5Og
- MZpNeTf5Pu/ANbJZq0oJxYtMQjjIVOrkxmCw3O/3JOkRJ3uYznTJlk0bN/2WqWDA1GamqfZGgg6
- wMSqoNXKEjV6ovWd+9S7K7LrJQHCxjUjQM5Vpf1CtJgCFmzKY0KGo8dQf2LKqW8ypwS+7sq2pV4
- //O3xQh51CMPJy+4R8hzIhZNinDOTsGaNnrPq+6cKbSI=
+ bh=eQkqYxpWSanYKxPhcGDRdC42rK/h4DBAcc6ryt80h+Q=;
+ b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBn2cPkM9LBwJ0OMl5jBRqXpXuOP/YHLHmJTmOnf
+ CWHXL21zOmJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZ9nD5BUcYW5kZXJzc29u
+ QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcW0Rg/+LnBSuBQQG0u1ou9Yxw5vpTTiExzPmRVCQ1dcdJI
+ BWZamNmWSd9Ecx/G/RDQ1ORbOrK/xdqPbmWzags4F2Apg9lVvvSiRzmLBMyOS/YRkv67033m+de
+ nnzsLwdfaOPwVi6F/RDl9NHLQFTfwIg6nqbZYD3iq8KOmbHZIfs/M3+cTMGLExwKRqzBh0N4U1b
+ AP+nGRsQ3FumxoZX2t7soCe20L/HCJ6r9lFoJRFGJfL00svKfxcmJv8kKIM0tKxu5IYjOHqpan9
+ p88ekMJK1v4Ux6NNhIfCkvLdFRomSefCA05IrK10oLgkoaSfBb/r1yRoGheJD8UAImdDyISiBhs
+ 8kqp7pzcL3wSwoRALEl4nYyn2iINUmSwokGdyfcJ2cK4gCq6xPqN1DEuC7ODpLc8AjIM6p+xKOt
+ 0UOh9m9eKZcQorO1Ouqccc2tNoBOrGLQzPrM+Iu67bdocqA5QQZI4nbM49yQmUYhAT2qxPnGVxZ
+ c1Cq/UMqA0K1O1HVHxoHnewJpIivdxdYGYSFdR0CrcAgY5ve5ILMNgPSFAkH0XdTyc5fCjI0iUb
+ aGbx253jM5YwwOGFX28K0lPqEW9/vXlYiPAMPC1IEdwZV5FaAf1gx5yuFeOzU0GXlncjjf3TiTa
+ OhrmEJD9S1x2RCS9infPMMYUcYmvui7m6boGm1uNCNVc=
 X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
  fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
-X-Authority-Analysis: v=2.4 cv=SKhCVPvH c=1 sm=1 tr=0 ts=67d9c3ea cx=c_pps a=4ztaESFFfuz8Af0l9swBwA==:117 a=DaeiM5VmU20ml6RIjrOvYw==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=EUspDBNiAAAA:8 a=bGkOf_LmPnIWPiKmcZAA:9 a=QEXdDO2ut3YA:10
- a=TPnrazJqx2CeVZ-ItzZ-:22
-X-Proofpoint-ORIG-GUID: RytQLWlgWlgmhXU5VNRZGkBvVIE8A7lG
-X-Proofpoint-GUID: RytQLWlgWlgmhXU5VNRZGkBvVIE8A7lG
+X-Proofpoint-GUID: EvZTss2rbZgM7d0AeiaM5GgegVJj8NoN
+X-Proofpoint-ORIG-GUID: EvZTss2rbZgM7d0AeiaM5GgegVJj8NoN
+X-Authority-Analysis: v=2.4 cv=XKcwSRhE c=1 sm=1 tr=0 ts=67d9c3ee cx=c_pps a=yymyAM/LQ7lj/HqAiIiKTw==:117 a=DaeiM5VmU20ml6RIjrOvYw==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=EUspDBNiAAAA:8 a=Rmjymn6LDx49BAQaV_MA:9 a=QEXdDO2ut3YA:10
+ a=efpaJB4zofY2dbm2aIRb:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-18_08,2025-03-17_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=996 spamscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 bulkscore=0 mlxscore=0 suspectscore=0 phishscore=0
- impostorscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2503180137
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 phishscore=0
+ impostorscore=0 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503180137
 
-The DWC3 IP block is handled by three distinct device drivers: XHCI,
-DWC3 core and a platform specific (optional) DWC3 glue driver.
+The USB IP-block found in most Qualcomm platforms is modelled in the
+Linux kernel as 3 different independent device drivers, but as shown by
+the already existing layering violations in the Qualcomm glue driver
+they can not be operated independently.
 
-This has resulted in, at least in the case of the Qualcomm glue, the
-presence of a number of layering violations, where the glue code either
-can't handle, or has to work around, the fact that core might not probe
-deterministically.
+With the current implementation, the glue driver registers the core and
+has no way to know when this is done. As a result, e.g. the suspend
+callbacks needs to guard against NULL pointer dereferences when trying
+to peek into the struct dwc3 found in the drvdata of the child.
+Even with these checks, there are no way to fully protect ourselves from
+the race conditions that occur if the DWC3 is unbound.
 
-An example of this is that the suspend path should operate slightly
-different depending on the device operating in host or peripheral mode,
-and the only way to determine the operating state is to peek into the
-core's drvdata.
+Missing from the upstream Qualcomm USB support is handling of role
+switching, in which the glue needs to be notified upon DRD mode changes.
+Several attempts has been made through the years to register callbacks
+etc, but they always fall short when it comes to handling of the core's
+probe deferral on resources etc.
 
-The Qualcomm glue driver is expected to make updates in the qscratch
-register region (the "glue" region) during role switch events, but with
-the glue and core split using the driver model, there is no reasonable
-way to introduce listeners for mode changes.
+Moving to a model where the DWC3 core is instantiated in a synchronous
+fashion avoids above described race conditions.
 
-Split the dwc3 core platform_driver callbacks and their implementation
-and export the implementation, to make it possible to deterministically
-instantiate the dwc3 core as part of the dwc3 glue drivers and to
-allow flattening of the DeviceTree representation.
+It is however not feasible to do so without also flattening the
+DeviceTree binding, as assumptions are made in the DWC3 core and
+frameworks used that the device's associated of_node will the that of
+the core. Furthermore, the DeviceTree binding is a direct
+representation of the Linux driver model, and doesn't necessarily
+describe "the USB IP-block".
+
+The Qualcomm DWC3 glue driver is therefor transitioned to initialize and
+operate the DWC3 within the one device context, in synchronous fashion.
+
+To provide a limited time backwards compatibility, a snapshot of the
+driver is retained in a previous commit. As such no care is taken in the
+dwc3-qcom driver for the qcom,dwc3 backwards compatibility.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 ---
- drivers/usb/dwc3/core.c | 142 +++++++++++++++++++++++++++++++++---------------
- drivers/usb/dwc3/glue.h |  32 +++++++++++
- 2 files changed, 129 insertions(+), 45 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 143 ++++++++++++++++++++++---------------------
+ 1 file changed, 74 insertions(+), 69 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 66a08b5271653abd458f9ec85ca730afd7779d71..b428b6fc3d0a55811e2f75d33d79df4b0c67dcac 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -36,6 +36,7 @@
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 9d04c2457433bd6bcd96c445f59d7f2a3c6fdf24..49ad3fc8df33a354c7ab7cb0fbc47e47419fe689 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -4,7 +4,6 @@
+  * Inspired by dwc3-of-simple.c
+  */
  
+-#include <linux/cleanup.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/clk.h>
+@@ -14,7 +13,6 @@
+ #include <linux/kernel.h>
+ #include <linux/extcon.h>
+ #include <linux/interconnect.h>
+-#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/phy/phy.h>
+ #include <linux/usb/of.h>
+@@ -23,6 +21,7 @@
+ #include <linux/usb/hcd.h>
+ #include <linux/usb.h>
  #include "core.h"
- #include "gadget.h"
 +#include "glue.h"
- #include "io.h"
  
- #include "debug.h"
-@@ -2148,27 +2149,16 @@ static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
- 	return usb_psy;
+ /* USB QSCRATCH Hardware registers */
+ #define QSCRATCH_HS_PHY_CTRL			0x10
+@@ -73,7 +72,7 @@ struct dwc3_qcom_port {
+ struct dwc3_qcom {
+ 	struct device		*dev;
+ 	void __iomem		*qscratch_base;
+-	struct platform_device	*dwc3;
++	struct dwc3		dwc;
+ 	struct clk		**clks;
+ 	int			num_clocks;
+ 	struct reset_control	*resets;
+@@ -92,6 +91,8 @@ struct dwc3_qcom {
+ 	struct icc_path		*icc_path_apps;
+ };
+ 
++#define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
++
+ static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+ {
+ 	u32 reg;
+@@ -116,6 +117,11 @@ static inline void dwc3_qcom_clrbits(void __iomem *base, u32 offset, u32 val)
+ 	readl(base + offset);
  }
  
--static int dwc3_probe(struct platform_device *pdev)
-+int dwc3_core_probe(const struct dwc3_probe_data *data)
++/*
++ * TODO: Make the in-core role switching code invoke dwc3_qcom_vbus_override_enable(),
++ * validate that the in-core extcon support is functional, and drop extcon
++ * handling from the glue
++ */
+ static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
  {
--	struct device		*dev = &pdev->dev;
--	struct resource		*res, dwc_res;
-+	struct dwc3		*dwc = data->dwc;
-+	struct device		*dev = dwc->dev;
-+	struct resource		dwc_res;
- 	unsigned int		hw_mode;
- 	void __iomem		*regs;
--	struct dwc3		*dwc;
-+	struct resource		*res = data->res;
- 	int			ret;
+ 	if (enable) {
+@@ -260,7 +266,7 @@ static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+ 		goto put_path_ddr;
+ 	}
  
--	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+-	max_speed = usb_get_maximum_speed(&qcom->dwc3->dev);
++	max_speed = usb_get_maximum_speed(qcom->dwc.dev);
+ 	if (max_speed >= USB_SPEED_SUPER || max_speed == USB_SPEED_UNKNOWN) {
+ 		ret = icc_set_bw(qcom->icc_path_ddr,
+ 				USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+@@ -303,25 +309,14 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+ /* Only usable in contexts where the role can not change. */
+ static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
+ {
+-	struct dwc3 *dwc;
+-
+-	/*
+-	 * FIXME: Fix this layering violation.
+-	 */
+-	dwc = platform_get_drvdata(qcom->dwc3);
+-
+-	/* Core driver may not have probed yet. */
 -	if (!dwc)
--		return -ENOMEM;
+-		return false;
 -
--	dwc->dev = dev;
+-	return dwc->xhci;
++	return qcom->dwc.xhci;
+ }
+ 
+ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom, int port_index)
+ {
+-	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+ 	struct usb_device *udev;
+ 	struct usb_hcd __maybe_unused *hcd;
++	struct dwc3 *dwc = &qcom->dwc;
+ 
+ 	/*
+ 	 * FIXME: Fix this layering violation.
+@@ -498,7 +493,7 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
+ static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+ {
+ 	struct dwc3_qcom *qcom = data;
+-	struct dwc3	*dwc = platform_get_drvdata(qcom->dwc3);
++	struct dwc3 *dwc = &qcom->dwc;
+ 
+ 	/* If pm_suspended then let pm_resume take care of resuming h/w */
+ 	if (qcom->pm_suspended)
+@@ -700,40 +695,14 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+ 	return 0;
+ }
+ 
+-static int dwc3_qcom_of_register_core(struct dwc3_qcom *qcom, struct platform_device *pdev)
+-{
+-	struct device_node	*np = pdev->dev.of_node;
+-	struct device		*dev = &pdev->dev;
+-	int			ret;
 -
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(dev, "missing memory resource\n");
+-	struct device_node *dwc3_np __free(device_node) = of_get_compatible_child(np,
+-										  "snps,dwc3");
+-	if (!dwc3_np) {
+-		dev_err(dev, "failed to find dwc3 core child\n");
 -		return -ENODEV;
 -	}
 -
- 	dwc->xhci_resources[0].start = res->start;
- 	dwc->xhci_resources[0].end = dwc->xhci_resources[0].start +
- 					DWC3_XHCI_REGS_END;
-@@ -2232,7 +2222,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 		goto err_disable_clks;
- 	}
- 
--	platform_set_drvdata(pdev, dwc);
-+	dev_set_drvdata(dev, dwc);
- 	dwc3_cache_hwparams(dwc);
- 
- 	if (!dwc->sysdev_is_parent &&
-@@ -2327,12 +2317,35 @@ static int dwc3_probe(struct platform_device *pdev)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(dwc3_core_probe);
- 
--static void dwc3_remove(struct platform_device *pdev)
-+static int dwc3_probe(struct platform_device *pdev)
- {
--	struct dwc3	*dwc = platform_get_drvdata(pdev);
-+	struct dwc3_probe_data probe_data;
-+	struct resource *res;
-+	struct dwc3 *dwc;
- 
--	pm_runtime_get_sync(&pdev->dev);
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		dev_err(&pdev->dev, "missing memory resource\n");
-+		return -ENODEV;
-+	}
-+
-+	dwc = devm_kzalloc(&pdev->dev, sizeof(*dwc), GFP_KERNEL);
-+	if (!dwc)
-+		return -ENOMEM;
-+
-+	dwc->dev = &pdev->dev;
-+
-+	probe_data.dwc = dwc;
-+	probe_data.res = res;
-+
-+	return dwc3_core_probe(&probe_data);
-+}
-+
-+void dwc3_core_remove(struct dwc3 *dwc)
-+{
-+	pm_runtime_get_sync(dwc->dev);
- 
- 	dwc3_core_exit_mode(dwc);
- 	dwc3_debugfs_exit(dwc);
-@@ -2340,22 +2353,28 @@ static void dwc3_remove(struct platform_device *pdev)
- 	dwc3_core_exit(dwc);
- 	dwc3_ulpi_exit(dwc);
- 
--	pm_runtime_allow(&pdev->dev);
--	pm_runtime_disable(&pdev->dev);
--	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_allow(dwc->dev);
-+	pm_runtime_disable(dwc->dev);
-+	pm_runtime_dont_use_autosuspend(dwc->dev);
-+	pm_runtime_put_noidle(dwc->dev);
- 	/*
- 	 * HACK: Clear the driver data, which is currently accessed by parent
- 	 * glue drivers, before allowing the parent to suspend.
- 	 */
--	platform_set_drvdata(pdev, NULL);
--	pm_runtime_set_suspended(&pdev->dev);
-+	dev_set_drvdata(dwc->dev, NULL);
-+	pm_runtime_set_suspended(dwc->dev);
- 
- 	dwc3_free_event_buffers(dwc);
- 
- 	if (dwc->usb_psy)
- 		power_supply_put(dwc->usb_psy);
- }
-+EXPORT_SYMBOL_GPL(dwc3_core_remove);
-+
-+static void dwc3_remove(struct platform_device *pdev)
-+{
-+	dwc3_core_remove(platform_get_drvdata(pdev));
-+}
- 
- #ifdef CONFIG_PM
- static int dwc3_core_init_for_resume(struct dwc3 *dwc)
-@@ -2544,9 +2563,8 @@ static int dwc3_runtime_checks(struct dwc3 *dwc)
- 	return 0;
- }
- 
--static int dwc3_runtime_suspend(struct device *dev)
-+int dwc3_runtime_suspend(struct dwc3 *dwc)
- {
--	struct dwc3     *dwc = dev_get_drvdata(dev);
- 	int		ret;
- 
- 	if (dwc3_runtime_checks(dwc))
-@@ -2558,10 +2576,11 @@ static int dwc3_runtime_suspend(struct device *dev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(dwc3_runtime_suspend);
- 
--static int dwc3_runtime_resume(struct device *dev)
-+int dwc3_runtime_resume(struct dwc3 *dwc)
- {
--	struct dwc3     *dwc = dev_get_drvdata(dev);
-+	struct device *dev = dwc->dev;
- 	int		ret;
- 
- 	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
-@@ -2571,7 +2590,7 @@ static int dwc3_runtime_resume(struct device *dev)
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
- 		if (dwc->pending_events) {
--			pm_runtime_put(dwc->dev);
-+			pm_runtime_put(dev);
- 			dwc->pending_events = false;
- 			enable_irq(dwc->irq_gadget);
- 		}
-@@ -2586,10 +2605,11 @@ static int dwc3_runtime_resume(struct device *dev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(dwc3_runtime_resume);
- 
--static int dwc3_runtime_idle(struct device *dev)
-+int dwc3_runtime_idle(struct dwc3 *dwc)
- {
--	struct dwc3     *dwc = dev_get_drvdata(dev);
-+	struct device *dev = dwc->dev;
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-@@ -2607,12 +2627,28 @@ static int dwc3_runtime_idle(struct device *dev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(dwc3_runtime_idle);
-+
-+static int dwc3_plat_runtime_suspend(struct device *dev)
-+{
-+	return dwc3_runtime_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int dwc3_plat_runtime_resume(struct device *dev)
-+{
-+	return dwc3_runtime_resume(dev_get_drvdata(dev));
-+}
-+
-+static int dwc3_plat_runtime_idle(struct device *dev)
-+{
-+	return dwc3_runtime_idle(dev_get_drvdata(dev));
-+}
- #endif /* CONFIG_PM */
- 
- #ifdef CONFIG_PM_SLEEP
--static int dwc3_suspend(struct device *dev)
-+int dwc3_pm_suspend(struct dwc3 *dwc)
- {
--	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	struct device *dev = dwc->dev;
- 	int		ret;
- 
- 	ret = dwc3_suspend_common(dwc, PMSG_SUSPEND);
-@@ -2623,10 +2659,11 @@ static int dwc3_suspend(struct device *dev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(dwc3_pm_suspend);
- 
--static int dwc3_resume(struct device *dev)
-+int dwc3_pm_resume(struct dwc3 *dwc)
- {
--	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	struct device *dev = dwc->dev;
- 	int		ret = 0;
- 
- 	pinctrl_pm_select_default_state(dev);
-@@ -2645,10 +2682,10 @@ static int dwc3_resume(struct device *dev)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(dwc3_pm_resume);
- 
--static void dwc3_complete(struct device *dev)
-+void dwc3_pm_complete(struct dwc3 *dwc)
- {
--	struct dwc3	*dwc = dev_get_drvdata(dev);
- 	u32		reg;
- 
- 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST &&
-@@ -2658,21 +2695,36 @@ static void dwc3_complete(struct device *dev)
- 		dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
- 	}
- }
-+EXPORT_SYMBOL_GPL(dwc3_pm_complete);
-+
-+static int dwc3_plat_suspend(struct device *dev)
-+{
-+	return dwc3_pm_suspend(dev_get_drvdata(dev));
-+}
-+
-+static int dwc3_plat_resume(struct device *dev)
-+{
-+	return dwc3_pm_resume(dev_get_drvdata(dev));
-+}
-+
-+static void dwc3_plat_complete(struct device *dev)
-+{
-+	dwc3_pm_complete(dev_get_drvdata(dev));
-+}
- #else
--#define dwc3_complete NULL
-+#define dwc3_plat_complete NULL
- #endif /* CONFIG_PM_SLEEP */
- 
- static const struct dev_pm_ops dwc3_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
--	.complete = dwc3_complete,
+-	ret = of_platform_populate(np, NULL, NULL, dev);
+-	if (ret) {
+-		dev_err(dev, "failed to register dwc3 core - %d\n", ret);
+-		return ret;
+-	}
 -
-+	SET_SYSTEM_SLEEP_PM_OPS(dwc3_plat_suspend, dwc3_plat_resume)
-+	.complete = dwc3_plat_complete,
- 	/*
- 	 * Runtime suspend halts the controller on disconnection. It relies on
- 	 * platforms with custom connection notification to start the controller
- 	 * again.
- 	 */
--	SET_RUNTIME_PM_OPS(dwc3_runtime_suspend, dwc3_runtime_resume,
--			dwc3_runtime_idle)
-+	SET_RUNTIME_PM_OPS(dwc3_plat_runtime_suspend, dwc3_plat_runtime_resume,
-+			   dwc3_plat_runtime_idle)
+-	qcom->dwc3 = of_find_device_by_node(dwc3_np);
+-	if (!qcom->dwc3) {
+-		ret = -ENODEV;
+-		dev_err(dev, "failed to get dwc3 platform device\n");
+-		of_platform_depopulate(dev);
+-	}
+-
+-	return ret;
+-}
+-
+ static int dwc3_qcom_probe(struct platform_device *pdev)
+ {
++	struct dwc3_probe_data	probe_data = {};
+ 	struct device_node	*np = pdev->dev.of_node;
+ 	struct device		*dev = &pdev->dev;
+ 	struct dwc3_qcom	*qcom;
++	struct resource		res;
++	struct resource		*r;
+ 	int			ret, i;
+ 	bool			ignore_pipe_clk;
+ 	bool			wakeup_source;
+@@ -742,7 +711,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	if (!qcom)
+ 		return -ENOMEM;
+ 
+-	platform_set_drvdata(pdev, qcom);
+ 	qcom->dev = &pdev->dev;
+ 
+ 	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
+@@ -771,8 +739,15 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 		goto reset_assert;
+ 	}
+ 
+-	qcom->qscratch_base = devm_platform_ioremap_resource(pdev, 0);
++	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!r)
++		goto clk_disable;
++	res = *r;
++	res.end = res.start + SDM845_QSCRATCH_BASE_OFFSET;
++
++	qcom->qscratch_base = devm_ioremap(dev, res.end, SDM845_QSCRATCH_SIZE);
+ 	if (IS_ERR(qcom->qscratch_base)) {
++		dev_err(dev, "failed to map qscratch region: %pe\n", qcom->qscratch_base);
+ 		ret = PTR_ERR(qcom->qscratch_base);
+ 		goto clk_disable;
+ 	}
+@@ -792,17 +767,21 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	if (ignore_pipe_clk)
+ 		dwc3_qcom_select_utmi_clk(qcom);
+ 
+-	ret = dwc3_qcom_of_register_core(qcom, pdev);
+-	if (ret) {
+-		dev_err(dev, "failed to register DWC3 Core, err=%d\n", ret);
++	qcom->dwc.dev = dev;
++	probe_data.dwc = &qcom->dwc;
++	probe_data.res = &res;
++	probe_data.ignore_clocks_and_resets = true;
++	ret = dwc3_core_probe(&probe_data);
++	if (ret)  {
++		ret = dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
+ 		goto clk_disable;
+ 	}
+ 
+ 	ret = dwc3_qcom_interconnect_init(qcom);
+ 	if (ret)
+-		goto depopulate;
++		goto remove_core;
+ 
+-	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
++	qcom->mode = usb_get_dr_mode(dev);
+ 
+ 	/* enable vbus override for device mode */
+ 	if (qcom->mode != USB_DR_MODE_HOST)
+@@ -815,20 +794,15 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 
+ 	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+ 	device_init_wakeup(&pdev->dev, wakeup_source);
+-	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
+ 
+ 	qcom->is_suspended = false;
+-	pm_runtime_set_active(dev);
+-	pm_runtime_enable(dev);
+-	pm_runtime_forbid(dev);
+ 
+ 	return 0;
+ 
+ interconnect_exit:
+ 	dwc3_qcom_interconnect_exit(qcom);
+-depopulate:
+-	of_platform_depopulate(&pdev->dev);
+-	platform_device_put(qcom->dwc3);
++remove_core:
++	dwc3_core_remove(&qcom->dwc);
+ clk_disable:
+ 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+ 		clk_disable_unprepare(qcom->clks[i]);
+@@ -842,12 +816,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 
+ static void dwc3_qcom_remove(struct platform_device *pdev)
+ {
+-	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
++	struct dwc3 *dwc = platform_get_drvdata(pdev);
++	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
+ 	struct device *dev = &pdev->dev;
+ 	int i;
+ 
+-	of_platform_depopulate(&pdev->dev);
+-	platform_device_put(qcom->dwc3);
++	dwc3_core_remove(&qcom->dwc);
+ 
+ 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+ 		clk_disable_unprepare(qcom->clks[i]);
+@@ -864,10 +838,15 @@ static void dwc3_qcom_remove(struct platform_device *pdev)
+ 
+ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+ {
+-	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	struct dwc3 *dwc = dev_get_drvdata(dev);
++	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
+ 	bool wakeup = device_may_wakeup(dev);
+ 	int ret;
+ 
++	ret = dwc3_pm_suspend(&qcom->dwc);
++	if (ret)
++		return ret;
++
+ 	ret = dwc3_qcom_suspend(qcom, wakeup);
+ 	if (ret)
+ 		return ret;
+@@ -879,7 +858,8 @@ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+ 
+ static int __maybe_unused dwc3_qcom_pm_resume(struct device *dev)
+ {
+-	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	struct dwc3 *dwc = dev_get_drvdata(dev);
++	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
+ 	bool wakeup = device_may_wakeup(dev);
+ 	int ret;
+ 
+@@ -889,30 +869,55 @@ static int __maybe_unused dwc3_qcom_pm_resume(struct device *dev)
+ 
+ 	qcom->pm_suspended = false;
+ 
++	ret = dwc3_pm_resume(&qcom->dwc);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
+ 
+ static int __maybe_unused dwc3_qcom_runtime_suspend(struct device *dev)
+ {
+-	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	struct dwc3 *dwc = dev_get_drvdata(dev);
++	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
++	int ret;
++
++	ret = dwc3_runtime_suspend(&qcom->dwc);
++	if (ret)
++		return ret;
+ 
+ 	return dwc3_qcom_suspend(qcom, true);
+ }
+ 
++static void __maybe_unused dwc3_qcom_complete(struct device *dev)
++{
++	struct dwc3 *dwc = dev_get_drvdata(dev);
++
++	dwc3_pm_complete(dwc);
++}
++
+ static int __maybe_unused dwc3_qcom_runtime_resume(struct device *dev)
+ {
+-	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	struct dwc3 *dwc = dev_get_drvdata(dev);
++	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
++	int ret;
++
++	ret = dwc3_qcom_resume(qcom, true);
++	if (ret)
++		return ret;
+ 
+-	return dwc3_qcom_resume(qcom, true);
++	return dwc3_runtime_resume(&qcom->dwc);
+ }
+ 
+ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(dwc3_qcom_pm_suspend, dwc3_qcom_pm_resume)
+ 	SET_RUNTIME_PM_OPS(dwc3_qcom_runtime_suspend, dwc3_qcom_runtime_resume,
+ 			   NULL)
++	.complete = dwc3_qcom_complete,
  };
  
- #ifdef CONFIG_OF
-diff --git a/drivers/usb/dwc3/glue.h b/drivers/usb/dwc3/glue.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..e73cfc466012f07214291abe56454934ab014013
---- /dev/null
-+++ b/drivers/usb/dwc3/glue.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * glue.h - DesignWare USB3 DRD glue header
-+ */
-+
-+#ifndef __DRIVERS_USB_DWC3_GLUE_H
-+#define __DRIVERS_USB_DWC3_GLUE_H
-+
-+#include <linux/types.h>
-+#include "core.h"
-+
-+/**
-+ * dwc3_probe_data: Initialization parameters passed to dwc3_core_probe()
-+ * @dwc: Reference to dwc3 context structure
-+ * @res: resource for the DWC3 core mmio region
-+ */
-+struct dwc3_probe_data {
-+	struct dwc3 *dwc;
-+	struct resource *res;
-+};
-+
-+int dwc3_core_probe(const struct dwc3_probe_data *data);
-+void dwc3_core_remove(struct dwc3 *dwc);
-+
-+int dwc3_runtime_suspend(struct dwc3 *dwc);
-+int dwc3_runtime_resume(struct dwc3 *dwc);
-+int dwc3_runtime_idle(struct dwc3 *dwc);
-+int dwc3_pm_suspend(struct dwc3 *dwc);
-+int dwc3_pm_resume(struct dwc3 *dwc);
-+void dwc3_pm_complete(struct dwc3 *dwc);
-+
-+#endif
+ static const struct of_device_id dwc3_qcom_of_match[] = {
++	{ .compatible = "qcom,snps-dwc3" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
 
 -- 
 2.48.1
