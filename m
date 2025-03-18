@@ -1,108 +1,58 @@
-Return-Path: <linux-usb+bounces-21842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6511FA672C5
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 12:31:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56149A674AD
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 14:15:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97E413AADBB
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 11:31:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91145422861
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 13:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AA220B210;
-	Tue, 18 Mar 2025 11:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8224B20CCCC;
+	Tue, 18 Mar 2025 13:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dxctdvia"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Bcf4iqYd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DA620B1FE;
-	Tue, 18 Mar 2025 11:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E8220C46A;
+	Tue, 18 Mar 2025 13:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742297469; cv=none; b=dCzi95LZHSLqWG28/KJhy7qjwD4PKu4M7KOKelvPq0myjGFO0QD0QWsegA1DexCB3T6N2Lc4dJDOvrKXApMRwL+b8hPSaLdoglkwY0xulp5MwHgvKAqzJLPTIkW1id+RKtiR/boKetKb4xk4eFuQy4iGQkUgsG63rIklemBdUes=
+	t=1742303645; cv=none; b=QgCIkCr+55qoRLCZ9nxnE7HIlkHWL3bUqg1CLzHRpBXNdwMjM4cdAj4G7twQlYQDoeSdyf82K3AzE7Ryw+/6WofttaGcLUE2B6EGZ+fh3H4kbyMkgEKjep6i9LU13t+Po3UGg21LizlSajPHxADSyytvdwHKdmB7V5nQkApHLJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742297469; c=relaxed/simple;
-	bh=kxndd+gmt8x5LRoL0YBDmYnHkE5/msuSYIUck6xVs8w=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBVOe/A+rMnZOigEFOq/PXyWADg1LC8XyZJmtVJk/97OT2rZEVUKZKAAiHmsPF6dT1Rf6D1U83zg8L+naUYpV1hplu4SuiO1XvsEL+3c9SV3OML/tysClWeWwQ4k4cY6PaLNvOZhfBZnWntE28aKqB7rt0mIOXrqf1PO6OcSkEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dxctdvia; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf3192f3bso33685215e9.1;
-        Tue, 18 Mar 2025 04:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742297466; x=1742902266; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeWK8KnE02poaU2apmgZYe7NYIk2mK6ZRM9x7EecA0A=;
-        b=DxctdviapLtKOOdP9WKNGbFyejFU8zj4Sn0zxgIJindQ5N+5RbpTfcrAs/IXlHbQGU
-         Zg1Nh59UzIQUG6j7L8WGeHm7AqDbCcFT3nzyk2csme1De8Hqvw5Lujd4cX8Rc0GUOflC
-         xatTKIto9ZNMU96haoolJ6QWAr0u4tqWRwG4+2eBMEv5+y3Q9KolfXn9tFZ8qA5KZytp
-         q3+GoYdBxG5FklDUI2eY/lULKvgoazNri5nCtYOScrjxDQXRGblNv/0MTo4KjOHoNzFC
-         pJOby53NmJTPqJtANBjGAltyEMlxchczOJSv1m4smjdsAxhzydHw/rk8YRKd+WwUM4zC
-         eP+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742297466; x=1742902266;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oeWK8KnE02poaU2apmgZYe7NYIk2mK6ZRM9x7EecA0A=;
-        b=TuiMaxQmoupfnxJQTugCC5D3+V7ieKOQDmh3umhZuij4sxBnRfYArWe6+tl9jPASNB
-         kAUP5Cm757qJ30XWl3k/o5qqlkBNKOy90/chEZQds0y45jpy+1ibZ/WMCz6Z61XU1vPh
-         SeqOcdKsl/wjAXHpcuswGqWPeIyA//yBmHLS828K3tIbXusyrasrJEPlCB+GHGiAy9Ab
-         uj0r0TAiC96w23lOssB6KuBsPCPp529g+ILlo0RXaeuBQTFpQ9hSXua7RMwGlBLXO8AM
-         /Qer6cnAb7+xzw5wLZJWO3hppN4xmkraKrLY0TdO4QrpQkp0fej1FQS29tdr0AJsm/eA
-         OsPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVen/nmAXAUhdW+t53y9HFYcaL0j+t7CdLGRp166OSS9UofAUZQSsvK14Hwe/sAIbDWH0pd6UnXP3tJ@vger.kernel.org, AJvYcCVl8dahB6SG02KE4HO5lrPdsFdcPLrazbx2Dkn9FYer1T/8zDpEzuU/7ZVp7Zk8LY45wnXUpNMsm4jvkxTu@vger.kernel.org, AJvYcCWZjje2qsmBLCh1Z8SSuEZqilwBIiTwV/49NZMAEOBMbQDg6VYoiZvjxkdh5PPz6+qGI36CKYZbRr4X@vger.kernel.org, AJvYcCXV/cBr9F4KYPCDDeizW294PJPElCtHwB/Gic9iFqsQWj3z9RTYBkkd6Hkbfh26RfMcmFJr+tmhH2/+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw87Iemf0/PUvUT+W5si0RZrsDtLzZtoif59MRYVg32KuvbFLOP
-	PnX3nA/HWZYOK4AVDiRxwdtctgZ4ZQlJhmKWRL5LESZFJVxWebD9
-X-Gm-Gg: ASbGncv6ozNEVyRgSKxtGtt8SrdsPRo+r0dCy3q8u17E4je7YfLXwUb6wSU5Ym9I9hs
-	QwevAeATG286EpUST12tMVjOy5BMzOYVL9UeVuvXbauGkeAcKdS3n1IqpZYrcknew/ORSNow7bu
-	ftL43spUiPpScEcoE8tJE3a2nGe/EPZOLE/5bik2cdk1v0RiqtUoBB8TgU9Z1wiA7ZP9l9eRUG8
-	BHwhjBYWkgJYq1inyJJcuw4KIHEO1FF7U6tuCktTB2WU6vcT1oJxGXWke4BrqCistaxC80y7W7+
-	uDUPPkcqk8D/iqkqCFKO6v0IqrW6BwakoZWgvdpiIcKFONkf4E2066spgg//WZRC3wC+hj9hymF
-	h
-X-Google-Smtp-Source: AGHT+IFpi+zFuJ8XXOnGn4TOSQKOE+/3yFEH37sz6LbTqTOZGYuC+54cInlqBrHl+fxwxahe/rNImA==
-X-Received: by 2002:a5d:47c9:0:b0:390:e311:a8c7 with SMTP id ffacd0b85a97d-3971cd57eb0mr15913025f8f.5.1742297465853;
-        Tue, 18 Mar 2025 04:31:05 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-129.ip49.fastwebnet.it. [93.34.90.129])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395c8881187sm17594872f8f.41.2025.03.18.04.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 04:31:05 -0700 (PDT)
-Message-ID: <67d95979.050a0220.166852.25e6@mx.google.com>
-X-Google-Original-Message-ID: <Z9lZdFMUpqWwpsA2@Ansuel-XPS.>
-Date: Tue, 18 Mar 2025 12:31:00 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Guo Ren <guoren@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
-	Ben Hutchings <ben@decadent.org.uk>, Felix Fietkau <nbd@nbd.name>,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-phy@lists.infradead.org, linux-mediatek@lists.infradead.org,
-	linux-usb@vger.kernel.org, upstream@airoha.com
-Subject: Re: [PATCH 09/13] dt-bindings: phy: Add documentation for Airoha
- AN7581 USB PHY
-References: <20250309132959.19045-1-ansuelsmth@gmail.com>
- <20250309132959.19045-10-ansuelsmth@gmail.com>
- <4f16d239-f540-45d5-b67a-767b09f1c70c@kernel.org>
- <67d0862f.df0a0220.375bd.6b15@mx.google.com>
- <4a9ac302-dfbe-4d76-a634-a445957c313c@kernel.org>
+	s=arc-20240116; t=1742303645; c=relaxed/simple;
+	bh=WzM66xIHTbmz3TlxtlPdmB+DWTWd2fsKUEx8GAB4jFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IFg+u5N5Hlnnt3R6cNJmYU8V5RSxNOkZyJqu58jUjg5qa/uXWEJEVioKdyzVFo5HYWysH0eDFsOZ/S0VV8emW3EfxX95bkqmHoR17fViftrkncHUEnC9sgPgtccWkyo67jlAeLPjNg1MvwnK44oYXyzyFQyqmWXcCF1Jg45VChE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Bcf4iqYd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53CD7C4CEDD;
+	Tue, 18 Mar 2025 13:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1742303644;
+	bh=WzM66xIHTbmz3TlxtlPdmB+DWTWd2fsKUEx8GAB4jFc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bcf4iqYd9/VZQZDY7zmHH1nIEz45x2vf+DHLPF3fOG3zYMnTSRZbJ1Pg69PNmEdEg
+	 kbN8o6ccr5Tg5241Wfi7wJ51JGIqC5cN4pR3mRupwl0fDXaGEzb0hVsnbFMu75YM1z
+	 YtCU2CFv3ccAoIQ9ztjQ2+Pitp2rMP+uPwA6gQxg=
+Date: Tue, 18 Mar 2025 14:12:46 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, peter.chen@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v5 0/6] add USB2.0 support for i.MX95-19x19 EVK board
+Message-ID: <2025031823-certainty-crewman-b90c@gregkh>
+References: <20250312082700.260260-1-xu.yang_2@nxp.com>
+ <2025031443-rounding-subject-1f60@gregkh>
+ <20250314092137.6m3gmj4irxqwpy22@hippo>
+ <2025031404-elite-critter-05b7@gregkh>
+ <20250318072414.x5y4kbe2ahl24uzg@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -111,82 +61,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a9ac302-dfbe-4d76-a634-a445957c313c@kernel.org>
+In-Reply-To: <20250318072414.x5y4kbe2ahl24uzg@hippo>
 
-On Sun, Mar 16, 2025 at 06:01:02PM +0100, Krzysztof Kozlowski wrote:
-> On 11/03/2025 19:51, Christian Marangi wrote:
-> >>
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    enum: [0, 1]
-> >>
-> >> I don't understand why do you need index property here (which are
-> >> usually not allowed).
-> >>
-> > 
-> > Eh... As said in the description this is really to differentiate the 2
-> > different physical port...
-> > 
-> > Each port have a dedicated oscillator for calibration and these
-> > calibration are identified by an offset (all placed one after another in
-> > a separate register space).
+On Tue, Mar 18, 2025 at 03:24:14PM +0800, Xu Yang wrote:
+> Hi Greg,
 > 
-> So different oscillators? Then describe the oscillator and its differences.
-> 
-> Different programing model? Different compatible.
-> 
-> Other difference? Depending what is the difference.
-> 
-> But there is no such thing as "different port ID" based on your
-> description above. You just claimed that they are different, but you do
-> not put that difference to hardware description. Instead you encode that
-> difference in the drivers and it should be opposite. The DTS, so the
-> hardware description, should tell you the difference. And I am sorry,
-> but in 99% of cases "I am the first phy" and "I am the second" is not
-> the actual difference we are interested in.
->
-
-Ok to make it as clear as possible. (hope I don't contraddict with the
-previous statement) (actually yes the "separate register space statement
-was wrong and sorry for the confusion")
-
-- 2 USB port
-- USB 2.0 needs to be calibrated with an oscillator
-- Each USB port have his own dedicated oscillator somewhere in the HW
-- Each USB port have at the same offset a register to SELECT the
-  oscillator. This register refer to the same oscillator selection in
-  the HW.
-  
-  Example:
-  reg 0x1fac0100 MASK 27:26 can be set to source out of oscillator 0,1,2
-  reg 0x1fae0100 MASK 27:26 can be set to source out of oscillator 0,1,2
-
-  Both register refer to the same oscillators in hardware (hence each
-  port should select the correct one)
-  Selecting oscillator 0 for both USB port is problematic.
-
-With this in mind is it ok if I describe this with something like
-
-airoha,usb2-monitor-clk-sel = <AIROHA_USB2_MONCLK_SEL0>;
-
-and some dt-bindings include
-
-#define AIROHA_USB2_MONCLK_SEL0 0
-#define AIROHA_USB2_MONCLK_SEL1 1
-#define AIROHA_USB2_MONCLK_SEL2 2
-#define AIROHA_USB2_MONCLK_SEL3 3
-
-Or an enum of string like "osc0", "osc1", "osc2"...?
-
+> On Fri, Mar 14, 2025 at 01:37:19PM +0100, Greg KH wrote:
+> > On Fri, Mar 14, 2025 at 05:21:37PM +0800, Xu Yang wrote:
+> > > Hi Greg,
+> > > 
+> > > On Fri, Mar 14, 2025 at 09:18:51AM +0100, Greg KH wrote:
+> > > > On Wed, Mar 12, 2025 at 04:26:54PM +0800, Xu Yang wrote:
+> > > > > The i.MX95-19x19 EVK board features a USB 2.0 Type-A port, with this
+> > > > > series primarily introducing USB 2.0 support. In the i.MX95 architecture,
+> > > > > the USB wake-up handling mechanism is integrated within the HSIO block
+> > > > > control module, utilizing a dedicated wake-up interrupt. Therefore, we
+> > > > > also implemented corresponding wake-up logic code to properly manage this
+> > > > > functionality.
+> > > > > 
+> > > > > For detailed changes can refer to patch commit log.
+> > > > 
+> > > > Does not apply to my tree :(
+> > > 
+> > > It'd due to below dts patch #2,3 not in usb tree. However, linux-next already
+> > > have them. I see Shawn just send pull request for 6.15. To make it easy,
+> > > let me ping you when usb tree have them, is it ok?
+> > > 
+> > > https://lore.kernel.org/linux-usb/20241204050907.1081781-1-xu.yang_2@nxp.com/#t
 > > 
-> > Oscillator 0 for physical port 0
-> > Oscillator 1 for physcial port 1
-> > 
-> > And model this is a bit problematic without an additional property, any
-> > hint for this?
-> > 
-> Best regards,
-> Krzysztof
+> > That will not be until after 6.15-rc1 is out.
+> 
+> In this series, patch #1-4 should go to usb tree and path #5,6 should go to Shawn
+> tree. You can't apply patch #5,6, right? However, you can ignore patch #5,6 and
+> pick up patch #1-4, am my understanding right? Shawn will pick patch #5,6 to his
+> tree.
 
--- 
-	Ansuel
+Ok, can you resend just what you want me to take so I can suck in the
+whole patch series at once and don't have to do it "by hand"?
+
+thanks,
+
+greg k-h
 
