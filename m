@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-21848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9C5FA6774E
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 16:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5653CA67750
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 16:11:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94174189624F
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 15:08:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40C4A1897088
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 15:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACA420E6F0;
-	Tue, 18 Mar 2025 15:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75B520E6F1;
+	Tue, 18 Mar 2025 15:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="VU7mxfNW"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BIj7/YMm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2079.outbound.protection.outlook.com [40.107.20.79])
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2089.outbound.protection.outlook.com [40.107.247.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD3920E034;
-	Tue, 18 Mar 2025 15:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F8420E021;
+	Tue, 18 Mar 2025 15:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742310481; cv=fail; b=ZVvWpEfHyVz3LSguufV6mifYiDfC6uVTGYH7i1261ia3kVhwrmHofSu+y7bcyAWq5yT5GhZerK3vECsZhBXd1hcZC+wjjkFFYk81FOnSBNCtctkTzk1j4NChxSmPZ3/Bbvc8WWYC5gvyCfQBjjxbqzTnJsCxEBXJr94BJwUwDK8=
+	t=1742310487; cv=fail; b=KPwkBVMWiJ9TLewy4NazI9agLYRFTRKIOdHMwUUb7i30z6uuDrnoEmSoOly12RIi4OKKuj5lKbvvCgMWu287ypFAxMsVbkxUKq3QM36w1++MWfkkrYevQJ57UCNoZjA2EX0ABeV5enOKTSrK0LdA5uliCQzH5LPjrvFtmYdiYHI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742310481; c=relaxed/simple;
-	bh=QfWySGhwRt4hWOim02Q68G2DIYeJu06VBzNFIER+p4I=;
+	s=arc-20240116; t=1742310487; c=relaxed/simple;
+	bh=pEgFMUGd+NPA5jmxHScz8PX5fanc+vGyZWWFxdmyOWM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QKMpSfCSMYkAz1Dxn+tupjZHmcXu0059kRaOfRyzARy3+LqecU4HS37yR06dDpnf7ZjTBUtuZUcf6LOrQ8kJ9KPE+ebF1j3joV7bVJw68VI2FY/ji/+Dh/iNixMRX8pDXdbPrHUj4Wyi5fNy3+smDOV+eNC0V2q74Cx//TH1iuE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=VU7mxfNW; arc=fail smtp.client-ip=40.107.20.79
+	 Content-Type:MIME-Version; b=LbnhdhxuQgkvKWmrRzCkFfISJAD/kxBSFR/LLRjLyGIipg+ALfvVdcKxvJWaIZ6KPaj/Ez/ymFkQFa31X7gp/jPSFkmQzFsfVc2zsJSPAdRkyzEWi9jMzIOCTgw3U7QDT0U3YmMU86Rh9xEYUnOAKNxkYW3ZsMF7xp9Vh53UAZ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BIj7/YMm; arc=fail smtp.client-ip=40.107.247.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iU071nv4XL8gjp+71DJG/rkDfWK1VmPcngiIm/pRO+4fOt0otp74L8CMplCBzZtYDY/DPF3UEF4gpgn9JRL0/qLSlz2XnC16ySdmfZ4DNLDfBj+DUeJVnHa+OEmNcSK9HJ+i32GurEeJKDa96fI0zQ9K7//o+u8DcrJqsk2Oh28wR7bSsYD3f676A00iFdurA3joLRQQwCtkecT8nB1swCID1X1EQpQ5G9Z7i5Cbs4KO/+oKpBO0/nogpz+lJ0eh8oeAa2YD/aOLjsAUqLLb3LW5/k4R1QUwkrIEj0YXV3XPvYVJQDhbl7hEjmkSAy4TMKfRD+AnCF+LOff8q6NnDA==
+ b=fh8LG2npGGXmCrilgao6EmYGK7Nxp/Khm44UZXzXlxLmwMJgjtb58ZfdNSSKFBccCTWJ/jGhYIUbNv6WrrpLGWCSGWMOIOkx3D2Kjp5Z5Tdv8+MH/yviIG0KRSZNAW7bAJt89UY/gLh0j4DzLcFitmdotMNJBWqkRV46Tr2hcSQiJEtEmYrgeaWyZnlTMFtKegtdFXCM88qg2lT7FIn+O43niHbjCFlEHsAuT1oYyvA88X90+SmWbw7TtpG9/Nx0lHhS5sUii9ZgN/8h45NlDPg8ReBY93JXao8tLfTNFFJfDZcW4Zan7lGjZM2BuwcS0D1+zi+ZveBhl4XqISbXFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tIUS0fdwfmM/XT19YzKDUA4ekaVNRz6FEuXXw/O8z48=;
- b=rrDysEHYe+m4b/33M9O8048fwaH6mLydXaZK8X7cHM16VjgIZrc2SoXLx3tiBHX1B2QkH/eGFX6flI5Y6mK7Sj7+pJa3hj2HjPz4OrBmQizrYl3oQhDztIOLe9JuToPO3M1BmHbi8rbdvPZHy5HB11tnHAjimCPcIMjXJinnKI2Aq56kAVCL4jeb8HNE0OL9RBBeL/8FWgh026k1EUdaPIjGUlfH+fL043HRKda0Psgz25IiAEmac0DJG5HQmt5Ivv3PfSpa9Ue6PVtK+lVz3HLv+MVbFnGU7rhBLg5so7XBmqc3IWU5GjUvB4Y7wLBzPR/ENm70P7b9AwCDDBc5zg==
+ bh=FqWR/Z/phbw+RtIIESiaAzjtRT0go8yHKXxyvSpwroQ=;
+ b=m9NopYdHd0WVCy8/8p4RsBkd1w/eun5iiIJVNtmzQyQGQYYBOGM7GO26kUqe3Z/fd0dS45H24jaqKCvVYtDuuJHNu1dDliUS2AtG4uC5GA5VgVrWcFSGMwEk1Vt/C3hveaYBycdmjnsns7/C9oXSe6CmF0S+5Oz2cazLhVov6JrQsLmc1o78g5u2H8BolvJQIY3RtWsZWHJi7Sdmek8toLWMqqh7t3+Ee4lK48uyczj7xQPn7U1IfYfE8Nu0XNf5znwMr7+WnDP/WRyo7KRKRPlXrOwjWEMzb98CQmfSJkIOXQsnEQcKEIqii+21aiPP4HfzNDNPfb6GenxAL2M0fQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tIUS0fdwfmM/XT19YzKDUA4ekaVNRz6FEuXXw/O8z48=;
- b=VU7mxfNW12qJSzjgYbsjXdVx2/nKOyv1yOY3vrR+r79SMZWB0ZpAHMckYaoiTxClC9NbOXM6X8n47tp9EIQ0af92/vx5Y1feRDfW4jf+4vryTfundXx4FrFN7j08CsprUBDVRTbffq1I0arNmCA4/kUhAT26DKOjXqkirKm2IEFopfK8gMjPAzfIp61Nw+eu2TdLJShG3ap49RUbx5io7FFyO2+MPoy5CQq/7Xrjs0FWn7era6lTrcmKVhQVUWfwQK8sTPN27+ZueDtVGGliZRa81cMGMhUntg4QxwMnyNCVTucMLIfnw8dwwSwIrsgmrie5UOuHlSLcnyA7gze2UA==
+ bh=FqWR/Z/phbw+RtIIESiaAzjtRT0go8yHKXxyvSpwroQ=;
+ b=BIj7/YMm+qiRmT9WucQqKGYO9+w0WHQ7WKfqOvm3mvTa/uhT0XAucC5HWCCzNx9X0o2zHShgITklGbibAkePCDMoh4ooie63yktHM82FeATEM+CUn2tbaabZw+vOdgQHiccQG78Y2C4Hez2vO9ubnh8gdq9gl8hsQVRJ7V66c1KBZSc9mkVMBw0JaFEFx8LAiU8FS09UCu9AFNcve1hLWz38BAFLRVqrseiWjNxlEjYXurNhl/ssoPQYQ6RGCgQOlU0MphiGSJm3GwGos55NdOyho3uD3s9i7hPn+ZmCl7dsKnb8E64APjSDfA2zC6+mBuKTaBOu1Z++rs88W6vruQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by PA2PR04MB10257.eurprd04.prod.outlook.com (2603:10a6:102:401::22) with
+ by DU4PR04MB10598.eurprd04.prod.outlook.com (2603:10a6:10:580::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
- 2025 15:07:55 +0000
+ 2025 15:07:59 +0000
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::4e24:c2c7:bd58:c5c7%7]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
- 15:07:54 +0000
+ 15:07:59 +0000
 From: Xu Yang <xu.yang_2@nxp.com>
 To: gregkh@linuxfoundation.org,
 	robh@kernel.org,
@@ -70,9 +70,9 @@ Cc: linux-usb@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	imx@lists.linux.dev,
 	jun.li@nxp.com
-Subject: [PATCH v6 3/4] usb: chipidea: imx: add wakeup interrupt handling
-Date: Tue, 18 Mar 2025 23:09:07 +0800
-Message-Id: <20250318150908.1583652-3-xu.yang_2@nxp.com>
+Subject: [PATCH v6 4/4] usb: chipidea: imx: add HSIO Block Control wakeup setting
+Date: Tue, 18 Mar 2025 23:09:08 +0800
+Message-Id: <20250318150908.1583652-4-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250318150908.1583652-1-xu.yang_2@nxp.com>
 References: <20250318150908.1583652-1-xu.yang_2@nxp.com>
@@ -88,204 +88,246 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PA2PR04MB10257:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a200b66-7352-468b-3a14-08dd662ea8fb
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DU4PR04MB10598:EE_
+X-MS-Office365-Filtering-Correlation-Id: 10f98942-5660-4b47-4aed-08dd662eab7e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|1800799024|376014|52116014|38350700014;
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fQ81bfeuB/2zkGRbYcGBA5GfUnspsBJqi4s4Sj9g7h4KAR3G6M+vDXTCzuSo?=
- =?us-ascii?Q?T2ljERswZuySIOQtrDstVS29P4xMIEwqX/BeYtumDQ+1dOWnjMx17Oq74gvA?=
- =?us-ascii?Q?QXymrETbsKFEQNqEPlcWPcv0FElIAZJZPlGGiMtpQdloQPvf9Z6C+EkLNpvM?=
- =?us-ascii?Q?4bWQWIxksoy2wB9hGAOtlmgjceJxZo8mb4GL4utHiEj+hcMBhI3iDas5iiFH?=
- =?us-ascii?Q?e8+JyeKYlWx3lVOUhE86MUbV0fhP2D6ChEXO4yXaqrhktIrjdlrJpYDl6sPc?=
- =?us-ascii?Q?oTLVyddQw0W5HLRw1j16uATF+VnSX2i5hTMYmXbA5z0f/Gvt5XhW76uyKwnH?=
- =?us-ascii?Q?ooaIsWlQTBWh+DKBGMXne06UK2CwUsBwK5vy7aiW4Sbz+wdUS0DwvylLGnzc?=
- =?us-ascii?Q?q+6ChOaC6pPhmioYTh40BhlN1gmPd5FOgsPg+6QKBY6Sv8cVI+IOu7xUFXDv?=
- =?us-ascii?Q?x6eY/r4SIXafRCaaN36DUTKoZNsoRqpQk0hoeeu9y73cjJB+dnvu5j62+9xQ?=
- =?us-ascii?Q?axyIlHKCfDjRp30xZPqdOpKQpyZ0IZkAtoFDasDWE+8Gr92WIQ3p7klYdP1p?=
- =?us-ascii?Q?KUVAek+qv+9NpSgcOT9TJoWe/AexKW/KMSpQwcTlpgjGlVOSBzrf9GulRpc4?=
- =?us-ascii?Q?ymlYnQm0nkPjXz1qYiE8h0KDjUjvPgQ7cLSeiKlteDyIQd2TnkhC6eZKtrpQ?=
- =?us-ascii?Q?FpjFZ5QoSFBRO3/y1lM+KfEJUo2E5u9krM0ThJqzbelvI94iKwneS0WPAONV?=
- =?us-ascii?Q?dm0gc76IUUHR4cn9Alocidmfy+0Ielfc4fd9JWMM/rkfd+WSjEMBFpHAtO7p?=
- =?us-ascii?Q?P1uXzx7iqKdmY0KxWQgLIyXuspWGK49oI4BBOQwhYhpYksTGrd4jWxrMeY7D?=
- =?us-ascii?Q?ldcNoQnwexoDdt3TXGtyxE21QzU2lWexEbcSj1KwzxyMwxQy2svnyv7NT4pZ?=
- =?us-ascii?Q?NHzJU1fDOxokFbZWprJUDhUul//merIaVqkOvcl0WLX5DeOP5YEu5yiw6o7F?=
- =?us-ascii?Q?9F4OQ/+sqdzJVwmrWyplgr6CAICD+TjtRUXTItG7s+P7nf7jP+X8NZTcPgwp?=
- =?us-ascii?Q?X6wB/H0tC3gSiS4fAcRqOfIaZBgdj05USsfTEJMo8COyCrStfDvVl47WlSw2?=
- =?us-ascii?Q?KOERnxqvNutY1wlI+Zo6s7CoBkuWGspztVOUPvuMLgUK48WN5MEJhGwwSNfj?=
- =?us-ascii?Q?lG6/cAJ4dnaFB6lSIc9Xw9Z/K8cPvYr98qdbgYEcA362per5ak1Yob7C+Li/?=
- =?us-ascii?Q?OmAGiPsE4UBjrJeVLbc5jXo1+Ky/t1iW3q0D8c/HTUfZx2MuxYBRwIySKjlR?=
- =?us-ascii?Q?lNd27vjZW2iQFzSbdIZSbvYpmK4Bdqy7zJvqXMI1Je4qurEjRukk3xvcgOYJ?=
- =?us-ascii?Q?RSiLvirwucRPT/fC5+eD3TDIrMNV0PKeWLAJ4OLlrmA0RRvAG3+UqWCM/y6+?=
- =?us-ascii?Q?Z4IM0RjYhwCxyd1CKLp53UpuGJOG4QzI?=
+	=?us-ascii?Q?DuthZJcnUVOB47JTsI7bixzAmSM121e3cV80GbsRYaGrI8P6IlyNpRNx+KUR?=
+ =?us-ascii?Q?S5erVZk53Tl1nYYEMK9+ashWF7Ca/V7/t28W93R0egU212yPNGCqNTbRkKg+?=
+ =?us-ascii?Q?4E/NsceVPLkb71YO6P5V2WH15NDqEw72bYsBk7LQKIZ1UpyNFb5chDJmZ2/2?=
+ =?us-ascii?Q?87thQlKtYWftgfov0Nco15dgb5t/jBTSZs9GiDrqYDHIUHr2yf8fIScwFNtD?=
+ =?us-ascii?Q?IwSx3EDeOLwzmhbKdDbwPf+MXAzYoKoU8lixtsvrdur8q/r2E9fXbxIJ4dNb?=
+ =?us-ascii?Q?Q5qUX6aE9lyanAfWcWZq/rkHCODDzDV1bzDI1tJv48JxtpDc3Czx3RyjIv/N?=
+ =?us-ascii?Q?Fdjlcwmug++iT0k7tAlAsYeGI6c0jgbu5cTz8j74LdarQNZx4Kh+Y4OBO/1q?=
+ =?us-ascii?Q?iYKeSja1vXOYfPRN1IZxvJutEhIvVTkLOZ5UVkjvMHjX/Loj2aqv9O/uPrvn?=
+ =?us-ascii?Q?Bs4NjPrAUShZ+7I/lCv1Ngsdu8RzZegMSELWXHLY2OTzS8iUudCVA9MqMrzi?=
+ =?us-ascii?Q?Ma/4xO9qqX6CmZnSpRF4sHT8JE/K8rMd+pw3v5BU99jIZmIQyoPKjgoBuqGB?=
+ =?us-ascii?Q?y5SK4Xz86CUlJ7AEMFYRjeCdKa64XqeWljjQunw7K1MYB8/dWErNm5KnzTPC?=
+ =?us-ascii?Q?R+bc03+gIEsCPoj5W8oa7Ep6Ct/1ibVKmiQXOblcY8KKzG6MPhqPnaritT0W?=
+ =?us-ascii?Q?ICC90YGodykS37CZMubJKM0VczJeBOVTcgy9J+umEBA1QiccK6v/PqNVIE4X?=
+ =?us-ascii?Q?gp7zjfLftBJkvKkO5MattWQEsXPbzZGxy8SdPq2XTdFQqb6oNY/fLw7xs/iJ?=
+ =?us-ascii?Q?WpguyHmQ5uxvI3j10pzgkf4EPMzcqopahmWWvNJXtXjWC6+9HF5WhpF0iFCO?=
+ =?us-ascii?Q?XxOXdGY1L2wRD41OMEV4l6sTfwyws2X4Zn+cFcKfy/Ggz8tCEHJ11zH9c1Np?=
+ =?us-ascii?Q?/rPemhtGhGTtGHLsXtP3wedjSh+DmbdautkaZejBycDJrnokIUyIaIMRDrd8?=
+ =?us-ascii?Q?R9PdjF38tonCW7ohARkC6rmjypaTifnE/tU9hVR+CKvVZU4pjqmMi/c5VU11?=
+ =?us-ascii?Q?8KiBW4ZfED4X59Un52DW62Lu0KrhWC7OvQhvZ0wj4YSUHvOEl5yNuajaQeqT?=
+ =?us-ascii?Q?fFBDT3a0ghisrsBfKxrvmEOydetjXmN4JoKlQRgODWFq187+rpiRFelgRx1r?=
+ =?us-ascii?Q?dQGwOXZ2TpbRiZnRq7lhkAA+An6KIUdfMDn40kDYYQZgT0k/+4sZOKBggLVm?=
+ =?us-ascii?Q?1I8SU5BFyfmMsNzlgJ2mtIMgt0v1cwxd4X4D5ZTinm23VQDICUAaccauOMaf?=
+ =?us-ascii?Q?q2EuaLIubjL7KQVEQ5MuwOne5NyYdHMGxQRe6SVkJFfXw3tJ0hK3YQaPQsmz?=
+ =?us-ascii?Q?WbZMqIz7koRm+eLYDxbxzD0h9rmAO9/7WEXaRVmXRSwKVbtCR+z0SipmS0Nt?=
+ =?us-ascii?Q?fwh6/cDo1DHVkl9Bg/C3kmrBZ5qjKz/7?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wVPM1+2vKY/2EfyrpIxhbbt6ZNDFsq2wPCYgZRsr/w/54LgbQE8Xk8dY3ULF?=
- =?us-ascii?Q?kVDQCzSKlXGJJR+5SmD6N4JlhryqZbbpOVV4e9kwqG6NlVPaIDlEiUzcSWcj?=
- =?us-ascii?Q?LgLVevAiq/EMfc58uzA6/E8gDaOVuTUGEcQa4j6A45tuUEI9wHCSdTrDEs3S?=
- =?us-ascii?Q?pHBMeXgXWjgMSf4Mjrcl1q3q4AqgphopunVB4JHHOctYXJ/QlfncUx+1OIMk?=
- =?us-ascii?Q?XgotPAdzXeccws6LzSpWcO971rszZNuLm6B0WHH3jRf6AJl2V01XClslzIct?=
- =?us-ascii?Q?CDv5UjCPFfZkhlV0ze7+gld3idbvzfIAogiKeJ/4zhvQuWKDDmbcLisxGn5o?=
- =?us-ascii?Q?A0xBe9d0/MynU6xA/q4Vo/fFYTIei6nvlwP0psCqJ7tySVBUdX/G1tvNfBG7?=
- =?us-ascii?Q?j2xW7TThAjRhCl5w7ou3wJFzpYJ/3ZYrL3mBhlO70ZVC4UFmi/Iw6R4NCbqT?=
- =?us-ascii?Q?sfS3th/+Wtw68pMqGd6TlHTajnyGQENM9e0080n5tHVjp0gl3v9iBz+G7Nho?=
- =?us-ascii?Q?nQfmvKziuoPyzbafVfM0G9GbKvUAyj33yRieWNqSyBBE19WlWEDdXtBzJplo?=
- =?us-ascii?Q?5LGZVLmN1CYR1FMvSPQpFaTShdBJY8yAbGDdPAyZ61b1/gEX4OkMRAE9OqKB?=
- =?us-ascii?Q?pVAJpnHg71NUaAKIWHussqMg27MwoGkvogtZYR9mhzijncew3/pCXhWBACc5?=
- =?us-ascii?Q?jiNxzOq+MLFgtFnzLx9XHt1XSF9HtDvgjSkmIfoustVCUAeErAuBzQr4MJpr?=
- =?us-ascii?Q?p1e4oR05vcP2MuWU+Jl3CpfmHJOyTtqG4vWJ4hC0GZ5VqS3l30PDmrGhV+1A?=
- =?us-ascii?Q?tbBr3QVPnjZmwre8e637vN5yWYWT0ykjHErll4T8oPhNso+ZFOiKN6hvtblo?=
- =?us-ascii?Q?Dj4uoSIhAmmn3NsYdXAXH4ooVE0YJT8QB1yBajD6HgbFF4KjiD2n6MF4gtiK?=
- =?us-ascii?Q?SLtWt6viwMRkISegt1GHa2MUgalSRBsJHWOCRgQAvartf4sv16HLs8O5fi0Q?=
- =?us-ascii?Q?bptCCU8niAfcYwJGKJN1xy5LdYQAwt+gx6WUlOAcS0UWg0xK/ssO5DgYd2Mp?=
- =?us-ascii?Q?hyMvgjHC/au4DsMq+ARIMZYaNHfD+KvB04fg+MOwdwQzBM7t8Vg+zXR35Eln?=
- =?us-ascii?Q?ZHLSBEEFXmcxyb6DB9pGWy6TbO7TDJ/1QNKZUzZSV+rd87w8480Qly2ZvMFl?=
- =?us-ascii?Q?MmBUmgnQL0s8Zq3V98Yb0p4fcoJ9cj8oDs+OeT2B7R9folbjdETxAkgODt0a?=
- =?us-ascii?Q?oE77DyQyKtpF97l6r7YViw6dt0iGOksR4rExXnMoquNNX/Gp6uTS1/LxA0EF?=
- =?us-ascii?Q?yfURRUA8dODtEwsIr8thnnFZwHe1CNZPRrMHStPzI/qjkPsjRm5GEcbKGvC4?=
- =?us-ascii?Q?bBD3I6A7Njm8hd8ieqYpKLZqQsemDed3wRXERsO3O2uXmsG0ELeIg95YD3wi?=
- =?us-ascii?Q?OPPlSn0Q7iFq9PVKDrYvPnZqDaEVppX6zWVpqjDEe3FcyZtdyUP+zuNrfxzD?=
- =?us-ascii?Q?xrBzJyi9OLHznn6qrbAEb5qZjjQSUWOuHIO/NOZFYlCLBsWYrAxiL0GBQyQO?=
- =?us-ascii?Q?S6BRGVo9uHTd/aaZnBfrFOq1UWfZba/t4T/kHZNU?=
+	=?us-ascii?Q?cplZZxarEk/8YK995vnbBRd9Ju/4jCxcCShvGcY9aH+ZmNZCH3Hh6JCayqaz?=
+ =?us-ascii?Q?nNRRpSTMDBFZItYZDgDMexeMr2AHKsYxRarG+a1JOqfObyhttHxc+RElWziO?=
+ =?us-ascii?Q?KhvTk3tPPyJqKLkceGWtticTePSRDwcZ+036aaHKfMELavhJjvkXyfIu6mo/?=
+ =?us-ascii?Q?kfoMCT5uVPI9I2F+bMvdcx2Q6zHyruPFJz1rvyKufuxbZUPA8AEO5WEGbQjX?=
+ =?us-ascii?Q?FpZ3p9LuSLfuvA0eGu2x3x8X6e2XwtqgqG/2W+Cti7huSmP/3MO1SpN5D9+1?=
+ =?us-ascii?Q?7i0yzCH4CZO4bXqYRF9N63hCVd4fxFCR0DXa+erA0dDhxOj6/0KoYSt+TbCe?=
+ =?us-ascii?Q?OGmnKO8tKpRl8Q3Pe5I4MVCoLkBumQLQruOpm7+f143aMDd+P4byt6O33lfm?=
+ =?us-ascii?Q?5CkVpIaMgWhw7hOEZKeyiks4UXIyOeBpCFQYjFvHHk1wN9zInmmoUJced2cY?=
+ =?us-ascii?Q?fHhJMF6xMgSiACTf0La8GuqhMxmrC6tjOHaxeBml4HCWEY26Y6FWAenh2po0?=
+ =?us-ascii?Q?+JvKluVpfmmgrJBh4dzG8RbvuccvAmku/pYBi/bABK95C995wDnXUTotIeQg?=
+ =?us-ascii?Q?0dL5PQp2lAGB8iC6YybsjYEmbqhw9ExaSrg2bfeg15jAy4tFhatdfKzifmt3?=
+ =?us-ascii?Q?/Mw3HaRArTB8fsY+jInXUGexFAy7GprkC/oglgOd9MHUQFliZA/aGGVuY4I4?=
+ =?us-ascii?Q?HnmmhkS10rucVXHWzRE1dEEsUmv8JVbHH1ro2xz+80V2JOcudRKm0Park5tq?=
+ =?us-ascii?Q?vYucL+y4zw5l/2No5SgvGIe9+2qa4JlN+t02verEpe+b1XjlpPRy/Q1MGBmi?=
+ =?us-ascii?Q?ubi2pnPkvikzdS6gy66F0NJ56kudLn6uNW7ml1RZ4TcvcbjxWQC6a2N/sYmC?=
+ =?us-ascii?Q?kgjxbczw8dpc4448nD4EQXiWX+vN2xSGwn0ZcI34MoxvwGKHv/36TvMmO2Vr?=
+ =?us-ascii?Q?yRNV6zom5jV8YWcuOvofHDxCkl3g+iZe2LlSl8nUv+ghCF0qPqLf52HU9NWJ?=
+ =?us-ascii?Q?Ke8b89pOXlv8GvnUWzu9yZUmqM4mzb1fh/Nck2Xs6dRgUurt/Amnve3N5SOX?=
+ =?us-ascii?Q?zmeljMAyXF5sopwqKmW3dl7F3JJEZNYT1wzgiJIiKibi47sTqkueB2bAdp9C?=
+ =?us-ascii?Q?nToV6ppV6o03h4OoJp9EofavDwxY07IFNvnP2sbYrICWVGKuJeDerk/E43jh?=
+ =?us-ascii?Q?7J+f5TIv+eTFVI9oZ6knH8qYZQzqPcXwXhhxX/3fxXUALYT+FS9GSJxRK+hY?=
+ =?us-ascii?Q?2IWKXnH/usrcpnY5y1ZNbwwTkb3B75Gdc2pQ372E8oDdjRQ8KX94l6ZdYMHr?=
+ =?us-ascii?Q?SgxC8Pr1L2+X7LVj0Kn28nUJQU/D9Ye8FTwxkpBgSe9/1DF4SaiXLk9I9m2a?=
+ =?us-ascii?Q?SYLe3BYNNfP7DIgbeDc+ce9d1xbjKGgSbabX7mnJXO1X2W4mSLx4at7vw4Z5?=
+ =?us-ascii?Q?ejLV0Af7Hzt87Bna0LSj7iRCv0ZBoWNgXFkcTh4uCy83HqbosA+ag+sJY/sR?=
+ =?us-ascii?Q?25DL9Gb/UtHSVkSCc+vItXy4mtnT2rtFy4xBebF2mzb5u6zqSCwJOYaTtCAy?=
+ =?us-ascii?Q?qSfnSUL2oeEX5xpcxRa7S17/n51ZNnVWStn/d+iK?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a200b66-7352-468b-3a14-08dd662ea8fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10f98942-5660-4b47-4aed-08dd662eab7e
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2025 15:07:54.8305
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2025 15:07:59.0200
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n9r0wKLPc316GPr3yxMn3+PfMCDianyQH9v1gQSTvedcAG3BKsv4UjRbUrBxIo3zb39x6UYdqCQOS2u3H3S1cQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA2PR04MB10257
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8LWbmWptgVFmGtU3c4w408NXEBB5k66JvTzwKeAuKd5budRdlaFp4AGiXXmZalPpiP14sfD5RtcT+hQL6xfSGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB10598
 
-In previous imx platform, normal USB controller interrupt and wakeup
-interrupt are bound to one irq line. However, it changes on latest
-i.MX95 platform since it has a dedicated irq line for wakeup interrupt.
-This will add wakeup interrupt handling for i.MX95 to support various
-wakeup events.
+On i.MX95 platform, USB wakeup setting is controlled by HSIO Block
+Control:
 
+HSIO Block Control Overview:
+- The HSIO block control include configuration and status registers that
+  provide miscellaneous top-level controls for clocking, beat limiter
+  enables, wakeup signal enables and interrupt status for the PCIe and USB
+  interfaces.
+
+The wakeup function of HSIO blkctl is basically same as non-core, except
+improvements about power lost cases. This will add the wakeup setting for
+HSIO blkctl on i.MX95. It will firstly ioremap hsio blkctl memory, then do
+wakeup setting as needs.
+
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Reviewed-by: Jun Li <jun.li@nxp.com>
 Acked-by: Peter Chen <peter.chen@kernel.org>
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+
 ---
 Changes in v6:
- - add Ack tag
+ - no changes
 Changes in v5:
- - remove warning
- - add wakeup_irq checking
+ - add Ab tag
 Changes in v4:
- - warning if no irq provided for imx95
+ - add blkctl NULL checking
+ - warning if no blkctl reg provided for imx95
 Changes in v3:
- - include <linux/irq.h> to fix possible build issue
+ - remove usbmisc_imx95_init(), use usbmisc_imx7d_init()
 Changes in v2:
- - rename irq to wakeup_irq
- - disable irq by default
- - enable irq when suspend, disable irq when resume
+ - add Rb tag
 ---
- drivers/usb/chipidea/ci_hdrc_imx.c | 37 ++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/usb/chipidea/usbmisc_imx.c | 77 ++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index 1a7fc638213e..c34298ccc399 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -6,6 +6,7 @@
-  */
+diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+index 6243d8005f5d..118b9a68496b 100644
+--- a/drivers/usb/chipidea/usbmisc_imx.c
++++ b/drivers/usb/chipidea/usbmisc_imx.c
+@@ -139,6 +139,22 @@
+ #define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKEUP | \
+ 				 MX6_BM_ID_WAKEUP | MX6SX_BM_DPDM_WAKEUP_EN)
  
- #include <linux/module.h>
-+#include <linux/irq.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
-@@ -98,6 +99,7 @@ struct ci_hdrc_imx_data {
- 	struct clk *clk;
- 	struct clk *clk_wakeup;
- 	struct imx_usbmisc_data *usbmisc_data;
-+	int wakeup_irq;
- 	bool supports_runtime_pm;
- 	bool override_phy_control;
- 	bool in_lpm;
-@@ -336,6 +338,16 @@ static int ci_hdrc_imx_notify_event(struct ci_hdrc *ci, unsigned int event)
- 	return ret;
++/*
++ * HSIO Block Control Register
++ */
++
++#define BLKCTL_USB_WAKEUP_CTRL		0x0
++#define BLKCTL_OTG_WAKE_ENABLE		BIT(31)
++#define BLKCTL_OTG_VBUS_SESSVALID	BIT(4)
++#define BLKCTL_OTG_ID_WAKEUP_EN		BIT(2)
++#define BLKCTL_OTG_VBUS_WAKEUP_EN	BIT(1)
++#define BLKCTL_OTG_DPDM_WAKEUP_EN	BIT(0)
++
++#define BLKCTL_WAKEUP_SOURCE		(BLKCTL_OTG_WAKE_ENABLE	   | \
++					 BLKCTL_OTG_ID_WAKEUP_EN   | \
++					 BLKCTL_OTG_VBUS_WAKEUP_EN | \
++					 BLKCTL_OTG_DPDM_WAKEUP_EN)
++
+ struct usbmisc_ops {
+ 	/* It's called once when probe a usb device */
+ 	int (*init)(struct imx_usbmisc_data *data);
+@@ -159,6 +175,7 @@ struct usbmisc_ops {
+ 
+ struct imx_usbmisc {
+ 	void __iomem *base;
++	void __iomem *blkctl;
+ 	spinlock_t lock;
+ 	const struct usbmisc_ops *ops;
+ };
+@@ -1016,6 +1033,44 @@ static int usbmisc_imx6sx_power_lost_check(struct imx_usbmisc_data *data)
+ 		return 0;
  }
  
-+static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
++static u32 usbmisc_blkctl_wakeup_setting(struct imx_usbmisc_data *data)
 +{
-+	struct ci_hdrc_imx_data *imx_data = data;
++	u32 wakeup_setting = BLKCTL_WAKEUP_SOURCE;
 +
-+	disable_irq_nosync(irq);
-+	pm_runtime_resume(&imx_data->ci_pdev->dev);
++	if (data->ext_id || data->available_role != USB_DR_MODE_OTG)
++		wakeup_setting &= ~BLKCTL_OTG_ID_WAKEUP_EN;
 +
-+	return IRQ_HANDLED;
++	if (data->ext_vbus || data->available_role == USB_DR_MODE_HOST)
++		wakeup_setting &= ~BLKCTL_OTG_VBUS_WAKEUP_EN;
++
++	/* Select session valid as VBUS wakeup source */
++	wakeup_setting |= BLKCTL_OTG_VBUS_SESSVALID;
++
++	return wakeup_setting;
 +}
 +
- static int ci_hdrc_imx_probe(struct platform_device *pdev)
- {
- 	struct ci_hdrc_imx_data *data;
-@@ -476,6 +488,16 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 	if (pdata.flags & CI_HDRC_SUPPORTS_RUNTIME_PM)
- 		data->supports_runtime_pm = true;
++static int usbmisc_imx95_set_wakeup(struct imx_usbmisc_data *data, bool enabled)
++{
++	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
++	unsigned long flags;
++	u32 val;
++
++	if (!usbmisc->blkctl)
++		return 0;
++
++	spin_lock_irqsave(&usbmisc->lock, flags);
++	val = readl(usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
++	val &= ~BLKCTL_WAKEUP_SOURCE;
++
++	if (enabled)
++		val |= usbmisc_blkctl_wakeup_setting(data);
++
++	writel(val, usbmisc->blkctl + BLKCTL_USB_WAKEUP_CTRL);
++	spin_unlock_irqrestore(&usbmisc->lock, flags);
++
++	return 0;
++}
++
+ static const struct usbmisc_ops imx25_usbmisc_ops = {
+ 	.init = usbmisc_imx25_init,
+ 	.post = usbmisc_imx25_post,
+@@ -1068,6 +1123,14 @@ static const struct usbmisc_ops imx7ulp_usbmisc_ops = {
+ 	.power_lost_check = usbmisc_imx7d_power_lost_check,
+ };
  
-+	data->wakeup_irq = platform_get_irq_optional(pdev, 1);
-+	if (data->wakeup_irq > 0) {
-+		ret = devm_request_threaded_irq(dev, data->wakeup_irq,
-+						NULL, ci_wakeup_irq_handler,
-+						IRQF_ONESHOT | IRQF_NO_AUTOEN,
-+						pdata.name, data);
-+		if (ret)
-+			goto err_clk;
++static const struct usbmisc_ops imx95_usbmisc_ops = {
++	.init = usbmisc_imx7d_init,
++	.set_wakeup = usbmisc_imx95_set_wakeup,
++	.charger_detection = imx7d_charger_detection,
++	.power_lost_check = usbmisc_imx7d_power_lost_check,
++	.vbus_comparator_on = usbmisc_imx7d_vbus_comparator_on,
++};
++
+ static inline bool is_imx53_usbmisc(struct imx_usbmisc_data *data)
+ {
+ 	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
+@@ -1289,6 +1352,10 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
+ 		.compatible = "fsl,imx8ulp-usbmisc",
+ 		.data = &imx7ulp_usbmisc_ops,
+ 	},
++	{
++		.compatible = "fsl,imx95-usbmisc",
++		.data = &imx95_usbmisc_ops,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+@@ -1296,6 +1363,7 @@ MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+ static int usbmisc_imx_probe(struct platform_device *pdev)
+ {
+ 	struct imx_usbmisc *data;
++	struct resource *res;
+ 
+ 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -1307,6 +1375,15 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
+ 	if (IS_ERR(data->base))
+ 		return PTR_ERR(data->base);
+ 
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (res) {
++		data->blkctl = devm_ioremap_resource(&pdev->dev, res);
++		if (IS_ERR(data->blkctl))
++			return PTR_ERR(data->blkctl);
++	} else if (device_is_compatible(&pdev->dev, "fsl,imx95-usbmisc")) {
++		dev_warn(&pdev->dev, "wakeup setting is missing\n");
 +	}
 +
- 	ret = imx_usbmisc_init(data->usbmisc_data);
- 	if (ret) {
- 		dev_err(dev, "usbmisc init failed, ret=%d\n", ret);
-@@ -584,6 +606,10 @@ static int imx_controller_suspend(struct device *dev,
- 	}
+ 	data->ops = of_device_get_match_data(&pdev->dev);
+ 	platform_set_drvdata(pdev, data);
  
- 	imx_disable_unprepare_clks(dev);
-+
-+	if (data->wakeup_irq > 0)
-+		enable_irq(data->wakeup_irq);
-+
- 	if (data->plat_data->flags & CI_HDRC_PMQOS)
- 		cpu_latency_qos_remove_request(&data->pm_qos_req);
- 
-@@ -608,6 +634,10 @@ static int imx_controller_resume(struct device *dev,
- 	if (data->plat_data->flags & CI_HDRC_PMQOS)
- 		cpu_latency_qos_add_request(&data->pm_qos_req, 0);
- 
-+	if (data->wakeup_irq > 0 &&
-+	    !irqd_irq_disabled(irq_get_irq_data(data->wakeup_irq)))
-+		disable_irq_nosync(data->wakeup_irq);
-+
- 	ret = imx_prepare_enable_clks(dev);
- 	if (ret)
- 		return ret;
-@@ -643,6 +673,10 @@ static int ci_hdrc_imx_suspend(struct device *dev)
- 		return ret;
- 
- 	pinctrl_pm_select_sleep_state(dev);
-+
-+	if (data->wakeup_irq > 0 && device_may_wakeup(dev))
-+		enable_irq_wake(data->wakeup_irq);
-+
- 	return ret;
- }
- 
-@@ -651,6 +685,9 @@ static int ci_hdrc_imx_resume(struct device *dev)
- 	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
- 	int ret;
- 
-+	if (data->wakeup_irq > 0 && device_may_wakeup(dev))
-+		disable_irq_wake(data->wakeup_irq);
-+
- 	pinctrl_pm_select_default_state(dev);
- 	ret = imx_controller_resume(dev, PMSG_RESUME);
- 	if (!ret && data->supports_runtime_pm) {
 -- 
 2.34.1
 
