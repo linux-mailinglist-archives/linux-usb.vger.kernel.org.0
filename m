@@ -1,113 +1,167 @@
-Return-Path: <linux-usb+bounces-21839-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21840-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAE73A66F83
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 10:18:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D818A6714D
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 11:30:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC0513B8BD7
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 09:18:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 689EB4224E5
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Mar 2025 10:29:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B99206F1A;
-	Tue, 18 Mar 2025 09:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5091B208976;
+	Tue, 18 Mar 2025 10:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kpkjVPfA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dpuI138O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB5B148857;
-	Tue, 18 Mar 2025 09:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8AB207E0C
+	for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 10:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742289520; cv=none; b=DNUKAcLHuiXoT3Hwr/3Jp3A3cJ6X+dw3sfPdT0wVdj3y93bS6+TbB6khsNcaSi9ZSNR4mDBaZRR4yqNcf7uvDQdQDINPezoRGbEmEMZ4QZF2y2Ot6emOatRsE7qWUIQWHsADGaBQdnG85L61stodk46ruzPWjT21SrWsHciIF0U=
+	t=1742293766; cv=none; b=LIqyE2FQOHLzZtlYEAbQuESFShNAmaGtGlDjNWJB8E9K4zd8ZkcZh9uNEl/Ria3QdOMxszvpACK4m1aSRHpdCV42johDk3n40QxZyxYqK3uqex3mqQGNovrueXRv5YutKYH9PnBGfeqenuaLCkICoMnjIUzaf/qGqRGRvXkgaSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742289520; c=relaxed/simple;
-	bh=oyoXlL9IzzSXFl5qWJg2CSmmwr34k4pqXRJBoD9ptT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ibm5f5KM5/WRP0bMjHqf593d6rLaBw10GCEpHQ6FkvnAHWdeOhBo4fUjQ/5AjXTQqTwcpuKvlgeE94o2YuxyY+dL6z8l6A09p/URLMWYArtb24+c7KLZMBl6QmIhjUqof6z9zzuvN4hyNzI9If79yalbPAuWl2cvONUoisjnmnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kpkjVPfA; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5499659e669so5889442e87.3;
-        Tue, 18 Mar 2025 02:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742289516; x=1742894316; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iUTzmIuRjC2JAfNwka8eNB59m5yfPsonXucEEZCt/jc=;
-        b=kpkjVPfAq8NV5J28ayEgJHPFLFKK0OE264IZWmEN62Euf7uDR8DqIJlzEYV0raxGYU
-         USbsOcsNv6egFTAfvNEnpWVY32s+XIgpVjC6A2yq8yQKgA+r+qf3m4bI5rSvqgKt/NKl
-         N/zQTjGuynqkrA70usqW+9GrH6PhejW3frMdUsNkAwmULZqeTmRPjlBV4cIpGj1usxwC
-         6Xky4EseEz5uSQP4P8toORAXGqwcRnQngok/pbqHmksca5+M9K5EkfGZQogZADqX/FkH
-         i4BiDrzjBBFnn0ByxPtSibx+Zgm9pG09omYxsP3rtFUGT4u0LHSnEDzwhgfBFC6GChu7
-         gZVw==
+	s=arc-20240116; t=1742293766; c=relaxed/simple;
+	bh=icRL3FzX7n5CwQlt+hD3T1io+oS0x9c6Jm2EpRDFMI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FFD3F3CcoYoQ4D42FVFuJpVlod1aGYosDllCwG/6dyrxl3pLAPvpfNlhUj44F1p4zzX5wESmaGXQkP3PSJ/edC8RV5Hu7t7jROgBforoZEFmI8kOCnwzZvqM+ECh/8bQLjaEbk+WiSW5BSgeAbD07pKUXqzTvlglGh5e/wHgKO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dpuI138O; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742293760;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6+RqQ9ZAEqwS3Wc2GhSiEZkrs2uvAiEdXS3wPJ9ZEBc=;
+	b=dpuI138O+wuQ0/6NBDI134S7odDCBR1jddYoBdsuiTMt/UMhiR98ag+INXQwpH8c2GSE6v
+	M07kuVG7WXvNFVyErXzPJ/4m48wGBdS4FkFpxOJUgYH1MeUQsyJczCzfgUQHF60ymp+dwM
+	cNwlY4aMbYvsK2nv8O2AFGZyyvmKzn8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-543-seAthVlaMJOJ81l0J5cQ1w-1; Tue, 18 Mar 2025 06:29:18 -0400
+X-MC-Unique: seAthVlaMJOJ81l0J5cQ1w-1
+X-Mimecast-MFC-AGG-ID: seAthVlaMJOJ81l0J5cQ1w_1742293758
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac2bb3ac7edso600769066b.2
+        for <linux-usb@vger.kernel.org>; Tue, 18 Mar 2025 03:29:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742289516; x=1742894316;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iUTzmIuRjC2JAfNwka8eNB59m5yfPsonXucEEZCt/jc=;
-        b=vHSdoiY3ROiwEphk3VSkPAveND5gBHSoetFWCm7CwYKTySrxh5gLMXPH4wgQiSEH5J
-         6TM7fDxI383vCkCzih8fspW8hhpwYZRgT0VO6XGizYpVEdMzC61NxhJfOIfMojG7SR/Z
-         L9KW4PExTQaxWK+Wdw2m5SpJx8qCUykZPlGBHVgRKd6C3iJ8jCLpyX+6aPnE1c2AG/qT
-         Z2llLcNx6ErnM/zBmx2ofW4uPKmGVnQmvTCmkReFfNpBledkuq7zVrOPVU6G07zcKF0E
-         wL4nvqcGl9wamqi8zYEA4Ns2pd5XhuJkogqiem/WqtLg+zUqgU/BA6vE3qIMSFK+CbdB
-         9xQw==
-X-Forwarded-Encrypted: i=1; AJvYcCWZap+2VRis1P31LmYQlEPVxIfrlq8o5WEQDwIOnmWPHKoKpP7ClhZchtrqzj9DfgYaNWOgZykmXBoC2Tc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7+R1YP+JpfAp/bFQQF9yCJNmZA6l0H1lKME3BZfgfGjmVWWnS
-	nVh/YoLi5A19IR2ImOl//Ouhpd+2HEyi46l/glAlzeexqlwiv8el
-X-Gm-Gg: ASbGnctPtGs1fp8qp7V2M3xkNT5Penjzt3U1LmMLbHjQk/jpApw6bswSDUxEqCrFCZa
-	EgJ0QZUXyPPEwji7NCD+VPZVvmi92MlTrZ6aGeZvflHmYAZpxMXtAzVZJVGfTxbXdiAN6FhNmlk
-	u9s2v+otoqPxNhBYmC3uQ34MXpd+KV1ozwsgGqBqfQGqhBRKSujTQWSFbqogeteKTEZuvIvF5bn
-	TsRYZVPT/GexkMN4tlewiG8oowhkupuHMN88BfImPxqyX7ImX93ab+QfR/NeENY3Het8n98hTDd
-	POpneoGtHB/JoiSw1AXFveiFswm1kMhT1bTu/3Y1bDu5TaFE0d2Nj4wJgF8=
-X-Google-Smtp-Source: AGHT+IGHwBr3z+X5KybLHAm4VLxQ6zBuSIuEK+aXOsN7Kzieot+b02V/4BG29JCWDwYNaB7fV6VFbw==
-X-Received: by 2002:a05:6512:3da8:b0:549:490e:240d with SMTP id 2adb3069b0e04-549c391a8c8mr10131590e87.28.1742289516250;
-        Tue, 18 Mar 2025 02:18:36 -0700 (PDT)
-Received: from foxbook (adqh54.neoplus.adsl.tpnet.pl. [79.185.141.54])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549ba7ce823sm1602244e87.105.2025.03.18.02.18.33
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 18 Mar 2025 02:18:34 -0700 (PDT)
-Date: Tue, 18 Mar 2025 10:18:30 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci: Fix double newline in a debug message
-Message-ID: <20250318101830.49e7a37a@foxbook>
+        d=1e100.net; s=20230601; t=1742293757; x=1742898557;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6+RqQ9ZAEqwS3Wc2GhSiEZkrs2uvAiEdXS3wPJ9ZEBc=;
+        b=WKdizZoMMbrHh2DFHO4hxsmvmKjCuoddEeb6PCbgyeBcbhnHfSmTyItRvhMIsFGdbB
+         +vUooaQnGRJBC2snz83gXzKX2KNEQG6QaFBS1E9M4LshtLhjm6rTJz0vhaMKk4wwKDq4
+         RjkgF34Sy1yp+uLdVl5YSb8n7bUJKGIDlXexwiQ4sWaWPlWT1HL3luT/VRkT9OqUwr8V
+         nM+f39cuUuiXWkuPAdhyhfVFrLT9rHNJhhK76L/aM+qMS0pbDGMKul7wA81z0gXcb1B7
+         +Qp3qOzkJxOnGwRFQXzs1ZoldtfYJfrio5KzDzkHxRKXtl25vQyWbvg0XRlfJvlmJSaF
+         /8dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhSbqBYcjNvvFaXXeZ8x+BdH1cGc3Ra9bh9RzAX6Vra8AB9EB5U0+vkLSwVBH5HW1celU5Mx8Vwy8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzclYsA5m9uyWrwgjm/N6Ab3O9YkOh+g9wiHNpTH1ozn1TiPov
+	tVBjdNE6wocGIFHOqdGwJZ1pcGuV/iRh/zNHPUz/FPrQssfwDnVnxKGU8P5Du0mYcqSnu3bOOwS
+	TjSE8SPLEE81E+ahuI/ilb3x2byotUD1aQFxoS3sACZcVFOToB8fNlsvuz7stL7R1SNUC
+X-Gm-Gg: ASbGnctg7tE2uLQ+5dkZkWBNkppgu3/91mn2HR2Gmd3LBg+AA+6SuXTEsSmzUa0eZBj
+	8ywG0Jr8I2Ky3M/xihDAxUHa2imsi4tPG9F88+n1OuebTo+zq8BMPJiNiSzLrNPXXVLCFBAoOye
+	WxdPHvXFhpxjKDXF/phyep46OxkcmowST6ILDZP4FLW6OFguHf/1K7oI8rZZmFjxnwXYF6LUe4p
+	oHkbwt0ewyocAyxKRfZ8rhucTvGZ2etQusXUbe/6OkwaeEjsXbJKK5wd9ipRY8+O5im/umE9KEU
+	Ga4b+XyQqopOgvoPGc0YSAx5Eo8n9tQGXSTdQb+GIEzQwA==
+X-Received: by 2002:a17:907:7f20:b0:ac2:690a:12fb with SMTP id a640c23a62f3a-ac38d405ac4mr326112166b.17.1742293757534;
+        Tue, 18 Mar 2025 03:29:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGJ9phnirtnPj5YmMubP6Ht2qkaUfOSLn82FDbJFuRSYXcPah8hVaAareCATLF7C7En8FYvbA==
+X-Received: by 2002:a17:907:7f20:b0:ac2:690a:12fb with SMTP id a640c23a62f3a-ac38d405ac4mr326110166b.17.1742293757124;
+        Tue, 18 Mar 2025 03:29:17 -0700 (PDT)
+Received: from [192.168.88.253] (146-241-10-172.dyn.eolo.it. [146.241.10.172])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3147ed1e4sm831316866b.66.2025.03.18.03.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Mar 2025 03:29:16 -0700 (PDT)
+Message-ID: <491430dd-71ad-4472-b3e1-0531da6d4ecc@redhat.com>
+Date: Tue, 18 Mar 2025 11:29:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart() and
+ cleanup error handling
+To: Qasim Ijaz <qasdev00@gmail.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org,
+ syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>,
+ stable@vger.kernel.org
+References: <20250311161157.49065-1-qasdev00@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250311161157.49065-1-qasdev00@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-xhci_dbg_trace() appends a newline to the format string,
-don't call it with a newline terminated string - it only
-adds a blank line to the log.
+On 3/11/25 5:11 PM, Qasim Ijaz wrote:
+> In mii_nway_restart() during the line:
+> 
+>         bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+> 
+> The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+> 
+> ch9200_mdio_read() utilises a local buffer, which is initialised
+> with control_read():
+> 
+>         unsigned char buff[2];
+> 
+> However buff is conditionally initialised inside control_read():
+> 
+>         if (err == size) {
+>                 memcpy(data, buf, size);
+>         }
+> 
+> If the condition of "err == size" is not met, then buff remains
+> uninitialised. Once this happens the uninitialised buff is accessed
+> and returned during ch9200_mdio_read():
+> 
+>         return (buff[0] | buff[1] << 8);
+> 
+> The problem stems from the fact that ch9200_mdio_read() ignores the
+> return value of control_read(), leading to uinit-access of buff.
+> 
+> To fix this we should check the return value of control_read()
+> and return early on error.
+> 
+> Furthermore the get_mac_address() function has a similar problem where
+> it does not directly check the return value of each control_read(),
+> instead it sums up the return values and checks them all at the end
+> which means if any call to control_read() fails the function just 
+> continues on.
+> 
+> Handle this by validating the return value of each call and fail fast
+> and early instead of continuing.
+> 
+> Lastly ch9200_bind() ignores the return values of multiple 
+> control_write() calls.
+> 
+> Validate each control_write() call to ensure it succeeds before
+> continuing with the next call.
+> 
+> Reported-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Closes: https://syzkaller.appspot.com/bug?extid=3361c2d6f78a3e0892f9
+> Tested-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Fixes: 4a476bd6d1d9 ("usbnet: New driver for QinHeng CH9200 devices")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
- drivers/usb/host/xhci-ring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please split the patch in a small series, as suggested by Simon.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index dc674bc24a89..b565c9f7e036 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -789,7 +789,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	ep->queued_deq_ptr = new_deq;
- 
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--		       "Set TR Deq ptr 0x%llx, cycle %u\n", addr, new_cycle);
-+		       "Set TR Deq ptr 0x%llx, cycle %u", addr, new_cycle);
- 
- 	/* Stop the TD queueing code from ringing the doorbell until
- 	 * this command completes.  The HC won't set the dequeue pointer
--- 
-2.48.1
+Please additionally include the target tree name ('net', in this case)
+in the subj prefix.
+
+Thanks,
+
+Paolo
+
 
