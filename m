@@ -1,72 +1,82 @@
-Return-Path: <linux-usb+bounces-21927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F0E0A693E8
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 16:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BFBA69416
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 16:52:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A76AF1647C6
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 15:47:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32273178D5B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 15:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7B4D1DDA36;
-	Wed, 19 Mar 2025 15:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AF71D88C3;
+	Wed, 19 Mar 2025 15:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MOuzlnOG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZTPa0hb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDE21D5142;
-	Wed, 19 Mar 2025 15:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165BF1FB3;
+	Wed, 19 Mar 2025 15:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742399218; cv=none; b=KDnLfzBgxsy+lsEKrWmGHsVh9bNgcEDUXwGKWYx4CW0rGD+LclqXAfbXSg8DQn8WiStXEvsj5v55rX0kt9rLKxWAmAzJQgEb6RnwYZjyEpvwt54OWItE0szqkjUQ485yHDkv0XhQcSfwQmhuwfUpiefj+Hwh4a4yq7xaiP76PMc=
+	t=1742399541; cv=none; b=P8sdac4u0sPsEtFsx60Ww1H2OQIjjB1CC2zHYn+oGzaeLFLZ2E4YmBIsS3pD6MDgoiKJgubG+nWreLWAD0CrtmyETq3fsWuac0mm09dImpaeyCHSwkV7Qo/9fUvxD7QD6yMjgHoyKdogggfcOeSzOlYm5a/2EVH2xIBEUWhpiVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742399218; c=relaxed/simple;
-	bh=aMbtdvd7lPx3VzMWnSDe0in/nBa9AF22jEaDljtoGGk=;
+	s=arc-20240116; t=1742399541; c=relaxed/simple;
+	bh=NGbAHTuhvzBd3gWV5Ye2Nzx6lDdvF9IFw6FYrwoAGCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qWapF54HiL/psog7VJ/rIHAqzD8pvFEoxDUqtUS8oIcfoYSO9x244NILuIgb0MpkhaAWILSsnPhZW2elZ7twhYy1ndw9kjgTra+uQqA1Sp4C9upr4ubRXZ95/eMKAugA595QAa0e59zFN3e7AED9t6Oe7X7Dh9jggrzJHJD643A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=MOuzlnOG; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+qJlruxx2j9t0DthHj7xMEyCL4PZ6YK/QOIB1zY+fZU=; b=MOuzlnOGG9bQxnE4Akg9HZDLH5
-	UqqFWBcRCRju3nH/550uQUvRg1vX2x2OGFbtTBF6+7x+7ubiH1qxPcrg2G1FejbBIL7u1af12v1+d
-	r4jRG8FDkfhUsDEWLtG9VvpRrxqceGKjREXnpov970GJ8f67/fRcmrKxawr3qZ1bwJ507rEmiQg8Y
-	0vuKw8NFmj2eW1tbwS6kqcWGXr/w8Lr+po1/UMZE9MGE3uuDIDSSlFZDETzCGoJBU9HTGQqVSNKqF
-	BzuCwWPdr35ELcPl1/8Qm8qWuSFtagsHmrAzu05mLFZpB955kAUhZ1nsBqDd1XmgR7/Jv0k1B8Wjy
-	Ck8W0+QQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38252)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1tuvd5-0006cu-11;
-	Wed, 19 Mar 2025 15:46:51 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1tuvd2-0005jS-1G;
-	Wed, 19 Mar 2025 15:46:48 +0000
-Date: Wed, 19 Mar 2025 15:46:48 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RpmkrN/kZOcML8FBKf1Fo4GLfkbmgo7CHHR6Hi3PdWSiNNfAk+0SQfB8jQ/WpCjc3xqjVxeXwbG+8OytRWz8kVrPaHHxe3+BtW64KZ5gT6rYvPeWOywJcGz/CSpdAgk6OJWgp9MLeZc62q/64EXxBl0/rDTGoeAPYyUQQHlR8Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZTPa0hb; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742399540; x=1773935540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NGbAHTuhvzBd3gWV5Ye2Nzx6lDdvF9IFw6FYrwoAGCA=;
+  b=LZTPa0hbaMAJC4xeDyoeThQfd4DosHNllRC0+xbVdgoxNzFlY1AeE1+L
+   yFIIVgAjRTUD7dT4IE5DoW2wU+HJgo0aqoQhsXtrpmRo5R3vnd1tAGB1p
+   TQltjgq010MaIFkzFZ2hWsMzhyocvhKg8Hg52mJMzaCspxjTcBFy0Zt9Y
+   wztG3QDtmCWscINKgPLcrYSxANTDjx8Na0L+eVzYnResGreKeHJq2UDUZ
+   1llMIvTIbTuZs5FWPFUPAZlW+XWj+KzSxjx3tY8nzRV1/+1LJySeSs2DT
+   SNcizCbYHJc/vv3thcXBpzMS9L+K6iOy2OmGvRP0S3rgjkOlA2Hc3DU+9
+   Q==;
+X-CSE-ConnectionGUID: mpettNl8S9+omMFx6eSI1Q==
+X-CSE-MsgGUID: dIEk1mVkSn2cCZ5sqw2c9g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="43329731"
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="43329731"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 08:52:19 -0700
+X-CSE-ConnectionGUID: Jy8p7MkERuK5RMcf/Qoi8A==
+X-CSE-MsgGUID: FnoODpthSLmorvjzmDrRtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="127749013"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 08:52:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tuviH-00000003z02-3mIi;
+	Wed, 19 Mar 2025 17:52:13 +0200
+Date: Wed, 19 Mar 2025 17:52:13 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
 Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>
 Subject: Re: [PATCH net v2 1/2] net: phy: Fix formatting specifier to avoid
  potential string cuts
-Message-ID: <Z9rm6NYEQpbo4-pz@shell.armlinux.org.uk>
-References: <20250319105813.3102076-1-andriy.shevchenko@linux.intel.com>
- <20250319105813.3102076-2-andriy.shevchenko@linux.intel.com>
+Message-ID: <Z9roLbRN7Dyf22G2@smile.fi.intel.com>
+References: <20250319105813.3102076-2-andriy.shevchenko@linux.intel.com>
+ <202503192340.iVN44lM2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,21 +85,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319105813.3102076-2-andriy.shevchenko@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <202503192340.iVN44lM2-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Mar 19, 2025 at 12:54:33PM +0200, Andy Shevchenko wrote:
-> -#define PHY_ID_FMT "%s:%02x"
-> +#define PHY_ID_FMT "%s:%02hhx"
+On Wed, Mar 19, 2025 at 11:37:19PM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on net/main]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/net-phy-Fix-formatting-specifier-to-avoid-potential-string-cuts/20250319-190433
+> base:   net/main
+> patch link:    https://lore.kernel.org/r/20250319105813.3102076-2-andriy.shevchenko%40linux.intel.com
+> patch subject: [PATCH net v2 1/2] net: phy: Fix formatting specifier to avoid potential string cuts
+> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20250319/202503192340.iVN44lM2-lkp@intel.com/config)
+> compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250319/202503192340.iVN44lM2-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503192340.iVN44lM2-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/net/usb/ax88172a.c:312:20: warning: format specifies type 'unsigned char' but the argument has type 'u16' (aka 'unsigned short') [-Wformat]
+>      311 |         snprintf(priv->phy_name, 20, PHY_ID_FMT,
+>          |                                      ~~~~~~~~~~
+>      312 |                  priv->mdio->id, priv->phy_addr);
+>          |                                  ^~~~~~~~~~~~~~
+>    1 warning generated.
 
-I was going to state whether it is correct to use hh with an "int"
-argument, as printf() suggests its only for use with arguments of
-type 'signed char' and 'unsigned char'. My suspicion has been
-confirmed by the warning the kbuild bot has just reported.
-
-It seems this is not a correct fix for the problem you report.
+It's fun: while working around GCC complain, clang does not agree with... :-)
+Let's wait more, probably the simplest fix (if this becomes only a single user
+of the non-byte parameter) is to move it to u8.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
 
