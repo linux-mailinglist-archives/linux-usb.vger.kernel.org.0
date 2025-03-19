@@ -1,139 +1,182 @@
-Return-Path: <linux-usb+bounces-21900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151E9A684B5
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 07:01:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B430CA685A1
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 08:16:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64C3319C3A7E
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 06:02:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1294E179350
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 07:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3BE24E4DA;
-	Wed, 19 Mar 2025 06:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5941B24EAB7;
+	Wed, 19 Mar 2025 07:16:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151781598F4;
-	Wed, 19 Mar 2025 06:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5447820E31B
+	for <linux-usb@vger.kernel.org>; Wed, 19 Mar 2025 07:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742364108; cv=none; b=Ut74x2Cfaepjn4Ng5GLnm2d5Qa1OIxHMSX7vFHIIhO2wG3GJteXPQyUqyQwmwQ5XWE1rREFh454fLC8tiC720mRqH7NH04ecRENkM2PQIq5qpHA6LAfJwRQn/11mnRlo28d4MfrZmqKh9WUHpM/eruvgQPTdIj2O01oYqjllTN0=
+	t=1742368590; cv=none; b=I1Nm6Xt+03cCn+ejaBElvl+UCcw4Rt7zAmQIn7qT+ClyQO+LXD8/fYtZ7bkgj/7VDDDoilISwFQrabHgvldU1Fx0/kxSVskI5h5Il69au1scSMsHktiyOjwo3Huu7NYhlUJA3h5EzYoeAYW6vLdOyitNZmaDaRxcFDd08X77n4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742364108; c=relaxed/simple;
-	bh=O+/3bAgQEXsLeTYbZ+T8NDIikrDwqM7YBfVeNvN53yc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TDwLXr9eF+0tg3hBXJ3TG+sXRbrrLrcT9/cn/DIYsPw+f3uE8PUSuTU/I/R530tdHpSP62Ljq1vLpdSnY81vjgjSOlpwrM7DWKa1gQF8EfGR5xMgR23FN8mWT3iIf7YhffiIBYEhHYcdrXp/a2VXraWQO9dLghnNO4kTSwsmIXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9c1c73f6048711f0a216b1d71e6e1362-20250319
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:b0055900-673b-4e67-85ca-cce063e7a286,IP:0,U
-	RL:0,TC:0,Content:0,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:6493067,CLOUDID:84368d1a854d9369a4807f4faecb4f4d,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:1,IP:n
-	il,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LE
-	S:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 9c1c73f6048711f0a216b1d71e6e1362-20250319
-Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
-	(envelope-from <lijiayi@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 571012771; Wed, 19 Mar 2025 14:01:33 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 42DBC16011396;
-	Wed, 19 Mar 2025 14:01:33 +0800 (CST)
-X-ns-mid: postfix-67DA5DBC-916915388
-Received: from kylin-pc.. (unknown [172.25.130.133])
-	by node4.com.cn (NSMail) with ESMTPA id 0111B16008107;
-	Wed, 19 Mar 2025 06:01:31 +0000 (UTC)
-From: Jiayi Li <lijiayi@kylinos.cn>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	stefan.eichenberger@toradex.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: jiayi_dec@163.com,
-	Jiayi Li <lijiayi@kylinos.cn>
-Subject: [PATCH WITHDRAWN] usb: core: Add boot delay for DH34 board in restore mode
-Date: Wed, 19 Mar 2025 14:00:46 +0800
-Message-ID: <20250319060046.3438058-1-lijiayi@kylinos.cn>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250306061749.1502029-1-lijiayi@kylinos.cn>
-References: <20250306061749.1502029-1-lijiayi@kylinos.cn>
+	s=arc-20240116; t=1742368590; c=relaxed/simple;
+	bh=CC7DRDtrFvkxYQtn3kfZJFOhKEzGVTL4FB9WynWstlU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kNCk1HlNcXwCiXHoyOkpD/qCP7LykBXS3eTSYHDTSKvVgbsP43mM+DcOxjN+T4r62Wi2DdgXgY6OFMkbGmFg6sQ/QiHG3tnU9C2SYDPQNuJvEVhN0QhL1sCZ2+juZXCm2hqAIWMkpmR1q2IE0/7hObuwlP4AhAAIy3MCPZohh/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-851a991cf8bso37878339f.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Mar 2025 00:16:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742368587; x=1742973387;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4JpfHRhd3cZqCv/ShofI+lV++ZteeaYec28PjSosO4Y=;
+        b=IDSsY+dtJF/2mqbNkdXQSg5kciECqvRK/X9Gx7QFDZIjJ9KCyWIB26kgTaotk/rwB8
+         Z1ajMUkpJNc08y2TIEdPyAPP+cXy+NYTdWaqsvehtQR06jUw5nde2jJn+6zADu/+6f1y
+         6OESzFdz5e+yHNmS+OSpSvEtYYEiZoO8yMMwnuWrBK+ReK/v/lt/n5PntzPwrqS/oHZf
+         oF6IZz8gbDYeK0MkTHEwtpzwX1NyXCg59AP8ZJTKBfnSMkNGD/yo19cdzNbYvI53M0z/
+         MSBtO6UB6FJt1PYXXCphZic5853T5i1Ia/pn+9o7W0ikrjJC82iOY2VDR6n2tX5oGdfW
+         yd6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXocQENlqNhfDuEzyfN1CIvqzSh4xndRBgif0w/Me2XC/eJC55KhnvXEl8wIQUnq7C++i0ASMVAZ+g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCOf6etF2jpuvJUq2Jomdtg1g3JAGiS6ShOqAAsvoV0pI941xx
+	WhZxpL/7zJ/OSONZWZeHgwxA8MuxBVFF51yLQLCfaAA/vq1JrgZhSPmFpl9erEmb6EeqDjJ+o7p
+	4LKPnHZtJGngFAj7FLjiyG0GMBE0Y5rRq/rE3ipHJKPDr953NzCmz3HE=
+X-Google-Smtp-Source: AGHT+IFVsMa7mvYecZQOmiCe4H9qLGvCcN6wJuiI+m/B3W9zZtW7EwARBsUWZp6QwYfofNG8b2hOTkUl5xo/A0Uh4NjMdwlSf3gy
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6e02:1a24:b0:3d3:f72c:8fd8 with SMTP id
+ e9e14a558f8ab-3d586eafb52mr13943225ab.6.1742368587460; Wed, 19 Mar 2025
+ 00:16:27 -0700 (PDT)
+Date: Wed, 19 Mar 2025 00:16:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67da6f4b.050a0220.3657bb.013b.GAE@google.com>
+Subject: [syzbot] [media?] [usb?] WARNING in media_create_pad_link (2)
+From: syzbot <syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com>
+To: laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
+	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On certain DH34-model motherboards, USB keyboards may fail to respond
-during the restore mode confirmation prompt due to the usbhid driver
-not being fully initialized when device registration occurs. This
-results in inability to input 'y'/'n' confirmation.
+Hello,
 
-Detect this scenario by:
-1. Checking DMI_BOARD_NAME for "DH34" substring
-2. Verifying "restore" in kernel command line
+syzbot found the following issue on:
 
-Introduce a 200ms delay before device registration when both conditions
-are met. This allows sufficient time for the usbhid driver to properly
-initialize before user interaction is required.
+HEAD commit:    3a85c1011540 usb: host: cdns3: forward lost power informat..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1590f874580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7e0ed68747dbff9
+dashboard link: https://syzkaller.appspot.com/bug?extid=701fc9cc0cb44e2b0fe9
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1726ae54580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1390f874580000
 
-Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/eaddfad7c5c2/disk-3a85c101.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d37f14fba48b/vmlinux-3a85c101.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/47054ab7f64f/bzImage-3a85c101.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com
+
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+usb 1-1: Found UVC 0.00 device syz (046d:08c3)
+usb 1-1: No streaming interface found for terminal 6.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 25 at drivers/media/mc/mc-entity.c:1144 media_create_pad_link+0x5c1/0x760 drivers/media/mc/mc-entity.c:1144
+Modules linked in:
+CPU: 1 UID: 0 PID: 25 Comm: kworker/1:0 Not tainted 6.14.0-rc6-syzkaller-g3a85c1011540 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:media_create_pad_link+0x5c1/0x760 drivers/media/mc/mc-entity.c:1144
+Code: d8 48 83 c4 28 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc e8 70 7e 65 fc 90 0f 0b 90 bb ea ff ff ff eb d6 e8 60 7e 65 fc 90 <0f> 0b 90 eb ee e8 55 7e 65 fc 90 0f 0b 90 eb e3 e8 4a 7e 65 fc 90
+RSP: 0018:ffffc900001aef18 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888118fa0880 RCX: ffffffff8515cf70
+RDX: ffff888102689d40 RSI: ffffffff8515d490 RDI: 0000000000000002
+RBP: ffff888121e9f880 R08: 0000000000000002 R09: 0000000000000000
+R10: 0000000000000000 R11: ffffffff8ee92ad0 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000003 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffec100cca8 CR3: 0000000122e30000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ uvc_mc_create_links drivers/media/usb/uvc/uvc_entity.c:50 [inline]
+ uvc_mc_register_entities+0x3a8/0xaa0 drivers/media/usb/uvc/uvc_entity.c:151
+ uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2142 [inline]
+ uvc_probe+0x2859/0x4810 drivers/media/usb/uvc/uvc_driver.c:2278
+ usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x114b/0x1a70 drivers/base/core.c:3666
+ usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x114b/0x1a70 drivers/base/core.c:3666
+ usb_new_device+0xd09/0x1a20 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5531 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5913
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3319 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3400
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+
 ---
- drivers/usb/core/hub.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index a76bb50b6202..b81b518f438b 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -36,6 +36,7 @@
- #include <linux/bitfield.h>
- #include <linux/uaccess.h>
- #include <asm/byteorder.h>
-+#include <linux/dmi.h>
-=20
- #include "hub.h"
- #include "phy.h"
-@@ -2610,6 +2611,7 @@ static void set_usb_port_removable(struct usb_devic=
-e *udev)
- int usb_new_device(struct usb_device *udev)
- {
- 	int err;
-+	const char *board_name;
-=20
- 	if (udev->parent) {
- 		/* Initialize non-root-hub device wakeup to disabled;
-@@ -2656,6 +2658,17 @@ int usb_new_device(struct usb_device *udev)
- 	/* check whether the hub or firmware marks this port as non-removable *=
-/
- 	set_usb_port_removable(udev);
-=20
-+	/* get board manufacturer information (DMI_BOARD_VENDOR) */
-+	board_name =3D dmi_get_system_info(DMI_BOARD_NAME);
-+
-+	/* In order to load the usbhid driver on a specific model motherboards
-+	 * before the restore mode confirmation, add 200ms of latancy.
-+	 */
-+	if (board_name && strstr(board_name, "DH34") &&
-+		(strstr(saved_command_line, "restore") !=3D NULL))
-+		msleep(200);
-+
-+
- 	/* Register the device.  The device driver is responsible
- 	 * for configuring the device and invoking the add-device
- 	 * notifier chain (used by usbfs and possibly others).
---=20
-2.47.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
