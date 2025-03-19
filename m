@@ -1,182 +1,200 @@
-Return-Path: <linux-usb+bounces-21901-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21902-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B430CA685A1
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 08:16:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C167A685ED
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 08:41:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1294E179350
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 07:16:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B6511B60C4C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 07:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5941B24EAB7;
-	Wed, 19 Mar 2025 07:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F422505B6;
+	Wed, 19 Mar 2025 07:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTC2J7vI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5447820E31B
-	for <linux-usb@vger.kernel.org>; Wed, 19 Mar 2025 07:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF07520E31B;
+	Wed, 19 Mar 2025 07:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742368590; cv=none; b=I1Nm6Xt+03cCn+ejaBElvl+UCcw4Rt7zAmQIn7qT+ClyQO+LXD8/fYtZ7bkgj/7VDDDoilISwFQrabHgvldU1Fx0/kxSVskI5h5Il69au1scSMsHktiyOjwo3Huu7NYhlUJA3h5EzYoeAYW6vLdOyitNZmaDaRxcFDd08X77n4E=
+	t=1742370006; cv=none; b=BI3+9M4H1jxxESAfyNRmSVkjdrof6I5LcmAkAWLydMOUVvnvjGB/AdpRj81jgAykYlV2Q1Sza4HmYQp7/DW796asMycWOhScIlqUXSOVaGYpp5NuwFEsMzH6SqQTAn84BLlYWxWcjvTbG7Pi5jNPyKo0AkDW+wOH4Xa2ep6kQaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742368590; c=relaxed/simple;
-	bh=CC7DRDtrFvkxYQtn3kfZJFOhKEzGVTL4FB9WynWstlU=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kNCk1HlNcXwCiXHoyOkpD/qCP7LykBXS3eTSYHDTSKvVgbsP43mM+DcOxjN+T4r62Wi2DdgXgY6OFMkbGmFg6sQ/QiHG3tnU9C2SYDPQNuJvEVhN0QhL1sCZ2+juZXCm2hqAIWMkpmR1q2IE0/7hObuwlP4AhAAIy3MCPZohh/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-851a991cf8bso37878339f.0
-        for <linux-usb@vger.kernel.org>; Wed, 19 Mar 2025 00:16:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742368587; x=1742973387;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4JpfHRhd3cZqCv/ShofI+lV++ZteeaYec28PjSosO4Y=;
-        b=IDSsY+dtJF/2mqbNkdXQSg5kciECqvRK/X9Gx7QFDZIjJ9KCyWIB26kgTaotk/rwB8
-         Z1ajMUkpJNc08y2TIEdPyAPP+cXy+NYTdWaqsvehtQR06jUw5nde2jJn+6zADu/+6f1y
-         6OESzFdz5e+yHNmS+OSpSvEtYYEiZoO8yMMwnuWrBK+ReK/v/lt/n5PntzPwrqS/oHZf
-         oF6IZz8gbDYeK0MkTHEwtpzwX1NyXCg59AP8ZJTKBfnSMkNGD/yo19cdzNbYvI53M0z/
-         MSBtO6UB6FJt1PYXXCphZic5853T5i1Ia/pn+9o7W0ikrjJC82iOY2VDR6n2tX5oGdfW
-         yd6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXocQENlqNhfDuEzyfN1CIvqzSh4xndRBgif0w/Me2XC/eJC55KhnvXEl8wIQUnq7C++i0ASMVAZ+g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCOf6etF2jpuvJUq2Jomdtg1g3JAGiS6ShOqAAsvoV0pI941xx
-	WhZxpL/7zJ/OSONZWZeHgwxA8MuxBVFF51yLQLCfaAA/vq1JrgZhSPmFpl9erEmb6EeqDjJ+o7p
-	4LKPnHZtJGngFAj7FLjiyG0GMBE0Y5rRq/rE3ipHJKPDr953NzCmz3HE=
-X-Google-Smtp-Source: AGHT+IFVsMa7mvYecZQOmiCe4H9qLGvCcN6wJuiI+m/B3W9zZtW7EwARBsUWZp6QwYfofNG8b2hOTkUl5xo/A0Uh4NjMdwlSf3gy
+	s=arc-20240116; t=1742370006; c=relaxed/simple;
+	bh=tKIbx2+7UEC6SU/Ci8glYFwYES+rjaNTdcbdH+R6TS4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b6vOfK/30ZIbVDI36fqCtZ0xWtJz46neO5QtQ3Ij+FdpsKgz76jUMf+st4S97+oaydJYpmb8wCFRUZ2gpe48i/H+1r7TLwsBeS9PGXtgkb6ehQXNpUBLYmuVioa+nnq/vzIFuBLCeKeHXf3SbWZ1tmP1VKZCde1fArx8pxuOy0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTC2J7vI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4F4C4CEE9;
+	Wed, 19 Mar 2025 07:39:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742370005;
+	bh=tKIbx2+7UEC6SU/Ci8glYFwYES+rjaNTdcbdH+R6TS4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iTC2J7vI9gdw4qI2bdHDiMSymEqGhCe2EaCZpTpfQ2DERnFKR7kQs4qTvHQnTr7Tf
+	 Ng+DPcHm19bSxSO0miPkBpWLO9gbiq1xESNFLalNDHqTCSKQCmbd3l20qsrxk52w7E
+	 1h+0v7377B0cpcqmfluYlpWf/kC4rT5P6xGzjjlq9e/M9/O33V9w2INM76kL2Cdj/P
+	 BfD+wdg8rSDUGHcoR4q3cB/LF3zf9aViOVfjBrvSYFhbuZWGQRR9UO2pkjT8JYGzm5
+	 f2jqjFYo3VhcjJWuf2wRJ3A6viyEJjxq4lLg20lqwORpgH2hKficXCrNhSLVw+6SiB
+	 w0dToPGlDelcA==
+Message-ID: <cd445f29-ea01-4e57-b1b7-4e9c3bfbcc8f@kernel.org>
+Date: Wed, 19 Mar 2025 08:39:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a24:b0:3d3:f72c:8fd8 with SMTP id
- e9e14a558f8ab-3d586eafb52mr13943225ab.6.1742368587460; Wed, 19 Mar 2025
- 00:16:27 -0700 (PDT)
-Date: Wed, 19 Mar 2025 00:16:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67da6f4b.050a0220.3657bb.013b.GAE@google.com>
-Subject: [syzbot] [media?] [usb?] WARNING in media_create_pad_link (2)
-From: syzbot <syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com>
-To: laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/13] dt-bindings: phy: Add documentation for Airoha
+ AN7581 USB PHY
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Daniel Danzberger <dd@embedd.com>,
+ Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Nikita Shubin <nikita.shubin@maquefel.me>, Guo Ren <guoren@kernel.org>,
+ Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
+ Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+ upstream@airoha.com
+References: <20250309132959.19045-1-ansuelsmth@gmail.com>
+ <20250309132959.19045-10-ansuelsmth@gmail.com>
+ <4f16d239-f540-45d5-b67a-767b09f1c70c@kernel.org>
+ <67d0862f.df0a0220.375bd.6b15@mx.google.com>
+ <4a9ac302-dfbe-4d76-a634-a445957c313c@kernel.org>
+ <67d95979.050a0220.166852.25e6@mx.google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <67d95979.050a0220.166852.25e6@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 18/03/2025 12:31, Christian Marangi wrote:
+> On Sun, Mar 16, 2025 at 06:01:02PM +0100, Krzysztof Kozlowski wrote:
+>> On 11/03/2025 19:51, Christian Marangi wrote:
+>>>>
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    enum: [0, 1]
+>>>>
+>>>> I don't understand why do you need index property here (which are
+>>>> usually not allowed).
+>>>>
+>>>
+>>> Eh... As said in the description this is really to differentiate the 2
+>>> different physical port...
+>>>
+>>> Each port have a dedicated oscillator for calibration and these
+>>> calibration are identified by an offset (all placed one after another in
+>>> a separate register space).
+>>
+>> So different oscillators? Then describe the oscillator and its differences.
+>>
+>> Different programing model? Different compatible.
+>>
+>> Other difference? Depending what is the difference.
+>>
+>> But there is no such thing as "different port ID" based on your
+>> description above. You just claimed that they are different, but you do
+>> not put that difference to hardware description. Instead you encode that
+>> difference in the drivers and it should be opposite. The DTS, so the
+>> hardware description, should tell you the difference. And I am sorry,
+>> but in 99% of cases "I am the first phy" and "I am the second" is not
+>> the actual difference we are interested in.
+>>
+> 
+> Ok to make it as clear as possible. (hope I don't contraddict with the
+> previous statement) (actually yes the "separate register space statement
+> was wrong and sorry for the confusion")
+> 
+> - 2 USB port
+> - USB 2.0 needs to be calibrated with an oscillator
+> - Each USB port have his own dedicated oscillator somewhere in the HW
+> - Each USB port have at the same offset a register to SELECT the
+>   oscillator. This register refer to the same oscillator selection in
+>   the HW.
+>   
+>   Example:
+>   reg 0x1fac0100 MASK 27:26 can be set to source out of oscillator 0,1,2
+>   reg 0x1fae0100 MASK 27:26 can be set to source out of oscillator 0,1,2
 
-syzbot found the following issue on:
+So that's your difference between devices - you choose the oscillator.
 
-HEAD commit:    3a85c1011540 usb: host: cdns3: forward lost power informat..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1590f874580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7e0ed68747dbff9
-dashboard link: https://syzkaller.appspot.com/bug?extid=701fc9cc0cb44e2b0fe9
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1726ae54580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1390f874580000
+> 
+>   Both register refer to the same oscillators in hardware (hence each
+>   port should select the correct one)
+>   Selecting oscillator 0 for both USB port is problematic.
+> 
+> With this in mind is it ok if I describe this with something like
+> 
+> airoha,usb2-monitor-clk-sel = <AIROHA_USB2_MONCLK_SEL0>;
+> 
+> and some dt-bindings include
+> 
+> #define AIROHA_USB2_MONCLK_SEL0 0
+> #define AIROHA_USB2_MONCLK_SEL1 1
+> #define AIROHA_USB2_MONCLK_SEL2 2
+> #define AIROHA_USB2_MONCLK_SEL3 3
+> 
+> Or an enum of string like "osc0", "osc1", "osc2"...?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/eaddfad7c5c2/disk-3a85c101.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d37f14fba48b/vmlinux-3a85c101.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/47054ab7f64f/bzImage-3a85c101.xz
+Both are fine.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com
-
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-usb 1-1: Found UVC 0.00 device syz (046d:08c3)
-usb 1-1: No streaming interface found for terminal 6.
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 25 at drivers/media/mc/mc-entity.c:1144 media_create_pad_link+0x5c1/0x760 drivers/media/mc/mc-entity.c:1144
-Modules linked in:
-CPU: 1 UID: 0 PID: 25 Comm: kworker/1:0 Not tainted 6.14.0-rc6-syzkaller-g3a85c1011540 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:media_create_pad_link+0x5c1/0x760 drivers/media/mc/mc-entity.c:1144
-Code: d8 48 83 c4 28 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc e8 70 7e 65 fc 90 0f 0b 90 bb ea ff ff ff eb d6 e8 60 7e 65 fc 90 <0f> 0b 90 eb ee e8 55 7e 65 fc 90 0f 0b 90 eb e3 e8 4a 7e 65 fc 90
-RSP: 0018:ffffc900001aef18 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888118fa0880 RCX: ffffffff8515cf70
-RDX: ffff888102689d40 RSI: ffffffff8515d490 RDI: 0000000000000002
-RBP: ffff888121e9f880 R08: 0000000000000002 R09: 0000000000000000
-R10: 0000000000000000 R11: ffffffff8ee92ad0 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000003 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffec100cca8 CR3: 0000000122e30000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- uvc_mc_create_links drivers/media/usb/uvc/uvc_entity.c:50 [inline]
- uvc_mc_register_entities+0x3a8/0xaa0 drivers/media/usb/uvc/uvc_entity.c:151
- uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2142 [inline]
- uvc_probe+0x2859/0x4810 drivers/media/usb/uvc/uvc_driver.c:2278
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x114b/0x1a70 drivers/base/core.c:3666
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x114b/0x1a70 drivers/base/core.c:3666
- usb_new_device+0xd09/0x1a20 drivers/usb/core/hub.c:2663
- hub_port_connect drivers/usb/core/hub.c:5531 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
- port_event drivers/usb/core/hub.c:5831 [inline]
- hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5913
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3400
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Best regards,
+Krzysztof
 
