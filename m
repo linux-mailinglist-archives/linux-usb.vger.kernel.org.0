@@ -1,200 +1,140 @@
-Return-Path: <linux-usb+bounces-21902-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21903-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C167A685ED
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 08:41:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D44CA689BE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 11:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B6511B60C4C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 07:40:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 751E519C2C9D
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 10:35:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F422505B6;
-	Wed, 19 Mar 2025 07:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE20A253F25;
+	Wed, 19 Mar 2025 10:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTC2J7vI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NRFr29Lh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF07520E31B;
-	Wed, 19 Mar 2025 07:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC09D253352;
+	Wed, 19 Mar 2025 10:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742370006; cv=none; b=BI3+9M4H1jxxESAfyNRmSVkjdrof6I5LcmAkAWLydMOUVvnvjGB/AdpRj81jgAykYlV2Q1Sza4HmYQp7/DW796asMycWOhScIlqUXSOVaGYpp5NuwFEsMzH6SqQTAn84BLlYWxWcjvTbG7Pi5jNPyKo0AkDW+wOH4Xa2ep6kQaY=
+	t=1742380528; cv=none; b=SJ7Kvm5I1OfeZFcd2mSLt+tQ/rU1Eg5ZJQAdm9DniWSIJKTuyjp3WG/TMw1XnLVsYr4VcsrEQAs9WBRZUSodnazRcvOzbssYfY+sXOBJx1mv6M3uu2dFs4JsLdDyJqr0s5TO61HtYJFcA5Cice4EmvMV+7drpfD+YuU+CxoZs/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742370006; c=relaxed/simple;
-	bh=tKIbx2+7UEC6SU/Ci8glYFwYES+rjaNTdcbdH+R6TS4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b6vOfK/30ZIbVDI36fqCtZ0xWtJz46neO5QtQ3Ij+FdpsKgz76jUMf+st4S97+oaydJYpmb8wCFRUZ2gpe48i/H+1r7TLwsBeS9PGXtgkb6ehQXNpUBLYmuVioa+nnq/vzIFuBLCeKeHXf3SbWZ1tmP1VKZCde1fArx8pxuOy0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTC2J7vI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4F4C4CEE9;
-	Wed, 19 Mar 2025 07:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742370005;
-	bh=tKIbx2+7UEC6SU/Ci8glYFwYES+rjaNTdcbdH+R6TS4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iTC2J7vI9gdw4qI2bdHDiMSymEqGhCe2EaCZpTpfQ2DERnFKR7kQs4qTvHQnTr7Tf
-	 Ng+DPcHm19bSxSO0miPkBpWLO9gbiq1xESNFLalNDHqTCSKQCmbd3l20qsrxk52w7E
-	 1h+0v7377B0cpcqmfluYlpWf/kC4rT5P6xGzjjlq9e/M9/O33V9w2INM76kL2Cdj/P
-	 BfD+wdg8rSDUGHcoR4q3cB/LF3zf9aViOVfjBrvSYFhbuZWGQRR9UO2pkjT8JYGzm5
-	 f2jqjFYo3VhcjJWuf2wRJ3A6viyEJjxq4lLg20lqwORpgH2hKficXCrNhSLVw+6SiB
-	 w0dToPGlDelcA==
-Message-ID: <cd445f29-ea01-4e57-b1b7-4e9c3bfbcc8f@kernel.org>
-Date: Wed, 19 Mar 2025 08:39:52 +0100
+	s=arc-20240116; t=1742380528; c=relaxed/simple;
+	bh=bkb2aj+ND5fVbPnCKkskLmtkIcJtDAREoubFFIC7OjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AhOE71uoc05ItHB4iLTdRM665Vz0AjLELOOVQGhhmKnRPnxFAwgFBnud70OYfXfnqwHqXC6LnfAZBdbp3z/imeBlQySmvzKYDX6iaNB5zIm9L0p6WVQLpUIboLgT5cq2VvThLXBszdrOUXpOFaAGKXFIJBYfVdeUM/t8sFvO/lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NRFr29Lh; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742380527; x=1773916527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bkb2aj+ND5fVbPnCKkskLmtkIcJtDAREoubFFIC7OjM=;
+  b=NRFr29LhLkiVrsJmm5UP0jTuNzmuYl0BgDE5WnplT+6zZMsWw+Zgq9Si
+   cbtMsFADx03KJuRVf3BTckmH8Txf4eLtt5cTdyx3SrckXhpm9JrwxgXYc
+   B/NRWXqTi7uLabfE8n/CQK5rDQJqGzgbq6X9my4qdz44L+MC+Xu8EsmyI
+   X2Sj53M7imvJq0XMirlyKcHc7k/cLD+m82sKsj/YuzmFmNn6fXokjeINk
+   lcw02t11ynQLubXzP0fo91HD8vd6CHIhY4xxeKGjmJ0weQRHTFb4Ksl/y
+   ARkpKA7gtUz2xXvUqsSmkPCSWxnr3G87z5rRh8dDMU4AHhgXkYmR8ihj7
+   w==;
+X-CSE-ConnectionGUID: wyC+1B9uSby7zZ2mxwvZew==
+X-CSE-MsgGUID: YOBV8RoZTF25jy6rFJkYjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11377"; a="54232793"
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="54232793"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 03:35:26 -0700
+X-CSE-ConnectionGUID: d0W5vS45RIOvYcKW4YxbiQ==
+X-CSE-MsgGUID: oPJRO9ezR1KCXX9CLxG3rA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="126770318"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 03:35:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tuqld-00000003tIn-0VmX;
+	Wed, 19 Mar 2025 12:35:21 +0200
+Date: Wed, 19 Mar 2025 12:35:20 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net v1 1/1] net: usb: asix: ax88772: Increase phy_name
+ size
+Message-ID: <Z9qd6HfmfE18Clxv@smile.fi.intel.com>
+References: <20250318161702.2982063-1-andriy.shevchenko@linux.intel.com>
+ <481268aa-c8e9-4475-bd5c-8d0f82a6652a@lunn.ch>
+ <Z9mlWNdvWXohc6aM@smile.fi.intel.com>
+ <f9640312-3641-4f32-9803-a76b2b010d7d@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/13] dt-bindings: phy: Add documentation for Airoha
- AN7581 USB PHY
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Daniel Danzberger <dd@embedd.com>,
- Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
- Nikita Shubin <nikita.shubin@maquefel.me>, Guo Ren <guoren@kernel.org>,
- Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
- Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
- upstream@airoha.com
-References: <20250309132959.19045-1-ansuelsmth@gmail.com>
- <20250309132959.19045-10-ansuelsmth@gmail.com>
- <4f16d239-f540-45d5-b67a-767b09f1c70c@kernel.org>
- <67d0862f.df0a0220.375bd.6b15@mx.google.com>
- <4a9ac302-dfbe-4d76-a634-a445957c313c@kernel.org>
- <67d95979.050a0220.166852.25e6@mx.google.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <67d95979.050a0220.166852.25e6@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9640312-3641-4f32-9803-a76b2b010d7d@lunn.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 18/03/2025 12:31, Christian Marangi wrote:
-> On Sun, Mar 16, 2025 at 06:01:02PM +0100, Krzysztof Kozlowski wrote:
->> On 11/03/2025 19:51, Christian Marangi wrote:
->>>>
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    enum: [0, 1]
->>>>
->>>> I don't understand why do you need index property here (which are
->>>> usually not allowed).
->>>>
->>>
->>> Eh... As said in the description this is really to differentiate the 2
->>> different physical port...
->>>
->>> Each port have a dedicated oscillator for calibration and these
->>> calibration are identified by an offset (all placed one after another in
->>> a separate register space).
->>
->> So different oscillators? Then describe the oscillator and its differences.
->>
->> Different programing model? Different compatible.
->>
->> Other difference? Depending what is the difference.
->>
->> But there is no such thing as "different port ID" based on your
->> description above. You just claimed that they are different, but you do
->> not put that difference to hardware description. Instead you encode that
->> difference in the drivers and it should be opposite. The DTS, so the
->> hardware description, should tell you the difference. And I am sorry,
->> but in 99% of cases "I am the first phy" and "I am the second" is not
->> the actual difference we are interested in.
->>
-> 
-> Ok to make it as clear as possible. (hope I don't contraddict with the
-> previous statement) (actually yes the "separate register space statement
-> was wrong and sorry for the confusion")
-> 
-> - 2 USB port
-> - USB 2.0 needs to be calibrated with an oscillator
-> - Each USB port have his own dedicated oscillator somewhere in the HW
-> - Each USB port have at the same offset a register to SELECT the
->   oscillator. This register refer to the same oscillator selection in
->   the HW.
->   
->   Example:
->   reg 0x1fac0100 MASK 27:26 can be set to source out of oscillator 0,1,2
->   reg 0x1fae0100 MASK 27:26 can be set to source out of oscillator 0,1,2
+On Tue, Mar 18, 2025 at 06:09:12PM +0100, Andrew Lunn wrote:
+> On Tue, Mar 18, 2025 at 06:54:48PM +0200, Andy Shevchenko wrote:
+> > On Tue, Mar 18, 2025 at 05:49:05PM +0100, Andrew Lunn wrote:
 
-So that's your difference between devices - you choose the oscillator.
+...
 
-> 
->   Both register refer to the same oscillators in hardware (hence each
->   port should select the correct one)
->   Selecting oscillator 0 for both USB port is problematic.
-> 
-> With this in mind is it ok if I describe this with something like
-> 
-> airoha,usb2-monitor-clk-sel = <AIROHA_USB2_MONCLK_SEL0>;
-> 
-> and some dt-bindings include
-> 
-> #define AIROHA_USB2_MONCLK_SEL0 0
-> #define AIROHA_USB2_MONCLK_SEL1 1
-> #define AIROHA_USB2_MONCLK_SEL2 2
-> #define AIROHA_USB2_MONCLK_SEL3 3
-> 
-> Or an enum of string like "osc0", "osc1", "osc2"...?
+> > > > -	char phy_name[20];
+> > > > +	char phy_name[MII_BUS_ID_SIZE + 5];
+> > > 
+> > > Could you explain the + 5?
+> > > 
+> > > https://elixir.bootlin.com/linux/v6.13.7/source/drivers/net/ethernet/davicom/dm9051.c#L1156
+> > > https://elixir.bootlin.com/linux/v6.13.7/source/drivers/net/ethernet/freescale/fec_main.c#L2454
+> > > https://elixir.bootlin.com/linux/v6.13.7/source/drivers/net/ethernet/xilinx/ll_temac.h#L348
+> > > 
+> > > The consensus seems to be + 3.
 
-Both are fine.
+And shouldn't it be 4 actually? %s [MII_BUS_ID_SIZE] + ':' + '%02x' + nul
 
-Best regards,
-Krzysztof
+> > u16, gcc can't proove the range, it assumes 65536 is the maximum.
+> > 
+> > include/linux/phy.h:312:20: note: directive argument in the range [0, 65535]
+> 
+> How about after
+> 
+>         ret = asix_read_phy_addr(dev, priv->use_embdphy);
+> 	if (ret < 0)
+> 		goto free;
+> 
+> add
+> 
+>         if (ret > 31) {
+> 	        netdev_err(dev->net, "Invalid PHY ID %d\n", ret);
+> 	        return -ENODEV;
+> 	}
+> 
+> and see if GCC can follow that?
+
+No, with + 3 it doesn't work, need + 4.
+
+Another possibility to change the _FMT to have %02hhx instead of %02x.
+
+Tell me which one should I take?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
