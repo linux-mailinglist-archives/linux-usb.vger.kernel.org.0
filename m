@@ -1,70 +1,61 @@
-Return-Path: <linux-usb+bounces-21931-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21932-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A03A694C0
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 17:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD11A69621
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 18:15:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91946462DFE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 16:23:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E09717F1AC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 17:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC9F1DF248;
-	Wed, 19 Mar 2025 16:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4EAF1EB5F9;
+	Wed, 19 Mar 2025 17:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q3RvGWYs"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="BnEE45AP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7E61361;
-	Wed, 19 Mar 2025 16:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DE71DDC36;
+	Wed, 19 Mar 2025 17:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742401381; cv=none; b=C1KwuCC/8IPcie+rbIWjfVuUAcZFuIJ6RRySPQZyDP1L/jlrlttqvB8rl6cCDOhQxhzu0h/q1caL/+q9JpqUixfLfv6laQkrwjWjUE+Y4pLWxdMvmXaE1g+h2lAmex9/QecXNCC8gZv/4wi1gF0L8GaIvq2CAUhghfVGF4LUlLA=
+	t=1742404440; cv=none; b=p66ZKlbeNZWvbMp+Mk6jDESL6czC/AEe+VjonMjys91jje7e2SHGOcqN0/0EhAJHsGKdPJ+ThfXKsrSloRG73hjbm28TBwwrh4fY9aw6vE5zXy4Us2+exTch2Aa8wIqELHxG6oP9CiHK67cztHKdFUQgQr8iQJ8g1g4iCRO0ePY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742401381; c=relaxed/simple;
-	bh=iHIqJYLkK9BQSabqoYL+rnhGusscRAiHOJAuHss1rpw=;
+	s=arc-20240116; t=1742404440; c=relaxed/simple;
+	bh=wAQQse1JJ2NrTswaol+dHctLRt+H6YYb1Y+zzArtGvk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hE2CkWMIEPIhkBfuJ7001/TuLNUrrlUksYh79ZwWbFlZuwtuC47ygDpfUqZBo64eluzSd9h4MyDWDo4waoYoYsytT+Sb5ohYh2PiLrOKZGLD8JHSG5x8BJLuYnqUb5nd8SHT1v11ac0rgSBlH1i/o+a1N+UvacfxRA0r1Ju5MzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q3RvGWYs; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742401380; x=1773937380;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iHIqJYLkK9BQSabqoYL+rnhGusscRAiHOJAuHss1rpw=;
-  b=Q3RvGWYs5dyEMmbWkEhz7VB+ekngt+pyaXt6lB0ajJnKiNyDFsdQ7DPD
-   e8n3JMatyvp00do8n5KzYyAKufuYSWzi7gdwVadQxa5Jj81o1xvY1gGcU
-   4Osa9Mln2GryE5OiU7XKNkE/o/VHK657ilJQftQt6xN+KfH70MwuJe7Sj
-   QuNbtJPC9JMcn3nRn1lMmcWdIilotLFs+OGuKt1fU2Dh3AjVSO40oT7/b
-   tkhkZaCJaeMm2ncbZQ0NbytGg501dEqQjLaLY6gjWav53dJ3lGW0rL3+W
-   w7zu7xtDXZfDkcW8arFyCpyjnpgx4K7SB+Woo/HO07TU++saMAyCgnHlb
-   g==;
-X-CSE-ConnectionGUID: DzaUMRsTS7KizNck39E/wA==
-X-CSE-MsgGUID: DSFERfr8ThGUztdES/562g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="43706740"
-X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="43706740"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 09:22:59 -0700
-X-CSE-ConnectionGUID: f6Se1N2cSmGnWOKmbjot4g==
-X-CSE-MsgGUID: YOUeaOX4RA6fuvBBn2aMTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="123174041"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 09:22:57 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tuwBy-00000003zXS-1rOo;
-	Wed, 19 Mar 2025 18:22:54 +0200
-Date: Wed, 19 Mar 2025 18:22:54 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kpEWGwiy+dfWh+s9gTe3+vCHw7Ape/1rBaKbg9QE4KMpuoQmprey++0yXMtqCYYsxorcIzS0N7c8lxeVHVTzB6huO2fFYvBIHzxaVI/JEl0URvu/Gn9jXnLjyKBgLnpO3pUKjMoi3qCeB/9ghUgGxjfL9TFciISNyJIRuh+vAPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=BnEE45AP; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=pI17Q4nNlTm+hhSsaQohyNStV7Ae92pJPOoQhC5orr0=; b=BnEE45APQwPLklTv+eKyR7FAA5
+	SJ57khjn79weVrVU4W/lIe3bRI0hAvSAbRq7iVDDWS3KFOB0MjyTaZAM9Ethxj469sFl4RufLdg2l
+	2b/CI/yCV9l8zRP1ZrVS2MM7Q7Tg0ii47AoLbDoOT2tC02xhMfXQahO4PcTQvvCS/NRU2BsWM+//c
+	HUI3CspJkIi2cmi/vBQ+7o/Ka0NCKKFI+SEOYMWRjFVtP8jrlxh7VGpo/NxmXp2mWvCC0DWAWoPxR
+	X0ls9cAn/VSSor4/NuQrdg0LLj4zRqyEs7G74SKFRhADDBMX+N1zjcU2g3AXVDZHKCpPNp+HzL1yk
+	norqMC9w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59960)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1tuwzL-0006ih-03;
+	Wed, 19 Mar 2025 17:13:55 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1tuwzJ-0005n7-0O;
+	Wed, 19 Mar 2025 17:13:53 +0000
+Date: Wed, 19 Mar 2025 17:13:52 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -73,82 +64,65 @@ Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
 	Heiner Kallweit <hkallweit1@gmail.com>
 Subject: Re: [PATCH net v2 2/2] net: usb: asix: ax88772: Increase phy_name
  size
-Message-ID: <Z9rvXilnPCblbfIv@smile.fi.intel.com>
+Message-ID: <Z9r7UPJUJ_Ds6n-6@shell.armlinux.org.uk>
 References: <20250319105813.3102076-1-andriy.shevchenko@linux.intel.com>
  <20250319105813.3102076-3-andriy.shevchenko@linux.intel.com>
  <Z9rYHDL3dNbaK9jZ@shell.armlinux.org.uk>
+ <Z9rvXilnPCblbfIv@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9rYHDL3dNbaK9jZ@shell.armlinux.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <Z9rvXilnPCblbfIv@smile.fi.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Wed, Mar 19, 2025 at 02:43:40PM +0000, Russell King (Oracle) wrote:
-> On Wed, Mar 19, 2025 at 12:54:34PM +0200, Andy Shevchenko wrote:
-
-> > GCC compiler (Debian 14.2.0-17) is not happy about printing
-> > into a short buffer (when build with `make W=1`):
+On Wed, Mar 19, 2025 at 06:22:54PM +0200, Andy Shevchenko wrote:
+> On Wed, Mar 19, 2025 at 02:43:40PM +0000, Russell King (Oracle) wrote:
+> > On Wed, Mar 19, 2025 at 12:54:34PM +0200, Andy Shevchenko wrote:
+> > > -	char phy_name[20];
+> > > +	char phy_name[MII_BUS_ID_SIZE + 3];
 > > 
-> >  drivers/net/usb/ax88172a.c: In function ‘ax88172a_reset’:
-> >  include/linux/phy.h:312:20: error: ‘%s’ directive output may be truncated writing up to 60 bytes into a region of size 20 [-Werror=format-truncation=]
+> > MII_BUS_ID_SIZE is sized to 61, and is what is used in struct
+> > mii_bus::id. Why there a +3 here, which seems like a random constant to
+> > make it 64-bit aligned in size. If we have need to increase
+> > MII_BUS_ID_SIZE in the future, this kind of alignment then goes
+> > wrong...
+> > 
+> > If the intention is to align it to 64-bit then there's surely a better
+> > and future-proof ways to do that.
 > 
-> GCC reckons this can be up to 60 bytes...
+> Nope, intention is to cover the rest after %s.
 
-It has two complains, but they a bit differ, first one was about %s, as you see
-above, the other one which I missed to add here is about %02x:
+Oops, I had missed that MII_BUS_ID_SIZE is the size of the "%s" part.
+I think linux/phy.h should declare:
 
-drivers/net/usb/ax88172a.c:311:9: note: ‘snprintf’ output between 4 and 66 bytes into a destination of size 20
+#define PHY_ID_SIZE (MII_BUS_ID_SIZE + 3)
 
-...
+to cater for the ":XX" that PHY_ID_FMT adds.
 
-> > -	char phy_name[20];
-> > +	char phy_name[MII_BUS_ID_SIZE + 3];
-> 
-> MII_BUS_ID_SIZE is sized to 61, and is what is used in struct
-> mii_bus::id. Why there a +3 here, which seems like a random constant to
-> make it 64-bit aligned in size. If we have need to increase
-> MII_BUS_ID_SIZE in the future, this kind of alignment then goes
-> wrong...
-> 
-> If the intention is to align it to 64-bit then there's surely a better
-> and future-proof ways to do that.
+So the above would become:
 
-Nope, intention is to cover the rest after %s.
+	char phy_name[PHY_ID_SIZE];
 
-...
+I wonder whether keeping PHY_ID_FMT as-is, but casting the argument
+to a u8 would solve the issue?
 
-> I'm also surprised that the +3 randomness wasn't described in the
-> commit message.
+Maybe something like:
 
-It was referred in the cover letter and previous discussion, but I agree that
-it has to be clarified here, it's ':%02x', the %s case, i.e. MII_BUS_ID_SIZE
-covers 60 characters + NUL.
+static inline void
+phy_format_id(char *dst, size_t n, const char *mii_bus_id, u8 phy_dev_id)
+{
+	BUILD_BUG_ON_MSG(n < PHY_ID_SIZE, "PHY ID destination too small");
+	snprintf(dat, n, PHY_ID_FMT, mii_bus_id, phy_dev_id);
+}
 
-...
-
-> > +	if (ret >= PHY_MAX_ADDR) {
-> > +		netdev_err(dev->net, "Invalid PHY ID %x\n", ret);
-> 
-> An address is not a "PHY ID". "Invalid PHY address %d\n" probably makes
-> more sense, but if you want to keep the hex, then it really should be
-> %#x or 0x%x to make it clear that e.g. "20" is hex and not decimal.
-
-Sure, I fix it locally, but we need to understand how to go with the
-+3/+whatever fix, so format specifier won't hit us back.
-
-...
-
-Thank you for the review!
+would solve it?
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
