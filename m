@@ -1,124 +1,129 @@
-Return-Path: <linux-usb+bounces-21874-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D260DA681D9
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 01:54:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A9CA682BD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 02:28:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FC5F7AC904
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 00:53:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9789E176FC3
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 01:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8005F1CAA81;
-	Wed, 19 Mar 2025 00:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715CF2248A8;
+	Wed, 19 Mar 2025 01:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="glVSwiBs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UaLE5S/4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A9914D43D;
-	Wed, 19 Mar 2025 00:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76C2207E04;
+	Wed, 19 Mar 2025 01:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742345536; cv=none; b=WyQe6zuDwxYMjwLzl17H4CvR6w16VM6Rgki5HdOSpWugywGh6Bj5n3snmszBI+loNucf1wKYUEHLDxOAs5wxtKiwtJegYINV6QUdxFQQ6sC2uOddT0tn854sUhb3E+xMTL6bKM5UGrjORvcFTSHBihRYZqLwnJnzGQnX3HTssqI=
+	t=1742347675; cv=none; b=o4bRUmlT1975AMYe5pSaOIqSePeEaIR2A5oJ9HWj72HLOZhE6oJbYBWWwR/vBOuxwSsls79JMI8RYoVUXGiwv9oJ6WjBSKWAFiqwzSGTQRmzMOyim2TR+8THZt5cfQWuz7Zf3j2kB5omOK6rD3Ja/POz3OAEEFMNCkeDGXeznKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742345536; c=relaxed/simple;
-	bh=tHcXDwbmG9clKLv81IEEz9Giw5qRYs1/YjdseAv9Dbg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LXWQVmz9Cscr+HfeR78Lwf3O9D4/x4q1D+KQVbUVFWYTBA725N/bGPMtPTuGCUpQfFXBNzbbnXQovuNbqwjVliS2Ydkkk739f7WDsmlLBQlDfeUrLZV1dAGozmuixtCMkPTh1gdjYjGZ7+7ZGTOWjhF4p+TP19oCmbk3SETCi6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=glVSwiBs; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52IJienq022737;
-	Wed, 19 Mar 2025 00:52:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Z7WMBFHQhktNaf8pql7zKR7DGPBcFESHbjhgEvWcI5U=; b=glVSwiBs6djJpD0c
-	J40hbl/sivkbLZgY0lnEe0f59K7hzB4Ts44HQ8HkD5zuCl5lLL2Pi/2v/M4sOkHS
-	+squSiEQe9NHmJkHuI1gPBFJOOgNEt7LV3jlYmdSk5u42ox2WGYdQyQuvty0AYVo
-	hI5Ehi8FFvlCFgUp3pNnUrO/cIpUKghlCOTZmsPNtTVGl+w5cHI+cHjPpAp6oVy+
-	0zxFQx2MJOYT6tBu8g+XQhT8hrTPTktSl3bXPS0QhkXtI7fXXOyDvY8WTnAgdtXZ
-	Vi6uvq/rQEodBUJdfCKEwWw8Uyt6jcy+ijs0PaYIiDyQeEGejRz4P3uGrpn90zO9
-	t7zmMQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45exwx3hrn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Mar 2025 00:52:00 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52J0q0Bt006594
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Mar 2025 00:52:00 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 18 Mar 2025 17:51:59 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
-        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v36 31/31] ALSA: usb-audio: qcom: Notify USB audio devices on USB offload probing
-Date: Tue, 18 Mar 2025 17:51:41 -0700
-Message-ID: <20250319005141.312805-32-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250319005141.312805-1-quic_wcheng@quicinc.com>
-References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1742347675; c=relaxed/simple;
+	bh=CuVaPYVmTxG9Z/4/GY8XJLK4/KQ794QljAoN47lFzjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TpsrxvIz8PLUnjCkBCFY8A3Fr3hF7L30CJOgGpx5xoz9n9touqrm66Gz+mS3nfdOIiYer1cr64M7BmgiBzLSCBS/GgeLjFdTauhNoMwKGNdtvvri0yumHqbKh4w7VxBfWNC9m/RkI3Qy2aq8DT2z6HL8nK1l0FXnM4H6ER0do2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UaLE5S/4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C169C4CEE3;
+	Wed, 19 Mar 2025 01:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742347674;
+	bh=CuVaPYVmTxG9Z/4/GY8XJLK4/KQ794QljAoN47lFzjI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UaLE5S/4qIpbLqkK+uTylbL9aZ26EtlwM/+7mnRprz2E8Pi3JWsAXRg4QbCu0orKs
+	 SVTSDjbX9ZE+yFitzbzo9ZCY+XJyu4ncJxN02+NDCcFf6bWmk2cW9Df87WdjD1lEYY
+	 SJlTJUYUB/ntzlEHmSuGEtUw+vNsnibebqwjGya3h8ucocZwxVYdC9PZzqSjYqmW+c
+	 Kw/XxQ/vCseqQYEvkokYtSJ8TNyQ4ujvQV4ckDoCY9OqVGkYi3NMXqqVAhI5DIgyJa
+	 Avz0g7TrjSOPSm0DLFMWqvRtJsEdI5d8KUiH43ootRqKpNxoTiBaLAFIC2y9AX6AoF
+	 EkQCyki6IB/4A==
+Date: Wed, 19 Mar 2025 09:27:47 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Ralph Siemsen <ralph.siemsen@linaro.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Aswath Govindraju <a-govindraju@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Steven Rostedt <rostedt@goodmis.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdns3: Fix deadlock when using NCM gadget
+Message-ID: <Z9odk4aHd76nXxZ-@nchen-desktop>
+References: <20250318-rfs-cdns3-deadlock-v2-1-bfd9cfcee732@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jkD5seBvxtpwfKY3v3DbjE-nNgIK8KL-
-X-Authority-Analysis: v=2.4 cv=INICChvG c=1 sm=1 tr=0 ts=67da1530 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=0R9NKns1a96QCZ5VGfgA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: jkD5seBvxtpwfKY3v3DbjE-nNgIK8KL-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-18_10,2025-03-17_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 phishscore=0 mlxscore=0 spamscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503190003
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250318-rfs-cdns3-deadlock-v2-1-bfd9cfcee732@linaro.org>
 
-If the vendor USB offload class driver is not ready/initialized before USB
-SND discovers attached devices, utilize snd_usb_rediscover_devices() to
-find all currently attached devices, so that the ASoC entities are notified
-on available USB audio devices.
+On 25-03-18 11:09:32, Ralph Siemsen wrote:
+> The cdns3 driver has the same NCM deadlock as fixed in cdnsp by commit
+> 58f2fcb3a845 ("usb: cdnsp: Fix deadlock issue during using NCM gadget").
+> 
+> Under PREEMPT_RT the deadlock can be readily triggered by heavy network
+> traffic, for example using "iperf --bidir" over NCM ethernet link.
+> 
+> The deadlock occurs because the threaded interrupt handler gets
+> preempted by a softirq, but both are protected by the same spinlock.
+> Prevent deadlock by disabling softirq during threaded irq handler.
+> 
+> cc: stable@vger.kernel.org
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/usb/qcom/qc_audio_offload.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index 31624753284e..1a3688cc83d6 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -1966,6 +1966,8 @@ static int __init qc_usb_audio_offload_init(void)
- 	if (ret < 0)
- 		goto release_qmi;
- 
-+	snd_usb_rediscover_devices();
-+
- 	return 0;
- 
- release_qmi:
+> ---
+> v2 changes:
+> - move the fix up the call stack, as per discussion at
+> https://lore.kernel.org/linux-rt-devel/20250226082931.-XRIDa6D@linutronix.de/
+> ---
+>  drivers/usb/cdns3/cdns3-gadget.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index fd1beb10bba72..19101ff1cf1bd 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -1963,6 +1963,7 @@ static irqreturn_t cdns3_device_thread_irq_handler(int irq, void *data)
+>  	unsigned int bit;
+>  	unsigned long reg;
+>  
+> +	local_bh_disable();
+>  	spin_lock_irqsave(&priv_dev->lock, flags);
+>  
+>  	reg = readl(&priv_dev->regs->usb_ists);
+> @@ -2004,6 +2005,7 @@ static irqreturn_t cdns3_device_thread_irq_handler(int irq, void *data)
+>  irqend:
+>  	writel(~0, &priv_dev->regs->ep_ien);
+>  	spin_unlock_irqrestore(&priv_dev->lock, flags);
+> +	local_bh_enable();
+>  
+>  	return ret;
+>  }
+> 
+> ---
+> base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+> change-id: 20250312-rfs-cdns3-deadlock-697df5cad3ce
+> 
+> Best regards,
+> -- 
+> Ralph Siemsen <ralph.siemsen@linaro.org>
+> 
+
+-- 
+
+Best regards,
+Peter
 
