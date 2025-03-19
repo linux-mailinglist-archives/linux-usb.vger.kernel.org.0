@@ -1,240 +1,147 @@
-Return-Path: <linux-usb+bounces-21918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F52A68D33
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:51:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E549BA68D45
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:57:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 922EB1777B0
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 12:51:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 763457A802B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 12:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3B625522E;
-	Wed, 19 Mar 2025 12:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63ABD2561CC;
+	Wed, 19 Mar 2025 12:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jookia.org header.i=@jookia.org header.b="RIvRaYIT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7pu23bv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21BF256C74
-	for <linux-usb@vger.kernel.org>; Wed, 19 Mar 2025 12:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A92255E4E;
+	Wed, 19 Mar 2025 12:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742388660; cv=none; b=s9tieD1aepHpoR4WjIkdFc+fDwAFh4c1ICY+XElD/vNT4SJbhTkrbnHkYWXfg/Vq/e1R3R5DcVz9SmjBKGhN0QLaZ1IEyYVj2DpZsxV2oPT7kKtrlnZQV/sC2kmaV/sTVW92+p9Ug1apcpuOg67Fhyxqige0ZPayLg1ctrxqhhI=
+	t=1742389015; cv=none; b=kS2nGdRNyRAWMV1ko4CzOLu0q9Xyb3akDyBo2a5WV7pelkN2MYbKQcGslps8Taecx6HY2jcknf92vA2vIGS8OdcdxF3TkJozeHPgmx9GPEYt3g6hAb/xaVeDw4PkuJQpdxHHd/E0HeAWuTboniXdKTRhxcRJYApcK6xGWpxHB3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742388660; c=relaxed/simple;
-	bh=Vgu9QpLQ8NzMteKcw39Ik0lHKvd7kXEza/zrlY12YHo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y2nFjRLg9QvSQmKD8p/e4ie5t+Wi13xK+5K2PmIU+R7a8MQgo/qKkI99VuDHNKj3UFcg29Oca9pqB6QVu5qyGHX9CklvR+wTDYwxGVPW7WttARjDoLMZzsBqnonPRZ6Vu1WGBUzT0fOqpZYFyMDdJUvtHRuNXse9EGJp6nRnlxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jookia.org; spf=pass smtp.mailfrom=jookia.org; dkim=pass (2048-bit key) header.d=jookia.org header.i=@jookia.org header.b=RIvRaYIT; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jookia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jookia.org
-Date: Wed, 19 Mar 2025 23:50:04 +1100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
-	t=1742388644;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZQUJuu8RR3480H+KUDZsaepfSJB1QqD/N+g3TCs245U=;
-	b=RIvRaYITSHqAnUwm2pI83P1Gp0Mo4KjsiJq7hq4+E6mFDS34mM8Jqppr5FGugruST0Bgkq
-	2227YIq1TyUavT4FSCCUklUzfunP/aTz3wwNiBTANEH0G7XrL9WpA/eRmWPSyxy1nV6Ji7
-	U7Abh6PTWacCKv3qOjIqTLGJIbig0I23NBlpqMfGYsyVuS4lYLtLegsOPmIipyrsLIf+LV
-	2x1OqqDBBD3eceTyF1aPxBoxK1TPpOu7MJtrRGGJhE6HM17imnUfqTwvdb/u6hO7Geiozw
-	+fCEhwmxb9Gjo1ST/7u2xxmtfKSKfREtdHQ+jDZh+Z72jWuAVPjh3eLPBLyXkg==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: John Watts <contact@jookia.org>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ch341: Clear interrupt register after each
- interrupt
-Message-ID: <Z9q9fD0Gi4WxjFkT@titan>
-References: <20250319-ch341-v1-1-9f33f051fc6a@jookia.org>
+	s=arc-20240116; t=1742389015; c=relaxed/simple;
+	bh=rP5OqDL3fH4Cg8a+h2J+kDWfriTgr0IxmZYcqE/+s84=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b7gWyeCBCOMOzXmtXNBR9hezYGTgjkvT1dGwRhkiKF+oHIIFxMjdIBVk9a+JdQNebSS44euvizZY6wLAoqTDmkwwnfROzGyxBRQrKVPrGjeqq6lFnVNIrc9lXRsM00g08wmCP3XmOdSY/QMHUtlMv/6TOmgyP5dzddOoFwaA6qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H7pu23bv; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3f6ab1b8fc1so4028805b6e.0;
+        Wed, 19 Mar 2025 05:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742389013; x=1742993813; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JS++ktrb2/HykLlbcoAgHKVDVhWZ20hOobCegoXat3s=;
+        b=H7pu23bvkkkxRYBKeugFsQ6DNYfPajsnaE8jhTN4K+wosw01TGMt/Q0ujXleKnJRI4
+         un4Ro06JOyunZcmfywp+BMumAjRsHCIAwTzDIbnJ6Cs0vNdPLEI5YcmzttDLY9nG4qZ3
+         AXtwK6TI2kRhe4B+DKapl3PNCV9O1WOIlhdWvj7+CuCNoOLpnVrm0rLL4/5hS+42rmZl
+         dLGv/9jNfZJelBrE0S4Y15jijRp0oFvP1WAJzBi3YiIDh/m/mATOZH8jRrpihsCKtBlv
+         OesbVMOLO2/fZfZ6MvBcRH8Om6FVfSfIcfowKRnfaHnfA4t/XM6JZe8yKQV3uzeCUKAH
+         9zdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742389013; x=1742993813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JS++ktrb2/HykLlbcoAgHKVDVhWZ20hOobCegoXat3s=;
+        b=fBZB25EPt9aYh1hG6E0y5NqWiU+Nq8EB4QpcwOxiSCtch2qbUntJmR0ahD/sb9HJ+4
+         7ZdPUbYBR4rpeDyu4rX/hauiJtlc4WBU7M1B7BS+OVFPsvPC8PioPm2qlgDLTDuaVLpO
+         ItiABDqzdgsk2zJJxTdGwZBn+X/77vNJMfI0ajGbTMIxruwBxhAZ/xLbqL9KuRXOdpQ+
+         tPNV55KGnLDVYbz0gcPGmpWqWq07K7AWlE7U5kydN4I7hHiPV+52sRgPQ8AnVgW+7h4w
+         ibYeOCuUkFCmZzcnJsgTlUSEXLI5QNIVEJEhc8ERDkvIJWqLh8TinggA45c1sh5PA1yC
+         2rtg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdZsey+/Qg7yMEiwt81a6qBrRsxL8pX7YmB/tjrhJ8TWh8bmHYInNTieomHB7AqLV5BSl2cGFHKY5ofB8=@vger.kernel.org, AJvYcCWwVif69l9KN5r8UTnThf1UCQFaoJVI1QceEpX7vURacgxYe9tYBtVTd1XlZ7MWIuN9Vvc1qzYjNgqt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5bkQVdDeudzPsF4ou+53MH7YOunFyTNjDGIraoIq5vYtp7Uw6
+	lPZ3/E6uUwent+UsXjBmwBtUkZhctOQJvu3TGBm6W6v4m+EIKtdcFrRNAJbctjtyeDzQ0gGfq8g
+	+gVvFNdRqZBgXwU9OS6UnpyjGpMg=
+X-Gm-Gg: ASbGncvYZme0Ik/s4RtGsp9UvqU8TPEODq6nL9SEW15fHa/i5JJxJZ26cwc68S9KlNk
+	vCXSW8po41eZ9m86eWJM7Ofzea/18G7uG7zdQvPUXNJen1NlmEzND4P2AeG7U27wwSxfiNUaXqa
+	82L9lVyH1++cckBTwHQHqCZ5TJ/Rocm/n4EnfJHg==
+X-Google-Smtp-Source: AGHT+IFF9SQTna3K6AFhrUaB1l2KAoa9AnC8ZS6CW+cEAO1pLAksDNvr8ULJLTv0u7Y0S0dwE6DhzXku8kRcFbjfrtQ=
+X-Received: by 2002:a05:6808:1585:b0:3f9:a187:1f5d with SMTP id
+ 5614622812f47-3fead5ea449mr1843804b6e.35.1742389013497; Wed, 19 Mar 2025
+ 05:56:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250319-ch341-v1-1-9f33f051fc6a@jookia.org>
-X-Migadu-Flow: FLOW_OUT
+References: <20250317222927.5b76518e@foxbook>
+In-Reply-To: <20250317222927.5b76518e@foxbook>
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+Date: Wed, 19 Mar 2025 20:56:43 +0800
+X-Gm-Features: AQ5f1JoD8NekiAN6LMoD1gcAH-XPaXA4CuWiAAbXL62OamY4aIhDdHgjpT3TutA
+Message-ID: <CAHN5xi1RgkKQ2J8tJ5+hWUksMm1F9wU6Lx9p_VgqGwCp4812GA@mail.gmail.com>
+Subject: Re: [PATCH] usb: xhci: Fix invalid pointer dereference in Etron workaround
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 19, 2025 at 01:52:20AM +1100, John Watts wrote:
-> The CH340 adapter I have won't send interrupts unless you clear the
-> 0x2727 register after each interrupt. The Windows driver does this but
-> neither the mainline Linux or OEM Linux driver do this.
-> 
-> Without this fix the device status flags for hardware flow control are
-> never updated.
-> 
-> As far as I can tell there is not a register to configure this
-> behaviour, this seems to be a hardware quirk. The chip reports an
-> identical version, vendor and product to a working chip. It's possible
-> this is a clone chip only tested against Windows.
-> 
-> Signed-off-by: John Watts <contact@jookia.org>
+Hi,
+
+Michal Pecio <michal.pecio@gmail.com> =E6=96=BC 2025=E5=B9=B43=E6=9C=8818=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=885:29=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> This check is performed before prepare_transfer() and prepare_ring(), so
+> enqueue can already point at the final link TRB of a segment. And indeed
+> it will, some 0.4% of times this code is called.
+>
+> Then enqueue + 1 is an invalid pointer. It will crash the kernel right
+> away or load some junk which may look like a link TRB and cause the real
+> link TRB to be replaced with a NOOP. This wouldn't end well.
+
+Ah, this could happen, my bad.
+
+>
+> Use a functionally equivalent test which doesn't dereference the pointer
+> and always gives correct result.
+>
+> Something has crashed my machine twice in recent days while playing with
+> an Etron HC, and a control transfer stress test ran for confirmation has
+> just crashed it again. The same test passes with this patch applied.
+>
+> Fixes: 5e1c67abc930 ("xhci: Fix control transfer error on Etron xHCI host=
+")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 > ---
-> This fixes hardware flow control flags like RTS and CTS not updating on
-> a specific (fake?) CH340 chip I have.
-> 
-> John Paul Morrison reported an issue that sounds similar to this one in
-> 2022:
-> https://lore.kernel.org/all/YlP1poVgy0bAP3MN@hovoldconsulting.com/T/
+>  drivers/usb/host/xhci-ring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 60d89cf418da..dc674bc24a89 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -3786,7 +3786,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t=
+ mem_flags,
+>                  * enqueue a No Op TRB, this can prevent the Setup and Da=
+ta Stage
+>                  * TRB to be breaked by the Link TRB.
+>                  */
+> -               if (trb_is_link(ep_ring->enqueue + 1)) {
+> +               if (last_trb_on_seg(ep_ring->enq_seg, ep_ring->enqueue + =
+1)) {
+>                         field =3D TRB_TYPE(TRB_TR_NOOP) | ep_ring->cycle_=
+state;
+>                         queue_trb(xhci, ep_ring, false, 0, 0,
+>                                         TRB_INTR_TARGET(0), field);
+> --
+> 2.48.1
 
-After a lot more testing it looks like this isn't the correct way to fix
-this issue: Status changes will still be dropped if they trigger two
-interrupts in quick succession as I don't poll the status. This is
-something that can happen fairly easily with a null modem cable that
-connects DTR to DSR+DCD.
+Reviewed-by: Kuangyi Chiang <ki.chiang65@gmail.com>
 
-The only proper fix here is to put modem status updates in to its own
-worker that is triggered when we suspect the modem status is out of
-date. It would clear interrupts then read the status properly.
-
-John.
-
-> ---
->  drivers/usb/serial/ch341.c | 51 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index d10e4c4848a0ab9073c4c93638a8796ab61ce3a6..8edbac18146cebd0ff7b9cfaca6853a2c5f047df 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -63,6 +63,7 @@
->  #define CH341_REG_DIVISOR      0x13
->  #define CH341_REG_LCR          0x18
->  #define CH341_REG_LCR2         0x25
-> +#define CH341_REG_INTERRUPT    0x2727
->  
->  #define CH341_NBREAK_BITS      0x01
->  
-> @@ -102,6 +103,9 @@ struct ch341_private {
->  	u8 version;
->  
->  	unsigned long break_end;
-> +
-> +	struct work_struct interrupt_work;
-> +	struct usb_serial_port *port;
->  };
->  
->  static void ch341_set_termios(struct tty_struct *tty,
-> @@ -306,6 +310,32 @@ static int ch341_get_status(struct usb_device *dev, struct ch341_private *priv)
->  	return 0;
->  }
->  
-> +static int ch341_clear_interrupt(struct usb_device *dev)
-> +{
-> +	int r;
-> +
-> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
-> +			CH341_REG_INTERRUPT, 0);
-> +	if (r)
-> +		return r;
-> +
-> +	return 0;
-> +}
-> +
-> +static void ch341_interrupt_work(struct work_struct *work)
-> +{
-> +	struct ch341_private *priv =
-> +		container_of(work, struct ch341_private, interrupt_work);
-> +	struct usb_serial_port *port = priv->port;
-> +	int ret;
-> +
-> +	ret = ch341_clear_interrupt(port->serial->dev);
-> +	if (ret < 0) {
-> +		dev_err_once(&port->dev, "failed to clear interrupt: %d\n",
-> +			ret);
-> +	}
-> +}
-> +
->  /* -------------------------------------------------------------------------- */
->  
->  static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
-> @@ -399,6 +429,9 @@ static int ch341_port_probe(struct usb_serial_port *port)
->  	if (r < 0)
->  		goto error;
->  
-> +	INIT_WORK(&priv->interrupt_work, ch341_interrupt_work);
-> +	priv->port = port;
-> +
->  	return 0;
->  
->  error:	kfree(priv);
-> @@ -438,8 +471,10 @@ static void ch341_dtr_rts(struct usb_serial_port *port, int on)
->  
->  static void ch341_close(struct usb_serial_port *port)
->  {
-> +	struct ch341_private *priv = usb_get_serial_port_data(port);
->  	usb_serial_generic_close(port);
->  	usb_kill_urb(port->interrupt_in_urb);
-> +	flush_work(&priv->interrupt_work);
->  }
->  
->  
-> @@ -466,6 +501,12 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
->  		goto err_kill_interrupt_urb;
->  	}
->  
-> +	r = ch341_clear_interrupt(port->serial->dev);
-> +	if (r < 0) {
-> +		dev_err(&port->dev, "failed to clear interrupt: %d\n", r);
-> +		goto err_kill_interrupt_urb;
-> +	}
-> +
->  	r = usb_serial_generic_open(tty, port);
->  	if (r)
->  		goto err_kill_interrupt_urb;
-> @@ -474,6 +515,7 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
->  
->  err_kill_interrupt_urb:
->  	usb_kill_urb(port->interrupt_in_urb);
-> +	flush_work(&priv->interrupt_work);
->  
->  	return r;
->  }
-> @@ -747,6 +789,7 @@ static void ch341_update_status(struct usb_serial_port *port,
->  static void ch341_read_int_callback(struct urb *urb)
->  {
->  	struct usb_serial_port *port = urb->context;
-> +	struct ch341_private *priv = usb_get_serial_port_data(port);
->  	unsigned char *data = urb->transfer_buffer;
->  	unsigned int len = urb->actual_length;
->  	int status;
-> @@ -770,6 +813,8 @@ static void ch341_read_int_callback(struct urb *urb)
->  
->  	usb_serial_debug_data(&port->dev, __func__, len, data);
->  	ch341_update_status(port, data, len);
-> +	schedule_work(&priv->interrupt_work);
-> +
->  exit:
->  	status = usb_submit_urb(urb, GFP_ATOMIC);
->  	if (status) {
-> @@ -830,6 +875,12 @@ static int ch341_reset_resume(struct usb_serial *serial)
->  			dev_err(&port->dev, "failed to read modem status: %d\n",
->  				ret);
->  		}
-> +
-> +		ret = ch341_clear_interrupt(port->serial->dev);
-> +		if (ret < 0) {
-> +			dev_err(&port->dev, "failed to clear interrupt: %d\n",
-> +				ret);
-> +		}
->  	}
->  
->  	return usb_serial_generic_resume(serial);
-> 
-> ---
-> base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
-> change-id: 20250319-ch341-aab9934f1c72
-> 
-> Best regards,
-> -- 
-> John Watts <contact@jookia.org>
-> 
+Thanks for the patch,
+Kuangyi Chiang
 
