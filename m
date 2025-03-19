@@ -1,147 +1,165 @@
-Return-Path: <linux-usb+bounces-21919-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21920-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E549BA68D45
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:57:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C4A4A68DEE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 14:38:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 763457A802B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 12:56:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94BAE883F70
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63ABD2561CC;
-	Wed, 19 Mar 2025 12:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D536C2571B2;
+	Wed, 19 Mar 2025 13:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7pu23bv"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="B0mWfGHL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A92255E4E;
-	Wed, 19 Mar 2025 12:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD7C20CCE9;
+	Wed, 19 Mar 2025 13:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742389015; cv=none; b=kS2nGdRNyRAWMV1ko4CzOLu0q9Xyb3akDyBo2a5WV7pelkN2MYbKQcGslps8Taecx6HY2jcknf92vA2vIGS8OdcdxF3TkJozeHPgmx9GPEYt3g6hAb/xaVeDw4PkuJQpdxHHd/E0HeAWuTboniXdKTRhxcRJYApcK6xGWpxHB3I=
+	t=1742391483; cv=none; b=bwmbbMC+KCz60lt9bdBuUGrnO8FJ8FO+0xjG60mT0OV79JP9VFWrTkqncHPl6EWpKtyLxOGUBZ4uhyr0vwv5BqRrBEZL/PaQQ1vzS6xmGEiyXojwRF4MZIwwJ8jjQHUMdT0JG7NqZgJJFY8HsNiopqeOX4eBVfbg+5eueHXLoyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742389015; c=relaxed/simple;
-	bh=rP5OqDL3fH4Cg8a+h2J+kDWfriTgr0IxmZYcqE/+s84=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b7gWyeCBCOMOzXmtXNBR9hezYGTgjkvT1dGwRhkiKF+oHIIFxMjdIBVk9a+JdQNebSS44euvizZY6wLAoqTDmkwwnfROzGyxBRQrKVPrGjeqq6lFnVNIrc9lXRsM00g08wmCP3XmOdSY/QMHUtlMv/6TOmgyP5dzddOoFwaA6qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H7pu23bv; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3f6ab1b8fc1so4028805b6e.0;
-        Wed, 19 Mar 2025 05:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742389013; x=1742993813; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JS++ktrb2/HykLlbcoAgHKVDVhWZ20hOobCegoXat3s=;
-        b=H7pu23bvkkkxRYBKeugFsQ6DNYfPajsnaE8jhTN4K+wosw01TGMt/Q0ujXleKnJRI4
-         un4Ro06JOyunZcmfywp+BMumAjRsHCIAwTzDIbnJ6Cs0vNdPLEI5YcmzttDLY9nG4qZ3
-         AXtwK6TI2kRhe4B+DKapl3PNCV9O1WOIlhdWvj7+CuCNoOLpnVrm0rLL4/5hS+42rmZl
-         dLGv/9jNfZJelBrE0S4Y15jijRp0oFvP1WAJzBi3YiIDh/m/mATOZH8jRrpihsCKtBlv
-         OesbVMOLO2/fZfZ6MvBcRH8Om6FVfSfIcfowKRnfaHnfA4t/XM6JZe8yKQV3uzeCUKAH
-         9zdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742389013; x=1742993813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JS++ktrb2/HykLlbcoAgHKVDVhWZ20hOobCegoXat3s=;
-        b=fBZB25EPt9aYh1hG6E0y5NqWiU+Nq8EB4QpcwOxiSCtch2qbUntJmR0ahD/sb9HJ+4
-         7ZdPUbYBR4rpeDyu4rX/hauiJtlc4WBU7M1B7BS+OVFPsvPC8PioPm2qlgDLTDuaVLpO
-         ItiABDqzdgsk2zJJxTdGwZBn+X/77vNJMfI0ajGbTMIxruwBxhAZ/xLbqL9KuRXOdpQ+
-         tPNV55KGnLDVYbz0gcPGmpWqWq07K7AWlE7U5kydN4I7hHiPV+52sRgPQ8AnVgW+7h4w
-         ibYeOCuUkFCmZzcnJsgTlUSEXLI5QNIVEJEhc8ERDkvIJWqLh8TinggA45c1sh5PA1yC
-         2rtg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdZsey+/Qg7yMEiwt81a6qBrRsxL8pX7YmB/tjrhJ8TWh8bmHYInNTieomHB7AqLV5BSl2cGFHKY5ofB8=@vger.kernel.org, AJvYcCWwVif69l9KN5r8UTnThf1UCQFaoJVI1QceEpX7vURacgxYe9tYBtVTd1XlZ7MWIuN9Vvc1qzYjNgqt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5bkQVdDeudzPsF4ou+53MH7YOunFyTNjDGIraoIq5vYtp7Uw6
-	lPZ3/E6uUwent+UsXjBmwBtUkZhctOQJvu3TGBm6W6v4m+EIKtdcFrRNAJbctjtyeDzQ0gGfq8g
-	+gVvFNdRqZBgXwU9OS6UnpyjGpMg=
-X-Gm-Gg: ASbGncvYZme0Ik/s4RtGsp9UvqU8TPEODq6nL9SEW15fHa/i5JJxJZ26cwc68S9KlNk
-	vCXSW8po41eZ9m86eWJM7Ofzea/18G7uG7zdQvPUXNJen1NlmEzND4P2AeG7U27wwSxfiNUaXqa
-	82L9lVyH1++cckBTwHQHqCZ5TJ/Rocm/n4EnfJHg==
-X-Google-Smtp-Source: AGHT+IFF9SQTna3K6AFhrUaB1l2KAoa9AnC8ZS6CW+cEAO1pLAksDNvr8ULJLTv0u7Y0S0dwE6DhzXku8kRcFbjfrtQ=
-X-Received: by 2002:a05:6808:1585:b0:3f9:a187:1f5d with SMTP id
- 5614622812f47-3fead5ea449mr1843804b6e.35.1742389013497; Wed, 19 Mar 2025
- 05:56:53 -0700 (PDT)
+	s=arc-20240116; t=1742391483; c=relaxed/simple;
+	bh=KdwvDs/LJhlEGwHAfpsYj5Uf0iDrX2Am/u8k/2yb+2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JLoIPSnlK116rJob/NoaVS8aVQvN45rcYDYR9WDucEDUFMWg1CoVNWlktw0ZWFdIYundXPWQGjUp3HUcVENQ6VV4KaoPPFEZzzatm0c7DL18V2Riz0rmZeCwCsHVM8IA4CUc4kUCVqx5dF0LJ7kqgYokcNBzJu6k5nSJfrm6UAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=B0mWfGHL; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6IFhAEM6QXSnnfEsfKnYA9AhAD6BenyTboqR3ogwdfI=; b=B0mWfGHLsRaufUhImXjS3PmpaS
+	in1Lkaq2WqPXk9zjBA42rkH2Aq9yvTihr8padx5LBRXKYeO9ath/zqi+OYx5bUFNoAduy5fkK8sHF
+	ILcbFybvEveDbj3pM5jqcXTXTDqBgT3nZ9Yuc8lkVrkEDXZH6xGfcU5osKJ7F5qlBzME=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tutcB-006Mtf-Ut; Wed, 19 Mar 2025 14:37:47 +0100
+Date: Wed, 19 Mar 2025 14:37:47 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
+	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
+ MBa62xx carrier board Device Trees
+Message-ID: <262ff436-2334-43bb-a998-ab48f06ea0e3@lunn.ch>
+References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
+ <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
+ <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
+ <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
+ <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
+ <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
+ <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
+ <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
+ <2953e10c-0a57-4d49-b831-3864a07eefd5@lunn.ch>
+ <e6ee878f655c31473bca54e4187d9006a19158b1.camel@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317222927.5b76518e@foxbook>
-In-Reply-To: <20250317222927.5b76518e@foxbook>
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-Date: Wed, 19 Mar 2025 20:56:43 +0800
-X-Gm-Features: AQ5f1JoD8NekiAN6LMoD1gcAH-XPaXA4CuWiAAbXL62OamY4aIhDdHgjpT3TutA
-Message-ID: <CAHN5xi1RgkKQ2J8tJ5+hWUksMm1F9wU6Lx9p_VgqGwCp4812GA@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: Fix invalid pointer dereference in Etron workaround
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6ee878f655c31473bca54e4187d9006a19158b1.camel@ew.tq-group.com>
 
-Hi,
+> Hi Andrew,
+> 
+> I've just thought about this issue again. As mentioned, a number of MAC
+> drivers(*) implement what is described here:
+> 
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml?h=v6.13#n77
+> 
+> 
+> That is, the delay is either added by the PHY or the MAC; having a delay on the
+> PCB is simply not supported.
 
-Michal Pecio <michal.pecio@gmail.com> =E6=96=BC 2025=E5=B9=B43=E6=9C=8818=
-=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=885:29=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> This check is performed before prepare_transfer() and prepare_ring(), so
-> enqueue can already point at the final link TRB of a segment. And indeed
-> it will, some 0.4% of times this code is called.
->
-> Then enqueue + 1 is an invalid pointer. It will crash the kernel right
-> away or load some junk which may look like a link TRB and cause the real
-> link TRB to be replaced with a NOOP. This wouldn't end well.
+Yes it is, you are reading it wrong. First off, as said a number of
+times in the last couple of months, this description is from the
+perspective of the PHY. It is not the board perspective. So:
 
-Ah, this could happen, my bad.
+      # RX and TX delays are added by the MAC when required
+      - rgmii
 
->
-> Use a functionally equivalent test which doesn't dereference the pointer
-> and always gives correct result.
->
-> Something has crashed my machine twice in recent days while playing with
-> an Etron HC, and a control transfer stress test ran for confirmation has
-> just crashed it again. The same test passes with this patch applied.
->
-> Fixes: 5e1c67abc930 ("xhci: Fix control transfer error on Etron xHCI host=
-")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 60d89cf418da..dc674bc24a89 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3786,7 +3786,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t=
- mem_flags,
->                  * enqueue a No Op TRB, this can prevent the Setup and Da=
-ta Stage
->                  * TRB to be breaked by the Link TRB.
->                  */
-> -               if (trb_is_link(ep_ring->enqueue + 1)) {
-> +               if (last_trb_on_seg(ep_ring->enq_seg, ep_ring->enqueue + =
-1)) {
->                         field =3D TRB_TYPE(TRB_TR_NOOP) | ep_ring->cycle_=
-state;
->                         queue_trb(xhci, ep_ring, false, 0, 0,
->                                         TRB_INTR_TARGET(0), field);
-> --
-> 2.48.1
+From the perspective of the PHY, "when required" the MAC adds the
+delay. It might not be required, because the PCB adds the delay.
 
-Reviewed-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+      # RGMII with internal RX and TX delays provided by the PHY,
+      # the MAC should not add the RX or TX delays in this case
+      - rgmii-id
 
-Thanks for the patch,
-Kuangyi Chiang
+The MAC should not add delays because the PHY does. But this implies
+the PCB cannot also be adding delays because you would end up with two
+sets of delays.
+
+> Fixing MAC drivers to interpret the values without
+> "id" to mean that there is a delay on the PCB will break existing Device Trees,
+> so that's no good.
+
+You need to look at it broken driver by broken driver. I _think_ the
+Aspeed case can be fixed. Others we need to look at the details. Maybe
+in some cases we do need to add a warning to the device tree binding
+the driver is FUBAR and has special, broken meaning for 'rgmii'.
+
+> As a first step, I'd update the docs to describe the intended behavior, but
+> mention that some drivers implement it wrong.
+
+Feel free to submit patches. However, please think about it. DT is OS
+agnostic. DT describes the hardware, not configuration. Other OSes
+might decide on a different policy about which of the MAC/PHY pair
+implements the delay, since that is configuration, not a hardware
+description.
+
+> The question is how to deal with
+> the wrong behavior going forward. I see the following options, but none spark
+> joy for me...
+> 
+> - Keep current driver behavior forever where fixing it would break existing
+>   Device Trees
+> - Deprecate all existing "rgmii*" values because of their inconsistent
+>   implementation, come up with new ones. Seems like a huge pain to add support
+>   for in all MAC drivers and other code that deals with PHY modes...
+
+Won't help anyway. If developers are getting it wrong now, why should
+they suddenly start getting it right when all you are changing is the
+name.
+
+The real issue is that you can combine two bugs to get a working
+system. It seems like few developers actually understand RGMII
+delays. They don't spend time to understand it, they just try random
+things until it works. As a result, they get systems where the MAC is
+unknowingly adding delays, and 'rgmii' works, so job done. They don't
+know or care it is wrong.
+
+> - Introduce an additional DTS flag next to phy-mode to express that the
+>   phy-mode is supposed to be interpreted correctly
+
+If you are going to do add any sort of property, it should be a bool
+indicating the opposite, 'phy-mode-is-fubar'. Something which
+developers will think about before copying into their DT.
+
+> Do you have any suggestions?
+
+Add a checkpatch.pl check. Any patch which adds a phy-mode !=
+'rgmii-id' needs to have a comment on the previous line containing the
+word PCB. That should at least help stop more broken DT being added.
+
+	Andrew
 
