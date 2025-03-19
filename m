@@ -1,75 +1,72 @@
-Return-Path: <linux-usb+bounces-21926-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21927-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D091BA693C7
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 16:42:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F0E0A693E8
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 16:47:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8052D463256
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 15:40:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A76AF1647C6
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 15:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616561D61A5;
-	Wed, 19 Mar 2025 15:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7B4D1DDA36;
+	Wed, 19 Mar 2025 15:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="dYaZwAuK"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MOuzlnOG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217561AD3E5;
-	Wed, 19 Mar 2025 15:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDE21D5142;
+	Wed, 19 Mar 2025 15:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742398821; cv=none; b=gbOt7J9OkPOkfWGj5/rTDvTF2QhDbOB8wGIyUeXJR+lcHjbSI0a281M1M2rPR6J4P67G9u4D9nBB1J0yINx6IKJD7YoT4LyzREL5CpLUdGsEDaRc+yxOeTFYhF1dV0uZfDvTbatdnlmTYHqb3Z51D4LGskQ0CSY9rPyHmP/g2/Y=
+	t=1742399218; cv=none; b=KDnLfzBgxsy+lsEKrWmGHsVh9bNgcEDUXwGKWYx4CW0rGD+LclqXAfbXSg8DQn8WiStXEvsj5v55rX0kt9rLKxWAmAzJQgEb6RnwYZjyEpvwt54OWItE0szqkjUQ485yHDkv0XhQcSfwQmhuwfUpiefj+Hwh4a4yq7xaiP76PMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742398821; c=relaxed/simple;
-	bh=hZp8bKrhsM4SKX+Ce8UlGm3QMhSPZn+QWpNEU4QZwdY=;
+	s=arc-20240116; t=1742399218; c=relaxed/simple;
+	bh=aMbtdvd7lPx3VzMWnSDe0in/nBa9AF22jEaDljtoGGk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tagj15fVJ9rrbjerLdHq8Yw6qMrtN4uw4yuE/2JR1G5XG6yZ0SM60k0zNzu1hAPqB6rQr83SLVg889Pk7ljRZJomdlWk6CvD4GilpDkH+0zsSPdcenBT48w5WTx1CCFXUb+5ygglcAmv8xaX6WdoiLj90zFle5r/WBZqo4JRiI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=dYaZwAuK; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=6odEtpsbLUs835q3V1F9htFlGcWFQ+wEDjb2L+ALX80=; b=dYaZwAuKzjhW3ZNTaXcIQCJ+k3
-	iwLZzorpQDDaAyO/kmFL7XmMhmEGHfatWWzfcgfuXU/jGuELtOAuRpmVvjoc76qc1hdkeSLn7ifeg
-	l+jurutCvlp6IFNR97ie6mCjgcxpu8WB7me7nKLDSciOcoK8FEmVSnyk2SCRBNVtf6dw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tuvWP-006NhH-ND; Wed, 19 Mar 2025 16:39:57 +0100
-Date: Wed, 19 Mar 2025 16:39:57 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
-	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
- MBa62xx carrier board Device Trees
-Message-ID: <c277cc6b-6624-44df-94ff-45b341859b62@lunn.ch>
-References: <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
- <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
- <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
- <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
- <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
- <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
- <2953e10c-0a57-4d49-b831-3864a07eefd5@lunn.ch>
- <e6ee878f655c31473bca54e4187d9006a19158b1.camel@ew.tq-group.com>
- <262ff436-2334-43bb-a998-ab48f06ea0e3@lunn.ch>
- <570d9c2a25b437ab75f14104b354027210809028.camel@ew.tq-group.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qWapF54HiL/psog7VJ/rIHAqzD8pvFEoxDUqtUS8oIcfoYSO9x244NILuIgb0MpkhaAWILSsnPhZW2elZ7twhYy1ndw9kjgTra+uQqA1Sp4C9upr4ubRXZ95/eMKAugA595QAa0e59zFN3e7AED9t6Oe7X7Dh9jggrzJHJD643A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=MOuzlnOG; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=+qJlruxx2j9t0DthHj7xMEyCL4PZ6YK/QOIB1zY+fZU=; b=MOuzlnOGG9bQxnE4Akg9HZDLH5
+	UqqFWBcRCRju3nH/550uQUvRg1vX2x2OGFbtTBF6+7x+7ubiH1qxPcrg2G1FejbBIL7u1af12v1+d
+	r4jRG8FDkfhUsDEWLtG9VvpRrxqceGKjREXnpov970GJ8f67/fRcmrKxawr3qZ1bwJ507rEmiQg8Y
+	0vuKw8NFmj2eW1tbwS6kqcWGXr/w8Lr+po1/UMZE9MGE3uuDIDSSlFZDETzCGoJBU9HTGQqVSNKqF
+	BzuCwWPdr35ELcPl1/8Qm8qWuSFtagsHmrAzu05mLFZpB955kAUhZ1nsBqDd1XmgR7/Jv0k1B8Wjy
+	Ck8W0+QQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38252)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1tuvd5-0006cu-11;
+	Wed, 19 Mar 2025 15:46:51 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1tuvd2-0005jS-1G;
+	Wed, 19 Mar 2025 15:46:48 +0000
+Date: Wed, 19 Mar 2025 15:46:48 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net v2 1/2] net: phy: Fix formatting specifier to avoid
+ potential string cuts
+Message-ID: <Z9rm6NYEQpbo4-pz@shell.armlinux.org.uk>
+References: <20250319105813.3102076-1-andriy.shevchenko@linux.intel.com>
+ <20250319105813.3102076-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,52 +75,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <570d9c2a25b437ab75f14104b354027210809028.camel@ew.tq-group.com>
+In-Reply-To: <20250319105813.3102076-2-andriy.shevchenko@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-> > > Fixing MAC drivers to interpret the values without
-> > > "id" to mean that there is a delay on the PCB will break existing Device Trees,
-> > > so that's no good.
-> > 
-> > You need to look at it broken driver by broken driver. I _think_ the
-> > Aspeed case can be fixed. Others we need to look at the details. Maybe
-> > in some cases we do need to add a warning to the device tree binding
-> > the driver is FUBAR and has special, broken meaning for 'rgmii'.
-> 
-> I don't know about Aspeed (maybe you're mixing something up, or I'm not aware of
-> something?) - in the case of the TI driver I'm dealing with, this is indeed
-> possible to fix up because the MAC always adds a delay, it is not configurable.
+On Wed, Mar 19, 2025 at 12:54:33PM +0200, Andy Shevchenko wrote:
+> -#define PHY_ID_FMT "%s:%02x"
+> +#define PHY_ID_FMT "%s:%02hhx"
 
-The Aspeed driver also gets RGMII delays wrong. And there is an
-ongoing discussion about how to fix it. The discussions there probably
-apply to most drivers which get RGMII delays wrong. Following the
-discussions on how RGMII is broken in other places might help you fix
-the TI driver.
+I was going to state whether it is correct to use hh with an "int"
+argument, as printf() suggests its only for use with arguments of
+type 'signed char' and 'unsigned char'. My suspicion has been
+confirmed by the warning the kbuild bot has just reported.
 
-> The whole point of my suggestions is to allow fixing the drivers while staying
-> compatible with old, broken Device Trees. If we could add a property 'phy-mode-
-> is-fubar' to old Device Trees, we could just fix them instead - but we can only
-> fix in-tree DTS, and it will only have an effect on systems that update their
-> DTBs with their kernel, so I believe this simply isn't an option because of
-> backwards compat guarantees for Device Trees.
+It seems this is not a correct fix for the problem you report.
 
-So you need the TI driver to accept the broken 'rgmii', and the
-correct 'rgmii-id'. You say the MAC hardware always adds the delay. So
-
-1) Patch the driver to test for 'rgmii', and issues a warning that the
-   DT is wrong and needs updating.
-
-2) Add the missing masking of the value passed to the PHY. Since the
-   MAC driver is adding the delays, it needs to modify the
-   phy_interface_t passed to phy_connect(), masking out the delays the
-   MAC is adding. This is an established procedure for MACs which
-   implement the delays, rather than ask the PHY to do it. It then
-   becomes possible to use the correct 'rgmii-id' value.
-
-3) Patch the TI .dts files to use the correct rgmii-id. That makes the
-   warnings added in 1) go away.
-
-This is a lot simpler than the Aspeed case, but the basic discussion
-taking place with the Aspeed driver would give you useful background.
-
-	Andrew
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
