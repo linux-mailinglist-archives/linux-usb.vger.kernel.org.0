@@ -1,75 +1,82 @@
-Return-Path: <linux-usb+bounces-21920-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21921-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C4A4A68DEE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 14:38:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7BCA68E4A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 14:54:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94BAE883F70
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:37:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 817FB881284
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Mar 2025 13:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D536C2571B2;
-	Wed, 19 Mar 2025 13:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6ED17A2F0;
+	Wed, 19 Mar 2025 13:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="B0mWfGHL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LDliM1mY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD7C20CCE9;
-	Wed, 19 Mar 2025 13:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448BD1EF1D;
+	Wed, 19 Mar 2025 13:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742391483; cv=none; b=bwmbbMC+KCz60lt9bdBuUGrnO8FJ8FO+0xjG60mT0OV79JP9VFWrTkqncHPl6EWpKtyLxOGUBZ4uhyr0vwv5BqRrBEZL/PaQQ1vzS6xmGEiyXojwRF4MZIwwJ8jjQHUMdT0JG7NqZgJJFY8HsNiopqeOX4eBVfbg+5eueHXLoyE=
+	t=1742392465; cv=none; b=FMSCm8MZqejA4E90eTumRAYvHr9aRG3wsmNq7Mdg0zjtZHM7nB4iRArhtdF648yXUStveQEXccFdPnfAb9eLTFOxeJ27rYQPIJVTaiMcv/iQozZH7LWzkF3Q8MZw0B5MhM7LQd1F30HuInjgDE6R3KGWdhhZ4rYDeYAhdNpGUV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742391483; c=relaxed/simple;
-	bh=KdwvDs/LJhlEGwHAfpsYj5Uf0iDrX2Am/u8k/2yb+2Q=;
+	s=arc-20240116; t=1742392465; c=relaxed/simple;
+	bh=bcifr8S4Mb7kY/ExELY32tHcrvskcaRdRJ9ODW1TKuA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JLoIPSnlK116rJob/NoaVS8aVQvN45rcYDYR9WDucEDUFMWg1CoVNWlktw0ZWFdIYundXPWQGjUp3HUcVENQ6VV4KaoPPFEZzzatm0c7DL18V2Riz0rmZeCwCsHVM8IA4CUc4kUCVqx5dF0LJ7kqgYokcNBzJu6k5nSJfrm6UAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=B0mWfGHL; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=6IFhAEM6QXSnnfEsfKnYA9AhAD6BenyTboqR3ogwdfI=; b=B0mWfGHLsRaufUhImXjS3PmpaS
-	in1Lkaq2WqPXk9zjBA42rkH2Aq9yvTihr8padx5LBRXKYeO9ath/zqi+OYx5bUFNoAduy5fkK8sHF
-	ILcbFybvEveDbj3pM5jqcXTXTDqBgT3nZ9Yuc8lkVrkEDXZH6xGfcU5osKJ7F5qlBzME=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tutcB-006Mtf-Ut; Wed, 19 Mar 2025 14:37:47 +0100
-Date: Wed, 19 Mar 2025 14:37:47 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=r32ZnW34wi+k6gXmigDAsSlI9Ha8t94vCJFynP5mxomBoZc7vn17i+5xSe0hJczNNI+adYC/zgtaHgUo4u3t+AFfN/YoSiyKZJQWqLmIEU/0KE64u0kZh+SKQJBal+BAcAvwv3b0hOhX7rNzGw3f744HZN3C/4tWFCfj3jDy9Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LDliM1mY; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742392464; x=1773928464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bcifr8S4Mb7kY/ExELY32tHcrvskcaRdRJ9ODW1TKuA=;
+  b=LDliM1mYBVQKUGPbjmuD7nrWJvtlzc8/w5VQPVf1g4F9KoPbEuqcJfDe
+   d0mXoJAEkgpDALN0Rt8qx09y5Rtoas74DlrY+UmHesch42jikxd8l5ApK
+   3YG3SXY5B0P0CpAelhm0mYDZlGoTfpmNRDnUJKJu5siWATmHyFwat3u9I
+   RbFXsKp7byU0KomlQqAUxfgGWuiEV+AyGet1x2Ls//+1A/WETziN9fIzT
+   vCPP9v7OCMpf/zTQBTUh30+kzuiwbK4us2gxpMu8/43mbC9Zze0FrmsJd
+   nOAuJJM0rcFgG2+U1jdsBqZHuphXXkoFB0CgVkEx24Z6I89FrWmkjYgkQ
+   Q==;
+X-CSE-ConnectionGUID: jFQ2uXK7RYqiZ3vbTEJSwA==
+X-CSE-MsgGUID: JdUnqBDUSe28JuTLG+dHag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="42754394"
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="42754394"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 06:54:23 -0700
+X-CSE-ConnectionGUID: h3mmb4ItRlmBb7GMIaTZ5g==
+X-CSE-MsgGUID: TYOhSRNEQ6ifJfCeT4ys4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="127449990"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa003.jf.intel.com with SMTP; 19 Mar 2025 06:54:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Mar 2025 15:54:16 +0200
+Date: Wed, 19 Mar 2025 15:54:16 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: amitsd@google.com
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
-	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
- MBa62xx carrier board Device Trees
-Message-ID: <262ff436-2334-43bb-a998-ab48f06ea0e3@lunn.ch>
-References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
- <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
- <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
- <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
- <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
- <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
- <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
- <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
- <2953e10c-0a57-4d49-b831-3864a07eefd5@lunn.ch>
- <e6ee878f655c31473bca54e4187d9006a19158b1.camel@ew.tq-group.com>
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH 2/5] power: supply: core: add function to get supplies
+ from fwnode
+Message-ID: <Z9rMiONSFDJInPYM@kuha.fi.intel.com>
+References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
+ <20250312-batt_ops-v1-2-88e0bb3129fd@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,88 +85,125 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e6ee878f655c31473bca54e4187d9006a19158b1.camel@ew.tq-group.com>
+In-Reply-To: <20250312-batt_ops-v1-2-88e0bb3129fd@google.com>
 
-> Hi Andrew,
+On Wed, Mar 12, 2025 at 04:42:02PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> I've just thought about this issue again. As mentioned, a number of MAC
-> drivers(*) implement what is described here:
+> Add a new helper function power_supply_get_by_fwnode_reference_array()
+> to retrieve a list of power_supplies associated with the fwnode's
+> property. The property can contain multiple nodes where each node is
+> associated with a power_supply. The list of power_supply objects will be
+> stored in an array supplied by the caller and the return value will
+> indicate the size of the resulting array.
+
+I don't think this API is necessary. If I've understood what you are
+after here, the batteries should simply have the Type-C psy(s) listed
+in the supplied_to and/or supplied_from.
+
+So you just need to make sure your battery nodes have the USB Type-C
+node(s) listed in the "power-supplies" property in your DT, no?
+
+thanks,
+
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+>  drivers/power/supply/power_supply_core.c | 60 ++++++++++++++++++++++++++++++++
+>  include/linux/power_supply.h             |  5 +++
+>  2 files changed, 65 insertions(+)
 > 
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml?h=v6.13#n77
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index 76c340b38015af0a67a0d91305e6242a8646bf53..df1a52f85125748c4fdcb10687aa7ed2f626ded1 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -593,6 +593,66 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
+>  EXPORT_SYMBOL_GPL(devm_power_supply_get_by_phandle);
+>  #endif /* CONFIG_OF */
+>  
+> +static int power_supply_match_fwnode(struct device *dev, const void *data)
+> +{
+> +	return dev && dev->parent && dev->parent->fwnode == data;
+> +}
+> +
+> +/**
+> + * power_supply_get_by_fwnode_reference_array() - Returns an array of power
+> + * supply objects associated with each fwnode reference present in the property
+> + * @fwnode: Pointer to fwnode to lookup property
+> + * @property: Name of property holding references
+> + * @psy: Resulting array of power_supply pointers. To be provided by the caller.
+> + * @size: size of power_supply pointer array.
+> + *
+> + * If power supply was found, it increases reference count for the
+> + * internal power supply's device. The user should power_supply_put()
+> + * after usage.
+> + *
+> + * Return: On success returns the number of power supply objects filled
+> + * in the @psy array.
+> + * -EOVERFLOW when size of @psy array is not suffice.
+> + * -EINVAL when @psy is NULL or @size is 0.
+> + * -ENODATA when fwnode does not contain the given property
+> + */
+> +int power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
+> +					       const char *property,
+> +					       struct power_supply **psy,
+> +					       ssize_t size)
+> +{
+> +	int ret, index, count = 0;
+> +	struct fwnode_reference_args args;
+> +	struct device *dev;
+> +
+> +	if (!psy || !size)
+> +		return -EINVAL;
+> +
+> +	for (index = 0; index < size &&
+> +	     !(ret = fwnode_property_get_reference_args(fwnode, property, NULL,
+> +							0, index, &args));
+> +	     ++index) {
+> +		dev = class_find_device(&power_supply_class, NULL, args.fwnode,
+> +					power_supply_match_fwnode);
+> +		fwnode_handle_put(args.fwnode);
+> +		if (!dev)
+> +			continue;
+> +
+> +		if (count > size)
+> +			return -EOVERFLOW;
+> +
+> +		psy[count] = dev_get_drvdata(dev);
+> +		atomic_inc(&psy[count]->use_cnt);
+> +		++count;
+> +	}
+> +
+> +	if (ret != -ENOENT)
+> +		return ret;
+> +
+> +	return index ? count : -ENODATA;
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_get_by_fwnode_reference_array);
+> +
+>  int power_supply_get_battery_info(struct power_supply *psy,
+>  				  struct power_supply_battery_info **info_out)
+>  {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 6ed53b292162469d7b357734d5589bff18a201d0..3f062607e5cd7c7f04384e34128ae0953e25d981 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -820,6 +820,11 @@ devm_power_supply_get_by_phandle(struct device *dev, const char *property)
+>  { return NULL; }
+>  #endif /* CONFIG_OF */
+>  
+> +extern int
+> +power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
+> +					   const char *property,
+> +					   struct power_supply **psy,
+> +					   ssize_t size);
+>  extern const enum power_supply_property power_supply_battery_info_properties[];
+>  extern const size_t power_supply_battery_info_properties_size;
+>  extern int power_supply_get_battery_info(struct power_supply *psy,
 > 
+> -- 
+> 2.49.0.rc0.332.g42c0ae87b1-goog
 > 
-> That is, the delay is either added by the PHY or the MAC; having a delay on the
-> PCB is simply not supported.
 
-Yes it is, you are reading it wrong. First off, as said a number of
-times in the last couple of months, this description is from the
-perspective of the PHY. It is not the board perspective. So:
-
-      # RX and TX delays are added by the MAC when required
-      - rgmii
-
-From the perspective of the PHY, "when required" the MAC adds the
-delay. It might not be required, because the PCB adds the delay.
-
-      # RGMII with internal RX and TX delays provided by the PHY,
-      # the MAC should not add the RX or TX delays in this case
-      - rgmii-id
-
-The MAC should not add delays because the PHY does. But this implies
-the PCB cannot also be adding delays because you would end up with two
-sets of delays.
-
-> Fixing MAC drivers to interpret the values without
-> "id" to mean that there is a delay on the PCB will break existing Device Trees,
-> so that's no good.
-
-You need to look at it broken driver by broken driver. I _think_ the
-Aspeed case can be fixed. Others we need to look at the details. Maybe
-in some cases we do need to add a warning to the device tree binding
-the driver is FUBAR and has special, broken meaning for 'rgmii'.
-
-> As a first step, I'd update the docs to describe the intended behavior, but
-> mention that some drivers implement it wrong.
-
-Feel free to submit patches. However, please think about it. DT is OS
-agnostic. DT describes the hardware, not configuration. Other OSes
-might decide on a different policy about which of the MAC/PHY pair
-implements the delay, since that is configuration, not a hardware
-description.
-
-> The question is how to deal with
-> the wrong behavior going forward. I see the following options, but none spark
-> joy for me...
-> 
-> - Keep current driver behavior forever where fixing it would break existing
->   Device Trees
-> - Deprecate all existing "rgmii*" values because of their inconsistent
->   implementation, come up with new ones. Seems like a huge pain to add support
->   for in all MAC drivers and other code that deals with PHY modes...
-
-Won't help anyway. If developers are getting it wrong now, why should
-they suddenly start getting it right when all you are changing is the
-name.
-
-The real issue is that you can combine two bugs to get a working
-system. It seems like few developers actually understand RGMII
-delays. They don't spend time to understand it, they just try random
-things until it works. As a result, they get systems where the MAC is
-unknowingly adding delays, and 'rgmii' works, so job done. They don't
-know or care it is wrong.
-
-> - Introduce an additional DTS flag next to phy-mode to express that the
->   phy-mode is supposed to be interpreted correctly
-
-If you are going to do add any sort of property, it should be a bool
-indicating the opposite, 'phy-mode-is-fubar'. Something which
-developers will think about before copying into their DT.
-
-> Do you have any suggestions?
-
-Add a checkpatch.pl check. Any patch which adds a phy-mode !=
-'rgmii-id' needs to have a comment on the previous line containing the
-word PCB. That should at least help stop more broken DT being added.
-
-	Andrew
+-- 
+heikki
 
