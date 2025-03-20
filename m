@@ -1,152 +1,196 @@
-Return-Path: <linux-usb+bounces-21981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21982-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC93A6ABE9
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 18:26:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52758A6AD15
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 19:26:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B70E179B73
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 17:25:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BDD57B0296
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 18:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544D5224B02;
-	Thu, 20 Mar 2025 17:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6C9227B94;
+	Thu, 20 Mar 2025 18:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qkbRn6Dh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYloGAYR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2996B223301
-	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 17:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EF41F5F6;
+	Thu, 20 Mar 2025 18:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742491511; cv=none; b=SKtnbmtJkBH7tvFn5SJgf5dqGpLBntBwYUI58AIRZB0JkKfz+O+tBfSTUoK8F+l0mnvDTJ5b3wNcRDT+DZ+rJscplw04ubkTU98iB45IZtGOPjKiWEm5VOXQ6vLvnwjljTNpofEq0sVKcln1x/GYw0JnA1aO5GAlLgtEabYXQ+Q=
+	t=1742495176; cv=none; b=BMGePlvlwFAsY8a89k8Px2G7RPY4D8OiaEuq36Gznx6LU7LBczxA4yfbtBIN307eFHN04aXMzwGPmQZE87YjrqMKGyH9xv/kdCsOwi6sxS5XHrI++NGfFe+O/CVjQ2uluAW5FaEk9sQE7p8vL1z87z/BbUr3164QEl9X8B4d0NM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742491511; c=relaxed/simple;
-	bh=fzQUX0TFLfebdWmZqTcvsgkqfZ3xX/aDgewmGQBJNIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k7bmZidvM1bB0WRIr+hB1RbyFekOzzTzsFacT6nU3OulXFeiZUs0zPzit4Ih0fmCCs9hBeCDha5yaKBtYtZsnvC+oyG2grEmDvBqXljSu/wQZ6pPfAOTRLePB6Nm4agKafvp5QBw0jm9dCXgpo5KBtcVhTz+tAMfZaqOe3eO6IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qkbRn6Dh; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-47690a4ec97so10987371cf.2
-        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 10:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1742491509; x=1743096309; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rL6DebdLzScpxUUXc1Xt4tJ87WZ47vTIBhRO5NkDR0k=;
-        b=qkbRn6Dh1rwGxMQnmmMYO2yYtosiMaoo2b+GAl067EsMQpqokDV2cpJDZfANaJnAYp
-         I8bI+Dv1VRblY+vQyGoiReTtbsxeaYApRdcfzs5KMZ2vWlL2D3XglvGtXNo0JV0zDKbU
-         cEMnSGYvBXcgrwKR0wTbQWAFm8Tcij1GdvXNYN7xynShfpiwlRcKh6hXvjs9jlGlbudC
-         YhJkPtt/h+56lD08WjjwUA/AYSVkDnvfsjyOLi4K6g4V8F8ggo6/aQS+sQ7n3KLMJVwr
-         08ILmdrjgIz74lByPwK8CkZLA0uG+mKFCoiSbPcV4t6iiXxiDkrQEnOQJCtESKmY7+0g
-         +gAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742491509; x=1743096309;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rL6DebdLzScpxUUXc1Xt4tJ87WZ47vTIBhRO5NkDR0k=;
-        b=hT45Ofj+9Zue8Z9+5l5KxyEO/GINN5x7+38rag/nTeYBbNQTVw7s5JymrfRazGYrGX
-         +AikG2fE/LmD2tzfMSjSm9KAs4YLei1gL3tjmJyJ2F8A6V90kyyP7NBqxAS90ECREvh2
-         Zn83DaloU4QSe6/2JI9rjKuDYSFiShtV6boQms9Jo9YIeupkJ1tkQzU5Mr/1tW6Tweck
-         L247WU9G9A8efP5MMf1v0qtl/X8hhkqUh1s/6201YzK30EBfjYe+2iBBiCcfEk/oXSv+
-         93N5cOzk9+iQa+gwIUKBmaOYOIMM7Y19faGJ+iALDbY63mpZvmytpe9srTY40NKCLF5G
-         w8PA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2FULXYPl2InbXfcOQAmnxcPHcdNsqB9UCf61j4+eSk6cb1e3KvpNkLIyyBltRKDWODapzgsYVDmw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdEMlrR50VbPPc8XrXTRPAwOHvT6SW3j/MY2moC5ljv18FY7XE
-	ofcL+aXW3/gJvFbMHr2XORjy/IpmYME84/4ZNjlcmkZPBRB+Dhecd2/gl5W8Yg==
-X-Gm-Gg: ASbGnct/F727FMhwkfJPlAf/hPaqfEgVgg51TobdTk7G6YQVlNGCmvXfAQwPNKi7bEq
-	OBJxZyBsxHtP8Wlt6u8OGMdCKgw3I1m985gEUSu7C4KqhUsXZdi0tjL/wYj3cSH8f1Hq1P2jwzn
-	Hvj22Jfx4LKbBBQ9ZYJNuYs589VOEFGRRYYh7KLhT5AqhkNvnzzMHsUU/kzELI6PS7Xj+zt1RsB
-	2Yaw3nL6qJrrxqIKL2iuqjAWew9cbeC7RmsgwBAbfvi0KVy3vGNFbh1cz/WvCI5WMoTJvT1r+1s
-	OBtAQoIKiCiUzkBcXDq3uLbXAhrxYCS27rZ5M8mrapP8Wdf7bx3f5XU896iaE5miwTaaiUeyBKj
-	cQwKBdOxmQNSJuDamlvBleMJR4N6bKEyOB+Edgg==
-X-Google-Smtp-Source: AGHT+IHgyRoJU+sQRfaKBvGkDtBulGCQxmx3ELr3PVJnr/FpuA7LHLyshb2Ty3ZfruL2JeE7d0BUVg==
-X-Received: by 2002:a05:6214:1c0e:b0:6d8:af66:6344 with SMTP id 6a1803df08f44-6eb3f27f541mr4060236d6.2.1742491509066;
-        Thu, 20 Mar 2025 10:25:09 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc6018sm820456d6.86.2025.03.20.10.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 10:25:08 -0700 (PDT)
-Date: Thu, 20 Mar 2025 13:25:05 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: =?utf-8?B?55m954OB5YaJ?= <baishuoran@hrbeu.edu.cn>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Kun Hu <huk23@m.fudan.edu.cn>, Jiaji Qin <jjtan24@m.fudan.edu.cn>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, syzkaller@googlegroups.com
-Subject: Re: WARNING in cm109_urb_irq_callback/usb_submit_urb
-Message-ID: <07f2ec1a-0363-4734-97ff-a129699b1907@rowland.harvard.edu>
-References: <559eddf1.5c68.195b1d950ef.Coremail.baishuoran@hrbeu.edu.cn>
- <62d91b68-2137-4a3a-a78a-c765402edd35@suse.com>
- <a3f66f2e-a99e-47f2-a3ef-742b6903cc5d@rowland.harvard.edu>
- <7be81186-2d18-4d0e-8a93-d2dda20b02b2@suse.com>
+	s=arc-20240116; t=1742495176; c=relaxed/simple;
+	bh=WqjD83gS59KXnxcWN0xrv2Qy66XqwIZlhcsvnHNzlD0=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=WF6TKdFX9CryfeLy1CMFVUYBYwPpsvSxHSRBX0s3yDcptrL7cw+HCw+d0r7iS7mDHCXg/d95EM44Y/oQDIU84zlI3Sps8rfjXmnJp+V3oDDBOfsUM5fedii6frWLxJ8f7AcTcc2dC8BK57xPdFPOx/saOOCgzf1/V1GYNY1qdEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYloGAYR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691C4C4CEDD;
+	Thu, 20 Mar 2025 18:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742495174;
+	bh=WqjD83gS59KXnxcWN0xrv2Qy66XqwIZlhcsvnHNzlD0=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=JYloGAYRUHZ9s4ndZMNiZ/YXTnxxxYiyDHj0Hp2VzGq3o+btOYbamd9ZiuFhWFMet
+	 ie3338Y/XRLdUCpjJyC3jborHQ/CXIIcVuOUVVK9U/rgIm5/VFx7Y1YS4wkFLVCDtw
+	 NxtFT5PZepI7IN/DrIOQSmiiHzyZN6y4L/goZn/FeHhICSNh+acqedzYpPcX+zCvRz
+	 zhiyJ8Z6cpsyttti+B/CqOcRvhgWw3QnIpYjK0Go3Z+AU3KMHdGzRyH2j6HzO8MXH/
+	 AjBZ8JDhSha0K3F92CqtjR4pU4dQ8OkZTVExZRrdd4MLrd7BZtl3cpcRusyzQ7ISi7
+	 Mu66NbJSYYULA==
+Date: Thu, 20 Mar 2025 13:26:13 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7be81186-2d18-4d0e-8a93-d2dda20b02b2@suse.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Yangyu Chen <cyy@cyyself.name>, Conor Dooley <conor+dt@kernel.org>, 
+ Lorenzo Bianconi <lorenzo@kernel.org>, 
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+ Felix Fietkau <nbd@nbd.name>, devicetree@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Michael Turquette <mturquette@baylibre.com>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-arm-kernel@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
+ linux-clk@vger.kernel.org, Nikita Shubin <nikita.shubin@maquefel.me>, 
+ upstream@airoha.com, linux-mediatek@lists.infradead.org, 
+ Ben Hutchings <ben@decadent.org.uk>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Daniel Danzberger <dd@embedd.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ linux-usb@vger.kernel.org, Matthias Brugger <matthias.bgg@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-phy@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>, 
+ linux-kernel@vger.kernel.org
+To: Christian Marangi <ansuelsmth@gmail.com>
+In-Reply-To: <20250320130054.4804-1-ansuelsmth@gmail.com>
+References: <20250320130054.4804-1-ansuelsmth@gmail.com>
+Message-Id: <174249492019.658064.14719387276656076364.robh@kernel.org>
+Subject: Re: [PATCH v2 00/11] airoha: en7581: clk cleanup + USB support
 
-On Thu, Mar 20, 2025 at 04:42:33PM +0100, Oliver Neukum wrote:
-> On 20.03.25 15:25, Alan Stern wrote:
+
+On Thu, 20 Mar 2025 14:00:23 +0100, Christian Marangi wrote:
+> This series implement all the changes required to correctly handle
+> USB support for the Airoha EN7581 SoC.
 > 
-> > This test must itself be subject to the same race, right?  There needs
-> > to be some kind of synchronization between the two tasks (i.e., a mutex,
-> > spinlock, or something similar).
+> The first few patch are cleanup for the clock driver and the
+> introduction of the SCU SSR SoC driver.
 > 
-> Hi,
+> The SoC always support USB 2.0 but for USB 3.0 it needs additional
+> configuration for the Serdes port. Such port can be either configured
+> for USB usage or for PCIe lines or HSGMII and these are configured
+> in the SCU space.
 > 
-> there is:
+> The xHCI USB is based on the Mediatek implementation but the PHY
+> handling although conceptually similar, is indded different compared
+> to Mediatek due to SSR checks and different port power up.
 > 
-> static void cm109_stop_traffic(struct cm109_dev *dev)
-> {
->         dev->shutdown = 1;
->         /*
->          * Make sure other CPUs see this
->          */
->         smp_wmb();
->         usb_kill_urb(dev->urb_ctl);
->         usb_kill_urb(dev->urb_irq);
->         cm109_toggle_buzzer_sync(dev, 0);
->         dev->shutdown = 0;
->         smp_wmb();
-
-I don't know anything about this driver, but the placement of the second 
-smp_wmb() looks odd.  Should it really come before the line that sets 
-dev->shutdown to 0?  In general, smp_wmb() is used to separate two sets 
-of stores; if it comes after all the relevant stores have been performed 
-then it won't accomplish anything.
-
-> }
+> The SSR driver expose an API to poll the current status of the Serdes
+> port and the USB PHY driver validates it. Refer to the specific commit
+> for additional info.
 > 
-> This driver has a tough job as the two completion
-> handlers submitted each other's as well as their own
-> URBs based on the data they get.
-> That scheme is rather complex, but as far as I can tell correct,
-> but you need to test that flag everywhere.
+> Consider that there is currently an inconsistency as AN7581 and
+> EN7581 refer to the same thing. This is due to the fact that
+> the SoC born under EcoNet but then was acquired by Airoha.
+> 
+> Changes v2:
+> - Drop changes for simple-mfd
+> - Rework PHY node structure to single node
+> - Drop port-id property in favor of serdes-port and
+>   usb2-monitor-clock-sel
+> - Make the SSR driver probe from the clock driver
+> 
+> Christian Marangi (11):
+>   clk: en7523: convert driver to regmap API
+>   clk: en7523: generalize register clocks function
+>   dt-bindings: clock: en7523: add Documentation for Airoha AN7581 SCU
+>     SSR
+>   soc: airoha: add support for configuring SCU SSR Serdes port
+>   clk: en7523: define and register SoC SCU SSR driver for EN7581
+>   soc: airoha: scu-ssr: expose API to read current Serdes Port mode
+>   dt-bindings: phy: Add documentation for Airoha AN7581 USB PHY
+>   phy: move Airoha PCIe PHY driver to dedicated directory
+>   phy: airoha: Add support for Airoha AN7581 USB PHY
+>   usb: host: add ARCH_AIROHA in XHCI MTK dependency
+>   arm64: dts: airoha: en7581: add USB nodes
+> 
+>  .../bindings/clock/airoha,en7523-scu.yaml     |  101 +-
+>  .../bindings/phy/airoha,an7581-usb-phy.yaml   |   83 ++
+>  MAINTAINERS                                   |   21 +-
+>  arch/arm64/boot/dts/airoha/en7581.dtsi        |   49 +
+>  drivers/clk/clk-en7523.c                      |  340 +++--
+>  drivers/phy/Kconfig                           |   11 +-
+>  drivers/phy/Makefile                          |    5 +-
+>  drivers/phy/airoha/Kconfig                    |   23 +
+>  drivers/phy/airoha/Makefile                   |    4 +
+>  drivers/phy/airoha/phy-airoha-pcie-regs.h     |  494 +++++++
+>  drivers/phy/airoha/phy-airoha-pcie.c          | 1290 +++++++++++++++++
+>  drivers/phy/airoha/phy-airoha-usb.c           |  571 ++++++++
+>  drivers/soc/Kconfig                           |    1 +
+>  drivers/soc/Makefile                          |    1 +
+>  drivers/soc/airoha/Kconfig                    |   18 +
+>  drivers/soc/airoha/Makefile                   |    3 +
+>  drivers/soc/airoha/airoha-scu-ssr.c           |  271 ++++
+>  drivers/usb/host/Kconfig                      |    2 +-
+>  .../dt-bindings/phy/airoha,an7581-usb-phy.h   |   11 +
+>  include/dt-bindings/soc/airoha,scu-ssr.h      |   11 +
+>  include/linux/clk/clk-en7523.h                |   10 +
+>  include/linux/soc/airoha/airoha-scu-ssr.h     |   34 +
+>  22 files changed, 3202 insertions(+), 152 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+>  create mode 100644 drivers/phy/airoha/Kconfig
+>  create mode 100644 drivers/phy/airoha/Makefile
+>  create mode 100644 drivers/phy/airoha/phy-airoha-pcie-regs.h
+>  create mode 100644 drivers/phy/airoha/phy-airoha-pcie.c
+>  create mode 100644 drivers/phy/airoha/phy-airoha-usb.c
+>  create mode 100644 drivers/soc/airoha/Kconfig
+>  create mode 100644 drivers/soc/airoha/Makefile
+>  create mode 100644 drivers/soc/airoha/airoha-scu-ssr.c
+>  create mode 100644 include/dt-bindings/phy/airoha,an7581-usb-phy.h
+>  create mode 100644 include/dt-bindings/soc/airoha,scu-ssr.h
+>  create mode 100644 include/linux/clk/clk-en7523.h
+>  create mode 100644 include/linux/soc/airoha/airoha-scu-ssr.h
+> 
+> --
+> 2.48.1
+> 
+> 
+> 
 
-However, it's quite noticeable that the code you want to change in 
-cm109_submit_buzz_toggle() doesn't have any memory barriers to pair with 
-the smb_wmb()'s above.  Shouldn't there at least be an smp_rmb() after 
-you read dev->shutdown?
 
-As long you're updating the synchronization, it might be a good idea to 
-also improve the comment describing the memory barriers.  "Make sure 
-other CPUs see this" doesn't mean anything -- of course all the other 
-CPUs will eventually see the changes made here.  The point is that they 
-should see the new value of dev->shutdown before seeing the final 
-completion of the two URBs.  Also, the comment should say which other 
-memory barriers pair with the ones here.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Alan Stern
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/airoha/' for 20250320130054.4804-1-ansuelsmth@gmail.com:
+
+arch/arm64/boot/dts/airoha/en7581-evb.dtb: usb@1fab0000: compatible:0: 'mediatek,mtk-xhci' is not one of ['mediatek,mt2701-xhci', 'mediatek,mt2712-xhci', 'mediatek,mt7622-xhci', 'mediatek,mt7623-xhci', 'mediatek,mt7629-xhci', 'mediatek,mt7986-xhci', 'mediatek,mt7988-xhci', 'mediatek,mt8173-xhci', 'mediatek,mt8183-xhci', 'mediatek,mt8186-xhci', 'mediatek,mt8188-xhci', 'mediatek,mt8192-xhci', 'mediatek,mt8195-xhci', 'mediatek,mt8365-xhci']
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/airoha/en7581-evb.dtb: usb@1fab0000: compatible: ['mediatek,mtk-xhci'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/airoha/en7581-evb.dtb: usb@1fad0000: compatible:0: 'mediatek,mtk-xhci' is not one of ['mediatek,mt2701-xhci', 'mediatek,mt2712-xhci', 'mediatek,mt7622-xhci', 'mediatek,mt7623-xhci', 'mediatek,mt7629-xhci', 'mediatek,mt7986-xhci', 'mediatek,mt7988-xhci', 'mediatek,mt8173-xhci', 'mediatek,mt8183-xhci', 'mediatek,mt8186-xhci', 'mediatek,mt8188-xhci', 'mediatek,mt8192-xhci', 'mediatek,mt8195-xhci', 'mediatek,mt8365-xhci']
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/airoha/en7581-evb.dtb: usb@1fad0000: compatible: ['mediatek,mtk-xhci'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+
+
+
+
+
 
