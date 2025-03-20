@@ -1,54 +1,58 @@
-Return-Path: <linux-usb+bounces-21963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40B1DA6A779
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 14:45:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89FAFA6A78E
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 14:50:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 803373AE5F9
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 13:43:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 125413B71F3
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 13:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3888621CC6A;
-	Thu, 20 Mar 2025 13:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED27221F39;
+	Thu, 20 Mar 2025 13:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wWr9Bu6X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sg3jlpiP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61CD1CAA8D
-	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 13:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6C51EDA38;
+	Thu, 20 Mar 2025 13:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742478185; cv=none; b=SUxPXic05A2DVaSe02nP3ffnZ0c0Mlrpz4LCu/pgq2R39YXPKZb/t43HcxM5AhSSDERZgEiae/O0i99nMOgQdVUZ3AROqsXkJBJqn6AIS3cpxbRg+aJMBd13zOY7524X38okgvO2aSFlc0r48mCleuN6HRZCEztWg75XFgZHBt8=
+	t=1742478526; cv=none; b=MCFEIN2weO3bj0pmdYULI5F/6nRCRY3+iBEiC+D0IhAZdaxfuGu3LKH+IrJkIB+RlD4UmFoo75bXjOOSeYZCcrtavsedLRadMJbg3XQWt4yVGKGJ/GSQDeoW5BwWbO1eqjWk2EO1tRqE/6anYqx2YNTKTZ5rtQEzTEFIKRM2hM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742478185; c=relaxed/simple;
-	bh=9jsMCkt6ZxtUs90cBsKkk3BevS0TmQNHjoX9pD0OWkw=;
+	s=arc-20240116; t=1742478526; c=relaxed/simple;
+	bh=n2Aa2LlLF6Pk+aaptQYR87WXXsYSLb/Oa2nEIcU7Lb4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u8kchXNnaFSE/0y31PQIB6XcyZ4/IpjKaFqXqgdk/nXALceuwVjAjtvRPbetTxTuh6TZbQJJXktIB6birdp9+bbVJRDngLvu3K7Qc12s0IwcmN4Z4OX9HJK45P8Iu+zrMGNJN48Gj0T22P7VK2obOK68192yGO23kMVMvVVFfmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wWr9Bu6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B40C4CEDD;
-	Thu, 20 Mar 2025 13:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742478185;
-	bh=9jsMCkt6ZxtUs90cBsKkk3BevS0TmQNHjoX9pD0OWkw=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=tZDPOAM4nBfi8Kb34Kn6Rj6/ydw+8Hj6GzIxfC6lgsmuM/akQNRV96qwaGE4OKihGNEYmPCoQDR3JvSLqFFRfHlnaR+A7ZBpjorZCEc31beMMfKVoGV2r2MGUEf2/U51gN86xMhi1X5LDs6EplgQ7z1KW6bBUePD2rs3juBG66w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sg3jlpiP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3550C4CEDD;
+	Thu, 20 Mar 2025 13:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742478526;
+	bh=n2Aa2LlLF6Pk+aaptQYR87WXXsYSLb/Oa2nEIcU7Lb4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wWr9Bu6Xg7wuI9pbvFqtAHqI/c5SqOsLHfgxSCVSlYlI9wPwreCz7BPNqheNcPIap
-	 hfgFrf+Qg+2m2W6BOxrebnDAvl4Dw1yzXXAfbE8jOzX0+wpbRhjIxhJdmzl8Vd1S80
-	 OIbdmTONDa56jnewIs9/w0UK7EVCyZtvIGfwXpC4=
-Date: Thu, 20 Mar 2025 06:41:45 -0700
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB4/Thunderbolt changes for v6.15 merge window
-Message-ID: <2025032037-bazooka-vision-c830@gregkh>
-References: <20250320114914.GO3713119@black.fi.intel.com>
+	b=Sg3jlpiPx/dB5BNvXf0tThzs8u8gi3vrNWyciwwY5xslP5x65VURw3KYxskp+PSzN
+	 nv78QPsVVJjC6f6Hvmi6HVs+I70VB0bquL0V0Yx9zJO8abjCQSfLSZJxVSs76TSC4N
+	 yAy8fDudb7VqkMgt0l73bHllyh4/G+WwkkItX1FszsyLpdilq+sznRW6I+E3Ff8Q/3
+	 36X4K3Q1QuPEQf5hJ+Hp8ASKgEsLtWWZlNTUppo48fb8jpt062iRwcdJ6VpBMT/8av
+	 IN6YtSuRvlzmg3iQciKCx9MvQBEwhtl98eJPNbIDalEwnVkN74cvm5CxHIIsu1K3t6
+	 5mc8aOp3kcLKw==
+Date: Thu, 20 Mar 2025 13:48:42 +0000
+From: Simon Horman <horms@kernel.org>
+To: Qasim Ijaz <qasdev00@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] net: fix uninitialised access in mii_nway_restart()
+Message-ID: <20250320134842.GS280585@kernel.org>
+References: <20250319112156.48312-1-qasdev00@gmail.com>
+ <20250319112156.48312-2-qasdev00@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,20 +61,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250320114914.GO3713119@black.fi.intel.com>
+In-Reply-To: <20250319112156.48312-2-qasdev00@gmail.com>
 
-On Thu, Mar 20, 2025 at 01:49:14PM +0200, Mika Westerberg wrote:
-> Hi Greg,
+On Wed, Mar 19, 2025 at 11:21:53AM +0000, Qasim Ijaz wrote:
+> In mii_nway_restart() during the line:
 > 
-> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+>         bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
 > 
->   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+> The code attempts to call mii->mdio_read which is ch9200_mdio_read().
 > 
-> are available in the Git repository at:
+> ch9200_mdio_read() utilises a local buffer, which is initialised
+> with control_read():
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.15-rc1
+>         unsigned char buff[2];
+> 
+> However buff is conditionally initialised inside control_read():
+> 
+>         if (err == size) {
+>                 memcpy(data, buf, size);
+>         }
+> 
+> If the condition of "err == size" is not met, then buff remains
+> uninitialised. Once this happens the uninitialised buff is accessed
+> and returned during ch9200_mdio_read():
+> 
+>         return (buff[0] | buff[1] << 8);
+> 
+> The problem stems from the fact that ch9200_mdio_read() ignores the
+> return value of control_read(), leading to uinit-access of buff.
+> 
+> To fix this we should check the return value of control_read()
+> and return early on error.
+> 
+> Reported-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Closes: https://syzkaller.appspot.com/bug?extid=3361c2d6f78a3e0892f9
+> Tested-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+> Fixes: 4a476bd6d1d9 ("usbnet: New driver for QinHeng CH9200 devices")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
 
-Pulled and pushed out, thanks.
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-greg k-h
 
