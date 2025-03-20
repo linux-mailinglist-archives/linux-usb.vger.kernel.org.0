@@ -1,174 +1,138 @@
-Return-Path: <linux-usb+bounces-21977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21978-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898B4A6A960
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 16:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 805CFA6AA1D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 16:42:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B21D31886B1A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 14:59:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1006188CB3D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 15:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ACCD1E3DEF;
-	Thu, 20 Mar 2025 14:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7502B1EB19F;
+	Thu, 20 Mar 2025 15:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lquIPGPn"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fOC0lpNT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9683C2F;
-	Thu, 20 Mar 2025 14:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA2C1E98F9
+	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 15:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742482754; cv=none; b=ce628IwdBlwuaDMGuqAe2BzkpQJesX7rALx7tCJ8KYd01nqpsQUlqMKF8R/Ta9lVCqYdebsB2xpbwIrsMaEjPwy5nV8xadgehh4/NrLmBxztyUDBxVC4z7gtNnaCTjN0NUa87bT567HfQYtjkOJaPk29EpTOlVe0QBD0Pe0TDDk=
+	t=1742485359; cv=none; b=RbREZIA7tvnoclo57bvuk7pjUoPU7LX6BjEzO8SkEdb+l/LEdoasxRuBA8yZOS+k0Rid+4Ekctc3zxbrstt/Rrvp2wQ+n7E+SW+UZmCzMqMHSmx4Q5nGZOwyRvdtw44QmHJe+lFDWvNfb/E648DxK+bftAIYoUUibN5J3gA0UMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742482754; c=relaxed/simple;
-	bh=gvvve4bfA2xN7CqM1D0GuF35FojJxC50q/W6Ep0Q37Q=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nowkeJ0uMqb6KgwCwhWHym14otzUtATGJTcJe77AnKDmK1dOEJnuFzRsXQQ2Ac2xqr8LejwaN9p9pPYQkpT2hMHYHBZav6ex6IjYOzkup2N0I9Lh5HWdXoSKAKMHDfV1kIZG2HV8X6tC2g9JZOOkUrfOJ4yi8mIspGwIlF2mD8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lquIPGPn; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so13832675e9.1;
-        Thu, 20 Mar 2025 07:59:12 -0700 (PDT)
+	s=arc-20240116; t=1742485359; c=relaxed/simple;
+	bh=J32prBUm6oBZ88b3RAURwzKHHWR9F+LoXAHqBCRBzBw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jS7VzNJ1F5ItJCQSieBldFjjd67KEqm0rfWQjILIKsAQVXYwMzJrD6j9vyMOCyJ6vlv1qYG0WKqcZqjkc2uH9vQP01kyoQfxJrXFlHvHHZoTG5pMd2Cg6CTmOIveIvLdMkkhUzcgRdBEIn82ZkRmrt5zEpPyaLVB+iVUJcd4i7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fOC0lpNT; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43d0359b1fcso6726045e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 08:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742482751; x=1743087551; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MXWVPiHsl/ybfeX0fVWWFkRY/xYzUHOKzudQkSQFpg=;
-        b=lquIPGPnXBWgHdFe147D9WAdZXoPrrDtO6qzwdY7Y21oNbiTX2KyDscgaHSP/1k6p5
-         F3p2srZ7kaViz7/fR9PLw8F2zEtsLseaDx2hVpfrpFH8EPGeypztdl9SfpibPFnbkuKV
-         DRxkHk4MfyDkQcjPoRgsPtPPxd4pbAclbjOjTscw/en1CaO3h8KFrW8SgJQUjbdY3DEW
-         tGdCTHFcVGq5ONMKhl8eUHL3QohTD1HEZO9w+6QXLZdsdZ4qr3mUlLEn09o5UyKqLH1R
-         vkuf5kDc5hOqUJA9OFRQuoLs32b+z05WZn93WDGkf5ychbezCuvQGIxj2SYXGT2urwWA
-         P+tQ==
+        d=suse.com; s=google; t=1742485355; x=1743090155; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AzdNEu6y+XONtMGIUQtcG5XKDkgKB41TTl7oxU5xJJg=;
+        b=fOC0lpNTZrUXHleugTQhIkfVp5+yJzbR7CcCZBPVLAZAgt4QRGqRKBLKt3zuHpKBeF
+         NkAjWYKde5Q47uZ90Qf0srZ3T1wr/jdIPr7PY4mYJ+F0IQv4Wf9Mu2oDj+h38Ytni8aw
+         1bmbhSZDkLT5ZHrYXM8EE+jsMpHH9slrHpo/Pd1KsGJc916okrCF8QvGkRKALkuGex4L
+         M7T7C3SGVNINQzRDfFM4Yvkqu0EX0s4TAB6Ui0724vUA4Qhj0Hm70az+vFbHE4Hbs1TR
+         148wd/MKf5ygXUD+9zfbgDNQpcGssEhlpsVPwT91N/AJGK65nqI0RB4yUSptXQgrpyEy
+         8cjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742482751; x=1743087551;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9MXWVPiHsl/ybfeX0fVWWFkRY/xYzUHOKzudQkSQFpg=;
-        b=PM89XItoHs6OZeXybrmfR2aCHHNNr0WG+uajCj2AtBdMFA/NFlyVW+eyoK2w6Jb1QH
-         Wxk+eJIUKJZh/Ubq6VQ2Oe/pKlxDNQ9GBmikefvMR3TOQEFrUfsTvXKug8xnSSZ3gaf8
-         D4vmcNIMcOB/Wmg0k0d+I0lcfY4a8YOzrcOT4/Vl0bCw/QEuCDpQ5c+QLQpNyoZ5IqsL
-         2wDMAKIpr98EjqAssQIR3t8iomvzjAr7McJu3XVdK2wGUtFXQ5977zuXnH1R1UZb4wHf
-         uNTBibg3S3WgO331tKtme3PUyP83+XwJEozpQYmHqIv6QBY9E9E/a7/IXGjZecizE/Jz
-         6TjA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIcVicuJU7hVd2F4QqvqxpA9T8uJaDNSHweGelYKcdU/1iJj4fQ3JkFqXSyyJLLP793vpdsBnZcAk8@vger.kernel.org, AJvYcCULsoB8P8BYNWyGANJtryZWO/Iwj2Em3zFuwgYPTfhZTXSzK9bHdcfi2vxHAu5N99PUN6Z3GKKsWN7OEqaB@vger.kernel.org, AJvYcCUwj+y6qDVYQ08fdS8wyRx4Wl8GlUV+sfBKejcsOnKp/46i+VvX04FTwa9A0QB9WMn71b1CM2+dDqhs@vger.kernel.org, AJvYcCWJpVSZp7RnY37oIN92NhVU8/6j/GEKcH4apVgAVsmmG5uWoO53d6GE6nc4r+2fo0uKKZHWJ0ANAk07@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpaJMzheb7FsAbCBjR1idPViZiqx8eKTi8s8wIMbdNMJ9Fd8bv
-	nz0cJx6ElKuLwONxyQYTR+H+8d4GNmOKhUKRFLi8limErM3ded1+
-X-Gm-Gg: ASbGnct9J0LOLl60xg+1FlqL5hyVAmeuOYxRuKQubdCd1su9Od9BbD9DdKhNvtMmeuS
-	RvWk4qTi3UzKTl2Wyz2ySXcW+igwc4OycTFzWuefrIm5q8DpgFLetnUV4HPqJesMRaJ8zj+A0mX
-	YWhMu19XVkFqEqd+7oT6E73jSIXBgTfcGh2jcbDB672NMYAeZ+jkKQMqq9wek9w7At3M9iGQkEM
-	iv48HzaoaHGdIStG2dcaCFDDq1/4ynmz3HZaPKQLLSeak7QGAX30qP7mAD2Pjtjp2HtQ7jRvvCJ
-	0olN4KYeOETP1ld6enXBgQ0QJEdRyX4x45ysdNrwwX/YJ6es+iovmLPifEGWaxU+jn5cxGZelPx
-	N
-X-Google-Smtp-Source: AGHT+IFSmo8fFuEqajq9aZA55RF0/kNYRGkGPQelDDCd7p8x/2z2TYhPjj6gPq4JZPeYBBnh3Gq1Ag==
-X-Received: by 2002:a5d:64a8:0:b0:390:ff84:532b with SMTP id ffacd0b85a97d-3997955cc22mr2933292f8f.7.1742482750791;
-        Thu, 20 Mar 2025 07:59:10 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-129.ip49.fastwebnet.it. [93.34.90.129])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f43e35sm51134405e9.14.2025.03.20.07.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 07:59:10 -0700 (PDT)
-Message-ID: <67dc2d3e.050a0220.2e39a4.c3f0@mx.google.com>
-X-Google-Original-Message-ID: <Z9wtOv-ttPCY-Lpg@Ansuel-XPS.>
-Date: Thu, 20 Mar 2025 15:59:06 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Daniel Danzberger <dd@embedd.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
-	Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-	upstream@airoha.com
-Subject: Re: [PATCH v2 04/11] soc: airoha: add support for configuring SCU
- SSR Serdes port
-References: <20250320130054.4804-1-ansuelsmth@gmail.com>
- <20250320130054.4804-5-ansuelsmth@gmail.com>
- <d6e27266-dc5b-4ef8-b708-21cedd06621e@app.fastmail.com>
+        d=1e100.net; s=20230601; t=1742485355; x=1743090155;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AzdNEu6y+XONtMGIUQtcG5XKDkgKB41TTl7oxU5xJJg=;
+        b=HwRQJbNhScT1FzylAtj0Bz/go7iyobJPYhsZKiJcSupXbnse9nyCGI4E7KKcC2oYXR
+         34pl3lMn5MHH/WtpeJmo+8+iT3h7EIa2MH5oyOt4Tw2/c6tF9ZgemqHDI8akMdt9ZorV
+         +rceR42YIe8zo/L9EcuvPRl27nupoun5E6u/RL7WZ1wtDHb41cwqo+DWi4FaPWicg77R
+         3JcAi1AGZ5TAcBOhP94rtbG6Iav8r79IxWB5bwK83BGjJwFJvqmQoMZaE+L77/UNyRhi
+         hJbeoWXYAUnM+FQJUrYh/ktNrtNXF70J3BQWmxyWqG5PjWn47vIK7vMrbJqtBV0tEs9x
+         dbww==
+X-Forwarded-Encrypted: i=1; AJvYcCVrx+aovmIeMxJIPR9wsc8FSjNxQxG5CFLVRhgS4IRXqA2ypzWDbBc3mZQy1kMI3CWKKrh9ST5NfMY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1pz8Otx2NyMDLA6WL8jAgK+ux5T8oypuETUUF9yBAP7QqUI4W
+	cduvklRAJnudEVu28IMVTSvOGhfyqeV95R7D9SRmCv9L0xD4Zuz5jUsfc1WZCPQ=
+X-Gm-Gg: ASbGnct4KdgRzkNdjTUpYTUYBmRn0ufACrhfCInBG1a6UHn1mCvN5Ydo1PrUxM1b4+7
+	k16LdQ8e9tBh6ikUxoHx4jOF0JhUfa1dK5a6UAhkw0yIn9tm/bRxiahehUwaLXJT+wi0oXPARen
+	R4roqBd2DRft347miejDn4zJkqMUc6y3OOns5z+K5EtIlICF9MMG43ifK03W/vhk+DkKrIYeDHO
+	jPN5rC4N8G+YKlUeDo0Hbgfd24VrV7cFkyXwwF37q8S0EorpnvRgRP7EAe+0IHrfsj+ZrKS/YgN
+	6Mm/P9qKrIt1+V6D2wST/pd/DfOAokVCKKm9ENvwCzVSNU9QyjVtbCu4Gt7ZipcFoMm/rm4dOg7
+	A1ZSLPZ9Rj9SLUSxw5087ZA==
+X-Google-Smtp-Source: AGHT+IFQEufoOY/ocwSQk/juDoom1Vr2/cRMpKfbGJG8KRcBZIE/XUKwxnHaV2M2+UGrtqFY48z25w==
+X-Received: by 2002:a05:600c:1f92:b0:43b:c857:e9d7 with SMTP id 5b1f17b1804b1-43d502e338emr69485e9.5.1742485354965;
+        Thu, 20 Mar 2025 08:42:34 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1348:8f01:d3d3:1b29:8986:519c? ([2001:a61:1348:8f01:d3d3:1b29:8986:519c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d4fdbd348sm1141335e9.39.2025.03.20.08.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 08:42:34 -0700 (PDT)
+Message-ID: <7be81186-2d18-4d0e-8a93-d2dda20b02b2@suse.com>
+Date: Thu, 20 Mar 2025 16:42:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d6e27266-dc5b-4ef8-b708-21cedd06621e@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: WARNING in cm109_urb_irq_callback/usb_submit_urb
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
+Cc: =?UTF-8?B?55m954OB5YaJ?= <baishuoran@hrbeu.edu.cn>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Kun Hu <huk23@m.fudan.edu.cn>,
+ Jiaji Qin <jjtan24@m.fudan.edu.cn>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+ syzkaller@googlegroups.com
+References: <559eddf1.5c68.195b1d950ef.Coremail.baishuoran@hrbeu.edu.cn>
+ <62d91b68-2137-4a3a-a78a-c765402edd35@suse.com>
+ <a3f66f2e-a99e-47f2-a3ef-742b6903cc5d@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <a3f66f2e-a99e-47f2-a3ef-742b6903cc5d@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 20, 2025 at 03:49:08PM +0100, Arnd Bergmann wrote:
-> On Thu, Mar 20, 2025, at 14:00, Christian Marangi wrote:
-> > Add support for configuring SCU SSR Serdes port. Airoha AN7581 SoC can
-> > configure the different Serdes port by toggling bits in the SCU register
-> > space.
-> >
-> > Port Serdes mode are mutually exclusive, force example the USB2 Serdes port
-> > can either used for USB 3.0 or PCIe 2 port. Enabling USB 3.0 makes the
-> > PCIe 2 to not work.
-> >
-> > The current supported Serdes port are:
-> > - WiFi 1 and defaults to PCIe0 1 line mode
-> > - Wifi 2 and defaults to PCIe1 1 line mode
-> > - USB 1 and defaults to USB 3.0 mode
-> > - USB 2 and defaults to USB 3.0 mode
-> >
-> > WiFi 1, WiFi 2 and USB 1 also support a particular Ethernet mode that
-> > can toggle between USXGMII or HSGMII mode (USB 1 only to HSGMII)
-> > Such mode doesn't configure bits as specific Ethernet PCS driver will
-> > take care of configuring the Serdes mode based on what is required.
-> >
-> > This driver is to correctly setup these bits.
-> > Single driver can't independently set the Serdes port mode as that
-> > would cause a conflict if someone declare, for example, in DT
-> > (and enable) PCIe 2 port and USB2 3.0 port.
-> >
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> I think serdes drivers are usually implement in the drivers/phy
-> layer, and I see there is already a drivers/phy/phy-airoha-pcie.c,
-> which may or may not overlap with this one (I have not looked at
-> the details).
-> 
-> Have you tried to use the phy subsystem interface here instead
-> of creating a custom in-kernel interface?
->
+On 20.03.25 15:25, Alan Stern wrote:
 
-These really set 1-2 bit and I think PHY can't describe PCIe in x2 mode
-or in x1. Also I think PHY is used for more advanced stuff and usually
-have dedicated register/maps. This is really to configure 1-2 bit and
-provide the mode, nothing else... no enable, no power up.
+> This test must itself be subject to the same race, right?  There needs
+> to be some kind of synchronization between the two tasks (i.e., a mutex,
+> spinlock, or something similar).
 
-Do you think a it's possible to implement a ""read-only"" PHY driver?
+Hi,
 
-The PCIe x2 mode maybe can be modelled with
-phy-cells = <2> and adding a extra entry to enforce x2 line mode?
+there is:
 
-But I feel it would be wrong to say that the SCU expose PHY as it won't
-be true.
+static void cm109_stop_traffic(struct cm109_dev *dev)
+{
+         dev->shutdown = 1;
+         /*
+          * Make sure other CPUs see this
+          */
+         smp_wmb();
+                 
+         usb_kill_urb(dev->urb_ctl);
+         usb_kill_urb(dev->urb_irq);
+                 
+         cm109_toggle_buzzer_sync(dev, 0);
+                 
+         dev->shutdown = 0;
+         smp_wmb();
+}
 
-Honestly we should really consider starting to implement a generic
-provider for these stuff... it's not the first time we have bit that
-configure part of the entire system.
+This driver has a tough job as the two completion
+handlers submitted each other's as well as their own
+URBs based on the data they get.
+That scheme is rather complex, but as far as I can tell correct,
+but you need to test that flag everywhere.
 
-For example this is very common for QCOM with TCSR and also for Mediatek
-with the TPHY. (but TPHY is at least more realistic as it can enable and
-disable serdes port... here it's just 1 bit)
-
--- 
-	Ansuel
+	Regards
+		Oliver
+           
 
