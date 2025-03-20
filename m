@@ -1,150 +1,113 @@
-Return-Path: <linux-usb+bounces-21941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21943-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF55EA69F18
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 05:39:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F15AA6A1E7
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 09:55:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AC2818986DB
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 04:39:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15788171BF9
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 08:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6E01DF74F;
-	Thu, 20 Mar 2025 04:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1062321CC58;
+	Thu, 20 Mar 2025 08:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A1dPiVL1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hrbeu.edu.cn (mx1.hrbeu.edu.cn [202.118.176.6])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C8033E1;
-	Thu, 20 Mar 2025 04:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.118.176.6
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A350A219314
+	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 08:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742445578; cv=none; b=libM3QmRx31Vptq/umkKJpq5o9va61Q4juH59L7v44CJc9qCt6xt506NrvezOAOlMbKN/XQFRSQhIsu29LKEYDXPKRdyY2bZP6BFKch6Wgbnu1g1bQwNANsu9HFSp/7WjwtlxRvoT+ophMxQGRTqIqhlaWv6o2oKqzn1tlvAavM=
+	t=1742460921; cv=none; b=FzA+tCyo4YgTqQhXHbye4Ij/y85jb6DQnzHOHqUuYjxYQxE76z3/74ZeD28lMj7JuZsTsidoi989YnC7ZrJH9WTU1O1cZSXkftbm3od8jFDClOukgnUFZxZYuQlElP4FPiqQ7vcbsWUtqbXr5TpO/k+RUOWSpSiq87DGCLVtOuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742445578; c=relaxed/simple;
-	bh=ftgEpznoOgdnpXw35OzUbRA18XILihoo4sKoASydQCQ=;
-	h=Date:From:To:Cc:Subject:Content-Type:MIME-Version:Message-ID; b=EdSGH0V2LKs0+OMQxkg3/g1tGMyzcJTIkghkCMsMQ2ZrRu9Rlq1W//F3Wv5WcEnVmEcfFftAwNvXVTLfNeFCYTlR8u4Gb1+TnOyvjS65lMlyyyOyWi/fvnXS+6N+MnaxG6QHyoy+j9z9lDBpzLNx9MmYvvbXoO289lBYYoQdYwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hrbeu.edu.cn; spf=pass smtp.mailfrom=hrbeu.edu.cn; arc=none smtp.client-ip=202.118.176.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hrbeu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hrbeu.edu.cn
-Received: from baishuoran$hrbeu.edu.cn ( [198.2.244.151] ) by
- ajax-webmail-Front (Coremail) ; Thu, 20 Mar 2025 12:39:24 +0800 (GMT+08:00)
-Date: Thu, 20 Mar 2025 12:39:24 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: =?UTF-8?B?55m954OB5YaJ?= <baishuoran@hrbeu.edu.cn>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Dmitry Torokhov" <dmitry.torokhov@gmail.com>
-Cc: "Kun Hu" <huk23@m.fudan.edu.cn>, "Jiaji Qin" <jjtan24@m.fudan.edu.cn>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, syzkaller@googlegroups.com
-Subject: WARNING in cm109_urb_irq_callback/usb_submit_urb
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20241202(ebbd5d74) Copyright (c) 2002-2025 www.mailtech.cn hrbeu.edu.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1742460921; c=relaxed/simple;
+	bh=xdEcEMtpUDSoZpKEPUUxO32/bBHfrn5dJLu0mCdxQGs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SYCe7n3fixnFPTOh7ShwrCCS8AikIDwYHKUrX0cYPXMtqJnCFGMzzkQk/sOo5YxNVsZQDT3dxTGcLyMy946kfXF8gXX7UrqfuvuBrm2P9H0CDeRAWhpMwRsROEWjQoYiq7dpen8qjq/l84QNkjzIlKRprisfrHnWyINC25gL2TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A1dPiVL1; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cf257158fso2905045e9.2
+        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 01:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1742460917; x=1743065717; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2MrfgjPAqlNn2eUud6G1hK5xCroWzCbZXOyHt9NcJeY=;
+        b=A1dPiVL1A7myzN3Pb2Tm09c2n67GkAhkCtQOjZ8cjGcntGxZ75WhGRU2N1deBnyV3f
+         ZoCVAdwv39xGVpwqFg+mztgBrClyLUAzPxHrBLl+qbjmdQ+Y3/Fx4QLpkRB5IQeWRv8x
+         D16NuDG/ML9Y6BqJu0MYmE6KieuNDzma1Tr69NL/o1LagFjQfWpXh7BWraj1I2qgsLmD
+         9i+mPaTOsbvqHYX4kpL6lWkbgHfk7YFBCrGwP44wGucgrcOC2bnfwK81xOR8cyrMjL/2
+         rhwsJLqY/a3+mp6qtPkIs+dSRo3y+h+N185uTNDuivoWklxakd4lQBJlVpVBHljSF7zc
+         bvEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742460917; x=1743065717;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2MrfgjPAqlNn2eUud6G1hK5xCroWzCbZXOyHt9NcJeY=;
+        b=BWe/k6Qs7nUGnJ+0QqLRxgGv1imWMB5aFaBOO8vv3lE+8Dx7AgasKuwl/qPfjF/z+Z
+         wk41Vct7c6/hgFyDEJp5QSVwGzDDjThNeNNci+ZuSTlfYPVQs9o4Wej8iHxCkFLxnm9e
+         eMOfAoUu4vQvyRBkG/hS6vdj/tqcB8bj/C16uSZM7efMKNVOggOH57py6kgKnkSnDc5f
+         niHJOKFOgsk2xWik6IE0WKsDl8p2jK+MvDXNxgj8Xdb4OjDqLWOR8P7hfjD2+2Pd5X/7
+         XtRI/2a4bZYWgIRAzOJ9mZwfelrC9VCqfu8xyXU+MvYZoaPl3KZkAMKSM/kniovq82xP
+         bRQA==
+X-Gm-Message-State: AOJu0Yw+jupx5alvW7AEyMB+RZwsH911gNm+Tz0pStMTefVyM6EEfS6F
+	5Xb2NggIUobYAuelEltV+7++/RSW9MkJUJiT2pfGwxnOkKCO7bX8/A6MG5NSyRYuluCgzlIzMu/
+	p
+X-Gm-Gg: ASbGnctQSWenbT/WGG/M1h2dnZpx1EuutgopcZmDIyuVj0JGKxqK8Aav6xhRr0jKV7g
+	JVXOPfoO8VdW5+Ju+BQ7QHIlgQ4wNdEO0I4N/3dBHMYz4i1PytxP+XfbxKCmJRijAsttM7Cj1LS
+	e0njUejcKUZhQ5ypHzjX8L0C3B/IIWzgjZU3GlMa/JxQc+XrzMZ7FgRqMTcjGZKF27VdjNYoC6t
+	hfd6z5wQ7KxzAKH80zp/jGh/ndNOLhM4tX2qP0aA5vt/mBqSH4hwGA2dLpStWcMM4U67jdt2+Dr
+	juXw0hvZBwgyVT2pcAARxCeuwECdokDE1SQ5uKzVWtxmm3Mo1OYtDSLycdb5Vg0V8RpbHBiN3BT
+	hbPikqMACHrtNW3BCv3uCMA==
+X-Google-Smtp-Source: AGHT+IGU49v/Lhj/oen+zcnHCh0eZR5eOnW4KQbs/Ef8gsM2qEALp+P0YL7mG8wyU72gTByAWx7BOg==
+X-Received: by 2002:a05:600c:870f:b0:43c:f00b:d581 with SMTP id 5b1f17b1804b1-43d43880eb4mr58784485e9.29.1742460916713;
+        Thu, 20 Mar 2025 01:55:16 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1348:8f01:d3d3:1b29:8986:519c? ([2001:a61:1348:8f01:d3d3:1b29:8986:519c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f55c3dsm42191635e9.23.2025.03.20.01.55.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 01:55:16 -0700 (PDT)
+Message-ID: <a34c5771-3103-4253-93d8-df5d4c4a8b1e@suse.com>
+Date: Thu, 20 Mar 2025 09:55:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <559eddf1.5c68.195b1d950ef.Coremail.baishuoran@hrbeu.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:CbB2ygBH0h_8m9tn1nCMAA--.13392W
-X-CM-SenderInfo: pedl2xpxrut0w6kuuvvxohv3gofq/1tbiAQIHCmfbjtQAfAABsV
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWDJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: use-after-free in drivers/net/usb/hso.c hso_serial_open()
+To: Greg KH <gregkh@linuxfoundation.org>, rtm@csail.mit.edu
+Cc: linux-usb@vger.kernel.org
+References: <33193.1742406937@30-11-165.wireless.csail.mit.edu>
+ <2025031933-clavicle-sulfide-878e@gregkh>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <2025031933-clavicle-sulfide-878e@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-RGVhciBNYWludGFpbmVycywKCldoZW4gdXNpbmcgb3VyIGN1c3RvbWl6ZWQgU3l6a2FsbGVyIHRv
-IGZ1enogdGhlIGxhdGVzdCBMaW51eCBrZXJuZWwsIHRoZSBmb2xsb3dpbmcgY3Jhc2ggKDk0dGgp
-d2FzIHRyaWdnZXJlZC4KCgpIRUFEIGNvbW1pdDogNjUzN2NmYjM5NWYzNTI3ODI5MThkOGVlN2I3
-ZjEwYmEyY2MzY2JmMgpnaXQgdHJlZTogdXBzdHJlYW0KT3V0cHV0Omh0dHBzOi8vZ2l0aHViLmNv
-bS9wZ2hrMTMvS2VybmVsLUJ1Zy90cmVlL21haW4vMDMwNV82LjE0cmM1Lzk0LUlORk9fJTIwcmN1
-JTIwZGV0ZWN0ZWQlMjBzdGFsbCUyMGluJTIwZGNhY2hlX2Rpcl9vcGVuCktlcm5lbCBjb25maWc6
-aHR0cHM6Ly9naXRodWIuY29tL3BnaGsxMy9LZXJuZWwtQnVnL2Jsb2IvbWFpbi8wMzA1XzYuMTRy
-YzUvY29uZmlnLnR4dApDIHJlcHJvZHVjZXI6aHR0cHM6Ly9naXRodWIuY29tL3BnaGsxMy9LZXJu
-ZWwtQnVnL2Jsb2IvbWFpbi8wMzA1XzYuMTRyYzUvOTQtSU5GT18lMjByY3UlMjBkZXRlY3RlZCUy
-MHN0YWxsJTIwaW4lMjBkY2FjaGVfZGlyX29wZW4vOTRyZXByby5jClN5emxhbmcgcmVwcm9kdWNl
-cjogaHR0cHM6Ly9naXRodWIuY29tL3BnaGsxMy9LZXJuZWwtQnVnL2Jsb2IvbWFpbi8wMzA1XzYu
-MTRyYzUvOTQtSU5GT18lMjByY3UlMjBkZXRlY3RlZCUyMHN0YWxsJTIwaW4lMjBkY2FjaGVfZGly
-X29wZW4vOTRyZXBvcnQKCgpUaGUgZXJyb3Igb2NjdXJzIGFyb3VuZCBsaW5lIDM3OSBvZiB0aGUg
-dXJiLmMgZmlsZS4gVGhlIHByb2JsZW0gZW5kcyB1cCBpbiB0aGUgY20xMDlfdXJiX2lycV9jYWxs
-YmFjayBmdW5jdGlvbiBpbiB0aGUgY20xMDkuYyBmaWxlOkluIHRoZSBjbTEwOV91cmJfaXJxX2Nh
-bGxiYWNrIGZ1bmN0aW9uLCB0aGUgZHJpdmVyIGF0dGVtcHRzIHRvIHJlc3VibWl0IGEgVVJCIHRo
-YXQgaGFzIG5vdCB5ZXQgYmVlbiBwcm9jZXNzZWQuIFRoZXJlIG1heSBiZSBhIHJhY2UgY29uZGl0
-aW9uIGluIHRoZSBkcml2ZXIgdGhhdCByZXN1Ym1pdHMgdGhlIFVSQiBpbiB0aGUgVVJCIGNvbXBs
-ZXRpb24gY2FsbGJhY2ssIGJ1dCB0aGUgc2FtZSBVUkIgbWF5IGhhdmUgYWxyZWFkeSBiZWVuIGNv
-bW1pdHRlZCB0byBhbm90aGVyIGxvY2F0aW9uIGluIHRoZSBzeXN0ZW0uIFRoaXMgaXNzdWUgc2Vl
-bXMgdG8gaW52b2x2ZSB0aGUgY3JlYXRpb24gb2YgVVNCIGRldmljZXMsIHRoZSBvcGVyYXRpb24g
-b2YgVFRZIGRldmljZXMsIGFuZCBmaWxlIGRlc2NyaXB0b3IgY29weWluZy4gVGhpcyBjb21wbGV4
-IGludGVyYWN0aW9uIHJlc3VsdGVkIGluIGR1cGxpY2F0ZSBjb21taXRzIG9mIHRoZSBVUkIuCldl
-IGhhdmUgcmVwcm9kdWNlZCB0aGlzIGlzc3VlIHNldmVyYWwgdGltZXMgb24gNi4xNC1yYzUgYWdh
-aW4uCgoKCgpJZiB5b3UgZml4IHRoaXMgaXNzdWUsIHBsZWFzZSBhZGQgdGhlIGZvbGxvd2luZyB0
-YWcgdG8gdGhlIGNvbW1pdDoKUmVwb3J0ZWQtYnk6IEt1biBIdSA8aHVrMjNAbS5mdWRhbi5lZHUu
-Y24+LCBKaWFqaSBRaW4gPGpqdGFuMjRAbS5mdWRhbi5lZHUuY24+LCBTaHVvcmFuIEJhaSA8YmFp
-c2h1b3JhbkBocmJldS5lZHUuY24+CgoKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09IApVUkIgZmZmZjg4ODA0NWM4MTgwMCBz
-dWJtaXR0ZWQgd2hpbGUgYWN0aXZlCldBUk5JTkc6IENQVTogMCBQSUQ6IDAgYXQgZHJpdmVycy91
-c2IvY29yZS91cmIuYzozNzkgdXNiX3N1Ym1pdF91cmIrMHgxMzRlLzB4MTc1MApNb2R1bGVzIGxp
-bmtlZCBpbjoKQ1BVOiAwIFVJRDogMCBQSUQ6IDAgQ29tbTogc3dhcHBlci8wIE5vdCB0YWludGVk
-IDYuMTQuMC1yYzUgIzEKSGFyZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsg
-UElJWCwgMTk5NiksIEJJT1MgMS4xMy4wLTF1YnVudHUxLjEgMDQvMDEvMjAxNApSSVA6IDAwMTA6
-dXNiX3N1Ym1pdF91cmIrMHgxMzRlLzB4MTc1MApDb2RlOiBlOCBjNyBiNCBhMCBmYSA4NCBkYiAw
-ZiA4NSA0NyBmNSBmZiBmZiBlOCAwYSBiMyBhMCBmYSBjNiAwNSBjMyBiYSAzMCAwOSAwMSA5MCA0
-OCBjNyBjNyAwMCAzZSAyZiA4YyA0YyA4OSBmZSBlOCBlMyBhOCA2MCBmYSA5MCA8MGY+IDBiIDkw
-IDkwIGU5IDIxIGY1IGZmIGZmIDQ4IDg5IDdjIDI0IDM4IGU4IGRmIGIyIGEwIGZhIDQ4IDhiIDdj
-ClJTUDogMDAxODpmZmZmYzkwMDAwMDA3YWQwIEVGTEFHUzogMDAwMTAwODIKUkFYOiAwMDAwMDAw
-MDAwMDAwMDAwIFJCWDogMDAwMDAwMDAwMDAwMDAwMCBSQ1g6IGZmZmZmZmZmODE3OWVjN2EKUkRY
-OiAwMDAwMDAwMDAwMDAwMDAwIFJTSTogZmZmZmZmZmY4ZGU5Nzc0MCBSREk6IDAwMDAwMDAwMDAw
-MDAwMDIKUkJQOiBmZmZmODg4MDIyYmVlNzQwIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IGZm
-ZmZlZDEwMDU3MDUxODIKUjEwOiBmZmZmZWQxMDA1NzA1MTgxIFIxMTogZmZmZjg4ODAyYjgyOGMw
-YiBSMTI6IDAwMDAwMDAwMDAwMDAwNDYKUjEzOiBmZmZmODg4MDI3YjI0MDU4IFIxNDogMDAwMDAw
-MDBmZmZmZmZmMCBSMTU6IGZmZmY4ODgwNDVjODE4MDAKRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAw
-MDApIEdTOmZmZmY4ODgwMmI4MDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMApDUzog
-IDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCkNSMjogMDAwMDdm
-ZmZjYTA0ZmY2MCBDUjM6IDAwMDAwMDAwMGRmODAwMDAgQ1I0OiAwMDAwMDAwMDAwNzUwZWYwClBL
-UlU6IDU1NTU1NTU0CkNhbGwgVHJhY2U6CiA8SVJRPgogY20xMDlfdXJiX2lycV9jYWxsYmFjaysw
-eDQ0Yi8weGI2MAogX191c2JfaGNkX2dpdmViYWNrX3VyYisweDJlNC8weDZiMAogdXNiX2hjZF9n
-aXZlYmFja191cmIrMHgzOTEvMHg0NTAKIGR1bW15X3RpbWVyKzB4MTIxNy8weDM1NDAKIF9faHJ0
-aW1lcl9ydW5fcXVldWVzKzB4MWI3LzB4YzMwCiBocnRpbWVyX3J1bl9zb2Z0aXJxKzB4MTdmLzB4
-MmUwCiBoYW5kbGVfc29mdGlycXMrMHgxYmQvMHg4ODAKIGlycV9leGl0X3JjdSsweGZkLzB4MTUw
-CiBzeXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1cHQrMHhhOC8weGMwCiA8L0lSUT4KIDxUQVNLPgog
-YXNtX3N5c3ZlY19hcGljX3RpbWVyX2ludGVycnVwdCsweDFhLzB4MjAKUklQOiAwMDEwOmRlZmF1
-bHRfaWRsZSsweDFlLzB4MzAKQ29kZTogOTAgOTAgOTAgOTAgOTAgOTAgOTAgOTAgOTAgOTAgOTAg
-OTAgZjMgMGYgMWUgZmEgMGYgMWYgNDQgMDAgMDAgZWIgMGMgMGYgMWYgNDQgMDAgMDAgMGYgMDAg
-MmQgYzkgYTkgMGQgMDAgMGYgMWYgNDQgMDAgMDAgZmIgZjQgPGZhPiBlOSBhNyA0MSBiNyBmNSA2
-NiA2NiAyZSAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCA5MCA5MCA5MCA5MCA5MApSU1A6IDAwMTg6
-ZmZmZmZmZmY4ZGUwN2UwOCBFRkxBR1M6IDAwMDAwMjA2ClJBWDogMDAwMDAwMDAwMDI3ZGVjNSBS
-Qlg6IDAwMDAwMDAwMDAwMDAwMDAgUkNYOiBmZmZmZmZmZjhiNThlNWE3ClJEWDogMDAwMDAwMDAw
-MDAwMDAwMCBSU0k6IDAwMDAwMDAwMDAwMDAwMDEgUkRJOiAwMDAwMDAwMDAwMDAwMDAwClJCUDog
-ZGZmZmZjMDAwMDAwMDAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDEgUjA5OiBmZmZmZWQxMDA1NzA2
-Zjg2ClIxMDogZmZmZmVkMTAwNTcwNmY4NSBSMTE6IGZmZmY4ODgwMmI4MzdjMmIgUjEyOiAwMDAw
-MDAwMDAwMDAwMDAwClIxMzogZmZmZmZmZmY5MDYxNmExMCBSMTQ6IDAwMDAwMDAwMDAwMDAwMDAg
-UjE1OiAwMDAwMDAwMDAwMDAwMDAwCiBkZWZhdWx0X2lkbGVfY2FsbCsweDZkLzB4YjAKIGRvX2lk
-bGUrMHgzMTIvMHgzYzAKIGNwdV9zdGFydHVwX2VudHJ5KzB4NGYvMHg2MAogcmVzdF9pbml0KzB4
-MWE5LzB4MmYwCiBzdGFydF9rZXJuZWwrMHgzZmEvMHg0ZTAKIHg4Nl82NF9zdGFydF9yZXNlcnZh
-dGlvbnMrMHgxOC8weDMwCiB4ODZfNjRfc3RhcnRfa2VybmVsKzB4YjMvMHhjMAogY29tbW9uX3N0
-YXJ0dXBfNjQrMHgxM2UvMHgxNDgKIDwvVEFTSz4KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0KQ29kZSBkaXNhc3NlbWJseSAoYmVzdCBndWVzcyk6CiAgIDA6CTkwICAgICAgICAgICAg
-ICAgICAgIAlub3AKICAgMToJOTAgICAgICAgICAgICAgICAgICAgCW5vcAogICAyOgk5MCAgICAg
-ICAgICAgICAgICAgICAJbm9wCiAgIDM6CTkwICAgICAgICAgICAgICAgICAgIAlub3AKICAgNDoJ
-OTAgICAgICAgICAgICAgICAgICAgCW5vcAogICA1Ogk5MCAgICAgICAgICAgICAgICAgICAJbm9w
-CiAgIDY6CTkwICAgICAgICAgICAgICAgICAgIAlub3AKICAgNzoJOTAgICAgICAgICAgICAgICAg
-ICAgCW5vcAogICA4Ogk5MCAgICAgICAgICAgICAgICAgICAJbm9wCiAgIDk6CTkwICAgICAgICAg
-ICAgICAgICAgIAlub3AKICAgYToJOTAgICAgICAgICAgICAgICAgICAgCW5vcAogICBiOgk5MCAg
-ICAgICAgICAgICAgICAgICAJbm9wCiAgIGM6CWYzIDBmIDFlIGZhICAgICAgICAgIAllbmRicjY0
-CiAgMTA6CTBmIDFmIDQ0IDAwIDAwICAgICAgIAlub3BsICAgMHgwKCVyYXgsJXJheCwxKQogIDE1
-OgllYiAwYyAgICAgICAgICAgICAgICAJam1wICAgIDB4MjMKICAxNzoJMGYgMWYgNDQgMDAgMDAg
-ICAgICAgCW5vcGwgICAweDAoJXJheCwlcmF4LDEpCiAgMWM6CTBmIDAwIDJkIGM5IGE5IDBkIDAw
-IAl2ZXJ3ICAgMHhkYTljOSglcmlwKSAgICAgICAgIyAweGRhOWVjCiAgMjM6CTBmIDFmIDQ0IDAw
-IDAwICAgICAgIAlub3BsICAgMHgwKCVyYXgsJXJheCwxKQogIDI4OglmYiAgICAgICAgICAgICAg
-ICAgICAJc3RpCiAgMjk6CWY0ICAgICAgICAgICAgICAgICAgIAlobHQKKiAyYToJZmEgICAgICAg
-ICAgICAgICAgICAgCWNsaSA8LS0gdHJhcHBpbmcgaW5zdHJ1Y3Rpb24KICAyYjoJZTkgYTcgNDEg
-YjcgZjUgICAgICAgCWptcHEgICAweGY1Yjc0MWQ3CiAgMzA6CTY2IDY2IDJlIDBmIDFmIDg0IDAw
-IAlkYXRhMTYgbm9wdyAlY3M6MHgwKCVyYXgsJXJheCwxKQogIDM3OgkwMCAwMCAwMCAwMAogIDNi
-Ogk5MCAgICAgICAgICAgICAgICAgICAJbm9wCiAgM2M6CTkwICAgICAgICAgICAgICAgICAgIAlu
-b3AKICAzZDoJOTAgICAgICAgICAgICAgICAgICAgCW5vcAogIDNlOgk5MCAgICAgICAgICAgICAg
-ICAgICAJbm9wCiAgM2Y6CTkwICAgICAgICAgICAgICAgICAgIAlub3AKLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0KCgoKCgp0aGFua3MsCkt1biBIdQo=
+On 20.03.25 00:49, Greg KH wrote:
+
+> Wait, shouldn't we fail a device that has a zero size anyway in the USB
+> core?  Is that a valid configuration?  It's been a long time since I dug
+> into the spec for that...
+
+Hi,
+
+3.x has language that requires a minimum size of 1
+2.0 does not. In fact it has language that can be read as allowing
+a size of 0
+
+I am afraid blocking this in core wouldn't be a good idea.
+
+	Regards
+		Oliver
+
 
