@@ -1,196 +1,132 @@
-Return-Path: <linux-usb+bounces-21944-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21945-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32DDA6A217
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 10:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38407A6A40D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 11:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DAB93A7741
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 09:07:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6093BE265
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Mar 2025 10:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE7221ADCC;
-	Thu, 20 Mar 2025 09:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8779B2248B3;
+	Thu, 20 Mar 2025 10:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZUs0vL1Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4AD207A03
-	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 09:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092492144BB
+	for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 10:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742461648; cv=none; b=Zy/8hmN7Pb9ponShPCrAFHdL2urZlYNxc08N4/KfzFx1fQXYx9vf/sWJrS0us0arxVkowpQwyZfxuet+cUQsHMgLTCk7O7CpOfmy6hXFibPLiNffZn5Nq7m++LNUYatPGq+JAGwfVxPLHUIWiz+n6F+sewPCrvV9VFQy/FYMNR8=
+	t=1742467674; cv=none; b=YC0bjslrK2zVuYwVO2MzP6E8AOQAW5C8+0LqRAtTaLx3BNKW0zc5a6/+zaAEb1hBBrTyzW/75mkdVN/uL7A/4OOrgWGE8Hh5/PWrpNJ4YiuwQaMkN5VMGPw34XhMgoeS0pFtNU8MobPGL7mQDC+WTrpGtz1ldXCFsLTNeNNal+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742461648; c=relaxed/simple;
-	bh=tB0s+m6aFPYw2aUKhjQrnBmhGjg3R3H1qUca04bdGEs=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YW6FoThIp1w20j/wzUgTdVt6o8fo26F9nFDJBhY1xBp+JdW19cRRTgqlid1dSVdFsPHWY0N40wwLx6ct/QZSdAmXL8NS4fYzFybsVj7kHh2M5F7t9R7ZOVd6YHDJAjp7pg1KkDtF7KEuncfMgEfWNj0x6CClaLQ8KVsaObSfVOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3d3d949fd42so10846345ab.3
-        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 02:07:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742461646; x=1743066446;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	s=arc-20240116; t=1742467674; c=relaxed/simple;
+	bh=b/4sQwud0OrkziRdWZLgXgI9I/atRHIuDBOY19FW2ys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y6sMcknrhg4tOH1NxMJlHd4Z1EOGB3cZY8i2b460d1Glrf/3ol56VfXY6OrM5ZIvlG/+GVfe3lV5hg/YSGXEqbHGezy6rQ0ZxVv+QRkZoZstscxJ/VPy1HaLf3U7SYlToaKlC1DVu0/c2c4Cw5ij4WLCBDQQGVBpF1cV13woJCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZUs0vL1Y; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d0359b1fcso3856995e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 03:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1742467670; x=1743072470; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hJAGCcFQC5ruyciO77MttM2UXxm4c5ZthxU0/9v+U6I=;
-        b=VgvnHANzneMYrZsTZfW0OSHPEmydrB3u6fTzdFjPSWNnHeA5A+1JGE8j3Cq3U2JrsB
-         Twgurn5aMz0DAoS3tS/aCcUMOMo7ULn08OrpVzoYrBRFZmTAjkU6px6IRIzOhjLyqxVc
-         GgsVtUy9yxtG755cl4zZGWdSvItbKHHAHtFJd4tw4N3PZHrg81ADzv2MtkL+nnB7QFTS
-         YnuVSGbv15M/uJJuiP6UpW8tu3BINyyH0uTW+uZKhq8grR3oujVff+HjpymkyZ5xhaJi
-         Oz73ndD3cUfJCLqDoUzyAokeEI1p84pMM2rJuoW9uqEOoGGFxKapG1auBJGrP0YvxDxC
-         BLzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhY1x8vwG+J15bgYIW8XwJKU2Ar85tTaw/Y36j21L65y/jN72VZ8dVv1JihsHtDLXjgGqcF2x63Xw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5oe289lGvHY5vevn+yWFJXLlNhwaIMt/F9T0SVQ45i5sE/xNg
-	zwstUx5XJ/HBHWxi8aRiYmVFJ601ECWbl0DAcQEpDJ8ga075du7Du4/yq4TV8MYgeMct60kTEUN
-	vrYG1tOB2dUUYp0YGpiwg4VRrWE5N6M+fas8mbBUNjnJE2NUsXAYlC10=
-X-Google-Smtp-Source: AGHT+IHkd9aGmCSyxtOnJ9AZaC1LbCNax4fNstQBY5Acgd7vJs6VEfBK5wbWW4AK2HGnt+Ium+k8WqxbeCT9VqX/8PTVGPeRjhE2
+        bh=GvKwVlZTxe8IGUc6X4Pju/hWNXugAe5j8w6m1ssCyeA=;
+        b=ZUs0vL1YaQeCj/gdNEPS0+/klBiip0ARoTtooUEhSE9Tq/SxqPgk2krkdrO6RPu762
+         boROB0Wd6YnxLZ5NXhz7oq4koJA25laL85YHPUyfhC6hYFV8hqUyVY3faPye77OMwvly
+         XJ0q5FCz9gAXAmkH0U1W0+pwZ307Q42Ym4qptxBP+loObSCV+dE98fNDZKqqAajhWdxX
+         ljgiYyE/kWeZUEAC34i8B43Jec/rhzq+0SLAuY1pQvCnil3OIl/9si9yHRDbhtZrjF++
+         pGPrcumGJbWjfa8caaLSj8flHNsXuyj1aVwsnuKoD2lUxMa7atb3fTeWKR080WttFlWp
+         0i7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742467670; x=1743072470;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GvKwVlZTxe8IGUc6X4Pju/hWNXugAe5j8w6m1ssCyeA=;
+        b=DE0LadzGl8q1KXCvbJOlgEPbJrMx5iWwhcmsNwCHjN+tREjHu9CgXbCL/TTUbaVAWE
+         VDi2iNz+PLXmDJDzcIes1RS45jt+WIFMqlAc5zP+VoU3JhqhAfZWoC9RnoCVA1iaY5EJ
+         eWc2VZTMjdaF73zPg0ca/PUzKvbvdWRKWNlNtTXPpKJsi/ooARkOa5rvtIYHjcG1g+BD
+         hdjTyYu8hv36OXIP2uBefliz6/e+K7Y4mNuhGskx2LELGJjfU6dXf4ef4TLlG8XU92tm
+         TyKWeBnks6rfL+x7hM9HsFu1g8CTYuCkBEqTbb884lRi+YLvx9LnLeQvBJ6/e5VD/1Je
+         D7Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWXHQAez6gaXlSp+b76gcwjgVaqIReWabs0AIPkme7CIbEVmuz3HpjOwEnQi7tYkee5NBzVAbfmj7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqEbNEXzRsfIFjq09AA+an76y+Zya8/tmw/DU6QWphnszArfoG
+	P6jPoP4tLjdvWmjXvNIkLkFPeWoML1wJYnhcOW67P+oje2RJFxuPUAav68ozEmxzp1vcVl/YuOy
+	9
+X-Gm-Gg: ASbGncubKicnEABw4sIbzZNrUKqP5X7g5vlWtk7mga3oxqJv4dDQ11763jKcMhG86JW
+	nvuefp61Rbq0uCIzn3SsdeHN2Fqm2osKchh1su3huCYhZ10BFVeJRJIcW+V/CQabX7StVMYfIi3
+	UqIWE9+sx/SCNOXAQyM8qZlyNzxZsKUNdDIlbt1KRyjCj+AOsvzy+nQTBJVixTVkM0LXl9BD+3r
+	v1saMAHSAHYEOJBmi+brNBMq0YUf5o+6Hz3sRyzYDeyyzxx6m/JRlanSV8EMIqgt7owM3+JepL/
+	MLTWFfqlaabNbSOAx2ItVyyncjQDKZte6MWgpWeucX1m+NGmCMcTNlVTy2lNZrwznC/zzheis6O
+	+Oyh8ELxlbfU=
+X-Google-Smtp-Source: AGHT+IFAgOi0iQwJmjyYHeaDM3BwcL4nsSqokT3gF+YbfSSaR2H2zS1j9LaQsMUw2SXodksXCseK5Q==
+X-Received: by 2002:a05:600c:4fd1:b0:439:9434:4f3b with SMTP id 5b1f17b1804b1-43d49179f3bmr26245975e9.8.1742467670238;
+        Thu, 20 Mar 2025 03:47:50 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1348:8f01:d3d3:1b29:8986:519c? ([2001:a61:1348:8f01:d3d3:1b29:8986:519c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43fdeb6esm44590645e9.31.2025.03.20.03.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 03:47:50 -0700 (PDT)
+Message-ID: <60516f6b-fb96-4fe7-8767-ebb63758d099@suse.com>
+Date: Thu, 20 Mar 2025 11:47:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1547:b0:3d3:d07d:20a3 with SMTP id
- e9e14a558f8ab-3d58ebc2d70mr26103775ab.10.1742461646218; Thu, 20 Mar 2025
- 02:07:26 -0700 (PDT)
-Date: Thu, 20 Mar 2025 02:07:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67dbdace.050a0220.31a16b.000b.GAE@google.com>
-Subject: [syzbot] [bluetooth?] [usb?] BUG: soft lockup in hci_cmd_timeout (2)
-From: syzbot <syzbot+7f3e9d90cb008752b863@syzkaller.appspotmail.com>
-To: johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, luiz.dentz@gmail.com, 
-	marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: use-after-free in drivers/net/usb/hso.c hso_serial_open()
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: rtm@csail.mit.edu, linux-usb@vger.kernel.org
+References: <33193.1742406937@30-11-165.wireless.csail.mit.edu>
+ <2025031933-clavicle-sulfide-878e@gregkh>
+ <e7f0dc08-a5bd-4838-a229-a9fc1afd4f09@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <e7f0dc08-a5bd-4838-a229-a9fc1afd4f09@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On 20.03.25 02:41, Alan Stern wrote:
 
-HEAD commit:    a5618886fdab Merge remote-tracking branch 'will/for-next/p..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=101283b0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=29061e148cfaa3d3
-dashboard link: https://syzkaller.appspot.com/bug?extid=7f3e9d90cb008752b863
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138abff8580000
+> The USB 2.0 spec doesn't say that wMaxPacketSize must be nonzero for
+> interrupt endpoints.  It specifies a maximum allowed value for this
+> field but not a minimum.  In theory, transfers limited to length 0 can
+> still be used to convey Boolean information (did the transfer succeed or
+> fail?), although I don't think any existing devices do this.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8b90307e7f61/disk-a5618886.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8b5ea0300ee3/vmlinux-a5618886.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/47f59a45fc8c/Image-a5618886.gz.xz
+Yes. Though it does not really matter. The submission of the interrupt
+URB can fail for other reasons, too.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7f3e9d90cb008752b863@syzkaller.appspotmail.com
+> In any case, this isn't directly related to the bug reported here, which
+> appears to be a simple logic error in the hso driver: not cleaning up
+> completely in one of the error paths.
 
-yealink 1-1:36.0: unexpected response 0
-yealink 1-1:36.0: urb_ctl_callback - urb status -71
-yealink 1-1:36.0: urb_irq_callback - urb status -71
-yealink 1-1:36.0: unexpected response 0
-watchdog: BUG: soft lockup - CPU#1 stuck for 26s! [kworker/u9:1:6013]
-Modules linked in:
-irq event stamp: 347894
-hardirqs last  enabled at (347893): [<ffff8000804b08ac>] console_emit_next_record kernel/printk/printk.c:3130 [inline]
-hardirqs last  enabled at (347893): [<ffff8000804b08ac>] console_flush_all+0x678/0xb90 kernel/printk/printk.c:3210
-hardirqs last disabled at (347894): [<ffff80008b7cdd84>] __el1_irq arch/arm64/kernel/entry-common.c:557 [inline]
-hardirqs last disabled at (347894): [<ffff80008b7cdd84>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:575
-softirqs last  enabled at (347888): [<ffff8000803128a4>] softirq_handle_end kernel/softirq.c:407 [inline]
-softirqs last  enabled at (347888): [<ffff8000803128a4>] handle_softirqs+0xb44/0xd34 kernel/softirq.c:589
-softirqs last disabled at (347877): [<ffff800080020dbc>] __do_softirq+0x14/0x20 kernel/softirq.c:595
-CPU: 1 UID: 0 PID: 6013 Comm: kworker/u9:1 Not tainted 6.14.0-rc6-syzkaller-ga5618886fdab #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Workqueue: hci3 hci_cmd_timeout
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __daif_local_irq_restore arch/arm64/include/asm/irqflags.h:176 [inline]
-pc : arch_local_irq_restore arch/arm64/include/asm/irqflags.h:195 [inline]
-pc : console_emit_next_record kernel/printk/printk.c:3130 [inline]
-pc : console_flush_all+0x69c/0xb90 kernel/printk/printk.c:3210
-lr : console_emit_next_record kernel/printk/printk.c:3130 [inline]
-lr : console_flush_all+0x698/0xb90 kernel/printk/printk.c:3210
-sp : ffff8000a4ad72c0
-x29: ffff8000a4ad7400 x28: 1ffff0001495ae72 x27: 1fffe0001aec87a2
-x26: dfff800000000000 x25: 1ffff000122bcaa7 x24: 0000000000000001
-x23: ffff8000915e5538 x22: ffff8000915e54e0 x21: 0000000000000000
-x20: 0000000000000000 x19: 00000000000000c0 x18: ffff8000a4ad7208
-x17: 20627275202d206b x16: ffff80008046947c x15: 0000000000000001
-x14: 1ffff00011f8fe70 x13: ffff8000a4ad8000 x12: 0000000000000003
-x11: 0000000000000001 x10: 0000000000ff0100 x9 : 0000000000000000
-x8 : ffff0000d7643d00 x7 : ffff8000804aa598 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : 0000000000000080 x0 : 0000000000000000
-Call trace:
- __daif_local_irq_restore arch/arm64/include/asm/irqflags.h:175 [inline] (P)
- arch_local_irq_restore arch/arm64/include/asm/irqflags.h:195 [inline] (P)
- console_emit_next_record kernel/printk/printk.c:3130 [inline] (P)
- console_flush_all+0x69c/0xb90 kernel/printk/printk.c:3210 (P)
- __console_flush_and_unlock kernel/printk/printk.c:3269 [inline]
- console_unlock+0x138/0x3ac kernel/printk/printk.c:3309
- vprintk_emit+0x308/0x55c kernel/printk/printk.c:2432
- vprintk_default+0xa0/0xe4 kernel/printk/printk.c:2447
- vprintk+0x94/0x12c kernel/printk/printk_safe.c:82
- _printk+0xdc/0x128 kernel/printk/printk.c:2457
- bt_err+0xfc/0x144 net/bluetooth/lib.c:296
- hci_cmd_timeout+0x108/0x1cc net/bluetooth/hci_core.c:1452
- process_one_work+0x810/0x1638 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x97c/0xeec kernel/workqueue.c:3400
- kthread+0x65c/0x7b0 kernel/kthread.c:464
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:862
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.14.0-rc6-syzkaller-ga5618886fdab #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : arch_local_irq_enable+0x8/0xc arch/arm64/include/asm/irqflags.h:50
-lr : default_idle_call+0xf8/0x128 kernel/sched/idle.c:124
-sp : ffff80008fb37cf0
-x29: ffff80008fb37cf0 x28: dfff800000000000 x27: 1ffff00011f66fac
-x26: ffff80008fbbd000 x25: 0000000000000000 x24: 0000000000000001
-x23: 1ffff00011f77ac1 x22: ffff80008fbbd608 x21: 0000000000000000
-x20: ffff80008fbe6780 x19: ffff800080410018 x18: 1fffe000366f1886
-x17: ffff80008fbbd000 x16: ffff80008040f8f8 x15: 0000000000000001
-x14: 1fffe000366f3537 x13: 0000000000000000 x12: 0000000000000003
-x11: 0000000000000001 x10: 0000000000000003 x9 : 0000000000000000
-x8 : 000000000028a3a3 x7 : ffff8000805c3f98 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : ffff80008b7d2680
-x2 : 0000000000000000 x1 : ffff80008b87a760 x0 : ffff800123c84000
-Call trace:
- __daif_local_irq_enable arch/arm64/include/asm/irqflags.h:26 [inline] (P)
- arch_local_irq_enable+0x8/0xc arch/arm64/include/asm/irqflags.h:48 (P)
- cpuidle_idle_call kernel/sched/idle.c:185 [inline]
- do_idle+0x1ec/0x4e0 kernel/sched/idle.c:325
- cpu_startup_entry+0x5c/0x74 kernel/sched/idle.c:423
- rest_init+0x2dc/0x2f4 init/main.c:743
- start_kernel+0x3f8/0x4f8 init/main.c:1099
- __primary_switched+0x8c/0x94 arch/arm64/kernel/head.S:246
+I am afraid, we are facing the opposite issue here. A failure to open
+a device should report an error to user space, but have no other
+consequences.
+
+Instead the HSO driver looks to be overzealous in cleaning up after
+a failure to open a device.
+It seems to me that the commit 29bd3bc1194c
+("hso: fix crash when device disappears while serial port is open")
+is ultimately the culprit by doing an unbalance kref_put() in the cleanup method.
+
+Dear bug reporter, could you try reverting that patch for confirmation?
+
+	Regards
+		Oliver
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
