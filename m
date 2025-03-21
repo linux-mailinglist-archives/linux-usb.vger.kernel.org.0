@@ -1,111 +1,105 @@
-Return-Path: <linux-usb+bounces-21992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21993-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3340FA6B874
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 11:05:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A70CA6B976
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 12:05:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABF9E189A6AE
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 10:05:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFC69169507
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 11:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D971F153E;
-	Fri, 21 Mar 2025 10:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F964221D90;
+	Fri, 21 Mar 2025 11:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANbZ8BSj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcbIOsiH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FB3EEB3
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 10:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B96921B8F6;
+	Fri, 21 Mar 2025 11:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742551535; cv=none; b=cGbTFF3WC/3mr12Y+Ya8wEpN1l1dmzL/Pz0CA1Duapu8UYNl8sy1GvzpJmsyIceXbUqtfBRl+D40DV2a03gpY4l/JghtBaNZObSGEGCTLB2b0REcT5iMoprIDVi5R3ExEbmfngTGLVkGcRm/FwvBk1LPT6SYrpT9doAnjw1eQtM=
+	t=1742555002; cv=none; b=D5V7XsHM8WYVrWu9C6ox1jdV9J5fgwXNhEY+LavMf7uKhJycSrDz+YRbNwukfb/xnvYv1XyyNbV6eDv8G7vcDn7ka7qErI95sNoqNAXfIEmIH8tuKE7WsuExegn14vmfEDFjydyJ7StvJymJEIacgV8Or6VQdQAW6BXltzB95IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742551535; c=relaxed/simple;
-	bh=sCY3goQq/Immx8uEyGA+tNYb/cvc2kmvN2pTxWuFLaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yq7uh4+9TyADIo4Ztm4S0w5DNm1ShkpRXK5dT4bTL+mjG2Nqb22MXyg8gIl3m83twyMmh9DHzzZ5AiySotT5LezgwT+jkWOOCOfmG7lSZL3LATxaStKCOdj79/3t0/SFR/dFMRXJW9GGVPUlrW/vMuBQ+Gm2YwFKwu9ynIirKHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANbZ8BSj; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742551533; x=1774087533;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sCY3goQq/Immx8uEyGA+tNYb/cvc2kmvN2pTxWuFLaI=;
-  b=ANbZ8BSjmYpWg7yaS42umQeOHF44duAuXUYkfQKaDONzGHmtuwyqv+BY
-   dJ3WMo8Odn/juDXnGkY69DTA721jDVm9zO3h/CToOECYPNReF/m6xgx9+
-   hNaEH33AdlYmA1bFy+JZcB+nbMQDeibOgiKgZOz3BCBoQId1oiP3Rt1w7
-   HEc8wyAyv/gIxqhwYLLYwr1ojywkJeILVievEgiJLs/4ximA4qce4oV6F
-   I1ropDvQStCqJhkKENMRY8guRFnXzbdnuFQnIf49X3j42eefhuMJu0C3g
-   9QdaQKXdzHot+wDG1/d2YdSI6aBnhNYjqy6gOCyF5phsysAAC3wHBma8D
-   Q==;
-X-CSE-ConnectionGUID: k/CHQ+ysRDy2QaGVTqyG0A==
-X-CSE-MsgGUID: tEzrV7GUT0iN+XoKxEJKjA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43826380"
-X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
-   d="scan'208";a="43826380"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 03:05:33 -0700
-X-CSE-ConnectionGUID: XjNHBkcdRmi83Ucy7aXlWw==
-X-CSE-MsgGUID: iQFvBkx7QuO9urDNVOmzlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
-   d="scan'208";a="123383512"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa006.jf.intel.com with ESMTP; 21 Mar 2025 03:05:29 -0700
-Message-ID: <c5b57cf2-3972-4507-b8de-8611933e75c9@linux.intel.com>
-Date: Fri, 21 Mar 2025 12:06:35 +0200
+	s=arc-20240116; t=1742555002; c=relaxed/simple;
+	bh=dnGJFip3baBzMZ60dxk3ll/ELydDcUMKz9tdidQK0e0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/LIqyF5KM4ECJkDoG0IwKvGKGIvQpjIBOsMSAfCSomHY4oC8jwjSSSB0qKUrrytAI17gliT07Sph4GNso8B6Kyd9UYgxddRYvBtFzF6epy1ogsVLrJIAJBJH0chEdCe0mCPE0Zs6XO6nhPWZcQHrmNCuQ+LsS+aNkQRWTMoaYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcbIOsiH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C0E9C4CEE3;
+	Fri, 21 Mar 2025 11:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742555001;
+	bh=dnGJFip3baBzMZ60dxk3ll/ELydDcUMKz9tdidQK0e0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DcbIOsiHKVUcIwiMJC7jOgFvkGQITxiWdt+RNBLbkOzYwoZ6a5P/q9bItvrC/A/50
+	 KCfEHXqCiipeCHQHwwnggU3D8k+TnCM54NLemAmkDtJSUQeHOb0zT2E8/P60XAdaN5
+	 izJR68KM6pi6TSfLad+Bj+NFp/tVZqQUZIobflECwJW+A7FKzAaQVJgyvqaVMdAZcS
+	 IpqY4w/lYqOHspKEROqo6lmtjtJn98niRdKc28YAygY0KYyH4IaP+ru8SWUbUhtm48
+	 7Rc7vVg3TNtS8UvwQ4uJhc9MRGzxPuH1WVqjvcbVeGLSWIEzwHB7mwjjURpw3KXZ3S
+	 ft0NkNEwC0ZXg==
+Date: Fri, 21 Mar 2025 11:03:15 +0000
+From: Lee Jones <lee@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>,
+	Markus Elfring <elfring@users.sourceforge.net>,
+	Jakob Riepler <jakob+lkml@paranoidlabs.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-usb@vger.kernel.org,
+	Daniel Scally <djrscally@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1 0/4] leds: Introduce and use
+ fwnode_get_child_node_count()
+Message-ID: <20250321110315.GH1750245@google.com>
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH] xhci: Limit time spent with interrupts disabled
- during bus resume
-To: liudingyuan <liudingyuan@huawei.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "patchwork-bot@kernel.org" <patchwork-bot@kernel.org>,
- "mricon@kernel.org" <mricon@kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc: "Fangjian (Jay)" <f.fangjian@huawei.com>,
- Kangfenglong <kangfenglong@huawei.com>, yangxingui <yangxingui@huawei.com>,
- "fengsheng (A)" <fengsheng5@huawei.com>,
- lingmingqiang <lingmingqiang@huawei.com>,
- liulongfang <liulongfang@huawei.com>,
- zhonghaoquan <zhonghaoquan@hisilicon.com>,
- "yanzhili (A)" <yanzhili7@huawei.com>, "huyihua (A)" <huyihua4@huawei.com>,
- "Zengtao (B)" <prime.zeng@hisilicon.com>,
- "shenjian (K)" <shenjian15@huawei.com>, liuyonglong
- <liuyonglong@huawei.com>, Jonathan Cameron <jonathan.cameron@huawei.com>
-References: <168e63cfc8864f9e920a7eb40d45b23f@huawei.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <168e63cfc8864f9e920a7eb40d45b23f@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
 
-On 21.3.2025 8.47, liudingyuan wrote:
-> I have already tested that this solution can solve the problem.
-> And the specific verification details were described in the previous reply.
+On Mon, 10 Mar 2025, Andy Shevchenko wrote:
+
+> This series was inspired during review of "Support ROHM BD79124 ADC" [1].
+> The three conversion patches are the examples of the new API in use.
 > 
-> Thanks!
+> Since the first two examples of LEDS, in case of posotove response it may
+> be routed via that tree and immutable branch/tag shared with others, e.g.,
+> IIO which Matti's series is targeting and might be dependent on. The USB
+> patch can be applied later separately, up to the respective maintainers.
 > 
-> Tested-by: Devyn Liu <liudingyuan@huawei.com>
+> Link: https://lore.kernel.org/r/cover.1741610847.git.mazziesaccount@gmail.com> [1]
+> 
+> Andy Shevchenko (4):
+>   device property: Split fwnode_get_child_node_count()
+>   leds: pwm-multicolor: Use fwnode_get_child_node_count()
+>   leds: ncp5623: Use fwnode_get_child_node_count()
+>   usb: typec: tcpm: Use fwnode_get_child_node_count()
+> 
+>  drivers/base/property.c                | 12 ++++++------
+>  drivers/leds/rgb/leds-ncp5623.c        |  5 ++---
+>  drivers/leds/rgb/leds-pwm-multicolor.c |  7 +++----
+>  drivers/usb/typec/tcpm/tcpm.c          |  6 ++----
+>  include/linux/property.h               |  7 ++++++-
+>  5 files changed, 19 insertions(+), 18 deletions(-)
 
-Thanks for testing it
+Note to self: This has everything we need.  Merge it for v6.16.
 
-I'll submit the patch after the merge window, once 6.15-rc1 is out.
-
-Would you like me to also add a "Reported-by:" tag for you, or someone else
-in the team?
-
-Thanks
-Mathias
+-- 
+Lee Jones [李琼斯]
 
