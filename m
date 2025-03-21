@@ -1,195 +1,248 @@
-Return-Path: <linux-usb+bounces-21994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21995-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BABD1A6BB83
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 14:13:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7CEAA6BCB8
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 15:16:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2B733B48A1
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 13:13:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1E3A3AE349
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 14:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF15229B29;
-	Fri, 21 Mar 2025 13:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29C3419938D;
+	Fri, 21 Mar 2025 14:16:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="AVr7YmAw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CXy5VLEJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCDC22ACFA
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 13:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0871B191F77
+	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 14:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742562796; cv=none; b=qx8Lp2T5b9qwq927t8wl+ofDVfPTRzUxR5L3AznLhMcfyxDvoPMydvXnaVn9bKkv7vj5rUfGx1SoAtsUyHREnULsSs+z2WNG3wGCpdeYg5x7qtmdA7jj/7jcQMEJNOe4tyfX+r80rKAFh/U7pFvUiOspkXWA38iFUj6bd2gMyQE=
+	t=1742566562; cv=none; b=KGSBkPh9w4O0XLooowVMnKPiunBb7Qq9nUrJKE/w9C0VgtZiR9gDfP011AD4+DJMQh/JLj4ayWdvnqgymqjnJXI4zKN9jHeunQ6YZQRRzhUPqov3MBAQYVFYCGIg1gQL45c8c77ntPGJq9ag12jbzHscL96TwL4oMioVUQqJHAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742562796; c=relaxed/simple;
-	bh=gBMuiDhCemk5cSPTk5dmy01AjipaPQhh1hQfbQoK9+w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=sZy4CF8i8/C4RxypGBfkErSQFwX2z683Jlv3JEyILqa9tBqv+MtJZPFAQQP0j/OyUsXGuJ4VhyJkhK2TS0DP7jQbkWajUmHRSG8VfCjyxwRVMIG7GOCi6Uc12ajALLnXsZsQVtZc+wWNUyKmHNQOXXAKij9o45zL7TGw25IjH/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=AVr7YmAw; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e677f59438so3051048a12.2
-        for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 06:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1742562792; x=1743167592; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=azxH+KYm8tJkLH7rFHwCJLBDMbyPBsLOxN72/qPc1Xk=;
-        b=AVr7YmAw/ej31E45hIjLMKkNTCngcDZ6dcaInOv0CrseUD1VZgNWJVAolqi9newOIH
-         XUC7+F2hIyFEgnYhBDCEJKAjs4RQrq6E6Ah5z1ZsD9c3DZJah/SFTAaooMvz2hfXoqXu
-         buwDyX6Pi3CEZYJLhwDF8K7buus17ZaxoNvyQBsmnhjZb60B3p/epXkH97O31VT1eSp/
-         qr3R+PLDvTp5Sg7aereNlDPltuYKN6Bux0ilzQbS7qmG9ssT7jM0pPP4Ac5S6Kp0NJPd
-         GvsG1ylRS9oaDng2iGg+cWzIxErGtQ2Vb5jKrJ/E3vprpS3psmJQhwKC/JFdtKgsf2p8
-         yBKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742562792; x=1743167592;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=azxH+KYm8tJkLH7rFHwCJLBDMbyPBsLOxN72/qPc1Xk=;
-        b=IYFEiNWjpqdCcLUNum+NxGQhr4ZP6wAJaXki9CESVAH1NfwLZxTX4bq0zLcyAc7Pjm
-         s6Tyx2nJt6xQ4smd6wiqLuXlF7Z0aTSUgBJxSAuU/ZxMYjpe3MKNqD+LFNZ/+VKHbOTD
-         AZsgKS7/rw2IdvoytHzUw4dK+9HxnvpjKlH/W0bcwHqLWasxM7gMVXDMXXr+wTYpypsx
-         2xtaLWl+Q3OuqbVJVx7pgCHGuEkGAcGuF0T8qn/zdB2IMeRVXJqa/DSKF2ifwpBfHTYM
-         L8MXGADd9pidyIVfaDpd5SjxYjxM2mTUBLgb4osbqWv2o9LW7kZdZ7VPaX/cyASeFWD/
-         TFCA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1Zex0cQxJoO+u+SG29NTjnqUYorVwXi1w7yUDxgKSHpLfcKa5k4yXA4/Gg27cmWqxniup5A6uJcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLFxBR5F8aHaTuhBJT9nMssV26VNhCBHLTzf1QzKvtO13oRzNK
-	MkaYvZP9AgyT9iAOeSv+d5gThenr3ICY+TftGVf8eshFKgUv++RdWcHe86X488s=
-X-Gm-Gg: ASbGncusq+KF3FMjbGbrRo9SEOfWMNin702wMUDymiE2qs94YVgQ6UOvKTXzRk5EBbd
-	qUMuecuYUJidRaSjHpOQecKU3ieyzWoU6acuzeIqUQQ9E5JUWsfoRYjEYvQShSn/AnnmsJsaQ1b
-	Ei/TsR8Nt4CafQ2APAlXD7LEejLEmMjOY/T2eIZnSBwXNeguCWBX6N0ZvWS+lshcYrxWNP1fzdb
-	bEnUdTp28CH0ZysxuadWRL+tcfFp1QKqQBF/PbeLc1TNo48SiK/TVqK+hNC2Y26xW6NPmhYy148
-	WAoGhlJC5fpjddL9NNMnwCQ/GcJof1RpfUTnztMnXeht06HyrMg07irm1ZG2zvFOuwJ/5g46hEP
-	WtSa7qcZOcwbjIg==
-X-Google-Smtp-Source: AGHT+IE8PhCgUGBY/JkCA/TsunqWtiCtyLdiJOJyXQ4SyEMmQjgGArax5BsxRlrz/Py8KVlD3G8r/g==
-X-Received: by 2002:a05:6402:1d4a:b0:5e8:bf8b:4396 with SMTP id 4fb4d7f45d1cf-5ebcd42dd1fmr3003367a12.13.1742562791878;
-        Fri, 21 Mar 2025 06:13:11 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ebcd0c7157sm1344509a12.60.2025.03.21.06.13.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 06:13:11 -0700 (PDT)
+	s=arc-20240116; t=1742566562; c=relaxed/simple;
+	bh=xDw6J3qBISrCbhJMbEcTavGZ99WnukIqo2N+OqvG+Bs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=QQqVeLOjh98Sbm7DHIqUx3Iw5gazwnhnRwhQ1Egy6QqMK96O/OIXkUdYoTLq9vGP0QlsgwPDT7Dytx7xyG5HT5BvTW4d2RkE9INkmIC3r53H12V8EWBjU9tKz1m5TA+PwphSzUvKiFG5pT1eLxIYcTf5NR3SH6FUw+X0oovpoYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CXy5VLEJ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742566561; x=1774102561;
+  h=date:from:to:cc:subject:message-id;
+  bh=xDw6J3qBISrCbhJMbEcTavGZ99WnukIqo2N+OqvG+Bs=;
+  b=CXy5VLEJymqbgW43zb7hOGuLup7RKoEC1uVvPo2a86rndVeUC4U9XSSP
+   tsCP22uMrlTjo/tpTIyTUVGGgn1RAU5jHM9JC31F1nYxpx+wCsmbjGt9+
+   voJFgVAGoTsfsHU/zziaDjhiI2L6JiirN/jFrEXWyMuPDfo4C8HTv9Jge
+   RctYKdnUypb6srANzphq0hliEjYcmGJAF6Ayp2fPaqaNXKbIqZXllxb4/
+   gdVma8LNmq9cmBnlAni/XOJFUCeJjHXjzkhIcYVuIyqTY6p/eOTqXk9VB
+   giUqxGoIK95VbPUyAfpngSh+u3CdgDd3H0W/lpD0ZjD4+l6UpC84kylsA
+   g==;
+X-CSE-ConnectionGUID: GPpXmRjZQQ6p9OwKIUePaw==
+X-CSE-MsgGUID: +qZCMh7VTeuL4yZCYgFyig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="43075789"
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="43075789"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 07:15:50 -0700
+X-CSE-ConnectionGUID: Cxhmb5xnSGyoDhq8vT8ueQ==
+X-CSE-MsgGUID: H0sHdJtpRtKaNoh4FYu0eg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="123212335"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Mar 2025 07:15:49 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvd9l-0001NJ-2d;
+	Fri, 21 Mar 2025 14:15:42 +0000
+Date: Fri, 21 Mar 2025 22:14:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 434da42d7173bf097e9fab78ff97d51e8b74170d
+Message-ID: <202503212211.Pj77roY1-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 21 Mar 2025 14:13:10 +0100
-Message-Id: <D8LYYEQJ2W4L.1H7FPF4140BVS@fairphone.com>
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Wesley Cheng" <quic_wcheng@quicinc.com>,
- <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
- <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
- <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
- <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
- <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
- <gregkh@linuxfoundation.org>
-Cc: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v36 00/31] Introduce QC USB SND audio offloading support
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
-In-Reply-To: <20250319005141.312805-1-quic_wcheng@quicinc.com>
 
-Hi Wesley,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 434da42d7173bf097e9fab78ff97d51e8b74170d  Merge tag 'thunderbolt-for-v6.15-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
 
-On Wed Mar 19, 2025 at 1:51 AM CET, Wesley Cheng wrote:
-> Requesting to see if we can get some Acked-By tags, and merge on usb-next=
-.
->
-> Several Qualcomm based chipsets can support USB audio offloading to a
-> dedicated audio DSP, which can take over issuing transfers to the USB
-> host controller.  The intention is to reduce the load on the main
-> processors in the SoC, and allow them to be placed into lower power modes=
-.
-> There are several parts to this design:
->   1. Adding ASoC binding layer
->   2. Create a USB backend for Q6DSP
->   3. Introduce XHCI interrupter support
->   4. Create vendor ops for the USB SND driver
->
+elapsed time: 1449m
 
-I was able to test this series (v35) on SM6350/SM7225 Fairphone 4
-smartphone and it appears to work as expected!
+configs tested: 155
+configs skipped: 5
 
-Based on the sm8350 branch you shared[0] I added similar dts bits for my
-device, I've pushed that branch here[1] for reference.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-[0] https://git.codelinaro.org/clo/linux-kernel/kernel-qcom/-/commits/usb_a=
-udio_offload/
-[1] https://github.com/sm6350-mainline/linux/commits/sm6350-6.14-wip-usb-sn=
-d-offload/
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                         haps_hs_defconfig    gcc-14.2.0
+arc                   randconfig-001-20250321    gcc-13.3.0
+arc                   randconfig-002-20250321    gcc-11.5.0
+arc                           tb10x_defconfig    gcc-14.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                         bcm2835_defconfig    clang-21
+arm                          collie_defconfig    gcc-14.2.0
+arm                            dove_defconfig    gcc-14.2.0
+arm                       imx_v4_v5_defconfig    clang-15
+arm                        multi_v7_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250321    clang-19
+arm                   randconfig-002-20250321    gcc-9.3.0
+arm                   randconfig-003-20250321    gcc-5.5.0
+arm                   randconfig-004-20250321    clang-21
+arm                         s3c6400_defconfig    gcc-14.2.0
+arm                         socfpga_defconfig    gcc-14.2.0
+arm                       versatile_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250321    gcc-5.5.0
+arm64                 randconfig-002-20250321    gcc-5.5.0
+arm64                 randconfig-003-20250321    clang-20
+arm64                 randconfig-004-20250321    clang-21
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250321    gcc-13.3.0
+csky                  randconfig-002-20250321    gcc-13.3.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250321    clang-21
+hexagon               randconfig-002-20250321    clang-16
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250320    gcc-12
+i386        buildonly-randconfig-001-20250321    clang-20
+i386        buildonly-randconfig-002-20250320    clang-20
+i386        buildonly-randconfig-002-20250321    clang-20
+i386        buildonly-randconfig-003-20250320    clang-20
+i386        buildonly-randconfig-003-20250321    clang-20
+i386        buildonly-randconfig-004-20250320    clang-20
+i386        buildonly-randconfig-004-20250321    clang-20
+i386        buildonly-randconfig-005-20250320    gcc-12
+i386        buildonly-randconfig-005-20250321    clang-20
+i386        buildonly-randconfig-006-20250320    clang-20
+i386        buildonly-randconfig-006-20250321    clang-20
+i386                                defconfig    clang-20
+loongarch                        alldefconfig    gcc-14.2.0
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250321    gcc-14.2.0
+loongarch             randconfig-002-20250321    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                            q40_defconfig    gcc-14.2.0
+m68k                           sun3_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                           ci20_defconfig    clang-21
+mips                            gpr_defconfig    clang-18
+mips                           ip30_defconfig    gcc-14.2.0
+mips                        vocore2_defconfig    clang-15
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250321    gcc-13.3.0
+nios2                 randconfig-002-20250321    gcc-7.5.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+openrisc                    or1ksim_defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250321    gcc-8.5.0
+parisc                randconfig-002-20250321    gcc-6.5.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc                     ep8248e_defconfig    gcc-14.2.0
+powerpc                 linkstation_defconfig    clang-20
+powerpc                     ppa8548_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250321    clang-21
+powerpc               randconfig-002-20250321    gcc-7.5.0
+powerpc               randconfig-003-20250321    gcc-7.5.0
+powerpc                     sequoia_defconfig    clang-17
+powerpc64             randconfig-001-20250321    gcc-5.5.0
+powerpc64             randconfig-002-20250321    clang-16
+powerpc64             randconfig-003-20250321    gcc-7.5.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-21
+riscv                    nommu_k210_defconfig    clang-21
+riscv             nommu_k210_sdcard_defconfig    gcc-14.2.0
+riscv                 randconfig-001-20250321    clang-21
+riscv                 randconfig-002-20250321    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250321    clang-16
+s390                  randconfig-002-20250321    gcc-8.5.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                    randconfig-001-20250321    gcc-7.5.0
+sh                    randconfig-002-20250321    gcc-7.5.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250321    gcc-12.4.0
+sparc                 randconfig-002-20250321    gcc-6.5.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250321    gcc-10.5.0
+sparc64               randconfig-002-20250321    gcc-6.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250321    gcc-12
+um                    randconfig-002-20250321    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250320    clang-20
+x86_64      buildonly-randconfig-001-20250321    clang-20
+x86_64      buildonly-randconfig-002-20250320    gcc-12
+x86_64      buildonly-randconfig-002-20250321    clang-20
+x86_64      buildonly-randconfig-003-20250320    clang-20
+x86_64      buildonly-randconfig-003-20250321    gcc-12
+x86_64      buildonly-randconfig-004-20250320    clang-20
+x86_64      buildonly-randconfig-004-20250321    clang-20
+x86_64      buildonly-randconfig-005-20250320    clang-20
+x86_64      buildonly-randconfig-005-20250321    clang-20
+x86_64      buildonly-randconfig-006-20250320    gcc-12
+x86_64      buildonly-randconfig-006-20250321    clang-20
+x86_64                              defconfig    gcc-11
+xtensa                           alldefconfig    gcc-14.2.0
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                          iss_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250321    gcc-6.5.0
+xtensa                randconfig-002-20250321    gcc-10.5.0
+xtensa                    smp_lx200_defconfig    gcc-14.2.0
+xtensa                    xip_kc705_defconfig    gcc-14.2.0
 
-And I've used these commands to test:
-
-fairphone-4:~$ amixer -c0 cset name=3D'USB Mixer MultiMedia2' On
-
-fairphone-4:~$ aplay -l
-**** List of PLAYBACK Hardware Devices ****
-card 0: F4 [Fairphone 4], device 0: MultiMedia1 (*) []
-Subdevices: 1/1
-Subdevice #0: subdevice #0
-card 0: F4 [Fairphone 4], device 1: MultiMedia2 (*) []
-Subdevices: 1/1
-Subdevice #0: subdevice #0
-card 1: Audio [Hi-Res Audio], device 0: USB Audio [USB Audio]
-Subdevices: 1/1
-Subdevice #0: subdevice #0
-
-fairphone-4:~$ ffmpeg -i test.m4a -acodec pcm_s16le test.wav
-
-fairphone-4:~$ aplay --device=3Dplughw:0,1 Music/test.wav
-Playing WAVE 'Music/test.wav' : Signed 16 bit Little Endian, Rate 44100 Hz,=
- Stereo
-
-And then music was coming out of these headphones connected via a USB-C
-to 3.5mm dongle.
-
-Every time I'm starting playback this error appears in dmesg, do you
-also see this on your test setup?
-
-[ 1336.081525] q6afe-dai 3000000.remoteproc:glink-edge:apr:service@4:dais: =
-AFE Port already open
-
-
-And if I'm not mistaken it's possible to check that actually the offload
-path is getting used by checking the interrupt counts of the xhci-hcd
-interrupt.
-
-With regular USB audio card playback there's many interrupts per second
-happening:
-
-fairphone-4:~$ aplay --device=3Dplughw:1,0 Music/test.wav # regular USB
-fairphone-4:~$ cat /proc/interrupts | grep -i usb
-188:     137524          0          0          0          0          0     =
-     0          0    GICv3 165 Level     xhci-hcd:usb1
-fairphone-4:~$ cat /proc/interrupts | grep -i usb
-188:     137591          0          0          0          0          0     =
-     0          0    GICv3 165 Level     xhci-hcd:usb1
-
-And with the offload card during playback there's no interrupts
-happening (just a few when initially starting playback):
-
-fairphone-4:~$ aplay --device=3Dplughw:0,1 Music/test.wav # offload
-fairphone-4:~$ cat /proc/interrupts | grep -i usb
-188:     141947          0          0          0          0          0     =
-     0          0    GICv3 165 Level     xhci-hcd:usb1
-fairphone-4:~$ cat /proc/interrupts | grep -i usb
-188:     141947          0          0          0          0          0     =
-     0          0    GICv3 165 Level     xhci-hcd:usb1
-
-
-Let me know what you think about the message in dmesg I mentioned above.
-
-Regards
-Luca
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
