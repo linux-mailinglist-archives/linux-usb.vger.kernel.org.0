@@ -1,104 +1,95 @@
-Return-Path: <linux-usb+bounces-22006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22007-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0366EA6BF71
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 17:16:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CBBA6C017
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 17:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 383A77A7FBE
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 16:13:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 006EC17F694
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 16:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EC622B590;
-	Fri, 21 Mar 2025 16:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B2A22D788;
+	Fri, 21 Mar 2025 16:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHM1CbtZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bWeQBzj7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196431E00B4;
-	Fri, 21 Mar 2025 16:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCA91EBA1E;
+	Fri, 21 Mar 2025 16:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742573653; cv=none; b=jW9n7mt6JH340VQIJ62XOWR5mLVgoaQpLTlH9m2F4JuH9lkfQZcanyGqHcyBqe6Yk5RaOSbV3RSd31ahjLBM2fsdQqzb4tjgBo+jTKBoXOmwBgrrH6g4nTGe5KHUFJ1v3db99DO/Airter59bTQo+UKHSb/jYCyVlk32xATk9Kc=
+	t=1742575015; cv=none; b=WEdhf0uF85sp9QoQlzlOjy/YFfV2t+GDVooN9xysJdtNmttvuiU0zLvnKc1AyELruGNMBJyuvxIlUqt8opwGuIqjcxPbIOqJ9TOxUKvdimbcV+y2mvppd2vOgPHBwPEiI8+m+UUuMduVERiZnrtK1XTMN9Xs0VkgbHnXgNPeqD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742573653; c=relaxed/simple;
-	bh=D4wmE+1sJieP2ZR8N+4BcCjmZMiOCHIqifIqz4WDGnE=;
+	s=arc-20240116; t=1742575015; c=relaxed/simple;
+	bh=z2M1KgvZACzDXW3+9ZoAXZoPdOgW03NFuntv5MFO/ks=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0/qkLPCyO2KQSzufonCVluoYW6KBVq8t4ortXpdvjN4Y+B+1FozLXmmwaGrhCJK3L82wr8dUjTMHXl/BIdsA8SD8/lWfda8JgOtkYecFs2jzaVyv4vKTDa4Vt1x2LiK5nkNMIsjdKMwD4CFufOOsQ/36K1wbONOxS5KD1MZVDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHM1CbtZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51373C4CEE3;
-	Fri, 21 Mar 2025 16:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742573652;
-	bh=D4wmE+1sJieP2ZR8N+4BcCjmZMiOCHIqifIqz4WDGnE=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=tnfzek5rd2g9XXVqyUqJwy8YB7jI946eMWkhb0QcyPDdRq2ho9Za3L2NjoS3m2RnXfAEmTE2stWfHGRj0zeXtsXhxorIqHfjB/OaMcS4wnG4r3Lfkvix4hDGUGZGtpxu4XcFeszMF+ToJ048YbHJPRMMyZrjR7rO5qym0KAB1xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bWeQBzj7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBD5C4CEE3;
+	Fri, 21 Mar 2025 16:36:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1742575014;
+	bh=z2M1KgvZACzDXW3+9ZoAXZoPdOgW03NFuntv5MFO/ks=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lHM1CbtZoDg6GisJ10dBrzHmYigP/Xc39YTSaXnWn0akMOEbRA2qWSQWAJo5RNWdH
-	 SzAUmIIQfpe2bToTpNNqZKxGvaUsB/yW/z/9p1ImCY/hSLFLcxWSqUZ6kd+T6Jq+68
-	 tkdZUR/0iNv4+KxjclLCBuLCMokOYwiVH9NP8Yu4swUQNyVXPtLjeyBLB05KFCRCfu
-	 yDyQBNQS3ExE3WqrBJp/GsmQMpSx1pqrp4es7w+DRLUpQj+75iYC5E1umlHYPObbmE
-	 cSAEC8uOQVsKLdha6Ga5b0DIgxaPnbFRwQrDv3ZQK9GIOIfrkhICi3r2BRMEKs8OKB
-	 iLRg7iQRe9VqA==
-Date: Fri, 21 Mar 2025 11:14:11 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Cc: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 2/7] dt-bindings: usb: Introduce qcom,snps-dwc3
-Message-ID: <174257365080.3466536.3652323578969133351.robh@kernel.org>
-References: <20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com>
- <20250318-dwc3-refactor-v5-2-90ea6e5b3ba4@oss.qualcomm.com>
+	b=bWeQBzj7jOmHh2UpO1isuMraMqZTKJrnTjbc21oTqlbHDEQnlZ5KZmUmMp70nHZkJ
+	 XsphGTfme6ZF9ThZowsOA7A01Aa6gzVNy407fPLu9tITMSaLeyFI95fcwzZqcsD5F1
+	 q7Y2v1aCVE+SayNuxsw+GI9YrlUjldSK0vHK9ufc=
+Date: Fri, 21 Mar 2025 12:36:53 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, Mark Brown <broonie@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
+	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+	Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
+ of_node to fwnode
+Message-ID: <20250321-famous-acrid-monkey-ab9c07@lemur>
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
+ <2025022542-recital-ebony-d9b5@gregkh>
+ <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
+ <2025030845-pectin-facility-a474@gregkh>
+ <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
+ <eqfqv2tkfretqzvt74o5dvj5yixkfc3h3my4bhskvhtsrbmtwp@poryvs4oipnp>
+ <2025030831-various-monthly-4ae0@gregkh>
+ <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250318-dwc3-refactor-v5-2-90ea6e5b3ba4@oss.qualcomm.com>
+In-Reply-To: <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
 
+On Sat, Mar 08, 2025 at 07:27:28PM +0100, Konrad Dybcio wrote:
+> > I do use b4, but it wants to suck the whole series down.  If I want to
+> > pick an individual one out, I have to manually cut the message-id out
+> > of the email and type out the command and pick the individual commit
+> > out (or use the -P 3 as was said).
+> > 
+> > But that's a world away from me just hitting a single key in my email
+> > client to suck down the whole thread and apply it to my tree.
 
-On Tue, 18 Mar 2025 14:05:02 -0500, Bjorn Andersson wrote:
-> The Qualcomm USB glue is not separate of the Synopsys DWC3 core and
-> several of the snps,dwc3 properties (such as clocks and reset) conflicts
-> in expectation with the Qualcomm integration.
-> 
-> Using the newly split out Synopsys DWC3 core properties, describe the
-> Qualcomm USB block in a single block. The new binding is a copy of
-> qcom,dwc3 with the needed modifications.
-> 
-> It would have been convenient to retain the two structures with the same
-> compatibles, but as there exist no way to select a binding based on the
-> absence of a subnode/patternProperty, a new generic compatible is
-> introduced to describe this binding.
-> 
-> To avoid redefining all the platform-specific compatibles, "select" is
-> used to tell the DeviceTree validator which binding to use solely on the
-> generic compatible. (Otherwise if the specific compatible matches during
-> validation, the generic one must match as well)
-> 
-> Mark qcom,dwc3 deprecated, to favor expressing future platforms using
-> the new combined binding.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
->  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 620 +++++++++++++++++++++
->  2 files changed, 632 insertions(+), 1 deletion(-)
-> 
+Would it help to have an "interactive cherry-pick mode" where it grabs the
+whole thread but before it applies it to your tree, it lets you pick the
+subset of the patches you want? So, instead of passing -P 3,4, you have a file
+open in your $EDITOR where you can just delete the patches you don't want?
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+-K
 
 
