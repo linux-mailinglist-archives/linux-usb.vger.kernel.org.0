@@ -1,223 +1,183 @@
-Return-Path: <linux-usb+bounces-21990-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21991-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E938CA6B491
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 07:47:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8890EA6B583
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 08:52:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21CEA7A3011
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 06:46:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C233AC24E
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 07:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5767C1E5702;
-	Fri, 21 Mar 2025 06:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0FC1EEA47;
+	Fri, 21 Mar 2025 07:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSM7m5X/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F0012E7F
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 06:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882A326ACB;
+	Fri, 21 Mar 2025 07:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742539667; cv=none; b=HYRMMmRBiQiLA6nWly1++40GmuVnCtfCVLAMQD/kYUtcnmDh/aqDR1pVYp/3iQgRzZnOGPnIzokmNt2U1T9SuTBl36gTTjKps1V29fNLOS78hpWZKheUKOQQ3AvcA+OJgGU+Qw9S219Z2l78p0UByiF+zM8Fbx9JuCuKAquVLgA=
+	t=1742543512; cv=none; b=gjgwO469xH6+tci8kWg5oxCY3BF8AC+qJhJC0zGFf1bip2YyA4wem8weuUDDkAxjNIx16uexgk1rwqwMIoLKRn0PHLa57hpPTZouVw7utmsYrvEmkxhjRhDWICqMBodIBLQBwZg1uHOhCmj8/GS8rMTzjRqIZ0KHI5SaIfzOPZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742539667; c=relaxed/simple;
-	bh=Fo0nYIwmGYMWaQnn61ulEW+GK8OE7zGkN8KvZqzPu4A=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=NgMsUM9FsxuMg6ebqVRvnDD0c7qyNa6V5iN3sH5aadhdnpGgM+3vFr5d4JLkuZqRaZQwkouNT32xurUksUlqv5MLoE2ys/p1YYOlTu0qzVDgzqps7Rwc7G67FD8KvW6DGbJ/vwDCPnETWAcOLiADFEL4JKFBySp9Nh0ypp/sNqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZJtKm6c6Kz13Kk1;
-	Fri, 21 Mar 2025 14:47:24 +0800 (CST)
-Received: from kwepemd500022.china.huawei.com (unknown [7.221.188.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 04B521800E4;
-	Fri, 21 Mar 2025 14:47:41 +0800 (CST)
-Received: from kwepemn200006.china.huawei.com (7.202.194.129) by
- kwepemd500022.china.huawei.com (7.221.188.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 21 Mar 2025 14:47:40 +0800
-Received: from kwepemn200006.china.huawei.com ([7.202.194.129]) by
- kwepemn200006.china.huawei.com ([7.202.194.129]) with mapi id 15.02.1544.011;
- Fri, 21 Mar 2025 14:47:40 +0800
-From: liudingyuan <liudingyuan@huawei.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"patchwork-bot@kernel.org" <patchwork-bot@kernel.org>, "mricon@kernel.org"
-	<mricon@kernel.org>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC: "Fangjian (Jay)" <f.fangjian@huawei.com>, Kangfenglong
-	<kangfenglong@huawei.com>, yangxingui <yangxingui@huawei.com>, "fengsheng
- (A)" <fengsheng5@huawei.com>, lingmingqiang <lingmingqiang@huawei.com>,
-	liulongfang <liulongfang@huawei.com>, zhonghaoquan
-	<zhonghaoquan@hisilicon.com>, "yanzhili (A)" <yanzhili7@huawei.com>, "huyihua
- (A)" <huyihua4@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"shenjian (K)" <shenjian15@huawei.com>, liuyonglong <liuyonglong@huawei.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>
-Subject: re: [RFT PATCH] xhci: Limit time spent with interrupts disabled
- during bus resume
-Thread-Topic: [RFT PATCH] xhci: Limit time spent with interrupts disabled
- during bus resume
-Thread-Index: AduSewHx+L+mpxq5Qm+NrRpgWQ50AAG/UXUwACy7/EA=
-Date: Fri, 21 Mar 2025 06:47:40 +0000
-Message-ID: <168e63cfc8864f9e920a7eb40d45b23f@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1742543512; c=relaxed/simple;
+	bh=eUqWIJcB3nSd/mXSYygUn6M3e1U2VTzoZUejWvBj2HU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NBnCbKFt502vSvC3f28yVpj2vrYmYCYhlq5RUYPQ0KDB4g1mR+GeHOWanKcVlyWX7OpB5Py5hBtyJxqe6NogiGe3iYq14TEqRwZ6WfrDlpTZ8pww7uC4N8Fwohv1EfKX+hq1LDbQyohpj33nbdG3pdHR3PMYWjtEYa3+bg3h5gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSM7m5X/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB1CC4CEE3;
+	Fri, 21 Mar 2025 07:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742543512;
+	bh=eUqWIJcB3nSd/mXSYygUn6M3e1U2VTzoZUejWvBj2HU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=tSM7m5X/sYFP6LXrJRSTdDwt2LcAuSi/NbowmE7HCqzddAOieWE5YS0TfNr9wIg0I
+	 AGVEZRJrt+VbwkTIh90aVx86Rr2oN0yoR2uUY9wrwk/pZj174J35fL0seVaqCf3Rvv
+	 cSBqhCbyLj31KkLqd6j9BeBAPbhBSxK+1XClerEIAjXns3hVmnsqnPBwaC8GO9qEpz
+	 TzXd8DGFQV+7Jj2QTv7jruYJqRvjylgLH33whHVEgavMziPOqsYS2/kJnSai9fX+fn
+	 z/xfUz30MG8rKxg0LRzYWYVkAY8/q3a4MsdkWbAvaVOwiktgYDMOXWcBFq6r1np2Yf
+	 5ccvARZiKZqrw==
+Message-ID: <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
+Date: Fri, 21 Mar 2025 08:51:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
+ TCPM
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Sebastian Reichel <sre@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
+ <20250313-determined-wild-seahorse-f7871a@krzk-bin>
+ <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
+ <3f65fe16-56f8-4887-bb91-994b181ce5a9@kernel.org>
+ <9852e5a8-843d-48ae-90d0-7991628e93b3@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <9852e5a8-843d-48ae-90d0-7991628e93b3@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-I have already tested that this solution can solve the problem.
-And the specific verification details were described in the previous reply.
+On 20/03/2025 22:11, Amit Sunil Dhamne wrote:
+> On 3/16/25 9:52 AM, Krzysztof Kozlowski wrote:
+>> On 15/03/2025 01:49, Amit Sunil Dhamne wrote:
+>>> Hi Krzysztof,
+>>>
+>>> Thanks for the review!
+>>>
+>>> On 3/13/25 1:50 AM, Krzysztof Kozlowski wrote:
+>>>> On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
+>>>>> Support for Battery Status & Battery Caps messages in response to
+>>>>> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
+>>>>> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
+>>>>> Applicability" section. This patchset adds support for these AMSes
+>>>>> to achieve greater compliance with the spec.
+>>>> Which board uses it? I would be happy to see that connection between
+>>>> batteries and USB connector on the schematics of some real device. How
+>>>> does it look like?
+>>> Any board that uses a USB Type-C connector that supplies power into or
+>> If you keep responding like this, you will got nowhere, so let me
+>> re-iterate:
+>>
+>> Which upstream DTS (or upstream supported hardware) is going to use this
+>> binding, so I can see how you are going to implement it there in the
+>> entire system?
+> 
+> This is for maxim,max33359 Type-C controller.
 
-Thanks!
+Stop deflecting the questions. max33359 is not a board. I already asked
+two times.
 
-Tested-by: Devyn Liu <liudingyuan@huawei.com>
->
->  [RFT PATCH] xhci: Limit time spent with interrupts disabled during=20
-> bus resume
->
->  Current xhci bus resume implementation prevents xHC host from generating=
- interrupts during high-speed USB 2 and super-speed USB 3 bus resume.
->
->  Only reason to disable interrupts during bus resume would be to prevent =
-the interrupt handler from interfering with the resume process of USB 2 por=
-ts.
->
->  Host initiated resume of USB 2 ports is done in two stages.
->
->  The xhci driver first transitions the port from 'U3' to 'Resume' state, =
-then wait in Resume for 20ms, and finally moves port to U0 state.
->  xhci driver can't prevent interrupts by taking and keeping the xhci spin=
-lock with spin_lock_irqsave() due to this 20ms sleep.
->
->  Limit interrupt disabling to the USB 2 port resume case only.
->  resuming USB 2 ports in bus resume is only done in special cases where U=
-SB 2 ports had to be forced to suspend during bus suspend.
->
->  The current way of preventing interrupts by clearing the 'Interrupt Enab=
-le' (INTE) bit in USBCMD register won't prevent the Interrupter registers '=
-Interrupt Pending' (IP), 'Event Handler Busy' (EHB) and USBSTS register Eve=
-nt Interrupt (EINT) bits from being set.
->
->  New interrupts can't be issued before those bits are properly clered.
->
->  This way IP, EHB and INTE won't be set before IE is enabled again and a =
-new interrupt is triggered.
->
->  Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->  ---
->  drivers/usb/host/xhci-hub.c | 30 ++++++++++++++++--------------
->  drivers/usb/host/xhci.c     |  4 ++--
->  drivers/usb/host/xhci.h     |  2 ++
->  3 files changed, 20 insertions(+), 16 deletions(-)
->
->  diff --git a/drivers/usb/host/xhci-hub.c=20
-> b/drivers/usb/host/xhci-hub.c index 9693464c0520..d11b60f705bb 100644
->  --- a/drivers/usb/host/xhci-hub.c
->  +++ b/drivers/usb/host/xhci-hub.c
->  @@ -1870,9 +1870,10 @@ int xhci_bus_resume(struct usb_hcd *hcd)
->   	int max_ports, port_index;
->   	int sret;
->   	u32 next_state;
->  -	    u32 temp, portsc;
->  +	u32 portsc;
->   	struct xhci_hub *rhub;
->  	    struct xhci_port **ports;
->  +	bool disabled_irq =3D false;
-> =20
->  	    rhub =3D xhci_get_rhub(hcd);
->  	    ports =3D rhub->ports;
-> @@ -1888,17 +1889,20 @@ int xhci_bus_resume(struct usb_hcd *hcd)
->   		return -ESHUTDOWN;
->   	}
->  =20
->  -	    /* delay the irqs */
->  -	    temp =3D readl(&xhci->op_regs->command);
->  -	    temp &=3D ~CMD_EIE;
->  -	    writel(temp, &xhci->op_regs->command);
->  -
->    	/* bus specific resume for ports we suspended at bus_suspend */
->  - 	if (hcd->speed >=3D HCD_USB3)
->  +	if (hcd->speed >=3D HCD_USB3) {
->  		next_state =3D XDEV_U0;
->  - 	else
->  +	} else {
->  		next_state =3D XDEV_RESUME;
->  -
->  +	if (bus_state->bus_suspended) {
->  +			/*
->  +			 * prevent port event interrupts from interfering
->  +			 * with usb2 port resume process
->  +			 */
->  +			xhci_disable_interrupter(xhci->interrupters[0]);
->  +			disabled_irq =3D true;
->  +		}
->  +	}
->   	    port_index =3D max_ports;
->   	    while (port_index--) {
->   		portsc =3D readl(ports[port_index]->addr); @@ -1966,11 +1970,9 @@ int=
- xhci_bus_resume(struct usb_hcd *hcd)
->   	(void) readl(&xhci->op_regs->command);
->  =20
->   	bus_state->next_statechange =3D jiffies + msecs_to_jiffies(5);
->  -	    /* re-enable irqs */
->  -  	temp =3D readl(&xhci->op_regs->command);
->  -  	temp |=3D CMD_EIE;
->  - 	writel(temp, &xhci->op_regs->command);
->  -	    temp =3D readl(&xhci->op_regs->command);
->  +	/* re-enable interrupter */
->  +	if (disabled_irq)
->  +		xhci_enable_interrupter(xhci->interrupters[0]);
->  =20
->   	spin_unlock_irqrestore(&xhci->lock, flags);
->   	return 0;
->  diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c index=20
-> 0c22b78358b9..ad229cb9a90b 100644
->  --- a/drivers/usb/host/xhci.c
->  +++ b/drivers/usb/host/xhci.c
->  @@ -322,7 +322,7 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci=
-)
->   		xhci_info(xhci, "Fault detected\n");
->    }
->  =20
->  -static int xhci_enable_interrupter(struct xhci_interrupter *ir)
-> +int xhci_enable_interrupter(struct xhci_interrupter *ir)
-> =20
->   	u32 iman;
-> =20
->  @@ -335,7 +335,7 @@ static int xhci_enable_interrupter(struct xhci_inter=
-rupter *ir)
->   	return 0;
->   }
->  =20
->  -static int xhci_disable_interrupter(struct xhci_interrupter *ir)
-> +int xhci_disable_interrupter(struct xhci_interrupter *ir)
->   {
->   	u32 iman;
->  =20
->  diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h index=20
-> 6c00062a9acc..10572336fabe 100644
->  --- a/drivers/usb/host/xhci.h
->  +++ b/drivers/usb/host/xhci.h
->  @@ -1891,6 +1891,8 @@ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
->   		struct usb_tt *tt, gfp_t mem_flags);
->   int xhci_set_interrupter_moderation(struct xhci_interrupter *ir,
->   				    u32 imod_interval);
->  +int xhci_enable_interrupter(struct xhci_interrupter *ir); int
-> +xhci_disable_interrupter(struct xhci_interrupter *ir);
->  =20
->   /* xHCI ring, segment, TRB, and TD functions */  dma_addr_t=20
-> xhci_trb_virt_to_dma(struct xhci_segment *seg, union xhci_trb *trb);
->  --
->  2.43.0
+Apparently admitting "no upstream users" is impossible, so let's state
+the obvious:
+
+There are no upstream users of this.
+
+> 
+> This would property would have been present for the connector present in 
+> the typec device for gs101-oriole board (that uses the max33359 
+> controller).
 
 
+But it is not.
+
+
+> 
+> However, I will be exploring existing bindings to describe the 
+> relationship for now.
+> 
+>>> out of a battery while operating in sink or source mode respectively.
+>>> The VBUS is connected to the (battery + buck boost IC's CHGin/Vin) or a
+>>> companion IFPMIC connected to a battery.  In our board we have USB
+>>> Connector <-> IFPMIC <-> Battery.
+>> Which board is that?
+> 
+> gs101-oriole board.
+
+
+Then why this is not used? The board was released some years ago, so I
+do not see a problem in using it.
+
+Best regards,
+Krzysztof
 
