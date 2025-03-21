@@ -1,95 +1,137 @@
-Return-Path: <linux-usb+bounces-22007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18CBBA6C017
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 17:38:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDA73A6C09B
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 17:52:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 006EC17F694
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 16:37:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 336C3189AEFA
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 16:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B2A22D788;
-	Fri, 21 Mar 2025 16:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4842122C35D;
+	Fri, 21 Mar 2025 16:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bWeQBzj7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ve6khhgh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCA91EBA1E;
-	Fri, 21 Mar 2025 16:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C04155A25;
+	Fri, 21 Mar 2025 16:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575015; cv=none; b=WEdhf0uF85sp9QoQlzlOjy/YFfV2t+GDVooN9xysJdtNmttvuiU0zLvnKc1AyELruGNMBJyuvxIlUqt8opwGuIqjcxPbIOqJ9TOxUKvdimbcV+y2mvppd2vOgPHBwPEiI8+m+UUuMduVERiZnrtK1XTMN9Xs0VkgbHnXgNPeqD4=
+	t=1742575796; cv=none; b=YI6L2duFqzLNhSesWK4Gab8ag9STN7IkhEtOr6pQWrK+jcG/yjO5Q3FkUAVF3LubsVgKxxZA0KpSIxUQqdZxuA9JRmgFmkP3EzDSG5sMczawBBeCOrDS6ONA4u3lg4NFvHiRcV40YzPpcuh5voSIEciND0MmJKU6EFNSL+2kRN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575015; c=relaxed/simple;
-	bh=z2M1KgvZACzDXW3+9ZoAXZoPdOgW03NFuntv5MFO/ks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tnfzek5rd2g9XXVqyUqJwy8YB7jI946eMWkhb0QcyPDdRq2ho9Za3L2NjoS3m2RnXfAEmTE2stWfHGRj0zeXtsXhxorIqHfjB/OaMcS4wnG4r3Lfkvix4hDGUGZGtpxu4XcFeszMF+ToJ048YbHJPRMMyZrjR7rO5qym0KAB1xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bWeQBzj7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBD5C4CEE3;
-	Fri, 21 Mar 2025 16:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742575014;
-	bh=z2M1KgvZACzDXW3+9ZoAXZoPdOgW03NFuntv5MFO/ks=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bWeQBzj7jOmHh2UpO1isuMraMqZTKJrnTjbc21oTqlbHDEQnlZ5KZmUmMp70nHZkJ
-	 XsphGTfme6ZF9ThZowsOA7A01Aa6gzVNy407fPLu9tITMSaLeyFI95fcwzZqcsD5F1
-	 q7Y2v1aCVE+SayNuxsw+GI9YrlUjldSK0vHK9ufc=
-Date: Fri, 21 Mar 2025 12:36:53 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Mark Brown <broonie@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
-	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
-	Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
- of_node to fwnode
-Message-ID: <20250321-famous-acrid-monkey-ab9c07@lemur>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
- <2025022542-recital-ebony-d9b5@gregkh>
- <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
- <2025030845-pectin-facility-a474@gregkh>
- <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
- <eqfqv2tkfretqzvt74o5dvj5yixkfc3h3my4bhskvhtsrbmtwp@poryvs4oipnp>
- <2025030831-various-monthly-4ae0@gregkh>
- <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
+	s=arc-20240116; t=1742575796; c=relaxed/simple;
+	bh=iXRT/qes364OAhYPS5CBvBhBz7tLPO070NnwuD9TcqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uX5Q6hkJ4WVuRGOn85XgcmnyxSvLc9d2cnmR1jwzaul8lSDUWnNrar2VLJjxysPOj5Hv5xuJ5AGsNVA+x4ttH2qFD0lPlVcGAywft2Woy0QE6PSo/HeOz+x1dBlMmCXd6t/Zjv+Hywy8mK9mZg1j2XXbNryI2A/X2ayIrUXkgl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ve6khhgh; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742575796; x=1774111796;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iXRT/qes364OAhYPS5CBvBhBz7tLPO070NnwuD9TcqI=;
+  b=Ve6khhghxj5jQn6B1dD1IZj9omNtTWR9IpbuTPHpgpb0xvYLZklz0i49
+   Hss2D2POL1/yuP34OYc4Hew2dviC8HVrcK+cNYFwVOPU5vKsHAfeVQjo3
+   /VH6W1LEkubgZ9qYEIR60TKysdetrB0A2m1CpMJ/BQXJjQg5Tj1hwbz+Q
+   6zquq59B7Z1XbBqppgcPz8p3ZFbhroVOjYgF5N7IuN+paianZ9OFVrtUA
+   N55ySJjDlkS7Er+gAoWssFJYttJmSL6I4sukZaX+g/frAIoaLUNgU1FaU
+   hlX+vhNtKOUglT3F4z4tW3sJQd1u48ljtGLk8VEZ5NNGiWhfxn4PKbsvv
+   A==;
+X-CSE-ConnectionGUID: 4suOlnuKTnunfGpmrcTdAQ==
+X-CSE-MsgGUID: 8ohNRyeMR4+J/ntj9XWoQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="66311540"
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="66311540"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:49:55 -0700
+X-CSE-ConnectionGUID: JrWYtE5jRw6RDnx3o6BG2w==
+X-CSE-MsgGUID: Q3MpQSMoTfakReuZYcnBfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="123416334"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa010.jf.intel.com with ESMTP; 21 Mar 2025 09:49:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 2771E14B; Fri, 21 Mar 2025 18:49:52 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v1 1/1] usb: Add checks for snprintf() calls in usb_alloc_dev()
+Date: Fri, 21 Mar 2025 18:49:49 +0200
+Message-ID: <20250321164949.423957-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 08, 2025 at 07:27:28PM +0100, Konrad Dybcio wrote:
-> > I do use b4, but it wants to suck the whole series down.  If I want to
-> > pick an individual one out, I have to manually cut the message-id out
-> > of the email and type out the command and pick the individual commit
-> > out (or use the -P 3 as was said).
-> > 
-> > But that's a world away from me just hitting a single key in my email
-> > client to suck down the whole thread and apply it to my tree.
+When creating a device path in the driver the snprintf() takes
+up to 16 characters long argument along with the additional up to
+12 characters for the signed integer (as it can't see the actual limits)
+and tries to pack this into 16 bytes array. GCC complains about that
+when build with `make W=1`:
 
-Would it help to have an "interactive cherry-pick mode" where it grabs the
-whole thread but before it applies it to your tree, it lets you pick the
-subset of the patches you want? So, instead of passing -P 3,4, you have a file
-open in your $EDITOR where you can just delete the patches you don't want?
+  drivers/usb/core/usb.c:705:25: note: ‘snprintf’ output between 3 and 28 bytes into a destination of size 16
 
--K
+Since everything works until now, let's just check for the potential
+buffer overflow and bail out. It is most likely a never happen situation,
+but at least it makes GCC happy.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/core/usb.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 0b4685aad2d5..118fa4c93a79 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -695,15 +695,16 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
+ 		device_set_of_node_from_dev(&dev->dev, bus->sysdev);
+ 		dev_set_name(&dev->dev, "usb%d", bus->busnum);
+ 	} else {
++		int n;
++
+ 		/* match any labeling on the hubs; it's one-based */
+ 		if (parent->devpath[0] == '0') {
+-			snprintf(dev->devpath, sizeof dev->devpath,
+-				"%d", port1);
++			n = snprintf(dev->devpath, sizeof(dev->devpath), "%d", port1);
+ 			/* Root ports are not counted in route string */
+ 			dev->route = 0;
+ 		} else {
+-			snprintf(dev->devpath, sizeof dev->devpath,
+-				"%s.%d", parent->devpath, port1);
++			n = snprintf(dev->devpath, sizeof(dev->devpath), "%s.%d",
++				     parent->devpath, port1);
+ 			/* Route string assumes hubs have less than 16 ports */
+ 			if (port1 < 15)
+ 				dev->route = parent->route +
+@@ -712,6 +713,11 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
+ 				dev->route = parent->route +
+ 					(15 << ((parent->level - 1)*4));
+ 		}
++		if (n >= sizeof(dev->devpath)) {
++			usb_put_hcd(bus_to_hcd(bus));
++			usb_put_dev(dev);
++			return NULL;
++		}
+ 
+ 		dev->dev.parent = &parent->dev;
+ 		dev_set_name(&dev->dev, "%d-%s", bus->busnum, dev->devpath);
+-- 
+2.47.2
 
 
