@@ -1,258 +1,248 @@
-Return-Path: <linux-usb+bounces-21988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC2BA6B2BA
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 02:47:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ADB5A6B344
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 04:22:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A37998811F1
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 01:47:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FC764A092F
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 03:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0869C1DF277;
-	Fri, 21 Mar 2025 01:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XdSJ4aA+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B5A1E5714;
+	Fri, 21 Mar 2025 03:22:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D9E15820C
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 01:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C42078F5B
+	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 03:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742521636; cv=none; b=UQm0fWPUng+rq/qqA/sDlOekj9/8NVuqFZcdwSfeXKjrQkLGCE8CMqCoGqaqy0HWRDvYAopz5TRTx8qKaQXRCHnvjPg6ZtmddCAKcGFENRZc6E5Pz0RAq8VUA0JHQnajcr/16zyqfOdWawNiuFDfm336fqyMbu/YuGvzpgRfsQE=
+	t=1742527350; cv=none; b=es3n0UjPo6f+BIlJRP97bDGiKLzkF8Ra1fl6OpLFpMdhv57V6Hktclf+lbyQWzVs+KGOdlbLtbfoOADw11HoBro6dlNY9mNzFUcwQ3dFt9mJnb+DeEecW0HC/pkgXugIu8ARbJx+rsny0ystWtgI4UBn8+l0VYgvgglkIdgp1AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742521636; c=relaxed/simple;
-	bh=2H66PUeo1OFgKD4XFqrOdgBr4dkk/VKUPGtTE1IhTYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SMEUdy+mZOTZfKJmsikFYTuhVrgs3CDF3teAcB6iepnOrMImn+9X2ar/GafZxka8NOj3RmSCSZZKV+ZRN5sE+uHwixPvBC0za0DBnQZCM+pRTDoyPOVEihPiHAycvY9GV0yat+0ndovbSSXanbwOmRwNxDck7nyFFA88UtqtzVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XdSJ4aA+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30828C4CEDD;
-	Fri, 21 Mar 2025 01:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742521636;
-	bh=2H66PUeo1OFgKD4XFqrOdgBr4dkk/VKUPGtTE1IhTYc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XdSJ4aA+IJ5ShRVskkpoj01s19k8z3CCExco1CDAWiU98j/fJFIQyorozPg3LkWRK
-	 UnM18a13gGJ+467OLgKEmhe/9CGZESnfggI0sovlYQ9WMfjsaRfGhGumL5xok3OXmz
-	 jkW5CdMoEN+a7wOnVvnfva6QXPpV5WUJu27BUBLE=
-Date: Thu, 20 Mar 2025 18:45:56 -0700
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Adam Xue <zxue@semtech.com>
-Cc: "johan@kernel.org" <johan@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Iulian Mocanu <imocanu@semtech.com>
-Subject: Re: USB: serial: qcserial: patch for adding Sierra Wireless 9x50,
- EM91, EM92 and SDX35.
-Message-ID: <2025032047-deluge-observant-963f@gregkh>
-References: <DS7PR20MB4855FE3E27EFAD39D56FF897C6D82@DS7PR20MB4855.namprd20.prod.outlook.com>
+	s=arc-20240116; t=1742527350; c=relaxed/simple;
+	bh=GgRU88wmDyM7qPhrFf+VsQpfRAcO5Sy3Vykmkzvu4ZE=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Z8WNz1ZilPdf0Wbngo/kCox4wxIP6EV+S3FirWmj1wktiBsgoYJl5sFzqE9ZJdfCLG9UKlT0/mBKJKv2TF5eAxBRhp+SwebBZMN/SUUMpiwFLr8LVOGWc7JW1oXAHliTblcDdfRc3Hlt4KBDYbU3DQoUJHx56uk2apadt6k5ERc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4ZJnjT06gxz2CcwJ;
+	Fri, 21 Mar 2025 11:19:09 +0800 (CST)
+Received: from kwepemd100010.china.huawei.com (unknown [7.221.188.107])
+	by mail.maildlp.com (Postfix) with ESMTPS id A4303140156;
+	Fri, 21 Mar 2025 11:22:23 +0800 (CST)
+Received: from kwepemn200006.china.huawei.com (7.202.194.129) by
+ kwepemd100010.china.huawei.com (7.221.188.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Fri, 21 Mar 2025 11:22:23 +0800
+Received: from kwepemn200006.china.huawei.com ([7.202.194.129]) by
+ kwepemn200006.china.huawei.com ([7.202.194.129]) with mapi id 15.02.1544.011;
+ Fri, 21 Mar 2025 11:22:23 +0800
+From: liudingyuan <liudingyuan@huawei.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"patchwork-bot@kernel.org" <patchwork-bot@kernel.org>, "mricon@kernel.org"
+	<mricon@kernel.org>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC: "Fangjian (Jay)" <f.fangjian@huawei.com>, Kangfenglong
+	<kangfenglong@huawei.com>, yangxingui <yangxingui@huawei.com>, "fengsheng
+ (A)" <fengsheng5@huawei.com>, lingmingqiang <lingmingqiang@huawei.com>,
+	liulongfang <liulongfang@huawei.com>, zhonghaoquan
+	<zhonghaoquan@hisilicon.com>, "yanzhili (A)" <yanzhili7@huawei.com>, "huyihua
+ (A)" <huyihua4@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
+	"shenjian (K)" <shenjian15@huawei.com>, liuyonglong <liuyonglong@huawei.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>
+Subject: re: [RFT PATCH] xhci: Limit time spent with interrupts disabled
+ during bus resume
+Thread-Topic: [RFT PATCH] xhci: Limit time spent with interrupts disabled
+ during bus resume
+Thread-Index: AduSewHx+L+mpxq5Qm+NrRpgWQ50AAG/UXUw
+Date: Fri, 21 Mar 2025 03:22:23 +0000
+Message-ID: <910319d13c01430480d26841ac0f79b1@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DS7PR20MB4855FE3E27EFAD39D56FF897C6D82@DS7PR20MB4855.namprd20.prod.outlook.com>
 
-On Thu, Mar 20, 2025 at 10:08:36PM +0000, Adam Xue wrote:
-> Hi Johan,
-> 
-> This is the patch for adding support for Sierra Wireless and Semtech products based on 
-> Qualcomm 9x50, SDX35, SDX55 and SDX65 based products (EM75xx, EM91xx, EM92xx). 
-> Currently, only our products based on Qualcomm 9x30 and older chipsets are supported.
-> These products have a different USB interface layout compared to the default one which 
-> require code changes. The VID/PID list has also been updated for all products mentioned above.
-> Please review.
->  
-> Thanks,
->  
-> Adam
->  
-> 
-> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-> index 13c664317a05..f362da97b7de 100644
-> --- a/drivers/usb/serial/qcserial.c
-> +++ b/drivers/usb/serial/qcserial.c
-> @@ -26,12 +26,24 @@ enum qcserial_layouts {
->       QCSERIAL_G1K = 1, /* Gobi 1000 */
->       QCSERIAL_SWI = 2, /* Sierra Wireless */
->       QCSERIAL_HWI = 3, /* Huawei */
-> +     QCSERIAL_SWI_9X50 = 4, /* Sierra Wireless 9x50 USB-IF */
-> +     QCSERIAL_SWI_SDX55 = 5, /* Sierra Wireless SDX55 */
-> +     QCSERIAL_SWI_SDX55_RMNET = 6, /* Sierra Wireless SDX55 rmnet */
-> +     QCSERIAL_SWI_SDX35 = 7, /* Sierra Wireless SDX35 */
->  };
->  
->  #define DEVICE_G1K(v, p) \
->       USB_DEVICE(v, p), .driver_info = QCSERIAL_G1K
->  #define DEVICE_SWI(v, p) \
->       USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI
-> +#define DEVICE_SWI_9X50(v, p) \
-> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_9X50
-> +#define DEVICE_SWI_SDX55(v, p) \
-> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX55
-> +#define DEVICE_SWI_SDX55_RMNET(v, p) \
-> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX55_RMNET
-> +     #define DEVICE_SWI_SDX35(v, p) \
-> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX35
->  #define DEVICE_HWI(v, p) \
->       USB_DEVICE(v, p), .driver_info = QCSERIAL_HWI
->  
-> @@ -165,11 +177,21 @@ static const struct usb_device_id id_table[] = {
->       {DEVICE_SWI(0x1199, 0x907b)}, /* Sierra Wireless EM74xx */
->       {DEVICE_SWI(0x1199, 0x9090)}, /* Sierra Wireless EM7565 QDL */
->       {DEVICE_SWI(0x1199, 0x9091)}, /* Sierra Wireless EM7565 */
-> -     {DEVICE_SWI(0x1199, 0x90d2)}, /* Sierra Wireless EM9191 QDL */
-> +     {DEVICE_SWI(0x1199, 0x90b0)}, /* Sierra Wireless EM7565 QDL */
-> +     {DEVICE_SWI_9X50(0x1199, 0x90b1)},  /* Sierra Wireless EM7565 */
-> +     {DEVICE_SWI(0x1199, 0x90d2)}, /* Sierra Wireless EM9190 QDL */
-> +     {DEVICE_SWI_SDX55(0x1199, 0x90d3)}, /* Sierra Wireless EM9190 */
-> +     {DEVICE_SWI(0x1199, 0x90d8)}, /* Sierra Wireless EM9190 QDL */
-> +     {DEVICE_SWI_SDX55_RMNET(0x1199, 0x90d9)}, /* Sierra Wireless EM9190 */
-> +     {DEVICE_SWI(0x1199, 0x90e0)}, /* Sierra Wireless EM929x QDL */
-> +     {DEVICE_SWI_SDX55(0x1199, 0x90e1)}, /* Sierra Wireless EM929x */
-> +     {DEVICE_SWI(0x1199, 0x90e2)}, /* Sierra Wireless EM929x QDL */
-> +     {DEVICE_SWI_SDX55(0x1199, 0x90e3)}, /* Sierra Wireless EM929x */
->       {DEVICE_SWI(0x1199, 0x90e4)}, /* Sierra Wireless EM86xx QDL*/
->       {DEVICE_SWI(0x1199, 0x90e5)}, /* Sierra Wireless EM86xx */
->       {DEVICE_SWI(0x1199, 0xc080)}, /* Sierra Wireless EM7590 QDL */
->       {DEVICE_SWI(0x1199, 0xc081)}, /* Sierra Wireless EM7590 */
-> +     {DEVICE_SWI_SDX35(0x05c6, 0x90b8)}, /* Sierra Wireless SDX35 */
->       {DEVICE_SWI(0x413c, 0x81a2)}, /* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
->       {DEVICE_SWI(0x413c, 0x81a3)}, /* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
->       {DEVICE_SWI(0x413c, 0x81a4)}, /* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
-> @@ -367,6 +389,88 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
->                   break;
->             }
->             break;
-> +     case QCSERIAL_SWI_SDX55:
-> +           /*
-> +            * Sierra Wireless SDX55 layout:
-> +            * 3: AT-capable modem port
-> +            * 4: DM/DIAG
-> +            */
-> +           switch (ifnum) {
-> +           case 3:
-> +                 dev_dbg(dev, "Modem port found\n");
-> +                 sendsetup = true;
-> +                 break;
-> +           case 4:
-> +                 dev_dbg(dev, "DM/DIAG interface found\n");
-> +                 break;
-> +           default:
-> +                 /* don't claim any unsupported interface */
-> +                 altsetting = -1;
-> +                 break;
-> +           }
-> +           break;
-> +     case QCSERIAL_SWI_SDX55_RMNET:
-> +           /*
-> +            * Sierra Wireless SDX55 layout:
-> +            * 1: AT-capable modem port
-> +            * 2: DM
-> +            */
-> +           switch (ifnum) {
-> +           case 1:
-> +                 dev_dbg(dev, "Modem port found\n");
-> +                 sendsetup = true;
-> +                 break;
-> +           case 2:
-> +                 dev_dbg(dev, "DM/DIAG interface found\n");
-> +                 break;
-> +           default:
-> +                 /* don't claim any unsupported interface */
-> +                 altsetting = -1;
-> +                 break;
-> +           }
-> +           break;
-> +     case QCSERIAL_SWI_9X50:
-> +           /*
-> +            * Sierra Wireless 9X50 USB-IF layout:
-> +            * 2: AT-capable modem port
-> +            * 3: NMEA
-> +            * 4: DM
-> +            */
-> +           switch (ifnum) {
-> +           case 2:
-> +                 dev_dbg(dev, "Modem port found\n");
-> +                 sendsetup = true;
-> +                 break;
-> +           case 3:
-> +                 dev_dbg(dev, "NMEA GPS interface found\n");
-> +                 sendsetup = true;
-> +                 break;
-> +           case 4:
-> +                 dev_dbg(dev, "DM/DIAG interface found\n");
-> +                 break;
-> +           default:
-> +                 /* don't claim any unsupported interface */
-> +                 altsetting = -1;
-> +                 break;
-> +           }
-> +           break;
-> +     case QCSERIAL_SWI_SDX35:
-> +           /*
-> +            */
-> +           switch (ifnum) {
-> +           case 0:
-> +                 dev_dbg(dev, "DM/DIAG interface found\n");
-> +                 break;
-> +           case 1:
-> +                 dev_dbg(dev, "Modem port found\n");
-> +                 sendsetup = true;
-> +                 break;
-> +           default:
-> +                 /* don't claim any unsupported interface */
-> +                 altsetting = -1;
-> +                 break;
-> +           }
-> +           break;
->       case QCSERIAL_HWI:
->             /*
->              * Huawei devices map functions by subclass + protocol
->  
-> 
+Hi
 
-Hi,
+Applying the patch based on the 6.14-rc6 kernel, we conducted verification =
+and found that this patch can
+resolve the issue of interrupt loss when a USB3 controller is connected onl=
+y to a USB2 device.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Additionally, by constructing a scenario with a lower probability where a U=
+SB3 controller is connected only
+to a USB3 device, causing the USB2 port to enter the resume process and lea=
+ding to interrupt loss, we confirmed
+that the operation of disabling interrupts through IE configuration in this=
+ patch can solve the problem of the
+controller being unable to trigger new interrupts after interrupt enablemen=
+t.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Thank you very much!  I believe this fix solution has been verified to be a=
+cceptable.
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+We also conducted more USB basic functionality tests , including connecting=
+ mice, keyboards, hard drives,=20
+and other devices, as well as read/write functions and multi-level USB devi=
+ce testing. Based on the current
+results, this patch does not seem to affect the basic functionality of USB.
 
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/process/submitting-patches.rst and resend
-  it after adding that line.  Note, the line needs to be in the body of
-  the email, before the patch, not at the bottom of the patch or in the
-  email signature.
+Hope these test results can help get the patch pushed to the mainline.
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
+Thanks.
+Best regards!
+Devyn
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+>
+>  [RFT PATCH] xhci: Limit time spent with interrupts disabled during=20
+> bus resume
+>
+>  Current xhci bus resume implementation prevents xHC host from generating=
+ interrupts during high-speed USB 2 and super-speed USB 3 bus resume.
+>
+>  Only reason to disable interrupts during bus resume would be to prevent =
+the interrupt handler from interfering with the resume process of USB 2 por=
+ts.
+>
+>  Host initiated resume of USB 2 ports is done in two stages.
+>
+>  The xhci driver first transitions the port from 'U3' to 'Resume' state, =
+then wait in Resume for 20ms, and finally moves port to U0 state.
+>  xhci driver can't prevent interrupts by taking and keeping the xhci spin=
+lock with spin_lock_irqsave() due to this 20ms sleep.
+>
+>  Limit interrupt disabling to the USB 2 port resume case only.
+>  resuming USB 2 ports in bus resume is only done in special cases where U=
+SB 2 ports had to be forced to suspend during bus suspend.
+>
+>  The current way of preventing interrupts by clearing the 'Interrupt Enab=
+le' (INTE) bit in USBCMD register won't prevent the Interrupter registers '=
+Interrupt Pending' (IP), 'Event Handler Busy' (EHB) and USBSTS register Eve=
+nt Interrupt (EINT) bits from being set.
+>
+>  New interrupts can't be issued before those bits are properly clered.
+>
+>  This way IP, EHB and INTE won't be set before IE is enabled again and a =
+new interrupt is triggered.
+>
+>  Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>  ---
+>  drivers/usb/host/xhci-hub.c | 30 ++++++++++++++++--------------
+>  drivers/usb/host/xhci.c     |  4 ++--
+>  drivers/usb/host/xhci.h     |  2 ++
+>  3 files changed, 20 insertions(+), 16 deletions(-)
+>
+>  diff --git a/drivers/usb/host/xhci-hub.c=20
+> b/drivers/usb/host/xhci-hub.c index 9693464c0520..d11b60f705bb 100644
+>  --- a/drivers/usb/host/xhci-hub.c
+>  +++ b/drivers/usb/host/xhci-hub.c
+>  @@ -1870,9 +1870,10 @@ int xhci_bus_resume(struct usb_hcd *hcd)
+>   	int max_ports, port_index;
+>   	int sret;
+>   	u32 next_state;
+>  -	    u32 temp, portsc;
+>  +	u32 portsc;
+>   	struct xhci_hub *rhub;
+>  	    struct xhci_port **ports;
+>  +	bool disabled_irq =3D false;
+> =20
+>  	    rhub =3D xhci_get_rhub(hcd);
+>  	    ports =3D rhub->ports;
+> @@ -1888,17 +1889,20 @@ int xhci_bus_resume(struct usb_hcd *hcd)
+>   		return -ESHUTDOWN;
+>   	}
+>  =20
+>  -	    /* delay the irqs */
+>  -	    temp =3D readl(&xhci->op_regs->command);
+>  -	    temp &=3D ~CMD_EIE;
+>  -	    writel(temp, &xhci->op_regs->command);
+>  -
+>    	/* bus specific resume for ports we suspended at bus_suspend */
+>  - 	if (hcd->speed >=3D HCD_USB3)
+>  +	if (hcd->speed >=3D HCD_USB3) {
+>  		next_state =3D XDEV_U0;
+>  - 	else
+>  +	} else {
+>  		next_state =3D XDEV_RESUME;
+>  -
+>  +	if (bus_state->bus_suspended) {
+>  +			/*
+>  +			 * prevent port event interrupts from interfering
+>  +			 * with usb2 port resume process
+>  +			 */
+>  +			xhci_disable_interrupter(xhci->interrupters[0]);
+>  +			disabled_irq =3D true;
+>  +		}
+>  +	}
+>   	    port_index =3D max_ports;
+>   	    while (port_index--) {
+>   		portsc =3D readl(ports[port_index]->addr); @@ -1966,11 +1970,9 @@ int=
+ xhci_bus_resume(struct usb_hcd *hcd)
+>   	(void) readl(&xhci->op_regs->command);
+>  =20
+>   	bus_state->next_statechange =3D jiffies + msecs_to_jiffies(5);
+>  -	    /* re-enable irqs */
+>  -  	temp =3D readl(&xhci->op_regs->command);
+>  -  	temp |=3D CMD_EIE;
+>  - 	writel(temp, &xhci->op_regs->command);
+>  -	    temp =3D readl(&xhci->op_regs->command);
+>  +	/* re-enable interrupter */
+>  +	if (disabled_irq)
+>  +		xhci_enable_interrupter(xhci->interrupters[0]);
+>  =20
+>   	spin_unlock_irqrestore(&xhci->lock, flags);
+>   	return 0;
+>  diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c index=20
+> 0c22b78358b9..ad229cb9a90b 100644
+>  --- a/drivers/usb/host/xhci.c
+>  +++ b/drivers/usb/host/xhci.c
+>  @@ -322,7 +322,7 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci=
+)
+>   		xhci_info(xhci, "Fault detected\n");
+>    }
+>  =20
+>  -static int xhci_enable_interrupter(struct xhci_interrupter *ir) =20
+> +int xhci_enable_interrupter(struct xhci_interrupter *ir)
+> =20
+>   	u32 iman;
+> =20
+>  @@ -335,7 +335,7 @@ static int xhci_enable_interrupter(struct xhci_inter=
+rupter *ir)
+>   	return 0;
+>   }
+>  =20
+>  -static int xhci_disable_interrupter(struct xhci_interrupter *ir) =20
+> +int xhci_disable_interrupter(struct xhci_interrupter *ir)
+>   {
+>   	u32 iman;
+>  =20
+>  diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h index=20
+> 6c00062a9acc..10572336fabe 100644
+>  --- a/drivers/usb/host/xhci.h
+>  +++ b/drivers/usb/host/xhci.h
+>  @@ -1891,6 +1891,8 @@ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
+>   		struct usb_tt *tt, gfp_t mem_flags);
+>   int xhci_set_interrupter_moderation(struct xhci_interrupter *ir,
+>   				    u32 imod_interval);
+>  +int xhci_enable_interrupter(struct xhci_interrupter *ir); int =20
+> +xhci_disable_interrupter(struct xhci_interrupter *ir);
+>  =20
+>   /* xHCI ring, segment, TRB, and TD functions */  dma_addr_t=20
+> xhci_trb_virt_to_dma(struct xhci_segment *seg, union xhci_trb *trb);
+>  --
+>  2.43.0
 
-thanks,
 
-greg k-h's patch email bot
 
