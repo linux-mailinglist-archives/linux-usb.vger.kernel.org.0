@@ -1,142 +1,104 @@
-Return-Path: <linux-usb+bounces-22005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30248A6BD88
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 15:50:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0366EA6BF71
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 17:16:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33214177C2D
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 14:48:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 383A77A7FBE
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 16:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CF21DE4D5;
-	Fri, 21 Mar 2025 14:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EC622B590;
+	Fri, 21 Mar 2025 16:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UX5gO9Js"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHM1CbtZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFB71D798E;
-	Fri, 21 Mar 2025 14:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196431E00B4;
+	Fri, 21 Mar 2025 16:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742568492; cv=none; b=NoHuH/+1R53Twgt2ANtvkqJV4XuXLhpkvYl1Fif1l2Gx9D0bIvNz6RvRChs9Clupdrasgj+628QWBFWzcshXLqaDVtTse3z7fEh4/W5KNJp2rzymOF6UVLHCrVHXVSkvasKodLfGPxFOXihUwxZjljedBgDtoqjtnizwwIfSFS0=
+	t=1742573653; cv=none; b=jW9n7mt6JH340VQIJ62XOWR5mLVgoaQpLTlH9m2F4JuH9lkfQZcanyGqHcyBqe6Yk5RaOSbV3RSd31ahjLBM2fsdQqzb4tjgBo+jTKBoXOmwBgrrH6g4nTGe5KHUFJ1v3db99DO/Airter59bTQo+UKHSb/jYCyVlk32xATk9Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742568492; c=relaxed/simple;
-	bh=gHef/WiJIYxfSHBE8F247KxYLolP4gheBKJOWI5k8io=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cV2T61ZF/Rt3fcSmvWLOLw4/BweB+k28VPzw+9cUbeMPHNMc5ObyQdl2TGZGV+RDJqhihDH7Zf8F4R1DQKgIQWqDnxlt5+mxeEpfa6Xk7MYXoN3l+l71SOYU7rXTbXGwf1JyW3wUuB8AfSgXzhKcaWvnnvtWQ5PP7ZA3H6fXT6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UX5gO9Js; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-39127512371so1406665f8f.0;
-        Fri, 21 Mar 2025 07:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742568489; x=1743173289; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eglGoRr46S0QXsG3q/hnCjtc4IGj4qTm0VYKUvrdsl0=;
-        b=UX5gO9Jsm0Nh41Ij4DARZne/W3ELCU5J5NZ2/8h0AW7mdbaTt/czqKhz8QNS6lnTBP
-         7fVbFku2R4Y9Rt7BluJrrycRKX7LEP00eJPiV2YR79ycc0M9Pz/BmNbhnvVbkhX8b1QM
-         N/CtsJimNRw1RIAU04bIBC53LG28zX/+dgg7pH/QeDUZ9e0OktPoMl6qFH7IKCUfF4IR
-         N46h8mGjxo+SKi1f378bnMpknIBj9TFIU9fItdiiJLGN0ia/hKt9pnMbcSixGrNX3QWF
-         AM1ufKo5XalNJ5YUAEfrMrmN9moWheq88a9tSypP3PgD/8HrS1Wm1dDBsJzCyBbhluoG
-         MZmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742568489; x=1743173289;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eglGoRr46S0QXsG3q/hnCjtc4IGj4qTm0VYKUvrdsl0=;
-        b=XoE4ARTI0UuRXlvbrFW6qrqvKKXJvECImohH1NO54Xy1hxmGg0CSDvLXwV6bds1Yvi
-         3OcGddaV0JlzHWtW0gGgs1VJ/BoW9Z3je3hEtHykgWMoZPsWMD4E+AYKdmrTpc3Ezz5M
-         qEPTq8aY84Eq6yiyDMTH7ySU7kCpDXI+n5c7eAJt6XaSdJdphUyz2YUWENFENWjeF53l
-         pjMyZU+WwVWNghhvKGLa7rntrLyGgoF7zcZiM3Abxey/9R8YRn//lI+cXBBRVOUMZs+Z
-         LPIDepss4IExoPKmykNEiYIYAdPxNYUvnNm+Rm90TlPfOEnwLTJYec11oq1B7QeW1js2
-         wcvw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMDMBmpZ+MBH79Jn8NyI2VWJhSwiooui7SLRdTyK6nIjpfC1fCf8MKkRkrPwZEQAKzrqjAeeGuIZjfL4WlpCPEQ64=@vger.kernel.org, AJvYcCUh4I1ZtdgrAw+oyVxHAFc0KPLr7W5dOpYaj3XiBcn72O9YsdqoTHF6UTiaBLEFvLcMJQB5+Vx3i2/O@vger.kernel.org, AJvYcCViibzQdGf7Jevqz9UnbXTPF6BZGBbGWEds7uZVxeaFvTQIbE7tvI1mNAiEvaLB3kRQSznvevgmhQmfMYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfpu0wV5hjPjRCpBsOmkTMgqzh+Ta5IdSbs7OT1Onubdq978WO
-	v0o9foVGRtuwgBg0qhhWWDUuln8alqHT6xCd2cYnMHY76Pa/+p57
-X-Gm-Gg: ASbGncs6AsvgiBT8EFIaLIgu3pMn4nlIvSmN0LcpbvQZfKZL7lgiTMX/yBU8lvnYHBC
-	gqlkasJ1DEtiGqtpGKxoaJD//cJJqTfVC+zSrg93NC1Gz8ED6ekC0zrazoy0aDESP+r6p4Yofr9
-	gFPLkLT8oA8jPPOdthuN6ZgiUT+JDmPjfn/qP8eVhrMvm5LbTIU1XRAjtTPU/fN0NnEKFJ8jxPz
-	zgAdms6MIXIl9C9wSCnxFrFzeKel4EwcqaQ/EUxFEFyYa3Y3w/AZkk+WFMXuPSMrJTsE0AfoEfQ
-	aXqycoQrm/OfThaGbEDtJvSOZgURrf/KkGUDKkYTb9MN9Jvagm/6Yotdv82E0uBIdsMNRKhZ95H
-	nHil8J83ZBGFNvpEdhzaF
-X-Google-Smtp-Source: AGHT+IGV1TOlNM3xng9QbH9wlKQQUk/Hqr0UTaR7z33DFcaPZufgeSbUX/WC36jQ/lzEZqtWL3v0TQ==
-X-Received: by 2002:a05:6000:210b:b0:391:2192:ccd6 with SMTP id ffacd0b85a97d-3997f932f07mr3452699f8f.39.1742568489430;
-        Fri, 21 Mar 2025 07:48:09 -0700 (PDT)
-Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9b3dd5sm2533851f8f.45.2025.03.21.07.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 07:48:09 -0700 (PDT)
-From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 2/2] usb: dwc3: exynos: add support for Exynos2200 variant
-Date: Fri, 21 Mar 2025 16:48:03 +0200
-Message-ID: <20250321144804.1435502-3-ivo.ivanov.ivanov1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250321144804.1435502-1-ivo.ivanov.ivanov1@gmail.com>
-References: <20250321144804.1435502-1-ivo.ivanov.ivanov1@gmail.com>
+	s=arc-20240116; t=1742573653; c=relaxed/simple;
+	bh=D4wmE+1sJieP2ZR8N+4BcCjmZMiOCHIqifIqz4WDGnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V0/qkLPCyO2KQSzufonCVluoYW6KBVq8t4ortXpdvjN4Y+B+1FozLXmmwaGrhCJK3L82wr8dUjTMHXl/BIdsA8SD8/lWfda8JgOtkYecFs2jzaVyv4vKTDa4Vt1x2LiK5nkNMIsjdKMwD4CFufOOsQ/36K1wbONOxS5KD1MZVDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHM1CbtZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51373C4CEE3;
+	Fri, 21 Mar 2025 16:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742573652;
+	bh=D4wmE+1sJieP2ZR8N+4BcCjmZMiOCHIqifIqz4WDGnE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lHM1CbtZoDg6GisJ10dBrzHmYigP/Xc39YTSaXnWn0akMOEbRA2qWSQWAJo5RNWdH
+	 SzAUmIIQfpe2bToTpNNqZKxGvaUsB/yW/z/9p1ImCY/hSLFLcxWSqUZ6kd+T6Jq+68
+	 tkdZUR/0iNv4+KxjclLCBuLCMokOYwiVH9NP8Yu4swUQNyVXPtLjeyBLB05KFCRCfu
+	 yDyQBNQS3ExE3WqrBJp/GsmQMpSx1pqrp4es7w+DRLUpQj+75iYC5E1umlHYPObbmE
+	 cSAEC8uOQVsKLdha6Ga5b0DIgxaPnbFRwQrDv3ZQK9GIOIfrkhICi3r2BRMEKs8OKB
+	 iLRg7iQRe9VqA==
+Date: Fri, 21 Mar 2025 11:14:11 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Cc: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 2/7] dt-bindings: usb: Introduce qcom,snps-dwc3
+Message-ID: <174257365080.3466536.3652323578969133351.robh@kernel.org>
+References: <20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com>
+ <20250318-dwc3-refactor-v5-2-90ea6e5b3ba4@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250318-dwc3-refactor-v5-2-90ea6e5b3ba4@oss.qualcomm.com>
 
-Add Exynos2200 compatible string and associated driver data. This SoC
-requires a Link interface AXI clock.
 
-Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Tue, 18 Mar 2025 14:05:02 -0500, Bjorn Andersson wrote:
+> The Qualcomm USB glue is not separate of the Synopsys DWC3 core and
+> several of the snps,dwc3 properties (such as clocks and reset) conflicts
+> in expectation with the Qualcomm integration.
+> 
+> Using the newly split out Synopsys DWC3 core properties, describe the
+> Qualcomm USB block in a single block. The new binding is a copy of
+> qcom,dwc3 with the needed modifications.
+> 
+> It would have been convenient to retain the two structures with the same
+> compatibles, but as there exist no way to select a binding based on the
+> absence of a subnode/patternProperty, a new generic compatible is
+> introduced to describe this binding.
+> 
+> To avoid redefining all the platform-specific compatibles, "select" is
+> used to tell the DeviceTree validator which binding to use solely on the
+> generic compatible. (Otherwise if the specific compatible matches during
+> validation, the generic one must match as well)
+> 
+> Mark qcom,dwc3 deprecated, to favor expressing future platforms using
+> the new combined binding.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
+>  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 620 +++++++++++++++++++++
+>  2 files changed, 632 insertions(+), 1 deletion(-)
+> 
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index f5d963fae..aa22265c7 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -145,6 +145,12 @@ static void dwc3_exynos_remove(struct platform_device *pdev)
- 	regulator_disable(exynos->vdd10);
- }
- 
-+static const struct dwc3_exynos_driverdata exynos2200_drvdata = {
-+	.clk_names = { "link_aclk" },
-+	.num_clks = 1,
-+	.suspend_clk_idx = -1,
-+};
-+
- static const struct dwc3_exynos_driverdata exynos5250_drvdata = {
- 	.clk_names = { "usbdrd30" },
- 	.num_clks = 1,
-@@ -177,6 +183,9 @@ static const struct dwc3_exynos_driverdata gs101_drvdata = {
- 
- static const struct of_device_id exynos_dwc3_match[] = {
- 	{
-+		.compatible = "samsung,exynos2200-dwusb3",
-+		.data = &exynos2200_drvdata,
-+	}, {
- 		.compatible = "samsung,exynos5250-dwusb3",
- 		.data = &exynos5250_drvdata,
- 	}, {
--- 
-2.43.0
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
