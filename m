@@ -1,113 +1,258 @@
-Return-Path: <linux-usb+bounces-21987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-21988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E61AEA6B26A
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 01:44:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC2BA6B2BA
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 02:47:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B586884801
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 00:44:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A37998811F1
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 01:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2EA0374D1;
-	Fri, 21 Mar 2025 00:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0869C1DF277;
+	Fri, 21 Mar 2025 01:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XdSJ4aA+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97827200CB
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 00:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D9E15820C
+	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 01:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742517882; cv=none; b=RpI+I0ihHS+vijglKSOufzmty7Kf1ZNfDMF9cB7PlFQcF8F7QjC961b/FhkOmzZAA7K71eLL6h74XT3vXP9e05kRU5+i+BGP3au6woCnaY5HqjC83JP1Da/lNdbV0fLwedS4BWUUmY3XbNCbzhIsv6En4d/MdNQsVbrHX7CUETE=
+	t=1742521636; cv=none; b=UQm0fWPUng+rq/qqA/sDlOekj9/8NVuqFZcdwSfeXKjrQkLGCE8CMqCoGqaqy0HWRDvYAopz5TRTx8qKaQXRCHnvjPg6ZtmddCAKcGFENRZc6E5Pz0RAq8VUA0JHQnajcr/16zyqfOdWawNiuFDfm336fqyMbu/YuGvzpgRfsQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742517882; c=relaxed/simple;
-	bh=gVrx8JwHkvcVCcTs9bw8eqzimuLsp2e3hep1h4EuT30=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=itiARNn0E0BzWVDJ1+Yrx6154oerxCgpsNjj4Ljunb9DX1nDaKhMgcJ2TjvLs/pqVXmsyPTbnjxhR4kttTwqG3Y/aRA/7akmtJYarYuU5U5H+qMMIGwcXSJX0XiZw9RZ3drSniiKoJRvGjVjjM4T9IJvMM7EU70yxT7xDaMB9is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-85b3f480d86so122804939f.3
-        for <linux-usb@vger.kernel.org>; Thu, 20 Mar 2025 17:44:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742517878; x=1743122678;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XLe3EfXEq7ymtnT+1ejTFU9x1KX0C5ejSjskerXlAxg=;
-        b=qvtIucK1Xn+WV5TsuVPvkOEjWANLAV083IOzt7kaP3qI6qoOUEv9PUcjJ9sXcJ8mkx
-         xJ8ksojM4WjIsbvKJInZ37nLEClU1fw7B73K1b5sfv4XfmobkIG5IAk61moNIOtf1NBO
-         GOTnvf4X2vOgtwWefEuNhc0mlv1gCV0yPRA6f5lHY1qa+7IiY+37bG41/n5RsWoBfLge
-         G06UzIt5M0uRNq0aewjWZijxB7K6i1vSXt7PmYQOjrrAzbbX6CA6Hdh4OhRlssoy48Xs
-         5EAJnno3VwwjKUIPhjiqj/KDqa2UItkY1Fh1IMWcjhFTBhr+IesVl9TIWnLeDko7jLSm
-         l9OA==
-X-Forwarded-Encrypted: i=1; AJvYcCX+NEwIBSvkfOje2ZduvLHsuhdmLf5RSx13wj0XzAld5CRL2qA5tyGNJ4PZlKykhgU0KKfXSwsQzYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSpSulgPaT3xVFPTqMWpOk5HuBkalu36/APqzIdR3FQ9WK9FMe
-	18ZBwoKZ33EmtIvzorWyhLfkc68XG0OWLmXQhfNn9r+yRe9GxcHzQQ3oDLVs1GhCl6J7wI2G5Pu
-	N6q2+YNAB7cEGmeYjuvNiFiAnj4tZeyorWO7MHKoi2TP5kcOBWamzLmM=
-X-Google-Smtp-Source: AGHT+IHxevJ6n34X7cYaD0ykzZlag17qgnTsXf8laxxIPzy7Zgti7tAsNnVcIMCE0N3ISW7WkjIarSLmswV+Livoq7AQsQRNyib1
+	s=arc-20240116; t=1742521636; c=relaxed/simple;
+	bh=2H66PUeo1OFgKD4XFqrOdgBr4dkk/VKUPGtTE1IhTYc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SMEUdy+mZOTZfKJmsikFYTuhVrgs3CDF3teAcB6iepnOrMImn+9X2ar/GafZxka8NOj3RmSCSZZKV+ZRN5sE+uHwixPvBC0za0DBnQZCM+pRTDoyPOVEihPiHAycvY9GV0yat+0ndovbSSXanbwOmRwNxDck7nyFFA88UtqtzVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XdSJ4aA+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30828C4CEDD;
+	Fri, 21 Mar 2025 01:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1742521636;
+	bh=2H66PUeo1OFgKD4XFqrOdgBr4dkk/VKUPGtTE1IhTYc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XdSJ4aA+IJ5ShRVskkpoj01s19k8z3CCExco1CDAWiU98j/fJFIQyorozPg3LkWRK
+	 UnM18a13gGJ+467OLgKEmhe/9CGZESnfggI0sovlYQ9WMfjsaRfGhGumL5xok3OXmz
+	 jkW5CdMoEN+a7wOnVvnfva6QXPpV5WUJu27BUBLE=
+Date: Thu, 20 Mar 2025 18:45:56 -0700
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Adam Xue <zxue@semtech.com>
+Cc: "johan@kernel.org" <johan@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Iulian Mocanu <imocanu@semtech.com>
+Subject: Re: USB: serial: qcserial: patch for adding Sierra Wireless 9x50,
+ EM91, EM92 and SDX35.
+Message-ID: <2025032047-deluge-observant-963f@gregkh>
+References: <DS7PR20MB4855FE3E27EFAD39D56FF897C6D82@DS7PR20MB4855.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3047:b0:3d2:b154:49dc with SMTP id
- e9e14a558f8ab-3d5960cd132mr19329485ab.5.1742517878710; Thu, 20 Mar 2025
- 17:44:38 -0700 (PDT)
-Date: Thu, 20 Mar 2025 17:44:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67dcb676.050a0220.31a16b.0016.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Mar 2025)
-From: syzbot <syzbot+listade70b662293f9976322@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DS7PR20MB4855FE3E27EFAD39D56FF897C6D82@DS7PR20MB4855.namprd20.prod.outlook.com>
 
-Hello usb maintainers/developers,
+On Thu, Mar 20, 2025 at 10:08:36PM +0000, Adam Xue wrote:
+> Hi Johan,
+> 
+> This is the patch for adding support for Sierra Wireless and Semtech products based on 
+> Qualcomm 9x50, SDX35, SDX55 and SDX65 based products (EM75xx, EM91xx, EM92xx). 
+> Currently, only our products based on Qualcomm 9x30 and older chipsets are supported.
+> These products have a different USB interface layout compared to the default one which 
+> require code changes. The VID/PID list has also been updated for all products mentioned above.
+> Please review.
+>  
+> Thanks,
+>  
+> Adam
+>  
+> 
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 13c664317a05..f362da97b7de 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -26,12 +26,24 @@ enum qcserial_layouts {
+>       QCSERIAL_G1K = 1, /* Gobi 1000 */
+>       QCSERIAL_SWI = 2, /* Sierra Wireless */
+>       QCSERIAL_HWI = 3, /* Huawei */
+> +     QCSERIAL_SWI_9X50 = 4, /* Sierra Wireless 9x50 USB-IF */
+> +     QCSERIAL_SWI_SDX55 = 5, /* Sierra Wireless SDX55 */
+> +     QCSERIAL_SWI_SDX55_RMNET = 6, /* Sierra Wireless SDX55 rmnet */
+> +     QCSERIAL_SWI_SDX35 = 7, /* Sierra Wireless SDX35 */
+>  };
+>  
+>  #define DEVICE_G1K(v, p) \
+>       USB_DEVICE(v, p), .driver_info = QCSERIAL_G1K
+>  #define DEVICE_SWI(v, p) \
+>       USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI
+> +#define DEVICE_SWI_9X50(v, p) \
+> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_9X50
+> +#define DEVICE_SWI_SDX55(v, p) \
+> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX55
+> +#define DEVICE_SWI_SDX55_RMNET(v, p) \
+> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX55_RMNET
+> +     #define DEVICE_SWI_SDX35(v, p) \
+> +     USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI_SDX35
+>  #define DEVICE_HWI(v, p) \
+>       USB_DEVICE(v, p), .driver_info = QCSERIAL_HWI
+>  
+> @@ -165,11 +177,21 @@ static const struct usb_device_id id_table[] = {
+>       {DEVICE_SWI(0x1199, 0x907b)}, /* Sierra Wireless EM74xx */
+>       {DEVICE_SWI(0x1199, 0x9090)}, /* Sierra Wireless EM7565 QDL */
+>       {DEVICE_SWI(0x1199, 0x9091)}, /* Sierra Wireless EM7565 */
+> -     {DEVICE_SWI(0x1199, 0x90d2)}, /* Sierra Wireless EM9191 QDL */
+> +     {DEVICE_SWI(0x1199, 0x90b0)}, /* Sierra Wireless EM7565 QDL */
+> +     {DEVICE_SWI_9X50(0x1199, 0x90b1)},  /* Sierra Wireless EM7565 */
+> +     {DEVICE_SWI(0x1199, 0x90d2)}, /* Sierra Wireless EM9190 QDL */
+> +     {DEVICE_SWI_SDX55(0x1199, 0x90d3)}, /* Sierra Wireless EM9190 */
+> +     {DEVICE_SWI(0x1199, 0x90d8)}, /* Sierra Wireless EM9190 QDL */
+> +     {DEVICE_SWI_SDX55_RMNET(0x1199, 0x90d9)}, /* Sierra Wireless EM9190 */
+> +     {DEVICE_SWI(0x1199, 0x90e0)}, /* Sierra Wireless EM929x QDL */
+> +     {DEVICE_SWI_SDX55(0x1199, 0x90e1)}, /* Sierra Wireless EM929x */
+> +     {DEVICE_SWI(0x1199, 0x90e2)}, /* Sierra Wireless EM929x QDL */
+> +     {DEVICE_SWI_SDX55(0x1199, 0x90e3)}, /* Sierra Wireless EM929x */
+>       {DEVICE_SWI(0x1199, 0x90e4)}, /* Sierra Wireless EM86xx QDL*/
+>       {DEVICE_SWI(0x1199, 0x90e5)}, /* Sierra Wireless EM86xx */
+>       {DEVICE_SWI(0x1199, 0xc080)}, /* Sierra Wireless EM7590 QDL */
+>       {DEVICE_SWI(0x1199, 0xc081)}, /* Sierra Wireless EM7590 */
+> +     {DEVICE_SWI_SDX35(0x05c6, 0x90b8)}, /* Sierra Wireless SDX35 */
+>       {DEVICE_SWI(0x413c, 0x81a2)}, /* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+>       {DEVICE_SWI(0x413c, 0x81a3)}, /* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+>       {DEVICE_SWI(0x413c, 0x81a4)}, /* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+> @@ -367,6 +389,88 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
+>                   break;
+>             }
+>             break;
+> +     case QCSERIAL_SWI_SDX55:
+> +           /*
+> +            * Sierra Wireless SDX55 layout:
+> +            * 3: AT-capable modem port
+> +            * 4: DM/DIAG
+> +            */
+> +           switch (ifnum) {
+> +           case 3:
+> +                 dev_dbg(dev, "Modem port found\n");
+> +                 sendsetup = true;
+> +                 break;
+> +           case 4:
+> +                 dev_dbg(dev, "DM/DIAG interface found\n");
+> +                 break;
+> +           default:
+> +                 /* don't claim any unsupported interface */
+> +                 altsetting = -1;
+> +                 break;
+> +           }
+> +           break;
+> +     case QCSERIAL_SWI_SDX55_RMNET:
+> +           /*
+> +            * Sierra Wireless SDX55 layout:
+> +            * 1: AT-capable modem port
+> +            * 2: DM
+> +            */
+> +           switch (ifnum) {
+> +           case 1:
+> +                 dev_dbg(dev, "Modem port found\n");
+> +                 sendsetup = true;
+> +                 break;
+> +           case 2:
+> +                 dev_dbg(dev, "DM/DIAG interface found\n");
+> +                 break;
+> +           default:
+> +                 /* don't claim any unsupported interface */
+> +                 altsetting = -1;
+> +                 break;
+> +           }
+> +           break;
+> +     case QCSERIAL_SWI_9X50:
+> +           /*
+> +            * Sierra Wireless 9X50 USB-IF layout:
+> +            * 2: AT-capable modem port
+> +            * 3: NMEA
+> +            * 4: DM
+> +            */
+> +           switch (ifnum) {
+> +           case 2:
+> +                 dev_dbg(dev, "Modem port found\n");
+> +                 sendsetup = true;
+> +                 break;
+> +           case 3:
+> +                 dev_dbg(dev, "NMEA GPS interface found\n");
+> +                 sendsetup = true;
+> +                 break;
+> +           case 4:
+> +                 dev_dbg(dev, "DM/DIAG interface found\n");
+> +                 break;
+> +           default:
+> +                 /* don't claim any unsupported interface */
+> +                 altsetting = -1;
+> +                 break;
+> +           }
+> +           break;
+> +     case QCSERIAL_SWI_SDX35:
+> +           /*
+> +            */
+> +           switch (ifnum) {
+> +           case 0:
+> +                 dev_dbg(dev, "DM/DIAG interface found\n");
+> +                 break;
+> +           case 1:
+> +                 dev_dbg(dev, "Modem port found\n");
+> +                 sendsetup = true;
+> +                 break;
+> +           default:
+> +                 /* don't claim any unsupported interface */
+> +                 altsetting = -1;
+> +                 break;
+> +           }
+> +           break;
+>       case QCSERIAL_HWI:
+>             /*
+>              * Huawei devices map functions by subclass + protocol
+>  
+> 
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Hi,
 
-During the period, 4 new issues were detected and 2 were fixed.
-In total, 85 issues are still open and 375 have already been fixed.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Some of the still happening issues:
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Ref  Crashes Repro Title
-<1>  13032   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
-                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
-<2>  3328    Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<3>  1931    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
-                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
-<4>  1385    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
-<5>  1142    Yes   KASAN: use-after-free Read in v4l2_fh_open
-                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
-<6>  1096    Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<7>  723     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
-                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
-<8>  674     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<9>  667     Yes   WARNING: ODEBUG bug in release_nodes
-                   https://syzkaller.appspot.com/bug?extid=624d9e79ec456915d85d
-<10> 652     Yes   WARNING in enable_work
-                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/process/submitting-patches.rst and resend
+  it after adding that line.  Note, the line needs to be in the body of
+  the email, before the patch, not at the bottom of the patch or in the
+  email signature.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-You may send multiple commands in a single email message.
+thanks,
+
+greg k-h's patch email bot
 
