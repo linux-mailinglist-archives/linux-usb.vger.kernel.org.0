@@ -1,106 +1,119 @@
-Return-Path: <linux-usb+bounces-22022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22023-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FB3A6C782
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 04:45:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76165A6CA40
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 14:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CABA3B77EA
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 03:45:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A36747A6DE4
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 13:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B9B13B280;
-	Sat, 22 Mar 2025 03:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6141FCFFB;
+	Sat, 22 Mar 2025 13:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yQmcL6S/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="OhB+ceKO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858042E337D;
-	Sat, 22 Mar 2025 03:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DD71DF26B
+	for <linux-usb@vger.kernel.org>; Sat, 22 Mar 2025 13:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742615147; cv=none; b=VFc78KluN9AsmcoOT9XWUsRf6DgrQ7gub4JOA07c9/Np/5fN2oz62FElynKC3cYCcAPmPXBdGjqkXKZLSXQy6iU2p946Hz67YIs0yImY1TI6V2j7xFJuv15QWjwOfHvrjzePceXn6DxXFPK/B7FScSXoN5jGCY+4CRJ0GtqBldc=
+	t=1742649563; cv=none; b=ub/sjd/lahPPLm1ZEqOluF1O2zKdBwxqPYCIrb3aXtBk9mZKtJBVNA9deZrlJbQ+bl/85RCUlk5mE5FN4SSu1MAhqrSp/vGSVf5sNobEf+T6emLCvhA/EqTNeLHulj8LuXiY1m6Eg5PnDvMZKyjxpOueNsAOy0FNhAAX5GU3658=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742615147; c=relaxed/simple;
-	bh=/UCd4h/6gwL0U5r9X2vlvNkmZ7Z//FawotZigJcoF8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kISMKjWotBifqLBe0snJKrtcnX9z32hWnFeCUgOvSkjJbYR84g4hDcGLdAHnoV+IjOofujY8qbtdKiCas+pxgeEcKvSswlr11kBxUPuMrlv3i9RsVBafx8D2wIoJCSqfoRh/ADKBxHNryhNVQWaN4wOITdl+veD1guhoHrlc4bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yQmcL6S/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412CFC4CEDD;
-	Sat, 22 Mar 2025 03:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742615146;
-	bh=/UCd4h/6gwL0U5r9X2vlvNkmZ7Z//FawotZigJcoF8A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yQmcL6S/Llw1LfrnG1OLg59L82Vkw56On2NNBN945yOOZ9kx9UD+SHWrV8/UMJy2G
-	 LSruYoVTTpxp2qEwIyeKh3+RIpXGlXg19rKIZnl3yDOSlkveoukLhHuLQPU0BtT5l1
-	 w8PXU0gog3/RXFDui3bWAU9QtXMfoNBrhFno9NAM=
-Date: Fri, 21 Mar 2025 20:44:24 -0700
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Mark Brown <broonie@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Samuel Holland <samuel@sholland.org>,
-	David Lechner <david@lechnology.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
- of_node to fwnode
-Message-ID: <2025032119-mammogram-fracture-14e6@gregkh>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
- <2025022542-recital-ebony-d9b5@gregkh>
- <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
- <2025030845-pectin-facility-a474@gregkh>
- <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
- <eqfqv2tkfretqzvt74o5dvj5yixkfc3h3my4bhskvhtsrbmtwp@poryvs4oipnp>
- <2025030831-various-monthly-4ae0@gregkh>
- <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
- <20250321-famous-acrid-monkey-ab9c07@lemur>
+	s=arc-20240116; t=1742649563; c=relaxed/simple;
+	bh=MnaEr0HKvRTMmFsEGnBABMVlWmcwLBOq06phwGORvbQ=;
+	h=Date:To:From:Subject:Message-ID:MIME-Version:Content-Type; b=lWv6s/+SaeOLwGrE07GjNwW0eF/kaTizd+aozdmMpVSEJfT+ae8AakLmCiC5cqqwdbizPg0G7ZpxT1aPkPLu/tXJAs+aM6TsJB+Y8f3VEeL49aKAAZsi5wAe91LQjYLOWlgp7RFB+uWMJpqXPso6dOGsPiokgOZtrEPcmfeppw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=OhB+ceKO; arc=none smtp.client-ip=79.135.106.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1742649557; x=1742908757;
+	bh=MnaEr0HKvRTMmFsEGnBABMVlWmcwLBOq06phwGORvbQ=;
+	h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=OhB+ceKOqihTQzv+eMM6O1x6Bj52ZQl25Ovb2EU8EgfMHUORFEIDS9mZutSJwip2V
+	 8Q9SrJmUFAM9yqAUEY+Y2qhsyzkKVHIRQ49xi0BpodqqIINmhTFy5aPom7O0itQoOG
+	 H1lyxj2oGdrBdCeki5uM+mEPGAzHnZPm+RPVE1me9rpAnkh0jnJbbCf3Wi8rHivk2l
+	 1qSINu3I7w1KgaN3TiS01sjCsGT1IlxwCwyLhQ63zGgd7fIkr7R6huFUq3xti+TZjl
+	 ttSirwZOTMn5WDjoGvqsABdhlOffjIVaXXNARycMzrEmftXJwPtIMtH+tVgtSYWRSE
+	 lzXy7OLrQfE5Q==
+Date: Sat, 22 Mar 2025 13:19:13 +0000
+To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From: laycookie <laycookie@proton.me>
+Subject: USB device enumeration failure after a certain amount of uptime
+Message-ID: <tftazqcClYI-2-p31uywrZ6yeCzD8MkfSdzeBlhODA0739v21m4K2sU20aybeXfJiqBFOWz0BjawusLq1vKkZCpHGYSdRxzKoPUGYZSJFq4=@proton.me>
+Feedback-ID: 83346434:user:proton
+X-Pm-Message-ID: ca97fecf06df34ab70d19953faa2324433f02830
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250321-famous-acrid-monkey-ab9c07@lemur>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 21, 2025 at 12:36:53PM -0400, Konstantin Ryabitsev wrote:
-> On Sat, Mar 08, 2025 at 07:27:28PM +0100, Konrad Dybcio wrote:
-> > > I do use b4, but it wants to suck the whole series down.  If I want to
-> > > pick an individual one out, I have to manually cut the message-id out
-> > > of the email and type out the command and pick the individual commit
-> > > out (or use the -P 3 as was said).
-> > > 
-> > > But that's a world away from me just hitting a single key in my email
-> > > client to suck down the whole thread and apply it to my tree.
-> 
-> Would it help to have an "interactive cherry-pick mode" where it grabs the
-> whole thread but before it applies it to your tree, it lets you pick the
-> subset of the patches you want? So, instead of passing -P 3,4, you have a file
-> open in your $EDITOR where you can just delete the patches you don't want?
+Hello, this is my first time reporting a bug to the Linux mailing list so i=
+f I make any mistakes on how the report should be formatted I deeply apolog=
+ies, and I would really appreciate feedback on how I could have made it bet=
+ter.
 
-Yes it would!
+I have recently installed a pcie capture card (AVerMedia GC575) into my com=
+puter, which from my understanding is recognized as a USB hub, to which a U=
+SB =E2=80=9Cvirtual capture card=E2=80=9D gets connected, as well as an RGB=
+ controller, and while there is no problems with the RGB controller, the ca=
+pture card itself disconnects after some uptime.
+
+When the computer boots up, or wakes up from hibernation, the capture card =
+spits out some errors but ultimately ends up connecting, and functioning pr=
+operly with the following being logged in to the dmesg.
+
+[73087.256972] usb usb4-port1: attempt power cycle
+[73087.681433] usb 4-1: Device not responding to setup address.
+[73087.887446] usb 4-1: Device not responding to setup address.
+[73088.095031] usb 4-1: device not accepting address 67, error -71
+[73088.580035] usb 4-1: new SuperSpeed USB device number 68 using xhci_hcd
+[73088.649577] usb 4-1: LPM exit latency is zeroed, disabling LPM.
+
+However after some uptime since the boot/hibernation the capture card ends =
+up getting disconnected with the following being logged.
+
+[73491.691281] usb 4-1: Device not responding to setup address.
+[73491.898772] usb 4-1: Device not responding to setup address.
+[73492.106227] usb 4-1: device not accepting address 68, error -71
+[73492.857630] usb 4-1: USB disconnect, device number 68
+[73493.184176] usb 4-1: new SuperSpeed USB device number 69 using xhci_hcd
+[73498.305648] usb 4-1: device descriptor read/8, error -110
+[73498.409287] usb 4-1: new SuperSpeed USB device number 69 using xhci_hcd
+73513.767567] usb 4-1: device descriptor read/8, error -110
+[73514.056885] usb 4-1: Device not responding to setup address.
+[73514.265895] usb 4-1: Device not responding to setup address.
+[73514.473459] usb 4-1: device not accepting address 70, error -71
+[73514.475317] usb usb4-port1: attempt power cycle
+[73514.903850] usb 4-1: Device not responding to setup address.
+[73515.113863] usb 4-1: Device not responding to setup address.
+[73515.322369] usb 4-1: device not accepting address 71, error -71
+[73515.817911] usb 4-1: new SuperSpeed USB device number 72 using xhci_hcd
+[73520.833734] usb 4-1: device descriptor read/8, error -110
+[73520.937385] usb 4-1: new SuperSpeed USB device number 72 using xhci_hcd
+[73536.294619] usb 4-1: device descriptor read/8, error -110
+[73536.412431] usb usb4-port1: unable to enumerate USB device
+
+I managed to track down the source of all the following errors with the exc=
+eption being =E2=80=9CDevice not responding to setup address.=E2=80=9D to b=
+eing in the following file:
+drivers/usb/core/hub.c
+
+However sadly I=E2=80=99m still very much learning about linux, so I didn=
+=E2=80=99t yet progress much then this. If anyone has any idea of what is g=
+oing on I would really appreciate a small explanation, or pointers to where=
+ I should look. Currently I=E2=80=99m trying to find out what error -71, an=
+d -110 correspond.
+The following was tested on kernel version 6.14.0-rc6, and the same behavio=
+r was observed on kernel versions 6.6.x.
 
