@@ -1,162 +1,106 @@
-Return-Path: <linux-usb+bounces-22021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A145A6C663
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 00:20:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16FB3A6C782
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 04:45:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AC76483663
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Mar 2025 23:20:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CABA3B77EA
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Mar 2025 03:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A27234977;
-	Fri, 21 Mar 2025 23:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B9B13B280;
+	Sat, 22 Mar 2025 03:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZCAjuQP2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yQmcL6S/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F6F2A1C9
-	for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 23:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858042E337D;
+	Sat, 22 Mar 2025 03:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742599149; cv=none; b=akhmau3CgZamssjsppGF2fufVwrClnyAWnKBc7wtcY01+Mt3Ub/OpXhBLGSs5AJIadth0wRpfAbtCgFLHz7GIRZBQ/ZNSAC+pW2UDIE+DUYhFatF6CItzcl4avPnQoRGf7KUUuduY+Uo/hkG6yrmegc1QLuXzmYHNPDzchbMCb4=
+	t=1742615147; cv=none; b=VFc78KluN9AsmcoOT9XWUsRf6DgrQ7gub4JOA07c9/Np/5fN2oz62FElynKC3cYCcAPmPXBdGjqkXKZLSXQy6iU2p946Hz67YIs0yImY1TI6V2j7xFJuv15QWjwOfHvrjzePceXn6DxXFPK/B7FScSXoN5jGCY+4CRJ0GtqBldc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742599149; c=relaxed/simple;
-	bh=7R7aUV+pTd9zyynGBCXb4GYWyEVGu6gupsqBeQ35lLo=;
+	s=arc-20240116; t=1742615147; c=relaxed/simple;
+	bh=/UCd4h/6gwL0U5r9X2vlvNkmZ7Z//FawotZigJcoF8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cwnniBts3gnmmYsH8cGVoBUvzt0u5QBH0BGTqQT0Ljh+yy3kzyDtZ4uW/gcDF7lUaU3qAku1dmXCOLD2WcO7BpulvEOLmqVyTYggdS+L3zXELFxgrDz4DC4pu3rxLfdm41mcfUd2lm742Wgc1MzVGgiV4x5ftuPkqt3cu2YRrfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZCAjuQP2; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22548a28d0cso31034625ad.3
-        for <linux-usb@vger.kernel.org>; Fri, 21 Mar 2025 16:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742599147; x=1743203947; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLVVtEiYY62MhsiRQ4vP6SNkQCOsvwGGW3jtnlnRhnQ=;
-        b=ZCAjuQP2FAacEUDfJlVLeLg/0KuuKIUUuS9g4/o7Ht+KiGjd/AzTrlxbKxTudSwmLU
-         vooqOqnMpS14fuPWhFV2Yzo+06+J3mPtE7og9gRkYoQLrI3efZZKDR6tyjfmGw9I7VnD
-         w8hU0mlfH4xuh3aW1C+cbN6wj+WcP5aPeF7dd/BwDQV5OkVXt5oozJ8VqAfEB9ZITW2/
-         WPhGSlrzRdJMqmWO1wlptlVAvFgAJu4wGEJwYFj1l4IOu+KSISp50oBv60Khz0eMB56R
-         2Ma204k/ZWRWOPYi17zXgFc9NWzrJhAjTUWX175R9b5dYTuluGoVheRVmoMRdedE6gWH
-         TcyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742599147; x=1743203947;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLVVtEiYY62MhsiRQ4vP6SNkQCOsvwGGW3jtnlnRhnQ=;
-        b=GX5jLnvShldoBDKbhK6ARd6WnwpCn4tNd8HRubT7IV/14zYtSG40vg64+fReHxJvzB
-         8ZgMySK7r8gVKM++7EkA5GCgTZ8bHEp28Sj2TemVGqZfnhE1wyHCU9rgZvVQrSY5Nz0P
-         lmKdws5TwYY+D/dITMAsisUajGMCNvFQlyTGqEggXS/DFlLj62km43jvoDWONgtEadNb
-         PLYNRJpUW4fWK744qRs67S+rKuPJ/89F/opuLvxqL+FXFJ2eC/dcfxjDM22w5BwiCM9I
-         9WTl7U7k/pR3xqZbse8qQfxaljlHbwDRjysHFEBTa/tviipWnu37HFnPMd5KoD3yKU6h
-         pFBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQt9O5f8CkfWtwIk+UWAHQocp09KolxtAqUlsrPdO23JxCc7yHi8XlwFniz51L9cvEpH0bqFGVwws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkVhdFKyN+P/F6Kz4qOkY8vuwYmj+EZFBC5vGaSakkpiKzNwI6
-	pQsvUdr61gtsfI/RehLvD+saiIn1wKODULFgTsRHO4sjqBZpijykhTr/kDx+Zb5/ZpxOVMhJkFE
-	HjQ==
-X-Gm-Gg: ASbGncvD88R+Q20FulHCeOg72OWx98LiqqffISwMCbUvzYJsN4MxVLaIez1IBLgaQJs
-	JK+W7pI8V/sZ1VYLukHtVO3dQ9+4/UrSryeLPwzywJjax4wwSOY3HoiMgL7EGFCp5wXwj9bljcW
-	v6S/ENdxNInEzbwXHlQ6sSByAg8TVmYHcmQh/cWxYYVmD+exxprA2ZMlLi9FanEDiyxunwOLICY
-	BSJt2p/qOOHMkHyZNdaP0yru+YouxrsNehpOMl9AbvnUbp7syNxtrnhDsN16u5+zaoRr4SABgCH
-	hm7NpCuczfeIlfZyseealYe6axEHQLKdvdqjKnQRVE9YbgVh5F/4DlCTj4nRKa9L3TpPOUEBW45
-	4XXXfSbIz1OpcJ1QDeA==
-X-Google-Smtp-Source: AGHT+IF195diPWEKYH6Ae8Xu5+le/VenNZhzDbi1MXz0VeJbXGBB6rQE3KK3GWeNmszmqE1ZmR6hRg==
-X-Received: by 2002:a17:902:ea07:b0:224:179a:3b8f with SMTP id d9443c01a7336-22780d83b53mr70549105ad.23.1742599147135;
-        Fri, 21 Mar 2025 16:19:07 -0700 (PDT)
-Received: from google.com (132.111.125.34.bc.googleusercontent.com. [34.125.111.132])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811c1b8fsm23330555ad.154.2025.03.21.16.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 16:19:05 -0700 (PDT)
-Date: Fri, 21 Mar 2025 23:19:01 +0000
-From: Benson Leung <bleung@google.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: typec: class: Invalidate USB device pointers on
- partner unregistration
-Message-ID: <Z93z5WqL-u4ZyBhH@google.com>
-References: <20250321143728.4092417-1-akuchynski@chromium.org>
- <20250321143728.4092417-3-akuchynski@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kISMKjWotBifqLBe0snJKrtcnX9z32hWnFeCUgOvSkjJbYR84g4hDcGLdAHnoV+IjOofujY8qbtdKiCas+pxgeEcKvSswlr11kBxUPuMrlv3i9RsVBafx8D2wIoJCSqfoRh/ADKBxHNryhNVQWaN4wOITdl+veD1guhoHrlc4bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yQmcL6S/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412CFC4CEDD;
+	Sat, 22 Mar 2025 03:45:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1742615146;
+	bh=/UCd4h/6gwL0U5r9X2vlvNkmZ7Z//FawotZigJcoF8A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yQmcL6S/Llw1LfrnG1OLg59L82Vkw56On2NNBN945yOOZ9kx9UD+SHWrV8/UMJy2G
+	 LSruYoVTTpxp2qEwIyeKh3+RIpXGlXg19rKIZnl3yDOSlkveoukLhHuLQPU0BtT5l1
+	 w8PXU0gog3/RXFDui3bWAU9QtXMfoNBrhFno9NAM=
+Date: Fri, 21 Mar 2025 20:44:24 -0700
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Samuel Holland <samuel@sholland.org>,
+	David Lechner <david@lechnology.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
+ of_node to fwnode
+Message-ID: <2025032119-mammogram-fracture-14e6@gregkh>
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
+ <2025022542-recital-ebony-d9b5@gregkh>
+ <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
+ <2025030845-pectin-facility-a474@gregkh>
+ <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
+ <eqfqv2tkfretqzvt74o5dvj5yixkfc3h3my4bhskvhtsrbmtwp@poryvs4oipnp>
+ <2025030831-various-monthly-4ae0@gregkh>
+ <5ef97125-2b27-4961-8755-09fcea062f78@oss.qualcomm.com>
+ <20250321-famous-acrid-monkey-ab9c07@lemur>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="cN3cAe1kDpvEvgtB"
-Content-Disposition: inline
-In-Reply-To: <20250321143728.4092417-3-akuchynski@chromium.org>
-
-
---cN3cAe1kDpvEvgtB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250321-famous-acrid-monkey-ab9c07@lemur>
 
-Hi Andrei,
+On Fri, Mar 21, 2025 at 12:36:53PM -0400, Konstantin Ryabitsev wrote:
+> On Sat, Mar 08, 2025 at 07:27:28PM +0100, Konrad Dybcio wrote:
+> > > I do use b4, but it wants to suck the whole series down.  If I want to
+> > > pick an individual one out, I have to manually cut the message-id out
+> > > of the email and type out the command and pick the individual commit
+> > > out (or use the -P 3 as was said).
+> > > 
+> > > But that's a world away from me just hitting a single key in my email
+> > > client to suck down the whole thread and apply it to my tree.
+> 
+> Would it help to have an "interactive cherry-pick mode" where it grabs the
+> whole thread but before it applies it to your tree, it lets you pick the
+> subset of the patches you want? So, instead of passing -P 3,4, you have a file
+> open in your $EDITOR where you can just delete the patches you don't want?
 
-On Fri, Mar 21, 2025 at 02:37:27PM +0000, Andrei Kuchynski wrote:
-> To avoid using invalid USB device pointers after a Type-C partner
-> disconnects, this patch clears the pointers upon partner unregistration.
-> This ensures a clean state for future connections.
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: 59de2a56d127 ("usb: typec: Link enumerated USB devices with Type-C=
- partner")
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
-> ---
->  drivers/usb/typec/class.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index eadb150223f8..3df3e3736916 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1086,10 +1086,14 @@ void typec_unregister_partner(struct typec_partne=
-r *partner)
->  	port =3D to_typec_port(partner->dev.parent);
-> =20
->  	mutex_lock(&port->partner_link_lock);
-> -	if (port->usb2_dev)
-> +	if (port->usb2_dev) {
->  		typec_partner_unlink_device(partner, port->usb2_dev);
-> -	if (port->usb3_dev)
-> +		port->usb2_dev =3D NULL;
-> +	}
-> +	if (port->usb3_dev) {
->  		typec_partner_unlink_device(partner, port->usb3_dev);
-> +		port->usb3_dev =3D NULL;
-> +	}
-> =20
->  	device_unregister(&partner->dev);
->  	mutex_unlock(&port->partner_link_lock);
-> --=20
-> 2.49.0.395.g12beb8f557-goog
->=20
-
---cN3cAe1kDpvEvgtB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ93z5QAKCRBzbaomhzOw
-wuFRAP4tlk6s6adpSCRvWDdtv0FaODRXc1HiADy+70TI9ectMAD/bOW7B2uK9KrQ
-c+EbKHzy8PaWNAxKs4biseORVjHi6gU=
-=CBy0
------END PGP SIGNATURE-----
-
---cN3cAe1kDpvEvgtB--
+Yes it would!
 
