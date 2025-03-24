@@ -1,209 +1,115 @@
-Return-Path: <linux-usb+bounces-22041-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22042-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A896A6DFDC
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 17:36:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD7FFA6E181
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:50:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D25887A3BEC
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 16:35:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B890916E857
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 17:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D4F263C88;
-	Mon, 24 Mar 2025 16:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F1C266599;
+	Mon, 24 Mar 2025 17:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="pQF1AnL1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MRlHneAd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-24418.protonmail.ch (mail-24418.protonmail.ch [109.224.244.18])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35CE263C82
-	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 16:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D05226658C;
+	Mon, 24 Mar 2025 17:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742834101; cv=none; b=YVhcCxBeL7PK4HltYzgEKnioDZw1Hqjjf4bvWAyUENVigf43hEnttIQn7g4nmirgmqKByySFbc+LQuJrpEhTF/4JOyGCX5zn4gmzMrX5KN2ficG85vorEhM8du0uKVzYiEntJEoBuHJh3LKN1FZqF8EEJAbk5EajVj/jMiBb2oc=
+	t=1742837907; cv=none; b=qSTAaSbg6PFhCq3xDonW/3mPxO9Pc6zs1gC0m8wN8Ihw/6F4H2eEje+oDjNzQk7bPSgLH4kpPzLrCenIe5Zu3/f/pkmcVZnJanslBswuKKlffMDktBJGaJMpcUzOi1Y8xvVBLJKQQPBHjeqOpKQkrgtVH6/+5TUxc4RIibumdJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742834101; c=relaxed/simple;
-	bh=2VKwLKmGkpdlcqWpdTlu23oo/O/asD2Au7MWuT1zRfs=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hBoAgJ8jHb8fCH+uO5mwpwwu5Psd5rQCQiJhjzUGwCnFRyel4vg8pl5rDqmAR96w8H2d0ip/rJkefjTdUF/5rd+hPop+m6KebUKFqefSCD/JiR2TjlAZIdFPBDGapUUmB/QRC/vepcYriM2gxvAoYLipbyaCSReV8fqYwFKnMlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=pQF1AnL1; arc=none smtp.client-ip=109.224.244.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1742834096; x=1743093296;
-	bh=cbW/EsJAuMcQQgCqI6Tdr4zGMRd9Zt3XpLehMUEoLmc=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
-	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=pQF1AnL11/ENhlaHNLFaqjzEbbHX4vkdwUGrYJQBcI3ATBo++XTo9821F+lp3esZ6
-	 p5qSjZJkkPM5V3nEyx5jX/oDTJVu/r43MB3S3G05zYgGtkJKOkFr469k2G6/iHqgMY
-	 /tXF4fXOBqzE+fUI1iC0izPebovByI2o6mMam1AOdwi96l/BcdeN3Hepc+hcuLqJb7
-	 9gmrgSlDOGPwn8YuOD9o9vFlsh4SLtUY9AA4KbrxK5A/xRHzrsUqlYoM9UnEFh7DXL
-	 KgaxLCWZ+Vfp1umvtJDUjKuaCXEqeONspIdtbd3ZzJ5E6O5V2TzBV2J/VrkF2q/e+k
-	 BT/6GTq7lNdtw==
-Date: Mon, 24 Mar 2025 16:34:50 +0000
-To: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From: =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Subject: [PATCH] USB: serial: ftdi_sio: Code style cleanup
-Message-ID: <20250324163358.134541-1-dominik.karol.piatkowski@protonmail.com>
-Feedback-ID: 117888567:user:proton
-X-Pm-Message-ID: 3b940895cc1138ccce87b8db6a9d4ae75e968b3c
+	s=arc-20240116; t=1742837907; c=relaxed/simple;
+	bh=t6sR+wx+/rmQqNgwFv004AN/gLFYDmi/rJQlweN4q4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BVdVqFYbMV+NPPqjr2tSmAMrf6v0xNLhoItAAi1ql0DzV5RzkJOONhMqMk/xZp5L2F0o8QCk1DTH08I2ATnr19hWwOBq12hvuBnBYedwn+n4jVJC8yRYMDtwBMFGvBuEB/I1XVmk21lbThheHuV1OEkBo7DxFtmxE51tMCU29ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=MRlHneAd; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=0U+IOhAGSaWncMWr/2hE8r/FR6Wiw+nBu5VXy4Qmqwc=; b=MRlHneAddWRZUUWjUF5a0+9gm6
+	JYM5TGNJ+o+RsAI3POwXgni1ytvhWJ9QjAk9SdbayLqJ2sDOrP4kWSUo/6F5R+B1G7Kb36JPcMOOC
+	q4sG3MhdR1j1TQYyq/LqedInXojDUO/Wkzel6NgvJWcDQYLYCVkKZPbqEEAXlCP2RUfjPxg0SHOEd
+	uGJVQQm068tsr2mUUi7Q12pO6emK3hqHr6YObCgUk8yhRB5kPfOKL5TD4qLo44ubMqtIIboRrXQWz
+	V192wUGpMUa9PJxsXO1LTzXEg41RRoKPt4vOMtQUfykrp3Nb66fXF8rbXUGCtxDxLf07KxaVJVaCF
+	UKSlnYWw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35314)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1twlkg-0003t8-2r;
+	Mon, 24 Mar 2025 17:38:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1twlkd-0002R9-1F;
+	Mon, 24 Mar 2025 17:38:15 +0000
+Date: Mon, 24 Mar 2025 17:38:15 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net v3 1/2] net: =?utf-8?Q?phy?=
+ =?utf-8?Q?=3A_Introduce_PHY=5FID=5FSIZE_?= =?utf-8?B?4oCU?= minimum size for
+ PHY ID string
+Message-ID: <Z-GYh7tWq6dNDDqt@shell.armlinux.org.uk>
+References: <20250324144751.1271761-1-andriy.shevchenko@linux.intel.com>
+ <20250324144751.1271761-2-andriy.shevchenko@linux.intel.com>
+ <Z-F07j7tlez_94aK@shell.armlinux.org.uk>
+ <Z-GAzlPEVR8p5l7-@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z-GAzlPEVR8p5l7-@smile.fi.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Fix the following code style issues:
-- Space before comma
-- Missing blank line after declarations
-- Superfluous space before statement
-- Spaces used for indentation instead of tabs
-- Misaligned block comment
-- Space before tabs
+On Mon, Mar 24, 2025 at 05:57:02PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 24, 2025 at 03:06:22PM +0000, Russell King (Oracle) wrote:
+> > On Mon, Mar 24, 2025 at 04:39:29PM +0200, Andy Shevchenko wrote:
+> > > The PHY_ID_FMT defines the format specifier "%s:%02x" to form
+> > > the PHY ID string, where the maximum of the first part is defined
+> > > in MII_BUS_ID_SIZE, including NUL terminator, and the second part
+> > > is implied to be 3 as the maximum address is limited to 32, meaning
+> > > that 2 hex digits is more than enough, plus ':' (colon) delimiter.
+> > > However, some drivers, which are using PHY_ID_FMT, customise buffer
+> > > size and do that incorrectly. Introduce a new constant PHY_ID_SIZE
+> > > that makes the minimum required size explicit, so drivers are
+> > > encouraged to use it.
+> > > 
+> > > Suggested-by: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > 
+> > Thanks!
+> 
+> Thank you!
+> 
+> And just a bit of offtopic, can you look at
+> 20250312194921.103004-1-andriy.shevchenko@linux.intel.com
+> and comment / apply?
 
-Signed-off-by: Dominik Karol Pi=C4=85tkowski <dominik.karol.piatkowski@prot=
-onmail.com>
----
- drivers/usb/serial/ftdi_sio.c     | 16 ++++++++++------
- drivers/usb/serial/ftdi_sio.h     |  2 +-
- drivers/usb/serial/ftdi_sio_ids.h |  4 ++--
- 3 files changed, 13 insertions(+), 9 deletions(-)
+That needs to go into my patch system please. Thanks.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 9b34e23b7091..60d24152e385 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -190,7 +190,7 @@ static const struct usb_device_id id_table_combined[] =
-=3D {
- =09{ USB_DEVICE(FTDI_VID, FTDI_8U232AM_PID) },
- =09{ USB_DEVICE(FTDI_VID, FTDI_8U232AM_ALT_PID) },
- =09{ USB_DEVICE(FTDI_VID, FTDI_232RL_PID) },
--=09{ USB_DEVICE(FTDI_VID, FTDI_8U2232C_PID) ,
-+=09{ USB_DEVICE(FTDI_VID, FTDI_8U2232C_PID),
- =09=09.driver_info =3D (kernel_ulong_t)&ftdi_8u2232c_quirk },
- =09{ USB_DEVICE(FTDI_VID, FTDI_4232H_PID) },
- =09{ USB_DEVICE(FTDI_VID, FTDI_232H_PID) },
-@@ -1143,6 +1143,7 @@ static unsigned short int ftdi_232am_baud_base_to_div=
-isor(int baud, int base)
- =09unsigned short int divisor;
- =09/* divisor shifted 3 bits to the left */
- =09int divisor3 =3D DIV_ROUND_CLOSEST(base, 2 * baud);
-+
- =09if ((divisor3 & 0x7) =3D=3D 7)
- =09=09divisor3++; /* round x.7/8 up to x+1 */
- =09divisor =3D divisor3 >> 3;
-@@ -1160,7 +1161,7 @@ static unsigned short int ftdi_232am_baud_base_to_div=
-isor(int baud, int base)
-=20
- static unsigned short int ftdi_232am_baud_to_divisor(int baud)
- {
--=09 return ftdi_232am_baud_base_to_divisor(baud, 48000000);
-+=09return ftdi_232am_baud_base_to_divisor(baud, 48000000);
- }
-=20
- static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
-@@ -1169,6 +1170,7 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, =
-int base)
- =09u32 divisor;
- =09/* divisor shifted 3 bits to the left */
- =09int divisor3 =3D DIV_ROUND_CLOSEST(base, 2 * baud);
-+
- =09divisor =3D divisor3 >> 3;
- =09divisor |=3D (u32)divfrac[divisor3 & 0x7] << 14;
- =09/* Deal with special cases for highest baud rates. */
-@@ -1181,7 +1183,7 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, =
-int base)
-=20
- static u32 ftdi_232bm_baud_to_divisor(int baud)
- {
--=09 return ftdi_232bm_baud_base_to_divisor(baud, 48000000);
-+=09return ftdi_232bm_baud_base_to_divisor(baud, 48000000);
- }
-=20
- static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
-@@ -1211,7 +1213,7 @@ static u32 ftdi_2232h_baud_base_to_divisor(int baud, =
-int base)
-=20
- static u32 ftdi_2232h_baud_to_divisor(int baud)
- {
--=09 return ftdi_2232h_baud_base_to_divisor(baud, 120000000);
-+=09return ftdi_2232h_baud_base_to_divisor(baud, 120000000);
- }
-=20
- #define set_mctrl(port, set)=09=09update_mctrl((port), (set), 0)
-@@ -1657,6 +1659,7 @@ static ssize_t latency_timer_show(struct device *dev,
- {
- =09struct usb_serial_port *port =3D to_usb_serial_port(dev);
- =09struct ftdi_private *priv =3D usb_get_serial_port_data(port);
-+
- =09if (priv->flags & ASYNC_LOW_LATENCY)
- =09=09return sprintf(buf, "1\n");
- =09else
-@@ -2194,6 +2197,7 @@ static int ftdi_probe(struct usb_serial *serial, cons=
-t struct usb_device_id *id)
-=20
- =09if (quirk && quirk->probe) {
- =09=09int ret =3D quirk->probe(serial);
-+
- =09=09if (ret !=3D 0)
- =09=09=09return ret;
- =09}
-@@ -2621,8 +2625,8 @@ static bool ftdi_tx_empty(struct usb_serial_port *por=
-t)
-  * WARNING: set_termios calls this with old_termios in kernel space
-  */
- static void ftdi_set_termios(struct tty_struct *tty,
--=09=09             struct usb_serial_port *port,
--=09=09             const struct ktermios *old_termios)
-+=09=09=09     struct usb_serial_port *port,
-+=09=09=09     const struct ktermios *old_termios)
- {
- =09struct usb_device *dev =3D port->serial->dev;
- =09struct device *ddev =3D &port->dev;
-diff --git a/drivers/usb/serial/ftdi_sio.h b/drivers/usb/serial/ftdi_sio.h
-index 55ea61264f91..d671d2194c64 100644
---- a/drivers/usb/serial/ftdi_sio.h
-+++ b/drivers/usb/serial/ftdi_sio.h
-@@ -95,7 +95,7 @@
-  *
-  * The Purge RX and TX buffer commands affect nothing except the buffers
-  *
--   */
-+ */
-=20
- /* FTDI_SIO_SET_BAUDRATE */
- #define FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE 0x40
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_si=
-o_ids.h
-index 52be47d684ea..3d9f6ed97783 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1022,7 +1022,7 @@
-  * Kondo Kagaku Co.Ltd.
-  * http://www.kondo-robot.com/EN
-  */
--#define KONDO_VID =09=090x165c
-+#define KONDO_VID=09=090x165c
- #define KONDO_USB_SERIAL_PID=090x0002
-=20
- /*
-@@ -1446,7 +1446,7 @@
- /*
-  * Accesio USB Data Acquisition products (http://www.accesio.com/)
-  */
--#define ACCESIO_COM4SM_PID =090xD578
-+#define ACCESIO_COM4SM_PID=090xD578
-=20
- /* www.sciencescope.co.uk educational dataloggers */
- #define FTDI_SCIENCESCOPE_LOGBOOKML_PID=09=090xFF18
---=20
-2.34.1
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
