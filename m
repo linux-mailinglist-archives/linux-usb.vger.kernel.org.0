@@ -1,248 +1,205 @@
-Return-Path: <linux-usb+bounces-22030-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22031-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB3FA6D352
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 04:25:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8610EA6D7BB
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 10:43:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5945616DEA8
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 03:25:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD96E3A8F95
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 09:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78050176AA1;
-	Mon, 24 Mar 2025 03:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7921825DAE9;
+	Mon, 24 Mar 2025 09:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cd9aa4K6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H8XtmqNu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBB779F5
-	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 03:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC1D1A0739;
+	Mon, 24 Mar 2025 09:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742786737; cv=none; b=hyZTL9ZA1cu5YTu/fXsejCFoDMqWI56YLTq6J0uKJsdjZrT84TbVTIkdx5Uxyt7etMScOZUt9nQZtUPEQb4c/UDJvHX80h+MVTnM9/AEJcwN/LeY1Zaqv2ZaiUMJaGYvxDhC6H5zr7JgRoCx+8C0nskMq2Vc5EllcOWrlKJpkXY=
+	t=1742809370; cv=none; b=NCPuD+oLS6gUH60N41/4R29BhNSve36H5hSLKODL5LKr4oqkGQ9BmrCSpb7wUHmBXuSnoIoKs09/mwbycEA8s1dOeb2fM2XQhQlyZmUoCpa+cdxL34xaGgLAwCZ5nCQvXeRJRpPpTRJ0pWTZH2wFc4UKo95y6x34kEewVcciqL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742786737; c=relaxed/simple;
-	bh=2RsNrHBPeiTV/KGoBuTX4+LkDKeG1yy/Gh87Th+pOyI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YUKMkilX9dIR09JZsNkkM2Akr7Nb0QFDPNZGmPgYU2Gr61D62dtHtbhGME+jbuEssErNvBGnOxW+RKLJPrsLbnkygki3w2rI2MljBFrwF+1CTA8cqtvZQxeLlopltCns0vrI3ikeyYDLLKPaOEncwrDk9N1UNJoocny8SzjZHCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cd9aa4K6; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5498c5728aeso5724e87.0
-        for <linux-usb@vger.kernel.org>; Sun, 23 Mar 2025 20:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742786733; x=1743391533; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=93QQCUzi6u14I2syzV0j3AvYvvOWRX6mB9orIqjNnIs=;
-        b=cd9aa4K6E6DrJlNTSTy+QSYIBDjx+WwsXym938jeAwaRGOe7+eCFG7ZpqUKgqwjpaL
-         inG24+aepceR3V/5PLs0Ot9d3CGQGVjvC4z5y2yxUx0L1pmPEBWaN2riZvCj/s6WA52Z
-         JJ/nV3qk6Ms8zRwkQYSUsLr6RVkEBf2IeqPZAkBn0f3BVSYzEwP/Bl7OhdqvFiV6xNrs
-         VyzjXGZTBFfGSRACRMcvQ9McOnRsKIATYU4xw2sC+dpm8MyXP2Ee7Tsr8+E8miWzNTFp
-         FjGFqxUx2I4o4T81ueSExArr/nvXUJcTTRYGVSYF/7n7jLzvA2/3UkSw0TP8C0dj0Lrx
-         XqOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742786733; x=1743391533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=93QQCUzi6u14I2syzV0j3AvYvvOWRX6mB9orIqjNnIs=;
-        b=RrB/14epQ9fRX6u1MJbFS9ppXKEmbHeIxVtNLJbr1mbb4NxDt126cJtJEutWxi1IHE
-         2/XGJoUzlnyfu/Qfiel7+3DGqnOPuHzN8mVcLXTLX1tUKsgnthVvDMOhAwD4wm9jK1XD
-         8jUccNOenwjFkWqyt+AgARIt8jvx9cy2riwi5xsebX2cA793GyHFqb1mjAk3DFPh5ls9
-         yB8sM/u6ZdxDYx0uPbAUoOHYBcrJuV3FHldTsCnA6LEgOVUKGh4hgrJlRBfjPFRAhZkH
-         V3As7ML+87Tnw+zbxl/D9w2WeAx3nQ2BkhOwHIDWMuaOi46Z1De3w66T+dsOqZXb9ZGw
-         ENNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Bxk/hW3JYfWx1Xmq1BFuDldtLyI6S/m3Ln4IBXTpTn5CdZd5VpiEZOS0pjR7OHSYh64v1MtM2ug=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqlg2C52KD/k40FXOvBkqX1479b+YE70dP5JY0eajh0nYjEDQP
-	ASR0/eTl+NDba0WeXB/qGJBY1E6yRXdSDZlQKwDayWlJM49dBa4mcdj1nge5Sk3UsoxBmAkNcVu
-	FZ+3MAcTP0QqYQJukcdGNdmDk9LYPLOIMF81c
-X-Gm-Gg: ASbGncvNMPAj8S/ui6WW8dHLAxcIcqgtRPBcQCA0UlZ/f50tuY4JsnlthFbnOvvDKXp
-	rv1gUj48lOZzICAo/X2SlVCGApikXFRlyLsnBReUAXuJPC03nVT23brJGdYMxH/UL/Zopzfc1GA
-	RD0MCd8MGurDkkbxEd9NzuCboapzS5pyqPPIx4l88osdkeuygo0vwo
-X-Google-Smtp-Source: AGHT+IFyLONDsmo4q+s/Se+asT70Fizp6jQ0wtmTB8UY4hyRCcY4MwRiME7C7lDD3pd9NG8mZH/C3OyNJ5NWWIzys4Q=
-X-Received: by 2002:ac2:4c39:0:b0:549:4bc4:d3f7 with SMTP id
- 2adb3069b0e04-54adef08baemr145746e87.5.1742786732985; Sun, 23 Mar 2025
- 20:25:32 -0700 (PDT)
+	s=arc-20240116; t=1742809370; c=relaxed/simple;
+	bh=RFzYTWQ4Y+y7xyQLjsfX2uiUzOqhWOXMh+X8f0EG3qU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B3zwSqJ/+uMcZTggVrIaeg9Z/Ka4KCPfODdOOcy8m0BNrRFZXXwrAuis73LSHnhhqJGiN8Fkg/GmJ+l9hw4RFtYlBK8JtRB4u6eTOVFgc7K3U6p+8NuwFKNYhkJYJINGkEnm+suHvIh7UWcota/sMK6EVMrfByR09ETcVdBeYMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H8XtmqNu; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742809368; x=1774345368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RFzYTWQ4Y+y7xyQLjsfX2uiUzOqhWOXMh+X8f0EG3qU=;
+  b=H8XtmqNuvgjMwN3phNhKX+uo61thrhq5a/DRZooiS80MpS1JCKSxtSCa
+   O7j4IeEWpCyTpVqSF2cMASHqwvd1KBIM3rSISoNovwj/u44oSG0Gd8Y9C
+   +va8b4Pnrhw5c/fSYOyCXm3s3eITejcordVQ10mdM5hU3Ch++FsgDTrbo
+   rkBwaQ6W9voxH0iuwpKEMkojtWEkOEc41NqZyRZaQLH9Fy359/BXcyNqM
+   Dkfj8Tcl+YDhM00bIkPWMBtrC0YRAyX2GCc5TcFM4KI4HobuqAfrYGxDG
+   FLLUIK2F8MRjGFDrNorXwx+s3/ws5FyslZqcoqpMyGKGaMMtVD8ukXZkC
+   w==;
+X-CSE-ConnectionGUID: qe45EVqSQk205Vcdp4rD3A==
+X-CSE-MsgGUID: B7Of/ZifRea6xzTlbd0rcg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="55382463"
+X-IronPort-AV: E=Sophos;i="6.14,271,1736841600"; 
+   d="scan'208";a="55382463"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 02:42:47 -0700
+X-CSE-ConnectionGUID: M0YvMUT/Qn+YFACk0zF6QA==
+X-CSE-MsgGUID: NEojajlIR3Owy/e1Z2cKog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,271,1736841600"; 
+   d="scan'208";a="123714017"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa009.jf.intel.com with SMTP; 24 Mar 2025 02:42:44 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Mar 2025 11:42:43 +0200
+Date: Mon, 24 Mar 2025 11:42:43 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: typec: class: Fix NULL pointer access
+Message-ID: <Z-EpEyEAQnmIzHoS@kuha.fi.intel.com>
+References: <20250321143728.4092417-1-akuchynski@chromium.org>
+ <20250321143728.4092417-2-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250320135734.3778611-1-khtsai@google.com> <20250321220346.wwt3vfwmrcq3qwzj@synopsys.com>
-In-Reply-To: <20250321220346.wwt3vfwmrcq3qwzj@synopsys.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Mon, 24 Mar 2025 11:25:06 +0800
-X-Gm-Features: AQ5f1Jqct093Fmcmrd_6vJLJFARrA4kA9RxtRRr-REHnftM_9zxYRo89GNiEeME
-Message-ID: <CAKzKK0o__XbUhbFAn-uh-r-dLDCVOUr4JDYGDYnM2K0v_FrWPw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Abort suspend on soft disconnect failure
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250321143728.4092417-2-akuchynski@chromium.org>
 
-On Sat, Mar 22, 2025 at 6:03=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Thu, Mar 20, 2025, Kuen-Han Tsai wrote:
-> > When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
-> > going with the suspend, resulting in a period where the power domain is
-> > off, but the gadget driver remains connected.  Within this time frame,
-> > invoking vbus_event_work() will cause an error as it attempts to access
-> > DWC3 registers for endpoint disabling after the power domain has been
-> > completely shut down.
-> >
-> > Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
-> > controller and proceeds with a soft connect.
-> >
-> > CC: stable@vger.kernel.org
->
-> Please add Fixes tag.
+On Fri, Mar 21, 2025 at 02:37:26PM +0000, Andrei Kuchynski wrote:
+> Concurrent calls to typec_partner_unlink_device can lead to a NULL pointer
+> dereference. This patch adds a mutex to protect USB device pointers and
+> prevent this issue. The same mutex protects both the device pointers and
+> the partner device registration.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 59de2a56d127 ("usb: typec: Link enumerated USB devices with Type-C partner")       
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 
-Sent out v2 version of the patch.
-https://lore.kernel.org/linux-usb/20250324031758.865242-1-khtsai@google.com=
-/
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
->
-> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > ---
-> >
-> > Kernel panic - not syncing: Asynchronous SError Interrupt
-> > Workqueue: events vbus_event_work
-> > Call trace:
-> >  dump_backtrace+0xf4/0x118
-> >  show_stack+0x18/0x24
-> >  dump_stack_lvl+0x60/0x7c
-> >  dump_stack+0x18/0x3c
-> >  panic+0x16c/0x390
-> >  nmi_panic+0xa4/0xa8
-> >  arm64_serror_panic+0x6c/0x94
-> >  do_serror+0xc4/0xd0
-> >  el1h_64_error_handler+0x34/0x48
-> >  el1h_64_error+0x68/0x6c
-> >  readl+0x4c/0x8c
-> >  __dwc3_gadget_ep_disable+0x48/0x230
-> >  dwc3_gadget_ep_disable+0x50/0xc0
-> >  usb_ep_disable+0x44/0xe4
-> >  ffs_func_eps_disable+0x64/0xc8
-> >  ffs_func_set_alt+0x74/0x368
-> >  ffs_func_disable+0x18/0x28
-> >  composite_disconnect+0x90/0xec
-> >  configfs_composite_disconnect+0x64/0x88
-> >  usb_gadget_disconnect_locked+0xc0/0x168
-> >  vbus_event_work+0x3c/0x58
-> >  process_one_work+0x1e4/0x43c
-> >  worker_thread+0x25c/0x430
-> >  kthread+0x104/0x1d4
-> >  ret_from_fork+0x10/0x20
-> >
-> > ---
-> >  drivers/usb/dwc3/core.c   | 10 +++++++---
-> >  drivers/usb/dwc3/gadget.c | 22 +++++++++-------------
-> >  2 files changed, 16 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 66a08b527165..d64d17677bdb 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -2387,7 +2387,7 @@ static int dwc3_core_init_for_resume(struct dwc3 =
-*dwc)
-> >  static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >  {
-> >       u32 reg;
-> > -     int i;
-> > +     int i, ret;
->
-> Minor nit: Can we keep declarations in separate lines.
+> ---
+>  drivers/usb/typec/class.c | 15 +++++++++++++--
+>  drivers/usb/typec/class.h |  1 +
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 9c76c3d0c6cf..eadb150223f8 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1052,6 +1052,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  		partner->usb_mode = USB_MODE_USB3;
+>  	}
+>  
+> +	mutex_lock(&port->partner_link_lock);
+>  	ret = device_register(&partner->dev);
+>  	if (ret) {
+>  		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
+> @@ -1063,6 +1064,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  		typec_partner_link_device(partner, port->usb2_dev);
+>  	if (port->usb3_dev)
+>  		typec_partner_link_device(partner, port->usb3_dev);
+> +	mutex_unlock(&port->partner_link_lock);
+>  
+>  	return partner;
+>  }
+> @@ -1083,12 +1085,14 @@ void typec_unregister_partner(struct typec_partner *partner)
+>  
+>  	port = to_typec_port(partner->dev.parent);
+>  
+> +	mutex_lock(&port->partner_link_lock);
+>  	if (port->usb2_dev)
+>  		typec_partner_unlink_device(partner, port->usb2_dev);
+>  	if (port->usb3_dev)
+>  		typec_partner_unlink_device(partner, port->usb3_dev);
+>  
+>  	device_unregister(&partner->dev);
+> +	mutex_unlock(&port->partner_link_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(typec_unregister_partner);
+>  
+> @@ -2041,10 +2045,11 @@ static struct typec_partner *typec_get_partner(struct typec_port *port)
+>  static void typec_partner_attach(struct typec_connector *con, struct device *dev)
+>  {
+>  	struct typec_port *port = container_of(con, struct typec_port, con);
+> -	struct typec_partner *partner = typec_get_partner(port);
+> +	struct typec_partner *partner;
+>  	struct usb_device *udev = to_usb_device(dev);
+>  	enum usb_mode usb_mode;
+>  
+> +	mutex_lock(&port->partner_link_lock);
+>  	if (udev->speed < USB_SPEED_SUPER) {
+>  		usb_mode = USB_MODE_USB2;
+>  		port->usb2_dev = dev;
+> @@ -2053,18 +2058,22 @@ static void typec_partner_attach(struct typec_connector *con, struct device *dev
+>  		port->usb3_dev = dev;
+>  	}
+>  
+> +	partner = typec_get_partner(port);
+>  	if (partner) {
+>  		typec_partner_set_usb_mode(partner, usb_mode);
+>  		typec_partner_link_device(partner, dev);
+>  		put_device(&partner->dev);
+>  	}
+> +	mutex_unlock(&port->partner_link_lock);
+>  }
+>  
+>  static void typec_partner_deattach(struct typec_connector *con, struct device *dev)
+>  {
+>  	struct typec_port *port = container_of(con, struct typec_port, con);
+> -	struct typec_partner *partner = typec_get_partner(port);
+> +	struct typec_partner *partner;
+>  
+> +	mutex_lock(&port->partner_link_lock);
+> +	partner = typec_get_partner(port);
+>  	if (partner) {
+>  		typec_partner_unlink_device(partner, dev);
+>  		put_device(&partner->dev);
+> @@ -2074,6 +2083,7 @@ static void typec_partner_deattach(struct typec_connector *con, struct device *d
+>  		port->usb2_dev = NULL;
+>  	else if (port->usb3_dev == dev)
+>  		port->usb3_dev = NULL;
+> +	mutex_unlock(&port->partner_link_lock);
+>  }
+>  
+>  /**
+> @@ -2614,6 +2624,7 @@ struct typec_port *typec_register_port(struct device *parent,
+>  
+>  	ida_init(&port->mode_ids);
+>  	mutex_init(&port->port_type_lock);
+> +	mutex_init(&port->partner_link_lock);
+>  
+>  	port->id = id;
+>  	port->ops = cap->ops;
+> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+> index b3076a24ad2e..db2fe96c48ff 100644
+> --- a/drivers/usb/typec/class.h
+> +++ b/drivers/usb/typec/class.h
+> @@ -59,6 +59,7 @@ struct typec_port {
+>  	enum typec_port_type		port_type;
+>  	enum usb_mode			usb_mode;
+>  	struct mutex			port_type_lock;
+> +	struct mutex			partner_link_lock;
+>  
+>  	enum typec_orientation		orientation;
+>  	struct typec_switch		*sw;
+> -- 
+> 2.49.0.395.g12beb8f557-goog
 
-Fixed.
-
->
-> >
-> >       if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
-> >               dwc->susphy_state =3D (dwc3_readl(dwc->regs, DWC3_GUSB2PH=
-YCFG(0)) &
-> > @@ -2406,7 +2406,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
-pm_message_t msg)
-> >       case DWC3_GCTL_PRTCAP_DEVICE:
-> >               if (pm_runtime_suspended(dwc->dev))
-> >                       break;
-> > -             dwc3_gadget_suspend(dwc);
-> > +             ret =3D dwc3_gadget_suspend(dwc);
-> > +             if (ret)
-> > +                     return ret
-> >               synchronize_irq(dwc->irq_gadget);
-> >               dwc3_core_exit(dwc);
-> >               break;
-> > @@ -2441,7 +2443,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
-pm_message_t msg)
-> >                       break;
-> >
-> >               if (dwc->current_otg_role =3D=3D DWC3_OTG_ROLE_DEVICE) {
-> > -                     dwc3_gadget_suspend(dwc);
-> > +                     ret =3D dwc3_gadget_suspend(dwc);
-> > +                     if (ret)
-> > +                             return ret;
-> >                       synchronize_irq(dwc->irq_gadget);
-> >               }
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 89a4dc8ebf94..316c1589618e 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
-> >       int ret;
-> >
-> >       ret =3D dwc3_gadget_soft_disconnect(dwc);
-> > -     if (ret)
-> > -             goto err;
-> > -
-> > -     spin_lock_irqsave(&dwc->lock, flags);
-> > -     if (dwc->gadget_driver)
-> > -             dwc3_disconnect_gadget(dwc);
-> > -     spin_unlock_irqrestore(&dwc->lock, flags);
-> > -
-> > -     return 0;
-> > -
-> > -err:
-> >       /*
-> >        * Attempt to reset the controller's state. Likely no
-> >        * communication can be established until the host
-> >        * performs a port reset.
-> >        */
-> > -     if (dwc->softconnect)
-> > +     if (ret && dwc->softconnect) {
-> >               dwc3_gadget_soft_connect(dwc);
-> > +             return ret;
-> > +     }
-> >
-> > -     return ret;
-> > +     spin_lock_irqsave(&dwc->lock, flags);
-> > +     if (dwc->gadget_driver)
-> > +             dwc3_disconnect_gadget(dwc);
-> > +     spin_unlock_irqrestore(&dwc->lock, flags);
-> > +
-> > +     return 0;
-> >  }
-> >
-> >  int dwc3_gadget_resume(struct dwc3 *dwc)
-> > --
-> > 2.49.0.395.g12beb8f557-goog
-> >
->
-> The rest looks good.
->
-> Thanks,
-> Thinh
-
-Thanks,
-Kuen-Han
+-- 
+heikki
 
