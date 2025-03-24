@@ -1,105 +1,161 @@
-Return-Path: <linux-usb+bounces-22043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 537EDA6E189
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:51:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8CCA6E220
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:18:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C77DF172F0F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 17:48:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4EB188B180
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4DB264A75;
-	Mon, 24 Mar 2025 17:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YlS907EE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FE126463E;
+	Mon, 24 Mar 2025 18:18:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869E9263C8A;
-	Mon, 24 Mar 2025 17:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8AB210FB
+	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 18:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742837982; cv=none; b=G0MhiFZN20ZSHJBfO6zrfJzdYEhJi0KV3PjL9l4pjxpi9iKwS4X+0/OBEzJub1WH5QmCTRQB0SSEfqJRMHYY4d1q1qVq1mc+m9bwFji+SrC0pIJXKa1hlsIgYWN3umK1mcFKzdUkz9t6jJEF4JhMzpelq13vE0wvznOfmtdDwA8=
+	t=1742840312; cv=none; b=ShwCBYp2b2JAIY3GjAdIpDwlMdagnyk4Q0uvAWQhteyu147vuJLrGVHjTInfV8pYOMG+pbu5HtBVY578D0yCcC7RiDFhng2sevP2PnHoatySFAfBFzhwamz+cUApS9zOavdpDDJgcmmXmo+n5JcoL44msmgCpkXkF6mjrp5sdfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742837982; c=relaxed/simple;
-	bh=TpBBvCJ5ZhLUY72PJ/tPDIoeVdpnOq59e3Sk63JXbz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rxw6zboQFJeUwDc66JW0WxBOEmK7lWVezKwvxVdWI2fISnvD6HxiY10FaW0eT/tNr8wP2mzcY82kBGaYpDQxswg+ZnLRGQJEWzv+CakBGPoPLTjGZjIJrQIjPB7KmhBuZJNjslCc93UpzXVY592J79JorXHlanXYq6izWUoEfOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YlS907EE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE38C4CEDD;
-	Mon, 24 Mar 2025 17:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742837982;
-	bh=TpBBvCJ5ZhLUY72PJ/tPDIoeVdpnOq59e3Sk63JXbz4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YlS907EEgEzOO9RyiCaA1JjXWU9YxgwXxSFcoAckkje+zIdNuclrAT+2fx1M9FPyR
-	 o2UtmQENlyQ1Z6S8HaEhSW0xYf0/RpqoeHokl5PQLHXQESQ47WX53yx2ounkjNq0Le
-	 iVg3DaCLoURTWxzH5xy2BbqEri1VBi8MDiiF89o0=
-Date: Mon, 24 Mar 2025 10:38:19 -0700
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Dominik Karol =?utf-8?Q?Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Code style cleanup
-Message-ID: <2025032402-slideshow-storewide-2230@gregkh>
-References: <20250324163358.134541-1-dominik.karol.piatkowski@protonmail.com>
+	s=arc-20240116; t=1742840312; c=relaxed/simple;
+	bh=btgeIGnIUoCIck9+wS+7c/hFv1g6wYgJLfeKG87NVzA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RMtMGczBLlOOPAGoCVlbdBdfPPsjd4r007yzm3fkHIhYYyf5FUocatTNrVzz0h3sEk907pcb7jnGAZHTuIYBTJhwWpe34MK0efOvCb4RUj6yaPDzvJgGVN9bQO6WyRqsE7h7ZESrEV+nL40cnciW2aGHXNaH5ykNYIefhEAaTus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d586b968cfso91251855ab.1
+        for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 11:18:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742840309; x=1743445109;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pBNLf/d9pxK/fHTPY4JvsITkXOFpMyYfD4pamBhwHRA=;
+        b=ZVHmv0U7tHU48CbFFq5DW8pOOlKAavLnsT1fi5eHft9ZJMQ2nKWgn1Dlfx1W6ZnT41
+         Kpd/mO32vIJF5JpmSPiUKH8kAz1WEaPWXJtBfUjKyWwJJZNSzYcljKQCnJFghizMPcdc
+         nIjquwoLlgnZDJsF1qok7GyGkfAGUYpd+hBHSrR1CvnjTlwYsY7kPz4l7dnW6H3xX5pu
+         rrJ4rrsdR1FBOW9u8jP9vSD/esRqDXMgQPizT0a9Cxtx6IB9LkcT5Sbk8IJKLLZrQnX/
+         SYybHbrL6DqfBN5axCrE/sEqNuY6/BAylY/EQcT9M5ykzH/x1Jsuhtn9StweHBtIOFf/
+         j5bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKKia432mX+0f9coCHxTrgPlq0GbNhI66akQrw4HCITdyWCOkiHJN+pDU7vee1Or4jjc0KlNDw9PA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxX9zV9ACxWQWBBnlADIL9RwPovREhNBBZBNxaSXj83lHDP9Tju
+	x/BRNt88c+s1GxY1xsmOHheFFdtFwhT9iYWa3pNjVMt5bw0LS8OOQysYO3uD4caHtQne+OgThLP
+	5eEP3ly/fwsFcM3YDdDA3jcJhypfNu3mRCtW6Yu7Lhbg55YD4RLNDKB0=
+X-Google-Smtp-Source: AGHT+IHAO6nfo755uIRQ2cGgnPp5lBiB6CmROXZt0tvLmT1MEN9v/EwZsmiYxrgD2wI4hYDXTJjrhTrIXK4dSioxL/HqgQhiF2Fe
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250324163358.134541-1-dominik.karol.piatkowski@protonmail.com>
+X-Received: by 2002:a05:6e02:174c:b0:3d4:3aba:e5ce with SMTP id
+ e9e14a558f8ab-3d5961bc1ffmr145580605ab.20.1742840309399; Mon, 24 Mar 2025
+ 11:18:29 -0700 (PDT)
+Date: Mon, 24 Mar 2025 11:18:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
+Subject: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+From: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 24, 2025 at 04:34:50PM +0000, Dominik Karol Piątkowski wrote:
-> Fix the following code style issues:
-> - Space before comma
-> - Missing blank line after declarations
-> - Superfluous space before statement
-> - Spaces used for indentation instead of tabs
-> - Misaligned block comment
-> - Space before tabs
-> 
-> Signed-off-by: Dominik Karol Piątkowski <dominik.karol.piatkowski@protonmail.com>
-> ---
->  drivers/usb/serial/ftdi_sio.c     | 16 ++++++++++------
->  drivers/usb/serial/ftdi_sio.h     |  2 +-
->  drivers/usb/serial/ftdi_sio_ids.h |  4 ++--
->  3 files changed, 13 insertions(+), 9 deletions(-)
+Hello,
 
-Hi,
+syzbot found the following issue on:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+HEAD commit:    5fc319360819 Merge tag 'net-6.14-rc8' of git://git.kernel...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15445e98580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27515cfdbafbb90d
+dashboard link: https://syzkaller.appspot.com/bug?extid=c38e5e60d0041a99dbf5
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ea4c4c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15435004580000
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1c90f739fd77/disk-5fc31936.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1949bfaaa2fe/vmlinux-5fc31936.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/dc1e147ca5d4/bzImage-5fc31936.xz
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000f80 doesn't match bRequestType c0
+WARNING: CPU: 1 PID: 5901 at drivers/usb/core/urb.c:413 usb_submit_urb+0x11d9/0x18c0 drivers/usb/core/urb.c:411
+Modules linked in:
+CPU: 1 UID: 0 PID: 5901 Comm: syz-executor773 Not tainted 6.14.0-rc7-syzkaller-00137-g5fc319360819 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
+RIP: 0010:usb_submit_urb+0x11d9/0x18c0 drivers/usb/core/urb.c:411
+Code: 48 8b 4c 24 08 0f b6 04 01 84 c0 0f 85 52 05 00 00 45 0f b6 07 48 c7 c7 e0 4b d1 8c 4c 89 f6 48 89 da 89 e9 e8 e8 9b 09 fa 90 <0f> 0b 90 90 e9 c9 f3 ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 57
+RSP: 0018:ffffc900041cf808 EFLAGS: 00010246
+RAX: fe52edbd68e0e800 RBX: ffff888021693020 RCX: ffff8880267d5a00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000080000f80 R08: ffffffff81819e52 R09: 1ffff92000839e9c
+R10: dffffc0000000000 R11: fffff52000839e9d R12: ffff88802a23f0a8
+R13: ffff88801e6cfa00 R14: ffffffff8cd1b600 R15: ffff888033956e60
+FS:  0000555580b9b380(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa8c1abb0f0 CR3: 00000000282c0000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x113/0x520 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x2b1/0x4c0 drivers/usb/core/message.c:154
+ dib0700_ctrl_rd drivers/media/usb/dvb-usb/dib0700_core.c:95 [inline]
+ dib0700_i2c_xfer_legacy drivers/media/usb/dvb-usb/dib0700_core.c:315 [inline]
+ dib0700_i2c_xfer+0xc53/0x1060 drivers/media/usb/dvb-usb/dib0700_core.c:361
+ __i2c_transfer+0x866/0x2220
+ i2c_transfer+0x271/0x3b0 drivers/i2c/i2c-core-base.c:2315
+ i2cdev_ioctl_rdwr+0x452/0x710 drivers/i2c/i2c-dev.c:306
+ i2cdev_ioctl+0x759/0x9f0 drivers/i2c/i2c-dev.c:467
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:906 [inline]
+ __se_sys_ioctl+0xf5/0x170 fs/ioctl.c:892
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fa8c1a448f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc66aa7058 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa8c1a448f9
+RDX: 00002000000004c0 RSI: 0000000000000707 RDI: 0000000000000004
+RBP: 000000000002ca0e R08: 00232d6332692f76 R09: 0000000000000006
+R10: 000000000000001f R11: 0000000000000246 R12: 00007ffc66aa706c
+R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
 
-thanks,
 
-greg k-h's patch email bot
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
