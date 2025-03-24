@@ -1,113 +1,184 @@
-Return-Path: <linux-usb+bounces-22048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07227A6E3D6
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 20:52:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3B1DA6E417
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 21:20:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F18D16EE5D
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:52:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E134189352F
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 20:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04C21A5BAC;
-	Mon, 24 Mar 2025 19:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB691D7E2F;
+	Mon, 24 Mar 2025 20:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LYwrngq6"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JH2b0Crs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8350719E97A;
-	Mon, 24 Mar 2025 19:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D581A3156;
+	Mon, 24 Mar 2025 20:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742845936; cv=none; b=gHwWBsLuupBcKr1GSXWq0u3fTd4zle1xBfoqL+VX7jmUiI0i1rlAqaF3TQBbj4gIKjm8MhJJo+drkeL2hxDW2jEhs+c+fQ1lnqhhtvp0Mj9UrLkZdFQAyDENdsXx9xA8AjQiC6/Cm53nGqTiAQWar070lZjzI8ZdWhqCWt9dyOg=
+	t=1742847574; cv=none; b=ioHWmdt80Z+W1vy38H9EIYyMAIo03QD/XtbkoetzVgRF9qqwAptccIm5psIW85CXrqCIEjgkcbT0mtsUU/HHrTNpXWuX0l4H52j6GAdLAVS+t263/QwNsqgbtIwFrD16/Hdpv/l1l6cQ6XV+u4KNrFKWP2V4Looks5eBMX6AMtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742845936; c=relaxed/simple;
-	bh=n0Y3b7HRTtpTKyBWfhkTEuUsYWA03Tme1XcvVc3hf1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tqv8+NpkPWBF0/wYPkztlX+VY1DVPyBGUWF6AfhVELbidbKnc1kx6jkwUZD8cGJSGXShcLlvwSIDRMhmahCRzNewYKsUeJpOTyeBiLv3JL3Nt+PiiZB7ehO2atUZ7BGW4iKJ+WRRN9Q7exy8kGKAKiAU/bzPXXbkgIe6UyZZe7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LYwrngq6; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742845935; x=1774381935;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n0Y3b7HRTtpTKyBWfhkTEuUsYWA03Tme1XcvVc3hf1c=;
-  b=LYwrngq6CvUuziy/5dBYlPVrDrn4sVfQd5LQ/qB6vsw+1QFahBWj1Yl9
-   1F5zoobNoU8sTwsQUYQss3eBrO0iPSTxpYg9ovFE1FpsLERJLZqeTYT9F
-   4E7Xp/0HvN9Rdt1VpMH+sJvZZf38AVIGwvn6A2jvAlApDk7Zd70yB9bBl
-   vFTTkQZNxNCd88Oh89ZW3pg1AZqlr+0o7GwTmC5P0ILD8zgwnzhw1xQGk
-   bRgg2Vzfi6wCN2BWzdkOXnCVYisX1KVH7XcFgpshTaco8sDtSN6pwXRwH
-   I/vms3inaNsjC/S+plBiQoHyHT6+BJR0+A3tDopi4Xf0LKTnYhxo/C9Ob
-   A==;
-X-CSE-ConnectionGUID: 5G0pdwb5RhyOEAqHx5L5Tw==
-X-CSE-MsgGUID: HQJcK1usRpiel6DcGlw2JA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11383"; a="61596024"
-X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
-   d="scan'208";a="61596024"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 12:52:13 -0700
-X-CSE-ConnectionGUID: J2q0b5/NQZe3MYkt1W+HnA==
-X-CSE-MsgGUID: ed+exVfURjqFNe/cQArszg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
-   d="scan'208";a="123957514"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 12:52:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1twnqC-00000005YFF-2EwL;
-	Mon, 24 Mar 2025 21:52:08 +0200
-Date: Mon, 24 Mar 2025 21:52:08 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH net v3 1/2] net: =?utf-8?Q?phy?=
- =?utf-8?Q?=3A_Introduce_PHY=5FID=5FSIZE_?= =?utf-8?B?4oCU?= minimum size for
- PHY ID string
-Message-ID: <Z-G36MdYl2og7lxb@smile.fi.intel.com>
-References: <20250324144751.1271761-1-andriy.shevchenko@linux.intel.com>
- <20250324144751.1271761-2-andriy.shevchenko@linux.intel.com>
- <Z-F07j7tlez_94aK@shell.armlinux.org.uk>
- <Z-GAzlPEVR8p5l7-@smile.fi.intel.com>
- <Z-GYh7tWq6dNDDqt@shell.armlinux.org.uk>
+	s=arc-20240116; t=1742847574; c=relaxed/simple;
+	bh=Eu448yCoTvdB0zDM/J9J/XYR56g9WuEoLLaZRxFAujw=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=FYzVpr7UMwUd9q4Da3YgcUmVySB0gRdr6nNgHCnXVWTEOxg9NvO5JzE0Olt5Sij5yHZDaUxrUv6a2an/86BUrrCk1QEkpffvcWsxcFpbpgtibQtD3gsfZtk5lWel0UdgXSLIMjGUdpwCL4shUn8foBtFZWBy8+LOyBA1e8pt1Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JH2b0Crs; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52OIXI8p030746;
+	Mon, 24 Mar 2025 20:19:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=CnBBuAgtDyQ64pB4bRbFXI
+	6lot2wxW1oL7D98iyHw3c=; b=JH2b0CrsDqnXQ+/4PrexZ4Vr/ph/0I/rJErYb0
+	/ukwSDwiz9YN48puHvoq2bhiwLMUha9piTnkYhutBm9zz7qz4TRPOJuq/tdwbUHY
+	qafhCCmiqHr8RvrfCb06I5MZAk6KQz1vSUM/pigTl/8zohtTTMk7m4Ln5qkTJFP1
+	PlbtfHeQ+K4yI51dYfi2cWSc8/OzXdbUdVW0POcoCcOs62hVNGMjsXM/y95+rHLx
+	P7upLX9oPAiQ+GWRY/M7JTJt858Vzziokan8/iP0wpIt4ekKwas97urrp0+9iKkD
+	9HMXxQEz91pwlwksmZjjuPiZZg/0OMa9mKrI8HMUnyxyG5NQ==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45hmt05g7t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 20:19:17 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52OKJGBc027841
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 20:19:16 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 24 Mar 2025 13:19:16 -0700
+From: Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v3 00/10] phy: qcom: Introduce USB support for SM8750
+Date: Mon, 24 Mar 2025 13:18:28 -0700
+Message-ID: <20250324-sm8750_usb_master-v3-0-13e096dc88fd@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z-GYh7tWq6dNDDqt@shell.armlinux.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABS+4WcC/23NQQ6CMBQE0KuQrq1pP6WgK+9hDKntr3QBaAuNh
+ nB3Cy6ICcuZZN5MJKB3GMg5m4jH6ILruxTyQ0Z0o7oHUmdSJsBAcICchrYqC1aP4V63KgzoqYV
+ SoSmtNIKRtHt6tO69mtfbL3t8jYketrJxYej9Z/2NfGmXi4JxvncROWWUnZRFbjQUIC7J067TR
+ 923ZPEibEbOxJ4ByVDyVClAWSGT/8Y8z1/yJldbDQEAAA==
+X-Change-ID: 20241223-sm8750_usb_master-f27aed7f6d40
+To: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Dmitry Baryshkov <lumag@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1742847556; l=3117;
+ i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
+ bh=Eu448yCoTvdB0zDM/J9J/XYR56g9WuEoLLaZRxFAujw=;
+ b=2ljSCJPAHPnjnB7la8uyzgz+JI5tLyS0fd8DLLa99dZwdDPUGm4frGL4Q5lbRADNs3DTSQaK1
+ tiDkxN5Z049DM93nL2YgqyGmAFXGMWnflBSLE/TGJGx9mh0FT3zcIr+
+X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
+ pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0PRR3Cqstcjj5gcCTJh41gRGbD8wW7XF
+X-Proofpoint-ORIG-GUID: 0PRR3Cqstcjj5gcCTJh41gRGbD8wW7XF
+X-Authority-Analysis: v=2.4 cv=aqGyCTZV c=1 sm=1 tr=0 ts=67e1be45 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=3H110R4YSZwA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=1rs2XOWFaH1SNEFhMLQA:9
+ a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-24_07,2025-03-21_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 suspectscore=0 mlxscore=0 phishscore=0 adultscore=0
+ spamscore=0 clxscore=1011 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503240143
 
-On Mon, Mar 24, 2025 at 05:38:15PM +0000, Russell King (Oracle) wrote:
-> On Mon, Mar 24, 2025 at 05:57:02PM +0200, Andy Shevchenko wrote:
-> > On Mon, Mar 24, 2025 at 03:06:22PM +0000, Russell King (Oracle) wrote:
+Add support for the PHYs and controllers used for USB on SM8750 SoCs.
 
-...
+---
+Changes in v3:
+- Split platform DTs into separate commits.
+- Fixed up M31 eUSB2 PHY driver with feedback received.
+- Reordered DT properties based on feedback.
+- Rewrote commit message for enabling EUSB driver.
+- Link to v2: https://lore.kernel.org/r/20250304-sm8750_usb_master-v2-0-a698a2e68e06@quicinc.com
 
-> > And just a bit of offtopic, can you look at
-> > 20250312194921.103004-1-andriy.shevchenko@linux.intel.com
-> > and comment / apply?
-> 
-> That needs to go into my patch system please. Thanks.
+Changes in v2:
+- Added new QMP PHY register definitions for v8 based QMP phys.
+- Made changes to clean up some code in the M31 eUSB2 PHY driver based
+on feedback received.
+- Added bulk regulator operations in M31 eUSB2 PHY, to ensure that
+both the vdd and vdda12 regulators are properly voted for.
+- Removed external references to other dt bindings in M31 example for
+the DT bindings change.
+- Split DT patches between SoC and plaform changes, as well as the
+PHY subsystem Kconfig changes when introducing the M31 eUSB2 PHY.
+- Added orientation switch and port definitions in the DT changes.EDITME: describe what is new in this series revision.
+- Link to v1: https://lore.kernel.org/r/20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com
 
-Ah, cool, just made it to appear there.
+---
+Melody Olvera (1):
+      arm64: defconfig: Add M31 eUSB2 PHY config for SM8750
 
+Wesley Cheng (9):
+      dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add SM8750 to QMP PHY
+      dt-bindings: phy: Add the M31 based eUSB2 PHY bindings
+      dt-bindings: usb: qcom,dwc3: Add SM8750 compatible
+      phy: qcom: qmp-combo: Add new PHY sequences for SM8750
+      phy: qcom: Update description for QCOM based eUSB2 repeater
+      phy: qcom: Add M31 based eUSB2 PHY driver
+      arm64: dts: qcom: sm8750: Add USB support to SM8750 SoCs
+      arm64: dts: qcom: sm8750: Add USB support for SM8750 MTP platform
+      arm64: dts: qcom: sm8750: Add USB support for SM8750 QRD platform
+
+ .../bindings/phy/qcom,m31-eusb2-phy.yaml           |  79 ++++++
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml         |   2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+ arch/arm64/boot/dts/qcom/sm8750-mtp.dts            |  24 ++
+ arch/arm64/boot/dts/qcom/sm8750-qrd.dts            |  24 ++
+ arch/arm64/boot/dts/qcom/sm8750.dtsi               | 166 ++++++++++++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/phy/qualcomm/Kconfig                       |  16 +-
+ drivers/phy/qualcomm/Makefile                      |   1 +
+ drivers/phy/qualcomm/phy-qcom-m31-eusb2.c          | 297 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c          | 221 +++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v8.h     |  38 +++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v8.h         |  32 +++
+ drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v8.h |  64 +++++
+ .../phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v8.h    |  68 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h                |   5 +
+ 16 files changed, 1038 insertions(+), 3 deletions(-)
+---
+base-commit: 882a18c2c14fc79adb30fe57a9758283aa20efaa
+change-id: 20241223-sm8750_usb_master-f27aed7f6d40
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Melody Olvera <quic_molvera@quicinc.com>
 
 
