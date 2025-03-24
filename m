@@ -1,211 +1,115 @@
-Return-Path: <linux-usb+bounces-22033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19152A6DA57
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 13:52:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C3DA6DD58
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 15:48:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 761757A738A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 12:51:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42B5C188F299
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 14:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37AD225F7BC;
-	Mon, 24 Mar 2025 12:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35DC25FA2B;
+	Mon, 24 Mar 2025 14:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NP+xK7Fw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h/XXlTPj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC0325EF9A
-	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 12:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C428502B1;
+	Mon, 24 Mar 2025 14:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742820709; cv=none; b=RWfYkQS6VCeV1EYFG78UNy+Ezos+poMPPXejx0yCWdA6RAfM+ZpddcbYz0IVRKlrVhPkU356/qiUx6TDcNowFzFedVCjMcMOaGWCymOtQr2oovA/OuSgilOFh3Vr7a4ZKjQNRhZOCSXhTkj5zGhrLpgOVoZk4MvG0pBtPo/81fQ=
+	t=1742827679; cv=none; b=jB1PqE4J64BdCtpRNnc4nFjLQ63CpaenLi7oibpu9bM3YdPLIcJLE8a8b28u/yByX+kmcExHqslMVoBh8u8s23Pc1c/JSuipDK444OT3xHCArSy9H86LbVbeSJQETKx99HE+5orqTuvl4uUQNnzJBgEovueY2C5B8Ar8uY+Dc54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742820709; c=relaxed/simple;
-	bh=5xx5FlSKyFLZJzr6V7Uye9kG+TXRdex/gunTUYdSsNM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HwBPu83tMDOsIvu2pOMIsvihmwanWNrxTErRgIg9yJq8qqOjkhpOQg6nCBBSeIVCUC+HxMNTxngQR9SfAGQ4OJh3ijDY1hjOEOKAqiGOY3eLGM9IkgQIdO4p865xkhcyKCesTz2gIYTuXDB1tHtndsg86OyPSdnhY1P9Hme+Wk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NP+xK7Fw; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39123ad8a9fso274213f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 05:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742820706; x=1743425506; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kUoMpr+FmTJUUYgunEAsWmKDX1DoLLbcuPSMJE5oesQ=;
-        b=NP+xK7Fw++10iicRo50MFXoOH+THisvuEjDQ5+muT3sN7nbiMPJCfhnlcZ5RmRw/VU
-         xtZIvrHUnglYK8dfRV+Bvk00JyqEEBNaTAYo3Yt7mKXJTWktlQwYzWtkcTCQZPeO5nAs
-         5XMj3Kiv1PoTm8BwAJgu2B6sR3b8h0A9ea9nWC7Vog7PGbPbD0jMYgP+Jkm2GWI+56iq
-         YKPn0LTQwCx5SOwXl2XGJ7mfT2WEhegQn7cGcfq6BxzNsuSqdX6g7FU3fsJaPFXooCeX
-         HrGBKXiNK2Sw1r/Yq87qHqBfIlpv2NFORQwodB8Eh9TxqM3kELn8XwhjA5YuETNcN0vF
-         3k2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742820706; x=1743425506;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kUoMpr+FmTJUUYgunEAsWmKDX1DoLLbcuPSMJE5oesQ=;
-        b=ppy6w32W4VlKLxUknwe6KEd4CNfxCDXcMqWKcqGQR4DPdvyXWBKyYKKuAaiXhVaEKA
-         zLD4cPb3R80SG+AA7T88enh7cbIQiTXLnzp6RNVsASn31uT4P6mKPN5xZ8BxJQO9FgFI
-         g6JtOOOU5zU9MUCng402KWwgQjENrQ+Oc1tBOhIzos3UWtO5e2FGlU5XSgUDWrafaFau
-         lQaa7dZ/9k+QqjOaAA4P59BaI40U8fZcKH/x6Nf53My3qoDIfmJY+N5mjIUry8+kmA1e
-         qFfdTTOu+XWC5m5jyM8hhH921RXL1f3mIJJYhcyQfhDvIPsxh1aTg2J6VgtmcshWzXA9
-         AePw==
-X-Forwarded-Encrypted: i=1; AJvYcCVHDGdN6am3u6sEw8oJes0JtEZbS/UOfpFJnbrS9rlvG7bCGyZrHVqygPbZRvFAne3Qq1hoYWpDKr8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgMb/ErCCm+Me1cqKVHnI6tLeZO5AqL+X6sOykH4qcvk9v3uJU
-	Hx1190YHXQ2BerIL+J1K3Lgtl6s/awohT40BP8o9nplIT9Z+rXDRuyZVPj3ZSdM=
-X-Gm-Gg: ASbGncs2t/wIGayopD222l+xqftJPg74aHmrnxN4vENO+SxdVYhPf6OgCLjjHb+01TQ
-	w+sxts+V026j3PkmNJ2jVn4rWPEtP9Jcy5Us7KIvV0E4oH0cs32CN453bE1CjCtQpBGc4Wh5dVg
-	6kcsYzlKg6bzRzXW6xSipQ3CkGqk8UnWmGvEdpHAErhK/lXiva6IbiKEIi5c0BlJyym6qRFE5tQ
-	5pPIkFE6kCiA7DM9+gcatGaiXZ8EDueqpByVoht6/2OLA1dwFvA5fy4dTDgIfCORkBYBb5hJ6be
-	qGfbdTHEDlTlZAvSAoNUT8rV4qjD+T2e77iU/9qNqCqfgLFq5Pu0ADy4jg==
-X-Google-Smtp-Source: AGHT+IHWJMXQRiamAeJVWu4eRAJNadDYJhtO38dS8WMcOCTUIapL+/uAak0BnxNe/tjBFhmz9SU7Qg==
-X-Received: by 2002:a05:6000:154a:b0:390:d964:d325 with SMTP id ffacd0b85a97d-3997f9406dcmr4123049f8f.8.1742820706146;
-        Mon, 24 Mar 2025 05:51:46 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9ef063sm10713445f8f.83.2025.03.24.05.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 05:51:45 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dongjin Kim <tobetter@gmail.com>,
+	s=arc-20240116; t=1742827679; c=relaxed/simple;
+	bh=f5WoR9C6FEyWk59i9LulIupWqmrwbOKvqOYOe7GwAu4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k/SQU2pGnjh2Q3a3NtS38NIjlPahTaR8ZHWAim8B9wpSOAor/JSZMJgjgR93BJUdKEfBr73wsa3Mc9I8+sXoGQVYeKoO5WCZHCW7Bad1DQwU837d54xqymtI1UGW+/djx0irsTN/D7zNQ59g/qo/uTWPLTWPkgMyFNOjyYiyMk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h/XXlTPj; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742827678; x=1774363678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f5WoR9C6FEyWk59i9LulIupWqmrwbOKvqOYOe7GwAu4=;
+  b=h/XXlTPjS+lT4FKh8dhFKc6wS9D6NY9nvFrjDmx/6uANjptxYFVUmTGr
+   4MLdN+B8z1b4S7ybmww4aAsoBl8fHqUUFatuP70JrBKVHMzwHI2oiEE4c
+   WDXUdj62NDhUj1ASF8y+X/qRD7b7kD1QcapWY/1Cou9mx3+Awpei+55nF
+   mLUQK+Bi1DFcS6zZtCzov73+Z/TFgENI4SOdpAIbE40+HudCR3IuN81yR
+   IohVelVBuTSrIqHtWAeUwraHnlWb7DEe2XFy69cejmv/WLh7p42rw5xKu
+   r9gD2fqNMyRN/Ita4MeBit5wYdPix15UwmBxZ97GLPgiFHa75mY6SPjS3
+   Q==;
+X-CSE-ConnectionGUID: IUGEw9AMTIOqG31Bwir05g==
+X-CSE-MsgGUID: FkYqy9krQ6uaG4tVKzdkug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11383"; a="43192104"
+X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
+   d="scan'208";a="43192104"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 07:47:57 -0700
+X-CSE-ConnectionGUID: mflDKyU8RZSX5K+kLVs3bQ==
+X-CSE-MsgGUID: 9t6lR2ANRYyxLNct16mZEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
+   d="scan'208";a="124022002"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa010.jf.intel.com with ESMTP; 24 Mar 2025 07:47:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id D6B2126F; Mon, 24 Mar 2025 16:47:52 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: usb: smsc,usb3503: Correct indentation and style in DTS example
-Date: Mon, 24 Mar 2025 13:51:42 +0100
-Message-ID: <20250324125142.81910-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>
+Subject: [PATCH net v3 0/2] net: usb: asix: ax88772: Fix potential string cut
+Date: Mon, 24 Mar 2025 16:39:28 +0200
+Message-ID: <20250324144751.1271761-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-DTS example in the bindings should be indented with 2- or 4-spaces and
-aligned with opening '- |', so correct any differences like 3-spaces or
-mixtures 2- and 4-spaces in one binding.
+The agreement and also PHY_MAX_ADDR limit suggest that the PHY address
+can't occupy more than two hex digits. In some cases GCC complains about
+potential string cut. In course of fixing this, introduce the PHY_ID_SIZE
+predefined constant to make it easier for the users to know the bare
+minimum for the buffer that holds PHY ID string (patch 1). With that,
+fix the ASIX driver that triggers GCC accordingly (patch 2).
 
-No functional changes here, but saves some comments during reviews of
-new patches built on existing code.
+In v3:
+- dropped format specifier changes (Russell, LKP)
+- added predefined constant for a minimum buffer size (Russell)
+- updated error message to refer to the address and not ID string (Russell)
+- changed type of phy_addr to u8, otherwise GCC can't cope with its range
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/usb/smsc,usb3503.yaml | 84 +++++++++----------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+In v2:
+- added first patch
+- added a conditional to the ASIX driver (Andrew)
 
-diff --git a/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-index 6156dc26e65c..18e35122dc1f 100644
---- a/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-+++ b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-@@ -106,54 +106,54 @@ additionalProperties: false
- 
- examples:
-   - |
--      i2c {
--          #address-cells = <1>;
--          #size-cells = <0>;
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
- 
--          usb-hub@8 {
--              compatible = "smsc,usb3503";
--              reg = <0x08>;
--              connect-gpios = <&gpx3 0 1>;
--              disabled-ports = <2 3>;
--              intn-gpios = <&gpx3 4 1>;
--              reset-gpios = <&gpx3 5 1>;
--              initial-mode = <1>;
--              clocks = <&clks 80>;
--              clock-names = "refclk";
--          };
--      };
-+        usb-hub@8 {
-+            compatible = "smsc,usb3503";
-+            reg = <0x08>;
-+            connect-gpios = <&gpx3 0 1>;
-+            disabled-ports = <2 3>;
-+            intn-gpios = <&gpx3 4 1>;
-+            reset-gpios = <&gpx3 5 1>;
-+            initial-mode = <1>;
-+            clocks = <&clks 80>;
-+            clock-names = "refclk";
-+        };
-+    };
- 
-   - |
--      i2c {
--          #address-cells = <1>;
--          #size-cells = <0>;
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
- 
--          usb-hub@8 {
--              compatible = "smsc,usb3803";
--              reg = <0x08>;
--              connect-gpios = <&gpx3 0 1>;
--              disabled-ports = <2 3>;
--              intn-gpios = <&gpx3 4 1>;
--              reset-gpios = <&gpx3 5 1>;
--              bypass-gpios = <&gpx3 6 1>;
--              initial-mode = <3>;
--              clocks = <&clks 80>;
--              clock-names = "refclk";
--          };
--      };
-+        usb-hub@8 {
-+            compatible = "smsc,usb3803";
-+            reg = <0x08>;
-+            connect-gpios = <&gpx3 0 1>;
-+            disabled-ports = <2 3>;
-+            intn-gpios = <&gpx3 4 1>;
-+            reset-gpios = <&gpx3 5 1>;
-+            bypass-gpios = <&gpx3 6 1>;
-+            initial-mode = <3>;
-+            clocks = <&clks 80>;
-+            clock-names = "refclk";
-+        };
-+    };
- 
-   - |
--      #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/gpio/gpio.h>
- 
--      usb-hub {
--          /* I2C is not connected */
--          compatible = "smsc,usb3503";
--          initial-mode = <1>; /* initialize in HUB mode */
--          disabled-ports = <1>;
--          intn-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
--          reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
--          connect-gpios = <&pio 4 17 GPIO_ACTIVE_HIGH>; /* PE17 */
--          refclk-frequency = <19200000>;
--      };
-+    usb-hub {
-+        /* I2C is not connected */
-+        compatible = "smsc,usb3503";
-+        initial-mode = <1>; /* initialize in HUB mode */
-+        disabled-ports = <1>;
-+        intn-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
-+        reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+        connect-gpios = <&pio 4 17 GPIO_ACTIVE_HIGH>; /* PE17 */
-+        refclk-frequency = <19200000>;
-+    };
- 
- ...
+Andy Shevchenko (2):
+  net: phy: Introduce PHY_ID_SIZE — minimum size for PHY ID string
+  net: usb: asix: ax88772: Increase phy_name size
+
+ drivers/net/usb/ax88172a.c | 12 ++++++++----
+ include/linux/phy.h        |  1 +
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
 -- 
-2.43.0
+2.47.2
 
 
