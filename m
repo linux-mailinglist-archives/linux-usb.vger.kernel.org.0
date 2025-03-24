@@ -1,88 +1,138 @@
-Return-Path: <linux-usb+bounces-22045-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22046-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1201DA6E240
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:26:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42FD9A6E310
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 20:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 353943A9A68
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:26:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A661B167E1E
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1488264A78;
-	Mon, 24 Mar 2025 18:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40141267387;
+	Mon, 24 Mar 2025 19:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iP2VTDwz"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LipMvCuu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD99263F59;
-	Mon, 24 Mar 2025 18:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB484266EED
+	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 19:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742840779; cv=none; b=lfhC2GQIqlsU2LjJ2lQKlSifQtpryJqlEycaK7q3Fw+Kq8XdsthOut5Xzd4kZQyS9vZVyz3QItTzodi1Sz2C515ztvWbd9nfHCqKNbEGDtiITTlDUddqrZf3Bk2r8MN0MUSiiziCBguXKizN7xc+bxkwe4sQzLiXcCna5MwFms0=
+	t=1742843329; cv=none; b=kuEtVnOrpe5jUO6vTYapmC/bu9/eH7kZNeTLInOSz/NWYSHF57cQaHXP4JNDOBa+hK9SCVdnBQ3z9MckYnnekCyfqK/HJ4YaHt2keGgV7LJAj9z/vOr0iZ8hFQqyxSH1tKbqnRVsFRknRmeAfKkw4QsBJPr9CVUmfRqowFg+JK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742840779; c=relaxed/simple;
-	bh=iwATA+Qn6Ifas2JD09TOZptJ0vS/eM5Ffuc+wJCxIvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MdP2YhVaTI37ljHZ0RgQJDAkaV+WtLRQvpLPmZhXfhQHYnK6wLgIPLg1cra7h6n81EXJFXAs4IatnKUku6S1zz2O9vfNV9jpvnZszOPmCCQHtEGqsNOL8EFhKtFeEMBtHj276QyNQZjt0ZjnYZ8fVzPEK1gUnp4rogGNLy5Njsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iP2VTDwz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7B0C4CEDD;
-	Mon, 24 Mar 2025 18:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742840778;
-	bh=iwATA+Qn6Ifas2JD09TOZptJ0vS/eM5Ffuc+wJCxIvI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iP2VTDwzmXqLWhG+ptlDEO7KWTJGwF7OJfyLAuSBPfEOOT6C0yv4lK0Vi6U6Twly3
-	 8SqeJr+ZgB2BA/QkkjJbw73N0gbB39OJSsn7woEn5P2TL1RsGMn/LOfxiu5NoeCGxe
-	 HcvWrwgZnbxZcGF/qDc5WMJ6SntjQOiz7/5C6CC7qmmJ92KCuLkK81alYCxuKB7YC+
-	 5k0PGOJhu/61RuWeeEw6SscV5SBrG+BWNvhU6mxiMJg7f6kqmyXhCYOZ3CzhUBq2Ap
-	 /7Z9qG25Hq3K3r/5YotV0eBJHt8QBAczbVt+GES7ffspQKX5YKRXtyXvT8icG8oNCa
-	 m2iY/T/E4Sr0Q==
-Date: Mon, 24 Mar 2025 11:26:11 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Lubomir Rintel <lkundrak@v3.sk>
-Cc: linux-usb@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Eric Dumazet
- <edumazet@google.com>, "David S. Miller" <davem@davemloft.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH v2 net-next] rndis_host: Flag RNDIS modems as WWAN
- devices
-Message-ID: <20250324112611.0eb6fdc3@kernel.org>
-In-Reply-To: <20250317150739.2986057-1-lkundrak@v3.sk>
-References: <20250317150739.2986057-1-lkundrak@v3.sk>
+	s=arc-20240116; t=1742843329; c=relaxed/simple;
+	bh=1rymG9tMU7d+EpOLvZQFkNyqfGP87y3hoGgfLC166/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RvZBGz6b35Im3H0xmRj5TL7RKy4tjCOth6wfDSSoIpcv6itJgx2CcJKn5SncB9GX0fFl51/hWwbsyooaEgJ4IWk7RoAwMjyXF5ls6pR+j3WYMZ79FuSrnfKyqVgmDSopKwTBtiLy8GhQSCBZlCZwDeT7maEcLtajXb11mSrjzXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LipMvCuu; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-476af5479feso43862461cf.2
+        for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 12:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1742843326; x=1743448126; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1dTQfcrbRLKQGYdsmVW0rTSaepqHTuYnIg8Unhl8ec=;
+        b=LipMvCuuqAVFW/ay6G7/+fSJxc6SfY4PY6zXm+Vs9uIRu1FoBWfbjXGTdGz7jzspUb
+         CMHZ9FygTiMqIvHgd6MQl5bvVm191GCzO9VRcTKOkaCon60HWVoM4tCsmOnmiCuc/jOe
+         flhJvb6RV3o1qeYCJnRtgl0/s25v4MqjWPI9jqZp+PhkyVMPz3bem9tSi/S9ldO2HgRO
+         tCab37lZEGNaTbWiZUlOl57IB9KVCfxUzlqHME+s+T+HHMazu0OVE7ijp8471oMpF0Zm
+         KYV7qwLnIm+JWCW3e0xq/g8aCEnK4XAXvBnJIcmA4WJbr5XkO4thQhgT1cu/gqOAWUTg
+         eqbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742843326; x=1743448126;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e1dTQfcrbRLKQGYdsmVW0rTSaepqHTuYnIg8Unhl8ec=;
+        b=Vs4kZ0EtP/ftNRlvhoBrvDsxbSk4+625mjkxwDpdQS5hEcBSxBH4rWvd1uTCiIObfZ
+         uK447rjM1livSeM4vOQUu+sqkV2AmdARoR1WCY2xC6ZZQiVdLeLGhcMsa8WUaGmiKhzm
+         XUK4X9yh55oX0eHbxcQBIHplhNBj1mIGQ+JDAY39b3vC7JbzNoIpJ8qREKIjT5tfLUum
+         scjhVJ0XTonYTeia6e7Vuplt67MQmI5SwNITESSTld7Q3lAEpEONescSFVdUEbSN6eJn
+         UV6fa5wVKxkLZR4Ck0LNf67h68sbt2nDGze/wti/SVIhYPYzFevW/RhOf6/Om/mRM75n
+         rDMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUIX/IQmtWhqCsbclBDZsl2WYX9UkKfQIp76q7n11+hbatmTGFhcI40XWptFRAT2ugNRay39Say12A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuRNbObd5DPuxKMbhJCLNfONkHqUFduvxkQiOyHy8IauiapCmZ
+	r+Mz2/uPQlEn8i+iS4b81zfIBv83+CUyC/vcK++VDx5WyH+7flj3HA0tptAPIQ==
+X-Gm-Gg: ASbGnct3Sq3Fih1b8ZrRXYbHJOxcoc06Ca6fOblHSfvGlHnInL4ZTHDmh18DmMfIeXZ
+	Mf34x9A6hop97mIc+9X5GaiwfA1V3CQqg6XXrDo8HihCUAmiFMbPbjAycbuWUB3DIv9GTBTWJ5/
+	2S5GVb5omyAYYBg+hXncZiZ02s0rk+7F2eRb9bHjTNO99lUNFY/bfvcUHm+qPlmH+kMnAZO7c4D
+	/d/UNjTrNtEVbUd9Joq5+33/wIuSOyM0e0bEmxDe3QcyixOHFKxntzPLpBooYm7OxBw8hiv13Ei
+	BQqcI2iddC85fkYRDAfUOcSXqQMHHlooJUSD96SXjnMyzbl20INooMAxA8XPTPJvgLVvDEQL7ts
+	JDWORx0Fbp78h212qjj3yPe+EQVL9JZZKKslm7w==
+X-Google-Smtp-Source: AGHT+IHHVjLyxs4xugjYg38o07zQ3r4VavLlX0Whe/aSGbbSEHsuX248QsM4WBhcDUcE3xWJGlSOXA==
+X-Received: by 2002:ac8:5ac3:0:b0:477:1f29:e80f with SMTP id d75a77b69052e-4771f29e85fmr239847391cf.4.1742843326471;
+        Mon, 24 Mar 2025 12:08:46 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4771d159a42sm50755791cf.11.2025.03.24.12.08.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Mar 2025 12:08:45 -0700 (PDT)
+Date: Mon, 24 Mar 2025 15:08:42 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-i2c@vger.kernel.org
+Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+Message-ID: <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
+References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
 
-On Mon, 17 Mar 2025 16:07:37 +0100 Lubomir Rintel wrote:
-> Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
-> Broadband Modems, as opposed to regular Ethernet adapters.
+On Mon, Mar 24, 2025 at 11:18:29AM -0700, syzbot wrote:
+> Hello,
 > 
-> Otherwise NetworkManager gets confused, misjudges the device type,
-> and wouldn't know it should connect a modem to get the device to work.
-> What would be the result depends on ModemManager version -- older
-> ModemManager would end up disconnecting a device after an unsuccessful
-> probe attempt (if it connected without needing to unlock a SIM), while
-> a newer one might spawn a separate PPP connection over a tty interface
-> instead, resulting in a general confusion and no end of chaos.
+> syzbot found the following issue on:
 > 
-> The only way to get this work reliably is to fix the device type
-> and have good enough version ModemManager (or equivalent).
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> Fixes: 475ddf05ce2d ("rndis_host: Flag RNDIS modems as WWAN devices")
+> HEAD commit:    5fc319360819 Merge tag 'net-6.14-rc8' of git://git.kernel...
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=15445e98580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=27515cfdbafbb90d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c38e5e60d0041a99dbf5
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ea4c4c580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15435004580000
 
-This should point to the commit you're fixing. Judging purely by the
-touched lines perhaps 63ba395cd7a5 ("rndis_host: support Novatel Verizon
-USB730L") ?
--- 
-pw-bot: cr
+> ------------[ cut here ]------------
+> usb 1-1: BOGUS control dir, pipe 80000f80 doesn't match bRequestType c0
+> WARNING: CPU: 1 PID: 5901 at drivers/usb/core/urb.c:413 usb_submit_urb+0x11d9/0x18c0 drivers/usb/core/urb.c:411
+
+> Call Trace:
+>  <TASK>
+>  usb_start_wait_urb+0x113/0x520 drivers/usb/core/message.c:59
+>  usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+>  usb_control_msg+0x2b1/0x4c0 drivers/usb/core/message.c:154
+>  dib0700_ctrl_rd drivers/media/usb/dvb-usb/dib0700_core.c:95 [inline]
+>  dib0700_i2c_xfer_legacy drivers/media/usb/dvb-usb/dib0700_core.c:315 [inline]
+>  dib0700_i2c_xfer+0xc53/0x1060 drivers/media/usb/dvb-usb/dib0700_core.c:361
+>  __i2c_transfer+0x866/0x2220
+>  i2c_transfer+0x271/0x3b0 drivers/i2c/i2c-core-base.c:2315
+>  i2cdev_ioctl_rdwr+0x452/0x710 drivers/i2c/i2c-dev.c:306
+>  i2cdev_ioctl+0x759/0x9f0 drivers/i2c/i2c-dev.c:467
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+
+It appears that this problem was caused by the fuzzer requesting an i2c 
+transfer containing a 0-length read (I2C_M_RD) message.  The dib0700 
+driver translates this more or less literally into a USB read request of 
+length 0.  But the USB protocol does not allow such things; a 
+request of length 0 is always a write.  Hence the WARNING above.
+
+As far as I can tell from the source code, the dib0700 simply isn't able 
+to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be 
+changed simply to return 0 in such cases?
+
+Alan Stern
 
