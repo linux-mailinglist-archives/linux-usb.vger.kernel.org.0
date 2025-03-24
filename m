@@ -1,113 +1,113 @@
-Return-Path: <linux-usb+bounces-22047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BFAA6E339
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 20:20:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07227A6E3D6
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 20:52:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5373171D0A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:19:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F18D16EE5D
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8CA199FAB;
-	Mon, 24 Mar 2025 19:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04C21A5BAC;
+	Mon, 24 Mar 2025 19:52:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eaRDCsZY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LYwrngq6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7918197A7A
-	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 19:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8350719E97A;
+	Mon, 24 Mar 2025 19:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742843977; cv=none; b=c6gu3H9p1txQBNOyYm48n7zxAWwUH0+Js78OGp9om884g7LOxDaxcQxznEh6/roShPsWd1XayTapmTCrmRgVkeyCbxmNFDutUnPGNbWcaRTIRJ6crXHljVCjLBN9zgNr80FgKIApHjqE20VgOLgUGZNUCCa6CoH8AY7fDpPIpo4=
+	t=1742845936; cv=none; b=gHwWBsLuupBcKr1GSXWq0u3fTd4zle1xBfoqL+VX7jmUiI0i1rlAqaF3TQBbj4gIKjm8MhJJo+drkeL2hxDW2jEhs+c+fQ1lnqhhtvp0Mj9UrLkZdFQAyDENdsXx9xA8AjQiC6/Cm53nGqTiAQWar070lZjzI8ZdWhqCWt9dyOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742843977; c=relaxed/simple;
-	bh=P/hwBBn+ky1Zya+g5OHKD1ly/i5ipwUmNOgXdV7PMjg=;
+	s=arc-20240116; t=1742845936; c=relaxed/simple;
+	bh=n0Y3b7HRTtpTKyBWfhkTEuUsYWA03Tme1XcvVc3hf1c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kr2rb2umVSPikvpWSv9XuwD1SU/Mxjq9O9Nx1KVduXWNo6KPaFidj3l/pHGMAXFnmeFTPdfJqqVBTr5TCUPClZxYkQSnmnJTwynGfyn4sHlHbkolqILcOoBU+tD8/gPBJKDFZUFwkvbu7YYL81Fv7KAQUDfuQeFwaU3NJXl+JnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eaRDCsZY; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=R9G+
-	9YMCrVAXcN/A7C/bnMd2N4uDf2n66715z7MwFmw=; b=eaRDCsZYKRjAOXENBFxD
-	NUusBd6dFIL3ifBFA03P08hKISn6A9QsJRRvbuQNOU0oJl+/YXquxnokwvGh2CJE
-	sOu3xT/5XDTIBL0Y367UgEDsSiBKjAP1yoiQzIoFcXgEP228pEQEhvQXQJ0mHJw9
-	T93En2Cxp/qcceaHSzTk916pvva4ydL1Y9FybICqPe5JTCzPIxi9tYNwCibAd7j0
-	lbtrdNyts/7aDGip5RWvWRL9KFXjQe/BKVD0y5N4WQeQ6pHrwAHECnrg+8zHqATE
-	aBPvLQSirazxWy7oe1ro2eQGIkZv9Ezm5reeDQfITAiJrfKT2/cUwY2e6r8ubkEh
-	iA==
-Received: (qmail 2701050 invoked from network); 24 Mar 2025 20:19:32 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Mar 2025 20:19:32 +0100
-X-UD-Smtp-Session: l3s3148p1@u5LfexsxQF1tKPAv
-Date: Mon, 24 Mar 2025 20:19:32 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	linux-i2c@vger.kernel.org
-Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
-Message-ID: <Z-GwRNe8NIigXYtS@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	linux-i2c@vger.kernel.org
-References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
- <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tqv8+NpkPWBF0/wYPkztlX+VY1DVPyBGUWF6AfhVELbidbKnc1kx6jkwUZD8cGJSGXShcLlvwSIDRMhmahCRzNewYKsUeJpOTyeBiLv3JL3Nt+PiiZB7ehO2atUZ7BGW4iKJ+WRRN9Q7exy8kGKAKiAU/bzPXXbkgIe6UyZZe7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LYwrngq6; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742845935; x=1774381935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n0Y3b7HRTtpTKyBWfhkTEuUsYWA03Tme1XcvVc3hf1c=;
+  b=LYwrngq6CvUuziy/5dBYlPVrDrn4sVfQd5LQ/qB6vsw+1QFahBWj1Yl9
+   1F5zoobNoU8sTwsQUYQss3eBrO0iPSTxpYg9ovFE1FpsLERJLZqeTYT9F
+   4E7Xp/0HvN9Rdt1VpMH+sJvZZf38AVIGwvn6A2jvAlApDk7Zd70yB9bBl
+   vFTTkQZNxNCd88Oh89ZW3pg1AZqlr+0o7GwTmC5P0ILD8zgwnzhw1xQGk
+   bRgg2Vzfi6wCN2BWzdkOXnCVYisX1KVH7XcFgpshTaco8sDtSN6pwXRwH
+   I/vms3inaNsjC/S+plBiQoHyHT6+BJR0+A3tDopi4Xf0LKTnYhxo/C9Ob
+   A==;
+X-CSE-ConnectionGUID: 5G0pdwb5RhyOEAqHx5L5Tw==
+X-CSE-MsgGUID: HQJcK1usRpiel6DcGlw2JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11383"; a="61596024"
+X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
+   d="scan'208";a="61596024"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 12:52:13 -0700
+X-CSE-ConnectionGUID: J2q0b5/NQZe3MYkt1W+HnA==
+X-CSE-MsgGUID: ed+exVfURjqFNe/cQArszg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,272,1736841600"; 
+   d="scan'208";a="123957514"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 12:52:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1twnqC-00000005YFF-2EwL;
+	Mon, 24 Mar 2025 21:52:08 +0200
+Date: Mon, 24 Mar 2025 21:52:08 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net v3 1/2] net: =?utf-8?Q?phy?=
+ =?utf-8?Q?=3A_Introduce_PHY=5FID=5FSIZE_?= =?utf-8?B?4oCU?= minimum size for
+ PHY ID string
+Message-ID: <Z-G36MdYl2og7lxb@smile.fi.intel.com>
+References: <20250324144751.1271761-1-andriy.shevchenko@linux.intel.com>
+ <20250324144751.1271761-2-andriy.shevchenko@linux.intel.com>
+ <Z-F07j7tlez_94aK@shell.armlinux.org.uk>
+ <Z-GAzlPEVR8p5l7-@smile.fi.intel.com>
+ <Z-GYh7tWq6dNDDqt@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="D3w7yJPKb+YSZTp1"
-Content-Disposition: inline
-In-Reply-To: <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
-
-
---D3w7yJPKb+YSZTp1
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Z-GYh7tWq6dNDDqt@shell.armlinux.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+
+On Mon, Mar 24, 2025 at 05:38:15PM +0000, Russell King (Oracle) wrote:
+> On Mon, Mar 24, 2025 at 05:57:02PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 24, 2025 at 03:06:22PM +0000, Russell King (Oracle) wrote:
+
+...
+
+> > And just a bit of offtopic, can you look at
+> > 20250312194921.103004-1-andriy.shevchenko@linux.intel.com
+> > and comment / apply?
+> 
+> That needs to go into my patch system please. Thanks.
+
+Ah, cool, just made it to appear there.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> As far as I can tell from the source code, the dib0700 simply isn't able=
-=20
-> to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be=20
-> changed simply to return 0 in such cases?
-
-The adapter (I assume the one in dvb-usb-i2c.c) should populate an
-i2c_adapter_quirks struct with I2C_AQ_NO_ZERO_LEN and then the core will
-bail out for you.
-
-
---D3w7yJPKb+YSZTp1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfhsEAACgkQFA3kzBSg
-KbZviRAAgwc9tdRFJkCUrclcfUuNms0E4rHrMGo76Al74WtC9ycZe4+exceZP1F2
-mtb2SM6PGPKsYkx0vsOej7tUW6uNBeVNFH/3xIhjJTXq4n5JFRaw9kB3DU93qaMt
-Zi57qC2fsJtKW7Zbu3AWtN9cyWf4qw7ihjOH+bGYl9244oUSpbqaum/GlErPkPdq
-S6k4mKtAsNvN+KvSB8m7HqdGknO8Ma6UJBIr2T+/X8ywKa+Dp7RgHcPYAT41eYWP
-aDxwJvIlKKK7JsIz+/f8knqRbTND15tcPfgTEeL6EFUp86u9ppa0UM9eYS4VC7AC
-kvwq9qwmHCOVfye+nc4iO6mQRjIW/V1MWqiQvLXH3V/aig8DC12mSLA/JnWcJ+n8
-6KVPfVEymOKXn0W+GiKRnlFuxdd6SkKN6K3G5nssV9Jmbn891T6LX3QPeIfUqGyf
-avDqHKpBfv59HacrKdsxzd6IYx773UqUELkTanFfcIfn9BSQa1DwUxdvDaI5YPze
-+IB0JiW7vFERAv/qje38LKI5iFAzidSHbam4k5GH8Q+nkXG6wv+fDLJSQvm7TFiY
-1YLwn0KmiAJKLeEJTgUOnc61E2I5Dc0yUZVRpeMLrR85v8zNLvy8IMU8E85utgyu
-YogWdIhRXHdKZR4Ql7STBE7gwHcPoCQf2v5jL88vzKRMRWB2u3w=
-=Ixnu
------END PGP SIGNATURE-----
-
---D3w7yJPKb+YSZTp1--
 
