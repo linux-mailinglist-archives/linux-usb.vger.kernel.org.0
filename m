@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-22038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0265CA6DDC2
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 16:06:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28F91A6DEFC
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 16:49:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1BAF7A4A15
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 15:05:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47BE2169411
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 15:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4556826136F;
-	Mon, 24 Mar 2025 15:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB05261569;
+	Mon, 24 Mar 2025 15:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="BiT/byg0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wxhn0Z9z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD85925EFA4;
-	Mon, 24 Mar 2025 15:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61FA1DDE9;
+	Mon, 24 Mar 2025 15:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742828789; cv=none; b=LjtQ8kny+DkyQ7070DCLftF/HAsKyNCOXrntZjKiCYT1ZB82uTPbi2v/gRGDaAFPBk+ceMNVyCTv2cWQS0uuMmwplfXYt2RPUERBegDHCwt0lMTHPw89Liqg5W/eyUQUeNMybU6i2Xn0BaX73nukFqFw21asry9QnsAbViggO4Y=
+	t=1742831360; cv=none; b=V5bOMAYFq6oOVmqQ2FA98bjO9lGKkYfHSvoeR3S70fu0gYhaMqeGk+hPhUnA9SOfgN/t6Nca40bTqnJfQ57BqKPC78ckOzAwSo05OAbFKOInqkhE0FiOPSrOYPOgZJ/d5KlNusEkH6UMkIsmrlVsO9iMe77S1ZVmbyVcAtZ/ca4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742828789; c=relaxed/simple;
-	bh=2UyfWKa1A2bwYrJ10f3fMq8znNoxlz7+Gf9TQZYX9No=;
+	s=arc-20240116; t=1742831360; c=relaxed/simple;
+	bh=mTbzGdF585SBjs9qPph8XaC8lrk++6aRMnH/YTASE/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pW2V6nk5g+FCViWEHSTfSPveIF3ptYIpUg6r/QorZ4jp4I2wRdLYxlE1moAtUUN+8WVEYOKojixaQ3ajLVcaoyoDJbDe4uvdpqcdJyid11dNomMfnyLRS4yBQdsBb924LrOT+u3sGt6e/B6vp7QJ1NGUTHQBDSk8ia93I/lihzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=BiT/byg0; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=oyNYGh8iDDAgrKD6zIW/UpG4qhZ5QDpo+/PKSwJbzqo=; b=BiT/byg04IMEiIji5AnLNVWDZ+
-	O0JDn8GlapzNVFvbp0e0BvS/bHoU4YN/N9lqz820J6wW8mDqwKLkUAy4OnoHWdCVXCdHIvh909i+1
-	qTMOGzcrHub8FBkP8uOevLrxwn6bLF2QrBCvQxJSTNX5eey0Ic81XYcEixEDHnxyRfu3czAQ4R7co
-	qGCEr4CCdN6sgkzLNisrbJTfX+7h9TBmQizzKWphCfsWrowKXZGMxYWE5BVMdL4k9mTSBXh43U43d
-	sw0tdTv+Xf10lQEf32MTqTkaKnhPHmaJLArdh9B0GkxJITO78pcbMhEJ5P0ssYJIXVYRj4+c96KMA
-	xUQk5ouQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52790)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1twjNg-0003hd-11;
-	Mon, 24 Mar 2025 15:06:24 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1twjNe-0002KN-1Q;
-	Mon, 24 Mar 2025 15:06:22 +0000
-Date: Mon, 24 Mar 2025 15:06:22 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH net v3 1/2] net: =?utf-8?Q?phy?=
- =?utf-8?Q?=3A_Introduce_PHY=5FID=5FSIZE_?= =?utf-8?B?4oCU?= minimum size for
- PHY ID string
-Message-ID: <Z-F07j7tlez_94aK@shell.armlinux.org.uk>
-References: <20250324144751.1271761-1-andriy.shevchenko@linux.intel.com>
- <20250324144751.1271761-2-andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tsUW/vUKbLe6RHJBjakcpO5lEjHYWKZm1mO9DflfyrYAoWGczUf4Rg3UfDgFpO6aUDD04ilMAehGRtVV6q8mWI3DqNIJJikeim3HFHZk10eJzAqxJRhyosdpsc51Yobif2L33kQIEqmpSgeeYiuZp9eoZE1UDCPw3I6K46CZ65A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wxhn0Z9z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D86C4CEDD;
+	Mon, 24 Mar 2025 15:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742831360;
+	bh=mTbzGdF585SBjs9qPph8XaC8lrk++6aRMnH/YTASE/0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wxhn0Z9z3nh/2wuc6gVgU5ZwFdAmyHEABI9c/8nJRe+t6Dq7cGxBiYHE2vOpYwF7r
+	 kRU5ydtcI91sDHKqlW/e6G6qPs9OwF8Cclr3X3CexKDR8Tv7ddkISF3S4aAKEs4GXL
+	 f52tEdkI/RTCG1iQ9jcKj2ThSWq1sxi1qITtC0eDbbXOmdLqnEG18WXxJEoHaEaQMr
+	 Aaz8RHgWJ3PvYJayX1I4CULlm5YHWjJ3aeb5GtJNMhhyknUdv5xVlYF67UN6nluWcQ
+	 JNi5Dy/1JWSwgOK1gXUo/kEC/u9tmXqoaUxhqdZi5PokB5tDeg+yUfqJlHS8zCbHkX
+	 j1WFmI+6TM55A==
+Date: Mon, 24 Mar 2025 10:49:19 -0500
+From: Rob Herring <robh@kernel.org>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Daniel Danzberger <dd@embedd.com>, Arnd Bergmann <arnd@arndb.de>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Yangyu Chen <cyy@cyyself.name>, Ben Hutchings <ben@decadent.org.uk>,
+	Felix Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH v2 07/11] dt-bindings: phy: Add documentation for Airoha
+ AN7581 USB PHY
+Message-ID: <20250324154919.GA101272-robh@kernel.org>
+References: <20250320130054.4804-1-ansuelsmth@gmail.com>
+ <20250320130054.4804-8-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,28 +76,129 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250324144751.1271761-2-andriy.shevchenko@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20250320130054.4804-8-ansuelsmth@gmail.com>
 
-On Mon, Mar 24, 2025 at 04:39:29PM +0200, Andy Shevchenko wrote:
-> The PHY_ID_FMT defines the format specifier "%s:%02x" to form
-> the PHY ID string, where the maximum of the first part is defined
-> in MII_BUS_ID_SIZE, including NUL terminator, and the second part
-> is implied to be 3 as the maximum address is limited to 32, meaning
-> that 2 hex digits is more than enough, plus ':' (colon) delimiter.
-> However, some drivers, which are using PHY_ID_FMT, customise buffer
-> size and do that incorrectly. Introduce a new constant PHY_ID_SIZE
-> that makes the minimum required size explicit, so drivers are
-> encouraged to use it.
+On Thu, Mar 20, 2025 at 02:00:30PM +0100, Christian Marangi wrote:
+> Add documentation for Airoha AN7581 USB PHY that describe the USB PHY
+> for the USB controller.
 > 
-> Suggested-by: "Russell King (Oracle)" <linux@armlinux.org.uk>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Airoha AN7581 SoC support a maximum of 2 USB port. The USB 2.0 mode is
+> always supported. The USB 3.0 mode is optional and depends on the Serdes
+> mode currently configured on the system for the USB port.
+> 
+> If the airoha,serdes-port property is not declared, it's assumed USB 3.0
+> mode is not supported, as the Serdes mode can't be validated.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/phy/airoha,an7581-usb-phy.yaml   | 83 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 ++
+>  .../dt-bindings/phy/airoha,an7581-usb-phy.h   | 11 +++
+>  3 files changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+>  create mode 100644 include/dt-bindings/phy/airoha,an7581-usb-phy.h
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml b/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+> new file mode 100644
+> index 000000000000..39ceaded5d0e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/airoha,an7581-usb-phy.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/airoha,an7581-usb-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Airoha AN7581 SoC USB PHY
+> +
+> +maintainers:
+> +  - Christian Marangi <ansuelsmth@gmail.com>
+> +
+> +description: >
+> +  The Airoha AN7581 SoC USB PHY describes the USB PHY for the USB controller.
+> +
+> +  Airoha AN7581 SoC support a maximum of 2 USB port. The USB 2.0 mode is
+> +  always supported. The USB 3.0 mode is optional and depends on the Serdes
+> +  mode currently configured on the system for the USB port.
+> +
+> +  If the airoha,serdes-port property is not declared, it's assumed USB 3.0
+> +  mode is not supported, as the Serdes mode can't be validated.
+> +
+> +properties:
+> +  compatible:
+> +    const: airoha,an7581-usb-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +
+> +  airoha,usb2-monitor-clk-sel:
+> +    description: Describe what oscillator across the available 4
+> +      should be selected for USB 2.0 Slew Rate calibration.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+> +
+> +  airoha,serdes-port:
+> +    description: Describe what Serdes Port is attached to the USB 3.0 port.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Since you only have a single value here, does that mean only only one of 
+the 2 ports/phys supports USB3?
 
-Thanks!
+> +
+> +  airoha,scu:
+> +    description: Phandle to the SCU node for USB 3.0 Serdes mode validation.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+A bit unusual, but you could use the phys binding here instead of these 
+2 properties. The phy for the phy...
+
+> +
+> +  '#phy-cells':
+> +    const: 1
+
+Please add a description of what's in the cell.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - airoha,usb2-monitor-clk-sel
+> +  - '#phy-cells'
+> +
+> +dependentRequired:
+> +  airoha,serdes-port: [ 'airoha,scu' ]
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/phy/airoha,an7581-usb-phy.h>
+> +    #include <dt-bindings/soc/airoha,scu-ssr.h>
+> +
+> +    phy@1fac0000 {
+> +        compatible = "airoha,an7581-usb-phy";
+> +        reg = <0x1fac0000 0x10000>;
+> +
+> +        airoha,usb2-monitor-clk-sel = <AIROHA_USB2_MONCLK_SEL1>;
+> +        airoha,scu = <&scu>;
+> +        airoha,serdes-port = <AIROHA_SCU_SERDES_USB1>;
+> +
+> +        #phy-cells = <1>;
+> +    };
+> +
+> +    phy@1fae0000 {
+> +        compatible = "airoha,an7581-usb-phy";
+> +        reg = <0x1fae0000 0x10000>;
+> +
+> +        airoha,usb2-monitor-clk-sel = <AIROHA_USB2_MONCLK_SEL2>;
+> +
+> +        #phy-cells = <1>;
+> +    };
+
+Drop the 2nd example.
+
+Rob
 
