@@ -1,161 +1,88 @@
-Return-Path: <linux-usb+bounces-22044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8CCA6E220
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:18:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1201DA6E240
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 19:26:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4EB188B180
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:18:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 353943A9A68
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Mar 2025 18:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FE126463E;
-	Mon, 24 Mar 2025 18:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1488264A78;
+	Mon, 24 Mar 2025 18:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iP2VTDwz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8AB210FB
-	for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 18:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD99263F59;
+	Mon, 24 Mar 2025 18:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742840312; cv=none; b=ShwCBYp2b2JAIY3GjAdIpDwlMdagnyk4Q0uvAWQhteyu147vuJLrGVHjTInfV8pYOMG+pbu5HtBVY578D0yCcC7RiDFhng2sevP2PnHoatySFAfBFzhwamz+cUApS9zOavdpDDJgcmmXmo+n5JcoL44msmgCpkXkF6mjrp5sdfs=
+	t=1742840779; cv=none; b=lfhC2GQIqlsU2LjJ2lQKlSifQtpryJqlEycaK7q3Fw+Kq8XdsthOut5Xzd4kZQyS9vZVyz3QItTzodi1Sz2C515ztvWbd9nfHCqKNbEGDtiITTlDUddqrZf3Bk2r8MN0MUSiiziCBguXKizN7xc+bxkwe4sQzLiXcCna5MwFms0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742840312; c=relaxed/simple;
-	bh=btgeIGnIUoCIck9+wS+7c/hFv1g6wYgJLfeKG87NVzA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RMtMGczBLlOOPAGoCVlbdBdfPPsjd4r007yzm3fkHIhYYyf5FUocatTNrVzz0h3sEk907pcb7jnGAZHTuIYBTJhwWpe34MK0efOvCb4RUj6yaPDzvJgGVN9bQO6WyRqsE7h7ZESrEV+nL40cnciW2aGHXNaH5ykNYIefhEAaTus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d586b968cfso91251855ab.1
-        for <linux-usb@vger.kernel.org>; Mon, 24 Mar 2025 11:18:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742840309; x=1743445109;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pBNLf/d9pxK/fHTPY4JvsITkXOFpMyYfD4pamBhwHRA=;
-        b=ZVHmv0U7tHU48CbFFq5DW8pOOlKAavLnsT1fi5eHft9ZJMQ2nKWgn1Dlfx1W6ZnT41
-         Kpd/mO32vIJF5JpmSPiUKH8kAz1WEaPWXJtBfUjKyWwJJZNSzYcljKQCnJFghizMPcdc
-         nIjquwoLlgnZDJsF1qok7GyGkfAGUYpd+hBHSrR1CvnjTlwYsY7kPz4l7dnW6H3xX5pu
-         rrJ4rrsdR1FBOW9u8jP9vSD/esRqDXMgQPizT0a9Cxtx6IB9LkcT5Sbk8IJKLLZrQnX/
-         SYybHbrL6DqfBN5axCrE/sEqNuY6/BAylY/EQcT9M5ykzH/x1Jsuhtn9StweHBtIOFf/
-         j5bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKKia432mX+0f9coCHxTrgPlq0GbNhI66akQrw4HCITdyWCOkiHJN+pDU7vee1Or4jjc0KlNDw9PA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX9zV9ACxWQWBBnlADIL9RwPovREhNBBZBNxaSXj83lHDP9Tju
-	x/BRNt88c+s1GxY1xsmOHheFFdtFwhT9iYWa3pNjVMt5bw0LS8OOQysYO3uD4caHtQne+OgThLP
-	5eEP3ly/fwsFcM3YDdDA3jcJhypfNu3mRCtW6Yu7Lhbg55YD4RLNDKB0=
-X-Google-Smtp-Source: AGHT+IHAO6nfo755uIRQ2cGgnPp5lBiB6CmROXZt0tvLmT1MEN9v/EwZsmiYxrgD2wI4hYDXTJjrhTrIXK4dSioxL/HqgQhiF2Fe
+	s=arc-20240116; t=1742840779; c=relaxed/simple;
+	bh=iwATA+Qn6Ifas2JD09TOZptJ0vS/eM5Ffuc+wJCxIvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MdP2YhVaTI37ljHZ0RgQJDAkaV+WtLRQvpLPmZhXfhQHYnK6wLgIPLg1cra7h6n81EXJFXAs4IatnKUku6S1zz2O9vfNV9jpvnZszOPmCCQHtEGqsNOL8EFhKtFeEMBtHj276QyNQZjt0ZjnYZ8fVzPEK1gUnp4rogGNLy5Njsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iP2VTDwz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7B0C4CEDD;
+	Mon, 24 Mar 2025 18:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742840778;
+	bh=iwATA+Qn6Ifas2JD09TOZptJ0vS/eM5Ffuc+wJCxIvI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=iP2VTDwzmXqLWhG+ptlDEO7KWTJGwF7OJfyLAuSBPfEOOT6C0yv4lK0Vi6U6Twly3
+	 8SqeJr+ZgB2BA/QkkjJbw73N0gbB39OJSsn7woEn5P2TL1RsGMn/LOfxiu5NoeCGxe
+	 HcvWrwgZnbxZcGF/qDc5WMJ6SntjQOiz7/5C6CC7qmmJ92KCuLkK81alYCxuKB7YC+
+	 5k0PGOJhu/61RuWeeEw6SscV5SBrG+BWNvhU6mxiMJg7f6kqmyXhCYOZ3CzhUBq2Ap
+	 /7Z9qG25Hq3K3r/5YotV0eBJHt8QBAczbVt+GES7ffspQKX5YKRXtyXvT8icG8oNCa
+	 m2iY/T/E4Sr0Q==
+Date: Mon, 24 Mar 2025 11:26:11 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Lubomir Rintel <lkundrak@v3.sk>
+Cc: linux-usb@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Eric Dumazet
+ <edumazet@google.com>, "David S. Miller" <davem@davemloft.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>
+Subject: Re: [PATCH v2 net-next] rndis_host: Flag RNDIS modems as WWAN
+ devices
+Message-ID: <20250324112611.0eb6fdc3@kernel.org>
+In-Reply-To: <20250317150739.2986057-1-lkundrak@v3.sk>
+References: <20250317150739.2986057-1-lkundrak@v3.sk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:174c:b0:3d4:3aba:e5ce with SMTP id
- e9e14a558f8ab-3d5961bc1ffmr145580605ab.20.1742840309399; Mon, 24 Mar 2025
- 11:18:29 -0700 (PDT)
-Date: Mon, 24 Mar 2025 11:18:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
-From: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On Mon, 17 Mar 2025 16:07:37 +0100 Lubomir Rintel wrote:
+> Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
+> Broadband Modems, as opposed to regular Ethernet adapters.
+> 
+> Otherwise NetworkManager gets confused, misjudges the device type,
+> and wouldn't know it should connect a modem to get the device to work.
+> What would be the result depends on ModemManager version -- older
+> ModemManager would end up disconnecting a device after an unsuccessful
+> probe attempt (if it connected without needing to unlock a SIM), while
+> a newer one might spawn a separate PPP connection over a tty interface
+> instead, resulting in a general confusion and no end of chaos.
+> 
+> The only way to get this work reliably is to fix the device type
+> and have good enough version ModemManager (or equivalent).
+> 
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> Fixes: 475ddf05ce2d ("rndis_host: Flag RNDIS modems as WWAN devices")
 
-syzbot found the following issue on:
-
-HEAD commit:    5fc319360819 Merge tag 'net-6.14-rc8' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15445e98580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=27515cfdbafbb90d
-dashboard link: https://syzkaller.appspot.com/bug?extid=c38e5e60d0041a99dbf5
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ea4c4c580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15435004580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1c90f739fd77/disk-5fc31936.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1949bfaaa2fe/vmlinux-5fc31936.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dc1e147ca5d4/bzImage-5fc31936.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000f80 doesn't match bRequestType c0
-WARNING: CPU: 1 PID: 5901 at drivers/usb/core/urb.c:413 usb_submit_urb+0x11d9/0x18c0 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 1 UID: 0 PID: 5901 Comm: syz-executor773 Not tainted 6.14.0-rc7-syzkaller-00137-g5fc319360819 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-RIP: 0010:usb_submit_urb+0x11d9/0x18c0 drivers/usb/core/urb.c:411
-Code: 48 8b 4c 24 08 0f b6 04 01 84 c0 0f 85 52 05 00 00 45 0f b6 07 48 c7 c7 e0 4b d1 8c 4c 89 f6 48 89 da 89 e9 e8 e8 9b 09 fa 90 <0f> 0b 90 90 e9 c9 f3 ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 57
-RSP: 0018:ffffc900041cf808 EFLAGS: 00010246
-RAX: fe52edbd68e0e800 RBX: ffff888021693020 RCX: ffff8880267d5a00
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000080000f80 R08: ffffffff81819e52 R09: 1ffff92000839e9c
-R10: dffffc0000000000 R11: fffff52000839e9d R12: ffff88802a23f0a8
-R13: ffff88801e6cfa00 R14: ffffffff8cd1b600 R15: ffff888033956e60
-FS:  0000555580b9b380(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa8c1abb0f0 CR3: 00000000282c0000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x113/0x520 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x2b1/0x4c0 drivers/usb/core/message.c:154
- dib0700_ctrl_rd drivers/media/usb/dvb-usb/dib0700_core.c:95 [inline]
- dib0700_i2c_xfer_legacy drivers/media/usb/dvb-usb/dib0700_core.c:315 [inline]
- dib0700_i2c_xfer+0xc53/0x1060 drivers/media/usb/dvb-usb/dib0700_core.c:361
- __i2c_transfer+0x866/0x2220
- i2c_transfer+0x271/0x3b0 drivers/i2c/i2c-core-base.c:2315
- i2cdev_ioctl_rdwr+0x452/0x710 drivers/i2c/i2c-dev.c:306
- i2cdev_ioctl+0x759/0x9f0 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:906 [inline]
- __se_sys_ioctl+0xf5/0x170 fs/ioctl.c:892
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fa8c1a448f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc66aa7058 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa8c1a448f9
-RDX: 00002000000004c0 RSI: 0000000000000707 RDI: 0000000000000004
-RBP: 000000000002ca0e R08: 00232d6332692f76 R09: 0000000000000006
-R10: 000000000000001f R11: 0000000000000246 R12: 00007ffc66aa706c
-R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+This should point to the commit you're fixing. Judging purely by the
+touched lines perhaps 63ba395cd7a5 ("rndis_host: support Novatel Verizon
+USB730L") ?
+-- 
+pw-bot: cr
 
