@@ -1,199 +1,90 @@
-Return-Path: <linux-usb+bounces-22130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4B5A709D1
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 20:02:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BDB5A709F7
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 20:09:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1FCC19A3E87
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 18:56:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D24BF3A86CE
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 19:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8931F4178;
-	Tue, 25 Mar 2025 18:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IfOPRDuI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F0E1CBA02;
+	Tue, 25 Mar 2025 19:07:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548501F417A
-	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 18:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705391AD41F
+	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 19:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928717; cv=none; b=HIgmp+bE5RdC9MUz774qrfwupAxPCg+J//Qge05Px1G/UJuYuJrkjy3VemPs66o9zn+7Jp1ZyLDfMuJyk9HXidxEoJsh8KkJZ4ZwljLnx7/WZJyMdkQ2xX3HOghr9fBiO9kw7aJIWnvw+7wiAbGCe0llZif3X5wHiQEZYXsG1cs=
+	t=1742929624; cv=none; b=ZnLatL77PsVXJvz5tVUhsu9c3A3gKqPeesh4jQhVU3L/wkF/wkB7NpDg/46z9Gz8lZLjgzoejSI1OsLHpQ4Xm3BqcpqWyc4vY+UvnjseqoxBJ1BnZK0iDBNE1SOnUFL3ST/dicQcGrDEncDKz620G7Hv9HpuUqC0lfeDjjrRHxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928717; c=relaxed/simple;
-	bh=2xXGFLVwkInmobcJUBE5/1UQyq/cvN0CxyPECWhZDZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ISwhFp2DNpPUjhzCm+j1pRPv9S62ne2A7DXQ4wpvMuKD8JU34lBwr6H/iTQqfnX5gr37vVXT4kqDAb5azO4ifmzp5o5mnJ0eHeXNaaSMkMRCtxcVu2sAnijqYRMmoxFVyEkRARouZmP4pD47RpL8ql+BuICwHnTwuX9Ow9vxzg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IfOPRDuI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742928713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=t8j8FcQOo2vXT0+x/EC8FM0KhlfrmjmrMAU0Mg5SiOs=;
-	b=IfOPRDuIJb6mcD26eVv03HxOHVXjlqMmW0qdvja63G+EVtDAVTS+71vN8WxEgkUXbDe99M
-	F67N3MqKl7LwUKqlMCtKh+lQlo/4gADy46882U41Z5/rvMgl+tWjJ2qPpXZZMw7G37rYlA
-	IDue9AQ4G+f8s20KPbZEqVHW7WgO2E8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-XOC9DuIfPFmqgTryPQOI-Q-1; Tue, 25 Mar 2025 14:51:52 -0400
-X-MC-Unique: XOC9DuIfPFmqgTryPQOI-Q-1
-X-Mimecast-MFC-AGG-ID: XOC9DuIfPFmqgTryPQOI-Q_1742928711
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6e8feea216aso2613306d6.0
-        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 11:51:52 -0700 (PDT)
+	s=arc-20240116; t=1742929624; c=relaxed/simple;
+	bh=WOM/LLp0RgmVJoWJDMoK3chj3lsZU2VAedMMvNUKJrk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=WHljuuQfHaFpV4EV8N+e6SXKWev0WR5tg2yr/cL3QVTx9cfq4Okok3D2K1QNhvqRMDj2WMhKlmluBlCJTxfyQFNZQrqiKzY9TQ17mnxku4GUP/NNi12tWW4cxSUYqxyBlW55NbIVmSXs/+7uUFEn8PX5Iw07WjW9f06j5dhIMf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-85dad58e80fso1194508639f.3
+        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 12:07:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742928711; x=1743533511;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=t8j8FcQOo2vXT0+x/EC8FM0KhlfrmjmrMAU0Mg5SiOs=;
-        b=cdlBIIucQu63JqYLU07A9JeNgVPAemObFzTskSi3bj/BUdcXdlNQ13Bqq/GCFcpeTw
-         s8EdzcfCW6Q3IPz0fAdvAMnU4Cgb6WfCnfqv+ae9xEztrde6KKpLB4g88S/BvW19yWqS
-         Ixafa8yKkFcn2euwEqE0U3Zdfs+iOtrlAYdnPgCHnvpYg7WeMULl5SnNMPO/dx+u/ERg
-         5Jh686RrMDo/Y1wRvkLOHnE92/5/QOAJy40+ZWJ5OwNyuTNxbcDuUf5HPFM+iGUXrVV9
-         yH7vGF60BjHZ2Smk1DQ4hzuWvsRx5XCWWRnJy7lLY/V/fL6pyQRHJQbL2LsIxcgiiJpK
-         KFQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLOYPxzZRRPnBrgDyx2VwHMlUI/DD/G7C2gHwG5dAFNCQitkZWONfyTGXLkVy1mNPePUIbJgM64IU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxwmTvQNS4TUCK2aBLcH8FGsRjDNTk0sDBOAnizpgLDr4YYIys
-	MtbPcHQ8AponhrF3dMxMv+5oyS5g33im8iNkNGS79f3og+K/g141yIqvvdLP+KYVAZr8YMTRu1a
-	sS/B0HbClY6AFMQIiafDtWb+Q8TEPY31sMCDc49JNmmIaIeCbCHwtOebc+w==
-X-Gm-Gg: ASbGncspSiIea6MG7vnW4AgcaaORofuV0WwoGc2THHNsQ3lzvDSRsMj0NZAtk1l1Nnw
-	Sxh4kcyCtvDiYg4TBYBKkvv3sWJQiQ1ioPZYKVW42A42pZ87+NooQ4Ghf6lho3VKiulcUuQvAPu
-	HyPQ7sTBTzSB0/Bx6ypELUvcnRR0L1pPKsXGI1Mk5eO3jq7qmm7+L7K2tt3DxbXn4nA1kuXGcYD
-	DQzVyL+k862HTMIQHa7s4VFESTWPKSe8H7RUjwvM4iTGo7hjQBbvI2FrECqvJWJ8nWdM6xcyrB2
-	J3Z6CM8MUEdm
-X-Received: by 2002:a0c:eb46:0:b0:6ea:d503:6cfd with SMTP id 6a1803df08f44-6ed16cde3f6mr12230936d6.19.1742928711445;
-        Tue, 25 Mar 2025 11:51:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFqYQjFn4K1j4fuehDL2vDnCV4xeKoEsPSC3k3g7nw2h2mfdx1DkNTmzNbOxS9v9bBBC08uag==
-X-Received: by 2002:a0c:eb46:0:b0:6ea:d503:6cfd with SMTP id 6a1803df08f44-6ed16cde3f6mr12229966d6.19.1742928710955;
-        Tue, 25 Mar 2025 11:51:50 -0700 (PDT)
-Received: from [172.20.3.205] ([99.209.85.25])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc5952sm58924306d6.83.2025.03.25.11.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Mar 2025 11:51:50 -0700 (PDT)
-Message-ID: <0e1d8823-620f-420c-86a5-35495ccbd10f@redhat.com>
-Date: Tue, 25 Mar 2025 19:51:47 +0100
+        d=1e100.net; s=20230601; t=1742929621; x=1743534421;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jsIsSKwvnvgu9UvmVVPieDuoJRM8nMXrJ64iZfB2uCc=;
+        b=RUE0GVbCHEPG1mIJw45+b5ndu2t6T3sbPFWleuaxk5qnuaIP5boXGMUuuvb6DYpuvd
+         51sL+10I+95v8GYCbZSoizAqiRokLyRlCmctP7hbWvKlnGrkN59MMPb6jgEDM2rW8SyZ
+         1lSxCIEfnxESEGmomqihMdgucXvRWpvcgKtkEnWBNQMGcuKJksRAgLFNrAS2JTF3jFWK
+         UUIbH+5QqX8Ats1Lf4PBSLjHqornauV4ldKDNEh9ZTc7OD2DLBomdELOqNPLsKKaDWUi
+         niCEDYDXtgfpgzHYfZQIpoHNHL6WKYsvJQ4GDBc+BmqbF/lsJ6C4pGWwU3M2ZRy7DiG4
+         VKZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRDzXA0/I8Azcnds8har+6nFJhQ1yB+drQHgLJi650VyCoQWpTPpJgKXfwSpzKeqA6nZeYavjwf5A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd9Q1TRGTLxjl6JBFYugJsFI4al9WJpDltSZc/Xfochh+wzPON
+	BKNN86UsQ5/yTu9phescqX4p2SsQc9brRULjlOryp1m6Caz3A9/8i8DvTwseUsNCs509PJFei54
+	LBdchvcDrUsd4b51eZFd07FLOyAoN6v1hBDMW/ykiT3bObPcKHmFK9MY=
+X-Google-Smtp-Source: AGHT+IGPKv4GLrmy6f48OwPKgG50sMNIwGNkNf1MrfozlyeG1piUknHPlp7DUKLvYSUoScAO8IdC/7+fA/Lmxz1Tf1C42fuLvLTP
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT
- kernel-self with ILP32 ABI
-To: Peter Zijlstra <peterz@infradead.org>, guoren@kernel.org
-Cc: arnd@arndb.de, gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, anup@brainfault.org,
- atishp@atishpatra.org, oleg@redhat.com, kees@kernel.org, tglx@linutronix.de,
- will@kernel.org, mark.rutland@arm.com, brauner@kernel.org,
- akpm@linux-foundation.org, rostedt@goodmis.org, edumazet@google.com,
- unicorn_wang@outlook.com, inochiama@outlook.com, gaohan@iscas.ac.cn,
- shihua@iscas.ac.cn, jiawei@iscas.ac.cn, wuwei2016@iscas.ac.cn,
- drew@pdp7.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
- ctsai390@andestech.com, wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com,
- josef@toxicpanda.com, dsterba@suse.com, mingo@redhat.com,
- boqun.feng@gmail.com, xiao.w.wang@intel.com, qingfang.deng@siflower.com.cn,
- leobras@redhat.com, jszhang@kernel.org, conor.dooley@microchip.com,
- samuel.holland@sifive.com, yongxuan.wang@sifive.com,
- luxu.kernel@bytedance.com, ruanjinjie@huawei.com, cuiyunhui@bytedance.com,
- wangkefeng.wang@huawei.com, qiaozhe@iscas.ac.cn, ardb@kernel.org,
- ast@kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
- linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
- linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-arch@vger.kernel.org, maple-tree@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-media@vger.kernel.org
-References: <20250325121624.523258-1-guoren@kernel.org>
- <20250325122640.GK36322@noisy.programming.kicks-ass.net>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20250325122640.GK36322@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:2683:b0:3d3:f7ed:c903 with SMTP id
+ e9e14a558f8ab-3d59605a645mr207012955ab.0.1742929621482; Tue, 25 Mar 2025
+ 12:07:01 -0700 (PDT)
+Date: Tue, 25 Mar 2025 12:07:01 -0700
+In-Reply-To: <6bb3b80b-a808-4992-8666-535ed9a5c980@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67e2fed5.050a0220.a7ebc.0053.GAE@google.com>
+Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+From: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com, 
+	wsa@sang-engineering.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 25.03.25 13:26, Peter Zijlstra wrote:
-> On Tue, Mar 25, 2025 at 08:15:41AM -0400, guoren@kernel.org wrote:
->> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
->>
->> Since 2001, the CONFIG_64BIT kernel has been built with the LP64 ABI,
->> but this patchset allows the CONFIG_64BIT kernel to use an ILP32 ABI
-> 
-> I'm thinking you're going to be finding a metric ton of assumptions
-> about 'unsigned long' being 64bit when 64BIT=y throughout the kernel.
-> 
-> I know of a couple of places where 64BIT will result in different math
-> such that a 32bit 'unsigned long' will trivially overflow.
-> 
-> Please, don't do this. This adds a significant maintenance burden on all
-> of us.
-> 
+Hello,
 
-Fully agreed.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
--- 
-Cheers,
+Reported-by: syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com
+Tested-by: syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com
 
-David / dhildenb
+Tested on:
 
+commit:         5fc31936 Merge tag 'net-6.14-rc8' of git://git.kernel...
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c1324c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27515cfdbafbb90d
+dashboard link: https://syzkaller.appspot.com/bug?extid=c38e5e60d0041a99dbf5
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1459643f980000
+
+Note: testing is done by a robot and is best-effort only.
 
