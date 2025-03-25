@@ -1,151 +1,199 @@
-Return-Path: <linux-usb+bounces-22129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE9DA7086D
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 18:47:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4B5A709D1
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 20:02:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0394B175ECD
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 17:47:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1FCC19A3E87
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 18:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FFF263F4E;
-	Tue, 25 Mar 2025 17:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8931F4178;
+	Tue, 25 Mar 2025 18:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="RiFmS2yP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IfOPRDuI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBAC263C8B
-	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 17:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548501F417A
+	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 18:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742924842; cv=none; b=KozjTa/QsSZrxVnXIWZU2q9eE/xXrA2+OoEqHJB75fg2uuOealJ65B/qACHaJ0rYHDAXAYtY/B4jc7YyOytcGzuL0IgrfOTnHXhAwhwZXRYOSJYS3AbXucOSt57eyFuQVI+pQ9OiCHKd4Gtp4acFfexeFmVLj20y0uoz/+YoKbo=
+	t=1742928717; cv=none; b=HIgmp+bE5RdC9MUz774qrfwupAxPCg+J//Qge05Px1G/UJuYuJrkjy3VemPs66o9zn+7Jp1ZyLDfMuJyk9HXidxEoJsh8KkJZ4ZwljLnx7/WZJyMdkQ2xX3HOghr9fBiO9kw7aJIWnvw+7wiAbGCe0llZif3X5wHiQEZYXsG1cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742924842; c=relaxed/simple;
-	bh=goKPkMeXynwdrhBXnRq9X1VvT6tW+FJCFrUGgCdOnmg=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEEyYDWXUlpVCLtHk804OSQcw7SVxdWABRbAcIz2LA0gIlWbO6D2NXVxEKTX/Ib/Qx5HGwnEhc5jtfl7SS96n4KA7jiKLh6cUOu+AvGi2s55LGV7QqlFrzIwWAerntGNhHO0SjQ1I8XtD2dmYGKQup5j47oOpR30T288PEv7G3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=RiFmS2yP; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6e17d3e92d9so45821326d6.1
-        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 10:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1742924838; x=1743529638; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
-        b=RiFmS2yPwpzXwLruNurFXEeXSL2ike4PAgZjfJvw3f2bMQp7D+X5aQdEi+/iHOD6xb
-         QEXChE3bWBBE0BQXE+G0KwrGRxKb+BUFPVrblKcVnlgY+9t1Co34dsS6M6KReUaHicen
-         J8Y6tilYG818HT0ShqpexiSCxaeXC9GH3VZtUJvbMgZZICUHDAvgad0c+xTuBDgCqmVz
-         XcmPVcz0YqWGZLHenjXXW9syLh61SwAlL33m/RsgyYXm10vCl98ALzk3rEgQmq8eB+UF
-         yxvMWP2D7JV1Ab70eClf6abpx16+bPDt4nVOTV6LbuWKXIBBQNzcn52uQOUzNPEKIiPb
-         hjHA==
+	s=arc-20240116; t=1742928717; c=relaxed/simple;
+	bh=2xXGFLVwkInmobcJUBE5/1UQyq/cvN0CxyPECWhZDZM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ISwhFp2DNpPUjhzCm+j1pRPv9S62ne2A7DXQ4wpvMuKD8JU34lBwr6H/iTQqfnX5gr37vVXT4kqDAb5azO4ifmzp5o5mnJ0eHeXNaaSMkMRCtxcVu2sAnijqYRMmoxFVyEkRARouZmP4pD47RpL8ql+BuICwHnTwuX9Ow9vxzg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IfOPRDuI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742928713;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=t8j8FcQOo2vXT0+x/EC8FM0KhlfrmjmrMAU0Mg5SiOs=;
+	b=IfOPRDuIJb6mcD26eVv03HxOHVXjlqMmW0qdvja63G+EVtDAVTS+71vN8WxEgkUXbDe99M
+	F67N3MqKl7LwUKqlMCtKh+lQlo/4gADy46882U41Z5/rvMgl+tWjJ2qPpXZZMw7G37rYlA
+	IDue9AQ4G+f8s20KPbZEqVHW7WgO2E8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-74-XOC9DuIfPFmqgTryPQOI-Q-1; Tue, 25 Mar 2025 14:51:52 -0400
+X-MC-Unique: XOC9DuIfPFmqgTryPQOI-Q-1
+X-Mimecast-MFC-AGG-ID: XOC9DuIfPFmqgTryPQOI-Q_1742928711
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6e8feea216aso2613306d6.0
+        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 11:51:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742924838; x=1743529638;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
-        b=LCou8ZP9dHJCkKcmMoTJ5fHQdkjbEAcqh8FGUPunMcenwf2h+oFUT4zcUDtMCzm+I/
-         HmjqBkwe6HeGk7dCDpKCEtvV6tCQEGH3JF+bYAPRYg+/jkcOhAOGX1M1SOtVWMyTTjkl
-         TatuoiAjveWuB719wYKZlBa2z7SVRo8MFbPuc+z9Fuu0LoS64uY+sTx499eJ/bdR5k6b
-         Vp8dWPPrtckl9rfA5B8qIgA7IoiaaQXLBGo/2ACQegKuXD5wzLslZr6cEIRH/t4+tvO+
-         egHkSrVJgBpd6cdZAFqj0owFq7m+vfMMGf/tnTKT9G7xsf8e+Zie24iOzdkG8gvFt3qW
-         LapQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeHfMLn5cQbsSwTbZlQKuhfO8YSZyLl4PTXOknY9vIT50fg9AW9WD2KE64Gj0wmdPLyylv0RA6cz0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN5gpM8GUl8EELeC0/gjBvgWbWLEVHRYOe5CCTNtgW+HIP5H2k
-	NJI+4eOTwUE6Ly8jFAhK8NLGccVXBcjBg0XdtBqq4AwfKh+nXOAcl5Oip4Csyw==
-X-Gm-Gg: ASbGncvx7bhysB77n5mbXaanGpKQEKP3cQTCeNZxmgpz/FKJM07cRnJARyt5DaMTta3
-	iZPhHimtTrLJ1sBQPIKpFWvv1UyNi2uD5wIXYJTXYT/ilrVnmElLKT8LtH3pPyKFnvl06UOmqnx
-	xU8kppGChmfHDpPED+eW/J6ixX2jOzpn3JkjCc96wI0jteKkuGgTw5+eZSzHyiEpfpHw729+uaX
-	cRjZok8Tcx06tbzHeOgsmKH4JOoLa0wVtXDY8Oxe12K4SFSBk7r2AXaUtKcjO9+KEvRoZGLrCmz
-	0tB2SVgAAGF2NdsqojBoC+0uUw9k18pQldD9c1+C5SyfFRUzSQW5DbSF6/YMk/9QLt4VxaHcwk4
-	cxoncu3mIayGniyxg3m8pB7rtTkApxs511ENKKA==
-X-Google-Smtp-Source: AGHT+IEE3s2WyDicsHyN8I8hDTQsl58ko3gMhcMuYw+oTIF/jYZenScg9DM9xoAREespRcfMxIvUaA==
-X-Received: by 2002:a05:6214:19ef:b0:6e8:97f6:3229 with SMTP id 6a1803df08f44-6eb3f294676mr269179956d6.16.1742924838295;
-        Tue, 25 Mar 2025 10:47:18 -0700 (PDT)
-Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc5a1dsm58469186d6.79.2025.03.25.10.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 10:47:17 -0700 (PDT)
-Date: Tue, 25 Mar 2025 13:47:15 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	linux-i2c@vger.kernel.org
-Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
-Message-ID: <6bb3b80b-a808-4992-8666-535ed9a5c980@rowland.harvard.edu>
-References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
- <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
- <Z-GwRNe8NIigXYtS@shikoro>
- <ecdc37c4-b178-4e43-bfbf-45bd3ed29ff2@rowland.harvard.edu>
- <Z-Lg3glmnzA44R_H@shikoro>
+        d=1e100.net; s=20230601; t=1742928711; x=1743533511;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t8j8FcQOo2vXT0+x/EC8FM0KhlfrmjmrMAU0Mg5SiOs=;
+        b=cdlBIIucQu63JqYLU07A9JeNgVPAemObFzTskSi3bj/BUdcXdlNQ13Bqq/GCFcpeTw
+         s8EdzcfCW6Q3IPz0fAdvAMnU4Cgb6WfCnfqv+ae9xEztrde6KKpLB4g88S/BvW19yWqS
+         Ixafa8yKkFcn2euwEqE0U3Zdfs+iOtrlAYdnPgCHnvpYg7WeMULl5SnNMPO/dx+u/ERg
+         5Jh686RrMDo/Y1wRvkLOHnE92/5/QOAJy40+ZWJ5OwNyuTNxbcDuUf5HPFM+iGUXrVV9
+         yH7vGF60BjHZ2Smk1DQ4hzuWvsRx5XCWWRnJy7lLY/V/fL6pyQRHJQbL2LsIxcgiiJpK
+         KFQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLOYPxzZRRPnBrgDyx2VwHMlUI/DD/G7C2gHwG5dAFNCQitkZWONfyTGXLkVy1mNPePUIbJgM64IU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxwmTvQNS4TUCK2aBLcH8FGsRjDNTk0sDBOAnizpgLDr4YYIys
+	MtbPcHQ8AponhrF3dMxMv+5oyS5g33im8iNkNGS79f3og+K/g141yIqvvdLP+KYVAZr8YMTRu1a
+	sS/B0HbClY6AFMQIiafDtWb+Q8TEPY31sMCDc49JNmmIaIeCbCHwtOebc+w==
+X-Gm-Gg: ASbGncspSiIea6MG7vnW4AgcaaORofuV0WwoGc2THHNsQ3lzvDSRsMj0NZAtk1l1Nnw
+	Sxh4kcyCtvDiYg4TBYBKkvv3sWJQiQ1ioPZYKVW42A42pZ87+NooQ4Ghf6lho3VKiulcUuQvAPu
+	HyPQ7sTBTzSB0/Bx6ypELUvcnRR0L1pPKsXGI1Mk5eO3jq7qmm7+L7K2tt3DxbXn4nA1kuXGcYD
+	DQzVyL+k862HTMIQHa7s4VFESTWPKSe8H7RUjwvM4iTGo7hjQBbvI2FrECqvJWJ8nWdM6xcyrB2
+	J3Z6CM8MUEdm
+X-Received: by 2002:a0c:eb46:0:b0:6ea:d503:6cfd with SMTP id 6a1803df08f44-6ed16cde3f6mr12230936d6.19.1742928711445;
+        Tue, 25 Mar 2025 11:51:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFqYQjFn4K1j4fuehDL2vDnCV4xeKoEsPSC3k3g7nw2h2mfdx1DkNTmzNbOxS9v9bBBC08uag==
+X-Received: by 2002:a0c:eb46:0:b0:6ea:d503:6cfd with SMTP id 6a1803df08f44-6ed16cde3f6mr12229966d6.19.1742928710955;
+        Tue, 25 Mar 2025 11:51:50 -0700 (PDT)
+Received: from [172.20.3.205] ([99.209.85.25])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc5952sm58924306d6.83.2025.03.25.11.51.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Mar 2025 11:51:50 -0700 (PDT)
+Message-ID: <0e1d8823-620f-420c-86a5-35495ccbd10f@redhat.com>
+Date: Tue, 25 Mar 2025 19:51:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z-Lg3glmnzA44R_H@shikoro>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT
+ kernel-self with ILP32 ABI
+To: Peter Zijlstra <peterz@infradead.org>, guoren@kernel.org
+Cc: arnd@arndb.de, gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, anup@brainfault.org,
+ atishp@atishpatra.org, oleg@redhat.com, kees@kernel.org, tglx@linutronix.de,
+ will@kernel.org, mark.rutland@arm.com, brauner@kernel.org,
+ akpm@linux-foundation.org, rostedt@goodmis.org, edumazet@google.com,
+ unicorn_wang@outlook.com, inochiama@outlook.com, gaohan@iscas.ac.cn,
+ shihua@iscas.ac.cn, jiawei@iscas.ac.cn, wuwei2016@iscas.ac.cn,
+ drew@pdp7.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+ ctsai390@andestech.com, wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com,
+ josef@toxicpanda.com, dsterba@suse.com, mingo@redhat.com,
+ boqun.feng@gmail.com, xiao.w.wang@intel.com, qingfang.deng@siflower.com.cn,
+ leobras@redhat.com, jszhang@kernel.org, conor.dooley@microchip.com,
+ samuel.holland@sifive.com, yongxuan.wang@sifive.com,
+ luxu.kernel@bytedance.com, ruanjinjie@huawei.com, cuiyunhui@bytedance.com,
+ wangkefeng.wang@huawei.com, qiaozhe@iscas.ac.cn, ardb@kernel.org,
+ ast@kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
+ linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, maple-tree@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+References: <20250325121624.523258-1-guoren@kernel.org>
+ <20250325122640.GK36322@noisy.programming.kicks-ass.net>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250325122640.GK36322@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 25, 2025 at 05:59:10PM +0100, Wolfram Sang wrote:
+On 25.03.25 13:26, Peter Zijlstra wrote:
+> On Tue, Mar 25, 2025 at 08:15:41AM -0400, guoren@kernel.org wrote:
+>> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+>>
+>> Since 2001, the CONFIG_64BIT kernel has been built with the LP64 ABI,
+>> but this patchset allows the CONFIG_64BIT kernel to use an ILP32 ABI
 > 
-> > > > As far as I can tell from the source code, the dib0700 simply isn't able 
-> > > > to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be 
-> > > > changed simply to return 0 in such cases?
-> > > 
-> > > The adapter (I assume the one in dvb-usb-i2c.c) should populate an
-> > > i2c_adapter_quirks struct with I2C_AQ_NO_ZERO_LEN and then the core will
-> > > bail out for you.
-> > 
-> > Or the I2C_AQ_NO_ZERO_LEN_READ flag bit.
+> I'm thinking you're going to be finding a metric ton of assumptions
+> about 'unsigned long' being 64bit when 64BIT=y throughout the kernel.
 > 
-> Yes, that would be more convervative. Does USB allow zero-length writes?
-
-It does.
-
-> > What about all the other fields in the i2c_adapter_quirks structure?  
-> > How should they be set?  (Note: I don't know anything about this driver 
-> > or these devices; I'm just chasing down the syzbot bug report.)
+> I know of a couple of places where 64BIT will result in different math
+> such that a 32bit 'unsigned long' will trivially overflow.
 > 
-> As I also don't know the hardware, I suggest to leave them empty. 0
-> means "no quirk".
+> Please, don't do this. This adds a significant maintenance burden on all
+> of us.
+> 
 
-Okay, let's see if this works.
+Fully agreed.
 
-Alan Stern
+-- 
+Cheers,
 
+David / dhildenb
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5fc319360819
-
-Index: usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
-+++ usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
-@@ -10,6 +10,9 @@
- 
- int dvb_usb_i2c_init(struct dvb_usb_device *d)
- {
-+	static const struct i2c_adapter_quirks i2c_usb_quirks = {
-+		.flags = I2C_AQ_NO_ZERO_LEN_READ,
-+	};
- 	int ret = 0;
- 
- 	if (!(d->props.caps & DVB_USB_IS_AN_I2C_ADAPTER))
-@@ -24,6 +27,7 @@ int dvb_usb_i2c_init(struct dvb_usb_devi
- 	strscpy(d->i2c_adap.name, d->desc->name, sizeof(d->i2c_adap.name));
- 	d->i2c_adap.algo      = d->props.i2c_algo;
- 	d->i2c_adap.algo_data = NULL;
-+	d->i2c_adap.quirks    = &i2c_usb_quirks;
- 	d->i2c_adap.dev.parent = &d->udev->dev;
- 
- 	i2c_set_adapdata(&d->i2c_adap, d);
 
