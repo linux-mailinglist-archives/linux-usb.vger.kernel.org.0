@@ -1,112 +1,127 @@
-Return-Path: <linux-usb+bounces-22138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42955A70C5C
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 22:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 220A9A70CB3
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 23:17:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA1ED170712
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 21:48:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6463C16E123
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 22:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C757A25DCFA;
-	Tue, 25 Mar 2025 21:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E5A269D16;
+	Tue, 25 Mar 2025 22:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="CB0SIAnG"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WBGMIDEi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AAD1EE7B1
-	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 21:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6172818DB03
+	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 22:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742939279; cv=none; b=r3oQVODgqtruCZ2NyO3e6K7vnPOseJM8SPtZcVW1wn+G9TdlQZgxLTuuf0U7JpHPK6b7mpLwWuy1YXzWJD3IDrSfCwoy8lSKCky1qYVgNL+FbGmhp+DA6Is52Q/gvZzcupCJkJJit9Qu9OGWi5Rz8SjbYrbBnhInV0FffqxW8L0=
+	t=1742941060; cv=none; b=TwT2zfD10DnXVsqQ1Y73K7QczJj2aWMXdOQXojRd9wssNo5oR6XZAyd3aTsTQ61e2JHjxbUz9IA4Wr7BPNEhcI3wIgP0/AQXpww/8tdQ71TY6vDGcRa/vrtkUqfsPyL7gbDoBVnC/Ms0Uma2S2QA1uZCROKQZUzFfP4yXJc917s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742939279; c=relaxed/simple;
-	bh=QETzk4pWUdd8GTK9mbSDrwkUGp7j6xwkhUzJ0GqSv0U=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WveBVGgfIETAaZGJtPe/fHXo31CsRQGdQcu+IytbVzqEyxLqI5pXHwWc4LPk3O498T+GTZSJX8TEHuRy80Nf4RqH2XB/Rcab0IC34Jl7nCf/y5/4BVCjtM1TJx3BJL+m4maDKfoF9NecK0vTQWy5Ox8+fC+MA6QeRVhQHrTIWs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=CB0SIAnG; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-47664364628so2950901cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 14:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1742939276; x=1743544076; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wjSQcs1axKYj4DiilJ42WS/RY+75sj0DasrfbCjQhfE=;
-        b=CB0SIAnGmxdFUz4yVjdZHL1LYJzN2aYSQV6WscOvYM8w/zZNQHzEHtLYnQZ+whTzRO
-         fcWn0s6V6/9XgM/S0/4N8gASvUrV2kO4UMjvQ7+vFA4iLuuuFB/xhgfidjRyKJ9oR6Gg
-         u544FtWhQyo8DyReq68Z7cUoGee6qcGzpXis/aUeRKlDUqgppXr+SixZDl6iPghqrTu4
-         JiIMJ3B0S2kwUb5wuR4OPlh6Tv6VEgeLdJjrge3WSOmAWrRArtuJjbGDneS2YbXz5f7x
-         h/EEFLsUYc1azLWYlDnLW75GPKM2TsAPCxkMF6JZQwIa0n5ayLCLvxP3yPK4BG61y+JJ
-         6jeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742939276; x=1743544076;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjSQcs1axKYj4DiilJ42WS/RY+75sj0DasrfbCjQhfE=;
-        b=T0tyyAF1YPDqfB9QYKRReDSVyozqR39efv/tZ4ul0JoIeb4dM1XMFCQZbYW4lPrlhz
-         8ijENI1rwBIYUtTc0rfMxVdujdMEEPCOqxI5Zf9KjinHvZxu+J4mnNb3ZS53rV7ImLT6
-         +5Wslv0obwEto9N31daMJUUKXasNm6JTpIQVhjfLeJJ4urJDeoThY19Wf1YjujDmfeVr
-         6G9dlar5UmL/f9UhTUAZZ7KJrfbuppQ2a1K3xj1PPgcGWUiDNnyDV/7gGra8PvpGHJ5B
-         t0qMMVjnvtl27c4I62xVpfsgTR5o48bxQ3nR786Bxf+CpkL80Kh570V/juwg9bIsrKbl
-         PO0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVPtnO+sDYMAOoT9Mj7XCgKYlr4cisN5jh7SMiw/jX22ZsLNuHONdgdDE4WMwQ+WroEUb3kgXHFWkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0DdiBleXWO/pPD2DXYMPR3nu2kGwqJXm9eoIzMg7FUz0ESSgR
-	Rrf5xHdCDKigNY/bXoPP0HA29IQR4xT2iil+rXsgFmKUTrSMxjfrgfdNsJ6jZw==
-X-Gm-Gg: ASbGncs5H+dD1U5U3lr5+d24KUhqlECzmtfhLujWq+9fFf5U2zLExvEVLQ2XLGEi58E
-	7jtwzbTVar5r1UT5yp+CkK/6MhcNI+1tkYqPEZ9ALSwdwEuRNGsQWeNyDp7ntQVcFMjjS7jPGxE
-	k1Zw+MKX4BoXzc61fJluYbt9rKeNA2U3jbA5BzlntiFdfjw5MRP/GXBuE2A1qEBan69FVF8cPgy
-	IDeljE17i2HLv1/BAxVqzwllLO1q3CArw2CSVr0ylUV8NgugY7I791Bg0Xw8o5RI2LhW2q2yYzu
-	q6oyxPlexnC5J2DhEVJPCC4d6vZYb7S1U5sP3uvrlnAc4Q==
-X-Google-Smtp-Source: AGHT+IGa7jO/ejiTjbS4D+JRAtx11lg1Iif+dd+JHkXnhyYOFTmofUITjiHEUTYyKHeLyVKHjj7o9Q==
-X-Received: by 2002:a05:622a:2b49:b0:471:9e02:365e with SMTP id d75a77b69052e-4775f2f8693mr21094701cf.8.1742939276575;
-        Tue, 25 Mar 2025 14:47:56 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::3b5d])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4771d18fe25sm65734241cf.42.2025.03.25.14.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 14:47:56 -0700 (PDT)
-Date: Tue, 25 Mar 2025 17:47:53 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	s=arc-20240116; t=1742941060; c=relaxed/simple;
+	bh=1UV2rZVmB0/CIyPMfCR+mlReHLl03xvenKKyv7M3/pQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pf3UFR6X1JJ//cwJ4GhqRsrdexL2gYQB9Lk4yrE9uSIT4Lw9o3mct1e5vL7E7VPAm+q8H/MY9fKfpvY8IM5vkHK0JXnSqpZg4dmfGED2P8nnCh97Sb9JOz4HnyQxyZATIIKoNAGOHrxGqu4qkoQIAxvuDis4u2wDKhUR/1kdo5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WBGMIDEi; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Tr7g
+	aQg6UzJbHbDAcDCQLiy0DQOB9MXlClKRMUC2x+M=; b=WBGMIDEiYQpapAhshyPG
+	esG+zvrH2sxU27mbQ7+vn0tlDs1D/hWlUgeS6oMIA4+NHLsJC/pydqq2JqfBR/nh
+	z3sBWmwxvop46UqyJxEy7jkPJWXmXCvyqW7AFRI2xzMBvl516cf5/sBJ1C39m22a
+	x6oRP5WIiE96SgkQ38me+QzXEU9Mw8JW4BATqqrEfBLIrmjtt5tXlyJ/TRiJI9Ag
+	3yGANsaYXlC6esP9/nT5b6kZvuQcC/JJ9bJDcQSg4czxgOGyjyltESZSk5TBTGIW
+	7nxcgziG5ygPWXREY6LGpMfsj3VEF6bwxMgh2DvBJjw6qTsvqH3xZlHn+FYz+YGF
+	6g==
+Received: (qmail 3289556 invoked from network); 25 Mar 2025 23:17:33 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Mar 2025 23:17:33 +0100
+X-UD-Smtp-Session: l3s3148p1@nANaFjIxYuUujnsv
+Date: Tue, 25 Mar 2025 23:17:32 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
 	gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	syzkaller-bugs@googlegroups.com
 Subject: Re: [PATCH] media: dvb: usb: Fix WARNING in
  dib0700_i2c_xfer/usb_submit_urb
-Message-ID: <d0fd60d7-5660-42ed-b1c7-4dfd6b8e74b0@rowland.harvard.edu>
+Message-ID: <Z-MrfICsY06DZV-2@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
 References: <6bb3b80b-a808-4992-8666-535ed9a5c980@rowland.harvard.edu>
  <67e2fed5.050a0220.a7ebc.0053.GAE@google.com>
  <29db5fdc-13c9-45f0-9183-c80d637725c6@rowland.harvard.edu>
  <Z-MKiV0Ei5lmWik6@shikoro>
+ <d0fd60d7-5660-42ed-b1c7-4dfd6b8e74b0@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6ptUPvfCjRk92+jO"
+Content-Disposition: inline
+In-Reply-To: <d0fd60d7-5660-42ed-b1c7-4dfd6b8e74b0@rowland.harvard.edu>
+
+
+--6ptUPvfCjRk92+jO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z-MKiV0Ei5lmWik6@shikoro>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 25, 2025 at 08:56:57PM +0100, Wolfram Sang wrote:
-> 
-> > +	static const struct i2c_adapter_quirks i2c_usb_quirks = {
-> > +		.flags = I2C_AQ_NO_ZERO_LEN_READ,
-> > +	};
-> 
-> Why didn't you create the static struct outside of probe?
+On Tue, Mar 25, 2025 at 05:47:53PM -0400, Alan Stern wrote:
+> On Tue, Mar 25, 2025 at 08:56:57PM +0100, Wolfram Sang wrote:
+> >=20
+> > > +	static const struct i2c_adapter_quirks i2c_usb_quirks =3D {
+> > > +		.flags =3D I2C_AQ_NO_ZERO_LEN_READ,
+> > > +	};
+> >=20
+> > Why didn't you create the static struct outside of probe?
+>=20
+> Because it's used only in that one function.  But if you prefer, I will=
+=20
+> move the definition outside of the function.  It doesn't make any real=20
+> difference.
 
-Because it's used only in that one function.  But if you prefer, I will 
-move the definition outside of the function.  It doesn't make any real 
-difference.
+Then, for consistency reasons, I'd really prefer it outside probe. I
+also think it doesn't really make a difference, it just looks unusual to
+me.
 
-Alan Stern
+Thanks and happy hacking!
 
+
+--6ptUPvfCjRk92+jO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfjK3kACgkQFA3kzBSg
+KbZHVA/7Bp5i1ouvo7Hmf6ovhTvrc8OHu91n9fvTIhYsYxXZ/hwThoCkIWE9KRRd
+dPYxa/0JNQSQN3dMwdROceygUYQCkvpB2as1rJUp3PoTMHP2PG+0617QdWNBNaui
+TOSXf+UAou62g2NVeVdHpKAevFH7fZ3d6rSf0sjxEzk3xSJaxfrfo+6Zo+JctcHE
+rRuMZVKLE4u0pJbemqLaU9A1p8AVqe8S2ew9/ikgAJvC0X4lHlGjeY2YD2pR6zOv
+001vP+DwbC8twVZrCABZf9jKBR1MZJb7d5rZ4iQTIoUpFEYwnr7oZDhfzxZzKk4k
+1iZo699e2W9S664nFnXJbF5Ud8yRwf6JAcWAGOAVk3sV+SpFW0QTUeo7BohOOr2H
+pOZKTURY07bZA0J+65XnDb01Qeam/ru4Xrt5ZOeYKrE+imnbER3ov4zlbF3opjQK
+FSSb2vJBI17T9RLaEcWYog4YAomEjyXfbZIgjzWug5S3u4WbK9c9KZswNxt9XzjA
+S6LBbPzH9OZKSXUcxJo5pzSOGbXycmpspF4PkNc1VCUvpPfLPdSvTMC2Q+07c1Ke
+WABGIvBGNNo6+yfJ6tDrY1SP1gAr5+JLrWogh8T4NpX261DiLBJMH27DuCaVNFfz
+7pPUo21QKe2jK6vQ73i7ZgjprRZ0eMMmnQHip+XNAUTAhsFKjiI=
+=zLCi
+-----END PGP SIGNATURE-----
+
+--6ptUPvfCjRk92+jO--
 
