@@ -1,152 +1,151 @@
-Return-Path: <linux-usb+bounces-22128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C6EFA707EF
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 18:20:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE9DA7086D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 18:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F65C16B11E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 17:20:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0394B175ECD
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 17:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8BF263F32;
-	Tue, 25 Mar 2025 17:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FFF263F4E;
+	Tue, 25 Mar 2025 17:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="RiFmS2yP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1896313633F;
-	Tue, 25 Mar 2025 17:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBAC263C8B
+	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 17:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742923195; cv=none; b=JVnlwqVX6P2mPQEyZ+/VCGqJ4P18sGpLohEiLA42NvMdcuwFnvm6Gts6MotbeIPjngeCkr7IXavTEdHtxZ54NYjKzjnieHJbw52OYu20xq+NTnzQV8+qEdFr9x29mvagLSgEdt93kTrsER3utBA5TBu0NaZouBObCpg2MWJ/vlo=
+	t=1742924842; cv=none; b=KozjTa/QsSZrxVnXIWZU2q9eE/xXrA2+OoEqHJB75fg2uuOealJ65B/qACHaJ0rYHDAXAYtY/B4jc7YyOytcGzuL0IgrfOTnHXhAwhwZXRYOSJYS3AbXucOSt57eyFuQVI+pQ9OiCHKd4Gtp4acFfexeFmVLj20y0uoz/+YoKbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742923195; c=relaxed/simple;
-	bh=XhmLROfnnL3FtaOH27gIOe9sbljr3QNEJt4khOaoGEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=thXfkLpcysvlslOLNwAsjXCeCS6JfK6KctSbO2VGPV3RuKnyk0b5C13uS18qMml/OaXFTQll1YJumJb0xtEBlz6OVXMzXwT+u0OP1YIXmFUMXF7N6mj6jdKsM0A+dPbTQIyLF0c2blFZmvdsLhtgQIwwYgh2AD86/cle9R4yFAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.2.102] (213.87.136.199) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 25 Mar
- 2025 20:19:41 +0300
-Message-ID: <05fec753-cdaa-45a5-a029-b6435c30eb07@omp.ru>
-Date: Tue, 25 Mar 2025 20:19:39 +0300
+	s=arc-20240116; t=1742924842; c=relaxed/simple;
+	bh=goKPkMeXynwdrhBXnRq9X1VvT6tW+FJCFrUGgCdOnmg=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GEEyYDWXUlpVCLtHk804OSQcw7SVxdWABRbAcIz2LA0gIlWbO6D2NXVxEKTX/Ib/Qx5HGwnEhc5jtfl7SS96n4KA7jiKLh6cUOu+AvGi2s55LGV7QqlFrzIwWAerntGNhHO0SjQ1I8XtD2dmYGKQup5j47oOpR30T288PEv7G3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=RiFmS2yP; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6e17d3e92d9so45821326d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 10:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1742924838; x=1743529638; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
+        b=RiFmS2yPwpzXwLruNurFXEeXSL2ike4PAgZjfJvw3f2bMQp7D+X5aQdEi+/iHOD6xb
+         QEXChE3bWBBE0BQXE+G0KwrGRxKb+BUFPVrblKcVnlgY+9t1Co34dsS6M6KReUaHicen
+         J8Y6tilYG818HT0ShqpexiSCxaeXC9GH3VZtUJvbMgZZICUHDAvgad0c+xTuBDgCqmVz
+         XcmPVcz0YqWGZLHenjXXW9syLh61SwAlL33m/RsgyYXm10vCl98ALzk3rEgQmq8eB+UF
+         yxvMWP2D7JV1Ab70eClf6abpx16+bPDt4nVOTV6LbuWKXIBBQNzcn52uQOUzNPEKIiPb
+         hjHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742924838; x=1743529638;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
+        b=LCou8ZP9dHJCkKcmMoTJ5fHQdkjbEAcqh8FGUPunMcenwf2h+oFUT4zcUDtMCzm+I/
+         HmjqBkwe6HeGk7dCDpKCEtvV6tCQEGH3JF+bYAPRYg+/jkcOhAOGX1M1SOtVWMyTTjkl
+         TatuoiAjveWuB719wYKZlBa2z7SVRo8MFbPuc+z9Fuu0LoS64uY+sTx499eJ/bdR5k6b
+         Vp8dWPPrtckl9rfA5B8qIgA7IoiaaQXLBGo/2ACQegKuXD5wzLslZr6cEIRH/t4+tvO+
+         egHkSrVJgBpd6cdZAFqj0owFq7m+vfMMGf/tnTKT9G7xsf8e+Zie24iOzdkG8gvFt3qW
+         LapQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUeHfMLn5cQbsSwTbZlQKuhfO8YSZyLl4PTXOknY9vIT50fg9AW9WD2KE64Gj0wmdPLyylv0RA6cz0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN5gpM8GUl8EELeC0/gjBvgWbWLEVHRYOe5CCTNtgW+HIP5H2k
+	NJI+4eOTwUE6Ly8jFAhK8NLGccVXBcjBg0XdtBqq4AwfKh+nXOAcl5Oip4Csyw==
+X-Gm-Gg: ASbGncvx7bhysB77n5mbXaanGpKQEKP3cQTCeNZxmgpz/FKJM07cRnJARyt5DaMTta3
+	iZPhHimtTrLJ1sBQPIKpFWvv1UyNi2uD5wIXYJTXYT/ilrVnmElLKT8LtH3pPyKFnvl06UOmqnx
+	xU8kppGChmfHDpPED+eW/J6ixX2jOzpn3JkjCc96wI0jteKkuGgTw5+eZSzHyiEpfpHw729+uaX
+	cRjZok8Tcx06tbzHeOgsmKH4JOoLa0wVtXDY8Oxe12K4SFSBk7r2AXaUtKcjO9+KEvRoZGLrCmz
+	0tB2SVgAAGF2NdsqojBoC+0uUw9k18pQldD9c1+C5SyfFRUzSQW5DbSF6/YMk/9QLt4VxaHcwk4
+	cxoncu3mIayGniyxg3m8pB7rtTkApxs511ENKKA==
+X-Google-Smtp-Source: AGHT+IEE3s2WyDicsHyN8I8hDTQsl58ko3gMhcMuYw+oTIF/jYZenScg9DM9xoAREespRcfMxIvUaA==
+X-Received: by 2002:a05:6214:19ef:b0:6e8:97f6:3229 with SMTP id 6a1803df08f44-6eb3f294676mr269179956d6.16.1742924838295;
+        Tue, 25 Mar 2025 10:47:18 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc5a1dsm58469186d6.79.2025.03.25.10.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 10:47:17 -0700 (PDT)
+Date: Tue, 25 Mar 2025 13:47:15 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-i2c@vger.kernel.org
+Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+Message-ID: <6bb3b80b-a808-4992-8666-535ed9a5c980@rowland.harvard.edu>
+References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
+ <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
+ <Z-GwRNe8NIigXYtS@shikoro>
+ <ecdc37c4-b178-4e43-bfbf-45bd3ed29ff2@rowland.harvard.edu>
+ <Z-Lg3glmnzA44R_H@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH V3 25/43] rv64ilp32_abi: exec: Adapt 64lp64 env and
- argv
-To: <guoren@kernel.org>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-	<torvalds@linux-foundation.org>, <paul.walmsley@sifive.com>,
-	<palmer@dabbelt.com>, <anup@brainfault.org>, <atishp@atishpatra.org>,
-	<oleg@redhat.com>, <kees@kernel.org>, <tglx@linutronix.de>,
-	<will@kernel.org>, <mark.rutland@arm.com>, <brauner@kernel.org>,
-	<akpm@linux-foundation.org>, <rostedt@goodmis.org>, <edumazet@google.com>,
-	<unicorn_wang@outlook.com>, <inochiama@outlook.com>, <gaohan@iscas.ac.cn>,
-	<shihua@iscas.ac.cn>, <jiawei@iscas.ac.cn>, <wuwei2016@iscas.ac.cn>,
-	<drew@pdp7.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	<ctsai390@andestech.com>, <wefu@redhat.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <josef@toxicpanda.com>, <dsterba@suse.com>,
-	<mingo@redhat.com>, <peterz@infradead.org>, <boqun.feng@gmail.com>,
-	<xiao.w.wang@intel.com>, <qingfang.deng@siflower.com.cn>,
-	<leobras@redhat.com>, <jszhang@kernel.org>, <conor.dooley@microchip.com>,
-	<samuel.holland@sifive.com>, <yongxuan.wang@sifive.com>,
-	<luxu.kernel@bytedance.com>, <david@redhat.com>, <ruanjinjie@huawei.com>,
-	<cuiyunhui@bytedance.com>, <wangkefeng.wang@huawei.com>,
-	<qiaozhe@iscas.ac.cn>
-CC: <ardb@kernel.org>, <ast@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <kvm@vger.kernel.org>,
-	<kvm-riscv@lists.infradead.org>, <linux-mm@kvack.org>,
-	<linux-crypto@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-input@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-	<linux-serial@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <maple-tree@lists.infradead.org>,
-	<linux-trace-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-atm-general@lists.sourceforge.net>, <linux-btrfs@vger.kernel.org>,
-	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-	<linux-nfs@vger.kernel.org>, <linux-sctp@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-media@vger.kernel.org>
-References: <20250325121624.523258-1-guoren@kernel.org>
- <20250325121624.523258-26-guoren@kernel.org>
-Content-Language: en-US
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20250325121624.523258-26-guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 03/25/2025 16:50:54
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 192097 [Mar 25 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 51 0.3.51
- 68896fb0083a027476849bf400a331a2d5d94398
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.136.199
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/25/2025 16:52:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/25/2025 3:18:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z-Lg3glmnzA44R_H@shikoro>
 
-On 3/25/25 3:16 PM, guoren@kernel.org wrote:
-
-> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+On Tue, Mar 25, 2025 at 05:59:10PM +0100, Wolfram Sang wrote:
 > 
-> The rv64ilp32 abi reuses the env and argv memory layout of the
-> lp64 abi, so leave the space to fit the lp64 struct layout.
+> > > > As far as I can tell from the source code, the dib0700 simply isn't able 
+> > > > to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be 
+> > > > changed simply to return 0 in such cases?
+> > > 
+> > > The adapter (I assume the one in dvb-usb-i2c.c) should populate an
+> > > i2c_adapter_quirks struct with I2C_AQ_NO_ZERO_LEN and then the core will
+> > > bail out for you.
+> > 
+> > Or the I2C_AQ_NO_ZERO_LEN_READ flag bit.
 > 
-> Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
-> ---
->  fs/exec.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Yes, that would be more convervative. Does USB allow zero-length writes?
+
+It does.
+
+> > What about all the other fields in the i2c_adapter_quirks structure?  
+> > How should they be set?  (Note: I don't know anything about this driver 
+> > or these devices; I'm just chasing down the syzbot bug report.)
 > 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 506cd411f4ac..548d18b7ae92 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -424,6 +424,10 @@ static const char __user *get_user_arg_ptr(struct user_arg_ptr argv, int nr)
->  	}
->  #endif
->  
-> +#if defined(CONFIG_64BIT) && (BITS_PER_LONG == 32)
+> As I also don't know the hardware, I suggest to leave them empty. 0
+> means "no quirk".
 
-   Parens don't seem necessary...
+Okay, let's see if this works.
 
-> +	nr = nr * 2;
+Alan Stern
 
-   Why not nr *= 2?
 
-[...]
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5fc319360819
 
-MBR, Sergey
-
+Index: usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
++++ usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
+@@ -10,6 +10,9 @@
+ 
+ int dvb_usb_i2c_init(struct dvb_usb_device *d)
+ {
++	static const struct i2c_adapter_quirks i2c_usb_quirks = {
++		.flags = I2C_AQ_NO_ZERO_LEN_READ,
++	};
+ 	int ret = 0;
+ 
+ 	if (!(d->props.caps & DVB_USB_IS_AN_I2C_ADAPTER))
+@@ -24,6 +27,7 @@ int dvb_usb_i2c_init(struct dvb_usb_devi
+ 	strscpy(d->i2c_adap.name, d->desc->name, sizeof(d->i2c_adap.name));
+ 	d->i2c_adap.algo      = d->props.i2c_algo;
+ 	d->i2c_adap.algo_data = NULL;
++	d->i2c_adap.quirks    = &i2c_usb_quirks;
+ 	d->i2c_adap.dev.parent = &d->udev->dev;
+ 
+ 	i2c_set_adapdata(&d->i2c_adap, d);
 
