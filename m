@@ -1,55 +1,94 @@
-Return-Path: <linux-usb+bounces-22073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B999A6F059
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 12:14:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C016CA6F44F
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 12:36:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06E0F3A9FD4
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 11:14:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A34AD167DE4
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Mar 2025 11:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B07255E3C;
-	Tue, 25 Mar 2025 11:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E43A2561C5;
+	Tue, 25 Mar 2025 11:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zIUEg0XD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h+r+GtQX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70597A937;
-	Tue, 25 Mar 2025 11:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865A91AD3E0
+	for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 11:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742901281; cv=none; b=unEUzEMC7HB8dAnRuEdYB6tiy89shcCTO79s9a+Zi9BdtyevujY3uoL7fWI1GRMcCrqha3JmSfjY2c7uCDc9/gdoQDU+Rkvrq5VyU43dcjgRM4pqNclRDkUNL0FdV1v26HIy4PJOyhm8tNthPhonrgl6Whg9AwH1E0cPAhZhoA0=
+	t=1742902535; cv=none; b=KaWHEQucBnpEm+A6cyiEr78FbrdM07qf5jg6Ub6mrRd7f87vgJyt9TX5123V3twoB6IP4obNHuDLFgEwEfDVOZYHhvaueQtLHPcR2Pj3kHvn2fY8Ck6Ok0uoC0RK6jfeF3yHnoCrho6X10StY/SGhSZvKJoo6w4h0hh0U5nzYkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742901281; c=relaxed/simple;
-	bh=N7nNpkGG93O1d4OuWsSH/Z9bDtptyVB0AGTzGeZOesE=;
+	s=arc-20240116; t=1742902535; c=relaxed/simple;
+	bh=axTyly0sCljhfwwpNOgHFHjTCGh51MkgyOh1E0/Iq9w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=txCX62/psfhLL3qnkgXDm2zVrpVwVQccdzuzMhrKhjLMwpfykE4zedkckta8c32KcTYPeQh5xX7fOPbpZ94yZ9fSjZTH1qZcqhLX1H0fBHX3TCy5ispwN5eLs0w4FjroGPvJzcs5PuubF2qd33SO15Erruul0+FLf4z3Rxc4WAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zIUEg0XD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E64DC4CEE4;
-	Tue, 25 Mar 2025 11:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742901280;
-	bh=N7nNpkGG93O1d4OuWsSH/Z9bDtptyVB0AGTzGeZOesE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zIUEg0XDvxh/kBD441/02kLatp7dQAtVOeiZaXVE6t8nmnadP1ReVBkoW35co3uF8
-	 qmWjVf6kcyiWA6jJTRalli8eyK983xMYsKg9tw0sSDN6gafp6q7eIBbNbfNAN9NbjK
-	 pEvEeBINzafqONQpZB40cDQewTeK+jabUl5AgMKQ=
-Date: Tue, 25 Mar 2025 07:13:18 -0400
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Lubomir Rintel <lkundrak@v3.sk>
-Cc: linux-usb@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH v3 net-next] rndis_host: Flag RNDIS modems as WWAN devices
-Message-ID: <2025032559-dispersal-humvee-bdfb@gregkh>
-References: <20250325095842.1567999-1-lkundrak@v3.sk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqOSZqDc5uvBnbFMlR3t7rnhi7bhhBNCSq3JrojlbgokbZZQ/w7fYo492a54l6YJHmuP6olEeFjF4vepnEagArmS3jBoH6TGbhZl6pY6848gKn/pHFjdO7sH6R6FXpafv96WDPImkfOwx6ln7j9qb5A9Aegs2Psnp7jt6c/yvVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h+r+GtQX; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2a81e41e3so1107373166b.1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Mar 2025 04:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742902532; x=1743507332; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ona5OctVpUFMXPABaOF+C6CD5ocYKvVWSnGYTcvi3Ao=;
+        b=h+r+GtQXpnstt+dpx91SPRhxJK+ciZQbkP/kAR/PPsE8hEIhQ0ZpdykjVXTcItvQCI
+         wUJmlUs0ePLMrv1a3IfCn0DNwBhrA7w77wVIMXxdv2oVYkBt02TL0QYkDUZh4tGG1Pb8
+         71P2ZYp2wamyXKTNYf0MWC3pPYEIRHhi3WPcsXrS8eEr0pUT+iRfDHuQioLRFtB8vylJ
+         4JA7Nfnj3zNfv9+Q/IW61CoPeZEi/JAJQjU8nQ/jIxsM5E5LDcyQj2t7iLKwDUSCV82U
+         mXFWxL7YC7p9yapECODixfe2Jic1x72RpS0swBCpQylapWHWFWCU72fuBXkabYSw2R6y
+         ngoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742902532; x=1743507332;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ona5OctVpUFMXPABaOF+C6CD5ocYKvVWSnGYTcvi3Ao=;
+        b=UzpB9GcFkzT4yYgKh47goIjvlrfbT9Rqk/rK33EG4nBkFyYaeFOFYVAlXIBI0mOkQW
+         UtXelAEL3m/IHPumgmvlIkH7F2S9Npx0h25GbckYz0Vx/f2Wge50Q0SiGc4cxku0ABw2
+         p8vrXFSIqQ1Ej042F6N66c+Anw2Qk20DNxk08zD5YjdH9Db4DrRvB6FxtPrUrIaq/KZq
+         jSEvYWqV3n9+x/WmJV3ohDAQQprV/uydi6AoHQCU7+JYQVAYAHXxpI4cbDmFVyymgkOT
+         EfK5IIDnwyQMbgMN4vh31IOEyzWeH51xcYqW/GF+BFMAzKpzrVLeKgqTrfvFPf1RYM0f
+         6fSA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzuXT4SRRkodmu1nmGQxGPOV37uTNhzFh+zzCteWc33wo7WH1anS5zvFgbhNObxWPaw62h0GbKALM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSdCYPwzXKXxS85FhB3r5etG5Vg4zAZ7XC1GGSGLO3K+2AOkz3
+	1CYbN949Z6j7kNsuXPnDPuRQxGZEfH/IJXZIs7w6PQrRC7gV6auMLdisakn4YeoISeNY5BvJyIZ
+	f
+X-Gm-Gg: ASbGncsLFdiVEpCb4tpLGt9VD3sw7NsvApdFK3R298ps2sqwnO2h8Sqdloj/MI6lHvL
+	MYFvmTs7ZwWEjkqGNKHhzYMAsobwyYCbmReaHDm3N4wW3fu4jJ+GBxKNmfOsdgDs0GOZM0eGzB+
+	w8kwWfLwrY1XQ5iQ1/TJbJq1MW+xmaoUbXC2eSRx0b4dn1N8Oae0ioioIeWUDuDP+Hv5cLo04P+
+	RvilNaxOScw8Z3mELUE4i/gtDx5zaVB75lmE7sm6SfybnIsz40CC0+8ejMJ/YwPL+0GoJVqJ2jn
+	ItGD0WsbprPxIxUGQlgmwiidkhrm/JQzTAw+Wsdeg9eGnmVTtDifagQ=
+X-Google-Smtp-Source: AGHT+IFKpEsb4p3LWlHWOKvoJwQ3AF5kC9F/GUq8MdsIh3ud5GODZ+3OVezWTIFKtb7E9DO2qBLkNg==
+X-Received: by 2002:a17:906:c144:b0:aa6:b63a:4521 with SMTP id a640c23a62f3a-ac3f2117cb7mr1775900066b.15.1742902531711;
+        Tue, 25 Mar 2025 04:35:31 -0700 (PDT)
+Received: from linaro.org ([2a02:2454:ff21:ef30:f88a:e8d5:82b:cbb5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3efb64b06sm848323766b.94.2025.03.25.04.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 04:35:31 -0700 (PDT)
+Date: Tue, 25 Mar 2025 12:35:26 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: srinivas.kandagatla@linaro.org, mathias.nyman@intel.com, perex@perex.cz,
+	conor+dt@kernel.org, dmitry.torokhov@gmail.com, corbet@lwn.net,
+	broonie@kernel.org, lgirdwood@gmail.com, krzk+dt@kernel.org,
+	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
+	tiwai@suse.com, robh@kernel.org, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v36 30/31] ALSA: usb-audio: qcom: Add USB offload route
+ kcontrol
+Message-ID: <Z-KU_o_LE3PO6J2y@linaro.org>
+References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
+ <20250319005141.312805-31-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,104 +97,95 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250325095842.1567999-1-lkundrak@v3.sk>
+In-Reply-To: <20250319005141.312805-31-quic_wcheng@quicinc.com>
 
-On Tue, Mar 25, 2025 at 10:58:41AM +0100, Lubomir Rintel wrote:
-> Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
-> Broadband Modems, as opposed to regular Ethernet adapters.
+On Tue, Mar 18, 2025 at 05:51:40PM -0700, Wesley Cheng wrote:
+> In order to allow userspace/applications know about USB offloading status,
+> expose a sound kcontrol that fetches information about which sound card
+> and PCM index the USB device is mapped to for supporting offloading.  In
+> the USB audio offloading framework, the ASoC BE DAI link is the entity
+> responsible for registering to the SOC USB layer.
 > 
-> Otherwise NetworkManager gets confused, misjudges the device type,
-> and wouldn't know it should connect a modem to get the device to work.
-> What would be the result depends on ModemManager version -- older
-> ModemManager would end up disconnecting a device after an unsuccessful
-> probe attempt (if it connected without needing to unlock a SIM), while
-> a newer one might spawn a separate PPP connection over a tty interface
-> instead, resulting in a general confusion and no end of chaos.
+> It is expected for the USB SND offloading driver to add the kcontrol to the
+> sound card associated with the USB audio device.  An example output would
+> look like:
 > 
-> The only way to get this work reliably is to fix the device type
-> and have good enough version ModemManager (or equivalent).
+> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+> -1, -1 (range -1->255)
 > 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> Fixes: 63ba395cd7a5 ("rndis_host: support Novatel Verizon USB730L")
+> This example signifies that there is no mapped ASoC path available for the
+> USB SND device.
 > 
+> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+> 0, 0 (range -1->255)
+> 
+> This example signifies that the offload path is available over ASoC sound
+> card index#0 and PCM device#0.
+> 
+> The USB offload kcontrol will be added in addition to the existing
+> kcontrols identified by the USB SND mixer.  The kcontrols used to modify
+> the USB audio device specific parameters are still valid and expected to be
+> used.  These parameters are not mirrored to the ASoC subsystem.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-> Changes since v1:
-> * Added Fixes tag, as suggested by Paolo Abeni
+>  sound/usb/Kconfig                  |  10 ++
+>  sound/usb/qcom/Makefile            |   4 +
+>  sound/usb/qcom/mixer_usb_offload.c | 158 +++++++++++++++++++++++++++++
+>  sound/usb/qcom/mixer_usb_offload.h |  17 ++++
+>  sound/usb/qcom/qc_audio_offload.c  |   2 +
+>  5 files changed, 191 insertions(+)
+>  create mode 100644 sound/usb/qcom/mixer_usb_offload.c
+>  create mode 100644 sound/usb/qcom/mixer_usb_offload.h
 > 
-> Changes since v2:
-> * Fixed Fixes tag... Suggested by Jakub Kicinski
-> 
-> ---
->  drivers/net/usb/rndis_host.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
-> index 7b3739b29c8f7..bb0bf14158727 100644
-> --- a/drivers/net/usb/rndis_host.c
-> +++ b/drivers/net/usb/rndis_host.c
-> @@ -630,6 +630,16 @@ static const struct driver_info	zte_rndis_info = {
->  	.tx_fixup =	rndis_tx_fixup,
->  };
+> diff --git a/sound/usb/Kconfig b/sound/usb/Kconfig
+> index 6daa551738da..7d8833945711 100644
+> --- a/sound/usb/Kconfig
+> +++ b/sound/usb/Kconfig
+> @@ -176,9 +176,19 @@ config SND_BCD2000
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called snd-bcd2000.
 >  
-> +static const struct driver_info	wwan_rndis_info = {
-> +	.description =	"Mobile Broadband RNDIS device",
-> +	.flags =	FLAG_WWAN | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SETINT,
-> +	.bind =		rndis_bind,
-> +	.unbind =	rndis_unbind,
-> +	.status =	rndis_status,
-> +	.rx_fixup =	rndis_rx_fixup,
-> +	.tx_fixup =	rndis_tx_fixup,
-> +};
+> +config SND_USB_QC_OFFLOAD_MIXER
+> +	tristate "Qualcomm USB Audio Offload mixer control"
+
+This looks like a "bool" and not a "tristate", since the ifneq in the
+Makefile below ignores whether this is a "y" or "m".
+
+> +	help
+> +	 Say Y to enable the Qualcomm USB audio offloading mixer controls.
+> +	 This exposes an USB offload capable kcontrol to signal to
+> +	 applications about which platform sound card can support USB
+> +	 audio offload.  The returning values specify the mapped ASoC card
+> +	 and PCM device the USB audio device is associated to.
 > +
->  /*-------------------------------------------------------------------------*/
+>  config SND_USB_AUDIO_QMI
+>  	tristate "Qualcomm Audio Offload driver"
+>  	depends on QCOM_QMI_HELPERS && SND_USB_AUDIO && USB_XHCI_SIDEBAND && SND_SOC_USB
+> +	select SND_USB_OFFLOAD_MIXER
+
+And I think "SND_USB_OFFLOAD_MIXER" (without _QC suffix) doesn't exist
+anymore after v30? I see there was some discussion around that there.
+Is this supposed to be "select SND_USB_QC_OFFLOAD_MIXER"?
+
+If yes, isn't this option always selected if SND_USB_AUDIO_QMI is
+enabled? In that case you could just drop the config option...
+
+>  	help
+>  	  Say Y here to enable the Qualcomm USB audio offloading feature.
 >  
->  static const struct usb_device_id	products [] = {
-> @@ -666,9 +676,11 @@ static const struct usb_device_id	products [] = {
->  	USB_INTERFACE_INFO(USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
->  	.driver_info = (unsigned long) &rndis_info,
->  }, {
-> -	/* Novatel Verizon USB730L */
-> +	/* Mobile Broadband Modem, seen in Novatel Verizon USB730L and
-> +	 * Telit FN990A (RNDIS)
-> +	 */
->  	USB_INTERFACE_INFO(USB_CLASS_MISC, 4, 1),
-> -	.driver_info = (unsigned long) &rndis_info,
-> +	.driver_info = (unsigned long)&wwan_rndis_info,
->  },
->  	{ },		// END
->  };
-> -- 
-> 2.48.1
-> 
-> 
+> diff --git a/sound/usb/qcom/Makefile b/sound/usb/qcom/Makefile
+> index 1eb51160e2e5..1efe1b90be7a 100644
+> --- a/sound/usb/qcom/Makefile
+> +++ b/sound/usb/qcom/Makefile
+> @@ -1,2 +1,6 @@
+>  snd-usb-audio-qmi-y := usb_audio_qmi_v01.o qc_audio_offload.o
+>  obj-$(CONFIG_SND_USB_AUDIO_QMI) += snd-usb-audio-qmi.o
+> +
+> +ifneq ($(CONFIG_SND_USB_QC_OFFLOAD_MIXER),)
+> +snd-usb-audio-qmi-y += mixer_usb_offload.o
+> +endif
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Thanks,
+Stephan
 
