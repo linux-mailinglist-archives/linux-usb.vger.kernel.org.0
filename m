@@ -1,173 +1,102 @@
-Return-Path: <linux-usb+bounces-22195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22196-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E39F3A7221C
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 23:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D8E9A723D4
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 23:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA8F03B9575
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 22:06:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0F233B54C8
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 22:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83EE725484F;
-	Wed, 26 Mar 2025 22:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1D92620C6;
+	Wed, 26 Mar 2025 22:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ehIwNvUZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZjKyefw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD11B040D;
-	Wed, 26 Mar 2025 22:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A24019D88B;
+	Wed, 26 Mar 2025 22:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743026778; cv=none; b=fIs/6oAgX/q15BL4N01pzI0W/9P+X9AkSWsLUvMdiXn4aT5X+ErwZ2rOhXbK3gdoQBJzjjwV1DdEQCo47KWzhvNwi/1EZgy305570Py17glIbskDevsV/73qom0H1gbZPz+pamdJIo0A2hdy+owI6OGJedF010iBMz4ZFoHOlkQ=
+	t=1743027464; cv=none; b=WZ1Dj76SWraGtnlruLMOljB1qfHjfFPb5nhsh3c3o8sbQH0h1mHnos/eTVJe0ckLeaQ/a57PrVBv1iZLrcXMftl7Viajo33++vxDC2MnHAOOlDg2tRKoD2b+nGA1ePS1ubFkWh/2zNzkYsxyqWcOxiM4TP+k5HZLdxJobViQov4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743026778; c=relaxed/simple;
-	bh=wBUZtm7tQMfLpH6iDp+77aS8r5MvIGZkKqcqaUwCPlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MnznXBBkgJMDY4LR+nIU2hlBPA+gFf1vV9oSjGiIKNA389xgl3JbeNjzUsM3bhwXcRo0XlwiFq3GafNUFmoeAQCEP7BmMmbqj2dkHaoUT2MOI6oG9KsFa5ld95orDIpovZCvpOlYOaluL1vOMKY3dwyeHIWYCWA7Z2PIBQZX9Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ehIwNvUZ; arc=none smtp.client-ip=80.12.242.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id xYjetXqeFG2llxYjhtb0U8; Wed, 26 Mar 2025 22:56:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743026200;
-	bh=Hkg1tTedGB+Nrzuw+UGSEvgfhzz7DWhq6NfPcD6jls0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=ehIwNvUZRrYlyHrVPoKyhA9+6FelPnghZEwndDyTk9A7kX5ZiDyZT8xOF9MYv5AxH
-	 MJlqH6+TnWRuEC+VLGvnUFpwpoPkS957gtuI1Db/64vG1VT0s+n5oyRUEaa1Sy9ZeE
-	 sjLRmqegaUeObIO47DnC7Z6aI1y2gh6x49WfYR52riStnVUkv+ZtstQrZg0NEZMuLZ
-	 kYE9LlZxQeBgxRmLZw1CVWiqFYaUEeko2/SFASpYW01pxMjnbvtk5FH/5A/Ke0Zxqu
-	 MsNghiRcYtxVGichRbfu5nWMZQwUUAA6qLQFxMOGkI2IYsr3GtozA6PSHx2dhKnPjR
-	 U+bmi2yH/2OHw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 26 Mar 2025 22:56:40 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <08f1177f-6623-46ff-8936-5b628326d8bf@wanadoo.fr>
-Date: Wed, 26 Mar 2025 22:56:30 +0100
+	s=arc-20240116; t=1743027464; c=relaxed/simple;
+	bh=ztcSyDM8688dY/x4+PbD/IkRXQaivYoZnohIQ5z1uOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Qg2y2bGmu1s4ioSDIlWGbMHj5Ele88soFGAIoMj+yEvYZsTbWGY53bbMecrEoERJngmzagRuO2Moq1mpIUVpJVqWQzjqP3U7I4Yu95cZQyvy0VOXYV0V0qMFU8Fr7pUDO+MRI8ITN92ZOGV/RUM2YrM0uh/H8q8AmS0duuDAY6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZjKyefw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C32DC4CEE2;
+	Wed, 26 Mar 2025 22:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743027463;
+	bh=ztcSyDM8688dY/x4+PbD/IkRXQaivYoZnohIQ5z1uOk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=aZjKyefwZKYW7LeGPlItgSyUrpIMQulGkTH7hGBOcy36+7XQoK4Una1scZ6ZVHlax
+	 WaKJRvg4WEcH7nrTkKZCrZv5Lagw9FRHfG6zutH3FgYnIdrjgn/bc76FOlfgd38VgU
+	 Yp9g5LKLFsH6vrWDjxJywPxkBeXiavmEH4zl0wcNKSHr5tlb4BIBOXRRQPdfODkIla
+	 SJvWdMdjhjy6repYF27U25o5E6JpVyMr0HBpNOmsccm/fhEHc4FREkWs23WNG8dZp4
+	 t4Q2rN4/UZVh1/palTutmswlnOOFiuQi7AlXTIM0aLpWkGdCQgkUCzRzUQzmL28ba9
+	 BtMEoboYuKvsA==
+Date: Wed, 26 Mar 2025 16:17:41 -0600
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH][next] usb: ehci-fsl: Avoid -Wflex-array-member-not-at-end
+ warning
+Message-ID: <Z-R9BcnSzrRv5FX_@kspp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Le 25/02/2025 à 09:16, Ming Yu a écrit :
-> This driver supports Socket CANFD functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+-Wflex-array-member-not-at-end was introduced in GCC-14, and we are
+getting ready to enable it, globally.
 
-...
+Move the conflicting declaration to the end of the structure. Notice
+that `struct ehci_hcd` is a flexible structure --a structure that
+contains a flexible-array member.
 
-> +static int nct6694_can_probe(struct platform_device *pdev)
-> +{
-> +	const struct mfd_cell *cell = mfd_get_cell(pdev);
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	struct nct6694_can_priv *priv;
-> +	struct net_device *ndev;
-> +	int ret, irq, can_clk;
-> +
-> +	irq = irq_create_mapping(nct6694->domain,
-> +				 NCT6694_IRQ_CAN0 + cell->id);
-> +	if (!irq)
-> +		return irq;
+Fix the following warning:
 
-Should irq_dispose_mapping() be caled in the error handling path and in 
-the remove function?
+drivers/usb/host/ehci-fsl.c:414:25: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
 
-> +
-> +	ndev = alloc_candev(sizeof(struct nct6694_can_priv), 1);
-> +	if (!ndev)
-> +		return -ENOMEM;
-> +
-> +	ndev->irq = irq;
-> +	ndev->flags |= IFF_ECHO;
-> +	ndev->dev_port = cell->id;
-> +	ndev->netdev_ops = &nct6694_can_netdev_ops;
-> +	ndev->ethtool_ops = &nct6694_can_ethtool_ops;
-> +
-> +	priv = netdev_priv(ndev);
-> +	priv->nct6694 = nct6694;
-> +	priv->ndev = ndev;
-> +
-> +	can_clk = nct6694_can_get_clock(priv);
-> +	if (can_clk < 0) {
-> +		ret = dev_err_probe(&pdev->dev, can_clk,
-> +				    "Failed to get clock\n");
-> +		goto free_candev;
-> +	}
-> +
-> +	INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
-> +
-> +	priv->can.state = CAN_STATE_STOPPED;
-> +	priv->can.clock.freq = can_clk;
-> +	priv->can.bittiming_const = &nct6694_can_bittiming_nominal_const;
-> +	priv->can.data_bittiming_const = &nct6694_can_bittiming_data_const;
-> +	priv->can.do_set_mode = nct6694_can_set_mode;
-> +	priv->can.do_get_berr_counter = nct6694_can_get_berr_counter;
-> +	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-> +		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> +		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> +
-> +	ret = can_rx_offload_add_manual(ndev, &priv->offload,
-> +					NCT6694_NAPI_WEIGHT);
-> +	if (ret) {
-> +		dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\n");
-> +		goto free_candev;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +	SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> +
-> +	ret = register_candev(priv->ndev);
-> +	if (ret)
-> +		goto rx_offload_del;
-> +
-> +	return 0;
-> +
-> +rx_offload_del:
-> +	can_rx_offload_del(&priv->offload);
-> +free_candev:
-> +	free_candev(ndev);
-> +	return ret;
-> +}
-> +
-> +static void nct6694_can_remove(struct platform_device *pdev)
-> +{
-> +	struct nct6694_can_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	unregister_candev(priv->ndev);
-> +	can_rx_offload_del(&priv->offload);
-> +	free_candev(priv->ndev);
-> +}
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/ehci-fsl.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-...
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 26f13278d4d6..c720d55f4982 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -411,12 +411,13 @@ static int ehci_fsl_setup(struct usb_hcd *hcd)
+ }
+ 
+ struct ehci_fsl {
+-	struct ehci_hcd	ehci;
+-
+ #ifdef CONFIG_PM
+ 	/* Saved USB PHY settings, need to restore after deep sleep. */
+ 	u32 usb_ctrl;
+ #endif
++
++	/* Must be last --ends in a flexible-array member. */
++	struct ehci_hcd	ehci;
+ };
+ 
+ #ifdef CONFIG_PM
+-- 
+2.43.0
 
-CJ
 
