@@ -1,141 +1,255 @@
-Return-Path: <linux-usb+bounces-22156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50638A710BA
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 07:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 168EEA710D5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 07:56:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA1A9172CB3
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 06:47:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 027D31730C6
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 06:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2DE19047C;
-	Wed, 26 Mar 2025 06:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3843719ADA2;
+	Wed, 26 Mar 2025 06:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fDcDOavR"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="RfzR1uEn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gYnqao2r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185D62E3370;
-	Wed, 26 Mar 2025 06:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83704A29;
+	Wed, 26 Mar 2025 06:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742971665; cv=none; b=dFFN7NMxb3OfVQ6F6EBEwYMzC2IyvNxTi8w2FV3/YDuh/tvQ3Uom1sqtQQRb4Vtt4+AemcOkWxQPTBQiuEZ8Vhj6iaXYWoqqshQud2D6w7vEKeN9vSwD2CitEFbB2ALYeVoFn9xNNADRHJs62dGs70wcoAqo51xyF+7POtEcLls=
+	t=1742972186; cv=none; b=eVgwYbyzVaKqByt6dsOo2RFAw0OJUvB1JB+rxA3CBUIllQG0PI4rBzapVkjgu6K+r5ZiXlwhWHADjvsjXw95lji4jhZCuoQo+K7gRdUbwWeCChlftQURQ+a7ync5+1bcDOTaX2ze0ZH5ZVVDPV9+kJ3du/rxGQkFPGbDbnVJTfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742971665; c=relaxed/simple;
-	bh=hInxrTw2p9YD0ruU7r9TnLPL8BFZrnOItF+gEKhRCF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=ZZ+vgEjArctcK2yvbFN0CsM7V3+7Xw0jUsnL/E3vTDrA9L2dzpMlXWn6i+OBiBfzkghLIzAj4txad+dFfiO3T0MwLwVQ7tpWp3pAQphDxdD8xyQHQ6oj8oEItVwt1ULbcJjuj7cP1YXWldg7z0IF61w0MwW0Pn8zUqy0E2qf9WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fDcDOavR; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-54993c68ba0so6892851e87.2;
-        Tue, 25 Mar 2025 23:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742971662; x=1743576462; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z3ZUwlq81Dl9Tw3Z0k8iVPb1wMk8RLrd84BZ0RhOluI=;
-        b=fDcDOavRFwKL/bREH+M4oz/WO87cv+GXEGGT1nJbGaaL7HRRcW8dBew7BqWeR6TlKI
-         ZFfAYm0MqLggXfOz4eW3DDN8twWE6SD9WmGNvHB8l3y4QlCOLOxKcbHiWBL2tJ8u4a1M
-         YSvSwUVXlSh8rIotsjxyM8RMxgTlrqJJDH8PO5QIPCR9kQq3VP0MyAxUmmP3qOqn6rOl
-         JUd2uZm4WfPy45e2MYnnHGzUhj/bLSMJjs9O2ND5LNYYQHP2U8XhB42M+3jjBwOuxhml
-         F8oys1pdYvMnkVXsxBwtq5szok7uzNW58Y2KPhjYYMGAMGbtVidq3jj7ffNtaivDEHCl
-         yj1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742971662; x=1743576462;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z3ZUwlq81Dl9Tw3Z0k8iVPb1wMk8RLrd84BZ0RhOluI=;
-        b=aETAJv6trsiqOOFcYw6vF1jWUYsuNg5MOf/4flxPmzEiZyRp3Wg652/w33jsFV4YU9
-         9elb+sKU/wSuJFcyLknFLurGwPNo3D3Lh7Pq6eN9heP8eqI5Spie1fJjSEEY9lhv3NmB
-         sEEfWc8w+pc3PKgjxhsoJhkvZQLcfDtvKdpd9PDqq+oIyt/RO9pe3ORvHVJPtSkalfnv
-         oZV3OT6+SEhqBJ74HtwVE24mD3fF28Uw62+9aGgWJlAnZhmcsZjRY96QFP8qy0TD0Hfy
-         1sSjZ4h1m42ItI20hWvvfL5cCy1tEEl+PgmSfnQd1M7BTCg462Bow76xeQ4vt2AKuBbc
-         b5uA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2fZnytQhKcZn5eoDaz5G1PZ9i/BJWCGDmYnyD0mQ4oHjp9GxM5euErB5MaXVwGPFHxd+Km7SeBSR3@vger.kernel.org, AJvYcCWaYbBFgW7gcEfY+hrzVVcvaGtSBa2oFGCodMBqCVjYAug1CpvsfG+WWwzSLwl7oCzzllMxZ3x2@vger.kernel.org, AJvYcCXKBrVdpJeQUvKfLNdGAfy1ZKd5pGewCHlub015NhgRgJ1hV5R+wEHe4nqVMbJAXbp+EtbaHvpPpIiuk0Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjfto5zmweky/lsGbGf0qA7PxvUEFsMwxPB0lpphDzJimHdJq2
-	9SiheBYur6Ntr2iWSH5llJA76NhCYlrs2Uy+7d+Dwwd82DhLdpjF
-X-Gm-Gg: ASbGncs0UDpoN5YunoDHhZBhrc8gFeQF8Op1yvZlNQGbrBFCaVXVilovqG+svwhDrLq
-	wseVtm7nT5o2+1UxcQiBL3GuewyvVV2mDAIIY4NFlQZkJ97u/wWmw5ZtU2M+o5t4wBsDAy+ThmT
-	UhaJHqcB6/0sHmPcTKzs95Q4PXW+ZFkApHf5LtYgik/JQVkNiTVSDniuOh2+zMlf6+nO82UI+O/
-	kNJ2A9HWDpjwY3HMTduV2ohbpTZuQUK2oOjL+yYwRVa6KYU6nZt0816ZHDZFg31Mk36jVJLyweP
-	q3D7R9xsBcjI8qDKd3kzh6JOy7xIMDQpv01ezlqpZKilEQlQ9GGiT5TLr7U=
-X-Google-Smtp-Source: AGHT+IEydJCRHupdB/cKYq7WepoCyOs09ATLFIeqJraguP+X4PcOqh1fYBqXJO1n1JIuhWwAtkAspg==
-X-Received: by 2002:a05:6512:1590:b0:545:cd5:84d9 with SMTP id 2adb3069b0e04-54ad6491654mr6736601e87.12.1742971661849;
-        Tue, 25 Mar 2025 23:47:41 -0700 (PDT)
-Received: from foxbook (adqm95.neoplus.adsl.tpnet.pl. [79.185.146.95])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54ad6512143sm1688712e87.228.2025.03.25.23.47.39
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 25 Mar 2025 23:47:40 -0700 (PDT)
-Date: Wed, 26 Mar 2025 07:47:36 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: raju.rangoju@amd.com
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com,
- mathias.nyman@linux.intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH v4] usb: xhci: quirk for data loss in ISOC transfers
-Message-ID: <20250326074736.1a852cbc@foxbook>
-In-Reply-To: <81c922e6-8848-47a2-bd54-1a9f8b1dbdc0@amd.com>
+	s=arc-20240116; t=1742972186; c=relaxed/simple;
+	bh=ZcAFJrQbbKIem4eNtWw3oLhqPmvDEs7Nba9AnPq9pQY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Gc7j2SLq44o9/Ksni6hb54uUo1It6zn1urKbIjLZrPUiIHFiueXftOmT6ABhkfO6S11XpwmTXWJhwyYk6CvyXNjajnodLISIxV0CM70aA+6/tj/xOnslhvkOttFHLIjEkE8/JxoJ6GuzUYDHcacVm/QcgXWjfd8duPWM8uOcBSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=RfzR1uEn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gYnqao2r; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailflow.stl.internal (Postfix) with ESMTP id 1DE6A1D414F3;
+	Wed, 26 Mar 2025 02:56:21 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 26 Mar 2025 02:56:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742972180;
+	 x=1742979380; bh=ECmdnGpGt7R784A69CvkoNMp+aXiuLAMl/bxf3OLtmI=; b=
+	RfzR1uEnzuIhYupQbRLI+t6oD3s5flwg37XUBK1TKTl7jUzDLK53c269/4po+kWE
+	T6qwedPUcgiN2GV+jWlQJ5lajxSVtI9ACkVCTV4sHtzhp0xkVuOIxEao3qH87ENC
+	kVg9hTNedZNDfzUbSAuNT7mcFz0h5QO8ykZym3mRFDAFqKLTqloW33OahrucaK+b
+	P3LrHLXJKyiFe6tn7RboE7xMbRj85ez+WILF2Qs6B4i6jZFiWu9JPcZK/6gbLj03
+	c4xQhgU0ZFxWSyOjDy3ba2ofduCyAHN7FWLBP2Q4XhHYaOOcRmSl1AuJhJWnxOQK
+	27dpe9yy8fAecOL+iMZPcQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742972180; x=
+	1742979380; bh=ECmdnGpGt7R784A69CvkoNMp+aXiuLAMl/bxf3OLtmI=; b=g
+	Ynqao2rMNXNJWY51guszo0nI0tNF47omPFyN1uI7U4D+iD7kLt7kFBDCjKeE55sZ
+	gBca+k+hzsx1OnS77ApTw+K2kJllSfqWkSAhiRvax9sXj6q+MAkhvAkyU4zOzzmZ
+	I3rtMPo41pI86aZlACoC1a0HH9j/UmCqQlcH0mo7n588xEKa13NNdqcWw5KbcBJ3
+	zy0Zfiz28FcL2jNzEd5A/teVhLgIz1MX2ZIkED3an241RCIt7rtO++A2dEk/V6nh
+	ijGIZ2f1Mw7v3ksd/5HFlc+qg0puMl/6G62vIZGE37II+E+lNHMtf4jwtV9XfRTA
+	yczIABDyB67Rl5wWM9TXg==
+X-ME-Sender: <xms:FKXjZ47JqwKD1MMrx_9I06vXKPEfU2tweDnovrjptC1d9dD1GDyAIw>
+    <xme:FKXjZ56BGLV-HkBA5qzXgicwMiP5GSS5I5PXkjP5GUBpEbgIdrbpVEA0zl_Szlmde
+    vYwckN0l7pLjbv5krg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieegkeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnegohfhorhgsihguuggvnhffohhmrghinhculdehtddtmden
+    ucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrh
+    hnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrght
+    thgvrhhnpeffffeghffftdejvddutefhfeetiedthfegfeekheekhfejvefhleejhedvke
+    ehteenucffohhmrghinhepgihrvhhmrdgtohhmnecuhfhorhgsihguuggvnhffohhmrghi
+    nhepgihrvhhmrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddupdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopeihohhnghiguhgrnhdrfigrnhhgsehsih
+    hfihhvvgdrtghomhdprhgtphhtthhopehqihhnghhfrghnghdruggvnhhgsehsihhflhho
+    figvrhdrtghomhdrtghnpdhrtghpthhtohepughsthgvrhgsrgesshhushgvrdgtohhmpd
+    hrtghpthhtohepjhhoshgvfhesthhogihitghprghnuggrrdgtohhmpdhrtghpthhtohep
+    sghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvhhmsehvghgvrh
+    drkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqsghtrhhfshesvhhgvghrrd
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtrhihphhtohesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:FKXjZ3d865jUDOU_P3FqbCph211xhmVC-jXyhH2KvvXElZTeQSCrgA>
+    <xmx:FKXjZ9JUruLpX2ktbpsTrhMOW6uVWlJG98VBhg4xjYQ7DuQLuO7Xew>
+    <xmx:FKXjZ8KNSq7i3QUHAn7c2JfEirLmIp-ywXOibEmSzqsyHEY4iBPGiA>
+    <xmx:FKXjZ-xD2Zzof1B-aLRUAWZXdTsQSFSDERd7iaO-s9v57_uaLtvrLg>
+    <xmx:FKXjZ1d3DtOU1G9qLwQ1zQD4PKXh2AexxJg74oQHx5WEvNy6MmnL8Dh->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DB88E2220072; Wed, 26 Mar 2025 02:56:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-ThreadId: T218a0d8b70d1a53d
+Date: Wed, 26 Mar 2025 07:55:17 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: guoren <guoren@kernel.org>
+Cc: "Peter Zijlstra" <peterz@infradead.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Anup Patel" <anup@brainfault.org>,
+ "Atish Patra" <atishp@atishpatra.org>, "Oleg Nesterov" <oleg@redhat.com>,
+ "Kees Cook" <kees@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Will Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Eric Dumazet" <edumazet@google.com>,
+ "Chen Wang" <unicorn_wang@outlook.com>,
+ "Inochi Amaoto" <inochiama@outlook.com>, gaohan@iscas.ac.cn,
+ shihua@iscas.ac.cn, jiawei@iscas.ac.cn, wuwei2016@iscas.ac.cn,
+ "Drew Fustini" <drew@pdp7.com>, "Lad,
+ Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ ctsai390@andestech.com, wefu@redhat.com,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Josef Bacik" <josef@toxicpanda.com>, "David Sterba" <dsterba@suse.com>,
+ "Ingo Molnar" <mingo@redhat.com>, "Boqun Feng" <boqun.feng@gmail.com>,
+ "Xiao W Wang" <xiao.w.wang@intel.com>, qingfang.deng@siflower.com.cn,
+ "Leonardo Bras" <leobras@redhat.com>,
+ "Jisheng Zhang" <jszhang@kernel.org>,
+ "Conor.Dooley" <conor.dooley@microchip.com>,
+ "Samuel Holland" <samuel.holland@sifive.com>, yongxuan.wang@sifive.com,
+ "Xu Lu" <luxu.kernel@bytedance.com>,
+ "David Hildenbrand" <david@redhat.com>,
+ "Ruan Jinjie" <ruanjinjie@huawei.com>,
+ "Yunhui Cui" <cuiyunhui@bytedance.com>,
+ "Kefeng Wang" <wangkefeng.wang@huawei.com>, qiaozhe@iscas.ac.cn,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
+ linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, maple-tree@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+Message-Id: <a9dddc3d-d03d-4614-9d55-1ce48c6ad5ef@app.fastmail.com>
+In-Reply-To: 
+ <CAJF2gTSHpZMyUk+8HL0=bevCd4XZYRAkrPM600qLPCKxG+bfrg@mail.gmail.com>
+References: <20250325121624.523258-1-guoren@kernel.org>
+ <20250325122640.GK36322@noisy.programming.kicks-ass.net>
+ <db3c9923-8800-4ed3-a352-4ee9ef79c0b7@app.fastmail.com>
+ <CAJF2gTSHpZMyUk+8HL0=bevCd4XZYRAkrPM600qLPCKxG+bfrg@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT kernel-self with
+ ILP32 ABI
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> >> The root cause of the MSE is attributed to the ISOC OUT endpoint
-> >> being omitted from scheduling. This can happen either when an IN
-> >> endpoint with a 64ms service interval is pre-scheduled prior to
-> >> the ISOC OUT endpoint or when the interval of the ISOC OUT
-> >> endpoint is shorter than that of the IN endpoint.
-
-To me this reads like the condition is
-
-(IN ESIT >= 64ms && IN pre-scheduled before OUT) ||
-(OUT ESIT < IN ESIT)
-
-but I suspect it really is
-
-(IN ESIT >= 64ms) &&
-(IN pre-scheduled before OUT || OUT ESIT < IN ESIT)
-
-because otherwise this workaround wouldn't really help:
-ISOC OUT ESIT < INT IN ESIT is almost always true in practice.
-
-
-Moving "either" later maybe makes it more clear:
-
-This can happen when an IN endpoint with a 64ms service interval either
-is pre-scheduled prior to the ISOC OUT endpoint or the interval of the
-ISOC OUT endpoint is shorter than that of the IN endpoint.
-
-> > This code limits interval to 32ms for Interrupt endpoints (any
-> > speed), should it be isoc instead?
+On Wed, Mar 26, 2025, at 07:07, Guo Ren wrote:
+> On Tue, Mar 25, 2025 at 9:18=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Tue, Mar 25, 2025, at 13:26, Peter Zijlstra wrote:
+>> > On Tue, Mar 25, 2025 at 08:15:41AM -0400, guoren@kernel.org wrote:
+>>
+>> You declare the syscall ABI to be the native 64-bit ABI, but this
+>> is fundamentally not true because a many uapi structures are
+>> defined in terms of 'long' or pointer values, in particular in
+>> the ioctl call.
 >
-> The affected transfer is ISOC. However, due to INT EP service
-> interval of 64ms causing the ISO EP to be skipped, the WA is to
-> reduce the INT EP service to be less than 64ms (32ms).
+> I modified uapi with
+> void __user *msg_name;
+> ->
+> union {void __user *msg_name; u64 __msg_name;};
+> to make native 64-bit ABI.
+>
+> I would look at compat stuff instead of using __riscv_xlen macro.
 
-What if there is an ISOC IN endpoint with 64ms ESIT? I haven't yet seen
-such a slow isoc endpoint, but I think they are allowed by the spec.
-Your changelog suggests any periodic IN endpoint can trigger this bug.
+The problem I see here is that there are many more drivers
+that you did not modify than drivers that you did change this
+way.  The union is particularly ugly, but even if you find
+a nicer method of doing this, you now also put the burden
+on future driver writers to do this right for your platform.
 
-> > Are Full-/Low-speed devices really also affected?
-> > 
-> No, Full-/Low-speed devices are not affected.
+>> As far as I can tell, there is no way to rectify this design flaw
+>> other than to drop support for 64-bit userspace and only support
+>> regular rv32 userspace. I'm also skeptical that supporting rv64
+>> userspace helps in practice other than for testing, since
+>> generally most memory overhead is in userspace rather than the
+>> kernel, and there is much more to gain from shrinking the larger
+>> userspace by running rv32 compat mode binaries on a 64-bit kernel
+>> than the other way round.
+>
+> The lp64-abi userspace rootfs works fine in this patch set, which
+> proves the technique is valid. But the modification on uapi is raw,
+> and I'm looking at compat stuff.
 
-The interesting question here is whether LS/FS devices with long
-interval IN endpoints can disrupt a HS OUT endpoint or not, because
-the patch solves the problem from the IN endpoint's side.
+There is a big difference between making it work for a particular
+set of userspace binaries and making it correct for the entire
+kernel ABI.
 
-(I assume that SS probably has no effect on HS schedule.)
+I agree that limiting the hacks to the compat side while keeping
+the native ABI as ilp32 as in your previous versions is better,
+but I also don't think this can be easily done without major
+changes to how compat mode works in general, and that still
+seems like a show-stopper for two reasons:
 
-Regards,
-Michal
+- it still puts the burden on driver writers to get it right
+  for your platform. The scope is a bit smaller than in the
+  current version because that would be limited to the compat
+  handlers and not change the native codepath, but that's
+  still a lot of drivers.
+
+- the way that I would imagine this to be implemented in
+  practice would require changing the compat code in a way that
+  allows multiple compat ABIs, so drivers can separate the
+  normal 32-on-64 handling from the 64-on-32 version you need.
+  We have discussed something like this in the past, but Linus
+  has already made it very clear that he doesn't want it done
+  that way. Whichever way you do it, this is unlikely to
+  find consensus. =20
+
+> Supporting lp64-abi userspace is essential because riscv lp64-abi and
+> ilp32-abi userspace are hybrid deployments when the target is
+> ilp32-abi userspace. The lp64-abi provides a good supplement to
+> ilp32-abi which eases the development.
+
+I'm not following here, please clarify. I do understand that
+having a mixed 32/64 userspace can help for development, but
+that can already be done on a 64-bit kernel and it doesn't
+seem to be useful for deployment because having two sets of
+support libraries makes this counterproductive for the goal
+of saving RAM.
+
+>> If you remove the CONFIG_64BIT changes that Peter mentioned and
+>> the support for ilp64 userland from your series, you end up
+>> with a kernel that is very similar to a native rv32 kernel
+>> but executes as rv64ilp32 and runs rv32 userspace. I don't have
+>> any objections to that approach, and the same thing has come
+>> up on arm64 as a possible idea as well, but I don't know if
+>> that actually brings any notable advantage over an rv32 kernel.
+>>
+>> Are there CPUs that can run rv64 kernels and rv32 userspace
+>> but not rv32 kernels, similar to what we have on Arm Cortex-A76
+>> and Cortex-A510?
+>
+> Yes, there is, and it only supports rv32 userspace, not rv32 kernel.
+> https://www.xrvm.com/product/xuantie/C908
+
+Ok, thanks for the link.
+
+       Arnd
 
