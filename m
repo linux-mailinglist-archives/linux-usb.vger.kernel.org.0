@@ -1,156 +1,137 @@
-Return-Path: <linux-usb+bounces-22189-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22190-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C259A71D85
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 18:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E079A71DD5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 18:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC8DD16DC35
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 17:43:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 063A6171223
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 17:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4A923FC4B;
-	Wed, 26 Mar 2025 17:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABF32405ED;
+	Wed, 26 Mar 2025 17:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnS2FyLz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE87F23F28A
-	for <linux-usb@vger.kernel.org>; Wed, 26 Mar 2025 17:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81C223E334;
+	Wed, 26 Mar 2025 17:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743010927; cv=none; b=SLq7Bbhd9LdLoDEfXThaEZtVJZqB4fiVq04JWIv52TL+Gb9ctUK+GNT5m1l3vhkDtITUS4uHEp5AvNLH3h274Iy8LPCIuwWtNmsZY2sNjAawCreGqL376mZiLDwi+7m0/X+RRUKLiiomQlzDX1Bb64ObetubxJ8RFA7n6KAGChA=
+	t=1743011896; cv=none; b=Cz2HgaYdW1HqjjZLzemzNRcRMB1YiQW7dbGssCEzQK6jZnH/7FNaIJJ6h23a6wJpbfBoAO8fWoTUFuxv3wJza/VTAlFZ+8ho5wv3YciGoM7NF0WLdk2LcT2YeNnW51n0N1ctIwksMoE8FYbn/ekc4rNCssnNsLqQy0gHAMDjGqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743010927; c=relaxed/simple;
-	bh=Z+kmXHGClhFpLj7Nta6mCo6WFt55JgT1HnxwLsMrksk=;
+	s=arc-20240116; t=1743011896; c=relaxed/simple;
+	bh=qD/cQ41RTo+8BDYdoRt9s5SKovqsdZGdDznd1NSpQ6s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6W6fXP43Cxfpf9wytnKuee15fsFwLBfYSWmEYTJNQOjrl3bh28cvZTtn/Gu6GFrg9bfJYi9T9Ilm7UbkRkJTx5eG1D+S59mZseBlIqlqbTuESeiQf0vNpDKPmZxogvxlnxh7yVIz454B3PHwtW4TwBeM7Br32BhwjGZEN2+aVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-0001hP-Qx; Wed, 26 Mar 2025 18:41:36 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-001nIV-1O;
-	Wed, 26 Mar 2025 18:41:36 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id D680D3E7735;
-	Wed, 26 Mar 2025 17:41:35 +0000 (UTC)
-Date: Wed, 26 Mar 2025 18:41:35 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iQv7oB+8enMWHqvxoKl8OsrYfPmtk3TmNe31Rk1IxF3W+xN/AQMZ78jGvW1R2wQgPpH77+pN80gVMmM9+TVzmokiVxn2r1KWLup0+pbpNrPPrTLKdnHLS9JKJNTlD5HkTrrJU6Vt9ccdNJlGrbeMxXfqCDA9NCJ4z1BxDJOLxNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnS2FyLz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A90C4CEE2;
+	Wed, 26 Mar 2025 17:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743011896;
+	bh=qD/cQ41RTo+8BDYdoRt9s5SKovqsdZGdDznd1NSpQ6s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CnS2FyLz/sd/a9zJ6hmgsKESQg/fH8iDeWVq2tPaA4JXR14WInCiekYIY9X8GYBxv
+	 v+2S2s5YrK+EMlc62REZ7YCao5x9cUjTH6z6a0dLif7BvHSQvYq4JMHSxwwTM1aXuS
+	 1EtwJmvhlHKjnereQixhR2d5dcJOhjBr3Jn4xpGWAjM3BqKD0FbvbiAQThaoGFlkDd
+	 DLZKN7T0R+XMRSD1ZwgxVHqlc54xkVBIdunljgm39zqs7ZJwjDS7xZcGmOITVYfLee
+	 zEI19BS2enPqpLIrDi+7FNL2jSpOalh01klMNugAgsXT0+cE407KhXs1hZwu0pUaNS
+	 D2VDFkTjl2AGg==
+Date: Wed, 26 Mar 2025 17:58:11 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+Cc: Matthias Kaehlcke <mka@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Klaus Goger <klaus.goger@theobroma-systems.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, quentin.schulz@cherry.de,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: usb: cypress,hx3: Add support for all
+ variants
+Message-ID: <20250326-fanatic-onion-5f6bf8ec97e3@spud>
+References: <20250326-onboard_usb_dev-v1-0-a4b0a5d1b32c@thaumatec.com>
+ <20250326-onboard_usb_dev-v1-2-a4b0a5d1b32c@thaumatec.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r56ki5hqfoc5hcq4"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="9k9ZnTZP7lApPE38"
 Content-Disposition: inline
-In-Reply-To: <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20250326-onboard_usb_dev-v1-2-a4b0a5d1b32c@thaumatec.com>
 
 
---r56ki5hqfoc5hcq4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+--9k9ZnTZP7lApPE38
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
 
-On 26.03.2025 10:27:03, Ming Yu wrote:
-> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
-7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:21=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > > > > +     priv->can.clock.freq =3D can_clk;
-> > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nomina=
-l_const;
-> > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_d=
-ata_const;
-> > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_coun=
-ter;
-> > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTI=
-NG |
-> > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > > >
-> > > > Does your device run in CAN-FD mode all the time? If so, please use
-> > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_suppor=
-ted
-> > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
-> > > >
-> > >
-> > > Our device is designed to allow users to dynamically switch between
-> > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
-> > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported, and
-> > > can_set_static_ctrlmode() is not suitable in this case.
-> > > Please let me know if you have any concerns about this approach.
-> >
-> > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or not?
-> >
+On Wed, Mar 26, 2025 at 05:22:57PM +0100, Lukasz Czechowski wrote:
+> The Cypress HX3 hubs use different default PID value depending
+> on the variant. Update compatibles list.
 >=20
-> Sorry, I was previously confused about our device's control mode. I
-> will use can_set_static_ctrlmode() to set CAN_FD mode in the next
-> patch.
+> Fixes: 1eca51f58a10 ("dt-bindings: usb: Add binding for Cypress HX3 USB 3=
+=2E0 family")
+> Cc: stable@vger.kernel.org # 6.6
+> Cc: stable@vger.kernel.org # Backport of the patch in this series fixing =
+product ID in onboard_dev_id_table and onboard_dev_match in drivers/usb/mis=
+c/onboard_usb_dev.{c,h} driver
+> Signed-off-by: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+> ---
+>  Documentation/devicetree/bindings/usb/cypress,hx3.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Doc=
+umentation/devicetree/bindings/usb/cypress,hx3.yaml
+> index 1033b7a4b8f9..f0b93002bd02 100644
+> --- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> @@ -15,8 +15,14 @@ allOf:
+>  properties:
+>    compatible:
+>      enum:
+> +      - usb4b4,6500
+> +      - usb4b4,6502
+> +      - usb4b4,6503
+>        - usb4b4,6504
+>        - usb4b4,6506
+> +      - usb4b4,6507
+> +      - usb4b4,6508
+> +      - usb4b4,650a
 
-Does your device support CAN-CC only mode? Does your device support to
-switch between CAN-CC only and CAN-FD mode?
+All these devices seem to have the same match data, why is a fallback
+not suitable?
 
-regards,
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> =20
+>    reg: true
+> =20
+>=20
+> --=20
+> 2.43.0
+>=20
 
---r56ki5hqfoc5hcq4
+--9k9ZnTZP7lApPE38
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkPEwACgkQDHRl3/mQ
-kZwXaAf/a0RArL3RY/rCsvGqnhAz/Nk1ljI1/sjXn6b6BRnEzwSev7b8LpGNMeTK
-ygCzVEDcFHwfjhcV2/C2irc0XtxnLLmh3YqpNF54IY/vAAFDzqPGqzOHYPiOE+Al
-ZFK6zjj26zmBDh011lfjyWk9EYvhDUfZNCUAX6N8Cdic+9wNGDiN9HKVfz6cUj9K
-oGTTUPVTU0Nh7bwnuHLuj5IIruIQlTPH6w0Yd56Uv4TvGZ0cQ+S9hgGvY2J6v4f8
-tdvZIe+xMQTR2d4kaK/HU+wA0iMdSoxKyu9sCszU3tWGH/Yb+UAF1/gcdc0f5Gk6
-0X0j7uJgXLMbbdpHbsWypGiIkORpqQ==
-=mUFO
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ+RAMwAKCRB4tDGHoIJi
+0tRpAQDNS6dW2CGP9zLlr+W7yJhcE2bWiGiO3BKrgWFrmthJsAEAs22eY1Eg/Hrt
+9vPFW4oviBxxip0Da3nn9lOjzkpFSQM=
+=9XYv
 -----END PGP SIGNATURE-----
 
---r56ki5hqfoc5hcq4--
+--9k9ZnTZP7lApPE38--
 
