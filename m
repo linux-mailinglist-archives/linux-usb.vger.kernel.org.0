@@ -1,134 +1,138 @@
-Return-Path: <linux-usb+bounces-22147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AA56A70EE5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 03:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77889A70F01
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 03:27:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E62E33BBBDF
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 02:20:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E6D23B7538
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Mar 2025 02:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD32413A86C;
-	Wed, 26 Mar 2025 02:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 279FC1459F7;
+	Wed, 26 Mar 2025 02:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kX65erbQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DFAEEA9;
-	Wed, 26 Mar 2025 02:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E376DDD2;
+	Wed, 26 Mar 2025 02:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742955642; cv=none; b=hVrb3DBcybriLmpa2SjkFVOCwRQR7KUcGjhO5evOeTPYYMPNzJ42LU0+coT2A0vJWNrnXj7iDP2a7CnjNkTZQUwGvArICXedyOzBJi8PgJ9DanpQEQSvDWRSrWjjQr35psIfzcVW9sNqQUG1xgBC6K045RPrP+PGMFJlLDzs6BA=
+	t=1742956038; cv=none; b=G32R9pQCUxT+baH+0eoh+yKM7baZQMcInO2sRN37RgGCp0+C8JwO49qGj1q+QOEUmVgynN/0JvxHJFYZ78Ipsw6J9LePUkYJUdLUVqZtpLXfPfztqlja9tqelVII1CxXZoK++a/5TXZCc+QI/2pJP7KOkeFxW/A7pWw8FIzH56U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742955642; c=relaxed/simple;
-	bh=Gd9ZdX7vXb/xGpvEuuY5fym5Nrk9/rQzhFroCZyhdHU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AOnsLBSVnIIm5rjMEAwcONaTUF6FN8xwX6cBQwtRI/gizazRHYlJgUa0baaScvy+Xfoo6QjzrVgkawGZGMb+A5rREf4G9nksRd7dQ+/0FxJR4S1j6OSbY1VkcBnYeIiKoaItEwVqEXrFuVB56/J0igtKTxq6lVvNr8O/D+ePhbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e10e9b7c09e811f0a216b1d71e6e1362-20250326
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:20e6d293-0125-4ee8-8d8d-b3dde439d568,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-INFO: VERSION:1.1.45,REQID:20e6d293-0125-4ee8-8d8d-b3dde439d568,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:re
-	lease,TS:5
-X-CID-META: VersionHash:6493067,CLOUDID:dd945ea749cb232eb412d347a8c5ed73,BulkI
-	D:250326100250278RLHOF,BulkQuantity:1,Recheck:0,SF:19|38|66|72|78|102,TC:n
-	il,Content:0|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil
-	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-UUID: e10e9b7c09e811f0a216b1d71e6e1362-20250326
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 54479125; Wed, 26 Mar 2025 10:20:26 +0800
-From: Jie Deng <dengjie03@kylinos.cn>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	xiehongyu1@kylinos.cn,
-	Jie Deng <dengjie03@kylinos.cn>
-Subject: [PATCH] usb-storage: apply IGNORE_UAS for Realtek on RTL9210
-Date: Wed, 26 Mar 2025 10:20:19 +0800
-Message-Id: <20250326022019.1593669-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1742956038; c=relaxed/simple;
+	bh=OsYNUD0JrMVznUm/0Sb5u3pWCXxEM1pl+4CcCbQaFiA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X8P7jNj9E+zdAsqerKXOLMHmqIuaEv2QSyAAIfolplBcMYgACVPEHtnNivux6CYP/P/Gr9UJYoDNn9FeZvnKiGj/Lb60ZOBRMsZDlxjfvMjD7IyYmsMvn/q/yUgeGg7KOQap/bdKTVgq8IGCNUtIEd923JCK/xl5jR60oIe4YBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kX65erbQ; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e643f0933afso367469276.1;
+        Tue, 25 Mar 2025 19:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742956035; x=1743560835; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OesivztSSmkVg2MxyN65puUzbiFCHezJeeQ4VZITXsY=;
+        b=kX65erbQXqftn9bmSQ0V2U+Thy7k8x6FvwyTzj/WlvrmeMWo8+MH3WJvSkE4o7/5aM
+         KOFD/54aTcoDHzP0B2qQpTnoKDKkoyX6788R1XOf75H8/tI42/L/fn4GXanySGB2guv/
+         j2H085P51F51nENq6o1RjlAKuIfucsMDxhq28oY0xIay2p+w5q31QgWmDoz2hU3iFbYE
+         TQTMhXdPyPSSyxpJjnhFyLBb72svObql9FbnlmfsKqARIbqXkaiJwznGSTCG60EID4MF
+         j2cq8r4xfZ29jB7caItS9GedAaiYaFvwSAiDuw+fc1sMH+b1dxwwYVY63lzEmkE9fCtl
+         0ICA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742956035; x=1743560835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OesivztSSmkVg2MxyN65puUzbiFCHezJeeQ4VZITXsY=;
+        b=fl96/+LpywN9od0uPYHQ2RZEof49IKngJcAT2idGLs47OUzWz72Fy2+1pgnAnUMHrk
+         U2FNJwIH4vMeIOTixesDcO0CTGOrD14XJVbbIKEK2zPTpDfK0Xh1PMKk4AWZgcuXA9iX
+         9pzdN3nb5zDHP3U7TWHohYvCuhfb33b0uqir41Ni8o7gVQCHZ5ydhKG95NfGilvxhuAZ
+         fhFJbGTWeChHCx1+nuutXOqTlxzocKMtEUGUk0PuWq/MVK3clNmdOJWvTEpzS4BYAJkS
+         B2Np5TnjcKiAjnJK4aU925L+8o/wAWDX1xerdRGk+sOSnyzCZO+AJGOzN6FZTCH9a2PZ
+         OWyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUeS9pCMIWCkrmUz3TFbX8J/r1zBYshScWcfTU01LyrofRpu/N0DcjEFAfgi2Zvvq/5Bd+bwhaqfVw=@vger.kernel.org, AJvYcCUoQBamja1IacMCxp9AUplv52XviJ34+iZVgG9lepj6vs5SOJ2jSOgqU6MGtlq25EFYJvl0JLgLM7Sjsw==@vger.kernel.org, AJvYcCVMwd25H24b9FhjV6Y3jnwGF1TmhrHesNwlEH31vQ1p7iw/Lakqi4Z2Q7OYVkqZd0YFY96oclC97W3MG/0=@vger.kernel.org, AJvYcCWjeYGiNb6kEJ2+a9bvMB0pMMDBcHXlT4uwDozPOhN4yhfYZzVoMDP/6zEstgzTEpZE1++HdfhY8n/Z@vger.kernel.org, AJvYcCX7k/SaUWdzk2oClIX4o+Xy3/jviWuY5itVhmYdoIi/AtGJWukvg4jVCQ1IIcISXQGbjQF+oWJ20li4ROn2@vger.kernel.org, AJvYcCXIrCO9VsvuCnLq4NpsWA75rY86vLrumQR0pULaO8WEq0RwPZb8u2fasehpZaadvV/jjiOF/q7XcaoDuFOCMRY=@vger.kernel.org, AJvYcCXIrSd6DAROQQw+9B/yXk6w1pJ8JAM5FIkKGmCouaF+bsYd0dho1zJKDUARTTBaORAxXxgz93GWcSE3@vger.kernel.org, AJvYcCXnMuIAVPLwj9X8SidlXImJZYH4HZNyCztrblFeFcRqR0fUx50H9BQ/jX22Ir6HA9IqDbP4XbdI@vger.kernel.org, AJvYcCXzcbBhGg8BMSuiGdbOEk5WLVAp9Kz23iHnCU8n7ZElsht+8OzPZ0Ty5zlHQNHPWF1cPr6+4LC3hPXy@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsgzCnkDgSpRQhnA0N8emajIn88McgzWPRx5asz/z/DLCg6i+H
+	d4T5INjuHeYFL7+q2A2LNuzzBGaARxuYpR55gOZBwItX1fyzMXKgMtszieRvkCSd09IpuRYiCDe
+	4sN7FD/128FyKaH+F93453BH/l8o=
+X-Gm-Gg: ASbGncvs+0/v+FWzSNl1nYVbWV9lr1cjMcrTN9xaD1h8ZDg5cxLo4pLLs7wEhJAHqA3
+	9tM2C3tH1F5bqoWN7Y7jnUO2x+MHmPpMNKD+qzv8HeoeryUL2ty8y7h/BHCydtCQSjKn+bQK010
+	ovjztIfO7YzjUzQLoZNrIuzJ/VcSfZw2NGFhR1TeaQSUq2MzBU01jmNMiM8Ccv8yP/bxoz1N0=
+X-Google-Smtp-Source: AGHT+IE3Snfm2qHqVOKFt4OK9x43NDDK7USUND1kRLvFUR9KKrSRB3y9vtkk0LE7kTF3W/i9pdHGSCQ/R7I9CXHX7nk=
+X-Received: by 2002:a05:6902:124b:b0:e66:a274:7fff with SMTP id
+ 3f1490d57ef6-e692eeb669bmr2931469276.21.1742956034774; Tue, 25 Mar 2025
+ 19:27:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com> <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com> <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+In-Reply-To: <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 26 Mar 2025 10:27:03 +0800
+X-Gm-Features: AQ5f1Jp--uItuyd7OBONJJlx1w09CC-5QpS4AdX0orjyk40ENkleiPptvRU1DIc
+Message-ID: <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The UAS mode of Realtek USB_HDD is reported
-to fail to work on several platforms with
-the following error message, then after
-re-connecting the device will be offlined
-and not working at all.
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=8817=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:21=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> > > > +     priv->can.clock.freq =3D can_clk;
+> > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_=
+const;
+> > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_dat=
+a_const;
+> > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counte=
+r;
+> > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
+> > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING=
+ |
+> > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > >
+> > > Does your device run in CAN-FD mode all the time? If so, please use
+> > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_supporte=
+d
+> > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+> > >
+> >
+> > Our device is designed to allow users to dynamically switch between
+> > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
+> > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported, and
+> > can_set_static_ctrlmode() is not suitable in this case.
+> > Please let me know if you have any concerns about this approach.
+>
+> Where do you evaluate if the user has configured CAN_CTRLMODE_FD or not?
+>
 
-[  143.361210] sd 9:0:0:0: [sdg]
-tag#6 uas_eh_abort_handler 0 uas-tag 2 inflight: CMD IN
-[  143.372377] sd 9:0:0:0: [sdg]
-tag#6 CDB: Read(10) 28 00 00 00 00 10 00 00 10 00
-[  143.382908] sd 9:0:0:0: [sdg]
-tag#5 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
-[  143.394080] sd 9:0:0:0: [sdg]
-tag#5 CDB: Read(10) 28 00 00 00 00 00 00 00 10 00
-[  143.404610] sd 9:0:0:0: [sdg]
-tag#4 uas_eh_abort_handler 0 uas-tag 4 inflight: CMD IN
-[  143.415782] sd 9:0:0:0: [sdg]
-tag#4 CDB: Read(10) 28 00 00 00 00 30 00 00 10 00
-[  148.437916][ 22] xhci_hcd 0000:ba:02.0:
-xHCI host not responding to stop endpoint command.
-[  148.462295][ 22] xhci_hcd 0000:ba:02.0:
-xHCI host controller not responding, assume dead
+Sorry, I was previously confused about our device's control mode. I
+will use can_set_static_ctrlmode() to set CAN_FD mode in the next
+patch.
 
-The Realtek Manufacturer's device cannot
-initialize properly using the UAS driver,
-so we need to switch it to usb-storage
 
-Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
----
- drivers/usb/storage/uas-detect.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/storage/uas-detect.h b/drivers/usb/storage/uas-detect.h
-index 4d3b49e5b87a..23579a2a1181 100644
---- a/drivers/usb/storage/uas-detect.h
-+++ b/drivers/usb/storage/uas-detect.h
-@@ -125,8 +125,11 @@ static int uas_use_uas_driver(struct usb_interface *intf,
- 	 */
- 	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bda &&
- 			le16_to_cpu(udev->descriptor.idProduct) == 0x9210 &&
--			(udev->manufacturer && !strcmp(udev->manufacturer, "HIKSEMI")) &&
--			(udev->product && !strcmp(udev->product, "MD202")))
-+			(((udev->manufacturer && !strcmp(udev->manufacturer, "HIKSEMI")) &&
-+			(udev->product && !strcmp(udev->product, "MD202"))) ||
-+			((udev->manufacturer && !strcmp(udev->manufacturer, "Realtek")) &&
-+			(udev->product && !strcmp(udev->product, "RTL9210")))
-+			))
- 		flags |= US_FL_IGNORE_UAS;
- 
- 	usb_stor_adjust_quirks(udev, &flags);
--- 
-2.25.1
-
+Thanks,
+Ming
 
