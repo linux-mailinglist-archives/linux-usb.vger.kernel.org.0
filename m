@@ -1,150 +1,133 @@
-Return-Path: <linux-usb+bounces-22234-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22235-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5032A7342E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:18:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27632A73443
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 146093BFD5A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:17:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E67763BFC40
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4658121770C;
-	Thu, 27 Mar 2025 14:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74A021770B;
+	Thu, 27 Mar 2025 14:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bvLKFw2M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gFTd+GoG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DCD21767D
-	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 14:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B8121422C;
+	Thu, 27 Mar 2025 14:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743085026; cv=none; b=U7Hak83BG0aMz8bKjZ21rlBFPDAIrwiY5YpD5N0LqkYYbDq1zBxd04aQXyBvhVvqcYW/Va6RAkiLDlHddIzbpzfaaVKEg7foKw0nY1/eSWvSR5lFy6anvR2XIhwoVnPd1KHaJgzZT/3EcqiS6VR6ZAPT3r+lLBFmub6oYmqYs4w=
+	t=1743085244; cv=none; b=YJzogbY9Hf7u1qnlTMbb8vfs4f59QpxOUAMyVQUmaf8GHJO9Wsf/X8+EnTrvNVC+ICMbk9Zox9nr9r30yfsyW1z7iRt1YvcC6IG5fiTZbQZDXM3bATRJ+7KTbwe+dKVOfzrYgKG2CxN7n17H/icSTRuRw/YN8XuWWBs6r6jm7lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743085026; c=relaxed/simple;
-	bh=FMjn3PBCrIkcDy6h1GYGmCEGqAcDg9C0ZGWaMXOSL1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BqFf+HOkDOw9rjoJwq+lH4qts54A3xybjo9xNKqtiFoZ5r/WGjXTFUl8C7whsxkqlnjTsUOO4+i5I9P/yx/O9zGH0xkIjZ3rP7pDJb8PS3Hc5qcQ0Im89ZKYmxwn7Wv6WsuZGIssqCFxoVGJ8LT3YeyDxKWkMQnZhZKhaB/wFqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bvLKFw2M; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3913b539aabso553710f8f.2
-        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1743085022; x=1743689822; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9pcxyyMzwk7n/+DPlY6qN839q1d9lfkdYO8LPY/iBB4=;
-        b=bvLKFw2M+8Klx+Oh/iy8W5zgakShklDIYXr8Tbybb5k29dzJ4poFshB4D0YQIkZfZ6
-         OARbNBOMKX3fUHo8PNiCZb7u71PhQn2wplRACMJNUIhkBqEn5H0PjaCIhTOGJwvJtz4X
-         fgvdBSzAQQf16AFAgrNLEBrxR8V9rcdwN/Mso0h83g560gmxPDF8PfdzHptakzBul10k
-         Nnya2lA5myv1w819Yjeoqmvpd0w86vXuI/isc0cMWgehVbP4J/p34CIplOOq/5Z2VI/O
-         dU9YxP1wzuZ94HrJPIJNo50LH+njTFFURnXkio1N+iqtUZDI9d/BlyW0RjWv0curlK6W
-         OkBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743085022; x=1743689822;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9pcxyyMzwk7n/+DPlY6qN839q1d9lfkdYO8LPY/iBB4=;
-        b=SwOWE/K9oQ0J6JUQ//Ym/NkjMF3JMRgQhq+NwrxnQBAq0xh3IevpSHRUodi67Mkg2U
-         AZi3h+mRK+c2xO9lK+qbnIHViy1SS0k9DYOLzgJr5SAFGseppLYA76ghjGt8Mbs06pgq
-         bABHAzV0RsHUPHDmFNvYdJ/h/j14deO8wBKO35SR2tYptrSqBSA6BhprnfYR0X9C7G/e
-         gytsMsaaFRUNGrW4FZaPV2puAv/J/RjbfvQ4+WeH9+a6zO6u8Z6pp1rUvNxG3RUNcaKk
-         kT0bz4gU/Xt80PR0T6NYnhKdrvOP4qulWRfhFS4n9rhaUJhCRLAoHKXMJn57G/dSdK3y
-         8DTg==
-X-Gm-Message-State: AOJu0YzIkyg3151FwQJXjEXFX9E88XtBBk+GKzqW1tQuZRHoYnAHLruI
-	P7ZhUQsB5/OO0Bo/yKaOAJGuwjjybS1lZtlrDilgu3yO2n3ubIcIfZI7cFp/1HkgNNh6ElGzCk+
-	teLs=
-X-Gm-Gg: ASbGncsvAaBINs9lQG2MnSg58pcYId4CZ5NkCs4Ygq7vOXG5yckvEEiWyxKJ8Wrpo/N
-	mIgwtGOoLE/N1s3WJTXV+KBPnerezTmX422p5DIqJ96TkNn+oKBns+5hP5BfqOfkQcms2KpMkvu
-	e9kD9cq6ubLHbrEaZcepSVpezm21Nj4LXk+IdgryXrTrXTSBs0h+fyCeIfNIJWE2lOJT6IXiK1N
-	7gTalYHkZEq/dvdp6ndYadkpe9uX6gMypoP0T1hFcPcG06OXOlS3g2cBUHtBK8a+0/DndIzTfZz
-	I6uh7I4rv45jilieGQZ+CvyeyAAM9kvHocvG1N2bzGdZaXRSC2epPd1RxoASfA==
-X-Google-Smtp-Source: AGHT+IF/irwuEodx4D7xUKBA5kN6ZYxHeS1aZzgWqcSt+btQ+7WAk8JcnQ4xzAmPzYdQC619LJsesA==
-X-Received: by 2002:a05:6000:1ac6:b0:390:f394:6271 with SMTP id ffacd0b85a97d-39ad176bc7emr3193106f8f.43.1743085021468;
-        Thu, 27 Mar 2025 07:17:01 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:355:6b90:e24f:43ff:fee6:750f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9e6651sm20112527f8f.75.2025.03.27.07.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 07:17:00 -0700 (PDT)
-From: Frode Isaksen <fisaksen@baylibre.com>
-To: linux-usb@vger.kernel.org,
-	Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org,
-	Frode Isaksen <frode@meta.com>
-Subject: [PATCH] usb: dwc3: ep0: prevent dwc3_request from being queued twice
-Date: Thu, 27 Mar 2025 15:15:26 +0100
-Message-ID: <20250327141630.2085029-1-fisaksen@baylibre.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1743085244; c=relaxed/simple;
+	bh=Kp8tmG94C1NlHRTeGN7AQJ/wzvfSetrtkc7dV9pp+ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AWLjIEMHBe8e/g+IOsUa08CLcfWpf5aT5Mbr/pdOFTr6YI9zwyNUqzhyx/bNMXT44NqrV9tbGWIps7ojGukSRyaaTDR4qZ6vkSDbeNR9lkFW5TKbTJ8Vad9h+01zYfToVOjXBGHExclXTc0YtBq/n3fSIXV9D5Imir+OhuYqBO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gFTd+GoG; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743085243; x=1774621243;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kp8tmG94C1NlHRTeGN7AQJ/wzvfSetrtkc7dV9pp+ug=;
+  b=gFTd+GoGMeXyZtvTp1U6ciegvFIpE62SPhMe9Jas80cJmQs9akocR5Tp
+   pqadrkmq/4CNWG3DwOf757SsH0uaeyYltVryB8wezbANSS3AsZqKJtg+r
+   i9BphNyCAbJvGqHNW246Ogc9MKURDom7hlFau/njFn7yXyyjiqhcsQ5z/
+   jH0qVZ7Nyl082FzPOmK1icMO04YbIQ0sbFA7mMZIXVxEBFAZTc+9VcPyK
+   bksFwm2ld2pTvLWnUCylW1S25AE6Nb3gQPKYi961GocwECJnD9nNpDoPK
+   AAy11XAoVr1pdK8RWiiiE10DcbF6tsLm0e1kbgUx4X8yVhKVnTmhJZ2n3
+   Q==;
+X-CSE-ConnectionGUID: dAKc+rYJTt6IE810RwRirg==
+X-CSE-MsgGUID: C4SisLOMSnOtz/1R7LSDpQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44435719"
+X-IronPort-AV: E=Sophos;i="6.14,280,1736841600"; 
+   d="scan'208";a="44435719"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2025 07:20:42 -0700
+X-CSE-ConnectionGUID: x5QxreAqSqa894qDKsBJ7Q==
+X-CSE-MsgGUID: PXo505ySSDCVuk2lWzsCDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,280,1736841600"; 
+   d="scan'208";a="126082271"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 27 Mar 2025 07:20:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id CCAB51D9; Thu, 27 Mar 2025 16:20:38 +0200 (EET)
+Date: Thu, 27 Mar 2025 16:20:38 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCHv2] thunderbolt: do not double dequeue a request
+Message-ID: <20250327142038.GB3152277@black.fi.intel.com>
+References: <20250327114222.100293-1-senozhatsky@chromium.org>
+ <20250327133756.GA3152277@black.fi.intel.com>
+ <vxocwwtfwg3tmjm62kcz33ypsg22afccd2ua5jqymbxaxwcigf@nnydc53vu3gv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <vxocwwtfwg3tmjm62kcz33ypsg22afccd2ua5jqymbxaxwcigf@nnydc53vu3gv>
 
-From: Frode Isaksen <frode@meta.com>
+Hi,
 
-Prevent dwc3_request from being queued twice, by checking
-req->status.
-Similar to commit b2b6d601365a ("usb: dwc3: gadget: prevent
-dwc3_request from being queued twice") for non-ep0 endpoints.
-Crash log:
-list_add double add: new=ffffff87ab2c7950, prev=ffffff87ab2c7950,
- next=ffffff87ab485b60.
-kernel BUG at lib/list_debug.c:35!
-Call trace:
-__list_add_valid+0x70/0xc0
-__dwc3_gadget_ep0_queue+0x70/0x224
-dwc3_ep0_handle_status+0x118/0x200
-dwc3_ep0_inspect_setup+0x144/0x32c
-dwc3_ep0_interrupt+0xac/0x340
-dwc3_process_event_entry+0x90/0x724
-dwc3_process_event_buf+0x7c/0x33c
-dwc3_thread_interrupt+0x58/0x8c
+On Thu, Mar 27, 2025 at 11:02:04PM +0900, Sergey Senozhatsky wrote:
+> Hi,
+> 
+> On (25/03/27 15:37), Mika Westerberg wrote:
+> > > Another possibility can be tb_cfg_request_sync():
+> > > 
+> > > tb_cfg_request_sync()
+> > >  tb_cfg_request()
+> > >   schedule_work(&req->work) -> tb_cfg_request_dequeue()
+> > >  tb_cfg_request_cancel()
+> > >   schedule_work(&req->work) -> tb_cfg_request_dequeue()
+> > 
+> > Not sure about this one because &req->work will only be scheduled once the
+> > second schedule_work() should not queue it again (as far as I can tell).
+> 
+> If the second schedule_work() happens after a timeout, that's what
+> !wait_for_completion_timeout() does, then the first schedule_work()
+> can already execute the work by that time, and then we can schedule
+> the work again (but the request is already dequeued).  Am I missing
+> something?
 
-Signed-off-by: Frode Isaksen <frode@meta.com>
----
-This bug was discovered, tested and fixed (no more crashes seen) on 
-Meta Quest 3 device. Also tested on T.I. AM62x board.
+schedule_work() does not schedule the work again if it is already
+scheduled.
 
- drivers/usb/dwc3/ep0.c    | 5 +++++
- drivers/usb/dwc3/gadget.c | 1 +
- 2 files changed, 6 insertions(+)
+> > > To address the issue, do not dequeue requests that don't
+> > > have TB_CFG_REQUEST_ACTIVE bit set.
+> > 
+> > Just to be sure. After this change you have not seen the issue anymore
+> > with your testing?
+> 
+> Haven't tried it yet.
+> 
+> We just found it today, it usually takes several weeks before
+> we can roll out the fix to our fleet and we prefer patches from
+> upstream/subsystem git, so that's why we reach out to the upstream.
 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 666ac432f52d..e26c3a62d470 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -91,6 +91,11 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
- {
- 	struct dwc3		*dwc = dep->dwc;
- 
-+	if (WARN(req->status < DWC3_REQUEST_STATUS_COMPLETED,
-+				"%s: request %pK already in flight\n",
-+				dep->name, &req->request))
-+		return -EINVAL;
-+
- 	req->request.actual	= 0;
- 	req->request.status	= -EINPROGRESS;
- 	req->epnum		= dep->number;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89a4dc8ebf94..c34446d8c54f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3002,6 +3002,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
- 	dwc->ep0_bounced = false;
- 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
- 	dwc->delayed_status = false;
-+	dwc->ep0_usb_req.status = DWC3_REQUEST_STATUS_UNKNOWN;
- 	dwc3_ep0_out_start(dwc);
- 
- 	dwc3_gadget_enable_irq(dwc);
--- 
-2.48.1
+Makes sense.
 
+> The 0xdead000000000122 deference is a LIST_POISON on x86_64, which
+> is set explicitly in list_del(), so I'd say I'm fairly confident
+> that we have a double list_del() in tb_cfg_request_dequeue().
+
+Yes, I agree but since I have not seen any similar reports (sans what I saw
+ages ago), I would like to be sure the issue you see is actually fixed with
+the patch (and that there are no unexpected side-effects). ;-)
 
