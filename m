@@ -1,89 +1,169 @@
-Return-Path: <linux-usb+bounces-22209-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22210-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADF2A72A5E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 08:02:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B595A72A8B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 08:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DD0C189746C
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 07:02:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 134933B8B69
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 07:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E3B1CDA2D;
-	Thu, 27 Mar 2025 07:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ha2EyVm8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43EA1F4716;
+	Thu, 27 Mar 2025 07:26:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9071624DC;
-	Thu, 27 Mar 2025 07:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91841F463C
+	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743058944; cv=none; b=DBOhU967NakWluC3Z6/m5AZ1TOBJbjUoAPMogbYBbnCeD0YRVFJFEhJFZCcUFN+9hLt+2Vehk+QWC0JqOSGwPQBFReQ7PNxv12DEAADsNykn9jUmcsWs/SyyhuG3XZ5gWrs3Jg2cWyuuyBOZSW+pVesk5zpubjCKE/T8ymd62io=
+	t=1743060362; cv=none; b=ggOc3236wziH/RunGchHp66I0G/1M/wQnoq9HukoQ9O2xqYF429xg2/DWZyMh0gvfClsT8Em6nzAvjLrkNPCg1hlBVDFkgtIzok11tWu9QW4nnUspUhr5k6QEKh04/mUcQS/5TCjBas4hDJ7O/AF28bPEl9fgBcIZJd9ODoOC54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743058944; c=relaxed/simple;
-	bh=rahj8n/g/fCJxulj8uYGukhsVfUSTm5Q8ORfoy2mA+M=;
+	s=arc-20240116; t=1743060362; c=relaxed/simple;
+	bh=JSSGQS6tGG25ltA0Mvv5MyPkthwco/wCEhroPDJOdFE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VrJpxp6GJPkORSy6ahM0/uVkP8wNh83GWmSz1eQYJEZLW4rSWUG7ZEma4ugLtjtfsQ0LHgizRddSxC7OpLeBjB6EdeobtMocFZH7jai1hc+WaiJGndLqyQwibNhD0KBj5aHky+CWUzsu0Gs/Ydg5NwJLCGrdvZq3sGjTRF/L8t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ha2EyVm8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB81C4CEDD;
-	Thu, 27 Mar 2025 07:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1743058943;
-	bh=rahj8n/g/fCJxulj8uYGukhsVfUSTm5Q8ORfoy2mA+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ha2EyVm8lrapGVoOIpR3L1EYlHgRAXpQX/S1tpm7U42Gi2cQ+/aaXUCOZihg/9B8B
-	 2Q4AVHx2qseM2T01sYSwwKfic9Kv5sb9Wn1bxUSJI/Qfyu0aaabeqdg/RV04OMsv01
-	 M/ReF8VYnXR036ZrM29U20J9wogHRlWFFTqq6Dt8=
-Date: Thu, 27 Mar 2025 08:02:20 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Puma Hsu <pumahsu@google.com>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
-	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
-	lgirdwood@gmail.com, krzk+dt@kernel.org,
-	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
-	tiwai@suse.com, robh@kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v36 01/31] xhci: sideband: add initial api to register a
- secondary interrupter entity
-Message-ID: <2025032734-reward-fantasize-dc16@gregkh>
-References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
- <20250319005141.312805-2-quic_wcheng@quicinc.com>
- <CAGCq0LZoi0MOJLJYUeQJW6EfOU_Ch=v1Sg8L4_B-KhdDCx1fCw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TMIRjaJ/SIKxPsXPcI3+hqBiXovlDaLl/l7VLGEp+po6N0MYiNKxWKFgwv6YcZ/Z9IWcuBwswiau0ffUZLrVCEYol1DI5ByDIxPEojEFnnQ0mWWSkgWE1qfc/5TzmbviILcM/3i7yPm+dxW9Y84T97WxZH6lzEKaCCtoCBJIN8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txhcD-0004yL-Vr; Thu, 27 Mar 2025 08:25:26 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txhc9-001t0o-2e;
+	Thu, 27 Mar 2025 08:25:21 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E00643E7BAF;
+	Thu, 27 Mar 2025 07:06:19 +0000 (UTC)
+Date: Thu, 27 Mar 2025 08:06:13 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
+ <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+ <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+ <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
+ <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c65ffbddv2wxsgu3"
 Content-Disposition: inline
-In-Reply-To: <CAGCq0LZoi0MOJLJYUeQJW6EfOU_Ch=v1Sg8L4_B-KhdDCx1fCw@mail.gmail.com>
+In-Reply-To: <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, Mar 27, 2025 at 02:27:00PM +0800, Puma Hsu wrote:
-> Hi,
-> 
-> We have implemented and verified the USB audio offloading feature with
-> the xhci sideband driver on our Google Pixel products. We would
-> appreciate it if this solution can be accepted. Thank you all for the
-> work!
-> 
 
-Great, can you properly send a "Tested-by:" line for this against the
-00/XX email so that it will be properly saved?
+--c65ffbddv2wxsgu3
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Also, I think a new version of the series is coming, can you test that
-to verify it works properly?  We have to wait until after -rc1 is out
-anyway.
+On 27.03.2025 13:38:22, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=882=
+7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:41=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > > > > > > +     priv->can.clock.freq =3D can_clk;
+> > > > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_no=
+minal_const;
+> > > > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittimi=
+ng_data_const;
+> > > > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > > > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_=
+counter;
+> > > > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
+> > > > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REP=
+ORTING |
+> > > > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > > > > >
+> > > > > > Does your device run in CAN-FD mode all the time? If so, please=
+ use
+> > > > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_su=
+pported
+> > > > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+> > > > > >
+> > > > >
+> > > > > Our device is designed to allow users to dynamically switch betwe=
+en
+> > > > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
+> > > > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported,=
+ and
+> > > > > can_set_static_ctrlmode() is not suitable in this case.
+> > > > > Please let me know if you have any concerns about this approach.
+> > > >
+> > > > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or=
+ not?
+> > > >
+> > >
+> > > Sorry, I was previously confused about our device's control mode. I
+> > > will use can_set_static_ctrlmode() to set CAN_FD mode in the next
+> > > patch.
+> >
+> > Does your device support CAN-CC only mode? Does your device support to
+> > switch between CAN-CC only and CAN-FD mode?
+> >
+>=20
+> Our device supports both CAN-CC and CAN-FD mode.
 
-thanks,
+This doesn't answer my question:
 
-greg k-h
+Does your device support CAN-CC only mode?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--c65ffbddv2wxsgu3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfk+OIACgkQDHRl3/mQ
+kZyShwf/SEuLYWxNwEXPQAFmu0xkYcX51A4Mbmaf6/13N46iS6PA0obpQq4+AO3C
+b9PQ/S6ksgL4cA7wqXcakT/lI4Q8EAhieKHkpCD63j3S82fGjVACaE+USZLhDdWV
+Dv3+2yePBKFkyBQuI0LPTq0isnXsbZ2UPF/mA9amECwxoyUTFTGYLyjN5KfyLppD
+UNPdQWoRXLadDDSKKQGLVD58oUO1QYaWoY/ZdTZg3EnLFLJEccmkG1+gxCuhOenM
+GwjIagbJVdODncOGVoFPLa5diYu68IVwaKWPEomFwIzxi53uQKLHtGvtLTfa2pwf
+5SH3X1oM60OqPxr+EKluuxWTRgN9kg==
+=ctjr
+-----END PGP SIGNATURE-----
+
+--c65ffbddv2wxsgu3--
 
