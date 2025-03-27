@@ -1,171 +1,150 @@
-Return-Path: <linux-usb+bounces-22233-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22234-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD8EA73415
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:15:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5032A7342E
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16ACB3AB2AD
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:13:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 146093BFD5A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36308217707;
-	Thu, 27 Mar 2025 14:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4658121770C;
+	Thu, 27 Mar 2025 14:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="AWMhMaax"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bvLKFw2M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43972217677
-	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 14:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DCD21767D
+	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 14:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743084794; cv=none; b=V+nxHc8TJDSSS4BSbMqC3KcWobvJHbOPk2apOf1wB9wnyAbxN4H490VSQTSrYfNx5s8LEfURetUwh6n07Fqif/QFGtWDX1ZyLy45ue7sT7R13dwq4wW75tZtB/0kBjAiMMB0IB65Hao9/gVvzicFg8GmFQpmnl5snuXCCvinJYA=
+	t=1743085026; cv=none; b=U7Hak83BG0aMz8bKjZ21rlBFPDAIrwiY5YpD5N0LqkYYbDq1zBxd04aQXyBvhVvqcYW/Va6RAkiLDlHddIzbpzfaaVKEg7foKw0nY1/eSWvSR5lFy6anvR2XIhwoVnPd1KHaJgzZT/3EcqiS6VR6ZAPT3r+lLBFmub6oYmqYs4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743084794; c=relaxed/simple;
-	bh=pV5/syCA5fBvtlnUDTP4Viuzn5QJd9O/C8y0VGyIafo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YISv5r2ej0U3prufq9+y7BfZyYT+pHFt3jOR0mmmCmWJEdKBpWh6Qe28Id8kQRYyjvt0yq08vREEg9zW5kWtY/hYPLlpv3ICDt7rDxLiUjxKVTmObl/3XikWFgitBlh8FhER5Ga3n2YMN0w0eqn4nwBEsuCwZQoJ75E4AF85iQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=AWMhMaax; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7c0e135e953so119273285a.2
-        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:13:11 -0700 (PDT)
+	s=arc-20240116; t=1743085026; c=relaxed/simple;
+	bh=FMjn3PBCrIkcDy6h1GYGmCEGqAcDg9C0ZGWaMXOSL1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BqFf+HOkDOw9rjoJwq+lH4qts54A3xybjo9xNKqtiFoZ5r/WGjXTFUl8C7whsxkqlnjTsUOO4+i5I9P/yx/O9zGH0xkIjZ3rP7pDJb8PS3Hc5qcQ0Im89ZKYmxwn7Wv6WsuZGIssqCFxoVGJ8LT3YeyDxKWkMQnZhZKhaB/wFqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bvLKFw2M; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3913b539aabso553710f8f.2
+        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1743084791; x=1743689591; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0znUA5ytfnQNvKB7ZGRjnFezjykFr7P6h5TA5X7hXVk=;
-        b=AWMhMaaxufJ1bciMie0MwTIsc2006DOJQ6OmD/6XcWhgyHItILd4LP8aSxhuI/B/MV
-         qnZa/ICfbqDTdm6S6bUzpyyP8CWVy09bRC3x8MwDFU3v8ENa34o33Rv3vJIFcPXc/gx0
-         pPNwQ+G6SJMonRsC70FqeiFqeHPgwdY4oI/SsewhSMblc6Tep73ez18KBs9S8UNY1SQ7
-         bUDTmlAPyNhe8xKkyfgSHIz19q72owUOIoBZpu1mmVfepfaOHCpG7hblNBHsJU2Tryys
-         JOJCkmIB4PwstK88E67oCtuOfbY+3ygk4+F/HsAkZUdYawGgYfTGs8n3Sk/VF933nV3j
-         1viQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1743085022; x=1743689822; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9pcxyyMzwk7n/+DPlY6qN839q1d9lfkdYO8LPY/iBB4=;
+        b=bvLKFw2M+8Klx+Oh/iy8W5zgakShklDIYXr8Tbybb5k29dzJ4poFshB4D0YQIkZfZ6
+         OARbNBOMKX3fUHo8PNiCZb7u71PhQn2wplRACMJNUIhkBqEn5H0PjaCIhTOGJwvJtz4X
+         fgvdBSzAQQf16AFAgrNLEBrxR8V9rcdwN/Mso0h83g560gmxPDF8PfdzHptakzBul10k
+         Nnya2lA5myv1w819Yjeoqmvpd0w86vXuI/isc0cMWgehVbP4J/p34CIplOOq/5Z2VI/O
+         dU9YxP1wzuZ94HrJPIJNo50LH+njTFFURnXkio1N+iqtUZDI9d/BlyW0RjWv0curlK6W
+         OkBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743084791; x=1743689591;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0znUA5ytfnQNvKB7ZGRjnFezjykFr7P6h5TA5X7hXVk=;
-        b=tshUG83rfVDZuRvNgakwtAG/UR3FgFrj9dI/zCW/NI8PUT9Lt7Eq7RjtVLkyAaB3w/
-         01ltejz3fgBE2J7crUeJx/DMTK7Yz8i3mLt1wOU0Fkrlrv2P3j91cUjrJZUrrgipTcO7
-         OYFkcJws/URQmtylv8A0qRn5AKQb51mL8ZK6/UAa6ybHV3qyPMZJIPyDGa0P4uPQHu4F
-         6ikY0W2Dwi7K8rihw4Vc+XGfklPKy2BYoNRbxtO9iWMM4qCg/lmqsvya3ynUGENVocH6
-         m1wynaFGqMgMuqJaK7TOyxexfdp3qHbEcySjBX4oJScrAfLfx2RYGwuG3K3NtNTP5e91
-         po4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWp49CHGcBzW1Gr+TI+1nzh/7cLuQSoc2oLVRQF4k69ONFzyCu2uCmBiMv5f+R4y6mNso5BndYXPDs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3An8cnw0iSWfRecIIkJkLdHFNDLg0buTgK2tgahNLwk+o7+A1
-	mtjGmGWbMdNaFvA/8fCxeDe9hu5RJ8YwcunehucL1aSnR/NR86wAEiGFwHfNKg==
-X-Gm-Gg: ASbGncvR+ZNRsMlLJIBrMEYVB4CYLVX6rZEft5Et+P2UkwnvUty3Q7WVtOzBLGRx6Mc
-	Qgw6Yj3g9NhN2nnheIgVFVhAucXPI6hkzmoA9o8Ilgey4uN9HQ1ovuchh2DN8AwaeTXkcFF8JFW
-	ryJ1Kd745inknH6YnO1Gz4mem+KcmaApEc3to8cuwjx6VJ6SUbu1U4k2afDMlEldRrYF30MobBJ
-	2U1UUD+LRj2ErO0B0NjVCY266Tge7iSU3/dD94nW3FS3gsB3HLzS9Usdt3mDwr+YZKYTFilA0Ma
-	IIYO9ZJnOyWoLSDzra8j6uGk+3yj6MnyAjtMk9tGNXdacIciWlRXF9ruphFYEdpc3bNenxCmTw=
-	=
-X-Google-Smtp-Source: AGHT+IE2SBIHjHAYNsZGyQDUcKNFrgHSGj/BZ68tmr1ayCQI4h3zXjcJLQD3CNZrmBSAW0mD66CY/A==
-X-Received: by 2002:a05:620a:40c6:b0:7c5:5768:40ac with SMTP id af79cd13be357-7c5eda0e738mr563024585a.30.1743084790825;
-        Thu, 27 Mar 2025 07:13:10 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5b92ea919sm902764385a.51.2025.03.27.07.13.09
+        d=1e100.net; s=20230601; t=1743085022; x=1743689822;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9pcxyyMzwk7n/+DPlY6qN839q1d9lfkdYO8LPY/iBB4=;
+        b=SwOWE/K9oQ0J6JUQ//Ym/NkjMF3JMRgQhq+NwrxnQBAq0xh3IevpSHRUodi67Mkg2U
+         AZi3h+mRK+c2xO9lK+qbnIHViy1SS0k9DYOLzgJr5SAFGseppLYA76ghjGt8Mbs06pgq
+         bABHAzV0RsHUPHDmFNvYdJ/h/j14deO8wBKO35SR2tYptrSqBSA6BhprnfYR0X9C7G/e
+         gytsMsaaFRUNGrW4FZaPV2puAv/J/RjbfvQ4+WeH9+a6zO6u8Z6pp1rUvNxG3RUNcaKk
+         kT0bz4gU/Xt80PR0T6NYnhKdrvOP4qulWRfhFS4n9rhaUJhCRLAoHKXMJn57G/dSdK3y
+         8DTg==
+X-Gm-Message-State: AOJu0YzIkyg3151FwQJXjEXFX9E88XtBBk+GKzqW1tQuZRHoYnAHLruI
+	P7ZhUQsB5/OO0Bo/yKaOAJGuwjjybS1lZtlrDilgu3yO2n3ubIcIfZI7cFp/1HkgNNh6ElGzCk+
+	teLs=
+X-Gm-Gg: ASbGncsvAaBINs9lQG2MnSg58pcYId4CZ5NkCs4Ygq7vOXG5yckvEEiWyxKJ8Wrpo/N
+	mIgwtGOoLE/N1s3WJTXV+KBPnerezTmX422p5DIqJ96TkNn+oKBns+5hP5BfqOfkQcms2KpMkvu
+	e9kD9cq6ubLHbrEaZcepSVpezm21Nj4LXk+IdgryXrTrXTSBs0h+fyCeIfNIJWE2lOJT6IXiK1N
+	7gTalYHkZEq/dvdp6ndYadkpe9uX6gMypoP0T1hFcPcG06OXOlS3g2cBUHtBK8a+0/DndIzTfZz
+	I6uh7I4rv45jilieGQZ+CvyeyAAM9kvHocvG1N2bzGdZaXRSC2epPd1RxoASfA==
+X-Google-Smtp-Source: AGHT+IF/irwuEodx4D7xUKBA5kN6ZYxHeS1aZzgWqcSt+btQ+7WAk8JcnQ4xzAmPzYdQC619LJsesA==
+X-Received: by 2002:a05:6000:1ac6:b0:390:f394:6271 with SMTP id ffacd0b85a97d-39ad176bc7emr3193106f8f.43.1743085021468;
+        Thu, 27 Mar 2025 07:17:01 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:355:6b90:e24f:43ff:fee6:750f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9e6651sm20112527f8f.75.2025.03.27.07.17.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 07:13:10 -0700 (PDT)
-Date: Thu, 27 Mar 2025 10:13:07 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Mingcong Bai <baimingcong@loongson.cn>
-Subject: Re: [PATCH V2] USB: OHCI: Add quirk for LS7A OHCI controller (rev
- 0x02)
-Message-ID: <208f5310-5932-402b-9980-0225e67f2d66@rowland.harvard.edu>
-References: <20250327044840.3179796-1-chenhuacai@loongson.cn>
+        Thu, 27 Mar 2025 07:17:00 -0700 (PDT)
+From: Frode Isaksen <fisaksen@baylibre.com>
+To: linux-usb@vger.kernel.org,
+	Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	Frode Isaksen <frode@meta.com>
+Subject: [PATCH] usb: dwc3: ep0: prevent dwc3_request from being queued twice
+Date: Thu, 27 Mar 2025 15:15:26 +0100
+Message-ID: <20250327141630.2085029-1-fisaksen@baylibre.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250327044840.3179796-1-chenhuacai@loongson.cn>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 27, 2025 at 12:48:40PM +0800, Huacai Chen wrote:
-> The OHCI controller (rev 0x02) under LS7A PCI host has a hardware flaw.
-> MMIO register with offset 0x60/0x64 is treated as legacy PS2-compatible
-> keyboard/mouse interface, which confuse the OHCI controller. Since OHCI
-> only use a 4KB BAR resource indeed, the LS7A OHCI controller's 32KB BAR
-> is wrapped around (the second 4KB BAR space is the same as the first 4KB
-> internally). So we can add an 4KB offset (0x1000) to the OHCI registers
-> (from the PCI BAR resource) as a quirk.
-> 
-> Cc: stable@vger.kernel.org
-> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> Tested-by: Mingcong Bai <baimingcong@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> V2: add a comment explaining why the quirk is needed and how it fixes.
-> 
->  drivers/usb/host/ohci-pci.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ohci-pci.c b/drivers/usb/host/ohci-pci.c
-> index 900ea0d368e0..bd90b2fed51b 100644
-> --- a/drivers/usb/host/ohci-pci.c
-> +++ b/drivers/usb/host/ohci-pci.c
-> @@ -165,6 +165,24 @@ static int ohci_quirk_amd700(struct usb_hcd *hcd)
->  	return 0;
->  }
->  
-> +static int ohci_quirk_loongson(struct usb_hcd *hcd)
-> +{
-> +	struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
-> +
-> +	/*
-> +	 * Loongson's LS7A OHCI controller (rev 0x02) has a
-> +	 * flaw. MMIO register with offset 0x60/64 is treated
-> +	 * as legacy PS2-compatible keyboard/mouse interface.
-> +	 * Since OHCI only use 4KB BAR resource, LS7A OHCI's
-> +	 * 32KB BAR is wrapped around (the 2nd 4KB BAR space
-> +	 * is the same as the 1st 4KB internally). So add 4KB
-> +	 * offset (0x1000) to the OHCI registers as a quirk.
-> +	 */
-> +	hcd->regs += (pdev->revision == 0x2) ? 0x1000 : 0x0;
+From: Frode Isaksen <frode@meta.com>
 
-I'm sorry, I should have mentioned this previously but I only noticed it 
-now.  This would be a lot easier for people to read if you wrote it as a 
-simple "if" statement:
+Prevent dwc3_request from being queued twice, by checking
+req->status.
+Similar to commit b2b6d601365a ("usb: dwc3: gadget: prevent
+dwc3_request from being queued twice") for non-ep0 endpoints.
+Crash log:
+list_add double add: new=ffffff87ab2c7950, prev=ffffff87ab2c7950,
+ next=ffffff87ab485b60.
+kernel BUG at lib/list_debug.c:35!
+Call trace:
+__list_add_valid+0x70/0xc0
+__dwc3_gadget_ep0_queue+0x70/0x224
+dwc3_ep0_handle_status+0x118/0x200
+dwc3_ep0_inspect_setup+0x144/0x32c
+dwc3_ep0_interrupt+0xac/0x340
+dwc3_process_event_entry+0x90/0x724
+dwc3_process_event_buf+0x7c/0x33c
+dwc3_thread_interrupt+0x58/0x8c
 
-	if (pdev->revision == 0x02)
-		hcd->regs += 0x1000;
+Signed-off-by: Frode Isaksen <frode@meta.com>
+---
+This bug was discovered, tested and fixed (no more crashes seen) on 
+Meta Quest 3 device. Also tested on T.I. AM62x board.
 
-Otherwise the patch looks fine.  If you make this change, you can 
-resubmit it with:
+ drivers/usb/dwc3/ep0.c    | 5 +++++
+ drivers/usb/dwc3/gadget.c | 1 +
+ 2 files changed, 6 insertions(+)
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 666ac432f52d..e26c3a62d470 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -91,6 +91,11 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+ 
++	if (WARN(req->status < DWC3_REQUEST_STATUS_COMPLETED,
++				"%s: request %pK already in flight\n",
++				dep->name, &req->request))
++		return -EINVAL;
++
+ 	req->request.actual	= 0;
+ 	req->request.status	= -EINPROGRESS;
+ 	req->epnum		= dep->number;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89a4dc8ebf94..c34446d8c54f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3002,6 +3002,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	dwc->ep0_bounced = false;
+ 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
+ 	dwc->delayed_status = false;
++	dwc->ep0_usb_req.status = DWC3_REQUEST_STATUS_UNKNOWN;
+ 	dwc3_ep0_out_start(dwc);
+ 
+ 	dwc3_gadget_enable_irq(dwc);
+-- 
+2.48.1
 
-Alan Stern
-
-> +
-> +	return 0;
-> +}
-> +
->  static int ohci_quirk_qemu(struct usb_hcd *hcd)
->  {
->  	struct ohci_hcd *ohci = hcd_to_ohci(hcd);
-> @@ -224,6 +242,10 @@ static const struct pci_device_id ohci_pci_quirks[] = {
->  		PCI_DEVICE(PCI_VENDOR_ID_ATI, 0x4399),
->  		.driver_data = (unsigned long)ohci_quirk_amd700,
->  	},
-> +	{
-> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a24),
-> +		.driver_data = (unsigned long)ohci_quirk_loongson,
-> +	},
->  	{
->  		.vendor		= PCI_VENDOR_ID_APPLE,
->  		.device		= 0x003f,
 
