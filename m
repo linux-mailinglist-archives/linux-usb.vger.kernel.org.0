@@ -1,84 +1,89 @@
-Return-Path: <linux-usb+bounces-22232-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22233-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E60A733D3
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:03:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CD8EA73415
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 15:15:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9A6188AFF6
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:02:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16ACB3AB2AD
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Mar 2025 14:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1272B217679;
-	Thu, 27 Mar 2025 14:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36308217707;
+	Thu, 27 Mar 2025 14:13:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gkcBeA5e"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="AWMhMaax"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5DD79CF
-	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 14:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43972217677
+	for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 14:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743084133; cv=none; b=VLqYSdEI7dG+KrsVGTKZ7cn8mAkXeR51oEDO47OQ17NGx00g4CVtQpn1OaE+y/6UggOEJr2iiOLDlhU71bZLazRfZ6MKR8mvfxxoyFChjUL8DEj43ZTJmVcFE2EzdxnsAQQXJ8wNoQiCi9hEoOKyam16dHFf0iARKovlwWqFnPo=
+	t=1743084794; cv=none; b=V+nxHc8TJDSSS4BSbMqC3KcWobvJHbOPk2apOf1wB9wnyAbxN4H490VSQTSrYfNx5s8LEfURetUwh6n07Fqif/QFGtWDX1ZyLy45ue7sT7R13dwq4wW75tZtB/0kBjAiMMB0IB65Hao9/gVvzicFg8GmFQpmnl5snuXCCvinJYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743084133; c=relaxed/simple;
-	bh=cqf11Pz9JhbgAIl3asxDpX0Pyj8CKqlu4uBXva96xuM=;
+	s=arc-20240116; t=1743084794; c=relaxed/simple;
+	bh=pV5/syCA5fBvtlnUDTP4Viuzn5QJd9O/C8y0VGyIafo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pD1sYC8OrhawxR5XswUsFpRVXsW5sQtnqR0Qc/IW8dKOgTKezvC+iJmt7c7SB0opbArMCBRXVmPx5gIwBJGVjXaD3lanLqo9snITSJqRV8LvgkO6Gqhkv9tEOIfO6mGSRBKhQoJ8fHbNWz/M9y+L2Bl0E45jvwILTdd77sMZKcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gkcBeA5e; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2279915e06eso21920815ad.1
-        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:02:10 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YISv5r2ej0U3prufq9+y7BfZyYT+pHFt3jOR0mmmCmWJEdKBpWh6Qe28Id8kQRYyjvt0yq08vREEg9zW5kWtY/hYPLlpv3ICDt7rDxLiUjxKVTmObl/3XikWFgitBlh8FhER5Ga3n2YMN0w0eqn4nwBEsuCwZQoJ75E4AF85iQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=AWMhMaax; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7c0e135e953so119273285a.2
+        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 07:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1743084130; x=1743688930; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1743084791; x=1743689591; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6+lzTRwJoxGLhsBP/jpjF8an5v1mXJJ/EYMWzXoLZE=;
-        b=gkcBeA5eyYOFPJgpU8WsgV5Ks9coIAQgltTVZ4dpBrzPoIcWvEcxgK8eWkcyxIZK7k
-         y4B4zaHuz+1SjPFAfHRznLIlicOQdXYN/z5JuKRdEa/Cuw7z0gsY4OA/qkEm49EmZTRP
-         jDtRSv2ENZ4m9FqQp/zF2l5Uhf4Mu/xZWrTDY=
+        bh=0znUA5ytfnQNvKB7ZGRjnFezjykFr7P6h5TA5X7hXVk=;
+        b=AWMhMaaxufJ1bciMie0MwTIsc2006DOJQ6OmD/6XcWhgyHItILd4LP8aSxhuI/B/MV
+         qnZa/ICfbqDTdm6S6bUzpyyP8CWVy09bRC3x8MwDFU3v8ENa34o33Rv3vJIFcPXc/gx0
+         pPNwQ+G6SJMonRsC70FqeiFqeHPgwdY4oI/SsewhSMblc6Tep73ez18KBs9S8UNY1SQ7
+         bUDTmlAPyNhe8xKkyfgSHIz19q72owUOIoBZpu1mmVfepfaOHCpG7hblNBHsJU2Tryys
+         JOJCkmIB4PwstK88E67oCtuOfbY+3ygk4+F/HsAkZUdYawGgYfTGs8n3Sk/VF933nV3j
+         1viQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743084130; x=1743688930;
+        d=1e100.net; s=20230601; t=1743084791; x=1743689591;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I6+lzTRwJoxGLhsBP/jpjF8an5v1mXJJ/EYMWzXoLZE=;
-        b=rddio+w2oji4k3sgukCoZmUl7PiWnMZdxYqq40hZr9hMY+b6VFjwI6ZR3oZwCvYHAC
-         kHOQBAFVL6CCSaAGcfWdgyYVX7BWAlgkSIGvFWdnOLfmxQ6/jcwSvSruBl16I7meJvRd
-         77LIjRznkOQB214dz51TZ/cQqmYdgASG/cFRWJbaQSVRfeSQeRPrpLTEj23L537+8wHZ
-         eqWcnLIHpsrSkVBGAAoT2jd5T0qdserzUFyl8KIQZ5Z7D13BHeFlP8V6mT5tmL5s8Z/P
-         ViS2a5pU2RMfqQR8X99+mL26G9jb0K/qEB/mZEfpwUTuUD5/exkn61rEmn9On8nUfELM
-         4vkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVE7qwZBX5vYKDkXOhMxadsFZL7PdZ+6rcUol79EG/JYPW83Ci4gw2XzukTp9Kle2X2B7D5xKHjRwE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCzGXN9oJoJXq8+WqLCL+ougjwX6m6M8ncmAuW4RPhicmbV0Sx
-	ACyJ2ocP+oKB1MSe0Jnef0jwtto7ywZaghYi8GxajvnsPQmNrmXw1io8lTCc4w==
-X-Gm-Gg: ASbGncvNyFj5BWZBHXUXiq4CLRSO9YbnxFW2f/tQTrW7ckwSDQ1LYiTiPuq3A2+sJIw
-	gJo8UUGTy6J++gv22nZOYdgyPCvgWmTc7TcTn2xXatVdBsLoHoLJE2n6tLT+qAefMCJxB4j5oH7
-	/q2suUf+MeA1ohI49EbdNGoEBq3c4LnMcwDhxiRUDMPM0OY3wqwN4uJjmBaYc3E8h/u3z+i2c7o
-	rNs1I2BO2OecJSvtGpvKqO4JORnd6OxvtKMqgwt5ao73cIsNYgd5QF+Yh6AdSsjeXlQu+QqKhXJ
-	lpjL+fLRwSLjekO/q+oZTnWOPT7OdeT2TMLK9iBtzuNcVhk=
-X-Google-Smtp-Source: AGHT+IG5RDX9ELKWhy7U+xRS3VIKhi043iiEwxA4WvUdw/Q6+t/DjvYPY7UK3SxprNLahK6GIimuUg==
-X-Received: by 2002:a17:903:41d2:b0:224:912:153 with SMTP id d9443c01a7336-2280481cebamr53711055ad.5.1743084130287;
-        Thu, 27 Mar 2025 07:02:10 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:cd9c:961:27c5:9ceb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811f651asm128518625ad.209.2025.03.27.07.02.07
+        bh=0znUA5ytfnQNvKB7ZGRjnFezjykFr7P6h5TA5X7hXVk=;
+        b=tshUG83rfVDZuRvNgakwtAG/UR3FgFrj9dI/zCW/NI8PUT9Lt7Eq7RjtVLkyAaB3w/
+         01ltejz3fgBE2J7crUeJx/DMTK7Yz8i3mLt1wOU0Fkrlrv2P3j91cUjrJZUrrgipTcO7
+         OYFkcJws/URQmtylv8A0qRn5AKQb51mL8ZK6/UAa6ybHV3qyPMZJIPyDGa0P4uPQHu4F
+         6ikY0W2Dwi7K8rihw4Vc+XGfklPKy2BYoNRbxtO9iWMM4qCg/lmqsvya3ynUGENVocH6
+         m1wynaFGqMgMuqJaK7TOyxexfdp3qHbEcySjBX4oJScrAfLfx2RYGwuG3K3NtNTP5e91
+         po4w==
+X-Forwarded-Encrypted: i=1; AJvYcCWp49CHGcBzW1Gr+TI+1nzh/7cLuQSoc2oLVRQF4k69ONFzyCu2uCmBiMv5f+R4y6mNso5BndYXPDs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3An8cnw0iSWfRecIIkJkLdHFNDLg0buTgK2tgahNLwk+o7+A1
+	mtjGmGWbMdNaFvA/8fCxeDe9hu5RJ8YwcunehucL1aSnR/NR86wAEiGFwHfNKg==
+X-Gm-Gg: ASbGncvR+ZNRsMlLJIBrMEYVB4CYLVX6rZEft5Et+P2UkwnvUty3Q7WVtOzBLGRx6Mc
+	Qgw6Yj3g9NhN2nnheIgVFVhAucXPI6hkzmoA9o8Ilgey4uN9HQ1ovuchh2DN8AwaeTXkcFF8JFW
+	ryJ1Kd745inknH6YnO1Gz4mem+KcmaApEc3to8cuwjx6VJ6SUbu1U4k2afDMlEldRrYF30MobBJ
+	2U1UUD+LRj2ErO0B0NjVCY266Tge7iSU3/dD94nW3FS3gsB3HLzS9Usdt3mDwr+YZKYTFilA0Ma
+	IIYO9ZJnOyWoLSDzra8j6uGk+3yj6MnyAjtMk9tGNXdacIciWlRXF9ruphFYEdpc3bNenxCmTw=
+	=
+X-Google-Smtp-Source: AGHT+IE2SBIHjHAYNsZGyQDUcKNFrgHSGj/BZ68tmr1ayCQI4h3zXjcJLQD3CNZrmBSAW0mD66CY/A==
+X-Received: by 2002:a05:620a:40c6:b0:7c5:5768:40ac with SMTP id af79cd13be357-7c5eda0e738mr563024585a.30.1743084790825;
+        Thu, 27 Mar 2025 07:13:10 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5b92ea919sm902764385a.51.2025.03.27.07.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 07:02:09 -0700 (PDT)
-Date: Thu, 27 Mar 2025 23:02:04 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
-	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCHv2] thunderbolt: do not double dequeue a request
-Message-ID: <vxocwwtfwg3tmjm62kcz33ypsg22afccd2ua5jqymbxaxwcigf@nnydc53vu3gv>
-References: <20250327114222.100293-1-senozhatsky@chromium.org>
- <20250327133756.GA3152277@black.fi.intel.com>
+        Thu, 27 Mar 2025 07:13:10 -0700 (PDT)
+Date: Thu, 27 Mar 2025 10:13:07 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Mingcong Bai <baimingcong@loongson.cn>
+Subject: Re: [PATCH V2] USB: OHCI: Add quirk for LS7A OHCI controller (rev
+ 0x02)
+Message-ID: <208f5310-5932-402b-9980-0225e67f2d66@rowland.harvard.edu>
+References: <20250327044840.3179796-1-chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,41 +92,80 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250327133756.GA3152277@black.fi.intel.com>
+In-Reply-To: <20250327044840.3179796-1-chenhuacai@loongson.cn>
 
-Hi,
-
-On (25/03/27 15:37), Mika Westerberg wrote:
-> > Another possibility can be tb_cfg_request_sync():
-> > 
-> > tb_cfg_request_sync()
-> >  tb_cfg_request()
-> >   schedule_work(&req->work) -> tb_cfg_request_dequeue()
-> >  tb_cfg_request_cancel()
-> >   schedule_work(&req->work) -> tb_cfg_request_dequeue()
+On Thu, Mar 27, 2025 at 12:48:40PM +0800, Huacai Chen wrote:
+> The OHCI controller (rev 0x02) under LS7A PCI host has a hardware flaw.
+> MMIO register with offset 0x60/0x64 is treated as legacy PS2-compatible
+> keyboard/mouse interface, which confuse the OHCI controller. Since OHCI
+> only use a 4KB BAR resource indeed, the LS7A OHCI controller's 32KB BAR
+> is wrapped around (the second 4KB BAR space is the same as the first 4KB
+> internally). So we can add an 4KB offset (0x1000) to the OHCI registers
+> (from the PCI BAR resource) as a quirk.
 > 
-> Not sure about this one because &req->work will only be scheduled once the
-> second schedule_work() should not queue it again (as far as I can tell).
-
-If the second schedule_work() happens after a timeout, that's what
-!wait_for_completion_timeout() does, then the first schedule_work()
-can already execute the work by that time, and then we can schedule
-the work again (but the request is already dequeued).  Am I missing
-something?
-
-> > To address the issue, do not dequeue requests that don't
-> > have TB_CFG_REQUEST_ACTIVE bit set.
+> Cc: stable@vger.kernel.org
+> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+> Tested-by: Mingcong Bai <baimingcong@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> V2: add a comment explaining why the quirk is needed and how it fixes.
 > 
-> Just to be sure. After this change you have not seen the issue anymore
-> with your testing?
+>  drivers/usb/host/ohci-pci.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ohci-pci.c b/drivers/usb/host/ohci-pci.c
+> index 900ea0d368e0..bd90b2fed51b 100644
+> --- a/drivers/usb/host/ohci-pci.c
+> +++ b/drivers/usb/host/ohci-pci.c
+> @@ -165,6 +165,24 @@ static int ohci_quirk_amd700(struct usb_hcd *hcd)
+>  	return 0;
+>  }
+>  
+> +static int ohci_quirk_loongson(struct usb_hcd *hcd)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
+> +
+> +	/*
+> +	 * Loongson's LS7A OHCI controller (rev 0x02) has a
+> +	 * flaw. MMIO register with offset 0x60/64 is treated
+> +	 * as legacy PS2-compatible keyboard/mouse interface.
+> +	 * Since OHCI only use 4KB BAR resource, LS7A OHCI's
+> +	 * 32KB BAR is wrapped around (the 2nd 4KB BAR space
+> +	 * is the same as the 1st 4KB internally). So add 4KB
+> +	 * offset (0x1000) to the OHCI registers as a quirk.
+> +	 */
+> +	hcd->regs += (pdev->revision == 0x2) ? 0x1000 : 0x0;
 
-Haven't tried it yet.
+I'm sorry, I should have mentioned this previously but I only noticed it 
+now.  This would be a lot easier for people to read if you wrote it as a 
+simple "if" statement:
 
-We just found it today, it usually takes several weeks before
-we can roll out the fix to our fleet and we prefer patches from
-upstream/subsystem git, so that's why we reach out to the upstream.
+	if (pdev->revision == 0x02)
+		hcd->regs += 0x1000;
 
-The 0xdead000000000122 deference is a LIST_POISON on x86_64, which
-is set explicitly in list_del(), so I'd say I'm fairly confident
-that we have a double list_del() in tb_cfg_request_dequeue().
+Otherwise the patch looks fine.  If you make this change, you can 
+resubmit it with:
+
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
+
+> +
+> +	return 0;
+> +}
+> +
+>  static int ohci_quirk_qemu(struct usb_hcd *hcd)
+>  {
+>  	struct ohci_hcd *ohci = hcd_to_ohci(hcd);
+> @@ -224,6 +242,10 @@ static const struct pci_device_id ohci_pci_quirks[] = {
+>  		PCI_DEVICE(PCI_VENDOR_ID_ATI, 0x4399),
+>  		.driver_data = (unsigned long)ohci_quirk_amd700,
+>  	},
+> +	{
+> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a24),
+> +		.driver_data = (unsigned long)ohci_quirk_loongson,
+> +	},
+>  	{
+>  		.vendor		= PCI_VENDOR_ID_APPLE,
+>  		.device		= 0x003f,
 
