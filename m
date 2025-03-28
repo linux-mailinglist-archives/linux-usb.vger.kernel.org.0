@@ -1,88 +1,137 @@
-Return-Path: <linux-usb+bounces-22282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91A9A74608
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 10:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81324A74615
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 10:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9521E3ADEDD
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 09:10:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDC2A3B9BED
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 09:12:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDD8B212F8F;
-	Fri, 28 Mar 2025 09:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0nk9dfih"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B67213E66;
+	Fri, 28 Mar 2025 09:11:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0EE1D5170
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 09:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76ED521420C
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 09:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743153059; cv=none; b=J6PuM3beu7UjLs6PLab+c07gZhQsCK94EnWw9+gr7p1YyAfeTwtCCjYFzrw20GTEBq+Ta2F5P7mBzO5TCsdSLusLMKROS1DdnYJzbRSFNbmEAQIbk0mhHD/NIlIAzw63Zuz97YQq0/aXFWk0QW5awY7eFZPwQf1PtbgicaRnouk=
+	t=1743153118; cv=none; b=S2bN+7iJ3hAf+iLeqrjDhmNBtVRuLX1zsZATrnJd+1+PLD8XbBhbBhH1kvH3FVev6GVzh8vWrRyZ/z9q8spRIos5IelKC5lvImzvcw6uBHCJ4KhWUm0+xfEIzz9nZNgo2ADgtX68dlehhxvA732pawRgkCGm+w4ochRaCeopZ1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743153059; c=relaxed/simple;
-	bh=rj/oItgzrVr7b9u7ChyhR8PDanjmB4327zKnaYX/9hU=;
+	s=arc-20240116; t=1743153118; c=relaxed/simple;
+	bh=pbIVsVcuNi+0DDbMVyNw26SOB82vpubAP8F0r7NBXg8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c1NLiNSM/b6n0Q5JittJlKn8cqVOxzcgrxsZ7UbYhpVK8ock9YpLFLAZYulauzfUo/wIjvxan29sr0c628S9ePRRga99L0sU6wLtkanISTFPej47p6Giz0Yn4shfl7KXI3jdjg6TUMx9A1KfO+F4VeqB8AKh56oGoONThMlUtKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0nk9dfih; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E62EC4CEE4;
-	Fri, 28 Mar 2025 09:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1743153058;
-	bh=rj/oItgzrVr7b9u7ChyhR8PDanjmB4327zKnaYX/9hU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0nk9dfihiYhl8O0mwodafXapA4hAtdxo8uKhU45L89YbcwQlgvZj/lc7nveub7d6b
-	 3PqstxZZkSpkXtaFTich85gsghEApUSXwgP4WW8ZVAnEw5IziiUOjq4U12ko6Unutr
-	 Xwl3K9LQRfNHoP6ZnBphVOpP0PWO8yrRnlh1H9to=
-Date: Fri, 28 Mar 2025 10:10:55 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Frode Isaksen <fisaksen@baylibre.com>
-Cc: linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
-	Frode Isaksen <frode@meta.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: check that event count does not
- exceed event buffer length
-Message-ID: <2025032841-tactics-linguini-f2ca@gregkh>
-References: <20250328085603.2156517-1-fisaksen@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYMC7TFGKLhvHtkH3IJ94OL2o3k6O3qk93kx/ZGp+jed4CS+CNQiEqCvpc+75K/Rm6Rk507RE02PzX06z5n9rqOEBtu0WjiMXRro+TfhfmKFYfpMVR/KP7x1El7jxkb+Pd0D1Ol1u0drCb8PsmbjIRWUeOTuLLwGMLK1p8khg7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ty5kJ-0005uZ-G0; Fri, 28 Mar 2025 10:11:23 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ty5kG-0024gm-2N;
+	Fri, 28 Mar 2025 10:11:20 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5804A3E86D3;
+	Fri, 28 Mar 2025 09:11:20 +0000 (UTC)
+Date: Fri, 28 Mar 2025 10:11:19 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250328-gentle-dangerous-raptor-2b66fa-mkl@pengutronix.de>
+References: <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
+ <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+ <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+ <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
+ <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+ <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
+ <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
+ <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
+ <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tzr33nw7euhn5lwq"
 Content-Disposition: inline
-In-Reply-To: <20250328085603.2156517-1-fisaksen@baylibre.com>
+In-Reply-To: <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Fri, Mar 28, 2025 at 09:55:25AM +0100, Frode Isaksen wrote:
-> From: Frode Isaksen <frode@meta.com>
-> 
-> The event count is read from register DWC3_GEVNTCOUNT.
-> There is a check for the count being zero, but not for exceeding the
-> event buffer length.
-> Check that event count does not exceed event buffer length,
-> avoiding an out-of-bounds access when memcpy'ing the event.
-> Crash log:
-> Unable to handle kernel paging request at virtual address ffffffc0129be000
-> pc : __memcpy+0x114/0x180
-> lr : dwc3_check_event_buf+0xec/0x348
-> x3 : 0000000000000030 x2 : 000000000000dfc4
-> x1 : ffffffc0129be000 x0 : ffffff87aad60080
-> Call trace:
-> __memcpy+0x114/0x180
-> dwc3_interrupt+0x24/0x34
-> 
-> Signed-off-by: Frode Isaksen <frode@meta.com>
-> ---
-> This bug was discovered, tested and fixed (no more crashes seen) on Meta Quest 3 device.
-> Also tested on T.I. AM62x board.
 
-What commit id does this fix?  Should it go to stable kernels too?
+--tzr33nw7euhn5lwq
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-thanks,
+On 28.03.2025 16:57:46, Ming Yu wrote:
+> > > > Does your device support CAN-CC only mode?
+> > >
+> > > It can dynamically switch between CAN-CC and CAN-FD mode when
+> > > trasmitting or receiving, depending on whether the nct6694_can_frame
+> > > passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
+> >
+> > Ok, but what about the receive path? Does the device support CAN-CC only
+> > mode? Will it throw an error, if it receives a CAN-FD frame?
+>=20
+> No, it can receive both CAN-CC and CAN-FD frames, if the hardware
+> receives a CAN-FD frame, the firmware will set the
+> NCT6694_CAN_FRAME_FLAG_FD flag.
 
-greg k-h
+Ok, then set the CAN-FD ctrl mode static.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--tzr33nw7euhn5lwq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmZ7UACgkQDHRl3/mQ
+kZwYtQf/c7cT0KfIOS3YnlbxRmDPcKbxtcH25rhCTmL7CvrAnktrR9i0DzB+7vkt
+BwE/PZmyu3XSHeCbvfd/Di0Zddu9NxXyFTe32yXpA3s7uV0UFwWEyi7y20ZT19aL
+r5PeInCTNFIQG88kHekGt/bAO+afweWxvb+iphZpcLZj3PGQlE24S0SSgUqo0tHZ
+oqTgFKC4v/YvEV2qmLQ5966R+L/7cKSRf5QlJfQl/v0pfk+IJ+QuhQhcG4YjQOVQ
+NFBM2ncTGmQWGFeKqJiB5IuvhInT2DukqwaChLbEaqhPFS9PmRvb+YXGxTnd4b4H
+Iob/zMnIE/RmFXwHANoSF/2Sely55Q==
+=2tPP
+-----END PGP SIGNATURE-----
+
+--tzr33nw7euhn5lwq--
 
