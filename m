@@ -1,108 +1,91 @@
-Return-Path: <linux-usb+bounces-22293-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C4DFA74936
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:27:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D0C7A74937
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6115A188A560
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:27:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8D027A8710
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D371721ABDF;
-	Fri, 28 Mar 2025 11:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064C4218AA5;
+	Fri, 28 Mar 2025 11:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Bj0haRSK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kJn4SLtT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZrGRESj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2178E21ABCD
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 11:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DBA21ADB4
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 11:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743161246; cv=none; b=HSd1/oz9G4EXXxJ8MzDgoloRLcUzqLLsgEOZg+wFwPfNNSQahUiYxoM1SLPdzksWmspJL79v+62sfuOtuOjrum8Bjs30LDAfBYrG+uAW59YnB0Sci9Pl0UlCGrpufwJlrOgvioWXnQezEo5OshUWfHl9FFrSgmQgIIcLAbZVhlo=
+	t=1743161247; cv=none; b=YuuBtlM4oZp5ozVGuB5q1JJXIA3B/IJNxK/2tCPG9SPOwkgYfBItuOAOXWnaU25leNY7KRqcpD9tcwXCHqjql/hpopxDvH/Jx1SCZOoJrpFmy6+qJNEdG+a7udUhWLM5PTxgDNk/ywEtiVBbZqJ87ep3leTfgDjt//C/8+J/Zig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743161246; c=relaxed/simple;
-	bh=sU70KVcRCAmuSj3HJ8+zxmXAHaSqz3NUybXxw2SjAII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onD0C5I6Y5BnlvSLBVPiKvzjaOqGPD2s1fZjuGcvvgq8j65YDOOXFUlN+APlcA0eD4dd+YTfkC6XUH1bKaWGmb9oVRi7nvIniyLN6p+e7l0U14b+hK9mSXNuQjSEufGbbz/N260RZXA7GKS9st7XhBq5suXJRc15hfXBnwnJd4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Bj0haRSK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kJn4SLtT; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 33ABE1140109;
-	Fri, 28 Mar 2025 07:27:23 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Fri, 28 Mar 2025 07:27:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1743161243; x=1743247643; bh=Fc0rY1OG6W
-	OcEVe7FC55Ap6jhpdGfdyamxg8HqcXCrg=; b=Bj0haRSKdNhTfPqXVdf1Lp1Yoq
-	HYTRdu/nlfGd8bUZ+rEv2HwNdoabq/j4Zk6JwYDzKnmOjgpPvFkADMm4Bt3+mmLL
-	3oskdChO08ksXdouJfI6+KRAbFoOgRzRW/0XaVg1BKjS5Xac7JGR1t6vpH0cHQoA
-	OZ3j9JnfmEvgakU+iy2PyCo1AyguHIBcgM//YHETBu7syIiw6BAOFB3+IuuKDPQc
-	/cKU/knmiS6ivrSe490R9GYUUz6MjndZfsB2Du0w+aNl6+RkYpDokFekTDWqxoB6
-	qry4Z26mXM9dekw0PIBgUZBGkchHgMSVrtpyrcsIyZth1yIWbQqGO/SLHBFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1743161243; x=1743247643; bh=Fc0rY1OG6WOcEVe7FC55Ap6jhpdGfdyamxg
-	8HqcXCrg=; b=kJn4SLtT/qRIM0+hd1Y2XC135Ut/QgDAkUNDV+zWRa337wcwimF
-	HU61NhSS8XX63yGYJSUKjGpDD35T7ucCaYUeY8Lg0uv74FPPdlnSc9WvWyMeScjR
-	OgdwojH8nrK63bqURtZq/sPD0XalUW4E0qvA2Pt/2k4wxcJmX3VLYxGYN/2a7CkJ
-	uP1OpcHqXPUJ2NVAXMfCRLtEAIldQFZDZZ13wqIsmR6de4yyPWmzRktv42cQEl6Z
-	Jter1nb53Z6Ai49cCYPcnviN7zncDfbxgGOIeuFNKu/nQdR+xYYzqIKDxWHK4Mq5
-	zkUAkuaTaazzFt/vRzu7Oxiqm+SNU6hKrfA==
-X-ME-Sender: <xms:mofmZ4E7el-RT7Xyj1aLz0m2ffKKxmmhl_AApEvftnf-se7UlCfhzw>
-    <xme:mofmZxVYY3mWr-fhM9D_6P4XryfY1VzEf3ivQGX972boigjmSYFFeL2-A2XPHVMuR
-    nB1Z1slShvTnQ>
-X-ME-Received: <xmr:mofmZyK3K1Htu9_wSZlxvB8LHz3o9HmtRKaQFDjaMdnb2vOP390PwK8wY7fKpLhjuySMTUL3pmRhLcZ25tdMQ4RILkvw5w8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeduudejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpeffhf
-    fvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhr
-    vghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvleejuefgtd
-    duudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhdpnh
-    gspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghughii
-    ihhllhgrqdgurggvmhhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugi
-    dquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:mofmZ6HxYGphDHWnICHQ4LST5NhX0R6PCf8n_-lfUqUagssOirIgVw>
-    <xmx:mofmZ-VLDf9bYeve98VvniTTLoyKZrcia8P_7Sw3HcBinl8Pq09ygg>
-    <xmx:mofmZ9Oq25hRA4IDZVeqWq7FXJChJe89Kw3aRoH4Z-d_Jn37wy8SHQ>
-    <xmx:mofmZ13fIlg8Tu_GId6d6CiwPgNa6AouIwtmIEHLyBbEskxCIR7Jkw>
-    <xmx:m4fmZ8wcnGV6c25r4iFZTGFkR5jsU-UZE5BWO4wxd-yQa3t5X4ODHW2p>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Mar 2025 07:27:22 -0400 (EDT)
-Date: Fri, 28 Mar 2025 12:27:20 +0100
-From: Greg KH <greg@kroah.com>
-To: bugzilla-daemon@kernel.org
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [Bug 219951] New: Missing null check in ast_vhub_init_dev
-Message-ID: <2025032800-tamale-amendment-c049@gregkh>
+	s=arc-20240116; t=1743161247; c=relaxed/simple;
+	bh=BYC4dyOv9U8z+C+4DrMxqahNFJG0TadJrYnq7s9z2nA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ELV3IQe2ymjRxf8Gj6uTh8AqtoCWOCcxdWJxPCYQeJcKH/yE55nO/v7W0iUi3SaRtSNdt0G79GRmGf5FOXoUEzF98hYE8912Ly8FTxIbUjHqszuYd5iqIpe0DYmZYhaTD8VSraCK6l6k6/9U/6VjEDpI0ber20F4McWl/PUQCFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZrGRESj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D3A1C4CEE4
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 11:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743161247;
+	bh=BYC4dyOv9U8z+C+4DrMxqahNFJG0TadJrYnq7s9z2nA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=bZrGRESjFhOrdN1vNnqM4LsHpMpWbuB2UgL1ZZ3ZXf0hFRL/vFEhlcoeodOXcKLrp
+	 LTtOPyDV9OAveDbVnQquShSN68LavVDdPLDNkxPH/eQKWFQkt4Nv6L3Fjy+EmrM48l
+	 qHasJZ9awrRWP/qRoTIueVT8XK//oYP8CwaT9CLwSOdR8AmPeJioNSWZ2mjldIbyZ4
+	 4zApQIalzpoGJXmc5WgkbMLyj4JOXEWEg12j05CF8afwIsj0GeACwQKwXG2sdHYGeL
+	 HG2Rf88oTGFTjFfkLA9yUKWRwkm9dQ5cUhcRvgGLI0w0zS04I13ecZKi14+WDUaH0B
+	 UScm1ARWT5Pgw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 21728C41614; Fri, 28 Mar 2025 11:27:27 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219951] Missing null check in ast_vhub_init_dev
+Date: Fri, 28 Mar 2025 11:27:26 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219951-208809-WxKBuymt3j@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219951-208809@https.bugzilla.kernel.org/>
 References: <bug-219951-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bug-219951-208809@https.bugzilla.kernel.org/>
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219951
+
+--- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
 On Fri, Mar 28, 2025 at 11:15:22AM +0000, bugzilla-daemon@kernel.org wrote:
-> When devm_kasprintf() fails, it returns a NULL pointer. However, this return
-> value is not properly checked in the function ast_vhub_init_dev. 
-> 
-> A NULL check should be added after the devm_kasprintf call to prevent potential
+> When devm_kasprintf() fails, it returns a NULL pointer. However, this ret=
+urn
+> value is not properly checked in the function ast_vhub_init_dev.=20
+>=20
+> A NULL check should be added after the devm_kasprintf call to prevent
+> potential
 > NULL pointer dereference error.
 
 Please submit a patch for this if you feel it needs to be fixed up.
@@ -110,4 +93,10 @@ Please submit a patch for this if you feel it needs to be fixed up.
 thanks,
 
 greg k-h
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
