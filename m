@@ -1,154 +1,188 @@
-Return-Path: <linux-usb+bounces-22266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B78FA742F4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 05:12:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2685BA74456
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 08:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DA563BC49A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 04:11:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 613EB175765
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 07:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1449C21129A;
-	Fri, 28 Mar 2025 04:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fy0Iu609"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166BE211A19;
+	Fri, 28 Mar 2025 07:23:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178111C8618
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 04:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F43C211A06
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 07:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743135112; cv=none; b=gO1Y2Dv/tv57UmEEnOEWwvWPeAb/mV3JubdUi7Qchi4a/jJJiF3yx9zkjmGEMc+YRL/dapbNcFfcZcMkNWZ+JoJLGmDvIPFdLC7+NI/pKjLQuS8HfkwfNjci3BrVS5my83FMgsOcLmbTisSVzALsb1+qeQxf0Z57nEaLPmIQOBU=
+	t=1743146608; cv=none; b=BeDxs/XG4jj18q1rManSBMxx0K+3pnDYxkxozQ/JWGBWp2XbOPw/hdR0gGvtphIiZjinDwLuRT1sIyrgW3ZR0d47YLbahnnbUN4euBT9JMHej0Dm+A+YFMmrWHn/onFDjpOAv4jOWe9FGDLqPZd3n0tmhZ56ZO9Bc+dhRl5Opno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743135112; c=relaxed/simple;
-	bh=VcQhGjwKbCvL7TRvUAl66tFmQC357t2OP7ZqCwnkd1s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I024NU6v+dUwKO1bQoY2zX8uLho+W3NS+uinJNnBD57fbHagWaAMWZ0UfLaLNwazG40zEK/yiTsKI0s2Svq5egIROWUimd5pS9tc+Tn+7uzswWaQPazSk8ijpsodTvGbU8i0NNjmQGrHVOomQqi3+86cSmgiy+eudn2AdVuYuf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fy0Iu609; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-30362ee1312so3006550a91.0
-        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 21:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743135110; x=1743739910; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KOaMt0R9YVNlwsA3/uI772AmvrvkxzcfR1yqEVw0pxY=;
-        b=Fy0Iu609nlNHuG9ClqLu+UMxGHR0IAoL+VJmrvaJLVNypQU4rg7l23kou71EVsuS5l
-         I85zvc0BhhWo+tSQCwghPfTc4rV1R/gDOyZMKPnRtmj/B0BchgusX8uuGW43DIcobBDW
-         6g5BaIdakj0Zv/iuSU1nH6+xddj6+78Mxav/8d44n5J/sN/cew6OsM+hsApEtjRwLvcM
-         piAi0a6kF+wKxxoE3MW3YBXhAx0H0XvvsUCElocGxy2dgDbMZQ1eIROn/mC8zr+CJ0cw
-         pNFDpu9Fi142rhLR0tHXrwBL4thUjWiVtsPhcNrLgzLr8Wzz5RIUDJbcdjBlKR5BKG20
-         NWeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743135110; x=1743739910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KOaMt0R9YVNlwsA3/uI772AmvrvkxzcfR1yqEVw0pxY=;
-        b=CIBhPNbdDRr9aB8riRo80PXUYri3lDZ3ga0n6u1OYBNFNkRWAPUoKUV4OqDnrSCKR3
-         WbT0NTWkO2QsznerQNZTjvNQTmrvVMeD97GWpV9KFrXWkwiRdbK0K8Ejs35C7KCx+IU2
-         CCGoaNh+5j9AYZ3+XnP6NTJ3zjwpzSb64OpzueSpvp43a5yKPMkFJ2nO5A/ZyhfFmyC9
-         F8hnKTUyjA1grnkitOQNxTKrX4EQnp+AzIMGTty5pQEqVxlJgerogOFF8eGWRg3B8rSM
-         Y3DfZvfnFzXWfFL463qGsnBlVv5sS8PGTGahTXLScKcl6mkseFapqodnASNUBYy88ueo
-         +byw==
-X-Forwarded-Encrypted: i=1; AJvYcCXa5lS6TttBy3nptZsI99nMqkCWhHYSsLnxuCOcdgNx0Q2bNhqyP3ONC+Sh7Z7ievgxKYDUHoutzYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQPyU/Z1yQ5CqsemkpFu2T04CPF2ee1IrPAwuQTrtFoeKIFWar
-	qWTl04c7ybGqld+E0RTJXFR4+lt37+Tl8Ij8bxUgAKsOrDgmpvVTk2mvzuJLqbg6nYnlQBDVVtt
-	Z3V06b5+paefHcJErC2L7S9ChbPMHFwVCABDz
-X-Gm-Gg: ASbGnct3x/gZIMF5n1I/em7w/MkntpooBs/v3P/225QihBw4sm+woagvVIUSwZ/+rcI
-	MFhImn3oC5gGCHo1oBbqFRfIdrQGpr1Fqr1LVTvXnbM76IGbeva8yY+MFOMb83ymcIQ4mXeUlUz
-	fV/k7rAa8fgaqifFekzv2wkVGTHYIrNzFqKPOujVS1/VEiU95QE2VeG0Se
-X-Google-Smtp-Source: AGHT+IFzcIsDka9WHZJAJxFJMpLG8c8sNW7ZlIUJIwmaNAc9LhnSuWXu0PkDrFCS/5qopuG/ewx09I4HC8RtpYaWMI8=
-X-Received: by 2002:a17:90b:5450:b0:2ff:64a0:4a58 with SMTP id
- 98e67ed59e1d1-303a83c3c41mr7500138a91.22.1743135109830; Thu, 27 Mar 2025
- 21:11:49 -0700 (PDT)
+	s=arc-20240116; t=1743146608; c=relaxed/simple;
+	bh=JREqmQ3F44uxPOvDqNR52TR0Yop4pEtWE1iR0/YLCZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H/cjw8NGDQzU21kPvjAFPE3b1HfOQrfvrj54udx/2TL8l8c9ICWK8Y6vARZQ2LVeUJblT8TaAczKy5poSyzNH7JQMWjMEO5ZLPcrOQlumKr4fPAqX4qbHJzchkbd+nAgT6RZ8Zf0MTBG15Vrn3L8zx11BM8eKmVkFCMXbKFiSEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ty43D-0000Nn-Lv; Fri, 28 Mar 2025 08:22:47 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ty439-0023qP-1p;
+	Fri, 28 Mar 2025 08:22:43 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 1DB853E85BD;
+	Fri, 28 Mar 2025 07:22:43 +0000 (UTC)
+Date: Fri, 28 Mar 2025 08:22:42 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
+ <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+ <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+ <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
+ <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+ <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
+ <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
- <20250319005141.312805-2-quic_wcheng@quicinc.com> <CAGCq0LZoi0MOJLJYUeQJW6EfOU_Ch=v1Sg8L4_B-KhdDCx1fCw@mail.gmail.com>
- <2025032734-reward-fantasize-dc16@gregkh> <CAGCq0LamxvvE8b45VAshw9aWJNC2so_vK9t+pzXd3C7Y7tfYAg@mail.gmail.com>
- <87746e66-84c1-4ff3-8b69-fbee1664eff6@quicinc.com>
-In-Reply-To: <87746e66-84c1-4ff3-8b69-fbee1664eff6@quicinc.com>
-From: Puma Hsu <pumahsu@google.com>
-Date: Fri, 28 Mar 2025 12:11:00 +0800
-X-Gm-Features: AQ5f1Jpnovh_4p-_u6V4wCVMQJgZBCl06fy9sGBvVcdkQOOr_maNF6N-1VIckKo
-Message-ID: <CAGCq0LYi=Dq+3RvvK6Z5kFGZ3XanPq2BuizEBZ353oVo2FGHAg@mail.gmail.com>
-Subject: Re: [PATCH v36 01/31] xhci: sideband: add initial api to register a
- secondary interrupter entity
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, srinivas.kandagatla@linaro.org, 
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org, 
-	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org, 
-	lgirdwood@gmail.com, krzk+dt@kernel.org, pierre-louis.bossart@linux.intel.com, 
-	Thinh.Nguyen@synopsys.com, tiwai@suse.com, robh@kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Mathias Nyman <mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="a4tssny7k3xmom4i"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+
+
+--a4tssny7k3xmom4i
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-On Fri, Mar 28, 2025 at 12:12=E2=80=AFAM Wesley Cheng <quic_wcheng@quicinc.=
-com> wrote:
->
-> On 3/27/2025 3:14 AM, Puma Hsu wrote:
-> > On Thu, Mar 27, 2025 at 3:02=E2=80=AFPM Greg KH <gregkh@linuxfoundation=
-.org> wrote:
-> >>
-> >> On Thu, Mar 27, 2025 at 02:27:00PM +0800, Puma Hsu wrote:
-> >>> Hi,
-> >>>
-> >>> We have implemented and verified the USB audio offloading feature wit=
-h
-> >>> the xhci sideband driver on our Google Pixel products. We would
-> >>> appreciate it if this solution can be accepted. Thank you all for the
-> >>> work!
-> >>>
-> >>
-> >> Great, can you properly send a "Tested-by:" line for this against the
-> >> 00/XX email so that it will be properly saved?
-> >>
+On 28.03.2025 10:37:33, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=882=
+7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=883:25=E5=AF=AB=E9=81=93=EF=
+=BC=9A
 > >
-> > We(Google Pixel) only use the xhci sideband related changes and two
-> > changes in the sound card driver. For the details, what we actually
-> > tested are patch [01], [02], [03], [04], [05], [06], [08], and [12].
-> > Do I still send the "Tested-by:" line to 00/31 email? Or should I just
-> > send the "Tested-by:" line to the 8 changes above? (I added
-> > "Tested-by" line for this [01/31] first.)
+> > On 27.03.2025 13:38:22, Ming Yu wrote:
+> > > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=
+=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:41=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> > > >
+> > > > > > > > > +     priv->can.clock.freq =3D can_clk;
+> > > > > > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittimin=
+g_nominal_const;
+> > > > > > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bit=
+timing_data_const;
+> > > > > > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > > > > > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_b=
+err_counter;
+> > > > > > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPB=
+ACK |
+> > > > > > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR=
+_REPORTING |
+> > > > > > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > > > > > > >
+> > > > > > > > Does your device run in CAN-FD mode all the time? If so, pl=
+ease use
+> > > > > > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmod=
+e_supported
+> > > > > > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Our device is designed to allow users to dynamically switch b=
+etween
+> > > > > > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
+> > > > > > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_suppor=
+ted, and
+> > > > > > > can_set_static_ctrlmode() is not suitable in this case.
+> > > > > > > Please let me know if you have any concerns about this approa=
+ch.
+> > > > > >
+> > > > > > Where do you evaluate if the user has configured CAN_CTRLMODE_F=
+D or not?
+> > > > > >
+> > > > >
+> > > > > Sorry, I was previously confused about our device's control mode.=
+ I
+> > > > > will use can_set_static_ctrlmode() to set CAN_FD mode in the next
+> > > > > patch.
+> > > >
+> > > > Does your device support CAN-CC only mode? Does your device support=
+ to
+> > > > switch between CAN-CC only and CAN-FD mode?
+> > > >
+> > >
+> > > Our device supports both CAN-CC and CAN-FD mode.
 > >
-> >> Also, I think a new version of the series is coming, can you test that
-> >> to verify it works properly?  We have to wait until after -rc1 is out
-> >> anyway.
-> >>
+> > This doesn't answer my question:
 > >
-> > I think this v36 is the last version of the series as I discussed with
-> > QCOM Wesley. And for sure I will test it if they do have a new
-> > version.
-> >
->
-> Hi Puma,
->
-> I'm discussing with Stephan on the QC specific stuff, so the common chang=
-es
-> won't change on v37.  Please provide your tested-by tags for each commit,
-> so I can carry them accordingly on the next submission.  If I do end up
-> making changes to any of the common patches, I will remove your tested by
-> tag, which means you might have to test it again.
->
+> > Does your device support CAN-CC only mode?
+>=20
+> It can dynamically switch between CAN-CC and CAN-FD mode when
+> trasmitting or receiving, depending on whether the nct6694_can_frame
+> passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
 
-Thank you Wesley, I will add Tested-by for the commits, and I will
-track your next new version.
+Ok, but what about the receive path? Does the device support CAN-CC only
+mode? Will it throw an error, if it receives a CAN-FD frame?
 
-Thanks
-Puma
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--a4tssny7k3xmom4i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmTj8ACgkQDHRl3/mQ
+kZxbBggAnvTDCDToJYkOojptUT65lDvDa1RdwRbTO+7MEEyuklVxALUQJmpsq1Yw
+Aw4gKcwEZE1Q3vdlXR9kF4hUCKczWT5QxeqCW9M/qEfSXgNXhX8CCHVDzl5b7Om+
+kB+tiH7jitYhp2s9dK0Muj/hl4QuOL35OW0Ayn6G/Pd/fKjNJlf4to2ziatUFtk6
+nWNfPrk9LhQq9B/Fy5yGxDpt7WwPU3MUMaYWHZSvSMyPawBPpj6nYtlXRn9FeVUK
+EEZIiOVW/orW9H5nu5XeGXbYM5OdwNqh83rqW94yYoeyE4A+2CX9UZ+kkLpabh7v
+Xz6Zr0RWQWzVT0cOQWKPGt0vY3Iw0Q==
+=Op9R
+-----END PGP SIGNATURE-----
+
+--a4tssny7k3xmom4i--
 
