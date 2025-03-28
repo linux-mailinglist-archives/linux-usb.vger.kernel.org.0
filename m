@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-22265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84593A742ED
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 05:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B78FA742F4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 05:12:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8C463BA2BD
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 04:08:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DA563BC49A
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 04:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC2915666D;
-	Fri, 28 Mar 2025 04:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1449C21129A;
+	Fri, 28 Mar 2025 04:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eroXl0n8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fy0Iu609"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7C91AF0C1
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 04:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178111C8618
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 04:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743134904; cv=none; b=HCwA9NICRMT4vgSfCBMSBdoZvBHGS1EIl7QYummL/Ok8kySQlrI4oQf0BN9+HzKyx2r0qltn6Rl9uQWmn0rnRB/0vxktnSVjWgUpFCj3mBqz6+K9JmrI3RO/8i1LY1RQEJH8GRQ61mEUf9u1Gj1CytpJPuCCGTxjcSg5xPKTN/0=
+	t=1743135112; cv=none; b=gO1Y2Dv/tv57UmEEnOEWwvWPeAb/mV3JubdUi7Qchi4a/jJJiF3yx9zkjmGEMc+YRL/dapbNcFfcZcMkNWZ+JoJLGmDvIPFdLC7+NI/pKjLQuS8HfkwfNjci3BrVS5my83FMgsOcLmbTisSVzALsb1+qeQxf0Z57nEaLPmIQOBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743134904; c=relaxed/simple;
-	bh=iYrVRcD+hMzJtKzodR0ESNhu7mLxGvDK1xY/1pi4jNw=;
+	s=arc-20240116; t=1743135112; c=relaxed/simple;
+	bh=VcQhGjwKbCvL7TRvUAl66tFmQC357t2OP7ZqCwnkd1s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JPYl77PAP6uJyY1KpxzZMlAy65TFE6fH160dLNM6eBlgE6Ce55m7cTvXIjUHc+MJ5MHaScrFCc3KMBSpJNMr1NCHqlu4HS/sCbzl5618CJ1GikrOWBj5/0HRpDg/0F6rcc04BfXQ6X6gwAVV1VR0Jg7bCDa7EghQMIndMrHo1H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eroXl0n8; arc=none smtp.client-ip=209.85.216.47
+	 To:Cc:Content-Type; b=I024NU6v+dUwKO1bQoY2zX8uLho+W3NS+uinJNnBD57fbHagWaAMWZ0UfLaLNwazG40zEK/yiTsKI0s2Svq5egIROWUimd5pS9tc+Tn+7uzswWaQPazSk8ijpsodTvGbU8i0NNjmQGrHVOomQqi3+86cSmgiy+eudn2AdVuYuf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fy0Iu609; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3031354f134so2326996a91.3
-        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 21:08:22 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-30362ee1312so3006550a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 27 Mar 2025 21:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743134902; x=1743739702; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1743135110; x=1743739910; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N03iBb0aPoOa1EMU2w3tNSLo9fIJtKzm12qVBAP380o=;
-        b=eroXl0n8+OT1WgONptV+EA+kK8ucFA8h5gKi/zuj5OQRMp/bjukCcy0en5STiHvPjF
-         hk+0RbyfQArUFzXVJCZIU4lcCM91HpM/R6oLg8REt3szqn/8DlbFUqRaFz7KVW1uUhC2
-         2R8lLzlWzv6PGJtf5oH90dHAX4cRqBki80bGQli/mIh7ZKqVh16jWHyF8BwonOgC8xc7
-         Z58exKQhCj/OHYjOLyfr0Yzl57V4S4mqh5MMEoBf0uJYiiEa9z8FZgYVjc1Rkeys5wkW
-         c9jZIRU2rtdOEMJu1njuawOnnUTKseg6qPEo2Os8ZhCqc/A/C6VyepPeTfTpL9L62XQc
-         HrYw==
+        bh=KOaMt0R9YVNlwsA3/uI772AmvrvkxzcfR1yqEVw0pxY=;
+        b=Fy0Iu609nlNHuG9ClqLu+UMxGHR0IAoL+VJmrvaJLVNypQU4rg7l23kou71EVsuS5l
+         I85zvc0BhhWo+tSQCwghPfTc4rV1R/gDOyZMKPnRtmj/B0BchgusX8uuGW43DIcobBDW
+         6g5BaIdakj0Zv/iuSU1nH6+xddj6+78Mxav/8d44n5J/sN/cew6OsM+hsApEtjRwLvcM
+         piAi0a6kF+wKxxoE3MW3YBXhAx0H0XvvsUCElocGxy2dgDbMZQ1eIROn/mC8zr+CJ0cw
+         pNFDpu9Fi142rhLR0tHXrwBL4thUjWiVtsPhcNrLgzLr8Wzz5RIUDJbcdjBlKR5BKG20
+         NWeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743134902; x=1743739702;
+        d=1e100.net; s=20230601; t=1743135110; x=1743739910;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N03iBb0aPoOa1EMU2w3tNSLo9fIJtKzm12qVBAP380o=;
-        b=Rj4x/ErAv+G+WRb6/bO0+FYaB8JiEFFht+s4cprFq/mtu4knv2rP9b1iaLI74UYF9y
-         EPgLXvBG5eCYjSu+J8NJmUS0MEkrqCEBTMorz1cy3etMamBXqvA8i6tCMaEE/S4pVJxq
-         ParE2ySZuopBBmLGtZ4OVYv8vjwgxH7ImHLWZN5oINaMSnEEUGvAozaK0YcgyRpx4uZd
-         i5amwyBr5zoF5sw6VjijtaIGe0G/+C1UhHrMI8nI3gty23Ssi8kH9BFmahTWF0rLb2mZ
-         U5jES5D2PJkiuLZGaAaoMhIlAO2lx0Y4Pc4le7YmbAlU9kqLjUc5WEoF9ycyIqd0Fo1N
-         ANMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVGd9+MTauOBs2GoKUfY2BpovgYktBUJI+H9CDmYUAIhA62Uc3lOuLCREZhIxNUQ9ZOr0CaIBnAzt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQz7J3QvuCwwUq3kjvILz4eYTT7yDSXt7Kvb0ZgsHwk8ERN9rh
-	+J65dNvELV7p5xzTY2JrnALXFUiOIvvYagtVWUwAeGpZWrr0Smv0QT2NozzZiM57QQ9VW2hO8tX
-	QlmxIpQoV1d3ykDU7cTkg2yB98Z+VWUut+Nlq
-X-Gm-Gg: ASbGncv4NhMlvKUg9554HzkE3T+wYDbNu0xTr9eUerp/L9g1juAVi5bikyoTTR1XOE6
-	8+J0XJtcUN0JRkzJKDCaZgSGaYyyDJxncVR/yjQ/DCUr+G3W4KELbeeLR2GLdPRUMOvC2JfTuVQ
-	jf6aprJpWMyBBWE26O0wq37EHZf+41IxteI8iUFT8zatazUwU7wYMBqhnB
-X-Google-Smtp-Source: AGHT+IET2SIyJWG/WqM8dYN2pMoj552qvEHpWMKKbW6yAwVAwSlCGxAcGWCgJC6GDSoyfDHa7yGjAkBy+fMLLMAo3AE=
-X-Received: by 2002:a17:90a:e185:b0:2ee:cded:9ac7 with SMTP id
- 98e67ed59e1d1-303a8164d83mr9850612a91.20.1743134902056; Thu, 27 Mar 2025
- 21:08:22 -0700 (PDT)
+        bh=KOaMt0R9YVNlwsA3/uI772AmvrvkxzcfR1yqEVw0pxY=;
+        b=CIBhPNbdDRr9aB8riRo80PXUYri3lDZ3ga0n6u1OYBNFNkRWAPUoKUV4OqDnrSCKR3
+         WbT0NTWkO2QsznerQNZTjvNQTmrvVMeD97GWpV9KFrXWkwiRdbK0K8Ejs35C7KCx+IU2
+         CCGoaNh+5j9AYZ3+XnP6NTJ3zjwpzSb64OpzueSpvp43a5yKPMkFJ2nO5A/ZyhfFmyC9
+         F8hnKTUyjA1grnkitOQNxTKrX4EQnp+AzIMGTty5pQEqVxlJgerogOFF8eGWRg3B8rSM
+         Y3DfZvfnFzXWfFL463qGsnBlVv5sS8PGTGahTXLScKcl6mkseFapqodnASNUBYy88ueo
+         +byw==
+X-Forwarded-Encrypted: i=1; AJvYcCXa5lS6TttBy3nptZsI99nMqkCWhHYSsLnxuCOcdgNx0Q2bNhqyP3ONC+Sh7Z7ievgxKYDUHoutzYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQPyU/Z1yQ5CqsemkpFu2T04CPF2ee1IrPAwuQTrtFoeKIFWar
+	qWTl04c7ybGqld+E0RTJXFR4+lt37+Tl8Ij8bxUgAKsOrDgmpvVTk2mvzuJLqbg6nYnlQBDVVtt
+	Z3V06b5+paefHcJErC2L7S9ChbPMHFwVCABDz
+X-Gm-Gg: ASbGnct3x/gZIMF5n1I/em7w/MkntpooBs/v3P/225QihBw4sm+woagvVIUSwZ/+rcI
+	MFhImn3oC5gGCHo1oBbqFRfIdrQGpr1Fqr1LVTvXnbM76IGbeva8yY+MFOMb83ymcIQ4mXeUlUz
+	fV/k7rAa8fgaqifFekzv2wkVGTHYIrNzFqKPOujVS1/VEiU95QE2VeG0Se
+X-Google-Smtp-Source: AGHT+IFzcIsDka9WHZJAJxFJMpLG8c8sNW7ZlIUJIwmaNAc9LhnSuWXu0PkDrFCS/5qopuG/ewx09I4HC8RtpYaWMI8=
+X-Received: by 2002:a17:90b:5450:b0:2ff:64a0:4a58 with SMTP id
+ 98e67ed59e1d1-303a83c3c41mr7500138a91.22.1743135109830; Thu, 27 Mar 2025
+ 21:11:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,16 +77,16 @@ MIME-Version: 1.0
 References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
  <20250319005141.312805-2-quic_wcheng@quicinc.com> <CAGCq0LZoi0MOJLJYUeQJW6EfOU_Ch=v1Sg8L4_B-KhdDCx1fCw@mail.gmail.com>
  <2025032734-reward-fantasize-dc16@gregkh> <CAGCq0LamxvvE8b45VAshw9aWJNC2so_vK9t+pzXd3C7Y7tfYAg@mail.gmail.com>
- <2025032756-aliens-ibuprofen-79e5@gregkh>
-In-Reply-To: <2025032756-aliens-ibuprofen-79e5@gregkh>
+ <87746e66-84c1-4ff3-8b69-fbee1664eff6@quicinc.com>
+In-Reply-To: <87746e66-84c1-4ff3-8b69-fbee1664eff6@quicinc.com>
 From: Puma Hsu <pumahsu@google.com>
-Date: Fri, 28 Mar 2025 12:08:00 +0800
-X-Gm-Features: AQ5f1JorDK6fkpVgYpd1mPibjV42TOlpaMjT0M3mouvQUfQc-UcxBnx7ecDNaLc
-Message-ID: <CAGCq0LZUezCBoqrS2+6Dphd4J2T0w5tPNweNVtGcNzMzjgSUXw@mail.gmail.com>
+Date: Fri, 28 Mar 2025 12:11:00 +0800
+X-Gm-Features: AQ5f1Jpnovh_4p-_u6V4wCVMQJgZBCl06fy9sGBvVcdkQOOr_maNF6N-1VIckKo
+Message-ID: <CAGCq0LYi=Dq+3RvvK6Z5kFGZ3XanPq2BuizEBZ353oVo2FGHAg@mail.gmail.com>
 Subject: Re: [PATCH v36 01/31] xhci: sideband: add initial api to register a
  secondary interrupter entity
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org, 
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, srinivas.kandagatla@linaro.org, 
 	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org, 
 	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org, 
 	lgirdwood@gmail.com, krzk+dt@kernel.org, pierre-louis.bossart@linux.intel.com, 
@@ -98,27 +98,26 @@ Cc: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 27, 2025 at 6:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
+On Fri, Mar 28, 2025 at 12:12=E2=80=AFAM Wesley Cheng <quic_wcheng@quicinc.=
+com> wrote:
 >
-> On Thu, Mar 27, 2025 at 06:14:00PM +0800, Puma Hsu wrote:
+> On 3/27/2025 3:14 AM, Puma Hsu wrote:
 > > On Thu, Mar 27, 2025 at 3:02=E2=80=AFPM Greg KH <gregkh@linuxfoundation=
 .org> wrote:
-> > >
-> > > On Thu, Mar 27, 2025 at 02:27:00PM +0800, Puma Hsu wrote:
-> > > > Hi,
-> > > >
-> > > > We have implemented and verified the USB audio offloading feature w=
-ith
-> > > > the xhci sideband driver on our Google Pixel products. We would
-> > > > appreciate it if this solution can be accepted. Thank you all for t=
-he
-> > > > work!
-> > > >
-> > >
-> > > Great, can you properly send a "Tested-by:" line for this against the
-> > > 00/XX email so that it will be properly saved?
-> > >
+> >>
+> >> On Thu, Mar 27, 2025 at 02:27:00PM +0800, Puma Hsu wrote:
+> >>> Hi,
+> >>>
+> >>> We have implemented and verified the USB audio offloading feature wit=
+h
+> >>> the xhci sideband driver on our Google Pixel products. We would
+> >>> appreciate it if this solution can be accepted. Thank you all for the
+> >>> work!
+> >>>
+> >>
+> >> Great, can you properly send a "Tested-by:" line for this against the
+> >> 00/XX email so that it will be properly saved?
+> >>
 > >
 > > We(Google Pixel) only use the xhci sideband related changes and two
 > > changes in the sound card driver. For the details, what we actually
@@ -126,40 +125,29 @@ he
 > > Do I still send the "Tested-by:" line to 00/31 email? Or should I just
 > > send the "Tested-by:" line to the 8 changes above? (I added
 > > "Tested-by" line for this [01/31] first.)
->
-> Send it to the commits that you used if you only used portions.
->
-> But that feels odd, why are you only using portions here?  Why not the
-> whole thing?  Are you going to have to revert portions of this series in
-> order for your device to work properly?
->
-
-Google Pixels use Tensor instead of QCOM chip, so we won't enable
-QCOM specific drivers from this series(i.g. patch [14~31]). What we
-need from this series are common xhci stuff and portions of alsa. We
-won't build QCOM driver even if this series is all merged, so we don't
-have to revert anything.
-
-
-> > > Also, I think a new version of the series is coming, can you test tha=
-t
-> > > to verify it works properly?  We have to wait until after -rc1 is out
-> > > anyway.
-> > >
+> >
+> >> Also, I think a new version of the series is coming, can you test that
+> >> to verify it works properly?  We have to wait until after -rc1 is out
+> >> anyway.
+> >>
 > >
 > > I think this v36 is the last version of the series as I discussed with
 > > QCOM Wesley. And for sure I will test it if they do have a new
 > > version.
+> >
 >
-> See:
->         https://lore.kernel.org/r/ee95520b-cdcc-4e10-a70e-683993cafe36@qu=
-icinc.com
-> for where the need for a new version is discussed.
+> Hi Puma,
+>
+> I'm discussing with Stephan on the QC specific stuff, so the common chang=
+es
+> won't change on v37.  Please provide your tested-by tags for each commit,
+> so I can carry them accordingly on the next submission.  If I do end up
+> making changes to any of the common patches, I will remove your tested by
+> tag, which means you might have to test it again.
 >
 
-Thank you for the information. It looks like QCOM specific, but I will
-track and test if there was any change for common xhci in the new
-version.
+Thank you Wesley, I will add Tested-by for the commits, and I will
+track your next new version.
 
 Thanks
 Puma
