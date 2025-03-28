@@ -1,149 +1,132 @@
-Return-Path: <linux-usb+bounces-22279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22280-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B233CA7456C
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 09:31:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82EDAA745C3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 09:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E07F3BEFAC
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 08:30:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 547777A7FC9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 08:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698202135AD;
-	Fri, 28 Mar 2025 08:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674EC21323F;
+	Fri, 28 Mar 2025 08:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ORm0QcCy"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="w6+Ll/ZR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F8B212FBF;
-	Fri, 28 Mar 2025 08:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294FF14375D
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 08:56:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743150638; cv=none; b=ssjzEcHNAtQdDJsk9YceI0YtTbpIwvkrU8uSStGSEVag4/ku59faMUa0jE57Wl9mii2aCrhXRYTIb6Bgx0zpdVSIhDt3oC4mPIPMUQbSR0A9ahKZW4M/qZMpAY3ys/n1Vs2yACTGVGFBe+Rw1arZecI+kBgpNdp/JoWBYrdZHlM=
+	t=1743152185; cv=none; b=CTN4iokpS3kqbsJedXO62mFmp35ws44TmrUyFRdUr/TJGWLxquTEJ08ZYKZTWOg7mW/NL5bhXt9fIYk/Bj0DObpFGYLdOlaPaHngKeCiyuI3WeABF3vlnkRiaF3BU9cCY7qYwSaCR2U6UI1ikKpgSp+++Dzsi6eZ5hsKC3/lM2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743150638; c=relaxed/simple;
-	bh=DTcedE6KspyD0WF2+HMkGLOGGYHnEJsoVr5IaBC0H1I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZBFTW/q/NQ7iLiXO/pE219xZNeYQR+P4aw0sebuieDxrzDKY+rBLoUqyX+rvehM/vX5kNxa/ukI/i2mrdAYJ7zldOD5zd0aHIcop3rko4TFrnhxFeGzNz9ZyLOQfzOiVUhwyYHsdQBRZPV5HnNaQ9eqKz5r63f3zUKhsiKFvrUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ORm0QcCy; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-51eb18130f9so928928e0c.3;
-        Fri, 28 Mar 2025 01:30:36 -0700 (PDT)
+	s=arc-20240116; t=1743152185; c=relaxed/simple;
+	bh=lo/s7kP0LWbaBN7kB2F2Ps1rhG6eCVa8wmyM9lHjSRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mJapDMhQRQYdPoWJi/kDgpBFpctkBnLudAzg+7ec9y+DmpuQt25om1JgdWWrVtLYnPyll/5YP0c03AxWDSxg82+9pWPi4u94jTyTyL2GDJiVqh9/1CLJR4JU/9NDFInLLT6iVr1TwmrdHcjAQx39DgA+v9J9qbIn9fn3+PXpHu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=w6+Ll/ZR; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso13115055e9.0
+        for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 01:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743150635; x=1743755435; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCz69q91HFfvhGoJrcN7iTaAaXUD5silbw3K2qhF6HQ=;
-        b=ORm0QcCyYHE88TApOCi8jN7/pgRrfidzwxJ90Kgn/rDoKPW/cpJpvXDTNa3K4bBEQf
-         J9W2rSQmBEdnAZ/cv360sy+CVWbfU2iK4YM/TqjgAgkZlcQ9n3iA9YIn9F42y9w9hjo1
-         QltX8cGtW3t/hnc0E40DRcNSwVqRpSWLuIxRPhzNYdClOBFFXqjMM/uovzDWxIUdBMld
-         tTLGdsylxy21Is42Yx98+F6/xDkOJ/QtZXPsJNgAerd8QZxd4IdAw5DrrfcDeKE0UvB/
-         Zj9G+gqV7S4AwZ/tXd+92oESXpH7/yv0e/JSIX9E7+9PxkbAuvBQJLZczMAr2NxXOV3g
-         m11g==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1743152180; x=1743756980; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7doriRpniCsEUzcCdohshQNnWmn/Qc8WrWi2JyiWBmg=;
+        b=w6+Ll/ZRU++bUBEmwuUhnD7R0N8pgih8coQh4V+YMhmXaoDS/QUdFU37zdYm52Hu00
+         czD0IYFQSi0IkL7F23DVKrE3MjtuTGXdaOeOB6HuKQXHfRH2x+nxgxoCVRjNsJ5PrNti
+         OVXVmgzRaIRyGg1w+fU3u2p9dGIjE3pRE8aFoE+Ou6M3pVtdrX+ItcdEvnnZtRKdyV73
+         uD2CSbTRRWZl/NyaFH7rBuEhKEClm1Sh51gYr2one1GO7PY3f94HkR9P6X4VmNHlD5zf
+         ptvMJTxKYMJCmmpN5yoD3IjOIqn6rtbzYCxAVUTWilt8JYmTMoDK1NXZae4LTZYs9aEv
+         cz0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743150635; x=1743755435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wCz69q91HFfvhGoJrcN7iTaAaXUD5silbw3K2qhF6HQ=;
-        b=IzHY4hcshxNjfdB/XABmSzDXNopvem2c9KBpjXhoP1Ehxj0UbiQ+U9FVQf2tLGOwek
-         ej8JDfnEny8VT3FALp+3uxhtMRL0oA9DpV86XBr5ftC4TxZAfHcMCOGaJMv6LNMsQPNK
-         y7tUmS5dAkihs5IENeUEJcKLUiZbiqVJF5K2GUwWstNxzZ0PtK+TpuYzbxhNxZFNI/ZX
-         to6OQhIWs61QQM5RS68lCQe/W7sAVuyTybgJJNcgO/oMvUHW8NCoYfYs/GY+ejZ1y/Qr
-         uFBIPr+tQxX/KLSwAfIxKNVXmwPZz4nmGufnE0OvL0LW4vE3FynZfXuv0+10jJhfiF4/
-         GMmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFzg4L5MedjkS7cPiXrr/SPLUw949dgaJoYk0h/jzt1B4zp4mo5r2Ap2r05qJkiSEbbTv3VS3DHVeQbLtAheQItQg=@vger.kernel.org, AJvYcCUzp9Kig5yTQOSYu4Ou4fSo9bUj83TELR81DzMrKoe6+oIWWHZUjF0ftHw21uWyS6Mkafsp0E5uJP//uiw=@vger.kernel.org, AJvYcCX6upC/tXaz1ZKUTHIEdHJt3nc4+MmZMbtOrxhcNjFmIvlek3VJ6Bh5iyl3zZ2XBXRvOagBYh+Vu39s@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA5FeE25qBa8MWhYNJO9l6ac9OT7VqOLZ8HxTUALiOfYXbxsnK
-	4sm7UDo4Qcudu/A40dEUJQVzrgwI/oreLYSXQkpx52d5tKeUei3SfBaJnEYyXmFtf7Xomzsbg35
-	Wo7rjeCuit1k7t4oDJg4J9u330lU=
-X-Gm-Gg: ASbGncuZH0gRBj+SsHcsOe45urtm27AV2wRdarYOoJblRyrWcW3WQPNffo/BKYH5/9J
-	PNk7LWS6OQ/Iuj3MHO/oowGZJE2IcIWbk/fGYG9uZo/4uNiC5l0dpaDyg2dVM3xQeq7/prYxsGI
-	tTfYy2jeXEKv8fbwZG8eGUNytxMg==
-X-Google-Smtp-Source: AGHT+IFIZReqhwYH+e0OINTV0TbFc9HMOCFT2KPlEmIJBSBf3GP/kFOfHmgaEfx6fm/rrHXFKMQCWubhlgeX8F1T68s=
-X-Received: by 2002:a05:6122:887:b0:520:9b05:4cb6 with SMTP id
- 71dfb90a1353d-52600719492mr4729899e0c.0.1743150635039; Fri, 28 Mar 2025
- 01:30:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743152180; x=1743756980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7doriRpniCsEUzcCdohshQNnWmn/Qc8WrWi2JyiWBmg=;
+        b=t7+edLXxa7fVJuXGBMxK7GHj+CnQE0J6GsY4V0EgArqMklJrd7g0oEKb9eoi4DKzR9
+         +evVnbQn+bcrfDhRQRsGbtWjsUXiQXWZ9lRML5LhedM4Qz4Zko+BZfStNSo7uwhCMTD8
+         8xzr2kF0souxkNDuHVzw7NcQv20il4tya/1a5ZFB6wYuGqUaGlNwX2iPTt6Ck4ZPOR3m
+         g9ddXO6+QEs3q6DlGcpkE4c22EiELzj2xnVy5N6OMXq3Qi41E7sGYgI/kjNjEx03o/vn
+         Z4nLPHbyC/3oRwIliQdyuMo5tT8E1bAFpSySG+nSnxlyi37VOkY1IjfaiAlZMXXK3+Y0
+         XYxQ==
+X-Gm-Message-State: AOJu0Yz4LxMB0LEyA0+lQ29XWkt553LBxyXCenuelaIdiKefhKS+KIhh
+	pVEQ7XkLQF+d8oqQXr8Zime+b/1s7zdAevlnu/qWbSusrR5dnjyaGP3PzZswLe1JL8ap28odHkA
+	OcwE=
+X-Gm-Gg: ASbGncudFjPL3osC4wVM5qtN763gJhHG8eO08D3UEWzv60gbyjUkMpVW9ijhW+vm5NU
+	hDd7XNmW0KyD8zI88VhbI0uYMSrXFzjnx9MQ0XkWZz+UkmiFSzHXxOKt11oDLwb4ew9Rvl0jR7U
+	9D/J5yW2eoXrHcg0ho48siaHmDfI+zpZF2n8CGPdML9U3HvXovQ+C+nOKJoEvdc8sea3+lL+LKz
+	IT5kqnNToqeHkwgFssKQIcMO9+nFTf3MDJXDthZQCPNNkPSprOnAQoyiqNEFT147B4rjXoNIQ3R
+	+ThRR8fTcnwI1f6PTbYtFKVjQJIjR0l626QdS0Oiu4I88/31gA1uBdCujzi0+Q==
+X-Google-Smtp-Source: AGHT+IGOC2oovfPaGextgL/nLdI++VE+zzRrVOVMGl+qTN3GzTHzCnHLSIOn6To+WNbR20IwUG8DYw==
+X-Received: by 2002:a05:600c:190b:b0:43c:eec7:eabb with SMTP id 5b1f17b1804b1-43d84f9a6f7mr56815505e9.8.1743152180181;
+        Fri, 28 Mar 2025 01:56:20 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:355:6b90:e24f:43ff:fee6:750f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d90000a09sm20203335e9.35.2025.03.28.01.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 01:56:19 -0700 (PDT)
+From: Frode Isaksen <fisaksen@baylibre.com>
+To: linux-usb@vger.kernel.org,
+	Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	fisaksen@baylibre.com,
+	Frode Isaksen <frode@meta.com>
+Subject: [PATCH] usb: dwc3: gadget: check that event count does not exceed event buffer length
+Date: Fri, 28 Mar 2025 09:55:25 +0100
+Message-ID: <20250328085603.2156517-1-fisaksen@baylibre.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250327120737.230041-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250327120737.230041-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <8734ey10dp.wl-kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <8734ey10dp.wl-kuninori.morimoto.gx@renesas.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 28 Mar 2025 08:30:08 +0000
-X-Gm-Features: AQ5f1JrdoiuRzwfKuayvqqi9Zb-yH-FlHzUYFciOjeCux00RWQ8VspRuF2eowtU
-Message-ID: <CA+V-a8sk_SU4-2tq6ZdOsMeZY41NeFhVbAq_NZQ7YgUWuMkACw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] usb: renesas_usbhs: Correct function reference in comment
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-usb@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Kuninori san,
+From: Frode Isaksen <frode@meta.com>
 
-Thank you for the review.
+The event count is read from register DWC3_GEVNTCOUNT.
+There is a check for the count being zero, but not for exceeding the
+event buffer length.
+Check that event count does not exceed event buffer length,
+avoiding an out-of-bounds access when memcpy'ing the event.
+Crash log:
+Unable to handle kernel paging request at virtual address ffffffc0129be000
+pc : __memcpy+0x114/0x180
+lr : dwc3_check_event_buf+0xec/0x348
+x3 : 0000000000000030 x2 : 000000000000dfc4
+x1 : ffffffc0129be000 x0 : ffffff87aad60080
+Call trace:
+__memcpy+0x114/0x180
+dwc3_interrupt+0x24/0x34
 
-On Fri, Mar 28, 2025 at 12:09=E2=80=AFAM Kuninori Morimoto
-<kuninori.morimoto.gx@renesas.com> wrote:
->
->
-> Hi Prabhakar
->
-> Thank you for your patch
->
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Update the comment to reference `usbhs_mod_probe` instead of
-> > `usbhs_mod_init`, as `usbhs_mod_probe` is the correct function
-> > used in this context.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/usb/renesas_usbhs/common.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_u=
-sbhs/common.c
-> > index 4b35ef216125..15ef246a1245 100644
-> > --- a/drivers/usb/renesas_usbhs/common.c
-> > +++ b/drivers/usb/renesas_usbhs/common.c
-> > @@ -698,7 +698,7 @@ static int usbhs_probe(struct platform_device *pdev=
-)
-> >       if (ret < 0)
-> >               goto probe_end_fifo_exit;
-> >
-> > -     /* dev_set_drvdata should be called after usbhs_mod_init */
-> > +     /* dev_set_drvdata should be called after usbhs_mod_probe */
-> >       platform_set_drvdata(pdev, priv);
->
-> If you want to care about context, it seems we want to care "dev_set_drvd=
-ata"
-> and "platform_set_drvdata" too :)
-> And, it is easy to understand that it indicates function if it has ().
-> like below
->
-> -       /* dev_set_drvdata should be called after usbhs_mod_init */
-> +       /* platform_set_drvdata() should be called after usbhs_mod_probe(=
-) */
->         platform_set_drvdata(pdev, priv);
->
-Ok, I'll update it as above in v2.
+Signed-off-by: Frode Isaksen <frode@meta.com>
+---
+This bug was discovered, tested and fixed (no more crashes seen) on Meta Quest 3 device.
+Also tested on T.I. AM62x board.
 
-Cheers,
-Prabhakar
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 63fef4a1a498..548e112167f3 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4564,7 +4564,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 
+ 	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+ 	count &= DWC3_GEVNTCOUNT_MASK;
+-	if (!count)
++	if (!count || count > evt->length)
+ 		return IRQ_NONE;
+ 
+ 	evt->count = count;
+-- 
+2.48.1
+
 
