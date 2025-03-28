@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-22289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22291-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CC96A748F1
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:06:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C75BA74929
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:25:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2096E1B6131D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:06:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7CDCC7A8C6C
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1981221517B;
-	Fri, 28 Mar 2025 11:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD32219300;
+	Fri, 28 Mar 2025 11:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wr68pL72"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDTiM9p9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D10B676;
-	Fri, 28 Mar 2025 11:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D496145B27;
+	Fri, 28 Mar 2025 11:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743159996; cv=none; b=hFUUzBxwBwIvj6ROv7gK+XZKE2SCfIi7MPQXT+KZdahvfB2+3eZ8rxWqJttprs48Zb7y6l2NU3NJuoem7a3B+1oD1lUJ2NsIIw6Wpr6hZQ1S1R+slTY0FnTSIg9TqqoPkhdu3GVbB2dEPN5/JSzctLaWNE6CNkQqzyCe3vDI9q8=
+	t=1743161090; cv=none; b=aOpKuJZW7rd7dWcq4wzDo9zyWg28rc2rCCp+jbb4biWME+QW+VZJElG9w3I37aRHPjo/oX1b+/xhVEPv7F3Dr7o/vWnQCOI3LuzxufcLb1RnaCMHNa6QvG0aoDOqQNFwVrK4c9wpLBI9j5rIKeDpXyiXnW5gJrte7trK7jywnfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743159996; c=relaxed/simple;
-	bh=KITmyAiTQTCE6UaFMWxBRg+TpNuFpe6uMazmeLCKXxI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aRQabDILcHINsnIl+8fkOjvYhgBKXUYOJo34TL4knCazUxaN4IQlLw/ZPJgAI3w13NXnn7WmqH05xU5amfQFOAxy7vG2dYX7YGBFwoR/z5EwXkenLEDlYuQ5Gmsf5F/1/IjaeNsrD5+QDaOXJq0JUsk+v69KgT9vlhKg/b1e/+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wr68pL72; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1743161090; c=relaxed/simple;
+	bh=uOQtP6lL6Ge7T833eHO6JChDyq2YE0dX5lWBJluwnCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Krd9mVZOjDLMQ2M2M1/f/bLSGWtkw+0MLbloIwpNceUlQFf/t0v+w8E+gwE3B1V0jnRfkb+p3Mo2q43bzNKBQnyPTXWw6WxvO1tBoxihWiEFkR6EEbk7Cb0yaW6ZDyLe8QE8er7x9TnF4su0F2v6O6AFUtT5dml0W6OdjYU/3rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDTiM9p9; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743159995; x=1774695995;
+  t=1743161088; x=1774697088;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=KITmyAiTQTCE6UaFMWxBRg+TpNuFpe6uMazmeLCKXxI=;
-  b=Wr68pL723tnJkaJYVxv4lFMrm6Mdr5Kg3UGEU+bB/GTUjLfA7DPytNUT
-   oylWMpypb+8qIyJAyBfaCanelYgrq0OZABrhKsn99meOTYEp9geFmBKbP
-   QQpLga8BNo44sleHbRXP3BQF9OYocXTusccREIDfyqHKHKuVhb+nXqM+L
-   mQuOjBkt5kEA7+8c7KOYvCjZFikBHelUZ2k0TaBtQtUhZ2hK6ksqQ7Pho
-   S8KXjx11F4x9qRf/SPKg3s8I9EJjL5+bIMi7kmNT5XQDjounANevACSKE
-   w7HMh6jmSMoAxGeMm0jxfDw/QO0omFZNZd+jDLQ5gZcEI+JxWwu9nVSYl
-   Q==;
-X-CSE-ConnectionGUID: pTzjOig2SXKb/ESeL8++sw==
-X-CSE-MsgGUID: 1FjDI2PsS6K5Xgbv0c4wDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="48175948"
+  bh=uOQtP6lL6Ge7T833eHO6JChDyq2YE0dX5lWBJluwnCM=;
+  b=jDTiM9p9b6QZqQJDEI7knlaFh3lOZmPr/6zDA7tpLtNJjrQF4jXRPJyw
+   xh2LCnBofS45vpkf0M6qLA+lQRlJ7C3wNII/UTPOvvMrbwYrqeKbtr8j2
+   woJSnOrSnPL9eawzfn9e9huayznbD+h2cp+YImZtLXgKUIzuqnOg4JWIb
+   1EzSyqndMlAKDir8G60ThaBa87rIswdN954inzQhxVzBJQna0wZeaym9q
+   j3U2xiDViXpgmD5l1uRF6Y9jzGEqcDAgxLx8FUiDBxwaXocwyahG9Hr5A
+   67KwcTvx27UoCHOMI4OhYNRVZ6xedjCowXBpL/l/2bOn9H7QBP3XBrHlr
+   w==;
+X-CSE-ConnectionGUID: kzRkAIzDR9ewfjnXHfGS4g==
+X-CSE-MsgGUID: q/sVeovVSDOoR/BBi7VFow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44702597"
 X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
-   d="scan'208";a="48175948"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 04:06:34 -0700
-X-CSE-ConnectionGUID: JySGm6xZT/Or262AOtoxow==
-X-CSE-MsgGUID: 3bOImvsSSgavOkKNMedv9Q==
+   d="scan'208";a="44702597"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 04:24:47 -0700
+X-CSE-ConnectionGUID: iGEpRbFDRTe1f3qqVfXKNQ==
+X-CSE-MsgGUID: 9iY+bSG4R2+xiE+9+p69xA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
-   d="scan'208";a="125644421"
+   d="scan'208";a="130277056"
 Received: from win-uq4qlp9a0jq.iind.intel.com (HELO madhum.iind.intel.com) ([10.223.138.63])
-  by fmviesa008.fm.intel.com with ESMTP; 28 Mar 2025 04:06:30 -0700
+  by orviesa003.jf.intel.com with ESMTP; 28 Mar 2025 04:24:44 -0700
 From: madhu.m@intel.com
 To: gregkh@linuxfoundation.org
 Cc: heikki.krogerus@linux.intel.com,
@@ -68,8 +68,8 @@ Cc: heikki.krogerus@linux.intel.com,
 	linux-kernel@vger.kernel.org,
 	Madhu M <madhu.m@intel.com>
 Subject: [PATCH v2] usb: typec: ucsi: Add the UCSI commands in debugfs
-Date: Fri, 28 Mar 2025 17:02:27 +0530
-Message-Id: <20250328113227.554096-1-madhu.m@intel.com>
+Date: Fri, 28 Mar 2025 17:20:41 +0530
+Message-Id: <20250328115041.555008-1-madhu.m@intel.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -86,6 +86,7 @@ UCSI_GET_ATTENTION_VDO and UCSI_SET_USB support in debugfs to enhance
 PD/TypeC debugging capability.
 
 Signed-off-by: Madhu M <madhu.m@intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
 Changes in v1:
 - Removed UCSI_READ_POWER_LEVEL and UCSI_SET_PDOS commands.
