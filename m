@@ -1,145 +1,120 @@
-Return-Path: <linux-usb+bounces-22297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22298-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54462A74A72
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 14:14:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80A25A74BA3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 14:53:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F30C188FEA1
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 13:14:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85DD23A8FAC
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 13:47:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E82128819;
-	Fri, 28 Mar 2025 13:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29F2188A0E;
+	Fri, 28 Mar 2025 13:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNAOcbvb"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="gnc6CQMz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFE322F19
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 13:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B9F13B2A4
+	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 13:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743167664; cv=none; b=aBtJ8tWjwMJgVUn1XCUl9dqf9HFcKda6S5rC+fC/maFcipaJle8Vf8+6inFnJhH76wPrc7q491xvFsAxDt5rSbLTOSO77q9WFGV1O3f/lX8jhlLg0p4iaccFniPwgsDOn0b9zgR/iPduaD/TlHLTfJSB5jV1/qgoYcHk+2zfXhg=
+	t=1743169048; cv=none; b=AIhi5imQUHMmudqr7dPcpLeTdR8me2nB9UEg2zNmcQEGQ7wBFtc/iJyiA8sjaOZ2VTZj6+VDnVfaLfUyfYG3qwslgPWZQHbc8ApxNfVkYbq5Bg8KKmR/JsxOxvBFTwG8CmWyL+Fjq0+FwM/D+Plsp9m0AiHZ7hi0+XCDxVEQt2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743167664; c=relaxed/simple;
-	bh=7bMVhEOI108fTpIEO7nZbKfzP+gg/leLbCmCKbauvp0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IbuMKfI68K6RgPe9+EXUJhVrqfp9eKXO4ECUOVzNme5Tn9epRkRE4tpWDCTAVp7V7fRIEzS4TTFtAqGZdD0LNAuN62odge3Dih8QGC/vA4dIgvy8ZQbwpOoRDShpfIYw9ZWVnDO+4LIg0uNQGu2q4cD9AOKrSmDGVu9h/hg5vXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNAOcbvb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A0653C4CEE4
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 13:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743167663;
-	bh=7bMVhEOI108fTpIEO7nZbKfzP+gg/leLbCmCKbauvp0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=CNAOcbvboW8xLe6TJF94J9p59dpxOP2DCaYKZ8NoKbxjf766DumPOhITDKBcWc3YX
-	 MOdWav5DzZIoZNKo1lbnDK/Jk86siip2qBgG0//jRzl9y1J/VLJTF+JAkn+LY3igl+
-	 1UX7/Rvy2jO6SHozf+eY0jxpBCIWWOjVe0sXXqZlVw5jEHtjK7LFVQ3hc+fLrcnez9
-	 B/G/CauFOUajmHWo+i+9qJPfdq8RuFFAWYhrd4knwkQJADrFywP4AED89jYJcELbIB
-	 iWa1S29caJ29Nz+KCFtL3n5uoqtNTrKUPPXgsrkqPXLW9TeqZT8pHXlWbiIlt/34GJ
-	 ZLtozs+36UaOQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8E389C41612; Fri, 28 Mar 2025 13:14:23 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219951] Missing null check in ast_vhub_init_dev
-Date: Fri, 28 Mar 2025 13:14:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bsdhenrymartin@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219951-208809-AGW2CK72nL@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219951-208809@https.bugzilla.kernel.org/>
-References: <bug-219951-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1743169048; c=relaxed/simple;
+	bh=JbTBJRO6wNNcMyk7LUysmH5nCKUsjPBNp+4MPN5pAKU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=J/7qUA0+DUuaS4XtSfHSVaH2GSikVIpvUdlYiJisQmQQuJOFTi5h2eGFQ111WeYNqsOH2AWzKU83DipOJrg97sNBuPEHT9JlZQJ7kUlKhp2HqsH3M3fpFO6mmvCrpLm5WrBwKnMqUyxnYpET6Yp1CbdHuWTDXz6qBVHmnN2JW4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=gnc6CQMz; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1743169044; x=1743773844; i=wahrenst@gmx.net;
+	bh=JbTBJRO6wNNcMyk7LUysmH5nCKUsjPBNp+4MPN5pAKU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=gnc6CQMzwuxHrzAmebplHxpeyjNfeXRYFOq6QyyjOyh3qhU0b6WTEwodaG/QAAf8
+	 vvrr3HHPQodjyDNGu205TjRae1i57qD9D+e57dmYieOMrK4IJUJWtrXLrz6ad65Zf
+	 8WIt80kvaUtNb0yvnJ4w8vEC0fNyhoAzznQ4/n/GKXVIbJpx24e2CBtgbIs8bS0CI
+	 dobtV0VXt73U587SfZ0n/KdlJcn1xEKUG7e/rfCWJG+Dwu/DI2SRLhcdd1rkywpBh
+	 UFlpuNk6hSYq4w23mBfJOIVcLML4hZR4YIhjzx6FGgSrSte23vtaXXZIQzHCeWDoS
+	 guJSN8OaFhBgQz1WHQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.107] ([37.4.251.153]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MplXp-1tLmso3yKD-00bOkb; Fri, 28
+ Mar 2025 14:37:24 +0100
+Message-ID: <bda32f68-fe51-4814-82ba-00fd742ac39b@gmx.net>
+Date: Fri, 28 Mar 2025 14:37:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: szabo.zsolt@szabofrigocargo.hu
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From: Stefan Wahren <wahrenst@gmx.net>
+Subject: =?UTF-8?Q?Re=3A_Raspberry_Pi_Freezes_on_SIM7600_Reset_=E2=80=93_Inf?=
+ =?UTF-8?Q?inite_qmi=5Fwwan_EPROTO_Errors?=
+Autocrypt: addr=wahrenst@gmx.net; keydata=
+ xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
+ IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
+ NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
+ JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
+ TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
+ f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
+ V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
+ aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:gEORvf3IRLtKMFRnGPa/dXDPYy70ZEwBjgWi6xtgwJi/Wruo0GJ
+ RWNMw00V6+QcJfc7iGR/ZlVkWHy0jgu0L3MnakG4Wey1wwP+RKxYQ5WWlOvrq/08d43h08k
+ oej25Cew46OQXM7ARVhrxsBECmxd7bSuXv7gEa6BH980ZWg/qa8MkHNlmhQ8fIX6tNjLdEI
+ eFhKKz9KUDB4ClaHIUEAw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:LXs1qHBu0sk=;VcNKsCNI48DFh0vOkvDtGxlmaGp
+ YG1pYgj1uytlNcj8xGRBUUvJN7UM1bg144S3rbBkoCHw9dXD8luWTcEgjZnFpK5mXCji74U6V
+ 0JF2i8yuA41mbZXVsyFGXy1dLzSyG7i6qTTXHeAZhbcN7eRPEDnMOxTyGv3ky1T1TxtD3E93H
+ ZUC9Uo8553rY+0Ch6i3gbb1Ianw1Hw7pbEWu5Hx97CRNTCb/onXmKwMfH+/78viZmFiLX7c72
+ l9y9wYuxuM/upEtZvfclBAB5Ydx1m6vJjNjEGYO3oc9RnjL5XqCqLgfR1TJAPfWKBUpa8ejQl
+ E9OEma4h2eLa6a56QTjED/kd6T1mzum4aepvb3o2TkyiokdYTTWUGOfD0ts0Z6uCGLdwmGCTB
+ bYU3pz78M0L7W+SN5/6zOaldUvi0heYbsjRZ0Ovi4eRSfX7Caw8v0pdo5oFQKITHFpyNbMEgW
+ E2UpqrSsEiyp8wCoclfwI/EQ6BtroKij/aoJiuJLpSbun3HZdgdswGEyNVv+c1uhQixl4FZzw
+ DXUvn+qQB+YdX5hVROMszqjXOXU405x+QjRNpnBbJL98VrEi9zQWwtrgfkXsBFyyhJACRkMF4
+ 8bNEpRTwDipEjoXN2nEZBiGlQdvDonBJ5ILTFiTYLN9qdsx/JJ/tFw4ShpoqntUyXpX/7mjjD
+ byF2ovUsvc2WJAs29BtBaKn6DovEkJNu7oIM0+Q8t27AsMrWL+zMePlikbHNEa5uH7s6M3ir4
+ ITuy4r3z/2Suq5x2qFHCRP3aQCVzNOu/eQUxXFZNAqkOhMwmxldCzpXvgunsGVcdPM6LNxcSt
+ /xjgTB856QZ4Nzu1A6v4quFIJaKPXO6I7SDQ+lqIjIR89K0kwYyRnU7+TUgogmkQa0/LG5Mam
+ bY6fSg+7q/u6YmDcKYqZigz7UlRRFn0jhPSdzkYBkcwi9pNzylbgIuAXL/IdjNYEtd3YEavH9
+ tMyN1DMAaPuKQbinat39Trnr+KeQHnPxd+FvaxesID9GHFxkCcYBSR3s0uPwqiYQ1GWK8HlMr
+ Jyb6sxYK9WnY0yVUpziDi1A8ZJ2S8XtsNEP2mLgtA9KaLHBuyIVvscha+yGasELNHYEL64hn1
+ kuR6nk+lGa31pqZPPRwUySwjne+xI1fr6COmIoTd+9v5xyOkoOfVH0Yd5S8wh023jLi633did
+ megt5CgIrBnviVFZgdPp+IBN4BLjnn07eYpjndzUtN3mkPS1VZSFBC9LNkXyMnWhbG1w+Q9Yh
+ JH9Xbzp8z00oIWX6HwmZ7Cm5AouOolzIm8HSbUPtexIrOVzmDnFSlMbNYUNV0COwBS3si0X9f
+ lpGN/bbHHKEEYlInbUogCzX9x1cKhPIss05znTn8DfzlXGsOHrCNosjjBDbk6VDjuXO1Bbf4k
+ SJGUsfCObVjcr/sLirTeQmGfYReThSaspTWydziRpZBwsu4Du8msnY7/fAUkyqfL60GzXXpju
+ JKkUG8/g+KvUGMBtN5JcNs884/gw=
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219951
+Hi Szabo,
 
---- Comment #3 from henry (bsdhenrymartin@gmail.com) ---
-This is patch file.
+thank for the report. Unfortunately i'm not able to answer to your
+question, but i like to share some hints to increase the chances to get
+a response.
 
-henry martin <bsdhenrymartin@gmail.com> =E4=BA=8E2025=E5=B9=B43=E6=9C=8828=
-=E6=97=A5=E5=91=A8=E4=BA=94 20:41=E5=86=99=E9=81=93=EF=BC=9A
+1. Please don't send HTML mails. In case you want report kernel
+messages, please include them as text.
 
-> We should first check devm_kasprintf() before setting d->vhub and
-> d->index, so that if allocation fails, the d struct remains in a clean
-> state.
->
-> Patch code:
-> int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
-> {
-> struct ast_vhub_dev *d =3D &vhub->ports[idx].dev;
-> struct device *parent =3D &vhub->pdev->dev;
-> int rc;
->
-> /* First allocate the name (before modifying d->vhub/index) */
-> d->name =3D devm_kasprintf(parent, GFP_KERNEL, "port%d", idx + 1);
-> if (!d->name)
-> return -ENOMEM;
->
-> /* Now safe to set vhub and index */
-> d->vhub =3D vhub;
-> d->index =3D idx;
-> d->regs =3D vhub->regs + 0x100 + 0x10 * idx;
->
-> ast_vhub_init_ep0(vhub, &d->ep0, d);
->
-> <bugzilla-daemon@kernel.org> =E4=BA=8E2025=E5=B9=B43=E6=9C=8828=E6=97=A5=
-=E5=91=A8=E4=BA=94 19:27=E5=86=99=E9=81=93=EF=BC=9A
->
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D219951
->>
->> --- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
->> On Fri, Mar 28, 2025 at 11:15:22AM +0000, bugzilla-daemon@kernel.org
->> wrote:
->> > When devm_kasprintf() fails, it returns a NULL pointer. However, this
->> return
->> > value is not properly checked in the function ast_vhub_init_dev.
->> >
->> > A NULL check should be added after the devm_kasprintf call to prevent
->> > potential
->> > NULL pointer dereference error.
->>
->> Please submit a patch for this if you feel it needs to be fixed up.
->>
->> thanks,
->>
->> greg k-h
->>
->> --
->> You may reply to this email to add a comment.
->>
->> You are receiving this mail because:
->> You reported the bug.
->
->
+2. linux-usb is a mailing list, about the mainline kernel. But
+6.6.51+rpt-rpi-v7 based on the vendor kernel from Raspberry Pi. So
+please try to reproduce the issue with a recent mainline kernel like
+6.14. The vendor tree uses a different USB host driver, which is not
+available in mainline.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Best regards
 
