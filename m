@@ -1,120 +1,98 @@
-Return-Path: <linux-usb+bounces-22298-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A25A74BA3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 14:53:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74B60A74BD9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 15:01:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85DD23A8FAC
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 13:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DD3C1B63A5F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 13:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29F2188A0E;
-	Fri, 28 Mar 2025 13:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C9021C9F1;
+	Fri, 28 Mar 2025 13:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="gnc6CQMz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KyNuM56o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B9F13B2A4
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 13:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF7221B9DC;
+	Fri, 28 Mar 2025 13:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743169048; cv=none; b=AIhi5imQUHMmudqr7dPcpLeTdR8me2nB9UEg2zNmcQEGQ7wBFtc/iJyiA8sjaOZ2VTZj6+VDnVfaLfUyfYG3qwslgPWZQHbc8ApxNfVkYbq5Bg8KKmR/JsxOxvBFTwG8CmWyL+Fjq0+FwM/D+Plsp9m0AiHZ7hi0+XCDxVEQt2Q=
+	t=1743169801; cv=none; b=dGPW13DU+XSBsjDHjy6m/0bDJcbxWdWc1n0kB3yNuWh8HZ9FSOGs2WfmVQ9tqrDlSw1Y4SrjDaB9tRo8RV0UXDdrxokAqpdhJ5P/IaE8Ifz7c1MSXZnBsK9Y1L3q3c2SHgAS9/LjXDOWMzDYxc6oTi1GFIyEm89P45ATb/ruuM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743169048; c=relaxed/simple;
-	bh=JbTBJRO6wNNcMyk7LUysmH5nCKUsjPBNp+4MPN5pAKU=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=J/7qUA0+DUuaS4XtSfHSVaH2GSikVIpvUdlYiJisQmQQuJOFTi5h2eGFQ111WeYNqsOH2AWzKU83DipOJrg97sNBuPEHT9JlZQJ7kUlKhp2HqsH3M3fpFO6mmvCrpLm5WrBwKnMqUyxnYpET6Yp1CbdHuWTDXz6qBVHmnN2JW4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=gnc6CQMz; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1743169044; x=1743773844; i=wahrenst@gmx.net;
-	bh=JbTBJRO6wNNcMyk7LUysmH5nCKUsjPBNp+4MPN5pAKU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=gnc6CQMzwuxHrzAmebplHxpeyjNfeXRYFOq6QyyjOyh3qhU0b6WTEwodaG/QAAf8
-	 vvrr3HHPQodjyDNGu205TjRae1i57qD9D+e57dmYieOMrK4IJUJWtrXLrz6ad65Zf
-	 8WIt80kvaUtNb0yvnJ4w8vEC0fNyhoAzznQ4/n/GKXVIbJpx24e2CBtgbIs8bS0CI
-	 dobtV0VXt73U587SfZ0n/KdlJcn1xEKUG7e/rfCWJG+Dwu/DI2SRLhcdd1rkywpBh
-	 UFlpuNk6hSYq4w23mBfJOIVcLML4hZR4YIhjzx6FGgSrSte23vtaXXZIQzHCeWDoS
-	 guJSN8OaFhBgQz1WHQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.107] ([37.4.251.153]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MplXp-1tLmso3yKD-00bOkb; Fri, 28
- Mar 2025 14:37:24 +0100
-Message-ID: <bda32f68-fe51-4814-82ba-00fd742ac39b@gmx.net>
-Date: Fri, 28 Mar 2025 14:37:23 +0100
+	s=arc-20240116; t=1743169801; c=relaxed/simple;
+	bh=bytdEJsWxc2MzGpyA8pJAcQkpLhKdSKhNixsc65l/QE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=AcVSaG513FIgq1FXxMNViYslf3dAkzHsqUohy/vekvhbIqH7AtL9A6h/ZJmKC7rAPwWeko+dHvb/xkrL1XxWP+BVt9iAYKic+8kpEdZITzdbPJS0xFJNhDAsjC+LANhpoQXTPycDUhAdFNOECc3ye61Oizs5cBYr3cjXKsGkfT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KyNuM56o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A88AC4CEF0;
+	Fri, 28 Mar 2025 13:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743169801;
+	bh=bytdEJsWxc2MzGpyA8pJAcQkpLhKdSKhNixsc65l/QE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KyNuM56oJ6cqMaMVEBrdBtW0my/amCPBhvYy/z6QYF2fp4b+iNuVSTurOEqTzFGLi
+	 8Ox6Z8Xj3prDaQEkf9K29s7+kE22oS41X/mQG2i6tE9GL2HsFle7G/yQxSwSQIAFGG
+	 8r+0YYmPMcwcJVbaFrjB7bFiLIS3C0pN4VIvWI1d516DjtgSY1Whc83j+iQm1YzFyw
+	 eEER0O0zQrh4IVZtmBYn50lRynTT9vTIYhR+djaezzH3wL+sj5IqjA5Y+hWsy5dsH/
+	 +r/stLbM6u8ASYBITTsR5ZJiHe6cfizvcOR9eqTDsr1lO7TNjOTwKc1hMMtrEyb3KP
+	 cDJzfAK4WtwJA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD5D380AA66;
+	Fri, 28 Mar 2025 13:50:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: szabo.zsolt@szabofrigocargo.hu
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-From: Stefan Wahren <wahrenst@gmx.net>
-Subject: =?UTF-8?Q?Re=3A_Raspberry_Pi_Freezes_on_SIM7600_Reset_=E2=80=93_Inf?=
- =?UTF-8?Q?inite_qmi=5Fwwan_EPROTO_Errors?=
-Autocrypt: addr=wahrenst@gmx.net; keydata=
- xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
- IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
- NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
- JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
- TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
- f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
- V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
- aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gEORvf3IRLtKMFRnGPa/dXDPYy70ZEwBjgWi6xtgwJi/Wruo0GJ
- RWNMw00V6+QcJfc7iGR/ZlVkWHy0jgu0L3MnakG4Wey1wwP+RKxYQ5WWlOvrq/08d43h08k
- oej25Cew46OQXM7ARVhrxsBECmxd7bSuXv7gEa6BH980ZWg/qa8MkHNlmhQ8fIX6tNjLdEI
- eFhKKz9KUDB4ClaHIUEAw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:LXs1qHBu0sk=;VcNKsCNI48DFh0vOkvDtGxlmaGp
- YG1pYgj1uytlNcj8xGRBUUvJN7UM1bg144S3rbBkoCHw9dXD8luWTcEgjZnFpK5mXCji74U6V
- 0JF2i8yuA41mbZXVsyFGXy1dLzSyG7i6qTTXHeAZhbcN7eRPEDnMOxTyGv3ky1T1TxtD3E93H
- ZUC9Uo8553rY+0Ch6i3gbb1Ianw1Hw7pbEWu5Hx97CRNTCb/onXmKwMfH+/78viZmFiLX7c72
- l9y9wYuxuM/upEtZvfclBAB5Ydx1m6vJjNjEGYO3oc9RnjL5XqCqLgfR1TJAPfWKBUpa8ejQl
- E9OEma4h2eLa6a56QTjED/kd6T1mzum4aepvb3o2TkyiokdYTTWUGOfD0ts0Z6uCGLdwmGCTB
- bYU3pz78M0L7W+SN5/6zOaldUvi0heYbsjRZ0Ovi4eRSfX7Caw8v0pdo5oFQKITHFpyNbMEgW
- E2UpqrSsEiyp8wCoclfwI/EQ6BtroKij/aoJiuJLpSbun3HZdgdswGEyNVv+c1uhQixl4FZzw
- DXUvn+qQB+YdX5hVROMszqjXOXU405x+QjRNpnBbJL98VrEi9zQWwtrgfkXsBFyyhJACRkMF4
- 8bNEpRTwDipEjoXN2nEZBiGlQdvDonBJ5ILTFiTYLN9qdsx/JJ/tFw4ShpoqntUyXpX/7mjjD
- byF2ovUsvc2WJAs29BtBaKn6DovEkJNu7oIM0+Q8t27AsMrWL+zMePlikbHNEa5uH7s6M3ir4
- ITuy4r3z/2Suq5x2qFHCRP3aQCVzNOu/eQUxXFZNAqkOhMwmxldCzpXvgunsGVcdPM6LNxcSt
- /xjgTB856QZ4Nzu1A6v4quFIJaKPXO6I7SDQ+lqIjIR89K0kwYyRnU7+TUgogmkQa0/LG5Mam
- bY6fSg+7q/u6YmDcKYqZigz7UlRRFn0jhPSdzkYBkcwi9pNzylbgIuAXL/IdjNYEtd3YEavH9
- tMyN1DMAaPuKQbinat39Trnr+KeQHnPxd+FvaxesID9GHFxkCcYBSR3s0uPwqiYQ1GWK8HlMr
- Jyb6sxYK9WnY0yVUpziDi1A8ZJ2S8XtsNEP2mLgtA9KaLHBuyIVvscha+yGasELNHYEL64hn1
- kuR6nk+lGa31pqZPPRwUySwjne+xI1fr6COmIoTd+9v5xyOkoOfVH0Yd5S8wh023jLi633did
- megt5CgIrBnviVFZgdPp+IBN4BLjnn07eYpjndzUtN3mkPS1VZSFBC9LNkXyMnWhbG1w+Q9Yh
- JH9Xbzp8z00oIWX6HwmZ7Cm5AouOolzIm8HSbUPtexIrOVzmDnFSlMbNYUNV0COwBS3si0X9f
- lpGN/bbHHKEEYlInbUogCzX9x1cKhPIss05znTn8DfzlXGsOHrCNosjjBDbk6VDjuXO1Bbf4k
- SJGUsfCObVjcr/sLirTeQmGfYReThSaspTWydziRpZBwsu4Du8msnY7/fAUkyqfL60GzXXpju
- JKkUG8/g+KvUGMBtN5JcNs884/gw=
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: usb: usbnet: restore usb%d name exception for
+ local mac addresses
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174316983751.2839333.8852822669091857678.git-patchwork-notify@kernel.org>
+Date: Fri, 28 Mar 2025 13:50:37 +0000
+References: <20250326-usbnet_rename-v2-1-57eb21fcff26@atmark-techno.com>
+In-Reply-To: <20250326-usbnet_rename-v2-1-57eb21fcff26@atmark-techno.com>
+To: Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, naseefkm@gmail.com
 
-Hi Szabo,
+Hello:
 
-thank for the report. Unfortunately i'm not able to answer to your
-question, but i like to share some hints to increase the chances to get
-a response.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-1. Please don't send HTML mails. In case you want report kernel
-messages, please include them as text.
+On Wed, 26 Mar 2025 17:32:36 +0900 you wrote:
+> commit 8a7d12d674ac ("net: usb: usbnet: fix name regression") assumed
+> that local addresses always came from the kernel, but some devices hand
+> out local mac addresses so we ended up with point-to-point devices with
+> a mac set by the driver, renaming to eth%d when they used to be named
+> usb%d.
+> 
+> Userspace should not rely on device name, but for the sake of stability
+> restore the local mac address check portion of the naming exception:
+> point to point devices which either have no mac set by the driver or
+> have a local mac handed out by the driver will keep the usb%d name.
+> 
+> [...]
 
-2. linux-usb is a mailing list, about the mainline kernel. But
-6.6.51+rpt-rpi-v7 based on the vendor kernel from Raspberry Pi. So
-please try to reproduce the issue with a recent mainline kernel like
-6.14. The vendor tree uses a different USB host driver, which is not
-available in mainline.
+Here is the summary with links:
+  - [v2] net: usb: usbnet: restore usb%d name exception for local mac addresses
+    https://git.kernel.org/netdev/net/c/2ea396448f26
 
-Best regards
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
