@@ -1,121 +1,77 @@
-Return-Path: <linux-usb+bounces-22290-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620DEA74911
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:16:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1D3A7492E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 12:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 210CE17E739
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:15:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C86B3BC112
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Mar 2025 11:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BFA218AA5;
-	Fri, 28 Mar 2025 11:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC77E2192E1;
+	Fri, 28 Mar 2025 11:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4wshhNp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="riB4glJe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF7B4C6E
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 11:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BC1214200;
+	Fri, 28 Mar 2025 11:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743160523; cv=none; b=rvF5QFFxAjFkEeHxJTY0TEFhBHegG4cPlxyGvGlLpzpUXLjts3Dof56iKceGmCdDXw4PYVtO/p5e7Em6nLM62ZrLtYfA10kn4HasqPDFL9+JAvc0Snlkymle+Vt7qNsIij9l1evXWqhQ4cpXtpplssDY4FVz4QZxh450X0aj8Bs=
+	t=1743161197; cv=none; b=bXr8x5fgcLjFWTgxmAjJTmC3zSPDIXG5pD/ysE5PIO41X8ZDkGJZ+m6STRucJlooWQqlMnE0zhQ7+ioR4wEPIo9Jlp5e5xSeSSC7et9vCRNBKszNVJ9S0HE1rt98y2o59UYRyOE6+rX4bkNq9zNXSYtwBdip5sUefVJZlmn+iGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743160523; c=relaxed/simple;
-	bh=RLSZEYpt43AZB2Xuu8p5//XoGLJY+KtCzXx+A9nN8o8=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=P5FpXw+hc8TNU17NwAC9V5N0fgx+oFjZQ34UI0O3AIDzMwvI4I6ReMw5zWuaV4zzzolq+7CzLJ8fvQnlMSDVa0n6zftFwLIWLpDOcZ08a9aFXrKV+6SXt5FVPlZiUTTvOrQb/w/O27+hB86cLDmLuJtkbwCXEYDSvwNhLj28Q9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4wshhNp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED0EDC4CEE4
-	for <linux-usb@vger.kernel.org>; Fri, 28 Mar 2025 11:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743160523;
-	bh=RLSZEYpt43AZB2Xuu8p5//XoGLJY+KtCzXx+A9nN8o8=;
-	h=From:To:Subject:Date:From;
-	b=Z4wshhNpgiZG+OuiZE3QvHw7iJWWO9B8jW6OZOVa7v3LnJCIh4HrfWZHVAsXNBq7I
-	 N3lLi2fayIEAOOOUyAp3IybEibpV2sRBnGXdBf60Vu6XWBf7wwddJNZ5Ac2PX8IJvC
-	 4Ju4FZPIS8MzR4EHCM5DXJF6vwUunYqQYPxjw+CMJubIV6uvjb3dOfn7MdxAxFms4a
-	 1Sfy1l/5TVuXj3XFqHFDC6t8kr4pfJyA25mXsXmIX0D1VWeEqriZ83UqhZpoCAOTMg
-	 1mqt7lKUfysNeJS1w0O+cS3hqN8pJx8rlPVWUUk0o2EDPWaEAa4Qgak9gm3abBOdH1
-	 Q6kfeilsCp4zg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D9324C3279F; Fri, 28 Mar 2025 11:15:22 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219951] New: Missing null check in ast_vhub_init_dev
-Date: Fri, 28 Mar 2025 11:15:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bsdhenrymartin@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-219951-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1743161197; c=relaxed/simple;
+	bh=i3hZPvdfk5t2gyh3A+ixkJXXG+ItAZRyeyAI7G4hmpU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ttoT1CwFRVq1u7mdEUWSyhrgo8axlsc3c1TIlMswkVOnbaZhJRhxNNLCqwLoR6+AhDoCz4f1fooZJ/kV2CnUDlP7/9HKgiQdJdaFMcMcwTOwWR+oNExqWq9do/+UzJOcejsSyJmzpEi2nTfDCJVB/vhNQURxnTE3tb9pLbmFOQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=riB4glJe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D7CC4CEE4;
+	Fri, 28 Mar 2025 11:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1743161196;
+	bh=i3hZPvdfk5t2gyh3A+ixkJXXG+ItAZRyeyAI7G4hmpU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=riB4glJen51I9dFLSh6trQc1IcmpyRCi3lPv0HOFOzlmwOk6fJgdD/Yl11QQV5jDu
+	 aoPkn5cPZzQtNx4aQJgYeH9VJ9uPo73NXCAyROL8nWYPZizZcebNKP4cMZEDD09sMs
+	 l+RdprUbYHbeHjDJWs0zoy73rp2rh+duBqJIG6NM=
+Date: Fri, 28 Mar 2025 12:26:33 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: madhu.m@intel.com
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	pooja.katiyar@intel.com, dmitry.baryshkov@linaro.org,
+	diogo.ivo@tecnico.ulisboa.pt, lk@c--e.de,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: ucsi: Add the UCSI commands in debugfs
+Message-ID: <2025032811-speech-absolve-a114@gregkh>
+References: <20250328113227.554096-1-madhu.m@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250328113227.554096-1-madhu.m@intel.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219951
+On Fri, Mar 28, 2025 at 05:02:27PM +0530, madhu.m@intel.com wrote:
+> From: Madhu M <madhu.m@intel.com>
+> 
+> Added the UCSI commands UCSI_GET_CAM_SUPPORTED, UCSI_GET_PD_MESSAGE,
+> UCSI_GET_ATTENTION_VDO and UCSI_SET_USB support in debugfs to enhance
+> PD/TypeC debugging capability.
+> 
+> Signed-off-by: Madhu M <madhu.m@intel.com>
+> ---
+> Changes in v1:
+> - Removed UCSI_READ_POWER_LEVEL and UCSI_SET_PDOS commands.
+> - Modified commit messages.
 
-            Bug ID: 219951
-           Summary: Missing null check in ast_vhub_init_dev
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: bsdhenrymartin@gmail.com
-        Regression: No
+This is really v3, right?
 
-usb: gadget: udc: aspeed-vhub: dev.c
-Add NULL check in the ast_vhub_init_dev
-
-When devm_kasprintf() fails, it returns a NULL pointer. However, this return
-value is not properly checked in the function ast_vhub_init_dev.=20
-
-A NULL check should be added after the devm_kasprintf call to prevent poten=
-tial
-NULL pointer dereference error.
-
-CODE:
-        struct ast_vhub_dev *d =3D &vhub->ports[idx].dev;
-        struct device *parent =3D &vhub->pdev->dev;
-        int rc;
-
-        d->vhub =3D vhub;
-        d->index =3D idx;
-        d->name =3D devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-        d->regs =3D vhub->regs + 0x100 + 0x10 * idx;
-
-        ast_vhub_init_ep0(vhub, &d->ep0, d);
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Please fix up and also, what happened to the reviewed-by?
 
