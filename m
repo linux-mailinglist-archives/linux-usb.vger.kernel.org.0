@@ -1,105 +1,128 @@
-Return-Path: <linux-usb+bounces-22314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2118A756B2
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Mar 2025 15:32:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94A10A7584E
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Mar 2025 03:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FCF0170CD4
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Mar 2025 14:32:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 197D43AD1F8
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Mar 2025 01:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DD41D63F9;
-	Sat, 29 Mar 2025 14:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BA41172A;
+	Sun, 30 Mar 2025 01:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LiSogFoV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c9uxCmn7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EB91B424F
-	for <linux-usb@vger.kernel.org>; Sat, 29 Mar 2025 14:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51F62F5E;
+	Sun, 30 Mar 2025 01:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743258757; cv=none; b=g178cDHRWN/700sBitYptiOTyO3P+EUbJ3D4ZVZjAKELg25PLUkm4oxAT9RoD+uRlRN/hhKh5bNsCKTSEBjIwlizCOTlRQhryDgdQKvE2HNQg3hfQBwVQ85QfbdwjOb6dDWCM4FuDyq2JU5RPqznthfvMUObsOnefcRul5wO/5Y=
+	t=1743297920; cv=none; b=ZzNfuiGX2TI9040PCYmuCBzjzDkT7QgLUD2wkEnP3EtRrCEuijUXWZpcd/5XpWH7sn0andSHSJR3oaWXSZ8QJ+ufpX629xnO0cq6gpHz8QcX1v+2QjO8BJz9NGwfaK1o+GxZivrA7xX3ma+/utxO21mNFIZCZz7cZlHsMPeT4jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743258757; c=relaxed/simple;
-	bh=Cf8QRuBHzGTj3EpbgfOpI8Dc180sRYRxMhwtcFoAbHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BquufaW7G4jpkkzYnE5X1kZINkCMcewP3IQRwPGOpUgBZVD2V/MZ8W+PZ18PZ20/OZVfM1MRiWyhOUQmQFnrC8aiye5l4q0tZa/d9DPSoFg0DZV1lDcTL+RdpuPQ5o3rlzeR4mdzc4HZ2N/Davfw/pILrAbzB+DFF1xkU3B/3TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LiSogFoV; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c592764e54so404953685a.3
-        for <linux-usb@vger.kernel.org>; Sat, 29 Mar 2025 07:32:35 -0700 (PDT)
+	s=arc-20240116; t=1743297920; c=relaxed/simple;
+	bh=63YAsRcrUP7aTS8gAI4HjbVeysFlkxotoNZUiIvo1KI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hiZG3iT/6GdoSk7/eUB+LrMHA4/cKb66oC5LSmQTPSORnPta6kygM3JMxBGJ6wsUAvix7wNEYHtyUTDIzHLK3EHbVQ46oiehVUNqLPy4ogaqGZMWhBAnRLZXHOB+RJeHlUjvdbEnvjV5+N7tqAQV7kZI2I/eXYwmA02QddWoB9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c9uxCmn7; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43d2d952eb1so23483875e9.1;
+        Sat, 29 Mar 2025 18:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1743258755; x=1743863555; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cf8QRuBHzGTj3EpbgfOpI8Dc180sRYRxMhwtcFoAbHM=;
-        b=LiSogFoVXFIl0+dfIjFBFpSHXHlPQFOIraqW/LNm9dhMhK6Ylh59+Pbvqgl+qWhbI4
-         LqHFJHozYoaoX+ARyXD39qf/0mhY4lBwHIig9wBu/URxp1Y/oBFYNVVV5n7yQEsZ4VMm
-         m6QmATA6fPyEKdSDk1vlRif2bCLx6kj6566aK7Ndq5bxxkZZqzs3DBcpsPX1u25gxKUo
-         48cUzpYVLmu/VkveSZW0TGllESo3Ao7IUgE2j0/IfmWX55gmw9665V+7KBKs7gY/SAv6
-         5Geepe4F2+wHyCvH42SXgtgQET9gzVFz8XJS534kICmNQGB7DyefzWUvBP7/MiXr6J8I
-         eKkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743258755; x=1743863555;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1743297917; x=1743902717; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cf8QRuBHzGTj3EpbgfOpI8Dc180sRYRxMhwtcFoAbHM=;
-        b=L0pltKVhQBg3xICKtoaXNMzXx41QSMr/q9C9NL5ulLy6LhtglABMNgxC7bbzUVEzs7
-         RdInsWgqnVOITW9c84v8v4MYRmaFXrxEtcc9Skqgogpsk+PnjqX9BrRTOu24vf3KA6Ym
-         j3z0HQKtPbVEUSLlW0RUUnBdi3bYwk3vS01pgj2IBb0jWqVZKS9v+1EdkAYEm4Ne6MB7
-         vMJKYJqjD38l2+S3r4Plme0o1WhNozIdPnfrl+6/j+4fA81GLcwPCTapCZK0k+SARl8M
-         Q9ECP6+tZkI7rpm9OwpL0xp1Aih7YswO3cg0qg3xwFlC9wyReWgfK1zHi4kBpqgjoAU7
-         8n3w==
-X-Forwarded-Encrypted: i=1; AJvYcCXefEBCIbetQpgcRCxzNE7+oNZgp/gyhwb0TV1VR0Jd6qaDXpVLxdSXhW7si/72t1r7isLb1pm4ifQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKqxQU2gXjlM73ZRCk04b7hNK97TFHLwgOnNKn6UjvBnvxO8le
-	+zWGYe2H7rJem9GzJR3YFfajK2E8zoeUzkUCp06JBsx7qSCiUJ9FG9ZZjtCMvw==
-X-Gm-Gg: ASbGncvyMwsYuPqkcevFYmwGdsd/FB8tBrZoBErO47611hBifKc1nnXor2/b9vbYest
-	JWgS+i+kARKqcbU07SWwms53BWF22H0lHj0BHL3fy0EistKFuj2n6sfiUmF0JZY2hDJ3kWFL4pF
-	xfcrXesml+nDRcClu7VnxPLnzi6XVsZ44RYVmc22e84t55YDJtA6iucqBzwlJSaZUwzgFhDu6hq
-	14EgRn/RAwMC043eO1vKHFmB/Vtn730sHLFE4xYo6pG9prCvW7stxFflpaHUFwjM+LusNogQiMo
-	+FKHfqHYsq45HDTk3AvSkiHKyXuxxdz8ZIoDJHo2lKm33hUSaJZ0dio=
-X-Google-Smtp-Source: AGHT+IF0cQy0jr4KMVVkh8U0F52O1lJsPAgFLz9t15YfkUtmvE3yApsTmKKf0mX9v2iGYZlTkuZukQ==
-X-Received: by 2002:a05:620a:19aa:b0:7c5:5d32:2612 with SMTP id af79cd13be357-7c690890ef3mr378710685a.58.1743258754701;
-        Sat, 29 Mar 2025 07:32:34 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::df1])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f7659ad8sm249276685a.22.2025.03.29.07.32.33
+        bh=0YBtgoHQ8wdNpKVMvmo1Gs6WFu0m4rSJTZCQrvW/Ocs=;
+        b=c9uxCmn7iDXVkXtI3YBFwj8lznN4B/5m6PdRwgYDUJWQBI/UzR7nH3qUUYPxTboMzX
+         sl1N2lYaVIlW6kd6tLmtgmYnTqmuEU+soL1sd+gf4NUiX93lfZ4nCpSrH041Lb+Z9lCg
+         tYXfaaQ2p/6n3LNXya2AyXN31b6ZxY/7zqW0HmW//UNh6+yFi/cOT+HFdIYEG9LLzqbz
+         gNyZUfVo5DTRw8TWvJwG5mhDiAVetJBuk0XSHKz6dBnFM+HYAyabc3feO11z/9jtElhU
+         XEJ95MCdxo8FPVBYgLu5+IPTcsJj/J/2D7eUNpl4HgIgx/YYuwH7jkDDGFmmatnsmGw3
+         z4ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743297917; x=1743902717;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0YBtgoHQ8wdNpKVMvmo1Gs6WFu0m4rSJTZCQrvW/Ocs=;
+        b=qrDc/rGhkW04hLiNidmjyzdaBFJVEwYfLU0215lcaitJJEnj248nmVLCEoLJbYSuXL
+         0C0EAGj6zSCyR89oXVVbr8OH8OCWzs1nwm+sJHztRo165QJiu/677xmusCaghCcrWPOb
+         e15P6B42ar7+2B8ID3Vcufzaqps9rkDTGpdNjgQhPImVP3cwfnHeflwtHC8oijAWR8fo
+         VUvJJIOGRhEBZpSYd4APaFVdgW1muKuHTyJzNZLmVn3cR6EAxmzUDHWBE8PIICAQ28Ge
+         Vmu7qSB3mpwg6Oy0lKSFgmkKGMWToRlvn3vGkJKbYKSbzvkqzMfh1xaM/4A2EYS1p3oz
+         e6gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJa+yousjqEdqXnAHuXfOpyLdDVW54uUO/bf9WKV8RndXAvbw5AX5Gf8tVSRA20C0JGJePxmHPZ7/s@vger.kernel.org, AJvYcCX1oQ/7xkBXDHS1CZqTPkQov7G7AfPXouS8AAG7pHQk0lq2rxvYGzJVC/mMOJbWui4y0B9IJMLff2vOUvI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrjYcT060E9AIZquNTtGeYP486dacpCNRdvHFiNz2+hdPVAB1w
+	eIdfYSg+BF0y2rbwjIZADpzXAIqWGw1K2cT3alKYbZEle9bhvI+B
+X-Gm-Gg: ASbGnctu4Yyf/QD3uxvDTtjFMjpiJm/tIpNeznoHf68VNCyVFzPL6odaEWg6JH9Ejq+
+	f7mpRVlK6CKPko+WbxlndVCuehPNMuKBDogLL88pOm0Oz2Xxhnxb4rYcaPPWfn9zK+wlP+Pdfw9
+	HL8OHt0FVUdNMcYFE+5qxze2vIOc5LpsCV6BcO7zY/UdgD57joM0nfdWoNVlF9hieWeBU9rptLC
+	5t+B9BACrDecpzUV6J9KeVJR7iBCsghAj9e9EjK7f0D3KCQ+OPm4Qzcs2za0X1mTPSJJNC0GDCX
+	TXk1gOx0CSsD5bhrj+yKLRQ2C+aYWbMK3lAiMHePQiOLhcNp+IdWkZHZ7sdI5vDzR+CNgDH4Ilr
+	Cw/aqlpiBe9iUupomheDCGDOg
+X-Google-Smtp-Source: AGHT+IETgakP77R1xNRKQkY2RX9kFRQvJyHoxZlC3KNeSg7iURqiKwJHKtUZE8zqkLBK2Qu2lsdF/w==
+X-Received: by 2002:a05:6000:4282:b0:38f:3073:708 with SMTP id ffacd0b85a97d-39c120cc9aamr3108884f8f.3.1743297916783;
+        Sat, 29 Mar 2025 18:25:16 -0700 (PDT)
+Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c0b6589e4sm7321606f8f.10.2025.03.29.18.25.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Mar 2025 07:32:34 -0700 (PDT)
-Date: Sat, 29 Mar 2025 10:32:31 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Mingcong Bai <baimingcong@loongson.cn>
-Subject: Re: [PATCH V2] USB: OHCI: Add quirk for LS7A OHCI controller (rev
- 0x02)
-Message-ID: <4bbbf646-318d-4805-98df-67eecf040de9@rowland.harvard.edu>
-References: <20250327044840.3179796-1-chenhuacai@loongson.cn>
- <208f5310-5932-402b-9980-0225e67f2d66@rowland.harvard.edu>
- <CAAhV-H4aitynD20EEWQhF_uv79+1nw7sKxzd7c_+009oY63tEg@mail.gmail.com>
+        Sat, 29 Mar 2025 18:25:16 -0700 (PDT)
+From: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To: clabbe@baylibre.com
+Cc: david@ixit.cz,
+	gregkh@linuxfoundation.org,
+	johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	martin.blumenstingl@googlemail.com,
+	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+Date: Sun, 30 Mar 2025 03:24:51 +0200
+Message-ID: <20250330012451.13711-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250204135842.3703751-1-clabbe@baylibre.com>
+References: <20250204135842.3703751-1-clabbe@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAhV-H4aitynD20EEWQhF_uv79+1nw7sKxzd7c_+009oY63tEg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 29, 2025 at 04:40:59PM +0800, Huacai Chen wrote:
-> Thanks, V3 is sent:
-> https://lore.kernel.org/linux-usb/20250328040059.3672979-1-chenhuacai@loongson.cn/T/#u
+On Tue, 4 Feb 2025 13:58:40 +0000 Corentin Labbe wrote:
+> The CH348 is an USB octo port serial adapter.
+> The device multiplexes all 8 ports in the same pair of Bulk endpoints.
+> Since there is no public datasheet, unfortunately it remains some magic
+> values
+>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  drivers/usb/serial/Kconfig  |   9 +
+>  drivers/usb/serial/Makefile |   1 +
+>  drivers/usb/serial/ch348.c  | 736 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 746 insertions(+)
+>  create mode 100644 drivers/usb/serial/ch348.c
+>
 
-Okay, it looks good.
+Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 
-Alan Stern
+Quickly gave this another test by just connecting two ports of a CH348 device
+together and making sure data arrives unchowdered at the other end when sending
+at full speed with various baud rates. Seems to work about as well as I
+expected my jumper wires to hold up at higher baudrates.
+
+I'll likely use this to lessen the pile of active USB-to-serial devices on my
+desk while working, so many thanks for keeping up the good work on the driver.
+That way it'll also get some more in-depth real world testing in th e coming
+weeks, but I doubt it needs more testing at this stage.
+
+Regards,
+Nicolas Frattaroli
 
