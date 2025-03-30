@@ -1,233 +1,154 @@
-Return-Path: <linux-usb+bounces-22316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7F92A758D4
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Mar 2025 09:21:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B0A1A75D17
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 00:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAA037A42F8
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Mar 2025 07:20:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA9C93A973B
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Mar 2025 22:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2EE2156F3C;
-	Sun, 30 Mar 2025 07:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6981DC98C;
+	Sun, 30 Mar 2025 22:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="NEWee4Zv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CCB8836
-	for <linux-usb@vger.kernel.org>; Sun, 30 Mar 2025 07:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA711DDC0B;
+	Sun, 30 Mar 2025 22:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.177.23.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743319283; cv=none; b=hpGMasXRYzuOWfA8KG1pbFDf4ZJYfRUzde+fHl2nx4LnpwtqrCvdQOlZ9Wna+NzqaUWSUzgv+HYPJrVY7O2AwbasVauvYiQ88EFKjT4S6fCkZ6YIbFbSLBgy0npoJlrBkKLkh1ES6pB5jTVqRg1Ieaov0/S9BHXySZzcihbgcbQ=
+	t=1743372714; cv=none; b=sdYILlkz1aGCGrIMh610dbkl8cCfHlok1T1QJXpIf9cSF+rd+McnUmfE074tABze4f3m5KB1Kv+vwUdmTm89g5Ku+0XhTAls/hcEI9y8OMha8Xg0huB7CoEARqIrOhBA4rbSbqUTqxn4od12HtaOoXGKqv3e9PbaGCCdSTXLh54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743319283; c=relaxed/simple;
-	bh=k738eV7yzh7Xnf0l+baJdiznh7UPihVpqagJfg4C8sI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=BZjQgHNbyS3mQ43kj+jniCqxzcxxGq8WrKnfOL9I/uEC7s3c75Wvvck8qaSugpuAepPDegfpTAYcLFjxJtTOhxISj4vUVBryBCyQJFXnzGTXR07mewd7AiIODL39i3k5pWmtJMkoaksDaqyDtg59px3heIygsFzXJOMMP3GYiPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3d43b460962so65156875ab.2
-        for <linux-usb@vger.kernel.org>; Sun, 30 Mar 2025 00:21:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743319281; x=1743924081;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YN1bqYUShpYXpsZIbYbai/4Pd44ShMyMX/7yLMgAtJ8=;
-        b=sf7NO/DMDodhp/HJXqzHRLEzxChD0ZtJyMFKblHLtQHq46f6r0ztQtUxCDd+MoB1YQ
-         CPO8n3WyblAvPcxIqh8HO29TdsMGl4LgcqSzEZuo7u2UfODKY7gOEsA30lPEnJ8kSizw
-         mEEzDX/bHp5wxaNPjcnPEJtnkAlPw7SAp7W1CZibu6kpVvLxBnRPxPMMlkRVAj8zZtlD
-         Hb+ke1myHKYhHJzldqBkzFbXH1IBjW1AFKUcF58TFcW1sWoJM6zE6WcaursuheLkECT1
-         ApZaXcc4P4bFZEuJ924Ybf0sDa42Z5ikN9g9KUGYjw/9zmUc8D12nPMhwBLwY2bevZC8
-         NJAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTFF4UL8liW/DGiQDEjIveYqbugJYWP7PZIOOjxli5EA7blBVROIsJ3pKSQB2Gr14LORJhkMHcvXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDDmVx3gPxCCtuBLd4QaIHKzxTKUIWsaB/46xkvXv8bDwnX9ap
-	VmYskFdUcw+GH4gd2rwqINrZbTZwzHlGAg8asG6Cf7lmSv7lI0e0So9/9CGv6UFXFaePXRUL19b
-	orDjua1515a20QNBmjJN5GeJ/BBoJNlkUTMIcpC3nUS0jdUlTM8B3l1c=
-X-Google-Smtp-Source: AGHT+IFd6Jrw4KiUJzPoXOuRT6mWNDrT7YE+phTRHqkA2N1M1bOuqPCXEV/r+StS26s+KJD3H0Qi7S1UI0sl/YXMdN6mV3Jl+9gD
+	s=arc-20240116; t=1743372714; c=relaxed/simple;
+	bh=LGjM+uG3yN2TuXG5w70qSulch8tgxCw+EQ4H7ATDvVo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H+LpmStOdJ40ROG/jcHX1N2b7DpYeARcxbJboXGXsg437SV+MwCfwHxh5cLDeP+u6V/Mwd1VlqiwWPtpiou543pCYGA07NRiQrTj+cw3gmgHA1UehcPZ2Efb9psDJZ90y53UthMos+DHzYzETUK5QW8LnaKG0RZmx69fd/yjgzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=NEWee4Zv; arc=none smtp.client-ip=89.177.23.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
+Received: from [10.0.0.228] (unknown [10.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id A1DCF165C19;
+	Mon, 31 Mar 2025 00:11:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1743372702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=3H32D2MG+HVkOMXTA0u9viQ00uGsZ2h/+IJLzYF6WMQ=;
+	b=NEWee4ZvYgkePkC09NLDtgIdYJamLiVCB+dVxOMxOQVE8EzfEF8jrDDvS9zKPrRx9+wXnX
+	RFw+lGgHAtudGe48l2vi3s8R0TOcnq+8sb1MTMZ1/+kekvcJeKT56vlVwoy7lVu3M2dDgj
+	Ze9+WRpr4o39/FtRcMEzJG2JHv1erHs=
+Message-ID: <454deee5-5359-4fc8-bdaa-801de90f6257@ixit.cz>
+Date: Mon, 31 Mar 2025 00:11:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:194e:b0:3cf:fe21:af8 with SMTP id
- e9e14a558f8ab-3d5e08ed0afmr54956005ab.4.1743319281188; Sun, 30 Mar 2025
- 00:21:21 -0700 (PDT)
-Date: Sun, 30 Mar 2025 00:21:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67e8f0f1.050a0220.1547ec.0092.GAE@google.com>
-Subject: [syzbot] [media?] [usb?] KASAN: slab-use-after-free Read in
- load_firmware_cb (2)
-From: syzbot <syzbot+db4326df1b9af04f68fc@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+To: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, clabbe@baylibre.com
+Cc: gregkh@linuxfoundation.org, johan@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ martin.blumenstingl@googlemail.com
+References: <20250204135842.3703751-1-clabbe@baylibre.com>
+ <20250330012451.13711-1-frattaroli.nicolas@gmail.com>
+Content-Language: en-US
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ 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
+In-Reply-To: <20250330012451.13711-1-frattaroli.nicolas@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello,
+If another Tested-by is needed to get this in, I can build kernel w/ 
+driver and give it shot too.
 
-syzbot found the following issue on:
+Thanks for your work & testing!
 
-HEAD commit:    a2392f333575 drm/panthor: Clean up FW version information ..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16b57804580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=12ccc0a681e19f95
-dashboard link: https://syzkaller.appspot.com/bug?extid=db4326df1b9af04f68fc
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10011de4580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a0864c580000
+On 30/03/2025 03:24, Nicolas Frattaroli wrote:
+> On Tue, 4 Feb 2025 13:58:40 +0000 Corentin Labbe wrote:
+>> The CH348 is an USB octo port serial adapter.
+>> The device multiplexes all 8 ports in the same pair of Bulk endpoints.
+>> Since there is no public datasheet, unfortunately it remains some magic
+>> values
+>>
+>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>> ---
+>>   drivers/usb/serial/Kconfig  |   9 +
+>>   drivers/usb/serial/Makefile |   1 +
+>>   drivers/usb/serial/ch348.c  | 736 ++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 746 insertions(+)
+>>   create mode 100644 drivers/usb/serial/ch348.c
+>>
+> 
+> Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> 
+> Quickly gave this another test by just connecting two ports of a CH348 device
+> together and making sure data arrives unchowdered at the other end when sending
+> at full speed with various baud rates. Seems to work about as well as I
+> expected my jumper wires to hold up at higher baudrates.
+> 
+> I'll likely use this to lessen the pile of active USB-to-serial devices on my
+> desk while working, so many thanks for keeping up the good work on the driver.
+> That way it'll also get some more in-depth real world testing in th e coming
+> weeks, but I doubt it needs more testing at this stage.
+> 
+> Regards,
+> Nicolas Frattaroli
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/aa9dc8dca3f7/disk-a2392f33.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/96ca6097aca7/vmlinux-a2392f33.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/78dee40677fb/Image-a2392f33.gz.xz
+-- 
+David Heidelberg
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+db4326df1b9af04f68fc@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-use-after-free in load_firmware_cb+0xbc/0x1638 drivers/media/tuners/xc2028.c:1372
-Read of size 8 at addr ffff0000dccc7318 by task kworker/0:58/6836
-
-CPU: 0 UID: 0 PID: 6836 Comm: kworker/0:58 Not tainted 6.14.0-rc7-syzkaller-ga2392f333575 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Workqueue: events request_firmware_work_func
-Call trace:
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:466 (C)
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:408 [inline]
- print_report+0x198/0x550 mm/kasan/report.c:521
- kasan_report+0xd8/0x138 mm/kasan/report.c:634
- __asan_report_load8_noabort+0x20/0x2c mm/kasan/report_generic.c:381
- load_firmware_cb+0xbc/0x1638 drivers/media/tuners/xc2028.c:1372
- request_firmware_work_func+0x150/0x214 drivers/base/firmware_loader/main.c:1196
- process_one_work+0x810/0x1638 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x97c/0xeec kernel/workqueue.c:3400
- kthread+0x65c/0x7b0 kernel/kthread.c:464
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:862
-
-Allocated by task 6850:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x40/0x78 mm/kasan/common.c:68
- kasan_save_alloc_info+0x40/0x50 mm/kasan/generic.c:562
- poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
- __kasan_kmalloc+0xac/0xc4 mm/kasan/common.c:394
- kasan_kmalloc include/linux/kasan.h:260 [inline]
- __kmalloc_cache_noprof+0x2cc/0x428 mm/slub.c:4325
- kmalloc_noprof include/linux/slab.h:901 [inline]
- kzalloc_noprof include/linux/slab.h:1037 [inline]
- tuner_probe+0x108/0x1798 drivers/media/v4l2-core/tuner-core.c:636
- i2c_device_probe+0x700/0x9bc drivers/i2c/i2c-core-base.c:590
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x38c/0x8fc drivers/base/dd.c:658
- __driver_probe_device+0x194/0x374 drivers/base/dd.c:800
- driver_probe_device+0x78/0x330 drivers/base/dd.c:830
- __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:958
- bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:462
- __device_attach+0x2b4/0x434 drivers/base/dd.c:1030
- device_initial_probe+0x24/0x34 drivers/base/dd.c:1079
- bus_probe_device+0x178/0x240 drivers/base/bus.c:537
- device_add+0x728/0xa6c drivers/base/core.c:3666
- device_register+0x28/0x38 drivers/base/core.c:3748
- i2c_new_client_device+0x8d0/0xf3c drivers/i2c/i2c-core-base.c:1020
- v4l2_i2c_new_subdev_board+0xb0/0x224 drivers/media/v4l2-core/v4l2-i2c.c:80
- v4l2_i2c_new_subdev+0x144/0x1e4 drivers/media/v4l2-core/v4l2-i2c.c:135
- em28xx_v4l2_init+0x6c8/0x28d4 drivers/media/usb/em28xx/em28xx-video.c:2617
- em28xx_init_extension+0x10c/0x1b4 drivers/media/usb/em28xx/em28xx-core.c:1117
- request_module_async+0x68/0x98 drivers/media/usb/em28xx/em28xx-cards.c:3457
- process_one_work+0x810/0x1638 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x97c/0xeec kernel/workqueue.c:3400
- kthread+0x65c/0x7b0 kernel/kthread.c:464
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:862
-
-Freed by task 6850:
- kasan_save_stack mm/kasan/common.c:47 [inline]
- kasan_save_track+0x40/0x78 mm/kasan/common.c:68
- kasan_save_free_info+0x54/0x6c mm/kasan/generic.c:576
- poison_slab_object mm/kasan/common.c:247 [inline]
- __kasan_slab_free+0x64/0x8c mm/kasan/common.c:264
- kasan_slab_free include/linux/kasan.h:233 [inline]
- slab_free_hook mm/slub.c:2353 [inline]
- slab_free mm/slub.c:4609 [inline]
- kfree+0x180/0x478 mm/slub.c:4757
- tuner_remove+0x1d8/0x1f4 drivers/media/v4l2-core/tuner-core.c:789
- i2c_device_remove+0x8c/0x1dc drivers/i2c/i2c-core-base.c:631
- device_remove drivers/base/dd.c:567 [inline]
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x3e4/0x698 drivers/base/dd.c:1296
- device_release_driver+0x28/0x38 drivers/base/dd.c:1319
- bus_remove_device+0x314/0x3b4 drivers/base/bus.c:579
- device_del+0x480/0x828 drivers/base/core.c:3855
- device_unregister+0x2c/0xcc drivers/base/core.c:3896
- i2c_unregister_device+0x130/0x190 drivers/i2c/i2c-core-base.c:1069
- v4l2_i2c_subdev_unregister+0xa8/0xbc drivers/media/v4l2-core/v4l2-i2c.c:28
- v4l2_device_unregister+0x17c/0x248 drivers/media/v4l2-core/v4l2-device.c:102
- em28xx_v4l2_init+0x1300/0x28d4 drivers/media/usb/em28xx/em28xx-video.c:2898
- em28xx_init_extension+0x10c/0x1b4 drivers/media/usb/em28xx/em28xx-core.c:1117
- request_module_async+0x68/0x98 drivers/media/usb/em28xx/em28xx-cards.c:3457
- process_one_work+0x810/0x1638 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x97c/0xeec kernel/workqueue.c:3400
- kthread+0x65c/0x7b0 kernel/kthread.c:464
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:862
-
-The buggy address belongs to the object at ffff0000dccc7000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 792 bytes inside of
- freed 2048-byte region [ffff0000dccc7000, ffff0000dccc7800)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11ccc0
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-anon flags: 0x5ffc00000000040(head|node=0|zone=2|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 05ffc00000000040 ffff0000c0002000 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000000080008 00000000f5000000 0000000000000000
-head: 05ffc00000000040 ffff0000c0002000 0000000000000000 dead000000000001
-head: 0000000000000000 0000000000080008 00000000f5000000 0000000000000000
-head: 05ffc00000000003 fffffdffc3733001 ffffffffffffffff 0000000000000000
-head: 0000000000000008 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff0000dccc7200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff0000dccc7280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff0000dccc7300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff0000dccc7380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff0000dccc7400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
