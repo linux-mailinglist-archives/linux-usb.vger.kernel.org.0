@@ -1,205 +1,184 @@
-Return-Path: <linux-usb+bounces-22318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCCFA75D6B
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 02:05:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CAF0A75DC0
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 04:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A78EB188A975
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 00:05:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82B093A8E70
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 02:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9383234;
-	Mon, 31 Mar 2025 00:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="S9hJeBCF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A6582866;
+	Mon, 31 Mar 2025 02:14:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011071.outbound.protection.outlook.com [40.107.74.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC4B2F29;
-	Mon, 31 Mar 2025 00:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743379508; cv=fail; b=TrWxJGCvhIdU+oK3I4AGF+nVjYPlx/6j61AghdshEEG3CU+5UVRDNQL3URhGwwGvl1MO+xYSqNzOj5Z0hDxN8NsclTxStApbFaQqjt1YBZA4tFqom+HUBGQfqnq7ivu1wKwpnPghvk0GAVEKtuJ7AK8zjCHhWOJfkpI7/I2L3sQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743379508; c=relaxed/simple;
-	bh=kreHL7cK2nvQW/3RbgMytCrNb8nx0IRuVJBNZtGbtXw=;
-	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=cv+JPcxVWQeD10r7elilJ3NjDLwDM3CEbVlplt6+syy51ctOan1Ivma77bBPhPP9O4ZzizJPgWnZ/yFSdB3HU06fF/0/qyUkadco0s7oRe91+GQOqdGmUtL8Y0iWF5hqkuBb4UuC+/zslO1sZMRpRzTbFTApVRaZ7TufvDv7PvU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=S9hJeBCF; arc=fail smtp.client-ip=40.107.74.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s7Bz7P6GXYD3WOJbZ/b/jVLHYNArF5/yoqeqQWw01o5hqFls+gWG0iAlmRM9tMJMEFgCuVqfWgZfu6hc6vDeBKvEDXCoItkjLsUtd/PuhSloR6sRKIE7Oke0sDKeQDxlrSBEa2bmCuGud0Rvcga+xaE1wScqi2XnXjyZh9AZogrSebLtVWo3ODh7zYitBwi5fSFHrzZENFQn9nf0TdmcRJ0pz3xh2Eb8TNpcfhvDCJvgXCt6R/+qAcvXGvpKB/mfV/uduC35s2brZyEHicSL5h4jQOuhtebMjIHOPzIl28mLQbIk6nz/irk4xN+hH914l9IUXabhGZ1ofCdYt+a5Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wGYCoHKKEAlOmm//ATibMQQZJIGH7ajp5UggB/AGFjI=;
- b=DnV4520Y5ICFTuSNpDFRUfi1A0PcwzveOA4U6F0SyiAR8O8h9urWTnflYE0TuS8LFLSdJk3zKoYZiVOIhktbMSsw2lROdc9LTXhLbRt6l9bOhg/CDeitrDS8M22t3//nNc0PmbALLBxCTQ7kBQP5A3rlpdhkXPbQW26LJx85GS4k93dHYgHUagJ9/9LND/BBTTALT4b6S6apSiLVooABeLhYFzD4LLyiVLlmjWUazaoqRMEXIaP9Zzf+sejP/Gv4iMVOM93LB0zNbvGvS1fyMVLcMMCULnjmcpOHQ/TL04gfPOIcoDtX/t9RDdA7iOnzVb2ASIqKngYfw2ybD32tzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wGYCoHKKEAlOmm//ATibMQQZJIGH7ajp5UggB/AGFjI=;
- b=S9hJeBCF17eUTb/SQ7huhDtVcmBtUUANEZ7ZocfeAeRO26eS0mdoM27L17mm383U00u+6z5u4+wllsio6HIrxRbCotXhtbeXcGU7s6AtBLXFxFQqqwT1Iz4yJQ56G/ZZYbMsvx+SCu5dQ3M8ogi2r1kk3TBVuKl9WxSagE/tepk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11) by TYCPR01MB5629.jpnprd01.prod.outlook.com
- (2603:1096:400:44::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8583.36; Mon, 31 Mar
- 2025 00:05:01 +0000
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11%5]) with mapi id 15.20.8583.033; Mon, 31 Mar 2025
- 00:05:01 +0000
-Message-ID: <875xjq12vr.wl-kuninori.morimoto.gx@renesas.com>
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-usb@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 3/3] usb: renesas_usbhs: Reorder clock handling and power management in probe
-In-Reply-To: <CA+V-a8uwJasrQZ+3Y1vgTKz+b_SBULXpXdGYxULUOpPkZgXjFg@mail.gmail.com>
-References: <20250327120737.230041-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-	<20250327120737.230041-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-	<87zfh6yoly.wl-kuninori.morimoto.gx@renesas.com>
-	<CA+V-a8uwJasrQZ+3Y1vgTKz+b_SBULXpXdGYxULUOpPkZgXjFg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 Emacs/29.3 Mule/6.0
-Content-Type: text/plain; charset=US-ASCII
-Date: Mon, 31 Mar 2025 00:05:01 +0000
-X-ClientProxiedBy: TYAPR01CA0098.jpnprd01.prod.outlook.com
- (2603:1096:404:2a::14) To TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADA342049
+	for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 02:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743387269; cv=none; b=rP9k6o0/KrzSG2cmx61O8dWwswKuNAqGyvT2n29rLn8WugJfMifQmcFriH3qpUretn1NjjkfINggq+q7jYGUhJ2fyiMinGn7Cxkv+IAFBfnGU8S8xsTR10je0WSbGYfK0uGGUXXN5UgIc3UC/vRqgKkjUl8WtN23n7KpFjl+wZI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743387269; c=relaxed/simple;
+	bh=otP5ppnT9Z1XPJMiBGLIWJxYif8WNzKhHlwtQdlMvUc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=H7tPp4ZGaWxd6WmROLeT9lWNXBOV5Q9bmuHgAAmPsGhucx4bmOWL3ZcYXdTR6maYeqEfoh3cefs3Y4y/vd412pYmIpvB53u6TJNIueLWosQvLp9CsdPI607GoPCWU4INRp09y70UIujRFoykEx1iLAtV9rJhk6BDCYRaxcjgUnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3d443811f04so38534075ab.1
+        for <linux-usb@vger.kernel.org>; Sun, 30 Mar 2025 19:14:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743387266; x=1743992066;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zn4wsqECmycelK2HB+BPPSdvs//fE/pmKUurDQYNNO4=;
+        b=i/eo206D2/4q7DqZ/8d6zd5oqeQRAPhk/elA8LKXyBOVc6Z2qANBcKwsu+tQ82Us9w
+         UcxDwFheiHgfBHVY+3jQfgHE9+TeXLait4U8VskY5AfI9oMUIy4cCjbKKjGb16rrQRbm
+         Nj5xQ9CUcOJmdpOnSi2jTv5O6VApVHq4PCERbWomAY3gG4fmaa8m0wIyA4C04JJDMM0Z
+         Soe0i71hFdmoo25MrBHncLwLJvV0km2MfMqKmJ2A6g1OuFg2eBGVrp7nN2wcB/jTRzxd
+         p/IuikJeNKScyRY2m+fp6wN+zafgGhq/UyK5QHHQWnrnPdXyWoXxVjyvKgHDZuCm4ugO
+         OwRg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3gUGszBEGOpOUyM5SB9Fi8I7w9s2q6kWXhP0DHdnKe6vSUr8iMLGxDc0AwCUVr3tcxIPrP+5wBtI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRvzWU1zxqvjAQ4pTWb1DJF13NmXDZkf9mQ2yj7nVcufY8RDDy
+	oqpwFdv4jsc+lzs54xA9FA52ZtIZjRs3EaBoQqZjucq16acLUaVTV52b0+FxOdyampz91z7JmmC
+	IdwdL2E1gX9valONrxu1U6M0bqnQGr8yDgcd18VbeOb1/kmQni1cDzyg=
+X-Google-Smtp-Source: AGHT+IHzaYoQ6A44D1gbKMagzp6/4TOHACf+Mx08YIPA7ACJMpaj92WyCyyf1pCWil+4DLIasr/vgutg399jYAaX6NfMvuhZXDIM
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|TYCPR01MB5629:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62a68881-e301-4296-5426-08dd6fe7ae8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7DdIGVL+wQ+07JoDmK/0bgfHQS/QalfxIrOOjJbh/AmNjQd6gEFKdU/ufEO8?=
- =?us-ascii?Q?hLR3Xi+MSsrrjOiQVM492uvbpAfYRDNBlhERXl9OuHF78P45dlmobqgj5ZTv?=
- =?us-ascii?Q?w4UdJ8UgrjkuvIg3ugADSFn9t1McQhqNRNDAw461de81WfCJHwt/KXIAdKj8?=
- =?us-ascii?Q?WISndB1mdPO+Ah6JyArB3cO1TsrZjqOXXIlLyU5EIy22b2UQfCHV4iiMbzd/?=
- =?us-ascii?Q?73Eqs3vgDftk9F2w5PFmcz9CajnOvJr0M2gc1gHJml+9tfh8x7ZwqHoIbzrt?=
- =?us-ascii?Q?VRLjNCaeDukU3Du8yfPBoeH/DvOP7Gf0Irpn2cM2qn+t9eSqwAdP7m+MgMrN?=
- =?us-ascii?Q?35o7RiGAA37i09vfnZn4xbZasdeCQT9WaPHm1GaErI51OqLXlY073gHkFzhl?=
- =?us-ascii?Q?Tk+LIaiMPbSyCikn/Fif9LXWBxu/IMq7EMO7UZXQ99KsJ8eaYwgj+ESmBW94?=
- =?us-ascii?Q?3a5PsHrcnMkEtd0XmOuGzUnSs6N5f8uGFMlQ2wgrCAQfT+xXvNpatdLzVzJG?=
- =?us-ascii?Q?9p2fVGXKZrPIAYft8uhd4ZPIOW08+P4gFGfNIBObD2VUGQgtxIE0YRMp2lCm?=
- =?us-ascii?Q?JR5AaY7/DD9uOzuIw/irRd1SngV1dmIafd5MlLm33+R7cpDY3SrRAvCdwH1d?=
- =?us-ascii?Q?EmSvfXePzzgRZYx73Uz6PJmVlmNXhWrkx5P9COnScRuroiGEK47/Uk6DiU/5?=
- =?us-ascii?Q?+dq3R1ALpWSTOkox8PAGvsiWoalRBsgWu2zoDWU0DjgiF0cxpGzZqTIk7pjP?=
- =?us-ascii?Q?uQr34Kb/Vb3IqCu02hOqjf2samn38sYjh+vArPw6wfjUo1RQupNkpPLBgb/x?=
- =?us-ascii?Q?khGrtbFk0DKoKYwaxtLmClbcrBEiOeTt8FKnUlpj+X3XUOaRiz62TuAZ+9aB?=
- =?us-ascii?Q?L9Q5jCmOI/fbXHaSwNbNV92/AEr1y3bFiDp2a7qdQMu9JbsnZcKqDib88mSo?=
- =?us-ascii?Q?zpoNe5x5Kel0LvlhZiaTuj5+q+A4cqk/jghrEDWp8yfpcb0dxiIAyWBEZZjD?=
- =?us-ascii?Q?lqgRAGVJY+h/rk+xj7UjzsEfDwBEuK19KAFP0DR9JNZNUF4BDC/xe39XglfB?=
- =?us-ascii?Q?K4s43aGMM0Dnyxhw7Veza3P5/GxDii1Gol2asYaf6nQvSbQag7nz4ggrxfB+?=
- =?us-ascii?Q?LrTD28qqvPEOHe9kBI5NTpBxHdkSl2qnOy/myC2uEAFmUdnanv8G55QEOn25?=
- =?us-ascii?Q?LpE4Uu8B3gSB/dd+f3/HXaLat+XIQT6wpwXDRvOEcad3plSw3vEyFosWilZ1?=
- =?us-ascii?Q?RjqVwXE1DzHZAaIh9M1FRM4C+bbgTK6lVr2p4/hWWfZ4HhecBBz3iVpHltrc?=
- =?us-ascii?Q?zvbvwLXq82lStok/ILByyWV0KK8W3yX+gwxJ+7kz5Ez31QjAprC+d4hCDrfG?=
- =?us-ascii?Q?eYO7BpDOL8ltOmWIuogXOFv6n3nC5qTbaifgPWdxPPnTA32uiruqEUmpU/4u?=
- =?us-ascii?Q?m+uaL8HmGCskpmucSo8pQbuaH7urD33w?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NlTlseV23B9IN6NBiFRlKWvx+hL3aiLojyoJOwkGPSWQC+89LobPDeHjjhuh?=
- =?us-ascii?Q?x5zZWt/ppT8qQusb5X8qg/mT7RwdNm8jmHElcRaEhdJIu1yTbp6+0rQtA6tH?=
- =?us-ascii?Q?jis2KhynQ3kzytVqCthh/49pmiAfYvEoPGATNnZgyxFCfKAkh+oIxhCmI8D1?=
- =?us-ascii?Q?wyS3tBl4vyaYE4Wj3hypCHkZLuHyglCQ4frjsiEBd5Lt3yIMCXXaW/Xn9ngF?=
- =?us-ascii?Q?gytamdAZwsCJjDFPvsF+5WGf6J2wrH6Ae1u++uE0uikX1lmdWH0Xoin1SRme?=
- =?us-ascii?Q?hXs+/yLu2NY6hjpJaGEl0AIENcWS5nPgJ8xrKa0N6KwjZ+1yppk4fljcXvLj?=
- =?us-ascii?Q?Jz+AvZJZTfJtFn4gTIoFfrL1LDfBml9yjygrHiPRqrjxzirWLx+YQOjGGRlM?=
- =?us-ascii?Q?Hr3qsIZde+RgXWFrizEz/Hhue6kLbQmtNPP5tBfvEFGbeD9ZRP2ch8UHPEOT?=
- =?us-ascii?Q?brhJtDZrJS329DMVS4Ltjop5/bVSWy649uqEEnQh1cmNkCcuH8nHFU2jPRZy?=
- =?us-ascii?Q?uqpugfFABJNI9IE0Y6+TMaIE+IzvhSNcujCHk582J31gNneCeBOimhVvqJlI?=
- =?us-ascii?Q?Oi8PL/dYbtXYzA+n5ikGB2FS44pFZE5gJZdrFRYcycMM94TXVAij02zgJOeb?=
- =?us-ascii?Q?EvUJh0xKfKr7woj09x6rZx6UvljUb2HcEtx9dWnymZr0V+/yfBBwFwSC24Rt?=
- =?us-ascii?Q?s04niUzX/FDQ3hN8u3dVBNEKfpxAju2PsPWRiuxsjHTqHeaTCMBCQB8V9nHs?=
- =?us-ascii?Q?fdh1Yp6rHGDN3L7u/TlaxX6EcxrJ6l6wGlgcvX+bOk5Sk8R6w+8bRnfaXALp?=
- =?us-ascii?Q?Cwo7Kj9jCITB+WocMzDNV/A+5CoYzZej7Ran91lAQjZgzeTS9icUEKW+hFtX?=
- =?us-ascii?Q?Sc33NTpJRIPlaPQHg4hzan8yBmvb7/p16ackG39u+Wuzthot0bvhTB/UG+ac?=
- =?us-ascii?Q?ucrXCQLurRJXLMdjlL0G/83naYREcPdCXLz0FJ9F9CdZIiqak69po1X/4B9f?=
- =?us-ascii?Q?U5fUMQ9JtVxhkWqdiTFdjpFIPtGIoEQt1FQ78+e/1MoAvH1Cc4f8WvMnBRue?=
- =?us-ascii?Q?Nho35ueAFj3migbrM1xC7jA8CskBBAYqaHVLjQ6kR78oSo1clzC9HXItc9em?=
- =?us-ascii?Q?PI2uNrC3KkhchaYdtZP7M5Gwy1rmxZTBZYcky7ArrVVhKFkVggDUD/fET0Zt?=
- =?us-ascii?Q?PcUNmKgJ1XtqdFUwD7I6pQUoFI3c8Z4H9ECXr8Bebgu402BvePM/ymB0M5r0?=
- =?us-ascii?Q?Jq0elMrA8rxCdrCFtQB51w3+dotE8ybot/WZdscoGtaLrrs8yuEhJXmGnosJ?=
- =?us-ascii?Q?l7XYaf0smSWXdWvonAMp+wMF7JhnKsQc8Th0YivfMVo3JcQSzA/f1jmCjBsE?=
- =?us-ascii?Q?+suVfOIXKP2grXnPwc/zdarUR3OHIF68XYenhx/hyVU8XRcblGWSKmOdxXH7?=
- =?us-ascii?Q?rwODzfzFf6FokERevauYdXQvIt3V7UE3nZrKPaGklZMH5vUMz/k6Do7A8sBT?=
- =?us-ascii?Q?P9B47/ZRj9NAAtcHJle1by+4K9DHLsAG5LBvoNVbnnIWCRINuHvxALL2SrZX?=
- =?us-ascii?Q?e6nF7eQw4OgXL6V6a94VhaQRABi72OYsyhOgR5z/+mtSXvU7NQySLIQbhMbO?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62a68881-e301-4296-5426-08dd6fe7ae8b
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2025 00:05:01.5058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VnuQuGq0Or2eDYfBTsP4G3O8OqL3RwDtFvrK5GsR5NunzwxBypwdUvtskoXwP1FSoVbgaAb1RkeLTJ1GBzX1YBStm7oVn1pD3Z+/pvnke7mp0lOEqo9cOoQvkr6A4gGb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5629
+X-Received: by 2002:a05:6e02:1646:b0:3d3:fdcc:8fb8 with SMTP id
+ e9e14a558f8ab-3d5e090cedfmr58623345ab.10.1743387266684; Sun, 30 Mar 2025
+ 19:14:26 -0700 (PDT)
+Date: Sun, 30 Mar 2025 19:14:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67e9fa82.050a0220.1547ec.00e8.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in __kfifo_alloc
+From: syzbot <syzbot+d5204cbbdd921f1f7cad@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    f6e0150b2003 Merge tag 'mtd/for-6.15' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14ebabb0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a15c3c5deef99cef
+dashboard link: https://syzkaller.appspot.com/bug?extid=d5204cbbdd921f1f7cad
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=146e4a4c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d1d804580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-f6e0150b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/416c28ebba43/vmlinux-f6e0150b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/df554d24e7cb/bzImage-f6e0150b.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d5204cbbdd921f1f7cad@syzkaller.appspotmail.com
+
+usb 5-1: New USB device found, idVendor=056a, idProduct=00f8, bcdDevice= 0.00
+usb 5-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 5-1: config 0 descriptor??
+------------[ cut here ]------------
+UBSAN: shift-out-of-bounds in ./include/linux/log2.h:57:13
+shift exponent 64 is too large for 64-bit type 'long unsigned int'
+CPU: 0 UID: 0 PID: 835 Comm: kworker/0:2 Not tainted 6.14.0-syzkaller-03565-gf6e0150b2003 #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x16c/0x1f0 lib/dump_stack.c:120
+ ubsan_epilogue lib/ubsan.c:231 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x27f/0x420 lib/ubsan.c:492
+ __roundup_pow_of_two include/linux/log2.h:57 [inline]
+ __kfifo_alloc.cold+0x18/0x1d lib/kfifo.c:32
+ wacom_devm_kfifo_alloc drivers/hid/wacom_sys.c:1308 [inline]
+ wacom_parse_and_register+0x28e/0x5d10 drivers/hid/wacom_sys.c:2368
+ wacom_probe+0xa1c/0xe10 drivers/hid/wacom_sys.c:2867
+ __hid_device_probe drivers/hid/hid-core.c:2717 [inline]
+ hid_device_probe+0x354/0x710 drivers/hid/hid-core.c:2754
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3666
+ hid_add_device+0x373/0xa60 drivers/hid/hid-core.c:2900
+ usbhid_probe+0xd38/0x13f0 drivers/hid/usbhid/hid-core.c:1432
+ usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3666
+ usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
+ device_add+0x1148/0x1a70 drivers/base/core.c:3666
+ usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5533 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5673 [inline]
+ port_event drivers/usb/core/hub.c:5833 [inline]
+ hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5915
+ process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3319 [inline]
+ worker_thread+0x6c1/0xef0 kernel/workqueue.c:3400
+ kthread+0x3a4/0x760 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+---[ end trace ]---
 
 
-Hi Lad, Prabhakar
-
-> > >     usbhs_probe()
-> > >         usbhs_sys_clock_ctrl()
-> > >             usbhs_bset()
-> > >                 usbhs_write()
-> > >                     iowrite16()  <-- Register access before enabling clocks
-> >
-> > This patch itself is not so bad idea, but basically, we should not assume
-> > the power/clock was enabled since kernel boot.
-> > In this driver, register access happen only during power enable <->  power
-> > disable (except your issue case), and this is good idea. So, the strange
-> > is usbhs_sys_clock_ctrl() call in usbhs_probe() (without power enable) I
-> > guess.
-> >
-> > According to the comment, it is just caring boot loader, and
-> > usbhs_sys_clock_ctrl() itself will be called when usbhsc_power_ctrl() was
-> > called anyway. And more, if my understanding was correct, Renesas clock
-> > driver will stop all unused devices clock/power after boot.
-> > So maybe we can just remove strange usbhs_sys_clock_ctrl() from usbhs_probe() ?
-> >
-> 
-> After dropping usbhs_sys_clock_ctrl and removing the clock enabling
-> done in this patch and with  `CONFIG_USB_G_SERIAL=y` I hit the same
-> issue.
-
-Ah...
-OK, not only usbhs_sys_clock_ctrl(), but other initializer also
-missing power in probe(). Thank you for reporting, your original patch
-is reasonable.
-
-Thank you for your help !!
-
-Best regards
 ---
-Kuninori Morimoto
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
