@@ -1,130 +1,150 @@
-Return-Path: <linux-usb+bounces-22328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22329-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEA5CA763B5
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 11:59:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806AAA764A1
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 12:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21698188AA21
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 09:59:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32ABB16774F
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 10:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8959F1DEFD2;
-	Mon, 31 Mar 2025 09:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3836C1E22FA;
+	Mon, 31 Mar 2025 10:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FzZtfixn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aghuHnW8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001951DED47
-	for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 09:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF201E0B91;
+	Mon, 31 Mar 2025 10:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743415179; cv=none; b=A5QxVVEb5bgkKBvdno8oCX3HK2nhqxjvFin5BIwcXe6msRbIA5Vy5tiGCJ7/+dSXKya82ExbdjNgyqYZnGrookEV4tGU+ut2VlcKyzzmX2qJpyACcQPydY/oroHdBObeaoVLQRMvlCsBnlruKQW7eK8mAx+uzBrr0glia4GUp+s=
+	t=1743418651; cv=none; b=kedU9NJJ9MomolxFarixd1LBS7NLH9XRt0FdVMdGm/Jqxfod3T8MHhUYFjbBFqQdk0Dfimixl6UKMgHDTrCU8otvuMML7dhgM9c6SBPtllwM3KkR1zyBvhyWfZaE/IoPqf/cP6B6XTdEy50vJi7TWssM6UmtwUvODNNDRZaLJ+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743415179; c=relaxed/simple;
-	bh=/PqcCCPTIgpg/pzD+xJ4tI1xUacqMMtg+YshUz+CqAw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Sw3l8akv9bwOgen5eW+gimZ51rOKgYWrREn3nIwHUJER9B9l+Z6WWyVy/pVPBaLujToqc9PHr+Yjjr00uEZLBSqn6xl13rfEJu8DeMc2uubg/FtnNDMGozRSzKXv71GLSUu5LtnNVSwIDG0Q1Ijiui9n1Osw/k7fxM0lqB9VFGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FzZtfixn; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac29fd22163so717548766b.3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 02:59:36 -0700 (PDT)
+	s=arc-20240116; t=1743418651; c=relaxed/simple;
+	bh=3iyJtbgGzB1OJBH5C9tTZhh5p8Zc2H+RQBAXZssCc3A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bUjB53w990Ij9+FeyHH7rSvvfP5lSlKUdD6x7f2ct54fdFGKgOlBmmfWo51mzvBKmFffednYuXC/Q51sPq5ZZHFoe+q7C3OTymooDKRwqQgUCeDFoLUG4WVi0vBemVc+JCrb6fqWmlpQ8Xgm8bPAnCKwvs7l38xA612GcKTpy6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aghuHnW8; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5240317b3e0so1407503e0c.0;
+        Mon, 31 Mar 2025 03:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1743415175; x=1744019975; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RMabzr509u5T4ZaFmjs8XZAaFywVFi/eFQF/j47VzkU=;
-        b=FzZtfixn6tM7GCCSmlKginW83pwBeRfAWeMT3fAjnyUcJeiW1PYUWHNztIL4nKKHvS
-         AtNTSl838ZxRGIpixCyoOzoDX09XRBC5KQezwnUOySYvFSjccO0SIL7Pm2D0lZUI1P9u
-         v8JmW5wiq7Y5+QjUl5159H+X/t4uV4uGtG5YlxJsnwQk8fkzH2E7XR/wv7hoxT1SqXc8
-         ZYpC82GTawwc4+/DFr8iyfRBpM+y9OljTi1E6bvHj9CQDAJJxCeaQGaSZP0yJges/hMQ
-         2ksMN7L4vjigF9/YcPchtd2B3isp8PmPzP561naYK73y8kDaDakRHU1CsDyD0FvTP+oE
-         1c9A==
+        d=gmail.com; s=20230601; t=1743418649; x=1744023449; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DNNRG1/aA151htuH/eNkLqh0nhijCBN91yU1AUjfzl8=;
+        b=aghuHnW8QAM4LFHI/vLwr/YwoSHoQ90pZ+obkZTbuMF+a+1kT4UPr9UVzueWc4l0Vw
+         kZiLZsF/xOipxQG7Xs7QjkKRk93TNe+coH3333yx6DO3BMjIE1eVJB0c0H8G44Z6VSsw
+         lLNeQrPrE/uNu+1T5Jntuf+aLRx6i6ReOi3jgEQWXaaZg8FM4Lr8Kc70dsZhYXxzH5t7
+         1I6aqXEvldknxbmPBpCMF6vdOmFoyi6esQv9vqRLzTnNyNlXNSJnjZG9Ly6J765l5iKb
+         zNXGxOjBvXavfT/U3vaE+sdB9Sred65So6u+e3KEaFoePDN74vEaGyVunFzjmVRIcLVq
+         OFzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743415175; x=1744019975;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMabzr509u5T4ZaFmjs8XZAaFywVFi/eFQF/j47VzkU=;
-        b=NwNumiW1fRCuP0X6tU5/cMFWU+b0bKqATk5h4dQraoMYNkpZavIaMgvDUE6UY6st4l
-         6wrjtYbIayBGm9eNnCzxHwKEbUDWXQph/51X3Lypnv/EnbXKKmQDbxinbZabUO1vm6RS
-         1EKTXL3s69GbhwtzumeEmD+6T8bhJz3/YB4WUupTKxnEaRpO+TxROEivvAoug5CgCgqM
-         TYThvURaFrydXwBIA3eK3l5npre07uqufwllZN18tJQMZuNbJIU0eSofwEgBAK0rXw8e
-         lx42L+qmV/NMkunjWW0iroDMJCtWkyxjxnO9q26y97swVw2MaOFSyE2p50CvN56SheB4
-         2UeA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsZVcmSlpU2TOkSWkFoZow9wYjhc+kf0ZLrnN77aoPnJhfPNu79CFfqTOTkGLhkMUbzN37WpR2IUU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWgGCrBmHFiEYNwJbWdHO+wfqFB1wE3VXMDgEMuqoIGy3rqh/M
-	KvGuJGyHxzQ3nj4ffm8+HYgD0SHWOLplm2iiqdAXaCEw2FgpSW8soAS8m4694Ibct9zxfeRKYBu
-	5
-X-Gm-Gg: ASbGncvCGSoZBD2hv5gJJxVV/N8W6rw0vaPX1a/2CNcGJ789mO1UhPPyXmJkVSrMSGO
-	SBQcU2YTdfRBF1aSDRm/OwoOs4qv8hL1FqxaKSx4BKndgbSVSJJ0MM9nJ9t54lhHo0TuzuaazjF
-	kOBWJAuQ8I4gePmOi6pUxXQDmT7R8o0lAN5vk5+JrT3efHrU5Rn+Xb8Iy0ltVBJ0Xesj7IUfgmd
-	NpwL+StMyNCk2JPQ0/CHZTC2EDPKDML55PJCs9xzMq5j2Bfx/rmGqMF9hN2YWEF73tChHakRL3z
-	tVMRQPuXNXhGtONzkFt8bXiBbkieb8tk0ydAc22VaLzMxPi8mNuqxb7hJp12sVvDaHh+SYWvPzk
-	w9xalUgYGnw==
-X-Google-Smtp-Source: AGHT+IFIX8OXKB/VOA6THN/BL8YVUKH4ay9+edaVVtm0NkMm6yxizrzJj8pFXpXTR8Kr+uvHpF3WXw==
-X-Received: by 2002:a17:907:1b10:b0:ac2:7a6d:c927 with SMTP id a640c23a62f3a-ac738c23ea2mr746705366b.50.1743415174944;
-        Mon, 31 Mar 2025 02:59:34 -0700 (PDT)
-Received: from ?IPV6:2a02:3033:271:b27:e778:d598:b1da:7ad7? ([2a02:3033:271:b27:e778:d598:b1da:7ad7])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7196dc426sm592637566b.159.2025.03.31.02.59.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Mar 2025 02:59:34 -0700 (PDT)
-Message-ID: <d1a9bfca-0c94-4770-b5a9-c7d0432dd476@suse.com>
-Date: Mon, 31 Mar 2025 11:59:33 +0200
+        d=1e100.net; s=20230601; t=1743418649; x=1744023449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DNNRG1/aA151htuH/eNkLqh0nhijCBN91yU1AUjfzl8=;
+        b=kkQia31gwKn4i7JMXWWVMToGqmzsh3uC+3AYu2eDz0chSarS0KluwdgSsR//fjA/sH
+         Q1lQWYKQrR8pVqf7JAVxuUKUfjjCNvIaE386A3shWzbbrDhvJ9aGZwGDI87910+xPpse
+         begCt3uW3PkEm7H/Miby9IXPQkGB3SqUpLGHdjXAamPRbgoJAonmZSohtYxqN6pDQflX
+         O2HxVhzv4AcdEFurOiT4K0wIXcqwlVtLLkKHw7a2inOP665MSTMnrdhFKT67zHt/GMGh
+         kXc4r0+WdL6u7NGrRCq6LcMvPEBD+TdB/sjkeLSkylFPn+TwHSpeK5sXbppR7IcuKIIF
+         iRLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUw3h6nnWbIIshbGycIKt3yAYEwGC/dWq5cQ1DHSAManlduz8suq1hxVHssAsJR7tmzM7H5cfIMwTMYM8g=@vger.kernel.org, AJvYcCWQszTeEgih4NDjbli5BHCtnbtBd5zcmUawCBesNi/OmZh8cLKEa7O0gWD3S7BL37fwMapWHSJpN5TgjCIBh2jJuSA=@vger.kernel.org, AJvYcCXlsvSyOFepEh4wzEUJWzku8W9HAZfC4RKgDxZQXON2ngDPqUAc6fpoO++vSvaDmjHtZ2G5n/6aUHPu@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbjNtGtFTCuVI1J4GfEfD9crnjQPJ7xNj4o4+mg3ikb7kq8Wyc
+	WT08m1aIniBm8Y0TKjLQZiCzj8OSMthMT+09bBaYZnqZQoxjYjQ/QfMHAa+z53K8rSTHRZ5kRrf
+	JaMhBwse/aa0Z0L5Kfd5yTRyA4dE=
+X-Gm-Gg: ASbGncv0lV36ug+J5sMM9T8Pw506DJbo0vSMN0+lsIi2A8EhvPoTvCD/ePuuarzsO05
+	bLTpM58mE2e145JhhIZnNJdQxW0gzh1UQYMGdzmkHAl0jF7CRQZGeeWHiBTX/Ds0JNuxzW08GBl
+	dgxvcQiJ/hezvoB6MT1oUr5Z65LIhsLqTb2NaQ5FXCK8BwTOmEcYgEZk88gf4=
+X-Google-Smtp-Source: AGHT+IEqYRcxUiARUhkAS+U3oiuXILK20HiYaw+X095+lOU7LXb76ms2yffoHkVVCV2OqJX0/p9GqGjoiVD1nyweXf0=
+X-Received: by 2002:a05:6122:d87:b0:520:6773:e5bf with SMTP id
+ 71dfb90a1353d-5261d353d3fmr3113600e0c.1.1743418648966; Mon, 31 Mar 2025
+ 03:57:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Handling incoming ZLP in cdc-wdm
-To: Robert Hodaszi <robert.hodaszi@digi.com>, Oliver Neukum
- <oneukum@suse.com>, "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-References: <bd07dc48-d6f5-4a95-9dc4-c738640349d1@digi.com>
- <ade69712-836c-4cd9-ba79-79b2d97fba83@digi.com>
- <dc8500a8-df6a-45d4-8ce3-1dad4b8f2413@suse.com>
- <a9bc14f2-7f07-44c0-96fa-0616402792e7@digi.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <a9bc14f2-7f07-44c0-96fa-0616402792e7@digi.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250327120737.230041-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250327120737.230041-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <87zfh6yoly.wl-kuninori.morimoto.gx@renesas.com> <CA+V-a8uwJasrQZ+3Y1vgTKz+b_SBULXpXdGYxULUOpPkZgXjFg@mail.gmail.com>
+ <875xjq12vr.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <875xjq12vr.wl-kuninori.morimoto.gx@renesas.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Mon, 31 Mar 2025 11:57:03 +0100
+X-Gm-Features: AQ5f1JocOtJDqSG1p3iXddX3aNepbZDqcge-fFv546733q8ijn8MptjNPw0nAh4
+Message-ID: <CA+V-a8vqnNN119RbRJ5FvEUkWOd+FEHr9g+B3YnZasn=y7MWaQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] usb: renesas_usbhs: Reorder clock handling and power
+ management in probe
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-usb@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-(Adding Bjørn)
+Hi Morimoto san,
 
-On 27.03.25 16:27, Robert Hodaszi wrote:
-> On Thursday, 27.03.2025 at 14:24 +0100, Oliver Neukum <oneukum@suse.com> wrote:
->>
->> Why do you wish to react to this like an error?
->> It seems to me that we indeed need to wait for the device in this case.
->>
->>         Regards
->>                 Oliver
->>
-> See my previous response to your patch. Because:
-> 
->      1. we have to submit another read URB is resp_count != 0 (call service_outstanding_interrupt), otherwise receiving gets stuck
+On Mon, Mar 31, 2025 at 1:05=E2=80=AFAM Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+>
+>
+> Hi Lad, Prabhakar
+>
+> > > >     usbhs_probe()
+> > > >         usbhs_sys_clock_ctrl()
+> > > >             usbhs_bset()
+> > > >                 usbhs_write()
+> > > >                     iowrite16()  <-- Register access before enablin=
+g clocks
+> > >
+> > > This patch itself is not so bad idea, but basically, we should not as=
+sume
+> > > the power/clock was enabled since kernel boot.
+> > > In this driver, register access happen only during power enable <->  =
+power
+> > > disable (except your issue case), and this is good idea. So, the stra=
+nge
+> > > is usbhs_sys_clock_ctrl() call in usbhs_probe() (without power enable=
+) I
+> > > guess.
+> > >
+> > > According to the comment, it is just caring boot loader, and
+> > > usbhs_sys_clock_ctrl() itself will be called when usbhsc_power_ctrl()=
+ was
+> > > called anyway. And more, if my understanding was correct, Renesas clo=
+ck
+> > > driver will stop all unused devices clock/power after boot.
+> > > So maybe we can just remove strange usbhs_sys_clock_ctrl() from usbhs=
+_probe() ?
+> > >
+> >
+> > After dropping usbhs_sys_clock_ctrl and removing the clock enabling
+> > done in this patch and with  `CONFIG_USB_G_SERIAL=3Dy` I hit the same
+> > issue.
+>
+> Ah...
+> OK, not only usbhs_sys_clock_ctrl(), but other initializer also
+> missing power in probe(). Thank you for reporting, your original patch
+> is reasonable.
+>
+Thanks! I'll send a V2 incorporating your review comments next week
+after v6.15-rc1 is released.
 
-Now that you mention that I am not sure that the resp_count
-logic in general is correct. I see no reason user space cannot
-exhaust the buffer and get resp_count out of sync.
-
->      2. we should not set WDM_READ, to not confuse userspace
-
-We agree on that.
-
->      3. we should not set res_length to 0, otherwise  we get stuck again (actually, should we clear the "if (!desc->reslength)" in wdm_read(), since that's is no longer possible anymore?
-
-AFAICT it can happen if two threads are racing on wdm_read()
-
-	Regards
-		Oliver
-
+Cheers,
+Prabhakar
 
