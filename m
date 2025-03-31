@@ -1,131 +1,136 @@
-Return-Path: <linux-usb+bounces-22337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAE16A768D0
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 16:55:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEA3BA7690A
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 17:01:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685AB188EE56
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 14:52:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F3417A226E
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Mar 2025 14:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 797EC21CA02;
-	Mon, 31 Mar 2025 14:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98B421A433;
+	Mon, 31 Mar 2025 14:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="SyRK28Us"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDzMx+jo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D45221C197
-	for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 14:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CC921A452;
+	Mon, 31 Mar 2025 14:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743431881; cv=none; b=CYqeBxXOAbtTB1y4XW7045vxpsoBUHThL0JCoxocpCciuKPOtRCjxUr6cMCUZoekLD4cKdFY8eV7X7EyDX25nMMR/RIbgDW2OJwlSp32mUrDkacdyDUCZHQ2gVRBLI0Wyh02bdzgcEPEU1pJxLj7U4+nQwI9NMGq8FE+ofVtT/k=
+	t=1743432772; cv=none; b=f4cNpEsEoGQuRcpbqAh+DABTOJjFyXK7PeOw801EmYan6I/B2Tu27NtDzLlO3MxHpyCqQLIr1+vIfQ9C12AS+9atrhmeMvCybWJsKsUR37Q3UciNY0fcMROu0YI7v9h01hpTvCbu6eEQD0ifexZqPljbCxgBvwpwH1HqXUOuYpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743431881; c=relaxed/simple;
-	bh=5GuqQsOBQ/wettgqlG9rE0MePw04dSg//SEXlT2WjJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KV5R7AP9btwGGwT3G9hu2JDpWM9qelrsGV5lJuU6AsXa5mMW7O5ZTF+dx4aCoYu8S0axDlqT9mutdcdb/LRURJHHfCOuirq/nrpnDAwI6k7ZG1C8VL8YvBPAYXhEq7vDTQRT8gj+q5gYNCWjQQuvMxWJC9qE0YQD7zk9HCYgoFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=SyRK28Us; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e8f06e13a4so55484906d6.0
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 07:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1743431879; x=1744036679; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DE/sAWU5nCw+S23T4Bkv3/flGqA1IFUngSA9Kn4PpRQ=;
-        b=SyRK28Usi2ArIPgB99vM7d1JJ+bQ4eTWtb1vo1NVitiiGXyLWmLQO4Ga7n1pVl04lN
-         yxEylKVUuwuRM70nTBGy6kp1TCSJ0SkRgq/k/wuelsS106INVH5AujvZswMQ52RmzCZI
-         4uC1MCU5LfG0eLguZn1nc/zbeLaA/7w0gABKJvvo8MP9fpx6pvA7EPvgSOHhm+iZDl71
-         4vMGzmI5cYL6H9N6h1CODJpeI0DHu0VCoK5Hpeqmkns8WWTyJXRO5chy8MvIigZFuZQl
-         xHdH7mCy+1zKSacW/I9Rzri2qeJh9kk+nIum9AKrXotb6oJUCHXhcho7hSnnkX3RCbs1
-         ra3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743431879; x=1744036679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DE/sAWU5nCw+S23T4Bkv3/flGqA1IFUngSA9Kn4PpRQ=;
-        b=K5R1zONCYtn9XNAGPFGO+WvmPnvz0cRMgAlRm5w4Fyww8O7ytnlVATUojyamGgTVU+
-         PYqrv81AK+cl+JrnVticZc7Hd7atvlfIQTUlps+sin3vffT7/uL6Vf9ZXBw6Wqe3Kh9V
-         6vN7dRF+AgNe2DZPBVRzxcPZlG9uyaJr6565zDFtSilwvfaLsjtQFlWHfsrFY9nxoNOo
-         SUYFjbzAtIaPoSqRzxmi/f5t6WKv0yKuzAHY1WO6XqzP6+uampnil60OlxVm5G6YTMRb
-         Hd+TM41qVl+0l6xXzqt8oIilLE2u8JYQn5bEMp3Rq1n007dYUneTUIhAEq2ZuHQMH8PS
-         c1qw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7ZR+P4KQDRFMxn/TZBUJTUZu5zpK4mbbaTaiCvEdBT/pPM2jNUEHakSws02cwHqqJlqgvGfe5+d0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFUthvAAu+kMI+EulJm1nG4C+xJpbw4VU5byP9PfXjkgE9DfYb
-	TIQJ9iSERjUAGmRAfdF7x8UzvXYsA3mQGEbNAuLabQORzttnIw22SCHM6LZ5fw==
-X-Gm-Gg: ASbGncuVoPJ9NoBb6sqyDSjjjUQODdzTdfjmre18udbhUp7QQKODqHBeEuR2jetb8sq
-	IS5pM7gfbL5M4W6x07ljRWI211ItFBnHUVUfg72DbPlxxijp6bIvYsINxvT9PeKBQnHUbxm9Faj
-	JDxkxOmlJBp+TkwEiJu2iKg7K7kms4db2YnWKgXzsjRzsQaslNOs6iMqLV8VHJSS4JQoARDbMD4
-	8NTQOoMeAZjFjjKJWb3HfdudUYdZFaLdoVSSeyH9zHnDtEdi1mQpGDg0W4bzgPTlMORb7JZ0mfO
-	+MmaMmP8GAtueqQ6d0yiNE7tnZFWPMsP8YGxPDEcs/ZVULY869ipMu5D9DEYTus=
-X-Google-Smtp-Source: AGHT+IHE+whbE87lsI1UQ/QzTdYVOSsbIWuODpn6hXAsvKFRJxfvxGSxHa3ir5a/Dc5qV7S2oJPI/w==
-X-Received: by 2002:a05:6214:1252:b0:6ea:d503:6cfd with SMTP id 6a1803df08f44-6eed527fd89mr124796916d6.19.1743431879146;
-        Mon, 31 Mar 2025 07:37:59 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f768e744sm505959485a.48.2025.03.31.07.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Mar 2025 07:37:58 -0700 (PDT)
-Date: Mon, 31 Mar 2025 10:37:57 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: gregkh@linuxfoundation.org, bjorn@mork.no, loic.poulain@linaro.org,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 2/4] USB: wdm: close race between wdm_open and
- wdm_wwan_port_stop
-Message-ID: <1fc14a6e-c77e-4030-bb62-6f6d5bb18d63@rowland.harvard.edu>
-References: <20250331132614.51902-1-oneukum@suse.com>
- <20250331132614.51902-3-oneukum@suse.com>
+	s=arc-20240116; t=1743432772; c=relaxed/simple;
+	bh=WwKf7qEzym3fm1+PYCXiS5nCEC8E5Q7PGj26QpqD5CM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V6JkOUhfGijPsT18BHv2MFUD7fof8oDAsgckKbwygJoQYJWHSEx5Knn6c8vts1cU9R5T/nFboTMkxPzmF27DrhL6Jy9pXb5sp2a7x0vyqPm5IadUAkSaWgRmuqul6YDA21QXlZ/Qlln8wKqwg2dzfq4PlPq2dW8j7gV3UpC7vSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDzMx+jo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FB1C4CEE4;
+	Mon, 31 Mar 2025 14:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743432771;
+	bh=WwKf7qEzym3fm1+PYCXiS5nCEC8E5Q7PGj26QpqD5CM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fDzMx+joGirAUQ6yB6SKfYtAoRk+QLPd9v3bBEg6ItmfPUJp9pmPeRPEEMBHMwVKF
+	 IxT2nMg9F/XqJ5IM7QUXNWpU7SSnJ+9jaKPFaXRQ8e/f/ZGkECTvN04TpYLb97WDx1
+	 drI7Qq4Q+vDe27sC7Ifj9SKGIWVtNIKAPV9wUG5Q2+14++f+Ow73HgsueL2YNOBciQ
+	 COr5Sm5BEPgdUUjsKHFkKOVJgKVf4ErRbaiQVHBYC91YuXxqLWm6qjPesgRec4h39C
+	 t5gUfAuVAdDQvUMQrPX4eFy95Fwgy1SuxUAYnYB3ZeswrVcZePYHuM3T4qVd5121ao
+	 Os3kCQ2sp6D4g==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
+	Makarenko Oleg <oleg@makarenk.ooo>,
+	=?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal@nozomi.space>,
+	Paul Dino Jones <paul@spacefreak18.xyz>,
+	=?UTF-8?q?Crist=C3=B3ferson=20Bueno?= <cbueno81@gmail.com>,
+	Pablo Cisneros <patchkez@protonmail.com>,
+	Jiri Kosina <jkosina@suse.com>,
+	Sasha Levin <sashal@kernel.org>,
+	jikos@kernel.org,
+	bentiss@kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 03/27] HID: pidff: Convert infinite length from Linux API to PID standard
+Date: Mon, 31 Mar 2025 10:52:21 -0400
+Message-Id: <20250331145245.1704714-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250331145245.1704714-1-sashal@kernel.org>
+References: <20250331145245.1704714-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250331132614.51902-3-oneukum@suse.com>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 31, 2025 at 03:25:02PM +0200, Oliver Neukum wrote:
-> Clearing WDM_WWAN_IN_USE must be the last action or
-> we can open a chardev whose URBs are still poisoned
-> 
-> Fixes: cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/usb/class/cdc-wdm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-> index 12038aa43942..e67844618da6 100644
-> --- a/drivers/usb/class/cdc-wdm.c
-> +++ b/drivers/usb/class/cdc-wdm.c
-> @@ -870,8 +870,9 @@ static void wdm_wwan_port_stop(struct wwan_port *port)
->  	poison_urbs(desc);
->  	desc->manage_power(desc->intf, 0);
->  	clear_bit(WDM_READ, &desc->flags);
-> -	clear_bit(WDM_WWAN_IN_USE, &desc->flags);
->  	unpoison_urbs(desc);
-> +	/* this must be last lest we open a poisoned device */
-> +	clear_bit(WDM_WWAN_IN_USE, &desc->flags);
->  }
+From: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
 
-This is a good example of a place where a memory barrier is needed.  
-Neither unpoison_urbs() nor clear_bit() includes an explicit memory 
-barrier.  So even though patch ensures that unpoison_urb() occurs before 
-clear_bit() in the source code, there is still no guarantee that a CPU 
-will execute them in that order.  Or even if they are executed in order, 
-there is no guarantee that a different CPU will see their effects 
-occurring in that order.
+[ Upstream commit 37e0591fe44dce39d1ebc7a82d5b6e4dba1582eb ]
 
-In this case you almost certainly need to have an smp_wmb() between the 
-two statements, with a corresponding smp_rmb() (or equivalent) in the 
-code that checks whether the WDM_WWAIN_IN_USE flag is set.
+Software uses 0 as de-facto infinite lenght on Linux FF apis (SDL),
+Linux doesn't actually define anythi as of now, while USB PID defines
+NULL (0xffff). Most PID devices do not expect a 0-length effect and
+can't interpret it as infinite. This change fixes Force Feedback for
+most PID compliant devices.
 
-Alan Stern
+As most games depend on updating the values of already playing infinite
+effects, this is crucial to ensure they will actually work.
+
+Previously, users had to rely on third-party software to do this conversion
+and make their PID devices usable.
+
+Co-developed-by: Makarenko Oleg <oleg@makarenk.ooo>
+Signed-off-by: Makarenko Oleg <oleg@makarenk.ooo>
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+Reviewed-by: Michał Kopeć <michal@nozomi.space>
+Reviewed-by: Paul Dino Jones <paul@spacefreak18.xyz>
+Tested-by: Paul Dino Jones <paul@spacefreak18.xyz>
+Tested-by: Cristóferson Bueno <cbueno81@gmail.com>
+Tested-by: Pablo Cisneros <patchkez@protonmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hid/usbhid/hid-pidff.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 3b4ee21cd8111..5fe4422bb5bad 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -21,6 +21,7 @@
+ #include "usbhid.h"
+ 
+ #define	PID_EFFECTS_MAX		64
++#define	PID_INFINITE		0xffff
+ 
+ /* Report usage table used to put reports into an array */
+ 
+@@ -301,7 +302,12 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
+ 		pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
+ 	pidff->set_effect_type->value[0] =
+ 		pidff->create_new_effect_type->value[0];
+-	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
++
++	/* Convert infinite length from Linux API (0)
++	   to PID standard (NULL) if needed */
++	pidff->set_effect[PID_DURATION].value[0] =
++		effect->replay.length == 0 ? PID_INFINITE : effect->replay.length;
++
+ 	pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
+ 	pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
+ 		effect->trigger.interval;
+-- 
+2.39.5
+
 
