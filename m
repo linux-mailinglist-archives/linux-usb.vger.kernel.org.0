@@ -1,260 +1,179 @@
-Return-Path: <linux-usb+bounces-22403-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22404-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5381FA7746B
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 08:18:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C169A7747D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 08:30:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90BAD3A88BC
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:18:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB10216AD14
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064B11E1C09;
-	Tue,  1 Apr 2025 06:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B991E2606;
+	Tue,  1 Apr 2025 06:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yzk+f0+d"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vrfZ83L+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBA131E2D;
-	Tue,  1 Apr 2025 06:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743488324; cv=fail; b=lNPgz59pGYsovXPoQp+Rr/aBUqeLRlNTmLyMhdIqgN0HvzU8SfDvDCUkI/J3o2JcX/ezXLus0d44pZQeuWo4Jj+Bs03TXdeRQwJ3leNkVYePJrFp2xAB9FzZbs5/L8qVZkhndPE0eUBwlEYWUNgE8u0voxNspkPcRhNwleOpW1o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743488324; c=relaxed/simple;
-	bh=kOsuPwImtADFq5cyJawsuvh/S1YCn9S1sNyKcnDm2WU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dzmyr5wYpZWevy6q+qIuO/lpMGwPLLCkBRiErRPqgo1uGZTq4wjeofEZh8aQAGVd3V91tMc21q8ZUo4kZZLVunidN9mw+ok15wjK+JNIJxBoQygLK0dCp0mut5aKWH0AvQcY1BC51RQJrXrhkStWYl71PFm1AV21E1IY8BsfitE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yzk+f0+d; arc=fail smtp.client-ip=40.107.94.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NIaEljjncOb+aaScWDFViZCcqM/Y8Qb7JQA6V9tccDl1el1o01zoDABfwP5jFfkMKfF64lqnikAuLvNMZx8wPHbE0N+hHa9/6v9FcDQBTvmgykN3rraEzi3GD40RTNBLxqqphleuyxKyoL/eA8s4JasPVTj5IlgaQxcOlJFmedjSREYrd4qyFWPoejnqA8k50+qIzBLb4iDFBClU+ar0g+MEK5AgoUnWmjBLqME61TpOQVyGv1y1YkCTqMOvXv0Hox8Bd7QLQ0kDvwR5Ctd4U2YEJi1RAfGd5/uNPXCMYi3WlwIn8V+7sTzoetFw+uzVN4w3RNy1fluMF6foWQQFFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=szNTX3sbHWxH5aNq363FPKpROTDLOw/3T8YRVfaAf5I=;
- b=ArtjOWXhhx2B9YJwoaX3HUmyuOJXyQBmqVxQ2Fl0DNh5I8TXGhieBIfC4qSvNV2Tax4UobWQg4yJa+Lc2z7nyuhdVCycYO2uxQYtPK2YW6hTZxedsbmS/H4GRD2n6ENPKsmPQxxQGTfLHO+9LcXnue3KcUnFsakvjF3FGgytJGL6sl1FruDlQmn3/KDCNze/A+2n7OvYsaMd7v3GQdj2uQcIbdoZrPkuq+5iFob6zlAL5/4tN13ex8k1WZ9Dv52HK28YT9ZwLkhT3bqLJ8KxQ949xE1HN+M+TFP7gqCMlptw4Zjm4543RJBqzM3CI0Dkyts3nL5H1USif1r742IDeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=szNTX3sbHWxH5aNq363FPKpROTDLOw/3T8YRVfaAf5I=;
- b=yzk+f0+dM2m7CERj43/6G1otPKCPGWuBZpe3ykEty+nOVZeOwSOOxzrUQc2IwErt+hBQMkqAnT7JogM8yPRay25OW9nkmo6Cp7cK2GzxKoYcGWjkCanop1duLwOd68vj68YXvK2l2GVyuLh07hVwcaauHMsgtIeMrvXJLyXJptg=
-Received: from SJ0PR03CA0112.namprd03.prod.outlook.com (2603:10b6:a03:333::27)
- by CH3PR12MB7763.namprd12.prod.outlook.com (2603:10b6:610:145::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.50; Tue, 1 Apr
- 2025 06:18:38 +0000
-Received: from SJ1PEPF00001CE0.namprd05.prod.outlook.com
- (2603:10b6:a03:333:cafe::32) by SJ0PR03CA0112.outlook.office365.com
- (2603:10b6:a03:333::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.52 via Frontend Transport; Tue,
- 1 Apr 2025 06:18:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF00001CE0.mail.protection.outlook.com (10.167.242.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8606.22 via Frontend Transport; Tue, 1 Apr 2025 06:18:38 +0000
-Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 1 Apr
- 2025 01:18:35 -0500
-From: Raju Rangoju <Raju.Rangoju@amd.com>
-To: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <mathias.nyman@intel.com>, <michal.pecio@gmail.com>, Raju Rangoju
-	<Raju.Rangoju@amd.com>, <stable@vger.kernel.org>
-Subject: [PATCH v5] usb: xhci: quirk for data loss in ISOC transfers
-Date: Tue, 1 Apr 2025 11:47:25 +0530
-Message-ID: <20250401061725.3039278-1-Raju.Rangoju@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11CA1078F
+	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 06:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743489009; cv=none; b=gbEKwiRhyd8DZbZB14ycr1WDBJm21tRsdmkNjVp/Z0QG8/LM8L79AHfDTZBw/g9MKXnv2CMg34OD16lzdTOq2HOD4xsdl25YW3KCQKk1CpLugc/9zP2uhKX1SCZUxTG+B+SmOofqDqD0m1Ow1ULeFoQvCteow3PONFiWr/3BWCA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743489009; c=relaxed/simple;
+	bh=USbG23zlSAIqxxboVL2BnKC5smfMZAVgXPKkRSRld0I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qKr/DGMk9WiwyqY8BdS17ICm9sfH//uilPmveZBrnClkIqGOt7pObV3/YT0gdIGl3yNwdKNnWFZ/g8JEiAAZXLDMszLFtJVp1vGPVearaeWTSJa3he6Qr2bQxaUG0AC8HGKTG0OvKnykHohLQes4kZhxOJpdDsTcgc2GuJHLGBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vrfZ83L+; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2240c997059so121868645ad.0
+        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 23:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1743489007; x=1744093807; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OqYe84wc1n9dIq60dY5m/RZydOIHZgtl3uuNumZs698=;
+        b=vrfZ83L+bowA2yITVR5dVK4I6h82FHlsI+bXSMt8kD4daHd75PRxzM2lIS1swuVn6S
+         4vSlkm9PZC6HcGqdQKnfnpsB2eRCSZvkld2BKs4DzdKXjjWMlrkIpNnUuSkNOHH3TmX3
+         2Q9kjdvBguEr+c/pwt1wnkZVpKA2RW5kX2IB4gS2CLQpzlHJ9MliaUZ+59ruf/1v8nw+
+         Ie+Ny8io77YK/0S65ebp/TfBzYEa9TcCI5uBxZcBCymXMSrggCKMkkbGVw6mG3sGyQSX
+         5OJ86LBJAlgZYwtYjpbLHUQsHpStQuPhX9fPsqaXsfSNVpAagLGkhxGLk2MSTtc5esI/
+         7bOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743489007; x=1744093807;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OqYe84wc1n9dIq60dY5m/RZydOIHZgtl3uuNumZs698=;
+        b=JHvldSaJk4O/0+gBJjgbYTcyUruD0kuRZ/3fBsDkFxv0r5tvHaT8MndQxz3uReeBi1
+         cumHmFnW532P56sxHlIH7iT3Kxw2tlhC3MRJ7leCnjj1U3hAk0aKAIOGAp1m2g6Ncz2l
+         +7QDvBUH8GMUx17nfL8H4ly4Axfuhx8Pn2Gjbyur2jfl87Bgy2eUBDgoGJiW1mCrvC7o
+         5WMMJaHhAjqCL/U05hfm/j97QD9D9tVG2UbWYvZVNQVlA5DtwQ/qAIyYKXxhiBME7PAk
+         vMSYi1TOrW57+gVuTEjGlm1Gw3ElpKDdzFv2QVqNNBS4eGwy8dfe/9K3iRtZgFnVYQCA
+         2Vwg==
+X-Gm-Message-State: AOJu0Yz7Ei98tNZAnoFBHzhzig8M+gLDGZ3DqDjwJbgBOgW0t4ixH1gu
+	4Ye53rxVTr8uSWtJI/7bvOkX4ZcM9H3P9DGr3Pe0GKPXWtlk4kw2MBMaUP1IV1Z/Q1gge7Q2C/t
+	xw+694moM9j0wDA==
+X-Google-Smtp-Source: AGHT+IG/Msl15+/4rANvxgod1MVl7FV/C1o7eT1eyIP5SvPXayKelEHw73RaXYFBCSQvGe7nthOYn87oNf6fxWM=
+X-Received: from pjl14.prod.google.com ([2002:a17:90b:2f8e:b0:2fa:26f0:c221])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f709:b0:224:7a4:b2a with SMTP id d9443c01a7336-2292f942aa8mr216978175ad.11.1743489007210;
+ Mon, 31 Mar 2025 23:30:07 -0700 (PDT)
+Date: Tue,  1 Apr 2025 06:22:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE0:EE_|CH3PR12MB7763:EE_
-X-MS-Office365-Filtering-Correlation-Id: b16ef74a-0fad-4e0e-8d62-08dd70e50acd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sBNBCkM1YxQnpc2KMLiHkvueOvP/Ed4G+HYBfAPBC3mEDSzY/ciRXfyF4TJe?=
- =?us-ascii?Q?t2H+K/cVcc2UKjHDY9meEEFZVXNlB+u6Y8K936iBp/YzX/umPBLJIImwteht?=
- =?us-ascii?Q?M+CtO9BwzvvmO2BZt/mLhx7g4G+1Ci0sVA1IIZU2wwcYKLOpQ7QKQcui6USC?=
- =?us-ascii?Q?O2o7j8YxO7OLsk1uN2y1pAqWVgFZTOL8LVxfrv3xpa3rmTfOAr/x6gEx4wdm?=
- =?us-ascii?Q?H7wD440Tjiz2BJL4SKDY+BsYAtnuTHzIgWQP8s33ydpx2r1Zb+AS4IHMoFWJ?=
- =?us-ascii?Q?iAdauCx8KMtPPLqmbAWLGDkAuRJNFzHMojhRVoaDtO+x4rai1qc6DjLiKC9O?=
- =?us-ascii?Q?5r5Z9l8QTz91P7AobgRBS+K9M7xqRIQaWR5nBoLn3Rffz0uN875aAN5eaGQ6?=
- =?us-ascii?Q?OlAm0U0IB5ju6F/yaQwvfGye/uD/2jgKY9ONygdkOwjV3EOhgVsoixVUWaUx?=
- =?us-ascii?Q?p66DKz7pDol/6kblS3E7w3SpS1e1tJB3TuuygFvo5pnGy4e2O8Jf7IOgWFQM?=
- =?us-ascii?Q?WD31Grvo9gLf1+uJoasTSkyFX0NErREUzMv144DtPSbeZHvFClxzaQTdfv/y?=
- =?us-ascii?Q?wjlE+XflJV1T44tUV6yAi1DD3F7z8z6Xqy2/FwwdwpC4oPkhHfJTS+11YVeE?=
- =?us-ascii?Q?853PEu2jBsJtNhLcaonCv8Pp7uhBFU0mIF1MtqGHhDRuVOFVV2c52RpzqwXO?=
- =?us-ascii?Q?jfo/Zh7E9C99gCy+aZUU15/O3O+V2h+30qCPYJvU8wkFShDtbu8BdiOhYNX7?=
- =?us-ascii?Q?otn0u5qy5tjq1k3uS5xt4See/0wfbiYzEfzAmHyIyzv5oxQIoUwRVUySMM+5?=
- =?us-ascii?Q?vUgpOMrguaUJlIno7eyfR+3pTjOost62W7EWgse1gkf8yxVOpfgb3BC5Q+Op?=
- =?us-ascii?Q?csArMtX/UYK5iuQ1cZT9IAJcqEvQaISEeoDOnorTPsi6unUE7FLc8JqgmIUL?=
- =?us-ascii?Q?/fVGgUbw0vKFBYo4FE3LPRSJDNVnzzYK69+mAbin2kOXaBhoWUutldut0utL?=
- =?us-ascii?Q?mQpczA16U3dKvBKBPAi8h0FLtkl7Syppd6yn1dbcLV7cz0FoJ3xaGM1onb3m?=
- =?us-ascii?Q?nR7xmAeFVw8YiZKVc1gfPQ3dVnxTZnU/mS0GoYKNWvWtsyyHOMDG06Y92lrA?=
- =?us-ascii?Q?6O0/OwK4YfvH5yiYlIpP82rrhlG4vQVHdcFQ2sQEVl/rpKvVPV68+XK2I3LP?=
- =?us-ascii?Q?LPXr798nOc4LTHI7pIFlH7Jwn8VgIbzZTEbBGcpAFwkHX/r7WxHt3sVMhWfQ?=
- =?us-ascii?Q?R6rDcFzqBN89uVtoagfEOirV0OM+9JZo5/0krDsrHTPQzPOcYQLZ0W3rZxP2?=
- =?us-ascii?Q?3nTKSOsBcjJNY3FwAshb9V1yV1TIv1gBq+r7j36WO/7MRZQl4gNGHxzpCCgU?=
- =?us-ascii?Q?9GUheip5R9+heweL1fzmdHRErHSFWpDjgvHgUtZIQWX2tKRGRu3SQsq90rak?=
- =?us-ascii?Q?6Ex6O4wgtcL+bqcfzn2Xn71ZabwbxkGz55lkkoXV2VlEidIiB5QcEa/IIQzf?=
- =?us-ascii?Q?e9CWndYK0oPP1no=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2025 06:18:38.6137
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b16ef74a-0fad-4e0e-8d62-08dd70e50acd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7763
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.472.ge94155a9ec-goog
+Message-ID: <20250401062951.3180871-1-guanyulin@google.com>
+Subject: [PATCH v10 0/4] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu, sumit.garg@kernel.org, kekrby@gmail.com, 
+	jeff.johnson@oss.qualcomm.com, elder@kernel.org, quic_zijuhu@quicinc.com, 
+	ben@decadent.org.uk
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-During the High-Speed Isochronous Audio transfers, xHCI
-controller on certain AMD platforms experiences momentary data
-loss. This results in Missed Service Errors (MSE) being
-generated by the xHCI.
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the system to sleep
+(suspend-to-RAM) and save power. However, Linux's System Sleep model halts
+the USB host controller when the main system isn't managing any USB
+transfers. To address this, the proposal modifies the system to recognize
+offloaded USB transfers and manage power accordingly. This way, offloaded
+USB transfers could still happen during system sleep (Suspend-to-RAM).
 
-The root cause of the MSE is attributed to the ISOC OUT endpoint
-being omitted from scheduling. This can happen when an IN
-endpoint with a 64ms service interval either is pre-scheduled
-prior to the ISOC OUT endpoint or the interval of the ISOC OUT
-endpoint is shorter than that of the IN endpoint. Consequently,
-the OUT service is neglected when an IN endpoint with a service
-interval exceeding 32ms is scheduled concurrently (every 64ms in
-this scenario).
+This involves two key steps:
+1. Transfer Status Tracking: Propose offload_usage and corresponding apis
+drivers could track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(xhci host controller driver, and USB device drivers) allow the system to
+sleep (Suspend-to-RAM) without disrupting co-processor managed USB
+transfers. This involves adding conditional checks to bypass some power
+management operations in the System Sleep model.
 
-This issue is particularly seen on certain older AMD platforms.
-To mitigate this problem, it is recommended to adjust the service
-interval of the IN endpoint to not exceed 32ms (interval 8). This
-adjustment ensures that the OUT endpoint will not be bypassed,
-even if a smaller interval value is utilized.
+patches depends on series "Introduce QC USB SND audio offloading support" 
+https://lore.kernel.org/lkml/20250319005141.312805-1-quic_wcheng@quicinc.com/
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+changelog
+----------
+Changes in v10:
+- Remove unnecessary operations in dwc3 driver.
+- Introduce CONFIG_USB_XHCI_SIDEBAND_SUSPEND to enable/disable offloaded
+  usb transfers during system Suspend-to-RAM.
+- Modify the approach to detect offloaded USB transfers when the system
+  resumes from Suspend-to-RAM.
+- Mark sideband activity when sideband interrupters are created/removed.
+- Cosmetics changes on coding style.
+
+Changes in v9:
+- Remove unnecessary white space change.
+
+Changes in v8:
+- Change the runtime pm api to correct the error handling flow.
+- Not flushing endpoints of actively offloaded USB devices to avoid
+  possible USB transfer conflicts.
+
+Changes in v7:
+- Remove counting mechanism in struct usb_hcd. The USB device's offload
+  status will be solely recorded in each related struct usb_device.
+- Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
+  control the suspend flow of USB interfaces and associated USB endpoints.
+  This addresses the need to support interrupt transfers generated by
+  offloaded USB devices while the system is suspended.
+- Block any offload_usage change during USB device suspend period.
+
+Changes in v6:
+- Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
+- Explicitly specify the data structure of the drvdata refereced in
+  dwc3_suspend(), dwc3_resume().
+- Move the initialization of counters to the patches introducing them.
+
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
+Changes in v2:
+- Cosmetics changes on coding style.
+
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
 ---
-Changes since v4:
- - reword the commit message.
- - handle the potential corner case with ISOC IN ep with 64ms ESIT
 
-Changes since v3:
- - Bump up the enum number XHCI_LIMIT_ENDPOINT_INTERVAL_9
+Guan-Yu Lin (4):
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for offload usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable USB offload during system sleep
 
-Changes since v2:
- - added stable tag to backport to all stable kernels
+ drivers/usb/core/driver.c         | 141 ++++++++++++++++++++++++++++--
+ drivers/usb/core/usb.c            |   1 +
+ drivers/usb/host/Kconfig          |  11 +++
+ drivers/usb/host/xhci-plat.c      |  42 ++++++++-
+ drivers/usb/host/xhci-plat.h      |   1 +
+ drivers/usb/host/xhci-sideband.c  |  43 +++++++++
+ include/linux/usb.h               |  19 ++++
+ include/linux/usb/xhci-sideband.h |   9 ++
+ 8 files changed, 257 insertions(+), 10 deletions(-)
 
-Changes since v1:
- - replaced hex values with pci device names
- - corrected the commit message
----
- drivers/usb/host/xhci-mem.c |  4 ++++
- drivers/usb/host/xhci-pci.c | 25 +++++++++++++++++++++++++
- drivers/usb/host/xhci.h     |  1 +
- 3 files changed, 30 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index fdf0c1008225..364b5a9e7c3e 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1420,6 +1420,10 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
- 	/* Periodic endpoint bInterval limit quirk */
- 	if (usb_endpoint_xfer_int(&ep->desc) ||
- 	    usb_endpoint_xfer_isoc(&ep->desc)) {
-+		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_9) &&
-+		    interval >= 9) {
-+			interval = 8;
-+		}
- 		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_7) &&
- 		    udev->speed >= USB_SPEED_HIGH &&
- 		    interval >= 7) {
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 54460d11f7ee..6c15b4158f06 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -71,12 +71,22 @@
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
- 
-+#define PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI		0x13ed
-+#define PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI		0x13ee
-+#define PCI_DEVICE_ID_AMD_STARSHIP_XHCI			0x148c
-+#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI		0x15d4
-+#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI		0x15d5
-+#define PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI		0x15e0
-+#define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
-+#define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
- 
-+#define PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI		0x7316
-+
- #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
- #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
-@@ -280,6 +290,21 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
- 		xhci->quirks |= XHCI_NEC_HOST;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-+	    (pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_STARSHIP_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN2_XHCI))
-+		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
-+
-+	if (pdev->vendor == PCI_VENDOR_ID_ATI &&
-+	    pdev->device == PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI)
-+		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version == 0x96)
- 		xhci->quirks |= XHCI_AMD_0x96_HOST;
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 779b01dee068..6de1164e2e53 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1637,6 +1637,7 @@ struct xhci_hcd {
- #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
- #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
- #define XHCI_ETRON_HOST	BIT_ULL(49)
-+#define XHCI_LIMIT_ENDPOINT_INTERVAL_9 BIT_ULL(50)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
 -- 
-2.34.1
+2.49.0.472.ge94155a9ec-goog
 
 
