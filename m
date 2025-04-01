@@ -1,80 +1,87 @@
-Return-Path: <linux-usb+bounces-22401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977C8A77401
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 07:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AA6BA7740B
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 07:43:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D96D1690A0
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 05:38:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEF4E16853F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 05:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375411DED72;
-	Tue,  1 Apr 2025 05:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315D31DE2BD;
+	Tue,  1 Apr 2025 05:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eSSDghq6"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="l1X5uVKE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FD3C2C6
-	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 05:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FFC187550
+	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 05:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743485917; cv=none; b=GlXcmgsFudd4H1DZtsR3YN3gwp1N1l2juT9qDKFmmc9A7x15eBrEVc8jcofKu+5S+fH11CtHV3pr4KyHvd/CceTGcXlWacmuS2cQM7Z7Dpa/ijACatBJ/I5QPK2ChY0d32xAcJnmwtSmdszoqCAx+iF/grAVLJcvAJgWHMeJ0T0=
+	t=1743486210; cv=none; b=GuimyaWwPF1Hhjr+X3L3E1Nbu4LzeFCSn40KqaCailB/+h+k/4kueyCzD3u19bFCO4o0hHOV0Lw/SONm1IaZGsNRdLc/0ldf8u8rJfUSFLPpvKNVh8PoY6PAkv8o7wW44ZQm6K7hgUG/TOx9tCs2rTxia2xcNU8UR+goNaJxqOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743485917; c=relaxed/simple;
-	bh=CErkKDEjU9Ktzy6kTr9k/XT5kFEz9hg4L3vyVBes7gU=;
+	s=arc-20240116; t=1743486210; c=relaxed/simple;
+	bh=SwnRx78oJ+t+ZIV01o+BoWbkv/UO2URLd3njvMzcoVM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tEeSsaDkxunOGy6O1SmGuylYMIGwa5EcyCKxSVrPVbJ79xbz6J+PjUtZZ1CpxcIHR77/SXTs0D2d1G91ee3PNDzaoSKmKHgkt9Cb3OF6vDoK2BUH6wQ4JTyFDviXcLf39LJm/iM7//IRiToz6Rw0vZdY6vYM2Mebof/5mcR5Oq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eSSDghq6; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43cee550af2so3870145e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 22:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743485913; x=1744090713; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOpoP6PSaztLl4THg2Btve5EdP4mRwwEJFJZnZpMdgM=;
-        b=eSSDghq6WjlPvmAYJcJ96cByFZhgzFSngECRPwqrqRuoskN0tD0oGL/NuOZL/oG2rs
-         moc20F2JfZ0B12TCx8RYvBDepAgAfiXYCw6uBkU/HInLrUNT7jIJmHNd9laTOThFpaie
-         RmzKNesQxnLWIvogolRSS7N92xlnWq6bhbRTcqyfaU+XuGgHWZJX3QDML+v94D2F7+tz
-         5jcGuve1+f4FEfpPQ+5HLvo90rv63xWycnMfnQMXz+rNt74MCBa+NUGaXDYy0cQoWPL5
-         lTFH5nWsTfbHaVqo7tjtWLg8CP4aKzqztGBt6ykARXOTELHSmM26OW6UE893eTEW/wmA
-         3glg==
+	 In-Reply-To:Content-Type; b=g1/MhmV3kQRIXZXogWV5639MEBuHFxkHqVJLqvNUJOhr/qe5NTENyv4HFvTTF6q/zcIdLAQ2plY2wJGqcH42/Sb9+/+dukplQjX4A3DiPcfkauFwz/uoik7GbjdGixgKM8z2+I8XMYZIV6yBY+jiOrLN4rR3xK1tKq9KEf1e8ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=l1X5uVKE; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52VFCrK0025837
+	for <linux-usb@vger.kernel.org>; Tue, 1 Apr 2025 05:43:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	66+D7nE5qKkdJ4daDmuUIadvGENO/tgUBOSj9nZjjGs=; b=l1X5uVKE59j55yHC
+	kDxz08QO4e5TMV+i890lIcVqBIt/BNkL7CWOTVunIu9ttb/8Str+fWETuHE6HNNz
+	dgpaCPH79SCcbdBM4fLndjEfTNDtp/eEiQyCNz9NYPPG2Dev8ZFfGVb5FCoUD8yS
+	HNmMTIdxCtbHCAwqNXK5eakjsAXrbmwUQ5GYuCpU27UV6A/y6Lgg0SFPfk5bNud2
+	1FGavuVri6m2tMlOaUjeVOSRPuIvvHBhh+uBGCNFIhSFm6ES6zHbC7ZTkuoIOfIB
+	jCBxBL+9qM34A+XOPqkiYkiTf4/AKUm/6qbw2MMAecLaCImae3mnjs9K98stqszL
+	8V+C4A==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p6jhpu1j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 05:43:28 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-223f3357064so84794305ad.3
+        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 22:43:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743485913; x=1744090713;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bOpoP6PSaztLl4THg2Btve5EdP4mRwwEJFJZnZpMdgM=;
-        b=qwjKXyxriF08pQd+zxKaeFNT2DkFmctEb1XpevL6rPfvC3NvlngKnCZe8+QuqhWF5q
-         27c0Jx3hncUyrwI0271xiKBAbUs+SqqP4+8dlS985wwC5zpgacOZHuugJ+NLCOuKlNzz
-         Vpr6kW1+PZwwfneq0GF/a5rotjGJgPP3Pgfsb9TDoqE+YZmIMc/wtFPGXmoKoO2S95G4
-         nCG42OVnp4XmT4X2BWUYAFr4kSaSlVbbEJwGyegAo4fA2628NkqgLXBGYxIBP14xqMc8
-         U450h5fXdn2ZP1GiIr/97bQjbYCLKqYqCh/UG6PeCvb7Gq6v+1aBpnU7dRAImNBDS/yV
-         9kiA==
-X-Forwarded-Encrypted: i=1; AJvYcCXVxL6MdDKeG+83AP/CxpjPqC/g8TwPNY2WWjv476h6dPPlXtURDvmrl4OMxx5Ry3V7q+b1FSa5Y/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUf9TaP+9Hyt4MLxfNWIn98qJex25AjSYiSJ2bzrnhjfOQR8tx
-	bYAWnGRCfRtoG4z0jj8e+kTwkR3LYoLbupOyzXIj0IxDSpo6ekjoKRBfn2ooYP4=
-X-Gm-Gg: ASbGnctrTWjD6hBczeqAcaIG/kSIeqeVSisrp7ls41f9uJpusP/NNyaaaaZqXfQ60v1
-	O9lKzX5nCUDulSyXmWB+jUDxYJJSx8CG0KN+dQSg7uBPPAZ/EIpmpS7BlHza1HJSUihFdSy2mxA
-	DLIe3oNubjV53w4yXCekeVOwJxCT4C39jh56rJJmh5qzocYSmlydeDhS8eNTuFf0WL6wSyqc7cI
-	shFdeITJAjAS4aaJHF8XZZm/coVMXFMOda7lpa2tEbZS37eFuU6yuJ2k65LuLg3l2ebU94jLVgB
-	+Ssb97993EyvBhODriSRiONPBVbMGrVDudh97O6ToSimpSpFUlB66LzFs3Mco7Q=
-X-Google-Smtp-Source: AGHT+IHolxMjUnLGFkfC2w74/f/AQfcpTxmuYQXIpvrtRTrSCdapL3ByrIc22eis1XEbS7cr+DyvLw==
-X-Received: by 2002:a5d:47a8:0:b0:39c:1ef2:fe3e with SMTP id ffacd0b85a97d-39c24707735mr242318f8f.6.1743485913265;
-        Mon, 31 Mar 2025 22:38:33 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c0b658838sm12938694f8f.5.2025.03.31.22.38.31
+        d=1e100.net; s=20230601; t=1743486207; x=1744091007;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=66+D7nE5qKkdJ4daDmuUIadvGENO/tgUBOSj9nZjjGs=;
+        b=OqQ2UtdYl1mUcx9DKI8ogakBr7V21PH05ve4tcvm00NcdWWtwKYPpiwfKELsFHhEX5
+         ou7UgQQvcsZeuzfUU0p36J1b2HwCVpkZM4/LCjACGnOQOGkKRzbr5PEkyIACJuB1cBlu
+         uO9Pg4F/0dX+3Hh3xUstjSaTKdiR3smxdDxXiWqO9x25OczUunX9gsBa9Gx6HKvohpoD
+         r4YIsTwMAQmJBSY+WBCiN8Bw5ZbDak15Su0M3sdB7h67XV88oK1JRvxa309cZJtVy1Vc
+         7Uxbkf21oDobScKoB0I/+19fi9aiQBLlm7rlg+hylBnQY9Vq14fqzYbce+rODX3WE+45
+         Y/3g==
+X-Forwarded-Encrypted: i=1; AJvYcCWCWzXEIJJ0K0v3rSi0kLvH5MA8bghQ8TwtsnbCBf2GtGCwzWDuSF1KdaUOapi7wOxvmExQ9XCOlJ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5M4TJh9reFjHvrXzB3dqjYUSEp3VkmSWfSVXJ6PrXzoYhS54V
+	j65smhg52XjnTLu3J6SGzHdO/ZFMWWVvy3luXI/jd/8ANjpydP8FruE6/TauNhtjx2EP8SxJHWC
+	/KNoY5AoIrHqXdrQC4pfarD1pVv4SPGHLIDay0mHBh4ugRZA/9TMwiXvNQS4=
+X-Gm-Gg: ASbGncum7cMN5+ZNfZZQFwJkHvX4FxilSNkiuMjLR4fTbC4LaJb1FGTZycCk42YRvPz
+	DZetLq29pJkm4U3pyZO373v89otO27e7F45JtJLMgeM5ynqS+m7vcnocAbpb4lR+d8kdR7oKi2T
+	7jHJjDGKQSbOr12p+Q4efHKcn6fmWoN1FuVjESsyte3vAHg5Ws3SwozA4zWe3t39B9hXd1SsGXn
+	oaMAT2qf2868HgI0sffJbLRA84synhT1LmI0YyKfzplJS5qB+7oEMGjseG2HZW48CS1BcgIaum/
+	ah+/LUlqIkTDblzbDpYyo/F+kBUPY7Dz5Thz00S8lNozOaU=
+X-Received: by 2002:a17:903:1c2:b0:227:ac2a:1dd6 with SMTP id d9443c01a7336-2292f974a5bmr185669185ad.24.1743486207247;
+        Mon, 31 Mar 2025 22:43:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHBGv2kXUZkjYQVkGex90enEWlxQkgChxhnJNxuI71EPO9S9/XsFTdb1ksSAJUaPYMKS+L1NA==
+X-Received: by 2002:a17:903:1c2:b0:227:ac2a:1dd6 with SMTP id d9443c01a7336-2292f974a5bmr185668895ad.24.1743486206839;
+        Mon, 31 Mar 2025 22:43:26 -0700 (PDT)
+Received: from [10.92.176.227] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73971090928sm7987817b3a.125.2025.03.31.22.43.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Mar 2025 22:38:32 -0700 (PDT)
-Message-ID: <fb1fc0aa-4921-4ee3-9b8a-6167ef6558eb@linaro.org>
-Date: Tue, 1 Apr 2025 07:38:30 +0200
+        Mon, 31 Mar 2025 22:43:26 -0700 (PDT)
+Message-ID: <0767d38d-179a-4c5e-9dfe-fef847d1354d@oss.qualcomm.com>
+Date: Tue, 1 Apr 2025 11:13:22 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,103 +89,92 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/6] dt-bindings: arm: qcom: Add Asus Zenbook A14
-To: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Abel Vesa <abel.vesa@linaro.org>, Johan Hovold <johan+linaro@kernel.org>,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20250331215720.19692-1-alex.vinarskis@gmail.com>
- <20250331215720.19692-5-alex.vinarskis@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
+ exceed event buffer length
+To: Frode Isaksen <fisaksen@baylibre.com>, Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Frode Isaksen <frode@meta.com>, stable@vger.kernel.org
+References: <20250328104930.2179123-1-fisaksen@baylibre.com>
 Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20250331215720.19692-5-alex.vinarskis@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20250328104930.2179123-1-fisaksen@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: _-EgD69qHUVX99vj3S5OrROHMRlygIl-
+X-Proofpoint-ORIG-GUID: _-EgD69qHUVX99vj3S5OrROHMRlygIl-
+X-Authority-Analysis: v=2.4 cv=bZZrUPPB c=1 sm=1 tr=0 ts=67eb7d00 cx=c_pps a=JL+w9abYAAE89/QcEU+0QA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=jIQo8A4GAAAA:8 a=VabnemYjAAAA:8
+ a=SHyoynBsh-P7v1gKxDYA:9 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=TjNXssC_j7lpFel5tvFf:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-01_02,2025-03-27_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ impostorscore=0 mlxlogscore=771 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504010036
 
-On 31/03/2025 23:53, Aleksandrs Vinarskis wrote:
-> Document the X1E-78-100 and X1P-42-100/X1-26-100 variants.
+
+
+On 3/28/2025 4:14 PM, Frode Isaksen wrote:
+> From: Frode Isaksen <frode@meta.com>
 > 
-> Signed-off-by: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
+> The event count is read from register DWC3_GEVNTCOUNT.
+> There is a check for the count being zero, but not for exceeding the
+> event buffer length.
+> Check that event count does not exceed event buffer length,
+> avoiding an out-of-bounds access when memcpy'ing the event.
+> Crash log:
+> Unable to handle kernel paging request at virtual address ffffffc0129be000
+> pc : __memcpy+0x114/0x180
+> lr : dwc3_check_event_buf+0xec/0x348
+> x3 : 0000000000000030 x2 : 000000000000dfc4
+> x1 : ffffffc0129be000 x0 : ffffff87aad60080
+> Call trace:
+> __memcpy+0x114/0x180
+> dwc3_interrupt+0x24/0x34
+> 
+> Signed-off-by: Frode Isaksen <frode@meta.com>
+> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for processing events")
+> Cc: stable@vger.kernel.org
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> v1 -> v2: Added Fixes and Cc tag.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 08c329b1e919..1b7e2ed56baa 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -1133,6 +1133,7 @@ properties:
->        - items:
->            - enum:
->                - asus,vivobook-s15
-> +              - asus,x1e80100-zenbook-a14
-
-asus,zenbook-a14-x1e80100
-
-asus did not make a component of x1e80100 soc.
-
->                - dell,xps13-9345
->                - hp,omnibook-x14
->                - lenovo,yoga-slim7x
-> @@ -1144,6 +1145,7 @@ properties:
->  
->        - items:
->            - enum:
-> +              - asus,x1p42100-zenbook-a14
-
-Same here.
+> This bug was discovered, tested and fixed (no more crashes seen) on Meta Quest 3 device.
+> Also tested on T.I. AM62x board.
+> 
+>   drivers/usb/dwc3/gadget.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 63fef4a1a498..548e112167f3 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4564,7 +4564,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+>   
+>   	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+>   	count &= DWC3_GEVNTCOUNT_MASK;
+> -	if (!count)
+> +	if (!count || count > evt->length)
+>   		return IRQ_NONE;
+>   
+>   	evt->count = count;
 
 
-Best regards,
-Krzysztof
+I did see this issue previously ([1] on 5.10) on SAR2130 (upstreamed 
+recently). Can you help check if the issue is same on your end if you 
+can reproduce it easily. Thinh also provided some debug pointers to 
+check suspecting it to be a HW issue.
+
+As per the comments from Thinh, he suggested to add a error log as well 
+when this happens [2].
+
+[1]: 
+https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
+
+[2]: 
+https://lore.kernel.org/all/20230525001822.ane3zcyyifj2kuwx@synopsys.com/
+
+Regards,
+Krishna,
 
