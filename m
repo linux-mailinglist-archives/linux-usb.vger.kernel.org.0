@@ -1,93 +1,93 @@
-Return-Path: <linux-usb+bounces-22397-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22398-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54980A772BB
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 04:31:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31BE6A77341
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:08:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BB9516A7BE
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 02:31:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF3AC3ACF6A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 04:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4AE518C936;
-	Tue,  1 Apr 2025 02:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ckz3va9S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE7D192B90;
+	Tue,  1 Apr 2025 04:07:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE183C2ED;
-	Tue,  1 Apr 2025 02:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFB87FBA2
+	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 04:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743474670; cv=none; b=pM/Ana3tic/VMQTo3WXBuLL4g+fnuRkebTPmmvWzFlqhO/metTq0My9PrLsjjS5pLUtdGzyRQxbmBsPAL2UrS58E0iAzmHxI57wFh6ES9Huo52qNeDSYIjL6NpYT+LopcPD1iiu3U/sJbclMMuWWOwGpDqwxA33pu03dzXNu4l0=
+	t=1743480477; cv=none; b=KqkPFtKz+fRB0y7bSoKlvZtlipMitXkADV1FiuQk8z+BH+ZcUkibdsnOe1ahRTRMX7wd7/5So6a+gf/S9TAqBzz2V3ZTvWudXOMo5IlQ3WlodJhYLSgvuqwWOPWtHaRbfXiapWCE31uj+d734b+e66cKr+ByVdofTm9aC/mUw7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743474670; c=relaxed/simple;
-	bh=4MYpM8jnr/X1wA3ZJOyYKyFQrCEJfGH3h3VkCqnbT6M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZIt8ApLyaRAuxdDDjJwEfduG75nDdFO5BAoCUQs0/abElSVz+nM1nowKSCYiQeHkoeiYv9C17Y7I4C/UMQy8MguJq1mHRZo2bh2x5kdlDoo/39gcjse1vsGD0Kh51PNn3lR1bQVW1KPx3C/yxZyTAEwVSOCFyM3tIa3xcOn1nbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ckz3va9S; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZDN6N
-	BtOaJ5NgefmbSoc75r2LxpCFClFNBh8uIuOEGQ=; b=ckz3va9SxR/N+V2EL50vl
-	SBT0t09ErUhHCl57MhIAY2idov3dRfHPllubCh1yNnVLHeC7B9j9+jOQEdPGWA2D
-	wvf8LM1fFY1p8QLosqGuYIajP9waXxzDxBNcxRltp2c5sttBWD/2AF71+Ew9Wnh5
-	JjgIWswuxRTomhh8jdIhDI=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wDXYaTWT+tnqHd2DQ--.1943S2;
-	Tue, 01 Apr 2025 10:30:48 +0800 (CST)
-From: Miao Li <limiao870622@163.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	limiao870622@163.com,
-	Miao Li <limiao@kylinos.cn>
-Subject: [PATCH] usb: quirks: add DELAY_INIT quirk for Silicon Motion Flash Drive
-Date: Tue,  1 Apr 2025 10:30:27 +0800
-Message-Id: <20250401023027.44894-1-limiao870622@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1743480477; c=relaxed/simple;
+	bh=6ei/J9HuzXOkVvbNTD3Zbs4Jz2FvchdANo41vCzU/CA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SNA9ReJuwYHZoteqIO7JIfG46bxRVMbVgbDhP0Kn17Nf3Y2+bZ/w0ycisOZMNimGU7EFulKhMV5mZkpb8YvBI3yUgAr9NUJponWiFhAybu7ocUzsEOPuuytNDxmrzrOAAEogplRCtpcqGq6YlbciOeIRylzK02cCAEnyl16zc4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from [IPv6:::1] (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 5313lvUW010557;
+	Mon, 31 Mar 2025 22:47:58 -0500
+Message-ID: <bcce62d1bb233edaf39637a60089fcc146c8173f.camel@kernel.crashing.org>
+Subject: Re: [PATCH] Subject: [PATCH] usb: gadget: aspeed: Add NULL check in
+ the ast_vhub_init_dev
+From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To: Henry Martin <bsdhenrymartin@gmail.com>, linux-usb@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org
+Cc: gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org
+Date: Tue, 01 Apr 2025 14:47:57 +1100
+In-Reply-To: <20250329002911.132826-1-bsdhenrymartin@gmail.com>
+References: <20250329002911.132826-1-bsdhenrymartin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDXYaTWT+tnqHd2DQ--.1943S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Xry7Xw45GF15GF1UCr1xZrb_yoWDJrc_Cr
-	1DWan3u3W8CF9xtrn2va1fZrW0kay0vryvgFyqqry3JFW7uwn5Jw47GFW0vw1UGFykJFsx
-	tw4Du3Z8Zrn3WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRitCz5UUUUU==
-X-CM-SenderInfo: 5olpxtbryxiliss6il2tof0z/1tbiShYizWfrTOx3iAAAsg
 
-From: Miao Li <limiao@kylinos.cn>
+On Sat, 2025-03-29 at 08:29 +0800, Henry Martin wrote:
+> When devm_kasprintf() fails, it returns a NULL pointer. However, this
+> return value is not properly checked in the function
+> ast_vhub_init_dev.
+>=20
+> A NULL check should be added after the devm_kasprintf call to prevent
+> potential NULL pointer dereference error.
+>=20
+> Fixes: 7ecca2a4080cb ("usb/gadget: Add driver for Aspeed SoC virtual
+> hub")
+> Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
 
-Silicon Motion Flash Drive connects to Huawei hisi platforms and
-performs a system reboot test for two thousand circles, it will
-randomly work incorrectly on boot, set DELAY_INIT quirk can workaround
-this issue.
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 
-Signed-off-by: Miao Li <limiao@kylinos.cn>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 8efbacc5bc34..61583a1b7ac6 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -383,6 +383,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0904, 0x6103), .driver_info =
- 			USB_QUIRK_LINEAR_FRAME_INTR_BINTERVAL },
- 
-+	/* Silicon Motion Flash Drive */
-+	{ USB_DEVICE(0x090c, 0x1000), .driver_info = USB_QUIRK_DELAY_INIT },
-+
- 	/* Sound Devices USBPre2 */
- 	{ USB_DEVICE(0x0926, 0x0202), .driver_info =
- 			USB_QUIRK_ENDPOINT_IGNORE },
--- 
-2.25.1
+> ---
+> =C2=A0drivers/usb/gadget/udc/aspeed-vhub/dev.c | 4 +++-
+> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> index 573109ca5b79..1709a58299a5 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> @@ -545,9 +545,11 @@ int ast_vhub_init_dev(struct ast_vhub *vhub,
+> unsigned int idx)
+> =C2=A0	struct device *parent =3D &vhub->pdev->dev;
+> =C2=A0	int rc;
+> =C2=A0
+> +	d->name =3D devm_kasprintf(parent, GFP_KERNEL, "port%d", idx +
+> 1);
+> +	if (!d->name)
+> +		return -ENOMEM;
+> =C2=A0	d->vhub =3D vhub;
+> =C2=A0	d->index =3D idx;
+> -	d->name =3D devm_kasprintf(parent, GFP_KERNEL, "port%d",
+> idx+1);
+> =C2=A0	d->regs =3D vhub->regs + 0x100 + 0x10 * idx;
+> =C2=A0
+> =C2=A0	ast_vhub_init_ep0(vhub, &d->ep0, d);
 
 
