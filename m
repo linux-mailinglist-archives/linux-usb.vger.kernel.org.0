@@ -1,80 +1,81 @@
-Return-Path: <linux-usb+bounces-22399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01F5AA773F7
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 07:37:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536FCA773FD
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 07:37:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B33553ACBC0
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 05:36:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1CB6166FFC
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 05:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13021DE2A8;
-	Tue,  1 Apr 2025 05:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340E71D63F7;
+	Tue,  1 Apr 2025 05:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d8YhWPxe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PFkXiwP6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE4E42052
-	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 05:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BCD42052
+	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 05:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743485825; cv=none; b=PhfWeKNwo+7E/54IddYsHKkj29pqjonHwhzK9UB1zjLhHEDp8j9d6wFALw0EH0Unr5A1TNcxSJznZP3PT87NrKG5kvuB/hE0JFNo0q6YboPu4eS0s4vibthstqsvWfclD286D6vFuzUH9OO67Hw7HmLmdzqnhUiY5SM81wUIFr0=
+	t=1743485847; cv=none; b=Lqb0hP9lOMKJXXlgER9ZwRCveq7tonCZ3EK9qeS0s+50vOtvxgPba6iOTfLVI/74mcSsJ0qHE8sMhBgKPDAXtYs25zEwDSdfgIxlrK0UZYnM7EhMDwXreFuWEnVvJRN5sPz7SKyI1jOkN1WRi3qpDjNGf1At6rVMYNVG/gyamY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743485825; c=relaxed/simple;
-	bh=JVZidevUngCAlUzSm2CT29tmFHp3F9Ed94AR2VALx4s=;
+	s=arc-20240116; t=1743485847; c=relaxed/simple;
+	bh=s0VbEY+y+zt4UWZGVhiFYKXCJFm5wzoLHCoJFYBIOjQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SUe5qkbIcmsKkAAyc+v/ZNr/zaY10dXAjUN7NWDbNz4hIJyqnQLssiEyrLg49hYz3d9xVy+6oJv0fZuHwFop6RCXWc6U6sLQ3l0kqvJto4PoDcDesV8NMe5p2psQ3hiNbjPaVhw/UMBjFtf+yThGzLYFjf3ZUYoNr/0riA+Uyuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d8YhWPxe; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=CUpSZHLsIqKW9qSnQaI4b32sjS6CX/zjoL0oyfJrHGbVwYOVks/kNWDS61sdUlxy5aAuTiw+glQuMDaCmzANV5WKeAb+Q9GtE9tsJNjx/UOvxqyNBxDK3RSa2vWhxCc+YpMLdC3//4LYr60338+ffrBALfDKRX+E6xNySZhabls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PFkXiwP6; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43d4ff56136so4575875e9.3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 22:37:03 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43d0953d3e1so4197685e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 22:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743485822; x=1744090622; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1743485843; x=1744090643; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=01iB6URHrpWHBfa0GAIF+nEI7/XyRofj2bP4175TeZs=;
-        b=d8YhWPxeyTIcjUKwj4Nr6yf0RtY02LJVIBpfhcsyPt6OBmXLFzvVtyLFm62qK2nQZh
-         1mCdyLMA7jPfZ5U8YU7OtTEzvrVnfbsW4PF1MeUYTtMnL34NavA9of2s25aNjGEs0fj+
-         LFBHo6to+OlepGB4XBXu5vW5J2h1L8EunbJoYuQQXsLvheNbqkGQDcJgiN59cjMa2WJI
-         hqBkwq55Ql8DYGMw3Ro+LZEhbqdJzQJ6DqyYSscOOsnnDydVIY1yAZtHpWZrbEu1oZTH
-         27QB/TsRWJGq7aGYYiv7ElZ36jYXCvPCs9ihgB1XUyEe+e/JrIxPTHh5bsugZSyCd12T
-         /16Q==
+        bh=7sGlS2iL/z9B2onN9uyeopwDJJ8I8KTQrZr2eIiejDY=;
+        b=PFkXiwP6yukpkZN4wO1vxEMLABJhjfG2anYAeBCMbNbIccwhd8E8cVDxNNDkxYirbt
+         JqQz8wp4hTxsr27qjt9+Nq8PCgaOzD51Ne9tJ9BzLHuBqjx1BcIQaeGXpwR0R1f3zpH3
+         CJG2Ysa+znaO0CLCVik3N3mj3G/g8j3HWBhOaKMA1KuFx0/nnMzm8+kudgjCuOmbEY4S
+         2bipBPv6+nHnUbiJjJLPguAzhRtOmfBnE7+XdddFidA4ZMuk/ZzlFT8HKLrVJegsZrZ+
+         E5Mmw9sapmSE5Et53h7XY8/kb/zWQfqmJwnrgptnQP4TwQ7BqGhweHTiYUi42eIXYnU1
+         FddA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743485822; x=1744090622;
+        d=1e100.net; s=20230601; t=1743485843; x=1744090643;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=01iB6URHrpWHBfa0GAIF+nEI7/XyRofj2bP4175TeZs=;
-        b=Y6K2bCX7KQqHpPf6BNaEmZAMjptplZ1Yev+a1zFZr51IwFWyUTBFtsNixXpNMkqeVJ
-         S5BWzJ1aaE5YUjK/OdvQIg6W2XHGEW3upxlQxm3IklFrr2YZN8MykUqHL8EnbU4q45iH
-         bshQpyhFoxsd/EAuxjoH8Zgn7lh1oRBj/N7ifx5mI5y5ahZBtjV1RwEhjQ9aqDRMPNd9
-         j8v3/zNNApeQK9oUJgRaskWDneeguoGGyXmfQHIyHSYaznZb7wzrfDGxr/cN9mFjvaoK
-         IHYzBJ+DnVakn2oCZVPC//8If0lmkYTRjLm7aHlEz17enwGlJRSuR8yvF8MGusWK429h
-         MFTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXv00ynBv1UQPpYb9JZZkbgWSok2xKK1PRQPajscV2aoeC2ytJVhy0lpyYmuBT7gFYNjHqyGn6+9jM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf+Sl67Ij8W4PA9J7O+MlANItDpSJUtaOrzJY1VjaX1epXZx+D
-	5phiml4FbwVRVYCpCSJxyR/QOmbwluBVbqKd4oEuihSqfk68KaxMLRAN+ZFFKho=
-X-Gm-Gg: ASbGncvZVR4ecyzmF1MpGlaFepCuE4ELbvOBujbKoTjY0T2JPVzq72z7TxhdZDRfpkS
-	JM2DjqwyjVtpGguE1yiwP1R7RrPMraaOqoo2yzMxdn2s3zou4PVLdaI+82R+xygH41AsqcvCDR4
-	d3hkrnHgaE3cQOCFH8hWA/W4Mo3K1RPw1l0gVA762y5W2xGjET3WCe1LwT/iQB0uTpJ0OWHnxqJ
-	4wrYYeYaD1K/zXbGH6ADzo1tYED/ShRJpeZktKtisQDSBhy8UsHj8vG6lPx1Qy4qFokiVObB7bw
-	PC/3HWSXEuRFCEZJkHjz/8ZUbiq7shh7hXaIlBvwwfkbuY6k/lSQWmZ8hX64ED0=
-X-Google-Smtp-Source: AGHT+IE4yTXgJb7kf83ZNcToY9GsgqSHspbGawtIOKUIsde0qt4ASpveIQGP0VhqlWUOIBws0phEVA==
-X-Received: by 2002:a05:6000:2913:b0:391:2b54:5fb5 with SMTP id ffacd0b85a97d-39c1211409fmr3321404f8f.10.1743485821816;
-        Mon, 31 Mar 2025 22:37:01 -0700 (PDT)
+        bh=7sGlS2iL/z9B2onN9uyeopwDJJ8I8KTQrZr2eIiejDY=;
+        b=nDRZuMTDqOHo8Y/VPrelS2UKbC+g7W5BOYP/5LUFhbJLjoyO+wI+esKBIHuyA7kpsC
+         jGk3a7XEUd1um7sg+29xm/VlCYZwX0KZsK5J/ujHwad+mjSAugiTkTVGJDTGm0TldQlF
+         Ku+cBXrUrbyH1hVKiY4tT1YipaFsFJT3mCKXgUtm2Pv2beWmgpU7LbvHH5djQzyD6g6a
+         N6XpqmlZgn9zx0cd07m53skMmJOoiUxyXrAMdbcnlRKyzXED+M8p634zbK9WdoB+nxxq
+         axHukf4COmyd5MDbgfHJ3XbIorzczuVBBdT52ipmClFaYj+1Se4vQhVJLP5SM04GQHeW
+         qXwg==
+X-Forwarded-Encrypted: i=1; AJvYcCX84Cj7dFroSwRaGzzzKPcPPyy9s79ubqvhp0wfC2+0YQj8R/3graf5vAxDxXx4h+7cn+FeDca8oAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH2U2XPrBCGyMMGjJUgszsw4PcWXNCT1dqlcUdL4/J70HmGmAa
+	mEIq4bAaO8JKYlidi+GlHcAaCeuBEr+SFWgK1AkJZ5Ft/WcB5y3yKU4jMnvNZ7U=
+X-Gm-Gg: ASbGncu3TEmb74rM0dq/QnwnwrXm1bViuwJsIv+fvFZSCLPoO3IcyA8YhqIhnHhdngA
+	2N05FAr4o5J0Aqaq/mHRZx7nj02+03LWUw/pVPwIUUzspsnQ0nSUvPfPfiyExy6LjppbZB9OVzd
+	VkPYoo8HIrgKrlzx9tFEdHNLeXLJb5SzG9J1e09ZIaoijPbJ3TMXOB2pkBa34x2zeALn6F9iRkk
+	g6k8RdUfbY7HXjzV8ZpTyAdlo7B4HHCHQLZRDAUnRShA1sOet7LA3cr/qHRTRzV2AZZVAeV/BQb
+	paT4pBAIv+QLbKSAF8jF1KTlPoQms53hHLFyuwoBnsIU/4FvgqtQn3ut812/KQPcQ+Tq6c2efQ=
+	=
+X-Google-Smtp-Source: AGHT+IE9VVlqaElKSlTlRNsLp5lNckamDxE50wxkxfz1YXgMaph2I/ABZPwdbX4HuFlBp2KCO3RzyA==
+X-Received: by 2002:a05:600c:5488:b0:43b:c228:1ee0 with SMTP id 5b1f17b1804b1-43ea93dc66emr3022695e9.7.1743485843423;
+        Mon, 31 Mar 2025 22:37:23 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c0b79e467sm13204998f8f.79.2025.03.31.22.37.00
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d900008d8sm142376205e9.33.2025.03.31.22.37.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Mar 2025 22:37:01 -0700 (PDT)
-Message-ID: <3af09bc7-e088-4d49-b7bb-ffa7aae5557f@linaro.org>
-Date: Tue, 1 Apr 2025 07:36:59 +0200
+        Mon, 31 Mar 2025 22:37:22 -0700 (PDT)
+Message-ID: <0f590400-d50b-4b1f-afb4-6d3ac112d426@linaro.org>
+Date: Tue, 1 Apr 2025 07:37:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,7 +83,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/6] dt-bindings: usb: Add Parade PS8833 Type-C retimer
+Subject: Re: [PATCH v1 2/6] usb: typec: Add Parade PS8833 Type-C Retimer
  variant
 To: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
  Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
@@ -95,7 +96,7 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>
 References: <20250331215720.19692-1-alex.vinarskis@gmail.com>
- <20250331215720.19692-4-alex.vinarskis@gmail.com>
+ <20250331215720.19692-3-alex.vinarskis@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -142,7 +143,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20250331215720.19692-4-alex.vinarskis@gmail.com>
+In-Reply-To: <20250331215720.19692-3-alex.vinarskis@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -151,9 +152,23 @@ On 31/03/2025 23:53, Aleksandrs Vinarskis wrote:
 > Snapdragon X1 devices, such as Asus Zenbook A14.
 > 
 > Signed-off-by: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
+> ---
+>  drivers/usb/typec/mux/ps883x.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883x.c
+> index ad59babf7cce..095c36530904 100644
+> --- a/drivers/usb/typec/mux/ps883x.c
+> +++ b/drivers/usb/typec/mux/ps883x.c
+> @@ -447,6 +447,7 @@ static void ps883x_retimer_remove(struct i2c_client *client)
+>  
+>  static const struct of_device_id ps883x_retimer_of_table[] = {
+>  	{ .compatible = "parade,ps8830" },
+> +	{ .compatible = "parade,ps8833" },
 
 
-Looks compatible, so express it with fallback.
+Don't create unnecessary entries for compatible devices. Patch should be
+dropped.
 
 Best regards,
 Krzysztof
