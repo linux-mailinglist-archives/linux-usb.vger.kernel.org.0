@@ -1,216 +1,128 @@
-Return-Path: <linux-usb+bounces-22433-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22434-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC84A77AEB
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 14:26:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B98B7A77B17
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 14:36:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97B3316BB02
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 12:26:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7924B16C144
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 12:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FDA203704;
-	Tue,  1 Apr 2025 12:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC9A1FBE9B;
+	Tue,  1 Apr 2025 12:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ShzPhrhb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9R7s2KQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFDD202F7B
-	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 12:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C2E1EBA14;
+	Tue,  1 Apr 2025 12:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743510376; cv=none; b=YpwrlCLrpm17p/2TwCXK36Vws6hedHFEBF4QzbY9cUzgEOIAw+zoKuX6kQNWr4n8dt++CxzP9GyWUQlkp3lphBe+F1E9QT6XoW1y+rBdjfp4rU1/aG6vJNzpLl1TKf9TBse7BqUFP2hmz6o3383JNMbC2F4u6byd7v8os80U2Aw=
+	t=1743511002; cv=none; b=J8j+FXcDO2mLjIW0668Aao08fA/TLg9VydJpiMO9jy+GRdwHKU7FBb+Fj5ENT+q2zxR3qEhwC6Ub7rLcaRUYVrkAkba8+Ow0yyc/YLLOqWGpNElTd+K3Hch9pU8QgLymgV3fCOFYVa2e8EO/2FTALkAFGWtqehgK4OnOWtXoZGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743510376; c=relaxed/simple;
-	bh=MzWbRRs8pa6TteDFhTWSEA05fml/aRf6VDr6jSrrhl8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qd5KY0DbAo9VwR+oiGhqmt/IlRpyKDpYTOaz8zlBgC1pZXUnmM3UCrOfDj7YY8AxK6wmrcXY5NUfZinBhECZj46hgiJh3FoCrKMFkUvN2UzvZ1y6AN7Rnlq8JXiogDblsvvtgtNZCL4oYljCDAW2FXcWwLCB8MY6Qc/CjTFXsVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ShzPhrhb; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 531CGqRd014509
-	for <linux-usb@vger.kernel.org>; Tue, 1 Apr 2025 12:26:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	s5IelXbw1nz5rkiuUSMs5w3F2RL5AE5cDWJplubtFH4=; b=ShzPhrhb00ncAYyG
-	gmU8r1cR9cGillA+SR52rm3c4D4g/iJoAAnLH36M4LWWT4WlCF+f2vIjQkhWltZD
-	ObZo835RPeQTEacjukwOK9BTXYmCtVY58MbtJPDlhmXTEj0rLb1ep3HAb2P9WsV3
-	a2XZwOInITmHLO72EX7+Wpod2jVbitk83jAIX1YSWaCg20HI8ZUa8QzNeECxMHNN
-	mmJxSTWH5a9fh2mI1HBoQbe+lhX2TJsZ2fDEOAIUztG9ZIG3ktKNoM/9gMkzsf2Y
-	6avmjNs5Ob5Ey+uKeierob7lF6zcSi5kdytIk0D7mk8Pvsccfh49VH7/lXQ/Gvh/
-	GSrw6A==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p7tvfyx2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 12:26:13 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2265a09dbfcso1666095ad.0
-        for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 05:26:13 -0700 (PDT)
+	s=arc-20240116; t=1743511002; c=relaxed/simple;
+	bh=rFyqZ2RLaO7RKhVaj4rYRYF03+gUYQQxc4D+EVrDNFI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ze3uBUOXUWwJgGGV7OfUlI9Q0Y4LnLnGfIhUYxPoIK5FNx7XUVyZx4L+/+FTe3UHjEFrwxW0AY+zRpGCuh1u1+6KIg1mROwhw7vztxWv8tgpEWbuuRJo+UBgA0Mfav8XCmIvk0rlnfAehzD7mKpJYBeygId4lRBghvrSVIb39xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9R7s2KQ; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-227b650504fso109395835ad.0;
+        Tue, 01 Apr 2025 05:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743511000; x=1744115800; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PRLq03yk6Zy7YEUudCgpVtrnIVH8S9IIQdohHtcELnE=;
+        b=F9R7s2KQAzpBhEcQSLhyRl6xGdSAemhtmp0w+jC6vPizCtElvKFM2364eHh26Fh7UH
+         J5b7zikdQjrs/kwuvAwMXaPBC7DOjIMiFrwWsp9KWuMRBaVHyfsH9HkjVnznw8b9kYHa
+         bG0te1cOYjKA9f3aoWhGskfnYAuOCkFdT7Jq2/7wFgs7+IiSeFNB4M8EXkV9MCusm0m4
+         rU7E1gUSJugb7psn7IAFVwveOIUv8zAspW88Inr9/Tp/5szTsgG5i2DvNvlcrKpyuKGf
+         yuH+J5+3wnzJTr2HjLEUb8sX2TG+EwfxVYCeit2vqgd8Se4c73jVgNj7qr5S2E2fib3A
+         W57w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743510373; x=1744115173;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s5IelXbw1nz5rkiuUSMs5w3F2RL5AE5cDWJplubtFH4=;
-        b=sQFL2ZSw2NEEa861SeQgRpaiexMzHD2NTpx0jCScFwsn329EiAL73eQG71ZzmpcBMu
-         pucv3yBGTzCS26fP3Gkbi/+0y0w/D9XKRmrm30GLEqbaZ7crTxvf5DjrLrYNsGi9Csge
-         2Iu+CRIndTVsrgx2OJXdxLyxIANkcFIDqUuqBa/F3q9imEYIMIEoWUIWPGOXWTHVMVhs
-         su9CitAjfNa2cWqBYSqNdeFzs2fv8hW6LvoQg/8P5TRTprso+9LIFmdmQRjsWcpOPStI
-         b91pSg7zB5nsqAfBgu1HF4L4ErVszthxVJgwiQlWGXBnCKBO5OengWEpYYFXiooKptKA
-         KUcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFjsIZyqoJQwXYR9lZBYIZcBTuv/LFZDpEtEqu9uwAA8B1b+lOxof1V442Nv6IaglnRQUftK3rqVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKBFjvnQh9oo5zDGoQt+7u5ODmO2nYY7/OcN6UdzJKCPZZT+pj
-	Ix1bP7IajWH7PbqIN9ywG5+zwVz7NfrapUJ5R0YAb1y3VIaFHOhXuidCSrm3vP50qQI/hzLW/DT
-	c6K9bBiJC/cKnDyupCRv+g/tvK0DNQmOAxOAmUkaOaVyQYmF/EFfeoC5NeOY=
-X-Gm-Gg: ASbGncvYCLHN1YCV8txc2lExk8kF+/GYgxHYfzjodLu6PphgNCcqnehJIp5e3hSZvfH
-	FEvTtaVMl5LOYjgTJIbV/pfuxQ8+YAeA8ZhbCbKRtFQDjOIqZPETYkYuobnIQU0O4AicsDoH42r
-	WXNt44xLe6ploQkrCH4+tuhWeYwvmLpDQG/R9Gr88ZLlYbhR4YRTpmbbuKn2AqvkJtCtMPfFKvN
-	4HiBYDOt1fIDcMRvMUE8USbE0Ff/G2GODl1YpR9SGTSN01iyjbLIcquV9izxp4GcDkN5ThIn3h0
-	/7aZio7bzj0J0wMTz/dj6wyizykLtO11RcpCXba4YD6zczIlSwe6vZg=
-X-Received: by 2002:a17:902:f709:b0:215:6e01:ad07 with SMTP id d9443c01a7336-2292f94a1aamr166788365ad.6.1743510373148;
-        Tue, 01 Apr 2025 05:26:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF913CZIgF3zF0FHk8m4BOSMaMjEn/F31BODeWH5rl8fQt/hKYO7T1Pweu6BZVIgOku/ZpQDg==
-X-Received: by 2002:a17:902:f709:b0:215:6e01:ad07 with SMTP id d9443c01a7336-2292f94a1aamr166788065ad.6.1743510372745;
-        Tue, 01 Apr 2025 05:26:12 -0700 (PDT)
-Received: from [192.168.31.128] ([152.59.239.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291f1cec2fsm86789825ad.117.2025.04.01.05.26.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 05:26:12 -0700 (PDT)
-Message-ID: <a1ccb48d-8c32-42bf-885f-22f3b1ca147b@oss.qualcomm.com>
-Date: Tue, 1 Apr 2025 17:56:08 +0530
+        d=1e100.net; s=20230601; t=1743511000; x=1744115800;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PRLq03yk6Zy7YEUudCgpVtrnIVH8S9IIQdohHtcELnE=;
+        b=CiJ+HTDcF1Gf6wC4+hhZLT+gSbZFrdydEyoFAF1CC10QCXKbVDaLLezCCec/pGxNtr
+         l1Z9zRbb787S8J/Dc5loIunHyfEqIoocLOAeGc6Y6Xp4gMsggtrFFDI08WVt61AbhxB1
+         VvOdTkXISkYa+oNWLgHVzV1tQp9XzcnbZlYGgiw6+mH6cnNuwupmAukEbHnHfsl+jcom
+         dz52nftMzu6OaEJGp73Q+QBUHeayTjs/ERyzHIbVP4Ma84hu+bUo2PxXGuLmKG2DlRd5
+         9UkaIQ1QGqTJ+L72s7/OTYZP/ThM+8EyYra/4ExGYwTiDKZfT7fryEyEeu4LBZOIjsJL
+         uMqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXeStN/lCxGIbp6pbuGSLdE2guCyzvTw8BLUatMgm1HdeFx7AE1+qMR05ize8QiYh3/IloSuNegYZ04@vger.kernel.org, AJvYcCXwnwfurI/1rxYwF2DiUH+Cr4VL7gjDkLCcTuzVq+Lg94ymaeJpsCYD8e6BAiWozrIHh8C0XtnWUfw79/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzes8LgCatvKSFrpjtYGkz0XeTgzeN22MxeP2C4EJxVCBUpCi3f
+	pHy8KiSY7BZzBtCt5wkWLsqJyjsI5CkG1hxzwqRFGKx+/j/28Edn
+X-Gm-Gg: ASbGncuW2jwg0MXJDjJKCu3JYdPrwFegGMZ/LTRTr3pEQYW7egGMUSkkTMXb7lvX2/K
+	iXc4HVGKz9mG0qCtCm8zLT2YPuEmavh5NRZjfyFJfMeUe6ADHhHQpejV7QVWTgHUjpKrKoHReif
+	s7Tuf+cfv5l+ZzWn3cBS1OgU6ZEY3suqiJP9vFo4JffWfJJsmu/F94s6GpI123k6Y3GyG7vDL0w
+	F3D1HN72TCf43UmsHWpO7rlH3OmtM7QQr8AEcwfdvWkqoO0reJ06GMABrPlLGNjXMvbLhd7Tqlm
+	Ruodut4zabCCqkXIj/K54IjlOUwmzYpZvhPjS4S7I9ejPWvm2wavxenjckRspKKIPyRLaJ/oymY
+	i5Lo=
+X-Google-Smtp-Source: AGHT+IEZ+AqxgvDoRSMSCzF1vC7TGaxMp9fl292+90i1l0j1zcPEixAD1cQ+sRQphPvlDNQdKR1/9A==
+X-Received: by 2002:a17:90b:4d09:b0:2ee:693e:ed7a with SMTP id 98e67ed59e1d1-3053216e46bmr17029670a91.35.1743510999853;
+        Tue, 01 Apr 2025 05:36:39 -0700 (PDT)
+Received: from mi-ThinkStation-K.mioffice.cn ([43.224.245.231])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3039e1139fasm12699199a91.25.2025.04.01.05.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 05:36:39 -0700 (PDT)
+From: Ying Lu <luying526@gmail.com>
+To: oneukum@suse.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ying Lu <luying1@xiaomi.com>
+Subject: [PATCH v2 0/1] usbnet:fix NPE during rx_complete
+Date: Tue,  1 Apr 2025 20:36:31 +0800
+Message-ID: <cover.1743510609.git.luying1@xiaomi.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
- exceed event buffer length
-To: Frode Isaksen <fisaksen@baylibre.com>, Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Frode Isaksen <frode@meta.com>, stable@vger.kernel.org
-References: <20250328104930.2179123-1-fisaksen@baylibre.com>
- <0767d38d-179a-4c5e-9dfe-fef847d1354d@oss.qualcomm.com>
- <d21c87f4-0e26-41e1-a114-7fb982d0fd34@baylibre.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <d21c87f4-0e26-41e1-a114-7fb982d0fd34@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=OIon3TaB c=1 sm=1 tr=0 ts=67ebdb66 cx=c_pps a=JL+w9abYAAE89/QcEU+0QA==:117 a=v/fl2IxmdEHBtBzv4ytVIg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=jIQo8A4GAAAA:8 a=VabnemYjAAAA:8
- a=EqO8uaqlcL3FtOQN4IAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=TjNXssC_j7lpFel5tvFf:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: OYYaytam5KA0bQi6JWO0AeepZSaff-d2
-X-Proofpoint-GUID: OYYaytam5KA0bQi6JWO0AeepZSaff-d2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-01_05,2025-03-27_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 lowpriorityscore=0 malwarescore=0 mlxscore=0 clxscore=1015
- adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504010076
 
+From: Ying Lu <luying1@xiaomi.com>
 
+The patchset fix the issue caused by the following modifications:
+commit 04e906839a053f092ef53f4fb2d610983412b904
+(usbnet: fix cyclical race on disconnect with work queue)
 
-On 4/1/2025 5:38 PM, Frode Isaksen wrote:
-> On 4/1/25 7:43 AM, Krishna Kurapati wrote:
->>
->>
->> On 3/28/2025 4:14 PM, Frode Isaksen wrote:
->>> From: Frode Isaksen <frode@meta.com>
->>>
->>> The event count is read from register DWC3_GEVNTCOUNT.
->>> There is a check for the count being zero, but not for exceeding the
->>> event buffer length.
->>> Check that event count does not exceed event buffer length,
->>> avoiding an out-of-bounds access when memcpy'ing the event.
->>> Crash log:
->>> Unable to handle kernel paging request at virtual address 
->>> ffffffc0129be000
->>> pc : __memcpy+0x114/0x180
->>> lr : dwc3_check_event_buf+0xec/0x348
->>> x3 : 0000000000000030 x2 : 000000000000dfc4
->>> x1 : ffffffc0129be000 x0 : ffffff87aad60080
->>> Call trace:
->>> __memcpy+0x114/0x180
->>> dwc3_interrupt+0x24/0x34
->>>
->>> Signed-off-by: Frode Isaksen <frode@meta.com>
->>> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for 
->>> processing events")
->>> Cc: stable@vger.kernel.org
->>> ---
->>> v1 -> v2: Added Fixes and Cc tag.
->>>
->>> This bug was discovered, tested and fixed (no more crashes seen) on 
->>> Meta Quest 3 device.
->>> Also tested on T.I. AM62x board.
->>>
->>>   drivers/usb/dwc3/gadget.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index 63fef4a1a498..548e112167f3 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -4564,7 +4564,7 @@ static irqreturn_t dwc3_check_event_buf(struct 
->>> dwc3_event_buffer *evt)
->>>         count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
->>>       count &= DWC3_GEVNTCOUNT_MASK;
->>> -    if (!count)
->>> +    if (!count || count > evt->length)
->>>           return IRQ_NONE;
->>>         evt->count = count;
->>
->>
->> I did see this issue previously ([1] on 5.10) on SAR2130 (upstreamed 
->> recently). Can you help check if the issue is same on your end if you 
->> can reproduce it easily. Thinh also provided some debug pointers to 
->> check suspecting it to be a HW issue.
-> 
-> Seems to be exactly the same issue, and your fix looks OK as well. I'm 
-> happy to abandon my patch and let yo provide the fix.
->
+The issue:
+The usb_submit_urb function lacks a usbnet_going_away validation,
+whereas __usbnet_queue_skb includes this check. This inconsistency
+creates a race condition where: A URB request may succeed, but
+the corresponding SKB data fails to be queued.
 
-NAK. I tried to skip copying data beyond 4K which is not the right 
-approach. Thinh was tending more towards your line of code changes. So 
-your code looks fine, but an error log indicating the presence of this 
-issue might be helpful.
+Subsequent processes (e.g., rx_complete → defer_bh → __skb_unlink(skb, list))
+attempt to access skb->next, triggering a NULL pointer dereference (Kernel Panic).
 
-> Note that I am not able to reproduce this locally and it happens very 
-> seldom.
-> 
+Fix issue:
+adding the usbnet_going_away check in usb_submit_urb to synchronize the validation logic.
 
-It was very hard to reproduce this issue. Only two instances reported on 
-SAR2130 on my end.
+Changes in v2
+Use the formal name instead of an email alias.
 
-> Where can I find the upstream'ed version ?
-> 
+Ying Lu (1):
+  usbnet:fix NPE during rx_complete
 
-The upstreamed version I was referring to was that SAR2130 DT is present 
-on open-source.
+ drivers/net/usb/usbnet.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Krishna,
+-- 
+2.49.0
 
->>
->> As per the comments from Thinh, he suggested to add a error log as 
->> well when this happens [2].
->>
->> [1]: 
->> https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
->>
->> [2]: 
->> https://lore.kernel.org/all/20230525001822.ane3zcyyifj2kuwx@synopsys.com/
->>
->> Regards,
->> Krishna,
-> 
-> 
 
