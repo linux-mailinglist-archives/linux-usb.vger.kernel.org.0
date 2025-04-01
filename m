@@ -1,275 +1,138 @@
-Return-Path: <linux-usb+bounces-22408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22409-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E57DA77485
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 08:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1092DA774CD
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 08:56:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1166E16AEA9
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:31:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C285B1670DC
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B351E5732;
-	Tue,  1 Apr 2025 06:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2FB21E5B9C;
+	Tue,  1 Apr 2025 06:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZsQMq8Yw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="z2VdxEfN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA571078F
-	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 06:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73C03BBC9;
+	Tue,  1 Apr 2025 06:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743489038; cv=none; b=iSuTvuAh0cK6LHb5vc5eqzftyUXi/1m1TkgWuqZhJioFP/zXzjjcIQG4TK3eV1T8GFLnQISTFJ2dnB5CUb9HXrY9ilXzoL73XdeOna03v9Gej53NMLP5JHJE4EMwKfr89OHic1cEb7aYzw1nU4UH2ZN6fdxluZqSx/lAvC4+9dI=
+	t=1743490601; cv=none; b=OKiz4tSCtDJmKSzvmWVTGe1ONRCWaBFXR/glQy0TSD7mf2TCpmhGCl8xe3switHPDSx86e+ETovGulgbRm0cexd7g+/tiKCZIHBS5bKBUrzYwp8KVgLR8nTHW3pxJ7q+0PNBk5e4HIid3Ux2SGu+yexIFvJRJI0fYJf/zNN2Vh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743489038; c=relaxed/simple;
-	bh=J/M6ym/3HaB2IbGY1t1wGYKVKwUFdldUw+cz1/kEueA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CiguxD9kafk01pAxNjJmoC+5gDv2pWEvZEeiZit6Sitkln2FBR0hwGjdeF4y9fH85HBz0hdJsv1p/hmfiwsQ5rxEno+CxIr6qXtqvwJXqxU9IGcuXcJn3id5xd/Th+8TlKtZvYkExT00A8dNyvlRl2cf3QweyOtlN9c4Y07xRnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZsQMq8Yw; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff55176edcso9915158a91.1
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 23:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743489036; x=1744093836; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jiFiSExmIpswe63JqhLJ7F3T/vXcNa8/l4kRqI6BHnI=;
-        b=ZsQMq8YwldqdPww2aNNCtLvgl8PDT8tmJiIUQ1Y+v5kcO5/3+yiDquHKfU9TvvSrIS
-         9o+MpZnuwTdxFExXq4WShoHwDscjDk+56zIorLOk4BAgedSwI/tgBgcif/j838Wij1Fb
-         kHXKjkoPnsLLc50iQ+3dHPdbuN0NI1riP4wKYltSI1eDh3cZbXwmefwu0boPugjN8eNI
-         t+7bRq5wrVYlBe3sobaRgbWy0zFEgsxDRnXXzXvoHwptMQnbJxlES8r9DNpAUJHUGzRz
-         93NuCAz6qkf0lPlJ6DebT0ribC8VkiFRFfdvFt3A8Tv6cPCE5GmTLy78pH0u5gK0LERD
-         Z1+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743489036; x=1744093836;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jiFiSExmIpswe63JqhLJ7F3T/vXcNa8/l4kRqI6BHnI=;
-        b=XU+zivxNvHnR6KdEXoPmMyDEtg8DwL/iN9mydTDQZvNj7SatmyXij/JBX6yj5c36qi
-         SKFIRv71VSIdMIitEaSjMnW/3TJSd5jaZE9bKr7pj8wbmdihs4wyHayoCfgoESveWBXH
-         PNmK0lwFlo7ccfHoDXGmcHI9oHsp1Ya+C1smJ5hjbZOQ4L5C1FZHsfSbUPXxVVth/T6o
-         IXG5XRE0jI9jPwoftEjequHqCXgYIuTtjr0JbUFclv8E3ghsWZwt3JHscUomusCy5n2b
-         d1dxsWm02n0hyIJ+IS86J7fhWiFOJ4C21FeqUwLqq3++YMro8zPIUtL2k1NVKtemdD4l
-         H4Jg==
-X-Gm-Message-State: AOJu0YxhdOy8wZQMUAJFLkp+0IxqsRsTGDRv4A0n1WBB/97aquY9f02x
-	q361yd3OQpAUmfyDXaUj6EHLhxo+Er09Yva965PKWJ2jUNTOqr/IQcv19wqW4drZLt1stGrq7jK
-	CX6kXynHkQiQh2A==
-X-Google-Smtp-Source: AGHT+IGxI/ecbNMCBfYfN5C+BPG5kYRSq6a1FOzanRyj9Idz2E8lANjOYdUW6OJTmUG8JPe4h77qtxE+xQa7zhg=
-X-Received: from pgbg26.prod.google.com ([2002:a63:521a:0:b0:aee:900e:e3d6])
- (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:3953:b0:1f6:6539:e026 with SMTP id adf61e73a8af0-2009f5fe141mr16978771637.15.1743489035752;
- Mon, 31 Mar 2025 23:30:35 -0700 (PDT)
-Date: Tue,  1 Apr 2025 06:22:42 +0000
-In-Reply-To: <20250401062951.3180871-1-guanyulin@google.com>
+	s=arc-20240116; t=1743490601; c=relaxed/simple;
+	bh=GFKxsd0OGuU+pV6q/WYGlQsX3XgcsM/kbJXOW/wuxto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Spa4DXVQpK3kSMvPawBtCGjqbq0yvTY0MqjohjEcct+WB3ZGPxMIjQkETX0c81T0mgVQENt7THK+C3hTGRS43CZvHYczwG/WAudMSM/aEc9wqD5WD2CXZ85W+YAXqqqdancN0F5NnRWcODZFg0RNmUCCs9BybEz/VqJ9RAkdeZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=z2VdxEfN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03E2C4CEE8;
+	Tue,  1 Apr 2025 06:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1743490600;
+	bh=GFKxsd0OGuU+pV6q/WYGlQsX3XgcsM/kbJXOW/wuxto=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=z2VdxEfNTJIvE/HabgSJSvBeMu4NUAIELc43S3sHXIHHv8cDKZ309/WN1crbCrQA9
+	 Qz8OStnhhm5xDZNQ2fcsGbfgQRst8oEmLyZjkAgKTX9I+So2r9h7MeNWnZdcz6tga5
+	 ltKV63S7ixU3vUUNTVG7GGbS3nrdyIU8lyTi1JSM=
+Date: Tue, 1 Apr 2025 07:55:13 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jung Daehwan <dh10.jung@samsung.com>
+Cc: Wesley Cheng <quic_wcheng@quicinc.com>, Puma Hsu <pumahsu@google.com>,
+	srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+	perex@perex.cz, conor+dt@kernel.org, dmitry.torokhov@gmail.com,
+	corbet@lwn.net, broonie@kernel.org, lgirdwood@gmail.com,
+	krzk+dt@kernel.org, pierre-louis.bossart@linux.intel.com,
+	Thinh.Nguyen@synopsys.com, tiwai@suse.com, robh@kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v36 01/31] xhci: sideband: add initial api to register a
+ secondary interrupter entity
+Message-ID: <2025040109-dove-declared-9466@gregkh>
+References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
+ <20250319005141.312805-2-quic_wcheng@quicinc.com>
+ <CAGCq0LZoi0MOJLJYUeQJW6EfOU_Ch=v1Sg8L4_B-KhdDCx1fCw@mail.gmail.com>
+ <2025032734-reward-fantasize-dc16@gregkh>
+ <CAGCq0LamxvvE8b45VAshw9aWJNC2so_vK9t+pzXd3C7Y7tfYAg@mail.gmail.com>
+ <CGME20250327161254epcas2p35ea7c80bdcefaefc645c061531dd6833@epcas2p3.samsung.com>
+ <87746e66-84c1-4ff3-8b69-fbee1664eff6@quicinc.com>
+ <20250401022336.GA98772@ubuntu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250401062951.3180871-1-guanyulin@google.com>
-X-Mailer: git-send-email 2.49.0.472.ge94155a9ec-goog
-Message-ID: <20250401062951.3180871-5-guanyulin@google.com>
-Subject: [PATCH v10 4/4] usb: host: enable USB offload during system sleep
-From: Guan-Yu Lin <guanyulin@google.com>
-To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
-	stern@rowland.harvard.edu, sumit.garg@kernel.org, kekrby@gmail.com, 
-	jeff.johnson@oss.qualcomm.com, elder@kernel.org, quic_zijuhu@quicinc.com, 
-	ben@decadent.org.uk
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guan-Yu Lin <guanyulin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250401022336.GA98772@ubuntu>
 
-Sharing a USB controller with another entity via xhci-sideband driver
-creates power management complexities. To prevent the USB controller
-from being inadvertently deactivated while in use by the other entity, a
-usage-count based mechanism is implemented. This allows the system to
-manage power effectively, ensuring the controller remains available
-whenever needed.
-In order to maintain full functionality of an offloaded USB devices,
-several changes are made within the suspend flow of such devices:
-- skip usb_suspend_device() so that the port/hub are still active for
-  USB transfers via offloaded path.
-- not suspending the endpoints which are used by USB interfaces marked
-  with needs_remote_wakeup. Namely, skip usb_suspend_interface() and
-  usb_hcd_flush_endpoint() on associated USB interfaces. This reserves a
-  pending interrupt urb during system suspend for handling the interrupt
-  transfer, which is necessary since remote wakeup doesn't apply in the
-  offloaded USB devices when controller is still active.
-- not flushing the endpoints of actively offloaded USB devices. Given
-  that the USB devices is used by another entity, unilaterally flush the
-  endpoint might lead to unexpected behavior on another entity.
-- not suspending the xhci controller. This is done by skipping the
-  suspend/resume callbacks in the xhci platform driver.
+On Tue, Apr 01, 2025 at 11:23:36AM +0900, Jung Daehwan wrote:
+> On Thu, Mar 27, 2025 at 09:12:12AM -0700, Wesley Cheng wrote:
+> > 
+> > 
+> > On 3/27/2025 3:14 AM, Puma Hsu wrote:
+> > > On Thu, Mar 27, 2025 at 3:02 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >>
+> > >> On Thu, Mar 27, 2025 at 02:27:00PM +0800, Puma Hsu wrote:
+> > >>> Hi,
+> > >>>
+> > >>> We have implemented and verified the USB audio offloading feature with
+> > >>> the xhci sideband driver on our Google Pixel products. We would
+> > >>> appreciate it if this solution can be accepted. Thank you all for the
+> > >>> work!
+> > >>>
+> > >>
+> > >> Great, can you properly send a "Tested-by:" line for this against the
+> > >> 00/XX email so that it will be properly saved?
+> > >>
+> > > 
+> > > We(Google Pixel) only use the xhci sideband related changes and two
+> > > changes in the sound card driver. For the details, what we actually
+> > > tested are patch [01], [02], [03], [04], [05], [06], [08], and [12].
+> > > Do I still send the "Tested-by:" line to 00/31 email? Or should I just
+> > > send the "Tested-by:" line to the 8 changes above? (I added
+> > > "Tested-by" line for this [01/31] first.)
+> > > 
+> > >> Also, I think a new version of the series is coming, can you test that
+> > >> to verify it works properly?  We have to wait until after -rc1 is out
+> > >> anyway.
+> > >>
+> > > 
+> > > I think this v36 is the last version of the series as I discussed with
+> > > QCOM Wesley. And for sure I will test it if they do have a new
+> > > version.
+> > > 
+> > 
+> > Hi Puma,
+> > 
+> > I'm discussing with Stephan on the QC specific stuff, so the common changes
+> > won't change on v37.  Please provide your tested-by tags for each commit,
+> > so I can carry them accordingly on the next submission.  If I do end up
+> > making changes to any of the common patches, I will remove your tested by
+> > tag, which means you might have to test it again.
+> > 
+> > Thanks
+> > Wesley Cheng
+> > 
+> > 
+> > 
+> 
+> Hi Wesley,
+> 
+> Thanks for your effort to upstream usb audio offload.
+> I've also used your patchset like Puma.
+> ([01], [02], [03], [04], [05], [06], [08], and [12])
+> 
+> It works well on Exynos. Please let me know if you need also
+> "Tested-by:" on our side.
 
-Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
----
- drivers/usb/core/driver.c    | 33 +++++++++++++++++++++++++++------
- drivers/usb/host/xhci-plat.c | 19 +++++++++++++++++++
- drivers/usb/host/xhci-plat.h |  1 +
- include/linux/usb.h          |  2 ++
- 4 files changed, 49 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 2ba033bf7e4e..678106e1c520 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1420,11 +1420,20 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 			udev->state == USB_STATE_SUSPENDED)
- 		goto done;
- 
-+	if (msg.event == PM_EVENT_SUSPEND && usb_offload_check(udev)) {
-+		dev_dbg(&udev->dev, "device offload active, skip suspend.\n");
-+		udev->offload_at_suspend = 1;
-+	}
-+
- 	/* Suspend all the interfaces and then udev itself */
- 	if (udev->actconfig) {
- 		n = udev->actconfig->desc.bNumInterfaces;
- 		for (i = n - 1; i >= 0; --i) {
- 			intf = udev->actconfig->interface[i];
-+			if (udev->offload_at_suspend && intf->needs_remote_wakeup) {
-+				dev_dbg(&intf->dev, "active interface on offloaded devices\n");
-+				continue;
-+			}
- 			status = usb_suspend_interface(udev, intf, msg);
- 
- 			/* Ignore errors during system sleep transitions */
-@@ -1435,7 +1444,8 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 		}
- 	}
- 	if (status == 0) {
--		status = usb_suspend_device(udev, msg);
-+		if (!udev->offload_at_suspend)
-+			status = usb_suspend_device(udev, msg);
- 
- 		/*
- 		 * Ignore errors from non-root-hub devices during
-@@ -1480,9 +1490,11 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 	 */
- 	} else {
- 		udev->can_submit = 0;
--		for (i = 0; i < 16; ++i) {
--			usb_hcd_flush_endpoint(udev, udev->ep_out[i]);
--			usb_hcd_flush_endpoint(udev, udev->ep_in[i]);
-+		if (!udev->offload_at_suspend) {
-+			for (i = 0; i < 16; ++i) {
-+				usb_hcd_flush_endpoint(udev, udev->ep_out[i]);
-+				usb_hcd_flush_endpoint(udev, udev->ep_in[i]);
-+			}
- 		}
- 	}
- 
-@@ -1524,17 +1536,26 @@ static int usb_resume_both(struct usb_device *udev, pm_message_t msg)
- 	udev->can_submit = 1;
- 
- 	/* Resume the device */
--	if (udev->state == USB_STATE_SUSPENDED || udev->reset_resume)
--		status = usb_resume_device(udev, msg);
-+	if (udev->state == USB_STATE_SUSPENDED || udev->reset_resume) {
-+		if (!udev->offload_at_suspend)
-+			status = usb_resume_device(udev, msg);
-+		else
-+			dev_dbg(&udev->dev, "device offload active, skip resume.\n");
-+	}
- 
- 	/* Resume the interfaces */
- 	if (status == 0 && udev->actconfig) {
- 		for (i = 0; i < udev->actconfig->desc.bNumInterfaces; i++) {
- 			intf = udev->actconfig->interface[i];
-+			if (udev->offload_at_suspend) {
-+				dev_dbg(&intf->dev, "active interface on offloaded devices\n");
-+				continue;
-+			}
- 			usb_resume_interface(udev, intf, msg,
- 					udev->reset_resume);
- 		}
- 	}
-+	udev->offload_at_suspend = 0;
- 	usb_mark_last_busy(udev);
- 
-  done:
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 9843d3ad5cf4..598f1b974347 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -20,6 +20,7 @@
- #include <linux/acpi.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
-+#include <linux/usb/xhci-sideband.h>
- 
- #include "xhci.h"
- #include "xhci-plat.h"
-@@ -483,6 +484,15 @@ static int xhci_plat_suspend_common(struct device *dev)
- 
- static int xhci_plat_suspend(struct device *dev)
- {
-+	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	if (xhci_sideband_check(hcd)) {
-+		priv->sideband_at_suspend = 1;
-+		dev_dbg(dev, "sideband instance active, skip suspend.\n");
-+		return 0;
-+	}
-+
- 	return xhci_plat_suspend_common(dev);
- }
- 
-@@ -535,6 +545,15 @@ static int xhci_plat_resume_common(struct device *dev, bool power_lost)
- 
- static int xhci_plat_resume(struct device *dev)
- {
-+	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	if (priv->sideband_at_suspend) {
-+		priv->sideband_at_suspend = 0;
-+		dev_dbg(dev, "sideband instance active, skip resume.\n");
-+		return 0;
-+	}
-+
- 	return xhci_plat_resume_common(dev, false);
- }
- 
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index fe4f95e690fa..cd07b22adc60 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -15,6 +15,7 @@ struct usb_hcd;
- struct xhci_plat_priv {
- 	const char *firmware_name;
- 	unsigned long long quirks;
-+	unsigned sideband_at_suspend:1;
- 	bool power_lost;
- 	void (*plat_start)(struct usb_hcd *);
- 	int (*init_quirk)(struct usb_hcd *);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index f3a4064c729c..bc3a84870907 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -648,6 +648,7 @@ struct usb3_lpm_parameters {
-  *	Will be used as wValue for SetIsochDelay requests.
-  * @use_generic_driver: ask driver core to reprobe using the generic driver.
-  * @offload_usage: number of offload activities happening on this usb device.
-+ * @offload_at_suspend: offload activities during suspend is enabled.
-  *
-  * Notes:
-  * Usbcore drivers should not set usbdev->state directly.  Instead use
-@@ -736,6 +737,7 @@ struct usb_device {
- 	unsigned use_generic_driver:1;
- 
- 	refcount_t offload_usage;
-+	unsigned offload_at_suspend:1;
- };
- 
- #define to_usb_device(__dev)	container_of_const(__dev, struct usb_device, dev)
--- 
-2.49.0.472.ge94155a9ec-goog
-
+Yes please.
 
