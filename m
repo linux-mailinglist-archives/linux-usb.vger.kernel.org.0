@@ -1,98 +1,106 @@
-Return-Path: <linux-usb+bounces-22440-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22441-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4340A77CA1
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 15:50:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56596A77CCB
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 15:53:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BB0D3AF273
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 13:48:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18D001892423
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 13:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E42204680;
-	Tue,  1 Apr 2025 13:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55165202F67;
+	Tue,  1 Apr 2025 13:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2jIBIrIQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oKwEO6Pv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A708D20371A;
-	Tue,  1 Apr 2025 13:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C913D1E51E7;
+	Tue,  1 Apr 2025 13:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743515289; cv=none; b=Jqzk1SxpW6vvXFTwwWSXOrF72pvdbMPsPUc7g5ABm1QDRDObUy5TPFylweqD+tDWJi3+s1Gos1AKYSxb+zjgyf/NLp2Esfzbp+jumENhHxiwjBlK+vVpsNyCYnkw4e+UrLLNT5Z6pTafY8kvPPp4neiqXpKRigxy6CBzFuW8F+Q=
+	t=1743515452; cv=none; b=Bg1OZYsgRKWZF7EeTyLiPE1rEU66VTGsynTGaQqz7nRWODII3U70Jeh3tRsVDEbR1ZnKEIE39TnTuBJwktVjTGyarZS6toHBrNyZfhM84P/0g6BxBLQuzr+4tJEFJAoXT3VoTDly5EPaZTzGKeXwg8Fdf+LqXXKHbsEFwr2K+Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743515289; c=relaxed/simple;
-	bh=XP6Hcbmk/zkfwvAVnWwB1djHn3B4hIRqVoZ7XYY1hY4=;
+	s=arc-20240116; t=1743515452; c=relaxed/simple;
+	bh=tcKWq9EH3QuriWsMczl+cF4GVPGvlxBbpqMwgXsKe8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=twdWj3O4fBuWmIzr2WuhSKzl9GaeUvtUEi8mSukMcEhKhQFt1ROA4vncXjpuCbobqkbJL5J12iL1Tbk1m4FzytVC1eOfk1L1tRgFSXZ/Uw3NuMKtGtbpPPYFZ53tL0e/CQP0H6vQBGlY1Httq/BMjqBeyie4yBr+XbQ2Py8m7r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2jIBIrIQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9C7C4CEE5;
-	Tue,  1 Apr 2025 13:48:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TP6kaz/LQRF6yAAU9P43a12AY1EmaaL0R6w5RxBhiV7fleO6Tv5yJpETtvZZ3wv7+WCE9vng5uu3wnQyzW/ip+YwH+77KIIcSvGv46ektJ7xMad4PI7CLwuw/dJD6UHvPks7oW7gBRlNdi8aZvQWfawr2GqArnHCpgY+VPW69/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oKwEO6Pv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5125C4CEE4;
+	Tue,  1 Apr 2025 13:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1743515289;
-	bh=XP6Hcbmk/zkfwvAVnWwB1djHn3B4hIRqVoZ7XYY1hY4=;
+	s=korg; t=1743515452;
+	bh=tcKWq9EH3QuriWsMczl+cF4GVPGvlxBbpqMwgXsKe8A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2jIBIrIQPo+ylLfP0xAye/ISgG+cmtKHuz8L2rhbhTf4npQJaVfFSlDYKgChQbOO7
-	 vrA+9zJECqdg68p8yYHzC72dBA4Ktf655jr+nhww5kZeKPvtC7VNQ6vZeYmyMrEayc
-	 5AknbyI/u7xzZEAl+Fzq9GexejT4ye5wRQl416j0=
-Date: Tue, 1 Apr 2025 14:46:38 +0100
+	b=oKwEO6PvQ7s3exAburEZp6UMShJuSUtMjwaCtzyUAlP3LO+4qXHL5/EpsrVlizG8Z
+	 9sy46oN4lFDyjchK3/Dv8WqqnwPtlh3b3Wv+dYkqT12T8Kn2+YMubUo+2EIeb3PXDs
+	 c37oTmsHttzjgH7M1GFr4Avd+AuCNJoLfeUg4MKA=
+Date: Tue, 1 Apr 2025 14:49:22 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Ying Lu <luying526@gmail.com>
-Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, luying1 <luying1@xiaomi.com>
-Subject: Re: [PATCH v1 1/1] usbnet:fix NPE during rx_complete
-Message-ID: <2025040121-compactor-lumpiness-e615@gregkh>
-References: <cover.1743497376.git.luying1@xiaomi.com>
- <e3646459ea67f10135ab821f90f66d8b6e74456c.1743497376.git.luying1@xiaomi.com>
- <2025040110-unknowing-siding-c7d2@gregkh>
- <CAGo_G-f_8w9E388GOunNJ329W8UqOQ0y2amx_gMvbbstw4=H2A@mail.gmail.com>
+To: Frode Isaksen <fisaksen@baylibre.com>
+Cc: linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+	krishna.kurapati@oss.qualcomm.com, Frode Isaksen <frode@meta.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
+ exceed event buffer length
+Message-ID: <2025040141-ferret-junior-4549@gregkh>
+References: <20250401125350.221910-1-fisaksen@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGo_G-f_8w9E388GOunNJ329W8UqOQ0y2amx_gMvbbstw4=H2A@mail.gmail.com>
+In-Reply-To: <20250401125350.221910-1-fisaksen@baylibre.com>
 
-On Tue, Apr 01, 2025 at 08:48:01PM +0800, Ying Lu wrote:
-> On Tue, Apr 1, 2025 at 6:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Apr 01, 2025 at 06:18:01PM +0800, Ying Lu wrote:
-> > > From: luying1 <luying1@xiaomi.com>
-> > >
-> > > Missing usbnet_going_away Check in Critical Path.
-> > > The usb_submit_urb function lacks a usbnet_going_away
-> > > validation, whereas __usbnet_queue_skb includes this check.
-> > >
-> > > This inconsistency creates a race condition where:
-> > > A URB request may succeed, but the corresponding SKB data
-> > > fails to be queued.
-> > >
-> > > Subsequent processes:
-> > > (e.g., rx_complete → defer_bh → __skb_unlink(skb, list))
-> > > attempt to access skb->next, triggering a NULL pointer
-> > > dereference (Kernel Panic).
-> > >
-> > > Signed-off-by: luying1 <luying1@xiaomi.com>
-> >
-> > Please use your name, not an email alias.
-> >
-> OK, I have updated. please check the Patch v2
+On Tue, Apr 01, 2025 at 02:53:13PM +0200, Frode Isaksen wrote:
+> From: Frode Isaksen <frode@meta.com>
 > 
-> > Also, what commit id does this fix?  Should it be applied to stable
-> > kernels?
-> The commit  id is 04e906839a053f092ef53f4fb2d610983412b904
-> (usbnet: fix cyclical race on disconnect with work queue)
-> Should it be applied to stable kernels?  -- Yes
+> The event count is read from register DWC3_GEVNTCOUNT.
+> There is a check for the count being zero, but not for exceeding the
+> event buffer length.
+> Check that event count does not exceed event buffer length,
+> avoiding an out-of-bounds access when memcpy'ing the event.
+> Crash log:
+> Unable to handle kernel paging request at virtual address ffffffc0129be000
+> pc : __memcpy+0x114/0x180
+> lr : dwc3_check_event_buf+0xec/0x348
+> x3 : 0000000000000030 x2 : 000000000000dfc4
+> x1 : ffffffc0129be000 x0 : ffffff87aad60080
+> Call trace:
+> __memcpy+0x114/0x180
+> dwc3_interrupt+0x24/0x34
+> 
+> Signed-off-by: Frode Isaksen <frode@meta.com>
+> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for processing events")
+> Cc: stable@vger.kernel.org
+> ---
+> v1->v2: added error log
+> 
+>  drivers/usb/dwc3/gadget.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 89a4dc8ebf94..923737776d82 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4564,6 +4564,12 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+>  	if (!count)
+>  		return IRQ_NONE;
+>  
+> +	if (count > evt->length) {
+> +		dev_err(dwc->dev, "invalid count(%u) > evt->length(%u)\n",
+> +			count, evt->length);
 
-Please mark the commit with that information, you seem to have not done
-so for the v2 version :(
+Is this wise to do in an irq handler?  If the hardware goes crazy, will
+this just fill the logs?  Why not rate-limit it?
+
+thanks,
+
+greg k-h
 
