@@ -1,145 +1,126 @@
-Return-Path: <linux-usb+bounces-22425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5FFCA778AA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 12:17:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B00A778B0
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 12:18:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F2C9169D4C
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 10:17:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E03016AF14
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 10:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C421C1F0996;
-	Tue,  1 Apr 2025 10:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F611F09A7;
+	Tue,  1 Apr 2025 10:18:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wu+O/zuL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bEa5jlqG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28C3131E2D;
-	Tue,  1 Apr 2025 10:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5681E885A;
+	Tue,  1 Apr 2025 10:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743502630; cv=none; b=GQXkz2nwgxjTrUSTGzKESv9/3/hTIG5WRog+Acri8T+NcbM8Jo8Lh+WsZo/vBBzA1+q5WeBPOImZ+h4SXGcT9UgU/qKf3W3FM2HMV4396rZkEKyO1NdoJ/irq82yz19rpx3MB8aGyN4Chd5QEIVszy5thQkzW7sBt6ydZJ04/LE=
+	t=1743502691; cv=none; b=Weu20Zaq0VFHs1775STQ4r+KD/FKH3sf3jwFm4bLHQ57kv3gImxfisfUuhYg2xZheoTk5kuksJXNxfuGlX+1G2vSTQ/loERg0zLaWmgIh5uyIp42/zFKj7Y0vv61nNa5eQ2qWIq38jOGiaL9Ab/Nod/i+I7z+RtAGYULH04QSVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743502630; c=relaxed/simple;
-	bh=Peb1o//GSWEmIuVpBNVjaGkIQrweoDtyw/f2xdyE+W0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W4D7+b1YuV+9WMJtDNk+TvIByIZIFHAX1CEH/3cW5C7norQoosqBss9UsMrqZgmCX2n7EWB6JonJTkBKnXLSKKttHjwXRRZhl216DefuoeWrk38k6Yl1OURq6V/c+lNYoFXd2akXnyRLxVT2pSJuCYcIKTaAjaLvnYN85gSQl44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wu+O/zuL; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1743502691; c=relaxed/simple;
+	bh=5URm45iO5Dva5c5vZE938pEu4oNn53E3yXkACy1GJsM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WdEdPkL71QN5h8YuMWwj5vH2W+katQk2RFUDp7pUXexFikj7RnNUt8BJy2E+IfRAdlLJwUZtzlfWlDJYZWZcKIL/AYO8uMqFeUEvBzIkgt8TUHbuk+kGEWZGGNqhdRiPlYrDm2MBbvgctL3df3LKGWdob8u5id5grboRrsNr8sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bEa5jlqG; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3965c995151so2923960f8f.1;
-        Tue, 01 Apr 2025 03:17:08 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3012a0c8496so7114476a91.2;
+        Tue, 01 Apr 2025 03:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743502627; x=1744107427; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=64rAQ2VCJf7txTVICWUW0ghWJrbf/f0/mZiOG+wN05g=;
-        b=Wu+O/zuL7byXNfDV/P/fCGbL2aa/8Y8tJ63TmI0Dsb2AdpoQBIoHrwBE85ERxOi6Jc
-         UiF6h9xZdZODGZ6Zj6ym7qnGCRD9iqoLkY35j9hnsgrM8G/WZmC0eBfFS6Xl8okgiFEe
-         puyHlrOYMC/fcbZEoClDnfTw/podaUQzlHXHWZmMyPCnfZEKIde+0CL2sOAum6RSi7Q0
-         AvgKu1fQLTTTQr4/0KYpw8fjVeXwBLo/lb/ZJv9tuwDbYtJiWccwwlir+ZjHImBPE7kR
-         YHGRZKkCXIYRfEYrgzWV0rEQZJNhCPnsHVwiNJOlrGrcTXPsnUoQ9SH0NHw4w6ZODnCu
-         2J1w==
+        d=gmail.com; s=20230601; t=1743502689; x=1744107489; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CIZ3aaOK44zYE4FOewMRIfLw6B008LnAXYNyC85Qxc0=;
+        b=bEa5jlqGL0xZQmJnABteV7JRIOQELjWm6cnKvJUeHI8ZBAaAzjTSJGFH6Qp5rtpS59
+         eEBslAdCmsaVeoHlcR86TYX2m9grKp4pJvWFvObIuKpVMZqV7eAN+QsZxDIO6kcjSCwY
+         4DEapyC7/ZH5Tj16ifIa2cL50vFJftDFy0VwWfL9KEje0Vs1IOM+U5lJvCCKfLiukngc
+         iysVNEyoS6pkOcUbZW6sLRlF33kwVzINRFn6r1phU5nwOpfWlGezxOfSEgm9qmXGo8/P
+         na0B6Zidb7g26ZktVkbctc3gngFHFSrgIlEgmDeQAafCalhmchIE+jHghYEm7MeUb6dU
+         l43g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743502627; x=1744107427;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1743502689; x=1744107489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=64rAQ2VCJf7txTVICWUW0ghWJrbf/f0/mZiOG+wN05g=;
-        b=DTbuGZFH4eZH0jkOy3oywL6kh1IK/NSQ7BlEnrZRaRTqGnmQVxS3CT3B+uIQmR0PRh
-         tNbgOUl4feyua+UUIhplycPD0h6nJ6hCNvP9ABVm/Ih73QkR78JtPjkrD/pKWBIcJYFF
-         Hz3iBQ7MH9IkYxOy3lHRLvvjGBa1HV8ZXQhTGc/bUAnP3nVXscmi19aE7cBYAQFsu3RR
-         5ds5/eJDif/mWuXyZg5kEwrs6nUuKSFAHi+bS5jtuCZpbyh0HpKHjIgOUCzp0mu/JV6E
-         SRxh/dkp3FmH9gTxJz3h3DAzEi97SEYAgp7H/MzCZQCHPIPbPquqIuRUqibZUFrLDn/i
-         6RNw==
-X-Forwarded-Encrypted: i=1; AJvYcCU334xoZEGbscJYqrCEcXrlInA4EGGZPw5imSloTJ0m9WNijqwRJU8O7nK1gSiKB4qmov2dLw9IHmMLyBTv@vger.kernel.org, AJvYcCUgzAAC6UgcQ3HHzBReHxJuVd/KVps8Qa9orMvx1+vx9vLIpC7wDZ5hUrYtBFrkc+txc6VyIevdVVQ8@vger.kernel.org, AJvYcCWDboRW6S5uqo36HTN+tY3/lD0oy/VWx2YTqLd6Aba2nilosbthf7KRdiBTLwAggB5/UBUx04VrI2iz@vger.kernel.org, AJvYcCWpqpBAJdaO2g7jlocZ6HJddCXKTVZbz+eI6Ntcozfb9vEI5IeXkyKmzQWftYEA24u94DmMAsyWCPJo1KiHKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2VtlwIFI0V8fW/jAL1CQ9dEGy7zxu60F0YHuV3trPfDTxopOq
-	s/SEaKecqTl46agJGQvyXHmbSpg6moji6DmOUh8vSApQH4S3fecI+BBtzxWefekh67+F/SX7T9l
-	v94wRNDkX7sDmoALPPAC3E2ErlQ==
-X-Gm-Gg: ASbGncupmc9XVXNw6u69w0PBklc38c4zbVDPM1yLLxiRSXcQy9U+1NngNA0tj5lZeL2
-	4Za8Z+uszgTOh+z7h72QA34Dq+FVeb5QyBIjby1Io0aHLq5ZJthrT27sgfcLo3T72GvmuJ/oVQ+
-	PeZp8nGKJZEYiYOADhmial9eD0YQ==
-X-Google-Smtp-Source: AGHT+IHFY3NKdTJ9L3ZcnHHkf8BNknq+DA4HNmpIkvt/+N60rm+ITtpzpjaK7YuegUYY84tr1PeBYtChhoZ/dQrZWeI=
-X-Received: by 2002:a05:6000:2701:b0:39c:1258:7e1a with SMTP id
- ffacd0b85a97d-39c12587e45mr5888229f8f.59.1743502626613; Tue, 01 Apr 2025
- 03:17:06 -0700 (PDT)
+        bh=CIZ3aaOK44zYE4FOewMRIfLw6B008LnAXYNyC85Qxc0=;
+        b=CWLqznjx1r/XKpEUkU1c9q1t00j7HAMtVq5MBm1Fl4g1sDA7tY20MkKAiz1poM3id6
+         7EnqTUlzAexxHWIQa/2pdzK+lpjFPe+LsUfwhnybBk1bYOyBmPJKZWckJ0fLpmic3wXM
+         YYbA1edqgTGQmpFhE9WZNX75mb+BLDE8Bo9Fk6uhYUH9NZYBCAdXgYPCN8qAIQM3xfF5
+         IiJkMszNkAyuB36hYzXxIauDH5EHRz7kspD1BCY6DE4uAQ4Mxz+qupagqqy3dL+mHtjz
+         JwZjYIiX05T7MF6hWYjV6QvpNG+fNk44zRx/dYUALF/oqs+ktjcjHXQPgXOnA+9Vttca
+         cGYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUjeqk8oSn4TEIQ5RHwCk+qaXczM3B3siBVV1aqu6xW8gkTTQ0SXm+23xffDMXgekuJAC4ieXsytPJE@vger.kernel.org, AJvYcCXWlbbIFH63OTrMBkOhGNgX5fdxPOEbVo0AbrtE4ufQBfzD5L2ty4C06C5VSmWDk7upWci4l/tCnslHPEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4wio25MxvTTy2fNugf8K5n/eZiPu3ccQZBGgCkSRjR/7Er2Pl
+	jL2itoZ7SrSRNhGXgeg3XF53Gg2HFjjlcLXINS4vYwFDVSwb0TG8KvDMHvrB
+X-Gm-Gg: ASbGncsgt/L3x4x9+Hn79gFw1t3zCAAoVrJJh0AkpGbHyd9LOq8ZJliWg305iT+8+H0
+	cvhlZIrEnWBDMBs5R6lvUd0Uxe3JbjIpEsgrTirYqUD4ib2JLSiaR7r0F7yuIGcE8vwm9vHC6dD
+	L1Fq++JdX3Koc3FdO5SSMp8qz6OFWB9R4Wgnd5DpwvLyG1i7a/ItN6AmpGl/cCrgsgVcUr4Qc71
+	A35qU4sFWIWk9g3I5+HN0kHIZK/p2aBgf913JGTxf+NIg2xEAtVMbc/ci/eDWQltXkVGrVY9MGR
+	dyQ2MjegmvTQT+3xOunxhRTM5Q/lzOEJqoNVvWVB+xRPxpaVLOLOBQw0E/vOS9pBavNo11kMwLb
+	fUQc=
+X-Google-Smtp-Source: AGHT+IFnPKCc9XQIbSujsDw5VVE06q5nJCsm7Hu3gBV9iap9A/VDBbz1ulnF74a0u1j5CFLLrdySVQ==
+X-Received: by 2002:a17:90b:3a81:b0:301:1bce:c252 with SMTP id 98e67ed59e1d1-3053214bcdcmr19200369a91.27.1743502689074;
+        Tue, 01 Apr 2025 03:18:09 -0700 (PDT)
+Received: from mi-ThinkStation-K.mioffice.cn ([43.224.245.231])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291f1f8badsm84595835ad.246.2025.04.01.03.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 03:18:08 -0700 (PDT)
+From: Ying Lu <luying526@gmail.com>
+To: oneukum@suse.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	luying1 <luying1@xiaomi.com>
+Subject: [PATCH v1 0/1] usbnet:fix NPE during rx_complete
+Date: Tue,  1 Apr 2025 18:18:00 +0800
+Message-ID: <cover.1743497376.git.luying1@xiaomi.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250331215720.19692-1-alex.vinarskis@gmail.com>
- <20250331215720.19692-5-alex.vinarskis@gmail.com> <fb1fc0aa-4921-4ee3-9b8a-6167ef6558eb@linaro.org>
-In-Reply-To: <fb1fc0aa-4921-4ee3-9b8a-6167ef6558eb@linaro.org>
-From: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
-Date: Tue, 1 Apr 2025 12:16:55 +0200
-X-Gm-Features: AQ5f1JpMVjeGXlb_NjTeg0k-K6EplgmtwfAq6ppihs2rHcJBRu-dh162qJB6gNQ
-Message-ID: <CAMcHhXoxLx9SiUcntp1vmmK7BF0SO_uo3DCBx_3Ldd3tx+rBXg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/6] dt-bindings: arm: qcom: Add Asus Zenbook A14
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Johan Hovold <johan+linaro@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 1 Apr 2025 at 07:38, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 31/03/2025 23:53, Aleksandrs Vinarskis wrote:
-> > Document the X1E-78-100 and X1P-42-100/X1-26-100 variants.
-> >
-> > Signed-off-by: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > index 08c329b1e919..1b7e2ed56baa 100644
-> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > @@ -1133,6 +1133,7 @@ properties:
-> >        - items:
-> >            - enum:
-> >                - asus,vivobook-s15
-> > +              - asus,x1e80100-zenbook-a14
->
-> asus,zenbook-a14-x1e80100
->
-> asus did not make a component of x1e80100 soc.
+From: luying1 <luying1@xiaomi.com>
 
-I see, I misunderstood the meaning of qcom,x1e80100-crd, clear now.
-In that case, perhaps follow pattern of other devices, describe by
-model differences (eg. -oled) instead of soc? eg:
+The patchset fix the issue caused by the following modifications:
+commit 04e906839a053f092ef53f4fb2d610983412b904
+(usbnet: fix cyclical race on disconnect with work queue)
 
-`asus,zenbook-a14-ux3407ra` (for x1e variant)
-`asus,zenbook-a14-ux3407qa` (for x1/x1p variants)
+The issue:
+The usb_submit_urb function lacks a usbnet_going_away validation,
+whereas __usbnet_queue_skb includes this check. This inconsistency
+creates a race condition where: A URB request may succeed, but
+the corresponding SKB data fails to be queued.
 
-Thanks for the review,
-Alex
+Subsequent processes (e.g., rx_complete → defer_bh → __skb_unlink(skb, list))
+attempt to access skb->next, triggering a NULL pointer dereference (Kernel Panic).
 
->
-> >                - dell,xps13-9345
-> >                - hp,omnibook-x14
-> >                - lenovo,yoga-slim7x
-> > @@ -1144,6 +1145,7 @@ properties:
-> >
-> >        - items:
-> >            - enum:
-> > +              - asus,x1p42100-zenbook-a14
->
-> Same here.
->
->
-> Best regards,
-> Krzysztof
+Fix issue:
+adding the usbnet_going_away check in usb_submit_urb to synchronize the validation logic.
+
+
+luying1 (1):
+  usbnet:fix NPE during rx_complete
+
+ drivers/net/usb/usbnet.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+-- 
+2.40.1
+
 
