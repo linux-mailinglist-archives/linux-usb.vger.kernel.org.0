@@ -1,180 +1,260 @@
-Return-Path: <linux-usb+bounces-22402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22403-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AA6BA7740B
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 07:43:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5381FA7746B
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 08:18:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEF4E16853F
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 05:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90BAD3A88BC
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Apr 2025 06:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315D31DE2BD;
-	Tue,  1 Apr 2025 05:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064B11E1C09;
+	Tue,  1 Apr 2025 06:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="l1X5uVKE"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yzk+f0+d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FFC187550
-	for <linux-usb@vger.kernel.org>; Tue,  1 Apr 2025 05:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743486210; cv=none; b=GuimyaWwPF1Hhjr+X3L3E1Nbu4LzeFCSn40KqaCailB/+h+k/4kueyCzD3u19bFCO4o0hHOV0Lw/SONm1IaZGsNRdLc/0ldf8u8rJfUSFLPpvKNVh8PoY6PAkv8o7wW44ZQm6K7hgUG/TOx9tCs2rTxia2xcNU8UR+goNaJxqOk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743486210; c=relaxed/simple;
-	bh=SwnRx78oJ+t+ZIV01o+BoWbkv/UO2URLd3njvMzcoVM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g1/MhmV3kQRIXZXogWV5639MEBuHFxkHqVJLqvNUJOhr/qe5NTENyv4HFvTTF6q/zcIdLAQ2plY2wJGqcH42/Sb9+/+dukplQjX4A3DiPcfkauFwz/uoik7GbjdGixgKM8z2+I8XMYZIV6yBY+jiOrLN4rR3xK1tKq9KEf1e8ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=l1X5uVKE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52VFCrK0025837
-	for <linux-usb@vger.kernel.org>; Tue, 1 Apr 2025 05:43:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	66+D7nE5qKkdJ4daDmuUIadvGENO/tgUBOSj9nZjjGs=; b=l1X5uVKE59j55yHC
-	kDxz08QO4e5TMV+i890lIcVqBIt/BNkL7CWOTVunIu9ttb/8Str+fWETuHE6HNNz
-	dgpaCPH79SCcbdBM4fLndjEfTNDtp/eEiQyCNz9NYPPG2Dev8ZFfGVb5FCoUD8yS
-	HNmMTIdxCtbHCAwqNXK5eakjsAXrbmwUQ5GYuCpU27UV6A/y6Lgg0SFPfk5bNud2
-	1FGavuVri6m2tMlOaUjeVOSRPuIvvHBhh+uBGCNFIhSFm6ES6zHbC7ZTkuoIOfIB
-	jCBxBL+9qM34A+XOPqkiYkiTf4/AKUm/6qbw2MMAecLaCImae3mnjs9K98stqszL
-	8V+C4A==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p6jhpu1j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 05:43:28 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-223f3357064so84794305ad.3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Mar 2025 22:43:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743486207; x=1744091007;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=66+D7nE5qKkdJ4daDmuUIadvGENO/tgUBOSj9nZjjGs=;
-        b=OqQ2UtdYl1mUcx9DKI8ogakBr7V21PH05ve4tcvm00NcdWWtwKYPpiwfKELsFHhEX5
-         ou7UgQQvcsZeuzfUU0p36J1b2HwCVpkZM4/LCjACGnOQOGkKRzbr5PEkyIACJuB1cBlu
-         uO9Pg4F/0dX+3Hh3xUstjSaTKdiR3smxdDxXiWqO9x25OczUunX9gsBa9Gx6HKvohpoD
-         r4YIsTwMAQmJBSY+WBCiN8Bw5ZbDak15Su0M3sdB7h67XV88oK1JRvxa309cZJtVy1Vc
-         7Uxbkf21oDobScKoB0I/+19fi9aiQBLlm7rlg+hylBnQY9Vq14fqzYbce+rODX3WE+45
-         Y/3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWCWzXEIJJ0K0v3rSi0kLvH5MA8bghQ8TwtsnbCBf2GtGCwzWDuSF1KdaUOapi7wOxvmExQ9XCOlJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5M4TJh9reFjHvrXzB3dqjYUSEp3VkmSWfSVXJ6PrXzoYhS54V
-	j65smhg52XjnTLu3J6SGzHdO/ZFMWWVvy3luXI/jd/8ANjpydP8FruE6/TauNhtjx2EP8SxJHWC
-	/KNoY5AoIrHqXdrQC4pfarD1pVv4SPGHLIDay0mHBh4ugRZA/9TMwiXvNQS4=
-X-Gm-Gg: ASbGncum7cMN5+ZNfZZQFwJkHvX4FxilSNkiuMjLR4fTbC4LaJb1FGTZycCk42YRvPz
-	DZetLq29pJkm4U3pyZO373v89otO27e7F45JtJLMgeM5ynqS+m7vcnocAbpb4lR+d8kdR7oKi2T
-	7jHJjDGKQSbOr12p+Q4efHKcn6fmWoN1FuVjESsyte3vAHg5Ws3SwozA4zWe3t39B9hXd1SsGXn
-	oaMAT2qf2868HgI0sffJbLRA84synhT1LmI0YyKfzplJS5qB+7oEMGjseG2HZW48CS1BcgIaum/
-	ah+/LUlqIkTDblzbDpYyo/F+kBUPY7Dz5Thz00S8lNozOaU=
-X-Received: by 2002:a17:903:1c2:b0:227:ac2a:1dd6 with SMTP id d9443c01a7336-2292f974a5bmr185669185ad.24.1743486207247;
-        Mon, 31 Mar 2025 22:43:27 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHBGv2kXUZkjYQVkGex90enEWlxQkgChxhnJNxuI71EPO9S9/XsFTdb1ksSAJUaPYMKS+L1NA==
-X-Received: by 2002:a17:903:1c2:b0:227:ac2a:1dd6 with SMTP id d9443c01a7336-2292f974a5bmr185668895ad.24.1743486206839;
-        Mon, 31 Mar 2025 22:43:26 -0700 (PDT)
-Received: from [10.92.176.227] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73971090928sm7987817b3a.125.2025.03.31.22.43.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Mar 2025 22:43:26 -0700 (PDT)
-Message-ID: <0767d38d-179a-4c5e-9dfe-fef847d1354d@oss.qualcomm.com>
-Date: Tue, 1 Apr 2025 11:13:22 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBA131E2D;
+	Tue,  1 Apr 2025 06:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743488324; cv=fail; b=lNPgz59pGYsovXPoQp+Rr/aBUqeLRlNTmLyMhdIqgN0HvzU8SfDvDCUkI/J3o2JcX/ezXLus0d44pZQeuWo4Jj+Bs03TXdeRQwJ3leNkVYePJrFp2xAB9FzZbs5/L8qVZkhndPE0eUBwlEYWUNgE8u0voxNspkPcRhNwleOpW1o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743488324; c=relaxed/simple;
+	bh=kOsuPwImtADFq5cyJawsuvh/S1YCn9S1sNyKcnDm2WU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dzmyr5wYpZWevy6q+qIuO/lpMGwPLLCkBRiErRPqgo1uGZTq4wjeofEZh8aQAGVd3V91tMc21q8ZUo4kZZLVunidN9mw+ok15wjK+JNIJxBoQygLK0dCp0mut5aKWH0AvQcY1BC51RQJrXrhkStWYl71PFm1AV21E1IY8BsfitE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yzk+f0+d; arc=fail smtp.client-ip=40.107.94.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NIaEljjncOb+aaScWDFViZCcqM/Y8Qb7JQA6V9tccDl1el1o01zoDABfwP5jFfkMKfF64lqnikAuLvNMZx8wPHbE0N+hHa9/6v9FcDQBTvmgykN3rraEzi3GD40RTNBLxqqphleuyxKyoL/eA8s4JasPVTj5IlgaQxcOlJFmedjSREYrd4qyFWPoejnqA8k50+qIzBLb4iDFBClU+ar0g+MEK5AgoUnWmjBLqME61TpOQVyGv1y1YkCTqMOvXv0Hox8Bd7QLQ0kDvwR5Ctd4U2YEJi1RAfGd5/uNPXCMYi3WlwIn8V+7sTzoetFw+uzVN4w3RNy1fluMF6foWQQFFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=szNTX3sbHWxH5aNq363FPKpROTDLOw/3T8YRVfaAf5I=;
+ b=ArtjOWXhhx2B9YJwoaX3HUmyuOJXyQBmqVxQ2Fl0DNh5I8TXGhieBIfC4qSvNV2Tax4UobWQg4yJa+Lc2z7nyuhdVCycYO2uxQYtPK2YW6hTZxedsbmS/H4GRD2n6ENPKsmPQxxQGTfLHO+9LcXnue3KcUnFsakvjF3FGgytJGL6sl1FruDlQmn3/KDCNze/A+2n7OvYsaMd7v3GQdj2uQcIbdoZrPkuq+5iFob6zlAL5/4tN13ex8k1WZ9Dv52HK28YT9ZwLkhT3bqLJ8KxQ949xE1HN+M+TFP7gqCMlptw4Zjm4543RJBqzM3CI0Dkyts3nL5H1USif1r742IDeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=szNTX3sbHWxH5aNq363FPKpROTDLOw/3T8YRVfaAf5I=;
+ b=yzk+f0+dM2m7CERj43/6G1otPKCPGWuBZpe3ykEty+nOVZeOwSOOxzrUQc2IwErt+hBQMkqAnT7JogM8yPRay25OW9nkmo6Cp7cK2GzxKoYcGWjkCanop1duLwOd68vj68YXvK2l2GVyuLh07hVwcaauHMsgtIeMrvXJLyXJptg=
+Received: from SJ0PR03CA0112.namprd03.prod.outlook.com (2603:10b6:a03:333::27)
+ by CH3PR12MB7763.namprd12.prod.outlook.com (2603:10b6:610:145::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.50; Tue, 1 Apr
+ 2025 06:18:38 +0000
+Received: from SJ1PEPF00001CE0.namprd05.prod.outlook.com
+ (2603:10b6:a03:333:cafe::32) by SJ0PR03CA0112.outlook.office365.com
+ (2603:10b6:a03:333::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.52 via Frontend Transport; Tue,
+ 1 Apr 2025 06:18:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00001CE0.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8606.22 via Frontend Transport; Tue, 1 Apr 2025 06:18:38 +0000
+Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 1 Apr
+ 2025 01:18:35 -0500
+From: Raju Rangoju <Raju.Rangoju@amd.com>
+To: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <mathias.nyman@intel.com>, <michal.pecio@gmail.com>, Raju Rangoju
+	<Raju.Rangoju@amd.com>, <stable@vger.kernel.org>
+Subject: [PATCH v5] usb: xhci: quirk for data loss in ISOC transfers
+Date: Tue, 1 Apr 2025 11:47:25 +0530
+Message-ID: <20250401061725.3039278-1-Raju.Rangoju@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
- exceed event buffer length
-To: Frode Isaksen <fisaksen@baylibre.com>, Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Frode Isaksen <frode@meta.com>, stable@vger.kernel.org
-References: <20250328104930.2179123-1-fisaksen@baylibre.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <20250328104930.2179123-1-fisaksen@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: _-EgD69qHUVX99vj3S5OrROHMRlygIl-
-X-Proofpoint-ORIG-GUID: _-EgD69qHUVX99vj3S5OrROHMRlygIl-
-X-Authority-Analysis: v=2.4 cv=bZZrUPPB c=1 sm=1 tr=0 ts=67eb7d00 cx=c_pps a=JL+w9abYAAE89/QcEU+0QA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=jIQo8A4GAAAA:8 a=VabnemYjAAAA:8
- a=SHyoynBsh-P7v1gKxDYA:9 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=TjNXssC_j7lpFel5tvFf:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-01_02,2025-03-27_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
- impostorscore=0 mlxlogscore=771 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504010036
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE0:EE_|CH3PR12MB7763:EE_
+X-MS-Office365-Filtering-Correlation-Id: b16ef74a-0fad-4e0e-8d62-08dd70e50acd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sBNBCkM1YxQnpc2KMLiHkvueOvP/Ed4G+HYBfAPBC3mEDSzY/ciRXfyF4TJe?=
+ =?us-ascii?Q?t2H+K/cVcc2UKjHDY9meEEFZVXNlB+u6Y8K936iBp/YzX/umPBLJIImwteht?=
+ =?us-ascii?Q?M+CtO9BwzvvmO2BZt/mLhx7g4G+1Ci0sVA1IIZU2wwcYKLOpQ7QKQcui6USC?=
+ =?us-ascii?Q?O2o7j8YxO7OLsk1uN2y1pAqWVgFZTOL8LVxfrv3xpa3rmTfOAr/x6gEx4wdm?=
+ =?us-ascii?Q?H7wD440Tjiz2BJL4SKDY+BsYAtnuTHzIgWQP8s33ydpx2r1Zb+AS4IHMoFWJ?=
+ =?us-ascii?Q?iAdauCx8KMtPPLqmbAWLGDkAuRJNFzHMojhRVoaDtO+x4rai1qc6DjLiKC9O?=
+ =?us-ascii?Q?5r5Z9l8QTz91P7AobgRBS+K9M7xqRIQaWR5nBoLn3Rffz0uN875aAN5eaGQ6?=
+ =?us-ascii?Q?OlAm0U0IB5ju6F/yaQwvfGye/uD/2jgKY9ONygdkOwjV3EOhgVsoixVUWaUx?=
+ =?us-ascii?Q?p66DKz7pDol/6kblS3E7w3SpS1e1tJB3TuuygFvo5pnGy4e2O8Jf7IOgWFQM?=
+ =?us-ascii?Q?WD31Grvo9gLf1+uJoasTSkyFX0NErREUzMv144DtPSbeZHvFClxzaQTdfv/y?=
+ =?us-ascii?Q?wjlE+XflJV1T44tUV6yAi1DD3F7z8z6Xqy2/FwwdwpC4oPkhHfJTS+11YVeE?=
+ =?us-ascii?Q?853PEu2jBsJtNhLcaonCv8Pp7uhBFU0mIF1MtqGHhDRuVOFVV2c52RpzqwXO?=
+ =?us-ascii?Q?jfo/Zh7E9C99gCy+aZUU15/O3O+V2h+30qCPYJvU8wkFShDtbu8BdiOhYNX7?=
+ =?us-ascii?Q?otn0u5qy5tjq1k3uS5xt4See/0wfbiYzEfzAmHyIyzv5oxQIoUwRVUySMM+5?=
+ =?us-ascii?Q?vUgpOMrguaUJlIno7eyfR+3pTjOost62W7EWgse1gkf8yxVOpfgb3BC5Q+Op?=
+ =?us-ascii?Q?csArMtX/UYK5iuQ1cZT9IAJcqEvQaISEeoDOnorTPsi6unUE7FLc8JqgmIUL?=
+ =?us-ascii?Q?/fVGgUbw0vKFBYo4FE3LPRSJDNVnzzYK69+mAbin2kOXaBhoWUutldut0utL?=
+ =?us-ascii?Q?mQpczA16U3dKvBKBPAi8h0FLtkl7Syppd6yn1dbcLV7cz0FoJ3xaGM1onb3m?=
+ =?us-ascii?Q?nR7xmAeFVw8YiZKVc1gfPQ3dVnxTZnU/mS0GoYKNWvWtsyyHOMDG06Y92lrA?=
+ =?us-ascii?Q?6O0/OwK4YfvH5yiYlIpP82rrhlG4vQVHdcFQ2sQEVl/rpKvVPV68+XK2I3LP?=
+ =?us-ascii?Q?LPXr798nOc4LTHI7pIFlH7Jwn8VgIbzZTEbBGcpAFwkHX/r7WxHt3sVMhWfQ?=
+ =?us-ascii?Q?R6rDcFzqBN89uVtoagfEOirV0OM+9JZo5/0krDsrHTPQzPOcYQLZ0W3rZxP2?=
+ =?us-ascii?Q?3nTKSOsBcjJNY3FwAshb9V1yV1TIv1gBq+r7j36WO/7MRZQl4gNGHxzpCCgU?=
+ =?us-ascii?Q?9GUheip5R9+heweL1fzmdHRErHSFWpDjgvHgUtZIQWX2tKRGRu3SQsq90rak?=
+ =?us-ascii?Q?6Ex6O4wgtcL+bqcfzn2Xn71ZabwbxkGz55lkkoXV2VlEidIiB5QcEa/IIQzf?=
+ =?us-ascii?Q?e9CWndYK0oPP1no=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2025 06:18:38.6137
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b16ef74a-0fad-4e0e-8d62-08dd70e50acd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7763
 
+During the High-Speed Isochronous Audio transfers, xHCI
+controller on certain AMD platforms experiences momentary data
+loss. This results in Missed Service Errors (MSE) being
+generated by the xHCI.
 
+The root cause of the MSE is attributed to the ISOC OUT endpoint
+being omitted from scheduling. This can happen when an IN
+endpoint with a 64ms service interval either is pre-scheduled
+prior to the ISOC OUT endpoint or the interval of the ISOC OUT
+endpoint is shorter than that of the IN endpoint. Consequently,
+the OUT service is neglected when an IN endpoint with a service
+interval exceeding 32ms is scheduled concurrently (every 64ms in
+this scenario).
 
-On 3/28/2025 4:14 PM, Frode Isaksen wrote:
-> From: Frode Isaksen <frode@meta.com>
-> 
-> The event count is read from register DWC3_GEVNTCOUNT.
-> There is a check for the count being zero, but not for exceeding the
-> event buffer length.
-> Check that event count does not exceed event buffer length,
-> avoiding an out-of-bounds access when memcpy'ing the event.
-> Crash log:
-> Unable to handle kernel paging request at virtual address ffffffc0129be000
-> pc : __memcpy+0x114/0x180
-> lr : dwc3_check_event_buf+0xec/0x348
-> x3 : 0000000000000030 x2 : 000000000000dfc4
-> x1 : ffffffc0129be000 x0 : ffffff87aad60080
-> Call trace:
-> __memcpy+0x114/0x180
-> dwc3_interrupt+0x24/0x34
-> 
-> Signed-off-by: Frode Isaksen <frode@meta.com>
-> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for processing events")
-> Cc: stable@vger.kernel.org
-> ---
-> v1 -> v2: Added Fixes and Cc tag.
-> 
-> This bug was discovered, tested and fixed (no more crashes seen) on Meta Quest 3 device.
-> Also tested on T.I. AM62x board.
-> 
->   drivers/usb/dwc3/gadget.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 63fef4a1a498..548e112167f3 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -4564,7 +4564,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
->   
->   	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
->   	count &= DWC3_GEVNTCOUNT_MASK;
-> -	if (!count)
-> +	if (!count || count > evt->length)
->   		return IRQ_NONE;
->   
->   	evt->count = count;
+This issue is particularly seen on certain older AMD platforms.
+To mitigate this problem, it is recommended to adjust the service
+interval of the IN endpoint to not exceed 32ms (interval 8). This
+adjustment ensures that the OUT endpoint will not be bypassed,
+even if a smaller interval value is utilized.
 
+Cc: stable@vger.kernel.org
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+---
+Changes since v4:
+ - reword the commit message.
+ - handle the potential corner case with ISOC IN ep with 64ms ESIT
 
-I did see this issue previously ([1] on 5.10) on SAR2130 (upstreamed 
-recently). Can you help check if the issue is same on your end if you 
-can reproduce it easily. Thinh also provided some debug pointers to 
-check suspecting it to be a HW issue.
+Changes since v3:
+ - Bump up the enum number XHCI_LIMIT_ENDPOINT_INTERVAL_9
 
-As per the comments from Thinh, he suggested to add a error log as well 
-when this happens [2].
+Changes since v2:
+ - added stable tag to backport to all stable kernels
 
-[1]: 
-https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
+Changes since v1:
+ - replaced hex values with pci device names
+ - corrected the commit message
+---
+ drivers/usb/host/xhci-mem.c |  4 ++++
+ drivers/usb/host/xhci-pci.c | 25 +++++++++++++++++++++++++
+ drivers/usb/host/xhci.h     |  1 +
+ 3 files changed, 30 insertions(+)
 
-[2]: 
-https://lore.kernel.org/all/20230525001822.ane3zcyyifj2kuwx@synopsys.com/
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index fdf0c1008225..364b5a9e7c3e 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1420,6 +1420,10 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 	/* Periodic endpoint bInterval limit quirk */
+ 	if (usb_endpoint_xfer_int(&ep->desc) ||
+ 	    usb_endpoint_xfer_isoc(&ep->desc)) {
++		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_9) &&
++		    interval >= 9) {
++			interval = 8;
++		}
+ 		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_7) &&
+ 		    udev->speed >= USB_SPEED_HIGH &&
+ 		    interval >= 7) {
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 54460d11f7ee..6c15b4158f06 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -71,12 +71,22 @@
+ #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
+ #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
+ 
++#define PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI		0x13ed
++#define PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI		0x13ee
++#define PCI_DEVICE_ID_AMD_STARSHIP_XHCI			0x148c
++#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI		0x15d4
++#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI		0x15d5
++#define PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI		0x15e0
++#define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
++#define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
+ 
++#define PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI		0x7316
++
+ #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
+ #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
+ #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
+@@ -280,6 +290,21 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
+ 		xhci->quirks |= XHCI_NEC_HOST;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
++	    (pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_STARSHIP_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN2_XHCI))
++		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
++
++	if (pdev->vendor == PCI_VENDOR_ID_ATI &&
++	    pdev->device == PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI)
++		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version == 0x96)
+ 		xhci->quirks |= XHCI_AMD_0x96_HOST;
+ 
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 779b01dee068..6de1164e2e53 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1637,6 +1637,7 @@ struct xhci_hcd {
+ #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
+ #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
+ #define XHCI_ETRON_HOST	BIT_ULL(49)
++#define XHCI_LIMIT_ENDPOINT_INTERVAL_9 BIT_ULL(50)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+2.34.1
 
-Regards,
-Krishna,
 
