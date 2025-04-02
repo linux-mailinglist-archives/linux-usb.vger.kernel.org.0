@@ -1,229 +1,271 @@
-Return-Path: <linux-usb+bounces-22459-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22460-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F325A78756
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 06:43:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE229A78820
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 08:30:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497D83AE9B0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 04:42:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C83016C6EF
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 06:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FAF230BC7;
-	Wed,  2 Apr 2025 04:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94FE233134;
+	Wed,  2 Apr 2025 06:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="B5h3c8EX"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="f12LftuR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02olkn2085.outbound.protection.outlook.com [40.92.50.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B76920AF8B
-	for <linux-usb@vger.kernel.org>; Wed,  2 Apr 2025 04:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743568975; cv=none; b=bYo3G8pofAEIKG2pPyjDhhrfEuYfxZZrkYNJ8jyHwpXHv/QIdX7QFrsNln4AqyYuLWjh5Y/oQOdsPa14a9nxkhqa4kiIRFWQaR/VvEcmtqXXk++93nK4r5jg+3Mw0p70kUrD4TWS7miWkK81D/9WTqjmOk8ZpYChhLh20x88hEc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743568975; c=relaxed/simple;
-	bh=qZYwJH7+q22j/uTOz04w3vnQHZFCKfxkJPGcjgjE6d0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HmjwaGz+kCAFddxA/E1YLD/+Vfsy0PwG+bKuUC+akrEAZG7aUgc7fbabj+LluGfaSbbGTkWKT+FzDdI2gRARKS4GG6pw6xzZQYflBAGRlZ6U3JOx9GuYbNXTXJFHFu2Y+YueZjNYaiEx/W5pRCaZBDt35Y1fkRDqh3hIWkm6c28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=B5h3c8EX; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5322fiwZ024654
-	for <linux-usb@vger.kernel.org>; Wed, 2 Apr 2025 04:42:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Fsc/ia+3ekoWiUvTYhDO0IcUlCjl3N229EoDeW2bErU=; b=B5h3c8EXGjZroHdw
-	b7U54eLHGo8qm1AioH4ij9Wslkp1ranXN+kDGBJtXf73+cW0PPwOc1beCzxegwWY
-	UL+cRMAY3LW9pvHBUh3OVvn9twbkKotCNw2a5yeWKsjjCghRdbD0fm7/MXQd6C6v
-	B8xrU4Bfw7XCaxDxAZXRkA86XBWV2zS/Rel5/HJocZAUe6msvJKRJq1IUwlP5cdX
-	Ch2uMldyEBOxiP4hDGxiqZ5+DWWhFavmhOZEI3e8YJcE5KLV0gXD7HtsAc1bcIOX
-	Th3e5yXXN7mW617xTJb4uXssjcbd9ofbefwFl6Q4tGrxMjDbgE5X07o4G8UQy46W
-	RheGQQ==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p86kt7hg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 02 Apr 2025 04:42:52 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-227ea16b03dso178399215ad.3
-        for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 21:42:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743568970; x=1744173770;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fsc/ia+3ekoWiUvTYhDO0IcUlCjl3N229EoDeW2bErU=;
-        b=KFOoLEBknMhPng3VnjjgFsHnmrXXpEBeAwUGCqmKXjMAl26Hm3Tp6HV7+VdpYjGg52
-         My4KfPMxw8KsXa539oQKUd3AGowQ3fbnohIXoNU7bZqjXh7JVwJtg8/7WZZjYFDdC/SU
-         raRxBDIrRseQLqxBEvaoroPotf9fT6pQz7SPG3KWE0WcpKend0R4nK0MUF6OI+en0Vbk
-         0cN3xT13Wg2sedIQKI+MjBST6uUmn1gLuiQsBJuBJyI6V3QFNEBBObMlMc5uJfGTiWmw
-         XjDVsjz7+ADLrQtNC9ohx6ADvQDbUrP5rMr2B50BC8AbQyUlDp2eGaaTp0nA6J1Adyob
-         +hWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBREkNmrVVsYblHJNOMxiTkv1470z6tvH1MpT3cHUpU85iekQ0D0REazXRYctBmMRC1RfQeXRuJ3I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3SiSxsRl5dxMkRcY9+e9sn3pNHoTNZkSK5dnjEgDfzwSDQ61V
-	n6GoeNug8aq9e37hMkSO6mhj48bbmWmlYXBec9zAtdWGwgTKncqeXC4BzQOpJRDNMifIZ+VfUqd
-	anAJNVlQU8gKuhBNDG7qyZV43UrJkodRe19uB+LgDhV0E/DXyWCH9fCTLgr1zvg2Nv90=
-X-Gm-Gg: ASbGncvpk731hvdgFgPlZ1qjxKJIb/DxuzzuEoqYmKgFxF/NGIkRQNoJxA+9uPcmc/m
-	AOS0c8hFGEOb13aGJmyYqkvpW+ZzxMsSj/dfIVqPlsCxHn/JVCf4vvjPSOEA5cRFmU0E8dbjZpM
-	5Px+nMsCpFTZensFHR0iSwrNiVag9fdIQjBU9R+PJXd4bXCz0cKRwtDp7pVS8VkobMsC4KagfYY
-	+UGZ/Qi2HH0FvjakHXQYfwEhdXRzJdybjItPt0wo+A6CjVTWgBDRHcgAGrAOPahLnLfvcYb87UW
-	HOmqacn4kTkKWob4uZTYr0QX75doOqLmivC6TAPE76qY
-X-Received: by 2002:a05:6a00:852:b0:736:48d1:57f7 with SMTP id d2e1a72fcca58-7398036737cmr20072274b3a.7.1743568970530;
-        Tue, 01 Apr 2025 21:42:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE5ELsL2QdK6nHfiqIA5vZv80dty9X8RSjij14cKDuVlA2qtjsFx42IogqS87E3RtSAUR5DFw==
-X-Received: by 2002:a05:6a00:852:b0:736:48d1:57f7 with SMTP id d2e1a72fcca58-7398036737cmr20072249b3a.7.1743568970031;
-        Tue, 01 Apr 2025 21:42:50 -0700 (PDT)
-Received: from [10.218.44.4] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73970e27129sm10235002b3a.57.2025.04.01.21.42.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 21:42:49 -0700 (PDT)
-Message-ID: <4d9226a9-d89d-4441-9dbf-f76ebce49a9e@oss.qualcomm.com>
-Date: Wed, 2 Apr 2025 10:12:46 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4240620E33E;
+	Wed,  2 Apr 2025 06:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.50.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743575415; cv=fail; b=iPCC0m/gonVRHQCwnKJRDzQjbjQD2pUdMY1/IDBIcU86jG+Q9VW7SJgTtgEIcJeGQOzNP6cJqB8sViMSyY54qtqjL8PICjIRQdq2jz5EgdY3maUSQyhzDNDSt3JUgbvMsUx8IpoTKsTuJ024ECxO3dnsvhT4PPbj22kYsdIB8JM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743575415; c=relaxed/simple;
+	bh=yJJVM/mBc65WG/s2W1DOMw9Q5+OkHxg/86a+306+2TI=;
+	h=Message-ID:Date:To:Cc:References:Subject:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=IkhIcM31l4Ubejo/9TTOARb6HGO1KorVFCfnXy8uYj5NqvsFvBDi6QUpK6POYU2UdxY1bwbrWC9t9c2C3QysSjDA3nCHBaV+zpePtMP/gpZRwKQG9mQM1DMd7BAfPDhfubsNvv0QnTUxjNWCjydUxNydTuCZS62510RvzrTBvYE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=f12LftuR; arc=fail smtp.client-ip=40.92.50.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=X//c410IkeWk0gngibQKRm5hOwPyDNgCZomiaCzgMJdAEZjiKazijMsCj+WoKDkzgRQQyEP4rzR1DkHswLqQZgePS+GC+1hIG6eSmd8U4+wg6haS5SuS7ZAmWM0vgdjnXiaHch6TAvPWSkq6DpOmURvrFUBgTw5+hjWDrXBC0eFdfMIVyi0D5XQpDzM2kK7tWtIEZ85BAtincw+k2NaFoIz7vb494SXtjAM0EjeWoNmy2rFM7aQiXZKCGOut49KUff/6lGo/Re1mMbVBsME/+a8eWd5PsexOrYImJKQo7VQnlPNd/bGmexawCqSvBBWoo2uv0tpU9x7UTapy55zj3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PV8oiWqlnyKqadm5DWvoYSvpMY4DYCXfePLQI42JIyU=;
+ b=B6hqFf0rR0CuBhdX+HPDKm3WBKpRu59CbuFivNORdwVxbPnRjz4FzlT2ZyaCsVyCTTkHTDgyZKhBC9C1A3S21/7h/z9CsTHDY4q2pyIpK53uNVL0fkNbLmoGvYBh1HQQNhDSTzuPtIb9AhDuLnZWW++BHA3WZwCv7NS9/cpOvKliT1xrdm2FT99ty4SERgWjTzVVhVj09L6CGt8CSOt3fVP42YlfzfTabZ0OH0ckNae9D5Iyi8HHurQHyZyRfDReb/KswnUYoR4wVOuxBOygMBtxI7/hDOxCJP01GskmuwJKmCMbq8yqki0fFgKwfT5IunII5VGnanSRk9Ch/gxEpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PV8oiWqlnyKqadm5DWvoYSvpMY4DYCXfePLQI42JIyU=;
+ b=f12LftuRYegWtEuTqQIjlFecrR3Lda6hzqKRItl/QQ2RxTHK+bG8yOAFgNXJmrdPopVgRaw9+zZ5i2eqoaNZq3UoDs5usplRYMDYVZyIaWMMcCactPcnDzRU5cv2epZRMQLQD+OVGWXYMJfqyyFycRUqdZwHsVhKBGtH5KgED6Vd61GVQPxGUP9F9cmv+qBWFAiDeedlaGNoyjks/rDgkh2lPmOo8o4PIVABGxvN+U9AcwPHbt5pW4E6cbH/ZliqtUUrgi3AFORLxhSfzcYEniR9Pmjywzdw3a5yQvejnClcFYQ8H2y2neennot2fi3JuDciM8xsisj4JPKJ1XmXTA==
+Received: from AM7P189MB1009.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:175::17)
+ by AS8P189MB1272.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:2aa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.54; Wed, 2 Apr
+ 2025 06:30:11 +0000
+Received: from AM7P189MB1009.EURP189.PROD.OUTLOOK.COM
+ ([fe80::e9f1:a878:e797:ee1a]) by AM7P189MB1009.EURP189.PROD.OUTLOOK.COM
+ ([fe80::e9f1:a878:e797:ee1a%4]) with mapi id 15.20.8534.048; Wed, 2 Apr 2025
+ 06:30:11 +0000
+Message-ID:
+ <AM7P189MB100945E7C0850C7469739C81E3AF2@AM7P189MB1009.EURP189.PROD.OUTLOOK.COM>
+Date: Wed, 2 Apr 2025 08:30:10 +0200
+User-Agent: Mozilla Thunderbird
+To: alex.vinarskis@gmail.com
+Cc: abel.vesa@linaro.org, andersson@kernel.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+ heikki.krogerus@linux.intel.com, johan+linaro@kernel.org,
+ konrad.dybcio@oss.qualcomm.com, konradybcio@kernel.org, krzk+dt@kernel.org,
+ krzysztof.kozlowski@linaro.org, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, lumag@kernel.org,
+ robh@kernel.org
+References: <CAMcHhXqbQ-6SLotNfQDStr5B0KAMxFRuSiLnjdg+UrtqA1phXw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] arm64: dts: qcom: Add support for X1-based Asus
+ Zenbook A14
+Content-Language: en-US
+From: Maud Spierings <maud_spierings@hotmail.com>
+In-Reply-To: <CAMcHhXqbQ-6SLotNfQDStr5B0KAMxFRuSiLnjdg+UrtqA1phXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR10CA0039.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:150::19) To AM7P189MB1009.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:175::17)
+X-Microsoft-Original-Message-ID:
+ <15dae5f2-6af1-4fb6-8f08-2ec8f398a1aa@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
- exceed event buffer length
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Frode Isaksen <fisaksen@baylibre.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Frode Isaksen <frode@meta.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20250328104930.2179123-1-fisaksen@baylibre.com>
- <0767d38d-179a-4c5e-9dfe-fef847d1354d@oss.qualcomm.com>
- <d21c87f4-0e26-41e1-a114-7fb982d0fd34@baylibre.com>
- <a1ccb48d-8c32-42bf-885f-22f3b1ca147b@oss.qualcomm.com>
- <20250401233625.6jtsauyqkzqej3uj@synopsys.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <20250401233625.6jtsauyqkzqej3uj@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=W8g4VQWk c=1 sm=1 tr=0 ts=67ecc04c cx=c_pps a=JL+w9abYAAE89/QcEU+0QA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=VabnemYjAAAA:8 a=m5ogOnp4AejF7vqX9dAA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=TjNXssC_j7lpFel5tvFf:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-GUID: a7ur2W1hMoIDeY7-6MzCoKuHM_j9kJth
-X-Proofpoint-ORIG-GUID: a7ur2W1hMoIDeY7-6MzCoKuHM_j9kJth
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-02_02,2025-04-01_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 clxscore=1015 malwarescore=0 adultscore=0
- phishscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504020028
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7P189MB1009:EE_|AS8P189MB1272:EE_
+X-MS-Office365-Filtering-Correlation-Id: e06d0f37-2548-4e1c-1c54-08dd71afd18d
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|8060799006|5072599009|19110799003|15080799006|6090799003|461199028|1602099012|10035399004|4302099013|440099028|3412199025|18061999006;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eGFTRCs2SStvN0pwWk1DZTRzUEN1WVVBakhoYkJpenV2ZEdTSU0xK0xnaGkx?=
+ =?utf-8?B?Z0s5YlBDWTdyem1HOWVvTDRXcnovNENTendXOUNWVU5ObjI3YTZkaTd6N05a?=
+ =?utf-8?B?R1hmYXZuTkNWU0lQUkd1TGNKTW0wWGptU0t1cjI4bTBpNkZ3MjBXYjVYZkFr?=
+ =?utf-8?B?b2hXTWZxRFU3VmlRcUdSdVhYMHNnVVVWSjl6clo1ZXFjTDVFTUxDTmc1b0RW?=
+ =?utf-8?B?QnA4N1FDSXlwVFIybms5cG5IQXNXNE1BWnZidThTUG01S3IrUjQ0T1VvVE9D?=
+ =?utf-8?B?NUtCSENiVXIzdFp0SWtOQU02a2pCNlVmSXI2NzBXREFUem80M3J5QUd2WUkw?=
+ =?utf-8?B?NXl1MnJlaEtwS1R3dE1JZHNUajZ1WkIvVXpwODRiWHpQMjBZTmxFcW5YL2w5?=
+ =?utf-8?B?emxrYk1DZThodzJqeFBWMTZML1ZEWXpZZjR1eU10OWVXUFhHaEZ1OWJjeW80?=
+ =?utf-8?B?NmVDa0pSOURiaFF2ZG1LVjlYNVNRWDFPT0FteDJQZXkwSHdGVXZiTURXZzFy?=
+ =?utf-8?B?MTVzL25IQVJZOE1sWm1IUmZVZUs5QnIvN2YramtJdUFVVVNpL2UxVnc1U1NZ?=
+ =?utf-8?B?dk14TTQwcVE5b0NTL3VxcFlnOE8vdlpheFpnOUpXeVEyNy9zN05vNUtNaUFo?=
+ =?utf-8?B?eVREcURrdzF6N3p4MTUvN0c4MndFS3NkeGs5dGp1K21SN2w1SEM4b0NwM0Q0?=
+ =?utf-8?B?SUhIaDNEbWpteFpoSDRxRXBKR293T25KZHFhZ2UrS1BtSzZXbnN4VUdweW1x?=
+ =?utf-8?B?M2N2TEVKN0h1cXVIRUtoQVVYVHFoM0JLMUxFekxhWW1CSndBUElYQjZacnBW?=
+ =?utf-8?B?REVnVm1EVUdGVlNlaWxUcEhyZkVQNWpZaTcxNXR5OHY4RkhCcTRPUWNUVWFG?=
+ =?utf-8?B?Y2wrK1hTaCt2KzBpMHJPZWRpYkpMc29FK090MjRCbGwweXQweDRNdGRhR2ZW?=
+ =?utf-8?B?cUxSTTcxbDZIQjdoK0x0aUU3dWNqZ2pEMkkwTHlJNnVwNHNYTmtzaFgwbTJ1?=
+ =?utf-8?B?bXh4MTBEZTlvVThaTDVNRmdtaVNxNGFNT0RBZm1Ya1lUY081V2t0RTRJL3Yw?=
+ =?utf-8?B?M1lOKzAwaVRjdGJLdjZuVmtDandVcys4b0dqN3lrMXFyd2NsZWJOQ0d1VVAz?=
+ =?utf-8?B?d0RZSlNaMVUvZmVWWFU5Wm1XeFpGQUMwQTNxNEg0VVhNQlkwcUVuN1pTckVi?=
+ =?utf-8?B?L0Yxbk14aFJLbkE4VWhNNUFBanUxUzlKRTNoNUgwSGxhRjY3d214U2tiRCtL?=
+ =?utf-8?B?UThxdHU1RXJLN0VRWjZNaDh4S2NuSkVPRWZMb3VFa2FPVXhLY28rbGJvNWh4?=
+ =?utf-8?B?dmdXbDdmanlHdElqWHNQbVgzemF2VHdKYXZFQ3EzK00yeXlkbm00Z0dkaTZE?=
+ =?utf-8?B?SEFiYm5JRm13YXJaTlNXMjJybjU5SmR6T3NlbFp4RGh6UGVJTGptTEtGNHRP?=
+ =?utf-8?B?ZVlQOTFvekZYb2xZNUZ4Q0JBTzhqanFZRDNxYVN5RFozWlU2YzJEckhHVXhq?=
+ =?utf-8?B?MHlPZEU2L3pmN0hZVWtQeUFGWmh1cE93YUZ5N3JzTGl0STI1ZzJ2MkUxVTFE?=
+ =?utf-8?B?ei9NU0JtODF3Z2pESzVBalZncHdJRXc4Z3JpM0pMTWtINklEZ1h4YjY1VXFl?=
+ =?utf-8?B?aWxCSnMxKytnMXZVeCt6RWdOUmR4UVpyTDNCVk01UDFTb2ExYnRycHJqb29p?=
+ =?utf-8?Q?xr+eGHEvvrYf+S6bXnsx?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QmJZL25iNFJzcTJCMkMyckdBb0pzRjZpelBWUSs0elBaVnkvaTF4OUdqUGJi?=
+ =?utf-8?B?ZWJqWHRpL3drbUZDQ0ZCbS9rbGFOOVF5NEpFM1hIV2pPcjZxYnlmc3hEaU5R?=
+ =?utf-8?B?M1ZtRlZ6QW9lTVhCQ1lxSU5DWXZLdVUwUnhSQ3RpelhYMnp1KzRMaGxYb2pK?=
+ =?utf-8?B?a2dERkE2azhUWDd6VnRseGlIRE5YbTVJT29jUHQ3V3FleXdYZ0hEZklTWm5m?=
+ =?utf-8?B?YkdMZHoybitxVzlZMHhvV1N1SEtVQ0xBczAyc242empJRllpZndCVWMrN1hM?=
+ =?utf-8?B?RjNtRU1MbHh2a25sNmJ1R1YyUWQ3b1JoT3hDci83eXJSa0xtd1NaZXNvaFcw?=
+ =?utf-8?B?K290VGhBWVpxMkthcWxhcUc5OWJuSER4dWExcEY1OVVnalE0NDJPaFI4eVRK?=
+ =?utf-8?B?RGZ3RW1mU1JjbE45QUVMYWV0dUxNSFB6Q01UMTBNNlYxaWlHaEFROFUwdkRz?=
+ =?utf-8?B?VG5iVXR0NlZkV3FYcituNVVDMWpYTDdjVGtPcXdrTWhMeHNnajFDb1E3d2hT?=
+ =?utf-8?B?NTlJQzExSEFhU2pUR1g3UnAxR3R5ZVhWazI0TnpWRXRxTThoeExGMitNL2hN?=
+ =?utf-8?B?MEM3cjFLZi94UVRBa2FKc2czd0ltOHdYOTZRb0JWQkhHbzZ6L0JpQVo2THN6?=
+ =?utf-8?B?MWhwMkdVdVNPSXViSWJ3MXNuVm9iVXlqY284NHVjR0huVXV5cHhzUjVNZWxj?=
+ =?utf-8?B?TUFMc2QwaDBYMXV5Njh6OWpYSm5LQS9IQndJTU1QZzlMb2NWVzVGZUZpaUNV?=
+ =?utf-8?B?RFFoZzM3cW9MdE9jUlpleE94RmNmUHNDTW9Rei92SnBrUXJFYlNzQ25PZ3Rm?=
+ =?utf-8?B?OU5uNWJUQnEzclY4eUllUW1lYW9qUWx1N0xUTjZReVU1UzBqWm9YNWZhU05H?=
+ =?utf-8?B?dFFDT2ZJOHBlTDBGWm95K2lkWjFVeHR2bVNPTnBZZlhGTTV4VXdOb1FEeS9x?=
+ =?utf-8?B?ajh3c0VaVHFWVDBwV3Z6RUVqNWVlMTRVTi9NVDBsR3YwdTRXZVJITWEyZkFM?=
+ =?utf-8?B?Z2xSRE90NCtjTjZXeGl3UysybGMyNVV4N0JRZlB4Ly9PbTZYcU1KRDNtMGpB?=
+ =?utf-8?B?OUNVTXd1YnNyTVVzYUF3R1BrYlBISGwrRXhmV0J3U0hoVG5nU1VCVlZyek03?=
+ =?utf-8?B?TUVtVHFFbnJxVFN2SVEwenJZa2Z0NnVaVmpwTFdoWkluRmdOSEV5ZjJQbk94?=
+ =?utf-8?B?NFpMdGQwNmlpQzFPcWZ6NkJMRlM4aWRvR1laSitwY0l5djN3ZVpJS1VGbmdB?=
+ =?utf-8?B?cU5mNk1EUi94WVAxOXMvUXRPZmZDOWM5cUMxbHlZcmVqK3FDb1k2TjJWSnZ4?=
+ =?utf-8?B?YlpaT3VkVENRV25UU0xUOW56VlQxY1Z6bytwOFBXeWtCNndVRWJTdEljVmdM?=
+ =?utf-8?B?ai8xSkl3QUZjUENxRlgrV203VlI0VUFrcXlwTnRabUM1TjVMOTRtejhTb29Y?=
+ =?utf-8?B?MzdsUDV6Z0RWVzZaMlVNdXRNS2Zpb3U3QVE3ZkJ1K2RvbEtUbDRhd0Z0Z0FE?=
+ =?utf-8?B?QjNCR1VJbDk1WGNIR0RkZmRmakxPOHlMclUraGhmM1VCRm0rOG11OVJra0l3?=
+ =?utf-8?B?Q2JqSlFGSmlUckIzTWk1Ym1KdFBjSFB1OE4yV3JIbXliMTVjVTZTL0xqamwy?=
+ =?utf-8?B?ODBTclB6b080OVFNNlh1aktiYk5XSGVvdncxSlJvZFpzZFFHZTNnbmw0ZWpZ?=
+ =?utf-8?B?eGc3SGpURk1UM3B5MTc0MlV5enlzMGE3a04yMGlVS1ZLdXh1Z3Nra0hSMEJU?=
+ =?utf-8?Q?zvFVtEeid0oO0FOdzyqMLDzkInzKCD73m8d3IIG?=
+X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c54b5.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: e06d0f37-2548-4e1c-1c54-08dd71afd18d
+X-MS-Exchange-CrossTenant-AuthSource: AM7P189MB1009.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2025 06:30:10.9891
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P189MB1272
 
+> On Tue, 1 Apr 2025 at 23:15, Konrad Dybcio
+> <konrad.dybcio@oss.qualcomm.com> wrote:
+>>
+>> On 4/1/25 8:05 PM, Aleksandrs Vinarskis wrote:
+>> > On Tue, 1 Apr 2025 at 17:59, Konrad Dybcio
+>> > <konrad.dybcio@oss.qualcomm.com> wrote:
+>> >>
+>> >> On 3/31/25 11:53 PM, Aleksandrs Vinarskis wrote:
+>> >>> Initial support for Asus Zenbook A14. Particular moddel exists
+>> >>> in X1-26-100, X1P-42-100 (UX3407QA) and X1E-78-100 (UX3407RA).
+>> >>>
+>> >>> Mostly similar to other X1-based laptops. Notable differences are:
+>> >>> * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407QA
+>> >>>   and Qualcomm FastConnect 7800 on UX3407RA
+>> >>> * USB Type-C retimers are Parade PS8833, appear to behave identical
+>> >>>   to Parade PS8830
+>> >>> * gpio90 is TZ protected
+>> >>
+>>
+>> [...]
+>>
+>> >>
+>> >>> +&spi10 {
+>> >>> +     status = "disabled";
+>> >>> +
+>> >>> +     /* Unknown device */
+>> >>> +};
+>> >>
+>> >> Does the device crash if you enable this bus? Keeping it 'okay' would
+>> >> make it easier for folks to poke at it
+>> >
+>> > It does boot just fine, but does not initialize:
+>> > ```
+>> > geni_spi a88000.spi: Invalid proto 9
+>> > ...
+>> > qnoc-x1e80100 interconnect-1: sync_state() pending due to a88000.spi
+>> > ...
+>> > ```
+>> >
+>> > I only quickly checked that 9 is indeed invalid state, iirc should've
+>> > been 2. But haven't looked deeper into it, so left it disabled. So I
+>> > thought best to leave it off for now. Unless you prefer to drop it
+>> > altogether?
+>>
+>> That means this QUP is configured to work as a QSPI host, which is not yet
+>> supported upstream. I looked at the DSDT you submitted to aa64-laptops, but
+>> there doesn't seem to be anything connected there, perhaps it's loaded at
+>> runtime. Since your keyboard and touchpad work, maybe it's a touchscreen?
+>>
+> 
+> Indeed it is just defined without anything attached. I am suspecting
+> it also may be just leftover, won't be the first one...
+> No, this particular laptop doesn't have a touchscreen in any of the
+> three screen configurations announced.
+> 
+> It also does not have a fingerprint reader, nor hardware TPM2.0 (yet
+> SPI11 typically used for it is still TZ protected :). EC seems to be
+> over i2c5. Asus's touchpad supports some fancy gesture controls, but
+> there is in fact another 'extra' hidraw device 'hdtl', I assume that's
+> the one. No sdcard reader.
+> Only other still unsupported features are audio (i guess unlikely that
+> they used different smart amp?), camera (ov02c01, pm8010, so also no)
+> and DP-HDMI bridge PS185HDM, which from what I can guesstimate is i2c.
 
+I actually managed to contact someone about the ps185hdm as it is also 
+used in my asus vivobook s15. But from what they told me it is a dumb 
+bridge that does not require any further configuration. I have tried 
+getting it to work but I've had no luck yet. I did find a hpd gpio at 
+tlmm 126.
 
-On 4/2/2025 5:06 AM, Thinh Nguyen wrote:
-> Hi Frode,
-> 
-> On Tue, Apr 01, 2025, Krishna Kurapati wrote:
->>
->>
->> On 4/1/2025 5:38 PM, Frode Isaksen wrote:
->>> On 4/1/25 7:43 AM, Krishna Kurapati wrote:
->>>>
->>>>
->>>> On 3/28/2025 4:14 PM, Frode Isaksen wrote:
->>>>> From: Frode Isaksen <frode@meta.com>
->>>>>
->>>>> The event count is read from register DWC3_GEVNTCOUNT.
->>>>> There is a check for the count being zero, but not for exceeding the
->>>>> event buffer length.
->>>>> Check that event count does not exceed event buffer length,
->>>>> avoiding an out-of-bounds access when memcpy'ing the event.
->>>>> Crash log:
->>>>> Unable to handle kernel paging request at virtual address
->>>>> ffffffc0129be000
->>>>> pc : __memcpy+0x114/0x180
->>>>> lr : dwc3_check_event_buf+0xec/0x348
->>>>> x3 : 0000000000000030 x2 : 000000000000dfc4
->>>>> x1 : ffffffc0129be000 x0 : ffffff87aad60080
->>>>> Call trace:
->>>>> __memcpy+0x114/0x180
->>>>> dwc3_interrupt+0x24/0x34
->>>>>
->>>>> Signed-off-by: Frode Isaksen <frode@meta.com>
->>>>> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for
->>>>> processing events")
->>>>> Cc: stable@vger.kernel.org
->>>>> ---
->>>>> v1 -> v2: Added Fixes and Cc tag.
->>>>>
->>>>> This bug was discovered, tested and fixed (no more crashes seen)
->>>>> on Meta Quest 3 device.
->>>>> Also tested on T.I. AM62x board.
->>>>>
->>>>>    drivers/usb/dwc3/gadget.c | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>> index 63fef4a1a498..548e112167f3 100644
->>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>> @@ -4564,7 +4564,7 @@ static irqreturn_t
->>>>> dwc3_check_event_buf(struct dwc3_event_buffer *evt)
->>>>>          count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
->>>>>        count &= DWC3_GEVNTCOUNT_MASK;
->>>>> -    if (!count)
->>>>> +    if (!count || count > evt->length)
->>>>>            return IRQ_NONE;
->>>>>          evt->count = count;
->>>>
->>>>
->>>> I did see this issue previously ([1] on 5.10) on SAR2130 (upstreamed
->>>> recently). Can you help check if the issue is same on your end if
->>>> you can reproduce it easily. Thinh also provided some debug pointers
->>>> to check suspecting it to be a HW issue.
->>>
->>> Seems to be exactly the same issue, and your fix looks OK as well. I'm
->>> happy to abandon my patch and let yo provide the fix.
->>>
->>
->> NAK. I tried to skip copying data beyond 4K which is not the right approach.
->> Thinh was tending more towards your line of code changes. So your code looks
->> fine, but an error log indicating the presence of this issue might be
->> helpful.
->>
->>> Note that I am not able to reproduce this locally and it happens very
->>> seldom.
->>>
->>
->> It was very hard to reproduce this issue. Only two instances reported on
->> SAR2130 on my end.
->>
-> 
-> I still wonder what's current behavior of the HW to properly respond
-> here. If the device is dead, register read often returns all Fs, which
-> may be the case you're seeing here. If so, we should properly prevent
-> the driver from accessing the device and properly teardown the driver.
-> 
-> If this is a momentary bleep/lost of power in the device, perhaps your
-> change here is sufficient and the driver can continue to access the
-> device.
-> 
-> With the difficulty of reproducing this issue, can you confirm that the
-> device still operates properly after this change?
+I currently have just tried ignoring its existence and describing a non 
+existent dp-connector with the hpd gpio hooked up to mdss_dp2_out but no 
+luck. I get a timeout on the aux bus communication I think, so something 
+is blocking that still.
 
-Unfortunately, I did not test this particular change of returning when 
-ev count is invalid. I stress tested the change of copying only 4K [1], 
-but didn't see any issue. I suspect we didn't hit the issue later again 
-in the course of 14 day testing.
+I think it may just be some regulator or something required to actually 
+power up the ps185hdm
+
+from my correspondence:
+`
+Hi Maud,
+
+There is no “enable pin” on the PS185 but there are several GPIO’s. The 
+FW associated with the device is programmable so the manufacturer of the 
+motherboard you are using may have requested a special feature (such as 
+an enable pin on one of the GPIO) to be added by Parade. If that’s the 
+case then you would need to contact the motherboard manufacturer to find 
+out more details.
+
+Hot plug events are normally routed through the DP_HPD pin but, as noted 
+above, it’s possible that the motherboard manufacturer asked for this to 
+be replicated on the GPIO pin.
+`
+
+some messing around of me in the dts can be found here: [1]
+
+[...]
 
 [1]: 
-https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
+https://github.com/SpieringsAE/linux/blob/wip/x1e80100-6.14/arch/arm64/boot/dts/qcom/x1e80100-asus-vivobook-s15.dts
 
-Regards,
-Krishna,
-
-
+kind regards,
+Maud
 
