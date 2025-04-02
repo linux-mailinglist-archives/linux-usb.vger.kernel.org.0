@@ -1,513 +1,229 @@
-Return-Path: <linux-usb+bounces-22458-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22459-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33C7CA7866F
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 04:33:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F325A78756
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 06:43:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBB6716E126
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 02:33:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497D83AE9B0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 04:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61676F06B;
-	Wed,  2 Apr 2025 02:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FAF230BC7;
+	Wed,  2 Apr 2025 04:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GfUeAtHn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="B5h3c8EX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bg5.exmail.qq.com (bg5.exmail.qq.com [43.154.197.177])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19EAEEB2;
-	Wed,  2 Apr 2025 02:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.154.197.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B76920AF8B
+	for <linux-usb@vger.kernel.org>; Wed,  2 Apr 2025 04:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743561186; cv=none; b=U5CA/1ss6b+FCKHeuZ+7g791Z+FpgkgQTqooqppFfQCXBuNC4pps12yHgDCjV/rO+l9SAYI/0YWJhhDtx/30lfIMLX44vNdih8eQHDZU6CjouN0r9qJ44GiVXI4B9JFiTFbR5DkdMfCOUTt4lIhkBb1Q1+rxE1cLow+AVjwTtTM=
+	t=1743568975; cv=none; b=bYo3G8pofAEIKG2pPyjDhhrfEuYfxZZrkYNJ8jyHwpXHv/QIdX7QFrsNln4AqyYuLWjh5Y/oQOdsPa14a9nxkhqa4kiIRFWQaR/VvEcmtqXXk++93nK4r5jg+3Mw0p70kUrD4TWS7miWkK81D/9WTqjmOk8ZpYChhLh20x88hEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743561186; c=relaxed/simple;
-	bh=EAiy6oQESp4bH9RUWapq0zzIPxcPEcBVLvInJtCoZL0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TKzcxgaZ+OAQJjuUHbJm2WVQxUD/nRfqPMObScaROetMGKu1KVZ2py2aMt+79nrR9gI+0fkFzTcOPcKXVCCiAuGXHpDP0A8Kujxbs7JuV4Csb5aYRyMWW4C6w8X5cIp9aottHZWbIKJ4AUb5PTNUrfZfvTbXcXLW+VbZKPweoy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GfUeAtHn; arc=none smtp.client-ip=43.154.197.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1743561161;
-	bh=eGU5KbXO6e1/HojDQxT8SCCrYwesKSvunfoPBk+eObk=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=GfUeAtHnLGK9MJQ7Cw+iGUwjPive3iXdhoQ+eAglrx5VIsNLTDjH0PUwqCurH8asU
-	 Q8VYbr+7NSOG9YYg/USABt2uwrbOfayQsTcSomvJMYFtoX3jh0WQPy4IIg0MEiUcFB
-	 Z81V3pq8RtAypkbu0Q6hD7tfKZowEukTMk77OJCY=
-X-QQ-mid: bizesmtpip4t1743561052tc8e308
-X-QQ-Originating-IP: jKwJ6CYMPd9lPExsLpd+vLwoRtPbgYC/T8e0Byx4OGw=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 02 Apr 2025 10:30:50 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 15527068167197107366
-EX-QQ-RecipientCnt: 7
-From: raoxu <raoxu@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	wangyuli@uniontech.com,
-	zhanjun@uniontech.com,
-	Xu Rao <raoxu@uniontech.com>
-Subject: [RESEND PATCH V6] usb:xhci: Add debugfs support for xHCI port bandwidth
-Date: Wed,  2 Apr 2025 10:30:47 +0800
-Message-Id: <20250402023047.26719-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1743568975; c=relaxed/simple;
+	bh=qZYwJH7+q22j/uTOz04w3vnQHZFCKfxkJPGcjgjE6d0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HmjwaGz+kCAFddxA/E1YLD/+Vfsy0PwG+bKuUC+akrEAZG7aUgc7fbabj+LluGfaSbbGTkWKT+FzDdI2gRARKS4GG6pw6xzZQYflBAGRlZ6U3JOx9GuYbNXTXJFHFu2Y+YueZjNYaiEx/W5pRCaZBDt35Y1fkRDqh3hIWkm6c28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=B5h3c8EX; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5322fiwZ024654
+	for <linux-usb@vger.kernel.org>; Wed, 2 Apr 2025 04:42:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Fsc/ia+3ekoWiUvTYhDO0IcUlCjl3N229EoDeW2bErU=; b=B5h3c8EXGjZroHdw
+	b7U54eLHGo8qm1AioH4ij9Wslkp1ranXN+kDGBJtXf73+cW0PPwOc1beCzxegwWY
+	UL+cRMAY3LW9pvHBUh3OVvn9twbkKotCNw2a5yeWKsjjCghRdbD0fm7/MXQd6C6v
+	B8xrU4Bfw7XCaxDxAZXRkA86XBWV2zS/Rel5/HJocZAUe6msvJKRJq1IUwlP5cdX
+	Ch2uMldyEBOxiP4hDGxiqZ5+DWWhFavmhOZEI3e8YJcE5KLV0gXD7HtsAc1bcIOX
+	Th3e5yXXN7mW617xTJb4uXssjcbd9ofbefwFl6Q4tGrxMjDbgE5X07o4G8UQy46W
+	RheGQQ==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p86kt7hg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 02 Apr 2025 04:42:52 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-227ea16b03dso178399215ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 01 Apr 2025 21:42:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743568970; x=1744173770;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fsc/ia+3ekoWiUvTYhDO0IcUlCjl3N229EoDeW2bErU=;
+        b=KFOoLEBknMhPng3VnjjgFsHnmrXXpEBeAwUGCqmKXjMAl26Hm3Tp6HV7+VdpYjGg52
+         My4KfPMxw8KsXa539oQKUd3AGowQ3fbnohIXoNU7bZqjXh7JVwJtg8/7WZZjYFDdC/SU
+         raRxBDIrRseQLqxBEvaoroPotf9fT6pQz7SPG3KWE0WcpKend0R4nK0MUF6OI+en0Vbk
+         0cN3xT13Wg2sedIQKI+MjBST6uUmn1gLuiQsBJuBJyI6V3QFNEBBObMlMc5uJfGTiWmw
+         XjDVsjz7+ADLrQtNC9ohx6ADvQDbUrP5rMr2B50BC8AbQyUlDp2eGaaTp0nA6J1Adyob
+         +hWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBREkNmrVVsYblHJNOMxiTkv1470z6tvH1MpT3cHUpU85iekQ0D0REazXRYctBmMRC1RfQeXRuJ3I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3SiSxsRl5dxMkRcY9+e9sn3pNHoTNZkSK5dnjEgDfzwSDQ61V
+	n6GoeNug8aq9e37hMkSO6mhj48bbmWmlYXBec9zAtdWGwgTKncqeXC4BzQOpJRDNMifIZ+VfUqd
+	anAJNVlQU8gKuhBNDG7qyZV43UrJkodRe19uB+LgDhV0E/DXyWCH9fCTLgr1zvg2Nv90=
+X-Gm-Gg: ASbGncvpk731hvdgFgPlZ1qjxKJIb/DxuzzuEoqYmKgFxF/NGIkRQNoJxA+9uPcmc/m
+	AOS0c8hFGEOb13aGJmyYqkvpW+ZzxMsSj/dfIVqPlsCxHn/JVCf4vvjPSOEA5cRFmU0E8dbjZpM
+	5Px+nMsCpFTZensFHR0iSwrNiVag9fdIQjBU9R+PJXd4bXCz0cKRwtDp7pVS8VkobMsC4KagfYY
+	+UGZ/Qi2HH0FvjakHXQYfwEhdXRzJdybjItPt0wo+A6CjVTWgBDRHcgAGrAOPahLnLfvcYb87UW
+	HOmqacn4kTkKWob4uZTYr0QX75doOqLmivC6TAPE76qY
+X-Received: by 2002:a05:6a00:852:b0:736:48d1:57f7 with SMTP id d2e1a72fcca58-7398036737cmr20072274b3a.7.1743568970530;
+        Tue, 01 Apr 2025 21:42:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE5ELsL2QdK6nHfiqIA5vZv80dty9X8RSjij14cKDuVlA2qtjsFx42IogqS87E3RtSAUR5DFw==
+X-Received: by 2002:a05:6a00:852:b0:736:48d1:57f7 with SMTP id d2e1a72fcca58-7398036737cmr20072249b3a.7.1743568970031;
+        Tue, 01 Apr 2025 21:42:50 -0700 (PDT)
+Received: from [10.218.44.4] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73970e27129sm10235002b3a.57.2025.04.01.21.42.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Apr 2025 21:42:49 -0700 (PDT)
+Message-ID: <4d9226a9-d89d-4441-9dbf-f76ebce49a9e@oss.qualcomm.com>
+Date: Wed, 2 Apr 2025 10:12:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: gadget: check that event count does not
+ exceed event buffer length
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Frode Isaksen <fisaksen@baylibre.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Frode Isaksen <frode@meta.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20250328104930.2179123-1-fisaksen@baylibre.com>
+ <0767d38d-179a-4c5e-9dfe-fef847d1354d@oss.qualcomm.com>
+ <d21c87f4-0e26-41e1-a114-7fb982d0fd34@baylibre.com>
+ <a1ccb48d-8c32-42bf-885f-22f3b1ca147b@oss.qualcomm.com>
+ <20250401233625.6jtsauyqkzqej3uj@synopsys.com>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20250401233625.6jtsauyqkzqej3uj@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: NIvXgkk7mfUglAlRqZUtKE4p1EzyqTOIDUk1Y3wKzf4xzV8mcIY43un/
-	7QRkmkCHdf9hg+PXTV7ls7Gj5RLKD4ZzM+wlSTOxVFJb5HDyXjXnYbLQMRcHNaKgOHxqve5
-	6mVHtD/+9GN2pwnxAMc1FkNdwgVljGcH4ZjtSdleQBQtJRwc2T9PvQENC6R+LNLi9LigxP0
-	Q2Y0KH5ES+b/PXRU2IoFyyGxHpZAkmZPyZNaFeB9NRyp1GH2ZOHQC3KaAvbAxp3MPZ7MdxW
-	s7nOGmyIIX9yT2Y/TpPN+jfzLo+sRUFF/EKe8hdJClkGmjUNIgXbVJZyKCRogUmU8mHcKOH
-	dWz9ZrTU+uSuM5OZLcrD7pLzVfoI8A+TSf9G8D+4bMCxqAcfi0w2DSV7gwYbCxDxAQX64g5
-	GaBQX0P7syYJ9+RrGTbBJ+hGK2KiwY76p8JDMYVq9inA06xGMkRFMTnZibSk4OsfudfY1gB
-	vbHnwAGNUp3+9ltrbEKFwLj2NGKvbr7w83+5er+sptDTCZ408Jbxw0T38X4aKJ0blIG8gn6
-	qkPouk1UxJx+a5rO5eAyXxeCufqWS2po53XGAACbGoj2oIEZcDnFtdoWEjoO2a0lXm+HZZz
-	T5lXMhfgWeFQ3F/Wj26PS0efHvZh0THVV7Pd4rkjXcNST/MLXCV2lfkhZTurNuI3vHYUg9+
-	kYRuVII9GeSMsrMk31fIxGy95uut1du+Fjg8TzGiLTyMlJtP286yDAiWWXNdALREHqGj7cH
-	3Qetsjcgf2E7FvCNT9166AzeS561NTlDP58CpAyPs1xpaDfr7JJNzTN1C0Y6zE+CTdkzbek
-	RHkOIU46S2i1YT3dQygsAuiJHYJG5kjjIhKuXvb1VK3bCMjJp49ElwfgNjthQERi5fN2bRz
-	UANbX38ERA5sigys32LN7AOTz/yk1vnIF+OvngcryRjyyeedU/+tW00kqnEFBXxhW1kDIod
-	yjeRk2ktlQFLj0FK1CeEQHuP0nvtgdcHLYMq9q6b+OMOYfQOnRmNU23uIQD9o0wj0ud2b/t
-	aLP+Mbox2W1V1sRko8m8Q9p0Tuxso=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-X-QQ-RECHKSPAM: 0
+X-Authority-Analysis: v=2.4 cv=W8g4VQWk c=1 sm=1 tr=0 ts=67ecc04c cx=c_pps a=JL+w9abYAAE89/QcEU+0QA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=VabnemYjAAAA:8 a=m5ogOnp4AejF7vqX9dAA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=TjNXssC_j7lpFel5tvFf:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-GUID: a7ur2W1hMoIDeY7-6MzCoKuHM_j9kJth
+X-Proofpoint-ORIG-GUID: a7ur2W1hMoIDeY7-6MzCoKuHM_j9kJth
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-02_02,2025-04-01_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ phishscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504020028
 
-From: Xu Rao <raoxu@uniontech.com>
 
-In many projects, you need to obtain the available bandwidth of the
-xhci roothub port. Refer to xhci rev1_2 and use the TRB_GET_BW
-command to obtain it.
 
-hardware tested:
-03:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1
-(prog-if 30 [XHCI])
-Subsystem: Huawei Technologies Co., Ltd. Raven USB 3.1
-Flags: bus master, fast devsel, latency 0, IRQ 30
-Memory at c0300000 (64-bit, non-prefetchable) [size=1M]
-Capabilities: [48] Vendor Specific Information: Len=08 <?>
-Capabilities: [50] Power Management version 3
-Capabilities: [64] Express Endpoint, MSI 00
-Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
-Capabilities: [c0] MSI-X: Enable+ Count=8 Masked-
-Kernel driver in use: xhci_hcd
+On 4/2/2025 5:06 AM, Thinh Nguyen wrote:
+> Hi Frode,
+> 
+> On Tue, Apr 01, 2025, Krishna Kurapati wrote:
+>>
+>>
+>> On 4/1/2025 5:38 PM, Frode Isaksen wrote:
+>>> On 4/1/25 7:43 AM, Krishna Kurapati wrote:
+>>>>
+>>>>
+>>>> On 3/28/2025 4:14 PM, Frode Isaksen wrote:
+>>>>> From: Frode Isaksen <frode@meta.com>
+>>>>>
+>>>>> The event count is read from register DWC3_GEVNTCOUNT.
+>>>>> There is a check for the count being zero, but not for exceeding the
+>>>>> event buffer length.
+>>>>> Check that event count does not exceed event buffer length,
+>>>>> avoiding an out-of-bounds access when memcpy'ing the event.
+>>>>> Crash log:
+>>>>> Unable to handle kernel paging request at virtual address
+>>>>> ffffffc0129be000
+>>>>> pc : __memcpy+0x114/0x180
+>>>>> lr : dwc3_check_event_buf+0xec/0x348
+>>>>> x3 : 0000000000000030 x2 : 000000000000dfc4
+>>>>> x1 : ffffffc0129be000 x0 : ffffff87aad60080
+>>>>> Call trace:
+>>>>> __memcpy+0x114/0x180
+>>>>> dwc3_interrupt+0x24/0x34
+>>>>>
+>>>>> Signed-off-by: Frode Isaksen <frode@meta.com>
+>>>>> Fixes: ebbb2d59398f ("usb: dwc3: gadget: use evt->cache for
+>>>>> processing events")
+>>>>> Cc: stable@vger.kernel.org
+>>>>> ---
+>>>>> v1 -> v2: Added Fixes and Cc tag.
+>>>>>
+>>>>> This bug was discovered, tested and fixed (no more crashes seen)
+>>>>> on Meta Quest 3 device.
+>>>>> Also tested on T.I. AM62x board.
+>>>>>
+>>>>>    drivers/usb/dwc3/gadget.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>> index 63fef4a1a498..548e112167f3 100644
+>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>> @@ -4564,7 +4564,7 @@ static irqreturn_t
+>>>>> dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+>>>>>          count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+>>>>>        count &= DWC3_GEVNTCOUNT_MASK;
+>>>>> -    if (!count)
+>>>>> +    if (!count || count > evt->length)
+>>>>>            return IRQ_NONE;
+>>>>>          evt->count = count;
+>>>>
+>>>>
+>>>> I did see this issue previously ([1] on 5.10) on SAR2130 (upstreamed
+>>>> recently). Can you help check if the issue is same on your end if
+>>>> you can reproduce it easily. Thinh also provided some debug pointers
+>>>> to check suspecting it to be a HW issue.
+>>>
+>>> Seems to be exactly the same issue, and your fix looks OK as well. I'm
+>>> happy to abandon my patch and let yo provide the fix.
+>>>
+>>
+>> NAK. I tried to skip copying data beyond 4K which is not the right approach.
+>> Thinh was tending more towards your line of code changes. So your code looks
+>> fine, but an error log indicating the presence of this issue might be
+>> helpful.
+>>
+>>> Note that I am not able to reproduce this locally and it happens very
+>>> seldom.
+>>>
+>>
+>> It was very hard to reproduce this issue. Only two instances reported on
+>> SAR2130 on my end.
+>>
+> 
+> I still wonder what's current behavior of the HW to properly respond
+> here. If the device is dead, register read often returns all Fs, which
+> may be the case you're seeing here. If so, we should properly prevent
+> the driver from accessing the device and properly teardown the driver.
+> 
+> If this is a momentary bleep/lost of power in the device, perhaps your
+> change here is sufficient and the driver can continue to access the
+> device.
+> 
+> With the difficulty of reproducing this issue, can you confirm that the
+> device still operates properly after this change?
 
-test progress:
-1. cd /sys/kernel/debug/usb/xhci/0000:03:00.3/port_bandwidth# ls
-FS_BW  HS_BW  SS_BW
-2. test fs speed  device
-cat FS_BW
-port[1] available bw: 90%.
-port[2] available bw: 90%.
-port[3] available bw: 90%.
-port[4] available bw: 90%.
-port[5] available bw: 0%.
-port[6] available bw: 0%.
-port[7] available bw: 0%.
-port[8] available bw: 0%.
-plug in fs usb audio ID 0d8c:013c
-cat FS_BW
-port[1] available bw: 76%.
-port[2] available bw: 76%.
-port[3] available bw: 76%.
-port[4] available bw: 76%.
-port[5] available bw: 0%.
-port[6] available bw: 0%.
-port[7] available bw: 0%.
-port[8] available bw: 0%.
-3. test hs speed device
-cat HS_BW
-port[1] available bw: 79%.
-port[2] available bw: 79%.
-port[3] available bw: 79%.
-port[4] available bw: 79%.
-port[5] available bw: 0%.
-port[6] available bw: 0%.
-port[7] available bw: 0%.
-port[8] available bw: 0%.
-plug in hs usb video ID 0408:1040
-cat HS_BW
-port[1] available bw: 39%.
-port[2] available bw: 39%.
-port[3] available bw: 39%.
-port[4] available bw: 39%.
-port[5] available bw: 0%.
-port[6] available bw: 0%.
-port[7] available bw: 0%.
-port[8] available bw: 0%.
-4.cat SS_BW
-port[1] available bw: 0%.
-port[2] available bw: 0%.
-port[3] available bw: 0%.
-port[4] available bw: 0%.
-port[5] available bw: 90%.
-port[6] available bw: 90%.
-port[7] available bw: 90%.
-port[8] available bw: 90%.
+Unfortunately, I did not test this particular change of returning when 
+ev count is invalid. I stress tested the change of copying only 4K [1], 
+but didn't see any issue. I suspect we didn't hit the issue later again 
+in the course of 14 day testing.
 
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
-Changelog:
- *v1->v2: modify the patch subject no code changes.
-  v2->v3: separate files in debugfs for each speed (SS HS FS).
-	  queue one command for each speed not queuing three commands on one file.
-	  print value from context not array on stack.
-  v3->v4: Fix compilation warnings for W=1 build. Delete unused variable
-  v4->v5: Add pm_runtime_get_sync operation before get port bandwidth.
-	  When obtaining port bandwidth, alloc a new command structure with
-	  context for each time.
-	  Create dma pool instead of allocating one shared.
-  v5->v6: The memory of port bandwidth context structure shall be aligned 16-
-	  byte not 8-byte
----
- drivers/usb/host/xhci-debugfs.c | 108 ++++++++++++++++++++++++++++++++
- drivers/usb/host/xhci-mem.c     |  45 ++++++++++++-
- drivers/usb/host/xhci-ring.c    |  13 ++++
- drivers/usb/host/xhci.c         |  36 +++++++++++
- drivers/usb/host/xhci.h         |  14 +++++
- 5 files changed, 215 insertions(+), 1 deletion(-)
+[1]: 
+https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index 1f5ef174abea..c6d44977193f 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -631,6 +631,112 @@ static void xhci_debugfs_create_ports(struct xhci_hcd *xhci,
- 	}
- }
+Regards,
+Krishna,
 
-+static int xhci_port_bw_show(struct xhci_hcd *xhci, u8 dev_speed,
-+				struct seq_file *s)
-+{
-+	unsigned int			num_ports;
-+	unsigned int			i;
-+	int				ret;
-+	struct xhci_container_ctx	*ctx;
-+	struct usb_hcd			*hcd = xhci_to_hcd(xhci);
-+	struct device			*dev = hcd->self.controller;
-+
-+	ret = pm_runtime_get_sync(dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
-+
-+	ctx = xhci_alloc_port_bw_ctx(xhci, 0);
-+	if (!ctx) {
-+		pm_runtime_put_sync(dev);
-+		return -ENOMEM;
-+	}
-+
-+	/* get roothub port bandwidth */
-+	ret = xhci_get_port_bandwidth(xhci, ctx, dev_speed);
-+	if (ret)
-+		goto err_out;
-+
-+	/* print all roothub ports available bandwidth
-+	 * refer to xhci rev1_2 protocol 6.2.6 , byte 0 is reserved
-+	 */
-+	for (i = 1; i < num_ports+1; i++)
-+		seq_printf(s, "port[%d] available bw: %d%%.\n", i,
-+				ctx->bytes[i]);
-+err_out:
-+	pm_runtime_put_sync(dev);
-+	xhci_free_port_bw_ctx(xhci, ctx);
-+	return ret;
-+}
-+
-+static int xhci_ss_bw_show(struct seq_file *s, void *unused)
-+{
-+	int ret;
-+	struct xhci_hcd		*xhci = (struct xhci_hcd *)s->private;
-+
-+	ret = xhci_port_bw_show(xhci, USB_SPEED_SUPER, s);
-+	return ret;
-+}
-+
-+static int xhci_hs_bw_show(struct seq_file *s, void *unused)
-+{
-+	int ret;
-+	struct xhci_hcd		*xhci = (struct xhci_hcd *)s->private;
-+
-+	ret = xhci_port_bw_show(xhci, USB_SPEED_HIGH, s);
-+	return ret;
-+}
-+
-+static int xhci_fs_bw_show(struct seq_file *s, void *unused)
-+{
-+	int ret;
-+	struct xhci_hcd		*xhci = (struct xhci_hcd *)s->private;
-+
-+	ret = xhci_port_bw_show(xhci, USB_SPEED_FULL, s);
-+	return ret;
-+}
-+
-+static struct xhci_file_map bw_context_files[] = {
-+	{"SS_BW",	xhci_ss_bw_show, },
-+	{"HS_BW",	xhci_hs_bw_show, },
-+	{"FS_BW",	xhci_fs_bw_show, },
-+};
-+
-+static int bw_context_open(struct inode *inode, struct file *file)
-+{
-+	int			i;
-+	struct xhci_file_map	*f_map;
-+	const char		*file_name = file_dentry(file)->d_iname;
-+
-+	for (i = 0; i < ARRAY_SIZE(bw_context_files); i++) {
-+		f_map = &bw_context_files[i];
-+
-+		if (strcmp(f_map->name, file_name) == 0)
-+			break;
-+	}
-+
-+	return single_open(file, f_map->show, inode->i_private);
-+}
-+
-+static const struct file_operations bw_fops = {
-+	.open			= bw_context_open,
-+	.read			= seq_read,
-+	.llseek			= seq_lseek,
-+	.release		= single_release,
-+};
-+
-+static void xhci_debugfs_create_bandwidth(struct xhci_hcd *xhci,
-+					struct dentry *parent)
-+{
-+	parent = debugfs_create_dir("port_bandwidth", parent);
-+
-+	xhci_debugfs_create_files(xhci, bw_context_files,
-+			  ARRAY_SIZE(bw_context_files),
-+			  xhci,
-+			  parent, &bw_fops);
-+}
-+
- void xhci_debugfs_init(struct xhci_hcd *xhci)
- {
- 	struct device		*dev = xhci_to_hcd(xhci)->self.controller;
-@@ -681,6 +787,8 @@ void xhci_debugfs_init(struct xhci_hcd *xhci)
- 	xhci->debugfs_slots = debugfs_create_dir("devices", xhci->debugfs_root);
-
- 	xhci_debugfs_create_ports(xhci, xhci->debugfs_root);
-+
-+	xhci_debugfs_create_bandwidth(xhci, xhci->debugfs_root);
- }
-
- void xhci_debugfs_exit(struct xhci_hcd *xhci)
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 92703efda1f7..31549b37f61e 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -484,6 +484,35 @@ void xhci_free_container_ctx(struct xhci_hcd *xhci,
- 	kfree(ctx);
- }
-
-+struct xhci_container_ctx *xhci_alloc_port_bw_ctx(struct xhci_hcd *xhci,
-+						    gfp_t flags)
-+{
-+	struct xhci_container_ctx *ctx;
-+	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+
-+	ctx = kzalloc_node(sizeof(*ctx), flags, dev_to_node(dev));
-+	if (!ctx)
-+		return NULL;
-+
-+	ctx->size = GET_PORT_BW_ARRAY_SIZE;
-+
-+	ctx->bytes = dma_pool_zalloc(xhci->port_bw_pool, flags, &ctx->dma);
-+	if (!ctx->bytes) {
-+		kfree(ctx);
-+		return NULL;
-+	}
-+	return ctx;
-+}
-+
-+void xhci_free_port_bw_ctx(struct xhci_hcd *xhci,
-+			     struct xhci_container_ctx *ctx)
-+{
-+	if (!ctx)
-+		return;
-+	dma_pool_free(xhci->port_bw_pool, ctx->bytes, ctx->dma);
-+	kfree(ctx);
-+}
-+
- struct xhci_input_control_ctx *xhci_get_input_control_ctx(
- 					      struct xhci_container_ctx *ctx)
- {
-@@ -1907,6 +1936,11 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Freed small stream array pool");
-
-+	dma_pool_destroy(xhci->port_bw_pool);
-+	xhci->port_bw_pool = NULL;
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"Freed xhci port bw array pool");
-+
- 	dma_pool_destroy(xhci->medium_streams_pool);
- 	xhci->medium_streams_pool = NULL;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-@@ -2463,7 +2497,16 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	 * will be allocated with dma_alloc_coherent()
- 	 */
-
--	if (!xhci->small_streams_pool || !xhci->medium_streams_pool)
-+	/* refer to xhci rev1_2 protocol 5.3.3 max ports is 255.
-+	 * refer to xhci rev1_2 protocol 6.4.3.14 port bandwidth buffer need
-+	 * to be 16-byte aligned.
-+	 */
-+	xhci->port_bw_pool =
-+		dma_pool_create("xHCI 256 port bw ctx arrays",
-+			dev, GET_PORT_BW_ARRAY_SIZE, 16, 0);
-+
-+	if (!xhci->small_streams_pool || !xhci->medium_streams_pool ||
-+		!xhci->port_bw_pool)
- 		goto fail;
-
- 	/* Set up the command ring to have one segments for now. */
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 965bffce301e..0a01753075b4 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1867,6 +1867,8 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 	case TRB_NEC_GET_FW:
- 		xhci_handle_cmd_nec_get_fw(xhci, event);
- 		break;
-+	case TRB_GET_BW:
-+		break;
- 	default:
- 		/* Skip over unknown commands on the event ring */
- 		xhci_info(xhci, "INFO unknown command type %d\n", cmd_type);
-@@ -4414,6 +4416,17 @@ int xhci_queue_configure_endpoint(struct xhci_hcd *xhci,
- 			command_must_succeed);
- }
-
-+/* Queue a get root hub port bandwidth command TRB */
-+int xhci_queue_get_port_bw(struct xhci_hcd *xhci,
-+		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
-+		u8 dev_speed, bool command_must_succeed)
-+{
-+	return queue_command(xhci, cmd, lower_32_bits(in_ctx_ptr),
-+		upper_32_bits(in_ctx_ptr), 0,
-+		TRB_TYPE(TRB_GET_BW) | DEV_SPEED_FOR_TRB(dev_speed),
-+		command_must_succeed);
-+}
-+
- /* Queue an evaluate context command TRB */
- int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 45653114ccd7..fde774408a13 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3088,6 +3088,42 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- }
- EXPORT_SYMBOL_GPL(xhci_reset_bandwidth);
-
-+/* Get the available bandwidth of the ports under the xhci roothub */
-+int xhci_get_port_bandwidth(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
-+		u8 dev_speed)
-+{
-+	struct xhci_command *cmd;
-+	unsigned long flags;
-+	int ret;
-+
-+	if (!ctx || !xhci)
-+		return -EINVAL;
-+
-+	cmd = xhci_alloc_command(xhci, true, GFP_KERNEL);
-+	if (!cmd)
-+		return -ENOMEM;
-+
-+	cmd->in_ctx = ctx;
-+
-+	/* get xhci port bandwidth, refer to xhci rev1_2 protocol 4.6.15 */
-+	spin_lock_irqsave(&xhci->lock, flags);
-+
-+	ret = xhci_queue_get_port_bw(xhci, cmd, ctx->dma, dev_speed, 0);
-+	if (ret) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		goto err_out;
-+	}
-+	xhci_ring_cmd_db(xhci);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+
-+	wait_for_completion(cmd->completion);
-+err_out:
-+	kfree(cmd->completion);
-+	kfree(cmd);
-+
-+	return ret;
-+}
-+
- static void xhci_setup_input_ctx_for_config_ep(struct xhci_hcd *xhci,
- 		struct xhci_container_ctx *in_ctx,
- 		struct xhci_container_ctx *out_ctx,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8c164340a2c3..51bf99787ec9 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -586,6 +586,7 @@ struct xhci_stream_info {
-
- #define	SMALL_STREAM_ARRAY_SIZE		256
- #define	MEDIUM_STREAM_ARRAY_SIZE	1024
-+#define	GET_PORT_BW_ARRAY_SIZE		256
-
- /* Some Intel xHCI host controllers need software to keep track of the bus
-  * bandwidth.  Keep track of endpoint info here.  Each root port is allocated
-@@ -999,6 +1000,9 @@ enum xhci_setup_dev {
- /* bits 16:23 are the virtual function ID */
- /* bits 24:31 are the slot ID */
-
-+/* bits 19:16 are the dev speed */
-+#define DEV_SPEED_FOR_TRB(p)    ((p) << 16)
-+
- /* Stop Endpoint TRB - ep_index to endpoint ID for this TRB */
- #define SUSPEND_PORT_FOR_TRB(p)		(((p) & 1) << 23)
- #define TRB_TO_SUSPEND_PORT(p)		(((p) & (1 << 23)) >> 23)
-@@ -1554,6 +1558,7 @@ struct xhci_hcd {
- 	struct dma_pool	*device_pool;
- 	struct dma_pool	*segment_pool;
- 	struct dma_pool	*small_streams_pool;
-+	struct dma_pool	*port_bw_pool;
- 	struct dma_pool	*medium_streams_pool;
-
- 	/* Host controller watchdog timer structures */
-@@ -1837,6 +1842,10 @@ struct xhci_container_ctx *xhci_alloc_container_ctx(struct xhci_hcd *xhci,
- 		int type, gfp_t flags);
- void xhci_free_container_ctx(struct xhci_hcd *xhci,
- 		struct xhci_container_ctx *ctx);
-+struct xhci_container_ctx *xhci_alloc_port_bw_ctx(struct xhci_hcd *xhci,
-+		gfp_t flags);
-+void xhci_free_port_bw_ctx(struct xhci_hcd *xhci,
-+		struct xhci_container_ctx *ctx);
- struct xhci_interrupter *
- xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
- 				  u32 imod_interval);
-@@ -1907,6 +1916,11 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xhci, gfp_t mem_flags,
- int xhci_queue_configure_endpoint(struct xhci_hcd *xhci,
- 		struct xhci_command *cmd, dma_addr_t in_ctx_ptr, u32 slot_id,
- 		bool command_must_succeed);
-+int xhci_queue_get_port_bw(struct xhci_hcd *xhci,
-+		struct xhci_command *cmd, dma_addr_t in_ctx_ptr,
-+		u8 dev_speed, bool command_must_succeed);
-+int xhci_get_port_bandwidth(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
-+		u8 dev_speed);
- int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 		dma_addr_t in_ctx_ptr, u32 slot_id, bool command_must_succeed);
- int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
---
-2.43.4
 
 
