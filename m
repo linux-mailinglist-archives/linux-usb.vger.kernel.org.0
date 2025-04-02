@@ -1,156 +1,172 @@
-Return-Path: <linux-usb+bounces-22469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88371A789A8
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 10:18:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7A95A78A0B
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 10:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8F773B1434
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 08:17:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D936A3B0E67
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Apr 2025 08:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1883F235345;
-	Wed,  2 Apr 2025 08:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4011E234988;
+	Wed,  2 Apr 2025 08:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5q7HT1S"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="phb0QmiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23DAB20C485;
-	Wed,  2 Apr 2025 08:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80BFE19F40F;
+	Wed,  2 Apr 2025 08:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743581868; cv=none; b=POIYFnPw/ndWGQywl3alywFiwDEsH725mZZ2WziwAgkIm27/a4zCKyBoOfnfjG2HOOqcpBBNUjMw1DE1HomzmFCb1q8qTEARvLYMmhy/gUEMEeP/wwg0lJleW54V0yPQMHp4p0IIeGngzohBMJI4rjqw34pX79yn9XNS+UxTmUc=
+	t=1743582870; cv=none; b=XSXp3u4ZMA7I89r+1u0qFfgfvGYAkKnogzt8RFTQQsbaCSQ4USEoIRI07BbNC35HmatlOOCP8lsQPeJTfRWS/2UgeZzeI2ld9fwC1ydUjOniqMlSq+w++VTFWRIBhp/EFZei7ppcB5JMFA1D3JXDn/yRz5yd4Xve+7HM14xGKW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743581868; c=relaxed/simple;
-	bh=HXVWXQjZBHgemZIstJDUf3tOUVVLt7xyNaadY5xfUlY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OjIqU0MSRZJ1MS3mTozYUc3TEKs63sMPHG1jy8+ktlUGJDWnVBKFwBmmh2hGhBylPO4wVDuWMHwQiDVUrWXPAe2hyZfAJC22+5DSnSjmHz5opHWsgN8Lr1ZEDE8MDYCTtsXyksGIonz2otEFDfp2LHsD3d3MoX+XchbvoNFKdXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5q7HT1S; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2c2bb447e5eso3602603fac.0;
-        Wed, 02 Apr 2025 01:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743581866; x=1744186666; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=scXv72Bahse5Ld8quQ31fuwQGCjaKYynLIZEvxwhnnM=;
-        b=G5q7HT1Svh/iqZtzJkZ6ae7GXL6T9d6kB1P8G4omOKoomwHjPIcOk5ShScMx48t9zV
-         UN+nNo0yxp8Q64W09fSYI1fCZhfuAcVG75Zet6iTSXVewtb8hGpRKBaG0hASzdpx9P0L
-         3QYBpCsEs7NdxcxN0z5qIaxmMgGAG/sEbBfHGKq/GX6BeW4Va+yim12ehqW9LoYpPGVT
-         DOIVXzpYxa8YECD1Qb6/Z42g9ilpML2FecV0f7fBGmT85mJWLqsdYW5IpwFXezZNFYnG
-         f0wDH8XIy2Lt/yjDwH3+vYIM/o4kt4lfqoQJY4NISER70q/5gpltpOikCf0inG9d/gbq
-         ZDSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743581866; x=1744186666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=scXv72Bahse5Ld8quQ31fuwQGCjaKYynLIZEvxwhnnM=;
-        b=dW5w28KPntqmOxEtEpQEAUuDxsltgOAe3XSSoUJGza958uvdoi4QpPnLcLJ29MdNn1
-         SWhTpFwDw2rlPRst2XqeCqrb8cSNrVrt/kYVvtrb68qhu5jaeEa1ukdSvc9kTmkpLh4e
-         uLhf6XkwjhE+bfizY5sAkhYAmnD3vrosT3dAmp9xwbcKfNneLg1uEdS3JEZ48GzyfAZH
-         gppywjzLjQeQ30PFnU4QrWkwgbmlRyerM7YyVLWdpl5wSjYmpoYAZsp5nHx1ttTB7zZs
-         8yWfSumMtLRy+ODLn91Etdn+/VPQUMkOuBMJ8jiXkLiIdrbP8aLmiCVpkIDsVNv5F+HK
-         dVLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUTPuKK6ULMBaJUhwKkutqvMZAV61CHlSoVZ72ZESqbcXV9YDeAdJtS76Blfh9eq+QqxK+21s9l@vger.kernel.org, AJvYcCWmv4ldkaEv6SHWcXqXAHmMWZmZIZMGMtcVjI4Fbho9npmTkxcH+y5/DGAKNe3wwHAIbgHVftjZlSy+@vger.kernel.org, AJvYcCXmGIETxpHuRbm4b2+GNW8x8ixPnuXB4KQqc2LvumGT4y+7Hg96DsQ+b4fNx78+cgVRORrzo0CyBnkYMm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBkzXNinLo71CULtRIqutgw9Ikj70r5XaahHkBSsYo2sVpvOLw
-	w3WuU+mG5fagR39q9+m1J7RCXsG+WkFqGT7y7+UVQzo2w04lTEQsBgwb1Ozhpwl/Wex7Oot4qaS
-	+frumSwSccLdHzf0iVkT/zP2XINM=
-X-Gm-Gg: ASbGncvTViBSIvgKrLXFw9/OLCtMvsO380baFr09klHypxsiXaVsDkM3ZvdN/wSMXBA
-	Rm0u4cjNzjxJti/0SyWlTZH5vRJ3tknF3j4CLZGMlJtz8GnzgfmmfVupz1tNwKCfl2jV25LBJhr
-	TFeXKNgYNTOfJ05gUGsAAQ4KLzWJQ=
-X-Google-Smtp-Source: AGHT+IHnWOrb0SQAM9qeTR3XznNyfvNQpkps5XgOACrUXiIN2RbZ1nz5GKAlnHeRW4ijLKsnV92MvcmQrgOqdxQHrGY=
-X-Received: by 2002:a05:6870:8092:b0:2c2:5369:f3b with SMTP id
- 586e51a60fabf-2cc60b0597bmr958285fac.14.1743581866041; Wed, 02 Apr 2025
- 01:17:46 -0700 (PDT)
+	s=arc-20240116; t=1743582870; c=relaxed/simple;
+	bh=lKeikN9azWuW6BHlS4lrSyXtbeUm9u4e3+OgYNrqA3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qhDlgxrBjIyuypSkpvBh0CJwCP3xlvVOVXW1QBCKKPSf8VsdjtEZNgbrwWNDQqJOktG+0DGX+hvTG2XuKalFxREDQ/Gnl2DSW6t9fycxQiXNd1qsNBwAIpGX0FvtSa023Wk1gb8LgC1ZQeEpdC2Or7QV3HfMRIp1M83frOQNeAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=phb0QmiN; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=Nt14CP8peI1k8Bn46zWTZfy+pg1IfssuPQ6bs44nZUo=;
+	b=phb0QmiNgfmacNPJCpBeGVIicfftkf8UODQOiTGBRpCbg4mbIppRNKazpCp6Yv
+	igB8icMwbOpdOUXL+nGfJDIbcsB4Y16O9T24EGVz1vcvgKgB8gg6HUKhosqssh6x
+	RkiH0FQfuL6ZUpKDV6aIXUdvrBUu4yBguXdnvwSrxY6+I=
+Received: from [10.42.12.155] (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3p8yA9uxn5WmkDg--.33608S2;
+	Wed, 02 Apr 2025 16:34:10 +0800 (CST)
+Message-ID: <6b970291-c9f7-4a5f-9b82-210a3c4d2739@163.com>
+Date: Wed, 2 Apr 2025 16:34:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1743497376.git.luying1@xiaomi.com> <e3646459ea67f10135ab821f90f66d8b6e74456c.1743497376.git.luying1@xiaomi.com>
- <2025040110-unknowing-siding-c7d2@gregkh> <CAGo_G-f_8w9E388GOunNJ329W8UqOQ0y2amx_gMvbbstw4=H2A@mail.gmail.com>
- <2025040121-compactor-lumpiness-e615@gregkh> <CAGo_G-fiR5webo04uoVKTFh3UZaVTzkUgF2OcD8+fY-HzWCO6g@mail.gmail.com>
- <2025040228-mobile-busybody-e5c4@gregkh>
-In-Reply-To: <2025040228-mobile-busybody-e5c4@gregkh>
-From: Ying Lu <luying526@gmail.com>
-Date: Wed, 2 Apr 2025 16:17:35 +0800
-X-Gm-Features: AQ5f1Jquh1nJnLrgwYJjGFcAamZNu8xNGhAjeJoDqCgf_Ak9OFRUYZgaxk4j2Z4
-Message-ID: <CAGo_G-eptB4ui3UBf2Ey42iFUTnRvLO5dDBVf2drkLQXdMVbzQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usbnet:fix NPE during rx_complete
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, luying1 <luying1@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
+ usbip device
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
+References: <20250219092555.112631-1-min_halo@163.com>
+ <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
+ <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
+ <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
+ <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
+ <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
+ <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
+ <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
+ <7e9db4d9-0a22-44b4-a981-0de25d6a2aa4@163.com>
+ <99a8b726-726a-4e26-bafc-9ff2b1e4d7be@linuxfoundation.org>
+Content-Language: en-US
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <99a8b726-726a-4e26-bafc-9ff2b1e4d7be@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3p8yA9uxn5WmkDg--.33608S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF4UWF1DJF4xJr17Ww45KFg_yoW5Ww47pF
+	W8XFy7KFZrta10yFnFyw1rX3WFya1xKry3Wr9xGw1UX390vF13WF4ktFWruay3WFnxu3W2
+	yr4DZa43WrnIyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UseOXUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbixxwjq2fs8Iy2EgAAsA
 
-On Wed, Apr 2, 2025 at 3:12=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
- wrote:
+
+On 2025/3/29 05:14, Shuah Khan wrote:
+> On 3/13/25 04:02, Zongmin Zhou wrote:
+>>
+>> On 2025/3/11 00:49, Shuah Khan wrote:
+>>> On 3/5/25 03:03, Zongmin Zhou wrote:
+>>>> At 2025-03-05 03:45:28, "Shuah Khan" <skhan@linuxfoundation.org> 
+>>>> wrote:
+>>>>
+>>>>> On 3/2/25 05:37, Zongmin Zhou wrote:
+>>>>>> Dear shuah,
+>>>>>>
+>>>>>>
+>>>>>> Yes, I agree with you.It would be better if there have a more 
+>>>>>> simpler fixes than This patch.
+>>>>>>
+>>>>>> I can just think of the two possible solutions that mentioned 
+>>>>>> before.
+>>>>>
+>>>>  >What are the two possible solutions?
+>>>> 1. The patch we are discussing now,have to change the API between 
+>>>> the kernel and user-space.
+>>>
+>>> 2. Simply set vhci-hcd dma mask to 64 by default,just modify the 
+>>> vhci-hcd driver. Then dma_max_mapping_size() will always return 
+>>> SIZE_MAX.
+>>>
+>>> I prefer option #2 - What are the downsides if any with this option?
+>>>
+>> If set vhci-hcd dma mask to 64 by default,I can't predict what will 
+>> happen when the real USB controller support less than 64bit?
+>>
+>> After all, the data flows from vhci-hcd to usbip-host and finally to 
+>> the USB controller to which the device is actually connected.
+>>
+>> the data is ultimately processed through the real USB controller?
 >
-> On Wed, Apr 02, 2025 at 08:12:06AM +0800, Ying Lu wrote:
-> > On Tue, Apr 1, 2025 at 9:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
-org> wrote:
-> > >
-> > > On Tue, Apr 01, 2025 at 08:48:01PM +0800, Ying Lu wrote:
-> > > > On Tue, Apr 1, 2025 at 6:31=E2=80=AFPM Greg KH <gregkh@linuxfoundat=
-ion.org> wrote:
-> > > > >
-> > > > > On Tue, Apr 01, 2025 at 06:18:01PM +0800, Ying Lu wrote:
-> > > > > > From: luying1 <luying1@xiaomi.com>
-> > > > > >
-> > > > > > Missing usbnet_going_away Check in Critical Path.
-> > > > > > The usb_submit_urb function lacks a usbnet_going_away
-> > > > > > validation, whereas __usbnet_queue_skb includes this check.
-> > > > > >
-> > > > > > This inconsistency creates a race condition where:
-> > > > > > A URB request may succeed, but the corresponding SKB data
-> > > > > > fails to be queued.
-> > > > > >
-> > > > > > Subsequent processes:
-> > > > > > (e.g., rx_complete =E2=86=92 defer_bh =E2=86=92 __skb_unlink(sk=
-b, list))
-> > > > > > attempt to access skb->next, triggering a NULL pointer
-> > > > > > dereference (Kernel Panic).
-> > > > > >
-> > > > > > Signed-off-by: luying1 <luying1@xiaomi.com>
-> > > > >
-> > > > > Please use your name, not an email alias.
-> > > > >
-> > > > OK, I have updated. please check the Patch v2
-> > > >
-> > > > > Also, what commit id does this fix?  Should it be applied to stab=
-le
-> > > > > kernels?
-> > > > The commit  id is 04e906839a053f092ef53f4fb2d610983412b904
-> > > > (usbnet: fix cyclical race on disconnect with work queue)
-> > > > Should it be applied to stable kernels?  -- Yes
-> > >
-> > > Please mark the commit with that information, you seem to have not do=
-ne
-> > > so for the v2 version :(
-> > Thank you for your response. Could you please confirm if I understand c=
-orrectly:
-> > Should we include in our commit message which commit id we're fixing?
+> Sorry for the delay.
 >
-> No, use the correct "Fixes:" tag format as described in the
-> documentation.
+> That is the case. I have to check the code to see what the host
+> would do if it receives larger buffers from the client (vhci)
+>>
+>> However, the default setting to 64-bit is equivalent to eliminating 
+>> the impact of
+>>
+>> the patch(commit d74ffae8b8dd) on usbip protocol devices, sounds 
+>> feasible?
+>>
+>> I am not very professional in this field, waiting for your evaluation.
+>
+> We can give this a try. Send me the patch with default testing the
+> following cases:
+>
+> Host - swiotlb enabled and disabled in your environment to see what
+> happens when there is a mismatch swiotlb enabled case and client
+> side doesn't limit the size.
+
+If you want to test swiotlb disabled mode, you can modify the kernel cmd 
+to force disable swiotlb:
+
+modify the grub.cfg, add the swiotlb=noforce parameter to kernel command 
+line,and reboot.
+
+cat /proc/cmdline to check whether modified successfully.
+
+
+The patch set vhci-hcd dma mask to 64 by default like below:
+
+---
+  drivers/usb/usbip/vhci_hcd.c | 3 +++
+  1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index e70fba9f55d6..fca3a4a6e94d 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -1345,6 +1345,9 @@ static int vhci_hcd_probe(struct platform_device 
+*pdev)
+
+      usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
+
++    /* Set the dma mask to support 64bit for vhci-hcd driver. */
++    dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
++
+      /*
+       * Allocate and initialize hcd.
+       * Our private data is also allocated automatically.
+-- 
+2.34.1
+
 >
 > thanks,
->
-> greg k-h
+> -- Shuah
 
-Oh, I see. Thank you very much for the reminder!
-I've already fixed it in the PATCH v3. Could you please take another look?
-
-Thanks,
-
-Ying Lu
 
