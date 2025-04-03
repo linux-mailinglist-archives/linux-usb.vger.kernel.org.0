@@ -1,182 +1,234 @@
-Return-Path: <linux-usb+bounces-22491-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22492-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC1B5A79A97
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 05:41:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72CF3A79BCB
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 08:09:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 034F03AFAC0
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 03:41:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C6EC1892D23
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 06:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178C754F81;
-	Thu,  3 Apr 2025 03:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261B51A070E;
+	Thu,  3 Apr 2025 06:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lyY9CgLj"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="o2y/Mjl2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2081.outbound.protection.outlook.com [40.107.95.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A4F145B3E
-	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 03:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743651667; cv=none; b=BFlhw3nJjPcL19oUCdchcBdAVOEFyODCJpaQbja7rvc/FZ2tJ8SPiF0PJOnJFcUY4jEpgOC0Q2cFQyClpBYemnblssjqRjtp74Qgb0utVAHLcJkyFZsa/8lMkE+8VhHfn1RK6HyBn4EujRCZJ19brsCUaxAPewpJ3AgWKcrFsEk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743651667; c=relaxed/simple;
-	bh=4aTH+S+5/DaE7SK3f14o739lz7d4vHx+nHgg53Ilpic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qL/zdyPkkmJoLvgFLml4DVwhQpbYu4OmLr6LvAUIesLp/QpMM6BRiUVwbcDkz1whwANukuhxBZ44l/X0rjeRzdKMC8hl+jpDtcydlrQVkFgakP3HBujQSu+9wRJZ8+yjeM8+wtIpTnYuuxRvp2D8kvFUELuhZhXgCInnvzj0N5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lyY9CgLj; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-227cf12df27so3452445ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 02 Apr 2025 20:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743651665; x=1744256465; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0tEj5kz4If7Ej673fi5hk/2hJig3VYxT41dAgyMOLI=;
-        b=lyY9CgLjw5w/omaCCOXRmGOkLC04kzcy2leKTC+7T42kKoJTSdWKzNmOjhxgW3UxzO
-         /97cz3bumayZzjInyeK17jY03f/x4aX3euSUjs0n3saU/BlKKpLEVHdZpIiqIV92Pqx+
-         zcKezlq1zGycE/WtglYmo6de0b7VO3G5Ec2iIENeXiCptQvvD7/hSZajDdjKem9M+ORD
-         UwdrdCwkPk0tLGrKlTyyB8vRBz3mEQKchMX6EjK3tzKja9nCZNtAz1GlpdiPLcWHjuby
-         NCQxszMh9hmSQiP/677re+qjNIBv5V/KtX+aTnkgLnNmsVejO7FoNzTE2/tTjI3Al5HK
-         Ixiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743651665; x=1744256465;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0tEj5kz4If7Ej673fi5hk/2hJig3VYxT41dAgyMOLI=;
-        b=tzJTu/aGUuBvfzI4Mm07Pf2QnoRBak7WJrk0+FwMVPRxzKMlxnpSXaLZH71uASXNKo
-         0H8bWuHM52yP3s4cd6zoyrvUuQW0nsEc3cQHyE3JGLkJ2BKv2lKHLtcR0CVrQPcKmHgC
-         5oy/Ew0e8iPdgPzFnxr3AYjuRTbrQ7gM6Ag/y94DAclmd9Ze6w54/KKPmTIHuUmF5ZNa
-         7rn74JKB6jIOCKXGFur4m++fk/h8sv+yPjSJSHPkQ1aXoVgMmFU09HitKVf1mlIO7sWT
-         0ypNeYNoKs4hcdCsHe9aT5PZyf/aYG2dnZ+C9RkNSjvZk9s88InjLs0bpIGpWelxQyxU
-         bkLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxjfhcURrjSirEvd/P/m+W8tZZVJPgEyJ42IrAETbPEP/uzxiank0tOWDwwl2Sx4CAQfPVuFwqFbc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyhqw/dBqi5S4q9ev1ekPaIz+92++uDyw0nNV5gx80qL9Qs16uI
-	K5Gk5YR/3w3FwPflj8JUb/zfYLOeVhOo25Ud6uHw3btnQq9jjIHry8e2zpZPGA==
-X-Gm-Gg: ASbGncvjxdXhoJOMsahDauLqOZJzgZgWZgAdlFzP/GabXErB3F0uM/R70WBC/TnAtEN
-	GHjTO5zf7HePwU4UxzgBbV0ENc8qGSwSm+JvrjQnt47iMX1SwlL2sL+hQmiyZh051FgGL/zqt2S
-	HHGljgVNB/WX+wxogu2GscbC5E+2mQJVeS+/c59BFPXSf1O3xt07zlgPOAOZvwTJOZdDfFgPDZ9
-	R4DVQdQTG5hjpYuX8nDUvYCmU3cwp7MGbBkdZdidC1QefqjrnpuLL6Gfw2o6gvL6Zm2lahDoI+l
-	twYqGjfgxeSDXMAlrRZc+Lo423XhoJeOqsnUYzd1GH82GrpA1XGhAdccU6kX75djhd1jX2cuU46
-	ZmCcjcn6Pz3VgT5iLqu3mOPn7FTA1GH8Nx9/ucJTjuJA=
-X-Google-Smtp-Source: AGHT+IF+aLQLn6pLeab1Mot3xJ/DQBJV5mL7CVD5eHdMlU/bvNw7/84AH4TtA5RPRM1hKWlLyvBvkA==
-X-Received: by 2002:a17:902:ccca:b0:215:58be:3349 with SMTP id d9443c01a7336-229765ecb95mr30013415ad.14.1743651664993;
-        Wed, 02 Apr 2025 20:41:04 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:7:33af:bd9c:23d7:88c5? ([2a00:79e0:2e14:7:33af:bd9c:23d7:88c5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2297865e483sm3887005ad.116.2025.04.02.20.41.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Apr 2025 20:41:04 -0700 (PDT)
-Message-ID: <7c7cff17-2c53-4dcd-8760-50c72760de5b@google.com>
-Date: Wed, 2 Apr 2025 20:41:02 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE30F198E75;
+	Thu,  3 Apr 2025 06:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743660566; cv=fail; b=eAQgVvX8wlJ52/NKgUrSBB6JSwgID0LItzaQhjiWqsWZE76DmpYvpBI1zAds52r1hqr5Rv0Z+UG7Td1eWd67D4BY/hn6igrMDzOboZfFuiA2lpsIYpDhqCbR0jW0bcB8MbMCmUTwyEYHVqachf8xOnJ9DS/DhqXiVcWG+gAdoII=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743660566; c=relaxed/simple;
+	bh=J26X5DEHhsoiddHBhAvylGa5ascehO/gUpHgjMc4xdQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q2XcahtlDZQAwI4a2diqOzkj0GijraUaW6a2dhFADN4iLYH59Qw12OPGISjSjSQPuE0xLxLtaYa1pHqIxTgE4qBkL96/FtU5r9jlUTDtqYH/YW385gIbb2OAPPK2oA6Clc7GskejJOr+gEes/Ih2ZfgfafPX0jJY/kk1/Mc5Zjk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=o2y/Mjl2; arc=fail smtp.client-ip=40.107.95.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yrFU7IddJI698HKJyxTuOAUYgRWaCw7ijvAf4wswEih2yI362w+fNoNRZCKNEXLR/JXb8DJyqlFRs4nQRf3a4ethXuUDbuu2f2Zg5DG+c6/oz0aq9Cvt1wr7bZrB8uft9oZqw5vEAAuXJPuNukRc5AKCGctn1tTMMCLRkl8a2u7rp71s2nqFVwk6spsq5EYmfNceXoXEI2yy9zhdha8Y3IKUy3KONZyt7ubctfsUzsPIyTNygC1CaozX4C4oik8OjKV7Kx1nb93QQQZaT5erw/Sc197GLQWOLJnF/DQMJE7kHBwSpgVHCQ2kCDckWecdUDBNosIKc36nlWz0RkDoKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z+I0kNEG7+cPSApd/MI+RCWglu1hfaTCwGjTOC8b+uU=;
+ b=pVD+pW+5H69sQTjgbuUT8dTAZ+K3oAkzzj36qeqn8aZFJxq4eDJiqYFOZQWJzFEAWLeW5RCi+KLu2CZX7LpPnktLPz0eijSz8IhtHSgpUj0TiZsheqiin77ijrWgqfLBq9IMptlU4HnmuhvCojKNbKYNmngmQIt+c6H4AbxlmwXX+Nq+Hxtd1NapV0k2782mjusDUwTjzh0kymOpI5+NdggypZ2ApnL1iL7iXk9WR6QiAQ0RSxR7BgAlkgbFBJzlwCr6bouX/eFfmvnawxdPkjXg2EyTlOX5xkmkWyoBkZFZWOTgcUQtRyz5uKOLgeXwHc5odVzoMZ4LTflpN+ioyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z+I0kNEG7+cPSApd/MI+RCWglu1hfaTCwGjTOC8b+uU=;
+ b=o2y/Mjl2TkYR+aaRLxSvCvMLWntBMXeun6XCSgb2Jjcy+E6J5UsMuw+SMOWq6TV4Rxix3lqZePED2D0GGUsocSgPQ0WEcYkCOZGgjuyesTErzBkxN++DH0CRIDVpLVUnQFwzaW0byyIvHMsbREwm2hVuKPuBr2AiOYXJnL4mc3E=
+Received: from BY5PR13CA0011.namprd13.prod.outlook.com (2603:10b6:a03:180::24)
+ by MN0PR12MB6032.namprd12.prod.outlook.com (2603:10b6:208:3cc::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.44; Thu, 3 Apr
+ 2025 06:09:21 +0000
+Received: from CO1PEPF000075F2.namprd03.prod.outlook.com
+ (2603:10b6:a03:180:cafe::24) by BY5PR13CA0011.outlook.office365.com
+ (2603:10b6:a03:180::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.24 via Frontend Transport; Thu,
+ 3 Apr 2025 06:09:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1PEPF000075F2.mail.protection.outlook.com (10.167.249.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8606.22 via Frontend Transport; Thu, 3 Apr 2025 06:09:20 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 3 Apr
+ 2025 01:09:17 -0500
+Received: from xhdmubinusm40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 3 Apr 2025 01:09:13 -0500
+From: Mubin Sayyed <mubin.sayyed@amd.com>
+To: <dlemoal@kernel.org>, <cassel@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <linus.walleij@linaro.org>,
+	<brgl@bgdev.pl>, <michal.simek@amd.com>, <p.zabel@pengutronix.de>,
+	<gregkh@linuxfoundation.org>, <radhey.shyam.pandey@amd.com>
+CC: <linux-ide@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+	<git@amd.com>, Mubin Sayyed <mubin.sayyed@amd.com>
+Subject: [PATCH] dt-bindings: xilinx: Remove myself from maintainership
+Date: Thu, 3 Apr 2025 11:38:36 +0530
+Message-ID: <20250403060836.2602361-1-mubin.sayyed@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
- TCPM
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250313-determined-wild-seahorse-f7871a@krzk-bin>
- <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
- <3f65fe16-56f8-4887-bb91-994b181ce5a9@kernel.org>
- <9852e5a8-843d-48ae-90d0-7991628e93b3@google.com>
- <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB03.amd.com: mubin.sayyed@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000075F2:EE_|MN0PR12MB6032:EE_
+X-MS-Office365-Filtering-Correlation-Id: e81f7246-6488-4e46-7982-08dd727612b3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|7416014|1800799024|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?hzvDd3yI0TubJZ/+xwWFjU299gCO9ISgOtaJAt9UT+lh9lMmzJDFvpcKOdCs?=
+ =?us-ascii?Q?w/AKaZCDSY3Thm6WWQwj+A5JgI+GtafD/mb9kLJelXGhjjhuSp07AD0fFY5j?=
+ =?us-ascii?Q?5LJfA8rNwizgvmcOd45x2a5DlXwdfKNyj2j9+ozY7lG1ToNStrnxw73hhKRK?=
+ =?us-ascii?Q?YppvIt6JTn0XuSRY2IJXAOeQqBIWLgVq2G48tpVbcBKoAO2+h+5k8cQdRYg0?=
+ =?us-ascii?Q?VyEC6+ZY5B6C/P6yArX6IeUM8R/87my/4mtF26hqMgOy6EbPTchM7lzEtMFW?=
+ =?us-ascii?Q?HTHwGGLq4MBCRFGU9HMRAYTaziy/AECO6JdcHHPsggf5BPdVGbdGADXybdkf?=
+ =?us-ascii?Q?+2HHocw/o4kaT2qbM8RlxoHyEna9cKYrSjlU1ov9KquuyQVf8idZa9L0RegC?=
+ =?us-ascii?Q?JA4FPUEr9sRet5cQ4qio1/zC840/3AGhT0UR8Tz6blCDA7qYMPe7Cye7EzxH?=
+ =?us-ascii?Q?Gw9az6w164HIUO/OiqylHxL1c8a5XPFqO6fy1Z3QIo66Fk43tu7lndlWrThD?=
+ =?us-ascii?Q?XAjomhTar5FwMHNPeeNjqhOh/PXUbKoP8BFFahYBd1wJekaLpTKJDYEZ81Xd?=
+ =?us-ascii?Q?eH+CWzZ8lcM8kMmfsg/AOtuJ4XOjMtzxamnE6pothoHUZ+vVGIyvFdezQ9Mn?=
+ =?us-ascii?Q?erUFvoF92fMHz9WseIvOljeOM4z0ZzK9e9EJyXa4dv0edz6U5DOgiq4E4R5Q?=
+ =?us-ascii?Q?UxLPOe4+YPRtqrIn9Xj/1sCJWb/xUpDcDyUklyz1EEv/mu0796EjH4bgyz9R?=
+ =?us-ascii?Q?PsWb93i47fVlgdj5WGOgCkNgIOjhwa72xZXrppNO6pgjCwT/l22y3tcVRdhf?=
+ =?us-ascii?Q?QZWcDXx26K+/LgicliYJ2GKZ5y4OsYeeZsqhDlDtWyDjKhNYPJSuf5ngLUGp?=
+ =?us-ascii?Q?UFvhMpewHBoArADGhzuNzmrP3w78k6hYE22LUMseHBADnFpTZFn97twMgGIU?=
+ =?us-ascii?Q?/oDEgzy9dtr9DqgoOm10Zy5Ra7apQx3/9iO6bhtDRqucfJH6Z/MSAJcEi8hr?=
+ =?us-ascii?Q?D0L8uWdiVBMV4Hg4j1jON4N0SSTSKjPiUOMjyIkYjLtifogR+V8NFSV8yO/u?=
+ =?us-ascii?Q?Wwfj7Px5Qj0ds2lKxzbIK2EXGc9AhYXRuQw4Zcsf+29jaQbxAWgSujkcNQr9?=
+ =?us-ascii?Q?4+/TM6PSOYcCjV9sJ42RLDEZYTEZDf/JAQg+SsTnlg4acoZCCFOA5G7x00OI?=
+ =?us-ascii?Q?QYyCyNf1b3F5yyzCm/LAsljUK8s8DtYk9Xn9qHqnav2q6c9xcmTGcB7Mh3aF?=
+ =?us-ascii?Q?ymhFNCpw5HQ3T9hT5LmUamMl7nBH6sOLnoM++WmcnyyT+2BxYAPXO3aFVIKq?=
+ =?us-ascii?Q?9eA5gJ+cKOTMH/PwlM1eUYOKSnYm4D6bexF9unVOWtB8CpGqkMHBo/MFJwE5?=
+ =?us-ascii?Q?bJg1tQO3UJXvYchaPWRpdSvz+CyRMML9y+lmVN6gNFAE/scfgLnIHx9r37KP?=
+ =?us-ascii?Q?qSn3pkK8Op6vcJqAc/bBzifhlH76vzLZ?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(7416014)(1800799024)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2025 06:09:20.0531
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e81f7246-6488-4e46-7982-08dd727612b3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000075F2.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6032
 
+As I am leaving AMD and will no longer be maintaining
+these platform drivers, so removing myself from maintainership.
 
-On 3/21/25 12:51 AM, Krzysztof Kozlowski wrote:
-> On 20/03/2025 22:11, Amit Sunil Dhamne wrote:
->> On 3/16/25 9:52 AM, Krzysztof Kozlowski wrote:
->>> On 15/03/2025 01:49, Amit Sunil Dhamne wrote:
->>>> Hi Krzysztof,
->>>>
->>>> Thanks for the review!
->>>>
->>>> On 3/13/25 1:50 AM, Krzysztof Kozlowski wrote:
->>>>> On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
->>>>>> Support for Battery Status & Battery Caps messages in response to
->>>>>> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
->>>>>> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
->>>>>> Applicability" section. This patchset adds support for these AMSes
->>>>>> to achieve greater compliance with the spec.
->>>>> Which board uses it? I would be happy to see that connection between
->>>>> batteries and USB connector on the schematics of some real device. How
->>>>> does it look like?
->>>> Any board that uses a USB Type-C connector that supplies power into or
->>> If you keep responding like this, you will got nowhere, so let me
->>> re-iterate:
->>>
->>> Which upstream DTS (or upstream supported hardware) is going to use this
->>> binding, so I can see how you are going to implement it there in the
->>> entire system?
->> This is for maxim,max33359 Type-C controller.
-> Stop deflecting the questions. max33359 is not a board. I already asked
-> two times.
->
-> Apparently admitting "no upstream users" is impossible, so let's state
-> the obvious:
->
-> There are no upstream users of this.
+Signed-off-by: Mubin Sayyed <mubin.sayyed@amd.com>
+---
+ Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml        | 1 -
+ .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml       | 1 -
+ Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml   | 1 -
+ Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml           | 1 -
+ Documentation/devicetree/bindings/usb/microchip,usb5744.yaml     | 1 -
+ Documentation/devicetree/bindings/usb/xlnx,usb2.yaml             | 1 -
+ 6 files changed, 6 deletions(-)
 
-max33359 controller has an upstream user i.e., gs101-oriole (Pixel 6) 
-board. Totally agree that at the moment there are no upstream 
-devices/drivers for the Fuel Gauge (that my patchset has a dependency 
-on) in gs101-oriole board. gs101-oriole uses max77759 fuel gauge device. 
-I see that there's an effort for upstreaming it 
-(https://lore.kernel.org/all/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be/). 
-I will mark my patches as dependent on it + demonstrate the relationship 
-of the devices in the gs101-oriole board. Hope that's okay?
+diff --git a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
+index 6ad78429dc74..c92341888a28 100644
+--- a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
++++ b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Ceva AHCI SATA Controller
+ 
+ maintainers:
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ description: |
+diff --git a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+index bb93baa88879..e13e9d6dd148 100644
+--- a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
++++ b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+@@ -12,7 +12,6 @@ description:
+   PS_MODE). Every pin can be configured as input/output.
+ 
+ maintainers:
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ properties:
+diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+index 1f1b42dde94d..1db85fc9966f 100644
+--- a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
++++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Zynq UltraScale+ MPSoC and Versal reset
+ 
+ maintainers:
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ description: |
+diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+index b5843f4d17d8..379dacacb526 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx SuperSpeed DWC3 USB SoC controller
+ 
+ maintainers:
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ properties:
+diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+index e2a72deae776..c68c04da3399 100644
+--- a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
++++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+@@ -17,7 +17,6 @@ description:
+ 
+ maintainers:
+   - Michal Simek <michal.simek@amd.com>
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ properties:
+diff --git a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+index a7f75fe36665..f295aa9d9ee7 100644
+--- a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
++++ b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx udc controller
+ 
+ maintainers:
+-  - Mubin Sayyed <mubin.sayyed@amd.com>
+   - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+ 
+ properties:
+-- 
+2.25.1
 
-
-Thanks,
-
-Amit
-
->> This would property would have been present for the connector present in
->> the typec device for gs101-oriole board (that uses the max33359
->> controller).
->
-> But it is not.
->
->
->> However, I will be exploring existing bindings to describe the
->> relationship for now.
->>
->>>> out of a battery while operating in sink or source mode respectively.
->>>> The VBUS is connected to the (battery + buck boost IC's CHGin/Vin) or a
->>>> companion IFPMIC connected to a battery.  In our board we have USB
->>>> Connector <-> IFPMIC <-> Battery.
->>> Which board is that?
->> gs101-oriole board.
->
-> Then why this is not used? The board was released some years ago, so I
-> do not see a problem in using it.
->
-> Best regards,
-> Krzysztof
 
