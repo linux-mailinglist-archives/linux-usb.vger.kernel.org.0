@@ -1,65 +1,69 @@
-Return-Path: <linux-usb+bounces-22523-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22524-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2314BA7AA03
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 21:06:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4309A7AA48
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 21:10:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA8133B931D
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 19:05:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B665188F249
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 19:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DDC256C7A;
-	Thu,  3 Apr 2025 19:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92C325B68E;
+	Thu,  3 Apr 2025 19:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="snxcRyKt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRXJwmpl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDCF253B7D;
-	Thu,  3 Apr 2025 19:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4F5253B4B;
+	Thu,  3 Apr 2025 19:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743706965; cv=none; b=UKDYjDD1VrcFemkwQkc+GPlWkDpyX2Tcb9c0njzk+xqy6Locqe68nGhGtyouGju4AoqSQ4VHSFlqJ29hnSsk9GTOymLeryG8A47/ZtAWJPHBg4lgJeWeHQrJI/ej/gSNehzniM7Ztr67pHrm/OLj9A5LnL75VOB4lqYfYdEk4To=
+	t=1743707018; cv=none; b=RimDD5bLaEbaHKoBHHqwrLm9J55hlbAIi42lgrSbUoOBGuexisbDvjysmu8DLplZEHBsGtdc28irwZQzOmnZ9zas6A6/9fdtVcam2spS3ahiR8UIfb2QPXcoUKE+UFoqU5L/CRWE9cDkS4ij1jjzS5OaynvY+A8/xEzdQTuxDmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743706965; c=relaxed/simple;
-	bh=kJ2jEXmnju3HLRFGJ99O6SI8AOeIJq7v6im4cDEw3pY=;
+	s=arc-20240116; t=1743707018; c=relaxed/simple;
+	bh=RzUQhRXe/+OGT7kgCPvHqBz2OlKqXhNnYBz8/RhX7ho=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gLxoNXHNSSKB4/TKWVXRrPAgjHCJKJ5i6VpjF6CEGrdQcJB4R1VxhLF2L176UhuiRsQE0nnfmY6+lrsGuLmnSVevjpqGfp1bjPr5jLgFBb3OfNYjjeDtE+YGmsUOe9UZs80ER86yKBqVv/HzpzIpHl+oZyquG6VpeZbjFYcus9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=snxcRyKt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D540BC4CEE8;
-	Thu,  3 Apr 2025 19:02:42 +0000 (UTC)
+	 MIME-Version; b=c5vpZYk4D/knGT+on0NVlyMJwnqINEP+wm8WGHfYx1m4h65vb6BhqTjAw0ppHHU/C2U4tqmDEs+aLgG6X7fiUeyjFtyTwjtcIHpHbKFnM20yXFFht4NuB6Y/rovp4P7dqz0RDcjnuRPDuedh69aKZRqVWk+iHGb5UHUQh7sfCas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KRXJwmpl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0651AC4CEEA;
+	Thu,  3 Apr 2025 19:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743706964;
-	bh=kJ2jEXmnju3HLRFGJ99O6SI8AOeIJq7v6im4cDEw3pY=;
+	s=k20201202; t=1743707017;
+	bh=RzUQhRXe/+OGT7kgCPvHqBz2OlKqXhNnYBz8/RhX7ho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=snxcRyKtW1yM7FWRxPH2ziwL968QqrFi07l+WWkGCchYHtCFzBULGYsyv9I31UUJh
-	 Ap1hPUTDIBajfj8I/K01C7wEjDwilVt0sadj/w56Mhjgum4+Yd9pMjx7juv0H71mws
-	 VApX5Ucd4dPwuHY9+EhMYSBtqL+7FlN54BWmoi0zw6dlIyyuNGU/VdaXapTksuq7Ov
-	 sW4h6XPPCZUGmbHMgYfYghe369l4mGK+ECG0g+4jA8t/TWwva26jReKueuVyRF8NKF
-	 wsBT2+tHsuLgDtNqG+znfWjzb7WFV4Muk415zuAXAD+hC2o9qaj6RFneuoO5C6VPs4
-	 NkU7lmmfbl2Qw==
+	b=KRXJwmpl60vfacNrXq+RUV48oBHphkt9ZUTFQ+n+FA8Dh5cRgEXAp8hY5lzz2VArh
+	 vSIAODL5t5G7Fa4l1ytmZO4baqpyk2pnrq1NezjAxYoLpXkr2f19/ZBKJAI4jqB1S3
+	 FOgJ+HIIpUEwO/qByTMwGsRlnV9cMtHlNtP/kJl8VLpzX8E5c8sKNSFLhZGFH4GTYO
+	 zeC8m16udAoNtjeHtMtFgcGaZqdrGtJ/YQTS8PiY8HyyqW59zmvhGEAvpxz2TvazvN
+	 V/bQotucTCRvlrOHV2ww0mbwtOFaR/F6f3pv8F4rT+4PdcLhodtTUygfnEcd0Iz+Bo
+	 MvOwEIiFk0dxg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Max Schulze <max.schulze@online.de>,
-	David Hollis <dhollis@davehollis.com>,
-	Sven Kreiensen <s.kreiensen@lyconsys.com>,
+Cc: Philipp Hahn <phahn-oss@avm.de>,
+	Leon Schuermann <leon@is.currently.online>,
 	Jakub Kicinski <kuba@kernel.org>,
+	Oliver Neukum <oliver@neukum.org>,
+	netdev@vger.kernel.org,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Sasha Levin <sashal@kernel.org>,
 	andrew+netdev@lunn.ch,
 	davem@davemloft.net,
 	edumazet@google.com,
-	pabeni@redhat.com,
+	hayeswang@realtek.com,
+	dianders@chromium.org,
+	horms@kernel.org,
 	sd@queasysnail.net,
-	jacob.e.keller@intel.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 15/54] net: usb: asix_devices: add FiberGecko DeviceID
-Date: Thu,  3 Apr 2025 15:01:30 -0400
-Message-Id: <20250403190209.2675485-15-sashal@kernel.org>
+	olek2@wp.pl,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 37/54] cdc_ether|r8152: ThinkPad Hybrid USB-C/A Dock quirk
+Date: Thu,  3 Apr 2025 15:01:52 -0400
+Message-Id: <20250403190209.2675485-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250403190209.2675485-1-sashal@kernel.org>
 References: <20250403190209.2675485-1-sashal@kernel.org>
@@ -74,57 +78,112 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14
 Content-Transfer-Encoding: 8bit
 
-From: Max Schulze <max.schulze@online.de>
+From: Philipp Hahn <phahn-oss@avm.de>
 
-[ Upstream commit 4079918ae720e842ed7dff65fedeb9980b374995 ]
+[ Upstream commit a07f23ad9baf716cbf7746e452c92960536ceae6 ]
 
-The FiberGecko is a small USB module that connects a 100 Mbit/s SFP
+Lenovo ThinkPad Hybrid USB-C with USB-A Dock (17ef:a359) is affected by
+the same problem as the Lenovo Powered USB-C Travel Hub (17ef:721e):
+Both are based on the Realtek RTL8153B chip used to use the cdc_ether
+driver. However, using this driver, with the system suspended the device
+constantly sends pause-frames as soon as the receive buffer fills up.
+This causes issues with other devices, where some Ethernet switches stop
+forwarding packets altogether.
 
-Signed-off-by: Max Schulze <max.schulze@online.de>
-Tested-by: Max Schulze <max.schulze@online.de>
-Suggested-by: David Hollis <dhollis@davehollis.com>
-Reported-by: Sven Kreiensen <s.kreiensen@lyconsys.com>
-Link: https://patch.msgid.link/20250212150957.43900-2-max.schulze@online.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
+
+Cc: Leon Schuermann <leon@is.currently.online>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Oliver Neukum <oliver@neukum.org> (maintainer:USB CDC ETHERNET DRIVER)
+Cc: netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Link: https://git.kernel.org/netdev/net/c/cb82a54904a9
+Link: https://git.kernel.org/netdev/net/c/2284bbd0cf39
+Link: https://www.lenovo.com/de/de/p/accessories-and-software/docking/docking-usb-docks/40af0135eu
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
+Link: https://patch.msgid.link/484336aad52d14ccf061b535bc19ef6396ef5120.1741601523.git.p.hahn@avm.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/asix_devices.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 6 ++++++
+ drivers/net/usb/r8153_ecm.c | 6 ++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 57d6e5abc30e8..da24941a6e444 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -1421,6 +1421,19 @@ static const struct driver_info hg20f9_info = {
- 	.data = FLAG_EEPROM_MAC,
- };
- 
-+static const struct driver_info lyconsys_fibergecko100_info = {
-+	.description = "LyconSys FiberGecko 100 USB 2.0 to SFP Adapter",
-+	.bind = ax88178_bind,
-+	.status = asix_status,
-+	.link_reset = ax88178_link_reset,
-+	.reset = ax88178_link_reset,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
-+		 FLAG_MULTI_PACKET,
-+	.rx_fixup = asix_rx_fixup_common,
-+	.tx_fixup = asix_tx_fixup,
-+	.data = 0x20061201,
-+};
-+
- static const struct usb_device_id	products [] = {
- {
- 	// Linksys USB200M
-@@ -1578,6 +1591,10 @@ static const struct usb_device_id	products [] = {
- 	// Linux Automation GmbH USB 10Base-T1L
- 	USB_DEVICE(0x33f7, 0x0004),
- 	.driver_info = (unsigned long) &lxausb_t1l_info,
-+}, {
-+	/* LyconSys FiberGecko 100 */
-+	USB_DEVICE(0x1d2a, 0x0801),
-+	.driver_info = (unsigned long) &lyconsys_fibergecko100_info,
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index a6469235d904e..a032c1ded4063 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -783,6 +783,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
  },
- 	{ },		// END
+ 
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa359, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* Aquantia AQtion USB to 5GbE Controller (based on AQC111U) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(AQUANTIA_VENDOR_ID, 0xc101,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 468c739740463..96fa3857d8e25 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -785,6 +785,7 @@ enum rtl8152_flags {
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
++#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK		0xa359
+ 
+ struct tally_counter {
+ 	__le64	tx_packets;
+@@ -9787,6 +9788,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+ 		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
++		case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
+ 			return 1;
+ 		}
+ 	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
+@@ -10064,6 +10066,8 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
+ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
+ 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
++
++	/* Lenovo */
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
+@@ -10074,7 +10078,9 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
++	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
+ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
++
+ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
+index 20b2df8d74ae1..8d860dacdf49b 100644
+--- a/drivers/net/usb/r8153_ecm.c
++++ b/drivers/net/usb/r8153_ecm.c
+@@ -135,6 +135,12 @@ static const struct usb_device_id products[] = {
+ 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+ 	.driver_info = (unsigned long)&r8153_info,
+ },
++/* Lenovo ThinkPad Hybrid USB-C with USB-A Dock (40af0135eu, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0xa359, USB_CLASS_COMM,
++				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = (unsigned long)&r8153_info,
++},
+ 
+ 	{ },		/* END */
  };
 -- 
 2.39.5
