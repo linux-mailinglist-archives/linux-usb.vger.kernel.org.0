@@ -1,31 +1,30 @@
-Return-Path: <linux-usb+bounces-22544-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0415A7B21E
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 00:43:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E30A7B232
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 01:02:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D05F33B111C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 22:43:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18FB189B907
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 23:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FBA1DE4C2;
-	Thu,  3 Apr 2025 22:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19BF1D63C2;
+	Thu,  3 Apr 2025 23:02:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9611A8F97
-	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 22:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC1E1922FA
+	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 23:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743720199; cv=none; b=LZsSGtUYBAd/++ncKe2w0L414lNY4qRc2aEmpOeRqrjOnK3wrwZc5CIxX80cV1K6u0zCB0nZS9fuT11eXUUrMm4tmk9yFwo5eKIPjA5zMTV+BX2iGST9qOBKQ/GgFv+nSh8JEFiJMhXSc9xuVwO7kj9ptEvdEAcCgMkQvkqXHnY=
+	t=1743721347; cv=none; b=BETC3YKYLDStNu/vxa89WHbdgYKIFE4cLNJNjbtBgA9o4anbobsQBrX9WqUiy19q5WIoG+SJhQ3AXBcpG/09SUljaBcMh1uC94bu7e85CjyYL2cK0bGKElMPoYeI8VG9hTcxvfAgaRBd+v+oJZvFm2lit/paK/+gQpitFjJyP2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743720199; c=relaxed/simple;
-	bh=SMcprCbzSdYBayAifllR4RUIbZ++HBCrIl+uX6Vkmws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bhL0Ouoj6miIwrppkXmcopcPtzgGS1Hh8QabkHTS6CYdnFq/xkvtKFmC+TeEhFnLgkLOA4oyG/K49+iVgYGng7BBDi8O0niKrpibHcuYPLvNqUjbnblDR5W28axW6aHKeA6rf6uAD17ZlI9BBylGa6UB+yeOp4xu3wA3zFswlA0=
+	s=arc-20240116; t=1743721347; c=relaxed/simple;
+	bh=5gz+IKOc8N3R2ZPRZ8QLjEQogRib4lDUx76Z0fGIaoE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k4ANnHEP2gj8hOCXe54rwiM+8VaezbwPDNSGrXLGIiS1mEiykvnyO7Nn64ZP8HJO1lNtvT0/e1zsbQOv4ia12wK4U0MX56IFSLp4wHEOiM+DiAVKaUoy8OOohb11Fs/w68mcTTYi2rgmTXUIGcWsG5FL/G3peYGRRx8YlknMwYY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,22 +32,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0THG-0000kF-33; Fri, 04 Apr 2025 00:43:14 +0200
+	id 1u0TZm-00020j-2a; Fri, 04 Apr 2025 01:02:22 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0THF-003AjW-16;
-	Fri, 04 Apr 2025 00:43:13 +0200
+	id 1u0TZl-003AlB-08;
+	Fri, 04 Apr 2025 01:02:21 +0200
 Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
 	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0THF-004aMT-0t;
-	Fri, 04 Apr 2025 00:43:13 +0200
+	id 1u0TZk-004d1L-3B;
+	Fri, 04 Apr 2025 01:02:20 +0200
 From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Fri, 04 Apr 2025 00:43:06 +0200
-Subject: [PATCH 3/3] usb: typec: tcpm: allow switching to mode accessory to
- mux properly
+Date: Fri, 04 Apr 2025 01:02:20 +0200
+Subject: [PATCH] usb: typec: mux: fsa4480: add regulator support
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,29 +55,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250404-ml-topic-tcpm-v1-3-b99f44badce8@pengutronix.de>
-References: <20250404-ml-topic-tcpm-v1-0-b99f44badce8@pengutronix.de>
-In-Reply-To: <20250404-ml-topic-tcpm-v1-0-b99f44badce8@pengutronix.de>
+Message-Id: <20250404-ml-topic-typec-mux-fs4480-v1-1-475377ef22a3@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAHsT72cC/x3MQQqDMBBA0avIrDswpiONXqW4kDhpBxoNiYpFv
+ LvB5Vv8f0CWpJKhqw5IsmnWeSqoHxW47zB9BHUsBkOmISbG8MNljupw+UdxGNYdfWa2hM/WML1
+ 8y94ylD4m8brf73d/nhfEvfVWawAAAA==
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4160;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1405;
  i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=SMcprCbzSdYBayAifllR4RUIbZ++HBCrIl+uX6Vkmws=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBn7w8AYHhLMy4jSKsCd1plRQS5xgMXh8yBillLm
- rivdLLi0fiJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZ+8PAAAKCRC/aVhE+XH0
- qzA2EACLwzBAl9ZEb8KPL5KwErDsBKJGDqeFTU/Otu9n1AC3xG55ySo4eCN0iwR7QuVg6YGS0UA
- ecYFwoqAPxAsl9ZTqY4oTOtvtd6ELBv2wyxt+UGAPl0O5xRP0/AwxWZG2XFkNihzx7uGmw6rjyE
- 11z9lYldBygnRtV7UevsUEa10c4aQRrdOek1hJwzOJQURDtbm7QVXZ3Fp2zh3e70MXNliQMvTUu
- CUSzk+tk+IQWrIdNl8WV/etYptawJdM7VB9wsU3Qscez+bKrMOaz9/aIs2HvClKI2yCys92S2UM
- OeBQP8XZR4jZGIEgJMzb03kFcpyx1M0fTc7YugR1Y4bWzY3ZMBha2+XWpAxQNDVlQ/gWOubjnIE
- tDLMN12GrM3jJC9OPnRhyn0RUGQMd2Rycg+ukGKhkKnuRwEiZo1KwxlE3LAwuTG039hit78uZGs
- 8y1VYJ0CJNDXY95lM9wUVheAjhxpy+zOoSDAonEdi5rX9CDGWOyW/TfMISyDVUn6m363cxbfi37
- OOCIgfYDiDDX0pQQVwArWkeGyDXQ+uh8Md/LhJIcLVDWnJ8E8SvVZcl2XBsyxJ+ALeuLyZwzUy/
- nc4yL48Gel9QvqaMEmhKwFs7F3Y29GUk7CgS0Uogpui2ccf0lZ6GHrDrdSOzJhxuvw+5wfRv6FT
- Rm85jRcrFHlBOmQ==
+ bh=5gz+IKOc8N3R2ZPRZ8QLjEQogRib4lDUx76Z0fGIaoE=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBn7xN8EiywtJhILSIHVsUv53/iqlpIIIdYB2VhW
+ NasEmAvg9+JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZ+8TfAAKCRC/aVhE+XH0
+ q7ZwD/4u/xwXm3iubekHtT7RjkrbqscBQdjwM7EhYvz2WiFjNHTIcn2LBzCyHEZMagQuCSFPiW7
+ 1EBesBg9+KjkEy6byeiFYjxbREX7nTkADx/gXIDj8ryv30AYOzgDMQ5QKlmnzVXZpGWlb0JUEOd
+ IlI9sB1XZdzaf2L26BFgwsugQfEHKDs5b4Rw/Df8/iTYAfdOF5iJ3O6RU35qWRXKk6kQq1EAakV
+ U5iBqv/cdRpJ3QoJoiR0mR8YR3hLb7B2gVApPj0Hy33s+1oAQCYXW2z9LLrqYvYr9AXAsyZfbQf
+ C0Nr7cCtCF9aW1BIP93UISavhVp2Z76Mxm1WzixU8MjwZ+bgO/x5l84ATHyB07SnUXnhAa1j4yv
+ V9HTFTjqno8KE3OsFKHJnJywu0j04HNSLjj5i84tbfyry7TtQSxavCXYVrooNi/8ZwU3HuLD/jo
+ uYDEq4fIXqb1Suapx6kAXQDXufU7BXwKKLQr3s7Dl2niM9tx1rSNeKOy0PTLeNpXHEhU3gDMC9e
+ A6EWKMn+oVkDDBaZNSLKrIyw7iFS9PQazChJRYnsasvXUwOnLOt8wajI0H2zbsaw1oBk9M19GQS
+ NGwB6JHIex7xOGfQ8GYVNnyTIzsEVDARMfO4Z1xwNpyl2WHzCrAvsVXojBxJ33U7jODzkUieX0t
+ NTdVO0T7ull/yJg==
 X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
  fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -87,116 +86,44 @@ X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-The funciton tcpm_acc_attach is not setting the proper state when
-calling tcpm_set_role. The function tcpm_set_role is currently only
-handling TYPEC_STATE_USB. For the tcpm_acc_attach to switch into other
-modal states tcpm_set_role needs to be extended by an extra state
-parameter. This patch is handling the proper state change when calling
-tcpm_acc_attach.
+The fsa4480 vcc lane could be driven by some external regulator.
+This patch is adding support to enable the regulator before probing.
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+ drivers/usb/typec/mux/fsa4480.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 01714a42f848a..784fa23102f90 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1153,7 +1153,7 @@ static int tcpm_set_attached_state(struct tcpm_port *port, bool attached)
- 				     port->data_role);
- }
+diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+index f71dba8bf07c9..c54e42c7e6a16 100644
+--- a/drivers/usb/typec/mux/fsa4480.c
++++ b/drivers/usb/typec/mux/fsa4480.c
+@@ -12,6 +12,7 @@
+ #include <linux/regmap.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_mux.h>
++#include <linux/regulator/consumer.h>
  
--static int tcpm_set_roles(struct tcpm_port *port, bool attached,
-+static int tcpm_set_roles(struct tcpm_port *port, bool attached, int state,
- 			  enum typec_role role, enum typec_data_role data)
- {
- 	enum typec_orientation orientation;
-@@ -1190,7 +1190,7 @@ static int tcpm_set_roles(struct tcpm_port *port, bool attached,
- 		}
- 	}
+ #define FSA4480_DEVICE_ID	0x00
+  #define FSA4480_DEVICE_ID_VENDOR_ID	GENMASK(7, 6)
+@@ -273,6 +274,10 @@ static int fsa4480_probe(struct i2c_client *client)
+ 	if (IS_ERR(fsa->regmap))
+ 		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
  
--	ret = tcpm_mux_set(port, TYPEC_STATE_USB, usb_role, orientation);
-+	ret = tcpm_mux_set(port, state, usb_role, orientation);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -4355,7 +4355,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
- 
- 	tcpm_enable_auto_vbus_discharge(port, true);
- 
--	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
-+	ret = tcpm_set_roles(port, true, TYPEC_STATE_USB,
-+			     TYPEC_SOURCE, tcpm_data_role_for_source(port));
- 	if (ret < 0)
- 		return ret;
- 
-@@ -4530,7 +4531,8 @@ static int tcpm_snk_attach(struct tcpm_port *port)
- 
- 	tcpm_enable_auto_vbus_discharge(port, true);
- 
--	ret = tcpm_set_roles(port, true, TYPEC_SINK, tcpm_data_role_for_sink(port));
-+	ret = tcpm_set_roles(port, true, TYPEC_STATE_USB,
-+			     TYPEC_SINK, tcpm_data_role_for_sink(port));
- 	if (ret < 0)
- 		return ret;
- 
-@@ -4555,6 +4557,7 @@ static int tcpm_acc_attach(struct tcpm_port *port)
- 	int ret;
- 	enum typec_role role;
- 	enum typec_data_role data;
-+	int state = TYPEC_STATE_USB;
- 
- 	if (port->attached)
- 		return 0;
-@@ -4563,7 +4566,13 @@ static int tcpm_acc_attach(struct tcpm_port *port)
- 	data = tcpm_port_is_sink(port) ? tcpm_data_role_for_sink(port)
- 				       : tcpm_data_role_for_source(port);
- 
--	ret = tcpm_set_roles(port, true, role, data);
-+	if (tcpm_port_is_audio(port))
-+		state = TYPEC_MODE_AUDIO;
++	ret = devm_regulator_get_enable_optional(dev, "vcc");
++	if (ret && ret != -ENODEV)
++		return dev_err_probe(dev, ret, "Failed to get regulator\n");
 +
-+	if (tcpm_port_is_debug(port))
-+		state = TYPEC_MODE_DEBUG;
-+
-+	ret = tcpm_set_roles(port, true, state, role, data);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -5349,7 +5358,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		 */
- 		tcpm_set_vconn(port, false);
- 		tcpm_set_vbus(port, false);
--		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
-+		tcpm_set_roles(port, port->self_powered, TYPEC_STATE_USB, TYPEC_SOURCE,
- 			       tcpm_data_role_for_source(port));
- 		/*
- 		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
-@@ -5381,7 +5390,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		tcpm_set_vconn(port, false);
- 		if (port->pd_capable)
- 			tcpm_set_charge(port, false);
--		tcpm_set_roles(port, port->self_powered, TYPEC_SINK,
-+		tcpm_set_roles(port, port->self_powered, TYPEC_STATE_USB, TYPEC_SINK,
- 			       tcpm_data_role_for_sink(port));
- 		/*
- 		 * VBUS may or may not toggle, depending on the adapter.
-@@ -5505,10 +5514,10 @@ static void run_state_machine(struct tcpm_port *port)
- 	case DR_SWAP_CHANGE_DR:
- 		tcpm_unregister_altmodes(port);
- 		if (port->data_role == TYPEC_HOST)
--			tcpm_set_roles(port, true, port->pwr_role,
-+			tcpm_set_roles(port, true, TYPEC_STATE_USB, port->pwr_role,
- 				       TYPEC_DEVICE);
- 		else
--			tcpm_set_roles(port, true, port->pwr_role,
-+			tcpm_set_roles(port, true, TYPEC_STATE_USB, port->pwr_role,
- 				       TYPEC_HOST);
- 		tcpm_ams_finish(port);
- 		tcpm_set_state(port, ready_state(port), 0);
+ 	ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
+ 	if (ret)
+ 		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
 
+---
+base-commit: a1b5bd45d4ee58af4f56e49497b8c3db96d8f8a3
+change-id: 20250404-ml-topic-typec-mux-fs4480-392407f94f84
+
+Best regards,
 -- 
-2.39.5
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
