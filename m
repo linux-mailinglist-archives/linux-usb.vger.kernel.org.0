@@ -1,273 +1,151 @@
-Return-Path: <linux-usb+bounces-22515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22516-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83020A7A595
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 16:45:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E6FA7A598
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 16:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E50F3B4DE2
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 14:41:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2A8A3B7847
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 14:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BADEC24EF7D;
-	Thu,  3 Apr 2025 14:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744A224EF7F;
+	Thu,  3 Apr 2025 14:41:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=digi.com header.i=@digi.com header.b="pnCaWXbb"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MKGOCfQs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outbound-ip24a.ess.barracuda.com (outbound-ip24a.ess.barracuda.com [209.222.82.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20ED1F3FC1;
-	Thu,  3 Apr 2025 14:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.206
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743691291; cv=fail; b=s6OSzVlseO5crLQFZR1xg00bvNXwphlV0RB5H1NJMiRtHo15OBXA6FncDVOcpCB7G2XXObdcOgBFqL4CqStTg3aO9pEu7LtWDjB2bULFcYRVOIWErTXmz16F7GnP3+sLV9yeuabdzDSEfwX45W0SkbRZ1LOqWf3w/noXQgaX+DU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743691291; c=relaxed/simple;
-	bh=Ukt1DXXnFLLaWA61TKNizaTzcAMPUePKEtLXKDpHWvo=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=pkKrifwIVYfZBHagdlqGfxvcStww646y98Q4OBRcMryLwo/xWt8F6rUo5BealaY1QRhiCiwFGxj5b9pJ40NJ0ntNySaKgYSAL4DIgg4QaRq7o2UQh/gq5ZR3NPsjMo2N/+Wu3echIvPt4DpuQT9YlSczyHshK/tdzdWhASAv7Us=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=digi.com; spf=pass smtp.mailfrom=digi.com; dkim=pass (2048-bit key) header.d=digi.com header.i=@digi.com header.b=pnCaWXbb; arc=fail smtp.client-ip=209.222.82.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=digi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digi.com
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2177.outbound.protection.outlook.com [104.47.73.177]) by mx-outbound9-129.us-east-2a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 03 Apr 2025 14:40:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PO4jdgqyc4N+SAMzay7QUTQ0RKI1HxXmOBRaSvnQ2g/itBsHYo9uqhD/XiXJL0ArvYVBYq+1g3+ymjKwHWjmMq4feG7RN77cQ3P6VzqhljLH8GOboEC8LFgp7oVtuKRfg4Xrr9yMOMMdkQKJVJYD5w6Gr2RDxlY6vpVsSXO/VBJdErUaHYhLyE50QsxzOnY9mXdx7exRnjb+1E0xpi+qNirrA+RDjkJ+u3VpVwQc1hTztsq8Sydjx/SAUH0n3rEnQUs6I29Fhth5tVxdYCUrAaIbl7iHmaLTzj0gr7W3duPFHLWvTseUJO1Q0/xG3b8i7qqB2t1xsHx21UT/Fuv7vQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKGP7fRr0nbNkvFuWxkTTcTy3m0ysrsc5fFOY/+z3oI=;
- b=eyIs4XoXv7daIeMMVkn6bPaWw3IVDq8pS/curKepOGTXCBWh3FMBuDb7nOUa9PvtqxdiJYDEOkPs+zZzl8qEKBUZk34q3FDNCHZ5Gugzx5j+1ONzJzB6QbeuLuIjNzfXm78aH7Kf3+CujpTytcOgF8yg7Ws9HPtYgLwwlmP/D41FCkx+b0oVgQQehGrvvRtQGeHTNmT7ZM6ijev1D/mtRALun3UU0Emh0x/MjaWK2T7Che81npZ03hOLYL/ZOO7t1fNwvU4Zw94JqwCO5k1ZEky/PDAHa/X5aFM/lF56xarCe7yIsOyjzbrbuF/eGyw6C348EinCYAGTZuB+BCm/wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=digi.com; dmarc=pass action=none header.from=digi.com;
- dkim=pass header.d=digi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digi.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKGP7fRr0nbNkvFuWxkTTcTy3m0ysrsc5fFOY/+z3oI=;
- b=pnCaWXbbapHjDkR2gnrL5i1d+V1JVrAcm+6i4Hz0QsB9RKJqwwqggi7aNKHV6it5uYTsV7w16m0UlEipcAG89L4tOYKEcU+BiKPQ88tFDedMv7amZhKyPI4HkOnOTZtE+c4Q11EXGpPoFlXb7wFNa6a/nwcbYumiJzvGCHGJX0BTP6AchweUJuOPKGIa+Tsh1N/LxT2xGzcfLrMCEjuVp4aMOlOXocX4gW+RoEMX9KC1YgE92Z7VT5hSmI804z7CfjmDcDnw/HIkmmAtO0Ro1LIfJ+Z0HsRwKsNyodo/qAQEjL8yazdEUTFngQ5dS8mqz8OjUCD8OesXGHde+2ECcA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=digi.com;
-Received: from CO1PR10MB4561.namprd10.prod.outlook.com (2603:10b6:303:9d::15)
- by MN6PR10MB7442.namprd10.prod.outlook.com (2603:10b6:208:470::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8583.38; Thu, 3 Apr
- 2025 14:40:48 +0000
-Received: from CO1PR10MB4561.namprd10.prod.outlook.com
- ([fe80::ecc0:e020:de02:c448]) by CO1PR10MB4561.namprd10.prod.outlook.com
- ([fe80::ecc0:e020:de02:c448%4]) with mapi id 15.20.8583.038; Thu, 3 Apr 2025
- 14:40:48 +0000
-From: Robert Hodaszi <robert.hodaszi@digi.com>
-To: gregkh@linuxfoundation.org,
-	oneukum@suse.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu,
-	viro@zeniv.linux.org.uk,
-	Robert Hodaszi <robert.hodaszi@digi.com>
-Subject: [PATCH] usb: cdc-wdm: avoid setting WDM_READ for ZLP-s
-Date: Thu,  3 Apr 2025 16:40:04 +0200
-Message-ID: <20250403144004.3889125-1-robert.hodaszi@digi.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR0P281CA0146.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::20) To CO1PR10MB4561.namprd10.prod.outlook.com
- (2603:10b6:303:9d::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6221024EF7A
+	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 14:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743691314; cv=none; b=I3P98ZQdMKoYNaA1c4Qdm6m9gIR4P6YgI8ioU0KWQ/ccsvkGIYRFskJeIYGw9458HzX76lCHTVxmCPvQHp28sGveYr5z8SwrRSmHNcW6ctxGGlqMJFiZP5J0I1T8kdL3tOMdR4UqlpDqqkWbkCOeEBgzWER7TK/FqmOgFvCfQh0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743691314; c=relaxed/simple;
+	bh=deul/6DMD0WupcCRPEsci+NKCg6iMOZb6tLQIefJsfg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kzGYnIhnLVTCsr5k7wCHYEFyqzx5stmTI3krEShRIjxu57cKCBUDUMZh+Jk6GXR/P700aKThcrNWB4O0nsR3f9DtzAx4Rsio7Ci4Rsi5Ljk8CqmPZeR2siYKnSSxZqAzudK6ZiqWg+ZDheQqndcsbFYz7hLz8fvjT60r5snGj8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MKGOCfQs; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so15327015e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 03 Apr 2025 07:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1743691308; x=1744296108; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qU2AENczHbFYi0vapb5qtmr112HUi8oMeHXkjdOGnTc=;
+        b=MKGOCfQsjoT5DpqOikpx2fWQbC1D3QUe4+bHJyRc304R5WnMPSGfkohErSIPg0hwAZ
+         qQIEBOu9wNQsJHjVZ/UvmZcFU9xe56fsUZ1TmTV8GYbr1UvkzSlQg/tcBjwAuszt+GIG
+         5Pg24uLuwXYSuRGeRc0U1dbhaofIBg3+gugLjVtgbRCJ85Qffs2zoq5W+k5voJkvXmF0
+         faCdORNden2C/hJAXMnXGIDhcSnmRkoPssvGi1dAgr48ysNvRPnRM/QIlvAevwtduRIA
+         +dBbWUVyzzPqiJyMmfLDyInRTZ3eLmiGXANp7h6/bRMpqRHr1LxvAV9IVJUgT/wzjpru
+         ugVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743691308; x=1744296108;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qU2AENczHbFYi0vapb5qtmr112HUi8oMeHXkjdOGnTc=;
+        b=vQdf6sH2xvvUuNyjhpIxacI7GC1p+pw09MYWgSK2kZIoSXNZt6C3E84F5EorEOxhaq
+         iuclVo4Yd4KUR1w11MzW7j2GfEsN7joDEJ7J93yQy/AIACAfMTsvwJl08JJNPXtxGv5P
+         03ts4HSd9O/9HlbYuakVbJ9jc3F/aw7nbPJ5sCmdkJ/+Szhrz4gxF6U/H0sSPpUPNrgL
+         eD+WgsahOAnHKM8tI9Oto3BWubiZpz9eGGU/tAZpbf5R+synhO4yftq0dEWG9cHrmkGx
+         EqDz/6NumQwB78vrOMMTckXK2Pj3lMqgUq/qlJToAxipUg/kM6o0fQwY4Zq6Qz3RUnSm
+         Bycw==
+X-Gm-Message-State: AOJu0YyIyfft8z2ZyVSjY48dxZG5G1hm9rxCzMOETWnxs5ggj2QYBWk8
+	CGEgkT6xkCHZqN9zG7G2xhVfqpBEt6KoYnl2gadcLbt13rpVx3dSx+rMCzJAb9gHs+0KSlz1/7H
+	mK0k=
+X-Gm-Gg: ASbGncsLfc+PGZP5J6ymbwViaXXipumhZOHa2blkn/L2FPPfhMP+zx9nODnbdxLfvaD
+	gmCeZ8P3wTmpN6g7FYkSDJtmmZvf+RZvAS/zhxfZxMto1x+LPqX+XocOSRWU+hLlohzB8TAUZ4P
+	u4mWxbIjcQF+f+BGupzMbXkznZbhZCWF/U0V1oE1B6DNAfDJ8Nu3patFp7hcgujj9byw4CysAv5
+	ldy1GepkesPz36F5m6XOr5fvfS/W0euXuNDUHg8iZnheGRM5BnV5suyffVe4TYB0LLSBr6A27HS
+	gDI1FpmqLt2a5fW+qdKH8P5Usyy8ROU8q17f9oXxj/UKlkeRm6jEwcOzSmFwAA==
+X-Google-Smtp-Source: AGHT+IFalIoL8K4m0td9bSbzSevan9w/rCRp+a1gY9nTWSue++Cl9cZnjcr7EiL0+MdouIWg6bYH9g==
+X-Received: by 2002:a5d:5f8e:0:b0:39b:32fc:c025 with SMTP id ffacd0b85a97d-39c2e5f50f4mr2892458f8f.2.1743691308511;
+        Thu, 03 Apr 2025 07:41:48 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:355:6b90:e24f:43ff:fee6:750f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c3020d975sm2006676f8f.75.2025.04.03.07.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 07:41:47 -0700 (PDT)
+From: Frode Isaksen <fisaksen@baylibre.com>
+To: linux-usb@vger.kernel.org,
+	Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	krishna.kurapati@oss.qualcomm.com,
+	Frode Isaksen <frode@meta.com>
+Subject: [PATCH v2] usb: dwc3: ep0: prevent dwc3_request from being queued twice
+Date: Thu,  3 Apr 2025 16:40:35 +0200
+Message-ID: <20250403144134.518383-1-fisaksen@baylibre.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4561:EE_|MN6PR10MB7442:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8adeca2-c589-48e4-8202-08dd72bd861f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9KhrKam7zuWOTtsl8EXOwyVm4xhkQ8yvFTNB8kDY/cdijb2tjwGTqN+AGNvc?=
- =?us-ascii?Q?W+QLp/6HXy1rTaHowSnIGGfNHURWxTuP7OtHTBCMIJm58QqbDuU/cmMB/brl?=
- =?us-ascii?Q?vaxnYyCZq6IW5gyw72IIJ8F8YCP3TzIujJXujq/BuMNtWYRfZIs0qm3j77ua?=
- =?us-ascii?Q?T+sH9X9v5LmZQvb4eprN7lHfHj6NpWkUN+BQP66bm66A+Yiyip5zauQf4Jai?=
- =?us-ascii?Q?NKOBqUWSXxFnNASpiT18gL3NKeQwL3zYaBMEXEH3PtjrExd7TS3elVkLyn5y?=
- =?us-ascii?Q?P1fC6Evfl5IcJcSi3onlGBmY1S6GJmGzV+m1ybLnSTWSQjfhmCN2y6uU98Cb?=
- =?us-ascii?Q?SAdXH+EvUlVGM0pAxDmTdb5mUG0x3BOcJwspIjCVvryIv+qYw1nskhdHRdze?=
- =?us-ascii?Q?S1hMeu3Sy9ArGHYuSLxfADjBzbfoT0J8ln5Kby9wqKAINrUnDwEVMJXrGmnn?=
- =?us-ascii?Q?WQMGhgJA3oCzVL5dPXX5rIGiLoW+CGfqdSmtx0sGn8wm0Ads2k25tMN4SKls?=
- =?us-ascii?Q?JrU37kEdsK/fT0eVFYv03lyZb7rO1eSKyba9apqgE+gK9jFfM+LkTGd5qdDE?=
- =?us-ascii?Q?NvfVKM/C/tWHaVTLtKnvs+rL3dUyPYhvzxjCiUO7qretOKHhqVPiRz7/lQkt?=
- =?us-ascii?Q?2QozqPmxbuySn0OM5iUVTIYYI9unKQPBbiNRTBPO2OVj435JqUfVT8xWug6g?=
- =?us-ascii?Q?sLtTyl6FEUngPbVD+MpFoMWO4mt+4FTOPTpZgxsa/1PmDPjaBWpKWCVgpDTC?=
- =?us-ascii?Q?RVxgaE91docrg75sdZ4BFvmbCFIf8hKcmz8PEJgFK72y0h9jVfRazH+p2ICL?=
- =?us-ascii?Q?bbfoniKIR5XszC5LLgLKBgGewfUSc04TIa/KUg4b6MYmu5muNiUiOI2CyFSc?=
- =?us-ascii?Q?fgf1AAnjETFKdkAOclXq2Qu+NfxRbp7ahl4xHsOTC3NvsJ7zW/KmeNHNzrMz?=
- =?us-ascii?Q?thdGjgNe9zynX5ZBzymjbDRb3J9sFEfi3JDv4/wGfHvTRC4NeW0GT6j7noFG?=
- =?us-ascii?Q?1XXyXq9OMno+JXTxfHRa5eWfSkn/vEvDleyBgV97uwu0dUfDsEkSKfvSSNVQ?=
- =?us-ascii?Q?nC9TmfIi/035Qh9y7YTzyEVIgFL6cSUBcctNOf28pXJ6T/zfuC6ePL5qgzhB?=
- =?us-ascii?Q?DAoaqMlAU2EPegNtJCXyaWhqMp8wVWJPbOLNUXGZ3p+JRLjp0RD9zoLymq7R?=
- =?us-ascii?Q?e0MOJ6W4FqgPxJuRkX8YqfJRelSA7/y3uAsvdUmBNr1clGbmHEOeNd2h9hVj?=
- =?us-ascii?Q?vs01UV7PNLuhc6hkCRy96AeNpE37MdWoZ6J87U9grxnAuOQurbXhLG+qDeva?=
- =?us-ascii?Q?ZRtYmlENzv6j+FfiJcL35oA8cZ3NPBlZL/A7nfppW1/abH2PqZc2zkJdc5JH?=
- =?us-ascii?Q?GULl/F9mo3Bv1V7a0Orvq9iWOCVVsYuk4XzOlCVJKawcafIpWq0z9pPvA6vO?=
- =?us-ascii?Q?HP4tsv6Jkag7LDLKoEkVJe66xY7Hh9Mf?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4561.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3rVD39235PBgVgbDNat6KgZi2X+VuqEi2xWL6eo09bpAW8HvKRrii/H+ShXv?=
- =?us-ascii?Q?7ouaiXB9wn0gqEivZafRcH+akfkYYOcymPlrHpSKJREOMnlWTldlPx1SPCKt?=
- =?us-ascii?Q?tag/zbJCHxMObtnA/xOapWZc4TNNYfaxlhCqVF6ss00SzV2LKpNipZQCADtN?=
- =?us-ascii?Q?ZgeOFx78LEEKK6nXR1exPUoVrgxLku2JhsbFsUVJJKru4lqTGLuWINKRvfPl?=
- =?us-ascii?Q?IH1w5Xn4tfCxG7Azh6my5G+K36rY1mod41kJ/EiYeLi0Arc8ICcEYmt+ZSzQ?=
- =?us-ascii?Q?NbmmJuDlzJD3SbQZYyp+gVLIFT6Z5OpcREBLe+7mCLOtFQyIysbfkAj3SeRP?=
- =?us-ascii?Q?XtWQIx+1j8AR46B6hl/OX7e+jkMsQ861Usy3/OEH/RjkGd6jx885MweG/yQQ?=
- =?us-ascii?Q?Vfo607/FkonQw014BUFTjATywh0AxgKQdVVzKTUxeQ8jyvx7DtrP89SXUoTV?=
- =?us-ascii?Q?7NdNUHTlm0qOYvh0s+hTOrY7KuPIw+ktoRpiRR8aN2HbN4ksT+IS5PBu3iiu?=
- =?us-ascii?Q?wKNUpbtktXP6CHExbjLY1XqfzmfjdXoNhALRX69GcNfxWGbHiZ7vMzBMiGz3?=
- =?us-ascii?Q?fjkPZUvdDbKNBwwZF3H4RTOHHIDEG+T70l/9MggYkT//bZIo2QFdbxoAc1mt?=
- =?us-ascii?Q?O+jJJ6989ElC5a1HPDAXEdqfdTmH5AtMMd5OoEM96Vtmm2OcO4Bz5/qmPBDF?=
- =?us-ascii?Q?FozuKYN9xrwy+KI1ugIMMbk/Xt7q4112JgouH3/oL5fbpdiSVWAnsNAXX+kZ?=
- =?us-ascii?Q?ZPPwOwAGMqYCRPkhrjzNq4NW+kWRiel1CSm3hjZjaccxEmmioPGunH/1q6S2?=
- =?us-ascii?Q?nw2+As6Oavq2qaqKQ3hxnBSPxIXhD/wKX/2CR/zXlE1K39zdRKJsJLpPlRuQ?=
- =?us-ascii?Q?KQZ0PVAGlKjjIiwa3cqOwwMEQEBbhuysrgBIAAuTqiR8BOignTDRXA4OwrGc?=
- =?us-ascii?Q?mLxHKCdcN/MrCtAAQyBprZTLHHsfIiThuz6FCtPirNL9pvAqolLXoeyeLfM6?=
- =?us-ascii?Q?SomrKfpu8CuBGg6yCx2TeDBDrvPmLUqUf5P/yIlR6dVX+0EW++B4yuqgrNyg?=
- =?us-ascii?Q?+boIzxWBlGT7bGqYCe8apBuBkU0u1SI76dp5bPS8bnAYflodM4ardfa4AXTI?=
- =?us-ascii?Q?dr+E++iztVR1JA9ed9xpOp5pEBILzLoEtLB+vOG+sLuxfIvIxp0fhlnhxJiA?=
- =?us-ascii?Q?9tyWLzX9Wt2R3PLQ7IkHGevcYR0KTdHVmw68d7X6KScKCtA7zHUz57mV1nI6?=
- =?us-ascii?Q?jp9gZIGj6g9XENc7053qm9jEEu/a+D5tnv0/1B55Ek15dqrcg9A3QVP2nFpH?=
- =?us-ascii?Q?HxPw79RdcAgNn29UDVWHmrLb1Fx1Nlvt5UFaFh8+dwnCe0BJCaPkFPCjISMy?=
- =?us-ascii?Q?JTjPL9nIORZmZ1E93UTU2QkSwYdTK9YQzCAPrgBjPdM8SpZCdolQHNZ5vwYh?=
- =?us-ascii?Q?CUkMw5HmQf/LnOnlU8E/GhCX5zniOCDJr4Iso1nDlpDZRJHscbPfppxTqjLf?=
- =?us-ascii?Q?OIWx+UMbSAn8t0/bPBG5vAOvWj59yhc8GqV5U+4CLTmPwEql0K/BlRmI7VE2?=
- =?us-ascii?Q?lQGEDiSuG+0kQPK5lbQunKH0ljGM5qLFH/fo5ZrG?=
-X-OriginatorOrg: digi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8adeca2-c589-48e4-8202-08dd72bd861f
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4561.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2025 14:40:48.2654
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: abb4cdb7-1b7e-483e-a143-7ebfd1184b9e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3sYo7VeTu9l9kblU2ftrG+v4i8dTUFcfNNBXu6ZiqrwjD3tgPeEMzll2oy5j1cEJWvJNhjcmwDp14JjMzf84WQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7442
-X-BESS-ID: 1743691251-102433-7745-11178-1
-X-BESS-VER: 2019.1_20250402.1544
-X-BESS-Apparent-Source-IP: 104.47.73.177
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVsaG5qZAVgZQ0CA51TzZxMI80d
-	AyLdXC0tLC0NggxdTI1DTJyNQ42dhIqTYWAD0rqH9BAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.263623 [from 
-	cloudscan11-244.us-east-2a.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS112744 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
+Content-Transfer-Encoding: 8bit
 
-Don't set WDM_READ flag in wdm_in_callback() for ZLP-s, otherwise when
-userspace tries to poll for available data, it might - incorrectly -
-believe there is something available, and when it tries to non-blocking
-read it, it might get stuck in the read loop.
+From: Frode Isaksen <frode@meta.com>
 
-For example this is what glib does for non-blocking read (briefly):
+Prevent dwc3_request from being queued twice, by checking
+req->status.
+Similar to commit b2b6d601365a ("usb: dwc3: gadget: prevent
+dwc3_request from being queued twice") for non-ep0 endpoints.
+Crash log:
+list_add double add: new=ffffff87ab2c7950, prev=ffffff87ab2c7950,
+ next=ffffff87ab485b60.
+kernel BUG at lib/list_debug.c:35!
+Call trace:
+__list_add_valid+0x70/0xc0
+__dwc3_gadget_ep0_queue+0x70/0x224
+dwc3_ep0_handle_status+0x118/0x200
+dwc3_ep0_inspect_setup+0x144/0x32c
+dwc3_ep0_interrupt+0xac/0x340
+dwc3_process_event_entry+0x90/0x724
+dwc3_process_event_buf+0x7c/0x33c
+dwc3_thread_interrupt+0x58/0x8c
 
-  1. poll()
-  2. if poll returns with non-zero, starts a read data loop:
-    a. loop on poll() (EINTR disabled)
-    b. if revents was set, reads data
-      I. if read returns with EINTR or EAGAIN, goto 2.a.
-      II. otherwise return with data
-
-So if ZLP sets WDM_READ (#1), we expect data, and try to read it (#2).
-But as that was a ZLP, and we are doing non-blocking read, wdm_read()
-returns with EAGAIN (#2.b.I), so loop again, and try to read again
-(#2.a.).
-
-With glib, we might stuck in this loop forever, as EINTR is disabled
-(#2.a).
-
-Signed-off-by: Robert Hodaszi <robert.hodaszi@digi.com>
+Signed-off-by: Frode Isaksen <frode@meta.com>
 ---
- drivers/usb/class/cdc-wdm.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+v1 -> v2: Replace WARN with dev_warn
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 86ee39db013f..28c5ed840a40 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -92,7 +92,6 @@ struct wdm_device {
- 	u16			wMaxCommand;
- 	u16			wMaxPacketSize;
- 	__le16			inum;
--	int			reslength;
- 	int			length;
- 	int			read;
- 	int			count;
-@@ -214,6 +213,11 @@ static void wdm_in_callback(struct urb *urb)
- 	if (desc->rerr == 0 && status != -EPIPE)
- 		desc->rerr = status;
+ drivers/usb/dwc3/ep0.c    | 6 ++++++
+ drivers/usb/dwc3/gadget.c | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 666ac432f52d..7ab102b5fda5 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -91,6 +91,12 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
+ {
+ 	struct dwc3		*dwc = dep->dwc;
  
-+	if (length == 0) {
-+		dev_dbg(&desc->intf->dev, "received ZLP\n");
-+		goto skip_zlp;
++	if (req->status < DWC3_REQUEST_STATUS_COMPLETED) {
++		dev_warn(dwc->dev, "%s: request %pK already in flight\n",
++			dep->name, &req->request);
++		return -EINVAL;
 +	}
 +
- 	if (length + desc->length > desc->wMaxCommand) {
- 		/* The buffer would overflow */
- 		set_bit(WDM_OVERFLOW, &desc->flags);
-@@ -222,18 +226,18 @@ static void wdm_in_callback(struct urb *urb)
- 		if (!test_bit(WDM_OVERFLOW, &desc->flags)) {
- 			memmove(desc->ubuf + desc->length, desc->inbuf, length);
- 			desc->length += length;
--			desc->reslength = length;
- 		}
- 	}
- skip_error:
+ 	req->request.actual	= 0;
+ 	req->request.status	= -EINPROGRESS;
+ 	req->epnum		= dep->number;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index b75b4c5ca7fc..e1eb531e192d 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3002,6 +3002,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	dwc->ep0_bounced = false;
+ 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
+ 	dwc->delayed_status = false;
++	dwc->ep0_usb_req.status = DWC3_REQUEST_STATUS_UNKNOWN;
+ 	dwc3_ep0_out_start(dwc);
  
- 	if (desc->rerr) {
- 		/*
--		 * Since there was an error, userspace may decide to not read
--		 * any data after poll'ing.
-+		 * If there was a ZLP or an error, userspace may decide to not
-+		 * read any data after poll'ing.
- 		 * We should respond to further attempts from the device to send
- 		 * data, so that we can get unstuck.
- 		 */
-+skip_zlp:
- 		schedule_work(&desc->service_outs_intr);
- 	} else {
- 		set_bit(WDM_READ, &desc->flags);
-@@ -585,15 +589,6 @@ static ssize_t wdm_read
- 			goto retry;
- 		}
- 
--		if (!desc->reslength) { /* zero length read */
--			dev_dbg(&desc->intf->dev, "zero length - clearing WDM_READ\n");
--			clear_bit(WDM_READ, &desc->flags);
--			rv = service_outstanding_interrupt(desc);
--			spin_unlock_irq(&desc->iuspin);
--			if (rv < 0)
--				goto err;
--			goto retry;
--		}
- 		cntr = desc->length;
- 		spin_unlock_irq(&desc->iuspin);
- 	}
-@@ -1005,7 +1000,7 @@ static void service_interrupt_work(struct work_struct *work)
- 
- 	spin_lock_irq(&desc->iuspin);
- 	service_outstanding_interrupt(desc);
--	if (!desc->resp_count) {
-+	if (!desc->resp_count && (desc->length || desc->rerr)) {
- 		set_bit(WDM_READ, &desc->flags);
- 		wake_up(&desc->wait);
- 	}
+ 	dwc3_gadget_enable_irq(dwc);
 -- 
-2.43.0
+2.49.0
 
 
