@@ -1,30 +1,30 @@
-Return-Path: <linux-usb+bounces-22541-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22542-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 875E7A7B201
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 00:22:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A2EBA7B218
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 00:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DCBA18982B2
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 22:21:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1455A17974A
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 22:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AB982E62AE;
-	Thu,  3 Apr 2025 22:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414D71C84B9;
+	Thu,  3 Apr 2025 22:43:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A472E62C0
-	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 22:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9AB1AB6F1
+	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 22:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743718889; cv=none; b=iF3yB0OHT84JTDVobq85tP/VQNyy+wSzVTqv/JAGsdKw7CyMg+6vBbUCzFzzzgWb6NEidmZrNyLIojytZ508qrLOOr7SXEk6g8qO464jeAADK+N23HFNjy+V08hl2ruqTA/fWEeBV71pbnamYdHaycwpgZlft2NcLMc+S2h0NpY=
+	t=1743720198; cv=none; b=B4X8o6DQMvZk+5eWk2yJ7Eq125qcR45pRLgFny0pPs+MjAGNO5ps/wksL+3OkT7x78GigcfswWbAZHBZAxsnNJGxNDfPTlMtQa4Tk2SEO9WJMY6bLZ7EvMPwj9QJ6gmGcqr7zG61ZSR9vYEwyFKTwS+TiBBtVy+KqYBhPC0xTWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743718889; c=relaxed/simple;
-	bh=xZbKHATwgzlto9VB+6ctPn+t/pyRlRiza9WY5y99mjI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gNSetEImpl4TRHDpD6aXRFM3iQzuslywoYjTasrDFC13Eug9Eui8woSvb8v+UGtsD7ylpQ/ltb/VLXI2gp/qHPv3XeQru+4K8FheCqeiwaESrpRfZuqrW7QmU3zlyYYtSgIjStHAgXGnpwhLyijl4mbmM0psyi7p+wBCV5SeRhY=
+	s=arc-20240116; t=1743720198; c=relaxed/simple;
+	bh=MC/KEKdPTOEflqGlUvBmURVglRnQ9QWtHNmEHTvCwqw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XTclTvwrCuCg9RUazxYHk9lUJZeSi8EkB8xEkA7Rrr1YFvjZNKykuP1Il9LoiZ3TJ/G0JmC/8ui5LQndxl1nO9/23jYacGWOomRd+3WGvdc31W+i6DHbDpNV9c5i+ILLP0yarfFvcnaQfvT3Bi/WFINQ0k5Zkgg8RPtcHgvNOH0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,22 +32,22 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0Sw0-0007zP-Nh; Fri, 04 Apr 2025 00:21:16 +0200
+	id 1u0THG-0000kD-33; Fri, 04 Apr 2025 00:43:14 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0Svz-003Ad9-29;
-	Fri, 04 Apr 2025 00:21:15 +0200
+	id 1u0THF-003AjU-13;
+	Fri, 04 Apr 2025 00:43:13 +0200
 Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
 	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1u0Svz-004X5f-1x;
-	Fri, 04 Apr 2025 00:21:15 +0200
+	id 1u0THF-004aMT-0q;
+	Fri, 04 Apr 2025 00:43:13 +0200
 From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Fri, 04 Apr 2025 00:21:01 +0200
-Subject: [PATCH] usb: typec: mux: do not return on EOPNOTSUPP in {mux,
- switch}_set
+Subject: [PATCH 0/3] usb: typec: tcpm: sink (ufp) accessory mode support
+Date: Fri, 04 Apr 2025 00:43:03 +0200
+Message-Id: <20250404-ml-topic-tcpm-v1-0-b99f44badce8@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,30 +56,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250404-ml-topic-typec-mux-v1-1-22c0526381ba@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAMwJ72cC/x3MQQqAIBBA0avErBvQ0EVdJVqkTjWQJVphRHdPW
- r7F/w8kikwJuuqBSBcn3rcCWVdgl3GbCdkVQyMaLZRQ6Fc89sAWjzuQRX9m1KY1QqpJOuOghCH
- SxPmf9sP7fgGoWc1kAAAA
+X-B4-Tracking: v=1; b=H4sIAPcO72cC/x3MQQqAIBBA0avErBswyU1XiRY2TjWQJhoRiHdPW
+ r7F/wUyJ+EMU1cg8SNZrtAw9B3QYcPOKK4ZtNJGjWpEf+J9RSG8KXq0diUym3bGMLQmJt7k/X/
+ zUusHv1MnhF8AAAA=
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1449;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=852;
  i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=xZbKHATwgzlto9VB+6ctPn+t/pyRlRiza9WY5y99mjI=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBn7wnbkw5mBibVC8FpLe0vWnFk1fo/DOGTDNl0R
- iE+yLCPMr2JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZ+8J2wAKCRC/aVhE+XH0
- q7PTEACABzO6rbbad/vQgrwL7mlVSJ+EFD1x7mk5h72i2f6fppE8RXgKwABTOChplCbI3VltZvq
- Jsj8V5dOs0zLaPo3I/SiNnL/P5jH/TjTVEGjVG15wsig4O4Fi2QQZ96x9tdFNL9TXlv5dDbC7lO
- GtPR6lViZL0sSQX6Uo1jOwUyrrUEKk+Ak2yroBqSdCwEo9zmBx1P20QihxYg2+xeHNMaO+UfjYg
- KC5RA4HFF2dwFRs864IOvXH6IEOipQpyBSrlzkvrcimkijrQUvDsgYnbrdYMmOPf6iA+0BsLUy1
- UP+xL7XyEvPV5d7PqQlM6gd/quy8ojm4KBn+V3lxDNItktqmeXHmyQ85yLxpW1VvGNQgw8c3C9R
- 1M3sACtB3S9oanpflWFN5tG8jirYz8Zct6VReyem1rIXWs8suAEmDQxLUjFN5IuvegCwh4qNwT9
- 46kinrdJNWQufLJMCtxy6xCTuBNyYSRfqZF3T23BmuIoYHU5HqyOdzPSmqaQ7faAhqpEXaba4PW
- sB7oUStKBunv/sX2IFQVNgc1xbkw8mOzUrbFH282/rLvRv9pXqtVF2RImyf6EtldCB6aXW1/cN9
- pS8gMbOVXBXP2H97sg6I9tCeXvcRSCV3NBDq8cNqd/m5ROTMxim9FchHHj1rkhA7EOWJjDZJGTj
- vO4HhnQlAgQoTIg==
+ bh=MC/KEKdPTOEflqGlUvBmURVglRnQ9QWtHNmEHTvCwqw=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBn7w7/eRus1d7Dqqh37Jw8+q+uyFlSjogqRvC1n
+ ZIXVTkUu4KJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZ+8O/wAKCRC/aVhE+XH0
+ q/4AEACSkvLzR5VbV5RMNgIJDNoIx/PZxYa07Gp8ODXHaJvWYwctPB2JUbtuM+xIKrlrHO3bx3a
+ 2p+zEIv9eE+E7ydu5jGnKq8Y+7TChojAfTGHCo/yYQCESvQOPb3VTgTkzDtTqGUXE+sRBubd8a2
+ LJzn7M7hbu5PfgiBTIYcwWqVj5rXw+mvqF+F0z8X6T6z3PV+IGtvVy2j6yKHUzh6YBXYr90cmy7
+ DfdTO42GRTsq5ISMObjh6Ps8Hq74i1HoPet0zyZKIw9XjmQrW5MNnt/CHeYd+oj6H0vrS2e2r7J
+ qFtE1qvKdkYfDEM82gjB8CcWmuv5wbuHhCc18PjPYa9uKttSMLor3HtS4/yMnbWy2t1zDmvp10H
+ H9coKSrRT7TsSOMZoQbiqyb/CAxMaTiUX8qVimL3nYcVNE0wCsghyEm2wO/Tfs+UkxjDXd49gdt
+ TCR2EfLhCKfQKu8IwsACsx6V3za/BM+aj/InCiBys4g+Aav+rzZuldNktKuJkZ0ChVEABQycpk1
+ 5wQY+tuwH7XSEAljyqyYgAL3D8VJDH2jlBFfdICFQTbKXKvATcES0cOLX79Y2a8ecy5mth8F8RH
+ 4Tfqqdy1qPvNT+eNPEj72a8JJb78EDyqVmOTBqX5Oje2iaBu95FGNzmZ5byIo2oXcVi/EqsCycn
+ zqaa20o4dCHFruA==
 X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
  fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -87,46 +86,23 @@ X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Since the typec connectors can have many muxes or switches for different
-lanes (sbu, usb2, usb3) going into different modal states (usb2, usb3,
-audio, debug) all of them will be called on typec_switch_set and
-typec_mux_set. But not all of them will be handling the expected mode.
-
-If one of the mux or switch will come back with EOPTNOSUPP this is no
-reason to stop running through the next ones. Therefor we skip this
-particular error value and continue calling the next.
+This series is adding support to reach the DEBUG_ACC_ATTACHED state
+when configured as sink. It also extends the tcpm_acc_attach function
+to handle sink and src cases and sets the proper modal state when
+calling tcpm_set_role.
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 ---
- drivers/usb/typec/mux.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Michael Grzeschik (3):
+      usb: typec: tcpm: allow to use sink in accessory mode
+      usb: typec: tcpm: allow sink (ufp) to toggle into accessory mode debug
+      usb: typec: tcpm: allow switching to mode accessory to mux properly
 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 49926d6e72c71..182c902c42f61 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -214,7 +214,7 @@ int typec_switch_set(struct typec_switch *sw,
- 		sw_dev = sw->sw_devs[i];
- 
- 		ret = sw_dev->set(sw_dev, orientation);
--		if (ret)
-+		if (ret && ret != -EOPNOTSUPP)
- 			return ret;
- 	}
- 
-@@ -378,7 +378,7 @@ int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- 		mux_dev = mux->mux_devs[i];
- 
- 		ret = mux_dev->set(mux_dev, state);
--		if (ret)
-+		if (ret && ret != -EOPNOTSUPP)
- 			return ret;
- 	}
- 
-
+ drivers/usb/typec/tcpm/tcpm.c | 68 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 53 insertions(+), 15 deletions(-)
 ---
 base-commit: a1b5bd45d4ee58af4f56e49497b8c3db96d8f8a3
-change-id: 20250404-ml-topic-typec-mux-5b9b014f1dbd
+change-id: 20250404-ml-topic-tcpm-aabcc5f2d55e
 
 Best regards,
 -- 
