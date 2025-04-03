@@ -1,57 +1,86 @@
-Return-Path: <linux-usb+bounces-22496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22497-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A68AA79C54
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 08:50:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4943FA79CFC
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 09:29:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64AA73B375A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 06:49:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F238172CE7
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 07:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C7B1A5B82;
-	Thu,  3 Apr 2025 06:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607F82405F8;
+	Thu,  3 Apr 2025 07:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yR2OhGUJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DB01A317E;
-	Thu,  3 Apr 2025 06:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A85319E97C
+	for <linux-usb@vger.kernel.org>; Thu,  3 Apr 2025 07:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743663003; cv=none; b=NvBOrfHe4rZNIkVeeoCKWJ2nKXsOb5GNh4v9mx6W5B7kob73nmvcHycuSVfhTjANfWz13gnoH+ZwGAMXYnLN9Uz/saDF4q4Vg6+warFSaRPl7jo8iRl7K9sIh+h4bwwJQz6n4d356qJJDFVdUoFvCS/hJKgLUpxTDX04C14wdzk=
+	t=1743665385; cv=none; b=WfR0Mtnoz+/m3rhT2JfH7n9ZcEJiTL7Y1pxmb2K63Y6rSNz7/9Dv3MI3coC2UPaBRcHm7RBIYSP7kxBaFH6LnW2kX5JVeX/hx/hRWQTLsRDddX1yVkKqSBDgCpDkWHG9wWmKQUueUdl2wWDznw+P8hC3f86YIS+roVD03WOrkxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743663003; c=relaxed/simple;
-	bh=51AyStNrNztTeEQnw76esYXCUc6hXZdkbZ+IyVSnUWU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=s3Byn9i/PFArQbuoKl94jVL6/onM6wwvn+KiVYjQtgu7psNcMWWFp4sHuTlKByH91H4dTSwDm1DWRXHP1SkKGcliSIbTbAG5yWEC6TeNzXJe9My0JRdESe8EheGUoelNZJolvL7SYlOZmRFWnXIwZnmbgqnSVptelSJhvovf3xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5334aGiQ007487;
-	Wed, 2 Apr 2025 23:49:51 -0700
-Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 45sg1u8bap-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 02 Apr 2025 23:49:51 -0700 (PDT)
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.43; Wed, 2 Apr 2025 23:49:51 -0700
-Received: from pek-lpg-core1.wrs.com (147.11.136.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2507.43 via Frontend Transport; Wed, 2 Apr 2025 23:49:48 -0700
-From: <jianqi.ren.cn@windriver.com>
-To: <stable@vger.kernel.org>
-CC: <patches@lists.linux.dev>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <jianqi.ren.cn@windriver.com>,
-        <laurent.pinchart@ideasonboard.com>, <dan.scally@ideasonboard.com>,
-        <linux-usb@vger.kernel.org>, <abhishektamboli9@gmail.com>
-Subject: [PATCH 6.1.y] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
-Date: Thu, 3 Apr 2025 14:49:47 +0800
-Message-ID: <20250403064947.51317-1-jianqi.ren.cn@windriver.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1743665385; c=relaxed/simple;
+	bh=gPgYbaL+rhOQ9fSKgtZrjLnPUZeu+nsmZ0Ecrf1wPtc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P9aYPhwwESo3Rip64qihbJFja2ufSCdFiXhxNrLRowKTzgefeMwMoQzWVRfXGhdGLpcC3FycPHLJJVb69dTNlOZ0Nk9iS9qwpfC+iXCUzya5tZdHLfQuN7J4+gIbCzYa0+t2nn/FQyQgk3tye4DO2XE7a/P+cQVQlrIZf+p/E5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yR2OhGUJ; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cfe574976so2971765e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 03 Apr 2025 00:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1743665381; x=1744270181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0sRQ76srbv8D7/R1qXBY2wavN01HHK5lciers8r4d0E=;
+        b=yR2OhGUJYwZFUmtlVjT9dsuo9Dew3HYopvtcmgCSNpg0GJWPVHbYYwFPVnBp2RRcgv
+         Z0Z0b3MEGUfmG8Jl4815BdKWCH3SxBhFrWMvTpcJg01+J5N/RgHaDLM0lD/0iCTwa4oz
+         3YMz5XzCf+j4EQcOKCBgfXwmm1Aryy6tbB7n00PnfzixRH1NTORGTgH2d2WLvGXlxiGp
+         itlXNHJBRTcYq4Gh4A8uOkJ2Y3TngFgdFIdOjbTAcvjEai4jrnlaFSVSbhzCSqjWkw5h
+         JPe6jG5NSWyEik44YDL6FQnxESHfsvqPTFcNp0Qs8a8ra2idyBCTHVoOCD5a1w6vkfin
+         H7OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743665381; x=1744270181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0sRQ76srbv8D7/R1qXBY2wavN01HHK5lciers8r4d0E=;
+        b=QpUUudSXxQPUJc5NfGLjngLKrDveLBD/4NMfzksfdlH9fN1Yo6KdWemRWNRDC/S+EY
+         2ew7lbRAHC0G8ElPnr6it6jkZ/Mqhaxs5OecakryHyplK/bB3yDJCmeJmYSuH+ZqTQWC
+         zMlumUgGAMYS4gY0hehZIwmqJm8/LtGW+8HDTNFRz+mw+iLtVjcLbGvfZAf0BYyzeMIf
+         65jfANtBPZQRVRPYIid+C0TMCe2D0y38VqQoyu+VbAlYw1i91KtYe2OVt3UqpMbZVWuN
+         +hUSeOsOypK74KVCQzKQw1lhMwCpVpsiJB9H3jyrR6ClDcdpa5PcoG7GcAYvpdGPwMnK
+         2Tjg==
+X-Gm-Message-State: AOJu0YzcYHjP9S8/rGywqYd3jZt72AhWqmKVhgwkgrm0BGbc2Eb3fW2n
+	ie+84b5Jra1yVcabVEx3jZiHjBUI4Q1Ni98Oy9aCkG6V6NSV2f6Roc1p6JqPErArLrwAJtfq/sB
+	9K9s=
+X-Gm-Gg: ASbGnct3GqjgVNuJIVYQ92v1OV9qldxHq/XhZ/JsdMlvfKRInhyaSV9wiTMiRfdl+Gz
+	CCdpTYaZUis65RXSW+Wv65MADK3HoYMQui5oew9awF6l9asiiB/VROVmDxH1OS/nnWf6pG/eFBU
+	wR9yIqbKy7OlI8DkXURpTDx/3OOKwLQvwJuvhzOiy3moCeznUyB8PmKTRavP56mmMQCQfJTFXdz
+	JEBo1RI9NzqoktoBuKQKN9vptffKKEwHZ/pu8LGRKEuvLvm+TpoVvMo3MnjDwlsf7BIBIWW1lEP
+	JA4freU9iS2aDlVhS7V0Cf4GpMPfRcWigcCQYA3UdEKQIGsIkHtjsyurSubH1A==
+X-Google-Smtp-Source: AGHT+IEK0NpzRIdpqLlvwUQOGPVY8za1RLz3sOqZ86LJdKiJXmK3wLJ1S9B5P6HVxD40Xla2VSb1kg==
+X-Received: by 2002:a05:600c:4586:b0:439:8c80:6af4 with SMTP id 5b1f17b1804b1-43ec42b9616mr7733425e9.19.1743665380662;
+        Thu, 03 Apr 2025 00:29:40 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:355:6b90:e24f:43ff:fee6:750f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec1794e94sm13460735e9.31.2025.04.03.00.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 00:29:39 -0700 (PDT)
+From: Frode Isaksen <fisaksen@baylibre.com>
+To: linux-usb@vger.kernel.org,
+	Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	krishna.kurapati@oss.qualcomm.com,
+	Frode Isaksen <frode@meta.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v5] usb: dwc3: gadget: check that event count does not exceed event buffer length
+Date: Thu,  3 Apr 2025 09:28:03 +0200
+Message-ID: <20250403072907.448524-1-fisaksen@baylibre.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,95 +88,54 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 1JhZngRbH0zePc2-NqpBWPa2zO1bb18Y
-X-Authority-Analysis: v=2.4 cv=Aqnu3P9P c=1 sm=1 tr=0 ts=67ee2f8f cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=ag1SF4gXAAAA:8 a=t7CeM3EgAAAA:8 a=REYqGfaRdox0a-FwMx0A:9
- a=Yupwre4RP9_Eg_Bd0iYG:22 a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-GUID: 1JhZngRbH0zePc2-NqpBWPa2zO1bb18Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-03_02,2025-04-02_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 adultscore=0 spamscore=0 priorityscore=1501 phishscore=0
- clxscore=1015 malwarescore=0 lowpriorityscore=0 bulkscore=0
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2502280000
- definitions=main-2504030033
 
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
+From: Frode Isaksen <frode@meta.com>
 
-[ Upstream commit a7bb96b18864225a694e3887ac2733159489e4b0 ]
+The event count is read from register DWC3_GEVNTCOUNT.
+There is a check for the count being zero, but not for exceeding the
+event buffer length.
+Check that event count does not exceed event buffer length,
+avoiding an out-of-bounds access when memcpy'ing the event.
+Crash log:
+Unable to handle kernel paging request at virtual address ffffffc0129be000
+pc : __memcpy+0x114/0x180
+lr : dwc3_check_event_buf+0xec/0x348
+x3 : 0000000000000030 x2 : 000000000000dfc4
+x1 : ffffffc0129be000 x0 : ffffff87aad60080
+Call trace:
+__memcpy+0x114/0x180
+dwc3_interrupt+0x24/0x34
 
-Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
-and uvc_v4l2_enum_format().
-
-Fix the following smatch errors:
-
-drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
-error: 'fmtdesc' dereferencing possible ERR_PTR()
-
-Also, fix similar issue in uvc_v4l2_try_format() for potential
-dereferencing of ERR_PTR().
-
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Link: https://lore.kernel.org/r/20240815102202.594812-1-abhishektamboli9@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Jianqi Ren <jianqi.ren.cn@windriver.com>
-Signed-off-by: He Zhe <zhe.he@windriver.com>
+Signed-off-by: Frode Isaksen <frode@meta.com>
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Cc: stable@vger.kernel.org
 ---
-Verified the build test
----
- drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+v1 -> v2: Added Fixes and Cc tag.
+v2 -> v3: Added error log
+v3 -> v4: Rate limit error log
+v4 -> v5: Changed Fixes tag
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a189b08bba80..5aeeaff7b283 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	list_for_each_entry(format, &uvc->header->formats, entry) {
- 		struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
+ drivers/usb/dwc3/gadget.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89a4dc8ebf94..b75b4c5ca7fc 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4564,6 +4564,12 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	if (!count)
+ 		return IRQ_NONE;
  
-+		if (IS_ERR(fmtdesc))
-+			continue;
++	if (count > evt->length) {
++		dev_err_ratelimited(dwc->dev, "invalid count(%u) > evt->length(%u)\n",
++			count, evt->length);
++		return IRQ_NONE;
++	}
 +
- 		if (fmtdesc->fcc == pixelformat) {
- 			uformat = format->fmt;
- 			break;
-@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	struct uvc_video *video = &uvc->video;
- 	struct uvcg_format *uformat;
- 	struct uvcg_frame *uframe;
-+	const struct uvc_format_desc *fmtdesc;
- 	u8 *fcc;
+ 	evt->count = count;
+ 	evt->flags |= DWC3_EVENT_PENDING;
  
- 	if (fmt->type != video->queue.queue.type)
-@@ -265,7 +269,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
- 	fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
--	fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-+	fmtdesc = to_uvc_format(uformat);
-+	if (IS_ERR(fmtdesc))
-+		return PTR_ERR(fmtdesc);
-+	fmt->fmt.pix.pixelformat = fmtdesc->fcc;
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
- 	fmt->fmt.pix.priv = 0;
- 
-@@ -378,6 +385,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		f->flags |= V4L2_FMT_FLAG_COMPRESSED;
- 
- 	fmtdesc = to_uvc_format(uformat);
-+	if (IS_ERR(fmtdesc))
-+		return PTR_ERR(fmtdesc);
-+
- 	f->pixelformat = fmtdesc->fcc;
- 
- 	strscpy(f->description, fmtdesc->name, sizeof(f->description));
 -- 
-2.34.1
+2.49.0
 
 
