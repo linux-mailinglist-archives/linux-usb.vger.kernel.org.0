@@ -1,282 +1,312 @@
-Return-Path: <linux-usb+bounces-22486-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22487-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB34DA79937
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 02:07:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55899A79964
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 02:24:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81FFA188FAE0
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 00:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55EF21713D3
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 00:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4D75228;
-	Thu,  3 Apr 2025 00:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9529219E4;
+	Thu,  3 Apr 2025 00:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eb05JHwT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eVljdGKl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13484D26D;
-	Thu,  3 Apr 2025 00:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE281FDD;
+	Thu,  3 Apr 2025 00:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743638806; cv=none; b=EktLb/2alElJ/ANDJ9yKUbZoXxi+lgL6M3B0P0DgHytdcSxbRslyKXW1LWkJ516xJRNoysCIO4cCwAGwL066IG/KxGf6BjNY8hG0u/5/UAi7Gj3+y0hXlUbWq6xjM6Bx2hWR6O9cEulPLRqYxGeBdRiAbNr08exvoZpJqhW+P0A=
+	t=1743639873; cv=none; b=h8ekAveRakjrGFvhHXIioKdDJIEjy7ybFpuwRZS1PyPte2xYG4Rdm+y8QK7hHfNNDoD5Vpk4UTOzRY0a031XFriaXcH9bA1gYKhYvNRWY8iy1aL/nXHu+JAbSwuHeMdwvHvzarojw4gY2cdgINzpbnRIIniu+SEb/oi1bLtlbzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743638806; c=relaxed/simple;
-	bh=q0oeBg4kkjHukNevSdAXAXG57vFGbGkVFCKLMccHnWs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IfPtc69T1DLraapCbKjLYvVmq5TSJib/bTbvl7MuQbe3r7NB6TobNKmynqxXlNJjYeEY91cMVvWId/y5ZVhCf7YmGL2rnqdhatlBKThpke3brsGuEmuGCsvd7Pmyr54wZfBfhY+Ya5oX/RZC05d8bvn0JKeo/u+yXX3x8QrqVmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eb05JHwT; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43ea40a6e98so2430755e9.1;
-        Wed, 02 Apr 2025 17:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743638802; x=1744243602; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=THqZB3gc9ZiqXUYns3lMT7gLqog0AJdSzQ22r6kIxIg=;
-        b=eb05JHwTcsOcMq5VFNt78u6jEbs/NAfwNmBxcLQvXJ3oO2yT3cwSTN9d0eoYqzR6Rg
-         70bLPYn9Iw+WLxNsEEP+/n07nA/sQfZS5lu47pZ5F2nOZWjrB+cLCMheKfGa2Tik1oxe
-         +C5NF54cWRbf3KySzXa+eUD7yI1nMOdBCK6FgPwbBQsDKMDbRL8MD400B6FkvjAfrTCC
-         8y+wgKmRB2EKgBi0RxtuOt+gTOQmub/Lg0SFpKHU+pFF8jlA99P+ILgE1aNZLXXHh7RP
-         72bSuEQ3sy/7xt2JY+Ls9PAksv180el2uoxg7mB6vh5zQS8j1kGaImNZ4ohFh3kIUAQ3
-         TVcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743638802; x=1744243602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=THqZB3gc9ZiqXUYns3lMT7gLqog0AJdSzQ22r6kIxIg=;
-        b=bW1uJPzrFs4o0Xn1qkeli/E1xhXgr628qMMVPit+97N+DVmxdtgtTgQu317scTmYL/
-         2k/cGHJaEjKKqFt1cZPgs1QFo8LCDoY8q8U0x/udcuma3diIjFJqRD/DZMBxNA/C6dQb
-         92zffP+vgaIm31LXTDbs0U3RHDt6hsn6Jkhlf0GbsdgfW6ecIP3ZT8vmMZzC/Zbv6pOJ
-         yB57dkkgjCF+CgjIHb9cwn4DIrdIrnhd+uX2kBP4VAw+s3Ok8CYwJ5zG955Ss3HMAD5U
-         dkuoRsRUg1jLj1EN07ZhvooHtcZvIjFcTilj00Rl4oFRTgN5SoLwpMPnt2sxh1apPD88
-         OMDw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1y1EksQvDo/EE+ffg/BGzMhzKGlU8AunP71EFoQafPAk5qKft3ET53yZucRAl2QTFXIK63nreKICg@vger.kernel.org, AJvYcCUkwC7fNmNlzKObuLAWSDsKcikRdqPk152Vj3PiCLFrKaizzTOBluTC9ArJ4EzI/KDrIRo8HtSNiJlQ@vger.kernel.org, AJvYcCW3ZuB6Awv4WK0wR8rW4HDu6XuOVvpGy9fsq22pmscaP0jVvl2B7aTVNzoGr4rSy1H4HsdXClHV12C0OHR5@vger.kernel.org, AJvYcCWhDvXy+LQ+J2FV6+1a6ufHcUY0AivBiutfcn8Uga8HQbUNqG7E+SYCh+iqX5qyy+NL9HYJftOTZAOJxdgGBA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMADUh+DecK8DFwYOx0x632Qx89HW5EelcKigAcFdvOahoJTUk
-	FtY3eyTIxegvo75g9zu+Vzbhysz3+IC+dcicKw+3w4EBu0hGNHDJlxk3ye7UZlDw6Vk+DpzYRUb
-	PV9L85+J5zhef61uZ4YC0PbBBJA==
-X-Gm-Gg: ASbGncumnHWJBaFW4oe+JYbhC+amBaeGF/MTs9py+Dm3DlVJ+X6hH8Ypyf4KuCns5Bz
-	nNhdpoZDEivK+7TI3HKPq4NP5xHew9D4c4XIDGBaaZ5SnI4royxU22MQ55PpwFgMPT7igNwuoiz
-	O7dJ5mS4r6GXzKLzAhDDRjDgfoOg==
-X-Google-Smtp-Source: AGHT+IEvyEQkupDmAf3qVozR5BlueIdVIfTL0esTsJxUP8sWVaCCP1GT6K2TX6UE6Phhe+TxzenmCuBGyJp2uE4+9O0=
-X-Received: by 2002:a05:6000:2585:b0:39c:2688:4ebf with SMTP id
- ffacd0b85a97d-39c29737e0dmr3794378f8f.6.1743638801887; Wed, 02 Apr 2025
- 17:06:41 -0700 (PDT)
+	s=arc-20240116; t=1743639873; c=relaxed/simple;
+	bh=6XZh1V30Rzsbn6flexh5RQ4bDkFhdQKdQBzVMehjhaM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hvD1hJZ1zSZLBZHQ8kK9QO26eDHyASrqqWd33U+mxlvhJCdrOkydDHoaad8jS4ZqY42yc+TnG/PiNMXowhzcRnKSRSL7SGpG+PDIDURXCzo3yv5EBNNmq9cxM7m87A/WtA7NPKyUOghQdzHWpgtdg+8lOfTSk5Pt6JM/KiSexc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eVljdGKl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 532NKmkx027462;
+	Thu, 3 Apr 2025 00:24:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	HvQpmtJKEJofOOt6F1fE3B2ZvJx3FG+wtDeDOcpKnEM=; b=eVljdGKl0tCH5uN0
+	JzyMlEgQsVoTv0ExVhvDiU7IOGRMx9y+xfD8MvTfvkjXS54W6oglktu1lUJBw1Dn
+	HVajy1jV2iy93teylzxoH+cR3jt5b5XrH4CCDJZKWQZRhQcHJsWaFLrPDPHpNH1q
+	LaSX7ORTgMxV8R5AmeiADi79Lq7qB1xwTGe4F8+Z0X1n1QRaBGWLdoeq8oS7X16R
+	B8xR9XhOJ06zYZ4uYyoDf+ZQpxerRwkcRf8J29fSCbfFQCeJp3u6DHvHVCdKCSQE
+	EFO8VAXNhMI6ZyWFw08m3GedhpQNpJS4CXz4+H5ONZ9ZtAdb3iSFt3sjU8yKTZDT
+	eUgiSw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45s36a20a5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Apr 2025 00:24:08 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5330O7pn013173
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 3 Apr 2025 00:24:07 GMT
+Received: from [10.110.31.20] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 2 Apr 2025
+ 17:24:06 -0700
+Message-ID: <7d5fd3bf-c33e-4274-938b-2fb93c4b39d8@quicinc.com>
+Date: Wed, 2 Apr 2025 17:23:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMcHhXqbQ-6SLotNfQDStr5B0KAMxFRuSiLnjdg+UrtqA1phXw@mail.gmail.com>
- <AM7P189MB100945E7C0850C7469739C81E3AF2@AM7P189MB1009.EURP189.PROD.OUTLOOK.COM>
- <CAMcHhXrcvsKtZnHC5gKFh3nc_XKQKaLdBbnQA6J_rBdUxxP27w@mail.gmail.com>
-In-Reply-To: <CAMcHhXrcvsKtZnHC5gKFh3nc_XKQKaLdBbnQA6J_rBdUxxP27w@mail.gmail.com>
-From: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
-Date: Thu, 3 Apr 2025 02:06:30 +0200
-X-Gm-Features: ATxdqUHEo8FZvVy5ygBezdSIUAGGICKKb_RWUaWMTv_G9s3WUL90wafr3AxtuqI
-Message-ID: <CAMcHhXpPpQ175jiX3KbEVY7ATLghEzGU9EeQjx+zHkMs8vovzA@mail.gmail.com>
-Subject: Re: [PATCH v1 6/6] arm64: dts: qcom: Add support for X1-based Asus
- Zenbook A14
-To: Maud Spierings <maud_spierings@hotmail.com>
-Cc: abel.vesa@linaro.org, andersson@kernel.org, conor+dt@kernel.org, 
-	devicetree@vger.kernel.org, gregkh@linuxfoundation.org, 
-	heikki.krogerus@linux.intel.com, johan+linaro@kernel.org, 
-	konrad.dybcio@oss.qualcomm.com, konradybcio@kernel.org, krzk+dt@kernel.org, 
-	krzysztof.kozlowski@linaro.org, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, lumag@kernel.org, 
-	robh@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v36 22/31] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
+Content-Language: en-US
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
+        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        Luca Weiss
+	<luca.weiss@fairphone.com>
+References: <20250319005141.312805-1-quic_wcheng@quicinc.com>
+ <20250319005141.312805-23-quic_wcheng@quicinc.com>
+ <Z-J2WnrZHP6iMIhT@linaro.org>
+ <871827f0-94ba-4565-865f-775cab9501eb@quicinc.com>
+ <Z-PPlRD7gcUcNvNv@linaro.org>
+ <200c08f7-3637-c2fb-2caa-002604b957ed@quicinc.com>
+ <Z-ug3YFwff8hWIRl@linaro.org>
+ <378af3f1-b5b0-4f7a-ab62-f5c891feb7b5@quicinc.com>
+ <Z-1MtJjfVbUQFron@linaro.org>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <Z-1MtJjfVbUQFron@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=W6M4VQWk c=1 sm=1 tr=0 ts=67edd528 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=1mSyFIW9ksY8zQpuRLsA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: htyi_OKb2GIzpjagmMd0MqRL5z70dXNm
+X-Proofpoint-GUID: htyi_OKb2GIzpjagmMd0MqRL5z70dXNm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-02_11,2025-04-02_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
+ malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504020155
 
-On Wed, 2 Apr 2025 at 10:36, Aleksandrs Vinarskis
-<alex.vinarskis@gmail.com> wrote:
->
-> On Wed, 2 Apr 2025 at 08:30, Maud Spierings <maud_spierings@hotmail.com> =
-wrote:
-> >
-> > > On Tue, 1 Apr 2025 at 23:15, Konrad Dybcio
-> > > <konrad.dybcio@oss.qualcomm.com> wrote:
-> > >>
-> > >> On 4/1/25 8:05 PM, Aleksandrs Vinarskis wrote:
-> > >> > On Tue, 1 Apr 2025 at 17:59, Konrad Dybcio
-> > >> > <konrad.dybcio@oss.qualcomm.com> wrote:
-> > >> >>
-> > >> >> On 3/31/25 11:53 PM, Aleksandrs Vinarskis wrote:
-> > >> >>> Initial support for Asus Zenbook A14. Particular moddel exists
-> > >> >>> in X1-26-100, X1P-42-100 (UX3407QA) and X1E-78-100 (UX3407RA).
-> > >> >>>
-> > >> >>> Mostly similar to other X1-based laptops. Notable differences ar=
-e:
-> > >> >>> * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407=
-QA
-> > >> >>>   and Qualcomm FastConnect 7800 on UX3407RA
-> > >> >>> * USB Type-C retimers are Parade PS8833, appear to behave identi=
-cal
-> > >> >>>   to Parade PS8830
-> > >> >>> * gpio90 is TZ protected
-> > >> >>
-> > >>
-> > >> [...]
-> > >>
-> > >> >>
-> > >> >>> +&spi10 {
-> > >> >>> +     status =3D "disabled";
-> > >> >>> +
-> > >> >>> +     /* Unknown device */
-> > >> >>> +};
-> > >> >>
-> > >> >> Does the device crash if you enable this bus? Keeping it 'okay' w=
-ould
-> > >> >> make it easier for folks to poke at it
-> > >> >
-> > >> > It does boot just fine, but does not initialize:
-> > >> > ```
-> > >> > geni_spi a88000.spi: Invalid proto 9
-> > >> > ...
-> > >> > qnoc-x1e80100 interconnect-1: sync_state() pending due to a88000.s=
-pi
-> > >> > ...
-> > >> > ```
-> > >> >
-> > >> > I only quickly checked that 9 is indeed invalid state, iirc should=
-'ve
-> > >> > been 2. But haven't looked deeper into it, so left it disabled. So=
- I
-> > >> > thought best to leave it off for now. Unless you prefer to drop it
-> > >> > altogether?
-> > >>
-> > >> That means this QUP is configured to work as a QSPI host, which is n=
-ot yet
-> > >> supported upstream. I looked at the DSDT you submitted to aa64-lapto=
-ps, but
-> > >> there doesn't seem to be anything connected there, perhaps it's load=
-ed at
-> > >> runtime. Since your keyboard and touchpad work, maybe it's a touchsc=
-reen?
-> > >>
-> > >
-> > > Indeed it is just defined without anything attached. I am suspecting
-> > > it also may be just leftover, won't be the first one...
-> > > No, this particular laptop doesn't have a touchscreen in any of the
-> > > three screen configurations announced.
-> > >
-> > > It also does not have a fingerprint reader, nor hardware TPM2.0 (yet
-> > > SPI11 typically used for it is still TZ protected :). EC seems to be
-> > > over i2c5. Asus's touchpad supports some fancy gesture controls, but
-> > > there is in fact another 'extra' hidraw device 'hdtl', I assume that'=
-s
-> > > the one. No sdcard reader.
-> > > Only other still unsupported features are audio (i guess unlikely tha=
-t
-> > > they used different smart amp?), camera (ov02c01, pm8010, so also no)
-> > > and DP-HDMI bridge PS185HDM, which from what I can guesstimate is i2c=
-.
-> >
-> > I actually managed to contact someone about the ps185hdm as it is also
-> > used in my asus vivobook s15. But from what they told me it is a dumb
-> > bridge that does not require any further configuration. I have tried
-> > getting it to work but I've had no luck yet. I did find a hpd gpio at
-> > tlmm 126.
-> >
-> > I currently have just tried ignoring its existence and describing a non
-> > existent dp-connector with the hpd gpio hooked up to mdss_dp2_out but n=
-o
-> > luck. I get a timeout on the aux bus communication I think, so somethin=
-g
-> > is blocking that still.
->
-> I think it was your messages that I saw on IRC of aarch64-laptops
-> then. Can confirm both HPD on tlmm, and lack of any i2c devices on
-> newly created virtual bus.
->
-> >
-> > I think it may just be some regulator or something required to actually
-> > power up the ps185hdm
->
-> That was my conclusion as well. Would you mind following up with them,
-> if they could disclose the amount of voltage supplies the IC is
-> expecting? if it's 1 or 2, it's rather easy to bruteforce all unused
-> pin combinations. If it's more than that, it's only reasonable to
-> enable all unused GPIOs to high at once, which I wouldn't do tbh :)
->
-> The weird thing is that according to a rather simplified publically
-> available diagram, HPD is actually propagated through the PS185,
-> implying that bridge is on. It could be that IC requires multiple
-> supplies, hence Aux bus is not working, but in my experience these
-> devices typically don't start until all of the required supplies are
-> up.
->
-> >
-> > from my correspondence:
-> > `
-> > Hi Maud,
-> >
-> > There is no =E2=80=9Cenable pin=E2=80=9D on the PS185 but there are sev=
-eral GPIO=E2=80=99s. The
-> > FW associated with the device is programmable so the manufacturer of th=
-e
-> > motherboard you are using may have requested a special feature (such as
-> > an enable pin on one of the GPIO) to be added by Parade. If that=E2=80=
-=99s the
-> > case then you would need to contact the motherboard manufacturer to fin=
-d
-> > out more details.
-> >
-> > Hot plug events are normally routed through the DP_HPD pin but, as note=
-d
-> > above, it=E2=80=99s possible that the motherboard manufacturer asked fo=
-r this to
-> > be replicated on the GPIO pin.
-> > `
-> >
-> > some messing around of me in the dts can be found here: [1]
->
-> I think, you would also need to enable usb_1_ss2 combo phy, afaik only
-> mdss3 (for eDP) has a dedicated DP phy, for the rest it's a combo
-> qmpphy. Konrad could probably confirm?
-> Once i2c/aux works, maybe we would also need a small driver to set phy
-> to DP mode, as afaik pmic-glink handles these. Just hypothesis though.
-> I have tried adding a dummy "dp-connector" like you did, but as a
-> child node to pmic-glink, hoping that it would handle the alt mode,
-> but it is probably not that easy :)
->
-> Would be happy to cooperate on debugging this offline.
->
-> Alex
+Hi Stephan,
 
-Small update,
+On 4/2/2025 7:41 AM, Stephan Gerhold wrote:
+> On Tue, Apr 01, 2025 at 04:47:41PM -0700, Wesley Cheng wrote:
+>> On 4/1/2025 1:16 AM, Stephan Gerhold wrote:
+>>> On Mon, Mar 31, 2025 at 12:52:19PM -0700, Wesley Cheng wrote:
+>>>> On 3/26/2025 2:57 AM, Stephan Gerhold wrote:
+>>>>> On Tue, Mar 25, 2025 at 04:18:03PM -0700, Wesley Cheng wrote:
+>>>>>> On 3/25/2025 2:24 AM, Stephan Gerhold wrote:
+>>>>>>> On Tue, Mar 18, 2025 at 05:51:32PM -0700, Wesley Cheng wrote:
+>>>>>>>> The QC ADSP is able to support USB playback endpoints, so that the main
+>>>>>>>> application processor can be placed into lower CPU power modes.  This adds
+>>>>>>>> the required AFE port configurations and port start command to start an
+>>>>>>>> audio session.
+>>>>>>>>
+>>>>>>>> Specifically, the QC ADSP can support all potential endpoints that are
+>>>>>>>> exposed by the audio data interface.  This includes isochronous data
+>>>>>>>> endpoints, in either synchronous mode or asynchronous mode. In the latter
+>>>>>>>> case both implicit or explicit feedback endpoints are supported.  The size
+>>>>>>>> of audio samples sent per USB frame (microframe) will be adjusted based on
+>>>>>>>> information received on the feedback endpoint.
+>>>>>>>>
+>>>>>>>> Some pre-requisites are needed before issuing the AFE port start command,
+>>>>>>>> such as setting the USB AFE dev_token.  This carries information about the
+>>>>>>>> available USB SND cards and PCM devices that have been discovered on the
+>>>>>>>> USB bus.  The dev_token field is used by the audio DSP to notify the USB
+>>>>>>>> offload driver of which card and PCM index to enable playback on.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>>>>> ---
+>>>>>>>>   sound/soc/qcom/qdsp6/q6afe-dai.c         |  60 +++++++
+>>>>>>>>   sound/soc/qcom/qdsp6/q6afe.c             | 192 ++++++++++++++++++++++-
+>>>>>>>>   sound/soc/qcom/qdsp6/q6afe.h             |  36 ++++-
+>>>>>>>>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c |  23 +++
+>>>>>>>>   sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h |   1 +
+>>>>>>>>   sound/soc/qcom/qdsp6/q6routing.c         |  32 +++-
+>>>>>>>>   6 files changed, 341 insertions(+), 3 deletions(-)
+>>>>>>>>
+>>>>>> [...]
+>>>>>>>> diff --git a/sound/soc/qcom/qdsp6/q6routing.c b/sound/soc/qcom/qdsp6/q6routing.c
+>>>>>>>> index 90228699ba7d..b7439420b425 100644
+>>>>>>>> --- a/sound/soc/qcom/qdsp6/q6routing.c
+>>>>>>>> +++ b/sound/soc/qcom/qdsp6/q6routing.c
+>>>>>>>> @@ -435,6 +435,26 @@ static struct session_data *get_session_from_id(struct msm_routing_data *data,
+>>>>>>>>   	return NULL;
+>>>>>>>>   }
+>>>>>>>> +
+>>>>>>>> +static bool is_usb_routing_enabled(struct msm_routing_data *data)
+>>>>>>>> +{
+>>>>>>>> +	int i;
+>>>>>>>> +
+>>>>>>>> +	/*
+>>>>>>>> +	 * Loop through current sessions to see if there are active routes
+>>>>>>>> +	 * to the USB_RX backend DAI.  The USB offload routing is designed
+>>>>>>>> +	 * similarly to the non offload path.  If there are multiple PCM
+>>>>>>>> +	 * devices associated with the ASoC platform card, only one active
+>>>>>>>> +	 * path can be routed to the USB offloaded endpoint.
+>>>>>>>> +	 */
+>>>>>>>> +	for (i = 0; i < MAX_SESSIONS; i++) {
+>>>>>>>> +		if (data->sessions[i].port_id == USB_RX)
+>>>>>>>> +			return true;
+>>>>>>>> +	}
+>>>>>>>> +
+>>>>>>>> +	return false;
+>>>>>>>> +}
+>>>>>>>
+>>>>>>> What is different about USB_RX compared to other output ports we have in
+>>>>>>> Q6AFE? Obviously, we can only play one stream on an output port. But
+>>>>>>> doesn't the ADSP mix streams together when you have multiple routes?
+>>>>>>>
+>>>>>>
+>>>>>> This patch will limit the USB_RX from being able to be mixed to multiple
+>>>>>> q6adm paths.
+>>>>>>
+>>>>>>> Also, this doesn't actually check for *active* routes only. It just
+>>>>>>> looks if any other MultiMedia DAI is configured to output to USB_RX.
+>>>>>>> That doesn't mean they will ever be active at the same time.
+>>>>>>>
+>>>>>>
+>>>>>> Yes, the main reason being that that is the mechanism we use to populate
+>>>>>> the active offload path within the USB SND card mixer.
+>>>>>>
+>>>>>>> I might for example want to have MultiMedia1 and MultiMedia2 both
+>>>>>>> configured to output to USB_RX. Let's assume MultiMedia1 is a normal PCM
+>>>>>>> DAI, MultiMedia2 is a compress offload DAI. When I want to playback
+>>>>>>> normal audio, I go through MultiMedia1, when I want to play compressed
+>>>>>>> audio, I go through MultiMedia2. Only one of them active at a time.
+>>>>>>> Why can't I set this up statically in the mixers?
+>>>>>>>
+>>>>>>> If you confirm that it is really impossible to have multiple streams
+>>>>>>> mixed together to the USB_RX output in the ADSP, then this should be a
+>>>>>>> runtime check instead when starting the stream IMO.
+>>>>>>>
+>>>>>>
+>>>>>> We can have multiple streams being mixed together, but it will get
+>>>>>> confusing because it changes the definition that we had discussed about in
+>>>>>> the past about the overall design for the interaction w/ userspace.
+>>>>>> Although we (QC) only support a single USB audio device for offloading,
+>>>>>> there could be other situations where the audio DSP can support multiple
+>>>>>> devices.  The assumption is that each MM path is assigned to a USB device.
+>>>>>>
+>>>>>
+>>>>> Are you referring to the "USB Offload Playback Route PCM#*" mixers here?
+>>>>> They could just refer to first of the configured MM paths, if someone
+>>>>> decides to route multiple paths to the USB backend. Looking at
+>>>>> q6usb_update_offload_route(), I think the implementation does that
+>>>>> already.
+>>>>>
+>>>>> I think it's fine that the userspace API for automatically "probing" the
+>>>>> PCM device supports only a single path to the USB backend. But if
+>>>>> someone wants to bypass the automatic probing and configure a more
+>>>>> advanced setup, do we need to forbid that?
+>>>>>
+>>>>> Asked differently: what would happen if we remove this check here and
+>>>>> handle USB_RX like any other Q6AFE output port? Would anything break for
+>>>>> the userspace interface?
+>>>>>
+>>>>
+>>>> So I took a look at seeing how the Q6ADM/ASM interactions would work for
+>>>> the situation where if user tried to start both MM1/2 streams at the same
+>>>> time over the USB offload path.  In this scenario, we see that the Q6USB BE
+>>>> DAI operations, ie startup, hw_params, etc... gets called one time for the
+>>>> initial stream.  For example, if I start playback on MM1, then that
+>>>> triggers the USB BE DAI to be brought up.
+>>>>
+>>>> When I start playback on MM2, since MM1 already called
+>>>> dpcm_be_dai_startup(), then be->dpcm[stream].users will be greater than
+>>>> zero.  This would cause the __soc_pcm_open() to be skipped for the USB BE
+>>>> DAI, so I wouldn't be able to check the runtime status at the Q6USB backend
+>>>> DAI.  However, we do track current streaming sessions done over Q6 ADM and
+>>>> it does save the AFE port associated to each COPP allocation, so I think its
+>>>> reasonable to see if there is already a COPP entry for the USB AFE port, to
+>>>> fail the open() call associated to the FE DAI.
+>>>>
+>>>
+>>> This sounds like a reasonable approach *if* we have to prevent multiple
+>>> MM DAIs from streaming to the USB AFE port at the same time.
+>>>
+>>> It's still unclear to me why we have to introduce this limitation in the
+>>> first place. I think the questions from my previous email are still
+>>> open. Can you check them again?
+>>>
+>>
+>> So I checked with our audio DSP folks, and they mentioned there isn't
+>> technically a limitation from mixing multiple ADM streams from their end.
+>> My observations are as follows:
+>> - Using tinyplay to open and play on different FE PCM devices (ie MM1 and
+>> MM2), both streams are audible on the USB headset (intermixed).
+>> - If starting playback on MM1 first, before MM2, then once playback is
+>> complete on MM1, the ADM close is also affecting the MM2 stream.
+>> Basically, MM2 stops when the MM1 audio file is completed.
+>> - Due to the abrupt/incomplete closing of the MM2 ADM stream, looks like
+>> the audio DSP is not handling that case well, so subsequent playbacks fail.
+>>
+> 
+> Thanks a lot for testing this!
+> 
+>> I did find a possible reason for this, and it seems to be due to some code
+>> unrelated to the USB offload path directly.  It looks like the Q6ADM is
+>> currently built in a way that you can only route streams to a single
+>> endpoint, even though we do have reference counting for each COPP profile.
+>> So even after the first MM1 ADM stream completes and the PCM device is
+>> closed, the MM1 ADM close callback will issue a q6adm_device_close() for
+>> the USB AFE port.
+> 
+> Yeah, this sounds like a bug to me...
+> 
+>>
+>> I made some test changes to account for the refcount before issuing the
+>> q6adm_device_close(), and that seemed to work.  Once the MM1 stream closes,
+>> it allows for the MM2 stream to close/finish before issuing the command,
+>> and that allows for proper cleanup of the audio data.
+>>
+>> IMO, I would like to keep the initial behavior (ie, blocking the additional
+>> stream open from the kernel) until I can get some more testing done, and
+>> figure out if this is the correct approach.  If it is, I can submit a
+>> follow up series to address it.
+>>
+> 
+> I'm fine with this approach. My only two concerns/comments are:
+> 
+>   1. Let's make sure we don't waste too much time finding the ideal
+>      approach to implement the additional blocking, if this will likely
+>      end up getting removed again anyway.
+> 
+>   2. How can we justify making this change only for USB? Your analysis
+>      sounds like the issue applies to all types of output ports. This was
+>      exactly my main concern with the check you added in this patch:
+>      I would expect QDSP6 treats all ports exactly the same. This means
+>      we should add this additional check for all the output ports...
+> 
 
-Following initial work from Maud, I hacked around a bit and got HDMI
-working _most of the times_ on cold boot. Far from complete, but this
-proves the IC is indeed working as dumb bridge. At least non Zenbook
-DP routed to qmphy, like hinted by DSDT.
-I am guessing the HPD event comes too early, before AUX is ready for
-EDID readout to be the cause of the hotplug almost never working,
-since I can always readout EDID manually just fine. Will need to
-investigate it a bit more.
+Fair points...I will extend this check across all ports until I get back 
+with seeing how we can address the mixing situation.
 
-Initial (dirty) change for Asus Zenbook A14 [1].
-
-[1] https://github.com/alexVinarskis/linux-x1e80100-zenbook-a14/commit/9046=
-6cd004c3df5d717295ae7dcd5ed183701de0
-
->
->
->
-> >
-> > [...]
-> >
-> > [1]:
-> > https://github.com/SpieringsAE/linux/blob/wip/x1e80100-6.14/arch/arm64/=
-boot/dts/qcom/x1e80100-asus-vivobook-s15.dts
-> >
-> > kind regards,
-> > Maud
+Thanks
+Wesley Cheng
 
