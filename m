@@ -1,104 +1,153 @@
-Return-Path: <linux-usb+bounces-22494-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22495-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84EC3A79C31
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 08:39:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5DB6A79C52
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 08:50:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52CF33B2022
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 06:38:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 939461892795
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Apr 2025 06:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187AE1A3149;
-	Thu,  3 Apr 2025 06:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rdDW3wZC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917541A3175;
+	Thu,  3 Apr 2025 06:49:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749171A0BCF;
-	Thu,  3 Apr 2025 06:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F873194A59;
+	Thu,  3 Apr 2025 06:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743662324; cv=none; b=LCE0NW2mVGBT3c5iSpcEeF96UPw8M5jlRRfCX6wo/UU2GgnTtVDrlfeiYhmiJ4xOTzj30zRv8xl3+9xdVQU/KHkrdh9TndC1iHRUHrdLSc/T1wkEm3zmhHzHbtR0RO9FbqPXmOCBBNWOEKe1azB/dh70ZKzR9/KNn67k6qKQtrc=
+	t=1743662985; cv=none; b=XMRoksfGDlDic6P3RWctv6vroHfe8UArRGh7gvpd5U0TbH9YS6S33dk58s2KujIxBwguiEhzKFwnmyULThbGYM0NrcRcu6IVPkz7CNWM2tHoS+6L/Q73nHKoGxdXDh2mXzT+KPF6Iw5mEdiAXhWtvijVM/Uv+Irn5I0OU5qIT48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743662324; c=relaxed/simple;
-	bh=YxNQgOwbq/vG85PIYBP1y2DGiGETcPpm5tCt19Qss54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U+PfJflEBVrFbu76Df89pnl+DZrw1WBqMwnaalN4qZLuYz34f9S6IaGC6Rc/kRD6UMbOK7aSe4ylytPYgD3fw13/uolArr7oJgKmJ3nITgmDwyXbrBMVbVgjv85UzRFq0mba/cJRi8g2rzvTMUjlkeUVB8OTkH+A9pq8OOaTk1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rdDW3wZC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A111CC4CEE3;
-	Thu,  3 Apr 2025 06:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743662324;
-	bh=YxNQgOwbq/vG85PIYBP1y2DGiGETcPpm5tCt19Qss54=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rdDW3wZC8xXiJzAIqacq3AFyhV8SPL68kl/cC3n98UPqJaEyMqxcsIFykpUpS2qQX
-	 4sdSc+FGzw9BhHakkWWvvuXP7JxZyQR0g75qSEBS4iVubpp5eBw9rX5ID/8epJy+05
-	 /xo8CcQNgCzSgs5ejS7jBfvglyxNu34h6yUdFl1d22Nkd08exLRJYHBKn7HuEzZG3v
-	 TDLyw3sEM8PuS3ZN48IvXVuQPVX5UxnC7AP3Pj1pjo+VpZDj3T7hba+7W6tCittmBL
-	 i6zzVdOhsmwr0giUHa2HcuH5vjA22qXOpy/yzC9+QY5YF94R+796LuGY7DBleOF6y8
-	 kIEdrT7oOBfbQ==
-Message-ID: <4371c835-205e-4ec5-865b-ae01d87b7b70@kernel.org>
-Date: Thu, 3 Apr 2025 15:38:40 +0900
+	s=arc-20240116; t=1743662985; c=relaxed/simple;
+	bh=vgDK6hP6Qs5vLrru7PJGnb/Mqd8iT5lCj+6AGozYMU8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YLkh6wO+1TgMzdN/OZS3naoqrjgR1Lfi49ssJksp5ns8LkUhwLUkXq33hdEiyC6YY+oO7nLteUhp5Fxw+f8xhEoChV4unr1GzarA3Cjlpjs5Qb7pyzNXqW96wYoAgw+RJ6nHPG5IG1S3WfJi8x8WcF11Qs2/eEGMkxfRkOyT3Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5334o2rd010959;
+	Thu, 3 Apr 2025 06:49:39 GMT
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 45sg0q8b10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 03 Apr 2025 06:49:39 +0000 (GMT)
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Wed, 2 Apr 2025 23:49:38 -0700
+Received: from pek-lpg-core1.wrs.com (147.11.136.210) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Wed, 2 Apr 2025 23:49:35 -0700
+From: <jianqi.ren.cn@windriver.com>
+To: <stable@vger.kernel.org>
+CC: <patches@lists.linux.dev>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <jianqi.ren.cn@windriver.com>,
+        <laurent.pinchart@ideasonboard.com>, <dan.scally@ideasonboard.com>,
+        <linux-usb@vger.kernel.org>, <abhishektamboli9@gmail.com>
+Subject: [PATCH 6.6.y] usb: gadget: uvc: Fix ERR_PTR dereference in uvc_v4l2.c
+Date: Thu, 3 Apr 2025 14:49:35 +0800
+Message-ID: <20250403064935.51299-1-jianqi.ren.cn@windriver.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: xilinx: Remove myself from maintainership
-To: Mubin Sayyed <mubin.sayyed@amd.com>, cassel@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, michal.simek@amd.com, p.zabel@pengutronix.de,
- gregkh@linuxfoundation.org, radhey.shyam.pandey@amd.com
-Cc: linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, git@amd.com
-References: <20250403060836.2602361-1-mubin.sayyed@amd.com>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20250403060836.2602361-1-mubin.sayyed@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: Rwu53oHxXM2sWj_BOR1z2ne_zHhppLce
+X-Proofpoint-ORIG-GUID: Rwu53oHxXM2sWj_BOR1z2ne_zHhppLce
+X-Authority-Analysis: v=2.4 cv=G+4cE8k5 c=1 sm=1 tr=0 ts=67ee2f83 cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=ag1SF4gXAAAA:8 a=t7CeM3EgAAAA:8 a=REYqGfaRdox0a-FwMx0A:9
+ a=Yupwre4RP9_Eg_Bd0iYG:22 a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-03_02,2025-04-02_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 priorityscore=1501 clxscore=1011 mlxscore=0 adultscore=0
+ phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.21.0-2502280000
+ definitions=main-2504030033
 
-On 4/3/25 15:08, Mubin Sayyed wrote:
-> As I am leaving AMD and will no longer be maintaining
-> these platform drivers, so removing myself from maintainership.
-> 
-> Signed-off-by: Mubin Sayyed <mubin.sayyed@amd.com>
-> ---
->  Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml        | 1 -
->  .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml       | 1 -
->  Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml   | 1 -
->  Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml           | 1 -
->  Documentation/devicetree/bindings/usb/microchip,usb5744.yaml     | 1 -
->  Documentation/devicetree/bindings/usb/xlnx,usb2.yaml             | 1 -
->  6 files changed, 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> index 6ad78429dc74..c92341888a28 100644
-> --- a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> +++ b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> @@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Ceva AHCI SATA Controller
->  
->  maintainers:
-> -  - Mubin Sayyed <mubin.sayyed@amd.com>
->    - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+From: Abhishek Tamboli <abhishektamboli9@gmail.com>
 
-Fine with me.
+[ Upstream commit a7bb96b18864225a694e3887ac2733159489e4b0 ]
 
-Acked-by: Damien Le Moal <dlemoal@kernel.org>
+Fix potential dereferencing of ERR_PTR() in find_format_by_pix()
+and uvc_v4l2_enum_format().
 
-Not sure which tree will pick this up though ? linux-arm maybe ?
-If noone volunteers, I can take it.
+Fix the following smatch errors:
 
+drivers/usb/gadget/function/uvc_v4l2.c:124 find_format_by_pix()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+drivers/usb/gadget/function/uvc_v4l2.c:392 uvc_v4l2_enum_format()
+error: 'fmtdesc' dereferencing possible ERR_PTR()
+
+Also, fix similar issue in uvc_v4l2_try_format() for potential
+dereferencing of ERR_PTR().
+
+Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
+Link: https://lore.kernel.org/r/20240815102202.594812-1-abhishektamboli9@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jianqi Ren <jianqi.ren.cn@windriver.com>
+Signed-off-by: He Zhe <zhe.he@windriver.com>
+---
+Verified the build test
+---
+ drivers/usb/gadget/function/uvc_v4l2.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 3f0a9795c0d4..0195625bef53 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -121,6 +121,9 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
+ 	list_for_each_entry(format, &uvc->header->formats, entry) {
+ 		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
+ 
++		if (IS_ERR(fmtdesc))
++			continue;
++
+ 		if (fmtdesc->fcc == pixelformat) {
+ 			uformat = format->fmt;
+ 			break;
+@@ -240,6 +243,7 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 	struct uvc_video *video = &uvc->video;
+ 	struct uvcg_format *uformat;
+ 	struct uvcg_frame *uframe;
++	const struct uvc_format_desc *fmtdesc;
+ 	u8 *fcc;
+ 
+ 	if (fmt->type != video->queue.queue.type)
+@@ -265,7 +269,10 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
+ 	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
+ 	fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
+-	fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
++	fmtdesc = to_uvc_format(uformat);
++	if (IS_ERR(fmtdesc))
++		return PTR_ERR(fmtdesc);
++	fmt->fmt.pix.pixelformat = fmtdesc->fcc;
+ 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+ 	fmt->fmt.pix.priv = 0;
+ 
+@@ -375,6 +382,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 		return -EINVAL;
+ 
+ 	fmtdesc = to_uvc_format(uformat);
++	if (IS_ERR(fmtdesc))
++		return PTR_ERR(fmtdesc);
++
+ 	f->pixelformat = fmtdesc->fcc;
+ 
+ 	return 0;
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
+
 
