@@ -1,124 +1,97 @@
-Return-Path: <linux-usb+bounces-22550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22580-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD2CA7B4B0
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 02:42:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93CC1A7B786
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 08:02:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4DC51897080
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 00:38:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F14AD177717
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 06:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEF31F12E7;
-	Fri,  4 Apr 2025 00:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20DF613BC35;
+	Fri,  4 Apr 2025 06:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="A38pVdVg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9JGK43Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B576C19067C;
-	Fri,  4 Apr 2025 00:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248EC2E62D4
+	for <linux-usb@vger.kernel.org>; Fri,  4 Apr 2025 06:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743726482; cv=none; b=ni+r1DXrmD4CPAMMfe+GAaTlcSWTrKkkN2qGkVsFVY5M8jyn5JjPHLJBxrbcmtl7FsWOKBrQlwWO5b59uKj/UChktjKHTkm+n/CFz3OmJNKhCMnxQ8SmGYeX2mNssleZ2Gr2kxN3IX0VL8C6Yk2nzyWdj+yLxAWKkedSFH5xWjc=
+	t=1743746527; cv=none; b=WpsGcnGv21xhBxDxO80xQ3PkxgJpauR4+AG1OpkdUnHvxbd6Pd+IcCdeBlfFYn9A5E4LppoGvTOFrAI7OsDG5it1PFOyCVSif8DIpe2ND5RqFNMCQqsZiRW5mm6QDXoSdGJFWyd74mqeQesv+0peLiC3OJYzGjhCB2QrwgAGZTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743726482; c=relaxed/simple;
-	bh=iCtHLk33YvZVAWXt7i5RyMq9fMhcsg+qWem2feATC5g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F6v6dUwWG7cQhDMke8y9osHotB6E4BdTywwPHz1+ahg1/thWNT2a3i2sMwaQSNfeUcqdx6zc6nbFrMtH/qZnVMKsJU9yIslX8v/tlTyOh6zhszQG9oEnRB5+1CL8dXJ0KL5mGnWfpr7GbsbHRm2FOZEL9kErcQ5jFiR4O+u4EUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=A38pVdVg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 533NXC7n031140;
-	Fri, 4 Apr 2025 00:27:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	coBhNxrqtvBjPYHNF8KL0UPazsmtH2wkILUKTEDK9Ns=; b=A38pVdVgdXAj4qSK
-	KtW+DF5r5mHuPP5b+9nen8vdnAVI9aGCAq2NFe5bqiKteFbBgL6q4DLn51QbKdgA
-	Es4vTrze20hohpuWfXz1JWLboDBdkCdbh9Bym+ch6VxqDl7jKff0S4uMToI5DQG/
-	PkGuO1nXSqfiHO1WeHPiJwhvJj0/bv6o1QVE9d49U+I3sa88cEJghAUst3xppGZA
-	wwoEWwRhHrhom/jv8Jh6CoWw73MpoFAd9LjA4/dlWHgb/Arr732tSs/7KRdwfJrB
-	Lv+BsN7YcFG+lncO0alltCAG/CopPO3BdSmZuNlIVMUAOEtJ/zfeKhM+lGX+lBkT
-	BbGgkA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45t2d908qt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Apr 2025 00:27:48 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5340Rlcc006331
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 4 Apr 2025 00:27:47 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 3 Apr 2025 17:27:47 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
-        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v37 31/31] ALSA: usb-audio: qcom: Notify USB audio devices on USB offload probing
-Date: Thu, 3 Apr 2025 17:27:28 -0700
-Message-ID: <20250404002728.3590501-32-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250404002728.3590501-1-quic_wcheng@quicinc.com>
-References: <20250404002728.3590501-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1743746527; c=relaxed/simple;
+	bh=LlOPlCqu0hmnUIYYc6SeiLMISX2Y13WCzX+6VspSgkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ITGWnRF/WUzbm5razjCpSmXG9X8ut2YnUMs0ucCdvxWk8ZiXnGfy00/OghONsYnAEjvHMRLGBOM9nGRuHp86x6i+hDREMRvXTXq/OjPLyZiJdt2Fof7DW3oDn1IfzNp8pZEAmVu//PqTX1rWo1BR8ebhBWRoL08q3gWZG5mg6EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9JGK43Z; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743746526; x=1775282526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LlOPlCqu0hmnUIYYc6SeiLMISX2Y13WCzX+6VspSgkk=;
+  b=l9JGK43Zy/WMuaXITW1LRc/sFoumEwxSRkAWFFy7i/7wK2dQyGTlreHY
+   B8tib3TC39ZhV4DjC0uNybUWDB9sWtDp5RyJNJG+Lyq4hxIjTPAtpDUqV
+   Kr9z6vOopUL+wekmKh6ZgbVEXBnsbJPCIQpnZ+1Ubt5R4j9AlM0WnOF4O
+   X8mctC4BEqG0m/aF1GJ7y8FSHco7X4+DIsTB6mGyZddSb7tjS8AIWaXeP
+   pQdjPOy421X4DWpa5R7uAgB+rp8YUCSVP8yVTRQ9TxXUp5VIQ3yByPJez
+   obUlhhUo4PPOH2BIlqpMMdlbDeqKsJVzkY5g9m+rTr0WtwIvT5nk4XMVp
+   Q==;
+X-CSE-ConnectionGUID: dC6jSSetQWCanvrK1sh6YA==
+X-CSE-MsgGUID: 2g+wq7b+Q3SocZO2vJqDiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11393"; a="62717754"
+X-IronPort-AV: E=Sophos;i="6.15,187,1739865600"; 
+   d="scan'208";a="62717754"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2025 23:02:05 -0700
+X-CSE-ConnectionGUID: it95BubFTc2xAyMDYOVPnw==
+X-CSE-MsgGUID: +qUkE13XQ8eeJxdJseOqzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,187,1739865600"; 
+   d="scan'208";a="127199395"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 03 Apr 2025 23:02:04 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 5FE91141; Fri, 04 Apr 2025 09:02:03 +0300 (EEST)
+Date: Fri, 4 Apr 2025 09:02:03 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	"Gong, Richard" <Richard.Gong@amd.com>
+Subject: Re: Wake on connect / wake on disconnect
+Message-ID: <20250404060203.GM3152277@black.fi.intel.com>
+References: <ce2048af-1044-4424-bca2-3799baefb9c2@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZtO5fC3K0emqKFc71Utpnz7SErcrFtgy
-X-Proofpoint-GUID: ZtO5fC3K0emqKFc71Utpnz7SErcrFtgy
-X-Authority-Analysis: v=2.4 cv=CPUqXQrD c=1 sm=1 tr=0 ts=67ef2784 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=0R9NKns1a96QCZ5VGfgA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-03_11,2025-04-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 clxscore=1015 malwarescore=0 suspectscore=0 spamscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504040001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ce2048af-1044-4424-bca2-3799baefb9c2@amd.com>
 
-If the vendor USB offload class driver is not ready/initialized before USB
-SND discovers attached devices, utilize snd_usb_rediscover_devices() to
-find all currently attached devices, so that the ASoC entities are notified
-on available USB audio devices.
+Hi Mario,
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/usb/qcom/qc_audio_offload.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, Apr 03, 2025 at 01:12:07PM -0500, Mario Limonciello wrote:
+> Mika,
+> 
+> Recently there are some conversations about wake-up from connect/disconnect
+> happening and I wanted to get some background from you about the current
+> policy set in tb_switch_suspend().
+> 
+> Wake on connect and disconnect are only used for runtime, not for system
+> suspend.  Would you be open to adding wake on connect as well for system
+> suspend?  This should help enable use cases like plugging in a closed laptop
+> to a dock (which works on Windows).
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index 378249a264a3..5874eb5ba827 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -1952,6 +1952,8 @@ static int qc_usb_audio_probe(struct auxiliary_device *auxdev,
- 	if (ret < 0)
- 		goto release_qmi;
- 
-+	snd_usb_rediscover_devices();
-+
- 	return 0;
- 
- release_qmi:
+Don't we already have a similar for all usb4_portX devices? That does not
+work for you?
 
