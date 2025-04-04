@@ -1,136 +1,125 @@
-Return-Path: <linux-usb+bounces-22585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22586-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DCF8A7BF09
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 16:22:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24A30A7BF1B
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 16:25:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2268A1794E6
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 14:21:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEE8C189D8BA
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Apr 2025 14:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346211F3D31;
-	Fri,  4 Apr 2025 14:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF70C1F3BAC;
+	Fri,  4 Apr 2025 14:25:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZI2ZReU1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OS4lrJC9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2231EF088;
-	Fri,  4 Apr 2025 14:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B9F1F0E5D;
+	Fri,  4 Apr 2025 14:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743776483; cv=none; b=lpO5C2tIHro7jQ03W+WvUTkTcDiMSXxTrrCOW6/p8ZNNTXV0UB7vsPCvTlg80+e+B1asNalx2Pe86PFVpD6Fl543e0OMsRZY2o4ZxWor+qxKH8LM0Zjls6ICGq56qbg+9+S5SCt5qZeVRhGJAepoUK+2/3/zyLsNVHZo/XzzmYc=
+	t=1743776734; cv=none; b=l+B7wbkcFUHu4oP9z2xAGWYBlHl2ihrZZxQla4lypKXmih8xvdgMekcT7+CBNH9tgxZqF0meUhvRdg5oxwR769qaYD9cNTFAzj0drw2IwTpySFiYUJjY1hWiGdgl+iOng5k5VcWYnpZaBM+79Ww7zTlTqgSUV+F5Z4xiol6R1+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743776483; c=relaxed/simple;
-	bh=jWDI/Zr0/C5m752YjHWoRmTDwZdbUMKMz0DGgxY/xNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IrTQXu+dsNcUxHMuYna4jRB1v/hJMn2iOaGFtlNl4wMXCzzCZsigIrJkB9ViOzYp71Eh0bPP1n6LxZ83a/+HFd2C1W+JvMtzyixUQZhT0H8MH30PDqQqUBMSoqdqzWTMSw2N/VU+LbKqtBiFRG+vz9UuMlnXTdKspsxMMMCMnfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZI2ZReU1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE8BC4CEDD;
-	Fri,  4 Apr 2025 14:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743776482;
-	bh=jWDI/Zr0/C5m752YjHWoRmTDwZdbUMKMz0DGgxY/xNE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZI2ZReU12jWJWtPcM6Zm1LelBbJ0IuB+ZYdQ7zGoAY01nrTX6icYXg4hfo2ZyPR/+
-	 TFb1QP2U3vi83K2SB7wMXVlsv1EbaDFkYO93Mc5MRJBLjVRpEt6wyuftu1pys508Q1
-	 Gx+P7JYHB1gAJu9Yv6ilupRA2fljBJJ49WLHLNCGYF7+54yAeGb/jDky7C4mmN/q69
-	 Mq2bCatP/Tk8s7PcP4ffGxHflKt1rfBNzO0xml2yN6JtsStcODOsuXkLf1VuzpZqYr
-	 q/yjX+XsM/G5Vkse2Syb9zEvHs9AkAKqmAi/+ehVlpC9sBls8pyb0+4Ujf7OXU3HaU
-	 7bTLp2ns2VbTg==
-Date: Fri, 4 Apr 2025 15:21:15 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250404142115.GC278642@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com>
- <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
+	s=arc-20240116; t=1743776734; c=relaxed/simple;
+	bh=QsmLFt7EjGOu0E7+wEGHOEm9tfhJmkWpMEUJ/Tk8ZGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V9Qqm0i+0OG04AJN2GSgktjr85zFKOcqQotduDe7RSjNRJDP0fvxBsSGnKb7Lvib8JUgLl9e9SJaQ67m2zRHnKslk0ObOYo6JfnvlPpfsXP+2wCyYtgVg2nUXvOFaIVc0A++a36odkXoxq2XnZgahNtsCbOEX87hWqzYTmyJ77I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OS4lrJC9; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743776732; x=1775312732;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QsmLFt7EjGOu0E7+wEGHOEm9tfhJmkWpMEUJ/Tk8ZGU=;
+  b=OS4lrJC9icfEyQ5fC4bFHpruIflEnfdUfHXYaUOE8Fd7sbymjMgJ1apd
+   5LdyTdFHAW5dol8TRibzxre/gJQ9a2UYZWxGGKMDc3GvgDkXvQqYjn0Gq
+   TItcaOukbGLtxoqU26DOlwxdrxn3dptUGH/hIKMURGgDV/E47ltdcbyGz
+   krjkDSskkWhGcyog25Ub12L/xe54xkgZghxK75fVrqeXojVXmZXob62qm
+   qwSKEJyDBcnKhyvlexplkEi1952jSMSqVve0cwdlnGVeLoDq4WB1SpHyO
+   UwMNeXz1B+wsh1Y1C+UGraMrBOJX3Z3WUwrjx9f7wJJmq5DcsrE+ZyEXl
+   A==;
+X-CSE-ConnectionGUID: RergILhgSISSNhm/U868bQ==
+X-CSE-MsgGUID: EsQqmavETKSTCuSQKBJMxg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="55851612"
+X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
+   d="scan'208";a="55851612"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 07:25:32 -0700
+X-CSE-ConnectionGUID: MwVuWQEIRzyk0NbW7McFAw==
+X-CSE-MsgGUID: eOoob3K+Tt2XiDa9y12Gfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
+   d="scan'208";a="132035673"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Apr 2025 07:25:30 -0700
+Message-ID: <b356f743-44b5-4f48-a289-fae0afe106ff@linux.intel.com>
+Date: Fri, 4 Apr 2025 17:26:40 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: xhci: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep
+ state.
+To: Paul Menzel <pmenzel@molgen.mpg.de>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Michal Pecio <michal.pecio@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
 
-On Wed, 26 Mar 2025, Ming Yu wrote:
-
-> Lee Jones <lee@kernel.org> 於 2025年3月20日 週四 下午10:50寫道：
-> >
-> ...
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > >
-> > > > IDs are usually given in base-10.
-> > > >
-> > >
-> > > Fix it in v9.
-> > >
-> > > > Why are you manually adding the device IDs?
-> > > >
-> > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > >
-> > >
-> > > I need to manage these IDs to ensure that child devices can be
-> > > properly utilized within their respective modules.
-> >
-> > How?  Please explain.
-> >
-> > This numbering looks sequential and arbitrary.
-> >
-> > What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-> >
-> 
-> As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> but I need fixed IDs.
-> For example, the GPIO driver relies on these IDs to determine the
-> group, allowing the firmware to identify which GPIO group to operate
-> on through the API.
-
-PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-done here.  These lines do not have any differentiating attributes, so
-either way we are not allocating specific IDs to specific pieces of the
-H/W.  I still do not understand why you need to allocate them manually.
-
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
-> > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
+On 3.4.2025 21.02, Paul Menzel wrote:
+> Dear Linux folks,
 > 
 > 
-> Thanks,
-> Ming
+> Just a heads-up, that connecting an LMP USB-C mini Dock [1] to the Intel Kaby Lake Dell XPS 13 9360 with
+> 
+>      00:14.0 USB controller [0c03]: Intel Corporation Sunrise Point-LP USB 3.0 xHCI Controller [8086:9d2f] (rev 21)
+> 
+> resulted in Linux 6.14.0-12966-ga2cc6ff5ec8f logging the warning and trace below.
+> 
+> ```
+> [   74.898485] usb 4-1.4: reset SuperSpeed USB device number 5 using xhci_hcd
+> [   74.916241] sd 0:0:0:0: [sda] Media removed, stopped polling
+> [   74.916634] sd 0:0:0:0: [sda] Attached SCSI removable disk
+> [   98.803081] PM: suspend entry (deep)
+> [   98.813999] Filesystems sync: 0.010 seconds
+> [   98.819226] Freezing user space processes
+> [  105.534176] xhci_hcd 0000:39:00.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+> [  105.606437] usb 4-1.4: reset SuperSpeed USB device number 5 using xhci_hcd
+> [  118.822270] Freezing user space processes failed after 20.003 seconds (2 tasks refusing to freeze, wq_busy=0):
 
--- 
-Lee Jones [李琼斯]
+Thanks for the report.
+
+Looks like it's triggered during system suspend.
+
+"The Set TR Deq" command that fails here is queued when
+- endpoint stops to remove cancelled transfers.
+- endpoint resets to clear STALL or other halt due to transfer error.
+- canceling a transfer while endpoint is mid stall or tt clearing.
+
+Looks like there are at least some gaps in verifying endpoint state in endpoint
+reset handler  before queuing the "Set TR Deq" command,
+this could be a possible reason.
+
+If this case could be reproduces with xhci dynamic debug enabled it would help
+narrowing down the real cause.
+
+echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+
+Thanks
+Mathias
 
