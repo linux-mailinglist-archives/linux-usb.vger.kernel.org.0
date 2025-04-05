@@ -1,126 +1,127 @@
-Return-Path: <linux-usb+bounces-22603-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22604-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B4DBA7C8E5
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Apr 2025 13:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 369BDA7C988
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Apr 2025 16:09:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9C0E1894E67
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Apr 2025 11:30:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD7D71892090
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Apr 2025 14:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048131E1DF5;
-	Sat,  5 Apr 2025 11:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDEs5UW0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0801F1911;
+	Sat,  5 Apr 2025 14:09:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345D41B0F30;
-	Sat,  5 Apr 2025 11:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5BC3FC3;
+	Sat,  5 Apr 2025 14:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743852635; cv=none; b=pGRkrxCLaFP9EAiH00XbFhybplsnJw8FskROLIwQafBx/bSWxMNOhnPoouUPFEx0WJQlmKqyzS9ivsxc7WRqvpvm9dHvsKWG+wmZsS6h3JmBbaDsZbOK9XlLzCE5LpOeoPEExbXOlBfrfp/YTckxOqq0nmlBwfAQSwPdZbfBmNk=
+	t=1743862149; cv=none; b=FkWL86LmEkSWQ9MU/++caqlaLZzgWZRHK8BOrPPeyhfeBXgeNSLzQqP3E2YOdfF7ylLxPM7/SpHH9KLANDkt5OI5Lip1VUH7bqkRW78CKNYSymbjOfhhd64xHcBtDPYhxRBjDJIyDPVve46IoplG+tIkdcGhN6BPoLxzGX/OQps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743852635; c=relaxed/simple;
-	bh=YhMfyn/9sdvW/+B1C9ttSC2di1cyrxHSVS6pEOeqCWA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hukIE2pCXDApb9liHQV6+mxVnnBUlr3i7a1S2jeW07gQOYB3Okh9BN30yyOUHovTHAsjVW8qacPmNGy5lfHOFcoNCEUnYMCtJJq8bBQwOJhZqtc5TEPQ++VyuysJQneQf/cR3damCD1bJ990QLY8uAy8Vg8X9HIE5sE3/fyOQxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDEs5UW0; arc=none smtp.client-ip=209.85.215.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-af589091049so1907339a12.1;
-        Sat, 05 Apr 2025 04:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743852633; x=1744457433; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SoQfJRPHunsbNr6uBql3ChRC57ynqxjZE49jEW526Ik=;
-        b=SDEs5UW0EY5rqEm8NLI0XWEe4isyutedwARQsepi/PNOytO4dhDpeIuarxwatmepMi
-         jAnp3f7NttHnaUtshgqD0EY+HjSSXnix7JS8kpoFOy9ZFvkpFkpaNvSYan2U2ou6o1Od
-         bbvdxyUDXcQ6fP1xspRr6PBIYFrcRMGJpqK8UESsX4YXp3NkVjQsruA/RhLYF8F4e/y3
-         6R3qa9OsIredkbUR3WuVVu8mGKrHhn7fkdk4nirhLLEcjEQ9HPm8KmjmQFNSZgnBYanu
-         aCf9LHtprmdE7FxKZ7TPO0HyA/i0/4Ahb57khX8hetLRH7buEbc+qFZ6jA2qWcAnLHC+
-         vsPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743852633; x=1744457433;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SoQfJRPHunsbNr6uBql3ChRC57ynqxjZE49jEW526Ik=;
-        b=DSKilHi9cAPXAiuHmUjTDwILCMjxjPPXcRCCHwJtCNto63F13cz+UXtgCZYoxZ8JvT
-         rRb/60VSF7/DPScAFHpAkV8Ctrdf1ipWtKnd2mxlIIBfQH6gxMK/QGF3JZexbJ9+uxBZ
-         KazZ4MJd751mWDKmdMRVybYpThRIDA1QQHJooR2QkIikFhVWyENe4jg+2SXt9Qh+WST0
-         X9aIx+/4FJWJphqJRlu+PSbRWz0KMAil6nUdC4k3poR5aFSwBc2KeWQ5THpg4Q135Bbl
-         slGXeAmFA37EDoO+iUZiS2gpnsXdAgXaehS+v3MD/B/+d9llxVoTdgNx/Oje63ETQruf
-         1qLw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+kuAowq7bvUd7eUpIeAS2LyykDyTQwPDGcpO3LJtzn5WrGVjL9RloMi9dkSP/kcL5flUxAacN@vger.kernel.org, AJvYcCWWr3WKFq9hy96VlkHap7aL0PAsdLghYB4lYa0gRGlvgqlWa5/ijCo/dpF7g9YOaC5XacaSVjeFv9KFvhc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp0q1rkOjGqwCGa/deSqvEsv4Z0evFb4ExMltyyc8qlmnaXyWZ
-	zCSavUfFN11jK5tJ8kL35EcC6VSoZGwV9qsOSIm8tvUu/kJpk8GHjmNf+zMAqhpSOQ==
-X-Gm-Gg: ASbGncsxUiq7WEseQGZf+YgO59qbq+zdD80aLZw8paXCP6pbqrEb+dqOGl4WPhQ6YiE
-	0D0K+608oh4n6V4pTHJse6Y+og+/nljuT9qmAAYSKXJ6fMbIVLlKtxTLR92l77OSEZdYRMUy7xw
-	Ypq4MdcBO4yNalTboFe7x7RFvhshwnWXUAbZqND2lcX2CtL4JlJzG+EXT1u8kvwBSzNZxJUeYJp
-	C0XWgxZzYkzvLy0AkQvdZ6rqIuTXZORenfU9dpU5oeY0Pt8KRbRaqb+lRpM6l3LAs7LtjccVOVK
-	pSEVawYGuY9X0aFFEfzD8IOHODRCQYDMV/qDzZCdPomdl4K305x+pgClSRTQmfJD36m1
-X-Google-Smtp-Source: AGHT+IG3yh2rev0TOr9Xa1tn7dlPnXmv6Sk9wM2sX7rVbQR8YnS+sCVDoP/A+k0aNPhcL4ZnjR4Y1A==
-X-Received: by 2002:a17:90a:e18c:b0:2fe:d766:ad95 with SMTP id 98e67ed59e1d1-306a4860a03mr8905930a91.9.1743852633336;
-        Sat, 05 Apr 2025 04:30:33 -0700 (PDT)
-Received: from henry.localdomain ([223.72.104.21])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc323839sm4299234a12.30.2025.04.05.04.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Apr 2025 04:30:32 -0700 (PDT)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: gregkh@linuxfoundation.org,
-	joel@jms.id.au,
-	andrew@codeconstruct.com.au
-Cc: linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb/gadget: Add NULL check in ast_vhub_init_dev()
-Date: Sat,  5 Apr 2025 19:30:20 +0800
-Message-Id: <20250405113020.80387-1-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1743862149; c=relaxed/simple;
+	bh=aPiGerDof7zYDp81C0rPZwzQgTelHPEeK8XxpmDKjbg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H1mJxYSrBlGwoTxeJPgruPukEj7B4OqNdie86jSrJjZMu0g0ko9XJeL5Vk/K7ldVI6uZlXLjM9eiZ7cacx9ybIVlRDY0uP1SykegLv5ntdQVAXtlCKlmyaera3kR46fye0REXbO+WRrzy9O5oqknHjEyHsB9BKQvx3gQU+1Kzt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af06c.dynamic.kabel-deutschland.de [95.90.240.108])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id AF7C561E64799;
+	Sat, 05 Apr 2025 16:08:26 +0200 (CEST)
+Message-ID: <20a4400e-a175-47e2-91ce-a6b475a14b33@molgen.mpg.de>
+Date: Sat, 5 Apr 2025 16:08:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: xhci: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep
+ state.
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
+ <20250405084307.4080edf4@foxbook>
+ <7ec5ba1d-1de7-409d-882c-2efab4922ed4@molgen.mpg.de>
+ <20250405114924.7aa7f3a1@foxbook>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20250405114924.7aa7f3a1@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-devm_kasprintf() returns NULL when memory allocation fails. Currently,
-ast_vhub_init_dev() does not check for this case, which results in a
-NULL pointer dereference.
+Dear Michał,
 
-Add NULL check after devm_kasprintf() to prevent this issue.
 
-Cc: stable@vger.kernel.org	# v4.18
-Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
----
-V1 -> V2: Add Cc: stable label and correct commit message.
+Thank you for your reply.
 
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 2 ++
- 1 file changed, 2 insertions(+)
+Am 05.04.25 um 11:49 schrieb Michał Pecio:
+> On Sat, 5 Apr 2025 09:36:03 +0200, Paul Menzel wrote:
+>>> And the problem appears to be that some USB device gets reset
+>>> periodically, probably /dev/sda, whatever it is. This reset loop is
+>>> also visible in your new log today.
+>> I guess it’s the SD/eMMC card slot, which I do not use though.
+> 
+> Yep, I just realized that your dmesg shows it clearly:
+> 
+> [   37.517985] usb 4-1.4: new SuperSpeed USB device number 5 using xhci_hcd
+> [   37.535773] usb 4-1.4: New USB device found, idVendor=058f, idProduct=8468, bcdDevice= 1.00
+> [   37.535780] usb 4-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [   37.535782] usb 4-1.4: Product: Mass Storage Device
+> [   37.535783] usb 4-1.4: Manufacturer: Generic
+> [   37.535785] usb 4-1.4: SerialNumber: 058F84688461
+> [   37.552531] usb-storage 4-1.4:1.0: USB Mass Storage device detected
+> 
+>>> 3. is it reproducible on 6.14, 6.13, ...
+>>
+>> As written, from my logs it happened sporadically in the past, but
+>> since at least commit a2cc6ff5ec8f it happens almost always. I didn’t
+>> see it with commit 08733088b566, and after that I didn’t use any
+>> USB-C adapters for three days.
+> 
+> To be exact, I'm wondering if the reset loop itself is a regression, or
+> business as usual. So simply look for this repeating every few seconds:
+> 
+> [   74.898485] usb 4-1.4: reset SuperSpeed USB device number 5 using xhci_hcd
+> 
+> Relevant commits in your range are:
+> 
+> 0c74d232578b xhci: Avoid queuing redundant Stop Endpoint command for stalled endpoint
+> 860f5d0d3594 xhci: Prevent early endpoint restart when handling STALL errors.
+> 
+> Reverting 0c74d232578b will remove the warning, but this means that
+> 860f5d0d3594 isn't having the intended effect. Not sure  if reverting
+> the latter will solve the reset loop or if it was always there. And
+> these commits look alright, so IDK what's going wrong.
+> 
+> I could send a debug patch which might clear some things up.
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index 573109ca5b79..5b7d41a990d7 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -548,6 +548,8 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
- 	d->vhub = vhub;
- 	d->index = idx;
- 	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-+	if (!d->name)
-+		return -ENOMEM;
- 	d->regs = vhub->regs + 0x100 + 0x10 * idx;
- 
- 	ast_vhub_init_ep0(vhub, &d->ep0, d);
--- 
-2.34.1
+That’d be awesome.
 
+>> PS: Hints on how to try to reproduce this in QEMU would be welcome.
+>> (Passing the controller and device to the VM.)
+> 
+> If you need help setting up PCI passthrough, I'm afraid I can't help.
+> As for reproduction, simply booting a buggy kernel should give those
+> repeating resets and xHCI warnings if you are lucky.
+
+After this morning I wasn’t able to reproduce it by un-/replugging. 
+Maybe I am lucky to find a reproducer (reboot needed?).
+
+
+Kind regards,
+
+Paul
 
