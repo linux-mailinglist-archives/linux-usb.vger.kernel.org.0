@@ -1,103 +1,118 @@
-Return-Path: <linux-usb+bounces-22611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE18A7D061
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Apr 2025 22:39:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 502E2A7D063
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Apr 2025 22:41:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 536633AE9AE
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Apr 2025 20:38:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE27016C64F
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Apr 2025 20:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5BD1ACEDE;
-	Sun,  6 Apr 2025 20:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6C61ACEBE;
+	Sun,  6 Apr 2025 20:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="C8qbSjl1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CLkNsWgZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B921487F6;
-	Sun,  6 Apr 2025 20:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7C31A3147
+	for <linux-usb@vger.kernel.org>; Sun,  6 Apr 2025 20:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743971939; cv=none; b=GzpigS2DlsszuKfgaki6gkeb3jocFhxqrhh/mjINMA2/t/O3aAHxrJwb9DPrO6lyPfPIB3d3wsrZSBZ8xb4sFBLH35UYRblwPJf6YFkB261rjZMyN8sD/lSZnVIj2d4MsI6iSAV5fUDP0Y9AQO+oORsxaViQNyKMc2wAcKqOiWc=
+	t=1743972058; cv=none; b=gvs0tkIiNoAOcRkvW8r36kLlurCxS2cuPNmlPEjZaGo5aCZvDoppIZB9t2LaDmq5Ah3SYXK0TiWeSPlN7LrS1kiKcGkAQHiHp7kK6eGVvEJXGGHbthG2oLtHDgpdtmr4ukjLW6rXFeQwKs1Af67VTi1XXP8iBJXTGv7o+yYEQBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743971939; c=relaxed/simple;
-	bh=NI1/kyy0gTrSMXMDeYc9TiMNCu+lNoTvc7HFd6GFVr8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H+n/BOXv1IKaRg9LOxDGYniT0IHu+SCYQjV65nGBXMsfzE5x7jD63I/bXVKryCz8rVPP81c2lTZrXmkkqjv+3u61YZz9jp2fFFtKp5FyYNNhTivDYQVMbbzEKJE4OCvtjdjXX6sr/yesG5oNvdfomo6gQXW0/WZbDQTw+HvPHao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=C8qbSjl1; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-223fd89d036so40654815ad.1;
-        Sun, 06 Apr 2025 13:38:57 -0700 (PDT)
+	s=arc-20240116; t=1743972058; c=relaxed/simple;
+	bh=uPYcgZ3omwIzurOp+2cX3SXPc6HbP09vKi4vWgSXMaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KxyuBQqgCD5ljrOmMkd64umDPNWqUkWQqY4UipIVLcGnXru7JUgAy2Jk2qy/pI/b1sFowYqTfVaLbrmsZ11CAcaiwUX7KgcLiaD2gyzD0H7fZ1d/HHt3qmdl8RbxgZfdbXgVX9XDQaBKXpyQbQ2zz10a9f1DYCEL3DbQeGpJNNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CLkNsWgZ; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3978ef9a778so507560f8f.0
+        for <linux-usb@vger.kernel.org>; Sun, 06 Apr 2025 13:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1743971937; x=1744576737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ydwO1JyYbeugO8yOiEfHx3MM3FsXIUg1LfWXi3rj/4M=;
-        b=C8qbSjl1w73HTPnPSeQN6y3Q2za9i09nDD+6K5A8qppvqKxkW8ei4SRDbDkNJ7bykU
-         Dd2EKkPVECsyydhJzVcGw01i0k3XnC7+kpWhbc0MMITnSdg8Gb80X+QoRHvP2+kGq0Z+
-         B+z3FiqQmZ8GaD1ElgMiXaHInea1JAIQNbI3dtGQU09F15+w9PTMvGGXwVcNLxtgqe+D
-         sGFWHBNnJaXknjSxZjS4zOsfTboG6IO1eXHg8Q/D2468L9roosulC/+IZ9ujPvJJbXP+
-         1a0T4BA87JzLSSu8Y5mUxDGT11yDMZRx0p2BHyAejB/DsRcoEvrVf/VSl7XSMMHLg5Lh
-         nk6g==
+        d=linaro.org; s=google; t=1743972055; x=1744576855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B3QgOOpj7+iSDBUkQvomYjpZ7VjRT58FtT28ljc6yyM=;
+        b=CLkNsWgZaGfSz2fFWVeXF8lMCJGT9u6LRDHAi4Z0Grsq6YLmpqCtk/hgIvxJ4pAC63
+         p4NZBrXPr2hyMtmeyOghTqsjw2XSRrfNotmFMUEivXxen+fiB9qq0iNxWBlWlOVVi8zc
+         yenwWTlEPLpsKqfBQWm53Uc4LbU37GmPAVP59mkjYOAWliEp9H3Jpy71Afua1YAuKbgT
+         IlBkpgyp0FPLRB5yJy96N98Qd7X42dIJqbNMW8bWWGhu5UoH78bmxWjN+rARLFJdeccy
+         NqHPpWbcAHD1FUoF7KqJGFUB35KJxm4oVtXA4batMqC0RaLRHl/YMobHimk/yUfDzMZw
+         Qgjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743971937; x=1744576737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ydwO1JyYbeugO8yOiEfHx3MM3FsXIUg1LfWXi3rj/4M=;
-        b=Dhgl0/Pzncv+UTIolytm8XX7Vs+wiNGgZzIl2qfPJGy2waUvJ/yjB1NeUzScrLdsDp
-         fTeeKABCv0U/4oOJvk6R8/jm7iLxnsE0f5Ydh8TLfzPsTXMiXAE03mQIJZaw3VM/ItcT
-         cT1knUPy4RK3GLgxOjGewAzTK4mIJGxuCTlMZvGtgdnqatK64/HmwO8OpHSmFYx+9t5b
-         XzGUEeqFNQWTaHbdI8YIs8hJ3CF1dZuOvnN+dyTmwb/UU741UwhG993JO4k0dKyxgl9u
-         Nz3F7RGSUC5JqgHDZrx7ukWZH/F3DSUNRStZrrRXMrX4xVKvmRi4WKHa+RHrAvpqDCwg
-         U3Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCVG95vaJlo3OUbMiDDgiGKBGCNgmpQazqROrFvwdj9JpwD42xLiBuvfSdsPX8Ai8yyzV+AmR72tBieb@vger.kernel.org, AJvYcCVSNrI4MNA+/ml5uhWG26joZccThljyyZrf7AhUITJuqSOYQ5yNyEcLy3HiS5/+83kAMwonbGFa3+kTI0uCvBQ=@vger.kernel.org, AJvYcCX5EmEK/2tbaFjTWr2dxLOdSAvU3vwc6FctsiJ2Xhr5Ou/JnmOZ0U01HW9UgLHGR3tm0lJahP0jQaFL@vger.kernel.org, AJvYcCXPZjfMTilyV6evsZkt498oSO2t9j4qg/uovX7AhhO9doHKWjHLXJWKqtxhW2HiQvY22WRCGerHxm6QL73k@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAK3qgBBm7O7hKhlQxD4JpBK4f5ItYyKGtL0dLMT9qKoxgsZi4
-	SOmVorRF1nVpj/h27yGqZgUgEIzaXWfJyQeLmeaX/f9PvYmkUhLTosXJ6s8VH3+RkmdKxX86wFc
-	zVlwhmtBreQVdMkZKBdclteke//s=
-X-Gm-Gg: ASbGncuVsaH6GpPzGy+uE6j0yX2ZhHzhWoUYHaWBUMtzXPwbVaeIV1uUStNDXW1YckU
-	dEBOzAttB6Md/hbmM0i15L10C7ylZwFE9dDlxpD/7pydqQIzOcZjycKhOlGhTRdCENpbzQYCwzH
-	EySvXKtGyA1UXrb5eKZuuY1KG/vfAb3Y3Q3NTD4vtA
-X-Google-Smtp-Source: AGHT+IGDuS2E1gbvf+gLEVGC9aXsTzLI97TA0L4xSj8FjsSjT4qJXWhbv3i5QpV5K5VBN+QeBy8RRJfKYOEPI2TztGs=
-X-Received: by 2002:a17:903:2ec5:b0:216:6283:5a8c with SMTP id
- d9443c01a7336-22a8a0a3599mr145741465ad.39.1743971937401; Sun, 06 Apr 2025
- 13:38:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743972055; x=1744576855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B3QgOOpj7+iSDBUkQvomYjpZ7VjRT58FtT28ljc6yyM=;
+        b=mT9UoRmhEEW3JaaXiKt4YMb8xse6mA2Sxn4lQkja5ZknyJeFSEwFoPdJsuWaVYnavc
+         /OZ/4bWfd9wQ4DQvxwClvoOuqFr5bsOPR7wCLFTgZzElTCv8rWMT9NQGSc+X/nOD4IAB
+         dFGOPrQutLeHjtwW/9276v0dvbe1ksmlUkpsX/6IwWAuohHKAY+0Y3weM6kBgCbzPcXK
+         v0J1U32X36tTZILyVPaivi0WJAF006pQDWg0ZVJDuL6RDo+isfPoU99IrzYRQ4G46SYJ
+         Nj34wb5vP2YV54KJxG3FmUWYQX6YZZmJXgm7WvCSLN1mUGHZHWmf1jx95VlzOLWKHah/
+         yLjA==
+X-Forwarded-Encrypted: i=1; AJvYcCWt581fY3xY4S4xl+K69So0wHtudN3dUsg7WKU/6dCya7SNNM2y6R/89DvggILQNzHn21m6FAhdbf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw27J6XDLqcGzP1C5NiNIWx0fsh6cpt8xoKDIGTQkRcYu5nIaTH
+	RXdCeyhs+kpmCTAAKgGfgrWLPNO7yrwmQTJ7303TqtABU7VmAprGresmMPUSPEY=
+X-Gm-Gg: ASbGncvvk6ld/YbpH1PpE+FVOc/4FJHGkYLIY+ZI8d5tFzN+I3BFOX54GJFFuYxC7uC
+	0fK5cOv+grLTWjCFdUtMwTbUML4yn8a0N5umGZgAZYb4HmDd0y2EKlLYItveKMCp2z1xlP/7Vm4
+	IeIUQR8OmaDuaJ5d5WpYsJu0PoOOycgGpjSvtZgJp6e6agtVzjH2WdREGHtGYTZIdVgOXVDneTi
+	47VFg5Es3D+iWqEiun3tMknJ/xy1xDI6Qi4YCPYCH4Hco3hBv6VYDwGIytTKSFSKEBWk5VTmphy
+	ICqiZXs0dSlLynep8FzmbykfJWw5Xy3kGorOf8uUWcIj/nmgL2mKjw==
+X-Google-Smtp-Source: AGHT+IFchdRno11RgL9CU1ownDwZEuJHgz79IyNA8LtlWkkc0l/WAoB/U9KiTsDOjehHkL0ncSktpg==
+X-Received: by 2002:a05:6000:2505:b0:39b:f12c:3862 with SMTP id ffacd0b85a97d-39cb35ac4camr2855921f8f.2.1743972054936;
+        Sun, 06 Apr 2025 13:40:54 -0700 (PDT)
+Received: from shite.. ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec17b0dbesm113167335e9.33.2025.04.06.13.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Apr 2025 13:40:54 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] usb: typec: tcpci: Fix wakeup source leaks on device unbind
+Date: Sun,  6 Apr 2025 22:40:50 +0200
+Message-ID: <20250406204051.63446-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-rtl-onboard-v1-0-10ca9a6a4ee0@posteo.net> <20250403-rtl-onboard-v1-1-10ca9a6a4ee0@posteo.net>
-In-Reply-To: <20250403-rtl-onboard-v1-1-10ca9a6a4ee0@posteo.net>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Sun, 6 Apr 2025 22:38:46 +0200
-X-Gm-Features: ATxdqUHvsyKfKqx08asuwFCr7vofQGUcWxylj7FIDVyn6z9dRxtd3LDG4d6Z8JE
-Message-ID: <CAFBinCADBn2uUvdL9he0LZEZx4Kt=qPqrhifw_MUn4=BxLeJFw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: Add Realtek RTL8188 USB WiFi
-To: j.ne@posteo.net
-Cc: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	=?UTF-8?B?Si4gTmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>, 
-	Matthias Kaehlcke <mka@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jes Sorensen <Jes.Sorensen@gmail.com>, linux-wireless@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 3, 2025 at 4:07=E2=80=AFPM J. Neusch=C3=A4fer via B4 Relay
-<devnull+j.ne.posteo.net@kernel.org> wrote:
-[...]
-> +description:
-> +  The Realtek RTL8188 is a USB-connected 2.4 GHz WiFi module.
-> +  TODO- website or soemthing
-When you re-send this patch (to update the email address) please
-delete the TODO (a website is not strictly necessary)
+Device can be unbound, so driver must also release memory for the wakeup
+source.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+index fd1b80593367..29a4aa89d1a1 100644
+--- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
++++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+@@ -536,7 +536,10 @@ static int max_tcpci_probe(struct i2c_client *client)
+ 		return dev_err_probe(&client->dev, ret,
+ 				     "IRQ initialization failed\n");
+ 
+-	device_init_wakeup(chip->dev, true);
++	ret = devm_device_init_wakeup(chip->dev);
++	if (ret)
++		return dev_err_probe(chip->dev, ret, "Failed to init wakeup\n");
++
+ 	return 0;
+ }
+ 
+-- 
+2.45.2
+
 
