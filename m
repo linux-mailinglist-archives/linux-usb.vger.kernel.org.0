@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-22638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 414B0A7DEF0
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12833A7DEF8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:24:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D2701769FF
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:19:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B8AB17B25F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07717253F3F;
-	Mon,  7 Apr 2025 13:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5E25253F3B;
+	Mon,  7 Apr 2025 13:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzfSUKFV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/yNomVj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678AC23A9B6;
-	Mon,  7 Apr 2025 13:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF8F253F21;
+	Mon,  7 Apr 2025 13:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744031938; cv=none; b=g0AQU3VLcppxWHgSvwCbet3S8c/PfRvtT9bSi8peTizthccsPplwMgrMasgvxDKEDJRksDNKy56KFQEmBL4xqz4Ipl0PTXhyO+NALlcGu4dMcTQtumOYn1THTzeLfKf8RvQyT6SzaY5BLHdX//+N7sr7KjimJ6iSAVvsZy7Be38=
+	t=1744032020; cv=none; b=hLoeeL+nwKQVTZQwNPyp58VbS+5DTUpIqdQxw1eSc9LlJISwvcNP/163NI2G+sJhELOVNpqywYKi5BhmsOM3y0BzCzF1oLZvbbAQ0ddrsD+LXrYsFikbq9aXvEhzyxzuBbrCOosFA+8KRRfOdFwHw5JaqwbJTsIyj7ghh4SiNF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744031938; c=relaxed/simple;
-	bh=v1NRki44ZNsg11HwuI5lbdH0wmJphUEXdqHPrVHt4dw=;
+	s=arc-20240116; t=1744032020; c=relaxed/simple;
+	bh=filjrS06rqZ0ew/T3d0sXhHExTLXZr6chgbI6OChQmE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=icxERXfm1CZawVPaI5Iozq/IHRAgG5zezKLB7cqy8ZA2xiPTlXdbaoU8vUCCGoTtmk/l4JUrrA/pZZkyKrRVrzUOcoby9YIhYds46E5mVyxqtHeTiuQ1dEhcD8VApk5L1ojaxpaTMEAFcFnVVzcYMgL/Ephwtr0ZPagLg70cfik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzfSUKFV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73452C4CEDD;
-	Mon,  7 Apr 2025 13:18:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=JKDGKNFMpXP4ncYVXavxyBXHsnMcZ5MfTjco9YSCuRw2fdYckqkh3nUDQUsLVrVcOWT16zjjm3y7VzLyR/f8dHR8vqYygqoDoPKGw3+ecJzX4/WDMMJFx62IyVgbfcpM2LsmEbTr0GYGTKKROpjzCq3j+kCTN6rCwYjmRPOyuA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/yNomVj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A3DC4CEDD;
+	Mon,  7 Apr 2025 13:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744031937;
-	bh=v1NRki44ZNsg11HwuI5lbdH0wmJphUEXdqHPrVHt4dw=;
+	s=k20201202; t=1744032018;
+	bh=filjrS06rqZ0ew/T3d0sXhHExTLXZr6chgbI6OChQmE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BzfSUKFVEpf0b9QkyCwYgoqYngi01GfaCOmSO7DOi5Ik36vH6qRv7isKR9eWSdXb+
-	 cBo+ifa02XLZ4OjgqVo+GwClE3157DdGsWBq/QjH22e9seMOLo/xU3kNaj3h3rvXe0
-	 npHsD2YUE8VSizzc/Pu63CbZ6Vvl6VhhihD5JmVL+ULVqF1ZsIY0iTuvLH4GuRm0gY
-	 J18IchOfnFU1109RueLHMAb7SnVT8NwTsfbALQQRgHy6Ad0G2XehMnP4JyU5LnvBkT
-	 GHRHJFRVpUM49HIi16FO9YNq9sxWQQw1G5/GMw11NMbayBpgJndcsoJYynwNuVkrrP
-	 JEwGs1AEWZTbg==
-Message-ID: <02157e96-9524-4590-9ca6-e4390176d74e@kernel.org>
-Date: Mon, 7 Apr 2025 15:18:51 +0200
+	b=a/yNomVjn7s86TOYejdygiH1sC/wzPEjFMGUQTb/FZ1Kp1Zl0AskZHojDh37MF9rp
+	 bVsVNviFb0fNioBtNNKl5Qq8c/9wspSr2td0bwJyaguUsxdPW8ZTbkSYFWHsNnULib
+	 01PqflKsNQuGb9+g2G9hcOCuB0TGRF6VvkQUFTm/lIwh0C4bC7bHqAOJ3wGtx1wf7q
+	 rOYYVwDiq0EggDefaSeE+ksRKj8pXAEa7P/EpyGfDGwPHJ5wP2rh557lUjvSKWXXwr
+	 iGVB64MxsWkbcKf2kU90a2BQ/ypR1cygnM95c4lcfUjQr/mciUjN+twBapFbDRWUqA
+	 NuJP3LfCJg5Pg==
+Message-ID: <74bb9d27-fd6f-4332-9965-e967c3a31c63@kernel.org>
+Date: Mon, 7 Apr 2025 15:20:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] dt-bindings: phy: spacemit: add K1 USB2 PHY
+Subject: Re: [PATCH 2/7] dt-bindings: phy: spacemit: add K1 PCIe/USB3 combo
+ PHY
 To: Ze Huang <huangze@whut.edu.cn>, Vinod Koul <vkoul@kernel.org>,
  Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -65,7 +66,7 @@ Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
  linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
- <20250407-b4-k1-usb3-v3-2-v1-1-bf0bcc41c9ba@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-2-bf0bcc41c9ba@whut.edu.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,26 +112,76 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-1-bf0bcc41c9ba@whut.edu.cn>
+In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-2-bf0bcc41c9ba@whut.edu.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/04/2025 14:38, Ze Huang wrote:
+> Introduce support for SpacemiT K1 PCIe/USB3 combo PHY controller.
+> 
+> PCIe portA and USB3 controller share this phy, only one of them can work
+> at any given application scenario.
+> 
+> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
+> ---
+>  .../bindings/phy/spacemit,k1-combphy.yaml          | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/spacemit,k1-combphy.yaml b/Documentation/devicetree/bindings/phy/spacemit,k1-combphy.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..450157b65410b27129603ea1f3523776a1b0a75e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/spacemit,k1-combphy.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/spacemit,k1-combphy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Spacemit K1 PCIe/USB3 PHY
+> +
+> +maintainers:
+> +  - Ze Huang <huangze@whut.edu.cn>
+> +
+> +description:
+> +  Combo PHY on SpacemiT K1 SoC.PCIe port A and USB3 controller share this
+> +  phy, only one of PCIe port A and USB3 port can work at any given application
+> +  scenario.
 > +
 > +properties:
 > +  compatible:
-> +    const: spacemit,k1-usb2-phy
+> +    const: spacemit,k1-combphy
 > +
 > +  reg:
-> +    maxItems: 1
+> +    maxItems: 2
+
+List and describe the items instead
+
 > +
-> +  clocks:
+> +  reg-names:
+> +    items:
+> +      - const: phy_ctrl
+
+drop phy_
+
+> +      - const: phy_sel
+
+ditto
+
+> +
+> +  resets:
 > +    maxItems: 1
 > +
 > +  "#phy-cells":
-> +    const: 0
-> +
-No supplies? No resets? Are you sure hardware does not use them?
+> +    const: 1
+
+What is the cell argument?
+
+Also no supplies?
+
+> 
+
 
 Best regards,
 Krzysztof
