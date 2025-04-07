@@ -1,58 +1,58 @@
-Return-Path: <linux-usb+bounces-22689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22690-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D80A7EACF
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:41:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C62AA7EA81
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 446834232D7
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:33:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED61C1888370
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA4E265CD1;
-	Mon,  7 Apr 2025 18:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C14B25485E;
+	Mon,  7 Apr 2025 18:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y46iPY+U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bjGCFiUg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679F0265CBA;
-	Mon,  7 Apr 2025 18:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208C9266B41;
+	Mon,  7 Apr 2025 18:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049666; cv=none; b=qH3Btv9vzEGKNQRgTO4d5isB2voxeKnF0OUH2Vz1Ty7/c4UjH3XlmvToBwsPLEC9FZZRIelRU1EX6A5z4unI835lcPAcBEDFJwzCYrJ/eBk4xEYUvNs3o9XVa3gx9NIIJzeB7nvuAT4uatmeo4pKru9tN9LJmkrID83Du+kvidY=
+	t=1744049671; cv=none; b=Ytl/YkaPUD+G5w88PQxWgewrW/jaCDrsf+SfHY0ROrEknnZISxiJhjPcB5mgCFDrjFoypH10OONsKje9ln9VMgzISOAVo3bLTWTg55EBrrUS1qEgv1iAGNUiNSRLNX+6ITcftPWuwr3TCQcRcm7DoK6ULvv3RddbVQvdmTau+kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049666; c=relaxed/simple;
-	bh=P9IARbyBPJ3Osu5SDwsFJok3oD6DIO0uGCgbsgkHuDE=;
+	s=arc-20240116; t=1744049671; c=relaxed/simple;
+	bh=0mCCtYKAYFjs9NmMVhHteIrRhXZpoHLaF0jqmAD86kw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vFlIxfm/kCOC4BJhD3X1SAlNVF6I1I4oP0B6xoGcBJvNsSXK1gj59c+sWjlvhCMV496rgZ+/2SJptuDPOxuB1LNfpkHhNfHWYFGLTRjIqytEYtmXPJBRX7C6wL18cR88Dqm1Yp32pq+btoz1pWO+EYHPXPayGJcIWq/hs8A2IUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y46iPY+U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D84C4CEDD;
-	Mon,  7 Apr 2025 18:14:25 +0000 (UTC)
+	 MIME-Version; b=lU5VJxFNu2puK7mCHrBOmwpKTIJtLM7gu080FkTo6sUhG9ljkv+8i5ur5ek6FPHqlN74FpWts2ZM0PuNiACcDkCV42TaKK/XP5663/HAp/qX2iH+EHa/jQUpY55qHsle6HRvcsoVr8t/kcZ+VKvM6zKiaAPcaSIlO6xJchsOuEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bjGCFiUg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C76C4CEF3;
+	Mon,  7 Apr 2025 18:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049666;
-	bh=P9IARbyBPJ3Osu5SDwsFJok3oD6DIO0uGCgbsgkHuDE=;
+	s=k20201202; t=1744049670;
+	bh=0mCCtYKAYFjs9NmMVhHteIrRhXZpoHLaF0jqmAD86kw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y46iPY+UqnkiScNlE8tsKqk3Y+OHWjG7ive0Q6eN4F/1ZPxij+AE0BfVDtHYBG3yE
-	 B3N+RQHP2wLGg04OsQ5EVifUD2+UTRIC2FOXAkA4dLh9JPjvSf7ahGOzMElZiCC3qk
-	 pQexgxdd05JOWgYuteGOEqORhfzPYyi/9QOxW9BJpYfWXPU3GgO3H2VRyAO7ayYNWB
-	 KuF5duqZrGxRVsHmzY4/ddUuN4MgDlNXpTqxsfJHc26QwLO+582JgwRPnpuvtujBH2
-	 NggH3PQYOgo6VUqYK+Mv1NI2HGr8BbqDxiJVHxP3+9S+m2+PU2zPySdo2+vqx4M4SL
-	 rrsyDjjXyywaw==
+	b=bjGCFiUgODQRvxkUHSWn3whvpa8oc4jM1ZFEi3mB1lMlRtRX0JIsdcyrtE5rjTsSV
+	 GXVYZvMHBhzS4ox4OdcSpnRjoz1QJp8MVywo2UjVjYtnfjazo50m0UE74biXHjQxxK
+	 JT2YaimqOTRnVA1eidWqorj34jHNzPbjETlCw9MbbwaVmz/wGZprrZZTqTfo+/BGIp
+	 9cF7S2PpfWuB+x75nXR5K0Sl83lg/1yYY8qnFisWDQJj+TfajSw2JXoa7eAGXHnACo
+	 3Js9KHJkubEigDmkPmmDMM5YzJUps7vCYXd20Zak+zsNxxmRf5mYX8wamfSBXg0Z/e
+	 5sBsklAlAInrQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ferry Toth <fntoth@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Cc: Michal Pecio <michal.pecio@gmail.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 04/15] usb: dwc3: gadget: Avoid using reserved endpoints on Intel Merrifield
-Date: Mon,  7 Apr 2025 14:14:04 -0400
-Message-Id: <20250407181417.3183475-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 07/15] usb: xhci: Avoid Stop Endpoint retry loop if the endpoint seems Running
+Date: Mon,  7 Apr 2025 14:14:07 -0400
+Message-Id: <20250407181417.3183475-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250407181417.3183475-1-sashal@kernel.org>
 References: <20250407181417.3183475-1-sashal@kernel.org>
@@ -62,69 +62,59 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.86
 Content-Transfer-Encoding: 8bit
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Michal Pecio <michal.pecio@gmail.com>
 
-[ Upstream commit 461f24bff86808ee5fbfe74751a825f8a7ab24e0 ]
+[ Upstream commit 28a76fcc4c85dd39633fb96edb643c91820133e3 ]
 
-Intel Merrifield SoC uses these endpoints for tracing and they cannot
-be re-allocated if being used because the side band flow control signals
-are hard wired to certain endpoints:
+Nothing prevents a broken HC from claiming that an endpoint is Running
+and repeatedly rejecting Stop Endpoint with Context State Error.
 
-• 1 High BW Bulk IN (IN#1) (RTIT)
-• 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
+Avoid infinite retries and give back cancelled TDs.
 
-In device mode, since RTIT (EP#1) and EXI/RunControl (EP#8) uses
-External Buffer Control (EBC) mode, these endpoints are to be mapped to
-EBC mode (to be done by EXI target driver). Additionally TRB for RTIT
-and EXI are maintained in STM (System Trace Module) unit and the EXI
-target driver will as well configure the TRB location for EP #1 IN
-and EP#8 (IN and OUT). Since STM/PTI and EXI hardware blocks manage
-these endpoints and interface to OTG3 controller through EBC interface,
-there is no need to enable any events (such as XferComplete etc)
-for these end points.
+No such cases known so far, but HCs have bugs.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Ferry Toth <fntoth@gmail.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/20250212193116.2487289-5-andriy.shevchenko@linux.intel.com
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20250311154551.4035726-4-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/host/xhci-ring.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 052852f801467..54a4ee2b90b7f 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -148,11 +148,21 @@ static const struct property_entry dwc3_pci_intel_byt_properties[] = {
- 	{}
- };
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 4a081685a1953..09b9288dd87a4 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1214,16 +1214,19 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 			 * Stopped state, but it will soon change to Running.
+ 			 *
+ 			 * Assume this bug on unexpected Stop Endpoint failures.
+-			 * Keep retrying until the EP starts and stops again, on
+-			 * chips where this is known to help. Wait for 100ms.
++			 * Keep retrying until the EP starts and stops again.
+ 			 */
+-			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
+-				break;
+ 			fallthrough;
+ 		case EP_STATE_RUNNING:
+ 			/* Race, HW handled stop ep cmd before ep was running */
+ 			xhci_dbg(xhci, "Stop ep completion ctx error, ctx_state %d\n",
+ 					GET_EP_CTX_STATE(ep_ctx));
++			/*
++			 * Don't retry forever if we guessed wrong or a defective HC never starts
++			 * the EP or says 'Running' but fails the command. We must give back TDs.
++			 */
++			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
++				break;
  
-+/*
-+ * Intel Merrifield SoC uses these endpoints for tracing and they cannot
-+ * be re-allocated if being used because the side band flow control signals
-+ * are hard wired to certain endpoints:
-+ * - 1 High BW Bulk IN (IN#1) (RTIT)
-+ * - 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
-+ */
-+static const u8 dwc3_pci_mrfld_reserved_endpoints[] = { 3, 16, 17 };
-+
- static const struct property_entry dwc3_pci_mrfld_properties[] = {
- 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
- 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
-+	PROPERTY_ENTRY_U8_ARRAY("snps,reserved-endpoints", dwc3_pci_mrfld_reserved_endpoints),
- 	PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable"),
- 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
- 	{}
+ 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
+ 			if (!command) {
 -- 
 2.39.5
 
