@@ -1,64 +1,60 @@
-Return-Path: <linux-usb+bounces-22666-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22667-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A210A7E9EC
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:22:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13EDA7E9D9
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:21:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 255A544171D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:18:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 777107A5C84
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9547C257434;
-	Mon,  7 Apr 2025 18:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B5B25A2A5;
+	Mon,  7 Apr 2025 18:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEeMg8tx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuLHDIAh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4AF257ACF;
-	Mon,  7 Apr 2025 18:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F587259CB2;
+	Mon,  7 Apr 2025 18:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049506; cv=none; b=T0mBBWx8TmmBW6w+qLXy1kyJ69oJ9I3kAmoBYm3hAX5bwQwEuG6yeq+LDlEOQ/7sQ3zItGjaZxtHdEJZTkL4NKPE0tGupXlQDghdNe5AkRNSJPMBz61l0O/dMfbF3CNBDoB4nQObm8AWopkMn+g+xWnqITBWH4JQAbEyZSvYzLA=
+	t=1744049552; cv=none; b=lyCeRQGzHU7gKih07TGUu6cdxgrlonLhRTDuIz2EniFWZE9LOWvQsTEDFpb1/zuElglN8a4lCPl1VVWRqWRGSEYvaxfSKlpKqwhRmPClvK4hqSFKifC4hiFBXU2tnoxHegcvnLK4mwQqpg4l122bZOpvrAkCKgW97rQ+UNPbYT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049506; c=relaxed/simple;
-	bh=LuNWxjWkBC7Yri3h83ygQs28FdxNmO2jbFGl+Oqz1vc=;
+	s=arc-20240116; t=1744049552; c=relaxed/simple;
+	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=X2L0hHqRXRSv/8fmjFVNhpNj1nng+lxXOv7yP/O7MvlBq9IgPpILPeuN2nZTVwjEycQ5XBM2geWDCEK8UJ75Q3ooTL1GPdicjoPvHt828/+NY5sjOyVcyWGNqk/Y7SsUOfYHH2n9A86M13AcK1uCufpQZNqcTRzGSwsm0MUz6qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEeMg8tx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E91C4CEE7;
-	Mon,  7 Apr 2025 18:11:44 +0000 (UTC)
+	 MIME-Version; b=EcoZWpyZhzU3PvvbX1JyFDZBLoT9EZcaPi4UkS9mIPWG8IUMAuA92ubJNT0TaTvcIg3hZ/ELJ1x9KBTk5CC+2w5id3FmG6jWzwPPruYT/KchIiQCxXqCtCARKXaO8YvdVtqpAWRR87oI0YL6seMeBx3H6owlHWhpBKdH0Wrl9qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuLHDIAh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA806C4CEDD;
+	Mon,  7 Apr 2025 18:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049505;
-	bh=LuNWxjWkBC7Yri3h83ygQs28FdxNmO2jbFGl+Oqz1vc=;
+	s=k20201202; t=1744049552;
+	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oEeMg8txAaWP26L1wY0M2HAxrld6lvpdOi0rJx5nBg7keqcbRFWGtDaYgq+0F3o3d
-	 RQutUTS5/ovGI8e8z3Vkl5646HbIC9svkn7+eXLMDP6o7HyKg3XBDbmq4qGUSNqUPe
-	 VnHRogUPXdxI1PExNc2E/PSX02vQOGKCSKXarubqJ6ruuocthilERf0JBqOynIZPSt
-	 BPNThHvz/Eau7phxkuaxfa7vzqc30iZ90/sJMDw4w5TO8COg0qbjKyjzDRWaXUad4k
-	 Y2wt+lFdvQRVpeHJTPdyM/rzV8CzwZnrzkXWpDiaMaAAIVLskBwyOccYJX/Uydr/5b
-	 bKMv9XJbudZJA==
+	b=nuLHDIAhJbgA0aDMb7BKbzxM1OUEYvOc+nSrO/Hz4lF5Be1UW8bXQMYNgW5d83ozN
+	 osU+mdjJiZ4WiJHSvBLLCIHIOM8jYcdeHQtZlvQrq1OJEP/MZ2/29IvKvlO+ns6X5g
+	 CmKK+uhWJ/xU0GTP3Z01nkTfAEXAk2vMCrYbw+jcFSkd3BrAANR8Pu+t8ouit4gPnE
+	 bhWMaMhouxDOAJ5Uk5GQ82XTZKLtcHSQbt+pHJYBLrnhqbFajWL3dvZRHxWB0gAn3r
+	 U8zKB43U17Vls/7Jlj6WpEKttkUoKaKG3AR+3op8HioZjKbNQGhhhBo4LfOp14Sqag
+	 6KgP69xj4sK8A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Thomas Lynema <lyz27@yahoo.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
+Cc: Alexander Stein <alexander.stein@mailbox.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	westeri@kernel.org,
-	YehezkelShB@gmail.com,
+	mark.tomlinson@alliedtelesis.co.nz,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 22/31] thunderbolt: Scan retimers after device router has been enumerated
-Date: Mon,  7 Apr 2025 14:10:38 -0400
-Message-Id: <20250407181054.3177479-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.13 02/28] usb: host: max3421-hcd: Add missing spi_device_id table
+Date: Mon,  7 Apr 2025 14:11:52 -0400
+Message-Id: <20250407181224.3180941-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407181054.3177479-1-sashal@kernel.org>
-References: <20250407181054.3177479-1-sashal@kernel.org>
+In-Reply-To: <20250407181224.3180941-1-sashal@kernel.org>
+References: <20250407181224.3180941-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,69 +63,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.1
+X-stable-base: Linux 6.13.10
 Content-Transfer-Encoding: 8bit
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-[ Upstream commit 75749d2c1d8cef439f8b69fa1f4f36d0fc3193e6 ]
+[ Upstream commit 41d5e3806cf589f658f92c75195095df0b66f66a ]
 
-Thomas reported connection issues on AMD system with Pluggable UD-4VPD
-dock. After some experiments it looks like the device has some sort of
-internal timeout that triggers reconnect. This is completely against the
-USB4 spec, as there is no requirement for the host to enumerate the
-device right away or even at all.
+"maxim,max3421" DT compatible is missing its SPI device ID entry, not
+allowing module autoloading and leading to the following message:
+ "SPI driver max3421-hcd has no spi_device_id for maxim,max3421"
 
-In Linux case the delay is caused by scanning of retimers on the link so
-we can work this around by doing the scanning after the device router
-has been enumerated.
+Fix this by adding the spi_device_id table.
 
-Reported-by: Thomas Lynema <lyz27@yahoo.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219748
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Link: https://lore.kernel.org/r/20250128195114.56321-1-alexander.stein@mailbox.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thunderbolt/tb.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/usb/host/max3421-hcd.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 390abcfe71882..8c527af989271 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1305,11 +1305,15 @@ static void tb_scan_port(struct tb_port *port)
- 		goto out_rpm_put;
- 	}
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index 0881fdd1823e0..dcf31a592f5d1 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1946,6 +1946,12 @@ max3421_remove(struct spi_device *spi)
+ 	usb_put_hcd(hcd);
+ }
  
--	tb_retimer_scan(port, true);
--
- 	sw = tb_switch_alloc(port->sw->tb, &port->sw->dev,
- 			     tb_downstream_route(port));
- 	if (IS_ERR(sw)) {
-+		/*
-+		 * Make the downstream retimers available even if there
-+		 * is no router connected.
-+		 */
-+		tb_retimer_scan(port, true);
++static const struct spi_device_id max3421_spi_ids[] = {
++	{ "max3421" },
++	{ },
++};
++MODULE_DEVICE_TABLE(spi, max3421_spi_ids);
 +
- 		/*
- 		 * If there is an error accessing the connected switch
- 		 * it may be connected to another domain. Also we allow
-@@ -1359,6 +1363,14 @@ static void tb_scan_port(struct tb_port *port)
- 	upstream_port = tb_upstream_port(sw);
- 	tb_configure_link(port, upstream_port, sw);
- 
-+	/*
-+	 * Scan for downstream retimers. We only scan them after the
-+	 * router has been enumerated to avoid issues with certain
-+	 * Pluggable devices that expect the host to enumerate them
-+	 * within certain timeout.
-+	 */
-+	tb_retimer_scan(port, true);
-+
- 	/*
- 	 * CL0s and CL1 are enabled and supported together.
- 	 * Silently ignore CLx enabling in case CLx is not supported.
+ static const struct of_device_id max3421_of_match_table[] = {
+ 	{ .compatible = "maxim,max3421", },
+ 	{},
+@@ -1955,6 +1961,7 @@ MODULE_DEVICE_TABLE(of, max3421_of_match_table);
+ static struct spi_driver max3421_driver = {
+ 	.probe		= max3421_probe,
+ 	.remove		= max3421_remove,
++	.id_table	= max3421_spi_ids,
+ 	.driver		= {
+ 		.name	= "max3421-hcd",
+ 		.of_match_table = max3421_of_match_table,
 -- 
 2.39.5
 
