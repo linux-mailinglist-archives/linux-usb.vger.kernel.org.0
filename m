@@ -1,110 +1,111 @@
-Return-Path: <linux-usb+bounces-22708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22709-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28C9EA7EB3B
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:49:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3141A7EC7F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 21:18:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E4E73BCA1D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:43:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9933188A42B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 19:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A378726B96C;
-	Mon,  7 Apr 2025 18:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A15F264F81;
+	Mon,  7 Apr 2025 18:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhHBcldp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJUIBZbg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BEC255E38;
-	Mon,  7 Apr 2025 18:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA6422172C;
+	Mon,  7 Apr 2025 18:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049760; cv=none; b=ase8k9UCAwGeOPw+GD15bLKz3NocJWDAfD/ofHUDAqsuDcmxJzZMjpVEUQl56YQhXC1XxnFYG6Kod8yyUuwDpXJuBADhxdv1Y+4y1A9RwcxNZkdmM6ufmhFI0tgfrQgO3W9pxLcWgXmUJjq/PIATT71CycjBikU8Jut3FRswqUY=
+	t=1744051938; cv=none; b=bUm9hMUsmchF9/1L6XFlNMZ6QRMSP3/gXEQi4g5JqDQgBBh/aJhG3HnaO0igPuZ8liel2wDJvQuDwkTt/SCXm+YrDvXhORqFxH0xGiu+Lc8/FqvDI6Fkc6GOFho1iKFtuS3lVw7z46lxAtFosSus5mH7LayDVwsBFXB5p2rHb0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049760; c=relaxed/simple;
-	bh=k13xiQCaT/GS6dWcuXlaBInjqnzPmqms2Dv69by3/rE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FPjWI8ABFE98cOk2y/9n28yLvfk1w0Q5fNxHLyscjvgAWSLz+6fzvD3zGTuMm9WEx1xC5uh353j83D9D4zVkij64u+ddw6YOzTIEtneIw7pe6PlMP5CPQovJJPyhFmjGTj4eW9a3MylTc1sRKpiQtnQHuWql5NuLoLWpfbkGyjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhHBcldp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B4FC4CEDD;
-	Mon,  7 Apr 2025 18:15:58 +0000 (UTC)
+	s=arc-20240116; t=1744051938; c=relaxed/simple;
+	bh=/cjh5PTdngsV2rrZrVQpnhYg1pc1i3/7ohYYCmKkUDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KsCK9/kSuFzYE6zOqHOBNVXoTxHZv0Pn/HUqdW8x07lpwRBxsUc2kFwi8Or4UVsCOrTrJ+6Vz0MX4XWY6n/VEuo1yqfs4YlFCzKaYSI2pzfkBnjjWH+UKhYa50/qNghLzLKEcca+52WiHwftnxfICi6vEok4Sjq5MV37i113VbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJUIBZbg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6D7C4CEED;
+	Mon,  7 Apr 2025 18:52:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049759;
-	bh=k13xiQCaT/GS6dWcuXlaBInjqnzPmqms2Dv69by3/rE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uhHBcldpetwj+Px1tlBUuWitjT07SZP+IoP3R9vvpPEOWbLi8eKgSyPqXXjDd99d5
-	 SD1kdDcqxtHEt8+TKorNtwYKWKztXuIBgxmfJqtKWgTtNO6n6a+r+uFOgtZr4k8hHP
-	 V5vGz/SdpNfX2wGjsQAdADsYL/nk+5uACGIOqYngshyIEhWoJXKRrCjiMYHyqmic2X
-	 AcbNGhrZNhRjnp4ErPrGyD2eZSEJzynZRWYb3hYkrapgqx0foxf7BffNp5cETvDIzZ
-	 Lo6AEiw378Xfb7aX22M1HJocqeS37bitc6+d6P22TXh33hd+BPQFuq2oWqwqYJLFDn
-	 EM3urwhIEDsOA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Chenyuan Yang <chenyuan0y@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	joel@jms.id.au,
-	andrew@codeconstruct.com.au,
-	richardcochran@gmail.com,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 3/3] usb: gadget: aspeed: Add NULL pointer check in ast_vhub_init_dev()
-Date: Mon,  7 Apr 2025 14:15:48 -0400
-Message-Id: <20250407181550.3184047-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407181550.3184047-1-sashal@kernel.org>
-References: <20250407181550.3184047-1-sashal@kernel.org>
+	s=k20201202; t=1744051938;
+	bh=/cjh5PTdngsV2rrZrVQpnhYg1pc1i3/7ohYYCmKkUDQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SJUIBZbgzdqsmwDFK1kzCKIdu3zeLbwBgM12jT2a46x0KSiib2ka5d8S4fV8IMWIv
+	 P5sf7L+3zfcobE4jo65DG/gr/AubQ6Ed2K47vFYL5JaE0kYl/zRd01qgKV1VoxxuY1
+	 IXpBiFFYwjDCaa/p7omVQuKtuXvzRl6A2+7tmJ/5JDb7xWFe9DoXtn1YuXe8lgDOqb
+	 yPIOuRQHw69LsH4mK8+oyBpHo92g6w3hA28dtnnAFRWHpnPhbrSrgoWe6C6cRQVwnx
+	 b48AT4yMQOVSTqgSXP9DoXWSivY+2W76PaS05mRC0EgDbdSHjp99V3diSD/D0371wG
+	 rLjeTS4l2SyIg==
+Date: Mon, 7 Apr 2025 11:52:13 -0700
+From: Kees Cook <kees@kernel.org>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] usb: gadget: uvc: Avoid
+ -Wflex-array-member-not-at-end warnings
+Message-ID: <202504071148.6F55B7AF34@keescook>
+References: <Z9dyY7_ydJiGqh_d@kspp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.291
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9dyY7_ydJiGqh_d@kspp>
 
-From: Chenyuan Yang <chenyuan0y@gmail.com>
+On Mon, Mar 17, 2025 at 11:22:51AM +1030, Gustavo A. R. Silva wrote:
+> -Wflex-array-member-not-at-end was introduced in GCC-14, and we are
+> getting ready to enable it, globally.
+> 
+> Move the conflicting declaration to the end of the structure. Notice
+> that `struct uvc_input_header_descriptor` is a flexible structure --a
+> structure that contains a flexible-array member.
+> 
+> With this, fix three of the following warnings:
+> 
+> drivers/usb/gadget/function/uvc_configfs.h:77:57: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/usb/gadget/function/uvc_configfs.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_configfs.h b/drivers/usb/gadget/function/uvc_configfs.h
+> index 2f78cd4f396f..9391614135e9 100644
+> --- a/drivers/usb/gadget/function/uvc_configfs.h
+> +++ b/drivers/usb/gadget/function/uvc_configfs.h
+> @@ -74,10 +74,12 @@ static inline struct uvcg_format *to_uvcg_format(struct config_item *item)
+>  
+>  struct uvcg_streaming_header {
+>  	struct config_item				item;
+> -	struct uvc_input_header_descriptor		desc;
+>  	unsigned					linked;
+>  	struct list_head				formats;
+>  	unsigned					num_fmt;
+> +
+> +	/* Must be last --ends in a flexible-array member. */
+> +	struct uvc_input_header_descriptor		desc;
+>  };
+>  
+>  static inline struct uvcg_streaming_header *to_uvcg_streaming_header(struct config_item *item)
 
-[ Upstream commit 8c75f3e6a433d92084ad4e78b029ae680865420f ]
+This looks correct to me, and may be fixing some bugs -- I can see the
+allocation routine for this is already expecting the bmaControls (in
+desc) to be trailing:
 
-The variable d->name, returned by devm_kasprintf(), could be NULL.
-A pointer check is added to prevent potential NULL pointer dereference.
-This is similar to the fix in commit 3027e7b15b02
-("ice: Fix some null pointer dereference issues in ice_ptp.c").
+                /* bmaControls */
+                *size += h->num_fmt * UVCG_STREAMING_CONTROL_SIZE;
 
-This issue is found by our static analysis tool
+Reviewed-by: Kees Cook <kees@kernel.org>
 
-Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
-Link: https://lore.kernel.org/r/20250311012705.1233829-1-chenyuan0y@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index 4008e7a511889..89d7d3b24718d 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -542,6 +542,9 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
- 	d->vhub = vhub;
- 	d->index = idx;
- 	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-+	if (!d->name)
-+		return -ENOMEM;
-+
- 	d->regs = vhub->regs + 0x100 + 0x10 * idx;
- 
- 	ast_vhub_init_ep0(vhub, &d->ep0, d);
 -- 
-2.39.5
-
+Kees Cook
 
