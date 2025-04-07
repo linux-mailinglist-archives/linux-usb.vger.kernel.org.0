@@ -1,124 +1,326 @@
-Return-Path: <linux-usb+bounces-22644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 340F5A7DF6C
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B13A7DFAF
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF0D91895FD0
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:33:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 233B01895EF0
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087C43594A;
-	Mon,  7 Apr 2025 13:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TcH50iPS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613C81991C9;
+	Mon,  7 Apr 2025 13:38:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AE83594E
-	for <linux-usb@vger.kernel.org>; Mon,  7 Apr 2025 13:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E9C1D555
+	for <linux-usb@vger.kernel.org>; Mon,  7 Apr 2025 13:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744032792; cv=none; b=rJpSfkLLexRZs388x93g8ed6mry0Zp6eKkK49iM33TkclHaxLiI7nm43IMCHfzSYqPdKiUd9sCV0zMCsVBYWNy7yijDlrXye2ygPlyVwm9IidBCcVRJoCZzMDYIvX/WYox3EEVSXLbsBrY9ReVQpW4twcmb9vcI2e/j9ngM1+AY=
+	t=1744033096; cv=none; b=Nk/mZSdgF7TNp8uPIe2imjwkWBDcbsmMicD3RhakIh7ctUqEYBk28avSaMEIWps0vye8sT2uUFF1uTM4avqd0Pfa4x4uI/LzSMIpnFpXgPzd0XVfxUnZ2VyRQrsIAuj4LhLag8yTaP5fbm1OtZVoW5oRQM3KkYn5O5FIMeygL0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744032792; c=relaxed/simple;
-	bh=mILCVLSvJBZLbDv7c/jllR89Bo+tWwbGnV6kOc7SLpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fsN7pUPvzucHKKfdaGahKSVrFjP0yJgFMu57cf9LZ3utLxoBja/29A2ifbF5qnJZjiowigXi/L20qW9jtac7n4V5Ftc+79e1yV/WYQj3Udcy72wXfJzuZI4rb95s7qCyNpJi2431YJPKUdBIdTLH5PFJsqggjMjHV3kdhr4vHqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TcH50iPS; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744032791; x=1775568791;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mILCVLSvJBZLbDv7c/jllR89Bo+tWwbGnV6kOc7SLpU=;
-  b=TcH50iPSX7FOp76VflAHM+dLUcUZ9WMIQ1hgXQriD7KQ7QYqtQ0sPvPP
-   oNI0nxzeD1Bre5+4Rk6jBAwLUynzyKQLhgO3UfXdXaWv1I1CfDEAu8Oum
-   Zd/Uqd+5cSQlZ5RAMA8YVT7a6lkJ27yA7yIRKrNq2S4CxG09fcsYwLjHF
-   vhcZYV5qmIR2tDkUs/8+VRV/6CIZ549lyx7Q5h467P0l6TaJume+w4bz3
-   HUM7IbSKkAd215dg6ks7XYY4eetRp2wRvkepUoQJhO2zDaklw8xlWkmkY
-   /rRVu+m+DRw0/ozjG6tL2EEK/WUoE73itNyMAd6A7HuirWVn51mi8VM0N
-   Q==;
-X-CSE-ConnectionGUID: WEQRqADwSMa16SwrF+0iIQ==
-X-CSE-MsgGUID: 4flA7+m0TvqkXUlUaz17rQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45510603"
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="45510603"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 06:33:09 -0700
-X-CSE-ConnectionGUID: KL5o6tu0QKy09O4S7IsQRw==
-X-CSE-MsgGUID: Q9z25LaFR/aB2pfyB4m1TA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="127841226"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 07 Apr 2025 06:33:07 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Amit Sunil Dhamne <amitsd@google.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	=?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>,
-	linux-usb@vger.kernel.org,
-	Badhri Jagan Sridharan <badhri@google.com>
-Subject: [PATCH] MAINTAINERS: Assign maintainer for the port controller drivers
-Date: Mon,  7 Apr 2025 16:33:06 +0300
-Message-ID: <20250407133306.387576-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1744033096; c=relaxed/simple;
+	bh=YZ24IjoPPIZZv1j6ya2Q6y1c3Lyezek/7soV2rHdK2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3Z00yqvDYnB4rx5/gjKBZYgZ7V84pH53IeeYzZRfnZAyPUEXqC+6VsSs4M4QnSlAeiWtvbNTjLaUXmCTOwu6zyNdS8V5/b606jtDw274AneVp0uwghhZKChcHEYzEqyiu4m9A0Dkkmgmhb5hNE34g9HmtgDWWFOZwfb6uOt6eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u1mfq-00070I-WC; Mon, 07 Apr 2025 15:38:03 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u1mfp-003lrS-1W;
+	Mon, 07 Apr 2025 15:38:01 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1u1mfp-004hsE-1A;
+	Mon, 07 Apr 2025 15:38:01 +0200
+Date: Mon, 7 Apr 2025 15:38:01 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc: netdev <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH REPOST] usbnet: asix: leave the carrier control to phylink
+Message-ID: <Z_PVOWDMzmLObRM6@pengutronix.de>
+References: <m35xjgdvih.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <m35xjgdvih.fsf@t19.piap.pl>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Especially the port manager (tcpm.c) is so major driver that
-it should have somebody watching over it who really
-understands it, and the port controller interface in
-general. Assigning Badhri as the designated reviewer and
-restoring the status to Maintained from Orphan.
+Hi Krzysztof,
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Badhri Jagan Sridharan <badhri@google.com>
----
-Hi,
+On Mon, Apr 07, 2025 at 02:08:22PM +0200, Krzysztof Hałasa wrote:
+> [added Oleksij - the author of the phylink code for this driver]
+> 
+> ASIX AX88772B based USB 10/100 Ethernet adapter doesn't come
+> up ("carrier off"), despite the built-in 100BASE-FX PHY positive link
+> indication. The internal PHY is configured (using EEPROM) in fixed
+> 100 Mbps full duplex mode.
+>
+> The primary problem appears to be using carrier_netif_{on,off}() while,
+> at the same time, delegating carrier management to phylink. Use only the
+> latter and remove "manual control" in the asix driver.
 
-I'm proposing here that Badhri takes the role of the maintainer of
-the core tcpm.c and tcpci.c. I think he would be the best person for
-the job.
+Good point, this artifact should be partially removed, but not for all
+devices.  Only ax88772 are converted to PHYlink. ax88178 are not
+converted.
 
-Badhri, I hope this is okay with you.
+> I don't have any other AX88772 board here, but the problem doesn't seem
+> specific to a particular board or settings - it's probably
+> timing-dependent.
 
-thanks,
----
- MAINTAINERS | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+The AX88772 portion of the driver, is not forwarding the interrupt to
+the PHY driver. It means, PHY is in polling mode. As long as PHY
+provides proper information, it will work.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index de65f37966ef..ad28ecc7cc63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25127,9 +25127,13 @@ S:	Maintained
- F:	drivers/usb/typec/mux/pi3usb30532.c
- 
- USB TYPEC PORT CONTROLLER DRIVERS
-+M:	Badhri Jagan Sridharan <badhri@google.com>
- L:	linux-usb@vger.kernel.org
--S:	Orphan
--F:	drivers/usb/typec/tcpm/
-+S:	Maintained
-+F:	drivers/usb/typec/tcpm/tcpci.c
-+F:	drivers/usb/typec/tcpm/tcpm.c
-+F:	include/linux/usb/tcpci.h
-+F:	include/linux/usb/tcpm.h
- 
- USB TYPEC TUSB1046 MUX DRIVER
- M:	Romain Gantois <romain.gantois@bootlin.com>
+On other hand, you seems to use AX88772B in 100BASE-FX mode. I'm sure,
+current PHY driver for this device do not know anything about FX mode:
+drivers/net/phy/ax88796b.c
+
+Which 100BASE-FX PHY  capable device do you use? Is it possible to buy
+it some where?
+
+> Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
+> 
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 74162190bccc..8531b804021a 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -224,7 +224,6 @@ int asix_write_rx_ctl(struct usbnet *dev, u16 mode, int in_pm);
+>  
+>  u16 asix_read_medium_status(struct usbnet *dev, int in_pm);
+>  int asix_write_medium_mode(struct usbnet *dev, u16 mode, int in_pm);
+> -void asix_adjust_link(struct net_device *netdev);
+>  
+>  int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm);
+>  
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 72ffc89b477a..7fd763917ae2 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -414,28 +414,6 @@ int asix_write_medium_mode(struct usbnet *dev, u16 mode, int in_pm)
+>  	return ret;
+>  }
+>  
+> -/* set MAC link settings according to information from phylib */
+> -void asix_adjust_link(struct net_device *netdev)
+> -{
+> -	struct phy_device *phydev = netdev->phydev;
+> -	struct usbnet *dev = netdev_priv(netdev);
+> -	u16 mode = 0;
+> -
+> -	if (phydev->link) {
+> -		mode = AX88772_MEDIUM_DEFAULT;
+> -
+> -		if (phydev->duplex == DUPLEX_HALF)
+> -			mode &= ~AX_MEDIUM_FD;
+> -
+> -		if (phydev->speed != SPEED_100)
+> -			mode &= ~AX_MEDIUM_PS;
+> -	}
+> -
+> -	asix_write_medium_mode(dev, mode, 0);
+> -	phy_print_status(phydev);
+> -	usbnet_link_change(dev, phydev->link, 0);
+> -}
+> -
+>  int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm)
+>  {
+>  	int ret;
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 57d6e5abc30e..af91fc947f40 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -40,22 +40,6 @@ struct ax88172_int_data {
+>  	__le16 res3;
+>  } __packed;
+>  
+> -static void asix_status(struct usbnet *dev, struct urb *urb)
+> -{
+> -	struct ax88172_int_data *event;
+> -	int link;
+> -
+> -	if (urb->actual_length < 8)
+> -		return;
+> -
+> -	event = urb->transfer_buffer;
+> -	link = event->link & 0x01;
+> -	if (netif_carrier_ok(dev->net) != link) {
+> -		usbnet_link_change(dev, link, 1);
+> -		netdev_dbg(dev->net, "Link Status is: %d\n", link);
+> -	}
+> -}
+> -
+>  static void asix_set_netdev_dev_addr(struct usbnet *dev, u8 *addr)
+>  {
+>  	if (is_valid_ether_addr(addr)) {
+> @@ -752,7 +736,6 @@ static void ax88772_mac_link_down(struct phylink_config *config,
+>  	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
+>  
+>  	asix_write_medium_mode(dev, 0, 0);
+> -	usbnet_link_change(dev, false, false);
+>  }
+>  
+>  static void ax88772_mac_link_up(struct phylink_config *config,
+> @@ -783,7 +766,6 @@ static void ax88772_mac_link_up(struct phylink_config *config,
+>  		m |= AX_MEDIUM_RFC;
+>  
+>  	asix_write_medium_mode(dev, m, 0);
+> -	usbnet_link_change(dev, true, false);
+>  }
+>  
+>  static const struct phylink_mac_ops ax88772_phylink_mac_ops = {
+> @@ -1309,40 +1291,36 @@ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
+>  static const struct driver_info ax8817x_info = {
+>  	.description = "ASIX AX8817x USB 2.0 Ethernet",
+>  	.bind = ax88172_bind,
+> -	.status = asix_status,
+>  	.link_reset = ax88172_link_reset,
+>  	.reset = ax88172_link_reset,
+> -	.flags =  FLAG_ETHER | FLAG_LINK_INTR,
+> +	.flags =  FLAG_ETHER,
+>  	.data = 0x00130103,
+>  };
+>  
+>  static const struct driver_info dlink_dub_e100_info = {
+>  	.description = "DLink DUB-E100 USB Ethernet",
+>  	.bind = ax88172_bind,
+> -	.status = asix_status,
+>  	.link_reset = ax88172_link_reset,
+>  	.reset = ax88172_link_reset,
+> -	.flags =  FLAG_ETHER | FLAG_LINK_INTR,
+> +	.flags =  FLAG_ETHER,
+>  	.data = 0x009f9d9f,
+>  };
+>  
+>  static const struct driver_info netgear_fa120_info = {
+>  	.description = "Netgear FA-120 USB Ethernet",
+>  	.bind = ax88172_bind,
+> -	.status = asix_status,
+>  	.link_reset = ax88172_link_reset,
+>  	.reset = ax88172_link_reset,
+> -	.flags =  FLAG_ETHER | FLAG_LINK_INTR,
+> +	.flags =  FLAG_ETHER,
+>  	.data = 0x00130103,
+>  };
+>  
+>  static const struct driver_info hawking_uf200_info = {
+>  	.description = "Hawking UF200 USB Ethernet",
+>  	.bind = ax88172_bind,
+> -	.status = asix_status,
+>  	.link_reset = ax88172_link_reset,
+>  	.reset = ax88172_link_reset,
+> -	.flags =  FLAG_ETHER | FLAG_LINK_INTR,
+> +	.flags =  FLAG_ETHER,
+>  	.data = 0x001f1d1f,
+>  };
+>  
+> @@ -1350,10 +1328,9 @@ static const struct driver_info ax88772_info = {
+>  	.description = "ASIX AX88772 USB 2.0 Ethernet",
+>  	.bind = ax88772_bind,
+>  	.unbind = ax88772_unbind,
+> -	.status = asix_status,
+>  	.reset = ax88772_reset,
+>  	.stop = ax88772_stop,
+> -	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR | FLAG_MULTI_PACKET,
+> +	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
+>  	.rx_fixup = asix_rx_fixup_common,
+>  	.tx_fixup = asix_tx_fixup,
+>  };
+> @@ -1362,11 +1339,9 @@ static const struct driver_info ax88772b_info = {
+>  	.description = "ASIX AX88772B USB 2.0 Ethernet",
+>  	.bind = ax88772_bind,
+>  	.unbind = ax88772_unbind,
+> -	.status = asix_status,
+>  	.reset = ax88772_reset,
+>  	.stop = ax88772_stop,
+> -	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
+> -	         FLAG_MULTI_PACKET,
+> +	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
+>  	.rx_fixup = asix_rx_fixup_common,
+>  	.tx_fixup = asix_tx_fixup,
+>  	.data = FLAG_EEPROM_MAC,
+> @@ -1376,11 +1351,9 @@ static const struct driver_info lxausb_t1l_info = {
+>  	.description = "Linux Automation GmbH USB 10Base-T1L",
+>  	.bind = ax88772_bind,
+>  	.unbind = ax88772_unbind,
+> -	.status = asix_status,
+>  	.reset = ax88772_reset,
+>  	.stop = ax88772_stop,
+> -	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
+> -		 FLAG_MULTI_PACKET,
+> +	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
+>  	.rx_fixup = asix_rx_fixup_common,
+>  	.tx_fixup = asix_tx_fixup,
+>  	.data = FLAG_EEPROM_MAC,
+> @@ -1390,11 +1363,9 @@ static const struct driver_info ax88178_info = {
+>  	.description = "ASIX AX88178 USB 2.0 Ethernet",
+>  	.bind = ax88178_bind,
+>  	.unbind = ax88178_unbind,
+> -	.status = asix_status,
+>  	.link_reset = ax88178_link_reset,
+>  	.reset = ax88178_reset,
+> -	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
+> -		 FLAG_MULTI_PACKET,
+> +	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
+>  	.rx_fixup = asix_rx_fixup_common,
+>  	.tx_fixup = asix_tx_fixup,
+>  };
+> @@ -1412,10 +1383,8 @@ static const struct driver_info hg20f9_info = {
+>  	.description = "HG20F9 USB 2.0 Ethernet",
+>  	.bind = ax88772_bind,
+>  	.unbind = ax88772_unbind,
+> -	.status = asix_status,
+>  	.reset = ax88772_reset,
+> -	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
+> -	         FLAG_MULTI_PACKET,
+> +	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
+>  	.rx_fixup = asix_rx_fixup_common,
+>  	.tx_fixup = asix_tx_fixup,
+>  	.data = FLAG_EEPROM_MAC,
+> 
+> -- 
+> Krzysztof "Chris" Hałasa
+> 
+> Sieć Badawcza Łukasiewicz
+> Przemysłowy Instytut Automatyki i Pomiarów PIAP
+> Al. Jerozolimskie 202, 02-486 Warszawa
+> 
+> 
+
 -- 
-2.47.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
