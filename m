@@ -1,58 +1,58 @@
-Return-Path: <linux-usb+bounces-22659-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22660-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94FBA7E9BE
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:18:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DC59A7E9AA
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D28C2188BB9D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:15:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF7457A39CC
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217DD25522A;
-	Mon,  7 Apr 2025 18:11:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BDE2561B4;
+	Mon,  7 Apr 2025 18:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2qcbt6O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OronrtRV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954F32550D7;
-	Mon,  7 Apr 2025 18:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99822561A6;
+	Mon,  7 Apr 2025 18:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049486; cv=none; b=s0HNaXLFDmFlc1BE3Dt4wJ6QAqShE7wWpCTAB/v4+PTOMD+24MM7NJolBoovz3r+LPagfU2o8Ss2c8IxIv6+ezy/5DmX58cdlaFjwzN2BJ5HtShXrSwRe0Y6yRH42jJqK7pLam6uATJn8qLXnVF1aU5bGThtZX2OhOib+BlITBo=
+	t=1744049491; cv=none; b=OA+1Q7+oRyXvN9+eCyEoo1ZihSUXSqT+q9Jz8Eg8mZU64hDQ8NgJ4bsxyOVyL3mf3PX3ZAchNALSPX/n/fBcOeMiRZgK6x2LOwLP17WTeMH8AEBxW1OxAtkK/J6hyQJBr9TWoe/9G7/o0mhwLxsRe+zABMYcf7h9QLEuB3CEo+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049486; c=relaxed/simple;
-	bh=P9IARbyBPJ3Osu5SDwsFJok3oD6DIO0uGCgbsgkHuDE=;
+	s=arc-20240116; t=1744049491; c=relaxed/simple;
+	bh=vImFDlR8xdmIIxfCoScDB3r2PkO8QPmRlF6vkGAIrvE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YHbEs4Nw4TSKoLEB6im+rgRoYAtkbru2FMRGfZH4orswJ780ejstPobBYzAb849KcYKd9J9l3UuTtAKk3AmBrsuYvbXwTcB+FzwGmUMeIorMMp32x4sZaF7cdH10yF4891cMY/Eldijyyy8ZOwAkZ0qqdkDhNEQRrHRkgOfTLUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2qcbt6O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E5BC4CEDD;
-	Mon,  7 Apr 2025 18:11:25 +0000 (UTC)
+	 MIME-Version; b=YTxJhBHkHpSjXmgG/9cNJfA/4U8PsUX3Zni6I1vB5GEbEwByKYEdPlsxefyFL/E/gS2mmWGApXZuWetey4Kj3DlsbsmXC+Hkqdwu1JoY9YT2w9IxB8vsXnqMPUKzcRPT0puRcKnWqJdE+/ud/aBAg2KCEJTIKy/e+RopNbv1zAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OronrtRV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2122AC4CEEE;
+	Mon,  7 Apr 2025 18:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049486;
-	bh=P9IARbyBPJ3Osu5SDwsFJok3oD6DIO0uGCgbsgkHuDE=;
+	s=k20201202; t=1744049491;
+	bh=vImFDlR8xdmIIxfCoScDB3r2PkO8QPmRlF6vkGAIrvE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J2qcbt6OM8KHst8Peah9DSDZjgyPonmy8Xh0RwEyXmUJeaD/CLFM3OCrdSWxj+zvk
-	 wArtPdxUiaCK6P8aLtUOCzG/QpnP7LfjXWWDLDjFZcw+k3QaHb+oxgXqwuh3wM/OMn
-	 Vh5rtbM2d4b0rvTl3BRLSiMTisFbAIArFamETeG14P/1JmyqGIN9OoSuu4Av72fYXl
-	 DnE9kfrhitcbo7TxXylwGgW4R5cNXQp0hRlP9wk0Ve3DRrU5lQX7o0HThmbduB775A
-	 DlBkq3BMO8VR7vz8zUhAInd3qYmlMwtqY5YRRiK64osa9ZLQhZjKBLZI3+/3o9DCBf
-	 AJPGdY80swbnA==
+	b=OronrtRVKCdFo3tIexDVE2R08UFrRnxTIvi2qKR952r3cv9PQD8oNNzJS2IB/KWkN
+	 lDzfrmLgoOM9A9n64IHmWgRwXNR/6j96TLJLeu9IUd7nZLgYm5e2Zya0iEeMeIiKmu
+	 ci+A23WgM4SRKu1xYEj9cOLKsdOyCrXn77zcXYvGsilw2ueRYciQiWSDSb0HjsmZ0c
+	 eD2lT1CUaPA7mMp/Z4lhjSmibqsKUtZgWljwwvSSE4/veStSPLVb29CYB978DGOK5N
+	 8jRQQYHlDB69GfyqV+eGdBEfHqA7yhM74cuhVZCAaccXJrJ7zBPM3Esva5cIEfh4mx
+	 QS+iFA+DduduA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ferry Toth <fntoth@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+Cc: Michal Pecio <michal.pecio@gmail.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 10/31] usb: dwc3: gadget: Avoid using reserved endpoints on Intel Merrifield
-Date: Mon,  7 Apr 2025 14:10:26 -0400
-Message-Id: <20250407181054.3177479-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 13/31] usb: xhci: Complete 'error mid TD' transfers when handling Missed Service
+Date: Mon,  7 Apr 2025 14:10:29 -0400
+Message-Id: <20250407181054.3177479-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250407181054.3177479-1-sashal@kernel.org>
 References: <20250407181054.3177479-1-sashal@kernel.org>
@@ -62,69 +62,55 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14.1
 Content-Transfer-Encoding: 8bit
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Michal Pecio <michal.pecio@gmail.com>
 
-[ Upstream commit 461f24bff86808ee5fbfe74751a825f8a7ab24e0 ]
+[ Upstream commit bfa8459942822bdcc86f0e87f237c0723ae64948 ]
 
-Intel Merrifield SoC uses these endpoints for tracing and they cannot
-be re-allocated if being used because the side band flow control signals
-are hard wired to certain endpoints:
+Missed Service Error after an error mid TD means that the failed TD has
+already been passed by the xHC without acknowledgment of the final TRB,
+a known hardware bug. So don't wait any more and give back the TD.
 
-• 1 High BW Bulk IN (IN#1) (RTIT)
-• 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
+Reproduced on NEC uPD720200 under conditions of ludicrously bad USB link
+quality, confirmed to behave as expected using dynamic debug.
 
-In device mode, since RTIT (EP#1) and EXI/RunControl (EP#8) uses
-External Buffer Control (EBC) mode, these endpoints are to be mapped to
-EBC mode (to be done by EXI target driver). Additionally TRB for RTIT
-and EXI are maintained in STM (System Trace Module) unit and the EXI
-target driver will as well configure the TRB location for EP #1 IN
-and EP#8 (IN and OUT). Since STM/PTI and EXI hardware blocks manage
-these endpoints and interface to OTG3 controller through EBC interface,
-there is no need to enable any events (such as XferComplete etc)
-for these end points.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Ferry Toth <fntoth@gmail.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/20250212193116.2487289-5-andriy.shevchenko@linux.intel.com
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20250306144954.3507700-5-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/host/xhci-ring.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 052852f801467..54a4ee2b90b7f 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -148,11 +148,21 @@ static const struct property_entry dwc3_pci_intel_byt_properties[] = {
- 	{}
- };
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 965bffce301e2..af6c4c4cbe1cc 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2789,7 +2789,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		xhci_dbg(xhci,
+ 			 "Miss service interval error for slot %u ep %u, set skip flag\n",
+ 			 slot_id, ep_index);
+-		return 0;
++		break;
+ 	case COMP_NO_PING_RESPONSE_ERROR:
+ 		ep->skip = true;
+ 		xhci_dbg(xhci,
+@@ -2837,6 +2837,10 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		xhci_dequeue_td(xhci, td, ep_ring, td->status);
+ 	}
  
-+/*
-+ * Intel Merrifield SoC uses these endpoints for tracing and they cannot
-+ * be re-allocated if being used because the side band flow control signals
-+ * are hard wired to certain endpoints:
-+ * - 1 High BW Bulk IN (IN#1) (RTIT)
-+ * - 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
-+ */
-+static const u8 dwc3_pci_mrfld_reserved_endpoints[] = { 3, 16, 17 };
++	/* Missed TDs will be skipped on the next event */
++	if (trb_comp_code == COMP_MISSED_SERVICE_ERROR)
++		return 0;
 +
- static const struct property_entry dwc3_pci_mrfld_properties[] = {
- 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
- 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
-+	PROPERTY_ENTRY_U8_ARRAY("snps,reserved-endpoints", dwc3_pci_mrfld_reserved_endpoints),
- 	PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable"),
- 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
- 	{}
+ 	if (list_empty(&ep_ring->td_list)) {
+ 		/*
+ 		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
 -- 
 2.39.5
 
