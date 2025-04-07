@@ -1,182 +1,149 @@
-Return-Path: <linux-usb+bounces-22618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96007A7D3AE
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 07:55:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44981A7D559
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 09:18:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29B003AD285
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 05:55:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2664B3B9E77
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 07:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417A6224892;
-	Mon,  7 Apr 2025 05:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08936227E97;
+	Mon,  7 Apr 2025 07:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AloOtAi8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCqZkpXd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4111224235
-	for <linux-usb@vger.kernel.org>; Mon,  7 Apr 2025 05:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64931225412;
+	Mon,  7 Apr 2025 07:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744005325; cv=none; b=pvoVBwL43EHIVxXpY7gI2dI15cO082ooLRQ3aSPpeZbTAug2XwKZwNNp1Ywzd0siVRjGq05V+gqEnsqFJQIg4wd1hepOa6ZNdWnJkCmyo8qsI5qOAIpw28S7hQ8ytGpJryK3mkRXn3HVZRz1y3D+IDKAPUjZw6fcd2sz653FqZE=
+	t=1744010063; cv=none; b=tQKtV3R8N1UOeWzFPVNW5/M4mWtaFWxJPEbVVV/h7wZVl+qUFuhRvVmU+awBOn6Vo5989xa0S7cXltvTwgOuLydVYrPFFRbaOE6fDh6hk3sx353Gd6LFWaMjzvjSGfrJJwK5reDUwoglDNFBM8nl7JDT0Gh04PqbeN/R+eSKU0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744005325; c=relaxed/simple;
-	bh=tCJr38lWP9ledOXaM57GB7VWrYoHSmyMq20cHWqbEEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TLooKXqPezuY5Nom+67477O6ygZiR0OYwJAvsG+vMPcMo9iWLg3ShejHGFtRghJzdndtzCLwEzL6R0Ec2nEqUAhAnTsQm/D3a1UObopNDLcB1WLaiUEfeYnMsafyQz8L4HcsftH7MatsYC/OcHmRcySNfrsjIacVHi7GB5yfrXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AloOtAi8; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1744010063; c=relaxed/simple;
+	bh=IoJ/QPbazRVpsAOJM/Crsupeww6a0Sl51rezjRCdCOc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KAv0jg4PIaRuxFLRLPA83DwSl5VBpMp1WgwFj6Jd5FokM9t2sfKZl97x5sI0CflXvS7KPVHAmhZgXozRuHWEE9l39tJjD/neUgZ7d6FK4lbZt+GKczj8VGJnTZuGvAwwzGXjG1/pNJYZOWBbGTbBbU/JmiqOpDmMQsTJ0AtzwBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCqZkpXd; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744005324; x=1775541324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tCJr38lWP9ledOXaM57GB7VWrYoHSmyMq20cHWqbEEg=;
-  b=AloOtAi8gWEfgAUfu/Ew8dZy1xcEE1L+nE03ufBmPBdPg8AvsPOUy6x7
-   ZwfQNjososp8y3LXgrKZvfh8X7P+2trgrbb8Hv5IJq/RCtX/vPBHGRjHX
-   PAtRj1dN975P7j3g3PIo6NGMJozjK1vXYRu/++vBB63GFxcM4MSkKaFXy
-   tJSKaCTHfJf/7cWLtqWRNRRDdtzztGWsZUpb/xxsk1jNNvjij2MQG56rV
-   6gVFmQCrrnd2mr5jHKmQnH+fUpN5t7I0YkGrBkcL/ZqubelWwFFXdH5AO
-   kY0J5CtPHWYk+K+Zdm0GUyQNFHwznDlbi1QMsdl0hinW/XFeDNCsXRaLs
-   w==;
-X-CSE-ConnectionGUID: UY/RH0I+QhCPg2uS0Pp6EQ==
-X-CSE-MsgGUID: vOQuNSZ8RD63a60YRubskg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="45391567"
+  t=1744010061; x=1775546061;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IoJ/QPbazRVpsAOJM/Crsupeww6a0Sl51rezjRCdCOc=;
+  b=hCqZkpXdP84RHfJ+zAusxbHvwDMyos8PWd+nXK1RuW55JFDYJPJlSj2S
+   CGCi1MpzaTRf69wqvfBxfZ6WZNgVnhSzUF62JODbWej9Uk0IdvYd6mBzS
+   f3CXKt0Py6o0OlIOXS64RnRkAYTJWtQIeOJQjiu2vUdxzR4zyJQeMrZ53
+   oNlo0R2E+fGFcXnkEpydWkEJiTG9Zv7sHwiPs9wGov+AjlPbYvbghHJfV
+   6Y6EAnRtiIptMTbZz/83X39yb4YJu9TLtVkjzE32u5ul3pokSD4KS0+FL
+   3RLAFk3tvF9X7Jn1QSnD2atbm8EqyJv5cQg2yi9eVOBFIPNtY7/BwKYz8
+   A==;
+X-CSE-ConnectionGUID: yDf694IxSFCK35GAaMZw/A==
+X-CSE-MsgGUID: sagtfNFgRyW0Bap/q8uyjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="45269356"
 X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="45391567"
+   d="scan'208";a="45269356"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2025 22:55:23 -0700
-X-CSE-ConnectionGUID: cdfnfPOZSHKrgG2BpaPCTw==
-X-CSE-MsgGUID: 5sbFIkExQ3+JXgTxTcqX2g==
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 00:14:20 -0700
+X-CSE-ConnectionGUID: xM0Jr1GIT5ebmpv/dAo3mQ==
+X-CSE-MsgGUID: o+egIjbESJu9tvxsX3hKKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="128373732"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 06 Apr 2025 22:55:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 3FE63338; Mon, 07 Apr 2025 08:55:20 +0300 (EEST)
-Date: Mon, 7 Apr 2025 08:55:20 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Raul Rangel <rrangel@chromium.org>
-Cc: Mario Limonciello <superm1@kernel.org>,
-	Opal Voravootivat <puthik@google.com>,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	"Gong, Richard" <Richard.Gong@amd.com>,
-	Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: Re: Wake on connect / wake on disconnect
-Message-ID: <20250407055520.GP3152277@black.fi.intel.com>
-References: <ce2048af-1044-4424-bca2-3799baefb9c2@amd.com>
- <20250404060203.GM3152277@black.fi.intel.com>
- <3b283147-cd32-410e-a163-9e603fd40bc1@gmail.com>
- <20250404115346.GN3152277@black.fi.intel.com>
- <98539971-3b43-4d64-a105-6790198c46d1@amd.com>
- <20250404161008.GO3152277@black.fi.intel.com>
- <f9806a24-875f-4c44-9694-96b62a6aefd9@gmail.com>
- <5f9004aa-9b51-474d-9cb0-c8c4e23b19f4@kernel.org>
- <CAHQZ30C=7d1DkHYTixrgmArCwKHzhxBn602P=YY5rP6OcAXuVw@mail.gmail.com>
+   d="scan'208";a="128394866"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa007.jf.intel.com with ESMTP; 07 Apr 2025 00:14:18 -0700
+Message-ID: <dd277ca2-6225-43f6-b833-fe41c2d7f686@linux.intel.com>
+Date: Mon, 7 Apr 2025 10:15:29 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: xhci: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep
+ state.
+To: Alan Stern <stern@rowland.harvard.edu>,
+ =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
+ <b356f743-44b5-4f48-a289-fae0afe106ff@linux.intel.com>
+ <84b400f8-2943-44e0-8803-f3aac3b670af@molgen.mpg.de>
+ <20250406002311.2a76fc64@foxbook>
+ <ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHQZ30C=7d1DkHYTixrgmArCwKHzhxBn602P=YY5rP6OcAXuVw@mail.gmail.com>
 
-On Fri, Apr 04, 2025 at 10:55:35AM -0600, Raul Rangel wrote:
-> On Fri, Apr 4, 2025 at 10:20 AM Mario Limonciello <superm1@kernel.org> wrote:
-> >
-> >
-> >
-> > On 4/4/25 11:16, Mario Limonciello wrote:
-> > >
-> > >
-> > > On 4/4/25 11:10, Mika Westerberg wrote:
-> > >> On Fri, Apr 04, 2025 at 10:03:18AM -0500, Mario Limonciello wrote:
-> > >>> On 4/4/2025 6:53 AM, Mika Westerberg wrote:
-> > >>>> On Fri, Apr 04, 2025 at 06:47:31AM -0500, Mario Limonciello wrote:
-> > >>>>> On 4/4/25 01:02, Mika Westerberg wrote:
-> > >>>>>> Hi Mario,
-> > >>>>>>
-> > >>>>>> On Thu, Apr 03, 2025 at 01:12:07PM -0500, Mario Limonciello wrote:
-> > >>>>>>> Mika,
-> > >>>>>>>
-> > >>>>>>> Recently there are some conversations about wake-up from connect/
-> > >>>>>>> disconnect
-> > >>>>>>> happening and I wanted to get some background from you about the
-> > >>>>>>> current
-> > >>>>>>> policy set in tb_switch_suspend().
-> > >>>>>>>
-> > >>>>>>> Wake on connect and disconnect are only used for runtime, not for
-> > >>>>>>> system
-> > >>>>>>> suspend.  Would you be open to adding wake on connect as well for
-> > >>>>>>> system
-> > >>>>>>> suspend?  This should help enable use cases like plugging in a
-> > >>>>>>> closed laptop
-> > >>>>>>> to a dock (which works on Windows).
-> > >>>>>>
-> > >>>>>> Don't we already have a similar for all usb4_portX devices? That
-> > >>>>>> does not
-> > >>>>>> work for you?
-> > >>>>>>
-> > >>>>>
-> > >>>>> I think that will functionally work - but I'll double check.
-> > >>>>>
-> > >>>>> However usb_portX power/wakeup defaults are 'disabled' so this
-> > >>>>> would need a
-> > >>>>> udev rule.  Could we set the kernel default for those to 'enabled'
-> > >>>>> instead?
-> > >>>>
-> > >>>> No because that would trigger wakeup each time you unplug/plug and
-> > >>>> this is
-> > >>>> certainly not good if you close the lid, unplug from dock and throw the
-> > >>>> laptop to your backpack. Chrome uses this with "dark resume" so if
-> > >>>> this is
-> > >>>> supported by the userspace then it can also enable these.
-> > >>>
-> > >>> Ahhh.  I was thinking specifically with wake on connect that's not a
-> > >>> problem, but the sysfs knob for the port changes both wake on connect
-> > >>> and
-> > >>> wake on disconnect.
-> > >>>
-> > >>> Is there actually a use case for chrome with wake on disconnect?  IE
-> > >>> if we
-> > >>> didn't turn on wake on disconnect but defaulted to wake on connect would
-> > >>> things be OK?  Or made the sysfs knob control only wake on disconnect?
-> > >>
-> > >> Good guestion - I don't know ;-) The Chrome folks wanted this so I
-> > >> suppose
-> > >> their usecase is specifically that dark resume and I think that's when
-> > >> you
-> > >> unplug a device so disconnect. Not so sure about wake on connect.
-> > >
-> > > I found the original patch from Rajat [1].
-> > >
-> > > Rajat, any comments?  Could you loop in the right people from the Chrome
-> > > side to ask?    I think my "preference" would be that we make "wake on
-> > > connect" always enabled and then let the sysfs knob control "wake on
-> > > disconnect".
-> > >
-> > > [1] https://lore.kernel.org/linux-usb/20221101115042.248187-1-
-> > > rajat.khandelwal@intel.com/
-> >
-> > Oh Rajat's email bounced.  The only person I know that I've worked on
-> > wakeup related stuff is Raul.  I'll add him.
-> >
-> > Mika, Raul,
-> >
-> > Could you pull in current Chrome people from Intel and Google that could
-> > comment here?
+On 6.4.2025 5.40, Alan Stern wrote:
+> On Sun, Apr 06, 2025 at 12:23:11AM +0200, Michał Pecio wrote:
+>> Looks like some URB stalled and usb_storage reset the device without
+>> usb_clear_halt(). Then the core didn't usb_hcd_reset_endpoint() either.
+>> And apparently EP_STALLED is still set in xhci_hcd after all that time.
+>>
+>> Then usb_storage submits one URB which never executes because the EP
+>> is in Running-Idle state and the doorbell is inhibited by EP_STALLED.
+>> 30s later it times out, unlinks the URB and resets again. Set TR Deq
+>> fails because the endpoint is Running.
 > 
-> + Opal who should be able to answer the question regarding wake on
-> connect/disconnect.
+>> Not sure if it's a USB core bug or something that xHCI should take
+>> care of on its own. For now, reverting those two "stall" patches ought
+>> to clean up the noise.
+> 
+> The core believes that resetting a device should erase the endpoint
+> information in the HCD.  There is a callback in hub_port_reset() to that
+> effect:
+> 
+> 		if (hcd->driver->reset_device)
+> 			hcd->driver->reset_device(hcd, udev);
+> 
+> So after this the EP should not be in the Running-Idle state; in fact it
+> should not exist at all (unless it is ep0, but in this case I think it
+> isn't).
+> 
 
-Added Utkarsh from Intel side.
+> Is the implementation of the reset_device callback in xhci-hcd missing
+> something?
+> 
+> Alan Stern
+
+Thanks, I believe this is at least part of the issue here, thanks for the tip.
+
+We don't clear the virt_dev->eps[ep_index].ep_state flags after device reset.
+
+And the two new patches Michal pointed out rely even more of ep_state flags than
+before, causing a regression.
+
+0c74d232578b xhci: Avoid queuing redundant Stop Endpoint command for stalled endpoint
+860f5d0d3594 xhci: Prevent early endpoint restart when handling STALL errors.
+
+Does this oneliner help?
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 0452b8d65832..044c70c17746 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3930,6 +3930,7 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
+					&virt_dev->eps[i],
+					virt_dev->tt_info);
+		xhci_clear_endpoint_bw_info(&virt_dev->eps[i].bw_info);
++		ep->ep_state = 0;
+	}
+	/* If necessary, update the number of active TTs on this root port */
+	xhci_update_tt_active_eps(xhci, virt_dev, old_active_eps);
+
+Thanks
+Mathias
+
 
