@@ -1,57 +1,61 @@
-Return-Path: <linux-usb+bounces-22677-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22678-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08030A7EA78
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:34:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF8E5A7EA6A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 572DF3BE434
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:27:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA07A1759DA
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863C025EFBF;
-	Mon,  7 Apr 2025 18:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010FA25F980;
+	Mon,  7 Apr 2025 18:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3H1Aoor"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEx+GSpl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A082222DA;
-	Mon,  7 Apr 2025 18:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7720725F96A;
+	Mon,  7 Apr 2025 18:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049619; cv=none; b=Mhsd14jUkHbAi3+m04GLj0cHonKspFh4+QFsXHKuOpqKQ6lypeybseRURwlv+nVwx9L4M9g0XixnDd/LE1uSyIZojtxNUFnA1LsWx4eUVT74ewIhgpwuJNwgV5/C9AXn7qOrn0G1/GarAoPwqVQmKJtKpjpE4mdHNwDllDnn6vw=
+	t=1744049622; cv=none; b=a44glkutpTYPUPCJxa/AHUc8tg6h/BVKVMXV9Crwl+wUstv5Jit8LRR3XVfs7eDdD8x95mOVZUAJuDKKVAc+YNla+djoxopCVyQOlY30IiQ4aN7rhdf23LVSbQVgqGGtGj+djJLu3DgyPppb24JpC+UkIDjTpQTYMXAIWEb5rzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049619; c=relaxed/simple;
-	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WNR0dtIfokimMc7HaS8EhHxzlNFHOKyEAjOdMNtaNMRSdWdUW2r8kKUXvGpmKyOcRDhsNzhDbYEjQCVgyFlYa0RNnfNeI2V2Z0R1krkbTdga1SCw8LVz2dealvwt3YyXxDjWV4ZdIMfqcmVlNBjo30JgU6BYZtsMiHO/ExMqoG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3H1Aoor; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A489DC4CEDD;
-	Mon,  7 Apr 2025 18:13:37 +0000 (UTC)
+	s=arc-20240116; t=1744049622; c=relaxed/simple;
+	bh=nYfZroOJUNMA9Aie1qGoItkV5Q6UiXEAtmZRQvapd1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=uAEdc12WrrHPmvy6z3FQaQzt0NalUb2geE9JwcdD+mF5kqp1DrevXNO2OJEXmIoYEBF6LiXIrGXEVBoPsHd27QoOCn0SegTt5g6ule2PH2fizlp8eXEClN8tTu5zeDGdHObBz+ijfH5SnYMzVEeYpO4MHDmuY+peF03WnGKsLPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEx+GSpl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77413C4CEDD;
+	Mon,  7 Apr 2025 18:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049618;
-	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=U3H1AoorFUG17Lu1XDG59/xNQ9N/aX1sEq+lY3QkVOkWIM3Vm5eMLQECHxNeJFh36
-	 qnJWaFV9lT/Y9vWyiw1D2VveVtxs9zw9M6N9XX2U3SnCFjNEs9CTJfE4rulXIMUOrd
-	 QPrQy8JfeQA7JYzLpgKYCdcd8VbmRrpgInD3hJ44yGANOeFqUP4eFueiTI4lIrIy34
-	 OSbl1v/8YOA59aBVdSy+u5FssxCMWcGJ2CgWs/cs5ykFl9dyQDLOFPJdlzrOOVodHj
-	 1T6XGhZA7iWHQ+nm0nA0OhAzUdZK8kTtLcXYZJB5kkQydlek0WFlQ1LnlejqbCE15Y
-	 /r0tkcShHJplg==
+	s=k20201202; t=1744049622;
+	bh=nYfZroOJUNMA9Aie1qGoItkV5Q6UiXEAtmZRQvapd1U=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FEx+GSpl+cnjUEf5E2pTT3jbGDoVAmWx3ZdFgSao8gSKX6JXR4/w5vhcCtArD3u6a
+	 8iJEhx3gi7m+7ZkIeccwOqC1ug9GmwfWF8muotDcbkPBlCefFHHSGtmwhoQM8dOvbQ
+	 a62y99OLdA+4760yz7SB25NTruFuvGzmbly+pUEw8sI494+LoQOPdNx3HeMRVzubIP
+	 pmHBGvD7iGMjotO5lzB/CpjPElYLohF11YzsJNZnZJnGhMF9CstfbaTaXrOgaxWNjA
+	 XdpzcIlxOJpbw0ZyfVOeYHsRMmt4bIoQ4OhTNfD/7/ltCZtvUZS4DC0GN7K62oz04G
+	 tbXLheQv00KFw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Alexander Stein <alexander.stein@mailbox.org>,
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ferry Toth <fntoth@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mark.tomlinson@alliedtelesis.co.nz,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 01/22] usb: host: max3421-hcd: Add missing spi_device_id table
-Date: Mon,  7 Apr 2025 14:13:11 -0400
-Message-Id: <20250407181333.3182622-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 04/22] usb: dwc3: gadget: Refactor loop to avoid NULL endpoints
+Date: Mon,  7 Apr 2025 14:13:14 -0400
+Message-Id: <20250407181333.3182622-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250407181333.3182622-1-sashal@kernel.org>
+References: <20250407181333.3182622-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,49 +67,87 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.22
 Content-Transfer-Encoding: 8bit
 
-From: Alexander Stein <alexander.stein@mailbox.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 41d5e3806cf589f658f92c75195095df0b66f66a ]
+[ Upstream commit eafba0205426091354f050381c32ad1567c35844 ]
 
-"maxim,max3421" DT compatible is missing its SPI device ID entry, not
-allowing module autoloading and leading to the following message:
- "SPI driver max3421-hcd has no spi_device_id for maxim,max3421"
+Prepare the gadget driver to handle the reserved endpoints that will be
+not allocated at the initialisation time.
 
-Fix this by adding the spi_device_id table.
+While at it, add a warning where the NULL endpoint should never happen.
 
-Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
-Link: https://lore.kernel.org/r/20250128195114.56321-1-alexander.stein@mailbox.org
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Ferry Toth <fntoth@gmail.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/20250212193116.2487289-3-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/max3421-hcd.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-index 0881fdd1823e0..dcf31a592f5d1 100644
---- a/drivers/usb/host/max3421-hcd.c
-+++ b/drivers/usb/host/max3421-hcd.c
-@@ -1946,6 +1946,12 @@ max3421_remove(struct spi_device *spi)
- 	usb_put_hcd(hcd);
- }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 309a871453bfa..521e05442fd99 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -548,6 +548,7 @@ static int dwc3_gadget_set_xfer_resource(struct dwc3_ep *dep)
+ int dwc3_gadget_start_config(struct dwc3 *dwc, unsigned int resource_index)
+ {
+ 	struct dwc3_gadget_ep_cmd_params params;
++	struct dwc3_ep		*dep;
+ 	u32			cmd;
+ 	int			i;
+ 	int			ret;
+@@ -564,8 +565,13 @@ int dwc3_gadget_start_config(struct dwc3 *dwc, unsigned int resource_index)
+ 		return ret;
  
-+static const struct spi_device_id max3421_spi_ids[] = {
-+	{ "max3421" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(spi, max3421_spi_ids);
+ 	/* Reset resource allocation flags */
+-	for (i = resource_index; i < dwc->num_eps && dwc->eps[i]; i++)
+-		dwc->eps[i]->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
++	for (i = resource_index; i < dwc->num_eps; i++) {
++		dep = dwc->eps[i];
++		if (!dep)
++			continue;
 +
- static const struct of_device_id max3421_of_match_table[] = {
- 	{ .compatible = "maxim,max3421", },
- 	{},
-@@ -1955,6 +1961,7 @@ MODULE_DEVICE_TABLE(of, max3421_of_match_table);
- static struct spi_driver max3421_driver = {
- 	.probe		= max3421_probe,
- 	.remove		= max3421_remove,
-+	.id_table	= max3421_spi_ids,
- 	.driver		= {
- 		.name	= "max3421-hcd",
- 		.of_match_table = max3421_of_match_table,
++		dep->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
++	}
+ 
+ 	return 0;
+ }
+@@ -752,9 +758,11 @@ void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+ 
+ 	dwc->last_fifo_depth = fifo_depth;
+ 	/* Clear existing TXFIFO for all IN eps except ep0 */
+-	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM);
+-	     num += 2) {
++	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM); num += 2) {
+ 		dep = dwc->eps[num];
++		if (!dep)
++			continue;
++
+ 		/* Don't change TXFRAMNUM on usb31 version */
+ 		size = DWC3_IP_IS(DWC3) ? 0 :
+ 			dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
+@@ -3670,6 +3678,8 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 
+ 		for (i = 0; i < DWC3_ENDPOINTS_NUM; i++) {
+ 			dep = dwc->eps[i];
++			if (!dep)
++				continue;
+ 
+ 			if (!(dep->flags & DWC3_EP_ENABLED))
+ 				continue;
+@@ -3858,6 +3868,10 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+ 	u8			epnum = event->endpoint_number;
+ 
+ 	dep = dwc->eps[epnum];
++	if (!dep) {
++		dev_warn(dwc->dev, "spurious event, endpoint %u is not allocated\n", epnum);
++		return;
++	}
+ 
+ 	if (!(dep->flags & DWC3_EP_ENABLED)) {
+ 		if ((epnum > 1) && !(dep->flags & DWC3_EP_TRANSFER_STARTED))
 -- 
 2.39.5
 
