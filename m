@@ -1,203 +1,112 @@
-Return-Path: <linux-usb+bounces-22648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27ACEA7E02A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:58:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8AE1A7E01A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:56:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 163BB3A4BB5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:50:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 199CF17BEC3
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BC7149C51;
-	Mon,  7 Apr 2025 13:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC091ADC7F;
+	Mon,  7 Apr 2025 13:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jg52u1JD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHOGmumx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A351531C5;
-	Mon,  7 Apr 2025 13:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DD32557C;
+	Mon,  7 Apr 2025 13:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744033819; cv=none; b=JYjCyaNBSdXTTkMlZ7Z3BfMjIkg//nTjVZlrJgVYnVR2QbAMOSfkpCFv4+6EyFZpR38mW6Z4JFAxKGaLmEWQOBHCYO1raPu8v5UvVnqWFtObZFGp1Se8wcgk1/OWUm76KOrnKptqGg6of0uplRLWTIy2VPUrpPkOmp8RIXt9Gp0=
+	t=1744033872; cv=none; b=fvTomc7Agv2277Kw71gVZJqC0mHJrX0GcREyYq4ce7WiHmKdoNqqpcxOK8FAFtG4G3Im9hZNY0Tav9DRmHUEtxJkS9jDExIhWvYHlwUjtED1mGObzr6XhSra08wYy2q34qLiCKdUbDYRmahEhgNT6zdjI/WlVwSjt10C4ePQHCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744033819; c=relaxed/simple;
-	bh=A1UzUe+zGPW63dqcR62WgQaMDeReDJC0hjEAe4fREE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R16/MeSjGXkJ+ZzbtN0A5ezA2qcsXD2u9T9nKg5k45cS/z7Rey8fxlT3fA+qKgQpHwsfOKVpE25lf0V4/syeF2da8OIHsJUIgEnLcKQuUhS2HLxFHiUig0JXW2tdkQSvqd0tZs2+g5iYC9dyV4mIwicpoahEDF/dzmdgmt7ZiNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jg52u1JD; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744033817; x=1775569817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A1UzUe+zGPW63dqcR62WgQaMDeReDJC0hjEAe4fREE0=;
-  b=jg52u1JDMymflBipSrNEcLDHqQO0udW07m6RvZ+o/p3jGVMdfam5VERt
-   2B6BfiQlXVXurN4JVo3b1guuz4mYQN3s/PIG5BqgmJ6a981Vu6OSagRoz
-   o3+z44COB+L29e5N9Qwxa86JzF2+Z+O51Ef7f0aWHly0HOFOsGXNRwE7i
-   /PqYElJqEzFKOP1M+M3+DlN7ZYL11lxil+dXXB3BcpHRKZ4baz0nvPx/3
-   1myxwMw+wcTTQrKHlsyUkfAm47R003l3MjqxGlNLQbpfIC0WA+1Co6QuI
-   7X5vj6wvT1jhomEgOGx8eO7V7z6BuZsuHAmnAH7SIRc6RYq2rklgpTYtp
-   g==;
-X-CSE-ConnectionGUID: /z+tLe2NQMuQpq8bBlIiaw==
-X-CSE-MsgGUID: 0muffSn5SV6f9tvbPGAtpw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="70797038"
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="70797038"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 06:50:16 -0700
-X-CSE-ConnectionGUID: faZGuwsGSvG6iv/gAs2B1w==
-X-CSE-MsgGUID: hGLh2kZARzWb61yh/1Cs8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="132815360"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa003.jf.intel.com with SMTP; 07 Apr 2025 06:50:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Apr 2025 16:50:13 +0300
-Date: Mon, 7 Apr 2025 16:50:13 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de, Badhri Jagan Sridharan <badhri@google.com>
-Subject: Re: [PATCH 3/3] usb: typec: tcpm: allow switching to mode accessory
- to mux properly
-Message-ID: <Z_PYFT7IGMhX7gLO@kuha.fi.intel.com>
-References: <20250404-ml-topic-tcpm-v1-0-b99f44badce8@pengutronix.de>
- <20250404-ml-topic-tcpm-v1-3-b99f44badce8@pengutronix.de>
+	s=arc-20240116; t=1744033872; c=relaxed/simple;
+	bh=/4UbHHj3ELGJgxeyuvL3Ow2/535NK31HYifR4a3PlBs=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=n2weSyWOFJ/0+KrXn0RUL4DeWKeVAcG1qdKwiJM03fGjN/qz2637d+r+reDWjufQ7d2HbO8bDedGezjisOEjbiSsz1z5luE7CCpmS6XDj4coEetyds062uYksyTt7MEGl0CIBaYdE8Yh3DIkiLAGiHFk6VPH6F7jlqN54hWy/rM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHOGmumx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E29C4CEDD;
+	Mon,  7 Apr 2025 13:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744033872;
+	bh=/4UbHHj3ELGJgxeyuvL3Ow2/535NK31HYifR4a3PlBs=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=FHOGmumxpjPbtEi02dw/UrPdWcSj6OgVNu6Z8djsSYXGGSTMmRhcgg5/PykumAhsv
+	 APr0UaT7wm3hFEbsV1rDGljw+MBpEUbbrbEWzeS9Yna+/e/uZyh53/K2YsaaygIFYR
+	 2vE5s10Pyfnd+64WVGjRoz1X/CDgBdwa6w5Z8es7NCv1mkOeLJF51nNQkHqjlnwYb1
+	 p5on6oAEc+pP3a04MEjATgKT7y6GrmmLJ48YopCT25JZFz5qoGSUhX/+EB8waTwp7x
+	 JuqjPRCX7JL4Kq9Docq7y/FtN3nm96Q/s37qiegOdSnj50bF1yqu+sqkrE+MQXkI0y
+	 eiPqC1t9YA/Ow==
+Date: Mon, 07 Apr 2025 08:51:10 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250404-ml-topic-tcpm-v1-3-b99f44badce8@pengutronix.de>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Conor Dooley <conor+dt@kernel.org>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, Yixun Lan <dlan@gentoo.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
+To: Ze Huang <huangze@whut.edu.cn>
+In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-3-bf0bcc41c9ba@whut.edu.cn>
+References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-3-bf0bcc41c9ba@whut.edu.cn>
+Message-Id: <174403387085.2155711.16403180293126338183.robh@kernel.org>
+Subject: Re: [PATCH 3/7] dt-bindings: usb: add SpacemiT K1 DWC3 glue
 
-+Badhri
 
-On Fri, Apr 04, 2025 at 12:43:06AM +0200, Michael Grzeschik wrote:
-> The funciton tcpm_acc_attach is not setting the proper state when
-> calling tcpm_set_role. The function tcpm_set_role is currently only
-> handling TYPEC_STATE_USB. For the tcpm_acc_attach to switch into other
-> modal states tcpm_set_role needs to be extended by an extra state
-> parameter. This patch is handling the proper state change when calling
-> tcpm_acc_attach.
+On Mon, 07 Apr 2025 20:38:48 +0800, Ze Huang wrote:
+> Add support for SpacemiT DWC3 glue driver, which manages interrupt,
+> reset and clock resource.
 > 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 27 ++++++++++++++++++---------
->  1 file changed, 18 insertions(+), 9 deletions(-)
+>  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 78 ++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 01714a42f848a..784fa23102f90 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1153,7 +1153,7 @@ static int tcpm_set_attached_state(struct tcpm_port *port, bool attached)
->  				     port->data_role);
->  }
->  
-> -static int tcpm_set_roles(struct tcpm_port *port, bool attached,
-> +static int tcpm_set_roles(struct tcpm_port *port, bool attached, int state,
->  			  enum typec_role role, enum typec_data_role data)
->  {
->  	enum typec_orientation orientation;
-> @@ -1190,7 +1190,7 @@ static int tcpm_set_roles(struct tcpm_port *port, bool attached,
->  		}
->  	}
->  
-> -	ret = tcpm_mux_set(port, TYPEC_STATE_USB, usb_role, orientation);
-> +	ret = tcpm_mux_set(port, state, usb_role, orientation);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -4355,7 +4355,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
->  
->  	tcpm_enable_auto_vbus_discharge(port, true);
->  
-> -	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
-> +	ret = tcpm_set_roles(port, true, TYPEC_STATE_USB,
-> +			     TYPEC_SOURCE, tcpm_data_role_for_source(port));
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -4530,7 +4531,8 @@ static int tcpm_snk_attach(struct tcpm_port *port)
->  
->  	tcpm_enable_auto_vbus_discharge(port, true);
->  
-> -	ret = tcpm_set_roles(port, true, TYPEC_SINK, tcpm_data_role_for_sink(port));
-> +	ret = tcpm_set_roles(port, true, TYPEC_STATE_USB,
-> +			     TYPEC_SINK, tcpm_data_role_for_sink(port));
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -4555,6 +4557,7 @@ static int tcpm_acc_attach(struct tcpm_port *port)
->  	int ret;
->  	enum typec_role role;
->  	enum typec_data_role data;
-> +	int state = TYPEC_STATE_USB;
->  
->  	if (port->attached)
->  		return 0;
-> @@ -4563,7 +4566,13 @@ static int tcpm_acc_attach(struct tcpm_port *port)
->  	data = tcpm_port_is_sink(port) ? tcpm_data_role_for_sink(port)
->  				       : tcpm_data_role_for_source(port);
->  
-> -	ret = tcpm_set_roles(port, true, role, data);
-> +	if (tcpm_port_is_audio(port))
-> +		state = TYPEC_MODE_AUDIO;
-> +
-> +	if (tcpm_port_is_debug(port))
-> +		state = TYPEC_MODE_DEBUG;
-> +
-> +	ret = tcpm_set_roles(port, true, state, role, data);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -5349,7 +5358,7 @@ static void run_state_machine(struct tcpm_port *port)
->  		 */
->  		tcpm_set_vconn(port, false);
->  		tcpm_set_vbus(port, false);
-> -		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
-> +		tcpm_set_roles(port, port->self_powered, TYPEC_STATE_USB, TYPEC_SOURCE,
->  			       tcpm_data_role_for_source(port));
->  		/*
->  		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
-> @@ -5381,7 +5390,7 @@ static void run_state_machine(struct tcpm_port *port)
->  		tcpm_set_vconn(port, false);
->  		if (port->pd_capable)
->  			tcpm_set_charge(port, false);
-> -		tcpm_set_roles(port, port->self_powered, TYPEC_SINK,
-> +		tcpm_set_roles(port, port->self_powered, TYPEC_STATE_USB, TYPEC_SINK,
->  			       tcpm_data_role_for_sink(port));
->  		/*
->  		 * VBUS may or may not toggle, depending on the adapter.
-> @@ -5505,10 +5514,10 @@ static void run_state_machine(struct tcpm_port *port)
->  	case DR_SWAP_CHANGE_DR:
->  		tcpm_unregister_altmodes(port);
->  		if (port->data_role == TYPEC_HOST)
-> -			tcpm_set_roles(port, true, port->pwr_role,
-> +			tcpm_set_roles(port, true, TYPEC_STATE_USB, port->pwr_role,
->  				       TYPEC_DEVICE);
->  		else
-> -			tcpm_set_roles(port, true, port->pwr_role,
-> +			tcpm_set_roles(port, true, TYPEC_STATE_USB, port->pwr_role,
->  				       TYPEC_HOST);
->  		tcpm_ams_finish(port);
->  		tcpm_set_state(port, ready_state(port), 0);
-> 
-> -- 
-> 2.39.5
 
--- 
-heikki
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.example.dtb: usb@c0a00000 (spacemit,k1-dwc3): '#address-cells', '#size-cells' do not match any of the regexes: '^usb@', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.example.dtb: usb@c0a00000 (spacemit,k1-dwc3): usb@0:reg: [[0, 0], [0, 65536]] is too long
+	from schema $id: http://devicetree.org/schemas/usb/spacemit,k1-dwc3.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/spacemit,k1-dwc3.example.dtb: usb@0 (snps,dwc3): reg: [[0, 0], [0, 65536]] is too long
+	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250407-b4-k1-usb3-v3-2-v1-3-bf0bcc41c9ba@whut.edu.cn
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
