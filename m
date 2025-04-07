@@ -1,65 +1,80 @@
-Return-Path: <linux-usb+bounces-22619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44981A7D559
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 09:18:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8446DA7D99B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 11:25:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2664B3B9E77
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 07:16:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 633F318879A7
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 09:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08936227E97;
-	Mon,  7 Apr 2025 07:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B571C22E40F;
+	Mon,  7 Apr 2025 09:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCqZkpXd"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bV6hQi8g"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64931225412;
-	Mon,  7 Apr 2025 07:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB8712C544
+	for <linux-usb@vger.kernel.org>; Mon,  7 Apr 2025 09:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744010063; cv=none; b=tQKtV3R8N1UOeWzFPVNW5/M4mWtaFWxJPEbVVV/h7wZVl+qUFuhRvVmU+awBOn6Vo5989xa0S7cXltvTwgOuLydVYrPFFRbaOE6fDh6hk3sx353Gd6LFWaMjzvjSGfrJJwK5reDUwoglDNFBM8nl7JDT0Gh04PqbeN/R+eSKU0o=
+	t=1744017790; cv=none; b=PskPfSp1Wsr2+j5LoqeR1Rk6ZZKWwC0PwftSWR/yQmUj/n+kqCRZPcMGepUnOj5YRfgkMadQzVx7LgQdPVw/8rFAVVQReLdtR47OVXupP9HyV9CMeGuztusFIn4rQ2mHu8C9NpjdXEBP74Tx6e+SFgYobCyYNn15fdI8j0EHhlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744010063; c=relaxed/simple;
-	bh=IoJ/QPbazRVpsAOJM/Crsupeww6a0Sl51rezjRCdCOc=;
+	s=arc-20240116; t=1744017790; c=relaxed/simple;
+	bh=r9RqrhzeutBtIOlYVz3agoheAkTOhawsk2ceW69HgXE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KAv0jg4PIaRuxFLRLPA83DwSl5VBpMp1WgwFj6Jd5FokM9t2sfKZl97x5sI0CflXvS7KPVHAmhZgXozRuHWEE9l39tJjD/neUgZ7d6FK4lbZt+GKczj8VGJnTZuGvAwwzGXjG1/pNJYZOWBbGTbBbU/JmiqOpDmMQsTJ0AtzwBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCqZkpXd; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744010061; x=1775546061;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IoJ/QPbazRVpsAOJM/Crsupeww6a0Sl51rezjRCdCOc=;
-  b=hCqZkpXdP84RHfJ+zAusxbHvwDMyos8PWd+nXK1RuW55JFDYJPJlSj2S
-   CGCi1MpzaTRf69wqvfBxfZ6WZNgVnhSzUF62JODbWej9Uk0IdvYd6mBzS
-   f3CXKt0Py6o0OlIOXS64RnRkAYTJWtQIeOJQjiu2vUdxzR4zyJQeMrZ53
-   oNlo0R2E+fGFcXnkEpydWkEJiTG9Zv7sHwiPs9wGov+AjlPbYvbghHJfV
-   6Y6EAnRtiIptMTbZz/83X39yb4YJu9TLtVkjzE32u5ul3pokSD4KS0+FL
-   3RLAFk3tvF9X7Jn1QSnD2atbm8EqyJv5cQg2yi9eVOBFIPNtY7/BwKYz8
-   A==;
-X-CSE-ConnectionGUID: yDf694IxSFCK35GAaMZw/A==
-X-CSE-MsgGUID: sagtfNFgRyW0Bap/q8uyjg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="45269356"
-X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="45269356"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 00:14:20 -0700
-X-CSE-ConnectionGUID: xM0Jr1GIT5ebmpv/dAo3mQ==
-X-CSE-MsgGUID: o+egIjbESJu9tvxsX3hKKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="128394866"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa007.jf.intel.com with ESMTP; 07 Apr 2025 00:14:18 -0700
-Message-ID: <dd277ca2-6225-43f6-b833-fe41c2d7f686@linux.intel.com>
-Date: Mon, 7 Apr 2025 10:15:29 +0300
+	 In-Reply-To:Content-Type; b=mo+thJbJUsU5JCg+IsZf9nrKyc//XJMSUEGvOpimvJi7AVnn6KoE3ob5LOaxC9NdGisv2YJncoff/BR5ywacN7P17Qm8yQvrtc8zjQ319vFi0WLDPCMk5JGBNCAXTJcqcs1OYSuLw0l/EL9HFY0bSkWrjELuZnZTutUPwGh7Ebw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bV6hQi8g; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43cfdc2c8c9so23676605e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 07 Apr 2025 02:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1744017785; x=1744622585; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8GEB2/7f7npYgGmINlGKb01Ype4hZwo/GgBaLZ4O8ec=;
+        b=bV6hQi8gv1oYpnl4voM20JEKrXRqL0/1yGZfLVjoCkXI+wWagk3OajeMqQARB/dwmL
+         Bh5BltnRj1u3oQb0lqubM8jSGfLyH7EJMcRmDgHC6VjyEiCA/OLo8QKWqZU54CehYTuI
+         +Q2NdhYWwlewk3zGA4e2jleojLGvyrdRhIiP1q9S2AAlPS9v7ZMCQyrtl++TI1E7KVaO
+         HwSS+jGezW53MXTWfUc+kAghRbURXCZnYFfg2o1ZogQnsoR5RmSH7yEbPfsR4e8AmNxl
+         s98htRANFyNEORiRnqLAdbofycF8Psr4EqzwBlXrs7rGeu8yUJq6B+BRV+7ruWiHrhTf
+         oR7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744017785; x=1744622585;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8GEB2/7f7npYgGmINlGKb01Ype4hZwo/GgBaLZ4O8ec=;
+        b=AoVTRrhdUF61awhXruYp+bxH30PO3TtXmPQjs4eLT1iBu2cHHmh8CaiePuo0m0KVJZ
+         zphGDdQpbppdyhet+qIrkIeTBUaOAG4duOX7tnbqDaCdtKzFrbFIW0TQ892Uy2cQbAan
+         NsRC4v97K7zu7LgkyQ9O7K5gpPoNKm1WDVKyllepewBwLVmy21YkQMdLGxBgSMQaRQjd
+         ZdUhmeJTOrMmNQp4ho6w57CAgd8iFxuu5agsy/1CIk2e/dlJjJuiGfYQSyFFI9uuRMKt
+         2o7zUY2oH3uVn7xycDvPx511lvRBhQQ6QhN1vROFaghEY0/RLjiMd2RAjo/5jeBIAekY
+         CNmg==
+X-Forwarded-Encrypted: i=1; AJvYcCXPEx49ZRpJ3+koPQ4vNe2zPtDikUrBQlmcVT1wMpeenWYDcye9eWy1AL4aRCWXOj3JReVuSzA47D0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrgfBDr3Av2iwTSFwuRnvMQTyc88jt60xMknRCAkrsHg9Pbjpc
+	7ly6FEe7rKe3xYgTaB5bpibWhhJIfi3DwZ3b4ODPN9NpAMxdoSLWg41Zsi5wA2U=
+X-Gm-Gg: ASbGncsPNv5D1EhDOT0W/LLkvMXHKv+1tsfsppUyktofjSYOm8w4iMzp7zttSG4+r07
+	1J+E0DxUCbuTTjCc/p+eEqXUgirNNB0R1T/9rSE12vTjaQh7DO1qjBl9kHyHUw4bK4IDzCv0P3E
+	vxwkHy25icqDvUUiG2VrWOZYOhMUW1qDkKbIncxc1S4IlnfP7GeFqvM6h4VQLSlxltLtlFQ3bGY
+	lxuCAbo3t8EKfvNm5JxwfJPLf/dHxT5LKCaOUV22tKqWUcPH1yLSvUKZOpvqHvUhx4cN7a3acz9
+	X3TtktWbb5EeOGgJ8WV387pe6VC9+FddAwvg0LpdfpJ2Tz6EJiim4oivZypxnMvOdSNjPvuTpCO
+	9mVnTNwt/qaI=
+X-Google-Smtp-Source: AGHT+IH2D4ZOZwcneAudIPcxeXzVvvPrAKJL14lK9bzoixHtxQl9qS6i6XTiQ1W94FT9J/YucBQ34w==
+X-Received: by 2002:a05:6000:40c9:b0:391:43cb:43e6 with SMTP id ffacd0b85a97d-39d6fd022a6mr6415177f8f.51.1744017785228;
+        Mon, 07 Apr 2025 02:23:05 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1302:8001:d2dc:b329:7532:c373? ([2001:a61:1302:8001:d2dc:b329:7532:c373])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ea9a346e3sm110990905e9.1.2025.04.07.02.23.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Apr 2025 02:23:04 -0700 (PDT)
+Message-ID: <9fdb5e30-8570-420f-940b-bea5fa72e12d@suse.com>
+Date: Mon, 7 Apr 2025 11:23:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,83 +82,44 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: xhci: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep
- state.
-To: Alan Stern <stern@rowland.harvard.edu>,
- =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>
-References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
- <b356f743-44b5-4f48-a289-fae0afe106ff@linux.intel.com>
- <84b400f8-2943-44e0-8803-f3aac3b670af@molgen.mpg.de>
- <20250406002311.2a76fc64@foxbook>
- <ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
+Subject: Re: [PATCH] usb: cdc-wdm: avoid setting WDM_READ for ZLP-s
+To: Robert Hodaszi <robert.hodaszi@digi.com>, gregkh@linuxfoundation.org,
+ oneukum@suse.com
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ stern@rowland.harvard.edu, viro@zeniv.linux.org.uk
+References: <20250403144004.3889125-1-robert.hodaszi@digi.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250403144004.3889125-1-robert.hodaszi@digi.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6.4.2025 5.40, Alan Stern wrote:
-> On Sun, Apr 06, 2025 at 12:23:11AM +0200, Michał Pecio wrote:
->> Looks like some URB stalled and usb_storage reset the device without
->> usb_clear_halt(). Then the core didn't usb_hcd_reset_endpoint() either.
->> And apparently EP_STALLED is still set in xhci_hcd after all that time.
->>
->> Then usb_storage submits one URB which never executes because the EP
->> is in Running-Idle state and the doorbell is inhibited by EP_STALLED.
->> 30s later it times out, unlinks the URB and resets again. Set TR Deq
->> fails because the endpoint is Running.
+
+
+On 03.04.25 16:40, Robert Hodaszi wrote:
+> Don't set WDM_READ flag in wdm_in_callback() for ZLP-s, otherwise when
+> userspace tries to poll for available data, it might - incorrectly -
+> believe there is something available, and when it tries to non-blocking
+> read it, it might get stuck in the read loop.
 > 
->> Not sure if it's a USB core bug or something that xHCI should take
->> care of on its own. For now, reverting those two "stall" patches ought
->> to clean up the noise.
+> For example this is what glib does for non-blocking read (briefly):
 > 
-> The core believes that resetting a device should erase the endpoint
-> information in the HCD.  There is a callback in hub_port_reset() to that
-> effect:
+>    1. poll
+>    2. if poll returns with non-zero, starts a read data loop:
+>      a. loop on poll() (EINTR disabled)
+>      b. if revents was set, reads data
+>        I. if read returns with EINTR or EAGAIN, goto 2.a.
+>        II. otherwise return with data
 > 
-> 		if (hcd->driver->reset_device)
-> 			hcd->driver->reset_device(hcd, udev);
+> So if ZLP sets WDM_READ (#1), we expect data, and try to read it (#2).
+> But as that was a ZLP, and we are doing non-blocking read, wdm_read()
+> returns with EAGAIN (#2.b.I), so loop again, and try to read again
+> (#2.a.).
 > 
-> So after this the EP should not be in the Running-Idle state; in fact it
-> should not exist at all (unless it is ep0, but in this case I think it
-> isn't).
+> With glib, we might stuck in this loop forever, as EINTR is disabled
+> (#2.a).
 > 
-
-> Is the implementation of the reset_device callback in xhci-hcd missing
-> something?
-> 
-> Alan Stern
-
-Thanks, I believe this is at least part of the issue here, thanks for the tip.
-
-We don't clear the virt_dev->eps[ep_index].ep_state flags after device reset.
-
-And the two new patches Michal pointed out rely even more of ep_state flags than
-before, causing a regression.
-
-0c74d232578b xhci: Avoid queuing redundant Stop Endpoint command for stalled endpoint
-860f5d0d3594 xhci: Prevent early endpoint restart when handling STALL errors.
-
-Does this oneliner help?
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 0452b8d65832..044c70c17746 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3930,6 +3930,7 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
-					&virt_dev->eps[i],
-					virt_dev->tt_info);
-		xhci_clear_endpoint_bw_info(&virt_dev->eps[i].bw_info);
-+		ep->ep_state = 0;
-	}
-	/* If necessary, update the number of active TTs on this root port */
-	xhci_update_tt_active_eps(xhci, virt_dev, old_active_eps);
-
-Thanks
-Mathias
+> Signed-off-by: Robert Hodaszi <robert.hodaszi@digi.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
 
