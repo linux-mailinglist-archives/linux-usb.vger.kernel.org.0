@@ -1,79 +1,48 @@
-Return-Path: <linux-usb+bounces-22637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFCA0A7DEC5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:17:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 414B0A7DEF0
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:23:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 129043ACECB
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:15:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D2701769FF
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF84A253F31;
-	Mon,  7 Apr 2025 13:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07717253F3F;
+	Mon,  7 Apr 2025 13:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REW3fMHY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzfSUKFV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A338221F25;
-	Mon,  7 Apr 2025 13:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678AC23A9B6;
+	Mon,  7 Apr 2025 13:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744031666; cv=none; b=KW6OHomLDhgGbgbJtNIZ4CsiS8ZmfUsIVGTCrO49B2nQpj0bUyGlpfoaSh9i4tXnVPI0G/Anw6kjdQ6b6prU5p5+H+5HZmSYj5n6ubJiC4BC0gshW0z1wQ0T6/TI951+krhTeit/5H/McnJv3o4qLb2LSFg7n4Eh0qiJejW5Y5s=
+	t=1744031938; cv=none; b=g0AQU3VLcppxWHgSvwCbet3S8c/PfRvtT9bSi8peTizthccsPplwMgrMasgvxDKEDJRksDNKy56KFQEmBL4xqz4Ipl0PTXhyO+NALlcGu4dMcTQtumOYn1THTzeLfKf8RvQyT6SzaY5BLHdX//+N7sr7KjimJ6iSAVvsZy7Be38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744031666; c=relaxed/simple;
-	bh=esDg0xM8Y4ZazYNOozgp2f4DIAuNinwrUVDRw26qrTo=;
+	s=arc-20240116; t=1744031938; c=relaxed/simple;
+	bh=v1NRki44ZNsg11HwuI5lbdH0wmJphUEXdqHPrVHt4dw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YJGAYI8i1H9/iC8Zhi8/Fmai295Tw9UdTxswm6JNlBPHQvnM475Rah49CujQ2X2bpzvjPJRTWqHZRoW/cmsqGjBYZgIx74q8AROOBeKlfXkhzByV4BzKkMhp/fzbUkyBIYG5yAb6nWPa0B4UpKzZDb4lzeSJng2YrRK2QyUGNGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REW3fMHY; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e6194e9d2cso8303196a12.2;
-        Mon, 07 Apr 2025 06:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744031662; x=1744636462; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XK/v/TJL7lqRfnZivx0jdbKyv53Azw09B9p+I3AQ/Ec=;
-        b=REW3fMHYyj1/VT8lCDkqt9UzODHsPzTdy98PnW5DrZFuDazfK/5AYzbdddDDLA9kPE
-         8SX57J0cEFPfYW+GApJCNMqDk6k2ALZutAwvfGfpFmIJtr4vQ8xVxfSnin8/75nkvbq0
-         XsfiwrVc3+yf9PCj+qN0Nm7Isq1WYE1xihzxSX7bQ6G1Z5n6fW+go1Tnneq7SMGOW89r
-         6nv//J1ywL2f3oPCNWOB0IvkIxLiMNXSZbPLQHReTB1BNfjdzmT0VAA3Lg8zV7Moctld
-         AX3P/kKgTe8Y3jdNJwVBnwW9QKO05zB4h/JZXCs723+gVmVXZrf6lR8LLH8fZvSRuxgD
-         W1IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744031662; x=1744636462;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XK/v/TJL7lqRfnZivx0jdbKyv53Azw09B9p+I3AQ/Ec=;
-        b=Q9gQhFsZs6YvZn/QSoIz0/nGqkGMLSxl5WTEJU8YcxeNPB59byrGC81oADphBGWhJe
-         drvWMFMxMqzqDwj1D3v90rkqCKZ3XDQrXDctiP5Hx6xj0XDjnFhUzyogDCzSoU4BHjLj
-         TWppa9bO/KLBjg5D89PjVqMBhsrDWNtF6whRhjaJGUdL8HHX0a9H33lVM27+5TODBkW5
-         vahkqD7wzjOGRqG5cIKrMAV8nmlUNJQuJA2g0FRu+tt3k22e1rB2OS1Ze4VAyLNxjscy
-         FBCKp0tORLZ3jAlxeO4WD+BuGFyNqXTy44iZEvcL3Pmx1ye2Cq8Zd0z0HpA5t/nmIyS5
-         W8FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVudyRro9/cfFVuOySR57zROFooSsgtXlGHmdlPtsNDP91nZW+14cm9MS4jvCHJG9sNvH2NIOU5lBitvfT0@vger.kernel.org, AJvYcCXBQ1UUmxQY7+mBYtYuF1KVYDY2DlBnB3nZxp7F47wOlrZX6He4kLXM0AvT5sZKzgezTuYPoOrdxmj5@vger.kernel.org, AJvYcCXKnTusncr8/rfEmK3CxGCMfk55obrPnEIHMY7JIh09jui7l5hdji7XChID+gTvzu0gnuAjZJ5ytIEk9afaB58=@vger.kernel.org, AJvYcCXP4NteRk/pDmg6fxXQg+xSYsT9gl7l95B+It8tOrfg5LR4W+/LPVZbn4NuSZEnhZ2cu1HEyt48lkde@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwSYSqDVoL3h9cei2UzYVpuVUkoIrVW+ltb8kZ5QzbOxd3nbn5
-	W8O5N1bBwcH9RwvoPs+7mYvmaZCWeeEGHszA7xLSxHapxlOln+7S
-X-Gm-Gg: ASbGncsHcMma4wXtajpZX51vf6xKmy84zivLJtDdpIsFGem5SZYZMOan9tT13vyD7NY
-	0z+kxzkq37gsLO9g2Et3FCmVIb5FfTwJT0T2fZve35Mfv+xngM13NhtCAhPdZOLqIyYr5hwxn+P
-	APhPz6TlDhR3te+0Bth3g2H+tMUVoNYbCK7z0/CpfkypuSuVRkDCFgGk4LnKfDRR5K9Wni0KjCr
-	Nz9DAOCpNdCx2l89n6UYEc8UzuypX/CpiuQkW57zV72BR9YzuOm0wAgxLFQgSeR6YmLur0rbgSF
-	HYSMhX0+bHXuYl39RBZLYD1j5jEb6swB1NpOycOovb2Rn7stWoCewg==
-X-Google-Smtp-Source: AGHT+IGyLMeKGLNiZ6Bg9P49yXVeovF9kmluZgH6/6aFqrvUlJiRGJhqFJ/Y75psCo1iDeFB0shdwA==
-X-Received: by 2002:a05:6402:524b:b0:5e6:17db:898d with SMTP id 4fb4d7f45d1cf-5f0b3b65971mr8088772a12.2.1744031662359;
-        Mon, 07 Apr 2025 06:14:22 -0700 (PDT)
-Received: from [192.168.0.50] ([79.119.240.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f087f07baasm6732801a12.37.2025.04.07.06.14.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Apr 2025 06:14:22 -0700 (PDT)
-Message-ID: <60b16a26-8c88-47bf-8b59-cab8dc25d2db@gmail.com>
-Date: Mon, 7 Apr 2025 16:14:17 +0300
+	 In-Reply-To:Content-Type; b=icxERXfm1CZawVPaI5Iozq/IHRAgG5zezKLB7cqy8ZA2xiPTlXdbaoU8vUCCGoTtmk/l4JUrrA/pZZkyKrRVrzUOcoby9YIhYds46E5mVyxqtHeTiuQ1dEhcD8VApk5L1ojaxpaTMEAFcFnVVzcYMgL/Ephwtr0ZPagLg70cfik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzfSUKFV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73452C4CEDD;
+	Mon,  7 Apr 2025 13:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744031937;
+	bh=v1NRki44ZNsg11HwuI5lbdH0wmJphUEXdqHPrVHt4dw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BzfSUKFVEpf0b9QkyCwYgoqYngi01GfaCOmSO7DOi5Ik36vH6qRv7isKR9eWSdXb+
+	 cBo+ifa02XLZ4OjgqVo+GwClE3157DdGsWBq/QjH22e9seMOLo/xU3kNaj3h3rvXe0
+	 npHsD2YUE8VSizzc/Pu63CbZ6Vvl6VhhihD5JmVL+ULVqF1ZsIY0iTuvLH4GuRm0gY
+	 J18IchOfnFU1109RueLHMAb7SnVT8NwTsfbALQQRgHy6Ad0G2XehMnP4JyU5LnvBkT
+	 GHRHJFRVpUM49HIi16FO9YNq9sxWQQw1G5/GMw11NMbayBpgJndcsoJYynwNuVkrrP
+	 JEwGs1AEWZTbg==
+Message-ID: <02157e96-9524-4590-9ca6-e4390176d74e@kernel.org>
+Date: Mon, 7 Apr 2025 15:18:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,49 +50,88 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Onboard USB device support for RTL8188 2.4GHz USB
- WiFi module
-To: =?UTF-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Cc: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH 1/7] dt-bindings: phy: spacemit: add K1 USB2 PHY
+To: Ze Huang <huangze@whut.edu.cn>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?J=2E_Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>, Matthias Kaehlcke <mka@chromium.org>,
+ <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Jes Sorensen <Jes.Sorensen@gmail.com>, linux-wireless@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250403-rtl-onboard-v1-0-10ca9a6a4ee0@posteo.net>
- <14513d89-1ee3-4d90-bd26-1d761714a8a9@gmail.com> <Z_OvWwunajTcg9TJ@probook>
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-1-bf0bcc41c9ba@whut.edu.cn>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <Z_OvWwunajTcg9TJ@probook>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-1-bf0bcc41c9ba@whut.edu.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 07/04/2025 13:56, J. Neuschäfer wrote:
-> On Mon, Apr 07, 2025 at 01:37:17AM +0300, Bitterblue Smith wrote:
->> On 03/04/2025 17:07, J. Neuschäfer via B4 Relay wrote:
->>> This patchset adds rtl8188 (usbbda,179) to the onboard_usb_dev driver.
->>
->> RTL8188 could mean at least five different chips (C, E, F, G).
->> Should you use a more specific name like RTL8188EU?
-> 
-> Yes, that's a good point.
-> 
-> I'm not completely sure which name to pick, though:
-> 
->  - The chip is marked RTL8188ETV (see photo[1])
->  - The RTL8XXXU driver reports it as RTL8188EU
-> 
+On 07/04/2025 14:38, Ze Huang wrote:
+> +
+> +properties:
+> +  compatible:
+> +    const: spacemit,k1-usb2-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+No supplies? No resets? Are you sure hardware does not use them?
 
-Both is good.
-
-> 
-> Best regards,
-> J. Neuschäfer
-> 
-> 
-> [1]: https://c3voc.de/gallery/misc/fernsehfee/92QVxQl.jpg.html
-
+Best regards,
+Krzysztof
 
