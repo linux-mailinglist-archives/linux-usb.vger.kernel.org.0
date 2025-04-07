@@ -1,129 +1,165 @@
-Return-Path: <linux-usb+bounces-22614-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22615-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED5C1A7D114
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 00:37:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E00A7D224
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 04:26:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A23A4188AAC0
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Apr 2025 22:37:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E6AB16B5D5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 02:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDAB13DBB1;
-	Sun,  6 Apr 2025 22:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9019321325B;
+	Mon,  7 Apr 2025 02:26:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DCgHd3s2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klJ2q2hU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB746191461;
-	Sun,  6 Apr 2025 22:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D2414AA9;
+	Mon,  7 Apr 2025 02:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743979047; cv=none; b=EC02aKT+SHINmx3mFLn+pN++f5tev2g3rbUaUDVHe3W5A6yjfLCA0QuktCmZX7C698uahWlHryAUNq0tjpuoriZ+ZAzBdf/+kQVqveLtn7SZECgki39o/g3BD2Qm8L11NRGPCGiJOjRSybu1T9YzRrZ7HCsQHMl6bDTN24W1CWM=
+	t=1743992772; cv=none; b=Avw+X5duHJNop5wHi/fxNZYmSZsyT/pXBWwC9FTeqKwTGSHpZ9XIWXU/QcocY7pO1xddyirohfno/2kd02NqzEBqtyu1dfv2MwhWccgbSBf7rH6IONTcTw4RUjiTsjdNChTpprT26wXBtaougbX7gV7XJ6oPz7oQk+Qs8kkmFi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743979047; c=relaxed/simple;
-	bh=BEZuxW/tPkj0TNRpDw+niTh+GANp78QImBZ+kCA3ghE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Ir3rcOt+u/lWGy/lSwDFRLMMCQS7M8cd/5//vjFunNV+3DgzRkjGGj/fdg8O/l0YPGQ9tfs0nCzDov5zZfsuuHrPdRGzrA6gPd0+jX74j/0Hv4VTj06lAuhfmnCJ0FZLFzqy4sVJkcqB7rAS8vAv5D2rBqye+TiuEYMYYB7Jhrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DCgHd3s2; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1743992772; c=relaxed/simple;
+	bh=qqs+LE0eRz1+HvRjfisMIFt6Lj6/g1vAXELmv46RSi4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nt/UT1plSi62tnPUhtD5mfYwdlQ9dViZRArM7AUwAcw1yvC6pOuXrUkjg5U+ZD3q5e63/wzaeSJeXJMNkyPBVgPmVLwPwbu7YhGYMFJTLn0Lt+5iWKlLr0hS93HXX80ME/bj6eJUbRKmyFL487qKz3l6HRamrxPyfigyAU1ZXkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klJ2q2hU; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac73723b2d5so790810966b.3;
-        Sun, 06 Apr 2025 15:37:24 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6febf391132so35008187b3.1;
+        Sun, 06 Apr 2025 19:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743979043; x=1744583843; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WHqUPfV6WMZ2X/rA9+CQ7dYZUn1Zy97wM7iX0HT+Yec=;
-        b=DCgHd3s28Vvnh+c9coJWRoHifVeGW0XquS/eDLC3+67SpGB8SxZoyENSFvBuSuVCoh
-         xJTHs1I/I3t4nxtKQ22ML4PUqMk6wSQWbkNKThLjmZpWV2sC4Y61AWIAoifAj4rL9LOi
-         UiBYQwbGIhrVcP4lAaMRSIa/v7OuMhAXUO8ZPoDevkpxo+g5K34QbuyASYj42YMuoyzU
-         YzF0VXW/X5vKhdIVtVNRFG1c+wM+QjHgXt+k2PSnqqIBDKmYaZvhFQXnGV+xk1v06Oi9
-         OY+VbtFQrRwvcZAw3arEjXzj84myXPkl2alQv5TCs0tPmzro6zgOOJvQgDfXmfbmSoCo
-         0Aww==
+        d=gmail.com; s=20230601; t=1743992769; x=1744597569; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=debS+VRslkmHys5XV5kL/p+TQCO24vSGvmW5DmRp9r4=;
+        b=klJ2q2hU5QK0BhrCPmtHpVURfrT3364cLANBbD1NoggF58lwGZ7V/qLNCtxEOiTjA6
+         DSSic105zW7f34EANeRuZ452rbLPCI6zUYXIjuuJE+PoesQABHl2m/BO96sO+8oZR2qZ
+         ob8oKFhU/AxYTiQqSHa8zYflUVLK2esMw/xCV1+so+pygeR7mGVbQoNvvhAk+dLZh8Kq
+         6AQe/kxuzqwKf0suTzbOJ6ff9o/Yyb2ksPEAsWUA2Xvq74z61Olvtw2nES5TC52+TOUp
+         1eUw8lpCwoVsjenYS6XYBYkg4Es577WzCNsqsFGxES5/2Y9ifFLZDu/ss1sD+FehfejV
+         visA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743979043; x=1744583843;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WHqUPfV6WMZ2X/rA9+CQ7dYZUn1Zy97wM7iX0HT+Yec=;
-        b=FJsmo8JSW3Xg9Gaouvocu57KM1AzB7Xk6dWj2vR5VydtE58KBxhcge8Xt9hZSxkd0Z
-         CTZKPfSXvun0QcqsOKij0SD8Tz5Y+kd9nFQe6ys13j9HnJW6LTsXbmkpGx7T6d33+PJ7
-         kXxrlz1UwQfBYbc7yiCIgsZBejY2/IC/HTOI90qBedUTsjHQUxqiunt9PuDigH9wH+4K
-         ZgD1cAwT0RdaM/jFsB/cQThrq9X/5xxqTStEbyZtmucCNc33L8EOz0xbik4u77y9Nf/t
-         Kb7m58MvecxJsJkDW/dVFBYiVTtoBVqkVE2zoIGBnGqs1zURDWIPszCErnKS64GkdU0b
-         AzQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjAcJuoqJpcQet9hVzDsnpRYiqGqTzjllSZsHbzxvt05fkF/hlZ4XYYQ6xzXHBo9Hu7kHIS7+846u3Bqyv@vger.kernel.org, AJvYcCWQEBJj8DCLwvv27d+TFslkmLdUV55rUnSZyNjNuD8I1anqslh33Ks2yk/D+ckYg2o92YN35euxbXcK@vger.kernel.org, AJvYcCXF/w/73U+Ibh3d8TRWHI2uiQkw/+Qe1hOKb8WQOngqqTrfgHatLRtB+KRVAoZb1nF/e4oWRxfH1SELwyibJV0=@vger.kernel.org, AJvYcCXZdXf7/S43yyVfs5C4f/mt4G7SV/FfQ9GzCsMs5xPEKCBk5BotlNRvrn47T0b2GYtJW3L9cNLM/+Rh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0kNv1mGo/KTgkmUWC/pub/wZc7aiEgn26v5AqtxJsKRLnnvPe
-	N4Nln0y0yjfIk4Kbr8sjzqTsG5K1gKIiDlwKuXWLzA2yg64ZhI4j
-X-Gm-Gg: ASbGncs5eLSiyCje8etqDpdiid0mOE+VDXOg6b9XsQyhsDC3QSousVKelhowGF9FPnL
-	Jp+g98ono87On/p0UW7HfD3jb75x7hAOtevXIO2pXW11J6aayF1NTMIxVlxdu19tgXWEbtNSH06
-	DXFX3iodpi/RQln0Wx6rzb4bffBLf3NgaJyVoZ0R7P8cluYyfGazJPqPF1/dGtw1TIWzLmbR+Rj
-	OxaXIyvEb95XnDmjR9I+TfO+VVZ/858nRWaVzKDQYAiWV1DnJNaI57en90YSKgSexUIo7uvv7wM
-	J/R0GbfJRlTYy+2R9ov/QJzqQbNAmg2tqG4GPtwEYwJo5DRhlOi2/Q==
-X-Google-Smtp-Source: AGHT+IGH/JCb2haLK8M6Hg83Hl1Ir/URcGcMma3Wfc+3EBUya5WF+wecNHln934OF3SpETZoePDA2Q==
-X-Received: by 2002:a17:906:c110:b0:abf:607b:d0d with SMTP id a640c23a62f3a-ac7e71b25e7mr739510166b.16.1743979042671;
-        Sun, 06 Apr 2025 15:37:22 -0700 (PDT)
-Received: from [192.168.0.50] ([79.119.240.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7bfe5c804sm649423466b.15.2025.04.06.15.37.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Apr 2025 15:37:22 -0700 (PDT)
-Message-ID: <14513d89-1ee3-4d90-bd26-1d761714a8a9@gmail.com>
-Date: Mon, 7 Apr 2025 01:37:17 +0300
+        d=1e100.net; s=20230601; t=1743992769; x=1744597569;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=debS+VRslkmHys5XV5kL/p+TQCO24vSGvmW5DmRp9r4=;
+        b=WtwRZeFpNqTwQIJWf/qLEwLKcK2lOGv7qZVLoksE8mw3aLH7UyvPa51Co7er1gnv2F
+         JLvJAgU/jdG0C++3j/daALV/KOPRt22msNLTQ55zmJbrzWanrJgD/OKQCa9L95i3avHH
+         LLSpLfqDnomeBEDtooy/zXIHfFkYemTncq5LLwgLN2txBZJD8wS1dG5QJ//rhYm8/Qww
+         z7K+cYJZ3R1bC5J/YTliBiTnPJVM4GQRTZJAlVpttv12rXXnURNqQp+ePRx6I8Xe+N1q
+         xhdLHAvLVSLxotlki3MtlBSJnn73EthBPTuT2x0hUvTDjEaupwNFXJlf2/VnP30s7W7I
+         tqWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFaNkJXnxj7tkrHPvzm+iFffUJ7QMxkqXZWLuVSalt2OYx/EOm7RTJGKXWlHmC2q1cEvE8q5L3lsbM@vger.kernel.org, AJvYcCUPQiX/SyYLbOq3G2FoOzlJNY8YYkN+iAH7tuitd37I7bw0Upoitt/yUlnO0PisdvDb4g3kypj/8ttJtiwq@vger.kernel.org, AJvYcCUfh5WMlcb4kkJumy8aaXYQQEwejMYJmisobrld8Bpkl+LzIynG3rLtO5hue87/p52Y6DsCOBpKaCkWgZVLD/4=@vger.kernel.org, AJvYcCVE4f6AlsF932Ssa59QX+4x2kuvCfZq1DIkm4Mw065UcrLuHaBr2wDHYj6Va3X/yZk+DB0k8eRZAq3S@vger.kernel.org, AJvYcCVK+gadp8QAPJ+71sPw+uTzElx2dCJ5jnfF6/oeGZcxFRY8gHr3YtpFkyHM28ETCwu8jtnxFHU7I0NVkw==@vger.kernel.org, AJvYcCVKHqH3b01JAjrbEE02F663UFePU3XkAc7WZWeaZG0eBGVXktLgxYzAKtcbd9O13CS5lN9ktNM8tl8=@vger.kernel.org, AJvYcCWJgEqxzZfn3Zd4wUYc35YDricmRlQG3bsnWLMlQAgAN2Jb9csQH4VPY1sYvMrBtkQ5IIoJs8SM@vger.kernel.org, AJvYcCX/S4t4Ghktu+gZv3ALEc6NMC2TPeFGEdEGx9bVIWXG9CjCAIDeonNkzG/RXxDRj5crJrGddF7XhzBB@vger.kernel.org, AJvYcCXCzRN+p8rU/G7+yv84RwX8CQLpwbTLx1hGdwx5greFtJ/mOzm4rLM0J21qPi6XjF/4qCVegODP1Yt2VqU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC51YS6iW3EVd87P9gX0kGMRMH8sNjNWpUGG2c7yXlqjqmoY2k
+	plyN/MXILVSvC/aB8ZC1iFywSF06vv4e0fzX/32s9TfMwJBSSRBjc5jFFuJgYM5drVg2K1rMLwX
+	5sdbq6R0Ays0BMVZlvbCbsB68yFI=
+X-Gm-Gg: ASbGncu9A5PtZTY7SOOQ0IasZmO80XfQAqRRP01tBlIfcp9ewMUt3oASUCxjrWYDdFV
+	x+gaF/+h6szxX/VuoZGYtXPcML473+PA9o3kv41XI+bsssKyn1CMWBoFsyiitDJllSHZ25kePM2
+	Y7E/dlMnJ6FQ2FjojfEg9jefTKzx05EgycxGAMdn72sFuvr3Hk6CCPFl+5gplkXU1XfDtJMHw=
+X-Google-Smtp-Source: AGHT+IGquV6j7kjxSU5DDbl56LJUWg84NJlvktHpwJEewJUQrkBdAn2Dp3qCJNnObG7k37I2GpH8CM6noQcYsBFXMjQ=
+X-Received: by 2002:a05:690c:670f:b0:6fd:a226:fb76 with SMTP id
+ 00721157ae682-703e31407ddmr182228257b3.14.1743992769361; Sun, 06 Apr 2025
+ 19:26:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Subject: Re: [PATCH 0/2] Onboard USB device support for RTL8188 2.4GHz USB
- WiFi module
-To: j.ne@posteo.net, Johannes Berg <johannes@sipsolutions.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?J=2E_Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>, Matthias Kaehlcke <mka@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Jes Sorensen <Jes.Sorensen@gmail.com>, linux-wireless@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250403-rtl-onboard-v1-0-10ca9a6a4ee0@posteo.net>
-Content-Language: en-US
-In-Reply-To: <20250403-rtl-onboard-v1-0-10ca9a6a4ee0@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
+ <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
+ <20250320145042.GS3890718@google.com> <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
+ <20250404142115.GC278642@google.com>
+In-Reply-To: <20250404142115.GC278642@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 7 Apr 2025 10:25:58 +0800
+X-Gm-Features: ATxdqUEJhGHgxl-DlDPMkzogxSTRCsyaw-VHC_dALxuK6Y_oivsfK0lqdUug0TA
+Message-ID: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03/04/2025 17:07, J. Neuschäfer via B4 Relay wrote:
-> This patchset adds rtl8188 (usbbda,179) to the onboard_usb_dev driver.
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=884=E6=97=A5 =E9=
+=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:21=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> > ...
+> > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
+> > > > >
+> > > > > IDs are usually given in base-10.
+> > > > >
+> > > >
+> > > > Fix it in v9.
+> > > >
+> > > > > Why are you manually adding the device IDs?
+> > > > >
+> > > > > PLATFORM_DEVID_AUTO doesn't work for you?
+> > > > >
+> > > >
+> > > > I need to manage these IDs to ensure that child devices can be
+> > > > properly utilized within their respective modules.
+> > >
+> > > How?  Please explain.
+> > >
+> > > This numbering looks sequential and arbitrary.
+> > >
+> > > What does PLATFORM_DEVID_AUTO do differently such that it is not usef=
+ul?
+> > >
+> >
+> > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
+> > but I need fixed IDs.
+> > For example, the GPIO driver relies on these IDs to determine the
+> > group, allowing the firmware to identify which GPIO group to operate
+> > on through the API.
+>
+> PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
+> done here.  These lines do not have any differentiating attributes, so
+> either way we are not allocating specific IDs to specific pieces of the
+> H/W.  I still do not understand why you need to allocate them manually.
+>
 
-RTL8188 could mean at least five different chips (C, E, F, G).
-Should you use a more specific name like RTL8188EU?
+I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
+MFD_CELL_NAME(), like this:
 
-> It is found in a set-top box called "Fernsehfee 3.0".
-> 
-> As a side note, this device is currently marked untested in the RTL8XXXU
-> driver. In my experience it works (tested with a WPA2 home network).
-> 
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> ---
-> J. Neuschäfer (2):
->       dt-bindings: net: wireless: Add Realtek RTL8188 USB WiFi
->       usb: misc: onboard_dev: Add Realtek RTL8188 WiFi (0bda:0179)
-> 
->  .../bindings/net/wireless/realtek,rtl8188.yaml     | 51 ++++++++++++++++++++++
->  drivers/usb/misc/onboard_usb_dev.c                 |  1 +
->  drivers/usb/misc/onboard_usb_dev.h                 |  8 ++++
->  3 files changed, 60 insertions(+)
-> ---
-> base-commit: 38fec10eb60d687e30c8c6b5420d86e8149f7557
-> change-id: 20250403-rtl-onboard-f38354f0b14b
-> 
-> Best regards,
+static const struct mfd_cell nct6694_dev[] =3D {
+    MFD_CELL_NAME("nct6694-gpio"),
+    MFD_CELL_NAME("nct6694-gpio"),
+    ......
+    MFD_CELL_NAME("nct6694-gpio"),
+    MFD_CELL_NAME("nct6694-i2c"),
+    MFD_CELL_NAME("nct6694-i2c"),
+    ......
+    MFD_CELL_NAME("nct6694-i2c"),
+    ......
+};
 
+For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
+i2c-nct6694.c is 17~22. Does this mean each driver should
+independently handle its dynamically assigned IDs?
+Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
+and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
+you think this approach is appropriate in my case?
+
+
+Thanks,
+Ming
 
