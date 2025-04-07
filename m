@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-22642-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22643-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08620A7DF13
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:27:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC074A7DF2C
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:29:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C28B2188C5AA
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:26:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ADD8188D00D
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B39253F05;
-	Mon,  7 Apr 2025 13:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4B0253B75;
+	Mon,  7 Apr 2025 13:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6BY655S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZr2BP5T"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7164723E349;
-	Mon,  7 Apr 2025 13:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0267A1AA782;
+	Mon,  7 Apr 2025 13:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744032357; cv=none; b=Ii8FF3ot+rn8DCqIgIVrLECUOgHD9m8LPSJk2Nj1KTzgEmfneAh0Fb5IK6TefuOcEj+d9z8WFUDgWqezwuM70IAAGHZrj3FeMhYqTWreeHtRO0UmxpwDF2Y/1z77xwfxT1+0h6Q4ajGmpZVBdHx8INNEW5FeeVT4hhoglSLt7QQ=
+	t=1744032515; cv=none; b=f26JfHeu+Ev9HzEXMIolKlh4EGPYM6dLqQPoSjWNg8Rku6CseOwkDZqbdTX8vmOBoO2HOV2x+XyGzEiHF4GnqUfm9ec6dZ3oXqsHckYds6EhtZQz720Zy7eMa2ynwSOWgXI98rTmRy1MIw/O1V4VwMvDGs00PaeS3qPN14gf5d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744032357; c=relaxed/simple;
-	bh=b1zRwSwMdCchEFyuh6cDIP7vGCbroduKVm2a2qoCE4s=;
+	s=arc-20240116; t=1744032515; c=relaxed/simple;
+	bh=HB0twLKuHWo/5qu+5ldxdN6AsWcl950kES1LxUYdfsg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qwzK4gKLPuXsqWTJVheVsC3A87+HhGTHebQgrx3TInXJt6XixViSoy8LGrYvi06UuIsk52bF092BVG4Wce5+k7GSKcPOVzkNFxwKIriC33SjHe0V9fHeCW2mqR4Q5Ybzjeswg861mICtTzVgxEmsCsI4uAU7fS77kfvWfPLIpLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6BY655S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F935C4CEDD;
-	Mon,  7 Apr 2025 13:25:52 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jFSWkeT/Y2r5chY+CLs8qBQazDblyS8onoFg89k9mP7qd4quZ4x/1VXFZa8Ep0wDGHJAvFc3/x9L8tuSwLMDkY63+ZvquE+xI8P2hxTH33d8gFR6iMF5Mcr+yiPNYJyDBwweTGRkv8Xx+bcAHywSeEwdl6FgFLQhKd9IKb9A/cE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZr2BP5T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F211C4CEDD;
+	Mon,  7 Apr 2025 13:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744032356;
-	bh=b1zRwSwMdCchEFyuh6cDIP7vGCbroduKVm2a2qoCE4s=;
+	s=k20201202; t=1744032514;
+	bh=HB0twLKuHWo/5qu+5ldxdN6AsWcl950kES1LxUYdfsg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r6BY655SIUdGNY2K2nBTnUI9+KZLQKVx/Szfkf7ER5Oc8ZKUdZ6hsl9pYXQudX1nN
-	 skbTV03Fc/Q0xRptf2SC7xvkz0LGi/TG0r0CdrBm70peHfhllmdZoCe9IwBPlyID36
-	 7D3oOYDFyfhbC46hzc6/G4FoyKSfW9S7v4KjSgCOf5/uWofI9ywAI3PfLQ8HK7C5t4
-	 FLzsEL9Pf4S90HWjAcooP2j2UNnvyPk7VvutSLy9Rcxse5nvGUfC+ZY3lfoR/+mn8Q
-	 5lx75hkllLI7TmgPDDmsSZ5tChw+QjZQDCaSkoE5WsXIWlZH6sS7asf2a3z0jMDehn
-	 IzWmfjKstYUhw==
-Message-ID: <abac53a6-cba7-4962-9f34-ab2eac9e6e3d@kernel.org>
-Date: Mon, 7 Apr 2025 15:25:50 +0200
+	b=HZr2BP5TMyT8C182KOfF0EY/qMgwUmDvDJuMpbUAr63dXGazwawrg9sb4+SlTBr1y
+	 gFBQluLa+ZGmR9QsV/z+KJwXUFWEYZCShIQEx0hbBKMRJy0kgztEfcHFo91ZUgrYA5
+	 NJL6SwE26kjqMnFyvvJxk2nmCGjG4MQvOPm8+jyWRZ1t77AoXGsnHbVEuCcRAkY/G8
+	 +FG/W6DP71sYwCXdRFgOQI5aOPUHhNWMQcJlQR0pXoX84a09CRXDW3tHqE8Zem/kNQ
+	 /QOr4+5niJu5sTEN88WZiRwXQ9MNxhHbJ5gWMnGGvIkI5ZBbeOHf37ELxILnkCntUd
+	 d8zIlAy6g6bOw==
+Message-ID: <74770bec-eeda-4823-b494-bea177fe26b0@kernel.org>
+Date: Mon, 7 Apr 2025 15:28:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/7] phy: spacemit: support K1 USB2.0 PHY controller
+Subject: Re: [PATCH 5/7] phy: spacemit: add USB3 support for K1 PCIe/USB3
+ combo PHY
 To: Ze Huang <huangze@whut.edu.cn>, Vinod Koul <vkoul@kernel.org>,
  Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -65,7 +66,7 @@ Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
  linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
- <20250407-b4-k1-usb3-v3-2-v1-4-bf0bcc41c9ba@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-5-bf0bcc41c9ba@whut.edu.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,27 +112,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-4-bf0bcc41c9ba@whut.edu.cn>
+In-Reply-To: <20250407-b4-k1-usb3-v3-2-v1-5-bf0bcc41c9ba@whut.edu.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/04/2025 14:38, Ze Huang wrote:
-> +static const struct of_device_id spacemit_usb2phy_dt_match[] = {
-> +	{ .compatible = "spacemit,k1-usb2-phy", },
-> +	{ /* sentinal */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, spacemit_usb2phy_dt_match);
+> Add support for USB 3.0 mode on the K1 PCIe/USB3 combo PHY. Currently,
+> only USB mode is supported; PCIe support is not included in this change.
+> 
+> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
+> ---
+>  drivers/phy/spacemit/Kconfig          |   8 ++
+>  drivers/phy/spacemit/Makefile         |   1 +
+>  drivers/phy/spacemit/phy-k1-combphy.c | 229 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 238 insertions(+)
+> 
+> diff --git a/drivers/phy/spacemit/Kconfig b/drivers/phy/spacemit/Kconfig
+> index f0c2a33f53cc810e71c6140ae957aa68a2b6ff0c..12749aba756329cf64fb9199055ba484fe05f3ab 100644
+> --- a/drivers/phy/spacemit/Kconfig
+> +++ b/drivers/phy/spacemit/Kconfig
+> @@ -10,3 +10,11 @@ config PHY_SPACEMIT_K1_USB2
+>  	help
+>  	  Enable this to support K1 USB 2.0 PHY driver. This driver takes care of
+>  	  enabling and clock setup and will be used by K1 udc/ehci/otg driver.
 > +
-> +static struct platform_driver spacemit_usb2_phy_driver = {
-> +	.probe	= spacemit_usb2phy_probe,
-> +	.driver = {
-> +		.name   = "spacemit-usb2-phy",
-> +		.owner  = THIS_MODULE,
+> +config PHY_SPACEMIT_K1_COMBPHY
+> +	tristate "SpacemiT K1 PCIe/USB3 combo PHY support"
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	default ARCH_SPACEMIT && USB_DWC3_SPACEMIT
+> +	help
+> +	  USB3/PCIe Combo PHY Support for SpacemiT K1 SoC
+
+Missing depends on ARCH_SPACEMIT || COMPILE_TEST
+
+...
 
 
-Take recent drivers and use them as base. There is no such 'owner' since
-10 years.
-
+> +	priv->phy = devm_phy_create(dev, NULL, &spacemit_combphy_ops);
+> +	if (IS_ERR(priv->phy))
+> +		return dev_err_probe(dev, PTR_ERR(priv->phy),
+> +				     "failed to create combphy\n");
+> +
+> +	dev_set_drvdata(dev, priv);
+> +	phy_set_drvdata(priv->phy, priv);
+Both make no sense. Look what this function does.
 
 Best regards,
 Krzysztof
