@@ -1,62 +1,58 @@
-Return-Path: <linux-usb+bounces-22657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22658-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D64C7A7E9C5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:19:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AEFDA7E9B9
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:17:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F29A3B66DD
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:14:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 384A718987CD
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2523C21C16B;
-	Mon,  7 Apr 2025 18:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E9552550B8;
+	Mon,  7 Apr 2025 18:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEb9w07F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="opeQUzH7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D7A21B9E5;
-	Mon,  7 Apr 2025 18:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AAE2550AC;
+	Mon,  7 Apr 2025 18:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049476; cv=none; b=Y8j8+sEm+/Xu5ATG64jFcoRWImSCEsuekEfzIUJhUSqdu8YBeNGerRR1f1RLExSm0lr7PyqMrNkxJylSBdx7dQwbY4en1MzrZfT+UDyeCyaoL2DG9Z4iyC7RoSZ1KKvHXcLAYtXKcMXXbvPp2v8cu1h22RA3hJCpIuY+b7b7MkI=
+	t=1744049484; cv=none; b=pXwCjZvImvmJtAAmMWgZmcoKeNwhTcqmkL0Xg111ZSOBOFBeNi7RM+TyMaqUcSvepBED+97pObmvfU+o2D4aaKlJr0oLJJKsFJGLv8ljg1NNrBiIpUad+D3MhW4xVXw6beu/SpaZvyPbRedFvNZEyyGacUTe+AAahwSFu2+AIP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049476; c=relaxed/simple;
-	bh=IXmX+R1etJYleCxhJEyeEUBu6d/Gzl8XoxiZqTW4Luk=;
+	s=arc-20240116; t=1744049484; c=relaxed/simple;
+	bh=L05B7hniSO/AXQmct1z5w1FOMm0O6936Nt0X/IobJrU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fjAZPIkitfaJMMl13ObVBxyYmR/W/t+EtuLcoEDj0xdHy3xaAhLrPQTA04u1QSEalMdFCJX48J8o+QFi/gtd+cuI5TClQpZWlR1zCASKnBzEPIdqp3z7SDe0EggLTbisnthpwXsnJv4MI5Es00S88wP3cNa59doc1BIjFKHdBOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEb9w07F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E9EC4CEE9;
-	Mon,  7 Apr 2025 18:11:13 +0000 (UTC)
+	 MIME-Version; b=pp5y2wSaHiSSpT50JIrFYJTRQEPF2I+KvFdMJD7sjNd76+1ZS3usrd4ZiSTFJzdTnC5qtfR1kCnNZGwg0i20872YUGt9JiIGTmXqPhuAHOyItsgWHPnR9YvVy1v14uykywK4m02bF6jU8ust1jBT6OmprQXAN4VLtPIzGi6V4sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=opeQUzH7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9568C4CEDD;
+	Mon,  7 Apr 2025 18:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049475;
-	bh=IXmX+R1etJYleCxhJEyeEUBu6d/Gzl8XoxiZqTW4Luk=;
+	s=k20201202; t=1744049484;
+	bh=L05B7hniSO/AXQmct1z5w1FOMm0O6936Nt0X/IobJrU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BEb9w07FqAEMBnyiZ9zNTwyQP/A8vTaxwDyK0f4NL0ptD8obw7IXaxYi+MXZu26/N
-	 pd4HFGtOZqY6cffkPsK5krd5nl3oXPvi9pcf+l57KJaQbwT83nuc7MfmA8YgJoi8pd
-	 JfTDdC0sbAlASHwcJLjr3oIX8B44rNmiLSxjQZEQt3SqpmGDHNUYCZq8dvqgF7JDYC
-	 +62C+oDt6TiQq8xRI/Lhx+NN9mIqQOwSdXNXsXNgsIjww4oGplmAl5QfHGB63N0iLv
-	 FwfnveOPe6VhtTSCruG83wuiIrgI1FOHAONx0l5hTilcPNQmSFNhPfJmPSTjmYo6XQ
-	 7ay1nhU9uAQpg==
+	b=opeQUzH7YpRrZUP9pxSZ7GCAZFUX3sboYVrlmphRoe4yJpzR3wC8/naTDHS/VmRvW
+	 w84v1C3o+NCiHWogKTimvp/vOIqr0Lyd5bd7EejPXW6Gf3O9NaMCcyPy8FX+u5xc3V
+	 HEG64++cXrCA+WVWS9By8i7/Xy+71vGuG8oC00CcCHL8AWqtprw/XwygjlEk3u+8XK
+	 Z2MamNnaNavIHwTHulek3fQNAVAgy5oAnquoSD7gvCbhTmC/Gju6SARhHNlAwYQSny
+	 MFKhgG997AYkzsdvJNy2+eh+pu2zCftLKtiM782Xf1SVMR3At0aLQjnzB6KHcs8dvh
+	 vLW9Czv2grE3g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ferry Toth <fntoth@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	lumag@kernel.org,
-	dan.carpenter@linaro.org,
-	mario.limonciello@amd.com,
-	viro@zeniv.linux.org.uk,
-	lk@c--e.de,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 04/31] usb: typec: ucsi: ccg: move command quirks to ucsi_ccg_sync_control()
-Date: Mon,  7 Apr 2025 14:10:20 -0400
-Message-Id: <20250407181054.3177479-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 09/31] usb: dwc3: gadget: Refactor loop to avoid NULL endpoints
+Date: Mon,  7 Apr 2025 14:10:25 -0400
+Message-Id: <20250407181054.3177479-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250407181054.3177479-1-sashal@kernel.org>
 References: <20250407181054.3177479-1-sashal@kernel.org>
@@ -71,131 +67,87 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14.1
 Content-Transfer-Encoding: 8bit
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 7f82635494ef3391ff6b542249793c7febf99c3f ]
+[ Upstream commit eafba0205426091354f050381c32ad1567c35844 ]
 
-It is easier to keep all command-specific quirks in a single place. Move
-them to ucsi_ccg_sync_control() as the code now allows us to return
-modified messages data.
+Prepare the gadget driver to handle the reserved endpoints that will be
+not allocated at the initialisation time.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20250120-ucsi-merge-commands-v2-2-462a1ec22ecc@linaro.org
+While at it, add a warning where the NULL endpoint should never happen.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Ferry Toth <fntoth@gmail.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/20250212193116.2487289-3-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 62 +++++++++++++++----------------
- 1 file changed, 29 insertions(+), 33 deletions(-)
+ drivers/usb/dwc3/gadget.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 254c391618521..618d585905a02 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -222,7 +222,6 @@ struct ucsi_ccg {
- 	u16 fw_build;
- 	struct work_struct pm_work;
- 
--	u64 last_cmd_sent;
- 	bool has_multiple_dp;
- 	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
- 	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
-@@ -538,9 +537,10 @@ static void ucsi_ccg_update_set_new_cam_cmd(struct ucsi_ccg *uc,
-  * first and then vdo=0x3
-  */
- static void ucsi_ccg_nvidia_altmode(struct ucsi_ccg *uc,
--				    struct ucsi_altmode *alt)
-+				    struct ucsi_altmode *alt,
-+				    u64 command)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 89a4dc8ebf948..1c3d153ea73f7 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -547,6 +547,7 @@ static int dwc3_gadget_set_xfer_resource(struct dwc3_ep *dep)
+ int dwc3_gadget_start_config(struct dwc3 *dwc, unsigned int resource_index)
  {
--	switch (UCSI_ALTMODE_OFFSET(uc->last_cmd_sent)) {
-+	switch (UCSI_ALTMODE_OFFSET(command)) {
- 	case NVIDIA_FTB_DP_OFFSET:
- 		if (alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
- 			alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
-@@ -578,37 +578,11 @@ static int ucsi_ccg_read_cci(struct ucsi *ucsi, u32 *cci)
- static int ucsi_ccg_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
- {
- 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
--	struct ucsi_capability *cap;
--	struct ucsi_altmode *alt;
+ 	struct dwc3_gadget_ep_cmd_params params;
++	struct dwc3_ep		*dep;
+ 	u32			cmd;
+ 	int			i;
+ 	int			ret;
+@@ -563,8 +564,13 @@ int dwc3_gadget_start_config(struct dwc3 *dwc, unsigned int resource_index)
+ 		return ret;
  
- 	spin_lock(&uc->op_lock);
- 	memcpy(val, uc->op_data.message_in, val_len);
- 	spin_unlock(&uc->op_lock);
+ 	/* Reset resource allocation flags */
+-	for (i = resource_index; i < dwc->num_eps && dwc->eps[i]; i++)
+-		dwc->eps[i]->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
++	for (i = resource_index; i < dwc->num_eps; i++) {
++		dep = dwc->eps[i];
++		if (!dep)
++			continue;
++
++		dep->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
++	}
  
--	switch (UCSI_COMMAND(uc->last_cmd_sent)) {
--	case UCSI_GET_CURRENT_CAM:
--		if (uc->has_multiple_dp)
--			ucsi_ccg_update_get_current_cam_cmd(uc, (u8 *)val);
--		break;
--	case UCSI_GET_ALTERNATE_MODES:
--		if (UCSI_ALTMODE_RECIPIENT(uc->last_cmd_sent) ==
--		    UCSI_RECIPIENT_SOP) {
--			alt = val;
--			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID)
--				ucsi_ccg_nvidia_altmode(uc, alt);
--		}
--		break;
--	case UCSI_GET_CAPABILITY:
--		if (uc->fw_build == CCG_FW_BUILD_NVIDIA_TEGRA) {
--			cap = val;
--			cap->features &= ~UCSI_CAP_ALT_MODE_DETAILS;
--		}
--		break;
--	default:
--		break;
--	}
--	uc->last_cmd_sent = 0;
--
  	return 0;
  }
+@@ -751,9 +757,11 @@ void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
  
-@@ -639,11 +613,9 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
- 	mutex_lock(&uc->lock);
- 	pm_runtime_get_sync(uc->dev);
- 
--	uc->last_cmd_sent = command;
--
--	if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_SET_NEW_CAM &&
-+	if (UCSI_COMMAND(command) == UCSI_SET_NEW_CAM &&
- 	    uc->has_multiple_dp) {
--		con_index = (uc->last_cmd_sent >> 16) &
-+		con_index = (command >> 16) &
- 			UCSI_CMD_CONNECTOR_MASK;
- 		if (con_index == 0) {
- 			ret = -EINVAL;
-@@ -655,6 +627,30 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
- 
- 	ret = ucsi_sync_control_common(ucsi, command, cci, data, size);
- 
-+	switch (UCSI_COMMAND(command)) {
-+	case UCSI_GET_CURRENT_CAM:
-+		if (uc->has_multiple_dp)
-+			ucsi_ccg_update_get_current_cam_cmd(uc, (u8 *)data);
-+		break;
-+	case UCSI_GET_ALTERNATE_MODES:
-+		if (UCSI_ALTMODE_RECIPIENT(command) == UCSI_RECIPIENT_SOP) {
-+			struct ucsi_altmode *alt = data;
+ 	dwc->last_fifo_depth = fifo_depth;
+ 	/* Clear existing TXFIFO for all IN eps except ep0 */
+-	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM);
+-	     num += 2) {
++	for (num = 3; num < min_t(int, dwc->num_eps, DWC3_ENDPOINTS_NUM); num += 2) {
+ 		dep = dwc->eps[num];
++		if (!dep)
++			continue;
 +
-+			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID)
-+				ucsi_ccg_nvidia_altmode(uc, alt, command);
-+		}
-+		break;
-+	case UCSI_GET_CAPABILITY:
-+		if (uc->fw_build == CCG_FW_BUILD_NVIDIA_TEGRA) {
-+			struct ucsi_capability *cap = data;
-+
-+			cap->features &= ~UCSI_CAP_ALT_MODE_DETAILS;
-+		}
-+		break;
-+	default:
-+		break;
+ 		/* Don't change TXFRAMNUM on usb31 version */
+ 		size = DWC3_IP_IS(DWC3) ? 0 :
+ 			dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
+@@ -3703,6 +3711,8 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 
+ 		for (i = 0; i < DWC3_ENDPOINTS_NUM; i++) {
+ 			dep = dwc->eps[i];
++			if (!dep)
++				continue;
+ 
+ 			if (!(dep->flags & DWC3_EP_ENABLED))
+ 				continue;
+@@ -3852,6 +3862,10 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+ 	u8			epnum = event->endpoint_number;
+ 
+ 	dep = dwc->eps[epnum];
++	if (!dep) {
++		dev_warn(dwc->dev, "spurious event, endpoint %u is not allocated\n", epnum);
++		return;
 +	}
-+
- err_put:
- 	pm_runtime_put_sync(uc->dev);
- 	mutex_unlock(&uc->lock);
+ 
+ 	if (!(dep->flags & DWC3_EP_ENABLED)) {
+ 		if ((epnum > 1) && !(dep->flags & DWC3_EP_TRANSFER_STARTED))
 -- 
 2.39.5
 
