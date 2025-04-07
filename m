@@ -1,109 +1,115 @@
-Return-Path: <linux-usb+bounces-22654-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22655-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80C7CA7E861
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 19:34:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 849B1A7EBAE
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:58:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 328B93A3AA3
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 17:32:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3F987A4E02
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6293A217657;
-	Mon,  7 Apr 2025 17:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B739B222563;
+	Mon,  7 Apr 2025 18:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="PZ/TYz1o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W61dIT2l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06C121146B
-	for <linux-usb@vger.kernel.org>; Mon,  7 Apr 2025 17:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FA02192EC;
+	Mon,  7 Apr 2025 18:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744047013; cv=none; b=Ba5vN0PihPGRm9VaDad6yWZrSF9pCS0/V30rheYVYoiBOoeWthhbHIIrRanJ+FINWswtHIOvAADsiB5jGKeAwOYNXIWWD1m6q61XdT88yAInkJM3UBH+3dE57jf0aYVDLrVTkDNibfyIbz8hvq7BDqoVzokbZMOsXkdJnC/0Wrw=
+	t=1744049463; cv=none; b=aOIY2qkphCQ/Pg4uKcjNrleBk0r8DUbkdrl/87jIjOfOJeh98+xuusHc98jJvGbOnK0wsfSUhEWTe5bin7ZBbOHZydkVkqq/F4wA5RHvMM98yIKNbyOyhrX9vLGadEHwS+oHS3Bbb5Z3hYzSk7OpZvE8VlQ5qi/1cUI/q7kJGms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744047013; c=relaxed/simple;
-	bh=hAYYiBXXY70Jm2em3H1a/VfV6D4aFUDEgbCDcaD8eNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Txqlr/mfQH5lFSOg5aPgRKBg67LVk9LXrBok1HU1OWaQmts9wTYLVtzHMTjZM916ff2WAjBBaxHuYuOBFwOOl+khRVH+YgP5dBuQiqIvc9WPbqRgVxU5oeOIH+LW6mrffWMvYW4Yxm5awOia8qMr9yq53koeIRFiAt+bCo7pwkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=PZ/TYz1o; arc=none smtp.client-ip=212.77.101.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 18832 invoked from network); 7 Apr 2025 19:30:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1744047002; bh=SJZFLal8jqgIPZVp/6QbOdmJqNow83TJq1CG0CzJ+4Y=;
-          h=From:To:Cc:Subject;
-          b=PZ/TYz1on+IwGYToEv/ZBSjHgABYjeX9HR1p7cPHrA1zIoTBRF6JdR+Aj91UG/PRS
-           Cr1pn9swgWTl8MOGlKEagkTE/+BJYfdFn1F2CFXHO9ZE7M4t/AfTY0WvkmuoOGvM/y
-           XfFR6Bsg3/qX2MasqSmEPvBOjTFM9aSIm1ZfFw+R6ZjGpGmNfC+e/EgPWjcQn7hRn0
-           8ZTjbyVsADhmW1DCgvAX9SIj3Uhv0mspUyIYeHXEsIc39iN8sAKcmT0+mcb3fq+1o2
-           J9TrRfk9HXgNS1f2QV3yhHs6loBGzty2jMiwH4lEdcgSLL9IPmkm7/DB2VycaEuKpr
-           YKht8pBq6OZ2w==
-Received: from 89-64-9-62.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.9.62])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <gremlin@altlinux.org>; 7 Apr 2025 19:30:02 +0200
-Date: Mon, 7 Apr 2025 19:30:01 +0200
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: "Alexey V. Vissarionov" <gremlin@altlinux.org>
-Cc: Matthieu CASTET <castet.matthieu@free.fr>,
+	s=arc-20240116; t=1744049463; c=relaxed/simple;
+	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=G1VB8zFXxTvTTkf6LZ/mEcuT0bXuXng5H1nOtO22EjY3lytrbAfUICLjjaJ6zmlb1ew/b/rh4y+GHz3gUDlYSbRulKJk0VF4aoGErLFv6+2fmZUvGhbePMTINElCohMZhshmo/rTKOZ62unIHdPpUuAqbzLE4R8hZmmusmPXSPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W61dIT2l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9466C4CEDD;
+	Mon,  7 Apr 2025 18:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744049462;
+	bh=aWnBchov1Oc4qRALKKfsxuNtvRNfxDEeevqDES1rkyM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=W61dIT2l3z6W5uTbmuHaGO11AmCcW7qAayxhRLrAMFXAQdVqaZv0zRMLRcYIeySRZ
+	 pziU92wnIAnraD605LvA1coUF0szOgYuEa/j7mqxHvpblpp4CKeitWfoSQGuXnZTDT
+	 w73yT1fgWFg0SdyX7ykMjLcmq/T10ENxzNyG+P8yDSAEwuVHPdBLCtOUecpizrJsdp
+	 +yjt5NnvfHdPFGqZ25pceNUcMYX8cSq9gZMpST604PCt1k7lPy4qnY//t4uGdTmKPf
+	 mPp4kmrfHEmynqR/R4DqPn8ks7K4IraIlHs/VnIVBnJoCghhdnOhG9OwRx3VAIA9KW
+	 pLDYpv/a6yxeA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Alexander Stein <alexander.stein@mailbox.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@osdl.org>, linux-usb@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH] ueagle-atm: enforce boundary check for sync_wait[]
-Message-ID: <20250407173001.GA36983@wp.pl>
-References: <20250407130000.GD20970@altlinux.org>
+	Sasha Levin <sashal@kernel.org>,
+	mark.tomlinson@alliedtelesis.co.nz,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 02/31] usb: host: max3421-hcd: Add missing spi_device_id table
+Date: Mon,  7 Apr 2025 14:10:18 -0400
+Message-Id: <20250407181054.3177479-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250407181054.3177479-1-sashal@kernel.org>
+References: <20250407181054.3177479-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250407130000.GD20970@altlinux.org>
-X-WP-MailID: ac83f1f4f5ed40491b16e5134d345434
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000001 [oXJR]                               
 
-On Mon, Apr 07, 2025 at 04:00:00PM +0300, Alexey V. Vissarionov wrote:
-> After several increments of modem_index (e.g. after plugging and
-> removing the device several times) modem_index may reach NB_MODEM
-> value causing the out-of-boundary sync_wait[] array access.
-> 
-> Found by ALT Linux Team (altlinux.org) and Linux Verification Center
-> (linuxtesting.org).
-> 
-> Fixes: b72458a80c75 ("[PATCH] USB: Eagle and ADI 930 usb adsl modem driver")
-> Signed-off-by: Alexey V. Vissarionov <gremlin@altlinux.org>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+[ Upstream commit 41d5e3806cf589f658f92c75195095df0b66f66a ]
 
-> ---
->  drivers/usb/atm/ueagle-atm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
-> index cd0f7b4bd82ab132..436412b62c910e2f 100644
-> --- a/drivers/usb/atm/ueagle-atm.c
-> +++ b/drivers/usb/atm/ueagle-atm.c
-> @@ -2500,7 +2500,9 @@ static int uea_bind(struct usbatm_data *usbatm, struct usb_interface *intf,
->  	if (ifnum != UEA_INTR_IFACE_NO)
->  		return -ENODEV;
->  
-> -	usbatm->flags = (sync_wait[modem_index] ? 0 : UDSL_SKIP_HEAVY_INIT);
-> +	usbatm->flags =
-> +		modem_index < NB_MODEM && sync_wait[modem_index] ?
-> +		0 : UDSL_SKIP_HEAVY_INIT;
->  
->  	/* interface 1 is for outbound traffic */
->  	ret = claim_interface(usb, usbatm, UEA_US_IFACE_NO);
-> 
-> -- 
-> Alexey V. Vissarionov
-> gremlin ПРИ altlinux ТЧК org; +vii-cmiii-ccxxix-lxxix-xlii
-> GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+"maxim,max3421" DT compatible is missing its SPI device ID entry, not
+allowing module autoloading and leading to the following message:
+ "SPI driver max3421-hcd has no spi_device_id for maxim,max3421"
+
+Fix this by adding the spi_device_id table.
+
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Link: https://lore.kernel.org/r/20250128195114.56321-1-alexander.stein@mailbox.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/host/max3421-hcd.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index 0881fdd1823e0..dcf31a592f5d1 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1946,6 +1946,12 @@ max3421_remove(struct spi_device *spi)
+ 	usb_put_hcd(hcd);
+ }
+ 
++static const struct spi_device_id max3421_spi_ids[] = {
++	{ "max3421" },
++	{ },
++};
++MODULE_DEVICE_TABLE(spi, max3421_spi_ids);
++
+ static const struct of_device_id max3421_of_match_table[] = {
+ 	{ .compatible = "maxim,max3421", },
+ 	{},
+@@ -1955,6 +1961,7 @@ MODULE_DEVICE_TABLE(of, max3421_of_match_table);
+ static struct spi_driver max3421_driver = {
+ 	.probe		= max3421_probe,
+ 	.remove		= max3421_remove,
++	.id_table	= max3421_spi_ids,
+ 	.driver		= {
+ 		.name	= "max3421-hcd",
+ 		.of_match_table = max3421_of_match_table,
+-- 
+2.39.5
+
 
