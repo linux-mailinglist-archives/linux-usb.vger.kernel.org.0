@@ -1,111 +1,130 @@
-Return-Path: <linux-usb+bounces-22701-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22702-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63510A7EAD0
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:41:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37E6DA7EB1D
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DEE8188B113
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:39:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95A7C421EA5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66822550BD;
-	Mon,  7 Apr 2025 18:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A847F269AF9;
+	Mon,  7 Apr 2025 18:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nwfrx+L/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVYr0hu5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B092236F0;
-	Mon,  7 Apr 2025 18:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275D52550C7;
+	Mon,  7 Apr 2025 18:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049721; cv=none; b=h6kPdn4rCfrTLjlo8xuSIBDbnH7NKlrKAMLQZG5z5qBxu3hSd3V9xSevCluXq3JD9QNm+AkAKF0jDVTM8dlKqZQJxjjDGwk/ANueovL1mPPYvOMnInnv7bSmTP+kf4P8bN5SxUS97yGISnSlTlddhS/gSiH/3UEVdVkkrhNMUyY=
+	t=1744049724; cv=none; b=t0q+j4esiPZDrUVbVSrUL+iBfEmu+//HnF3roAUn8bfI6R+PwrCGyAVyFyhtidiqffNtpN67VpOtaMIJbduDtELVZjPue/SWo4IGh2RnWlBeLcfYduYnpwQuAZKap9IhIHXzclNPCKNozWRgxDYqXE8RA2KknftEKbM4Fv1oiaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049721; c=relaxed/simple;
-	bh=tgQT/fBkRIsvHEjKratjydCq/3tv6iRd2tWQmUIzM2Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jHQrpHDUgZ1aDRqODGa79atgwrMwitlCdFNUmr+DUUL/eMmuPb1tR0rHB6vj0re/SYp3vG24raSeV23V+gr2yWbQU5a6iTG8lJ7s1qxNf0HkQY2Jmnm9HrRpfkHYMsFwygP4l2LF3014qq9ZlDoc2GaIn93mGGToR+K1WRZFCJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nwfrx+L/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE38C4CEDD;
-	Mon,  7 Apr 2025 18:15:20 +0000 (UTC)
+	s=arc-20240116; t=1744049724; c=relaxed/simple;
+	bh=uuDdzrXe7hIa2fRDKBV1y84OU1qD7FqqEWcopua3u9I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=plbywRf8S6OWxMfdJyKvICWRp7RpQ0qTcXomP3Y1I7bKM8J0P8EgD8WqYa+x+Vev/meh6pJpAAFIAMNvXNr0WRm3RTmxW26SQ54ZQqk6zrLcl6GIQGaqCcXe8EcL1nq+gS8mhW4AHvFpv6OhQRsxDSpQXq7K2fpbPCBj8XjG9sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVYr0hu5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9B0C4CEEE;
+	Mon,  7 Apr 2025 18:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049721;
-	bh=tgQT/fBkRIsvHEjKratjydCq/3tv6iRd2tWQmUIzM2Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nwfrx+L/HK/xTvOCSU9qi6fSsLJRgD6Ze3x3WLc+gpN7R1/QwBJHkPoa82IddKYr/
-	 1nBK2c1rrCf0EZWC1hYFo8/q7se4cJukReNdEqvPlUv+Td7RCpivdjXTCoZxUYqJz7
-	 bYuo+CxLDUgEifm/e2E0d/B8mxt04ZJV7pNqMl5J1avCFx1UxMVw3qNNR5B1yGZ6fa
-	 QyF/4ruFE/sq9og0GOsx2Fl+lmxMDHwFENTksLf3ONIT98BX3SarNi1HZvJv7dmaLa
-	 YIngf7seqPrKLwOY/IQ9ZT3LBV1/PtU9UTV62l/7M8sMjrmeQjyFUW9eWIPY7Q143t
-	 9aPKsV5DKKZKg==
+	s=k20201202; t=1744049724;
+	bh=uuDdzrXe7hIa2fRDKBV1y84OU1qD7FqqEWcopua3u9I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hVYr0hu5SbNsWFTfLOwf1f5qADdwxgSPTjV/E40OFjGtoBvqahuVQcjzSmwk1klXT
+	 8XC/9vHPEP/7DdW3FUySe6kbPTRzCLr5e0Y9tckjeWWcnlBR0prDypzPtLJEd6sCEt
+	 01NwfWILgG+W9OC3puOHfnOhukjuaWCyDPPu4NE0DRzIf7gMf/JHWHqXYkIs+xqnav
+	 rmVsYHkGSSlxDLtt+BU8tyZY3QD/k/0IyhaIbVTLvo3n4Mn8daj8jbqMVWYBRx80td
+	 wV8LQJd9pK/PnRLkM6ljhbMW7sWj3fFrugc0qlRb4Fzg6vxTlnI2voY0Gt4+BHqllY
+	 3qQEFU8x9t0iQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Alexander Stein <alexander.stein@mailbox.org>,
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ferry Toth <fntoth@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mark.tomlinson@alliedtelesis.co.nz,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 1/8] usb: host: max3421-hcd: Add missing spi_device_id table
-Date: Mon,  7 Apr 2025 14:15:07 -0400
-Message-Id: <20250407181516.3183864-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 3/8] usb: dwc3: gadget: Avoid using reserved endpoints on Intel Merrifield
+Date: Mon,  7 Apr 2025 14:15:09 -0400
+Message-Id: <20250407181516.3183864-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250407181516.3183864-1-sashal@kernel.org>
+References: <20250407181516.3183864-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.179
 Content-Transfer-Encoding: 8bit
 
-From: Alexander Stein <alexander.stein@mailbox.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 41d5e3806cf589f658f92c75195095df0b66f66a ]
+[ Upstream commit 461f24bff86808ee5fbfe74751a825f8a7ab24e0 ]
 
-"maxim,max3421" DT compatible is missing its SPI device ID entry, not
-allowing module autoloading and leading to the following message:
- "SPI driver max3421-hcd has no spi_device_id for maxim,max3421"
+Intel Merrifield SoC uses these endpoints for tracing and they cannot
+be re-allocated if being used because the side band flow control signals
+are hard wired to certain endpoints:
 
-Fix this by adding the spi_device_id table.
+• 1 High BW Bulk IN (IN#1) (RTIT)
+• 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
 
-Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
-Link: https://lore.kernel.org/r/20250128195114.56321-1-alexander.stein@mailbox.org
+In device mode, since RTIT (EP#1) and EXI/RunControl (EP#8) uses
+External Buffer Control (EBC) mode, these endpoints are to be mapped to
+EBC mode (to be done by EXI target driver). Additionally TRB for RTIT
+and EXI are maintained in STM (System Trace Module) unit and the EXI
+target driver will as well configure the TRB location for EP #1 IN
+and EP#8 (IN and OUT). Since STM/PTI and EXI hardware blocks manage
+these endpoints and interface to OTG3 controller through EBC interface,
+there is no need to enable any events (such as XferComplete etc)
+for these end points.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Ferry Toth <fntoth@gmail.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/20250212193116.2487289-5-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/max3421-hcd.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/dwc3/dwc3-pci.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-index 6d95b90683bc8..37a5914f79871 100644
---- a/drivers/usb/host/max3421-hcd.c
-+++ b/drivers/usb/host/max3421-hcd.c
-@@ -1956,6 +1956,12 @@ max3421_remove(struct spi_device *spi)
- 	return 0;
- }
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 1872de3ce98bd..5e0b326875fac 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -132,11 +132,21 @@ static const struct property_entry dwc3_pci_intel_byt_properties[] = {
+ 	{}
+ };
  
-+static const struct spi_device_id max3421_spi_ids[] = {
-+	{ "max3421" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(spi, max3421_spi_ids);
++/*
++ * Intel Merrifield SoC uses these endpoints for tracing and they cannot
++ * be re-allocated if being used because the side band flow control signals
++ * are hard wired to certain endpoints:
++ * - 1 High BW Bulk IN (IN#1) (RTIT)
++ * - 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
++ */
++static const u8 dwc3_pci_mrfld_reserved_endpoints[] = { 3, 16, 17 };
 +
- static const struct of_device_id max3421_of_match_table[] = {
- 	{ .compatible = "maxim,max3421", },
- 	{},
-@@ -1965,6 +1971,7 @@ MODULE_DEVICE_TABLE(of, max3421_of_match_table);
- static struct spi_driver max3421_driver = {
- 	.probe		= max3421_probe,
- 	.remove		= max3421_remove,
-+	.id_table	= max3421_spi_ids,
- 	.driver		= {
- 		.name	= "max3421-hcd",
- 		.of_match_table = of_match_ptr(max3421_of_match_table),
+ static const struct property_entry dwc3_pci_mrfld_properties[] = {
+ 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
+ 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+ 	PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
+ 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
++	PROPERTY_ENTRY_U8_ARRAY("snps,reserved-endpoints", dwc3_pci_mrfld_reserved_endpoints),
+ 	PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable"),
+ 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+ 	{}
 -- 
 2.39.5
 
