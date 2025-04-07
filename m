@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-22650-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22651-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9BD3A7E028
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 15:57:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 491ADA7E056
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 16:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01A3D17E061
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:52:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5E8A3A2764
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 13:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ABFA1B87EB;
-	Mon,  7 Apr 2025 13:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1291ACEAD;
+	Mon,  7 Apr 2025 13:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ca47zA+P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUuV+LDb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF8919D060;
-	Mon,  7 Apr 2025 13:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440A035972;
+	Mon,  7 Apr 2025 13:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744033931; cv=none; b=tGRdPmlFVhenWJ+CPo/UK1u2J0Im/+zQAQa8+k55ZHIG4PGx25O2dsZ1UMJpdvjwvZRFmA8KBW3qxJw1cVukLDc4CQ0yQvw9KYR675NjijwOKA5kB4vaLw1jTtH9Iy2H4KjLTlNzCEeOveXHiN6jbcQPsGOH1JNpMkpT4EAhjaQ=
+	t=1744034220; cv=none; b=J0ISte1BkxxENFUQJXLU5DU7Q2SBkMOQQMUy17E8Vzti9tbO3cWWq6ZlDQMtCgMwaA3kzBhcWW33JTn5oUZVrVuIbo4glGRLLrORugX2isR+yoqXNX3KaOoFc4+ytBrQCAGLQzlxBKn1mHGY4Hd1SrEbIqYgVaPacUo6hjdNcWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744033931; c=relaxed/simple;
-	bh=y+c8QiAjEMS2q89sfnStlQVZ1zqvw66HAR7EOr7Z5Nc=;
+	s=arc-20240116; t=1744034220; c=relaxed/simple;
+	bh=8rrW/8LF+uQZ+ilbW3GuDDQbfeborWsQoNXyo+zSF8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cb7XliVN8eWpUFITpFlrPGP9ApCUUnBCMgWHXp/3c3kgCp8QrVof2sp2/EyeeWKcm3BI4Cw6g/dxL8sC4iEDyzpv3kkbWyzkUoJx35p+NQUo3jovDUIadk32qt0G2rV7orVaxSCSr2rAZetTKdqOP2BilrdmhfOlpvL6h8Txtiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ca47zA+P; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zgg25HZjz7xqbriM9w0pKl3lO7MuIkZtu/4xPX4p35kYnnpbPFSaZMtxe75fUN6LXsZexY/gDgJn2fBSnQQFN/FP9p620L9X3Tfs/kaKDl5ugEZ+3A9Lwd2G3N+ASebMPMdEwQYTQKrFshiu6clv0GFQWQY30OgcYPhpjl33Fgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUuV+LDb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744033930; x=1775569930;
+  t=1744034219; x=1775570219;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=y+c8QiAjEMS2q89sfnStlQVZ1zqvw66HAR7EOr7Z5Nc=;
-  b=Ca47zA+PCER48nt/+09d3NqApN8JyIRuLWz5m/VbJqzxEJGdZ/xqshcO
-   nwHDUlXKSOC6GMWBljjw2HDw8d2wrn0PwoMr8uy0HxGjVtI2HB/nbprSY
-   5DOdMstftKcCrv5/AQC1fYVqzmC63Af6DvjI9Lsteh6yc/2UoXioH6C03
-   /1iWWY6od1nRtj2frcoX1H8Pu0IKCc5PXbl6xjMEBzvEww6riThzNVzFu
-   9IWErpZSM1CnAIGP1iw9XioHWg+CfT86rPmMsea/haZ0LsVS+jihdXo0M
-   yjU3QTI5qlClpnSvm7IkzqXLDA+rgmxIm0/kniBStYsHMxfeFomsWYfjd
-   A==;
-X-CSE-ConnectionGUID: 2nMa9VYSRYiecPDJBdWJQQ==
-X-CSE-MsgGUID: YtTUzJK6SN2QYKFaw3v0vQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56790797"
+  bh=8rrW/8LF+uQZ+ilbW3GuDDQbfeborWsQoNXyo+zSF8A=;
+  b=NUuV+LDbBxzYFyaICS7PRngUKjZiYVSTKFRKeemk2/JW1PhPVlOQ9lyH
+   BDTPGB+dUDQ5ghYfrnFIYPM+rUqCSneSQs82U2uyOcooQ0qUwIwk2Z8Z5
+   857Xph4CghszgauHNfFK9qlAd13Qhf79zbcGreu7oMQ4vRQSTFL95O5ti
+   8nEOuOKPokNL5s0ilBwLyThEQDvjN8V5zUuodlMXuk0DtFVbaToktmuuN
+   4Shvu1ZU66VZ2TRMJuMrK0aCn0ink22+ATVvIRj5jSRTWeJN9w3cznb9+
+   MvHTYlEC+WT0rO1i5Ez/Ele1bUU/6j8sEc5Q16JLO1kGmjT7nXpljKdSd
+   Q==;
+X-CSE-ConnectionGUID: ij2YuH9HSqaehxwCBMMSOg==
+X-CSE-MsgGUID: sqUJSoPfS+qMGYEEaexRfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="70797736"
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="56790797"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 06:52:08 -0700
-X-CSE-ConnectionGUID: 89si6OklTNKD+7dbM/wAkA==
-X-CSE-MsgGUID: X5NS5+wUQgmFMjGOQAS/kw==
+   d="scan'208";a="70797736"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 06:56:58 -0700
+X-CSE-ConnectionGUID: AYLFC7sWTmqvatay9tLaMA==
+X-CSE-MsgGUID: HAxXgHPoTfeGbJ09f9lxHA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="165163892"
+   d="scan'208";a="132816801"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa001.jf.intel.com with SMTP; 07 Apr 2025 06:52:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Apr 2025 16:52:04 +0300
-Date: Mon, 7 Apr 2025 16:52:04 +0300
+  by orviesa003.jf.intel.com with SMTP; 07 Apr 2025 06:56:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Apr 2025 16:56:55 +0300
+Date: Mon, 7 Apr 2025 16:56:55 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de, Badhri Jagan Sridharan <badhri@google.com>
-Subject: Re: [PATCH] usb: typec: tcpci: add regulator support
-Message-ID: <Z_PYhMbmNv6dWM4w@kuha.fi.intel.com>
-References: <20250404-ml-topic-tcpci-v1-1-4442c7d0ee1e@pengutronix.de>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: typec: tcpci: Fix wakeup source leaks on device
+ unbind
+Message-ID: <Z_PZp4pL8MVS_QMv@kuha.fi.intel.com>
+References: <20250406204051.63446-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,53 +76,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250404-ml-topic-tcpci-v1-1-4442c7d0ee1e@pengutronix.de>
+In-Reply-To: <20250406204051.63446-1-krzysztof.kozlowski@linaro.org>
 
-+Badhri
-
-On Fri, Apr 04, 2025 at 01:17:20AM +0200, Michael Grzeschik wrote:
-> The tcpci chip vbus pin is possibly driven by an regulator. This patch
-> is adding support to enable an optional vdd regulator before probing.
+On Sun, Apr 06, 2025 at 10:40:50PM +0200, Krzysztof Kozlowski wrote:
+> Device can be unbound, so driver must also release memory for the wakeup
+> source.
 > 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+I this should be marked as a fix. In any case, FWIW:
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 19ab6647af706..a56e31b20c214 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -17,6 +17,7 @@
->  #include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/usb/typec.h>
-> +#include <linux/regulator/consumer.h>
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> index fd1b80593367..29a4aa89d1a1 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> @@ -536,7 +536,10 @@ static int max_tcpci_probe(struct i2c_client *client)
+>  		return dev_err_probe(&client->dev, ret,
+>  				     "IRQ initialization failed\n");
 >  
->  #define	PD_RETRY_COUNT_DEFAULT			3
->  #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
-> @@ -905,6 +906,10 @@ static int tcpci_probe(struct i2c_client *client)
->  	int err;
->  	u16 val = 0;
->  
-> +	err = devm_regulator_get_enable_optional(&client->dev, "vdd");
-> +	if (err && err != -ENODEV)
-> +		return dev_err_probe(&client->dev, err, "Failed to get regulator\n");
+> -	device_init_wakeup(chip->dev, true);
+> +	ret = devm_device_init_wakeup(chip->dev);
+> +	if (ret)
+> +		return dev_err_probe(chip->dev, ret, "Failed to init wakeup\n");
 > +
->  	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
->  	if (!chip)
->  		return -ENOMEM;
-> 
-> ---
-> base-commit: a1b5bd45d4ee58af4f56e49497b8c3db96d8f8a3
-> change-id: 20250404-ml-topic-tcpci-524d1d6bfede
-> 
-> Best regards,
+>  	return 0;
+>  }
+>  
 > -- 
-> Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 2.45.2
 
 -- 
 heikki
