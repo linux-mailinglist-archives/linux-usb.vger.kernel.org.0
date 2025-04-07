@@ -1,65 +1,57 @@
-Return-Path: <linux-usb+bounces-22706-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22707-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01888A7EB24
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:47:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95DF1A7EB41
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 20:50:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FA2616F256
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFDA63A8BC4
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Apr 2025 18:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA8025524B;
-	Mon,  7 Apr 2025 18:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F8526B2CB;
+	Mon,  7 Apr 2025 18:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ftQIQVyz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSdHkMuI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96DB26AA9B;
-	Mon,  7 Apr 2025 18:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB1C21ADC4;
+	Mon,  7 Apr 2025 18:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049745; cv=none; b=nNq7y48C+lyUA6E+PemtzgeTxjeyx0x8RKg7MahtXqT5/wcTePc39X1E0bWJY/at705+R+uqSnzWClT+wYsqjxfk8GfPalrXVFpRehjHOsB+7L88m750e7XTi6jZIWQ8hE7B3sWpxv/BLw8v0eVKnMhcxDxE3uLb6SkW1d/guxQ=
+	t=1744049754; cv=none; b=fK2EVpYB3rWfheME2yAfNUQ/SVyVwE+09aBN0fOGTwouLD2KghP4kTjKyQ2wO/EglEOPGe6ySyK+XZ3ie3NQPTpld8uzvS4oE+d6MZV51DVmH3+21rmr5xeJ7k4KrS6rMNFwpT5uw6R0uc8jBDdflRZkJv9RFwpDvngvTnf7tzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049745; c=relaxed/simple;
-	bh=ojmiIKC5JoIOY5ncsM343Ilta0QjoLb8LQTtRAMq5Mg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HUWCz2A3+u0C3g8zOgn3bHNqTStqRuoZC9vKW4JuftGlkFFbFQFlgUHgNcq+cdOZbFIcN1M0sNtY2ZEf5y8BLv8QsYnE5hwBKEzBPYkblS/JCq3ncT4u5L0eWOT42h08yzY35xuVDlJpvpFVNqWeEzRK+xiT/ALD4ssLSBipREE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ftQIQVyz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C98DC4CEE7;
-	Mon,  7 Apr 2025 18:15:44 +0000 (UTC)
+	s=arc-20240116; t=1744049754; c=relaxed/simple;
+	bh=JLqHkqQPeOxveqhfH++FK6yYdvY/BEz54iOYag6Pzxw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BbggKvwEKbbzs3/EKVyEvqThVjz9niert/jpso+5AOJj8u6/L1QEnPFgqFk8nAHYaBvkcr0PwCJ/+udGxopCcoONCA+AgtsXm/LRE25BmXpq4oU9DPn/AANkUh+xELirWPBIah019Bve1V8SWas8CCmCMOIU4PriuNVKq+ls/EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSdHkMuI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2BAC4CEDD;
+	Mon,  7 Apr 2025 18:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049745;
-	bh=ojmiIKC5JoIOY5ncsM343Ilta0QjoLb8LQTtRAMq5Mg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ftQIQVyzGt536oXaO7gh8Odq9U85GV04hk2FXfqtDG6dy12mM5wjDKlUN+nLTdRWa
-	 enNvRrOnDbmFaG8ZuOvGBFkjTlJOP9u4pVJEgQWT55T00nE+b9tal5LTvT1V6gVZ6w
-	 d2TMzVmtZWBPOIxOiG7LqtqU5n8GYBEAF1/yvo9B1haC33k729ZRRog3qDXhZr5m09
-	 Mg81iFCxWXG6K1pIbIyClp6ZTq0A//2Ve/nbPyQBmb4zVrVQblNbATjyJbYU/FXALG
-	 1wy9BwUwB7cSfv4GDZ9AAd6j219w2EDEgJ7Hlnt6OlLBqUv8UM7lvwDBkZKSIBZQx7
-	 Df6tDh2epdNAw==
+	s=k20201202; t=1744049754;
+	bh=JLqHkqQPeOxveqhfH++FK6yYdvY/BEz54iOYag6Pzxw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gSdHkMuIXu+1pf8PCFfdLu8pT0MHu899PoaJijlH9OMgJNPHE+KzQNgEn56JXxSpO
+	 S9UEbhT9oRW+gV0Ix+7DnveI6YcR3HuR2yDmjaAYJCjj6ZHZavBsULr8c4nBzRBN2Y
+	 x6hryKo769uczzO3SMDr/FZboPSe29gK/5Cucx/dj3PgDNJm6rQjhSpleE1opbM6ej
+	 vG7kYyF/lRx67ATkNPRB3TeK4iFu6e/yVP8vpJySBpF76C6zPNeMHDtR+cDwaaBUjY
+	 +4Dve+GxI1d0tXd7b3nDJRHd4k6nsxH00Ndgxok9bD9EtTmlFvhbUoJCSBsZYTM3jx
+	 curWgfCx//R/g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Chenyuan Yang <chenyuan0y@gmail.com>,
+Cc: Alexander Stein <alexander.stein@mailbox.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	joel@jms.id.au,
-	andrew@codeconstruct.com.au,
-	richardcochran@gmail.com,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/4] usb: gadget: aspeed: Add NULL pointer check in ast_vhub_init_dev()
-Date: Mon,  7 Apr 2025 14:15:33 -0400
-Message-Id: <20250407181536.3183979-3-sashal@kernel.org>
+	mark.tomlinson@alliedtelesis.co.nz,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 1/3] usb: host: max3421-hcd: Add missing spi_device_id table
+Date: Mon,  7 Apr 2025 14:15:46 -0400
+Message-Id: <20250407181550.3184047-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407181536.3183979-1-sashal@kernel.org>
-References: <20250407181536.3183979-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,42 +60,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.235
+X-stable-base: Linux 5.4.291
 Content-Transfer-Encoding: 8bit
 
-From: Chenyuan Yang <chenyuan0y@gmail.com>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-[ Upstream commit 8c75f3e6a433d92084ad4e78b029ae680865420f ]
+[ Upstream commit 41d5e3806cf589f658f92c75195095df0b66f66a ]
 
-The variable d->name, returned by devm_kasprintf(), could be NULL.
-A pointer check is added to prevent potential NULL pointer dereference.
-This is similar to the fix in commit 3027e7b15b02
-("ice: Fix some null pointer dereference issues in ice_ptp.c").
+"maxim,max3421" DT compatible is missing its SPI device ID entry, not
+allowing module autoloading and leading to the following message:
+ "SPI driver max3421-hcd has no spi_device_id for maxim,max3421"
 
-This issue is found by our static analysis tool
+Fix this by adding the spi_device_id table.
 
-Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
-Link: https://lore.kernel.org/r/20250311012705.1233829-1-chenyuan0y@gmail.com
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Link: https://lore.kernel.org/r/20250128195114.56321-1-alexander.stein@mailbox.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/host/max3421-hcd.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d268306a7bfee..92755a2fe4ff7 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -543,6 +543,9 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
- 	d->vhub = vhub;
- 	d->index = idx;
- 	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-+	if (!d->name)
-+		return -ENOMEM;
-+
- 	d->regs = vhub->regs + 0x100 + 0x10 * idx;
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index 0a5e0e6449826..5a21777197e95 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -1956,6 +1956,12 @@ max3421_remove(struct spi_device *spi)
+ 	return 0;
+ }
  
- 	ast_vhub_init_ep0(vhub, &d->ep0, d);
++static const struct spi_device_id max3421_spi_ids[] = {
++	{ "max3421" },
++	{ },
++};
++MODULE_DEVICE_TABLE(spi, max3421_spi_ids);
++
+ static const struct of_device_id max3421_of_match_table[] = {
+ 	{ .compatible = "maxim,max3421", },
+ 	{},
+@@ -1965,6 +1971,7 @@ MODULE_DEVICE_TABLE(of, max3421_of_match_table);
+ static struct spi_driver max3421_driver = {
+ 	.probe		= max3421_probe,
+ 	.remove		= max3421_remove,
++	.id_table	= max3421_spi_ids,
+ 	.driver		= {
+ 		.name	= "max3421-hcd",
+ 		.of_match_table = of_match_ptr(max3421_of_match_table),
 -- 
 2.39.5
 
