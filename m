@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-22767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D1DEA8160A
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 21:51:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A247A81616
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 21:55:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E1927B2091
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 19:50:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD9651BA7B5A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 19:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996C52528FC;
-	Tue,  8 Apr 2025 19:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEAC248888;
+	Tue,  8 Apr 2025 19:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ns76dayi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vmZ9s3+S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89442505AF
-	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 19:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3237C23F41D
+	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 19:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744141863; cv=none; b=oYHfKCO2rpCMgIFRjpPUg/7iKZBhMw7pJiacgdbe8QNToH11LKab8eGXFylOD3OciRmkJ7UdpY6oNMppmXqp6ySSya9PMyAvd3IprN1RyUI82TdjIie01R3F6VLUnqory9FK1IK3PU9HXYEYEVLrOP5EuG3eQiNZorCkxOdrsyE=
+	t=1744142073; cv=none; b=sok8sGrVTWY752Z2cvUDLNRnFln/TvevG5QwE9qhGPimClnagR0hdmdk5D2qYiw4SDyKaLqbrz//qzsYCJpO8Mjl90ObVFK+tgMD2kEMT4+cSsZx/xJgKOiFLqhr5UXw1ZB32nb+jWNGAR7aJB+pjFXjg+kH6xYo3zI7yoxZ6rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744141863; c=relaxed/simple;
-	bh=kYjOzHDJD1Ku2qLVhOUwN9rHloyRnFSlAKTaMhIuOKA=;
+	s=arc-20240116; t=1744142073; c=relaxed/simple;
+	bh=+4iqyUTi0E7UltQIdQPFstwrYJASj34CNxi5y1rMv0Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X7YHRN+Hr3zsEcx0S9ONbUTibuW29B5i2Z1sUkerZ4TK3vrItH5BG7DYDRum9e4R4Pj1SwOsDtk+ypK5kekYt6LscF+w+V27axpHFaFPqFCsBN8SIfsaaPwzQkhuY4Eeq2Tl6os7oHxKb94kGIZ3gLZxPyrQ9Kf2m09wAUtK1Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ns76dayi; arc=none smtp.client-ip=209.85.215.181
+	 In-Reply-To:Content-Type; b=BbTgNPI5xuoNU+2Qmtfvxbbl0ToI9LVWkKNqhDHuxpoUXMojDOJJJxg2oUWMSpeAvCR6rZ850PSfg8Wr73gTCVGPNYIR+hU3WRgLVHplSXEnZjx3C75CY6gFub9E/QTvaWM88u68lqWxNB6wMq+Ty6aGkSZSJYuZ/5eDkFWD+5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vmZ9s3+S; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-ad51f427054so4055713a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 08 Apr 2025 12:51:01 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-736b0c68092so4978505b3a.0
+        for <linux-usb@vger.kernel.org>; Tue, 08 Apr 2025 12:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744141861; x=1744746661; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1744142071; x=1744746871; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kYjOzHDJD1Ku2qLVhOUwN9rHloyRnFSlAKTaMhIuOKA=;
-        b=ns76dayi9FfsOOgzwJ0t1uyR+Mx/iowxQxn1f26XcVcx9qFDZodfmFmj3i6Be/Idzw
-         TeHExO0zxK/GQ4plC46NTxhzlT9rB/MMT58gCixw1lFbMnN/epRcV11ux5eb3mvHq/2L
-         vTXnTUufXTtH2t9OwsL4EVqUSQ2xB/tNUWCZ5t/hHzlhWe0rgzI89xO4jvuiaYanqiPN
-         rqofdshqQ2gXZLJzQa/gMQlhPncWWI179QslDblAmBmzgTVIJfoRYvscpiQLetklMKTd
-         woixp8w7D+vB2JQo3OTQbMboXgC14nVDXUFvWU66f7AosrVdtH+6/VERfVEI5ulcOWqp
-         p9og==
+        bh=KBGk/fKPNmRqrd1bCAlViX+nWV4o6WwNupDuItfdSOI=;
+        b=vmZ9s3+S7EREsPsSVrlOEBDS6ovxDIM8zv2M7+p5KvY852nXt6gFq+mHBnZ/tmwE03
+         NgtHB2y+8XQva5+aPDhsPp4ZbQbrkbShNBPDyvuPiCr0O7Pcq+QHWw9yYsfc95S1O+C0
+         r9uSZgpFJjYk/TEoQq2+yNLercrBz+EBTT6jl36PjcVWHhDkdpQyiLg30UZHR0OjO2d8
+         pQAruMWN+nRDtFoOSVMSRd2cMyn7fk/4T1GLp4h+KvKJdlkVAcEfI8/X+pn6GBow/pQX
+         OMlP2dwz0GhXkXeiNGzebKC6KcP2tlW/QkZVEcgQQeN2iOhejDVAVou+Z4WxoHdUuFBT
+         F1iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744141861; x=1744746661;
+        d=1e100.net; s=20230601; t=1744142071; x=1744746871;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYjOzHDJD1Ku2qLVhOUwN9rHloyRnFSlAKTaMhIuOKA=;
-        b=vbkPqEM7E0wqLmIkspUJI9oOAQrAe08Yrq4F/PfxAsa2+RKhaDpum31+BEjbFc91B/
-         LogKabWd+BQTvGgLhCFBbzKxy53gnYVoCaLIa+ZdXAcHC4XMh3n528/74AapvxiAIHk7
-         pOQ3RTbgGu1lvn39nPJz0Vn1/XAfxw/H4h1sPbKmdpB5HEg5MWTgk8CzRVjTmAMVWDHb
-         XHmp5u7L5i+/Mv2dPwNAlscOlwfKr07V52/2tXtJfWkp41sWvLF+CCK/t5qzTqfVAEJm
-         zFlSTQwBw376Eha6dkfHJ98S9qDgUSar4GGkxGaDtK7xGmcTqNve8xaU3is50LT8yMz4
-         v7ng==
-X-Forwarded-Encrypted: i=1; AJvYcCW6pAjwSw17yGsalavc6MdZyXzp44xBEVKaWXg+vp8FgvQk0QGb6xX73mER2iiTlyqJPuFFB+Rqcq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2HiS5nVmcMIAVrHo7cYgaGMDKEhK7nbBS5dkU/1WRfhDgxqVq
-	86c8VcTqxRDvxut4AVcGY6zaBS6WScnyiN7OlDGHkCbfw08iu2/4Zw4H+hCVEw==
-X-Gm-Gg: ASbGncuXQD/1Fg41JsahTni9W0gtAewEsYUJuQwYZwExiyvT60b7QmZZP1e9dfNBiXS
-	56B/qTBRVwmam0ZGkbU0QcAclyOHqDkfEyqtUFtpe/lpdSszdwdXK9BD61YlWSJgWWlOtjvs5WZ
-	wXL5QfJ9y+BM3VQWn4JqnvQqgxRa5+nB+TuR6D2ng+MY7l/IQrhi3/9VoNdL701nc7gMWZGfQId
-	ppMFlzEww9LeVBwE2LsUaBztG9l18JCmuFUT9XK+PSacAW8GAyb8wnimSbhs8t8mH7mbQlvxPVV
-	relOl6D7JlYCxRM3nFzUp5CMxxysoLbwZ1suJqWBxb8XbMAZkALMnzCZ4BnTy5GeDBuJdKMcuDZ
-	/oAlIpetB4g4+C7XK8z6UCrTl2M/8TkfJVdxz/fcvRzo=
-X-Google-Smtp-Source: AGHT+IE8D0yj/1izPqnhy7CnkrKCfihVPNUd7hh5oantY3ye/eMd0x6P1EKKg9jiwP4mfC+LMAEAyg==
-X-Received: by 2002:a17:90b:51c3:b0:2f4:434d:c7f0 with SMTP id 98e67ed59e1d1-306dbb948d6mr770818a91.12.1744141860732;
-        Tue, 08 Apr 2025 12:51:00 -0700 (PDT)
+        bh=KBGk/fKPNmRqrd1bCAlViX+nWV4o6WwNupDuItfdSOI=;
+        b=Mv+frHSNsYybYpxPVbFM6kG+DxtnqgzLtvDDahvf6hPYMHjPlpiis0lpUnt0cIeim7
+         5ncUNH++83rwNTzO8Ah02jjUm4Ml+sEOJUU6cTpTAi2zeo8rf2uaqGqw5z7OE8M59AEJ
+         yY1jOnKFQnnlZuo9s43di27aGI45YHzmrEiMODBPAgTHV+VNVgBvnrAgxSrdhA3XVU5C
+         UhKW8XQBIsBGUWvPkrgTqTiR7P8CoWDB83T83uAihkbOp2YZBP1/hE75g+Jmhy1D5kTR
+         dytZvlTwm9bSk0eYfRvsj9jEODPak6AtNidRByKvm7GsHePJYh4Cv143uXWwWBsclTQr
+         sbqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX4KO3O86zHATZPnH1uXMc78TFYukfNz2DsHa8QR1CsgFtfjIBijebQGSpx+UdfgTHzpHzQFeYvubA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLcTYFA/vh7IuIEGNKr34nSkosuCgQRhzGIUeoxMFQlk0CoVRD
+	LDMBPpUPjrYc+C89ITVy5kp0zRck78WEw8ShUZkZ8cdAq4KitqC+XTuZKN7QWA==
+X-Gm-Gg: ASbGncv5bkVBbGgv/HhsvUnX+HyrG6nbsGfgGNqsOGADlJsmWbLKOiqMBcuMP7qd1bb
+	UcP+jEWGFRkYf7xsliOTJnJPN/gMwgDKofSKx1x7ob6y7HcNuGSLh5JkTlNCizQ0pehReypwLHw
+	jdTI1NF9+7ufdMYvyRaGHk6RhqeBoqKafxtwuevYFcicb0bfYpebwN0nlNKC7IK1CvlWskpzMaV
+	Hw5zf17Xe4oU4WVwSQxqwUvWDwAaCxPynm5TEaEaEFvwz5RW18yeiWtg2No4w6R53U3VQ6PHGzW
+	yk9ZhJfe0vdJ0A9+1ka5moA0TyEM8EfPXveL8ppt74i43D0ZEL39809cUswl5Gg/zYVLcKE8xCA
+	ZfKBdvriDrjWxHJP65cftOW1Z8tPmFWNG/HX3xyMwAIg=
+X-Google-Smtp-Source: AGHT+IFpX171nkKO4/pkD9or/PTfHZTRPoVBCZggU+DSor2BZJYvT8pJQsh9q1mKL13bLo8q2/aXiQ==
+X-Received: by 2002:a05:6a00:4608:b0:736:b101:aed3 with SMTP id d2e1a72fcca58-73bae4957c5mr347163b3a.1.1744142071138;
+        Tue, 08 Apr 2025 12:54:31 -0700 (PDT)
 Received: from ?IPV6:2a00:79e0:2e14:7:4da8:81cb:274b:fff0? ([2a00:79e0:2e14:7:4da8:81cb:274b:fff0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3057cb5a7d8sm11701509a91.38.2025.04.08.12.50.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d97f3719sm11009549b3a.71.2025.04.08.12.54.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 12:51:00 -0700 (PDT)
-Message-ID: <d6a33a0c-f24c-470a-97bf-ee50ee7a82b5@google.com>
-Date: Tue, 8 Apr 2025 12:50:58 -0700
+        Tue, 08 Apr 2025 12:54:30 -0700 (PDT)
+Message-ID: <4e96d3ba-043c-4707-9bb9-8987d8c53025@google.com>
+Date: Tue, 8 Apr 2025 12:54:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,69 +82,143 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
- TCPM
-To: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 2/5] power: supply: core: add function to get supplies
+ from fwnode
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
+ Sebastian Reichel <sre@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
 References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
- <20250313-determined-wild-seahorse-f7871a@krzk-bin>
- <914a0df4-96d0-4cd4-ac87-3826fa9c1440@google.com>
- <3f65fe16-56f8-4887-bb91-994b181ce5a9@kernel.org>
- <9852e5a8-843d-48ae-90d0-7991628e93b3@google.com>
- <442bebf4-4de1-42d1-a14b-2bb509fea12f@kernel.org>
- <7c7cff17-2c53-4dcd-8760-50c72760de5b@google.com>
- <ba5f79a0-be46-4f17-90f7-1342a6310048@kernel.org>
- <07e4478d-569e-46d5-aad7-882e52ef3cac@kernel.org>
+ <20250312-batt_ops-v1-2-88e0bb3129fd@google.com>
+ <Z9rMiONSFDJInPYM@kuha.fi.intel.com>
 Content-Language: en-US
 From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <07e4478d-569e-46d5-aad7-882e52ef3cac@kernel.org>
+In-Reply-To: <Z9rMiONSFDJInPYM@kuha.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 4/3/25 1:02 AM, Krzysztof Kozlowski wrote:
-> On 03/04/2025 10:00, Krzysztof Kozlowski wrote:
->>>>>> Which upstream DTS (or upstream supported hardware) is going to use this
->>>>>> binding, so I can see how you are going to implement it there in the
->>>>>> entire system?
->>>>> This is for maxim,max33359 Type-C controller.
->>>> Stop deflecting the questions. max33359 is not a board. I already asked
->>>> two times.
->>>>
->>>> Apparently admitting "no upstream users" is impossible, so let's state
->>>> the obvious:
->>>>
->>>> There are no upstream users of this.
->>> max33359 controller has an upstream user i.e., gs101-oriole (Pixel 6)
->>> board. Totally agree that at the moment there are no upstream
->>> devices/drivers for the Fuel Gauge (that my patchset has a dependency
->>> on) in gs101-oriole board. gs101-oriole uses max77759 fuel gauge device.
->>> I see that there's an effort for upstreaming it
->>> (https://lore.kernel.org/all/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be/).
->>> I will mark my patches as dependent on it + demonstrate the relationship
->>> of the devices in the gs101-oriole board. Hope that's okay?
->> Then please send the DTS for GS101 Oriole using this binding. I don't
->> understand the point of adding binding for some user and in the same
->> time not doing anything for that user.
+On 3/19/25 6:54 AM, Heikki Krogerus wrote:
+> On Wed, Mar 12, 2025 at 04:42:02PM -0700, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> Add a new helper function power_supply_get_by_fwnode_reference_array()
+>> to retrieve a list of power_supplies associated with the fwnode's
+>> property. The property can contain multiple nodes where each node is
+>> associated with a power_supply. The list of power_supply objects will be
+>> stored in an array supplied by the caller and the return value will
+>> indicate the size of the resulting array.
+> I don't think this API is necessary. If I've understood what you are
+> after here, the batteries should simply have the Type-C psy(s) listed
+> in the supplied_to and/or supplied_from.
 >
-> ... and just a reminder: DTS goes to separate patchset (!) from USB
-> drivers one, with lore link in changelog or cover letter to the binding.
-
-Sure thing!
-
-Thanks
-
+> So you just need to make sure your battery nodes have the USB Type-C
+> node(s) listed in the "power-supplies" property in your DT, no?
+Thanks Heikki! I will evaluate between this approach vs OF graph 
+approach (as suggested in previous review) and implement it in v2.
 >
-> Best regards,
-> Krzysztof
+> thanks,
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>   drivers/power/supply/power_supply_core.c | 60 ++++++++++++++++++++++++++++++++
+>>   include/linux/power_supply.h             |  5 +++
+>>   2 files changed, 65 insertions(+)
+>>
+>> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+>> index 76c340b38015af0a67a0d91305e6242a8646bf53..df1a52f85125748c4fdcb10687aa7ed2f626ded1 100644
+>> --- a/drivers/power/supply/power_supply_core.c
+>> +++ b/drivers/power/supply/power_supply_core.c
+>> @@ -593,6 +593,66 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
+>>   EXPORT_SYMBOL_GPL(devm_power_supply_get_by_phandle);
+>>   #endif /* CONFIG_OF */
+>>   
+>> +static int power_supply_match_fwnode(struct device *dev, const void *data)
+>> +{
+>> +	return dev && dev->parent && dev->parent->fwnode == data;
+>> +}
+>> +
+>> +/**
+>> + * power_supply_get_by_fwnode_reference_array() - Returns an array of power
+>> + * supply objects associated with each fwnode reference present in the property
+>> + * @fwnode: Pointer to fwnode to lookup property
+>> + * @property: Name of property holding references
+>> + * @psy: Resulting array of power_supply pointers. To be provided by the caller.
+>> + * @size: size of power_supply pointer array.
+>> + *
+>> + * If power supply was found, it increases reference count for the
+>> + * internal power supply's device. The user should power_supply_put()
+>> + * after usage.
+>> + *
+>> + * Return: On success returns the number of power supply objects filled
+>> + * in the @psy array.
+>> + * -EOVERFLOW when size of @psy array is not suffice.
+>> + * -EINVAL when @psy is NULL or @size is 0.
+>> + * -ENODATA when fwnode does not contain the given property
+>> + */
+>> +int power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
+>> +					       const char *property,
+>> +					       struct power_supply **psy,
+>> +					       ssize_t size)
+>> +{
+>> +	int ret, index, count = 0;
+>> +	struct fwnode_reference_args args;
+>> +	struct device *dev;
+>> +
+>> +	if (!psy || !size)
+>> +		return -EINVAL;
+>> +
+>> +	for (index = 0; index < size &&
+>> +	     !(ret = fwnode_property_get_reference_args(fwnode, property, NULL,
+>> +							0, index, &args));
+>> +	     ++index) {
+>> +		dev = class_find_device(&power_supply_class, NULL, args.fwnode,
+>> +					power_supply_match_fwnode);
+>> +		fwnode_handle_put(args.fwnode);
+>> +		if (!dev)
+>> +			continue;
+>> +
+>> +		if (count > size)
+>> +			return -EOVERFLOW;
+>> +
+>> +		psy[count] = dev_get_drvdata(dev);
+>> +		atomic_inc(&psy[count]->use_cnt);
+>> +		++count;
+>> +	}
+>> +
+>> +	if (ret != -ENOENT)
+>> +		return ret;
+>> +
+>> +	return index ? count : -ENODATA;
+>> +}
+>> +EXPORT_SYMBOL_GPL(power_supply_get_by_fwnode_reference_array);
+>> +
+>>   int power_supply_get_battery_info(struct power_supply *psy,
+>>   				  struct power_supply_battery_info **info_out)
+>>   {
+>> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+>> index 6ed53b292162469d7b357734d5589bff18a201d0..3f062607e5cd7c7f04384e34128ae0953e25d981 100644
+>> --- a/include/linux/power_supply.h
+>> +++ b/include/linux/power_supply.h
+>> @@ -820,6 +820,11 @@ devm_power_supply_get_by_phandle(struct device *dev, const char *property)
+>>   { return NULL; }
+>>   #endif /* CONFIG_OF */
+>>   
+>> +extern int
+>> +power_supply_get_by_fwnode_reference_array(struct fwnode_handle *fwnode,
+>> +					   const char *property,
+>> +					   struct power_supply **psy,
+>> +					   ssize_t size);
+>>   extern const enum power_supply_property power_supply_battery_info_properties[];
+>>   extern const size_t power_supply_battery_info_properties_size;
+>>   extern int power_supply_get_battery_info(struct power_supply *psy,
+>>
+>> -- 
+>> 2.49.0.rc0.332.g42c0ae87b1-goog
+>>
 
