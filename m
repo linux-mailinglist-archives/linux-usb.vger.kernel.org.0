@@ -1,258 +1,187 @@
-Return-Path: <linux-usb+bounces-22722-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22723-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A79B6A7F2B1
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 04:33:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F4E6A7F35E
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 05:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 161187A56B2
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 02:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3C853AF1D3
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 03:58:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1396921CA0D;
-	Tue,  8 Apr 2025 02:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA3625F794;
+	Tue,  8 Apr 2025 03:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SIAaWqhZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pgU1ytqm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87008F77;
-	Tue,  8 Apr 2025 02:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8A8F9D6
+	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 03:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744079618; cv=none; b=qsrJpP7VXJEckAlfkn8egG5InM8td/7W/rvU/BAlJ2i2bb8kzHXpAnIg72o9YMbn58kcEMPGF4dvYjckzSBzzwyxK3CzPCpZ6i273ic5gGCnDpGamOyLlvLj/RUgvjRM16a/4aOCrqehyaUTSAkNxZEoiAE2l4WRDscP8dQ+dfg=
+	t=1744084726; cv=none; b=KOXqwN/AqgFI4a0upmq60ZxHqdmWNGSj/znuCEcmXLJ83JY3Dwk05OEto0fH3+zPXRM0LLQEt1E5nx6r+k8qw2Dlgl3j4KLuq//W+qpuzott6DkUdM3VDQNnZ8QKkiu1JkzViugFsHD6PxkVn1UWA+lPwFX8dyjz5PoHL2BwlTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744079618; c=relaxed/simple;
-	bh=vSBnwvoM1GwONMhi4Pk2sXk0SrZulUpa7dTpzQ9opg0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=n3pzZjdtp3xtk10AVNHoXTgWueP/6eKV4dgA5VTG4/j8/K98r5JBX6pJWJBE6EH8MnocolGir2R40MEq68OOwFo3aO3JuEfDUR2E5G3DA6Vu3HyP8jgP+6lxrL+eeCHXqf5rmZAYatfTzN41H6dKLfzvEVRM/r/830VIZRHXvmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SIAaWqhZ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5382GPej019664;
-	Tue, 8 Apr 2025 02:32:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8tkLU/q9k4bzXOFaIPnKaXKZ9vxRAORbRLbV0GT2sj4=; b=SIAaWqhZKCRyXT5b
-	LPOPvCKqjpkCu4mwv6zyomN6MHZkgmlw0so8HPOIgFTvYq9Cf0A5r6JjZrxaZXeX
-	OvSmKVyc0wqaJiV6Ici0LY8qoLGCe9CFuvsFTbncuBBYcapvFSp6QRA+NlhNZBMA
-	YZracMLeBdI3rOiAtyyfMvzSSgrV9iS26Q/4pRmCEW59Rb+JkDisEovKEPAZMAHx
-	8G92RknUmauD2coG9zoNEIUFGGyckGXdiK/JEne37Ai79LhaYsRwU7OyUnl9SneG
-	MYCt2UZ2tEpMAw3SRTBU9KAAYZ8jF8DTs4J/VIldsAvFodejUY9NvJbK+gTiWQSq
-	pD0VDg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twg3e566-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Apr 2025 02:32:56 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5382WtF9000584
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 8 Apr 2025 02:32:55 GMT
-Received: from [10.110.75.38] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 7 Apr 2025
- 19:32:54 -0700
-Message-ID: <73499d82-e7e5-b88a-41a4-160529efc988@quicinc.com>
-Date: Mon, 7 Apr 2025 19:32:53 -0700
+	s=arc-20240116; t=1744084726; c=relaxed/simple;
+	bh=ff21elfV9WA+EUmjRXQ6LjjPkPIloNxwbagFWMRCcVs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bR1Vuq1fnG70tEGK8t2Z+MlM03jk8ZVjR4GA0JVL6VwFNUtRlji64XNJ6HxkUhVFt46BiE8WWiHOelghrCco4hTpx/A5BsOilItkRYtb5HC+271ZI3hBKUehNez7+ePf7ZsW3XbVxvygCI203LQ+EQ1uKAkVWXhTvha994cnMeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pgU1ytqm; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-736c7d0d35aso7192341b3a.1
+        for <linux-usb@vger.kernel.org>; Mon, 07 Apr 2025 20:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744084725; x=1744689525; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1ih90bRJrRPnQchSa8rLYGcIPpTSXKq7O+MPB3UPJao=;
+        b=pgU1ytqm93JmDutVjwWz64bYTkFfdRI2/GzFRwAEtZCM3Iz65Zr0/mLZcnErLD65c1
+         aYp8LMCJac+5i1jUMj3xyAM1lSuf/zM0+mtsJ7zSfD2gXrDc38v+aoKoNKRQqvB+jXJe
+         t9g2eiYv1FWSLNgsUcxLkV5VfAyjWjGdxoRfLCS9OoERE97O1aDNSAgPO95YOzhegqfm
+         VC8XR7B6GpmFg6k5WM027k8wHbuiKk0h0qnWwIndQWDPRV1hYdsbuNZgghI0hbi4zEku
+         xwAfErAaIa1c8W/SWZqPGtQZBgBSkE/2VPXF37a2dJE/fdUkf14BLsIW0kzGg7M9v9Yp
+         YVUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744084725; x=1744689525;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1ih90bRJrRPnQchSa8rLYGcIPpTSXKq7O+MPB3UPJao=;
+        b=MCmjo7XUQXdKQHqjwcWPiJkVPqwKvXJN0MzF3252ywNE5fFmJkEd8SNNvNmf2rcl/r
+         dEMDvUDj+JNXLYA6ytnFs1QMZHrwLtQhSti6NUKaPxT1gOEukit9P8ehBY+sKNFUz+rS
+         aJPIsJ6k7sy4pIu5/qIVklSLaXuDMBvT5a5hbMF/h0qfC4ir/uQVktw7aziRH7mwo5DL
+         UzTCvVb2GcQhQTX5rh62DLNjq0Pw0lq+pyhNClwIqfB3e/OKXoeX2TTbrEw/pF+2RhC5
+         6+JEt6thbzSrkQ2xua6MoYOXxUmQHVlYjjcJ/giqvC5+Is+bvpwBv89PELtTKVVce2TQ
+         zGuQ==
+X-Gm-Message-State: AOJu0YyoDy9ONwqubjnqL8x96uMmqsjpOGfA7HH8z9La5XqDh0nfdN1i
+	pCejIl1588ZW//v8UMPkxQa16tYJ4tQTuXPFq9rGFrvQQTwARkfpm5hlUTERcNyDsu4moopFZr0
+	kZJHiuPx4+ZuqQg==
+X-Google-Smtp-Source: AGHT+IESLoGE0zurjIsH+6CNJvPTjGEW4knHJgJPB9SvGABLu5g7MSpd6P4iir6utsdKHsLSfE099TqWqvObGrY=
+X-Received: from pgjh14.prod.google.com ([2002:a63:df4e:0:b0:af8:cf0d:14cd])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:338b:b0:1f5:8d30:a4e3 with SMTP id adf61e73a8af0-20113d28462mr15446433637.28.1744084724651;
+ Mon, 07 Apr 2025 20:58:44 -0700 (PDT)
+Date: Tue,  8 Apr 2025 03:57:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 06/10] phy: qcom: Add M31 based eUSB2 PHY driver
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>
-CC: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Bjorn
- Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20250324-sm8750_usb_master-v3-0-13e096dc88fd@quicinc.com>
- <20250324-sm8750_usb_master-v3-6-13e096dc88fd@quicinc.com>
- <kj5dyy7bclmkft7x4hdpzpo7n35cu5nkpksj47phb7jt5lceab@7fb5i6gluqwz>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <kj5dyy7bclmkft7x4hdpzpo7n35cu5nkpksj47phb7jt5lceab@7fb5i6gluqwz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 21XJomGnkL8m6ur2pvtTBprBrwIZ3tQc
-X-Proofpoint-ORIG-GUID: 21XJomGnkL8m6ur2pvtTBprBrwIZ3tQc
-X-Authority-Analysis: v=2.4 cv=I/9lRMgg c=1 sm=1 tr=0 ts=67f48ad8 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=IJHOkPr1J-CqusO2T_sA:9 a=QEXdDO2ut3YA:10
- a=RVmHIydaz68A:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-07_07,2025-04-07_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- phishscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- clxscore=1015 malwarescore=0 adultscore=0 priorityscore=1501
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504080016
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
+Message-ID: <20250408035833.844821-1-guanyulin@google.com>
+Subject: [PATCH v11 0/4] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu, gargaditya08@live.com, kekrby@gmail.com, 
+	jeff.johnson@oss.qualcomm.com, elder@kernel.org, quic_zijuhu@quicinc.com, 
+	ben@decadent.org.uk
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Dmitry,
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the system to sleep
+(suspend-to-RAM) and save power. However, Linux's System Sleep model halts
+the USB host controller when the main system isn't managing any USB
+transfers. To address this, the proposal modifies the system to recognize
+offloaded USB transfers and manage power accordingly. This way, offloaded
+USB transfers could still happen during system sleep (Suspend-to-RAM).
 
-On 3/26/2025 7:33 AM, Dmitry Baryshkov wrote:
-> On Mon, Mar 24, 2025 at 01:18:34PM -0700, Melody Olvera wrote:
->> From: Wesley Cheng <quic_wcheng@quicinc.com>
->>
->> SM8750 utilizes an eUSB2 PHY from M31.  Add the initialization
->> sequences to bring it out of reset and into an operational state.  This
->> differs to the M31 USB driver, in that the M31 eUSB2 driver will
->> require a connection to an eUSB2 repeater.  This PHY driver will handle
->> the initialization of the associated eUSB2 repeater when required.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/Kconfig              |  10 +
->>   drivers/phy/qualcomm/Makefile             |   1 +
->>   drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 297 ++++++++++++++++++++++++++++++
->>   3 files changed, 308 insertions(+)
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..b18aab968122683e2e87287a4b570321d376870a
->> --- /dev/null
->> +++ b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
->> @@ -0,0 +1,297 @@
->> +// SPDX-License-Identifier: GPL-2.0+
-> 
-> GPL-2.0-only
-> 
+This involves two key steps:
+1. Transfer Status Tracking: Propose offload_usage and corresponding apis
+drivers could track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(xhci host controller driver, and USB device drivers) allow the system to
+sleep (Suspend-to-RAM) without disrupting co-processor managed USB
+transfers. This involves adding conditional checks to bypass some power
+management operations in the System Sleep model.
 
-Will fix.
+patches depends on series "Introduce QC USB SND audio offloading support" 
+https://lore.kernel.org/lkml/20250319005141.312805-1-quic_wcheng@quicinc.com/
 
->> +/*
->> + * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/phy/phy.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/reset.h>
->> +#include <linux/slab.h>
->> +
->> +#include <linux/regulator/consumer.h>
->> +
->> +#define USB_PHY_UTMI_CTRL0		(0x3c)
->> +
->> +#define USB_PHY_UTMI_CTRL5		(0x50)
->> +
->> +#define USB_PHY_HS_PHY_CTRL_COMMON0	(0x54)
->> +#define FSEL				GENMASK(6, 4)
->> +#define FSEL_38_4_MHZ_VAL		(0x6)
->> +
->> +#define USB_PHY_HS_PHY_CTRL2		(0x64)
->> +
->> +#define USB_PHY_CFG0			(0x94)
->> +#define USB_PHY_CFG1			(0x154)
->> +
->> +#define USB_PHY_FSEL_SEL		(0xb8)
->> +
->> +#define USB_PHY_XCFGI_39_32		(0x16c)
->> +#define USB_PHY_XCFGI_71_64		(0x17c)
->> +#define USB_PHY_XCFGI_31_24		(0x168)
->> +#define USB_PHY_XCFGI_7_0		(0x15c)
->> +
->> +#define M31_EUSB_PHY_INIT_CFG(o, b, v)	\
->> +{				\
->> +	.off = o,		\
->> +	.mask = b,		\
->> +	.val = v,		\
->> +}
->> +
->> +struct m31_phy_tbl_entry {
->> +	u32 off;
->> +	u32 mask;
->> +	u32 val;
->> +};
->> +
->> +struct m31_eusb2_priv_data {
->> +	const struct m31_phy_tbl_entry	*setup_seq;
->> +	unsigned int			setup_seq_nregs;
->> +	const struct m31_phy_tbl_entry	*override_seq;
->> +	unsigned int			override_seq_nregs;
->> +	const struct m31_phy_tbl_entry	*reset_seq;
->> +	unsigned int			reset_seq_nregs;
->> +	unsigned int			fsel;
->> +};
->> +
->> +static const struct m31_phy_tbl_entry m31_eusb2_setup_tbl[] = {
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, BIT(1), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, BIT(1), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG1, BIT(0), 1),
->> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_FSEL_SEL, BIT(0), 1),
-> 
-> I suppose, we can not expect to have #defines for all used bitfields?
-> 
+changelog
+----------
+Changes in v11:
+- Use USB subsystem wrappers in usb_offload_get()/usb_offload_put().
+- Refine logics and add comment in usb_suspend_both()/usb_resume_both().
 
-Added the bitfields as requested.
+Changes in v10:
+- Remove unnecessary operations in dwc3 driver.
+- Introduce CONFIG_USB_XHCI_SIDEBAND_SUSPEND to enable/disable offloaded
+  usb transfers during system Suspend-to-RAM.
+- Modify the approach to detect offloaded USB transfers when the system
+  resumes from Suspend-to-RAM.
+- Mark sideband activity when sideband interrupters are created/removed.
+- Cosmetics changes on coding style.
 
->> +};
->> +
-> 
-> [...]
-> 
->> +
->> +static const struct phy_ops m31eusb2_phy_gen_ops = {
->> +	.init	= m31eusb2_phy_init,
->> +	.exit	= m31eusb2_phy_exit,
-> 
-> I think, you have a missing .set_mode callback here.
-> 
+Changes in v9:
+- Remove unnecessary white space change.
 
-Added this to properly set the mode on the repeater as well.
+Changes in v8:
+- Change the runtime pm api to correct the error handling flow.
+- Not flushing endpoints of actively offloaded USB devices to avoid
+  possible USB transfer conflicts.
 
->> +	.owner	= THIS_MODULE,
->> +};
->> +
->> +static int m31eusb2_phy_probe(struct platform_device *pdev)
->> +{
->> +	struct phy_provider *phy_provider;
->> +	const struct m31_eusb2_priv_data *data;
->> +	struct device *dev = &pdev->dev;
->> +	struct m31eusb2_phy *phy;
->> +	int ret;
->> +
->> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
->> +	if (!phy)
->> +		return -ENOMEM;
->> +
->> +	data = of_device_get_match_data(dev);
-> 
-> device_get_match_data()
-> 
+Changes in v7:
+- Remove counting mechanism in struct usb_hcd. The USB device's offload
+  status will be solely recorded in each related struct usb_device.
+- Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
+  control the suspend flow of USB interfaces and associated USB endpoints.
+  This addresses the need to support interrupt transfers generated by
+  offloaded USB devices while the system is suspended.
+- Block any offload_usage change during USB device suspend period.
 
-Done.
+Changes in v6:
+- Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
+- Explicitly specify the data structure of the drvdata refereced in
+  dwc3_suspend(), dwc3_resume().
+- Move the initialization of counters to the patches introducing them.
 
-Thanks
-Wesley Cheng
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
+Changes in v2:
+- Cosmetics changes on coding style.
+
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+---
+
+Guan-Yu Lin (4):
+
+*** BLURB HERE ***
+
+Guan-Yu Lin (4):
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for offload usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable USB offload during system sleep
+
+ drivers/usb/core/driver.c         | 151 ++++++++++++++++++++++++++++--
+ drivers/usb/core/usb.c            |   1 +
+ drivers/usb/host/Kconfig          |  11 +++
+ drivers/usb/host/xhci-plat.c      |  42 ++++++++-
+ drivers/usb/host/xhci-plat.h      |   1 +
+ drivers/usb/host/xhci-sideband.c  |  43 +++++++++
+ include/linux/usb.h               |  19 ++++
+ include/linux/usb/xhci-sideband.h |   9 ++
+ 8 files changed, 267 insertions(+), 10 deletions(-)
+
+-- 
+2.49.0.504.g3bcea36a83-goog
+
 
