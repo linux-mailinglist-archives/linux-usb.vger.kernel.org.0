@@ -1,253 +1,419 @@
-Return-Path: <linux-usb+bounces-22735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22736-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18B61A7FBD9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 12:29:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D07EA7FC6A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 12:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D578D3B47A9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 10:22:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31B321706EA
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 10:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F910267AED;
-	Tue,  8 Apr 2025 10:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FDDC267B6B;
+	Tue,  8 Apr 2025 10:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hvj3SFXQ"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="ThbX2Bxt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011020.outbound.protection.outlook.com [40.107.74.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DE020459F;
-	Tue,  8 Apr 2025 10:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744107506; cv=none; b=hTJGPskkdr2j4YHuO47zNqewAICMylomr+1z+qIhOAaz/j+GNjefGRevIFde6VEhkZ/h9GsQzzZa7m5I3gf4LaZ/p2QOuz3X9PV2mnInzaXkSebgigDGLQnrdf5o/xzHg63DU94T/JYKILSYJysIhh4wBup7nrC/R8l99uxpx+k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744107506; c=relaxed/simple;
-	bh=d8JQ+MyNMKTBF2IizxU/b6I/RWItXomgcUIW0s0VUKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=btmOqF4aUHIF6vsefuliI06Afi5VwG7yKZF+75ZC4Ufjcjaf3t9m7BAdj8JbC0qDCvHU+w4swS2QkWLdJ/ALPnHzzcmVPYWYP7AmzY2kWRD9Img/0Nc+djzcXgs0BJb0zUVxLDYAIGqJBTfbOUBrf1eYMgvcVLFiQPoY/py6Pps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hvj3SFXQ; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54b0d638e86so6502483e87.1;
-        Tue, 08 Apr 2025 03:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744107503; x=1744712303; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GBkkvpBAwxMLDl3JDRufEPMKoNS7FiCw8zDnhwNt4xY=;
-        b=Hvj3SFXQdplfaZiCsb292KpDlDU5un5GcQINhj1K0FX1cpsnQOtV/3EwKed3vTYEYv
-         9GWQ5w62wIYB3DkYeadmSjycwphTEsafBsp45JqY9+cI4K7ReNZ/peN2KlSLpPAa2iAv
-         gHu/gb+y09yjNjMAFuM66sV0SXx6ppQrXbT/x8IIdi8PGv4/e294PnurkwKn4GO5CkYu
-         22Z2W1Ci0XW8anCXnZ2QxSydEZCt3CdRZOIj5eMpn3UMI41a6/uogcgnmJQFAhM32IlH
-         Vxy1brjULCm1X5WElbT4mf2UriOhO6dvJ9MPy41p489adBbXgTKyq3pHcRCuRt4tgdQv
-         9h5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744107503; x=1744712303;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GBkkvpBAwxMLDl3JDRufEPMKoNS7FiCw8zDnhwNt4xY=;
-        b=a1ytr2E4ylHlK3QrELkUZK4GQ24WqXetu+aTT/3OE+/nXQztE0HVJcd8Fu425RNEuW
-         ZicsuEzsuCn3SSpy9JDC+b47u5YDjwF3iXxH0zBmP4Kk7We5BHSyr9UrNVur7xn3mRIN
-         L6o/Mbux/ZYmfx79v4zWUr0mzTmlsh1AA0G8gUZuo9Yxg2OGuTf4bMAAz6VESrS7edK7
-         xO0CEY6whLM95SzE4W8sh5bWwMlvwWrS5ER2DKhTBlhca0ReHircoJWYTZRmuYdBz7PN
-         MgDe9M61eMCuePmCZvnoFG26OLdlKxpRT2dKcX4IRaJ54zLmvZBSPL9HzmlbHhMOpZZV
-         hPtw==
-X-Forwarded-Encrypted: i=1; AJvYcCU85qHV+eNmeRTqIniiSnu05p2RVfFmygnhDtKxqrci2nJpdwjZnVE4VCbMp4aVOWEKPtc9GaxqHDxy@vger.kernel.org, AJvYcCUXBqYMjaVm24wte2lZjOMWvXsjUfjNv5Of1z3tBYQo6tg+e+sK0spaXl/r1qg8O0dXW4flMz5c7D7Q8/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlOnbN5zTriD5FOhzWaPIhjLlu0+mlNtv5P67KpZU3CFtM7Bus
-	pKssxLYXey1shTInIque+Z3NmsQd8kMdV9Go83BuOrrO6Q96nAxa
-X-Gm-Gg: ASbGnct2P3ljdwd+1e0E/GoQhwDn1Ky1cSWYGjWqFaJRSqqhihP4g2R7aNHt7a/08Va
-	L+VIH2SE2qaM/kd81f6+XXqBfqqR25mPTNBQdIpAhBv1AqRW81wCDNvqk92tayNzOQz5DrnfvPr
-	RXvSxqCeK7rBNHPjO86IvH4EFiziIUe3WDw3qI5tshKEW7Y38d/cbwMpUYu7zyvmMEx5sSb2tUh
-	qEZHDyDyA0ypPwatLuWJNkSxwDAPLRMZyQ5PCUusl3HkDL7dwwA4bT1GMxXFqVfuzke9KxNhg6p
-	ZUKmJEFDBKdPi3VAztH0IbjXIH2aL70bXU2TvO0AgkLXnKtc0uamClrYxThU6AGonsS9K37r
-X-Google-Smtp-Source: AGHT+IE33f1qbai7AfYia4ni2e8TuOOEK5WgNlxelgpVl5tugeQ44eLgh1uzbezRxcSqsbh50XLuIQ==
-X-Received: by 2002:a05:6512:1281:b0:549:39ca:13fc with SMTP id 2adb3069b0e04-54c227ff6ddmr4769141e87.49.1744107502358;
-        Tue, 08 Apr 2025 03:18:22 -0700 (PDT)
-Received: from foxbook (adtq195.neoplus.adsl.tpnet.pl. [79.185.228.195])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54c1e67244fsm1463149e87.247.2025.04.08.03.18.21
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 08 Apr 2025 03:18:21 -0700 (PDT)
-Date: Tue, 8 Apr 2025 12:18:17 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mathias Nyman
- <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>
-Subject: [PATCH RFC RFT] usb: hcd: Add a usb_device argument to
- hc_driver.endpoint_reset()
-Message-ID: <20250408121817.6ae8defd@foxbook>
-In-Reply-To: <3efb52b8-0974-4125-a344-00f459fbe4e4@rowland.harvard.edu>
-References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
-	<b356f743-44b5-4f48-a289-fae0afe106ff@linux.intel.com>
-	<84b400f8-2943-44e0-8803-f3aac3b670af@molgen.mpg.de>
-	<20250406002311.2a76fc64@foxbook>
-	<ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
-	<20250406095008.0dbfd586@foxbook>
-	<20250406175032.12b7d284@foxbook>
-	<14197657-0a0f-45a8-ac36-dd37b16a1565@rowland.harvard.edu>
-	<20250407074905.2d236fb9@foxbook>
-	<3efb52b8-0974-4125-a344-00f459fbe4e4@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6E2266EFA;
+	Tue,  8 Apr 2025 10:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744108819; cv=fail; b=G93+I+PM6JguwGeypY8i0/QD/esK9kwUVYqjyZgg7KNyEfoauicXA3yeTpW2TKMzsRbuMWs1sy23qRltmGzqJK6zCuK0Un8aVj1dTQOlHqMlOn4ZpfGLKaRR0HfLD1ghDa6oqtQ/OG5afUb+2NkeEbDUfBk2wH56j1SOvMHrwLM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744108819; c=relaxed/simple;
+	bh=3PPSI81tJYtYC14x1ZOhKdpci+xlkQ2mCsHPV02GYyE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=HQwa/GiXnrU18VZop+dZTcqAzwc+6ozmoko2ktTHY9tPKIkBZoiNniEL0FvOklTq608iO0JQhVYIRxzl3qTrGE2gzsZS0aSNPH94i4VT99Uy1kaZ3S5qlzX4GWNPfmDn6D+Cq1iY6/fF6zzTxjDvi7OBxcirf5mPKYl9EayGLrU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=ThbX2Bxt; arc=fail smtp.client-ip=40.107.74.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z+Mo0BOtQMX0QikU4WTDhg7c3MCKEKmJ8wn4zfjmUpI6P7arx1aKDDs1OcH0mJaB7J1w3ED0lzI3MuhZOXTCojAxlxPzpgijNTD/sSRG8o7pKtxaW42yfJG5MU/ApJtTUgfndzRsZ2daxm1sTnq5vjuE+XJtdz7K4C4oy6LX/tnggDVQFBhcvzDOmRKN+cCWRJQVUMh4ebG2wZm0xBnOY4OO1JaW5WU1EzsMifG0GABu1/x14NmGyVOXm2CgsjjdDLp5GtBQ6lRaQoLY3Ojt391MxwsdKsgvUUqANh5IjXuBVJ4CIMFZmG96WxkLpD947XndhZhJmnheNcKvID5W4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PBJmKEgmnVULFBAKKmJ0GdWAX3JatVibcytPFvfJlzw=;
+ b=H0zySMARrWDv3lOn0A7V1gVpcrW31ZHESvzwgPYT2DtrbWF5FovaicgHFb+qp11ggsWNQ+hUcLl8Nlx4u81z+kCo96s7YaJQaso/WRI9JFqCQPXD2d+Ztua8/RR9lObg45Ufh80KF18P2VL4MbgXDeNDz9x1gy6kuSobLIQrAdqOFj78F47RdXsgI722k1l4e8zzAoeR3a43X3RpUZ9hyyLBh971z1/I4FjIlsmeMQS79AUQDrLgdV+1O9J4PL8gmFlu6tzPm3tIR7iCx1hZk+ygH1dt4nz4h+sS58TTLFNYB3XbkdxOlRrerpxLKye7UdWMsrohUoG8oAA84zXxKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PBJmKEgmnVULFBAKKmJ0GdWAX3JatVibcytPFvfJlzw=;
+ b=ThbX2Bxtz5edOrO5DfkQwUNneqovrf7YwGkUTZZ2/DARVnRT3wEpFmxyztxM/PbHvIIAEo7K5rZ/IQCM0rD1/PnuigqfCd+ezwIYX037Svej4gT+pRmYH9Vw997ryOwG96AJsco3UQI7dYFbqOJfQaJJ8mRQsmodAjEDNk6GfmQ=
+Received: from TYCPR01MB11040.jpnprd01.prod.outlook.com (2603:1096:400:3a7::6)
+ by OSCPR01MB13698.jpnprd01.prod.outlook.com (2603:1096:604:37f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8583.45; Tue, 8 Apr
+ 2025 10:40:08 +0000
+Received: from TYCPR01MB11040.jpnprd01.prod.outlook.com
+ ([fe80::b183:a30f:c95f:a155]) by TYCPR01MB11040.jpnprd01.prod.outlook.com
+ ([fe80::b183:a30f:c95f:a155%3]) with mapi id 15.20.8606.033; Tue, 8 Apr 2025
+ 10:40:08 +0000
+From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To: Prabhakar <prabhakar.csengg@gmail.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, Biju
+ Das <biju.das.jz@bp.renesas.com>, Claudiu Beznea
+	<claudiu.beznea.uj@bp.renesas.com>, Fabrizio Castro
+	<fabrizio.castro.jz@renesas.com>, Prabhakar Mahadev Lad
+	<prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: RE: [PATCH v2 3/3] usb: renesas_usbhs: Reorder clock handling and
+ power management in probe
+Thread-Topic: [PATCH v2 3/3] usb: renesas_usbhs: Reorder clock handling and
+ power management in probe
+Thread-Index: AQHbp6raLCyMPN3kxkGUjRK8DG3KN7OZk3vA
+Date: Tue, 8 Apr 2025 10:40:08 +0000
+Message-ID:
+ <TYCPR01MB11040727E81F6DF8647D92343D8B52@TYCPR01MB11040.jpnprd01.prod.outlook.com>
+References: <20250407105002.107181-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250407105002.107181-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250407105002.107181-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB11040:EE_|OSCPR01MB13698:EE_
+x-ms-office365-filtering-correlation-id: 80e93d04-73cb-47f0-2bfd-08dd7689bb99
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|366016|10070799003|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?1uPg3uodVGn3kclEZukTq6SvcuRFetl8w8DnH9h69kMv5uXrnZPISI4rb+wO?=
+ =?us-ascii?Q?DMe/t0Q6c7rUgIaygzDc6CxGPTC11XSlDtaPba/HBLmNhtR2CDp2MSJ+bvLV?=
+ =?us-ascii?Q?BWRdhRFQ+E0sreAyMux4Dtkzp18ExNCSZM4Pk3zsDLRHsIAwEmwys7rd1Vzs?=
+ =?us-ascii?Q?3pXKXzrQSQQIhwsNMn8Mrw8kZX6ZwZ68/L0o+mXRLytRoBXLSgKg75YlPr1s?=
+ =?us-ascii?Q?uPxOcSQQydiPt8bRhQzfJusFbdQDcvLrHM8JUQ1l1gPoJP3MvuMACAp8HvJ7?=
+ =?us-ascii?Q?rr7fU0Mvl+yj5a9hlmkLUViHopT1lPredoQxQeOuAlT2Z6h6gfNl2Dgy/SmW?=
+ =?us-ascii?Q?D0i99DKMiVymdulhoZMwiBn/isn3DT2mfjPAU9lPMyvqxm+VOEsXf8sEIX1G?=
+ =?us-ascii?Q?rhhGgHMAlB7RBLc4hOEDr4P1SBoT466+earRcuLSUWrAi5hqmeao64bLjRmJ?=
+ =?us-ascii?Q?ORdvkSuz+9HdqU+Lom/q8XGY0A+xdMj0wKtZ126GQZal7nYL727buRlQsTmy?=
+ =?us-ascii?Q?nPkWGWs+G+NvzPZTOL8UAkCK4C82UXbK/FfPYKg2SeYWaO4pPin7CeicPZ43?=
+ =?us-ascii?Q?7/oVZ71f7SlataSpRuAzCh3vJxdrDaDd1YqmrQd0pwgntlCo7ukM3O2PV+pq?=
+ =?us-ascii?Q?1ZIzsd8q88wHRTPrf4MlTYiIhaCIrqAywCiQz38Tx2BYqdX2EunNO7WNjLB4?=
+ =?us-ascii?Q?x2ENCkAEP3fwd3cY6bPo4zZK1ZBpmRLRyb+lOjlg6mPNokIOsrlvwOo2lCoO?=
+ =?us-ascii?Q?sCXIUgnSNzCZN7+pGNcZrpC+Fjqu6j/WlnsZtResPaXRv9o8yvIijnP9695j?=
+ =?us-ascii?Q?Yvc762ZmNjgVa+JuYAB6y2tpdzPrrpwaBDlzUw4TzvtMB1PEQQo5yTZ/+7Ww?=
+ =?us-ascii?Q?9JD5+Amh9t29OvqkCmXFNDiqeJTBYf0GrQOA/XuDuNsBiMqQRXgA2377INwJ?=
+ =?us-ascii?Q?YTRuTvV/T9xmEMwHSGp7Vx758k9kiRJ5rbnpUP+CeAJubqNJ283JUWEaOlAH?=
+ =?us-ascii?Q?oLJS8ILgSjL0R2hnULWIK2VeAjHk/HKfr1k7GwoxInvDIw6GCFxW+HuJi8Jk?=
+ =?us-ascii?Q?JRujGiZDeBjombDiGarnXMZbuFjcA/HTrecAghfEROiLVSaVF2eMaAKbJ6KM?=
+ =?us-ascii?Q?hSzQmawocavkFmJyKiHAf3olnvHh1icUS/LwrVRJLdukxvMDfEvAznZXKv8F?=
+ =?us-ascii?Q?YQJWbz6iZxe0v3Ebh6m7Vg09nX+r+oufzPYcKyfkPU5kGgbjsvlFWNWXLrY4?=
+ =?us-ascii?Q?9qbzQYxDIA8RqeRdU7BTaQA2W54MPQaWirv5KbCtRk7kR1mmmP+WwChOyU8s?=
+ =?us-ascii?Q?PGk1in6aNGKBsBS0vdKhKRqsa8hEpzxFeOd9MY6P/Ck/OXMCZwGagdAyau6F?=
+ =?us-ascii?Q?qQa31ZiJQEfxm0e25wmYOau+btVvwCsdaSw/NXV66nA94JKjszBQ/OoQ4yMJ?=
+ =?us-ascii?Q?2ldWexqtPNmqTuyfPaLPZfbffOS23w8L+hz4Sl6AJqbOJ1t6ku2Iul1JlOxd?=
+ =?us-ascii?Q?20J6QwF2c5sNUKE=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11040.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(10070799003)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?6CQedeKirJ0OCzpKkertPOERT5QII3/hHVAZFn6Z1U9bJhFSnWQAlc38wt5n?=
+ =?us-ascii?Q?gCMgGSrt+R0uPTr8yqciI4bT+fBJR+nNB08BtbxD8mEDPB6HdVR+l2gxw/jd?=
+ =?us-ascii?Q?5xmYa09j+1ntmXPKW+MxTWO9kYRrTQu51WTMS3LheBQalN1VORuiV07DSfZ/?=
+ =?us-ascii?Q?mmdA+s27giuKlmp9alghiGk3pZwMCteiunSH1mZrs+2OyLxXSSifwpbOpwY4?=
+ =?us-ascii?Q?sKfGI67vWUTykkrzKqozXmu82fIty92SuxdgJcbsKstVcIkU7uLTqRz/BF64?=
+ =?us-ascii?Q?Ld3b1vUUw3XtLw9dtqHOVI/Yl5rBWdIg7ZR4r0Od6ueh85ESJ/UW2h7jQHMb?=
+ =?us-ascii?Q?7fuIIQ+ABXHWI5FhA0SqFuNxeW8VcJ3ol4TPFWko3C85GZGM3tIfY72LTNHT?=
+ =?us-ascii?Q?PIvJkx2ojS4J2DqGrHsNhH6Sk6gl16ZMjQMWWN7nq/GeiJeD6SSOfrYOx93v?=
+ =?us-ascii?Q?O0JVlgIFqiWzJ4N4wAI2MPQfyxvTd7/p+0USfNFAW9m0F+XYRG41odU9jtbZ?=
+ =?us-ascii?Q?M6hHNCrQHU9wIE76QpFeYpacMEpm5SUnWRLng2lGY+gvp21s2CHBGCwLHLuj?=
+ =?us-ascii?Q?lR9t134/PXtSAvDyyCnS4RjKOEdH3gSSG3U6JHJUdtgCEuKSt8HhUJ1PiqzN?=
+ =?us-ascii?Q?ZR+gXx2vQyLcjDHpW2vVx7NWkcmkX0ZG6SH7T30xB3A+qJcZ1njH01fwmzHX?=
+ =?us-ascii?Q?nSRyx3yssTZvNYZHgY/Q2KsZJoUbOjo1z81H77FwyKUMqm2odyocVASk63L9?=
+ =?us-ascii?Q?DEXFDg46BD7Xnjuk+TqbOqi41pusRbg5ThxO5ss6wO0i6ObmVlQ7HKiyht95?=
+ =?us-ascii?Q?9mzDe3i+WdpWDte/rrN5mR1balDcrLa6+QC2iBXQp6wlvCHn2SYXjcDCJmeX?=
+ =?us-ascii?Q?+5XHSS7DPmGF1JxuceuihXFFOQPNPJEZb7yeWM78NPrE/PuPvT9HnrW0vJSj?=
+ =?us-ascii?Q?zkC0eh+9oqqh/ZntmZuIhudLC1Fr1a3CDUWBW55BiQyDvgG1Rvr7uP/HqYkV?=
+ =?us-ascii?Q?IgkfQYSKAv2judty2wmoiY2RXUAMvvRyVj11syDyO2qX+muC4HI29suAaxyJ?=
+ =?us-ascii?Q?bF/gmJYaww6ZgHg1LDkiFYS2QlMI2oIqQehcLfaBhP0r2X3np0dCOKVQXwZw?=
+ =?us-ascii?Q?7tmlJdUcc0Igvyk0Eq4rvxiKmONvi7kn3n+ziLRpdtiWvUYgxY2Th/Y2hDQc?=
+ =?us-ascii?Q?XT0WSZap1Lm4JwMvo38mMWkMd/4/Ry8w480AlEqTFlPspgqfMfpIWRa1qrc9?=
+ =?us-ascii?Q?bIhQdqbF0c4/AnrBAYk9sa9iabeQiAyBZ+Kq6Y37wHQBPXwL75i57XclX+HW?=
+ =?us-ascii?Q?Z7eSE7925QP2w6OyTIlbYTUAkK6MzYoFlSvO1rska77PyO6BLQN86OHUZcnt?=
+ =?us-ascii?Q?hyv7KYGK68kqUltp5XANlbaFBDfueZik9YEfoW1sndB6CfgcO2NgF/4qPKFh?=
+ =?us-ascii?Q?iV5yk7m+drK14REcE20aQu47gzNxHwppHqbxCjja12emaQ9zS2YxLqRGRdKD?=
+ =?us-ascii?Q?er971/plQbms28VM6OsT2i4cAH05LMq9GtVcquDsdzSc6dcx+bSl9fNijEWR?=
+ =?us-ascii?Q?EgDzyYS6C0IAKSpihGYYjemGA7D+XISP8AVRcVfLRmbyPAna94EscKFmkoKO?=
+ =?us-ascii?Q?rI5lPIV0BYPDOPtvygQleAk545eqfs7RvH0+sw8/hxady99DfZAK+UT3Qshc?=
+ =?us-ascii?Q?5fQ7Hw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11040.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80e93d04-73cb-47f0-2bfd-08dd7689bb99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2025 10:40:08.6039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zrRWXte5RWjAl/nSqUPtrRWAgD9SzIvZ3m6NEJ8AMtYWJyIxwd/F3irqx3ug73O3Vl4dQJzAdXfL7wde71XYQo2Zurf9arqWG81f6sl/8FLKi87Xe2LqXrVFbgWPigqj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13698
 
-xHCI needs usb_device in this callback so it employed some hacks that
-proved unreliable in the long term and made the code a little tricky.
+Hello Prabhakar-san,
 
-Make USB core supply it directly and simplify xhci_endpoint_reset().
-Use xhci_check_args() to prevent resetting emulated endpoints of root
-hubs and to deduplicate argument validation and improve debuggability.
+Thank you for the patch!
 
-Update ehci_endpoint_reset(), which is the only other such callback,
-to accept (and ignore) the new argument.
+> From: Prabhakar, Sent: Monday, April 7, 2025 7:50 PM
+>=20
+> Reorder the initialization sequence in `usbhs_probe()` to enable runtime
+> PM before accessing registers, preventing potential crashes due to
+> uninitialized clocks.
 
-This fixes the root cause of a 6.15-rc1 regression reported by Paul,
-which I was able to reproduce locally. It also solves the general
-problem of xhci_endpoint_reset() becoming a no-op after device reset
-or changing configuration or altsetting. Although nobody complained
-because halted endpoints are reset automatically by xhci_hcd, it was
-a bug - sometimes class drivers want to reset not halted endpoints.
+Just for a record. I don't know why, but the issue didn't occur on the orig=
+inal code
+with my environment (R-Car H3). But, anyway, I understood that we need this=
+ patch for RZ/V2H.
 
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Closes: https://lore.kernel.org/linux-usb/c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de/
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
+----- I added some debug printk -----
+<snip>
+[    3.193400] usbhs_probe:706
+[    3.196204] usbhs_probe:710
+[    3.199012] usbhs_probe:715
+[    3.201808] usbhs_probe:720
+[    3.204605] usbhs_read: reg =3D 0
+[    3.207754] usbhs_write: reg =3D 0, data =3D 20
+[    3.211941] usbhs_probe:727
+[    3.214738] usbhs_read: reg =3D 102
+[    3.218061] usbhs_write: reg =3D 102, data =3D 4000
+[    3.222697] usbhs_read: reg =3D 0
+[    3.225845] usbhs_write: reg =3D 0, data =3D 420
+[    3.230118] usbhs_write: reg =3D 30, data =3D 0
+[    3.234304] usbhs_write: reg =3D 32, data =3D 0
+[    3.238489] usbhs_write: reg =3D 3a, data =3D 0
+[    3.242673] usbhs_write: reg =3D 36, data =3D 0
+[    3.246859] usbhs_write: reg =3D 30, data =3D 8000
+[    3.251312] usbhs_read: reg =3D 40
+[    3.254540] renesas_usbhs e659c000.usb: probed
+[    3.802010] usbhs_probe:690
+[    3.808677] renesas-cpg-mssr e6150000.clock-controller: MSTP 704/hsusb O=
+N
+-----
 
-Is such change acceptable to interested parties?
+> Currently, in the probe path, registers are accessed before enabling the
+> clocks, leading to a synchronous external abort on the RZ/V2H SoC.
+> The problematic call flow is as follows:
+>=20
+>     usbhs_probe()
+>         usbhs_sys_clock_ctrl()
+>             usbhs_bset()
+>                 usbhs_write()
+>                     iowrite16()  <-- Register access before enabling cloc=
+ks
+>=20
+> Since `iowrite16()` is performed without ensuring the required clocks are
+> enabled, this can lead to access errors. To fix this, enable PM runtime
+> early in the probe function and ensure clocks are acquired before registe=
+r
+> access, preventing crashes like the following on RZ/V2H:
+>=20
+> [13.272640] Internal error: synchronous external abort: 0000000096000010 =
+[#1] PREEMPT SMP
+> [13.280814] Modules linked in: cec renesas_usbhs(+) drm_kms_helper fuse d=
+rm backlight ipv6
+> [13.289088] CPU: 1 UID: 0 PID: 195 Comm: (udev-worker) Not tainted 6.14.0=
+-rc7+ #98
+> [13.296640] Hardware name: Renesas RZ/V2H EVK Board based on r9a09g057h44=
+ (DT)
+> [13.303834] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+> [13.310770] pc : usbhs_bset+0x14/0x4c [renesas_usbhs]
+> [13.315831] lr : usbhs_probe+0x2e4/0x5ac [renesas_usbhs]
+> [13.321138] sp : ffff8000827e3850
+> [13.324438] x29: ffff8000827e3860 x28: 0000000000000000 x27: ffff8000827e=
+3ca0
+> [13.331554] x26: ffff8000827e3ba0 x25: ffff800081729668 x24: 000000000000=
+0025
+> [13.338670] x23: ffff0000c0f08000 x22: 0000000000000000 x21: ffff0000c0f0=
+8010
+> [13.345783] x20: 0000000000000000 x19: ffff0000c3b52080 x18: 00000000ffff=
+ffff
+> [13.352895] x17: 0000000000000000 x16: 0000000000000000 x15: ffff8000827e=
+36ce
+> [13.360009] x14: 00000000000003d7 x13: 00000000000003d7 x12: 000000000000=
+0000
+> [13.367122] x11: 0000000000000000 x10: 0000000000000aa0 x9 : ffff8000827e=
+3750
+> [13.374235] x8 : ffff0000c1850b00 x7 : 0000000003826060 x6 : 000000000000=
+001c
+> [13.381347] x5 : 000000030d5fcc00 x4 : ffff8000825c0000 x3 : 000000000000=
+0000
+> [13.388459] x2 : 0000000000000400 x1 : 0000000000000000 x0 : ffff0000c3b5=
+2080
+> [13.395574] Call trace:
+> [13.398013]  usbhs_bset+0x14/0x4c [renesas_usbhs] (P)
+> [13.403076]  platform_probe+0x68/0xdc
+> [13.406738]  really_probe+0xbc/0x2c0
+> [13.410306]  __driver_probe_device+0x78/0x120
+> [13.414653]  driver_probe_device+0x3c/0x154
+> [13.418825]  __driver_attach+0x90/0x1a0
+> [13.422647]  bus_for_each_dev+0x7c/0xe0
+> [13.426470]  driver_attach+0x24/0x30
+> [13.430032]  bus_add_driver+0xe4/0x208
+> [13.433766]  driver_register+0x68/0x130
+> [13.437587]  __platform_driver_register+0x24/0x30
+> [13.442273]  renesas_usbhs_driver_init+0x20/0x1000 [renesas_usbhs]
+> [13.448450]  do_one_initcall+0x60/0x1d4
+> [13.452276]  do_init_module+0x54/0x1f8
+> [13.456014]  load_module+0x1754/0x1c98
+> [13.459750]  init_module_from_file+0x88/0xcc
+> [13.464004]  __arm64_sys_finit_module+0x1c4/0x328
+> [13.468689]  invoke_syscall+0x48/0x104
+> [13.472426]  el0_svc_common.constprop.0+0xc0/0xe0
+> [13.477113]  do_el0_svc+0x1c/0x28
+> [13.480415]  el0_svc+0x30/0xcc
+> [13.483460]  el0t_64_sync_handler+0x10c/0x138
+> [13.487800]  el0t_64_sync+0x198/0x19c
+> [13.491453] Code: 2a0103e1 12003c42 12003c63 8b010084 (79400084)
+> [13.497522] ---[ end trace 0000000000000000 ]---
+>=20
+> Fixes: f1407d5c66240 ("usb: renesas_usbhs: Add Renesas USBHS common code"=
+)
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/usb/renesas_usbhs/common.c | 50 +++++++++++++++++++++++-------
+>  1 file changed, 38 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usb=
+hs/common.c
+> index 703cf5d0cb41..f52418fe3fd4 100644
+> --- a/drivers/usb/renesas_usbhs/common.c
+> +++ b/drivers/usb/renesas_usbhs/common.c
+> @@ -685,10 +685,29 @@ static int usbhs_probe(struct platform_device *pdev=
+)
+>  	INIT_DELAYED_WORK(&priv->notify_hotplug_work, usbhsc_notify_hotplug);
+>  	spin_lock_init(usbhs_priv_to_lock(priv));
+>=20
+> +	/*
+> +	 * Acquire clocks and enable power management (PM) early in the
+> +	 * probe process, as the driver accesses registers during
+> +	 * initialization. Ensure the device is active before proceeding.
+> +	 */
+> +	pm_runtime_enable(dev);
+> +
+> +	ret =3D usbhsc_clk_get(dev, priv);
+> +	if (ret)
+> +		goto probe_pm_disable;
+> +
+> +	ret =3D pm_runtime_resume_and_get(dev);
+> +	if (ret)
+> +		goto probe_clk_put;
+> +
+> +	ret =3D usbhsc_clk_prepare_enable(priv);
+> +	if (ret)
+> +		goto probe_pm_put;
+> +
 
-It solves the problem completely for me, because as Alan said,
-core calls endpoint_reset() after installing a new config or alt
-to notify HCDs that ignore reset_device(), and also those which
-implement it incompletely, I guess ;)
+Did you really need to call these functions at this timing?
+IIUC, usbhs_{pipe,fifo,mod}_probe() will not access any registers.
 
-Unlike clearing EP_STALLED on reset_device() or drop_endpoint(),
-this also fixes cases when another STALL happens after device
-reset and the device is not reset again. For example, I see that
-when I insert a card after the original problem happens.
+>  	/* call pipe and module init */
+>  	ret =3D usbhs_pipe_probe(priv);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto probe_clk_dis_unprepare;
+>=20
+>  	ret =3D usbhs_fifo_probe(priv);
+>  	if (ret < 0)
+> @@ -705,10 +724,6 @@ static int usbhs_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto probe_fail_rst;
+>=20
+> -	ret =3D usbhsc_clk_get(dev, priv);
+> -	if (ret)
+> -		goto probe_fail_clks;
+> -
 
-At this point I can insert or remove the card, plug or unplug
-the reader and reload ums-realtek in any order, it all works.
+If my understanding above is correct, I would like to add some functions ca=
+lling around here
+to reduce modification lines.
 
-Paul, could you check if this patch works on your hardware too?
+Best regards,
+Yoshihiro Shimoda
 
- drivers/usb/core/hcd.c      |  2 +-
- drivers/usb/host/ehci-hcd.c |  3 ++-
- drivers/usb/host/xhci.c     | 27 ++++++++-------------------
- include/linux/usb/hcd.h     |  2 +-
- 4 files changed, 12 insertions(+), 22 deletions(-)
+>  	/*
+>  	 * device reset here because
+>  	 * USB device might be used in boot loader.
+> @@ -721,7 +736,7 @@ static int usbhs_probe(struct platform_device *pdev)
+>  		if (ret) {
+>  			dev_warn(dev, "USB function not selected (GPIO)\n");
+>  			ret =3D -ENOTSUPP;
+> -			goto probe_end_mod_exit;
+> +			goto probe_assert_rest;
+>  		}
+>  	}
+>=20
+> @@ -735,14 +750,19 @@ static int usbhs_probe(struct platform_device *pdev=
+)
+>  	ret =3D usbhs_platform_call(priv, hardware_init, pdev);
+>  	if (ret < 0) {
+>  		dev_err(dev, "platform init failed.\n");
+> -		goto probe_end_mod_exit;
+> +		goto probe_assert_rest;
+>  	}
+>=20
+>  	/* reset phy for connection */
+>  	usbhs_platform_call(priv, phy_reset, pdev);
+>=20
+> -	/* power control */
+> -	pm_runtime_enable(dev);
+> +	/*
+> +	 * Disable the clocks that were enabled earlier in the probe path,
+> +	 * and let the driver handle the clocks beyond this point.
+> +	 */
+> +	usbhsc_clk_disable_unprepare(priv);
+> +	pm_runtime_put(dev);
+> +
+>  	if (!usbhs_get_dparam(priv, runtime_pwctrl)) {
+>  		usbhsc_power_ctrl(priv, 1);
+>  		usbhs_mod_autonomy_mode(priv);
+> @@ -759,9 +779,7 @@ static int usbhs_probe(struct platform_device *pdev)
+>=20
+>  	return ret;
+>=20
+> -probe_end_mod_exit:
+> -	usbhsc_clk_put(priv);
+> -probe_fail_clks:
+> +probe_assert_rest:
+>  	reset_control_assert(priv->rsts);
+>  probe_fail_rst:
+>  	usbhs_mod_remove(priv);
+> @@ -769,6 +787,14 @@ static int usbhs_probe(struct platform_device *pdev)
+>  	usbhs_fifo_remove(priv);
+>  probe_end_pipe_exit:
+>  	usbhs_pipe_remove(priv);
+> +probe_clk_dis_unprepare:
+> +	usbhsc_clk_disable_unprepare(priv);
+> +probe_pm_put:
+> +	pm_runtime_put(dev);
+> +probe_clk_put:
+> +	usbhsc_clk_put(priv);
+> +probe_pm_disable:
+> +	pm_runtime_disable(dev);
+>=20
+>  	dev_info(dev, "probe failed (%d)\n", ret);
+>=20
+> --
+> 2.49.0
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index a63c793bac21..d2433807a397 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1986,7 +1986,7 @@ void usb_hcd_reset_endpoint(struct usb_device *udev,
- 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
- 
- 	if (hcd->driver->endpoint_reset)
--		hcd->driver->endpoint_reset(hcd, ep);
-+		hcd->driver->endpoint_reset(hcd, udev, ep);
- 	else {
- 		int epnum = usb_endpoint_num(&ep->desc);
- 		int is_out = usb_endpoint_dir_out(&ep->desc);
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index 6d1d190c914d..813cdedb14ab 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -1044,7 +1044,8 @@ ehci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
- }
- 
- static void
--ehci_endpoint_reset(struct usb_hcd *hcd, struct usb_host_endpoint *ep)
-+ehci_endpoint_reset(struct usb_hcd *hcd, struct usb_device *udev,
-+		    struct usb_host_endpoint *ep)
- {
- 	struct ehci_hcd		*ehci = hcd_to_ehci(hcd);
- 	struct ehci_qh		*qh;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 0452b8d65832..5bf89ba7e2b8 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3161,11 +3161,10 @@ static void xhci_endpoint_disable(struct usb_hcd *hcd,
-  * resume. A new vdev will be allocated later by xhci_discover_or_reset_device()
-  */
- 
--static void xhci_endpoint_reset(struct usb_hcd *hcd,
-+static void xhci_endpoint_reset(struct usb_hcd *hcd, struct usb_device *udev,
- 		struct usb_host_endpoint *host_ep)
- {
- 	struct xhci_hcd *xhci;
--	struct usb_device *udev;
- 	struct xhci_virt_device *vdev;
- 	struct xhci_virt_ep *ep;
- 	struct xhci_input_control_ctx *ctrl_ctx;
-@@ -3175,7 +3174,12 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 	u32 ep_flag;
- 	int err;
- 
-+	err = xhci_check_args(hcd, udev, host_ep, 1, true, __func__);
-+	if (err <= 0)
-+		return;
-+
- 	xhci = hcd_to_xhci(hcd);
-+	vdev = xhci->devs[udev->slot_id];
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 
- 	/*
-@@ -3185,28 +3189,13 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 	 */
- 	if (usb_endpoint_xfer_control(&host_ep->desc) && ep_index == 0) {
- 
--		udev = container_of(host_ep, struct usb_device, ep0);
--		if (udev->speed != USB_SPEED_FULL || !udev->slot_id)
--			return;
--
--		vdev = xhci->devs[udev->slot_id];
--		if (!vdev || vdev->udev != udev)
--			return;
--
--		xhci_check_ep0_maxpacket(xhci, vdev);
-+		if (udev->speed == USB_SPEED_FULL)
-+			xhci_check_ep0_maxpacket(xhci, vdev);
- 
- 		/* Nothing else should be done here for ep0 during ep reset */
- 		return;
- 	}
- 
--	if (!host_ep->hcpriv)
--		return;
--	udev = (struct usb_device *) host_ep->hcpriv;
--	vdev = xhci->devs[udev->slot_id];
--
--	if (!udev->slot_id || !vdev)
--		return;
--
- 	ep = &vdev->eps[ep_index];
- 
- 	spin_lock_irqsave(&xhci->lock, flags);
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index ac95e7c89df5..179c85337eff 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -304,7 +304,7 @@ struct hc_driver {
- 
- 	/* (optional) reset any endpoint state such as sequence number
- 	   and current window */
--	void	(*endpoint_reset)(struct usb_hcd *hcd,
-+	void	(*endpoint_reset)(struct usb_hcd *hcd, struct usb_device *udev,
- 			struct usb_host_endpoint *ep);
- 
- 	/* root hub support */
--- 
-2.48.1
 
