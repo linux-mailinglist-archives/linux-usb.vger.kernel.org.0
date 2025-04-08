@@ -1,169 +1,232 @@
-Return-Path: <linux-usb+bounces-22761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22762-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B46A81274
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 18:34:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2967DA81283
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 18:36:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 212493B180F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 16:30:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE73A463962
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 16:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C98E22F16E;
-	Tue,  8 Apr 2025 16:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABA022F17B;
+	Tue,  8 Apr 2025 16:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PA00jMCX"
+	dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b="w3+Q8MAD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C1C22D4C1;
-	Tue,  8 Apr 2025 16:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A4622DFA1
+	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 16:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744129831; cv=none; b=QX0EBWKBuPfK6n8m5n5jm1r8apOPybu7vj6RZj/0a8dNoNKGycnSVqXNWmE2QGO4+iUqJbLTYXMPTo1sessnHc259xujmwUCjxTI1n8GjcGdY860hNllfoGYbu4hLL0Q+nfaktIj0e3eICZ5lGYmehu97n1rszuaTz6LlqMzqGc=
+	t=1744130180; cv=none; b=Wy8jAYiPznQmRjfYhNknczRUDuMLUeBBQjrvz/U0pTSVSbKt6KNZU45p4a5DfBB+aZyyvTsTn8dLsoYizNrF0r302NHAz3T64d2xlAs+RWmb+yr+ztSuKzNrS6bVRJJtuvu/Ry4idBhVBxOcSgF+22HWXRaZuOhsSP+H+ZGqrec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744129831; c=relaxed/simple;
-	bh=oNUYEMgGqJ+3wGse3jpH09pPTdEyTcpXIxcUBN0Qlxk=;
+	s=arc-20240116; t=1744130180; c=relaxed/simple;
+	bh=zNql4wjyEPOLy1mY6jhCj+sK140gdpVkS0KbDrHloKs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dSFw2vA06z5aGgXkD7Y18Hylzi+nt++ypx+scO3sW+BSTTjdaSadgjoCA1k/k4E5vqIZwgJ/CRX42FrWm5rI8A787ymYM8dng3w553CmmHqalv685o2mRP+VKJri4I4NrZPlyf1aIXDmOccq68Vcg3lg8tK7wd2s7MhFKMp+QGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PA00jMCX; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-523edc385caso2401823e0c.3;
-        Tue, 08 Apr 2025 09:30:29 -0700 (PDT)
+	 To:Cc:Content-Type; b=HxOlMzzGcSDafSDJsIj8n6b48yUhN5UzD2QKa3O99z0I2bk8vPmSuvB+2S7r6YQJNnnEEjVLhwLzIQ5dKu5S0SiPXdsGVn4VA/10xAm/PZmM8p5eC+IpUyRpww4F3gS1CXVjaTy7QCinYLBMl0BiRLhDRAym1JKub+v77sXT2og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thaumatec.com; spf=pass smtp.mailfrom=thaumatec.com; dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b=w3+Q8MAD; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thaumatec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thaumatec.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac345bd8e13so979698866b.0
+        for <linux-usb@vger.kernel.org>; Tue, 08 Apr 2025 09:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744129829; x=1744734629; darn=vger.kernel.org;
+        d=thaumatec-com.20230601.gappssmtp.com; s=20230601; t=1744130177; x=1744734977; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7wJ4YLUkXoLkwKjpRqxcQiGAxIAwL7Wsxqtgcenp5GE=;
-        b=PA00jMCXY81sVnE/gO975e6BiJz80jFF7SxLf5MWhFMIbGzk4JjcMZRNn+Vi83a/No
-         3L8VYORtrf72yiHZGnRkfX0qpWQuWJo3SiGdyl1AFDorAE6/yfwnQYEXQPfuvzrbIpkJ
-         JK6EI09oQ0XGvGnYypbaQyv9Xl6ajlL1bvKfuMwAToHcPO13ejHCRrhoH7LCB2BCzH7a
-         uqynQerO1nsIuQfXLmiYDR4SVCxVElxoVwfIGfVNRVh69AYe7lNrIMqVstA1GKp9ois0
-         4CrA+0vmCa0JdvfqXnAIjphNl3B/mmdCfx+v99WBpGZPn+mJZ0ahkAuMYEE3NwhqBY21
-         bNWw==
+        bh=i3wrvWVbOnRUQVWpOBEubP7kMDCUCq12GpzisA/3qfg=;
+        b=w3+Q8MADhnBdGtHmrmwMEr3qqPodDdBil5lUmmiSj30j0y8uiLKXK7MTYanU0do1jV
+         y6tE7UZMl1U+0Sr+jg/I+CEdtMMpYqz3w2wcoM+VExLGP5mboTP7Ezw4KV9zarlsPQoD
+         KVhghmJvOK/MqOEOm9/C6Xwxj5T9unJpAckgUWbQZh7CgA4+14DHu1QKnHRQMdGRY7Qu
+         +gAN2MfRasrQ3Se9ai3ZmZRBF/Ok7/rpejhmYjPIzxn/YVm2GY3H8rLyodfFUD5am1if
+         N79Qq/GD/ZcohtokcRzkOGxIs4+DAX2aJt/sT4mT8nsZEpxhqmbkHQ+ciZ0wlV9iiwh1
+         bPpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744129829; x=1744734629;
+        d=1e100.net; s=20230601; t=1744130177; x=1744734977;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7wJ4YLUkXoLkwKjpRqxcQiGAxIAwL7Wsxqtgcenp5GE=;
-        b=oNtnAVbIra8fQDCllu8VL2zwWFrbbEKfGTd7aRQhu5Jphjuwnanpqz8XuJPQ3SoN5h
-         L1DdBEK7EO0ZbMzoBRfj6ZT3Q7NQK+/9pVOc4V2kSbQF7ZEXiizskuL4Xinou/Osakge
-         egqW/Duw2EHwTcevzCDbFriH6YR5Uo6iA7vHBEiN1Qj3sJTM+mIHVqsWVYPCRoeziULH
-         0kxCQpp+tGDeT7M3aoIjkVycxi2imTNISzvrEvFbcOWiYRo2T9cvqg5ayW4qpGxlROMF
-         fbVfxDtEfGz0nYy+cII2DGRG/NkCZcFSBEg4va5L4PQfvIliRjIrw5hwhNk6lBzbdJSJ
-         9lAg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhdSbEgA7p5PjG4xoZ5OHOLnCdVLjMAVvydkq/dj7AWJfwr3PXg6cGU7R9gGhZ74I3HFebIs9fLXW7WVQ=@vger.kernel.org, AJvYcCV0ckyFy+KJG3pFvsaaaHckA+s6j7WcHvRCqr28D3Lr7iS2d41BtLCKkZ4ja0V0YgzKVRfMspLEqCaP@vger.kernel.org, AJvYcCXU2bmT76iaKM3XYJVHUALGWKNo4wyWoyFoCZGM1BmrVhRTZPw5jKRBfFJgQnVTdFpN7ecukHa4Y4hpNmg0Qln5OkA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9awA1hZRenNZ14SjtXztqgB5VEJA31L6J10w/jHWvAdSZmcHe
-	Wm7dlZVcTuZocC9QmQDqt2xPQDTcAmhf+Fz1e+sgeIQUwjlyvpugPWorXp5/7aDt+auOUuc5TH1
-	QxEmBTkigEWCFOSlv7PXpr8pL6ok=
-X-Gm-Gg: ASbGnctslidkNkpWYDsHAzkLqceZPUF9LgB+phpJgjUqI2KFmja1xz6LVhL54DVr0/2
-	C4KjyFfC/SEJ0ZVFNJz7ynrcG14am7nwRIbCJnI9abyK5bJNKjpA0XgWXT+1tBcLXPs2LX7KbU0
-	KcdY5jrRjlFgDT/db+14PwTuUeyQ==
-X-Google-Smtp-Source: AGHT+IF5vpxNNPgG48KmSP5YzAFbWLkv5ORwKd1NXBIFcwfuQX8RWoaUye5P4F2J864AgBaRoMtNJ04iAsqmgY0QlTc=
-X-Received: by 2002:a05:6122:659c:b0:520:3987:ce0b with SMTP id
- 71dfb90a1353d-5276443fba4mr13910530e0c.2.1744129828922; Tue, 08 Apr 2025
- 09:30:28 -0700 (PDT)
+        bh=i3wrvWVbOnRUQVWpOBEubP7kMDCUCq12GpzisA/3qfg=;
+        b=RHB66qts5zSN+2T1KBmgw0u1YEkVjzRuP1KMPpm/Axmg/av5eEt2YkKy5cooj5oaC8
+         AanbqsDxxY08V8f5qyVVZz/yKU2WsekkZEzOeZJ3T1fP8dwwZIcJWrUdhq4ksCI8VIX/
+         SAfgElDO8OO2FZOWnEntoSC9ZqSA5rlMHa4Ythy0JYevRzuEzvgl5WD7FMrVjB46uw5X
+         1W4fRpLWFVwq1l4mUeYp4FtIV9IIAJ3TOjjtn8C4n47yYawztfaSxdFEJOXB6LYxbrXz
+         Rt9NOtcfGISgN2/Al9dXjuMw6tZOOgMgZ7lsp08Sw7yJmVOa7/+4C3rbdje1WaRdOrHd
+         Cp6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVzauZnSEA9+hsPutQPxheHaeAcwH3pDymmkOG3EoBJ5V0cANETJ7HYNDy93/1aXKNalCP1dijCAbM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqhee6hRb9bS/Fo08GZBvlxvqvz+uR6pRqLxZL0jUP+uob3RFY
+	njLfdc1/84qUq8m6++Dy/uqri3KXnFcN7W9ZPF9Wf6fQy9E70NHB99YOxF0pIVOByXEar/MG6Iy
+	FW+y1CjFXUsZt65xQ0jThxKcpZWiM9zKiOKUctw==
+X-Gm-Gg: ASbGncsbX0apKCNPtHERBM315ObEZJ5DxwaHgt4nH1QIgxT9nL60HB4SFJBymXO1fHC
+	oNKmCk/fsDBYrYdM2dXRfywSA+eml5Y1NWa+qphCJ54dxS3XbAAGm7PlDYHbf+zfEamgLDkOvXq
+	QLsqqRBMpAzlWM3ZThGEtvFLcThSBa
+X-Google-Smtp-Source: AGHT+IEKFLhzxNA8nE4j3QQLXx2xIaLoG80ZEqlxvEiciuURe4ovIM9jxkUyiDuLYEFOGCRYHlOLSuzofncZr+mD4JY=
+X-Received: by 2002:a17:907:7da3:b0:ac2:55f2:f939 with SMTP id
+ a640c23a62f3a-ac7e7170328mr1083292466b.6.1744130176982; Tue, 08 Apr 2025
+ 09:36:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407105002.107181-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250407105002.107181-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <TYCPR01MB11040727E81F6DF8647D92343D8B52@TYCPR01MB11040.jpnprd01.prod.outlook.com>
- <CAMuHMdWXid=9NXUULSA-vedZyjvDKJWt2KX8_Y=arMOp_-gFRQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWXid=9NXUULSA-vedZyjvDKJWt2KX8_Y=arMOp_-gFRQ@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Tue, 8 Apr 2025 16:30:02 +0000
-X-Gm-Features: ATxdqUGgIgmcjOglWViw_kzyabRFOC_xMFbdUJNoeHkDgkQfHaMF7v3wcEAvb14
-Message-ID: <CA+V-a8v=AtYbFwTtTzFfkf3S126HOioU8jZvcKo1uKkkF-rO+g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] usb: renesas_usbhs: Reorder clock handling and
- power management in probe
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20250326-onboard_usb_dev-v1-0-a4b0a5d1b32c@thaumatec.com>
+ <20250326-onboard_usb_dev-v1-2-a4b0a5d1b32c@thaumatec.com> <20250326-fanatic-onion-5f6bf8ec97e3@spud>
+In-Reply-To: <20250326-fanatic-onion-5f6bf8ec97e3@spud>
+From: =?UTF-8?Q?=C5=81ukasz_Czechowski?= <lukasz.czechowski@thaumatec.com>
+Date: Tue, 8 Apr 2025 18:36:04 +0200
+X-Gm-Features: ATxdqUGKDxJYzUIvQOK05tjpTcLCd2GeOTcg3K4KoR3MFRQVI_hcKPX99fihLeY
+Message-ID: <CABd623tEGh=qtpF0h7PkRBBrR7V9EaxUv9HregqbPcLU_2Exbg@mail.gmail.com>
+Subject: Re: [PATCH 2/5] dt-bindings: usb: cypress,hx3: Add support for all variants
+To: Conor Dooley <conor@kernel.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Benjamin Bara <benjamin.bara@skidata.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Klaus Goger <klaus.goger@theobroma-systems.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, quentin.schulz@cherry.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
+Hello,
 
-On Tue, Apr 8, 2025 at 4:43=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
-.org> wrote:
+=C5=9Br., 26 mar 2025 o 18:58 Conor Dooley <conor@kernel.org> napisa=C5=82(=
+a):
 >
-> Hi Shimoda-san,
->
-> On Tue, 8 Apr 2025 at 12:40, Yoshihiro Shimoda
-> <yoshihiro.shimoda.uh@renesas.com> wrote:
-> > > From: Prabhakar, Sent: Monday, April 7, 2025 7:50 PM
-> > >
-> > > Reorder the initialization sequence in `usbhs_probe()` to enable runt=
-ime
-> > > PM before accessing registers, preventing potential crashes due to
-> > > uninitialized clocks.
+> On Wed, Mar 26, 2025 at 05:22:57PM +0100, Lukasz Czechowski wrote:
+> > The Cypress HX3 hubs use different default PID value depending
+> > on the variant. Update compatibles list.
 > >
-> > Just for a record. I don't know why, but the issue didn't occur on the =
-original code
-> > with my environment (R-Car H3). But, anyway, I understood that we need =
-this patch for RZ/V2H.
+> > Fixes: 1eca51f58a10 ("dt-bindings: usb: Add binding for Cypress HX3 USB=
+ 3.0 family")
+> > Cc: stable@vger.kernel.org # 6.6
+> > Cc: stable@vger.kernel.org # Backport of the patch in this series fixin=
+g product ID in onboard_dev_id_table and onboard_dev_match in drivers/usb/m=
+isc/onboard_usb_dev.{c,h} driver
+> > Signed-off-by: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/cypress,hx3.yaml | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/D=
+ocumentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > index 1033b7a4b8f9..f0b93002bd02 100644
+> > --- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > @@ -15,8 +15,14 @@ allOf:
+> >  properties:
+> >    compatible:
+> >      enum:
+> > +      - usb4b4,6500
+> > +      - usb4b4,6502
+> > +      - usb4b4,6503
+> >        - usb4b4,6504
+> >        - usb4b4,6506
+> > +      - usb4b4,6507
+> > +      - usb4b4,6508
+> > +      - usb4b4,650a
 >
-> On R-Car Gen3 and later, the firmware must trap the external abort,
-> as usually no crash happens, but register reads return zero when
-> the module clock is turned off.  I am wondering why RZ/V2H behaves
-> differently than R-Car Gen3?
+> All these devices seem to have the same match data, why is a fallback
+> not suitable?
 >
-From section 4.4.8.4.1 of RZ/V2H HW manual:
-In this mode, the frequency of the clock signals supplied to specified
-peripheral units is stopped to obtain lower power
-consumption.
-This is achieved by stopping supply of the clock signals by the CPG
-and, through the given CPG registers, switching
-the bus MSTOP ports. Error interrupts notify the system of attempted
-access to units in the MSTOP state.
 
-> On R-Car Gen2, you do get an external abort when accessing hardware
-> registers while the module's clock is turned off.  Has anyone tested
-> usbhs on R-Car Gen2 recently?
->
-Yes I tested this with the patch applied,
-https://gist.github.com/prabhakarlad/3d1bbb6f745d8d867c8e6e009ab93f8d
+Thank you for the suggestion. Indeed the fallback compatible appears
+to work fine in this case,
+and I am able to avoid additional entries in onboard_dev_match table
+as added in the first patch in this series.
 
-1] For R-Car Gen3 looking at the r8a77951.dtsi we have the below:
+However, after I've updated the cypress,hx3.yaml schema file and
+rk3399-puma.dtsi file,
+I get the following warnings, when running "make dtbs_check":
 
-hsusb: usb@e6590000 {
-        compatible =3D "renesas,usbhs-r8a7795",
-        ...
-        clocks =3D <&cpg CPG_MOD 703>, <&cpg CPG_MOD 704>;
-        ....
-};
+linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@1:
+compatible: ['usb4b4,6502', 'usb4b4,6506'] is too long
+=E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/cypres=
+s,hx3.yaml#
+linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@2:
+compatible: ['usb4b4,6500', 'usb4b4,6504'] is too long
+=E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/cypres=
+s,hx3.yaml#
 
-The same clocks are used for ehci0/ohci0/phy0 in  r8a77951.dtsi,
-probably by the time we reach probing the usbhs driver these clocks
-may have been already enabled hence register reads were sensible.
+Below is the diff of my changes:
 
-2] For the R-Car Gen2, looking at the RZ/G1H USBHS node we have the below:
+diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+index f0b93002bd02..d6eac1213228 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+@@ -14,15 +14,22 @@ allOf:
 
-hsusb: usb@e6590000 {
-    ....
-    clocks =3D <&cpg CPG_MOD 704>;
-    ....
-};
+ properties:
+   compatible:
+-    enum:
+-      - usb4b4,6500
+-      - usb4b4,6502
+-      - usb4b4,6503
+-      - usb4b4,6504
+-      - usb4b4,6506
+-      - usb4b4,6507
+-      - usb4b4,6508
+-      - usb4b4,650a
++    oneOf:
++      - enum:
++          - usb4b4,6504
++          - usb4b4,6506
++      - items:
++          - enum:
++              - usb4b4,6500
++              - usb4b4,6508
++          - const: usb4b4,6504
++      - items:
++          - enum:
++              - usb4b4,6502
++              - usb4b4,6503
++              - usb4b4,6507
++              - usb4b4,650a
++          - const: usb4b4,6506
 
-Same clock is for USBPHY, even in this case the PHY driver is probed
-first due to which the clock is ON and then we probe usbhs driver..
+   reg: true
 
-Cheers,
-Prabhakar
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index d0d867374b3f..7fac61f95fc6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -594,14 +594,14 @@ &usbdrd_dwc3_1 {
+        #size-cells =3D <0>;
+
+        hub_2_0: hub@1 {
+-               compatible =3D "usb4b4,6502";
++               compatible =3D "usb4b4,6502", "usb4b4,6506";
+                reg =3D <1>;
+                peer-hub =3D <&hub_3_0>;
+                reset-gpios =3D <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;
+        };
+
+        hub_3_0: hub@2 {
+-               compatible =3D "usb4b4,6500";
++               compatible =3D "usb4b4,6500", "usb4b4,6504";
+                reg =3D <2>;
+                peer-hub =3D <&hub_2_0>;
+                reset-gpios =3D <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;
+
+
+Do you have any suggestions on how I can properly update the schema
+files to avoid the above warnings?
+
+> >
+> >    reg: true
+> >
+> >
+> > --
+> > 2.43.0
+> >
+
+Best regards,
+Lukasz
 
