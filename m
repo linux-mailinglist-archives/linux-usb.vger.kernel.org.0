@@ -1,186 +1,216 @@
-Return-Path: <linux-usb+bounces-22769-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22770-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35011A8190E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 00:54:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C64CA8195B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 01:29:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5852C3AFB82
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 22:54:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB2161BA4FA8
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 23:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124C02561B6;
-	Tue,  8 Apr 2025 22:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB57A2566E8;
+	Tue,  8 Apr 2025 23:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Lu7MxIAK"
+	dkim=pass (2048-bit key) header.d=hesling.com header.i=@hesling.com header.b="ayGtHOBO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9142D245024
-	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 22:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE0E2566D7
+	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 23:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744152869; cv=none; b=r1v6yohfiADxoyoucvYmXa9BjVKeIpRYtSfOR9jrdX/7Fb7A8pxsHeGFjYU0K3WZcQ3U4v0lVLBIa7Xb/TrT2l//UIfLgfO1Y2SK8bk4PDEdkjpXTEOfWCM+fQwm0mcEl23OTsMLXcs6B9ANN5m6LBRwkWiJWQPXKaw2Sd7wbfU=
+	t=1744154898; cv=none; b=tLAB73v+oLefdi5hlG6bq2pEO4b7C8s/I+M+CCWGuFQkgezlyLzD1kif+BBxfo/I9+MJKw26jGtK7kQtBI8ImvO2LEgnGo+xJhCgNTe4TaZfUwxJv5T/TrLzyNAQFkpPKxMzdYAOAdMWMnqcPikx1VkFd9lIg5CHiipxuzFy5/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744152869; c=relaxed/simple;
-	bh=J2CDvDN+jqzXzi1yPusxXrH3ULFQeb2EMfoZSTLHzLs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bapIVVbADpwXWTl6VSpp0v7JMSMtuExlAK5/rgXv4VDJQRUJGv6WEMlO2rLcvhXynXPX2xtGyLxcVObMlmkTsi+NEMhwNIvt331VSR86av3ClzSG6PjGOS/hlWGD5ZOW1t+krYAqg01ZSJIZzNaw1Ed5LpX6Lvffzi8fnoWJm1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Lu7MxIAK; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-85e46f5c50fso155667239f.3
-        for <linux-usb@vger.kernel.org>; Tue, 08 Apr 2025 15:54:26 -0700 (PDT)
+	s=arc-20240116; t=1744154898; c=relaxed/simple;
+	bh=FIXpaJ6I+Mj5XP0JpNbIDUHSehFYUEVKGCS8FJGfwvg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DOxKqvbTrS0YNBuEzvUAPGSpqzZVI3lKHTEtQutETfWuHZwG414ZPSFW93MNN9paWSTC2QR/uj2aYZ1ffDKdT3vKQemsELQHSS2zp4oE++SBjq2ggWVYaYSMlkEr+iPSW5O4GoLL8UaiKGrCJZCI7ZPR9I899eByPE9Mt7HS3m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hesling.com; spf=pass smtp.mailfrom=hesling.com; dkim=pass (2048-bit key) header.d=hesling.com header.i=@hesling.com header.b=ayGtHOBO; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hesling.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hesling.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3054ef26da3so4913740a91.3
+        for <linux-usb@vger.kernel.org>; Tue, 08 Apr 2025 16:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1744152865; x=1744757665; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O4u+uHbYpd56jQ75uyWCLwOdDC6xzBcEAv4IFYv/TvA=;
-        b=Lu7MxIAKfG/tcadb65sUGl+vyidWbyyBVKwqXipfVN+ZrpiLldxk0OdrW+4MLOEA7J
-         /BjWUpUKNm12ddtj6JlOgWeBE6IBomyZt0X+q3SmgI0llMTYLzgO8vh+t3CyEA5YR7dT
-         3j/QFpklNUtvOG3dbMSryfcxPakA3ryvNRH28=
+        d=hesling.com; s=google; t=1744154896; x=1744759696; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cm4FPLMOh2GauL3WSiMT61Z/Hhcdt4AG8xN7ZzrRPu0=;
+        b=ayGtHOBO39iXooGWmho9861ucbqob/fhYhD1K22SqS+qi0NKX10zQg5oamODiPS2Oo
+         fjFowlkfky6N2hhb38VOQ/CP1RIByLrGg5K1sgdZT1cSauqzKJ1jp2XoCyNjGMJ6s7+y
+         L+vLxgn/v2s5RUBvfEo/Lc6iBDtcxjgyvvXGvoNwOTV3I5lljreuEk+XGs4/hX8M6p/M
+         2SDFUBbntK6BOrmOoKeGH4rbEhBhhJkyKgT02sCP9PjIAGPlnW7zfbCl79V8qC+8I1by
+         L9++svHJxRo1a6vVy3k3NFSiOk8Y2etzGcBNuzXvWeoECQcoACJwSsZg9YYZMMJKKrpV
+         90sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744152865; x=1744757665;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4u+uHbYpd56jQ75uyWCLwOdDC6xzBcEAv4IFYv/TvA=;
-        b=uL39t3jQ7xk8VAiI3N1Q6+w5B6HAdu28aUQ7ZiRksjBi7snVA3gkikjaliwgiF9Hdz
-         asavFztD+oyIyiAN7xh6ByIOkWdX2VOFCVieyZt4Ra7kDPntFdWpY+FkePOMGOzVnuyG
-         I4QkvKFSfhYrUhZm8Zyvdkcvk13FmH0uFEtYriyc/u/Du8lPt7Z9FcWBr1P48vEKq3iG
-         Iecf8rNKUiFCzbWOxb0bVBUz8wzyWb7qhpkKsvbnyi+9eJv8CtQOnmk2UmwiQ8CqzJ15
-         8Lt1NDjeRQlEZazujb6NByNcNlTdKmQDByruRbLOOvYj8IxWVZFNYnP70uHbRt3/Anfk
-         UTqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUwhTalUYnVI2PrBpyjKC4Mk/9ht1VzcQjJcSFKp+BgGpwa6laQvahEIld5yH/FHqVqHpS9Cot42EI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR5XOik2Aw3clfRDzL1rAEPSr5oq4X6KtbZ5dnm+6XZf6Ntk4S
-	KlJCvXlP2nJimP8E/5QjB7XJ52rW4KAT7PnKWcgf4WM7AOapeqsg6DuNKHJ3ccI=
-X-Gm-Gg: ASbGncvRYR1XnEXuehNPqYvi1vcehEG2+tIZWe7gSFPbysqFTMJ+mHt8akT2toUnMJK
-	dWOZNiRAOjCbm6MbY7cTqVeW/DFOEswWpi6wffBMdjN38EFT9JZD3QUEotwKvYQjwpI+ixHzqYu
-	bcqwCxe+CCn+TmJYVEDQ3EepAx6hgd/7F/wR7U4+fA9PU54YlTYkGGuxSevHSEGMxbhK/Ns0FGw
-	Xn5W00HUjgH/VTU81KdUntirqqO15ryk49B9g305Rchau/sfaRgsgvPlvM8KhpMaWapllVFGqnY
-	XWO1qjsgqEi5LyuF+MJvzD88EUpVBLCb8A7kk8dWM68EU8whW401Duk=
-X-Google-Smtp-Source: AGHT+IFfPoJb4vdcOemp+ouDZhEEwgxl3/HoTYOaWV1UhL5oZ8jHQZhPCV559v9JzkSlUJ58yn1X9A==
-X-Received: by 2002:a05:6602:720e:b0:85d:a02a:f13e with SMTP id ca18e2360f4ac-861611bb5demr144005039f.6.1744152865637;
-        Tue, 08 Apr 2025 15:54:25 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f4f43bcce7sm710192173.6.2025.04.08.15.54.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 15:54:25 -0700 (PDT)
-Message-ID: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
-Date: Tue, 8 Apr 2025 16:54:24 -0600
+        d=1e100.net; s=20230601; t=1744154896; x=1744759696;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cm4FPLMOh2GauL3WSiMT61Z/Hhcdt4AG8xN7ZzrRPu0=;
+        b=D9ZB3BvuKhRJqJsRxGJOGrKqNZfnap0dllK6/qLxM/6d4R2j94cL8Ucyrudxhpw8XJ
+         Gy4CRfGULafbrirLBH5geUvFmiMJVUXrUt4dhkUH8eNTjF3+a3WamOrFNdCjOaRgsX6+
+         veO1dNBdLp+Ko8Zm+IdTilWEnAYqynjlV13GkVQ91hKlXSp3mZqc23eFCjTTVrnp2Oip
+         5wHtTJVZr/mJJp4zXUUbyhu6SoKqr1sBO5yGVZmBxMg5CV9PVt0fs6Q/exz/9kAktZKM
+         9zBvsXpLh1FABcc1J0cJ8z6xNgK5CDYXHXDWd8BgGTkD7FGOdo1Pr/d/tCDdVtqkzDXL
+         BcMA==
+X-Forwarded-Encrypted: i=1; AJvYcCVWnLTPHzyuC9dcG874YJuCgfwr738XrY1ltrG/556PzpS6litwGt3TtoXGrBYHY0Z2hVfqplWgaNE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1wWtftORvb56F+mfk/tjXEdoqol5dO+NHj1nAcixftQnWZNtU
+	1N9i51CTFm7keiS/NFpd5XIj13xsgTrkfxLoTjNJjB6SRXACz6L9tYxAihHGF/M=
+X-Gm-Gg: ASbGncv0FTv/g+FkONvfM/wqtk0RbLzuvKTekzELy1HMIB6NRSJV+lNU+Rl3YKGICIt
+	ruqhnvlhZ3zH3j8nLATFAIQs5vu/0D0K7lsH1DRkoj8CuzIOZnprb69qg8/T7C+LF5zWZ5mYhwR
+	N/Zzq4xp7nyVjP8hUMEAJiAPQ5Y3mjgCFbAwYRaQp+i4kmKAuSQikx8KeetJNYKnE9PMoffneaM
+	F2W5uF73HO4EqyDrH1PxT5bRWWsKIC5tUkJw4cxQkOrqAhZNZKreDJYFH1Znp3a2yV+gLyydQMG
+	lpv3SCB4aWR1RQF7gQxiBZvfB84fH33BepZ88UcpxqsHNVMhvUoeumYtVPN2f/HMhUz/WbQ3
+X-Google-Smtp-Source: AGHT+IFnuCdRZgsYnenjFUjCSOcjgtIvg6cUe/e+MOCCQ/pJrUIV7Ecz0sNeENBlkdUngQcW73qsmg==
+X-Received: by 2002:a17:90b:5344:b0:2fc:3264:3666 with SMTP id 98e67ed59e1d1-306dbc3e090mr1134561a91.30.1744154895773;
+        Tue, 08 Apr 2025 16:28:15 -0700 (PDT)
+Received: from craigwork.rex-boga.ts.net ([2601:646:300:8200:7c1c:b43d:f21e:5a79])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d980645asm11134521b3a.74.2025.04.08.16.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Apr 2025 16:28:15 -0700 (PDT)
+From: Craig Hesling <craig@hesling.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	sboyd@kernel.org,
+	craig@hesling.com
+Subject: [PATCH] USB: serial: simple: add OWON HDS200 series oscilloscope support
+Date: Tue,  8 Apr 2025 16:27:03 -0700
+Message-ID: <20250408232703.954945-1-craig@hesling.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: Fix the error limitation on max_hw_sectors for
- usbip device
-To: Zongmin Zhou <min_halo@163.com>
-Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250219092555.112631-1-min_halo@163.com>
- <88b2fb4b-96a4-4d29-bf92-4064d3572fa4@linuxfoundation.org>
- <5a41d6c3.8c78.195371996e0.Coremail.min_halo@163.com>
- <247c7e15-bbff-427f-8315-ca463f8b933b@linuxfoundation.org>
- <4d4035bf.26b9.19556dcc23d.Coremail.min_halo@163.com>
- <c49917d2-5157-4878-9866-be6053b5124d@linuxfoundation.org>
- <6d47fef6.9eef.19565c308e5.Coremail.min_halo@163.com>
- <803b43c6-9aab-4380-9753-fd2efa8061fa@linuxfoundation.org>
- <7e9db4d9-0a22-44b4-a981-0de25d6a2aa4@163.com>
- <99a8b726-726a-4e26-bafc-9ff2b1e4d7be@linuxfoundation.org>
- <6b970291-c9f7-4a5f-9b82-210a3c4d2739@163.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <6b970291-c9f7-4a5f-9b82-210a3c4d2739@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 4/2/25 02:34, Zongmin Zhou wrote:
-> 
-> On 2025/3/29 05:14, Shuah Khan wrote:
->> On 3/13/25 04:02, Zongmin Zhou wrote:
->>>
->>> On 2025/3/11 00:49, Shuah Khan wrote:
->>>> On 3/5/25 03:03, Zongmin Zhou wrote:
->>>>> At 2025-03-05 03:45:28, "Shuah Khan" <skhan@linuxfoundation.org> wrote:
->>>>>
->>>>>> On 3/2/25 05:37, Zongmin Zhou wrote:
->>>>>>> Dear shuah,
->>>>>>>
->>>>>>>
->>>>>>> Yes, I agree with you.It would be better if there have a more simpler fixes than This patch.
->>>>>>>
->>>>>>> I can just think of the two possible solutions that mentioned before.
->>>>>>
->>>>>  >What are the two possible solutions?
->>>>> 1. The patch we are discussing now,have to change the API between the kernel and user-space.
->>>>
->>>> 2. Simply set vhci-hcd dma mask to 64 by default,just modify the vhci-hcd driver. Then dma_max_mapping_size() will always return SIZE_MAX.
->>>>
->>>> I prefer option #2 - What are the downsides if any with this option?
->>>>
->>> If set vhci-hcd dma mask to 64 by default,I can't predict what will happen when the real USB controller support less than 64bit?
->>>
->>> After all, the data flows from vhci-hcd to usbip-host and finally to the USB controller to which the device is actually connected.
->>>
->>> the data is ultimately processed through the real USB controller?
->>
->> Sorry for the delay.
->>
->> That is the case. I have to check the code to see what the host
->> would do if it receives larger buffers from the client (vhci)
->>>
->>> However, the default setting to 64-bit is equivalent to eliminating the impact of
->>>
->>> the patch(commit d74ffae8b8dd) on usbip protocol devices, sounds feasible?
->>>
->>> I am not very professional in this field, waiting for your evaluation.
->>
->> We can give this a try. Send me the patch with default testing the
->> following cases:
->>
->> Host - swiotlb enabled and disabled in your environment to see what
->> happens when there is a mismatch swiotlb enabled case and client
->> side doesn't limit the size.
-> 
-> If you want to test swiotlb disabled mode, you can modify the kernel cmd to force disable swiotlb:
-> 
-> modify the grub.cfg, add the swiotlb=noforce parameter to kernel command line,and reboot.
-> 
-> cat /proc/cmdline to check whether modified successfully.
-> 
-> 
-> The patch set vhci-hcd dma mask to 64 by default like below:
-> 
-> ---
->   drivers/usb/usbip/vhci_hcd.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index e70fba9f55d6..fca3a4a6e94d 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -1345,6 +1345,9 @@ static int vhci_hcd_probe(struct platform_device *pdev)
-> 
->       usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
-> 
-> +    /* Set the dma mask to support 64bit for vhci-hcd driver. */
-> +    dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-> +
->       /*
->        * Allocate and initialize hcd.
->        * Our private data is also allocated automatically.
+Add serial support for OWON HDS200 series oscilloscopes and likely
+many other pieces of OWON test equipment.
 
+OWON HDS200 series devices host two USB endpoints, designed to
+facilitate bidirectional SCPI. SCPI is a predominately ASCII text
+protocol for test/measurement equipment. Having a serial/tty interface
+for these devices lowers the barrier to entry for anyone trying to
+write programs to communicate with them.
 
-Please send me a patch I can apply.
+The following shows the USB descriptor for the OWON HDS272S running
+firmware V5.7.1:
 
-thanks,
--- Shuah
+Bus 001 Device 068: ID 5345:1234 Owon PDS6062T Oscilloscope
+Negotiated speed: Full Speed (12Mbps)
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x5345 Owon
+  idProduct          0x1234 PDS6062T Oscilloscope
+  bcdDevice            1.00
+  iManufacturer           1 oscilloscope
+  iProduct                2 oscilloscope
+  iSerial                 3 oscilloscope
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0029
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         5 Physical Interface Device
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              0
+      ** UNRECOGNIZED:  09 21 11 01 00 01 22 5f 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval              32
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval              32
+Device Status:     0x0000
+  (Bus Powered)
+
+OWON appears to be using the same USB Vendor and Product ID for many
+of their oscilloscopes. Looking at the discussion about the USB
+vendor/product ID, in the link bellow, suggests that this VID/PID is
+shared with VDS, SDS, PDS, and now the HDS series oscilloscopes.
+Available documentation for these devices seems to indicate that all
+use a similar SCPI protocol, some with RS232 options. It is likely that
+this same simple serial setup would work correctly for them all.
+
+Link: https://usb-ids.gowdy.us/read/UD/5345/1234
+Signed-off-by: Craig Hesling <craig@hesling.com>
+---
+ drivers/usb/serial/usb-serial-simple.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 2c12449ff60c..a0afaf254d12 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -100,6 +100,11 @@ DEVICE(nokia, NOKIA_IDS);
+ 	{ USB_DEVICE(0x09d7, 0x0100) }	/* NovAtel FlexPack GPS */
+ DEVICE_N(novatel_gps, NOVATEL_IDS, 3);
+ 
++/* OWON electronic test and measurement equipment driver */
++#define OWON_IDS()			\
++	{ USB_DEVICE(0x5345, 0x1234) } /* HDS200 oscilloscopes and others */
++DEVICE(owon, OWON_IDS);
++
+ /* Siemens USB/MPI adapter */
+ #define SIEMENS_IDS()			\
+ 	{ USB_DEVICE(0x908, 0x0004) }
+@@ -134,6 +139,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&motorola_tetra_device,
+ 	&nokia_device,
+ 	&novatel_gps_device,
++	&owon_device,
+ 	&siemens_mpi_device,
+ 	&suunto_device,
+ 	&vivopay_device,
+@@ -153,6 +159,7 @@ static const struct usb_device_id id_table[] = {
+ 	MOTOROLA_TETRA_IDS(),
+ 	NOKIA_IDS(),
+ 	NOVATEL_IDS(),
++	OWON_IDS(),
+ 	SIEMENS_IDS(),
+ 	SUUNTO_IDS(),
+ 	VIVOPAY_IDS(),
+
+base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+-- 
+2.47.2
+
 
