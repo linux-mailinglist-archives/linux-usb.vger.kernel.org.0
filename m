@@ -1,97 +1,138 @@
-Return-Path: <linux-usb+bounces-22759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38FAEA81000
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 17:30:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9E67A8107A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 17:45:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6598E3AC60D
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 15:23:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E3117ADB15
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 15:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C07B1E5B7F;
-	Tue,  8 Apr 2025 15:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XHHK/PeF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EF523A986;
+	Tue,  8 Apr 2025 15:43:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758F822CBCC;
-	Tue,  8 Apr 2025 15:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ED722DFB1;
+	Tue,  8 Apr 2025 15:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744125779; cv=none; b=V6R0v7Jxs0L/bdcyfe/rQwThimzALqmH0X3l8kZhURHAT6fo/6oEpZH78U6jjsG45ljwvEq1rhJydiR8jZm/eFZgpFvmQbt+e2HdWel7h6qfbvbh9zqa3pkkLwGoLVPqRVxGKa2JRaZSg643rLp2OEe+hN/KJ4utGU4pEKFO+Gw=
+	t=1744126992; cv=none; b=K+9M+XDDOG8EsUpft5AAejKc54OUtkDlj0HfnrSY2SScUMYEBxdWyffZZ04fMFo+puViFqWKToYT3kKsME4+b/8em/dMEWU+0MKU0ZCa+rj2l2R3PCfiMlXuL/XYeAToGVAIgILcO2gF0tTONlZzP/PQUGaGkh7P1GGRojFBOWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744125779; c=relaxed/simple;
-	bh=g38sI2F/r3LVSr8muislTa9JSawGqyk3eG9TFH+dXRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lNS2u6RfMHvjXqEDE0LdJPzVQZMbPa8M8+LqT+kJQsg7eNlzAjuajZOvwytWNl5lHWOJfpeH+xHKK8HbCV5ct5bRMPCTxEY3j37ojnwdunjZ3GcXyLeNZCk/v56haA/nxGq9z1nuyJxoAAgO2tcPoNyz1GKHeb7/+8gLK+k+vTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XHHK/PeF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3C0C4CEED;
-	Tue,  8 Apr 2025 15:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744125779;
-	bh=g38sI2F/r3LVSr8muislTa9JSawGqyk3eG9TFH+dXRA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XHHK/PeF7bTPTPlFcZ+0wOd2f8+E4++uNg8a+D5JaH7P0wKrds8VArIUwa/MQsi8i
-	 0lFxttBhBoY/qfK0YDBnNpcR0N/5yMjVhabIULWDOUudS1CuLGqJpGWptye1K1YkIQ
-	 BZMQ7gv7jDkko2x2OTRBfSRLBOBpvB8lUqX3KSPhPmu9Etf8FiKt+XoVDQHL4TwH9S
-	 7UNfC9188QfmKN/hwYFGOnL5C3WZRv3Gmb+C8cMpNK3Fi1MESnjWe+dTW0ZDTgc+Up
-	 o8nXg9BZ0TCQjFYIG1CLdvSXculdXqZjp325W+CqX72eJmRlXJCFIMXPW+HAl30ugv
-	 FdS3wrWwiBQOg==
-Date: Tue, 8 Apr 2025 08:22:57 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Krzysztof =?UTF-8?B?SGHFgmFzYQ==?= <khalasa@piap.pl>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, netdev
- <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Jose Ignacio
- Tornos Martinez <jtornosm@redhat.com>, Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH v2] usbnet: asix AX88772: leave the carrier control to
- phylink
-Message-ID: <20250408082257.7281c61c@kernel.org>
-In-Reply-To: <m3plhmdfte.fsf_-_@t19.piap.pl>
-References: <m35xjgdvih.fsf@t19.piap.pl>
-	<Z_PVOWDMzmLObRM6@pengutronix.de>
-	<m3tt6ydfzu.fsf@t19.piap.pl>
-	<m3plhmdfte.fsf_-_@t19.piap.pl>
+	s=arc-20240116; t=1744126992; c=relaxed/simple;
+	bh=mhKkui2MuhCCaDSjZCOqWxA4Njty2X+zcDjBIAbuSMw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UeLbIRB1rXZx0WDGKqU06KLsnPDwyCspdV8zq1zzrkAEz9XfJKEjeg+T0/rGQeEmlUjKFU/UE8hYo1ijHjVSwZ2nPIS/Nbsp8EWnemcJl5pYLEXo7Lkzw7iMzPFuuuiwt8inhRnAus0qL9e8yqI/9MxvO6RVypcsotseFOHWv8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-86d3907524cso2439123241.0;
+        Tue, 08 Apr 2025 08:43:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744126988; x=1744731788;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1MKeMphw2AxvVI3RVQzjeZ/yfGi4a9EjuMid/lapYRc=;
+        b=Fmpc7B0x4DNcwV949/dLsgtn0Gzfjek/gJQruUl/kQsRggphrnDZTdh3U2gpzd/JuC
+         RUPUJmFYEXICEPRCoSvUjp3Nme20qVxveGir3qLCSMkX/7g7pIZIqa5n9p3mPNKFzoPt
+         KjiWBHg4T1jF3itiZiHB2TqyhldhVNV6OnSw+G6pxyKkXTMHhQYOMGejzTw3N1hmWbuY
+         Rcfw6ycxg2VItmLOHrxDCz70+gJNqCAqk9aq/+WcVuXMfb6T3WkHJNYZdbxnusMUAWrx
+         W2/O+ldX9/ArM9XrCV5oS6fHfvaT89MrvxGO2LCp8vc/VWIQEXkZ10eJNYIhhTeFEMDy
+         ApXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ75Zu3/K1ounvljVaruGePH+aZlRhQO0wlOz8ya3odOY3dkiBVETMMtDZNhoHxOu2ZzKFcFRmlI2K3TAGAal2+oM=@vger.kernel.org, AJvYcCVl8v+BYiLV8hhHZG6wlVZFxhP/DUsBctHCmn3voL8ICvHa2dU9VcjYB8A5xekeJNPadd87CmBFMnh2Uio=@vger.kernel.org, AJvYcCXOR2EDSEr7c82rIRP4cvvFrr2dxJXr+09SsmLJ0ZwJQAMescRM9WUjQgbWbJk4AcT4MlwTLj99R4IE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlWZ+ED4BvngQk9MnpyUW11aqwEaacef25VHR6ANXB7EDFy6Dp
+	f9bCQiuJfKYk4o8RJjJaN1kJhhRCAhm8VRrwD+PP1KcvDuDrBqm0jtynS8lA
+X-Gm-Gg: ASbGncuMRqd4rlscHPwT0FYaXeSjkYAjuB8zhS9GTX0m9LT8isgfwe1ZmLU77qNdFLx
+	IJfngeZpYGVUhMFOoorKFje07fMDXeCYHPnPmTf6680iF+WsIINdw9jtWWbCyYDm6cylcHFxhgw
+	WxvBuWygI6D/WiDOTq6za1uWY40XI3A4pzr+Byv1SV77Yyv/YcnuD9tigkXEngW4A74VhFfX2m1
+	0SJfiCA3FY9XUbs3jhK06phufCqbkAjTjwQQY993sc/xZI6lSF0lghaxux6gUrYLjgpNBI0SaWC
+	398nzOLXoyUfrtV6T9vsbJsh8GUxj/fsHwErpSchq0Cu7Rv91MoVv96S/KI0CHlDIXCbNVCaYb3
+	BMBU3VOM=
+X-Google-Smtp-Source: AGHT+IGHdVY/wnxGdMhNhL1OPVgn4p7SEBCBWVd6ve1HnO0+EdVxRaTd0eekcDohZlNepWuhsOEXSw==
+X-Received: by 2002:a05:6122:310c:b0:523:bf8b:5dc3 with SMTP id 71dfb90a1353d-52765d6768dmr11854567e0c.9.1744126988109;
+        Tue, 08 Apr 2025 08:43:08 -0700 (PDT)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5279b6638f7sm420957e0c.38.2025.04.08.08.43.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 08:43:07 -0700 (PDT)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86d75f4e9a1so2360928241.3;
+        Tue, 08 Apr 2025 08:43:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVXPNCFZ6muz4mcw1GV8FT7NwjOGm+u/9b5EXh040GuboiMvf2cg1L2CscKsa5tpnerv2PdkuEVd3jDKvY=@vger.kernel.org, AJvYcCWFU1IvxuwrD750nm3BDWvuGQg+TXGUjQWvN2LxB0N3qiWtFwJD0z8nxBzJfihgt0eGeC1VPjgiXQyN@vger.kernel.org, AJvYcCXNZegFmnzR0oSBSa29deMYxKxokLYW95f9QiEZtCi+N3TVthqVqdJxo6AZC2rlRb5y+/hda3wbom//w+h49wUpUy4=@vger.kernel.org
+X-Received: by 2002:a05:6102:3f11:b0:4c3:c9:c667 with SMTP id
+ ada2fe7eead31-4c856a2d156mr14464779137.24.1744126987419; Tue, 08 Apr 2025
+ 08:43:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20250407105002.107181-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250407105002.107181-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <TYCPR01MB11040727E81F6DF8647D92343D8B52@TYCPR01MB11040.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYCPR01MB11040727E81F6DF8647D92343D8B52@TYCPR01MB11040.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 8 Apr 2025 17:42:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWXid=9NXUULSA-vedZyjvDKJWt2KX8_Y=arMOp_-gFRQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFmBwGMbXbgaFjq5IIWz6pytzMIZ8IPfFxKT-P3pDL-WzZ7zQs69pL5a0Q
+Message-ID: <CAMuHMdWXid=9NXUULSA-vedZyjvDKJWt2KX8_Y=arMOp_-gFRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] usb: renesas_usbhs: Reorder clock handling and
+ power management in probe
+To: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Prabhakar <prabhakar.csengg@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 08 Apr 2025 13:59:41 +0200 Krzysztof Ha=C5=82asa wrote:
-> ASIX AX88772B based USB 10/100 Ethernet adapter doesn't come
-> up ("carrier off"), despite the built-in 100BASE-FX PHY positive link
-> indication. The internal PHY is configured (using EEPROM) in fixed
-> 100 Mbps full duplex mode.
->=20
-> The primary problem appears to be using carrier_netif_{on,off}() while,
-> at the same time, delegating carrier management to phylink. Use only the
-> latter and remove "manual control" in the asix driver.
->=20
-> I don't have any other AX88772 board here, but the problem doesn't seem
-> specific to a particular board or settings - it's probably
-> timing-dependent.
->=20
-> Remove unused asix_adjust_link() as well.
->=20
-> Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+Hi Shimoda-san,
 
-In the future, if you don't mind, please add a lore link here, like
-this:
----
-v1: https://lore.kernel.org/all/m35xjgdvih.fsf@t19.piap.pl/
+On Tue, 8 Apr 2025 at 12:40, Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> > From: Prabhakar, Sent: Monday, April 7, 2025 7:50 PM
+> >
+> > Reorder the initialization sequence in `usbhs_probe()` to enable runtime
+> > PM before accessing registers, preventing potential crashes due to
+> > uninitialized clocks.
+>
+> Just for a record. I don't know why, but the issue didn't occur on the original code
+> with my environment (R-Car H3). But, anyway, I understood that we need this patch for RZ/V2H.
 
-Sending in-reply-to is discouraged, it messes up patch ordering for
-reviewers:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#resendi=
-ng-after-review
+On R-Car Gen3 and later, the firmware must trap the external abort,
+as usually no crash happens, but register reads return zero when
+the module clock is turned off.  I am wondering why RZ/V2H behaves
+differently than R-Car Gen3?
+
+On R-Car Gen2, you do get an external abort when accessing hardware
+registers while the module's clock is turned off.  Has anyone tested
+usbhs on R-Car Gen2 recently?
+
+> ----- I added some debug printk -----
+> <snip>
+> [    3.193400] usbhs_probe:706
+> [    3.196204] usbhs_probe:710
+> [    3.199012] usbhs_probe:715
+> [    3.201808] usbhs_probe:720
+> [    3.204605] usbhs_read: reg = 0
+
+Hmm, did it read back sensible data?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
