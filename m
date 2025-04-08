@@ -1,202 +1,118 @@
-Return-Path: <linux-usb+bounces-22740-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22750-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B51EFA80411
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 14:05:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35798A80618
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 14:24:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 768201B611C4
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 12:01:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4462E886688
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Apr 2025 12:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD27326A0A2;
-	Tue,  8 Apr 2025 11:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC75126B2D1;
+	Tue,  8 Apr 2025 12:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Bgm3jS76"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+Received: from mr85p00im-zteg06021501.me.com (mr85p00im-zteg06021501.me.com [17.58.23.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028FCA94A;
-	Tue,  8 Apr 2025 11:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9240D26B09D
+	for <linux-usb@vger.kernel.org>; Tue,  8 Apr 2025 12:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744113586; cv=none; b=P890LR9UQ3KH1xrqM5lBeKZviw4eNz6uKScc8pk2H8IYq32cZ70bzpad8YxLssGLzDhYbWkJFX9nyMe+1SqEWCfkZ4jMHm6wxy6OnmwV2qVjHdZKG0U2TU4a5C62FvmWxzS9upwMW7O31G36jTEom5r4pyMUk+AtVMrwk/SQ+KI=
+	t=1744114200; cv=none; b=hBOIigWYcs3+8bGJJjcYTksk4k21AGs+0sZEESzHeZZO3vD+OoLWy4JFinR/cEjaQs5+J++jZgTgbJ4A8Tc2mUp9hXJHI7/tRx88mq0eSsdZQdeNZ+8hpiGTfQNQLXfBB7YNDxBeZ1dTVkBymnY0ITqmlwR1deyEepSEMj4gbR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744113586; c=relaxed/simple;
-	bh=H+sEWRoi0KMWTJdhw9CdKZg4wP0qGCG0W3QopnKON+U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PACFX++k+GCNHpRcQt39GezqrACQel2Qt6nvtVPtTr9r5uPF8KcIKX7qfg8se8hG+c0/QmyxzAQlGlhHwh9K7FPTaEvfxOdoEA6rSVToV7SkmrVu7ElUy5MJ2MtzDQ1vljNmRWyAh9MjzNWnrrkG2ED+PMlZJXpSu0OcmHOi12s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id 89C76C408283;
-	Tue,  8 Apr 2025 13:59:41 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 89C76C408283
-From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: netdev <netdev@vger.kernel.org>,  Oliver Neukum <oneukum@suse.com>,
-  Andrew Lunn <andrew+netdev@lunn.ch>,  "David S. Miller"
- <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  <linux-usb@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,  Jose
- Ignacio Tornos Martinez <jtornosm@redhat.com>,  Ming Lei
- <ming.lei@redhat.com>
-Subject: [PATCH v2] usbnet: asix AX88772: leave the carrier control to phylink
-In-Reply-To: <m3tt6ydfzu.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
- =?utf-8?Q?a=22's?= message of
-	"Tue, 08 Apr 2025 13:55:49 +0200")
-References: <m35xjgdvih.fsf@t19.piap.pl> <Z_PVOWDMzmLObRM6@pengutronix.de>
-	<m3tt6ydfzu.fsf@t19.piap.pl>
-Sender: khalasa@piap.pl
-Date: Tue, 08 Apr 2025 13:59:41 +0200
-Message-ID: <m3plhmdfte.fsf_-_@t19.piap.pl>
+	s=arc-20240116; t=1744114200; c=relaxed/simple;
+	bh=QEqKjxqbWub8YsuQbU+tPhuhK3lJRWqkR2DgLlJnxvQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CNLyPM+0RXThcbYpzbjgnjELUOmcBk2JqTB8j7vyEI0OXAyS0Lyxdh2v6aO/Bsp34xPMjuC5ymxLN+J9Xhub6oa/Esmv8GjDv9Sp8QymFcBxqVR05eveg5DfQw1cIWiS8TgrB5wr0f6OOjaE3lDNsSImG4vhimaDfWnsKSHrqGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Bgm3jS76; arc=none smtp.client-ip=17.58.23.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=BDiMM4gbvtusq153Cw0jBPOX1iQ4qyGjf3UtgNk2nRQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:x-icloud-hme;
+	b=Bgm3jS76T0ExwCoHgcW23Pl2H4wM3F0J2gZznH5M7UOovoLE4b0EGT+8OvTX4UrZf
+	 IGZDjtj/EUlFSr6zvMrGnRDP4PNbVwgGRTxZSNyg87knuq5TpUJUIsJ2/47IB/cJrN
+	 NQVxtjmmhIXk+5iEYkHun3pErC3gyYuJVE1uIqAqbPvgY68BZzfZjpq8ix3GZefrcZ
+	 AcT8LmkEB0n1gKUMQse2N541qju9CUY0OGH4zlt6X8cFDy9d41vW4MEFx3eRLpw82w
+	 /Q1t/qZZ1kTSzl+he19tkfkOSnGHjRk4L1Y6x8+Y68Ffix9KSKOqKe+fZb9z9GxJ2x
+	 5yhpjQDkdzCmA==
+Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+	by mr85p00im-zteg06021501.me.com (Postfix) with ESMTPSA id F26582793FE0;
+	Tue,  8 Apr 2025 12:09:05 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Tue, 08 Apr 2025 20:08:51 +0800
+Subject: [PATCH] USB: core: Correct API usb_(enable|disable)_autosuspend()
+ prototypes
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250408-fix_usb_hdr-v1-1-e785c5b49481@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIANIR9WcC/x2MWwqAIBAAryL7neATpKtESOWa+2OhFIF096TPY
+ ZhpULEQVhhZg4I3VTpyBzkw2NKSd+QUOoMSygojHI/0+KuuPoXCnRZWWxeNQgm9OAt2/d+m+X0
+ /abSx510AAAA=
+X-Change-ID: 20250408-fix_usb_hdr-8305358f42e1
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-GUID: FQj8FmXbrb2tqslaEMhyWDlIIDI50Zr_
+X-Proofpoint-ORIG-GUID: FQj8FmXbrb2tqslaEMhyWDlIIDI50Zr_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-08_04,2025-04-08_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015
+ malwarescore=0 spamscore=0 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=697 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.22.0-2503100000 definitions=main-2504080086
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-ASIX AX88772B based USB 10/100 Ethernet adapter doesn't come
-up ("carrier off"), despite the built-in 100BASE-FX PHY positive link
-indication. The internal PHY is configured (using EEPROM) in fixed
-100 Mbps full duplex mode.
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-The primary problem appears to be using carrier_netif_{on,off}() while,
-at the same time, delegating carrier management to phylink. Use only the
-latter and remove "manual control" in the asix driver.
+API usb_(enable|disable)_autosuspend() have inconsistent prototypes
+regarding if CONFIG_PM is defined.
 
-I don't have any other AX88772 board here, but the problem doesn't seem
-specific to a particular board or settings - it's probably
-timing-dependent.
+Correct prototypes when the macro is undefined by referring to those
+when the macro is defined.
 
-Remove unused asix_adjust_link() as well.
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ include/linux/usb.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b46738701f8dc46085f251379873b6a8a008d99d..1b2545b4363bcf3ef97a53a004ebf456eb9d5d05 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -815,10 +815,10 @@ static inline void usb_mark_last_busy(struct usb_device *udev)
+ 
+ #else
+ 
+-static inline int usb_enable_autosuspend(struct usb_device *udev)
+-{ return 0; }
+-static inline int usb_disable_autosuspend(struct usb_device *udev)
+-{ return 0; }
++static inline void usb_enable_autosuspend(struct usb_device *udev)
++{ }
++static inline void usb_disable_autosuspend(struct usb_device *udev)
++{ }
+ 
+ static inline int usb_autopm_get_interface(struct usb_interface *intf)
+ { return 0; }
 
---- a/drivers/net/usb/asix.h
-+++ b/drivers/net/usb/asix.h
-@@ -224,7 +224,6 @@ int asix_write_rx_ctl(struct usbnet *dev, u16 mode, int=
- in_pm);
-=20
- u16 asix_read_medium_status(struct usbnet *dev, int in_pm);
- int asix_write_medium_mode(struct usbnet *dev, u16 mode, int in_pm);
--void asix_adjust_link(struct net_device *netdev);
-=20
- int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm);
-=20
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -414,28 +414,6 @@ int asix_write_medium_mode(struct usbnet *dev, u16 mod=
-e, int in_pm)
- 	return ret;
- }
-=20
--/* set MAC link settings according to information from phylib */
--void asix_adjust_link(struct net_device *netdev)
--{
--	struct phy_device *phydev =3D netdev->phydev;
--	struct usbnet *dev =3D netdev_priv(netdev);
--	u16 mode =3D 0;
--
--	if (phydev->link) {
--		mode =3D AX88772_MEDIUM_DEFAULT;
--
--		if (phydev->duplex =3D=3D DUPLEX_HALF)
--			mode &=3D ~AX_MEDIUM_FD;
--
--		if (phydev->speed !=3D SPEED_100)
--			mode &=3D ~AX_MEDIUM_PS;
--	}
--
--	asix_write_medium_mode(dev, mode, 0);
--	phy_print_status(phydev);
--	usbnet_link_change(dev, phydev->link, 0);
--}
--
- int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm)
- {
- 	int ret;
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -752,7 +736,6 @@ static void ax88772_mac_link_down(struct phylink_config=
- *config,
- 	struct usbnet *dev =3D netdev_priv(to_net_dev(config->dev));
-=20
- 	asix_write_medium_mode(dev, 0, 0);
--	usbnet_link_change(dev, false, false);
- }
-=20
- static void ax88772_mac_link_up(struct phylink_config *config,
-@@ -783,7 +766,6 @@ static void ax88772_mac_link_up(struct phylink_config *=
-config,
- 		m |=3D AX_MEDIUM_RFC;
-=20
- 	asix_write_medium_mode(dev, m, 0);
--	usbnet_link_change(dev, true, false);
- }
-=20
- static const struct phylink_mac_ops ax88772_phylink_mac_ops =3D {
-@@ -1350,10 +1328,9 @@ static const struct driver_info ax88772_info =3D {
- 	.description =3D "ASIX AX88772 USB 2.0 Ethernet",
- 	.bind =3D ax88772_bind,
- 	.unbind =3D ax88772_unbind,
--	.status =3D asix_status,
- 	.reset =3D ax88772_reset,
- 	.stop =3D ax88772_stop,
--	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR | FLAG_MULTI_PAC=
-KET,
-+	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
- 	.rx_fixup =3D asix_rx_fixup_common,
- 	.tx_fixup =3D asix_tx_fixup,
- };
-@@ -1362,11 +1339,9 @@ static const struct driver_info ax88772b_info =3D {
- 	.description =3D "ASIX AX88772B USB 2.0 Ethernet",
- 	.bind =3D ax88772_bind,
- 	.unbind =3D ax88772_unbind,
--	.status =3D asix_status,
- 	.reset =3D ax88772_reset,
- 	.stop =3D ax88772_stop,
--	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
--	         FLAG_MULTI_PACKET,
-+	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
- 	.rx_fixup =3D asix_rx_fixup_common,
- 	.tx_fixup =3D asix_tx_fixup,
- 	.data =3D FLAG_EEPROM_MAC,
-@@ -1376,11 +1351,9 @@ static const struct driver_info lxausb_t1l_info =3D {
- 	.description =3D "Linux Automation GmbH USB 10Base-T1L",
- 	.bind =3D ax88772_bind,
- 	.unbind =3D ax88772_unbind,
--	.status =3D asix_status,
- 	.reset =3D ax88772_reset,
- 	.stop =3D ax88772_stop,
--	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
--		 FLAG_MULTI_PACKET,
-+	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
- 	.rx_fixup =3D asix_rx_fixup_common,
- 	.tx_fixup =3D asix_tx_fixup,
- 	.data =3D FLAG_EEPROM_MAC,
-@@ -1412,10 +1383,8 @@ static const struct driver_info hg20f9_info =3D {
- 	.description =3D "HG20F9 USB 2.0 Ethernet",
- 	.bind =3D ax88772_bind,
- 	.unbind =3D ax88772_unbind,
--	.status =3D asix_status,
- 	.reset =3D ax88772_reset,
--	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
--	         FLAG_MULTI_PACKET,
-+	.flags =3D FLAG_ETHER | FLAG_FRAMING_AX | FLAG_MULTI_PACKET,
- 	.rx_fixup =3D asix_rx_fixup_common,
- 	.tx_fixup =3D asix_tx_fixup,
- 	.data =3D FLAG_EEPROM_MAC,
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250408-fix_usb_hdr-8305358f42e1
 
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
 
 
