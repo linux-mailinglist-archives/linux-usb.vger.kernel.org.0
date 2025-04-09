@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-22795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82EEA821BD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 12:09:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B310A821C1
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 12:10:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89C503B83F7
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 10:08:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57EF5461466
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 10:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB2F25D21E;
-	Wed,  9 Apr 2025 10:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A8E25D54E;
+	Wed,  9 Apr 2025 10:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VU2q5mPq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFID15ZN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0962A1B6CE0;
-	Wed,  9 Apr 2025 10:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FF625D210;
+	Wed,  9 Apr 2025 10:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744193305; cv=none; b=OFa6f4oChEGzukJ92m1swiz9loOhf0Zlt33yEM5IIeHuezfF+o4q16O5lWLSdU5xKaT21bYc3NDf4fcf3QPpHNb3BseMtKArHvrB+ZFkxHnlWsHk5JG9cawfRGPPf2N7myrIEyYOLnXM3trGDmNf8cEf8hIRdhh7/VENG1yD8Ak=
+	t=1744193424; cv=none; b=GiYSy9dLfqMm5iGyla7LrPX6kqsrjz87dV/1HgS5OuFYgzlM+x+hxi7SDK3G6sJE7oIFzMBBBjqiPnS9faF1FqbTkFrbAn6QQOMMHZdjTTJEgJWeD3fI7rH3q1MD4C5UoZ2wmL3nkmcLjQq4SC1PhXRAY1xHZjU5pijeXFwj9nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744193305; c=relaxed/simple;
-	bh=LcspFk/X/sA7YZYHZEQPrB2VlezSYpfA0UY17z/Qkc0=;
+	s=arc-20240116; t=1744193424; c=relaxed/simple;
+	bh=4ztBQyoanieoKs9OTTceiNvpf/RWS8ZPBb//xn5jov8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l2d8TBR6DsFW3Z4cBSB40dDZ/EvT8wIbPwOObCAsqHTJIy9fbQPc+MWCMZeZKX31xOXx8FdZTn5vAL3iq7VRLff/DyrPMzti5sTBIhTNvBc9J2pQynbHy3YpdYh1a5aejVH3TpEILEPtZjyD8jtgctqrZGbThMQ222zLL5MJIkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VU2q5mPq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED89C4CEE3;
-	Wed,  9 Apr 2025 10:08:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Iw4npBHPaRDdd9tmVp8c31ubb0wkWZ9Cyz+z5QwtVDh6L5ZrMj43lL3PUQ+lypJEnTbtqtseHtTeNZKlmjtRxefKoctbGZVDkLtvzo3XS8aaLidHAp5wzuUY7CPcWCCgL0+eloi7UYeCkrOP071pxjJYXJAXqwSlsp2W6+AtG6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFID15ZN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DCAC4CEE3;
+	Wed,  9 Apr 2025 10:10:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744193304;
-	bh=LcspFk/X/sA7YZYHZEQPrB2VlezSYpfA0UY17z/Qkc0=;
+	s=k20201202; t=1744193423;
+	bh=4ztBQyoanieoKs9OTTceiNvpf/RWS8ZPBb//xn5jov8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VU2q5mPqyURKQUNVN/j/LMlB1LbtvVJ0luiDxdJYD4OTxjO9sEhtG7mxKmezdpQJk
-	 xRxGPKRJ68HI22sBzL5T6Vt6t1+d6JcknvfgJ7MrXYhyUQxUh6bilaC6lNbvpF+oJQ
-	 RbPsILz1OqJg23pnzC7wt1ksyrYUM2tXVgZ94gysgDPLcRItvm+613n3rGAQKrhrt7
-	 skPy5H9U9J2kSNTYKSXZsZWKnCYS226jcXiTRRZGdOnVzU8JETPZ7ctXBuza1dj2Do
-	 HmofgcyzIJgXlqWd7f1gce+V6nPow2W1JxKCsqCdKtWjUyhQxy3vn7hR3svbT1/36H
-	 0mm0EJ/SGllGw==
-Message-ID: <6319c28b-1ce1-4521-a673-72ca6b712090@kernel.org>
-Date: Wed, 9 Apr 2025 12:08:18 +0200
+	b=dFID15ZNeiCoJdac35gYsEbpDFHxZtnxup0htMt2eLG0vVVoCHGx4dD6IFoAxiBeT
+	 WH1x43zrXfi6Cheassia6Yf+XpyC4rBnFn8uGIuvnCIAfRWHf9vXkaE0AI/wTfESn4
+	 sppKrvIvtK4+fheWn/u8h/4VFo+DAWIroO/N9ZdWbDcwIL5xcjDU1BC7Adoz8TJARK
+	 73xHEYSQ1gT3CitgU5oGMq18AAAbt8w8s9YLsWXOfV5qK4yAGSl1YXKHEojErm3JEi
+	 S+5xrp2yJXa+C0XGk9U4oocnF8Cwm7zcQLxkiQaS9VVM5YOu9ECWiELzPJXf/ysEFG
+	 +8Hn7ehGqv+vg==
+Message-ID: <21698603-2780-4f23-8a77-7be98fdd3ab3@kernel.org>
+Date: Wed, 9 Apr 2025 12:10:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/7] dt-bindings: usb: add SpacemiT K1 DWC3 glue
+Subject: Re: [PATCH 5/7] phy: spacemit: add USB3 support for K1 PCIe/USB3
+ combo PHY
 To: Ze Huang <huangze@whut.edu.cn>, Vinod Koul <vkoul@kernel.org>,
  Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -65,9 +66,9 @@ Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
  linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
- <20250407-b4-k1-usb3-v3-2-v1-3-bf0bcc41c9ba@whut.edu.cn>
- <ac9fd6b3-2184-4d75-83e5-6caee4f3758d@kernel.org>
- <9f7d1ea4-d9cb-48d2-9af1-4db38fadd55e@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-5-bf0bcc41c9ba@whut.edu.cn>
+ <74770bec-eeda-4823-b494-bea177fe26b0@kernel.org>
+ <a71f45fc-d266-447d-8fb0-1ff0897f5bff@whut.edu.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,25 +114,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <9f7d1ea4-d9cb-48d2-9af1-4db38fadd55e@whut.edu.cn>
+In-Reply-To: <a71f45fc-d266-447d-8fb0-1ff0897f5bff@whut.edu.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 09/04/2025 10:16, Ze Huang wrote:
->>
->>> +  vbus-supply:
->>> +    description: A phandle to the regulator supplying the VBUS voltage.
+On 09/04/2025 11:43, Ze Huang wrote:
+>>> +	priv->phy = devm_phy_create(dev, NULL, &spacemit_combphy_ops);
+>>> +	if (IS_ERR(priv->phy))
+>>> +		return dev_err_probe(dev, PTR_ERR(priv->phy),
+>>> +				     "failed to create combphy\n");
 >>> +
->>> +patternProperties:
->>> +  '^usb@':
->>> +    $ref: snps,dwc3.yaml#
->> No, rather fold child into the parent.
+>>> +	dev_set_drvdata(dev, priv);
+>>> +	phy_set_drvdata(priv->phy, priv);
+>> Both make no sense. Look what this function does.
 > 
-> I’m not entirely sure I understand your suggestion. Could you please provide
-> an example? Thanks!
-Do not create glue node, but only one node for entire DWC. All new DWC
-USB bindings are supposed to follow this new approach. There are some
-examples in the tree and some on the lists.
+> It does seem redundant at first glance, but pdev->dev is the parent of 
+> phy->dev.
+> pdev->dev->driver_data will be used in spacemit_combphy_xlate()
+> phy->dev->driver_data  will be used in phy_ops functions
+> 
+> I've checked some other drivers that did the same:
+>      - phy-zynqmp.c at lines 990 and 1026
+>      - phy-rockchip-samsung-hdptx.c at lines 1989 and 2000
+
+Indeed, right. It's fine.
 
 Best regards,
 Krzysztof
