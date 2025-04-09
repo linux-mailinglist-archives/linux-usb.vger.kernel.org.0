@@ -1,144 +1,154 @@
-Return-Path: <linux-usb+bounces-22796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22797-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B310A821C1
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 12:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8DF0A821E7
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 12:20:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57EF5461466
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 10:10:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30914464736
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 10:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A8E25D54E;
-	Wed,  9 Apr 2025 10:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 008E125D918;
+	Wed,  9 Apr 2025 10:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFID15ZN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0gaoH7q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FF625D210;
-	Wed,  9 Apr 2025 10:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C761325D8E3;
+	Wed,  9 Apr 2025 10:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744193424; cv=none; b=GiYSy9dLfqMm5iGyla7LrPX6kqsrjz87dV/1HgS5OuFYgzlM+x+hxi7SDK3G6sJE7oIFzMBBBjqiPnS9faF1FqbTkFrbAn6QQOMMHZdjTTJEgJWeD3fI7rH3q1MD4C5UoZ2wmL3nkmcLjQq4SC1PhXRAY1xHZjU5pijeXFwj9nM=
+	t=1744193907; cv=none; b=FUhmlh5C0nD9zPSvzfloOOYbZ35IZJvfn2/rcoC4NcHwYJeSxZzPle4mmxFKrPC3d7oxYkQTbWbvR/091HixEvP0wgU8DEJtqhuNE3XNyryBNfPOnxWNHOfpfbl4GUQGZOaPR2H2+gtU/apHm4Y8fwW1QlD22A1ckz66JqOZgv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744193424; c=relaxed/simple;
-	bh=4ztBQyoanieoKs9OTTceiNvpf/RWS8ZPBb//xn5jov8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iw4npBHPaRDdd9tmVp8c31ubb0wkWZ9Cyz+z5QwtVDh6L5ZrMj43lL3PUQ+lypJEnTbtqtseHtTeNZKlmjtRxefKoctbGZVDkLtvzo3XS8aaLidHAp5wzuUY7CPcWCCgL0+eloi7UYeCkrOP071pxjJYXJAXqwSlsp2W6+AtG6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFID15ZN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DCAC4CEE3;
-	Wed,  9 Apr 2025 10:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744193423;
-	bh=4ztBQyoanieoKs9OTTceiNvpf/RWS8ZPBb//xn5jov8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dFID15ZNeiCoJdac35gYsEbpDFHxZtnxup0htMt2eLG0vVVoCHGx4dD6IFoAxiBeT
-	 WH1x43zrXfi6Cheassia6Yf+XpyC4rBnFn8uGIuvnCIAfRWHf9vXkaE0AI/wTfESn4
-	 sppKrvIvtK4+fheWn/u8h/4VFo+DAWIroO/N9ZdWbDcwIL5xcjDU1BC7Adoz8TJARK
-	 73xHEYSQ1gT3CitgU5oGMq18AAAbt8w8s9YLsWXOfV5qK4yAGSl1YXKHEojErm3JEi
-	 S+5xrp2yJXa+C0XGk9U4oocnF8Cwm7zcQLxkiQaS9VVM5YOu9ECWiELzPJXf/ysEFG
-	 +8Hn7ehGqv+vg==
-Message-ID: <21698603-2780-4f23-8a77-7be98fdd3ab3@kernel.org>
-Date: Wed, 9 Apr 2025 12:10:16 +0200
+	s=arc-20240116; t=1744193907; c=relaxed/simple;
+	bh=fC6Hu988itxJobHVjIyl2N25uYpfG2R9GTAajm0H80A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NLuUqx1QtSFetdKKzg2r4lfaL4J0Zp76FlGFmu/iyABik7lvzit7/vDsjSqE8BnRJXCEPkdoH2uY6j29cMEgs1ZU7bi6cQDl0m79XliyLusdsdPGcU4B4AS8DjhsRJLvNsKbLhOXTE40BwLI8aj2RG6RfjuDkirHMbhzgtYTLk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k0gaoH7q; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54acc04516cso7642108e87.1;
+        Wed, 09 Apr 2025 03:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744193904; x=1744798704; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zS7Ack0Y5Rf82PolP7CbpVR9ELTjfJ8a0j6nVSCIVEs=;
+        b=k0gaoH7qREiwZzkd8i7o7sGkTIr2dQnG2DtxnEQ2xFyfVgfP8b8CiLL/5v9gtfQYzH
+         VfSWK18rjSavheelDbzXy4JtA1+rKc0oY6ls4ZQIqpgP2+YXbtc0Dxde7QpJuqOalxdi
+         sOp9kzgsl0gWqcdx1jJlji6O6/NlSaEkG0Xn1UL+5LA2t96qWsKRnzILNvf2N12EXNdI
+         L8dotuNHc4I3EZM3Ibdf+JmOsjSvp4AVuww7BxIS+NAz8UJWU38QZiJPG5bMR0i56w0c
+         49gtm1yDE4NHKeVJc9jyrx6Puqzt0vc2ugkc5cRrTVcgIONWNuaD7ww9xpp0DQT5uTSC
+         cysA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744193904; x=1744798704;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zS7Ack0Y5Rf82PolP7CbpVR9ELTjfJ8a0j6nVSCIVEs=;
+        b=euSNyQSRjAnzOIsWOVdeQ4QJrrawwmnYSjJp7tLdOj3b4/u8Hn52DCW9EeBkdlhDfJ
+         NnTTz8hxZV2CgQfJ57/HhYYVtJpodU+DRnrJh73HXCkIhClvMB8r3yYbzC1Lpi/tBMhF
+         o4QIBNRaYQoVMZ/bZylc+Y0buyEGi6OXopoilVurjw2x3si2ejZo9ffoCsiqZknHieAX
+         2SejIx/OjWsS167hRw9ZhrscGZYBXoEZ5HHyri4htKFDMS62gWBHRg3DTWNYjqPriL1i
+         MZGGICf39B0/AaTY0LywntG8JrQ6u/WWizC9WY1jRU7MOQ+OT/pz4cktL15W/gfYJxnA
+         4qQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmpbVNas1umw/vQcbLdG2B9wyzMrXpRWWi7SYTtPalDPuUAfiYkHiG3KcPTWjkwny362ZSGDx9FFdY7TM=@vger.kernel.org, AJvYcCWJGfJ6QHFfCF45EqkrFXo8JYYevxIma38ykWhpdjFLYBlP3sTByjzZ7lx/efxga+5fmG9brEhOI4Yy@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJJ/8PpdKia79kskhCpCRfng7eeCzMp5rOVzoIdH3dnuRODzpI
+	jBFYzgQaKgo86I5huU5tveKeqahdXP3RErwFr0yxa5hNt2W0sKLWl0XIxg==
+X-Gm-Gg: ASbGncsDHufSBa2SEGJ07/+hXa9g+E7sZxnkuRZyfkgPUC0eQfF3Z4pTvKqYZhM2SuL
+	EGmr8AVD+Ha1QHsbIyZhWcW/tDmBZDsKHb90tdnIc4T2qpmCz1zqfsWnIvzE6KGLg5bfkv2jX1O
+	Tw+OYR8yeI4/mSTgwcmSZ9g4glj6oRzwZqZJCaF14bHxw63gDgIEtIV+5Vv2QLP9V3E7P8wg3oW
+	zAjXLAMsXRvlDd1IUtt8jKblwsffQdnUFHbcF0/JnQDR1TtGDkURCxJ66vInHEkZF0QFz4l+LsP
+	Kr9DI549a8+9Xhzuh+qv6TDKqt0G68uYNkA3chehRsq6ktgA9R+pzStLxYT8pGA3JCRM
+X-Google-Smtp-Source: AGHT+IF56XODRGoGorCF28z0pxYiO8EdSzRH3NU1mlnYnutfK4P2r4ExRLOtmZ8IkLeM73uJyohhpw==
+X-Received: by 2002:a05:651c:12c8:b0:30b:f924:3565 with SMTP id 38308e7fff4ca-30f438be86dmr7349781fa.37.1744193903460;
+        Wed, 09 Apr 2025 03:18:23 -0700 (PDT)
+Received: from foxbook (adtq195.neoplus.adsl.tpnet.pl. [79.185.228.195])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465d50fbsm1174151fa.80.2025.04.09.03.18.22
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 09 Apr 2025 03:18:23 -0700 (PDT)
+Date: Wed, 9 Apr 2025 12:18:19 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Mathias Nyman
+ <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Paul Menzel <pmenzel@molgen.mpg.de>, linux-usb@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC RFT] usb: hcd: Add a usb_device argument to
+ hc_driver.endpoint_reset()
+Message-ID: <20250409121819.64db23a0@foxbook>
+In-Reply-To: <357368ff-0c49-4f22-a03d-fd9560c22dae@linux.intel.com>
+References: <c279bd85-3069-4841-b1be-20507ac9f2d7@molgen.mpg.de>
+	<b356f743-44b5-4f48-a289-fae0afe106ff@linux.intel.com>
+	<84b400f8-2943-44e0-8803-f3aac3b670af@molgen.mpg.de>
+	<20250406002311.2a76fc64@foxbook>
+	<ade0d77a-651a-4b03-bf21-00369fdc22f8@rowland.harvard.edu>
+	<20250406095008.0dbfd586@foxbook>
+	<20250406175032.12b7d284@foxbook>
+	<14197657-0a0f-45a8-ac36-dd37b16a1565@rowland.harvard.edu>
+	<20250407074905.2d236fb9@foxbook>
+	<3efb52b8-0974-4125-a344-00f459fbe4e4@rowland.harvard.edu>
+	<20250408121817.6ae8defd@foxbook>
+	<357368ff-0c49-4f22-a03d-fd9560c22dae@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] phy: spacemit: add USB3 support for K1 PCIe/USB3
- combo PHY
-To: Ze Huang <huangze@whut.edu.cn>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
- <20250407-b4-k1-usb3-v3-2-v1-5-bf0bcc41c9ba@whut.edu.cn>
- <74770bec-eeda-4823-b494-bea177fe26b0@kernel.org>
- <a71f45fc-d266-447d-8fb0-1ff0897f5bff@whut.edu.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <a71f45fc-d266-447d-8fb0-1ff0897f5bff@whut.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 09/04/2025 11:43, Ze Huang wrote:
->>> +	priv->phy = devm_phy_create(dev, NULL, &spacemit_combphy_ops);
->>> +	if (IS_ERR(priv->phy))
->>> +		return dev_err_probe(dev, PTR_ERR(priv->phy),
->>> +				     "failed to create combphy\n");
->>> +
->>> +	dev_set_drvdata(dev, priv);
->>> +	phy_set_drvdata(priv->phy, priv);
->> Both make no sense. Look what this function does.
+On Tue, 8 Apr 2025 16:55:24 +0300, Mathias Nyman wrote:
+> 1. driver->reset_device will free all xhci endpoint rings, and lose
+> td_list head, but keep cancelled_td_list and ep->ep_state flags. xHC
+> issues reset device command setting all internal ep states in xci to
+> "disabled".
 > 
-> It does seem redundant at first glance, but pdev->dev is the parent of 
-> phy->dev.
-> pdev->dev->driver_data will be used in spacemit_combphy_xlate()
-> phy->dev->driver_data  will be used in phy_ops functions
+> 2. usb hcd_alloc_bandwith will drop+add xhci endpoints for this
+> configuration, allocate new endpoint rings, and inits new td_list
+> head. Old cancelled_td_list and ep_state flags are still set, not
+> matching ring.
 > 
-> I've checked some other drivers that did the same:
->      - phy-zynqmp.c at lines 990 and 1026
->      - phy-rockchip-samsung-hdptx.c at lines 1989 and 2000
+> 3. usb_disable_interface() will flush all pending URBs calling
+> xhci_urb_dequeue(). xhci_urb_dequeue() makes decision based on stale
+> ep_state flags. May start to cancel/giveback urbs in old
+> cancelled_td_list for tds that existed on old freed ring. will also
+> set host_ep->hcpriv to null
+> 
+> 4. usb_enable_interface() calls xhci_endpoint_reset() that finally
+> clears the EP_STALLED flag (udev now found thanks to this patch)
+> 
+> Disabling endpoints, like calling usb_disable_interface() in step 3
+> should be done before calling  usb_hcd_alloc_bandwith().
+> This was fixed in other places such as usb_set_interface() and
+> usb_reset_config()
 
-Indeed, right. It's fine.
+I haven't thought about it, but you are right. This means that my
+commit message is wrong to suggest that the problem occurs after
+altsetting changes, it is apparently unique to device reset case.
 
-Best regards,
-Krzysztof
+> We might need to clean up ep_state flags and give back cancelled URBs
+> in xhci_discover_or_reset_device() after the reset device xhci
+> command completion.
+
+I guess it wouldn't be strictly necessary if core flushed all endpoints
+before resetting. I frankly always assumed that it does so, because it
+also makes sense for other HCDs which don't even define reset_device().
+
+There seems to be nothing stopping them from talking to a device while
+it is undergoing a reset and re-configuration, seems a little risky
+given that HW isn't exactly free of its own bugs.
+
+Speaking of xhci, I wonder if this could also be responsible for some
+xHC crashes during enumeration. I recall that those Etron quirk patches
+mentioned events for a disabled endpoint and "HC died" in some cases.
+
+Regards,
+Michal
 
