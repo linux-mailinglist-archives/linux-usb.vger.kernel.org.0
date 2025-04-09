@@ -1,155 +1,91 @@
-Return-Path: <linux-usb+bounces-22807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3882A82A1A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 17:24:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1323EA82B9B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 18:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B3FB188FA17
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 15:18:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599D919E168C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 15:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 711852676E3;
-	Wed,  9 Apr 2025 15:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF92268C73;
+	Wed,  9 Apr 2025 15:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ttQN+AIr"
+	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="bWJPExSI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bee.tesarici.cz (bee.tesarici.cz [37.205.15.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1308F267392
-	for <linux-usb@vger.kernel.org>; Wed,  9 Apr 2025 15:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CBA17CA17;
+	Wed,  9 Apr 2025 15:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.15.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744211881; cv=none; b=OA9YuSilk0HIt+oOV/D8ohGqu3/Nl/nfR4xfKSWqfrOIVirRvs3Sev39RA8gnCfAJKSM+eYyI0eL9m+yMb+zWbt/F5F/Hn3ftK6kFL5KDvG/boV3w7qE/wKAMs2837CWhC03vNFIFcCya48s7zPIZB07uL6wZhxbIeN2diBi7/4=
+	t=1744213657; cv=none; b=oQdS6pNe+ErimNXTFj+qkGvcogbXLr0bcMfGmdmQg22jaJ5xePnBLjvmjWb+ADyOrVrwJiDU4Zh4T5KcZBYZIlReUBza5MNjGPziu9E/my5hS3PGRPelfrq8X2rV1nztZUT585eoSDy7yU0lq3roOE1q7mjGg3PazjafodxOrOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744211881; c=relaxed/simple;
-	bh=L05GeTPpsVwGei1PRLQ+qItaPjTFR+kADeT9SbaA8AM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TIyzxyau9Pz8vUnpI/bRkwQawnCxy+WtlUk2bDUehTeN0/2PpPvxcy00d7HvRMXh9dW4gDbvrdA1KDlgGko7H++L22qIqz2+Qu+S74ifLOxquTmulhxg5c4YIjffqAhj1jRlPPt/Ab+IQp2pMI29OTNjkV6f9q+GXtJArIRO1Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ttQN+AIr; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6e8fce04655so66071786d6.3
-        for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 08:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1744211877; x=1744816677; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSz4oGBczB4s7QzN4sMG6IGoZmYK3gCdR0YSP1AReVY=;
-        b=ttQN+AIrpWeQeVj+ZHxZxFOzdBrB/wi7yXNpTiqFNZ25ZDGiTwxFvDg026gSHMsDr9
-         4p3xPVj6tcCWn9ySCpqZ80+xtIPphShVotBxsRZtunIqGmnZsoJjLaCGHAn/b7DT8Vpe
-         AFd/UKhhRT9xHN87YU8OCL3x4JsHUhwR2QszgXy0GyOozLRRbqmydYYa1KINEqOjiSAD
-         cidmjZ6BdlQHJCNgprjEDow/qXV/rU7uPf+CumBAgwoflykP7oMtq0bbe3GzaryqWC0i
-         t1JwKzf9qhqxHBnwK770RhA8qq6UWYKEPpFWIVQY2ceTmhNzEgS51V2pZ7ul3abiabae
-         0s0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744211877; x=1744816677;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZSz4oGBczB4s7QzN4sMG6IGoZmYK3gCdR0YSP1AReVY=;
-        b=MLoC1epT699jsGkawX8cNiVcvWiG7E8C4uHLSusIQ5XTL3HCylSy7c/9raiCZT0XKg
-         dYVGwp84dqI5u1yEnachNetXzoCmKOB2Uh4bKWHRXVT3FF2ZxASTgNzIX+u/hg7qJ/pl
-         FQ6ekEL7cc/CBPiUBWPem7rpnT0gI2JMetJPWMxTdT0hBtJ09XzVkQtGKcRi8wDvPiSD
-         nzBcgP7uO3bdG5VRfrOm3vdHlIwwW5PKfLsY3WctVbmtaL3YukNH+hDBYEKEmcs/Qk5x
-         AOYrUnZ1pMNG3NTE6uvfBe1fVJQFSbZhkAYRrBvEvZ3TiMqUtk+huXTXApZEEabUjyyz
-         k2qA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwXKjlJwnF8Rf6kKkCCdekJB/QZBf3gmOiGXmmvwh0f5BvwZbOQ6oEdKOkaH3FJBMgypKjOFBq6IA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVyosgzUwzlvc/1I58tBw2N0st8NXMAU0YevtpTu5H9cXd7AZr
-	WtzB0WEf5bwh+mNfnwNcp9U36igIvNknL2RmpMLkyH9EFb0x2+Q6kprOl5IBSA==
-X-Gm-Gg: ASbGncvNIa13E9SgS1POJzkDYUebRY6s0mI+iuiDf38njqyvOx74JUY09tAmXylLE5r
-	kK5GDATdgK57olD2HK6NFpU88CVrSsVuWr1wbxJjo8ajYWzm7p7HWLdYl774ssQvVpLEvpISj87
-	YFrHE9fgCo+XE6P8A8/F1PFkevvat/WbV8ZV7ouFEfszYXMbU28flSDWupdPEjHEFQYeLPJm+jh
-	3qAJ5fkh5ETk7XpGKXfkDPqADeUOAu2+uMmhcLURXBBRzTeVvHKYJgSUcxJpSUh2qGFBAWbC9Y8
-	Nf56CmYay1WjNQapajny2R24ZxMHwJsLzYfJ9BBcHaRuJ7ITP43FtgQXtfMCwSaRZJOfsw==
-X-Google-Smtp-Source: AGHT+IHjwyEnZ98boe3bPSpo46Gy/YwX3wb//6rfyBN5Ja9ijCITZ3UxvTOSgqs8SVsosirRXDfodg==
-X-Received: by 2002:a05:6214:409:b0:6e8:f464:c9a0 with SMTP id 6a1803df08f44-6f0dbbc0972mr55539716d6.13.1744211876980;
-        Wed, 09 Apr 2025 08:17:56 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f0de95fdfbsm8457386d6.1.2025.04.09.08.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 08:17:56 -0700 (PDT)
-Date: Wed, 9 Apr 2025 11:17:53 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-	gargaditya08@live.com, kekrby@gmail.com,
-	jeff.johnson@oss.qualcomm.com, elder@kernel.org,
-	quic_zijuhu@quicinc.com, ben@decadent.org.uk,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 4/4] usb: host: enable USB offload during system sleep
-Message-ID: <adc03a95-baa0-4a2a-9b00-39a644bab426@rowland.harvard.edu>
-References: <20250408035833.844821-1-guanyulin@google.com>
- <20250408035833.844821-5-guanyulin@google.com>
+	s=arc-20240116; t=1744213657; c=relaxed/simple;
+	bh=uFQGScYkT9rGW7RUOTBDJsMqufbmEHss3iSSPhWaxa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IFpRkgkhlk4+uTqYXb0ZFZ1nh4NpEWn+KZBkCOCEgfPEAJSdWyM/OzvLkT0ESsU1PfEpWawWt6p+0vjvTVH81J0pANwA0p2+Yv4ah/6DjA+udfr2EJ3ZzZ78Un9j74yqSbEIZrcHroUkEa7QjVEb1F6r8rIyex013QaJ8zueZ+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tesarici.cz; spf=pass smtp.mailfrom=tesarici.cz; dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b=bWJPExSI; arc=none smtp.client-ip=37.205.15.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tesarici.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tesarici.cz
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by bee.tesarici.cz (Postfix) with ESMTPSA id A58CE22544C;
+	Wed,  9 Apr 2025 17:40:36 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=quarantine dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tesarici.cz; s=mail;
+	t=1744213236; bh=Q3oGetcbcRnS+hTNIu7MsUHEGW7j/Mqa2tl6ukaL52Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bWJPExSIyEEz5P4nfkubwk2SFmZZqzUsRHqlsf2YWUvvOu8tgAZKjExuMxT/OG6gd
+	 /Zik8DSGJo89gmqK9dyfxzM7q2CxCqpiUF468VPigOQUQnHPZI6oDtJwzZU2i325ow
+	 6ELfRuTALNHkk6TX2coGrPrmFlggSctN9SDUuSGKwMzybzS25mwYO7vtpEY0k0St9a
+	 4w1778ZcS3+9sVQJJjKTGr09M8arI8RccjT1UouuVGqUrp+egIQo9wgoJEbLTKrf8y
+	 zzv1OG56Lb5ibhHs7aYZSc1XDFKYBqbBRNESVZx+nPQERMs8TlVFF+FaI1Xbihemrn
+	 afsVZuN7aSOzA==
+Date: Wed, 9 Apr 2025 17:40:36 +0200
+From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Petr Tesarik <ptesarik@suse.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: core: warn if a GFP zone flag is passed to
+ hcd_buffer_alloc()
+Message-ID: <20250409174036.7ee76248@meshulam.tesarici.cz>
+In-Reply-To: <20250325134000.575794-1-ptesarik@suse.com>
+References: <20250320154733.392410-1-ptesarik@suse.com>
+	<20250325134000.575794-1-ptesarik@suse.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408035833.844821-5-guanyulin@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 08, 2025 at 03:57:24AM +0000, Guan-Yu Lin wrote:
-> Sharing a USB controller with another entity via xhci-sideband driver
-> creates power management complexities. To prevent the USB controller
-> from being inadvertently deactivated while in use by the other entity, a
-> usage-count based mechanism is implemented. This allows the system to
-> manage power effectively, ensuring the controller remains available
-> whenever needed.
-> In order to maintain full functionality of an offloaded USB devices,
-> several changes are made within the suspend flow of such devices:
-> - skip usb_suspend_device() so that the port/hub are still active for
->   USB transfers via offloaded path.
-> - not suspending the endpoints which are used by USB interfaces marked
->   with needs_remote_wakeup. Namely, skip usb_suspend_interface() and
->   usb_hcd_flush_endpoint() on associated USB interfaces. This reserves a
->   pending interrupt urb during system suspend for handling the interrupt
->   transfer, which is necessary since remote wakeup doesn't apply in the
->   offloaded USB devices when controller is still active.
-> - not flushing the endpoints of actively offloaded USB devices. Given
->   that the USB devices is used by another entity, unilaterally flush the
->   endpoint might lead to unexpected behavior on another entity.
-> - not suspending the xhci controller. This is done by skipping the
->   suspend/resume callbacks in the xhci platform driver.
+On Tue, 25 Mar 2025 14:40:00 +0100
+Petr Tesarik <ptesarik@suse.com> wrote:
+
+> Remove a misleading comment and issue a warning if a zone modifier is
+> specified when allocating a hcd buffer.
 > 
-> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
-> ---
->  drivers/usb/core/driver.c    | 43 +++++++++++++++++++++++++++++++-----
->  drivers/usb/host/xhci-plat.c | 19 ++++++++++++++++
->  drivers/usb/host/xhci-plat.h |  1 +
->  include/linux/usb.h          |  2 ++
->  4 files changed, 59 insertions(+), 6 deletions(-)
+> There is no valid use case for a GFP zone modifier in hcd_buffer_alloc():
+> - PIO mode can use any kernel-addressable memory
+> - dma_alloc_coherent() ignores memory zone bits
 > 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 316526a05250..59b33e5e9a87 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -1420,11 +1420,25 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
->  			udev->state == USB_STATE_SUSPENDED)
->  		goto done;
->  
-> +	if (msg.event == PM_EVENT_SUSPEND && usb_offload_check(udev)) {
-> +		dev_dbg(&udev->dev, "device offload active, skip suspend.\n");
-> +		udev->offload_at_suspend = 1;
-> +	}
-> +
->  	/* Suspend all the interfaces and then udev itself */
->  	if (udev->actconfig) {
->  		n = udev->actconfig->desc.bNumInterfaces;
->  		for (i = n - 1; i >= 0; --i) {
->  			intf = udev->actconfig->interface[i];
-> +			/*
-> +			 * Don't suspend interfaces with remote wakeup while the controller is
-> +			 * active. This preserves pending interrupt urbs, allowing interrupt
-> +			 * events to be handled during system suspend.
-> +			 */
+> This function is called by usb_alloc_coherent() and indirectly by
+> usb_submit_urb(). Despite the comment, no in-tree users currently pass
+> GFP_DMA.
+> 
+> Signed-off-by: Petr Tesarik <ptesarik@suse.com>
 
-Here and below, please try to limit the line lengths to below 80 
-columns, even in comments.
+I know this was posted during the merge window, but that's now over.
+Any comment on this patch?
 
-Alan Stern
+Petr T
 
