@@ -1,124 +1,251 @@
-Return-Path: <linux-usb+bounces-22828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3172EA830C8
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 21:49:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A23A83368
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 23:31:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED9DD19E7984
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 19:49:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B873ABC46
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 21:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7832147FD;
-	Wed,  9 Apr 2025 19:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8A41E0DFE;
+	Wed,  9 Apr 2025 21:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="e2S6XtIj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADwuJth9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240912101B3;
-	Wed,  9 Apr 2025 19:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B7F2144DB;
+	Wed,  9 Apr 2025 21:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744228118; cv=none; b=Fi5IZB1ZEQbHplpTvvmyrjJv2sUdj2/k0GHL0cuJgOSRnwyD8qNTSJbvqlTL7rXk5oKqa1BukunhNBEXaI8fNq54xMI56lpWVK34BhqQ/4DvnRmwmkEq3z0o1u6hbOI3tRK/SIfM67mwanGfbf2WQWF+UvX0nSPCapKqeQ2S8VE=
+	t=1744234081; cv=none; b=j74gQ7lcmzvrL9aA264B7lYeSlGocecGarb0LEifuTDOXgjyfee7lOYHwtYR8mzSgy3EUrq6P8oEJxth7s1yHzKnHGnPCmQJLbODh0RPjrLU8pw9OWWqQiJwTSIHd/SzWwpSyLHeUnfIoMT5rzC/kQKGagqNqxFgU9/PcWXh5aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744228118; c=relaxed/simple;
-	bh=iCtHLk33YvZVAWXt7i5RyMq9fMhcsg+qWem2feATC5g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t7hT7bVaO7mSjZvNcRoXW6BR6Q11xIy2c5n3melxRPs6+n3IUgnkusWwoDKTlgKZIT9lPell+85dGJ31xkWZSPxpqFhQwTPF1nVptopCLYGlEyV3RU42QPzvpl2Aj9tZo3L++huDpD6C9Q/+0B8vuJsCxlSau080dVOrY/ylHTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=e2S6XtIj; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 539HE1fJ005921;
-	Wed, 9 Apr 2025 19:48:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	coBhNxrqtvBjPYHNF8KL0UPazsmtH2wkILUKTEDK9Ns=; b=e2S6XtIjbzWLlY6q
-	fo78D1uUsMyMxOYWpZpFxhOCCARzdl7gtnOj53Rdl5NISfNXMnxpL+wNkS3PjSgL
-	70tEo+M+3hg4xC0hMGnMvLL2d5t+d9SMSxs87U09EsqbZbkJTjL1flpu1nJEWpbu
-	rmwPcMu9ifoOcazPSOK/2R4xChDjn523xVqP5Hj4eXGA+3rDAAH8R9smBy/HmEaL
-	MKDHlV5LvWRMHS+QQb1C9y4E6jbMzrNW61NJYB18EI/S5ggeLZwPuit98n+AjQoH
-	aQ/7SeNwiIzmDniW9t/3jcqHYEwzdTbufT0kq1aJAtTNWmw3A+yl4Ak+uTBOEXX2
-	Hulo6w==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twtb4pc5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Apr 2025 19:48:25 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 539JmOYE031475
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 9 Apr 2025 19:48:24 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 9 Apr 2025 12:48:24 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <tiwai@suse.com>, <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v38 31/31] ALSA: usb-audio: qcom: Notify USB audio devices on USB offload probing
-Date: Wed, 9 Apr 2025 12:48:04 -0700
-Message-ID: <20250409194804.3773260-32-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250409194804.3773260-1-quic_wcheng@quicinc.com>
-References: <20250409194804.3773260-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1744234081; c=relaxed/simple;
+	bh=HUTQnj8ze1LT1u9H7w0DR7fWczDhTekCkEVOqJ0i1/Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O6vlghwKknZVLAhb9qJ7S5mvNi+vxwt+6xGuZi5Ebo3DmCtYrkNM33T1YOgvOdbQX/cSCq2P6prN45JQF0Gqi+ZiJZF9Z7IyrFNXI9u+nPpOWBJCxTicRl3Xu9uyW++P8ldyFh01Sdi3fM5F+umP+qnoGhFL8WIRDBl10kjibmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADwuJth9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22201C4CEE2;
+	Wed,  9 Apr 2025 21:27:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744234080;
+	bh=HUTQnj8ze1LT1u9H7w0DR7fWczDhTekCkEVOqJ0i1/Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ADwuJth9M0hdHJZG+35SnORU9RYiqTVDynMPbdNtlLsNOag3ucrglPu79fZryBqwp
+	 9cyunJIQNhhWCP5jFCABOwEktUVGkU8SRcv/YFzCRzCffPnVEcUxztr88pwv4mgkcO
+	 TLoP73hMAMQLHxXe/8UfX11zcUSr+0i9/kiCT2QvirANdYIZAj/iEbNXyVMjh/dn7m
+	 neDBA6kFMRRFI1IUFHZj7n4N174CNHbP+WBCjPefDyt4zMZoEjoYEbrGjMsDa0jPRG
+	 wG7+n/gRll5Mf8iSy7FZFmD5cIP2ll1lO9bN/38fZpsy4K0uRgSUE2hNTnTPcnRLnj
+	 n4Kmcm5pP/LzQ==
+Date: Wed, 9 Apr 2025 22:27:55 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Quentin Schulz <quentin.schulz@cherry.de>
+Cc: =?utf-8?Q?=C5=81ukasz?= Czechowski <lukasz.czechowski@thaumatec.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Klaus Goger <klaus.goger@theobroma-systems.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 2/5] dt-bindings: usb: cypress,hx3: Add support for all
+ variants
+Message-ID: <20250409-glorified-crouch-837870b4d443@spud>
+References: <20250326-onboard_usb_dev-v1-0-a4b0a5d1b32c@thaumatec.com>
+ <20250326-onboard_usb_dev-v1-2-a4b0a5d1b32c@thaumatec.com>
+ <20250326-fanatic-onion-5f6bf8ec97e3@spud>
+ <CABd623tEGh=qtpF0h7PkRBBrR7V9EaxUv9HregqbPcLU_2Exbg@mail.gmail.com>
+ <20250409-commend-brewing-7c541aec26a9@spud>
+ <cc49276b-f64f-42a8-b4b4-61bde17b61e3@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NyMvLVILQomADtA_HpADUenBomJUU4EG
-X-Authority-Analysis: v=2.4 cv=LLlmQIW9 c=1 sm=1 tr=0 ts=67f6cf09 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=0R9NKns1a96QCZ5VGfgA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: NyMvLVILQomADtA_HpADUenBomJUU4EG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-09_06,2025-04-08_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- clxscore=1015 mlxlogscore=999 malwarescore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504090132
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="siX/JzAbfY5Bb/0r"
+Content-Disposition: inline
+In-Reply-To: <cc49276b-f64f-42a8-b4b4-61bde17b61e3@cherry.de>
 
-If the vendor USB offload class driver is not ready/initialized before USB
-SND discovers attached devices, utilize snd_usb_rediscover_devices() to
-find all currently attached devices, so that the ASoC entities are notified
-on available USB audio devices.
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/usb/qcom/qc_audio_offload.c | 2 ++
- 1 file changed, 2 insertions(+)
+--siX/JzAbfY5Bb/0r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index 378249a264a3..5874eb5ba827 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -1952,6 +1952,8 @@ static int qc_usb_audio_probe(struct auxiliary_device *auxdev,
- 	if (ret < 0)
- 		goto release_qmi;
- 
-+	snd_usb_rediscover_devices();
-+
- 	return 0;
- 
- release_qmi:
+On Wed, Apr 09, 2025 at 06:26:43PM +0200, Quentin Schulz wrote:
+> Hi Conor,
+>=20
+> On 4/9/25 6:18 PM, Conor Dooley wrote:
+> > On Tue, Apr 08, 2025 at 06:36:04PM +0200, =C5=81ukasz Czechowski wrote:
+> > > Hello,
+> > >=20
+> > > =C5=9Br., 26 mar 2025 o 18:58 Conor Dooley <conor@kernel.org> napisa=
+=C5=82(a):
+> > > >=20
+> > > > On Wed, Mar 26, 2025 at 05:22:57PM +0100, Lukasz Czechowski wrote:
+> > > > > The Cypress HX3 hubs use different default PID value depending
+> > > > > on the variant. Update compatibles list.
+> > > > >=20
+> > > > > Fixes: 1eca51f58a10 ("dt-bindings: usb: Add binding for Cypress H=
+X3 USB 3.0 family")
+> > > > > Cc: stable@vger.kernel.org # 6.6
+> > > > > Cc: stable@vger.kernel.org # Backport of the patch in this series=
+ fixing product ID in onboard_dev_id_table and onboard_dev_match in drivers=
+/usb/misc/onboard_usb_dev.{c,h} driver
+> > > > > Signed-off-by: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+> > > > > ---
+> > > > >   Documentation/devicetree/bindings/usb/cypress,hx3.yaml | 6 ++++=
+++
+> > > > >   1 file changed, 6 insertions(+)
+> > > > >=20
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.ya=
+ml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > > > index 1033b7a4b8f9..f0b93002bd02 100644
+> > > > > --- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > > > @@ -15,8 +15,14 @@ allOf:
+> > > > >   properties:
+> > > > >     compatible:
+> > > > >       enum:
+> > > > > +      - usb4b4,6500
+> > > > > +      - usb4b4,6502
+> > > > > +      - usb4b4,6503
+> > > > >         - usb4b4,6504
+> > > > >         - usb4b4,6506
+> > > > > +      - usb4b4,6507
+> > > > > +      - usb4b4,6508
+> > > > > +      - usb4b4,650a
+> > > >=20
+> > > > All these devices seem to have the same match data, why is a fallba=
+ck
+> > > > not suitable?
+> > > >=20
+> > >=20
+> > > Thank you for the suggestion. Indeed the fallback compatible appears
+> > > to work fine in this case,
+> > > and I am able to avoid additional entries in onboard_dev_match table
+> > > as added in the first patch in this series.
+> > >=20
+> > > However, after I've updated the cypress,hx3.yaml schema file and
+> > > rk3399-puma.dtsi file,
+> > > I get the following warnings, when running "make dtbs_check":
+> > >=20
+> > > linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@1:
+> > > compatible: ['usb4b4,6502', 'usb4b4,6506'] is too long
+> > > =E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/=
+cypress,hx3.yaml#
+> > > linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@2:
+> > > compatible: ['usb4b4,6500', 'usb4b4,6504'] is too long
+> > > =E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/=
+cypress,hx3.yaml#
+> > >=20
+> > > Below is the diff of my changes:
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > index f0b93002bd02..d6eac1213228 100644
+> > > --- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+> > > @@ -14,15 +14,22 @@ allOf:
+> > >=20
+> > >   properties:
+> > >     compatible:
+> > > -    enum:
+> > > -      - usb4b4,6500
+> > > -      - usb4b4,6502
+> > > -      - usb4b4,6503
+> > > -      - usb4b4,6504
+> > > -      - usb4b4,6506
+> > > -      - usb4b4,6507
+> > > -      - usb4b4,6508
+> > > -      - usb4b4,650a
+> > > +    oneOf:
+> > > +      - enum:
+> > > +          - usb4b4,6504
+> > > +          - usb4b4,6506
+> > > +      - items:
+> > > +          - enum:
+> > > +              - usb4b4,6500
+> > > +              - usb4b4,6508
+> > > +          - const: usb4b4,6504
+> > > +      - items:
+> > > +          - enum:
+> > > +              - usb4b4,6502
+> > > +              - usb4b4,6503
+> > > +              - usb4b4,6507
+> > > +              - usb4b4,650a
+> > > +          - const: usb4b4,6506
+> > >=20
+> > >     reg: true
+> > >=20
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+> > > b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+> > > index d0d867374b3f..7fac61f95fc6 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+> > > @@ -594,14 +594,14 @@ &usbdrd_dwc3_1 {
+> > >          #size-cells =3D <0>;
+> > >=20
+> > >          hub_2_0: hub@1 {
+> > > -               compatible =3D "usb4b4,6502";
+> > > +               compatible =3D "usb4b4,6502", "usb4b4,6506";
+> > >                  reg =3D <1>;
+> > >                  peer-hub =3D <&hub_3_0>;
+> > >                  reset-gpios =3D <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;
+> > >          };
+> > >=20
+> > >          hub_3_0: hub@2 {
+> > > -               compatible =3D "usb4b4,6500";
+> > > +               compatible =3D "usb4b4,6500", "usb4b4,6504";
+> > >                  reg =3D <2>;
+> > >                  peer-hub =3D <&hub_2_0>;
+> > >                  reset-gpios =3D <&gpio4 RK_PA3 GPIO_ACTIVE_HIGH>;
+> > >=20
+> > >=20
+> > > Do you have any suggestions on how I can properly update the schema
+> > > files to avoid the above warnings?
+> >=20
+> > The diffs you have here look okay, not really sure what you're asking
+> > for.
+>=20
+> It fails dtbs_check:
+>=20
+> linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@1:
+> compatible: ['usb4b4,6502', 'usb4b4,6506'] is too long
+> =E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/cypr=
+ess,hx3.yaml#
+> linux/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: hub@2:
+> compatible: ['usb4b4,6500', 'usb4b4,6504'] is too long
+> =E2=80=83=E2=80=83from schema $id: http://devicetree.org/schemas/usb/cypr=
+ess,hx3.yaml#
+>=20
+> I'm not sure we're allowed to add new errors with dtbs_check (and would l=
+ike
+> to avoid it in any case).
+
+Ah, the restriction I think comes from the usb-device binding. Maybe
+just leave it as you had it?
+
+--siX/JzAbfY5Bb/0r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ/bmWwAKCRB4tDGHoIJi
+0t8XAQDCNdCD4zh7JrShscGp2cZzh9+XhRC1yUwBkP1mgikpJAD/UgJNyrT10N/J
+5bTLDt8O/UvBlsOZQcNilW6mXhfNhgU=
+=II5O
+-----END PGP SIGNATURE-----
+
+--siX/JzAbfY5Bb/0r--
 
