@@ -1,136 +1,136 @@
-Return-Path: <linux-usb+bounces-22793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CF09A8212E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 11:42:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647EDA82137
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 11:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18EA1B817D7
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 09:42:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE35D46782F
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 09:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF4B25C6F1;
-	Wed,  9 Apr 2025 09:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1qvPjAn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA2725D20A;
+	Wed,  9 Apr 2025 09:43:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C6253F1B;
-	Wed,  9 Apr 2025 09:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F271D54FA;
+	Wed,  9 Apr 2025 09:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744191741; cv=none; b=Fli/KdVKTK0Pqf2k76aNmX51qUhOz9GBYLhsOPJP8dQdSGWvlo5feSkuR1BB7yAPIueQqCfEuW9z0Uq4iCYFvxxESwfihdmW6NSlWnP7Mzy4I0B83+3KP2wwIST48vSVvd2YmX5MTYRULCRXRnJE7TJkVpZ2u2AQRA0tlzxVJKQ=
+	t=1744191835; cv=none; b=vCIzcnC8HQiOarnzvV7lK0Z1bMe7AntsEpXto3VzG29M256oZ4pdymXMm+Ed8hS5Z3bpmWJEs32rbbGm+TCf58tWJuTVDIpm1XxCCO3cbSBA05k0iO5O4JvWK9v4YivRx6raRDO8UmI/cYlBtjeIWeVwDZnkxOtSufKhKCyKdo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744191741; c=relaxed/simple;
-	bh=+xIm5QaTkd6wUvuWwFpOoa9gHwHT+MTsJAnhcqKhick=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nxFgYaWTiX2QrOsr4EnGStsmByI+fDZhQdxLLCPVIckBXLepAjwCeI6+KLwkoPxNC071XNqydlwY760VGpqcu4362J7CCZSAK28XnP0qa6Pjvnl+pQxXJvC1qnLFfjxCMWv9ucqFie1sNK2neAAKb1QocN1CDNXy6quD359Bpl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1qvPjAn; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-548430564d9so7314181e87.2;
-        Wed, 09 Apr 2025 02:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744191736; x=1744796536; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4rukcpxvbwuYB2l7K8gJhZiG0D7KlbxMB1KIdtvrzhM=;
-        b=N1qvPjAn+03SlAIRcbJjcbO7tawpXb9II/WQtB0i5mQBuu8NmpwpEIxEQEYucgft2i
-         +AeswfPoikJh/Ju5OinOUpDvmVTBxhSAvrpQHA323SVORu2Qp4e0eqP2XKR6RJJQi8FI
-         jjFQUrDVD8rsksIJzevPMhEKMlC85HEUYMQrLcY/r+0lmq9YM1EKp61glMTEsizsysYv
-         vJ8wvrTN7oq70FMjba0Dew+7FHdy3FSwHdDPr6Wim8zaS9aeUrj8Ju7/OCwXxjMNBCr/
-         rtKSMckMuppAFD2+bptU3d3SW9LIvJ9qZ7LotXCnnxJzFdz96ooMpa5mIAo9u+5ABF1C
-         uI2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744191736; x=1744796536;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4rukcpxvbwuYB2l7K8gJhZiG0D7KlbxMB1KIdtvrzhM=;
-        b=ANWdeKkbI8AyESfPU3PpqQI31DNU3NyA9qtW61gH+uuJiQ/ksEEvp3PDZA8w5psqWN
-         AsK6/qpCD/MAFPFOa86NxwjBEv4D6qRhQv44nlvP7LOIeXMpNIFUF5IAhpG98+wGQrK9
-         RzEvrfAyaBE69GiSV3UYIqRt1l7Www46Y7YAZs14uDIk+e+MmMpPxRBWOsIYXebXyhnR
-         KfgvKFrzufZyzr2KfyQ/sK8QEBt1ld78CEzjuf+5OBbBJFioDB01g4g/9fbx8b7FoqUH
-         QVlTdUERyegaSCMwo/E7fqJygWynNad8FYKecOokjoguP0pkYsOfmi8iI/Kk0EPVsWRw
-         RQLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWlNydZ0MtR/KhEPRVtE3HPjNFc9FcthOzpCibmgJ6t5EUYpKMjYDqzdXVOCa638jEDzzUdwS9elp9g@vger.kernel.org, AJvYcCX9sPQ+STlJM4Qd5aDZ7ZYy725eZe3qwpmrz6slNyUv/tL4MR9miTDXkcigsCYplNbHejSTCyQ+rQITRg8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywsi2BlntOey1pAIMRVA81fgPOq4Mxlbd2OI4JXQtlA8ywymcA9
-	b0GXDb/lNobc9X4lWV0tCipPvOwtsswbrFLuQZOX3QB17BIXGIb1
-X-Gm-Gg: ASbGncuxtDhBkW/zqvsfJqFgkQdLQ9fwaZbkwGydzAzoQRrA4lNHet5rm/Wep5RaTJ/
-	2TpoJ7kOmLw2esk6B72I6+w9nwpwj459M32Bx3OMwv6yTpDm7RWAmKsCegfLGlezUOf2OQ0QtxY
-	b9pP7MaUOkAMirb1L2Y+1Omo4GJbaI4a4UgHHRxc3DgHvXf3ATb5Dt3H4DZgIaOE5NPUXnM/d3M
-	hV2j4iNDGuxzA6jvcC7wsFKfXY43ZIs34lXQ+2cQ9gjsMDyRn5dRVdF5GsaWtvGWy/Hx5+c2sgT
-	VbDn+qeRzBxeBEpap3s+8qhwFtNnsz/n9is2HLvyoRnX8E9bb/yQL+BjbA==
-X-Google-Smtp-Source: AGHT+IFDE7FB5vAL6zbHiHf0loRdqp6bETdh6LbcKxtoIUwcaRLI3ATBqkpfKIyYT8rnNRgmNE09Fw==
-X-Received: by 2002:a05:6512:3ba5:b0:545:17d:f96b with SMTP id 2adb3069b0e04-54c4370b196mr557305e87.14.1744191735938;
-        Wed, 09 Apr 2025 02:42:15 -0700 (PDT)
-Received: from foxbook (adtq195.neoplus.adsl.tpnet.pl. [79.185.228.195])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54c455d6aa5sm91559e87.35.2025.04.09.02.42.15
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 09 Apr 2025 02:42:15 -0700 (PDT)
-Date: Wed, 9 Apr 2025 11:42:11 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: Kuangyi Chiang <ki.chiang65@gmail.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Fix invalid pointer dereference in Etron
- workaround
-Message-ID: <20250409114211.62dddbdc@foxbook>
-In-Reply-To: <20250317222927.5b76518e@foxbook>
-References: <20250317222927.5b76518e@foxbook>
+	s=arc-20240116; t=1744191835; c=relaxed/simple;
+	bh=84ymEGm4zvSJ3WXK2INgidAW+cBpZ4oXWDbgkmXwmIc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o8+5donf6fxhnAD3NMGCeJRxYpeS6kYsSz+ax+SEO3z5/LO4j3jAYSXgtPetnu9sLgytP43UHRnuCUWWc/fqOh4dZArwnG4OUQFlzjyBQc9/bE5jtSkJsjh1zpvy+YKqqx2AkeE/F76WltITBAzd91QntFaczNECRHqE+xIv9DQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
+Received: from [198.18.0.1] (gy-adaptive-ssl-proxy-2-entmail-virt205.gy.ntes [27.18.106.237])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 113920671;
+	Wed, 9 Apr 2025 17:43:41 +0800 (GMT+08:00)
+Message-ID: <a71f45fc-d266-447d-8fb0-1ff0897f5bff@whut.edu.cn>
+Date: Wed, 9 Apr 2025 17:43:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/7] phy: spacemit: add USB3 support for K1 PCIe/USB3
+ combo PHY
+To: Krzysztof Kozlowski <krzk@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
+ <20250407-b4-k1-usb3-v3-2-v1-5-bf0bcc41c9ba@whut.edu.cn>
+ <74770bec-eeda-4823-b494-bea177fe26b0@kernel.org>
+Content-Language: en-US
+From: Ze Huang <huangze@whut.edu.cn>
+In-Reply-To: <74770bec-eeda-4823-b494-bea177fe26b0@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHx4ZVh8YSBlCHUhKHR1NQlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJTFVKQ1VKS01VSUhMWVdZFhoPEhUdFFlBWU9LSFVKS0hKTkxPVUpLS1VKQk
+	tLWQY+
+X-HM-Tid: 0a9619ef181403a1kunm113920671
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRQ6HCo5TjJCDjwXERcME0kh
+	NVFPCShVSlVKTE9PSkJKQ0lDTUpPVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
+	TFVKQ1VKS01VSUhMWVdZCAFZQUhOS0o3Bg++
 
-Hi Mathias,
+On 4/7/25 9:28 PM, Krzysztof Kozlowski wrote:
+> On 07/04/2025 14:38, Ze Huang wrote:
+>> Add support for USB 3.0 mode on the K1 PCIe/USB3 combo PHY. Currently,
+>> only USB mode is supported; PCIe support is not included in this change.
+>>
+>> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
+>> ---
+>>   drivers/phy/spacemit/Kconfig          |   8 ++
+>>   drivers/phy/spacemit/Makefile         |   1 +
+>>   drivers/phy/spacemit/phy-k1-combphy.c | 229 ++++++++++++++++++++++++++++++++++
+>>   3 files changed, 238 insertions(+)
+>>
+>> diff --git a/drivers/phy/spacemit/Kconfig b/drivers/phy/spacemit/Kconfig
+>> index f0c2a33f53cc810e71c6140ae957aa68a2b6ff0c..12749aba756329cf64fb9199055ba484fe05f3ab 100644
+>> --- a/drivers/phy/spacemit/Kconfig
+>> +++ b/drivers/phy/spacemit/Kconfig
+>> @@ -10,3 +10,11 @@ config PHY_SPACEMIT_K1_USB2
+>>   	help
+>>   	  Enable this to support K1 USB 2.0 PHY driver. This driver takes care of
+>>   	  enabling and clock setup and will be used by K1 udc/ehci/otg driver.
+>> +
+>> +config PHY_SPACEMIT_K1_COMBPHY
+>> +	tristate "SpacemiT K1 PCIe/USB3 combo PHY support"
+>> +	depends on OF
+>> +	select GENERIC_PHY
+>> +	default ARCH_SPACEMIT && USB_DWC3_SPACEMIT
+>> +	help
+>> +	  USB3/PCIe Combo PHY Support for SpacemiT K1 SoC
+> Missing depends on ARCH_SPACEMIT || COMPILE_TEST
 
-Gentle reminder about a pretty annoying bug, it would seem like a good
-idea to have it fixed in 6.15-rc2.
+Will fix, thanks!
 
-Basically, if you use SS control transfers on Etron, this happens:
+>
+> ...
+>
+>
+>> +	priv->phy = devm_phy_create(dev, NULL, &spacemit_combphy_ops);
+>> +	if (IS_ERR(priv->phy))
+>> +		return dev_err_probe(dev, PTR_ERR(priv->phy),
+>> +				     "failed to create combphy\n");
+>> +
+>> +	dev_set_drvdata(dev, priv);
+>> +	phy_set_drvdata(priv->phy, priv);
+> Both make no sense. Look what this function does.
 
-[88483.258966] xhci_hcd 0000:06:00.0: last TRB on seg we're gonna dieee!!!
-[88483.260825] BUG: unable to handle page fault for address: ffffc9000177a00c
-[88483.262441] #PF: supervisor read access in kernel mode
-[88483.263889] #PF: error_code(0x0000) - not-present page
-[88483.265306] PGD 100000067 P4D 100000067 PUD 100234067 PMD 103dd4067 PTE 0
-[88483.266648] Oops: Oops: 0000 [#1] SMP
-[88483.267980] CPU: 2 UID: 1000 PID: 20753 Comm: v4l2-ctl Not tainted 6.15.0-rc1 #7 PREEMPT 
-[88483.269327] Hardware name: HP HP EliteDesk 705 G3 MT/8265, BIOS P06 Ver. 02.45 07/16/2024
-[88483.270689] RIP: 0010:xhci_queue_ctrl_tx+0xaf/0x410 [xhci_hcd]
+It does seem redundant at first glance, but pdev->dev is the parent of 
+phy->dev.
+pdev->dev->driver_data will be used in spacemit_combphy_xlate()
+phy->dev->driver_data  will be used in phy_ops functions
 
+I've checked some other drivers that did the same:
+     - phy-zynqmp.c at lines 990 and 1026
+     - phy-rockchip-samsung-hdptx.c at lines 1989 and 2000
 
-On Mon, 17 Mar 2025 22:29:27 +0100, Michal Pecio wrote:
-> This check is performed before prepare_transfer() and prepare_ring(),
-> so enqueue can already point at the final link TRB of a segment. And
-> indeed it will, some 0.4% of times this code is called.
-> 
-> Then enqueue + 1 is an invalid pointer. It will crash the kernel right
-> away or load some junk which may look like a link TRB and cause the
-> real link TRB to be replaced with a NOOP. This wouldn't end well.
-> 
-> Use a functionally equivalent test which doesn't dereference the
-> pointer and always gives correct result.
-> 
-> Something has crashed my machine twice in recent days while playing
-> with an Etron HC, and a control transfer stress test ran for
-> confirmation has just crashed it again. The same test passes with
-> this patch applied.
-> 
-> Fixes: 5e1c67abc930 ("xhci: Fix control transfer error on Etron xHCI
-> host") Cc: stable@vger.kernel.org
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-
-Regards,
-Michal
+>
+> Best regards,
+> Krzysztof
+>
+>
 
