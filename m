@@ -1,258 +1,206 @@
-Return-Path: <linux-usb+bounces-22812-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22813-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A81C0A82D88
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 19:25:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97C53A82DDD
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 19:48:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFEBD3B7B34
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 17:24:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66D771B64A1B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Apr 2025 17:48:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B69276020;
-	Wed,  9 Apr 2025 17:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A236327702C;
+	Wed,  9 Apr 2025 17:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GjEjxU3j"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j0nP4u0c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3083C78F5D
-	for <linux-usb@vger.kernel.org>; Wed,  9 Apr 2025 17:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850551C84CD
+	for <linux-usb@vger.kernel.org>; Wed,  9 Apr 2025 17:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744219495; cv=none; b=TzQaygriFiqZuAkpf4mFOE8GMFEgxg9wfwvyw5/56MXzy/X6qfscSCHAYw+ekxjRh/LEQNPiOcvr3+/Ro9QMDUU1arZL5J6dfDB0IzJPyVcS30Gz57T0ZIHobOPYF8dOWvTFKZxT6lQZuPcUtwdU/y4f5KilSKgztmDmOb5NgY8=
+	t=1744220911; cv=none; b=HGTlgVYap85KEc2w23/YaZs5QWHEXgxaZyhZCMZfB8ed3ba4XQI1fvyxS4o1V9qGXsGi4Eyrp/e7EGkS51R5wFseh+7Q3F2M3XFPVlEmzP9c1WPgr5ooLYLB/gFgqi+itT3at3H+KjbUCHxboYNpXorNNy9CHH9kX7Gfp9HgVcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744219495; c=relaxed/simple;
-	bh=YDzadL7/WN7nrK86D16+jCqBEoNId42ComPeqlR73DM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N1Xqcl38Zt1LvFGSHvCkAyGMqCj+6NZy9ufJKrg40Yrzm4K1aK1qFs3yN5t66V+O5UxFbQLPVzjX3sZgWLBo9zEnoX4n7tyPc2bUgil7MQnGJFjATKVOC6vd/8/Bh089GzeeTXwg4y7BKl+4qryCD2tizHfV5qZRcTHj3OlP6K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GjEjxU3j; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c54b651310so935726485a.0
-        for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 10:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1744219491; x=1744824291; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=REdwccDLAjCC250oqs5IGhVVKlH520TIM+1ksxa5+4M=;
-        b=GjEjxU3jWOQOXLWp09FviiWlzpjc4fMmNtSiLYSGHwsf6oSxkt4+7ou1YYh8EBL/hw
-         iFziDEIvFOjAv1ql2KqOgMVk3ETmc1J3ORZUPlXqOykjdQXICNPCIA0xz9M5UzvfYy5R
-         1IPNNCr9s+5HqaKHZGOK/2BwpbDy+5YNQT998=
+	s=arc-20240116; t=1744220911; c=relaxed/simple;
+	bh=hc3zIYh7JSINeCh8Z4mm9tEk+Au4y7knpSnk7GKAv5E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mhdBu84xlbuJikQfhprSMo3IorbaKDw3hEamprTuihbKazCrYi4YbEw3+UUvtmtR5HusEZOBcrXLTBnVhn/Y3znoU0rLbriUxOX/btY92Iip6qtqo6HwLWpd3UEyKYPOSy81w/y+esUIqyjomteCVi45BvMMSBQ9r3b1PhC/rM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j0nP4u0c; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5398pinM023950
+	for <linux-usb@vger.kernel.org>; Wed, 9 Apr 2025 17:48:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=2xGb6Lh+V7STeCHTaCEpkP
+	9K8DWgoNDGliAnks1g2Mw=; b=j0nP4u0czRkp9AcpCO9Brqv2nI2Gzkg0BRZ3BI
+	uun2N25YYL+CMIOGSq5AUri36yKBlQKgn9UEHutP7w3jRDEeUrPiUxjQhz/QplTl
+	wtrxasWsDi/whtixf2qB7P36fmVwGvp5WnjhpNZtT2Aj4mi8sb7QGeD5qgCpTte5
+	MCteXCOdpMp5DeByXbzyoQpIr8MpBPA2b0FDA3z3Nh3KwGTo7jqcrQznzqeb2ly0
+	yTKvTaXGdBnK9gaXUD4sD91CarcBJlKLBAQoItJDg+r01Qzlxjy1yEg6D6rJBrE5
+	9NQtnvrbD2U9d5WL+L6nztzSFQWTNLLLC7HmjEPZQ0Gtc5ZQ==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twfkm54u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 17:48:26 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-22aa75e6653so29958625ad.0
+        for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 10:48:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744219491; x=1744824291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=REdwccDLAjCC250oqs5IGhVVKlH520TIM+1ksxa5+4M=;
-        b=bG7OCHqkaD/vnFl/zxmEk6MiUi3m8ULXh6Myc0QJCYf0kq/k/fO/M3vwpwAVSm2/k3
-         NWfaGZQC7s3dlG9V8AKncp3wKJ2rY80saK79goQnKRmW3vA9BiBiD9rz8aXpwpArcsCB
-         /KPRDLJgVZJY807w2sHv3Jhy+1GMYY3Ty+ZY9uU8La7wXt0zoqf3PJ8PmfD+DsWrTRFr
-         U0kI2tWwcZUtbKbPstMKogHxqdxnwTnwE96imAzYL4h+YYnhExBbIwBze+z7fJ0ZQL5X
-         YtNOGzmxJ2zpzwa5/GwcRfAcciEVRt2NcLET+wKcd8N6JzsckBBMEwC6/vtT722fDz36
-         j3CA==
-X-Forwarded-Encrypted: i=1; AJvYcCXoWPKk8M+eVXbTI2TlQfQnm9RXQMivminVRrCQ0ISG9JdwvfZZIt/mhVrHBFIAYAB2ViWIrPtF88c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdrmxlPpARlKX7Var3GQ9N3aHcaa/2GxgbBrLS1zQw0L9AEm1w
-	kNMIS/wl4gO4zHc5MzFshCimH+u3ogpyeFl2TaDNLWpopWTZ10wpF5lhZ42VY3hLBnbeISgVJCs
-	IFA==
-X-Gm-Gg: ASbGncvSv1zGZjOLyYiUE7E3hUk3JCT0f24cLzmEA9QIm/hOmVO4hJX2BJEHDQ6rV6F
-	4B8SvpxDX/IhaBb4q47ZCVja+Ohwxzk49hQcw85DsegDzX90ltJJpegmQjgzxk+RVeTlhwFWdoV
-	QPcUYP4PQrcPASpN5am+vfvYgMdpw77AQfIjoS+Ri5g0wHtEr3sI+0qzLysJsVKUxDEUmmPi3Tb
-	PzufNKpoWCWN5dwzN8XojGTCm/G5rdKUG/Q/2/q+oOcPF0C8V8PstXwJSG4T651bufqtawMeNIq
-	K32/ylFkSQzYNYMg1twgP2vBfNmLhr55HXY1hl7jhU0bSXl3IdjBq+Nj4LgHVD5tX27cXnKXYBv
-	CBz4zx8k=
-X-Google-Smtp-Source: AGHT+IEnN1y4RvG11zoJVAh54qLDub2uFohzkPfApJukRb+8dz6rjxB7sm8JiUu/37mdF3I40+ySPA==
-X-Received: by 2002:a05:620a:404d:b0:7c5:6140:734f with SMTP id af79cd13be357-7c79ddab42fmr390989585a.18.1744219491403;
-        Wed, 09 Apr 2025 10:24:51 -0700 (PDT)
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com. [209.85.222.182])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a10ce3basm97497385a.54.2025.04.09.10.24.50
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Apr 2025 10:24:51 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c08fc20194so1342337285a.2
-        for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 10:24:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWPazUw69qLJWye/mEvfIh831cH8LahL+zW1KOPw4EWwkCwW5JoHmUfc33zzL7l6zSG5Xo//yIqxJQ=@vger.kernel.org
-X-Received: by 2002:a05:620a:4481:b0:7c3:d5a4:3df3 with SMTP id
- af79cd13be357-7c79dde625amr396629085a.34.1744219489705; Wed, 09 Apr 2025
- 10:24:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744220905; x=1744825705;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2xGb6Lh+V7STeCHTaCEpkP9K8DWgoNDGliAnks1g2Mw=;
+        b=hz3e7MnOgEjPgegnmTcK5RgoQw7/Wrt/WS0nvPjd9QuigVBmpE9bo23qFB8WeqACqr
+         omHu9ijyt+vE0NjR0u//q9vZ84ZiCBwHELzhypkZ/E5Ltl4iaTIFh7ALUoP5UWJdsBuc
+         wghHBfLN1kwNUGDZhMHgfp1tfNAcypYiQY+pq1bdbWCEJp95wTvy6zsmh6kpHUjllv6c
+         OPF256+Ww+SyFVg6ggHciqLCRTboerDJBfZSqNyDwoIzqpGzL9C+lchdMgF4oUiea2O9
+         VK6MIJ5hG/yWjVlS0YN+TID2COpuLkMylBWQ+uz2prC6lJ8/MsxD0GXg180QO3tUquQO
+         vvaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWowmx2QYHGtbEo49mr7G93sYRDM0NIzSqlNh54GD1AtrE9DGhaMMtWV2UPjT56l6KYqoEi0d8PXeU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4woufaNJSZh/qcUBJYbfjkNtBlXF96eh7njqjnN6pqemmwd2O
+	OdAhPZ5SF0E735QwaYeym9XmJCp+sDbUFVCy3ZwhS0vg5kWnBa+LSaLhVzvFHWS04o+/df8ozrs
+	A/s5D4nvHQ/NpJO3F4SvVDllB/UVMi0egLmjCXoZKfP7QAwa0nRcdCcWxWMY=
+X-Gm-Gg: ASbGncuLXP4LFmxNNWnVVV1q3KD2plu8YtUNjX80bZ/P+RO+5u8FwZmeVfG3r+KQXg4
+	OYGK5wXH+XcG8imsTrqS2Be+dyL8StlFT+BBEOh3VVeJmPKZDd8ctL0ta7WizRdQVrnuLLUDZ3v
+	9lKZ2Q/TrnjlQxa7a5UB1/pacZ3Rbtvsab5zlNqgdad6wyBCHl/TWu1en9cU7seKui/rVUQ4Y3i
+	j8lwBCEFpInpptr65rD+IHzK+lSvSAqN0aNaDxBY/qvB7tm991+eYAL2UhlH4hyISy8TuaiDHVx
+	2JPhw4Tj+jutkVSzkwmJ/+MmiuPVLLpW/acjEnVD8+5STet2XLUkTJaLpK3/YEK90Ic=
+X-Received: by 2002:a17:902:e750:b0:224:256e:5e4e with SMTP id d9443c01a7336-22ac2991b3dmr44828575ad.16.1744220905529;
+        Wed, 09 Apr 2025 10:48:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0DTV9cBjuEu2MIM4VNLNiQsiktOF0HLT4+M1oyrikXvXe/d3fV2RaMyWqc4EXrShjavyy5Q==
+X-Received: by 2002:a17:902:e750:b0:224:256e:5e4e with SMTP id d9443c01a7336-22ac2991b3dmr44828135ad.16.1744220905102;
+        Wed, 09 Apr 2025 10:48:25 -0700 (PDT)
+Received: from hu-molvera-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7c97a1bsm14964005ad.148.2025.04.09.10.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 10:48:24 -0700 (PDT)
+From: Melody Olvera <melody.olvera@oss.qualcomm.com>
+Subject: [PATCH v4 00/10] phy: qcom: Introduce USB support for SM8750
+Date: Wed, 09 Apr 2025 10:48:11 -0700
+Message-Id: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ce2048af-1044-4424-bca2-3799baefb9c2@amd.com> <20250404060203.GM3152277@black.fi.intel.com>
- <3b283147-cd32-410e-a163-9e603fd40bc1@gmail.com> <20250404115346.GN3152277@black.fi.intel.com>
- <98539971-3b43-4d64-a105-6790198c46d1@amd.com> <20250404161008.GO3152277@black.fi.intel.com>
- <f9806a24-875f-4c44-9694-96b62a6aefd9@gmail.com> <5f9004aa-9b51-474d-9cb0-c8c4e23b19f4@kernel.org>
- <CAHQZ30C=7d1DkHYTixrgmArCwKHzhxBn602P=YY5rP6OcAXuVw@mail.gmail.com>
- <20250407055520.GP3152277@black.fi.intel.com> <dcf41124-d693-4b0f-a1d1-7ad7cd914449@kernel.org>
-In-Reply-To: <dcf41124-d693-4b0f-a1d1-7ad7cd914449@kernel.org>
-From: Raul Rangel <rrangel@chromium.org>
-Date: Wed, 9 Apr 2025 11:24:38 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30Db-3sA1QVru-Tpwp9ZgJdSrO2UKC5Qpqg1dkqc0O2S2Q@mail.gmail.com>
-X-Gm-Features: ATxdqUFRSlWqRpu8YZxXRxnF7-x2pCYYvS-RE8nDyA5ex0nrT45-5TuYKdw_afQ
-Message-ID: <CAHQZ30Db-3sA1QVru-Tpwp9ZgJdSrO2UKC5Qpqg1dkqc0O2S2Q@mail.gmail.com>
-Subject: Re: Wake on connect / wake on disconnect
-To: Mario Limonciello <superm1@kernel.org>, Subrata Banik <subratabanik@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, Opal Voravootivat <puthik@google.com>, 
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>, "Gong, Richard" <Richard.Gong@amd.com>, 
-	Utkarsh Patel <utkarsh.h.patel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANuy9mcC/23NwW7DIBAE0F+JOJdoWTDGPeU/oigisDQcbKfgW
+ Kks/3uxc0iq+jgjzZuJZUqRMvvcTSzRGHPsuxLUx465q+2+iEdfMkNAJRAlz62pKzjf8+Xc2jx
+ Q4gFrS74O2itgZXdLFOJjNY+nZ070fS/08CqvMQ99+ll/R7G0y0UFQmxdjIIDh8YGEt5hhepQP
+ Bc7t3d9yxZvxJchQW0ZWAyrG2ORtCHQ/w35ZuCmIYshJEGjvTMm+L/GPM+/19zZdVEBAAA=
+X-Change-ID: 20241223-sm8750_usb_master-f27aed7f6d40
+To: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Melody Olvera <melody.olvera@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Dmitry Baryshkov <lumag@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744220903; l=3325;
+ i=melody.olvera@oss.qualcomm.com; s=20241204; h=from:subject:message-id;
+ bh=hc3zIYh7JSINeCh8Z4mm9tEk+Au4y7knpSnk7GKAv5E=;
+ b=zw2dUOA9Z5fTRvpUid1hCtpl8B6Q8X93pzTd7rkqWGMA1r8H1zd/4CmdV5ZTN89UxJK8IxJB7
+ WUCArCpEc9IAjj+Es//Eik6NbyfCoICTWuBufEJReoHQD0JlOuU43bJ
+X-Developer-Key: i=melody.olvera@oss.qualcomm.com; a=ed25519;
+ pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
+X-Proofpoint-GUID: 6HI3O3rM7uGOvqLj7UkN520NPppN_wzw
+X-Proofpoint-ORIG-GUID: 6HI3O3rM7uGOvqLj7UkN520NPppN_wzw
+X-Authority-Analysis: v=2.4 cv=b7Oy4sGx c=1 sm=1 tr=0 ts=67f6b2ea cx=c_pps a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=1rs2XOWFaH1SNEFhMLQA:9
+ a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-09_06,2025-04-08_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 mlxscore=0 impostorscore=0 phishscore=0
+ clxscore=1011 spamscore=0 mlxlogscore=876 bulkscore=0 lowpriorityscore=0
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504090116
 
-On Wed, Apr 9, 2025 at 11:03=E2=80=AFAM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
->
-> On 4/7/2025 12:55 AM, Mika Westerberg wrote:
-> > On Fri, Apr 04, 2025 at 10:55:35AM -0600, Raul Rangel wrote:
-> >> On Fri, Apr 4, 2025 at 10:20=E2=80=AFAM Mario Limonciello <superm1@ker=
-nel.org> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 4/4/25 11:16, Mario Limonciello wrote:
-> >>>>
-> >>>>
-> >>>> On 4/4/25 11:10, Mika Westerberg wrote:
-> >>>>> On Fri, Apr 04, 2025 at 10:03:18AM -0500, Mario Limonciello wrote:
-> >>>>>> On 4/4/2025 6:53 AM, Mika Westerberg wrote:
-> >>>>>>> On Fri, Apr 04, 2025 at 06:47:31AM -0500, Mario Limonciello wrote=
-:
-> >>>>>>>> On 4/4/25 01:02, Mika Westerberg wrote:
-> >>>>>>>>> Hi Mario,
-> >>>>>>>>>
-> >>>>>>>>> On Thu, Apr 03, 2025 at 01:12:07PM -0500, Mario Limonciello wro=
-te:
-> >>>>>>>>>> Mika,
-> >>>>>>>>>>
-> >>>>>>>>>> Recently there are some conversations about wake-up from conne=
-ct/
-> >>>>>>>>>> disconnect
-> >>>>>>>>>> happening and I wanted to get some background from you about t=
-he
-> >>>>>>>>>> current
-> >>>>>>>>>> policy set in tb_switch_suspend().
-> >>>>>>>>>>
-> >>>>>>>>>> Wake on connect and disconnect are only used for runtime, not =
-for
-> >>>>>>>>>> system
-> >>>>>>>>>> suspend.  Would you be open to adding wake on connect as well =
-for
-> >>>>>>>>>> system
-> >>>>>>>>>> suspend?  This should help enable use cases like plugging in a
-> >>>>>>>>>> closed laptop
-> >>>>>>>>>> to a dock (which works on Windows).
-> >>>>>>>>>
-> >>>>>>>>> Don't we already have a similar for all usb4_portX devices? Tha=
-t
-> >>>>>>>>> does not
-> >>>>>>>>> work for you?
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> I think that will functionally work - but I'll double check.
-> >>>>>>>>
-> >>>>>>>> However usb_portX power/wakeup defaults are 'disabled' so this
-> >>>>>>>> would need a
-> >>>>>>>> udev rule.  Could we set the kernel default for those to 'enable=
-d'
-> >>>>>>>> instead?
-> >>>>>>>
-> >>>>>>> No because that would trigger wakeup each time you unplug/plug an=
-d
-> >>>>>>> this is
-> >>>>>>> certainly not good if you close the lid, unplug from dock and thr=
-ow the
-> >>>>>>> laptop to your backpack. Chrome uses this with "dark resume" so i=
-f
-> >>>>>>> this is
-> >>>>>>> supported by the userspace then it can also enable these.
-> >>>>>>
-> >>>>>> Ahhh.  I was thinking specifically with wake on connect that's not=
- a
-> >>>>>> problem, but the sysfs knob for the port changes both wake on conn=
-ect
-> >>>>>> and
-> >>>>>> wake on disconnect.
-> >>>>>>
-> >>>>>> Is there actually a use case for chrome with wake on disconnect?  =
-IE
-> >>>>>> if we
-> >>>>>> didn't turn on wake on disconnect but defaulted to wake on connect=
- would
-> >>>>>> things be OK?  Or made the sysfs knob control only wake on disconn=
-ect?
-> >>>>>
-> >>>>> Good guestion - I don't know ;-) The Chrome folks wanted this so I
-> >>>>> suppose
-> >>>>> their usecase is specifically that dark resume and I think that's w=
-hen
-> >>>>> you
-> >>>>> unplug a device so disconnect. Not so sure about wake on connect.
-> >>>>
-> >>>> I found the original patch from Rajat [1].
-> >>>>
-> >>>> Rajat, any comments?  Could you loop in the right people from the Ch=
-rome
-> >>>> side to ask?    I think my "preference" would be that we make "wake =
-on
-> >>>> connect" always enabled and then let the sysfs knob control "wake on
-> >>>> disconnect".
-> >>>>
-> >>>> [1] https://lore.kernel.org/linux-usb/20221101115042.248187-1-
-> >>>> rajat.khandelwal@intel.com/
-> >>>
-> >>> Oh Rajat's email bounced.  The only person I know that I've worked on
-> >>> wakeup related stuff is Raul.  I'll add him.
-> >>>
-> >>> Mika, Raul,
-> >>>
-> >>> Could you pull in current Chrome people from Intel and Google that co=
-uld
-> >>> comment here?
-> >>
-> >> + Opal who should be able to answer the question regarding wake on
-> >> connect/disconnect.
-> >
-> > Added Utkarsh from Intel side.
->
-> I had another look at usb4_port.c the flows used.  This is the call path:
->
-> tb_switch_suspend()
-> ->tb_switch_set_wake()
-> ->->usb4_switch_set_wake()
->
-> The flags for wakeup policy are set in tb_switch_suspend() and then
-> passed as arguments down to usb4_switch_set_wake().  This enumerates
-> whether wake is set for any usb4_port device and applies the flags to
-> that device.
->
-> So AFAICT that means that even on ChromeOS there won't be a wake on
-> connect or wake on disconnect event for suspend/resume no matter what
-> the sysfs files for each port are set to.
->
-> In summary; my ask is whether we can do this:
->
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 6a2116cbb06f9..f2f6a085a742b 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -3599,6 +3599,7 @@ void tb_switch_suspend(struct tb_switch *sw, bool
-> runtime)
->                  flags |=3D TB_WAKE_ON_USB4;
->                  flags |=3D TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_O=
-N_DP;
->          } else if (device_may_wakeup(&sw->dev)) {
-> +               flags |=3D TB_WAKE_ON_CONNECT;
->                  flags |=3D TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 |
-> TB_WAKE_ON_PCIE;
->          }
->
-> That would allow the use case of "plug in a closed laptop to a dock" and
-> it wakes up.
+Add support for the PHYs and controllers used for USB on SM8750 SoCs.
 
-+ Subrata since they might have more context on the TB stack.
+---
+Changes in v4:
+- Made some fixups to the M31 eUSB2 driver
+- Moved TCSR refclk_en to the QMP PHY DT node
+- Link to v3: https://lore.kernel.org/r/20250324-sm8750_usb_master-v3-0-13e096dc88fd@quicinc.com
+
+Changes in v3:
+- Split platform DTs into separate commits.
+- Fixed up M31 eUSB2 PHY driver with feedback received.
+- Reordered DT properties based on feedback.
+- Rewrote commit message for enabling EUSB driver.
+- Link to v2: https://lore.kernel.org/r/20250304-sm8750_usb_master-v2-0-a698a2e68e06@quicinc.com
+
+Changes in v2:
+- Added new QMP PHY register definitions for v8 based QMP phys.
+- Made changes to clean up some code in the M31 eUSB2 PHY driver based
+on feedback received.
+- Added bulk regulator operations in M31 eUSB2 PHY, to ensure that
+both the vdd and vdda12 regulators are properly voted for.
+- Removed external references to other dt bindings in M31 example for
+the DT bindings change.
+- Split DT patches between SoC and plaform changes, as well as the
+PHY subsystem Kconfig changes when introducing the M31 eUSB2 PHY.
+- Added orientation switch and port definitions in the DT changes.EDITME: describe what is new in this series revision.
+- Link to v1: https://lore.kernel.org/r/20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com
+
+---
+Melody Olvera (1):
+      arm64: defconfig: Add M31 eUSB2 PHY config for SM8750
+
+Wesley Cheng (9):
+      dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add SM8750 to QMP PHY
+      dt-bindings: phy: Add the M31 based eUSB2 PHY bindings
+      dt-bindings: usb: qcom,dwc3: Add SM8750 compatible
+      phy: qcom: qmp-combo: Add new PHY sequences for SM8750
+      phy: qcom: Update description for QCOM based eUSB2 repeater
+      phy: qcom: Add M31 based eUSB2 PHY driver
+      arm64: dts: qcom: sm8750: Add USB support to SM8750 SoCs
+      arm64: dts: qcom: sm8750: Add USB support for SM8750 MTP platform
+      arm64: dts: qcom: sm8750: Add USB support for SM8750 QRD platform
+
+ .../bindings/phy/qcom,m31-eusb2-phy.yaml           |  79 +++++
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml         |   2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+ arch/arm64/boot/dts/qcom/sm8750-mtp.dts            |  24 ++
+ arch/arm64/boot/dts/qcom/sm8750-qrd.dts            |  24 ++
+ arch/arm64/boot/dts/qcom/sm8750.dtsi               | 164 +++++++++++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/phy/qualcomm/Kconfig                       |  16 +-
+ drivers/phy/qualcomm/Makefile                      |   1 +
+ drivers/phy/qualcomm/phy-qcom-m31-eusb2.c          | 325 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c          | 223 +++++++++++++-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v8.h     |  38 +++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v8.h         |  32 ++
+ drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v8.h |  64 ++++
+ .../phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v8.h    |  68 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h                |   5 +
+ 16 files changed, 1065 insertions(+), 4 deletions(-)
+---
+base-commit: 46086739de22d72319e37c37a134d32db52e1c5c
+change-id: 20241223-sm8750_usb_master-f27aed7f6d40
+
+Best regards,
+-- 
+Melody Olvera <melody.olvera@oss.qualcomm.com>
+
 
