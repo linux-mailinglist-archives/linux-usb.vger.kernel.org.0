@@ -1,150 +1,225 @@
-Return-Path: <linux-usb+bounces-22870-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22871-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4074AA8372E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 05:23:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1BB5A837D4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 06:27:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 242BF465B8E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 03:23:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB6FF8A44F3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 04:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780061F09A3;
-	Thu, 10 Apr 2025 03:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8401F0E56;
+	Thu, 10 Apr 2025 04:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I5p11Y35"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R++rCazk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C651EF0AA
-	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 03:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0191C8609
+	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 04:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744255381; cv=none; b=SzPhvrEsr3Anx1Oqh9QYC8TkBig/IHQPKtEofeapyTcBTbUzVhTE7Vp1gNE5RSE9wEYEMneA4dtT3y/jlKfXsrsJZ2ti14hxPm7VU1MMgrfIWcSsZTnY4HP0uVthBefYtBi4H+1dN7+dBQM3aRpq/zFzCz6LzNA/cQEnheQfQck=
+	t=1744259249; cv=none; b=G5Xy0D2KcajiWm9oFESatrMRjI0qsWKLBCbhF9n9UXw/T4dZjhMO7tn+GIQb1XSl8EVKadITJzTp7iA2R1S6sQft8mwT255J72s1fCwYXpKkrLiR+1g5mKNRCOh0Fbpf87N0bO/aWtH4iCv5B0dqUkCO2Xzrpr9QZo+hgXxhuT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744255381; c=relaxed/simple;
-	bh=qPeh0Ja4yEU1rTr9eUKX8gtlUq67HRNq5YbB4fNpeqg=;
+	s=arc-20240116; t=1744259249; c=relaxed/simple;
+	bh=ajQyQf55NxToaWLCpRFts55GQKwV/RZ13SoSKFq4O8c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KaOMlB83d63b78oQKi/441Z5O8WlTnDwjcC/s5VR6/Bk1+etDAIAw87/ZedbwKfyNwsJaaZBtYt8Yf+6oFIXTSA8fNrguE67TQI/IwcHSzmBOeJm9vUeKRXjKt5hvLEXxfv1StDABfuBxRZP8ZhSSeQmukba9vSXHwND9jR3xa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I5p11Y35; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 539HE1CX005921
-	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 03:22:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=pfANK38r2/Y0veNUeTUAv/nE
-	G8v1dA3z5o6Mox8qnqo=; b=I5p11Y35E3uk4R+AslEb/sZe87E9qPzIOb9grMUy
-	Q9vDG4rbEC6+ZZGjaVVMvUg5QdTvkpP4qsX9g9GMymYOJ5AO45WLI50Sgqj+it0G
-	kr/imzKJHfVmBDD/9qSyTjASDo4UyanuKPW9QhmzKO6XZLvhUuWjm6lOiwD+Ecid
-	YwdWQYEK6deJBbafAp2j1gotiX+NUdNYbS68TyLByWCLS6bE/vtACHIRPuNaJqCX
-	ikEC9NU9/N2+i3kfMxvZqD8MW3nMeFwNrGCRhWUVUKwmoPVe/EklmrToEI695tvJ
-	OMXLjeYxeZuVyPGXRqggt0aWzyT0wpJC69b7+5Jaj2RIPw==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twtb5jb8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 03:22:58 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7c5cd0f8961so83262885a.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Apr 2025 20:22:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744255377; x=1744860177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pfANK38r2/Y0veNUeTUAv/nEG8v1dA3z5o6Mox8qnqo=;
-        b=e2a8oN/fTgfEFs9+U7+OP+4v6aqLskgwRRzhnipry14mWXFCcI7IAqAG+r4I0BLaQg
-         1BfekfYTVseeX0nGRmkRcZy9flBN3KqJkxab7JLo+kiGIk5aMnaoMv+lzqzhKbe1xb+R
-         d3u6yyTcmDt7CXd1JhCDZdOFR2kTpXNcqxfQXEOlluWmed7YwIzLFBx7f8Ggr41KC2dE
-         VzxGI8eqBAGyA7heDHdXzanNiUPblrVk0LpcBPZJhl1laSP7WXdX2vVMGuoYAarwr3Ks
-         L0DktMIbpx7MSInzMFJI8RcX2LpLWYgOVD9hGhPCp0PjWk4tCV27fDpv+T3RT8+RuOjF
-         JYYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGydG7Ljl53iaawseYUb6bgU+klLrTa7Zcy8UXvPF2Rduu7suOgIr3v824RpCaFlUVw65zG60brAM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy35oYbgN4cE5FxoyfmGpK6IKnPAZdy6rfB9nlMDdecN10UDdzt
-	b9BALlGbCyZcErCBhc3CjHelKb7xIIoc6TRf/ERq5KjPatsmSzPYzAaJK4S9s8Aux1WMBHyFuWP
-	ovudZdZo1eIJ66m+RpIs9Vq/LvNyyH5TwcjZSL4YyPh4xuImMX/z/RWf7rhU=
-X-Gm-Gg: ASbGnctsFD5sxcZYDVjTGwF53p4a3MNU7/gXFSJsf+wXreHKGDidwsiuikXxiihV9yU
-	j7eLClHmAS1HdF+f7dqdlKk4YxqjzNwed8eHlpPQMRW97FU1Oczy6gFwmsYAJmrNLRSoha/iTJ4
-	Ai0HpdLi7AKI1cTlm+monzJG9WUNOP/tag6D0Pg/jacIPHLsjPGS02jvJOoyPk1BWxlpHea0to/
-	EDU6gjf0T7Vr9ozeT0snvrSjCT5gkDz4CEgjKcR41Hhxm0drtn1svc+Ijk+JizhAuRAO+JDy9NJ
-	/TK6eDJZAIecG0R9Uf3QXIS7/Vsa+qye/AH6RK8MphC3apaQmLUYd/IZQrRF8eDflHmGLJ7O43A
-	=
-X-Received: by 2002:a05:620a:4011:b0:7c5:5d4b:e621 with SMTP id af79cd13be357-7c7a81b6b63mr131507885a.37.1744255377675;
-        Wed, 09 Apr 2025 20:22:57 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEvdPKTSB3sqkRdmy4+rKmOaEHDNl9nfoJyk2DFMvWHYvIaySZUI2uhQyy+e3BTNZL0wgeEFg==
-X-Received: by 2002:a05:620a:4011:b0:7c5:5d4b:e621 with SMTP id af79cd13be357-7c7a81b6b63mr131496485a.37.1744255375618;
-        Wed, 09 Apr 2025 20:22:55 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465d4ebbsm3476721fa.73.2025.04.09.20.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 20:22:54 -0700 (PDT)
-Date: Thu, 10 Apr 2025 06:22:53 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Melody Olvera <melody.olvera@oss.qualcomm.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 06/10] phy: qcom: Add M31 based eUSB2 PHY driver
-Message-ID: <fvbfsvx4ibixnvdh7ujt3kaybjqj3fdla4k5sx6lguegepxipg@ci5nmq36irpr>
-References: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
- <20250409-sm8750_usb_master-v4-6-6ec621c98be6@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5pqyPmkG4M5lJITgoHM4AqdYx0LJsaCZBX7+6DSBjzLgfiMNq/in2cnqjOxjtWyindAXjDzSet0MWzNK3F1aN9UjUs99BK5wrToXK5LjgkBKKOoAKUS7q1DYIO5zgCCq/6lXvFiB39sDXHh0hUNL/1VDtipssByLmYfLmmOt4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R++rCazk; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744259247; x=1775795247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ajQyQf55NxToaWLCpRFts55GQKwV/RZ13SoSKFq4O8c=;
+  b=R++rCazkqeXd8HlOkrH8YfbiMIWxSLOPfW0hrGWv+F4gpmm5di2hin7u
+   YO3vJGOg7IYFOytbOEXhylL+ZdRHwXyOKXP7aHVzKzd9cijtX6URVZQ7B
+   6ne/+GfAaZm48GDquVo4Wus4lQcUsGZI/fpRDS8sAmdb8oPCR99WL68W/
+   6UDyQIQzNPS8ZT6k7aYPfsLzGb3ThF4UnIlm+4RpWCVzrfKaxHPqPMRyp
+   HX5u2thHJwErEFYUzW9bWpVEa5dnTfxHxHhFQweMLeX33nwyL8627cnZd
+   mMh9+2qhj3QrEkP0U3nlsEohwQgtR0WR1zM0CqYFfNme9zcJUH2XyDhfB
+   Q==;
+X-CSE-ConnectionGUID: kBkOB+scRtirP8pgrMf17g==
+X-CSE-MsgGUID: Tu1w+OhMSqynEyld16daeQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45851297"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="45851297"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 21:27:27 -0700
+X-CSE-ConnectionGUID: ds1yBOCdQBuxOvO5d6WcDA==
+X-CSE-MsgGUID: 6WcNiw5CSIOMwG63SjqSnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="128639146"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Apr 2025 21:27:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 462B2368; Thu, 10 Apr 2025 07:27:24 +0300 (EEST)
+Date: Thu, 10 Apr 2025 07:27:23 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Raul Rangel <rrangel@chromium.org>,
+	Opal Voravootivat <puthik@google.com>,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	"Gong, Richard" <Richard.Gong@amd.com>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>
+Subject: Re: Wake on connect / wake on disconnect
+Message-ID: <20250410042723.GU3152277@black.fi.intel.com>
+References: <20250404060203.GM3152277@black.fi.intel.com>
+ <3b283147-cd32-410e-a163-9e603fd40bc1@gmail.com>
+ <20250404115346.GN3152277@black.fi.intel.com>
+ <98539971-3b43-4d64-a105-6790198c46d1@amd.com>
+ <20250404161008.GO3152277@black.fi.intel.com>
+ <f9806a24-875f-4c44-9694-96b62a6aefd9@gmail.com>
+ <5f9004aa-9b51-474d-9cb0-c8c4e23b19f4@kernel.org>
+ <CAHQZ30C=7d1DkHYTixrgmArCwKHzhxBn602P=YY5rP6OcAXuVw@mail.gmail.com>
+ <20250407055520.GP3152277@black.fi.intel.com>
+ <dcf41124-d693-4b0f-a1d1-7ad7cd914449@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250409-sm8750_usb_master-v4-6-6ec621c98be6@oss.qualcomm.com>
-X-Proofpoint-GUID: msUtbMb18lwHik25xhrbUhztQplHzyb9
-X-Authority-Analysis: v=2.4 cv=LLlmQIW9 c=1 sm=1 tr=0 ts=67f73992 cx=c_pps a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=RKJlQbLL0f_VtHaaO3gA:9 a=CjuIK1q_8ugA:10
- a=NFOGd7dJGGMPyQGDc5-O:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: msUtbMb18lwHik25xhrbUhztQplHzyb9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-09_06,2025-04-08_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- clxscore=1015 mlxlogscore=459 malwarescore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504100023
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dcf41124-d693-4b0f-a1d1-7ad7cd914449@kernel.org>
 
-On Wed, Apr 09, 2025 at 10:48:17AM -0700, Melody Olvera wrote:
-> From: Wesley Cheng <quic_wcheng@quicinc.com>
+On Wed, Apr 09, 2025 at 12:03:52PM -0500, Mario Limonciello wrote:
+> On 4/7/2025 12:55 AM, Mika Westerberg wrote:
+> > On Fri, Apr 04, 2025 at 10:55:35AM -0600, Raul Rangel wrote:
+> > > On Fri, Apr 4, 2025 at 10:20 AM Mario Limonciello <superm1@kernel.org> wrote:
+> > > > 
+> > > > 
+> > > > 
+> > > > On 4/4/25 11:16, Mario Limonciello wrote:
+> > > > > 
+> > > > > 
+> > > > > On 4/4/25 11:10, Mika Westerberg wrote:
+> > > > > > On Fri, Apr 04, 2025 at 10:03:18AM -0500, Mario Limonciello wrote:
+> > > > > > > On 4/4/2025 6:53 AM, Mika Westerberg wrote:
+> > > > > > > > On Fri, Apr 04, 2025 at 06:47:31AM -0500, Mario Limonciello wrote:
+> > > > > > > > > On 4/4/25 01:02, Mika Westerberg wrote:
+> > > > > > > > > > Hi Mario,
+> > > > > > > > > > 
+> > > > > > > > > > On Thu, Apr 03, 2025 at 01:12:07PM -0500, Mario Limonciello wrote:
+> > > > > > > > > > > Mika,
+> > > > > > > > > > > 
+> > > > > > > > > > > Recently there are some conversations about wake-up from connect/
+> > > > > > > > > > > disconnect
+> > > > > > > > > > > happening and I wanted to get some background from you about the
+> > > > > > > > > > > current
+> > > > > > > > > > > policy set in tb_switch_suspend().
+> > > > > > > > > > > 
+> > > > > > > > > > > Wake on connect and disconnect are only used for runtime, not for
+> > > > > > > > > > > system
+> > > > > > > > > > > suspend.  Would you be open to adding wake on connect as well for
+> > > > > > > > > > > system
+> > > > > > > > > > > suspend?  This should help enable use cases like plugging in a
+> > > > > > > > > > > closed laptop
+> > > > > > > > > > > to a dock (which works on Windows).
+> > > > > > > > > > 
+> > > > > > > > > > Don't we already have a similar for all usb4_portX devices? That
+> > > > > > > > > > does not
+> > > > > > > > > > work for you?
+> > > > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > I think that will functionally work - but I'll double check.
+> > > > > > > > > 
+> > > > > > > > > However usb_portX power/wakeup defaults are 'disabled' so this
+> > > > > > > > > would need a
+> > > > > > > > > udev rule.  Could we set the kernel default for those to 'enabled'
+> > > > > > > > > instead?
+> > > > > > > > 
+> > > > > > > > No because that would trigger wakeup each time you unplug/plug and
+> > > > > > > > this is
+> > > > > > > > certainly not good if you close the lid, unplug from dock and throw the
+> > > > > > > > laptop to your backpack. Chrome uses this with "dark resume" so if
+> > > > > > > > this is
+> > > > > > > > supported by the userspace then it can also enable these.
+> > > > > > > 
+> > > > > > > Ahhh.  I was thinking specifically with wake on connect that's not a
+> > > > > > > problem, but the sysfs knob for the port changes both wake on connect
+> > > > > > > and
+> > > > > > > wake on disconnect.
+> > > > > > > 
+> > > > > > > Is there actually a use case for chrome with wake on disconnect?  IE
+> > > > > > > if we
+> > > > > > > didn't turn on wake on disconnect but defaulted to wake on connect would
+> > > > > > > things be OK?  Or made the sysfs knob control only wake on disconnect?
+> > > > > > 
+> > > > > > Good guestion - I don't know ;-) The Chrome folks wanted this so I
+> > > > > > suppose
+> > > > > > their usecase is specifically that dark resume and I think that's when
+> > > > > > you
+> > > > > > unplug a device so disconnect. Not so sure about wake on connect.
+> > > > > 
+> > > > > I found the original patch from Rajat [1].
+> > > > > 
+> > > > > Rajat, any comments?  Could you loop in the right people from the Chrome
+> > > > > side to ask?    I think my "preference" would be that we make "wake on
+> > > > > connect" always enabled and then let the sysfs knob control "wake on
+> > > > > disconnect".
+> > > > > 
+> > > > > [1] https://lore.kernel.org/linux-usb/20221101115042.248187-1-
+> > > > > rajat.khandelwal@intel.com/
+> > > > 
+> > > > Oh Rajat's email bounced.  The only person I know that I've worked on
+> > > > wakeup related stuff is Raul.  I'll add him.
+> > > > 
+> > > > Mika, Raul,
+> > > > 
+> > > > Could you pull in current Chrome people from Intel and Google that could
+> > > > comment here?
+> > > 
+> > > + Opal who should be able to answer the question regarding wake on
+> > > connect/disconnect.
+> > 
+> > Added Utkarsh from Intel side.
 > 
-> SM8750 utilizes an eUSB2 PHY from M31.  Add the initialization
-> sequences to bring it out of reset and into an operational state.  This
-> differs to the M31 USB driver, in that the M31 eUSB2 driver will
-> require a connection to an eUSB2 repeater.  This PHY driver will handle
-> the initialization of the associated eUSB2 repeater when required.
+> I had another look at usb4_port.c the flows used.  This is the call path:
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Melody Olvera <melody.olvera@oss.qualcomm.com>
-> ---
->  drivers/phy/qualcomm/Kconfig              |  10 +
->  drivers/phy/qualcomm/Makefile             |   1 +
->  drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 325 ++++++++++++++++++++++++++++++
->  3 files changed, 336 insertions(+)
+> tb_switch_suspend()
+> ->tb_switch_set_wake()
+> ->->usb4_switch_set_wake()
 > 
+> The flags for wakeup policy are set in tb_switch_suspend() and then passed
+> as arguments down to usb4_switch_set_wake().  This enumerates whether wake
+> is set for any usb4_port device and applies the flags to that device.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Indeed. So this actually never worked.
 
--- 
-With best wishes
-Dmitry
+> So AFAICT that means that even on ChromeOS there won't be a wake on connect
+> or wake on disconnect event for suspend/resume no matter what the sysfs
+> files for each port are set to.
+> 
+> In summary; my ask is whether we can do this:
+> 
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 6a2116cbb06f9..f2f6a085a742b 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -3599,6 +3599,7 @@ void tb_switch_suspend(struct tb_switch *sw, bool
+> runtime)
+>                 flags |= TB_WAKE_ON_USB4;
+>                 flags |= TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON_DP;
+>         } else if (device_may_wakeup(&sw->dev)) {
+> +               flags |= TB_WAKE_ON_CONNECT;
+>                 flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 |
+> TB_WAKE_ON_PCIE;
+>         }
+> 
+> That would allow the use case of "plug in a closed laptop to a dock" and it
+> wakes up.
+
+I think we should set both here. Someone will want the unplug to behave the
+same and at that point it is hard to change anymore to avoid breaking
+things. Then it is up to the userspace to enable per USB4 port, and deal
+with (e.g dark resume).
 
