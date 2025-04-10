@@ -1,219 +1,86 @@
-Return-Path: <linux-usb+bounces-22920-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22921-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 273F1A84796
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 17:18:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE7D4A84AA0
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 19:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C56419E75D7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 15:18:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E54BE1BA0499
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 17:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35211EB1A1;
-	Thu, 10 Apr 2025 15:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAF71EE7BC;
+	Thu, 10 Apr 2025 17:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y7MWb65q"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0BkfbZqa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF341E9B2F;
-	Thu, 10 Apr 2025 15:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F92126BFF;
+	Thu, 10 Apr 2025 17:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744298264; cv=none; b=tSIO8SreJ8bpzFR5VDKXiMUTB9anFbj3ZK6hTBKijpiH0HSUA0f0m/wywToRGgUePwzugrR3F72pMlP0mwSxl2RkITyiDtXQCJUWpXx2XWHe/SU11hiwITNfAWoIqA8x1jB2b3/soU12ghaLdNDr+BtIWjXzz6+IArhD59+WcrU=
+	t=1744304669; cv=none; b=Fcu8LGmPeAl1oVj2ddu7oXIkBnTSI/8RMtjbENhxWWLMS/uGVotmIfdNcopltkM7vQkhJIBvJXw5ItNKR7XN8xrONX3q5kL/noVg/N/mGECm/bnsTihu0vm0yRptJsfpcELCGCp+8TJaN+az4UG3teDLeqxh/FSTAhRxXyvrHFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744298264; c=relaxed/simple;
-	bh=Jkt5Se38Pf/t3Pe9IkB7jcqZB9143Imd57ts1oxbTJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K0ukA5iDcqlwtaGQZU42SO9mso4OftgQ8JjjutErueevQEZc+Dw7v+4Ha9+0TkKGTWXdthjsGmzX74eq2UjCCeNG2JRHetqGHbO6IelGgXrKeSLq7YhFyGdUBQhE1Ci82vWq9usXCa9W/g32Ub21L0vi/Izqk3tsTatdLQRkNRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y7MWb65q; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744298263; x=1775834263;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Jkt5Se38Pf/t3Pe9IkB7jcqZB9143Imd57ts1oxbTJY=;
-  b=Y7MWb65qGIC3L5yCF2XZKAecgBvUIAccXe/inFuBk9ZK+eXobeWrH9w1
-   0zEKWaFGymJMT1t6KNza4kQ7Y40ehg2tXmHY6wuuGnKrAO7diHRG5MA/E
-   W/shaRnezN4+jaQg9HWfUsgy8xLguhWZTDkGm7CFfmCIx7VNxVKYvldhT
-   6ftE2kc7fMzLN8Qd/i2b1W8hpx3HSWe8DPEzBbE020AG92bWXfzv/9+dx
-   cldrccZBUbB/pzuQ0f88GCcyYCEe+dReEWqCRKblIakDURNjMDMoHgvPC
-   K24KAPy/mPsau+5n4acGu5fNSSZc4bmHOAXFOMsAZ48xUop8YPbKigSIm
-   w==;
-X-CSE-ConnectionGUID: UZrGcBX+S0iqdpo3xrhE6g==
-X-CSE-MsgGUID: 9usRH7ctSrONTTGiVlHmjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="48534991"
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="48534991"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:17:42 -0700
-X-CSE-ConnectionGUID: j9Xu/5bnTHGGuYA58KhSRw==
-X-CSE-MsgGUID: i72DV4cdSrCsqtccQR/5dA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="128913263"
-Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Apr 2025 08:17:41 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Devyn Liu <liudingyuan@huawei.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 5/5] xhci: Limit time spent with xHC interrupts disabled during bus resume
-Date: Thu, 10 Apr 2025 18:18:27 +0300
-Message-ID: <20250410151828.2868740-6-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250410151828.2868740-1-mathias.nyman@linux.intel.com>
-References: <20250410151828.2868740-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1744304669; c=relaxed/simple;
+	bh=vYtJC6oVobTd9CBPOufa59mL2FSgDqugsEkV3bOCIyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QdeRxKdj3USvDN1E4yvbEMNbdNIqBr/sHxfBAfmU17C2stsnIcrbt2RG+waQQwMP/vUPmB2pADgJpCAz0i/vqlrKHjmvu0Lb3KoiXe83sna7Ew7FlQtgCjOWPl95ZVdbuE7Dhucr68/bY1hopMXruhdN5RL66DlyYv8NY6FGVYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0BkfbZqa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB55AC4CEE8;
+	Thu, 10 Apr 2025 17:04:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1744304668;
+	bh=vYtJC6oVobTd9CBPOufa59mL2FSgDqugsEkV3bOCIyo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0BkfbZqaoW2OjA6Bea50+7lcxK5ZhSGm3fuCAkJB4iL3Qae3cY+Bt4nlMn4OLiVzX
+	 t7n5XoTxCUZRGndUnKEEvds9ojbZUB2GgaapI0ak6XU49cbmXtN1KQRoQE/VivIxpb
+	 dJLo8ySvBODZvVRBaeu/eBIWOUelW6N9RnSJJtAU=
+Date: Thu, 10 Apr 2025 19:02:52 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Zijun Hu <zijun_hu@icloud.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+Subject: Re: [PATCH] usb: dwc3: Simplify memset struct array
+Message-ID: <2025041024-napping-renewed-1b41@gregkh>
+References: <20250410-simplify_memset-v1-1-c7bbd850e520@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410-simplify_memset-v1-1-c7bbd850e520@quicinc.com>
 
-Current xhci bus resume implementation prevents xHC host from generating
-interrupts during high-speed USB 2 and super-speed USB 3 bus resume.
+On Thu, Apr 10, 2025 at 09:30:00PM +0800, Zijun Hu wrote:
+> From: Zijun Hu <quic_zijuhu@quicinc.com>
+> 
+> For 'struct property_entry props[6]', Simplify its memset to
+> 'memset(props, 0, sizeof(props))'.
+> 
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
+>  drivers/usb/dwc3/host.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index b48e108fc8fe7343446946e7babf9ba3bc0d2dc3..5a2fe4c6b0e433c32945c136b8b35e1912e3acc8 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -158,7 +158,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  		goto err;
+>  	}
+>  
+> -	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+> +	memset(props, 0, sizeof(props));
 
-Only reason to disable interrupts during bus resume would be to prevent
-the interrupt handler from interfering with the resume process of USB 2
-ports.
+What does this really help with?  It feels like churn to me.
 
-Host initiated resume of USB 2 ports is done in two stages.
+thanks,
 
-The xhci driver first transitions the port from 'U3' to 'Resume' state,
-then wait in Resume for 20ms, and finally moves port to U0 state.
-xhci driver can't prevent interrupts by keeping the xhci spinlock
-due to this 20ms sleep.
-
-Limit interrupt disabling to the USB 2 port resume case only.
-resuming USB 2 ports in bus resume is only done in special cases where
-USB 2 ports had to be forced to suspend during bus suspend.
-
-The current way of preventing interrupts by clearing the 'Interrupt
-Enable' (INTE) bit in USBCMD register won't prevent the Interrupter
-registers 'Interrupt Pending' (IP), 'Event Handler Busy' (EHB) and
-USBSTS register Event Interrupt (EINT) bits from being set.
-
-New interrupts can't be issued before those bits are properly clered.
-
-Disable interrupts by clearing the interrupter register 'Interrupt
-Enable' (IE) bit instead. This way IP, EHB and INTE won't be set
-before IE is enabled again and a new interrupt is triggered.
-
-Reported-by: Devyn Liu <liudingyuan@huawei.com>
-Closes: https://lore.kernel.org/linux-usb/b1a9e2d51b4d4ff7a304f77c5be8164e@huawei.com/
-Cc: stable@vger.kernel.org
-Tested-by: Devyn Liu <liudingyuan@huawei.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 30 ++++++++++++++++--------------
- drivers/usb/host/xhci.c     |  4 ++--
- drivers/usb/host/xhci.h     |  2 ++
- 3 files changed, 20 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index c0f226584a40..486347776cb2 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1878,9 +1878,10 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 	int max_ports, port_index;
- 	int sret;
- 	u32 next_state;
--	u32 temp, portsc;
-+	u32 portsc;
- 	struct xhci_hub *rhub;
- 	struct xhci_port **ports;
-+	bool disabled_irq = false;
- 
- 	rhub = xhci_get_rhub(hcd);
- 	ports = rhub->ports;
-@@ -1896,17 +1897,20 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 		return -ESHUTDOWN;
- 	}
- 
--	/* delay the irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp &= ~CMD_EIE;
--	writel(temp, &xhci->op_regs->command);
--
- 	/* bus specific resume for ports we suspended at bus_suspend */
--	if (hcd->speed >= HCD_USB3)
-+	if (hcd->speed >= HCD_USB3) {
- 		next_state = XDEV_U0;
--	else
-+	} else {
- 		next_state = XDEV_RESUME;
--
-+		if (bus_state->bus_suspended) {
-+			/*
-+			 * prevent port event interrupts from interfering
-+			 * with usb2 port resume process
-+			 */
-+			xhci_disable_interrupter(xhci->interrupters[0]);
-+			disabled_irq = true;
-+		}
-+	}
- 	port_index = max_ports;
- 	while (port_index--) {
- 		portsc = readl(ports[port_index]->addr);
-@@ -1974,11 +1978,9 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 	(void) readl(&xhci->op_regs->command);
- 
- 	bus_state->next_statechange = jiffies + msecs_to_jiffies(5);
--	/* re-enable irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp |= CMD_EIE;
--	writel(temp, &xhci->op_regs->command);
--	temp = readl(&xhci->op_regs->command);
-+	/* re-enable interrupter */
-+	if (disabled_irq)
-+		xhci_enable_interrupter(xhci->interrupters[0]);
- 
- 	spin_unlock_irqrestore(&xhci->lock, flags);
- 	return 0;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index ca390beda85b..90eb491267b5 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -322,7 +322,7 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- 		xhci_info(xhci, "Fault detected\n");
- }
- 
--static int xhci_enable_interrupter(struct xhci_interrupter *ir)
-+int xhci_enable_interrupter(struct xhci_interrupter *ir)
- {
- 	u32 iman;
- 
-@@ -335,7 +335,7 @@ static int xhci_enable_interrupter(struct xhci_interrupter *ir)
- 	return 0;
- }
- 
--static int xhci_disable_interrupter(struct xhci_interrupter *ir)
-+int xhci_disable_interrupter(struct xhci_interrupter *ir)
- {
- 	u32 iman;
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 28b6264f8b87..242ab9fbc8ae 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1890,6 +1890,8 @@ int xhci_alloc_tt_info(struct xhci_hcd *xhci,
- 		struct usb_tt *tt, gfp_t mem_flags);
- int xhci_set_interrupter_moderation(struct xhci_interrupter *ir,
- 				    u32 imod_interval);
-+int xhci_enable_interrupter(struct xhci_interrupter *ir);
-+int xhci_disable_interrupter(struct xhci_interrupter *ir);
- 
- /* xHCI ring, segment, TRB, and TD functions */
- dma_addr_t xhci_trb_virt_to_dma(struct xhci_segment *seg, union xhci_trb *trb);
--- 
-2.43.0
-
+greg k-h
 
