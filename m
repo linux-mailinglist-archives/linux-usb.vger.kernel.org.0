@@ -1,166 +1,138 @@
-Return-Path: <linux-usb+bounces-22923-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22924-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68575A84F52
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 23:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BE1CA84F8B
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 00:15:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7120A4C63B8
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 21:55:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 203154C7987
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 22:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A5D20C00B;
-	Thu, 10 Apr 2025 21:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DAB820E319;
+	Thu, 10 Apr 2025 22:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkYh24IS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767E41F03F8
-	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 21:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1111BAD5E;
+	Thu, 10 Apr 2025 22:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744322091; cv=none; b=DCYz15j5QiVO8tiyBjhKGQK7vUvfLsF0m5w/n+x12Sq+zYGUMMWj1iuJ1cWN0hoiuVK27K9CtvSCPdH7sflq7AdgZmUvL98RldFOl9meJHKHiBgeujGTj4T83p8hsyB04fODjPIQcXQnNG4wmuFIl5s/wsj1BqthIMYKCodPFcM=
+	t=1744323335; cv=none; b=euuxiwl9POjdmnaoz3o9L/UkLkGQqB4vvMpQ3YgpBsxsuZokY1v+QA7p1jfeidVIcwfjdM9qffMY6WpHLPfiTOP7Nslltk/GZZewcRzpVBqltTQEzmQq+Cv2E6GhXcsSHOmawLg4uAuPdyWeVWuajpXKcM7StMjXBA07UkQZD/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744322091; c=relaxed/simple;
-	bh=fta3R4t40tTXB23G6QY7NjF/Qlb0isrhbuKlqi8dmNw=;
+	s=arc-20240116; t=1744323335; c=relaxed/simple;
+	bh=eD7OpbrV355NOsVgIK+u+xFAJHuoZLTjFTxvYn3y7kk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=afc6u+XOgBGhUFrdPR6syWd4Up/MUYj441IBzSvYRvNBu8XEZ8KMq3LAlgeNqnt62OQwI+lGCerzuakz2iyCDPqc1HXU9RzX/1hwXIVlaO9LQ8Ga+PLEdM4qWWz+PwTRN16pth1h+3UBURWVKMW55GautsWDM8MjxG2zmBzd+Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1u2zr6-0005Z1-IA; Thu, 10 Apr 2025 23:54:40 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1u2zr4-004Kdv-2Y;
-	Thu, 10 Apr 2025 23:54:38 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1u2zr4-00ATw4-2E;
-	Thu, 10 Apr 2025 23:54:38 +0200
-Date: Thu, 10 Apr 2025 23:54:38 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH] usb: typec: mux: fsa4480: add regulator support
-Message-ID: <Z_g-Hl-G9IwRZmqF@pengutronix.de>
-References: <20250404-ml-topic-typec-mux-fs4480-v1-1-475377ef22a3@pengutronix.de>
- <aiechdq62mjgta5p5g3s33okgnp56fe5ing2va7vaaf74nerug@nvrwrgnoyp7g>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fkSqFtDIGMu5XIiten+Db2t+BCWaPuPU0LFnPhaJLfOqbA2L0rN/La+AO9eXqyQ5Q2fCgfCczeiHQwtCWEtPkw3pdBu4ToG/tLFxQJGFoLBzcnUSsEtq9BB6CPEN13fxMkLXePFVOfwYK1KC2Xs2pEChZ5w1zxyESy3GgxHpQrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkYh24IS; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso14645555e9.1;
+        Thu, 10 Apr 2025 15:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744323332; x=1744928132; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2D0fm6noiDhUqbW229izXLjEq5gR5IU1/g8b5nJLWms=;
+        b=RkYh24ISbo9RkfQU0dZlXu3EXNQo7RUSnionBaRfRBBcp2inqlZF36mCVjQ46sjDhc
+         QChEqEriNep5CmLl5Jz3jOuUIVjNcbqFuc2d6i3/xfLqsCnkJkMtRLJoUNBsO/VIyUYs
+         ZnrbEzPFrH7VbSx0UpMOWlNPmQPuV7fl3/H2+/+6LUOLf3Yn+YNj8Mm3D7E3aa7CGPU5
+         Z0ZFi+z2/wdb4Jp2M0h2c0+/eWUJOYywlgEKi2J0D7D1isJ1Q2y7mNRdI7/rA4MzDY8s
+         crhjf/8OuntNy3xGS7KOjGBciFlSWbwWqwYhOSBx6euTMHrxHrjdxbOi45R9z9FA8B0H
+         Cj0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744323332; x=1744928132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2D0fm6noiDhUqbW229izXLjEq5gR5IU1/g8b5nJLWms=;
+        b=eh3fCqnlLH4iXvTCPwac21L965Q8IkKTqOSxFmppylwg2JbMjpLJA1V9WXCQ5+fEyK
+         gv48oSwj26tkn7Gjm8ExwvnEJZiVzdjQnFxtIN45bgKNNHgTIpCIvPy7I96AeaCfmiW6
+         5mVOX+4MkAPv09J9aWbs7KZ2WiWNWiLFwRgNpcDWmxBC34m95NxqT9PYlETBW+0oCJPB
+         SHvpSZiEH5f7tp1mAzQVu9AJjY9VwvjuuFwFghpgnYKMrwaoqxWza2FvTyyMyZ6bKLiA
+         YnEUvbrnYWTYm+Bjx/AU+h84XtzS7d9m56CQqPcYwQPQtQ9L2Su09LAIcSotR1eQsf17
+         GqLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUU/VKL3+KGMKVwANWLbClXk/RrM9p+3ZrO59EcCeuyGwIlluXoVwWiME76TpKJHWsVTT0UBOfYAEaKXUo=@vger.kernel.org, AJvYcCUnOZuqDiW809C2kTpn7tXwJ4e78AAkNYYg8xF11egYnUOOuHJgT3zFb3Qa23tOQRxcRLW6ihYI20dg@vger.kernel.org, AJvYcCXuorECJr9W7K//DFdkZtrGyKmUtqUJRYuY97sjc+dt+eKftExj8MIPBbEwwBL6ETBIXlASQ3Ld@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgXISl6pvdpttlDj5E4ukBvu3uSVEIQ0iMpK+KkOKxgNHt/jX1
+	LPN0h6Y9//ACWvnMQ9Ay2aOeT4sJ4Lp0lRX1oV9EnbiqdXOYTlZH
+X-Gm-Gg: ASbGncv+GP0+V+XavxzJyO6YML8eECd+927f3L+6ldsZNsHFbjVJWSuQbx1hS9gP44X
+	MgQe2QeEymNo9gsfDyoAhfnf2I1Vhrtpd50f+YJG2EcCJ4TTEdQxPGA/d6y/jiFxOSUsnuPBLxt
+	5gi9d6YLHhE3Nokf6k3b2gis/pTPkZEsTMhck1P+hJBPDUy/4AcAC3j68LGoqbmLNtxY5Dnb+29
+	BPepIEgoQBDEBpKS2skQnuajQcwjZIc/ytU+glmAyVw7aXF2PwiobfVeHilkuhU5JHHjatKkMpb
+	+RlRfmt4gUcMmN/vkpxsO4pW94qwbeDJ2eUSDjG9EMNY
+X-Google-Smtp-Source: AGHT+IGFZ4o1lTVxW+yAhuxVsX9mcVfiNdXCNZsSNdzp8rAl0RUCEbUwySvdn6Xq8tbTeM0CQsze8A==
+X-Received: by 2002:a5d:59a3:0:b0:390:e1e0:1300 with SMTP id ffacd0b85a97d-39eaaea4548mr215313f8f.33.1744323332170;
+        Thu, 10 Apr 2025 15:15:32 -0700 (PDT)
+Received: from qasdev.system ([2a02:c7c:6696:8300:a7c3:c7a5:ff1b:f4fa])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf445270sm151066f8f.81.2025.04.10.15.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 15:15:31 -0700 (PDT)
+Date: Thu, 10 Apr 2025 23:15:23 +0100
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+Subject: Re: [PATCH 1/4] net: fix uninitialised access in mii_nway_restart()
+Message-ID: <Z_hC-9C7Bc2lPrig@qasdev.system>
+References: <20250319112156.48312-1-qasdev00@gmail.com>
+ <20250319112156.48312-2-qasdev00@gmail.com>
+ <20250325063307.15336182@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fcBZ+xgpOmCxkGr9"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aiechdq62mjgta5p5g3s33okgnp56fe5ing2va7vaaf74nerug@nvrwrgnoyp7g>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20250325063307.15336182@kernel.org>
 
-
---fcBZ+xgpOmCxkGr9
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 08, 2025 at 03:18:14PM +0300, Dmitry Baryshkov wrote:
->On Fri, Apr 04, 2025 at 01:02:20AM +0200, Michael Grzeschik wrote:
->> The fsa4480 vcc lane could be driven by some external regulator.
->> This patch is adding support to enable the regulator before probing.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/typec/mux/fsa4480.c | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa=
-4480.c
->> index f71dba8bf07c9..c54e42c7e6a16 100644
->> --- a/drivers/usb/typec/mux/fsa4480.c
->> +++ b/drivers/usb/typec/mux/fsa4480.c
->> @@ -12,6 +12,7 @@
->>  #include <linux/regmap.h>
->>  #include <linux/usb/typec_dp.h>
->>  #include <linux/usb/typec_mux.h>
->> +#include <linux/regulator/consumer.h>
->>
->>  #define FSA4480_DEVICE_ID	0x00
->>   #define FSA4480_DEVICE_ID_VENDOR_ID	GENMASK(7, 6)
->> @@ -273,6 +274,10 @@ static int fsa4480_probe(struct i2c_client *client)
->>  	if (IS_ERR(fsa->regmap))
->>  		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize=
- regmap\n");
->>
->> +	ret =3D devm_regulator_get_enable_optional(dev, "vcc");
+On Tue, Mar 25, 2025 at 06:33:07AM -0700, Jakub Kicinski wrote:
+> On Wed, 19 Mar 2025 11:21:53 +0000 Qasim Ijaz wrote:
+> > --- a/drivers/net/mii.c
+> > +++ b/drivers/net/mii.c
+> > @@ -464,6 +464,8 @@ int mii_nway_restart (struct mii_if_info *mii)
+> >  
+> >  	/* if autoneg is off, it's an error */
+> >  	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+> > +	if (bmcr < 0)
+> > +		return bmcr;
+> >  
+> >  	if (bmcr & BMCR_ANENABLE) {
+> >  		bmcr |= BMCR_ANRESTART;
+> 
+> We error check just one mdio_read() but there's a whole bunch of them
+> in this file. What's the expected behavior then? Are all of them buggy?
 >
->Missing DT bindings update that describes this supply.
+ 
+Hi Jakub
+    
+Apologies for my delayed response, I had another look at this and I
+think my patch may be off a bit. You are correct that there are multiple
+mdio_read() calls and looking at the mii.c file we can see that calls to
+functions like mdio_read (and a lot of others) dont check return values.
+  
+So in light of this I think a better patch would be to not edit the 
+mii.c file at all and just make ch9200_mdio_read return 0 on     
+error. This way if mdio_read fails and 0 is returned, the         
+check for "bmcr & BMCR_ANENABLE" won't be triggered and mii_nway_restart
+will just return 0 and end. If we return a negative on error it may
+contain the exact bit the function checks.
 
-Looking into "Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml" it
-seems vcc-supply is alread documented. Is more needed?
+Similiar to this patch:
+<https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=c68b2c9eba38>
 
->> +	if (ret && ret !=3D -ENODEV)
->> +		return dev_err_probe(dev, ret, "Failed to get regulator\n");
->> +
->>  	ret =3D regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
->>  	if (ret)
->>  		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
->>
->> ---
->> base-commit: a1b5bd45d4ee58af4f56e49497b8c3db96d8f8a3
->> change-id: 20250404-ml-topic-typec-mux-fs4480-392407f94f84
->>
->> Best regards,
->> --
->> Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->
->--=20
->With best wishes
->Dmitry
->
+If this sounds good, should i send another patch series with all the
+changes? 
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---fcBZ+xgpOmCxkGr9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmf4Pg8ACgkQC+njFXoe
-LGQMCQ//anu/yApazaQv7M3ivouebs1Zozc2yhZYcrZvNZWAkqltbU3h1tV5uGyZ
-slQJemSkuXpI4kQOs0l4ExZup+qDudlYetr0w7VrrttgsW5dQVVE5+HLUwL25c3d
-NkwuXPAi/JlgX7K/coxHo8ztoHZviZ1BbN1rn+/MIMUdAEg+eDchLdthUJ2ZcoAH
-BQKf/29NRrDKrwvfJFA2BHzbxzyFxod5NIt+4oVmk2S+9mZgtotHLgGx/1Y19vEG
-mkPLJ1wcc196Te4s6RtH1FS0SG+OIniZuw6gQ0+zpL1L7CUIc9QAZfwSqwzc1Hk4
-h8M7nUeYQsLMpNlXayAXCA0L12aITJbzYYj+bXi36LWQUPFl8lHoSEan4cIVDzFO
-aJJoqef+OxhSB9R607kFttXBLPgdXzlv3b2IZU7IahjZYuzaAL+yQJQB+qx2L7yh
-zQDtj21keMTbsT1GU+BWg7mgv7W3MOWVpJ+mb5uY6ON5X8xPg7/N3TGZROobU4eu
-YJ9N6MvTfemJnuenBngnQ6fjlu5EpjnNxGZ5dy45zeVzsO1jNiBQtzoISA+SPDcR
-H4SlWtNt2hrozIDmEOFusSySGRSGzJShQrgw0I1my3oMMqdJjKZK0khYqAh2zMPd
-MMnGGqvsEG59wal+LRCNRMLdolrG0XAyUd1AhxV5VKAKZUEqC+g=
-=IbVA
------END PGP SIGNATURE-----
-
---fcBZ+xgpOmCxkGr9--
+> This patch should be split into core and driver parts.
+> -- 
+> pw-bot: cr
 
