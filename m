@@ -1,193 +1,182 @@
-Return-Path: <linux-usb+bounces-22862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E505EA83638
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 04:10:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 183E5A83694
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 04:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0FCB1B62D04
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 02:10:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CB113BF29B
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 02:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C579E1C6FE8;
-	Thu, 10 Apr 2025 02:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B82A51E379B;
+	Thu, 10 Apr 2025 02:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJWEVjio"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A99136327;
-	Thu, 10 Apr 2025 02:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA2513D893;
+	Thu, 10 Apr 2025 02:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744251017; cv=none; b=YTzZMePRfk15z6oap+l6H8qeHcYjak1bqxTzDrgPxCEA3dyOfYMGcZXBvYxw1o6IpGHBIx3j4OHtY1vRxNHxyGeSIKYHNLvm4qoZwvKg1EDxuUnI4HlpS5fG972bbZrTxpBCmsYj6EB8NRceeZnyQ5EwjHTHgDCHXxIQ16fgD0Y=
+	t=1744252706; cv=none; b=RpwTF1YzhnUAzTArhAkepaHBRPN4qMGjc3Gyd9/LvwAoZiEejlg9DrFIk5MEsO5xYPBr74q6NoeqUFnung0itbscsJXdGrbM2gC1tCkKXmM70kchh2b0M8Ntv+9xv53ZIiS/jiR/dmLVc2N7EdyLcOZU82c6P2d+ZLJUAFewzrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744251017; c=relaxed/simple;
-	bh=rusP4e8kCFAczgQY3Sdj8q9TkHCZznQjrAV+7N+Q6mc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QwU8C2Jkz1ytGKswz2UNhtQyzBJaI9H37Q2kh8HeBCatna6Ih9EAFY/0baoQaTTPOsGdm6s56VEjPYFZgsZyItgQzDFVPA1YCD2u06Drd3/qJV9cQ6B3SAzsgcMPA+uWyIE4z4TDSKsUQsNevr9iAeF8LLFiDQ33XFVTa/6kOGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
-Received: from [198.18.0.1] (gy-adaptive-ssl-proxy-1-entmail-virt204.gy.ntes [27.18.106.237])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 114dfc3d8;
-	Thu, 10 Apr 2025 09:34:38 +0800 (GMT+08:00)
-Message-ID: <d500b879-a4fe-4f29-a9d0-c29826d21e31@whut.edu.cn>
-Date: Thu, 10 Apr 2025 09:34:38 +0800
+	s=arc-20240116; t=1744252706; c=relaxed/simple;
+	bh=paI2iYkqHH9JNN2Kzhxw10YZ5U6tiwmffxf7SjfF7ZM=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=Xurq73r+P3KcirD2Zx9toZ+ogjblLouly08MKkSI52tNkE76Dzw21PxzOsPTPYl9hvAfLZ/6ukPz4WxT4EGLfNSmfgMHvewljqU2wUwcabOld5JFG2zQ0aETMP27inrqU273KIXaiJ5/yaWQF2bxpJDOLQmyGzBElJ7LNk2dYVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJWEVjio; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CF99C4CEE2;
+	Thu, 10 Apr 2025 02:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744252705;
+	bh=paI2iYkqHH9JNN2Kzhxw10YZ5U6tiwmffxf7SjfF7ZM=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=kJWEVjiol+oAz565mJrlnO0DmB4RDnil7BM5NMSBfi3jLuBwelpAC6x6VE3plgt6+
+	 /wqJnlJprj9vCYtXwFh/HjIDfoZJVf73EJB6pP6ahLQbP76zp83aH7YlB1dX7nlia8
+	 T3zG5mPKU0R5gTQoNP7AwO3aicL1yjFW71wCmjSjWetNTbB7OAQH1syDNM2EK0YSwI
+	 lYFMLV9PPS3iHPBDYPFgGgoDkkGu8NgEhs7xxbmY72EtQ/TRdeIOh0s03zNwVXBzsH
+	 1u4SBbH2kij/4Vmpl3AhGVLkENexdAudjITCMR93UWTnAp9GFuRb0+QZWUTvp2U4jD
+	 AIcv0NFZpaCAw==
+Date: Wed, 09 Apr 2025 21:38:24 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] usb: dwc3: add spacemit dwc3 glue layer driver
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "spacemit@lists.linux.dev" <spacemit@lists.linux.dev>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20250407-b4-k1-usb3-v3-2-v1-0-bf0bcc41c9ba@whut.edu.cn>
- <20250407-b4-k1-usb3-v3-2-v1-6-bf0bcc41c9ba@whut.edu.cn>
- <20250409223452.svwckotac4dbze6v@synopsys.com>
-Content-Language: en-US
-From: Ze Huang <huangze@whut.edu.cn>
-In-Reply-To: <20250409223452.svwckotac4dbze6v@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGUNPVh9LTkoYTBpKQk4fTlYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJTFVKQ1VKS01VSUhMWVdZFhoPEhUdFFlBWU9LSFVKS0hKTkxPVUpLS1VKQk
-	tLWQY+
-X-HM-Tid: 0a961d55b85703a1kunm114dfc3d8
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ogg6OTo4MTJNDjJKEiIDSwwp
-	LjQwCh5VSlVKTE9PSU9DQ0NOTUNIVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
-	TFVKQ1VKS01VSUhMWVdZCAFZQU5KQ0w3Bg++
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, linux-phy@lists.infradead.org, 
+ Dmitry Baryshkov <lumag@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+ Will Deacon <will@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, linux-arm-msm@vger.kernel.org, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, devicetree@vger.kernel.org, 
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ linux-usb@vger.kernel.org
+To: Melody Olvera <melody.olvera@oss.qualcomm.com>
+In-Reply-To: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
+References: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
+Message-Id: <174425260896.2271002.12988489456571693265.robh@kernel.org>
+Subject: Re: [PATCH v4 00/10] phy: qcom: Introduce USB support for SM8750
 
-On 4/10/25 6:34 AM, Thinh Nguyen wrote:
-> On Mon, Apr 07, 2025, Ze Huang wrote:
->> Add SpacemiT glue logic to support dwc3 HC on K1 SoC. The driver manages
->> clock, reset and interrupt resource.
->>
->> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
->> ---
->>   drivers/usb/dwc3/Kconfig         |   7 +++
->>   drivers/usb/dwc3/Makefile        |   1 +
->>   drivers/usb/dwc3/dwc3-spacemit.c | 127 +++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 135 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
->> index 310d182e10b50b253d7e5a51674806e6ec442a2a..3c30680fa4f83565fc03c6800e867c6ced0fe101 100644
->> --- a/drivers/usb/dwc3/Kconfig
->> +++ b/drivers/usb/dwc3/Kconfig
->> @@ -189,4 +189,11 @@ config USB_DWC3_RTK
->>   	  or dual-role mode.
->>   	  Say 'Y' or 'M' if you have such device.
->>   
->> +config USB_DWC3_SPACEMIT
->> +	tristate "Spacemit Platforms"
-> Does this depend on other configs like OF and COMMON_CLK?
 
-Yes, depends on them, will fix Kconfig entries in next version
+On Wed, 09 Apr 2025 10:48:11 -0700, Melody Olvera wrote:
+> Add support for the PHYs and controllers used for USB on SM8750 SoCs.
+> 
+> ---
+> Changes in v4:
+> - Made some fixups to the M31 eUSB2 driver
+> - Moved TCSR refclk_en to the QMP PHY DT node
+> - Link to v3: https://lore.kernel.org/r/20250324-sm8750_usb_master-v3-0-13e096dc88fd@quicinc.com
+> 
+> Changes in v3:
+> - Split platform DTs into separate commits.
+> - Fixed up M31 eUSB2 PHY driver with feedback received.
+> - Reordered DT properties based on feedback.
+> - Rewrote commit message for enabling EUSB driver.
+> - Link to v2: https://lore.kernel.org/r/20250304-sm8750_usb_master-v2-0-a698a2e68e06@quicinc.com
+> 
+> Changes in v2:
+> - Added new QMP PHY register definitions for v8 based QMP phys.
+> - Made changes to clean up some code in the M31 eUSB2 PHY driver based
+> on feedback received.
+> - Added bulk regulator operations in M31 eUSB2 PHY, to ensure that
+> both the vdd and vdda12 regulators are properly voted for.
+> - Removed external references to other dt bindings in M31 example for
+> the DT bindings change.
+> - Split DT patches between SoC and plaform changes, as well as the
+> PHY subsystem Kconfig changes when introducing the M31 eUSB2 PHY.
+> - Added orientation switch and port definitions in the DT changes.EDITME: describe what is new in this series revision.
+> - Link to v1: https://lore.kernel.org/r/20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com
+> 
+> ---
+> Melody Olvera (1):
+>       arm64: defconfig: Add M31 eUSB2 PHY config for SM8750
+> 
+> Wesley Cheng (9):
+>       dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp-phy: Add SM8750 to QMP PHY
+>       dt-bindings: phy: Add the M31 based eUSB2 PHY bindings
+>       dt-bindings: usb: qcom,dwc3: Add SM8750 compatible
+>       phy: qcom: qmp-combo: Add new PHY sequences for SM8750
+>       phy: qcom: Update description for QCOM based eUSB2 repeater
+>       phy: qcom: Add M31 based eUSB2 PHY driver
+>       arm64: dts: qcom: sm8750: Add USB support to SM8750 SoCs
+>       arm64: dts: qcom: sm8750: Add USB support for SM8750 MTP platform
+>       arm64: dts: qcom: sm8750: Add USB support for SM8750 QRD platform
+> 
+>  .../bindings/phy/qcom,m31-eusb2-phy.yaml           |  79 +++++
+>  .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml         |   2 +
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +
+>  arch/arm64/boot/dts/qcom/sm8750-mtp.dts            |  24 ++
+>  arch/arm64/boot/dts/qcom/sm8750-qrd.dts            |  24 ++
+>  arch/arm64/boot/dts/qcom/sm8750.dtsi               | 164 +++++++++++
+>  arch/arm64/configs/defconfig                       |   1 +
+>  drivers/phy/qualcomm/Kconfig                       |  16 +-
+>  drivers/phy/qualcomm/Makefile                      |   1 +
+>  drivers/phy/qualcomm/phy-qcom-m31-eusb2.c          | 325 +++++++++++++++++++++
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c          | 223 +++++++++++++-
+>  drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v8.h     |  38 +++
+>  drivers/phy/qualcomm/phy-qcom-qmp-pcs-v8.h         |  32 ++
+>  drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v8.h |  64 ++++
+>  .../phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v8.h    |  68 +++++
+>  drivers/phy/qualcomm/phy-qcom-qmp.h                |   5 +
+>  16 files changed, 1065 insertions(+), 4 deletions(-)
+> ---
+> base-commit: 46086739de22d72319e37c37a134d32db52e1c5c
+> change-id: 20241223-sm8750_usb_master-f27aed7f6d40
+> 
+> Best regards,
+> --
+> Melody Olvera <melody.olvera@oss.qualcomm.com>
+> 
+> 
+> 
 
->
->> +	default USB_DWC3
->> +	help
->> +	  Support SPACEMIT platforms with DesignWare Core USB3 IP.
->> +	  Say 'Y' or 'M' here if you have one such device
->> +
->>   endif
->> diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
->> index 124eda2522d9c1f4caab222ec9770d0deaf655fc..61a87765c0c591e0a53c33b5a6544db056166f96 100644
->> --- a/drivers/usb/dwc3/Makefile
->> +++ b/drivers/usb/dwc3/Makefile
->> @@ -56,3 +56,4 @@ obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
->>   obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
->>   obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
->>   obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
->> +obj-$(CONFIG_USB_DWC3_SPACEMIT)		+= dwc3-spacemit.o
-...
->> +
->> +#ifdef CONFIG_PM_SLEEP
->> +static int dwc3_spacemit_suspend(struct device *dev)
->> +{
->> +	struct dwc3_spacemit *spacemit = dev_get_drvdata(dev);
->> +
->> +	clk_disable_unprepare(spacemit->clk);
->> +
->> +	return 0;
->> +}
->> +
->> +static int dwc3_spacemit_resume(struct device *dev)
->> +{
->> +	struct dwc3_spacemit *spacemit = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	ret = clk_prepare_enable(spacemit->clk);
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct dev_pm_ops dwc3_spacemit_dev_pm_ops = {
->> +	SET_SYSTEM_SLEEP_PM_OPS(dwc3_spacemit_suspend, dwc3_spacemit_resume)
->> +};
->> +#endif /* CONFIG_PM_SLEEP */
->> +
-> Use DEFINE_SIMPLE_DEV_PM_OPS to remove the CONFIG_PM_SLEEP guards.
 
-thanks
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
->
->> +static struct platform_driver dwc3_spacemit_driver = {
->> +	.probe		= dwc3_spacemit_probe,
->> +	.remove		= dwc3_spacemit_remove,
->> +	.driver		= {
->> +		.name	= "spacemit-dwc3",
->> +		.of_match_table = spacemit_dwc3_match,
->> +#ifdef CONFIG_PM_SLEEP
->> +		.pm	= &dwc3_spacemit_dev_pm_ops,
->> +#endif /* CONFIG_PM_SLEEP */
->> +	},
->> +};
->> +module_platform_driver(dwc3_spacemit_driver);
->> +
->> +MODULE_AUTHOR("Wilson <long.wan@spacemit.com>");
-> The author is different than the commiter? Also, is there a last name?
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-You're right, I missed Signed-off-by tag for Wilson in commit message
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
->
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("DesignWare USB3 Spacemit Glue Layer");
->>
->> -- 
->> 2.49.0
->>
-> The logic in this glue driver looks quite simple. Can this platform work
-> as dwc3-of-simple?
+  pip3 install dtschema --upgrade
 
-Yes, indeed simple.
-As Krzysztof mentioned, creating glue nodes is not ideal for DWC USB. I
-would drop the glue driver and use dwc3/core.c as fallback, similar to
-what Rockchip did[1].
 
-[1] 
-https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/rockchip%2Cdwc3.yaml
+This patch series was applied (using b4) to base:
+ Base: using specified base-commit 46086739de22d72319e37c37a134d32db52e1c5c
 
->
-> Thanks,
-> Thinh
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/qcom/' for 20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com:
+
+arch/arm64/boot/dts/qcom/sm8750-mtp.dtb: usb@a6f8800 (qcom,sm8750-dwc3): clock-names: ['cfg_noc', 'core', 'iface', 'sleep', 'mock_utmi'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+arch/arm64/boot/dts/qcom/sm8750-mtp.dtb: usb@a6f8800 (qcom,sm8750-dwc3): clocks: [[35, 11], [35, 156], [35, 3], [35, 161], [35, 158]] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+arch/arm64/boot/dts/qcom/sm8750-qrd.dtb: usb@a6f8800 (qcom,sm8750-dwc3): clock-names: ['cfg_noc', 'core', 'iface', 'sleep', 'mock_utmi'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+arch/arm64/boot/dts/qcom/sm8750-qrd.dtb: usb@a6f8800 (qcom,sm8750-dwc3): clocks: [[35, 11], [35, 156], [35, 3], [35, 161], [35, 158]] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+
+
+
+
 
 
