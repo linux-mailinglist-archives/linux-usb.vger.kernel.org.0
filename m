@@ -1,118 +1,101 @@
-Return-Path: <linux-usb+bounces-22891-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22893-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58FA0A83CF0
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 10:30:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BAFBA83E43
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 11:19:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BEF99E531F
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 08:25:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47DB21899C6D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 09:13:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D4A91EB18D;
-	Thu, 10 Apr 2025 08:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF8920D4F0;
+	Thu, 10 Apr 2025 09:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WL/HyhLm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WjR3WPGI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABDC1D416E;
-	Thu, 10 Apr 2025 08:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B2020C471;
+	Thu, 10 Apr 2025 09:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273527; cv=none; b=qlgwGpV3kDOPFzm5Xf18V5ARRHXHUH7HpZrfgY+tNJdJBqxCDchq4QCKHsk56EVEQ1Noh1uM29dzjo1Oxn+D9SfVGRONhXdnTruPRYO8oKpyqA7GkpF52U0v80YSZT8W3HKRLYductjlAUaDMmDK5xnM6s+PNqTi0ZXfTD7tRUE=
+	t=1744276362; cv=none; b=GvVYb9aUoru0N2DlYer42lZ/BKGl52Kywlt6BjIdFLhJD5hA+vIc6nzJtci9nc4OWxPtA22Q8iHX8Dmyx8ad7sPV83+bb/TeVF/pooWNrbUw26pJwdMhJXtwYWm9Zm+9qsLOzU/Wazt6yi057W2dDMTq70rqmqjCOysoPD1PWIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273527; c=relaxed/simple;
-	bh=LTEaIOzZ9jS93F48m6McJQ0UkNGLRlHGNRZyi80ytfc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sCfIH6Wh2d3NqEkoVornflY925XAkWTp4yFUZxjg3JtCXYZk7JuFyXXWRoqDA4i9uk0QRKOJpFVQboOo1d+bV2JyT3GIx9x2jDrHxPya7jsgb9svWMRPhaGJfkp1o0Oy4j3IiAlH67lWAt2yGeOh9cSijzxF9VvdUeO+DUMxFYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WL/HyhLm; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744273526; x=1775809526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=LTEaIOzZ9jS93F48m6McJQ0UkNGLRlHGNRZyi80ytfc=;
-  b=WL/HyhLmJp0SaLrN0CzQ5SPKBQkuIlbqg/mx/auSom/vcYdxIqCoe5vi
-   vA1UWIXrSZl4akydcnjCsGuC7g5W3rOEbA6we7tb8RmvPdT4sLdUnZAfz
-   bgfABr3Z4ZBFGZrkeDTKjChye/V5ZPweOEEBX7PXNJ+eEDoUIp8UuGCET
-   2Ar0uvK/ur4EAEn0M2QP9G/uEEskk/tDPhWaslEce9hktP1y/Eo8H9hVo
-   7yxKISax1s1W9sOx2t7eJi0GRBxhRodKQ4lV4/v+8ZdgAUMbLXWTyP+HL
-   MVVqSgWH4DtrwOsDT8DiJQ2YsHvbtl9TTu32QTLioxQIwwGHke5xaH80N
-   w==;
-X-CSE-ConnectionGUID: IUez00Y1Q2WF9W9yfXEQMQ==
-X-CSE-MsgGUID: fVZ8wqA6TuyrYbbQMTVUYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45494228"
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="45494228"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 01:25:25 -0700
-X-CSE-ConnectionGUID: 30kkst3HR/WseVd3f0Edcw==
-X-CSE-MsgGUID: qGRfzcUxRdiWk73u7bqZGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="129369246"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa010.fm.intel.com with SMTP; 10 Apr 2025 01:25:22 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Apr 2025 11:25:21 +0300
-Date: Thu, 10 Apr 2025 11:25:21 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: joswang <joswang1221@gmail.com>, Benson Leung <bleung@chromium.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>
-Subject: Re: [PATCH 1/1] usb: typec: displayport: Receive DP Status Update
- NAK request exit dp altmode
-Message-ID: <Z_eAcbVOrT5dn201@kuha.fi.intel.com>
-References: <20250209071926.69625-1-joswang1221@gmail.com>
- <Z635BJNnFAiIFXxM@kuha.fi.intel.com>
- <2025041054-landside-filtrate-17b0@gregkh>
+	s=arc-20240116; t=1744276362; c=relaxed/simple;
+	bh=tnQ5awqGoh+LT3f7BlATG0XmmrwP46na2dkB3wG7XD8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=m4u7FMh7eVBo07yFR/2Qo5W+O9uqeT7+mUl8ukTt5uXM0kryU4hp/lMvhwNhlZAUW9eICb1dnHQX76Oe66N10rcdVbdqZ/OXGSEoNTA+osdR0lnxbH1nSilVhDqMkyojmdPV2DNCWA6ezqTD7XU99Y0fQAmqYILwiAbswE+/ms8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WjR3WPGI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C13C4CEDD;
+	Thu, 10 Apr 2025 09:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744276359;
+	bh=tnQ5awqGoh+LT3f7BlATG0XmmrwP46na2dkB3wG7XD8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=WjR3WPGIQVwwjQNBadceQTL8QQ6HAykIWJ7WP/b4KEgLK96+l+C4C3RIGFv9fIlEY
+	 tB2i5D4I/xaPEqYXsw4JPlNtb6xSztDmoCBVWAnyAOwEPe7Ik68QRRHciWaUYeotcG
+	 lLN6xQ2VRPLTuzW7vvTLNY9ouyGcjm3ShYM+ubgZqH6kitudTHIs0xQLxWc0TQBf46
+	 TTIxFxMdX2NMPaWZmTM402Bo6slKqNVE5Ay08Tkmmo4OO+6UspZ3fHn7Dyv7lydKyD
+	 G2tb5W6Mmrt8B4nxyzxXJ7CUW+4j7VbC1w7qMyhMz32OJa725yOovzEYRIAiCegEf3
+	 wEEKYhzZtI+Dg==
+From: Lee Jones <lee@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rob Herring (Arm)" <robh@kernel.org>, 
+ Markus Elfring <elfring@users.sourceforge.net>, 
+ Jakob Riepler <jakob+lkml@paranoidlabs.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-acpi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+ linux-usb@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Daniel Scally <djrscally@gmail.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Jonathan Cameron <jic23@kernel.org>
+In-Reply-To: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
+References: <20250310150835.3139322-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] leds: Introduce and use
+ fwnode_get_child_node_count()
+Message-Id: <174427635578.1663653.5515524063188895904.b4-ty@kernel.org>
+Date: Thu, 10 Apr 2025 10:12:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025041054-landside-filtrate-17b0@gregkh>
+X-Mailer: b4 0.15-dev-510f9
 
-On Thu, Apr 10, 2025 at 09:10:02AM +0200, Greg KH wrote:
-> On Thu, Feb 13, 2025 at 03:52:04PM +0200, Heikki Krogerus wrote:
-> > On Sun, Feb 09, 2025 at 03:19:26PM +0800, joswang wrote:
-> > > From: Jos Wang <joswang@lenovo.com>
-> > > 
-> > > Although some Type-C DRD devices that do not support the DP Sink
-> > > function (such as Huawei Mate 40Pro), the Source Port initiates
-> > > Enter Mode CMD, but the device responds to Enter Mode ACK, the
-> > > Source port then initiates DP Status Update CMD, and the device
-> > > responds to DP Status Update NAK.
-> > > 
-> > > As PD2.0 spec ("6.4.4.3.4 Enter Mode Command")，A DR_Swap Message
-> > > Shall Not be sent during Modal Operation between the Port Partners.
-> > > At this time, the source port initiates DR_Swap message through the
-> > > "echo device > /sys/class/typec/port0/data_role" command to switch
-> > > the data role from host to device. The device will initiate a Hard
-> > > Reset for recovery, resulting in the failure of data role swap.
-> > > 
-> > > Therefore, when DP Status Update NAK is received, Exit Mode CMD is
-> > > initiated to exit the currently entered DP altmode.
-> > > 
-> > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > 
-> > This looks okay to me, but Benson, can you take a look at this?
+On Mon, 10 Mar 2025 16:54:50 +0200, Andy Shevchenko wrote:
+> This series was inspired during review of "Support ROHM BD79124 ADC" [1].
+> The three conversion patches are the examples of the new API in use.
 > 
-> What ever happened to this patch?
+> Since the first two examples of LEDS, in case of posotove response it may
+> be routed via that tree and immutable branch/tag shared with others, e.g.,
+> IIO which Matti's series is targeting and might be dependent on. The USB
+> patch can be applied later separately, up to the respective maintainers.
+> 
+> [...]
 
-Sorry Greg.
+Applied, thanks!
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+[1/4] device property: Split fwnode_get_child_node_count()
+      commit: 1490cbb9dbfd0eabfe45f9b674097aea7e6760fc
+[2/4] leds: pwm-multicolor: Use fwnode_get_child_node_count()
+      commit: 4623cc4e9a5f1b7ad7e6599dfc2a5a4d9d4f5d72
+[3/4] leds: ncp5623: Use fwnode_get_child_node_count()
+      commit: 53762bb44b0659e79a3e3177372e823ec4afcc8a
+[4/4] usb: typec: tcpm: Use fwnode_get_child_node_count()
+      commit: 08ca89e98620c08d68b7e7aed6c9294698e214e1
 
--- 
-heikki
+--
+Lee Jones [李琼斯]
+
 
