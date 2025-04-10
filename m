@@ -1,72 +1,71 @@
-Return-Path: <linux-usb+bounces-22917-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22918-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E0FA8479E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 17:19:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D357BA84794
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 17:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFA1F8A4573
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 15:17:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F15B461CED
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 15:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1411E8847;
-	Thu, 10 Apr 2025 15:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F73D1E9B1F;
+	Thu, 10 Apr 2025 15:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g79Yx1Sm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nPR98IPj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE83757F3
-	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 15:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C0B1E5B9F
+	for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 15:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744298260; cv=none; b=b/YQrNEFknSXA9OdxbeMbxQdEyHBmG9bxHZvjuk6qcrxhFEgpRzZtNMKyswSL9bWLXlehQO72jsRJlX9Vc6WZZmi2soZBC+yxDNKGeOopgnoEU6rUbl58pVFVRXgVmYBFAaKBR2Xawk2OSatDDBWtpuox+7l69gamVbcasqz+zU=
+	t=1744298262; cv=none; b=LmwVj7QA41LB5MlxiFUAnRbysEsRo3Tpu/uSTnj1y5oPkRcZy6RuvdVtx6EnyJSkKZRxnQWsCxIAzJX8rifv4mgMX5dIcbO/SFO/nx3kTKgiMAhdIGZE5YzIxzADb/76YIaA0+ZLglcXZ5zNN1UCbLWrD38+q94SkNulNKBR8+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744298260; c=relaxed/simple;
-	bh=5Yc21wueEndWZDDnB2dz3Zbd+I7CcrfZC6vxrfYhCsA=;
+	s=arc-20240116; t=1744298262; c=relaxed/simple;
+	bh=kWiYUW4oM5Uc9rLButl1omzs1blRdK1HKWAloBzuEL0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fa6EDkPucL8990loXPya7odOM71wagj/SX8KMjedEXDpJAB7mx1Tt5vOkG4yX2rJNrGnnJoYhWNJrzQ8kY/kQV9g/3hXhHYpLcxW7Dy42idxYXV8CQzWC/Poj6N5qQ2Y+368Z5bNwfIkLnoKqcGj6sJ6KCujS5JkOLNkEruSEgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g79Yx1Sm; arc=none smtp.client-ip=192.198.163.13
+	 MIME-Version; b=V9lf5DsS3+6XExyXaefXew+/2g8IBNCJyqWsThVrYDcZi0yaWmhRmCrLwIg52BWQrlRMk5ZMVUksD8BsQpBADjS9vm+d4unYi7DjfW+VUYc3OdZcNpNejUyKNAct0t78A5VDaefQDRWNGb/+jhjwzxfV3wm42niKwt+CQRvHL0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nPR98IPj; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744298258; x=1775834258;
+  t=1744298260; x=1775834260;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5Yc21wueEndWZDDnB2dz3Zbd+I7CcrfZC6vxrfYhCsA=;
-  b=g79Yx1SmjCppcCb1745DWT7BOzDg9AWs3A/00ARAKbUsMm/IQkv7eq3r
-   Lz3NqHxbylpYALLdIwl9iV2hYJo/JBlKMm/KKru74my23+cwlgfSc3zmK
-   +Un3MjHBPtk/YZcDl7/JMfrbYyamXDPdThlp/5duoDGdYjk4uiH0pS88m
-   y2s1RSyAGIkfZFplFFR3ttjgD5LOFaQvFVsBdh74QqRQsmiqD2ywUZDWh
-   7w060UKUS6xfD1XDQ7BuBXCAHUlbE6YdhmjbwOxYdVmjmx0nLxxAzphhM
-   Z0ZITU+NriML7K5iJKFOJpa/SOi5KXuX3ywkCX6+yhibiKsRdKuy2L4jq
+  bh=kWiYUW4oM5Uc9rLButl1omzs1blRdK1HKWAloBzuEL0=;
+  b=nPR98IPjCCMvaey7KUM0jYbFQJQORqY/InhXIakXJvNtL+xkmTl3qW+Y
+   pPgYPpL0aQlN7n3j/XFJF9M3PVL6tToeHGpMZ73PwfaZqek1J0LS1Ir34
+   6ZWyc8AKam8u2J3TQnvF3Zqnn9Wfej11MAJtvxUghaScrRg7zZdyet9O7
+   OhGfBmXhaP0ka5xDRbHIGubWR3kWpEEhOQtPeh/o9zpRBt9xgcaGA4gDu
+   +3lKuv99mQor5wqgYb11BYY42PpaEoDcak61rcc7OlEDNkGJiV58EmEgv
+   xT+cmkJGNcCEHH3N8ODhWXw1QjxDFF3PjtEy5kVw2M3CFJ56WHuz/TlQI
    A==;
-X-CSE-ConnectionGUID: 60bMseohTq2vJCWkwtPsIA==
-X-CSE-MsgGUID: PfT1ps4aRv6uUzgXVIs9wA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="48534970"
+X-CSE-ConnectionGUID: Qkk2wEVLRv6PymMXEwHXAQ==
+X-CSE-MsgGUID: p1CMuuduS5mBzMfv4++LFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="48534979"
 X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="48534970"
+   d="scan'208";a="48534979"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:17:37 -0700
-X-CSE-ConnectionGUID: MGc4wgZvQaSCqXiuDCB4Ew==
-X-CSE-MsgGUID: FyNEH+QMRVSqfzXxSmhgYA==
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:17:39 -0700
+X-CSE-ConnectionGUID: OGnjUBg8T26ZIlrSJo928A==
+X-CSE-MsgGUID: 6R2hF353QZ2Yubex6cBb/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="128913190"
+   d="scan'208";a="128913202"
 Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Apr 2025 08:17:35 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 10 Apr 2025 08:17:37 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Michal Pecio <michal.pecio@gmail.com>
-Subject: [PATCH 2/5] Revert "xhci: Prevent early endpoint restart when handling STALL errors."
-Date: Thu, 10 Apr 2025 18:18:24 +0300
-Message-ID: <20250410151828.2868740-3-mathias.nyman@linux.intel.com>
+	Michal Pecio <michal.pecio@gmail.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 3/5] usb: xhci: Fix Short Packet handling rework ignoring errors
+Date: Thu, 10 Apr 2025 18:18:25 +0300
+Message-ID: <20250410151828.2868740-4-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250410151828.2868740-1-mathias.nyman@linux.intel.com>
 References: <20250410151828.2868740-1-mathias.nyman@linux.intel.com>
@@ -78,94 +77,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This reverts commit 860f5d0d3594005d4588240028f42e8d2bfc725b.
+From: Michal Pecio <michal.pecio@gmail.com>
 
-Paul Menzel reported that the two EP_STALLED patches in 6.15-rc1 cause
-regression. Turns out that the new flag may never get cleared after
-reset-resume, preventing xhci from restarting the endpoint.
+A Short Packet event before the last TRB of a TD is followed by another
+event on the final TRB on spec-compliant HCs, which is most of them.
 
-Revert this to take a proper look at it.
+A 'last_td_was_short' flag was added to know if a TD has just completed
+as Short Packet and another event is to come. The flag was cleared after
+seeing the event (unless no TDs are pending, but that's a separate bug)
+or seeing a new TD complete as something other than Short Packet.
 
-Link: https://lore.kernel.org/linux-usb/84b400f8-2943-44e0-8803-f3aac3b670af@molgen.mpg.de
-cc: Paul Menzel <pmenzel@molgen.mpg.de>
-cc: Michal Pecio <michal.pecio@gmail.com>
+A rework replaced the flag with an 'old_trb_comp_code' variable. When
+an event doesn't match the pending TD and the previous event was Short
+Packet, the new event is silently ignored.
+
+To preserve old behavior, 'old_trb_comp_code' should be cleared at this
+point, but instead it is being set to current comp code, which is often
+Short Packet again. This can cause more events to be silently ignored,
+even though they are no longer connected with the old TD that completed
+short and indicate a serious problem with the driver or the xHC.
+
+Common device classes like UAC in async mode, UVC, serial or the UAS
+status pipe complete as Short Packet routinely and could be affected.
+
+Clear 'old_trb_comp_code' to zero, which is an invalid completion code
+and the same value the variable starts with. This restores original
+behavior on Short Packet and also works for illegal Etron events, which
+the code has been extended to cover too.
+
+Fixes: b331a3d8097f ("xhci: Handle spurious events on Etron host isoc enpoints")
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 7 ++-----
- drivers/usb/host/xhci.c      | 6 ------
- drivers/usb/host/xhci.h      | 3 +--
- 3 files changed, 3 insertions(+), 13 deletions(-)
+ drivers/usb/host/xhci-ring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 5d64c297721c..94a2ae2c52e2 100644
+index 94a2ae2c52e2..4e975caca235 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -561,8 +561,8 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
- 	 * pointer command pending because the device can choose to start any
- 	 * stream once the endpoint is on the HW schedule.
- 	 */
--	if (ep_state & (EP_STOP_CMD_PENDING | SET_DEQ_PENDING | EP_HALTED |
--			EP_CLEARING_TT | EP_STALLED))
-+	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
-+	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
- 		return;
+@@ -2913,7 +2913,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 			if (xhci_spurious_success_tx_event(xhci, ep_ring)) {
+ 				xhci_dbg(xhci, "Spurious event dma %pad, comp_code %u after %u\n",
+ 					 &ep_trb_dma, trb_comp_code, ep_ring->old_trb_comp_code);
+-				ep_ring->old_trb_comp_code = trb_comp_code;
++				ep_ring->old_trb_comp_code = 0;
+ 				return 0;
+ 			}
  
- 	trace_xhci_ring_ep_doorbell(slot_id, DB_VALUE(ep_index, stream_id));
-@@ -2573,9 +2573,6 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 
- 		xhci_handle_halted_endpoint(xhci, ep, td, EP_SOFT_RESET);
- 		return;
--	case COMP_STALL_ERROR:
--		ep->ep_state |= EP_STALLED;
--		break;
- 	default:
- 		/* do nothing */
- 		break;
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 6370874bf265..ca390beda85b 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1605,11 +1605,6 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 		goto free_priv;
- 	}
- 
--	/* Class driver might not be aware ep halted due to async URB giveback */
--	if (*ep_state & EP_STALLED)
--		dev_dbg(&urb->dev->dev, "URB %p queued before clearing halt\n",
--			urb);
--
- 	switch (usb_endpoint_type(&urb->ep->desc)) {
- 
- 	case USB_ENDPOINT_XFER_CONTROL:
-@@ -3208,7 +3203,6 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		return;
- 
- 	ep = &vdev->eps[ep_index];
--	ep->ep_state &= ~EP_STALLED;
- 
- 	/* Bail out if toggle is already being cleared by a endpoint reset */
- 	spin_lock_irqsave(&xhci->lock, flags);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 37860f1e3aba..28b6264f8b87 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -664,7 +664,7 @@ struct xhci_virt_ep {
- 	unsigned int			err_count;
- 	unsigned int			ep_state;
- #define SET_DEQ_PENDING		(1 << 0)
--#define EP_HALTED		(1 << 1)	/* Halted host ep handling */
-+#define EP_HALTED		(1 << 1)	/* For stall handling */
- #define EP_STOP_CMD_PENDING	(1 << 2)	/* For URB cancellation */
- /* Transitioning the endpoint to using streams, don't enqueue URBs */
- #define EP_GETTING_STREAMS	(1 << 3)
-@@ -675,7 +675,6 @@ struct xhci_virt_ep {
- #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
- /* usb_hub_clear_tt_buffer is in progress */
- #define EP_CLEARING_TT		(1 << 8)
--#define EP_STALLED		(1 << 9)	/* For stall handling */
- 	/* ----  Related to URB cancellation ---- */
- 	struct list_head	cancelled_td_list;
- 	struct xhci_hcd		*xhci;
 -- 
 2.43.0
 
