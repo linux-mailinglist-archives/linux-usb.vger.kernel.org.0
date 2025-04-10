@@ -1,70 +1,76 @@
-Return-Path: <linux-usb+bounces-22890-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22891-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58626A83CB6
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 10:24:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58FA0A83CF0
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 10:30:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CA7E1886FA4
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 08:24:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BEF99E531F
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Apr 2025 08:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F1320F085;
-	Thu, 10 Apr 2025 08:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D4A91EB18D;
+	Thu, 10 Apr 2025 08:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHqX2mW9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WL/HyhLm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2591F03F8;
-	Thu, 10 Apr 2025 08:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABDC1D416E;
+	Thu, 10 Apr 2025 08:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273301; cv=none; b=Me5k3mf7j6UjOFKwb45FB0FSEaiYEo0gJwWAlbRLsQzqlxlFYu4sbZn9rJh1oWtrkskbcXGaJqEsB6rkVXS0zPoPDYkAfd23dOU5I7DFA/DpkCTDQ4gSyV0p+RL0FSgP5FGTsNmsh2d4pNgKBJiwLAdKy6OYThrTmobRExA9ywk=
+	t=1744273527; cv=none; b=qlgwGpV3kDOPFzm5Xf18V5ARRHXHUH7HpZrfgY+tNJdJBqxCDchq4QCKHsk56EVEQ1Noh1uM29dzjo1Oxn+D9SfVGRONhXdnTruPRYO8oKpyqA7GkpF52U0v80YSZT8W3HKRLYductjlAUaDMmDK5xnM6s+PNqTi0ZXfTD7tRUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273301; c=relaxed/simple;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
+	s=arc-20240116; t=1744273527; c=relaxed/simple;
+	bh=LTEaIOzZ9jS93F48m6McJQ0UkNGLRlHGNRZyi80ytfc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E05KcU0ClR4Rp3XZkTldFE7FhkEP2zLeXhUusgQe4IO6UaN+ys90uyQGG/z+sk1xxa/7zC0ljRhYmsiz4IjHJZDGsfnkAeq3Tro0AhEPrKQh/IoTXXO267T79U00+doSZ2WsYOMR4tSbbDnS+Vdmy8EBNyC69/9/cInYg0fp2MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHqX2mW9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64388C4CEDD;
-	Thu, 10 Apr 2025 08:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744273299;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CHqX2mW9Zjwnt70+e0Tz0XPrkqHOtRGF/P69tBC+UmJYQMsTed3SOZ6EedJfZQjJf
-	 w5WM/9bt71oA38jm3o63EOmToJHx3UbTjhrYeefhAbILWJAiS4q2QYJCpHJKwlNh/k
-	 9vLO59VSIZvsqYux6o1BoYYbkm+yBbt0SRVK1BiBAJNOmgZqDhlqn5ZETEFunMsnt/
-	 hy8+o0EY1K8T63ZQA9+4sGRhftCcM4NfBud/wrw7vfKy1IL/gwad2OjFwt/ot38+uO
-	 bkvkWMHcrxxDykCGGY9OBhCTC4GGOUT1ZZpem2HTqfbnsdf3mdhSFb8qkstBZH9WhH
-	 JvucG4tU7jseg==
-Date: Thu, 10 Apr 2025 09:21:32 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250410082132.GP372032@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com>
- <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com>
- <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sCfIH6Wh2d3NqEkoVornflY925XAkWTp4yFUZxjg3JtCXYZk7JuFyXXWRoqDA4i9uk0QRKOJpFVQboOo1d+bV2JyT3GIx9x2jDrHxPya7jsgb9svWMRPhaGJfkp1o0Oy4j3IiAlH67lWAt2yGeOh9cSijzxF9VvdUeO+DUMxFYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WL/HyhLm; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744273526; x=1775809526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=LTEaIOzZ9jS93F48m6McJQ0UkNGLRlHGNRZyi80ytfc=;
+  b=WL/HyhLmJp0SaLrN0CzQ5SPKBQkuIlbqg/mx/auSom/vcYdxIqCoe5vi
+   vA1UWIXrSZl4akydcnjCsGuC7g5W3rOEbA6we7tb8RmvPdT4sLdUnZAfz
+   bgfABr3Z4ZBFGZrkeDTKjChye/V5ZPweOEEBX7PXNJ+eEDoUIp8UuGCET
+   2Ar0uvK/ur4EAEn0M2QP9G/uEEskk/tDPhWaslEce9hktP1y/Eo8H9hVo
+   7yxKISax1s1W9sOx2t7eJi0GRBxhRodKQ4lV4/v+8ZdgAUMbLXWTyP+HL
+   MVVqSgWH4DtrwOsDT8DiJQ2YsHvbtl9TTu32QTLioxQIwwGHke5xaH80N
+   w==;
+X-CSE-ConnectionGUID: IUez00Y1Q2WF9W9yfXEQMQ==
+X-CSE-MsgGUID: fVZ8wqA6TuyrYbbQMTVUYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45494228"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="45494228"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 01:25:25 -0700
+X-CSE-ConnectionGUID: 30kkst3HR/WseVd3f0Edcw==
+X-CSE-MsgGUID: qGRfzcUxRdiWk73u7bqZGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="129369246"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa010.fm.intel.com with SMTP; 10 Apr 2025 01:25:22 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Apr 2025 11:25:21 +0300
+Date: Thu, 10 Apr 2025 11:25:21 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: joswang <joswang1221@gmail.com>, Benson Leung <bleung@chromium.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>
+Subject: Re: [PATCH 1/1] usb: typec: displayport: Receive DP Status Update
+ NAK request exit dp altmode
+Message-ID: <Z_eAcbVOrT5dn201@kuha.fi.intel.com>
+References: <20250209071926.69625-1-joswang1221@gmail.com>
+ <Z635BJNnFAiIFXxM@kuha.fi.intel.com>
+ <2025041054-landside-filtrate-17b0@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -74,78 +80,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+In-Reply-To: <2025041054-landside-filtrate-17b0@gregkh>
 
-On Mon, 07 Apr 2025, Ming Yu wrote:
-
-> Lee Jones <lee@kernel.org> 於 2025年4月4日 週五 下午10:21寫道：
-> >
-> > > ...
-> > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > > >
-> > > > > > IDs are usually given in base-10.
-> > > > > >
-> > > > >
-> > > > > Fix it in v9.
-> > > > >
-> > > > > > Why are you manually adding the device IDs?
-> > > > > >
-> > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > > >
-> > > > >
-> > > > > I need to manage these IDs to ensure that child devices can be
-> > > > > properly utilized within their respective modules.
-> > > >
-> > > > How?  Please explain.
-> > > >
-> > > > This numbering looks sequential and arbitrary.
-> > > >
-> > > > What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-> > > >
-> > >
-> > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> > > but I need fixed IDs.
-> > > For example, the GPIO driver relies on these IDs to determine the
-> > > group, allowing the firmware to identify which GPIO group to operate
-> > > on through the API.
-> >
-> > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-> > done here.  These lines do not have any differentiating attributes, so
-> > either way we are not allocating specific IDs to specific pieces of the
-> > H/W.  I still do not understand why you need to allocate them manually.
-> >
+On Thu, Apr 10, 2025 at 09:10:02AM +0200, Greg KH wrote:
+> On Thu, Feb 13, 2025 at 03:52:04PM +0200, Heikki Krogerus wrote:
+> > On Sun, Feb 09, 2025 at 03:19:26PM +0800, joswang wrote:
+> > > From: Jos Wang <joswang@lenovo.com>
+> > > 
+> > > Although some Type-C DRD devices that do not support the DP Sink
+> > > function (such as Huawei Mate 40Pro), the Source Port initiates
+> > > Enter Mode CMD, but the device responds to Enter Mode ACK, the
+> > > Source port then initiates DP Status Update CMD, and the device
+> > > responds to DP Status Update NAK.
+> > > 
+> > > As PD2.0 spec ("6.4.4.3.4 Enter Mode Command")，A DR_Swap Message
+> > > Shall Not be sent during Modal Operation between the Port Partners.
+> > > At this time, the source port initiates DR_Swap message through the
+> > > "echo device > /sys/class/typec/port0/data_role" command to switch
+> > > the data role from host to device. The device will initiate a Hard
+> > > Reset for recovery, resulting in the failure of data role swap.
+> > > 
+> > > Therefore, when DP Status Update NAK is received, Exit Mode CMD is
+> > > initiated to exit the currently entered DP altmode.
+> > > 
+> > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > 
+> > This looks okay to me, but Benson, can you take a look at this?
 > 
-> I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-> MFD_CELL_NAME(), like this:
-> 
-> static const struct mfd_cell nct6694_dev[] = {
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-gpio"),
->     ......
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
-> };
-> 
-> For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-> i2c-nct6694.c is 17~22. Does this mean each driver should
-> independently handle its dynamically assigned IDs?
-> Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-> and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-> you think this approach is appropriate in my case?
+> What ever happened to this patch?
 
-Yes, if you _need_ the ranges to start from 0, then you will have to
-call mfd_add_devices() separately on those ranges.  Otherwise one range
-will follow directly on to another range.
+Sorry Greg.
 
-But wait, you're using mfd_add_hotplug_devices(), which means you are
-using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
-being ignored anyway.  Thus, if you have tested that this works, you
-don't need them anyway, right?
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 -- 
-Lee Jones [李琼斯]
+heikki
 
