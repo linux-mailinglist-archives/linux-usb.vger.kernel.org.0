@@ -1,148 +1,163 @@
-Return-Path: <linux-usb+bounces-22974-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22975-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA987A85F0D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 15:33:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74A4A85F2D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 15:38:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5F6F4C7453
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 13:31:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AC4544106C
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 13:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5D6D1D619D;
-	Fri, 11 Apr 2025 13:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E6711AA786;
+	Fri, 11 Apr 2025 13:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OED7EW9o"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="AB4kYOjG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f194.google.com (mail-lj1-f194.google.com [209.85.208.194])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0BB2EB1D;
-	Fri, 11 Apr 2025 13:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C671F5828
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 13:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744378242; cv=none; b=bIKtDfrCtP3/wZ700HYJPPAdSRiP+5cD3DLU0vANe7d8pPf+KGKSCc6tM2D0nS2iW6+iOw0SW0k9HtjDymgRNompWVH9emM70WJ5uq9ifc4MqPsiL84NZDJD2Si2f9TAkTO9LG7oBM8uKUTw70QRoqOyypChNlT/RW9JJ6pO5XY=
+	t=1744378365; cv=none; b=C7u9cT9jAGNN6hHByv/iCjH/6HOdB+n1D8CyeN0Z6IpDYd1Nqgw6S+OxpvsYxSllwCPiOVfi0dKZMduGFalufnFUz5tKTN98HWgGjQnRugYaYvpU5zCbrwqANPucWx2J/9qflc62xHEHZg+zs/vS6sPnHZyi+utz4ojRpZF/IcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744378242; c=relaxed/simple;
-	bh=jueZpG4oTv3+EEGxq89YYgWm1ZpK/jmc9aD28F2zK0Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lrc7hjIk+9T4baglrJdIrK6xcU8GBw16ZVdV431gYQR4G9zoxlBd8AFl0h+sudHSZA8njitaYvbPGbm0r7Czo75qv2LvRLxw+V827CHeFVAdnzxEJRmNbp6182Ft1Zjs8LDCs/SZEM/chgKEwRH5Clo+VxH129qJCbuOqH/9QJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OED7EW9o; arc=none smtp.client-ip=209.85.208.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f194.google.com with SMTP id 38308e7fff4ca-30bf5d7d107so16308631fa.2;
-        Fri, 11 Apr 2025 06:30:40 -0700 (PDT)
+	s=arc-20240116; t=1744378365; c=relaxed/simple;
+	bh=MZVxMmDkiFSXjVRJNNkrhkJlUN93Ava1/DzXk572XC8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Aj1nTwPIzt16U80akhsy4bLHtvw42SV+8MtsPWjEa8RhoJESR4w84RWpJzUi5kWkkGhjd7HeJ/tjbKy56tvVC6q9XeJmUvjtweGTiR4BtNcg/4vm+fcek7SsJxKudgRhZmIxi3bZDyzvLVnWzSgi6N/Cp5Nke+/5saB6YmwcCT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=AB4kYOjG; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2241053582dso27242595ad.1
+        for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 06:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744378239; x=1744983039; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T2R/IkUgsNUQZyYj/hsSGzxvJ2UNWF/IZAubjoxHQl0=;
-        b=OED7EW9oxb0n1TJOyAt2IWEcpfTsqfsAPRfvJIjYM3OkF8H23GzElV7o20jDOnYGod
-         knfquLm8ZDzFW0AbjQWK+AX/ln/a7tQ+a9m30aMHzCiiQk2N7VmvOWSqqJ2Cvc84sK6Z
-         LG35SRljqlFngR97aP0plXUi5r9/1hWh/Gh85rLC9ytOmlTm+Mw36boo/GKDlUf4p8P4
-         kODQag4R+74W0TUR+U35r/7ZYDr158OQMnBcijRHQTtCqs9gnuydId19MhxCNrprKBbo
-         IjfNSY16GM8px7OTQNsW6jGC0Quur7TLQV81C+PU5gdvqFB6ev5JfcuKoIZQmwV5qj5f
-         n+Cg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744378361; x=1744983161; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IbIVaZg1KTEytG74iCEwD7bcscUv9siCSknWzupnAMA=;
+        b=AB4kYOjGZSh+GY7J8GjdWChYnQGWQp39qOAS5IYZV96oRXJ9iZ7BXVT8eWqWvb174J
+         JC88lQZ1rSTdJExySs6b/YowMjmr0+Vo7GNYfP+xSMu2CGb2Sfb7PYTBXGtiv1NcwPZO
+         rfp4LJFQyiN6JxiuFHOIS4Y/OYCqSuRgt2/FXnscVcIH3liw61u5ISmeD6fnbGJpST7x
+         DVm4eU0PLbvrWQ2pRHL8UUcEe56R4PJY7OwWtM89RDjxbBFeAJ+l4oRgLbqR1g/mbtDU
+         zGvSh0xGR0rhcU5DebCPPGKoD9SSa4Tzz7PCG5GJb64Ik4sxSqul/ZEVaDFkwL3r2plS
+         grcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744378239; x=1744983039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T2R/IkUgsNUQZyYj/hsSGzxvJ2UNWF/IZAubjoxHQl0=;
-        b=J5Ezn56mqyYWnSQnNw34k1Ym/c3eCrUvLcUxUUSpwG4knlWurAUx7u0Qvv4aHtzh19
-         3jxJNFiIxb6eW33TDtcRC24ZW962HH4cuAZO+wx7M2KI5Pnogi9evDSiPRKgHApxSBZI
-         VkNImIG84/M+A470hFa5D+fb0VtCqX8K+f30StosGBePvS0Owsx7Z3JFOzkrryBNtgX5
-         q3urxJdfxv2r6bs0f8MQa64gJxlR45k8CbdWbRfERGGxvy5Kan8J7GBWau6fL6kq3dUS
-         clnQrKKQN9//+F4JdPC18GPBcEKOAeCIGID5rO/e1GbcqAc2GuoIMOrc+gKeaeqoiosp
-         LeUw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0M02NylB7BNELlSeB4NILq9HX2ujQYPX0D8lcbrHNAqMXHUWzxgYsZEJU5xSTgdirYSjoN2XgCl59@vger.kernel.org, AJvYcCUfASsqMZ85tqmYqlN0XhN+xD3QxF/NcoSMx2F4MDlOZKQpFYlU0O6+cq1jbfZ2J6NzEv90mnXc@vger.kernel.org, AJvYcCXA8OaL+LwRCtA/4JXpDN3OEBdoZjvxh2ST9CSYPxkTOz1K4fF5FgiCVVCrv8lP9JX6K+ahx0EUUE2ZNTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdeM6dS1lsb1a4u22lEHjDHWM4Zm3FIXfHBy9rAfHL1HeSGENR
-	7BeoL6AaRgw7I7djSKk7LCixW+cGYYxiXbCFcQc2X99Y30U9tlfkaz3Fth7zOd6PzDdKUNNaAR7
-	+ddb+0wcfpCHWKWc3dkz98sPKR6E=
-X-Gm-Gg: ASbGncudll7R0S8KjJ/aX/DLbG2D4P6GmlgxNikq5tvTvYDeVmTaF0jzCVMPHb5inSE
-	tZQvJ4o2wuv8vAWK2lOxPTYnl18DZE1iHJ5dgEVYAUGYCAJTpmSEdq+qn2T8HDCNCxig7ex3vKU
-	PMeU1SVLd9k4V9iraSHdCG
-X-Google-Smtp-Source: AGHT+IG1lqVlN04eQ+Cdjd0vIhu0KNn3WIjR2MqivG0AARDZu5eY1L6Hi/Vnc2KqgBWl1QD8jRqYqg+Y0ThYnZbHxqc=
-X-Received: by 2002:a2e:a545:0:b0:30b:a92e:8b42 with SMTP id
- 38308e7fff4ca-31049a930d6mr9258461fa.26.1744378237355; Fri, 11 Apr 2025
- 06:30:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744378361; x=1744983161;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IbIVaZg1KTEytG74iCEwD7bcscUv9siCSknWzupnAMA=;
+        b=cYngJmxhqvcmET4TTd0/CaPn6c4uW2L340EmqedLwyMoEgnAZWhM2aLd/uhVkEv9oU
+         Av9vWpdm9A2IZWI6vYgW/KhuLrNvTJq/+nSI5eZzVAD10ChWZr09qssbiWATA9DAyLVt
+         AD+oqNmKLIq4rUvecHWYdP2m0/3vX2iWmI9Jd/3qxys4W0lG+D3GrxuZu7cjlrJuVl5y
+         4hjuuSVZzNGRlKBe/ow7wNodI3HNM6JUFQgwVdzFdeABwawN9ei8Dm4mkKyquRIDQY19
+         QdIU0QSx8TGzrlC39QdeDhyvjALYsuFgN9d6pRRBD6gpt1BA3TZ7oRB+JE4Ya/Nx6UHR
+         1/gA==
+X-Gm-Message-State: AOJu0Yx0gZGkezReargyDZmIj1z23pbXG9w2rQNApivkscVMg1YzaA1I
+	egXfwdJGLRcxRHPGHyKGEE+goJQLyr18Nj/Kgv4xqbNKI43jSH/LKmTMaGzcs3Xb9hofNNKGESq
+	NNiU=
+X-Gm-Gg: ASbGncsNUqVpe26BhM43cxhfkRKQEHay3dGA9VEFa3iZvVu0Lrd8+mJ4HKnX3Es16TS
+	5MPARXs4WXkPDM8naxsY4ZL+I7WrB037fFaDdCKHAaSqPVOTARdJLjU4jl8i5zC0vm6swB9zC4g
+	TOoJxlJ92deqly/3+MeCcUkrpNWb/YhlY3h0XLF1656t6kfdGVeHvSZ8XfvKSNLiq01Ts4uvmAu
+	BblF87B1hyY5SLUUMQeLEBGaGgcTmnjl8Qw1yDa07pz8JaYWJHI1/zHJ1cnQl9ovldGt+bOxhKn
+	9UNicf8A4Dj8QC1YBaCNCuS+H3mH4HdnSYmvyy2O54or5Rwq8UIDaQ==
+X-Google-Smtp-Source: AGHT+IE219zNoKn3fh+pOBnc+bKK/oYYiCeFX1H1Q2omwPngcEIUDeJOIyhovIuIh4nrPifTAu4SgA==
+X-Received: by 2002:a17:902:d2d1:b0:223:f928:4553 with SMTP id d9443c01a7336-22bea50bb7dmr41681885ad.44.1744378361438;
+        Fri, 11 Apr 2025 06:32:41 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c085:21c1::10a1? ([2620:10d:c090:400::5:3722])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7b654a2sm48943865ad.49.2025.04.11.06.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Apr 2025 06:32:41 -0700 (PDT)
+Message-ID: <dab8e91a-a751-4307-ad21-31d3539963da@baylibre.com>
+Date: Fri, 11 Apr 2025 15:32:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250405113020.80387-1-bsdhenrymartin@gmail.com> <2025041119-debit-cosmic-f41c@gregkh>
-In-Reply-To: <2025041119-debit-cosmic-f41c@gregkh>
-From: henry martin <bsdhenrymartin@gmail.com>
-Date: Fri, 11 Apr 2025 21:30:26 +0800
-X-Gm-Features: ATxdqUFFH3sTnc2x3CM9EZtpM34AzSWHqdFLolBE3C_g_Sf3mnv8aMarh0qkivM
-Message-ID: <CAEnQdOqmq3wwn3FLNq2wiq6MuM9ZMgcs6vcmwpVVgwzY=zeceg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb/gadget: Add NULL check in ast_vhub_init_dev()
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: f_fs: Invalidate io_data when USB request
+ is dequeued or interrupted
 To: Greg KH <gregkh@linuxfoundation.org>
-Cc: joel@jms.id.au, andrew@codeconstruct.com.au, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+ Frode Isaksen <frode@meta.com>, stable@vger.kernel.org, jassibrar@meta.com
+References: <20250331085540.32543-1-fisaksen@baylibre.com>
+ <2025041139-sedan-liquid-de35@gregkh>
+Content-Language: en-US
+From: Frode Isaksen <fisaksen@baylibre.com>
+In-Reply-To: <2025041139-sedan-liquid-de35@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> What kernel version did you make this against?  It does not apply to
-> 6.15-rc1 for me :(
-
-Apologies for the noise.
-
-I just rebased onto v6.15-rc1 and noticed that this issue has already been
-fixed upstream.
-Thanks again for taking the time to review =E2=80=94 I'll drop this patch.
-
-Best regards,
-Henry
-
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B44=E6=9C=8811=E6=
-=97=A5=E5=91=A8=E4=BA=94 21:06=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat, Apr 05, 2025 at 07:30:20PM +0800, Henry Martin wrote:
-> > devm_kasprintf() returns NULL when memory allocation fails. Currently,
-> > ast_vhub_init_dev() does not check for this case, which results in a
-> > NULL pointer dereference.
-> >
-> > Add NULL check after devm_kasprintf() to prevent this issue.
-> >
-> > Cc: stable@vger.kernel.org    # v4.18
-> > Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub=
-")
-> > Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
-> > ---
-> > V1 -> V2: Add Cc: stable label and correct commit message.
-> >
-> >  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gad=
-get/udc/aspeed-vhub/dev.c
-> > index 573109ca5b79..5b7d41a990d7 100644
-> > --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> > @@ -548,6 +548,8 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsign=
-ed int idx)
-> >       d->vhub =3D vhub;
-> >       d->index =3D idx;
-> >       d->name =3D devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
-> > +     if (!d->name)
-> > +             return -ENOMEM;
-> >       d->regs =3D vhub->regs + 0x100 + 0x10 * idx;
-> >
-> >       ast_vhub_init_ep0(vhub, &d->ep0, d);
-> > --
-> > 2.34.1
-> >
->
-> What kernel version did you make this against?  It does not apply to
-> 6.15-rc1 for me :(
+On 4/11/25 3:08 PM, Greg KH wrote:
+> On Mon, Mar 31, 2025 at 10:53:50AM +0200, Frode Isaksen wrote:
+>> From: Frode Isaksen <frode@meta.com>
+>>
+>> Invalidate io_data by setting context to NULL when USB request is
+>> dequeued or interrupted, and check for NULL io_data in epfile_io_complete().
+>> The invalidation of io_data in req->context is done when exiting
+>> epfile_io(), since then io_data will become invalid as it is allocated
+>> on the stack.
+>> The epfile_io_complete() may be called after ffs_epfile_io() returns
+>> in case the wait_for_completion_interruptible() is interrupted.
+>> This fixes a use-after-free error with the following call stack:
+>>
+>> Unable to handle kernel paging request at virtual address ffffffc02f7bbcc0
+>> pc : ffs_epfile_io_complete+0x30/0x48
+>> lr : usb_gadget_giveback_request+0x30/0xf8
+>> Call trace:
+>> ffs_epfile_io_complete+0x30/0x48
+>> usb_gadget_giveback_request+0x30/0xf8
+>> dwc3_remove_requests+0x264/0x2e8
+>> dwc3_gadget_pullup+0x1d0/0x250
+>> kretprobe_trampoline+0x0/0xc4
+>> usb_gadget_remove_driver+0x40/0xf4
+>> usb_gadget_unregister_driver+0xdc/0x178
+>> unregister_gadget_item+0x40/0x6c
+>> ffs_closed+0xd4/0x10c
+>> ffs_data_clear+0x2c/0xf0
+>> ffs_data_closed+0x178/0x1ec
+>> ffs_ep0_release+0x24/0x38
+>> __fput+0xe8/0x27c
+>>
+>> Signed-off-by: Frode Isaksen <frode@meta.com>
+>> Cc: stable@vger.kernel.org
+>> ---
+>> v1 -> v2:
+>> Removed WARN_ON() in ffs_epfile_io_complete().
+>> Clarified commit message.
+>> Added stable Cc tag.
+>>
+>>   drivers/usb/gadget/function/f_fs.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index 2dea9e42a0f8..e35d32e7be58 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -738,6 +738,9 @@ static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
+>>   {
+>>   	struct ffs_io_data *io_data = req->context;
+>>   
+>> +	if (io_data == NULL)
+>> +		return;
+> What prevents req->context to be set to NULL right after you check this?
 >
 > thanks,
 >
 > greg k-h
+
+Nothing really, but the race is really much shorter. We will try to redo 
+this code, but that will take some time.
+
+Thanks,
+
+Frode
+
+
 
