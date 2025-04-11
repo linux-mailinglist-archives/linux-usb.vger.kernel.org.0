@@ -1,72 +1,75 @@
-Return-Path: <linux-usb+bounces-22950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10B5EA8579B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 11:12:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1805A857A5
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 11:14:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4DDD7A78B4
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 09:11:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8F863B0CFC
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 09:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5D32980BF;
-	Fri, 11 Apr 2025 09:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2CB2980D9;
+	Fri, 11 Apr 2025 09:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZFbAOnMv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lsxwGrn9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB7815D5B6
-	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 09:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DED027CB39
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 09:12:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744362758; cv=none; b=RS6xBCpOpJwWX9Q/9XTFIuCCiKgc9bnFwI6WKMZG8Eg+QDAkNFg6Zjet1ZqXaGJ9a94ycmS4UaIh5d+3d4E4W2JUx/YBzXJ/VkJRKbpr1DmCFYr3l5N7G+7QcJhimLAKibf465pi81dd8uqYiBHHzqqHU1YCKmKjpJjR+ZeUkJg=
+	t=1744362759; cv=none; b=qEOmHV5JpKldf5osQmb8vuhBiVbdGutILW1fjnC3w2e4e5jOMVlwwEKAt2pQJWvpFEEn2Ddo6owmDXRLaLgopX/NsflvoR2sWC8t5HpC9/u4iEjojuwVPq/4utNZygAHFhNK00HlImhvZFFAm+8jj1y0B6Dgr06OGWh5LPXWVkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744362758; c=relaxed/simple;
-	bh=pQ988reGHkHfVnv0gCNglPbPOS14YcjpbUQGzavKiD0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GNnIpgOaNfGuOZk/9jYYWfpqZdDMdqoMMbjMccmpcma6VJC1qC183YB3JXICko5ond4GZryBdVK/XS7m8iUiElFJWln43RD04jsN/dndAul9XHBSrevoTVzVJ7EKE/ITjDve2kFyETUm0VDDrEzo+b6wRhQAk03hShLuLKuysvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZFbAOnMv; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1744362759; c=relaxed/simple;
+	bh=8HSgT548SJtyjGc/dP+XJalXIk45cGYogs5L6Q5PJFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Gmc+mWyxokAHML7xxpT18ZPiuDD2ayyNzpGu3Sn/cDkBxhjNS/6PNRbWdV6XuhDo4kO7RSV6z6s/0GdUnbZpAWDttDXSSFwLAjhEeL/Sb4rrgujgf4wfV+5LndlrdYHIndRg4dRDj9EMuik24plDMlvuQ+xPXIpx0WNG6Y3UHxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lsxwGrn9; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744362756; x=1775898756;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pQ988reGHkHfVnv0gCNglPbPOS14YcjpbUQGzavKiD0=;
-  b=ZFbAOnMvJbgnh1kE47hl7e3qPisJjkN4uEg/oh0XmLP4jC2kh3Kw7vEi
-   p8oNNNcha+uOHbCxJ+kW398SOXUJQb400aX9hm8LF44M9WHM93geN7IV1
-   ZMdZWFN34z/yU9Q3yHgRloI7zrxnyhiqNWxjCrwIH+9hVV90dy5LZDEeY
-   L8dtmbflpTvW3w0WLwLyhE8PqVCLGAvXRSadiRXrRM9/Daq1Fp+k6XuRl
-   BSxzsNsMWzjO05m0Uw4jmatdYzHD1IIN4cTpMUaL+YC6EsQPhY0yUZKTZ
-   03SUOZV413S2Q8DnYdd9C7kC8Tpw7CHQf5UAWfIL+VbypnvMXwNXPofbh
-   A==;
-X-CSE-ConnectionGUID: 9xdmkQhwS5GjLs03WBTYqQ==
-X-CSE-MsgGUID: gzHruRf+SoiI6yGU810uHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="71295704"
+  t=1744362758; x=1775898758;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8HSgT548SJtyjGc/dP+XJalXIk45cGYogs5L6Q5PJFo=;
+  b=lsxwGrn97ddGVKrygqTfYoUMFDoXDIdK1/UpW7RM8ZqoeXlgDLqtEzKu
+   sGYJti9kgdgW7fzlojeuAy2ivXuIystIdivHHm6XEnrVCVOKBdLE9zPwN
+   X6QdZvXosiDXB+uuwDYHcgWZHoN4xBRPMfqPMmA1FrjtvdwTmh/aEBFKl
+   uVK9WVQMqg9TlJDXwS59HLP05KDWBxqSIlNbgXzIwB0830W7yfxhvafLh
+   7zHMaXelkajH9sbYGkEHYDOQDNtcuPjU/Y2IKN9T4cvUiDdDSKX/qdlwX
+   mwANSjcMJ0Lq8h7ox5PZSjooqCLQhsrx4DL/oU1FUPXX1JxzFXfesCWjz
+   w==;
+X-CSE-ConnectionGUID: rWi2GA/0QrCfIljfNdpZpw==
+X-CSE-MsgGUID: zuYD6yIbQ2arWodaCB6/aA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="48617948"
 X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="71295704"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 02:12:35 -0700
-X-CSE-ConnectionGUID: /axfVcaOQwebthKaRjgMyw==
-X-CSE-MsgGUID: YEQB9o8OSqK7rTfQHUdUhg==
+   d="scan'208";a="48617948"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 02:12:37 -0700
+X-CSE-ConnectionGUID: /IymIXf9RieVwqOuu14cag==
+X-CSE-MsgGUID: Catcd6o6RD2rPQ6sPA8Vrw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="129986202"
+   d="scan'208";a="166335666"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 11 Apr 2025 02:12:35 -0700
+  by orviesa001.jf.intel.com with ESMTP; 11 Apr 2025 02:12:37 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id 753C357F; Fri, 11 Apr 2025 12:12:33 +0300 (EEST)
+	id 1A64E78B; Fri, 11 Apr 2025 12:12:35 +0300 (EEST)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 00/11] usb: xhci: decouple allocation and initialization
-Date: Fri, 11 Apr 2025 12:11:44 +0300
-Message-ID: <20250411091155.3386971-1-niklas.neronin@linux.intel.com>
+Subject: [PATCH 01/11] usb: xhci: relocate pre-allocation initialization
+Date: Fri, 11 Apr 2025 12:11:45 +0300
+Message-ID: <20250411091155.3386971-2-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250411091155.3386971-1-niklas.neronin@linux.intel.com>
+References: <20250411091155.3386971-1-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,38 +78,131 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, after hibernation (S4 state), the xhci driver frees all its
-memory and reallocates it from scratch, which is inefficient. Instead, much
-of the memory can be simply re-initialized.
+Move pre-allocation initialization from xhci_mem_init() to xhci_init().
+This change is part of an ongoing effort to separate initialization from
+allocation within the xhci driver. By doing so, it will enable future
+patches to re-initialize xhci driver memory without the necessity of fully
+recreating it.
 
-The proposed changes begin the process by decoupling initialization code
-from memory allocation code. Specifically, the initialization code is moved
-from xhci_mem_init() into separate functions, which are then called from
-xhci_init().
+Additionally, compliance mode recovery initialization has been adjusted to
+only occur after successful memory allocation.
 
-By implementing these changes, future patches will be able to call the
-initialization functions directly after hibernation, thereby improving
-efficiency and enhancing code structure.
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+---
+ drivers/usb/host/xhci-mem.c | 28 ----------------------------
+ drivers/usb/host/xhci.c     | 29 ++++++++++++++++++++++++++---
+ 2 files changed, 26 insertions(+), 31 deletions(-)
 
-Niklas Neronin (11):
-  usb: xhci: relocate pre-allocation initialization
-  usb: xhci: move device slot enabling register write
-  usb: xhci: move command ring pointer write
-  usb: xhci: refactor xhci_set_cmd_ring_deq()
-  usb: xhci: move DCBAA pointer write
-  usb: xhci: move doorbell array pointer assignment
-  usb: xhci: move enabling of USB 3 device notifications
-  usb: xhci: remove error handling from xhci_add_interrupter()
-  usb: xhci: move initialization of the primary interrupter
-  usb: xhci: add individual allocation checks in xhci_mem_init()
-  usb: xhci: cleanup xhci_mem_init()
-
- drivers/usb/host/xhci-caps.h |   4 +-
- drivers/usb/host/xhci-mem.c  | 164 +++++++++--------------------------
- drivers/usb/host/xhci.c      | 126 ++++++++++++++++++++++-----
- drivers/usb/host/xhci.h      |  12 +--
- 4 files changed, 155 insertions(+), 151 deletions(-)
-
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index d698095fc88d..eb07445687bb 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2371,22 +2371,6 @@ xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
+ }
+ EXPORT_SYMBOL_GPL(xhci_create_secondary_interrupter);
+ 
+-static void xhci_hcd_page_size(struct xhci_hcd *xhci)
+-{
+-	u32 page_size;
+-
+-	page_size = readl(&xhci->op_regs->page_size) & XHCI_PAGE_SIZE_MASK;
+-	if (!is_power_of_2(page_size)) {
+-		xhci_warn(xhci, "Invalid page size register = 0x%x\n", page_size);
+-		/* Fallback to 4K page size, since that's common */
+-		page_size = 1;
+-	}
+-
+-	xhci->page_size = page_size << 12;
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "HCD page size set to %iK",
+-		       xhci->page_size >> 10);
+-}
+-
+ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ {
+ 	struct xhci_interrupter *ir;
+@@ -2395,15 +2379,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	unsigned int	val, val2;
+ 	u64		val_64;
+ 	u32		temp;
+-	int		i;
+-
+-	INIT_LIST_HEAD(&xhci->cmd_list);
+-
+-	/* init command timeout work */
+-	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
+-	init_completion(&xhci->cmd_ring_stop_completion);
+-
+-	xhci_hcd_page_size(xhci);
+ 
+ 	/*
+ 	 * Program the Number of Device Slots Enabled field in the CONFIG
+@@ -2515,9 +2490,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 
+ 	ir->isoc_bei_interval = AVOID_BEI_INTERVAL_MAX;
+ 
+-	for (i = 0; i < MAX_HC_SLOTS; i++)
+-		xhci->devs[i] = NULL;
+-
+ 	if (scratchpad_alloc(xhci, flags))
+ 		goto fail;
+ 	if (xhci_setup_port_arrays(xhci, flags))
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 0452b8d65832..abc5115a2839 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -460,6 +460,21 @@ static int xhci_all_ports_seen_u0(struct xhci_hcd *xhci)
+ 	return (xhci->port_status_u0 == ((1 << xhci->usb3_rhub.num_ports) - 1));
+ }
+ 
++static void xhci_hcd_page_size(struct xhci_hcd *xhci)
++{
++	u32 page_size;
++
++	page_size = readl(&xhci->op_regs->page_size) & XHCI_PAGE_SIZE_MASK;
++	if (!is_power_of_2(page_size)) {
++		xhci_warn(xhci, "Invalid page size register = 0x%x\n", page_size);
++		/* Fallback to 4K page size, since that's common */
++		page_size = 1;
++	}
++
++	xhci->page_size = page_size << 12;
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "HCD page size set to %iK",
++		       xhci->page_size >> 10);
++}
+ 
+ /*
+  * Initialize memory for HCD and xHC (one-time init).
+@@ -473,11 +488,18 @@ static int xhci_init(struct usb_hcd *hcd)
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+ 	int retval;
+ 
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xhci_init");
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
+ 	spin_lock_init(&xhci->lock);
+ 
++	INIT_LIST_HEAD(&xhci->cmd_list);
++	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
++	init_completion(&xhci->cmd_ring_stop_completion);
++	xhci_hcd_page_size(xhci);
++	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
++
+ 	retval = xhci_mem_init(xhci, GFP_KERNEL);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Finished xhci_init");
++	if (retval)
++		return retval;
+ 
+ 	/* Initializing Compliance Mode Recovery Data If Needed */
+ 	if (xhci_compliance_mode_recovery_timer_quirk_check()) {
+@@ -485,7 +507,8 @@ static int xhci_init(struct usb_hcd *hcd)
+ 		compliance_mode_recovery_timer_init(xhci);
+ 	}
+ 
+-	return retval;
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Finished %s", __func__);
++	return 0;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
 -- 
 2.47.2
 
