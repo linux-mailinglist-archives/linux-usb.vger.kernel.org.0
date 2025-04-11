@@ -1,99 +1,142 @@
-Return-Path: <linux-usb+bounces-22941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17953A852E2
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 07:09:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 707F5A85303
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 07:25:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF2C9A1AA6
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:09:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CAC89A2120
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3078E27CB35;
-	Fri, 11 Apr 2025 05:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659C627CCC4;
+	Fri, 11 Apr 2025 05:25:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5Npoiv5"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="jCFzg0hg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C6C1E7C06
-	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 05:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FA62F5A;
+	Fri, 11 Apr 2025 05:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744348183; cv=none; b=XdVfBwzjvg9UofEZU7OsMGvnISJjhvuaLwT4zcbNGb5BHrJYxWlnj/O2pSeFxIybvq5TygsNsR0DPW+7GHlho7ZhKWPNEOeTHbMoG9HdbjlxgpI+gswCFOseXPwWztQQrKXUkxLdPqPvZV4q1fqZm2vuDBdeD4kfSCiJ65PLsLw=
+	t=1744349144; cv=none; b=DrrQg1VCUqL5tL9mfpAEPaXPO8jBcxvQG98j0pTNw3jK6uMwOn+FvdHWlJxWnLoGfc1CKv/t37e/N6GTGbhGN8I1w2RO7swIg5zigmgYBQdbvHLRv6squ3TeGGTyc0EYdldcfpXSGt6exBlqKXuXBHDdugaVTu1DWsRHha687q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744348183; c=relaxed/simple;
-	bh=801bC1WeogLvg+OXXH6/HLa5x12g/rdtgM4NFjFeUEM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=a9y2SZzdTNlgXywPq7yGshsZXBnQYFKSEbLZohEZavqCggmFMmFKhM4XnAHMy51YeCKZLLGpK4fm4bqa1StyATLlMFeJOPlC1e3ipxVrGVYt3JEfAlZyNZFX4FR4Q07Ah//ZrW4dEWX1/YbmhRpRSC26JRgfFD33a8YAXy8Co3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5Npoiv5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1BBCDC4CEE5
-	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 05:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744348182;
-	bh=801bC1WeogLvg+OXXH6/HLa5x12g/rdtgM4NFjFeUEM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=g5Npoiv5feMhiylysr7sgF8W+tdpGg+oUXLRWfKpoZOlGRQQ2mAyevEO4vSJIrLB8
-	 X6vMZEKtie45SQtPx6bW8OF2gdQZJ/f6G6wh+D85me+4sXKQdQ+y/gxQM1BOMQfw3Y
-	 MTwJ5bxyiGVfhSocOX0gL3gs+Bew1xIy0o1MDHoIhgVKKRxZp7AxsgvzswzuWnlwZA
-	 sVhFlh75OCPV8WaIhIRf3DeO02PXIBwC7MF8dS/wDM45zI9a3C8rK2ZULiqo8mIB7w
-	 bHk+ak0A7fitvLIwVTz/OfR4uNW0u4vPPRetCXpOk6jIZ411mjcex2dyI2bdb9COJq
-	 OIxtqig2K9uHw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 01D62C3279F; Fri, 11 Apr 2025 05:09:41 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220002] USB tethering fails with rndis_host on 6.14.2
-Date: Fri, 11 Apr 2025 05:09:41 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220002-208809-x0znYrjKuk@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220002-208809@https.bugzilla.kernel.org/>
-References: <bug-220002-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1744349144; c=relaxed/simple;
+	bh=F5IwO7xNRT04uiROP/oeCB8HkPlZOPYoytFUFMqBCLQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kuVlqZdPHOqfRgPhgv65TrJNuDZ3nsaMVlWD4JNbgCVsnqGHqzTDbj8gNH/dOU4K6eW9NY7p8nCgzl9f9MYQTZouTe+evL+FsqMC0Sk3QPnvOcUk5pE7qOERsvJmQxZ7wpVjc035Tm/Sz4K3C/mB3tDDIf1inZp/xgd97BVZHtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=jCFzg0hg; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [10.102.97.179] (118-163-61-247.hinet-ip.hinet.net [118.163.61.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id DF1623F189;
+	Fri, 11 Apr 2025 05:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1744349130;
+	bh=JobDZ4cR9gQ+Ni5Hnn8liTSBPbDfaEPWRaew7CjdJGY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=jCFzg0hgvmP2xTFbgXWqmr4Ouxlxg0hvI1yIDMuYT5q+7lwtUsMja8s7mMLjuyLWz
+	 uFYfKfU5p4yZP9cU9lKARfKZX5of9QjRpJozq+soCd89kuX2owlJqffq7ZGHtynjuG
+	 4MUhjCLv9yuK4ZeO1RjjDG0HczIsycjSRKGwJUFTCf01RdjsaA40lrS0/C8qkpBjYr
+	 93mFkf11gHcnmfYIlZ7IWRyZ0/ynj6lrA18OeQtmBlfz1aQaGj+blMl2ihN8Qjxm0t
+	 VC0+w1/Ss80FUqCZm4n3Z9hozjkNsuSu9qa7N+RwgbVff+fqqrOaW5hFL2Cn0kmJN3
+	 QLlWXJjYYug+g==
+Message-ID: <09496c1d-3e2b-46c5-9ef2-75fdd8a61bda@canonical.com>
+Date: Fri, 11 Apr 2025 13:25:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: quirks: Add quirk to prefer vendor-specific
+ configuration
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: krzysztof.kozlowski@linaro.org, limiao@kylinos.cn,
+ wangyuli@uniontech.com, jinxiaobo@uniontech.com, huanglei@kylinos.cn,
+ mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250410024626.981215-1-ivan.hu@canonical.com>
+ <2025041055-debtless-delirium-d5ca@gregkh>
+Content-Language: en-GB
+From: ivanhu <ivan.hu@canonical.com>
+In-Reply-To: <2025041055-debtless-delirium-d5ca@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220002
+On 2025/4/10 14:58, Greg KH wrote:
+> On Thu, Apr 10, 2025 at 10:46:26AM +0800, Ivan Hu wrote:
+>> Some USB devices with multiple configurations expose a vendor-specific
+>> interface class that should be preferred by default. However, the generic
+>> usb_choose_configuration() logic selects the first configuration whose
+>> first interface uses a non-vendor-specific class, which can lead to
+>> incomplete or limited functionality.
+>>
+>> Introduce a new quirk, USB_QUIRK_CHOOSE_VENDOR_SPEC_CFG, which
+>> instructs the USB core to prefer a configuration that contains a
+>> vendor-specific interface class when multiple configurations are present.
+>>
+>> Apply this quirk to the ASIX AX88179 USB Ethernet adapter
+>> (0x0b95:0x1790), which requires selecting its vendor-specific
+>> configuration for full functionality, instead of falling back to
+>> cdc_ncm.
+> 
+> Shouldn't this be done in userspace instead?  And how does other
+> operating systems handle this, the "first" configuration is usually the
+> default for them as well, do they have some built-in quirk to handle
+> this or do they rely on a vendor-provided driver?
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+Hi Greg,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
+Thanks for the feedback.
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-No meaningful changes to USB core or xhci_hcd, wild guess that maybe you co=
-uld
-try reverting this?
+In this case, the device advertises three configuration descriptors. The first is vendor-specific, the second is CDC-NCM, and the third is CDC-Ether:
 
-d34963d968a6 rndis_host: Flag RNDIS modems as WWAN devices
+Device Descriptor:
+   idVendor           0x0b95 ASIX Electronics Corp.
+   idProduct          0x1790 AX88179 Gigabit Ethernet
+   bNumConfigurations      3
 
---=20
-You may reply to this email to add a comment.
+Configuration 1:
+   Interface 0:
+     bInterfaceClass       255 Vendor Specific Class
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Configuration 2:
+   Interface 0:
+     bInterfaceClass         2 Communications
+     bInterfaceSubClass     13 (CDC-NCM)
+
+Configuration 3:
+   Interface 0:
+     bInterfaceClass         2 Communications
+     bInterfaceSubClass      6 (CDC-Ether)
+
+In drivers/usb/core/generic.c, the logic currently prefers the first configuration whose first interface is non-vendor-specific,
+based on the assumption that Linux is more likely to have a generic class driver than a vendor-specific one:
+		/* From the remaining configs, choose the first one whose
+		 * first interface is for a non-vendor-specific class.
+		 * Reason: Linux is more likely to have a class driver
+		 * than a vendor-specific driver. */
+This results in the CDC-NCM configuration being selected by default, even though the kernel already supports the vendor-specific driver ax88179_178a,
+which provides the correct and full functionality.
+
+Of course, this could be handled in userspace, but due to security restrictions on certain systems, such as Ubuntu Core, modifying configuration selection in userspace becomes significantly more complex and less straightforward.
+And although I don’t have insight into the exact design in Windows, but during testing on a standard Windows install, the device is correctly initialized with the vendor driver without any additional configuration or modification.
+Given that this quirk is device-specific and not a general change in policy, the proposed quirk simply allows the kernel to prefer the correct vendor-specific configuration when it's known to be required.
+
+Cheers,
+Ivan
 
