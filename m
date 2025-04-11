@@ -1,61 +1,52 @@
-Return-Path: <linux-usb+bounces-22970-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22971-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B28BBA85DF8
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 14:59:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8772EA85E29
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 15:06:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E02A1783B0
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 12:54:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B5707AE33E
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 13:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E686E2367BC;
-	Fri, 11 Apr 2025 12:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D87AC13957E;
+	Fri, 11 Apr 2025 13:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D+1poUm5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oCHB33EI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450892367B7;
-	Fri, 11 Apr 2025 12:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7BE7DA6A;
+	Fri, 11 Apr 2025 13:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744376075; cv=none; b=NlgwAVb1xUnEcNXovUfDs17LZ05mJL+dOj5FTMpVAA4palwU0aFxqWSHResORKhTC4s1mJ66jUUcfnXD0BAiRBYWjNQkOJ0ueJe6QVX8cn3o8GgUh75yQlpKFRgMUjRQcK98bpk0GTR1hRKNp3UvC8RyhsN3bSnBS6Sf2s35EXE=
+	t=1744376798; cv=none; b=mbnkXvxywrPe2uRfqC+TB+KvtVLOP9AeRm08QabRzkKMla5GiEGh2o2R1WgYokRy3LTqEYxyoAAKTLFE2Uinxj+nY/u46/TfRRrBhfirMSGFvMxtac1f6loM26QJZcVb05EN3uKG6sPxlmYXqy+1cUYut68+LHw0M/7i17sTyy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744376075; c=relaxed/simple;
-	bh=1FMfL5JnI997PT62pkJADHSoxPEsKGsxLvDEqOfq+8g=;
+	s=arc-20240116; t=1744376798; c=relaxed/simple;
+	bh=5O79GdJMUP1u1auDATSqpr2gGJykXZlL0f4n5WLQaS8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kC/V7kH2NIa2JbJqbq0CpNWudf0xzGfZeIXru625GrLpz/F4IgXuIjamDLvm2AVtQMnII/Ap3kiyx5sCA6RjCFfWY5XSYapoyCd2srZJNeXUiQFhaGhVvCm0Co0Q/aa509pv8ajqJBMMsmzcWUp+YeR4E/SRuWN1fh2W/tBiEEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D+1poUm5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EC1C4CEE2;
-	Fri, 11 Apr 2025 12:54:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XZVZ10UCx6SPk+3uZTh5b2Jn45NHBGIlvwgjEv1MZTZd2k6Xp+EwHDs20JkfXLgn/7JaJtobiudqE4yfAwd9a6CG6i/W/vpXL/EfdOuysxrwknZ1dAJgQdrS/LucHVVYJuP38I3X/o/cFXJGKeAGkYagoods1sLICGkVGWP8+Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oCHB33EI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506F3C4CEE2;
+	Fri, 11 Apr 2025 13:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744376074;
-	bh=1FMfL5JnI997PT62pkJADHSoxPEsKGsxLvDEqOfq+8g=;
+	s=korg; t=1744376797;
+	bh=5O79GdJMUP1u1auDATSqpr2gGJykXZlL0f4n5WLQaS8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D+1poUm5qqgIM4f5Y+ygHQRvTmE/bDvELlFFTrXnk8o9amrj9+VwDjvaI3UHLLXfm
-	 tuvUNtFa0w0fegdzpUTp173lRcHis64JPwwddmp2rS0SIa/5pyLHSpuJsh73wQmqaM
-	 eeyHnimkbrv+XaHd28Y80irAKGZcQH0CzvNaEUXI=
-Date: Fri, 11 Apr 2025 14:54:32 +0200
+	b=oCHB33EIcwBAAJPW7SO/vLL7mLGzXBClQFxfPq7Pgaq4qkNo00L4MAAaaVSAl5pBX
+	 DJFRwHCd9ksWW1uOxVAsehLtq31xgQ1QykeaPmW3bkqaRv2Lb+R9tGQi9GUpUJKs7G
+	 VvvXPitxaU4AHjFjlBLbtnqMzVAC89ik78+Jrdf0=
+Date: Fri, 11 Apr 2025 15:06:34 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
-	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
-	lgirdwood@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
-	pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
-	tiwai@suse.com, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v38 00/31] Introduce QC USB SND audio offloading support
-Message-ID: <2025041152-eternal-harmonize-d608@gregkh>
-References: <20250409194804.3773260-1-quic_wcheng@quicinc.com>
- <2025041029-oval-cavity-7896@gregkh>
- <2025041144-imitation-reappear-a0d9@gregkh>
- <Z_kNr52hM-iWUgyZ@linaro.org>
+To: Henry Martin <bsdhenrymartin@gmail.com>
+Cc: joel@jms.id.au, andrew@codeconstruct.com.au, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb/gadget: Add NULL check in ast_vhub_init_dev()
+Message-ID: <2025041119-debit-cosmic-f41c@gregkh>
+References: <20250405113020.80387-1-bsdhenrymartin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,33 +55,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z_kNr52hM-iWUgyZ@linaro.org>
+In-Reply-To: <20250405113020.80387-1-bsdhenrymartin@gmail.com>
 
-On Fri, Apr 11, 2025 at 02:40:15PM +0200, Stephan Gerhold wrote:
-> Hi Greg,
+On Sat, Apr 05, 2025 at 07:30:20PM +0800, Henry Martin wrote:
+> devm_kasprintf() returns NULL when memory allocation fails. Currently,
+> ast_vhub_init_dev() does not check for this case, which results in a
+> NULL pointer dereference.
 > 
-> On Fri, Apr 11, 2025 at 01:04:37PM +0200, Greg KH wrote:
-> > On Thu, Apr 10, 2025 at 09:11:42AM +0200, Greg KH wrote:
-> > > On Wed, Apr 09, 2025 at 12:47:33PM -0700, Wesley Cheng wrote:
-> > > > Requesting to see if we can get some Acked-By tags, and merge on usb-next.
-> > > 
-> > > let me give it some 0-day bot testing to see how that goes...
-> > 
-> > All looks good, so let me go apply this to my usb-next branch now.
-> > 
-> > Thanks for sticking with this, I think it deserves the "most versions ever"
-> > of a patch series award.
-> > 
+> Add NULL check after devm_kasprintf() to prevent this issue.
 > 
-> I have honestly no intention of blocking this series any longer, but the
-> comments I raised on PATCH 26/31 are likely valid and suggest the series
-> wasn't fully tested on v38. So I would personally prefer to get fixes
-> and confirmation on that from Wesley and then merge v39. It doesn't feel
-> like the kind of thing to fix incrementally on top, since the commit
-> message is also misleading now.
+> Cc: stable@vger.kernel.org	# v4.18
+> Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub")
+> Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+> ---
+> V1 -> V2: Add Cc: stable label and correct commit message.
+> 
+>  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> index 573109ca5b79..5b7d41a990d7 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> @@ -548,6 +548,8 @@ int ast_vhub_init_dev(struct ast_vhub *vhub, unsigned int idx)
+>  	d->vhub = vhub;
+>  	d->index = idx;
+>  	d->name = devm_kasprintf(parent, GFP_KERNEL, "port%d", idx+1);
+> +	if (!d->name)
+> +		return -ENOMEM;
+>  	d->regs = vhub->regs + 0x100 + 0x10 * idx;
+>  
+>  	ast_vhub_init_ep0(vhub, &d->ep0, d);
+> -- 
+> 2.34.1
+> 
 
-I think a fixup is probably sufficient, especially as I can't rebase my
-tree, and reverting all of these is just a mess.
+What kernel version did you make this against?  It does not apply to
+6.15-rc1 for me :(
 
 thanks,
 
