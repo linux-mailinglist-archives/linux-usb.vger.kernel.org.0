@@ -1,55 +1,53 @@
-Return-Path: <linux-usb+bounces-22982-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22983-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B32A85FE4
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 16:03:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4D5A85FF6
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 16:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48A5A8C4F4A
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 14:02:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A79314C3A03
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 14:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6261F1909;
-	Fri, 11 Apr 2025 14:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7742A1F2C44;
+	Fri, 11 Apr 2025 14:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X4jfO+uL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yMLR0hRc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4082C8635A;
-	Fri, 11 Apr 2025 14:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C371F150B;
+	Fri, 11 Apr 2025 14:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744380142; cv=none; b=QMKrPBfolNcexEVuGB9qXotmRyrCzdNBqnUljPUliZR7uJDhNfWo/yDrEGkArGwl5IToqUXlRP8bXpbiuXkd0/Ux33osExm+qz7K0g/Tom8x4gHmKjhR9uBQVGILDFUX6dA/OaNJ4NaraG2OlNpJKDH0DheZLA4ZjiP+apkAbi8=
+	t=1744380271; cv=none; b=JMauP3yYbpjXVX7Veo5D6H7bbeYOdCDUTKC8xF2PKIteCC7iQcI5g0H1P3wepLcmXO3NHq3c3koYKDNGereggX0GTphftrH4On8vZW0+I92VyiwfBGFWGB5kCT8TXUvd+Xal3RFaj/MnuV1hvlJWPMUN492/wcdyqmNUvlfiUiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744380142; c=relaxed/simple;
-	bh=6gZYC8dYoQ73OQgYvOUcUOQs/hk7/YC48r0jnFZSK14=;
+	s=arc-20240116; t=1744380271; c=relaxed/simple;
+	bh=wWqWHZOrq1Qn5idsQv+wIOMUCzZhIhn1TOWFLusktZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NV+0mY+Fji5OZxLMuw1CEFPmfkY3O01Pkz+C+f3yx6n3RtFt+Q7S+oMfmNm38WmBzGEZTIanPXoSDYekd1V3h77h3m7Go26ylTPMpSbCCX/OShgMAtifpGfjAZIMxY/yspCd+HcKDV2jo6RhMfz3Mg6yzpvnHEmGXmDLpquNC5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X4jfO+uL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E8DC4CEE2;
-	Fri, 11 Apr 2025 14:02:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RP+V5FObK+BjkSyKchS/fv6VgZW/z2k19diQCrTJmV+SY7Th2jFtIqJXLcRGWRdwgI9IAKU/Ku3gCSsl0EzuremzTVzKdtEFrT7MW3j3E3zRCLtMqAtnhS9FiSUeJ5wi//m//4fkvj/00ThN9H0rn4kwlPtWLB8cSql67iTLBhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yMLR0hRc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2803C4CEE2;
+	Fri, 11 Apr 2025 14:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744380141;
-	bh=6gZYC8dYoQ73OQgYvOUcUOQs/hk7/YC48r0jnFZSK14=;
+	s=korg; t=1744380270;
+	bh=wWqWHZOrq1Qn5idsQv+wIOMUCzZhIhn1TOWFLusktZI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X4jfO+uLKXDmb4EKG4z/dQdCKfVL0iYVZL9uA2HYnM2r7sqscNWkTZJxk+lTN7+pJ
-	 zHQGB4Eed8+FTO+iBMA+SPVhltK4lLTK7WnZgY9v6b0ah2q/0ShypZjtEALhqlGG9V
-	 OOD7NEEK28yji5SnWF+KzGbuqW9G9fZgcDRU3FE4=
-Date: Fri, 11 Apr 2025 16:02:18 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu,
-	gargaditya08@live.com, kekrby@gmail.com,
-	jeff.johnson@oss.qualcomm.com, elder@kernel.org,
-	quic_zijuhu@quicinc.com, ben@decadent.org.uk,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 4/4] usb: host: enable USB offload during system sleep
-Message-ID: <2025041140-fernlike-reconvene-b2e5@gregkh>
-References: <20250408035833.844821-1-guanyulin@google.com>
- <20250408035833.844821-5-guanyulin@google.com>
+	b=yMLR0hRcR9ALRmn/LpQN+r+iLhxiIe4HVvgwxdV1VGkMkLejZE4umtFzExLAiZZit
+	 GXUdw8pgsEIVUJ957Yu/gGaISq5M+9kN3+CIdSTQ0Ry8mj63OsdmcFbeeCbrggP3m3
+	 7kmlHuYGydSjZ0nv7rJN1Ka0Dub9Ui8DjdKmMwlU=
+Date: Fri, 11 Apr 2025 16:04:22 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Chance Yang <chance.yang@kneron.us>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, morgan.chang@kneron.us,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: common: usb-conn-gpio: use a unique name for usb
+ connector device
+Message-ID: <2025041154-perfume-demote-2fef@gregkh>
+References: <20250411-work-next-v3-1-7cd9aa80190c@kneron.us>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,19 +56,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250408035833.844821-5-guanyulin@google.com>
+In-Reply-To: <20250411-work-next-v3-1-7cd9aa80190c@kneron.us>
 
-On Tue, Apr 08, 2025 at 03:57:24AM +0000, Guan-Yu Lin wrote:
-> @@ -736,6 +737,7 @@ struct usb_device {
->  	unsigned use_generic_driver:1;
->  
->  	refcount_t offload_usage;
-> +	unsigned offload_at_suspend:1;
+On Fri, Apr 11, 2025 at 04:33:26PM +0800, Chance Yang wrote:
+> The current implementation of the usb-conn-gpio driver uses a fixed
+> "usb-charger" name for all USB connector devices. This causes conflicts
+> in the power supply subsystem when multiple USB connectors are present,
+> as duplicate names are not allowed.
+> 
+> Use IDA to manage unique IDs for naming usb connectors (e.g.,
+> usb-charger-0, usb-charger-1).
+> 
+> Fixes: 880287910b189 ("usb: common: usb-conn-gpio: fix NULL pointer dereference of charger")
 
-Please take a second and think about how the memory is now layed out
-here with your new addition.  The tool 'pahole' is your friend...
+This isn't a "fix" it is a "new feature to support multiple devices in
+the same system".
 
-thanks,
+So I'll drop the stable stuff here when applying it, thanks.
 
 greg k-h
 
