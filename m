@@ -1,123 +1,93 @@
-Return-Path: <linux-usb+bounces-22994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22995-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38101A868EC
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 00:42:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8E0EA8692C
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 01:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E38AA188E499
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 22:42:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F01418952B9
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 23:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82102BD583;
-	Fri, 11 Apr 2025 22:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF4A283686;
+	Fri, 11 Apr 2025 23:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8/5oaNi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFY/LRVY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965EA298CB8;
-	Fri, 11 Apr 2025 22:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CBE1EFF9F
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 23:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744411332; cv=none; b=GA1J+GwV//ikGfxZf5TFJRhlo9DBZn9psBst9WGVQkKmMq4Y8xHDnXcWaE3sTVBbPe3jQjVgn2fL5mxBLCk4soeI65JEeSY0aarxBPD/eN1aV8Tp0Odtp4zPbv7pyh+7dAVf3QB8kPYmwam69/btivz69JEVAkPFM78QDi08m1w=
+	t=1744414268; cv=none; b=P0lEE69E2Cd7DSDs/S5jYS+P0/CKhFqS1nc2I4+4Bzff1UkUPyhCE34ALDNjvNLQtHIRysTcA9lRHbSwsJcspMpUqmAUdcWitNk3r7fh7eNIuGZs3+QhV+gT4LNyOTDNXYp/KR3IQYiDNMR+xGSgOvmfdfkbP9SKob+f2v8NQFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744411332; c=relaxed/simple;
-	bh=FdmqUISjZIZYic0y2KPJOx0P3SF4CBgysTj/yfKiVqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Cjv0SUyIKyuhiTZO4uclICAc0VTk/BxifnQLL8dJCTSM0aecZRVXpTZ9CZoiCKReZh3TKHQkGfF112G7Bh0F09IGXtWvOjFu8ENu7vkVqWZ9LkYcTR6PIt50gQg53r4pG82x233yRPXhsXASImiJO56nj0awrwhyVig914TI1t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8/5oaNi; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30bfc8faef9so23316621fa.1;
-        Fri, 11 Apr 2025 15:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744411328; x=1745016128; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wfMPFZIkxa9RCg5uonUpCWP0daSFj+rwBDcLLo/EAvE=;
-        b=h8/5oaNiemUloyZTdwfjutWHxRM3GLW34JoC445Blj91HNnDvk7uorBVcv+N6X/vqk
-         k4oGrLbawF+dAIR5z6sW/QnIRXPm9V6hQp0cELQuKsjcbAqrjj5h288OJJc+6YZ+RRnP
-         4v/GMhlXWkNtKMgaTyGav2AgvvhlGbtImvTWBKsX2vLHmeIAFv+GFD8YJPdfAJqnUU0N
-         tmMnUWTOxjuali1LZ88nUBzDklPpQAUlNaB0X0OVJWkoruGFByPCK3kpPm/HzKRjelEv
-         pZa8KnWlxiQGxYKEFA9RVNrvhcv03XYdS/9rXTwoJLA/ViLFSjRLE0lqQkiP547c/SXb
-         OQaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744411328; x=1745016128;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wfMPFZIkxa9RCg5uonUpCWP0daSFj+rwBDcLLo/EAvE=;
-        b=fR5cDotjuKLWtlyv8A1EhF963qdPGFQw1yraY/PxAtt9fa5tPVzgcoo2ybmvOQdsq9
-         PwPSrTBezAEtjZgtldeXZFYm+JypZlf2ttmuZEJWpjAL6aQhF0qaO7w+2ca5vLpRMT9w
-         1YA5unSBn9P8zYCgy3fPRsX98Ovgq1t1UnP8qs6DRHixfdYiTIMfInnFftusaoUxuZD7
-         kefjUuCCVZF36e2oVWh5yE3UU2aYSNYEaeVkD65SHXKcR8eiz2R4N7aRVudfAc2IHdLu
-         hbsptGljBtJqjzq+Rc6TD6OXh/r1AKhlPgRZrzMrjBeTGAH7X9FYsvZW/YZhYGjiftgW
-         njqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUl9xqe/3BanFHV79/v7hD9tg8a3iDHn9MTcUoK1aKETCyn9mBijl6bi2RSB9ZHvsipQXWwGZnX@vger.kernel.org, AJvYcCX0H+KdYm/ZFXeYIGPOVyzckMXAN6JzaqhMrZZ64NECSvOtdqwOomr7YquQzklYbQ975+1VvHaspNzi0/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYanBwdXmcQXpgBndzP9KMfZ2G34I+IPmoM143trVgsA0vrPxw
-	SiM3lccP0NCvOwvKGKQFBG0jrC/YCpcrHPpTdI0mYrGagYkBi35T
-X-Gm-Gg: ASbGnctxG3qWu2eQAojgCMBRIXScrZNH/3OPjwrtYaeUV0ghRnsN55VkBUpldkycend
-	9bkxOOBlqDtdtcslqSW4UOM5rNUqfH5TLTuwp3OoNQDgiNNjd2YKALx1FKkI9M33VaTmAJzR5xe
-	CdCYjQgrjhsOuueLRaa5gEGvICFkYAl8mGPIoF9RieJuGA7AmRtRLktsoG+Vzkp04CnByb0x44l
-	BkztZhOYpDsKLEQUCELfNdF2opR4CAblTdD5yK2wSvvAY2mEO8Cj1IqA+439afodI9G9lzngwgY
-	Tvie/SuoYnex9VnFmqHGp6YiuxpXVmPw1IOpsuOYltLZQvTAvR+vtAt5uRq3yQK+Lfmt
-X-Google-Smtp-Source: AGHT+IHXaq0sN8vDq6Hffwl9NXo/fpZhZOHJ9IKz9rM+MPatzUdCqfXnSbOzG6KtZ8jFnj3rt45NZg==
-X-Received: by 2002:a2e:be88:0:b0:30b:fe19:b07a with SMTP id 38308e7fff4ca-31049a8085dmr15182781fa.25.1744411328302;
-        Fri, 11 Apr 2025 15:42:08 -0700 (PDT)
-Received: from foxbook (adtq195.neoplus.adsl.tpnet.pl. [79.185.228.195])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f464cbbb0sm9044391fa.30.2025.04.11.15.42.07
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 11 Apr 2025 15:42:07 -0700 (PDT)
-Date: Sat, 12 Apr 2025 00:42:03 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Lubomir Rintel <lkundrak@v3.sk>
-Cc: linux-usb@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Jakub Kicinski
- <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, "David S. Miller"
- <davem@davemloft.net>, Andrew Lunn <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH v3 net-next] rndis_host: Flag RNDIS modems as WWAN
- devices
-Message-ID: <20250412004203.099e482a@foxbook>
-In-Reply-To: <20250325095842.1567999-1-lkundrak@v3.sk>
-References: <20250325095842.1567999-1-lkundrak@v3.sk>
+	s=arc-20240116; t=1744414268; c=relaxed/simple;
+	bh=on0l0G5c2Fc5PXB2eLKR2pWhp45DU58L13uai8vZLno=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=L5P9WoYHDeNWh/MtLEIZ/KC9nTxbSL+EZX5WazqNPj7RLFTxyfqM1JDhWHXqSSV+asjhaTo1WQn2lCjGuZmQZL0m8E2CB4/PJHEDpW0Q8iSdLXn2YgjT4A+pEeIfgzJjNZuwxoN93hq/BgMOcdZZmKu4CRGRQWbONobUX/LlMLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFY/LRVY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C368AC4CEE5
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 23:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744414267;
+	bh=on0l0G5c2Fc5PXB2eLKR2pWhp45DU58L13uai8vZLno=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=iFY/LRVY2n67anTCVaNZN5qd0n6oiLJ+nzkR8qBr0Hlw/tHbB/JNZR7B6ZMNxktxV
+	 sZxjhUaJfDUb0AuueamBU9Z76s/FXhQl9iGwyWOa6qZB//cKyGmAOXY1MBchNPYKFh
+	 K6ODHS6wXMxSt1xILGdixcB1LBkpG8S/JYSk5Rf4VJMqEMEG/50slSBGAMfJcLnMB6
+	 ZGeTWM2XAhYdrQ695bm15u5acb1+jN92MboLSpETF3YmkhjGdG0E23kMAlpJll8PXz
+	 MwpiL/Jx/Pma3DsrJpUFjaRsPfMdJ0i+L9nnABrrKb+FMR89m/+7fNPr3AdQ8IPMY9
+	 ewr04dKtqu1jQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B42ACC41614; Fri, 11 Apr 2025 23:31:07 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220002] USB tethering fails with rndis_host on 6.14.2
+Date: Fri, 11 Apr 2025 23:31:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aminvandh@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-220002-208809-71aKkCS1LD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220002-208809@https.bugzilla.kernel.org/>
+References: <bug-220002-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Tue, 25 Mar 2025 10:58:41 +0100, Lubomir Rintel wrote:
-> Set FLAG_WWAN instead of FLAG_ETHERNET for RNDIS interfaces on Mobile
-> Broadband Modems, as opposed to regular Ethernet adapters.
-> 
-> Otherwise NetworkManager gets confused, misjudges the device type,
-> and wouldn't know it should connect a modem to get the device to work.
-> What would be the result depends on ModemManager version -- older
-> ModemManager would end up disconnecting a device after an unsuccessful
-> probe attempt (if it connected without needing to unlock a SIM), while
-> a newer one might spawn a separate PPP connection over a tty interface
-> instead, resulting in a general confusion and no end of chaos.
-> 
-> The only way to get this work reliably is to fix the device type
-> and have good enough version ModemManager (or equivalent).
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> Fixes: 63ba395cd7a5 ("rndis_host: support Novatel Verizon USB730L")
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220002
 
-Hi,
+hooman (aminvandh@gmail.com) changed:
 
-This patch appears to have caused a regression for some users,
-who opened a bug against the USB subsystem here:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-https://bugzilla.kernel.org/show_bug.cgi?id=220002
+--=20
+You may reply to this email to add a comment.
 
-Regards,
-Michal
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
