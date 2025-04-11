@@ -1,254 +1,78 @@
-Return-Path: <linux-usb+bounces-22984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22985-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6101AA86018
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 16:11:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D14FA86089
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 16:26:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5038189272E
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 14:09:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 383FB3AE3C5
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 14:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A1561F30CC;
-	Fri, 11 Apr 2025 14:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A41F4606;
+	Fri, 11 Apr 2025 14:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U/JwKS2V"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ykrbSkiF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C3D1F2B8D
-	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 14:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881061C3BEB;
+	Fri, 11 Apr 2025 14:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744380535; cv=none; b=aOBhtut3Qpo4NIrc2db2CFdquudq0yXHYFrH5n60VQTb4vhujBeMjfWMKs3ADzm2JLi0R1N0YEp+y4Qgc63ymAWojPkhQqlQQ6FHfphXzFSx6TTuQmVJDLL+/ZzH39IUsgBmpJQITgD6nGy68V8+ZjX74wnPDzU/Xs8k7NhGZLs=
+	t=1744381423; cv=none; b=r5NxglBr4DJ/S+ETtACa3JFTzM6QpCTR0OJz8lJDvKTPn2fgTOK7CZ9joNXZCRhWXLP2mIeQVfwagAIO/fXiZ2cacyYOGOyaeTbQJRdEesQJBXXb3Ko87HeBjbYyLkdYcIJ65h8vGi/+ueQ3XUlDZPOqURn7WHIo8FcQ4Z+PxQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744380535; c=relaxed/simple;
-	bh=AXf+TOIsxTe7gFokC/cK4t5yaKBEpqCAZ7YE7r0VXAA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=eccsL6EUmu9BtpjANcDZ3NfmUwrzo3LlUsOfBAdiVt4KmCBDT1cx3RQVeX2rKkwKAmPMu3HBM6fXSTTg3UozPWCU6GkM5RUNUsybsTzdHntC9XzFb+vpTxC4Qf/ZEh+SsV0otCBn5oivuQiE5tItAsr5DP05o+F4kIt/GXI/mU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U/JwKS2V; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso1212341f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 07:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744380532; x=1744985332; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rBj/6se5tCkgHEuB0Gb6HuXLXKWv7TpLm9YNzyiLklA=;
-        b=U/JwKS2VoK4GSEnoSmZ5UIhsnSsruTiG1gcT9l+WaU+GbxkxxBH4jIJqj2O5ypkuFS
-         1ib+MPil0sX2GNtqutJNtVrm1Q1Muhr6QOrLmJVZvi2gF0bjsfqEaWicXgNBD8W6jn82
-         /HyQOhXZzHL8LvJFSxZcGGdXac1DwNPB78mx2hPqPsdovEbiU+AVGkFzg4g+smx/P10y
-         Fz3Zfv4jUPlcImpmYLAB6i7OPK+3AK9DN8uMVIsna8D6O8sC6bTPz+6zv2E5sRQmIlXf
-         71DeVPQTovr8EDkg66JOGFHdIuD6oQjaJ6ECUK3pI4vbxgFYOgBEUvT9nq9JPHvsgALc
-         3gqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744380532; x=1744985332;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rBj/6se5tCkgHEuB0Gb6HuXLXKWv7TpLm9YNzyiLklA=;
-        b=a35oVEQhAH089QSKOSx9YY+CUnTMbFEpaof5W56vpl3KuhKKwpHgOJ0VAl9bzVFuyR
-         56nR+ohZoerZ/35TPBlyRaLQOe+aMdDi9nZlb92vPnF7TA5VgqPu/AFGp5Q8HlwD9Ed/
-         nk/oar3KP172kPJBVKp+ID8h5mHLFNVotknwXrDDOGg1e8FWrYRoryC91a+aZewqOj3F
-         nxEwBy6KT8Z0xzME+ya9swdQ19YS7yhCy7f1OhswFd41ZZ80rB5N5enHMnht3LPp/I3l
-         jzjsXXiVWoeqWpj5LBApRdfQjugw65RCis+Lz0ibUn2HcG6uszzzSNhikNKqdJxuOCgJ
-         hy2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUUYHVLUgA5Qel1aB+KkD2yA5IGAkd34kVGL80ACqQdWsAKVP7URLj3zlRixJN7n88/gpoLtVj+91Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytQ0PsCkW+9ONDZ0qELsidOJLZsqWphJsHNjTGNvh8rT8lh7Om
-	p9JUyIR2soaO0ukAGkVziVZen6rYqed4jI6N/V5xeQpjONOqR1CoUvPID5HQU6I=
-X-Gm-Gg: ASbGnctrVwQYBtqNwtmYUoPSW7SJRTRwIgrzBco4mmDdZ6tcsdCX/QJnLqWKLFbG7Pp
-	Gbi4O4yjig11J1g9m7CzwhesAsMsjeaEq+88lgcqyru2rWiCv2qMsXyD59aYARIkrKQ28rhubYP
-	HL70cSf4KxmYXo0X/2i1Q8NarYm5dhNG0MsAWcHQ5akTyHk1qmyXFwlJMsE6jTO8d/Y9qydhHEi
-	XnwuLqS57d0C9uwZGcg9NnAm9PtFjU/LTZ982EjvcGopzki7n4ybNrx/5iWk6EI9Jk/XO+zP6k0
-	dfyraqoHtvDz+OfmIPFi0e+pheAtMifMxWjFbaDZmbaw6+qQwlu8UDg5cXYvupMOxKvHevH3PZu
-	p+MQO9+Kdh0siCiuRaw==
-X-Google-Smtp-Source: AGHT+IFnB9Qn0xYinsQMUfheUpu1Su+V1dXaFUExJ5EgbBZlHAOQb/p3lWxk4FDMVN2HW/UOMS4Sww==
-X-Received: by 2002:a05:6000:22c7:b0:391:487f:282a with SMTP id ffacd0b85a97d-39eaaecd643mr2208108f8f.50.1744380531857;
-        Fri, 11 Apr 2025 07:08:51 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:f77b:949e:1d61:69a8? ([2a01:e0a:3d9:2080:f77b:949e:1d61:69a8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf43ccd8sm2127969f8f.72.2025.04.11.07.08.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Apr 2025 07:08:51 -0700 (PDT)
-Message-ID: <6d406ffb-7e2b-4e3c-b316-82a2a6ab57eb@linaro.org>
-Date: Fri, 11 Apr 2025 16:08:50 +0200
+	s=arc-20240116; t=1744381423; c=relaxed/simple;
+	bh=GJX49r3BKpYaA7bCwqkvzU5fTQ0dfWOuIUAYjRLKwrI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GWhUcJPDLu58KM1+CVnnQq1hsBPgsvnc4lK+iDVA4j5KRgHuW0eTUAyWIW79g/gLdaBnYU/au2s0/nzhzeVq7faanGySxJij1wXi8na+WhbHsqQ0f16PhnDXjDtouAO6jm7OZRhHU+4WD3/Mz45R+ex0O0TL3H6ttH4+76ZvaoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ykrbSkiF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D59FC4CEE2;
+	Fri, 11 Apr 2025 14:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1744381423;
+	bh=GJX49r3BKpYaA7bCwqkvzU5fTQ0dfWOuIUAYjRLKwrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ykrbSkiFYCTU78cv7nHZ/NKfAWj8GpkCFCqBKjO0j0/eisI7B3hvs/K9YlpPNiFdI
+	 YBc9iW4tTH96iD8Aj0DArHvuOhdVqUZ6hcMZbNMFs+Mbon2Y2pQXU3fjbOnuz9NvaI
+	 Y5wPUpg3gdByrBIFKnOun9nT+lOg20Mieq7XkzIs=
+Date: Fri, 11 Apr 2025 16:23:40 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: dwc3: Abort suspend on soft disconnect failure
+Message-ID: <2025041149-krypton-rejoice-bced@gregkh>
+References: <20250327133233.2566528-1-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v6 0/6] usb: dwc3: qcom: Flatten dwc3 structure
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>,
- Saravana Kannan <saravanak@google.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250327133233.2566528-1-khtsai@google.com>
 
-On 11/04/2025 05:50, Bjorn Andersson wrote:
-> The USB IP-block found in most Qualcomm platforms is modelled in the
-> Linux kernel as 3 different independent device drivers, but as shown by
-> the already existing layering violations in the Qualcomm glue driver
-> they can not be operated independently.
+On Thu, Mar 27, 2025 at 09:32:16PM +0800, Kuen-Han Tsai wrote:
+> When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
+> going with the suspend, resulting in a period where the power domain is
+> off, but the gadget driver remains connected.  Within this time frame,
+> invoking vbus_event_work() will cause an error as it attempts to access
+> DWC3 registers for endpoint disabling after the power domain has been
+> completely shut down.
 > 
-> With the current implementation, the glue driver registers the core and
-> has no way to know when this is done. As a result, e.g. the suspend
-> callbacks needs to guard against NULL pointer dereferences when trying
-> to peek into the struct dwc3 found in the drvdata of the child.
+> Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
+> controller and proceeds with a soft connect.
 > 
-> Missing from the upstream Qualcomm USB support is proper handling of
-> role switching, in which the glue needs to be notified upon DRD mode
-> changes. Several attempts has been made through the years to register
-> callbacks etc, but they always fall short when it comes to handling of
-> the core's probe deferral on resources etc.
-> 
-> Furhtermore, the DeviceTree binding is a direct representation of the
-> Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> 
-> This series therefor attempts to flatten the driver split, and operate
-> the glue and core out of the same platform_device instance. And in order
-> to do this, the DeviceTree representation of the IP block is flattened.
-> 
-> Departing from previous versions' attempts at runtime-convert the
-> Devicetree representation is swapped out and instead a snapshot of the
-> current dwc3-qcom driver is proposed to be carried for a limited time.
-> 
-> A patch to convert a single platform - sc8280xp - was included in the
-> series. This, and others, will be submitted in a separate series as soon
-> as its introduction won't break bisection.
-> 
-> ---
-> Changes in v6:
-> - Change legacy driver's name, to avoid collision if both are loaded
-> - Drop duplicate pm_runtime_{allow,disable}() from dwc3_qcom_remove()
-> - Drop DeviceTree example patch, as this should be picked up separately
-> - Replace __maybe_unused for PM and PM_SLEEP functions in dwc3-qcom.c
->    with guards, to match the exported functions from the core
-> - Add missing pm_runtime idle wrapper from dwc3-qcom
-> - Add missing "dma-coherent" to the qcom,snps-dwc3 binding
-> - Link to v5: https://lore.kernel.org/r/20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com
-> 
-> Changes in v5:
-> - Moved the snapshot commit first, to get a clean copy
-> - Add missing kernel-doc in glue.h
-> - Used a local "struct device" variable in PM functions to reduce the
->    patch size
-> - Replaced initialization with default values with zero-initalizing the
->    dwc3_probe_data in dwc3_probe()
-> - Add TODO about extcon, as a role-switch callback needs to be
->    implemented
-> - Corrected &usb_2 mmio region length
-> - Changes the timeline expressed in the commit message to suggest the
->    legacy driver to be dropped after next LTS
-> - Integrated qcom,dwc3.yaml changes since v4
-> - Link to v4: https://lore.kernel.org/r/20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com
-> 
-> Changes in v4:
-> - dwc3_{init,uninit}() renamed to dwc3_core_probe() and dwc3_core_remove()
-> - dwc3_{suspend, resume, complete}() changed to dwc3_pm_*()
-> - Arguments to dwc3_core_probe() are wrapped in a struct to better
->    handle the expected growing list of parameters.
-> - Add the lost call to dwc3_core_remove() from the Qualcomm glue driver
-> - Removed now unused cleanup.h, of_address.h, and of_irq.h includes from
->    dwc3-qcom.c
-> - Link to v3: https://lore.kernel.org/r/20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com
-> 
-> Changes in v3:
-> - Replaced the handcoded migration logic of compatible, reg, interrupts,
->    phys with overlays.
-> - Move the migration logic (and overlays) to a new drivers/of/overlays
->    directory and apply this at postcore, so that it takes effect prior to
->    the relevant platform_devices are created
-> - struct dwc3 is embedded in the glue context, rather than having a
->    separate object allocated
-> - The hack of using of_address_to_resource() to avoid platform_resource
->    being stale is removed (thanks to applying migration at postcore)
-> - Link to v2: https://lore.kernel.org/r/20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com
-> 
-> Changes in v2:
-> - Rewrite after ACPI removal, multiport support and interrupt fixes
-> - Completely changed strategy for DeviceTree binding, as previous idea
->    of using snps,dwc3 as a generic fallback required unreasonable changes
->    to that binding.
-> - Abandoned idea of supporting both flattened and unflattened device
->    model in the one driver. As Johan pointed out, it will leave the race
->    condition holes and will make the code harder to understand.
->    Furthermore, the role switching logic that we intend to introduce
->    following this would have depended on the user updating their
->    DeviceTree blobs.
-> - Per above, introduced the dynamic DeviceTree rewrite
-> - Link to v1: https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
-> 
-> ---
-> Bjorn Andersson (6):
->        usb: dwc3: qcom: Snapshot driver for backwards compatibilty
->        dt-bindings: usb: Introduce qcom,snps-dwc3
->        usb: dwc3: core: Expose core driver as library
->        usb: dwc3: core: Don't touch resets and clocks
->        usb: dwc3: qcom: Don't rely on drvdata during probe
->        usb: dwc3: qcom: Transition to flattened model
-> 
->   .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
->   .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 622 ++++++++++++++
->   drivers/usb/dwc3/Makefile                          |   1 +
->   drivers/usb/dwc3/core.c                            | 160 ++--
->   drivers/usb/dwc3/dwc3-qcom-legacy.c                | 935 +++++++++++++++++++++
->   drivers/usb/dwc3/dwc3-qcom.c                       | 182 ++--
->   drivers/usb/dwc3/glue.h                            |  35 +
->   7 files changed, 1808 insertions(+), 140 deletions(-)
-> ---
-> base-commit: 29e7bf01ed8033c9a14ed0dc990dfe2736dbcd18
-> change-id: 20231016-dwc3-refactor-931e3b08a8b9
-> 
-> Best regards,
+> Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
+> CC: stable@vger.kernel.org
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
+Always test your patches before submitting them so you don't get emails
+from grumpy maintainers telling you to test your patches so that they
+don't break the build :(
 
-Thanks!
-Neil
 
