@@ -1,243 +1,264 @@
-Return-Path: <linux-usb+bounces-22933-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22934-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 266C5A85205
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:28:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D054A85227
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 151933B7B79
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 03:27:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D58EC7B49DB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 03:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E8B27C17E;
-	Fri, 11 Apr 2025 03:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9689527CB23;
+	Fri, 11 Apr 2025 03:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b="Z3yqB9Rj"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SeRY26do"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2137.outbound.protection.outlook.com [40.107.212.137])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121B522338;
-	Fri, 11 Apr 2025 03:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.137
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744342067; cv=fail; b=W11bT1cAuMjbXW4K0FpvJkJwax1a/bUPHiqGpuRXlPqfDjd5PJHEmbKikrpzWMtEMycqZ1KmmhLZYs6b74ll2B/wqO3g74kTqCzTKCZVHns1DhtpZSOgd3Fgfpengz380l/lC+gvYITB2xo3vgp0Tv+6LFbfYB31PJmwJZ+CIDg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744342067; c=relaxed/simple;
-	bh=MzN1eSIVj8IAWiceALmI5C5WO6BfNntcg582znkMtDA=;
-	h=From:Date:Subject:Content-Type:Message-Id:To:Cc:MIME-Version; b=aTxX3PdDPdNZ32jZ+s7/5nQ6R+8cxgYEkE7wellAyUjTyp4a3mvGpJuFGl0W6o/YEJmBvXZTFFpIANA08NPDXPFBTdEAcifRgZpTs4puGNxtCTXFr02EIDKfLGuZyU5ZSeYqJAshz6dGWJTEoPxDgls9fAbYcqjfcwlWx3mGCUU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us; spf=pass smtp.mailfrom=kneron.us; dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b=Z3yqB9Rj; arc=fail smtp.client-ip=40.107.212.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kneron.us
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CiyH16HfFgsznkZSzV6QNG9U8m4xXl0vqw1n8u8yjELaw4Jp2Rqa4S/6zSzM93OKIbCu7VfPe3wij0i9AifGdeQpzNpTVAL35axRoDKSQF03cPFwndUzWOmKlhIFJTcZ2LdyqvSvoxr2uesVd16tvf0U1oIkzBD8FHG5zvji1kKwSa3gfLYsL9jzifoJBYNWnsDImp32SpQiysh78LlCbURa4dDwUDshSOu7NMvaw1AfUs2w08hByhTmMZRbco8wTwIpO3Q3WuyAnFZJ7KXBr8jEvjo9LaaAxIfCQ9bTo4EHVzQ/Jj55jvK4NDjgbTesJHWub50wRPupDM1XG7y5Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RoyVwhPkWvOwqeS6n7F5XnG19gtGWbdBJ6OhY3pVIZ4=;
- b=aTpGpaDCPzpp/pH8cjhZamOiLz/Oz7VqNXGuAfTmYnSUsulPJCZ16WrbOZutO+VmJoxa+Ial0uA3zlzYlP2BsNwi3HvPPSrc26KAsKGif+di8XAZ+L1jm9eWJOgTG1Dk0xErmEyXSAyB5ENAleMKJ6FbpbkX9n2wc12ouQElb0CVTm+SvWkUyXrzlDlfcrTDXQuiRp6CSW8ZJhb4LBWYaXUnHAJVjVSuO2kPBevO+oFqcj3WW1sk4puwles/EbaAPmMMPxLHOj6XEQyPBIDMRrU5Ghl6786kgWzDABMSgJ1SngrIYdBEesH2wNrxnznhIHaopES3fsVi/po7HuM2Aw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kneron.us; dmarc=pass action=none header.from=kneron.us;
- dkim=pass header.d=kneron.us; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kneron.us;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RoyVwhPkWvOwqeS6n7F5XnG19gtGWbdBJ6OhY3pVIZ4=;
- b=Z3yqB9RjIO9VOsxnoo68FBCRU8eSfADuMfkM94pNiMffvgwvPxGaqWK7FG+4yXVW36JyomQU1lMNgSMAoak5lepHsiCKgSUttcBPhTGG1j3dl+d+sfEIswQvIpZJNOAthLIA8+v55b7vWdQ4dTjm+WRkvrwE7G5BAkLEk/gXmlg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kneron.us;
-Received: from PH0PR14MB4360.namprd14.prod.outlook.com (2603:10b6:510:26::18)
- by PH0PR14MB6655.namprd14.prod.outlook.com (2603:10b6:510:291::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.34; Fri, 11 Apr
- 2025 03:27:41 +0000
-Received: from PH0PR14MB4360.namprd14.prod.outlook.com
- ([fe80::f91d:52ba:8284:3e02]) by PH0PR14MB4360.namprd14.prod.outlook.com
- ([fe80::f91d:52ba:8284:3e02%6]) with mapi id 15.20.8606.029; Fri, 11 Apr 2025
- 03:27:41 +0000
-From: Chance Yang <chance.yang@kneron.us>
-Date: Fri, 11 Apr 2025 11:27:33 +0800
-Subject: [PATCH] usb: common: usb-conn-gpio: use a unique names for usb
- connector devices
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250411-work-next-v1-1-93c4b95ee6c1@kneron.us>
-X-B4-Tracking: v=1; b=H4sIACSM+GcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDE0ND3fL8omzdvNSKEt0UC0NzcwvzFDPjNCMloPqCotS0zAqwWdGxtbU
- A2ytCNFsAAAA=
-X-Change-ID: 20250411-work-next-d817787d63f2
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- morgan.chang@kneron.us, Chance Yang <chance.yang@kneron.us>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2154; i=chance.yang@kneron.us;
- h=from:subject:message-id; bh=MzN1eSIVj8IAWiceALmI5C5WO6BfNntcg582znkMtDA=;
- b=owGbwMvMwCVmsuR+7eedxj8YT6slMaT/6NFkvlPK/fixqtJyHZW5Qc9fMH4WNH/aFf5YSli34
- rN00Hb3jlIWBjEuBlkxRZbP2Ur7vVua59260rMfZg4rE8gQBi5OAZiI6lxGhpec4bduTI/V0iyt
- KRGq7LQM1/R/tSFy096uqjpxd95Cb0aGW/Mfvl/B+FUvd0v+7Z33t7DLcGiuPRDGXRyoyienL5r
- ODQA=
-X-Developer-Key: i=chance.yang@kneron.us; a=openpgp;
- fpr=F36B22BF4B84839EDAD48CBF34A4DF7DF3B933F8
-X-ClientProxiedBy: TPYP295CA0052.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:8::18) To PH0PR14MB4360.namprd14.prod.outlook.com
- (2603:10b6:510:26::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6837A27C153
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 03:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744343427; cv=none; b=nPpqA7kSeCmL1Qv1UXBE3To/xbYRfgrylGvfb9dGiXSH/yarOfKlaqhit7tmpHlkHaMukhg7c7tbQRqQwhztTsLid3Zoj0B35F3cswUppM/UXJ07gpilppXtyaYtK6HbDbKtXqYg0NVTu+Sk5a+AtMAFGbNEVRxZQPB4Iv+M/ms=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744343427; c=relaxed/simple;
+	bh=hsoTA7TUYDFboum63+Q9xYjk4wB3SF+u4wgvW7bhfEs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Dvyp+ndPZ2XXy3X8ElJm8WciBEdqx7rJi1yDqHA/eCkHDIENtnO1vlqjJLGSBwRIYSKyt1zty92I82xW8ts7QPOjA3fuWzMsI0y7ezZ+14hkIsToFJ+laIET/ccodp9J26IexJD+0n0qtGRQhovAHSQOIdFX2YD4IQf5BIjNKfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SeRY26do; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53AFLCpa008221
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 03:50:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=3Xh9OVaWmlFyLuOdTBhKdn
+	IImHC1uY2pEvdRTarP3jQ=; b=SeRY26doqoJiUYP1WnxwvaKeYfxIOhqULEXOZ3
+	+RiMKFhd45qvtUwyEoq0YvVQUcEWdRw+0g18jd9Y4AVHeN2hryioHdMJUCsB21uZ
+	Kr50UtRAuwr9mDHGQ7AUyg5XVopTZd9Ed0wPriTW8nSHlwOiruFV0yYDn8CGQORi
+	lndc2LaF9rPWtNcMvypp3kpZwPBK6UCnRz12U7hHiwT7xbhUzdn/LHDeVfuaI1kU
+	O0XA1oFx9ZnIZCmmDX47rLRQE4uSQihfLyqdLuqeqzzhEhzEl309m7teFKLuazSe
+	kxYrCjim48DylB8/r9o3P72XpJgAuSfdFelv9lZ4mfFBIzHA==
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twd097fn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 11 Apr 2025 03:50:23 +0000 (GMT)
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-2c2fc98f199so1020076fac.1
+        for <linux-usb@vger.kernel.org>; Thu, 10 Apr 2025 20:50:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744343423; x=1744948223;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Xh9OVaWmlFyLuOdTBhKdnIImHC1uY2pEvdRTarP3jQ=;
+        b=JMU6XNNZ+GUE7W306/Zl8TfWMoj+zdDqLc4H09h5mpqgIBg3kjyoUhs+2hfSSAbPyp
+         MCydJSOq4XUzMSXdqUiY/TiWhfaDYpu07ZCcn2E+szMmQPWawcGDbhXsjNwgDpRvE/Um
+         eq5hytb22bwREA8z0F0sc7FLt2V64RMPEL3BG1gUWa4Ugh+YvH+Ut9oHttCNwRkdNVdV
+         FGV9vWZeoI0E5EIe/wMiDgDlRQxfpKIz9VFPC1D77VEHq+PH1VsBakv/hscjEkDHG79a
+         efiLtsCFWM/bTP/onbL/uA476BuNvsCe1kXi8rWz75jETfX5UMIs8g/UeTNOCDoIJQrj
+         3Pow==
+X-Forwarded-Encrypted: i=1; AJvYcCVsJhKCk0V5W0Kj7Hg7CmjmduicwhWbDI29D5Y4IXC/0p06eHBh4UyO5eKK13mSC+CMgG32V89/2MI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH4nNXRSvt8iypIFPfi+gl7xBuCCKhuSsi+8NZq9Ijct8K6gmt
+	uoe+BPaNSzMMyQ8ujuO4c15wAXnVEEprpUjQ0Q0zeEJWNQx7iYrauvo4pPJXQKmopZk9cvzMh53
+	i0+X/Pa3D2xHM0fSpTAi1KxYbhpnino2C9/VNNqAYTq6pjfHwyGBkJ7YRGjw=
+X-Gm-Gg: ASbGncviCWcn4urCkeVavFz+HcjS5NjOzbUihGC+Y19j0WKEZccIgVZTek/RYO7Skpv
+	Wg8l9tKXmQwJAztHuOGF0nbKu1PTUSVi/3a6HRaIIZxMe0AhB5Vv4MbE3aHwMxCY8O+8qHgtjsX
+	XD8z4BTCPcC1+CfQ9Nw14x/FPleJLbxjsSP0lCtjbejsPEnDQxlX93cVzOB3ipnN+wix/fExN3m
+	nz7CTlas8GCviQb3tMKu+EW7lrEiU5Zk3rwEiMzkHtFOyTa4cTlSAgiCzhlrEnSfp53PraDlCnK
+	QZXp9RnRjBWHSUcz9mY589pTBnRPUqZM9KguiUmtUY62RfDjygwv4yhrpRjkUger37no0Nihhn9
+	WjppQuJ6et64=
+X-Received: by 2002:a05:6870:65a6:b0:2c2:5ac3:4344 with SMTP id 586e51a60fabf-2d0d5cda2d2mr534712fac.15.1744343422943;
+        Thu, 10 Apr 2025 20:50:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE12wcOEpffztQX7kjbDGI0IZSQnsKHREhLDbfvcR5PLJlQfuSR/LIF3qduhvJ0s8wrn9NbEw==
+X-Received: by 2002:a05:6870:65a6:b0:2c2:5ac3:4344 with SMTP id 586e51a60fabf-2d0d5cda2d2mr534700fac.15.1744343422583;
+        Thu, 10 Apr 2025 20:50:22 -0700 (PDT)
+Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2d0969589basm958677fac.19.2025.04.10.20.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 20:50:22 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Subject: [PATCH v6 0/6] usb: dwc3: qcom: Flatten dwc3 structure
+Date: Thu, 10 Apr 2025 22:50:11 -0500
+Message-Id: <20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR14MB4360:EE_|PH0PR14MB6655:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba5d625d-9f9c-4cfe-2109-08dd78a8d10f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|1800799024|366016|38350700014|80162021;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eFVMSlFTK2wwdzhSTkhSMWlWSlBXWUtZL0lheTJxWm5LeUxRSFBCYUZxSEhX?=
- =?utf-8?B?dzg4SUdhVzNxMWV2Q0QzOFpKWFlWMWNiVEowRXJ5VmtPbnNwWkY2UmdXYjZC?=
- =?utf-8?B?aTZNRzFBRE16N29mRW5leHV5TVR5bm5YaEhnSlNGMm1VT3pmWDZRVENBMFJD?=
- =?utf-8?B?b0lsZ1FobWZGbThDRlFsblYxY3QyOEVFaGY5aHlZNEg5c0UxRFg1amdMSVhN?=
- =?utf-8?B?MzN2K3c2ZWYyQlpOaHNsZ3p3bWlxUFExRFlmS2dQWWRkTHZpa0o5OXIwYnFK?=
- =?utf-8?B?SEdsd2ROeU1yWktpcWU1UTAxMDRLakJGRlkzZWpqYXYwYnczQ2xabG1qc0pk?=
- =?utf-8?B?eU1UYnMrMWkxY29kRjBIVUZ1VzNHRGk5ajgwUVJwZklYcGpZREZpNWVoUE5C?=
- =?utf-8?B?NjdBNG9jYlZteHB0KzErNEFYTEtuVG1ndHViODZ3cG03WVdTUDR6Z2tlQzJo?=
- =?utf-8?B?VmMyTEJWLzNmYnZqdHRncUJ3N3NjbFYxcHM1alNuTmY4RWxUTWhDalVsczA5?=
- =?utf-8?B?QXkxTVgyaHlpOWlKSVZpemFVSlpYbFdKWElHRkV0T05icEM1ZnEzdzFOVVBU?=
- =?utf-8?B?NmprWWwwWWJ5NHBXRWJlTlBSczBLemE0OHVadXI5Qk1GWGpWVDVrbHdla01j?=
- =?utf-8?B?NnpTd1VMRGtZNjcxRWRSbTV5UmY4bnU4TGJDQmpRbXpDaUZ3eGlsaDJMU1g1?=
- =?utf-8?B?djJaU3NiY2hncmtGSXAraHQxd1ovNiswOUdEVlk4ZVNwWVdTTGNCa2FwYysw?=
- =?utf-8?B?RVFIMWNpVDBhM1RjeDkyYm40RnpoTnZac2VMcUNNb1BkYnJHS2tRRHBZQXQ0?=
- =?utf-8?B?NkpHakFqZHRLVG9CV09hZ2g1L21TSUQxQ1I0Ykp2TUFDVkgwZnN6R1RVNS9V?=
- =?utf-8?B?NEcvTHh5YkJtam1DeGN2U3NKcmtIenNxd2tDY3MwdERRS0F5cnFKRU1HVkFj?=
- =?utf-8?B?NytLZG51cllBVVNHUlZpTTlST25kVVp0YXpGK3FmT1dKdW1MNEJJUHByTHBK?=
- =?utf-8?B?Zi8wS0lYajB5eDZWVGROc1NpZnN0N3JEMmFlQWtndXBXaE5aa0tGZHNEdU95?=
- =?utf-8?B?L1NzMHlLdGh3dEtPemZGSmhjeUY1eEM3ZWR0Tk5HUE1PekM5S1dHRE15czJX?=
- =?utf-8?B?UlpXaUp2YVM5U2dkUExqTm5FZlNHRktjL052eWpCcWhEQ3VTYis5WkFKY0Jj?=
- =?utf-8?B?WjRTamVhbDVkODZGVm4yTVdUZzFINTI0L0xxQThza0haTEpXZUJUOUFYa0FR?=
- =?utf-8?B?cU1KTmZoV0hLV0kvRHB5ZWJ5ZkVKNzRKNmNSelZMTkRTYUFWc0hzdTNtdTV3?=
- =?utf-8?B?dnNrbEx5RktFaVFweS9KRmNyRExxRGdMamkzdkg5WFJBMEV5bGgxUzJQNXFE?=
- =?utf-8?B?d3hVOGxuWlBqcml3OGhFbWRpSEw4aEpkRU1KZWlmYm5nNEJRR25ueDg1dnI0?=
- =?utf-8?B?aW1sQTNuK2dVTkNjMVBLOCswRVZtY1JOSE5EQi9kbC9mcHFzWmc4UTVYK0o2?=
- =?utf-8?B?NHdYTTQweFR3ZlpWZFY3RCtrZ3IwQ291dTVSSzMzNmhJVWxPZE1CM0tPUGlr?=
- =?utf-8?B?WEhEZ29sam9hNXFLQ29NRXhERlA5dEYzbUhCYXJLem8rTEw0TTZJU3Bla0pa?=
- =?utf-8?B?OElUdDJNVElSOGMrcFJmekZadU5nUGFkSnVac1l0bkRnUzJ4T1NOM1NlTGEw?=
- =?utf-8?B?bzVtcFRjUEZmTDJUemZJZ0g0TklWMEdPUlpsTThtYlRjdVRIa1hTN3Voc1NQ?=
- =?utf-8?B?UFkzQ1J2MWx5ZVR5QlR5MnZSRE9BeURVSUt5ZndsVVlKaElHTXBIbVhCTDdC?=
- =?utf-8?B?a2lkMng4bGhybUdCaytqVmRKd3hpVXFseUVYZTVQTlFUWTVJTy9hd1RxQ1di?=
- =?utf-8?B?QkZmV0YvOG1jK0dqZGx5ckJqSlg1dURwMDVQbTMxNFVJeWJIUkF6WWZGbjFX?=
- =?utf-8?B?dGg1VFVTQmFSVXFTcmtEOHZuVkJHb2l1S3VGV0QvM01jOGtCQlFyYWp3UDhD?=
- =?utf-8?B?cHlzb3hSZjlmOEN6VzJJNlVhWUI3RmJxQnlRQjgvUHhqVjhtZ2cvcnRYZVBh?=
- =?utf-8?Q?N/Iu04?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR14MB4360.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(1800799024)(366016)(38350700014)(80162021);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YmtKQVlwdTNWR2V6NVMraXQzVnJ1eWF5V2ZrR3hBeldFNTVzWDlzZ05vV2Nk?=
- =?utf-8?B?RlFSQ0lUWDU2ajZQQit1b2JTK0R3ekp3bjVMbSt5QlBBYy9uZC94WHFTV096?=
- =?utf-8?B?YmgrcVBlWmNMUEVteEdNQU0xV1JRK3YyK05nK0liMXJPOE9FRkFjRmU2YkVX?=
- =?utf-8?B?Nnk2cjQzS05lNThUYTdDcVlLc1BVNmUzNjdHT1MzcWlkUWhwRDVFdWcySjZ0?=
- =?utf-8?B?dEdPK1VMbjdqQ0RlWS93VFZyeFp2bCtFaEFqbFBOM2VkbU5SMnlBK2pvaGNh?=
- =?utf-8?B?TWtQOXZhTHd3NEFTZEE4aFRYVThRTThLNHcySGJ5TnE0Nkt3dDcxbWtnYXBL?=
- =?utf-8?B?eHEybXFXNjdFSUVUbkRMaHhvMHNtQkpGUnRrZk8vUW5pcVhIbFUveTRWdVlo?=
- =?utf-8?B?cHJFN25pLzBEa3BrQ1VTSGk2MldabjB3SmFvcTBxRkYzMXEvMlpCYUtJalBD?=
- =?utf-8?B?TnRiQ2tvUUR5YkxSdzV1engwNnhKTFFCYUY5UXZpdHY3aENIUTZISVJTTlNi?=
- =?utf-8?B?Y3V5ak45VmlrR05vN05ldDlaRmpocEtkV1F5dDdpWmhIUFRxRmowTmQ3N1Ju?=
- =?utf-8?B?VlFlbVJmMHNLWm1qWFpPZ0RDVU1tTDB2cUJiaTM1elhTY2ttbXN6dEcxaUpi?=
- =?utf-8?B?MWJIbXlOZ0VzREMxdVJZTTRxRXQ1SkU0aVk5NGJWUndiQnU4eHQ4MWtPdHhT?=
- =?utf-8?B?TzFCVGF3VGQ1eS9TMUdqQWovSi9vYTFBYVlVVWFaSitJTkNOdzRUSkVHK1lJ?=
- =?utf-8?B?ZFFya084ZXBNMUpzQWhZWUxUSFhTZHlyQmhZZlUza2tpOUcrY1l5VVN5NnpS?=
- =?utf-8?B?MDU3V295Q2VxZEtoMFY3a0dmcHV6UW1iVHFuTjBjZFN4RFdidDZiVUV1MUpH?=
- =?utf-8?B?TmpxcUVnTmsyMHZpU3V3Ri8zWUZmRkM4dFRpVlVkaTUrR1k5MWZkdW1XN3VM?=
- =?utf-8?B?Nll6d1RwbW10dzlrK2t2OW5UUDFldXNUbW9SZy92bUdQSXlya0R2M1RIWWpF?=
- =?utf-8?B?N01lRitXSW44SHR0UGVOdjhlWVdoMERGY2kzbWZtZVMxNHNNMGhsUW1zQXZz?=
- =?utf-8?B?d3J6dDY3TXp3bEdTTStpV09OdVp2U2M1aWU1b1BJRFhPSjMyNXkyeGRWSWJ6?=
- =?utf-8?B?Ujd0VWJmSDhKc0JFYmNTS3hYMnVsSnA5M0I0MC8rSjBMVkhzUUhtakVvZi9V?=
- =?utf-8?B?azczNllvOUF2VEhkc2Y5ZUloaXlyNTZGVkY2bHMzaUtOalhZcElQcDVxaTFM?=
- =?utf-8?B?b2JCa1NrcjNLNzJ1REJNU3YzQTNpUmpZOTdVZzA1THlJeWE0MGxGSjYrVWJH?=
- =?utf-8?B?UWttSE5jdjh0aXJsMlhYdnFpZXpibURtMThoa0pjR3NHWGdlbitBSE5KMzBy?=
- =?utf-8?B?SkUrK0VZTlNEN0RlRUhranc1L1ZvZzZheEVDT2pBMDVMeWNOYVA5R0o0R0V4?=
- =?utf-8?B?SngzUkhwaU82VytCRHF6K2tEYTVsMG9zSFlxcW9QT3BsRjdDbTJjZ2dsQVc3?=
- =?utf-8?B?RG1JbVlFMVpRa2R0bC9PMmcxekpkRm5yMkRCSW1MK1lSSGJIYzR4UCt2a0p4?=
- =?utf-8?B?b0NzUFQyQzlHZmlRSVBtL0tnZjRKRDdSQzlRb0doZjN4Rlp5K0M3SVJha3ky?=
- =?utf-8?B?S1JLcktyRjNtQmFYTXpyNTFVd3BMMm92Y1lSaW5tVHo3ZTlUejIvSGNvWjVm?=
- =?utf-8?B?eVd2cTYwUi9ZYlBMdUM3YWdVQ1lBaXh2UjI3TndFSVRRRFlNdFNFYWRqbnlC?=
- =?utf-8?B?Zk5JbHF6YTZJRy9IN1U4ZEdPVng2eFJkUG95eERYZmZPT2o3Z0xVSlNjM21O?=
- =?utf-8?B?U2Q2S1JoU3pTeEJyN1lMMVo2cysyVU9BNitRZUszcVZ2amJIZjhFQVhhUmNG?=
- =?utf-8?B?WS9IbDZlWXVwTjN1dElDN0QyU3Zmb21xeFZwejlxNHpITTZ1RWs2QW4vZ1pV?=
- =?utf-8?B?TXBhWjYrbUM3RjE1UXRLOG9oSkQ0ZGM1djIyRHFpVUwzcVJTUmNucDl5YVBi?=
- =?utf-8?B?Q0RGWDN4RVBHN2U1SUVvYlIzOWQ5QXhOaEs2OW5NTDQ3K1lveVcyanFDOC81?=
- =?utf-8?B?ZlRaMnNSNVlhU3FhSDdiQmFwLzZ1ejVxUnhxcFZlSnJQWDhzeVlXMXFKUFFw?=
- =?utf-8?Q?lMSIZl1YkEoHSIgR4BxX7Ddus?=
-X-OriginatorOrg: kneron.us
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba5d625d-9f9c-4cfe-2109-08dd78a8d10f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR14MB4360.namprd14.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2025 03:27:41.6567
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f92b0f4b-650a-4d8a-bae3-0e64697d65f2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B5mnCOED1s6oSaLUlljkOLaRzhXcpwZcXyFXurh3ff+JwSURAnfyK9XWcbPIDwJ/H6QHsMiPjFviWh7kbF9Yyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR14MB6655
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHOR+GcC/3WPy2rDMBBFfyVoXQWNHpbdVf6jdKHHuBY4diPVa
+ kvwv3ccKAbTLu9lzrnMnRXMCQt7Pt1ZxppKmicKzdOJhcFNb8hTpMykkAoENDx+BsUz9i58zJl
+ 3ClB50brWd4wY7wpyn90UBqKmZRypfKfz9PUYeXmlPKRC7Pdjs8qt3fRatAAHfZVc8A56ZUVsw
+ EV5uS0ppCmcw3xlm6uqX94IAHXkFfERrJTCmthbf5lLOd8WNxJ/3SV6l0h5/LFqkmgNBi0AoO7
+ +kZhdoqA9Ssz2iUDXoPHKO/2HZF3XH/PP0NSQAQAA
+X-Change-ID: 20231016-dwc3-refactor-931e3b08a8b9
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Frank Li <Frank.Li@nxp.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5920;
+ i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
+ bh=hsoTA7TUYDFboum63+Q9xYjk4wB3SF+u4wgvW7bhfEs=;
+ b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBn+JF3fkCMsSPwZzI3Ac5ipf/AqeLqq6gxfqQ9S
+ OfAxfEfm+aJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZ/iRdxUcYW5kZXJzc29u
+ QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcVaHg/9FQSYNtkcmZo8MKnQ7tYyzRbaAJG51AUftkHkOwL
+ aw2nI/yb0qKeTDSBPFN3YcOTnihW5Y9LekHxuVCRvhEM3FGcfg/34wycoCbPAB4xAZ7VR89SrzB
+ StbONyk/yqyD/KQzWDMk54sd7Md58DY8xO1PaWkVPWs4KIT6nsWcKo99o0sdNN2k+FGQj9xdVvd
+ 7tNMZBV/eVYvHcEIrtn4tBe8fP/fkpIc6F31+UbpxeIV0uQAmV+k64bOivbyP2AWybMLCOU0yoA
+ FUBrblJQVttZsXSovKDYFR+zjv/YKRfhZxSFn+Q7nhXUX4u3t7G2iqMlatxCc+V7ssE/beX28ua
+ DCyRrH+IdZdkM/CCy4Tkgfb8DhP2xyBKRrazbFQLacWASV+3mg+3UXuJmu7rEPb9yU1P52Iqy3J
+ hG0ob/pNHIFmMb+bXv7KrX+PQF0WR7OhIm5q1bgU/vpf/Ccwzl7BDe7L8//wCZA9Dimej1kd2fL
+ Dk6kZ2g1l51Kl1dyIoMdwgSFJvicoy/VSNqwWABhIOzYw++vgiICt7caup9H2qZCr/gFSLWdFMK
+ PbE1NbXPb03casy2Q+DyFbegG+v+rvDRa+qPV3D7vYiUH4/YNuKqEKpPta1Et1fT/kPK3116XgG
+ UX2ki37tfQN1jlKMHXEt59zxhBOdPb6E+oAHZhYeKJ/I=
+X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
+ fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
+X-Proofpoint-ORIG-GUID: NeZCujvQFq2lMABBwVX2K2KwK0RFcg6m
+X-Authority-Analysis: v=2.4 cv=Q4vS452a c=1 sm=1 tr=0 ts=67f8917f cx=c_pps a=zPxD6eHSjdtQ/OcAcrOFGw==:117 a=DaeiM5VmU20ml6RIjrOvYw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=PRPaYdtWR3OSq7m5HH0A:9
+ a=QEXdDO2ut3YA:10 a=y8BKWJGFn5sdPF1Y92-H:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: NeZCujvQFq2lMABBwVX2K2KwK0RFcg6m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-11_01,2025-04-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504110026
 
-The current implementation uses "usb-charger" as a generic name for
-usb connector. This prevents us to have two usb connector devices
-attached as the power system will complain about the name which is
-already registered.
+The USB IP-block found in most Qualcomm platforms is modelled in the
+Linux kernel as 3 different independent device drivers, but as shown by
+the already existing layering violations in the Qualcomm glue driver
+they can not be operated independently.
 
-Use an incremental name for each usb connector attached.
+With the current implementation, the glue driver registers the core and
+has no way to know when this is done. As a result, e.g. the suspend
+callbacks needs to guard against NULL pointer dereferences when trying
+to peek into the struct dwc3 found in the drvdata of the child.
 
-Fixes: 880287910b189 ("usb: common: usb-conn-gpio: fix NULL pointer dereference of charger")
-Signed-off-by: Chance Yang <chance.yang@kneron.us>
----
-This patch addresses an issue in the usb-conn-gpio driver where the
-generic "usb-charger" name is used for all USB connector devices. This
-causes conflicts in the power supply subsystem when multiple USB
-connectors are present, as duplicate names are not allowed.
+Missing from the upstream Qualcomm USB support is proper handling of
+role switching, in which the glue needs to be notified upon DRD mode
+changes. Several attempts has been made through the years to register
+callbacks etc, but they always fall short when it comes to handling of
+the core's probe deferral on resources etc.
 
-The fix introduces an incremental naming scheme (e.g., usb-charger-0,
-usb-charger-1) for each USB connector device, ensuring uniqueness and
-preventing registration errors.
----
- drivers/usb/common/usb-conn-gpio.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Furhtermore, the DeviceTree binding is a direct representation of the
+Linux driver model, and doesn't necessarily describe "the USB IP-block".
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index 1e36be2a28fd5ca5e1495b7923e4d3e25d7cedef..2702e1a26634770500febd567f9d0891e63a8c4c 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -155,13 +155,19 @@ static int usb_charger_get_property(struct power_supply *psy,
- 
- static int usb_conn_psy_register(struct usb_conn_info *info)
- {
-+	static atomic_t usb_conn_no = ATOMIC_INIT(0);
-+	unsigned long n;
- 	struct device *dev = info->dev;
- 	struct power_supply_desc *desc = &info->desc;
- 	struct power_supply_config cfg = {
- 		.fwnode = dev_fwnode(dev),
- 	};
- 
--	desc->name = "usb-charger";
-+	n = atomic_inc_return(&usb_conn_no) - 1;
-+	desc->name = devm_kasprintf(dev, GFP_KERNEL, "usb-charger-%ld", n);
-+	if (!desc->name)
-+		return -ENOMEM;
-+
- 	desc->properties = usb_charger_properties;
- 	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
- 	desc->get_property = usb_charger_get_property;
+This series therefor attempts to flatten the driver split, and operate
+the glue and core out of the same platform_device instance. And in order
+to do this, the DeviceTree representation of the IP block is flattened.
+
+Departing from previous versions' attempts at runtime-convert the
+Devicetree representation is swapped out and instead a snapshot of the
+current dwc3-qcom driver is proposed to be carried for a limited time.
+
+A patch to convert a single platform - sc8280xp - was included in the
+series. This, and others, will be submitted in a separate series as soon
+as its introduction won't break bisection.
 
 ---
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250411-work-next-d817787d63f2
+Changes in v6:
+- Change legacy driver's name, to avoid collision if both are loaded
+- Drop duplicate pm_runtime_{allow,disable}() from dwc3_qcom_remove()
+- Drop DeviceTree example patch, as this should be picked up separately
+- Replace __maybe_unused for PM and PM_SLEEP functions in dwc3-qcom.c
+  with guards, to match the exported functions from the core
+- Add missing pm_runtime idle wrapper from dwc3-qcom
+- Add missing "dma-coherent" to the qcom,snps-dwc3 binding
+- Link to v5: https://lore.kernel.org/r/20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com
+
+Changes in v5:
+- Moved the snapshot commit first, to get a clean copy
+- Add missing kernel-doc in glue.h
+- Used a local "struct device" variable in PM functions to reduce the
+  patch size
+- Replaced initialization with default values with zero-initalizing the
+  dwc3_probe_data in dwc3_probe()
+- Add TODO about extcon, as a role-switch callback needs to be
+  implemented
+- Corrected &usb_2 mmio region length
+- Changes the timeline expressed in the commit message to suggest the
+  legacy driver to be dropped after next LTS
+- Integrated qcom,dwc3.yaml changes since v4
+- Link to v4: https://lore.kernel.org/r/20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com
+
+Changes in v4:
+- dwc3_{init,uninit}() renamed to dwc3_core_probe() and dwc3_core_remove()
+- dwc3_{suspend, resume, complete}() changed to dwc3_pm_*()
+- Arguments to dwc3_core_probe() are wrapped in a struct to better
+  handle the expected growing list of parameters.
+- Add the lost call to dwc3_core_remove() from the Qualcomm glue driver
+- Removed now unused cleanup.h, of_address.h, and of_irq.h includes from
+  dwc3-qcom.c
+- Link to v3: https://lore.kernel.org/r/20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com
+
+Changes in v3:
+- Replaced the handcoded migration logic of compatible, reg, interrupts,
+  phys with overlays.
+- Move the migration logic (and overlays) to a new drivers/of/overlays
+  directory and apply this at postcore, so that it takes effect prior to
+  the relevant platform_devices are created
+- struct dwc3 is embedded in the glue context, rather than having a
+  separate object allocated
+- The hack of using of_address_to_resource() to avoid platform_resource
+  being stale is removed (thanks to applying migration at postcore)
+- Link to v2: https://lore.kernel.org/r/20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com
+
+Changes in v2:
+- Rewrite after ACPI removal, multiport support and interrupt fixes
+- Completely changed strategy for DeviceTree binding, as previous idea
+  of using snps,dwc3 as a generic fallback required unreasonable changes
+  to that binding.
+- Abandoned idea of supporting both flattened and unflattened device
+  model in the one driver. As Johan pointed out, it will leave the race
+  condition holes and will make the code harder to understand.
+  Furthermore, the role switching logic that we intend to introduce
+  following this would have depended on the user updating their
+  DeviceTree blobs.
+- Per above, introduced the dynamic DeviceTree rewrite
+- Link to v1: https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+
+---
+Bjorn Andersson (6):
+      usb: dwc3: qcom: Snapshot driver for backwards compatibilty
+      dt-bindings: usb: Introduce qcom,snps-dwc3
+      usb: dwc3: core: Expose core driver as library
+      usb: dwc3: core: Don't touch resets and clocks
+      usb: dwc3: qcom: Don't rely on drvdata during probe
+      usb: dwc3: qcom: Transition to flattened model
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
+ .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 622 ++++++++++++++
+ drivers/usb/dwc3/Makefile                          |   1 +
+ drivers/usb/dwc3/core.c                            | 160 ++--
+ drivers/usb/dwc3/dwc3-qcom-legacy.c                | 935 +++++++++++++++++++++
+ drivers/usb/dwc3/dwc3-qcom.c                       | 182 ++--
+ drivers/usb/dwc3/glue.h                            |  35 +
+ 7 files changed, 1808 insertions(+), 140 deletions(-)
+---
+base-commit: 29e7bf01ed8033c9a14ed0dc990dfe2736dbcd18
+change-id: 20231016-dwc3-refactor-931e3b08a8b9
 
 Best regards,
 -- 
-Chance Yang <chance.yang@kneron.us>
+Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 
 
