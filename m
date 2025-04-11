@@ -1,58 +1,59 @@
-Return-Path: <linux-usb+bounces-22976-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22977-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08D16A85F51
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 15:42:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4B7A85F9C
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 15:50:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAEC77B3A03
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 13:41:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66BA93A9A22
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 13:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1180E1C863E;
-	Fri, 11 Apr 2025 13:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93BA1DE3C7;
+	Fri, 11 Apr 2025 13:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wveHEQwU"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z7cKJleZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E931AA786;
-	Fri, 11 Apr 2025 13:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BADF1C5489;
+	Fri, 11 Apr 2025 13:43:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744378936; cv=none; b=Z5Z4kwOrgLW3thXOmlCGoVnE/fJJLS7CRI1ypDsDWaUvxW5jQUOsccT3GnSRCG5jck3lpROH1cPI92tjJMk0RbVmxZ/ODo1g2fMx3reuE4YjtFtVeUYtxjRugnACCQkw5b0zlO83+hXj++Q/aMThUERud4M5jhkZkqIdPoF6jQ8=
+	t=1744379034; cv=none; b=TjwkcCqCNkQDz+KMO/Gu8fgLfwwrMX2Gpwp2nJQnUvx/li7/gr+L4fjk0GNHdPcVvBqvGwA/kmU3nC/c0LMGtSXyhARdkKHi9UxOF+m9iljrY6QUTkeRuHKOPnQFFnsZ0ETnMDpb6nSoYxD9L3tsOiNl1XVIlZ5r5q20VY1fazY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744378936; c=relaxed/simple;
-	bh=nS4mtmxGRp+CcFT9tVDGPOWxYtnM+243zUP7ZIU9t4U=;
+	s=arc-20240116; t=1744379034; c=relaxed/simple;
+	bh=oRdkdzG1fCjcQr/AxLrV6rsBYdJstSSe6ay/qNRbRso=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WqUKmTSAZYUMKHrLCygYwIEmA9PImJNvhvWi66/B9Re7J5c+SBfbt+gbsC35soJxXe2uQMAhdXbUrJCbmfCVCMv1v3DKcOIpKXL6gkLFL6q1B/wjMeiBfLLjqW34kYD06/aooLTTQoSrL/5SEJhaIJujlLdpgT3yeyJJ12SAgL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wveHEQwU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A547C4CEE2;
-	Fri, 11 Apr 2025 13:42:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QoM5ywzQHXaXxMDKMIjzmCgbljtuOiWeNZB6tNN6Odx422vkT/xZUTWD6MXYSjOa+Ije8hUYW2Ub5a/fDgTyLsx9B2bQdv5vqRjOiKUxkSgadxmQ0xzFjsPvv2fYktLC9Abyc1hNBK6uT8Ciwd0XhgwJZ8QVV5btigYpQoZRaLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z7cKJleZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0458BC4CEE2;
+	Fri, 11 Apr 2025 13:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744378935;
-	bh=nS4mtmxGRp+CcFT9tVDGPOWxYtnM+243zUP7ZIU9t4U=;
+	s=korg; t=1744379032;
+	bh=oRdkdzG1fCjcQr/AxLrV6rsBYdJstSSe6ay/qNRbRso=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wveHEQwU8QrxS6q3qjGn/QYQwFp5Wu9bwvhXBzF5ePMzmcNztJHnud0AdX+yOVylA
-	 YOyQBQ2tHfE8TjwG7Z8IGtk1XrzHRw8sgDKX205WpOQVcsaAwlNiWTZVHubUn1k+99
-	 GrJBgVvG4AdvJ+p86Lx61F/sN+3BAoPBSpnoLy/4=
-Date: Fri, 11 Apr 2025 15:42:12 +0200
+	b=Z7cKJleZm2+INpziPqaQyQr7vTXNxh5dqv0TuaDXljNy9EufPBMyxRoiPlOYzj53B
+	 ui5eq9knW7x7qaTtrS0L+d7/34ceoeCe2DYjb18+8/08DngUcAZw5F4qaJVe2bH5Q8
+	 XSYxWs9KBU8zqENO/NhtvtTmBlbTrbYGk3NP6ucI=
+Date: Fri, 11 Apr 2025 15:43:49 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Saravana Kannan <saravanak@google.com>,
 	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: samsung,exynos-dwc3: add
- exynos2200 compatible
-Message-ID: <2025041157-stilt-sculptor-c978@gregkh>
-References: <20250321144804.1435502-1-ivo.ivanov.ivanov1@gmail.com>
- <20250321144804.1435502-2-ivo.ivanov.ivanov1@gmail.com>
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/6] usb: dwc3: qcom: Flatten dwc3 structure
+Message-ID: <2025041135-sanitizer-desolate-67cb@gregkh>
+References: <20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,20 +62,41 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250321144804.1435502-2-ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com>
 
-On Fri, Mar 21, 2025 at 04:48:02PM +0200, Ivaylo Ivanov wrote:
-> The Exynos2200 SoC has a DWC3 compatible USB controller and can reuse
-> the existing Exynos glue. Update the dt schema to include the
-> samsung,exynos2200-dwusb3 compatible for it.
+On Thu, Apr 10, 2025 at 10:50:11PM -0500, Bjorn Andersson wrote:
+> The USB IP-block found in most Qualcomm platforms is modelled in the
+> Linux kernel as 3 different independent device drivers, but as shown by
+> the already existing layering violations in the Qualcomm glue driver
+> they can not be operated independently.
 > 
-> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/usb/samsung,exynos-dwc3.yaml          | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> With the current implementation, the glue driver registers the core and
+> has no way to know when this is done. As a result, e.g. the suspend
+> callbacks needs to guard against NULL pointer dereferences when trying
+> to peek into the struct dwc3 found in the drvdata of the child.
+> 
+> Missing from the upstream Qualcomm USB support is proper handling of
+> role switching, in which the glue needs to be notified upon DRD mode
+> changes. Several attempts has been made through the years to register
+> callbacks etc, but they always fall short when it comes to handling of
+> the core's probe deferral on resources etc.
+> 
+> Furhtermore, the DeviceTree binding is a direct representation of the
+> Linux driver model, and doesn't necessarily describe "the USB IP-block".
+> 
+> This series therefor attempts to flatten the driver split, and operate
+> the glue and core out of the same platform_device instance. And in order
+> to do this, the DeviceTree representation of the IP block is flattened.
+> 
+> Departing from previous versions' attempts at runtime-convert the
+> Devicetree representation is swapped out and instead a snapshot of the
+> current dwc3-qcom driver is proposed to be carried for a limited time.
+> 
+> A patch to convert a single platform - sc8280xp - was included in the
+> series. This, and others, will be submitted in a separate series as soon
+> as its introduction won't break bisection.
 
-This doesn't apply to my tree, can you rebase it and resend the series?
+Doesn't apply to my usb-next branch, can you rebase and resend?
 
 thanks,
 
