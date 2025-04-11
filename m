@@ -1,155 +1,97 @@
-Return-Path: <linux-usb+bounces-22943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-22944-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E833A853BF
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 07:59:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9C6A853C7
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 08:00:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E7549C09F6
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:54:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051A61890013
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Apr 2025 05:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108F827E1D5;
-	Fri, 11 Apr 2025 05:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0673A26FD98;
+	Fri, 11 Apr 2025 05:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zxRZ7GYN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Im/yDm9p"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3AE27D79A;
-	Fri, 11 Apr 2025 05:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E85645;
+	Fri, 11 Apr 2025 05:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744350562; cv=none; b=HbNUT5QJzyYGrFA2s92wmBD8EIvytoUzx15ponNuwC2T//CRfaGTqcRLlPnVWw6+i5GkCLGTT3tm44jYUmKdFEO8/W7h0CqlpEWOeufq7/EZgrtuAUXMLwmiu1/MCfBtgC7lQuyiE8nmUW0jY1msZVvHfPn5XRBWFnsGEW1Ih4s=
+	t=1744351005; cv=none; b=TjcCjWs5wqaKEgzEuQqXDtPTez2vloubEjSJ38HQZtkQKyHHVeXrGo6yFq3tjW0GWJgMQferwOcDGKPY4hhD9qF9MNvs/DcBhwZN0WTwd7LpFZMTB8WosCa4h/gQVpSf2cedc8mfeQpsz0sZAetzePsgzTjQvLVTcgmDPbBNlhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744350562; c=relaxed/simple;
-	bh=gxSjk1SfTJ11oFok344IjOAHsD6mQ9jmSi1cEz+8+zI=;
+	s=arc-20240116; t=1744351005; c=relaxed/simple;
+	bh=G67pLsBgKMXudRXip4K1q4VTgKNv74ZJ5I2KYYQsHUQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E9EqO1gT6X5YZcOEi0vtSG53B+xXeKFfljBX38h/dy4h7KVnQLMf+Me3loCOQZcvlknzf10ysRDKPP0UGSx6Gchc+pnon/ataseermcVYkzbnER6XxDqypg5op2xuoaEVjg8+pdSV4kqKX5OuIKFmIXE+rRR+Q4pxK62ieoe2zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zxRZ7GYN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7A8C4CEE5;
-	Fri, 11 Apr 2025 05:49:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oFS4c0anSW/ZO/PrafFzC5xoLrw/9nf6VlcOcJAU+pp2wsVhEC1Hnz8JIeMzIU7B7NRMmuywJTIkYLaDB/2tK3J3zQsx1zHJqTsICVQ7E3r6GpV0p7JOB0/DHcvFM1DzsGCeRsVV1hCsVxLHtdnyZE5nAhTH5jlpsv17qUc6pYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Im/yDm9p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790CFC4CEE2;
+	Fri, 11 Apr 2025 05:56:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744350561;
-	bh=gxSjk1SfTJ11oFok344IjOAHsD6mQ9jmSi1cEz+8+zI=;
+	s=korg; t=1744351004;
+	bh=G67pLsBgKMXudRXip4K1q4VTgKNv74ZJ5I2KYYQsHUQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zxRZ7GYNYxQu8DY70SPXQW0PRiHCpIxQ0LLIw4Jg0WEC2XcmMVVkSFangYoEqFA6p
-	 OMD94KAiq5qa20J0NawLYoMQrx+wQdryc54bodskJ/ugKEtAOOTr6yFnavxv1/YJwa
-	 MnIkjDnHk2yn61xqtA6X+GiMg5W8qsy0dKfe/XwQ=
-Date: Fri, 11 Apr 2025 07:47:46 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: ivanhu <ivan.hu@canonical.com>
-Cc: krzysztof.kozlowski@linaro.org, limiao@kylinos.cn,
-	wangyuli@uniontech.com, jinxiaobo@uniontech.com,
-	huanglei@kylinos.cn, mathias.nyman@linux.intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: quirks: Add quirk to prefer vendor-specific
- configuration
-Message-ID: <2025041129-retired-grading-1de9@gregkh>
-References: <20250410024626.981215-1-ivan.hu@canonical.com>
- <2025041055-debtless-delirium-d5ca@gregkh>
- <09496c1d-3e2b-46c5-9ef2-75fdd8a61bda@canonical.com>
+	b=Im/yDm9paiEiACr1VtOnudYq2aAVjOuBoS9O5hamAK0nq6qDSOCFCQ64MwE07cCfN
+	 tuQkwPPjFUVkQjo8t71TbB4uVeRb0NuFSmSRnb8YU+G7NEDmq7j7w3BaCpiLCyPUqD
+	 WLTX1q0hp8oavxJtF/ExjrTs3usXOHHPhX/8JPco=
+Date: Fri, 11 Apr 2025 07:55:09 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Chance Yang <chance.yang@kneron.us>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, morgan.chang@kneron.us
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: use a unique names for usb
+ connector devices
+Message-ID: <2025041131-datebook-tumble-a759@gregkh>
+References: <20250411-work-next-v1-1-93c4b95ee6c1@kneron.us>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <09496c1d-3e2b-46c5-9ef2-75fdd8a61bda@canonical.com>
+In-Reply-To: <20250411-work-next-v1-1-93c4b95ee6c1@kneron.us>
 
-On Fri, Apr 11, 2025 at 01:25:23PM +0800, ivanhu wrote:
-> On 2025/4/10 14:58, Greg KH wrote:
-> > On Thu, Apr 10, 2025 at 10:46:26AM +0800, Ivan Hu wrote:
-> > > Some USB devices with multiple configurations expose a vendor-specific
-> > > interface class that should be preferred by default. However, the generic
-> > > usb_choose_configuration() logic selects the first configuration whose
-> > > first interface uses a non-vendor-specific class, which can lead to
-> > > incomplete or limited functionality.
-> > > 
-> > > Introduce a new quirk, USB_QUIRK_CHOOSE_VENDOR_SPEC_CFG, which
-> > > instructs the USB core to prefer a configuration that contains a
-> > > vendor-specific interface class when multiple configurations are present.
-> > > 
-> > > Apply this quirk to the ASIX AX88179 USB Ethernet adapter
-> > > (0x0b95:0x1790), which requires selecting its vendor-specific
-> > > configuration for full functionality, instead of falling back to
-> > > cdc_ncm.
-> > 
-> > Shouldn't this be done in userspace instead?  And how does other
-> > operating systems handle this, the "first" configuration is usually the
-> > default for them as well, do they have some built-in quirk to handle
-> > this or do they rely on a vendor-provided driver?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
+On Fri, Apr 11, 2025 at 11:27:33AM +0800, Chance Yang wrote:
+> The current implementation uses "usb-charger" as a generic name for
+> usb connector. This prevents us to have two usb connector devices
+> attached as the power system will complain about the name which is
+> already registered.
 > 
-> Hi Greg,
+> Use an incremental name for each usb connector attached.
 > 
-> Thanks for the feedback.
+> Fixes: 880287910b189 ("usb: common: usb-conn-gpio: fix NULL pointer dereference of charger")
+> Signed-off-by: Chance Yang <chance.yang@kneron.us>
+> ---
+> This patch addresses an issue in the usb-conn-gpio driver where the
+> generic "usb-charger" name is used for all USB connector devices. This
+> causes conflicts in the power supply subsystem when multiple USB
+> connectors are present, as duplicate names are not allowed.
 > 
-> In this case, the device advertises three configuration descriptors. The first is vendor-specific, the second is CDC-NCM, and the third is CDC-Ether:
+> The fix introduces an incremental naming scheme (e.g., usb-charger-0,
+> usb-charger-1) for each USB connector device, ensuring uniqueness and
+> preventing registration errors.
+> ---
+>  drivers/usb/common/usb-conn-gpio.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> Device Descriptor:
->   idVendor           0x0b95 ASIX Electronics Corp.
->   idProduct          0x1790 AX88179 Gigabit Ethernet
->   bNumConfigurations      3
-> 
-> Configuration 1:
->   Interface 0:
->     bInterfaceClass       255 Vendor Specific Class
-> 
-> Configuration 2:
->   Interface 0:
->     bInterfaceClass         2 Communications
->     bInterfaceSubClass     13 (CDC-NCM)
-> 
-> Configuration 3:
->   Interface 0:
->     bInterfaceClass         2 Communications
->     bInterfaceSubClass      6 (CDC-Ether)
-> 
-> In drivers/usb/core/generic.c, the logic currently prefers the first configuration whose first interface is non-vendor-specific,
-> based on the assumption that Linux is more likely to have a generic class driver than a vendor-specific one:
-> 		/* From the remaining configs, choose the first one whose
-> 		 * first interface is for a non-vendor-specific class.
-> 		 * Reason: Linux is more likely to have a class driver
-> 		 * than a vendor-specific driver. */
-> This results in the CDC-NCM configuration being selected by default, even though the kernel already supports the vendor-specific driver ax88179_178a,
-> which provides the correct and full functionality.
-> 
-> Of course, this could be handled in userspace,
+> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+> index 1e36be2a28fd5ca5e1495b7923e4d3e25d7cedef..2702e1a26634770500febd567f9d0891e63a8c4c 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -155,13 +155,19 @@ static int usb_charger_get_property(struct power_supply *psy,
+>  
+>  static int usb_conn_psy_register(struct usb_conn_info *info)
+>  {
+> +	static atomic_t usb_conn_no = ATOMIC_INIT(0);
 
-Great!  Then handle it there.
-
-> but due to security restrictions on certain systems, such as Ubuntu
-> Core, modifying configuration selection in userspace becomes
-> significantly more complex and less straightforward.
-
-That's a design decision you made, don't force the kernel to do
-something that you can do in userspace just because you made a foolish
-decision in your userspace design patterns.
-
-And really, how does your userspace restrictions keep you from doing
-this in userspace?  What exactly prevents this?
-
-> And although I don’t have insight into the exact design in Windows, but during testing on a standard Windows install, the device is correctly initialized with the vendor driver without any additional configuration or modification.
-
-Watch what happens at device insertion on the bus to see how it decides
-which configuration to pick.  Is Linux's logic different somehow?  It's
-odd that only now would something like this start showing up.
-
-> Given that this quirk is device-specific and not a general change in
-> policy, the proposed quirk simply allows the kernel to prefer the
-> correct vendor-specific configuration when it's known to be required.
-
-This is a policy change of "if you can do it in userspace, you should.
+Please use a proper data structure for this (hint, not an atomic_t, but
+rather a idr, or is it ida?)
 
 thanks,
 
