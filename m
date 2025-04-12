@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-23000-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23001-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E281A86CC3
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 13:24:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 412C0A86CF4
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 14:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C4DD9A0F84
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 11:24:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 404C519E75F0
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 12:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E110C1DEFE1;
-	Sat, 12 Apr 2025 11:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0CAA1DE4EC;
+	Sat, 12 Apr 2025 12:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+VZsLnV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I7MOzI3B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1A11D79A0
-	for <linux-usb@vger.kernel.org>; Sat, 12 Apr 2025 11:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B93E1C7008
+	for <linux-usb@vger.kernel.org>; Sat, 12 Apr 2025 12:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744457050; cv=none; b=MEN9Dq2BonDZ7QSVbm5bE7mNklUVwWYnKXm71aa1qTYc/knLQQEeJz23xYjw7ReqMULO7uxIzx3WYtO6fBp1WMYtDFmzwPmlTeLbLdm7vBGyqdan4zA4KrvPNQIm3vAP18OsTMwL79lfj52idO8IdiIQQR5tHXM279ROqVYPpXg=
+	t=1744461677; cv=none; b=NzDqxJxcdlEtoB9zulv937P/SqSyIs34xdMfvMWCEkiVnzIjH95Usc9qkDFzEYvEa4/T7s4NfiWfpsv48xC1YNX/Vq4HmNziALh/6ZD9e7gl0AFf9EHlVpGjR85chyrOE3YmhxvmFijkvoOHcCs2rl/7x79i82ZuJHp7r+iF6QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744457050; c=relaxed/simple;
-	bh=j/KPEBiL0omDgAU8a4kTgSCTYw9brjifIE4+P3Szspc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NFm8pBeDnvOPhUd76BazcHGGvEaaHOtMwkO/wCFNsspvqnx3+r18dWSq9xBYkBxcZkS7Bb0U91XqUNZMoiWLekhNd6k6/N8Mm3Mb02XX9BH0La9h/CLeypPdl54hELMlOS5e3HyF1fNQefKRUsN5auF35ycdTy8/Lj3JHfp4QSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+VZsLnV; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1744461677; c=relaxed/simple;
+	bh=g9yZPBmiRL4YW3/IKzODvcD+3+55qG1ZcwgOZYunAmA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=OxwGXF7PE7g3vfL0nSyAJbItqE2+7P9KGk/aYEaAMlw6WaV022CsVkhWuP+UAwSYRkN8nC6wFkmTQwN4mdXC9slG65ePkoKoSc/6lQhXMI08gyb3yg3DYOg5rf2H9TItA2BjEtGasKhzcCX+Lrt/OnE9VFs60h22xBJ6hHwmaRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I7MOzI3B; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744457049; x=1775993049;
+  t=1744461676; x=1775997676;
   h=date:from:to:cc:subject:message-id;
-  bh=j/KPEBiL0omDgAU8a4kTgSCTYw9brjifIE4+P3Szspc=;
-  b=L+VZsLnVzk6zTB1LG3y0vwYLv0JWlZLWxoY69mACBbQona4d62gbPBRr
-   ZYgyGiNBR5XUxxCs26w54vrbh218ulkAgwIIMoTOdqeXFo3yFUPQ8eemG
-   0EOsex7C3oSz6UBMgTZasISWj74gWA9W+tvRc2P5RrHIqXn6E/TppVcjF
-   D5pMOdbVHGCNQ7/NYam6gugnEe4uOZsY+bgwPCJj1kLdrKNqkHH+Wq1mb
-   wwkZoKXOi5ZbXDyp3qwcVu8S0eIs440aopJa9cXRESMUg+7RNz8ntmCaG
-   ZX+r1eXi+YblKd5baMXJa/70kTx7f/JwYXSpx8YkMxCfs4NjJYvarZqsh
-   w==;
-X-CSE-ConnectionGUID: /iP+86pcRjaKhoKGnfaTIA==
-X-CSE-MsgGUID: FwDZhRmdQEOtsAeDAKGnMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="45899245"
+  bh=g9yZPBmiRL4YW3/IKzODvcD+3+55qG1ZcwgOZYunAmA=;
+  b=I7MOzI3BtqDWDYmdAAsI4SVSZIvto/32pnybuP+A9E23xV56ZvarWRfL
+   meR7P86k5K3ZVDSkpmOdaaZVDs+1lRXcNWjHfgDmwr+zUPlDuoacOSY3g
+   7pv4TNxCfs3lWF7U/rj4cU/63ErCy8IezmLtXlT43W1XhVJeJNzPEwNOI
+   Vl7PzwhAULe7wd9VxoG8tJY8fLAJpa074l7Z7uWOHll9G7xuDnnjOhavI
+   ky7VfTFDoE9le7+DPxAQUBdduIXtVPbA5R9B4Fp0o68i6ovfi4vG9DPNk
+   9esrwm6/lcWbmm2Y+cAQJU4DsCrJ4czeufVEUwblJqwDRKYt5jukuBJnk
+   A==;
+X-CSE-ConnectionGUID: wI5k2xCXTLSbcNrDLyKylQ==
+X-CSE-MsgGUID: KvWVgBbOTlSiCouJCY8yTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46007597"
 X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
-   d="scan'208";a="45899245"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 04:24:06 -0700
-X-CSE-ConnectionGUID: nc7UVT+QTdWT+34WRyNAjw==
-X-CSE-MsgGUID: GklayCzHRI+IpYnq6pn/WQ==
+   d="scan'208";a="46007597"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 05:41:14 -0700
+X-CSE-ConnectionGUID: 5JFrV88qQQCFqbNN/MpkSw==
+X-CSE-MsgGUID: cTCZMBW9RLaJccfgThDxPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
-   d="scan'208";a="129972115"
+   d="scan'208";a="134399185"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Apr 2025 04:24:05 -0700
+  by orviesa004.jf.intel.com with ESMTP; 12 Apr 2025 05:41:13 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u3Yxu-000Bl3-2D;
-	Sat, 12 Apr 2025 11:24:02 +0000
-Date: Sat, 12 Apr 2025 19:23:35 +0800
+	id 1u3aAX-000BnM-35;
+	Sat, 12 Apr 2025 12:41:09 +0000
+Date: Sat, 12 Apr 2025 20:40:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 9bf4294d0c1e5268332964604ece43eaf7f33cc3
-Message-ID: <202504121929.kBpWG8Af-lkp@intel.com>
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 4bfeea6ec1c0241a6c856ed1694a72a8cbaa8494
+Message-ID: <202504122049.Kxp9AcbV-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,13 +74,13 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 9bf4294d0c1e5268332964604ece43eaf7f33cc3  ALSA: usb-audio: qcom: Notify USB audio devices on USB offload probing
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 4bfeea6ec1c0241a6c856ed1694a72a8cbaa8494  thunderbolt: Use wake on connect and disconnect over suspend
 
-elapsed time: 1446m
+elapsed time: 1444m
 
-configs tested: 108
-configs skipped: 2
+configs tested: 102
+configs skipped: 1
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -100,7 +100,6 @@ arm                   randconfig-001-20250411    clang-21
 arm                   randconfig-002-20250411    clang-21
 arm                   randconfig-003-20250411    gcc-6.5.0
 arm                   randconfig-004-20250411    gcc-6.5.0
-arm                       spear13xx_defconfig    gcc-14.2.0
 arm64                            allmodconfig    clang-19
 arm64                             allnoconfig    gcc-14.2.0
 arm64                 randconfig-001-20250411    gcc-9.5.0
@@ -132,12 +131,10 @@ loongarch             randconfig-002-20250411    gcc-14.2.0
 m68k                             allmodconfig    gcc-14.2.0
 m68k                              allnoconfig    gcc-14.2.0
 m68k                             allyesconfig    gcc-14.2.0
-m68k                           virt_defconfig    gcc-14.2.0
 microblaze                       allmodconfig    gcc-14.2.0
 microblaze                        allnoconfig    gcc-14.2.0
 microblaze                       allyesconfig    gcc-14.2.0
 mips                              allnoconfig    gcc-14.2.0
-mips                        maltaup_defconfig    clang-21
 nios2                             allnoconfig    gcc-14.2.0
 nios2                 randconfig-001-20250411    gcc-9.3.0
 nios2                 randconfig-002-20250411    gcc-7.5.0
@@ -146,12 +143,9 @@ openrisc                         allyesconfig    gcc-14.2.0
 parisc                           allmodconfig    gcc-14.2.0
 parisc                            allnoconfig    gcc-14.2.0
 parisc                           allyesconfig    gcc-14.2.0
-parisc                generic-64bit_defconfig    gcc-14.2.0
 parisc                randconfig-001-20250411    gcc-14.2.0
 parisc                randconfig-002-20250411    gcc-8.5.0
-powerpc                          allmodconfig    gcc-14.2.0
 powerpc                           allnoconfig    gcc-14.2.0
-powerpc                 canyonlands_defconfig    clang-21
 powerpc               randconfig-001-20250411    gcc-9.3.0
 powerpc               randconfig-002-20250411    clang-21
 powerpc               randconfig-003-20250411    clang-21
