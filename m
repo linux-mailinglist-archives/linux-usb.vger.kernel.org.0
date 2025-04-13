@@ -1,303 +1,235 @@
-Return-Path: <linux-usb+bounces-23015-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23016-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFDEFA86FCA
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 23:20:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D719A87170
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 11:50:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB88A17D01C
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Apr 2025 21:20:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7559C189959B
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 09:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EBE323026C;
-	Sat, 12 Apr 2025 21:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C47C19E82A;
+	Sun, 13 Apr 2025 09:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="TUcqzPtc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C21229B30
-	for <linux-usb@vger.kernel.org>; Sat, 12 Apr 2025 21:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744492826; cv=none; b=KmvIMnfBLDY/jtihBi9ER3vGL2dE0uLFc0d5HHMd9f6ZQF+RyL2fPlQXq0+QBABA8/tBDdEXFQG/KXuCgMnRL9RG7OQMKcG6AS9DoxiwtrWVCO/uiKoVpgF8AwzWDHp1CQykagIXdqvJfgwynJFwQj70N4cyxiZZb0F6dbvUzq0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744492826; c=relaxed/simple;
-	bh=EmeNt+k1QMgSJ+cFNyJV6f3zyl3kiUzKwN2y2Uiv+XY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NMfQCaxbIsnXYT8+0vj4rv+27W++nbTXi7SnZ0coqVhOBfynhTnbfsZznbGPJf5OQvBhpAPyzhL1JyPGE4oziBxLbU0o/3OF+1Ihr7BrUxDjgMlIAmYXk+/l4EkLtKmfk4sOLCshUn50XHb9utq7XfDog+DxeRs3ZGTCOwER7Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3d4423d0c49so31748205ab.0
-        for <linux-usb@vger.kernel.org>; Sat, 12 Apr 2025 14:20:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744492824; x=1745097624;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PCb9XP7p0T7OrM0O4Wd1Ziuw+OQ27R1oZ4msvjdVWVk=;
-        b=Rwp8DsnKjwvIutSBdi/t5btQNbOkbrhV5lQD3LUvC9SWuJhn5ZNfgeW27SjxV9dsL+
-         3CkJQenTLFHEBhwBkAWrmuDRd+3bEvJYkhUHd2MMjI7VSJstIXNr1D0kZHfkWDIZ2d/e
-         fWp+2NmU4hzhXfPZk7EWOt2IKZF1y/5ylKO9V7nnQZr50L/x78U7ZwFOOq8S5tXslHkR
-         nNN9TZ7X22VruTpx6P7bURrwmph+MWENGcX5eve/SD/P36JVqshsZKlzbonZLb8pN723
-         KbBUULHW3ouq0iwz8HwBHdQTWilKHib3efwe8YtiAhXfuUUVhiHsJwp5TSF0/D1LDCJS
-         ssPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU05V9l69eGg4PqN4IXOv7Y5STLv9X5znfhc8YgQru8sYtL4pMxHIFWXkYjwCISTH0VjV/90JMq4xM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEBulhrAYiCrCwH1B24ZwmIRNiCNpdWAobJyUuJzOt74Oj1s7G
-	CB32z7/0M+6kKf4mhNuK1DuKpk4RHixvpweHV/tHDVKi70PLMShIodugfeay4veIeEY6ltQ0GH/
-	d83ee0A+N8xW2rh5x/RxP1xfts9y6QaC29zD99y+z6j8KMiStD9MgVdA=
-X-Google-Smtp-Source: AGHT+IEJ0DnQyXGwBWL5V63O2r8oKE3tFT9sWT8dXogWM1FljqNuOfbbokjn3K9mvCTwj9LlqCIxv2H2CPmP2f6NiBW+52OxysJr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04911A927;
+	Sun, 13 Apr 2025 09:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744537818; cv=pass; b=EjDgXwXxDOOParWt0sK0ehn/2MZ01VCRQ+EyLWhPOIWyhPVXMNitSER9hwjaZLvYtr88Wv5bpqHYT1w8iCNH8DzuDEJICp58pDAr7IvErpQ0qDD+P2zqb9E6TUED7Wt3pIYqVVjuE4Yn3VLvMpDMJoFaJ3ZHR/INkM2eSx4v6DE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744537818; c=relaxed/simple;
+	bh=kiaPdcZIaFmz86b20HLXekIG3ETiUjCIkSRj0UBr8j4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iK6V7T4xKd8wSnpOe1YK0TvEJrTrYU0PwYGSQsG8K06zo3Kw2ii/BkAxjpqvhxowx1rFaop3fhlqxKdXWOo2fP45l42SbKuX8fsu7hn5yQVrToNxrlPtj/v6HZfHuTZkBWOs6uUSUtN7fy6NshHO4tMIrTGFryePw++ZveUADBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=TUcqzPtc; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-127c-61ff-fee2-b97e.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:127c:61ff:fee2:b97e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Zb5Hs2gYrz49Pyv;
+	Sun, 13 Apr 2025 12:50:01 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1744537803;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2BQGV2KYv+aKhHgtS/6teQ8FYrfge2xbaHRLBUN2W+U=;
+	b=TUcqzPtckMjPhNZbXGwHc6ciTa06AFP08cYyywm0X0hcyTUGJTkBZ8KLHx885xSIcoPNqN
+	45gnDBNqu4tDD5oDdUaQMo7EPasKTK3kgfnQxQKF4hUeJRYgP3qp3Vl9uS+foBUKuwz52D
+	S8NgVi0RV8oSrNxoI8Dl2UFmRYTuNauh3KrMRow/35QEUzs8oj59LkmHSliryICsha7Thf
+	ui1NfwxfKv0AzMho3GvlULGX5xRXDKVfM+AACvkvyXIrkZ/qsDLm5EYCp7tH7ZAG5ItYgM
+	5LPYGu63gy0477V7XQ7BgxCX4YEsx0habknDuv4q8XA8pK/DbUwwcSzPrpPzHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1744537803;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2BQGV2KYv+aKhHgtS/6teQ8FYrfge2xbaHRLBUN2W+U=;
+	b=gWohZq68wor8SVJOhwlq12RGqg+b0iPVIa0sUx7TWIFaxUC4v/XuR148PBaERFDL+psvRf
+	R1ebs/r+j+PzAXd31Mbk3mRpsQblVVULXLO43Xvf9Php9UXG+25D1M+SAmygfC8puJdOTX
+	Qzko8PF4Pc6R+1izOcwdyKdgFxOfF+G747sL/tiL1vH2MP/8D5CLAgFftx+2PKLHJj22lH
+	kWPOUHjfxEri0jtZuCO8/75wdHxq4Jc/MpU+rXkJh+fXbIyXfTTG3gKNDAMVzc2B7RoY7D
+	QrTHKWmRZvwXUPybI5JFdn285k/soL2jng1C1imRPNotuzHIQ4PBf8agfkoWAg==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1744537803; a=rsa-sha256;
+	cv=none;
+	b=BlI69a+FFfREcxp6xgn95zX8ACf630wy7aI04BXjWr9Z4sbvk9cKLga9AtIOZSosGW5slB
+	qoTk3FY7NU1J5RdhfMJbzwz+PQs5DgxhQ6FlbdA7HIS5vrU9CvoUgZtT08e4hghdSGPhjo
+	R4VieI7BUwjnxu4tUbwP0qzDfsmKK4EsGaVn0hqKihQ8bAVAjF18s3mYn5bsYx3ngho1a5
+	CurfExlr6d17ZLBF8oD8ovqzuZKlfhadr8KfRaC1dlJYF3YL1Xmo5DU3QD4wWiyfIsi7mq
+	Xu0IHoJsiEX7k47gMvs8kMdUh42+p5dFOABEI3opwgNp1EIQmG3LTmpaFsPr5g==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id AD353634C93;
+	Sun, 13 Apr 2025 12:50:00 +0300 (EEST)
+Date: Sun, 13 Apr 2025 09:50:00 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 3/8] media: v4l: fwnode: Support acpi devices for
+ v4l2_fwnode_device_parse
+Message-ID: <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
+References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
+ <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3497:b0:3d4:3ab3:daf0 with SMTP id
- e9e14a558f8ab-3d7ec1f38a9mr80354015ab.7.1744492823829; Sat, 12 Apr 2025
- 14:20:23 -0700 (PDT)
-Date: Sat, 12 Apr 2025 14:20:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67fad917.050a0220.2c5fcf.0012.GAE@google.com>
-Subject: [syzbot] [net?] [usb?] INFO: task hung in usbnet_disconnect (3)
-From: syzbot <syzbot+361b9ca28e718288de20@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org>
 
-Hello,
+Hi Ricardo,
 
-syzbot found the following issue on:
+Thanks for the patch.
 
-HEAD commit:    0af2f6be1b42 Linux 6.15-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1637a7e4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=42c250ab10de03ed
-dashboard link: https://syzkaller.appspot.com/bug?extid=361b9ca28e718288de20
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+On Thu, Apr 03, 2025 at 07:16:14PM +0000, Ricardo Ribalda wrote:
+> This patch modifies v4l2_fwnode_device_parse() to support ACPI devices.
+> 
+> We initially add support only for orientation via the ACPI _PLD method.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/v4l2-core/v4l2-fwnode.c | 58 +++++++++++++++++++++++++++++++----
+>  1 file changed, 52 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+> index cb153ce42c45d69600a3ec4e59a5584d7e791a2a..81563c36b6436bb61e1c96f2a5ede3fa9d64dab3 100644
+> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
+> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+> @@ -15,6 +15,7 @@
+>   * Author: Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+>   */
+>  #include <linux/acpi.h>
+> +#include <acpi/acpi_bus.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+> @@ -807,16 +808,47 @@ int v4l2_fwnode_connector_add_link(struct fwnode_handle *fwnode,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_add_link);
+>  
+> -int v4l2_fwnode_device_parse(struct device *dev,
+> -			     struct v4l2_fwnode_device_properties *props)
+> +static int v4l2_fwnode_device_parse_acpi(struct device *dev,
+> +					 struct v4l2_fwnode_device_properties *props)
+> +{
+> +	struct acpi_pld_info *pld;
+> +	int ret = 0;
+> +
+> +	if (!acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld)) {
+> +		dev_dbg(dev, "acpi _PLD call failed\n");
+> +		return 0;
+> +	}
 
-Unfortunately, I don't have any reproducer for this issue yet.
+You could have software nodes in an ACPI system as well as DT-aligned
+properties. They're not the primary means to convey this information still.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8392cf904762/disk-0af2f6be.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/742ce214269c/vmlinux-0af2f6be.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/47fcdc35136e/bzImage-0af2f6be.xz
+How about returning e.g. -ENODATA here if _PLD doesn't exist for the device
+and then proceeding to parse properties as in DT?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+361b9ca28e718288de20@syzkaller.appspotmail.com
+> +
+> +	switch (pld->panel) {
+> +	case ACPI_PLD_PANEL_FRONT:
+> +		props->orientation = V4L2_FWNODE_ORIENTATION_FRONT;
+> +		break;
+> +	case ACPI_PLD_PANEL_BACK:
+> +		props->orientation = V4L2_FWNODE_ORIENTATION_BACK;
+> +		break;
+> +	case ACPI_PLD_PANEL_TOP:
+> +	case ACPI_PLD_PANEL_LEFT:
+> +	case ACPI_PLD_PANEL_RIGHT:
+> +	case ACPI_PLD_PANEL_UNKNOWN:
+> +		props->orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
+> +		break;
 
-INFO: task kworker/0:7:5815 blocked for more than 143 seconds.
-      Not tainted 6.15.0-rc1-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/0:7     state:D stack:21976 pid:5815  tgid:5815  ppid:2      task_flags:0x4288060 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x132a/0x3b00 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- rtnl_net_lock include/linux/rtnetlink.h:130 [inline]
- rtnl_net_dev_lock+0x146/0x360 net/core/dev.c:2096
- unregister_netdev+0x15/0x60 net/core/dev.c:12061
- usbnet_disconnect+0x109/0x500 drivers/net/usb/usbnet.c:1648
- usb_unbind_interface+0x1da/0x9a0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x122/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x44b/0x620 drivers/base/dd.c:1296
- bus_remove_device+0x22f/0x420 drivers/base/bus.c:579
- device_del+0x396/0x9f0 drivers/base/core.c:3855
- usb_disable_device+0x355/0x7d0 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2316
- hub_port_connect drivers/usb/core/hub.c:5371 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
- port_event drivers/usb/core/hub.c:5831 [inline]
- hub_event+0x1aa0/0x5030 drivers/usb/core/hub.c:5913
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-INFO: task kworker/0:7:5815 is blocked on a mutex likely owned by task dhcpcd:2887.
-task:dhcpcd          state:R  running task     stack:25704 pid:2887  tgid:2887  ppid:2886   task_flags:0x400140 flags:0x0000400a
-Call Trace:
- <TASK>
- </TASK>
+How about the rotation in _PLD?
 
-Showing all locks held in the system:
-6 locks held by kworker/1:0/23:
- #0: ffff8881066ab948
- ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc9000018fd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff88810afb9198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff88810afb9198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1be/0x5030 drivers/usb/core/hub.c:5859
- #3: ffff888116ce1198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff888116ce1198 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #4: ffff88811160f160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #4: ffff88811160f160 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #5: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: wpan_phy_register+0x27/0x160 net/ieee802154/core.c:145
-1 lock held by khungtaskd/30:
- #0: ffffffff890c1a00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #0: ffffffff890c1a00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
- #0: ffffffff890c1a00 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x36/0x1c0 kernel/locking/lockdep.c:6764
-7 locks held by kworker/1:1/38:
-6 locks held by kworker/1:2/2507:
- #0: ffff8881066ab948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc90003bbfd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff88810afc9198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff88810afc9198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1be/0x5030 drivers/usb/core/hub.c:5859
- #3: ffff888106a84198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff888106a84198 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #4: ffff888118766160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #4: ffff888118766160 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #5: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock_killable include/linux/rtnetlink.h:145 [inline]
- #5: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: register_netdev+0x18/0x50 net/core/dev.c:11130
-2 locks held by getty/2907:
- #0: ffff8881121230a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc900000432f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x41b/0x14f0 drivers/tty/n_tty.c:2222
-6 locks held by kworker/1:3/5229:
- #0: 
-ffff8881066ab948 ((wq_completion)usb_hub_wq
-){+.+.}-{0:0}
-, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc900021bfd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff8881160f4198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff8881160f4198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1be/0x5030 drivers/usb/core/hub.c:5859
- #3: ffff88810afa4508 (&port_dev->status_lock){+.+.}-{4:4}, at: usb_lock_port drivers/usb/core/hub.c:3220 [inline]
- #3: ffff88810afa4508 (&port_dev->status_lock){+.+.}-{4:4}, at: usb_reset_device+0x559/0xa90 drivers/usb/core/hub.c:6357
- #4: ffff888107bb6568 (hcd->address0_mutex){+.+.}-{4:4}, at: usb_reset_and_verify_device+0x335/0x1120 drivers/usb/core/hub.c:6163
- #5: ffffffff89bedfd0 (ehci_cf_port_reset_rwsem){.+.+}-{4:4}, at: hub_port_reset+0x1a1/0x1e00 drivers/usb/core/hub.c:3035
-4 locks held by kworker/1:4/5236:
- #0: ffff8881066ab948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: 
-ffffc900021dfd18
- ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff88810afa1198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff88810afa1198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1be/0x5030 drivers/usb/core/hub.c:5859
- #3: ffff88810afa4508 (&port_dev->status_lock){+.+.}-{4:4}, at: usb_lock_port drivers/usb/core/hub.c:3220 [inline]
- #3: ffff88810afa4508 (&port_dev->status_lock){+.+.}-{4:4}, at: hub_event+0x5c3/0x5030 drivers/usb/core/hub.c:5912
-4 locks held by udevd/5237:
- #0: ffff88811382a0a0 (&p->lock){+.+.}-{4:4}, at: seq_read_iter+0xe1/0x12b0 fs/seq_file.c:182
- #1: ffff8881198f4888 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_seq_start+0x4d/0x240 fs/kernfs/file.c:154
- #2: ffff888118ad45a8 (kn->active#5){++++}-{0:0}, at: kernfs_seq_start+0x71/0x240 fs/kernfs/file.c:155
- #3: ffff888116ce1198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff888116ce1198 (&dev->mutex){....}-{4:4}, at: uevent_show+0x187/0x3b0 drivers/base/core.c:2730
-4 locks held by udevd/5242:
- #0: ffff888102af4668 (&p->lock){+.+.}-{4:4}, at: seq_read_iter+0xe1/0x12b0 fs/seq_file.c:182
- #1: 
-ffff88811be0dc88 (&of->mutex
-#2){+.+.}-{4:4}, at: kernfs_seq_start+0x4d/0x240 fs/kernfs/file.c:154
- #2: ffff8881209f5e18 (kn->active#5){++++}-{0:0}, at: kernfs_seq_start+0x71/0x240 fs/kernfs/file.c:155
- #3: ffff888106a84198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff888106a84198 (&dev->mutex){....}-{4:4}, at: uevent_show+0x187/0x3b0 drivers/base/core.c:2730
-4 locks held by udevd/5275:
- #0: ffff88811c43ab08 (&p->lock){+.+.}-{4:4}, at: seq_read_iter+0xe1/0x12b0 fs/seq_file.c:182
- #1: ffff8881311e7488 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_seq_start+0x4d/0x240 fs/kernfs/file.c:154
- #2: ffff888109365b48 (kn->active#5){++++}-{0:0}, at: kernfs_seq_start+0x71/0x240 fs/kernfs/file.c:155
- #3: ffff88810b351198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff88810b351198 (&dev->mutex){....}-{4:4}, at: uevent_show+0x187/0x3b0 drivers/base/core.c:2730
-6 locks held by kworker/1:6/5525:
- #0: ffff8881066ab948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc90004257d18
- (
-(work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff88810b351198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff88810b351198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1be/0x5030 drivers/usb/core/hub.c:5859
- #3: ffff8881173bf198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff8881173bf198 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #4: ffff88811368c160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #4: ffff88811368c160 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1005
- #5: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock_killable include/linux/rtnetlink.h:145 [inline]
- #5: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: register_netdev+0x18/0x50 net/core/dev.c:11130
-7 locks held by kworker/0:7/5815:
-3 locks held by kworker/u8:1/9183:
- #0: ffff8881120a0948 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc90001c4fd18 ((work_completion)(&(&net->ipv6.addr_chk_work)->work)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock include/linux/rtnetlink.h:130 [inline]
- #2: ffffffff8a3bdaa8 (rtnl_mutex){+.+.}-{4:4}, at: addrconf_verify_work+0x12/0x30 net/ipv6/addrconf.c:4734
+> +	default:
+> +		dev_dbg(dev, "Unknown _PLD panel val %d\n", pld->panel);
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	ACPI_FREE(pld);
+> +	return ret;
+> +}
+> +
+> +static int v4l2_fwnode_device_parse_dt(struct device *dev,
+> +				       struct v4l2_fwnode_device_properties *props)
+>  {
+>  	struct fwnode_handle *fwnode = dev_fwnode(dev);
+>  	u32 val;
+>  	int ret;
+>  
+> -	memset(props, 0, sizeof(*props));
+> -
+> -	props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
+>  	ret = fwnode_property_read_u32(fwnode, "orientation", &val);
+>  	if (!ret) {
+>  		switch (val) {
+> @@ -833,7 +865,6 @@ int v4l2_fwnode_device_parse(struct device *dev,
+>  		dev_dbg(dev, "device orientation: %u\n", val);
+>  	}
+>  
+> -	props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
+>  	ret = fwnode_property_read_u32(fwnode, "rotation", &val);
+>  	if (!ret) {
+>  		if (val >= 360) {
+> @@ -847,6 +878,21 @@ int v4l2_fwnode_device_parse(struct device *dev,
+>  
+>  	return 0;
+>  }
+> +
+> +int v4l2_fwnode_device_parse(struct device *dev,
+> +			     struct v4l2_fwnode_device_properties *props)
+> +{
+> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+> +
+> +	memset(props, 0, sizeof(*props));
+> +
+> +	props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
+> +	props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
+> +
+> +	if (is_acpi_device_node(fwnode))
+> +		return v4l2_fwnode_device_parse_acpi(dev, props);
+> +	return v4l2_fwnode_device_parse_dt(dev, props);
+> +}
+>  EXPORT_SYMBOL_GPL(v4l2_fwnode_device_parse);
+>  
+>  /*
+> 
 
-=============================================
+-- 
+Kind regards,
 
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 30 Comm: khungtaskd Not tainted 6.15.0-rc1-syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:158 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:274 [inline]
- watchdog+0x11c4/0x15d0 kernel/hung_task.c:437
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 6797 Comm: kworker/1:7 Not tainted 6.15.0-rc1-syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Workqueue: events legacy_dvb_usb_read_remote_control
-RIP: 0010:printk_get_next_message+0x2d4/0x6d0 kernel/printk/printk.c:3027
-Code: 00 45 84 e4 0f 85 c0 00 00 00 e8 c7 20 20 00 8b 35 a1 cb 17 12 0f b6 15 fa b5 a0 07 4c 89 f7 83 e6 01 e8 4f 91 ff ff 89 04 24 <e8> a7 20 20 00 48 8d 7d 08 8b 04 24 48 ba 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc90014337680 EFLAGS: 00000286
-RAX: 000000000000002f RBX: 1ffff92002866ed5 RCX: fffff52002866eb5
-RDX: ffff8881129e9d40 RSI: ffffffff815bcd5f RDI: 0000000000000007
-RBP: ffffc900143378b0 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000800 R11: 205d303354202020 R12: 0000000000000000
-R13: 0000000000000001 R14: ffffc900143376c8 R15: ffffc90014337708
-FS:  0000000000000000(0000) GS:ffff8882692bf000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000110c381204 CR3: 000000011727a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- console_emit_next_record kernel/printk/printk.c:3092 [inline]
- console_flush_all+0x6ea/0xc60 kernel/printk/printk.c:3226
- __console_flush_and_unlock kernel/printk/printk.c:3285 [inline]
- console_unlock+0xd8/0x210 kernel/printk/printk.c:3325
- vprintk_emit+0x418/0x6d0 kernel/printk/printk.c:2450
- _printk+0xc7/0x100 kernel/printk/printk.c:2475
- m920x_read drivers/media/usb/dvb-usb/m920x.c:40 [inline]
- m920x_rc_query+0x496/0x770 drivers/media/usb/dvb-usb/m920x.c:193
- legacy_dvb_usb_read_remote_control+0x109/0x4f0 drivers/media/usb/dvb-usb/dvb-usb-remote.c:123
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Sakari Ailus
 
