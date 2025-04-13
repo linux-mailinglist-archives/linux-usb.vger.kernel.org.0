@@ -1,102 +1,77 @@
-Return-Path: <linux-usb+bounces-23016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23017-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D719A87170
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 11:50:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FDAFA873AE
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 21:47:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7559C189959B
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 09:50:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB3FD3ACF7B
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Apr 2025 19:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C47C19E82A;
-	Sun, 13 Apr 2025 09:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF4D1917E7;
+	Sun, 13 Apr 2025 19:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="TUcqzPtc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dvTCgHah"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04911A927;
-	Sun, 13 Apr 2025 09:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744537818; cv=pass; b=EjDgXwXxDOOParWt0sK0ehn/2MZ01VCRQ+EyLWhPOIWyhPVXMNitSER9hwjaZLvYtr88Wv5bpqHYT1w8iCNH8DzuDEJICp58pDAr7IvErpQ0qDD+P2zqb9E6TUED7Wt3pIYqVVjuE4Yn3VLvMpDMJoFaJ3ZHR/INkM2eSx4v6DE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744537818; c=relaxed/simple;
-	bh=kiaPdcZIaFmz86b20HLXekIG3ETiUjCIkSRj0UBr8j4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iK6V7T4xKd8wSnpOe1YK0TvEJrTrYU0PwYGSQsG8K06zo3Kw2ii/BkAxjpqvhxowx1rFaop3fhlqxKdXWOo2fP45l42SbKuX8fsu7hn5yQVrToNxrlPtj/v6HZfHuTZkBWOs6uUSUtN7fy6NshHO4tMIrTGFryePw++ZveUADBc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=TUcqzPtc; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-127c-61ff-fee2-b97e.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:127c:61ff:fee2:b97e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Zb5Hs2gYrz49Pyv;
-	Sun, 13 Apr 2025 12:50:01 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1744537803;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2BQGV2KYv+aKhHgtS/6teQ8FYrfge2xbaHRLBUN2W+U=;
-	b=TUcqzPtckMjPhNZbXGwHc6ciTa06AFP08cYyywm0X0hcyTUGJTkBZ8KLHx885xSIcoPNqN
-	45gnDBNqu4tDD5oDdUaQMo7EPasKTK3kgfnQxQKF4hUeJRYgP3qp3Vl9uS+foBUKuwz52D
-	S8NgVi0RV8oSrNxoI8Dl2UFmRYTuNauh3KrMRow/35QEUzs8oj59LkmHSliryICsha7Thf
-	ui1NfwxfKv0AzMho3GvlULGX5xRXDKVfM+AACvkvyXIrkZ/qsDLm5EYCp7tH7ZAG5ItYgM
-	5LPYGu63gy0477V7XQ7BgxCX4YEsx0habknDuv4q8XA8pK/DbUwwcSzPrpPzHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1744537803;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2BQGV2KYv+aKhHgtS/6teQ8FYrfge2xbaHRLBUN2W+U=;
-	b=gWohZq68wor8SVJOhwlq12RGqg+b0iPVIa0sUx7TWIFaxUC4v/XuR148PBaERFDL+psvRf
-	R1ebs/r+j+PzAXd31Mbk3mRpsQblVVULXLO43Xvf9Php9UXG+25D1M+SAmygfC8puJdOTX
-	Qzko8PF4Pc6R+1izOcwdyKdgFxOfF+G747sL/tiL1vH2MP/8D5CLAgFftx+2PKLHJj22lH
-	kWPOUHjfxEri0jtZuCO8/75wdHxq4Jc/MpU+rXkJh+fXbIyXfTTG3gKNDAMVzc2B7RoY7D
-	QrTHKWmRZvwXUPybI5JFdn285k/soL2jng1C1imRPNotuzHIQ4PBf8agfkoWAg==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1744537803; a=rsa-sha256;
-	cv=none;
-	b=BlI69a+FFfREcxp6xgn95zX8ACf630wy7aI04BXjWr9Z4sbvk9cKLga9AtIOZSosGW5slB
-	qoTk3FY7NU1J5RdhfMJbzwz+PQs5DgxhQ6FlbdA7HIS5vrU9CvoUgZtT08e4hghdSGPhjo
-	R4VieI7BUwjnxu4tUbwP0qzDfsmKK4EsGaVn0hqKihQ8bAVAjF18s3mYn5bsYx3ngho1a5
-	CurfExlr6d17ZLBF8oD8ovqzuZKlfhadr8KfRaC1dlJYF3YL1Xmo5DU3QD4wWiyfIsi7mq
-	Xu0IHoJsiEX7k47gMvs8kMdUh42+p5dFOABEI3opwgNp1EIQmG3LTmpaFsPr5g==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id AD353634C93;
-	Sun, 13 Apr 2025 12:50:00 +0300 (EEST)
-Date: Sun, 13 Apr 2025 09:50:00 +0000
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6830EEBB
+	for <linux-usb@vger.kernel.org>; Sun, 13 Apr 2025 19:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744573616; cv=none; b=e5wlan1mfBhxJR7wvmyuiKxM5/rPN3fo+JgO/1RfPx2bZifkpEw8stzV+SbcMH/F5prWpPj668oM0/f5+ih0XgfwnVAMJ+MQlurRf+HaQAowPPoAovTLfjSnJLP0DlbxFnrKCIvMX9URUVxyL2c5w0pbmRxzwsn5bXc1b+rc0Tg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744573616; c=relaxed/simple;
+	bh=KTtuztZAQhh79cVUGxx+F+f5NU8a5R50pdz0FYt7zjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ja2DYk2eo4eVt1OpX+ZGyKnK1odlKfs79UU5Df4w9VXzi+Rtoyi7UaRw+nk2PvBa9Ms7gYtwtvRXRgSliJMkKS9t8I0QZ8nS1YryMdAZCMnjOgZhdZftmwgCWbKyNBFPy9glmqYPzvmLeTS4W3/pFT+L8uPYw6vNTBcYYZ7uO2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dvTCgHah; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744573612; x=1776109612;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KTtuztZAQhh79cVUGxx+F+f5NU8a5R50pdz0FYt7zjw=;
+  b=dvTCgHah0OEawPA0qyfsAoX8qpPGxEoZ/EhOxQ4wU1h9V+1UPETJkgMb
+   +OP9qZLqQIbjAgGYPj5U1LgFeOlv5AvISAHWqjTWPvOidTCUbYTKKn2Ms
+   NfhoZLerfDDXrtcADOzZivO5Bh7goa8XNDQgP+jWjnt6Iq7ckPdo9OZHP
+   MHL3IgRmzt8NV1aIysAJPn9HhPUooLqMLUbuLMYgPvW3Xr5JWxGgqJlsT
+   kxhgfHYNNix358t+2KWrKSdm0CEFfRqnLWZ19XJt9mdzPMGjW5RgF+a2B
+   JDN01Q/2TLDVlrTFhWCQJJbIIcuQCb/Abj6VQeXjUsvoJJ/4ofea+p062
+   Q==;
+X-CSE-ConnectionGUID: W3JaMyeuRDaS1vLuoKOOqg==
+X-CSE-MsgGUID: oaGpjpcWQfCuUCul36m5Zw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46178337"
+X-IronPort-AV: E=Sophos;i="6.15,210,1739865600"; 
+   d="scan'208";a="46178337"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 12:46:52 -0700
+X-CSE-ConnectionGUID: KMzm6vRgTFyQoGTxKu0Tnw==
+X-CSE-MsgGUID: +X+KW+MkQDSNel6X2VILnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,210,1739865600"; 
+   d="scan'208";a="129494974"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 13 Apr 2025 12:46:50 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u43I0-000Cqy-1Q;
+	Sun, 13 Apr 2025 19:46:48 +0000
+Date: Mon, 14 Apr 2025 03:46:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 3/8] media: v4l: fwnode: Support acpi devices for
- v4l2_fwnode_device_parse
-Message-ID: <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
-References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
- <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org>
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [usb:usb-next 32/68] kismet: WARNING: unmet direct dependencies
+ detected for DRM_AUX_HPD_BRIDGE when selected by UCSI_HUAWEI_GAOKUN
+Message-ID: <202504140319.dgpbDOJZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -105,131 +80,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org>
 
-Hi Ricardo,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   1692632146451184c4bcb68554098470a119fb01
+commit: 00327d7f2c8c512c9b168daae02c8b989f79ec71 [32/68] usb: typec: ucsi: add Huawei Matebook E Go ucsi driver
+config: arc-kismet-CONFIG_DRM_AUX_HPD_BRIDGE-CONFIG_UCSI_HUAWEI_GAOKUN-0-0 (https://download.01.org/0day-ci/archive/20250414/202504140319.dgpbDOJZ-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250414/202504140319.dgpbDOJZ-lkp@intel.com/reproduce)
 
-Thanks for the patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504140319.dgpbDOJZ-lkp@intel.com/
 
-On Thu, Apr 03, 2025 at 07:16:14PM +0000, Ricardo Ribalda wrote:
-> This patch modifies v4l2_fwnode_device_parse() to support ACPI devices.
-> 
-> We initially add support only for orientation via the ACPI _PLD method.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/v4l2-core/v4l2-fwnode.c | 58 +++++++++++++++++++++++++++++++----
->  1 file changed, 52 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-> index cb153ce42c45d69600a3ec4e59a5584d7e791a2a..81563c36b6436bb61e1c96f2a5ede3fa9d64dab3 100644
-> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> @@ -15,6 +15,7 @@
->   * Author: Guennadi Liakhovetski <g.liakhovetski@gmx.de>
->   */
->  #include <linux/acpi.h>
-> +#include <acpi/acpi_bus.h>
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
->  #include <linux/module.h>
-> @@ -807,16 +808,47 @@ int v4l2_fwnode_connector_add_link(struct fwnode_handle *fwnode,
->  }
->  EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_add_link);
->  
-> -int v4l2_fwnode_device_parse(struct device *dev,
-> -			     struct v4l2_fwnode_device_properties *props)
-> +static int v4l2_fwnode_device_parse_acpi(struct device *dev,
-> +					 struct v4l2_fwnode_device_properties *props)
-> +{
-> +	struct acpi_pld_info *pld;
-> +	int ret = 0;
-> +
-> +	if (!acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld)) {
-> +		dev_dbg(dev, "acpi _PLD call failed\n");
-> +		return 0;
-> +	}
-
-You could have software nodes in an ACPI system as well as DT-aligned
-properties. They're not the primary means to convey this information still.
-
-How about returning e.g. -ENODATA here if _PLD doesn't exist for the device
-and then proceeding to parse properties as in DT?
-
-> +
-> +	switch (pld->panel) {
-> +	case ACPI_PLD_PANEL_FRONT:
-> +		props->orientation = V4L2_FWNODE_ORIENTATION_FRONT;
-> +		break;
-> +	case ACPI_PLD_PANEL_BACK:
-> +		props->orientation = V4L2_FWNODE_ORIENTATION_BACK;
-> +		break;
-> +	case ACPI_PLD_PANEL_TOP:
-> +	case ACPI_PLD_PANEL_LEFT:
-> +	case ACPI_PLD_PANEL_RIGHT:
-> +	case ACPI_PLD_PANEL_UNKNOWN:
-> +		props->orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
-> +		break;
-
-How about the rotation in _PLD?
-
-> +	default:
-> +		dev_dbg(dev, "Unknown _PLD panel val %d\n", pld->panel);
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	ACPI_FREE(pld);
-> +	return ret;
-> +}
-> +
-> +static int v4l2_fwnode_device_parse_dt(struct device *dev,
-> +				       struct v4l2_fwnode_device_properties *props)
->  {
->  	struct fwnode_handle *fwnode = dev_fwnode(dev);
->  	u32 val;
->  	int ret;
->  
-> -	memset(props, 0, sizeof(*props));
-> -
-> -	props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
->  	ret = fwnode_property_read_u32(fwnode, "orientation", &val);
->  	if (!ret) {
->  		switch (val) {
-> @@ -833,7 +865,6 @@ int v4l2_fwnode_device_parse(struct device *dev,
->  		dev_dbg(dev, "device orientation: %u\n", val);
->  	}
->  
-> -	props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
->  	ret = fwnode_property_read_u32(fwnode, "rotation", &val);
->  	if (!ret) {
->  		if (val >= 360) {
-> @@ -847,6 +878,21 @@ int v4l2_fwnode_device_parse(struct device *dev,
->  
->  	return 0;
->  }
-> +
-> +int v4l2_fwnode_device_parse(struct device *dev,
-> +			     struct v4l2_fwnode_device_properties *props)
-> +{
-> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
-> +
-> +	memset(props, 0, sizeof(*props));
-> +
-> +	props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
-> +	props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
-> +
-> +	if (is_acpi_device_node(fwnode))
-> +		return v4l2_fwnode_device_parse_acpi(dev, props);
-> +	return v4l2_fwnode_device_parse_dt(dev, props);
-> +}
->  EXPORT_SYMBOL_GPL(v4l2_fwnode_device_parse);
->  
->  /*
-> 
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE when selected by UCSI_HUAWEI_GAOKUN
+   WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+     Depends on [n]: HAS_IOMEM [=y] && DRM [=n] && DRM_BRIDGE [=n] && OF [=y]
+     Selected by [y]:
+     - UCSI_HUAWEI_GAOKUN [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=y] && EC_HUAWEI_GAOKUN [=y]
 
 -- 
-Kind regards,
-
-Sakari Ailus
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
