@@ -1,76 +1,86 @@
-Return-Path: <linux-usb+bounces-23042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9AEFA88BE7
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 21:03:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ACD8A88D12
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 22:28:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D5CD3B4944
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 19:03:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B27931895E83
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 20:28:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7A528BAA0;
-	Mon, 14 Apr 2025 19:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E487D1DFDBB;
+	Mon, 14 Apr 2025 20:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NR5HG/PJ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="l8cL8YH3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79AD1A257D
-	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 19:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9B194A6C
+	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 20:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744657427; cv=none; b=Ur06RZ6EEtz2YEzA7wKp1n1DP8vvTbxEqcZoOQQ/vH/WtG6oU68AgK0yW28HOiJjhVIeBKEP90jCO/+QsnerU6QtkM17RrWSYYA9X1nHc5ERv0LgNdSgholMlkd82U3YZpd9sjW/0KObokohDGLD4Y0aQCu0ij6j0oE6PBREQ24=
+	t=1744662502; cv=none; b=FJAuDtZDN2VptzyowTEmQu8ekZOHXg5x/MvPXQMFjV2VypeElfSstWovzf0h/mR8fCQueb71jgYa7/ZTTCtflu8TUafdR4I46tF6gymSbq0ctkzKahsHqP3bFtM6uiKgGm9y54zgRacPx/z1xxJObywOTkRDm8bjltKlrnYwt/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744657427; c=relaxed/simple;
-	bh=znL25D6OJj7rt0LH3T7rwAjqZAtNWqB9ebdHxUG13SQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H5+62C3tUG2Nuj9Q5edT+AR47diBNYxeiq56zU9zvIb76+w8rJKBo0bB42caSD4iM35VWQW550FViYlGB2ohKyQrHzHGt2etJjYoOE83k/Hi/YPNTwWzU/1KLlTcuTZg8p9pocFxKbebc5FsHG+GurDhIqwQNK5yD4Ty2JkGWlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NR5HG/PJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE494C4CEE2;
-	Mon, 14 Apr 2025 19:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744657426;
-	bh=znL25D6OJj7rt0LH3T7rwAjqZAtNWqB9ebdHxUG13SQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NR5HG/PJhyF9ZazwHiMKu0CFW5jlmOaeGg7sCRgqxQAHd00+hCSGPx+Q7nQemLj1H
-	 ryVEiJLOW9dB4JYgsNqoq+U1wmPOx31nDXUsELEGDeDCUS3Yp6LB8Sn1iWW9hkRqpX
-	 VdiHIRDAjz5JLiEul83Z6rGnoDg19I8FBV4+7TJI=
-Date: Mon, 14 Apr 2025 21:03:42 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, mika.westerberg@linux.intel.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 0/3] Introduce Thunderbolt/USB4 <-> USB Type-C port
- mapping
-Message-ID: <2025041421-snowbound-lullaby-3450@gregkh>
-References: <20250414175554.107228-1-alan.borzeszkowski@linux.intel.com>
+	s=arc-20240116; t=1744662502; c=relaxed/simple;
+	bh=mJsv2tM/I8C66voig+fQdm4mxuvEjmzB9vpmbCCufdw=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HLSWYB9vL6S7QLiKj0ONLneYRUPePbuoSzI50za3af1yqHJznK8+BWOdth7yAL1zNYyzh3JzahbXdAoe7eU9ScIti4A45yBAeqMdkD2/QgKgPH98uNEyYt5WOy5zWCBS2BUpSlxERSx3x1yIiEZlPMgjN9C0ry5kUBzFKzXYhqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=l8cL8YH3; arc=none smtp.client-ip=79.135.106.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1744662498; x=1744921698;
+	bh=5qEU6hzSwCnesMZRIBLEpCHkGx+ziAMm4+Nl/oZk6/U=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=l8cL8YH3Dlx/HaA2tXeQfGdzsN0aU+S4SmL2c3K6Q92JGNmIvPA0Q/ez9PANUsnEp
+	 2MB/TaXj620gElAURPuXCeuPyqN6DM2TyCkwortXofWuWbbiNoUQyRuYOybOHF0Bj7
+	 430t2AKHMiFEmbmi+UpijCtaIbMStov8haRms291DDxNWI09vwmzO3hzx56KqChExl
+	 XjcQAjz627O8KHoF0EFuYS/5gb24ZhZmjUYtkwS55JLR6wDPTwQ9/woQupTF3thC6M
+	 qH3CreqFHaPoBX2uw5m6XihBKSNAthc3Fwe6wcBQHlV0oZyHL1s51jHuzf5Qakt5jZ
+	 NgcPwRjytdDgg==
+Date: Mon, 14 Apr 2025 20:28:10 +0000
+To: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
+Subject: [PATCH v2 RESEND 0/6] USB: serial: ftdi_sio: Code style cleanup
+Message-ID: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
+Feedback-ID: 117888567:user:proton
+X-Pm-Message-ID: cc50f789df1fcf2fa6aebd54ffaea40d9690eb68
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250414175554.107228-1-alan.borzeszkowski@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 14, 2025 at 07:55:51PM +0200, Alan Borzeszkowski wrote:
-> Hello everyone,
-> 
-> This patch series introduces the creation of symlinks between
-> Thunderbolt/USB4 ports and their corresponding USB Type-C ports. The
-> primary goal is to provide users with clear visibility into which USB4
-> port is connected via a specific Type-C port. This provides the same
-> functionality that is already present in Chromebooks.
+This series fixes spotted code style issues in ftdi_sio driver.
 
-"mapping" in what way?  sysfs links?  If so, care to add
-Documentation/ABI/ updates?
+v2: Split the patch into smaller patches
 
-thanks,
+Signed-off-by: Dominik Karol Pi=C4=85tkowski <dominik.karol.piatkowski@prot=
+onmail.com>
 
-greg k-h
+Dominik Karol Pi=C4=85tkowski (6):
+  USB: serial: ftdi_sio: Remove space before comma
+  USB: serial: ftdi_sio: Add missing blank line after declarations
+  USB: serial: ftdi_sio: Remove superfluous space before statements
+  USB: serial: ftdi_sio: Fix indentation made with spaces
+  USB: serial: ftdi_sio: Fix misaligned block comment
+  USB: serial: ftdi_sio: Remove space before tabs
+
+ drivers/usb/serial/ftdi_sio.c     | 16 ++++++++++------
+ drivers/usb/serial/ftdi_sio.h     |  2 +-
+ drivers/usb/serial/ftdi_sio_ids.h |  4 ++--
+ 3 files changed, 13 insertions(+), 9 deletions(-)
+
+--=20
+2.34.1
+
+
 
