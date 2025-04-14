@@ -1,146 +1,312 @@
-Return-Path: <linux-usb+bounces-23035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 863B0A88900
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 18:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A28A88918
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 18:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD3AA189796E
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 16:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15620188A833
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 16:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876AC288CBB;
-	Mon, 14 Apr 2025 16:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C7C288C88;
+	Mon, 14 Apr 2025 16:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1oJYeLl"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZIG4agDJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B9A27FD5E;
-	Mon, 14 Apr 2025 16:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A519F130;
+	Mon, 14 Apr 2025 16:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744649537; cv=none; b=X698EJJeoV01qYN7fHf4vR/WONRvM4jgDYjLc2m+K5tetl7TDFZnsmdAqCJy3PyynrY0kKS8kT79jmMoWWzrZn8wiAj5t+m5b0f0vYK4Imwz5Ir8uyDysF4Qwf0HuoCxzbyrhfir3to+qhduNHfjD795TaDuJ1OopH0V17VrF7A=
+	t=1744649706; cv=none; b=Ai3P225ksUePnJIWI1kXQMIo8CaLG0WOs5UpcBs3ole3prqXWgOTwoyL6m7Kykt6NnyjO0tZi4RWXr0eXXCUa7SXjy8pId4AFX6JuRMrh3OxbMywd0TtSnIxrbYzOiKowUhXPFdqmDHHRtQ7jlX9gZYb9cQ+HZKJPw11TvgU30A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744649537; c=relaxed/simple;
-	bh=XTVAFslg/BTszObHyPG+drlASXgr8DAGYyR/rlAdfm4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r/XEa4hSK4YO5XZtODcnY6v38EnlU2cnotdGWRMar+7io8DXqet6s73bDBjFBOi0r4ZNjMepTLVMIYF5zC3Bq4d8qT/UgNSOe0HmCvQbzeZxpdMGVpVAzryqIZ9REh3Uuu4Zzswxp8xlemj25Rflnet6rD6HuhAaNZJUqe6yZos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1oJYeLl; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-39c1ee0fd43so4450046f8f.0;
-        Mon, 14 Apr 2025 09:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744649533; x=1745254333; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NaqaeO38bS1dfnb+XufrS6e3ce1N1V+fROEMewM8A04=;
-        b=B1oJYeLluW0Nk0npNwqEkoCxM3hSlP8RsYYIzVjPqBMfgJY2B5mEFFZ9SlCKRymXKv
-         NdDo3lKqtsiL2Fw/v32zTS4EaodHxPDNpoq3P8vj9CySSkBaTHo63AzsFqaKI7bb1BOa
-         vKE/6HDOesMoKvYOlfbItC47y0B/zsP5n9U6kDvlqM5hKs2GftttO2+R+dLR8VdcxUfe
-         uXST0KXKtCowScBvYDIvDcrq5EDGB5njqYst5AKllaoStWOGhI31aoRCigsUDt7BFGRB
-         Z8d3tyBmYl4qX8BuS9u0rmc3wQnOmy124x3GsoqzgJRx90Bov7w5yFxG1svdgdyGNLRR
-         ae2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744649533; x=1745254333;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NaqaeO38bS1dfnb+XufrS6e3ce1N1V+fROEMewM8A04=;
-        b=lskOGWhSG1TPh/le00zGs5VN/+93JZqDQCE2ylRbgOLIqxNKo+BorjMuxxehiNPbtO
-         LuC5InnNMJv++HL9e8EQ138oGhW9gMbc18Yy2JXJCkwUBfFPWDpSoYyhgvJMO6V1ngy1
-         ifpFzbnxmph+54vfsHiLshNRi9Jk9nRmlSkwqQg92GmaffRkuxGfMZPUTNPhtY/SbEpZ
-         fWBt3DVuhCzp7Qf/pCC0l/BNs26l+eiTTZvEYGEcgSosyxy6oZCVZ7oE1G87dEQ9ITWV
-         /50nW/8UnOsnJ1KWGPjwWtdxRGe4lEN6cV9jSx7p8nKEOW73tKLcmoP1EZ3XQT/iJP1O
-         AlzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWiNZKPHf+gNv3xFfGl9eUkBDgS00cGiGGopRTeebHPhvHLFLanNgbk7iFawPimqYKELQf9RktFfrjR@vger.kernel.org, AJvYcCWkqu0jgEIRy0CTb4zPOfD9WUj3DP9adWQM5A2rYlR7EpkFjJIFJfIbPg5QqgcjFpm+n3SqltnK4l21ysM=@vger.kernel.org, AJvYcCWtqW5XFKYiYdDGZlWwpgJj8ykHYLeLY7Jr/eGdL69/Qtep7pPnOt/Y9b913XlwwjfY7htEkFoAfak+28z8F/UY1rs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygGV793gXvs9Tak3Zzu8dNbr7MHxEdnw/b3iHP7AtzdvvuiQaX
-	HGstCpZwRh5wyaoiPClVGjEzXYjBu26ENB1e3p9FMjikUXThv21f
-X-Gm-Gg: ASbGncveL4QEpzvI0ON5qp0LG1xxAJH64tADXfqCN2m1Yo8CIhP2a/oyoRwgeG1p23g
-	X9rAKaWP6734q1uz3OAokcrBEEe3oxybzJV9bgsnDZOPqCyZRGz35fRe8DLMTG3FExsLx0QiDlm
-	uBa7G45NiSZsTU4QHDgGUZHqiOaZVnl7e/lYEyCzLE8bHzs47vPU1xNPUBNCLBmZ2aA//M5mEG8
-	RhAyW5OwwpJ5VS2htpqv4EOw2Sx6FHeeNaQgJUneKdbRQscDxKunRXidBy6XqZg4ZVIp0Nf6OBP
-	8sShdknOU8mu2dCEGQ7s6pJwtTi9DVdGanEyNIBY1FSvks0uBDOwYoASKBiu5dx1ykH7lNfzfLk
-	=
-X-Google-Smtp-Source: AGHT+IEyzU/62Ri8jHDV40wefEJeSo8FFpnMZrS9xG5JP8a4NbwIw30W9wpBPgoEHPqPBNQSjg4bZA==
-X-Received: by 2002:a05:6000:4007:b0:390:eb6f:46bf with SMTP id ffacd0b85a97d-39ea51f41fcmr10952364f8f.5.1744649533139;
-        Mon, 14 Apr 2025 09:52:13 -0700 (PDT)
-Received: from iku.Home ([2a06:5906:61b:2d00:eb55:397c:6c6:e937])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae96407esm11619295f8f.17.2025.04.14.09.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 09:52:12 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-usb@vger.kernel.org
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: usb: renesas,usbhs: Add RZ/V2H(P) SoC support
-Date: Mon, 14 Apr 2025 17:52:01 +0100
-Message-ID: <20250414165201.362262-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1744649706; c=relaxed/simple;
+	bh=ZY843y8r7FkKDxZ3LXY9PDcDmWSaRKZYXZmCMZjQnd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LgY+QBbdKsPgNV3HV3wytgBXeOFJ0xTRmPCsfmk5HoqnEJket36kQBcW6Tya4JV/r3K8TLdwMQPtPtfcXb+1zYM1+2BoJVu21i6nb3NmZCVKrzBAH+SKVTnN+zA1MJ2N7jEHnQeB3i/+r/j2BWPEpACDi55ejrxNxvKCWzAOP7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZIG4agDJ; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D11F43AF0;
+	Mon, 14 Apr 2025 16:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744649701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=42t/2/QY6y41gKecCEXacZfooM3QKM6eiym303yETDg=;
+	b=ZIG4agDJ3kRw+jCcVsyRWc4rHtC2Ir0hItngUSWFtYx17MR5Sw2S3Z2dajWQ/WveU3Lpht
+	53gm/fnA6bhDXKT3Dq0/v3dIyguGDkpe3zrZp4MGNb2SbIayZ03efoyf7rlsa7jPYIzuMU
+	9/pn5772cl9l8I7jXz2V2n2RNrdZmDBBvOTkztCxneTOu4BmCIZUnpFMSd8W7Tfo9ruv4I
+	xygtHeBcgvlzoZbg9jkOFO0HhdqZMyUIVnTHRR0jQQtTdjS9050ymYJLHWYXYbjJyBgXdG
+	oNkHgeQXeeHFPOgdzOEE/qPWievOLWPu083EIaC5zHuuNEEXQAHk7QFAoyt5zA==
+Date: Mon, 14 Apr 2025 18:54:58 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Minas Harutyunyan <hminas@synopsys.com>, linux-usb@vger.kernel.org,
+ Kever Yang <kever.yang@rock-chips.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, =?UTF-8?B?SGVydsOp?= Codina
+ <herve.codina@bootlin.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Stefan Wahren <wahrenst@gmx.net>, Fabrice
+ Gasnier <fabrice.gasnier@foss.st.com>
+Subject: DWC2 gadget: unexpected device reenumeration on Rockchip RK3308
+Message-ID: <20250414185458.7767aabc@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhoofggtgfgsehtqhertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjeeljedthfeggefgteejvdeugefgtdegieegudduveekjefhhfekgeevfedtjeefnecuffhomhgrihhnpehrrggugigrrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepledprhgtphhtthhopehhmhhinhgrshesshihnhhophhshihsrdgtohhmpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhin
+ hhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeifrghhrhgvnhhsthesghhmgidrnhgvthdprhgtphhtthhopehfrggsrhhitggvrdhgrghsnhhivghrsehfohhsshdrshhtrdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hello Minas, Kever, linux-usb, recent dwc2 driver contributors,
 
-Document the Renesas USBHS controller found on the Renesas RZ/V2H(P) SoC.
-The USBHS block on RZ/V2H(P) is functionally identical to the one on the
-RZ/G2L family, so no driver changes are needed. The existing
-"renesas,rzg2l-usbhs" fallback compatible will continue to be used for
-handling this IP.
+I am facing an unexpected behavior (apparently a bug) with a dwc2
+controller in gadget mode, using a mainline kernel: the gadget device is
+enumerated normally but then disappears and gets re-enumerated about 6
+seconds after the initial enumeration, for no apparent reason. Here are
+the details.
 
-In addition, update the schema validation logic by replacing the enum list
-of SoC-specific compatibles with a const "renesas,rzg2l-usbhs" as all
-listed SoCs share identical USBHS hardware and already include the fallback
-compatible. This will help to simplify the schema and avoid redundancy.
+Testing setup:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+SoC:             Rockchip RK3308
+Board:           Rock Pi S [1]
+USB controller:  rockchip,rk3308-usb, snps,dwc2 [2]
+Controller mode: device only (dr_mode =3D "peripheral") [3]
+Tested kernels:
+ - v6.15-rc2
+ - v6.14.1
+ - v6.12.20
+ - v6.6.87
+ - v6.1.134
+ - v5.15.180
+Device tree:     upstream Rock Pi S dts [4]
+Kernel config:   ARM64 defconfig
 
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-index 980f325341d4..6f4d41ba6ca7 100644
---- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-+++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-@@ -27,6 +27,7 @@ properties:
-               - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
-               - renesas,usbhs-r9a07g054 # RZ/V2L
-               - renesas,usbhs-r9a08g045 # RZ/G3S
-+              - renesas,usbhs-r9a09g057 # RZ/V2H(P)
-           - const: renesas,rzg2l-usbhs
- 
-       - items:
-@@ -127,11 +128,7 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            enum:
--              - renesas,usbhs-r9a07g043
--              - renesas,usbhs-r9a07g044
--              - renesas,usbhs-r9a07g054
--              - renesas,usbhs-r9a08g045
-+            const: renesas,rzg2l-usbhs
-     then:
-       properties:
-         interrupts:
--- 
-2.49.0
+Hardware setup: USB A-C cable connected from PC A port to the C
+connector on the Rock Pi S board. This cable provides board power as
+well as the connection between the host and the gadget.
 
+Behavior:
+ 1. boot board normally
+ 2. optionally wait some time
+ 3. run script to start a CDC serial gadget [5]
+ 4. after about 0.6 seconds the ttyGS0 serial device is present and
+    working, and so is ttyACM0 on the host: so far all good
+ 5. after about 6 seconds the dwc2 controller receives some
+    interrupts and starts a new enumeration sequence
+
+This is what the kernel logs:
+
+[   20.105688] dwc2 ff400000.usb: bound driver configfs-gadget.g1
+[   20.285431] dwc2 ff400000.usb: new device is high-speed
+[   20.373455] dwc2 ff400000.usb: new device is high-speed
+[   20.426496] dwc2 ff400000.usb: new address 28
+[   26.688388] dwc2 ff400000.usb: new device is high-speed
+[   26.775363] dwc2 ff400000.usb: new device is high-speed
+[   26.836880] dwc2 ff400000.usb: new address 29
+
+Here is a side-by-side log of host and device, synced manually using
+a video capture (sorry about the long lines, can't do without):
+
+    *** HOST ***                                                           =
+                           *** DEVICE ***
+                                                                           =
+                      <<< Last line of the script: 'echo ff400000.usb > UDC=
+' >>>
+                                                                           =
+                      [   14.281350] dwc2 ff400000.usb: bound driver config=
+fs-gadget.g1
+                                                                           =
+                      [   14.482332] dwc2 ff400000.usb: new device is high-=
+speed
+[108204.084049] usb 3-2: new high-speed USB device number 39 using xhci_hcd
+                                                                           =
+                      [   14.675692] dwc2 ff400000.usb: new device is high-=
+speed
+[108204.274639] usb 3-2: New USB device found, idVendor=3D1209, idProduct=
+=3D0001, bcdDevice=3D 1.00    [   14.737395] dwc2 ff400000.usb: new address=
+ 44
+[108204.274652] usb 3-2: New USB device strings: Mfr=3D1, Product=3D2, Seri=
+alNumber=3D3
+[108204.274656] usb 3-2: Product: ...
+[108204.274659] usb 3-2: Manufacturer: ...
+[108204.274662] usb 3-2: SerialNumber: 12345678
+[108204.282555] cdc_acm 3-2:1.0: ttyACM0: USB ACM device
+                                                            (...nothing hap=
+pens for about 6 seconds...)
+[108209.972180] usb 3-2: USB disconnect, device number 39
+                                                                           =
+                      [   20.766950] dwc2 ff400000.usb: new device is high-=
+speed
+[108210.339297] usb 3-2: new high-speed USB device number 40 using xhci_hcd
+                                                                           =
+                      [   20.960375] dwc2 ff400000.usb: new device is high-=
+speed
+[108210.739738] usb 3-2: New USB device found, idVendor=3D1209, idProduct=
+=3D0001, bcdDevice=3D 1.00    [   21.200670] dwc2 ff400000.usb: new address=
+ 45
+[108210.739750] usb 3-2: New USB device strings: Mfr=3D1, Product=3D2, Seri=
+alNumber=3D3
+[108210.739753] usb 3-2: Product: ...
+[108210.739756] usb 3-2: Manufacturer: ...
+[108210.739758] usb 3-2: SerialNumber: 12345678
+[108210.747084] cdc_acm 3-2:1.0: ttyACM0: USB ACM device
+
+Note: the device address is different on the host and the target. Is
+this expected?
+
+In the driver there are 2 interrupt handlers involved:
+ - dwc2_handle_common_intr in core_intr.c for the common events
+ - dwc2_hsotg_irq in gadget.c for gadget events
+
+They share the same interrupt number, which AFAICU is because they
+actually read different bits from the same GINTSTS register.
+
+I enabled DEBUG in the dwc2 driver and captured the initial events
+logged after the ~6 seconds pause, i.e. where the 2nd enumeration
+starts. Here they are with some annotations:
+
+ 1. first interrupt after the ~6 s break:
+    - dwc2_handle_common_intr finds no bits high
+    - dwc2_hsotg_irq finds one (early suspend bit):
+       [   46.203094] dwc2 ff400000.usb: dwc2_hsotg_irq: 04008428 00000400 =
+(d88c3cc4) retry 8
+       [   46.204060] dwc2 ff400000.usb: GINTSTS_ErlySusp
+
+ 2. second interrupt
+    - dwc2_handle_common_intr finds one bits high (suspend):
+       [   46.206807] dwc2 ff400000.usb: USB SUSPEND
+       [   46.206824] dwc2 ff400000.usb: dwc2_handle_usb_suspend_intr: DSTS=
+=3D0x502a01
+       [   46.206842] dwc2 ff400000.usb: DSTS.Suspend Status=3D1 HWCFG4.Pow=
+er Optimize=3D1 HWCFG4.Hibernation=3D0
+       [   46.206872] dwc2 ff400000.usb: dwc2_hsotg_irq: 04008028 00000000 =
+(d88c3cc4) retry 8     =20
+    - dwc2_hsotg_irq finds no bits high
+
+ 3. third interrupt
+    - dwc2_handle_common_intr finds no bits high
+    - dwc2_hsotg_irq finds two (reset detected + USB reset):
+       [   46.437109] dwc2 ff400000.usb: dwc2_hsotg_irq: 04809028 00801000 =
+(d88c3cc4) retry 8
+       [   46.437607] dwc2 ff400000.usb: dwc2_hsotg_irq: USBRstDet
+       [   46.437630] dwc2 ff400000.usb: dwc2_hsotg_irq: USBRst
+       [   46.437649] dwc2 ff400000.usb: GNPTXSTS=3D00080010
+       [   46.437673] dwc2 ff400000.usb: complete: ep 00000000dab859c8 ep0,=
+ req 000000009cb97255, -108 =3D> 00000000acdb2ee9
+       [   46.437719] dwc2 ff400000.usb: dwc2_hsotg_complete_setup: failed =
+-108
+       [   46.437765] dwc2 ff400000.usb: dwc2_hsotg_ep_disable(ep 00000000c=
+f8cf06f)
+       [   46.437790] dwc2 ff400000.usb: dwc2_hsotg_ep_disable: DxEPCTL=3D0=
+x08080200
+       ...
+
+=46rom now on the log appears as a normal enumeration process.
+
+I'm stuck at a dead end, trying to understand what may be triggering the
+second enumeration.
+
+Some more facts:
+
+ * the 2nd enumeration happens always
+ * there is never a 3rd enumeration
+ * the ~6 seconds delay is always between 5 and 6.5 seconds
+ * no relevant kernel activity is logged during the 6 seconds, except
+   for some OPP changes; disabling CONFIG_CPU_IDLE and CONFIG_CPU_FREQ
+   the OPP changes disappear but USB behaves like before
+ * happens (with same delay) if after the 1st enumeration the USB
+   serial is opened and kept in use
+ * happens even if using a different device class (tried 0x8, 0x2)
+ * happens even using g_mass_storage or g_zero instead of libcomposite
+   (but with g_zero it happens when the g_zero module is loaded,
+   without any configfs configuration)
+ * tried different cables, no change
+ * there is no evidence of power glitches
+ * happens also on a custom hardware which is self-powered
+ * happens with different hosts: two different PCs, one running Linux
+   and one running Windows
+ * to be double checked: does not happen if the host is an Android phone
+   (but I haven't gone into the details of what happens with that setup)
+
+So I'm looking for any hints or directions for further investigation.
+Any input would be very appreciated.
+
+Thanks in advance!
+
+Luca
+
+[1] https://wiki.radxa.com/RockpiS
+[2]
+https://elixir.bootlin.com/linux/v6.13.7/source/arch/arm64/boot/dts/rockchi=
+p/rk3308.dtsi#L696-L710
+[3]
+https://elixir.bootlin.com/linux/v6.13.7/source/arch/arm64/boot/dts/rockchi=
+p/rk3308-rock-pi-s.dts#L383=20
+[4]
+https://elixir.bootlin.com/linux/v6.13.7/source/arch/arm64/boot/dts/rockchi=
+p/rk3308-rock-pi-s.dts
+
+[5] Script used to configure the gadget serial:
+
+------------------------8<------------------------
+
+#!/bin/sh
+
+set -eu
+
+modprobe libcomposite
+
+mount -t configfs none /sys/kernel/config
+
+mkdir -p "/sys/kernel/config/usb_gadget/g1"
+cd "/sys/kernel/config/usb_gadget/g1"
+
+echo 0x0200 > bcdUSB
+echo 0x0100 > bcdDevice
+echo 0x1209 > idVendor
+echo 0x0001 > idProduct
+echo 0x02   > bDeviceClass=20
+echo 0x00   > bDeviceSubClass=20
+echo 0x00   > bDeviceProtocol=20
+
+mkdir -p strings/0x409
+echo 12345678 > strings/0x409/serialnumber
+echo "ACME"   > strings/0x409/manufacturer
+echo "foobar" > strings/0x409/product
+
+# create the configuration
+mkdir -p configs/c.1
+mkdir -p configs/c.1/strings/0x409
+echo "foobar Config" > configs/c.1/strings/0x409/configuration
+echo 500 > configs/c.1/MaxPower
+
+# create the function
+mkdir functions/acm.0
+
+# associate the function with the configuration
+ln -s functions/acm.0 configs/c.1
+
+# enable the gadget using rock pi s UDC controller name (from /sys/class/ud=
+c/)
+echo ff400000.usb > UDC
+
+------------------------8<------------------------
+
+--=20
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
