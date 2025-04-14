@@ -1,107 +1,115 @@
-Return-Path: <linux-usb+bounces-23029-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23030-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5436A87BD3
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 11:27:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56D1DA884D9
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 16:29:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82EEC18903C2
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 09:27:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 698787A6A4E
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 14:28:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC942262D02;
-	Mon, 14 Apr 2025 09:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0072820DF;
+	Mon, 14 Apr 2025 14:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exSeGMeG"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="h3GU+z6Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B744E261595
-	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 09:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2777742A92
+	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 14:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744622811; cv=none; b=Sd1cmztPVepzWiomn+JTamuA22JL4/v+dyAqX2HpIUrCddfpj/DMsfPnbSCRbD8+dOo4ww4+Mx1pgGtVmLiK+bKJj+Jqu3K0TiPJtowrQa0JbGVwcIKdGt7hAFX56uju94sMpYOPWKjkcPh9y/es+n/pbjLL2pH2bXk0Ws8L2fM=
+	t=1744639555; cv=none; b=tFF1Z4lA7wZ36p0g3GR8L5n5h6GrTeHsbb6VoM1QUA1C001FMfAStMIO5V59pL1wYWQRn/stt7oYSWtiUljBPEND0b9abAXTb+PWus1y2x/K1LgRHFwOjtjGt+qjG7nrZGRTV7ls0OaNsFCj4fn4tjeN7h8jPGWRp2AicRRXxNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744622811; c=relaxed/simple;
-	bh=37VS89QQqIIi7aBefMZcCMzGdx4VBJJjA68P2LMe8Lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mw/M0SPF5RzN8SMnQol3SP32gLRyRMizJpAK98Kb2be5XS6LjjD3vRUbwgKj3wslz5KLbEoaO0ws8pikJZ4dsuUNqzUDP70zI6vmxtNBG2EwiyMVGZY7aTEzFHVz3L5iktDmKg/5BtLu4SGLdbcSztkSk3fKU4DN9G0PV1nv/VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exSeGMeG; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744622810; x=1776158810;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=37VS89QQqIIi7aBefMZcCMzGdx4VBJJjA68P2LMe8Lc=;
-  b=exSeGMeGdGWf9LUubbR3W1CnWllOOSGPIllY4Ln2dJ7VW/WYNoimPRCS
-   ff7yDalQz/ZvfaX14emRighWkfnhQUqsbWntU1JUVof1PRMzhaWbEBB6/
-   UB6Yqx/hnBkzXmv6tpsGF6FB8wRPEKlh4oaWbI6iXt5uyAiFisNXufW6J
-   8kAUemRtb4sR3d5qm7QEL9ZVIQLL1wlkjbFzytURj7gf9zE+URGlrmj82
-   VaLK6J7zW52BE1/e/pO8bXyvIgFgQzOJWtyIqiSMHNGOF8hUwQn/yDMva
-   VuiRq3hnyGbb0fI+mR+S7Dae8n5fBiJlg6a4d68KJIRMIaEAZ80k/zoxw
-   w==;
-X-CSE-ConnectionGUID: rgXOBIWJS5KELRE39npA4w==
-X-CSE-MsgGUID: bXVwkl06QFa1peuSTcoX8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46216960"
-X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="46216960"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:26:49 -0700
-X-CSE-ConnectionGUID: RpvTPs3pRb2skKtYb1WZ5Q==
-X-CSE-MsgGUID: cudrLHOoT7mdY2DpOu/P0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="130746520"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa008.jf.intel.com with ESMTP; 14 Apr 2025 02:26:49 -0700
-Message-ID: <3c6c4f72-be17-4b25-8279-912311983e0e@linux.intel.com>
-Date: Mon, 14 Apr 2025 12:28:00 +0300
+	s=arc-20240116; t=1744639555; c=relaxed/simple;
+	bh=VPkc+BL+N/82sM3TipuvUvvxUrmfeag+ZU+s6LzlFe0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DxI47NDSK7HY4MaO1Q/3/q0bDRqjsEwLxhiN94XDRMkh5A9EV1DuyNVJA6P/QXlrxf3Zc2Mew9SJZlbKdpYHquaPfXaAtAX6h1X5o4rXXd+j/6a1g65cawAQzuX6K8Jcs1QDl0EW9WRdrfMKNS82INZfDdaCtmCzPADENMSdFUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=h3GU+z6Y; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6f0ad744811so26086236d6.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 07:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1744639553; x=1745244353; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6T8gpjoQT7606i7tWzfxu28DBnsN6pzQQOQXOesI5PM=;
+        b=h3GU+z6YVAnWeOeew4qb7EuTBAyawQPH4Irr5a1qAypyYDTEZBPBdKctEJg5HY4Jct
+         2z24mfKkasEd1KQfJFRbBCbGwab2p7H8BT/H9ADBgtXBAJiGW90OP/Z2K9oKmNOYtwJY
+         JnNHdHrURBqxW6QVppNzHawtBiHL+kPpfJYFHJkWtJORwaH51PtLHS55ap/EcNTNZkba
+         8NbIfeHP2wZobrSvTvFGYzvif8xTXLIgDv+Z3pQAtfcrpOIdLSXKNJSCn4Ak1dlbs7yy
+         hrQgNdF4qL6Ul699oSmEFjVkxRHAJCBzyETKjsG4NF39FODxMxICRjZjetFLRnALv46a
+         8i/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744639553; x=1745244353;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6T8gpjoQT7606i7tWzfxu28DBnsN6pzQQOQXOesI5PM=;
+        b=lFiUV0XIZu0BMdxxfcRPGQT1l6GpToJFWzK8Ozq7vRiHn3FCYehVCQ4JIIq6X4xTrG
+         uabrndl0HNjoE/fU921ZZX6OUPuRi4sYGSZ7spNOwvPaCpGvQwTmi2XhACq+98xtfk+9
+         RijyYewlHc9F6FlOxFvgqGNL4gxV/5YluXKWO3GGeefJxsYofUbBFMEGAmUYHR4m1G66
+         h30gup1P9r0yjrsQFe5AEl4QwE20mEJ2Ob4w2lORIbW6x5DYwarzKTMQaB8vG9xKTTf0
+         MpyjB+DPfjYbYmKCGQY2GP0uS8lG+kzMmooLeROVD+NAWj9ipfXA6qYQ4fbXfWjphvHz
+         z3pg==
+X-Gm-Message-State: AOJu0YzgbU8xgiXK477igqyXM8WSNfECpADoO7ihHQ30oGoiFOv4j3Td
+	31WW07LRtuTT6yIxCI3eEqbH4VmO7l22zM+FYWwtGdKzFHH3/3TUBLxhlZ5TLA==
+X-Gm-Gg: ASbGncsOkLAU/drZ8WxTo+9VxCiA0FRQ2QSXcwe32v7QWPYxA2Bc2OmRWyxMJzt611o
+	+bPor5m8vWX1DGwPHmd3O/w1t+Is80odyMRR5Yera+XfXQnewIMAd5JD5BUp0jHU6mFuI+BY801
+	XgJkgxWDsUVwrtPus7xAvUAEOmcDXXcQAU2Mlgx7yhpCQ8rErizxMJy+ljVl8205jax2wga+iks
+	yqu0odROKqm1EM+qOT3kO7bSGrbxv4oosXCKObyhraRULdnliYbCihbJ631zqjOZfGsY3wxMArN
+	wECe3InEkgF6SgDUGy8zZCz6mvsETc5ZCnr7fnJ2sdd1KQb5urIA9lHygU8=
+X-Google-Smtp-Source: AGHT+IFuZ5rZDGovuBKpWefBj3MR++D9QoLZnHTvoEGUT5YVxEPBxh8JMJ0ezpMw+iD7ILgvjapKQw==
+X-Received: by 2002:a05:6214:29e8:b0:6eb:1e80:19fa with SMTP id 6a1803df08f44-6f230caed3bmr148559496d6.1.1744639552779;
+        Mon, 14 Apr 2025 07:05:52 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a896b04esm742941885a.63.2025.04.14.07.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 07:05:52 -0700 (PDT)
+Date: Mon, 14 Apr 2025 10:05:49 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: raspberrypi/linux <reply+AG4XYTBMABQ4XN53CBXUUO6GBC3PXEVBNHHLALZAUU@reply.github.com>,
+	Oliver Neukum <oliver@neukum.org>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [raspberrypi/linux] cdc_wdm driver: infinite loop on -EPROTO
+ error leads to system freeze with SIM7600 module (Issue #6746)
+Message-ID: <9af24499-e2db-45e6-9890-f87c332bd171@rowland.harvard.edu>
+References: <raspberrypi/linux/issues/6746@github.com>
+ <raspberrypi/linux/issues/6746/2800873755@github.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] usb: xhci: set requested IMODI to the closest
- supported value
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-References: <20250408115752.1344901-1-niklas.neronin@linux.intel.com>
- <20250408115752.1344901-2-niklas.neronin@linux.intel.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250408115752.1344901-2-niklas.neronin@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <raspberrypi/linux/issues/6746/2800873755@github.com>
 
-On 8.4.2025 14.57, Niklas Neronin wrote:
-> The function configures the Interrupt Moderation Interval (IMODI) via bits
-> 15:0 in the Interrupt Moderation Register. The IMODI value is specified in
-> increments of 250 nanoseconds. For instance, an IMODI register value of 16
-> corresponds to 4000 nanoseconds, resulting in an interrupt every ~1ms.
+[+Oliver, linux-usb]
+
+On Mon, Apr 14, 2025 at 01:31:39AM -0700, sfczsolti wrote:
+> sfczsolti left a comment (raspberrypi/linux#6746)
 > 
-> Currently, the function fails when a requested IMODI value is too large,
-> only logging a warning message for secondary interrupters. Prevent this by
-> automatically adjusting the IMODI value to the nearest supported value.
+> Hi there,
 > 
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-> ---
->   drivers/usb/host/xhci-mem.c | 5 +----
->   drivers/usb/host/xhci.c     | 7 +++++--
->   2 files changed, 6 insertions(+), 6 deletions(-)
+> I opened this issue a few weeks ago regarding cdc_wdm driver and haven’t received any feedback yet. I wanted to follow up to see if anyone has had a chance to review it or if there is any update on addressing the problem.
 > 
+> If there’s any further information you need from me, or if there’s anything I can do to help, please let me know.
+> 
+> Thank you for your time and effort!
 
-This patch now conflicts with the recently accepted sideband series.
-Any chance you could respin this on top of that.
+Many USB drivers getting a -EPROTO error immediately give up and treat 
+it as fatal (an indication of a disconnection).
 
-Otherwise whole series looks good.
+However, I'm not an expert on the cdc-wdm driver, and the people who are 
+may not want to do this.
 
-Thanks
-Mathias
-
+Alan Stern
 
