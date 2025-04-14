@@ -1,104 +1,112 @@
-Return-Path: <linux-usb+bounces-23049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 194B5A88D1F
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 22:30:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28F22A88FEA
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 01:08:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAC8017D674
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 20:29:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5425A7A3955
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 23:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148131E1C3F;
-	Mon, 14 Apr 2025 20:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188171F4CAA;
+	Mon, 14 Apr 2025 23:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="OeOYxhT5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FpfVEWYs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2107E1E7C24
-	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 20:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8751E1DE2;
+	Mon, 14 Apr 2025 23:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744662540; cv=none; b=lEmdNB/ke2co8mAaRK9J/F8f2mtlqf314ORkzxdDsq5+OBd5ocLLIsgX9hrPrnc47FCpU1dtYQLI2IZDjLsfzyeMhwLSQ2YraHB8dU/2xdZcygKd/GB2a+zYqfp3tt7ZvweGeGjQt3brZnqf6Y/y2eVeXdN0WgEeWRKXzfeXJVo=
+	t=1744672106; cv=none; b=N6ivtjfBjPpoqdh4K3xTGyFKE3SMmVS5eOY3CJh3ygJzCcINGp+4TCSfWoVPsGtnhTMwwtawwFfzhjgdfxKcM0BaHj/4sbsViPWV6sQ88f8mubouQ6zDd60D+a4SrMx/BFSeOUAMF0MImYEQxdHKMI/h2mFTYGp1VCvmzqAYeOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744662540; c=relaxed/simple;
-	bh=GNu+kahqRURr3jBKGFOwVS7xGN4jr0+9cKSPvRimRUQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XlvICTbxTcRmGNY4dHmmyeSFzcRpdaWUEmLJkCpYcTBtySW4l9UCVhENlLkqSvVbv9ODt4vpFc5L9RnbP04cB9OAY5APdImJspEl48HO9jbzze96s/3tL9YxeySjCEmq5qqxjodWUfdWTceDdt7NL0aNus5FfVBov75AzdjV28w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=OeOYxhT5; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1744662535; x=1744921735;
-	bh=u5mBsTab4mA8udrpnBydbaZhEo5uyqSSg9IwaotnLuw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=OeOYxhT5w5WuFRgp4gIw7Wy+mOLcZQurVcmpRfJXhdMhIY4LVQG926gwhoFmFpIvD
-	 JBXbrrmKS6zIGZ9jzODB95h0PBzWlU+fu4ilIDqsIDmhXF+4PdYDeCfV/GWQreash2
-	 i58ocZmCR3rEZSaVGt1mhiUIB7eoX7yQBHDhZQK5mnwZtQlqGP4aBGwAktJbcpDoS7
-	 nUIuzDSoDdM4duKeAzgGL9vmUoOjeSu/caSz9huhdXB4IbZ4AFLe4Wvtv7y5lhH2xi
-	 T54m7Ixsp35Wb5aADzz9CeKuJhCaMUeTBehSHYhh+zSJY9qg2IfEd4qj3UNWhUqngx
-	 J5+98TPrdDajw==
-Date: Mon, 14 Apr 2025 20:28:51 +0000
-To: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From: =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, =?utf-8?Q?Dominik_Karol_Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Subject: [PATCH v2 RESEND 6/6] USB: serial: ftdi_sio: Remove space before tabs
-Message-ID: <20250414202750.9013-7-dominik.karol.piatkowski@protonmail.com>
-In-Reply-To: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
-References: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
-Feedback-ID: 117888567:user:proton
-X-Pm-Message-ID: f042265354f45c23594c973a41aad8e4bbba6fba
+	s=arc-20240116; t=1744672106; c=relaxed/simple;
+	bh=XfD8ffN9Nm78fevyv/4fXWARJZ/tMed++zhRH5Nvkkk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iKZOzaGp0+h3V1xsTRTWFrjOFvORlzP4/bNJHar6endoin/mS+ZnGpGNHyANYAXiPr4OnqvsKmVqHpxVDcTSpONLScXNqdwyusfPkxl5ZAgrTkI2l0mH1wKPc0LweBmd2oavv1Iyr2R3X3exnhs96RtYUx7WNTVXW/VM/bn7qg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FpfVEWYs; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-acb03ad9213so25291766b.1;
+        Mon, 14 Apr 2025 16:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744672103; x=1745276903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sJRMiweLG+hO/WGA08j/qE6jlnahNOBUB92vlz8iTTY=;
+        b=FpfVEWYsXEe/RGzmfTUbepwJboHPSGunU9anIxEwE4yfMMXzCeS7YpHDGaI23fBd4X
+         Qtid10OxS+c9OyUofmQd7MZP9oui0VYPtvXre9f6fKyyYytqqXlyer0xrLDtUOoeXNBz
+         OcpUo9tijXfOMzIiA8sd79woYLKMw6uhWAYYW15mgO8A/ppCMXD8nAfSxFZd6VIF/bb/
+         AgFG3+sN29LHnYtBZQQtCGdOhdcnuCUWkSYcSCRyJCn0nq/Izq5PdL48nFqtCzRMahny
+         9+qIavt2RFH6lEa5PqB2B7JsJ287KiXLmbuP0Vk2gdtNUgzRwVWXl9WWeQUZKtxFCK9z
+         Dosg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744672103; x=1745276903;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sJRMiweLG+hO/WGA08j/qE6jlnahNOBUB92vlz8iTTY=;
+        b=PF8VVbSRWj6Ue8lR6KHIxUvn/8NPoK7jqyrztR/d/t/nfEQibCViSIDlaGC6wGRWMo
+         aM/vyaCeFQSkc1EQUph7kZGDDQ1zUZBcWm3UbxvpLx8srI5ag2r0DbgcP8ZhgngiKb64
+         XI8AKVCdtpb7qvkg56zswD7AB1O1vpgKGp6VfuxBD8VgMhYrOPlVxvTgLcfesCeUCFSc
+         DSItzZG+oN1g2ZtVX0ITUThK8jSoZSB1cvHV+y3oJkhXGFmBtRc+0iYFSriGn0f1f8aC
+         3h55/7WwM8MmNQ6VRO8HnOBu+UJ51L+Y9fpRI9CMXDn00Nl+odBx4/Lm61EP9FgWQCLR
+         U1Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjCGSp+2C9tqQHNhkEK1Ifs3BADjKF4SULOrlp1W6gcL9jQ2mehIL/FP2jvvGbQlByNlFlZyirXe98@vger.kernel.org, AJvYcCVQjV6nPoZExFBV9pf87VCVqd4onPOtw6FWp03XHaRJKuEthV5KRr+Fvq22jlHLnl9Opnnbnhd3fwaipQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzcDAsL37/nICdzN8TSS3OtotsVWZcrI7eg9UEPOXoQj4sqJCA
+	TO3NzPF0R4pSwQ0DEL8VwMRipDcay4woGbdWNBDrQhq8qR2CCDy96x11Kw==
+X-Gm-Gg: ASbGnctclwnhU0N9/in/z3PDSUm3PzAOjlixpRH0R/hJOKm9t0jIs8baNTu1mgxHf1u
+	4PDWVQbzvBrTkkLdJTXKPbbfO9N4pCserkxZ3rsRYHWn4Hsy/gjiHsl2cruG21fOBU01qPOwe8Y
+	TSbQEYngI93O5rhtNGO1SNgogcbygZDl3B014p1aazLoq2CSlRDO1R1L0ADefNzr1uMwXb1ZEqQ
+	45c4bZWv3bBe1WNk0sSgtgoclPxsGBb1eFwO687ct94yGOQ5szI02yjC7xZHZaeAlfGe42KzIsJ
+	+xMjtRWCy0cUoTlaWvnnQ1Ft68t/W97VXDiW7Usf7SQuhwLjcGt+iLg6CMOEX16Hap7ORr8Xtp7
+	WLZQEovtSaSc=
+X-Google-Smtp-Source: AGHT+IEfIbf1o86N8Yf36KO8jpfnPUgRDeUMr3cQYTik16oJRURgK2gBLxxxT/zgBCAeAJBVQLFP7w==
+X-Received: by 2002:a17:907:c8a9:b0:ac7:390f:e36a with SMTP id a640c23a62f3a-acb1404db8amr40859366b.14.1744672102669;
+        Mon, 14 Apr 2025 16:08:22 -0700 (PDT)
+Received: from laptok.lan (89-64-31-184.dynamic.chello.pl. [89.64.31.184])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1bb3e08sm1001328166b.14.2025.04.14.16.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 16:08:22 -0700 (PDT)
+From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: oleg@makarenk.ooo,
+	linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH RESEND 0/2] HID: pidff: checkpatch fixes
+Date: Tue, 15 Apr 2025 01:08:16 +0200
+Message-ID: <20250414230818.957678-1-tomasz.pakula.oficjalny@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Remove superfluous space before tabs in defines to align with code
-style.
+No reason to write too much. Fixing errors and warnings from checkpatch.
+Made on top of for-6.15/pidff. Applies cleanly on 6.15-rc2 as well.
 
-Signed-off-by: Dominik Karol Pi=C4=85tkowski <dominik.karol.piatkowski@prot=
-onmail.com>
----
+I apologize for not checking my patches earlier.
 
-v2: Split the patch into smaller patches
+Tomasz Pakuła (2):
+  HID: hid-universal-pidff: Fix errors from checkpatch
+  HID: pidff: Fix checkpatch errors and warnings
 
- drivers/usb/serial/ftdi_sio_ids.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/hid-universal-pidff.c |  10 +--
+ drivers/hid/usbhid/hid-pidff.c    | 129 +++++++++++++-----------------
+ drivers/hid/usbhid/hid-pidff.h    |   3 +-
+ 3 files changed, 63 insertions(+), 79 deletions(-)
 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_si=
-o_ids.h
-index 52be47d684ea..3d9f6ed97783 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1022,7 +1022,7 @@
-  * Kondo Kagaku Co.Ltd.
-  * http://www.kondo-robot.com/EN
-  */
--#define KONDO_VID =09=090x165c
-+#define KONDO_VID=09=090x165c
- #define KONDO_USB_SERIAL_PID=090x0002
-=20
- /*
-@@ -1446,7 +1446,7 @@
- /*
-  * Accesio USB Data Acquisition products (http://www.accesio.com/)
-  */
--#define ACCESIO_COM4SM_PID =090xD578
-+#define ACCESIO_COM4SM_PID=090xD578
-=20
- /* www.sciencescope.co.uk educational dataloggers */
- #define FTDI_SCIENCESCOPE_LOGBOOKML_PID=09=090xFF18
---=20
-2.34.1
 
+base-commit: e2fa0bdf08a70623f24ed52f2037a330999d9800
+-- 
+2.49.0
 
 
