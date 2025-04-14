@@ -1,126 +1,155 @@
-Return-Path: <linux-usb+bounces-23033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC2F5A887AD
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 17:46:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF7BA887CE
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 17:53:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 549D83AB446
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 15:43:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A41C3AC588
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 15:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD32C27990E;
-	Mon, 14 Apr 2025 15:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB5127E1B4;
+	Mon, 14 Apr 2025 15:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0l+uGG6L"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DYe4pA58"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AD22798E5;
-	Mon, 14 Apr 2025 15:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2080C27B510
+	for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 15:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744645405; cv=none; b=Q7oW4dMLfHLz0MxXBsiecHPDNUQvoTD7N8Cm2ur8yWIfr4vFr2ziFQi1On08LYNOAHAHORDPYBPFm8TpZ5fSnUtQRcolGl6kYq5bZrm5VLZ1+ltJEKa4yCn4cqczMj/pu861U0hyeLR7POu8gYt29zYAPjJDOx9g/3NoR8CPckA=
+	t=1744645995; cv=none; b=bLNRgjSL79+ViF1uDsdeYQeGw73q5DHV/Lkp8JpWutp1TkhaF/JarIwokrkkYronVuXdt4hCJzV/INsAhL+IlOK9RGNcQB70a13/q2zshv4N/SQq77wb/E8WVkUmB4sBuAcefs6XT0P+PrvPBuUK01jDeNzE/O01ZooRLKYorAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744645405; c=relaxed/simple;
-	bh=B5KZJPD2Ol/xPkllsKIrCK+2TfleyI75nZBYDMSJMCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FoqvlV70OAYNePkBYq36KNeUSXPuHR6jzyU1A0ysRHf0jsEBrVcfQXlvA/zrzrPM3qZldH4RVA8mYwAPhX1owgLHUrBPQROMWYSvO5GGq8kaTRaFR0uFQJTYoj/Muzi2OS7+FH+pX7kliNxANmnn7Rl/Fwb7N64m9lExxWlYuaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=0l+uGG6L; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=XKKz1Mm1pkCh0ixIzZHIXbDXcfT7TrB4EjgzGW2m2hI=; b=0l+uGG6LH6NZXT0UtwKd8Gt3Ex
-	+omKHVWyNMTxImUtQfCMjuyK9Rj33fmTJSxVcNSYGVrmBGzUR2o4JAWFyTY7UGvWYHDBU4QEhM0BJ
-	O15qkKn6lTlCh3ZTBiAph94LBvZjXUAbtRx26y34Wmkw2bPdnw87Ngg/wE2bdvmyKTqw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1u4Lxm-009Dnl-0B; Mon, 14 Apr 2025 17:43:10 +0200
-Date: Mon, 14 Apr 2025 17:43:09 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
-	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-list@raspberrypi.com
-Subject: Re: [PATCH net] net: phy: microchip: force IRQ polling mode for
- lan88xx
-Message-ID: <24541282-0564-4fb6-8bd1-430f6b1390b0@lunn.ch>
-References: <20250414152634.2786447-1-fiona.klute@gmx.de>
+	s=arc-20240116; t=1744645995; c=relaxed/simple;
+	bh=7AFPn5AjLDiJ84lFwjuPny+NVv7hSklqBr+hGfuqtAc=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=FXQdS7R+yVVjzD4AZAMh2mus1+1H0CetRrWOnd4KFXmvA4EcuTNQ9TuEA31q5f9SFjME/rPNumUhSuSYEGoj6y+jNpzmiN5sU2jD3muPL+MAmc4wwRhR/Qr9MTkLnM0GonXae1rFdMkQIvlBYnef5wiXF5JUy/Rm6pNqNWJGhXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DYe4pA58; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-399737f4fa4so2607025f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 08:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1744645990; x=1745250790; darn=vger.kernel.org;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tI5NmhSNvRqQWUoYRdRSPPgpDjFPr+pUsQa5suoJQ1k=;
+        b=DYe4pA58V/1hlNjnWSsKch5HG2RrITLbQtDoasryv+jYfxdsa3AYod7F0m/8htb7rF
+         JllYyT8xq9EZT1BVybk8mxMArnwdQBjSqQ9IKJFMIazTq494FunRsNGWVMud/cfrROyk
+         u0wpBSUGn4dAHh1f4EWxIldBmyswIjxpKblkOS6cFm8H2m/Z/vh437ZvFBR0nk5G9NWn
+         Z6sl64l2EiXu0mBpqfzNAwUw3uqvdAB9NN9VIIwUMMUyIpAcVWNS/hklkltrss2rqs6R
+         ceDoZ4IWac6daf9D6lpqhmgFl61anBAXs12lZ/7Rpswff0IfTYXFWGfzVz8lDsPsUhTH
+         mLbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744645990; x=1745250790;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tI5NmhSNvRqQWUoYRdRSPPgpDjFPr+pUsQa5suoJQ1k=;
+        b=b5zMHjY6iJlif/mlTiUUvF6PkC+OVD1u1fmj+o4jnkZbU0FNBIOuQEEMtMI9Zr/Wwu
+         gkSXritIioUcjaGcDp8BAC0GS5x+fNpw8gbcjZh/p93BmgbQoiwMh6zk8Rr4yI37/2GN
+         SSdAm7tz3d/h9ONR+khqkmyUnrw7tgaDoRlCGcGv8gDmEjz8WDSUlY8D6vNxUWKd67PO
+         ZNT/t4ufKmXpfTL9l9y7R/UNm7vXq+LUG84zmcqGlwt5S+Gpu6JN2SOOZ11qFGnhvu7D
+         kTvGYkWmCd7srzqEZ9N7QTAvWmyxGyqr0g/BspJIbcFc/BM/HYaekOSzUnny4LCh6SbI
+         R+ag==
+X-Gm-Message-State: AOJu0Yy8TgDcRSoyhdC2iLk92iYgrCjgMjqOEfgdLYVLCDBUu8MKXEVp
+	O3Od5Yg8vkoyWfRuKz3AVlHSCsSjrTW7FBw7BYEQVTVEmKB0vRgcAeiCOYjYfII=
+X-Gm-Gg: ASbGnctQaMRYtgDBGuHavB2jqri/z6RuLBxbw7Qo4NMPvSnoWAOjxG92bFexKf6WKfX
+	4Cu/b72YDWk7bgD++UGvW1LvRcINvPE5QVp74S4PELDj8a2VUOJHcAvl1dt8oFC3Nj+KOArxpn/
+	GCy9sXLv/FLOUU2D6PmNu5aVUh3S6rxP+fWpFUsu4yHUJ1vjEPSBe8AySEKWiAJiorlzG3gzVQF
+	9x65zIfVOI9+jExYtbfJbMfGQsgoQNnOP+zWq1e8d8iLYNmaXcBgGkpGCStMTW2WqJID7V7k3fk
+	Yy0jWcXGIXGZSLaFlWpQUEzue5SSDH51vaOXazdZbWsCOEl1jwURcru6QYguh2WTI9/UaR389PG
+	E9rgK
+X-Google-Smtp-Source: AGHT+IGnaWwzR1/6adOw6wnqKFgr06F85tg6VImqSdBvnosNfVAmVJAVjrisT059/g3sx1SMqs0WrQ==
+X-Received: by 2002:a5d:584d:0:b0:39c:1efd:ed8f with SMTP id ffacd0b85a97d-39eaaedc509mr9909324f8f.50.1744645990074;
+        Mon, 14 Apr 2025 08:53:10 -0700 (PDT)
+Received: from ?IPV6:2001:a61:133f:6401:e752:8c5:d87a:c5a2? ([2001:a61:133f:6401:e752:8c5:d87a:c5a2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae97751fsm11294761f8f.41.2025.04.14.08.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Apr 2025 08:53:09 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------6rue5hrX3t9vsqJHkuqYOt0u"
+Message-ID: <8c63bb6f-e923-41ac-85a1-c761e303e020@suse.com>
+Date: Mon, 14 Apr 2025 17:53:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250414152634.2786447-1-fiona.klute@gmx.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [raspberrypi/linux] cdc_wdm driver: infinite loop on -EPROTO
+ error leads to system freeze with SIM7600 module (Issue #6746)
+To: Alan Stern <stern@rowland.harvard.edu>,
+ raspberrypi/linux
+ <reply+AG4XYTBMABQ4XN53CBXUUO6GBC3PXEVBNHHLALZAUU@reply.github.com>,
+ Oliver Neukum <oliver@neukum.org>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+References: <raspberrypi/linux/issues/6746@github.com>
+ <raspberrypi/linux/issues/6746/2800873755@github.com>
+ <9af24499-e2db-45e6-9890-f87c332bd171@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <9af24499-e2db-45e6-9890-f87c332bd171@rowland.harvard.edu>
 
-On Mon, Apr 14, 2025 at 05:26:33PM +0200, Fiona Klute wrote:
-> With lan88xx based devices the lan78xx driver can get stuck in an
-> interrupt loop while bringing the device up, flooding the kernel log
-> with messages like the following:
+This is a multi-part message in MIME format.
+--------------6rue5hrX3t9vsqJHkuqYOt0u
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 14.04.25 16:05, Alan Stern wrote:
+> [+Oliver, linux-usb]
 > 
-> lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+> On Mon, Apr 14, 2025 at 01:31:39AM -0700, sfczsolti wrote:
+>> sfczsolti left a comment (raspberrypi/linux#6746)
+>>
+>> Hi there,
+>>
+>> I opened this issue a few weeks ago regarding cdc_wdm driver and haven’t received any feedback yet. I wanted to follow up to see if anyone has had a chance to review it or if there is any update on addressing the problem.
+>>
+>> If there’s any further information you need from me, or if there’s anything I can do to help, please let me know.
+>>
+>> Thank you for your time and effort!
 > 
-> Removing interrupt support from the lan88xx PHY driver forces the
-> driver to use polling instead, which avoids the problem.
-> 
-> The issue has been observed with Raspberry Pi devices at least since
-> 4.14 (see [1], bug report for their downstream kernel), as well as
-> with Nvidia devices [2] in 2020, where disabling polling was the
-> vendor-suggested workaround (together with the claim that phylib
-> changes in 4.9 made the interrupt handling in lan78xx incompatible).
-> 
-> Iperf reports well over 900Mbits/sec per direction with client in
-> --dualtest mode, so there does not seem to be a significant impact on
-> throughput (lan88xx device connected via switch to the peer).
->
-> [1] https://github.com/raspberrypi/linux/issues/2447
-> [2] https://forums.developer.nvidia.com/t/jetson-xavier-and-lan7800-problem/142134/11
-> 
-> Link: https://lore.kernel.org/0901d90d-3f20-4a10-b680-9c978e04ddda@lunn.ch
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-> Cc: kernel-list@raspberrypi.com
-> Cc: stable@vger.kernel.org
+> Many USB drivers getting a -EPROTO error immediately give up and treat
+> it as fatal (an indication of a disconnection).
 
-Thanks for submitting this. Two nit picks:
+Hi,
 
-It needed a Fixes: tag. Probably:
+that is indeed the simplest option.
+In the medium term this driver's error handling needs
+some love. Dear sfczsolti, could you test the attached patch?
+--------------6rue5hrX3t9vsqJHkuqYOt0u
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-wdm-give-up-upon-EPROTO.patch"
+Content-Disposition: attachment;
+ filename="0001-usb-wdm-give-up-upon-EPROTO.patch"
+Content-Transfer-Encoding: base64
 
-Fixes: 792aec47d59d ("add microchip LAN88xx phy driver")
+RnJvbSA1NTg2YTA5YmI1MzNkODg3MjIxYjc3YjViNDA3ODcwOTNjYWY2YzQ1IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PgpEYXRlOiBNb24sIDE0IEFwciAyMDI1IDE3OjQ0OjIxICswMjAwClN1YmplY3Q6IFtQQVRD
+SF0gdXNiOiB3ZG06IGdpdmUgdXAgdXBvbiBFUFJPVE8KCklmIHdlIGFyZSBnZXR0aW5nIC1F
+UFJPVE8gaW4gYSBjb21wbGV0aW9uIGhhbmRsZXIKdGhlIGxpa2VseSBjYXVzZSBpcyBkaXNj
+b25uZWN0aW9uLiBIZW5jZSB3ZSBzaG91bGQKZ2l2ZSB1cC4gVGhlIGFsdGVyYXRpdmUgaXMg
+bGl2ZWxvY2suCgpGaXhlczogYWZiYTkzN2U1NDBjOSAoIlVTQjogQ0RDIFdETSBkcml2ZXIi
+KQpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0K
+IGRyaXZlcnMvdXNiL2NsYXNzL2NkYy13ZG0uYyB8IDMgKysrCiAxIGZpbGUgY2hhbmdlZCwg
+MyBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLXdk
+bS5jIGIvZHJpdmVycy91c2IvY2xhc3MvY2RjLXdkbS5jCmluZGV4IDI4YzVlZDg0MGE0MC4u
+ZjhlYWQ3M2RhNTA5IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtd2RtLmMK
+KysrIGIvZHJpdmVycy91c2IvY2xhc3MvY2RjLXdkbS5jCkBAIC0yNjksNiArMjY5LDkgQEAg
+c3RhdGljIHZvaWQgd2RtX2ludF9jYWxsYmFjayhzdHJ1Y3QgdXJiICp1cmIpCiAJCQlzZXRf
+Yml0KFdETV9JTlRfU1RBTEwsICZkZXNjLT5mbGFncyk7CiAJCQlkZXZfZXJyKCZkZXNjLT5p
+bnRmLT5kZXYsICJTdGFsbCBvbiBpbnQgZW5kcG9pbnRcbiIpOwogCQkJZ290byBzdzsgLyog
+aGFsdCBpcyBjbGVhcmVkIGluIHdvcmsgKi8KKwkJY2FzZSAtRVBST1RPOgorCQkJLyogd2Ug
+YXJlIGJlaW5nIGRpc2Nvbm5lY3RlZCAqLworCQkJcmV0dXJuOwogCQlkZWZhdWx0OgogCQkJ
+ZGV2X2Vycl9yYXRlbGltaXRlZCgmZGVzYy0+aW50Zi0+ZGV2LAogCQkJCSJub256ZXJvIHVy
+YiBzdGF0dXMgcmVjZWl2ZWQ6ICVkXG4iLCBzdGF0dXMpOwotLSAKMi40OS4wCgo=
 
->  static int lan88xx_suspend(struct phy_device *phydev)
->  {
->  	struct lan88xx_priv *priv = phydev->priv;
-> @@ -528,9 +487,6 @@ static struct phy_driver microchip_phy_driver[] = {
->  	.config_aneg	= lan88xx_config_aneg,
->  	.link_change_notify = lan88xx_link_change_notify,
->  
-> -	.config_intr	= lan88xx_phy_config_intr,
-> -	.handle_interrupt = lan88xx_handle_interrupt,
-> -
-
-Maybe add a comment somewhere around here that interrupts are broken,
-so not supported. Developers frequently don't look at commit messages,
-but are more likely to notice a comment.
-
-Thanks
-    Andrew
-
----
-pw-bot: cr
-
+--------------6rue5hrX3t9vsqJHkuqYOt0u--
 
