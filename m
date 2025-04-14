@@ -1,145 +1,114 @@
-Return-Path: <linux-usb+bounces-23023-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23024-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD57FA8787B
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 09:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E00A0A878AB
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 09:26:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 957CF3B0BEA
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 07:13:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8984F3B0B73
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 07:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383732036E8;
-	Mon, 14 Apr 2025 07:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZEeF3+U+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71C92580D2;
+	Mon, 14 Apr 2025 07:25:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE3C1BC3C;
-	Mon, 14 Apr 2025 07:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EA41A262D;
+	Mon, 14 Apr 2025 07:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744614838; cv=none; b=D9XldGF0M8c90rA4IfLaCYQ7CaHFzD8hsdwno2fRHSUbMDFCnkjtUEw7ikthWFPYS37dEtmqogt9SPPKXbICZDm6RWSIP/hdy3Ju9aHRiLpCZKtrhPR+Wcum2VjjH/vSQLedVuSJmoxI9xEyiWUrv8MkcryLH1goB5Ky88kaCdE=
+	t=1744615551; cv=none; b=LJDGFqJW8uhNfZg9McYT5qJKqjUwqdE0fpXryNfGUCy6jfpNBSNQPW8yPkZ+INXDLXuCB/1iKAx9tXikxqWV3zx9aJP+0Qj1hr4Lp/ISvhXa8uk+Awb+QGp6BhVSRu+4eS6h67YOS1utqgi2HnJHX2FdaLi4Zwq8QTfzpglAgYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744614838; c=relaxed/simple;
-	bh=yZYekePMIMVeeQwBv1Vp94M5jdHE5/SnXXfse5nxBIs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j51jTmp+/rZhcq+PdgJjOT4/uum9iNqdhjdxxzmMQZsTwZwyikPTXC9bj8R2FETC53XXisix5dMWLsEIYVBPL00H877nf5SRh5pL0wi0GnZIzY25xVj2PJKEUuJqaXbKr01aUGGPalqelKS3aUeR5aj5sRcuFbkBhh4FH4kv0OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZEeF3+U+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614F8C4CEEA;
-	Mon, 14 Apr 2025 07:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744614838;
-	bh=yZYekePMIMVeeQwBv1Vp94M5jdHE5/SnXXfse5nxBIs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZEeF3+U+BOvzTUfZUagamiBQlpAAB/LEUHdMGjTDzc03frkm6KTOChDhCJc1USqol
-	 WHQTultBo980BXvVQZZM0D6DIIG73cUWnWUNcWUOIy9OAz+DirbW6Id3oh+QevBybS
-	 UHedwrVgLrjZz4s41uKl9Butask3PebeZklc1p9U=
-Date: Mon, 14 Apr 2025 09:12:09 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Petr Tesarik <ptesarik@suse.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: warn if a GFP zone flag is passed to
- hcd_buffer_alloc()
-Message-ID: <2025041424-delay-distill-50b8@gregkh>
-References: <20250320154733.392410-1-ptesarik@suse.com>
- <20250325134000.575794-1-ptesarik@suse.com>
- <2025041110-starch-abroad-5311@gregkh>
- <20250414090216.596ebd11@mordecai>
+	s=arc-20240116; t=1744615551; c=relaxed/simple;
+	bh=kkd8u8qjRsZKGfCBhYwabWw6BCgMMgLM99/L5iSUIiM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=erFjOkPaWw1KKnmaOaJPYuheLRSuZgnTT5QWjCWSfnQxc0wL1Nk9SlqgfdbPGAixefsxqWcPH2ugtS28woS7mO2Nfy4o6nn4TzrpO53qEk+UefifdKa9CJqSea+g78kRS7ybJS5xPg3s8z7QjxL8cm9XvaZ4atx1GvwjF1gQ0PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [124.16.141.245])
+	by APP-05 (Coremail) with SMTP id zQCowAAHQwt4uPxnkVbnCA--.16352S2;
+	Mon, 14 Apr 2025 15:25:45 +0800 (CST)
+From: Wentao Liang <vulab@iscas.ac.cn>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH RESEND] usb: renesas_usbhs: Add error handling for usbhsf_fifo_select()
+Date: Mon, 14 Apr 2025 15:25:01 +0800
+Message-ID: <20250414072501.2259-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.42.0.windows.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250414090216.596ebd11@mordecai>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAAHQwt4uPxnkVbnCA--.16352S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr1rGrWkZF1Utr4kXrWDArb_yoW8XrWfpF
+	W7G3y5ur1rJw1UXa1UJ3y8Zw1FvayFgry7ZrsrKa97AF13Ja12ya9YvF10vr1DG3yayw1F
+	g3WvyFs5Gan7CFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v2
+	6r126r1DMxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+	1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x0JU7DGOUUUUU=
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgoMA2f8nCRmcAAAs2
 
-On Mon, Apr 14, 2025 at 09:02:16AM +0200, Petr Tesarik wrote:
-> On Fri, 11 Apr 2025 15:57:19 +0200
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> 
-> > On Tue, Mar 25, 2025 at 02:40:00PM +0100, Petr Tesarik wrote:
-> > > Remove a misleading comment and issue a warning if a zone modifier is
-> > > specified when allocating a hcd buffer.
-> > > 
-> > > There is no valid use case for a GFP zone modifier in hcd_buffer_alloc():
-> > > - PIO mode can use any kernel-addressable memory
-> > > - dma_alloc_coherent() ignores memory zone bits
-> > > 
-> > > This function is called by usb_alloc_coherent() and indirectly by
-> > > usb_submit_urb(). Despite the comment, no in-tree users currently pass
-> > > GFP_DMA.
-> > > 
-> > > Signed-off-by: Petr Tesarik <ptesarik@suse.com>
-> > > ---
-> > >  drivers/usb/core/buffer.c | 10 ++++++----
-> > >  1 file changed, 6 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-> > > index 87230869e1fa..10844cd42e66 100644
-> > > --- a/drivers/usb/core/buffer.c
-> > > +++ b/drivers/usb/core/buffer.c
-> > > @@ -108,10 +108,6 @@ void hcd_buffer_destroy(struct usb_hcd *hcd)
-> > >  }
-> > >  
-> > >  
-> > > -/* sometimes alloc/free could use kmalloc with GFP_DMA, for
-> > > - * better sharing and to leverage mm/slab.c intelligence.
-> > > - */
-> > > -
-> > >  void *hcd_buffer_alloc(
-> > >  	struct usb_bus		*bus,
-> > >  	size_t			size,
-> > > @@ -128,6 +124,12 @@ void *hcd_buffer_alloc(
-> > >  	if (hcd->localmem_pool)
-> > >  		return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
-> > >  
-> > > +	/*
-> > > +	 * Zone modifiers are ignored by DMA API, and PIO should always use
-> > > +	 * GFP_KERNEL.
-> > > +	 */
-> > > +	WARN_ON_ONCE(mem_flags & GFP_ZONEMASK);  
-> > 
-> > You just rebooted the box if this happens, do you REALLY want to do
-> > that?  People generally do not like their data lost :(
-> 
-> FWIW my box does not reboot on a warning. But I admit there are people
-> who want to run their systems with panic_on_warn (although I suspect
-> they already experience some sudden reboots, so they had better be
-> prepared).
+In usbhsf_dcp_data_stage_prepare_pop(), the return value of
+usbhsf_fifo_select() needs to be checked. A proper implementation
+can be found in usbhsf_dma_try_pop_with_rx_irq().
 
-There are billions of Linux systems out there with panic-on-warn enabled :(
+Add an error check and jump to PIO pop when FIFO selection fails.
 
-> > Why not just fix the callers, OR if this really isn't going to be
-> > allowed, return an error and just fail the whole submission?  And stick
-> > around to fix up all of the drivers that end up triggering this...
-> 
-> That's the point. AFAICS there are _no_ in-tree callers that would pass
-> GFP_DMA or GFP_DMA32 to hcd_buffer_alloc(), directly or indirectly. But
-> nobody should be tempted to add the flag, because I cannot imagine how
-> that would ever be the right thing to do.
-> 
-> I can change it back to mem_flags &= ~GFP_ZONEMASK to fix it silently;
-> I simply thought that driver authors may appreciate a warning that
-> they're trying to do something silly.
+Fixes: 9e74d601de8a ("usb: gadget: renesas_usbhs: add data/status stage handler")
+Cc: stable@vger.kernel.org # v3.2+
+Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+---
+ drivers/usb/renesas_usbhs/fifo.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-A warning is fine, but don't reboot a box please.  dev_warn() with a
-ratelimit and then return an error perhaps?
+diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+index 10607e273879..6cc07ab4782d 100644
+--- a/drivers/usb/renesas_usbhs/fifo.c
++++ b/drivers/usb/renesas_usbhs/fifo.c
+@@ -466,6 +466,7 @@ static int usbhsf_dcp_data_stage_prepare_pop(struct usbhs_pkt *pkt,
+ 	struct usbhs_pipe *pipe = pkt->pipe;
+ 	struct usbhs_priv *priv = usbhs_pipe_to_priv(pipe);
+ 	struct usbhs_fifo *fifo = usbhsf_get_cfifo(priv);
++	int ret;
+ 
+ 	if (usbhs_pipe_is_busy(pipe))
+ 		return 0;
+@@ -480,10 +481,14 @@ static int usbhsf_dcp_data_stage_prepare_pop(struct usbhs_pkt *pkt,
+ 
+ 	usbhs_pipe_sequence_data1(pipe); /* DATA1 */
+ 
+-	usbhsf_fifo_select(pipe, fifo, 0);
++	ret = usbhsf_fifo_select(pipe, fifo, 0);
++	if (ret < 0)
++		goto usbhsf_pio_prepare_pop;
++
+ 	usbhsf_fifo_clear(pipe, fifo);
+ 	usbhsf_fifo_unselect(pipe, fifo);
+ 
++usbhsf_pio_prepare_pop:
+ 	/*
+ 	 * change handler to PIO pop
+ 	 */
+-- 
+2.42.0.windows.2
 
-> Whatever works for you, but please keep in mind that there seems to be
-> agreement among mm people that DMA and DMA32 zones should be removed
-> from the kernel eventually.
-
-I agree, they should be removed as they don't do what people think they
-do.  So why not just remove them entirely, otherwise are you going to go
-and add this type of checking to all bus subsystems?
-
-thanks,
-
-greg k-h
 
