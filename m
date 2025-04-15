@@ -1,85 +1,80 @@
-Return-Path: <linux-usb+bounces-23075-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ADC6A89AF3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:49:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25EBFA89AF0
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:49:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 744363A9DB3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 10:49:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 324067A1235
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 10:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D238927A925;
-	Tue, 15 Apr 2025 10:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E1C28BA9E;
+	Tue, 15 Apr 2025 10:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RzX+R7ZH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D/5p9Esg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F27292911
-	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 10:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F9D28BAA2
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 10:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744713915; cv=none; b=M+LAj4mK4jI1YxwpEAiHpqNrUV66esFzdIF3/6IAjWAEHVRNCzkoAsmRwenvljTqL9D4jwa8d8T9nvVRi+LV92Ib8YnwRn8Gx3Qm5yVF5vzuQ733Q0SS/jPzYmlQKGRsRWb24VXSGxo8iWbYi3gyik2vzgXmVU4EEZrtC1FhJVs=
+	t=1744713941; cv=none; b=Mex7Ci3e0p/sOtuYwGKZs2nO7b5CgzSzdJeqCwRX4HPXADLm3Xxkq/ZBT3t+fBDshAxZGk9ebflfE4iGSmDcPGym9QvkIe8IN6H8kjZv2rZXnjsvfmhSrFDt+EfWZsfSblvOl+jjm+gyknFbt6Vhiju/VDi0aEkdltu/mr5cAAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744713915; c=relaxed/simple;
-	bh=fWybr2mbKY7qGwtYIZOqWE7CzXG4hHWRB38TSR3OKy0=;
+	s=arc-20240116; t=1744713941; c=relaxed/simple;
+	bh=SrghygaguMvzw+VE1qBiRq0FeD0wMT9DVgP8a2PxfNs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ddcbPxwfdfwx3juXm79Y1syngtXa2aSwrr0o3J2td0I4NSY8/cBONs4qX5NksG9U9b3qWuX9TiuqrB+t5PDbZSUqgecJrDhFZykyswoZaDAPL5Gz9imU4qLbiUEJOTC4+NoaSVFHmmoAJILkglNqseBRISSg8nEw1xprpJsYO0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RzX+R7ZH; arc=none smtp.client-ip=209.85.221.42
+	 Content-Disposition; b=gBBoVtwuFXPRmCzyEF2nXkHy2PbAEMthMi/elFCKTYIwCDtqnhoQqOyCKrH0aowFF5xEKjMMiFkKWa3ioQnv4kpDGyb2n649TL7Yxrta+lW1CvRDUEjXH2M/bCSMGPd4ggributyZW9PKoA5sPZNTxe1Bo2GVWh9pxoKTr84jCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D/5p9Esg; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso3220125f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 03:45:13 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso51668075e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 03:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744713912; x=1745318712; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744713938; x=1745318738; darn=vger.kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MK0WNbcSw4ed5M+cuZDVZvCtmU0gyT+OlvAi63oIbak=;
-        b=RzX+R7ZHzDIYeuFFMHRllgaRq1lcrTbfv50CSffTmnYLsS6pIdaY/xpgeHbiWFWIPJ
-         P/HnI4vbZkMsWL6KW6wm645WzX5BJZt0ytSwAUH0x3jIg/M7hoJ4pyr/dbnuGKBZj04x
-         TS21bbDEPt/2Vn6tNURf7cfgimX7aZi11yeyjckmRxBSa0IVuWT1NE9/65LQXk3AEor4
-         ZAv0Ok7Mfk2kAysc+EVxcHk7yvpqSCI/Teci0M/3Ofs6xlouUTX0J8bpP4CT3GDa7PQ0
-         JV7tbBcOn7nF7DHv8UH9l1oyQXUqJKwWiOeA6s7oge6XMfU381VeHLqBXqkO3LSbEgjD
-         3PiA==
+        bh=XXENc3u4+bTJRR7tdrGXDukPFtSkxVJx0QvmZMAzJw0=;
+        b=D/5p9EsgS7g7FSuDLQ8S1aew1bI/2qQcKxRHDy35t/YmAPsUygJ1jw/aaRKUZmTpHD
+         QVLHgtuiG+ZRM8W/+NETyEsEKk6eMmkWKfqRjHKZ/ttUXgM6cpMPgTPl02Wz8c7rSFgN
+         iEoyi8eET6dHi2fU4BzUPW8VZe5xWNonj8j7AMk1QCQxum3UrTPXviO1CBUDtxqmvRwg
+         CV7PpmaRf+aRBu+eSf8SXoLHQfU/zBVNBKdT10tNFKRxEi6eKfanWlMucQWdxmuQP8C3
+         KF7H5jYNp70lW8NlMwQeGIZo96NTKs2cXrrfqJEVsaacjAzGvLmCuBzgsgRf0RC/zHyg
+         CE7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744713912; x=1745318712;
+        d=1e100.net; s=20230601; t=1744713938; x=1745318738;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MK0WNbcSw4ed5M+cuZDVZvCtmU0gyT+OlvAi63oIbak=;
-        b=KqpQjYAg80icO7rec0SuYxPa+lOBeXASR5XLiuj03suhp8SksflymXBpmQViP3lvKq
-         hCwLAD9OxWkbH5Qb50dmPxMAPsNSvIMES0YLRrBy2Loh/LsKb9Ti4BM+o6dCn8aIaTzr
-         4tE+YTzFlmk9kWNeSVy+Gtg/O7Dxy4LLIyjNAZiqAea4IWlES3FekobIL/wwkBWS3YeF
-         iwkORxYKFc/DgpNcUl3RbUL9qgLZFI1lSrr6mIjwHo65u2rymXqFJz5Zvn7LjO2HLs/7
-         Z5DpA9GpNdORhrmjVmR4sKkTufKHiqIifupBQ6nGvLpzbBkj+GSg7UvHv8B2AaSYzQCQ
-         CbcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX9nMZcP3IdCcoTeYXXoPiFWMYalts9NRwBrgmyDsWSREyMfk1BmhqS02Wm1Uhd7srstBzU+LiPe6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJiNxBkkSFbJn1hZvfRbMnjuqqWkB/TIcOriKlq2VvFXc+pC4V
-	cUPxKctRm5rPVqnRWO5JpV8OFx0e4IKrcRQGN/9xQamY5TlfqqtRUIt3p2795Sw=
-X-Gm-Gg: ASbGncurg4QwNDY6MEUYLaTfdFclpProB5XoUg+K4DaiqgYsK5Ut4kaVwq2qEj7Ukhu
-	hh+GCLUduI/pDDwS8RRRIEGCoMIBJ5V7rJepyZdpSdONjfCNFcenZa2xis9dYmYeeIWbmy3kCa4
-	JXVY+AH2gK/r8e+aEM+pebh0zsYbvRBoFg5ItAD4udTBLjw3innxAmPzNOKsLyDwnOP1S4BvwtV
-	NqTmHqGhgUi9Yg8GlBot2fqtF7iSBafwBXKq49GKMCEW9Pm+chs/8pimNdoD5NneKMlmFZqdRKc
-	OkPveoVB+V6pQjK0/2B78oEWIRTlNkgM/jCsGz06v2Qcsg==
-X-Google-Smtp-Source: AGHT+IEIyKYv0BMZJodwyHmcwoGOgDdIqbSLHON2cJ+W/AbXoA9xLZFAvBmJ/hOGIRmJfI19cAlXiw==
-X-Received: by 2002:a05:6000:240c:b0:391:4674:b10f with SMTP id ffacd0b85a97d-39eaaebee70mr12627884f8f.36.1744713911750;
-        Tue, 15 Apr 2025 03:45:11 -0700 (PDT)
+        bh=XXENc3u4+bTJRR7tdrGXDukPFtSkxVJx0QvmZMAzJw0=;
+        b=NuMtefomdKeE8xu7BsnoDF6USE5xhQSR+PDH+5nH8/+AkzfMxt6XEmA8SAyErEM2rS
+         z2N6EUA9XsfIwDYVdxnf/sdTtMYvW/viNQLmcXoXg038VgwWF52ubcMxIQyDJ1HuBfPo
+         Gurb6+E99ceNmwXIqq6vgRulrBz5Xytb4iTKDBV4QYu3Cgm3NBvIRIoj0UhKtIPB4ICI
+         L117g7XQUOIqzluxcFkixYUlYh5xZ4Tu3HAgOViPP6qiGbOmNYPxNDPi8/DeuNkX6ot2
+         SpH8lyRUjtSUDKlbyO9FXytj9qrI/G1IfgQmG5ZU0MsYwBOTvbGJ8m2dxgz4K7gjlnDX
+         BSZA==
+X-Gm-Message-State: AOJu0YzHxWARYojzBOdQBkpxb/tQOsBFUjjg8UprVOe2fcwoe3ECwrcu
+	MbmPuvhk/YmNTCqVK2y/v4Y/DhXVsgGjYIVT3gT6O5yBQnPW0ddkqWfr1pMe5tY=
+X-Gm-Gg: ASbGncuq7LFt+3aUC4xC0DuQ0KVqT8fneO7eSzbsdkwshNETjmRXKIGZeTBo6H/Gjs6
+	5wAdOG7hjIt6Qu60XSNGpmvy4mBuiJ5pCt+agAnJVMMqLmOPxpwSJXWtiZsZVuGkqNTVjQWcIfM
+	7asMOBG7l6Q0gJ3yuUotn2v5MM83tUJQaN7EoEMUD/uogIup0U1OUirO5s3wvZoDP3TXxfDY893
+	FcdhSdDs97TW5iksQEVKbuRpourn0kYDVP3lgvq1JQCwcOwMQD7c1ymPA6mB7K/Bs5LY6rzUhU6
+	dAXzgF9Cub1SerUmuxXKIB+wjtrJuJqPPw0cYDpyCi0Mpg==
+X-Google-Smtp-Source: AGHT+IEM6/twse3iuL4HRpkw1+9xBOXpHNlRgurSd4Dlh9+LCDWr6gIxmQdrI2k93jxpQDRd77Yq7A==
+X-Received: by 2002:a05:600c:1e28:b0:43c:e481:3353 with SMTP id 5b1f17b1804b1-43f3a959b60mr157060365e9.17.1744713938200;
+        Tue, 15 Apr 2025 03:45:38 -0700 (PDT)
 Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39eae964025sm13625378f8f.6.2025.04.15.03.45.10
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43f2075fc8esm210501915e9.30.2025.04.15.03.45.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 03:45:11 -0700 (PDT)
-Date: Tue, 15 Apr 2025 13:45:08 +0300
+        Tue, 15 Apr 2025 03:45:37 -0700 (PDT)
+Date: Tue, 15 Apr 2025 13:45:34 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] usb: typec: class: Unlocked on error in
- typec_register_partner()
-Message-ID: <Z_44tOtmml89wQcM@stanley.mountain>
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [bug report] usb: typec: ucsi: add Huawei Matebook E Go ucsi driver
+Message-ID: <Z_44zoTyLLdXNkKT@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,30 +83,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
 
-We recently added some locking to this function but this error path
-was accidentally missed.  Unlock before returning.
+Hello Pengyu Luo,
 
-Fixes: ec27386de23a ("usb: typec: class: Fix NULL pointer access")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/typec/class.c | 1 +
- 1 file changed, 1 insertion(+)
+Commit 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi
+driver") from Mar 16, 2025 (linux-next), leads to the following
+Smatch static checker warning:
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 3df3e3736916..67a533e35150 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1056,6 +1056,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
- 	ret = device_register(&partner->dev);
- 	if (ret) {
- 		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
-+		mutex_unlock(&port->partner_link_lock);
- 		put_device(&partner->dev);
- 		return ERR_PTR(ret);
- 	}
--- 
-2.47.2
+	drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c:372 gaokun_ucsi_notify()
+	error: uninitialized symbol 'cci'.
 
+drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+    358 static int gaokun_ucsi_notify(struct notifier_block *nb,
+    359                               unsigned long action, void *data)
+    360 {
+    361         u32 cci;
+    362         struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
+    363 
+    364         switch (action) {
+    365         case EC_EVENT_USB:
+    366                 gaokun_ucsi_complete_usb_ack(uec);
+    367                 gaokun_ucsi_altmode_notify_ind(uec);
+    368                 return NOTIFY_OK;
+    369 
+    370         case EC_EVENT_UCSI:
+    371                 gaokun_ucsi_read_cci(uec->ucsi, &cci);
+                                                        ^^^^
+No error checking.
+
+--> 372                 ucsi_notify_common(uec->ucsi, cci);
+    373                 if (UCSI_CCI_CONNECTOR(cci))
+    374                         gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
+    375 
+    376                 return NOTIFY_OK;
+    377 
+    378         default:
+    379                 return NOTIFY_DONE;
+    380         }
+    381 }
+
+regards,
+dan carpenter
 
