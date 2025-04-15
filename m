@@ -1,86 +1,117 @@
-Return-Path: <linux-usb+bounces-23083-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23084-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF9FEA89DF4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 14:26:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 669E5A89E48
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 14:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F183F188CA20
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:26:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76B671777CC
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D551FF7A5;
-	Tue, 15 Apr 2025 12:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A418284679;
+	Tue, 15 Apr 2025 12:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kxkw8+6W"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fibD64BY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8E01B0F11;
-	Tue, 15 Apr 2025 12:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5529F1C6FF5
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 12:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744719990; cv=none; b=sPzKBQ4ZuBYZu51OEAB+wjiWCxTM11f7CPFcQjPYjhfOznRF+ZS48/lq5u5zQIbXSoj1ua6dqxI2bIM5DVT+Ie2JlhmFdQPxA1p22bWh1qJOLFn2/h9lnVNoU9dfuiqSIxmWB0aT3xSry/ZbvlfjL7AitZx03+1/tXOdOs8N6y4=
+	t=1744720648; cv=none; b=ry88AqBNASlJiIgPFwWvr2Z21DjrDof38Vha1P/c5D/GQmQdMT+io4Z03Bk/YuUf1ls8ev1h6LYnc2VChN4Puh1yy1/uLwZr9g+gtH24KpwJejuE8Xi4yjNkewtlnhYTciuePxnbP7inmjShTHuEYY+pslFkN7iGvXidsRI6WdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744719990; c=relaxed/simple;
-	bh=WqjoERzIdT6Wr9L7dDEWeyQ9e7vx9GTGZ3Z+EGp9uCM=;
+	s=arc-20240116; t=1744720648; c=relaxed/simple;
+	bh=wxH+/h7j84YFV5OC/w59n8xJ+G44cxPsxULt0hOsIDo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7TfPqPtwcsEzdfb0jhHRKgTyL+YuZ93ZUegU9r3Z0y/blKzI7IulAa+h3LhzyBMV6DRczZOxNOk1XoG2cBT0zvT2LidbfK/zXhIki2m20Y4C9CzPUAhlqolnKtEAeioOf3++qKq9YBvtJArEmoCvimJTCcaO+JpfxgxxxJdOc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kxkw8+6W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840FBC4CEDD;
-	Tue, 15 Apr 2025 12:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744719990;
-	bh=WqjoERzIdT6Wr9L7dDEWeyQ9e7vx9GTGZ3Z+EGp9uCM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kxkw8+6W2zaQ15ywcN9SiGnAVwYfYQCYedD8tSu4+s5mliZdrpEMgGAr+UjLwT5eM
-	 Gyo9ue1Th5SYA/8XBFnW9LRSUXwb8q5no4s8YrNHJ6kVi0ck4PEDQnN2tAYVjxxZ/Z
-	 4qLLmYUKQoqZzmYutjQs0nYn8vXux2ghoWg0Q31M=
-Date: Tue, 15 Apr 2025 14:26:26 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: hcd: Add a usb_device argument to
- hc_driver.endpoint_reset()
-Message-ID: <2025041508-rockslide-endpoint-a48b@gregkh>
-References: <20250415111003.064e0ab8@foxbook>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X9vIKUr1D2tMaIqYZc+PlLaI9XLv3hFLmMKtjsiJILDn8KROVJkSpf2m4NXIvwUlNnobWgCSh5yDfwsLekwmZF92/WL6ty3gnkHeBea6xj1PkIDJYTBuQrU92dqM3PGOHN3/yXdpWcEmQoFElAh2cMAHhYkCSeS+bHrK0H5aFuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fibD64BY; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744720647; x=1776256647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wxH+/h7j84YFV5OC/w59n8xJ+G44cxPsxULt0hOsIDo=;
+  b=fibD64BYiSnXsyNhFWaBRDoqaU+oWLsK48o3naIqg6PkjfQSuC9qhFQb
+   rsbX1RyTWITxdKnnNw+8RTPdmosIBDY/9S3SMSBJENUzkEXZbmUWxEJbw
+   AkKFkls86lJTk+0SHVmVA6Le/WSGk0ejNpurJvQKry6755d2vCB7lFdd5
+   OCfsX9HeNts1AzlPe6TIj8zHZ9cqmwcxGLQJoO5zXTYOHGTVshzUDJ7v1
+   RTQPTh03Wtq5v34lwcoYGcBfxE1PbE3XXdNrvHlzDGvYzvsEFDldAMctR
+   e7cA40fTlNP/KPk9WafKLGdv5H57KmnPDA2Goi83M6DGc1S7hFBzViwkY
+   Q==;
+X-CSE-ConnectionGUID: EIg+0+LRRjC6Kj249bPPMg==
+X-CSE-MsgGUID: kYHggs/pQXmNlyeKgFH97w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="50052622"
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="50052622"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 05:36:19 -0700
+X-CSE-ConnectionGUID: dA0L30H+Q2e69NQPY73j1Q==
+X-CSE-MsgGUID: 3CHVnKAkRQq9CR8FeRQXTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="130126331"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Apr 2025 05:36:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 763FC8D1; Tue, 15 Apr 2025 15:36:16 +0300 (EEST)
+Date: Tue, 15 Apr 2025 15:36:16 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	linux-usb@vger.kernel.org, andreas.noever@gmail.com,
+	michael.jamet@intel.com, YehezkelShB@gmail.com,
+	heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH 0/3] Introduce Thunderbolt/USB4 <-> USB Type-C port
+ mapping
+Message-ID: <20250415123616.GG3152277@black.fi.intel.com>
+References: <20250414175554.107228-1-alan.borzeszkowski@linux.intel.com>
+ <2025041521-axis-broadly-2216@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250415111003.064e0ab8@foxbook>
+In-Reply-To: <2025041521-axis-broadly-2216@gregkh>
 
-On Tue, Apr 15, 2025 at 11:10:03AM +0200, Michal Pecio wrote:
-> xHCI needs usb_device here, so it stored it in host_endpoint.hcpriv,
-> which proved problematic due to some unexpected call sequences from
-> USB core, and generally made the code more complex than it has to be.
+On Tue, Apr 15, 2025 at 02:22:35PM +0200, Greg KH wrote:
+> On Mon, Apr 14, 2025 at 07:55:51PM +0200, Alan Borzeszkowski wrote:
+> > Hello everyone,
+> > 
+> > This patch series introduces the creation of symlinks between
+> > Thunderbolt/USB4 ports and their corresponding USB Type-C ports. The
+> > primary goal is to provide users with clear visibility into which USB4
+> > port is connected via a specific Type-C port. This provides the same
+> > functionality that is already present in Chromebooks.
+> > 
+> > Alan Borzeszkowski (3):
+> >   thunderbolt: Expose usb4_port_index() to other modules
+> >   thunderbolt: Add Thunderbolt/USB4 <-> USB3 match function
+> >   usb: typec: Connect Type-C port with associated USB4 port
+> > 
+> >  drivers/thunderbolt/tb.h        |  1 +
+> >  drivers/thunderbolt/usb4.c      | 14 +++++++--
+> >  drivers/thunderbolt/usb4_port.c | 56 ++++++++++++++++++++++++++++-----
+> >  drivers/usb/typec/port-mapper.c | 23 ++++++++++++--
+> >  include/linux/thunderbolt.h     | 18 +++++++++++
+> >  5 files changed, 99 insertions(+), 13 deletions(-)
+> > 
+> > 
+> > base-commit: 306a14d03f47fa152c7e47be544d8d582d387a20
+> > -- 
+> > 2.43.0
+> > 
+> > 
 > 
-> Make USB core supply it directly and simplify xhci_endpoint_reset().
-> Use the xhci_check_args() helper for preventing resets of emulated
-> root hub endpoints and for argument validation.
-> 
-> Update other drivers which also define such callback to accept the
-> new argument and ignore it, as it seems to be of no use for them.
-> 
-> This fixes a 6.15-rc1 regression reported by Paul, which I was able
-> to reproduce, where xhci_hcd doesn't handle endpoint_reset() after
-> endpoint_disable() not followed by add_endpoint(). If a configured
-> device is reset, stalling endpoints start to get stuck permanently.
+> I'm guessing that these will come through the thunderbolt tree to me?
 
-As this fixes a bug, can you add a Fixes: tag with the needed
-information?
-
-thanks,
-
-greg k-h
+Yes, I will pick them up and send to you with the rest of the v6.16 stuff.
 
