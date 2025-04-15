@@ -1,119 +1,131 @@
-Return-Path: <linux-usb+bounces-23068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73200A8980A
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 11:32:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F2DA89871
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 11:44:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ED103A5CBC
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 09:32:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3F2D189DADE
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 09:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DCE27A936;
-	Tue, 15 Apr 2025 09:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4783428DF07;
+	Tue, 15 Apr 2025 09:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YZUk4v+G"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QPSqwTMl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBD41AD41F
-	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 09:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA5D288CAA
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 09:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744709538; cv=none; b=Tcf8gkJHUXACL20N6upDPBuXfrRAtWEznzwR8UDln+bnGjKPCI9BuQwnwwBl1Lw1yXfmBG+l5eRXNx+8Dj5ptUqwNYEQXDOBim1oSxNQqxg3BgIwi/TDgUQy/D9shbdp49PqEYviCL9IYzgSn6CrTYDFSCxY/EY5y46XslcwDx0=
+	t=1744710158; cv=none; b=fFiDTEhh9BaCOLxqMHO+ANqMmlxz9ahOOWDl8PaK+SDtrMrDxoduIfnyfnQhb3rzzzDc8g5bXx4bQ7wTX2F/yNPl0aVD3D2+wTKAH7qgf7gI6T3+sOb7ANmTEcc335uyPjL5rgf4KSO/Gqcs0MQkJktTeVqM9UxKmYjzYpkshjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744709538; c=relaxed/simple;
-	bh=NejoJ+orAluVJiftRHZPpZ/2hNnuflANS4za720ZjxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZTD7HVbOlGWOUQ0AsWUmKL8TfTu1OT+htIgd/hsizJ/WH6/yi9n+4iULw0h86Ejx3G/+y92IKlyAVXlirT7xLXCo3Fbn8OtMXOr2toPG+8KH6dzV1LOHv6EetqYvj0E+wuQc3i361p8OGEwqUP+RgSokI+WZx8iwDonyI0DKOS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YZUk4v+G; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744709537; x=1776245537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NejoJ+orAluVJiftRHZPpZ/2hNnuflANS4za720ZjxU=;
-  b=YZUk4v+G/2nJLg/ruvjwfhg6BaRmmO1LOh38+1d14dubZpCr2/M/Ss4u
-   VJpMlHgM5UeYxKan3defqemnFVUuE1BXikfybCUpLJrcRrUcBOdP9i2YF
-   gXoE9sJze5lJvpcJZqqjQekwZrQ2WS8PUV8lbi+Fye750OkJZyUgOYnbp
-   Ep264Gja7U3MAPE5Yzpc7WNHOz+c7M2ZvTT3k5DfGS4YRleZCrpb7is8/
-   aj0SnBSRc92dMh0FSrJRdjGm/zvoH+lcmHXYNidlqeiB6VmKh63Sp0HOn
-   bmGgNAi7hSy1Lg8ACQTNy+I0TKgMSVSK+GzArYu9cogbwR9kz3Ln+dHXK
-   w==;
-X-CSE-ConnectionGUID: FdCxYKjmSvCAnSDqY7mu1A==
-X-CSE-MsgGUID: lIbRbh7xRjGyTC7bTqDhDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="46124825"
-X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="46124825"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 02:32:16 -0700
-X-CSE-ConnectionGUID: jxf+a6eYQvGZWr1YMQah3w==
-X-CSE-MsgGUID: hNBKzrykSoeViY5fvkB7ZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="130074605"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa007.fm.intel.com with SMTP; 15 Apr 2025 02:32:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Apr 2025 12:32:11 +0300
-Date: Tue, 15 Apr 2025 12:32:11 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	linux-usb@vger.kernel.org, mika.westerberg@linux.intel.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com
-Subject: Re: [PATCH 0/3] Introduce Thunderbolt/USB4 <-> USB Type-C port
- mapping
-Message-ID: <Z_4nm3x6TvgkO4Rl@kuha.fi.intel.com>
-References: <20250414175554.107228-1-alan.borzeszkowski@linux.intel.com>
- <2025041421-snowbound-lullaby-3450@gregkh>
+	s=arc-20240116; t=1744710158; c=relaxed/simple;
+	bh=rvPK/Dg5T2im/RIHeiod+rLhyhXLcDICeW5UPJLeBGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uqmFO05H28IG0Iss9daGrGZX6mql0Daxe5VULXL8uz5+g7t4glqJGKgFuSC0cM0Lp3A0uw0srORm/vlLuqxdpMKte4TJiNA9FtQP3QdZQ5vMVfWtq3l59cy0h+JVYqN/hXYCYyOuOHaEirdBrxQJjk4L+1fSg6pypbi++gQA6F8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QPSqwTMl; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2264aefc45dso78324205ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 02:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1744710156; x=1745314956; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBaoORDclgJIxRjLsgxp6IQxhEhL0T0NDAX9n9Trx5U=;
+        b=QPSqwTMlDFRxts7YsVmvtlCYyL+FG21cZwk9QQjNa4t0acDmb9K7+z3LKF4O0waP5F
+         +I+jQjdiPNtuD7dMOdxp6N/jgThFN+AGECXxYOtc0xqPnTYWAM6gezu1le95d9B6Mb6P
+         +NAdHqFJaWO0irvmasbaQhn0tGuLNl0xV+9C8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744710156; x=1745314956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cBaoORDclgJIxRjLsgxp6IQxhEhL0T0NDAX9n9Trx5U=;
+        b=n5qyvZHdgenTLdxfmsskJIUhGKj2Uv4lvTfKqlf1R0ns1fMlWBQheYJWY08p0degD6
+         hYxOO/UmDrTXBy4reVJtoghh3epNbVkP9peQhZTvIzgsAeKNJPcDFfbkwLFUcLplK4wg
+         jtEDGsG4GJcr49t+dk9vYAOBg0sngcfCyKiTRzUoX2azyOKXaqYOXV5bsWtm4ZriYJKW
+         m6dLzP4MD17ogDZ8VGorOx4Vck70fRgWoIvF6NYeBvR64R8oUJUN7dMOonQbCBpRf87D
+         F4/i7J3dw7fvhUSR26DhG5SWyVPG3CQ68iAd3XN9YDOrrxmYTP7dIrtpQ6zmow41v3Iu
+         R3pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXJfYLhyTHcWuWVAW202DEWtUJPeaGtI0IyrNqW6oP2mMFdYUnWNZQ8kImSoIoiL6IVlWofwMvipQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyurYLfSgLtluPRg7Y0HSMVX5e+Whxsx5jz7iJTsXhKKxxCa/y
+	tQHdZ2/5e/iyKcpwklTexeb4TA4CHa5kTyLB3paMK6JaClf3hjz2yFpGyHSykw==
+X-Gm-Gg: ASbGncsNmSl3rgUgDFN7x+k/aGuc8L86VAXK20+NtXHgE0Hkgh4c3+h6DbGkrG3Q/Y3
+	VpJP71XAJCN/U8f8+6C11iFNLwzSDPG7FxzGLm1iV41SOsrh9U1vuHMuM9oT5PTTl0x7D3ZZDao
+	NCknzmg357ZATGAuT9SaszYRV4qioKuWjNOtqgMj6QSHDXbu15VROhN/Du3s94TKsR2zqxUZUin
+	uWe8AYNv4hT8BFC78YwZMpnqXinCZNy2GoZJV7g4HvREdosbyn5fuMvKuTCK4Z6xt2BeiEUOrJ5
+	f7F/6ZGfncSLkwmwolfFC+sFjbgR1hlOttRruMOnPub8ZUJt8vweJSBOT35WvIYP
+X-Google-Smtp-Source: AGHT+IHVvAZ1ygtLt+QZlSxzIJDMWWSa3m/mDTZEHZmrVvlbbotGb9BvVB2zRgsynJ3aC8i0qEwfeQ==
+X-Received: by 2002:a17:902:dac3:b0:224:f12:3734 with SMTP id d9443c01a7336-22bea4bd79bmr179704025ad.30.1744710156249;
+        Tue, 15 Apr 2025 02:42:36 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:7d0d:86ea:ee84:cd08])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7ccca5asm113135215ad.254.2025.04.15.02.42.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Apr 2025 02:42:35 -0700 (PDT)
+From: Pin-yen Lin <treapking@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>
+Cc: Stephen Boyd <swboyd@chromium.org>,
+	linux-kernel@vger.kernel.org,
+	Pin-yen Lin <treapking@chromium.org>,
+	devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/4] Introduce usb-hub.yaml binding and add support for Parade PS5511
+Date: Tue, 15 Apr 2025 17:41:57 +0800
+Message-ID: <20250415094227.3629916-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.49.0.777.g153de2bbd5-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025041421-snowbound-lullaby-3450@gregkh>
+Content-Transfer-Encoding: 8bit
 
-Hi Greg,
 
-On Mon, Apr 14, 2025 at 09:03:42PM +0200, Greg KH wrote:
-> On Mon, Apr 14, 2025 at 07:55:51PM +0200, Alan Borzeszkowski wrote:
-> > Hello everyone,
-> > 
-> > This patch series introduces the creation of symlinks between
-> > Thunderbolt/USB4 ports and their corresponding USB Type-C ports. The
-> > primary goal is to provide users with clear visibility into which USB4
-> > port is connected via a specific Type-C port. This provides the same
-> > functionality that is already present in Chromebooks.
-> 
-> "mapping" in what way?  sysfs links?  If so, care to add
-> Documentation/ABI/ updates?
+This series introduces usb-hub.yaml for on-board USB hubs, and use it for
+the newly-added Parade PS5511 binding and the existing Realtek RTS5411
+hub controller.
 
-It is already there:
-https://docs.kernel.org/admin-guide/abi-testing.html#abi-sys-bus-thunderbolt-devices-usb4-portx-connector
+Also add support for Parade PS5511 in onboard_usb_dev.c
 
-The link is already created on Cromebooks like Alan explained, because
-there each USB4/TBT port has a device node in the ACPI tables with the
-appropriate _PLD (Physical Location of Device), but on systems
-targeted primarily for Windows, that is not the case. There ports do
-not have device nodes, so we can't make the link based on _PLD.
+Patch 1 introduces usb-hub.yaml as the bindings for on-board USB hubs
+Patch 2 adds the binding for Parade PS5511
+Patch 3 modifies realtek,rts5411.yaml to adapt usb-hub.yaml
+Patch 4 adds the support for Parade PS5511 in onboard_usb_dev.c
 
-This series makes that same link by taking advantage of the
-"usb4-host-interface" _DSD device property [1] that we always have on
-those Windows platforms. That same device property that we also use in
-drivers/usb/code/usb-acpi.c, and probable some other places too.
+Link to v1: https://lore.kernel.org/all/20250328082950.1473406-1-treapking@chromium.org/
 
-[1] https://www.usb.org/sites/default/files/D1T2-2%20-%20USB4%20on%20Windows.pdf
 
-thanks,
+Changes in v2:
+- Introduce usb-hub.yaml
+- Modify parade,ps5511 and realtek,rts5411 to use usb-hub.yaml
+- Minor fixes on parade,ps5511.yaml
+
+Pin-yen Lin (4):
+  dt-bindings: usb: Introduce usb-hub.yaml
+  dt-bindings: usb: Add binding for PS5511 hub controller
+  dt-bindings: usb: realtek,rts5411: Adapt usb-hub.yaml
+  usb: misc: onboard_usb_dev: Add Parade PS5511 hub support
+
+ .../bindings/usb/parade,ps5511.yaml           | 115 ++++++++++++++++++
+ .../bindings/usb/realtek,rts5411.yaml         |  47 ++-----
+ .../devicetree/bindings/usb/usb-hub.yaml      |  91 ++++++++++++++
+ drivers/usb/misc/onboard_usb_dev.c            |   3 +
+ drivers/usb/misc/onboard_usb_dev.h            |   9 ++
+ 5 files changed, 231 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/parade,ps5511.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
 
 -- 
-heikki
+2.49.0.777.g153de2bbd5-goog
+
 
