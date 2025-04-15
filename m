@@ -1,522 +1,270 @@
-Return-Path: <linux-usb+bounces-23052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D2DA88FED
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 01:08:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5CD7A8911E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 03:22:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F31B77A4365
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Apr 2025 23:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05C0D189A3BC
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 01:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700441F5616;
-	Mon, 14 Apr 2025 23:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42D4202995;
+	Tue, 15 Apr 2025 01:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YdXmbu9N"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="piXVusq+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60991F4C8E;
-	Mon, 14 Apr 2025 23:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725401FDA69
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 01:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744672109; cv=none; b=HHoY3+fQ5TKL3sB2MpUzP5QOY1mqoZ9vMIhGidKG5sCZJbHYAZquTwYrhIIl53kZFi5/mhnrkfxJG02J4v5/Yl648jljsX0cZdA68waDwwumSuQTJL8ZJ2XWdf/dgkA6V6iLOTIUtEtwoSOnEn3TL0qshgp/dN+6lWiaRQ/NmQM=
+	t=1744680121; cv=none; b=iM/iLv4g3W7tjN/0sUdqLrp3cG82zCCT+PAKj5F6b6JivD6kkpvdgh2Zgu+VOjENKfdj3z2H0pT9Jr7oe8/y0WnIGcaWxp/QIQYcMZkraYG8vofMMEeKvDB/LaX6FXgPyGV28NDE/w8etyd7sN1zQWXPJ6CQy6G6XE1HBh27oSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744672109; c=relaxed/simple;
-	bh=hvtca5FhLzHgfMkfQiUQfWaDr+EJk1l+YUczTyqqp2U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ioYGDeO5EAYXHozrSDihYPPZv23GINen15JfjR52V68tQpJ+tAFPtHV4+OcYPfBmM2pdeULuva95kZgQ2TiMmGFw5xtjLpZPnZVb+VqxOBhn0IV1v+dNcLfZ0JLgEQzgkhz8oguqgKT0AmILWhlQ9khJLh10ULbBST/JssnEQS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YdXmbu9N; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ac2c7a367d9so96609066b.3;
-        Mon, 14 Apr 2025 16:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744672105; x=1745276905; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rEE6SX9EoTH1J1AGbX+gSLqDqp/jZqKyczZ4TnYEcvg=;
-        b=YdXmbu9NAxmr51aEWDGOqi6YPnHUap8sMmierkj4BFXcD6n6XewZ54JjpTraW16dwH
-         a4g8jaNxOYuBKW+fCTw/wHWsrP8R2x7mxY87zPU/H4avziZ42AspLBm70BgF8ynxfM0J
-         42OwyRkxPeVK/KdTwRkABCpdAnWdLvl3+8IoLjKaV3G7uuZvJZn1fHzyVHUFbK2QUyhV
-         pJZt6CyMRL7n5EJLOvA/fbcQKc27JNRhvwFh5XHKXfmrv2YRisoiiq7xea9iux/uRMad
-         mGlDJcTsaadmy9nOCnm98qBbZHHGb1hVCT+pazrkyfbwN1TQz/eKWouwI36xaBJx/NkR
-         UScw==
+	s=arc-20240116; t=1744680121; c=relaxed/simple;
+	bh=+pKd1wd9mvGbFUMaXhNv2GkBpFVdeSguJVT0UbYSWek=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VNtR40pDgvSPkQg/CVqgRsmOBM8gOfPPGxrZk3XbYXi4T1Qfgp8bILZaocoLWNGfJo2huMvEGnwRBRqW1KIiXkn5a8bhh/phYriIsQL0ApPGftQs3ObsQ/OQL+EEMaKFmVp7IM8gpiCjxINBHeLzSchFO8Ot951ij1yQrdgD/EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=piXVusq+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53F15MYR022242
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 01:21:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=fi+kxeSEE/xHRxUguI+W19
+	1irKpNVL4SIziCpXrYRYw=; b=piXVusq++UbVuqPVsnB25VVZk5tDZ/qOc7Wz7h
+	xAgsI3tLJR1iYAMzGXEbhoFOpDTFeXXJRIaJHaVbRVJ1TSoBBUppYD3ZY1fmC5te
+	MzEpKuAaTUj+3e3+5QH7/UwkGX1TTMtyrRelU54wpGJhNLR3ncn3BURs9S4YOLxE
+	GQfYi51hWyCxO32Xt0cuTyLSELw9K+2FmVY3jqdmt0BTpQwlfnLr/ZJQzNGEPpIt
+	z9wdEHNHwU4e4M5ETE5Cu0UJLEju5+VzE/xfD3YR8mh0wLl758sTmdBQKSiuzquT
+	rCW3iSEptBTIxMME0CiBQJJFMzQ/eHH27Mlt0aFMlN38eOkA==
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45yf4veb50-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 01:21:58 +0000 (GMT)
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-2c238fbc14fso5439602fac.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Apr 2025 18:21:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744672105; x=1745276905;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rEE6SX9EoTH1J1AGbX+gSLqDqp/jZqKyczZ4TnYEcvg=;
-        b=v1LIp4DT5+mr44wWYw6DAc57P6iHltZKEnQpGQYSp0boFO3xO4Na8nPjbGRICwrTlr
-         BqoGKJ2ycI99+jvmWjEW31GIR0ynR1FSacZ9RzBs6tWEy5XBkeASeHhGJa1+KfHnjF5s
-         L58l8JyVZ3EbYQDFMn+IQVGMsVyCBXQWUN3DFdUWYyWWGhpTFBayaPVK8NUTWk9XRpl/
-         bUBWSTvIo4T2Pjv26YkN037MwZAEHHGALM62qKH9yw+VbJnLqGSRluWkEsXniVRomS0P
-         ncxJDYvZZ8uSHzwur0PfatfbQjsW/DAjs6e04rtC8dZC/dhxVMXQUhpjC1lQpESZ7S6R
-         aGpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWb0E5TaBJvrOK7jzjq90pO1x32Po2TtElxcSy0lnQM/YgM8vclPTx0Lukv5UpvXyFkw/JvGUp2WdrlKg==@vger.kernel.org, AJvYcCXu+jQSJr35MWMt1NqhFHLrmPFHdMonDNMrqpFyVRPiAZuDRopR6QrIvl1ZDzgRhUAetkk3fkk4a6ZP@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuAPOmBZROvhjt2CGS7wss0zVkVD5BLNVV/DtDBPiLj4IgMfKT
-	SMkkQyoChGZ2vd1r4N/DdSiw5EdH7R0mZcNbN41SVzMtRX8sWINS
-X-Gm-Gg: ASbGnctTj2a8Toy7ZrfUtDn5OaDultNEUJRInuMo9f4FYAWKfZQVJjrDL21rVj3ny5X
-	gQouLPJ1aqyZsEu78kL5occRlSB99NDvbyWYAiTYQtZb5S9ZMwcuZ4XvNOHDy7YU2OvEzIEleNS
-	eJ85AXX7QAihnvQiPWIQ7zdkz0aozC+Xua188eUIW3lFEpOoosKS7RVIc7Z4YCrL9vdgaz2d12x
-	dNCCH+NAfrVtAXEtqAv5bvuLyzkpgO9JYqAudkYeWURkptbGUBgZ2fqXECPmidQ2qmaaGDSrv2f
-	rhJh/p2ISYZARY/B6MhwyPpjqOe6e/RhyapAkh3oDXG2W9jN22ePxCEjjxp96x8UOqAvertxrn6
-	K3eZ1NKYe8/E=
-X-Google-Smtp-Source: AGHT+IGqAY/gwcOyMUYjSxmZZpcQ7/hqow022rAcPRGQn+R5jPvOuwIgcNaBKjPKFmcaJiw71zNvYA==
-X-Received: by 2002:a17:907:9f13:b0:ac7:2aa0:309b with SMTP id a640c23a62f3a-acad3430ed5mr413176966b.1.1744672104832;
-        Mon, 14 Apr 2025 16:08:24 -0700 (PDT)
-Received: from laptok.lan (89-64-31-184.dynamic.chello.pl. [89.64.31.184])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1bb3e08sm1001328166b.14.2025.04.14.16.08.23
+        d=1e100.net; s=20230601; t=1744680117; x=1745284917;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fi+kxeSEE/xHRxUguI+W191irKpNVL4SIziCpXrYRYw=;
+        b=dY+0Ow38c1x+Vnolov+syWGTbVFEyIz1iSHcWffQHh6efi4i2KbGP904gTan8Q++kn
+         BmAJF4R/xo7n/oAhniMUdtIMuI9WiRT2LPLMhhkuyXfrGjK4hf4z5OAo2NDq75K3TKjl
+         2DjHCrLeuMaHN0/d8LLQueR2JHRato1q8SjAVlYmWwOeICmbaYMkwLjNiXbOD5G7C/0N
+         fmOCZx+ELQtAscye5se8cB6C12oRP1G19JvsJJtRcy3y04xfLqBHvCt2dG4gf1gT2aP6
+         t6sopwqqOIaDZffETOkdiToKrbtTnC+4LVFjOchB1GAdPiSwQcVfQ71FZyE2Oq/Qrwe8
+         PupQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXRrAOvMReSKsBhJTOPUpcYIEggQY3GuAVbTizg9kACZzqYZ3MNreJ0xs6OtNHquCzq2BeQ7URzPGM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqR46xmQGgz+OvZmD0hp4feM5w6OCjjuRPuTGjGtBmGrCQbSsN
+	ny3T/XdszTjMr2kO2mvaHvygSt4yoL6HmjVbPI/fBUBEe+grYBD69C45cqynei3Q4rCaei4TiVQ
+	u7FBXkCT4to23/IKk4ifo1v3JPi2Y6kUU0vX+AfZvJnMdCEL4NdCTWe9+3f8=
+X-Gm-Gg: ASbGncv/l/lSMcBcM9PA/Fz2CxYL3akn4OzJJuDusUgrGpPbQ6dnh3xTUeRZlaANIpN
+	HuBrPE3yotqqcHn+OyZKErXd2FkseDDKOjecSUPUovDvPBWqBLvzmJ7rYBvMAq0nudUF/e0F8pu
+	F6DuhL5pMz9oMw2LUuODV7Y4bsrHWVU08LspM2MzcmHJ08XmIEfWLZJ3ZYGrLYvefRT02JXUHX/
+	1Pw5OvBaQpPdeO31ClNRi8wXXrX1DVIH89SZf51p55jvNXiTdi/BNb1jEktwDvpUjtWdckSf4rq
+	V/919GdkmC317N18F7ywdZKvrpdhf3trqU8Z4oMbZAGIDbbJEePFmwz8K0nXiH35bY/Vo5wRf2c
+	FOB1ED5pVyq8=
+X-Received: by 2002:a05:6870:6f14:b0:2c2:cd87:7521 with SMTP id 586e51a60fabf-2d0d5c585c3mr9102365fac.4.1744680117108;
+        Mon, 14 Apr 2025 18:21:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE757j9dJHMp66IhBlr+KUh7uCS/kjJ8daHvGMydKbndb8Sh7ZAQ57GmiTT0CDLWHse8/MVYA==
+X-Received: by 2002:a05:6870:6f14:b0:2c2:cd87:7521 with SMTP id 586e51a60fabf-2d0d5c585c3mr9102347fac.4.1744680116733;
+        Mon, 14 Apr 2025 18:21:56 -0700 (PDT)
+Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2d0968e090esm2652538fac.6.2025.04.14.18.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 16:08:24 -0700 (PDT)
-From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org
-Cc: oleg@makarenk.ooo,
-	linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH RESEND 2/2] HID: pidff: Fix checkpatch errors and warnings
-Date: Tue, 15 Apr 2025 01:08:18 +0200
-Message-ID: <20250414230818.957678-3-tomasz.pakula.oficjalny@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250414230818.957678-1-tomasz.pakula.oficjalny@gmail.com>
-References: <20250414230818.957678-1-tomasz.pakula.oficjalny@gmail.com>
+        Mon, 14 Apr 2025 18:21:56 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Subject: [PATCH v7 0/6] usb: dwc3: qcom: Flatten dwc3 structure
+Date: Mon, 14 Apr 2025 20:21:49 -0500
+Message-Id: <20250414-dwc3-refactor-v7-0-f015b358722d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK20/WcC/3XPS2rDMBCA4asEraug0ehhd5V7hCz0GNcCx06s2
+ m0JvnvlQDGYZjmD/k/Mg2UaE2X2fniwkeaU09CXwb4dWGhd/0E8xTIzKSSCAMPjV0A+UuPC5zD
+ yGoHQi8pVvmal8S4T96PrQ1uqfuq6sryV5+n7+cn5UuY25dL+PP+c5bpdeSUqgB0/Sy54DQ1aE
+ Q24KE/3KYXUh2MYrmy1ZvzrtQDAfY+lj2ClFFbHxvrTkPPxPrmu9NcNURsi5f7GWRVEKdBkAYB
+ U/QLRG4JQ7RG9XiLIGdIevVMvELMhCsQeMes5QUTwiAZQ/4Msy/ILCQoedNUBAAA=
+X-Change-ID: 20231016-dwc3-refactor-931e3b08a8b9
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Frank Li <Frank.Li@nxp.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6128;
+ i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
+ bh=+pKd1wd9mvGbFUMaXhNv2GkBpFVdeSguJVT0UbYSWek=;
+ b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBn/bSyM1pA6Ut/HVJKGUwNJ9nBLjQCIsE0tpDwD
+ i367EIR+daJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZ/20shUcYW5kZXJzc29u
+ QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcUwRRAAxRYB9zEHxEOH1/ECz2z1qhfP+8KI+EABQAeIa6L
+ /5X1N8TkdkLKbMgBuuAXpRrOZkb19joQSVAHQfO78413al4c4f+xGIKhMIu/nh3KWqyrbQApmki
+ ye92n6vIzLA5wivM80P9oaLINRaJGRojVExd+yzhqI92TeYxGG/0YZsyBdvOpTkpYLRQFj//4Te
+ 7e+CZ6Tj4Abu14uAcysyAeFkowoFOLqKx1zUMK7RrUH4cThtVuIuE7IZM9n59YcYbwwGzP5dDnm
+ OG4zmFAyHXKl04BB/dan1xy1iys75eqAeK75ASLkuP+ETWVc9ImKhElsmuGA4qa5OJK3mEYYFKO
+ 05c+DvVIFwyUJeC/UjsSueCIy7AnYe2MN5AjkjwJuTskbfi0+GvbkvLwW2M0ndVc0Ngtz1zkEF/
+ 372aMV069ffP61YCC5gMhd7XssuzST5S6Bh41NV7ReMv+6SRWLOY5lceXTnRnoqO/tNjTPkawYB
+ EWm75uHX6rw/wdq9CVb1rfnaOn5ZP8xR967MA+KR5/HuXb1N0rk5Y3OOnWO76ZdtvLULeXBWWof
+ LoyDHHPBorPf3t0+BBB2bw8Ol6v67oChtfYjU2F2Kf+cOIaS2WEXeGb2LT8W7BQgpnlZ6RbaLn0
+ 6G/SHrBikGFlDYlvz6+WA0Ynxy0yP3GiRlUvLHyQn4L4=
+X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
+ fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
+X-Proofpoint-ORIG-GUID: B174jvYwmRt23WBhgdBx2wF0sKfk6ewB
+X-Authority-Analysis: v=2.4 cv=IZ6HWXqa c=1 sm=1 tr=0 ts=67fdb4b6 cx=c_pps a=CWtnpBpaoqyeOyNyJ5EW7Q==:117 a=DaeiM5VmU20ml6RIjrOvYw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=RNNl8Y2_yDh1yS-_eIMA:9
+ a=QEXdDO2ut3YA:10 a=vh23qwtRXIYOdz9xvnmn:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: B174jvYwmRt23WBhgdBx2wF0sKfk6ewB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-15_01,2025-04-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 impostorscore=0 suspectscore=0
+ phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504150005
 
-Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+The USB IP-block found in most Qualcomm platforms is modelled in the
+Linux kernel as 3 different independent device drivers, but as shown by
+the already existing layering violations in the Qualcomm glue driver
+they can not be operated independently.
+
+With the current implementation, the glue driver registers the core and
+has no way to know when this is done. As a result, e.g. the suspend
+callbacks needs to guard against NULL pointer dereferences when trying
+to peek into the struct dwc3 found in the drvdata of the child.
+
+Missing from the upstream Qualcomm USB support is proper handling of
+role switching, in which the glue needs to be notified upon DRD mode
+changes. Several attempts has been made through the years to register
+callbacks etc, but they always fall short when it comes to handling of
+the core's probe deferral on resources etc.
+
+Furhtermore, the DeviceTree binding is a direct representation of the
+Linux driver model, and doesn't necessarily describe "the USB IP-block".
+
+This series therefor attempts to flatten the driver split, and operate
+the glue and core out of the same platform_device instance. And in order
+to do this, the DeviceTree representation of the IP block is flattened.
+
+Departing from previous versions' attempts at runtime-convert the
+Devicetree representation is swapped out and instead a snapshot of the
+current dwc3-qcom driver is proposed to be carried for a limited time.
+
+A patch to convert a single platform - sc8280xp - was included in the
+series. This, and others, will be submitted in a separate series as soon
+as its introduction won't break bisection.
+
 ---
- drivers/hid/usbhid/hid-pidff.c | 129 ++++++++++++++-------------------
- drivers/hid/usbhid/hid-pidff.h |   3 +-
- 2 files changed, 58 insertions(+), 74 deletions(-)
+Changes in v7:
+- Rebased on usb-next, wrapped dwc3_prepare() alongside other exported
+  core functions
+- Link to v6: https://lore.kernel.org/r/20250410-dwc3-refactor-v6-0-dc0d1b336135@oss.qualcomm.com
 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index 8dfd2c554a27..844fc4d84be5 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -210,9 +210,7 @@ struct pidff_device {
-  */
- static s32 pidff_clamp(s32 i, struct hid_field *field)
- {
--	s32 clamped = clamp(i, field->logical_minimum, field->logical_maximum);
--	pr_debug("clamped from %d to %d", i, clamped);
--	return clamped;
-+	return clamp(i, field->logical_minimum, field->logical_maximum);
- }
- 
- /*
-@@ -229,8 +227,10 @@ static int pidff_rescale(int i, int max, struct hid_field *field)
-  */
- static int pidff_rescale_signed(int i, struct hid_field *field)
- {
--	if (i > 0) return i * field->logical_maximum / S16_MAX;
--	if (i < 0) return i * field->logical_minimum / S16_MIN;
-+	if (i > 0)
-+		return i * field->logical_maximum / S16_MAX;
-+	if (i < 0)
-+		return i * field->logical_minimum / S16_MIN;
- 	return 0;
- }
- 
-@@ -241,11 +241,12 @@ static u32 pidff_rescale_time(u16 time, struct hid_field *field)
- {
- 	u32 scaled_time = time;
- 	int exponent = field->unit_exponent;
-+
- 	pr_debug("time field exponent: %d\n", exponent);
- 
--	for (;exponent < FF_TIME_EXPONENT; exponent++)
-+	for (; exponent < FF_TIME_EXPONENT; exponent++)
- 		scaled_time *= 10;
--	for (;exponent > FF_TIME_EXPONENT; exponent--)
-+	for (; exponent > FF_TIME_EXPONENT; exponent--)
- 		scaled_time /= 10;
- 
- 	pr_debug("time calculated from %d to %d\n", time, scaled_time);
-@@ -265,18 +266,18 @@ static void pidff_set_signed(struct pidff_usage *usage, s16 value)
- 	else {
- 		if (value < 0)
- 			usage->value[0] =
--			    pidff_rescale(-value, -S16_MIN, usage->field);
-+				pidff_rescale(-value, -S16_MIN, usage->field);
- 		else
- 			usage->value[0] =
--			    pidff_rescale(value, S16_MAX, usage->field);
-+				pidff_rescale(value, S16_MAX, usage->field);
- 	}
- 	pr_debug("calculated from %d to %d\n", value, usage->value[0]);
- }
- 
- static void pidff_set_time(struct pidff_usage *usage, u16 time)
- {
--	u32 modified_time = pidff_rescale_time(time, usage->field);
--	usage->value[0] = pidff_clamp(modified_time, usage->field);
-+	usage->value[0] = pidff_clamp(pidff_rescale_time(time, usage->field),
-+				      usage->field);
- }
- 
- static void pidff_set_duration(struct pidff_usage *usage, u16 duration)
-@@ -332,6 +333,7 @@ static int pidff_needs_set_envelope(struct ff_envelope *envelope,
- 				    struct ff_envelope *old)
- {
- 	bool needs_new_envelope;
-+
- 	needs_new_envelope = envelope->attack_level  != 0 ||
- 			     envelope->fade_level    != 0 ||
- 			     envelope->attack_length != 0 ||
-@@ -460,15 +462,13 @@ static int pidff_needs_set_periodic(struct ff_effect *effect,
- static void pidff_set_condition_report(struct pidff_device *pidff,
- 				       struct ff_effect *effect)
- {
--	int i, max_axis;
--
- 	/* Devices missing Parameter Block Offset can only have one axis */
--	max_axis = pidff->quirks & HID_PIDFF_QUIRK_MISSING_PBO ? 1 : 2;
-+	int max_axis = pidff->quirks & HID_PIDFF_QUIRK_MISSING_PBO ? 1 : 2;
- 
- 	pidff->set_condition[PID_EFFECT_BLOCK_INDEX].value[0] =
- 		pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
- 
--	for (i = 0; i < max_axis; i++) {
-+	for (int i = 0; i < max_axis; i++) {
- 		/* Omit Parameter Block Offset if missing */
- 		if (!(pidff->quirks & HID_PIDFF_QUIRK_MISSING_PBO))
- 			pidff->set_condition[PID_PARAM_BLOCK_OFFSET].value[0] = i;
-@@ -496,10 +496,9 @@ static void pidff_set_condition_report(struct pidff_device *pidff,
- static int pidff_needs_set_condition(struct ff_effect *effect,
- 				     struct ff_effect *old)
- {
--	int i;
- 	int ret = 0;
- 
--	for (i = 0; i < 2; i++) {
-+	for (int i = 0; i < 2; i++) {
- 		struct ff_condition_effect *cond = &effect->u.condition[i];
- 		struct ff_condition_effect *old_cond = &old->u.condition[i];
- 
-@@ -557,7 +556,6 @@ static void pidff_set_gain_report(struct pidff_device *pidff, u16 gain)
-  */
- static void pidff_set_device_control(struct pidff_device *pidff, int field)
- {
--	int i, index;
- 	int field_index = pidff->control_id[field];
- 
- 	if (field_index < 1)
-@@ -568,8 +566,9 @@ static void pidff_set_device_control(struct pidff_device *pidff, int field)
- 		hid_dbg(pidff->hid, "DEVICE_CONTROL is a bitmask\n");
- 
- 		/* Clear current bitmask */
--		for(i = 0; i < sizeof(pidff_device_control); i++) {
--			index = pidff->control_id[i];
-+		for (int i = 0; i < sizeof(pidff_device_control); i++) {
-+			int index = pidff->control_id[i];
-+
- 			if (index < 1)
- 				continue;
- 
-@@ -615,11 +614,10 @@ static void pidff_reset(struct pidff_device *pidff)
-  */
- static void pidff_fetch_pool(struct pidff_device *pidff)
- {
--	int i;
- 	struct hid_device *hid = pidff->hid;
- 
- 	/* Repeat if PID_SIMULTANEOUS_MAX < 2 to make sure it's correct */
--	for(i = 0; i < 20; i++) {
-+	for (int i = 0; i < 20; i++) {
- 		hid_hw_request(hid, pidff->reports[PID_POOL], HID_REQ_GET_REPORT);
- 		hid_hw_wait(hid);
- 
-@@ -643,8 +641,6 @@ static void pidff_fetch_pool(struct pidff_device *pidff)
-  */
- static int pidff_request_effect_upload(struct pidff_device *pidff, int efnum)
- {
--	int j;
--
- 	if (!pidff->effect_count)
- 		pidff_reset(pidff);
- 
-@@ -657,11 +653,12 @@ static int pidff_request_effect_upload(struct pidff_device *pidff, int efnum)
- 	pidff->block_load_status->value[0] = 0;
- 	hid_hw_wait(pidff->hid);
- 
--	for (j = 0; j < 60; j++) {
-+	for (int i = 0; i < 60; i++) {
- 		hid_dbg(pidff->hid, "pid_block_load requested\n");
- 		hid_hw_request(pidff->hid, pidff->reports[PID_BLOCK_LOAD],
- 				HID_REQ_GET_REPORT);
- 		hid_hw_wait(pidff->hid);
-+
- 		if (pidff->block_load_status->value[0] ==
- 		    pidff->status_id[PID_BLOCK_LOAD_SUCCESS]) {
- 			hid_dbg(pidff->hid, "device reported free memory: %d bytes\n",
-@@ -715,6 +712,7 @@ static void pidff_playback_pid(struct pidff_device *pidff, int pid_id, int n)
- static int pidff_playback(struct input_dev *dev, int effect_id, int value)
- {
- 	struct pidff_device *pidff = dev->ff->private;
-+
- 	pidff_playback_pid(pidff, pidff->pid_id[effect_id], value);
- 	return 0;
- }
-@@ -741,8 +739,7 @@ static int pidff_erase_effect(struct input_dev *dev, int effect_id)
- 	struct pidff_device *pidff = dev->ff->private;
- 	int pid_id = pidff->pid_id[effect_id];
- 
--	hid_dbg(pidff->hid, "starting to erase %d/%d\n",
--		effect_id, pidff->pid_id[effect_id]);
-+	hid_dbg(pidff->hid, "starting to erase %d/%d\n", effect_id, pid_id);
- 
- 	/*
- 	 * Wait for the queue to clear. We do not want
-@@ -762,8 +759,7 @@ static int pidff_upload_effect(struct input_dev *dev, struct ff_effect *effect,
- 			       struct ff_effect *old)
- {
- 	struct pidff_device *pidff = dev->ff->private;
--	int type_id;
--	int error;
-+	int error, type_id;
- 
- 	pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0] = 0;
- 	if (old) {
-@@ -849,7 +845,7 @@ static int pidff_upload_effect(struct input_dev *dev, struct ff_effect *effect,
- 	case FF_INERTIA:
- 	case FF_FRICTION:
- 		if (!old) {
--			switch(effect->type) {
-+			switch (effect->type) {
- 			case FF_SPRING:
- 				type_id = PID_SPRING;
- 				break;
-@@ -939,23 +935,23 @@ static void pidff_set_autocenter(struct input_dev *dev, u16 magnitude)
- static int pidff_find_fields(struct pidff_usage *usage, const u8 *table,
- 			     struct hid_report *report, int count, int strict)
- {
-+	int return_value = 0;
-+
- 	if (!report) {
--		pr_debug("pidff_find_fields, null report\n");
-+		pr_debug("%s, null report\n", __func__);
- 		return -1;
- 	}
- 
--	int i, j, k, found;
--	int return_value = 0;
-+	for (int k = 0; k < count; k++) {
-+		int found = 0;
- 
--	for (k = 0; k < count; k++) {
--		found = 0;
--		for (i = 0; i < report->maxfield; i++) {
-+		for (int i = 0; i < report->maxfield; i++) {
- 			if (report->field[i]->maxusage !=
- 			    report->field[i]->report_count) {
- 				pr_debug("maxusage and report_count do not match, skipping\n");
- 				continue;
- 			}
--			for (j = 0; j < report->field[i]->maxusage; j++) {
-+			for (int j = 0; j < report->field[i]->maxusage; j++) {
- 				if (report->field[i]->usage[j].hid ==
- 				    (HID_UP_PID | table[k])) {
- 					pr_debug("found %d at %d->%d\n",
-@@ -974,13 +970,11 @@ static int pidff_find_fields(struct pidff_usage *usage, const u8 *table,
- 			pr_debug("Delay field not found, but that's OK\n");
- 			pr_debug("Setting MISSING_DELAY quirk\n");
- 			return_value |= HID_PIDFF_QUIRK_MISSING_DELAY;
--		}
--		else if (!found && table[k] == pidff_set_condition[PID_PARAM_BLOCK_OFFSET]) {
-+		} else if (!found && table[k] == pidff_set_condition[PID_PARAM_BLOCK_OFFSET]) {
- 			pr_debug("PBO field not found, but that's OK\n");
- 			pr_debug("Setting MISSING_PBO quirk\n");
- 			return_value |= HID_PIDFF_QUIRK_MISSING_PBO;
--		}
--		else if (!found && strict) {
-+		} else if (!found && strict) {
- 			pr_debug("failed to locate %d\n", k);
- 			return -1;
- 		}
-@@ -993,9 +987,7 @@ static int pidff_find_fields(struct pidff_usage *usage, const u8 *table,
-  */
- static int pidff_check_usage(int usage)
- {
--	int i;
--
--	for (i = 0; i < sizeof(pidff_reports); i++)
-+	for (int i = 0; i < sizeof(pidff_reports); i++)
- 		if (usage == (HID_UP_PID | pidff_reports[i]))
- 			return i;
- 
-@@ -1010,13 +1002,14 @@ static void pidff_find_reports(struct hid_device *hid, int report_type,
- 			       struct pidff_device *pidff)
- {
- 	struct hid_report *report;
--	int i, ret;
- 
- 	list_for_each_entry(report,
- 			    &hid->report_enum[report_type].report_list, list) {
- 		if (report->maxfield < 1)
- 			continue;
--		ret = pidff_check_usage(report->field[0]->logical);
-+
-+		int ret = pidff_check_usage(report->field[0]->logical);
-+
- 		if (ret != -1) {
- 			hid_dbg(hid, "found usage 0x%02x from field->logical\n",
- 				pidff_reports[ret]);
-@@ -1031,7 +1024,8 @@ static void pidff_find_reports(struct hid_device *hid, int report_type,
- 		 * implementation hides this fact, so we have to dig it up
- 		 * ourselves
- 		 */
--		i = report->field[0]->usage[0].collection_index;
-+		int i = report->field[0]->usage[0].collection_index;
-+
- 		if (i <= 0 ||
- 		    hid->collection[i - 1].type != HID_COLLECTION_LOGICAL)
- 			continue;
-@@ -1050,9 +1044,7 @@ static void pidff_find_reports(struct hid_device *hid, int report_type,
-  */
- static int pidff_reports_ok(struct pidff_device *pidff)
- {
--	int i;
--
--	for (i = 0; i <= PID_REQUIRED_REPORTS; i++) {
-+	for (int i = 0; i <= PID_REQUIRED_REPORTS; i++) {
- 		if (!pidff->reports[i]) {
- 			hid_dbg(pidff->hid, "%d missing\n", i);
- 			return 0;
-@@ -1069,22 +1061,19 @@ static struct hid_field *pidff_find_special_field(struct hid_report *report,
- 						  int usage, int enforce_min)
- {
- 	if (!report) {
--		pr_debug("pidff_find_special_field, null report\n");
-+		pr_debug("%s, null report\n", __func__);
- 		return NULL;
- 	}
- 
--	int i;
--
--	for (i = 0; i < report->maxfield; i++) {
-+	for (int i = 0; i < report->maxfield; i++) {
- 		if (report->field[i]->logical == (HID_UP_PID | usage) &&
- 		    report->field[i]->report_count > 0) {
- 			if (!enforce_min ||
- 			    report->field[i]->logical_minimum == 1)
- 				return report->field[i];
--			else {
--				pr_err("logical_minimum is not 1 as it should be\n");
--				return NULL;
--			}
-+
-+			pr_err("logical_minimum is not 1 as it should be\n");
-+			return NULL;
- 		}
- 	}
- 	return NULL;
-@@ -1096,12 +1085,10 @@ static struct hid_field *pidff_find_special_field(struct hid_report *report,
- static int pidff_find_special_keys(int *keys, struct hid_field *fld,
- 				   const u8 *usagetable, int count)
- {
--
--	int i, j;
- 	int found = 0;
- 
--	for (i = 0; i < count; i++) {
--		for (j = 0; j < fld->maxusage; j++) {
-+	for (int i = 0; i < count; i++) {
-+		for (int j = 0; j < fld->maxusage; j++) {
- 			if (fld->usage[j].hid == (HID_UP_PID | usagetable[i])) {
- 				keys[i] = j + 1;
- 				found++;
-@@ -1203,10 +1190,9 @@ static int pidff_find_special_fields(struct pidff_device *pidff)
- static int pidff_find_effects(struct pidff_device *pidff,
- 			      struct input_dev *dev)
- {
--	int i;
--
--	for (i = 0; i < sizeof(pidff_effect_types); i++) {
-+	for (int i = 0; i < sizeof(pidff_effect_types); i++) {
- 		int pidff_type = pidff->type_id[i];
-+
- 		if (pidff->set_effect_type->usage[pidff_type].hid !=
- 		    pidff->create_new_effect_type->usage[pidff_type].hid) {
- 			hid_err(pidff->hid,
-@@ -1355,8 +1341,6 @@ static int pidff_init_fields(struct pidff_device *pidff, struct input_dev *dev)
- static int pidff_check_autocenter(struct pidff_device *pidff,
- 				  struct input_dev *dev)
- {
--	int error;
--
- 	/*
- 	 * Let's find out if autocenter modification is supported
- 	 * Specification doesn't specify anything, so we request an
-@@ -1364,8 +1348,8 @@ static int pidff_check_autocenter(struct pidff_device *pidff,
- 	 * effect id was one above the minimum, then we assume the first
- 	 * effect id is a built-in spring type effect used for autocenter
- 	 */
-+	int error = pidff_request_effect_upload(pidff, 1);
- 
--	error = pidff_request_effect_upload(pidff, 1);
- 	if (error) {
- 		hid_err(pidff->hid, "upload request failed\n");
- 		return error;
-@@ -1395,8 +1379,6 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
- 	struct hid_input *hidinput = list_entry(hid->inputs.next,
- 						struct hid_input, list);
- 	struct input_dev *dev = hidinput->input;
--	struct ff_device *ff;
--	int max_effects;
- 	int error;
- 
- 	hid_dbg(hid, "starting pid init\n");
-@@ -1436,12 +1418,12 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
- 	if (error)
- 		goto fail;
- 
--	max_effects =
-+	int max_effects =
- 	    pidff->block_load[PID_EFFECT_BLOCK_INDEX].field->logical_maximum -
- 	    pidff->block_load[PID_EFFECT_BLOCK_INDEX].field->logical_minimum +
- 	    1;
--	hid_dbg(hid, "max effects is %d\n", max_effects);
- 
-+	hid_dbg(hid, "max effects is %d\n", max_effects);
- 	if (max_effects > PID_EFFECTS_MAX)
- 		max_effects = PID_EFFECTS_MAX;
- 
-@@ -1465,7 +1447,8 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
- 	if (error)
- 		goto fail;
- 
--	ff = dev->ff;
-+	struct ff_device *ff = dev->ff;
-+
- 	ff->private = pidff;
- 	ff->upload = pidff_upload_effect;
- 	ff->erase = pidff_erase_effect;
-diff --git a/drivers/hid/usbhid/hid-pidff.h b/drivers/hid/usbhid/hid-pidff.h
-index dda571e0a5bd..bfb97cb84f18 100644
---- a/drivers/hid/usbhid/hid-pidff.h
-+++ b/drivers/hid/usbhid/hid-pidff.h
-@@ -10,7 +10,8 @@
- #define HID_PIDFF_QUIRK_MISSING_DELAY		BIT(0)
- 
- /* Missing Paramter block offset (0x23). Skip it during SET_CONDITION
--   report upload */
-+ * report upload
-+ */
- #define HID_PIDFF_QUIRK_MISSING_PBO		BIT(1)
- 
- /* Initialise device control field even if logical_minimum != 1 */
+Changes in v6:
+- Change legacy driver's name, to avoid collision if both are loaded
+- Drop duplicate pm_runtime_{allow,disable}() from dwc3_qcom_remove()
+- Drop DeviceTree example patch, as this should be picked up separately
+- Replace __maybe_unused for PM and PM_SLEEP functions in dwc3-qcom.c
+  with guards, to match the exported functions from the core
+- Add missing pm_runtime idle wrapper from dwc3-qcom
+- Add missing "dma-coherent" to the qcom,snps-dwc3 binding
+- Link to v5: https://lore.kernel.org/r/20250318-dwc3-refactor-v5-0-90ea6e5b3ba4@oss.qualcomm.com
+
+Changes in v5:
+- Moved the snapshot commit first, to get a clean copy
+- Add missing kernel-doc in glue.h
+- Used a local "struct device" variable in PM functions to reduce the
+  patch size
+- Replaced initialization with default values with zero-initalizing the
+  dwc3_probe_data in dwc3_probe()
+- Add TODO about extcon, as a role-switch callback needs to be
+  implemented
+- Corrected &usb_2 mmio region length
+- Changes the timeline expressed in the commit message to suggest the
+  legacy driver to be dropped after next LTS
+- Integrated qcom,dwc3.yaml changes since v4
+- Link to v4: https://lore.kernel.org/r/20250226-dwc3-refactor-v4-0-4415e7111e49@oss.qualcomm.com
+
+Changes in v4:
+- dwc3_{init,uninit}() renamed to dwc3_core_probe() and dwc3_core_remove()
+- dwc3_{suspend, resume, complete}() changed to dwc3_pm_*()
+- Arguments to dwc3_core_probe() are wrapped in a struct to better
+  handle the expected growing list of parameters.
+- Add the lost call to dwc3_core_remove() from the Qualcomm glue driver
+- Removed now unused cleanup.h, of_address.h, and of_irq.h includes from
+  dwc3-qcom.c
+- Link to v3: https://lore.kernel.org/r/20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com
+
+Changes in v3:
+- Replaced the handcoded migration logic of compatible, reg, interrupts,
+  phys with overlays.
+- Move the migration logic (and overlays) to a new drivers/of/overlays
+  directory and apply this at postcore, so that it takes effect prior to
+  the relevant platform_devices are created
+- struct dwc3 is embedded in the glue context, rather than having a
+  separate object allocated
+- The hack of using of_address_to_resource() to avoid platform_resource
+  being stale is removed (thanks to applying migration at postcore)
+- Link to v2: https://lore.kernel.org/r/20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com
+
+Changes in v2:
+- Rewrite after ACPI removal, multiport support and interrupt fixes
+- Completely changed strategy for DeviceTree binding, as previous idea
+  of using snps,dwc3 as a generic fallback required unreasonable changes
+  to that binding.
+- Abandoned idea of supporting both flattened and unflattened device
+  model in the one driver. As Johan pointed out, it will leave the race
+  condition holes and will make the code harder to understand.
+  Furthermore, the role switching logic that we intend to introduce
+  following this would have depended on the user updating their
+  DeviceTree blobs.
+- Per above, introduced the dynamic DeviceTree rewrite
+- Link to v1: https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+
+---
+Bjorn Andersson (6):
+      usb: dwc3: qcom: Snapshot driver for backwards compatibilty
+      dt-bindings: usb: Introduce qcom,snps-dwc3
+      usb: dwc3: core: Expose core driver as library
+      usb: dwc3: core: Don't touch resets and clocks
+      usb: dwc3: qcom: Don't rely on drvdata during probe
+      usb: dwc3: qcom: Transition to flattened model
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |  13 +-
+ .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 622 ++++++++++++++
+ drivers/usb/dwc3/Makefile                          |   1 +
+ drivers/usb/dwc3/core.c                            | 173 ++--
+ drivers/usb/dwc3/dwc3-qcom-legacy.c                | 935 +++++++++++++++++++++
+ drivers/usb/dwc3/dwc3-qcom.c                       | 191 +++--
+ drivers/usb/dwc3/glue.h                            |  36 +
+ 7 files changed, 1828 insertions(+), 143 deletions(-)
+---
+base-commit: b425262c07a6a643ebeed91046e161e20b944164
+change-id: 20231016-dwc3-refactor-931e3b08a8b9
+
+Best regards,
 -- 
-2.49.0
+Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 
 
