@@ -1,81 +1,85 @@
-Return-Path: <linux-usb+bounces-23074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23075-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F22A89990
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:11:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ADC6A89AF3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 12:49:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FBC77A1D19
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 10:10:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 744363A9DB3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 10:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06231F3BA6;
-	Tue, 15 Apr 2025 10:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D238927A925;
+	Tue, 15 Apr 2025 10:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="krrS1WSx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RzX+R7ZH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9D41991B2
-	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 10:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F27292911
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 10:45:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744711904; cv=none; b=NKLDYGLT3Ewk6qUBhhanImy8lVFKq6K+Hv8MAZ6TX+sN6/lZZL0FydJct25URsVYLTtQ/fooiFo8g1JRPiHbAUMORDTcwI9m9umJfBumvvGOLV/5dC6ZUkJp46wC5NxQffJD0WOr3Oxb7vV3dudkTDCjVHipbTnyYXY5GEy9I3Q=
+	t=1744713915; cv=none; b=M+LAj4mK4jI1YxwpEAiHpqNrUV66esFzdIF3/6IAjWAEHVRNCzkoAsmRwenvljTqL9D4jwa8d8T9nvVRi+LV92Ib8YnwRn8Gx3Qm5yVF5vzuQ733Q0SS/jPzYmlQKGRsRWb24VXSGxo8iWbYi3gyik2vzgXmVU4EEZrtC1FhJVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744711904; c=relaxed/simple;
-	bh=pad2z7btKusTAdrgNujXvQaY6iYVQDbHAihtkip7dI0=;
+	s=arc-20240116; t=1744713915; c=relaxed/simple;
+	bh=fWybr2mbKY7qGwtYIZOqWE7CzXG4hHWRB38TSR3OKy0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MtISerokecxHRjWZ/Z/I0qbygvW8F/RQsczdGC6n+a9dw+DI1x2wpssU+qtAvKVkvZgjkLmlesNlDoG/xBV4/xHwt8/dsHUdczAl3mNuvNDZTFIk1hd0egrFgSvPZkucI1nD51ym4nz0QUCdYKuXgqkfhzd7LFeDCsTxkgQl/ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=krrS1WSx; arc=none smtp.client-ip=209.85.221.41
+	 Content-Disposition; b=ddcbPxwfdfwx3juXm79Y1syngtXa2aSwrr0o3J2td0I4NSY8/cBONs4qX5NksG9U9b3qWuX9TiuqrB+t5PDbZSUqgecJrDhFZykyswoZaDAPL5Gz9imU4qLbiUEJOTC4+NoaSVFHmmoAJILkglNqseBRISSg8nEw1xprpJsYO0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RzX+R7ZH; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c266c2dd5so4691816f8f.3
-        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 03:11:42 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso3220125f8f.0
+        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 03:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744711901; x=1745316701; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1744713912; x=1745318712; darn=vger.kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RuHw2+9Bddg4/t0C51DxWKmelYmbDY+X4yG4DeXkJ0g=;
-        b=krrS1WSxpD5di1/Gzp1suE8mPU96EnqSt0ZzG8si36DGm12iJRpgiPl+IyL8K92YzG
-         4qv1vgUnob/stBPuhNTJtg8YfU32fuvD3D3WmKi/t/WNwL0sljs9bWqWTjxVlGg39Swb
-         Vw8YIqTQnt0nEqCTZSPc3nh2WASV3e2OREBrjK9lVaJt9sTZS58I7TOg0TOT3m8fi+IU
-         E/flE+rBX2XOKHCWtQjpzz71coU7gNcD5tmR6KWiMH04YZ6TNk0+e0gHdOYJcMzelgmC
-         xmgBJhpuAwGf6DzU0PeUyeNTy8wBF7z9qLxXPKy3DPiiA985d/zXV7yvplsoZVAM/9A9
-         YqLQ==
+        bh=MK0WNbcSw4ed5M+cuZDVZvCtmU0gyT+OlvAi63oIbak=;
+        b=RzX+R7ZHzDIYeuFFMHRllgaRq1lcrTbfv50CSffTmnYLsS6pIdaY/xpgeHbiWFWIPJ
+         P/HnI4vbZkMsWL6KW6wm645WzX5BJZt0ytSwAUH0x3jIg/M7hoJ4pyr/dbnuGKBZj04x
+         TS21bbDEPt/2Vn6tNURf7cfgimX7aZi11yeyjckmRxBSa0IVuWT1NE9/65LQXk3AEor4
+         ZAv0Ok7Mfk2kAysc+EVxcHk7yvpqSCI/Teci0M/3Ofs6xlouUTX0J8bpP4CT3GDa7PQ0
+         JV7tbBcOn7nF7DHv8UH9l1oyQXUqJKwWiOeA6s7oge6XMfU381VeHLqBXqkO3LSbEgjD
+         3PiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744711901; x=1745316701;
+        d=1e100.net; s=20230601; t=1744713912; x=1745318712;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RuHw2+9Bddg4/t0C51DxWKmelYmbDY+X4yG4DeXkJ0g=;
-        b=kmNwfePKeXvN1mRMFTqo61QNSiXJlT2v8L1DnDyDOqXjWFNGfE9ya+GHdliwPCY4N1
-         QNHv8TitOZHC3lAzAHzcbHWEy22dnB4QaWS9iJI5m9QmiiZN73t86GU7+gwSBkpolQOr
-         qGnufa9SpkDsffX5hDMs7fOQKnfj9CxzadvEN7kVR/uhv9kLWS9NuytGa8TsRBTZyK3p
-         4xl7xZ/B/4SxXZ+0fuwpTYxNHa+J4ghYKqpMphpeZ8K/i8RfuqXg/OMNvM0NvPK2AMF5
-         TVt7gyrPMjNMztAxD9Yrhy8CFiO+jtrXaSah3O/LyqrvtPMhnIZ2HPA04HkKCMouxyMY
-         9yYA==
-X-Gm-Message-State: AOJu0Yxvq2hHs9ge1On/n8Cgmc9yDr2V6blVHU4vrVNJDhivcmnYYFwH
-	L5Ya2L5wcXhrClLIsDIJWjaaD/MOiyKZd7KS50kn8hm+Yaec3HRcE2CWjQw6RrE=
-X-Gm-Gg: ASbGncuJrqYiJfw6lLGiWLu9R4PuVQ1q3tk+uaX8rvhJX62ZDnDdC16ih8AkWrv0NTC
-	d1QNCZt8cBjq0dNaeX96yVDgDINyCZTPX+04rpaiRXPtnIF3eqTVrboMstoivCISaZ7I9HID8PC
-	6Q8B4/nB5bODAuHpHc78XMU4dVfQicJQ9sx7ttaq5QUgAXk+dSGDMAjdis8J2QOjGqudBfjgMQB
-	eMSTqKvJoGsiCd/3FQoloYJv6Da+idadJl/d6bWNAF25efbP9BUwTENeNJ0fUOXk2pXfhKiYGvj
-	wBWP+MBLeFa9JLjF6T/eeainjaqyMSaTeBAp3AVnjLgk4g==
-X-Google-Smtp-Source: AGHT+IHJmDPwovU17Z0TxO1zn1e+r1S2RndQbaXLalI05AvJ6dS0GjAJxCwXQXH5imnKjDTV2Q3j7Q==
-X-Received: by 2002:a05:6000:1848:b0:39c:13f5:dba0 with SMTP id ffacd0b85a97d-39ea52019f0mr13630616f8f.13.1744711900703;
-        Tue, 15 Apr 2025 03:11:40 -0700 (PDT)
+        bh=MK0WNbcSw4ed5M+cuZDVZvCtmU0gyT+OlvAi63oIbak=;
+        b=KqpQjYAg80icO7rec0SuYxPa+lOBeXASR5XLiuj03suhp8SksflymXBpmQViP3lvKq
+         hCwLAD9OxWkbH5Qb50dmPxMAPsNSvIMES0YLRrBy2Loh/LsKb9Ti4BM+o6dCn8aIaTzr
+         4tE+YTzFlmk9kWNeSVy+Gtg/O7Dxy4LLIyjNAZiqAea4IWlES3FekobIL/wwkBWS3YeF
+         iwkORxYKFc/DgpNcUl3RbUL9qgLZFI1lSrr6mIjwHo65u2rymXqFJz5Zvn7LjO2HLs/7
+         Z5DpA9GpNdORhrmjVmR4sKkTufKHiqIifupBQ6nGvLpzbBkj+GSg7UvHv8B2AaSYzQCQ
+         CbcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9nMZcP3IdCcoTeYXXoPiFWMYalts9NRwBrgmyDsWSREyMfk1BmhqS02Wm1Uhd7srstBzU+LiPe6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJiNxBkkSFbJn1hZvfRbMnjuqqWkB/TIcOriKlq2VvFXc+pC4V
+	cUPxKctRm5rPVqnRWO5JpV8OFx0e4IKrcRQGN/9xQamY5TlfqqtRUIt3p2795Sw=
+X-Gm-Gg: ASbGncurg4QwNDY6MEUYLaTfdFclpProB5XoUg+K4DaiqgYsK5Ut4kaVwq2qEj7Ukhu
+	hh+GCLUduI/pDDwS8RRRIEGCoMIBJ5V7rJepyZdpSdONjfCNFcenZa2xis9dYmYeeIWbmy3kCa4
+	JXVY+AH2gK/r8e+aEM+pebh0zsYbvRBoFg5ItAD4udTBLjw3innxAmPzNOKsLyDwnOP1S4BvwtV
+	NqTmHqGhgUi9Yg8GlBot2fqtF7iSBafwBXKq49GKMCEW9Pm+chs/8pimNdoD5NneKMlmFZqdRKc
+	OkPveoVB+V6pQjK0/2B78oEWIRTlNkgM/jCsGz06v2Qcsg==
+X-Google-Smtp-Source: AGHT+IEIyKYv0BMZJodwyHmcwoGOgDdIqbSLHON2cJ+W/AbXoA9xLZFAvBmJ/hOGIRmJfI19cAlXiw==
+X-Received: by 2002:a05:6000:240c:b0:391:4674:b10f with SMTP id ffacd0b85a97d-39eaaebee70mr12627884f8f.36.1744713911750;
+        Tue, 15 Apr 2025 03:45:11 -0700 (PDT)
 Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39eae96400dsm13919525f8f.11.2025.04.15.03.11.39
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39eae964025sm13625378f8f.6.2025.04.15.03.45.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 03:11:40 -0700 (PDT)
-Date: Tue, 15 Apr 2025 13:11:37 +0300
+        Tue, 15 Apr 2025 03:45:11 -0700 (PDT)
+Date: Tue, 15 Apr 2025 13:45:08 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [bug report] usb: host: xhci-mem: Allow for interrupter clients to
- choose specific index
-Message-ID: <Z_4w2b0BMiaCHqUx@stanley.mountain>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH next] usb: typec: class: Unlocked on error in
+ typec_register_partner()
+Message-ID: <Z_44tOtmml89wQcM@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,71 +88,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-Hello Wesley Cheng,
+We recently added some locking to this function but this error path
+was accidentally missed.  Unlock before returning.
 
-Commit fce57295497d ("usb: host: xhci-mem: Allow for interrupter
-clients to choose specific index") from Apr 9, 2025 (linux-next),
-leads to the following Smatch static checker warning:
+Fixes: ec27386de23a ("usb: typec: class: Fix NULL pointer access")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/usb/typec/class.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-	drivers/usb/host/xhci-mem.c:2373 xhci_create_secondary_interrupter()
-	error: uninitialized symbol 'i'.
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 3df3e3736916..67a533e35150 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1056,6 +1056,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+ 	ret = device_register(&partner->dev);
+ 	if (ret) {
+ 		dev_err(&port->dev, "failed to register partner (%d)\n", ret);
++		mutex_unlock(&port->partner_link_lock);
+ 		put_device(&partner->dev);
+ 		return ERR_PTR(ret);
+ 	}
+-- 
+2.47.2
 
-drivers/usb/host/xhci-mem.c
-  2333  xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
-  2334                                    u32 imod_interval, unsigned int intr_num)
-  2335  {
-  2336          struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-  2337          struct xhci_interrupter *ir;
-  2338          unsigned int i;
-  2339          int err = -ENOSPC;
-  2340  
-  2341          if (!xhci->interrupters || xhci->max_interrupters <= 1 ||
-  2342              intr_num >= xhci->max_interrupters)
-  2343                  return NULL;
-  2344  
-  2345          ir = xhci_alloc_interrupter(xhci, segs, GFP_KERNEL);
-  2346          if (!ir)
-  2347                  return NULL;
-  2348  
-  2349          spin_lock_irq(&xhci->lock);
-  2350          if (!intr_num) {
-  2351                  /* Find available secondary interrupter, interrupter 0 is reserved for primary */
-  2352                  for (i = 1; i < xhci->max_interrupters; i++) {
-  2353                          if (!xhci->interrupters[i]) {
-  2354                                  err = xhci_add_interrupter(xhci, ir, i);
-  2355                                  break;
-  2356                          }
-  2357                  }
-  2358          } else {
-  2359                  if (!xhci->interrupters[intr_num])
-  2360                          err = xhci_add_interrupter(xhci, ir, intr_num);
-
-i not initialized on this path
-
-  2361          }
-  2362          spin_unlock_irq(&xhci->lock);
-  2363  
-  2364          if (err) {
-  2365                  xhci_warn(xhci, "Failed to add secondary interrupter, max interrupters %d\n",
-  2366                            xhci->max_interrupters);
-  2367                  xhci_free_interrupter(xhci, ir);
-  2368                  return NULL;
-  2369          }
-  2370  
-  2371          err = xhci_set_interrupter_moderation(ir, imod_interval);
-  2372          if (err)
-  2373                  xhci_warn(xhci, "Failed to set interrupter %d moderation to %uns\n",
-  2374                            i, imod_interval);
-                                  ^
-
-  2375  
-  2376          xhci_dbg(xhci, "Add secondary interrupter %d, max interrupters %d\n",
-  2377                   ir->intr_num, xhci->max_interrupters);
-  2378  
-  2379          return ir;
-  2380  }
-
-regards,
-dan carpenter
 
