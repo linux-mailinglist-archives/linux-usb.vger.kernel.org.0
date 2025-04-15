@@ -1,124 +1,105 @@
-Return-Path: <linux-usb+bounces-23090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23091-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FDF7A8A2D9
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 17:34:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31323A8A373
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 17:55:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9C643A885E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 15:34:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DEB51901068
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 15:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DBB297A5E;
-	Tue, 15 Apr 2025 15:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Last2mY7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8ECB27B4F3;
+	Tue, 15 Apr 2025 15:55:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B832066F7;
-	Tue, 15 Apr 2025 15:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEE920FAA9
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 15:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744731257; cv=none; b=tb2A4WiT+KRkNDEGx+Yk/RZbhy7f+YTpNVTkgZXG4nsYx3Aav/gPvkNbZtyI6AQTwOfFYNMyDBQIv+4dDOnQjaqSlK6l1LUMEFXOdeM18CnpfKCnDYHBJtzs3DVj7n3PQmNdW62Oj5l+Am6MEUsnQsYm5OzYZQQtjqAA7HrS2tw=
+	t=1744732509; cv=none; b=G+6CRCAn1rGYgHJZ/Ptw56rwxaqYZZBPIKO/uheZ5AGIQ+yWtaCqulBWNvxxtCWXMLBDfBqzRn6MMVXwQl7aEbnFFXvzIrlnpgYldvtEEjAHBCJDb5AVXL7vcrDLrZqQnw5ftrUzuJ0Ik+1yK25DYWy4rUiFUdfrSl+LIydnZnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744731257; c=relaxed/simple;
-	bh=cpqtdMgP4pXsa/EYlUpj/7STbyGdrcFn3fsprhqFbKM=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=qlO9V8S6lEb/JN2zSF0MQABYq8+WYqzLrP8HZe0nNA+bF/InDz07OaA4R1pSGklNmeT3cWg3BSL/NaxEMgF/dVIqRR7WS6vpXBx3CU8H2evw0uRBVim7S4ugnmTS2ZynvDf6XKEmExGrlqG41LfmypaSVg4ACNrvmJPZVGeqlFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Last2mY7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF4AC4CEEC;
-	Tue, 15 Apr 2025 15:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744731256;
-	bh=cpqtdMgP4pXsa/EYlUpj/7STbyGdrcFn3fsprhqFbKM=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Last2mY7nOCCfKDpbUTfU2HNd42ZOhle2TyyuZnwCrtU+hM0tI5VFPEBV2ArdtUPv
-	 gs0qgGBN4T3I4C4mVt/955WwZiMuKIRBCzKX5E12koWMev3zu0CQ8fFIg8hlO0aVKk
-	 E0dNnvIOUkHLx8aqPoH557bWQ3O1orD18SHFIwXATQxl3WrAyWIXAwZ5beLZVIGect
-	 SLi7OunkCFMctAcHcNk1OE5eG7QU0Ni7OLUqbZw/wXXAsuaY32b7jnge8MWEQHWaea
-	 88XpzhgqKHT5Iw1nLh00MNRF34DRXORMqJPHzRbkS8xvZcjRHAF2tuBFnCfKle4PMC
-	 3687B/yfm2DdA==
-Date: Tue, 15 Apr 2025 10:34:14 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1744732509; c=relaxed/simple;
+	bh=tSGwgcDyV/ObVPKLNEjz3NYDx+ebapAhFJfN/wjNmYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LFv+QxjsNt8KXX7phycM579iQt7l6Juv7lQRNX7NjvRZTvHkdI69KrZb2nEmgwujmQr/WAi37QfrZcigOE0qqSseiepbqtc4Wlr+3aQPxw3NGaemqtOZubDcgBEraptk15uNd3GMGeJuSgRBq7B2mnkfp4lH8M4urjq8q5g2BhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=basealt.ru; arc=none smtp.client-ip=193.43.8.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=basealt.ru
+Received: from localhost (broadband-46-242-4-129.ip.moscow.rt.ru [46.242.4.129])
+	(Authenticated sender: gremlin)
+	by air.basealt.ru (Postfix) with ESMTPSA id E1E0C2337F;
+	Tue, 15 Apr 2025 18:46:47 +0300 (MSK)
+Date: Tue, 15 Apr 2025 18:46:46 +0300
+From: "Alexey V. Vissarionov" <gremlin@altlinux.org>
+To: Rui Miguel Silva <rui.silva@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] usb: isp1760: avoid return of uninitialized values
+Message-ID: <20250415154646.GA6814@altlinux.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: =?utf-8?q?=C5=81ukasz_Czechowski?= <lukasz.czechowski@thaumatec.com>, 
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Quentin Schulz <quentin.schulz@cherry.de>, devicetree@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org
-To: Quentin Schulz <foss+kernel@0leil.net>
-In-Reply-To: <20250415-dt-binding-usb-device-compatibles-v1-1-90f3cff32aa0@cherry.de>
-References: <20250415-dt-binding-usb-device-compatibles-v1-1-90f3cff32aa0@cherry.de>
-Message-Id: <174473125440.400068.8321160690827825721.robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: usb: usb-device: allow multiple
- compatibles
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+Whether regmap_raw_read() or regmap_field_read() would fail,
+functions isp1760_udc_read_raw(), isp1760_udc_read_raw16()
+and isp1760_field_read() may return the uninitialized value.
+Add explicit initialization to avoid that.
 
-On Tue, 15 Apr 2025 16:34:27 +0200, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@cherry.de>
-> 
-> The dt-core typically allows multiple compatibles[1] but usb-device
-> currently forces a single compatible.
-> 
-> This is an issue when multiple devices with slightly different productID
-> all behave the same. This would require the driver to keep updating its
-> compatible matching table and the bindings to include this new productID
-> instead of doing what is usually done: have two compatibles, the
-> leftmost which matches exactly the HW device definition, and the
-> rightmost one as a fallback which is assumed to be 100% compatible with
-> the device at hand. If this assumption turns out to be wrong, it is easy
-> to work around this without having to modify the device tree by handling
-> the leftmost compatible in the driver.
-> 
-> [1] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/dt-core.yaml#L21-L25
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
-> ---
-> This came up while working on fixing USB on an RK3399 Puma which has an
-> onboard USB hub whose productID isn't in any driver compatible list
-> but which can be supported by a driver with a slightly different
-> productID matching another variant of the same IC, from the same
-> datasheet.
-> 
-> See https://lore.kernel.org/linux-rockchip/20250326-onboard_usb_dev-v1-0-a4b0a5d1b32c@thaumatec.com/
-> ---
->  Documentation/devicetree/bindings/usb/usb-device.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
+Signed-off-by: Alexey V. Vissarionov <gremlin@altlinux.org>
+---
+ drivers/usb/isp1760/isp1760-core.h | 2 +-
+ drivers/usb/isp1760/isp1760-udc.c  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-My bot found errors running 'make dt_binding_check' on your patch:
+diff --git a/drivers/usb/isp1760/isp1760-core.h b/drivers/usb/isp1760/isp1760-core.h
+index 91e0ee3992a75fb6..d5822454eb4b6112 100644
+--- a/drivers/usb/isp1760/isp1760-core.h
++++ b/drivers/usb/isp1760/isp1760-core.h
+@@ -58,7 +58,7 @@ void isp1760_set_pullup(struct isp1760_device *isp, bool enable);
+ 
+ static inline u32 isp1760_field_read(struct regmap_field **fields, u32 field)
+ {
+-	unsigned int val;
++	unsigned int val = 0;
+ 
+ 	regmap_field_read(fields[field], &val);
+ 
+diff --git a/drivers/usb/isp1760/isp1760-udc.c b/drivers/usb/isp1760/isp1760-udc.c
+index 2af89ee28baac04b..dc9e630a576da76a 100644
+--- a/drivers/usb/isp1760/isp1760-udc.c
++++ b/drivers/usb/isp1760/isp1760-udc.c
+@@ -59,7 +59,7 @@ static void isp1760_udc_write(struct isp1760_udc *udc, u16 field, u32 val)
+ 
+ static u32 isp1760_udc_read_raw(struct isp1760_udc *udc, u16 reg)
+ {
+-	__le32 val;
++	__le32 val = 0;
+ 
+ 	regmap_raw_read(udc->regs, reg, &val, 4);
+ 
+@@ -68,7 +68,7 @@ static u32 isp1760_udc_read_raw(struct isp1760_udc *udc, u16 reg)
+ 
+ static u16 isp1760_udc_read_raw16(struct isp1760_udc *udc, u16 reg)
+ {
+-	__le16 val;
++	__le16 val = 0;
+ 
+ 	regmap_raw_read(udc->regs, reg, &val, 2);
+ 
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb-device.yaml: properties:compatible:items: {'pattern': '^usb[0-9a-f]{1,4},[0-9a-f]{1,4}$'} is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250415-dt-binding-usb-device-compatibles-v1-1-90f3cff32aa0@cherry.de
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-- 
+Alexey V. Vissarionov
+gremlin נעי altlinux פ‏כ org; +vii-cmiii-ccxxix-lxxix-xlii
+GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
 
