@@ -1,247 +1,194 @@
-Return-Path: <linux-usb+bounces-23079-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23080-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB174A89CB7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 13:42:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B6EDA89CBA
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 13:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C3551884135
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 11:40:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 642E01641A9
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 11:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E643229115F;
-	Tue, 15 Apr 2025 11:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E427C29290C;
+	Tue, 15 Apr 2025 11:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b="DgubTRi2"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b="noSycIe2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CAF2676CF
-	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 11:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C692E1D86F6;
+	Tue, 15 Apr 2025 11:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744717221; cv=none; b=AHKL4wQYfqhxj2+LR20ozqZv4aLuiZA0TbujROAD7kO2HYWc+jBbKr0elVYXmyr+X4f92k71rcwNVuGrcnABbZD2dNYwHCk7LJJffo/JNahel0PqKb6JbOH9PO7K0olqhl41OGShJEmq70UqummbQK13dWEPA7fS5Q//LJHEb5I=
+	t=1744717360; cv=none; b=hgLwPgqt2JUAv3PgXvc3/dG8cpQwaxDr/uK7Ou7xvzo/0Vdg/WzQd0em91b4Tq1zewcm1c2bd955AcMdoDdtYfkIj7chnqPCKvAOFfao0EQq65H0UQHD+f9wjJIuHLtpu5T//VskBQAXZ5fYNMpqcV3U6rI0b4ty/LtKn+lUuv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744717221; c=relaxed/simple;
-	bh=O/rT8+I9mTT1hvtVqcKe/fjxb+s+XOn8MkeEF7/UclI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cFFl1NqCvBp1ZnVwekczeSuH+Nn1VlDmw0zI0XxQZoWg1W/Y55aXXZ1dbrP4gTsMO0QhJUBayr7FBEjvS/Ici4boi0aQSw8hSYiibK/76ViqIOD8R2MXlUnkDxIfD5xVEUEBEPnoHbwrsLnVeTtFx/dpLmBcXIwiXMniX7SOVMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com; spf=pass smtp.mailfrom=mvista.com; dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b=DgubTRi2; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mvista.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2279915e06eso57073585ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 04:40:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mvista.com; s=google; t=1744717217; x=1745322017; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aev0NKrAlcg9mgeOUSYkPy9/PBVFtBme5rActlatexo=;
-        b=DgubTRi2CjCvf/OMQDWR4F1rIUepe1UIQy+Zlzzp2g4KtxOmIFwFaNeY0NI9Zbmk84
-         8EFyscGNfQFUrAzopoDrgOSp8yQaq1d2dQ17ELMow8wrmu00TpJV2CQcUGl0A1Ulqfnj
-         53SsiIaJV/zQIPou88ZvjxO3rGa6DMbpD+Qqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744717217; x=1745322017;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aev0NKrAlcg9mgeOUSYkPy9/PBVFtBme5rActlatexo=;
-        b=USGt9qJwcmn6ItocQra8fG0h8N3uK9Ps8oGUr0aCgdRLgTN5qwY5GFtzvFe/7E6feX
-         UJRQyu/B82LUBeOpkyh/X0FHpjLytq4rqbgLU+JcutL8ZuFGZVtfhmiYPAkEOIDyek++
-         kmCYZhzsPw+OiBScA53kb30RvT7MV7bhGN+YALRx9UWOyar/UpRRIvAJ4j+oIzaLdzL+
-         9aro66fwQIoB04dwuOZnvU2KX3X2vn8qoGFwgGWD5y43qQ56Lk0GfSEnPydktLjyelyS
-         VAwNsIe5mItbSQ+UT1ueZ92/XfA0/VG76EIxHH02qMtCrPSbCrrG2GAx07dUeew8zR09
-         +R8w==
-X-Forwarded-Encrypted: i=1; AJvYcCVLAQEbN1+/j6jSExI1pFFUiQC9MGjcy7mIZiJA8JhBZ/UsTPOWtyUibjmjZXiwTZ8TDrPMAtxeIK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2hnf4c/aKuMW0e8GTPjExoXe1udj1j3wlVmDepJSr3OsIgG8h
-	ZcJGDXCpZiazJIBT40UQs2wY9zqbeKK4Ocbba50An9ufvf+wmsVnNhGCdPVsR68=
-X-Gm-Gg: ASbGncsYFDfny6y0hkkr1mIvcZC1peXXkyXKGmDUxUmSKiczUcPcDQ/GmXwjRTQibE0
-	e3Teo6Cj8214Rw4Zyj8BYlzColVLsROK1WIoHm7D0Nz1SX1DlYrc7IxMg+5ZSoXTiENrAYvH+cX
-	Up/M2q3uvMhkAAysdtrS9vIp9Z9beQGCvLER1N4/zJziIKbeDmiRptq6HZiX4Ij4iiVA2P57rr1
-	/VRQob3HmSaz569c2tvL4+r8RvQUBwYRmXs0ytcgDiV1YHutMXu6gQVyb3/glq3BjJC/GTCNzHb
-	aMamrrJF+mgxvnTJ8n356EInVemmw0lHzw5urESUh/VcMRTgjRqEVa0Q
-X-Google-Smtp-Source: AGHT+IH7crPf+qwLzPI4w3eOrxW6iChDBV2CDgTRlXrgZfjm8Atec9trgc/njYSLmtbuVdbEstoRxQ==
-X-Received: by 2002:a17:902:f54f:b0:21f:61a9:be7d with SMTP id d9443c01a7336-22bea4fddfamr188923395ad.49.1744717217403;
-        Tue, 15 Apr 2025 04:40:17 -0700 (PDT)
-Received: from testing.mvista.com ([182.74.28.237])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-306df07dcfasm14299971a91.14.2025.04.15.04.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 04:40:17 -0700 (PDT)
-From: Hardik Gohil <hgohil@mvista.com>
-To: stable@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	Yu Chen <chenyu56@huawei.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Ferry Toth <fntoth@gmail.com>,
-	Wesley Cheng <wcheng@codeaurora.org>,
-	John Stultz <john.stultz@linaro.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Hardik Gohil <hgohil@mvista.com>
-Subject: [PATCH v5.4.y] usb: dwc3: core: Do core softreset when switch mode
-Date: Tue, 15 Apr 2025 11:39:52 +0000
-Message-Id: <20250415113952.1847695-1-hgohil@mvista.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1744717360; c=relaxed/simple;
+	bh=hm8aYJDNxysrMNHyUOe73MjsVB1mTcPsIfiAzmOy0xc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=efCD7Emjhyx7zAGH0oz2AYZzZSMGQGPzBDwjHjnDk4GpC0EsBLOKD5hfNtf3V8mGd/xFVaN/WvUGh5c0+y/uUuA+IkGZS5OnJhEO7YMh6YegDY9EVM6pnvaLUBm2nc3iOoF3OZaHhgl2XMViVPajTm5KHT44903LcBAp/F7asdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b=noSycIe2; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1744717355; x=1745322155; i=fiona.klute@gmx.de;
+	bh=hm8aYJDNxysrMNHyUOe73MjsVB1mTcPsIfiAzmOy0xc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=noSycIe2klE5wF2wxN1aVTAOpODVHahFyzTfFMFnLxmuCmqWeivesdQDvwjMHdTr
+	 VuEOUphjfeyyFCTZJRfWUKtMalXrs2BSa/MZPwQdtWU3f2yANfA9sf4mXPoRUa7Qs
+	 gf0mfVxXl1DgNEvBkZ7GfxXMJhvaKvrUK3+6c5V5Y3CvCb1OJHym+j6eQz3ZxB/lr
+	 Vzk8DK2Jd06YC4S2gMeoxaV4xlQbTl/soVkNuj8/DENt464V3FpIvg6Ii8iYv7Taa
+	 VW2YI2dlVK9hbbiKHWi0RCk/k1czVpagyDwEB+g9dUmDxb3ySvX/2VAOhm0oxi07f
+	 /LpKuKXFU6gMa5cmcw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.115.120]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0XCw-1t8RQt0V5Y-016GRv; Tue, 15
+ Apr 2025 13:42:35 +0200
+Message-ID: <db6b47a1-1a6c-476e-a679-aac3e5117c68@gmx.de>
+Date: Tue, 15 Apr 2025 13:42:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] net: phy: microchip: force IRQ polling mode for
+ lan88xx
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+ Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+ UNGLinuxDriver@microchip.com, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-list@raspberrypi.com
+References: <20250414152634.2786447-1-fiona.klute@gmx.de>
+ <24541282-0564-4fb6-8bd1-430f6b1390b0@lunn.ch>
+Content-Language: en-US, de-DE-1901, de-DE
+From: Fiona Klute <fiona.klute@gmx.de>
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
+ ppqPES8FiSl+M00Xe5icsLsi4mkBujgbuSDiugjNyqeOH5iqtg69xTd/r5DRMqt0K93GzmIj
+ 7ipWA+fomAMyX9FK3cHLBgoSLeb+Qj28W1cH94NGmpKtBxCkKfT+mjWvYUEwVdviMymdCAJj
+ Iabr/QJ3KVZ7UPWr29IJ9Dv+SwW7VRjhXVQ5IwSBMDaTnzDOUILTxnHptB9ojn7t6bFhub9w
+ xWXJQCsNkp+nUDESRwBeNLm4G5D3NFYVTg4qOQYLI/k/H1N3NEgaDuZ81NfhQJTIFVx+h0eT
+ pjuQ4vATShJWea6N7ilLlyw7K81uuQoFB6VcG5hlAQWMejuHI4UBb+35r7fIFsy95ZwjxKqE
+ QVS8P7lBKoihXpjcxRZiynx/Gm2nXm9ZmY3fG0fuLp9PQK9SpM9gQr/nbqguBoRoiBzONM9H
+ pnxibwqgskVKzunZOXZeqyPNTC63wYcQXhidWxB9s+pBHP9FR+qht//8ivI29aTukrj3WWSU
+ Q2S9ejpSyELLhPT9/gbeDzP0dYdSBiQjfd5AYHcMYQ0fSG9Tb1GyMsvh4OhTY7QwDz+1zT3x
+ EzB0I1wpKu6m20C7nriWnJTCwXE6XMX7xViv6h8ev+uUHLoMEwARAQABzSBGaW9uYSBLbHV0
+ ZSA8ZmlvbmEua2x1dGVAZ214LmRlPsLBlAQTAQgAPgIbIwULCQgHAwUVCgkICwUWAgMBAAIe
+ AQIXgBYhBOTTE4/i2fL6gVL9ke6nJs4hI1pYBQJn9S5IBQkQ6+MhAAoJEO6nJs4hI1pYvz0P
+ /34nPCo/g0WbeJB6N75/1EkM9gDD1+lT4GdFEYYnCzslSxrIsL3kWuzG2kpqrErU8i7Ao/B2
+ iE3J9NinRe613xlVUy2CU1VKaekm3YTkcfR7u8G/STNEQ42S46+3JRBMlLg1YldRsfVXq8tc
+ jdwo193h4zrEeEmUDm8n43BPBhhwNRf+igtI8cNVyn9nBt6BrDnSswg497lrRjGjoP2zTkLT
+ Q/Sb/6rCHoyFAxVcicA7n2xvaW0Pg0rTOrtA9mVku5J3zqyS4ABtoUwPmyoTLa7vpZdC33hy
+ g7+srYNdo9a1i9OKF+CK9q/4auf3bMMeJB472Q5N8yuthM+Qx8ICySElyVDYSbbQIle/h/L7
+ XYgm4oE1CxwiVCi8/Y/GOqhHt+RHLRGG1Ic+btNTiW+R+4W4yGUxL7qLwepIMY9L/0UcdnUa
+ OBJk4waEX2mgOTmyjKR0FAGtaSH1ebz2UbY6pz5H9tZ4BIX7ZcQN0fLZLoi/SbbF+WJgT4cd
+ 8BooqbaNRoglaNCtTsJ7oyDesL9l0pzQb/ni1HGAXKW3WBq49r7uPOsDBP8ygyoAOYw4b/TX
+ qUjJYpp9HcoQHv0sybSbXCFUMnL1E5WUhy8bBjA9fNtU43Fv3OR2n5/5xSn6o33XVMYMtkrN
+ 0AvEfAOGGOMJWktEYA7rxy0TQiy0ttUq0eQszsFNBGQ1Nr0BEADTlcWyLC5GoRfQoYsgyPgO
+ Z4ANz31xoQf4IU4i24b9oC7BBFDE+WzfsK5hNUqLADeSJo5cdTCXw5Vw3eSSBSoDP0Q9OUdi
+ PNEbbblZ/tSaLadCm4pyh1e+/lHI4j2TjKmIO4vw0K59Kmyv44mW38KJkLmGuZDg5fHQrA9G
+ 4oZLnBUBhBQkPQvcbwImzWWuyGA+jDEoE2ncmpWnMHoc4Lzpn1zxGNQlDVRUNnRCwkeclm55
+ Dz4juffDWqWcC2NrY5KkjZ1+UtPjWMzRKlmItYlHF1vMqdWAskA6QOJNE//8TGsBGAPrwD7G
+ cv4RIesk3Vl2IClyZWgJ67pOKbLhu/jz5x6wshFhB0yleOp94I/MY8OmbgdyVpnO7F5vqzb1
+ LRmfSPHu0D8zwDQyg3WhUHVaKQ54TOmZ0Sjl0cTJRZMyOmwRZUEawel6ITgO+QQS147IE7uh
+ Wa6IdWKNQ+LGLocAlTAi5VpMv+ne15JUsMQrHTd03OySOqtEstZz2FQV5jSS1JHivAmfH0xG
+ fwxY6aWLK2PIFgyQkdwWJHIaacj0Vg6Kc1/IWIrM0m3yKQLJEaL5WsCv7BRfEtd5SEkl9wDI
+ pExHHdTplCI9qoCmiQPYaZM5uPuirA5taUCJEmW9moVszl6nCdBesG2rgH5mvgPCMAwsPOz9
+ 7n+uBiMk0ZSyTQARAQABwsF8BBgBCAAmAhsMFiEE5NMTj+LZ8vqBUv2R7qcmziEjWlgFAmf1
+ LrEFCQeCXvQACgkQ7qcmziEjWljtgBAAnsoRDd6TlyntiKS8aJEPnFjcFX/LqujnCT4/eIn1
+ bpbIjNbGH9Toz63H5JkqqXWcX1TKmlZGHZT2xU/fKzjcyTJzji9JP+z1gQl4jNESQeqO1qEO
+ kqYe6/hZ5v/yCjpv2Y1sqBnPXKcm21fkyzUwYKPuX9O1Sy1VmP1rMzIRQHXnNapJJWn0wJAW
+ 079YqdX1NzESJyj4stoLxIcDMkIEvOy3uhco8Bm8wS88MquJoR0KlyBR30QZy9KoxmTiWKws
+ Mn6sy4aX9nac3W0pD+EyR+j/J9SWSvOENAmn4Km+ONxz93+oVLWb+KHtQQloxOsadO0wwiaZ
+ xUT7vJcxSgjrHugSs+mOLznX/D8PfG/+tYLFlddphcOGldzH0rxKfs53BplAUe+LEZY1AU8p
+ 0WDK2h097ZQ0eZiVZlvAKSjwsjow2tpqwamtfNKrFg/GFRbNZcoQuYsf3vBW1CiZ5JQ6Vh2A
+ bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
+ 6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
+ FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
+In-Reply-To: <24541282-0564-4fb6-8bd1-430f6b1390b0@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Uo9EvfEdp1sqjcgDxKDcHbPyka1TgzjSS1bXs5FwDEZ6eUbVZ40
+ zZMaN4Kf5IGDSEJXR6amBhZVkaMNihDYuXWNRwYCTHzpmlExQ8m2/EPmlrUTYu3rPMTpprw
+ 6xfjyayQjv9nV20ayoUxWAGwE29F/3Gakr5VBOFHeENmTMcbiGdTG9j0aQXykNkdX7nfJ2J
+ oL27TnlLqDrdz2nhiSnAg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:HQYZc/gpNrU=;Z1bJbVssbSJ7Mw4vEkNvLSUlCys
+ sjpsehVnjAksckxW6M7gkImZsK1Ev/dHFvMeUAgsIqgcbPnk2078ldTjALr4TshgRiQa5KMbU
+ NrVDuzewYMNmvyCizZGrk6r6yGeFveoBIly3sMdk7BSW5APLVrSmKBn/LIzuum0RXphOoW5We
+ KjBOiIqKfy8ToeHmglnUfcrLVgzIO4CfFbuj0sPPtJ8GexEFsT2aWPJ6rBR5dYkWLEDFjRwdz
+ SRyNuMxxDcB9GNS/1YF4CE0NAb7l22cSEQVHJfTtVctmFqhisaWDSsWcbe2+viVDEVw7gO0na
+ zzy6mS3AgIJUDvsjTyuF9+J+nWssdHJEzaLz6JWw3Pe/YHoAEsGqqeHJJVRfrtOfU2i6UrC+f
+ 4Ad5jbDK8GpaX8D92jEY70bBwGbHyXHEvxGWhGBO1Dzcf95jNWQIafODi0QqrqKrLYqTPNn6Q
+ cA/ojUIcSiCqU/dB+APlE61l3MOcKQvR0yvvnxxG1igOwubfxCgaj9wxh0cLGZqvC6gVcoQZ/
+ 5ttP8kkN+qYkT3o6Fr9H6TagSJkX0F9w6mGMI0i+W/4x43mSwiwnpwRj5140mW4ZfVP4iGZQk
+ LuAgZ68oDczKND7w2G+se9zhwGSZeI+6SBHqjg8ploihAkSE8PJWnzMWl2zMCBX4ps8DNgv29
+ LH0N2+DgGvXsHpAAT3BkqebWO353ghlywtUNTTHHarsxlIzWBKG7TshLozyBRIdEQk35xZucD
+ 2mXsF1CbW1Lm2oGdhHRF/gms+oxyB4//7xPGEABq43zrBQ62Afw+N7BlPslJLnk2+GtBt5imf
+ kNPOtLTTtuZA8fasXk/yNiB/ghcJXUVKPOYOGJSW9SHEGRl6mqQsE879JAWzNJ2Ovhxlyhm+4
+ rm7mQp9I/Y0vWBTQuCrOBPHz9qC5JdOHyIgQ/hZ6exc3Bh/bUUUhPy0c/n0ilNLLV6NEByELF
+ E4TqjNJefEoL7EwBon3KQP/HKv9odr2U6e8aw8dg4w+qOjrvL6Ft+xinO+VKH5xXxZ0tZsr1k
+ hQUytmlsfhYMx3oM9A9ZDTvezENnUd/tQSiI9dzNJ9mlNyoLYyqfyHPzWDQEVWE8FoS7Jv2+m
+ RvFJvSh6D+Kaly8q37r1S2RsEPTd2OAIlSiyCI64A5Kgb9/Tl9A1fain+dJoLvafjh70w2uti
+ 53kTwVb8CnFbT6z6fDw/tz/9XohLZYmiKO8bYqVN6HJpC6+l7QQ3F2SCjn2NyBLEfra/SUzop
+ bM/7NKljOIff7Vdv366h7+rn7XksKxD5/u4BCe/7earE20/R4kwxZgBJn4/ayCtCVx8Knqc6M
+ i/KA15XB5WD15n4WzMU3zwSnmwP6+1zIhnYlPqGdbO6dzPSM2X2e+6OZvA/jF9Z5Y8cuiGfqh
+ H0DSAk+LUsF/ujG+yu+SYsDL5QOkZV/2UKOZUWuPmiCQq8aaXjoHPaKB0sk6vbhgo0Yu3I8yk
+ mmRtXm6dCHHnu/b+u7if0i4/BMn64w0V91sHwOANs8QhgLfW6UcmbHRQWlsyDWfod95XHAQzG
+ omE7rjvzwK0lmf8FTHo=
 
-From: Yu Chen <chenyu56@huawei.com>
+Am 14.04.25 um 17:43 schrieb Andrew Lunn:
+> On Mon, Apr 14, 2025 at 05:26:33PM +0200, Fiona Klute wrote:
+>> With lan88xx based devices the lan78xx driver can get stuck in an
+>> interrupt loop while bringing the device up, flooding the kernel log
+>> with messages like the following:
+>>
+>> lan78xx 2-3:1.0 enp1s0u3: kevent 4 may have been dropped
+>>
+>> Removing interrupt support from the lan88xx PHY driver forces the
+>> driver to use polling instead, which avoids the problem.
+>>
+>> The issue has been observed with Raspberry Pi devices at least since
+>> 4.14 (see [1], bug report for their downstream kernel), as well as
+>> with Nvidia devices [2] in 2020, where disabling polling was the
+>> vendor-suggested workaround (together with the claim that phylib
+>> changes in 4.9 made the interrupt handling in lan78xx incompatible).
+>>
+>> Iperf reports well over 900Mbits/sec per direction with client in
+>> --dualtest mode, so there does not seem to be a significant impact on
+>> throughput (lan88xx device connected via switch to the peer).
+>>
+>> [1] https://github.com/raspberrypi/linux/issues/2447
+>> [2] https://forums.developer.nvidia.com/t/jetson-xavier-and-lan7800-pro=
+blem/142134/11
+>>
+>> Link: https://lore.kernel.org/0901d90d-3f20-4a10-b680-9c978e04ddda@lunn=
+.ch
+>> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+>> Cc: kernel-list@raspberrypi.com
+>> Cc: stable@vger.kernel.org
+>
+> Thanks for submitting this. Two nit picks:
+>
+> It needed a Fixes: tag. Probably:
+>
+> Fixes: 792aec47d59d ("add microchip LAN88xx phy driver")
+Sure, will add that (and a comment) and resend. I wasn't sure if I
+should add it if I can't pinpoint exactly where the problem was
+introduced, and it looks like the interrupt handling was changed a bit
+after.
 
-commit f88359e1588b85cf0e8209ab7d6620085f3441d9 upstream.
-
-From: John Stultz <john.stultz@linaro.org>
-
-According to the programming guide, to switch mode for DRD controller,
-the driver needs to do the following.
-
-To switch from device to host:
-1. Reset controller with GCTL.CoreSoftReset
-2. Set GCTL.PrtCapDir(host mode)
-3. Reset the host with USBCMD.HCRESET
-4. Then follow up with the initializing host registers sequence
-
-To switch from host to device:
-1. Reset controller with GCTL.CoreSoftReset
-2. Set GCTL.PrtCapDir(device mode)
-3. Reset the device with DCTL.CSftRst
-4. Then follow up with the initializing registers sequence
-
-Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
-switching from host to device. John Stult reported a lockup issue seen
-with HiKey960 platform without these steps[1]. Similar issue is observed
-with Ferry's testing platform[2].
-
-So, apply the required steps along with some fixes to Yu Chen's and John
-Stultz's version. The main fixes to their versions are the missing wait
-for clocks synchronization before clearing GCTL.CoreSoftReset and only
-apply DCTL.CSftRst when switching from host to device.
-
-[1] https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/
-[2] https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/
-
-Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Ferry Toth <fntoth@gmail.com>
-Cc: Wesley Cheng <wcheng@codeaurora.org>
-Cc: <stable@vger.kernel.org>
-Tested-by: John Stultz <john.stultz@linaro.org>
-Tested-by: Wesley Cheng <wcheng@codeaurora.org>
-Signed-off-by: Yu Chen <chenyu56@huawei.com>
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Hardik Gohil <hgohil@mvista.com>
----
-this fix is missing in v5.4.y stable version
-
-apply the following dependend patch before applying this patch
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.10.236&id=c2cd3452d5f8b66d49a73138fba5baadd5b489bd
-
- drivers/usb/dwc3/core.c | 25 +++++++++++++++++++++++++
- drivers/usb/dwc3/core.h |  5 +++++
- 2 files changed, 30 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 1a420c00d6ca..650eb4f735f9 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -122,6 +122,8 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	if (dwc->dr_mode != USB_DR_MODE_OTG)
- 		return;
- 
-+	mutex_lock(&dwc->mutex);
-+
- 	pm_runtime_get_sync(dwc->dev);
- 
- 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
-@@ -155,6 +157,25 @@ static void __dwc3_set_mode(struct work_struct *work)
- 		break;
- 	}
- 
-+	/* For DRD host or device mode only */
-+	if (dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
-+		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-+		reg |= DWC3_GCTL_CORESOFTRESET;
-+		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-+
-+		/*
-+		 * Wait for internal clocks to synchronized. DWC_usb31 and
-+		 * DWC_usb32 may need at least 50ms (less for DWC_usb3). To
-+		 * keep it consistent across different IPs, let's wait up to
-+		 * 100ms before clearing GCTL.CORESOFTRESET.
-+		 */
-+		msleep(100);
-+
-+		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-+		reg &= ~DWC3_GCTL_CORESOFTRESET;
-+		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 
- 	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
-@@ -179,6 +200,8 @@ static void __dwc3_set_mode(struct work_struct *work)
- 		}
- 		break;
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-+		dwc3_core_soft_reset(dwc);
-+
- 		dwc3_event_buffers_setup(dwc);
- 
- 		if (dwc->usb2_phy)
-@@ -201,6 +224,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- out:
- 	pm_runtime_mark_last_busy(dwc->dev);
- 	pm_runtime_put_autosuspend(dwc->dev);
-+	mutex_unlock(&dwc->mutex);
- }
- 
- void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
-@@ -1511,6 +1535,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 	dwc3_cache_hwparams(dwc);
- 
- 	spin_lock_init(&dwc->lock);
-+	mutex_init(&dwc->mutex);
- 
- 	pm_runtime_get_noresume(dev);
- 	pm_runtime_set_active(dev);
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 34f3fbba391b..44b0239676a1 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -13,6 +13,7 @@
- 
- #include <linux/device.h>
- #include <linux/spinlock.h>
-+#include <linux/mutex.h>
- #include <linux/ioport.h>
- #include <linux/list.h>
- #include <linux/bitops.h>
-@@ -929,6 +930,7 @@ struct dwc3_scratchpad_array {
-  * @scratch_addr: dma address of scratchbuf
-  * @ep0_in_setup: one control transfer is completed and enter setup phase
-  * @lock: for synchronizing
-+ * @mutex: for mode switching
-  * @dev: pointer to our struct device
-  * @sysdev: pointer to the DMA-capable device
-  * @xhci: pointer to our xHCI child
-@@ -1061,6 +1063,9 @@ struct dwc3 {
- 	/* device lock */
- 	spinlock_t		lock;
- 
-+	/* mode switching lock */
-+	struct mutex		mutex;
-+
- 	struct device		*dev;
- 	struct device		*sysdev;
- 
--- 
-2.25.1
+Best regards,
+Fiona
 
 
