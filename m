@@ -1,103 +1,109 @@
-Return-Path: <linux-usb+bounces-23061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23062-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB2D7A8916D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 03:35:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5E71A89453
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 08:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42CC9189BF37
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 01:35:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84ED73A638A
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 06:59:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171B219F133;
-	Tue, 15 Apr 2025 01:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="wWOCs9XA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BF22741CE;
+	Tue, 15 Apr 2025 06:59:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB2760DCF;
-	Tue, 15 Apr 2025 01:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A698D2DFA34
+	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 06:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744680916; cv=none; b=I8Fj3crJ8JqmfBoPYYANmbE5SO7ayR6CFKS8Lv8+BgjG7SwwjTGkMM9dmZZyRAcWuUN+R8XXhJyDTt8o/AHxDCekBDw+xdzM3AUpupqf4Sri6DOCcIJp9Xyyd66MtVrLCNjt4lnDWKGONRqNcLemQ4EPZP0qRqMNVoKF4G5Uq2s=
+	t=1744700363; cv=none; b=okrpprHE+z9yEyTmtlvlHfj7DWMTMzr1qFxf4sDqBr0rGBll8CpZubfOVA8XJglQMvCL5E/lAYq/GZdB75qvr4kjFEqWhhytOqa2V8CRs79xW4vNpVOBRM+hLh5mjWWtEAOtzO7x0XeVHPKaY6K6O28YDylcPHNKjOq+qMvzvfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744680916; c=relaxed/simple;
-	bh=wRuP1NRSC1BsMmcqei+fx7IF60RxB+2Uj0kHYZWNjzo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bzu9I3gIFRyVLdpmGrkCuRfuZACGRpiviPiC469rBaul5fTjoDQD/TLFc23GHdB0ZMAOoW7XTjCVyNZXZHUdO8TcbmWOwMjWu8v/CWKfo1r/wEqO6069KhcSWbwSsfKwlgSJuYhpJH/+dGViteqGtF2za3/U8ap07dykkDvg/bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=wWOCs9XA; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=I1cbI5+pkj/hOZGceZRN10hFZrE+QXRqS1+7QDiAZpM=; b=wWOCs9XAm2+fu3B0Zff96+yxRv
-	1QMlsJNG0BA84OOTnBwhzlNhW+VWeXbtZ4pJkaCN7vZuqaAO5//pkFnkglF///DL3EfBakAe0RuNb
-	9GObEBOZJjid/yc3p1Ohv2C5CldueEo+EkvRABgwK7CkQXrHW4AiEVN/YEStUcIDQaYk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1u4VCd-009Ju8-Jg; Tue, 15 Apr 2025 03:35:07 +0200
-Date: Tue, 15 Apr 2025 03:35:07 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Qasim Ijaz <qasdev00@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 5/5] net: ch9200: avoid triggering NWay restart on
- non-zero PHY ID
-Message-ID: <b49e6c21-8e0a-4e54-86eb-c18f1446c430@lunn.ch>
-References: <20250412183829.41342-1-qasdev00@gmail.com>
- <20250412183829.41342-6-qasdev00@gmail.com>
+	s=arc-20240116; t=1744700363; c=relaxed/simple;
+	bh=eCqr5bler881djOtK1LtONoOn8h2gUoZxmbZeWClUMk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z4eIhcYoJsT0ldGKgCYpWsONdnvqWy3aOQQ9QVS14IKIvlGGtgdL9OY/IZzECBEZzGkU4rdSZDIzS67l3hBnn9CCcvz+VUN5pbphZqGN46O7eA10xVNko6Kmi3wme9kWWrUKkKa2UVC1cL6zcbXfFHoN822YzzeRnz37W4VR3gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn; spf=pass smtp.mailfrom=iie.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iie.ac.cn
+Received: from localhost.localdomain (unknown [159.226.95.28])
+	by APP-05 (Coremail) with SMTP id zQCowACHxg6+A_5nA4sQCQ--.28714S2;
+	Tue, 15 Apr 2025 14:59:11 +0800 (CST)
+From: Chen Yufeng <chenyufeng@iie.ac.cn>
+To: gregkh@linuxfoundation.org
+Cc: Thinh.Nguyen@synopsys.com,
+	linux-usb@vger.kernel.org,
+	Chen Yufeng <chenyufeng@iie.ac.cn>
+Subject: [PATCH] usb: potential integer overflow in usbg_make_tpg()
+Date: Tue, 15 Apr 2025 14:58:57 +0800
+Message-ID: <20250415065857.1619-1-chenyufeng@iie.ac.cn>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250412183829.41342-6-qasdev00@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACHxg6+A_5nA4sQCQ--.28714S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17Xw1fuFW3KF48AFy7KFg_yoW8Xr1xpa
+	yxW345KrWUArWDX3y8Jws5ZFy5GFs7tryUKrW7t3909a9xJF48XFZFkFyFkF13XFyxCa12
+	qFWY9r95Aw4DCa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
+	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjdOz3UUUUU==
+X-CM-SenderInfo: xfkh05xxih0wo6llvhldfou0/1tbiDAYNEmf95Gx0PQAAsO
 
-On Sat, Apr 12, 2025 at 07:38:29PM +0100, Qasim Ijaz wrote:
-> During ch9200_mdio_read if the phy_id is not 0 -ENODEV is returned.
-> 
-> In certain cases such as in mii_nway_restart returning a negative such
-> as -ENODEV triggers the "bmcr & BMCR_ANENABLE" check, we should avoid 
-> this on error and just end the function.
-> 
-> To address this just return 0.
-> 
-> Signed-off-by: Qasim Ijaz <qasdev00@gmail.com> 
-> ---
->  drivers/net/usb/ch9200.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
-> index 187bbfc991f5..281800bb2ff2 100644
-> --- a/drivers/net/usb/ch9200.c
-> +++ b/drivers/net/usb/ch9200.c
-> @@ -182,7 +182,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
->  		   __func__, phy_id, loc);
->  
->  	if (phy_id != 0)
-> -		return -ENODEV;
-> +		return 0;
+The variable tpgt in usbg_make_tpg() is defined as unsigned long and is 
+assigned to tpgt->tport_tpgt, which is defined as u16. This may cause an 
+integer overflow when tpgt is greater than USHRT_MAX (65535). I 
+haven't tried to trigger it myself, but it is possible to trigger it
+by calling usbg_make_tpg() with a large value for tpgt.
 
-An actually MDIO bus would return 0xffff is asked to read from a PHY
-which is not on the bus. But i've no idea how the ancient mii code
-handles this.
+I modified the type of tpgt to match tpgt->tport_tpgt and adjusted the 
+relevant code accordingly.
 
-If this code every gets updated to using phylib, many of the changes
-you are making will need reverting because phylib actually wants to
-see the errors. So i'm somewhat reluctant to make changes like this.
+This patch is similar to commit 59c816c1f24d ("vhost/scsi: potential 
+memory corruption").
 
-	Andrew
+Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
+---
+ drivers/usb/gadget/function/f_tcm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 5a2e1237f85c..6e8804f04baa 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -1641,14 +1641,14 @@ static struct se_portal_group *usbg_make_tpg(struct se_wwn *wwn,
+ 	struct usbg_tport *tport = container_of(wwn, struct usbg_tport,
+ 			tport_wwn);
+ 	struct usbg_tpg *tpg;
+-	unsigned long tpgt;
++	u16 tpgt;
+ 	int ret;
+ 	struct f_tcm_opts *opts;
+ 	unsigned i;
+ 
+ 	if (strstr(name, "tpgt_") != name)
+ 		return ERR_PTR(-EINVAL);
+-	if (kstrtoul(name + 5, 0, &tpgt) || tpgt > UINT_MAX)
++	if (kstrtou16(name + 5, 0, &tpgt))
+ 		return ERR_PTR(-EINVAL);
+ 	ret = -ENODEV;
+ 	mutex_lock(&tpg_instances_lock);
+-- 
+2.34.1
+
 
