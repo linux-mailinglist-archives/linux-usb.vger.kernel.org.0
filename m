@@ -1,105 +1,143 @@
-Return-Path: <linux-usb+bounces-23091-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23092-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31323A8A373
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 17:55:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4074CA8A380
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 17:58:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DEB51901068
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 15:55:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B68CF3B7D0E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 15:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8ECB27B4F3;
-	Tue, 15 Apr 2025 15:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A982147EF;
+	Tue, 15 Apr 2025 15:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b0V7KNwe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEE920FAA9
-	for <linux-usb@vger.kernel.org>; Tue, 15 Apr 2025 15:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF8C1EEA59;
+	Tue, 15 Apr 2025 15:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744732509; cv=none; b=G+6CRCAn1rGYgHJZ/Ptw56rwxaqYZZBPIKO/uheZ5AGIQ+yWtaCqulBWNvxxtCWXMLBDfBqzRn6MMVXwQl7aEbnFFXvzIrlnpgYldvtEEjAHBCJDb5AVXL7vcrDLrZqQnw5ftrUzuJ0Ik+1yK25DYWy4rUiFUdfrSl+LIydnZnE=
+	t=1744732712; cv=none; b=qAXTy9tfUV1DSGADkDnO4IxuPoIzdXNj7bz9Lxtcm7jOSulD8PL+231V/NHdc+QsY0LRZKRx+Q4sij0zNE5/C3Fqu5/gNy2vQS/PR2vrtfYtQVkFe7s0t73S6/TegyFU2XJOY7dPusKNm5sx3F7Pahtzuygl+5O9oFsxX1WHvEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744732509; c=relaxed/simple;
-	bh=tSGwgcDyV/ObVPKLNEjz3NYDx+ebapAhFJfN/wjNmYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LFv+QxjsNt8KXX7phycM579iQt7l6Juv7lQRNX7NjvRZTvHkdI69KrZb2nEmgwujmQr/WAi37QfrZcigOE0qqSseiepbqtc4Wlr+3aQPxw3NGaemqtOZubDcgBEraptk15uNd3GMGeJuSgRBq7B2mnkfp4lH8M4urjq8q5g2BhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=basealt.ru; arc=none smtp.client-ip=193.43.8.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=basealt.ru
-Received: from localhost (broadband-46-242-4-129.ip.moscow.rt.ru [46.242.4.129])
-	(Authenticated sender: gremlin)
-	by air.basealt.ru (Postfix) with ESMTPSA id E1E0C2337F;
-	Tue, 15 Apr 2025 18:46:47 +0300 (MSK)
-Date: Tue, 15 Apr 2025 18:46:46 +0300
-From: "Alexey V. Vissarionov" <gremlin@altlinux.org>
-To: Rui Miguel Silva <rui.silva@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] usb: isp1760: avoid return of uninitialized values
-Message-ID: <20250415154646.GA6814@altlinux.org>
+	s=arc-20240116; t=1744732712; c=relaxed/simple;
+	bh=U/90jjP4V82IWeUHDUxtkeYDFaNHX8uWtKXtAFSsFl8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iyFze5HB0SyWPopFZ4rTtgJPUPgz509oQ+H/43e7pQ76f/NKombqaGsnUdHJmII1VWLRBtp8ovSzBGy9QY3SjEXjI5ihtRAFk/dxKsKyJr77Bgf2rfRSJ43J5dY4sK9mbQL3nnosGiXBgpFvwku2pJvFNMYCsnBbe8c+lLy56MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b0V7KNwe; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B771439B2;
+	Tue, 15 Apr 2025 15:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744732707;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IlFkx92zqrdGnm1jCeRAQEwZS/CqL7sPlGLEJRx74h8=;
+	b=b0V7KNwesW/RB5bRjvYoGOgVAOQ7/cpgJaxMGipjFpY6pbjyIi3yUJ0qNiM3435fwvrxel
+	OeaDpkTYGIv5v/+Yhs+Bao3GgzyBwK4f9ySFlu09P9Aa2wlsGDvFHQO7UOwImrs7yBnbtj
+	LPOoIdkqxdDXKhZfI4riu4smPhJYDvBu6q1Fbwv6f1bxG2PMTo8SaeSnCt5VA+cWTcUnLG
+	NwFTfJYfM+ny0xNWylXSU+bxi2wVkYOIKqLfs5EsebwWDXay/1N2ssDfxSFzyGQTO9BkEi
+	kZrTTcIaFpVfSSl1AyHDBKpbhTWZhukKzKxGdMvstO6VYEx0Y6Yn25k8VVH+yg==
+Date: Tue, 15 Apr 2025 17:58:22 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, Kever Yang <kever.yang@rock-chips.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, =?UTF-8?B?SGVydsOp?= Codina
+ <herve.codina@bootlin.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Stefan Wahren <wahrenst@gmx.net>, Fabrice
+ Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: DWC2 gadget: unexpected device reenumeration on Rockchip RK3308
+Message-ID: <20250415175822.1c537ae9@booty>
+In-Reply-To: <20250415162825.083f351c@booty>
+References: <20250414185458.7767aabc@booty>
+	<a96409af-4f82-4b65-b822-dd8c71508212@rowland.harvard.edu>
+	<cf84f5ca-8c7a-b6c6-492c-c9cf6f73130d@synopsys.com>
+	<20250415162825.083f351c@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdefledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueevveettddtieegveegffdugeevgffgleeuleejteeggfehueeffeffkefgkeevnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopefoihhnrghsrdfjrghruhhthihunhihrghnsehshihnohhpshihshdrtghomhdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrt
+ ghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvghvvghrrdihrghnghesrhhotghkqdgthhhiphhsrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Whether regmap_raw_read() or regmap_field_read() would fail,
-functions isp1760_udc_read_raw(), isp1760_udc_read_raw16()
-and isp1760_field_read() may return the uninitialized value.
-Add explicit initialization to avoid that.
+Hello again,
 
-Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
-Signed-off-by: Alexey V. Vissarionov <gremlin@altlinux.org>
----
- drivers/usb/isp1760/isp1760-core.h | 2 +-
- drivers/usb/isp1760/isp1760-udc.c  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, 15 Apr 2025 16:28:25 +0200
+Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 
-diff --git a/drivers/usb/isp1760/isp1760-core.h b/drivers/usb/isp1760/isp1760-core.h
-index 91e0ee3992a75fb6..d5822454eb4b6112 100644
---- a/drivers/usb/isp1760/isp1760-core.h
-+++ b/drivers/usb/isp1760/isp1760-core.h
-@@ -58,7 +58,7 @@ void isp1760_set_pullup(struct isp1760_device *isp, bool enable);
- 
- static inline u32 isp1760_field_read(struct regmap_field **fields, u32 field)
- {
--	unsigned int val;
-+	unsigned int val = 0;
- 
- 	regmap_field_read(fields[field], &val);
- 
-diff --git a/drivers/usb/isp1760/isp1760-udc.c b/drivers/usb/isp1760/isp1760-udc.c
-index 2af89ee28baac04b..dc9e630a576da76a 100644
---- a/drivers/usb/isp1760/isp1760-udc.c
-+++ b/drivers/usb/isp1760/isp1760-udc.c
-@@ -59,7 +59,7 @@ static void isp1760_udc_write(struct isp1760_udc *udc, u16 field, u32 val)
- 
- static u32 isp1760_udc_read_raw(struct isp1760_udc *udc, u16 reg)
- {
--	__le32 val;
-+	__le32 val = 0;
- 
- 	regmap_raw_read(udc->regs, reg, &val, 4);
- 
-@@ -68,7 +68,7 @@ static u32 isp1760_udc_read_raw(struct isp1760_udc *udc, u16 reg)
- 
- static u16 isp1760_udc_read_raw16(struct isp1760_udc *udc, u16 reg)
- {
--	__le16 val;
-+	__le16 val = 0;
- 
- 	regmap_raw_read(udc->regs, reg, &val, 2);
- 
+[...]
+
+> There are two more facts that may hint at something:
+> 
+>  * using the Rockchip 4.4 vendor kernel the problem does never happen
+>  * using a custom board with the RK3308 the problem happens if the
+>    USB-C cable is connected before booting; it does not happen if the
+>    connectror is connected after the boot has completed
+> 
+> These two have been reported to me and I haven't reproduced them (yet)
+> so I cannot provide logs at the moment. I can prioritize working on
+> them, or the 4.4 vendor kernel at least, if it is deemed useful.
+
+FWIW I managed to try the 4.4 vendor kernel:
+
+git repo: https://github.com/radxa/kernel.git
+commit:   4.4.143-23-rockchip-796-g09ee299143e4
+
+As said, there is only one enumerations, not two.
+
+Here's a log of the host during said enumeration (same host as before,
+no changes on the host side):
+
+[110685.837058] hub 3-3:1.0: state 7 ports 4 chg 0000 evt 0010
+[110685.844824] usb 3-3-port4: status 0101, change 0001, 12 Mb/s
+[110685.848278] usb 3-3-port4: indicator auto status 0
+[110685.958750] usb 3-3-port4: debounce total 100ms stable 100ms status 0x101
+[110686.053638] usb 3-3.4: new high-speed USB device number 116 using xhci_hcd
+[110686.163756] usb 3-3.4: skipped 2 descriptors after configuration
+[110686.163775] usb 3-3.4: skipped 4 descriptors after interface
+[110686.163996] usb 3-3.4: default language 0x0409
+[110686.164557] usb 3-3.4: udev 116, busnum 3, minor = 371
+[110686.164567] usb 3-3.4: New USB device found, idVendor=1209, idProduct=0001, bcdDevice= 1.00
+[110686.164574] usb 3-3.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[110686.164579] usb 3-3.4: Product: foobar
+[110686.164583] usb 3-3.4: Manufacturer: ACME
+[110686.164586] usb 3-3.4: SerialNumber: 12345678
+[110686.165279] usb 3-3.4: usb_probe_device
+[110686.165290] usb 3-3.4: configuration #1 chosen from 1 choice
+[110686.169116] usb 3-3.4: adding 3-3.4:1.0 (config #1, interface 0)
+[110686.169384] cdc_acm 3-3.4:1.0: usb_probe_interface
+[110686.169389] cdc_acm 3-3.4:1.0: usb_probe_interface - got id
+[110686.169827] cdc_acm 3-3.4:1.0: ttyACM0: USB ACM device
+[110686.169868] usb 3-3.4: adding 3-3.4:1.1 (config #1, interface 1)
+
+The only potentially significant difference I could spot from the
+previous host log is:
+
+mainline:  [105021.396995] usb 3-3.4: skipped 1 descriptor after configuration
+ 4.4:      [110686.163756] usb 3-3.4: skipped 2 descriptors after configuration
+
+Luca
 
 -- 
-Alexey V. Vissarionov
-gremlin נעי altlinux פ‏כ org; +vii-cmiii-ccxxix-lxxix-xlii
-GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
