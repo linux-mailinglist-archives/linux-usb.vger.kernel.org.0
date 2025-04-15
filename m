@@ -1,59 +1,62 @@
-Return-Path: <linux-usb+bounces-23099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23100-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977F8A8A763
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 21:01:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72B89A8AB60
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 00:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B197B7A7F2D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 19:00:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E407B189FFAD
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Apr 2025 22:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EAC3239592;
-	Tue, 15 Apr 2025 19:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A5029E069;
+	Tue, 15 Apr 2025 22:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Elty70a/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="guDi4TW8"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61850236A6D;
-	Tue, 15 Apr 2025 19:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1577C236431;
+	Tue, 15 Apr 2025 22:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744743688; cv=none; b=Js3xg2m8SH2bo9IpllI6mAPOA37W/W6wWeA0OKxByZy+87+gRzfhj7EWsyXE/x0HZ9FkBtDaBKWcw/khgp+CG56xbkL7+/Qqfq4XTjaUw6o9YZsR56vQciKcDRC71eNU9Nii0QFKm1p4VOAnp3Ibirj18uYT13uzzV0fmmNEsOA=
+	t=1744756932; cv=none; b=bUKTv33Q0OQrIHTqE7T542TSYdBr1h8FfpZ0EHVJTrwIFg99BUSvIS2pK97Jgt+5gbfGktaSBgoOicRIftrrvdK4kB+PvZdxZBxfyyH1u97lEeLfINuBvjTGWsJIim1CtJ+1FOLTlBbNF1vS1wXFsRZ5pLe5TbxNzqHiWdO+7ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744743688; c=relaxed/simple;
-	bh=/V+8gWJv5GQZRAGVN1IBdV5uulQCNrm6pXc/yJx92ws=;
+	s=arc-20240116; t=1744756932; c=relaxed/simple;
+	bh=qOKLD7q9ex3GH5aDziterb4sOHsnOsxOn0hgFmLapug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nO0X30JzNrIvgzN+oq7WHLWYoDMyl5RbJFWcCx99Rao24H8CymA95/8ib1qO9tD9mdg8PnnzsHnZrTdiccGiiGdBiGXQQ6XaiIffGuJoo32AERbZLh125/DSVt7qx68QcdvO92uKEIqgflBRx6S4dZ8u+Jed48HeebIOLmG3yFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Elty70a/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E23C4CEE7;
-	Tue, 15 Apr 2025 19:01:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ql8SLPmwale7zSPlU0rJOU+CiV62vpRpoZFCBWN0QOnXJtCOcVDcNc6pYYH4VIq+lC//+Be5Laz3t1uGQpCqY/M0KVdo+tQrWZSmzZHgaIy1GSe7VDqmN1Q3CfDfL3eb4fq/y4mawpgWYvj0q9pBcaPABniwyJOWYFh7Oc23Gek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=guDi4TW8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A74CC4CEE7;
+	Tue, 15 Apr 2025 22:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744743687;
-	bh=/V+8gWJv5GQZRAGVN1IBdV5uulQCNrm6pXc/yJx92ws=;
+	s=k20201202; t=1744756931;
+	bh=qOKLD7q9ex3GH5aDziterb4sOHsnOsxOn0hgFmLapug=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Elty70a/JsVT7DdriGGcVwTTUbsojQaZOi3NXd7h/CKhOTS6C382ge/TTd3PMyEl0
-	 SJlop+GdpEebw5wdpEjecChvkKC1Wb5HfaWVcRz8RiW55NwcWY2rhOG+HyET9zDgfD
-	 sofpnxiX2yQsg7hckpPTfPVnTD4UV5jkp8qQEO/5zlxPFQgQe7GnmAXM1qvvcVkTn0
-	 VBhuXiqMlWVoe6u0ZbOKuHa0LFg/uQZzy8XPW7MbB/YeD5JVLv+6ibKiuwAuw7E1kq
-	 LdZlnHQwnt/+8FKqHsC3h2PqNMUPby0OZ0Wehj2qEw5GKYCR0oP6gmvF/qQwZxZs52
-	 TWSl8jULZFjIQ==
-Date: Tue, 15 Apr 2025 14:01:25 -0500
-From: Rob Herring <robh@kernel.org>
-To: Quentin Schulz <foss+kernel@0leil.net>
+	b=guDi4TW8KZBuCAaCqE617xSkzoPp19jWcDvS6UJoiMkaZI32RKRmk599Hsh5z2m2n
+	 ZYu1aBpbSus4/YAHtE8s7OOGR5wa+hwlW/ArCJJnMRGphcuFpNDJ3dr32g3KGpzQYN
+	 6o8y3lpCIwn0Rs/BEV8hi4lQGeIwRSG2jFzVrHYuYXgPiatmjcoXjX8wnrHfeRN5Hg
+	 lQ3pORJ4KQdBBZSmOBuUtWR0uUgMbecF5l3GpJuzVq2niIAsBM7u9KbBoE7lYaRX/u
+	 oaWvTJNLZXv68QQP0A9JFa6Mig1JXRw0EYI/YR/FmOkJ+26t2ZcKVwL6fp3Q8dil7X
+	 t2ZCGxzrGD2ww==
+Date: Tue, 15 Apr 2025 17:42:09 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	=?utf-8?Q?=C5=81ukasz?= Czechowski <lukasz.czechowski@thaumatec.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Quentin Schulz <quentin.schulz@cherry.de>
-Subject: Re: [PATCH] dt-bindings: usb: usb-device: allow multiple compatibles
-Message-ID: <20250415190125.GA795139-robh@kernel.org>
-References: <20250415-dt-binding-usb-device-compatibles-v1-1-90f3cff32aa0@cherry.de>
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH] dt-bindings: usb: renesas,usbhs: Add RZ/V2H(P) SoC
+ support
+Message-ID: <174475692895.956159.3663942929236229677.robh@kernel.org>
+References: <20250414165201.362262-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,54 +65,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415-dt-binding-usb-device-compatibles-v1-1-90f3cff32aa0@cherry.de>
+In-Reply-To: <20250414165201.362262-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Tue, Apr 15, 2025 at 04:34:27PM +0200, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@cherry.de>
+
+On Mon, 14 Apr 2025 17:52:01 +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> The dt-core typically allows multiple compatibles[1] but usb-device
-> currently forces a single compatible.
+> Document the Renesas USBHS controller found on the Renesas RZ/V2H(P) SoC.
+> The USBHS block on RZ/V2H(P) is functionally identical to the one on the
+> RZ/G2L family, so no driver changes are needed. The existing
+> "renesas,rzg2l-usbhs" fallback compatible will continue to be used for
+> handling this IP.
 > 
-> This is an issue when multiple devices with slightly different productID
-> all behave the same. This would require the driver to keep updating its
-> compatible matching table and the bindings to include this new productID
-> instead of doing what is usually done: have two compatibles, the
-> leftmost which matches exactly the HW device definition, and the
-> rightmost one as a fallback which is assumed to be 100% compatible with
-> the device at hand. If this assumption turns out to be wrong, it is easy
-> to work around this without having to modify the device tree by handling
-> the leftmost compatible in the driver.
+> In addition, update the schema validation logic by replacing the enum list
+> of SoC-specific compatibles with a const "renesas,rzg2l-usbhs" as all
+> listed SoCs share identical USBHS hardware and already include the fallback
+> compatible. This will help to simplify the schema and avoid redundancy.
 > 
-> [1] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/dt-core.yaml#L21-L25
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> This came up while working on fixing USB on an RK3399 Puma which has an
-> onboard USB hub whose productID isn't in any driver compatible list
-> but which can be supported by a driver with a slightly different
-> productID matching another variant of the same IC, from the same
-> datasheet.
+>  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
-> See https://lore.kernel.org/linux-rockchip/20250326-onboard_usb_dev-v1-0-a4b0a5d1b32c@thaumatec.com/
-> ---
->  Documentation/devicetree/bindings/usb/usb-device.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
-> index c676956810331b81f11f3624340fc3e612c98315..9d55be4fb5981164cca969dbda5ba70ab3a87773 100644
-> --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
-> +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
-> @@ -28,7 +28,8 @@ description: |
->  
->  properties:
->    compatible:
-> -    pattern: "^usb[0-9a-f]{1,4},[0-9a-f]{1,4}$"
-> +    items:
-> +      pattern: "^usb[0-9a-f]{1,4},[0-9a-f]{1,4}$"
 
-I would use 'contains' here rather than 'items'. That's even more 
-relaxed in allowing "normal" compatible strings, but is aligned with 
-what we have for PCI device.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Rob
 
