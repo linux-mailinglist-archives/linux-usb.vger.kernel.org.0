@@ -1,98 +1,96 @@
-Return-Path: <linux-usb+bounces-23105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D196A8AEC9
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 05:58:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4136FA8B03D
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:26:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5189188DF48
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 03:57:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BB317ADCDD
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 06:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6865722837F;
-	Wed, 16 Apr 2025 03:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5351722259F;
+	Wed, 16 Apr 2025 06:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxtXUTiE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HeW3LmfW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2852227EB2;
-	Wed, 16 Apr 2025 03:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BBB21E08B;
+	Wed, 16 Apr 2025 06:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744775811; cv=none; b=Spzwv3o7K53BLTwHXRWG7FXcuGABVOrLVPIZCQVMwDUJKT83TAebz3KIDTpVsa5Cf0cdjYPfTuZsC8SRlRFoAOuM5A2BQuK2rqLoJK1NB1obuDPXn09+f47ySch2lR/Ga6vbC/UrR6roAnl33BC58T5adriXeZLLzZ46FHWcSjk=
+	t=1744784803; cv=none; b=PHE/e/b7R1X4Mj7jZP353xMFWBE8v+7R3wFROqYyMRz5jR5qFgvOPcoOYqfwN6YZIH1K9pNppyjlRQm7miDLQStYoHR6icvxn+agTrjsCHApf9lIHRudBZVEUIZVZMZqF+itrlqq7MW0sl4d5qX6lSvuMjlDb1s+BmQvE2+nKO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744775811; c=relaxed/simple;
-	bh=srYclNAF6hwGXM90kzTLH+JNUxLwQVKujXYqQkal3Oo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rtPjunLx9D6ysvXF1LsgYLCIHh6/YVAxCBbN5qgO7kky+kguKPJ4MjN0Ls7Siv3DGPQIxlRjbwntP5cIcn2BI4LX70p51DIBKCzhwHBTsEjuP9F7h04RM5Fu2IdM0eInBGHxsbgJ6hOQfEEFRQp5qegHLnoRXc7l0Y1gpOpVoR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxtXUTiE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7199C4CEE2;
-	Wed, 16 Apr 2025 03:56:49 +0000 (UTC)
+	s=arc-20240116; t=1744784803; c=relaxed/simple;
+	bh=qXExFh5kFbkzyI0w2PnMys9YzEwBpEtjHV9rWBpL5TQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ej5s7TtmiantE927oLaQqXZCx6Ve/l1ieGSBBOOU7Y8Y4lhpRtoXRcMYCW5eqYO50C3mAgP5sQR+rtWJ4Pmt47ywf3Zy6ZgGBrJomnuqsR8XGd0vJ7VDUWr6d+4/2PhVfKfydlgHKttvfmsQbEcEVozE9j2XcoZgNBbsbMm7Mj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HeW3LmfW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4345DC4CEE2;
+	Wed, 16 Apr 2025 06:26:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744775810;
-	bh=srYclNAF6hwGXM90kzTLH+JNUxLwQVKujXYqQkal3Oo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jxtXUTiEjkmm9XCs6bB73TMkMX6Q59nAHZdi2EqXeAKDvADK/395w8sM8BEhDj77F
-	 mhZHU2Ncp4Xo8BKwnmjiAWAMJnBXigVNFStxY7EJOINx030L+K7aCRyqrcbAMCOHoG
-	 vc62WRUD8Fp12X1F4J5u+Ffyo57F69ZYyC4AHTPtP4qIjnH1IODA/xuK4bYoxIZ13K
-	 t7VgOBrUhm0WgAdl623qWo1FQhesf2c4vLx0l/0Dyecnj3oDhJvP5xyWS5X5LZVt2c
-	 YrRezHfNjhRqHOhdn4or1UkyG+EIZmPgyoXlpDcQmEBsOkbJYIomb0h4XnQlF9GUM3
-	 uTiYBViafUJhg==
-Date: Tue, 15 Apr 2025 20:56:48 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Qasim Ijaz <qasdev00@gmail.com>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
- stable@vger.kernel.org
-Subject: Re: [PATCH 5/5] net: ch9200: avoid triggering NWay restart on
- non-zero PHY ID
-Message-ID: <20250415205648.4aa937c9@kernel.org>
-In-Reply-To: <20250415205230.01f56679@kernel.org>
-References: <20250412183829.41342-1-qasdev00@gmail.com>
-	<20250412183829.41342-6-qasdev00@gmail.com>
-	<b49e6c21-8e0a-4e54-86eb-c18f1446c430@lunn.ch>
-	<20250415205230.01f56679@kernel.org>
+	s=k20201202; t=1744784803;
+	bh=qXExFh5kFbkzyI0w2PnMys9YzEwBpEtjHV9rWBpL5TQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HeW3LmfWrBHzY1lOhCfzRXFLwBLqkoz6nloKZoj8W+HufqBkug5taNd8ErX9nMi4C
+	 E0g6F33KURhueQoS4qRMK6g7Tn+tBq2RAZVeRbnL9wJX6XGmF8Y1IkTPWwS7WI3u5g
+	 1YQBJvqyPWRPJuSfdwHrE48cO1izDAvbNVb213F26XMpn6rbzPYzgnadTotv0AriGG
+	 GRDZO1wRqElgVdjm/MK7nJ7XNysW40u0lydDxFmY/nsLmUQMi7OjOhCAK/BJBYBYEd
+	 sMrcpV+qZHOjZUFhillV+kvs65rxVZrT3tYCufaJ6VDKvFbjWSfjCvr4Ky09Su0X0J
+	 gHz1tQgp8rD8A==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1u4wEK-000000005y0-2JmE;
+	Wed, 16 Apr 2025 08:26:41 +0200
+Date: Wed, 16 Apr 2025 08:26:40 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Michael Ehrenreich <michideep@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: add support for Abacus Electrics
+ Optical Probe
+Message-ID: <Z_9NoO4Ma3LrP72L@hovoldconsulting.com>
+References: <Z9ewW-63F212DcV7@veno.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9ewW-63F212DcV7@veno.localdomain>
 
-On Tue, 15 Apr 2025 20:52:30 -0700 Jakub Kicinski wrote:
-> On Tue, 15 Apr 2025 03:35:07 +0200 Andrew Lunn wrote:
-> > > @@ -182,7 +182,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
-> > >  		   __func__, phy_id, loc);
-> > >  
-> > >  	if (phy_id != 0)
-> > > -		return -ENODEV;
-> > > +		return 0;    
-> > 
-> > An actually MDIO bus would return 0xffff is asked to read from a PHY
-> > which is not on the bus. But i've no idea how the ancient mii code
-> > handles this.
-> > 
-> > If this code every gets updated to using phylib, many of the changes
-> > you are making will need reverting because phylib actually wants to
-> > see the errors. So i'm somewhat reluctant to make changes like this.  
+On Mon, Mar 17, 2025 at 06:17:15AM +0100, Michael Ehrenreich wrote:
+> Abacus Electrics makes optical probes for interacting with smart meters
+> over an optical interface.
 > 
-> Right.
+> At least one version uses an FT232B chip (as detected by ftdi_sio) with
+> a custom USB PID, which needs to be added to the list to make the device
+> work in a plug-and-play fashion.
 > 
-> I mean most of the patches seem to be adding error checking, unlike
-> this one, but since Qasim doesn't have access to this HW they are
-> more likely to break stuff than fix. I'm going to apply the first
-> patch, Qasim if you'd like to clean up the rest I think it should
-> be done separately without the Fixes tags, if at all.
+> Signed-off-by: Michael Ehrenreich <michideep@gmail.com>
 
-Ah, no, patch 1 also does return 0. Hm. Maybe let's propagate the real
-error to silence the syzbot error and if someone with access to the HW
-comes along they can try to move this driver to more modern infra?
+> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+> index 5ee60ba2a..5de8067be 100644
+> --- a/drivers/usb/serial/ftdi_sio_ids.h
+> +++ b/drivers/usb/serial/ftdi_sio_ids.h
+> @@ -1612,3 +1612,8 @@
+>   */
+>  #define GMC_VID				0x1cd7
+>  #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
+> +
+> +/*
+> + * Abacus Electrics
+> + */
+> +#define ABACUS_OPTICAL_PROBE_PID	0xf458 /* ABACUS ELECTRICS Optical Probe */
+
+I moved this one to the FTDI VID section higher up.
+
+Now applied, thanks.
+
+Johan
 
