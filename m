@@ -1,312 +1,169 @@
-Return-Path: <linux-usb+bounces-23153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23154-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCCF0A906F5
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:50:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45923A90801
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 17:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCE803B3013
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 14:50:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F951899A8A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 15:49:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614531F585A;
-	Wed, 16 Apr 2025 14:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC7B207E13;
+	Wed, 16 Apr 2025 15:49:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ubkYjl5e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFK6h8R8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4241F8ACA
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 14:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F8AA50
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 15:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744815002; cv=none; b=Y+ZHWCpMatZypIN/23MxMB1GyMneC+oChJyVBHOXPYmXYxje5zZbYtTiVM7x/t1GQQFSMfeOxhjhdzjvadj3yWX2yU+UWY1xhWudWB7zv7wp2tYUJsRZfITAu59iOGWatrZKCJKUx0WOYKo0SPa6tt+8TWdwcHGb3I3H8s9foLw=
+	t=1744818580; cv=none; b=CbXXpwaaAqAsyCcEJt1+UExSp40YcT2WO8NNHp5NTSU5UPSHg+nWf8CPRaQ4dhMvZZLfmiGUR5IPpB/s0G75vLUqhc3q3lWkCJuBu0QroWI8fDUmj4GlQ3+FW9a5oKRD4xITkALQ8nOZZZzHSpQHlpSCu84R1Bc+5f7+puYnuGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744815002; c=relaxed/simple;
-	bh=vamw0maEHaBukVhssMS+S6Gwg15K722frOBUN1+Eaec=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uvVXeISwPslAoMJCSfsuWZMJG9/T3Jporjw4humGld+kA6yOogxNQ3yGPZ5EI2q7/r2++aoMbieFbJmgn8HVc6VuFYkHz0km+9o8LRmcIBiG6mQmdMZgdg6BH17Ct5Jf64B9VhH45TsXWra1/tBSIdOLFHTH9BiRfk1Cy8jArpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ubkYjl5e; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-736fff82264so721878b3a.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 07:50:00 -0700 (PDT)
+	s=arc-20240116; t=1744818580; c=relaxed/simple;
+	bh=PwjEyf9kp0kUUMF+0Jbj3mGIWSEE3M6T7jg25CGQLmU=;
+	h=From:Mime-Version:Content-Type:Date:Message-Id:Subject:To:Cc:
+	 References:In-Reply-To; b=CvooOiImVkK7tsKQNweEBaRYDGevbjANJ0DKYCQ8GZ5FDOX7Av5rynIB3mh6yfgySzN+bwEBLXlv/pcJSk0Sg81a1oMyL+1I39oot7Qr0c6qXVsIWM1O5ucQFevd+ivO/9WKLwrF4/RsZwx8GxivQ/wQYZgX56zIu4rjp2wuesQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFK6h8R8; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38f2f391864so4208625f8f.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 08:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744815000; x=1745419800; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zUjS2x82QyAbbEFyP3zEMnOERceY+liurHl5RmB4q8=;
-        b=ubkYjl5edCinKiSiDEnXN6QiG+Yed71AtQM9UQ7dsL8HN0BVwDTLe5ZjFkrTC4kOkK
-         gD4VJjJfFxH0ymSUyxBTY+rybGRIeo/k7yfE8KX2OZfhlHNBH9QpsJQdAe5G1KsbL/Mi
-         3yxpDfyWVWq/iYmwyZLdlaZHqej8mBho8NROfWX5jj61o6D3+Hqgxo3n6EOlxzGHyLgc
-         LWBiYe+wbJjjQV71NlfJ2eX6I+GqGyKPCPYm6vIBmyHztuFrnrozHcaV4LRrM/ey5jPn
-         z111ymyLwG/XOYvJpPCReNKYClk/QXIAHloCEE15z0S5vSaE9D1rkVJtsS7fLkmQbmUY
-         kagA==
+        d=gmail.com; s=20230601; t=1744818577; x=1745423377; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VywEuq2PMChR8O1a7SxJ7KchJEKay5WFwnAKi8Fp9eI=;
+        b=KFK6h8R8TKx4q17NmI1l5ZB5vqXC6dmNZMcbpkvQRUWgFKa9ES2ZRe3radTHB645fF
+         kDVXhzE8OhphHalyYUMo4fuyYGu3At2+QLre6pxDDJJcH9XypiCvJIxON7Yb7o0WhK1o
+         cBoYbKS6zIJdSZCVdG8Mb87/zNTb8YiqlFlMPE1WtqQyqKCwyB+exvnPDJLjNn1UXfJ+
+         WMY6l6LycGk0Lqw2y6Sxv6nSU3SnNo4IrWZz57Wboigr4znyjSbSJI/Vm2z3QBf/sZCN
+         1cICK+RlcfHhNzomGUmIVWwNNC9Sp4w0lIh/h+rONNqe3V7rjJOkQr9AGHHsmoRVdqTW
+         +otw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744815000; x=1745419800;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zUjS2x82QyAbbEFyP3zEMnOERceY+liurHl5RmB4q8=;
-        b=HH6IAuSaDrenU00q3PVe2wijUQZUxml1ZlKhqxc7d5dxTH4F9tJC9wO1+8cCYwNOa8
-         TImKXQ59MPRlYZP8aJIvhu0ykQS3GERXFDR7xDN5uqlL4pSYUHEDpIigOf8wF9wsiI+E
-         QdpVmHtGMv/Y79hGeVqWgI57w4KcV2IVK+5MPDPqiurFFaXVn0RUc/VpB6EtJl1ZJ9v4
-         l/BiozPoLrpkBiJvEhAwtJDxALN4JY+wegwRXr2n+4ZHOKOucWPhzTJD+Gg3XpOLRAz/
-         BNQ/ox17VD91VGtQB4Q9I1C7UfliYDR5DruE5IOzJgAzouCNOeE0h4Wwfa3qVw50YgYz
-         LLCQ==
-X-Gm-Message-State: AOJu0YyzEKsrs2Qrw/+o5J/cXM9/Tn8sACHijfqF9QBrygehvILlv9nP
-	cwQkVGbEwa2h/SbCobVProsxoQYpcjWCgV1rtlvscFWRMzAZFx/ttkymkYEyaxbkqaxzU61klTs
-	tZn1QWZC0KOZRfg==
-X-Google-Smtp-Source: AGHT+IHO9p0R6vx/xasgcNdYKoGnU97x1A00K9+39lodTTl67acuMpglei7UlMT7MGYETEDcubAg3m4QWvN/Hg4=
-X-Received: from pfih17.prod.google.com ([2002:a05:6a00:2191:b0:736:a134:94ad])
- (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:3a96:b0:736:aea8:c9b7 with SMTP id d2e1a72fcca58-73c26d17aa0mr3050071b3a.2.1744815000385;
- Wed, 16 Apr 2025 07:50:00 -0700 (PDT)
-Date: Wed, 16 Apr 2025 14:43:04 +0000
-In-Reply-To: <20250416144917.16822-1-guanyulin@google.com>
+        d=1e100.net; s=20230601; t=1744818577; x=1745423377;
+        h=in-reply-to:references:cc:to:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VywEuq2PMChR8O1a7SxJ7KchJEKay5WFwnAKi8Fp9eI=;
+        b=i3wle5DhG3bJ0ohxIPwITlv8w4ij7A47CVMjSMpgRAbjlLZgEfwILCdlRfFzSOOHMv
+         BmhjctZjvQUbxz6QYqaC2kJkEVQ1RXSQoltXaotZKkdQn++xmQ1OD42c/2+XnICS1UmB
+         xESi/v/H2T96CoGfhM2umCfDNpdVWuZSFEn9SkHaD4TwD5L50aoQf7WhsMDr8nId7bt6
+         WAZZ7U44XXrr31RWyNeKbi8OTDQoMlbG9D0KYGZNVtBWDeocWkniRUv5juZSI2kMUzWx
+         5NGb72HnbwtykwrdvJze05r3PWvgzSPOygZlPfg5zGkAo8mQkXWJldEpZAMFfZhT9E7d
+         aUEA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1fmjZhGrxDX9Ow8Bz6Y4oH7AZS5Jj/Rs0QYZsIqpOe5RMpeauY8YRtXt/dicovGrj4EsUOSgbuyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEiSLY7QJRPIByVlQvxqIJDNoQt2rTGCFkm+0KE2l8a/+Yfuie
+	8YPoLWX2yAvgvjbr9xZagCXxsMWbZ9Y5yDHsX6jjQOKaO4orW0DS
+X-Gm-Gg: ASbGnct1OkkyyEbRwtXBkDFIpfWDb4sLpx67PtrwjVrRh7x6ySgdbFWbtN/MLBQdiBx
+	NvtzLNB9Ml4v2q6w5jasxiepx3Vqrebi6jyjl3h650MYCJtZgZs42wDmAye6N+Zdez4l9fwllES
+	HOHZcNv2Ya59YCJu8VytxeL6zrhNNLMIkzU4vB0A+m0N6yxzY6GfRILQxFGgwlh3kJ6TnBktJAY
+	5P1bEMxuaPvSyRCoFiNBMvvHSx3ReuVh29jm0erYrkxE21eU9lP/gXshWG/AmT28er2o1k/SxIT
+	3pL2FkEHxxzD9i2rDD3yHv2L0K+1TdYRUgoOKoNWIA171uAaRZwTrbf+IqiXewE9NcSky12prvM
+	c
+X-Google-Smtp-Source: AGHT+IEZW0JCe96dHyLrAjH6Q4871GzqGlTxe0ci0mIspDf+vL+IQH/hDW3ilekWbGqePFl8pq3b8w==
+X-Received: by 2002:a5d:5c84:0:b0:39c:1257:dbab with SMTP id ffacd0b85a97d-39ee5baf33dmr2079218f8f.59.1744818576579;
+        Wed, 16 Apr 2025 08:49:36 -0700 (PDT)
+Received: from localhost (a109-49-32-45.cpe.netcabo.pt. [109.49.32.45])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39eae96c614sm17689800f8f.27.2025.04.16.08.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Apr 2025 08:49:35 -0700 (PDT)
+From: Rui Miguel Silva <rmfrfs@gmail.com>
+X-Google-Original-From: "Rui Miguel Silva" <rui.silva@linaro.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250416144917.16822-1-guanyulin@google.com>
-X-Mailer: git-send-email 2.49.0.604.gff1f9ca942-goog
-Message-ID: <20250416144917.16822-5-guanyulin@google.com>
-Subject: [PATCH v12 4/4] usb: host: enable USB offload during system sleep
-From: Guan-Yu Lin <guanyulin@google.com>
-To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
-	stern@rowland.harvard.edu, sumit.garg@kernel.org, gargaditya08@live.com, 
-	kekrby@gmail.com, jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com, 
-	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk, broonie@kernel.org, 
-	quic_wcheng@quicinc.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guan-Yu Lin <guanyulin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Apr 2025 16:49:34 +0100
+Message-Id: <D986KBO6PQ7H.1AF20ZSJLZ2DH@linaro.com>
+Subject: Re: [PATCH] usb: isp1760: avoid return of uninitialized values
+To: "Alexey V. Vissarionov" <gremlin@altlinux.org>, "Rui Miguel Silva"
+ <rui.silva@linaro.org>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <linux-usb@vger.kernel.org>, <lvc-project@linuxtesting.org>
+References: <20250415154646.GA6814@altlinux.org>
+In-Reply-To: <20250415154646.GA6814@altlinux.org>
 
-Sharing a USB controller with another entity via xhci-sideband driver
-creates power management complexities. To prevent the USB controller
-from being inadvertently deactivated while in use by the other entity, a
-usage-count based mechanism is implemented. This allows the system to
-manage power effectively, ensuring the controller remains available
-whenever needed.
-In order to maintain full functionality of an offloaded USB devices,
-several changes are made within the suspend flow of such devices:
-- skip usb_suspend_device() so that the port/hub are still active for
-  USB transfers via offloaded path.
-- not suspending the endpoints which are used by USB interfaces marked
-  with needs_remote_wakeup. Namely, skip usb_suspend_interface() and
-  usb_hcd_flush_endpoint() on associated USB interfaces. This reserves a
-  pending interrupt urb during system suspend for handling the interrupt
-  transfer, which is necessary since remote wakeup doesn't apply in the
-  offloaded USB devices when controller is still active.
-- not flushing the endpoints of actively offloaded USB devices. Given
-  that the USB devices is used by another entity, unilaterally flush the
-  endpoint might lead to unexpected behavior on another entity.
-- not suspending the xhci controller. This is done by skipping the
-  suspend/resume callbacks in the xhci platform driver.
+Thanks for the patch
+On Tue Apr 15, 2025 at 4:46 PM WEST, Alexey V. Vissarionov wrote:
 
-Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
----
- drivers/usb/core/driver.c    | 50 +++++++++++++++++++++++++++++++-----
- drivers/usb/host/xhci-plat.c | 19 ++++++++++++++
- drivers/usb/host/xhci-plat.h |  1 +
- include/linux/usb.h          |  7 ++---
- 4 files changed, 68 insertions(+), 9 deletions(-)
+> Whether regmap_raw_read() or regmap_field_read() would fail,
+> functions isp1760_udc_read_raw(), isp1760_udc_read_raw16()
+> and isp1760_field_read() may return the uninitialized value.
+> Add explicit initialization to avoid that.
+>
+> Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
+> Signed-off-by: Alexey V. Vissarionov <gremlin@altlinux.org>
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 76372690add0..6c3eb8fb6310 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1420,11 +1420,28 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 			udev->state == USB_STATE_SUSPENDED)
- 		goto done;
- 
-+	if (msg.event == PM_EVENT_SUSPEND && usb_offload_check(udev)) {
-+		dev_dbg(&udev->dev, "device offloaded, skip suspend.\n");
-+		udev->offload_at_suspend = 1;
-+	}
-+
- 	/* Suspend all the interfaces and then udev itself */
- 	if (udev->actconfig) {
- 		n = udev->actconfig->desc.bNumInterfaces;
- 		for (i = n - 1; i >= 0; --i) {
- 			intf = udev->actconfig->interface[i];
-+			/*
-+			 * Don't suspend interfaces with remote wakeup while
-+			 * the controller is active. This preserves pending
-+			 * interrupt urbs, allowing interrupt events to be
-+			 * handled during system suspend.
-+			 */
-+			if (udev->offload_at_suspend &&
-+			    intf->needs_remote_wakeup) {
-+				dev_dbg(&intf->dev,
-+					"device offloaded, skip suspend.\n");
-+				continue;
-+			}
- 			status = usb_suspend_interface(udev, intf, msg);
- 
- 			/* Ignore errors during system sleep transitions */
-@@ -1435,7 +1452,8 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 		}
- 	}
- 	if (status == 0) {
--		status = usb_suspend_device(udev, msg);
-+		if (!udev->offload_at_suspend)
-+			status = usb_suspend_device(udev, msg);
- 
- 		/*
- 		 * Ignore errors from non-root-hub devices during
-@@ -1480,9 +1498,11 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 	 */
- 	} else {
- 		udev->can_submit = 0;
--		for (i = 0; i < 16; ++i) {
--			usb_hcd_flush_endpoint(udev, udev->ep_out[i]);
--			usb_hcd_flush_endpoint(udev, udev->ep_in[i]);
-+		if (!udev->offload_at_suspend) {
-+			for (i = 0; i < 16; ++i) {
-+				usb_hcd_flush_endpoint(udev, udev->ep_out[i]);
-+				usb_hcd_flush_endpoint(udev, udev->ep_in[i]);
-+			}
- 		}
- 	}
- 
-@@ -1524,17 +1544,35 @@ static int usb_resume_both(struct usb_device *udev, pm_message_t msg)
- 	udev->can_submit = 1;
- 
- 	/* Resume the device */
--	if (udev->state == USB_STATE_SUSPENDED || udev->reset_resume)
--		status = usb_resume_device(udev, msg);
-+	if (udev->state == USB_STATE_SUSPENDED || udev->reset_resume) {
-+		if (!udev->offload_at_suspend)
-+			status = usb_resume_device(udev, msg);
-+		else
-+			dev_dbg(&udev->dev,
-+				"device offloaded, skip resume.\n");
-+	}
- 
- 	/* Resume the interfaces */
- 	if (status == 0 && udev->actconfig) {
- 		for (i = 0; i < udev->actconfig->desc.bNumInterfaces; i++) {
- 			intf = udev->actconfig->interface[i];
-+			/*
-+			 * Interfaces with remote wakeup aren't suspended
-+			 * while the controller is active. This preserves
-+			 * pending interrupt urbs, allowing interrupt events
-+			 * to be handled during system suspend.
-+			 */
-+			if (udev->offload_at_suspend &&
-+			    intf->needs_remote_wakeup) {
-+				dev_dbg(&intf->dev,
-+					"device offloaded, skip resume.\n");
-+				continue;
-+			}
- 			usb_resume_interface(udev, intf, msg,
- 					udev->reset_resume);
- 		}
- 	}
-+	udev->offload_at_suspend = 0;
- 	usb_mark_last_busy(udev);
- 
-  done:
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 9843d3ad5cf4..598f1b974347 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -20,6 +20,7 @@
- #include <linux/acpi.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
-+#include <linux/usb/xhci-sideband.h>
- 
- #include "xhci.h"
- #include "xhci-plat.h"
-@@ -483,6 +484,15 @@ static int xhci_plat_suspend_common(struct device *dev)
- 
- static int xhci_plat_suspend(struct device *dev)
- {
-+	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	if (xhci_sideband_check(hcd)) {
-+		priv->sideband_at_suspend = 1;
-+		dev_dbg(dev, "sideband instance active, skip suspend.\n");
-+		return 0;
-+	}
-+
- 	return xhci_plat_suspend_common(dev);
- }
- 
-@@ -535,6 +545,15 @@ static int xhci_plat_resume_common(struct device *dev, bool power_lost)
- 
- static int xhci_plat_resume(struct device *dev)
- {
-+	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	if (priv->sideband_at_suspend) {
-+		priv->sideband_at_suspend = 0;
-+		dev_dbg(dev, "sideband instance active, skip resume.\n");
-+		return 0;
-+	}
-+
- 	return xhci_plat_resume_common(dev, false);
- }
- 
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index fe4f95e690fa..cd07b22adc60 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -15,6 +15,7 @@ struct usb_hcd;
- struct xhci_plat_priv {
- 	const char *firmware_name;
- 	unsigned long long quirks;
-+	unsigned sideband_at_suspend:1;
- 	bool power_lost;
- 	void (*plat_start)(struct usb_hcd *);
- 	int (*init_quirk)(struct usb_hcd *);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index ec8d839e1e2b..f5bca317fa4c 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -635,6 +635,8 @@ struct usb3_lpm_parameters {
-  * @do_remote_wakeup:  remote wakeup should be enabled
-  * @reset_resume: needs reset instead of resume
-  * @port_is_suspended: the upstream port is suspended (L2 or U3)
-+ * @offload_at_suspend: offload activities during suspend is enabled.
-+ * @offload_usage: number of offload activities happening on this usb device.
-  * @slot_id: Slot ID assigned by xHCI
-  * @l1_params: best effor service latency for USB2 L1 LPM state, and L1 timeout.
-  * @u1_params: exit latencies for USB3 U1 LPM state, and hub-initiated timeout.
-@@ -647,7 +649,6 @@ struct usb3_lpm_parameters {
-  *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
-  *	Will be used as wValue for SetIsochDelay requests.
-  * @use_generic_driver: ask driver core to reprobe using the generic driver.
-- * @offload_usage: number of offload activities happening on this usb device.
-  *
-  * Notes:
-  * Usbcore drivers should not set usbdev->state directly.  Instead use
-@@ -724,6 +725,8 @@ struct usb_device {
- 	unsigned do_remote_wakeup:1;
- 	unsigned reset_resume:1;
- 	unsigned port_is_suspended:1;
-+	unsigned offload_at_suspend:1;
-+	int offload_usage;
- 	enum usb_link_tunnel_mode tunnel_mode;
- 
- 	int slot_id;
-@@ -734,8 +737,6 @@ struct usb_device {
- 
- 	u16 hub_delay;
- 	unsigned use_generic_driver:1;
--
--	int offload_usage;
- };
- 
- #define to_usb_device(__dev)	container_of_const(__dev, struct usb_device, dev)
--- 
-2.49.0.604.gff1f9ca942-goog
+Acked-by: Rui Miguel Silva <rui.silva@linaro.org>
+I think this need a more in depth change, with ret values checks and
+maybe open code all this. but that can be done in the future.
+
+Cheers,
+   Rui
+
+> ---
+>  drivers/usb/isp1760/isp1760-core.h | 2 +-
+>  drivers/usb/isp1760/isp1760-udc.c  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/isp1760/isp1760-core.h b/drivers/usb/isp1760/isp=
+1760-core.h
+> index 91e0ee3992a75fb6..d5822454eb4b6112 100644
+> --- a/drivers/usb/isp1760/isp1760-core.h
+> +++ b/drivers/usb/isp1760/isp1760-core.h
+> @@ -58,7 +58,7 @@ void isp1760_set_pullup(struct isp1760_device *isp, boo=
+l enable);
+> =20
+>  static inline u32 isp1760_field_read(struct regmap_field **fields, u32 f=
+ield)
+>  {
+> -	unsigned int val;
+> +	unsigned int val =3D 0;
+> =20
+>  	regmap_field_read(fields[field], &val);
+> =20
+> diff --git a/drivers/usb/isp1760/isp1760-udc.c b/drivers/usb/isp1760/isp1=
+760-udc.c
+> index 2af89ee28baac04b..dc9e630a576da76a 100644
+> --- a/drivers/usb/isp1760/isp1760-udc.c
+> +++ b/drivers/usb/isp1760/isp1760-udc.c
+> @@ -59,7 +59,7 @@ static void isp1760_udc_write(struct isp1760_udc *udc, =
+u16 field, u32 val)
+> =20
+>  static u32 isp1760_udc_read_raw(struct isp1760_udc *udc, u16 reg)
+>  {
+> -	__le32 val;
+> +	__le32 val =3D 0;
+> =20
+>  	regmap_raw_read(udc->regs, reg, &val, 4);
+> =20
+> @@ -68,7 +68,7 @@ static u32 isp1760_udc_read_raw(struct isp1760_udc *udc=
+, u16 reg)
+> =20
+>  static u16 isp1760_udc_read_raw16(struct isp1760_udc *udc, u16 reg)
+>  {
+> -	__le16 val;
+> +	__le16 val =3D 0;
+> =20
+>  	regmap_raw_read(udc->regs, reg, &val, 2);
+> =20
+>
+> --=20
+> Alexey V. Vissarionov
+> gremlin =D0=9F=D0=A0=D0=98 altlinux =D0=A2=D0=A7=D0=9A org; +vii-cmiii-cc=
+xxix-lxxix-xlii
+> GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+
+
 
 
