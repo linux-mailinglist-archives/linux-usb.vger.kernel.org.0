@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-23135-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23136-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F57A9053E
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:01:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21147A90535
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:00:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 783E419E0FBF
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 13:58:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CEC2462F0E
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 13:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2676B2222C3;
-	Wed, 16 Apr 2025 13:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618F31FCFE9;
+	Wed, 16 Apr 2025 13:46:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FF6mBO2A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dejtS77x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248FF221F16
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 13:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C2E221F08
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 13:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744811174; cv=none; b=HwngUFp7HfpO+qpi3rY0vsrfmeDAuXt0aCrTBa4FqFT+dhHe+HcpaADpxJwaVUy5H5hmT95rxqfN+prNpBd6vwloiSya9FUVAWhiNAJGqFMFwLpBJD3cjdgtmYPZ56o1Elf8Qr09qb/8FG9wvBdGYYtQxx6Lo7jz9V3BL0xgUi8=
+	t=1744811175; cv=none; b=DRJ1Rj/37y9WDUh3mhIsQ6IPqe2vBYm616ppE7daGvaLZ5JF34+KWBWIM/jzg2rZyieVNqG642SDyPRPEC6c1eMoj/yjxcbdQkuW86psig2a0ga2IdsBvCSCFK6Btuzkp+kHtOtRr8E8BCnBJaQmqv3kiAqFjgSmFO2oFulX1Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744811174; c=relaxed/simple;
-	bh=vKqksaxq1lqFhLE/VEiL3uiUEVcRAT0Iob6kSCJV4G4=;
+	s=arc-20240116; t=1744811175; c=relaxed/simple;
+	bh=tMqhvHGC+mGP7wO51UlauYDKJnp3Abykw/yyKT5N4bs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n9cSYem9Vc3w5qF3OfnbBnJyjyKau49v7BqNYLRRuZQStuPDfMzeAsHYgBkc2pYma9GZhjlwA+wBBOXtQoclemQLQ3dDlmb+HuT70D2kIHtE7AGXfrvLQQD7rdOdtpcsyyLEjRxYDLYfHy2M6r33b71dxsePebfD+Wa2mTskgos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FF6mBO2A; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=mCUwbdtf6dgE9rhJwtJnHE5tLPwPhxfpTF2RvJXGbdoJ67zBTskFo7P523rP+QMAAGrzIY+XUy25fZZ1EWZjlq8TsnUyqZWtrbZosMSArNEc8Hveu1uz61OqKUqQ7amAowAT15o4yrIhjlOaI6G3egFJxajiK5KL0jLxp1yiKZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dejtS77x; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744811172; x=1776347172;
+  t=1744811173; x=1776347173;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vKqksaxq1lqFhLE/VEiL3uiUEVcRAT0Iob6kSCJV4G4=;
-  b=FF6mBO2AFr3DtUE6+S2HJtQvK89c9Zp7miMwrdPrt5h/OX4nrhdaVDOd
-   VwhZb9szA6F8nIwRvzdRUZYiGhbkeKWliTYmNiZK0H1oGeQfCjfk+HZzi
-   WzXlruRbkCQ0JPjdZ33H2XuCKmY0dDN6RqCSbX7dIan6uIVzhLlxeeiwu
-   xhjzHXN9dtrkk8nSWNN95lo+y600Q7hkX3IIH5e5zVAo7MhmRTKVqIdNl
-   LYYEu+etQBMYKEk6AqzlpIf908h2y8lxqyu8CwEI/jhnCueK0Enczc5yn
-   0+tXMlX0KFfLBf5jvlkv4LdMn7wl7pgbsi13fOJhdzhN20y0r6b9MpMGJ
-   g==;
-X-CSE-ConnectionGUID: y1KRrYn6TOmWwoba0pIoyA==
-X-CSE-MsgGUID: ExPX6FNTQQKnHoNRVOaKHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="46074449"
+  bh=tMqhvHGC+mGP7wO51UlauYDKJnp3Abykw/yyKT5N4bs=;
+  b=dejtS77xR0K58N++vL4qfLMiOwsPjvLnC8LWrziVNBoR9f8biCyRtsW4
+   HVLzy1BpVz5p8EWtLQSk4+KnznmASxYHT+gDfj808NCIQgR5WxbkGVok/
+   S1fjeLj7k+eF3l9oRlOiuviMi1MgSlWT5G5KJ02DdwStIk08FcvARecno
+   gjigtzFAg3fOxAIb4WA0FtYuF1l2w8K9GRPELWrbZ9N502slUHm6jJAiJ
+   olgpjNl8vOssBRZARopsUoA0AzjLqw7Q3UnTwEUg3JN2K3tVZQpOeAtP5
+   paBFIjhamciFRm0z9N5xsPrSVGrn0NxLFVQssdHN0ZtC1/MShUvQcCJBM
+   Q==;
+X-CSE-ConnectionGUID: 8nTdwaZGRNirMvJnT3qGJg==
+X-CSE-MsgGUID: BI7zDBOEQpWc1dCe5rJwUw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="50168103"
 X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="46074449"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 06:46:11 -0700
-X-CSE-ConnectionGUID: Y13jcE+NTGCxlldh5X9J6w==
-X-CSE-MsgGUID: EHTx3sGVTtKMKxnpeZYoIw==
+   d="scan'208";a="50168103"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 06:46:12 -0700
+X-CSE-ConnectionGUID: 0EyeKj0fTxGJASmXu+AeOA==
+X-CSE-MsgGUID: 9QRER1ojTeyMEjdVd7aCbg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="135659144"
+   d="scan'208";a="135290228"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 16 Apr 2025 06:46:11 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 16 Apr 2025 06:46:11 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id 3B4BF715; Wed, 16 Apr 2025 16:46:09 +0300 (EEST)
+	id 0732478A; Wed, 16 Apr 2025 16:46:09 +0300 (EEST)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	sergei.shtylyov@gmail.com,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH v2 02/11] usb: xhci: move device slot enabling register write
-Date: Wed, 16 Apr 2025 16:45:01 +0300
-Message-ID: <20250416134510.2406543-3-niklas.neronin@linux.intel.com>
+Subject: [PATCH v2 03/11] usb: xhci: move command ring pointer write
+Date: Wed, 16 Apr 2025 16:45:02 +0300
+Message-ID: <20250416134510.2406543-4-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250416134510.2406543-1-niklas.neronin@linux.intel.com>
 References: <20250416134510.2406543-1-niklas.neronin@linux.intel.com>
@@ -79,89 +79,119 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor the setting of the Number of Device Slots Enabled field into a
-separate function, relocating it to xhci_init().
+Move command ring pointer write from xhci_mem_init() to xhci_init(),
+and utilize the xhci_set_cmd_ring_deq() function.
 
-The xHCI driver consistently sets the number of enabled device slots to the
-maximum value. The new function is named to reflect this behavior.
+The xhci_set_cmd_ring_deq() function is nearly identical to the Command
+Ring Control register code in xhci_mem_init(). The only notable change is
+the use of:
+  xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg, xhci->cmd_ring->dequeue)
+instead of:
+  xhci->cmd_ring->first_seg->dma
+but they are effectively the same in this context. The former represents
+the exact position of the dequeue pointer, while the latter is the first
+DMA in the first segment. Before use, the dequeue pointer is at the first
+DMA in the first segment.
 
-Remove the "// " prefix from trace messages, as it is unnecessary and
-distracting.
+The xhci_set_cmd_ring_deq() function is moved without modification, except
+for (long unsigned long) -> (unsigned long long) due to checkpatch.pl.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c | 15 +--------------
- drivers/usb/host/xhci.c     | 21 +++++++++++++++++++++
- 2 files changed, 22 insertions(+), 14 deletions(-)
+ drivers/usb/host/xhci-mem.c | 10 ----------
+ drivers/usb/host/xhci.c     | 37 ++++++++++++++++++++-----------------
+ 2 files changed, 20 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index d309e8e9d508..dbf0187086db 100644
+index dbf0187086db..46156e99bbbe 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -2385,23 +2385,10 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	struct xhci_interrupter *ir;
+@@ -2386,7 +2386,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
  	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
  	dma_addr_t	dma;
--	unsigned int	val, val2;
-+	unsigned int	val;
- 	u64		val_64;
+ 	unsigned int	val;
+-	u64		val_64;
  	u32		temp;
  
--	/*
--	 * Program the Number of Device Slots Enabled field in the CONFIG
--	 * register with the max value of slots the HC can handle.
--	 */
--	val = HCS_MAX_SLOTS(readl(&xhci->cap_regs->hcs_params1));
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// xHC can handle at most %d device slots.", val);
--	val2 = readl(&xhci->op_regs->config_reg);
--	val |= (val2 & ~HCS_SLOTS_MASK);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Setting Max device slots reg = 0x%x.", val);
--	writel(val, &xhci->op_regs->config_reg);
--
  	/*
- 	 * xHCI section 5.4.6 - Device Context array must be
- 	 * "physically contiguous and 64-byte (cache line) aligned".
+@@ -2449,15 +2448,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is 0x%pad",
+ 			&xhci->cmd_ring->first_seg->dma);
+ 
+-	/* Set the address in the Command Ring Control register */
+-	val_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
+-	val_64 = (val_64 & (u64) CMD_RING_RSVD_BITS) |
+-		(xhci->cmd_ring->first_seg->dma & (u64) ~CMD_RING_RSVD_BITS) |
+-		xhci->cmd_ring->cycle_state;
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Setting command ring address to 0x%016llx", val_64);
+-	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
+-
+ 	/* Reserve one command ring TRB for disabling LPM.
+ 	 * Since the USB core grabs the shared usb_bus bandwidth mutex before
+ 	 * disabling LPM, we only need to reserve one TRB for all devices.
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index ec2e4a2d8af0..4de51ba851d8 100644
+index 4de51ba851d8..92c32a80acae 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -477,6 +477,24 @@ static void xhci_hcd_page_size(struct xhci_hcd *xhci)
- 		       xhci->page_size >> 10);
+@@ -495,6 +495,23 @@ static void xhci_enable_max_dev_slots(struct xhci_hcd *xhci)
+ 	writel(config_reg, &xhci->op_regs->config_reg);
  }
  
-+static void xhci_enable_max_dev_slots(struct xhci_hcd *xhci)
++static void xhci_set_cmd_ring_deq(struct xhci_hcd *xhci)
 +{
-+	u32 config_reg;
-+	u32 max_slots;
++	u64	val_64;
 +
-+	max_slots = HCS_MAX_SLOTS(xhci->hcs_params1);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xHC can handle at most %d device slots",
-+		       max_slots);
-+
-+	config_reg = readl(&xhci->op_regs->config_reg);
-+	config_reg &= ~HCS_SLOTS_MASK;
-+	config_reg |= max_slots;
-+
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Setting Max device slots reg = 0x%x",
-+		       config_reg);
-+	writel(config_reg, &xhci->op_regs->config_reg);
++	/* step 2: initialize command ring buffer */
++	val_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
++	val_64 = (val_64 & (u64) CMD_RING_RSVD_BITS) |
++		(xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
++					xhci->cmd_ring->dequeue) &
++			(u64) ~CMD_RING_RSVD_BITS) |
++		xhci->cmd_ring->cycle_state;
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// Setting command ring address to 0x%llx",
++			(unsigned long long) val_64);
++	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
 +}
 +
  /*
   * Initialize memory for HCD and xHC (one-time init).
   *
-@@ -502,6 +520,9 @@ static int xhci_init(struct usb_hcd *hcd)
- 	if (retval)
- 		return retval;
+@@ -523,6 +540,9 @@ static int xhci_init(struct usb_hcd *hcd)
+ 	/* Set the Number of Device Slots Enabled to the maximum supported value */
+ 	xhci_enable_max_dev_slots(xhci);
  
-+	/* Set the Number of Device Slots Enabled to the maximum supported value */
-+	xhci_enable_max_dev_slots(xhci);
++	/* Set the address in the Command Ring Control register */
++	xhci_set_cmd_ring_deq(xhci);
 +
  	/* Initializing Compliance Mode Recovery Data If Needed */
  	if (xhci_compliance_mode_recovery_timer_quirk_check()) {
  		xhci->quirks |= XHCI_COMP_MODE_QUIRK;
+@@ -793,23 +813,6 @@ static void xhci_restore_registers(struct xhci_hcd *xhci)
+ 	}
+ }
+ 
+-static void xhci_set_cmd_ring_deq(struct xhci_hcd *xhci)
+-{
+-	u64	val_64;
+-
+-	/* step 2: initialize command ring buffer */
+-	val_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
+-	val_64 = (val_64 & (u64) CMD_RING_RSVD_BITS) |
+-		(xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
+-				      xhci->cmd_ring->dequeue) &
+-		 (u64) ~CMD_RING_RSVD_BITS) |
+-		xhci->cmd_ring->cycle_state;
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Setting command ring address to 0x%llx",
+-			(long unsigned long) val_64);
+-	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
+-}
+-
+ /*
+  * The whole command ring must be cleared to zero when we suspend the host.
+  *
 -- 
 2.47.2
 
