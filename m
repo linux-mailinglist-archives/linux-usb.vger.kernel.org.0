@@ -1,114 +1,191 @@
-Return-Path: <linux-usb+bounces-23155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25B78A908BF
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 18:25:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0601DA90963
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 18:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAC535A090F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:24:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F9AE444F3A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133112080D2;
-	Wed, 16 Apr 2025 16:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C49B2144C7;
+	Wed, 16 Apr 2025 16:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVumFY59"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWy3iDmi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6BC20E31C
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 16:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDF41B415F;
+	Wed, 16 Apr 2025 16:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744820605; cv=none; b=DkXBnHS0Dv8E122zuKWRNqn6/k557Q97cv258+UIDxlWiYDqAJzNfqkIx6FA6FK4IA5v2p+IY+5r5Org4TAcgSbBQeg4bnrXZQj0HpoJNz+C4dJ7G15Rct/Kdm/tAB4DxXHu8S9eLQc9zHyXBmimfG2E4kTYTTGAXSZO7lVIEGM=
+	t=1744822354; cv=none; b=ig9ugrKxgKDcl+J8ndHbUjt7Z4X91FyA/YALzHQ8z8FSTEUzNxwrpSszqFzjEun8/hSEEXvR9160H76koNGwKS5cAKoAImY6raYv4mgVBrJnOLAY8bVvc5/JWvX9lV+0t2XvIxxN7PAAVODgAmuxK+NQN/tFNa+Av9AkTfmjVQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744820605; c=relaxed/simple;
-	bh=83KYxMGN9KZ0u7942fiBr1KlePlKhRl4prm1p4oN5p8=;
+	s=arc-20240116; t=1744822354; c=relaxed/simple;
+	bh=IdK2+5qGsdGM3SO0IxHfMg481X+Kuem/Une0Z8qbCYk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lWBAGb/fzRjJ+eTChVnKDaMXBD+q8aia+4T0KNGJj5wL8I64oowVw6mPxNnSDuIgvDwn+azgKSqAjI6xjBAWjY7C4+NWExyzuowLrJ61VjT+fU1YyDvVFQdgeDvUfz4GFBrJFQAyWGJMXLFqAybvrwA28mEIzb06z2vbRhFSnPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVumFY59; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744820604; x=1776356604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=83KYxMGN9KZ0u7942fiBr1KlePlKhRl4prm1p4oN5p8=;
-  b=DVumFY59V0DvY008uyKL4Yp7T/bNRXxYUVQQXOA/8eyQyf8zP0rsG2sl
-   l2fNXzMQ5JXvcozzf+1bzr1TSMJwQ75DYpK6Bv1ahIMALDMOGy7glcI97
-   Qb/R32QYjCpEtObJ8WZYU2RUI2DIRvUEnh1rUcFCGEC1oqGXhN5lu+Kbj
-   s9ch1flqm3W72XtE9LxftiuOgJgnBPLQpOpd4TVPWHYl5lC8XTb63GxmV
-   9L3x9ov1PTBfErzN8f9e+XZpVqKvfqFMMFXMzfeIneGsCeZR/9NC6rml3
-   QtIwUk7ZES+d6wPEB2JGRugv8BtLtUNvev1tYeLL5HodKwE+9jrhbPxQp
-   w==;
-X-CSE-ConnectionGUID: jT/aNpfJSfy8zs1SqtFvfg==
-X-CSE-MsgGUID: cEYLbKvLSJO2Cr79rewMbA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="46263012"
-X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="46263012"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 09:23:23 -0700
-X-CSE-ConnectionGUID: LZZ5S5HUSI2rKGouH3P6yw==
-X-CSE-MsgGUID: ijrwIgXjR2OjIypqeH+Lrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="130498690"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa006.jf.intel.com with ESMTP; 16 Apr 2025 09:23:21 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 9C1AF1038; Wed, 16 Apr 2025 19:23:19 +0300 (EEST)
-Date: Wed, 16 Apr 2025 19:23:19 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
-	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com,
-	rajat.khandelwal@intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix a logic error in wake on connect
-Message-ID: <20250416162319.GA88033@black.fi.intel.com>
-References: <20250411151446.4121877-1-superm1@kernel.org>
- <20250416123743.GH3152277@black.fi.intel.com>
- <962f6730-c61a-4d26-98cf-5051782da3e8@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bfTeARWNaJSvRxKDRrgHsSETeQjgg3gqq9EzaIm00ydUqhRXSF9bq+/W96JPU/3N7OMZqdE9nbqXNamL0uZYYxAuDAn6NboUkR/eZvKZV6EWPq0i9HQ0j4EPzEwVvns4d6a4uqhAVxBxG4qYG8qrl2gFNa6+99WHZ2Md4nTqBM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWy3iDmi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 206F0C4CEE2;
+	Wed, 16 Apr 2025 16:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744822354;
+	bh=IdK2+5qGsdGM3SO0IxHfMg481X+Kuem/Une0Z8qbCYk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kWy3iDmi5zxRVqVY1CSrvNB+TjWKOGlPqwMfwWak+L2NEqK6fvp9vxuZT4+v0sPER
+	 ZursCOt15TYcH+xEUdbfLFfQo0OG1jt1zEHNIYRDgIJ9wmD3Qns/BaprJphgRj8n/q
+	 qJAfKteYISoQQex2rc/wYOhTZxvKl/vg1wT9xmc1nZMMaeOSIRF5G3jSFOqfOZyg/C
+	 msJ1KlAkEW1+QL+ay1gjs8qFIKdwiD932NN/5mOVYwMtwBlsyi3WZm2WIPlXXMjTe+
+	 gCrq0Q6c1VVe/olfv/jhKJ7/bXAu8Xd2b5gsps5t/R4u6EaePGeThcb3DcFC8G7QF9
+	 8VkCXVsRhKxww==
+Date: Wed, 16 Apr 2025 11:52:32 -0500
+From: Rob Herring <robh@kernel.org>
+To: Pin-yen Lin <treapking@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: Introduce usb-hub.yaml
+Message-ID: <20250416165232.GA3327258-robh@kernel.org>
+References: <20250415094227.3629916-1-treapking@chromium.org>
+ <20250415094227.3629916-2-treapking@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <962f6730-c61a-4d26-98cf-5051782da3e8@kernel.org>
+In-Reply-To: <20250415094227.3629916-2-treapking@chromium.org>
 
-On Wed, Apr 16, 2025 at 08:27:10AM -0500, Mario Limonciello wrote:
-> On 4/16/2025 7:37 AM, Mika Westerberg wrote:
-> > On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
-> > > From: Mario Limonciello <mario.limonciello@amd.com>
-> > > 
-> > > commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
-> > > on USB4 ports") introduced a sysfs file to control wake up policy
-> > > for a given USB4 port that defaulted to disabled.
-> > > 
-> > > However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
-> > > on connect and disconnect over suspend") I found that it was working
-> > > even without making changes to the power/wakeup file (which defaults
-> > > to disabled). This is because of a logic error doing a bitwise or
-> > > of the wake-on-connect flag with device_may_wakeup() which should
-> > > have been a logical AND.
-> > > 
-> > > Adjust the logic so that policy is only applied when wakeup is
-> > > actually enabled.
-> > > 
-> > > Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB4 ports")
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > 
-> > I guess the offending commit was never even tested :(
-> > 
+On Tue, Apr 15, 2025 at 05:41:58PM +0800, Pin-yen Lin wrote:
+> Introduce a general USB hub binding that describes downstream ports
+> and hard wired USB devices for on-board USB hubs.
 > 
-> Yeah that is my only explanation too.  So now this begs the question do we
-> do the 3rd step that we set all the ports to 'enabled' by default?
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> 
+> ---
+> 
+> Changes in v2:
+> - New in v2
+> 
+>  .../devicetree/bindings/usb/usb-hub.yaml      | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/usb-hub.yaml b/Documentation/devicetree/bindings/usb/usb-hub.yaml
+> new file mode 100644
+> index 00000000000000..34cd248fa43c2d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/usb-hub.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/usb-hub.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic USB Hub
+> +
+> +maintainers:
+> +  - Pin-yen Lin <treapking@chromium.org>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible: true
+> +
+> +  reg: true
 
-No we don't. That needs the userspace that can do dark resume and we cannot
-assume it by default.
+Drop these 2, already covered by usb-device.yaml.
+
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+
+Drop this, already covered by usb-device.yaml.
+
+> +
+> +  peer-hub:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the peer hub on the controller.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description:
+> +      The downstream facing USB ports
+> +
+> +    patternProperties:
+> +      "^port@[1-9]$":
+
+Only 9 ports possible? Should be '^port@[1-9a-f][0-9a-f]*$'
+
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +patternProperties:
+> +  '^.*@[1-9]$':
+> +    description: The hard wired USB devices
+> +    type: object
+> +    $ref: /schemas/usb/usb-device.yaml
+> +    additionalProperties: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    usb {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        /* 2.0 hub on port 1 */
+> +        hub_2_0: hub@1 {
+> +            compatible = "usb123,4567";
+> +            reg = <1>;
+> +            peer-hub = <&hub_3_0>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            /* USB 2.0 device on port 5 */
+> +            device@5 {
+> +                reg = <5>;
+> +                compatible = "usb765,4321";
+> +            };
+> +        };
+> +
+> +        /* 3.0 hub on port 2 */
+> +        hub_3_0: hub@2 {
+> +            compatible = "usb123,abcd";
+> +            reg = <2>;
+> +            peer-hub = <&hub_2_0>;
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                /* Type-A connector on port 3 */
+> +                port@3 {
+> +                    reg = <3>;
+> +                    endpoint {
+> +                        remote-endpoint = <&usb_a0_ss>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.49.0.777.g153de2bbd5-goog
+> 
 
