@@ -1,151 +1,124 @@
-Return-Path: <linux-usb+bounces-23112-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23113-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5BF7A8B293
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 09:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7890AA8B436
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 10:45:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23E54188A663
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 07:48:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2DA51895EA6
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D471322DF99;
-	Wed, 16 Apr 2025 07:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0E4232379;
+	Wed, 16 Apr 2025 08:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Jt5UjPgz"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IOtaqNiy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE181607AC
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 07:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B51422E410
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 08:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744789694; cv=none; b=n7/83ZC3AkDTyaKzkLeYqzDxjsSspnFCUa31Qg6qg3s1EyoG1CR6AlMzqF82X1T2TPvx1k9bWrWCK3ul0ue4cP9jzHYtir4XLuj2TJvLCLtyAne7ATAwDvAMXNBFe9DKxMnjBXbHJP5fRNDSGdZD+4E+Wm+SgZIHtLoujZvnXPk=
+	t=1744793124; cv=none; b=TN7PjOlTEJFET7eo8DyZ86Dw1ZHynyTN7cGDNYPggFVYwIJLPkow9i9NkOdlOtRcoGdofH2qDrcv2vWW/2Brt1b7e+mjaof1qLMiKYR7tn6gboMTyvIyE09kgkujrprI1izp8KKrpkc39anSHfO44VchV09PbpdgRWRIJvvDX7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744789694; c=relaxed/simple;
-	bh=mlLugVIgUXMn68LUKrSnqKZfI+aiuTTmcGRKFxZQE4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gjdub2KF6hy+6xe07KpSj8Vmwq7oCSkwUYIckj6a5RMYigy/uBgAa8PLWuPP66VB/+86lTfNQRsNjD3ll4Wq0Das3MoGt2jp/Ig+dBJoaB2d0urprGKWe19u2BAaUd37l6NKs0wBzu9ScU6lIqzmVAUYsur8yjc3f7p2Glo3eYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Jt5UjPgz; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1744793124; c=relaxed/simple;
+	bh=7U0tMRP3cRkwaU9kSWjymsTfcQX3Lo9MnZcTIGj2fAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L3TaWm9Eyq4/6dA4OqtDxzeSqY0WDiNCfj95Lx++nxdCq8iwGunYjQcXH8NSeUXsQbm75AelZ+L1uY9oPBYZsT8hRE3aWfgy8TL1zYht8aq1qadxm9FCfwZVK/X+F77PO3U9wT438iNJPx7Eo1g2B80P36hwL6AeBreELRSpKik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IOtaqNiy; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43e9ccaa1ebso8056365e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 00:48:11 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43ce70f9afbso66424665e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 01:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744789690; x=1745394490; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cTvOaDEQG30yWMqYolrBjhpkdSkM8de0KjZNMFJpHHE=;
-        b=Jt5UjPgzrvOaax5/Qeg5J5Xy16YvkCOVc4HtM2AuF51gyQHKFZggelDMuKijMuNg0g
-         RPvDbT0ZhKZL5PxUaTquwS23aOgWNVsD/AHXFMVQ9vnzXchG8EjEXx2nXnafAGBFS8zZ
-         95C5/w1YIiWs/w3/pJXy99B7GKf4YI+cWVoHn3tzoVlFg8T/0zL3i9gzBcWgRJh8lOMh
-         aH8X5PHWN5MnOmT6vB+b8QWSDCt6rgkSMaB4wmvSCxUmGjT41Qi5E6yJaQ+VsKxBuLfr
-         EbCWNEsHI/PjhzlJtPYvp2Z14fyU5uad39e2bo0bH5e4hx/nyPm2OJA2UPinLnaGusR+
-         R0lQ==
+        d=suse.com; s=google; t=1744793120; x=1745397920; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm7tG3FOphdGA/j+BS+chZSTAKzpNK7JzyptgTuNxfM=;
+        b=IOtaqNiyPnKatFuTBgU+NF331pQrlZI6EsXwn46HKd2FQJFa2t8llUrb86VYcRz9at
+         u2QgFXMnsWhXVmZnsmQ6la616pV4Bn7rHOaXdPe0XGEW9sutQmnDVJTZyksXYr9Tc2f8
+         hZkPTYugzgfvm8CXyhzLSjVcS5fJCjmcbLHmCv67aS22SIznTETduWmCKVoDvL/hFzFc
+         pirwnfTywGp5lMLoP6lRQpwKzMi5rrkhRLbcNZljMCOihXt0HoTSI72li8gBnbJ+o8Tx
+         fwpYkDdEY6QffzFYnmF+lQqWmURZbdZRG1c/CHPnbCQdjQZX5Fgg8WgJx0JLuPGJfo/e
+         9Zew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744789690; x=1745394490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTvOaDEQG30yWMqYolrBjhpkdSkM8de0KjZNMFJpHHE=;
-        b=hpTk/Bf8hKt9IsWBp+AZ7X1lVZ1qmlpzmr0PwvDdUm1menyMlAdDCECad1L1FEg29H
-         G2QVZqs9ymLqlFrW9d0qJT3Z4zuNdA0d+eU38HNKVxpKjs/N6g9NZa9j0xG3/L9z+WtV
-         /5A8Dj52h3k0EVAw0j1QodAI14f0H0dh5x1xWw3yET86eBWLj6yqRIn5//eYM0HbLJEu
-         A/gtEM83cGRus0GDhRUn6IEb9pGw1xWZf7i3kZ6Wdsm9yrJHkKpjdd3FY2ki5G68e7/z
-         Y3ZhNXVovPOLOolIvPe17lD1WylYVg+cjJXbBmzSfMlzKOrCal5Da5NMfsuglArIC7nC
-         pj6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVjhRIe6QaAbXj4R4ybGQ1MwbLNRZ0ZIKeenJWw+7vktcX4aTvRIEPcu+NLrv1A6b4iRS4V77rzkDg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/kbGgKWcQwfzxiddZx3FbjyVTA/7BGc/5JdamxgFXwd3+cgOM
-	+bjGBoTwwOg003MdzqFDDILVWvBZfOiP/HJ2evjrLvhKYThPiEt+A2gWiXubHXWhIkJ/dl355iq
-	9QvsRRQ==
-X-Gm-Gg: ASbGnctG5dih9FFp0FRlGEsX7+lVcE9f4SpkZc54RW7jIEdF/BU1fxBsStqCYxzeX1G
-	WUTHkbwOOaLGW4RLkrT3wgmNUDaJ3ajXyppqGZUMMd9QeHpJBEtAGHE9x+y0yarjWM38XXe5Huv
-	1I0z/jty302a+cweUOfUNQERSozMxQFznnH9pCkNUYh1JcYg8cmDuIahP4ONOqX55UNxnzi4N44
-	pVH5oG9Bs3HTBce+pLYUFN6NS33FEy/YwYSYfP2kFTwA399HTv7V/KV3z/quiEtnqe/RL52ynrb
-	RDZDnIoAY2nmi3i1dd1IsPwEf/2Zi65TGttzVC3bL/F5ufxyrlCy3HjFTrnIUfF33tc/6Twb5C5
-	k8yT4zBhvHGbUukYYhOZoAEVOp8R+RA==
-X-Google-Smtp-Source: AGHT+IFOauWmzV5VTo8P00eam5tza1oS3n8d1LwySwXAoWJeZ+FWxgBAT6OBdbDfI53apvgsnPAh3w==
-X-Received: by 2002:a05:6000:4205:b0:39e:dce8:1c01 with SMTP id ffacd0b85a97d-39ee5b99f7emr245421f8f.12.1744789690290;
-        Wed, 16 Apr 2025 00:48:10 -0700 (PDT)
-Received: from mordecai (dynamic-2a00-1028-83b8-1e7a-3010-3bd6-8521-caf1.ipv6.o2.cz. [2a00:1028:83b8:1e7a:3010:3bd6:8521:caf1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b4f3ed7sm12862225e9.24.2025.04.16.00.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 00:48:09 -0700 (PDT)
-Date: Wed, 16 Apr 2025 09:48:07 +0200
-From: Petr Tesarik <ptesarik@suse.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: warn if a GFP zone flag is passed to
- hcd_buffer_alloc()
-Message-ID: <20250416094807.2545efd8@mordecai>
-In-Reply-To: <522b3049-8e7f-41d4-a811-3385992a4d46@suse.com>
-References: <20250320154733.392410-1-ptesarik@suse.com>
-	<20250325134000.575794-1-ptesarik@suse.com>
-	<2025041110-starch-abroad-5311@gregkh>
-	<20250414090216.596ebd11@mordecai>
-	<522b3049-8e7f-41d4-a811-3385992a4d46@suse.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.48; x86_64-suse-linux-gnu)
+        d=1e100.net; s=20230601; t=1744793120; x=1745397920;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm7tG3FOphdGA/j+BS+chZSTAKzpNK7JzyptgTuNxfM=;
+        b=LuEixL0HFNTo8wyFFqmTmIeYRYLFv7ym7XkDuOgvMGqraXrvIol8AE+7YEq++dBv1y
+         djNr6KgazNhmnzf586Q2NNBDYYdycMZDqe5wTSYyLXYhfVTj63GHwYPa4EOaHXak2+h/
+         YWoqgIcp9fAwpPYffmw/vdhtzcYE9bHHpp8pFcihVhAoIeDYOshoauNC5GBLRy42RVk0
+         HtxBN3/LjhASRA5UwmN7R+gAbu04V8oTcah0RwrGumy3z0x8K4c/8iE46MLksFocLI5X
+         /tJgPiM2wvs9MrJIUMWxOYq1UtCGqPCBIcqmXWif/tzgGaOrMVpRv8hV9PCVlSXgiVfu
+         1Leg==
+X-Forwarded-Encrypted: i=1; AJvYcCVfOG/09SychXdFhKXjbKHwRLp+6fvhi+emFUNVcD2pPnGdjjcXQs9H8GL41KoyPepX0SRbqZJ2Vb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyL0IUY4btO9NTljoIY4VknHej+O14jq0P02i3C1uDNn3S9qYvr
+	khHTQUk2unfo69yYsE6qUpBlgPei1YXfJJ62Uwl9+TOpH4qPCnlqnnLjaPl1apRNjnSr7Tgmnf+
+	E
+X-Gm-Gg: ASbGnctS9JoKdXF/WN3GgXJmpm03ZnshW8ji6OtwnI4RqufEKSCOvhXz2sJXWLHuA3+
+	wRSTD9B2QVOE/8XW6PNv6QHWXG9VjVJic/RwWUp0+tjOItcl8J6DGGzCf0RGHV1WPOJycAUPWvG
+	jsRVVb+6dDA74fQzRj2BRhf2hPEKSGogt6bIVCF2RCzKdxr707wOd1elL1JG477LfrTFVTt1rqi
+	j4hEbIwP0xJCAHubG1aHm51UpaWRXauzLlkP3ebB7+iG4Zs+8G3LyucREjknvqyrwR/goowcDL3
+	sG1hLEtry10CT8XtnENo+0mFUvWd44I+E5RIdrnCWe15AlPn8U5/zHYotd8gTQtrf7JYGuxN/nG
+	X9CtJQCs1vWzpbALMmQ==
+X-Google-Smtp-Source: AGHT+IFy5QK43QuY6+hL98yAwj/BBHMpOeHx21JKXIFx4oqw7yW/szR2O/SwGayufdYEXrjfYcb8Wg==
+X-Received: by 2002:a05:600c:1912:b0:43c:fee3:2bce with SMTP id 5b1f17b1804b1-4405d6ab5f5mr8481255e9.26.1744793120203;
+        Wed, 16 Apr 2025 01:45:20 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1350:fd01:ac0d:cf4f:2906:b446? ([2001:a61:1350:fd01:ac0d:cf4f:2906:b446])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b4d3453sm14290285e9.16.2025.04.16.01.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Apr 2025 01:45:20 -0700 (PDT)
+Message-ID: <e23e72d7-e50b-4a16-b47d-5dcd7cf49641@suse.com>
+Date: Wed, 16 Apr 2025 10:45:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: core: warn if a GFP zone flag is passed to
+ hcd_buffer_alloc()
+To: Petr Tesarik <ptesarik@suse.com>, Oliver Neukum <oneukum@suse.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250320154733.392410-1-ptesarik@suse.com>
+ <20250325134000.575794-1-ptesarik@suse.com>
+ <2025041110-starch-abroad-5311@gregkh> <20250414090216.596ebd11@mordecai>
+ <522b3049-8e7f-41d4-a811-3385992a4d46@suse.com>
+ <20250416094807.2545efd8@mordecai>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250416094807.2545efd8@mordecai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Tue, 15 Apr 2025 09:53:24 +0200
-Oliver Neukum <oneukum@suse.com> wrote:
+On 16.04.25 09:48, Petr Tesarik wrote:
 
-> On 14.04.25 09:02, Petr Tesarik wrote:
-> 
-> Hi,
->   
-> > That's the point. AFAICS there are _no_ in-tree callers that would pass
-> > GFP_DMA or GFP_DMA32 to hcd_buffer_alloc(), directly or indirectly. But
-> > nobody should be tempted to add the flag, because I cannot imagine how
-> > that would ever be the right thing to do.  
-> 
-> You do not dream about putting USB onto PCMCIA over Thunderbolt?
+> Oh, I do, and that's precisely why these GFP flags are no good. The
+> address (and other) constraints imposed by different buses may not
+> (and often do not) match any existing memory zone.
 
-Oh, I do, and that's precisely why these GFP flags are no good. The
-address (and other) constraints imposed by different buses may not
-(and often do not) match any existing memory zone.
+True. So we currently have a non-portable series of flags.
+It would we better if we passed a hypothetical 'struct mem_constraint*'.
+But we don't for now.
 
-However, zone address ranges are determined statically at compile time,
-or latest at boot time (e.g. arm64). It's too late to adjust the limits
-when you hotplug a more constrained bus at run-time. And I haven't even
-mentioned bus bridges which add a non-zero offset to the address...
+> However, zone address ranges are determined statically at compile time,
+> or latest at boot time (e.g. arm64). It's too late to adjust the limits
+> when you hotplug a more constrained bus at run-time. And I haven't even
+> mentioned bus bridges which add a non-zero offset to the address...
 
-> > I can change it back to mem_flags &= ~GFP_ZONEMASK to fix it silently;
-> > I simply thought that driver authors may appreciate a warning that
-> > they're trying to do something silly.  
-> 
-> People rarely appreciate warnings. I think we should limit them
-> to cases where something goes wrong or something unexpected happens.
+Yes. Hence the only time somebody would pass a flag like that would be
+on very arch specific code. That means that such a developer would be on
+his or her own. Hence I'd say the simplest solution is just to do nothing.
 
-I'm certainly no expert on what is expected to happen if you include
-GFP_DMA in your HCD buffer allocation flags, but the current code will
-*ignore* it, unless the HCD uses PIO.
+	Regards
+		Oliver
 
-I thought this was rather unexpected.
-
-> > Whatever works for you, but please keep in mind that there seems to be
-> > agreement among mm people that DMA and DMA32 zones should be removed
-> > from the kernel eventually.  
-> 
-> Well, if somebody finds a legitimate use case for these flags, the mm
-> people should deal with it. They are likelier to find a good solution than
-> all driver writers being forced into finding individual solutions.
-
-My goal is to provide an allocator that is a better match for the
-constraints defined by dma_mask, coherent_dma_mask and bus_dma_limit.
-For now, I'm trying to clean up some users of GFP_DMA and GFP_DMA32
-flags which look obviously incorrect.
-
-Petr T
 
