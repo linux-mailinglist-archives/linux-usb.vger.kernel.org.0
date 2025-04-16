@@ -1,96 +1,127 @@
-Return-Path: <linux-usb+bounces-23106-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23107-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4136FA8B03D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:26:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1DF3A8B056
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BB317ADCDD
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 06:25:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 300D1189AD16
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 06:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5351722259F;
-	Wed, 16 Apr 2025 06:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A3922171E;
+	Wed, 16 Apr 2025 06:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HeW3LmfW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0NVdwl4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BBB21E08B;
-	Wed, 16 Apr 2025 06:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAA12206BF;
+	Wed, 16 Apr 2025 06:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744784803; cv=none; b=PHE/e/b7R1X4Mj7jZP353xMFWBE8v+7R3wFROqYyMRz5jR5qFgvOPcoOYqfwN6YZIH1K9pNppyjlRQm7miDLQStYoHR6icvxn+agTrjsCHApf9lIHRudBZVEUIZVZMZqF+itrlqq7MW0sl4d5qX6lSvuMjlDb1s+BmQvE2+nKO4=
+	t=1744785008; cv=none; b=FMIjnLj68QgPiSZGMvSjlvNtWgTaPpvsCdaoO6IDQ1WZPMbsY2Pm/33WuczlAB3nP+cDq5gnOIWY9raYatcREgLX7fhgMpJ9Ew3GWMyFOoJiafKpB1Z2BUvNf79Y1Kj3tfwZtL/fkis3GRfSJBiRx571h4h6nsUoPl617pwvSYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744784803; c=relaxed/simple;
-	bh=qXExFh5kFbkzyI0w2PnMys9YzEwBpEtjHV9rWBpL5TQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ej5s7TtmiantE927oLaQqXZCx6Ve/l1ieGSBBOOU7Y8Y4lhpRtoXRcMYCW5eqYO50C3mAgP5sQR+rtWJ4Pmt47ywf3Zy6ZgGBrJomnuqsR8XGd0vJ7VDUWr6d+4/2PhVfKfydlgHKttvfmsQbEcEVozE9j2XcoZgNBbsbMm7Mj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HeW3LmfW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4345DC4CEE2;
-	Wed, 16 Apr 2025 06:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744784803;
-	bh=qXExFh5kFbkzyI0w2PnMys9YzEwBpEtjHV9rWBpL5TQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HeW3LmfWrBHzY1lOhCfzRXFLwBLqkoz6nloKZoj8W+HufqBkug5taNd8ErX9nMi4C
-	 E0g6F33KURhueQoS4qRMK6g7Tn+tBq2RAZVeRbnL9wJX6XGmF8Y1IkTPWwS7WI3u5g
-	 1YQBJvqyPWRPJuSfdwHrE48cO1izDAvbNVb213F26XMpn6rbzPYzgnadTotv0AriGG
-	 GRDZO1wRqElgVdjm/MK7nJ7XNysW40u0lydDxFmY/nsLmUQMi7OjOhCAK/BJBYBYEd
-	 sMrcpV+qZHOjZUFhillV+kvs65rxVZrT3tYCufaJ6VDKvFbjWSfjCvr4Ky09Su0X0J
-	 gHz1tQgp8rD8A==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1u4wEK-000000005y0-2JmE;
-	Wed, 16 Apr 2025 08:26:41 +0200
-Date: Wed, 16 Apr 2025 08:26:40 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Michael Ehrenreich <michideep@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: add support for Abacus Electrics
- Optical Probe
-Message-ID: <Z_9NoO4Ma3LrP72L@hovoldconsulting.com>
-References: <Z9ewW-63F212DcV7@veno.localdomain>
+	s=arc-20240116; t=1744785008; c=relaxed/simple;
+	bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uhwiAd1VIG7Nqhfyg89m/2Jsux8oHCacCrRJV2aK54UKT8Wsfk5bOAt7W3r/6/Z8UxwLmsMzidlipq4TaN2xdHT3/GRShOVXl7qRu5m0lsUE/aLfPwtnSZLRASU1Bw7SzOuPFr0TAbIcQmb0N+VP27Q2tA/yzVw69AuRHfd4h3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g0NVdwl4; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5499d2134e8so7680493e87.0;
+        Tue, 15 Apr 2025 23:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744785004; x=1745389804; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
+        b=g0NVdwl4bGCLfJAZBK2XwvLm413rquB8IsYzPYmnJy0Cr/diYo1oi2WYDa1GUvAHWb
+         ZJpGgX4s5DQS46vLJ/WacHhZ2l8XRFg4JU20338UmaDxjpPn1h8XDtvDtOI+XSBpeyWL
+         Xi5H27dmWi3wEbIzH9WlT80WK5vWtMLuaH/Y7zobexPsPb2vIDKcJWCrvTL/ufI3j5O7
+         nTIZ189ziAer2lDpftmAUlSMiJAAW270+2tK73bP72aUDdQMNvNzZDrZB93qjsSIWIaR
+         vlugtyfsyO/6Tk5mGsg8jqBH1m+zQEd2xznWxqleLygXRhWigtjUm0VRNM986myP/CQt
+         GgIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744785004; x=1745389804;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
+        b=eToRKINzrwR0CIVpT6Ng7ibep0khL1KqCuMdARFyAAUiOZ2IduO3yrvjEHDASNFVjh
+         +GYw4ScZ/0/nPlaOE6e0iTXILJr4EluvWm0qy+sKjFSrkKQpcAGyUF4HBqVCRIoscx01
+         Rf0Br+rkslbLQKfkUCdUgHm1BLaBRybu5pAzhDRWuhR+7LTfdHmMWzpvcJJbDi+Yy8tT
+         qirN+HNHKpt3HDebQ18E/vcduHXtEbMUL2kRwYFiIgevuGsQk7hwb+KfYVuXHpFZkknI
+         VZBmCIWHMd2AckF+DI7GEMbi6R8OWhqDeKySB7hkg7k2Zqhliz7hohk+PpzlL/3KoAxw
+         Wa0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWrG4yzGpW7P0dYfe1zUYmiXJnjkSK6RMYipyvlUV/Pys46kjqVhXrzVMOl+VAjb1fK/cmq+d3sdPga2Nw=@vger.kernel.org, AJvYcCX2vu+J8tII4ysvg59yB/8GbGchduVYreJmdWv/Q/2TA2xuQpPcKXwwN6fm57Km+fo0TZGIlUhWq8tJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj1lWp9TNGyg3z45GQslz03PGvzlT1nbkTkPLtn9p2AJiHlpKu
+	NKTrlOildz9IzJVSRs9bmIONd9U88k6iISXd+XeC0w49mdlJ6pinYZCyVg==
+X-Gm-Gg: ASbGnctDnyspoxLdCCpAU2HjeECcgRw5LXDX7x66vgIx8HG4SzoVMHxK6HNIWzqY+Wd
+	rMSZ029MU6PpBJj5uNI+b2i22+XJF3gl/NR3yjlygyxUxB8+AE1dgJERImyp0WJR1tNHI/cHhu1
+	0RVQ3jz/wTYXlCQnw4u7TM6VXiJMBraeV0gDHQwMGxRcDOEbztfjSsX9UEiXoha3soxoRW+3u11
+	v6/cmlCTVIFpUO98Nu5BnSP1SkXwlvVgfwBsRZRtfGobYIIddK/keBx0xvq0c9GIfxX6WfJHit8
+	X+Cq0tVG6KlEfZO4Tcq4TfE4ErVkWlAEzDwvlkRcHe+HT9w9PwdzxngC2A==
+X-Google-Smtp-Source: AGHT+IEvrH8c8f4LURx/Hmz8qsDMxpWkZevbXOY94HHXLFvsjSZoFptohIAZ8X8MoMUvgQKI8KBioQ==
+X-Received: by 2002:a05:6512:239c:b0:545:1d96:d702 with SMTP id 2adb3069b0e04-54d64afd869mr175891e87.48.1744785004257;
+        Tue, 15 Apr 2025 23:30:04 -0700 (PDT)
+Received: from foxbook (adtu187.neoplus.adsl.tpnet.pl. [79.185.232.187])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d3d502579sm1645018e87.127.2025.04.15.23.30.01
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 15 Apr 2025 23:30:02 -0700 (PDT)
+Date: Wed, 16 Apr 2025 08:29:58 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Minas Harutyunyan
+ <hminas@synopsys.com>, Linus Walleij <linus.walleij@linaro.org>, Alan Stern
+ <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: hcd: Add a usb_device argument to
+ hc_driver.endpoint_reset()
+Message-ID: <20250416082958.20c34504@foxbook>
+In-Reply-To: <2025041508-rockslide-endpoint-a48b@gregkh>
+References: <20250415111003.064e0ab8@foxbook>
+	<2025041508-rockslide-endpoint-a48b@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9ewW-63F212DcV7@veno.localdomain>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 17, 2025 at 06:17:15AM +0100, Michael Ehrenreich wrote:
-> Abacus Electrics makes optical probes for interacting with smart meters
-> over an optical interface.
-> 
-> At least one version uses an FT232B chip (as detected by ftdi_sio) with
-> a custom USB PID, which needs to be added to the list to make the device
-> work in a plug-and-play fashion.
-> 
-> Signed-off-by: Michael Ehrenreich <michideep@gmail.com>
+On Tue, 15 Apr 2025 14:26:26 +0200, Greg Kroah-Hartman wrote:
+> > This fixes a 6.15-rc1 regression reported by Paul, which I was able
+> > to reproduce, where xhci_hcd doesn't handle endpoint_reset() after
+> > endpoint_disable() not followed by add_endpoint(). If a configured
+> > device is reset, stalling endpoints start to get stuck permanently.
+>
+> As this fixes a bug, can you add a Fixes: tag with the needed
+> information?
 
-> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-> index 5ee60ba2a..5de8067be 100644
-> --- a/drivers/usb/serial/ftdi_sio_ids.h
-> +++ b/drivers/usb/serial/ftdi_sio_ids.h
-> @@ -1612,3 +1612,8 @@
->   */
->  #define GMC_VID				0x1cd7
->  #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
-> +
-> +/*
-> + * Abacus Electrics
-> + */
-> +#define ABACUS_OPTICAL_PROBE_PID	0xf458 /* ABACUS ELECTRICS Optical Probe */
+Hi Greg,
 
-I moved this one to the FTDI VID section higher up.
+Sorry for bothering you, the real bug is that I forgot to carry over
+the RFC tag from v1.
 
-Now applied, thanks.
+The 6.15 regression is currently solved by reverts Mathias sent you.
 
-Johan
+The underlying bug is much older, I would have to research where it
+went wrong exactly. It was very obscure; a class driver would need to:
+
+1. call usb_set_interface(), usb_reset_device() or something like that
+2. submit some URBs to make the toggle/sequence state non-zero
+3. call usb_clear_halt() on a not yet halted endpoint
+
+Then the host endpoint wouldn't be reset, but the device would.
+
+I know of drivers which do 1 and 2 or even 2 and 3, but I have not
+yet encountered a driver doing all three in this order.
+
+Regards,
+Michal
 
