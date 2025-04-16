@@ -1,186 +1,251 @@
-Return-Path: <linux-usb+bounces-23123-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23124-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 557DDA8B6BB
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 12:24:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC089A8B6E4
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 12:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A685A190499F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 10:25:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4414E3BD732
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 10:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CA92472BD;
-	Wed, 16 Apr 2025 10:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17E12356C9;
+	Wed, 16 Apr 2025 10:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b="hyR+jb4V"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EHsTS0wk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C29D24729A;
-	Wed, 16 Apr 2025 10:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4967118CC1D
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 10:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744799084; cv=none; b=FGf6KvaMprfQV7/X02mTI1HdoPyViELOSuf8y5hUEriU/41t+zXGXg4ta2Sw6yNVAHZR6FpJjiZbBMpxDb77BoB34tUn8sVbQ9nm/YL3Gl2K59hj6TZR3Yuc5BICuxXwSuHbags0UVt7ZrmgUWJmbotHJ+IHBfAQHje/VFiqBjc=
+	t=1744800011; cv=none; b=MYGxXgTW2YstnVBjZDSUTqZFvL/jpQAk7/1dJ42d9tmjZgfeKYsjmgIzCpWQOmdnpyapaqWAvJ1DbI4rWU0MPV/La85xd5ytA2kjisX0s7skZ3iAYUw1yIEaribYnzHln5+onTq2jZGudHjhe2QHDHymofI55361o2IpHIVEOIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744799084; c=relaxed/simple;
-	bh=F1cfkVME9g4l1SiglzOmf/7l3tvFBiMdFHUrX9+ZuYY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NzQF/JvIZMzoU8RUcU7fb6UEjsHYLT4JwBbimylIEuz2nTr3uMNNcPTZhaUqzDQ/2HS7xa68Cf58j2g+kdb0rG1oJpiCkqecLKt+MbaznxW3x2kCwBOdoCCtFSbxOK2ZIvonArf5pv1hNejOxQYBsBW5dE3LEZFKRic8enkRL5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de header.b=hyR+jb4V; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1744799063; x=1745403863; i=fiona.klute@gmx.de;
-	bh=F1cfkVME9g4l1SiglzOmf/7l3tvFBiMdFHUrX9+ZuYY=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=hyR+jb4VC++rQ8EjbTAN4bYe1D7h1IqssziTnVJRhaa4dFRffsDPj63EXgVQviUm
-	 wKYk9Z7xEkfNB9FPReOdHTlr+AvGDAuxJeHNr/zAtqYL2jla1PgPl+DZSgt7XmQrD
-	 PN8KbfJWPo/g8zJQjc3lFw0UGzF3/XgK/7Cy5UKxOZN1pgAzhGCjY+LziUmNzbqpZ
-	 aC4J+Xm2KI9V5nFJ1ZYXMYjza3a2rtZDWHMk+4NRHyjT+V6LPJfOYcrijZD1gLtar
-	 HFpSs13p7+NMwuQAR1bGkrrC5FXhunO6LEbJC313hC7YE3izaxEpBCXFGgi6ySpCE
-	 ceoF0dkcTO4MxlaFfg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.113.159]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpnm-1tFmDk4AuY-00nWAL; Wed, 16
- Apr 2025 12:24:23 +0200
-From: Fiona Klute <fiona.klute@gmx.de>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
-	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-list@raspberrypi.com,
-	Fiona Klute <fiona.klute@gmx.de>
-Subject: [PATCH net v2] net: phy: microchip: force IRQ polling mode for lan88xx
-Date: Wed, 16 Apr 2025 12:24:13 +0200
-Message-ID: <20250416102413.30654-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1744800011; c=relaxed/simple;
+	bh=O43vBZXURJqZi5/YVIFLW0+npdbUxEBlQ/F7/trHqLA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R1DC62gf0zai0Ngs3rBMK7QG0+OAQwmQb2tir96JYIptvoLI4tPsj/atx5SoKNwgrHt0i8cTV58oXndiFlgiWRAyrxcwMvWUFrFWOXbqit9MKNLpO2ectjIg6tvOCyW4Zo8fIdv8VJ5zJwhLwUdvkmpBU7MbnSql9MFO2DrAbiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EHsTS0wk; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5499c8c95beso7394e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 03:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744800006; x=1745404806; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j5ZXVb5dTrb9owxQOaSc6zse/02f6gsl8oULQh4e96c=;
+        b=EHsTS0wkOzCfHSuRVYtTHP6PMnYmh1qqtQ+o+FbKOp4FdtxD0KhGZJv8J8i3Tq0XYL
+         RI1g+91v35Jyv2vvhFK1TTcWGc0iX1a5Zs0T7vS+ubkd8Y0nejh84fc5SwBBCuAuXM0f
+         j8GrQk+GMwG6mO2oJgfVDAG3kaxtdCZ/R3nMiwz0bt4aQ/Rpi7NHo7gb5S7p80yOVaqN
+         64XXo+ZNS4QRj/+wNuZgwvuDCJlIJfkWGg1wPmaDkynRbXh9mGi+8HHWenQjJ7qUpkLw
+         oYQuvGaU9nqQ55uXMxjjKL33hXNJzCo7fakVG74sGcK1XC5WZv7DG3tVaK6lzcZXWQ+F
+         BfYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744800006; x=1745404806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j5ZXVb5dTrb9owxQOaSc6zse/02f6gsl8oULQh4e96c=;
+        b=cujuAhh+hWmEVUhiMQ2SeBbKdnq9j6jDJUiKvNHFkAqHcomE5kfdCxnO5e8RVKR+va
+         Z1M8zy41Sx1yhcUxOWOQDAEWVmpuTREKcoSZoXUPMhB5jffyuUIkGdGL3k5yQ1hUaWwS
+         jb408sFuziSWj18XUkTyrzU28Ld3couzxNUvO+y5gD7tF2BRPTdB8F4WvFxA0nnAcxIH
+         4hXt8V+vjfQW8+/GrzeTrLw4K/7tga7HObG5u3SlsJnh+cwkqrYKCqx33mODznHKeyaA
+         PrBzq/X4h2zipA5UjPfhpKa6YNPw1U1ZGWu/yUnOa6scpEtDX9cAkzzf87ysUpuLOWQS
+         QXXg==
+X-Gm-Message-State: AOJu0YwVfR3eL1T75+vdd0dc5RyQ/RU3WXVwHlcmXYjP8ug+iuPelKyx
+	HEdL9Zx9zlsAPV8iJVV6ynSK52YPsLUXFpCLtMXNWEP4bO4688rSh76mhy4YS6l9psnVznVfBJ1
+	r8uWwlkQB/clVe355AR6zsMRTWE75DsToChukpWPx4JpYCWB9LXNB
+X-Gm-Gg: ASbGncuEIZ664bmzbhTYxMHv0/UWzWJ8U/VxsIjcwa0OXwrvlXDhKKxQI70EXKodF8L
+	OYhtpzirv7d/XWywK9+NWI5ObvSz8HN3qBn7ZxSZdsdtpYBqXkpxSWJcn9dnFBFzhHb22jSQXZk
+	C73ucXuRm0zxHMEZh3up7gTKtU97oSozoS1cOQGv7WQoONEkQL
+X-Google-Smtp-Source: AGHT+IG0RRQcjL0vTELyRBOF75YqbYQVhuLkLnGrg0E8ngHimeLXE2D4ctxxmq3vsKAQL1uhbg5wwG9sZ5PWlbwkso8=
+X-Received: by 2002:a05:6512:328d:b0:543:cf0c:ed14 with SMTP id
+ 2adb3069b0e04-54d6437ea2cmr72985e87.5.1744800005838; Wed, 16 Apr 2025
+ 03:40:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:K11aug/rBQsdo745LCFBdVhspCcbf/XlKyyietnwyNGMUzNbyLO
- wD28x74Vao5dMq4Y3kzANLrMtv+zmIR1FghOm3BbXFiv34lGjHcjrQnsW0GBsBnqkBIGJKy
- xdaf6zlPNDnXIE6yTIJkOYjQpalMHN3UAINawdDvEOBiAX0FfdYhyxoMxZ4UIg/OMn4R2xR
- Uxqic1IaxfgmDz0meUR1Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sdNxHQs2iVk=;h1sr932vX5NifI2SN8Oii8jC0cM
- 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
- EZ/Y4D9CyrByQ=
+References: <20250327133233.2566528-1-khtsai@google.com>
+In-Reply-To: <20250327133233.2566528-1-khtsai@google.com>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Wed, 16 Apr 2025 18:39:39 +0800
+X-Gm-Features: ATxdqUEz3Vxoy2SWWp3ckll3jRAQgcoBue0UND1ir68nE66lyLygn_C_oCNJUro
+Message-ID: <CAKzKK0oqdxvnfGg6GR_N3M59fdPqR+uTW=YC6SPGOB7+aojV_A@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: dwc3: Abort suspend on soft disconnect failure
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-V2l0aCBsYW44OHh4IGJhc2VkIGRldmljZXMgdGhlIGxhbjc4eHggZHJpdmVyIGNhbiBnZXQgc3R1
-Y2sgaW4gYW4KaW50ZXJydXB0IGxvb3Agd2hpbGUgYnJpbmdpbmcgdGhlIGRldmljZSB1cCwgZmxv
-b2RpbmcgdGhlIGtlcm5lbCBsb2cKd2l0aCBtZXNzYWdlcyBsaWtlIHRoZSBmb2xsb3dpbmc6Cgps
-YW43OHh4IDItMzoxLjAgZW5wMXMwdTM6IGtldmVudCA0IG1heSBoYXZlIGJlZW4gZHJvcHBlZAoK
-UmVtb3ZpbmcgaW50ZXJydXB0IHN1cHBvcnQgZnJvbSB0aGUgbGFuODh4eCBQSFkgZHJpdmVyIGZv
-cmNlcyB0aGUKZHJpdmVyIHRvIHVzZSBwb2xsaW5nIGluc3RlYWQsIHdoaWNoIGF2b2lkcyB0aGUg
-cHJvYmxlbS4KClRoZSBpc3N1ZSBoYXMgYmVlbiBvYnNlcnZlZCB3aXRoIFJhc3BiZXJyeSBQaSBk
-ZXZpY2VzIGF0IGxlYXN0IHNpbmNlCjQuMTQgKHNlZSBbMV0sIGJ1ZyByZXBvcnQgZm9yIHRoZWly
-IGRvd25zdHJlYW0ga2VybmVsKSwgYXMgd2VsbCBhcwp3aXRoIE52aWRpYSBkZXZpY2VzIFsyXSBp
-biAyMDIwLCB3aGVyZSBkaXNhYmxpbmcgcG9sbGluZyB3YXMgdGhlCnZlbmRvci1zdWdnZXN0ZWQg
-d29ya2Fyb3VuZCAodG9nZXRoZXIgd2l0aCB0aGUgY2xhaW0gdGhhdCBwaHlsaWIKY2hhbmdlcyBp
-biA0LjkgbWFkZSB0aGUgaW50ZXJydXB0IGhhbmRsaW5nIGluIGxhbjc4eHggaW5jb21wYXRpYmxl
-KS4KCklwZXJmIHJlcG9ydHMgd2VsbCBvdmVyIDkwME1iaXRzL3NlYyBwZXIgZGlyZWN0aW9uIHdp
-dGggY2xpZW50IGluCi0tZHVhbHRlc3QgbW9kZSwgc28gdGhlcmUgZG9lcyBub3Qgc2VlbSB0byBi
-ZSBhIHNpZ25pZmljYW50IGltcGFjdCBvbgp0aHJvdWdocHV0IChsYW44OHh4IGRldmljZSBjb25u
-ZWN0ZWQgdmlhIHN3aXRjaCB0byB0aGUgcGVlcikuCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL3Jh
-c3BiZXJyeXBpL2xpbnV4L2lzc3Vlcy8yNDQ3ClsyXSBodHRwczovL2ZvcnVtcy5kZXZlbG9wZXIu
-bnZpZGlhLmNvbS90L2pldHNvbi14YXZpZXItYW5kLWxhbjc4MDAtcHJvYmxlbS8xNDIxMzQvMTEK
-Ckxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnLzA5MDFkOTBkLTNmMjAtNGExMC1iNjgwLTlj
-OTc4ZTA0ZGRkYUBsdW5uLmNoCkZpeGVzOiA3OTJhZWM0N2Q1OWQgKCJhZGQgbWljcm9jaGlwIExB
-Tjg4eHggcGh5IGRyaXZlciIpClNpZ25lZC1vZmYtYnk6IEZpb25hIEtsdXRlIDxmaW9uYS5rbHV0
-ZUBnbXguZGU+CkNjOiBrZXJuZWwtbGlzdEByYXNwYmVycnlwaS5jb20KQ2M6IHN0YWJsZUB2Z2Vy
-Lmtlcm5lbC5vcmcKLS0tCnYyOgotIGFkZCBjb21tZW50IHdoeSBpbnRlcnJ1cHQgZnVuY3Rpb25z
-IGFyZSBtaXNzaW5nCi0gYWRkIEZpeGVzIHJlZmVyZW5jZQp2MTogaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvbmV0ZGV2LzIwMjUwNDE0MTUyNjM0LjI3ODY0NDctMS1maW9uYS5rbHV0ZUBnbXguZGUv
-CgogZHJpdmVycy9uZXQvcGh5L21pY3JvY2hpcC5jIHwgNDYgKysrLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgNDMgZGVs
-ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvcGh5L21pY3JvY2hpcC5jIGIvZHJp
-dmVycy9uZXQvcGh5L21pY3JvY2hpcC5jCmluZGV4IDBlMTdjYzQ1OGVmZGMuLjkzZGU4OGMxYzhm
-ZDUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3BoeS9taWNyb2NoaXAuYworKysgYi9kcml2ZXJz
-L25ldC9waHkvbWljcm9jaGlwLmMKQEAgLTM3LDQ3ICszNyw2IEBAIHN0YXRpYyBpbnQgbGFuODh4
-eF93cml0ZV9wYWdlKHN0cnVjdCBwaHlfZGV2aWNlICpwaHlkZXYsIGludCBwYWdlKQogCXJldHVy
-biBfX3BoeV93cml0ZShwaHlkZXYsIExBTjg4WFhfRVhUX1BBR0VfQUNDRVNTLCBwYWdlKTsKIH0K
-IAotc3RhdGljIGludCBsYW44OHh4X3BoeV9jb25maWdfaW50cihzdHJ1Y3QgcGh5X2RldmljZSAq
-cGh5ZGV2KQotewotCWludCByYzsKLQotCWlmIChwaHlkZXYtPmludGVycnVwdHMgPT0gUEhZX0lO
-VEVSUlVQVF9FTkFCTEVEKSB7Ci0JCS8qIHVubWFzayBhbGwgc291cmNlIGFuZCBjbGVhciB0aGVt
-IGJlZm9yZSBlbmFibGUgKi8KLQkJcmMgPSBwaHlfd3JpdGUocGh5ZGV2LCBMQU44OFhYX0lOVF9N
-QVNLLCAweDdGRkYpOwotCQlyYyA9IHBoeV9yZWFkKHBoeWRldiwgTEFOODhYWF9JTlRfU1RTKTsK
-LQkJcmMgPSBwaHlfd3JpdGUocGh5ZGV2LCBMQU44OFhYX0lOVF9NQVNLLAotCQkJICAgICAgIExB
-Tjg4WFhfSU5UX01BU0tfTURJTlRQSU5fRU5fIHwKLQkJCSAgICAgICBMQU44OFhYX0lOVF9NQVNL
-X0xJTktfQ0hBTkdFXyk7Ci0JfSBlbHNlIHsKLQkJcmMgPSBwaHlfd3JpdGUocGh5ZGV2LCBMQU44
-OFhYX0lOVF9NQVNLLCAwKTsKLQkJaWYgKHJjKQotCQkJcmV0dXJuIHJjOwotCi0JCS8qIEFjayBp
-bnRlcnJ1cHRzIGFmdGVyIHRoZXkgaGF2ZSBiZWVuIGRpc2FibGVkICovCi0JCXJjID0gcGh5X3Jl
-YWQocGh5ZGV2LCBMQU44OFhYX0lOVF9TVFMpOwotCX0KLQotCXJldHVybiByYyA8IDAgPyByYyA6
-IDA7Ci19Ci0KLXN0YXRpYyBpcnFyZXR1cm5fdCBsYW44OHh4X2hhbmRsZV9pbnRlcnJ1cHQoc3Ry
-dWN0IHBoeV9kZXZpY2UgKnBoeWRldikKLXsKLQlpbnQgaXJxX3N0YXR1czsKLQotCWlycV9zdGF0
-dXMgPSBwaHlfcmVhZChwaHlkZXYsIExBTjg4WFhfSU5UX1NUUyk7Ci0JaWYgKGlycV9zdGF0dXMg
-PCAwKSB7Ci0JCXBoeV9lcnJvcihwaHlkZXYpOwotCQlyZXR1cm4gSVJRX05PTkU7Ci0JfQotCi0J
-aWYgKCEoaXJxX3N0YXR1cyAmIExBTjg4WFhfSU5UX1NUU19MSU5LX0NIQU5HRV8pKQotCQlyZXR1
-cm4gSVJRX05PTkU7Ci0KLQlwaHlfdHJpZ2dlcl9tYWNoaW5lKHBoeWRldik7Ci0KLQlyZXR1cm4g
-SVJRX0hBTkRMRUQ7Ci19Ci0KIHN0YXRpYyBpbnQgbGFuODh4eF9zdXNwZW5kKHN0cnVjdCBwaHlf
-ZGV2aWNlICpwaHlkZXYpCiB7CiAJc3RydWN0IGxhbjg4eHhfcHJpdiAqcHJpdiA9IHBoeWRldi0+
-cHJpdjsKQEAgLTUyOCw4ICs0ODcsOSBAQCBzdGF0aWMgc3RydWN0IHBoeV9kcml2ZXIgbWljcm9j
-aGlwX3BoeV9kcml2ZXJbXSA9IHsKIAkuY29uZmlnX2FuZWcJPSBsYW44OHh4X2NvbmZpZ19hbmVn
-LAogCS5saW5rX2NoYW5nZV9ub3RpZnkgPSBsYW44OHh4X2xpbmtfY2hhbmdlX25vdGlmeSwKIAot
-CS5jb25maWdfaW50cgk9IGxhbjg4eHhfcGh5X2NvbmZpZ19pbnRyLAotCS5oYW5kbGVfaW50ZXJy
-dXB0ID0gbGFuODh4eF9oYW5kbGVfaW50ZXJydXB0LAorCS8qIEludGVycnVwdCBoYW5kbGluZyBp
-cyBicm9rZW4sIGRvIG5vdCBkZWZpbmUgcmVsYXRlZAorCSAqIGZ1bmN0aW9ucyB0byBmb3JjZSBw
-b2xsaW5nLgorCSAqLwogCiAJLnN1c3BlbmQJPSBsYW44OHh4X3N1c3BlbmQsCiAJLnJlc3VtZQkJ
-PSBnZW5waHlfcmVzdW1lLAotLSAKMi40OS4wCgo=
+On Thu, Mar 27, 2025 at 9:32=E2=80=AFPM Kuen-Han Tsai <khtsai@google.com> w=
+rote:
+>
+> When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
+> going with the suspend, resulting in a period where the power domain is
+> off, but the gadget driver remains connected.  Within this time frame,
+> invoking vbus_event_work() will cause an error as it attempts to access
+> DWC3 registers for endpoint disabling after the power domain has been
+> completely shut down.
+>
+> Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
+> controller and proceeds with a soft connect.
+>
+> Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
+> CC: stable@vger.kernel.org
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> ---
+>
+> Kernel panic - not syncing: Asynchronous SError Interrupt
+> Workqueue: events vbus_event_work
+> Call trace:
+>  dump_backtrace+0xf4/0x118
+>  show_stack+0x18/0x24
+>  dump_stack_lvl+0x60/0x7c
+>  dump_stack+0x18/0x3c
+>  panic+0x16c/0x390
+>  nmi_panic+0xa4/0xa8
+>  arm64_serror_panic+0x6c/0x94
+>  do_serror+0xc4/0xd0
+>  el1h_64_error_handler+0x34/0x48
+>  el1h_64_error+0x68/0x6c
+>  readl+0x4c/0x8c
+>  __dwc3_gadget_ep_disable+0x48/0x230
+>  dwc3_gadget_ep_disable+0x50/0xc0
+>  usb_ep_disable+0x44/0xe4
+>  ffs_func_eps_disable+0x64/0xc8
+>  ffs_func_set_alt+0x74/0x368
+>  ffs_func_disable+0x18/0x28
+>  composite_disconnect+0x90/0xec
+>  configfs_composite_disconnect+0x64/0x88
+>  usb_gadget_disconnect_locked+0xc0/0x168
+>  vbus_event_work+0x3c/0x58
+>  process_one_work+0x1e4/0x43c
+>  worker_thread+0x25c/0x430
+>  kthread+0x104/0x1d4
+>  ret_from_fork+0x10/0x20
+>
+> ---
+> Changelog:
+>
+> v3:
+> - change the Fixes tag
+>
+> v2:
+> - move declarations in separate lines
+> - add the Fixes tag
+>
+> ---
+>  drivers/usb/dwc3/core.c   |  9 +++++++--
+>  drivers/usb/dwc3/gadget.c | 22 +++++++++-------------
+>  2 files changed, 16 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 66a08b527165..1cf1996ae1fb 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -2388,6 +2388,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm=
+_message_t msg)
+>  {
+>         u32 reg;
+>         int i;
+> +       int ret;
+>
+>         if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
+>                 dwc->susphy_state =3D (dwc3_readl(dwc->regs, DWC3_GUSB2PH=
+YCFG(0)) &
+> @@ -2406,7 +2407,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm=
+_message_t msg)
+>         case DWC3_GCTL_PRTCAP_DEVICE:
+>                 if (pm_runtime_suspended(dwc->dev))
+>                         break;
+> -               dwc3_gadget_suspend(dwc);
+> +               ret =3D dwc3_gadget_suspend(dwc);
+> +               if (ret)
+> +                       return ret
+
+Sorry about forgetting the semicolon.
+
+>                 synchronize_irq(dwc->irq_gadget);
+>                 dwc3_core_exit(dwc);
+>                 break;
+> @@ -2441,7 +2444,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm=
+_message_t msg)
+>                         break;
+>
+>                 if (dwc->current_otg_role =3D=3D DWC3_OTG_ROLE_DEVICE) {
+> -                       dwc3_gadget_suspend(dwc);
+> +                       ret =3D dwc3_gadget_suspend(dwc);
+> +                       if (ret)
+> +                               return ret;
+>                         synchronize_irq(dwc->irq_gadget);
+>                 }
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 89a4dc8ebf94..316c1589618e 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+>         int ret;
+>
+>         ret =3D dwc3_gadget_soft_disconnect(dwc);
+> -       if (ret)
+> -               goto err;
+> -
+> -       spin_lock_irqsave(&dwc->lock, flags);
+> -       if (dwc->gadget_driver)
+> -               dwc3_disconnect_gadget(dwc);
+> -       spin_unlock_irqrestore(&dwc->lock, flags);
+> -
+> -       return 0;
+> -
+> -err:
+>         /*
+>          * Attempt to reset the controller's state. Likely no
+>          * communication can be established until the host
+>          * performs a port reset.
+>          */
+> -       if (dwc->softconnect)
+> +       if (ret && dwc->softconnect) {
+>                 dwc3_gadget_soft_connect(dwc);
+> +               return ret;
+
+This should return -EAGAIN after a soft connect to keep dwc3 active,
+allowing dwc3_gadget_pullup() to perform the subsequent pull-down
+normally.
+
+> +       }
+>
+> -       return ret;
+> +       spin_lock_irqsave(&dwc->lock, flags);
+> +       if (dwc->gadget_driver)
+> +               dwc3_disconnect_gadget(dwc);
+> +       spin_unlock_irqrestore(&dwc->lock, flags);
+> +
+> +       return 0;
+>  }
+>
+>  int dwc3_gadget_resume(struct dwc3 *dwc)
+> --
+> 2.49.0.472.ge94155a9ec-goog
+>
+
+Hi Thinh and Greg,
+
+Sorry again for the lack of thorough testing on my patches. I've
+corrected silly mistakes and sent out v4.
+
+https://lore.kernel.org/linux-usb/20250416100515.2131853-1-khtsai@google.co=
+m/
+
+Thanks,
+Kuen-Han
 
