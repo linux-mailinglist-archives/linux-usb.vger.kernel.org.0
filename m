@@ -1,127 +1,96 @@
-Return-Path: <linux-usb+bounces-23107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1DF3A8B056
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:30:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD719A8B069
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 08:35:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 300D1189AD16
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 06:30:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF175A054A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 06:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A3922171E;
-	Wed, 16 Apr 2025 06:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261A722171E;
+	Wed, 16 Apr 2025 06:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0NVdwl4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqIGa8Bh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAA12206BF;
-	Wed, 16 Apr 2025 06:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3663597A;
+	Wed, 16 Apr 2025 06:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744785008; cv=none; b=FMIjnLj68QgPiSZGMvSjlvNtWgTaPpvsCdaoO6IDQ1WZPMbsY2Pm/33WuczlAB3nP+cDq5gnOIWY9raYatcREgLX7fhgMpJ9Ew3GWMyFOoJiafKpB1Z2BUvNf79Y1Kj3tfwZtL/fkis3GRfSJBiRx571h4h6nsUoPl617pwvSYE=
+	t=1744785333; cv=none; b=crqIJMW1kedLJJIulsK74Z6nswC65Qd0p8H+xRp/P2JbLnqpsJseOAEXSzA4OnWQn/axj4lkLmpnhqZtfW0Psu7ceB3mAOYIebfMKB9Mkb3jXFRYzizwrOPxjYiM4G5EFaZZbaO/ffABIdJpVYlO4yR1tXuGOajbLPQcaw4ok3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744785008; c=relaxed/simple;
-	bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uhwiAd1VIG7Nqhfyg89m/2Jsux8oHCacCrRJV2aK54UKT8Wsfk5bOAt7W3r/6/Z8UxwLmsMzidlipq4TaN2xdHT3/GRShOVXl7qRu5m0lsUE/aLfPwtnSZLRASU1Bw7SzOuPFr0TAbIcQmb0N+VP27Q2tA/yzVw69AuRHfd4h3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g0NVdwl4; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5499d2134e8so7680493e87.0;
-        Tue, 15 Apr 2025 23:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744785004; x=1745389804; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
-        b=g0NVdwl4bGCLfJAZBK2XwvLm413rquB8IsYzPYmnJy0Cr/diYo1oi2WYDa1GUvAHWb
-         ZJpGgX4s5DQS46vLJ/WacHhZ2l8XRFg4JU20338UmaDxjpPn1h8XDtvDtOI+XSBpeyWL
-         Xi5H27dmWi3wEbIzH9WlT80WK5vWtMLuaH/Y7zobexPsPb2vIDKcJWCrvTL/ufI3j5O7
-         nTIZ189ziAer2lDpftmAUlSMiJAAW270+2tK73bP72aUDdQMNvNzZDrZB93qjsSIWIaR
-         vlugtyfsyO/6Tk5mGsg8jqBH1m+zQEd2xznWxqleLygXRhWigtjUm0VRNM986myP/CQt
-         GgIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744785004; x=1745389804;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5xWF+LyPoYH5KqxcaJNETqNS28KCaaILPY9hkLQ+CoQ=;
-        b=eToRKINzrwR0CIVpT6Ng7ibep0khL1KqCuMdARFyAAUiOZ2IduO3yrvjEHDASNFVjh
-         +GYw4ScZ/0/nPlaOE6e0iTXILJr4EluvWm0qy+sKjFSrkKQpcAGyUF4HBqVCRIoscx01
-         Rf0Br+rkslbLQKfkUCdUgHm1BLaBRybu5pAzhDRWuhR+7LTfdHmMWzpvcJJbDi+Yy8tT
-         qirN+HNHKpt3HDebQ18E/vcduHXtEbMUL2kRwYFiIgevuGsQk7hwb+KfYVuXHpFZkknI
-         VZBmCIWHMd2AckF+DI7GEMbi6R8OWhqDeKySB7hkg7k2Zqhliz7hohk+PpzlL/3KoAxw
-         Wa0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWrG4yzGpW7P0dYfe1zUYmiXJnjkSK6RMYipyvlUV/Pys46kjqVhXrzVMOl+VAjb1fK/cmq+d3sdPga2Nw=@vger.kernel.org, AJvYcCX2vu+J8tII4ysvg59yB/8GbGchduVYreJmdWv/Q/2TA2xuQpPcKXwwN6fm57Km+fo0TZGIlUhWq8tJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj1lWp9TNGyg3z45GQslz03PGvzlT1nbkTkPLtn9p2AJiHlpKu
-	NKTrlOildz9IzJVSRs9bmIONd9U88k6iISXd+XeC0w49mdlJ6pinYZCyVg==
-X-Gm-Gg: ASbGnctDnyspoxLdCCpAU2HjeECcgRw5LXDX7x66vgIx8HG4SzoVMHxK6HNIWzqY+Wd
-	rMSZ029MU6PpBJj5uNI+b2i22+XJF3gl/NR3yjlygyxUxB8+AE1dgJERImyp0WJR1tNHI/cHhu1
-	0RVQ3jz/wTYXlCQnw4u7TM6VXiJMBraeV0gDHQwMGxRcDOEbztfjSsX9UEiXoha3soxoRW+3u11
-	v6/cmlCTVIFpUO98Nu5BnSP1SkXwlvVgfwBsRZRtfGobYIIddK/keBx0xvq0c9GIfxX6WfJHit8
-	X+Cq0tVG6KlEfZO4Tcq4TfE4ErVkWlAEzDwvlkRcHe+HT9w9PwdzxngC2A==
-X-Google-Smtp-Source: AGHT+IEvrH8c8f4LURx/Hmz8qsDMxpWkZevbXOY94HHXLFvsjSZoFptohIAZ8X8MoMUvgQKI8KBioQ==
-X-Received: by 2002:a05:6512:239c:b0:545:1d96:d702 with SMTP id 2adb3069b0e04-54d64afd869mr175891e87.48.1744785004257;
-        Tue, 15 Apr 2025 23:30:04 -0700 (PDT)
-Received: from foxbook (adtu187.neoplus.adsl.tpnet.pl. [79.185.232.187])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d3d502579sm1645018e87.127.2025.04.15.23.30.01
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 15 Apr 2025 23:30:02 -0700 (PDT)
-Date: Wed, 16 Apr 2025 08:29:58 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, Minas Harutyunyan
- <hminas@synopsys.com>, Linus Walleij <linus.walleij@linaro.org>, Alan Stern
- <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: hcd: Add a usb_device argument to
- hc_driver.endpoint_reset()
-Message-ID: <20250416082958.20c34504@foxbook>
-In-Reply-To: <2025041508-rockslide-endpoint-a48b@gregkh>
-References: <20250415111003.064e0ab8@foxbook>
-	<2025041508-rockslide-endpoint-a48b@gregkh>
+	s=arc-20240116; t=1744785333; c=relaxed/simple;
+	bh=uAz0mpaZ1a822icq6bDEJvy+jiunxJBixzq+WVVONd4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qpZULWUvrE+/ektlOd0DPpSD+BQCMu/kWFYAAObhZD+QTVlvvCCIpNiILykjQPX3YF0mldsfA4iA3hvV6AcbUDzs0NsBAYtB+1NlbIyDyaOl6epytxQEMdj9FbOKTYC2P36flBQVpnqGUD78rcnEH/X9FfSBFnlRc7wVyiWeIgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqIGa8Bh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B371C4CEE2;
+	Wed, 16 Apr 2025 06:35:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744785333;
+	bh=uAz0mpaZ1a822icq6bDEJvy+jiunxJBixzq+WVVONd4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kqIGa8BhbSw65hv20D9N8g3inr/eD8uGeejiw6LexK4SmIfhysgcPeoy2Nk1BscUW
+	 s8o7mogPGdGOA/yJayv6u11XxmCKfpPXNGYh0bxdOoQzfvi9r9CHgHxgrAmQvEA9o1
+	 WNEn9kaHOzeZ7Q8AOYdQEQfwaIcyVYcv7vmgvyv8apk6rp2qrlesWaGvWXueY+JesB
+	 NBa5Qsp6kjSzXPV//n87s6J/MBEP7imPyVbsfNyLDngdxbr5AG3U5mTtr7vfmrdJ9G
+	 SGaFozrVEFxPDNU4IsB5KnZr47w4/+PmsuHSyUkxZqaVuJTyltGHxbdIAU+ARcS9O/
+	 dFsKCimxkg60A==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1u4wMs-000000006CK-1Vzz;
+	Wed, 16 Apr 2025 08:35:31 +0200
+Date: Wed, 16 Apr 2025 08:35:30 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Craig Hesling <craig@hesling.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, sboyd@kernel.org
+Subject: Re: [PATCH] USB: serial: simple: add OWON HDS200 series oscilloscope
+ support
+Message-ID: <Z_9PssdqzDrAmgUb@hovoldconsulting.com>
+References: <20250408232703.954945-1-craig@hesling.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250408232703.954945-1-craig@hesling.com>
 
-On Tue, 15 Apr 2025 14:26:26 +0200, Greg Kroah-Hartman wrote:
-> > This fixes a 6.15-rc1 regression reported by Paul, which I was able
-> > to reproduce, where xhci_hcd doesn't handle endpoint_reset() after
-> > endpoint_disable() not followed by add_endpoint(). If a configured
-> > device is reset, stalling endpoints start to get stuck permanently.
->
-> As this fixes a bug, can you add a Fixes: tag with the needed
-> information?
+On Tue, Apr 08, 2025 at 04:27:03PM -0700, Craig Hesling wrote:
+> Add serial support for OWON HDS200 series oscilloscopes and likely
+> many other pieces of OWON test equipment.
+> 
+> OWON HDS200 series devices host two USB endpoints, designed to
+> facilitate bidirectional SCPI. SCPI is a predominately ASCII text
+> protocol for test/measurement equipment. Having a serial/tty interface
+> for these devices lowers the barrier to entry for anyone trying to
+> write programs to communicate with them.
+> 
+> The following shows the USB descriptor for the OWON HDS272S running
+> firmware V5.7.1:
+> 
+> Bus 001 Device 068: ID 5345:1234 Owon PDS6062T Oscilloscope
 
-Hi Greg,
+> OWON appears to be using the same USB Vendor and Product ID for many
+> of their oscilloscopes. Looking at the discussion about the USB
+> vendor/product ID, in the link bellow, suggests that this VID/PID is
+> shared with VDS, SDS, PDS, and now the HDS series oscilloscopes.
+> Available documentation for these devices seems to indicate that all
+> use a similar SCPI protocol, some with RS232 options. It is likely that
+> this same simple serial setup would work correctly for them all.
+> 
+> Link: https://usb-ids.gowdy.us/read/UD/5345/1234
+> Signed-off-by: Craig Hesling <craig@hesling.com>
 
-Sorry for bothering you, the real bug is that I forgot to carry over
-the RFC tag from v1.
+Thanks for the patch. Now applied.
 
-The 6.15 regression is currently solved by reverts Mathias sent you.
-
-The underlying bug is much older, I would have to research where it
-went wrong exactly. It was very obscure; a class driver would need to:
-
-1. call usb_set_interface(), usb_reset_device() or something like that
-2. submit some URBs to make the toggle/sequence state non-zero
-3. call usb_clear_halt() on a not yet halted endpoint
-
-Then the host endpoint wouldn't be reset, but the device would.
-
-I know of drivers which do 1 and 2 or even 2 and 3, but I have not
-yet encountered a driver doing all three in this order.
-
-Regards,
-Michal
+Johan
 
