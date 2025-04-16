@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-23157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23158-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC663A909E2
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 19:21:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F35A90A57
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 19:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 344FE190571F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 17:21:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E3CB16A018
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 17:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9932B218ADE;
-	Wed, 16 Apr 2025 17:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED38217736;
+	Wed, 16 Apr 2025 17:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JA1RjVDx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6tGNm2w"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C75217F35
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2071FB3
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744824002; cv=none; b=C9maiZvV0sbm4p+pnVSXwulB9e2AfWq+7LfA4rTIIo2WOCJFz4wsKhaw59zxHYggbnLAqwZDTGCxHsbFmAvtpTsxJmxhK4szzB0a/hvdT3cuFCfAOYnbWCkGZstX2c3jNvuFn9LoHg7Eh6245eabRJKb8mhe3T4yKRxBXR+3K5E=
+	t=1744825392; cv=none; b=ICagktTQwK9xTf3v2dH0MnQpkl91TQJNpmq3hPlb7y/L+AdV4Hg4hI/4KfcQBY9OTV6isnPr2HochlHa0D4yPLApoHMCrJODaJNSi7U4VJA4enhcI1U0OVBnA0oj2ORGHqYP3rF4fZjWvFf1BJOwpcQUMJXNQvS3T+H/d9EMSPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744824002; c=relaxed/simple;
-	bh=B3ZbGHCut46hMDX1GVJfkG2DBQJZWNjv15c3LPUeB9w=;
+	s=arc-20240116; t=1744825392; c=relaxed/simple;
+	bh=csVaMlhpBtQQ2uX1pv9AGgNBxuRseqXrxxSJQqaz4N4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kC4ln/ZlL8JHZYuPWl4iMiPdhRCiQn58Xgy+JBLBrkMCCEbjW7BAOhdbxzuYpp1aw0WmlrkVzcBhLU5kBEPBloYOi/bo+b9xO9ZvpleaIhb0PkINOEbzXDSSrtyZKXSNDJucBBrcYC37WQTro1nPeleLV95rJlvk2t1nRkkxgSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JA1RjVDx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E3DCC4CEEC
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
+	 Content-Type:MIME-Version; b=pkR1d2Y2LFtrZHwV7JpI0K9WvMJaywV5kn+CYt5Lc7HO2fYcP1CoaOQ/AXwvmceAjZ7pumfeEwfYuDBmpAzAoAkk5ZixO0bArORIE5KNNNFtwj/Pe89+eOTBbjo0PkAkO37Z6gxDrE96xxzb/rrrrsUtPKCRqwkPuLbhX/EMEeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6tGNm2w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7A53C4CEEC
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744824001;
-	bh=B3ZbGHCut46hMDX1GVJfkG2DBQJZWNjv15c3LPUeB9w=;
+	s=k20201202; t=1744825391;
+	bh=csVaMlhpBtQQ2uX1pv9AGgNBxuRseqXrxxSJQqaz4N4=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JA1RjVDx7zdIgsVhGE9RAxYSmLA7t8THmkMLemNEUtMSVrSGH0HsOyBcKN7yIdO+p
-	 RWCsOXmYiKATWkx9+1+1H4C6VoMvF2Gww+cxvgWxfPBWtmPh0wf1dbhOcF1cLHMPkX
-	 Kj1VXPFanxw6a5Huy+nhuK9i0+P6Vxy7u+1gm65ChW+H7TXuEgNWWo/Cqd/+uttDHO
-	 UvE6zA525JJHXzTJrTZJaZ8s25Q5r4GjRcHxhQN8K3+yfh0dO8oFwubHUMl9GXnOcK
-	 AAcgWD6bOaa6J0vb1YmqefqL7WN5OavK7LVhQOiwcF4/PBPC9wzUhq8jYxJ7FOGsxp
-	 oXVaPNmcn7yPQ==
+	b=C6tGNm2wKf32zd5Tf9fvJg21694Hqd1bU4LJdpcYhZFHrzxK3FSezRCv2sSxQY4lo
+	 0Js816nuYcJgGRldOy4NqpJ30lY70TNeFcYnfr7oixm3wDi7AK5Z+QA0gT/8hsMEi0
+	 LJ1TIdRazqI9o8xspG82NUuKe3e8HaqgrdraQ58oTF21u8GEhoh9vCZXHWeDu0qXMU
+	 Wyod1dmpaghYdlAOyGpQPN8e2QImK5OEixbynN1n2wkX+iVxZbzwBjWiVy4D3BODRZ
+	 L7y/3IVUdL4rjRoXE88YB64yBRsHvy+Ttbi7wV+KA29ROyvKyPsOwCmmIBn3hqvdTJ
+	 23U8vLO5hzbeg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 73D3CC53BC5; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
+	id D5E52C4160E; Wed, 16 Apr 2025 17:43:11 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220016] USB devices plugged into USB hubs on
  6.14.2-300.fc42.x86_64 do not work
-Date: Wed, 16 Apr 2025 17:20:01 +0000
+Date: Wed, 16 Apr 2025 17:43:11 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: PCI
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: joe@solidadmin.com
+X-Bugzilla-Who: stevenfalco@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: component
-Message-ID: <bug-220016-208809-hPRS1pfD3D@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cc attachments.created
+Message-ID: <bug-220016-208809-rHePRjOupy@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
 References: <bug-220016-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,35 +79,16 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
-Joe Doss (joe@solidadmin.com) changed:
+Steven A. Falco (stevenfalco@gmail.com) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-          Component|USB                         |PCI
+                 CC|                            |stevenfalco@gmail.com
 
---- Comment #4 from Joe Doss (joe@solidadmin.com) ---
-(In reply to Micha=C5=82 Pecio from comment #3)
-> What if you disconnect the hub and connect an ordinary device in its plac=
-e?
-> This log looks like several USB ports on your computer should be complete=
-ly
-> dead. And some SATA ports too.
-
-I just swapped my mouse into the USB A 3.0 port that my hub was in and it is
-dead too.=20
-
-> This looks like devm_request_mem_region() is failing in usb_hcd_pci_probe=
-(),
-> and maybe pcim_iomap() in ahci (SATA). So something to do with PCI, ACPI =
-or
-> other lower level stuff.
->=20
-> You may try your luck reassigning this bug to drivers/PCI, they seem to be
-> responsive to bugzilla reports.
-
-OK sounds good. I will reassign this to drivers/PCI to see if those folks h=
-ave
-any ideas what is going on here.
+--- Comment #5 from Steven A. Falco (stevenfalco@gmail.com) ---
+Created attachment 307975
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307975&action=3Dedit
+Good boot with 6.13 kernel
 
 --=20
 You may reply to this email to add a comment.
