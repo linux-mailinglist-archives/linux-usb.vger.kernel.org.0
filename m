@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-23161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E3AEA90AA6
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 20:00:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE0B8A90AB1
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 20:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24AC05A2B31
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 18:00:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E68AA4476E0
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 18:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299BD216E26;
-	Wed, 16 Apr 2025 18:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E00217657;
+	Wed, 16 Apr 2025 18:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1eDgWpC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKy5jIN+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E1813A86C;
-	Wed, 16 Apr 2025 18:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC9728373;
+	Wed, 16 Apr 2025 18:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744826426; cv=none; b=bIohtQMkGVneUgupjEGJgC7IOSzn0//Ibv/oheSK02co14TJrrNdhMTX/h4HO5d8XYcIXBsBQHIVwuDLKg+urA8QW+uL27knNhTfF9EJO6viFeecNuxMKkK6lEubew7LmksPnUGW6fInzZD5WzZKYHp2M4r7wMm5DZWXg+JvXfI=
+	t=1744826485; cv=none; b=rBoh1arROI5nX+dFSkEPsO5/5BUBr3vAkN1Ogd09+TZ9yWNMXu3Qlyc5/OAf/JHSqcXJaR6rEe2a2eRI/7AvJ4G5yUYe1mgcSqs8MVXCvPcvkZaIUlbdRqfTklVYY4FNgzbbx/Sp1afCdmSqIWMRhHHgEn8xXTPVabzEIYg0xss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744826426; c=relaxed/simple;
-	bh=NvRCseR8XTCBOHm9X3PzrTsi5/cSHof+nmIAr71ohvA=;
+	s=arc-20240116; t=1744826485; c=relaxed/simple;
+	bh=ou+C4e6bXqBL2PzQ5WovjFqxQSEgJjK5auA6fY/WUrY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XCsqGxLXFEylM4G6s2M5BZaZDl5y5zmB4DywUOgIo/stGmqKlzu2NXAexgpzXPOYbXuzS4+alyxFL/e4ijXo/wkPLtD+9Oih8XpExmPp1E2nWSORSzhfM2Dg2bWRZXFBXqHPckZcL1M6OTqI1EseR5rFupMOvkzDAJwm9yQC2Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1eDgWpC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9942C4CEE2;
-	Wed, 16 Apr 2025 18:00:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LHQTLHoR/87ahgBLfaubQXTZNMuIbYdhKJI9CC8k5bL5PrZ7sx0Jr+EagHqtXGVhXhiSQoNoV8J8pHlQbEsu6hym8P73bz/A3pMyvPefYwBG0QV0F/7D831Unb8paaXJvXKXhlKfcCFsoVxguAxuelFX+y5PzrTZHk5fZ52qNUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKy5jIN+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1DEC4CEE2;
+	Wed, 16 Apr 2025 18:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744826426;
-	bh=NvRCseR8XTCBOHm9X3PzrTsi5/cSHof+nmIAr71ohvA=;
+	s=k20201202; t=1744826485;
+	bh=ou+C4e6bXqBL2PzQ5WovjFqxQSEgJjK5auA6fY/WUrY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y1eDgWpCO0Sc38BrdWct4412aXZZ2S0Q+H4tXDbo54dYOanjpTE56BeaRFrGjqFsp
-	 eKhU8cqZhQYhdVuv5JjZCOAAQFLcrMprQCW+5LpExdMCJfQkn8TUCThBoFwn7LAU6k
-	 nDov2HkbKk18xfZOAwLj1CHhzNR4kGUhAsxBCg8xO+8eh1580ba5FK2KhFQ4Ghi32s
-	 bXtT62xdUDOvUSPB2E9hdaIDZJHT/v5I2pbeM0B3POp4MS+WS2VkrkmdzRPB7kDZXO
-	 80Nv5CAZO2O8KtppTk1gFtnij8ZYCEjTj1kcG6TkHiMHZhGmnAa32JW15Qeyj5dfhv
-	 ghSI2i6+t1n6Q==
-Date: Wed, 16 Apr 2025 13:00:23 -0500
+	b=KKy5jIN+IkYTNJf90za19g48rtLjr5/BzpkxH3zIRXnTdSZdfqrAeXhR/2yGpfmxf
+	 5ZkOWqRgRIlAU36Rz5B/kfb8oMGCAY7aFJkk6P0TnkOqsMwwMgkZEhrb//cRD/ihqM
+	 PASYViR9cDS1ciH1v2520s8vC3ZfWtEp7tP6AGNEx52oBERBibNnYe9M48J1/HiEd5
+	 XB2DF5MFi1SmjwCUpCCT7tsppIGWbpl9/3bqgokTylawleL97wL1uYxNhR1CU+GuJD
+	 szGjynRnRyqInmCtk4gQcb6avxS8wPqK0lZ+aw90fz0utvVOfZQ4UUJXsAtteAwnkY
+	 5INk6Te9+x6ew==
+Date: Wed, 16 Apr 2025 13:01:23 -0500
 From: Rob Herring <robh@kernel.org>
 To: Pin-yen Lin <treapking@chromium.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,11 +50,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Matthias Kaehlcke <mka@chromium.org>,
 	Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] dt-bindings: usb: Add binding for PS5511 hub
- controller
-Message-ID: <20250416180023.GB3327258-robh@kernel.org>
+Subject: Re: [PATCH v2 3/4] dt-bindings: usb: realtek,rts5411: Adapt
+ usb-hub.yaml
+Message-ID: <20250416180123.GC3327258-robh@kernel.org>
 References: <20250415094227.3629916-1-treapking@chromium.org>
- <20250415094227.3629916-3-treapking@chromium.org>
+ <20250415094227.3629916-4-treapking@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,181 +63,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415094227.3629916-3-treapking@chromium.org>
+In-Reply-To: <20250415094227.3629916-4-treapking@chromium.org>
 
-On Tue, Apr 15, 2025 at 05:41:59PM +0800, Pin-yen Lin wrote:
-> Parade PS5511 is USB hub with 4 USB 3.2 compliant 5Gbps downstream(DS)
-> ports, and 1 extra USB 2.0 downstream port. The hub has one reset pin
-> control and two power supplies (3V3 and 1V1).
+On Tue, Apr 15, 2025 at 05:42:00PM +0800, Pin-yen Lin wrote:
+> Inherit usb-hub.yaml and remove duplicated schemas.
 > 
 > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > 
 > ---
 > 
 > Changes in v2:
-> - Inherit usb-hub.yaml
-> - Fix bindings to reject port@5/device@5 for 3.0 hub correctly
-> - Minor string fixes
+> - New in v2
 > 
->  .../bindings/usb/parade,ps5511.yaml           | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/parade,ps5511.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/parade,ps5511.yaml b/Documentation/devicetree/bindings/usb/parade,ps5511.yaml
-> new file mode 100644
-> index 00000000000000..86c75d69ee35b2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/parade,ps5511.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/parade,ps5511.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Parade PS5511 4+1 Port USB 3.2 Gen 1 Hub Controller
-> +
-> +maintainers:
-> +  - Pin-yen Lin <treapking@chromium.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - usb1da0,5511
-> +      - usb1da0,55a1
-> +
-> +  reg: true
-> +
-> +  '#address-cells': true
-> +
-> +  '#size-cells': true
+>  .../bindings/usb/realtek,rts5411.yaml         | 47 +++++--------------
+>  1 file changed, 13 insertions(+), 34 deletions(-)
 
-Drop these 3.
+Similar comments as patch 2 on this one.
 
-> +
-> +  reset-gpios:
-> +    items:
-> +      - description: GPIO specifier for RESETB pin.
-> +
-> +  vddd11-supply:
-> +    description:
-> +      1V1 power supply to the hub
-> +
-> +  vdd33-supply:
-> +    description:
-> +      3V3 power supply to the hub
-> +
-> +  peer-hub: true
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      '#address-cells': true
-> +
-> +      '#size-cells': true
-> +
-> +    patternProperties:
-> +      '^port@[1-5]$': true
-> +
-> +    additionalProperties: false
-
-I would do this instead:
-
-ports:
-  $ref: /schemas/graph.yaml#/properties/ports
-
-  patternProperties:
-    '^port@':
-      $ref: /schemas/graph.yaml#/properties/port
-
-      properties:
-        reg:
-          minimum: 1
-          maximum: 5
-
-> +
-> +patternProperties:
-> +  '^.*@[1-5]$': true
-
-And here:
-
-additionalProperties: true
-properties:
-  reg:
-    minimum: 1
-    maximum: 5
-    
-> +
-> +required:
-> +  - compatible
-> +  - reg
-
-Already required by usb-hub.yaml.
-
-> +  - peer-hub
-> +
-> +additionalProperties: false
-
-Use unevaluatedProperties instead.
-
-> +
-> +allOf:
-> +  - $ref: usb-hub.yaml#
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            enum:
-> +              - usb1da0,55a1
-> +    then:
-> +      properties:
-> +        ports:
-> +          properties:
-> +            port@5: false
-> +      patternProperties:
-> +        '^.*@5$': false
-> +
-> +examples:
-> +  - |
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +            compatible = "usb1da0,55a1";
-> +            reg = <1>;
-> +            peer-hub = <&hub_3_0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            /* USB 2.0 device on port 5 */
-> +            device@5 {
-> +                reg = <5>;
-> +                compatible = "usb123,4567";
-> +            };
-> +        };
-> +
-> +        /* 3.0 hub on port 2 */
-> +        hub_3_0: hub@2 {
-> +            compatible = "usb1da0,5511";
-> +            reg = <2>;
-> +            peer-hub = <&hub_2_0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                /* Type-A connector on port 3 */
-> +                port@3 {
-> +                    reg = <3>;
-> +                    endpoint {
-> +                        remote-endpoint = <&usb_a0_ss>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.49.0.777.g153de2bbd5-goog
-> 
+Rob
 
