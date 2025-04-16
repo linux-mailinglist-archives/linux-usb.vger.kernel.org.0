@@ -1,105 +1,124 @@
-Return-Path: <linux-usb+bounces-23129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC648A8B94D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 14:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E0AEA8F465
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 15:09:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B5201896C51
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 12:38:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89D631905127
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 13:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF811B960;
-	Wed, 16 Apr 2025 12:37:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096111898FB;
+	Wed, 16 Apr 2025 13:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DMCM4186"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="C1mJ+ovf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58CD12B73
-	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 12:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9814A149C7B
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 13:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744807070; cv=none; b=c24JhQO5OrYQQrZN1OgiSg2zSnZptUAC4kltki/THkXPE4qqHY6Q+LXPxVzSnjjY14MDaFbkl/aAyWepvaggfa4cXVVhwjzRITx6TKO48POYc0LDHmy6owDSrP9axg2F3CxkSkST+zlOgcBt5RSdWrg8Bve/ijSsdavzOs++DWc=
+	t=1744808942; cv=none; b=WavMAsi5RUlo29MLE10JLSz0k9BEKtca654iPRJ56xoyiL2N4z2ABbTvQdjyPWEpp05WRj0+TPLWYA6jBiHHq0WbM20XwEHv77nn9S1+yex4o6ishUMzlCXmCHmcRdowrU5eikXx2t22XWKOCXwlKoekTxa/beSYPEmd0boF48s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744807070; c=relaxed/simple;
-	bh=1cSJ9dc/ws6cKODgdr0sqq5pYsvKGzSC64n5HqPPDbg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dLPqWn+67D/Q56kwokMRyZi94ydzGBDNUVcUpBOkcttyM6Gf7OU0Bd/jIcYlKl3FGsQgW2GV3OIyWSnp/ERE/lobmim8VFofzB7iIPI6q793BGzPrI9TNBsKinhw4HY9XDsiHBOacXXYeMEe38gr9TJMH36e5HSfB0caagasJLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DMCM4186; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744807068; x=1776343068;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1cSJ9dc/ws6cKODgdr0sqq5pYsvKGzSC64n5HqPPDbg=;
-  b=DMCM4186FU8hM2B2cZfQTraPDOTpV1N4cE+241k9If7GrwGjwj7ku0ao
-   LJITDPRIwcMqdEKRJZzV8w8aBXk9tgSjfONQH40Eftzcd0GZu1Yz4G/Qy
-   bHhcNpSjLd3w9MROyQCP6EGbOIMIeXtkmFoYuQpPwQP03f8+1LxpuT6vr
-   41W7If7/6Dvs06u3SmleQK9E7tpBcrCF8PkTc+XfneW9LetWcRWGd0q20
-   4PYJoWfgpY87U0kL6QzB3Hl+HuFiu8RtQ5SFRC3FNW9dEvNyVKqDtLvk0
-   JOIE3+gNs67vNSquXVnGVD/4W/nyY9ovhOH+jDvbE3kZPAu5OyUjhs5nW
-   w==;
-X-CSE-ConnectionGUID: 4kZjqWH4TDS50LEA1HrzHw==
-X-CSE-MsgGUID: DEOhYTWKQAyxyaCCTVkOuA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="57740716"
-X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="57740716"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 05:37:47 -0700
-X-CSE-ConnectionGUID: YB3dXXvGSAmCyebeoWVHeg==
-X-CSE-MsgGUID: AR2Y//MER6y0gC5vg6oD1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
-   d="scan'208";a="135317302"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa003.jf.intel.com with ESMTP; 16 Apr 2025 05:37:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 5235AF8; Wed, 16 Apr 2025 15:37:43 +0300 (EEST)
-Date: Wed, 16 Apr 2025 15:37:43 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
-	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com,
-	rajat.khandelwal@intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix a logic error in wake on connect
-Message-ID: <20250416123743.GH3152277@black.fi.intel.com>
-References: <20250411151446.4121877-1-superm1@kernel.org>
+	s=arc-20240116; t=1744808942; c=relaxed/simple;
+	bh=p/iyWC6HvCPY2TgwnlCPzsZ6CCy+XnmL1Lk+5LmCGhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z5vBu1EadjvaWXQxU9qUvYN3PJbEcvuWFDk6+U3t/bBxeQhdS3XCodkb1sAFevbm92Tb84XIXpP0BjzHqZi8X2dtc64Tme/S7wKPtn8xxf06+HNUaxIafUh25e9uap65R2IuXxOkKRhDfZnK1qlYAp6YCAzcRCPRRllj2/IT28k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=C1mJ+ovf; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-39ee57c0b8cso530761f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 06:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1744808938; x=1745413738; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Q94yOoOApKItt1hLRlRluZyloOVNtuhZPjQvabIyLY=;
+        b=C1mJ+ovfwyUxOkxUy1ZTdUzVTdLc0RTLKxkJc8+vB2fqvW4KW1R/A6d70EaWq8dAms
+         vGioGUTBt716F9p8sEqqoaGcb0DtqmksNlpiVqKZwPtjaytNly6ntmO2kBojQTn/6z4/
+         xPgmTmUFp7r11MVZKuS2D5DS5PoIFQIzADzxHN1IfFT/sRqEr675OUX23QRIE4VBz1Ft
+         foTbQGc1OgS3PZe3oJkEZwECeFzN719qLs2Q8UNg6/4pbQj4Z1g6osxMRBWMHxHe7MRL
+         PWmDqP6/xmBGNwtvMKYDkaFp1XSvhFx3/9m6FZXYkkVRgeScd8GLSPYcuPZB7CFu6u9L
+         wM/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744808938; x=1745413738;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Q94yOoOApKItt1hLRlRluZyloOVNtuhZPjQvabIyLY=;
+        b=d6TXTEj275ma1zjaqa2Ce9QZr/nznoh+ZdC06Vza+W+PY/LP+TOlJsR7T3xFc9GDOb
+         YqpHqa17TVjhLavTAfUxa7GeABgsU5WJQkIgf+tER+k4JZirNrc4pD0jhDPbS7U2a7Tg
+         DzQ3DBJdwm9ftpezMLCmn1vrl0ainMmbwsGxJqCk4VelPJlhFT2zF0IVplf33kd1wExD
+         MEozuQDJN2deYxZ+0jXqyJuaIasq37AwMOcLdwYqu/aV5rdb1geeVcLAiFsTqpq6y49a
+         weBsFpYi/wlPhSq9UPxElB4Foqqnmmn87f75dSOM6nI4cvmW6nBcnX3IsLBNep57W5CR
+         UWGw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/WqjDm21cMZqhLyzOiG+R7MdamvUAm6xZjJtBlsu38MkZtGyZvXp/ZDDqazDKRLNSumtNEJxuA2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpjzNELJSNKol2EXezMHI4ysOGYh0jLvmT/d9659CXSWsnaVph
+	LdbVKLjy0GbZaeE8VrNV2AJwlsDmVqzyvQX/vVVFyW73n5KWnGfJW62dHSkeEsU=
+X-Gm-Gg: ASbGncsArRPYIyYDuYjTkKptV80XS2Dkgm4yITnyTP2s2qZfjYatNJM1GJOezLZU78t
+	QYnonAk/NlWWufLsAZH+4RePT0atIagoNexX9F/TdoWuIyjtj4OHGxEEedH+u/grn3TS5cWn6zB
+	VdzLtxa6Z+i5/GNhQZ1K3q8SDqD8GaRqBAYlIxleqvKdma6IjwEJs5lqTY7POo4lUPVo9/PTW8q
+	4qvsQF/CYa8CSUVqYeAgmuHg8VT1drHPd626DUfCOxajZl0u0X4QvNdUH/dZkb5+U5Cl/sozytl
+	f9Olz3Xx2+ovVDu6WX9jY0gQ4RjYtai8dB6dkHJEjxi81MlBstWxxECe7FLV0sYhZuBlKQOrkSx
+	UdRs6SmY=
+X-Google-Smtp-Source: AGHT+IHOsJk1QtB5kEoSZrYAYpRPaEigS+0jlbTDIIkpc2LnRk68oJlodSN8FXDP3R34O6sthrpyNg==
+X-Received: by 2002:a05:6000:4021:b0:39c:223f:2770 with SMTP id ffacd0b85a97d-39ee5b18646mr1809040f8f.15.1744808937399;
+        Wed, 16 Apr 2025 06:08:57 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1350:fd01:ac0d:cf4f:2906:b446? ([2001:a61:1350:fd01:ac0d:cf4f:2906:b446])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf43cd17sm17165723f8f.78.2025.04.16.06.08.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Apr 2025 06:08:56 -0700 (PDT)
+Message-ID: <65bd42ee-ecbc-4a23-9036-42358aa086df@suse.com>
+Date: Wed, 16 Apr 2025 15:08:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250411151446.4121877-1-superm1@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: core: warn if a GFP zone flag is passed to
+ hcd_buffer_alloc()
+To: Petr Tesarik <ptesarik@suse.com>, Oliver Neukum <oneukum@suse.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250320154733.392410-1-ptesarik@suse.com>
+ <20250325134000.575794-1-ptesarik@suse.com>
+ <2025041110-starch-abroad-5311@gregkh> <20250414090216.596ebd11@mordecai>
+ <522b3049-8e7f-41d4-a811-3385992a4d46@suse.com>
+ <20250416094807.2545efd8@mordecai>
+ <e23e72d7-e50b-4a16-b47d-5dcd7cf49641@suse.com>
+ <20250416124736.3ac2bd55@mordecai>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250416124736.3ac2bd55@mordecai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
-> on USB4 ports") introduced a sysfs file to control wake up policy
-> for a given USB4 port that defaulted to disabled.
-> 
-> However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
-> on connect and disconnect over suspend") I found that it was working
-> even without making changes to the power/wakeup file (which defaults
-> to disabled). This is because of a logic error doing a bitwise or
-> of the wake-on-connect flag with device_may_wakeup() which should
-> have been a logical AND.
-> 
-> Adjust the logic so that policy is only applied when wakeup is
-> actually enabled.
-> 
-> Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB4 ports")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On 16.04.25 12:47, Petr Tesarik wrote:
+  
+> If I stay with the USB buffer allocations, AFAICS the mem_flags
+> parameter should be used only for non-zone flags. If you specify,
+> GFP_DMA here, it will have no impact whatsoever on allocating DMA
+> buffers. It may unnecessarily allocate from the DMA zone for doing PIO.
 
-I guess the offending commit was never even tested :(
+Yes. But we should not limit enforcement of such a _new_ policy
+to one method in order to fix a hypothetical issue.
+There is just no need for action.
 
-Applied to thunderbolt.git/next thanks!
+> Now I think I should really write an article for LWN to debunk some
+> myths about GFP_DMA.
+
+Well, if you go to that trouble an explanation of why memflags
+are passed in USB at all and how DMA works in general would be
+productive.
+
+	Regards
+		Oliver
+
 
