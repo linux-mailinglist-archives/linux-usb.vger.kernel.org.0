@@ -1,191 +1,117 @@
-Return-Path: <linux-usb+bounces-23156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0601DA90963
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 18:52:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC663A909E2
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 19:21:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F9AE444F3A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 16:52:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 344FE190571F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Apr 2025 17:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C49B2144C7;
-	Wed, 16 Apr 2025 16:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9932B218ADE;
+	Wed, 16 Apr 2025 17:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWy3iDmi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JA1RjVDx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDF41B415F;
-	Wed, 16 Apr 2025 16:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C75217F35
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744822354; cv=none; b=ig9ugrKxgKDcl+J8ndHbUjt7Z4X91FyA/YALzHQ8z8FSTEUzNxwrpSszqFzjEun8/hSEEXvR9160H76koNGwKS5cAKoAImY6raYv4mgVBrJnOLAY8bVvc5/JWvX9lV+0t2XvIxxN7PAAVODgAmuxK+NQN/tFNa+Av9AkTfmjVQo=
+	t=1744824002; cv=none; b=C9maiZvV0sbm4p+pnVSXwulB9e2AfWq+7LfA4rTIIo2WOCJFz4wsKhaw59zxHYggbnLAqwZDTGCxHsbFmAvtpTsxJmxhK4szzB0a/hvdT3cuFCfAOYnbWCkGZstX2c3jNvuFn9LoHg7Eh6245eabRJKb8mhe3T4yKRxBXR+3K5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744822354; c=relaxed/simple;
-	bh=IdK2+5qGsdGM3SO0IxHfMg481X+Kuem/Une0Z8qbCYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bfTeARWNaJSvRxKDRrgHsSETeQjgg3gqq9EzaIm00ydUqhRXSF9bq+/W96JPU/3N7OMZqdE9nbqXNamL0uZYYxAuDAn6NboUkR/eZvKZV6EWPq0i9HQ0j4EPzEwVvns4d6a4uqhAVxBxG4qYG8qrl2gFNa6+99WHZ2Md4nTqBM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWy3iDmi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 206F0C4CEE2;
-	Wed, 16 Apr 2025 16:52:34 +0000 (UTC)
+	s=arc-20240116; t=1744824002; c=relaxed/simple;
+	bh=B3ZbGHCut46hMDX1GVJfkG2DBQJZWNjv15c3LPUeB9w=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kC4ln/ZlL8JHZYuPWl4iMiPdhRCiQn58Xgy+JBLBrkMCCEbjW7BAOhdbxzuYpp1aw0WmlrkVzcBhLU5kBEPBloYOi/bo+b9xO9ZvpleaIhb0PkINOEbzXDSSrtyZKXSNDJucBBrcYC37WQTro1nPeleLV95rJlvk2t1nRkkxgSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JA1RjVDx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E3DCC4CEEC
+	for <linux-usb@vger.kernel.org>; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744822354;
-	bh=IdK2+5qGsdGM3SO0IxHfMg481X+Kuem/Une0Z8qbCYk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kWy3iDmi5zxRVqVY1CSrvNB+TjWKOGlPqwMfwWak+L2NEqK6fvp9vxuZT4+v0sPER
-	 ZursCOt15TYcH+xEUdbfLFfQo0OG1jt1zEHNIYRDgIJ9wmD3Qns/BaprJphgRj8n/q
-	 qJAfKteYISoQQex2rc/wYOhTZxvKl/vg1wT9xmc1nZMMaeOSIRF5G3jSFOqfOZyg/C
-	 msJ1KlAkEW1+QL+ay1gjs8qFIKdwiD932NN/5mOVYwMtwBlsyi3WZm2WIPlXXMjTe+
-	 gCrq0Q6c1VVe/olfv/jhKJ7/bXAu8Xd2b5gsps5t/R4u6EaePGeThcb3DcFC8G7QF9
-	 8VkCXVsRhKxww==
-Date: Wed, 16 Apr 2025 11:52:32 -0500
-From: Rob Herring <robh@kernel.org>
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: Introduce usb-hub.yaml
-Message-ID: <20250416165232.GA3327258-robh@kernel.org>
-References: <20250415094227.3629916-1-treapking@chromium.org>
- <20250415094227.3629916-2-treapking@chromium.org>
+	s=k20201202; t=1744824001;
+	bh=B3ZbGHCut46hMDX1GVJfkG2DBQJZWNjv15c3LPUeB9w=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=JA1RjVDx7zdIgsVhGE9RAxYSmLA7t8THmkMLemNEUtMSVrSGH0HsOyBcKN7yIdO+p
+	 RWCsOXmYiKATWkx9+1+1H4C6VoMvF2Gww+cxvgWxfPBWtmPh0wf1dbhOcF1cLHMPkX
+	 Kj1VXPFanxw6a5Huy+nhuK9i0+P6Vxy7u+1gm65ChW+H7TXuEgNWWo/Cqd/+uttDHO
+	 UvE6zA525JJHXzTJrTZJaZ8s25Q5r4GjRcHxhQN8K3+yfh0dO8oFwubHUMl9GXnOcK
+	 AAcgWD6bOaa6J0vb1YmqefqL7WN5OavK7LVhQOiwcF4/PBPC9wzUhq8jYxJ7FOGsxp
+	 oXVaPNmcn7yPQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 73D3CC53BC5; Wed, 16 Apr 2025 17:20:01 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220016] USB devices plugged into USB hubs on
+ 6.14.2-300.fc42.x86_64 do not work
+Date: Wed, 16 Apr 2025 17:20:01 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: PCI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: joe@solidadmin.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: component
+Message-ID: <bug-220016-208809-hPRS1pfD3D@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
+References: <bug-220016-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250415094227.3629916-2-treapking@chromium.org>
 
-On Tue, Apr 15, 2025 at 05:41:58PM +0800, Pin-yen Lin wrote:
-> Introduce a general USB hub binding that describes downstream ports
-> and hard wired USB devices for on-board USB hubs.
-> 
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> 
-> ---
-> 
-> Changes in v2:
-> - New in v2
-> 
->  .../devicetree/bindings/usb/usb-hub.yaml      | 91 +++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/usb-hub.yaml b/Documentation/devicetree/bindings/usb/usb-hub.yaml
-> new file mode 100644
-> index 00000000000000..34cd248fa43c2d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/usb-hub.yaml
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/usb-hub.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic USB Hub
-> +
-> +maintainers:
-> +  - Pin-yen Lin <treapking@chromium.org>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible: true
-> +
-> +  reg: true
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
-Drop these 2, already covered by usb-device.yaml.
+Joe Doss (joe@solidadmin.com) changed:
 
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+          Component|USB                         |PCI
 
-Drop this, already covered by usb-device.yaml.
+--- Comment #4 from Joe Doss (joe@solidadmin.com) ---
+(In reply to Micha=C5=82 Pecio from comment #3)
+> What if you disconnect the hub and connect an ordinary device in its plac=
+e?
+> This log looks like several USB ports on your computer should be complete=
+ly
+> dead. And some SATA ports too.
 
-> +
-> +  peer-hub:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      phandle to the peer hub on the controller.
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description:
-> +      The downstream facing USB ports
-> +
-> +    patternProperties:
-> +      "^port@[1-9]$":
+I just swapped my mouse into the USB A 3.0 port that my hub was in and it is
+dead too.=20
 
-Only 9 ports possible? Should be '^port@[1-9a-f][0-9a-f]*$'
+> This looks like devm_request_mem_region() is failing in usb_hcd_pci_probe=
+(),
+> and maybe pcim_iomap() in ahci (SATA). So something to do with PCI, ACPI =
+or
+> other lower level stuff.
+>=20
+> You may try your luck reassigning this bug to drivers/PCI, they seem to be
+> responsive to bugzilla reports.
 
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +patternProperties:
-> +  '^.*@[1-9]$':
-> +    description: The hard wired USB devices
-> +    type: object
-> +    $ref: /schemas/usb/usb-device.yaml
-> +    additionalProperties: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +            compatible = "usb123,4567";
-> +            reg = <1>;
-> +            peer-hub = <&hub_3_0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            /* USB 2.0 device on port 5 */
-> +            device@5 {
-> +                reg = <5>;
-> +                compatible = "usb765,4321";
-> +            };
-> +        };
-> +
-> +        /* 3.0 hub on port 2 */
-> +        hub_3_0: hub@2 {
-> +            compatible = "usb123,abcd";
-> +            reg = <2>;
-> +            peer-hub = <&hub_2_0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                /* Type-A connector on port 3 */
-> +                port@3 {
-> +                    reg = <3>;
-> +                    endpoint {
-> +                        remote-endpoint = <&usb_a0_ss>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.49.0.777.g153de2bbd5-goog
-> 
+OK sounds good. I will reassign this to drivers/PCI to see if those folks h=
+ave
+any ideas what is going on here.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
