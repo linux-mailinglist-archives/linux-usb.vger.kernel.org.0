@@ -1,129 +1,165 @@
-Return-Path: <linux-usb+bounces-23197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23198-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3ECAA91D4F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 15:08:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E394BA91D7F
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 15:14:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DE887A9212
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 13:06:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DDAF3B4F9C
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 13:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4053E24502B;
-	Thu, 17 Apr 2025 13:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0B5247DDD;
+	Thu, 17 Apr 2025 13:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PrV+GUKg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoqO9GdX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3279F64A98;
-	Thu, 17 Apr 2025 13:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F7E64A98;
+	Thu, 17 Apr 2025 13:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744895271; cv=none; b=B05G8dbCxPJgdghoCzHVbK4zRs2AtpSBhY8391ns1a3sa5IBkuO2zb3IiauFioUNeYy+vul2fcLjgkVkwWhp1UCjN6L7wRdxfliDjFbvO74iOjiKv9R5hu/frLZKVegd49aoqPvYRr617R4OSvLfkIm65Y2h5oLKB3gig9au198=
+	t=1744895562; cv=none; b=VXh+l0eDHZCy4OV/4ILe8SznfSl2TbxI1D3ywll24Auw1h/LnIv4TfRO2N1yKOKT6uVnX+03eXPEd6khaSESww3eb9ziMfA9ncDkuzSY0SUI9Vsrzab9qZA1Zcx7Q5Ntu8aLBupQyCGBqVIQG5kkdSfAOKuk3W+LHbld9vGBh24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744895271; c=relaxed/simple;
-	bh=UjV9aC2iKPYoWSiVENtanYjNOx1Slgo6xak/xSRZJqQ=;
+	s=arc-20240116; t=1744895562; c=relaxed/simple;
+	bh=vMhvBBkKElMyIh7A9PoUjyUtyXpKUsIiYLmszT6LqGA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cUwiJPCcpeKdhaWpSesUa2utLUFHwVnLhVaQq2nu72vksKgZAcICyOUiV8XCAJxw9IA9WAvZhypIoN+bS47OSRI1Jyl91Zq74AYzDLaafi2TXfK3kgomqUFpfSaDB2jqcLYMtvZkXDmY2QHzGsiPCOZmdGRF6m6kKbyKUrYg0Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PrV+GUKg; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=MSh3pKFFtsK174HGY4hGcz18TvTCk3Otf9jU+VEpWpM/3L5TqiZeHP7ZxaG4YRhsdB+Q1/Ym7V7Xgi3gdJX+onlgPIsXjRR+9fm5QJtjySRsgF96Fug5tXu0j/14lVVhvzXiboOBK1OwAIKMatmgnR0Ry02pSz/WTsoSQczBv5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoqO9GdX; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c2688619bso478020f8f.1;
-        Thu, 17 Apr 2025 06:07:49 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cfdc2c8c9so4084885e9.2;
+        Thu, 17 Apr 2025 06:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744895268; x=1745500068; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdZ/++ZH3GtnA2ccX3OYnMNThHIYKD/1Ho+RU8AFgE4=;
-        b=PrV+GUKglNUrO5zhuW/47jQ9sjWYUlDPbUhbcg/DhXhGI6AZ2T+pdTl1F6TRBACmv/
-         hAne3AFFdVGPwO3YlOQMgy2d5LWkqvDgSnxbP4tH3GKTUbNUNj43RnifWzv9+2R7oMhb
-         +qHSBrsCmh0xnKC2wjNrG3KnaQ96Rm2sLlWWsBi+ZM9R7FOsxDPprC5eSLiY0/6RKf1S
-         Zna/aM22yKns68aetLSKo36qE/gf1CS6by2gsaNKhQcjvTAuUYoz5vvVKK1T9WJSh/Eq
-         Tx6Mw5BkzgdUpUkAI0++fpbZX/BAdGdt//YEXZlJsd2Ig8Umv2tgS32HAaGMnIMnMT3h
-         yDDA==
+        d=gmail.com; s=20230601; t=1744895559; x=1745500359; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=04TfvKNzSnzlvKlxW6Gwj4q+0nDZMEDnwoinbXJa+Pc=;
+        b=SoqO9GdX1AbQI8RwzrJ86m4XZjPlljgY8bcw8R5iGgRd0XlUUB7k+o8sK8v67/PBY8
+         UQyJIXbqPyipIFzuVRjI0c8KvBQcKzDAkTQOZQ4GPUNkN7MjrJYE2pa6mPKVeNf47ihY
+         9nj65BGL3vumXs90Se1AneZ8hPV2L1AywZ8oUx9QZVrfWdpPq1k7uRdb+dsT6mAO9Lhw
+         Dvl82taR9HrCnHtLaQg+FvnldrTYRMilxmahhQH7droushL9EeJRpyN3XAcRQfYL5Gp3
+         azkbOnsdL0l40Swd6m8h7IRSrGSuOOEmohQzh5LKeKZaSmiXy399zgDfrAtOfIR6mcUU
+         rbcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744895268; x=1745500068;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CdZ/++ZH3GtnA2ccX3OYnMNThHIYKD/1Ho+RU8AFgE4=;
-        b=cl+E3KzXpMVTo4rQKCu0UfRKQqr6L/cDuoBfalZ7Jt0U7U0AsDgKDyx9SogbIvP3Yz
-         E+kzKdKwAS4Y7+xMFQ6TydoXZMdIfWQrLDg7mSow3fLdUyJZOIU6DymQjyjKob+tN8/C
-         rAa0hx3KNEkFZYlTxogwX+ywzWvPPFsFWqjcRS0uHp8RXVzwckJjKJx9OoPL+ma50yv6
-         sTLtjObzNGGwZlLREivSi+nUqFDh8McsiSxYFH2dGpLwalJ7L0h2lM2iZXoJa45033fa
-         GjlBptQnTmB6k2R2OGtuhXc2qS5X65g8hsGlZJDen4dfAo5lHezP04jaUOmgVF+Pq/57
-         oM7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU/xMPWTJOGfhODsNgNeOTsO1sFShTv5L2E5GCiU+lwEWJd+0Os44pwpAL0Qn95AHudzlFDP70akLKaRgw=@vger.kernel.org, AJvYcCU5QgWvlsVR4qo0eRrkVued1OtJ20v00ucwiAenBRgwpC1M5Qr7SdojCD5A91QTZgRDASBWXPUw@vger.kernel.org, AJvYcCWMbziagGpQFUiu1K4CuFs9yt+gpz8jjsjhLPOIAfNbOpMSkvnVL8qOoEaINBdLY+z6s82+Y9c6@vger.kernel.org, AJvYcCWN/jae5NnrvWTDm73RI1OKgvdRMLMWbgzp2TFCmop4b14DXbFaAsK74vnqlFEHfuOJ70+77++WDTrs@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMg1+YgSdCjz1HkLYpguA0CnfwYWOBDAvR0sD04uNAmQ4neqss
-	YCy+9uW5W+HLhp0Ysctg1giNmVkuuTKo2/SA6u280rKsOai0Tz3E
-X-Gm-Gg: ASbGncsxeMPjcum2O4gKlNUrOEQ4Ion39LWRAxKzZmXuzKIspQX8Pff+snEXkiI2pPv
-	U2304EYXo1uYJxWA9E04dVU1GGdLbNVWYQxBDzqJb/jN9/HW1D9fs3QfZmq3i5TQ/pjfYjYIh/t
-	0ESTel/ymZP+WQDAp3oWdSxLQUU0qgwEmDMUVzZ4kvNbb4UY/ZcGrQvkhqWk7EXOek4lo4CAoV3
-	A+Juqjq+0FariZr5OIJWXWa8/ZMq3OJ+lafwKU8sF8tREcqwiTCQeRUoI5hghMvndT3m3yYVelS
-	9ohpExjcNV9mX2YB/bEeh/aTzer+2NTkh2U4XTw=
-X-Google-Smtp-Source: AGHT+IHb8mvMFNp6gOWVQLM5OsbQP1zjX7lIIaNxG4URsFT43g10QOXLplmQlUjGdo3GH+1kBmp/fw==
-X-Received: by 2002:a05:6000:1ac8:b0:39c:266c:421 with SMTP id ffacd0b85a97d-39ee5adbf1fmr4730232f8f.0.1744895266662;
-        Thu, 17 Apr 2025 06:07:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744895559; x=1745500359;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=04TfvKNzSnzlvKlxW6Gwj4q+0nDZMEDnwoinbXJa+Pc=;
+        b=U4pYWQJlRm6jVp0SmS7vhd9Jzk0Po6ZFZRI5o4UuMxLRIo9yf/TLWLT4EHBu43Kp3g
+         oE5a7DclB2IZcyvi6e1zMzRfArGvlHmWkeaq02M/NaVh8M/dbNitQekeaJAPHl+fzrmg
+         DXm+aXQcG25PmHaiw0yIkG6TiU9gyvG6fzhMtrB0H6NUz1zCXDUEFRWSw3x1TH0+m46V
+         jqEz15C9fFkanht0/m7JPFF+WwE56ZRJ9NGDWjT6f+pN+NCniI8IbNijRBg0vJ+4X/jK
+         ca63p5tRDIZG0z7Y8Lk3CgqSd5kOApTUggdaH6G+s3sG9nyxS5mNL18ULDBnF9alBMwA
+         oyuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUVb49t7JXEbajWTByYUECdfNRchS+/gJWoapXAwzQ5NAwkEZ8QhX4XZcHqFtsXhS4V2vDu/sBC@vger.kernel.org, AJvYcCUnnabczafcX1qtuAQdJmthoT4IPIRxIVTSm7ZB9Wkqoo3QeCEMSNOu5UBxSbFmQHJYPfFHFexf@vger.kernel.org, AJvYcCWSRUf2b1e+gKI4TIpBT+5yqwwk0Ke1nW7DvxXKPszeKu4CH/ojW9+vdfxmD+WjXPc+bRvuEvF4pLfk@vger.kernel.org, AJvYcCXhHw0cy/es0DRcmS5A+yFgZxhzhSJguWAydkMcm36wuP7CcxMq2Z4VDLMgsCqsI9DNO+7lKKpdJftRkUE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH1GYjBV+J/DtfbEAo9qE77NtCvxG3agINM/Xh7PJzQE+L+Qz6
+	ROkSvawZnW2tOTL8tJPVPttw8c06TcaY2GI4AgB0lsw/rRn9Dg0c
+X-Gm-Gg: ASbGncvC4XLAwMCjk6WCJ3lVqiNameGjpRzg7DZ96UPQGZCrBmVgcpee0IZZ3BG4ipB
+	r+Iq+Dya96FxAtF/myzLVE/qRpeUXb81q2Kuf+HNtW6KyzURTsIaapTwUfuJc3wu93NJjOFBYgi
+	FiMSGfhKSNKdToDXKl1L6QfRvbJfioP8PxOmRWIR6ht1T3LEdv3aaiB3mu94r9ER/hQMWcjRMwO
+	xAUEqD8OJgR77NNKr0+1B98V1hYCqBC3anAwJOrcO7R6ckKw7E6dmCyL5tBbgp+HzXlsfRbCDn5
+	bjvRoxKT6ru5SqMjyPJFap4R/pehd5nI9afOR24=
+X-Google-Smtp-Source: AGHT+IH0JrGfVzwDr9zTnRtEYBBNuX4yDnsqZwL6HLBEocbCMqO/cqA4N513NL/eSr8dmGL7xM6HIA==
+X-Received: by 2002:a05:600c:384b:b0:43c:e7ae:4bcf with SMTP id 5b1f17b1804b1-4405d5bdb1cmr66066095e9.0.1744895558817;
+        Thu, 17 Apr 2025 06:12:38 -0700 (PDT)
 Received: from gmail.com ([2a02:c7c:6696:8300:30d6:b851:2d62:d3f9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b53dee0sm52901945e9.33.2025.04.17.06.07.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf445737sm19774698f8f.88.2025.04.17.06.12.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 06:07:46 -0700 (PDT)
-Date: Thu, 17 Apr 2025 14:07:38 +0100
+        Thu, 17 Apr 2025 06:12:38 -0700 (PDT)
+Date: Thu, 17 Apr 2025 14:12:36 +0100
 From: Qasim Ijaz <qasdev00@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	horms@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
 	stable@vger.kernel.org
-Subject: Re: [PATCH 4/5] net: ch9200: add missing error handling in
- ch9200_bind()
-Message-ID: <aAD9GsY02U4dGBJ1@gmail.com>
+Subject: Re: [PATCH 5/5] net: ch9200: avoid triggering NWay restart on
+ non-zero PHY ID
+Message-ID: <aAD-RDUdJaL_sIqQ@gmail.com>
 References: <20250412183829.41342-1-qasdev00@gmail.com>
- <20250412183829.41342-5-qasdev00@gmail.com>
- <20250415204708.13dc3156@kernel.org>
+ <20250412183829.41342-6-qasdev00@gmail.com>
+ <b49e6c21-8e0a-4e54-86eb-c18f1446c430@lunn.ch>
+ <20250415205230.01f56679@kernel.org>
+ <20250415205648.4aa937c9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250415204708.13dc3156@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250415205648.4aa937c9@kernel.org>
 
-On Tue, Apr 15, 2025 at 08:47:08PM -0700, Jakub Kicinski wrote:
-> On Sat, 12 Apr 2025 19:38:28 +0100 Qasim Ijaz wrote:
-> >  	retval = usbnet_get_endpoints(dev, intf);
-> > -	if (retval)
-> > +	if (retval < 0)
-> >  		return retval;
+On Tue, Apr 15, 2025 at 08:56:48PM -0700, Jakub Kicinski wrote:
+> On Tue, 15 Apr 2025 20:52:30 -0700 Jakub Kicinski wrote:
+> > On Tue, 15 Apr 2025 03:35:07 +0200 Andrew Lunn wrote:
+> > > > @@ -182,7 +182,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
+> > > >  		   __func__, phy_id, loc);
+> > > >  
+> > > >  	if (phy_id != 0)
+> > > > -		return -ENODEV;
+> > > > +		return 0;    
+> > > 
+> > > An actually MDIO bus would return 0xffff is asked to read from a PHY
+> > > which is not on the bus. But i've no idea how the ancient mii code
+> > > handles this.
+> > > 
+> > > If this code every gets updated to using phylib, many of the changes
+> > > you are making will need reverting because phylib actually wants to
+> > > see the errors. So i'm somewhat reluctant to make changes like this.  
+> > 
+> > Right.
+> > 
+> > I mean most of the patches seem to be adding error checking, unlike
+> > this one, but since Qasim doesn't have access to this HW they are
+> > more likely to break stuff than fix. I'm going to apply the first
+> > patch, Qasim if you'd like to clean up the rest I think it should
+> > be done separately without the Fixes tags, if at all.
 > 
-> This change is unnecessary ? Commit message speaks of control_write(),
-> this is usbnet_get_endpoints().
+> Ah, no, patch 1 also does return 0. Hm. Maybe let's propagate the real
+> error to silence the syzbot error and if someone with access to the HW
 
+Hi Andrew and Jakub
 
-So this change was done mainly for consistency with the other error checks in the function. 
-Essentially in my one of my previous patches (<https://lore.kernel.org/all/20250317175117.GI688833@kernel.org/>) 
-I was using "if (retval)" for error handling, however after Simon's recommendation to use "if (retval < 0)" I 
-changed this. In this particular function I took Simons advice but then noticed that the 
-usbnet_get_endpoints() check was still using "if (retval)" so I decided to make it the same as the others. 
+Since there is uncertainty on whether these patches would break things 
+how about I refactor the patches to instead return what the function 
+already returns, this way we include error handling but maintain consistency 
+with what the function already returns and does so there is no chance of 
+breaking stuff. I think including the error handling would be a good idea
+overall because we have already seen 1 bug where the root cause is insufficient 
+error handling right? Furthermore this driver has not been updated in 4 years, 
+so for the near‑term surely improving these aspects can only be a good thing.
 
-The behaviour is still the same regardless of it we do "if (retval < 0)" or "if (retval)" for 
-checking usbnet_get_endpoints() since it returns 0 on success or negative on failure. 
+So now going into the changes:
 
-So in ch9200_bind:
+Patch 1: So patch 1 changes mdio_read, we can see that on failure mdio_read 
+already returns a negative of -ENODEV, so for the patch 1 change we can simply 
+just error check control_read by "if (ret < 0) return ret;" This matches 
+the fact that mdio_read already returns a negative so no chance of breaking anything.
 
-In the first case of "if (retval)", if the usbnet_get_endpoints() function fails 
-and returns negative then we execute this branch and it returns negative, if it 
-succeeds with 0 then the ch9200_bind function continues.
+Patch 2: For patch 2 I will add Cc stable to this patch since kernel test robot 
+flagged it, I assume backporting it would be the right thing to do since the 
+return statement here stops error propagation. Would you like me to add it to the other patches?
 
-In the second case of "if (retval < 0)", if the usbnet_get_endpoints() function 
-fails and returns negative then we execute this branch and it returns negative, 
-if it succeeds with 0 then ch9200_bind function continues.
+Patch 3: For patch 3 the get_mac_address and ch9200_bind function already returns a
+negative on error so my changes don't change what is returned, so this should be fine i think.
 
-If you like I can include this in the patch description for clarity or remove it entirely.
+Patch 4: For patch 4 it already returns a negative on error via usbnet_get_endpoints() 
+so i hope it is fine as is? Jakub commented on the changed usbnet_get_endpoints() 
+error check, if you want me to revert it back I can do that.
+
+Patch 5: We can drop this.
+
+Andrew and Jakub if you’re happy with this should I resend with these changes?
+
+> comes along they can try to move this driver to more modern infra?
 
