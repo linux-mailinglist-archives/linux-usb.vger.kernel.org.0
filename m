@@ -1,77 +1,51 @@
-Return-Path: <linux-usb+bounces-23194-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23195-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BF97A91A59
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 13:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B9D3A91BA3
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 14:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9287D7AF785
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 11:14:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A89C7A4BA2
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 12:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F39E238169;
-	Thu, 17 Apr 2025 11:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="CsQb1eXL";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="pErljyDW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1906D2417D4;
+	Thu, 17 Apr 2025 12:08:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB95423814F
-	for <linux-usb@vger.kernel.org>; Thu, 17 Apr 2025 11:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E4312B93;
+	Thu, 17 Apr 2025 12:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744888510; cv=none; b=ks+KOOJnzwki9rJoIU5qOtclnLN7B3/art9giAe38I9JOAjpOgIV0rM27ZZ2E22eNm6zW+erdkoSaNtZKvQacgxpqLwVZN0ikRYxhO0yd0yDc2canXYNBPUEqDY2AqroQeGJiX58l7HOyBzLSHo7imXK0qMpokmPTyj2mNjc7t8=
+	t=1744891732; cv=none; b=ihy1Za3+qozinmBQ6tlAWPM2Y8kfROAeIi4+UswUduhmUGY3ZsF+ZJ6d7almze7Jjuic1kz6AJgt03ox6Owy8MQuwA7zFtYKxQ6I0War415ZDRgDgDfzM7/8Fh9+nr2oXmnRWxEAIpsq4hLbpRapF8stkjGyXZNT2tUBNhAK5ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744888510; c=relaxed/simple;
-	bh=mUu4o99OPxuWM4ZRuXlGz4zVyfPqcsGLtasyXQgtJxs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rOov7yrh83ziUhaxC9AYjRS/tJdXwx9V+PgCPwIu8gh8XmApux9w/CAshjRtEzbyGk/EeHGQRfZJ30Ykuu5ATUmnKIOyWKDY+wc5GSZh+WNTd0cZyJmiSj1hVhHCPaVfrGYkt73LyX2+AlHWPvHL9ms3hDspHbPqU1e3zHW/xzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=CsQb1eXL; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=pErljyDW; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D39991F391;
-	Thu, 17 Apr 2025 11:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1744888507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=+RICHLavOZf3tqZjtakJjRO6HPK+YHHklCIKU+fD9LY=;
-	b=CsQb1eXLOXJciWC/IL9yP3lEbAaupm0OrtsY6d+sdfTm5TfPnDsLvabPi4z9mMLBxAJ2rO
-	CXb6l9vemb2gX1E/YBRobAO8Wq8RSIoLxWYjInks5jtL9TE0K6mSB24wHEyQzCwRBqH5IO
-	OZTpyyErb2YHEOn9DtnBlRbPBkuG4hg=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=pErljyDW
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1744888505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=+RICHLavOZf3tqZjtakJjRO6HPK+YHHklCIKU+fD9LY=;
-	b=pErljyDWi3yOlz92WDfEUWll4lippJ9ay+ganUCVA4WnTsiNFNzCIecOhLt4j14Ioq873N
-	bFQ5AHYa/Od45vk1nwDeuyFsX2NAOP+qlRLPBmf7lj1tnksrrm5X/20c29Yvo3n1mSoQ/Z
-	0jQI0+BspXLCTU3hlf2qQuWm/6n8VE8=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ACEA11388F;
-	Thu, 17 Apr 2025 11:15:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mKoEKbniAGiKGAAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 17 Apr 2025 11:15:05 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: peter.chen@kernel.org,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] USB: initialize struct otg_fsm earlier
-Date: Thu, 17 Apr 2025 13:14:54 +0200
-Message-ID: <20250417111502.140474-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1744891732; c=relaxed/simple;
+	bh=ik+6ZoWGrvG+xQX10oFL3IACybhCrcKL2S+rnUC0vf4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ekoRT/jryRE/N+cM02m/c7fz46qN4SqtVt3BQR5CtRAhxvgMPTi5Te2xFpDtKWzU9k5sQy6aMlEBZuq1eF4Z7UPmdULZB8IsuOohmFvrdV653Def5AET3ky25cvIL7stNIZb1Xt9km8xwfp8JpE6fdokRQ84zbXfWzAL5joUKh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Zdc913kM8z1DKcR;
+	Thu, 17 Apr 2025 20:07:49 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id B88D518047E;
+	Thu, 17 Apr 2025 20:08:40 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpemf500002.china.huawei.com
+ (7.185.36.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 17 Apr
+ 2025 20:08:40 +0800
+From: Yue Haibing <yuehaibing@huawei.com>
+To: <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+	<yuehaibing@huawei.com>, <mitltlatltl@gmail.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] usb: typec: ucsi: Fix unmet dependencies for UCSI_HUAWEI_GAOKUN
+Date: Thu, 17 Apr 2025 20:28:43 +0800
+Message-ID: <20250417122843.2667008-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,113 +53,38 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: D39991F391
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	DKIM_TRACE(0.00)[suse.com:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-The earlier fix bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
-corruption") in effect hid an issue with intialization.
-In effect it replaces the racy continous reinitialization
-of fsm->hnp_polling_work with a delayed one-time
-initialization.
+WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+  Depends on [n]: HAS_IOMEM [=y] && DRM [=n] && DRM_BRIDGE [=n] && OF [=n]
+  Selected by [m]:
+  - UCSI_HUAWEI_GAOKUN [=m] && USB_SUPPORT [=y] && TYPEC [=m] && TYPEC_UCSI [=m] && EC_HUAWEI_GAOKUN [=m]
 
-This just makes no sense. As a single initialization
-is sufficient, the clean solution is just to do it once
-and do it early enough.
+DRM_AUX_HPD_BRIDGE depends on DRM_BRIDGE and OF, only select it with
+both for UCSI_HUAWEI_GAOKUN.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
 ---
- drivers/usb/common/usb-otg-fsm.c | 7 +------
- drivers/usb/phy/phy-fsl-usb.c    | 1 +
- include/linux/usb/otg-fsm.h      | 2 +-
- 3 files changed, 3 insertions(+), 7 deletions(-)
+ drivers/usb/typec/ucsi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
-index e11803225775..a22d536ccdf8 100644
---- a/drivers/usb/common/usb-otg-fsm.c
-+++ b/drivers/usb/common/usb-otg-fsm.c
-@@ -117,7 +117,7 @@ static void otg_leave_state(struct otg_fsm *fsm, enum usb_otg_state old_state)
- 	}
- }
- 
--static void otg_hnp_polling_work(struct work_struct *work)
-+void otg_hnp_polling_work(struct work_struct *work)
- {
- 	struct otg_fsm *fsm = container_of(to_delayed_work(work),
- 				struct otg_fsm, hnp_polling_work);
-@@ -193,11 +193,6 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
- 	if (!fsm->host_req_flag)
- 		return;
- 
--	if (!fsm->hnp_work_inited) {
--		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
--		fsm->hnp_work_inited = true;
--	}
--
- 	schedule_delayed_work(&fsm->hnp_polling_work,
- 					msecs_to_jiffies(T_HOST_REQ_POLL));
- }
-diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
-index 40ac68e52cee..7f0fdba689de 100644
---- a/drivers/usb/phy/phy-fsl-usb.c
-+++ b/drivers/usb/phy/phy-fsl-usb.c
-@@ -845,6 +845,7 @@ int usb_otg_start(struct platform_device *pdev)
- 
- 	/* Initialize the state machine structure with default values */
- 	SET_OTG_STATE(otg_trans, OTG_STATE_UNDEFINED);
-+	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
- 	fsm->otg = p_otg->phy.otg;
- 
- 	/* We don't require predefined MEM/IRQ resource index */
-diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
-index 6135d076c53d..26cb7e84cd50 100644
---- a/include/linux/usb/otg-fsm.h
-+++ b/include/linux/usb/otg-fsm.h
-@@ -183,7 +183,6 @@ struct otg_fsm {
- 	struct mutex lock;
- 	u8 *host_req_flag;
- 	struct delayed_work hnp_polling_work;
--	bool hnp_work_inited;
- 	bool state_changed;
- };
- 
-@@ -308,5 +307,6 @@ static inline int otg_start_gadget(struct otg_fsm *fsm, int on)
- }
- 
- int otg_statemachine(struct otg_fsm *fsm);
-+void otg_hnp_polling_work(struct work_struct *work);
- 
- #endif /* __LINUX_USB_OTG_FSM_H */
+diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+index e94956d27325..8bf8fefb4f07 100644
+--- a/drivers/usb/typec/ucsi/Kconfig
++++ b/drivers/usb/typec/ucsi/Kconfig
+@@ -94,7 +94,7 @@ config UCSI_LENOVO_YOGA_C630
+ config UCSI_HUAWEI_GAOKUN
+ 	tristate "UCSI Interface Driver for Huawei Matebook E Go"
+ 	depends on EC_HUAWEI_GAOKUN
+-	select DRM_AUX_HPD_BRIDGE
++	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
+ 	help
+ 	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
+ 	  which is a sc8280xp-based 2-in-1 tablet.
 -- 
-2.49.0
+2.34.1
 
 
