@@ -1,177 +1,130 @@
-Return-Path: <linux-usb+bounces-23211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E1A9A923F6
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 19:27:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E0B2A9243C
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 19:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0333B189C20C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 17:27:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547323B60BE
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 17:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B221255251;
-	Thu, 17 Apr 2025 17:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mWrw2ZQl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B50D2561C5;
+	Thu, 17 Apr 2025 17:40:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0786D255E58;
-	Thu, 17 Apr 2025 17:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599112561B3
+	for <linux-usb@vger.kernel.org>; Thu, 17 Apr 2025 17:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744910831; cv=none; b=sVAPZyyKdsaoOq1BryQrKrb1FnOK5cv0nRtwx8KyqpDwMinhYgoA94TzylsFtFpTEGZ3GCmUKLdQR3AFD/fKMTrkV8Um1S+/uRpVLicEvoJyuMXpW7vvr4K837TrX1CFk7F5Gt9AHLfUFzScePUAje0O3qVZuUFeVN18bPENVNc=
+	t=1744911640; cv=none; b=Im7sN5SxqJ6CD1slVy4bvI0Bw9UV5QVbGvSh01yhr0RRE69ucOrpePXyU0KSntLHL2HQmUdux4UY/AlZp6zwnwZlw3bVWxim6oDeJFm5J6RWyKhgqJ9hWrHIT/llO+c1iegLBgDf3Vur06tw2/S7GH9nWKTmreEyy8rTALpBnUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744910831; c=relaxed/simple;
-	bh=sxkHYuOsrWQh8lOFfo/eXoJm5KYUTxqvZBDoPd6T/GA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4kGq1e94cytI5dLl1ERra6919CAw76Zz2vXJvF/2O557igVGgzmhZ7L73422bdrD+6DaGNP7K7yXi42cQcwSlmKfP1bybpJAFlxiwAauspYdY4hiGdulctSaYUCCTf8JBiq3LDSvlfAISNSW1hP7drvTkK/FhjrNCK9oaZbhcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mWrw2ZQl; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3914aba1ce4so803884f8f.2;
-        Thu, 17 Apr 2025 10:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744910828; x=1745515628; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wixJu71NKSByWZRqz3ES0mQxxXn96JrVSVxJlIUxh48=;
-        b=mWrw2ZQltygjybO13Zo6M+RsV/opDKzy0707ccqrHXdJ6MuQWrxzNtOt3CqIpec39F
-         fD+Ohl71nbwo5y0niDbTQFtgISx1STyU58AiOv6ZvNAKnKV2GrhGws5PpBQNKshoos6G
-         +EAr6Ydw7PloRacom8SS1irnBhfutK9Jqt7oozqm4/Hzlp3krkj8YbNVGvaq2ViP45mO
-         cEb4dezP0VzLX3OMdCzd3IMKEy/Uo9OBYOk72u6C0bVpoTD7chh6S/jR25rZrpZgYJ8z
-         f7UcoiM59fJZRyCzwsAZut0JagOqWRHtOdvNqdH/52wMGlOw716HqD3N2XvUAn/qRPoz
-         uNrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744910828; x=1745515628;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wixJu71NKSByWZRqz3ES0mQxxXn96JrVSVxJlIUxh48=;
-        b=Rd2VdHecl7GNBcVMSgsG7QPvOGdGMfFu1TaqmnOOuHMU9d5M+pmTAogQb4mBVWiTN2
-         nER25WyNzzgEsTH6mjXaa7ULTAWP46XrtWCSJxq6r+56CD4ikmfXSiy4gqclXx5s+SEv
-         09zWEjLOjia0piTrf0AMvj9RdsUaJKi8lBffhGVwTrW9I7gYAt2GWu9nuMs1k+4wXnN1
-         ryxhcrkqcTAM80IMImGe2270jtuWQqjlKYYTgmGGqhb569euzEzQpUaTncv+qRXTx4jz
-         WnhI6CF8eZT7CqkROmsH7eLLKnFTdj4xtR4IP2v2bHjitJT8kldAnZWZHFrGrB4TzsGa
-         inPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdYbe/9N5VF6wslVMoerIhRwEdVK26vZksg56lXi6me6vdcJafkuz0pQov0dwwURY3vA1i2H6T3gxgYLE=@vger.kernel.org, AJvYcCVkpgLK5qoeBoDDajq2YKL18pQq7EWhdb5V+DJYaW5kyCmAE+5nST9G4Pc5rjQWv/+7tjIAfNH8@vger.kernel.org, AJvYcCX7LpZ4jSF0LkZLUZUDOeKXmyah8UTKaG4pwFK+m/gOi9g+qzGMdMEo9liKAOIhxHJ4iHu95GsVZR0y@vger.kernel.org, AJvYcCXa7CsPXJbQIS7q22pzQih0ivLpfF0pKqlrj5RwqemJvsv4wStM4tEr+QsfKY39UhfPHRGWa11N@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIHHfXIu2F4H+1M1qS57CeaGALFzoOufw8acbv1B0CfaaiR5Ey
-	UNGjMjehgmgrZItVanw8y+ZD2GSU79TaaGWyule85mMzNZAvDKEG
-X-Gm-Gg: ASbGncuA+FuUWCo9DjVzoCjGr4AYtclo44A6GdcYiW5h0q7H1QFFTh0LLxIkdcURomq
-	+GUJszcrceZiFiPS4NmTDW9vA/2xlC7dZuKyKToASLj9kdzl6jhnBSlMqSujxR/6paR2y9CFEak
-	ZTupRTeu0MZa+UU2SkC4x+R3JAMD11f3+hjvVaz0lgtk0kEY2cqcvQUY7DT24WnnQTkaC3ByVXE
-	qcIiWE6DzDaxcSHjytQq5gv6z12xG7IiB1oyCs4qXrfhDsfsOFeomeAx5bua5niDeJalgZ6c8/e
-	UDrdML2Z34exE24buN5hr0Wf7EFn2+yX55Gieg==
-X-Google-Smtp-Source: AGHT+IFj6moxoKvW3/0bIkk3LxXfaTi6KALUQz1SQ2f4BX4nkO2V9Ua92HwQT5Vm8Zv6SFZvNZOQxQ==
-X-Received: by 2002:a5d:6d87:0:b0:391:2e31:c7e1 with SMTP id ffacd0b85a97d-39ee5b10f8cmr6323677f8f.4.1744910828006;
-        Thu, 17 Apr 2025 10:27:08 -0700 (PDT)
-Received: from gmail.com ([2a02:c7c:6696:8300:1efa:2230:869a:758])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa43c079sm240413f8f.50.2025.04.17.10.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 10:27:07 -0700 (PDT)
-Date: Thu, 17 Apr 2025 18:27:04 +0100
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 5/5] net: ch9200: avoid triggering NWay restart on
- non-zero PHY ID
-Message-ID: <aAE5wmi6MoYMzui7@gmail.com>
-References: <20250412183829.41342-1-qasdev00@gmail.com>
- <20250412183829.41342-6-qasdev00@gmail.com>
- <b49e6c21-8e0a-4e54-86eb-c18f1446c430@lunn.ch>
- <20250415205230.01f56679@kernel.org>
- <20250415205648.4aa937c9@kernel.org>
- <aAD-RDUdJaL_sIqQ@gmail.com>
- <b492cef9-7cdd-464e-80fe-8ce3276395a4@lunn.ch>
+	s=arc-20240116; t=1744911640; c=relaxed/simple;
+	bh=KQBKxbaVe63fu/O/4ha9V5nRgofS7Z/e1L61wF48buY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZVZJyqQETXXGBS7g/RjJ4DllpZ+PANf/z2RI2k+rqJbvO5UOPqi0q983XFnGSaFnOrskudHi6nO8buTcWjEesLko7m8oiJ1QyIiijgAj3GrcdvuYJWLp3yOOADs0Vw/E9kYmebLZai0zPuXRuO0lOz8xG0NcmFI0PFs3Qz/pYPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1u5TDv-0006JN-BW; Thu, 17 Apr 2025 19:40:27 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1u5TDu-000n0w-1O;
+	Thu, 17 Apr 2025 19:40:26 +0200
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1u5TDu-00198A-1A;
+	Thu, 17 Apr 2025 19:40:26 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Date: Thu, 17 Apr 2025 19:40:17 +0200
+Subject: [PATCH] usb: dwc2: also exit clock_gating when stopping udc while
+ suspended
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b492cef9-7cdd-464e-80fe-8ce3276395a4@lunn.ch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250417-dwc2_clock_gating-v1-1-8ea7c4d53d73@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAA9AWgC/x3M0QpAMBSA4VfRubZiaHgVSevsbE402oSSd7dcf
+ hf//0CkwBShzx4IdHLkzSeUeQY4a+9IsEkGWcimqEslzIVywnXDZXL6YO9EozrdKovGdhWkbg9
+ k+f6fw/i+H0CLtAFjAAAA
+To: Minas Harutyunyan <hminas@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1426;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=KQBKxbaVe63fu/O/4ha9V5nRgofS7Z/e1L61wF48buY=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBoAT0J9MbWVW8dLjn/LbXr1wAnJ/DiRji3wFbGA
+ sB43PgAqouJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCaAE9CQAKCRC/aVhE+XH0
+ qz15EACsplTgm8stnjnf6hPHvNH2VW7uzCctFYkG2IDAit5VFrM2v6VE3N1FbN3AKxPrkXxWWNh
+ Za6XRHApz7fYNeVuK1yNEl+vzuAcwC/1vzHxRS6+mKWdLf7GQzDTv4g4mQu2PMgNFiCjiKfT0WJ
+ zwhijIM9QmAabIirhwclhnOsTP/mko936jSSL6dkMHOaH/oGQ/6DA7uAxJtJqGnlU2TNQ7dybDe
+ 48z03U+P0eN/JlVe63yvKWRGO0zKAUZk7LHcYPaflqGSaSRax+nbLAtII+/F5M86d2B9W/hf8Yt
+ D2TiOnz1VZXtso+tO9Pk5ESs4b58Bu8B9wnZfydtX/ol/u3en1CSN7I3l9u25m71cwZrU3OmZSl
+ sBgAZgkW9sdof4QbBwm8mZTjmba+fz3C1PLMU9w+tc87p3pywgCo8SQM1V2UcZSTORbXWLu5zmv
+ fD+6nD++otTfPHW0hbwXPCXfK3aqQlFqAwn/PiJ05GvMx3MRsjppDxJK1BY0F0swMkVwx9MwI6X
+ aLRCZRFr3VrdC1w9oHWL/W3Qt0KBIpqyVnvmJVAKJGFujg7/wWg3rzxm9l3QOip1iL+lpukiDDu
+ 7ESitrWIkkPWxKHdX0XX/ewctS/qPt0nvLzr/9NbAWC207o+iuy+yGqTuBm7Bz0R0tK2d/GLFrR
+ KESLDqS2tiG7T3A==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, Apr 17, 2025 at 04:08:08PM +0200, Andrew Lunn wrote:
-> On Thu, Apr 17, 2025 at 02:12:36PM +0100, Qasim Ijaz wrote:
-> > On Tue, Apr 15, 2025 at 08:56:48PM -0700, Jakub Kicinski wrote:
-> > > On Tue, 15 Apr 2025 20:52:30 -0700 Jakub Kicinski wrote:
-> > > > On Tue, 15 Apr 2025 03:35:07 +0200 Andrew Lunn wrote:
-> > > > > > @@ -182,7 +182,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
-> > > > > >  		   __func__, phy_id, loc);
-> > > > > >  
-> > > > > >  	if (phy_id != 0)
-> > > > > > -		return -ENODEV;
-> > > > > > +		return 0;    
-> > > > > 
-> > > > > An actually MDIO bus would return 0xffff is asked to read from a PHY
-> > > > > which is not on the bus. But i've no idea how the ancient mii code
-> > > > > handles this.
-> > > > > 
-> > > > > If this code every gets updated to using phylib, many of the changes
-> > > > > you are making will need reverting because phylib actually wants to
-> > > > > see the errors. So i'm somewhat reluctant to make changes like this.  
-> > > > 
-> > > > Right.
-> > > > 
-> > > > I mean most of the patches seem to be adding error checking, unlike
-> > > > this one, but since Qasim doesn't have access to this HW they are
-> > > > more likely to break stuff than fix. I'm going to apply the first
-> > > > patch, Qasim if you'd like to clean up the rest I think it should
-> > > > be done separately without the Fixes tags, if at all.
-> > > 
-> > > Ah, no, patch 1 also does return 0. Hm. Maybe let's propagate the real
-> > > error to silence the syzbot error and if someone with access to the HW
-> > 
-> > Hi Andrew and Jakub
-> > 
-> > Since there is uncertainty on whether these patches would break things 
-> > how about I refactor the patches to instead return what the function 
-> > already returns, this way we include error handling but maintain consistency 
-> > with what the function already returns and does so there is no chance of 
-> > breaking stuff. I think including the error handling would be a good idea
-> > overall because we have already seen 1 bug where the root cause is insufficient 
-> > error handling right? Furthermore this driver has not been updated in 4 years, 
-> > so for the near‑term surely improving these aspects can only be a good thing.
-> 
-> It is not a simple thing to decided if we should make changes or not,
-> if we don't have the hardware. The test robot is saying things are
-> potentially wrong, but we don't have any users complaining it is
-> broken. If we make the test robot happy, without testing the changes,
-> we can make users unhappy by breaking it. And that is the opposite of
-> what we want.
+It is possible that the gadget will be disabled, while the udc is
+suspended. When enabling the udc in that case, the clock gating
+will not be enabled again. Leaving the phy unclocked. Even when the
+udc is not enabled, connecting this powered but not clocked phy leads
+to enumeration errors on the host side.
 
-For patch 2 the kernel test robot said it is missing a Cc stable tag in
-the sign-off area, it didnt highlight any build or functional errors so
-I don't understand what you mean there.
+To ensure that the clock gating will be in an valid state, we ensure
+that the clock gating will be enabled before stopping the udc.
 
-> 
-> We also need to think about "return on investment". Is anybody
-> actually using this device still? Would it be better to spend our time
-> on other devices we know are actually used?
-> 
-> If you can find a board which actually has this device, or can find
-> somebody to run tests, then great, we are likely to accept them. But
-> otherwise please focus on minimum low risk changes which are obviously
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/usb/dwc2/gadget.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-So going forward what should we do? I gave my thoughts for each
-patch above and how I think we should change it to minimise
-breaking things while adding error handling, which ones do you 
-agree/ don't agree with?
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 300ea4969f0cf..f323fb5597b32 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4604,6 +4604,12 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+ 	if (!hsotg)
+ 		return -ENODEV;
+ 
++	/* Exit clock gating when driver is stopped. */
++	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
++		dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
++
+ 	/* all endpoints should be shutdown */
+ 	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
+ 		if (hsotg->eps_in[ep])
 
-Thanks
-Qasim
-> correct, or just leave the test robot unhappy.
-> 
-> 	Andrew
+---
+base-commit: cfb2e2c57aef75a414c0f18445c7441df5bc13be
+change-id: 20250417-dwc2_clock_gating-579a87fcdf93
+
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 
