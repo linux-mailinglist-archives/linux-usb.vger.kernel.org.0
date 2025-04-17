@@ -1,167 +1,191 @@
-Return-Path: <linux-usb+bounces-23193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23194-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7EE5A9199D
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 12:46:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BF97A91A59
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 13:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7872461528
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 10:46:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9287D7AF785
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Apr 2025 11:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F172B22CBC1;
-	Thu, 17 Apr 2025 10:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F39E238169;
+	Thu, 17 Apr 2025 11:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dn9l+oDi"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="CsQb1eXL";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="pErljyDW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8EDC2DFA42
-	for <linux-usb@vger.kernel.org>; Thu, 17 Apr 2025 10:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB95423814F
+	for <linux-usb@vger.kernel.org>; Thu, 17 Apr 2025 11:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744886777; cv=none; b=nnxGnFFUAuAuwo+mcJ1ChoXmuz2JSxc74gfFCot3Ije6jd9TUsuDLXJjjMlDJMxk4LadcY11fevFlqiNGTzC0Z72F2aUTIsmnFBX92dxRlCfmFPIWc106+v6xuDtE+OF7Ec+wHDNuB5abQMriQSUDxvtS+sfQ14DXJUAmv4GewU=
+	t=1744888510; cv=none; b=ks+KOOJnzwki9rJoIU5qOtclnLN7B3/art9giAe38I9JOAjpOgIV0rM27ZZ2E22eNm6zW+erdkoSaNtZKvQacgxpqLwVZN0ikRYxhO0yd0yDc2canXYNBPUEqDY2AqroQeGJiX58l7HOyBzLSHo7imXK0qMpokmPTyj2mNjc7t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744886777; c=relaxed/simple;
-	bh=srGZgaumkYLmFBTMjgjNZU8L4VBsvSnD/ouHqchIPb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ptZpCr+9AuUpWijVo9JQc4NXgqWcGNohLWnl/vc04w4XINIB2Vm8FZFUF/n2k493xd6DSXfg+1wm5eCx/51mVic39T+3yT+rbRK1V4XeDD0mX8wiDyKtLv/MEmNzzjzzrUtO61w7rW9yIynEcjrkWWaE0dMPWVhwT/qB0GWF3NY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dn9l+oDi; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744886776; x=1776422776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=srGZgaumkYLmFBTMjgjNZU8L4VBsvSnD/ouHqchIPb4=;
-  b=dn9l+oDil99uzOeysMHKwEPbtXEnHRwB8c9MXGMRGS5BXPBelN99raMt
-   91pUiL1xJPFCvs3USipKs6a1Mirz7bt5LkfdKV8zjfZumF6dGB7IKxdoS
-   nqImrZFH9wF0psaqUclSeMbWsMPaGBeG1KfD8XWcYRoE2FdZAGHh8K1lK
-   Aiwe7GIAwi1mfcvzEChuGyJMkAEpYw8OOiscpxl5RgyXqngTH7dAA5CoB
-   PHaDADb4utbO3T4h+XE14pSno5n8eNZ6cojIsZBRKLFQNtzfH8tH4rfUr
-   vxAOC9urB5S5o6qTsHUAz7Dbo01Y3YkiDYDy7roYP9yQEPHnlYOmJYDvH
-   A==;
-X-CSE-ConnectionGUID: mPfVfHBzSXWbFea09Do3yw==
-X-CSE-MsgGUID: wYodaZCZS6id44DdmDIE4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="68959169"
-X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="68959169"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 03:46:15 -0700
-X-CSE-ConnectionGUID: dyB+MRzOQOeMhVkNvYqQyg==
-X-CSE-MsgGUID: Ozla6RslTFCWobgeoV7R+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="130727291"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa006.jf.intel.com with ESMTP; 17 Apr 2025 03:46:13 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id E8330170; Thu, 17 Apr 2025 13:46:11 +0300 (EEST)
-Date: Thu, 17 Apr 2025 13:46:11 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>
-Subject: Re: [PATCH v2 4/4] Documentation/admin-guide: Document
- Thunderbolt/USB4 tunneling events
-Message-ID: <20250417104611.GE88033@black.fi.intel.com>
-References: <20250417090426.221773-1-mika.westerberg@linux.intel.com>
- <20250417090426.221773-5-mika.westerberg@linux.intel.com>
- <2025041759-slimy-subzero-a6ba@gregkh>
- <20250417100456.GC88033@black.fi.intel.com>
- <2025041712-cupbearer-playhouse-d035@gregkh>
- <20250417103327.GD88033@black.fi.intel.com>
- <2025041722-untidy-cannot-40d4@gregkh>
+	s=arc-20240116; t=1744888510; c=relaxed/simple;
+	bh=mUu4o99OPxuWM4ZRuXlGz4zVyfPqcsGLtasyXQgtJxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rOov7yrh83ziUhaxC9AYjRS/tJdXwx9V+PgCPwIu8gh8XmApux9w/CAshjRtEzbyGk/EeHGQRfZJ30Ykuu5ATUmnKIOyWKDY+wc5GSZh+WNTd0cZyJmiSj1hVhHCPaVfrGYkt73LyX2+AlHWPvHL9ms3hDspHbPqU1e3zHW/xzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=CsQb1eXL; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=pErljyDW; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D39991F391;
+	Thu, 17 Apr 2025 11:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1744888507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=+RICHLavOZf3tqZjtakJjRO6HPK+YHHklCIKU+fD9LY=;
+	b=CsQb1eXLOXJciWC/IL9yP3lEbAaupm0OrtsY6d+sdfTm5TfPnDsLvabPi4z9mMLBxAJ2rO
+	CXb6l9vemb2gX1E/YBRobAO8Wq8RSIoLxWYjInks5jtL9TE0K6mSB24wHEyQzCwRBqH5IO
+	OZTpyyErb2YHEOn9DtnBlRbPBkuG4hg=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=pErljyDW
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1744888505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=+RICHLavOZf3tqZjtakJjRO6HPK+YHHklCIKU+fD9LY=;
+	b=pErljyDWi3yOlz92WDfEUWll4lippJ9ay+ganUCVA4WnTsiNFNzCIecOhLt4j14Ioq873N
+	bFQ5AHYa/Od45vk1nwDeuyFsX2NAOP+qlRLPBmf7lj1tnksrrm5X/20c29Yvo3n1mSoQ/Z
+	0jQI0+BspXLCTU3hlf2qQuWm/6n8VE8=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ACEA11388F;
+	Thu, 17 Apr 2025 11:15:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id mKoEKbniAGiKGAAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 17 Apr 2025 11:15:05 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: peter.chen@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: initialize struct otg_fsm earlier
+Date: Thu, 17 Apr 2025 13:14:54 +0200
+Message-ID: <20250417111502.140474-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025041722-untidy-cannot-40d4@gregkh>
+X-Rspamd-Queue-Id: D39991F391
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	DKIM_TRACE(0.00)[suse.com:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Thu, Apr 17, 2025 at 12:41:57PM +0200, Greg KH wrote:
-> On Thu, Apr 17, 2025 at 01:33:27PM +0300, Mika Westerberg wrote:
-> > On Thu, Apr 17, 2025 at 12:25:19PM +0200, Greg KH wrote:
-> > > On Thu, Apr 17, 2025 at 01:04:56PM +0300, Mika Westerberg wrote:
-> > > > On Thu, Apr 17, 2025 at 11:39:38AM +0200, Greg KH wrote:
-> > > > > On Thu, Apr 17, 2025 at 12:04:26PM +0300, Mika Westerberg wrote:
-> > > > > > From: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-> > > > > > 
-> > > > > > Add documentation about the Thunderbolt/USB4 tunneling events to the
-> > > > > > user’s and administrator’s guide.
-> > > > > > 
-> > > > > > Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-> > > > > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > > > ---
-> > > > > >  Documentation/admin-guide/thunderbolt.rst | 33 +++++++++++++++++++++++
-> > > > > >  1 file changed, 33 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
-> > > > > > index d0502691dfa1..f0368ab6bd1f 100644
-> > > > > > --- a/Documentation/admin-guide/thunderbolt.rst
-> > > > > > +++ b/Documentation/admin-guide/thunderbolt.rst
-> > > > > > @@ -296,6 +296,39 @@ information is missing.
-> > > > > >  To recover from this mode, one needs to flash a valid NVM image to the
-> > > > > >  host controller in the same way it is done in the previous chapter.
-> > > > > >  
-> > > > > > +Tunneling events
-> > > > > > +----------------
-> > > > > > +The driver sends ``KOBJ_CHANGE`` events to userspace when there is a
-> > > > > > +tunneling change in the ``thunderbolt_domain``. The notification carries
-> > > > > > +following environment variables::
-> > > > > > +
-> > > > > > +  TUNNEL_EVENT=<EVENT>
-> > > > > > +  TUNNEL_DETAILS=0:12 <-> 1:20 (USB3)
-> > > > > 
-> > > > > I'm ok with this, but wow TUNNEL_DETAILS is going to be hard to parse by
-> > > > > userspace, right?  Is this something that it is supposed to do something
-> > > > > with?
-> > > > 
-> > > > Yes, the reason it looks like that is because it matches the "format" we
-> > > > use in the logging (in dmesg). For instance:
-> > > > 
-> > > > [   35.400488] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): activating
-> > > > [   35.401237] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): DP IN maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-> > > > [   35.401239] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): DP OUT maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-> > > > [   35.401493] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): bandwidth allocation mode supported
-> > > > [   35.402528] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): non-reduced bandwidth 8100 Mb/s x4 = 25920 Mb/s
-> > > > [   35.402773] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): maximum bandwidth through allocation mode 20000 Mb/s x4 = 77575 Mb/s
-> > > > [   35.402775] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): granularity 500 Mb/s
-> > > > [   35.403029] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): estimated bandwidth 103500 Mb/s
-> > > > [   35.404693] thunderbolt 0000:07:00.0: 0:13 <-> 1:19 (DP): bandwidth allocation mode enabled
-> > > 
-> > > Kernel logs are not supposed to always be parsable, so this is fine :)
-> > > 
-> > > > This allows matching the event with dmesg tunnel logs. If you think this is
-> > > > not good we can change it.
-> > > 
-> > > It depends on what you are expecting userspace to do with this
-> > > information.  If it's a simple "here's some debugging information you
-> > > might like to look at" then it's fine.  If it is "here is some
-> > > information that you need to take a programatic action based on", then
-> > > that's different.
-> > 
-> > It's purely informative. Userspace cannot take any programmatic action
-> > based on this but it can use this to display user "more details" for
-> > example if there is an error allocating bandwidth for DisplayPort.
-> 
-> Ok, that's fine then, hopefully no one tried to parse it in the future.
+The earlier fix bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
+corruption") in effect hid an issue with intialization.
+In effect it replaces the racy continous reinitialization
+of fsm->hnp_polling_work with a delayed one-time
+initialization.
 
-;-)
+This just makes no sense. As a single initialization
+is sufficient, the clean solution is just to do it once
+and do it early enough.
 
-> You might say "the format of this string may change over time" or
-> something like that?
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/common/usb-otg-fsm.c | 7 +------
+ drivers/usb/phy/phy-fsl-usb.c    | 1 +
+ include/linux/usb/otg-fsm.h      | 2 +-
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
-Good idea, We'll do that.
+diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+index e11803225775..a22d536ccdf8 100644
+--- a/drivers/usb/common/usb-otg-fsm.c
++++ b/drivers/usb/common/usb-otg-fsm.c
+@@ -117,7 +117,7 @@ static void otg_leave_state(struct otg_fsm *fsm, enum usb_otg_state old_state)
+ 	}
+ }
+ 
+-static void otg_hnp_polling_work(struct work_struct *work)
++void otg_hnp_polling_work(struct work_struct *work)
+ {
+ 	struct otg_fsm *fsm = container_of(to_delayed_work(work),
+ 				struct otg_fsm, hnp_polling_work);
+@@ -193,11 +193,6 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
+ 	if (!fsm->host_req_flag)
+ 		return;
+ 
+-	if (!fsm->hnp_work_inited) {
+-		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+-		fsm->hnp_work_inited = true;
+-	}
+-
+ 	schedule_delayed_work(&fsm->hnp_polling_work,
+ 					msecs_to_jiffies(T_HOST_REQ_POLL));
+ }
+diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
+index 40ac68e52cee..7f0fdba689de 100644
+--- a/drivers/usb/phy/phy-fsl-usb.c
++++ b/drivers/usb/phy/phy-fsl-usb.c
+@@ -845,6 +845,7 @@ int usb_otg_start(struct platform_device *pdev)
+ 
+ 	/* Initialize the state machine structure with default values */
+ 	SET_OTG_STATE(otg_trans, OTG_STATE_UNDEFINED);
++	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+ 	fsm->otg = p_otg->phy.otg;
+ 
+ 	/* We don't require predefined MEM/IRQ resource index */
+diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
+index 6135d076c53d..26cb7e84cd50 100644
+--- a/include/linux/usb/otg-fsm.h
++++ b/include/linux/usb/otg-fsm.h
+@@ -183,7 +183,6 @@ struct otg_fsm {
+ 	struct mutex lock;
+ 	u8 *host_req_flag;
+ 	struct delayed_work hnp_polling_work;
+-	bool hnp_work_inited;
+ 	bool state_changed;
+ };
+ 
+@@ -308,5 +307,6 @@ static inline int otg_start_gadget(struct otg_fsm *fsm, int on)
+ }
+ 
+ int otg_statemachine(struct otg_fsm *fsm);
++void otg_hnp_polling_work(struct work_struct *work);
+ 
+ #endif /* __LINUX_USB_OTG_FSM_H */
+-- 
+2.49.0
+
 
