@@ -1,171 +1,138 @@
-Return-Path: <linux-usb+bounces-23226-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23227-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96463A93852
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 16:11:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 159ECA93887
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 16:19:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD77175AC2
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 14:11:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B37B920710
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 14:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D26F155753;
-	Fri, 18 Apr 2025 14:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF73917A311;
+	Fri, 18 Apr 2025 14:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="Hum3u1Xb"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="M7K2Msr4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012001.outbound.protection.outlook.com [52.101.126.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A21153BED;
-	Fri, 18 Apr 2025 14:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744985502; cv=fail; b=cyPTeHkUvERqvdRb2DXGuFvhYiXJdaxlE1UTeYKVLr/pySqcvWJ0xVixCRlCIcVgUgMXWI26ObfiqxwtW6cx/MNIOVbv3esW0kRG8/xMhRVcVlnWWUv6I+tI0Z/0LZyotW/scFW00aiq8gOhQi//HGuqAGrf+t//BL7yNG080vs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744985502; c=relaxed/simple;
-	bh=BvyX+5lZGLwkcycoGqKOauyLP94E19WOIXJ17ucEzk4=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=OjPbbrEbOVT52wK4AtYEFFVCx00Iuagcv8SAzhEvmrKI4l3M9PFGvseDlCd1kjFNLUXn6OupC2G+N3Ye2sKQh2E+fNe6YvfrSFaexNVAIGInP5YTWiEV8yO48sDiAEhcKRMUIL261/Hc6DKUdY72ppwccKj19k/30K+EHsWMexI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=Hum3u1Xb; arc=fail smtp.client-ip=52.101.126.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EDN6W7ptVCgILyn6hMpuh50HRmVQQGJY6HIYZf+E2G4CkN7PSiUEyNozjNbQI19/kEty9s+R3uchST8BXYhuAwehGFFnHqGlWuh/rtV8MHSsnD/gAD378QGujcjgaNdrzhUkyyB4KZWI2GHiVUtf3Lr4rDOaQW8HjfhdmrXx1k9NEEwSbYSQOGQsSFGtnGSRgrrQyqd8Q+ooeXOO09vKPEvLadwtLLyQ4r5XQHz7UJUbLRbeXkHgFSVxqTzQ9E5Jy3su5XkRM5yOa40PKzBZ5aF+IcseYDN9hm3q7MKomFmPvQn5hUyw8umBiRkpAx9tvF5eO5lPtu3kQcehtKCGzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BvyX+5lZGLwkcycoGqKOauyLP94E19WOIXJ17ucEzk4=;
- b=cJnBsB59fQFduyaD1jvbkrwiNt37NXYXXH477o3p3F3BvW5quvBXC8nxCjN+1vQjz/rTapz/ZAte6lvGODwFgVLpyUFUL5RWfxUNcawEO1jAFkVrJDWiFz4ceIagoEKQd7bjrY04XJTvtEDP7BJgzx6NUxl27GM4Jato7DViNzhqGr9zlA90uDRvopxE5g60DapH3P8B4IDEsnoj+srmZfmRh0t6/TAi/LOiwlyRoGpUnZfh+0d8yAULwejbCuqIRg2j5Brw3pdIEyCwLnXPlTJX/0lIT2y4mx8yurcBe1Z1LVbM54A5sHlDJCmwKz1dmqsBZaikSRZP8M2JcO0bmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BvyX+5lZGLwkcycoGqKOauyLP94E19WOIXJ17ucEzk4=;
- b=Hum3u1XbewZLSsL51ZgQYJVdr20lOsxSIIBodTlF+zR9gqKvmB2aQjMT2iMLt4vV8eDTQ8vDzKfluNIIvTZZt9lldwLbDT16vhLmyp45K/+E0tMELLXLU7TU/TcHXykGErTbHzGgdg5Q/VnG+aBx7mY8WXQ7ho+iDwolzzl7MUHv/SC/BjTWIkzv+k9/U8Nlwepcvgrj/zarWBRe/pYopq1kkT3PoZB7sprV/+0Qym9aBxifNaFPTQWaZ1UEb1SkI386mHpKRdlCg6+IL2wY6eVIoXlQepQjiG/R1aWZt9LWJyxciLZMdrdjZtFrqG/YSg9mYialdXpvlhh3FU5zIA==
-Received: from JH0PR06MB7294.apcprd06.prod.outlook.com (2603:1096:990:a1::6)
- by SEZPR06MB7023.apcprd06.prod.outlook.com (2603:1096:101:1f4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.22; Fri, 18 Apr
- 2025 14:11:37 +0000
-Received: from JH0PR06MB7294.apcprd06.prod.outlook.com
- ([fe80::6bd3:c327:c5c2:bbbe]) by JH0PR06MB7294.apcprd06.prod.outlook.com
- ([fe80::6bd3:c327:c5c2:bbbe%6]) with mapi id 15.20.8655.022; Fri, 18 Apr 2025
- 14:11:37 +0000
-From: "Chen, Jay" <jay.chen@siemens.com>
-To: Mathias Nyman <mathias.nyman@intel.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Shao, Tzi
- Yang" <tziyang.shao@siemens.com>
-Subject: Recall: [Bug 220033] xhci: Compliance Issue - avg_trb_len not set for
- EP0 during Address Device Command
-Thread-Topic: [Bug 220033] xhci: Compliance Issue - avg_trb_len not set for
- EP0 during Address Device Command
-Thread-Index: AQHbsGvM1t/aP14bBEu43pMuonep9g==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 1
-X-FaxNumberOfPages: 0
-Date: Fri, 18 Apr 2025 14:11:36 +0000
-Message-ID:
- <JH0PR06MB7294ED0E59CA35509EC73C9083BF2@JH0PR06MB7294.apcprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-traffictypediagnostic:
- JH0PR06MB7294:EE_|SEZPR06MB7023:EE_LegacyOutlookRecall
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ef32741a-84e7-4cde-9216-08dd7e82ee91
-x-ms-exchange-recallreportgenerated: true
-x-ms-exchange-recallreportcfmgenerated: true
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?XJeCTV4lOipcTiyyJg4oqEJmc7tsMRvnOKmUqxQsiqNdCsAl2WTRyYj+4bG3?=
- =?us-ascii?Q?Dt0FVbV52C/aADkwd4J6Y9lKZw3bQ50htdmCrAP4ydHV2CYd7ImS/l2EQoBG?=
- =?us-ascii?Q?AZRqIWiEDSCVBVgzArKsMC6FGAePWoqMe+TjxJeuO6oshc18cYH5/dS4lACa?=
- =?us-ascii?Q?8/7FhpWCODoMYpMSbB3fniPwrvJ1sOwC/RwgEGO/p/3xP1yI4hXKo44Cb+H5?=
- =?us-ascii?Q?Lb5OGCkPGKHdOfCoV1gC2V1sRsfvmMsn9Z8L42B9UDJMhePhSWP06q9Cw27M?=
- =?us-ascii?Q?JIpokYZz3rD2/mWwiozcB9NLlpV8Mxfb+hIhWAB8VXjxjJdGmX7cKZKwL0yS?=
- =?us-ascii?Q?vtakrHyGYZWyOvzmr21gIjS/eDR/NOwxHoockaJVYD6z3guLn3dU05afvIsP?=
- =?us-ascii?Q?a/9rEZZC+hc/g23ZXAck1GAY1yLldXsMjysFf1FZ8E5YSTzSCTnQq6S4DVTF?=
- =?us-ascii?Q?Pz1oTbI/VVMaiNbiAiJJaZSOfgE6Byx3WughUcOo/JvoIvGMOZpZ/q6tJfCG?=
- =?us-ascii?Q?OQT0atNNZxsxtMYRfGPGfHr9fBkeVS78sTTmpc4R2HlYzI3PynmuLuFdjz1X?=
- =?us-ascii?Q?T94Q/F8p0TplCEOX30cgG3KjQylgN3G02o/D+xTplUwpuHl8XswLyCmS20pH?=
- =?us-ascii?Q?SqAz5pyIb/6nY6DIfTdYHu/1VxGkEK5jlQ437hyUWJer4pAD2crmyLoondqf?=
- =?us-ascii?Q?KP4Gxitqd3F2OStLqcOJl0jUCe/QDg6aUMGHPLiVZeeJr9yyLMF2i3PfxvFB?=
- =?us-ascii?Q?F88dHxgneXx2D2/UBm7frFGhSb3CbvEFlMHeJim6ACAT0Bm5zlyE/0HFRn85?=
- =?us-ascii?Q?FZXIS4mJiMl4utf5WTkuENTaWKFsYUKpxYMRIhsG69gv0DCdPqLE8Nkkchvo?=
- =?us-ascii?Q?oeCvkG3KuMjtGIKqUw5gmfg/JbwCZIQTBrNZ1Aa8mrwuxrZ5gV9s8bn4tL6k?=
- =?us-ascii?Q?uLCA13HMg0jQk9jRWObkMDh2EhuPKvXQen3N/+8T/jzoxtt5QlL8iGCasOaf?=
- =?us-ascii?Q?jyIjcy2awd1VcMAeWVycjimhvdV2GfdRgFbqEPe48mFv8CYaIrNFU+5RfZwf?=
- =?us-ascii?Q?rGUsTPIf+WW2pFnKbFgPOdN0l76ZpR5psXf0n6akkHVTXV7ScSOAKMn3hdq7?=
- =?us-ascii?Q?b8G/oLNFvdjt2nDCw1pfzsCYy43RnrL+kUGa8ACy6IhC0vTcfZZd7ojH8xIb?=
- =?us-ascii?Q?xIT88Y/Tul5nPQhtec+e/xTXCP7P5gwDJVxB2n75qexPAv8GtSklV4/ix+rm?=
- =?us-ascii?Q?euQLNKd2LGTZYu3c6tUikW44wxumnEZsUxWy0UQ1V1S5RKDyFGxbZlKw4utY?=
- =?us-ascii?Q?QNQldL0HqabFAW0G3btV5sIQrlt4RA9i1a1SoBvaz6XRskowtUYTS+BCKMgO?=
- =?us-ascii?Q?37dR1mP9Dkpi9WAu8GrqdT1nxE2nvhNsMfxLzlfD6YFcZPgrWAjdFBeCUqUS?=
- =?us-ascii?Q?sJAbyK/FJSfLEC3z4QlAAzdPBP5/51WGrG9Hi6Hl4cLppoaTBCgRxoiVJtO+?=
- =?us-ascii?Q?elmWwvUY12lE7MM=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR06MB7294.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?exC+ypzHL83+dro141fcDLi+dQ+HYCFYe58F+9Au/xz+qVgWMsJGqQEzoOkp?=
- =?us-ascii?Q?nUv6vkQg0nttrIC6Df3uYKgqUM6x/tT2L4jW71yFjXWR5uoUWzwHLFNSoqp7?=
- =?us-ascii?Q?t1f2EPrYjG9wKyDye1TmX289iPOMgVrqJk5GN8JpDWp6oAmprMHJWK8dLoOv?=
- =?us-ascii?Q?u/jZ4lDO0RvnQVxNA4qDCL9XW4LTLD3JjUvxRuGBSM13CjEWi69ARyJGICA8?=
- =?us-ascii?Q?4IO3w55VEhZzNQcOcMMUHxfHCDXRDJs489wWvfKZSyvT3ybgVFDKaV1uFS+5?=
- =?us-ascii?Q?oSz3moNyNQXFwgpuSH8HFrmbrQBZnT5jvbp39CpCNkxa50UZlJM0FrqJ5c/b?=
- =?us-ascii?Q?tKBJ7bXzi2tnWPPmgz2efSDREpS7EreKOrcA5o0IkrXDv8QML8otCKakMfjS?=
- =?us-ascii?Q?1WJGZe9qAjUfAD4FQXK061OpQ80PctXqI/nb2OYqIM6rx8+noTshI3xba/o3?=
- =?us-ascii?Q?4IGwxk6ouXrrLtWxORlFqBW+juHnpeIJ/u+lcU4skf0b9keFjWx72V1gl1mn?=
- =?us-ascii?Q?epe3kHOsxlSY8Kk/Yj81Abl41FkXJjMHHFkHZcTKfq+0L47i+h5hMC2wBk7v?=
- =?us-ascii?Q?peAzPyL7H7jowJNKx+7KE+aoW9FAcr69c3fn6jfbbFxKXBTufQ0YVK3hhheO?=
- =?us-ascii?Q?AwX/xngDbY+hPv0p5ePvsIwExJp/b6x1zTylbVDVTQPIAahX5U3zDHrrMCjF?=
- =?us-ascii?Q?t4C3TQnPDEQMnCy43qQPWY1D5o+rKJCvboMKhHj4JWcHcaKsXFANIGUimT/2?=
- =?us-ascii?Q?AzkEe5fSaqJEe0Uo9Ue2vcpEXrotCUyi+wiR52JqeUfY+2FDtFxY9l24dJ9n?=
- =?us-ascii?Q?OiP1Raj6GODY9CXtyH9DzKHL8PBwf/KvWof3HysAi6zl0j3nQ2QLxHTiI8q1?=
- =?us-ascii?Q?FiY4Q81qVdw8VgAuiBPB3fQa8JeXQooXhsVzRop8xvzTSMuQMo7OwWbw2e2S?=
- =?us-ascii?Q?ZN4ciKwbsgc2TjaY+fSJbdHwUQbv1JJ3VCfbXf88lCP0ssbZ27DDzMMoe3uI?=
- =?us-ascii?Q?r8FdI13QrS90FUAgLLkdJPLHYNfrL9wpjJWSShVJU3e4WvGp8Tz5g6ZxAu8A?=
- =?us-ascii?Q?1XfHmDsOL6Xf3I+ui6Pw1H1KMMzo3ag1jpKdA/rxW/vkvveY4oEvH7kNmwKO?=
- =?us-ascii?Q?+/4hQXsI14xRCGFb/q6/IPZ/qxnF/9ofkJrF6e+qzLmrRu6nRDV20OBtFKIV?=
- =?us-ascii?Q?BLLcAfBF8scV7P70frRU/6mk0cbrHwV1bGQYdAG98vamQLqE/K5TdSHdMkUF?=
- =?us-ascii?Q?+8vbNBkEPcq3jH23V6RrWTf9Sb4r+kVtg5QHscob8UpQHi/u+gjCGc/9kjlM?=
- =?us-ascii?Q?hTieFaDx3hygMYSsrWkHjBDjq6RWPFodGPJ9mE9aXxihPoYV2wAeTQ4Y7cMT?=
- =?us-ascii?Q?/Ahnr9dtsWbKoJ/lH4E3bMnJ5sAt8kC6mV0LB1PSnTNNleb4spPrbIDT3Mcg?=
- =?us-ascii?Q?MQbwGqohXL6cp3PWfqdsPRwQy2x2f64J/gFBLhAdFCaS/+U2xYcj6iosx6U3?=
- =?us-ascii?Q?g+winiVKpRgExa/cSGWOW+57L7r7RPEqt3Sa+qlzEOVfe+bZ1bHvJH7o6ooL?=
- =?us-ascii?Q?OXai0jZ0K4H1XkWWHs2/Qo9baFsIbMYPzS5pEu65?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D3015852F
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 14:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744985968; cv=none; b=AJAwdnRR8KoQKNZRdKjD/yIb6wFTYhD7MqnPXfHgxbNpcf3dej4j5dvDRwutyX6AS4YEGvbLNrsP80zXu9jUtaBjIbulckp6aLWovhcDkcSEsrbzUyATCwrX30NeY8owX+AEpArOHP0hbxuFDhIFDB6kng2RP6FuY/Kk9o8prVk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744985968; c=relaxed/simple;
+	bh=jWBJDIpfJCgwpkVZxllIxEJnCFehqOuTWUxpAXb/WfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I+vt0PlzNsv03K79oL3hJgjKZAjT7aKyTlYx3Bw0n6aQ8HhXIYv7NprSjiHn8UJ1rt3ze3qRGYfsrCL4RxWAkjx9ugg8DA4ulSMX45gsouFqUoi9MlHjrOXJrJRuUwgFfmrGJguyiZ4uf1EzYVSJSvgf14IWKshJAOBwSssTmZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=M7K2Msr4; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c5c815f8efso168323385a.2
+        for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 07:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1744985965; x=1745590765; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6APAAgkdwXx+GMRkpzxt50sUuE/lXDS+eMQx0vd1bc=;
+        b=M7K2Msr4MjtkvvM28Tv8I+kWisIwMN0BrtZ2pktOhIRcmiYczptPXhkyWydkMeBcPx
+         onhseyWABrALhE5ZU/icjMOTZTi81UOmzjYkrBUoRYjEhQRYi07dig564IJ/bxwGzPqi
+         K+6d/pIuiAPzpPw1FIBl84CpeAfhw+5lJzE4+6S3M4KyqiC+/KZ0oDr+G+s6olFzwd9W
+         Bl/qJrC5Idm+oOAbhWmUjQ7lHxm/xIK5Nsnl0viPcD8++gBlpPeBF4btaeM7SPjx3TLS
+         PV19k5JoSUczSIfQzj5GGxsnKNY/Z8sqCqeGs466iur4R6Lt+E2IKYdmn60Eg0jpZGFX
+         ui5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744985965; x=1745590765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w6APAAgkdwXx+GMRkpzxt50sUuE/lXDS+eMQx0vd1bc=;
+        b=Uwrp8hM3LZJyac6KnVnxzWRJjrYSOp5DCMsenidccEj/mLlINpOSZD3X3s/c837HxE
+         vBMuwOSEpaW7oZ7WxW46CufCPIDss/uMlLfWxhlxMH4zLBW2MU6+6EkPWWg3GRU68aoq
+         e2szAYTqMfEcwAKQTLynMf3WlWxnlItsbMM0XF2ulL8ot40FtJjdI7AbrhLDl55WtoL+
+         AF2jEJNvfsyYWZFENL+YeFvYfTNA/Y+VmRfP+QG0cVwZE9ypKmLFhPivpf+stqDasx1Y
+         cbP66hyA+pG/mtQVt7tq+N2YbeJ2FG6BO9+DeE+pO0KMPg7wtwRrYO88FqADoo30Jyqq
+         UYuA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9b5MKPCHMMdEW69y46wq439qtAISVLXiGDrMeVwpTjqrNvQ7FbIp6sU6rb5NiVkKDaoKnM/SE7WI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsjeofKVQna6SPfOQlQ0c3Mfn2nABngnRXznsCrV0c3PgUrQf7
+	VMMlpfJz6Mc3kBaIeQ3dgrvFwBj5SO2qpRGP7mFaKjcDEy3eAaNSJkqYpvFZ/Q==
+X-Gm-Gg: ASbGncsKW2YwnbpPb+YFrSeN0fBvkclX/m3MVaOP032JXTdR3rGuEAMOst8yAXYGzl4
+	GocfNMVGbbqIDUOIRGhIqdTdP0NnbUNkrSYzuDjr96nP8/Sjhw063R7yJ9N8+HfMxfBElV/rUp1
+	6vm/lALyuwz2MrhcwFJY/kGXisXu9ICy0eauXJLZdZdq1N2cyXzRgvFhQyBBWykKraT9Se6QxwV
+	9zSUB7/3ERdYMbtbgpSeLz3PEUIuch+Cj8Qb/ZosJU01C1e9NbxlJpocvA5+ZWpXNu70K94TYcJ
+	UgDl8kIaZ9IAiHbeWTciiatrBWfki7/x/hgJHAoiGR5mvkLEWpR5Zal1Ka0=
+X-Google-Smtp-Source: AGHT+IE8f6HsMD+WBgLjvzPKpK4xqq9qZvoM91B/zfoBpQsGcLkYXTAjkkZg1car0dsJqQrxiuo52Q==
+X-Received: by 2002:a05:620a:29d5:b0:7c7:a55d:bd0 with SMTP id af79cd13be357-7c927f5944emr445043885a.5.1744985965485;
+        Fri, 18 Apr 2025 07:19:25 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c925ac5472sm111387885a.63.2025.04.18.07.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Apr 2025 07:19:24 -0700 (PDT)
+Date: Fri, 18 Apr 2025 10:19:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Chenyuan Yang <chenyuan0y@gmail.com>
+Cc: gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+	mika.westerberg@linux.intel.com, ribalda@chromium.org,
+	rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: acpi: Prevent null pointer dereference in
+ usb_acpi_add_usb4_devlink()
+Message-ID: <b886efd9-a611-4e0d-86dd-ae88ba53c3f6@rowland.harvard.edu>
+References: <20250417195032.1811338-1-chenyuan0y@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: JH0PR06MB7294.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef32741a-84e7-4cde-9216-08dd7e82ee91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2025 14:11:36.9415
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: j9Nl5a6qABSHYNgzJtbltqY8IxbG8uU9yhbXr2PIw/LrszggZsFVBQMvkp6cjhAihWCt+yHvqLqrcXqTZqch0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB7023
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250417195032.1811338-1-chenyuan0y@gmail.com>
 
-Chen, Jay (DI SW EDA DVT RD IN AVE US3) would like to recall the message, "=
-[Bug 220033] xhci: Compliance Issue - avg_trb_len not set for EP0 during Ad=
-dress Device Command".=
+On Thu, Apr 17, 2025 at 02:50:32PM -0500, Chenyuan Yang wrote:
+> As demonstrated by the fix for update_port_device_state,
+> commit 12783c0b9e2c ("usb: core: Prevent null pointer dereference in update_port_device_state"), 
+> usb_hub_to_struct_hub() can return NULL in certain scenarios, 
+> such as during hub driver unbind or teardown race conditions, 
+> even if the underlying usb_device structure exists.
+
+Those are not the conditions addressed by that commit.  The commit was 
+specifically meant to handle a bizarre situation created by the lvstest 
+driver (a child device added "by hand" after deconfiguring the parent 
+hub).
+
+> Plus, all other places that call usb_hub_to_struct_hub() in the same file
+> do check for NULL return values.
+> 
+> If usb_hub_to_struct_hub() returns NULL, the subsequent access to
+> hub->ports[udev->portnum - 1] will cause a null pointer dereference.
+> 
+> Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
+> Fixes: f1bfb4a6fed6 ("usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface")
+> 
+> ---
+>  drivers/usb/core/usb-acpi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+> index 935c0efea0b6..ea1ce8beb0cb 100644
+> --- a/drivers/usb/core/usb-acpi.c
+> +++ b/drivers/usb/core/usb-acpi.c
+> @@ -165,6 +165,8 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
+>  		return 0;
+>  
+>  	hub = usb_hub_to_struct_hub(udev->parent);
+> +	if (!hub)
+> +		return 0;
+>  	port_dev = hub->ports[udev->portnum - 1];
+
+While this test may not be strictly necessary, it doesn't hurt since 
+this isn't a hot path.
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
 
