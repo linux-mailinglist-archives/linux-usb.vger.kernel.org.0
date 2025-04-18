@@ -1,141 +1,92 @@
-Return-Path: <linux-usb+bounces-23229-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23230-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC02DA93B79
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 18:57:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 637FEA93C22
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 19:37:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C647E3BA314
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 16:57:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA55D7AD9C7
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 17:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CED1218AA5;
-	Fri, 18 Apr 2025 16:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB528218EB1;
+	Fri, 18 Apr 2025 17:37:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="dHGfvd+a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Awg7phWG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DD71A8F68;
-	Fri, 18 Apr 2025 16:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CE72AE8C
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744995442; cv=none; b=TneKCFjROgLZe9LGs/OpOBbNo529lU3fR0rEDoYfQMmFrrOExj4Bc2zs2zDliRJ6lBVkLcQhs4+v3oyv6PZXPvclHc+Iihjtu7W2BebedR0N7vTyWwx3pwK4jRxcjgLHkdvc1Tjimde2G0AMFqowtUowgVsDb8S55WUftlRtWlM=
+	t=1744997870; cv=none; b=oayH5oDnG3NKV6H0PAUY5WPrfgsrty24mikHa/CwOdQYP/WHaAYQKYtaPjLparL+PrBudHOFTRItBe+ZIxoaqt1uG/Aiou6L3aW5gM+LWO7fpovILHppX15IeRh8kTABGTYyMb4tiX15sufPf5ByLj7SQKEK0khJqD/3xzc4mG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744995442; c=relaxed/simple;
-	bh=TDuKAiO/Ql1pcO7Mfl5k5VKkVM7MYI46i4hq6UPJUVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uq4HrjlqKQ7RFpY40b1aYZx6YzJChGJgJG1WpIbfdRlszsqKN9lAgYtz022ZZk/EKe3To9MNHY32uz1X+2GQd9X4NvKSoRHw0356jJrsZv25KzCiDtjzxPJFertvqx2wqn9TMh1kpNF1L3J8Bq0lQGMuCs5H0YDwXLGtfcRGa6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=dHGfvd+a; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E0ABF102E6336;
-	Fri, 18 Apr 2025 18:57:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1744995437; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=pNwV8wF/f0cfEaYXtGKzXaf9WE3h64XoNFuFJfyDHNU=;
-	b=dHGfvd+aI3PWFI4S72fOF2+mh7dLV8lxtdiaWzoc0nyeJOqFGAocnEvxxyWK/lgoI+SVWj
-	/b9IK8t2OmLL6MsuVouhqpTUaGt7orcHTaMwXQnHKUUskStuE10gXl5WntPmVxvACYhkRS
-	p2UQqMHePKhQqI3ND0sARlRUSedeN1Vs87lmaqOYdFiZuIFARFkYv2ajX8xFx+dtwkNPyH
-	LeoiAMyRhNFV9Hg/MaGd3tVf56YY5gDjOk7sofsXLk9e6Ft+CtyXKPH+YXPia3/uDXXypS
-	meVJ38ej6R8uZbOqA4DEodK1NqDVNtOUGIRblvAJm6XU9SCYSznr9+ay6uwVkA==
-Date: Fri, 18 Apr 2025 18:57:11 +0200
-From: Pavel Machek <pavel@denx.de>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Tomasz =?utf-8?Q?Paku=C5=82a?= <forest10pl@gmail.com>,
-	Nolan Nicholson <nolananicholson@gmail.com>,
-	Tomasz =?utf-8?Q?Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
-	=?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal@nozomi.space>,
-	Paul Dino Jones <paul@spacefreak18.xyz>,
-	=?iso-8859-1?Q?Crist=F3ferson?= Bueno <cbueno81@gmail.com>,
-	Pablo Cisneros <patchkez@protonmail.com>,
-	Jiri Kosina <jkosina@suse.com>, jikos@kernel.org,
-	bentiss@kernel.org, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 3/5] HID: pidff: Fix null pointer
- dereference in pidff_find_fields
-Message-ID: <aAKEZwyixI01sJmk@duo.ucw.cz>
-References: <20250331145716.1706253-1-sashal@kernel.org>
- <20250331145716.1706253-3-sashal@kernel.org>
+	s=arc-20240116; t=1744997870; c=relaxed/simple;
+	bh=vltrVbVzrSykpSVM0h2jlCRHi5SW1JSMRIp/G2ieRao=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QVELohrkckEVudoNdreXLbXRWNK8RE8J1g9wexhzf+zwNAvZQEBAEvSAaZsPh/9Jkiyyi/pUPH5YfkK42CCxlXJOzfL/H0C7sSzC11G7Wca6VFy8T0h3m1OwgMBqaDvOSYSDlCcyAyaDMvIfUhzvvgV+d1FVmmSU6Z1if/AKJ+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Awg7phWG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BC90CC4CEEC
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744997869;
+	bh=vltrVbVzrSykpSVM0h2jlCRHi5SW1JSMRIp/G2ieRao=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Awg7phWGopb7IMkSdqeSl66LxoRMj5SLOdyJjNURQ9Z/1gYc3sWOxpBRld9oV+4fI
+	 LCYSXtvn/SFzOZjiYSmgiqCiU9iXPpRpEOD0NEMMx6wGlQOILiHzQxuaLqYXIPpaI7
+	 ztcwaM9OW5hVn6hng0oKP+VO5pVzXPlfojPfwzp/MFlLbOnBuYu4Ayw9uQQ1CsfWam
+	 kRJms3BneWw45TbuGG8tRJ5iol8nK414inibrBPBE8gIXpkIu9yQS5w0AVOVyi1FYD
+	 pCrTEGtcEy6MwTfgWQLKWUewPOVOnJLiDo63skgaEq52p1uU/CzS+OTVtg7XNmRpi1
+	 rCUc3WQOCU+xg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id AE7F1C53BC7; Fri, 18 Apr 2025 17:37:49 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220016] USB devices plugged into USB hubs on
+ 6.14.2-300.fc42.x86_64 do not work
+Date: Fri, 18 Apr 2025 17:37:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: PCI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stevenfalco@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-220016-208809-Kttvw00M3y@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
+References: <bug-220016-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="z0qow5r4EomdxsV3"
-Content-Disposition: inline
-In-Reply-To: <20250331145716.1706253-3-sashal@kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
---z0qow5r4EomdxsV3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--- Comment #12 from Steven A. Falco (stevenfalco@gmail.com) ---
+Created attachment 307986
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307986&action=3Dedit
+6.13.10 with realloc=3Don, no keyboard
 
-Hi!
-
-> From: Tomasz Paku=C5=82a <forest10pl@gmail.com>
->=20
-> [ Upstream commit 22a05462c3d0eee15154faf8d13c49e6295270a5 ]
->=20
-> This function triggered a null pointer dereference if used to search for
-> a report that isn't implemented on the device. This happened both for
-> optional and required reports alike.
-
-Ok.
-
-> +++ b/drivers/hid/usbhid/hid-pidff.c
-> @@ -770,6 +770,11 @@ static void pidff_set_autocenter(struct input_dev *d=
-ev, u16 magnitude)
->  static int pidff_find_fields(struct pidff_usage *usage, const u8 *table,
->  			     struct hid_report *report, int count, int strict)
->  {
-> +	if (!report) {
-> +		pr_debug("pidff_find_fields, null report\n");
-> +		return -1;
-> +	}
-> +
->  	int i, j, k, found;
-> =20
->  	for (k =3D 0; k < count; k++) {
-> @@ -883,6 +888,11 @@ static int pidff_reports_ok(struct pidff_device *pid=
-ff)
->  static struct hid_field *pidff_find_special_field(struct hid_report *rep=
-ort,
->  						  int usage, int enforce_min)
->  {
-> +	if (!report) {
-> +		pr_debug("pidff_find_special_field, null report\n");
-> +		return NULL;
-> +	}
-> +
->  	int i;
-
-
-But this is quite strange. Normally declarations go first. Not sure if
-old compilers can handle this?
-
-Best regards,
-								Pavel
 --=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+You may reply to this email to add a comment.
 
---z0qow5r4EomdxsV3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCaAKEZwAKCRAw5/Bqldv6
-8tJBAKCBurItwDdwVzRZ7HmySaIoV8YiWACghrPsYdQt5Vdys1Al1ITKXM7SOrs=
-=nFy1
------END PGP SIGNATURE-----
-
---z0qow5r4EomdxsV3--
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
