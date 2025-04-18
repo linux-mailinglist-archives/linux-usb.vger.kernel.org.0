@@ -1,138 +1,116 @@
-Return-Path: <linux-usb+bounces-23227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23228-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159ECA93887
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 16:19:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17EDBA93ADC
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 18:30:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B37B920710
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 14:19:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3A433A22AD
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 16:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF73917A311;
-	Fri, 18 Apr 2025 14:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9689E21420E;
+	Fri, 18 Apr 2025 16:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="M7K2Msr4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QAQ3xAL9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D3015852F
-	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 14:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0FB21506E
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 16:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744985968; cv=none; b=AJAwdnRR8KoQKNZRdKjD/yIb6wFTYhD7MqnPXfHgxbNpcf3dej4j5dvDRwutyX6AS4YEGvbLNrsP80zXu9jUtaBjIbulckp6aLWovhcDkcSEsrbzUyATCwrX30NeY8owX+AEpArOHP0hbxuFDhIFDB6kng2RP6FuY/Kk9o8prVk=
+	t=1744993541; cv=none; b=d6lm2s5id/nS2fFQNd1J0rp4pL8ljwdOgLIHm3lE/d/hXzerxEzQi3do4HQSaajDAjaZCr/sPFrkSghcvFiX5bmHO3kSbNn4pBdm/ZYj+PJ3zmz7oOtygN9olibPVJvfhbM8/5c1vFUJy7QsudHDce2JxvZJNdd7VDQt7G7G8jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744985968; c=relaxed/simple;
-	bh=jWBJDIpfJCgwpkVZxllIxEJnCFehqOuTWUxpAXb/WfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I+vt0PlzNsv03K79oL3hJgjKZAjT7aKyTlYx3Bw0n6aQ8HhXIYv7NprSjiHn8UJ1rt3ze3qRGYfsrCL4RxWAkjx9ugg8DA4ulSMX45gsouFqUoi9MlHjrOXJrJRuUwgFfmrGJguyiZ4uf1EzYVSJSvgf14IWKshJAOBwSssTmZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=M7K2Msr4; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c5c815f8efso168323385a.2
-        for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 07:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1744985965; x=1745590765; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6APAAgkdwXx+GMRkpzxt50sUuE/lXDS+eMQx0vd1bc=;
-        b=M7K2Msr4MjtkvvM28Tv8I+kWisIwMN0BrtZ2pktOhIRcmiYczptPXhkyWydkMeBcPx
-         onhseyWABrALhE5ZU/icjMOTZTi81UOmzjYkrBUoRYjEhQRYi07dig564IJ/bxwGzPqi
-         K+6d/pIuiAPzpPw1FIBl84CpeAfhw+5lJzE4+6S3M4KyqiC+/KZ0oDr+G+s6olFzwd9W
-         Bl/qJrC5Idm+oOAbhWmUjQ7lHxm/xIK5Nsnl0viPcD8++gBlpPeBF4btaeM7SPjx3TLS
-         PV19k5JoSUczSIfQzj5GGxsnKNY/Z8sqCqeGs466iur4R6Lt+E2IKYdmn60Eg0jpZGFX
-         ui5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744985965; x=1745590765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w6APAAgkdwXx+GMRkpzxt50sUuE/lXDS+eMQx0vd1bc=;
-        b=Uwrp8hM3LZJyac6KnVnxzWRJjrYSOp5DCMsenidccEj/mLlINpOSZD3X3s/c837HxE
-         vBMuwOSEpaW7oZ7WxW46CufCPIDss/uMlLfWxhlxMH4zLBW2MU6+6EkPWWg3GRU68aoq
-         e2szAYTqMfEcwAKQTLynMf3WlWxnlItsbMM0XF2ulL8ot40FtJjdI7AbrhLDl55WtoL+
-         AF2jEJNvfsyYWZFENL+YeFvYfTNA/Y+VmRfP+QG0cVwZE9ypKmLFhPivpf+stqDasx1Y
-         cbP66hyA+pG/mtQVt7tq+N2YbeJ2FG6BO9+DeE+pO0KMPg7wtwRrYO88FqADoo30Jyqq
-         UYuA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9b5MKPCHMMdEW69y46wq439qtAISVLXiGDrMeVwpTjqrNvQ7FbIp6sU6rb5NiVkKDaoKnM/SE7WI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsjeofKVQna6SPfOQlQ0c3Mfn2nABngnRXznsCrV0c3PgUrQf7
-	VMMlpfJz6Mc3kBaIeQ3dgrvFwBj5SO2qpRGP7mFaKjcDEy3eAaNSJkqYpvFZ/Q==
-X-Gm-Gg: ASbGncsKW2YwnbpPb+YFrSeN0fBvkclX/m3MVaOP032JXTdR3rGuEAMOst8yAXYGzl4
-	GocfNMVGbbqIDUOIRGhIqdTdP0NnbUNkrSYzuDjr96nP8/Sjhw063R7yJ9N8+HfMxfBElV/rUp1
-	6vm/lALyuwz2MrhcwFJY/kGXisXu9ICy0eauXJLZdZdq1N2cyXzRgvFhQyBBWykKraT9Se6QxwV
-	9zSUB7/3ERdYMbtbgpSeLz3PEUIuch+Cj8Qb/ZosJU01C1e9NbxlJpocvA5+ZWpXNu70K94TYcJ
-	UgDl8kIaZ9IAiHbeWTciiatrBWfki7/x/hgJHAoiGR5mvkLEWpR5Zal1Ka0=
-X-Google-Smtp-Source: AGHT+IE8f6HsMD+WBgLjvzPKpK4xqq9qZvoM91B/zfoBpQsGcLkYXTAjkkZg1car0dsJqQrxiuo52Q==
-X-Received: by 2002:a05:620a:29d5:b0:7c7:a55d:bd0 with SMTP id af79cd13be357-7c927f5944emr445043885a.5.1744985965485;
-        Fri, 18 Apr 2025 07:19:25 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c925ac5472sm111387885a.63.2025.04.18.07.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Apr 2025 07:19:24 -0700 (PDT)
-Date: Fri, 18 Apr 2025 10:19:22 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Chenyuan Yang <chenyuan0y@gmail.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-	mika.westerberg@linux.intel.com, ribalda@chromium.org,
-	rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: acpi: Prevent null pointer dereference in
- usb_acpi_add_usb4_devlink()
-Message-ID: <b886efd9-a611-4e0d-86dd-ae88ba53c3f6@rowland.harvard.edu>
-References: <20250417195032.1811338-1-chenyuan0y@gmail.com>
+	s=arc-20240116; t=1744993541; c=relaxed/simple;
+	bh=VfROq6WPTSBO5Ap5dlO5eNtUqJTJKGNwUoxJ17LWDK4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s7vOCUHzZoSK31iia2xsLlAhluN2yLWp5lgfKAyLVHbIL2iZvat+zGV5Ir+Pfbfc12nswJ6ryJJGjSSvpy+Kmyy8DRh83oiIv5OCL57hTgcHJFeTc1DnKJHbbd9ki6kr3BvRMiHy6ujDTuZwYyJu/baOcmeCOZaST/kv3qO3V9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QAQ3xAL9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 82ED1C4CEEC
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 16:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744993539;
+	bh=VfROq6WPTSBO5Ap5dlO5eNtUqJTJKGNwUoxJ17LWDK4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=QAQ3xAL9P6GiN5c71KXFkKFBs7VgriQ+ivIm+qpUIJ8DaDG8ipsKYP/8bMEZ1hYuz
+	 PSph0xdVKjn8uUZDskqCsW8uKXpR/zftUumarllX7YhHRp0UB+VA8f7PU5bQIDM73Q
+	 oXANAiOpDBbZ9KFpkTjLleKoDKQlFRJ1yc1bse/N43z4O+w2JIwOShiEl3B63SmNKp
+	 BeEoFBCggOl1RXW1U3kiCWiEwhUAAFn7ewj37OOdDjtOHbafiXB2aqeYsDOUMF6FoG
+	 HeYZ1Pkjcv24Q1fkpTmzhQzxUCTHFWaYrWnGqKn/idDAdL22qH+lZPETdBnpMVLe2R
+	 livAydXcd61Fw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 712B1C4160E; Fri, 18 Apr 2025 16:25:39 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220016] USB devices plugged into USB hubs on
+ 6.14.2-300.fc42.x86_64 do not work
+Date: Fri, 18 Apr 2025 16:25:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: PCI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ilpo.jarvinen@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220016-208809-TTNveuhjke@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
+References: <bug-220016-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250417195032.1811338-1-chenyuan0y@gmail.com>
 
-On Thu, Apr 17, 2025 at 02:50:32PM -0500, Chenyuan Yang wrote:
-> As demonstrated by the fix for update_port_device_state,
-> commit 12783c0b9e2c ("usb: core: Prevent null pointer dereference in update_port_device_state"), 
-> usb_hub_to_struct_hub() can return NULL in certain scenarios, 
-> such as during hub driver unbind or teardown race conditions, 
-> even if the underlying usb_device structure exists.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
-Those are not the conditions addressed by that commit.  The commit was 
-specifically meant to handle a bizarre situation created by the lvstest 
-driver (a child device added "by hand" after deconfiguring the parent 
-hub).
+Ilpo J=C3=A4rvinen (ilpo.jarvinen@linux.intel.com) changed:
 
-> Plus, all other places that call usb_hub_to_struct_hub() in the same file
-> do check for NULL return values.
-> 
-> If usb_hub_to_struct_hub() returns NULL, the subsequent access to
-> hub->ports[udev->portnum - 1] will cause a null pointer dereference.
-> 
-> Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
-> Fixes: f1bfb4a6fed6 ("usb: acpi: add device link between tunneled USB3 device and USB4 Host Interface")
-> 
-> ---
->  drivers/usb/core/usb-acpi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
-> index 935c0efea0b6..ea1ce8beb0cb 100644
-> --- a/drivers/usb/core/usb-acpi.c
-> +++ b/drivers/usb/core/usb-acpi.c
-> @@ -165,6 +165,8 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
->  		return 0;
->  
->  	hub = usb_hub_to_struct_hub(udev->parent);
-> +	if (!hub)
-> +		return 0;
->  	port_dev = hub->ports[udev->portnum - 1];
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |ilpo.jarvinen@linux.intel.c
+                   |                            |om
 
-While this test may not be strictly necessary, it doesn't hurt since 
-this isn't a hot path.
+--- Comment #11 from Ilpo J=C3=A4rvinen (ilpo.jarvinen@linux.intel.com) ---
+Does also 6.13 fail if pci=3Drealloc is on the kernel command line? It's not
+clear to me if PCI resource reallocation got enabled along with the kernel
+upgrade, that is, if Fedora packaging e.g. decided to enable
+CONFIG_PCI_REALLOC_ENABLE_AUTO in kernel's .config which is orthogonal to
+kernel version changes.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Please provide /proc/iomem from both working and non-working configuration.
+Preferrably with the otherwise identical kernel version, if you can't get it
+from the non-working configuration at all due to lack of keyboard, I'll man=
+age
+with the log from working only (things can be inferred from dmesg but it's =
+very
+very tedious process).
 
-Alan Stern
+Could you also clarify what you meant with this: "This issue also seems to =
+be
+present in 6.15.0 as well."? Kernel version 6.15 is not released yet, 6.15
+cycle is only at -rc2 at this point.
+
+I'll try to look more into this next week.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
