@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-23233-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23234-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A48BDA93C28
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 19:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD2CA93C2B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 19:46:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D35188F841
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 17:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB3C11B61FD3
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Apr 2025 17:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D03219A91;
-	Fri, 18 Apr 2025 17:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54BE021ABC5;
+	Fri, 18 Apr 2025 17:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhtVJIQz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLVTYbKA"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA2913B590
-	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D211A1B4236
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744997973; cv=none; b=dYuLrK9gi9J6A1ddhbjyuj0TFzJOIZyd4fD5I5bEd6HAzBjWyk3PDYT0dDvZ3uqmQ+W7Jz4fg/Ad3M86iur71Vg+HkQmtSD6JZhUarDrs52zw9XuSnkVU9Ki08MbBUgQROGyiQ6E9Ls9o/m4g0PR5wDziXWHqeljqgpaxcqQz48=
+	t=1744998357; cv=none; b=B/gBQ31252ZLxk6liK97wljvavrMV5Kx3bICVgtwch1BwP4+re2RiN+PkTXBd7WdRcDZZ8haOHrN/1WlCWA5eAdFc9yn/LFYUFr70SL3xI5LRM60Pc7zEbO1bccc+3k5rl2iJKsVzxCLJT6vwE09/L/WnZIvjnOBqI9grDHu11w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744997973; c=relaxed/simple;
-	bh=+6BfpOiyHiTC+qr7WeNRprweQQMsoB8dT4RUEjEKeio=;
+	s=arc-20240116; t=1744998357; c=relaxed/simple;
+	bh=wB41CXte8tSNzHK2aagAqDQIJfKteJXhx/bEh/YMCMY=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LWnNMW2brLpD06VXghdfVbxfMGRpUZDGCAu2ozXEQCsAxL6fHRgXQIzh+gCOBf4BJDqs6GfXd2zOmYeYwM/aTHe3MymASRNPMyYoSX7uAFuDRPskZwbmDS0eX5zdRiag09+++8qByw9/OTwnOXkvNYndwofx2SaY5yYrCpEJK7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rhtVJIQz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F6A0C4CEEA
-	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:39:33 +0000 (UTC)
+	 Content-Type:MIME-Version; b=qtiDKhyWOtpSru0YGEodkueS5j43e7Rar86+6X2wxBhSgPL5th5z5NqEJeY3mn7w4vTBzk0nlw+d+xofUg+fvpMV13cNh8nSKA+wsQV3BPqIBwO3TcS5Fp1C8LOFStXpFZyolya1CVHMwzX1FueW+BB/oFqj9viFcTHHXkvVlME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLVTYbKA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 529CDC4CEED
+	for <linux-usb@vger.kernel.org>; Fri, 18 Apr 2025 17:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744997973;
-	bh=+6BfpOiyHiTC+qr7WeNRprweQQMsoB8dT4RUEjEKeio=;
+	s=k20201202; t=1744998357;
+	bh=wB41CXte8tSNzHK2aagAqDQIJfKteJXhx/bEh/YMCMY=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=rhtVJIQzZDwbkSXYt5dTlMM24m6MUsPn1aCQsH3zmhQqRFj1bHpk9PjDpaGeieelV
-	 f+PRTPFRGz0bVgXvJJk7gsUoEnCfEWE+8UpkhBR4DL18vn7sx6oivPFOhXzcCIHk3n
-	 Pfwq9Or3TNAmyxMcNEFjtIWZwMKDMfKvSUfwFJ3Vm2P2DV88nnrF5LNGm2H+uc7pr5
-	 bFnVkCGY0YJMD+XbCuhlcOwFvI1y3gAU8y/pxjoGB24b+dEth+4EFkRECdfqTNZlBl
-	 8DkwByfPJQqediNB0b+shqFcK1NE2QP7msMRtocpSJdlHci9gXi2ittmkoJyzFOFqt
-	 PAQzg8VtgOFfg==
+	b=PLVTYbKAbXLAzoM3RgBmWO0UhGP71GNBSuOjzWuIPC+wLwcG39x62YrTdzcu0aew1
+	 UDTi3fLL5g34oGu5CFDoJGCmh3zvISVd9yGXZn1yZltFcBkDTBN/Q3zu3p18keYjg/
+	 YXbLiZHzVPC3MAP9CGoMF4gMDLLGxYEfkM/sTqb8DHz0N3mYnS5oeegZ/dHil8jti+
+	 EwlNoJQx9fEasSQV6yeAllc4+kJ0GI2FTVJTvs1U46TH/l7TYk2eA4BYSCgTGNE5fn
+	 vcoII5pSKVLxEgjIltVs/H435c6kOI1IhIoJUOtF0aj4BvmFyGLVdjt6E3+Q1Fxm9g
+	 lEHXWtf9oxxww==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 09043C53BC7; Fri, 18 Apr 2025 17:39:33 +0000 (UTC)
+	id 44B09C53BC7; Fri, 18 Apr 2025 17:45:57 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220016] USB devices plugged into USB hubs on
  6.14.2-300.fc42.x86_64 do not work
-Date: Fri, 18 Apr 2025 17:39:32 +0000
+Date: Fri, 18 Apr 2025 17:45:56 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220016-208809-xiPAaBAH83@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220016-208809-4L6HNo5u7M@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
 References: <bug-220016-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,30 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
---- Comment #15 from Steven A. Falco (stevenfalco@gmail.com) ---
-Created attachment 307989
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307989&action=3Dedit
-6.14.2 with realloc=3Doff, good keyboard
+--- Comment #16 from Steven A. Falco (stevenfalco@gmail.com) ---
+I ran the tests you requested.  I attached /proc/iomem for 6.13.10 both with
+realloc=3Doff and realloc=3Don.  I repeated the tests with 6.14.2.
+
+For both kernel versions, realloc=3Don results in a non-functional USB keyb=
+oard.
+
+For both kernels, realloc=3Doff works properly.
+
+I had been running Fedora 41 with their 6.13 kernel.  It was compiled with
+realloc=3Doff.
+
+I then upgraded to Fedora 42 with their 6.14 kernel.  It was compiled with
+realloc=3Don.
+
+Therefore, this is not a new problem with 6.14; it is just that the kernel
+option was changed in Fedora 42.
+
+I cannot comment about 6.15 but I think Joe was the one who tried it.  Perh=
+aps
+he can comment on that.  However, since both 6.13 and 6.14 don't work if
+realloc=3Don, it probably doesn't matter.
+
+Please let me know if there is any other data you need.
 
 --=20
 You may reply to this email to add a comment.
