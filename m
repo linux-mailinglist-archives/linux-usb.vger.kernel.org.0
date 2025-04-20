@@ -1,40 +1,79 @@
-Return-Path: <linux-usb+bounces-23249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DB81A9486E
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 19:17:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C942A94878
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 19:30:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22DCE3B1AA6
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 17:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEC181892978
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 17:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E61320C470;
-	Sun, 20 Apr 2025 17:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2C912B17C;
+	Sun, 20 Apr 2025 17:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CI/tiEHy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22ED34A11
-	for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 17:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C56E184F
+	for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 17:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745169437; cv=none; b=f5awSWPjn1LE/4/ZYhlwebJRdZibKqmb2VsDkGpBU2XRUfAnvAqT5+41EMJtTboxdP21H7HqJN1JeQPOYXvsU03cDtA0x+L0cyuMS4Zk417+p35XfFPhj735jxjNCLzk9IcA0vyahMxkkLN+UwIcuTzLni9IKMRsI5ZHzydUK+4=
+	t=1745170240; cv=none; b=ONz8w+gMCJJiqlJ68ToRrnpS71jEWHa11zYSXoRNUjBxdxhy9TDn6M9NUaFZ+/qL1eD31rOfb9jlmn+XfFpleqcENDwB9MsdEzdivhFEG9l9U1fNJeH+1/qocuKjBBBtEO5OdISu00kzfHXFSrNG2i0Nnthy9BgPekeKk6pink8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745169437; c=relaxed/simple;
-	bh=lXPPfM6pseQGexkOJ0A1RrB0Vm1IG+cgsDvA6iEReGg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=P47+wbwGh4jBVpdhbq5/UA+/XDPdtogJk8YcM9DBMlqnS064MfVkuhVzcx2gZ7anbyozLNT5Rzk556DC/OM7lZcnvgMOQawkzy+bnmE8qF3B8NXqWVoWEI5XWx8S90T+kpRE4Kv4rdqzwpEgGvftOlmvBG2y5CxsP5Rito2/StI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.2.102] (213.87.162.85) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Sun, 20 Apr
- 2025 20:16:42 +0300
-Message-ID: <9330492a-39e3-44c4-9c76-12bde069eef3@omp.ru>
-Date: Sun, 20 Apr 2025 20:16:41 +0300
+	s=arc-20240116; t=1745170240; c=relaxed/simple;
+	bh=5E6XKoboLBsROxcYXBtuDXJ2UxzJYDTgijixDnUJeic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PROA5sDX2q8iAcdY06D6iEW/dJizqXr6P9RHur6kgs5dyXZaQsvVs0Wi/Epe7HmqalJjh1fge3fm0TbsLqK/lMOSyuMlObF/+Bc3LLP6n5KsNT434XnhSz8OnhkEJReOt+MXSIeBssTpN/QAPuB5iOUGIVfxWi7mxp2tv7PmN3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CI/tiEHy; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54298ec925bso4810515e87.3
+        for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 10:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745170236; x=1745775036; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qCoNFIdVzok2s+VyCHLu7rvjGndpKW/O0xnXm/MtgJ4=;
+        b=CI/tiEHyqiZKXeNLANEocvCnF6QxUT+phiKjjDw35/AlxnNW4GgrlW1XuCMF6yl3Ij
+         fVMZgo8q+R16c/Tn0i/tkKMaNQ3L446FzOoPzbVwzOpEaf4o0zRTAG9oQMAtndXFPtYC
+         Py4LlAVYLrd2U1cMEbleocvEqjsvcD9H1yQLTo3NCD5gZnFM4aa8ybaUh59tRPI2/NSm
+         e/Ve5byNxdlndV3UMUkVZESzXukHSy7tXcP5M7oxYrJ0NmkkKE0i64AAy47To0OnRIc1
+         BemHMO6/EX5NxF/jxNtJtLs/XsQVpShesmSIhTki8CIPzBKEql+FtqqGPKqnaleLRkW3
+         fpBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745170236; x=1745775036;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCoNFIdVzok2s+VyCHLu7rvjGndpKW/O0xnXm/MtgJ4=;
+        b=VL6PgUi+viGllfUGY51Q2Bc9FAUIX9RKxDxasY8dr9U8Rx9mhGqek3bdyfpwqZ+k/r
+         dP7GVGuQLbB5eFwIXh6QTUiTGoFueYsT6pf9K59/Osda8xR48tx9Y3TbCpw3IbeKEWyi
+         E7izDQFWWN7Xj/72sqfH+fAqDglclCvHc7Jb43Kcbrd1v0LAfYIcbsWJLrVonDJ0Q7nn
+         d2Cdg70aAsFRkzO7jo03ID+G40X73gdqBbIA6jQ2q+gflMHttC/UhD5q/uquuxN6BFAD
+         Khj6WTl+f0Xpdbl/w2VmIJfkOsS/os7teYUCuSDvWLleJk6vNOKbSwqiiFsYBcToToUL
+         NV0w==
+X-Gm-Message-State: AOJu0Yw3L2+daU+J1jp+f8Aax1DEIcLkviJQ5n0PwIkH2g3IWzHu9ADa
+	ywTCNMVjfsu4jMTqYfu/1CUw0uZnbTQX2XtecFPhuWY0e/1A3nNmKeYeTg==
+X-Gm-Gg: ASbGncubauuiciRgDqBXR8ZR8VvvEQUfZjY+CO53QQns9n/V+8svcuXHuEwcI6b03bC
+	Od3XvYg0m8s0ockOJKVduMXYqq1Fzx9nHDvJtd9xrkZLZcQ5NK00RgMsHxaU0kkCQpFhhvsqVUt
+	kLbj38x773DhSOM7RQdGZYn2jrtmMFybs1EMSd/0OyYYIAfNtqEx8yP9SN0vymDgYefaF5YigBG
+	OJZuiwuP8hQXtoUsRu4K/yurEHWpqME1BA5BPVJ5KFD4+Y8Ew3mmg/wi62SnHwCcvrXRShWnH4u
+	R/AmljlfRctT+ey4fQKUP/SpdJ4Fna647dCDfXtIK+QMHh35LoE/JJ4QWnREXEyAXdF7+MwzpfR
+	SagWn9OMSqMYRTtUgAduWJg==
+X-Google-Smtp-Source: AGHT+IHqTdfZ93eNa+6MoiXMMb5pN7t8xkDxmX85OtTNzsg3/MPwnO3gqoqt3agJDf7iao5JSt0SEA==
+X-Received: by 2002:a05:6512:400c:b0:54a:cc73:a36 with SMTP id 2adb3069b0e04-54d6e61b90bmr2443014e87.6.1745170236146;
+        Sun, 20 Apr 2025 10:30:36 -0700 (PDT)
+Received: from ?IPV6:2a00:1fa0:4142:52f0:f392:abac:e837:67c5? ([2a00:1fa0:4142:52f0:f392:abac:e837:67c5])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d6e540e55sm732902e87.71.2025.04.20.10.30.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Apr 2025 10:30:35 -0700 (PDT)
+Message-ID: <cf54c624-4fbf-4d4e-81ca-48c0b487572c@gmail.com>
+Date: Sun, 20 Apr 2025 20:30:34 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -42,96 +81,79 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/11] usb: xhci: move doorbell array pointer
- assignment
+Subject: Re: [PATCH v2 03/11] usb: xhci: move command ring pointer write
 To: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	<mathias.nyman@linux.intel.com>
-CC: <linux-usb@vger.kernel.org>
+ mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org
 References: <20250416134510.2406543-1-niklas.neronin@linux.intel.com>
- <20250416134510.2406543-7-niklas.neronin@linux.intel.com>
+ <20250416134510.2406543-4-niklas.neronin@linux.intel.com>
 Content-Language: en-US
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20250416134510.2406543-7-niklas.neronin@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
+In-Reply-To: <20250416134510.2406543-4-niklas.neronin@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 04/20/2025 16:06:35
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 19
-X-KSE-AntiSpam-Info: Lua profiles 192774 [Apr 20 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 56 0.3.56
- 52db7f275cc9b6820389ba9ab2ac225370e1c244
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.162.85 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info:
-	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.162.85
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 19
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/20/2025 16:16:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/20/2025 2:12:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
 On 4/16/25 4:45 PM, Niklas Neronin wrote:
 
-> Move the assignment of the doorbell array pointer from xhci_mem_init()
-> to xhci_init(). The assignment now utilizes the newly introduced
-> xhci_set_doorbell_ptr() function.
+> Move command ring pointer write from xhci_mem_init() to xhci_init(),
+> and utilize the xhci_set_cmd_ring_deq() function.
 > 
-> Doorbell Array Offset mask (DBOFF_MASK) is updated to directly specify its
-> bit range as 31:2, rather than using inverted reserved bits 1:0.
-> This change simplifies the mask representation, making it more intuitive
-> and easier to understand.
+> The xhci_set_cmd_ring_deq() function is nearly identical to the Command
+> Ring Control register code in xhci_mem_init(). The only notable change is
+> the use of:
+>   xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg, xhci->cmd_ring->dequeue)
+> instead of:
+>   xhci->cmd_ring->first_seg->dma
+> but they are effectively the same in this context. The former represents
+> the exact position of the dequeue pointer, while the latter is the first
+> DMA in the first segment. Before use, the dequeue pointer is at the first
+> DMA in the first segment.
 > 
-> Remove the "// " prefix from trace messages, as it is unnecessary and
-> distracting.
+> The xhci_set_cmd_ring_deq() function is moved without modification, except
+> for (long unsigned long) -> (unsigned long long) due to checkpatch.pl.
 > 
 > Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 > ---
->  drivers/usb/host/xhci-caps.h |  4 ++--
->  drivers/usb/host/xhci-mem.c  |  8 --------
->  drivers/usb/host/xhci.c      | 13 +++++++++++++
->  3 files changed, 15 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
-> index f6b9a00a0ab9..4b8ff4815644 100644
-> --- a/drivers/usb/host/xhci-caps.h
-> +++ b/drivers/usb/host/xhci-caps.h
-> @@ -62,8 +62,8 @@
->  
->  #define CTX_SIZE(_hcc)		(HCC_64BYTE_CONTEXT(_hcc) ? 64 : 32)
->  
-> -/* db_off bitmask - bits 0:1 reserved */
-> -#define	DBOFF_MASK	(~0x3)
-> +/* db_off bitmask - bits 31:2 Doorbell Array Offset */
-> +#define	DBOFF_MASK	(0xfffffffc)
-
-   I don't think parens here are really needed...
+>  drivers/usb/host/xhci-mem.c | 10 ----------
+>  drivers/usb/host/xhci.c     | 37 ++++++++++++++++++++-----------------
+>  2 files changed, 20 insertions(+), 27 deletions(-)
 
 [...]
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 4de51ba851d8..92c32a80acae 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -495,6 +495,23 @@ static void xhci_enable_max_dev_slots(struct xhci_hcd *xhci)
+>  	writel(config_reg, &xhci->op_regs->config_reg);
+>  }
+>  
+> +static void xhci_set_cmd_ring_deq(struct xhci_hcd *xhci)
+> +{
+> +	u64	val_64;
+> +
+> +	/* step 2: initialize command ring buffer */
+> +	val_64 = xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
+> +	val_64 = (val_64 & (u64) CMD_RING_RSVD_BITS) |
+> +		(xhci_trb_virt_to_dma(xhci->cmd_ring->deq_seg,
+> +					xhci->cmd_ring->dequeue) &
+> +			(u64) ~CMD_RING_RSVD_BITS) |
+> +		xhci->cmd_ring->cycle_state;
 
+   Very strange alignment scheme here...
+
+> +	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+> +			"// Setting command ring address to 0x%llx",
+
+   I thought you're dropping those //?
+
+> +			(unsigned long long) val_64);
+> +	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
+> +}
+> +
+>  /*
+>   * Initialize memory for HCD and xHC (one-time init).
+>   *
+[...]
 MBR, Sergey
 
 
