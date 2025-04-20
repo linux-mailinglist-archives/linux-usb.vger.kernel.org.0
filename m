@@ -1,145 +1,137 @@
-Return-Path: <linux-usb+bounces-23248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F90FA9482B
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 17:18:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DB81A9486E
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 19:17:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CAB016A22A
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 15:18:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22DCE3B1AA6
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Apr 2025 17:17:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB021EB190;
-	Sun, 20 Apr 2025 15:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bigon.be header.i=@bigon.be header.b="AihTl4sb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E61320C470;
+	Sun, 20 Apr 2025 17:17:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17C71A9B5D
-	for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 15:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22ED34A11
+	for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 17:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745162318; cv=none; b=f6QXJPpT6dsKvKI+V1Oy73013NaRHg0yVSVWDfX1FxHtKUK8EjAsuKPgdanfYKQyD7wOKYrWqou01k3QFLyeRFrFo91Ntv5V2bf23XGdGW85MdSUZfs5Av40IGp9ABB9kuIr4sqdhtYnrdvGN9LoTNQpBFirrrd29j3jBIpo2A0=
+	t=1745169437; cv=none; b=f5awSWPjn1LE/4/ZYhlwebJRdZibKqmb2VsDkGpBU2XRUfAnvAqT5+41EMJtTboxdP21H7HqJN1JeQPOYXvsU03cDtA0x+L0cyuMS4Zk417+p35XfFPhj735jxjNCLzk9IcA0vyahMxkkLN+UwIcuTzLni9IKMRsI5ZHzydUK+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745162318; c=relaxed/simple;
-	bh=MBzRyf3V3Zf1IqfRFbE7iz/Z+UlrBdXJ1r/urWQyWFI=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=uoQVEAaWgKpgs9G+KBMK74l6WqzUnoSjUrqwZ5jbcQk7RHHJNnGKpaTbjd55ZpbKdtfPPkztZZqKSxghhNEtARYQwJURD+Uiz2nAlt+IQZ9ZpSMPxorDMWKEqYOxlykEaDbiUdUbiX+bTz0+4MgTH0LwF+NsDOsHFotgSKZoqQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bigon.be; spf=pass smtp.mailfrom=bigon.be; dkim=pass (2048-bit key) header.d=bigon.be header.i=@bigon.be header.b=AihTl4sb; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bigon.be
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bigon.be
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4ZgXFZ2423z9str
-	for <linux-usb@vger.kernel.org>; Sun, 20 Apr 2025 17:18:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bigon.be; s=MBO0001;
-	t=1745162306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:autocrypt:autocrypt;
-	bh=hIDazPIxB3dqI1MYzgrRjNSH8NmDe1hBH8LJPkqiK2c=;
-	b=AihTl4sb90IfrLZlii9gXhpZh5zbJd0M4rX4hFIL5FLWoxBX7yAoCXg12XG1QO5jiGIFMI
-	F8QCWqqtIOCz3f9JqCe9OFV8G0vOv14NQbHxV2Sk4HZpquOE1dilVEUhcTthMevIDMmR3w
-	GAu7ilwsa9K+ulyn6zFMu0aWrMJQGOFGSTy7zjCS7FxwSrVpDDu+zaVtJui1GVhvR2ZJDz
-	8wH6V/gd3xlB7X8SExGZVZA6K35j9+ZwzWy+gsNmbrO/4Hh/6MumjFFRyGhn2tqQixM4EH
-	T5r54t7C79qdAqJf4FbJvjeA6bSRoKLHKYAR6X83kbIsNFxgVe/YofpWoxjVUA==
-Message-ID: <d6411546-c4e4-4bc0-aec4-3e47ab45301f@bigon.be>
-Date: Sun, 20 Apr 2025 17:18:25 +0200
+	s=arc-20240116; t=1745169437; c=relaxed/simple;
+	bh=lXPPfM6pseQGexkOJ0A1RrB0Vm1IG+cgsDvA6iEReGg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=P47+wbwGh4jBVpdhbq5/UA+/XDPdtogJk8YcM9DBMlqnS064MfVkuhVzcx2gZ7anbyozLNT5Rzk556DC/OM7lZcnvgMOQawkzy+bnmE8qF3B8NXqWVoWEI5XWx8S90T+kpRE4Kv4rdqzwpEgGvftOlmvBG2y5CxsP5Rito2/StI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.162.85) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Sun, 20 Apr
+ 2025 20:16:42 +0300
+Message-ID: <9330492a-39e3-44c4-9c76-12bde069eef3@omp.ru>
+Date: Sun, 20 Apr 2025 20:16:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Laurent Bigonville <bigon@bigon.be>
-To: linux-usb@vger.kernel.org
-Content-Language: en-US, fr-BE, fr
-Autocrypt: addr=bigon@bigon.be; keydata=
- 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
- Gub8y8YgCrSTibbvx1KRJA==
-Subject: rndis_host: Zyxel 5G portable router seen as a WWAN device and not an
- Ethernet one in 6.13
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 06/11] usb: xhci: move doorbell array pointer
+ assignment
+To: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	<mathias.nyman@linux.intel.com>
+CC: <linux-usb@vger.kernel.org>
+References: <20250416134510.2406543-1-niklas.neronin@linux.intel.com>
+ <20250416134510.2406543-7-niklas.neronin@linux.intel.com>
+Content-Language: en-US
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20250416134510.2406543-7-niklas.neronin@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4ZgXFZ2423z9str
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 04/20/2025 16:06:35
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 192774 [Apr 20 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 56 0.3.56
+ 52db7f275cc9b6820389ba9ab2ac225370e1c244
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.162.85 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.162.85
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/20/2025 16:16:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/20/2025 2:12:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-Hello,
+On 4/16/25 4:45 PM, Niklas Neronin wrote:
 
-I've a Zyxel 5G portable router (NR2301).
+> Move the assignment of the doorbell array pointer from xhci_mem_init()
+> to xhci_init(). The assignment now utilizes the newly introduced
+> xhci_set_doorbell_ptr() function.
+> 
+> Doorbell Array Offset mask (DBOFF_MASK) is updated to directly specify its
+> bit range as 31:2, rather than using inverted reserved bits 1:0.
+> This change simplifies the mask representation, making it more intuitive
+> and easier to understand.
+> 
+> Remove the "// " prefix from trace messages, as it is unnecessary and
+> distracting.
+> 
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> ---
+>  drivers/usb/host/xhci-caps.h |  4 ++--
+>  drivers/usb/host/xhci-mem.c  |  8 --------
+>  drivers/usb/host/xhci.c      | 13 +++++++++++++
+>  3 files changed, 15 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+> index f6b9a00a0ab9..4b8ff4815644 100644
+> --- a/drivers/usb/host/xhci-caps.h
+> +++ b/drivers/usb/host/xhci-caps.h
+> @@ -62,8 +62,8 @@
+>  
+>  #define CTX_SIZE(_hcc)		(HCC_64BYTE_CONTEXT(_hcc) ? 64 : 32)
+>  
+> -/* db_off bitmask - bits 0:1 reserved */
+> -#define	DBOFF_MASK	(~0x3)
+> +/* db_off bitmask - bits 31:2 Doorbell Array Offset */
+> +#define	DBOFF_MASK	(0xfffffffc)
 
-Bus 003 Device 002: ID 05c6:9057 Qualcomm, Inc. SDXLEMUR-LITE-MTP _SN:XXXX
+   I don't think parens here are really needed...
 
-With kernel 6.12.22 from debian unstable, when the device is connected 
-to the computer by USB, it is seen as a network card and NetworkManager 
-(1.52.0) runs DHCP to get a connection.
+[...]
 
-With 6.13, this is not the case anymore.
-
-dmesg output with 6.12.22:
-rndis_host 3-2:1.0 eth0: register 'rndis_host' at usb-0000:00:14.0-2, 
-RNDIS device, fc:dd:55:ff:ff:ff
-usbcore: registered new interface driver rndis_host
-rndis_host 3-2:1.0 enxfcdd55ffffff: renamed from eth0
-
-dmesg output with 6.13:
-rndis_host 3-2:1.0 wwan0: register 'rndis_host' at usb-0000:00:14.0-2, 
-Mobile Broadband RNDIS device, fc:dd:55:ff:ff:ff
-usbcore: registered new interface driver rndis_host
-rndis_host 3-2:1.0 wwxfcdd55ffffff: renamed from wwan0
-
-As you can see with 6.12 it's seen as a Ethernet/RNDIS device, but with 
-6.13 it's seen as a Mobile Broadband RNDIS device
-
-This seems to be a regression from 67d1a8956d2d62fe6b4c13ebabb57806098511d8
-
-Note that the device is establishing the connection itself and also act 
-as a WiFi access point. The computer is not involved in the ppp 
-connection at all.
-
-Can something be done?
-
-Kind regards,
-
-Laurent Bigonville
+MBR, Sergey
 
 
