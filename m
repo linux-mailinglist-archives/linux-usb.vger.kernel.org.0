@@ -1,195 +1,273 @@
-Return-Path: <linux-usb+bounces-23258-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23259-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AFFA94FC0
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 13:00:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1089CA95026
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 13:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 430ED166509
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 11:00:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36AB8171634
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 11:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C844F262D0C;
-	Mon, 21 Apr 2025 11:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A842641E3;
+	Mon, 21 Apr 2025 11:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NPuNhvAd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KRnYRcml"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A3717CA17;
-	Mon, 21 Apr 2025 11:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FE1263F3E
+	for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 11:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745233229; cv=none; b=DyYaaE6NCbTX9JBBa8dTlkFYZOv1zTAfZqV4ZjvEjpyoEwRKfvrfbiYgRAoZUm9iNBX8wzS9eqEYRS8rCtV5ymyNe2668CSlV3E2mDbGQXL2s9wHC3zNLdrXPpI41jGJGSr60fBiy/yRy8FYMYLGkZQUe3wmmCTUzJqvfcj/Vlw=
+	t=1745234771; cv=none; b=Zo6o3RWElbP+SzPxPGAJs7bYvU67hGeZr/Px7aJlwgfIJ2kWr1crgZVmwZrM/ANwCb57q3i2dRoooXjqJxuL3nRNhJhfbYpwJeobYnEjoo133ebpHhEpR1bPnXbWqryUNxyi2vBvd+aChxsMwYJYIj1N1uUqyBwHfL4sCMiDfOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745233229; c=relaxed/simple;
-	bh=l5zPS8y6iowCGIfNInsmJ0YWWMW6rrpVtTzMCrgMbTo=;
+	s=arc-20240116; t=1745234771; c=relaxed/simple;
+	bh=zHcWarPj9NjR3xEtkYaqxlJfwvkaDX9lLrQsKXg/rjA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e/VzIBHI2ImsEY3HzBdT89kGY0X6EPYnzK2/iRWDXRqxrG+xaPoQOVXT9TI2UkIz0CU3aFPBOytGU4NrNkszrDb3N7FOAGHarZQoxkxqUuAhEU6oHoanXxLAR9zEPnSXqpz93kh65sFp8vMd6AjzpGqTOcNwsAkWzf1g3Xsb68g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NPuNhvAd; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-706cb438672so25527007b3.3;
-        Mon, 21 Apr 2025 04:00:27 -0700 (PDT)
+	 To:Cc:Content-Type; b=TN3t+KANAlqJRZwONN0Ds5oeWd8qUs2LaBmEc3mMj0CponpZMUp9tL1jAAcM4nLwFeMliXUOz+Y+tSiW4UdhUf3ZljCf1elqSYwVBk0MTXMPtDXz5btxZayyA++yZ2lDwxoxVzx3od//5zxMT4/6bynRASMm/qMysnHfEC4rxuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KRnYRcml; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54e655818b0so5212e87.0
+        for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 04:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745233226; x=1745838026; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745234766; x=1745839566; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=viAID0OFSfWPdzwpqnKUlHRrEMqoxHvEgq73p5L8B4c=;
-        b=NPuNhvAdASLO5KA9eZqnSFG1fC7zuIRY+fRwraWyDboxLB1H5N5spYyk7KfOJtn0Aw
-         PsOApmgNU1agFoJPGk6QLiR5JHvYtNPAx64xtFDtnCTt5SJwx5lZXfFY2mrMM5vSZ3FD
-         tWkS83mF0ltclqlO3rbzeEuOIkbhMIItf1KIWwOGQEndmrJVgKNOsVOMIpwewFzux0Jg
-         HsNCHLO85gufY3t+cm016dhn37i9OUsajHTyk1f7iYjKiuoq428Fh2KlWf2KxQmBimHn
-         el2d0S0rMJSav0O3T+FJlil2trrQxKV68PVV+13gTe3J8MOwp+w6d/hcH/KLYrjeSoXE
-         5stA==
+        bh=12ulIlL+bStUTIpncUPTjhwEK2bBCc519N9u/ukXq2U=;
+        b=KRnYRcmly1Y9j/ulMUHgMrSTuBzTDllSSObq7k7w7jMYsB9ADYIDjwirapXdfxFN3t
+         384x8YWRvINVqtKfmyYSnADLXNX01TQ/uxAvyrb4D4HLx7zS+brtkROKGFot55oAJxME
+         VlPsdSq3kjyVRRIEdw332PQvl8v3OcgVItRFAAFuXYQRH0bK0KHDN+BVqdNxUQwOrXh2
+         WNoHTRyP9nEruGcjcdBR10/0ypa+DUL37WO7BbKkER2umRiF0G1+/L9L1DoScuZfRqwZ
+         tSVvFOOFRKQiDU/8t4yjzHt8Qu4srvESQ8YZqga+LWOjFEABCS7fFqYcAQw3w4VImEGL
+         BZmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745233226; x=1745838026;
+        d=1e100.net; s=20230601; t=1745234766; x=1745839566;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=viAID0OFSfWPdzwpqnKUlHRrEMqoxHvEgq73p5L8B4c=;
-        b=CB5H+SnpnW5y6nJeMgFYjjXhmCzlwTy2XFy3seuWovjxZotiz/luCPB+Fr3gds6XAS
-         xEmrKVr+kUcNqaaYklCSL/ShyvCk4lqWtdBzFZ77zJGhFs1RA8PqzxtNflBLgN6tVR3q
-         L3Me6nylrYvGhtUuRWn+6GOlP3J40kko6H6410vsD8fD84omsnMyLtcJ7Rn5JP75NEIk
-         gfg3Rn7LcqbG6CBcsrjhbtNWTT5DDb+8Iol4WXL2K0itEojeoSe0GWQM0AuOaRCq1jhS
-         F1LZ9wBqjt1psEVYdECcTED17T9RW7VU1bWcl2OKFcCRWUryfugVI2iisJ8HtFhfSFKw
-         sslg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3QcfpJag8rq1lc1LrtZeeJEUGBrbswCh22ROLEfCQw2N5JLud/5S8w6Xb0aCqZtLm/kKN8vlH8NuOk8U=@vger.kernel.org, AJvYcCUE/dbXN6SuWxBh5z2jspE3L/ptFxC9fPznicNyQmQ1Q/p26Iqpw4tDQnbTSR+nX/HkzyPgUjwat7xU5KZN@vger.kernel.org, AJvYcCUd0FPLOqgDP5PZ2Pl+aokpOPlFEajitRZBQadWRfxrVRNFWymmd7zi3mIoj+pAIOX60juDClz07z0Y@vger.kernel.org, AJvYcCVAlnkonTaK2LUTsLkVleWIA3KLa8hIwL592384G/g7nl57UAkcNdJIgmsLTobyUm2RahWdxEUpibAu@vger.kernel.org, AJvYcCWfDkB0/VPWDveOdZBLEMnTbWaV3bl7pDlXEFJuLL51cTfqI7qPZ3ka8JmaK4HVaTkhNFsH77Ho@vger.kernel.org, AJvYcCWpb2nTtNJlxaZqXiP9+7wRoBCYD1rfBT911+kJuErP6D5HQZa1xLMRngZqj/P32a6b3WxbuOezqVuTZmOSAZs=@vger.kernel.org, AJvYcCX/fF4gF+YWwV7sXykA7797RbAMxPNVaFbLAnIVYB45LPAKWLmly9JqS89qBfAS43/1K+v5LYHosYQ=@vger.kernel.org, AJvYcCX5XvfOnxsvtfxLA5A2g1SD+x2FjMSmAn+/4VFfY59V+Q/eL0pnXlbsrsCmw3vqk8sFfijcNJcEfzG1YQ==@vger.kernel.org, AJvYcCXGkiEbh+myd8yS+gro1rnbT0ziL5b4RfAlosuxY/lNkEnql11HpH/XIeKl0LgbPK62+lps1Mb42xOe@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxuu6/hErfw3kg3JSHKH0FJEXOVJHrkcFlnqSPhi3iVtxt4iM8y
-	bhjuMHssgB6J5UbEWU3UQTahchw7Yl57COT3pJgZ5scRlniwJda5kDfpyJE0jAaKuI3cywEf/o+
-	Z65JwL2TtdrGD/VSmj62ynS33T+Q=
-X-Gm-Gg: ASbGnctWVn55G+UO++gg/trH/z4UyJ34A47DK5j77DL+uM62/utj67loFyh0Z7ISzMG
-	zADKE6xwNWKdnWrb5H/j7FZpb9a6c66kNrgApHia2cEEVcuVHkGMsJsGIbwwOUFj40KuwrPNNiq
-	jnTzuKX8SOB+5ZZtwt9OXWAwrrpYdknVtQnLXaIn/EmHkH1GApUfpChVff
-X-Google-Smtp-Source: AGHT+IG7euA4BFR+Mx5i/i0jG3mwDi1xEltiPr00AQmdaQcpf6Ouk/sCc3/HcH3nGYloVrsJS5NYz9rk2JRvmLgu4/g=
-X-Received: by 2002:a05:690c:4a09:b0:703:c3ed:1f61 with SMTP id
- 00721157ae682-706ccd2a836mr163642197b3.20.1745233226387; Mon, 21 Apr 2025
- 04:00:26 -0700 (PDT)
+        bh=12ulIlL+bStUTIpncUPTjhwEK2bBCc519N9u/ukXq2U=;
+        b=HPlp/PkGNm04D65OYUUOj3lupdA5Xg4zCtKYS3Fy+yW6yekNUtGGXKoJu1BCeGbHf5
+         DQZK7Z0M1yhiusuE6tkmHXJc9nIeClw/4q1EuBSv4XMFAu4gHAcX2zf/Yo1SQwxMikHM
+         7Jx+IydM/UCE6X0a+N9qNrbfjBRMUTRl67e85v/xhuzOkeh9YaMECqQQKyyCmcgBZhWQ
+         x9YlDKZWEpu5YXLqRdoybqndA9Df2SfoEJOvilASXdTHkVOn5dgZPz27sayf+QOdPmGc
+         RyTyqBW+7Q3G7iXIcMqYyyFwChc3X8hCkkN5ftIo0uhC7n9FuzwisagjlVYCUjS6MJDQ
+         juew==
+X-Forwarded-Encrypted: i=1; AJvYcCXpvvPVQUMxrtAFsP+ycQMCm51+9wDUWmYddzLa6HjXanXr+mtHKe3B0JsGzDAiSG+vWfxoXqg5kIQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiRyz0yrw0Ovj//JCSo8PKetCgxmJzD9slRSlib9lDmxdw4y2w
+	LIfyuwAFkh9oQ9loGfrqKlJqyI6mSkaFuLs6JoxCLwd14aU5OL0Kv/rFhUzh9hVV3G9Yk6NSaxe
+	4Z4ASyJIEGZtuPPtstJ7O1nkyvxxzqQz133EA
+X-Gm-Gg: ASbGnctTfv6511h2c1ItZ7H/5jQH6EUTfYVXH0LJMsY4TOyR/t7os/1NMgkLqOaLVfs
+	3DrMnN71I4Pa/QWDWMp0Od9QCJrOBaT0IW8MujCj5bFUQ0lAQmpkva+E6KsONo2tGnxLZ1ffPwP
+	AI9yHHTS8dPiGKO/D3Rh4IO7Gfr0wMZ+68lCw/n5/xkJ1NjR1khW6Ztw1k17E=
+X-Google-Smtp-Source: AGHT+IFEdze/a99TFCtvLVk5Rmo1yzKGRrpY13nJyWYeXkfaum583hJP2CO4rOYArfuDXtsh6chVGi7ekLd/CoQxvFQ=
+X-Received: by 2002:a19:5f0f:0:b0:549:73a8:c258 with SMTP id
+ 2adb3069b0e04-54d6e168ca4mr515392e87.0.1745234765451; Mon, 21 Apr 2025
+ 04:26:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com> <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com> <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
- <20250410082132.GP372032@google.com>
-In-Reply-To: <20250410082132.GP372032@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 21 Apr 2025 19:00:15 +0800
-X-Gm-Features: ATxdqUESxNdKH3-Yj-9uSqFAuc712zSM3LkrmRSu8wa-twvX0fsx93cPWbbNJ5U
-Message-ID: <CAOoeyxV-dzrJNJ83Y55SKc0rBqcFk2jPM1Z2T+hPF+QFGz3GRA@mail.gmail.com>
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250416100515.2131853-1-khtsai@google.com> <20250419012408.x3zxum5db7iconil@synopsys.com>
+In-Reply-To: <20250419012408.x3zxum5db7iconil@synopsys.com>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Mon, 21 Apr 2025 19:25:37 +0800
+X-Gm-Features: ATxdqUFlg1rMsWTAwoJOmoAmk_rGgxuPXSGtKm4qaRrSNgRpxrJoYCc9QRhljnU
+Message-ID: <CAKzKK0qCag3STZUqaX5Povu0Mzh5Ntfew5RW64dTtHVcVPELYQ@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Abort suspend on soft disconnect failure
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=8810=E6=97=A5 =E9=
-=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:21=E5=AF=AB=E9=81=93=EF=BC=9A
+On Sat, Apr 19, 2025 at 9:24=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
 >
-> On Mon, 07 Apr 2025, Ming Yu wrote:
->
-> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=884=E6=97=A5 =
-=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:21=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > > ...
-> > > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > > > >
-> > > > > > > IDs are usually given in base-10.
-> > > > > > >
-> > > > > >
-> > > > > > Fix it in v9.
-> > > > > >
-> > > > > > > Why are you manually adding the device IDs?
-> > > > > > >
-> > > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > > > >
-> > > > > >
-> > > > > > I need to manage these IDs to ensure that child devices can be
-> > > > > > properly utilized within their respective modules.
-> > > > >
-> > > > > How?  Please explain.
-> > > > >
-> > > > > This numbering looks sequential and arbitrary.
-> > > > >
-> > > > > What does PLATFORM_DEVID_AUTO do differently such that it is not =
-useful?
-> > > > >
-> > > >
-> > > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to device=
-s,
-> > > > but I need fixed IDs.
-> > > > For example, the GPIO driver relies on these IDs to determine the
-> > > > group, allowing the firmware to identify which GPIO group to operat=
-e
-> > > > on through the API.
-> > >
-> > > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you'v=
-e
-> > > done here.  These lines do not have any differentiating attributes, s=
-o
-> > > either way we are not allocating specific IDs to specific pieces of t=
-he
-> > > H/W.  I still do not understand why you need to allocate them manuall=
-y.
-> > >
+> On Wed, Apr 16, 2025, Kuen-Han Tsai wrote:
+> > When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
+> > going with the suspend, resulting in a period where the power domain is
+> > off, but the gadget driver remains connected.  Within this time frame,
+> > invoking vbus_event_work() will cause an error as it attempts to access
+> > DWC3 registers for endpoint disabling after the power domain has been
+> > completely shut down.
 > >
-> > I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-> > MFD_CELL_NAME(), like this:
+> > Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
+> > controller and proceeds with a soft connect.
 > >
-> > static const struct mfd_cell nct6694_dev[] =3D {
-> >     MFD_CELL_NAME("nct6694-gpio"),
-> >     MFD_CELL_NAME("nct6694-gpio"),
-> >     ......
-> >     MFD_CELL_NAME("nct6694-gpio"),
-> >     MFD_CELL_NAME("nct6694-i2c"),
-> >     MFD_CELL_NAME("nct6694-i2c"),
-> >     ......
-> >     MFD_CELL_NAME("nct6694-i2c"),
-> >     ......
-> > };
+> > Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
+> > CC: stable@vger.kernel.org
+> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> > ---
 > >
-> > For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-> > i2c-nct6694.c is 17~22. Does this mean each driver should
-> > independently handle its dynamically assigned IDs?
-> > Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-> > and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-> > you think this approach is appropriate in my case?
+> > Kernel panic - not syncing: Asynchronous SError Interrupt
+> > Workqueue: events vbus_event_work
+> > Call trace:
+> >  dump_backtrace+0xf4/0x118
+> >  show_stack+0x18/0x24
+> >  dump_stack_lvl+0x60/0x7c
+> >  dump_stack+0x18/0x3c
+> >  panic+0x16c/0x390
+> >  nmi_panic+0xa4/0xa8
+> >  arm64_serror_panic+0x6c/0x94
+> >  do_serror+0xc4/0xd0
+> >  el1h_64_error_handler+0x34/0x48
+> >  el1h_64_error+0x68/0x6c
+> >  readl+0x4c/0x8c
+> >  __dwc3_gadget_ep_disable+0x48/0x230
+> >  dwc3_gadget_ep_disable+0x50/0xc0
+> >  usb_ep_disable+0x44/0xe4
+> >  ffs_func_eps_disable+0x64/0xc8
+> >  ffs_func_set_alt+0x74/0x368
+> >  ffs_func_disable+0x18/0x28
+> >  composite_disconnect+0x90/0xec
+> >  configfs_composite_disconnect+0x64/0x88
+> >  usb_gadget_disconnect_locked+0xc0/0x168
+> >  vbus_event_work+0x3c/0x58
+> >  process_one_work+0x1e4/0x43c
+> >  worker_thread+0x25c/0x430
+> >  kthread+0x104/0x1d4
+> >  ret_from_fork+0x10/0x20
+> >
+> > ---
+> > Changelog:
+> >
+> > v4:
+> > - correct the mistake where semicolon was forgotten
+> > - return -EAGAIN upon dwc3_gadget_suspend() failure
+> >
+> > v3:
+> > - change the Fixes tag
+> >
+> > v2:
+> > - move declarations in separate lines
+> > - add the Fixes tag
+> >
+> > ---
+> >  drivers/usb/dwc3/core.c   |  9 +++++++--
+> >  drivers/usb/dwc3/gadget.c | 22 +++++++++-------------
+> >  2 files changed, 16 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 66a08b527165..f36bc933c55b 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2388,6 +2388,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >  {
+> >       u32 reg;
+> >       int i;
+> > +     int ret;
+> >
+> >       if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
+> >               dwc->susphy_state =3D (dwc3_readl(dwc->regs, DWC3_GUSB2PH=
+YCFG(0)) &
+> > @@ -2406,7 +2407,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >       case DWC3_GCTL_PRTCAP_DEVICE:
+> >               if (pm_runtime_suspended(dwc->dev))
+> >                       break;
+> > -             dwc3_gadget_suspend(dwc);
+> > +             ret =3D dwc3_gadget_suspend(dwc);
+> > +             if (ret)
+> > +                     return ret;
+> >               synchronize_irq(dwc->irq_gadget);
+> >               dwc3_core_exit(dwc);
+> >               break;
+> > @@ -2441,7 +2444,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >                       break;
+> >
+> >               if (dwc->current_otg_role =3D=3D DWC3_OTG_ROLE_DEVICE) {
+> > -                     dwc3_gadget_suspend(dwc);
+> > +                     ret =3D dwc3_gadget_suspend(dwc);
+> > +                     if (ret)
+> > +                             return ret;
+> >                       synchronize_irq(dwc->irq_gadget);
+> >               }
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 89a4dc8ebf94..630fd5f0ce97 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+> >       int ret;
+> >
+> >       ret =3D dwc3_gadget_soft_disconnect(dwc);
+> > -     if (ret)
+> > -             goto err;
+> > -
+> > -     spin_lock_irqsave(&dwc->lock, flags);
+> > -     if (dwc->gadget_driver)
+> > -             dwc3_disconnect_gadget(dwc);
+> > -     spin_unlock_irqrestore(&dwc->lock, flags);
+> > -
+> > -     return 0;
+> > -
+> > -err:
+> >       /*
+> >        * Attempt to reset the controller's state. Likely no
+> >        * communication can be established until the host
+> >        * performs a port reset.
+> >        */
+> > -     if (dwc->softconnect)
+> > +     if (ret && dwc->softconnect) {
+> >               dwc3_gadget_soft_connect(dwc);
+> > +             return -EAGAIN;
 >
-> Yes, if you _need_ the ranges to start from 0, then you will have to
-> call mfd_add_devices() separately on those ranges.  Otherwise one range
-> will follow directly on to another range.
+> This may make sense to have -EAGAIN for runtime suspend. I supposed this
+> should be fine for system suspend since it doesn't do anything special
+> for this error code.
 >
-> But wait, you're using mfd_add_hotplug_devices(), which means you are
-> using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
-> being ignored anyway.  Thus, if you have tested that this works, you
-> don't need them anyway, right?
+> When you tested runtime suspend, did you observe that the device
+> successfully going into suspend on retry?
+
+Hi Thinh,
+
+Yes, the dwc3 device can be suspended using either
+pm_runtime_suspend() or dwc3_gadget_pullup(), the latter of which
+ultimately invokes pm_runtime_put().
+
+One question: Do you know how to naturally cause a run stop failure?
+Based on the spec, the controller cannot halt until the event buffer
+becomes empty. If the driver doesn't acknowledge the events, this
+should lead to the run stop failure. However, since I cannot naturally
+reproduce this problem, I am simulating this scenario by modifying
+dwc3_gadget_run_stop() to return a timeout error directly.
+
+Regards,
+Kuen-Han
+
+
 >
-
-Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
-sub-devices use cell->id instead of platform_device->id, so it doesn't
-affect the current behavior.
-
-However, if you think there's a better approach or that this should be
-changed for consistency or correctness, I'm happy to update it, please
-let me know your recommendation.
-
-
-Thanks,
-Ming
+> In any case, I think this should be good. Thanks for the fix:
+>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>
+> Thanks,
+> Thinh
+>
+> > +     }
+> >
+> > -     return ret;
+> > +     spin_lock_irqsave(&dwc->lock, flags);
+> > +     if (dwc->gadget_driver)
+> > +             dwc3_disconnect_gadget(dwc);
+> > +     spin_unlock_irqrestore(&dwc->lock, flags);
+> > +
+> > +     return 0;
+> >  }
+> >
+> >  int dwc3_gadget_resume(struct dwc3 *dwc)
+> > --
+> > 2.49.0.604.gff1f9ca942-goog
+> >
 
