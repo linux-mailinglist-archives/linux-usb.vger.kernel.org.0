@@ -1,155 +1,153 @@
-Return-Path: <linux-usb+bounces-23261-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23262-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C846A953AC
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 17:41:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A97BA953EA
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 18:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6724B188B981
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 15:41:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EB877A9027
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Apr 2025 16:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C008D1DE4DB;
-	Mon, 21 Apr 2025 15:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FD981DD543;
+	Mon, 21 Apr 2025 16:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="tUAItBqF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8kFThld"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BDA1DE3A4
-	for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 15:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAC22F3E
+	for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 16:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745250099; cv=none; b=kWIlg+zdHS6ttWMesDf5YAEXv9SuZZkbiLF2mAXx/K/LGo9g4hneLYWr/JZUgL60hiayWLT39bXW35NC2dvOL388POvlVVfNL5GeTMCoM+gYyrzHmTku7moMhHaN45b5rwiWJBpl7BGl1dbBxj+Rgo1WYbcNJLNytimOUFPmFzE=
+	t=1745252135; cv=none; b=aG69mTUbUQw83O/X6D3qkYsPWbpcCu+E68D8wFvMrbzzXLwaQAKomv/m8Cg3PxR7Nbswi7eAfFXUh7qtJJQzPGSR13QD+/xgPOOHIHRi8zSF1Zl/z3mDCVgivqNZ+h/2Q3ICIrp+dtXHND6x6bm7ZA/juv0yIuuqbMAgzf72OGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745250099; c=relaxed/simple;
-	bh=PQa09r6j/8ooGdQtXiPa1g4Vr9JUS1TpaWAV/y+J4Ho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ecUjUNPPofLz4zQbq238BpvvEokrcnidYYgdKntZ+GnQ1FhghA9//KLO86ebFaGny19lvK/8PE0SkdUa5PtSxsjty8eFqcegeev+h/21nCCEYDCyEQroybGTcqhznTX5DAA3QUjB8d1hjKwvil0/r35Rnhsvi6DIm2CNemebMD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=tUAItBqF; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c560c55bc1so411563185a.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 08:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1745250096; x=1745854896; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4TPkLFjyaQsZeuebMek2/SMUS9oNfyPtxNemBHcNa+4=;
-        b=tUAItBqFLj1rflLXyQlEur7uCzQbBhXctYAU53fLNMR+mmy+DJTVw6Cv2ZCFeAknio
-         xpgFPJGujd8LMQTDW8Wzz1e0BHmqvh0iwJC877FD/icOUeyhtFyAv0pZmA+npjU7rV5F
-         1t7xaQ/RdCfROf1OgXvHAzaJ5pSsxXoX2Mz+fdhbSXZxp1umx9CqOl1umj7rc/pBCsXX
-         ew80mQ9mh/sjmwCMt4XknZKD4cePNTHEMssMvxp8jMTL/Cd3wKe+vGUXf4Z9/XEUTd8j
-         atHAoWUEY1l/wKNTR4GXv1cq7NOyUhogXGkl7ej/lygkDBb/8zemeCGpytcsq9mI65hi
-         uyYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745250096; x=1745854896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4TPkLFjyaQsZeuebMek2/SMUS9oNfyPtxNemBHcNa+4=;
-        b=fy+XjBsA0AZD67AfX4InGi26oL72jyn0nhSgTxaR+5U+kXuM20qXx3uUxUPr07MaLd
-         MPFwbnUbFwZVpWi0HtNDuLGYmGMO7iiC7rjb4Y1r2hVOQfaF2DfUiOV8uOCbyFHU88ii
-         ExjcoFGYumO8uG81um01XbEYH0elBd6Adfd96VSmS9ZIJs3KKYE5JHDODQKrua4K+dAm
-         4ODIOiQih18DjDL9tGdA4art5tzrF2BL35R+udZKZCNEKPTZSExMYuFinCxFtH2mqrgL
-         b4xR/4C+sThdgicxpojb9uQ8CsOUxkGRaPJz7buC8Rqr2GOtso5HEE1GNT5j0v0Wqhtu
-         jo0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXTyNeaHwWG95pdgHfHtYc7FfqAPT0DXUvewaCD6KMS6t+JHB+X2ZsNWNsW4F8aUiPEVGl2Hf0ViWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze12O2O2zOJopfyTagoTaM57zrtr7CQOgxnVU1Q8TtWquQhgGu
-	wT/tT6mfkmU8tUs3L4OaMSYnycJSaHHBlpDJZj2umVbWyjXFqE83ZCOLUSgPgg==
-X-Gm-Gg: ASbGncuBtmAKLkLcItBSK9ZEUGp0pwcLyiCPG243OwVjN0nnflOJy98S+tqd5eaYnhk
-	Ehl3TjEWVvgFpdCFsLxqM4G/MktsCsfMsUacthzKGDXdPFYyEPl5GrUh8IaeTHkEEmgTsw+xRCS
-	9bSpxDxMCzWzpiwBOtgZEiuhdJ+PgukIt+aNILwM5Q2RctvvtRkG0mI/pPZC39kBLS0DEQAGJhl
-	2mJjqYfWOPa6A7j82MmV1FpAQh9wB2X/vQU//4/rr8Gj8LxjddqLV+27t7nmAH7QZ2jKPGwz/pD
-	BRoSaZLSVoL6MWb//b9jfCLs3lEhm01Dr1IkW/Oeor55H/LpuFBKkjql23o=
-X-Google-Smtp-Source: AGHT+IFxk4QgWq+qBc70K4SqcUEOg6xHeTtZfd/Gn5+LywPh1UsOhJQ5xbD3fV49o91sTnL+bSml+Q==
-X-Received: by 2002:a05:620a:4149:b0:7c5:3cf6:7838 with SMTP id af79cd13be357-7c92805dcd3mr1994536885a.49.1745250096433;
-        Mon, 21 Apr 2025 08:41:36 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c925b4dc09sm434539385a.73.2025.04.21.08.41.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Apr 2025 08:41:36 -0700 (PDT)
-Date: Mon, 21 Apr 2025 11:41:33 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Alexey V. Vissarionov" <gremlin@altlinux.org>
-Cc: Jon Hunter <jonathanh@nvidia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe Kleine-Knig <u.kleine-koenig@baylibre.com>,
-	Nagarjuna Kristam <nkristam@nvidia.com>, linux-usb@vger.kernel.org,
-	linux-tegra@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] usb: tegra-xudc: check ep and ep->desc before deref
-Message-ID: <54fc8e1e-6d6b-4c4c-9ca4-164d24552477@rowland.harvard.edu>
-References: <20250415174204.GB6814@altlinux.org>
- <79265b11-c23a-4e4e-b7c3-6cf5b89b9977@nvidia.com>
- <20250416095555.GB27292@altlinux.org>
- <6e0b8bb7-c9c4-4625-bad0-552dcad89ea0@nvidia.com>
- <20250416120000.GD27292@altlinux.org>
- <f17d63cd-14a0-44bf-af9c-358d2a36b69d@rowland.harvard.edu>
- <20250421150728.GA32725@altlinux.org>
+	s=arc-20240116; t=1745252135; c=relaxed/simple;
+	bh=FiwA9ZbOf59WoKyO4d+C9jynfSSLMKd3Cczs6cH5+Lk=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=DaTc/p4KgQZ2oUMnL8zrXgQ2ov4rc0Zejo2bgw1zUZQ7M9SLP8srCdFym+esgBjJNqPHIOH+MR6M+uK3FEGuhj8CUJOyz0CxGZOo2o9cY+s0hnUn5PkmT/5/CvbA724x8fkmrdpPq/kunX/i/Zr2LY1sAIVSNqcT+hJYdQDm9Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8kFThld; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45CB4C4CEE4
+	for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 16:15:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745252135;
+	bh=FiwA9ZbOf59WoKyO4d+C9jynfSSLMKd3Cczs6cH5+Lk=;
+	h=From:To:Subject:Date:From;
+	b=a8kFThldVb3rYZ6mYHs5dElF5sCgo3aAvyNcD9KSCjSx4kygsmvyxB+UoYHl+jtOj
+	 FHiQPcXtkzq45vGo6ox/BoHK0Vy4gqvlUmrTXet2c5utHULFw97G+SJ505u5i9S4wZ
+	 UGsFQ/Fw6K2i/NeR+u/JOSC3lL6OlhEDI0Cfv48YzOsFzFOvIX3U3Mu5S4mIgEJOua
+	 tq9gE4bNAru4uNe0rwgzWcMfPGQXJFpBLyrKZWJLLKBGlI8cARARI/ZoEtmDdaVlB1
+	 ugzmMn1+SxuleyJknk2J+x0aB8Am9KkFsIagWzcsmA2wRqBf1+tsDdHbPfP2yVyY6q
+	 tRHJkJiO68J6A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 375A6C3279F; Mon, 21 Apr 2025 16:15:35 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220042] New: kmalloc Redzone overwritten in
+ usb_get_device_descriptor
+Date: Mon, 21 Apr 2025 16:15:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: m95d@psihoexpert.ro
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-220042-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250421150728.GA32725@altlinux.org>
 
-On Mon, Apr 21, 2025 at 06:07:28PM +0300, Alexey V. Vissarionov wrote:
-> Good ${greeting_time}!
-> 
-> On 2025-04-16 10:13:05 -0400, Alan Stern wrote:
-> 
-> 
->  >> +	/* trb_phys_to_virt() dereferences ep; check it here */
->  >> +	if (!ep) {
->  >> +		dev_err(xudc->dev, "unexpected NULL pointer: ep\n");
->  >> +		return;
->  >> +	}
->  > Is this condition something that is totally under the kernel's
->  > control? That is, is ep always passed in by a driver and there's
->  > never a valid reason for it to be NULL?
-> 
-> IIUC, the endpoints are reported by the device. But the device
-> may be something like STM32 uC with malicious firmware.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220042
 
-That doesn't matter, because the code you are changing doesn't run on 
-the host.  It runs on the gadget.  If a gadget with malicious firmware 
-crashes, who cares?  It would be a good thing, not a bad thing.
+            Bug ID: 220042
+           Summary: kmalloc Redzone overwritten in
+                    usb_get_device_descriptor
+           Product: Drivers
+           Version: 2.5
+          Hardware: ARM
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: m95d@psihoexpert.ro
+        Regression: No
 
-Besides, the condition you are testing for, namely !ep, can never happen 
-anyway.  Here's why:
+Created attachment 308005
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308005&action=3Dedit
+kernel config
 
-This routine -- tegra_xudc_handle_transfer_completion() -- is called 
-from tegra_xudc_handle_transfer_event() in the case where comp_code is 
-TRB_CMPL_CODE_SUCCESS or TRB_CMPL_CODE_SHORT_PACKET.  Either way, 
-comp_code will be different from TRB_CMPL_CODE_BABBLE_DETECTED_ERR, so 
-the code immediately preceding the function call will already have 
-dereferenced ep.  If ep is NULL, the system will crash before your new 
-code is executed.
+Hi.
 
->  > Then there's really no need for this check. In real life it
->  > will never trigger.
-> 
-> With real devices. But ready-to-use STM32F103C8T6 boards are sold
-> for only 10...15 CNY, so one would need only to write a firmware
-> and to flash it in the board using 20 CNY program-and-debug tool.
+Asus Tinkerboard S (RK3288, armv7).
+I get this error while booting, and every time I connect an USB device:
 
-Do those boards run a Linux kernel?  If they don't then they won't run 
-the code you are changing, so your statement is irrelevant.
+[   23.437577] [  T282]
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+[   23.447578] [  T282] BUG kmalloc-64 (Tainted: G        W         ): kmal=
+loc
+Redzone overwritten
+[   23.457246] [  T282]
+---------------------------------------------------------------------------=
+--
+[   23.469617] [  T282] 0xc5818c52-0xc5818c53 @offset=3D3154. First byte 0x=
+44
+instead of 0xcc
+[   23.478587] [  T282] FIX kmalloc-64: Restoring kmalloc Redzone
+0xc5818c52-0xc5818c53=3D0xcc
+[   23.487655] [  T282] Allocated in usb_get_device_descriptor+0x90/0x1a0
+age=3D1713 cpu=3D2 pid=3D27
+[   23.497031] [  T282]  usb_get_device_descriptor+0x90/0x1a0
+[   23.503086] [  T282]  hub_port_init+0x15bc/0x26e8
+[   23.508268] [  T282]  hub_port_connect+0xacc/0x2438
+[   23.513642] [  T282]  hub_port_connect_change+0x218/0x500
+[   23.519599] [  T282]  port_event+0xaa0/0xddc
+[   23.524292] [  T282]  hub_event+0x458/0x9b0
+[   23.528883] [  T282]  process_one_work+0x8a8/0x10b0
+[   23.534258] [  T282]  worker_thread+0x784/0x10a0
+[   23.539338] [  T282]  kthread+0x2e0/0x344
+[   23.543738] [  T282]  ret_from_fork+0x14/0x28
 
->  > Of course, if it is reasonable for ep or ep->desc to sometimes
->  > be NULL, then the checks should be made. But if that were true,
->  > I don't know why you would call dev_err().
-> 
-> This was suggested by Jon Hunter on 16 Apr 2025 08:43:58 +0100 and
-> I've agreed that would be wise.
+I did a git bisect and this is the result:
+# first bad commit: [fb5eda0dfe2256b468fc4e95207a4df88457274f] mm/kasan: Do=
+n't
+store metadata inside kmalloc object when slub_debug_orig_size is on
 
-The more I look at this, the more this change seems unnecessary.
+I also saw a redzone error in usb hid driver, but I didn't get to bisect th=
+at
+one yet - kernel build is really slow on this SBC. I'm going to open a sepa=
+rate
+bug report for that when it's ready.
 
-Alan Stern
+I'm attaching kernel config and complete error from dmesg.
+Thanks.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
