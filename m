@@ -1,96 +1,76 @@
-Return-Path: <linux-usb+bounces-23282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E452A95E42
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 08:34:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 039D2A95E75
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 08:41:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85BE818995DA
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 06:35:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3FF53A9661
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 06:40:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 282D5219A68;
-	Tue, 22 Apr 2025 06:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABD622ACE3;
+	Tue, 22 Apr 2025 06:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CmeyMm2d"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AlWYDvU6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE501F4E59;
-	Tue, 22 Apr 2025 06:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5868A25634;
+	Tue, 22 Apr 2025 06:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745303686; cv=none; b=Uh0ktuAMv/VEt5b+ezWtFwiDIHpzZmuJw7HoVJrgreeKKu8OxkKwFHZmiRh8ecM0yxZrCgrV7Pr05AdGrQaod3qlPC95B+3dASJ7pdhAFTMC1LqfOTZ0HKeXgEuIaf0OwcOPlAchs3ajNv2FCyRc2co4AI04sgE/K1DWBui0QiY=
+	t=1745304061; cv=none; b=bNT7p54vejd3tJfKx9JP0K+K5qdO3Sbqv2g7gvF0fKpsGeMWzYjfsyoisqKf2vKg2xMIN1YDps/zSGw3woZis9+xFfcJgNTG+yRjEB6BTYKPxAa2bpeZjvBpWh2A5IgV9IYRnSum4L4uPfjo8BxVsNtWRmIlN1ruXyeaTGcxyus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745303686; c=relaxed/simple;
-	bh=JmWei4l7lz4o6cL+p+ipmgk1XVBbw67QcTJhUS+A0Mc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c5Wg7h+C2rGJZkE9ubHfBhD9Iy6tPh4Iy/n5+aWvu/WnW+ooulo5FT3Zlx256EedJZECq9zU6y++8kh9p0H3lzQXRGClwbbeJxKAMfCBNKmdkoo0bCxQMn1Oh9AsGu9jD4L1t7bBMCKBGYAJyzRhZKk08jSWbo1PZ+bAiTkXeLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CmeyMm2d; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=IYN9Q
-	s58I4Vqu/JlMsD4Ruol4GYfkyWwUO6goo/h3SA=; b=CmeyMm2dwunsc1EAStZP0
-	qC7em9NgXBcnQKJh5165MLlW22JUOwoqg8+vZ0Kk34vQhd/ibXt/2+2OF9Uw3+j1
-	ezoIOMPpv+D0BN9hjJPY06feAmVGEBNsjB9XAy5JltEYsvwDxZnlzf0cfFIe14fR
-	dVxhTEkoMr2d6P33E0xudk=
-Received: from thinkpadx13gen2i.. (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wCXQ3dlOAdoOBRXBg--.17896S2;
-	Tue, 22 Apr 2025 14:34:15 +0800 (CST)
-From: Zongmin Zhou <min_halo@163.com>
-To: skhan@linuxfoundation.org
-Cc: gregkh@linuxfoundation.org,
-	i@zenithal.me,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	shuah@kernel.org,
-	valentina.manea.m@gmail.com,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-Date: Tue, 22 Apr 2025 14:34:09 +0800
-Message-Id: <20250422063409.607859-1-min_halo@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
+	s=arc-20240116; t=1745304061; c=relaxed/simple;
+	bh=hvpILiGjYbYXhwCEH7efRhy/shrxJjMpo9yrojqDQTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hwROr4kOT29hh2xqNYHgfuexbj8qWKjX9SrCDLrqXhM5J0nr1gXEGi3QH0cAHmbkp+Pi+Y9UWvrW7ZBlJrKWoHYSU39q0hWcj9EAee+QzU5OB+869Q4rlTMJIgK7ploaIZBN2BGLoAWBfLH9/JQn4cL6vYD/OXTkaB9pmq2WlDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AlWYDvU6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BFFC4CEE9;
+	Tue, 22 Apr 2025 06:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1745304061;
+	bh=hvpILiGjYbYXhwCEH7efRhy/shrxJjMpo9yrojqDQTs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AlWYDvU68KlKnZ9wKwlXZjix8qn5VpaU7SIVkjeyo2nDlkGnKWDin4fwyzBDTUiKk
+	 9dU5xd5rQDsTTWeQpJ5sJMpRljc1vGB3zZVfwNL+8m6rAZPN3exXoF66vVGVPFEP9K
+	 4X5gLbzKqIXKn/Z1H7kCJhwiR7bbUH62m6qksU6E=
+Date: Tue, 22 Apr 2025 08:40:58 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Zongmin Zhou <min_halo@163.com>
+Cc: skhan@linuxfoundation.org, i@zenithal.me, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, shuah@kernel.org,
+	valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+Message-ID: <2025042235-action-remedial-e0a2@gregkh>
 References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
+ <20250422063409.607859-1-min_halo@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCXQ3dlOAdoOBRXBg--.17896S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruFy8trWrWryxWr43tF1DZFb_yoW3urc_Cw
-	43uF4kWFs0k3Z0kw1v9ry5trZ8K3yDuF9YqF1DKF4FqasFyw1fA3yUX393KFWDZr1xtFn8
-	GwnFqrn5ZF18WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8yUDJUUUUU==
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbi7h43q2gHNktCUgAAsu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422063409.607859-1-min_halo@163.com>
 
-From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+On Tue, Apr 22, 2025 at 02:34:09PM +0800, Zongmin Zhou wrote:
+> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+> 
+> fix usb device limited  max_sectors when use usbip protocol
 
-fix usb device limited  max_sectors when use usbip protocol
+Please explain more as to why this is needed.
 
-Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
----
- drivers/usb/usbip/vhci_hcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index e70fba9f55d6..fca3a4a6e94d 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1345,6 +1345,9 @@ static int vhci_hcd_probe(struct platform_device *pdev)
- 
- 	usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
- 
-+	/* Set the dma mask to support 64bit for vhci-hcd driver. */
-+	dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-+
- 	/*
- 	 * Allocate and initialize hcd.
- 	 * Our private data is also allocated automatically.
--- 
-2.34.1
+What commit id does this fix?
 
+thanks,
+
+greg k-h
 
