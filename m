@@ -1,47 +1,87 @@
-Return-Path: <linux-usb+bounces-23287-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23288-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7646A95FA1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 09:38:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68834A9623E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 10:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93DF67A25F2
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 07:37:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C00617FC93
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 08:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E911EB1AB;
-	Tue, 22 Apr 2025 07:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC72E296150;
+	Tue, 22 Apr 2025 08:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kGFAXBPf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A277DA6D;
-	Tue, 22 Apr 2025 07:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89772957DF
+	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 08:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745307484; cv=none; b=T5oSN0y36ZgJheK4x2bKHkUMhHwHUNMXnq8f3B7DGAd+0xRlfbI6mxejZbG5XPGOkvsfLukGFcSFPNNmhkvoxhdLPpJAQR8jaSWWPgXDyccgZtE50Ypez7B+CrRDc1tlaNWi3tFv1yw2m3hMpyhV4II+uct2RqYJimFl+AQMxaE=
+	t=1745310611; cv=none; b=RYVwVOxGW6MExZG1qsNDzsmS+Q8v0EeZ7mECfulQpC6AsqDoSEfG6vEWaRe0pYJP4FivfJ3sNSXnNNCElZsv9eoZ2C1ZGyBP037iDYMW9Kx2VV4ukRMTR+D7WGjdA11fcGykTZx7Jbrq1nbAYCgHz9LOXVZ7FZ8bhVo2TcxXpXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745307484; c=relaxed/simple;
-	bh=6sgOfaHquz9KChHYPaMICP9c8L4Jj9Z/lr5QEoP2C2g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gkc9dqrtGlfP6yuZ6nGTHtuz4VYAvLhqAkxg4xSlk72EZzuJ6i0JDifBHvzwPIbBca1HudRaNUsQmYHIJSuddN5Zp/0aEME9/Lfq6Os/TWxykJTxC3wwoEOUEhsFclKRJovhxov4I5O9OZX8eCtNYxHh4FmAf9vlF3GBxmg9Ghg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowADHcT5RRwdoHk4WCw--.50807S2;
-	Tue, 22 Apr 2025 15:37:54 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	u.kleine-koenig@baylibre.com,
-	guoren@kernel.org
-Cc: linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1745310611; c=relaxed/simple;
+	bh=wpLvYJ8h+2gdD8KlovfRp/KEYqpjX5R39eBimYEADQ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NURcPUIVekDqct+k19nQoufob1R+czVOjk7vllQbn1Y4ddfuTykz+Mze2eWQ5okVR0GXKG+2iKFxHg3aT/+aOxCfX7wRhbd2SFwkuEwc4yOCqMp/lRd+P9r2VOaRgnKE0sGGxpWxEb58hgvAp+l1bIQZdXN+0csG9+kMoMiirRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kGFAXBPf; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7398d65476eso3835284b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 01:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1745310609; x=1745915409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=suVeEV15xn1TJzAA78ITbkuezXgamtF49ziPRPaA7d4=;
+        b=kGFAXBPfkCTyYBf4lAmBXiDYLKXdHMyuQGbr3NYT7kRjdMqCFpVt+3K+V4aq6r/lDb
+         V9zyb9ptPR5RVeBg6Gy63t7rnVLay1vAU6lE1Gcj6v6vI/T3uc6oSMpdMnmn6i/YxYQU
+         0Llf+EzBbXiG08xRrcbbkDpPhzSdnIlV0A0/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745310609; x=1745915409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=suVeEV15xn1TJzAA78ITbkuezXgamtF49ziPRPaA7d4=;
+        b=JW7cNMNx4A/CG9OI+/knIRwuMWAr8I8jQshL42LivRHaPvOOiazU6iiN/CwWHk+kHS
+         zFp66DiblCG6GYMHxMcZR9C/FX6a5m3VtVTPj+2bwZLzrpDm7s6k1O/VaQUo7+AjBBxI
+         ENrj5Bl30YXcbQgUp7Ai3i5FJoFvbHcm2WRMLObSVr6xAnceiYQjeZ59WVrxdU3W7ahB
+         c5+7u1TzhCqnZ5tzdfYYWPQxU3k2IDzl7jG4H4XhU3JvAe+GsTJTeCMgumeYM6fU8ir/
+         THoGc5AyShLpeMb8PNAVP3lSIJYREs+eHSDOm6n+Z1F8nfnTY5SaP05PQAXoNQmdAtle
+         161A==
+X-Forwarded-Encrypted: i=1; AJvYcCV1vAcBNObNWK9p4JiqaAHcxnwdAbWarKm63yMb0KlGjLeYEMzXj9rcWU6sMHY0Zdd3ZKXHjbKsqs4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvgHSKpNteF1AZ9G8o12XjumNVkZCMib25ieHSGmlBo0cco+yx
+	MOpGtAXUUamMv0qcAWMttSugVq+FBlVZmgQAg+H2isdmAZdA24r4C4hr020xfw==
+X-Gm-Gg: ASbGncsgMukkcW5HyR06YcvwhX+YUfvVYWlfax+RwdpZzVauYb+0aKYYbzw2hhV+exL
+	QrqZo6PxhDGo+D7Kyl6lhg47tecmMvXLk9+LeHngfNQa4cO9heiQvk0KpJM4jiYueBJhM/f4Ibf
+	IZMswqbApi8wmLnjA5Uov2SUBz92lIvn4J9cI2bP8H5iO6Rwgnz3X3kn6Bb3+dzlyACFPbWHBO+
+	OSkLQfrf6lyfhMGRCVHMA4McLLigJ81OVUcL+Ss1IRuaS2WeGKSA9bsd8/ywZoAINzF7xDIzYpO
+	yiRHPQMUDLH0TRJsPnt78j4cJGbZahQkp0t2vZb7Uu9KHrsUt/EDaVMKicLI82QB
+X-Google-Smtp-Source: AGHT+IEU6I61PKdSk66ALyW1SMKYEj8C6WoYl+I3tAab8Ss6BHWGapI8IPOL/MGB4xnrLL3uRQKw6g==
+X-Received: by 2002:aa7:88d2:0:b0:73c:3f2e:5df5 with SMTP id d2e1a72fcca58-73dc1b5a716mr18751882b3a.9.1745310608966;
+        Tue, 22 Apr 2025 01:30:08 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:90d6:56e4:9d90:9df3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8e0be0sm7993576b3a.49.2025.04.22.01.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Apr 2025 01:30:08 -0700 (PDT)
+From: Pin-yen Lin <treapking@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>
+Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] usb: gadget: udc: renesas_usb3: remove unnecessary NULL check before phy_exit()
-Date: Tue, 22 Apr 2025 15:37:14 +0800
-Message-Id: <20250422073714.1334380-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	Pin-yen Lin <treapking@chromium.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v3 0/4] Introduce usb-hub.yaml binding and add support for Parade PS5511
+Date: Tue, 22 Apr 2025 16:28:26 +0800
+Message-ID: <20250422082957.2058229-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.49.0.805.g082f7c87e0-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,58 +89,48 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowADHcT5RRwdoHk4WCw--.50807S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw18ZF4DKw47JryUJw1UZFb_yoWDCFb_Cw
-	1rWr1DGry2gas0gw17Xw4akrW2vayvq3WIvFs0k3ySqryIgr48XFn09F4kAw4DuFyDCFs8
-	Aws2yFnFvr1xXjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7VUbxhL5UUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-phy_exit() checks for NULL pointers internally.
-Remove unneeded NULL check here.
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/usb/gadget/udc/renesas_usb3.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+This series introduces usb-hub.yaml for on-board USB hubs, and use it for
+the newly-added Parade PS5511 binding and the existing Realtek RTS5411
+hub controller.
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index 89b304cf6d03..3e4d56457597 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2397,8 +2397,7 @@ static int renesas_usb3_stop(struct usb_gadget *gadget)
- 		rzv2m_usb3drd_reset(usb3_to_dev(usb3)->parent, false);
- 
- 	renesas_usb3_stop_controller(usb3);
--	if (usb3->phy)
--		phy_exit(usb3->phy);
-+	phy_exit(usb3->phy);
- 
- 	pm_runtime_put(usb3_to_dev(usb3));
- 
-@@ -2984,8 +2983,7 @@ static int renesas_usb3_suspend(struct device *dev)
- 		return 0;
- 
- 	renesas_usb3_stop_controller(usb3);
--	if (usb3->phy)
--		phy_exit(usb3->phy);
-+	phy_exit(usb3->phy);
- 	pm_runtime_put(dev);
- 
- 	return 0;
+Also add support for Parade PS5511 in onboard_usb_dev.c
+
+Patch 1 introduces usb-hub.yaml as the bindings for on-board USB hubs
+Patch 2 adds the binding for Parade PS5511
+Patch 3 modifies realtek,rts5411.yaml to adapt usb-hub.yaml
+Patch 4 adds the support for Parade PS5511 in onboard_usb_dev.c
+
+Link to v1: https://lore.kernel.org/all/20250328082950.1473406-1-treapking@chromium.org/
+Link to v2: https://lore.kernel.org/all/20250415094227.3629916-1-treapking@chromium.org/
+
+
+Changes in v3:
+- Remove redundant schemas
+- Update schemas for downstream ports and devices for ps5511 and rts5411
+
+Changes in v2:
+- Introduce usb-hub.yaml
+- Modify parade,ps5511 and realtek,rts5411 to use usb-hub.yaml
+- Minor fixes on parade,ps5511.yaml
+
+Pin-yen Lin (4):
+  dt-bindings: usb: Introduce usb-hub.yaml
+  dt-bindings: usb: Add binding for PS5511 hub controller
+  dt-bindings: usb: realtek,rts5411: Adapt usb-hub.yaml
+  usb: misc: onboard_usb_dev: Add Parade PS5511 hub support
+
+ .../bindings/usb/parade,ps5511.yaml           | 108 ++++++++++++++++++
+ .../bindings/usb/realtek,rts5411.yaml         |  52 +++------
+ .../devicetree/bindings/usb/usb-hub.yaml      |  84 ++++++++++++++
+ drivers/usb/misc/onboard_usb_dev.c            |   3 +
+ drivers/usb/misc/onboard_usb_dev.h            |   9 ++
+ 5 files changed, 217 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/parade,ps5511.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
+
 -- 
-2.25.1
+2.49.0.805.g082f7c87e0-goog
 
 
