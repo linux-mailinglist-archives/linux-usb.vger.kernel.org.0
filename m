@@ -1,77 +1,106 @@
-Return-Path: <linux-usb+bounces-23286-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23287-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D08BA95F43
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 09:25:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7646A95FA1
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 09:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEF513B7CB4
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 07:24:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93DF67A25F2
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 07:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43599238C32;
-	Tue, 22 Apr 2025 07:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WQPEIqfk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E911EB1AB;
+	Tue, 22 Apr 2025 07:38:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CAF23A997;
-	Tue, 22 Apr 2025 07:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A277DA6D;
+	Tue, 22 Apr 2025 07:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745306679; cv=none; b=G0DFBJBYB3/afrla/u4FomZ0nsE0esu6Mj7Xe3xvjrACKgQeS/RgyG8UzNQ9Ld1JMXD01bJsGNCFbRq4NO9reVMlWTNKf2NOrFwYuPq4OtkJ4QhLZIS+z+e/Inkw+quYpUt73YflQmvwbNHcEVuaOWt9eQkzGRq62gK13W2WbNc=
+	t=1745307484; cv=none; b=T5oSN0y36ZgJheK4x2bKHkUMhHwHUNMXnq8f3B7DGAd+0xRlfbI6mxejZbG5XPGOkvsfLukGFcSFPNNmhkvoxhdLPpJAQR8jaSWWPgXDyccgZtE50Ypez7B+CrRDc1tlaNWi3tFv1yw2m3hMpyhV4II+uct2RqYJimFl+AQMxaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745306679; c=relaxed/simple;
-	bh=rARWxkaM3ziM47daCESlNva3TTKxaptZ6wnLUD/IjrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bm2+/60b17QgYSMTFrl/WH2PI+89x+Tc9pWdO7AJsOaanQPbzEDjt6rf9M0mb8KCFKRWiNuyIro/rPVRjSwYzK2gtB5vkDcKHN+w37qb0ZStVbvwzN0dTISal4AuOcaJXQnUgmePBMTT7MtNAo4PjfXzOw9bCAgSqR4zJpXU5FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WQPEIqfk; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=6qf9NVyxxYmhp4Hd5psJAzdLeVZIv51mqD4ALuDoFZA=; b=WQPEIqfkHJ+dzMX8QLLz8iFWqn
-	d3ZexGjf6uzR8lxnnwSXY4Wy291ir1mGk4hhms1r5HnZpe/TsBLNsdO350kTqQZk32CGPBaJyDUK5
-	QuxV3UEfqXzljiUKe7MUILPk5m9ynr/wc9WnJcDN6ynI7GIaCN9Pr6jkKQHrUHb9+g2zXalcCaO8f
-	qbGlihHutDlJfUVUwksYMldtc+wL1cY9J8JS7iSIaub61LsxVgASEnaSbTudmM/AEsKLjq7cYula9
-	k3mbad5zqc/5PVr+kYNqJBV47zTKsYWkCj75oFA6/RexxfFEhc3S1tEpNtAyM3IXWZoSOpb6P65BP
-	srDf/Afg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1u77zf-000000066dm-3uaX;
-	Tue, 22 Apr 2025 07:24:35 +0000
-Date: Tue, 22 Apr 2025 00:24:35 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Zongmin Zhou <min_halo@163.com>
-Cc: skhan@linuxfoundation.org, gregkh@linuxfoundation.org, i@zenithal.me,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	shuah@kernel.org, valentina.manea.m@gmail.com,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-Message-ID: <aAdEM0crDfSP9JYf@infradead.org>
-References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
- <20250422063409.607859-1-min_halo@163.com>
+	s=arc-20240116; t=1745307484; c=relaxed/simple;
+	bh=6sgOfaHquz9KChHYPaMICP9c8L4Jj9Z/lr5QEoP2C2g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gkc9dqrtGlfP6yuZ6nGTHtuz4VYAvLhqAkxg4xSlk72EZzuJ6i0JDifBHvzwPIbBca1HudRaNUsQmYHIJSuddN5Zp/0aEME9/Lfq6Os/TWxykJTxC3wwoEOUEhsFclKRJovhxov4I5O9OZX8eCtNYxHh4FmAf9vlF3GBxmg9Ghg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowADHcT5RRwdoHk4WCw--.50807S2;
+	Tue, 22 Apr 2025 15:37:54 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: gregkh@linuxfoundation.org,
+	u.kleine-koenig@baylibre.com,
+	guoren@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] usb: gadget: udc: renesas_usb3: remove unnecessary NULL check before phy_exit()
+Date: Tue, 22 Apr 2025 15:37:14 +0800
+Message-Id: <20250422073714.1334380-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422063409.607859-1-min_halo@163.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowADHcT5RRwdoHk4WCw--.50807S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw18ZF4DKw47JryUJw1UZFb_yoWDCFb_Cw
+	1rWr1DGry2gas0gw17Xw4akrW2vayvq3WIvFs0k3ySqryIgr48XFn09F4kAw4DuFyDCFs8
+	Aws2yFnFvr1xXjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
+	JF0_Jw1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+	UI43ZEXa7VUbxhL5UUUUU==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-On Tue, Apr 22, 2025 at 02:34:09PM +0800, Zongmin Zhou wrote:
-> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
-> 
-> fix usb device limited  max_sectors when use usbip protocol
+phy_exit() checks for NULL pointers internally.
+Remove unneeded NULL check here.
 
-As far as I can tell this is a virtual HCI and can't perform DMA.
-Thus nothing should use DMA API calls on it and the mask is irrelevant.
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index 89b304cf6d03..3e4d56457597 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2397,8 +2397,7 @@ static int renesas_usb3_stop(struct usb_gadget *gadget)
+ 		rzv2m_usb3drd_reset(usb3_to_dev(usb3)->parent, false);
+ 
+ 	renesas_usb3_stop_controller(usb3);
+-	if (usb3->phy)
+-		phy_exit(usb3->phy);
++	phy_exit(usb3->phy);
+ 
+ 	pm_runtime_put(usb3_to_dev(usb3));
+ 
+@@ -2984,8 +2983,7 @@ static int renesas_usb3_suspend(struct device *dev)
+ 		return 0;
+ 
+ 	renesas_usb3_stop_controller(usb3);
+-	if (usb3->phy)
+-		phy_exit(usb3->phy);
++	phy_exit(usb3->phy);
+ 	pm_runtime_put(dev);
+ 
+ 	return 0;
+-- 
+2.25.1
 
 
