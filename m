@@ -1,252 +1,149 @@
-Return-Path: <linux-usb+bounces-23278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23279-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69306A95A1E
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 02:24:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A52FFA95A75
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 03:23:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BFD918967F6
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 00:24:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEE99173F00
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 01:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0092D148850;
-	Tue, 22 Apr 2025 00:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299D826ADD;
+	Tue, 22 Apr 2025 01:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RKnYtYp7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfbhQx6D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC2B78C91
-	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 00:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C9242AB4
+	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 01:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745281454; cv=none; b=MtrNuN3/JQf5ead9d+1SXYU4OY7XWjOH4RI3wA+IJdq5P0Rz5UgQ5kMH3xJK2diqCC4hYG9hdgjSHlXqSTzwF7nUq3IYXAvOwp2Xq50DUD2d3kNFKLLZO71/Uf7aNgs/ZCqVQfxurlvAU8Dpxj2jWafrNP3e1jGV106fUaxaS5o=
+	t=1745284987; cv=none; b=JXyLpIKLWAbrsePw5P1YiLjIffRyO6es/Qcb7um/DHfnxXOpkTKY3O4bI0a1Hjp82I9TOkOmlCttIRUjoB1VaUZ1y8G0bRpi3pkjAHi6O3Dm+qzaJXVsDxQnuR9ZkXIRd2odkTufQg2I31k6NxCFn3TnkC0WbZ5H5UmCRiU5n7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745281454; c=relaxed/simple;
-	bh=u52bVrB/pZ0lfovnX74KF6WwBxpQoIaVYqukYlfqcMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XqvspS3+CtsFY27WA1c0Avl6OuhzN8C1Gm6KzyiH5OFgCzP03kq2s/uRoXE6xrxchGVxR90RCU5VVJwhIUmFjHT+x1HOi/WiM3mkEAmsk38HV1H3lIF7HDar45y8eGLJIqt6RzacXfmHgQGUHsCADoR4skZfS4w8HiMmVKEphgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RKnYtYp7; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54af20849adso4357827e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 17:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1745281451; x=1745886251; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hfCnlXym9eZAbX+zdYaRO3WcEjSZxfzTyz2pRkP+wp4=;
-        b=RKnYtYp7+5hQoeG8PgxzAOpHJdzrx/U+derXFCLBIar+xF8HNT4lGTozlCt/jQK23n
-         0sDUiEbLBEKzksh5gXjNcdCMJKLWM7Kq3TQPI5NWz3fKzBZCBpxCnKR0aLFcNlPETcwJ
-         qYRhXjwhQGV2QGr+dBmc/XpX5f7ed9jd2q3Tk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745281451; x=1745886251;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hfCnlXym9eZAbX+zdYaRO3WcEjSZxfzTyz2pRkP+wp4=;
-        b=UcSrmG5HvGBNJAMGQckIWwYAakPS2tC4PUStui4B0mmaiHzGP+Bw6GQ4EVgM2kjhWD
-         XzUeoa/h8ytIdl1aGaZBeSFbL3dLRTEQEOWldZ45Ha/McfIGG9jQjLJMJ/B+r5aZMlo7
-         /f8lx6ZHFRPSpcEIqprwffDw1wOZWx5vN9rqwJJ1wzWpTCP4+JuMhR+ECnS7CvoLq1g3
-         jUXp8/qPnHBzZmz/HurGbilrxvwG4Qf1rUrDaKKNjrgW2TV4K4gSj79jik5uJobIDxEo
-         deUldnCveCBGADf2bJ0n+3ceyuqyFjblQBR9PLnIiAzP0Th+ev23k7WqqxU6t77GTp13
-         TPdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZGpk7QBgHTihoerttE1uQqwuEKknWPO4KAD+HACvGn/QJvqteTPegi9mqod8HXU5QYDbeGY2vulA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNNFrrmJ9YGH7DUrDMUJ82YcBp1/PDaEWC1HoJTAZpsZuWSD/S
-	8ozLR0KWSGTwJ3U0N8uBuvfuWBrKn4EqwbqMDGeTHrKuea7F/m5mWdwlPUUjvhTNp/xF92AFnhk
-	=
-X-Gm-Gg: ASbGncsplzizTSogYztbf3nn5JM8Jy2GRtGgCobWp2SwlKU2ARhQz0oLEFj2ZC0mOk5
-	v7lkDp7DKslym4DVUekqvoVv47e7KVwh0+B9gftb8L/BscExNnxkO8DZR0GgVru02LDCQ97jALp
-	+lZVrTwPqPudJOOCo3avvr99eXXbJ6SuGZJxPOlNveANR3vrG3bEmjhanCoS765SIjUWqh2E8xR
-	RmqrpsDhpUFl4iKuxnTUDZDHwD6RLL1eZeZDg3fchdo2Hw1ug0f5hQmA+rrKMSGpKu6JLPvN7UB
-	42ewL4y7/x2Sl4jMxE+kbkFy2O3hxzZxjajR6ryMBa6wJWMAHfFDhR0XCXRh6EoZ92veVx5Rd4+
-	sA7S8OSE=
-X-Google-Smtp-Source: AGHT+IHD4QG9/USOboMvx0IlhQ8VpEKdvbw1gxztlLup7joshFOYpRhqWmD9S7eenn0K0yIr6P1avw==
-X-Received: by 2002:a05:6512:3995:b0:54a:cc10:1050 with SMTP id 2adb3069b0e04-54d6e789b2bmr3360302e87.15.1745281450671;
-        Mon, 21 Apr 2025 17:24:10 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d6e541da0sm1065794e87.100.2025.04.21.17.24.07
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Apr 2025 17:24:10 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30bfc79ad97so59933441fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Apr 2025 17:24:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV1q/o7CnIadGLrAw3UCg6XHU0JkLnPGb25zfogC/6/jaeSCX4E4Q3nZrkrK6VRngjKcKJqDhQ1yUk=@vger.kernel.org
-X-Received: by 2002:a05:6512:3995:b0:54a:cc10:1050 with SMTP id
- 2adb3069b0e04-54d6e789b2bmr3360285e87.15.1745281447045; Mon, 21 Apr 2025
- 17:24:07 -0700 (PDT)
+	s=arc-20240116; t=1745284987; c=relaxed/simple;
+	bh=VVAtjiBtysUcQTVCwzMYrX8RjTKU5t8j4/G1n2+kgF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z9Zhi6saK6CuFDnYGK+RQmz91U33eUnOYGy+o8FanF0+G+di+usbpECHCqxMu/eryATgjLBVSu+M66EiKX5ntefL1MQrfZtAqqOaOE35DdvEynZOyd2ZyjBlJBsrNxXL1hY9qdg7anYcJNToMoPTknQEeyS6LaJRyqarl3fgnLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfbhQx6D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6633AC4CEE4;
+	Tue, 22 Apr 2025 01:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745284987;
+	bh=VVAtjiBtysUcQTVCwzMYrX8RjTKU5t8j4/G1n2+kgF8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WfbhQx6Dqf3zuRWObNAf2NMquEF/eBSZKjjVvAMby4p2IvSgNhQVsV8gtaCkWC+j7
+	 eyYa9fQWoC3gs2f+ZbKHHZYFatuIOMVnUvQM3e4GpsO4/bGAnfMmNxG3iW1nC4foUP
+	 xSqzDHLY/S3AVpYfqplzxMU1Qc2waas3cSIcyBG/NEZNGFSXqdkGHCmQhTGS6SGagx
+	 Qji2Yr45Fkhl/xG/ivk4oJuP+AKSPMujtWg9h0BeNeh5se1wmuQCDqWFH5XEwaKU5Z
+	 QdcBDGVoVuxkHLHFxiY+AZwLXPQ6qO+Q23Kbxbgyz2fbvUaZTahZ+5/1J+CxX3loxF
+	 kPdZ91gnwL9cQ==
+Date: Tue, 22 Apr 2025 09:23:00 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Dmitry Osipenko <digetx@gmail.com>
+Cc: Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: initialize struct otg_fsm earlier
+Message-ID: <20250422012300.GA3584429@nchen-desktop>
+References: <20250417111502.140474-1-oneukum@suse.com>
+ <20250421014545.GA3578913@nchen-desktop>
+ <410a1a6a-d866-44ad-8592-5babd3fe50b1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
- <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org> <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
-In-Reply-To: <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 22 Apr 2025 08:23:52 +0800
-X-Gmail-Original-Message-ID: <CANiDSCvQC25ZrSZgUuFt6deCogFL6=GPsYYrsegK1NOK=uzRJA@mail.gmail.com>
-X-Gm-Features: ATxdqUGV9UNm6rsWa1b6fT7zaIeRsrhtYZHR863_Li8k5tC_mUahvNyGq--RUEU
-Message-ID: <CANiDSCvQC25ZrSZgUuFt6deCogFL6=GPsYYrsegK1NOK=uzRJA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] media: v4l: fwnode: Support acpi devices for v4l2_fwnode_device_parse
-To: Sakari Ailus <sakari.ailus@iki.fi>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hdegoede@redhat.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <410a1a6a-d866-44ad-8592-5babd3fe50b1@gmail.com>
 
-Hi Sakari
+On 25-04-21 11:15:37, Dmitry Osipenko wrote:
+> 21.04.2025 04:45, Peter Chen (CIX) пишет:
+> > On 25-04-17 13:14:54, Oliver Neukum wrote:
+> >> The earlier fix bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
+> >> corruption") in effect hid an issue with intialization.
+> >> In effect it replaces the racy continous reinitialization
+> >> of fsm->hnp_polling_work with a delayed one-time
+> >> initialization.
+> >>
+> >> This just makes no sense. As a single initialization
+> >> is sufficient, the clean solution is just to do it once
+> >> and do it early enough.
+> >>
+> >> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > 
+> > Add Dmitry.
+> > 
+> > I am okay for this change, and see what's the Dmitry's response.
+> 
+> Thanks for notifying me
+> 
+> > Peter
+> >> ---
+> >>  drivers/usb/common/usb-otg-fsm.c | 7 +------
+> >>  drivers/usb/phy/phy-fsl-usb.c    | 1 +
+> >>  include/linux/usb/otg-fsm.h      | 2 +-
+> >>  3 files changed, 3 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+> >> index e11803225775..a22d536ccdf8 100644
+> >> --- a/drivers/usb/common/usb-otg-fsm.c
+> >> +++ b/drivers/usb/common/usb-otg-fsm.c
+> >> @@ -117,7 +117,7 @@ static void otg_leave_state(struct otg_fsm *fsm, enum usb_otg_state old_state)
+> >>  	}
+> >>  }
+> >>  
+> >> -static void otg_hnp_polling_work(struct work_struct *work)
+> >> +void otg_hnp_polling_work(struct work_struct *work)
+> >>  {
+> >>  	struct otg_fsm *fsm = container_of(to_delayed_work(work),
+> >>  				struct otg_fsm, hnp_polling_work);
+> >> @@ -193,11 +193,6 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
+> >>  	if (!fsm->host_req_flag)
+> >>  		return;
+> >>  
+> >> -	if (!fsm->hnp_work_inited) {
+> >> -		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> >> -		fsm->hnp_work_inited = true;
+> >> -	}
+> >> -
+> >>  	schedule_delayed_work(&fsm->hnp_polling_work,
+> >>  					msecs_to_jiffies(T_HOST_REQ_POLL));
+> >>  }
+> >> diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
+> >> index 40ac68e52cee..7f0fdba689de 100644
+> >> --- a/drivers/usb/phy/phy-fsl-usb.c
+> >> +++ b/drivers/usb/phy/phy-fsl-usb.c
+> >> @@ -845,6 +845,7 @@ int usb_otg_start(struct platform_device *pdev)
+> >>  
+> >>  	/* Initialize the state machine structure with default values */
+> >>  	SET_OTG_STATE(otg_trans, OTG_STATE_UNDEFINED);
+> >> +	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> >>  	fsm->otg = p_otg->phy.otg;
+> 
+> The original problem was fixed for the ChipIdea driver in the common USB
+> code, while this phy-fsl-usb is the Freeescale USB driver that has
+> nothing to do with the ChipIdea and the common code, AFAICT. Hence this
+> patch should be wrong. I suggest not to change the original logic.
+> 
 
-On Sun, 13 Apr 2025 at 17:50, Sakari Ailus <sakari.ailus@iki.fi> wrote:
->
-> Hi Ricardo,
->
-> Thanks for the patch.
->
-> On Thu, Apr 03, 2025 at 07:16:14PM +0000, Ricardo Ribalda wrote:
-> > This patch modifies v4l2_fwnode_device_parse() to support ACPI devices.
-> >
-> > We initially add support only for orientation via the ACPI _PLD method.
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/v4l2-core/v4l2-fwnode.c | 58 +++++++++++++++++++++++++++++++----
-> >  1 file changed, 52 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-> > index cb153ce42c45d69600a3ec4e59a5584d7e791a2a..81563c36b6436bb61e1c96f2a5ede3fa9d64dab3 100644
-> > --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> > +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> > @@ -15,6 +15,7 @@
-> >   * Author: Guennadi Liakhovetski <g.liakhovetski@gmx.de>
-> >   */
-> >  #include <linux/acpi.h>
-> > +#include <acpi/acpi_bus.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/module.h>
-> > @@ -807,16 +808,47 @@ int v4l2_fwnode_connector_add_link(struct fwnode_handle *fwnode,
-> >  }
-> >  EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_add_link);
-> >
-> > -int v4l2_fwnode_device_parse(struct device *dev,
-> > -                          struct v4l2_fwnode_device_properties *props)
-> > +static int v4l2_fwnode_device_parse_acpi(struct device *dev,
-> > +                                      struct v4l2_fwnode_device_properties *props)
-> > +{
-> > +     struct acpi_pld_info *pld;
-> > +     int ret = 0;
-> > +
-> > +     if (!acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld)) {
-> > +             dev_dbg(dev, "acpi _PLD call failed\n");
-> > +             return 0;
-> > +     }
->
-> You could have software nodes in an ACPI system as well as DT-aligned
-> properties. They're not the primary means to convey this information still.
->
-> How about returning e.g. -ENODATA here if _PLD doesn't exist for the device
-> and then proceeding to parse properties as in DT?
+Thanks for confirming it.  I did not check the user for OTG FSM
+carefully since there are no active users long time.
 
-Do you mean that there can be devices with ACPI handles that can also
-have DT properties?
+I have checked that the phy-fsl-usb has not used hnp polling,
+and the fsm->host_req_flag is not allocated. The chipidea driver is
+the only user for hnp polling, so this patch is not needed.
 
-Wow that is new to me :).
-
-What shall we do if _PLD contradicts the DT property? What takes precedence?
-
->
-> > +
-> > +     switch (pld->panel) {
-> > +     case ACPI_PLD_PANEL_FRONT:
-> > +             props->orientation = V4L2_FWNODE_ORIENTATION_FRONT;
-> > +             break;
-> > +     case ACPI_PLD_PANEL_BACK:
-> > +             props->orientation = V4L2_FWNODE_ORIENTATION_BACK;
-> > +             break;
-> > +     case ACPI_PLD_PANEL_TOP:
-> > +     case ACPI_PLD_PANEL_LEFT:
-> > +     case ACPI_PLD_PANEL_RIGHT:
-> > +     case ACPI_PLD_PANEL_UNKNOWN:
-> > +             props->orientation = V4L2_FWNODE_ORIENTATION_EXTERNAL;
-> > +             break;
->
-> How about the rotation in _PLD?
-
-If we agree on the orientation part I will extend it to support
-rotation. It should not be a complicated change.
-
->
-> > +     default:
-> > +             dev_dbg(dev, "Unknown _PLD panel val %d\n", pld->panel);
-> > +             ret = -EINVAL;
-> > +             break;
-> > +     }
-> > +
-> > +     ACPI_FREE(pld);
-> > +     return ret;
-> > +}
-> > +
-> > +static int v4l2_fwnode_device_parse_dt(struct device *dev,
-> > +                                    struct v4l2_fwnode_device_properties *props)
-> >  {
-> >       struct fwnode_handle *fwnode = dev_fwnode(dev);
-> >       u32 val;
-> >       int ret;
-> >
-> > -     memset(props, 0, sizeof(*props));
-> > -
-> > -     props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
-> >       ret = fwnode_property_read_u32(fwnode, "orientation", &val);
-> >       if (!ret) {
-> >               switch (val) {
-> > @@ -833,7 +865,6 @@ int v4l2_fwnode_device_parse(struct device *dev,
-> >               dev_dbg(dev, "device orientation: %u\n", val);
-> >       }
-> >
-> > -     props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
-> >       ret = fwnode_property_read_u32(fwnode, "rotation", &val);
-> >       if (!ret) {
-> >               if (val >= 360) {
-> > @@ -847,6 +878,21 @@ int v4l2_fwnode_device_parse(struct device *dev,
-> >
-> >       return 0;
-> >  }
-> > +
-> > +int v4l2_fwnode_device_parse(struct device *dev,
-> > +                          struct v4l2_fwnode_device_properties *props)
-> > +{
-> > +     struct fwnode_handle *fwnode = dev_fwnode(dev);
-> > +
-> > +     memset(props, 0, sizeof(*props));
-> > +
-> > +     props->orientation = V4L2_FWNODE_PROPERTY_UNSET;
-> > +     props->rotation = V4L2_FWNODE_PROPERTY_UNSET;
-> > +
-> > +     if (is_acpi_device_node(fwnode))
-> > +             return v4l2_fwnode_device_parse_acpi(dev, props);
-> > +     return v4l2_fwnode_device_parse_dt(dev, props);
-> > +}
-> >  EXPORT_SYMBOL_GPL(v4l2_fwnode_device_parse);
-> >
-> >  /*
-> >
->
-> --
-> Kind regards,
->
-> Sakari Ailus
-
-
+By the way, I just curious that are there any products in market still
+use OTG FSM?
 
 -- 
-Ricardo Ribalda
+
+Best regards,
+Peter
 
