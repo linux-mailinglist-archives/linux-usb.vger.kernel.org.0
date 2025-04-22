@@ -1,119 +1,139 @@
-Return-Path: <linux-usb+bounces-23306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D7E8A96AA3
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 14:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E53A96D73
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 15:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29FAB7A3630
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 12:44:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B82D7A1AB0
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 13:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F8C27D783;
-	Tue, 22 Apr 2025 12:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0D62820C6;
+	Tue, 22 Apr 2025 13:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fWmZqBKf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1l69cPy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468A227CCF2
-	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 12:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582A9201271;
+	Tue, 22 Apr 2025 13:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745325904; cv=none; b=Gkv6Ynh4RedSCeuGYLpecvbYcBYRSSfr0I6s7yMa9pq7+Pg+Gki0SV7eFcHcoLk43NIamXHc2Z8WnASqjd4bw2Qp1F5WIoZUdnt7fN3nXTJ+bKReY61i9+31227fwU4LI8505uDYFO396yLYz5cEyOMwueiCqb8zOgvmcq2KRLM=
+	t=1745329896; cv=none; b=te0RPnzHQlCKzj7A7NEXW2Gae3z5iZWx8ktGZ9iy/4tCvQtHFeiGaxirmVW7/tR9uLZz4v7K0Fz81EKKiFyZOh1/k6SQfRfIxmnbPA7cCT/ykTBz2EOwG2huFYc/6UHxXgPMhp4ZaLsy4GFERV7937cwjsZMAq6LIT12CPPp7tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745325904; c=relaxed/simple;
-	bh=lvVUs2e8qcPQTdzhT6lkVZyLMX8afuB3KeEklSE+EdY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HjdZOBq3L5ZYeMgiVWTMY1wHJW6ZdX2Ux1HuDcboq9dbmtsVkN/UySyZQyhta5xwFldLZt+cIEj9M1b/1Sfkqw29JGV02UiFynJuRtO79WOHSZFvu52nScA3pEnfcprhsc1ZLVBsGjsGKZajjAXqCaSPe67dCvpCVSGN5GwG15U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fWmZqBKf; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b074d908e56so3468314a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 05:45:03 -0700 (PDT)
+	s=arc-20240116; t=1745329896; c=relaxed/simple;
+	bh=cYb5wzdMYyq1bfZwwXLiss9AOzS6rESwiHVLQkIN9oI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qynSnSgoPixQ2mJ+BiNFUlNF9OGHVxBBqSCjW8/OVtyRDWE8IWBBWGOkf0wPcYPQUs7H0kNzEuJNxXkAwYdpeGH68U1SmjqU390pCsOLS1OrNKcUbRN8oY4w9dDJF/XnOTWZHj/kco3fQFwY6J6EGYj5oUvO2+wN467CtQyvBxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1l69cPy; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cec5cd73bso33689955e9.3;
+        Tue, 22 Apr 2025 06:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1745325902; x=1745930702; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qmv/eppcSNS/FFA0D45HtnI0orFklOBEuu+IeQXnzag=;
-        b=fWmZqBKfcVm9Zp/MwvaHYhnjmMUouOb8b5QDbOFiozNH+mQhQ4y4BETQeLOhDm7r0E
-         8JtBR3nouN+YzHSlPTm8oieEOqQPmz4rlC9747rrPqviTxNHW3tU1sHepxysWshSxpef
-         h9oz+YKITS0SAxIKKAP+mfn3wckbMuYRZZDEE=
+        d=gmail.com; s=20230601; t=1745329892; x=1745934692; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P20BR2Tv8R58N8rBs8jFttYwmstLArnkKgOXXmUHnkc=;
+        b=m1l69cPyFgSOKAe+KpCcXIgv15FUkhv+bPR3ezMkLofIfUv7uqEju7/jjxFcuyxWhI
+         e2/D4zbfGIqr1JPa3EArS/aPO/5FUqzcPKM85hEjsO6/DZL7Bu4Owj6hUOFGPQnCBEHV
+         3a15+uHkyyTe0TKt7cfCt4f3S0xRemoGY1HChJE8pdxfTeGD5+js6t3XABU9N6u829+8
+         qhLxQtrMjzrnZcFKb8tNYI99bb0omyagw4sG53CLPp5f2lKzEVPGVFYKr4oqGiH5eoWg
+         iaQO5oBVrftXJH6hozVrRt5WydUYHrOnh2L3R7ZGGULzb3tbeKQ2o3sXfb2qkK7ML65Z
+         /0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745325902; x=1745930702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qmv/eppcSNS/FFA0D45HtnI0orFklOBEuu+IeQXnzag=;
-        b=KTuqZYGtebTnXI1UywkaFIzsj27pfMu+7WXHBPYh2vUcCEyYpPS2dY0+7eqBJc5kVZ
-         nfZvVzDWGeB3N8PqTFYJkkMUQR0rp4DK9fkMRA9IGeAOA3DmQeXE6FfKZ3H4gyolVbEu
-         L6a2tU+HKGd53pkbrRk29bXKNnfLJCh0txv0PJuHCO5MzNfy0bkz+9CRms0w5RKvJcqF
-         S/uIfJ0tBtGgF4arTYGXJhonyr7UAhtY4mTIMaKxeIg7iLsoIqCmatZXpaI8MFjSN6En
-         4m6Ij/Xt26cX8LD3CTpnkfZB4jH7qHvbGhah04Vb93APGUbYRADKghTlzTByq5gExDTf
-         LFFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWti2tdXQsgpdGVqmUNQW1ri/h05AJutJITkH6NIsZMPCAz8kG6M5BF4YXdDxdKO5CP9K+cinbzzzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8/W852WKJWkTZqrYKKMgeYV+xtZTULz6s21zdShObLz81lUQ/
-	ZqV5yOSQkV6F3tOf9i4pLTplXMcQMHtf9CtTrE5dL5jhf8mC7a+lj0FE041KmMGMeGEB+xHA8/P
-	1GgKMo9vk/GC0wINbpZgdz4nAWVdU8oHgUIVw
-X-Gm-Gg: ASbGncttQEa1x1XSUw2U/dzME8eDIAsRQ+Yi0yQKZrvQxD3yBCKkK4KQ6J33ROTVWxu
-	ewlH/i0feV01Mv9tzJfTWaOjfQYOYty6upjz12Q1Y1aWGsfa0ULjNvRGRQ+DMgSWWH/8/TotlBc
-	wy6xZVWpjlusjWdDNMwrZUeHzmcpd2V4w59VRy9MU3De6zrVy9
-X-Google-Smtp-Source: AGHT+IHdTmSx9iS8EFu6hmVr5iQxagekadUQmWy2iPg8Fc4WAFCXivKqI/RbGAfgFTHhUvSFDjFlF3H8NSEt9mNdC88=
-X-Received: by 2002:a17:90b:57e6:b0:301:1bce:c252 with SMTP id
- 98e67ed59e1d1-3087bbbccb6mr20807109a91.27.1745325902515; Tue, 22 Apr 2025
- 05:45:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745329892; x=1745934692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P20BR2Tv8R58N8rBs8jFttYwmstLArnkKgOXXmUHnkc=;
+        b=F4UlFNbrl7PT6rTIfAfbqoc0eeM3a0CMN8ASZA7Ugil2PtF+ESKU6xLjoVdkuNhmOr
+         tLL95yJNJzTntxjYlMNmoqRetB5ZBkzJqeCzZhWkxqtj9UwMnbbj5fdu7tHBx6FAUW7L
+         IAPAo9PzII+5M18jfWVJkvt6AHV//rMQHtiNzC0B6Y+ujxhI8WA9lNLyQ4rAWPU0v+S2
+         9bZxuv/V7Jcr2antyaVupCQUFejEKhNRp9dEp3U7b5lc67gsHcoXJxIYtfnmi5tJY7Be
+         wI94PVDIDj7BaxHFhw1TbzE4WBww3PWCv7StUomaq9huC9Fr47p3S4I341LngVzBpChp
+         AMEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUyjg4V65y2RvpMTgZAdikn7+vMxDw0ffrqzwzRCR4GxGx3V0HRX/twHMwVINIGYsdBI/stitn1TL9zby8=@vger.kernel.org, AJvYcCWrfwAq8TyqJcnaPTIYYIjj2YLK2wwgyaUKo0xogSPMI+U4lc0UsEY9kiS8COimjIwS7SP8Iqyi@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhgTB9q6y/ibyAgsCf7muhBEblyyGNhz4fUwqUXLyBqtOwysFm
+	a42VDVvc+F14hUfvFirMt2wSLyiS+ar66/h04hq+i+z3GlLqclli
+X-Gm-Gg: ASbGncuPAvI3vW8t+WVg0lJzHSIbaxYvnqSL8GGidKkwgpRIfwle/FVJitRzEoNfM/2
+	T72DaWqErI16MhA3VCiTB6bAnG9oeoKh5DHIVtJ9dOi6aNF80AQBBLUqZ4wYHjXXklQP9NkQJqm
+	RxTEFmK4ggj5r5KevxVNwZnPI36cb0xwnlNsBSVcXURHa+rW1P3ZOB3D09VoreZqBZtjIJPyWPU
+	EVOg3igMHXSJ4fjnkxZ/k3y9UQh+v6IrMV9gtbGKuRDSpU6dah2CuMisSV/2S87T0xeGF01NyHs
+	YNM2CxeoUz8H85fZzY09GdOmV5x3TVC/muSOudoe
+X-Google-Smtp-Source: AGHT+IGwe8Z3YpFb5/ecMVn8Y3ic1OOVBuQhJmpxrIzlY7N4S3tEv4JjbxY4U6rgwDI2qjlfOun/Tg==
+X-Received: by 2002:a05:600c:4f8a:b0:43c:fe15:41d4 with SMTP id 5b1f17b1804b1-4406aba7ebfmr151332235e9.18.1745329892446;
+        Tue, 22 Apr 2025 06:51:32 -0700 (PDT)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:b678:ddbe:75a4:837])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5a9e50sm177577005e9.6.2025.04.22.06.51.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Apr 2025 06:51:32 -0700 (PDT)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	lumag@kernel.org,
+	pooja.katiyar@intel.com,
+	diogo.ivo@tecnico.ulisboa.pt,
+	madhu.m@intel.com,
+	saranya.gopal@intel.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: fix Clang -Wsign-conversion warning
+Date: Tue, 22 Apr 2025 14:47:17 +0100
+Message-Id: <20250422134717.66218-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Z_44tOtmml89wQcM@stanley.mountain>
-In-Reply-To: <Z_44tOtmml89wQcM@stanley.mountain>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Tue, 22 Apr 2025 14:44:51 +0200
-X-Gm-Features: ATxdqUHpL8I3vcFgpkU4A33HaV238Xv7lz1t0Ca9ja9K4i3LKe-c37qpW_-DVJY
-Message-ID: <CAMMMRMf0DtXaG4-qkUfAUNEB8sM-oV2Qg5E_3cPr=yjL3fLo4w@mail.gmail.com>
-Subject: Re: [PATCH next] usb: typec: class: Unlocked on error in typec_register_partner()
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benson Leung <bleung@chromium.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 15, 2025 at 12:45=E2=80=AFPM Dan Carpenter <dan.carpenter@linar=
-o.org> wrote:
-> We recently added some locking to this function but this error path
-> was accidentally missed.  Unlock before returning.
->
-> Fixes: ec27386de23a ("usb: typec: class: Fix NULL pointer access")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+debugfs.c emits the following warnings when compiling with the -Wsign-conversion flag with clang 15:
 
-Reviewed-by: Andrei Kuchynski <akuchynski@chromium.org>
-> ---
->  drivers/usb/typec/class.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 3df3e3736916..67a533e35150 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1056,6 +1056,7 @@ struct typec_partner *typec_register_partner(struct=
- typec_port *port,
->         ret =3D device_register(&partner->dev);
->         if (ret) {
->                 dev_err(&port->dev, "failed to register partner (%d)\n", =
-ret);
-> +               mutex_unlock(&port->partner_link_lock);
->                 put_device(&partner->dev);
->                 return ERR_PTR(ret);
->         }
-> --
-> 2.47.2
->
+drivers/usb/typec/ucsi/debugfs.c:58:27: warning: implicit conversion changes signedness: 'int' to 'u32' (aka 'unsigned int') [-Wsign-conversion]
+                ucsi->debugfs->status = ret;
+                                      ~ ^~~
+drivers/usb/typec/ucsi/debugfs.c:71:25: warning: implicit conversion changes signedness: 'u32' (aka 'unsigned int') to 'int' [-Wsign-conversion]
+                return ucsi->debugfs->status;
+                ~~~~~~ ~~~~~~~~~~~~~~~^~~~~~
+                
+During ucsi_cmd() we see:
+
+	if (ret < 0) {
+		ucsi->debugfs->status = ret;
+		return ret;
+	}
+	
+But "status" is u32 meaning unsigned wrap-around occurs when assigning a value which is < 0 to it, this obscures the real status.
+
+To fix this make the "status" of type int since ret is also of type int.
+
+Fixes: df0383ffad64 ("usb: typec: ucsi: Add debugfs for ucsi commands")
+Cc: stable@vger.kernel.org
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+---
+ drivers/usb/typec/ucsi/ucsi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 3a2c1762bec1..525d28160413 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -432,7 +432,7 @@ struct ucsi_debugfs_entry {
+ 		u64 low;
+ 		u64 high;
+ 	} response;
+-	u32 status;
++	int status;
+ 	struct dentry *dentry;
+ };
+ 
+-- 
+2.39.5
+
 
