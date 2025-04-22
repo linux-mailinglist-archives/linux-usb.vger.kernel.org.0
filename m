@@ -1,139 +1,181 @@
-Return-Path: <linux-usb+bounces-23307-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23308-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E53A96D73
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 15:51:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3C13A971A1
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 17:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B82D7A1AB0
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 13:50:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7163189D49D
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 15:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0D62820C6;
-	Tue, 22 Apr 2025 13:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A72F28FFEA;
+	Tue, 22 Apr 2025 15:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1l69cPy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WC2yptBz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582A9201271;
-	Tue, 22 Apr 2025 13:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A42A2900AC
+	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 15:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745329896; cv=none; b=te0RPnzHQlCKzj7A7NEXW2Gae3z5iZWx8ktGZ9iy/4tCvQtHFeiGaxirmVW7/tR9uLZz4v7K0Fz81EKKiFyZOh1/k6SQfRfIxmnbPA7cCT/ykTBz2EOwG2huFYc/6UHxXgPMhp4ZaLsy4GFERV7937cwjsZMAq6LIT12CPPp7tU=
+	t=1745337066; cv=none; b=p5bo5ODhe6e4PEqUAy4rXK3CpoEDZwS8Tu6sRBtEUQgLcPuFLhj/hBOEbCHyTyKWz4SRHBXWyCfsx+VsNtDTqhn83ZqNjgOf6mBvR1FrfAMFaQpmjDhfY/+jl1q3tiSwnd3fkyBrfs5Ypb8v8kvo9dlnmFzW3hBOxzYpy4pFBzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745329896; c=relaxed/simple;
-	bh=cYb5wzdMYyq1bfZwwXLiss9AOzS6rESwiHVLQkIN9oI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qynSnSgoPixQ2mJ+BiNFUlNF9OGHVxBBqSCjW8/OVtyRDWE8IWBBWGOkf0wPcYPQUs7H0kNzEuJNxXkAwYdpeGH68U1SmjqU390pCsOLS1OrNKcUbRN8oY4w9dDJF/XnOTWZHj/kco3fQFwY6J6EGYj5oUvO2+wN467CtQyvBxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1l69cPy; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cec5cd73bso33689955e9.3;
-        Tue, 22 Apr 2025 06:51:34 -0700 (PDT)
+	s=arc-20240116; t=1745337066; c=relaxed/simple;
+	bh=3sqNGatK3nNf3ioHPn/vTJ1ihZQnxYjPJUzKw2ujuNs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AMgVs7DjzbJHqShV2jhy1apAsBESUpITMnyfsahuLObtPrJdEOkvxxGKE2kFhGY0LPdz7jTk9QnFrYOalETI/OXbis1x9XbqTBu5+03dhsdaBPcN9HnP+wwcmpGoQF13FaoahTd34AiI9jJr3eoeyut7IPO/Ne2nDaV+qcTHKcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WC2yptBz; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5499c8c95beso7526e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 08:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745329892; x=1745934692; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=P20BR2Tv8R58N8rBs8jFttYwmstLArnkKgOXXmUHnkc=;
-        b=m1l69cPyFgSOKAe+KpCcXIgv15FUkhv+bPR3ezMkLofIfUv7uqEju7/jjxFcuyxWhI
-         e2/D4zbfGIqr1JPa3EArS/aPO/5FUqzcPKM85hEjsO6/DZL7Bu4Owj6hUOFGPQnCBEHV
-         3a15+uHkyyTe0TKt7cfCt4f3S0xRemoGY1HChJE8pdxfTeGD5+js6t3XABU9N6u829+8
-         qhLxQtrMjzrnZcFKb8tNYI99bb0omyagw4sG53CLPp5f2lKzEVPGVFYKr4oqGiH5eoWg
-         iaQO5oBVrftXJH6hozVrRt5WydUYHrOnh2L3R7ZGGULzb3tbeKQ2o3sXfb2qkK7ML65Z
-         /0wg==
+        d=google.com; s=20230601; t=1745337062; x=1745941862; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IdFGD2OG7sa0PhB8zVDzwTwQ3rmo3v4yX/7hU6EpgHE=;
+        b=WC2yptBzUE4Cu5A/1Zf0rY4marKoohubisGqMU8HDaA2CjNIt4qc3VnKoqK32RBc8D
+         YvwEXXqgZhR6L2rVT0epwwDea4opUN/G4hNHUNKRh8/OTxgDPCzPvOSISShOfzroiq4O
+         3lNWa5dAXrIEVv6U2MiO3WRR0Ob/snHAXS6WSY6TGi23SM6Dwm3z0D/Mzfl0gGXrzmQj
+         MKML2Xx1Jjg2ucMkUEF6hcyY7B6frA1bHLSpMM2vX2Gz7INJAb9tSk+8UKfeFFusiTtq
+         sDofLki336i6ILQWAkTT6OpgDGG17ZlnrOzdEf6Gc3wjvSZi1G9f2eTZGAnB5InApZXb
+         i7aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745329892; x=1745934692;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P20BR2Tv8R58N8rBs8jFttYwmstLArnkKgOXXmUHnkc=;
-        b=F4UlFNbrl7PT6rTIfAfbqoc0eeM3a0CMN8ASZA7Ugil2PtF+ESKU6xLjoVdkuNhmOr
-         tLL95yJNJzTntxjYlMNmoqRetB5ZBkzJqeCzZhWkxqtj9UwMnbbj5fdu7tHBx6FAUW7L
-         IAPAo9PzII+5M18jfWVJkvt6AHV//rMQHtiNzC0B6Y+ujxhI8WA9lNLyQ4rAWPU0v+S2
-         9bZxuv/V7Jcr2antyaVupCQUFejEKhNRp9dEp3U7b5lc67gsHcoXJxIYtfnmi5tJY7Be
-         wI94PVDIDj7BaxHFhw1TbzE4WBww3PWCv7StUomaq9huC9Fr47p3S4I341LngVzBpChp
-         AMEw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyjg4V65y2RvpMTgZAdikn7+vMxDw0ffrqzwzRCR4GxGx3V0HRX/twHMwVINIGYsdBI/stitn1TL9zby8=@vger.kernel.org, AJvYcCWrfwAq8TyqJcnaPTIYYIjj2YLK2wwgyaUKo0xogSPMI+U4lc0UsEY9kiS8COimjIwS7SP8Iqyi@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhgTB9q6y/ibyAgsCf7muhBEblyyGNhz4fUwqUXLyBqtOwysFm
-	a42VDVvc+F14hUfvFirMt2wSLyiS+ar66/h04hq+i+z3GlLqclli
-X-Gm-Gg: ASbGncuPAvI3vW8t+WVg0lJzHSIbaxYvnqSL8GGidKkwgpRIfwle/FVJitRzEoNfM/2
-	T72DaWqErI16MhA3VCiTB6bAnG9oeoKh5DHIVtJ9dOi6aNF80AQBBLUqZ4wYHjXXklQP9NkQJqm
-	RxTEFmK4ggj5r5KevxVNwZnPI36cb0xwnlNsBSVcXURHa+rW1P3ZOB3D09VoreZqBZtjIJPyWPU
-	EVOg3igMHXSJ4fjnkxZ/k3y9UQh+v6IrMV9gtbGKuRDSpU6dah2CuMisSV/2S87T0xeGF01NyHs
-	YNM2CxeoUz8H85fZzY09GdOmV5x3TVC/muSOudoe
-X-Google-Smtp-Source: AGHT+IGwe8Z3YpFb5/ecMVn8Y3ic1OOVBuQhJmpxrIzlY7N4S3tEv4JjbxY4U6rgwDI2qjlfOun/Tg==
-X-Received: by 2002:a05:600c:4f8a:b0:43c:fe15:41d4 with SMTP id 5b1f17b1804b1-4406aba7ebfmr151332235e9.18.1745329892446;
-        Tue, 22 Apr 2025 06:51:32 -0700 (PDT)
-Received: from qasdev.Home ([2a02:c7c:6696:8300:b678:ddbe:75a4:837])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5a9e50sm177577005e9.6.2025.04.22.06.51.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 06:51:32 -0700 (PDT)
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	lumag@kernel.org,
-	pooja.katiyar@intel.com,
-	diogo.ivo@tecnico.ulisboa.pt,
-	madhu.m@intel.com,
-	saranya.gopal@intel.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: fix Clang -Wsign-conversion warning
-Date: Tue, 22 Apr 2025 14:47:17 +0100
-Message-Id: <20250422134717.66218-1-qasdev00@gmail.com>
-X-Mailer: git-send-email 2.39.5
+        d=1e100.net; s=20230601; t=1745337062; x=1745941862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IdFGD2OG7sa0PhB8zVDzwTwQ3rmo3v4yX/7hU6EpgHE=;
+        b=R1Z9dKGwyrUbDRwTNLAMawKUuDqZCszZYxSBLShx8ozZnZRAB9NbAeHOOsh++Nk08r
+         3f0NKE2dUay4IWNzHW7L8GEn59LNTbVdiZKc7OlQ457l0DBfmMrFqcI843u607lIxXAP
+         rK4U3nPXQi+/5SvSlkz7sPJ1wpfnBEwrjtLoOiNZlvOPuD0oav5chd8rsQ/E1MV8FGFI
+         pK91TfYt6ascxhw8OXh6IMwv5+310Rs7KHLwL5KM7D2Zy68xpBpxUzyXt+8MD8+re9Kf
+         0/wkMcL2AJ8ioa1yzisAkxTfl96mzR26IwmCfUaTha035fkpEBStdm+QQmFpzYuz/lkA
+         Gc4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVNhAH0H0dGLcie9WlLP2Kauc3FxDEAEkWM3gj3s8gJ2dtdgMFzHvswq0EWN/u954kKQvWETVKk9Bg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9Xd727lcZ6J+/hfPNyeZTAY3bPJ4TOKQ3OCWfORdpgCpqWz1S
+	rjMxpTr7gnngeCXQ2HL/E85bNFasr7IkDeUKu/GROdThsZj0ZEVzkMWNUTewt9Lo7OS0Cx4cZDA
+	pdKvQnK3KnStiEB90Ahh/2XyuML6eizZZNOfi
+X-Gm-Gg: ASbGncuur4bvtw8UJdVTgSTI6y8UI95A9RXoc7IFLgtPsJlWIO9jdWkuMawXm49HE48
+	Om+/S3zPRxvEYLeo9y7QgSr2jRKXhpbFr17cAQbo8s2a5eTHz5s4Zd8Jb7Tj16dnUKdVheDLcsi
+	RGzXLYK4EDEDvexz3hQoFzHgU1Yqrh5QZcmYghH3AJcMwecdba66AHiT9M
+X-Google-Smtp-Source: AGHT+IHQqUWx2u3/cq0FvzsslIUm5Dy/4pb7LqJE77ayHMAIePU0Cj0gbTYfXvpwXwPkr+tZIRDQNcab7m9Im8ZO0D8=
+X-Received: by 2002:ac2:5181:0:b0:545:1cbb:74e5 with SMTP id
+ 2adb3069b0e04-54d6e956f35mr697284e87.3.1745337061944; Tue, 22 Apr 2025
+ 08:51:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250416100515.2131853-1-khtsai@google.com> <20250419012408.x3zxum5db7iconil@synopsys.com>
+ <CAKzKK0qCag3STZUqaX5Povu0Mzh5Ntfew5RW64dTtHVcVPELYQ@mail.gmail.com> <20250421232007.u2tmih4djakhttxq@synopsys.com>
+In-Reply-To: <20250421232007.u2tmih4djakhttxq@synopsys.com>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Tue, 22 Apr 2025 23:50:35 +0800
+X-Gm-Features: ATxdqUHW9FF8cqE3jm_WZD_OgsvjOfh6Q1uw_o-6F0YcJvOWm3NGOVNgd0xjp7M
+Message-ID: <CAKzKK0pReSZeJ1-iRUbU=w+dK0O1fB7AgecfC7KJap6m5cQWnQ@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Abort suspend on soft disconnect failure
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-debugfs.c emits the following warnings when compiling with the -Wsign-conversion flag with clang 15:
+On Tue, Apr 22, 2025 at 7:20=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> On Mon, Apr 21, 2025, Kuen-Han Tsai wrote:
+> > On Sat, Apr 19, 2025 at 9:24=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@syno=
+psys.com> wrote:
+> > >
+> > > On Wed, Apr 16, 2025, Kuen-Han Tsai wrote:
+>
+> <snip>
+>
+> > > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > > > index 89a4dc8ebf94..630fd5f0ce97 100644
+> > > > --- a/drivers/usb/dwc3/gadget.c
+> > > > +++ b/drivers/usb/dwc3/gadget.c
+> > > > @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+> > > >       int ret;
+> > > >
+> > > >       ret =3D dwc3_gadget_soft_disconnect(dwc);
+> > > > -     if (ret)
+> > > > -             goto err;
+> > > > -
+> > > > -     spin_lock_irqsave(&dwc->lock, flags);
+> > > > -     if (dwc->gadget_driver)
+> > > > -             dwc3_disconnect_gadget(dwc);
+> > > > -     spin_unlock_irqrestore(&dwc->lock, flags);
+> > > > -
+> > > > -     return 0;
+> > > > -
+> > > > -err:
+> > > >       /*
+> > > >        * Attempt to reset the controller's state. Likely no
+> > > >        * communication can be established until the host
+> > > >        * performs a port reset.
+> > > >        */
+> > > > -     if (dwc->softconnect)
+> > > > +     if (ret && dwc->softconnect) {
+> > > >               dwc3_gadget_soft_connect(dwc);
+> > > > +             return -EAGAIN;
+> > >
+> > > This may make sense to have -EAGAIN for runtime suspend. I supposed t=
+his
+> > > should be fine for system suspend since it doesn't do anything specia=
+l
+> > > for this error code.
+> > >
+> > > When you tested runtime suspend, did you observe that the device
+> > > successfully going into suspend on retry?
+> >
+> > Hi Thinh,
+> >
+> > Yes, the dwc3 device can be suspended using either
+> > pm_runtime_suspend() or dwc3_gadget_pullup(), the latter of which
+> > ultimately invokes pm_runtime_put().
+> >
+> > One question: Do you know how to naturally cause a run stop failure?
+> > Based on the spec, the controller cannot halt until the event buffer
+> > becomes empty. If the driver doesn't acknowledge the events, this
+> > should lead to the run stop failure. However, since I cannot naturally
+> > reproduce this problem, I am simulating this scenario by modifying
+> > dwc3_gadget_run_stop() to return a timeout error directly.
+> >
+>
+> I'm not clear what you meant by "naturally" here. The driver is
+> implemented in such a way that this should not happen. If it does, we
+> need to take look to see what we missed.
+>
+> However, to force the driver to hit the controller halt timeout, just
+> wait/generate some events and don't clear the GEVNTCOUNT of event bytes
+> before clearing the run_stop bit.
+>
+> BR,
+> Thinh
 
-drivers/usb/typec/ucsi/debugfs.c:58:27: warning: implicit conversion changes signedness: 'int' to 'u32' (aka 'unsigned int') [-Wsign-conversion]
-                ucsi->debugfs->status = ret;
-                                      ~ ^~~
-drivers/usb/typec/ucsi/debugfs.c:71:25: warning: implicit conversion changes signedness: 'u32' (aka 'unsigned int') to 'int' [-Wsign-conversion]
-                return ucsi->debugfs->status;
-                ~~~~~~ ~~~~~~~~~~~~~~~^~~~~~
-                
-During ucsi_cmd() we see:
+Hi Thinh,
 
-	if (ret < 0) {
-		ucsi->debugfs->status = ret;
-		return ret;
-	}
-	
-But "status" is u32 meaning unsigned wrap-around occurs when assigning a value which is < 0 to it, this obscures the real status.
+Thank you for getting back to me and the method to force the timeout!
 
-To fix this make the "status" of type int since ret is also of type int.
+By "naturally," I meant reproducing the issue without artificial steps
+designed solely to trigger it. You're right; since the driver is
+designed to prevent this state, reproducing it "naturally" is
+difficult.
 
-Fixes: df0383ffad64 ("usb: typec: ucsi: Add debugfs for ucsi commands")
-Cc: stable@vger.kernel.org
-Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
----
- drivers/usb/typec/ucsi/ucsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I really appreciate your patience, and thank you once more for the
+helpful clarification.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 3a2c1762bec1..525d28160413 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -432,7 +432,7 @@ struct ucsi_debugfs_entry {
- 		u64 low;
- 		u64 high;
- 	} response;
--	u32 status;
-+	int status;
- 	struct dentry *dentry;
- };
- 
--- 
-2.39.5
-
+Regards,
+Kuen-Han
 
