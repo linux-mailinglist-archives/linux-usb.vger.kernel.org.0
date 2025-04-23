@@ -1,395 +1,197 @@
-Return-Path: <linux-usb+bounces-23378-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23379-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B0EA98A06
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 14:43:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC2D4A98B09
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 15:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5D757A6A73
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 12:41:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CB6E3BAFA7
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 13:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E927F26FA77;
-	Wed, 23 Apr 2025 12:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1551865EB;
+	Wed, 23 Apr 2025 13:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fF/nb5rn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cMs/EHWK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E8026F475
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 12:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3A9286A1
+	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 13:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745412174; cv=none; b=YKUgx8Y0limBd4VZqtR8l5+Qjq9KkAM8hjL9JE6fstJR7MWCPkS36l5reiy+qQGxWQNO2RUugzBtHiEjfAkbqj4h9TtEs6NkylHh9NeVdAgS1mknCZaAQVQsEG+paswdI9OzWPe/B3gbWhi55Lyi44lcMvWsJEXiBIEOIQNOSVA=
+	t=1745415039; cv=none; b=MtxMchKz/7moMpK+pq2BVQWQ7kBb9QE6neUl/zifxfMJ1CkhkOeW/xHAV82wLD6b7pcXEBZ7uHDFXOkMv6poXjBPd3lSoOS3XDkRiOXXhJ6+LRpQMK6Kp9bOwgEQUBoCnn59y5fGyTOZa++hSI0TK0X4JKx0xFEY/r+uy9KVS98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745412174; c=relaxed/simple;
-	bh=zZPwEZRSQjKGCvsSvBfYxBzin2AbsFTnuUxRRn+vMW8=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=CU2iOJT5dojtjgBtyPXFWEHglTXFS+F1HvccekX5oKuzvmy0TAc2M0im6Np1o59eweW7i2AscQ+jsqo/3Db2tv8MRMZkmKbp200riWABeUoEJI9IugXplKp4xmtUZvlAf06qhEmxD8xbAJDhLl1lJj92gFsHgrJL++Qb1dS725s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fF/nb5rn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4729C4CEEB
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 12:42:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745412173;
-	bh=zZPwEZRSQjKGCvsSvBfYxBzin2AbsFTnuUxRRn+vMW8=;
-	h=From:To:Subject:Date:From;
-	b=fF/nb5rnypns8KfjlixX0jRrbbggdP19a8A+/2fTQcHSFoMLoS23n0w7gkjFB1NeH
-	 PTD2fBX04ogk11odrgwDW4SMY1KdmQBqirRZxrB2vYqJnXQz/XKlqPvaAPSRWyKrv+
-	 LObYv7elgrLFUwcUgGeTWVsm/W+Eo7XtOELTjDUkHNKgR1DWhzk0Pqaq1wbAB7xVz9
-	 PLmjiTGY0H1vkTa5rDowaeKBU+6IpR/k3ezit6zB/JjQKByjRH508FG6iSjG1ZNHiD
-	 9B9OJ0QJfpH6ClPj9LVOt1UzlVp25vPDSfD7zew3qzuPnJBmN76Km4N13epvI4txgj
-	 xOxyYFz1ktYjQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B106AC3279F; Wed, 23 Apr 2025 12:42:53 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220046] New: kmalloc Redzone overwritten in usbhid_parse and
- usb_get_status
-Date: Wed, 23 Apr 2025 12:42:53 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: m95d@psihoexpert.ro
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-220046-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1745415039; c=relaxed/simple;
+	bh=WKYV1t5SeWLAIvo4ur1wBfNb7+r/gkkLurn3pxPhYaw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JIz1kwEnARPba5ar8albjSL2kygQBLEJfm2WM4eoobpWoTPdEEbtsg6DoU60kXqS/kn9uMsPj0/ViXdh7k4HBAd1l7MFg6rk/G8yKypOdQ3in2sxb+sYG9GWqPZEGWP/lblDL3v9dVmpUTkSQ+Px+PcUWSfYL7rhz6oNVEz/dOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cMs/EHWK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NAEKTN016080
+	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 13:30:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=WbGQoV5TtWkaVGbUVN+WB0tm
+	HemlYXyNkVd6UejF+r4=; b=cMs/EHWKfrAVRpO315acQbgZZJrzBxOlSGiIOMx9
+	zwT6LIfesMxaap/QlbAfHn9MOEpnI0fRVwmxA4oyMrlws4IWwmii8eJ8i3ioCYtR
+	bCdeaFMKpfQhh4Jc2CIWxvAda6zIw7ph9ud54R262WevDmyWjR4Asu9QKasd9UH+
+	SdbCiI1VD5rM93gtiGwPgSaIx9azBicbu9aGd1zBPRLqrVmpPKYDx7QCElEmQaWO
+	RIOCuQ3F8Bnb8HBTLqNL3juAHUqf5V7GEu0g6MkQqEp17NbnWznTx3FbsX/hBr6f
+	gXq5Hrx5qouoGpzNHL6a2llVUK1gikagyits7xD3HpNiWA==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh0a9ee-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 13:30:36 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5f3b8b1a1so899574585a.3
+        for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 06:30:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745415035; x=1746019835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WbGQoV5TtWkaVGbUVN+WB0tmHemlYXyNkVd6UejF+r4=;
+        b=Zdc/GUHWiM89seg63oJOwWTjbTx4tqmK6nCHeBz1z6lnzsXNBPZsC/FO0Kc/HZ44of
+         CHX5dXX4bQ1xKewL1Uzgut7KEbKoDdwZjAqLYpytmfM/jlQd0EUl7zzJxHjeu4N+7GAB
+         uH5bhCubV5dl/zA94cTNsBzQQTXurcJOTzLAtjfVG1GgX+AR1KvYFzcW3WN9lK4w5WyI
+         K83jCDXzqnfH3zd4PnC7U44ifGZluXzcHLDlddnYcbcq1H7G1AV/5Zwmy7AOLCCaCpIX
+         qiPzSFgNHwFc5makU83dB8Fvq5o38J9vEG81fCSs5PZTJt0MU6gVKMZqf+xjiiC1K9Yi
+         TnIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVtArsvjl1mfXaq7JhdmCUY3MQuGY2xGc+vOi2VXUcpywxYjvcNKIOVXQOMaU2v3mtPB/zCS0V/IY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5TEWkuwXZxlmVF/RcceFRk0PSmQDzTZxnvtfSeRxljbkd6pbK
+	lAOeGgGnsgR3FXhqg4NMXmhQJJwrUwHHdaznN5nM6Zq4D5or0VCrjy7bprLf1oSPEOHkwKAxek/
+	0dDKosziYsXxJoGbr7E6oE9RHsUVmbZZyCua+V507wN7ypD3Gk8s89OhRBaw=
+X-Gm-Gg: ASbGncsvfNmhDuNKdDY1ypjzaCmS+OM7o9wyBe87kWs1UWsj33HJC4YDqks0ekGd2Da
+	hAbPS7koJOBO4yjxZ0A9sjLsLH2T3X58Zx6+r6/OE9+h6c9i+4mY+/AeVT1Pu1ug+NXH9Cw9sJb
+	uIKxuOh+Srm6yafwV4zxYYofcGAvxoD1fHK9bSt/IEfgn33vVyd/Ib4Jts2zgghKHFyXTG1SdIn
+	b/xPLo9LUwZsE1d22eNWf+RPvHm4JRQhecCCf7oey44mhDRnP+/71XPrfyqeJ74DiCZX2u9H5tB
+	iabC2gJ477JO5Bw51lBFV8d3/Suwt65A6JuSE86/jWFyC6i1vn+ZLi5YOubwyQUofbwC+lSqt80
+	=
+X-Received: by 2002:a05:620a:370d:b0:7c5:5670:bd75 with SMTP id af79cd13be357-7c928038eadmr3337064485a.46.1745415034974;
+        Wed, 23 Apr 2025 06:30:34 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFXTfpWsbVAbU0ylBQYL51RHYlyc+81kcBQZEj2nboNhovZTX2+cu6ODjDZ2xy1hvKkUJMoaw==
+X-Received: by 2002:a05:620a:370d:b0:7c5:5670:bd75 with SMTP id af79cd13be357-7c928038eadmr3337049985a.46.1745415034096;
+        Wed, 23 Apr 2025 06:30:34 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54d6e5cf767sm1524502e87.129.2025.04.23.06.30.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 06:30:33 -0700 (PDT)
+Date: Wed, 23 Apr 2025 16:30:31 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alex Elder <elder@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srini@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Loic Poulain <loic.poulain@oss.qualcomm.com>,
+        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>, Kees Cook <kees@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        David Wronek <david@mainlining.org>,
+        Jens Reidel <adrian@mainlining.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-remoteproc@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
+        linux@mainlining.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 27/33] soc: qcom: pd-mapper: Add support for SM7150
+Message-ID: <wi6azppohttfttjniktjsovstktalut6uhnxiiwekvqtjsw5gu@nstvkc7pv5bs>
+References: <20250422213137.80366-1-danila@jiaxyga.com>
+ <20250422213137.80366-11-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422213137.80366-11-danila@jiaxyga.com>
+X-Proofpoint-GUID: VuUUG5fU4nAtzEnWHz5Yid2RlWMATHIK
+X-Proofpoint-ORIG-GUID: VuUUG5fU4nAtzEnWHz5Yid2RlWMATHIK
+X-Authority-Analysis: v=2.4 cv=Fv0F/3rq c=1 sm=1 tr=0 ts=6808eb7c cx=c_pps a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=XR8D0OoHHMoA:10 a=OuZLqq7tAAAA:8 a=7ibcVnAUAAAA:8 a=EUspDBNiAAAA:8 a=JQ2_29xaah9frsLSoU4A:9 a=CjuIK1q_8ugA:10
+ a=IoWCM6iH3mJn3m4BftBB:22 a=AKGiAy9iJ-JzxKVHQNES:22 a=HywIFdX19-EX8Ph82vJO:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA5NCBTYWx0ZWRfXwSPTwyGihg2+ 2TyTku4QNZxxH9Ms8ow6Tq7ct6+YhlL5wJdvDkf6ZVoQMSjMWxJiLnWiGBWHxr/CAkTEj1MPnXU qrYAXOLaV6KsvEt5lQODAyrXDoZHoSq44wORJeheyViE9eFCQ9D0b0R5lo731/28/9IxsqAgzpW
+ 5CIO92Zn1qQySGnvNi1IwLbaw+PIh9X73/LPob1ithr5x4WbP69MLsNKPDwX6cg5PWD90YDHah7 P6aUL8Yjr+6sHtm3uj5P/1ny6/BkPyt0bx+NlgcHwf2+BbF73jCkkzVBI0ka8z9cVoJ9gmRmOTK PxWg7lMKjWEDVsmv2V9v9qYf601oA4sTsoqzx8TROlW6tmnUlqFzaRh060kRjtTXdeEyVymXTek
+ rCk7kBDa75+CQiabkBEo1gKwFuSIZt48n/WWE/G2x2CUunasBZ8rrGtgWa8jNU5JIpakDrAf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
+ definitions=2025-04-23_08,2025-04-22_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=764 priorityscore=1501 suspectscore=0
+ adultscore=0 bulkscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504230094
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220046
+On Wed, Apr 23, 2025 at 12:31:31AM +0300, Danila Tikhonov wrote:
+> From: Jens Reidel <adrian@mainlining.org>
+> 
+> SM7150 protection domains are the same as SC7180, with the subtle
+> difference that SM7150 has a CDSP.
+> 
+> Signed-off-by: Jens Reidel <adrian@mainlining.org>
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+>  drivers/soc/qcom/qcom_pd_mapper.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
 
-            Bug ID: 220046
-           Summary: kmalloc Redzone overwritten in usbhid_parse and
-                    usb_get_status
-           Product: Drivers
-           Version: 2.5
-          Hardware: ARM
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: m95d@psihoexpert.ro
-        Regression: No
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> 
 
-Hi.
-
-The system is Asus Tinkerboard S (RK3288, armv7).
-I get this error a few seconds after boot if a USB keyboard is connected:
-
-[  +0,007751] [  T265] [kmalloc Redzone overwritten] 0xc61ebec1-0xc61ebec3
-@offset=3D7873. First byte 0x40 instead of 0xcc
-[  +0,011900] [  T265]
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-[  +0,009952] [  T265] BUG kmalloc-128 (Tainted: G    B   W          ): Obj=
-ect
-corrupt
-[  +0,008575] [  T265]
----------------------------------------------------------------------------=
---
-
-[  +0,012348] [  T265] Allocated in usbhid_parse+0x4c0/0x940 age=3D1812 cpu=
-=3D0
-pid=3D63
-[  +0,008183] [  T265]  usbhid_parse+0x4c0/0x940
-[  +0,004880] [  T265]  hid_add_device+0x1ac/0xaf8
-[  +0,005076] [  T265]  usbhid_probe+0xbdc/0x1208
-[  +0,004973] [  T265]  usb_probe_interface+0x3f8/0xa40
-[  +0,005559] [  T265]  really_probe+0x250/0x818
-[  +0,004880] [  T265]  __driver_probe_device+0x1c4/0x404
-[  +0,005754] [  T265]  driver_probe_device+0x58/0x154
-[  +0,005459] [  T265]  __device_attach_driver+0x278/0x33c
-[  +0,005848] [  T265]  bus_for_each_drv+0x14c/0x1b4
-[  +0,005265] [  T265]  __device_attach+0x1d0/0x394
-[  +0,005167] [  T265]  bus_probe_device+0x19c/0x1cc
-[  +0,005264] [  T265]  device_add+0xb78/0x11ac
-[  +0,004778] [  T265]  usb_set_configuration+0x11dc/0x1e54
-[  +0,005946] [  T265]  usb_generic_driver_probe+0x8c/0xd0
-[  +0,005847] [  T265]  usb_probe_device+0xc4/0x340
-[  +0,005167] [  T265]  really_probe+0x250/0x818
-[  +0,004878] [  T265] Slab 0xeeed44e8 objects=3D21 used=3D15 fp=3D0xc61eb4=
-00
-flags=3D0x240(workingset|head|zone=3D0)
-[  +0,010611] [  T265] Object 0xc61ebe80 @offset=3D7808 fp=3D0x00000000
-
-[  +0,009149] [  T265] Redzone  c61ebe00: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Redzone  c61ebe10: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Redzone  c61ebe20: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010603] [  T265] Redzone  c61ebe30: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Redzone  c61ebe40: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Redzone  c61ebe50: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010603] [  T265] Redzone  c61ebe60: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Redzone  c61ebe70: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Object   c61ebe80: 05 01 09 06 a1 01 05 07 19 e0 29 =
-e7
-15 00 25 01  ..........)...%.
-[  +0,010604] [  T265] Object   c61ebe90: 75 01 95 08 81 02 95 01 75 08 81 =
-01
-95 03 75 01  u.......u.....u.
-[  +0,010603] [  T265] Object   c61ebea0: 05 08 19 01 29 03 91 02 95 05 75 =
-01
-91 01 95 06  ....).....u.....
-[  +0,010604] [  T265] Object   c61ebeb0: 75 08 05 07 19 00 2a ff 00 15 00 =
-26
-ff 00 81 00  u.....*....&....
-[  +0,010603] [  T265] Object   c61ebec0: c0 40 ef 00 cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  .@..............
-[  +0,010604] [  T265] Object   c61ebed0: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Object   c61ebee0: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Object   c61ebef0: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010602] [  T265] Redzone  c61ebf00: cc cc cc cc=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-           ....
-[  +0,009438] [  T265] Padding  c61ebf64: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a =
-5a
-5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
-[  +0,010604] [  T265] Padding  c61ebf74: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a =
-5a=20=20
-           ZZZZZZZZZZZZ
-[  +0,010213] [  T265] ------------[ cut here ]------------
-[  +0,005938] [  T265] WARNING: CPU: 1 PID: 265 at mm/slub.c:1110
-check_bytes_and_report+0xf4/0x118
-[  +0,009839] [  T265] CPU: 1 UID: 0 PID: 265 Comm: mdev Tainted: G    B   =
-W=20=20=20
-       6.15.0-rc3-M95D-00014-ge00e800e6d2a-dirty #1 NONE
-[  +0,000019] [  T265] Tainted: [B]=3DBAD_PAGE, [W]=3DWARN
-[  +0,000005] [  T265] Hardware name: Rockchip (Device Tree)
-[  +0,000006] [  T265] Call trace:
-[  +0,000005] [  T265] [<c0101c44>] (unwind_backtrace) from [<c01566c8>]
-(show_stack+0x10/0x28)
-[  +0,000024] [  T265] [<c01566c8>] (show_stack) from [<c0140ee8>]
-(dump_stack_lvl+0x58/0x94)
-[  +0,000023] [  T265] [<c0140ee8>] (dump_stack_lvl) from [<c0196828>]
-(__warn+0x12c/0x1b0)
-[  +0,000020] [  T265] [<c0196828>] (__warn) from [<c0196af0>]
-(warn_slowpath_fmt+0x244/0x24c)
-[  +0,000015] [  T265] [<c0196af0>] (warn_slowpath_fmt) from [<c0529ad8>]
-(check_bytes_and_report+0xf4/0x118)
-[  +0,000018] [  T265] [<c0529ad8>] (check_bytes_and_report) from [<c0529e9=
-c>]
-(check_object+0x3a0/0x408)
-[  +0,000017] [  T265] [<c0529e9c>] (check_object) from [<c052aa18>]
-(free_debug_processing+0x120/0x2e4)
-[  +0,000017] [  T265] [<c052aa18>] (free_debug_processing) from [<c052e0b4=
->]
-(free_to_partial_list+0x70/0x278)
-[  +0,000018] [  T265] [<c052e0b4>] (free_to_partial_list) from [<c0530234>]
-(___cache_free+0xcc/0x114)
-[  +0,000019] [  T265] [<c0530234>] (___cache_free) from [<c055fd74>]
-(qlist_free_all+0x6c/0x108)
-[  +0,000022] [  T265] [<c055fd74>] (qlist_free_all) from [<c0560270>]
-(kasan_quarantine_reduce+0x124/0x180)
-[  +0,000021] [  T265] [<c0560270>] (kasan_quarantine_reduce) from [<c055d3=
-58>]
-(__kasan_slab_alloc+0x5c/0x8c)
-[  +0,000020] [  T265] [<c055d358>] (__kasan_slab_alloc) from [<c052c91c>]
-(kmem_cache_alloc_noprof+0x160/0x254)
-[  +0,000019] [  T265] [<c052c91c>] (kmem_cache_alloc_noprof) from [<c05cf0=
-6c>]
-(getname_flags+0x94/0x720)
-[  +0,000019] [  T265] [<c05cf06c>] (getname_flags) from [<c05a44bc>]
-(sys_statx+0xb8/0xd4)
-[  +0,000018] [  T265] [<c05a44bc>] (sys_statx) from [<c0100060>]
-(ret_fast_syscall+0x0/0x54)
-[  +0,000016] [  T265] Exception stack(0xc85cffa8 to 0xc85cfff0)
-[  +0,000012] [  T265] ffa0:                   b6b2ab20 b6b2ac88 ffffff9c
-00263048 00000800 000007ff
-[  +0,000011] [  T265] ffc0: b6b2ab20 b6b2ac88 00263048 0000018d 002aa5d8
-00263048 00000001 00000000
-[  +0,000010] [  T265] ffe0: 00000000 b6b2ab00 ffffff9c 0017dc4c
-[  +0,000006] [  T265] ---[ end trace 0000000000000000 ]---
-[  +0,227892] [  T265] FIX kmalloc-128: Restoring kmalloc Redzone
-0xc61ebec1-0xc61ebec3=3D0xcc
-[  +0,009150] [  T265] FIX kmalloc-128: Object at 0xc61ebe80 not freed
-
-There's also an almost identical error in usb_get_status:
-
-[  +0,104795] [  T265] [kmalloc Redzone overwritten] 0xc3f0e342-0xc3f0e343
-@offset=3D834. First byte 0xff instead of 0xcc
-[  +0,011804] [  T265]
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-[  +0,009926] [  T265] BUG kmalloc-64 (Tainted: G    B   W          ): Obje=
-ct
-corrupt
-[  +0,008467] [  T265]
----------------------------------------------------------------------------=
---
-
-[  +0,012347] [  T265] Allocated in usb_get_status+0x84/0x33c age=3D1977 cp=
-u=3D2
-pid=3D50
-[  +0,008288] [  T265]  usb_get_status+0x84/0x33c
-[  +0,004972] [  T265]  hub_configure+0x1164/0x1d34
-[  +0,005171] [  T265]  hub_probe+0xde4/0xe90
-[  +0,004586] [  T265]  usb_probe_interface+0x3f8/0xa40
-[  +0,005557] [  T265]  really_probe+0x250/0x818
-[  +0,004880] [  T265]  __driver_probe_device+0x1c4/0x404
-[  +0,005751] [  T265]  driver_probe_device+0x58/0x154
-[  +0,005461] [  T265]  __device_attach_driver+0x278/0x33c
-[  +0,005847] [  T265]  bus_for_each_drv+0x14c/0x1b4
-[  +0,005265] [  T265]  __device_attach+0x1d0/0x394
-[  +0,005168] [  T265]  bus_probe_device+0x19c/0x1cc
-[  +0,005265] [  T265]  device_add+0xb78/0x11ac
-[  +0,004778] [  T265]  usb_set_configuration+0x11dc/0x1e54
-[  +0,005946] [  T265]  usb_generic_driver_probe+0x8c/0xd0
-[  +0,005848] [  T265]  usb_probe_device+0xc4/0x340
-[  +0,005168] [  T265]  really_probe+0x250/0x818
-[  +0,004877] [  T265] Slab 0xeee85df8 objects=3D16 used=3D9 fp=3D0xc3f0e440
-flags=3D0x200(workingset|zone=3D0)
-[  +0,010019] [  T265] Object 0xc3f0e340 @offset=3D832 fp=3D0xc3f0e440
-
-[  +0,009052] [  T265] Redzone  c3f0e300: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Redzone  c3f0e310: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Redzone  c3f0e320: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010603] [  T265] Redzone  c3f0e330: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010605] [  T265] Object   c3f0e340: 01 00 ff df cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Object   c3f0e350: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010603] [  T265] Object   c3f0e360: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010604] [  T265] Object   c3f0e370: cc cc cc cc cc cc cc cc cc cc cc =
-cc
-cc cc cc cc  ................
-[  +0,010603] [  T265] Redzone  c3f0e380: cc cc cc cc=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-           ....
-[  +0,009438] [  T265] Padding  c3f0e3e4: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a =
-5a
-5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
-[  +0,010603] [  T265] Padding  c3f0e3f4: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a =
-5a=20=20
-           ZZZZZZZZZZZZ
-[  +0,010214] [  T265] ------------[ cut here ]------------
-[  +0,005938] [  T265] WARNING: CPU: 1 PID: 265 at mm/slub.c:1110
-check_bytes_and_report+0xf4/0x118
-[  +0,009839] [  T265] CPU: 1 UID: 0 PID: 265 Comm: mdev Tainted: G    B   =
-W=20=20=20
-       6.15.0-rc3-M95D-00014-ge00e800e6d2a-dirty #1 NONE
-[  +0,000018] [  T265] Tainted: [B]=3DBAD_PAGE, [W]=3DWARN
-[  +0,000005] [  T265] Hardware name: Rockchip (Device Tree)
-[  +0,000007] [  T265] Call trace:
-[  +0,000004] [  T265] [<c0101c44>] (unwind_backtrace) from [<c01566c8>]
-(show_stack+0x10/0x28)
-[  +0,000025] [  T265] [<c01566c8>] (show_stack) from [<c0140ee8>]
-(dump_stack_lvl+0x58/0x94)
-[  +0,000022] [  T265] [<c0140ee8>] (dump_stack_lvl) from [<c0196828>]
-(__warn+0x12c/0x1b0)
-[  +0,000021] [  T265] [<c0196828>] (__warn) from [<c0196af0>]
-(warn_slowpath_fmt+0x244/0x24c)
-[  +0,000015] [  T265] [<c0196af0>] (warn_slowpath_fmt) from [<c0529ad8>]
-(check_bytes_and_report+0xf4/0x118)
-[  +0,000018] [  T265] [<c0529ad8>] (check_bytes_and_report) from [<c0529e9=
-c>]
-(check_object+0x3a0/0x408)
-[  +0,000017] [  T265] [<c0529e9c>] (check_object) from [<c052aa18>]
-(free_debug_processing+0x120/0x2e4)
-[  +0,000017] [  T265] [<c052aa18>] (free_debug_processing) from [<c052e0b4=
->]
-(free_to_partial_list+0x70/0x278)
-[  +0,000018] [  T265] [<c052e0b4>] (free_to_partial_list) from [<c0530234>]
-(___cache_free+0xcc/0x114)
-[  +0,000019] [  T265] [<c0530234>] (___cache_free) from [<c055fd74>]
-(qlist_free_all+0x6c/0x108)
-[  +0,000020] [  T265] [<c055fd74>] (qlist_free_all) from [<c0560270>]
-(kasan_quarantine_reduce+0x124/0x180)
-[  +0,000022] [  T265] [<c0560270>] (kasan_quarantine_reduce) from [<c055d3=
-58>]
-(__kasan_slab_alloc+0x5c/0x8c)
-[  +0,000020] [  T265] [<c055d358>] (__kasan_slab_alloc) from [<c052d5e0>]
-(__kvmalloc_node_noprof+0x1c4/0x3c4)
-[  +0,000018] [  T265] [<c052d5e0>] (__kvmalloc_node_noprof) from [<c06307c=
-8>]
-(seq_buf_alloc+0x68/0x14c)
-[  +0,000020] [  T265] [<c06307c8>] (seq_buf_alloc) from [<c0631cc4>]
-(seq_read_iter+0x8c4/0x14a8)
-[  +0,000018] [  T265] [<c0631cc4>] (seq_read_iter) from [<c058cc08>]
-(vfs_read+0x760/0xae0)
-[  +0,000021] [  T265] [<c058cc08>] (vfs_read) from [<c058f070>]
-(ksys_read+0xf4/0x1bc)
-[  +0,000020] [  T265] [<c058f070>] (ksys_read) from [<c0100060>]
-(ret_fast_syscall+0x0/0x54)
-[  +0,000018] [  T265] Exception stack(0xc85cffa8 to 0xc85cfff0)
-[  +0,000011] [  T265] ffa0:                   0000007f b6b2bc62 00000006
-b6b2bc62 0000007f 00000001
-[  +0,000012] [  T265] ffc0: 0000007f b6b2bc62 00000006 00000003 0023f53c
-00000011 ffffffff b6b2bc62
-[  +0,000009] [  T265] ffe0: 000001cc b6b29bd8 0006bcc8 0017f20c
-[  +0,000006] [  T265] ---[ end trace 0000000000000000 ]---
-[  +0,246152] [  T265] FIX kmalloc-64: Restoring kmalloc Redzone
-0xc3f0e342-0xc3f0e343=3D0xcc
-[  +0,009054] [  T265] FIX kmalloc-64: Object at 0xc3f0e340 not freed
-
-I tried to do a git bisect, but I couldn't go back more than v6.8 because t=
-he
-board won't boot.
-
-Thanks.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+With best wishes
+Dmitry
 
