@@ -1,309 +1,192 @@
-Return-Path: <linux-usb+bounces-23357-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23358-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7F46A97B0B
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 01:33:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25649A97BEA
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 03:02:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4678A1898A5D
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Apr 2025 23:34:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E72D43BE708
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 01:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C9B1FF1B3;
-	Tue, 22 Apr 2025 23:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA8A22097;
+	Wed, 23 Apr 2025 01:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d948haJQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B4zVrS96"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0006D214A74
-	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 23:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF811EB5DB;
+	Wed, 23 Apr 2025 01:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745364826; cv=none; b=oMWe+Wqii6wORU9OSa2mCibFt0ivpACOZ797D44iO9qxbq0UxukeuAjKhn5HfIJ3ziviAx43o0++VJ0HQeLSL5Alfup6dwacGPINLuiKSy1fVyTml+wbfiJkyPN13ySp2x0+bto/N75MSZ9ECJSA7XJxi17FRwEfvGb11fGa3sM=
+	t=1745370154; cv=none; b=lHjvQ+ugS3KEZ6ZvAARiAriZuP2sW1nfkPG51mI4iFrnsNYoLg45oKSu4OvjGkEvIznY8NpDwocyDD4uv/acKLA5Ux8RY3ljm/Gu/7HDN+9OPJb5kmvHZswn3jjincC6/0pGtf3xpDoMZsew2O35MGLpUuJlXLfOjUIdJQQJEgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745364826; c=relaxed/simple;
-	bh=Zm+0Vnd04bLna0H1tU+JPRUhjZEpd+vXGIhlF4JkvBM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZHw0GvmZ02maiC1aBtgQDwpF/06fUO+Fl1nnHKoDklt7sYzeCxJazo4A3T1DJ2sPk5LgJT4gXD9rEQ1+lBt8BP8ZKpVAKxEsO1HVgH/sRLzCE1tJ5YhuzA8GxzyIA22Ovg2HKH6g8nc1s3BQtaTHD3WAayns1fQ6oRBUdtwZEeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d948haJQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53MKpbT8025943
-	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 23:33:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=LbEEYSNZmbsDZ9eY95aJ2Y
-	EJLr23jK+dOe3rnqzLKQY=; b=d948haJQ7yEQwbLXrdRPF4bymMnHcUv76kwe0g
-	cGt9Uv7lIi/U4ED4A1PYv6qUMDAicVjSexJIyKjV3McTqeiH30tciF34f9Pmy9qE
-	AwpMGmXNixLYJPqaHrPA8H5F+S0r66SRHMl+EnBAY463R57OZFHOxua3Rms5OQD2
-	Gjp59jGpoaH8eRLMUJdux6oxaw1IoH/Mji38fDB6ZiBtsWwMo24w0p48LW5SPWhA
-	qKihHzahJJTfH7EQONjSCEvyExefWH3dOqjMS9OgHU+0Pg5eEg9n3SccSPXgBxc5
-	snpF65EMHHf9PhXQWxbXsVYT4zRQPGTV102nwXe7m7t6xJxw==
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh3g91d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 23:33:43 +0000 (GMT)
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-72bce6d1b16so318288a34.0
-        for <linux-usb@vger.kernel.org>; Tue, 22 Apr 2025 16:33:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745364822; x=1745969622;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LbEEYSNZmbsDZ9eY95aJ2YEJLr23jK+dOe3rnqzLKQY=;
-        b=rVkV44RXFqpE/+RYvSizqn9r02mqLf5VpkUVEza24O78hUbPPHEWwaEucd37wA40aF
-         xENQhI/ALGuImv4oi1AJ7TJsMIdmcFt9JGtntouiEsTpWnFk6VwYYwMdp7wjWxAcNvbg
-         h0905K1vqVeyrl0HwBl9NTYa7UgVz0ARY/8gkFJyrcoqSNFnO00gHujY/brEm+GdYHXc
-         tHNyZ+7zS2V4Ynvl3MD6yAaDStdJFyCZ7Il/fF5OknMVKcuCZq3FSuNcfad0oqHkfu+U
-         gVzUH5x0cJoNf0SfXotJuprg5bcplFwCqPg8xX9eecbfIsKaRxzdz+dhUlS8hKJe0p7a
-         zBTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW2EOY6zcYdkfg6Tvu7pzJxEADeTt0gTWXJj6sG9d79V5hLtUrz+hIjIU9ZSHdnPSWG3j1ekMhF/Ck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfAP8FrX7eycv54tdTFngCj9XAVs2M44DHphclqPRA5ddP4+2R
-	gr1arVKQCcuyRd4os/MpuoLQi2ViDOozXB/eSl+ffBs5iAoB5bN2LdSotS9YGvNZZ9Rlgy86Dux
-	9E32x2tekTl3am1F3UtyFxA1emKPUKrjaQU0RYQ3fZT3CPnkBvb9V5EJMvgUQ9KLIIMU=
-X-Gm-Gg: ASbGncvyXSti/9tHuJH+GfSbICH5Jzb/moWzT8yzjJgnqX8F+SnL/G86qPOXy5t56xZ
-	fg/nuWbZe6ZHjvjcbxtJcVR0e0rR5xOiZZXjmuHJV6hULsCU86vDmtOyy+fZ0yJVHFQ8qZ5QLbD
-	+ySpfoPu2sMTLl0kMIsalWFSYnY+bguYeKTQut73i2ihs46LgbrpR9YpP+shCFB/r1magj3tMQt
-	CbtT6E8JtNKgIWxG2U0sypjr9ICr/VBczXhiCnqvWX9ToGdSU1otB2W5nTab3r3hcJ2wFD2Y6am
-	6yfMNYAl7IpeyuTpobjRolZERRUGOAkv0iRWBf689Eh6kkvpEFErstUAm7WwiyLQa8g11UidRci
-	zD+FA38GN0oM=
-X-Received: by 2002:a05:6830:12d2:b0:72b:8d2e:4825 with SMTP id 46e09a7af769-73041e9de56mr467625a34.11.1745364822398;
-        Tue, 22 Apr 2025 16:33:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0t6cxJkJp59NTohJ5oLCCnmhskYwY9IBHFLPZrEh+ri7nRRRAj7gkP0LsYg//gp0mJqrbeg==
-X-Received: by 2002:a05:6830:12d2:b0:72b:8d2e:4825 with SMTP id 46e09a7af769-73041e9de56mr467615a34.11.1745364822037;
-        Tue, 22 Apr 2025 16:33:42 -0700 (PDT)
-Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-730047afc11sm2231478a34.25.2025.04.22.16.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 16:33:41 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Date: Tue, 22 Apr 2025 18:33:31 -0500
-Subject: [PATCH] usb: dwc3: qcom: Use bulk clock API and devres
+	s=arc-20240116; t=1745370154; c=relaxed/simple;
+	bh=V5z5E5+X3Jf2jY7+WG1Lr+g/krh0x4f/dkIPVzE6Zsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VLMn6R05B30puP/SzQ3ZFabAgNQABIvTvLccDNfWV7oz5k/bsuSA/pMmP9pop0Fv2jcSX4fkTOVF+FAzWrAS2AnBpQj1NKp90vlSOquUyTgRrzrwM7WJh04puWVm0sgGaxiCHzJsEfSuOUNlu8JJoloU2Axcy0HZoCIqpW2YkNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B4zVrS96; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745370152; x=1776906152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V5z5E5+X3Jf2jY7+WG1Lr+g/krh0x4f/dkIPVzE6Zsw=;
+  b=B4zVrS96NXFI6G1kDT8RPsQQ80L9dV+eFZyuMnPPsCOie0/d9doE176q
+   Uum4w75MebUxBjuTKTVOsRI02lpoqmShrxQI9OPnWj/DFStreqeRc5ume
+   Vt+6itCjGPs5nDCFvkVVgPl+WhfBNBnbdoM5VzQaeZ6XxUa82UFxSUEkr
+   HAiWFd74GUNB7gtKHeFKwLUCF1yLJjAivTg39D9jjAOngX1b64Y0vjgki
+   23BzdPWNqOYoz1ee9m0OnvazMlOhtf5vCO1XKyU+14l6gLZ7xFEw1Py41
+   FHA66evrQl/xDRiT+khNgKQF6bSkBnK7qPUvBwHzy7Amu3dSTH3NBpVZD
+   w==;
+X-CSE-ConnectionGUID: bI9chdc9Rp+KzjlseM5KyA==
+X-CSE-MsgGUID: ddoC15lmShKCGGIKn0QUBg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="69439437"
+X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
+   d="scan'208";a="69439437"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 18:02:31 -0700
+X-CSE-ConnectionGUID: 3KLY5xfjSJCF2TMuhEQFlA==
+X-CSE-MsgGUID: s7ej81ZcQcCQytNIvEW19Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
+   d="scan'208";a="169376875"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 22 Apr 2025 18:02:27 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u7OVL-0001S7-2x;
+	Wed, 23 Apr 2025 01:02:23 +0000
+Date: Wed, 23 Apr 2025 09:02:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zongmin Zhou <min_halo@163.com>, skhan@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, i@zenithal.me,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	shuah@kernel.org, valentina.manea.m@gmail.com,
+	Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+Message-ID: <202504230805.MkmxQyas-lkp@intel.com>
+References: <20250422063409.607859-1-min_halo@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250422-dwc3-clk-bulk-v1-1-37c7c941330f@oss.qualcomm.com>
-X-B4-Tracking: v=1; b=H4sIAEonCGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDEyMj3ZTyZGPd5Jxs3aRSIGFpZpBoaZiaYpKYZKEE1FNQlJqWWQE2Lzq
- 2thYAD+r1Xl8AAAA=
-X-Change-ID: 20250422-dwc3-clk-bulk-960a91ed4ab8
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4868;
- i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
- bh=Zm+0Vnd04bLna0H1tU+JPRUhjZEpd+vXGIhlF4JkvBM=;
- b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBoCCdVQtcnmQyH3hay44RXu8crJ1kkuop6qwCU/
- 06dKNBFf0iJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCaAgnVRUcYW5kZXJzc29u
- QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcXyFQ//SZgCOv1ZJhibE8+OWqjEcDnZuaUCksK3oO1NdX0
- W9uy8oT7Xr+kfR2FLIvZ3aWQIIdZhUsCjDD+yASja4fZmfk9f0Egbj6ENzhJrMRFoEYiBaSseSJ
- N/ZkDrUCOHOLJiZXdlmzJeztbylNtSYxpe7e6BDRa57V/YDPytwOT5wQKwfQuzp3eEBFgFNgIz2
- qb9Ug7JLhmmHgBrrZleWGD1CLsnhLvqqf7B8Ht/mLH/g6qYawz0DE5pcs+yBeKlDNyYOSVW8dDR
- mLbi27iU6qLrmrlWYjXaQtb5P03YHC3orhNDKDEkxKh/shTncgD461cN8h7y5sWlH6h6BRJZ+cH
- u4MwZj6i8IZjSpM5nIXfAtUZQtC2dkrR1EeQss7fQnjeexeIxNnDyLAp3jWz8pjhuC5ID6kbWY4
- 84gUy8KmekqeQrbuaxquX2nJ4Cy9i2EYdt43eU8yICxtzS0bGeuZ5lP4mcqjB3auU/yOaz9Oydv
- vlx4dcMVSYI2v3IrdN4X3KSto+HVJMv+j57HgfqT/F+qDZAilGD6wHh9sjP+qLZcis2elJmUxLj
- FX4XpNitCrdA1Lf3GmVTj2+nXgNNQlOqpe7nfGTCU7xFEVvmiHQEvB1kqqkQNuovi8uJMO3AAn/
- vIDy1GzxZtKbNh4jfsU+TLiFpxuNGD911FTtktyzarVA=
-X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
- fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
-X-Proofpoint-ORIG-GUID: wXXudxcG9ErSXEh-9Xk_36TZu4D3mk4l
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIyMDE3NiBTYWx0ZWRfX8xZunmI3gHlZ 2J2ph7R7Ct0s1WbndmON6W3f90ZaU4wdNlVeITiFSz2VKrIaA7fVavWtOCsWKIcqZR1z6UHitIn J9g//igPwCWrdqQRrjNyNLY1AcbnMWHXeB1qDFCjAfMIrVbQKrUsXtz/O0/QWMkVSmDbQZkCuWO
- Ttj5O8Nyjs/zhNaBaQN9Vm0dY8FRU7DbSau0QqkHC8AksZG9HGv7FG5ajxle5Mx2uKuXfG4C2/H PTDjTD5oLwG6Bgqyx1wpW8tq1NzArMfKahD6HgLAVCAaOlqQDmTPTryb5zrsUbtWSryqdmcTBWB PHwpy/ZBgtbCtzw/p7Gh6YsWsVws3ozl/jQRWOTc9BclTM5i9scGqfIF+SSHoUllN7Vvk+yh8Si
- wO278/n8GUGg+FOVwa2LGVa0R3OTOwyU+V6QmGAbbmVMgGZNo/Okf+D6L1BhQPtFyyj9n42S
-X-Authority-Analysis: v=2.4 cv=ELgG00ZC c=1 sm=1 tr=0 ts=68082757 cx=c_pps a=+3WqYijBVYhDct2f5Fivkw==:117 a=DaeiM5VmU20ml6RIjrOvYw==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=EUspDBNiAAAA:8 a=gJd3tMjwVXm2S4jxaKMA:9 a=QEXdDO2ut3YA:10
- a=eYe2g0i6gJ5uXG_o6N4q:22
-X-Proofpoint-GUID: wXXudxcG9ErSXEh-9Xk_36TZu4D3mk4l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-22_11,2025-04-22_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 clxscore=1015 bulkscore=0 phishscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504220176
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422063409.607859-1-min_halo@163.com>
 
-The Qualcomm DWC3 glue driver duplicates the logic of the bulk clock
-API to acquire, prepare, and unprepare the controller's clocks. It also
-manages the life cycle of these handled explicitly.
+Hi Zongmin,
 
-Transition to the bulk clock API and manage the resources using devres,
-to clean up the code.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 84 ++++++--------------------------------------
- 1 file changed, 11 insertions(+), 73 deletions(-)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.15-rc3 next-20250422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index d512002e1e88da9523ff82454e653bac55c1409d..ec6e197cfc32abf5ab8f9b23ba590bd1a126b500 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -73,7 +73,7 @@ struct dwc3_qcom {
- 	struct device		*dev;
- 	void __iomem		*qscratch_base;
- 	struct dwc3		dwc;
--	struct clk		**clks;
-+	struct clk_bulk_data	*clks;
- 	int			num_clocks;
- 	struct reset_control	*resets;
- 	struct dwc3_qcom_port	ports[DWC3_QCOM_MAX_PORTS];
-@@ -431,9 +431,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 			dev_err(qcom->dev, "port-%d HS-PHY not in L2\n", i + 1);
- 	}
--
--	for (i = qcom->num_clocks - 1; i >= 0; i--)
--		clk_disable_unprepare(qcom->clks[i]);
-+	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- 
- 	ret = dwc3_qcom_interconnect_disable(qcom);
- 	if (ret)
-@@ -465,14 +463,9 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
- 	if (dwc3_qcom_is_host(qcom) && wakeup)
- 		dwc3_qcom_disable_interrupts(qcom);
- 
--	for (i = 0; i < qcom->num_clocks; i++) {
--		ret = clk_prepare_enable(qcom->clks[i]);
--		if (ret < 0) {
--			while (--i >= 0)
--				clk_disable_unprepare(qcom->clks[i]);
--			return ret;
--		}
--	}
-+	ret = clk_bulk_prepare_enable(qcom->num_clocks, qcom->clks);
-+	if (ret < 0)
-+		return ret;
- 
- 	ret = dwc3_qcom_interconnect_enable(qcom);
- 	if (ret)
-@@ -648,62 +641,14 @@ static int dwc3_qcom_setup_irq(struct dwc3_qcom *qcom, struct platform_device *p
- 	return 0;
- }
- 
--static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
--{
--	struct device		*dev = qcom->dev;
--	struct device_node	*np = dev->of_node;
--	int			i;
--
--	if (!np || !count)
--		return 0;
--
--	if (count < 0)
--		return count;
--
--	qcom->num_clocks = count;
--
--	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
--				  sizeof(struct clk *), GFP_KERNEL);
--	if (!qcom->clks)
--		return -ENOMEM;
--
--	for (i = 0; i < qcom->num_clocks; i++) {
--		struct clk	*clk;
--		int		ret;
--
--		clk = of_clk_get(np, i);
--		if (IS_ERR(clk)) {
--			while (--i >= 0)
--				clk_put(qcom->clks[i]);
--			return PTR_ERR(clk);
--		}
--
--		ret = clk_prepare_enable(clk);
--		if (ret < 0) {
--			while (--i >= 0) {
--				clk_disable_unprepare(qcom->clks[i]);
--				clk_put(qcom->clks[i]);
--			}
--			clk_put(clk);
--
--			return ret;
--		}
--
--		qcom->clks[i] = clk;
--	}
--
--	return 0;
--}
--
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
- 	struct dwc3_probe_data	probe_data = {};
--	struct device_node	*np = pdev->dev.of_node;
- 	struct device		*dev = &pdev->dev;
- 	struct dwc3_qcom	*qcom;
- 	struct resource		res;
- 	struct resource		*r;
--	int			ret, i;
-+	int			ret;
- 	bool			ignore_pipe_clk;
- 	bool			wakeup_source;
- 
-@@ -733,11 +678,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 		goto reset_assert;
- 	}
- 
--	ret = dwc3_qcom_clk_init(qcom, of_clk_get_parent_count(np));
--	if (ret) {
-+	ret = devm_clk_bulk_get_all(&pdev->dev, &qcom->clks);
-+	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to get clocks\n");
- 		goto reset_assert;
- 	}
-+	qcom->num_clocks = ret;
- 
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!r)
-@@ -804,10 +750,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- remove_core:
- 	dwc3_core_remove(&qcom->dwc);
- clk_disable:
--	for (i = qcom->num_clocks - 1; i >= 0; i--) {
--		clk_disable_unprepare(qcom->clks[i]);
--		clk_put(qcom->clks[i]);
--	}
-+	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- reset_assert:
- 	reset_control_assert(qcom->resets);
- 
-@@ -818,15 +761,10 @@ static void dwc3_qcom_remove(struct platform_device *pdev)
- {
- 	struct dwc3 *dwc = platform_get_drvdata(pdev);
- 	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
--	int i;
- 
- 	dwc3_core_remove(&qcom->dwc);
- 
--	for (i = qcom->num_clocks - 1; i >= 0; i--) {
--		clk_disable_unprepare(qcom->clks[i]);
--		clk_put(qcom->clks[i]);
--	}
--	qcom->num_clocks = 0;
-+	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- 
- 	dwc3_qcom_interconnect_exit(qcom);
- 	reset_control_assert(qcom->resets);
+url:    https://github.com/intel-lab-lkp/linux/commits/Zongmin-Zhou/usbip-set-the-dma-mask-to-64bit-default-for-vhci-driver/20250422-143646
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250422063409.607859-1-min_halo%40163.com
+patch subject: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+config: arm-randconfig-004-20250423 (https://download.01.org/0day-ci/archive/20250423/202504230805.MkmxQyas-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504230805.MkmxQyas-lkp@intel.com/reproduce)
 
----
-base-commit: 2c9c612abeb38aab0e87d48496de6fd6daafb00b
-change-id: 20250422-dwc3-clk-bulk-960a91ed4ab8
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504230805.MkmxQyas-lkp@intel.com/
 
-Best regards,
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/usbip/vhci_hcd.c:1349:2: error: call to undeclared function 'dma_set_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+         |         ^
+   drivers/usb/usbip/vhci_hcd.c:1349:2: note: did you mean 'xa_set_mark'?
+   include/linux/xarray.h:361:6: note: 'xa_set_mark' declared here
+     361 | void xa_set_mark(struct xarray *, unsigned long index, xa_mark_t);
+         |      ^
+>> drivers/usb/usbip/vhci_hcd.c:1349:27: error: call to undeclared function 'DMA_BIT_MASK'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+         |                                  ^
+   2 errors generated.
+
+
+vim +/dma_set_mask +1349 drivers/usb/usbip/vhci_hcd.c
+
+  1338	
+  1339	static int vhci_hcd_probe(struct platform_device *pdev)
+  1340	{
+  1341		struct vhci             *vhci = *((void **)dev_get_platdata(&pdev->dev));
+  1342		struct usb_hcd		*hcd_hs;
+  1343		struct usb_hcd		*hcd_ss;
+  1344		int			ret;
+  1345	
+  1346		usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
+  1347	
+  1348		/* Set the dma mask to support 64bit for vhci-hcd driver. */
+> 1349		dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+  1350	
+  1351		/*
+  1352		 * Allocate and initialize hcd.
+  1353		 * Our private data is also allocated automatically.
+  1354		 */
+  1355		hcd_hs = usb_create_hcd(&vhci_hc_driver, &pdev->dev, dev_name(&pdev->dev));
+  1356		if (!hcd_hs) {
+  1357			pr_err("create primary hcd failed\n");
+  1358			return -ENOMEM;
+  1359		}
+  1360		hcd_hs->has_tt = 1;
+  1361	
+  1362		/*
+  1363		 * Finish generic HCD structure initialization and register.
+  1364		 * Call the driver's reset() and start() routines.
+  1365		 */
+  1366		ret = usb_add_hcd(hcd_hs, 0, 0);
+  1367		if (ret != 0) {
+  1368			pr_err("usb_add_hcd hs failed %d\n", ret);
+  1369			goto put_usb2_hcd;
+  1370		}
+  1371	
+  1372		hcd_ss = usb_create_shared_hcd(&vhci_hc_driver, &pdev->dev,
+  1373					       dev_name(&pdev->dev), hcd_hs);
+  1374		if (!hcd_ss) {
+  1375			ret = -ENOMEM;
+  1376			pr_err("create shared hcd failed\n");
+  1377			goto remove_usb2_hcd;
+  1378		}
+  1379	
+  1380		ret = usb_add_hcd(hcd_ss, 0, 0);
+  1381		if (ret) {
+  1382			pr_err("usb_add_hcd ss failed %d\n", ret);
+  1383			goto put_usb3_hcd;
+  1384		}
+  1385	
+  1386		usbip_dbg_vhci_hc("bye\n");
+  1387		return 0;
+  1388	
+  1389	put_usb3_hcd:
+  1390		usb_put_hcd(hcd_ss);
+  1391	remove_usb2_hcd:
+  1392		usb_remove_hcd(hcd_hs);
+  1393	put_usb2_hcd:
+  1394		usb_put_hcd(hcd_hs);
+  1395		vhci->vhci_hcd_hs = NULL;
+  1396		vhci->vhci_hcd_ss = NULL;
+  1397		return ret;
+  1398	}
+  1399	
+
 -- 
-Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
