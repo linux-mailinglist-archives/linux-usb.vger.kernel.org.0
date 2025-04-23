@@ -1,119 +1,152 @@
-Return-Path: <linux-usb+bounces-23360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA0AA97F34
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 08:31:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21382A980C5
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 09:27:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56CC63BB70F
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 06:30:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6024417F76F
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 07:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD601DE4E7;
-	Wed, 23 Apr 2025 06:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66733268689;
+	Wed, 23 Apr 2025 07:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="Ejyr6aE0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WJsYG4G5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6469A13C3F6
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 06:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001EB268C6D
+	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 07:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745389864; cv=none; b=gmKTIq0Yvg8yBBBjnLkB/jZX51IGAIjKhWzVsLzDY6DyQkpO6igMy1rqhSmqOwuYOyneJpruyOEwy+ukEzzBL3i+fD3TMbZ5bwpfUA+zI9FLYgkSxawoGK69xygvlb78/4tlnX5501sTVXOGQnN8xOj07OSIILxyaHTQhDElsS0=
+	t=1745393223; cv=none; b=p45sBwc/TgK+MWAnzOxJ2UhLpTFh2if/gK4toa9l0sHX1B773MEoiwGqwNfSVq410WY2eWT293EGnFBcT7/1aXSipzn/1/0yxX0PLYmWPzngNsR/1MUrrAeAsgIykJaEzG7YQNKPsDbrMANj0IK3bjXCTfKvkpWbjglGSceW7NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745389864; c=relaxed/simple;
-	bh=A/vPUqVhhl8PwVDrB4H+TWVYAvG7AiTYpf7XAQkbNUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noIkAb6zAtSNEEwx9McAe4qnZlwEQTSMXAi8JQEuUHS6gZNDJEDdU5obKCQzGdWdzqaLjNh8LY/eZNTl8tlGSItZ1mr3RwpEemeZT+v9GwcgHcp8a1KFsz5rEAR3Q4Yx51y7sirus4xR23kGIXqd0wnOlbAkraInUqD1ErwRfhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=Ejyr6aE0; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from localhost (unknown [10.10.165.7])
-	by mail.ispras.ru (Postfix) with ESMTPSA id ACFE25275407;
-	Wed, 23 Apr 2025 06:30:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru ACFE25275407
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1745389848;
-	bh=WRlaGAiE67RbUfRrqw8QVY0xVjkAHaAAP8HjVTImFqM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ejyr6aE0tC9GxKHZxnhlHndt80xI0oNt7E9G8CytHPKYFKOe5wju5fW0/qxzMpebJ
-	 JBhX/SqfMpB1dUReETD9vrkrjTPhOEvOR9RX68ooqGYb0dlz5FWYIvFIm87P+usQU7
-	 ef9zZB3e+laPPnHjMDY0cxxkatHPK3BqW5aGtb3s=
-Date: Wed, 23 Apr 2025 09:30:48 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: "Alexey V. Vissarionov" <gremlin@altlinux.org>
-Cc: Rui Miguel Silva <rui.silva@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] usb: isp1760: increase buffer size to avoid overflow
-Message-ID: <rdsyrsjl67rjhkuatkaggnrfcruvzcxlwnfb6jgqgh5ninlnmj@hy2ofl7jlhei>
-References: <20250422230000.GA857@altlinux.org>
+	s=arc-20240116; t=1745393223; c=relaxed/simple;
+	bh=Jrbw0OKpQbJ1dFid4p4N4XtPsI8/qSLnEpsHW9bCCKg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JhZawhuxbsFYyaRCfWCy6ty9/YmQ1TkKl1AaB1GCifoQLlj8DBM6d3AER0qW4h/EL3I/6hDJxkuUbgy/ilPTUGHXMUSK+/gpk6tVfygaXKOOyt9NuhsPtDTMj26unuHtuzZIK2dBb/6IOQlmTeK5f8nbvE+cImGql1y+iwHbQXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WJsYG4G5; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cfebc343dso50853185e9.2
+        for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 00:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745393218; x=1745998018; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
+        b=WJsYG4G5Le7NxcMduHBEdH1Cuadj5L7FAZjqaEd5mYiMF/Qi6ppXkTUuDDk22WovVY
+         O7B5DQAXeTfnr8i6cS+KbgmElCDTMFYIy2ECwPXpJaB3JeoMNYQZ/2ll4krvLhDrl0ry
+         XWWTUjEF+7PJnsDC+7ryWRsgboKsQww8oCHwjnyrsKXY0gIeOF3zFgeZ4kyZGKIkcSA/
+         8PxE1bS7/EyDFy8xpBfc+BpcJI9Cro2kEeAw/dG8GeFSA4Ky0taUyAn5Rs/tCD4hcZAp
+         J/CUYtr3Rlwo+y9zOka/9al+MhVV66wL+2jOPfBCVsxlMCkn7Y45wIQSBrCGS1BpJrx8
+         qsYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745393218; x=1745998018;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
+        b=ds7Ox9GFWcgSCZBp1Lyvos++ja520SvKzTa1OJ2S3hf3WSj3aj3ubJZCsa4KaDalJK
+         AA4B4Z84v7wW82FTgbOoE0KWvB4b6ZtaXwtclZILoxpS/l/xjwjKYTEgbo+JPEhGL+OG
+         puzXAndK8KurVjgHxHqoG1Y8CmEcc3NF7oWztkOmaErXw8Y7Xh+RkQBeS+h3DTIraG0d
+         hmpByHa7xzVdfPz3rQvcxKgc/pV4OdxL/1k1i8Tvwh5aDDxUv2Cx5fKn5K99Gm2b4Usd
+         3v0e8ZLOG4HebSbCaIsDcq73nXaCgulDTdamsJBLNHMxugQNuOWBiAdy44dmv3/32oyn
+         3ewA==
+X-Forwarded-Encrypted: i=1; AJvYcCXp649jIruSKBa8C9dBz/rlbAbE0lthhONkVxscq9DWvucHl5PdQbAkZfnEslm5Aeji1AuvkZ1urZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzLgicc5ut0tnNF1O0xdCM4qinBxN/mTC0zMG1t5FxBa/+tRTG
+	ZgftwkBtkp8NbVwNmDm0Doq2xTqLJmR+HYf+FGdv5VhTXKcUD/aHmoTcjAD5Pwg=
+X-Gm-Gg: ASbGncuJkjzF25PsXKZ381/2W1b4YVdsy+ikiwjOVz+9cCPY12OVqKISrNBvBEa2Lt9
+	PjaLp8mLAnVzWedW/QcFDSQTn6FH1NXtasQ49X79MEy+ROsOQh97A1ec76butD9NM3LhUsg7X14
+	fP9SvS6h4YetUr8uaxGZOdhkA7zvf5SmZXmSIVrsCS8TQIkHmhjywN8uXNF+TJk29CwDQfr2ZbX
+	ZzJXXF2jvCQYWsgnHUwV4gmdc29tZVmIIcpk2hh4cqqlD6SGVlO971HBOgm7USLmOxkdXdcBcrl
+	UkFX2Mu8UyTGg2kF3uzE2a4ahT1fXyvgtfSx9TCZUb4rO2yYNnaXed+QeZOLF2tfnTnqcB1dEEi
+	9yGpaeDFxqDEB53rAOA==
+X-Google-Smtp-Source: AGHT+IGQjZAyp9xHW8ASlQKrR9fCiGMeMbCakgAb3SkKNca/+Rt6CnnTlRW63K73V1hHmlOCRLIMvA==
+X-Received: by 2002:a05:600c:1c8f:b0:43c:fe5e:f040 with SMTP id 5b1f17b1804b1-4406abffc5emr134620725e9.23.1745393218300;
+        Wed, 23 Apr 2025 00:26:58 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:2835:c2f4:c226:77dd? ([2a01:e0a:3d9:2080:2835:c2f4:c226:77dd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44092db2bd5sm15015645e9.26.2025.04.23.00.26.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 00:26:57 -0700 (PDT)
+Message-ID: <283096ad-ae1b-42b8-8312-b192f735fc80@linaro.org>
+Date: Wed, 23 Apr 2025 09:26:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250422230000.GA857@altlinux.org>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
+ Google Pixel 4a
+To: Jens Reidel <adrian@mainlining.org>, Danila Tikhonov <danila@jiaxyga.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
+ netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+ linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-hardening@vger.kernel.org, linux@mainlining.org,
+ ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
+References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+ <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 23. Apr 02:00, Alexey V. Vissarionov wrote:
-> isp1760_field_set() may access the udc->fields array beyond the size
-> of DC_FIELD_MAX up to HC_FIELD_MAX, which is (now) bigger. Increase
-> the buffer size to max(DC_FIELD_MAX,HC_FIELD_MAX) to avoid possible
-> overflow.
+Hi,
 
-Where exactly does the problem manifest? There is no comprehensible bug
-description here from you..
+On 23/04/2025 00:07, Jens Reidel wrote:
+> Hi everyone,
+> 
+> apologies for the mess this created. Danila's mail provider ratelimited him halfway through sending the series and the attempt to re-try sending the second half an hour later ended up with a new message ID (I think due to not using --in-reply-to).
+> He asked me to let you know that this will be resolved later and the whole series will be re-sent once the problems are resolved.
 
-Though I guess isp1760_set_pullup() call site is concerned?
+The b4 web submission is a great alternative when the mail provider is rate limited:
+https://b4.docs.kernel.org/en/latest/contributor/send.html#web-endpoint
 
-> @@ -267,6 +267,8 @@ enum isp176x_device_controller_fields {
->  	DC_FIELD_MAX,
->  };
->  
-> +#define	FIELD_MAX	(DC_FIELD_MAX>HC_FIELD_MAX?DC_FIELD_MAX:HC_FIELD_MAX)
-> +
+Neil
 
-Please make sure to run your changes through checkpatch.pl and the
-compiler first. They are both not happy at the moment.
+> 
+> Best regards,
+> Jens
 
-
-In file included from drivers/usb/isp1760/isp1760-hcd.h:8,
-                 from drivers/usb/isp1760/isp1760-core.h:21,
-                 from drivers/usb/isp1760/isp1760-core.c:24:
-drivers/usb/isp1760/isp1760-regs.h:270:9: warning: ‘FIELD_MAX’ redefined
-  270 | #define FIELD_MAX       (DC_FIELD_MAX>HC_FIELD_MAX?DC_FIELD_MAX:HC_FIELD_MAX)
-      |         ^~~~~~~~~
-In file included from ./include/linux/fortify-string.h:5,
-                 from ./include/linux/string.h:392,
-                 from ./include/linux/bitmap.h:13,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/tlbbatch.h:5,
-                 from ./include/linux/mm_types_task.h:17,
-                 from ./include/linux/sched.h:38,
-                 from ./include/linux/delay.h:13,
-                 from drivers/usb/isp1760/isp1760-core.c:15:
-./include/linux/bitfield.h:86:9: note: this is the location of the previous definition
-   86 | #define FIELD_MAX(_mask)                                                \
-      |         ^~~~~~~~~
-drivers/usb/isp1760/isp1760-regs.h:270:38: warning: comparison between ‘enum isp176x_device_controller_fields’ and ‘enum isp176x_host_controller_fields’ [-Wenum-compare]
-  270 | #define FIELD_MAX       (DC_FIELD_MAX>HC_FIELD_MAX?DC_FIELD_MAX:HC_FIELD_MAX)
-      |                                      ^
-drivers/usb/isp1760/isp1760-hcd.h:53:41: note: in expansion of macro ‘FIELD_MAX’
-   53 |         struct regmap_field     *fields[FIELD_MAX];
-      |                                         ^~~~~~~~~
-drivers/usb/isp1760/isp1760-regs.h:270:38: warning: comparison between ‘enum isp176x_device_controller_fields’ and ‘enum isp176x_host_controller_fields’ [-Wenum-compare]
-  270 | #define FIELD_MAX       (DC_FIELD_MAX>HC_FIELD_MAX?DC_FIELD_MAX:HC_FIELD_MAX)
-      |                                      ^
-drivers/usb/isp1760/isp1760-udc.h:72:37: note: in expansion of macro ‘FIELD_MAX’
-   72 |         struct regmap_field *fields[FIELD_MAX];
-      |                                     ^~~~~~~~~
-
-
-Thanks!
 
