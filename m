@@ -1,152 +1,195 @@
-Return-Path: <linux-usb+bounces-23361-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23362-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21382A980C5
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 09:27:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D463A981A1
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 09:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6024417F76F
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 07:27:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347FD3AF244
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 07:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66733268689;
-	Wed, 23 Apr 2025 07:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D60926B978;
+	Wed, 23 Apr 2025 07:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WJsYG4G5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="marZN6GE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001EB268C6D
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 07:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D79F26C385;
+	Wed, 23 Apr 2025 07:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745393223; cv=none; b=p45sBwc/TgK+MWAnzOxJ2UhLpTFh2if/gK4toa9l0sHX1B773MEoiwGqwNfSVq410WY2eWT293EGnFBcT7/1aXSipzn/1/0yxX0PLYmWPzngNsR/1MUrrAeAsgIykJaEzG7YQNKPsDbrMANj0IK3bjXCTfKvkpWbjglGSceW7NE=
+	t=1745394662; cv=none; b=OSnImpTYkmrs6e7nSabrdzSjgdC0MPhAP+fh/VwvXvXtP1d2bL9f73mUSYoK0vwVHM6NmUJc4bds9wgEhyAhlUd4uY4suxSdfhwiXJ2I3aJaTQjNtrGAnIpjIX8XUDlIErew5ZKdBs4ZCLIsZvIIeQSVxTj72esm+zBldIpmTcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745393223; c=relaxed/simple;
-	bh=Jrbw0OKpQbJ1dFid4p4N4XtPsI8/qSLnEpsHW9bCCKg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JhZawhuxbsFYyaRCfWCy6ty9/YmQ1TkKl1AaB1GCifoQLlj8DBM6d3AER0qW4h/EL3I/6hDJxkuUbgy/ilPTUGHXMUSK+/gpk6tVfygaXKOOyt9NuhsPtDTMj26unuHtuzZIK2dBb/6IOQlmTeK5f8nbvE+cImGql1y+iwHbQXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WJsYG4G5; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cfebc343dso50853185e9.2
-        for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 00:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745393218; x=1745998018; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
-        b=WJsYG4G5Le7NxcMduHBEdH1Cuadj5L7FAZjqaEd5mYiMF/Qi6ppXkTUuDDk22WovVY
-         O7B5DQAXeTfnr8i6cS+KbgmElCDTMFYIy2ECwPXpJaB3JeoMNYQZ/2ll4krvLhDrl0ry
-         XWWTUjEF+7PJnsDC+7ryWRsgboKsQww8oCHwjnyrsKXY0gIeOF3zFgeZ4kyZGKIkcSA/
-         8PxE1bS7/EyDFy8xpBfc+BpcJI9Cro2kEeAw/dG8GeFSA4Ky0taUyAn5Rs/tCD4hcZAp
-         J/CUYtr3Rlwo+y9zOka/9al+MhVV66wL+2jOPfBCVsxlMCkn7Y45wIQSBrCGS1BpJrx8
-         qsYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745393218; x=1745998018;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
-        b=ds7Ox9GFWcgSCZBp1Lyvos++ja520SvKzTa1OJ2S3hf3WSj3aj3ubJZCsa4KaDalJK
-         AA4B4Z84v7wW82FTgbOoE0KWvB4b6ZtaXwtclZILoxpS/l/xjwjKYTEgbo+JPEhGL+OG
-         puzXAndK8KurVjgHxHqoG1Y8CmEcc3NF7oWztkOmaErXw8Y7Xh+RkQBeS+h3DTIraG0d
-         hmpByHa7xzVdfPz3rQvcxKgc/pV4OdxL/1k1i8Tvwh5aDDxUv2Cx5fKn5K99Gm2b4Usd
-         3v0e8ZLOG4HebSbCaIsDcq73nXaCgulDTdamsJBLNHMxugQNuOWBiAdy44dmv3/32oyn
-         3ewA==
-X-Forwarded-Encrypted: i=1; AJvYcCXp649jIruSKBa8C9dBz/rlbAbE0lthhONkVxscq9DWvucHl5PdQbAkZfnEslm5Aeji1AuvkZ1urZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzLgicc5ut0tnNF1O0xdCM4qinBxN/mTC0zMG1t5FxBa/+tRTG
-	ZgftwkBtkp8NbVwNmDm0Doq2xTqLJmR+HYf+FGdv5VhTXKcUD/aHmoTcjAD5Pwg=
-X-Gm-Gg: ASbGncuJkjzF25PsXKZ381/2W1b4YVdsy+ikiwjOVz+9cCPY12OVqKISrNBvBEa2Lt9
-	PjaLp8mLAnVzWedW/QcFDSQTn6FH1NXtasQ49X79MEy+ROsOQh97A1ec76butD9NM3LhUsg7X14
-	fP9SvS6h4YetUr8uaxGZOdhkA7zvf5SmZXmSIVrsCS8TQIkHmhjywN8uXNF+TJk29CwDQfr2ZbX
-	ZzJXXF2jvCQYWsgnHUwV4gmdc29tZVmIIcpk2hh4cqqlD6SGVlO971HBOgm7USLmOxkdXdcBcrl
-	UkFX2Mu8UyTGg2kF3uzE2a4ahT1fXyvgtfSx9TCZUb4rO2yYNnaXed+QeZOLF2tfnTnqcB1dEEi
-	9yGpaeDFxqDEB53rAOA==
-X-Google-Smtp-Source: AGHT+IGQjZAyp9xHW8ASlQKrR9fCiGMeMbCakgAb3SkKNca/+Rt6CnnTlRW63K73V1hHmlOCRLIMvA==
-X-Received: by 2002:a05:600c:1c8f:b0:43c:fe5e:f040 with SMTP id 5b1f17b1804b1-4406abffc5emr134620725e9.23.1745393218300;
-        Wed, 23 Apr 2025 00:26:58 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:2835:c2f4:c226:77dd? ([2a01:e0a:3d9:2080:2835:c2f4:c226:77dd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44092db2bd5sm15015645e9.26.2025.04.23.00.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 00:26:57 -0700 (PDT)
-Message-ID: <283096ad-ae1b-42b8-8312-b192f735fc80@linaro.org>
-Date: Wed, 23 Apr 2025 09:26:56 +0200
+	s=arc-20240116; t=1745394662; c=relaxed/simple;
+	bh=eSDL4UD3GxUACgoaJ3ojaja+aDcRGwvgui4UfPswGxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hU8IaOPV8N8n/XpKD+DkB62IkaO+bQ3FN0No5D/nsG7gRwB+xAY8QSipphX2HHg0PrGITz53s3wb2HAO/sO0ppYYXXc7Xio0sQtFiel5ZVJhBzSS2QyFPMPBInLGC1HLzHltCt5xCMBQKuP2aXjXux6KsOmP3IgWrnL0PbBJMyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=marZN6GE; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745394660; x=1776930660;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eSDL4UD3GxUACgoaJ3ojaja+aDcRGwvgui4UfPswGxk=;
+  b=marZN6GEBbIq8/aAk5n9MU2AIOs64qIcJhde7frjVxjMRYsek69hAUuk
+   A1U607RBcm2aUc3Ti39OhZ4l1XzvHtOG0sbH/JGwoq+pmcH7wD99QoX9T
+   +PDNPFCgqkWoUT2SBi/uZ+gCzTNTQjuC8wIyGfs/mtRmpDkJyMKm6QVDo
+   F/SStd1fa4WJaHw9ylp+Wsu/yZ9fIapUdWAEAOkfzB/MXL8xzNSMxUgNX
+   u0BEdYcBis3WZH3e3qObjOhzU0KzgoVCeaOS8i3qkUoKT0MNigMNDAWHw
+   VKbPxebnkXS9rGG5ustWmCVlQ/g4v4J2Nfc+fiDzLgw4GrkmfTBbbYA8o
+   g==;
+X-CSE-ConnectionGUID: ENirpNcdTIa7BFkRGHHGww==
+X-CSE-MsgGUID: xtjUpMjERD2l2JR41tzvBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="57633090"
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="57633090"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 00:50:59 -0700
+X-CSE-ConnectionGUID: Vpx8VSe3T52/aLM84GJF1w==
+X-CSE-MsgGUID: 2l55tajLT6KfLUi5J1KMcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="137027839"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 23 Apr 2025 00:50:57 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u7Ush-0001hT-0H;
+	Wed, 23 Apr 2025 07:50:55 +0000
+Date: Wed, 23 Apr 2025 15:50:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zongmin Zhou <min_halo@163.com>, skhan@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
+	i@zenithal.me, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, shuah@kernel.org,
+	valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+Message-ID: <202504231526.8kjh2iap-lkp@intel.com>
+References: <20250422063409.607859-1-min_halo@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
- Google Pixel 4a
-To: Jens Reidel <adrian@mainlining.org>, Danila Tikhonov <danila@jiaxyga.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
- netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
- linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-hardening@vger.kernel.org, linux@mainlining.org,
- ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
-References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
- <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422063409.607859-1-min_halo@163.com>
 
-Hi,
+Hi Zongmin,
 
-On 23/04/2025 00:07, Jens Reidel wrote:
-> Hi everyone,
-> 
-> apologies for the mess this created. Danila's mail provider ratelimited him halfway through sending the series and the attempt to re-try sending the second half an hour later ended up with a new message ID (I think due to not using --in-reply-to).
-> He asked me to let you know that this will be resolved later and the whole series will be re-sent once the problems are resolved.
+kernel test robot noticed the following build errors:
 
-The b4 web submission is a great alternative when the mail provider is rate limited:
-https://b4.docs.kernel.org/en/latest/contributor/send.html#web-endpoint
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.15-rc3 next-20250422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Neil
+url:    https://github.com/intel-lab-lkp/linux/commits/Zongmin-Zhou/usbip-set-the-dma-mask-to-64bit-default-for-vhci-driver/20250422-143646
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250422063409.607859-1-min_halo%40163.com
+patch subject: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250423/202504231526.8kjh2iap-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504231526.8kjh2iap-lkp@intel.com/reproduce)
 
-> 
-> Best regards,
-> Jens
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504231526.8kjh2iap-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   drivers/usb/usbip/vhci_hcd.c: In function 'vhci_hcd_probe':
+>> drivers/usb/usbip/vhci_hcd.c:1349:9: error: implicit declaration of function 'dma_set_mask'; did you mean 'xa_set_mark'? [-Wimplicit-function-declaration]
+    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+         |         ^~~~~~~~~~~~
+         |         xa_set_mark
+>> drivers/usb/usbip/vhci_hcd.c:1349:34: error: implicit declaration of function 'DMA_BIT_MASK'; did you mean 'BIT_MASK'? [-Wimplicit-function-declaration]
+    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+         |                                  ^~~~~~~~~~~~
+         |                                  BIT_MASK
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=n] && DRM_BRIDGE [=n] && OF [=y]
+   Selected by [m]:
+   - UCSI_HUAWEI_GAOKUN [=m] && USB_SUPPORT [=y] && TYPEC [=m] && TYPEC_UCSI [=m] && EC_HUAWEI_GAOKUN [=m]
+
+
+vim +1349 drivers/usb/usbip/vhci_hcd.c
+
+  1338	
+  1339	static int vhci_hcd_probe(struct platform_device *pdev)
+  1340	{
+  1341		struct vhci             *vhci = *((void **)dev_get_platdata(&pdev->dev));
+  1342		struct usb_hcd		*hcd_hs;
+  1343		struct usb_hcd		*hcd_ss;
+  1344		int			ret;
+  1345	
+  1346		usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
+  1347	
+  1348		/* Set the dma mask to support 64bit for vhci-hcd driver. */
+> 1349		dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+  1350	
+  1351		/*
+  1352		 * Allocate and initialize hcd.
+  1353		 * Our private data is also allocated automatically.
+  1354		 */
+  1355		hcd_hs = usb_create_hcd(&vhci_hc_driver, &pdev->dev, dev_name(&pdev->dev));
+  1356		if (!hcd_hs) {
+  1357			pr_err("create primary hcd failed\n");
+  1358			return -ENOMEM;
+  1359		}
+  1360		hcd_hs->has_tt = 1;
+  1361	
+  1362		/*
+  1363		 * Finish generic HCD structure initialization and register.
+  1364		 * Call the driver's reset() and start() routines.
+  1365		 */
+  1366		ret = usb_add_hcd(hcd_hs, 0, 0);
+  1367		if (ret != 0) {
+  1368			pr_err("usb_add_hcd hs failed %d\n", ret);
+  1369			goto put_usb2_hcd;
+  1370		}
+  1371	
+  1372		hcd_ss = usb_create_shared_hcd(&vhci_hc_driver, &pdev->dev,
+  1373					       dev_name(&pdev->dev), hcd_hs);
+  1374		if (!hcd_ss) {
+  1375			ret = -ENOMEM;
+  1376			pr_err("create shared hcd failed\n");
+  1377			goto remove_usb2_hcd;
+  1378		}
+  1379	
+  1380		ret = usb_add_hcd(hcd_ss, 0, 0);
+  1381		if (ret) {
+  1382			pr_err("usb_add_hcd ss failed %d\n", ret);
+  1383			goto put_usb3_hcd;
+  1384		}
+  1385	
+  1386		usbip_dbg_vhci_hc("bye\n");
+  1387		return 0;
+  1388	
+  1389	put_usb3_hcd:
+  1390		usb_put_hcd(hcd_ss);
+  1391	remove_usb2_hcd:
+  1392		usb_remove_hcd(hcd_hs);
+  1393	put_usb2_hcd:
+  1394		usb_put_hcd(hcd_hs);
+  1395		vhci->vhci_hcd_hs = NULL;
+  1396		vhci->vhci_hcd_ss = NULL;
+  1397		return ret;
+  1398	}
+  1399	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
