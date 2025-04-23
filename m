@@ -1,332 +1,113 @@
-Return-Path: <linux-usb+bounces-23375-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23377-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B61E5A98990
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 14:18:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E8DBA989EF
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 14:41:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 995831B669F8
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 12:18:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FB28440B4F
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Apr 2025 12:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1291621B8F2;
-	Wed, 23 Apr 2025 12:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89FBD26B949;
+	Wed, 23 Apr 2025 12:41:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Si+5gSsH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SDH4MpuZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C326C1FF1A0
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 12:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F2419AD8B;
+	Wed, 23 Apr 2025 12:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745410702; cv=none; b=KTH2LDMN8N2Ak1pIu1C7O/Hl7Ah5VTzTlOPCpnMtBHVnADx6ut77uaLdpSdt47LHoLc93aiSKT+80K7B789TPTY+oc6enuxLkRNo6PWPN1OQUNHLMwOBO0My833Kr7Pad4GMbzqu7MV5bHAs0iAkLPoIa2WPvc95vQx7RBnwqyo=
+	t=1745412073; cv=none; b=REwxqBWcyayAsimcgGxXdw3JVW9fXAcuQqMzTmDNaDZQrx/JXdkd/4aUJzT/AAf3MgYdg/rG5qfpm6fUbsOpSw637s8tSbYB7TJeFLqKbB4e/tP+/nLcmYrx7vxy9JGyZ06DPj1W8rKHeBd8iiE4JO1XMnud2i4rdPo6Ce+RndQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745410702; c=relaxed/simple;
-	bh=tCHjkL1SLgoL2j2PMqkiNHKmGBzODwMfabfskxgGLgY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hc9I7L7hJ4SJA/ipHKbhgD2sfGccQMFOQtGH7LA7VvWBtRGSOIBvsNNu4w3oCiiwlMDbmPuC9xCyZPD+xloLvc5fDdTDLL4p+ZXzzIGLf3JmHs5rkQWPDtaa6bcXDceXCjJd8b4Qq9JFcB9XtOsnPjMNGU4yyljiCUmX2iy7cik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Si+5gSsH; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NAdrAU022328
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 12:18:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ioGfs5MtgxexvBjcj4mXKq9ldJm50YBOXelQWnDDA+w=; b=Si+5gSsH5Sq4CR5G
-	Zobx6D0+awRftNyIeqLD7wIQskcuztJErV9gBIQp2+U6xijczIIGrGoV3uMuvabf
-	cR2Xq8lPy7e8jzNEHDBW+Og4hF5TZymj9fK/dEZzsIqvbifYODTJbgyUohcQ64+u
-	0X4uPBqGFeeHEAdZ5+1hXskww8AEFCL86Squ1tM1exBkLb5iGs0PXfZdkADjR3M6
-	xq1FhOyRQWGM1oeaQTo0L0a/yBRvylt0hKZKgfCANbK3gwS0ayoj1gl7bPDuhqPG
-	LxAOgDlMO66Wd5eF2yvBd/PwJx6SGqzIu3vcrZc2MrGFEWvmTNoGel42tBrLw6u7
-	lJVAvQ==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh12242-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 12:18:18 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c545ac340aso37040785a.1
-        for <linux-usb@vger.kernel.org>; Wed, 23 Apr 2025 05:18:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745410698; x=1746015498;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ioGfs5MtgxexvBjcj4mXKq9ldJm50YBOXelQWnDDA+w=;
-        b=rXVoKvKN72BbUTZwYDFI2tiGV9xaSMgRzzI7Orlvq9d7ctCQSaY4VZzYkWVEF0wwqP
-         J53dm81y2xe9rMNUvQO+l7fvjNHAZPGcUkfqm0eG7fdgeS5iGhTymPoohFAOcp/X/5ec
-         JPqMqkiVHmubiZrv+OidjX4QU2aR8aZN9HIduD64jyez0tFkLQb1fI7bfb1crBarNPoj
-         6KWMaZtug9qTr1CCn7HXPYLi2U0NMc5QAuwX+xWDWe2A9YfsAQ6HFbJbaLRrHnhIq/LG
-         P0Xn4TRnO8TzidH++jREMqHyd05rH7TZzdZvpweue/KMrpnAl9Hw1MbDx0pShdkAD24P
-         Fl/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWjWyENqha9wzYupGVkUIMk+x/TVMBv03Lg9LOwJCYkhmEuppNKys4H8ezVK/vsUSaxMG3p2SpITfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywmu+dw3fxE57oK8e3iSbSx2UOi/JmWCzcqdWThHUggtIlqoefd
-	Y61OMOrU5+eS9ou3j6xBVNJzVQCBsk5+S0WdyRPveiCCGd+p24ysAuvnEp24vQQa5KmzKDFmrRE
-	TpleFVymCmnLFw8DYbmUy7E0Af4Grd6AYG3sHnWkfCPypkvwwlZU59msWfjI=
-X-Gm-Gg: ASbGncvkXxHdmuqgVh7AuM6GligLuMcrWSHejA774ShAMQfGFLQ0rEhuJSfIFaXncEN
-	jV48hvF4JTUua97UtQT+EIH65NIpp6NGnX6JTFOdtsHB+7wAupePtMeawfMAsIQ0CuA7rvFeR+Z
-	WuLlrkGu3v9fJkNCopILicPJGdNdaAN28TWEaW0ew6lfqKFQcMqHsEeFMAWM1m5pWKvLKaLKqTA
-	sCBtaCX38o+ShjuWByhmOhlhyEUFj2cHLOcnzhvpUq2AVG+ZAE4l1rzAQ+a3HAqEkUTDpQL3K1K
-	gnzgqe8INsPvnpzL1G6hFbGGsKOHsovMmqcxEG4Zy9ESnJsUHBdN7l+NGTRfXl/wQUU=
-X-Received: by 2002:a05:620a:2492:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7c94d266c35mr148953885a.7.1745410697605;
-        Wed, 23 Apr 2025 05:18:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEav1ZFFMWH2+h22EnPEjP1DswVCKNGIgBpCwJp2VazcB6M7t8R/W/1xgUW9/XgzClpBqzW6A==
-X-Received: by 2002:a05:620a:2492:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7c94d266c35mr148944985a.7.1745410697019;
-        Wed, 23 Apr 2025 05:18:17 -0700 (PDT)
-Received: from [192.168.65.183] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6efadd51sm817256866b.179.2025.04.23.05.18.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 05:18:16 -0700 (PDT)
-Message-ID: <e0a61158-6278-45bc-bc5c-fe35227bdbf1@oss.qualcomm.com>
-Date: Wed, 23 Apr 2025 14:18:05 +0200
+	s=arc-20240116; t=1745412073; c=relaxed/simple;
+	bh=vuPHSXDYGJIDkCqEVb7xzubmHAFjmIAu6deVCTDXe5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zt/mBxGeStUmVYx1lXlNMam3e6mjsqs7n1w2wOm/ZYaJ2HE4dNBk8hsaBSvzgAJOP0RuswKuniRsaHLL9iXpVOs1nbjLXnyBiy5Z1X6uPzZr4t6C9LjCvX8jdAdT/p19OzcFLRsvHmrcDDmS7Ek4QDOZ17WwFbPfrIXT6UdkCs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SDH4MpuZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0FC1C4CEE2;
+	Wed, 23 Apr 2025 12:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745412072;
+	bh=vuPHSXDYGJIDkCqEVb7xzubmHAFjmIAu6deVCTDXe5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SDH4MpuZmgQybX1eY37H/yKYnZhDg6DAis3McprvezR9yjHdpSgM2sn1I2aE9x1AB
+	 xIGpL0+YBtK5II54K4yMp6WWpNcX7HxtM0+FHw4xhtzqVF22nFmM0ZOCQffQ9ZvIIW
+	 zlrtKxncSH83B/Y3id0o3PCZ7zXwDPhkv7LnjhtVfncL3y1c3h/j6rCosB5gqlu2Au
+	 Jpxy+N29g3AE6P+Sl9Nh6Sohr9boBRizf1CkAHWtFKCe+hiBmTV/vlTn3iZhmWyusC
+	 Sa4RlgUGvnkE/aLBq2ArHOWsV8fYIV6i1BWi5hQeY2olu0dwCtQLZ07TgMimOk7SJr
+	 72ekoDy3dr1Bw==
+Date: Wed, 23 Apr 2025 07:41:10 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] usb: dwc3: qcom: Fix error handling in probe
+Message-ID: <al4hz5pukil2mc263cyzq5atm4gdjn6v2kdanayhd7edfueidu@obr7h7365w2w>
+References: <aAijmfAph0FlTqg6@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 30/33] arm64: dts: qcom: Add dtsi for Snapdragon
- 730/730g/732g (SM7150) SoCs
-To: Danila Tikhonov <danila@jiaxyga.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
- <linux@roeck-us.net>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Bjorn Andersson
- <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S . Miller"
- <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alex Elder <elder@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>, Kees Cook <kees@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        David Wronek <david@mainlining.org>,
-        Jens Reidel <adrian@mainlining.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-hardening@vger.kernel.org, linux@mainlining.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20250422213137.80366-1-danila@jiaxyga.com>
- <20250422213137.80366-14-danila@jiaxyga.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250422213137.80366-14-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 7Eg5l-fRxF8BKGaH_ZULePIO8EPn3EEX
-X-Authority-Analysis: v=2.4 cv=OY6YDgTY c=1 sm=1 tr=0 ts=6808da8a cx=c_pps a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=OuZLqq7tAAAA:8 a=7ibcVnAUAAAA:8
- a=uu6HZSQSBnFQn7oXV_IA:9 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=cvBusfyB2V15izCimMoJ:22 a=AKGiAy9iJ-JzxKVHQNES:22 a=HywIFdX19-EX8Ph82vJO:22
-X-Proofpoint-ORIG-GUID: 7Eg5l-fRxF8BKGaH_ZULePIO8EPn3EEX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA4NSBTYWx0ZWRfX3fAYlOIqLjnm HUZvmMU1NLbJBcH+bD6m94S41oFzyjEG7C71zQOA6UmX1c0dhB3wA4FLUmZpO9Yzg9nmE7Y0o3z J3554nqfQZrSMb3EXQ/joWJuMa5IpqmVtS+t5kLp8pAnmjTm9GXse3tFYBNzf2OeHShHSRQLs7Y
- nAly0tIuyCv3XkTEOBOqQmsCycFG7iB0lAII+1HQxYMo6vPCKimdigzWQq1U5BWzgjOAqbWsFoA Rb+Y75vmFONH79OAd6Dhrh9p69r0mZoR9dGgQIPldoUViczEK5ROYjS1AU4O6Sbkef8GjT837LA 1HDyqrYCCjpxjtuL0O+CWHZYjzdtpSpa/kyczkW+n16Nw+wGhRpZWPuUAMjvoVBoNBXcP6ntWFP
- U0onDjqpLVg+KXVUzVz3ask8WcqM4zPMk3dkpPrxbrhUx0p8FKT3pOYUH4mzyr2xfam1JeXP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
- definitions=2025-04-23_07,2025-04-22_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=565 phishscore=0 priorityscore=1501 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504230085
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aAijmfAph0FlTqg6@stanley.mountain>
 
-On 4/22/25 11:31 PM, Danila Tikhonov wrote:
-> Add base dtsi for SM7150-AA/SM7150-AB/SM7150-AC SoCs
+On Wed, Apr 23, 2025 at 11:23:53AM +0300, Dan Carpenter wrote:
+> There are two issues:
+> 1) Return -EINVAL if platform_get_resource() fails.  Don't return
+>    success.
+> 2) The devm_ioremap() function doesn't return error pointers, it returns
+>    NULL.  Update the check.
 > 
-> Co-developed-by: David Wronek <david@mainlining.org>
-> Signed-off-by: David Wronek <david@mainlining.org>
-> Co-developed-by: Jens Reidel <adrian@mainlining.org>
-> Signed-off-by: Jens Reidel <adrian@mainlining.org>
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> Fixes: 1881a32fe14d ("usb: dwc3: qcom: Transition to flattened model")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+
+Regards,
+Bjorn
+
 > ---
-
-[...]
-
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "qcom,kryo470";
-
-Please split this into Kryo 470 silver and gold, with the former being
-based on CA55 and the latter on CA76
-
-[...]
-
-> +	pmu-a55 {
-> +		compatible = "arm,cortex-a55-pmu";
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	pmu-a76 {
-> +		compatible = "arm,cortex-a78-pmu";
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-
-Please update this, mimicking 
-
-2c06e0797c32 ("arm64: dts: qcom: sm8650: add PPI interrupt partitions for the ARM PMUs")
-
-> +
-> +	psci {
-> +		compatible = "arm,psci-1.0";
-> +		method = "smc";
-> +
-> +		cpu_pd0: power-domain-cpu0 {
-> +			#power-domain-cells = <0>;
-> +			power-domains = <&cluster_pd>;
-> +			domain-idle-states = <&little_cpu_sleep_0
-> +					      &little_cpu_sleep_1>;
-
-<&foo>,
-<&foo2>;
-
-because they are phandles to separate things - DTC treats them equally
-though..
-
-[...]
-
-> +				interconnects = <&aggre1_noc MASTER_QUP_0 QCOM_ICC_TAG_ALWAYS
-> +						 &config_noc SLAVE_QUP_0 QCOM_ICC_TAG_ALWAYS>,
-> +						<&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ALWAYS
-> +						 &config_noc SLAVE_QUP_0 QCOM_ICC_TAG_ALWAYS>,
-
-Paths involving AMPSS_M0 (the cpu endpoint) should be ACTIVE_ONLY,
-this applies to the entire file and all paths
-
-[...]
-
-> +		remoteproc_adsp: remoteproc@62400000 {
-> +			compatible = "qcom,sm7150-adsp-pas";
-> +			reg = <0x0 0x62400000 0x0 0x100>;
-
-This region is 0x10_000 long
-
-[...]
-
-> +		adreno_smmu: iommu@5040000 {
-> +			compatible = "qcom,sm7150-smmu-v2",
-> +				     "qcom,adreno-smmu",
-> +				     "qcom,smmu-v2";
-> +			reg = <0x0 0x05040000 0x0 0x10000>;
-> +
-> +			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 364 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 365 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 366 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 367 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 368 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 369 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 370 IRQ_TYPE_EDGE_RISING>,
-> +				     <GIC_SPI 371 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			clocks = <&gpucc GPU_CC_AHB_CLK>,
-> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
-> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>;
-> +			clock-names = "ahb",
-> +				      "bus",
-> +				      "iface";
-> +
-> +			power-domains = <&gpucc CX_GDSC>;
-> +
-> +			#iommu-cells = <1>;
-> +			#global-interrupts = <2>;
-
-Add `dma-coherent` and check whether the GPU still works
-
-[...]
-
-> +		};
-> +
-> +		gmu: gmu@506a000 {
-> +			compatible = "qcom,adreno-gmu-618.0",
-> +				     "qcom,adreno-gmu";
-> +			reg = <0x0 0x0506a000 0x0 0x31000>,
-
-Make it 0x26_000 so that it doesn't leak into GPU_CC
-
-[...]
-
-> +		tsens0: thermal-sensor@c263000 {
-> +			compatible = "qcom,sm7150-tsens",
-> +				     "qcom,tsens-v2";
-> +			reg = <0x0 0x0c263000 0x0 0x1ff>, /* TM */
-> +			      <0x0 0x0c222000 0x0 0x1ff>; /* SROT */
-
-Please remove these comments
-
-[...]
-
-> +		intc: interrupt-controller@17a00000 {
-> +			compatible = "arm,gic-v3";
-> +			reg = <0x0 0x17a00000 0x0 0x10000>,  /* GICD */
-> +			      <0x0 0x17a60000 0x0 0x100000>; /* GICR * 8 */
-
-And these ones too
-
-[...]
-
-> +	thermal-zones {
-
-Please adjust this against 
-
-https://lore.kernel.org/linux-arm-msm/20250219-x1e80100-thermal-fixes-v1-0-d110e44ac3f9@linaro.org/
-
-(keep only critical trips with no sw cooling for the CPU, etc.)
-
-Konrad
+>  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index d512002e1e88..b63fcaf823aa 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -740,15 +740,17 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!r)
+> +	if (!r) {
+> +		ret = -EINVAL;
+>  		goto clk_disable;
+> +	}
+>  	res = *r;
+>  	res.end = res.start + SDM845_QSCRATCH_BASE_OFFSET;
+>  
+>  	qcom->qscratch_base = devm_ioremap(dev, res.end, SDM845_QSCRATCH_SIZE);
+> -	if (IS_ERR(qcom->qscratch_base)) {
+> -		dev_err(dev, "failed to map qscratch region: %pe\n", qcom->qscratch_base);
+> -		ret = PTR_ERR(qcom->qscratch_base);
+> +	if (!qcom->qscratch_base) {
+> +		dev_err(dev, "failed to map qscratch region\n");
+> +		ret = -ENOMEM;
+>  		goto clk_disable;
+>  	}
+>  
+> -- 
+> 2.47.2
+> 
+> 
 
