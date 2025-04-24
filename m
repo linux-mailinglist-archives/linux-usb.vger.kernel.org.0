@@ -1,132 +1,183 @@
-Return-Path: <linux-usb+bounces-23411-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0092DA9AEC2
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 15:16:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74098A9B168
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 16:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B483441DBA
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 13:16:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF301171BB7
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 14:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C0827C84A;
-	Thu, 24 Apr 2025 13:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF81119E7F9;
+	Thu, 24 Apr 2025 14:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QK1Rt7Pi"
+	dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b="UiBzdblN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E46221FAA;
-	Thu, 24 Apr 2025 13:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F38612CDA5;
+	Thu, 24 Apr 2025 14:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745500603; cv=none; b=QcgNo7UjrzaS2+t/h2jAAjlIPGZrdeUITnASBGZb3rY5gr1C6IOiHFmAIbyf1glwPnMykJlEqeHdAeQ8YPyYM4wQ3uxtKKyBdCBhQ2MvHHLJD64b6TBKH6e/+fM7klYHLZOVewnHjq/DrvswLKmlbPtoFsfR9SSM7G1gFhfOlEA=
+	t=1745506029; cv=none; b=SZtTuGSqwSeOAgkazdEtnypL3/69ofMqk3HxtkQhuxOYTNhoOErzQf4z5QwhXFd/NB57g8E9yDgHbUINTtx3M9KUJDta7CYEyf/28xwV1YFYbylqWCzj63HIyMZeACtKL8115h5iy9JM3jx8q5AkD0R4mTIhfI4cFwp6DOlMraE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745500603; c=relaxed/simple;
-	bh=FoS91EweKjkPkrPYIt/JPpjGNtuk+G6YDWUkr6+gAtI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VVjicuLlA8WS+kDMBf/9qREZjViaQobECVWXdmd2xEhefqO8fCXP30nK0YrpZzdQJY0q5lL1ZQuA7u9ez4mR0yATFDsXeE5yZISIkZ90sW0QR41/oRxDoNIGB1YluJZbk7Xnxl0hN+862XO3Mr0W0/Fij12laAQ2h894PSXHI4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QK1Rt7Pi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8FEC4CEE3;
-	Thu, 24 Apr 2025 13:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745500603;
-	bh=FoS91EweKjkPkrPYIt/JPpjGNtuk+G6YDWUkr6+gAtI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QK1Rt7Pi8fP/SxHbOhnp1Cn5bLQgbVXpW7bkFYM9cPuoYW7EhjbPh8PP15X31wEyH
-	 QqE4G1IBzKFCF2wn6fy/lvbYRT+GfnzYjyQ5bIFBeSrs7+kuup4A8k6TnTjuvXEcrv
-	 xZwHy8w7Am5vxR27JRjQ0fhTjPfd/71Pv5qBtRWtfop+Lf7DPldjvQmvUbhNzMguE5
-	 l/ZPiDYwit9I894ycUVpeZqebMzu6IvY5kk2N1qoaXkw7KokYNE7ygknKrz/iAjsa6
-	 ImMYzBYtlJ4wQPqfqOQ6iTBz+bTGCGM/sqiVsYjpN8KkHFFI0YEB3U0OWUdBRGItZP
-	 PDctgGJPM8D0w==
-Message-ID: <2d01bcd6-80e1-4c15-ab23-b5ea5b90f2b1@kernel.org>
-Date: Thu, 24 Apr 2025 15:16:37 +0200
+	s=arc-20240116; t=1745506029; c=relaxed/simple;
+	bh=Bn7qKgmVirMnL4HSoD6+ySbU242thJzaLTltDmOvM9c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YOHyrghSLKMSGgPUJ9casVPkVL8lEYrVzGLY8Bd5cU663iCxks4Gv4GeaHbM7fZTqY2ElfuAV3H7cF8pX102Kh5d/9iKpVlZeO3elRVdPhJwD47DQndKt0J3N7/lNdEWzIsnCy5oG4j30KVKWt375MxVhn0jLlskUWCReFy46As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu; spf=pass smtp.mailfrom=heusel.eu; dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b=UiBzdblN; arc=none smtp.client-ip=212.227.126.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=heusel.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heusel.eu;
+	s=s1-ionos; t=1745506020; x=1746110820; i=christian@heusel.eu;
+	bh=BiYoI3t07zEC8MRuyXYTtYuABNrGYYjjjTp7cv/tN5k=;
+	h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=UiBzdblNx8SwoBGVxvk9jjILOoLWahs1kH+IM9Jg1GoFjDtyCk7d6VMXlArVRrCV
+	 cImoPPph4TrSVxDGFE4IFj2DND54y/B6fE6KDxDealrOQ8kNrQq1/YvHSSPLMxZ9I
+	 xyk6DtjWUJEpcJV3O9PZPKmD0QBFd0KESuAK0mAVObJyNaehAL43rmKHkIgsC6GQl
+	 DAYR2elgIPK/3EdTRx5hyUD4BgpERUy+gRW35H43fpfG00yTsJNKg5kEuBpcJNqEu
+	 JLz6g3bh9yLkh4i+UQrKViu6W8HiUfsubgDPrBUJ4K26vux5YRRwkMWJ0FCbbYIOV
+	 QdVGVxbZY82aIH5o/Q==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from meterpeter.localdomain ([80.187.66.147]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M7auL-1uBYB23HSf-0093Pm; Thu, 24 Apr 2025 16:01:06 +0200
+From: Christian Heusel <christian@heusel.eu>
+Date: Thu, 24 Apr 2025 16:00:28 +0200
+Subject: [PATCH] Revert "rndis_host: Flag RNDIS modems as WWAN devices"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 10/10] arm64: defconfig: Add M31 eUSB2 PHY config
-To: Melody Olvera <melody.olvera@oss.qualcomm.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20250421-sm8750_usb_master-v5-0-25c79ed01d02@oss.qualcomm.com>
- <20250421-sm8750_usb_master-v5-10-25c79ed01d02@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250421-sm8750_usb_master-v5-10-25c79ed01d02@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <20250424-usb-tethering-fix-v1-1-b65cf97c740e@heusel.eu>
+X-B4-Tracking: v=1; b=H4sIAPtDCmgC/x2MywqAIBAAf0X23ELZA+tXokPmpnux0Iog+veWj
+ jMw80CmxJRhUA8kujjzFgWqQsES5ugJ2QmDLnVbNrrBM1s86AiSRY8r31j3pjPG1trNDqTbE4n
+ +n+P0vh/8VO0nYwAAAA==
+X-Change-ID: 20250424-usb-tethering-fix-398688b32dad
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+ regressions@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>, 
+ Christian Heusel <christian@heusel.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2318; i=christian@heusel.eu;
+ h=from:subject:message-id; bh=uCmWJ08d3T6sqzruRhhWDBmrpAmhzZjpMdT+4kKwQso=;
+ b=owEBbQKS/ZANAwAIAcBH1PMotSWFAcsmYgBoCkQYdLRPMzkf+QHfzbvX3tEyVNKkXCfmnJZ2b
+ F3yPlBdc5+JAjMEAAEIAB0WIQRvd5reJHprig9yzBPAR9TzKLUlhQUCaApEGAAKCRDAR9TzKLUl
+ hbkUEADVFJTdIYmV70vJOafWG6Q0MJ2+D744VIi72htiDZaU5KXXnhjhgcCkc7ERzzc6EPBdfvh
+ fT0tSm0OSj5EmPxftgKRfnKpuSzgUf3JrqszWBjc3b1VS116beAeKyBSL3CDxn410Qgefxq6ONN
+ Snx4HfR6mmQMdYskMAmBfXcnhZumZbOs6E79j4Rgo9aGyhn8e5br9Wjydvdaha6ofhalKG4/noI
+ 3V1sxjlLAtItMZN6x8K/Sw//g6oOpKeUarSXzINs2jE1KE+KM9iEL0ao23V7D/Abvx5j8uIOnsH
+ Zd3XTbOumKO9MwGhRFcWscVXtTbwcwE4l08BvhjLrNQcx1CCXK4r1NDkqEvmCEQPkEs5gOCKe2s
+ KcH2umRSOXY3MdEFn6MfOaswwA9qB3GYfklyjZJ5sFsZ7B/CYK5taj4ZBdF2B2mJN+n8ZZJNOTa
+ GRQh2SZ5wcR4TfSt/UO8xGbvngKYeHzj1PVMBar79KJNDpwolwDF4Q12CUTfP0aPs2kCuWFaeTA
+ qSq8esVlTmrAYmpstcqq5ggZHK12aTwAgzo137jYyjctXFMGjwAMeHZ2/tAEHRQKYF/x0xp1J8l
+ rQvN2uVtySCduj5BGS8ibjNrLYHIy+QSEWgpYxK7DTRpQcR+TXmmojhXCma6F4AKINd9+Xit5sO
+ aVMbYywjdZ0p1AQ==
+X-Developer-Key: i=christian@heusel.eu; a=openpgp;
+ fpr=6F779ADE247A6B8A0F72CC13C047D4F328B52585
+X-Provags-ID: V03:K1:inbTguRCRiMzNvBapqeKfvNgoRAp4ykFIM+J2mJo0gamsw0VmE2
+ SCWeqUtxg/rShR/rwfRc771bqCWDaQuMi2EiSCFU/1U7cbNqcuOcfj6n03OKFnTz8PoT3Xy
+ cj3rVVGs0Lo8CPxQbCb3CxFRkiY/ojr9BH/QlvXlUFPFXIBABy3qJl/IsDYJqUiFt5Q2FTk
+ /8AdAL1xp0bS9+MPHtEHw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:PflABPEdXXQ=;RPRrPH81t1zq5AQlBJjAPtNrmDf
+ z1ri80UOQmYc4dRQUCwE5PDe/i4AuVyT68lf9t4FuUdxaA6OqAOMueSuojh8tubI4CHNBcRW7
+ 6jAjlC3xrBbdKpr26g06tMgBOivVL0NfE2FXD5NK5f4pUUFRSVczL34JXwwY2GsRLERxgRZvr
+ Xwf0Jb6vgkwENptVDqO8r7I5CZBayJBwgfnRtdvarmas+9hzEMs8sNtBMRzvwyyUQadp95qQc
+ ZjmGS9cHnh9nrzr/vfbCu5v1MNbbxhEawVbH+dNpjxl7A7hG6YUVXLGy7QjBP3XNDyC6JZnLu
+ CoTVuxEs/3aLm+6vTqVhbTO2MyCNQqvbONprbOhfckBCsJ7fLHuNdMogxphtbiCUKJ4FhuDpc
+ tfcbRormUhfG15NRrOY2pdX7iTXliAvZPdBOPJZfXehfsssLtv7VrQNcKtkecnKxc6gH2ivFd
+ DY1XrrOMyEJcVCZf6lZGyXr5BrI3xbSvCkWUwCOPHugWzsrNtLrTyw8xO9v6HJNpCx7DH4ayd
+ yKtxvKjcXLrUkyCrQoULoM2CGNamwCtEXdvpUDCfonqww/ED4jio9nURsWRRkBjcbzebweZ0H
+ /qYqskUX9VQpXLidBVBZhdirQLm5Ex049Vb50Iv+8w5fxCoWx7uMi0hRhJxKoRsu5//Zqp3/x
+ hYJMaVFao/MPUPXdId7ujlm48QFsxT7ALMXmTJtMy+1MHBoJ+u8FB12OXdmQ1lsvjoEqxb/TL
+ 8ix9TaULacjJ7hw+sWq3GDtHmZMwH81/ekfIA1SkbmwJ88ixv7HJ2Bq5H8aurUKBGDWK5s20y
+ yfrbNkEKuhlzI3Lqa/ZSTjYEJy6i/hT0DAY2xznOO4kLF5BgbJQQ38Cl+xq7Rl/0IEJmAwkKm
+ eLGCYYpUt3vXzKKMhh7eGl0j7i1uFHzfcLm0AG+6e6yAxmm0M+C/THAZg2GxZGqcowO4p2IF7
+ wsBJShEbeaBWPmfd9Jy+MJtMYboksE+8moo2SUTuPyzBFwvQFBHRNChAmt+vKXlVbw+wG3wPS
+ 1GxyDcFvAk2QbjjiTIm2pG9hrUHCLkzyXZ2COmHf787pNwXQO3oP+2w2DKA8xKxaNveeozQEo
+ ebEriHEf+7+pL2Ih0kZmk5xvpRh3GBw4FNf7WdP6z8NGsOL+fv0HdGFDtHWH4PsYq3ww/Co5i
+ CDbZuHM40lxEAIeMWLr8XzPzMzxW5GW5l/3a8Ol3TZucCEEmcI571WTcuG9Or5Jrl8BGvP/dy
+ 93ZYovJGafW889NA9VXP4Gvp9hJITNjbnLnjxMrF9UePt8x5PiIGgyBmFrNUHieqWpUZe06No
+ /q3t2GI+gAXepIrMOGveVwcKBQrjL7+gTtItIBFrZXs94+JSNsSP78Gf3Hce63EOyIYWsKe4R
+ 33jLZG0aF7F35D1DYAYsjHW+kq43b0ci7QzcE=
 
-On 22/04/2025 00:00, Melody Olvera wrote:
-> The SM8750 SoCs use an eUSB2 PHY driver different from the
+This reverts commit 67d1a8956d2d62fe6b4c13ebabb57806098511d8. Since this
+commit has been proven to be problematic for the setup of USB-tethered
+ethernet connections and the related breakage is very noticeable for
+users it should be reverted until a fixed version of the change can be
+rolled out.
 
-Qualcomm SM8750
+Closes: https://lore.kernel.org/all/e0df2d85-1296-4317-b717-bd757e3ab928@h=
+eusel.eu/
+Link: https://chaos.social/@gromit/114377862699921553
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220002
+Link: https://bugs.gentoo.org/953555
+Link: https://bbs.archlinux.org/viewtopic.php?id=3D304892
+Cc: stable@vger.kernel.org
+Acked-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: Christian Heusel <christian@heusel.eu>
+=2D--
+ drivers/net/usb/rndis_host.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-That's a defconfig for all vendors.
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index bb0bf1415872745aea177ce0ba7d6eb578cb4a47..7b3739b29c8f72b7b108c5f4ae=
+11fdfcf243237d 100644
+=2D-- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -630,16 +630,6 @@ static const struct driver_info	zte_rndis_info =3D {
+ 	.tx_fixup =3D	rndis_tx_fixup,
+ };
+=20
+-static const struct driver_info	wwan_rndis_info =3D {
+-	.description =3D	"Mobile Broadband RNDIS device",
+-	.flags =3D	FLAG_WWAN | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SET=
+INT,
+-	.bind =3D		rndis_bind,
+-	.unbind =3D	rndis_unbind,
+-	.status =3D	rndis_status,
+-	.rx_fixup =3D	rndis_rx_fixup,
+-	.tx_fixup =3D	rndis_tx_fixup,
+-};
+-
+ /*-----------------------------------------------------------------------=
+=2D-*/
+=20
+ static const struct usb_device_id	products [] =3D {
+@@ -676,11 +666,9 @@ static const struct usb_device_id	products [] =3D {
+ 	USB_INTERFACE_INFO(USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
+ 	.driver_info =3D (unsigned long) &rndis_info,
+ }, {
+-	/* Mobile Broadband Modem, seen in Novatel Verizon USB730L and
+-	 * Telit FN990A (RNDIS)
+-	 */
++	/* Novatel Verizon USB730L */
+ 	USB_INTERFACE_INFO(USB_CLASS_MISC, 4, 1),
+-	.driver_info =3D (unsigned long)&wwan_rndis_info,
++	.driver_info =3D (unsigned long) &rndis_info,
+ },
+ 	{ },		// END
+ };
 
-> already existing M31 USB driver because it requires a connection
-> to an eUSB2 repeater. Thus, for USB to probe and work properly on
-> SM8750, enable the additional driver.
-
-Commit msg should mention which board uses it.
+=2D--
+base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
+change-id: 20250424-usb-tethering-fix-398688b32dad
 
 Best regards,
-Krzysztof
+=2D-=20
+Christian Heusel <christian@heusel.eu>
+
 
