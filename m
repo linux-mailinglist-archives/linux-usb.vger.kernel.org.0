@@ -1,99 +1,123 @@
-Return-Path: <linux-usb+bounces-23417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40A3A9B22C
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 17:26:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59112A9B232
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 17:28:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 487FB4A215A
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 15:26:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D40913BD41A
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 15:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198581DDA32;
-	Thu, 24 Apr 2025 15:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95DB31DDA2D;
+	Thu, 24 Apr 2025 15:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tP2y/YSy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IoerhUH1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A124315C
-	for <linux-usb@vger.kernel.org>; Thu, 24 Apr 2025 15:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE7C1D7E4A;
+	Thu, 24 Apr 2025 15:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745508376; cv=none; b=P6MpA7du6tRKSL6HRbk+ikUD71nzzGveUHmji8pAXBsynG6+pvCBcGBnG97djGHskwvRyb+njdNv3qS1xBOYeWpGdkmD518f8pdUAEiYiPAyiSvzeFWH4uqHiZ5AeEP2+JO6zbYDjnpBrl/WLJps8nm/n9anBRYc1FuOMbwLynY=
+	t=1745508475; cv=none; b=NBgRYUfUoTFsTFLK+wREQWG9BN/zffUx+DstXZRYvSyZkScgYJqoBjP1/ZxJzMdSwYSmISwEENuLlreqXv1rkuD8rVBS35h5DhZLPuS7lFXytCLk/2jbDPWTf9qTKveeTp4iL2jQK5UzQFsMCtNsGO3YR84T4+6TMSTw+zyVDN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745508376; c=relaxed/simple;
-	bh=ZbcqSM5oyOnKJqogZIJ/8pmrYfKRQhhRrWwohUDO0nE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ew6hEdNhBxP/bqjBJRPMkr0cLyBwsaXzcY4NWxkp62haFr0QnzMMbtTsXtBV2fap0HjdL8y0TwHpB94k8dE7cBr3Nk2xUIkAddbor6r0uc1ZhzzOauPi+BlY+zRTmVtuLGUpOziasO0fvQVRQpf1/I/pxND+wAQI7fgX/nU/O7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tP2y/YSy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0875EC4CEEB
-	for <linux-usb@vger.kernel.org>; Thu, 24 Apr 2025 15:26:16 +0000 (UTC)
+	s=arc-20240116; t=1745508475; c=relaxed/simple;
+	bh=u/QtdMUzBzBtMDX1S0v4wSSMPI+jL4o/EmMuWHiQGew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bHqLHKuJKC1iq7XCVk03Jy2I6zfHiuHnIShRkhEMBdgPiWLULec0EJ3EKm4lUxE1aaQM5UJAoSgiZ1NM11VErCualVECqqx0+sLZzfI3IcGoWWHguEjLmS0PHLhpHI99faVWB5nrbBqWr0C+TE3NSvO8ZzQSCL+XGzIa+ObM6+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IoerhUH1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA4E6C4CEE3;
+	Thu, 24 Apr 2025 15:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745508376;
-	bh=ZbcqSM5oyOnKJqogZIJ/8pmrYfKRQhhRrWwohUDO0nE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=tP2y/YSy0dTpdoIvmGF1y5QdadVqS5g2p+yQVEkrKWXDLRFkPsRKnkcJKSIasoWSM
-	 KCcBo54V0cTl978kh6FMz0bAK9d0H05yTynV/s5kAcu/2xcLAGk6yjfnFSjNVYz+kI
-	 +sBcns+0hlN7egvk4TjAaKr1aSgNdEzmS+35BjxD6g4IDPydiJzI8DCQ8MlCPMMddg
-	 fbRNgYLbXNJRMVbUx5iRBrJVvL5foEb/3vjkCWO7dwF70ZgyDl/dg46SAHa4lmkucL
-	 mCIA75lOdSzVubGR12+ZaygAsvATtnUy5Rl73HCfCOyTgf2dnJTj5bCbgGEWlGZWWW
-	 FN+EbjgCeSADA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D3E49C41612; Thu, 24 Apr 2025 15:26:15 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220052] The usb/cdc-acm driver uses memory after it is freed
-Date: Thu, 24 Apr 2025 15:26:15 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gregkh@linuxfoundation.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220052-208809-GMqRpsDOBC@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220052-208809@https.bugzilla.kernel.org/>
-References: <bug-220052-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1745508474;
+	bh=u/QtdMUzBzBtMDX1S0v4wSSMPI+jL4o/EmMuWHiQGew=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IoerhUH1fRxW5aABJs8abtvAg/u8a0qria0HkXkB8rUzGG38+W3mOpesD9vLeaGF8
+	 klyOb1at3fSI2jwXvK8nA+iF6OMVmeZ7AyhPTjshM0dEkj0BYc887GThrQpEIQSAyJ
+	 saU/QUY0JJTiwxhJeBpEicQKQ4tJHZM5OPk679dh6uJjDMRLIs5n+NlX5UrbKBZwKm
+	 PNZpiCTCJG15ZW7isPDuc2/d3qvKPGZ+XrKiXmRpsO7QvZe6p96zLRhfiDLASrlxr5
+	 swdvLB5k+t4cWNb0vCwCsOPzxZ1L4DnYMTpnPEgdTmbeCAzxEYle7+SC+QstLKX1O2
+	 /SleApDzN6HQA==
+Date: Thu, 24 Apr 2025 16:27:50 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexey Charkov <alchark@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: generic-ehci: Add VIA/WonderMedia
+ compatible
+Message-ID: <20250424-chaffing-mating-e512c198c0e6@spud>
+References: <20250423-vt8500-ehci-binding-v1-1-1edcb0d330c2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AkuIQLd6f/4BOskW"
+Content-Disposition: inline
+In-Reply-To: <20250423-vt8500-ehci-binding-v1-1-1edcb0d330c2@gmail.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220052
 
---- Comment #1 from gregkh@linuxfoundation.org ---
-On Thu, Apr 24, 2025 at 02:31:20PM +0000, bugzilla-daemon@kernel.org wrote:
-> Created attachment 308013
->   --> https://bugzilla.kernel.org/attachment.cgi?id=3D308013&action=3Dedit
-> A patch file that solves the kernel panic.
+--AkuIQLd6f/4BOskW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please submit this properly through email so that we can review and
-apply it if it is correct.
+On Wed, Apr 23, 2025 at 11:49:45PM +0400, Alexey Charkov wrote:
+> VIA/WonderMedia SoCs use a plain vanilla EHCI controller with a
+> compatible string "via,vt8500-ehci". Add it to the binding.
 
-thanks,
+You should elaborate here that this is already in the driver and dts
+files. With that,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-greg k-h
+>=20
+> Signed-off-by: Alexey Charkov <alchark@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Do=
+cumentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 223f2abd5e592ff8cc3ad97f9a325356ea57044a..508d958e698c2e8dad748a6fc=
+def65d6e883b97d 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -86,6 +86,7 @@ properties:
+>            - nuvoton,npcm845-ehci
+>            - ti,ehci-omap
+>            - usb-ehci
+> +          - via,vt8500-ehci
+> =20
+>    reg:
+>      minItems: 1
+>=20
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250423-vt8500-ehci-binding-e607bfafdcbf
+>=20
+> Best regards,
+> --=20
+> Alexey Charkov <alchark@gmail.com>
+>=20
 
---=20
-You may reply to this email to add a comment.
+--AkuIQLd6f/4BOskW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaApYdgAKCRB4tDGHoIJi
+0pqXAP9UXO7DomFd+ehGdU6VYHx7BPH5waiSfQwdAxqurbIoLwEAm1wFLmWrACe4
+zDXd4Iak4cyD/GEfwFKwLIqprYjaKQQ=
+=n/2W
+-----END PGP SIGNATURE-----
+
+--AkuIQLd6f/4BOskW--
 
