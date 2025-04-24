@@ -1,127 +1,100 @@
-Return-Path: <linux-usb+bounces-23399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF6C0A9A78B
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 11:19:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 476FBA9A84C
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 11:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 895E83AA76F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 09:19:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5AA5447C99
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 09:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C92B1F5402;
-	Thu, 24 Apr 2025 09:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF319223DC0;
+	Thu, 24 Apr 2025 09:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jfFXZpEO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tNiXQcRY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A11D528
-	for <linux-usb@vger.kernel.org>; Thu, 24 Apr 2025 09:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1882222C8;
+	Thu, 24 Apr 2025 09:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745486364; cv=none; b=J48TiXXJPUOCPF3psoHzRPG0tx6v06C33ZSPpSX0YQmyVn7pO6xFXeZ5fySzeL9X3lluJlhS4zEkhC/Wbd0JxU4u4S6CYXCkyBUpL6Ka+CfSavJLXlM0ayi4m4J9wTB6DU4jSPgm5tONgCq1y4KXcPM66D9nAUe/IAI3vtaprQI=
+	t=1745487113; cv=none; b=CC5m3B+ntqJoW8gU5uxd/eEiha3dxCoCASuL9/I8ArQZCDmmZFST90TZ8IbyCHachnyAiZPoyNZyAPakZmEwPKVX8dtImJuJ+GTcoIQK7ObKhD4RpQlJFyY2EFXmO8cpG46a15ff6qYK7wpZitblwzwGyxzmYo7pnKYOLQDDGIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745486364; c=relaxed/simple;
-	bh=Ir1Jvv53Ubmo4YXZyDCLSFY2lgyS+XUOg5J1w4AVzKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jyTj/HoKUMSQwnJEFH7TjZjotK+PggiR8V3kJeMd9x+VYr542KlYd46KwbuXCdKZ+I/KHUKZ2h3xnzv0VPCtmtavU5o14ZPG+hD+h2FpXUkkXkjJ/WXkdSpKTr+SwVECw6EK/Rl8cN0nrpVZCipZX6JxW3LMaUmgXlSyR8E1mA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jfFXZpEO; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39efc1365e4so350319f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 24 Apr 2025 02:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745486361; x=1746091161; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2kW0+6CHGLKL7FENV7NWKpK8lZHJRM9oiM1y4rvumg=;
-        b=jfFXZpEOxr2funEq160vXy5Yv9V9BfaIo9snqgksscuEW/IZ02MVMiOKWoia1B+zQz
-         /EGDDVmZHqqnnEKtcLjQUhvUF7j3h69tDHWYmk1UO+8Kq3mq0B1mTz1qR8yJUKccXCZS
-         iyJt+YM8HgoxBapQEX5teRG+qPCDDG4Pg76UbrEnRdNJswQS6CuL74Y45viBqVGM/+JK
-         eaRklb7TC/xxn4+b6ch+fyk/LffCfmWtZQgVm8QQrzxi3mqtvXEX8JmNesO8Irsgrr+o
-         KEXSR0Zz5+cssBhuaJPWffpr5irZvNgqiGRwqCDz3BzqsYuX+e6w55VAfo9gS31Br6Ug
-         2K0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745486361; x=1746091161;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m2kW0+6CHGLKL7FENV7NWKpK8lZHJRM9oiM1y4rvumg=;
-        b=ikyIEcYRBYYNGNmFo0HTsqxVRxNbYvBGGc5nrjmURNK3/dNzwqMtKhr5CrVzNrx277
-         d2RiBy+fleAwpZBz/4jXqHSPoD/Qm2rk+mfff7DzVTKObq9xS1CGFyilEOW2LPBOaya8
-         30TMkbc0JnuzYLLcebvcItPNw8mRlJwIAlKXwKtnfCPwQhlaf+ippiGnWRuQmF44ad3u
-         JLj/0a04EAcd6ca8H72ROCI2wrl3GJivhMABt853J2fTqeIdN1ZZPgQTI9Fy2sBvuXF/
-         /B+PJqSk3Dv6/OSdnth8kEl341fEPwSBUm0dNUELt2yzbcIPQGxd3j8nzeKuYDJTmKiE
-         dRjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt+8yMIX//KLC85aXx96r7Ksw2/OttQl5SWLijUIxNHlZ7+NJphj+cYny1FgS61RvZQYvknv5Szcw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypmAC17rxonPWiuAL881FyWZPHFrWW3OWPCvO667iWCMheZ7lT
-	lmwwbZdPESJWBJeuY13tLpCnzE/2hA5/RSprXMzk6UZS81atBj4o/cY3vvI8L80=
-X-Gm-Gg: ASbGncscvEWRbZqbGKK8xOpSsXSL8vzPzaXVLlsLF+oOhjAfMaa6gXk0Qi/63tXs3qT
-	rblXtskKaQRvKK3i5KnlRInXzhulF+oHZ70bPoPvyJK04004pSj9wFfUaZazLTAx7lWY6WqksnK
-	OhyqXkNhAmkzv/f98UbHofhBQq2GBcmCSbLDEHw2Mgel4hBibCmbL3RjFnFyxkgEXkAfUnCZE65
-	DuML7e4y2yCfnE4/73ALUpugrxhwb2J88sQjDAHMbHAxGmCB6NPWO5Mr4Xxe1PE/JWjDnvHuMnE
-	DjZQXLBO+mjnVfLrcA+JwLzxvwyeaH6ZJaZKSdgCXmiTg3WxwSQGSQl1uJn9hQjYi2iASWMZX1w
-	=
-X-Google-Smtp-Source: AGHT+IHiYzswPwaJ/0SAVmL+W0eRZ953Xly4wt23DtwwVQa1Ic7tlX04pjm26M0T7Q4RrUegWntzAQ==
-X-Received: by 2002:a5d:6d89:0:b0:3a0:6b06:5740 with SMTP id ffacd0b85a97d-3a06cf63917mr1302662f8f.31.1745486361074;
-        Thu, 24 Apr 2025 02:19:21 -0700 (PDT)
-Received: from arch-thunder.lan (a109-49-32-45.cpe.netcabo.pt. [109.49.32.45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d4a7ff8sm1473940f8f.13.2025.04.24.02.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 02:19:20 -0700 (PDT)
-From: Rui Miguel Silva <rui.silva@linaro.org>
-To: "Alexey V . Vissarionov" <gremlin@altlinux.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	lvc-project@linuxtesting.org,
-	linux-usb@vger.kernel.org,
-	Rui Miguel Silva <rui.silva@linaro.org>
-Subject: [PATCH] usb: isp1760: fix set/clear pullup register field access
-Date: Thu, 24 Apr 2025 10:17:05 +0100
-Message-ID: <20250424091859.1073201-1-rui.silva@linaro.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1745487113; c=relaxed/simple;
+	bh=qCufCvxDi1+MqzijsET6fq/x9n2E81MIiZiD/rfpgRk=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=VoWE+LdQ9CjBYr22ySwzNQ8VL7k8NTTTmhZ5pYGNibKQls8qdEmUrMTCfmDDW4xKca476+SGae+c0+cOr15VRBmFZlG0IEXdQpPkfXdJb+LWJrvYCJBiqDaPsJQKJDy+/3VbgYXTbLDMJl/0bgb9aoD4DUsSBYivbIOVCpo6p0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tNiXQcRY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F085C4CEE3;
+	Thu, 24 Apr 2025 09:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745487112;
+	bh=qCufCvxDi1+MqzijsET6fq/x9n2E81MIiZiD/rfpgRk=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=tNiXQcRYE3abNCB8tT3I2WPZjSHSXQis/7GPR5re2Tl55/j7D1jxysGcXfrdRWRsb
+	 vEtgABQcd7bgXpaFmStU5vvaVgPFiRaf8IY1YRGQJF4A9VtNSpOnAlPhPmnF9hdq+x
+	 yUD2xatpyMO6hu1ehVIWDnecG94LYsywNvd13DhC5relKlk+DwD73iyotc+5j2kEd+
+	 Qpc3vHX3ivVHpUg60TXqlXH87n50QLmg8CuDpSf0Sm1UcXWKWqTFhbvKHXv83ezEws
+	 hhlgelXlovG+5lHW2bnmnLzbf+ztABNSu17futNGiD7oeQZqWIujutByW+m193AkA4
+	 5DcO1DS2aKKXA==
+Date: Thu, 24 Apr 2025 11:31:49 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Terry Junge <linuxhid@cosmicgizmosystems.com>
+cc: Benjamin Tissoires <bentiss@kernel.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Nikita Zhandarovich <n.zhandarovich@fintech.ru>, 
+    Alan Stern <stern@rowland.harvard.edu>, Kees Cook <kees@kernel.org>, 
+    "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-input@vger.kernel.org, 
+    linux-usb@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+    syzkaller-bugs@googlegroups.com, lvc-project@linuxtesting.org, 
+    syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH v2] HID: usbhid: Eliminate recurrent out-of-bounds bug
+ in usbhid_parse()
+In-Reply-To: <20250312222333.2296363-1-linuxhid@cosmicgizmosystems.com>
+Message-ID: <727o0521-q24p-s0qq-66n0-sn436rpqqr1p@xreary.bet>
+References: <20250307045449.745634-1-linuxhid@cosmicgizmosystems.com> <20250312222333.2296363-1-linuxhid@cosmicgizmosystems.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-We need to access the register HW_OTG_CTRL_SET mapped¬ on hcd regmap
-and not in the udc regmap region. Fix the call in isp1760_fields_set
-from the isp1760_set_pullup to use the correct regmap fields set.
+On Wed, 12 Mar 2025, Terry Junge wrote:
 
-Reported-by: "Alexey V. Vissarionov" <gremlin@altlinux.org>
-Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
-Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
----
- drivers/usb/isp1760/isp1760-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Update struct hid_descriptor to better reflect the mandatory and
+> optional parts of the HID Descriptor as per USB HID 1.11 specification.
+> Note: the kernel currently does not parse any optional HID class
+> descriptors, only the mandatory report descriptor.
+> 
+> Update all references to member element desc[0] to rpt_desc.
+> 
+> Add test to verify bLength and bNumDescriptors values are valid.
+> 
+> Replace the for loop with direct access to the mandatory HID class
+> descriptor member for the report descriptor. This eliminates the
+> possibility of getting an out-of-bounds fault.
+> 
+> Add a warning message if the HID descriptor contains any unsupported
+> optional HID class descriptors.
+> 
+> Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
+> Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Terry Junge <linuxhid@cosmicgizmosystems.com>
 
-diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
-index af88f4fe00d2..1eec4b21b54f 100644
---- a/drivers/usb/isp1760/isp1760-core.c
-+++ b/drivers/usb/isp1760/isp1760-core.c
-@@ -109,12 +109,12 @@ static int isp1760_init_core(struct isp1760_device *isp)
- 
- void isp1760_set_pullup(struct isp1760_device *isp, bool enable)
- {
--	struct isp1760_udc *udc = &isp->udc;
-+	struct isp1760_hcd *hcd = &isp->hcd;
- 
- 	if (enable)
--		isp1760_field_set(udc->fields, HW_DP_PULLUP);
-+		isp1760_field_set(hcd->fields, HW_DP_PULLUP);
- 	else
--		isp1760_field_set(udc->fields, HW_DP_PULLUP_CLEAR);
-+		isp1760_field_set(hcd->fields, HW_DP_PULLUP_CLEAR);
- }
- 
- /*
+Applied, thanks.
+
 -- 
-2.49.0
+Jiri Kosina
+SUSE Labs
 
 
