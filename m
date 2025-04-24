@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-23409-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23410-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E184A9AEA7
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 15:14:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E301A9AEB8
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 15:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C017441EEC
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 13:14:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8E6A17FCB7
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 13:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248AA27FD4F;
-	Thu, 24 Apr 2025 13:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8121027F4F8;
+	Thu, 24 Apr 2025 13:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Io6Ny1XJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="agzdKqoQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E0818FDA5;
-	Thu, 24 Apr 2025 13:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D815527CCD3;
+	Thu, 24 Apr 2025 13:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745500401; cv=none; b=GAk/7ALa204ZOGq62WG3T/bLnM3rr1S+bjJSmuO3QwmQLZ2D5+yQ31/y0luGJdbbbkaX3n0qTg5LlVsPfkdrk88KNCXaTNfejUnyvO6ezE/rb+Y1qIjeu3DKsjXpjvM1vsHphCadVCdwYzP1DKiOF6TLHzcTzcL3/fPhvtiGZmw=
+	t=1745500530; cv=none; b=r7iQ1dsZt8LMvnNzoBOGW0d4flKu5+7Wr7ovR17BWG2eqwh/Av5rsTrl6t4Cw1eo8TaTaa6sc+2fhh1AeXSXZiXx17SRNwZhvHprhk6v/QU0cu6UqIdpu0DE9ynQJ2I0zzBenIslOKU7X6ZHvVUgtjKK2Zv4bxUfzAr9UOmkSaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745500401; c=relaxed/simple;
-	bh=MG+YWrYEwntpF2IQjK0Cm+T1muoqGKxfEg/R/G79Dbs=;
+	s=arc-20240116; t=1745500530; c=relaxed/simple;
+	bh=6revvVVhRd4vMEsIX5cXh8CkmckdE8eSYHBQbAtAcdY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q6kYnM8IcSmz9zG91tvVJUrFs3QiPItZJ41aaI+mzaZ+J/ZsLT9JoZClWMRx+9kd2lXqmLsgSeIDqAULVr2DpXa2HKe+ZvfKfPEeqxuZ16R1rKtrbC0/mKCKeNSC9OguCg+wnP7pys2xxlY/cZTBXI4M9HQIZAPFIDIF+lYHd+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Io6Ny1XJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D435C4CEE3;
-	Thu, 24 Apr 2025 13:13:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bQ2so+7apQV8HBrmBJUbSb1prx4hVV1Zi/b14tf40rgJFpSiqoOH7ylM4WK4YXC62FzyvYXPp65AsxFIZBqWNzx8CclTOlI6Vu9BWrWygVh5xyLvkcpvq4MkIFqInm/trkgYdTuRDMWZCFFnzHr1HqdIDeCuAFK2hAFoh/JD3ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=agzdKqoQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E0E0C4CEE3;
+	Thu, 24 Apr 2025 13:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745500400;
-	bh=MG+YWrYEwntpF2IQjK0Cm+T1muoqGKxfEg/R/G79Dbs=;
+	s=k20201202; t=1745500529;
+	bh=6revvVVhRd4vMEsIX5cXh8CkmckdE8eSYHBQbAtAcdY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Io6Ny1XJnWH4HQee3II5NVYtmuvbDQoXoXxnw/6MR+DOgxCAt7iPBb+3+VaT1rdBZ
-	 WWvxpczXuqaDmun+A6zG1qv8RP6+cTv0fE+b3+KVTQlLsCUCz7zwjYuz8QDYHKAxz5
-	 J0tvc7j7JyDKmc6mTJ6boJ8VPaVqKQpuGvDTPHJ90WtLDqpJI5Ts3YKwm1aCqrw+Xb
-	 EFwj8MtpIRhfFa7bUqp7qMzzj1dlMeMGf1CujxjDINSGH1nkKKqnR+BbNzCg+JysyR
-	 y9TSogkZFv8eBLWhnTenQ/BhESDS+7KsyQpY1LOZpizpfJRm1ehHnZAgJ0eIzvYXsa
-	 GvrsY/F/LBang==
-Message-ID: <6db3f4c2-3c72-4963-b6ae-9750ea0733f5@kernel.org>
-Date: Thu, 24 Apr 2025 15:13:14 +0200
+	b=agzdKqoQBB2FMs7cqK1RmXVZqD1grWy2E+ukkzybd9k0mTq1QiDMOt5Z6C+vg+fXw
+	 VHe8+pEzSjLVEWKEAPVHvinv9/JH5mfNsfNVGiDjNlIsLRyuA0Qq6izqVaCGhZ32CM
+	 piFlIC+U62ttvHviPz+iwTA1U/2IyNfzvwAed9n7IXzrK+83ynrT1Fm9EprOzgj4Ow
+	 lYC1Kv8xJsfs8ms8PHgu1ugZHCU5y2dNwQin51yX3MpNKa684p9hzfzIhd5N0FJFSW
+	 S8Bvlm/KyO0mZupC3yoIxxan+Sr9Ww1K17574t7YAPsFrzO+Pt2KV+dqOI8ad7rMyt
+	 H47Z/P3HZrTpA==
+Message-ID: <cf741154-5772-4328-bfd0-fe5d83c75f72@kernel.org>
+Date: Thu, 24 Apr 2025 15:15:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -131,6 +131,7 @@ On 22/04/2025 00:00, Melody Olvera wrote:
 > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > Signed-off-by: Melody Olvera <melody.olvera@oss.qualcomm.com>
 > ---
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
