@@ -1,82 +1,86 @@
-Return-Path: <linux-usb+bounces-23391-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23392-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAF9FA9A3F2
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08D93A9A45B
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 09:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E660464141
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 07:32:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AE81463234
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Apr 2025 07:41:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E8CF214A8B;
-	Thu, 24 Apr 2025 07:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86937208997;
+	Thu, 24 Apr 2025 07:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qniUusik"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUAu1y4Z"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60651F3FEC;
-	Thu, 24 Apr 2025 07:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6411F30BB;
+	Thu, 24 Apr 2025 07:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745479520; cv=none; b=YVdtm8y3bReiThe7ZIg/KXA34Bz/m3tEiQIRmEb8tKLactsqDSJrqrO1btA4NlfFFn61f0Xesv1XgXwYka3oj/ImtL8rd7NzvC7u3RvAZP3E6epOuzaFGgvJNog+Zpi1abKDYp1RYNkKU7uemtb7FbLtGgR6wDG17KuwWnVsxR0=
+	t=1745479958; cv=none; b=ZWWwf2W9IOdjY2d/bAOQNB0KZC96pub24yfeQc6nOu/WROtsMzqIAhhuj61DHMIU+PL/f6Fxqml9nIKpjc7e0mU+cmu37o0IjfGzF9Uhkd7IVPZPQ9PkW4dVoB67kyASbgORPivYGg6onRreL8PzKzUu7B5jXdItgtYc2iGB+h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745479520; c=relaxed/simple;
-	bh=NZ8+VZ5pN87uoWHge4oimbOjZrCQVP5U1teuaf28Yjc=;
+	s=arc-20240116; t=1745479958; c=relaxed/simple;
+	bh=UXUhPaNtMk1R10Wyxi4MJA+gxXMW3VzEBTRBlFMNNlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jYbTX0cOt086qoC5Oo2ZBRuqyICRcQE+sZ9pnthjWWbdS7f6OgzaQb1FrVHxbQIvp526soyi7MnuZgYdRQxFYZf2rQgvP6Zpmol8ea1k0kgaFNa/f6ctm9bfHz6bJBYxdsxe2lbG9ZwbtVohrwTC0pINKbzc14BrCUp6IrInrYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qniUusik; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F848C4CEE3;
-	Thu, 24 Apr 2025 07:25:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n1m0b0F5layvwiu5wFX56HRHpUSHxvE05tK4ZkfmhWYfMz1MciPtaSCGOS2WnwWirK2yiLqSsUHM8nFsJJJBNX9YZiuzAS8wMmpOm4n2j3apU86aN/xWzl6C0Hud3AAAHEe1ZGlJHqTTK73KRZy8S6Pn+8Z/S1+xMq76/xhtOjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUAu1y4Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65A9C4CEE3;
+	Thu, 24 Apr 2025 07:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745479518;
-	bh=NZ8+VZ5pN87uoWHge4oimbOjZrCQVP5U1teuaf28Yjc=;
+	s=k20201202; t=1745479957;
+	bh=UXUhPaNtMk1R10Wyxi4MJA+gxXMW3VzEBTRBlFMNNlE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qniUusik9OZC1dongdpj6fNxDPLr7sR0/on77prS5HiyH6xaNA4dwII8crMHYMw2T
-	 oY7mDN4AH51imCuhlnyN4VsP8arXt4E8Bzgw/alaKeCsWprABhLXMsU6vuHaVECs0r
-	 E9biTyfVLmOgQH72bM4769aGgFvpda2/Du3r3K/Ekc6fKPh84Mwsn04Vn2L05D5HaV
-	 rUxPEE2xj9FbaMZT42xCj9QR98jaSIaMSk7K1T7mj6z9wW/vmmN1rPygT5eFZhTCTY
-	 jg0pIxYlpuXTLSy2pLfyluLrPNIMYyBHHcbxZI8qCYAjn7JDv2Ov6WFdFC7KMG915g
-	 BW5aWQFpPuhhw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1u7qxR-0000000013g-2zZV;
-	Thu, 24 Apr 2025 09:25:18 +0200
-Date: Thu, 24 Apr 2025 09:25:17 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Alexei Safin <a.safin@rosa.ru>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH] usb: serial: ti_usb_3410_5052: Add NULL check for
- read_urb in ti_open()
-Message-ID: <aAnnXQzzdqn-YXpC@hovoldconsulting.com>
-References: <20250422205140.7857-1-a.safin@rosa.ru>
+	b=nUAu1y4ZS1rReflpqiqcIN7UnNIzLnab3hyFdHbWsnfk+sesWnE+cnjI71LJ2ul7z
+	 Txo6iwxJWGfe3H6ghAxwT7/PnMWRR1rTO50jVNZ/75faGyo9IFUA9XP2aIF1Ne7F3O
+	 5CRIxgl24EvfPD9kT3I1EJORhClYqukaQN2TE/T2FpFkh8Z7KPucdXIqA5f3znsAft
+	 c66S1jwjfoWNY0oIVs42CfUy77VvxmAUI/8lVQvBTYj5Rpulxfu9oNvtgHOrMLM//n
+	 n76pHNLmcC3Q/CsqtMM0Y1UBha6tpmg7TXSsfd62OOCmdHm4duiD4qy6VFW+891Ilv
+	 9mkV0EBI4odrw==
+Date: Thu, 24 Apr 2025 09:32:34 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Melody Olvera <melody.olvera@oss.qualcomm.com>
+Cc: Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 03/10] dt-bindings: usb: qcom,dwc3: Correct the SM8750
+ compatible
+Message-ID: <20250424-masterful-original-python-8dafb0@kuoka>
+References: <20250421-sm8750_usb_master-v5-0-25c79ed01d02@oss.qualcomm.com>
+ <20250421-sm8750_usb_master-v5-3-25c79ed01d02@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250422205140.7857-1-a.safin@rosa.ru>
+In-Reply-To: <20250421-sm8750_usb_master-v5-3-25c79ed01d02@oss.qualcomm.com>
 
-On Tue, Apr 22, 2025 at 11:51:40PM +0300, Alexei Safin wrote:
-> Avoid dereferencing port->read_urb when it is NULL, which may happen if
-> usb_alloc_urb() fails or initialization of usb_serial_port is incomplete.
->
-> Dereferencing a NULL pointer in ti_open() leads to a kernel crash.
-> This condition was detected by a static analyzer, but can also occur
-> in practice if memory allocation fails in probe path or if the driver
-> is incorrectly initialized by a faulty device descriptor.
+On Mon, Apr 21, 2025 at 03:00:10PM GMT, Melody Olvera wrote:
+> SM8750 does not require an XO clock in the dt as it is the
+> parent of the TCSR refclk_src, so move the compatible to a section
+> where the XO clock is not required.
+> 
+> Signed-off-by: Melody Olvera <melody.olvera@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, this can't happen as probe would abort on allocation failures and
-the malicious descriptor case was fixed 8 years ago by commit
-ef079936d3cd ("USB: serial: ti_usb_3410_5052: fix NULL-deref at open").
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Johan
+Best regards,
+Krzysztof
+
 
