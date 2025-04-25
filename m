@@ -1,92 +1,89 @@
-Return-Path: <linux-usb+bounces-23473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4061DA9D1F3
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 21:40:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B56A9D2A1
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 22:04:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90F594632A7
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 19:40:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE0B81BC80C9
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 20:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9636B26D4DE;
-	Fri, 25 Apr 2025 19:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2AC522068B;
+	Fri, 25 Apr 2025 20:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOdNgRjm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGO87fH0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6B3288C92
-	for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 19:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE921E0DD8;
+	Fri, 25 Apr 2025 20:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745609760; cv=none; b=i6SzDCawHOF8CjthTAQ72iPuarQannkNBq6t4mgfEXTT8AIFwnLRQ73aOaS3v5WUJtErZP7SxOBZBiiE22dcOzzOe0fVmZEt5KGbmpvFDvtK9wPr7kNNs1nXlArfR7ZFVw4JaiQf394+B3C3N8JZg6L46tj3NiZ5uxKnlHj37fM=
+	t=1745611450; cv=none; b=UP/46uRuUSc2pl8U2pYkHN862pHsSTE7DGStMOMq+yVGlp8MxO5/EVOALXaKXYuE0zOMiKYNLcrV7bRwol4b3bAdD44OAydpR34KvUTSf6zep6Ol+YUAAG5WGNokDiT0okzLtvlisECu5Els56Cqv8Zpsy/ItW4RwO32l/o6rTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745609760; c=relaxed/simple;
-	bh=CHVczPGJNE2Iir8d2t0I1G1KocxziX30Bx2WtcVEapg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SjMnuDptYN07ZoejA/lvEXdkIqZyNk/ftAQHsf7JXDrDrYu5p8aBpJdv+QzsqnBqFt0/kyDWpe5jafh43ePg8g0mKkRI7vsgbUXw7W7gE5hqpS89tEpmFinnORyvRffbImXsuJVcCgOG5vaqvuJ40xQybUG52cJ6KKKllj58k0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOdNgRjm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F271C4CEEE
-	for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 19:35:59 +0000 (UTC)
+	s=arc-20240116; t=1745611450; c=relaxed/simple;
+	bh=4UWy2JHG2LUvJkjrlQYr0V4ExuSPFQvuOJhzRHDcKGw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZ1nE3CIudR4GrQoqO4C+TtP3tX8XOsooT9+dCmQgF959Gd0xjfNOb0MjX9EvFM3ytjnnyG7YaxmlNhRfzcpJ6hXjzVekCCtYXKFYsOoRu1viVFDVH9r7UShb0l05sRDScnA9duHjoLSUWlQneziQlGlLxz8RS7AwdfQsSNhQBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGO87fH0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB47C4CEE4;
+	Fri, 25 Apr 2025 20:04:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745609759;
-	bh=CHVczPGJNE2Iir8d2t0I1G1KocxziX30Bx2WtcVEapg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=oOdNgRjmKEqL6X2U0sU78ksQPCB4gqoyrtdxqPhFEaWZELDavgp1BojsCjUosHaNy
-	 YL+lWIEHfWsIKZgyT2aYvpGSXRzluDU5uTU0xcvk3jaq44BjqucdqTrsZejXKIEGuq
-	 uQ+PerpiMV21F1LG0QXxyANZJcAPrYYwJlkf/lUQ70HmBAF9x3L8UHAmtOjE4jwMK7
-	 3zJNRW4FK5TKIR9HPSjanV2D90uozdPIFwoC0ADgWaH3LAvWmCMPrnqzvjdmQqNdu+
-	 b9wSbzP7Tm5SrrLICkvQpbcKdk++GyavS4LOgfgH7va3lByU3WYJDDSosa7+LbqgMc
-	 CIHwTidpNmqmw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 95C16C41612; Fri, 25 Apr 2025 19:35:59 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220016] USB devices plugged into USB hubs on
- 6.14.2-300.fc42.x86_64 do not work
-Date: Fri, 25 Apr 2025 19:35:59 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: PCI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stevenfalco@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220016-208809-TcXofbeRzM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
-References: <bug-220016-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1745611449;
+	bh=4UWy2JHG2LUvJkjrlQYr0V4ExuSPFQvuOJhzRHDcKGw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OGO87fH0wQ53eMLq5xdDd6WDA0EZPztkcuRpUw9i5EUeJg3nMqBEAu1KvQechrpKq
+	 FqFkQ22XUE+HrDwDJ4QKd0L/zoXxeARJFMT8zh0gYTcVG7oJQ+BIpXON3mSCYY+Je2
+	 lHGntoZzHCZYrMeW3REQGwiF1yRqCYJoUTA63soTDDn56OR00HWN05VQXcTSyAbKYn
+	 UMsXeRAihM4ytoyWSuICU7Hx53S8g9KkyVpwW0QSOPWD7GVC025cZrlEmDLPm6qMA5
+	 IOBZZcw/Rt195MJ1mS2B0zk9U4uhWsmq+/KJJNQZy4t0aMjjSnwjP/IIJEiJZaPMAu
+	 wG+jLmxiY4CPw==
+Date: Fri, 25 Apr 2025 15:04:07 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Pin-yen Lin <treapking@chromium.org>
+Cc: linux-usb@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	Stephen Boyd <swboyd@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: usb: Introduce usb-hub.yaml
+Message-ID: <174561144733.2905131.13737700118522261776.robh@kernel.org>
+References: <20250422082957.2058229-1-treapking@chromium.org>
+ <20250422082957.2058229-2-treapking@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422082957.2058229-2-treapking@chromium.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
---- Comment #26 from Steven A. Falco (stevenfalco@gmail.com) ---
-I've run the experiment you requested and attached a log file.  This did not
-help with the problem - I still had no keyboard - but hopefully the extra
-logging will give you more information.
+On Tue, 22 Apr 2025 16:28:27 +0800, Pin-yen Lin wrote:
+> Introduce a general USB hub binding that describes downstream ports
+> and hard wired USB devices for on-board USB hubs.
+> 
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> 
+> ---
+> 
+> Changes in v3:
+> - Remove redundant schemas
+> 
+> Changes in v2:
+> - New in v2
+> 
+>  .../devicetree/bindings/usb/usb-hub.yaml      | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
+> 
 
---=20
-You may reply to this email to add a comment.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
