@@ -1,56 +1,50 @@
-Return-Path: <linux-usb+bounces-23456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 622DFA9C7FC
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBF90A9CACD
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 15:49:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 934A91BC52EE
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 11:44:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BB561BA5760
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E5B231A2D;
-	Fri, 25 Apr 2025 11:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47528239072;
+	Fri, 25 Apr 2025 13:49:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gIbDfsV3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="guztwcrq"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F4024466C;
-	Fri, 25 Apr 2025 11:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92362701D7;
+	Fri, 25 Apr 2025 13:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745581449; cv=none; b=nEFCw9LEuwXYk1zLsUQPyzGuVSvP9cvrC5rJDt7IyBj06A3i/4YUmFU6nE1pRErCxIGGjb+8SxzrTwPWk5oHOzZDf7/Lbyv7VXZkoUED4imRa9oAN+tTz/Y6KX27Uw/2SqJXO74Edafi/hfRnMijYweeJ3UtUQOkfC46rfIsMyI=
+	t=1745588952; cv=none; b=AMMM8l0evNZx40cX41frWyBQ6GzBq+LbaWDnJ0uJm6+FV5xq0tcxQbghTzYgLofxcE3wuGjQ9vYJxyECVg9U6Py7+BENHb2x3L1gTDrMmqN1peLESqGmirGcFWAUa1Bq5NtsxHAPFDsyR6EqMjRwqIa0RNw8KCYcps52A10lWk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745581449; c=relaxed/simple;
-	bh=vy6bG7+1BX3YWDKuvZYTt2tpcG6Xp8Qw24Qr8RqZnl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z95/9ohmR5PE4T1dPa7TvPUntvwjp/QHwXgL5vZDIbBNLIMfoenEYoVEjKBs2sAiC1i6DzDQF6Zh2wVDauMR9VmoGTxTkGEAZ3UXCfgsHFEICAQD0rRatPY8YnPrO4WXMBzJDPIIbWmzGPhoB+Hdj/8Dd5zLJJDEtYlffIvY31s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gIbDfsV3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73551C4CEE4;
-	Fri, 25 Apr 2025 11:44:08 +0000 (UTC)
+	s=arc-20240116; t=1745588952; c=relaxed/simple;
+	bh=FwuPWlq6Cw/29r+Y2VW5C7dzbjwD+MSu3wk62JqnBiQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ET8qSkkWpx6biGRSRiuCx2JyUUmDZeFJ1LmF6zPQj1PNAK16h1BY+2jjNGWBuV7CI3SixR7ZMLagKb0i4kDZ8Xkcq/5RfZVwZEoz9+0MRtIP8rCuMkN/5QjHFwSTEoK1BCTKzVzsGKFfGA27xi2sd5U6JqWI73fT+Erw0GWEQKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=guztwcrq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE83FC4CEE4;
+	Fri, 25 Apr 2025 13:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745581448;
-	bh=vy6bG7+1BX3YWDKuvZYTt2tpcG6Xp8Qw24Qr8RqZnl4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gIbDfsV3iXOaSM3xHYQRCXSa9bnIIYfRPBkK2ebU1MQpff4jWMK0ArG+rCxLRkXTo
-	 +GBI4XCceZzOaPIi2Fn5A8Nrck7qNdaH/bmXsj8ZZ5WOKe6DVuI7yhJaRztGNvPljq
-	 4O1apGcd8uOCTGhc7/BDp+h0pkv5WGRUQddPQcJ0=
-Date: Fri, 25 Apr 2025 13:44:06 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Pengyu Luo <mitltlatltl@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	kernel test robot <lkp@intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Pavan Holla <pholla@chromium.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: add DRM_BRIDGE dependencies
-Message-ID: <2025042551-baggie-brisket-aa8c@gregkh>
-References: <20250425113025.1718145-1-arnd@kernel.org>
+	s=korg; t=1745588952;
+	bh=FwuPWlq6Cw/29r+Y2VW5C7dzbjwD+MSu3wk62JqnBiQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=guztwcrq3C1RUzUhAnOThbNN+wPu9Zz7cCyo9SAk9gpfxApoSwd0DlAVUH4O/INtt
+	 ytd7POSELEASGoVD3upYX6X9U3NbkHzUsdUq7K7XwOok8WBExVDMtyi93U0+UknsFV
+	 uMRXUqu5lvTITbnDktE1YjxqICe5cw2RcsEnAq88=
+Date: Fri, 25 Apr 2025 15:49:09 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.15-rc4
+Message-ID: <aAuS1QXWLNwEf31j@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,34 +53,118 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250425113025.1718145-1-arnd@kernel.org>
 
-On Fri, Apr 25, 2025 at 01:30:21PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Selecting CONFIG_DRM_AUX_HPD_BRIDGE is not allowed when its dependencies
-> are not met:
-> 
-> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
->   Depends on [n]: HAS_IOMEM [=y] && DRM [=n] && DRM_BRIDGE [=n] && OF [=n]
->   Selected by [m]:
->   - UCSI_HUAWEI_GAOKUN [=m] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=m] && EC_HUAWEI_GAOKUN [=m]
-> 
-> ERROR: modpost: "drm_bridge_hpd_notify" [drivers/gpu/drm/bridge/aux-hpd-bridge.ko] undefined!
-> ERROR: modpost: "devm_drm_bridge_add" [drivers/gpu/drm/bridge/aux-hpd-bridge.ko] undefined!
-> 
-> Add the same dependencies for the new UCSI_HUAWEI_GAOKUN driver to ensure
-> it always builds cleanly.
-> 
-> Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202504140319.dgpbDOJZ-lkp@intel.com/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/usb/typec/ucsi/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-I just took this version which was sent before yours, sorry:
-	https://lore.kernel.org/r/20250417122843.2667008-1-yuehaibing@huawei.com
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.15-rc4
+
+for you to fetch changes up to 3dfc0445274252301dfcf3980d79acceea6409d1:
+
+  MAINTAINERS: Assign maintainer for the port controller drivers (2025-04-25 13:31:31 +0200)
+
+----------------------------------------------------------------
+USB fixes for 6.15-rc4
+
+Here are some small USB driver fixes and new device ids for 6.15-rc4.
+Nothing major in here, just the normal set of issues that have cropped
+up after -rc1:
+  - new device ids for usb-serial drivers
+  - new device quirks added
+  - typec driver fixes
+  - chipidea driver fixes
+  - xhci driver fixes
+  - wdm driver fixes
+  - cdns3 driver fixes
+  - MAINTAINERS file update
+
+All of these, except for the MAINTAINERS file update, have been in
+linux-next for a while with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Adam Xue (1):
+      USB: serial: option: add Sierra Wireless EM9291
+
+Andrei Kuchynski (2):
+      usb: typec: class: Fix NULL pointer access
+      usb: typec: class: Invalidate USB device pointers on partner unregistration
+
+Craig Hesling (1):
+      USB: serial: simple: add OWON HDS200 series oscilloscope support
+
+Dan Carpenter (1):
+      usb: typec: class: Unlocked on error in typec_register_partner()
+
+Fedor Pchelkin (3):
+      usb: chipidea: ci_hdrc_imx: fix usbmisc handling
+      usb: chipidea: ci_hdrc_imx: fix call balance of regulator routines
+      usb: chipidea: ci_hdrc_imx: implement usb_phy_init() error handling
+
+Frode Isaksen (1):
+      usb: dwc3: gadget: check that event count does not exceed event buffer length
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-6.15-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Heikki Krogerus (1):
+      MAINTAINERS: Assign maintainer for the port controller drivers
+
+Huacai Chen (1):
+      USB: OHCI: Add quirk for LS7A OHCI controller (rev 0x02)
+
+Mathias Nyman (3):
+      Revert "xhci: Avoid queuing redundant Stop Endpoint command for stalled endpoint"
+      Revert "xhci: Prevent early endpoint restart when handling STALL errors."
+      xhci: Limit time spent with xHC interrupts disabled during bus resume
+
+Miao Li (2):
+      usb: quirks: add DELAY_INIT quirk for Silicon Motion Flash Drive
+      usb: quirks: Add delay init quirk for SanDisk 3.2Gen1 Flash Drive
+
+Michael Ehrenreich (1):
+      USB: serial: ftdi_sio: add support for Abacus Electrics Optical Probe
+
+Michal Pecio (2):
+      usb: xhci: Fix Short Packet handling rework ignoring errors
+      usb: xhci: Fix invalid pointer dereference in Etron workaround
+
+Mike Looijmans (1):
+      usb: dwc3: xilinx: Prevent spike in reset signal
+
+Oliver Neukum (6):
+      USB: storage: quirk for ADATA Portable HDD CH94
+      USB: VLI disk crashes if LPM is used
+      USB: wdm: handle IO errors in wdm_wwan_port_start
+      USB: wdm: close race between wdm_open and wdm_wwan_port_stop
+      USB: wdm: wdm_wwan_port_tx_complete mutex in atomic context
+      USB: wdm: add annotation
+
+Ralph Siemsen (1):
+      usb: cdns3: Fix deadlock when using NCM gadget
+
+ MAINTAINERS                            |  8 +++++--
+ drivers/usb/cdns3/cdns3-gadget.c       |  2 ++
+ drivers/usb/chipidea/ci_hdrc_imx.c     | 44 ++++++++++++++++++++++++----------
+ drivers/usb/class/cdc-wdm.c            | 21 ++++++++++++----
+ drivers/usb/core/quirks.c              |  9 +++++++
+ drivers/usb/dwc3/dwc3-xilinx.c         |  4 +---
+ drivers/usb/dwc3/gadget.c              |  6 +++++
+ drivers/usb/host/ohci-pci.c            | 23 ++++++++++++++++++
+ drivers/usb/host/xhci-hub.c            | 30 ++++++++++++-----------
+ drivers/usb/host/xhci-ring.c           | 11 ++++-----
+ drivers/usb/host/xhci.c                | 18 ++++----------
+ drivers/usb/host/xhci.h                |  5 ++--
+ drivers/usb/serial/ftdi_sio.c          |  2 ++
+ drivers/usb/serial/ftdi_sio_ids.h      |  5 ++++
+ drivers/usb/serial/option.c            |  3 +++
+ drivers/usb/serial/usb-serial-simple.c |  7 ++++++
+ drivers/usb/storage/unusual_uas.h      |  7 ++++++
+ drivers/usb/typec/class.c              | 24 +++++++++++++++----
+ drivers/usb/typec/class.h              |  1 +
+ 19 files changed, 167 insertions(+), 63 deletions(-)
 
