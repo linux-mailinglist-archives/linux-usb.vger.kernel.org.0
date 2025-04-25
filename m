@@ -1,143 +1,108 @@
-Return-Path: <linux-usb+bounces-23439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C57A9C4A3
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 12:07:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23317A9C4F6
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 12:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DC3C1BA5360
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 10:07:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F29449A00FC
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 10:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBDB238C2A;
-	Fri, 25 Apr 2025 10:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E10242D8C;
+	Fri, 25 Apr 2025 10:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cRz8R4fN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPo8XGzK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5A726AC3;
-	Fri, 25 Apr 2025 10:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AE323FC49;
+	Fri, 25 Apr 2025 10:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745575652; cv=none; b=TYAqzqbwC2ZjkTn7pxZhOdJvWM9eG/Qz+lo4190dIBFqxsh8maMaYpEUUtz/+zP6p/3S5eyE1/y4wh+k0HmURcOgMhue8gJzPlX0LPBghLZ76imw4YFq7NUpods03O7a7OwC4qZzEu0V6DJRHnUbu48cg37kvDXMPWMhUlCQQRc=
+	t=1745576003; cv=none; b=dGecezmpSFMSdnnG/m875AYm2AwthmDXx94YqAyOFuTcvqxIGMo+F/QJIi0wcCuTPMu0aLYVLoxlPwnUM9F3sB+B9xk65uxDGOIfuSFnbe26lrIDzFd0eAvKCRxgUT646QxrYNGZRdWmCG9CFeF/XKFwOQiW1FLGh+w53WCO6Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745575652; c=relaxed/simple;
-	bh=AEtQ4zVhOD5ipP+9Ofvo+I3POCv/ZAPLObFlY45PRVo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JCgcgJBpIujqISwLSYoJosHYFuYz+Nockv1x2wuRwefeE54gyuGnbXZ5Dh9r5QDvVAQZ79w3CYFkGvw+Rx1Tu3miJAYXIYGPEKbAdeMnOJvC4EeeCrZ4u6X8rOJjgZkVx7EkEZk2Bg8SYIqgW1k3tlQsGZ0QTMlSV+Yy5Hynhpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cRz8R4fN; arc=none smtp.client-ip=209.85.215.174
+	s=arc-20240116; t=1745576003; c=relaxed/simple;
+	bh=leQ7yhAu9noiNiGYZltHvb58booqg1uL4Zo2ckgH484=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R92U2WK/hHeBJpn8PbbTUHNEgh6xJl9EEYRuxzCKW7FZDUVPwjbOe8M0lezZwIvvOzbQ+pTfuPKhtVKcHdJeFnHXB/0uNCLH9LcN6u3cpmNfz+he3YgykiJKjGqsUbWyGVtajb5VPgqIvM2bymTA2z2YG0/MhS5q8cZyLOYg/YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPo8XGzK; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-af590aea813so3107274a12.0;
-        Fri, 25 Apr 2025 03:07:31 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so13569095e9.1;
+        Fri, 25 Apr 2025 03:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745575651; x=1746180451; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9uPmzHYOFCtYn1VfRn4G0KZ5XWfuvrYmTvkQ5ZTDH8s=;
-        b=cRz8R4fN7dSlBirVjdrfUm2phowCC1GZ3ausi9WoEgYxHNEXp2Ic4Smf96vxI3VCYT
-         H3eKRCVFV63aSPLaV3GoaGzKeJyX2u2M1vdaL7Co8RC8L5nEZ4wOfhW+csCN7phi5gLa
-         OZzCA31spbSVoVfy158Ur+KDF5qJ3chdBYzn6pI2Fx1cfPXnndcryGD/KvMEDt7aviYZ
-         GKjGma1GaEsUrH9Xy1TChtFF6priEBScxyUvYzmcl44g9qTeITyHMLKUovVeN5/VjYe0
-         TQaTQ38rsBrtGZ1LMj4RUf+pSpwwl9Us25EUfrgAiMA12ecIKXVr6QT3lxK0tM556HhG
-         lILw==
+        d=gmail.com; s=20230601; t=1745576000; x=1746180800; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=leQ7yhAu9noiNiGYZltHvb58booqg1uL4Zo2ckgH484=;
+        b=jPo8XGzKOhDrNgkbDp8amVvcCzMj0/4D5TtImkK3PJLzI4GsODp28rEp/DkA6khCXT
+         JRiIs2n5UtJYrkIq0R9IHa6y6y9DhGEg/nnCotYSHaV+HQgfhDHG5rkfMw/x9ACivF1/
+         guPubQQAwmgojz77Seq+5vIx1GanPECppjFq7KS2d+a1AdNXVsGTo7vzz27jbaMK14Rz
+         nfwk8c/hc3NRKz09lMB5rlgwIn5j4Tsck8dzNToX41WNB4rdxa0hZ7ms7bNAIUwNdJkB
+         syhtF6byBwZaadvk43IEQ3rFdjYyi40EwIY5cJ3RKA9CKUYa3b5aHeLGqB3USOmVk0zI
+         lPCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745575651; x=1746180451;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9uPmzHYOFCtYn1VfRn4G0KZ5XWfuvrYmTvkQ5ZTDH8s=;
-        b=IG2Se8ErSr7t8OCm9p1G7+80TP0wFK83OZMTUNEQHObo6yjj0xaxsPrz2o8GOjss8o
-         b95vG3/r7vfIRrpRbOXtfN3Tq8x3NJeHGoyJXsGsGMQEJCKM42TXrrhegjCxFiXeuW8f
-         2wxkkb+YVws7vMtTa1Wax0xBrUa7E+0zApUkzIXioPzFg/y47dZSpPjf6Ds0+zYL/Prt
-         3cSZTY7e5hUIVItY25O0ed9PfvTylN19UpQVrvITl5iMftoELSBN9TtfwBlSiMKIecO2
-         u9n/67/zwWv6V86H3DFunhccMzKvn50GXQ8BuJREfAmYNRGKlGcTiE7cVPW0ht8I3iEG
-         UQaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTQU4BPE592S/gZcJM3VprEATX1SCEGcPh19z2rEUtkmvHc8zqSTj0BnC4U9G0mpz/cR2bF+MvjrWo@vger.kernel.org, AJvYcCUkorRfhYE6+K+hNBsYCMOk+5r2/u1Inn9plQSYHj+4hTfGZnS4Y/wOSoVSWuKpjf/7tChf123o9ieWH17Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBT8aZQdZJCf3oyr+Up4TmT51sePJfABNhW6Wr4eJ0ECGWnLXF
-	fBg86UaanxwjiWeHOQj46JiB9WF+RViQTkEW+krE6C699ZAPjEEs
-X-Gm-Gg: ASbGncuFuVXSPzu5Lr+HnPpxJ7/k0v9kcQ8JbJUTd1MEAZOZb7SqzhJrS4NsQWkKjl8
-	zxEK6+asAArOIRi+LhEpAgNjVj7doouRxPnjXEQXwVtlhT++r0ypKPCwNKwzxo1pShkfXAtJ4vM
-	rmYE4t/Pja6o0whVTpAteE9BobVlloKToqCkVCXgaGiWyeycl6ZghL5WSYdfMqzChESODinbLC0
-	xQ8lF6ZTrKwl90HsIOKcYi1bS3q3qXKqoqeNm3Y4iRxnvNcBaFx44nQgstHAy2kHPasGdNXVBtw
-	pt54030gYqbpYyejuA2PJfZZRPn8YTMEUfowEvRCrvATuzMTXSsB
-X-Google-Smtp-Source: AGHT+IEOXFkBumaprnMtZPAH/o9LFhkdeVpSsvxZfbKPhXNApsgEGu3ARHcUpcaYofflyKnemwQfCg==
-X-Received: by 2002:a17:90b:2741:b0:2fe:93be:7c9d with SMTP id 98e67ed59e1d1-309f8992d63mr2194207a91.7.1745575650719;
-        Fri, 25 Apr 2025 03:07:30 -0700 (PDT)
-Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef03bb26sm3337254a91.6.2025.04.25.03.07.24
+        d=1e100.net; s=20230601; t=1745576000; x=1746180800;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=leQ7yhAu9noiNiGYZltHvb58booqg1uL4Zo2ckgH484=;
+        b=MwH2xlT9yxBt2/aoOjwGTytfMQ/k1Nfd3VTyokypdO9ABAQsss+BucAjth+pyrV2wC
+         BcYNEP7MVfgiE0ldKoMbq3PUqPmUhgvmGiLlqBpke6nFMw/aPgMEAYZ+EBTVhGQwLWFj
+         rfc0TzeVBGF+dUOi+SWWJ9qvSNGLVFYPlnuKduV9wab6cbGS5AhnJMG8stYx6u0UuCCV
+         Po9RJlT1Jm4LDaz3cMef5ZFmbibLWKWQpyN1ql0IzG30gTOsOIviyf9aqnmPgf6Vv8cq
+         dlRtrTKbmiZ0s4NjrCyUZsgQ3tQmTo28dXbmNgBbMG6JyFxcJa4sCXHmJAZdYr+ZKSKF
+         oXgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7+uhKbGli4jyVT0Hj18q3lIovVYZ/EmIefqEmGhQ9UKfkZb3Dx+K5k7sckJ7OUHP3IneWtbjgWxaQ7e8=@vger.kernel.org, AJvYcCW7HONWCKSvR+XDKWFR7e0TaM5XAyFViLXNVHuco78W6cm1g4tN3TC/7prWAsfppGXZRKARfFiJiKfc@vger.kernel.org, AJvYcCWgJB05Jal3xB2aFi++bHbk4UVdpSsOko8XHrY/XG4KPPHzajEwfcVcG2Q7V2PCsTXJkZ96tvEt@vger.kernel.org, AJvYcCXiQgWsHbLapbOe3xowG1QFNo8J9dcq0NTEa1vmes/n56N1TEyyoA3fCeXEVRtu2hLstJUK6k8M@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjNuU2OZKApQj0bnPBbeXqUJF2cgd2GJg5ohfWOHafckbXBdNu
+	hSfz5nsn0VrALpHP9zkFyMXQkEgmiryj9yQNdxjoDUF5cK9VAGol
+X-Gm-Gg: ASbGnctmRLMtGEWtbJnazBXpfModndRYhtNJdnh0dCAGj/JtefPqsPjWeM/WiMVZWNK
+	Dk6Ask5fOMVHx7ivWSonT636H81WVJR2i8Jv6q+qCH1HtgR71HounyKS7Ug1DMAqSu504HxeCL4
+	7bVngwORndVDUOgbA49HNivGrAuLYFGg8GyKSVNmUjx4q8DmlobKeRP8og7i+hx4zrEL5gPvkYp
+	oIhGRPbkdnMfXHd4WVqz8CPptc5Gces3v8SURDYcUEv3qxBscxkolt5fschMqEMam24tu4sJhik
+	clnuCbI9xZNhf+eyceevJZrKvTvxwD4UaD2/Lzk=
+X-Google-Smtp-Source: AGHT+IETfuGeLDMAZxnrCqaBW3NFu5fzExXuY2mpnZTRfDsZm6SbJttDkP7GFTyNTPBz8Vw8yxZkrw==
+X-Received: by 2002:a05:600c:1c1e:b0:43b:ca8c:fca3 with SMTP id 5b1f17b1804b1-440a6693ad8mr13041395e9.11.1745575999354;
+        Fri, 25 Apr 2025 03:13:19 -0700 (PDT)
+Received: from gmail.com ([2a02:c7c:6696:8300:ae46:ea89:950b:a804])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a53044besm19768875e9.14.2025.04.25.03.13.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 03:07:30 -0700 (PDT)
-From: Alexey Charkov <alchark@gmail.com>
-Date: Fri, 25 Apr 2025 14:07:31 +0400
-Subject: [PATCH v2] dt-bindings: usb: generic-ehci: Add VIA/WonderMedia
- compatible
+        Fri, 25 Apr 2025 03:13:19 -0700 (PDT)
+Date: Fri, 25 Apr 2025 11:13:12 +0100
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	horms@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 5/5] net: ch9200: avoid triggering NWay restart on
+ non-zero PHY ID
+Message-ID: <aAtgOLMnsmuukU42@gmail.com>
+References: <20250412183829.41342-1-qasdev00@gmail.com>
+ <20250412183829.41342-6-qasdev00@gmail.com>
+ <b49e6c21-8e0a-4e54-86eb-c18f1446c430@lunn.ch>
+ <20250415205230.01f56679@kernel.org>
+ <20250415205648.4aa937c9@kernel.org>
+ <aAD-RDUdJaL_sIqQ@gmail.com>
+ <b492cef9-7cdd-464e-80fe-8ce3276395a4@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250425-vt8500-ehci-binding-v2-1-b4a350335add@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAOJeC2gC/32NQQrCMBBFr1Jm7cg0sSquvId00SSTdsCmkpSgl
- Nzd2APIX70P//0NEkfhBLdmg8hZkiyhgjo0YKchjIziKoMi1dFJaczrtSNCnqygkeAkjMhnuhg
- /eGeNh7p8Rfby3q2PvvIkaV3iZz/J7a/978st1nDVkdOarLqP8yDPo11m6EspX5r7yUO2AAAA
-X-Change-ID: 20250423-vt8500-ehci-binding-e607bfafdcbf
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
- Alexey Charkov <alchark@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745575666; l=1405;
- i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=AEtQ4zVhOD5ipP+9Ofvo+I3POCv/ZAPLObFlY45PRVo=;
- b=vyHQLxiH6LvzFbCTrK/BQsAfEZwEPwwAEu0+Z2j4SM0N2lJrJeHP4v8CfMaEVeJROC0PduAWH
- nrT6KR+ej9LA4O4dHv1G5+WDymiZLntez9+TgpduHl/hqlgx3DnQBZT
-X-Developer-Key: i=alchark@gmail.com; a=ed25519;
- pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b492cef9-7cdd-464e-80fe-8ce3276395a4@lunn.ch>
 
-VIA/WonderMedia SoCs use a plain vanilla EHCI controller with a
-compatible string "via,vt8500-ehci". This compatible is already
-used by the mainline Linux driver and relevant in-tree DTS files,
-so add it to the binding.
+Hi Andrew, Jakub
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Alexey Charkov <alchark@gmail.com>
----
-Changes in v2:
-- Amend the commit message to state that the compatible string in
-  question is already used by the driver and DTS (thanks Conor)
-- Add Conor's Ack
-- Link to v1: https://lore.kernel.org/r/20250423-vt8500-ehci-binding-v1-1-1edcb0d330c2@gmail.com
----
- Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Just pinging on my last message. Any thoughts on how to proceed with this patch series, I left my thoughts in the previous message.
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index 223f2abd5e592ff8cc3ad97f9a325356ea57044a..508d958e698c2e8dad748a6fcdef65d6e883b97d 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -86,6 +86,7 @@ properties:
-           - nuvoton,npcm845-ehci
-           - ti,ehci-omap
-           - usb-ehci
-+          - via,vt8500-ehci
- 
-   reg:
-     minItems: 1
-
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250423-vt8500-ehci-binding-e607bfafdcbf
-
-Best regards,
--- 
-Alexey Charkov <alchark@gmail.com>
-
+Thanks,
+Qasim
 
