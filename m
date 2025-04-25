@@ -1,56 +1,58 @@
-Return-Path: <linux-usb+bounces-23453-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23454-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4165A9C6F0
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:16:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3574FA9C6F9
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:17:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6411B1BC2A6C
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 11:16:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83DA7176AB5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 11:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24AA243374;
-	Fri, 25 Apr 2025 11:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60851FA178;
+	Fri, 25 Apr 2025 11:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AnYQkJwR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dwrSyhc0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D6C242910;
-	Fri, 25 Apr 2025 11:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F3522D4DA;
+	Fri, 25 Apr 2025 11:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745579705; cv=none; b=cziz76AT6PhjFf8KrlSiVLbsRKdkiYw7NeJI9FHMiTOSLWSJDBdwnmZXh0K0M1/IXeqFM59//HmzY69roaORLMs8QIymCNh+VW6USQZrZmb1sPLRZywVoNfG5kx39M1R2Bd4/UTZtX4kzFdzZFN+rIVZ1JQjKbcDMCMVoeG0HyQ=
+	t=1745579832; cv=none; b=sajdhHgeKzrKsTq+j0HIUlll0MJUvN9lZbbCl3dJZAAdmxuqt3ajNcdomnFoAqs9Y6yuzCjO6qPnITmMAWTG9NQgZxM88J/3A4PwDDibiKYbPoNsWxPPtA2Mj63InFSdzdZvs5cwPp6lfFf0aYcw2vRk+YvRhYDr3JzujcfUaqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745579705; c=relaxed/simple;
-	bh=waDywjXtUpYlX4zD/1tQfAt0I25YpPBSHWche6leJNM=;
+	s=arc-20240116; t=1745579832; c=relaxed/simple;
+	bh=WhwOteXj64XGivhOiwvnlcDEYElHNPlWxr/veIpt9QA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwOF9F4xpa+KFNrk98wOP/myNvmlhXG5JkKXTPEIy+Q+gBojdsEwJONH5bAxC4RjhyiqL70cMrA0qD0c7GFTeEuf9MkqMRBbHsnVksPIIYF3/oeWzU3mBvE0jbivuHiE7OplJXuy8Ef9TfYW55LcBUk53CyqSlUfxZuPsP9rey4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AnYQkJwR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB49C4CEE4;
-	Fri, 25 Apr 2025 11:15:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Swf6OODR8LVP8YmQVg2KMDm7wdkfoIatQu/5QUw55XbaPQhL76cnZhqrpGqlLjSnY0XKSUCuAYDf1tfHpCol+xve1rwa6i+Ri9fM4tDE0fXQHfz4xZ61T+5HJvmD3H+fsafAEW4lto+tizZpoFMIzy6Ahq50ucSxTsaOLRpE9kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dwrSyhc0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D956C4CEE4;
+	Fri, 25 Apr 2025 11:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745579704;
-	bh=waDywjXtUpYlX4zD/1tQfAt0I25YpPBSHWche6leJNM=;
+	s=korg; t=1745579832;
+	bh=WhwOteXj64XGivhOiwvnlcDEYElHNPlWxr/veIpt9QA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AnYQkJwRNKU4Tf69i1YG7bFC3KdnMW2cR1Z3jD+PV7AjQVZKqOSnKcEHe+uo3HqZY
-	 5GzNdj0jtiGMrVQi2AGzUQWJtp0CcdapkteeZ3OBZBgCit7cyeEL40u0qS68juADvm
-	 bZmtYA4ZLIQ/9UEuCOSKrK5NZX2/SVSzPe4l/W1o=
-Date: Fri, 25 Apr 2025 13:15:02 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu,
-	sumit.garg@kernel.org, gargaditya08@live.com, kekrby@gmail.com,
-	jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com,
-	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk,
-	broonie@kernel.org, quic_wcheng@quicinc.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 4/4] usb: host: enable USB offload during system sleep
-Message-ID: <2025042543-unfocused-whiff-fa7d@gregkh>
-References: <20250416144917.16822-1-guanyulin@google.com>
- <20250416144917.16822-5-guanyulin@google.com>
+	b=dwrSyhc0nfxJs4zr5Kxh7IyD+y3bTA/T0NqycOb19T2Nz/ENOIm0cY8YCKP50LdWP
+	 ubRqbt78/ak+GhrafY1iSKp1NeKXyY2IuGIwPG+apCSBMsw4Ll4N1CuHM15IPdvEz7
+	 JL+qWAZcK34SOQjgZTisUb4f6iKokg65BA7Jg3mY=
+Date: Fri, 25 Apr 2025 13:17:09 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: phy: rockchip: Convert RK3399 Type-C PHY
+ to schema
+Message-ID: <2025042559-badland-uncombed-c484@gregkh>
+References: <20250416202419.3836688-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,20 +61,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416144917.16822-5-guanyulin@google.com>
+In-Reply-To: <20250416202419.3836688-1-robh@kernel.org>
 
-On Wed, Apr 16, 2025 at 02:43:04PM +0000, Guan-Yu Lin wrote:
-> @@ -724,6 +725,8 @@ struct usb_device {
->  	unsigned do_remote_wakeup:1;
->  	unsigned reset_resume:1;
->  	unsigned port_is_suspended:1;
-> +	unsigned offload_at_suspend:1;
-> +	int offload_usage;
+On Wed, Apr 16, 2025 at 03:24:17PM -0500, Rob Herring (Arm) wrote:
+> Convert the Rockchip RK3399 Type-C PHY to DT schema format. Add the
+> missing "power-domains" property and "port" and "orientation-switch"
+> properties in the child nodes.
+> 
+> Omit the previously deprecated properties as they aren't used anywhere.
+> 
+> Drop the 2nd example which was pretty much identical to the 1st example.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Why is this moved now?  Why isn't it in the proper place from the
-beginning?
-
-thanks,
-
-greg k-h
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
