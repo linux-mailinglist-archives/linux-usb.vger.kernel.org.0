@@ -1,170 +1,142 @@
-Return-Path: <linux-usb+bounces-23457-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23458-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF90A9CACD
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 15:49:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4675A9CB2E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 16:11:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BB561BA5760
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:49:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0309C188FFB9
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 14:11:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47528239072;
-	Fri, 25 Apr 2025 13:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D5F2550CB;
+	Fri, 25 Apr 2025 14:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="guztwcrq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b+4Wlk6c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92362701D7;
-	Fri, 25 Apr 2025 13:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45B571747;
+	Fri, 25 Apr 2025 14:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745588952; cv=none; b=AMMM8l0evNZx40cX41frWyBQ6GzBq+LbaWDnJ0uJm6+FV5xq0tcxQbghTzYgLofxcE3wuGjQ9vYJxyECVg9U6Py7+BENHb2x3L1gTDrMmqN1peLESqGmirGcFWAUa1Bq5NtsxHAPFDsyR6EqMjRwqIa0RNw8KCYcps52A10lWk0=
+	t=1745590266; cv=none; b=qnaXEzsY/hdzdYpGeZ7kojRqYP9Y8VsWKTycgtuWIV3F2U6dlyA1eqkMLz+iPRHaUTqzzUNYK+5K2vm/CNQG5z27XM7w24BjSTdL0VQqGhx6beXfzdh024Al0v3TZQoYqNGKek8b8VAV80HRavl2BpPkF66wlRA74OCzPKXUkZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745588952; c=relaxed/simple;
-	bh=FwuPWlq6Cw/29r+Y2VW5C7dzbjwD+MSu3wk62JqnBiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ET8qSkkWpx6biGRSRiuCx2JyUUmDZeFJ1LmF6zPQj1PNAK16h1BY+2jjNGWBuV7CI3SixR7ZMLagKb0i4kDZ8Xkcq/5RfZVwZEoz9+0MRtIP8rCuMkN/5QjHFwSTEoK1BCTKzVzsGKFfGA27xi2sd5U6JqWI73fT+Erw0GWEQKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=guztwcrq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE83FC4CEE4;
-	Fri, 25 Apr 2025 13:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745588952;
-	bh=FwuPWlq6Cw/29r+Y2VW5C7dzbjwD+MSu3wk62JqnBiQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=guztwcrq3C1RUzUhAnOThbNN+wPu9Zz7cCyo9SAk9gpfxApoSwd0DlAVUH4O/INtt
-	 ytd7POSELEASGoVD3upYX6X9U3NbkHzUsdUq7K7XwOok8WBExVDMtyi93U0+UknsFV
-	 uMRXUqu5lvTITbnDktE1YjxqICe5cw2RcsEnAq88=
-Date: Fri, 25 Apr 2025 15:49:09 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.15-rc4
-Message-ID: <aAuS1QXWLNwEf31j@kroah.com>
+	s=arc-20240116; t=1745590266; c=relaxed/simple;
+	bh=D/fhKblNOpPNIWKJTvWP9sKhNkDTvsdfku2TDqTRhLM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Mz1BT2TcU2Tl32vUI2/McfIR7zrF+8znKsiWjBvvN7lTd7K7fQgMsMZWSuLAZxRZhqit/YPBVUAzEVUU98/UzRkwUhFvZrVzAc/3VcW9VEd8ic319CsEy6dpprcNUJbi7PNidv4lsMC0HIl7k1odMdFxEpVgenzy7FESilHoVQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b+4Wlk6c; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b0b2d1f2845so1630200a12.3;
+        Fri, 25 Apr 2025 07:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745590262; x=1746195062; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcFGunDGFlBnoHlVsGllCJdfq+5mLDS70Q12Us2qJLo=;
+        b=b+4Wlk6cFFQLdLVTvNdDE7xMqQadB5Vx+qjraT13Qmo0KScjy29oeKgGqYnfmHsEZ4
+         Oa7og+EqDTlo+ugu0zIOsz59AJzazVnujDNpkAgt2xSBi+J0MQobWBxBOQ152BGaNK8H
+         +RhAkWmz7awPEKklGXCcwKvNrkZdVL+SWIDZkgt6EmOspDw7XWmTBgOXwX6tN33Kfm+h
+         MQIw0jHFpLiYhZLiAAkkBYwOkYx1II5kRfHz6yZqSG9Vq+736Tj1FnSQOfAwxCX0tNMO
+         9K7jGboHkkpO/lK0rzhY89KlEfaK+4vaSv5n5o6Sy8t8XMRvNfQVWhUeHjp8JI1QD9PS
+         o31A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745590262; x=1746195062;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wcFGunDGFlBnoHlVsGllCJdfq+5mLDS70Q12Us2qJLo=;
+        b=DE7jNdoLBGi83sXh58bP3tRAdzezTJnVOgvnOOJje7YW/wsAsriK+lWZqT4/gI1aZw
+         UxyWEL1veagcivQxxoFTuG9exL6pUbsJewXU23G7MJ5efQK/rAXUvi5cKIfmXWxw6Vjs
+         oS1SGaljgbptglm43Q71eqJfx5Rw5PSzx/aFZR1GCJ7g6jswJeuUJVEAIYEhLs1lkdCt
+         379/+g3Zrmb4woe58r1XhADH4LHw27Ya6zj60PIuLqdwO8PofdvgbTZVSQeYqDTNGihf
+         GXaNoPxDPMouVn5QjzzI9r0tvQY+WerZR8ViHEJb4HeKlD3ANgvrXuZqMZWQgfnvOwOr
+         OLIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsU+HsD7ipu02cLghVf1YosWuP6GeZm4g7AR0uWdX+R9difHZzJQv9PHFB12g5PhRIvDqfkVsX@vger.kernel.org, AJvYcCVY20TezbGNOzhnr3tyLDwVQ+kfZ+DoABkC+zYMtDdI6uAXDfrleWzOlMACppa6C2/8zfPuiKNZH7mHM7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU43TYCwNqs5KOnDAPU8GPHbhkLn8zu1a0e5ymosO2cZMlmSwN
+	YMEurKzAtqQzGGoCkPL0y+96MH36GkaRLsnWEnvqcRmKkMf23wiBwEfEYn0/wls=
+X-Gm-Gg: ASbGnctXpAPnbZcXYON7zXZ+vj6VlB9UTAj4xQMBnh4YIlvLarTqMaf92fTyfbH0W+W
+	QpW/QhGOB50f4bs3OUIZWhlol23w3T8tSKfVlfsBmBGw8hzjCwme6tdH47LuSubOEzzPRff6r9O
+	MU9bhTSQmRPsLlFOcfu1HcmXrEGpWmPuaAyVtHCCXdhD8UQ/19E639h83o70ZyrHdbmZjUqq7Ea
+	IACjyqVrXvou0AawiPQGGqos3LEJsnlu3K++oXCmBjUrY/hKoKJBh34BcdeqlFcCJ3ndd3bVxBZ
+	nW/bMLCkiEx3D/oHVet3fG9UEOh0de8tNjzSBdnxf3b5UJecjcdN
+X-Google-Smtp-Source: AGHT+IEySxlPoPMDlFK9RIIxEb+5JKl+/kuCEAuk78G+bHa0i52eqx6+rjh8qLR5d7YVJIV18DYOag==
+X-Received: by 2002:a17:90a:bb8f:b0:305:5f32:d9f0 with SMTP id 98e67ed59e1d1-309f8db391amr2573185a91.19.1745590262515;
+        Fri, 25 Apr 2025 07:11:02 -0700 (PDT)
+Received: from NB-GIGA003.letovo.school ([5.194.95.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef03bb1asm3494350a91.7.2025.04.25.07.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Apr 2025 07:11:02 -0700 (PDT)
+From: Alexey Charkov <alchark@gmail.com>
+Date: Fri, 25 Apr 2025 18:11:11 +0400
+Subject: [PATCH] usb: uhci-platform: Make the clock really optional
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250425-uhci-clock-optional-v1-1-a1d462592f29@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAP6XC2gC/x2MQQqAIBAAvxJ7bsEkC/tKdBDdckkytCKI/p50H
+ JiZBzIlpgxD9UCiizPHrUBTV2C92RZCdoVBCqlEKxWe3jLaEO2KcT+KbQJqo53QqhPU9FDKPdH
+ M938dp/f9AM7fsUllAAAA
+X-Change-ID: 20250425-uhci-clock-optional-9a9d09560e17
+To: Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745590280; l=1431;
+ i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
+ bh=D/fhKblNOpPNIWKJTvWP9sKhNkDTvsdfku2TDqTRhLM=;
+ b=pOSFN8QvFDDI0Udc46ceGEG6LC+FxW7I/XRS8DDi9pfRjmFsWh7McOM2IAyGHwyMXl4s5TsJI
+ jGBEotWD+xEAaXMFoNbKm+ql4GkByofhffdASaoxqXblmD8iiDxOkEk
+X-Developer-Key: i=alchark@gmail.com; a=ed25519;
+ pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+Device tree bindings state that the clock is optional for UHCI platform
+controllers, and some existing device trees don't provide those - such
+as those for VIA/WonderMedia devices.
 
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+The driver however fails to probe now if no clock is provided, because
+devm_clk_get returns an error pointer in such case.
 
-are available in the Git repository at:
+Switch to devm_clk_get_optional instead, so that it could probe again
+on those platforms where no clocks are given.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.15-rc4
+Cc: stable@vger.kernel.org
+Fixes: 26c502701c52 ("usb: uhci: Add clk support to uhci-platform")
+Signed-off-by: Alexey Charkov <alchark@gmail.com>
+---
+ drivers/usb/host/uhci-platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for you to fetch changes up to 3dfc0445274252301dfcf3980d79acceea6409d1:
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index a7c934404ebc7ed74f64265fafa7830809979ba5..62318291f5664c9ec94f24535c71d962e28354f3 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -121,7 +121,7 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Get and enable clock if any specified */
+-	uhci->clk = devm_clk_get(&pdev->dev, NULL);
++	uhci->clk = devm_clk_get_optional(&pdev->dev, NULL);
+ 	if (IS_ERR(uhci->clk)) {
+ 		ret = PTR_ERR(uhci->clk);
+ 		goto err_rmr;
 
-  MAINTAINERS: Assign maintainer for the port controller drivers (2025-04-25 13:31:31 +0200)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250425-uhci-clock-optional-9a9d09560e17
 
-----------------------------------------------------------------
-USB fixes for 6.15-rc4
+Best regards,
+-- 
+Alexey Charkov <alchark@gmail.com>
 
-Here are some small USB driver fixes and new device ids for 6.15-rc4.
-Nothing major in here, just the normal set of issues that have cropped
-up after -rc1:
-  - new device ids for usb-serial drivers
-  - new device quirks added
-  - typec driver fixes
-  - chipidea driver fixes
-  - xhci driver fixes
-  - wdm driver fixes
-  - cdns3 driver fixes
-  - MAINTAINERS file update
-
-All of these, except for the MAINTAINERS file update, have been in
-linux-next for a while with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Adam Xue (1):
-      USB: serial: option: add Sierra Wireless EM9291
-
-Andrei Kuchynski (2):
-      usb: typec: class: Fix NULL pointer access
-      usb: typec: class: Invalidate USB device pointers on partner unregistration
-
-Craig Hesling (1):
-      USB: serial: simple: add OWON HDS200 series oscilloscope support
-
-Dan Carpenter (1):
-      usb: typec: class: Unlocked on error in typec_register_partner()
-
-Fedor Pchelkin (3):
-      usb: chipidea: ci_hdrc_imx: fix usbmisc handling
-      usb: chipidea: ci_hdrc_imx: fix call balance of regulator routines
-      usb: chipidea: ci_hdrc_imx: implement usb_phy_init() error handling
-
-Frode Isaksen (1):
-      usb: dwc3: gadget: check that event count does not exceed event buffer length
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.15-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Heikki Krogerus (1):
-      MAINTAINERS: Assign maintainer for the port controller drivers
-
-Huacai Chen (1):
-      USB: OHCI: Add quirk for LS7A OHCI controller (rev 0x02)
-
-Mathias Nyman (3):
-      Revert "xhci: Avoid queuing redundant Stop Endpoint command for stalled endpoint"
-      Revert "xhci: Prevent early endpoint restart when handling STALL errors."
-      xhci: Limit time spent with xHC interrupts disabled during bus resume
-
-Miao Li (2):
-      usb: quirks: add DELAY_INIT quirk for Silicon Motion Flash Drive
-      usb: quirks: Add delay init quirk for SanDisk 3.2Gen1 Flash Drive
-
-Michael Ehrenreich (1):
-      USB: serial: ftdi_sio: add support for Abacus Electrics Optical Probe
-
-Michal Pecio (2):
-      usb: xhci: Fix Short Packet handling rework ignoring errors
-      usb: xhci: Fix invalid pointer dereference in Etron workaround
-
-Mike Looijmans (1):
-      usb: dwc3: xilinx: Prevent spike in reset signal
-
-Oliver Neukum (6):
-      USB: storage: quirk for ADATA Portable HDD CH94
-      USB: VLI disk crashes if LPM is used
-      USB: wdm: handle IO errors in wdm_wwan_port_start
-      USB: wdm: close race between wdm_open and wdm_wwan_port_stop
-      USB: wdm: wdm_wwan_port_tx_complete mutex in atomic context
-      USB: wdm: add annotation
-
-Ralph Siemsen (1):
-      usb: cdns3: Fix deadlock when using NCM gadget
-
- MAINTAINERS                            |  8 +++++--
- drivers/usb/cdns3/cdns3-gadget.c       |  2 ++
- drivers/usb/chipidea/ci_hdrc_imx.c     | 44 ++++++++++++++++++++++++----------
- drivers/usb/class/cdc-wdm.c            | 21 ++++++++++++----
- drivers/usb/core/quirks.c              |  9 +++++++
- drivers/usb/dwc3/dwc3-xilinx.c         |  4 +---
- drivers/usb/dwc3/gadget.c              |  6 +++++
- drivers/usb/host/ohci-pci.c            | 23 ++++++++++++++++++
- drivers/usb/host/xhci-hub.c            | 30 ++++++++++++-----------
- drivers/usb/host/xhci-ring.c           | 11 ++++-----
- drivers/usb/host/xhci.c                | 18 ++++----------
- drivers/usb/host/xhci.h                |  5 ++--
- drivers/usb/serial/ftdi_sio.c          |  2 ++
- drivers/usb/serial/ftdi_sio_ids.h      |  5 ++++
- drivers/usb/serial/option.c            |  3 +++
- drivers/usb/serial/usb-serial-simple.c |  7 ++++++
- drivers/usb/storage/unusual_uas.h      |  7 ++++++
- drivers/usb/typec/class.c              | 24 +++++++++++++++----
- drivers/usb/typec/class.h              |  1 +
- 19 files changed, 167 insertions(+), 63 deletions(-)
 
