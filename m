@@ -1,59 +1,60 @@
-Return-Path: <linux-usb+bounces-23474-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23475-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98B56A9D2A1
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 22:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17FBFA9D2A5
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 22:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE0B81BC80C9
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 20:04:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B7371BC8177
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 20:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2AC522068B;
-	Fri, 25 Apr 2025 20:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1294222154A;
+	Fri, 25 Apr 2025 20:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGO87fH0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFheYrhT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE921E0DD8;
-	Fri, 25 Apr 2025 20:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882CB22068B;
+	Fri, 25 Apr 2025 20:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745611450; cv=none; b=UP/46uRuUSc2pl8U2pYkHN862pHsSTE7DGStMOMq+yVGlp8MxO5/EVOALXaKXYuE0zOMiKYNLcrV7bRwol4b3bAdD44OAydpR34KvUTSf6zep6Ol+YUAAG5WGNokDiT0okzLtvlisECu5Els56Cqv8Zpsy/ItW4RwO32l/o6rTk=
+	t=1745611549; cv=none; b=pQ+hkmeOTqF5C01zpwlUxpsoFE5wEFjMjJDLzQOMqsmoZjuuERco3nVP3a0teudBcIbneDRiipJY+/ER3UlFKGRy5Xr5zkovhdjwYyc6h7MUf3tMQM1CYKYxC39lBpcTvTZ9mS4hsMRJYlW2SvmSZ8d6epk/vup3ISFD1XfMUjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745611450; c=relaxed/simple;
-	bh=4UWy2JHG2LUvJkjrlQYr0V4ExuSPFQvuOJhzRHDcKGw=;
+	s=arc-20240116; t=1745611549; c=relaxed/simple;
+	bh=5BQ0LUg6W5yifs+8zhUEaKDVX1DslXZgeFTX4WLSDj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FZ1nE3CIudR4GrQoqO4C+TtP3tX8XOsooT9+dCmQgF959Gd0xjfNOb0MjX9EvFM3ytjnnyG7YaxmlNhRfzcpJ6hXjzVekCCtYXKFYsOoRu1viVFDVH9r7UShb0l05sRDScnA9duHjoLSUWlQneziQlGlLxz8RS7AwdfQsSNhQBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGO87fH0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB47C4CEE4;
-	Fri, 25 Apr 2025 20:04:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=a4u1emlIRrZUpj13/wM/PFCqUqBN84ABa+POJ1I2ohmUMGB9QKzZbnkwuFuCQ+CHqGUJoZ4oxLIib0hW5Zcl15tu1P+ifsMyOpAGJKtCcerIJT2nRN0r4Hm3anEj7FkS/Tshq1xyzaOK/2UdzPYks2sj+JfRQzYfJ8Ki4z8XE7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eFheYrhT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE40AC4CEE4;
+	Fri, 25 Apr 2025 20:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745611449;
-	bh=4UWy2JHG2LUvJkjrlQYr0V4ExuSPFQvuOJhzRHDcKGw=;
+	s=k20201202; t=1745611549;
+	bh=5BQ0LUg6W5yifs+8zhUEaKDVX1DslXZgeFTX4WLSDj4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OGO87fH0wQ53eMLq5xdDd6WDA0EZPztkcuRpUw9i5EUeJg3nMqBEAu1KvQechrpKq
-	 FqFkQ22XUE+HrDwDJ4QKd0L/zoXxeARJFMT8zh0gYTcVG7oJQ+BIpXON3mSCYY+Je2
-	 lHGntoZzHCZYrMeW3REQGwiF1yRqCYJoUTA63soTDDn56OR00HWN05VQXcTSyAbKYn
-	 UMsXeRAihM4ytoyWSuICU7Hx53S8g9KkyVpwW0QSOPWD7GVC025cZrlEmDLPm6qMA5
-	 IOBZZcw/Rt195MJ1mS2B0zk9U4uhWsmq+/KJJNQZy4t0aMjjSnwjP/IIJEiJZaPMAu
-	 wG+jLmxiY4CPw==
-Date: Fri, 25 Apr 2025 15:04:07 -0500
+	b=eFheYrhTeno44k6W7DzkL4UbKZHET/AA+stPKGWxGlJT5xTnLfAZXxMXQ0CpAhsDS
+	 +BQPPjPQ6YqH/jqyuJhWx+VaaHVKESNAAv6SNSSI3QlAuKxYfudFGiwuQ6xdGfOmBP
+	 qGxTLsguR+4/PFXYj8NZ2wo0wFDJuJBMTg5M5Vinpv0yuhodWq2nvbwf+2sJnF497W
+	 BNeESMVmP0lkvyrKrb0SPRpIfw2v5s7/CvmMHWjy4udABF7SqxBVNMtZL+jOuyo7vX
+	 XugiiCSz0DqSTGT52zG6TmuX5GpqL+tsGByA5KMma5jhp4u8Y6KxKYijAREP5ksxxr
+	 7PC6PbFxIbStA==
+Date: Fri, 25 Apr 2025 15:05:47 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Pin-yen Lin <treapking@chromium.org>
-Cc: linux-usb@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-	devicetree@vger.kernel.org,
+Cc: Matthias Kaehlcke <mka@chromium.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	Stephen Boyd <swboyd@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 1/4] dt-bindings: usb: Introduce usb-hub.yaml
-Message-ID: <174561144733.2905131.13737700118522261776.robh@kernel.org>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v3 2/4] dt-bindings: usb: Add binding for PS5511 hub
+ controller
+Message-ID: <174561154653.2910166.17841254906175097993.robh@kernel.org>
 References: <20250422082957.2058229-1-treapking@chromium.org>
- <20250422082957.2058229-2-treapking@chromium.org>
+ <20250422082957.2058229-3-treapking@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,12 +63,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250422082957.2058229-2-treapking@chromium.org>
+In-Reply-To: <20250422082957.2058229-3-treapking@chromium.org>
 
 
-On Tue, 22 Apr 2025 16:28:27 +0800, Pin-yen Lin wrote:
-> Introduce a general USB hub binding that describes downstream ports
-> and hard wired USB devices for on-board USB hubs.
+On Tue, 22 Apr 2025 16:28:28 +0800, Pin-yen Lin wrote:
+> Parade PS5511 is USB hub with 4 USB 3.2 compliant 5Gbps downstream(DS)
+> ports, and 1 extra USB 2.0 downstream port. The hub has one reset pin
+> control and two power supplies (3V3 and 1V1).
 > 
 > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > 
@@ -75,13 +77,16 @@ On Tue, 22 Apr 2025 16:28:27 +0800, Pin-yen Lin wrote:
 > 
 > Changes in v3:
 > - Remove redundant schemas
+> - Update the schema for downstream ports and devices
 > 
 > Changes in v2:
-> - New in v2
+> - Inherit usb-hub.yaml
+> - Fix bindings to reject port@5/device@5 for 3.0 hub correctly
+> - Minor string fixes
 > 
->  .../devicetree/bindings/usb/usb-hub.yaml      | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/usb-hub.yaml
+>  .../bindings/usb/parade,ps5511.yaml           | 108 ++++++++++++++++++
+>  1 file changed, 108 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/parade,ps5511.yaml
 > 
 
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
