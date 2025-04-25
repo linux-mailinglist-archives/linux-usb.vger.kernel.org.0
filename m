@@ -1,56 +1,61 @@
-Return-Path: <linux-usb+bounces-23450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B8CA9C6C3
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:12:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7822BA9C6D6
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 13:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07DB2924551
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 11:12:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECD2116A54C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 11:14:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A321023F42A;
-	Fri, 25 Apr 2025 11:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D6624336B;
+	Fri, 25 Apr 2025 11:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A5OuAj0Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzfPp44h"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A27183CC3;
-	Fri, 25 Apr 2025 11:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E21183CC3;
+	Fri, 25 Apr 2025 11:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745579570; cv=none; b=jk6xDk5iSaFnm1WH6WlTyBEPSC1OElhJ13kk0m+Kx6y5u1WbwEmUn4+ZNgzsH/2tK7r58SfhmIsSAkpnFg57I8DMFaxf7NJQ1AB7cVv4hP0EwQ8GUN4p/aL52+nVcyOwj3I16utYpw0YkepGTnM2+ZBRTdHWnMYj30pm29K4f/w=
+	t=1745579634; cv=none; b=P/xzN8flQ+1xwYUZxOvHfnRzrQyJKWMdpWo7ALqvWoDeL+XnJExRC9Q2vgxTW/kIoz0Dth3srfQMCgcAb346ocYBVYAaZH6K/AmW67lDPrq64AKGuZiRfVpzkPxOpifDtuHYnxcLkcxq2WvcQe8ZxzWYtQ7Z9qlh4+dos7ViqyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745579570; c=relaxed/simple;
-	bh=4Bfzl2YcVdfeGv48WnPC2v+UXms9ZjDFzemeC95vqgI=;
+	s=arc-20240116; t=1745579634; c=relaxed/simple;
+	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OiOV4oVDNmOLv0UxA/cuOIu3gIp4KfLbpuMGAoTknuHiyEGi8RmzyUdI8AXspdyw/7jgVcqOWiKKgMA4rbnknAhEFCKIy3F0I75tcKROzsVxU8np8/VSC9i3YvD8nX9Ucil9qo25fmzmpkQaH4eTPeZEkhMYVejs/GNaOK8/yk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=A5OuAj0Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DDDC4CEE4;
-	Fri, 25 Apr 2025 11:12:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745579569;
-	bh=4Bfzl2YcVdfeGv48WnPC2v+UXms9ZjDFzemeC95vqgI=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=jmXDvssfrCBJ67GUorV7XR5WaVsWEz7S/TH462lxmwgR9OaRPfiU6QhnHBfCUuMw133nsiof9McIggVcw7tp5i2rgA5YKPQwWLCr/t8l4+jrLFjf7DSs5z6ihONZlxaGD1SUrupdsZQlMtoD5JqdjuIjWISq+PIbrEaDO5TB3Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzfPp44h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF51C4CEE4;
+	Fri, 25 Apr 2025 11:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745579634;
+	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A5OuAj0YK95bMuf3OiQxLhDFYP98jueKPArVv3mqQ5i7/lYNWO+a2OkBd9NsRypsC
-	 PIdNUENCJzsuD3Z1o2/yGNI6A3+1R6EjTSJ+YWqPqH+iEZzjZlZB6pnaNPRdC6+V4e
-	 KfJpbX62NwWSdcQ4Ne/BR3RlNfwMks0840lLj2io=
-Date: Fri, 25 Apr 2025 13:12:47 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu,
-	sumit.garg@kernel.org, gargaditya08@live.com, kekrby@gmail.com,
-	jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com,
-	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk,
-	broonie@kernel.org, quic_wcheng@quicinc.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/4] usb: add apis for offload usage tracking
-Message-ID: <2025042540-implode-yelp-b8e5@gregkh>
-References: <20250416144917.16822-1-guanyulin@google.com>
- <20250416144917.16822-3-guanyulin@google.com>
+	b=nzfPp44hY80vim38LVUi0AJaVzHubxBfSYQh9zqjDYTgTQ+pEa7LzF82G6mkiZ0Wk
+	 gHP6U4AFnQML6cW+mEhJ5YqqMn0Ql+q158Onv6pmYnXPJyufAHAnCMj+AQ4Iz7ZihQ
+	 7HJSN9CKwHety5cLGSX4G5gxDwFP4BKNoBjPziAJDnUS4gstYvpoNjsXt+duZYlSnD
+	 QUWk2MAcn5wdWKjkbA4o+a7mkCSAcc+ZokZs6XaWQmth9mMMSKmeD6CysTl2obgbEN
+	 hSVcFqsPomfniiuL5nctH2FuCDX/zr7L7rxp8I9zhrcWMRkt9EvCnCb2uiI5oeUeS9
+	 0jkh3Aoavf8Yw==
+Date: Fri, 25 Apr 2025 13:13:49 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: a0282524688@gmail.com
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v10 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <qalofwnbulbpzl7542l7756radnx5ks7pt6wsbsblyqayxcycl@rl4ety27l27t>
+References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
+ <20250423094058.1656204-4-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,154 +64,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416144917.16822-3-guanyulin@google.com>
+In-Reply-To: <20250423094058.1656204-4-tmyu0@nuvoton.com>
 
-On Wed, Apr 16, 2025 at 02:43:02PM +0000, Guan-Yu Lin wrote:
-> Introduce offload_usage and corresponding apis to track offload usage
-> on each USB device. Offload denotes that there is another co-processor
-> accessing the USB device via the same USB host controller. To optimize
-> power usage, it's essential to monitor whether the USB device is
-> actively used by other co-processor. This information is vital when
-> determining if a USB device can be safely suspended during system power
-> state transitions.
+Hi,
+
+On Wed, Apr 23, 2025 at 05:40:54PM +0800, a0282524688@gmail.com wrote:
+> From: Ming Yu <tmyu0@nuvoton.com>
 > 
-> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
-> ---
->  drivers/usb/core/driver.c | 109 ++++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/usb.c    |   1 +
->  drivers/usb/host/Kconfig  |  11 ++++
->  include/linux/usb.h       |  17 ++++++
->  4 files changed, 138 insertions(+)
+> This driver supports I2C adapter functionality for NCT6694 MFD
+> device based on USB interface.
 > 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 460d4dde5994..76372690add0 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -2036,6 +2036,115 @@ int usb_disable_usb2_hardware_lpm(struct usb_device *udev)
->  
->  #endif /* CONFIG_PM */
->  
-> +#if IS_ENABLED(CONFIG_USB_XHCI_SIDEBAND_SUSPEND)
-> +
-> +/**
-> + * usb_offload_get - increment the offload_usage of a USB device
-> + * @udev: the USB device to increment its offload_usage
-> + *
-> + * Incrementing the offload_usage of a usb_device indicates that offload is
-> + * enabled on this usb_device; that is, another entity is actively handling USB
-> + * transfers. This information allows the USB driver to adjust its power
-> + * management policy based on offload activity.
-> + *
-> + * The caller must hold @udev's device lock.
-> + *
-> + * Return: 0 on success. A negative error code otherwise.
-> + */
-> +int usb_offload_get(struct usb_device *udev)
-> +{
-> +	int ret;
-> +
-> +	if (udev->state == USB_STATE_NOTATTACHED ||
-> +			udev->state == USB_STATE_SUSPENDED)
-> +		return -EAGAIN;
-> +
-> +	/*
-> +	 * offload_usage could only be modified when the device is active, since
-> +	 * it will alter the suspend flow of the device.
-> +	 */
-> +	ret = usb_autoresume_device(udev);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	udev->offload_usage++;
-> +	usb_autosuspend_device(udev);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_offload_get);
-> +
-> +/**
-> + * usb_offload_put - drop the offload_usage of a USB device
-> + * @udev: the USB device to drop its offload_usage
-> + *
-> + * The inverse operation of usb_offload_get, which drops the offload_usage of
-> + * a USB device. This information allows the USB driver to adjust its power
-> + * management policy based on offload activity.
-> + *
-> + * The caller must hold @udev's device lock.
-> + *
-> + * Return: 0 on success. A negative error code otherwise.
-> + */
-> +int usb_offload_put(struct usb_device *udev)
-> +{
-> +	int ret;
-> +
-> +	if (udev->state == USB_STATE_NOTATTACHED ||
-> +			udev->state == USB_STATE_SUSPENDED)
-> +		return -EAGAIN;
+> Each I2C controller uses the default baudrate of 100kHz, which
+> can be overridden via module parameters.
+> 
+> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
 
-What's to prevent the state of the device from changing right after you
-check for this?
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
 
-And why -EAGAIN, you don't mention that in the comment for the function.
-
-Also, to pile on, sorry, the coding style needs to be fixed up here :)
-
-> +
-> +	/*
-> +	 * offload_usage could only be modified when the device is active, since
-> +	 * it will alter the suspend flow of the device.
-> +	 */
-> +	ret = usb_autoresume_device(udev);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Drop the count when it wasn't 0, ignore the operation otherwise. */
-> +	if (udev->offload_usage)
-> +		udev->offload_usage--;
-> +	usb_autosuspend_device(udev);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_offload_put);
-> +
-> +/**
-> + * usb_offload_check - check offload activities on a USB device
-> + * @udev: the USB device to check its offload activity.
-> + *
-> + * Check if there are any offload activity on the USB device right now. This
-> + * information could be used for power management or other forms of resource
-> + * management.
-> + *
-> + * The caller must hold @udev's device lock.
-> + *
-> + * Returns true on any offload activity, false otherwise.
-> + */
-> +bool usb_offload_check(struct usb_device *udev)
-> +{
-> +	struct usb_device *child;
-> +	bool active;
-> +	int port1;
-> +
-> +	usb_hub_for_each_child(udev, port1, child) {
-
-No locking is needed for this loop at all?  What happens if a device is
-added or removed while it is looping?
-
-> +		device_lock(&child->dev);
-> +		active = usb_offload_check(child);
-> +		device_unlock(&child->dev);
-> +		if (active)
-> +			return true;
-> +	}
-> +
-> +	return !!udev->offload_usage;
-
-But the state can change right afterwards, so no one can do anything
-with this value, right?  What is is used for?
-
-thanks,
-
-greg k-h
+Thanks,
+Andi
 
