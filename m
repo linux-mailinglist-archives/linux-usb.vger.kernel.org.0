@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-23465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EAFA9CCC1
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 17:22:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB553A9CCBA
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 17:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FD493B28C6
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 15:19:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 945001BC477C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Apr 2025 15:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0958128E600;
-	Fri, 25 Apr 2025 15:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D9E28F53E;
+	Fri, 25 Apr 2025 15:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b="zKYjGXSV"
+	dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b="lchmvhlw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5167D288CA5
-	for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 15:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF5528BA9E
+	for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 15:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745594333; cv=none; b=s8gzG/lOj5ghJNTJ1K1kEYjlsb4YkIjrYP2jyEX5XIXon9nl0Og6t7C5w3QJbu1FUrNh0JAUk4A1OmiM17WqtvfoMjS6+XCV0FQb8p6ZhwE6JclTxQmLdc7ikAjQcjT4Mn1qpb/yxozK5SEaUrRjI616ithTSctoTi4q6dspcpE=
+	t=1745594335; cv=none; b=AbBVU70YoNQlNf7o+lw6+VAfN98MyyetTeSs2dMLqVJqc2Nf4bQ34mVMdni2hrf9B3OuyrhVKfwz+JHjp39uqRdW+SWY8q7ZVqa/JXIq3TCv0hZ7wykSscNASqIsKlwX9V83TLkcfikISp0nKKG1MJfOav+GuQQx0iWMfo/Umz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745594333; c=relaxed/simple;
-	bh=+VP43HO49IhC31BTb9rVuWFjBWT9hUxO1g+j9KnNrtI=;
+	s=arc-20240116; t=1745594335; c=relaxed/simple;
+	bh=+ce7+BTY4yeMzFbT6Akdy3KIL7k7OJDthEDgS6+rbEo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YZkIGkp5nE1yCXxwgEXp2x24q+dpWMKu75Bh8PbW2G+hmhk5r7dOEezkcwaFl1o7QlOQGLnqiMYVXXXAO01/CQ5GCh3yKxlRlIr1kgwxRU12z+215q1wetUUXyTg20dy/s61ZR4n0h4V0etbv78QJAEJcdLuvB2bwRFI8eAzyck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thaumatec.com; spf=pass smtp.mailfrom=thaumatec.com; dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b=zKYjGXSV; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:To:Cc; b=gdSJCSyewq+e89deO3AHE2lMGaYzM3n1Ti3ZX5ZfQ3GFQVEpbp/vy2+GGFM7cJ4yjtd4l/jB48bO4mv9zJRZbIJJhv+7go+JgYp4gM4CpcoC3YKey3YPsvv9zxid6aW7qavSghr72Cxe6MctU7IrzZAZMTvAdIhVGs24ToQDO/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thaumatec.com; spf=pass smtp.mailfrom=thaumatec.com; dkim=pass (2048-bit key) header.d=thaumatec-com.20230601.gappssmtp.com header.i=@thaumatec-com.20230601.gappssmtp.com header.b=lchmvhlw; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thaumatec.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thaumatec.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-acacb8743a7so397253266b.1
-        for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 08:18:50 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-acbb85ce788so471207866b.3
+        for <linux-usb@vger.kernel.org>; Fri, 25 Apr 2025 08:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thaumatec-com.20230601.gappssmtp.com; s=20230601; t=1745594329; x=1746199129; darn=vger.kernel.org;
+        d=thaumatec-com.20230601.gappssmtp.com; s=20230601; t=1745594331; x=1746199131; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ow+UI0NPOq4F4k1XRdbs16ucXtgoo6yarOk2Eu1UB88=;
-        b=zKYjGXSVsI2NLbQn1nXn3wmdAQwYoEMSMNGAkxao3Ju/Fd4xi26KP7KLhRP1WIqjiP
-         Rs7J8UiQ2rC7Sm79meapRNs6ayVZqgaeiHf0mHH058ykIQcvbhEuAHeImZUYiitX3pLm
-         x4xShFbUWr2lGFq2fGaJTIalVxMxmHTHHy3EW+I/bID6gUOC9VOfYFnkTjqBIxrU6JVl
-         xs9Y1XnJatZg3rT2QwieWHkIGriHSOgeQg+IgjND91hrnuaCUyet0V5OyZORxTMBv/sd
-         0AkyDTk18BADictzlragABu8ckNJQjW+fkFYrzj0Mc9zJrPwsj2nuXnqymq0THY9nCBp
-         4FeA==
+        bh=/OY31xp7Dll9vOIEOmAuyrG07iLGmNS/7kqtV/vhc5Y=;
+        b=lchmvhlwO7bwGEgJBEgpZN/k4rav9vWLKDzd+soZMVH+Yz3KfIo4voaxR25W32u43K
+         rWQ5Qs02bGwHRiGaSDpgKypd3HAQD3SVE4p+2ldw+nzx7CuWKxNvH+egV3h1Qyfd9+7Z
+         Zvc32z+V3CaWVZ+9PMmgvZpzrFGeeHEuQqd6/IS7aN3cUyrxw/x0v3VH9urYRffqjTpX
+         aZNTBP37pm2zShOoqvvJqbLMfKMGTrxMw6p1sYWqv21lmAdA3EIkRgXP5U3OFHDcmPbx
+         L6q8YAwwSWf1JO05tPiiYeWQH+uLQVXfnpnHdYkbT6OSY+sFBUk6Cf2dSLhaXVuHCAvb
+         4hmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745594329; x=1746199129;
+        d=1e100.net; s=20230601; t=1745594331; x=1746199131;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ow+UI0NPOq4F4k1XRdbs16ucXtgoo6yarOk2Eu1UB88=;
-        b=ktxFWO2Vb/WN/yI0g6x0NAOKU3jd1bjqmA59p2BhZDgeH9YmVrfT8XD+ZKPWQmY574
-         i5b6+b7W0nECWcJ9MVr7Y5cz2V5gqIS/pt1ER7mk+Fpx/Pe5LBoJJgvr1R4rcshT647T
-         O1TZ7GZCtGKs2qF937oPsww45jB1wuIuPxY1bL9gsZeTkwetAt61GKhmsD97flzqFDin
-         f4PhxaWDE6y2CImLpjpGrHgjvxjdWmwVZVu4gRlNqduDkTRRTfFhzi+nOU9BY6lomMal
-         rXbbXV2+X2L8GCnVsgs63m+bV2lDll4UAUNi9VXdeAbu/0YZ390WjPoNvlLN8lZ62wcQ
-         mmbA==
-X-Gm-Message-State: AOJu0YwcSbxU5SGIO2kpgRAU/VsYDNDCpcFUM3x0OjnHf75V9mgNMoLv
-	SczHLp6Z3+7clfIuAf7lZTEXxlA7t7K5UyhzbNVdxpX0x5rXS7nFhu8dQaR38jc=
-X-Gm-Gg: ASbGnct8Emp0Y3ugicnQfRfP5kwQvU97BOUZK+R8h04q6h820xZqcQ4NEwQzc8ORMfw
-	KzeRalJoexqmQ63x68QuRviuxc3Ep+MJ1wbVQvZ2p5HHUBiAhmtFfyvqVsVGZ/fb0WfNe9mDVCf
-	Z3Afzl5mLeotyzqiRMq7a2w7BSo+nPPtsCNZQyctLsy6cCuRpNorhpdrlx6kh4yh6WGuD+8fGCR
-	t5/EZiFahpIKCaUnJLjRWgRoQ+7SBDqcbbT8DzLBcj15MSixgaPBASzaysnvTEif/Eiu/QuoasA
-	aS+p+Uv0be/eT7Q1EKButSR6HVPO9sRyCqkOYjYbRfy1gPuWCBwl2ibrxA==
-X-Google-Smtp-Source: AGHT+IHLD6XdK+4P1TnWS4a50TCqQBANW7xBQ8lr6hgbyOsYBCK2P26JRQZuJdTwivbVOS6RTnoM6A==
-X-Received: by 2002:a17:907:3f0d:b0:ac8:1bbe:1a5b with SMTP id a640c23a62f3a-ace5a27b983mr482588066b.9.1745594329437;
-        Fri, 25 Apr 2025 08:18:49 -0700 (PDT)
+        bh=/OY31xp7Dll9vOIEOmAuyrG07iLGmNS/7kqtV/vhc5Y=;
+        b=W1FGDoFReS4N/b9fn5GiN78WEC5pf5n0+CPmrBk4ZEdlPDOm4DDsIqouf20suvjK4u
+         XiR9Nukz8860YFjtz5NnGkQIrEENN8O0Q3sbE2bdSxUw+xlw76RVXK+5/1Z9mypl1A6p
+         copRUOJIzdr4FFhMezr3nGAhRPsPWlvjQsKvzHARlvcatNIZq8F0qwJDk9HHtYRS4N6g
+         LZdIQsADN4Y/4oLeNNtHs77f9kRtCCYQPYar5Eq7Hc7M9habwjv2qc/Y/4VeHxM1LPqP
+         tjL6i94SX3uYelCvLV9N58t0EIuHC1R4pa7LkQwSeDHQhnlkuEgA2ZaQ67M5nRZZquI2
+         lNjA==
+X-Gm-Message-State: AOJu0YyiDBpBgDOSjC09tMdL1ctn9O5hD5fU81cCYMNSeCrAaEQLhHWQ
+	Ba9SviRlR2mqexuXA86TYo2g5yV24B+QnvtZvZ6tC8s/YpaLMJ69Zy0Eta9hjOE=
+X-Gm-Gg: ASbGncskLySG0jL9ctx1XvjWe1exsSY+rvnYlgwEQRuqV4HHsUV5aLrZZAniwt2gDaI
+	oDWK+sZeAiBl2eRzfCZqwbFQ+xvvzrYBoNc+KTeJqzmSSl+lY4L8BO7etfC61qxu1V6Pf/nKvJ1
+	4IsJ9OGX745bFl+6C1Ii8qHK0dpOJ3Qd11R/XB3GwwUmu3EdrK4bklcPiSvxONEBjdu5hkP/tZm
+	wLOz9lrj9HPZFtech914lRmAOezM6wVsQPu4d0tGge9VPyXnDBmNKAuHDu378QbfNguKEESnzh3
+	V8XlvazfpWiveBESubY3oIkh7C85DLUKncH1pXz/gA773qO7N2Cbr9cAkw==
+X-Google-Smtp-Source: AGHT+IF/D7KC9l8++rWqiUEiNq3eyx2s0Qq/rmeB9HU9Sb4W5K3CdWLHL8yd44YFf3+hogCSyIirhg==
+X-Received: by 2002:a17:907:2dab:b0:acb:bbc4:3344 with SMTP id a640c23a62f3a-ace71098d8dmr246518666b.22.1745594330687;
+        Fri, 25 Apr 2025 08:18:50 -0700 (PDT)
 Received: from [127.0.1.1] ([185.164.142.188])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e59649fsm151099766b.85.2025.04.25.08.18.48
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e59649fsm151099766b.85.2025.04.25.08.18.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 08:18:48 -0700 (PDT)
+        Fri, 25 Apr 2025 08:18:50 -0700 (PDT)
 From: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
-Date: Fri, 25 Apr 2025 17:18:09 +0200
-Subject: [PATCH v2 4/5] arm64: dts: rockchip: disable unrouted USB
- controllers and PHY on RK3399 Puma
+Date: Fri, 25 Apr 2025 17:18:10 +0200
+Subject: [PATCH v2 5/5] arm64: dts: rockchip: disable unrouted USB
+ controllers and PHY on RK3399 Puma with Haikou
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250425-onboard_usb_dev-v2-4-4a76a474a010@thaumatec.com>
+Message-Id: <20250425-onboard_usb_dev-v2-5-4a76a474a010@thaumatec.com>
 References: <20250425-onboard_usb_dev-v2-0-4a76a474a010@thaumatec.com>
 In-Reply-To: <20250425-onboard_usb_dev-v2-0-4a76a474a010@thaumatec.com>
 To: Matthias Kaehlcke <mka@chromium.org>, 
@@ -101,13 +101,25 @@ X-Mailer: b4 0.14.2
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-The u2phy1_host port is the part of the USB PHY1 (namely the
-HOST1_DP/DM lanes) which routes directly to the USB2.0 HOST
+The u2phy0_host port is the part of the USB PHY0 (namely the
+HOST0_DP/DM lanes) which routes directly to the USB2.0 HOST
 controller[1]. The other lanes of the PHY are routed to the USB3.0 OTG
 controller (dwc3), which we do use.
 
-The HOST1_DP/DM lanes aren't routed on RK3399 Puma so let's simply
-disable the USB2.0 controllers and associated part in USB2.0 PHY.
+The HOST0_DP/DM lanes aren't routed on RK3399 Puma so let's simply
+disable the USB2.0 controllers.
+
+USB3 OTG has been known to be unstable on RK3399 Puma Haikou for a
+while, one of the recurring issues being that only USB2 is detected and
+not USB3 in host mode. Reading the justification above and seeing that
+we are keeping u2phy0_host in the Haikou carrierboard DTS probably may
+have bothered you since it should be changed to u2phy0_otg. The issue is
+that if it's switched to that, USB OTG on Haikou is entirely broken. I
+have checked the routing in the Gerber file, the lanes are going to the
+expected ball pins (that is, NOT HOST0_DP/DM).
+u2phy0_host is for sure the wrong part of the PHY to use, but it's the
+only one that works at the moment for that board so keep it until we
+figure out what exactly is broken.
 
 No intended functional change.
 
@@ -117,36 +129,28 @@ Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 12 ------------
- 1 file changed, 12 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-index dd5a9bca26d1d221607e73071685d5774330d760..5c1162e2f34f9c9786da1f774dffa71adda23dbc 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-@@ -579,10 +579,6 @@ &u2phy1 {
- 	u2phy1_otg: otg-port {
- 		status = "okay";
- 	};
--
--	u2phy1_host: host-port {
--		status = "okay";
--	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts b/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
+index 947bbd62a6b09ce55320d0889ee8cf50ca59dfd4..93cefacc7a01ec8f9716de828077b3395a5e7696 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
+@@ -292,14 +292,6 @@ &uart2 {
+ 	status = "okay";
  };
  
- &usbdrd3_1 {
-@@ -616,11 +612,3 @@ hub_3_0: hub@2 {
- 		vdd2-supply = <&vcc3v3_sys>;
- 	};
+-&usb_host0_ehci {
+-	status = "okay";
+-};
+-
+-&usb_host0_ohci {
+-	status = "okay";
+-};
+-
+ &vopb {
+ 	status = "okay";
  };
--
--&usb_host1_ehci {
--	status = "okay";
--};
--
--&usb_host1_ohci {
--	status = "okay";
--};
 
 -- 
 2.43.0
