@@ -1,94 +1,116 @@
-Return-Path: <linux-usb+bounces-23493-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23494-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 404E1A9DC21
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 18:15:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB188A9DCDE
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 21:12:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AB4F5A632E
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 16:15:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAD2E922772
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 19:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A341E9B2C;
-	Sat, 26 Apr 2025 16:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD8125DD02;
+	Sat, 26 Apr 2025 19:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFhUT5j1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PCZp6F07"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4C96136
-	for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 16:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5FA946F
+	for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 19:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745684148; cv=none; b=puJ2rUNkFbNd+f/gRzVTWNY8QdW3ZPFTWZxB0wCBTmbCPKMQ6K27KQKZnSxbqsKPMIgjrqNTonE0b2y0or5b3tlEY6aE80nx752IF8Ofr/omqLu0XtsZuQzNvM8CUOh0XSjj+PyD+L/2B1ndywviYzDEEmSZIFkWKE5uIuurAT0=
+	t=1745694758; cv=none; b=NWe09Zd0zaZ9BBjdIMJJAnrMH9wbXMkBk0BvEfl4fq2nUclZ69QsrmM+d4FTe0l7Jd6EobhFkXZNCTQW4nm6t8my3rM5yiZy9RduNzSMHqVvKspmAS9RQ88JJHUFJLxyvH9JMqrmwS0jHEb/APdqiht36A55KikU/Mq9A1RHzds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745684148; c=relaxed/simple;
-	bh=Q0tbnDxmRNMiBrfqjLF1P72IhdYw8/ow0z0zxJ5pbso=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XGoM3CfXEwP9gEL5LrjpFs0h/5ZU88u8UEDJJlfyTj9M490vgOg+uu+tk0OhDdwew828X0Hvb24TvznIQWnZ7PyeadqppwDTTwabzbN9GvuFV1FfMsWulZ4Elhhiygv8NkDwIO755h7kc8kFkCNGJOzcTTZJU62X/fXfkmr1+zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFhUT5j1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 864A0C4CEE2
-	for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 16:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745684147;
-	bh=Q0tbnDxmRNMiBrfqjLF1P72IhdYw8/ow0z0zxJ5pbso=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JFhUT5j11tpNKmOKWZNcJtQIc65AFbIh57NZjc6dCFahNFlTNjqKHsXgDWtR8tEaS
-	 jCV/yat0xeORvewUAmlwd0BEbJuXnEQD87mQE4rCKf/gqnJFNmCQXF4qIbJYOf/6K4
-	 2iXvi2vIFShwBc0ZZAZuuSFSm59Bkmas9HBlhLzNMfnaJbg3ICL+L+RNUjzU2FUXdd
-	 5cdeqMjoeLyv9Td+GXP9HlC+p3uHM6/VODocDQuvF5MOs4w4xNrNXsPMNc1GJAHBuN
-	 n5FSWp9lhoCqiWSz3izrBqJQ2vKVIWiqEiO1tdEQnDpVKeC81ZAuLobPXt04Rd2za0
-	 C1gkIfPrYtYVw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 7ABD3C41613; Sat, 26 Apr 2025 16:15:47 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220027] USB 3.2 capture cards using incorrect USB speed
-Date: Sat, 26 Apr 2025 16:15:47 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: nrkowalski@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220027-208809-8xr7Q2JSNL@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220027-208809@https.bugzilla.kernel.org/>
-References: <bug-220027-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1745694758; c=relaxed/simple;
+	bh=tDOqFySVnKUC35zBTQzQCAY2FUiPns1UDF4WUsOXxqQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o0eVMn0tjrGcmBYTWgtBan6tjOKtJ014upDBvcY7KogF8Rac7H7CKXimwcDD1KgOCeSH/BSnqYaXaMJ3dPRPKws7n75f8YZn0GF0XG4IFvnHdzKGoUnykHn+r9nhvKqQTmz4WY9A6FRBTcAMKdGiRiVXRbtH3d7Sf+zhu9ekigc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PCZp6F07; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf680d351so26062645e9.0
+        for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 12:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745694755; x=1746299555; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gE9yqGlmSoncXuH3bxZWad4oXNf956odcXkUC7ORXEY=;
+        b=PCZp6F07dhJ08A8n4yvO8wd6JwlRma0Cpa5Q4qjXnJAiBAe1u7rSz0yZ2gvTHfYHZF
+         J9fjrMYhAhO0g1Ff/s48VLlvwRZLY/D3gnplYpD+n1lrVGTHM6D5oJ/BMSk4h05eObtS
+         OuKoz+IXbTxM5Q/kA+NYzCM2CWslkxPuTaVnaMipf0pV9xS7PKvyCNn+evzQV87+XVVq
+         Z+Znt2oUyP/2eWPhgxPcDCMfEmvBhdePRC66iVJryDQxSB94WjDOgsiykqhQ6wWRx955
+         VKzNQpH27ekXiU0zHab8C/wLxpbHzAk9jTjZbUp5WT2KGVocG6ozHoW2PvbJSSYYZNeI
+         PXeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745694755; x=1746299555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gE9yqGlmSoncXuH3bxZWad4oXNf956odcXkUC7ORXEY=;
+        b=dtYmGw72HVjQJ7U//WCSsOGIp2IuwqKviUN23BBt0OQrvoPi5gZs09FJgYfJ57pyTA
+         ChZYcuAXdkkqD7RxWHcJ8VXx6pGV4qJHmflgXFfdNiCX3At5d3g056mj0KcqRkh6rA9X
+         kE7OZHbbEPJ68od7SiULYVUixzebZtvkIX3ahXLZAbclwwQKLjUg3DfBMgvC/S3vFZpp
+         tGiTRNKkGlaT3MEOPUguIyRGxLfNFU4SWcgLBWBwlgCJy2ZptdfdhmdHmuXByYOxxYj2
+         o4nT6kgM2GMeeFnioE1NHQyOxL4Eii52RjJX+/rZ1RMsn4GG7W8UShJgKcUptAEycB/v
+         4oZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVff9r58JBB4sjS97LBc9aRk7l6OtdhkplHlCbOepX1AKEpF1tKpg7eiabF89hB3K5aXubipUoPlTE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDBYtBH1mHQ5FtBYnEDDR3l2+VzEMLjrd+JDEPoXsiA2zUf7NV
+	At3pMOGhd27jMClrxwlJdyAlCj40RXLm36M8mpUdwM9xh/zQ04g0
+X-Gm-Gg: ASbGncuupjPrGVHfmUYIpMnwSoYXo/ZIwFiPanz7bV5EwlvfnXCXi0/5Ows/GseTtcW
+	rcbTkwoMlSfLcfY0y0EKbgiKCrmKhj5tRo2CW8Zpge3/Z8lcQmpVziUeoObwvhfGawT1SKuSEMc
+	q/l0rw8vWvpeNeeENUTnEnNLM6gxYoXhnWxQhF8GM/wa7Z3cwOaNyU4zMbCBniu3ljiFr6jr2i8
+	3z0KqsQTFsHrSKK1iSPgNaTHYmb19w7VKxmO7YnAC8cGbvPZcdRn7pQg4jW4cfLD1sNS38JWlyo
+	82y+T00rUUgV6D8Y46lvzwA4K0zhp1UBVyO7taussCbg4yW2QYf7R1eIML7dRJNIwiBK+VjJj8t
+	l
+X-Google-Smtp-Source: AGHT+IF19BppRCKBdoN1SvmBZf0ZO1XSQ89h6xC83lnKMgrC+gVX2QKtmzoEJRNInSjR8TA8iBBb7w==
+X-Received: by 2002:a05:6000:18ae:b0:391:1218:d5f4 with SMTP id ffacd0b85a97d-3a074d4637dmr5083520f8f.23.1745694754536;
+        Sat, 26 Apr 2025 12:12:34 -0700 (PDT)
+Received: from localhost.localdomain (82-64-73-52.subs.proxad.net. [82.64.73.52])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073c8da58sm6473285f8f.15.2025.04.26.12.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Apr 2025 12:12:33 -0700 (PDT)
+From: Dave Penkler <dpenkler@gmail.com>
+To: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: guido.kiener@rohde-schwarz.com,
+	Dave Penkler <dpenkler@gmail.com>
+Subject: [PATCH 0/3] Fix erroneous ioctl returns
+Date: Sat, 26 Apr 2025 21:12:19 +0200
+Message-ID: <20250426191222.13727-1-dpenkler@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220027
+Recent tests with timeouts > INT_MAX produced random error returns
+with usbtmc_get_stb. This was caused by assigning the return value
+of wait_event_interruptible_timeout to an int which overflowed to
+negative values. Also return value on success was the remaining
+number of jiffies instead of 0.
 
---- Comment #3 from Niko (nrkowalski@gmail.com) ---
-The only other 10Gbps device I have at the moment is a USB hub which is
-properly detected as a SuperSpeed Plus device.
+These patches fix all the cases where the return of
+wait_event_interruptible_timeout was assigned to an int and
+the case of the remaining jiffies return in usbtmc_get_stb.
 
-I have 3 PCs to test with 2x AMD and 1x Intel and all 3 exhibit the same
-behavior in Linux Mint 21. I've confirmed the capture card does work at the
-correct speed in Windows 11 using the same USB port, with the same cable.
+Patch 1: Fixes usbtmc_get_stb 
+Patch 2: Fixes usbtmc488_ioctl_wait_srq
+Patch 3: Fixes usbtmc_generic_read
 
---=20
-You may reply to this email to add a comment.
+Dave Penkler (3):
+  usb: usbtmc: Fix erroneous get_stb ioctl error returns
+  usb: usbtmc: Fix erroneous wait_srq ioctl return
+  usb: usbtmc: Fix erroneous generic_read ioctl return
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ drivers/usb/class/usbtmc.c | 53 ++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 22 deletions(-)
+
+-- 
+2.49.0
+
 
