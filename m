@@ -1,101 +1,119 @@
-Return-Path: <linux-usb+bounces-23481-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23482-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E2FDA9D851
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 08:21:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D685AA9D8EF
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 09:09:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1120171161
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 06:21:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26CCC466056
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Apr 2025 07:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4825F1C8606;
-	Sat, 26 Apr 2025 06:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D4224BC1C;
+	Sat, 26 Apr 2025 07:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CkDjT54f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BKywoSp5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0FA6FC3;
-	Sat, 26 Apr 2025 06:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938E01F4722
+	for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 07:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745648490; cv=none; b=isQQEIMK+LuanCQJxJ1yHtmjWco3jdsf0CoaSbYMb17Ru0zjMNH8tKvjrZtprbX6ZiPMOCNORIZbB7liJzcbu1O5PzAAR5SoLkD9uzvM2QG4rVn9S0EhaVo5/jG1t3QizQ8RxKx7S6J6F6Gam2dMRrA7Jks28QTqy6r0O/F8WTY=
+	t=1745651348; cv=none; b=kqfh9yIdWGpbvLZ9xWLq31fjUWJrpurjQeZQEtmkAgO7GwIsawpD4FWyZDSRO51fj9QJLihijU0zv2rw1nKNNWslGF06FLVBSaAfGLP5/JTLbf7bNwd/6xv+nR9ENZnzO6HGI/jyUaCmnsY8IenvgS/FOIj1FXAxFyVWsY1bnTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745648490; c=relaxed/simple;
-	bh=U1JTFWLpoYixsK8KAsNfSNSPN6Lvv7EYl4tu2dmAvyc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=H13T1GxSQprj9AnjBYh9FazAeGAxB+TsjBzeHGAeMYXdzBC52Y85HLL863lvW1RKypN8K7hUKVlb0aSrGS1+STSYAOWJNDsZALp8k7onSAkGDw0vjK7Q/0TWlpSJomkUjy2/wH1Kbt3cOywccBJ5hxgGJw1r6hEbOeSlj/nV2k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CkDjT54f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA56C4CEE9;
-	Sat, 26 Apr 2025 06:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745648490;
-	bh=U1JTFWLpoYixsK8KAsNfSNSPN6Lvv7EYl4tu2dmAvyc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CkDjT54f6zxUclmB6EDiGxL11PmzdN9vFXgEl3HsSsJYfEQ491N8Mdiuymdas2TCp
-	 +lvklIF7LUt/X40xMxifZM/F6ahrKelbSh0Ga5G+HcVvL/gGaehr+1H2jxFvw6t0eA
-	 qGVW62hsDxjla6/sphTLUFxoZIBplTEzf89D2dg9mNyGcffb2MLlUbX6hWJC5N3v0q
-	 3rVlaOKIfHj3DhQYTczuXd2gq0zMsaWxaZqRNyJKrYuhPW0FN0X1ma2Yh9l4S6K7PV
-	 mk3KjZvyAM9lbWkYoapF85Yu4ffYf9F1wdneR+AV3kk/u5vvm8BrfOTIxmXFAjJVJJ
-	 76UX3JDEuY/PQ==
-From: Kees Cook <kees@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Wei Chen <harperchen1110@gmail.com>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] usb: gadget: g_ffs: Adjust f_ffs[0] allocation type
-Date: Fri, 25 Apr 2025 23:21:26 -0700
-Message-Id: <20250426062125.work.209-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1745651348; c=relaxed/simple;
+	bh=m/YLWpmMM5laA4h3xJSj8kV8LBoPyFvsSHwVgBtoJyc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=CNfgxm7JrN+cvpVhreX3rB/OPNmQTKM3seT2poB2tFLsuhu9srvBI/6uZ4dpSuIYgAUhwGiw1GKhGPpe0Fp4iJ5S0MoBiNFs7L4e2+h+NJoZIuPY23+QeBfiFhn1pMIxrWwgcBpFtMmB4yixlwp1k9n31Zf9SDzcMDosSzN+QfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BKywoSp5; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4766631a6a4so36210271cf.2
+        for <linux-usb@vger.kernel.org>; Sat, 26 Apr 2025 00:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745651345; x=1746256145; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m/YLWpmMM5laA4h3xJSj8kV8LBoPyFvsSHwVgBtoJyc=;
+        b=BKywoSp5rDKOkypNly6b1cdmF/sci8HUiwXlGnzlIj/0dxWKP/+lu1cuW+omafTYlB
+         VnyTcyTbh3imeNxBY3+TkE/KVMOqPb4vAsOOzhUMBv2xk1AJ/2LBA12l4GkjqOiswyHT
+         Kp6XIWLs6s4jPbAIgPisgGMF3cL4hl81kCJ7mXccAW//lskQVthSWZXZAV5OU14ls0QM
+         4A9kyN59kO0n8WacyKWJIeL4riTHFzA6TjmsM9fE4o+Y9C6RUK9sv6NuOdkGrESVZa+t
+         7A3mXGie3ieLrSQ1nc2Y6Yyp13u9W/pkSaNCPgZy2OTUqXJZnIRvjkj5cqMosHN3Keha
+         K2Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745651345; x=1746256145;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m/YLWpmMM5laA4h3xJSj8kV8LBoPyFvsSHwVgBtoJyc=;
+        b=Zw3TaoEG6tGvYqJFcZrXSdoxPmiA9J66CHjXSBZrRryQLVHU/0INlpElVIGoALEU8g
+         miV/fHKXu2OUpokzfOXzekYKaYQlJNnCZlkBkI58BgwNFOPaUl3/SNyNAo574RmdoTqo
+         wzj2+O+wGP/mjAPJYB5zhxHxwjXdJqU0mOZMgrG1/VjTmwvEnVnm5DFdExLid40DT1q3
+         cr6cIBPkWJrnged6pSaeyzCIwG+cpU64Yx/jKJWihpQwO33MqEgqPkM3p6iUl3j0/kFi
+         /iiYVVvQi7hhdUZBuvgbzmzRd+ayv8ngwaCIAsXFXuX7GTzMuw5Xe2C7BrjpfEVx5CWf
+         JO2w==
+X-Gm-Message-State: AOJu0YwEveH7vJFG5V783E2/SBpXpBaNnrrki8o9TYqegGJ6iSFE6V6l
+	SAvLyZ16imPqLeK5tUp/V4nskP7wgBpuDvbcFbPOFoUhxU49Xc6KLZo8HtwdaVEBirOW5xJCrkf
+	36UdgM9cZJ17v8KvSCdnMt94zlSQ6eLNv
+X-Gm-Gg: ASbGnctJNYX+vOjblOQONkcqWFkdh82i6yZfCwqVBO1aWAG589NqjYQczB3Ss/+lz6Y
+	eE5L7Dz5/CcosH/tTSOJpBet7Vcl4FcCveWW1Eydz1Q9cyHeGxOOLJNqmJi5UQgRiwyXtlEEpbp
+	YfYh06+lqKMFZ/eEf9XJNtMVc=
+X-Google-Smtp-Source: AGHT+IEtxKEYmuaW2omcbKc0tFsne6UuqIl6h3QiNqyW3mEJjxQCt/ao1ohRlz42VJwa6Z0M0xavJaUq48znyGEvIzw=
+X-Received: by 2002:a05:622a:153:b0:476:5fd5:4de7 with SMTP id
+ d75a77b69052e-4801e4ef5c4mr85224901cf.41.1745651345225; Sat, 26 Apr 2025
+ 00:09:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=kees@kernel.org; h=from:subject:message-id; bh=U1JTFWLpoYixsK8KAsNfSNSPN6Lvv7EYl4tu2dmAvyc=; b=owGbwMvMwCVmps19z/KJym7G02pJDBk81akyiw50CT+68SBtrmtOicCJ5JxjgUtY1k4MEn8l+ fIJf4ZRRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwERsXRkZptZENzxtkc5VmnBO 9Ij7R6V/89I9plf95lQW6krYZKxxhOF/kLj9lSWKEx/LrH98SlRf0rU5YHOB9IbMz8qTyx0/V6d yAQA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+From: Rajaram Regupathy <rajaram.regupathy@gmail.com>
+Date: Sat, 26 Apr 2025 12:38:53 +0530
+X-Gm-Features: ATxdqUGOGNLfGw8w-XFyKPW4dAzx_glK37J6lYxC_NY-_OxXnwNV6btHohoOSls
+Message-ID: <CAD039W60_f8+J5-PnVZBSJiab6GnX7M_wuUfHXDetjRxgKisaA@mail.gmail.com>
+Subject: Release : libtypec-0.6.1
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In preparation for making the kmalloc family of allocators type aware,
-we need to make sure that the returned type from the allocation matches
-the type of the variable being assigned. (Before, the allocator would
-always return "void *", which can be implicitly cast to any pointer type.)
+libtypec (https://github.com/libtypec/libtypec/)
+++++++
+=E2=80=9Clibtypec=E2=80=9D is aimed to provide a generic interface abstract=
+ing all
+platform complexity for user space to develop tools for efficient
+USB-C port management. The library can also enable development of
+diagnostic and debug tools to debug system issues around USB-C/USB PD
+topology.
 
-The assigned type is "struct usb_function **" but the returned type
-will be "struct usb_function ***". These are the same size allocation
-(pointer size), but different types. Adjust the allocation type to match
-the assignment.
+Wiki : https://github.com/libtypec/libtypec/wiki/lstypec-:-Know-your-USB-C-=
+Ports
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Wei Chen <harperchen1110@gmail.com>
-Cc: Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc: <linux-usb@vger.kernel.org>
----
- drivers/usb/gadget/legacy/g_ffs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What's Changed
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ucsicontrol: Add the new ucsi commands by @madhum031 in #16
+Link libtypec to libudev as it uses its symbols by @andrewshadura in #15
+Reset soversion to 0 when building with cmake by @andrewshadura in #14
+Fixes for usbcview.c by @andrewshadura in #13
+Build systems fixes and cleanups by @nullr0ute in #17
+Build fixes by @nullr0ute in #18
+lstypec: Add decoding for PDO voltages and other units by @richardg867 in #=
+20
 
-diff --git a/drivers/usb/gadget/legacy/g_ffs.c b/drivers/usb/gadget/legacy/g_ffs.c
-index a9544fea8723..578556422ea3 100644
---- a/drivers/usb/gadget/legacy/g_ffs.c
-+++ b/drivers/usb/gadget/legacy/g_ffs.c
-@@ -188,7 +188,7 @@ static int __init gfs_init(void)
- 	/*
- 	 * Allocate in one chunk for easier maintenance
- 	 */
--	f_ffs[0] = kcalloc(func_num * N_CONF, sizeof(*f_ffs), GFP_KERNEL);
-+	f_ffs[0] = kcalloc(func_num * N_CONF, sizeof(*f_ffs[0]), GFP_KERNEL);
- 	if (!f_ffs[0]) {
- 		ret = -ENOMEM;
- 		goto no_func;
--- 
-2.34.1
+New Contributors
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+@andrewshadura made their first contribution in #15
+@nullr0ute made their first contribution in #17
+@richardg867 made their first contribution in #20
 
+Release:
+=3D=3D=3D=3D=3D=3D=3D
+
+https://github.com/libtypec/libtypec/releases/download/libtypec-0.6.1/libty=
+pec_0.6.1_amd64.deb
+https://github.com/libtypec/libtypec/releases/download/libtypec-0.6.1/libty=
+pec-0.6.1-x86_64.rpm
 
