@@ -1,250 +1,194 @@
-Return-Path: <linux-usb+bounces-23513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B55DA9E988
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 09:39:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7320AA9E9AE
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 09:42:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 629907A54FD
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 07:38:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEB8A170D9F
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 07:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8551EB194;
-	Mon, 28 Apr 2025 07:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0057E1E1023;
+	Mon, 28 Apr 2025 07:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="lSnwrpxw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352F71DF25C;
-	Mon, 28 Apr 2025 07:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383811DF247
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 07:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745825921; cv=none; b=J3aQLsP2SjX95FenP+Q2UP29x/o05/uPBbnUZ7+w4cIy6/aZGJFOdGF3wvGTZWdWROn739kjVHXZPqXKlhq2mVk5Pd3oUdiaOyxBtBQlZWPLW0klH4REB9Xi3wi3FTJBycQB9hTio9Fb+L/JKr+xmjh4/VnaB/DIgXg/s0zT2uQ=
+	t=1745826077; cv=none; b=GirjEVfetmRben3iCG3skNq5hZkREZ7Kbw+Rfpk7jW3l/qOwfHQlxZsPy/iVD91MQ2VaWebtKuG9HAT82RFgY41WM4sLn3ZFgzcXWLOrKZEI0bKaUorbX7z0gRkPdHpCbYKx1dSwiGPy6ecVfeX/LS8C9Zi5ypWetsCZNE0i3rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745825921; c=relaxed/simple;
-	bh=InIXD7r3QEA4Imaa5hfJxxveIupBNNwLiowBxO1GqwI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dJhQ2mvdLnykjRb+4HPitmio3bmQpZs+pB+BVRCSeSsNCVyAQW/tTvGXC33aW3PLCwhVjhZCdTvfhtHwm4eDxpsa74plFeWqPxihTHZx7VoFMuxFgVU613xHKHPVIdPExUbiHj7wa47BKRAY6KiUSkm38psZWB5Sll6a9sC3bDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
-Received: from [127.0.0.1] (gy-adaptive-ssl-proxy-4-entmail-virt151.gy.ntes [27.18.99.221])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 135f5a5b2;
-	Mon, 28 Apr 2025 15:38:29 +0800 (GMT+08:00)
-From: Ze Huang <huangze@whut.edu.cn>
-Date: Mon, 28 Apr 2025 15:38:12 +0800
-Subject: [PATCH 2/2] riscv: dts: spacemit: add usb3.0 support for K1
+	s=arc-20240116; t=1745826077; c=relaxed/simple;
+	bh=2ur59+1ubAVC1jOBmnnt5jTjvdpj5sgc0TtVhaeTRJY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=gDWSVGOR5fVQy/X7rueB27TiYNynJxcYIqgCkZ6bgJ/ExBAH+DqwqcaTPOvsTb5C/nBGs6/XwMpALHCY3dkYyHAghV2W9nAFuSsDIWDkbINlDiTiC/j5/LOBIph+IvxIE+OBllc0nk5Z+eGlX9gBNMj3dXFrlNpZofKYKy9xYbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=lSnwrpxw; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf848528aso31468375e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 00:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1745826073; x=1746430873; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sn84KksoLA1XCM8eFqMm/ZJrcGihzBHVRs4q9bxH1gc=;
+        b=lSnwrpxwjy2NBzimuYQPFOZGww1ajOJ9WiCeGo1prTQzG5rqlWrCKN7YEHMc/PUPN5
+         9BoOyHoun4tWk6ipO+lc30w+j62Z9+rvUYtAZ0prpvDs111a1bRBvr98vKRvWY+egljL
+         Oqb5V29FbrVuLklL8YFQ5nfYXOhaa3v9lcX5mz+fC2/XBwDeqa5CfkjghFzqhe6rbNoU
+         dNisSD3Py9wiN1JVwFrUwpIF1F1iqZloJWMKtCJ7uy9SEZIF1Ocw9M4CfUc5Ux1TLKcO
+         7qHxfqaJ5G7egKvPRzsNBCrqiw1LQL4Qoj1Iy1hCDMzF/ZSesWupW/jMvmcDWySOa9KD
+         AWcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745826073; x=1746430873;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Sn84KksoLA1XCM8eFqMm/ZJrcGihzBHVRs4q9bxH1gc=;
+        b=ddg+TTNvv8Rc8kp8KvRE1JLOR175aPl7p6tY1h+mwsJmkII2p9vMdkEsLBHSePWQuv
+         LCb0UPTFTUqmKXkmCy2SVL+ykOVbyUr+GlTFMxbZ0WURGUfXBvpYYkPh1zA+rMb8dsCv
+         vnZs5tVpSSquOEOlmumU4Cotai/1DnM9wxU3ryQnpGgJTOb8eC3X3uNDVdGR616RgY0a
+         vaqMDs/fE4jN3lnKnm7Dic/BCzLliViYEEPXtaZolDtuZCpn+oSKJgqyW/cDBOvXm3du
+         +W05SKKte9lvPSoBAlVOs4XY1wvNrz2phhWpUjT+QsVxWDId1yJj9FoHUu0lyXnKd3+K
+         HOIw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCsKbVWb9PjkFnZdfykbK4jyGJb2BPcCDjuWjS+C3s1LwGKFjt3r0s7ROMotGLgmz6dVWxv6lOiZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE9LI40wlMQc/QE1F0dszFMDlpYX9Jw0IFnwkq2MckWQoELpVu
+	Jtgn0kGxxjWs0nY9D6iPcn+QwzEte64VuH0amEcObdcgYcZxGSUS+xgbRBZj/2s=
+X-Gm-Gg: ASbGncuti8n23FZs9OJ9kKAxNCyVjXz1Kd2QrC4d/VxP/gWyGAa96nJ6UnrpetsA2hv
+	u9cjUsIgEizYcqSIGLW5sWxFs58ZHr1+0lv1atvFjEwTvza/pkp2w4ftqNitdRrxTVHX/uh1LOX
+	GUdKWz2aT+wnUJ0EXl18ty7OalkvDDrU99K/7ITBd+4T5pQoC17ehCbLmdi3GzyfjZPlVBL2Dp9
+	g4wahNw879y4c3tp6spT7uN4VEZ9HHKX8uFU/Wj+Kf2Ar4GM3oV1upf700s6K3lhqgsBSX1Usxv
+	UZeeJoru06cqhLnamyFfnn6b8roy2JGNyRu/+1U=
+X-Google-Smtp-Source: AGHT+IGL44vW5/A++LXsZvrcU+Vla8hGWRBCR3n4mujmGHag6lTr8K8jbX9VXFTAyePxtqUQY98O/g==
+X-Received: by 2002:a05:600c:3b0d:b0:43c:f332:7038 with SMTP id 5b1f17b1804b1-440a669994dmr78600255e9.21.1745826073423;
+        Mon, 28 Apr 2025 00:41:13 -0700 (PDT)
+Received: from localhost ([41.66.99.1])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073c8d495sm10072538f8f.2.2025.04.28.00.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Apr 2025 00:41:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250428-b4-k1-dwc3-v2-v1-2-7cb061abd619@whut.edu.cn>
-References: <20250428-b4-k1-dwc3-v2-v1-0-7cb061abd619@whut.edu.cn>
-In-Reply-To: <20250428-b4-k1-dwc3-v2-v1-0-7cb061abd619@whut.edu.cn>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-kernel@vger.kernel.org, Ze Huang <huangze@whut.edu.cn>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745825898; l=5014;
- i=huangze@whut.edu.cn; s=20250325; h=from:subject:message-id;
- bh=InIXD7r3QEA4Imaa5hfJxxveIupBNNwLiowBxO1GqwI=;
- b=IVfVOwaQj6raMnn3pxzQq/Z5hW8EmniGXVFBYWWgBkuhaPyJosKcypBUPs9krGJC/WaEpZSXH
- g0XSnjXfbyPBOsVE0dwyudwOj9rp5Y94ilY2y+LAE7gUYrt2EQuPpWV
-X-Developer-Key: i=huangze@whut.edu.cn; a=ed25519;
- pk=C3zfn/kH6oMJickaXBa8dxTZO68EBiD93F+tAenboRA=
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSU5NVhhDSksYHUlIGkhPSVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJTFVKQ1VCQlVJSUpZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSktLVUpCS0
-	tZBg++
-X-HM-Tid: 0a967b554daa03a1kunm135f5a5b2
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6Ohw5HjJIPzUXDyFLAVYo
-	KB5PCRhVSlVKTE9OQ0lOQkpOTkhKVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
-	TFVKQ1VCQlVJSUpZV1kIAVlBTU9PTzcG
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 28 Apr 2025 09:41:10 +0200
+Message-Id: <D9I3OWQF8T3Y.1Q5U9E2RI5YZX@fairphone.com>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-sound@vger.kernel.org>
+Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm7225-fairphone-fp4: Enable USB
+ audio offload support
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Felipe Balbi" <balbi@kernel.org>, "Srinivas Kandagatla"
+ <srini@kernel.org>, "Liam Girdwood" <lgirdwood@gmail.com>, "Mark Brown"
+ <broonie@kernel.org>, "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai"
+ <tiwai@suse.com>, "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
+ <konradybcio@kernel.org>, "Wesley Cheng" <quic_wcheng@quicinc.com>,
+ "Stephan Gerhold" <stephan.gerhold@linaro.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250425-fp4-usb-audio-offload-v1-0-f90f571636e4@fairphone.com>
+ <20250425-fp4-usb-audio-offload-v1-6-f90f571636e4@fairphone.com>
+ <5c4ed073-45fe-4938-b25b-8979d96b456d@oss.qualcomm.com>
+In-Reply-To: <5c4ed073-45fe-4938-b25b-8979d96b456d@oss.qualcomm.com>
 
-Add USB 3.0 support for the SpacemiT K1 SoC, including the
-following components:
+On Fri Apr 25, 2025 at 11:06 PM CEST, Konrad Dybcio wrote:
+> On 4/25/25 12:44 PM, Luca Weiss wrote:
+>> Enable USB audio offloading which allows to play audio via a USB-C
+>> headset with lower power consumption and enabling some other features.
+>>=20
+>> This can be used like the following:
+>>=20
+>>   $ amixer -c0 cset name=3D'USB_RX Audio Mixer MultiMedia1' On
+>>   $ aplay --device=3Dplughw:0,0 test.wav
+>>=20
+>> Compared to regular playback to the USB sound card no interrupts should
+>> appear on the xhci-hcd interrupts during playback, instead the ADSP will
+>> be handling the playback.
+>
+> "should" isn't very optimistic - I assume this works for you? >=20
 
-- USB 2.0 PHY nodes
-- USB 3.0 combo PHY node
-- USB 3.0 host controller
-- USB 3.0 hub and vbus regulator (usb3_vhub, usb3_vbus)
-- DRAM interconnect node for USB DMA ("dma-mem")
+Yes it does!
 
-The `usb3_vbus` and `usb3_vhub` regulator node provides a fixed 5V
-supply to power the onboard USB 3.0 hub and usb vbus.
+With 'should' I meant to describe the expected behavior from using this
+since most people are probably not familiar with how this works.
 
-On K1, some DMA transfers from devices to memory use separate buses with
-different DMA address translation rules from the parent node. We express
-this relationship through the interconnects node("dma-mem").
+>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>> ---
+> [...]
+>
+>> +&sound {
+>> +	compatible =3D "fairphone,fp4-sndcard";
+>> +	model =3D "Fairphone 4";
+>> +
+>> +	mm1-dai-link {
+>> +		link-name =3D "MultiMedia1";
+>> +
+>> +		cpu {
+>> +			sound-dai =3D <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+>> +		};
+>> +	};
+>> +
+>> +	usb-dai-link {
+>> +		link-name =3D "USB Playback";
+>> +
+>> +		cpu {
+>> +			sound-dai =3D <&q6afedai USB_RX>;
+>> +		};
+>> +
+>> +		codec {
+>> +			sound-dai =3D <&q6usbdai USB_RX>;
+>> +		};
+>
+> 'co'dec < 'cp'u> +
 
-Signed-off-by: Ze Huang <huangze@whut.edu.cn>
----
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 52 +++++++++++++++++++++++
- arch/riscv/boot/dts/spacemit/k1.dtsi            | 56 +++++++++++++++++++++++++
- 2 files changed, 108 insertions(+)
+Aah, I thought I checked for that already. Will fix.
 
-diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index 816ef1bc358ec490aff184d5915d680dbd9f00cb..0c0bf572d31e056955eb2ff377c3262271dcc156 100644
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@ -28,6 +28,25 @@ led1 {
- 			default-state = "on";
- 		};
- 	};
-+
-+	usb3_vhub: regulator-vhub-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB30_VHUB";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio K1_GPIO(123) GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	usb3_vbus: regulator-vbus-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB30_VBUS";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		gpio = <&gpio K1_GPIO(97) GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
- };
- 
- &uart0 {
-@@ -35,3 +54,36 @@ &uart0 {
- 	pinctrl-0 = <&uart0_2_cfg>;
- 	status = "okay";
- };
-+
-+&usbphy2 {
-+	status = "okay";
-+};
-+
-+&combphy {
-+	status = "okay";
-+};
-+
-+&usb_dwc3 {
-+	dr_mode = "host";
-+	phy_type = "utmi";
-+	snps,hsphy_interface = "utmi";
-+	snps,dis_enblslpm_quirk;
-+	snps,dis-u1u2-quirk;
-+	snps,dis-u2-freeclk-exists-quirk;
-+	snps,dis-del-phy-power-chg-quirk;
-+	snps,dis_u2_susphy_quirk;
-+	snps,dis_u3_susphy_quirk;
-+	snps,dis_rxdet_inp3_quirk;
-+	snps,xhci-trb-ent-quirk;
-+	vbus-supply = <&usb3_vbus>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	hub@1 {
-+		compatible = "usb2109,817";
-+		reg = <0x1>;
-+		vdd-supply = <&usb3_vhub>;
-+		reset-gpios = <&gpio K1_GPIO(124) GPIO_ACTIVE_LOW>;
-+	};
-+};
-diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
-index c0cc4b99c9356d550a470291dba9f2625b10f8df..c7b86c850da969e5412ad42c63995cd20b4d0484 100644
---- a/arch/riscv/boot/dts/spacemit/k1.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
-@@ -4,6 +4,8 @@
-  */
- 
- #include <dt-bindings/clock/spacemit,k1-syscon.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/phy/phy.h>
- 
- /dts-v1/;
- / {
-@@ -346,6 +348,13 @@ soc {
- 		dma-noncoherent;
- 		ranges;
- 
-+		dram_range0: dram-range@0 {
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			dma-ranges = <0x0 0x00000000 0x0 0x00000000 0x0 0x80000000>;
-+			#interconnect-cells = <0>;
-+		};
-+
- 		syscon_rcpu: system-controller@c0880000 {
- 			compatible = "spacemit,k1-syscon-rcpu";
- 			reg = <0x0 0xc0880000 0x0 0x2048>;
-@@ -358,6 +367,53 @@ syscon_rcpu2: system-controller@c0888000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		usb_dwc3: usb@c0a00000 {
-+			compatible = "spacemit,k1-dwc3", "snps,dwc3";
-+			reg = <0x0 0xc0a00000 0x0 0x10000>;
-+			clocks = <&syscon_apmu CLK_USB30>;
-+			clock-names = "bus_early";
-+			resets = <&syscon_apmu RESET_USB3_0>;
-+			interrupt-parent = <&plic>;
-+			interrupts = <125>;
-+			interconnects = <&dram_range0>;
-+			interconnect-names = "dma-mem";
-+			phys = <&usbphy2>, <&combphy PHY_TYPE_USB3>;
-+			phy-names = "usb2-phy", "usb3-phy";
-+			status = "disabled";
-+		};
-+
-+		usbphy0: phy@c0940000 {
-+			compatible = "spacemit,usb2-phy";
-+			reg = <0x0 0xc0940000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB_AXI>;
-+			status = "disabled";
-+		};
-+
-+		usbphy1: phy@c09c0000 {
-+			compatible = "spacemit,usb2-phy";
-+			reg = <0x0 0xc09c0000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB_P1>;
-+			status = "disabled";
-+		};
-+
-+		usbphy2: phy@0xc0a30000 {
-+			compatible = "spacemit,k1-usb2-phy";
-+			reg = <0x0 0xc0a30000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB30>;
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		combphy: phy@c0b10000 {
-+			compatible = "spacemit,k1-combphy";
-+			reg = <0x0 0xc0b10000 0x0 0x800>,
-+			      <0x0 0xd4282910 0x0 0x400>;
-+			reg-names = "ctrl", "sel";
-+			resets = <&syscon_apmu RESET_PCIE0>;
-+			#phy-cells = <1>;
-+			status = "disabled";
-+		};
-+
- 		syscon_apbc: system-control@d4015000 {
- 			compatible = "spacemit,k1-syscon-apbc";
- 			reg = <0x0 0xd4015000 0x0 0x1000>;
+>> +		platform {
+>> +			sound-dai =3D <&q6routing>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>>  &tlmm {
+>>  	gpio-reserved-ranges =3D <13 4>, <56 2>;
+>> =20
+>> @@ -1178,6 +1214,7 @@ &usb_1 {
+>>  &usb_1_dwc3 {
+>>  	maximum-speed =3D "super-speed";
+>>  	dr_mode =3D "otg";
+>> +	num-hc-interrupters =3D /bits/ 16 <3>;
+> Where does this number come from?
 
--- 
-2.49.0
+I'm honestly not 100% sure. As far as I understand it, with
+'qcom,usb-audio-intr-idx =3D /bits/ 16 <2>;' in the qcom,q6usb node (which
+I've checked against downstream) we declare which "XHCI interrupter
+number to use". Without the num-hc-interrupters property we get an error
+that not enough interrupters are available (I assume only 1 is then), so
+this value practically needs to be higher than the <2> from earlier.
+
+Why it's this value and not a higher value e.g. 4 I'm not really sure.
+Downstream code looks somewhat different and "max_interrupters" in
+drivers/usb/ doesn't come from a dt property. I'd need to check more in
+details what this code does - or maybe Wesley can help.
+
+Regards
+Luca
+
+>
+> Konrad
 
 
