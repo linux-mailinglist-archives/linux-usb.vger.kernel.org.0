@@ -1,92 +1,178 @@
-Return-Path: <linux-usb+bounces-23530-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23531-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A831A9F90D
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 21:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8CE7A9F94D
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 21:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DF255A3593
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 19:00:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6D4B3BEDD8
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 19:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D44296D2E;
-	Mon, 28 Apr 2025 19:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8844296D32;
+	Mon, 28 Apr 2025 19:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9gHKSKf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiUoHHBf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBD82957A8
-	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 19:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527451A8F7F;
+	Mon, 28 Apr 2025 19:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745866811; cv=none; b=ORWzizDL/4hJ8Wyd0gOcEAjLLRPf3ZWb8U3LUZK3yNhcPOD4+hNlNy0h9VUsOIT9G2FCmQ8CzdBSdq4B8l5AZXEbckpNE6qIWomawihDfblTPj4T+dHJg5tA5kFtEjekUB9J+a70BiPW7dz0vtlPLMNTNYCDclWfJzu9SKyVHK0=
+	t=1745867907; cv=none; b=TwSBjSs+wCqqBvi4GD20HY2EijqZcTOO78/c7S6x7QsBw4w23xl7DMpFbvNzu8WSiUr2No3AYxnsCoSbDmFrjYJCTWu8F6x3FgJng/fEPwDEZas8+NIMX6tsu4SfhuaP0DxRXYIMzvBupkT2ff5ENNbmHssKQVxYYEVvO5Y0jko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745866811; c=relaxed/simple;
-	bh=wNhdhv4KYb5cDFIiRq5Mv/aSpkv9EK09JZjf4QOfT+g=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZBgCK7J4xet4c9t0L3k02d1+Z2Amb1kC1H/1h6cU3rwpWkuojX0N/W2bk6Q0Kkv4P9F6cA6czm9oSJC2pOx/49d6fF2ibJ+rryMC+4nrug2M6w/6mpC9mI1DHatR9wm/AHYfIamqei4csNgN2qZx2pzg7u920cHALXqfQQrDGzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9gHKSKf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D9645C4CEE4
-	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 19:00:10 +0000 (UTC)
+	s=arc-20240116; t=1745867907; c=relaxed/simple;
+	bh=i/QKM52Nh1KGsdn9abmiVXQDvhwyr9YUB3yshFRt/jI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CBCwFX1XQGy7CsnozdlNRWy14/jgNMIgdOz+qDklDh4c9bGmtEL5NzYzG6hLaeN/CwkfpuZJS7tjtq91EQrl8yIt/6wVKla5xrQYjH6kIhYWets5BhJ0YNS16xkgDifTE+ePbJ0YrNJaocEfSBS4mFvwCKQrZqpl/zr4ytuekWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiUoHHBf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE04C4CEE4;
+	Mon, 28 Apr 2025 19:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745866810;
-	bh=wNhdhv4KYb5cDFIiRq5Mv/aSpkv9EK09JZjf4QOfT+g=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Z9gHKSKfdREwX0O7UbLKpRISeukHqppw40QdWsv6iSBTgfxgA/iyBVT3yl/5Cy8j4
-	 Q0/okdUY3pawbXE43hh3JaOeaI5XdvPuH+baKTFIJ+/DyhU7v6kJZbc/EyDHPL14Zp
-	 iobgrjOnrG0ItfTN7CiuNrcGxOQE9aPeGbAiHLkcxqAjwAgmxvk2aKbeWAZgYWrmQh
-	 Y80VdMlbWOo9SJFvEMcFR+8v3iROYhOv3w+c988WNG+0jpGaYa9IuVmdO5s1oMgwl2
-	 d4uL6JP7ucKYdphDIXe7QX+ZiPE8k7uubEwPdBbEUN5fNEV4ESBu6F1Tku59PLyN93
-	 hn4NCrznk/aKQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id CEFC7C41614; Mon, 28 Apr 2025 19:00:10 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220016] USB devices plugged into USB hubs on
- 6.14.2-300.fc42.x86_64 do not work
-Date: Mon, 28 Apr 2025 19:00:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: PCI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stevenfalco@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220016-208809-nsruzr3ks3@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
-References: <bug-220016-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1745867906;
+	bh=i/QKM52Nh1KGsdn9abmiVXQDvhwyr9YUB3yshFRt/jI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SiUoHHBfFUaCjrcHhCWfjHbXTsrf6I4Ov+fNENselLjh993Gozy+iF9itHD21rRkM
+	 0uuk8If8HnS6gzaWAhO3mUDsdNgsEp6ItbhKdnQHoHuYItlQxEEpxhw1Uo/S1AAHhT
+	 eJ5ZRNMbUKiqnb7fqPvg5Y2/K3H/ft+KzigimMFAyziEYPCYilz9K9Zz5N29X2Ye4r
+	 0rTMOEOQn7dHiXU6iK8rhUnVSeQOogKGXJbdvtGyWBX3FzpPzi9TeAsida3waVOj7y
+	 dbsvweahRMoSUOm7D1r/L0y6KwvFk2tMmxPvejnEtUfzbCDvPbcH5E3cjMDGhBAWPy
+	 y/hU1TYTUoExg==
+From: Eric Biggers <ebiggers@kernel.org>
+To: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net-next] r8152: use SHA-256 library API instead of crypto_shash API
+Date: Mon, 28 Apr 2025 12:16:06 -0700
+Message-ID: <20250428191606.856198-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
+From: Eric Biggers <ebiggers@google.com>
 
---- Comment #28 from Steven A. Falco (stevenfalco@gmail.com) ---
-Thanks Justin.  I'll continue to work with Ilpo if there are any proposed f=
-ixes
-or additional tests that I can help with.
+This user of SHA-256 does not support any other algorithm, so the
+crypto_shash abstraction provides no value.  Just use the SHA-256
+library API instead, which is much simpler and easier to use.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ drivers/net/usb/Kconfig |  4 +---
+ drivers/net/usb/r8152.c | 46 +++++++----------------------------------
+ 2 files changed, 8 insertions(+), 42 deletions(-)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+index 3c360d4f06352..370b32fc25880 100644
+--- a/drivers/net/usb/Kconfig
++++ b/drivers/net/usb/Kconfig
+@@ -99,13 +99,11 @@ config USB_RTL8150
+ config USB_RTL8152
+ 	tristate "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
+ 	select MII
+ 	select PHYLIB
+ 	select CRC32
+-	select CRYPTO
+-	select CRYPTO_HASH
+-	select CRYPTO_SHA256
++	select CRYPTO_LIB_SHA256
+ 	help
+ 	  This option adds support for Realtek RTL8152 based USB 2.0
+ 	  10/100 Ethernet adapters and RTL8153 based USB 3.0 10/100/1000
+ 	  Ethernet adapters.
+ 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 2cab046749a92..67f5d30ffcbab 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -24,11 +24,11 @@
+ #include <linux/usb/cdc.h>
+ #include <linux/suspend.h>
+ #include <linux/atomic.h>
+ #include <linux/acpi.h>
+ #include <linux/firmware.h>
+-#include <crypto/hash.h>
++#include <crypto/sha2.h>
+ #include <linux/usb/r8152.h>
+ #include <net/gso.h>
+ 
+ /* Information for net-next */
+ #define NETNEXT_VERSION		"12"
+@@ -4626,52 +4626,20 @@ static bool rtl8152_is_fw_mac_ok(struct r8152 *tp, struct fw_mac *mac)
+  * make sure the file is correct.
+  */
+ static long rtl8152_fw_verify_checksum(struct r8152 *tp,
+ 				       struct fw_header *fw_hdr, size_t size)
+ {
+-	unsigned char checksum[sizeof(fw_hdr->checksum)];
+-	struct crypto_shash *alg;
+-	struct shash_desc *sdesc;
+-	size_t len;
+-	long rc;
+-
+-	alg = crypto_alloc_shash("sha256", 0, 0);
+-	if (IS_ERR(alg)) {
+-		rc = PTR_ERR(alg);
+-		goto out;
+-	}
+-
+-	if (crypto_shash_digestsize(alg) != sizeof(fw_hdr->checksum)) {
+-		rc = -EFAULT;
+-		dev_err(&tp->intf->dev, "digestsize incorrect (%u)\n",
+-			crypto_shash_digestsize(alg));
+-		goto free_shash;
+-	}
++	u8 checksum[sizeof(fw_hdr->checksum)];
+ 
+-	len = sizeof(*sdesc) + crypto_shash_descsize(alg);
+-	sdesc = kmalloc(len, GFP_KERNEL);
+-	if (!sdesc) {
+-		rc = -ENOMEM;
+-		goto free_shash;
+-	}
+-	sdesc->tfm = alg;
+-
+-	len = size - sizeof(fw_hdr->checksum);
+-	rc = crypto_shash_digest(sdesc, fw_hdr->version, len, checksum);
+-	kfree(sdesc);
+-	if (rc)
+-		goto free_shash;
++	BUILD_BUG_ON(sizeof(checksum) != SHA256_DIGEST_SIZE);
++	sha256(fw_hdr->version, size - sizeof(checksum), checksum);
+ 
+-	if (memcmp(fw_hdr->checksum, checksum, sizeof(fw_hdr->checksum))) {
++	if (memcmp(fw_hdr->checksum, checksum, sizeof(checksum))) {
+ 		dev_err(&tp->intf->dev, "checksum fail\n");
+-		rc = -EFAULT;
++		return -EFAULT;
+ 	}
+-
+-free_shash:
+-	crypto_free_shash(alg);
+-out:
+-	return rc;
++	return 0;
+ }
+ 
+ static long rtl8152_check_firmware(struct r8152 *tp, struct rtl_fw *rtl_fw)
+ {
+ 	const struct firmware *fw = rtl_fw->fw;
+
+base-commit: 33035b665157558254b3c21c3f049fd728e72368
+-- 
+2.49.0
+
 
