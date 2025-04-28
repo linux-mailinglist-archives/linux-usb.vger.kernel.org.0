@@ -1,178 +1,147 @@
-Return-Path: <linux-usb+bounces-23531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8CE7A9F94D
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 21:18:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B61FA9FA8C
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 22:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6D4B3BEDD8
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 19:18:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9839188AEBB
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 20:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8844296D32;
-	Mon, 28 Apr 2025 19:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AECB1D5170;
+	Mon, 28 Apr 2025 20:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiUoHHBf"
+	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="DuC/Ut0Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp1.math.uni-bielefeld.de (smtp1.math.uni-bielefeld.de [129.70.45.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527451A8F7F;
-	Mon, 28 Apr 2025 19:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00206F073;
+	Mon, 28 Apr 2025 20:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.70.45.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745867907; cv=none; b=TwSBjSs+wCqqBvi4GD20HY2EijqZcTOO78/c7S6x7QsBw4w23xl7DMpFbvNzu8WSiUr2No3AYxnsCoSbDmFrjYJCTWu8F6x3FgJng/fEPwDEZas8+NIMX6tsu4SfhuaP0DxRXYIMzvBupkT2ff5ENNbmHssKQVxYYEVvO5Y0jko=
+	t=1745872012; cv=none; b=Gccl3Hy9JZ6VTW+PS4C/WwXq/HPl4WhJnRpC79FzT1PNkD+tsrc/mRvddcAMqWVr0eSBOrQvp1Ji+G0xeUxX8Npg9/Ooe9q2PxAs7r0mkHuoh+O4T19dXHW+A62e6Cb38wTsfCVs9sjEqDV3R44ZnO8/tAnGxlJ3/xvPXEx3vIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745867907; c=relaxed/simple;
-	bh=i/QKM52Nh1KGsdn9abmiVXQDvhwyr9YUB3yshFRt/jI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CBCwFX1XQGy7CsnozdlNRWy14/jgNMIgdOz+qDklDh4c9bGmtEL5NzYzG6hLaeN/CwkfpuZJS7tjtq91EQrl8yIt/6wVKla5xrQYjH6kIhYWets5BhJ0YNS16xkgDifTE+ePbJ0YrNJaocEfSBS4mFvwCKQrZqpl/zr4ytuekWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiUoHHBf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE04C4CEE4;
-	Mon, 28 Apr 2025 19:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745867906;
-	bh=i/QKM52Nh1KGsdn9abmiVXQDvhwyr9YUB3yshFRt/jI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SiUoHHBfFUaCjrcHhCWfjHbXTsrf6I4Ov+fNENselLjh993Gozy+iF9itHD21rRkM
-	 0uuk8If8HnS6gzaWAhO3mUDsdNgsEp6ItbhKdnQHoHuYItlQxEEpxhw1Uo/S1AAHhT
-	 eJ5ZRNMbUKiqnb7fqPvg5Y2/K3H/ft+KzigimMFAyziEYPCYilz9K9Zz5N29X2Ye4r
-	 0rTMOEOQn7dHiXU6iK8rhUnVSeQOogKGXJbdvtGyWBX3FzpPzi9TeAsida3waVOj7y
-	 dbsvweahRMoSUOm7D1r/L0y6KwvFk2tMmxPvejnEtUfzbCDvPbcH5E3cjMDGhBAWPy
-	 y/hU1TYTUoExg==
-From: Eric Biggers <ebiggers@kernel.org>
-To: netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next] r8152: use SHA-256 library API instead of crypto_shash API
-Date: Mon, 28 Apr 2025 12:16:06 -0700
-Message-ID: <20250428191606.856198-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1745872012; c=relaxed/simple;
+	bh=mt4nBZoFMVuazThWZili02maSuYlJhyImrdFjgf73Nw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p7k2Pgs8in0z3U81jWpuE8p+k38zOydg3R4iWP5BgfstVUj67nTFqJFkX6XrTg3oLh67fjRBBz80tNOKNv16IzIhfmb1lZUszQemYoMh7pdQ7IhYO9ewOIQ5oV8q1iAaT7xFSA6ndyNu+Gto+/iCZzTdAd05BfgOXxP7I9OL/no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=DuC/Ut0Y; arc=none smtp.client-ip=129.70.45.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=math.uni-bielefeld.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=math.uni-bielefeld.de; s=default; t=1745872003;
+	bh=mt4nBZoFMVuazThWZili02maSuYlJhyImrdFjgf73Nw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DuC/Ut0Y5Ya0qey24ll36tGnrmNcbhDUWIG9buN/vfhikGqznDWsdjtciEFUsJERf
+	 eM+xNIU+IxBQx3H5i/oUewPdeHb+qIAWVHdVl3Jnht8GqboRHM6QEpcWQsBcWr9UTl
+	 Atw3grYDYMiPAjDw83xUhjmbTF1WfV99fVN5kSqZu9mbGQuFGGCVYuCxN6tL2b8T+Z
+	 MG2rW1nY/mZ8jLh1V1K+W86Ff+iRDGg4EqCFxF6+FNVI+8daeFNw3H3iC+B6TRZOSg
+	 9qxOx3bc9I6Fe2OdlewDd87C//T1RzcixNOlg4X52U08vwEE9K1Y7ECyiBbdgT9zG8
+	 PLgxuACdhApmQ==
+Received: from [192.168.0.100] (dslb-084-060-118-083.084.060.pools.vodafone-ip.de [84.60.118.83])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp1.math.uni-bielefeld.de (Postfix) with ESMTPSA id A4B7820396;
+	Mon, 28 Apr 2025 22:26:42 +0200 (CEST)
+Message-ID: <b34675f9-3f09-44ca-a712-c77af5340ae3@math.uni-bielefeld.de>
+Date: Mon, 28 Apr 2025 22:26:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] r8152: Call napi_schedule() from proper context
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: pmenzel@molgen.mpg.de, davem@davemloft.net, edumazet@google.com,
+ frederic@kernel.org, hayeswang@realtek.com, horms@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, romieu@fr.zoreil.com
+References: <8db2e1cd-553e-4082-a018-ec269592b69f@molgen.mpg.de>
+ <9b822fe6-699a-4fe6-88c5-1e92e6a6e588@math.uni-bielefeld.de>
+ <20250428104925.1ff7ad41@kernel.org>
+Content-Language: en-US
+From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
+ 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
+ 5pwFHSz7G+1ahA==
+In-Reply-To: <20250428104925.1ff7ad41@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Eric Biggers <ebiggers@google.com>
 
-This user of SHA-256 does not support any other algorithm, so the
-crypto_shash abstraction provides no value.  Just use the SHA-256
-library API instead, which is much simpler and easier to use.
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- drivers/net/usb/Kconfig |  4 +---
- drivers/net/usb/r8152.c | 46 +++++++----------------------------------
- 2 files changed, 8 insertions(+), 42 deletions(-)
+On 4/28/25 7:49 PM, Jakub Kicinski wrote:
+> On Sun, 27 Apr 2025 22:50:34 +0200 Tobias Jakobi wrote:
+>> Hello everyone,
+>>
+>> I believe this is still a problem, correct? I've been carrying the two
+>> patches in my tree for some weeks now -- otherwise the network adapter
+>> in my USB-C dock stops working randomly.
+>>
+>> Anything I can do to get these merged?
+> 
+> Which kernel are you suffering on?
+> The fix is in 6.14 -- commit 77e45145e3039a
+> It went in without Fixes and stable annotation, tho
+Hello Jakub,
 
-diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-index 3c360d4f06352..370b32fc25880 100644
---- a/drivers/net/usb/Kconfig
-+++ b/drivers/net/usb/Kconfig
-@@ -99,13 +99,11 @@ config USB_RTL8150
- config USB_RTL8152
- 	tristate "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
- 	select MII
- 	select PHYLIB
- 	select CRC32
--	select CRYPTO
--	select CRYPTO_HASH
--	select CRYPTO_SHA256
-+	select CRYPTO_LIB_SHA256
- 	help
- 	  This option adds support for Realtek RTL8152 based USB 2.0
- 	  10/100 Ethernet adapters and RTL8153 based USB 3.0 10/100/1000
- 	  Ethernet adapters.
- 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 2cab046749a92..67f5d30ffcbab 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -24,11 +24,11 @@
- #include <linux/usb/cdc.h>
- #include <linux/suspend.h>
- #include <linux/atomic.h>
- #include <linux/acpi.h>
- #include <linux/firmware.h>
--#include <crypto/hash.h>
-+#include <crypto/sha2.h>
- #include <linux/usb/r8152.h>
- #include <net/gso.h>
- 
- /* Information for net-next */
- #define NETNEXT_VERSION		"12"
-@@ -4626,52 +4626,20 @@ static bool rtl8152_is_fw_mac_ok(struct r8152 *tp, struct fw_mac *mac)
-  * make sure the file is correct.
-  */
- static long rtl8152_fw_verify_checksum(struct r8152 *tp,
- 				       struct fw_header *fw_hdr, size_t size)
- {
--	unsigned char checksum[sizeof(fw_hdr->checksum)];
--	struct crypto_shash *alg;
--	struct shash_desc *sdesc;
--	size_t len;
--	long rc;
--
--	alg = crypto_alloc_shash("sha256", 0, 0);
--	if (IS_ERR(alg)) {
--		rc = PTR_ERR(alg);
--		goto out;
--	}
--
--	if (crypto_shash_digestsize(alg) != sizeof(fw_hdr->checksum)) {
--		rc = -EFAULT;
--		dev_err(&tp->intf->dev, "digestsize incorrect (%u)\n",
--			crypto_shash_digestsize(alg));
--		goto free_shash;
--	}
-+	u8 checksum[sizeof(fw_hdr->checksum)];
- 
--	len = sizeof(*sdesc) + crypto_shash_descsize(alg);
--	sdesc = kmalloc(len, GFP_KERNEL);
--	if (!sdesc) {
--		rc = -ENOMEM;
--		goto free_shash;
--	}
--	sdesc->tfm = alg;
--
--	len = size - sizeof(fw_hdr->checksum);
--	rc = crypto_shash_digest(sdesc, fw_hdr->version, len, checksum);
--	kfree(sdesc);
--	if (rc)
--		goto free_shash;
-+	BUILD_BUG_ON(sizeof(checksum) != SHA256_DIGEST_SIZE);
-+	sha256(fw_hdr->version, size - sizeof(checksum), checksum);
- 
--	if (memcmp(fw_hdr->checksum, checksum, sizeof(fw_hdr->checksum))) {
-+	if (memcmp(fw_hdr->checksum, checksum, sizeof(checksum))) {
- 		dev_err(&tp->intf->dev, "checksum fail\n");
--		rc = -EFAULT;
-+		return -EFAULT;
- 	}
--
--free_shash:
--	crypto_free_shash(alg);
--out:
--	return rc;
-+	return 0;
- }
- 
- static long rtl8152_check_firmware(struct r8152 *tp, struct rtl_fw *rtl_fw)
- {
- 	const struct firmware *fw = rtl_fw->fw;
+thanks for pointing of the commit hash. I was looking for the wrong 
+commit in 6.14.y. More specifically I was searching for the one named 
+"r8152: Call napi_schedule() from proper context", touching 
+drivers/net/usb/r8152.c.
 
-base-commit: 33035b665157558254b3c21c3f049fd728e72368
--- 
-2.49.0
+But it seems the problem was solved in a different manner.
+
+Sorry for the noise!
+
+With best wishes,
+Tobias
 
 
