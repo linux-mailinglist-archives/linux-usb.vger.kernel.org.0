@@ -1,516 +1,159 @@
-Return-Path: <linux-usb+bounces-23526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9E9A9F482
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 17:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3B51A9F5A2
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 18:23:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69922189F171
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 15:33:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA2951A836F5
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 16:23:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A071A279905;
-	Mon, 28 Apr 2025 15:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E57427CCD7;
+	Mon, 28 Apr 2025 16:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LQ5+ua+9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VstnMOO9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E206326D4D5
-	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 15:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FED527CCCD
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 16:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745854390; cv=none; b=bZUTzcE3EdkQC4w3WpsUQdN0nHTuydG3mK6RcmYnc0aPujU7kn3HxtYpikvvXLVncXurvv9I2ihtEgPT2BXUGImhffDwyljxUeKnrJsvMnSgUI4buW57/c6KgLlEm6fgYZP4KSDHQd9VrtXa4h4OIWvLw7jvnhVSD5xfyW5Dqg4=
+	t=1745857330; cv=none; b=nCSc64p31rdDfmNsP7nniZkt9Zq+K9SInVR88Ohfj773bm/aHvfPHwDw3uSi67wZ9xE/31+GSajSOTiV8bEKSzeBWV9nD/eE79268C2BjKihdfoCv6LELDE89x6ezaKsYopym7RSRv9cu1USj69QmECwCAz1nu7z3dEJEGBZLMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745854390; c=relaxed/simple;
-	bh=3RkcV1mJSdBVLKXnP092JtjTS1ioFCIhKWkATUM0Ols=;
+	s=arc-20240116; t=1745857330; c=relaxed/simple;
+	bh=Vw4DlImvgesrbSAsVdwb6vTeImKi0Z4LGtqXAOAB+Nk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=imUp1Ypa+QTk3ZQY7C6nzJJoiRDXZgZkfHOWIuK5taC1GX1HQPyQENBJhhE00UloguwePh1FMGuiEdayfSzyjeBDOYrCzHkPrJFxNKGElJLl0wh1YrDsInNIsq26fCwi+nKtcSVe4LwTJC5rWxRZdDQvKlJzSig6hvCMkrNV89I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LQ5+ua+9; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54d6f933152so6656180e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 08:33:07 -0700 (PDT)
+	 To:Cc:Content-Type; b=lot3mP10S7MY0wx3M7wrk1h1x0IROP3uwsqbxv2v1cnZIjltlbb6ioJ6rB8ywNh9sTJIppKcGo/nm1JuBfWuU3/tR2tMyiYRlfoxyFw8S+9VB3tcVgW2IUVswRK5MwI5i5nniDwW5U63TNBB1C3i18owbtRadZQm4Sa3EIb57oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VstnMOO9; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7080dd5f9f1so34166817b3.0
+        for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 09:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1745854386; x=1746459186; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1745857326; x=1746462126; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9WuwtIohfhi7g92ooy28Ov5X+M+ATrx4yIp+s+NkPjE=;
-        b=LQ5+ua+9uqKNyK3ciHfov5pKC+Kk0nOf5O0nEyiNQC3erp0Do7V9h0D73SbfS9+6U+
-         HWu+tgUW0+UbYPMTKe68RRnQb5Np4Ur2CeOO9IWsaA2x85EaIb1+ozi670xxvzsregLL
-         xqBaqoKjf/yBNLfErBdW+Hl55S/CjOd0+N7wU=
+        bh=kjtfgNYAyQgaIv+6+gwAi/DXzlNfZQv9vmE2wR+LnUU=;
+        b=VstnMOO9OIpDzRVxGmD9lmKOmGsdXuocbVU9WCF4GNr0cPoaTl+FvxFER6+gxTX01g
+         l0lPgxqzmL4GI0JX2UiIFXcAiIS68xq+DKCjIKxCbmShJ71tf7eFQmLqy1OOwC5ZqDYz
+         zsKcS742SGFGoG5pLeeNUgEUQ28vlxoWIQa7wjfNDKi/ALdT3FLf6nIpQcw1FnW5H55G
+         6L/vMsGOdDkcpUMzmI3uLgqcHkhrY2S8ZeRgkF+AJZBbdJqT77kL0zGKpLFWCm3PHB+a
+         E1qqVEe0tr6wcHtDoZAR8pMkiR4kpbeZqwXtzijE3XqLWKv99PcQujVmOdxowxweiEl2
+         H5XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745854386; x=1746459186;
+        d=1e100.net; s=20230601; t=1745857326; x=1746462126;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9WuwtIohfhi7g92ooy28Ov5X+M+ATrx4yIp+s+NkPjE=;
-        b=E/VtXTacJzr71cwuW78LkwkjzNa7OKXmP0Xen1Bk5wDk9/B1JGkJR7uGfqF4YLWGmk
-         S7YMQsvfny0sHp8PD+CuHAGLUZr7mBKiHnGGN4uJosVMQ9iJGkSuIUbsrYpubYgBzl4U
-         WkaN/Cw34hpUlfKbb/sLQ7QdZZYXkSA7St0Bav980XH7ozcDzrxfE1q64hABRTTGp+BX
-         u5Rzt9RQTBoJInxuqf/TZSNX+YygUpO9eDC0j7b+ffswan786P+mqHSRgHljd+xDC5Rs
-         7yeWcATWYkDyB6vs72xiyjZM42feD44rpaExiUBC5SM4wtjek7+10g7v/SW6EV1qx2KD
-         6Cnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdurUPQVcpNA+lx4OPuYN+DKFDWD6aOXgpiozMrk0NXkc2Kuqk7sYkDOYqdcPjZ+vh4eOPtzZqw10=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw+Els3nG79+ejkkhHwNEPUXJr8U97RXSLqEL/LfnSVr7iPe2G
-	Fjc+s+w+Hvukai2uL5ixHoAl8skv9Vt2zyH2PjUCj4yGmmHbPuQrqHqNkKwVfCbAxtnT7Kx/K7I
-	=
-X-Gm-Gg: ASbGnctf8AvgMhrIDpoZeEkDL4pa8Dv7C9IEKQ1Dm6w8K1zNx/TZt/p+ExTlfe+FWVZ
-	GPdG+L0YgiyOsiS2qAWHlkyqtDeLIy0DhOLREELNBcMuUUfqwQn0RB2LBBg90TSXnGezSDskQdg
-	bYSYeGGaUUEEJfDbZAkM0RUANqryQJtomoVTsD6/W6zD2l50X+uLNNVhq6NyziE9B8PW18mRBg2
-	3Qbsy2DCn5krEixKMVlhGv2XemregGnvta2uu/D0zUIATNXGVM7CKfZ5dJoQpSppgmW7spybj8I
-	S5YqBM8DCK6cN3QOiSE2FWdbNJS45to9cAzzJBsameait2a3svbbvarm4cLqx4R5LbXmz0T5Nfd
-	BF10rruc=
-X-Google-Smtp-Source: AGHT+IFi6Y1pCxvSE0Sghtdp4D19TM52S7KNrEAxGzULbUPGk4IL0JBNcoSqb5Uw5HEWw/m0AARBCA==
-X-Received: by 2002:a05:6512:31c7:b0:545:cc5:be90 with SMTP id 2adb3069b0e04-54e900012abmr2969888e87.35.1745854385683;
-        Mon, 28 Apr 2025 08:33:05 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54e7cca7fbbsm1672880e87.159.2025.04.28.08.33.03
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Apr 2025 08:33:03 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-30bf7d0c15eso48953001fa.0
-        for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 08:33:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWyuax1klkkazv7sh61buJwZ6+qWQYGaExhSmH/XJg21TSkzd2sLKPu1Zmoz3ZnCbYlcElIiIpiIno=@vger.kernel.org
-X-Received: by 2002:a2e:a98a:0:b0:30b:f924:357c with SMTP id
- 38308e7fff4ca-319dc0211damr26226941fa.15.1745854383126; Mon, 28 Apr 2025
- 08:33:03 -0700 (PDT)
+        bh=kjtfgNYAyQgaIv+6+gwAi/DXzlNfZQv9vmE2wR+LnUU=;
+        b=hEMnLvLPIkB8+Y2eBOrb3GMFt7IgYFssRkc0FjcmHv724X2R7suFyty609F3PK4GRJ
+         FPzEGVMxeGzJFB/PveNLXMKzjvPCypg9vDC0JeOY7ojWLeTTYSXu8J/Q0JJPPRytHHTA
+         gURTiQi4BRHp/xRb2dSJgFEGYi9iPR7Ec1JDz5xbiCNj6hcIDsgsydgjEz1yscqoulEz
+         0J4LM4xBmh3sjRhHPUe53doZf26nuYcQEJhLbO9Sr0BIpmaFCqvLJk/45Eqdrmfq71In
+         UgK0Gp0n+gGy5H08xdP3elRz9PkmzRHbwJZfrodXjuxDxKV90IL3AUtJcJbcIDXOjazB
+         uwqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVNrMkErxd8CuGhdQ8m8+jwDcJTgZ8nfTWvClC0CjhD/fOiXO4flCnwAilBh1gVpc/604fqPTjpXZk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG4ULLTTt37FPMX4yaJ9n0q4WnfFH6J7qmpNhOXlTbwurvFcPw
+	18Ktc8E5kcGCucV+TOAdvl5aAzft0GYEngtBDCnT0cI0ePcSnjWWMhq2Gd7NNxfOJyGKdIoW9Yw
+	valUT9A8jNZqNolZUgqA0pOzgagh01JssNv8YSg==
+X-Gm-Gg: ASbGnctmu8u7/Nz8Gi/uzMi6oGNIDAifhwBL1PvEcxAhUbfXpEAmM+KiC312P9si/8O
+	tf2CzaupB2WvCHk4GbcRk0u2RlrlYJQhaHJiWCL3Ip326E9TQnxbqTdxteQ/Sp8cv0fe3Hv1oMo
+	3sjzg8+/1zeE+N96mnzX4praNqv9CQPIY4HQ==
+X-Google-Smtp-Source: AGHT+IHJ8fzCsar22nWRrLuqubA/nW5PD6Isexezh6U72gKuIl5N70HEwT9JTNXKPWmpqHrpu7bpAGC2DT3kmga/dpo=
+X-Received: by 2002:a05:690c:67c6:b0:708:3532:ec94 with SMTP id
+ 00721157ae682-70853f752e9mr174343137b3.0.1745857326167; Mon, 28 Apr 2025
+ 09:22:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
- <20250403-uvc-orientation-v1-6-1a0cc595a62d@chromium.org> <20250422212824.GQ17813@pendragon.ideasonboard.com>
- <CANiDSCuOaZ9bnd20tGLWzOA7cGA2q+oKdGktvouT-8+cUkHF1w@mail.gmail.com>
- <20250422222517.GU17813@pendragon.ideasonboard.com> <CANiDSCv3om=6puzMVC0OYAqsKGdH+JJQ-unmizhRmYLyTfKxkQ@mail.gmail.com>
- <f2b15a53-c4a6-4434-9e7b-b231b4054fba@redhat.com>
-In-Reply-To: <f2b15a53-c4a6-4434-9e7b-b231b4054fba@redhat.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 28 Apr 2025 17:32:49 +0200
-X-Gmail-Original-Message-ID: <CANiDSCvq-yo=Cc4pWoTwOdj0ak2Pes+ZQX-Sxu3ccwcOw5sdxA@mail.gmail.com>
-X-Gm-Features: ATxdqUEMUfe-MJTP1D_4mbueh1kaMY1YVv5iJ4f--XCyekjYNLPoYK6voLU0diQ
-Message-ID: <CANiDSCvq-yo=Cc4pWoTwOdj0ak2Pes+ZQX-Sxu3ccwcOw5sdxA@mail.gmail.com>
-Subject: Re: [PATCH 6/8] media: uvcvideo: Factor out gpio functions to its own file
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com> <20250422-sm7150-upstream-v1-11-bf9a9081631d@jiaxyga.com>
+In-Reply-To: <20250422-sm7150-upstream-v1-11-bf9a9081631d@jiaxyga.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 28 Apr 2025 18:21:30 +0200
+X-Gm-Features: ATxdqUFknbhFgOKvNVOI3-s43pP4YH55pKLNf_KwLrUaeaEizalUr2MLUM3sfs8
+Message-ID: <CAPDyKFqPpqDj+DKT=nJrTS8iDUx_8scnLreUQ99byDHEdBeiww@mail.gmail.com>
+Subject: Re: [PATCH 11/33] dt-bindings: mmc: sdhci-msm: Add the SM7150 compatible
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Rajendra Nayak <quic_rjendra@quicinc.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Lee Jones <lee@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alex Elder <elder@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>, 
+	Srinivas Kandagatla <srini@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Georgi Djakov <djakov@kernel.org>, 
+	Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss <rfoss@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, 
+	Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>, 
+	Imran Shaik <quic_imrashai@quicinc.com>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <quic_jesszhan@quicinc.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Kees Cook <kees@kernel.org>, 
+	Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>, 
+	David Wronek <david@mainlining.org>, Jens Reidel <adrian@mainlining.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-mmc@vger.kernel.org, netdev@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+	linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-hardening@vger.kernel.org, linux@mainlining.org, 
+	~postmarketos/upstreaming@lists.sr.ht
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Hans
+On Tue, 22 Apr 2025 at 22:24, Danila Tikhonov <danila@jiaxyga.com> wrote:
+>
+> Add compatible for the SDHCI block found in SM7150.
+>
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-On Mon, 28 Apr 2025 at 16:07, Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 23-Apr-25 00:35, Ricardo Ribalda wrote:
-> > On Wed, 23 Apr 2025 at 06:25, Laurent Pinchart
-> > <laurent.pinchart@ideasonboard.com> wrote:
-> >>
-> >> On Wed, Apr 23, 2025 at 06:20:09AM +0800, Ricardo Ribalda wrote:
-> >>> Hi Laurent
-> >>>
-> >>> On Wed, 23 Apr 2025 at 05:28, Laurent Pinchart
-> >>> <laurent.pinchart@ideasonboard.com> wrote:
-> >>>>
-> >>>> Hi Ricardo,
-> >>>>
-> >>>> Thank you for the patch.
-> >>>>
-> >>>> Hans raised an issue on "[PATCH v3 2/8] media: uvcvideo: Factor out gpio
-> >>>> functions to its own file" (part of "[PATCH v3 0/8] media: uvcvideo:
-> >>>> Implement the Privacy GPIO as a evdev"), asking if GPIO handling should
-> >>>> still use a uvc_entity if it moves to a evdev. There are implications on
-> >>>> this series too. Unless I'm mistaken, I haven't seen a reply from you to
-> >>>> my last e-mail. Can we please first finish that discussion ?
-> >>>
-> >>> Are you referring to:
-> >>> https://lore.kernel.org/all/0dfb780b-f2dc-43ed-a67d-afd5f50bb88f@redhat.com/
-> >>> ?
-> >>
-> >> I was referring to https://lore.kernel.org/all/20241125214523.GW19381@pendragon.ideasonboard.com/
-> >
-> > I believe the three of us agreed to remove the entity. Am I missing something?
->
-> That is what I remember too.
->
-> 2 other remarks:
->
-> 1. About this patch, what is this patch doing in *this* series, outside of exporting
-> uvc_alloc_entity(), I don't think we need this here. So for v2 I would prefer to
-> have this replaced with a patch just making uvc_alloc_entity() non static.
->
-> That avoids unnecessary dependencies between this series and the GPIO privacy control
-> use evdev series. Any conflicts from exporting uvc_alloc_entity() in this series should
-> be trivial to fix.
+Applied for next, thanks!
 
-will do
-
->
-> 2. About the series making the GPIO privacy control use evdev, if I've understood
-> things correctly the main motivation for that was power-consumption reasons and with
-> the granular power management series sitting in uvc/next those reasons are gone ?
-
-For ChromeOS that was the main motivation, you are correct. But I
-still see the value of unifying the userspace API.
-
-If you want to review that set (with low prio) that would be appreciated.
-
-Regards!
-
->
-> It would still be good to move to evdev to unify the userspace API with various
-> x86 laptop EC/ACPI drivers, but AFAIK this is a somewhat lower priority series to
-> get merged now because the power-consumption issues are resolved now, right ?
->
-> Regards,
->
-> Hans
->
->
->
-> >>>> On Thu, Apr 03, 2025 at 07:16:17PM +0000, Ricardo Ribalda wrote:
-> >>>>> This is just a refactor patch, no new functionality is added.
-> >>>>>
-> >>>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> >>>>> ---
-> >>>>>  drivers/media/usb/uvc/Makefile     |   3 +-
-> >>>>>  drivers/media/usb/uvc/uvc_driver.c | 121 +-----------------------------------
-> >>>>>  drivers/media/usb/uvc/uvc_gpio.c   | 123 +++++++++++++++++++++++++++++++++++++
-> >>>>>  drivers/media/usb/uvc/uvcvideo.h   |   6 ++
-> >>>>>  4 files changed, 133 insertions(+), 120 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/media/usb/uvc/Makefile b/drivers/media/usb/uvc/Makefile
-> >>>>> index 4f9eee4f81ab6436a8b90324a688a149b2c3bcd1..85514b6e538fbb8284e574ca14700f2d749e1a2e 100644
-> >>>>> --- a/drivers/media/usb/uvc/Makefile
-> >>>>> +++ b/drivers/media/usb/uvc/Makefile
-> >>>>> @@ -1,6 +1,7 @@
-> >>>>>  # SPDX-License-Identifier: GPL-2.0
-> >>>>>  uvcvideo-objs  := uvc_driver.o uvc_queue.o uvc_v4l2.o uvc_video.o uvc_ctrl.o \
-> >>>>> -               uvc_status.o uvc_isight.o uvc_debugfs.o uvc_metadata.o
-> >>>>> +               uvc_status.o uvc_isight.o uvc_debugfs.o uvc_metadata.o \
-> >>>>> +               uvc_gpio.o
-> >>>>>  ifeq ($(CONFIG_MEDIA_CONTROLLER),y)
-> >>>>>  uvcvideo-objs  += uvc_entity.o
-> >>>>>  endif
-> >>>>> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> >>>>> index da24a655ab68cc0957762f2b67387677c22224d1..b52e1ff401e24f69b867b5e975cda4260463e760 100644
-> >>>>> --- a/drivers/media/usb/uvc/uvc_driver.c
-> >>>>> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> >>>>> @@ -8,7 +8,6 @@
-> >>>>>
-> >>>>>  #include <linux/atomic.h>
-> >>>>>  #include <linux/bits.h>
-> >>>>> -#include <linux/gpio/consumer.h>
-> >>>>>  #include <linux/kernel.h>
-> >>>>>  #include <linux/list.h>
-> >>>>>  #include <linux/module.h>
-> >>>>> @@ -792,8 +791,8 @@ static const u8 uvc_media_transport_input_guid[16] =
-> >>>>>       UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
-> >>>>>  static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
-> >>>>>
-> >>>>> -static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
-> >>>>> -             unsigned int num_pads, unsigned int extra_size)
-> >>>>> +struct uvc_entity *u16 type, u16 id, unsigned int num_pads,
-> >>>>> +                                 unsigned int extra_size)
-> >>>>>  {
-> >>>>>       struct uvc_entity *entity;
-> >>>>>       unsigned int num_inputs;
-> >>>>> @@ -1242,122 +1241,6 @@ static int uvc_parse_control(struct uvc_device *dev)
-> >>>>>       return 0;
-> >>>>>  }
-> >>>>>
-> >>>>> -/* -----------------------------------------------------------------------------
-> >>>>> - * Privacy GPIO
-> >>>>> - */
-> >>>>> -
-> >>>>> -static void uvc_gpio_event(struct uvc_device *dev)
-> >>>>> -{
-> >>>>> -     struct uvc_entity *unit = dev->gpio_unit;
-> >>>>> -     struct uvc_video_chain *chain;
-> >>>>> -     u8 new_val;
-> >>>>> -
-> >>>>> -     if (!unit)
-> >>>>> -             return;
-> >>>>> -
-> >>>>> -     new_val = gpiod_get_value_cansleep(unit->gpio.gpio_privacy);
-> >>>>> -
-> >>>>> -     /* GPIO entities are always on the first chain. */
-> >>>>> -     chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
-> >>>>> -     uvc_ctrl_status_event(chain, unit->controls, &new_val);
-> >>>>> -}
-> >>>>> -
-> >>>>> -static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
-> >>>>> -                         u8 cs, void *data, u16 size)
-> >>>>> -{
-> >>>>> -     if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
-> >>>>> -             return -EINVAL;
-> >>>>> -
-> >>>>> -     *(u8 *)data = gpiod_get_value_cansleep(entity->gpio.gpio_privacy);
-> >>>>> -
-> >>>>> -     return 0;
-> >>>>> -}
-> >>>>> -
-> >>>>> -static int uvc_gpio_get_info(struct uvc_device *dev, struct uvc_entity *entity,
-> >>>>> -                          u8 cs, u8 *caps)
-> >>>>> -{
-> >>>>> -     if (cs != UVC_CT_PRIVACY_CONTROL)
-> >>>>> -             return -EINVAL;
-> >>>>> -
-> >>>>> -     *caps = UVC_CONTROL_CAP_GET | UVC_CONTROL_CAP_AUTOUPDATE;
-> >>>>> -     return 0;
-> >>>>> -}
-> >>>>> -
-> >>>>> -static irqreturn_t uvc_gpio_irq(int irq, void *data)
-> >>>>> -{
-> >>>>> -     struct uvc_device *dev = data;
-> >>>>> -
-> >>>>> -     uvc_gpio_event(dev);
-> >>>>> -     return IRQ_HANDLED;
-> >>>>> -}
-> >>>>> -
-> >>>>> -static int uvc_gpio_parse(struct uvc_device *dev)
-> >>>>> -{
-> >>>>> -     struct uvc_entity *unit;
-> >>>>> -     struct gpio_desc *gpio_privacy;
-> >>>>> -     int irq;
-> >>>>> -
-> >>>>> -     gpio_privacy = devm_gpiod_get_optional(&dev->intf->dev, "privacy",
-> >>>>> -                                            GPIOD_IN);
-> >>>>> -     if (!gpio_privacy)
-> >>>>> -             return 0;
-> >>>>> -
-> >>>>> -     if (IS_ERR(gpio_privacy))
-> >>>>> -             return dev_err_probe(&dev->intf->dev,
-> >>>>> -                                  PTR_ERR(gpio_privacy),
-> >>>>> -                                  "Can't get privacy GPIO\n");
-> >>>>> -
-> >>>>> -     irq = gpiod_to_irq(gpio_privacy);
-> >>>>> -     if (irq < 0)
-> >>>>> -             return dev_err_probe(&dev->intf->dev, irq,
-> >>>>> -                                  "No IRQ for privacy GPIO\n");
-> >>>>> -
-> >>>>> -     unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
-> >>>>> -     if (!unit)
-> >>>>> -             return -ENOMEM;
-> >>>>> -
-> >>>>> -     unit->gpio.gpio_privacy = gpio_privacy;
-> >>>>> -     unit->gpio.irq = irq;
-> >>>>> -     unit->gpio.bControlSize = 1;
-> >>>>> -     unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
-> >>>>> -     unit->gpio.bmControls[0] = 1;
-> >>>>> -     unit->get_cur = uvc_gpio_get_cur;
-> >>>>> -     unit->get_info = uvc_gpio_get_info;
-> >>>>> -     strscpy(unit->name, "GPIO", sizeof(unit->name));
-> >>>>> -
-> >>>>> -     list_add_tail(&unit->list, &dev->entities);
-> >>>>> -
-> >>>>> -     dev->gpio_unit = unit;
-> >>>>> -
-> >>>>> -     return 0;
-> >>>>> -}
-> >>>>> -
-> >>>>> -static int uvc_gpio_init_irq(struct uvc_device *dev)
-> >>>>> -{
-> >>>>> -     struct uvc_entity *unit = dev->gpio_unit;
-> >>>>> -     int ret;
-> >>>>> -
-> >>>>> -     if (!unit || unit->gpio.irq < 0)
-> >>>>> -             return 0;
-> >>>>> -
-> >>>>> -     ret = request_threaded_irq(unit->gpio.irq, NULL, uvc_gpio_irq,
-> >>>>> -                                IRQF_ONESHOT | IRQF_TRIGGER_FALLING |
-> >>>>> -                                IRQF_TRIGGER_RISING,
-> >>>>> -                                "uvc_privacy_gpio", dev);
-> >>>>> -
-> >>>>> -     unit->gpio.initialized = !ret;
-> >>>>> -
-> >>>>> -     return ret;
-> >>>>> -}
-> >>>>> -
-> >>>>> -static void uvc_gpio_deinit(struct uvc_device *dev)
-> >>>>> -{
-> >>>>> -     if (!dev->gpio_unit || !dev->gpio_unit->gpio.initialized)
-> >>>>> -             return;
-> >>>>> -
-> >>>>> -     free_irq(dev->gpio_unit->gpio.irq, dev);
-> >>>>> -}
-> >>>>> -
-> >>>>>  /* ------------------------------------------------------------------------
-> >>>>>   * UVC device scan
-> >>>>>   */
-> >>>>> diff --git a/drivers/media/usb/uvc/uvc_gpio.c b/drivers/media/usb/uvc/uvc_gpio.c
-> >>>>> new file mode 100644
-> >>>>> index 0000000000000000000000000000000000000000..30e3e6dd22cbc9cfee420dde7f7f64dbdce499b9
-> >>>>> --- /dev/null
-> >>>>> +++ b/drivers/media/usb/uvc/uvc_gpio.c
-> >>>>> @@ -0,0 +1,123 @@
-> >>>>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >>>>> +/*
-> >>>>> + *      uvc_gpio.c  --  USB Video Class driver
-> >>>>> + *
-> >>>>> + *      Copyright 2025 Google LLC
-> >>>>> + */
-> >>>>> +
-> >>>>> +#include <linux/kernel.h>
-> >>>>> +#include <linux/gpio/consumer.h>
-> >>>>> +#include "uvcvideo.h"
-> >>>>> +
-> >>>>> +static void uvc_gpio_event(struct uvc_device *dev)
-> >>>>> +{
-> >>>>> +     struct uvc_entity *unit = dev->gpio_unit;
-> >>>>> +     struct uvc_video_chain *chain;
-> >>>>> +     u8 new_val;
-> >>>>> +
-> >>>>> +     if (!unit)
-> >>>>> +             return;
-> >>>>> +
-> >>>>> +     new_val = gpiod_get_value_cansleep(unit->gpio.gpio_privacy);
-> >>>>> +
-> >>>>> +     /* GPIO entities are always on the first chain. */
-> >>>>> +     chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
-> >>>>> +     uvc_ctrl_status_event(chain, unit->controls, &new_val);
-> >>>>> +}
-> >>>>> +
-> >>>>> +static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
-> >>>>> +                         u8 cs, void *data, u16 size)
-> >>>>> +{
-> >>>>> +     if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
-> >>>>> +             return -EINVAL;
-> >>>>> +
-> >>>>> +     *(u8 *)data = gpiod_get_value_cansleep(entity->gpio.gpio_privacy);
-> >>>>> +
-> >>>>> +     return 0;
-> >>>>> +}
-> >>>>> +
-> >>>>> +static int uvc_gpio_get_info(struct uvc_device *dev, struct uvc_entity *entity,
-> >>>>> +                          u8 cs, u8 *caps)
-> >>>>> +{
-> >>>>> +     if (cs != UVC_CT_PRIVACY_CONTROL)
-> >>>>> +             return -EINVAL;
-> >>>>> +
-> >>>>> +     *caps = UVC_CONTROL_CAP_GET | UVC_CONTROL_CAP_AUTOUPDATE;
-> >>>>> +     return 0;
-> >>>>> +}
-> >>>>> +
-> >>>>> +static irqreturn_t uvc_gpio_irq(int irq, void *data)
-> >>>>> +{
-> >>>>> +     struct uvc_device *dev = data;
-> >>>>> +
-> >>>>> +     uvc_gpio_event(dev);
-> >>>>> +     return IRQ_HANDLED;
-> >>>>> +}
-> >>>>> +
-> >>>>> +int uvc_gpio_parse(struct uvc_device *dev)
-> >>>>> +{
-> >>>>> +     struct uvc_entity *unit;
-> >>>>> +     struct gpio_desc *gpio_privacy;
-> >>>>> +     int irq;
-> >>>>> +
-> >>>>> +     gpio_privacy = devm_gpiod_get_optional(&dev->intf->dev, "privacy",
-> >>>>> +                                            GPIOD_IN);
-> >>>>> +     if (!gpio_privacy)
-> >>>>> +             return 0;
-> >>>>> +
-> >>>>> +     if (IS_ERR(gpio_privacy))
-> >>>>> +             return dev_err_probe(&dev->intf->dev,
-> >>>>> +                                  PTR_ERR(gpio_privacy),
-> >>>>> +                                  "Can't get privacy GPIO\n");
-> >>>>> +
-> >>>>> +     irq = gpiod_to_irq(gpio_privacy);
-> >>>>> +     if (irq < 0)
-> >>>>> +             return dev_err_probe(&dev->intf->dev, irq,
-> >>>>> +                                  "No IRQ for privacy GPIO\n");
-> >>>>> +
-> >>>>> +     unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
-> >>>>> +     if (!unit)
-> >>>>> +             return -ENOMEM;
-> >>>>> +
-> >>>>> +     unit->gpio.gpio_privacy = gpio_privacy;
-> >>>>> +     unit->gpio.irq = irq;
-> >>>>> +     unit->gpio.bControlSize = 1;
-> >>>>> +     unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
-> >>>>> +     unit->gpio.bmControls[0] = 1;
-> >>>>> +     unit->get_cur = uvc_gpio_get_cur;
-> >>>>> +     unit->get_info = uvc_gpio_get_info;
-> >>>>> +     strscpy(unit->name, "GPIO", sizeof(unit->name));
-> >>>>> +
-> >>>>> +     list_add_tail(&unit->list, &dev->entities);
-> >>>>> +
-> >>>>> +     dev->gpio_unit = unit;
-> >>>>> +
-> >>>>> +     return 0;
-> >>>>> +}
-> >>>>> +
-> >>>>> +int uvc_gpio_init_irq(struct uvc_device *dev)
-> >>>>> +{
-> >>>>> +     struct uvc_entity *unit = dev->gpio_unit;
-> >>>>> +     int ret;
-> >>>>> +
-> >>>>> +     if (!unit || unit->gpio.irq < 0)
-> >>>>> +             return 0;
-> >>>>> +
-> >>>>> +     ret = request_threaded_irq(unit->gpio.irq, NULL, uvc_gpio_irq,
-> >>>>> +                                IRQF_ONESHOT | IRQF_TRIGGER_FALLING |
-> >>>>> +                                IRQF_TRIGGER_RISING,
-> >>>>> +                                "uvc_privacy_gpio", dev);
-> >>>>> +
-> >>>>> +     unit->gpio.initialized = !ret;
-> >>>>> +
-> >>>>> +     return ret;
-> >>>>> +}
-> >>>>> +
-> >>>>> +void uvc_gpio_deinit(struct uvc_device *dev)
-> >>>>> +{
-> >>>>> +     if (!dev->gpio_unit || !dev->gpio_unit->gpio.initialized)
-> >>>>> +             return;
-> >>>>> +
-> >>>>> +     free_irq(dev->gpio_unit->gpio.irq, dev);
-> >>>>> +}
-> >>>>> +
-> >>>>> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> >>>>> index b4ee701835fc016474d2cd2a0b67b2aa915c1c60..aef96b96499ce09ffa286c51793482afd9832097 100644
-> >>>>> --- a/drivers/media/usb/uvc/uvcvideo.h
-> >>>>> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> >>>>> @@ -683,6 +683,8 @@ do {                                                                      \
-> >>>>>   */
-> >>>>>
-> >>>>>  struct uvc_entity *uvc_entity_by_id(struct uvc_device *dev, int id);
-> >>>>> +struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
-> >>>>> +                                 unsigned int extra_size);
-> >>>>>
-> >>>>>  /* Video buffers queue management. */
-> >>>>>  int uvc_queue_init(struct uvc_video_queue *queue, enum v4l2_buf_type type);
-> >>>>> @@ -829,4 +831,8 @@ void uvc_debugfs_cleanup_stream(struct uvc_streaming *stream);
-> >>>>>  size_t uvc_video_stats_dump(struct uvc_streaming *stream, char *buf,
-> >>>>>                           size_t size);
-> >>>>>
-> >>>>> +/* gpio */
-> >>>>> +int uvc_gpio_parse(struct uvc_device *dev);
-> >>>>> +int uvc_gpio_init_irq(struct uvc_device *dev);
-> >>>>> +void uvc_gpio_deinit(struct uvc_device *dev);
-> >>>>>  #endif
-> >>>>>
-> >>
-> >> --
-> >> Regards,
-> >>
-> >> Laurent Pinchart
-> >
-> >
-> >
->
+Kind regards
+Uffe
 
 
--- 
-Ricardo Ribalda
+> ---
+>  Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> index eed9063e9bb352b5c8dac10ae2d289c5ca17f81b..2b2cbce2458b70b96b98c042109b10ead26e2291 100644
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> @@ -60,6 +60,7 @@ properties:
+>                - qcom,sm6125-sdhci
+>                - qcom,sm6350-sdhci
+>                - qcom,sm6375-sdhci
+> +              - qcom,sm7150-sdhci
+>                - qcom,sm8150-sdhci
+>                - qcom,sm8250-sdhci
+>                - qcom,sm8350-sdhci
+>
+> --
+> 2.49.0
+>
 
