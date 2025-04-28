@@ -1,115 +1,117 @@
-Return-Path: <linux-usb+bounces-23519-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23520-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADE4A9ED52
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 11:54:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4202FA9ED79
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 12:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A73F3A6E84
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 09:52:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68AE4188FE07
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 10:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9839425FA2C;
-	Mon, 28 Apr 2025 09:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D06A26136D;
+	Mon, 28 Apr 2025 10:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O4/B1puB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F/szESDb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388D825F994;
-	Mon, 28 Apr 2025 09:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC99F25F988;
+	Mon, 28 Apr 2025 10:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745833946; cv=none; b=FS1CeRUV2gWgxZ3ImOW3gkMIuvu7r72FS6x2wNqoxmoTaWbBVGbX8zKRsvcfLFvmgO0E416DBriPU6zdBo4t7aob4T7GF+96l1FapRKHH20gwgbKZhnHEPEJhr8IdI3dh0XpDPMpLJh93Bsjtq0PfjO+hT+YCOBEe+Wz89OGvhw=
+	t=1745834661; cv=none; b=fpzJzwBXPnWeJAFw0AtxZTyJyHUab5MZ314PIsf0jUKUXL1u/bTtNRn97kkEEbhlC3QzFqWMC7YVMBO5QiEvx7NJwC8uak2TJRiI4cNP2t5FFFou6FgbEEiB8XpSnr3IH7iVrKELeUCT+iHttcOSzaIAApQZg2AN0Nf68PInSoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745833946; c=relaxed/simple;
-	bh=1x8sp4jumFzb6yWzuwhlCiCa+03Bi2NQt2ISCvoMH0Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sxYDN34ex5IsPK8qenFv5T0ohLXZ0AZ7tdAu7BzoGpCiK5O4LYAKsRZ/adauRrHKtlDarrtpYy5bFl1kJhL0EDJARDNpJDVRKSwA4mudECtVYq/Unqel1fS8ZGY4jQKAnxu5043zQpmSv0gwbl7EV+UYWYFjwLmJJy3Auv+yktc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O4/B1puB; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-	Content-Type; bh=fZ1KTKeeZQIrOF8B6kO1Vb75Qk2vIgjMHppVXpEZZMA=;
-	b=O4/B1puB6Tj52ocS1Uq3UMlVUbuBwXkUxkoottG2J6ecxU0/WK6vxZEjLjiomI
-	zsQ+b9TnRjLhmoGLcxCDn+Jf5n5RJfLOQkWPSV5IJjTEnpWK2V6tWsjMR4QELaOV
-	HKqKlM8zmSC4ZMbCbJyIT1MZm37D7Iimc3zDeGmi67r6g=
-Received: from [10.42.12.155] (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wBXNGeMTw9oeVYADQ--.39766S2;
-	Mon, 28 Apr 2025 17:51:10 +0800 (CST)
-Message-ID: <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
-Date: Mon, 28 Apr 2025 17:51:08 +0800
+	s=arc-20240116; t=1745834661; c=relaxed/simple;
+	bh=rOFGbtpv4MrY1owxitYHQCckxfJhhUZ64PuiQrfe3co=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TIBUqKFNSCtbtiH2k0rJfzdopOCEg8DVWBtQYt4kcufoTQ6M7IuW0NhkDrC1ENEtHoANPPgduZ4Y6V47EjWEQEuK2C5S1HyCOz208LbT2W5HCPrFNwdm+IYTr7RHcx2T6K9FIgEPbkRTXsW5DWPOkpdCWcTgAOLvS1ReJeBstdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F/szESDb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E44C4CEE4;
+	Mon, 28 Apr 2025 10:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1745834660;
+	bh=rOFGbtpv4MrY1owxitYHQCckxfJhhUZ64PuiQrfe3co=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F/szESDbkRIp609MnQsoIntZkEgl78J2QHxTxTRoi0r8bS+oKSHOooN4Ff0n94ubs
+	 LxJ4VdgumPFw3LH4zxYAM730ij+YcaAzhc3ySkPVbgSETvDJIipKp7C8fZIxKgUT58
+	 sJeZo1RV4aRf49dTgJZ1gvdHP8mM83XcC7mMN0Kc=
+Date: Mon, 28 Apr 2025 12:04:17 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Zongmin Zhou <min_halo@163.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	Christoph Hellwig <hch@infradead.org>, i@zenithal.me,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	shuah@kernel.org, valentina.manea.m@gmail.com,
+	Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+Message-ID: <2025042812-sinister-shaping-bded@gregkh>
+References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
+ <20250422063409.607859-1-min_halo@163.com>
+ <aAdEM0crDfSP9JYf@infradead.org>
+ <4c6660a6-29ce-4b97-b092-8fc15585e52a@163.com>
+ <2025042512-corsage-handpick-bf2a@gregkh>
+ <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-To: Greg KH <gregkh@linuxfoundation.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>, i@zenithal.me,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, shuah@kernel.org,
- valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
-References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
- <20250422063409.607859-1-min_halo@163.com> <aAdEM0crDfSP9JYf@infradead.org>
- <4c6660a6-29ce-4b97-b092-8fc15585e52a@163.com>
- <2025042512-corsage-handpick-bf2a@gregkh>
-Content-Language: en-US
-From: Zongmin Zhou <min_halo@163.com>
-In-Reply-To: <2025042512-corsage-handpick-bf2a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBXNGeMTw9oeVYADQ--.39766S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy5try3tFWUKw17XF4rAFb_yoW8WF13pF
-	Z3uaySyrs8KF1Iqws5uw15Za4IyrsIvF9Ygr1DXr1UC3y5uFnFkFWIgr45uasrJr93C3Wr
-	ArZ7Was0yFWq9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UeKZAUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbiUA49q2gPTZI1sAAAs1
+In-Reply-To: <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
 
-Dear Greg and Shuah,
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-I found out that the vhci-hcd driver added this virtual device
-as a platform device from the very beginning since 2014.
-I'm just getting in touch with this module and
-don't have a deep understanding of it，shuah should be clearer.
+A: No.
+Q: Should I include quotations after my reply?
 
-I don't know if using the faux bus to replace the platform bus can solve 
-the problem
-that the error limitation on max_hw_sectors for usbip device since 
-commit d74ffae8b8dd applied.
-But this change will request user to update kernel version to support 
-faux bus.
-This will also be an expensive change to fix the problem?
+http://daringfireball.net/2007/07/on_top
 
-I have been discussing with shuah for a long time.
-Is there any simpler way to fix this problem?
+On Mon, Apr 28, 2025 at 05:51:08PM +0800, Zongmin Zhou wrote:
+> Dear Greg and Shuah,
+> 
+> I found out that the vhci-hcd driver added this virtual device
+> as a platform device from the very beginning since 2014.
 
-On 2025/4/25 16:28, Greg KH wrote:
-> On Fri, Apr 25, 2025 at 04:08:47PM +0800, Zongmin Zhou wrote:
->> Dear Greg and Christoph:
->>
->> This patch is the simple solution for the issue described in below link:
->> https://lore.kernel.org/all/20250219092555.112631-1-min_halo@163.com/
->>
->> This issue has been discussed at length with Shuah.
->>
->> As Christoph said,vhci-hcd is a virtual hci,
->> but it serves as a bridge to connect virtual USB devices to the real USB
->> controller.
->> Since the commit d74ffae8b8dd is applied on kernel v5.3,
->> the virtual USB devices's max_sectors size is limited since v5.3.
->>
->> Just because on vhci-hcd, the dma mask setting follows the platform device
->> default setting(32-bit).
-> Wait, why is vhci-hcd a platform device at all?  It shouldn't be doing
-> that, try removing that to start with, which will remove that "default"
-> setting.  I recommend using the faux bus as a potential replacement.
->
-> thanks,
->
-> greg k-h
+Ah, I should have caught it back then, but at the time there really
+wasn't another option.
 
+> I'm just getting in touch with this module and
+> don't have a deep understanding of it，shuah should be clearer.
+
+See the recent patches I did converting drivers to use the faux bus
+code, it should be pretty simple to do.
+
+> I don't know if using the faux bus to replace the platform bus can solve the
+> problem that the error limitation on max_hw_sectors for usbip device
+> since commit d74ffae8b8dd applied.
+
+That is for the storage driver, not usbip.  As the faux bus does not
+have any real dma operations, this should cause it to work properly
+given the default values involed, but that's up to you to test to verify
+it does just that.  Try it and see!
+
+> But this change will request user to update kernel version to support faux
+> bus.
+
+That's just a normal kernel update to a newer version, what is wrong
+with that?
+
+> This will also be an expensive change to fix the problem?
+
+Fixing things properly is the correct thing to do in all cases.
+
+thanks,
+
+greg k-h
 
