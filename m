@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-23536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E184A9FCBA
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 00:04:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6ACCA9FCC0
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 00:06:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 842F2171F06
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 22:04:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C63F53B31DD
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 22:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F90F20E031;
-	Mon, 28 Apr 2025 22:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18712101B7;
+	Mon, 28 Apr 2025 22:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLK/KHXT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5PuxFST"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BF41F4199
-	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 22:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205A620C02E
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 22:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745877847; cv=none; b=DGcss+WE50fgM1HVxx5qvHldH4FQtSFNAXRMHagAvuv7eqlTz+YQass+nQmWVOU65asti+tN0OQcyllUYwqm4pJVSeqWqqnAZagiKySNP8Nl9PYFmU4/6nPVrVMNuIof0KKtYNZht54QUsdWeeMUZoqcFNNE5I0XqPjYPsKuKC4=
+	t=1745877993; cv=none; b=o1LmK4Vmc18ziYHin16ZbVIGq8ZWePlFGi0LgBiUHK6K3DB4em3Ay9gM3uoIQdpTEnPNlNKdk/zPlAU4Xvnehk9E70s7V7nk1xtMvEuThQYxeA1Txah0Kueye5BSr5yJ/QWyzuj5i/2y8PeYiB+1tN0tRy5/U4qLciu7c9vMBeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745877847; c=relaxed/simple;
-	bh=08Ih18B+H9alks+wRMyi7A+go5s0XuQm8+pd+dAFxMo=;
+	s=arc-20240116; t=1745877993; c=relaxed/simple;
+	bh=t5oqMs8qz9rJJsTZ2StQ+6zhDbsIWuuS+Pah/rTViXY=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C1Yv60+1DOhn7NcWdUj0SJSkiKY9QjeVfJsUdYbNr4IObbx1Y7BSuFv1ovmUeAw1LK0TidsiGbSQuYgJd3vzUVfv+46teH8wxQIjztq6SrEuqf1Z4PAinItykZL+gbOfCYLlA3VnXBQJ4kJWI/DWiz2kFgGzoSO72IKzsf3rl/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLK/KHXT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83EB3C4CEE4
-	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 22:04:05 +0000 (UTC)
+	 Content-Type:MIME-Version; b=LtcyywzMWxXmIksTfpyvzqb6nAhiUQIESL2Vg69cY4PIWMObI0HmFbIIwwL/IY64At31HrtWIoS6cdle2QScWsOkmw71g2juc/3t4FkgffAX5p9bITih1D9HBvYhL2sWZxRnRgZpNvvGltdMJn65YC5/XLSTYpjzCzIUKsAVqDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5PuxFST; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BECCC4CEE4
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 22:06:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745877845;
-	bh=08Ih18B+H9alks+wRMyi7A+go5s0XuQm8+pd+dAFxMo=;
+	s=k20201202; t=1745877992;
+	bh=t5oqMs8qz9rJJsTZ2StQ+6zhDbsIWuuS+Pah/rTViXY=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=XLK/KHXTE5jzuSHE0Ardzz8jrFRPYm8alPrr/8ojx7DETJiKBOe1fSAmDEBSeQvqP
-	 jWYwxvJ5nXnS2q0AHuotU9mZLmLRwV5zZkCPTfI34CJxVyJcoT7V17ubS8jofDP26G
-	 5SU+ef9WNPBfgtsnbyEfiEUIDmp27H1YyDN9jVj/yRXU8+4t0RCrgG86xnVH2cu4Iq
-	 Eg5kSSkKtDJwnyD4T5snQlRTfwbSzUieIcnl/bBs2njn0Xbgj+mMrCfWQCMp2/C0C9
-	 rGZy49Jbrs6BUZ0BR/AUz38MqFy0X3iSvlnH2pcKoQFR4mDocuhogAEgcLj6hR5505
-	 0VCJj17GJfI4w==
+	b=h5PuxFSTBnwkSioLIXvXaj/WW8TZ34yJ4uWtFg14ytwxeLkztYyqHTHujmHszDbIR
+	 YRDDF+r2gw8R8lzUkAwyd+a+pXhacgiDY2DHo8itQB7BeMQzULnx/Uu/PGNVHWX2MI
+	 GLYZ+ybVO85aAvbbxnvGaneHrJrRbfMASGeRNL37LVQ7/WMy35TyLNvypUkqk6tOrb
+	 scW0o79DMDhw9wTXl3VZrsyPaIeqmWVD7t13fsg1ZNjYkot7Nb7Iwr5wJ4+f1MNRdT
+	 thzQ4SRiFXLcVTmdoVkK9Yz83ol4pQAe7P/+8wuWl9FOY9rGY4MQNRodSTmFAQKVp/
+	 0h8qS0NQvZugg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 704D5C433E1; Mon, 28 Apr 2025 22:04:05 +0000 (UTC)
+	id 6DFE1C433E1; Mon, 28 Apr 2025 22:06:32 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
-Date: Mon, 28 Apr 2025 22:04:05 +0000
+Date: Mon, 28 Apr 2025 22:06:32 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,7 +62,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213771-208809-9sPVvshUtM@https.bugzilla.kernel.org/>
+Message-ID: <bug-213771-208809-eUnOYe4sxt@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
 References: <bug-213771-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,8 +78,14 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
 
---- Comment #9 from Luzemario (luzemario@gmail.com) ---
-This issue appears to be FIXED with Kernel 6.1.0-17. It works for me.
+--- Comment #10 from Luzemario (luzemario@gmail.com) ---
+Tested with
+
+Linux desk 6.1.0-17-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.69-1 (2023-12-3=
+0)
+x86_64 GNU/Linux
+
+Devuan 5 Daedalus (latest patches)
 
 --=20
 You may reply to this email to add a comment.
