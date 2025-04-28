@@ -1,77 +1,92 @@
-Return-Path: <linux-usb+bounces-23529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 794B6A9F7B2
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 19:49:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A831A9F90D
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 21:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 902673BD837
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 17:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DF255A3593
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 19:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E9D2949F3;
-	Mon, 28 Apr 2025 17:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D44296D2E;
+	Mon, 28 Apr 2025 19:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jGXMz21g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9gHKSKf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F01119ABC6;
-	Mon, 28 Apr 2025 17:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBD82957A8
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 19:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745862567; cv=none; b=Ov2RJ8HngFJ+e5aUb3lRpsC9EF3ANi4aCESikxr22S5cQ0r0Hmf75XNu45vXu8Rh6pedYDVV4o8gBsRFLsFkXNylk8aNsIUKZAY6kvQb8DJM9eJaMMJNNIxlCCjOTuD2D1nHSRbar4aOCHf5viXBUYoe4jLfZQOpf3R4s561jK4=
+	t=1745866811; cv=none; b=ORWzizDL/4hJ8Wyd0gOcEAjLLRPf3ZWb8U3LUZK3yNhcPOD4+hNlNy0h9VUsOIT9G2FCmQ8CzdBSdq4B8l5AZXEbckpNE6qIWomawihDfblTPj4T+dHJg5tA5kFtEjekUB9J+a70BiPW7dz0vtlPLMNTNYCDclWfJzu9SKyVHK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745862567; c=relaxed/simple;
-	bh=Cx88xJyEUUBcP16+Gaemcgw+vTlMOvqcht8PV2BOsQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XNNG15/OKc/sANUggn1VJU7vBWkA/Re8gBwsRPEPj7SFRYcw8mYOi6QIW6bJXzMiNOlaTGVWOA1RywFOBltsklPEMraRs5qS/JFsbRWwOnjkemyg38wtF8DBdqfYFS+/ju2DLspjTfSySFx5gU7r4UmpFMdTgDw+O5HoLEvuJck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jGXMz21g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64313C4CEE4;
-	Mon, 28 Apr 2025 17:49:26 +0000 (UTC)
+	s=arc-20240116; t=1745866811; c=relaxed/simple;
+	bh=wNhdhv4KYb5cDFIiRq5Mv/aSpkv9EK09JZjf4QOfT+g=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZBgCK7J4xet4c9t0L3k02d1+Z2Amb1kC1H/1h6cU3rwpWkuojX0N/W2bk6Q0Kkv4P9F6cA6czm9oSJC2pOx/49d6fF2ibJ+rryMC+4nrug2M6w/6mpC9mI1DHatR9wm/AHYfIamqei4csNgN2qZx2pzg7u920cHALXqfQQrDGzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9gHKSKf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9645C4CEE4
+	for <linux-usb@vger.kernel.org>; Mon, 28 Apr 2025 19:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745862566;
-	bh=Cx88xJyEUUBcP16+Gaemcgw+vTlMOvqcht8PV2BOsQE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jGXMz21gwzY4LObWrhvdb7NheZ+SM3//+OYi6ygHu/2M5scLwHbyHPD0DdyGVf4zI
-	 SfZfzKdShCiIPuYy2fsUIZF8fsyUmCu118r4X1OaVPIMDUjmn96nzESoRJPMIbVxdy
-	 D9p+oK+4IIiFcoCRFWdQeUnsfrROUhjXNFvCuIm62O8Ii6EbcpMmOD1MeN0v0DTS3o
-	 oXaR/qJF1DPOSlEarMVwjT7cS7WStHT96OimpyxLEfwvGqxTV/qtkeLJgFHUvoRNqT
-	 d3lDYTHuUivCDjUGJYeXfMO5oahDeQdsQvgMHCIqnqBQ7ADh4afpOCq2aKEE1KJhUB
-	 u2nRHHvu2CSlw==
-Date: Mon, 28 Apr 2025 10:49:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
-Cc: pmenzel@molgen.mpg.de, davem@davemloft.net, edumazet@google.com,
- frederic@kernel.org, hayeswang@realtek.com, horms@kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com, romieu@fr.zoreil.com
-Subject: Re: [PATCH 2/2] r8152: Call napi_schedule() from proper context
-Message-ID: <20250428104925.1ff7ad41@kernel.org>
-In-Reply-To: <9b822fe6-699a-4fe6-88c5-1e92e6a6e588@math.uni-bielefeld.de>
-References: <8db2e1cd-553e-4082-a018-ec269592b69f@molgen.mpg.de>
-	<9b822fe6-699a-4fe6-88c5-1e92e6a6e588@math.uni-bielefeld.de>
+	s=k20201202; t=1745866810;
+	bh=wNhdhv4KYb5cDFIiRq5Mv/aSpkv9EK09JZjf4QOfT+g=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Z9gHKSKfdREwX0O7UbLKpRISeukHqppw40QdWsv6iSBTgfxgA/iyBVT3yl/5Cy8j4
+	 Q0/okdUY3pawbXE43hh3JaOeaI5XdvPuH+baKTFIJ+/DyhU7v6kJZbc/EyDHPL14Zp
+	 iobgrjOnrG0ItfTN7CiuNrcGxOQE9aPeGbAiHLkcxqAjwAgmxvk2aKbeWAZgYWrmQh
+	 Y80VdMlbWOo9SJFvEMcFR+8v3iROYhOv3w+c988WNG+0jpGaYa9IuVmdO5s1oMgwl2
+	 d4uL6JP7ucKYdphDIXe7QX+ZiPE8k7uubEwPdBbEUN5fNEV4ESBu6F1Tku59PLyN93
+	 hn4NCrznk/aKQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CEFC7C41614; Mon, 28 Apr 2025 19:00:10 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220016] USB devices plugged into USB hubs on
+ 6.14.2-300.fc42.x86_64 do not work
+Date: Mon, 28 Apr 2025 19:00:10 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: PCI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stevenfalco@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220016-208809-nsruzr3ks3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220016-208809@https.bugzilla.kernel.org/>
+References: <bug-220016-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Sun, 27 Apr 2025 22:50:34 +0200 Tobias Jakobi wrote:
-> Hello everyone,
-> 
-> I believe this is still a problem, correct? I've been carrying the two 
-> patches in my tree for some weeks now -- otherwise the network adapter 
-> in my USB-C dock stops working randomly.
-> 
-> Anything I can do to get these merged?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220016
 
-Which kernel are you suffering on? 
-The fix is in 6.14 -- commit 77e45145e3039a
-It went in without Fixes and stable annotation, tho
+--- Comment #28 from Steven A. Falco (stevenfalco@gmail.com) ---
+Thanks Justin.  I'll continue to work with Ilpo if there are any proposed f=
+ixes
+or additional tests that I can help with.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
