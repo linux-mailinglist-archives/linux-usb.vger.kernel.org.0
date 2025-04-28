@@ -1,39 +1,45 @@
-Return-Path: <linux-usb+bounces-23518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23519-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E232A9ED2B
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 11:50:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADE4A9ED52
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 11:54:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC6931628FC
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 09:50:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A73F3A6E84
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Apr 2025 09:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33B625DD1D;
-	Mon, 28 Apr 2025 09:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9839425FA2C;
+	Mon, 28 Apr 2025 09:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O4/B1puB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507A519048A;
-	Mon, 28 Apr 2025 09:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388D825F994;
+	Mon, 28 Apr 2025 09:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745833806; cv=none; b=dx2Z2Fb1Vqe8uVyObolSYUg/Kb2kiYlWTnDyihBp63/Eoxj5bxa99stmMOkDajYVTOn8U3tC5AXdNSMWAiMYHvOdaO1vM5xCXpCTgAcTZ5cp5vJFX9z6jKFoG+6iEyzRHvoO/JbEqoZ+1BR+Rh7s7ap7RrGbmKkS35dctMAf7Fc=
+	t=1745833946; cv=none; b=FS1CeRUV2gWgxZ3ImOW3gkMIuvu7r72FS6x2wNqoxmoTaWbBVGbX8zKRsvcfLFvmgO0E416DBriPU6zdBo4t7aob4T7GF+96l1FapRKHH20gwgbKZhnHEPEJhr8IdI3dh0XpDPMpLJh93Bsjtq0PfjO+hT+YCOBEe+Wz89OGvhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745833806; c=relaxed/simple;
-	bh=ARn8mONPmTlVesWVEfl9zh27G6Ld5tHGETk93xsn4Ww=;
+	s=arc-20240116; t=1745833946; c=relaxed/simple;
+	bh=1x8sp4jumFzb6yWzuwhlCiCa+03Bi2NQt2ISCvoMH0Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o/d9rMXzHosI3WRYwTaA5pxVZ9KLSOPw5DNz4pgRUvDz+RaliI3IF3Lpu/LCjFJ4uf0M1e7bhvA2xEBqBtMIh70FT2wZpYYmh9z1qQOrljiCAUwfud9qd3G9o850ZaWR8VKSjUIrDeqBJCD87yCIZZxbFBXnalvKLEJ9nVekuIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
-Received: from [198.18.0.1] (gy-adaptive-ssl-proxy-4-entmail-virt151.gy.ntes [27.18.99.221])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1364b8143;
-	Mon, 28 Apr 2025 17:44:46 +0800 (GMT+08:00)
-Message-ID: <c94409d9-3bd1-42c3-b5f6-785e994baa77@whut.edu.cn>
-Date: Mon, 28 Apr 2025 17:44:46 +0800
+	 In-Reply-To:Content-Type; b=sxYDN34ex5IsPK8qenFv5T0ohLXZ0AZ7tdAu7BzoGpCiK5O4LYAKsRZ/adauRrHKtlDarrtpYy5bFl1kJhL0EDJARDNpJDVRKSwA4mudECtVYq/Unqel1fS8ZGY4jQKAnxu5043zQpmSv0gwbl7EV+UYWYFjwLmJJy3Auv+yktc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O4/B1puB; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=fZ1KTKeeZQIrOF8B6kO1Vb75Qk2vIgjMHppVXpEZZMA=;
+	b=O4/B1puB6Tj52ocS1Uq3UMlVUbuBwXkUxkoottG2J6ecxU0/WK6vxZEjLjiomI
+	zsQ+b9TnRjLhmoGLcxCDn+Jf5n5RJfLOQkWPSV5IJjTEnpWK2V6tWsjMR4QELaOV
+	HKqKlM8zmSC4ZMbCbJyIT1MZm37D7Iimc3zDeGmi67r6g=
+Received: from [10.42.12.155] (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wBXNGeMTw9oeVYADQ--.39766S2;
+	Mon, 28 Apr 2025 17:51:10 +0800 (CST)
+Message-ID: <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
+Date: Mon, 28 Apr 2025 17:51:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -41,236 +47,69 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] riscv: dts: spacemit: add usb3.0 support for K1
-To: Yao Zi <ziyao@disroot.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250428-b4-k1-dwc3-v2-v1-0-7cb061abd619@whut.edu.cn>
- <20250428-b4-k1-dwc3-v2-v1-2-7cb061abd619@whut.edu.cn>
- <aA87PjTsbHxxFOdl@pie.lan>
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+To: Greg KH <gregkh@linuxfoundation.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, shuah@kernel.org,
+ valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
+References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
+ <20250422063409.607859-1-min_halo@163.com> <aAdEM0crDfSP9JYf@infradead.org>
+ <4c6660a6-29ce-4b97-b092-8fc15585e52a@163.com>
+ <2025042512-corsage-handpick-bf2a@gregkh>
 Content-Language: en-US
-From: Ze Huang <huangze@whut.edu.cn>
-In-Reply-To: <aA87PjTsbHxxFOdl@pie.lan>
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <2025042512-corsage-handpick-bf2a@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGBhLVkxLQ0oYSEMYTU1DQlYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJTFVKQ1VCQlVJSUpZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSktLVUpCS0
-	tZBg++
-X-HM-Tid: 0a967bc8e9ca03a1kunm1364b8143
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6K1E6OQw5ITIBCTQWIQI9Ng41
-	EEwwChxVSlVKTE9OQ0hIT0JJT0hNVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
-	TFVKQ1VCQlVJSUpZV1kIAVlBTE5NSTcG
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXNGeMTw9oeVYADQ--.39766S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy5try3tFWUKw17XF4rAFb_yoW8WF13pF
+	Z3uaySyrs8KF1Iqws5uw15Za4IyrsIvF9Ygr1DXr1UC3y5uFnFkFWIgr45uasrJr93C3Wr
+	ArZ7Was0yFWq9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UeKZAUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbiUA49q2gPTZI1sAAAs1
 
-On 4/28/25 4:24 PM, Yao Zi wrote:
-> On Mon, Apr 28, 2025 at 03:38:12PM +0800, Ze Huang wrote:
->> Add USB 3.0 support for the SpacemiT K1 SoC, including the
->> following components:
->>
->> - USB 2.0 PHY nodes
->> - USB 3.0 combo PHY node
->> - USB 3.0 host controller
->> - USB 3.0 hub and vbus regulator (usb3_vhub, usb3_vbus)
->> - DRAM interconnect node for USB DMA ("dma-mem")
->>
->> The `usb3_vbus` and `usb3_vhub` regulator node provides a fixed 5V
->> supply to power the onboard USB 3.0 hub and usb vbus.
->>
->> On K1, some DMA transfers from devices to memory use separate buses with
->> different DMA address translation rules from the parent node. We express
->> this relationship through the interconnects node("dma-mem").
->>
->> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
->> ---
->>   arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 52 +++++++++++++++++++++++
->>   arch/riscv/boot/dts/spacemit/k1.dtsi            | 56 +++++++++++++++++++++++++
->>   2 files changed, 108 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->> index 816ef1bc358ec490aff184d5915d680dbd9f00cb..0c0bf572d31e056955eb2ff377c3262271dcc156 100644
->> --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->> +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->> @@ -28,6 +28,25 @@ led1 {
->>   			default-state = "on";
->>   		};
->>   	};
->> +
->> +	usb3_vhub: regulator-vhub-5v {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "USB30_VHUB";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		gpio = <&gpio K1_GPIO(123) GPIO_ACTIVE_HIGH>;
->> +		enable-active-high;
->> +	};
->> +
->> +	usb3_vbus: regulator-vbus-5v {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "USB30_VBUS";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		regulator-always-on;
->> +		gpio = <&gpio K1_GPIO(97) GPIO_ACTIVE_HIGH>;
->> +		enable-active-high;
->> +	};
->>   };
->>   
->>   &uart0 {
->> @@ -35,3 +54,36 @@ &uart0 {
->>   	pinctrl-0 = <&uart0_2_cfg>;
->>   	status = "okay";
->>   };
->> +
->> +&usbphy2 {
->> +	status = "okay";
->> +};
->> +
->> +&combphy {
->> +	status = "okay";
->> +};
->> +
->> +&usb_dwc3 {
->> +	dr_mode = "host";
->> +	phy_type = "utmi";
->> +	snps,hsphy_interface = "utmi";
->> +	snps,dis_enblslpm_quirk;
->> +	snps,dis-u1u2-quirk;
->> +	snps,dis-u2-freeclk-exists-quirk;
->> +	snps,dis-del-phy-power-chg-quirk;
->> +	snps,dis_u2_susphy_quirk;
->> +	snps,dis_u3_susphy_quirk;
->> +	snps,dis_rxdet_inp3_quirk;
->> +	snps,xhci-trb-ent-quirk;
-> I suspect whether it's the correct place to put these quirks: they look
-> like IP quirks which are present in every K1 SoC regardless of the
-> board model, if my understanding is correct they should go into SoC
-> devicetree.
+Dear Greg and Shuah,
 
-I checked these quirks in differenct board dts in vendor repo, they are 
-actually the same.
-Will follow.
+I found out that the vhci-hcd driver added this virtual device
+as a platform device from the very beginning since 2014.
+I'm just getting in touch with this module and
+don't have a deep understanding of it，shuah should be clearer.
 
+I don't know if using the faux bus to replace the platform bus can solve 
+the problem
+that the error limitation on max_hw_sectors for usbip device since 
+commit d74ffae8b8dd applied.
+But this change will request user to update kernel version to support 
+faux bus.
+This will also be an expensive change to fix the problem?
+
+I have been discussing with shuah for a long time.
+Is there any simpler way to fix this problem?
+
+On 2025/4/25 16:28, Greg KH wrote:
+> On Fri, Apr 25, 2025 at 04:08:47PM +0800, Zongmin Zhou wrote:
+>> Dear Greg and Christoph:
+>>
+>> This patch is the simple solution for the issue described in below link:
+>> https://lore.kernel.org/all/20250219092555.112631-1-min_halo@163.com/
+>>
+>> This issue has been discussed at length with Shuah.
+>>
+>> As Christoph said,vhci-hcd is a virtual hci,
+>> but it serves as a bridge to connect virtual USB devices to the real USB
+>> controller.
+>> Since the commit d74ffae8b8dd is applied on kernel v5.3,
+>> the virtual USB devices's max_sectors size is limited since v5.3.
+>>
+>> Just because on vhci-hcd, the dma mask setting follows the platform device
+>> default setting(32-bit).
+> Wait, why is vhci-hcd a platform device at all?  It shouldn't be doing
+> that, try removing that to start with, which will remove that "default"
+> setting.  I recommend using the faux bus as a potential replacement.
 >
->> +	vbus-supply = <&usb3_vbus>;
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	status = "okay";
->> +
->> +	hub@1 {
->> +		compatible = "usb2109,817";
->> +		reg = <0x1>;
->> +		vdd-supply = <&usb3_vhub>;
->> +		reset-gpios = <&gpio K1_GPIO(124) GPIO_ACTIVE_LOW>;
->> +	};
->> +};
->> diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
->> index c0cc4b99c9356d550a470291dba9f2625b10f8df..c7b86c850da969e5412ad42c63995cd20b4d0484 100644
->> --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
->> +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
->> @@ -4,6 +4,8 @@
->>    */
->>   
->>   #include <dt-bindings/clock/spacemit,k1-syscon.h>
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/phy/phy.h>
->>   
->>   /dts-v1/;
->>   / {
->> @@ -346,6 +348,13 @@ soc {
->>   		dma-noncoherent;
->>   		ranges;
->>   
->> +		dram_range0: dram-range@0 {
->> +			#address-cells = <2>;
->> +			#size-cells = <2>;
->> +			dma-ranges = <0x0 0x00000000 0x0 0x00000000 0x0 0x80000000>;
->> +			#interconnect-cells = <0>;
->> +		};
->> +
->>   		syscon_rcpu: system-controller@c0880000 {
->>   			compatible = "spacemit,k1-syscon-rcpu";
->>   			reg = <0x0 0xc0880000 0x0 0x2048>;
->> @@ -358,6 +367,53 @@ syscon_rcpu2: system-controller@c0888000 {
->>   			#reset-cells = <1>;
->>   		};
->>   
->> +		usb_dwc3: usb@c0a00000 {
->> +			compatible = "spacemit,k1-dwc3", "snps,dwc3";
->> +			reg = <0x0 0xc0a00000 0x0 0x10000>;
->> +			clocks = <&syscon_apmu CLK_USB30>;
->> +			clock-names = "bus_early";
->> +			resets = <&syscon_apmu RESET_USB3_0>;
->> +			interrupt-parent = <&plic>;
->> +			interrupts = <125>;
->> +			interconnects = <&dram_range0>;
->> +			interconnect-names = "dma-mem";
->> +			phys = <&usbphy2>, <&combphy PHY_TYPE_USB3>;
->> +			phy-names = "usb2-phy", "usb3-phy";
->> +			status = "disabled";
->> +		};
->> +
->> +		usbphy0: phy@c0940000 {
->> +			compatible = "spacemit,usb2-phy";
->> +			reg = <0x0 0xc0940000 0x0 0x200>;
->> +			clocks = <&syscon_apmu CLK_USB_AXI>;
->> +			status = "disabled";
->> +		};
->> +
->> +		usbphy1: phy@c09c0000 {
->> +			compatible = "spacemit,usb2-phy";
->> +			reg = <0x0 0xc09c0000 0x0 0x200>;
->> +			clocks = <&syscon_apmu CLK_USB_P1>;
->> +			status = "disabled";
->> +		};
-> Why don't add #phy-cells properties to usbphy{0,1} just like usbphy2?
-> You've claimed #phy-cells as an essential property of
-> spacemit,k1-usb2-phy nodes in the PHY series and I suspect whether this
-> passes dtbs_check.
-
-The DT bindings for the USB PHY were submitted in an earlier patchset,
-some dts checks about PHY were missed.
-
-I will add #phy-cells in next version. thanks!
-
+> thanks,
 >
->> +		usbphy2: phy@0xc0a30000 {
->> +			compatible = "spacemit,k1-usb2-phy";
->> +			reg = <0x0 0xc0a30000 0x0 0x200>;
->> +			clocks = <&syscon_apmu CLK_USB30>;
->> +			#phy-cells = <0>;
->> +			status = "disabled";
->> +		};
->> +
->> +		combphy: phy@c0b10000 {
->> +			compatible = "spacemit,k1-combphy";
->> +			reg = <0x0 0xc0b10000 0x0 0x800>,
->> +			      <0x0 0xd4282910 0x0 0x400>;
->> +			reg-names = "ctrl", "sel";
->> +			resets = <&syscon_apmu RESET_PCIE0>;
->> +			#phy-cells = <1>;
->> +			status = "disabled";
->> +		};
->> +
->>   		syscon_apbc: system-control@d4015000 {
->>   			compatible = "spacemit,k1-syscon-apbc";
->>   			reg = <0x0 0xd4015000 0x0 0x1000>;
->>
->> -- 
->> 2.49.0
->>
->>
-> Best regards,
-> Yao Zi
->
->
->
+> greg k-h
 
 
