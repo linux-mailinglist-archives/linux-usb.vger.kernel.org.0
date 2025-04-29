@@ -1,176 +1,175 @@
-Return-Path: <linux-usb+bounces-23552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8B0AA0E68
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 16:14:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CA58AA0EBE
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 16:28:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAE9C163DAE
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 14:13:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 461A53A5319
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 14:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014662D4B5A;
-	Tue, 29 Apr 2025 14:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6368C2D3205;
+	Tue, 29 Apr 2025 14:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uj/Y042B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfqhmNo3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160131EB5CE;
-	Tue, 29 Apr 2025 14:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DED10942
+	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 14:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745935921; cv=none; b=OT5D+d/Kz1O1N6ukrQbO99/kBv3AHjmcat7FWrHfQFUkaRvtsgOC7YfwTBqQb/1xxvJbwGNW0CEg2YwrZIZzN/YJDUmj5kBTnz1cOzj6yrhhCeGYcVEmNAumIEb7EctbdbAfaKgijDgUgxdnPrXElGKbHAHWOQS7BLgTRZDPSYc=
+	t=1745936889; cv=none; b=khSdkGcKXfy3KpA/pvTjTNHlAwaR/FQvKwS1FHpxhlOnI3Eu8Vfd548Pg87c72VLHCedgkYFv1ILbZimSPt3IWEfv3IVKPh9I8o2o0uG0ujDlqBBPd20vHMjwbQ5XUBOszY2+S5QJ91lE68Z+3hIx1iZcJA/XaZoRslLV6r1kdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745935921; c=relaxed/simple;
-	bh=0V9jMahAxYW8zbxd2kGc9AaAI9Gd2wiuBQJ9XabL0Ic=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vi+Y8phtzKo5ahB0jQ4WU//PRIn0opBYkn5lDWRGYV5mUNvTCn2UCgx5soI4k2G6l9CO/ZT/Trr7SygNR6k8XMdMuA8zmqXdwInu4AvUlPSvVHUy6u0MvwF+v7pPPyAVqGskllyz2L1VZApcoT0+0XQEM2n3OPMzpquEgLZh0sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uj/Y042B; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-30549dacd53so4857674a91.1;
-        Tue, 29 Apr 2025 07:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745935919; x=1746540719; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ghLO85v0/fKsf8d4D5aFV15vBDjmZGdRu4B7/a9HdgA=;
-        b=Uj/Y042B5zObpZ5beVEXHGQcGoqVDvn62MX3F4YIuIFYNyRHFlQuTkv+rQVrN8Chge
-         YdEz2qgvat0HJg9Wg2eTU7V0GoZJaTaF4NXzFxtpmubEuc/xXZbypMAp7XmMMdd68wB3
-         hcdGHnnpsvh+20y1lwuENU2rPWwjpeBMdF8Bj+lsKUQzSVO/XgnnqG03ZTK2MyeepJ1i
-         5G+mGfxSG+luQV7oRYxrkee1KMWwvTDyjrW5xSMTQt1a/hKgjWPN+m++lARstr3LJwl5
-         v+1JBHsy9guBoY44OkRRP1vsUfPb/OnHPN/5Sdsf6mRin9ctQRh7k895Atq9sSPwoGQu
-         kLzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745935919; x=1746540719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ghLO85v0/fKsf8d4D5aFV15vBDjmZGdRu4B7/a9HdgA=;
-        b=qqNY6ZOkNvVP5OqBVtcM5zFhmlQhugxpmRI2f0hmtk0H4IOlNL64n61cXYKbuBwgcG
-         BirPg+v4h18AlLSVUSPYp+uMtBNkbX82sY2ckQGL6/8WPsKpELrk6zjvmxuwVd1Qbm/4
-         W6J4U/9LTA9UW7lXMx+jbxlM+LOIpxVkS8rxWBd1oqw1av4a/tAWx6jfEUQSnh5itGZw
-         5BiJ9IpGdRrYv2Hn5zbjJm1tXWD2Lm/9CFRDtCpaU3F6asbx+r4awHkS/4KfeDz12l0Z
-         /ca/6T6XZ69iyNgWdqcNvX87BTXD8rClGIinYne0zsywu14WB3x5NHJoSReJX+LZhW6y
-         HG+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUEFXW8R1Hv9lwMfk5ijMQBuYo/HfZmKUToR/4EDUgT6HuhgqVkmVmCcqj6W/fG55a+bGKdwaAaukQB@vger.kernel.org, AJvYcCWVuGPPZnd1BQ6X2+U+IpvhtVA/DNxFAczVVGsXO3Yh7GB7rv2p0Z4GTqTS+KrjOZ2/36viHzIdsHSsYNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3bqgVzkK56QzoL95EV1bwtXQ7VIeONxRxfi66X6Ay2/Lr9DcI
-	/8vfn4b8Y5cVVVjZWmW2L7cW+po+E7hn+RD2fQUy60KwY2XB9MjkD1lB0XXWms9r2Dit8+vaWfP
-	QdgPXqGtaqAhswRiaJVTDBqxoUMr06rzcGFEgDg==
-X-Gm-Gg: ASbGncvRNXoVNj9dnwrf9mDcDsQ1nCdBqjmLDYFZY5WR685mpx+qmmsAbjJBO/tcheM
-	lul4eukdzkAmoBCpd6sdw15gIljFlVABvVKG1ucQgh9vGeu2MYMhTHU1xd3Gs6/D3l7lHhX+vMy
-	vKbpJlxFKJF+3Yv6G7LHreDmS1uOG0t+I=
-X-Google-Smtp-Source: AGHT+IFGIJaXnUPI2CD5vwEPgXqAmwhf+WOG/jajlE048Ga1kc+i4yz/jRP2kw+bf/cOEgkA8sSkOIjBG6LR4KK8qMM=
-X-Received: by 2002:a17:90a:dfcc:b0:30a:1ebb:8dfb with SMTP id
- 98e67ed59e1d1-30a22456bccmr4003881a91.5.1745935919183; Tue, 29 Apr 2025
- 07:11:59 -0700 (PDT)
+	s=arc-20240116; t=1745936889; c=relaxed/simple;
+	bh=43Sgv+Zpz2ABjvncVJDGUYwbdYoQHbhhDnoWqcL00l8=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=nxA7ww+GrRnyBiDZ7wyv68YRz+1YM2t6wAg6nhVxyDn00xt5Wk59Jg7FYR7P1D9XdtCkNFmL7KulsT3sR2uUm4V8wCPWK2k/L74dCGo5QjvwE+ZV2vbAO27+Yu2tWHgFAjtVaZEPesru4PLPE/V7YMl1N8iD9DLqlz5BGKhs76w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfqhmNo3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C77EC4CEE9
+	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 14:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745936888;
+	bh=43Sgv+Zpz2ABjvncVJDGUYwbdYoQHbhhDnoWqcL00l8=;
+	h=From:To:Subject:Date:From;
+	b=jfqhmNo3ry6M2OsTqtbd+6A6CZajIF6QfWIvToGbr9/md8WcXOwuc9g8+0dPL+cEf
+	 YUaiZyiaaTbj3d9P4/DWgF7Z1aQsgvWUh4MG4uSiLsRl8bcoWjm6cKCAncHzYoFpF8
+	 Ja3EzZL9PkBZrt1UUZoSqbz5SCIUgMGry2Od29+ay3be5US7AdVtz+6QCNaDKO8nx0
+	 WqeK+S29luKRZKlFioc3IkmGz2xWJe8W9HGqj8YwZ8QGheK+KXR1fmKyMKeZO5nDyM
+	 G1hqjvIi8u+FbV5ao2nko2DBFNISWUL4f3a/0JubN+Bl+zMhNOXNY582E1AdMwt1On
+	 MTLt15Sm5cQmQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 40D00C433E1; Tue, 29 Apr 2025 14:28:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220069] New: [6.13.9] regression USB controller dies
+Date: Tue, 29 Apr 2025 14:28:08 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: cwunder@gnome.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-220069-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250429133310.353977-1-hoff.benjamin.k@gmail.com> <af771944-8236-462f-9097-2bf2336b361c@oss.qualcomm.com>
-In-Reply-To: <af771944-8236-462f-9097-2bf2336b361c@oss.qualcomm.com>
-From: Ben Hoff <hoff.benjamin.k@gmail.com>
-Date: Tue, 29 Apr 2025 10:11:48 -0400
-X-Gm-Features: ATxdqUF7Aep6o1Op5JSRl8mp6bspZ5TAYbHexXD2Kq22HAs9nao-eQuJ7awo2Hs
-Message-ID: <CAMSzxxRfKA0CTi0x_FAohvf8buTJ+eaB-q2+qrnfTd7E6eTwrQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: hid: allow dynamic interval configuration
- via configfs
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Greg, Krishna,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
 
-Thanks for the feedback!
+            Bug ID: 220069
+           Summary: [6.13.9] regression USB controller dies
+           Product: Drivers
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: cwunder@gnome.org
+        Regression: No
 
-You're right =E2=80=94 I should not have changed the default bInterval from=
- 4
-to 10 for all endpoints.
-To preserve the original behavior, I'll resend a v2 patch that:
+This seems, at least to me, a regression after the apparent fix on 6.13.7; =
+I've
+tested on 6.13.9 and 6.14.3, and 6.13.7 seems to be working fine to me.
 
-- Sets the global default bInterval to 4 frames, matching the existing
-implementation.
-- Leaves the High-Speed interrupt-out endpoints
-(hidg_hs_descriptors_intout) at their historic 10-frame default unless
-explicitly overridden through configfs.
+At random times (whether idle or with actual active usage), there is a high
+chance that any of the xHCI controllers will fail.
 
-Thanks again for reviewing this =E2=80=94 I'll send an updated patch shortl=
-y.
+```
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-11: USB disconnect, device number =
+11
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-7: USB disconnect, device number 6
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-5.2: USB disconnect, device number=
+ 9
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-5: USB disconnect, device number 4
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-3.5: USB disconnect, device number=
+ 15
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-3.4: USB disconnect, device number=
+ 14
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-3.3: USB disconnect, device number=
+ 12
+Apr 28 =E2=80=876:54:28 PM kernel: usb 8-5: USB disconnect, device number 4
+Apr 28 =E2=80=876:54:28 PM kernel: usb 8-2: USB disconnect, device number 2
+Apr 28 =E2=80=876:54:28 PM kernel: usb 8-3.4: USB disconnect, device number=
+ 5
+Apr 28 =E2=80=876:54:28 PM kernel: usb 8-3: USB disconnect, device number 3
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-3.1: USB disconnect, device number=
+ 7
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-3: USB disconnect, device number 3
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-2.5: USB disconnect, device number=
+ 8
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-2.3.2: USB disconnect, device numb=
+er 13
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-2.3.1: USB disconnect, device numb=
+er 10
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-2.3: USB disconnect, device number=
+ 5
+Apr 28 =E2=80=876:54:28 PM kernel: usb 7-2: USB disconnect, device number 2
+Apr 28 =E2=80=876:51:25 PM kernel: usb 7-3.4.2: USB disconnect, device numb=
+er 18
+Apr 28 11:23:44 AM kernel: usb 7-3.4.2: USB disconnect, device number 17
+Apr 27 =E2=80=871:06:10 AM kernel: usb 7-3.4.2: USB disconnect, device numb=
+er 16
+```
+
+Running (replace `??` for the actual guid)
+
+```
+echo -n "0000:??:00.0" | sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind && e=
+cho
+-n "0000:??:00.0" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind
+```
+
+Reinitialises the controller.
+
+----
 
 
-Ben
+uname:
 
-On Tue, Apr 29, 2025 at 9:50=E2=80=AFAM Krishna Kurapati
-<krishna.kurapati@oss.qualcomm.com> wrote:
->
->
->
-> On 4/29/2025 7:03 PM, hoff.benjamin.k@gmail.com wrote:
-> > From: Ben Hoff <hoff.benjamin.k@gmail.com>
-> >
-> > This patch adds support for dynamically configuring the polling interva=
-l
-> > (bInterval) for HID function drivers using configfs. This enables
-> > custom HID gadgets with user-specified poll rates without recompilation=
-.
-> >
-> > Signed-off-by: Ben Hoff <hoff.benjamin.k@gmail.com>
-> > ---
-> >   drivers/usb/gadget/function/f_hid.c | 54 ++++++++++++++--------------=
--
-> >   drivers/usb/gadget/function/u_hid.h |  1 +
-> >   2 files changed, 27 insertions(+), 28 deletions(-)
-> >
->
-> [...]
->
-> > @@ -1468,6 +1462,9 @@ static struct usb_function_instance *hidg_alloc_i=
-nst(void)
-> >       if (!opts)
-> >               return ERR_PTR(-ENOMEM);
-> >       mutex_init(&opts->lock);
-> > +
-> > +     opts->interval =3D 10;
-> > +
->
-> The default value was 10 only for hidg_hs_descriptors_intout.
-> Aren't we now making it 10 for all other ep descriptors as well ?
->
-> Regards,
-> Krishna,
->
-> >       opts->func_inst.free_func_inst =3D hidg_free_inst;
-> >       ret =3D &opts->func_inst;
-> >
-> > @@ -1546,6 +1543,7 @@ static struct usb_function *hidg_alloc(struct usb=
-_function_instance *fi)
-> >       hidg->bInterfaceProtocol =3D opts->protocol;
-> >       hidg->report_length =3D opts->report_length;
-> >       hidg->report_desc_length =3D opts->report_desc_length;
-> > +     hidg->interval =3D opts->interval;
-> >       if (opts->report_desc) {
-> >               hidg->report_desc =3D kmemdup(opts->report_desc,
-> >                                           opts->report_desc_length,
-> > diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/f=
-unction/u_hid.h
-> > index 84bb70292855..a29dcb14f738 100644
-> > --- a/drivers/usb/gadget/function/u_hid.h
-> > +++ b/drivers/usb/gadget/function/u_hid.h
-> > @@ -25,6 +25,7 @@ struct f_hid_opts {
-> >       unsigned short                  report_desc_length;
-> >       unsigned char                   *report_desc;
-> >       bool                            report_desc_alloc;
-> > +     unsigned char                   interval;
-> >
-> >       /*
-> >        * Protect the data form concurrent access by read/write
+
+```
+6.13.9-103.bazzite.fc42.x86_64
+```
+
+rpm-ostree:
+
+```
+=E2=97=8F ostree-image-signed:docker://ghcr.io/ublue-os/bazzite:stable
+                   Digest:
+sha256:1a7ae28b95fde42b976cc9aa159219c0aaaa0611f7416f4b3b30284e292b0875
+                  Version: 42.20250417 (2025-04-17T07:35:37Z)
+          LayeredPackages: android-tools
+            LocalPackages: 1password-8.10.70-1.x86_64
+sublime-text-4192-1.x86_64
+```
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
