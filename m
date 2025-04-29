@@ -1,198 +1,265 @@
-Return-Path: <linux-usb+bounces-23548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23549-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1AC0AA066D
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 11:00:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EC6AA0D8C
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 15:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D655A3B5AA3
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 09:00:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AB4E1A82623
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 13:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F81A29290D;
-	Tue, 29 Apr 2025 09:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939F884A35;
+	Tue, 29 Apr 2025 13:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JHycyrzi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+QML0O3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CCD29DB85
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 09:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768CA374D1;
+	Tue, 29 Apr 2025 13:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745917217; cv=none; b=Rr2+NEIppjo8tD4bdskoPo48qKcZo9feDTcZuHytKNkYSQX3UiJOJQNVUiKpAgVxHJgCXc/0+7PRydTMW9lp5Ln8+qjLETlZFuZxTB7WyguOHP3sT2PeLJLKIKVwVM8SxNZxaOn4YFXJxZkN7aJDb4cUo37we4SZA70Hokg+0Y8=
+	t=1745933605; cv=none; b=VsnejD9JsvzkDDZoD2MD5f03M+JMgXv6bCACMl+fk8iWyDSbYgQ67ZT04quc3nTWWBbAvILghriQ9x0dcAx5qOxJOiZSj/vzRYvjv+SAkjIhTHgi0phFjq/Ya8L17GlLrRueXJZbanUG4/5Q+EtZwJ9SkFgK5pfM+RgTXwzkZvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745917217; c=relaxed/simple;
-	bh=mYwV9qaC5quGigoNDzErPL97AxB0Z1lobQFByQD2FZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KwXTdqiiqy16fuoF/kvu1MM0nFmd0cQjn0gOumIQkejy0Hl9OqWdImmMzipw3vi4rAGtr3fSrKBcFip5RFV2rVKUBlX5GcUWkIp/JvSlZSFCzlZevlz38GoD3cjDlLGGblC5XVZoKFhxr5ghbJgQnpQXZYjqMGswpK7FhOg408g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JHycyrzi; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53SNq9qA015314
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 09:00:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zqDGdfO9/jWDyry3sjZsFjxW+nnt4/iR1gA9efn55k8=; b=JHycyrzi4i3ApBuc
-	31HQXK2oDNvxJ4SHzcea+VSjsiKuOh6XnUnuVU0NSB9G7G4PWnaoow/X8X+/v8JI
-	a+e3N4z51LMQvSD0wBJVsjEJb0ZNuxMFXe2nB+h6KmEX+vZs35oktuv+JFGd+wzO
-	RXbTekqBjlinpqhKMpCIG3MjhVtpILlI9lLl0ho/lOLvVaIFhkgF67WGtl2gPcji
-	VfDwmXVWoHIM6FuFNKcsY5lmWxXrEDHeP9lQ0wczsa0+xXpnqT9fbzQF/INJgV3T
-	Rr7RSKrd8lezM+BIxvGnAXZ2td3lEbBXHzwdpelMJahwDv/V5G9tia/T7jbSGw/j
-	17iOSw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 468r8htut1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 09:00:15 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-47ae537a9d6so8029241cf.3
-        for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 02:00:15 -0700 (PDT)
+	s=arc-20240116; t=1745933605; c=relaxed/simple;
+	bh=I4fM/o1bJjEGGY39wKCGAi6BcejJkqTUjX3MJmTypsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ut943KYGfQnQHydkYWNbkpox5BAkqox1CPCmrH7xDZxpS6c6OBsEl//8uRFQnLc8OS53wsS1BMwEcnFs+brnvxtx6zOIgxiiWHJL1jsm7+KidoIhsTQE7YyelO/VtLXCdZE8ZgChMVleNEpKGghIe7tyEv91dRR03gz11KVtftI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+QML0O3; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-86135af1045so562575539f.1;
+        Tue, 29 Apr 2025 06:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745933602; x=1746538402; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Df6b5iFE6W5u/roV6WT6hUMpstd2mlknLmR5T2FH1iY=;
+        b=P+QML0O3OasK2Z7kJqDUqTXGbJ81Kpe0p7AGOctTjyX3IuMAUI2Wer4iwownNf4Vwb
+         AVr0VKziG5r1RhIfLf+0gOauicBEdXvFgao2bWtqS1yE4DXbwrA81+Nsy8mYMiKleG0A
+         tCzVkRIpxKGnXE3SGbBs1XoAm6CziiiqrR4q4zaoQ1C0gTMyU4AI83R5/KC+JdD3SwKs
+         oK7Tqk7MVDP8ZG6n5NhXeCzDq4KlVqsUGTrQtG1xX+/SAgnyOHGvbUgzK35gvX+8fVmo
+         NLzLLYGCqusxu9hyAYfYmqcVMrO05C7ZAx8+m39Mmdlzl7m7SXiKGr1/MvebOWhNwEVG
+         kB+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745917214; x=1746522014;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqDGdfO9/jWDyry3sjZsFjxW+nnt4/iR1gA9efn55k8=;
-        b=wdQSVGMamW+2Sicu/SqhdlYEMlRJTGefcX1hDTFNtQj9L52w3M0V9VefjJCU1s29n2
-         saavZvf+FYtuwzfajVmTPJWKrN+LH9CjP0kfWZkUBtKCyNbaMedC5qbrbq/yVBHYZYq/
-         zD5fZkSH0WWie7ktZVHfpnZq0B86jwk9iBVFXwHu50hQ0ta3GbA3epzpblkg7q6pLCr7
-         9IXpPkMd0H7krzgj5F0aZ6izvPKxoN/HmW/hcybiGS5hzXvUsEZv1YMEkk2bdZHFTmOr
-         enml4Z4Mnp4LV0Y5o3PHP+RO5hSoIQloBnGrw51L7lb4n5qcHmp1hdp8+xaryyCXIWhN
-         rT7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXI7I/r9XnidY57Girt3NjHZpDsmNvHkeCd04SlBRT2oYzjjAtGXAczyEebtFhLG5hs0boZCIvDC4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypWuz1h4WDUZHwNeKxt5IYkgcQBpb80yHSTsDjfNStmED1AeXk
-	Wn27c5TaN+23eQEaEziaD4FSC8Y2MaFYFgtXh/HUy0auZyXWKXcKq3d4M4Mb20uzZcSiLVwOo+y
-	nZr65jTWsNWLBLo5pxvFKPHu81Glz2RILtZtCZokEOiR7T1PE3kXVnqbCE94=
-X-Gm-Gg: ASbGncttBCSJxWm/A7iPUf/0kNKwj3/W294QLwziJCg7zBoi2RJi2n3vJpl0FGKeSo0
-	pfBp7vBkIunecUEh9QMBlG7tBD2Fx1VLnneCOtSWfPADzFv7RErhd62dN+ElhVl4XdUPBAigi0F
-	hK8okQCPh+ynC8j5/inIgS8ZjiAUJ6Kuf+RY4pXdixxJSdhOI1iIhxSFSBb4nPcqV3ZtKRBxi/Y
-	2O/cbrxKtfA+qDXy5E8f9Ob5wSZ76O1uiZ6l5+5F77unCkv20HYLltWG2FruKR9i8Hc2Bw/1yc/
-	YJO3R35kJuzHUueG6B3cIlzPpxbWUDbaSrorSnWGnv0unddeBlY5vVwXgv8rqEk75A==
-X-Received: by 2002:ac8:584c:0:b0:472:7a2:c3ca with SMTP id d75a77b69052e-488665065b3mr13381371cf.7.1745917213866;
-        Tue, 29 Apr 2025 02:00:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHoe3LY+sQejWrjRsXICpmmof+c3/tmw3k1mD2dd7DkiBAR+7Wx53r3CiWHkEswrPutog4ATQ==
-X-Received: by 2002:ac8:584c:0:b0:472:7a2:c3ca with SMTP id d75a77b69052e-488665065b3mr13380991cf.7.1745917213331;
-        Tue, 29 Apr 2025 02:00:13 -0700 (PDT)
-Received: from [192.168.65.43] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e4fb5ecsm747910666b.71.2025.04.29.02.00.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Apr 2025 02:00:12 -0700 (PDT)
-Message-ID: <a1b7d6f9-13bc-49ed-bc4c-40f4c2fae8e2@oss.qualcomm.com>
-Date: Tue, 29 Apr 2025 11:00:09 +0200
+        d=1e100.net; s=20230601; t=1745933602; x=1746538402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Df6b5iFE6W5u/roV6WT6hUMpstd2mlknLmR5T2FH1iY=;
+        b=xLeBKFNujdN+JQjUbY5dkvb/odaiRlBP9H3h9qWW/b3TT88eDBQCm5SdZdF1y8QMva
+         m8lnu0Sz2rbxcIadzMUwfpbPcRIFFkpLKkrXaqnzZ2fhiQadIfaeBHiiyTFzdJ3XoKoS
+         OkvRK8tx+R2ltHlsJMwYV0hcJa6BUcHfwryvQIuyzAWpERV+sm/+pHubHBhu6WZbe0wv
+         gzcrJWhVnK4ssFDfSpbXjd18LAlz9ybzisAGelVt7ZCOevjsBr27pcGOHAImKx/fxyl7
+         O1W1GGl2C9y1IjLcQIpmYSBJo7MFwKjKPVIjBTVw85gcHCKrnpQtgF0aJQPGC3uhDeVm
+         3T3A==
+X-Forwarded-Encrypted: i=1; AJvYcCWEnq9LjAFY050Dj7sWF2HeCpUPFK4tXLVL1qgF4YNyfAyQEva9JKYFSBQKYiRFB+j2NrxJgUDivdu5Pr8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/ZI4xB6/484Xr7cVsulgyJZz1up69f5lHDNMMtxaFLLl/hu6O
+	niwtVUkf0xlOLB1p30o2cTnPO+2lAvcuHiIGAV+78x18ZuMUTYZjxNqTI/ccnBQ=
+X-Gm-Gg: ASbGncu7XbaELF1/XKLuauZGN3MXlBSAKw70DkArtWmlxLLtrb1WU02/kImxWh5zGXF
+	suNUWpwfZNf+XqLO8SntRUB1q8aDZqpCt/HugUgXlKAreK/Hn0XtmXNG9yczq1ctuvk2DWug8SU
+	f0UyKYdTlyb+iVBx+NSJROblsH1P+X3VNHdtk+qhxD33X71tSiQGRws2T/gfKpCATA1XFjysYUo
+	ZKWc4qKSUTGi5MAEfCF9Ur5LZkiU0RIuJYIp4Xo6XxsWPbjHnX4sRyD3+iVkTPW2h7GNJVWfdDL
+	TDATZZ6DNY69jR2/rZCQGlkZPpSSRAQXwqwL+EvjocBskmELoUdeOYbewHR6aPWqRTxSjwg3GE+
+	fnLu9MyBdt9f/XuJDJCdFpEYUb+cpbLF7m/1+h0/vTuC9
+X-Google-Smtp-Source: AGHT+IGAvIf6TiaMuGR5+zGThvHlOgy2GE1EJpUQ5RCSOJTJ/exL3XN8GCXSeK49Pqktc98Lpcv+uw==
+X-Received: by 2002:a92:dd02:0:b0:3d9:64cd:9490 with SMTP id e9e14a558f8ab-3d964cd9699mr7221095ab.16.1745933602102;
+        Tue, 29 Apr 2025 06:33:22 -0700 (PDT)
+Received: from localhost.localdomain (76-224-4-192.lightspeed.clmboh.sbcglobal.net. [76.224.4.192])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f862e82ffesm280645173.36.2025.04.29.06.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Apr 2025 06:33:21 -0700 (PDT)
+From: hoff.benjamin.k@gmail.com
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Ben Hoff <hoff.benjamin.k@gmail.com>
+Subject: [PATCH] usb: gadget: hid: allow dynamic interval configuration via configfs
+Date: Tue, 29 Apr 2025 09:33:10 -0400
+Message-ID: <20250429133310.353977-1-hoff.benjamin.k@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm7225-fairphone-fp4: Enable USB
- audio offload support
-To: Luca Weiss <luca.weiss@fairphone.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org
-References: <20250425-fp4-usb-audio-offload-v1-0-f90f571636e4@fairphone.com>
- <20250425-fp4-usb-audio-offload-v1-6-f90f571636e4@fairphone.com>
- <5c4ed073-45fe-4938-b25b-8979d96b456d@oss.qualcomm.com>
- <D9I3OWQF8T3Y.1Q5U9E2RI5YZX@fairphone.com>
- <8e152cf1-24a5-4883-8c5a-887d3c4bd888@oss.qualcomm.com>
- <D9IZWD6MS7A4.3FJ3UI3CG92OM@fairphone.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <D9IZWD6MS7A4.3FJ3UI3CG92OM@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: 8Pm3h4gZ--1eswcGs2cdYJuGQ6aSuAqN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI5MDA2NiBTYWx0ZWRfX3Ak5OoPt2HYj iLcPo5DIeDkY+PlD46s048H03+XzAuGMM2I7Gm8rwpKvEXVyY0HfElInMDgGuMS2wsvY3v2ftjm KYgyoC7aCY4ks84gJzUiHE1LvQrEwl50PX78fuZfS3yoVOcyC3fHCFO0fKGa7vM630+BDX9KW2I
- b9kzDSORYyg0YIrzhtd0pwOeJLMETqBxEPOhCYCDX0DXKq0cfJzdSfAFFyjeOffmrmGcdaOI581 yZel0clQP7obwSZznvEbyQOkmIWZ+SbwnA3tsKv73ClZJJ+2Hj33rwh6l9SDjuc+p/PejIDQYo9 8IZF/iHzQeVicw9pZp5qzFqcKA1ig1xP5GZgy+rFN7kKSDEFgkiesmjqI51TP8FNgD/tLS6gaPm
- GNKHYK3egEyvZRKQzb5bwY+ucJCHTdOlbt2gJxpveUs0gizBdDtmFSfHUokvQZu32HaSOrxM
-X-Authority-Analysis: v=2.4 cv=cfzSrmDM c=1 sm=1 tr=0 ts=6810951f cx=c_pps a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=6H0WHjuAAAAA:8 a=Iso9NqdAnq4PZ9IQp5IA:9 a=QEXdDO2ut3YA:10
- a=kacYvNCVWA4VmyqE58fU:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-GUID: 8Pm3h4gZ--1eswcGs2cdYJuGQ6aSuAqN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-29_03,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 mlxscore=0 mlxlogscore=971 adultscore=0
- clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504290066
+Content-Transfer-Encoding: 8bit
 
-On 4/29/25 10:55 AM, Luca Weiss wrote:
-> On Mon Apr 28, 2025 at 11:43 PM CEST, Konrad Dybcio wrote:
->> On 4/28/25 9:41 AM, Luca Weiss wrote:
->>> On Fri Apr 25, 2025 at 11:06 PM CEST, Konrad Dybcio wrote:
->>>> On 4/25/25 12:44 PM, Luca Weiss wrote:
->>>>> Enable USB audio offloading which allows to play audio via a USB-C
->>>>> headset with lower power consumption and enabling some other features.
->>>>>
->>>>> This can be used like the following:
->>>>>
->>>>>   $ amixer -c0 cset name='USB_RX Audio Mixer MultiMedia1' On
->>>>>   $ aplay --device=plughw:0,0 test.wav
->>>>>
->>>>> Compared to regular playback to the USB sound card no interrupts should
->>>>> appear on the xhci-hcd interrupts during playback, instead the ADSP will
->>>>> be handling the playback.
->>>>
->>>> "should" isn't very optimistic - I assume this works for you? > 
->>>
->>> Yes it does!
->>>
->>> With 'should' I meant to describe the expected behavior from using this
->>> since most people are probably not familiar with how this works.
->>>
->>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>>> ---
->>
->> [...]
->>
->>>>>  &usb_1_dwc3 {
->>>>>  	maximum-speed = "super-speed";
->>>>>  	dr_mode = "otg";
->>>>> +	num-hc-interrupters = /bits/ 16 <3>;
->>>> Where does this number come from?
->>>
->>> I'm honestly not 100% sure. As far as I understand it, with
->>> 'qcom,usb-audio-intr-idx = /bits/ 16 <2>;' in the qcom,q6usb node (which
->>> I've checked against downstream) we declare which "XHCI interrupter
->>> number to use". Without the num-hc-interrupters property we get an error
->>> that not enough interrupters are available (I assume only 1 is then), so
->>> this value practically needs to be higher than the <2> from earlier.
->>>
->>> Why it's this value and not a higher value e.g. 4 I'm not really sure.
->>> Downstream code looks somewhat different and "max_interrupters" in
->>> drivers/usb/ doesn't come from a dt property. I'd need to check more in
->>> details what this code does - or maybe Wesley can help.
->>
->> I got word that it's simply hw specific - please move it over to the
->> soc dt with the value of 3
-> 
-> Will do, thanks for checking!
-> 
-> Would you have a reference how to get the correct value for it based on
-> downstream or the running kernel on the hw?
+From: Ben Hoff <hoff.benjamin.k@gmail.com>
 
-3 should be reasonable for most platforms, but I don't think there's
-a clear value defined downstream
+This patch adds support for dynamically configuring the polling interval
+(bInterval) for HID function drivers using configfs. This enables
+custom HID gadgets with user-specified poll rates without recompilation.
 
-Konrad
+Signed-off-by: Ben Hoff <hoff.benjamin.k@gmail.com>
+---
+ drivers/usb/gadget/function/f_hid.c | 54 ++++++++++++++---------------
+ drivers/usb/gadget/function/u_hid.h |  1 +
+ 2 files changed, 27 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 740311c4fa24..8aae22f9d609 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -62,6 +62,7 @@ struct f_hidg {
+ 	unsigned short			report_desc_length;
+ 	char				*report_desc;
+ 	unsigned short			report_length;
++	unsigned char			interval;
+ 	/*
+ 	 * use_out_ep - if true, the OUT Endpoint (interrupt out method)
+ 	 *              will be used to receive reports from the host
+@@ -156,10 +157,7 @@ static struct usb_endpoint_descriptor hidg_ss_in_ep_desc = {
+ 	.bEndpointAddress	= USB_DIR_IN,
+ 	.bmAttributes		= USB_ENDPOINT_XFER_INT,
+ 	/*.wMaxPacketSize	= DYNAMIC */
+-	.bInterval		= 4, /* FIXME: Add this field in the
+-				      * HID gadget configuration?
+-				      * (struct hidg_func_descriptor)
+-				      */
++	/*.bInterval		= DYNAMIC */
+ };
+ 
+ static struct usb_ss_ep_comp_descriptor hidg_ss_in_comp_desc = {
+@@ -177,10 +175,7 @@ static struct usb_endpoint_descriptor hidg_ss_out_ep_desc = {
+ 	.bEndpointAddress	= USB_DIR_OUT,
+ 	.bmAttributes		= USB_ENDPOINT_XFER_INT,
+ 	/*.wMaxPacketSize	= DYNAMIC */
+-	.bInterval		= 4, /* FIXME: Add this field in the
+-				      * HID gadget configuration?
+-				      * (struct hidg_func_descriptor)
+-				      */
++	/*.bInterval		= DYNAMIC */
+ };
+ 
+ static struct usb_ss_ep_comp_descriptor hidg_ss_out_comp_desc = {
+@@ -218,10 +213,7 @@ static struct usb_endpoint_descriptor hidg_hs_in_ep_desc = {
+ 	.bEndpointAddress	= USB_DIR_IN,
+ 	.bmAttributes		= USB_ENDPOINT_XFER_INT,
+ 	/*.wMaxPacketSize	= DYNAMIC */
+-	.bInterval		= 4, /* FIXME: Add this field in the
+-				      * HID gadget configuration?
+-				      * (struct hidg_func_descriptor)
+-				      */
++	/* .bInterval		= DYNAMIC */
+ };
+ 
+ static struct usb_endpoint_descriptor hidg_hs_out_ep_desc = {
+@@ -230,10 +222,7 @@ static struct usb_endpoint_descriptor hidg_hs_out_ep_desc = {
+ 	.bEndpointAddress	= USB_DIR_OUT,
+ 	.bmAttributes		= USB_ENDPOINT_XFER_INT,
+ 	/*.wMaxPacketSize	= DYNAMIC */
+-	.bInterval		= 4, /* FIXME: Add this field in the
+-				      * HID gadget configuration?
+-				      * (struct hidg_func_descriptor)
+-				      */
++	/*.bInterval		= DYNAMIC */
+ };
+ 
+ static struct usb_descriptor_header *hidg_hs_descriptors_intout[] = {
+@@ -259,10 +248,7 @@ static struct usb_endpoint_descriptor hidg_fs_in_ep_desc = {
+ 	.bEndpointAddress	= USB_DIR_IN,
+ 	.bmAttributes		= USB_ENDPOINT_XFER_INT,
+ 	/*.wMaxPacketSize	= DYNAMIC */
+-	.bInterval		= 10, /* FIXME: Add this field in the
+-				       * HID gadget configuration?
+-				       * (struct hidg_func_descriptor)
+-				       */
++	/*.bInterval		= DYNAMIC */
+ };
+ 
+ static struct usb_endpoint_descriptor hidg_fs_out_ep_desc = {
+@@ -1202,6 +1188,10 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+ 	hidg_hs_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
+ 	hidg_fs_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
+ 	hidg_ss_out_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
++
++	hidg_fs_in_ep_desc.bInterval = hidg->interval;
++	hidg_hs_in_ep_desc.bInterval = hidg->interval;
++
+ 	hidg_ss_out_comp_desc.wBytesPerInterval =
+ 				cpu_to_le16(hidg->report_length);
+ 	hidg_hs_out_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
+@@ -1224,19 +1214,21 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+ 	hidg_ss_out_ep_desc.bEndpointAddress =
+ 		hidg_fs_out_ep_desc.bEndpointAddress;
+ 
+-	if (hidg->use_out_ep)
+-		status = usb_assign_descriptors(f,
+-			hidg_fs_descriptors_intout,
+-			hidg_hs_descriptors_intout,
+-			hidg_ss_descriptors_intout,
+-			hidg_ss_descriptors_intout);
+-	else
++	if (hidg->use_out_ep) {
++		hidg_fs_out_ep_desc.bInterval = hidg->interval;
++		hidg_hs_out_ep_desc.bInterval = hidg->interval;
++		status = usb_assign_descriptors(f,
++			    hidg_fs_descriptors_intout,
++			    hidg_hs_descriptors_intout,
++			    hidg_ss_descriptors_intout,
++			    hidg_ss_descriptors_intout);
++	} else {
+ 		status = usb_assign_descriptors(f,
+ 			hidg_fs_descriptors_ssreport,
+ 			hidg_hs_descriptors_ssreport,
+ 			hidg_ss_descriptors_ssreport,
+ 			hidg_ss_descriptors_ssreport);
+-
++	}
+ 	if (status)
+ 		goto fail;
+ 
+@@ -1362,6 +1354,7 @@ F_HID_OPT(subclass, 8, 255);
+ F_HID_OPT(protocol, 8, 255);
+ F_HID_OPT(no_out_endpoint, 8, 1);
+ F_HID_OPT(report_length, 16, 65535);
++F_HID_OPT(interval, 8, 255);
+ 
+ static ssize_t f_hid_opts_report_desc_show(struct config_item *item, char *page)
+ {
+@@ -1422,6 +1415,7 @@ static struct configfs_attribute *hid_attrs[] = {
+ 	&f_hid_opts_attr_protocol,
+ 	&f_hid_opts_attr_no_out_endpoint,
+ 	&f_hid_opts_attr_report_length,
++	&f_hid_opts_attr_interval,
+ 	&f_hid_opts_attr_report_desc,
+ 	&f_hid_opts_attr_dev,
+ 	NULL,
+@@ -1468,6 +1462,9 @@ static struct usb_function_instance *hidg_alloc_inst(void)
+ 	if (!opts)
+ 		return ERR_PTR(-ENOMEM);
+ 	mutex_init(&opts->lock);
++
++	opts->interval = 10;
++
+ 	opts->func_inst.free_func_inst = hidg_free_inst;
+ 	ret = &opts->func_inst;
+ 
+@@ -1546,6 +1543,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+ 	hidg->bInterfaceProtocol = opts->protocol;
+ 	hidg->report_length = opts->report_length;
+ 	hidg->report_desc_length = opts->report_desc_length;
++	hidg->interval = opts->interval;
+ 	if (opts->report_desc) {
+ 		hidg->report_desc = kmemdup(opts->report_desc,
+ 					    opts->report_desc_length,
+diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/function/u_hid.h
+index 84bb70292855..a29dcb14f738 100644
+--- a/drivers/usb/gadget/function/u_hid.h
++++ b/drivers/usb/gadget/function/u_hid.h
+@@ -25,6 +25,7 @@ struct f_hid_opts {
+ 	unsigned short			report_desc_length;
+ 	unsigned char			*report_desc;
+ 	bool				report_desc_alloc;
++	unsigned char			interval;
+ 
+ 	/*
+ 	 * Protect the data form concurrent access by read/write
+-- 
+2.49.0
+
 
