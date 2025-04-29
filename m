@@ -1,106 +1,130 @@
-Return-Path: <linux-usb+bounces-23558-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23561-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6140AA1BCE
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 22:07:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4617AAA1C6D
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 22:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B7F27B71AB
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 20:06:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F253A8BA7
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 20:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65663262813;
-	Tue, 29 Apr 2025 20:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJ+3n4t4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFDF25F97D;
+	Tue, 29 Apr 2025 20:48:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F5325A2A5
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 20:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF6C253B5F;
+	Tue, 29 Apr 2025 20:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745957235; cv=none; b=SjjjaEeeEQ7q6pSZ1HYbXYa7WbaUaURTR0aA9bJV5S29uchEsTo1xQKKHpj3g8RiWmadkN5CLaJMd1Y1iAHwP9TETVWF5xsNn/wl3aSDFyfPfSpu7BFcM4W9o0z4frsxE0E7sO/3+7TFDV/4sReF3eWmZvat3eEyG5Ga9s5wbj4=
+	t=1745959685; cv=none; b=mITSBkKLZ/nVLZ/Xc0BiQAHQDxIdb/CnXVy4sVf6+oEJVfdMbNKU6jajOlIco/M12r6NaU0eKaCM1YEZl3KHBbP+QjZvgxuLvU4sW/DkI86v7PFUsMO54YK3R6II7SRK3wgrmv9QLxqXc66EjsRnh0yiXTIxaAuYoXrmd47cLK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745957235; c=relaxed/simple;
-	bh=Lov7ERLNt8BDTQa4QMwxlYU0glnfrBzarlatjP034OI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BxHh0pepegnhhMkwjRdowWlNsOxsFXW+QwXUzxjflbrcRO+2MH0JhTz22HX1YLhSPFAAwW3b/b5SZUx7IXILrf9cu3LDQduggkGJPlDOBQ6tLUTwXaeAb+jb1DTrDw6ai/4p0drWmw+AvEpItKrTkxM4OUTd8MK/kbHUTWOup64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJ+3n4t4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54DCEC4CEE9
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 20:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745957234;
-	bh=Lov7ERLNt8BDTQa4QMwxlYU0glnfrBzarlatjP034OI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=DJ+3n4t4TO1R4+LO0x5+aqtQRg26l9YWNl1FyIAw/8VfOYlA54m3y3u6E9e3zNItl
-	 62qTgwOg2OoEdCnzxMNnU08EoQp6XSd8bcl02+e9lnARLfC5N0eYeptd4RAVgyXDhh
-	 OTi4SYGqB+eR0mnlcD9vV1R+A6eoPLtTKYwpXYqL/pptyM42RXeApxlno0SAd+Z5b9
-	 Q0yS+VNjFymi9vsFya4ATUW0zmWvXGBT7+4MvE2f0qoBa3FXqJXHeQyO4C8S+bqmPw
-	 d2/TxiWjCFhizD+rIk278DUHSWccq/5Y6sfCBLNNHkQ/myJEL/KVmaScxevAFKVCTW
-	 ED7WfWF2XcIMg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 485F2C3279F; Tue, 29 Apr 2025 20:07:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Tue, 29 Apr 2025 20:07:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220069-208809-nrxw4CJMGh@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
-References: <bug-220069-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1745959685; c=relaxed/simple;
+	bh=3QG6bD1fHB8Qpdf5IMGGkVLMPiekodAvyL68jjwpSkQ=;
+	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=nRsEBPQPhV/9LpN2cFAVGFjc2eNQ0otABugvrvgXtFB/zaiz3Bl2pucarzlF8fqyAUYpALB6REh7gX70UoahB69yvzmvj6vjxFI/3Wp/Jd7N7Nu6TFQq9UP5F2KT9dd/N2OmAkpLR1cJczd+XSowrEjQGMoRDDk1qEBoMEDOKsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.130.43) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 29 Apr
+ 2025 23:32:37 +0300
+Message-ID: <0e61b364-8f26-4f98-9f10-9b9800b1cd41@omp.ru>
+Date: Tue, 29 Apr 2025 23:32:36 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	<linux-usb@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>, Fedor
+ Pchelkin <pchelkin@ispras.ru>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH] usb: gadget: composite: fix possible kernel oops in
+ composite_setup()
+Organization: Open Mobile Platform
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 04/29/2025 20:17:26
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 193027 [Apr 29 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 56 0.3.56
+ 52db7f275cc9b6820389ba9ab2ac225370e1c244
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.130.43
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/29/2025 20:19:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/29/2025 5:44:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+list_first_entry() should never return NULL -- which makes Svace complain
+about the next *if* statement's condition being always false. What's worse,
+list_first_entry() won't work correctly when the list is empty -- in that
+case, passing config->descriptors[0] to memcpy() further below will cause
+dereferencing of a garbage pointer read from cdev->qw_sign[] and so (most
+probably) a kernel oops. Use list_first_entry_or_null() that returns NULL
+if the list is empty; fix the strange indentation below, while at it...
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+TTBOMK, this situation shouldn't happen with the current gadget drivers --
+however there's no guarantee that usb_add_config[_only]() is called by any
+gadget driver; and anyway, Svace's complaints would be silenced...
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
+Found by Linux Verification Center (linuxtesting.org) with the Svace static
+analysis tool.
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-That's odd, because there are no xhci changes between 6.13.7 and 6.13.9, and
-very few USB changes at all.
+Fixes: 53e6242db8d6 ("usb: gadget: composite: add USB_DT_OTG request handling")
+Suggested-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-Are you really sure that 6.13.7 was OK?
-Can you reproduce this on upstream kernels built from source?
-Or bring the issue up with Fedora, in case they apply other patches?
+---
+This patch is against the usb-linus branch of Greg KH's usb.git repo.
 
-What's the affected host controller (lspci -nn)?
-I presume you are seeing the "HC died" message too, could you post full dme=
-sg?
+ drivers/usb/gadget/composite.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-There is clearly "something" here, but hard to tell what it is and why.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Index: usb/drivers/usb/gadget/composite.c
+===================================================================
+--- usb.orig/drivers/usb/gadget/composite.c
++++ usb/drivers/usb/gadget/composite.c
+@@ -1887,8 +1887,8 @@ composite_setup(struct usb_gadget *gadge
+ 				if (cdev->config)
+ 					config = cdev->config;
+ 				else
+-					config = list_first_entry(
+-							&cdev->configs,
++					config = list_first_entry_or_null(
++						&cdev->configs,
+ 						struct usb_configuration, list);
+ 				if (!config)
+ 					goto done;
 
