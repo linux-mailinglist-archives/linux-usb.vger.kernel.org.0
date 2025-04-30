@@ -1,129 +1,119 @@
-Return-Path: <linux-usb+bounces-23568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31C56AA44E6
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 10:09:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB074AA4611
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 10:57:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C016018938CF
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 08:10:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A87C33AEF77
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 08:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4B42147E8;
-	Wed, 30 Apr 2025 08:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D0B213E89;
+	Wed, 30 Apr 2025 08:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hq2WPwmh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNSXm+Rg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA97C217668
-	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 08:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA8A20FAB2
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 08:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746000573; cv=none; b=sZeAYaLc3+DjhPOgGC8MHySHD0COLTTbNXBL5LljTPvjVac9mGkg0540uzEP3gPc0Lu15E2+xk6zyBsEq4sLbg+uBNAj/uz8pHYkUnzxHPzuhT7exhiGhf595/if39l6ebC2i6H6BPLDyjMM3zOG4MuC5boiKlCK7u3ZTQn1gIQ=
+	t=1746003462; cv=none; b=YDzz43vBUNpyVIffZX3Qj9LRsGVs1T5+lenrOuEBuhGkkVwyNIskRA8dN53CWx/O2FNg28mVQ4eWBP+jzcEdRDLHj/SFcBjlreB2CK3JKxaaKsh2hTWD9e2Qcaz9UcWjy9lGIwbofy1beTs6TeSovZ5iBxrjpKtwOQCdvBmmkyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746000573; c=relaxed/simple;
-	bh=CQ6pja6JpuvNj8GhJwYSxvn4/qg+p9sy9jTfIjn0auk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ATRBfONl7/iZRCfL3/uTbG6nsNrKfQUuJhu+ZS61iI95zrhZzc7AW6arAiPkzIi7fcHHaJFjeVeQo/Gz9hshTgOU2gr9KMBABC9mfxmABYwh/AF24fdvPO+j6tM8JsEMysMmXHbieNv0rOOT6PDvtO1N3vmhl0wZnxlWCtua0YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hq2WPwmh; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so43149395e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 01:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746000570; x=1746605370; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=naN3jc8qLi0j+UmIr799lqpbzhqGsLtFH/xbwLxkdrQ=;
-        b=Hq2WPwmhzz3n7ec90TgLrR4Rxv5q62vbfL2nPcAEdNUnn2VTy/+YADSfXM8vD7cAdU
-         C+sKgKIFgV3GM0Mb7dLEeenIUgqvwkpoWuFvfM6ix7q7Jhsw0bPsO64o8OA1i+lfaDaJ
-         juMD96MstZkEa1ZxZsVseK4F4+i4D2PY44WKcLlGK4No/ktdr4XQxPei3W/PnommMyni
-         r82oV6hLVeJMYbxXm/JEGCS1o4xqNe6KbCAE6UGxN2I4AXmUbSfCN420NdDb4J7QhI+n
-         1b/7b47ur05KHy7jh++eWxzVo+G/H5T5iWQG1KXU8OvtnH2JK7UseqOTb33NuQ8EpY9c
-         bKdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746000570; x=1746605370;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=naN3jc8qLi0j+UmIr799lqpbzhqGsLtFH/xbwLxkdrQ=;
-        b=WsKek/SeoThE1RTpAJg5h+otPdkuWyxnbAtFYtpMlfP2QTh5NrIxT65zayJHaX5I35
-         RamV7u+1FNYoI03WbiB1hJIdswp3X2QMyHJE7hwbwnn2ThYN8U7YscWOSnmDBjZdpNgk
-         04W+1+VDSzCvDlcK7gb9X/WU/OijFtvENEHSBw9C2YGmyoPhD4fqaUwnZdhdiOZ8d18T
-         QFFBvMKF9o0O6dB+dHJFtpuythchIC3GweZuLoCs8lrE3QvJgljdH/Ij7XxbsxBFW+Jr
-         nxAAJjhhioCyjsNTqArA7fqf8ySVQhhsv5uTnbwnPTOdOPVgXZWfdvS7aEwvD0ZMWtwr
-         0J6g==
-X-Gm-Message-State: AOJu0YxTFgMHk9I1czhxuOpnh9X0OhRMqgNXqzbKE2vqmD4w3+Ibrpv6
-	dodcgnc8Ap6SdNyAQFN05S/Yq4dmidCONzi99jh2sifSK0plktYjqPTJ6YXJ34Bfp7sCC170J3V
-	Z
-X-Gm-Gg: ASbGncspDfLdvhKIKeopBmf7QBwHVWUKfvaW2JuEdOmHH18UX2HdreFXofc0S2irCZ4
-	SGiDw0ApRFbitWswPE0738oqO4xFojWWAAaVVluimz8k7Og8Qhs5Ue4+whrt1ygEU7nUp0EZUrM
-	4lL23G30mP7Z6dQO6DTrKhgyPVeJqhVBeHboZQGK94XqfEqDGnMUS4X6zIoPv6U7ISmnE1yjz8/
-	3AeSwS3v5ad51OE3m17RcQl2XLg452MiMmOxUieZmfHzDXFfvu2/i8I8q+wA1xtUoQr0WI8gswm
-	XK/NENEuSbMD+oiUWlWZrdwupbARhDDp47AYvZp5QmeN0w==
-X-Google-Smtp-Source: AGHT+IEeTPUJ8FSljs1jKtAp9Rq/PuMSqKMONwqP3i2hIepkefVyLiyUmwiTSCaYiDTqDAuSrcV8EQ==
-X-Received: by 2002:a05:600c:b8c:b0:43d:b3:f95 with SMTP id 5b1f17b1804b1-441b2695cf7mr9638035e9.28.1746000570190;
-        Wed, 30 Apr 2025 01:09:30 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-441b2ad781csm15821815e9.8.2025.04.30.01.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 01:09:29 -0700 (PDT)
-Date: Wed, 30 Apr 2025 11:09:26 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [bug report] usb: gadget: u_serial: Implement remote wakeup
- capability
-Message-ID: <aBHatifO5bjR1yPt@stanley.mountain>
+	s=arc-20240116; t=1746003462; c=relaxed/simple;
+	bh=dQXGjepkVw6G+x+ChLqGDMLyB2gX3KP7wTGHNv0FjcA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OinrXQNIH468avJ/6r4wjn5UjE4lo5pRnhKowdSQpNln5qoTW42X8tMgSIn3BtNswVQDU4QiKQUmatx3cf75lbWyjXGlPjmFdspWN3m7NRGs6WKmVJZnWo1j0+WHoZGYWMrTKmYGW40WvGLFltsKAc1cbWi9VoSY0qrplNoM9bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNSXm+Rg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DD61C4CEE9
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 08:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746003461;
+	bh=dQXGjepkVw6G+x+ChLqGDMLyB2gX3KP7wTGHNv0FjcA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=lNSXm+Rg1UyAD42s5Uscxk1DkNK1xoMcFoJ59lmn5jv0RMtPelMo3JwUrJ/rgmbZX
+	 60UNgzBBTpSzIEFxkWFpk/OTZM73OHrhN89LCQUT+7pfQZBAtRP3RhOY14Vh2uDKOv
+	 K2Gz5TqWy1U6TrGksgdgNQBFndO4skaxpiavNv67WjpEkRaxA+smxh6uftPuFXsl/x
+	 DW1fOVTmjEeZ40HA5e1o/gTNumUWe1tEuyY1h/39qJ7x+T+SJt1lxDnWnS36MYs7nJ
+	 mGOQ9dvNXfSnyaxBiLMK8zcNzDbCzDDm8EBHRnEtBCdUI8nRiz6D25T1nAXPdIF/kS
+	 FeOvogqgIeS7g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8FCFCC41614; Wed, 30 Apr 2025 08:57:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220069] [6.13.9] regression USB controller dies
+Date: Wed, 30 Apr 2025 08:57:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220069-208809-mwfMNFbs0o@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
+References: <bug-220069-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hello Prashanth K,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
 
-Commit 3baea29dc0a7 ("usb: gadget: u_serial: Implement remote wakeup
-capability") from Apr 24, 2025 (linux-next), leads to the following
-Smatch static checker warning:
+Mathias Nyman (mathias.nyman@linux.intel.com) changed:
 
-drivers/usb/gadget/function/u_serial.c:1511 gserial_suspend() warn: double unlock 'global &serial_port_lock' (orig line 1505)
-drivers/usb/gadget/function/u_serial.c:1514 gserial_suspend() warn: double unlock 'flags' (orig line 1505)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mathias.nyman@linux.intel.c
+                   |                            |om
 
-drivers/usb/gadget/function/u_serial.c
-    1501         }
-    1502 
-    1503         if (port->write_busy || port->write_started) {
-    1504                 /* Wakeup to host if there are ongoing transfers */
-    1505                 spin_unlock_irqrestore(&serial_port_lock, flags);
-                                                 ^^^^^^^^^^^^^^^^  ^^^^^
-We unlock here.
+--- Comment #5 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+The symptoms still hint to be the regression caused by:
 
-    1506                 if (!gserial_wakeup_host(gser))
+36b972d4b7ce usb: xhci: improve xhci_clear_command_ring()
 
-Assume gserial_wakeup_host() fails so we don't return on the next line.
+Which  was fixed by Michal in:
+c7c1f3b05c67 usb: xhci: Fix host controllers "dying" after suspend and resu=
+me
 
-    1507                         return;
-    1508         }
-    1509 
-    1510         spin_lock(&port->port_lock);
---> 1511         spin_unlock(&serial_port_lock);
-                             ^^^^^^^^^^^^^^^^^
-Double unlock.
+Regression was caused by command cycle confusion, meaning controller stops
+fetching commands from the ringbuffer as it incorrectly assumes that comman=
+ds
+queued after cycle mismatch are old commands from last cycle on ring buffer.
+Driver keeps queuing new commands and hardware keeps ignoring them.
 
-    1512         port->suspended = true;
-    1513         port->start_delayed = true;
-    1514         spin_unlock_irqrestore(&port->port_lock, flags);
-                                                          ^^^^^
-IRQs were already enabled.  Which is probably fine, I don't know.
+Regression was first noticed when a dedicated timeout timer for "stop endpo=
+int"
+command did not complete in time, and timer handler assumed host is dead.
 
-    1515 }
+In this case it's the generic command timer that times out before a "stop
+endpoint" timer. xhci driver tries to recover by aborting the failing comma=
+nd,
+but abort likely fails as well as hardware isn't really processing any comm=
+ands
+at the moment, and we end up assuming host is dead.
 
-regards,
-dan carpenter
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
