@@ -1,144 +1,127 @@
-Return-Path: <linux-usb+bounces-23582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23583-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A49B9AA4DD1
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 15:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB473AA4E02
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 16:01:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1483A4C6D3D
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 13:48:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A51F4E44A4
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 14:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C1F25CC64;
-	Wed, 30 Apr 2025 13:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC51525DD10;
+	Wed, 30 Apr 2025 14:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="cX6GXXez";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="cX6GXXez"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bqzK/326"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F293625D8E7
-	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 13:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC23A41;
+	Wed, 30 Apr 2025 14:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746020897; cv=none; b=Iww+aE5BTDcCJMps2Y8Q4P665INYbBFfHsJAcp80MWx6EqGZZB+76oJcTaTF4Iptmt/EXjAHU21p8xqtVKKRMyMc1lek0N3OZX1covxMFEOS81bGiPJ7Ct9PKeKaqilbHusChvJn1bXQ8lkxBovWL1bS0yzjvUY+UNRSDEBljZg=
+	t=1746021666; cv=none; b=RUurbtsoJMETDNrcc7D2HqExtYFopM0TAf2bDdvVEADOBA7cFqUdkmrOtHGzei3cNuxDO7EXGTTQECNuUIM+DXPs1JDV483rBNrHyBwRtPAXrIaHV/nz2Xp357RKxRUPOWHfjngfXBWt+fCl9JFIfpCL8an22GOBkZ+489sLN68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746020897; c=relaxed/simple;
-	bh=qD/ag6Qx0h6Nk44QxbbfUuIgoOFhIZ9K1iH5k9GDYac=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YathOPiNIC+vuwDACugn0efedAPot1xTfXyzOClhdlxNB5mxqSmGEdgHdMH5K0Re/f443XbusMAa/Itx+mRMcdKwwHdiQXzhWWBDHgnjpEnHMHBe8n4QKI9uxqeH5l29OKFPY9YC5HK2g/ftktO4NoOelBMQ8D1crwzIFZwjjkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=cX6GXXez; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=cX6GXXez; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 13DA321170;
-	Wed, 30 Apr 2025 13:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1746020893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=EzdKI19OR8gJ3Vy5R9+8/WlroasGq9kMvycjjCcnmhk=;
-	b=cX6GXXezgGbCzs3juqWSEG5tB6mLy09VMvnjfNbLjGiXxb3USqt7PvRC+8a9rSvCIsigO+
-	W0Hr73nDhb3byCRRP0NXmTDehDmtsI9HgjAMN53qGUHnac0HlGim3qypnq6YqlFyHpgPmW
-	t8RuxgVIxWg7sFwAYMWCt1S8wvTpDos=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1746020893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=EzdKI19OR8gJ3Vy5R9+8/WlroasGq9kMvycjjCcnmhk=;
-	b=cX6GXXezgGbCzs3juqWSEG5tB6mLy09VMvnjfNbLjGiXxb3USqt7PvRC+8a9rSvCIsigO+
-	W0Hr73nDhb3byCRRP0NXmTDehDmtsI9HgjAMN53qGUHnac0HlGim3qypnq6YqlFyHpgPmW
-	t8RuxgVIxWg7sFwAYMWCt1S8wvTpDos=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E8B53139E7;
-	Wed, 30 Apr 2025 13:48:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id M5MjNxwqEmgcewAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Wed, 30 Apr 2025 13:48:12 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] USB: usbtmc: use interruptible sleep in usbtmc_read
-Date: Wed, 30 Apr 2025 15:48:10 +0200
-Message-ID: <20250430134810.226015-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1746021666; c=relaxed/simple;
+	bh=g3mqcDp20GVHB/q8qmntjxUMyBRxr3Pf8u1Ph+O76LE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QUi5TQktOJgAy2VilPquAt3ZQGDk10dErCoQ5nZDA1Vanp8a5cMs1YhcY3FCRm1o6yLwPwUqBAvz2WN7dBO2ESEFZC29HMzWEAtjnPISWmRXz5+Hn8vAo0uO96sW/+dxWMajy8BZjK4gBC/RoInHj3aegh07HclVIHDmNsFWGQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bqzK/326; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746021665; x=1777557665;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g3mqcDp20GVHB/q8qmntjxUMyBRxr3Pf8u1Ph+O76LE=;
+  b=bqzK/3268ZFGtYFzuwoi9cXdO/EytWMah1S/yClKvgk721WV8+3EnZpp
+   NEUZlaicR/Rqiic5Zh80KoFdwQ/LcxP6YZPjRJA2EFlEwAYQRPpU0VTTq
+   eMeuNTDnupNuzV7/jDBRFMLHhgoD41o9RmZ4n3phuXsaGiAXRx/oLedc5
+   r7rqWRXvHiFAq12RnJ2o8vpDJFPvoaW/GwZnG0vCZLq0tQh6dsim4d7wm
+   ajfhuhoMxghA0s+2/usbEB6BhYsEuO0w/ajDj2AlDIBP2O4uxZjF1/b52
+   R/emDIN4SjYTF7e0LxKsQyLVaGpMOigMrO2FHYDevr4IVCZbdh5RU7JII
+   w==;
+X-CSE-ConnectionGUID: C2429F9BQIWDcnEJVkT5Yg==
+X-CSE-MsgGUID: lra6iO4HRfqbCVsWyJRy+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="47819016"
+X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
+   d="scan'208";a="47819016"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 07:00:55 -0700
+X-CSE-ConnectionGUID: 48bfJdwQSDq2dVZ3BtnmQQ==
+X-CSE-MsgGUID: glWlL4EiREC8ohwKqQlOFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
+   d="scan'208";a="157360740"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa002.fm.intel.com with SMTP; 30 Apr 2025 07:00:51 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 30 Apr 2025 17:00:50 +0300
+Date: Wed, 30 Apr 2025 17:00:50 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: badhri@google.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: delay SNK_TRY_WAIT_DEBOUNCE to
+ SRC_TRYWAIT transition
+Message-ID: <aBItEvvt3Pz-FLfD@kuha.fi.intel.com>
+References: <20250429234703.3748506-2-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,imap1.dmz-prg2.suse.org:helo];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -2.80
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250429234703.3748506-2-rdbabiera@google.com>
 
-usbtmc_read() calls usbtmc_generic_read()
-which uses interruptible sleep, but usbtmc_read()
-itself uses uninterruptble sleep for mutual exclusion
-between threads. That makes no sense.
-Both should use interruptible sleep.
+On Tue, Apr 29, 2025 at 11:47:01PM +0000, RD Babiera wrote:
+> This patch fixes Type-C Compliance Test TD 4.7.6 - Try.SNK DRP Connect
+> SNKAS.
+> 
+> The compliance tester moves into SNK_UNATTACHED during toggling and
+> expects the PUT to apply Rp after tPDDebounce of detection. If the port
+> is in SNK_TRY_WAIT_DEBOUNCE, it will move into SRC_TRYWAIT immediately
+> and apply Rp. This violates TD 4.7.5.V.3, where the tester confirms that
+> the PUT attaches Rp after the transitions to Unattached.SNK for
+> tPDDebounce.
+> 
+> Change the tcpm_set_state delay between SNK_TRY_WAIT_DEBOUNCE and
+> SRC_TRYWAIT to tPDDebounce.
+> 
+> Fixes: a0a3e04e6b2c ("staging: typec: tcpm: Check for Rp for tPDDebounce")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-Fixes: 5b775f672cc99 ("USB: add USB test and measurement class driver")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/usbtmc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 34e46ef308ab..634c3bcbb413 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -1380,7 +1380,10 @@ static ssize_t usbtmc_read(struct file *filp, char __user *buf,
- 	if (!buffer)
- 		return -ENOMEM;
- 
--	mutex_lock(&data->io_mutex);
-+	retval = mutex_lock_interruptible(&data->io_mutex);
-+	if (retval < 0)
-+		goto exit_nolock;
-+
- 	if (data->zombie) {
- 		retval = -ENODEV;
- 		goto exit;
-@@ -1503,6 +1506,7 @@ static ssize_t usbtmc_read(struct file *filp, char __user *buf,
- 
- exit:
- 	mutex_unlock(&data->io_mutex);
-+exit_nolock:
- 	kfree(buffer);
- 	return retval;
- }
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 784fa23102f9..87d56ac4565d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6003,7 +6003,7 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  	case SNK_TRY_WAIT_DEBOUNCE:
+>  		if (!tcpm_port_is_sink(port)) {
+>  			port->max_wait = 0;
+> -			tcpm_set_state(port, SRC_TRYWAIT, 0);
+> +			tcpm_set_state(port, SRC_TRYWAIT, PD_T_PD_DEBOUNCE);
+>  		}
+>  		break;
+>  	case SRC_TRY_WAIT:
+> 
+> base-commit: 615dca38c2eae55aff80050275931c87a812b48c
+> -- 
+> 2.49.0.967.g6a0df3ecc3-goog
+
 -- 
-2.49.0
-
+heikki
 
