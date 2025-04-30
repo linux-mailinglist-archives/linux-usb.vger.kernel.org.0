@@ -1,275 +1,154 @@
-Return-Path: <linux-usb+bounces-23564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B666AAA3CFD
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 01:50:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E70AA424E
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 07:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12CCA175E79
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Apr 2025 23:50:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EB0546547B
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 05:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EA5280307;
-	Tue, 29 Apr 2025 23:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C1C1DF75B;
+	Wed, 30 Apr 2025 05:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1ZlqRIoi"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mgl7xiw3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A14B280332
-	for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 23:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E631D61AA;
+	Wed, 30 Apr 2025 05:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970558; cv=none; b=Kag1B4SoLkJsCa+jzNl/8wvVn80ka51xF8ktwVQgER3H8EXOrHKq2Se3yQyu+e8hrpPRUlfFG/BSL0H4kWJXHj44rdW9A1PmwVzk1+yJEl6k7oqK8KBTFgFZeMnEQwMHPHvGY2qS8Sl3Fm6l+mm7pxRoahnPaVRaV4WKDo5Je7w=
+	t=1745990700; cv=none; b=Afd0UfN+RNtK55okg8UjgVbb3wvk0ASdnslD8ZaVTQ5uUBBJxDn7Cy3un5PxNBoMcgVrVY2o3A50ilOEb46kewvB8gpsy672UF5E/66RVtPOca4SrTkFxJOcbtnXLsMPMXuIQ55XFkjyFUenb01B+q2qyeMEJPEYxiPyezoC3Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970558; c=relaxed/simple;
-	bh=woCp2DoIvTQ3ohVyoybI/HYz+s6FKuiWQs3idtzxfRs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:Cc:Content-Type; b=sDdaSCba2y5iRqAUaBY+7Xgntayn9fhUA7UODYUu8/BVVBUcB+4yYcVNx1XkFGPPPBcl9U5biFCkFVmOorA9HKhpC9UYnJVn5fB39TcdqoplYM6yhsUzABa0kW46bQHsm61WtKTBg1Ekbg8NX9SdWxTM/gtYo+LV0YzRFFNSGOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1ZlqRIoi; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-306b590faaeso4867125a91.3
-        for <linux-usb@vger.kernel.org>; Tue, 29 Apr 2025 16:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745970556; x=1746575356; darn=vger.kernel.org;
-        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4miyblymUWh4CB9qwAMZGQ/g7XpaifLef8Ab3PTixSc=;
-        b=1ZlqRIoiCeMZrLqma9OJ0Ob7wul1L+rasV1ndrwPpnJxQvuOQFzC51Utfn5yz2ZZZ8
-         egidHzpVluqK9yz9mhKvHh8df99HR9Qkk+MEDqN9pGgu/526F/ePrnuKrwKgqnIo80oK
-         El27MIEgQXDC/iExIXRVG9tX1iVWmUZyq/CX4NhDzlIFeVXUYf+rt3ux2P4YEFGy+36M
-         lhqMwysSEfVrC/v+UGx0ebbB+4A7TMtvGLZyaH/M4cF7/wy0/ixtlidTnD2s/yc4MFni
-         OGxUB1lbSWsvIcVXKh9uFHwJ/lkEZWAFYHHaAEe3VQVKWS55BD60qwYsxkX3r04x2nyB
-         QiLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745970556; x=1746575356;
-        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4miyblymUWh4CB9qwAMZGQ/g7XpaifLef8Ab3PTixSc=;
-        b=VwPqFgRcHHWJR4sqAHivvORxKQrwW3DBwmdocVm+JHrfBMkYlRhim9zrYJGQfDgfzu
-         sFJBcRQrFbHcPBhIQ5gSM9q6GedKClMJDttzFwK/v2ZfSdGyb31M63fWPPhXoVqE7pF9
-         +uIDtkCDT3A6s4SDJh0ZmXhPwRVUI1KS8vhYRE6MMDnLOXToWm7l0dqFL2bcR/4EPeWr
-         wId98L6+dznnObhHH86X6WVusFwMU6tnVKDDWKVsvbuw46MoiId9Mwj1Iw+RBDQtAwkP
-         s5nitPuJbq8unxHStR1SjU0CismtxzoWlBiRRROHwuDH4+92Y9+P/3NIICmALJkr6upY
-         QHuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrOKxBz7QdOc2G2+YxiqHv6YgbKLaV+CvPtHRYYMRG80gkRFC0X1hLM6AS1fWG7Y3mdpSYjK0wO4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBF5VilB6pw1/pQDarpOZx7anc87te2UufmBlqD6DyL71q36CJ
-	jgFHuYa1oSRGB4sKd8R1K2x2mBspcYmczgtbTTblyWwrsQ+T8LAgjTJVmuLLcj4AbLyBc9/oD9d
-	J/mL/b55ygFAc5w==
-X-Google-Smtp-Source: AGHT+IFsjk2IFjOMoJ9YANY7NqPvQC2AJ8xnUINbQ3Ung7D1u4/9oBYnYnCCMlL6uO6uB2+nePuki32LmQnMFto=
-X-Received: from pjbrr12.prod.google.com ([2002:a17:90b:2b4c:b0:2ff:4be0:c675])
- (user=rdbabiera job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3d09:b0:305:5f28:2d5c with SMTP id 98e67ed59e1d1-30a33300d59mr1464342a91.15.1745970556580;
- Tue, 29 Apr 2025 16:49:16 -0700 (PDT)
-Date: Tue, 29 Apr 2025 23:49:08 +0000
+	s=arc-20240116; t=1745990700; c=relaxed/simple;
+	bh=oPN9HNb7W+WnV8QqZ69WdQtfENQ8uSEUYUOwpqen8z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rpogZkvZJRXIrieTIW/rPzzsR/0P/Bc12IMYrwM0OkjZYtRw6bFraBkfSwVPUiEaBtvd9twF/YziHPjbv6QSYMx1fu4L4HpAD6wtQeRqUVkYn+Kbv/urukJ8cLMOr+KWrFbzqfLfymcPj3qQFLYL3ALXmK03/WcRs+Fq4VUm0Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mgl7xiw3; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=MVWXoYGa4OsAsg4nc8D9qzEcLgq9gyKCVEtwnH3camo=;
+	b=mgl7xiw3BD4JQ+t5cQFS6f2PNQRy4ucAaDsBHK3E4WqYg+aCGvrH1FyyU0IZ5m
+	ycRbfdoxYzSV1T3uxotcecTXeWDIE1Mil5vKaYkD6730CrV0pAgtK6d9OesylZ+c
+	zT4AkoXyN2c1Cm/ZWotOCtOhBjARuckAfBRRXPrX5b0Uo=
+Received: from [10.42.12.155] (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDX01EPtBFodsoXDg--.22173S2;
+	Wed, 30 Apr 2025 13:24:33 +0800 (CST)
+Message-ID: <b8bc6ce7-55eb-4270-b4dc-d6c853fa65ac@163.com>
+Date: Wed, 30 Apr 2025 13:24:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6569; i=rdbabiera@google.com;
- h=from:subject; bh=woCp2DoIvTQ3ohVyoybI/HYz+s6FKuiWQs3idtzxfRs=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDBmCqaVuMrZpAtM3K+6Kl85kvnzV1e3ijUQD1z38v5fa6
- h2QUrrbUcrCIMbBICumyKLrn2dw40rqljmcNcYwc1iZQIYwcHEKwEQ+uTL8j3hwcaq/l6e9n58D
- /7z7C4zfnUmoXVDonHrKLXPRjRlODxkZbm2xK/4vE7Vu+Y2dKY9T3OtV42dFxG6+ktf++AX/qTN aTAA=
-X-Mailer: git-send-email 2.49.0.967.g6a0df3ecc3-goog
-Message-ID: <20250429234908.3751116-2-rdbabiera@google.com>
-Subject: [PATCH v1] usb: typec: tcpm: move tcpm_queue_vdm_unlocked to
- asynchronous work
-From: RD Babiera <rdbabiera@google.com>
-Cc: heikki.krogerus@linux.intel.com, badhri@google.com, 
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, shuah@kernel.org,
+ valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
+References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
+ <20250422063409.607859-1-min_halo@163.com> <aAdEM0crDfSP9JYf@infradead.org>
+ <4c6660a6-29ce-4b97-b092-8fc15585e52a@163.com>
+ <2025042512-corsage-handpick-bf2a@gregkh>
+ <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
+ <2025042812-sinister-shaping-bded@gregkh>
+ <097ad0fd-db38-4174-8e34-4ceb485e7e23@linuxfoundation.org>
+Content-Language: en-US
+From: Zongmin Zhou <min_halo@163.com>
+In-Reply-To: <097ad0fd-db38-4174-8e34-4ceb485e7e23@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDX01EPtBFodsoXDg--.22173S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWxXry5uw4xJw4kGw45Wrg_yoW5Gw1fpF
+	W3Jay2krs8Kwn2qrnav3W0vF1FyrZ5t34rWrn8Jw18C390qFyavrWDt398CF9Fvr1xK3W2
+	vrWjgFyakFn8uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UeKZAUUUUU=
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbi7gM-q2gRqVj1hwAAsD
 
-A state check was previously added to tcpm_queue_vdm_unlocked to
-prevent a deadlock where the DisplayPort Alt Mode driver would be
-executing work and attempting to grab the tcpm_lock while the TCPM
-was holding the lock and attempting to unregister the altmode, blocking
-on the altmode driver's cancel_work_sync call.
 
-Because the state check isn't protected, there is a small window
-where the Alt Mode driver could determine that the TCPM is
-in a ready state and attempt to grab the lock while the
-TCPM grabs the lock and changes the TCPM state to one that
-causes the deadlock.
-
-Change tcpm_queue_vdm_unlocked to queue for tcpm_queue_vdm_work,
-which can perform the state check while holding the TCPM lock
-while the Alt Mode lock is no longer held. This requires a new
-struct to hold the vdm data, altmode_vdm_event.
-
-Fixes: cdc9946ea637 ("usb: typec: tcpm: enforce ready state when queueing alt mode vdm")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 91 +++++++++++++++++++++++++++--------
- 1 file changed, 71 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 784fa23102f9..9b8d98328ddb 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -597,6 +597,15 @@ struct pd_rx_event {
- 	enum tcpm_transmit_type rx_sop_type;
- };
- 
-+struct altmode_vdm_event {
-+	struct kthread_work work;
-+	struct tcpm_port *port;
-+	u32 header;
-+	u32 *data;
-+	int cnt;
-+	enum tcpm_transmit_type tx_sop_type;
-+};
-+
- static const char * const pd_rev[] = {
- 	[PD_REV10]		= "rev1",
- 	[PD_REV20]		= "rev2",
-@@ -1610,18 +1619,68 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
- 	mod_vdm_delayed_work(port, 0);
- }
- 
--static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
--				    const u32 *data, int cnt, enum tcpm_transmit_type tx_sop_type)
-+static void tcpm_queue_vdm_work(struct kthread_work *work)
- {
--	if (port->state != SRC_READY && port->state != SNK_READY &&
--	    port->state != SRC_VDM_IDENTITY_REQUEST)
--		return;
-+	struct altmode_vdm_event *event = container_of(work,
-+						       struct altmode_vdm_event,
-+						       work);
-+	struct tcpm_port *port = event->port;
- 
- 	mutex_lock(&port->lock);
--	tcpm_queue_vdm(port, header, data, cnt, tx_sop_type);
-+	if (port->state != SRC_READY && port->state != SNK_READY &&
-+	    port->state != SRC_VDM_IDENTITY_REQUEST) {
-+		tcpm_log_force(port, "dropping altmode_vdm_event");
-+		goto port_unlock;
-+	}
-+
-+	tcpm_queue_vdm(port, event->header, event->data, event->cnt, event->tx_sop_type);
-+
-+port_unlock:
-+	kfree(event->data);
-+	kfree(event);
- 	mutex_unlock(&port->lock);
- }
- 
-+static int tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
-+				   const u32 *data, int cnt, enum tcpm_transmit_type tx_sop_type)
-+{
-+	struct altmode_vdm_event *event;
-+	u32 *data_cpy;
-+	int ret = -ENOMEM;
-+
-+	event = kzalloc(sizeof(*event), GFP_KERNEL);
-+	if (!event)
-+		goto err_event;
-+
-+	data_cpy = kcalloc(cnt, sizeof(u32), GFP_KERNEL);
-+	if (!data_cpy)
-+		goto err_data;
-+
-+	kthread_init_work(&event->work, tcpm_queue_vdm_work);
-+	event->port = port;
-+	event->header = header;
-+	memcpy(data_cpy, data, sizeof(u32) * cnt);
-+	event->data = data_cpy;
-+	event->cnt = cnt;
-+	event->tx_sop_type = tx_sop_type;
-+
-+	ret = kthread_queue_work(port->wq, &event->work);
-+	if (!ret) {
-+		ret = -EBUSY;
-+		goto err_queue;
-+	}
-+
-+	return 0;
-+
-+err_queue:
-+	kfree(data_cpy);
-+err_data:
-+	kfree(event);
-+err_event:
-+	tcpm_log_force(port, "failed to queue altmode vdm, err:%d", ret);
-+	return ret;
-+}
-+
- static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
- {
- 	u32 vdo = p[VDO_INDEX_IDH];
-@@ -2832,8 +2891,7 @@ static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
- 	header = VDO(altmode->svid, vdo ? 2 : 1, svdm_version, CMD_ENTER_MODE);
- 	header |= VDO_OPOS(altmode->mode);
- 
--	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0, TCPC_TX_SOP);
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0, TCPC_TX_SOP);
- }
- 
- static int tcpm_altmode_exit(struct typec_altmode *altmode)
-@@ -2849,8 +2907,7 @@ static int tcpm_altmode_exit(struct typec_altmode *altmode)
- 	header = VDO(altmode->svid, 1, svdm_version, CMD_EXIT_MODE);
- 	header |= VDO_OPOS(altmode->mode);
- 
--	tcpm_queue_vdm_unlocked(port, header, NULL, 0, TCPC_TX_SOP);
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, NULL, 0, TCPC_TX_SOP);
- }
- 
- static int tcpm_altmode_vdm(struct typec_altmode *altmode,
-@@ -2858,9 +2915,7 @@ static int tcpm_altmode_vdm(struct typec_altmode *altmode,
- {
- 	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
- 
--	tcpm_queue_vdm_unlocked(port, header, data, count - 1, TCPC_TX_SOP);
--
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, data, count - 1, TCPC_TX_SOP);
- }
- 
- static const struct typec_altmode_ops tcpm_altmode_ops = {
-@@ -2884,8 +2939,7 @@ static int tcpm_cable_altmode_enter(struct typec_altmode *altmode, enum typec_pl
- 	header = VDO(altmode->svid, vdo ? 2 : 1, svdm_version, CMD_ENTER_MODE);
- 	header |= VDO_OPOS(altmode->mode);
- 
--	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0, TCPC_TX_SOP_PRIME);
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0, TCPC_TX_SOP_PRIME);
- }
- 
- static int tcpm_cable_altmode_exit(struct typec_altmode *altmode, enum typec_plug_index sop)
-@@ -2901,8 +2955,7 @@ static int tcpm_cable_altmode_exit(struct typec_altmode *altmode, enum typec_plu
- 	header = VDO(altmode->svid, 1, svdm_version, CMD_EXIT_MODE);
- 	header |= VDO_OPOS(altmode->mode);
- 
--	tcpm_queue_vdm_unlocked(port, header, NULL, 0, TCPC_TX_SOP_PRIME);
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, NULL, 0, TCPC_TX_SOP_PRIME);
- }
- 
- static int tcpm_cable_altmode_vdm(struct typec_altmode *altmode, enum typec_plug_index sop,
-@@ -2910,9 +2963,7 @@ static int tcpm_cable_altmode_vdm(struct typec_altmode *altmode, enum typec_plug
- {
- 	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
- 
--	tcpm_queue_vdm_unlocked(port, header, data, count - 1, TCPC_TX_SOP_PRIME);
--
--	return 0;
-+	return tcpm_queue_vdm_unlocked(port, header, data, count - 1, TCPC_TX_SOP_PRIME);
- }
- 
- static const struct typec_cable_ops tcpm_cable_ops = {
-
-base-commit: 615dca38c2eae55aff80050275931c87a812b48c
--- 
-2.49.0.967.g6a0df3ecc3-goog
+On 2025/4/29 07:07, Shuah Khan wrote:
+> On 4/28/25 04:04, Greg KH wrote:
+>> A: http://en.wikipedia.org/wiki/Top_post
+>> Q: Were do I find info about this thing called top-posting?
+>> A: Because it messes up the order in which people normally read text.
+>> Q: Why is top-posting such a bad thing?
+>> A: Top-posting.
+>> Q: What is the most annoying thing in e-mail?
+>>
+>> A: No.
+>> Q: Should I include quotations after my reply?
+>>
+>> http://daringfireball.net/2007/07/on_top
+>>
+Sorry for that,and thank you for the comment!I've learned it.
+>> On Mon, Apr 28, 2025 at 05:51:08PM +0800, Zongmin Zhou wrote:
+>>> Dear Greg and Shuah,
+>>>
+>>> I found out that the vhci-hcd driver added this virtual device
+>>> as a platform device from the very beginning since 2014.
+>>
+>> Ah, I should have caught it back then, but at the time there really
+>> wasn't another option.
+>>
+>
+>>> I'm just getting in touch with this module and
+>>> don't have a deep understanding of it，shuah should be clearer.
+>
+> faux_device should work fine for this. We do have to test of course.
+>
+> There are several examples of converting  platform device to faux device.
+>
+> 72239a78f9f5b9f05ea4bb7a15b92807906dab71
+> dcd2a9a5550ef556c8fc11601a0f729fb71ead5d
+>
+Ok,I will learn to do it.
+Thank you for your guidance.
+>>
+>> See the recent patches I did converting drivers to use the faux bus
+>> code, it should be pretty simple to do.
+>>
+>>> I don't know if using the faux bus to replace the platform bus can 
+>>> solve the
+>>> problem that the error limitation on max_hw_sectors for usbip device
+>>> since commit d74ffae8b8dd applied.
+>>
+>> That is for the storage driver, not usbip.  As the faux bus does not
+>> have any real dma operations, this should cause it to work properly
+>> given the default values involed, but that's up to you to test to verify
+>> it does just that.  Try it and see!
+>>
+>>> But this change will request user to update kernel version to 
+>>> support faux
+>>> bus.
+>>
+>> That's just a normal kernel update to a newer version, what is wrong
+>> with that?
+>
+> With one difference that the fix depends on faux_device feature - hence
+> we can't apply it to stables. I do think it is the right direction to
+> go to faux_device.
+>
+I just encountered similar users who were using a lower version of the 
+kernel and were unwilling to upgrade.
+But if reach a consensus to  go to faux_device,
+I will try to make the change(converting platform device to faux device 
+for vhci-hcd).
+>>
+>>> This will also be an expensive change to fix the problem?
+>>
+>> Fixing things properly is the correct thing to do in all cases.
+>>
+>
+> Zongmin, do let me know if you are unable to make the change.
+>
+> thanks,
+> -- Shuah
 
 
