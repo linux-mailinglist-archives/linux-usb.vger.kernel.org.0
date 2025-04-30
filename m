@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-23566-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23567-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41175AA42B9
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 07:57:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35DEAAA4331
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 08:36:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A127C466BBF
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 05:57:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C6FF170DE7
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 06:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAB61E5729;
-	Wed, 30 Apr 2025 05:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0706B2DC779;
+	Wed, 30 Apr 2025 06:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9+NT5RR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RD44+UNN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213F21E51E0
-	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F9A1E8326
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 06:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745992627; cv=none; b=jEI30btV+R9FcvAfneqKYP+DolaEpMl6X7SsmR7UhJW314TSA3xflIkFqcb4En7qIW5kHy7rAEyc+lC20hsajM7EEsevrSh5wsCIkk6lpLewzJkYDfSGDY6z1dgv8+srISBkSXVsovDKpHXSIEik0CkTZ6kQrKl55SrsTHQm2/o=
+	t=1745994959; cv=none; b=joDpSOS36g/f0F6NyLP+79KKBb+yyUQB7c4LkuFa253Rf/SR1JKO1etLljcoBjlnTz7d5iazy3tVoBlBSBEydTQPw70iVIz9Elq7PHCE9Sqv5HjRoGshiwUnf3m3JE+DzVF5uiVYZf35jxaCfa5H6HUsl3uuIfAC4B+5sDW9654=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745992627; c=relaxed/simple;
-	bh=Gk1cIWe4gsRRfJBw7iPHFhfyPp3ZSbAxGL4cn/ggpwo=;
+	s=arc-20240116; t=1745994959; c=relaxed/simple;
+	bh=ERYZexWtwjh8EUtRHvaZY9F0oZ4QNvjigu3PDyDHSFw=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bvqCvXYqu0SyDSlv+e3G/GF9GaHO5JqGp8YJxDYdqkM0j6+y+ZManzUIAKVzzw0aujq7sk5ZKiWWr6+0GLZmQeOAJMyh/fh3lOaqrDtUc4dhzCbErFcmA6STT2DvZrZkiI1ORXp+WNb2fNo+x2jjGzm8GMhY4nn2qI7BYxqlY0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9+NT5RR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F40AC4CEEC
-	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+	 Content-Type:MIME-Version; b=htfOs93KBMR6QPktgu7pAir2B5konpW6M3FnIOZqD8dAOXQEvY2GeJbpz+3o0KqVI43ev0ODZaEPfG2x3yNo98By8PQsKBbjItg3Rd1JYO4yfrsRRVsXhARUQcibArgjhlLhUEvR0+tnVZQ4kixAuqt2Ybcy6yQi1Lz2h4z9NDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RD44+UNN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 61C26C4CEEA
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 06:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745992626;
-	bh=Gk1cIWe4gsRRfJBw7iPHFhfyPp3ZSbAxGL4cn/ggpwo=;
+	s=k20201202; t=1745994959;
+	bh=ERYZexWtwjh8EUtRHvaZY9F0oZ4QNvjigu3PDyDHSFw=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=k9+NT5RRcDRFiJQEkTSHWTwiuUhT6VbB9UjdADrc0KD5ZZqfkmdqht11W8vCwoPeH
-	 7e7LiPpyQcIW+QZ2T+h/sFpupN3BK939hvtgbRGroOT6ku3MdGqW8FC+y+JE/zmd6N
-	 eG5sqHlR7CjCeD7v5l3rAnQODgWMY4lVIURkqkdEfeOUz5MziPgBT3/+b/n3kkEyx0
-	 HVjQ938RVhtLB5nVSGKajxpo2doGqAO84ufYiR5+NT9wyc5S+IYNbrjrXPjE6I/RUN
-	 zUy/ivmfDHxYJk9B6naAepuM79+/MHwHTQXgko3947DkatG2+rNC1HpPe4zk91iaHX
-	 mJOrhzfjU+mZw==
+	b=RD44+UNN1ItdtbdDGALAF2UZlnyFOmiBeo8k299q/Bw61IiBrKeJ4hNbx73x6YtCO
+	 CUtGOcUmGjVFUlZM41dq+Lo0+GBRlCXk2kwvkUjqYEjiOYm53WspWw7ndgWdhDv4ty
+	 AlHf/zxX7qpq9mgGRH4PuOx6pxhPUSIAC+vfg9cAaUVvbPu56PY9mOFWrvnz8dkxI8
+	 k348LYd2w0e49CZ8HpOZBbd0G9eeOg/oB5JgQ8y/lS3eBzMtxcBW5CGvl9MqMHrLuw
+	 6UIIu1bny7wFTgPk2+9n+i5BGTOnmGv9OeJPlQnKYagP4AKDfDDr4BY6BZL+ll9yg2
+	 QN54xKTIbP4cw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 71B66C433E1; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+	id 59BF5C41612; Wed, 30 Apr 2025 06:35:59 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Wed, 30 Apr 2025 05:57:06 +0000
+Subject: [Bug 220027] USB 3.2 capture cards using incorrect USB speed
+Date: Wed, 30 Apr 2025 06:35:59 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,9 +62,9 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220069-208809-efelfi3kJE@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
-References: <bug-220069-208809@https.bugzilla.kernel.org/>
+Message-ID: <bug-220027-208809-iqsjuuBYDN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220027-208809@https.bugzilla.kernel.org/>
+References: <bug-220027-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -76,57 +76,34 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220027
 
---- Comment #4 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-(In reply to Claudio Wunder from comment #2)
-> xhci_hcd 0000:6a:00.0: HC died; cleaning up
-> xhci_hcd 0000:6a:00.0: xHCI host controller not responding, assume dead
-> xhci_hcd 0000:6a:00.0: Abort failed to stop command ring: -110
+--- Comment #5 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Looks like a problem with those capture devices, then. Maybe they all use t=
+he
+same chip? One name I have seen somewhere is Realtek RTD2801VPF.
 
-If "abort failed" is what starts everything, this looks like a genuine case=
- of
-hardware going bad for some reason, unlike the February "hc died" regression
-which was a trivial driver bug and the HW worked as designed. This may be
-harder to solve and HW specific, possibly including connected devices.
+It could be what Mathias Nyman suggested in the other bug: the device expec=
+ts
+some particular order of descriptor requests (as issued by Windows) and doe=
+sn't
+know what to do when Linux does similar things in other order. It would be a
+little weird that such a bug only occurs at 10G speed, but hardware can be =
+all
+sorts of buggy...
 
-Actually, a regression could conceivably be caused by a change in some devi=
-ce
-driver. And distro regressions can also be caused by changes in kernel .con=
-fig,
-so you may want to ask them about that too.
+To test this theory it would be necessary to patch the kernel and observe w=
+hat
+happens. Can you build the kernel from source, are you familiar with C
+programming by any chance?
 
-> Regarding `dmesg` would you like a full output? The logs are... long.
-
-Well, at the very least, it would be nice to see complete and unmodified ke=
-rnel
-log from the event you are complaining about ;) The snippet quoted above, f=
-or
-example, appears to be in reverse order and I don't know why. Timestamps can
-useful too.
-
-If you can't or don't want to post full kernel log (from boot to "hc died"),
-please at least grep it for '0000:6a:00.0' since this will show PCI IDs of =
-the
-culprit chip and maybe some anomalies previously logged by xhci_hcd.
-
-
-Going forward, does your system support dynamic debug and/or debugfs? Please
-try:
-
-echo 'module usbcore +p' | sudo tee /proc/dynamic_debug/control
-echo 'module xhci_hcd +p' | sudo tee /proc/dynamic_debug/control
-
-If this produces dmesg noise on a completely idle system, post a sample. If
-not, you may leave it enabled (changing +p to -p disables it) and collect d=
-mesg
-with this debug info included next time something happens.
-
-If you can mount debugfs and access /sys/kernel/debug/usb/xhci/0000:??:00.0
-(all as root), please save a copy of that directory after the next crash but
-before unbinding and rebinding the driver. This will contain information ab=
-out
-what the chip was doing when it went belly up.
+Another possible approach is to sniff the USB bus with Wireshark on Windows=
+ and
+on Linux and compare. Disclaimer: I have never really used Wireshark on Win=
+dows
+before, so IDK how usable it is, and any changes to Linux behavior would st=
+ill
+require kernel patches of course.
 
 --=20
 You may reply to this email to add a comment.
