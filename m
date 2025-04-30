@@ -1,154 +1,136 @@
-Return-Path: <linux-usb+bounces-23565-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23566-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E70AA424E
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 07:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41175AA42B9
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 07:57:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EB0546547B
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 05:25:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A127C466BBF
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Apr 2025 05:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C1C1DF75B;
-	Wed, 30 Apr 2025 05:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAB61E5729;
+	Wed, 30 Apr 2025 05:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mgl7xiw3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9+NT5RR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E631D61AA;
-	Wed, 30 Apr 2025 05:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213F21E51E0
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745990700; cv=none; b=Afd0UfN+RNtK55okg8UjgVbb3wvk0ASdnslD8ZaVTQ5uUBBJxDn7Cy3un5PxNBoMcgVrVY2o3A50ilOEb46kewvB8gpsy672UF5E/66RVtPOca4SrTkFxJOcbtnXLsMPMXuIQ55XFkjyFUenb01B+q2qyeMEJPEYxiPyezoC3Z0=
+	t=1745992627; cv=none; b=jEI30btV+R9FcvAfneqKYP+DolaEpMl6X7SsmR7UhJW314TSA3xflIkFqcb4En7qIW5kHy7rAEyc+lC20hsajM7EEsevrSh5wsCIkk6lpLewzJkYDfSGDY6z1dgv8+srISBkSXVsovDKpHXSIEik0CkTZ6kQrKl55SrsTHQm2/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745990700; c=relaxed/simple;
-	bh=oPN9HNb7W+WnV8QqZ69WdQtfENQ8uSEUYUOwpqen8z8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rpogZkvZJRXIrieTIW/rPzzsR/0P/Bc12IMYrwM0OkjZYtRw6bFraBkfSwVPUiEaBtvd9twF/YziHPjbv6QSYMx1fu4L4HpAD6wtQeRqUVkYn+Kbv/urukJ8cLMOr+KWrFbzqfLfymcPj3qQFLYL3ALXmK03/WcRs+Fq4VUm0Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mgl7xiw3; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-	Content-Type; bh=MVWXoYGa4OsAsg4nc8D9qzEcLgq9gyKCVEtwnH3camo=;
-	b=mgl7xiw3BD4JQ+t5cQFS6f2PNQRy4ucAaDsBHK3E4WqYg+aCGvrH1FyyU0IZ5m
-	ycRbfdoxYzSV1T3uxotcecTXeWDIE1Mil5vKaYkD6730CrV0pAgtK6d9OesylZ+c
-	zT4AkoXyN2c1Cm/ZWotOCtOhBjARuckAfBRRXPrX5b0Uo=
-Received: from [10.42.12.155] (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDX01EPtBFodsoXDg--.22173S2;
-	Wed, 30 Apr 2025 13:24:33 +0800 (CST)
-Message-ID: <b8bc6ce7-55eb-4270-b4dc-d6c853fa65ac@163.com>
-Date: Wed, 30 Apr 2025 13:24:31 +0800
+	s=arc-20240116; t=1745992627; c=relaxed/simple;
+	bh=Gk1cIWe4gsRRfJBw7iPHFhfyPp3ZSbAxGL4cn/ggpwo=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bvqCvXYqu0SyDSlv+e3G/GF9GaHO5JqGp8YJxDYdqkM0j6+y+ZManzUIAKVzzw0aujq7sk5ZKiWWr6+0GLZmQeOAJMyh/fh3lOaqrDtUc4dhzCbErFcmA6STT2DvZrZkiI1ORXp+WNb2fNo+x2jjGzm8GMhY4nn2qI7BYxqlY0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9+NT5RR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F40AC4CEEC
+	for <linux-usb@vger.kernel.org>; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745992626;
+	bh=Gk1cIWe4gsRRfJBw7iPHFhfyPp3ZSbAxGL4cn/ggpwo=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=k9+NT5RRcDRFiJQEkTSHWTwiuUhT6VbB9UjdADrc0KD5ZZqfkmdqht11W8vCwoPeH
+	 7e7LiPpyQcIW+QZ2T+h/sFpupN3BK939hvtgbRGroOT6ku3MdGqW8FC+y+JE/zmd6N
+	 eG5sqHlR7CjCeD7v5l3rAnQODgWMY4lVIURkqkdEfeOUz5MziPgBT3/+b/n3kkEyx0
+	 HVjQ938RVhtLB5nVSGKajxpo2doGqAO84ufYiR5+NT9wyc5S+IYNbrjrXPjE6I/RUN
+	 zUy/ivmfDHxYJk9B6naAepuM79+/MHwHTQXgko3947DkatG2+rNC1HpPe4zk91iaHX
+	 mJOrhzfjU+mZw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 71B66C433E1; Wed, 30 Apr 2025 05:57:06 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220069] [6.13.9] regression USB controller dies
+Date: Wed, 30 Apr 2025 05:57:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220069-208809-efelfi3kJE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
+References: <bug-220069-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Greg KH <gregkh@linuxfoundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>, i@zenithal.me,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, shuah@kernel.org,
- valentina.manea.m@gmail.com, Zongmin Zhou <zhouzongmin@kylinos.cn>
-References: <3e1f8fab-0155-4ff9-800d-5fa9df88c48c@linuxfoundation.org>
- <20250422063409.607859-1-min_halo@163.com> <aAdEM0crDfSP9JYf@infradead.org>
- <4c6660a6-29ce-4b97-b092-8fc15585e52a@163.com>
- <2025042512-corsage-handpick-bf2a@gregkh>
- <575ce02c-9128-4098-a852-d9e14f14010e@163.com>
- <2025042812-sinister-shaping-bded@gregkh>
- <097ad0fd-db38-4174-8e34-4ceb485e7e23@linuxfoundation.org>
-Content-Language: en-US
-From: Zongmin Zhou <min_halo@163.com>
-In-Reply-To: <097ad0fd-db38-4174-8e34-4ceb485e7e23@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDX01EPtBFodsoXDg--.22173S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWxXry5uw4xJw4kGw45Wrg_yoW5Gw1fpF
-	W3Jay2krs8Kwn2qrnav3W0vF1FyrZ5t34rWrn8Jw18C390qFyavrWDt398CF9Fvr1xK3W2
-	vrWjgFyakFn8uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UeKZAUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbi7gM-q2gRqVj1hwAAsD
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+
+--- Comment #4 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+(In reply to Claudio Wunder from comment #2)
+> xhci_hcd 0000:6a:00.0: HC died; cleaning up
+> xhci_hcd 0000:6a:00.0: xHCI host controller not responding, assume dead
+> xhci_hcd 0000:6a:00.0: Abort failed to stop command ring: -110
+
+If "abort failed" is what starts everything, this looks like a genuine case=
+ of
+hardware going bad for some reason, unlike the February "hc died" regression
+which was a trivial driver bug and the HW worked as designed. This may be
+harder to solve and HW specific, possibly including connected devices.
+
+Actually, a regression could conceivably be caused by a change in some devi=
+ce
+driver. And distro regressions can also be caused by changes in kernel .con=
+fig,
+so you may want to ask them about that too.
+
+> Regarding `dmesg` would you like a full output? The logs are... long.
+
+Well, at the very least, it would be nice to see complete and unmodified ke=
+rnel
+log from the event you are complaining about ;) The snippet quoted above, f=
+or
+example, appears to be in reverse order and I don't know why. Timestamps can
+useful too.
+
+If you can't or don't want to post full kernel log (from boot to "hc died"),
+please at least grep it for '0000:6a:00.0' since this will show PCI IDs of =
+the
+culprit chip and maybe some anomalies previously logged by xhci_hcd.
 
 
-On 2025/4/29 07:07, Shuah Khan wrote:
-> On 4/28/25 04:04, Greg KH wrote:
->> A: http://en.wikipedia.org/wiki/Top_post
->> Q: Were do I find info about this thing called top-posting?
->> A: Because it messes up the order in which people normally read text.
->> Q: Why is top-posting such a bad thing?
->> A: Top-posting.
->> Q: What is the most annoying thing in e-mail?
->>
->> A: No.
->> Q: Should I include quotations after my reply?
->>
->> http://daringfireball.net/2007/07/on_top
->>
-Sorry for that,and thank you for the comment!I've learned it.
->> On Mon, Apr 28, 2025 at 05:51:08PM +0800, Zongmin Zhou wrote:
->>> Dear Greg and Shuah,
->>>
->>> I found out that the vhci-hcd driver added this virtual device
->>> as a platform device from the very beginning since 2014.
->>
->> Ah, I should have caught it back then, but at the time there really
->> wasn't another option.
->>
->
->>> I'm just getting in touch with this module and
->>> don't have a deep understanding of it，shuah should be clearer.
->
-> faux_device should work fine for this. We do have to test of course.
->
-> There are several examples of converting  platform device to faux device.
->
-> 72239a78f9f5b9f05ea4bb7a15b92807906dab71
-> dcd2a9a5550ef556c8fc11601a0f729fb71ead5d
->
-Ok,I will learn to do it.
-Thank you for your guidance.
->>
->> See the recent patches I did converting drivers to use the faux bus
->> code, it should be pretty simple to do.
->>
->>> I don't know if using the faux bus to replace the platform bus can 
->>> solve the
->>> problem that the error limitation on max_hw_sectors for usbip device
->>> since commit d74ffae8b8dd applied.
->>
->> That is for the storage driver, not usbip.  As the faux bus does not
->> have any real dma operations, this should cause it to work properly
->> given the default values involed, but that's up to you to test to verify
->> it does just that.  Try it and see!
->>
->>> But this change will request user to update kernel version to 
->>> support faux
->>> bus.
->>
->> That's just a normal kernel update to a newer version, what is wrong
->> with that?
->
-> With one difference that the fix depends on faux_device feature - hence
-> we can't apply it to stables. I do think it is the right direction to
-> go to faux_device.
->
-I just encountered similar users who were using a lower version of the 
-kernel and were unwilling to upgrade.
-But if reach a consensus to  go to faux_device,
-I will try to make the change(converting platform device to faux device 
-for vhci-hcd).
->>
->>> This will also be an expensive change to fix the problem?
->>
->> Fixing things properly is the correct thing to do in all cases.
->>
->
-> Zongmin, do let me know if you are unable to make the change.
->
-> thanks,
-> -- Shuah
+Going forward, does your system support dynamic debug and/or debugfs? Please
+try:
 
+echo 'module usbcore +p' | sudo tee /proc/dynamic_debug/control
+echo 'module xhci_hcd +p' | sudo tee /proc/dynamic_debug/control
+
+If this produces dmesg noise on a completely idle system, post a sample. If
+not, you may leave it enabled (changing +p to -p disables it) and collect d=
+mesg
+with this debug info included next time something happens.
+
+If you can mount debugfs and access /sys/kernel/debug/usb/xhci/0000:??:00.0
+(all as root), please save a copy of that directory after the next crash but
+before unbinding and rebinding the driver. This will contain information ab=
+out
+what the chip was doing when it went belly up.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
