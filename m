@@ -1,53 +1,55 @@
-Return-Path: <linux-usb+bounces-23607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CEBCAA60D0
-	for <lists+linux-usb@lfdr.de>; Thu,  1 May 2025 17:37:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0040AAA60D2
+	for <lists+linux-usb@lfdr.de>; Thu,  1 May 2025 17:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 127353BB624
-	for <lists+linux-usb@lfdr.de>; Thu,  1 May 2025 15:36:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A4924C39B8
+	for <lists+linux-usb@lfdr.de>; Thu,  1 May 2025 15:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B1E202C50;
-	Thu,  1 May 2025 15:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4011FDA6D;
+	Thu,  1 May 2025 15:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Cb75BCo/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LQFf8QFk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C8518C011;
-	Thu,  1 May 2025 15:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B62718C011;
+	Thu,  1 May 2025 15:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746113824; cv=none; b=f5S1bAOr5zo4xDLZRhGqrY0iO1fzVIC53TtCElzSLrcueO3fGuF4YGtOratyxYfgikf4xEOFN4fx4fEVetwYG8h8UCOMAHYCUv0Vj2YtA55AP6e+r2bLzwNlkbIWK8af6E+VMxh0qF756KmZlWsOUMKtca9U56vp9emXiM+94fw=
+	t=1746113898; cv=none; b=EDDepPEKJ6LwbJ7WVu9h3oqHYKPgi+HhZW87rgXVNOrd2lTrHqWpmPr5wuDzT0UVDypKx6NOy8KAuSeVe5B7YJor34/4BXun4Q81wOFmMVxwEXgGf/GoUHCvw7QgA+O5OGnW/f5mlp9uIvUhPnkdqVoBikofH1dRs/I1xfQO5zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746113824; c=relaxed/simple;
-	bh=cmR2HZvWWbjN4vgXaQS/6TxoTDS4aFO2IW+vqZLr+ZQ=;
+	s=arc-20240116; t=1746113898; c=relaxed/simple;
+	bh=XFFOTdP/3i3niIEuMBBcyJrNjW1QjuABGAb6m1NknNs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l5nn9N988zaLMwA6YPdzY5l0iOvqkXepWg47/3/68voFKvqSReHyr6hCpmPcrKwHobem2pVbkaKe3S/MiwOXaSlI/LuMFLikfKi/gnz8Ju9llwh+o5j0t9GYZ6jIiSfi3MZiIagijhxBCPOsaUyF/z2erFCs7DDdutch9x53l3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Cb75BCo/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88DDDC4CEED;
-	Thu,  1 May 2025 15:37:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=srGkDkbddQZbhPf7rVl42QH7xevRPdAPCAmUsjSgSB7DHOa8pslsmTQ1xhHCwfYRYJhsNERTmqmXet7n1k3HwPdIuQesYyE+HooDeIu2ilsTJMZnCIDF4ukcmgDicpsmYb1gkXZwQHTgqYBuYjFKQbd8ivFrD2pWDvuq0DZO8mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LQFf8QFk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01E2C4CEE3;
+	Thu,  1 May 2025 15:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746113824;
-	bh=cmR2HZvWWbjN4vgXaQS/6TxoTDS4aFO2IW+vqZLr+ZQ=;
+	s=korg; t=1746113897;
+	bh=XFFOTdP/3i3niIEuMBBcyJrNjW1QjuABGAb6m1NknNs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cb75BCo/UkfXkPrrygBxb3F+wIHkObt/ILrhJXUh6hqaYLEELC4sw/rQmo3FmlsTE
-	 qpYnGvnrhu1+OYkh25NajRiQCUzmcsoKZykMefplUyv3QK13SVXHnpyFEFUxgcXT2a
-	 Ug6GtpBV6ZY4E0EVWLOKm9th85w66UP9PlMtvODE=
-Date: Thu, 1 May 2025 17:36:56 +0200
+	b=LQFf8QFkg9xartG2fb/Sf2lau8ALekMhViwng4WjSIJTupiajzvvSwtZgcOsf2DvD
+	 rhglop+yqL0FI6xBMktUYIVWiBLuSUnXtWsAqeszyAPDi7HaqGCghkFjK7X9ZCgukN
+	 cpNzYesEMP78VqIWrU7yz4T3EwhBHE0vYXawsOLI=
+Date: Thu, 1 May 2025 17:38:14 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	John Youn <John.Youn@synopsys.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc2: gadget: Fix enter to hibernation for UTMI+
- PHY
-Message-ID: <2025050138-attempt-skewer-726d@gregkh>
-References: <8bacf7428d29d7fc2e5a94e5931f12d7df60c732.1745312619.git.Minas.Harutyunyan@synopsys.com>
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+	Fabio Estevam <festevam@gmail.com>,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, stable@kernel.org
+Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix NPD of usbmisc_data
+Message-ID: <2025050100-getting-curler-88aa@gregkh>
+References: <20250422185601.80199-1-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,27 +58,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8bacf7428d29d7fc2e5a94e5931f12d7df60c732.1745312619.git.Minas.Harutyunyan@synopsys.com>
+In-Reply-To: <20250422185601.80199-1-wahrenst@gmx.net>
 
-On Tue, Apr 22, 2025 at 09:16:52AM +0000, Minas Harutyunyan wrote:
-> For UTMI+ PHY, according to programming guide, first should be set
-> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
-> Remote Wakeup, then host notices disconnect instead.
-> For ULPI PHY, above mentioned bits must be set in reversed order:
-> STOPPCLK then PMUACTV.
+On Tue, Apr 22, 2025 at 08:56:01PM +0200, Stefan Wahren wrote:
+> The commit 74adad500346 ("usb: chipidea: ci_hdrc_imx: decrement device's
+> refcount in .remove() and in the error path of .probe()") introduced
+> a NULL pointer dereference on platforms which have no usbmisc_data
+> (e.g. i.MX28). So add the missing checks in .probe() and .remove().
 > 
-> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
-> Cc: stable@vger.kernel.org
-> Reported-by: Tomasz Mon <tomasz.mon@nordicsemi.no>
-> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+> Fixes: 74adad500346 ("usb: chipidea: ci_hdrc_imx: decrement device's refcount in .remove() and in the error path of .probe()")
+> Cc: <stable@kernel.org>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 > ---
-> Changes in v2:
->  - Added Cc: stable@vger.kernel.org
-> ---
->  drivers/usb/dwc2/gadget.c | 37 +++++++++++++++++++++++++------------
->  1 file changed, 25 insertions(+), 12 deletions(-)
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Does not apply to 6.15-rc4 at all, can you rebase and resubmit this?
+Does not apply to 6.15-rc4 at all, can you rebase and resubmit?
 
 thanks,
 
