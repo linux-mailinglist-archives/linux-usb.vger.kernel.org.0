@@ -1,119 +1,118 @@
-Return-Path: <linux-usb+bounces-23625-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23626-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD0DAA6B38
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:03:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92D85AA6B59
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17BE81899301
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F8429A3B27
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3553E2673A9;
-	Fri,  2 May 2025 07:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E5E2676CE;
+	Fri,  2 May 2025 07:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="o1P8mEo9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnK0Emoo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DBCEC4;
-	Fri,  2 May 2025 07:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E90D267387;
+	Fri,  2 May 2025 07:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746169380; cv=none; b=CGzLgRjP7kldFaYv8Ften4pILywIWsqz1oooRYkhpbKL8Y1fie/5tda96jWgs8WN/ZfefgTzJpUcXUfcF80gvkVtWeXKOx3QwX1Bct7PopsQSRS5fd8khba8vvJAz+w97/fPrqnjOb1YcGG9+J6p6uJy7fSrxG4dhJ5it+V2/8Q=
+	t=1746169788; cv=none; b=tibj9nWG1q8rltFgCYQxqekBqFfyfNlXlHh8QQoj6Ne+UPKrrvbaJ1drK5NQMacMPMnHSW+0FxGYx4sb7R/vwsBmPMpPT3JlaGORymqf5ppByVqQctuyMb9q+KNcTpIcks7gGIeFz/cHX6UlgbAX782XtNt9ddM0aODQJlQ4ML8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746169380; c=relaxed/simple;
-	bh=imq2Al4rJh9ulHm/zPY/w2S9+0BvBdWhHs5zM/0Klik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L94cWsIobjjD2+YnY4+ka2o5CaZHQUi1yiJqX07V2fGATOObKYM7+/0DiXJFsH9XwRuJWUnShJjyDt3ysxski0W6qWQMeyasiqBjjxu6+9spYhI7DGXG2JI4SZjOZe9XSwKffHnqPBmwvu2KbYy02S6QvK1y2L8f8Su7Wx1aRvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=o1P8mEo9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB224C4CEE4;
-	Fri,  2 May 2025 07:02:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746169380;
-	bh=imq2Al4rJh9ulHm/zPY/w2S9+0BvBdWhHs5zM/0Klik=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o1P8mEo9sseKF/ocFZoKXCtI6pbHoRRiap+qnfhjBiMUUGzzXBnWs4P/3mtTfymQv
-	 IA1AsW7D/AYNvxBQ3IMOjxyytuARUzALB391EDKilw7U9cwJUrbV+oJZOfUO7bUpC3
-	 yZXtYoc3p7tw3RZfA+nXH3jbrZqHjLR+JRhrXRu4=
-Date: Fri, 2 May 2025 09:02:57 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 4/7] usb-storage: reject probe of device one non-DMA HCDs
- when using highmem
-Message-ID: <2025050258-afraid-outweigh-e36c@gregkh>
-References: <20250502064930.2981820-1-hch@lst.de>
- <20250502064930.2981820-5-hch@lst.de>
+	s=arc-20240116; t=1746169788; c=relaxed/simple;
+	bh=Zv9UkLIihex6h6uTzkv6W5mgHkrreKRyi05a5WoLInI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RxLLO+s+bGG0h1mz43r4Lid1KGSADVLm1l5IHwmxvM1PB2G/ybS9ItMSWvkSjxgeN4AwsA2v5ZXxmbqjD8nbb/ALce/K+P/L0X7ZSaF6G7l/9tnYpdWUMMvKnI2RYh6TqtQgEYU8RYch8ho4wKfZ+nJqIQNdBGMpftorknMK3KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EnK0Emoo; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5edc07c777eso2464608a12.3;
+        Fri, 02 May 2025 00:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746169785; x=1746774585; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ep7HI99e/tGud544tNPRZD7MzU2VMMJjX/Q3bJALYng=;
+        b=EnK0EmooRPWQ3NaR0eN9HvXpp3mBourerkAvjwMF7vTdLoDqRAKOZBHVQ0l2Pn+YZw
+         t40EvwBYQBTfZ9fXDnye7bQFy0IVHt4IEesryX9aZf+0Ksl7vdsaV16mwoH2OMQjVjQn
+         SVOOLBOI+/C++PvoklDYnh53/87sVTVl7nZx18l1u98u8CsQ/oflw6oXeBS6xRHS5Og+
+         bDwrUjr6xAxoLac8svRX7braBWoX8LQ8duocy2fkPsluynSEXvA/H7sQd+C3/8bR0ltx
+         55B7xTpCgbCoEFNrSbPy5Olq3Ha+xuyfBtTHWoc4nALc2gpNufUfXK9n/q6sLb6naKAX
+         ll6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746169785; x=1746774585;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ep7HI99e/tGud544tNPRZD7MzU2VMMJjX/Q3bJALYng=;
+        b=K/18VDmma8OuLDDO2c9PYSWBrvU/9iEsvA3cIjCyuDssl0Xix7qWAlviW244PjpPef
+         I/ubTaNCJfdRUUWZAYwOa0QIcMtGkpazvcHGh1YaRoaHYYIh/O5CWdxuXs7+pBeV/m7p
+         AFosbhBVwjW7rPSxhBAbCwOptUX1q16PfxrAmXodE8ckVhaAsTDk0jrBdrsV7vWdpJb7
+         fjEa/o4tTgaTT38U9Cy6iXTPLRDHzoMzlIRnJ3PGf4OWsFwC61Z1RJA/xEF9eeV5He/S
+         R1/3l+OARDRlqNdldypsX1Yj/WCCHb0KQ8VFheN9j9XdYVp55IkJ3RDQ7olw1DbjhXoq
+         X2hg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+JjvvfI1uVBsUxmcv+WN9KRAmwJOBsSVq7SCV9xFXt3qh9SlN0HZjVmC5rAHFQLV5SR1vTZcj@vger.kernel.org, AJvYcCW39I78UTL2NSmDroIhgCR4R9FyufNJ0dDcW1KiMC8gi4g53NautMaCaWF4EF3NCo/5oqWXT5znGCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl7gzgxfqQO8PaD3E44d+wdmXxJlQS9S+cNj2BOESUsKAoRDG5
+	iZk1Ug3KLgP7vH/9ITEHG8YE/wkTLKnDt/s8pg+GN+gkJxrVB+0Y
+X-Gm-Gg: ASbGncsO809IdmfOg03VrFvamZxpSWUqQsVZF4+ufTPTRW4HDPKITm2Y0ZNuTLTKlbk
+	nDjkKFaXwwOZUcQT8PDdTYtxa3Al2mx2cjkxfKcQRMwrG0DlNR14qhl+BqgH35neLXDwxB/f3vB
+	8Kah6vtdwJ+wxe8gyiJ0s8Ujiw76+NJP/5SS5cpYe6bU6JtosfAP/bPyTUVEoXEIjcH23ZSnY7h
+	G/ddh5K2f+m+NugI581Or+dmwEIiMJH3+l+8mKoV2HlfVd/KdEXe/qj2VCHluBt125RdUqhBEHk
+	Q15j96tMttBlLrvmboiO9FG3+X+SBrtkMyIYL4GD0ZDdVqvBf8M=
+X-Google-Smtp-Source: AGHT+IEUOx/kHS3urIXTNQqKt63To14kA7EtxIUZfpJbg7fKJN0Zh8twc07BDyOu8Gnp9W4o9waVUA==
+X-Received: by 2002:a05:6402:50c8:b0:5f8:b48a:a2d with SMTP id 4fb4d7f45d1cf-5fa78018af5mr1413360a12.10.1746169785042;
+        Fri, 02 May 2025 00:09:45 -0700 (PDT)
+Received: from localhost.localdomain ([178.25.124.12])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa77bf3ec0sm753513a12.79.2025.05.02.00.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 00:09:44 -0700 (PDT)
+From: Dave Penkler <dpenkler@gmail.com>
+To: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: guido.kiener@rohde-schwarz.com,
+	stable@vger.kernel.org,
+	Dave Penkler <dpenkler@gmail.com>
+Subject: [PATCH 0/3 V3] usb: usbtmc: Fix erroneous ioctl returns
+Date: Fri,  2 May 2025 09:09:38 +0200
+Message-ID: <20250502070941.31819-1-dpenkler@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250502064930.2981820-5-hch@lst.de>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 02, 2025 at 07:49:21AM +0100, Christoph Hellwig wrote:
-> usb-storage is the last user of the block layer bounce buffering now,
-> and only uses it for HCDs that do not support DMA on highmem configs.
-> 
-> Remove this support and fail the probe so that the block layer bounce
-> buffering can go away.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/usb/storage/usb.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> index d36f3b6992bb..49bbfe4610d5 100644
-> --- a/drivers/usb/storage/usb.c
-> +++ b/drivers/usb/storage/usb.c
-> @@ -1057,12 +1057,15 @@ int usb_stor_probe1(struct us_data **pus,
->  
->  	/*
->  	 * Some USB host controllers can't do DMA; they have to use PIO.
-> -	 * For such controllers we need to make sure the block layer sets
-> -	 * up bounce buffers in addressable memory.
-> +	 * We can't support these controllers on highmem systems as the
-> +	 * usb-storage code lacks the code to kmap or bounce buffer.
->  	 */
-> -	if (!hcd_uses_dma(bus_to_hcd(us->pusb_dev->bus)) ||
-> -	    bus_to_hcd(us->pusb_dev->bus)->localmem_pool)
-> -		host->no_highmem = true;
-> +	if (IS_ENABLED(CONFIG_HIGHMEM) &&
-> +	    (!hcd_uses_dma(bus_to_hcd(us->pusb_dev->bus)) ||
-> +	     bus_to_hcd(us->pusb_dev->bus)->localmem_pool)) {
-> +		dev_warn(&intf->dev, "USB Mass Storage device not support on this HCD\n");
-> +		goto release;
-> +	}
->  
->  	/* Get the unusual_devs entries and the descriptors */
->  	result = get_device_info(us, id, unusual_dev);
-> @@ -1081,6 +1084,7 @@ int usb_stor_probe1(struct us_data **pus,
->  
->  BadDevice:
->  	usb_stor_dbg(us, "storage_probe() failed\n");
-> +release:
->  	release_everything(us);
->  	return result;
->  }
+Recent tests with timeouts > INT_MAX produced random error returns
+with usbtmc_get_stb. This was caused by assigning the return value
+of wait_event_interruptible_timeout to an int which overflowed to
+negative values. Also return value on success was the remaining
+number of jiffies instead of 0.
 
-Hopefully this pushes people to use UAS devices instead :)
+These patches fix all the cases where the return of
+wait_event_interruptible_timeout was assigned to an int and
+the case of the remaining jiffies return in usbtmc_get_stb.
 
-Should be interesting to see the fall-out to see if there are actual
-systems out there like this still.
+Patch 1: Fixes usbtmc_get_stb 
+Patch 2: Fixes usbtmc488_ioctl_wait_srq
+Patch 3: Fixes usbtmc_generic_read
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Dave Penkler (3):
+  usb: usbtmc: Fix erroneous get_stb ioctl error returns
+  usb: usbtmc: Fix erroneous wait_srq ioctl return
+  usb: usbtmc: Fix erroneous generic_read ioctl return
+
+ drivers/usb/class/usbtmc.c | 53 ++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 22 deletions(-)
+
+--
+Changes V1 => V2 Add cc to stable line
+        V2 => V3 Add susbsystem to cover letter
+2.49.0
+
 
