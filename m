@@ -1,106 +1,201 @@
-Return-Path: <linux-usb+bounces-23648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4D7AA735B
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 15:22:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 099C6AA7433
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 15:53:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 961F51BA39B4
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 13:22:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E5811B6865F
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 13:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED65F255F44;
-	Fri,  2 May 2025 13:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC157255F2F;
+	Fri,  2 May 2025 13:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="fPoJ56vG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="di2Ep4gJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD7D255224
-	for <linux-usb@vger.kernel.org>; Fri,  2 May 2025 13:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACB22550AE;
+	Fri,  2 May 2025 13:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746192070; cv=none; b=qiGXskirE+6VH0vw9dsNmVTZmBK/hSGr4DzqLXPkynvcdCJgUcsapdlluVTKzAEsuF8MKIxOKv3wZuAEnyVU7fbsGM+BRISKSWa7sbamq6As+7dHo6i6lJprs92bE2x67fGdcMzfr9WLI2zFE5ZXVITspH3SqcX+x7HOhEkPZjo=
+	t=1746194002; cv=none; b=TRrlZ77OWzinGuwwhfjzGKqjjFOb23HNl8QYz+NZE+A0x77BI6XJIfHPBuQIIYAjgSUflsQ/X+pH1W/K96Ep5FOBQE69FrEQz39iuymLwRQMmjHXTOVxnEnXplnyqkCYRhbtu50s1YhyVjfBK18f4ijcxytRJM4KpdyGf7J1Fa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746192070; c=relaxed/simple;
-	bh=PR8rIhUfojOnm5GYJvzQzEEo4eH5EGtmUfEk+APf7Bc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sP431JnVqLNOqo3CIPNXgpl3lOZtlfQ/rO0/IeDrfHHE9sWOoNGa9gW0a7NHKNxjIT5Xaq/Pyhy3nYnc1LJQHeuoldElV2EWRKLPGdQHvbJ9ZFtqRkKy1YSf4ET2IGdliDflFvQyMF5d6azweUuTUmf5ZSODYiOJt/JmxajwsF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=fPoJ56vG; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7c54f67db99so376076985a.1
-        for <linux-usb@vger.kernel.org>; Fri, 02 May 2025 06:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1746192068; x=1746796868; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PR8rIhUfojOnm5GYJvzQzEEo4eH5EGtmUfEk+APf7Bc=;
-        b=fPoJ56vGCB5tm6aA/wVoN195ur7xAfFtAVAJcHhVAvHutmC5nWzGdo51yvoOR4gaBS
-         Omgl1s1xedvyIHByq+kAho/xukzgoFXT0XGpd5UiE2FF53xcUfs+K1Le7zQbLl4ON2vt
-         jh+KeIVrls8zpksQkzXjQyJ2RxSa9KBTP1W47MOl7B/jTi7g9WEquBpOR+ZcZMbLZAud
-         8liFioAwwG+8m1cRBvjc8ZTS2aZyvtebhrUvNl6+m3xpIfJ1wr+OhWY+Lt4DLVNSfGzN
-         XGgXtEfW+tDT9SHfalP03sflo3zHskYes1s4znOyg3Cr4b3PvIIK2aRV8NPBmuxbrMwE
-         utGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746192068; x=1746796868;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PR8rIhUfojOnm5GYJvzQzEEo4eH5EGtmUfEk+APf7Bc=;
-        b=gjHPldh2IKWYWZSAPM3Oof/svZ/VgOILAMoFhtosqn8c9Uh2pWHHZnbmBDSRkATF1P
-         zt3b6y/qcnv4o22rRUHdXTFZJk+EZgN/oC1UrLD+j3AEn9VhfpHq0bdD4w9H7plLhAXR
-         YB8YEX9PjCLobqtXjHZg0AZIlA31LNOkHN611lka40vaFoqomb+nZv/cr148dT8WRN0t
-         L/oJiaZbxslONasK3csVXV5LRsZ7xDOzzmLZtKo411FKjATwXfis4+jDg04zUitvj8Wj
-         7Ts04sRySwK8XmsHh7QCvIh7sYZbvCEsb83rJ3xbk96bbWgSRLLO4kcSFF/+EYOuT7Sc
-         MSjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrR4EP+8gyyCzt1pvOoKtfNsw4Kuo1XrVjAfL0qNOqVXDzE20hkylg/8Hgf1CI5GkiZs7hRAwOvRs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDIgBtfF/Wd8TZAQtBKV1gyBEFTHwBHDBPLJm8qUUKEmltT0u1
-	E8RBkZDVlYcTEWLXeDTOWHbEwHeJ0lhiPjvzLbYiS1/ZyZT+IXhaXFfe5CoA5g==
-X-Gm-Gg: ASbGncvmSAOvndaZbao2NFR/R+imBv1v9NnbwoAFI6sBepqC9VCsaFQZS9BlOTUjEM4
-	VcvDyLCnTUzNuGWEXsjssKA5PNs2NNosAEDaxTqUcK1NcOvWvwRLyewfE61UpVFHVFibnDbaFhS
-	dyUs5BXqWAqr7wyvy3BlZm4EAu0TlbbUeN7vTmhp+9vT5+YarOBj4u8h2v6RWeNYRxo54gYwhvY
-	OEgrqmLEfx+bMnUQ0ElLCncm1kwR6GnvGAtAcvsDC6BYAD9xPg2vqUmJPpR6/bX+RyPsYyBPX87
-	p9jPrAFTx+/rMP8vtni54oqZJp8o85IbrQlOJKJ1fg==
-X-Google-Smtp-Source: AGHT+IHq26iKCiiX85zd4Rzb32AF63WsqwQ34SjNsJEMCsr8I+GA+YtyhS+XJmd6yQmIzjkSHMyyXg==
-X-Received: by 2002:a05:620a:c4f:b0:7ac:b95b:7107 with SMTP id af79cd13be357-7cace9a0b29mr888832585a.12.1746192067938;
-        Fri, 02 May 2025 06:21:07 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::283f])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad24413edsm181273785a.99.2025.05.02.06.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 06:21:07 -0700 (PDT)
-Date: Fri, 2 May 2025 09:21:05 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 4/7] usb-storage: reject probe of device one non-DMA HCDs
- when using highmem
-Message-ID: <b4fb1b90-1996-41ff-a05a-06f952b36ce0@rowland.harvard.edu>
-References: <20250502064930.2981820-1-hch@lst.de>
- <20250502064930.2981820-5-hch@lst.de>
- <2025050258-afraid-outweigh-e36c@gregkh>
+	s=arc-20240116; t=1746194002; c=relaxed/simple;
+	bh=vgZsW2stoOUxr+dsHo/BJA6aScmF3s1/I0yOgycAAwM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NOMBInr9S+X4+oVekCzmw069GGN1oC16WabGM11W2RqDyf5+7BpbI3ZSRO4HwlEgyAxzSHb4pz0mMUUYwBp7k8ldVnpMq+78FAcdU6YRDI2jSlZQqYfupyjNgZAzrAU32cEamcMktWO040hiCEHF0vLYAjH3Dose0bu14Hobopg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=di2Ep4gJ; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CEB6F43A18;
+	Fri,  2 May 2025 13:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1746193991;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q84CAbuYdxgmNlh++XSqTYDf79I7cNHmEsWeZV2JICU=;
+	b=di2Ep4gJtA1J+WPizEWdOd5SdjMuuT3ZWjJRhGI+dSG23LNy9nr/VF8Qfvk0isYYby+rrN
+	KY0PSuzDGfkibmwTgWhgnOcubtzYpFCTXynpuXfqLrlKfcrcgYUraJ0z+MozMb9pZdDmEZ
+	IW+tGrLxFxEye0lifxS+IbYxr/w8hXuORNjqU6ov3ameC6nbNSuW552FuMtBx/ykjc4yDH
+	IrvluGwuFZh3sYaDqveWi+W4XV3pfV/PbZh9bVH8foZpk3tppFcrck7wrAe2Qjn/ejinFZ
+	jymDo+grlOrjlfyOSzLUv1fSoWpQHJa2umQL4d34XCJgTxfdQkwN6Ucn69DpVQ==
+Date: Fri, 2 May 2025 15:53:08 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Kever Yang
+ <kever.yang@rock-chips.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, =?UTF-8?B?SGVydsOp?= Codina
+ <herve.codina@bootlin.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Stefan Wahren <wahrenst@gmx.net>, Fabrice
+ Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: DWC2 gadget: unexpected device reenumeration on Rockchip RK3308
+Message-ID: <20250502155308.11a991d4@booty>
+In-Reply-To: <8c2e18a9-44d1-47b3-8fe4-46bdc5be8d76@rowland.harvard.edu>
+References: <20250414185458.7767aabc@booty>
+ <a96409af-4f82-4b65-b822-dd8c71508212@rowland.harvard.edu>
+ <cf84f5ca-8c7a-b6c6-492c-c9cf6f73130d@synopsys.com>
+ <20250415162825.083f351c@booty>
+ <8c2e18a9-44d1-47b3-8fe4-46bdc5be8d76@rowland.harvard.edu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025050258-afraid-outweigh-e36c@gregkh>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjedviedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopefoihhnrghsrdfjrghruhhthihunhihrghnsehshihnohhpshihshdrtghomhdprhgtphhtthhopehlihhnuhigq
+ dhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvvhgvrhdrhigrnhhgsehrohgtkhdqtghhihhpshdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Fri, May 02, 2025 at 09:02:57AM +0200, Greg KH wrote:
-> Hopefully this pushes people to use UAS devices instead :)
+Hello Alan,
 
-If usb-storage won't work on a system then UAS won't work either.
+thanks for your continued support!
 
-Alan Stern
+On Tue, 15 Apr 2025 12:14:58 -0400
+Alan Stern <stern@rowland.harvard.edu> wrote:
+
+[...]
+
+> > > > It's quite possible that you're getting messed up by link power
+> > > > management (LPM).  But that's just a guess.  
+> > 
+> > What would be a symptom, if that happened?  
+> 
+> The debugging log wouldn't show much unless something went wrong.  You 
+> could see if there are any files containing "lpm" in their names in the 
+> /sys/bus/usb/devices/3-3.4/ directory (while the device is connected) 
+> and what they contain.  Also, there's a way to disable LPM on the host 
+> by setting a usbcore quirks module parameter:
+> 
+> 	echo 1209:0001:k >/sys/module/usbcore/parameters/quirks
+
+Tried this. There is no file with 'lpm' in the name in
+/sys/bus/usb/devices/3-3.4/, and adding the quirk did not change the
+result: still a disconnect and reconnect in ~6 seconds.
+
+> You could also try connecting a usbmon trace for bus 3, showing what 
+> happens during the initial connection and ensuing disconnection.  Any 
+> LPM transitions would show up in the trace.
+
+Tried this, and here are the few lines before and after the 5~6 seconds
+delay.
+
+ffff99621e768840 4009009102 C Bi:1:009:3 0 2 = 696e
+ffff99621e768840 4009009104 S Bi:1:009:3 -115 256 <
+ffff99621e768300 4009009115 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4009009144 C Bi:1:009:3 0 6 = 3a383534 2033
+ffff99621e768300 4009009155 C Bi:1:009:3 0 1 = 37
+ffff99621e768840 4009009178 C Bi:1:009:3 0 2 = 0d0a
+ffff99621e768840 4009009180 S Bi:1:009:3 -115 256 <
+ffff996080f11900 4009009361 C Ci:1:014:0 0 26 = 1a034300 44004300 20004100 43004d00 20004400 61007400 6100
+ffff99621e768300 4009009615 C Bi:1:009:3 0 3 = 5b2020
+ffff99621e768300 4009009624 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4009009645 C Bi:1:009:3 0 3 = 203233
+ffff99621e768840 4009009646 S Bi:1:009:3 -115 256 <
+ffff99621e768300 4009009692 C Bi:1:009:3 0 4 = 2e383738
+ffff99621e768300 4009009694 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4009009703 C Bi:1:009:3 0 2 = 3731
+ffff99621e768840 4009009722 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4009009933 C Bi:1:009:3 0 2 = 7472
+
+<<< 6 seconds delay >>>
+
+ffff9960828e9540 4014796128 C Ii:1:001:1 0:2048 2 = 1000
+ffff9960828e9540 4014796145 S Ii:1:001:1 -115:2048 4 <
+ffff996080f11900 4014796162 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11900 4014796189 C Ci:1:001:0 0 4 = 00010100
+ffff996080f11900 4014796201 S Co:1:001:0 s 23 01 0010 0004 0000 0
+ffff996080f11900 4014796219 C Co:1:001:0 0 0
+ffff996080f11000 4014799627 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11000 4014799679 C Ci:1:001:0 0 4 = 00010000
+ffff996080f11000 4014826132 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11000 4014826166 C Ci:1:001:0 0 4 = 00010000
+ffff996080f11000 4014852075 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11000 4014852122 C Ci:1:001:0 0 4 = 00010000
+ffff996080f11000 4014878210 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11000 4014878253 C Ci:1:001:0 0 4 = 00010000
+ffff996080f11000 4014904049 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff996080f11000 4014904088 C Ci:1:001:0 0 4 = 00010000
+ffff9960828e9540 4014948427 C Ii:1:001:1 0:2048 2 = 1000
+ffff9960828e9540 4014948456 S Ii:1:001:1 -115:2048 4 <
+ffff99621e768300 4014948461 C Bi:1:009:3 0 2 = 5b20
+ffff99621e768300 4014948472 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4014948488 C Bi:1:009:3 0 2 = 2020
+ffff99621e768840 4014948489 S Bi:1:009:3 -115 256 <
+ffff996080f11000 4014948522 S Ci:1:001:0 s a3 00 0000 0004 0004 4 <
+ffff99621e768300 4014948545 C Bi:1:009:3 0 58 = 32392e38 31373337 325d203e 3e3e2064 7763325f 68616e64 6c655f63 6f6d6d6f
+ffff99621e768300 4014948560 S Bi:1:009:3 -115 256 <
+ffff996080f11000 4014948607 C Ci:1:001:0 0 4 = 01010100
+ffff99621e768840 4014948639 C Bi:1:009:3 0 10 = 37395d20 3e3e3e20 6477
+ffff99621e768840 4014948644 S Bi:1:009:3 -115 256 <
+ffff99621e768300 4014948657 C Bi:1:009:3 0 3 = 63325f
+ffff99621e768300 4014948663 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4014948689 C Bi:1:009:3 0 5 = 68736f74 67
+ffff99621e768840 4014948693 S Bi:1:009:3 -115 256 <
+ffff99621e768300 4014948718 C Bi:1:009:3 0 2 = 5f69
+ffff99621e768300 4014948720 S Bi:1:009:3 -115 256 <
+ffff99621e768840 4014948759 C Bi:1:009:3 0 4 = 72713a33
+
+Does this give you any hints?
+
+I'm afraid it's going to take time before I'm able to decipher these
+hieroglyphs. :-|
+
+Full log is available, if needed.
+
+However I suspect using Wireshark to capture the USB traffic should
+produce the same content. If it is the case, I have available a
+Wireshark capture as well. The first logged event I see in Wireshark
+after the delay is a "URB_INTERRUPT in", which is possibly matching the
+"Ii" in the log above.
+
+However IIUC both the usbmon debugfs interface and Wireshark are unable
+to capture disconnection events because that's handled by the hardware.
+Correct?
+
+I hope useful hints can be found here. Otherwise I guess the only way
+out will be comparing the behaviour of the 4.4 Rockchip kernel (which
+works correctly) against mainline. I expect this to be a long and
+painful process, though.
+
+Best regards,
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
