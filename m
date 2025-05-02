@@ -1,253 +1,159 @@
-Return-Path: <linux-usb+bounces-23637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE049AA6C47
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 10:08:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 972E3AA6C98
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 10:36:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0643AA728
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 08:08:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0472D4A3260
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 08:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5B926980D;
-	Fri,  2 May 2025 08:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF9822A819;
+	Fri,  2 May 2025 08:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tU1Qbrfh"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="OKfC+EFs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA5A2686A2;
-	Fri,  2 May 2025 08:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFDA8828
+	for <linux-usb@vger.kernel.org>; Fri,  2 May 2025 08:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746173282; cv=none; b=PAhYGDf3gt62Psl1gJpALA5BjhFBvy+54SzVwZfTmPNJWB6lwXQEBMP4os0cBdJdvPYknx8tegMNp44jRUlH4NUdkIt2raNT+oODE5Thr2vT64uCetD9ThZSO8D6rnVirumL8BLP1CezKZNtWPqldw2Q/r6Bh/7Q3tyarNDnUZ4=
+	t=1746174976; cv=none; b=d+IX2hq1XMdZ7xwwjKeuH8xDV/euxJnoWtkmagXXStGTdD3m9JrLqZ7ZaRLy2glnihhH8HxsYkkzStfFHK+uX7la4AMHseX2SkZ1la0OxJEC6P1tR7Hyo8Ebtupvj55k9tE2Qmv4kvbklVwYQRkRBKeUlhzRqPswXAgx+42zDeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746173282; c=relaxed/simple;
-	bh=HklTXZPltUxBCBjY4Xi5FkFvWcIxA/hBpduMGYDplmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YefjTX+bWCU/nFiZAdBHLgFnUTmmLDMrDtj3po9czQznHs/zwxZGBfU1joTWy1H9XzSVifbgfCa/oFgcABEHpJhfA84ZXSMtsjGF++dJw7aVmWv793vcJm8gd5y0b7AALap9OoYMZK9BqzMYepsDXR5qYwa4UGvsxXEdKdJVHT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tU1Qbrfh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044A9C4CEE4;
-	Fri,  2 May 2025 08:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746173281;
-	bh=HklTXZPltUxBCBjY4Xi5FkFvWcIxA/hBpduMGYDplmE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tU1QbrfhcB1uCjK5n/IhiecqACo7NAkJRcgIcWqKnuOUpm7NYqmlGfjbQcpMYJx+E
-	 hhMOEfb9blUQr6lt9INZ66BOljxrmvKeL8fIjUhnjcpgFSmOV7AB/q39G+okJSuS6a
-	 y/wndusPcCgmR/v4ASRAsefDCNvjGLsz4OeQTOp/Tw+PaQZwwHDBQyct/54FqLX7rd
-	 9buq/G9hLnApvLK9Ct4l9Pvl4ucBPwnFYElshWaSM28EE/V/sasa3gbhGUxJXEJfzS
-	 CZofeCroOMkRnV6ajSJ3N/sOs9Sv1QnT/sbRdM43kMzfrzKZU+ri3DGQNzOYrZzlEb
-	 sUEZEDhoJ9/tg==
-Date: Fri, 2 May 2025 09:07:54 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250502080754.GD3865826@google.com>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-2-tmyu0@nuvoton.com>
- <20250501122214.GK1567507@google.com>
- <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
+	s=arc-20240116; t=1746174976; c=relaxed/simple;
+	bh=5A9Az7mveTcN/pRWecXhcMMNcg2YzTc3csqabayBRlk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P7E0RWnhYbCfxH/JLwDsgKuFCmQp5n3gq8wY5w7K/tEO1wD4UnAxaRfLRM2QfzLi9RFvqwqlBEwl25OF11Q5VWyE3WsmuxLUzBvt4Y1yGQheUKdnuMw9HZkZJfl+x60gH+gcsOw+hP9jBueD10+nPt+rrUN+gT0NDpY26UlCrZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=OKfC+EFs; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1746174952; x=1746779752; i=wahrenst@gmx.net;
+	bh=tmVg51H/Yx90+RAu75wKXY77CC6WojNhJpztbe5mbg0=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=OKfC+EFsfLBzXikqvevrFI/5BZT2NcoCX8NsXcQQo1IL/ZLSejulEwnbNDFr6ouo
+	 LOABjU1I0QROAPM9Zxc3CExob1PxZADZ6QRbhngGbb7xCk3k7U5Ms+Hk0CMxybnKa
+	 tnDKl2Mr6lvn28xoBQgBN3kunSAlazrJV1gPWnK9RlzWPVqgpiXKxVcZDrSyJI+7c
+	 A0cdJ1Bs+ubbu0vr94N3XP5b9BEMrF0zGGzOy4ymdxy70ASCHvQjrC0zbs0gmSdNG
+	 z+bGkuLKpGjvklx6jEM6yN752N9iUZhktkimv5Fz0CniUaSYE/b4N87OFmLr0VC15
+	 aUVp8mYIKgxHvcHwrQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.101] ([91.41.209.218]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MeCtZ-1ujYat1jip-00cVId; Fri, 02
+ May 2025 10:35:52 +0200
+Message-ID: <dafb48d3-2649-4a86-a889-f2d2750a5e70@gmx.net>
+Date: Fri, 2 May 2025 10:35:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: Fix NPD of usbmisc_data
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+ Fabio Estevam <festevam@gmail.com>, Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
+ linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+ imx@lists.linux.dev, stable@kernel.org
+References: <20250422185601.80199-1-wahrenst@gmx.net>
+ <2025050100-getting-curler-88aa@gregkh>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+Autocrypt: addr=wahrenst@gmx.net; keydata=
+ xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
+ IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
+ NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
+ JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
+ TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
+ f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
+ V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
+ aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
+In-Reply-To: <2025050100-getting-curler-88aa@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LsyS8aSCwkrSLe7pRcJgNJp8ebWNRWG3oos8dN7lkBf3GcOAqfX
+ NZSfFaY7exw4BwB8v5EgzuschXTWS/2QRMV05YkJbTJfgL//vxgsimPxm418uPAEtcbR6IE
+ 3lmDvD674e8vq3JUVE851jwoBSiSSrOC1S32gwZjzRNOLAFzy+l7/KJbBOPIaggmWPTNuoQ
+ Gm5qfDBeB4rzIduIjzDUw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:O+wwewcszP4=;W0nund+Bs/xQsV8U4wS4AoJ3lOV
+ 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
+ XOHntyHZ1gpiDtFHx9ZzIekZK5Fdayw=
 
-On Fri, 02 May 2025, Ming Yu wrote:
+Am 01.05.25 um 17:38 schrieb Greg Kroah-Hartman:
+> On Tue, Apr 22, 2025 at 08:56:01PM +0200, Stefan Wahren wrote:
+>> The commit 74adad500346 ("usb: chipidea: ci_hdrc_imx: decrement device'=
+s
+>> refcount in .remove() and in the error path of .probe()") introduced
+>> a NULL pointer dereference on platforms which have no usbmisc_data
+>> (e.g. i.MX28). So add the missing checks in .probe() and .remove().
+>>
+>> Fixes: 74adad500346 ("usb: chipidea: ci_hdrc_imx: decrement device's re=
+fcount in .remove() and in the error path of .probe()")
+>> Cc: <stable@kernel.org>
+>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> ---
+>>   drivers/usb/chipidea/ci_hdrc_imx.c | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+> Does not apply to 6.15-rc4 at all, can you rebase and resubmit?
+Sorry, i didn't noticed that Fedor Pchelkin already send "usb: chipidea:=
+=20
+ci_hdrc_imx: fix usbmisc handling" in March to fix this.
 
-> Dear Lee,
-> 
-> Thank you for your review. I have a few questions and would appreciate
-> your advice.
-> 
-> Lee Jones <lee@kernel.org> 於 2025年5月1日 週四 下午8:22寫道：
-> >
-> > On Wed, 23 Apr 2025, a0282524688@gmail.com wrote:
-> >
-> > > From: Ming Yu <tmyu0@nuvoton.com>
-> > >
-> > > The Nuvoton NCT6694 provides an USB interface to the host to
-> > > access its features.
-> > >
-> > > Sub-devices can use the USB functions nct6694_read_msg() and
-> > > nct6694_write_msg() to issue a command. They can also request
-> > > interrupt that will be called when the USB device receives its
-> > > interrupt pipe.
-> > >
-> > > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> > > ---
-> >
-> > v10 and no change log?  Please add a change log.
-> >
-> 
-> The change log is currently available at
-> https://patchwork.ozlabs.org/project/rtc-linux/cover/20250423094058.1656204-1-tmyu0@nuvoton.com/
-> I will move the relevant entries into each individual patch in the
-> next revision.
-> 
-> > >  MAINTAINERS                 |   6 +
-> > >  drivers/mfd/Kconfig         |  15 ++
-> > >  drivers/mfd/Makefile        |   2 +
-> > >  drivers/mfd/nct6694.c       | 387 ++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/nct6694.h | 101 ++++++++++
-> > >  5 files changed, 511 insertions(+)
-> > >  create mode 100644 drivers/mfd/nct6694.c
-> > >  create mode 100644 include/linux/mfd/nct6694.h
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index fa1e04e87d1d..b2dfcc063f88 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -17358,6 +17358,12 @@ F:   drivers/nubus/
-> > >  F:   include/linux/nubus.h
-> > >  F:   include/uapi/linux/nubus.h
-> > >
-> > > +NUVOTON NCT6694 MFD DRIVER
-> > > +M:   Ming Yu <tmyu0@nuvoton.com>
-> > > +S:   Supported
-> > > +F:   drivers/mfd/nct6694.c
-> > > +F:   include/linux/mfd/nct6694.h
-> > > +
-> > >  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
-> > >  M:   Antonino Daplas <adaplas@gmail.com>
-> > >  L:   linux-fbdev@vger.kernel.org
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 22b936310039..cd4d826a7fcb 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1058,6 +1058,21 @@ config MFD_MENF21BMC
-> > >         This driver can also be built as a module. If so the module
-> > >         will be called menf21bmc.
-> > >
-> > > +config MFD_NCT6694
-> > > +     tristate "Nuvoton NCT6694 support"
-> > > +     select MFD_CORE
-> > > +     depends on USB
-> > > +     help
-> > > +       This enables support for the Nuvoton USB device NCT6694, which shares
-> > > +       peripherals.
-> > > +       The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> > > +       6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> > > +       PWM, and RTC.
-> > > +       This driver provides core APIs to access the NCT6694 hardware
-> > > +       monitoring and control features.
-> > > +       Additional drivers must be enabled to utilize the specific
-> > > +       functionalities of the device.
-> > > +
-> > >  config MFD_OCELOT
-> > >       tristate "Microsemi Ocelot External Control Support"
-> > >       depends on SPI_MASTER
-> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > index 948cbdf42a18..471dc1f183b8 100644
-> > > --- a/drivers/mfd/Makefile
-> > > +++ b/drivers/mfd/Makefile
-> > > @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX) += mc13xxx-core.o
-> > >  obj-$(CONFIG_MFD_MC13XXX_SPI)        += mc13xxx-spi.o
-> > >  obj-$(CONFIG_MFD_MC13XXX_I2C)        += mc13xxx-i2c.o
-> > >
-> > > +obj-$(CONFIG_MFD_NCT6694)    += nct6694.o
-> > > +
-> > >  obj-$(CONFIG_MFD_CORE)               += mfd-core.o
-> > >
-> > >  ocelot-soc-objs                      := ocelot-core.o ocelot-spi.o
-> > > diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> > > new file mode 100644
-> > > index 000000000000..2480ca56f350
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/nct6694.c
-> > > @@ -0,0 +1,387 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) 2024 Nuvoton Technology Corp.
-> > > + *
-> > > + * Nuvoton NCT6694 core driver using USB interface to provide
-> > > + * access to the NCT6694 hardware monitoring and control features.
-> > > + *
-> > > + * The NCT6694 is an integrated controller that provides GPIO, I2C,
-> > > + * CAN, WDT, HWMON and RTC management.
-> > > + *
-> >
-> > Superfluous blank line.
-> >
-> 
-> Remove it in v11.
-> 
-> > > + */
-> > > +
-> > > +#include <linux/bits.h>
-> > > +#include <linux/interrupt.h>
-> > > +#include <linux/irq.h>
-> > > +#include <linux/irqdomain.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/mfd/nct6694.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/usb.h>
-> > > +
-> > > +static const struct mfd_cell nct6694_devs[] = {
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> >
-> > These are all identical.
-> >
-> > I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, you are
-> > already using PLATFORM_DEVID_AUTO since you are calling
-> > mfd_add_hotplug_devices().  So you don't need this IDs.
-> >
-> > MFD_CELL_NAME() should do.
-> >
-> 
-> Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
-> sub-devices use cell->id instead of platform_device->id, so it doesn't
-> affect the current behavior.
-> However, if you think there's a better approach or that this should be
-> changed for consistency or correctness, I'm happy to update it, please
-> let me know your recommendation.
-> 
-> When using MFD_CELL_NAME(), the platform_device->id for the GPIO
-> devices is assigned values from 1 to 16, and for the I2C devices from
-> 1 to 6, but I need the ID offset to start from 0 instead.
+Regards
+>
+> thanks,
+>
+> greg k-h
 
-Oh no, don't do that.  mfd_cell isn't supposed to be used outside of MFD.
-
-Just use the platform_device id-- if you really need to start from 0.
-
-As an aside, I'm surprised numbering starts from 1.
-
--- 
-Lee Jones [李琼斯]
 
