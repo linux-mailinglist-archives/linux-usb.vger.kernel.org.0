@@ -1,158 +1,171 @@
-Return-Path: <linux-usb+bounces-23629-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23630-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8748AA6B5F
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:10:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B176AA6B7E
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:24:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E4C77AB058
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:08:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30FFB980657
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5F92676D6;
-	Fri,  2 May 2025 07:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B8322A4DA;
+	Fri,  2 May 2025 07:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CF7296w8"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ryTAgF3s";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HFYEGdGH";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="A+KpCrTJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TCof81vc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C45267393;
-	Fri,  2 May 2025 07:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D720522425E
+	for <linux-usb@vger.kernel.org>; Fri,  2 May 2025 07:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746169796; cv=none; b=Q0khg4NyITJBmE85FC44y1Tg3Oqx1MAiFOl/z5Fw5L1Ys5G8gjQLJcfpUdUExkfA0sbqZZIXjK2WFQtP8CwAp2tGwf7ysbh4pfFFCQHfb3mk/4VGk9uXqrWbC6P1y83qGkltpA790ZCjExycgsPDyLnPvkcLT6ddqGHoswFEWgA=
+	t=1746170672; cv=none; b=TNRjx2FUuLYKUmOhKPFXV2JNwD4Ts6iulJsJlVhhoUGlOgn0Ep0FYc22/MdZe7hAXd+SHJ+bS1o7+sOYALs+uBbPjSVu8xIxnP9sC9247d4VzKpPlC+KfOlOCI5YsUDqzrb4QOCQqr6OlIkVDqkaBPGRuaxKqhz2mkVB2sdLKe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746169796; c=relaxed/simple;
-	bh=uzVjkm7xuS851VrFWNmL0auSaJTNbIuq8hK/utJoN/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T/+6D5qNg7BrHYrQoANEoc3Y6aAB6ZMbsWetXcnHI34FeIr1t0wReR6cUrB9WL2o41XpkuTIEXxy9BHSrGRIXvkmJoGts5xeQM2YM+TO0R0OiHvhDlaJNyoYZn9mApI/XL/blKlHRkPXiNLleb+w/Xsv2xVCyzAGlQvq5AivSPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CF7296w8; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5f62d3ed994so3078927a12.2;
-        Fri, 02 May 2025 00:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746169793; x=1746774593; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzt4aSgxAuWrJytcX/gjPBd3APIFdgE8OTpFBrBgGjo=;
-        b=CF7296w8z9Exr8tgCdAjV2ZdHMsIygPZspGP337fcS+YR0FZKfQy3QP+RWpedx0d/t
-         XFIW95Yj368L+hFvqTRpQGVPOwxqleV36BTvb71e4EujFma3/DUU+DGxvAfFyEJRh1EQ
-         H34un/1K4NIwRpv0qvdhS7PYQXfWoXeD+IYbAv9O/RtX/tQe7f0UlV5MLAreu/iOlWLH
-         5FDcDxTSTtbA5kEx+RDRrzRO1RffWOgqjTHCeKKNlkKDORbXyW46q60f3ltyUPk/7R2J
-         X9Zp6WmMVzRNkVEPbCgC15RrgA5X21lbXbpr3Nzbw1KnK6n7+Do+oShFoEMDAsDD4/py
-         eCKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746169793; x=1746774593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bzt4aSgxAuWrJytcX/gjPBd3APIFdgE8OTpFBrBgGjo=;
-        b=lr8Mct2GmmZf5ta2p9Z1ZjZR9mVLzEVjqqjFoMjR6inlbqJMy8S3rX5SXmzM0rUgkx
-         QQB2dp9DGoL7xJ0+1jGUfcx1cxzVxpoNFY7jJbYGSWSVXTVM2w81tCPlU5fZhSQEqMym
-         Hu7yZ9fvrxN5q9T6sHhwEplAjBENESCSdiUNhiWo2fXPZESEHDQ3OJZz+dlM/30eIVth
-         xwy3Kyp3/901tcgRPxT27S/CBa12On3sp9pqRaaoH6Ewp9T4syASo+1A6jKyITI9lQYt
-         9tF/VinEIiuwGEobzcCl58c5VatNDM4iwiUhASAd2jLQLkhcOA1954IvuT6DIqXDHwwV
-         r8QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUb+w95LpjNad85kPoBAtZqXRVYYCD7In46FHFvnpU1vjXgtRaXUIxWMSQwGFQG8nUi/sBgusPG@vger.kernel.org, AJvYcCWS8E7tt9ESbhlvETCP/4KohCk/OB/FP0i15wgCd5zT92b6EfpSgxaWNWYOqfHB4/OHylvhum0c2w8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+V9pjLxW9LXytJXK+tuhHxuM4GOqgJVcS7solpWsMT7jzIBcC
-	fj/Pds5tnZTHTppggmhieeSn7QbAopgc8+XYeLvqHyrECVAsJ+nKao+2N8LFA0M=
-X-Gm-Gg: ASbGncsCUFkp1Qy9SCLWYhIC2C9O8juwjw+7zA5bnvt+1dk2G/eB+chnN47l0gELtZw
-	lIbBkiLFJWOVGQcAwJQiPO88bABXhYu7ZQALc7irBS+yOFAVEmGduVwwVEv6Xyajlmq3+oDYHsM
-	JD2C/NzP8V6vVGJcl2Dfe1PtOPmSD22Ts5bD6xBXyP9Kv+OFIWJEVp3hFRp0jhC8kqTrmoAk+0k
-	jqB4Mlr7g6ErMLzlf64kzrxan1oPcvT6Of/X2X8ZSU/WtkRDgeEJlOR3bH5tFbHCpNYXoUJX2Cd
-	7HIGlGa+rjCWk4go+Eg7wthD0zWv0vekhDb4+yCPNvioZl8UVedUkiJ6BEPD3A==
-X-Google-Smtp-Source: AGHT+IFyXuzhV6UZrEksw3NwHNzRWAy3BH2tt0jPz8Wbd7C48KiPovJ6jkGs8b9hRPnBmEkrQybSMg==
-X-Received: by 2002:a05:6402:3554:b0:5f6:c5e3:faab with SMTP id 4fb4d7f45d1cf-5fa77fd765bmr1101612a12.1.1746169793206;
-        Fri, 02 May 2025 00:09:53 -0700 (PDT)
-Received: from localhost.localdomain ([178.25.124.12])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa77bf3ec0sm753513a12.79.2025.05.02.00.09.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 00:09:52 -0700 (PDT)
-From: Dave Penkler <dpenkler@gmail.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: guido.kiener@rohde-schwarz.com,
-	stable@vger.kernel.org,
-	Dave Penkler <dpenkler@gmail.com>
-Subject: [PATCH 3/3 V3] usb: usbtmc: Fix erroneous generic_read ioctl return
-Date: Fri,  2 May 2025 09:09:41 +0200
-Message-ID: <20250502070941.31819-4-dpenkler@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250502070941.31819-1-dpenkler@gmail.com>
-References: <20250502070941.31819-1-dpenkler@gmail.com>
+	s=arc-20240116; t=1746170672; c=relaxed/simple;
+	bh=4vp54kL6Yeyy+PGNKi7WYsUmqXlBmChy1Qa4Yb5AxxI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FMuNqDiI4mRU7oZDQ4BUAKzwi/M5hg0ZVXsDUz+PMVFH/ys41iMQDfjyguq9kMbkKSZZpa4yvEx/vzcdSobONDWyfVIlFlK5pY7QOiA/55XLvaXoXwri54MqslIESSd7P1Fx7mvV8tKhVdg762hlksHOKNT+i6Ixfi4fHbalviI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ryTAgF3s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HFYEGdGH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=A+KpCrTJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TCof81vc; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B54241F385;
+	Fri,  2 May 2025 07:24:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1746170669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Jpy3kA3EvG8tXSvkK0WCSKL/K4KU0ioXSifsdCwPYQ=;
+	b=ryTAgF3sJXGLcexWW+0FRLjGuz1Xydw/0zDtpNQkQJj/5XujRYv6x5g+Q+8PZdiKKs3/nV
+	CQpuUXItWXtzgdG3Fc3LquD0ShZmgtLOWr3GMv6CGRr6yXsgHVd/GD3XYPubiM82HaIGb9
+	SmUkW/SrfjAIlZX9p4M5+t3TsaK7IbM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1746170669;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Jpy3kA3EvG8tXSvkK0WCSKL/K4KU0ioXSifsdCwPYQ=;
+	b=HFYEGdGHKRUUCiWNHYC7PEb7OslyfcZrefvrgngiC/aArM0990IiM/JcEYgQhH91b3ZuYg
+	8CXdIiqbnbwJdLBw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=A+KpCrTJ;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=TCof81vc
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1746170668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Jpy3kA3EvG8tXSvkK0WCSKL/K4KU0ioXSifsdCwPYQ=;
+	b=A+KpCrTJCRPdMiczSTim4Zy+HHYQLht2rJUci2wGZmh4Frdn+rBdTMaVd/t143DcVBPzje
+	uwkzSqvdiVS/jFecVJZWnBVGiOvRVjZp8CW4cZ4zFpqpiK/DiUfIfogCvU4sqOtoFIjhG5
+	AwbNVT5ZRBUmmurYMldLd0cwrXnPaeA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1746170668;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Jpy3kA3EvG8tXSvkK0WCSKL/K4KU0ioXSifsdCwPYQ=;
+	b=TCof81vch6sNOtqOOLe4H6oldonXbvqlXWUyxbXFRd0QoqXgA5qINI7IWKjHImxIBqi4id
+	j26RccRuFJOulEBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5B66B13687;
+	Fri,  2 May 2025 07:24:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ffvQFCxzFGjwNwAAD6G6ig
+	(envelope-from <hare@suse.de>); Fri, 02 May 2025 07:24:28 +0000
+Message-ID: <40b4c1a8-666c-44ef-9f8c-9865aef94f3f@suse.de>
+Date: Fri, 2 May 2025 09:24:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/7] scsi: make aha152x depend on !HIGHMEM
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-block@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net, linux-mm@kvack.org
+References: <20250502064930.2981820-1-hch@lst.de>
+ <20250502064930.2981820-2-hch@lst.de>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20250502064930.2981820-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: B54241F385
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	SUBJECT_HAS_EXCLAIM(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
+X-Spam-Flag: NO
 
-wait_event_interruptible_timeout returns a long
-The return value was being assigned to an int causing an integer overflow
-when the remaining jiffies > INT_MAX which resulted in random error
-returns.
+On 5/2/25 08:49, Christoph Hellwig wrote:
+> This is one of the last drivers depending on the block layer bounce
+> buffering code.  Restrict it to run on non-highmem configs so that the
+> bounce buffering code can be removed.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/scsi/Kconfig   | 1 +
+>   drivers/scsi/aha152x.c | 1 -
+>   2 files changed, 1 insertion(+), 1 deletion(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Use a long return value, converting to the int ioctl return only on error.
+Cheers,
 
-Fixes: bb99794a4792 ("usb: usbtmc: Add ioctl for vendor specific read")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dave Penkler <dpenkler@gmail.com>
----
-Change V1 -> V2
-  Acc cc to stable line
-
- drivers/usb/class/usbtmc.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index b3ca89b0dab7..025a7aa795e3 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -833,6 +833,7 @@ static ssize_t usbtmc_generic_read(struct usbtmc_file_data *file_data,
- 	unsigned long expire;
- 	int bufcount = 1;
- 	int again = 0;
-+	long wait_rv;
- 
- 	/* mutex already locked */
- 
-@@ -945,19 +946,24 @@ static ssize_t usbtmc_generic_read(struct usbtmc_file_data *file_data,
- 		if (!(flags & USBTMC_FLAG_ASYNC)) {
- 			dev_dbg(dev, "%s: before wait time %lu\n",
- 				__func__, expire);
--			retval = wait_event_interruptible_timeout(
-+			wait_rv = wait_event_interruptible_timeout(
- 				file_data->wait_bulk_in,
- 				usbtmc_do_transfer(file_data),
- 				expire);
- 
--			dev_dbg(dev, "%s: wait returned %d\n",
--				__func__, retval);
-+			dev_dbg(dev, "%s: wait returned %ld\n",
-+				__func__, wait_rv);
-+
-+			if (wait_rv < 0) {
-+				retval = wait_rv;
-+				goto error;
-+			}
- 
--			if (retval <= 0) {
--				if (retval == 0)
--					retval = -ETIMEDOUT;
-+			if (wait_rv == 0) {
-+				retval = -ETIMEDOUT;
- 				goto error;
- 			}
-+
- 		}
- 
- 		urb = usb_get_from_anchor(&file_data->in_anchor);
+Hannes
 -- 
-2.49.0
-
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
