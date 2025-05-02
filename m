@@ -1,95 +1,95 @@
-Return-Path: <linux-usb+bounces-23635-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23636-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78EEFAA6B98
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:27:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 702E1AA6B9D
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 09:28:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC6E41BA3C77
-	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:27:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167129A358A
+	for <lists+linux-usb@lfdr.de>; Fri,  2 May 2025 07:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB62264F85;
-	Fri,  2 May 2025 07:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E417C22618F;
+	Fri,  2 May 2025 07:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="tHVANqYJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="8JzfdG0L";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="tHVANqYJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="8JzfdG0L"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ShzLkQ8v";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="SQnRgcpb";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ShzLkQ8v";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="SQnRgcpb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A13019DF41
-	for <linux-usb@vger.kernel.org>; Fri,  2 May 2025 07:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2127238176
+	for <linux-usb@vger.kernel.org>; Fri,  2 May 2025 07:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746170848; cv=none; b=eCdsOl0EjAz9tSul4QFQSUhyGK/OKTW8yeY+mVIZNnEH96qM86+n+870CKlx5w7bFTHaCmKoM2j7ZM31XSkBI9dywk6Wj3dPw1xLD+/IJobRra5lWhcbYVm7q6TJGKewf1gZ6xpSHOl1DthTaybX0xGtqaNjneB37m2Efoq23CE=
+	t=1746170873; cv=none; b=s041eljsZRjM8lRAu+W78/76/5JWEz+Y9R00Ma+mPgymas/VOputO4Rzre3lpCDcURA8MmGaWGIWXLPLxPKRa7+s0OnADy1C4bUvfrzx5ZWUq4CRs6amtzz1+XJ7jZcQWQjnFobpsvVTS97r/zJKpBkyHxa6kM1W+K681PNbpRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746170848; c=relaxed/simple;
-	bh=U/Mf7a8LVOInmzb1SADCnkSFTvUDImYBPNOEHch0enU=;
+	s=arc-20240116; t=1746170873; c=relaxed/simple;
+	bh=gy2an+r/Y9vT+IQNPlA7x2mBv+BmleYUZ2j8XhBorj0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QjhM9RhHLof+A/d6DJILAF/3VgUNzZE1N55Op9m51c6Q1LR8TplB3balpRQZyGcd/hWfwqZB+USZnvji3K9wwlNT18OFEQh3SeiLPd8b+pCiRFo++8T1MAtraX/kTrWvu08nuC7BL0EWC3CIZzaZhSZMzZXFSZPiDZphhhwGP98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=tHVANqYJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=8JzfdG0L; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=tHVANqYJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=8JzfdG0L; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=jKYieHCC5qeBdR0GbPx2eQKACZEw+pLEGcQcMSlGI7x8WHMuDx3TLhtgmqr3vv88ypdjkNXr/81nBq+UnCUfGpz4lZUF3OiY/9YC9q6Mq0FO1vzpi4Jt4rJDt80ZrnVtwYZluqE9UQWkTG4+VgwGNtKFXeQAR7sixvN0+MefjD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ShzLkQ8v; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=SQnRgcpb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ShzLkQ8v; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=SQnRgcpb; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9F32521227;
-	Fri,  2 May 2025 07:27:25 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 28A471F385;
+	Fri,  2 May 2025 07:27:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1746170845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1746170870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LehNLP4aFKmfjVjCiNiTfCnWhQDbiMcpDTK9kdHJbjk=;
-	b=tHVANqYJETA7GUpEs2jpEDPM9ZO/6V3WIzvAN4zW1QxtovWUEPMguJpgpSH/GgMm7ggGMe
-	xrRStzbWr+VrqgaPfiifZjJyNSBjCLpPuaiPsYzuw8VI2oYVUhEy9qOm9Hnwk7Xu+4rMOT
-	XYfDlWTd5NN78huMKbvx9neQl0RCRCg=
+	bh=W2PGwf5whLEVyVOCQc+zLst5fgDgN/UZfYnFj0npqnM=;
+	b=ShzLkQ8vCp5/mDOevaN2ImEIsPbkuaGdBD9e4BpAg+rZhOrh/8TqkVTVtDHxTC8RxR77hJ
+	VeFVGEaMU62qKQDPyoxEwEvRwyADyMmBOkxtKmjJByn3ysHVnaf7w54BA0QfohDllbc9uD
+	W5Zl7N2Rlysc5ticjATR6CxmldLwVyo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1746170845;
+	s=susede2_ed25519; t=1746170870;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LehNLP4aFKmfjVjCiNiTfCnWhQDbiMcpDTK9kdHJbjk=;
-	b=8JzfdG0Lpo6m+sGRQ7ct01A9bGw0u6ofmVzYnEPiI2GooRvK5h7agKHm0j05gsACRO9f3x
-	gpBPCuNPhemcFQBQ==
-Authentication-Results: smtp-out1.suse.de;
+	bh=W2PGwf5whLEVyVOCQc+zLst5fgDgN/UZfYnFj0npqnM=;
+	b=SQnRgcpbIZt4h8l0GR4TcD/YvZqhEX/AteOt4+xgso0xKBqvCOJtJ0qu7pS0dlD6Gnx8TH
+	jvFa4EHso+x/ryAQ==
+Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1746170845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1746170870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LehNLP4aFKmfjVjCiNiTfCnWhQDbiMcpDTK9kdHJbjk=;
-	b=tHVANqYJETA7GUpEs2jpEDPM9ZO/6V3WIzvAN4zW1QxtovWUEPMguJpgpSH/GgMm7ggGMe
-	xrRStzbWr+VrqgaPfiifZjJyNSBjCLpPuaiPsYzuw8VI2oYVUhEy9qOm9Hnwk7Xu+4rMOT
-	XYfDlWTd5NN78huMKbvx9neQl0RCRCg=
+	bh=W2PGwf5whLEVyVOCQc+zLst5fgDgN/UZfYnFj0npqnM=;
+	b=ShzLkQ8vCp5/mDOevaN2ImEIsPbkuaGdBD9e4BpAg+rZhOrh/8TqkVTVtDHxTC8RxR77hJ
+	VeFVGEaMU62qKQDPyoxEwEvRwyADyMmBOkxtKmjJByn3ysHVnaf7w54BA0QfohDllbc9uD
+	W5Zl7N2Rlysc5ticjATR6CxmldLwVyo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1746170845;
+	s=susede2_ed25519; t=1746170870;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LehNLP4aFKmfjVjCiNiTfCnWhQDbiMcpDTK9kdHJbjk=;
-	b=8JzfdG0Lpo6m+sGRQ7ct01A9bGw0u6ofmVzYnEPiI2GooRvK5h7agKHm0j05gsACRO9f3x
-	gpBPCuNPhemcFQBQ==
+	bh=W2PGwf5whLEVyVOCQc+zLst5fgDgN/UZfYnFj0npqnM=;
+	b=SQnRgcpbIZt4h8l0GR4TcD/YvZqhEX/AteOt4+xgso0xKBqvCOJtJ0qu7pS0dlD6Gnx8TH
+	jvFa4EHso+x/ryAQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 23F0813687;
-	Fri,  2 May 2025 07:27:25 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AE80B13687;
+	Fri,  2 May 2025 07:27:49 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ZhCgBd1zFGjHOAAAD6G6ig
-	(envelope-from <hare@suse.de>); Fri, 02 May 2025 07:27:25 +0000
-Message-ID: <0a76977f-aa17-4aa6-93f4-c0b02ce1b137@suse.de>
-Date: Fri, 2 May 2025 09:27:20 +0200
+	id V7+qKPVzFGjpOAAAD6G6ig
+	(envelope-from <hare@suse.de>); Fri, 02 May 2025 07:27:49 +0000
+Message-ID: <72655fa4-104c-4dd1-be55-090f50089f0f@suse.de>
+Date: Fri, 2 May 2025 09:27:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,7 +97,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] block: remove bounce buffering support
+Subject: Re: [PATCH 7/7] mm: remove NR_BOUNCE zone stat
 To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
  "Juergen E. Fischer" <fischer@norbit.de>,
@@ -106,13 +106,13 @@ Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
  linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
  usb-storage@lists.one-eyed-alien.net, linux-mm@kvack.org
 References: <20250502064930.2981820-1-hch@lst.de>
- <20250502064930.2981820-7-hch@lst.de>
+ <20250502064930.2981820-8-hch@lst.de>
 Content-Language: en-US
 From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20250502064930.2981820-7-hch@lst.de>
+In-Reply-To: <20250502064930.2981820-8-hch@lst.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
+X-Spam-Score: -4.30
 X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
@@ -131,29 +131,21 @@ X-Spamd-Result: default: False [-4.30 / 50.00];
 	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:email,imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid]
-X-Spam-Score: -4.30
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,lst.de:email,suse.de:mid,suse.de:email]
 X-Spam-Flag: NO
+X-Spam-Level: 
 
 On 5/2/25 08:49, Christoph Hellwig wrote:
-> The block layer bounce buffering support is unused now, remove it.
+> The stat is always 0 now, so remove it and hardwire the user visible
+> output to 0.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->   arch/mips/configs/gcw0_defconfig  |   1 -
->   block/Makefile                    |   1 -
->   block/blk-map.c                   |   5 +-
->   block/blk-mq.c                    |   2 -
->   block/blk-settings.c              |   5 -
->   block/blk.h                       |  17 --
->   block/bounce.c                    | 267 ------------------------------
->   include/linux/blk_types.h         |   1 -
->   include/linux/blkdev.h            |   5 +-
->   include/trace/events/block.h      |  15 --
->   include/uapi/linux/blktrace_api.h |   2 +-
->   kernel/trace/blktrace.c           |   9 -
->   12 files changed, 3 insertions(+), 327 deletions(-)
->   delete mode 100644 block/bounce.c
+>   drivers/base/node.c    | 2 +-
+>   fs/proc/meminfo.c      | 3 +--
+>   include/linux/mmzone.h | 1 -
+>   mm/show_mem.c          | 4 ++--
+>   4 files changed, 4 insertions(+), 6 deletions(-)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 
