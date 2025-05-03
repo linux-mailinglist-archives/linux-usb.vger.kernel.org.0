@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-23669-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23670-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BC9AAA81DE
-	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 19:49:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C01E7AA81EC
+	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 20:25:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2C927A62D3
-	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 17:48:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2242189BE54
+	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 18:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAA61E7C12;
-	Sat,  3 May 2025 17:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E48927A456;
+	Sat,  3 May 2025 18:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aY1RQUz+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="beQVhjLC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC501199938
-	for <linux-usb@vger.kernel.org>; Sat,  3 May 2025 17:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF98E199230
+	for <linux-usb@vger.kernel.org>; Sat,  3 May 2025 18:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746294578; cv=none; b=qwlebiu4jZRp/n4oL6XtNnn70XhEQUOSJUTO2qB9jra/f72EsFMWmxOYg2Hefy9LznU/rqqolbIFuEt/szCvJ4wIsCp0CtW75RPkni2/uickgsgAP3Sae+KYy2dSdM/6SBYjmVZu+LZ1vESB3PiWbmlV+/zmZcctFmlYcsRf1hQ=
+	t=1746296740; cv=none; b=Kyom3o2qw7+NriNyTrnJ/CZwgpWcGanUx1EqzA6F6I6RsLmlLe7cNG78yoQX+IdEwA466mMl61O3Q06kistuWqAPX0g+Qv/PppOLFjpN7CdMyP6xrrANjSGkS6EuNB18KGvjMSkWnWeQe89Hj7TgkaMWfZUL7FbIxAWY7Sun2gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746294578; c=relaxed/simple;
-	bh=ak7q2l5N67lleJUlcSpDODXfSuKCmKRsrarUA6spzfY=;
+	s=arc-20240116; t=1746296740; c=relaxed/simple;
+	bh=ErF7a3hgvEr4Zghn4N/xJ02w4EU9PEcQMJix+2dVJcA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JkYdgVmc5TXzOtixP/SN5uYWzPY+EkT2AjG4vTysYOQz9E3lmL2f4VfezCu9bmnRo/DLRnkylr0p22GCgpqWn8WiUb7A7uXkbEtzfZKErQFP2Bfk9LtfUX5Jlq0DULywTi9KiLqTc0WEvHdgY6T1ehgK1smwSybc2CDrjreGUhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aY1RQUz+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 625D7C4CEE9
-	for <linux-usb@vger.kernel.org>; Sat,  3 May 2025 17:49:37 +0000 (UTC)
+	 Content-Type:MIME-Version; b=RZ3lUG2SkBdySJSTP9o2qgM2N+wbjpmVsZj2ReLdRAhRm7T6s14JFO0HCmRB1HxC6+R6ZlSFizThGycw/YxYFjmLED5Ee+mQeEX8KdDQOrxw59XqpPjsNBGz6m2+p6Yl7baW45A8iNu0ytI7Y+9/utU1L2AYnJ2tFA1AiEB9Oi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=beQVhjLC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67E0AC4CEE9
+	for <linux-usb@vger.kernel.org>; Sat,  3 May 2025 18:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746294577;
-	bh=ak7q2l5N67lleJUlcSpDODXfSuKCmKRsrarUA6spzfY=;
+	s=k20201202; t=1746296739;
+	bh=ErF7a3hgvEr4Zghn4N/xJ02w4EU9PEcQMJix+2dVJcA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=aY1RQUz+An6OYPN/ga8P4QVjTvcdpyHo+tirVro/lxVQfr4mZWi4/VUz1T7LiBwj+
-	 x0wKjt3No0eS3MBYo9e50LiPlzrKasxOCgLMNejY/DjTwuvKijqIj8MwQjKaEQzEyC
-	 EoaSmYPeZxIJWGgeAuzQc4f8QBYeB3OcaoOIvQrUKlk3+4msW9JjWPUz7JQmmhpg6E
-	 b6kTJf3wNNgaRNLzATN7wJW+/vOZLPcvAeXwhaZjByx8EngoriyUiAtt+WJUb3jtHS
-	 3f/82VmAwmFMiQO/lnQtw/O7FrY9Bv7ACwYyCZnvIxVmzIaYoegbguHnaW1xXs6Y39
-	 r02ZwEwtxY5qw==
+	b=beQVhjLCqZ2xgiwojup2q0+dvcPH+jTyroRtMoKMdmNLO4gMJoeF6jnOZK8SeWIm3
+	 TBfs3BOWVcPGhX1GXUjViO228WJitXy9gqOaLfQt8lFcF8IOiJ4SNtIAcCruYMD/WT
+	 bl/sdYj44y9+eghWvB3J7s4aOPyQgAc1GADwOnvarZ2la0qTmpe5CSgzw90W9TFAq/
+	 oVB1QXqF6u6Vo15TceAzKomARvq0FtCtezUV3CyV9f6uN+2hP1HHpTpdWhifsyeiY4
+	 SEesNfOgW/yovhEO6SZ0UqRAKbzBBaLAisoxacwQeJDvl1Y00Q5lur4ZAI9wtZqD7P
+	 so/bjgd+3IrXQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5301CC3279F; Sat,  3 May 2025 17:49:37 +0000 (UTC)
+	id 58311C3279F; Sat,  3 May 2025 18:25:39 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Sat, 03 May 2025 17:49:37 +0000
+Date: Sat, 03 May 2025 18:25:39 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -55,14 +55,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Who: cwunder@gnome.org
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220069-208809-hejfUllmsG@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220069-208809-86Ulzn5pfH@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
 References: <bug-220069-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,32 +78,32 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
 
---- Comment #28 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Created attachment 308078
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308078&action=3Dedit
-collect xhc crash data and reset the thing
+--- Comment #29 from Claudio Wunder (cwunder@gnome.org) ---
+> Would it be possible to move one of those child devices to another place =
+so
+> that it goes to a different bus?
 
-Could you run this script?
+The webcam and another USB dongle are connected on the monitor's USB hub; T=
+hat
+hub is connected directly to one of the rear USB ports; Do you want me to
+connect them to the other bus? (5) -- Note that these are also one of the r=
+ear
+USB ports.=20
 
-It tries to catch debugfs after the controller hangs, but before the kernel
-"kills" it and forgets about all devices. It simply saves debugfs every few
-seconds, and packs the saved copy plus current debugfs and dmesg to a tgz
-archive when all devices disappear. Then it automatically resets the
-controller. Don't disconnect all devices by hand ;)
+Also note that if the problem is 8-3 I don't think there's much I can do, as
+ASM107x is an internal device from the Motherboard; Also the "6K7732" devic=
+e is
+(7-3.4 hub only device) a LED (it is just a simple LED backlight, it has no=
+ USB
+functionality whatsoever; There is also the AURA Led Controller and NZXT Kr=
+aken
+Base all devices under (7) but connected directly to the Mobo, and that I c=
+ould
+remove.
 
-The outdir and tmpdir paths need to be set to point at existing directories,
-and PCI ID is passed as an argument - use lspci to know if it's currently
-0000:6a:00.0 or 0000:6b:00.0.
-
-
-I think it's somehow related to the 7-3/8-3 (USB 2.0/3.0 parts) hub, and its
-children - either the 7-3.4/8-3.4 hub or the 7-3.3 webcam. Would it be poss=
-ible
-to move one of those child devices to another place so that it goes to a
-different bus? Perhaps bus 5, which is the first 600 chipset controller, so=
- we
-could see if the problem moves to the first 600 controller or stays on the
-second one.
+Anyhow, I can move the monitor Hub to another rear USB port and also run yo=
+ur
+script.
 
 --=20
 You may reply to this email to add a comment.
