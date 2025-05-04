@@ -1,451 +1,1328 @@
-Return-Path: <linux-usb+bounces-23674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937A5AA8303
-	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 23:21:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE94EAA8365
+	for <lists+linux-usb@lfdr.de>; Sun,  4 May 2025 02:27:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3D491889EA1
-	for <lists+linux-usb@lfdr.de>; Sat,  3 May 2025 21:21:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1BE7189B9EA
+	for <lists+linux-usb@lfdr.de>; Sun,  4 May 2025 00:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38EF1A9B40;
-	Sat,  3 May 2025 21:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E108F6E;
+	Sun,  4 May 2025 00:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pDklXHCb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D8618DF80
-	for <linux-usb@vger.kernel.org>; Sat,  3 May 2025 21:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C76F748F
+	for <linux-usb@vger.kernel.org>; Sun,  4 May 2025 00:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746307293; cv=none; b=p0066w+GFSYTypZRL64MY5eGdrH9xWHALi7eE0OUupO7XhJvzZ5scd2INRojdCg3tWtOrw4CLKyveJ81zAhJ/0y/GjQgUS0cup8oiaPCzo8wo6bUnpDoTzcBKYbPxW7CupQzN9MIULp08OuBTvg/yc/C5aXxCAscE0DWfdYHl2k=
+	t=1746318453; cv=none; b=gUNOoCqXBZnT0K6ITDsfXtIXpZQGRGThY3YmUZ8xll23nB0ETjj1VyTIJdDl03uBegjzs9HrbP97CYmvfrXXSiE/va6MLopfxWC916uj+X3aGkSG6/5WUYqX/bKZR9pdOSFl2sNIp/MJhw4OrrngORswMeB6pjlB/2S4psB1IsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746307293; c=relaxed/simple;
-	bh=g6wIeMwtbfhf3H/rUnGNKX4+QGI2bIX8shfw81sBHls=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=swEUw7JZn/S85EKOjyh/iXgZIfQWQbtFKjh1S3bOH62hw+ylZQZTnq6XmYOi1bwhMphepJZ1dFK2qlFkXdGsxmGTxBVj0LdKNAk0+h0T44i6AbvWE3KJYnJoScKM2hCTzD6zew1yAlfXd2zjrgup+1pSqa0l5thqYHWhpRQW2dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-85b3827969dso336956539f.1
-        for <linux-usb@vger.kernel.org>; Sat, 03 May 2025 14:21:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746307290; x=1746912090;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PkU/NCIfKJpQYuAiufWM4neNK5AulJjnUnPFc7igR7E=;
-        b=W0Xtdht/LaE8i++N3T1ltQhA6z0bB3rYvm5dVChPFwyQ+ZxSpoEtYxFU1fM6uFTR4u
-         FMGd2qxLf8Sl8eT+PY1iurnXjH6+wrXxLTMTkPJQ6/hOZV0baD6U9Y3vZNVAER0UeZps
-         zr7sj/qDPm8GbrXR7Mfi2w9olZ/841C2W48Nq5/GJ+4OAPRngdtZ4WvNdZK3j9RmM0a0
-         nhIGB/0ZOQ1xzf7jbk/+H3jK3SqS61EIh2hJfhYCtnIH/zPUYqe5efWCMrnDYkx1SOnA
-         BC2Qnz/ETdI2mBkQTxx+g236LVtvN/nnZLqY1VL9djSOSA99FO7A2STH0Nht9NhoqV+3
-         Pr0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWVOJPDrSWF1cfCkhYb1cuxiRZaY6rHzGTDT7iZG3xzGAvia2ToTF2pkY5Zn62gjvZcYJH6/udOE1s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOYyG6OaohpZaJLoCTPSDdsKC0LrYAetf91+Qh5YcRS5z6ZbJQ
-	vYi3Fu85JZbLjjc2SfCJGSN0UYP3xciBczUHwEacAuopDrDfsyQe3zF8+3TOUUjok0OUh8F/EMQ
-	/CL3cFdM9rtV8u1jXoYF9eI8MN5xc5fu6tFHZW0LY6PxvsTR1wd0Hisw=
-X-Google-Smtp-Source: AGHT+IFd8gDhK07AL8AgBLK/KW/pZMplfeivYfXo2dpRv3FMj/yr50P1K/X5UvISIVaUjO1pP9WeYV2Wn6FcWBdefP8gS4XuG4YB
+	s=arc-20240116; t=1746318453; c=relaxed/simple;
+	bh=Zn2sbymlgse0n8c7sDJQJmNFzQx7D7YjRdYI0BFyyHQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AEi5KhEkTXfaN1Sw5La2lo156WBwAmqy6sMf/+2JTKJfC/AwhRrPSb+jvvT7WpGxep4qnTmrE/PjoH5GrReGLKn+Iu8BzHbNgZ3u8KyXtwOS9w+0uazHzptSPTqRiwkex77Hy7nsy6s6nSkEyIsfPu198KBPVtXeFAUnof2044w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pDklXHCb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0727C4CEEB
+	for <linux-usb@vger.kernel.org>; Sun,  4 May 2025 00:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746318452;
+	bh=Zn2sbymlgse0n8c7sDJQJmNFzQx7D7YjRdYI0BFyyHQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=pDklXHCbuV248af4RKU4SJbjyngE6TADvg4gM8w1OhkppQ8vsGTbZY7t5z23UPr5V
+	 FoRuU8oHOt8L9sz7hRGtXyMVYI6M2KmXlk+aVYtaRVz3Lm/rmLzHAoUxzyxrkYo/+n
+	 RqW+BUrESQ7CDMLtkdorST7rVX6js/idlOsApRuQUCt97yHt3jOJIDeWCv/hbHbaU8
+	 POpnd7ckcMAiGf034/AKFTusnx59xEHiAqEf5Qo7KNjsT15Z98mzUud+Ws0l8P5/2H
+	 iqY9i778Y5CFTFgxfqDkbp+2KL1b9CLCZt2ot05O9RU1rJXCV7iM07E7ziHefOnluc
+	 yMn9q2JBjXyLQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 91902C3279F; Sun,  4 May 2025 00:27:32 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220027] USB 3.2 capture cards using incorrect USB speed
+Date: Sun, 04 May 2025 00:27:32 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: nrkowalski@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220027-208809-7Q1o3i3xt3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220027-208809@https.bugzilla.kernel.org/>
+References: <bug-220027-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b2b:b0:3d3:fbae:3978 with SMTP id
- e9e14a558f8ab-3da56921b33mr34036985ab.9.1746307290514; Sat, 03 May 2025
- 14:21:30 -0700 (PDT)
-Date: Sat, 03 May 2025 14:21:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <681688da.050a0220.11da1b.001c.GAE@google.com>
-Subject: [syzbot] [usb?] INFO: task hung in dvb_usb_i2c_exit
-From: syzbot <syzbot+0dcc341ee61fc9e4032f@syzkaller.appspotmail.com>
-To: anna-maria@linutronix.de, frederic@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220027
 
-syzbot found the following issue on:
+--- Comment #12 from Niko (nrkowalski@gmail.com) ---
+Apologies, I did not run that as root. Here is the output from root.
 
-HEAD commit:    ca91b9500108 Merge tag 'v6.15-rc4-ksmbd-server-fixes' of g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=130c88d4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ca17f2d2ba38f7a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=0dcc341ee61fc9e4032f
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16dc5368580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13def270580000
+Bus 008 Device 002: ID 0fd9:009b Elgato Systems GmbH Elgato 4K X
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.20
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2 [unknown]
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0         9
+  idVendor           0x0fd9 Elgato Systems GmbH
+  idProduct          0x009b Elgato 4K X
+  bcdDevice            0.02
+  iManufacturer           6 Elgato
+  iProduct                7 Elgato 4K X
+  iSerial                 3 A7SNB504228NRE
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x08bd
+    bNumInterfaces          4
+    bConfigurationValue     1
+    iConfiguration          4 Elgato 4K X
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower              896mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass         14 Video
+      bFunctionSubClass       3 Video Interface Collection
+      bFunctionProtocol       0=20
+      iFunction               5 Elgato 4K X
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass        14 Video
+      bInterfaceSubClass      1 Video Control
+      bInterfaceProtocol      0=20
+      iInterface              5 Elgato 4K X
+      VideoControl Interface Descriptor:
+        bLength                13
+        bDescriptorType        36
+        bDescriptorSubtype      1 (HEADER)
+        bcdUVC               1.00
+        wTotalLength       0x0050
+        dwClockFrequency       27.000000MHz
+        bInCollection           1
+        baInterfaceNr( 0)       1
+      VideoControl Interface Descriptor:
+        bLength                18
+        bDescriptorType        36
+        bDescriptorSubtype      2 (INPUT_TERMINAL)
+        bTerminalID             1
+        wTerminalType      0x0201 Camera Sensor
+        bAssocTerminal          0
+        iTerminal               0=20
+        wObjectiveFocalLengthMin      0
+        wObjectiveFocalLengthMax      0
+        wOcularFocalLength            0
+        bControlSize                  3
+        bmControls           0x00000000
+      VideoControl Interface Descriptor:
+        bLength                12
+        bDescriptorType        36
+        bDescriptorSubtype      5 (PROCESSING_UNIT)
+      Warning: Descriptor too short
+        bUnitID                 2
+        bSourceID               1
+        wMaxMultiplier      16384
+        bControlSize            3
+        bmControls     0x0000000f
+          Brightness
+          Contrast
+          Hue
+          Saturation
+        iProcessing             0=20
+        bmVideoStandards     0x09
+          None
+          SECAM - 625/50
+      VideoControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+        bTerminalID             3
+        wTerminalType      0x0101 USB Streaming
+        bAssocTerminal          0
+        bSourceID               4
+        iTerminal               0=20
+      VideoControl Interface Descriptor:
+        bLength                28
+        bDescriptorType        36
+        bDescriptorSubtype      6 (EXTENSION_UNIT)
+        bUnitID                 4
+        guidExtensionCode         {961073c7-49f7-44f2-ab42-e940405940c2}
+        bNumControls           17
+        bNrInPins               1
+        baSourceID( 0)          2
+        bControlSize            3
+        bmControls( 0)       0x0f
+        bmControls( 1)       0xfe
+        bmControls( 2)       0x01
+        iExtension              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval               8
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass        14 Video
+      bInterfaceSubClass      2 Video Streaming
+      bInterfaceProtocol      0=20
+      iInterface              6 Elgato
+      VideoStreaming Interface Descriptor:
+        bLength                            19
+        bDescriptorType                    36
+        bDescriptorSubtype                  1 (INPUT_HEADER)
+        bNumFormats                         6
+        wTotalLength                   0x07b5
+        bEndpointAddress                 0x82  EP 2 IN
+        bmInfo                              0
+        bTerminalLink                       3
+        bStillCaptureMethod                 0
+        bTriggerSupport                     0
+        bTriggerUsage                       0
+        bControlSize                        1
+        bmaControls( 0)                     0
+        bmaControls( 1)                     4
+        bmaControls( 2)                     0
+        bmaControls( 3)                     0
+        bmaControls( 4)                     0
+        bmaControls( 5)                     0
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        1
+        bNumFrameDescriptors                9
+        guidFormat=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+{32595559-0000-0010-8000-00aa00389b71}
+        bBitsPerPixel                      16
+        bDefaultFrameIndex                  5
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            640
+        wHeight                           480
+        dwMinBitRate                147456000
+        dwMaxBitRate                294912000
+        dwMaxVideoFrameBufferSize      614400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           480
+        dwMinBitRate                165888000
+        dwMaxBitRate                331776000
+        dwMaxVideoFrameBufferSize      691200
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            30
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           576
+        dwMinBitRate                331776000
+        dwMaxBitRate                331776000
+        dwMaxVideoFrameBufferSize      829440
+        dwDefaultFrameInterval         200000
+        bFrameIntervalType                  1
+        dwFrameInterval( 0)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                737280000
+        dwMaxBitRate                1769472000
+        dwMaxVideoFrameBufferSize     1843200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            54
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         5
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                994332671
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     4147200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  7
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+        dwFrameInterval( 4)            200000
+        dwFrameInterval( 5)            333333
+        dwFrameInterval( 6)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         6
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                2651553791
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     5529600
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            46
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         7
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                1767702527
+        dwMaxBitRate                3538944000
+        dwMaxVideoFrameBufferSize     7372800
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  5
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+        dwFrameInterval( 2)            200000
+        dwFrameInterval( 3)            333333
+        dwFrameInterval( 4)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         8
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3440
+        wHeight                          1440
+        dwMinBitRate                4294967295
+        dwMaxBitRate                4294967295
+        dwMaxVideoFrameBufferSize     9907200
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            38
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         9
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3840
+        wHeight                          2160
+        dwMinBitRate                3977330687
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize    16588800
+        dwDefaultFrameInterval         200000
+        bFrameIntervalType                  3
+        dwFrameInterval( 0)            200000
+        dwFrameInterval( 1)            333333
+        dwFrameInterval( 2)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 1 (BT.709)
+      VideoStreaming Interface Descriptor:
+        bLength                            11
+        bDescriptorType                    36
+        bDescriptorSubtype                  6 (FORMAT_MJPEG)
+        bFormatIndex                        2
+        bNumFrameDescriptors                6
+        bFlags                              0
+          Fixed-size samples: No
+        bDefaultFrameIndex                  6
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 1 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                737280000
+        dwMaxBitRate                1769472000
+        dwMaxVideoFrameBufferSize     1843200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            58
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                994332671
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     4147200
+        dwDefaultFrameInterval          41666
+        bFrameIntervalType                  8
+        dwFrameInterval( 0)             41666
+        dwFrameInterval( 1)             69444
+        dwFrameInterval( 2)             83333
+        dwFrameInterval( 3)            166666
+        dwFrameInterval( 4)            166833
+        dwFrameInterval( 5)            200000
+        dwFrameInterval( 6)            333333
+        dwFrameInterval( 7)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                2651553791
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     5529600
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            54
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                1767702527
+        dwMaxBitRate                3538944000
+        dwMaxVideoFrameBufferSize     7372800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  7
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+        dwFrameInterval( 4)            200000
+        dwFrameInterval( 5)            333333
+        dwFrameInterval( 6)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         5
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3440
+        wHeight                          1440
+        dwMinBitRate                4294967295
+        dwMaxBitRate                4294967295
+        dwMaxVideoFrameBufferSize     9907200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            54
+        bDescriptorType                    36
+        bDescriptorSubtype                  7 (FRAME_MJPEG)
+        bFrameIndex                         6
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3840
+        wHeight                          2160
+        dwMinBitRate                3977330687
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize    16588800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  7
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+        dwFrameInterval( 4)            200000
+        dwFrameInterval( 5)            333333
+        dwFrameInterval( 6)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     4 (SMPTE 170M)
+        bTransferCharacteristics            4 (SMPTE 170M)
+        bMatrixCoefficients                 4 (SMPTE 170M (BT.601))
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        3
+        bNumFrameDescriptors                9
+        guidFormat=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+{3231564e-0000-0010-8000-00aa00389b71}
+        bBitsPerPixel                      12
+        bDefaultFrameIndex                  9
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            640
+        wHeight                           480
+        dwMinBitRate                110592000
+        dwMaxBitRate                221184000
+        dwMaxVideoFrameBufferSize      460800
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           480
+        dwMinBitRate                124416000
+        dwMaxBitRate                248832000
+        dwMaxVideoFrameBufferSize      518400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            30
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           576
+        dwMinBitRate                248832000
+        dwMaxBitRate                248832000
+        dwMaxVideoFrameBufferSize      622080
+        dwDefaultFrameInterval         200000
+        bFrameIntervalType                  1
+        dwFrameInterval( 0)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                552960000
+        dwMaxBitRate                1327104000
+        dwMaxVideoFrameBufferSize     1382400
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            58
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         5
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                745749503
+        dwMaxBitRate                3583180800
+        dwMaxVideoFrameBufferSize     3110400
+        dwDefaultFrameInterval          41666
+        bFrameIntervalType                  8
+        dwFrameInterval( 0)             41666
+        dwFrameInterval( 1)             69444
+        dwFrameInterval( 2)             83333
+        dwFrameInterval( 3)            166666
+        dwFrameInterval( 4)            166833
+        dwFrameInterval( 5)            200000
+        dwFrameInterval( 6)            333333
+        dwFrameInterval( 7)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         6
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                1988665343
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     4147200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            54
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         7
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                1325776895
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     5529600
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  7
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+        dwFrameInterval( 4)            200000
+        dwFrameInterval( 5)            333333
+        dwFrameInterval( 6)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         8
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3440
+        wHeight                          1440
+        dwMinBitRate                3563025407
+        dwMaxBitRate                3566592000
+        dwMaxVideoFrameBufferSize     7430400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            46
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         9
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3840
+        wHeight                          2160
+        dwMinBitRate                2982998015
+        dwMaxBitRate                2985984000
+        dwMaxVideoFrameBufferSize    12441600
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  5
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+        dwFrameInterval( 2)            200000
+        dwFrameInterval( 3)            333333
+        dwFrameInterval( 4)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 1 (BT.709)
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        4
+        bNumFrameDescriptors                9
+        guidFormat=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+{30323449-0000-0010-8000-00aa00389b71}
+        bBitsPerPixel                      12
+        bDefaultFrameIndex                  9
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            640
+        wHeight                           480
+        dwMinBitRate                110592000
+        dwMaxBitRate                221184000
+        dwMaxVideoFrameBufferSize      460800
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           480
+        dwMinBitRate                124416000
+        dwMaxBitRate                248832000
+        dwMaxVideoFrameBufferSize      518400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            333333
+      VideoStreaming Interface Descriptor:
+        bLength                            30
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            720
+        wHeight                           576
+        dwMinBitRate                248832000
+        dwMaxBitRate                248832000
+        dwMaxVideoFrameBufferSize      622080
+        dwDefaultFrameInterval         200000
+        bFrameIntervalType                  1
+        dwFrameInterval( 0)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                552960000
+        dwMaxBitRate                1327104000
+        dwMaxVideoFrameBufferSize     1382400
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            58
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         5
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                745749503
+        dwMaxBitRate                3583180800
+        dwMaxVideoFrameBufferSize     3110400
+        dwDefaultFrameInterval          41666
+        bFrameIntervalType                  8
+        dwFrameInterval( 0)             41666
+        dwFrameInterval( 1)             69444
+        dwFrameInterval( 2)             83333
+        dwFrameInterval( 3)            166666
+        dwFrameInterval( 4)            166833
+        dwFrameInterval( 5)            200000
+        dwFrameInterval( 6)            333333
+        dwFrameInterval( 7)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         6
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                1988665343
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     4147200
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            54
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         7
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                1325776895
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     5529600
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  7
+        dwFrameInterval( 0)             69444
+        dwFrameInterval( 1)             83333
+        dwFrameInterval( 2)            166666
+        dwFrameInterval( 3)            166833
+        dwFrameInterval( 4)            200000
+        dwFrameInterval( 5)            333333
+        dwFrameInterval( 6)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         8
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3440
+        wHeight                          1440
+        dwMinBitRate                3563025407
+        dwMaxBitRate                3566592000
+        dwMaxVideoFrameBufferSize     7430400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            46
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         9
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3840
+        wHeight                          2160
+        dwMinBitRate                2982998015
+        dwMaxBitRate                2985984000
+        dwMaxVideoFrameBufferSize    12441600
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  5
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+        dwFrameInterval( 2)            200000
+        dwFrameInterval( 3)            333333
+        dwFrameInterval( 4)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 1 (BT.709)
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        5
+        bNumFrameDescriptors                4
+        guidFormat=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+{e436eb7d-524f-11ce-9f53-0020af0ba770}
+        bBitsPerPixel                      24
+        bDefaultFrameIndex                  2
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                1105920000
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     2764800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            50
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                1491499007
+        dwMaxBitRate                2985984000
+        dwMaxVideoFrameBufferSize     6220800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  6
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+        dwFrameInterval( 4)            333333
+        dwFrameInterval( 5)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                3977330687
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     8294400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            46
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                2651553791
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize    11059200
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  5
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+        dwFrameInterval( 2)            200000
+        dwFrameInterval( 3)            333333
+        dwFrameInterval( 4)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 1 (BT.709)
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        7
+        bNumFrameDescriptors                5
+        guidFormat=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+{30313050-0000-0010-8000-00aa00389b71}
+        bBitsPerPixel                      24
+        bDefaultFrameIndex                  2
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            42
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1280
+        wHeight                           720
+        dwMinBitRate                1105920000
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize     2764800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  4
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+      VideoStreaming Interface Descriptor:
+        bLength                            50
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         2
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           1920
+        wHeight                          1080
+        dwMinBitRate                1491499007
+        dwMaxBitRate                2985984000
+        dwMaxVideoFrameBufferSize     6220800
+        dwDefaultFrameInterval          83333
+        bFrameIntervalType                  6
+        dwFrameInterval( 0)             83333
+        dwFrameInterval( 1)            166666
+        dwFrameInterval( 2)            166833
+        dwFrameInterval( 3)            200000
+        dwFrameInterval( 4)            333333
+        dwFrameInterval( 5)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         3
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1080
+        dwMinBitRate                3977330687
+        dwMaxBitRate                3981312000
+        dwMaxVideoFrameBufferSize     8294400
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+      VideoStreaming Interface Descriptor:
+        bLength                            46
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         4
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           2560
+        wHeight                          1440
+        dwMinBitRate                2651553791
+        dwMaxBitRate                2654208000
+        dwMaxVideoFrameBufferSize    11059200
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  5
+        dwFrameInterval( 0)            166666
+        dwFrameInterval( 1)            166833
+        dwFrameInterval( 2)            200000
+        dwFrameInterval( 3)            333333
+        dwFrameInterval( 4)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                            34
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         5
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                           3840
+        wHeight                          2160
+        dwMinBitRate                4294967295
+        dwMaxBitRate                4294967295
+        dwMaxVideoFrameBufferSize    24883200
+        dwDefaultFrameInterval         333333
+        bFrameIntervalType                  2
+        dwFrameInterval( 0)            333333
+        dwFrameInterval( 1)            333667
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 1 (BT.709)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               1
+        bMaxBurst               7
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         2
+      bInterfaceCount         2
+      bFunctionClass          1 Audio
+      bFunctionSubClass       1 Control Device
+      bFunctionProtocol       0=20
+      iFunction               8 Elgato 4K X
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      1 Control Device
+      bInterfaceProtocol      0=20
+      iInterface              8 Elgato 4K X
+      AudioControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      1 (HEADER)
+        bcdADC               1.00
+        wTotalLength       0x002d
+        bInCollection           1
+        baInterfaceNr(0)        3
+      AudioControl Interface Descriptor:
+        bLength                12
+        bDescriptorType        36
+        bDescriptorSubtype      2 (INPUT_TERMINAL)
+        bTerminalID             1
+        wTerminalType      0x0602 Digital Audio Interface
+        bAssocTerminal          0
+        bNrChannels             2
+        wChannelConfig     0x0003
+          Left Front (L)
+          Right Front (R)
+        iChannelNames           0=20
+        iTerminal              10 Elgato 4K X
+      AudioControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+        bTerminalID             2
+        wTerminalType      0x0101 USB Streaming
+        bAssocTerminal          0
+        bSourceID               3
+        iTerminal               0=20
+      AudioControl Interface Descriptor:
+        bLength                 8
+        bDescriptorType        36
+        bDescriptorSubtype      6 (FEATURE_UNIT)
+        bUnitID                 3
+        bSourceID               4
+        bControlSize            1
+        bmaControls(0)       0x01
+          Mute Control
+        iFeature                0=20
+      AudioControl Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      5 (SELECTOR_UNIT)
+        bUnitID                 4
+        bNrInPins               1
+        baSourceID(0)           1
+        iSelector               0=20
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0=20
+      iInterface             10 Elgato 4K X
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       1
+      bNumEndpoints           1
+      bInterfaceClass         1 Audio
+      bInterfaceSubClass      2 Streaming
+      bInterfaceProtocol      0=20
+      iInterface             10 Elgato 4K X
+      AudioStreaming Interface Descriptor:
+        bLength                 7
+        bDescriptorType        36
+        bDescriptorSubtype      1 (AS_GENERAL)
+        bTerminalLink           2
+        bDelay                  1 frames
+        wFormatTag         0x0001 PCM
+      AudioStreaming Interface Descriptor:
+        bLength                11
+        bDescriptorType        36
+        bDescriptorSubtype      2 (FORMAT_TYPE)
+        bFormatType             1 (FORMAT_TYPE_I)
+        bNrChannels             2
+        bSubframeSize           2
+        bBitResolution         16
+        bSamFreqType            1 Discrete
+        tSamFreq[ 0]        48000
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            5
+          Transfer Type            Isochronous
+          Synch Type               Asynchronous
+          Usage Type               Data
+        wMaxPacketSize     0x00d0  1x 208 bytes
+        bInterval               4
+        bMaxBurst               0
+        AudioStreaming Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType        37
+          bDescriptorSubtype      1 (EP_GENERAL)
+          bmAttributes         0x01
+            Sampling Frequency
+          bLockDelayUnits         0 Undefined
+          wLockDelay         0x0000
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x002a
+  bNumDeviceCaps          3
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000f41e
+      BESL Link Power Management (LPM) Supported
+    BESL value     1024 us=20
+    Deep BESL value    61440 us=20
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+  SuperSpeedPlus USB Device Capability:
+    bLength                20
+    bDescriptorType        16
+    bDevCapabilityType     10
+    bmAttributes         0x00000001
+      Sublink Speed Attribute count 2
+      Sublink Speed ID count 1
+    wFunctionalitySupport   0x1100
+      Min functional Speed Attribute ID: 0
+      Min functional RX lanes: 1
+      Min functional TX lanes: 1
+    bmSublinkSpeedAttr[0]   0x000a4030
+      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
+    bmSublinkSpeedAttr[1]   0x000a40b0
+      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
+Device Status:     0x0001
+  Self Powered
+nkowalski@Eva-Mi
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d6e8d6537504/disk-ca91b950.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0de81a10c06a/vmlinux-ca91b950.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0e828bb2de22/bzImage-ca91b950.xz
+--=20
+You may reply to this email to add a comment.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0dcc341ee61fc9e4032f@syzkaller.appspotmail.com
-
-INFO: task kworker/0:3:5829 blocked for more than 143 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/0:3     state:D stack:22760 pid:5829  tgid:5829  ppid:2      task_flags:0x4208060 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_timeout+0x257/0x290 kernel/time/sleep_timeout.c:75
- do_wait_for_common kernel/sched/completion.c:95 [inline]
- __wait_for_common+0x2fc/0x4e0 kernel/sched/completion.c:116
- i2c_del_adapter+0x546/0x6f0 drivers/i2c/i2c-core-base.c:1812
- dvb_usb_i2c_exit+0x9f/0xf0 drivers/media/usb/dvb-usb/dvb-usb-i2c.c:46
- dvb_usb_exit drivers/media/usb/dvb-usb/dvb-usb-init.c:144 [inline]
- dvb_usb_device_exit+0x334/0x580 drivers/media/usb/dvb-usb/dvb-usb-init.c:338
- cxusb_probe+0x1c9/0x7d0 drivers/media/usb/dvb-usb/cxusb.c:1664
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_set_configuration+0x1187/0x1e20 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:657
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:799
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:829
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:957
- bus_for_each_drv+0x156/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1029
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
- device_add+0x1148/0x1a70 drivers/base/core.c:3692
- usb_new_device+0xd07/0x1a20 drivers/usb/core/hub.c:2663
- hub_port_connect drivers/usb/core/hub.c:5531 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
- port_event drivers/usb/core/hub.c:5831 [inline]
- hub_event+0x2eb7/0x4fa0 drivers/usb/core/hub.c:5913
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-INFO: task syz-executor329:5845 blocked for more than 143 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor329 state:D stack:28168 pid:5845  tgid:5845  ppid:5817   task_flags:0x400040 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- device_lock include/linux/device.h:922 [inline]
- usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
- chrdev_open+0x231/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3880 [inline]
- path_openat+0x1e5e/0x2d40 fs/namei.c:4039
- do_filp_open+0x20b/0x470 fs/namei.c:4066
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_openat fs/open.c:1460 [inline]
- __se_sys_openat fs/open.c:1455 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1455
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fcdf4207851
-RSP: 002b:00007ffe7889bab0 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcdf4207851
-RDX: 0000000000000002 RSI: 00007ffe7889bb50 RDI: 00000000ffffff9c
-RBP: 00007ffe7889bb50 R08: 000000000000000f R09: 00232d6332692f76
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe7889bf80
-R13: 00007ffe7889bfa0 R14: 0000000000010006 R15: 00007ffe7889bf7c
- </TASK>
-INFO: task syz-executor329:5847 blocked for more than 144 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor329 state:D stack:28792 pid:5847  tgid:5847  ppid:5820   task_flags:0x400040 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- device_lock include/linux/device.h:922 [inline]
- usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
- chrdev_open+0x231/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3880 [inline]
- path_openat+0x1e5e/0x2d40 fs/namei.c:4039
- do_filp_open+0x20b/0x470 fs/namei.c:4066
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_openat fs/open.c:1460 [inline]
- __se_sys_openat fs/open.c:1455 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1455
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fcdf4207851
-RSP: 002b:00007ffe7889bab0 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcdf4207851
-RDX: 0000000000000002 RSI: 00007ffe7889bb50 RDI: 00000000ffffff9c
-RBP: 00007ffe7889bb50 R08: 000000000000000f R09: 00232d6332692f76
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe7889bf80
-R13: 00007ffe7889bfa0 R14: 0000000000010005 R15: 00007ffe7889bf7c
- </TASK>
-INFO: task syz-executor329:5848 blocked for more than 144 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor329 state:D stack:28184 pid:5848  tgid:5848  ppid:5814   task_flags:0x400040 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- device_lock include/linux/device.h:922 [inline]
- usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
- chrdev_open+0x231/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3880 [inline]
- path_openat+0x1e5e/0x2d40 fs/namei.c:4039
- do_filp_open+0x20b/0x470 fs/namei.c:4066
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_openat fs/open.c:1460 [inline]
- __se_sys_openat fs/open.c:1455 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1455
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fcdf4207851
-RSP: 002b:00007ffe7889bab0 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcdf4207851
-RDX: 0000000000000002 RSI: 00007ffe7889bb50 RDI: 00000000ffffff9c
-RBP: 00007ffe7889bb50 R08: 000000000000000f R09: 00232d6332692f76
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe7889bf80
-R13: 00007ffe7889bfa0 R14: 000000000000ffeb R15: 00007ffe7889bf7c
- </TASK>
-INFO: task syz-executor329:5850 blocked for more than 144 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor329 state:D stack:27560 pid:5850  tgid:5850  ppid:5813   task_flags:0x400040 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- device_lock include/linux/device.h:922 [inline]
- usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
- chrdev_open+0x231/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3880 [inline]
- path_openat+0x1e5e/0x2d40 fs/namei.c:4039
- do_filp_open+0x20b/0x470 fs/namei.c:4066
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_openat fs/open.c:1460 [inline]
- __se_sys_openat fs/open.c:1455 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1455
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fcdf4207851
-RSP: 002b:00007ffe7889bab0 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcdf4207851
-RDX: 0000000000000002 RSI: 00007ffe7889bb50 RDI: 00000000ffffff9c
-RBP: 00007ffe7889bb50 R08: 000000000000000f R09: 00232d6332692f76
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe7889bf80
-R13: 00007ffe7889bfa0 R14: 000000000000ffeb R15: 00007ffe7889bf7c
- </TASK>
-INFO: task syz-executor329:5851 blocked for more than 145 seconds.
-      Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor329 state:D stack:27560 pid:5851  tgid:5851  ppid:5819   task_flags:0x400040 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x116f/0x5de0 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- __mutex_lock_common kernel/locking/mutex.c:678 [inline]
- __mutex_lock+0x6c7/0xb90 kernel/locking/mutex.c:746
- device_lock include/linux/device.h:922 [inline]
- usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
- chrdev_open+0x231/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:956
- vfs_open+0x82/0x3f0 fs/open.c:1086
- do_open fs/namei.c:3880 [inline]
- path_openat+0x1e5e/0x2d40 fs/namei.c:4039
- do_filp_open+0x20b/0x470 fs/namei.c:4066
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_openat fs/open.c:1460 [inline]
- __se_sys_openat fs/open.c:1455 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1455
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fcdf4207851
-RSP: 002b:00007ffe7889bab0 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcdf4207851
-RDX: 0000000000000002 RSI: 00007ffe7889bb50 RDI: 00000000ffffff9c
-RBP: 00007ffe7889bb50 R08: 000000000000000f R09: 00232d6332692f76
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffe7889bf80
-R13: 00007ffe7889bfa0 R14: 000000000001054d R15: 00007ffe7889bf7c
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/31:
- #0: ffffffff8e3bf5c0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #0: ffffffff8e3bf5c0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
- #0: ffffffff8e3bf5c0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x36/0x1c0 kernel/locking/lockdep.c:6764
-2 locks held by getty/5579:
- #0: ffff8880326d60a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
- #1: ffffc90002ffe2f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x41b/0x14f0 drivers/tty/n_tty.c:2222
-5 locks held by kworker/0:3/5829:
- #0: ffff88801f284948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x12a2/0x1b70 kernel/workqueue.c:3213
- #1: ffffc9000412fd18 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x929/0x1b70 kernel/workqueue.c:3214
- #2: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #2: ffff888145310198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1c0/0x4fa0 drivers/usb/core/hub.c:5859
- #3: ffff88807f727198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #3: ffff88807f727198 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1004
- #4: ffff88807ccea160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #4: ffff88807ccea160 (&dev->mutex){....}-{4:4}, at: __device_attach+0x7e/0x4b0 drivers/base/dd.c:1004
-4 locks held by udevd/5834:
- #0: ffff88802e1f38b8 (&p->lock){+.+.}-{4:4}, at: seq_read_iter+0xe1/0x12c0 fs/seq_file.c:182
- #1: ffff88802c20a088 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_seq_start+0x4d/0x240 fs/kernfs/file.c:154
- #2: ffff88802f69a4b8 (kn->active#18){.+.+}-{0:0}, at: kernfs_seq_start+0x71/0x240 fs/kernfs/file.c:155
- #3: ffff88807f727198 (&dev->mutex){....}-{4:4}, at: device_lock_interruptible include/linux/device.h:927 [inline]
- #3: ffff88807f727198 (&dev->mutex){....}-{4:4}, at: manufacturer_show+0x26/0xa0 drivers/usb/core/sysfs.c:142
-1 lock held by syz-executor329/5845:
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
-1 lock held by syz-executor329/5847:
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
-1 lock held by syz-executor329/5848:
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
-1 lock held by syz-executor329/5850:
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
-1 lock held by syz-executor329/5851:
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:922 [inline]
- #0: ffff888145310198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
-2 locks held by dhcpcd/5861:
- #0: ffff888012f64408 (&sb->s_type->i_mutex_key#11){+.+.}-{4:4}, at: inode_lock include/linux/fs.h:867 [inline]
- #0: ffff888012f64408 (&sb->s_type->i_mutex_key#11){+.+.}-{4:4}, at: __sock_release+0x86/0x270 net/socket.c:646
- #1: ffffffff8e3caaf8 (rcu_state.exp_mutex){+.+.}-{4:4}, at: exp_funnel_lock+0x280/0x3c0 kernel/rcu/tree_exp.h:304
-2 locks held by dhcpcd/5862:
- #0: ffff888012f62c08 (&sb->s_type->i_mutex_key#11){+.+.}-{4:4}, at: inode_lock include/linux/fs.h:867 [inline]
- #0: ffff888012f62c08 (&sb->s_type->i_mutex_key#11){+.+.}-{4:4}, at: __sock_release+0x86/0x270 net/socket.c:646
- #1: ffffffff8e3caaf8 (rcu_state.exp_mutex){+.+.}-{4:4}, at: exp_funnel_lock+0x1a3/0x3c0 kernel/rcu/tree_exp.h:336
-
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 31 Comm: khungtaskd Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:158 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:274 [inline]
- watchdog+0xf70/0x12c0 kernel/hung_task.c:437
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.15.0-rc4-syzkaller-00021-gca91b9500108 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
-RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:81
-Code: 95 62 02 c3 cc cc cc cc 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 73 aa 1d 00 fb f4 <c3> cc cc cc cc 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
-RSP: 0018:ffffffff8e007e10 EFLAGS: 000002c6
-RAX: 00000000000e2f7d RBX: 0000000000000000 RCX: ffffffff8b6c4419
-RDX: 0000000000000000 RSI: ffffffff8dbdf8c1 RDI: ffffffff8bf47e20
-RBP: fffffbfff1c12ee8 R08: 0000000000000001 R09: ffffed10170865bd
-R10: ffff8880b8432deb R11: 0000000000000000 R12: 0000000000000000
-R13: ffffffff8e097740 R14: ffffffff9084f110 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881249e4000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b05125c680 CR3: 000000000e180000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
- default_idle+0x13/0x20 arch/x86/kernel/process.c:748
- default_idle_call+0x6d/0xb0 kernel/sched/idle.c:117
- cpuidle_idle_call kernel/sched/idle.c:185 [inline]
- do_idle+0x391/0x510 kernel/sched/idle.c:325
- cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:423
- rest_init+0x16b/0x2b0 init/main.c:743
- start_kernel+0x3e9/0x4d0 init/main.c:1099
- x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:513
- x86_64_start_kernel+0xb0/0xc0 arch/x86/kernel/head64.c:494
- common_startup_64+0x13e/0x148
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
