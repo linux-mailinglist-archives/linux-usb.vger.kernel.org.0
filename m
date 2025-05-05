@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-23745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA422AAA937
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 03:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D841FAAA98E
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 03:16:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 746B3460A09
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 01:09:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1B744A10D9
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 01:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7059C35A540;
-	Mon,  5 May 2025 22:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE533679AF;
+	Mon,  5 May 2025 22:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tagauJDc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdsrFeQM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A3A359DF9;
-	Mon,  5 May 2025 22:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F6029AAF4;
+	Mon,  5 May 2025 22:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484977; cv=none; b=O/rB0lDxU31slPtIsXZuqOH9vZ2zVQ/9b1bqB9BN0coo4Ef+Y0YvFdfIYbH673q9kRzr7d/Lw9VLGj9gNvw/q+Wqn9F/AjWu8XXoRZ2pBI8qTL1IkCv2+5CHdDQ7vF3CvOMG9n/H7LGjF/npAW9ZxxKgvD8mUdKJoM6U3SfExQc=
+	t=1746485050; cv=none; b=O9TfjDZJbQ543fcWkmkdlgkdcWrhsN7tyPkZM9GqlaozaGhWMHCYE6fN4/O3+wHKVAf9YvFiM3Z43Avjr3AsLQAZGpP+dCTAXl3JvvqPZc2dgDvNnrXFF3Db4ZKfzCodEUaB5INmc2oGtccMqGzHL8abEWnA9GWAfNyPc7IQVpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484977; c=relaxed/simple;
-	bh=YQ75bINvl/uiYyqnZhLyfguZ9F0UaUz2ZRP/bkRD+kU=;
+	s=arc-20240116; t=1746485050; c=relaxed/simple;
+	bh=a3QzQ1hg2SV2WrVAJY6TwiYvWvPfuFP+s0Y2RBN2kPg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r5h9y55JJYN6vRhyJbVsrRnIkYsvPYU61TyyuozhfbwanJ7raShILG2d0/uPKr5FiwtNy4S2tt/9p2Q3d0lvXDBx23eqnB5wCxceRSuodoQ8WYI7ZD+fYFb+i2fKi4eewPMJC+x46IpbFxJH76AkkPCeM4psIiH5sBfQBtSt94U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tagauJDc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5636FC4CEE4;
-	Mon,  5 May 2025 22:42:55 +0000 (UTC)
+	 MIME-Version; b=fujrG/KftZN7pjUy+JVH5Vg31E4lSii+FvofzEe+5v62UgSMMHgtlwaLQLLt3KreXXXNiX6sSXKyWjvyepY7W68vo7UTCAh16aUKM+SJFAxzvW2R4Dz+bwD7C9sQDoW0KcimzfYKo+E0E29TR6vSAMfmm6+ndvQohVKYTu0vRTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdsrFeQM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DE06C4CEED;
+	Mon,  5 May 2025 22:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484976;
-	bh=YQ75bINvl/uiYyqnZhLyfguZ9F0UaUz2ZRP/bkRD+kU=;
+	s=k20201202; t=1746485050;
+	bh=a3QzQ1hg2SV2WrVAJY6TwiYvWvPfuFP+s0Y2RBN2kPg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tagauJDcT/9+ybLUVOchFKqbADIq6YI6zha5Mevau/atT2qhB49Ty9OsKwWF1HffS
-	 BUCpbUkVofuzhh1wnM+j7/ZGrbkO4G3HS6chssYgo787Sv9AEGwzmT72anoYe+X6Xx
-	 I6xrDgNgeoBmJx/GebWjyisowG5KmgAAnyC4ObJO77lrA+DeM5+aH1r2ovDScUPNUg
-	 fFy4WO6CNrskUvw0OVe/rC2KAFigmr/sKkttKLsNkuG7ThHFQtJJ4M66yVaN0MWWH1
-	 LWOo/bxq490RKzR26IYnaL9eEBCUmE+4yO8LxfUo0diNh3MeTCURp5OBc7n6pB+MuB
-	 j95fJXqWHppYw==
+	b=gdsrFeQMsBS7n06mhbbuoFfDCpWDo8rfH+dQr91NCtsrB9oQ0czLg4ORdu4gzIdUz
+	 cI6DdbwmjjAjLUb2TxlMLRs/tRMcbCj8xqgfMexuLXli5Mt/qnYIEI3P8zXdVZ/q6B
+	 pDHfc35HeGa9mAv+ft4MMgyK1rsdHyEIe8mJivk1Vo9xJpEKlgzM2d+fY1ol4Xh2Z2
+	 zdcm9NNPaOrAOnc3W5Poomr2dZxgDY5Nek5jm/nTyOMYKGqItUJlI/GQbUH8Ifvniq
+	 urskdsXvk14+I7P6GxQGeFu0EsMyYV2S8UoxOyiqZHZH2wX2LiFWyzfT0JIqVntzNU
+	 vW3cz23Mqntiw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc: Michal Pecio <michal.pecio@gmail.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	westeri@kernel.org,
-	YehezkelShB@gmail.com,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 106/486] thunderbolt: Do not add non-active NVM if NVM upgrade is disabled for retimer
-Date: Mon,  5 May 2025 18:33:02 -0400
-Message-Id: <20250505223922.2682012-106-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 142/486] usb: xhci: Don't change the status of stalled TDs on failed Stop EP
+Date: Mon,  5 May 2025 18:33:38 -0400
+Message-Id: <20250505223922.2682012-142-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -68,39 +67,66 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Michal Pecio <michal.pecio@gmail.com>
 
-[ Upstream commit ad79c278e478ca8c1a3bf8e7a0afba8f862a48a1 ]
+[ Upstream commit dfc88357b6b6356dadea06b2c0bc8041f5e11720 ]
 
-This is only used to write a new NVM in order to upgrade the retimer
-firmware. It does not make sense to expose it if upgrade is disabled.
-This also makes it consistent with the router NVM upgrade.
+When the device stalls an endpoint, current TD is assigned -EPIPE
+status and Reset Endpoint is queued. If a Stop Endpoint is pending
+at the time, it will run before Reset Endpoint and fail due to the
+stall. Its handler will change TD's status to -EPROTO before Reset
+Endpoint handler runs and initiates giveback.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Check if the stall has already been handled and don't try to do it
+again. Since xhci_handle_halted_endpoint() performs this check too,
+not overwriting td->status is the only difference.
+
+I haven't seen this case yet, but I have seen a related one where
+the xHC has already executed Reset Endpoint, EP Context state is
+now Stopped and EP_HALTED is set. If the xHC took a bit longer to
+execute Reset Endpoint, said case would become this one.
+
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20250311154551.4035726-3-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thunderbolt/retimer.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-ring.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
-index eeb64433ebbca..3488be7620674 100644
---- a/drivers/thunderbolt/retimer.c
-+++ b/drivers/thunderbolt/retimer.c
-@@ -93,9 +93,11 @@ static int tb_retimer_nvm_add(struct tb_retimer *rt)
- 	if (ret)
- 		goto err_nvm;
- 
--	ret = tb_nvm_add_non_active(nvm, nvm_write);
--	if (ret)
--		goto err_nvm;
-+	if (!rt->no_nvm_upgrade) {
-+		ret = tb_nvm_add_non_active(nvm, nvm_write);
-+		if (ret)
-+			goto err_nvm;
-+	}
- 
- 	rt->nvm = nvm;
- 	dev_dbg(&rt->dev, "NVM version %x.%x\n", nvm->major, nvm->minor);
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 3e70e4f6bf083..fbc8419a54730 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1156,7 +1156,14 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 	 */
+ 		switch (GET_EP_CTX_STATE(ep_ctx)) {
+ 		case EP_STATE_HALTED:
+-			xhci_dbg(xhci, "Stop ep completion raced with stall, reset ep\n");
++			xhci_dbg(xhci, "Stop ep completion raced with stall\n");
++			/*
++			 * If the halt happened before Stop Endpoint failed, its transfer event
++			 * should have already been handled and Reset Endpoint should be pending.
++			 */
++			if (ep->ep_state & EP_HALTED)
++				goto reset_done;
++
+ 			if (ep->ep_state & EP_HAS_STREAMS) {
+ 				reset_type = EP_SOFT_RESET;
+ 			} else {
+@@ -1167,8 +1174,11 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 			}
+ 			/* reset ep, reset handler cleans up cancelled tds */
+ 			err = xhci_handle_halted_endpoint(xhci, ep, td, reset_type);
++			xhci_dbg(xhci, "Stop ep completion resetting ep, status %d\n", err);
+ 			if (err)
+ 				break;
++reset_done:
++			/* Reset EP handler will clean up cancelled TDs */
+ 			ep->ep_state &= ~EP_STOP_CMD_PENDING;
+ 			return;
+ 		case EP_STATE_STOPPED:
 -- 
 2.39.5
 
