@@ -1,62 +1,69 @@
-Return-Path: <linux-usb+bounces-23753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23754-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B985AAB093
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 05:41:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1297AAB223
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 06:14:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E5674A6E68
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 03:40:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EAE73A6697
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 04:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649EE406C16;
-	Mon,  5 May 2025 23:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72106379A3F;
+	Tue,  6 May 2025 00:28:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3naPKB3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIyuUDhS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF8D2FBAC9;
-	Mon,  5 May 2025 23:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCD827FD61;
+	Mon,  5 May 2025 22:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487442; cv=none; b=H80zjiDk/VHZiz/nsiJR/PsM3n1R/T1UhlGtU0NScf+f0vPdO/RJoRF16tPNsyJWKpPo3Sn04crSpGUumdLC112rVXDwPSiYXCZHX3mXxNL1MVcP8CJU9K5nZL03pZD6Kb2z+f6oHmMeaVXcXCZU2MGcOHgZjgURUXr+Gj64x0A=
+	t=1746485637; cv=none; b=a3vegrlQwhXg0qREf/u1Dx0uesSY5wP7YXD6qHPYy4gEz9IjSzSyHAzt3WWPguEtxmAffyFnsu26Yws1q1Y+VPGtsLgSs8XYUG/f91FabdsC6rCvWVkUrRLKp7HuEBTtLHngIRmUE+qkrsh/HgO908iNwdIQlLDOtyoJXAo0GVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487442; c=relaxed/simple;
-	bh=+9wgd69+q8mhtvzBwj+DAjUx/KgGqujnSK1ZuuoQSbA=;
+	s=arc-20240116; t=1746485637; c=relaxed/simple;
+	bh=efAAsusLpliVA+wnEyoY/khXhi125dU5XM0uCV+wq7k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oXYXyiBCEQzMhwgzOxANRrTs7/0wgS2VFUSIrJa9bW7Cr8z5sPsUcaISCGihP6wzY6Zt+Jnt8LmKcU17R877hfN8S/lodvr0GHfwF7zyV8HMimFG/ySHRiy6rGkLBPrrVbX8UepqAj6e1w1ArJK/fmGurZBqybmvGuHl4s/XUtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3naPKB3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A25C4CEEE;
-	Mon,  5 May 2025 23:24:01 +0000 (UTC)
+	 MIME-Version; b=lsLkCvrBK5XhQkJG/d6m28bYPiFbZjWp1SbTU6iT58l/oO3cha2DRupu1N6opw1wSYWv2V8AUSc3QVdCgH/MQHUNgLyl76YpIQtT9j+9l3FDt7GVJ/hkefDbZyz8CsrpYhvCNvu+swLmjbiUfKUvKNh7nE1oVnF54YP110p/az0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIyuUDhS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC29C4CEED;
+	Mon,  5 May 2025 22:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487442;
-	bh=+9wgd69+q8mhtvzBwj+DAjUx/KgGqujnSK1ZuuoQSbA=;
+	s=k20201202; t=1746485637;
+	bh=efAAsusLpliVA+wnEyoY/khXhi125dU5XM0uCV+wq7k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d3naPKB3fjNk2UroWbj+Ps7Nrvc3qg9607k9t4QDTOVEEaU9lxB2UIFGLl/VGboXo
-	 B+rC028t9+CX3AJ+SVP1UUKYzBFRQwUsCDO4jSLUANIKL1Tf3PGnw1rUBjL6HB+sxX
-	 9Ju7OfQSFcSLnbfJBeIqglwwsMkljmdMBtTdyr5ZhpiR82U8LSJy/lCFgQQYSyrIlj
-	 looPVowhkPSENDEkQ6+gNmRAQBeun4J6kd/ULtQXniWjNJ4gbCGGdABp+AG7NtHlss
-	 YPVcrm4rvjkuKA1XE26VW9FbUmDdS8F3RlJqCwZi2akNj8FiGHriwqEPDolMpEKb0E
-	 VtGAFVskWXMXA==
+	b=oIyuUDhSj3em4n23ZvH7MiYj3rTXPHe6c4X4qpDE+1NLFknN8EvXipl1WQ7x8ZBSn
+	 s+aXLmlj2h/wUJPV/PKrVAWzqJfb3hJVXKadjUkZm+PhMECChZcAWIy1R8jil8LVCV
+	 1/Rlao2H/83aELRWRX/U5Zzc7igbhdeoS3dWq1RqAsZYzosClqn6UmKaP1XDZbkMP1
+	 QzRW7k1Nc/Krwp3ENcR1fqh/cOLBNa4+L6aXZS9A00OOSXVE0bpGBvAoemU0G4QdxW
+	 JOYmFHWy+Xmda9LDl+BLKUXv0oa5hnmliA+wcNzehDsIgIc8Ol9youiF+FR9FIL4zj
+	 Cc4xboespLC3g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: junan <junan76@163.com>,
-	Jiri Kosina <jkosina@suse.com>,
+Cc: Aleksander Jan Bajkowski <olek2@wp.pl>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	jikos@kernel.org,
-	bentiss@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	gregkh@linuxfoundation.org,
+	hayeswang@realtek.com,
+	horms@kernel.org,
+	dianders@chromium.org,
+	phahn-oss@avm.de,
 	linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 74/79] HID: usbkbd: Fix the bit shift number for LED_KANA
-Date: Mon,  5 May 2025 19:21:46 -0400
-Message-Id: <20250505232151.2698893-74-sashal@kernel.org>
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 398/486] r8152: add vendor/device ID pair for Dell Alienware AW1022z
+Date: Mon,  5 May 2025 18:37:54 -0400
+Message-Id: <20250505223922.2682012-398-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505232151.2698893-1-sashal@kernel.org>
-References: <20250505232151.2698893-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,35 +72,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.293
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: junan <junan76@163.com>
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
 
-[ Upstream commit d73a4bfa2881a6859b384b75a414c33d4898b055 ]
+[ Upstream commit 848b09d53d923b4caee5491f57a5c5b22d81febc ]
 
-Since "LED_KANA" was defined as "0x04", the shift number should be "4".
+The Dell AW1022z is an RTL8156B based 2.5G Ethernet controller.
 
-Signed-off-by: junan <junan76@163.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.com>
+Add the vendor and product ID values to the driver. This makes Ethernet
+work with the adapter.
+
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+Link: https://patch.msgid.link/20250206224033.980115-1-olek2@wp.pl
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/usbhid/usbkbd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/r8152.c   | 1 +
+ include/linux/usb/r8152.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
-index d5b7a696a68c5..50c5b204bf04c 100644
---- a/drivers/hid/usbhid/usbkbd.c
-+++ b/drivers/hid/usbhid/usbkbd.c
-@@ -160,7 +160,7 @@ static int usb_kbd_event(struct input_dev *dev, unsigned int type,
- 		return -1;
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 96fa3857d8e25..2cab046749a92 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -10085,6 +10085,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+ 	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
++	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
+ 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
+ 	{}
+ };
+diff --git a/include/linux/usb/r8152.h b/include/linux/usb/r8152.h
+index 33a4c146dc19c..2ca60828f28bb 100644
+--- a/include/linux/usb/r8152.h
++++ b/include/linux/usb/r8152.h
+@@ -30,6 +30,7 @@
+ #define VENDOR_ID_NVIDIA		0x0955
+ #define VENDOR_ID_TPLINK		0x2357
+ #define VENDOR_ID_DLINK			0x2001
++#define VENDOR_ID_DELL			0x413c
+ #define VENDOR_ID_ASUS			0x0b05
  
- 	spin_lock_irqsave(&kbd->leds_lock, flags);
--	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 3) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
-+	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 4) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
- 		       (!!test_bit(LED_SCROLLL, dev->led) << 2) | (!!test_bit(LED_CAPSL,   dev->led) << 1) |
- 		       (!!test_bit(LED_NUML,    dev->led));
- 
+ #if IS_REACHABLE(CONFIG_USB_RTL8152)
 -- 
 2.39.5
 
