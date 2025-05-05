@@ -1,135 +1,272 @@
-Return-Path: <linux-usb+bounces-23735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23736-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4718BAA9C94
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 21:26:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20F7DAA9D46
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 22:34:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D8D71A81261
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 19:26:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 021801A80B16
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 20:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D262701CD;
-	Mon,  5 May 2025 19:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3021627054C;
+	Mon,  5 May 2025 20:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="KzU7a7o/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="COOpByAv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C7F1C2335
-	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 19:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFB41DEFC5
+	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 20:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746472995; cv=none; b=JfSJzCegFiAnKJtHvERP4oTdccvYvKy9SYSRSJx4ydT9O7NZXeHYlmCVJ9JlZiel9iLlt0t4dCTHGWXI54RdwnPXiWMPFOrV6c4QO0X733BHUxqV3esnonRHQosvcvhD52s11F7lzKG+L32U7wXPU4MeWhPt+URgQMeAwsF7mi4=
+	t=1746477275; cv=none; b=KDi0qFhee9efYXxfEUIpW3aOeOFS66fnBtQEHSBeV67NgT63rG71ROOBunrA+PdTcp4RVglO+vssNTE+3UsMWHwgrGcnocLhDrMiQaJMG0ObkWcFE6OAEz78L3MSpmPHAsU6APNvsa/b0H7D97drs3CS5dAYzXP47zKMFNR4mXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746472995; c=relaxed/simple;
-	bh=ENSwrslkI8QKccIUjGOSW7JPQFj0MtcxngdcS/b7F70=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=C+ZZWSgLrv4uNwXxm7mXCj14atiI+aU2eI5ZBsHfETm4gjl3PXMGPsJFD6Q83c2o4HTrM2rx3wnq2ymNy9Nnp5KW8S2qpopEKVLr6NglC4dX/rKOeJJ9bLIgY9kCJQR0s8zJSLU4RmyvEQiW+rTo4wN6w9FD3pGT6XWtnb/RqbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=KzU7a7o/; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3d965c64d53so17943965ab.1
-        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 12:23:12 -0700 (PDT)
+	s=arc-20240116; t=1746477275; c=relaxed/simple;
+	bh=eXsbeYaStEdVkB/9iiuPPvCcb0GJ33j+Y7Lm4GpCn+k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ifRKKrsPU4sBtCB9PQjlJNYnRy0YVOzZDoLP+xjU+5uwD7KSagHL/szhe/Zkuss9jVnYh0mI72RW2DeeZHUc6Tdgi2D67Eq4ezLhGjUl7z+zWtTfKOtFKbYYl3ZojArV5IzLtTT7B2tdJ3BiN6xK+d4LOabbJOjCxloTF/jHXLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=COOpByAv; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-54e816aeca6so6221685e87.2
+        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 13:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1746472992; x=1747077792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1746477272; x=1747082072; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZMVeIpMgFF4mocy+t3rzmtkLWK0EgWsZb4AtQGZnRAs=;
-        b=KzU7a7o/03NOU83+KXDRr4VoaKCThhQSEhWpcfsB7BOO+72SsMmlp/k2fW3HG7h9q7
-         /NePk6i84NyiHnYHIjqsxWXZexMHD+r7oiLb8a6eElueMmWS9Uxt8tRB7wjYzbVK6DAt
-         VxnZNa7MuHcswUyv3Mko6USTaFAh4/SUVniSguPryCGnAyzMgrNgLIJsLHrjXidqjeUj
-         KE+tFdJHX/hELKBMw1JWT7u4NKGmMoas2agkcC9koVmMNxEvM4tU/TOcTLwmE+cLbR+k
-         8dKIqWuGwhfNFgltPDo4O8LM0y8pbBslX3urLbQPpRJAimwzD96UaEAoMOzOlnyiuiYX
-         o4xA==
+        bh=aad+O7LlnePo9Jud5k6L+0x2zxiP/d5GA/t21nuBedc=;
+        b=COOpByAv0LfDVqP8oj7pO3PZx6y7+sxjV85DLkW65znPUdJNTktz47RUTlfBdPwZFk
+         NyiNZrfJ7tqN3UdpTa6MElLncalkaE/vvNG/0TMpetH2v9t4X1lP1q2/vXpEudNiP/te
+         Tp0PUtiP6WgmLnm8/b7jWIf6MHGfuM6JnCbCE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746472992; x=1747077792;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1746477272; x=1747082072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZMVeIpMgFF4mocy+t3rzmtkLWK0EgWsZb4AtQGZnRAs=;
-        b=Be1WueQx7mz1d7rUAIK8EdUY8YbKzcnS9uF5byqkL+GvODCa5zWb/GEw5KTiLhQEOe
-         6wExAqBUqnQjpec3FmUp1wgnMfUW6p/AFg4LEBGb3Ot3KdPTNJ2+ddKo38nVpSSQVboA
-         MzA4peZOQRATk5AY6nLXeD99B8YeV3+tsKZAJAEOn2YcpWdL0KcDGZC4imAHcQggGXDi
-         H+owkFSf7RSiS64aw5hXmJBCyWwJXaGg4kjKMlMlo/tqPlSk94PUQQDsLXMO9xmf0J3Y
-         GG3ojsV3tqhkFT719ZH4Yvy6Q8Lg0nUWCkX9EiptW40W7CwaoSHXyljL+BB930a+FfRp
-         B3/A==
-X-Forwarded-Encrypted: i=1; AJvYcCU9KaNYvWoYOUXzK56pfeSnq+bzaSSlvWX66iYJo+kEBzPLG4+tk0CNXOhqpPKdPQG6snXrd3jWPFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk3VAdnf+uTjI9ujvw625fM/a9c8Tj8UrQbImaA6Hz/HObycx5
-	XooPhMXGaBpCXJQTYD2aDQGxXReC7jKshfKVU4ojpvftYElnCVjpkTZPQ8Fxezg=
-X-Gm-Gg: ASbGncvqtRU4t2P2jSoPCrVT6TyfKHY+OtFQslRw/5xCy/CrY+WpFQCHVulgJKwUHRg
-	JpD6JY+tGSxl4vQdfBQD3zrvBXBWp3KsXQfngWd/GuqjB44sasd/At/RMBywuistRXC9vYueB37
-	CCqmg573yEN6Ja/VJFWuFlpbpMGqH+GhECJ4LDzTXLegBNR22enYiH3jYSP8C3228MuNahf3U7W
-	uhExB9VDO0l3UTETH8eAgH2rboiwwFxPqcYtr0pcuN4y59274AMEIcheZWyfs5Y9a1g1K25qna9
-	CdNMCzWqw9HCf63MIWRQFYioTIMbssya
-X-Google-Smtp-Source: AGHT+IE4U0Nel01JtHK/rX8QBl2qPC8iA3WLhlaneMKSKU+x8aeNWP3CpSNUZacnFBxkOoaqFfb6GQ==
-X-Received: by 2002:a05:6e02:378a:b0:3d3:dfb6:2203 with SMTP id e9e14a558f8ab-3da5b34518cmr82097595ab.19.1746472991964;
-        Mon, 05 May 2025 12:23:11 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d975f6d771sm21077235ab.63.2025.05.05.12.23.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 12:23:11 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Christoph Hellwig <hch@lst.de>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, 
- "Juergen E. Fischer" <fischer@norbit.de>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Andrew Morton <akpm@linux-foundation.org>, linux-block@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
- usb-storage@lists.one-eyed-alien.net, linux-mm@kvack.org
-In-Reply-To: <20250505081138.3435992-1-hch@lst.de>
-References: <20250505081138.3435992-1-hch@lst.de>
-Subject: Re: remove block layer bounce buffering v2
-Message-Id: <174647299114.1416870.3005554851862973144.b4-ty@kernel.dk>
-Date: Mon, 05 May 2025 13:23:11 -0600
+        bh=aad+O7LlnePo9Jud5k6L+0x2zxiP/d5GA/t21nuBedc=;
+        b=GNkUrPEGYetGZttpIVHloS2VJ7BT6cZzX+eMKDJ9nxMb3wq7+HyZv1yVlbL5pHNcD8
+         jWSQaXNMYOtHsyAlry6k4mKA94TvLJZQCPpIQuLMQHP9GPesDxt/S6n3H39po6GEwkEb
+         jP4X9qtKgI10NS/IKBkT3Veh9BIlCbTO0lhzb+v3NyEIv2vDWjpJ0+UqPMiDFSXNxC3G
+         dwcePudCFwkBu3RlgRAsONio/A84FkqHXFrZs2IVIOeqbiZiCBpJpcsVhnIV5hnQH+Wi
+         DBLw3U3QyxxP6SBUe6XXLmSddX2ptHzlbSWYBn9y8dUvAY3mAZ0ACg6lmrtlbcHbrESV
+         tquw==
+X-Forwarded-Encrypted: i=1; AJvYcCVj8+bBjO8u8s3tRxerNHZTp2IjVat6JtxGhUMxpZfBL4Cd0iZ6A5UggI8LB8C3eTa04imyx4LWYyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfd/TqYCp1Xv8R85rAOkWHTSkDuNdaOsWwtOGSNuNsnLVHXyWI
+	jPiZygT7+gVoSUxvf2h1BQnnlERHoxehE5B/GKR5sUq2HuUBQwmjz9SYWrEz66eWnWGBULSrz/0
+	=
+X-Gm-Gg: ASbGncs3Gs+VTfhDQ329U9MPN0dWhbQykhU/Gq7c+BNuR0deR6a16lfSN8LY4tCaUZA
+	xlJiEF5U/q/BrfGTVptp66MwPQcCj5xbtx5CHgk15kM20MPmzw+AHE7XDaoiywn3JcJjMzuIp0+
+	Sf/qST8nW5ROOnALXM17VDtzuNc5Icd3Zz1k28Cv0D3kykx43kJaUCef07l3aHx5dBACI+8aMHM
+	uDCS1aTWBBWqUKwPRf1pNAJ+BERX1G9XUyz1TVuiPwVY68Q1sw6TUQgaqPQ2mKX8AAVSzbKBmIe
+	n5AffAwx/8GiU8lsfPqo4tBhuMY559uWm0Dzs/iAGJ0nfSno7nG+JZ/sNcaLeG3KJiHGM/B5iNQ
+	KHby910k=
+X-Google-Smtp-Source: AGHT+IH1pyJ8gWLSroJlwqUeQnJ0EF0Oo0iDbzF4Fmn6G1kMcC25n1v2g8doqCzBpcm342raiDdZ9Q==
+X-Received: by 2002:a05:6512:3f21:b0:54e:8222:7311 with SMTP id 2adb3069b0e04-54fb4a97772mr131919e87.39.1746477271636;
+        Mon, 05 May 2025 13:34:31 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54ea94f21a8sm1803694e87.197.2025.05.05.13.34.28
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 May 2025 13:34:30 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30de488cf81so50136041fa.1
+        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 13:34:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXGhHZrwd8SLcWhC1Bzah8I9ztPytzHixnQ6XszkSCUleq41ABkF0a12IgsIrTUnRmYq2XTmXCtezk=@vger.kernel.org
+X-Received: by 2002:a05:651c:b2a:b0:319:d856:c2f3 with SMTP id
+ 38308e7fff4ca-3266b59789emr751721fa.10.1746477268328; Mon, 05 May 2025
+ 13:34:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3-dev-7b9b9
+References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
+ <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org> <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
+ <CANiDSCvQC25ZrSZgUuFt6deCogFL6=GPsYYrsegK1NOK=uzRJA@mail.gmail.com>
+ <dd471b51-333b-4537-ac58-29ad2a10f1e2@redhat.com> <aAdkU65ruBfyRjss@valkosipuli.retiisi.eu>
+In-Reply-To: <aAdkU65ruBfyRjss@valkosipuli.retiisi.eu>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 5 May 2025 22:34:16 +0200
+X-Gmail-Original-Message-ID: <CANiDSCt5_HwfwXDWNGWvzkSAW2ZB4PJwS00=i0EizY_3A-OSgw@mail.gmail.com>
+X-Gm-Features: ATxdqUEg2rUAsN7TYo98ElSvRXDzyBQACXaWg80nr6xGofF6c5WfqBKJm9vPYRM
+Message-ID: <CANiDSCt5_HwfwXDWNGWvzkSAW2ZB4PJwS00=i0EizY_3A-OSgw@mail.gmail.com>
+Subject: Re: [PATCH 3/8] media: v4l: fwnode: Support acpi devices for v4l2_fwnode_device_parse
+To: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: Hans de Goede <hdegoede@redhat.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Sakari
+
+On Tue, 22 Apr 2025 at 11:41, Sakari Ailus <sakari.ailus@iki.fi> wrote:
+>
+> Hi Hans, Ricardo,
+>
+> On Tue, Apr 22, 2025 at 10:44:41AM +0200, Hans de Goede wrote:
+> > Hi Ricardo,
+> >
+> > On 22-Apr-25 2:23 AM, Ricardo Ribalda wrote:
+> > > Hi Sakari
+> > >
+> > > On Sun, 13 Apr 2025 at 17:50, Sakari Ailus <sakari.ailus@iki.fi> wrot=
+e:
+> > >>
+> > >> Hi Ricardo,
+> > >>
+> > >> Thanks for the patch.
+> > >>
+> > >> On Thu, Apr 03, 2025 at 07:16:14PM +0000, Ricardo Ribalda wrote:
+> > >>> This patch modifies v4l2_fwnode_device_parse() to support ACPI devi=
+ces.
+> > >>>
+> > >>> We initially add support only for orientation via the ACPI _PLD met=
+hod.
+> > >>>
+> > >>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > >>> ---
+> > >>>  drivers/media/v4l2-core/v4l2-fwnode.c | 58 +++++++++++++++++++++++=
+++++++++----
+> > >>>  1 file changed, 52 insertions(+), 6 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/=
+v4l2-core/v4l2-fwnode.c
+> > >>> index cb153ce42c45d69600a3ec4e59a5584d7e791a2a..81563c36b6436bb61e1=
+c96f2a5ede3fa9d64dab3 100644
+> > >>> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
+> > >>> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+> > >>> @@ -15,6 +15,7 @@
+> > >>>   * Author: Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+> > >>>   */
+> > >>>  #include <linux/acpi.h>
+> > >>> +#include <acpi/acpi_bus.h>
+> > >>>  #include <linux/kernel.h>
+> > >>>  #include <linux/mm.h>
+> > >>>  #include <linux/module.h>
+> > >>> @@ -807,16 +808,47 @@ int v4l2_fwnode_connector_add_link(struct fwn=
+ode_handle *fwnode,
+> > >>>  }
+> > >>>  EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_add_link);
+> > >>>
+> > >>> -int v4l2_fwnode_device_parse(struct device *dev,
+> > >>> -                          struct v4l2_fwnode_device_properties *pr=
+ops)
+> > >>> +static int v4l2_fwnode_device_parse_acpi(struct device *dev,
+> > >>> +                                      struct v4l2_fwnode_device_pr=
+operties *props)
+> > >>> +{
+> > >>> +     struct acpi_pld_info *pld;
+> > >>> +     int ret =3D 0;
+> > >>> +
+> > >>> +     if (!acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld=
+)) {
+> > >>> +             dev_dbg(dev, "acpi _PLD call failed\n");
+> > >>> +             return 0;
+> > >>> +     }
+> > >>
+> > >> You could have software nodes in an ACPI system as well as DT-aligne=
+d
+> > >> properties. They're not the primary means to convey this information=
+ still.
+> > >>
+> > >> How about returning e.g. -ENODATA here if _PLD doesn't exist for the=
+ device
+> > >> and then proceeding to parse properties as in DT?
+> > >
+> > > Do you mean that there can be devices with ACPI handles that can also
+> > > have DT properties?
+> >
+> > Yes it is possible to embed DT properties in ACPI, but I don't
+> > think that is really applicable here.
+>
+> This is determined by
+> Documentation/firmware-guide/acpi/DSD-properties-rules.rst . So rotation
+> and orientation shouldn't come from _DSD properties on ACPI systems.
+
+Doesn't this contradict what DisCo does?
 
 
-On Mon, 05 May 2025 10:11:19 +0200, Christoph Hellwig wrote:
-> the block layer bounce buffering from the early days of highmem keeps
-> being a wart in the block layer despite usage by only four drivers,
-> all through the SCSI layer.  One of them is an old PIO-only ISA
-> card, two are parallel port adapters, and the fourth is the usb-storage
-> driver.
-> 
-> This series makes the first three depend on !HIGHMEM and for the fourth
-> rejects the probe only when used on highmem system and the HCD is one
-> of the few annoying one that does not support DMA.
-> 
-> [...]
+if (!fwnode_property_present(adev_fwnode, "rotation")) {
+struct acpi_pld_info *pld;
 
-Applied, thanks!
+if (acpi_get_physical_device_location(handle, &pld)) {
+swnodes->dev_props[NEXT_PROPERTY(prop_index, DEV_ROTATION)] =3D
+PROPERTY_ENTRY_U32("rotation",
+   pld->rotation * 45U);
+kfree(pld);
+}
+}
 
-[1/7] scsi: make aha152x depend on !HIGHMEM
-      commit: 7b32cb540bff6d6c8a1659babf930e9f66283c2c
-[2/7] scsi: make imm depend on !HIGHMEM
-      commit: bf69bd3fc26a107611e76b342027bb60b2411d4e
-[3/7] scsi: make ppa depend on !HIGHMEM
-      commit: 27a0918d4b701d4825e191448e44b9f14dc0a3b3
-[4/7] usb-storage: reject probe of device one non-DMA HCDs when using highmem
-      commit: 48610ec22f0cf7ee5b5658b2b3bab27a8f2ef78b
-[5/7] scsi: remove the no_highmem flag in the host
-      commit: a9437f6a1d8d0b3787fe6ff03d9aab4d3fe9b940
-[6/7] block: remove bounce buffering support
-      commit: eeadd68e2a5f6bfe0bf1038ec49e3a8d99eb5fe8
-[7/7] mm: remove NR_BOUNCE zone stat
-      commit: 194df9f66db8d6f74f03c78c2ad47b74a5a8b886
+It seems to first check for the rotation property, and then check _DSD.
 
-Best regards,
--- 
-Jens Axboe
+If I send a v2, shall I also replace DisCo even if that means
+reverting its logic?
 
 
+>
+> >
+> > But we also have secondary software-fwnodes which are used
+> > extensively on x86 to set device-properties on devices by
+> > platform code to deal with ACPI tables sometimes having
+> > incomplete information.
+> >
+> > For example atm _PLD is already being parsed in:
+> >
+> > drivers/media/pci/intel/ipu-bridge.c and that is then used to add
+> > a standard "orientation" device-property on the sensor device.
+> >
+> > This is actually something which I guess we can drop once your
+> > patches are in, since those should then do the same in a more
+> > generic manner.
+>
+> DisCo for Imaging support currently also digs this information from _PDL
+> (see init_crs_csi2_swnodes() in drivers/acpi/mipi-disco-img.c), but this
+> is only done if a _CRS CSI-2 descriptor is present. It could also be done
+> for devices with the IPU Windows specific ACPI objects and it would be a
+> natural location for handing quirks -- there are some
+> unrelated Dell DSDT quirks already.
+>
+> >
+> > > What shall we do if _PLD contradicts the DT property? What takes prec=
+edence?
+> >
+> > As for priorities, at east for rotation it seems that we are going
+> > to need some quirks, I already have a few Dell laptops where it seems
+> > that the sensor is upside down and parsing the rotation field in
+> > the IPU6 specific SSDB ACPI package does not yield a 180=C2=B0 rotation=
+,
+> > so we are going to need some quirks.
+> >
+> > I expect these quirks to live in the bridge code, while your helper
+> > will be called from sensor drivers, so in order to allow quirks to
+> > override things, I think that first the "orientation" device-property
+> > should be checked (which the ACPI glue code we have can set before
+> > the sensor driver binds) and only then should _PLD be checked.
+> >
+> > IOW _PLD should be seen as the fallback, because ACPI tables are
+> > often a copy and paste job so it can very well contain wrong info
+> > copy-pasted from some example ACPI code or from another hw model.
+>
+> Unfortunately that does happen. :-(
+>
+> --
+> Regards,
+>
+> Sakari Ailus
 
+
+
+--=20
+Ricardo Ribalda
 
