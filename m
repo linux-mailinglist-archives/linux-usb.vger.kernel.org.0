@@ -1,176 +1,135 @@
-Return-Path: <linux-usb+bounces-23734-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23735-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD603AA9BFD
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 20:52:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4718BAA9C94
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 21:26:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4425B17D7F4
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 18:52:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D8D71A81261
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 19:26:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C5726F454;
-	Mon,  5 May 2025 18:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D262701CD;
+	Mon,  5 May 2025 19:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HN8qICtR"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="KzU7a7o/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF7B266584
-	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 18:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C7F1C2335
+	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 19:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746471139; cv=none; b=GDv4PyuOHfobVJ7ZB34PLm8RbsGkpdLQieMmeOrHXBz23YzrWfbD3rlmO23YKjIow+SJX+LIwOBnQVt+7yBmZ8gAL0+IwEz2Xsa4qwP0tIefPtaZkJphYYjMbVFmMsEfiplHmakuxUTzY62UPxjUaA0gnRSOPNYnrvGMA/8rxIs=
+	t=1746472995; cv=none; b=JfSJzCegFiAnKJtHvERP4oTdccvYvKy9SYSRSJx4ydT9O7NZXeHYlmCVJ9JlZiel9iLlt0t4dCTHGWXI54RdwnPXiWMPFOrV6c4QO0X733BHUxqV3esnonRHQosvcvhD52s11F7lzKG+L32U7wXPU4MeWhPt+URgQMeAwsF7mi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746471139; c=relaxed/simple;
-	bh=m3tQ3hZJYnMzPO4y+s2VpjGqh6WHCBpq3I/dc4g6Oes=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dM29kucm6ImCrN9yoV2FuFDXqGhM6uvnbHX+rHXDRw7u854J9slDMGxsujL6LIhrFPPt+/Ld6jelfjRF9UqD8ZV+Cx7vTsjkt11yk1L9KyzCtW1NATaLyj7wGY9OhgI4QxDkH/0TyGkILnL/wtD91zPUkEWO2K6DjudP9b4XNBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HN8qICtR; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf3192d8bso11865e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 11:52:17 -0700 (PDT)
+	s=arc-20240116; t=1746472995; c=relaxed/simple;
+	bh=ENSwrslkI8QKccIUjGOSW7JPQFj0MtcxngdcS/b7F70=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=C+ZZWSgLrv4uNwXxm7mXCj14atiI+aU2eI5ZBsHfETm4gjl3PXMGPsJFD6Q83c2o4HTrM2rx3wnq2ymNy9Nnp5KW8S2qpopEKVLr6NglC4dX/rKOeJJ9bLIgY9kCJQR0s8zJSLU4RmyvEQiW+rTo4wN6w9FD3pGT6XWtnb/RqbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=KzU7a7o/; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3d965c64d53so17943965ab.1
+        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 12:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746471135; x=1747075935; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1746472992; x=1747077792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kq8N4IwDeGXxtwbRB69apATuqmtzAPEZMQ/DbUjBjiU=;
-        b=HN8qICtRrcIGAQ1fEaKHQSaj9hNs9JyuLjdkzwNzR7ECnSVktoJenme9cH0iCosvf5
-         MPEW+LUZz+oBJ1rYufg/A7Aq/eEUVrqLMch6+9YUkmLAtM/tQ3PXtexAa4RDsFJ/QiFe
-         HBQQOEhBVUBqwvRb5sBwRHz1bWvMsDHUgHRDQ85f0pX9biqUWlsaYgErtOMXcSGTA86G
-         ooWgpR6eqHP9lDB7TPslPEqpCKo0K9Pg75Wdy0uDcBEffEufLEjf/CNezT8eCjvXXNnt
-         nebeAviw1YKsS39fMUprPDwO5qp0hjqSoBK7c44CIVupi5v0i/qMSqDGJBULXWqJibPO
-         HM7g==
+        bh=ZMVeIpMgFF4mocy+t3rzmtkLWK0EgWsZb4AtQGZnRAs=;
+        b=KzU7a7o/03NOU83+KXDRr4VoaKCThhQSEhWpcfsB7BOO+72SsMmlp/k2fW3HG7h9q7
+         /NePk6i84NyiHnYHIjqsxWXZexMHD+r7oiLb8a6eElueMmWS9Uxt8tRB7wjYzbVK6DAt
+         VxnZNa7MuHcswUyv3Mko6USTaFAh4/SUVniSguPryCGnAyzMgrNgLIJsLHrjXidqjeUj
+         KE+tFdJHX/hELKBMw1JWT7u4NKGmMoas2agkcC9koVmMNxEvM4tU/TOcTLwmE+cLbR+k
+         8dKIqWuGwhfNFgltPDo4O8LM0y8pbBslX3urLbQPpRJAimwzD96UaEAoMOzOlnyiuiYX
+         o4xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746471135; x=1747075935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1746472992; x=1747077792;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kq8N4IwDeGXxtwbRB69apATuqmtzAPEZMQ/DbUjBjiU=;
-        b=BVzdlKY9HvBEWrdvipCdfmkn6SlLBhKQw4hCWuJV1uozcNEEHHguylpMOEdb/xykkN
-         Z7eH6X7qEQz3e2jKHDF4bf8YxzsXf/NWe2TfdZNeiAPzClVa/mASTQWH5EsDYgqapReE
-         PiC2tuQGmWkJ1av7IqEpGUVfFWqPpGPVo5rsTDXzfDd7PW50BTF57fQzsTICHBt5R6FB
-         faa9YKxA+mMPcZF27XZqGrRhvRPBARfNibaXcwFwhb2VHRTF2+HprIbW0H9K7R7SrukR
-         DZexhbvnQ/d7YHw8jWbfOI1UfC1eqhKDW6nrNq0vCZEaIUq2aEZjw0G10U8SqNFDrTLc
-         vR5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUyqoDsEz+jAmMsm0oDnXAOWPE1Kuz6jaqzAO0vTBEzqnEFhebwMNmJ8DqNdfnErtx/6plQyPYYaH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9tM6XpJVi+e8qmCyC+qPoBdzVygRUJ684pFT42iN2fqA1wIX/
-	huVmP4bhp+9VTxe8M6qxdWXCEWSunnJtmueJhUSy7njJRZnnpL3zm16P+c+QfCagYrO+Vr61m0L
-	4J7pEnPwgUnny818WhcKAolIRB/QUjq940OBT
-X-Gm-Gg: ASbGncucVqDt5Mf5BrGcxmR5AnwYhQhFf83688HecYVVfCLK6EXODdRtw0iUe+4foFA
-	vcRQeXPOLjN5AU2KEdFVc8RK+IEjU4HB2u3yE+01Xor/0jaf5VKU+oBoOtEEdXzNw1GPlgVSIHd
-	MgS+6gtJY86f+thWytIhFeVfxATWWHc/DSahOdS1gtCsPD12bhCeD5QP6M
-X-Google-Smtp-Source: AGHT+IFAdoTm0XbjFIN/TiU1DX3Der4L/hKLRQeHwY6Q8R8vK/UDGU8xzlXhfEjWEXdnw8Bz51ruaDUr+YHH69/Jbpg=
-X-Received: by 2002:a05:600c:c8:b0:439:9434:1b66 with SMTP id
- 5b1f17b1804b1-441d0716a91mr87675e9.1.1746471135361; Mon, 05 May 2025 11:52:15
- -0700 (PDT)
+        bh=ZMVeIpMgFF4mocy+t3rzmtkLWK0EgWsZb4AtQGZnRAs=;
+        b=Be1WueQx7mz1d7rUAIK8EdUY8YbKzcnS9uF5byqkL+GvODCa5zWb/GEw5KTiLhQEOe
+         6wExAqBUqnQjpec3FmUp1wgnMfUW6p/AFg4LEBGb3Ot3KdPTNJ2+ddKo38nVpSSQVboA
+         MzA4peZOQRATk5AY6nLXeD99B8YeV3+tsKZAJAEOn2YcpWdL0KcDGZC4imAHcQggGXDi
+         H+owkFSf7RSiS64aw5hXmJBCyWwJXaGg4kjKMlMlo/tqPlSk94PUQQDsLXMO9xmf0J3Y
+         GG3ojsV3tqhkFT719ZH4Yvy6Q8Lg0nUWCkX9EiptW40W7CwaoSHXyljL+BB930a+FfRp
+         B3/A==
+X-Forwarded-Encrypted: i=1; AJvYcCU9KaNYvWoYOUXzK56pfeSnq+bzaSSlvWX66iYJo+kEBzPLG4+tk0CNXOhqpPKdPQG6snXrd3jWPFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk3VAdnf+uTjI9ujvw625fM/a9c8Tj8UrQbImaA6Hz/HObycx5
+	XooPhMXGaBpCXJQTYD2aDQGxXReC7jKshfKVU4ojpvftYElnCVjpkTZPQ8Fxezg=
+X-Gm-Gg: ASbGncvqtRU4t2P2jSoPCrVT6TyfKHY+OtFQslRw/5xCy/CrY+WpFQCHVulgJKwUHRg
+	JpD6JY+tGSxl4vQdfBQD3zrvBXBWp3KsXQfngWd/GuqjB44sasd/At/RMBywuistRXC9vYueB37
+	CCqmg573yEN6Ja/VJFWuFlpbpMGqH+GhECJ4LDzTXLegBNR22enYiH3jYSP8C3228MuNahf3U7W
+	uhExB9VDO0l3UTETH8eAgH2rboiwwFxPqcYtr0pcuN4y59274AMEIcheZWyfs5Y9a1g1K25qna9
+	CdNMCzWqw9HCf63MIWRQFYioTIMbssya
+X-Google-Smtp-Source: AGHT+IE4U0Nel01JtHK/rX8QBl2qPC8iA3WLhlaneMKSKU+x8aeNWP3CpSNUZacnFBxkOoaqFfb6GQ==
+X-Received: by 2002:a05:6e02:378a:b0:3d3:dfb6:2203 with SMTP id e9e14a558f8ab-3da5b34518cmr82097595ab.19.1746472991964;
+        Mon, 05 May 2025 12:23:11 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d975f6d771sm21077235ab.63.2025.05.05.12.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 May 2025 12:23:11 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Christoph Hellwig <hch@lst.de>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ "Juergen E. Fischer" <fischer@norbit.de>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Andrew Morton <akpm@linux-foundation.org>, linux-block@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
+ usb-storage@lists.one-eyed-alien.net, linux-mm@kvack.org
+In-Reply-To: <20250505081138.3435992-1-hch@lst.de>
+References: <20250505081138.3435992-1-hch@lst.de>
+Subject: Re: remove block layer bounce buffering v2
+Message-Id: <174647299114.1416870.3005554851862973144.b4-ty@kernel.dk>
+Date: Mon, 05 May 2025 13:23:11 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250505-tcpm-v2-1-71c6a21596b4@pengutronix.de>
-In-Reply-To: <20250505-tcpm-v2-1-71c6a21596b4@pengutronix.de>
-From: Kyle Tso <kyletso@google.com>
-Date: Tue, 6 May 2025 02:51:58 +0800
-X-Gm-Features: ATxdqUGd-hdpklhNUC-Nwsyj7IBeQwMAXTkRRXjdtLp2T7gNzQdx7rqgc3_skzk
-Message-ID: <CAGZ6i=0Sw7egvUFxr273GW+Z+oqYj1EBKyw8QC0XyuAU86TWvg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: detect orientation in debug acc mode
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Badhri Jagan Sridharan <badhri@google.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-7b9b9
 
-On Tue, May 6, 2025 at 1:33=E2=80=AFAM Michael Grzeschik
-<m.grzeschik@pengutronix.de> wrote:
->
-> For the debug accessory case, the orientation can be detected by reading
-> the cc resistor values. The will be TYPEC_CC_RP_DEF and TYPEC_CC_RP_1_5
-> in sink mode and TYPEC_CC_RA TYPEC_CC_RD in src mode.
->
-> Fixes: 64843d0ba96 ('usb: typec: tcpm: allow to use sink in accessory mod=
-e')
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
-> Changes in v2:
-> - Added fixes tag as suggested by gregkh
-> - Link to v1: https://lore.kernel.org/r/20250505-tcpm-v1-1-e6142985a012@p=
-engutronix.de
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index 784fa23102f90..478e9c80fc8c2 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -611,6 +611,12 @@ static const char * const pd_rev[] =3D {
->  #define tcpm_port_is_sink(port) \
->         (tcpm_cc_is_sink((port)->cc1) || tcpm_cc_is_sink((port)->cc2))
->
-> +#define tcpm_port_is_debug_pol_cc1(port) \
-> +       ((tcpm_port_is_sink(port) && \
-> +        (port->cc2 =3D=3D TYPEC_CC_RP_DEF && port->cc1 =3D=3D TYPEC_CC_R=
-P_1_5)) || \
-> +        (!tcpm_port_is_sink(port) && \
-> +        (port->cc2 =3D=3D TYPEC_CC_RA && port->cc1 =3D=3D TYPEC_CC_RD)))
-> +
 
-(oops I accidentally sent the mail in HTML format. Let me resend it in
-Plain Text)
----
+On Mon, 05 May 2025 10:11:19 +0200, Christoph Hellwig wrote:
+> the block layer bounce buffering from the early days of highmem keeps
+> being a wart in the block layer despite usage by only four drivers,
+> all through the SCSI layer.  One of them is an old PIO-only ISA
+> card, two are parallel port adapters, and the fourth is the usb-storage
+> driver.
+> 
+> This series makes the first three depend on !HIGHMEM and for the fourth
+> rejects the probe only when used on highmem system and the HCD is one
+> of the few annoying one that does not support DMA.
+> 
+> [...]
 
-Thanks for the patch. I have a few comments.
+Applied, thanks!
 
-My understanding was that TCPM in Debug Accessory Mode only supports
-the port as a TS Sink. This patch seems to add orientation detection,
-implying more than just a TS Sink. I thought TS Source/DRP and DTS
-Sink/Source/DRP were not in the current Debug Accessory Mode
-implementation in TCPM.
+[1/7] scsi: make aha152x depend on !HIGHMEM
+      commit: 7b32cb540bff6d6c8a1659babf930e9f66283c2c
+[2/7] scsi: make imm depend on !HIGHMEM
+      commit: bf69bd3fc26a107611e76b342027bb60b2411d4e
+[3/7] scsi: make ppa depend on !HIGHMEM
+      commit: 27a0918d4b701d4825e191448e44b9f14dc0a3b3
+[4/7] usb-storage: reject probe of device one non-DMA HCDs when using highmem
+      commit: 48610ec22f0cf7ee5b5658b2b3bab27a8f2ef78b
+[5/7] scsi: remove the no_highmem flag in the host
+      commit: a9437f6a1d8d0b3787fe6ff03d9aab4d3fe9b940
+[6/7] block: remove bounce buffering support
+      commit: eeadd68e2a5f6bfe0bf1038ec49e3a8d99eb5fe8
+[7/7] mm: remove NR_BOUNCE zone stat
+      commit: 194df9f66db8d6f74f03c78c2ad47b74a5a8b886
 
-While full Debug Accessory Mode functionality would be great, perhaps
-that should be in separate patches.
+Best regards,
+-- 
+Jens Axboe
 
-Also, for TS Sink orientation, please ensure it aligns with the Debug
-Accessory Mode of Operation in the Type-C Spec R2.4 (Table B-2). It's
-not solely based on Rp-def / Rp-1.5.
 
----
-Kyle
 
->  #define tcpm_cc_is_source(cc) ((cc) =3D=3D TYPEC_CC_RD)
->  #define tcpm_cc_is_audio(cc) ((cc) =3D=3D TYPEC_CC_RA)
->  #define tcpm_cc_is_open(cc) ((cc) =3D=3D TYPEC_CC_OPEN)
-> @@ -4569,8 +4575,11 @@ static int tcpm_acc_attach(struct tcpm_port *port)
->         if (tcpm_port_is_audio(port))
->                 state =3D TYPEC_MODE_AUDIO;
->
-> -       if (tcpm_port_is_debug(port))
-> +       if (tcpm_port_is_debug(port)) {
-> +               port->polarity =3D tcpm_port_is_debug_pol_cc1(port) ?
-> +                                       TYPEC_POLARITY_CC1 : TYPEC_POLARI=
-TY_CC2;
->                 state =3D TYPEC_MODE_DEBUG;
-> +       }
->
->         ret =3D tcpm_set_roles(port, true, state, role, data);
->         if (ret < 0)
->
-> ---
-> base-commit: 588d032e9e566997db3213dee145dbe3bda297b6
-> change-id: 20250505-tcpm-41b4ba7ea0ec
->
-> Best regards,
-> --
-> Michael Grzeschik <m.grzeschik@pengutronix.de>
->
->
 
