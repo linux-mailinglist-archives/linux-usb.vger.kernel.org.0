@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-23759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 048F3AAB46A
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 07:06:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D535AAB55F
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 07:27:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED9357B3ECC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 05:05:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B31133AA42A
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 05:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4569647E4E2;
-	Tue,  6 May 2025 00:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E670D347355;
+	Tue,  6 May 2025 00:46:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="au1TIWu3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7W0THAs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CC82DBB3F;
-	Mon,  5 May 2025 23:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EE2284B50;
+	Mon,  5 May 2025 23:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486748; cv=none; b=ed5WEAHidzBCcZNIHn+G3A4MCFFHpxMkt8t0D87jrHiKcsDcEykg5F/vVjcnMrsTAo3NPKS5F+rzLluYUKWyR6wY6HwutX7ViARSxs8iqKsudqVl0DCit0v2w8fVbu5Ruzrj8Frcjg7kFznf/zpvsNThy3iKVlJUcdiqpzK1yE4=
+	t=1746487057; cv=none; b=A1CiFsZx2dKkU6I5NV4vtJwrwxeY7HCy/W99EMl3cQjvkdSaoGFDk50qB5sP4gWSkhuTHMGuiKs/T/XNkfVZfyfHo0tVV42QY6QgMDUhW4aekQPFmYNCQe4jhu6WYlxOh6bAz3VxKInvnZOdbm4U8VKSJwU8EKaUJaBhqCxd0VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486748; c=relaxed/simple;
-	bh=VxwCcqEjjmFKkOmipPXouA+cBNnTqKLEv9WW2/LM5Tw=;
+	s=arc-20240116; t=1746487057; c=relaxed/simple;
+	bh=+jOy/rUkDGwAENDvYuJBQ7AgNkyldxwU7QFdHWuSleA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S8OfG0glXGfDDsg0S8mWEHXzAkNU3hT9CautzR483jrG/S5lBZiIpiWqkeNxRKdNWJGTzPOLkIxXFLW8qazVPY+CnmBqQImKCdP+YhJBwVtxk18Wfju5jZA8FaABSifhPmGeQUsvV5PqgwUYYNqhZCElnxi7/5wPC1yq14Sihb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=au1TIWu3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112BBC4CEEE;
-	Mon,  5 May 2025 23:12:24 +0000 (UTC)
+	 MIME-Version; b=QtgRzUn9WoQrKZNT8NW9yXo+AfoeKiCMpDI5MfXsjMK+q9DZnLfDXjNe16us3JRBI1nbVOfA6hbQBN0amNQWsjGP5sn7KcJgO945x//LPHfhIp5vArqeYZh/z6S7hS+fu46yoq4ydDob49MkM5Fh8fD/ypqs1kf8vnAoXaQWEXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7W0THAs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51085C4CEE4;
+	Mon,  5 May 2025 23:17:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486747;
-	bh=VxwCcqEjjmFKkOmipPXouA+cBNnTqKLEv9WW2/LM5Tw=;
+	s=k20201202; t=1746487057;
+	bh=+jOy/rUkDGwAENDvYuJBQ7AgNkyldxwU7QFdHWuSleA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=au1TIWu3SxQ/WeFpL0MbEVbSrAlKBtJciVmqGVVMrr43Mzx63MybgIf3amg6Yeiqc
-	 vykKxGWWoQF8V9mzA96E8iw0vMhk64ePRy2pEZh8AsxL/JIpzxsGuKWIT8wo3Y55UZ
-	 AVVZPbxRVm0Pc/1FEU/2JuOTCr8nxgwQzJ43b+8+3TMQSdBJvpXnxi2UWrnjg2gTJ6
-	 IpnsnRBUAmOU/PpeRBNC4NHb8kfBnGjsZMN2Xz4aB3xnBKrOY98feQyPQBGoa6Mz9k
-	 dGBPsSxHSOtNewT/4tbhft3rt91Sn/XDzVLTri8r/psW5ik5YyNOX6t//LvinblFQV
-	 COw5iXEBbq7Cw==
+	b=K7W0THAsIKgx4vW0UqGc2UzkhoGY5hGXKycEPjJn0fdj8U9ppHipIW0COT3ktIGUN
+	 jxpkeNFDh9JzSWEwEXGcbH/j5Ssoy25KFe5Enw9vVCZpAs7s4sRT1SrMiSsbLfAow8
+	 kMzyY5q+W9etZadtkAe96B8+25YjSPcvdWY7MJT4rpc5NsvXhLOVCUv28NcWcocrn8
+	 jQGaJr4vil7rhJXmXyZXkPqs3zsdSswuVuwl68X8uKMB+1pu8BSAlZgtuGnHrQ5cRP
+	 3aVldpf7j6wthyAVqaW7M4KUsL3RpIIffBG2w+Hc0hmkfv9JiPhpEBsAKkOukPJUlc
+	 qCYFAJA5GvQdw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,20 +53,19 @@ Cc: Aleksander Jan Bajkowski <olek2@wp.pl>,
 	pabeni@redhat.com,
 	gregkh@linuxfoundation.org,
 	hayeswang@realtek.com,
-	dianders@chromium.org,
 	horms@kernel.org,
-	kory.maincent@bootlin.com,
+	dianders@chromium.org,
 	gmazyland@gmail.com,
-	ste3ls@gmail.com,
 	phahn-oss@avm.de,
+	ste3ls@gmail.com,
 	linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 181/212] r8152: add vendor/device ID pair for Dell Alienware AW1022z
-Date: Mon,  5 May 2025 19:05:53 -0400
-Message-Id: <20250505230624.2692522-181-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 130/153] r8152: add vendor/device ID pair for Dell Alienware AW1022z
+Date: Mon,  5 May 2025 19:12:57 -0400
+Message-Id: <20250505231320.2695319-130-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
-References: <20250505230624.2692522-1-sashal@kernel.org>
+In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
+References: <20250505231320.2695319-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,7 +74,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.136
+X-stable-base: Linux 5.15.181
 Content-Transfer-Encoding: 8bit
 
 From: Aleksander Jan Bajkowski <olek2@wp.pl>
@@ -97,10 +96,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 061a7a9afad04..c2b715541989b 100644
+index abf4a488075ef..6cde3d262d415 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -9880,6 +9880,7 @@ static const struct usb_device_id rtl8152_table[] = {
+@@ -9853,6 +9853,7 @@ static const struct usb_device_id rtl8152_table[] = {
  	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
  	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
  	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
