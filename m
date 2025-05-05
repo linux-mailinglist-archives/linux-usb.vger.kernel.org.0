@@ -1,58 +1,59 @@
-Return-Path: <linux-usb+bounces-23756-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23757-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D81AAB304
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 06:35:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE4EAAB391
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 06:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F192E16E01A
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 04:32:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 843351BA11FA
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 04:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3BC339583;
-	Tue,  6 May 2025 00:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E55E286406;
+	Tue,  6 May 2025 00:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKEU2hEa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akO0J9CB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBEE3754C9;
-	Mon,  5 May 2025 22:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4F239E65;
+	Mon,  5 May 2025 23:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485963; cv=none; b=d+BN6Md4AVFg4FrR6TBJZ2IdJMt3FWtld5+ius8lBV21ECCzislyyFIBWjKG8Y1flaY7CryqMXMDK5BQzEXTDXTnOAhfwjiSxN8ofNJdVDzLP4hZbg6U5w4Tx0FuPl7Sn4Z1F2w9sgAzVLRgKs/Q8fy4hQPa/BvWh1lI3RX94is=
+	t=1746486347; cv=none; b=NDw19Wrmw2LTshQHqogMdOSJ2MpUt7DIDioNl2NtZ1dq0Pp6XXqcJj3+iTdWgLtRT+zpJIIHz9DZGivmOqo3JcOmWl0g1oer8wOuycHH+5yDzQ4u5Amdjd4Xz8Gp4tAJUoLzdOndZwEWhT3xhnXVqmbsIdZmFdgrJNcdL18Nx1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485963; c=relaxed/simple;
-	bh=3XBLW0df5ozYwym4QZGDLk68vugvH6vNuS8z03Nn780=;
+	s=arc-20240116; t=1746486347; c=relaxed/simple;
+	bh=REwDMsG0gYftbnPiYH3na179/GzS77pzCJ82Mrmea/o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=F+BGQhzXpPptmO9L7lCOX6EeDaDajXqi0b5bCZ9h+/qRPfwl1RT0NGvcydsLcLgbyC1ryPTgDaM+FmppNALm74n6vW3OIiPqnxAy4QenO8wSEOzOOQdXQTl0/lHuJN99QfLxjsQPQXFr9N1ISzvOazKsAzZFPnuChzrpFyETqBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKEU2hEa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74563C4CEE4;
-	Mon,  5 May 2025 22:59:21 +0000 (UTC)
+	 MIME-Version; b=TQCGFGyX6M0MM/w/1QOv66ct7yx4dtwkOWgYxlcEdrVU2IFc3JqEu4Zay13qT0KVR/roOFSMJjn82O48NPDBDb/z3yz7U9ZqtRktfNxyj1BduEQS78MiP/YHcfa+gb+FnEGDfOgZD4SlcfF5aaHUu0/Lsob0t+2fkhB8BaC6mFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akO0J9CB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C68C4CEF1;
+	Mon,  5 May 2025 23:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485962;
-	bh=3XBLW0df5ozYwym4QZGDLk68vugvH6vNuS8z03Nn780=;
+	s=k20201202; t=1746486346;
+	bh=REwDMsG0gYftbnPiYH3na179/GzS77pzCJ82Mrmea/o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BKEU2hEaBVQtsEAoIXzh0/hJVknMMGLyqVSLpxmKaLVjJ+J1bm9WZ6Mmze1t9OxES
-	 YJKuLI7RKAmNf+AKpDC6PtsZF57z2HVnAYEpW/TtXzZC/AUUkpuZa00XTA6vSrdSpf
-	 8lJMsePIRnpob7TGdM7zc3jLTTc06+/246SCtr8/5yZRrolLbqJNnFSh0rPTd54BKO
-	 t55exyLE1s5Ko9TxVs/IWEOHd6x7ExF9AEStvxI6pf+Dae4Q1ZcBQOXgd8FnnGVFyz
-	 TWa8QV8NsDSOdUaq0HXYYZZZP7b6uvLCF7q+Sm4nww/CHfFpNYN5m76FqPozw6cF7X
-	 bclNIpu88vSfQ==
+	b=akO0J9CBlOTyigepToDwNIHqyrEmPKzAEqXD+W+gA2C5M1i/0z5eB0w0ZuAh/meol
+	 rHh79rjf8xolKvx/4yeIJMpWLXardVob1iHEfALfH5cx3dZmQDDGqL1rH1kJ2zLCp2
+	 lItP7UaPy3zxHxnn3gDrBfyqwv6tGnj7lJ/hfB2bvayY0zMm3gGYSlHMAZgY0KJx+r
+	 sVyhD/pDHTgSKcCE/JR5+uxmeEmxxOQsZMQVYp0RpbTEXk4cmEg7JLgORueeiiSYWV
+	 zsvzeY7tM6tHoSmYULS1nDgEU4nWDaWMPr/o/f8s1tROScTdjJ9yP7pai95kttEBd8
+	 ahWHxSgv9V5eQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: junan <junan76@163.com>,
+	Jiri Kosina <jkosina@suse.com>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 088/294] usb: xhci: Don't change the status of stalled TDs on failed Stop EP
-Date: Mon,  5 May 2025 18:53:08 -0400
-Message-Id: <20250505225634.2688578-88-sashal@kernel.org>
+	jikos@kernel.org,
+	bentiss@kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 272/294] HID: usbkbd: Fix the bit shift number for LED_KANA
+Date: Mon,  5 May 2025 18:56:12 -0400
+Message-Id: <20250505225634.2688578-272-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
 References: <20250505225634.2688578-1-sashal@kernel.org>
@@ -67,66 +68,32 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
 
-From: Michal Pecio <michal.pecio@gmail.com>
+From: junan <junan76@163.com>
 
-[ Upstream commit dfc88357b6b6356dadea06b2c0bc8041f5e11720 ]
+[ Upstream commit d73a4bfa2881a6859b384b75a414c33d4898b055 ]
 
-When the device stalls an endpoint, current TD is assigned -EPIPE
-status and Reset Endpoint is queued. If a Stop Endpoint is pending
-at the time, it will run before Reset Endpoint and fail due to the
-stall. Its handler will change TD's status to -EPROTO before Reset
-Endpoint handler runs and initiates giveback.
+Since "LED_KANA" was defined as "0x04", the shift number should be "4".
 
-Check if the stall has already been handled and don't try to do it
-again. Since xhci_handle_halted_endpoint() performs this check too,
-not overwriting td->status is the only difference.
-
-I haven't seen this case yet, but I have seen a related one where
-the xHC has already executed Reset Endpoint, EP Context state is
-now Stopped and EP_HALTED is set. If the xHC took a bit longer to
-execute Reset Endpoint, said case would become this one.
-
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20250311154551.4035726-3-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: junan <junan76@163.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-ring.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/hid/usbhid/usbkbd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index cb94439629451..54f068cc75343 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1180,7 +1180,14 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 	 */
- 		switch (GET_EP_CTX_STATE(ep_ctx)) {
- 		case EP_STATE_HALTED:
--			xhci_dbg(xhci, "Stop ep completion raced with stall, reset ep\n");
-+			xhci_dbg(xhci, "Stop ep completion raced with stall\n");
-+			/*
-+			 * If the halt happened before Stop Endpoint failed, its transfer event
-+			 * should have already been handled and Reset Endpoint should be pending.
-+			 */
-+			if (ep->ep_state & EP_HALTED)
-+				goto reset_done;
-+
- 			if (ep->ep_state & EP_HAS_STREAMS) {
- 				reset_type = EP_SOFT_RESET;
- 			} else {
-@@ -1191,8 +1198,11 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 			}
- 			/* reset ep, reset handler cleans up cancelled tds */
- 			err = xhci_handle_halted_endpoint(xhci, ep, td, reset_type);
-+			xhci_dbg(xhci, "Stop ep completion resetting ep, status %d\n", err);
- 			if (err)
- 				break;
-+reset_done:
-+			/* Reset EP handler will clean up cancelled TDs */
- 			ep->ep_state &= ~EP_STOP_CMD_PENDING;
- 			return;
- 		case EP_STATE_STOPPED:
+diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
+index c439ed2f16dbc..af6bc76dbf649 100644
+--- a/drivers/hid/usbhid/usbkbd.c
++++ b/drivers/hid/usbhid/usbkbd.c
+@@ -160,7 +160,7 @@ static int usb_kbd_event(struct input_dev *dev, unsigned int type,
+ 		return -1;
+ 
+ 	spin_lock_irqsave(&kbd->leds_lock, flags);
+-	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 3) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
++	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 4) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
+ 		       (!!test_bit(LED_SCROLLL, dev->led) << 2) | (!!test_bit(LED_CAPSL,   dev->led) << 1) |
+ 		       (!!test_bit(LED_NUML,    dev->led));
+ 
 -- 
 2.39.5
 
