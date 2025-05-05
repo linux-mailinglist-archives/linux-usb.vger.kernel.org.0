@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-23744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74F1AAA796
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 02:37:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA422AAA937
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 03:10:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86C583BFBAF
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 00:32:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 746B3460A09
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 01:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AA9339756;
-	Mon,  5 May 2025 22:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7059C35A540;
+	Mon,  5 May 2025 22:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N9JjW+bJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tagauJDc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A65233973F;
-	Mon,  5 May 2025 22:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A3A359DF9;
+	Mon,  5 May 2025 22:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484627; cv=none; b=NVVOAj5dfQVrUx4ZUW0ziJqqLbfiY3XQ93TY8NIKUeRUqgSLoGSJofnOFajCswWagAsYW0SBWwTYIoz1ocAcffDdEkFDXxoWtt2vQDnA594/srM1UZ5XYmHxu747/M+6rhyo7vQl4iZsekolv7N++NbWMp7d2yQXlltzZwto02M=
+	t=1746484977; cv=none; b=O/rB0lDxU31slPtIsXZuqOH9vZ2zVQ/9b1bqB9BN0coo4Ef+Y0YvFdfIYbH673q9kRzr7d/Lw9VLGj9gNvw/q+Wqn9F/AjWu8XXoRZ2pBI8qTL1IkCv2+5CHdDQ7vF3CvOMG9n/H7LGjF/npAW9ZxxKgvD8mUdKJoM6U3SfExQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484627; c=relaxed/simple;
-	bh=REwDMsG0gYftbnPiYH3na179/GzS77pzCJ82Mrmea/o=;
+	s=arc-20240116; t=1746484977; c=relaxed/simple;
+	bh=YQ75bINvl/uiYyqnZhLyfguZ9F0UaUz2ZRP/bkRD+kU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WuqXSPBCgEszuefkh/dlB26u+sezaogoxjIR/cVd0SlcOaCOIMsQkvLs8D8N8JFG/WFHIDDYeXsz2T88ZhiEat7XqMcAsmZgisQdSH+1IV52B0JgptshaMhj94xJg6blaQ8MOHnE+WP8Or7bn2W6uoVx5olqgDFjqlU/uuwTz3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N9JjW+bJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBB7C4CEEF;
-	Mon,  5 May 2025 22:37:05 +0000 (UTC)
+	 MIME-Version; b=r5h9y55JJYN6vRhyJbVsrRnIkYsvPYU61TyyuozhfbwanJ7raShILG2d0/uPKr5FiwtNy4S2tt/9p2Q3d0lvXDBx23eqnB5wCxceRSuodoQ8WYI7ZD+fYFb+i2fKi4eewPMJC+x46IpbFxJH76AkkPCeM4psIiH5sBfQBtSt94U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tagauJDc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5636FC4CEE4;
+	Mon,  5 May 2025 22:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484627;
-	bh=REwDMsG0gYftbnPiYH3na179/GzS77pzCJ82Mrmea/o=;
+	s=k20201202; t=1746484976;
+	bh=YQ75bINvl/uiYyqnZhLyfguZ9F0UaUz2ZRP/bkRD+kU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N9JjW+bJKuOlEHxBDUqTO/jRBb+LSiv0gFnfkVaahUE+Dxn9VjgNSuzlxjJ73I55C
-	 Ht8WfHULb4Ofk6WlgW9v4ZIBRYEoabiX/wwo2lE5AI5iXNK7BnXwFjR4JJH//YTLOx
-	 Pq7b+Xg8SxuhosV4fmEcipioSBD/XY7EtDx6UJIF5ku2n2jYSNnUK4Lw4LGkwiKP9c
-	 XBWfSzptB/r/0q4FKPbsJ5bqHED2ueRe7Any9sXDWhy3C2InXw+vvdGuika5ukv6HB
-	 +9INQGz8ebXmvi85ReSViJOMSI8zxMYrr91rWBMjFbvtphV7BqifaMkdDVcb0ZYKwe
-	 ckAS6s80NeBdw==
+	b=tagauJDcT/9+ybLUVOchFKqbADIq6YI6zha5Mevau/atT2qhB49Ty9OsKwWF1HffS
+	 BUCpbUkVofuzhh1wnM+j7/ZGrbkO4G3HS6chssYgo787Sv9AEGwzmT72anoYe+X6Xx
+	 I6xrDgNgeoBmJx/GebWjyisowG5KmgAAnyC4ObJO77lrA+DeM5+aH1r2ovDScUPNUg
+	 fFy4WO6CNrskUvw0OVe/rC2KAFigmr/sKkttKLsNkuG7ThHFQtJJ4M66yVaN0MWWH1
+	 LWOo/bxq490RKzR26IYnaL9eEBCUmE+4yO8LxfUo0diNh3MeTCURp5OBc7n6pB+MuB
+	 j95fJXqWHppYw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: junan <junan76@163.com>,
-	Jiri Kosina <jkosina@suse.com>,
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Sasha Levin <sashal@kernel.org>,
-	jikos@kernel.org,
-	bentiss@kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 570/642] HID: usbkbd: Fix the bit shift number for LED_KANA
-Date: Mon,  5 May 2025 18:13:06 -0400
-Message-Id: <20250505221419.2672473-570-sashal@kernel.org>
+	andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	westeri@kernel.org,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 106/486] thunderbolt: Do not add non-active NVM if NVM upgrade is disabled for retimer
+Date: Mon,  5 May 2025 18:33:02 -0400
+Message-Id: <20250505223922.2682012-106-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,35 +65,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: junan <junan76@163.com>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit d73a4bfa2881a6859b384b75a414c33d4898b055 ]
+[ Upstream commit ad79c278e478ca8c1a3bf8e7a0afba8f862a48a1 ]
 
-Since "LED_KANA" was defined as "0x04", the shift number should be "4".
+This is only used to write a new NVM in order to upgrade the retimer
+firmware. It does not make sense to expose it if upgrade is disabled.
+This also makes it consistent with the router NVM upgrade.
 
-Signed-off-by: junan <junan76@163.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/usbhid/usbkbd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/retimer.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
-index c439ed2f16dbc..af6bc76dbf649 100644
---- a/drivers/hid/usbhid/usbkbd.c
-+++ b/drivers/hid/usbhid/usbkbd.c
-@@ -160,7 +160,7 @@ static int usb_kbd_event(struct input_dev *dev, unsigned int type,
- 		return -1;
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+index eeb64433ebbca..3488be7620674 100644
+--- a/drivers/thunderbolt/retimer.c
++++ b/drivers/thunderbolt/retimer.c
+@@ -93,9 +93,11 @@ static int tb_retimer_nvm_add(struct tb_retimer *rt)
+ 	if (ret)
+ 		goto err_nvm;
  
- 	spin_lock_irqsave(&kbd->leds_lock, flags);
--	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 3) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
-+	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 4) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
- 		       (!!test_bit(LED_SCROLLL, dev->led) << 2) | (!!test_bit(LED_CAPSL,   dev->led) << 1) |
- 		       (!!test_bit(LED_NUML,    dev->led));
+-	ret = tb_nvm_add_non_active(nvm, nvm_write);
+-	if (ret)
+-		goto err_nvm;
++	if (!rt->no_nvm_upgrade) {
++		ret = tb_nvm_add_non_active(nvm, nvm_write);
++		if (ret)
++			goto err_nvm;
++	}
  
+ 	rt->nvm = nvm;
+ 	dev_dbg(&rt->dev, "NVM version %x.%x\n", nvm->major, nvm->minor);
 -- 
 2.39.5
 
