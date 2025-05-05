@@ -1,80 +1,160 @@
-Return-Path: <linux-usb+bounces-23721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12033AA93F8
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 15:07:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B05EAA950F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 16:07:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80055178D56
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 13:07:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A4521796FC
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 14:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD17C2561B3;
-	Mon,  5 May 2025 13:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sm1q1CCI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAAF2594AA;
+	Mon,  5 May 2025 14:07:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2344320C02D;
-	Mon,  5 May 2025 13:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DD71F4607
+	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 14:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746450421; cv=none; b=Q85jMVtriY4eXfPmVd4qAtwAA055Enw8svueQjQbJeV84MtRAddwmgjg+WGvAHSq8YvJf3rfHfTalqlpPUnzkhxsKO/KJHh763n/RXur+sjhCGZBAzZFgFCkm2GBu/9yijQczFmXrajNSYjcjA18EIbNwv0g4+GDKsfED+7v54I=
+	t=1746454055; cv=none; b=KgkbXvBn55aWhLyU+ERCP7zcFd3JMJm1X/mgfeBUb6oxmoLOEjajCHpi+aoAfzf5p8z/0SbsmKBzlJxIJ63GCA24ZK602pJkFLCFVhvICjPa2v7wt+kP/7Cx7/FLpCVPZowABe6m3dJOxh+th+vA+0C5hcJpvmzkMWzj/kW8BNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746450421; c=relaxed/simple;
-	bh=wLI4WhaIi2O4ptbBTKPS0qRwzR+rgk9Z5fzmtbWH+EU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QCfdHe6y+x6GKgNGHVApRmHQ7ue0EcieOIuAXyVwC2O3kJ7Okv43BcT3eXd083d2rcR8/Vz2aBZWVlLFTjI6wlvZnW+UkiIzTxuIR8SiL5L+yHR7HCT9iL7D5pq9D0FlC3GbVadKByiX2kP4aTK0Efl8j/+XifyUWSbFlf4ic4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sm1q1CCI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7E0C4CEE4;
-	Mon,  5 May 2025 13:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746450420;
-	bh=wLI4WhaIi2O4ptbBTKPS0qRwzR+rgk9Z5fzmtbWH+EU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sm1q1CCIuJQLJdknNDQHwqFfQAMye278VLzSW2ZAvKVwISkgSkVoF3/0jBunKEPNc
-	 R53iiAUDy2kgO3wUboHWXbGGUYcDNtLPW9ZxXx6bcY0tOwJlnR3RPn1Fwx0lpyrUDr
-	 vMCJAMme5IAdq1yTbIHdcAI7rxCcpX4+1DK126w4=
-Date: Mon, 5 May 2025 15:06:52 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: detect orientation in debug acc mode
-Message-ID: <2025050539-agony-surging-ae99@gregkh>
-References: <20250505-tcpm-v1-1-e6142985a012@pengutronix.de>
- <2025050510-malformed-outweigh-3dbf@gregkh>
- <aBigoRYPnQntXNel@pengutronix.de>
+	s=arc-20240116; t=1746454055; c=relaxed/simple;
+	bh=Nl3Bdd2VD8L5riajd4yFTwM2PCG/MJvzQXEacWTfIvg=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=TOCZPY+dn2kjL0QtGw7U5IRFyWzz2rMlU4N/pt8vE8sYN/BvJqOI4nAWRUcvcTESY8RwwlTGcmw5kqMkuB+F02uMezWnr9kSHQzfMf9rpOwMv8Zsb+BgJpCSQxPsw1UYKQAn0nycqX+0vAw7hqPrIovx5Rd4C0u2j3KNfabEMmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d44dc8a9b4so44426495ab.3
+        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 07:07:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746454053; x=1747058853;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pxC5+1znYxQC/r4enrg+SzrtOZNNwunbYN3tx/LkGlo=;
+        b=F7Gl5YN7xQsRfYmcgobhi/e5nW4/gbsS0DNyznIMYYad8fWI8jA5Diylc7X+JZaDnP
+         /XkDamHxSAuz12OdELaJrG2+4ay3mbMZ9lyB5/3n4ph58MWZVJP76l18NgRtw8RJ5oWp
+         6NQ1fcdcb868AZBw+BpfOrLHzSq+hHwNwJHLsmop16qPP6J9HZ+0W4djsc41yKamclHQ
+         ps3s0fH8WDSiGaCvBRvqmLAqsBSwHzJJWwzxqnsf0HH1WBoONx1uYn4EoYcyrWd85wnP
+         08vpioBsoJU8irCmbZhcBVf8SCBeCEpyNL2Bbgpj8/9NdtimziNTpL4Bqw5ZyLKpWSla
+         10qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvcuZSvsByHSRlZyJyttZSA2JskkQVHxESMslEeXBWfcd9k0Ofsa01hBwj17l2UBbOYkWvYhXXh0g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyQhYA23kXOgjCoc0pgLJOy3XDmSK0gfS3nduHPE25FT1ROhTd
+	HKOr4Jvd6n+y0vjZvwIfkXKTkyzMlOSOJM/574FOFGiHjTN+wcUHTGWjHMGqBJ6uGpqcSW3W+HG
+	TJLPo3g6vkOPkTQahPJH5EIDXx7VPgoFf2p15QTRhDoKMBttswpqKFwA=
+X-Google-Smtp-Source: AGHT+IFB0lZ6S7TXw6aqkvB32BjoYiExKnL4jRlS3py/AnTzNuk3TVXRhlt4d5yT8FQ6i1L9+35xF99dpK9xUNORRWE89O099wwE
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aBigoRYPnQntXNel@pengutronix.de>
+X-Received: by 2002:a05:6e02:1f82:b0:3d3:fcff:edae with SMTP id
+ e9e14a558f8ab-3da5b2398f6mr70057475ab.3.1746454052903; Mon, 05 May 2025
+ 07:07:32 -0700 (PDT)
+Date: Mon, 05 May 2025 07:07:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6818c624.050a0220.11da1b.004c.GAE@google.com>
+Subject: [syzbot] [usb?] WARNING: ODEBUG bug in usb_unbind_interface (3)
+From: syzbot <syzbot+52ba12be8e4d18263247@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, May 05, 2025 at 01:27:29PM +0200, Michael Grzeschik wrote:
-> On Mon, May 05, 2025 at 01:21:18PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, May 05, 2025 at 01:06:16PM +0200, Michael Grzeschik wrote:
-> > > For the debug accessory case, the orientation can be detected by reading
-> > > the cc resistor values. The will be TYPEC_CC_RP_DEF and TYPEC_CC_RP_1_5
-> > > in sink mode and TYPEC_CC_RA TYPEC_CC_RD in src mode.
-> > > 
-> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > 
-> > What commit id does this fix?
-> 
-> This applies on 64843d0ba96 .
+Hello,
 
-Great, can you resend with the proper Fixes: tag added?
+syzbot found the following issue on:
 
-thanks,
+HEAD commit:    b6ea1680d0ac Merge tag 'v6.15-p6' of git://git.kernel.org/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1131b1b3980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9a25b7a36123454
+dashboard link: https://syzkaller.appspot.com/bug?extid=52ba12be8e4d18263247
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
 
-greg k-h
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d847e7b2a66a/disk-b6ea1680.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c4dcc4871fb2/vmlinux-b6ea1680.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7b8bf844d89e/bzImage-b6ea1680.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+52ba12be8e4d18263247@syzkaller.appspotmail.com
+
+WARNING: CPU: 0 PID: 6729 at lib/debugobjects.c:615 debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Modules linked in:
+CPU: 0 UID: 0 PID: 6729 Comm: kworker/0:11 Not tainted 6.15.0-rc4-syzkaller-00042-gb6ea1680d0ac #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Code: 4c 89 ff e8 b7 6b 63 fd 4d 8b 0f 48 c7 c7 80 d7 c1 8b 48 8b 34 24 4c 89 ea 89 e9 4d 89 f0 41 54 e8 6a d4 c5 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 17 ba c0 0a 48 83 c4 08 5b 41 5c 41 5d 41 5e 41
+RSP: 0018:ffffc900037df320 EFLAGS: 00010292
+RAX: ca5e4d58fd900000 RBX: dffffc0000000000 RCX: 0000000000100000
+RDX: ffffc90014e77000 RSI: 000000000002265c RDI: 000000000002265d
+RBP: 0000000000000000 R08: ffffffff8f7ed377 R09: 1ffffffff1efda6e
+R10: dffffc0000000000 R11: fffffbfff1efda6f R12: ffffffff86fb2200
+R13: ffffffff8bc1d900 R14: ffff88804f0b1260 R15: ffffffff8b69bc40
+FS:  0000000000000000(0000) GS:ffff8881260cc000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000200000404000 CR3: 000000006e344000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 000000000000000e DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x3a2/0x470 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2329 [inline]
+ slab_free mm/slub.c:4656 [inline]
+ kfree+0x117/0x440 mm/slub.c:4855
+ device_release+0x99/0x1c0 drivers/base/core.c:-1
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x480 lib/kobject.c:737
+ usb_unbind_interface+0x26b/0x8f0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x4d6/0x7c0 drivers/base/dd.c:1295
+ bus_remove_device+0x34d/0x410 drivers/base/bus.c:579
+ device_del+0x511/0x8e0 drivers/base/core.c:3881
+ usb_disable_device+0x3e9/0x8a0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x330/0x910 drivers/usb/core/hub.c:2316
+ hub_port_connect drivers/usb/core/hub.c:5371 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x1cdb/0x4a00 drivers/usb/core/hub.c:5913
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xadb/0x17a0 kernel/workqueue.c:3319
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3400
+ kthread+0x70e/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
