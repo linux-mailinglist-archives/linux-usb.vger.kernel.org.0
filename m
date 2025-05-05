@@ -1,136 +1,204 @@
-Return-Path: <linux-usb+bounces-23686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 550D9AA8BE6
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 07:59:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4518EAA8CCF
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 09:06:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B635416DBD1
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 05:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C4BB1894720
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 07:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F101B4156;
-	Mon,  5 May 2025 05:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42611DAC92;
+	Mon,  5 May 2025 07:05:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EDC1B0F31
-	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 05:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC511D5166
+	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 07:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746424769; cv=none; b=HksxcEmW9S22ZpedCFbgxGQ19etoAsgo0s6u85dZx0eZaIdTFfJo8J4i285XfJCLLF7Fo5I+mF6c45Weh+yy8MxmMIMPOVKAKTMqHbioukM4DiYoulBzgxlJCdoXx/kKvI27tAEAvMdx1pc73xLJy92dnF3pfkHqCbXQxmapibg=
+	t=1746428739; cv=none; b=Za8fo/dtfEAJf8d66xPo4BlLjODRI/6f4bHnTBM1XdybHcwMXcYmjC4eQ0iH6M/RjOJ83m8nkfKo6PeXvVrj2Vh1hqYR0e0II4WTKJRLaMu+nNrNuzFDMxXUtPDHXp6St7y/6TaTiLJgRUcx10DOqNhK8nakxoP+SRP4flNDX3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746424769; c=relaxed/simple;
-	bh=T8BOhzj6gnh1orolpakOJwBtatSNBf9YtDaPC5/V3hA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=K9IX9zDyB2h1oabkoerV9RJBm8Z/8cJnoeZZCvBJ4DkpYbFc+JzflsKXhswKUsoQ7sh5l0+OyOumOWMN61pwAtLhFgk1D3l+s6DlH4GOgJ4lfOTDbRBaETHu/2xPzVjzQ1nFkdTIi1Q2aVnuqOv8AKpXCGlYhIMs8vc8Z2PrOAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+	s=arc-20240116; t=1746428739; c=relaxed/simple;
+	bh=k4X3Nv021dW8jfuf/JCzY3IEXEVO82prEbX9vWVvZoA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JzFHfloJ8UXWb6NQTThWQ3nzuad5oPKy7OtjU781Lz1lEvioZwb7NqFaFu5sPtQMJmNUpAYWdcbgiLWss1ERV5EMcWV3KLliW54XFWHXFSPP6iL91TOui9eNZTEgyO6q1NOEfrSFFVz01oycWpjSfWQato0zEOORXQ+5cOFI72o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3d8f1c1ce45so80650035ab.2
-        for <linux-usb@vger.kernel.org>; Sun, 04 May 2025 22:59:27 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-85b402f69d4so401489939f.3
+        for <linux-usb@vger.kernel.org>; Mon, 05 May 2025 00:05:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746424766; x=1747029566;
+        d=1e100.net; s=20230601; t=1746428736; x=1747033536;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KutsmWOwsPqBpoNxW5I/vuWTL3F2OwtZR13w1gq13k0=;
-        b=ZpOG/Ot28/sUFvNDs6Yuxr+d4dfQSQPMs+gZrVMPWh5oxaj8bD1oTH2NHEgtlTCMoz
-         9L09oiDfg/GGX/2aVpkmoBjQlq8EpH/7PcvEs0GIWpxXn0jXP3Qs0rOwJ6Oz+/iND2Ot
-         sMDFmrX//24XvjjCJZPJcW0fWGU8kDiXHukNr6QSY+FsywdS/UNJtOGArIdEeHcKWI1X
-         qrP6tGFo/biUVSNGv3FuNMUHyRY/EW0Zk+LWIw47gn9N8keWXphVyp1g3AhHZ/vMX5w+
-         jemr4q9MBMWcIskGnELkJhhJOPuwW6WOv6epb+L4GABR7VsNSM0v2sNLyePDVKIp8XRE
-         G2sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWXgEXYOVa4w9ovlXTaIQ6usgSRihcvZqL2zQTBWcpRyI3/SmvnATF5oDRdOs/EKilslceylaKdfdU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylAzFcD+SaEvnpXVSkI4yekv6ZTd8jgA7Y1lCQsQSxkLJYWCz1
-	hOlRII2wDjDPXO+3k07WVADlL5ICy50o4+Fq/56Q4BGevFkfhb6F+kxWj6Zr0E4bvWURFAC4TNy
-	Bdg+Xu7ecwyKBGu37RhIQkiG5i4rjaImqFRz2LWMp0U92z/fZz74tDqg=
-X-Google-Smtp-Source: AGHT+IFrE2B83fmtCzbD7ysalL9wZfd6+x4E48Syd0LLPZjBKdKKAIcFRhGURbZbRBURkaTeyM9SfI3UeM5UGH/jxsyOBn2GF2bX
+        bh=xLWP2zVJ6fOZqqq1heDqtffHuRpKeSsgJdPsgVovfB8=;
+        b=UYffLhj+knwkgiNGo56l99qQQdzYGYcTIvPxYvN4wE1zZMuGDVwitmQXJig6h8CySa
+         cnHB7UasKPTxc0gASKLXvIWZRmCKy31cFYHVZOAunw/o6OEMdj8QuHsJsDQLpPqEFWQi
+         Bf7Dvmckr3mLT4cqbQc3vZzUQKV/wArKLvUffLlnOYywx70hR/WjGEs1a/zB0Vwgr6gU
+         kmhzslGlIqQL9zew8GaySyQQv5kpwyHAolm4kv4Zc9Eoyyz+42CMhh+3f9b842ENNZB+
+         RpyC+2r+k5MeC+UbMxUhl4UW28kREDuMVqze/ioKmoIG7EsF6v75P19+be5YUj0LOH/X
+         GUcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFL8RsrPD1KbCvtt/LFFFwiUzl3/DRwqpcuDTLhEAI6lYRSyFuZ03TNALEDWQi72kEZLYvwx4OVPA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPlKgNfIKDnbmM8TKsjn+ahTx3F7UEy1Yp+dTxuGV6GTiU4pIi
+	fDuTNax1NwVxZW5OExGTCIGPzsLde87ULtMc4KOdc9svHbnHZLX82hnPXYsl+5HP1/1UHKp+DuA
+	7Fh7r7pPqs/q03srdk3CMyfU1OZZeD8H953UNVV2p5BppENOuNO8bUeA=
+X-Google-Smtp-Source: AGHT+IHyfS0v1j5nW12pwutZMnVxePBGV8nWsNpeKPp52ke6dPrmo2UnIsK2qNh+kDMZrEd0wrsgUgot9MOUQ4xA1GJItwEPzSrF
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1908:b0:3d8:2187:5cea with SMTP id
- e9e14a558f8ab-3da5b23733dmr58521355ab.1.1746424766508; Sun, 04 May 2025
- 22:59:26 -0700 (PDT)
-Date: Sun, 04 May 2025 22:59:26 -0700
+X-Received: by 2002:a05:6e02:1a26:b0:3d6:d162:be12 with SMTP id
+ e9e14a558f8ab-3da5b3437e9mr59371665ab.21.1746428736480; Mon, 05 May 2025
+ 00:05:36 -0700 (PDT)
+Date: Mon, 05 May 2025 00:05:36 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <681853be.a70a0220.254cdc.0045.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in osif_xfer/usb_submit_urb
-From: syzbot <syzbot+4687ab80180e5d724f51@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <68186340.a70a0220.254cdc.0047.GAE@google.com>
+Subject: [syzbot] [bluetooth?] [usb?] general protection fault in lookup_or_create_module_kobject
+From: syzbot <syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com>
+To: linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luiz.dentz@gmail.com, marcel@holtmann.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    4f79eaa2ceac kbuild: Properly disable -Wunterminated-strin..
+HEAD commit:    7a13c14ee59d Merge tag 'for-6.15-rc4-tag' of git://git.ker..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11436f74580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=117ddf74580000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=a9a25b7a36123454
-dashboard link: https://syzkaller.appspot.com/bug?extid=4687ab80180e5d724f51
+dashboard link: https://syzkaller.appspot.com/bug?extid=7fb8a372e1f6add936dd
 compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103081cc580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ba139b980000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=107a139b980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1788302f980000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/12c9f96176cf/disk-4f79eaa2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c24afd828d55/vmlinux-4f79eaa2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b2d77950e184/bzImage-4f79eaa2.xz
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-7a13c14e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/723f1b9e0adc/vmlinux-7a13c14e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e75e39192fa8/bzImage-7a13c14e.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4687ab80180e5d724f51@syzkaller.appspotmail.com
+Reported-by: syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c1
-WARNING: CPU: 1 PID: 5832 at drivers/usb/core/urb.c:413 usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 1 UID: 0 PID: 5832 Comm: syz-executor397 Not tainted 6.15.0-rc4-syzkaller-00052-g4f79eaa2ceac #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
-RIP: 0010:usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
-Code: 0f b6 44 05 00 84 c0 0f 85 38 06 00 00 45 0f b6 04 24 48 c7 c7 20 5f 12 8c 48 8b 74 24 18 4c 89 fa 44 89 f1 e8 7f 6a 6f fa 90 <0f> 0b 90 90 49 bd 00 00 00 00 00 fc ff df e9 2b f4 ff ff 89 e9 80
-RSP: 0018:ffffc9000401f6d0 EFLAGS: 00010246
-RAX: 76fdec7c67ae9b00 RBX: ffff8880216ebd00 RCX: ffff888023fc9e00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000002
-RBP: 1ffff110034f4a08 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffffbfff1bba4b4 R12: ffff88801a7a5040
-R13: dffffc0000000000 R14: 0000000080000280 R15: ffff88801a7a5700
-FS:  0000555562d49380(0000) GS:ffff8881261cc000(0000) knlGS:0000000000000000
+RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000005
+RBP: 00007fc431fa0100 R08: 0000000000000000 R09: 00302e6364755f79
+R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fc43289e520 R14: 00007fc431f9f0d0 R15: 00007ffd3ac3bac8
+ </TASK>
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] SMP KASAN NOPTI
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 0 UID: 0 PID: 5424 Comm: syz-executor428 Not tainted 6.15.0-rc4-syzkaller-00051-g7a13c14ee59d #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+RIP: 0010:kasan_byte_accessible+0x12/0x30 mm/kasan/generic.c:199
+Code: 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 66 0f 1f 00 48 c1 ef 03 48 b8 00 00 00 00 00 fc ff df <0f> b6 04 07 3c 08 0f 92 c0 c3 cc cc cc cc cc 66 66 66 66 66 66 2e
+RSP: 0018:ffffc9000da77840 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: ffffffff8b585807 RCX: 92d5a11e0ccfe200
+RDX: 0000000000000000 RSI: ffffffff8b585807 RDI: 0000000000000004
+RBP: ffffffff819b39d8 R08: 0000000000000001 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1efda6f R12: 0000000000000000
+R13: 0000000000000020 R14: 0000000000000020 R15: 0000000000000001
+FS:  00007fc431fa16c0(0000) GS:ffff88808d6cc000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb480077df0 CR3: 000000007c70a000 CR4: 00000000003526f0
+CR2: 00007fc431f9eff8 CR3: 0000000052ad3000 CR4: 0000000000352ef0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- usb_start_wait_urb+0x114/0x4c0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
- osif_usb_read drivers/i2c/busses/i2c-robotfuzz-osif.c:41 [inline]
- osif_xfer+0x21a/0x5e0 drivers/i2c/busses/i2c-robotfuzz-osif.c:69
- __i2c_transfer+0x871/0x2170 drivers/i2c/i2c-core-base.c:-1
- i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2315
- i2c_transfer_buffer_flags+0x105/0x190 drivers/i2c/i2c-core-base.c:2343
- i2c_master_recv include/linux/i2c.h:79 [inline]
- i2cdev_read+0x10d/0x220 drivers/i2c/i2c-dev.c:155
- vfs_read+0x1fd/0x980 fs/read_write.c:568
- ksys_read+0x145/0x250 fs/read_write.c:713
+ __kasan_check_byte+0x12/0x40 mm/kasan/common.c:556
+ kasan_check_byte include/linux/kasan.h:399 [inline]
+ lock_acquire+0x8d/0x360 kernel/locking/lockdep.c:5840
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xa7/0xf0 kernel/locking/spinlock.c:162
+ complete_with_flags kernel/sched/completion.c:20 [inline]
+ complete+0x28/0x1b0 kernel/sched/completion.c:47
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x480 lib/kobject.c:737
+ lookup_or_create_module_kobject+0x150/0x170 kernel/params.c:783
+ module_add_driver+0xb9/0x310 drivers/base/module.c:46
+ bus_add_driver+0x391/0x640 drivers/base/bus.c:682
+ driver_register+0x23a/0x320 drivers/base/driver.c:249
+ usb_gadget_register_driver_owner+0xf9/0x270 drivers/usb/gadget/udc/core.c:1700
+ raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:595 [inline]
+ raw_ioctl+0x149a/0x3c90 drivers/usb/gadget/legacy/raw_gadget.c:1306
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:906 [inline]
+ __se_sys_ioctl+0xf9/0x170 fs/ioctl.c:892
  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
  do_syscall_64+0xf6/0x210 arch/x86/entry/syscall_64.c:94
  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f62e575f119
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd8ac089d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 0000200000000000 RCX: 00007f62e575f119
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f62e57d2610 R08: 00232d6332692f76 R09: 00007ffd8ac08ba8
-R10: 000000000000001f R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffd8ac08b98 R14: 0000000000000001 R15: 0000000000000001
+RIP: 0033:0x7fc43281c58b
+Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+RSP: 002b:00007fc431f9f020 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007fc43281c58b
+RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000005
+RBP: 00007fc431fa0100 R08: 0000000000000000 R09: 00302e6364755f79
+R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fc43289e520 R14: 00007fc431f9f0d0 R15: 00007ffd3ac3bac8
  </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:kasan_byte_accessible+0x12/0x30 mm/kasan/generic.c:199
+Code: 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 66 0f 1f 00 48 c1 ef 03 48 b8 00 00 00 00 00 fc ff df <0f> b6 04 07 3c 08 0f 92 c0 c3 cc cc cc cc cc 66 66 66 66 66 66 2e
+RSP: 0018:ffffc9000da77840 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: ffffffff8b585807 RCX: 92d5a11e0ccfe200
+RDX: 0000000000000000 RSI: ffffffff8b585807 RDI: 0000000000000004
+RBP: ffffffff819b39d8 R08: 0000000000000001 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1efda6f R12: 0000000000000000
+R13: 0000000000000020 R14: 0000000000000020 R15: 0000000000000001
+FS:  00007fc431fa16c0(0000) GS:ffff88808d6cc000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc431f9eff8 CR3: 0000000052ad3000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+   7:	00
+   8:	90                   	nop
+   9:	90                   	nop
+   a:	90                   	nop
+   b:	90                   	nop
+   c:	90                   	nop
+   d:	90                   	nop
+   e:	90                   	nop
+   f:	90                   	nop
+  10:	90                   	nop
+  11:	90                   	nop
+  12:	90                   	nop
+  13:	90                   	nop
+  14:	90                   	nop
+  15:	90                   	nop
+  16:	90                   	nop
+  17:	90                   	nop
+  18:	66 0f 1f 00          	nopw   (%rax)
+  1c:	48 c1 ef 03          	shr    $0x3,%rdi
+  20:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  27:	fc ff df
+* 2a:	0f b6 04 07          	movzbl (%rdi,%rax,1),%eax <-- trapping instruction
+  2e:	3c 08                	cmp    $0x8,%al
+  30:	0f 92 c0             	setb   %al
+  33:	c3                   	ret
+  34:	cc                   	int3
+  35:	cc                   	int3
+  36:	cc                   	int3
+  37:	cc                   	int3
+  38:	cc                   	int3
+  39:	66                   	data16
+  3a:	66                   	data16
+  3b:	66                   	data16
+  3c:	66                   	data16
+  3d:	66                   	data16
+  3e:	66                   	data16
+  3f:	2e                   	cs
 
 
 ---
