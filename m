@@ -1,91 +1,107 @@
-Return-Path: <linux-usb+bounces-23738-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6B37AA9E4C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 23:41:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABA5CAAA187
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 00:49:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 756911A8194F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 21:41:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA3413AFF75
+	for <lists+linux-usb@lfdr.de>; Mon,  5 May 2025 22:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45A03274668;
-	Mon,  5 May 2025 21:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2631F2BEC44;
+	Mon,  5 May 2025 22:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jqzzs+hm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+LTiSyC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF4E2741CF
-	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 21:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DF82BEC2A;
+	Mon,  5 May 2025 22:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746481262; cv=none; b=BbYK/tBfsio0D+D1YyiLukQlOy5XP7FcHiGB6og20sg/UrvP1t+zhHOhjE0YP/U8fozOkiNrkx2CpLHMY80ZVg9Lt4tinHzVy1hgi1++TaXNjYwfOJhxyfHKnofOjTxUJSodpw27mera1ffZesgoYKTjCGigOLamnILVM57p2/U=
+	t=1746483594; cv=none; b=AuPGacu63vT1cBgDasBf8DY1h4zjj6u7p2MGj1Vt3pubFrlNaki63x3ehxYA60JrscgOzmJGFTrsgYZUH5297HexPT7BkOtHq/ChytEjPfrMsuSfFs64uyc52Ofj5T2dkIc8LTrQKGgJ1ZVtDuSwK6gOKNulAeLETj9VIEiODTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746481262; c=relaxed/simple;
-	bh=aft3bVpBHH/E4P6tbGOBGfJNp1WHbRoPUrX2st14F58=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YOEkEBqCbWm1f8oRgb7sU6OSUb5o6wAGTm2/33al+NKI1ffVbBwxanqE3kvz6IyOVkAB2Ecnad3B9qfiP+yuDwxdIF/CTocmRdjgkca5K9hTvKvvC/+kLXpLRXcY5cCyeUgP0gxkAwNl50emx0URNn4QhI3h/uW5wMRnQwNOCtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jqzzs+hm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D3CDC4CEE4
-	for <linux-usb@vger.kernel.org>; Mon,  5 May 2025 21:41:02 +0000 (UTC)
+	s=arc-20240116; t=1746483594; c=relaxed/simple;
+	bh=bLujnhfTIunbQHVmbq4ko2m/+miocLfsEpD1Mp5kBX8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=a8TMA4Q3MJ7jd3l4uA3G0xtCYzl76ns0GmAMffBGJbCqBB19NgKe1t+ANaqkp9jqDZOFQXY2CTKKpBIinN2+lrwSLmNNTTB7rnR/4LOagc2BESBb46K2oxjQrVARvOm233QiA6ubpGbnANFK2jlzte9m8syhAnLwHfKmaLfuUeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+LTiSyC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3F6C4CEEF;
+	Mon,  5 May 2025 22:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746481262;
-	bh=aft3bVpBHH/E4P6tbGOBGfJNp1WHbRoPUrX2st14F58=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Jqzzs+hm6CTEljGXSJ9V/PbOHotJoqC9hrB0kv7rsJbgGfEs4i13rFgSw5xrIXZm8
-	 CfLlfYJ4aIYXNjyS8mbwj7V0kpsnaQ3DnD/zwYgPO6hqYY3HPvzEN7m73338Vx3Nyh
-	 WES0xr7AfZKu4zpQfPEZKCtRJGhBvYurU9K+UF/R6G2k0GsquABqNgPfoLe098Jb+n
-	 W3s6uOi5055NqsOvfxS1yO0hVt4gCb0cj9tZ+iQODQzSBckjuNrMcBGcPSibi0S8hW
-	 +v6L5oxbFwE1turI/kyfFhzTSJgVUx9MCxwVIVIOwlHPZ5M19sIcsyJ5piJqhPyoav
-	 XR0HtiOypF8aQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 280B4C41614; Mon,  5 May 2025 21:41:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Mon, 05 May 2025 21:41:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220069-208809-eoiAn1ZkGG@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
-References: <bug-220069-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1746483594;
+	bh=bLujnhfTIunbQHVmbq4ko2m/+miocLfsEpD1Mp5kBX8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Y+LTiSyCETvSUuFtPN3khfCQk4VaTXnfv6Y6ChtwptzvePxc4XLzfliw5k9GTTkTU
+	 0en4sjiVyFyM6WIgLrSUgAzMw+bNDckG/BEifyt/IZr5VlHxTPIqMlFrVpjKZW/btq
+	 JBHBYdhWIOiic88XUBoietT4oYvCavzR8sEDMEAX2JGqezmj5NHTlGBsM0EVFIyhqX
+	 BFolZX/b3DKA56CjpeVYDBYwAz0F/9urRtQhfkc52LYxcPl9WGnJWai5MVW0ARwtn7
+	 uG8L0kWbb/X9THdc/+5FSIaGQJObKs13nQT0yBoHUTCMyMu8qZsUxfJ9YOJq2qsd/g
+	 kmG030NlPHsDQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	westeri@kernel.org,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 133/642] thunderbolt: Do not add non-active NVM if NVM upgrade is disabled for retimer
+Date: Mon,  5 May 2025 18:05:49 -0400
+Message-Id: <20250505221419.2672473-133-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
+References: <20250505221419.2672473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.5
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
---- Comment #45 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-If you disconnect it from bus 5, you might as well connect it to bus 7 then.
-This way the two buses will be simultaneously testing two different
-configurations and time is saved ;)
+[ Upstream commit ad79c278e478ca8c1a3bf8e7a0afba8f862a48a1 ]
 
---=20
-You may reply to this email to add a comment.
+This is only used to write a new NVM in order to upgrade the retimer
+firmware. It does not make sense to expose it if upgrade is disabled.
+This also makes it consistent with the router NVM upgrade.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thunderbolt/retimer.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+index 1f25529fe05da..361fece3d8188 100644
+--- a/drivers/thunderbolt/retimer.c
++++ b/drivers/thunderbolt/retimer.c
+@@ -93,9 +93,11 @@ static int tb_retimer_nvm_add(struct tb_retimer *rt)
+ 	if (ret)
+ 		goto err_nvm;
+ 
+-	ret = tb_nvm_add_non_active(nvm, nvm_write);
+-	if (ret)
+-		goto err_nvm;
++	if (!rt->no_nvm_upgrade) {
++		ret = tb_nvm_add_non_active(nvm, nvm_write);
++		if (ret)
++			goto err_nvm;
++	}
+ 
+ 	rt->nvm = nvm;
+ 	dev_dbg(&rt->dev, "NVM version %x.%x\n", nvm->major, nvm->minor);
+-- 
+2.39.5
+
 
