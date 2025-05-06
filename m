@@ -1,51 +1,90 @@
-Return-Path: <linux-usb+bounces-23761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23762-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF2FBAAB9D2
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 09:05:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37E3EAAC1BA
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 12:49:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CD1516E58B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 07:02:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04BC37AB671
+	for <lists+linux-usb@lfdr.de>; Tue,  6 May 2025 10:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3461D221554;
-	Tue,  6 May 2025 04:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B492278E5A;
+	Tue,  6 May 2025 10:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XnGfu3cB"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ays7/Tvw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01568221D8F;
-	Tue,  6 May 2025 03:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5022220C028
+	for <linux-usb@vger.kernel.org>; Tue,  6 May 2025 10:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746502292; cv=none; b=S5vkwbOAwTSzahr4A/0J1BgS7sVSKvHqOCFZevvdazMK3IziBN8rXDyaOVUYloqTc7H1aHw4cI9PcVJHccOVVoY8yknO2khE2vAO5eqcrZphAI4/VDChJRTfDu9azU5IY9xWb3GoJUoels2Te99mwRSF02PizQT3qntnTE2gmXI=
+	t=1746528562; cv=none; b=O+RJ26ed6OvttUDV7DFYroOQ8QoqN8WxueuLH35uO5EgfqruJf2eqISdEw1JYEeGm9IhwU934NP4Gz9Z8VgdhunOsah7b52AF+KjjsIX9o2Mc0uCr1YxFh/XitGhlJAaVrBE3lYV6F/kTPue0Upq8Mm7TNYck5JU0DYhB3q+83A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746502292; c=relaxed/simple;
-	bh=Bc323uGw9bg1vSKP1bB4KaCxLYWf8Yumf+T0uu+k9iY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uw9HH4QUfkynM9S2tnUGueS2GbRDGO2GpkoROii4+uGOmDMfn5928TY5ziBz/znVOQRmiJy9duR6npqR8PhrDFlrBiuwn3ghwENGqbWAw12Ir2Taj8xJ3yKAdSItCRmgcY1bBbtenFl/rRs5amMWPwsMWk9LGyKJi7bEMicvB5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XnGfu3cB; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=miqoq
-	4cqdh1LtpHKSamdO+B4bXNZgm7fPVKTf8kCeHA=; b=XnGfu3cBMwyQ1+N3WqN2Z
-	R5lJyrRUH4xhRoOxOBSdARl1o6AgUzNBnzYRZ2y2Pc2t53aw4WtnY4vy4nQC0pDa
-	Xho78/M3X/9/jEZzRhA22ZAwOq1GW12FUADN+nwe19kWO8aeK+JEWrfL6QUE/8qb
-	0YcXu/cESyFM8oIqW1fV+Y=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgAHt3N8ghlooYTGCw--.39086S2;
-	Tue, 06 May 2025 11:31:10 +0800 (CST)
-From: Hans Zhang <18255117159@163.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hans Zhang <18255117159@163.com>
-Subject: [PATCH v2] xhci: Add missing parameter description to xhci_get_endpoint_index()
-Date: Tue,  6 May 2025 11:31:01 +0800
-Message-Id: <20250506033101.206180-1-18255117159@163.com>
+	s=arc-20240116; t=1746528562; c=relaxed/simple;
+	bh=MXqYVLlIC857YO1MJUKMFQ6APvJH33Iga5WRljoMUTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BZXGfnuuemCATT7EdaQuAqw0gh48mSVg0TZzIREhrjKY68WTBmSrP6LxeMjVwiLbDvSVcKVGL34j8EhEODganLpGWEJVvgpztPwuGsQWTrkT68sJHF64UFEPRylqiUZh6uRmE7meLvPgtOXLL+P1BHBiJHq9QQSL9p+1S3d71k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ays7/Tvw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5468np0v007245
+	for <linux-usb@vger.kernel.org>; Tue, 6 May 2025 10:49:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=1BT+9avoZ07YU8MroIjY3rzBacA3W/8MWgZ
+	5I9HIHaY=; b=ays7/Tvwvf6CbqmSf1OpMWWqZqQ538BlTyYzmjpK9RU1QL6OTQ6
+	+6K0xTk6T76lMedVlGvSGWueK8rBt5Afl2pSocczinlIF2rvMSZi4ocgYFX/aNye
+	4reyaTNWfV7yaywQ4Y1ZJIzFjsm3rnIV49qboGpachsoHK+J/WbzReECa5WW8paj
+	FE9uhimq2bgZrCDfDzMhExg904cnMfhlfzQaOCnM+TGNH1lNwOdZitf5s2s/rnqg
+	eSedKGHQSH/SRwp/FE+++Mjue0gNmrE2m8yejof7jt/xMs/j412gr2UNBIhE/wtD
+	CAaTGYJh7iybNJ7TiGpyp65ckfLGri2utmA==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5wg1wmq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 06 May 2025 10:49:19 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-22c31b55ac6so76222015ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 06 May 2025 03:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746528558; x=1747133358;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1BT+9avoZ07YU8MroIjY3rzBacA3W/8MWgZ5I9HIHaY=;
+        b=Pj7eLdF3Hof88G2fXlK1NMWQqoj5Cvipxj9A837KR6ysjfTvYmJzqvYqNUV8hMl5z6
+         13+1Qj0pYxVXvwxAyEQ1sAsZmo6+qcBzHAcUfQ4BOn/K4HnaFW8qjN1VNSoOpMwbp0S6
+         XtUeokX1Aby9ARctpIJzpcGEhnQr0Zrfce0+Opz2p9XXJXjJrMtmPk0b6KyxR+9ux+ys
+         Mp30kmoqNrCZuxpre/uSTyFMh8/wNK/3qiKvDnjpKcHIOIxHI0L8j4kM23BwmlkjlR+n
+         DER1fQLYoc2BwcBMzE5Wf/7mRKcSP2IP+ojneRocmJOVCzSjljRowUnxU48SfFUbqp1O
+         t/oA==
+X-Gm-Message-State: AOJu0YwMw9XbVGNriHK6LtyiBP3DbG6iG3K0kdzx4hUd0/UlNUsEp4d8
+	bWwmKIdELvaNEixrOfUCySay7gqjzvK8Y+l2DvBz+4toqISWGzjn2mRzkXY9guaX3hhBlEwsP2l
+	d1n24DzLuWHEEHlcgTUxI8+PpHgSvBWbTKapJV1vRhZlKp1+w4ynjX43UllI=
+X-Gm-Gg: ASbGnctdqex8vdSYo5kaHELLFYyBAcYTbIS1G5Gf+rpkRcBlAD7w/B1ukhP0gh5DdY7
+	C2OjnxYvYZOre14t/NU5773y+yG4aG9ElOlZnbgbIiAtYYIw++uEcu+M8YYbzO417PGX6Xvm5Rg
+	j8jp7XSE+Jep49gRU7IvN/EMHC65Bq0DMLFslyMbaK2x67OdK3pIqYuJopErmfSWMSdHNhFke2E
+	dW6odufBkISkqgu7U5X0LzUvfzEUBb/khA71qgZqCXquNjHkC4con/ISzjXpiqDFCoY4F/504Hu
+	Rh3Mwcvl1yeNLUvWUOwUM+Rd0bmmKwgIHT78GfEz
+X-Received: by 2002:a17:903:22d0:b0:22e:3279:990a with SMTP id d9443c01a7336-22e35fdfebbmr31963315ad.17.1746528558588;
+        Tue, 06 May 2025 03:49:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFKK6d45h63Gdu4TDOKJt0NRyzixLAgMez8xflvSEFkVTtmtil0jJ03NTWeRlH3BhT/YnRWWA==
+X-Received: by 2002:a17:903:22d0:b0:22e:3279:990a with SMTP id d9443c01a7336-22e35fdfebbmr31963135ad.17.1746528558221;
+        Tue, 06 May 2025 03:49:18 -0700 (PDT)
+Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e3b99dce9sm10786985ad.6.2025.05.06.03.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 03:49:17 -0700 (PDT)
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prashanth K <prashanth.k@oss.qualcomm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH] usb: gadget: u_serial: Avoid double unlock of serial_port_lock
+Date: Tue,  6 May 2025 16:19:12 +0530
+Message-Id: <20250506104912.3750934-1-prashanth.k@oss.qualcomm.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -54,44 +93,59 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgAHt3N8ghlooYTGCw--.39086S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryxAr1ktw15WFW3XF4DCFg_yoW8Gr1xpF
-	s8G3y0krs5JFWav3W8Aan7Aa4rCa17Ary5KFWxG3sYvrW3tF10yF12kF15tr13Zw43Aryj
-	vF4UG3y5W3W7uFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_FAJUUUUUU=
-X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiWxFFo2gZfjmk0AAAsu
+X-Proofpoint-ORIG-GUID: 3zooBw75Ukzszl8ku8bNoe_A47bJdwfL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDEwMyBTYWx0ZWRfXw7/3UrWzUC5g
+ Mz4AE85H9bqkSveR1NZ7zmuKsL8jNB38plAEVWRJ+YWxYYnNeL/2+Vy4UvZqhy5cAyQtkooLKpZ
+ dt1OGq02dVk9ey/3SL0jfYacN9TQ0yXUm//8kYWgJuG3N/q6L8JbaMCQOo//buYIOmAJ6jKsB9I
+ Tnb8kbG00aYplEU+9PizbPvr4YALg/8i+pXn0ET7f4ei5bY6J81jA1/e5glqJoYj60rBvyhhuTg
+ AjLTr8OAG+UvjtWZJ7hqcalo4gimz1186opy1Z3mfFQG5D7X4cx8p2Wvn1EnY7EkvNpHDGoY1L+
+ 3ILblbrlaAbLsqT8rNQb/ON5eu9UySCuvlBseoO8V/QpGWKjWxVkI0MjAGrXVY0kK31JgQxLGv9
+ 7y75eoy0FpSl/0PLFa7BfXoYHI0Q/s8H/CgPPGTRbwyu3CJhxN9S9gDdh7LGUeavTXht/2Og
+X-Authority-Analysis: v=2.4 cv=dPemmPZb c=1 sm=1 tr=0 ts=6819e92f cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=gJab5K-lH3zide7aClcA:9 a=GvdueXVYPmCkWapjIL-Q:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: 3zooBw75Ukzszl8ku8bNoe_A47bJdwfL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-06_05,2025-05-05_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 adultscore=0 mlxlogscore=819 priorityscore=1501 impostorscore=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505060103
 
-Fix kernel-doc warning by documenting the @desc parameter:
+Avoid unlocking serial_port_lock twice in gserial_suspend(), this can
+occur if gserial_wakeup_host() fails. And since wakeup is performed
+outside spinlock, check if the port is valid before proceeding again.
 
-drivers/usb/host/xhci.c:1369: warning: Function parameter or struct member 'desc' not described in 'xhci_get_endpoint_index'
-
-Add detailed description of the @desc parameter and clarify the indexing
-logic for control endpoints vs other types. This brings the documentation
-in line with kernel-doc requirements while maintaining technical accuracy.
-
-Fixes: d0e96f5a71a0 ("USB: xhci: Control transfer support.")
-Signed-off-by: Hans Zhang <18255117159@163.com>
+Fixes: 3baea29dc0a7 ("usb: gadget: u_serial: Implement remote wakeup capability")
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/all/aBHatifO5bjR1yPt@stanley.mountain/
+Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
 ---
-Changes for v2:
-- Add Fixes.
----
- drivers/usb/host/xhci.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/function/u_serial.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 90eb491267b5..dbe6f41202ca 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1359,6 +1359,7 @@ static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
-  * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
-  * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
-  * value to right shift 1 for the bitmask.
-+ * @desc: USB endpoint descriptor to determine index for
-  *
-  * Index  = (epnum * 2) + direction - 1,
-  * where direction = 0 for OUT, 1 for IN.
-
-base-commit: ca91b9500108d4cf083a635c2e11c884d5dd20ea
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 41dee7c8cc7c..ab544f6824be 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -1505,6 +1505,13 @@ void gserial_suspend(struct gserial *gser)
+ 		spin_unlock_irqrestore(&serial_port_lock, flags);
+ 		if (!gserial_wakeup_host(gser))
+ 			return;
++
++		/* Check if port is valid after acquiring lock back */
++		spin_lock_irqsave(&serial_port_lock, flags);
++		if (!port) {
++			spin_unlock_irqrestore(&serial_port_lock, flags);
++			return;
++		}
+ 	}
+ 
+ 	spin_lock(&port->port_lock);
 -- 
 2.25.1
 
