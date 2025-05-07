@@ -1,194 +1,134 @@
-Return-Path: <linux-usb+bounces-23781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23782-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B68AAE6A1
-	for <lists+linux-usb@lfdr.de>; Wed,  7 May 2025 18:28:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C240AAE6D6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 May 2025 18:36:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 573B8188EB9E
-	for <lists+linux-usb@lfdr.de>; Wed,  7 May 2025 16:23:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30FC89C2A92
+	for <lists+linux-usb@lfdr.de>; Wed,  7 May 2025 16:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C890428D8FE;
-	Wed,  7 May 2025 16:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD9A28BAAE;
+	Wed,  7 May 2025 16:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kde1Y7nx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+di1bRy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771FB28C2C2;
-	Wed,  7 May 2025 16:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA91C28C039;
+	Wed,  7 May 2025 16:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746634763; cv=none; b=GQxIzk6+DwZ+9A7aGCt7gdiZbR0A3rberCuq8yfU63X9lJ5D7nlYVc20O2sYm9nvy3h2KemnCnDL5t8SnnMN407Djf3osrN1vjsI5+j5jNapaxKWXx7lP1TS9G0r+jldIgTjQj+fmaZ2MiTjUQVHNHtwRpCjTIP4bDgBSfou/ic=
+	t=1746635790; cv=none; b=moz9/QK+kN8jEYHzzR6i6w2Mn0w40+kWUgDYg4LMUZ4tPqSFnBf8+VFhP7CebthqhVhq3ekRJ4usycddJ5Vera+Sy0y6wPJHiDuq1mCT+IUiFukU4Nx4eCwXmmDtDUMcxHxc2jBjdx7dtBYTobVsLfwnDw8Gd29Mv5VoPZqIjLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746634763; c=relaxed/simple;
-	bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s6ApguIN5erGByg/IeRtb2ANogKZiXrNGL+lu7H+BeLP4rp4RbeylcEsUrbDeBRn06AV2NeR3U15lSbLU6ghS4RVWWtFVl2pt993VTr6lXvAwhFeg6I+CX4oQ16hVmY3FVdcR0MfEsyv/lPYFPG+u2FPixgXcton2xRsfjPyWE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kde1Y7nx; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746634761; x=1778170761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
-  b=kde1Y7nxnJK+llHE2wJylU5eyF7s1whCukTnhHvIXyR8X+b5vtqQdely
-   QtloJaj/kaYuW3Tujk2s/Ip3a5NUhVhXCvf7hICsMu5ZA0867w2jp2doL
-   vdd2MkTSalbHiHdferPXkw70efj0mfNuACMkJxpX8G4zWX4d9Z99P7MKD
-   nIXGdLiRuhDLGZo5H4ygqYxGIkl0HNiiO9UgZqTsFIqWOdZ+x2dqH1kOT
-   aQR6ILW0GYopITUxE358n1YUQUQpi6U0496X6Qh6e4QBSH7vSO7TAhfEx
-   sZPjVfC/lorD+luygBEyNHMabn3MiG01YiXqCcyS9yUSI5wfhqudptY+h
-   A==;
-X-CSE-ConnectionGUID: 6TTN1G5CQCutI7U6mwcJdQ==
-X-CSE-MsgGUID: b76AnggTS26A/vkoOsm9qA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59772965"
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="59772965"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:19:20 -0700
-X-CSE-ConnectionGUID: b/FN9FoPQpuKIolEffre2w==
-X-CSE-MsgGUID: fdCGD3zBSKSaMGmZkOdFcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="141200324"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 May 2025 09:19:13 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uChUE-00089N-22;
-	Wed, 07 May 2025 16:19:10 +0000
-Date: Thu, 8 May 2025 00:18:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <202505072336.mhh6H9Ma-lkp@intel.com>
-References: <20250423094058.1656204-5-tmyu0@nuvoton.com>
+	s=arc-20240116; t=1746635790; c=relaxed/simple;
+	bh=jodQBOUHL1Gt952eiPBvOHE9pzfV95ZMyn2l0xgzhNI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DuSLf7VWnPY+2EGXXrX99PHEHlub57OqPDWko8jlydnRCMMpTpaf1Znutdff/YDBmSmcEhbe6KA6hiFzycmzfZktLwwyocAAK7tJAl5NmCYv0drpgeAWmsrhR6PeuDMcJbgcGE/RLs1hQIYrtE5q/HnwEiKL3287VH15MvEgMDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+di1bRy; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a0b933f214so60373f8f.0;
+        Wed, 07 May 2025 09:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746635787; x=1747240587; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=axt5Qbp2mD3JDBMkh2CUDM68i+V3fWWqBODx7JRunlE=;
+        b=X+di1bRy4H0E1YI5jauGFNQ2Nmsz5RbAd2Po/39/HscWNC+omMPJN6NyiluKdYKClS
+         gKkdIlLYadh0beLMtDIxP1GzyPn6LIH5Wbd2QdolQ4A3RZB8+O8O9X+HahHdousyWiIj
+         U4mTdT28rKE34v3Av0RbbkW0zPiFOjCAdzmnKQev5pocoZb1y1zUTbFnhxVWuvkBwYnD
+         QtbRlE2AU6cEU/ODVwqnT0QDAoIc4htRV6BZPJYIb4y6SgfiGOqCqXRq95j5KWvtHpNC
+         NnbErISEVvDiW/O9NFWNBVMa8S0neqVpao5JKZZEQfPUbdMvMCWEnFcsWN+6XaYrAuzj
+         YVQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746635787; x=1747240587;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=axt5Qbp2mD3JDBMkh2CUDM68i+V3fWWqBODx7JRunlE=;
+        b=oGYWXg4zOhmrpsDg0GDSL+7ISVVTzskCjMdZj50Cs9WJz4vNfIenYVN5e36qjIPBJb
+         K4ozJh02B1OChkZ59hVovv+fBfDCdeDv5R2voVhDhAcg5swe6OKbgdgXQWU8dRtQNwB9
+         oQPhVrBE/RbmdY5nDqz+6wcq3jxgniR/mAFF6SQKujbzXQMuUJZqlzCTRJX0M4gtemVB
+         4GdgtCp3oFTMuUPondULodJ8XQ/8G4DFFL437BXbalA9o9Yw8RlZVO7FCtmh/dIksYjk
+         R8/Nghwmtc1XVRZGvditLDHo2aKPS/7q75x5yPzkq2iXzJouLwlU4b7p1IqInTSwTflS
+         jS0g==
+X-Forwarded-Encrypted: i=1; AJvYcCUU/l9xpj43IXDZwluuB4X1YeBvAoqgBgE9vApoUgu/v1h7BfMpjy5+2WyF8qu0oNW6VW2KN8osvKl3@vger.kernel.org, AJvYcCV1YILll0+0qjPfsxh8p+0L/2ouF4tnG687rWtiY8IJ7I6RVcqiP9bjh/vRHZDSrYnSpLPACWu9urM5Lrjf@vger.kernel.org, AJvYcCXVo9uOL3Tcw3gUvXR0+moQiPBq24DurF4hwytIKw5yXwNymTjAatwtXh6wxtQ+jCMoPyW+841oBWFH@vger.kernel.org, AJvYcCXsuFCoZyqNsqUEgs3Mbz1OPuEYocLt0yN7nLjsjIzhhfCp+MbfDH534pwv2AHLCJ3eUSB+21TlQqs1BM/gPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw07RrKca0qwJnjsamrP//gkrViFUNi1MzF9xBhcENUXwv/KpSU
+	IsZ5ZGLV5o6WYu7ZCCtdVE/DVgPn8fwMsSHZeFWH0JHeIW8d9g58wZBP44y2Y4K3/YwH3fktb9C
+	pe4ocT/ivr7wiejQBYnJcFPcEjg==
+X-Gm-Gg: ASbGncv/qXHWYRzHrbkYH8EzT1qfdGbvaTJrJShP0jdK4v0O750/e7yaz661b0AMTcx
+	NaWR+FLOEhtEBUGtuaRaI0qDZzKMo2QfjNwl792e/2DiBSC8XH8ycMHTE0y0GvlGdR1/HcG1TWe
+	Enfm8thxJRZKWmgPKb7cYKMaA=
+X-Google-Smtp-Source: AGHT+IG4TtEc4UHcL2gxaRWi5FT3jZwhYmsgKbgjQKUE4+xfZUIUK784DIMLSgMmX34KKba9PPpbydZq1seoxRWbt+U=
+X-Received: by 2002:a05:6000:ec6:b0:3a0:b4fa:e594 with SMTP id
+ ffacd0b85a97d-3a0b4fae636mr3071542f8f.33.1746635786642; Wed, 07 May 2025
+ 09:36:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250423094058.1656204-5-tmyu0@nuvoton.com>
+References: <20250426130203.37659-1-alex.vinarskis@gmail.com> <174659505811.5380.3561194017032215136.b4-ty@kernel.org>
+In-Reply-To: <174659505811.5380.3561194017032215136.b4-ty@kernel.org>
+From: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
+Date: Wed, 7 May 2025 18:36:12 +0200
+X-Gm-Features: ATxdqUGYO_K7swrC_4mSQOoLVgxcVoKQsspTBMQaet4mxzcKeI5SjbJ6I6HJ0wA
+Message-ID: <CAMcHhXq1-=JeNspAZ61W0JqtjPkoKSi2W1sL07hoVsqFu5T--Q@mail.gmail.com>
+Subject: Re: (subset) [PATCH v4 0/4] X1E Asus Zenbook A14 support
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, maud_spierings@hotmail.com, 
+	dmitry.baryshkov@oss.qualcomm.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on brgl/gpio/for-next andi-shyti/i2c/i2c-host mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250423-174637
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250423094058.1656204-5-tmyu0%40nuvoton.com
-patch subject: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505072336.mhh6H9Ma-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/can/usb/nct6694_canfd.c:543:30: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     543 |         setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
-         |                                     ^
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-      88 | #define cpu_to_le32 __cpu_to_le32
-         |                     ^
-   1 error generated.
+On Wed, 7 May 2025 at 07:18, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+>
+> On Sat, 26 Apr 2025 14:57:56 +0200, Aleksandrs Vinarskis wrote:
+> > Introduce support for the mentioned laptop.
+> >
+> > Particular device exists in two model numbers:
+> > * UX3407QA: X1P-42-100 or X1-26-100 (as tested)
+> > * UX3407RA: X1E-78-100
+> >
+> > Mostly similar to other X1-based laptops. Notable differences are:
+> > * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407QA
+> >   and Qualcomm FastConnect 7800 on UX3407RA
+> > * USB Type-C retimers are Parade PS8833, appear to behave identical
+> >   to Parade PS8830
+> > * gpio90 is TZ protected
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [2/4] dt-bindings: arm: qcom: Add Asus Zenbook A14
+>       commit: 9f2ae52acd5e6c95ddc55d1cc67f44860940a21b
 
 
-vim +/FIELD_PREP +543 drivers/net/can/usb/nct6694_canfd.c
+Thanks!
 
-   512	
-   513	static int nct6694_canfd_start(struct net_device *ndev)
-   514	{
-   515		struct nct6694_canfd_priv *priv = netdev_priv(ndev);
-   516		const struct can_bittiming *d_bt = &priv->can.data_bittiming;
-   517		const struct can_bittiming *n_bt = &priv->can.bittiming;
-   518		struct nct6694_canfd_setting *setting __free(kfree) = NULL;
-   519		const struct nct6694_cmd_header cmd_hd = {
-   520			.mod = NCT6694_CANFD_MOD,
-   521			.cmd = NCT6694_CANFD_SETTING,
-   522			.sel = ndev->dev_port,
-   523			.len = cpu_to_le16(sizeof(*setting))
-   524		};
-   525		int ret;
-   526	
-   527		setting = kzalloc(sizeof(*setting), GFP_KERNEL);
-   528		if (!setting)
-   529			return -ENOMEM;
-   530	
-   531		if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-   532			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_MON);
-   533	
-   534		if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-   535			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_NISO);
-   536	
-   537		if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-   538			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_LBCK);
-   539	
-   540		/* Disable clock divider */
-   541		setting->ctrl2 = 0;
-   542	
- > 543		setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
-   544						       n_bt->sjw - 1) |
-   545					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NBRP,
-   546						       n_bt->brp - 1) |
-   547					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG2,
-   548						       n_bt->phase_seg2 - 1) |
-   549					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG1,
-   550						       n_bt->prop_seg + n_bt->phase_seg1 - 1));
-   551	
-   552		setting->dbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DSJW,
-   553						       d_bt->sjw - 1) |
-   554					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DBRP,
-   555						       d_bt->brp - 1) |
-   556					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG2,
-   557						       d_bt->phase_seg2 - 1) |
-   558					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG1,
-   559						       d_bt->prop_seg + d_bt->phase_seg1 - 1));
-   560	
-   561		setting->active = NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
-   562				  NCT6694_CANFD_SETTING_ACTIVE_CTRL2 |
-   563				  NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
-   564	
-   565		ret = nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-   566		if (ret)
-   567			return ret;
-   568	
-   569		priv->can.state = CAN_STATE_ERROR_ACTIVE;
-   570	
-   571		return 0;
-   572	}
-   573	
+I saw 2/4, 3/4 were applied. Is there a reason 4/4 was left behind,
+eg. Does it have to go through different trees like 1/4?
+I also saw that another later series with dtb changes for x1e devices
+[1] has landed, so 4/4 of the current series won't apply anymore...
+Would you like me to rebase & respin?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Alex
+
+[1] https://lore.kernel.org/all/174659597008.7675.2301017495937908497.b4-ty@kernel.org/
+>
+> Best regards,
+> --
+> Bjorn Andersson <andersson@kernel.org>
 
