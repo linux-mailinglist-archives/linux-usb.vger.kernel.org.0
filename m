@@ -1,279 +1,173 @@
-Return-Path: <linux-usb+bounces-23801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D094AAF403
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 08:45:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 067CAAAF60C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 10:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23A1E9C3DD0
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 06:44:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72ABB4C755F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 08:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E002206BF;
-	Thu,  8 May 2025 06:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="TyzNJktZ";
-	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="nCflk/J0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2C723A9B3;
+	Thu,  8 May 2025 08:52:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8AA21D3C7;
-	Thu,  8 May 2025 06:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746686669; cv=fail; b=NYqgU+0LC/XDbrOz6k9BzCd6StbMTpNZXAQfnZIKfmt+UxXkmVib0XX4Cy0WCiDr1h2C3noVyjA40w8WqUjvYUxVgQnpvXNGJqz3hOOIGYiV22dAgyReHl2qxSk/hOgvpICCE3C92p2wsQEAWIRpABHxMB2dZzvGkDy7sw9dsNg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746686669; c=relaxed/simple;
-	bh=pqydxFYUPJeb5LaYDlQ4oeXBwfAKc9nAIOvg6vwBxtQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YJWrU6F6vTOqRn9/U1wiSd1TpOrazYeF1YUA3+oRExfq2x2Souwhz8RCqXuooTwX7d9X8VGmE1qcKTmpDOPm4ojfbYdNFLjgDphD7wAAtdXEWN5JLuZUiQu1a99A1bVxRjM9TSH1IN2ts3OKEtsRlZ7TPXCeafcJBxl1PS8Bang=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=TyzNJktZ; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=nCflk/J0; arc=fail smtp.client-ip=208.86.201.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 547LUVTZ001921;
-	Wed, 7 May 2025 23:44:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=proofpoint;
-	 bh=jbLu3BeArrTknqywAWU/zAapvQB3cF3R8dnzmKfSW4U=; b=TyzNJktZxBUP
-	DUNfDbugD6CItFG0MHVvQP723ee/hqRTgSey7NG7/781wmOVTxSQmlJFfpZiyHwN
-	b4izNDMHEDQNGGmbQsIDLP47qmUNhNGSFXE6Jk3CfO4dczvxZFGxRqqt2ikMP/8e
-	QJ/59Di+p3V2c0OMQXO+XozNLWDSVpNPuAb5SAS5aWXSmjLwlzRRbQyBs/WDh3oV
-	P1keHfNfNvRLd1PL+jr7f0E7Fl1RdkwXC0FmESwfi4W9qOaQAoKHCU/Bf4iS9YVg
-	BFdpJQuDnWyG1ti6NKAmD1euOBdiHTYvMERKhV7lBPXBbnszptNWzb8M9btJKwFc
-	UIC3Ynz7rA==
-Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazlp17011030.outbound.protection.outlook.com [40.93.13.30])
-	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 46deqwwg4y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 May 2025 23:44:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XCraXt83/orEEpjbmra3QQcl43g5VQ3m5N3C2ITaILoLaGy5QqA7ybP/hG1hCQFFjuz7PUIWUDScFzTG6SD6+X65zbKuorlcaj2CGLGXCsg/5FTZqvpvztveS00oAYjRmVyvkp1tiWUC+YsM6wasnZzx/x/BZjaiog/XK//yYWUuBqp8DVDvKdZE9rfQkD994v/Jz5MRZGeLabfwu5eBqnEWaCjSjSOdBkmjZNdP6yaEPa20Sr+rfC8y5iHH+03SVFs1M3EkkfXuaAOQRK2dsl88oSYl+o/yWjfQo/237lNC8CRk74Go8Z9G5nRdYLa/1mNtYtFBhLiKMDyneaES/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jbLu3BeArrTknqywAWU/zAapvQB3cF3R8dnzmKfSW4U=;
- b=GOWFPFk4cXtvJRdcRC9CuFz1fQwVbcWhroeQkQeBxKs31a/sILrvgHoGeJSaQF97Nxm0oDn24ePQI16HvUf6P/kBnYUlHrnI9dI+Nv0tmRiXtQBBFa+Pc1SuRmr5N8S8jdxq6RedBXWGDpkxXDwzfUVUOleeuT+oPRdlc92Muz9jq9y7CR0WOAIsoDKilmJ66oXNf4IR0tij7B1vgtQPYDZXX+6lR1rG/gRmPSB7vGWLmrNcGaTG9lPeqlivP0SP3EXH+/uG+QZfvdWQ3spXCL3ma4ZfCRDx//uT8gPmKs89JN9Ga55CbzVswWhg4bHklmlhxPGf+9gDs6PZUm8tyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jbLu3BeArrTknqywAWU/zAapvQB3cF3R8dnzmKfSW4U=;
- b=nCflk/J0mpgZlTwjS/Ewv6odXAK9sgTbT0hoCX6f/dTI6ZDdsO3ZpFiG5OJcB2YWHMOwNLFktQDLy9/tMlaBeLWtTq0QwdiPihr8v8RXM2NIqGnuPle66DpHjH/kd6i/fLE7LIbxBi3zSfkg9fDufJpleSJIXzn4CNV7u4lcGNY=
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
- by DM6PR07MB6892.namprd07.prod.outlook.com (2603:10b6:5:1e4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Thu, 8 May
- 2025 06:44:20 +0000
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7%5]) with mapi id 15.20.8699.022; Thu, 8 May 2025
- 06:44:20 +0000
-From: Pawel Laszczak <pawell@cadence.com>
-To: "peter.chen@kernel.org" <peter.chen@kernel.org>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdnsp: Fix issue with detecting command completion
- event
-Thread-Topic: [PATCH] usb: cdnsp: Fix issue with detecting command completion
- event
-Thread-Index: AQHbvxnya97aAZjaiECX74c59YsKxbPGwtgAgAGGIvA=
-Date: Thu, 8 May 2025 06:44:20 +0000
-Message-ID:
- <PH7PR07MB953895BB387C725E701DCC0ADD8BA@PH7PR07MB9538.namprd07.prod.outlook.com>
-References: <20250507063119.1914946-1-pawell@cadence.com>
- <PH7PR07MB953855E1D951721A143A83ADDD88A@PH7PR07MB9538.namprd07.prod.outlook.com>
-In-Reply-To:
- <PH7PR07MB953855E1D951721A143A83ADDD88A@PH7PR07MB9538.namprd07.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|DM6PR07MB6892:EE_
-x-ms-office365-filtering-correlation-id: aaa64de0-70bc-42d5-399a-08dd8dfbc2eb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?pYcyz3zb5GSp2ejHKpk/l3TKJX0zJMWjKldz/E/b4JeRqqnCMTTNB1DYDH34?=
- =?us-ascii?Q?2+DnGo2g9K5f1v29cCXiE/DK35Zz6Kj8ObDpXTi7Rmp1zIscCd8t6biOKof5?=
- =?us-ascii?Q?Lgw52qbGMKzkZeZVU7wgoc0Cke6G/kZ0zeKDxRxB5reb7o3en2dwR2PyoI+t?=
- =?us-ascii?Q?QPcrodjqOXoSuvD6+Vq3LVcFnC7OKEdRtt4Th8141k6dFqmoDJchTPbztfQv?=
- =?us-ascii?Q?yIv00f4mMInAJV1ox0aUsTPQTHAqInO2p6PB2OLE94LNYFsONBy83HslSWj5?=
- =?us-ascii?Q?vAgGubMqEqgXWQwe09DzpVPTTktxgvQvhLjjIhLQyo8NocAxMAkHB799At1Y?=
- =?us-ascii?Q?hq5nA8Uj/420u8dHY+4UzV9Tzvq9qg8XAcb0kMVz13ORjZgH9CmKCHVdGM2L?=
- =?us-ascii?Q?vNTOMqI99YZNUzqSpvWb+zHt3fWWkXnphV6ql90OPQHKixs5iSVcjdsm1lHM?=
- =?us-ascii?Q?uJQdy3oY67fGCMswyIuVGq61VBuKHlTLO2UobjFfJ8b04Y4tlYnwP4Bgzj8w?=
- =?us-ascii?Q?d87atcVhlenPkxnF1etig+3JYgwOgOIYE2kdCre+1POD6J5FL6lF/vvRNkPs?=
- =?us-ascii?Q?8PLA0/zy6a6/wE6juwCfmIUIhRoKr27fa+bbPW4M8ZD7ldremhHVvn3KnIFr?=
- =?us-ascii?Q?H1gSMis8ZiFi4jATwsjrdIX0DPIIFjBcw7rwPg3L2HNcH1019JeJvoECgsaS?=
- =?us-ascii?Q?0EAUS9l/nyeDCXrKakGfHEdU/W0XTf9/ACEyZQiihzgVOhxpMWnkzYAC8s9R?=
- =?us-ascii?Q?wUjrtqPREpjls7zfSbUoKJAfBxKCZOq6j9qZ2D0/U69rh2DfXOP1R2LjFpCW?=
- =?us-ascii?Q?xy9o/x7eT707jkrf+tdfvCsggCGpe2IbNKjze+wUZCdQ7jDIRZk4Fpji39CH?=
- =?us-ascii?Q?N/Ayytxs4LkUb8V3UM5f47skBPIE8tsDv0q7kWeuxijRFjITFA1IP4wa7VhG?=
- =?us-ascii?Q?QRlTjfJmeO5FAv7H1Kez+/EETTBG3gaYBncn8w0iuAzj3rbx2S3uWMSRfUTF?=
- =?us-ascii?Q?EAImM2d66NtzXM32IX7QAmkkuIFigcmGgXDTgEAMVmhVGe1pGjOwjyB89s4k?=
- =?us-ascii?Q?d5ND8UNQu13zkybn0QJM2xk93TS0psSHiMjLKXXWBgeq1N5Tgu9GFqHHdPse?=
- =?us-ascii?Q?UnMbeFqiSo+jpu42aWuTjNIC9a9Gw+dWUnrbW3REQbVYapWiQLNRq9KgELaN?=
- =?us-ascii?Q?cYWBTbIekvswnW5xI/z4bmL3MCmgf2qvD/H7lMJPsfMpoa1bnvRZLTz8XWG6?=
- =?us-ascii?Q?z1k6c7FCKR28VS7wZpqry9mBG1vfdvA7NK1FCaa43YRX8y/sIFSy9JH94vhu?=
- =?us-ascii?Q?aSMUyee5WL6Ce54JPdh1Nhv8gBh+jT1nySxcA/DevKyTNeF90c0H96CG4kAD?=
- =?us-ascii?Q?TLhvwR3UYOstLWXwA1qYgB3TE7t+BJZYTxpdRmQCoueoVtJycV9R+vt1NypQ?=
- =?us-ascii?Q?tZPnoWXsYxp46ad5QeyAjmoL7m41Hx68y+M+OKVHkrCCp7qGTHXq85O7p0I8?=
- =?us-ascii?Q?tRVj/v2mZZIitpk=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?mG//tPxUDrCXsUxSQ4fH1tMvw/Ee1zzvgaw70WVaw6BVAtiFcrWlmCbUjt3/?=
- =?us-ascii?Q?gdf/E/43wwYF1PSMxNqyWYZW8bN4ia7iPcmIhd+zeAENEIdZkHNEJy823nMO?=
- =?us-ascii?Q?LkYINryt0/eCtWtWNRV189qmzg4nOnmBcixOect12ZXUb3rWVZW/sHgK5Rqh?=
- =?us-ascii?Q?Q5YOZYh/Gcv72lCW2Dm6YyXk14HNR1BijB0TMvcdd7a/NAFycXCizE4DpxPT?=
- =?us-ascii?Q?LqawLiOooEOUehQxIsrm3Yho6Tr6M82RUZKfA4SMIrRDiZ/vQRcv79eytmvh?=
- =?us-ascii?Q?MAu8DmHk/U98fLTICdndxvuz838b1O0tgP0r29tC695RosktBAYz/Uv9FMz9?=
- =?us-ascii?Q?sEhbsYb/vqqzsOaJzDKPd8u52bmRAALob+ccqDbvq+nP+pkxhKT/gud48hKB?=
- =?us-ascii?Q?ACV+3y4yVGFV8GLJLsLlb7qK4lAZC2bZB3v2BpPCRXewbhaWxwLuNvg1ynk1?=
- =?us-ascii?Q?BGrL0XeTydn4T/nFKCk5Xp7P8BIYXf1rE8TitUwCMw1tTgVSBXPmx9g/iG2U?=
- =?us-ascii?Q?q373r1f7dNqgSRDAU7gcl8Wv2kC5SfhwuYr6sLMXy0McaGl/GxkynACWjz50?=
- =?us-ascii?Q?hXEjEEeyDINkV6q0hhnbeAd7USrpxo35z5W3FaVzChrZRjcq2LBfB1CWKRuc?=
- =?us-ascii?Q?d/ABXe5sI/vGaGAOfaI1urwsp/Vve2qGDGl1vgbK68+gne+Hv6wgRU2+o5Y0?=
- =?us-ascii?Q?ifa9TqZuW3g0ZcgKPuAfNM01GV70y6iqtBV1upRvQsBUcasbsmbkmoSyf9M3?=
- =?us-ascii?Q?rGzKQ4LVODJ4RCQegfUwLweneFKBnqiEhusEfXk9RqqVqAmTqGyD7sp80u1T?=
- =?us-ascii?Q?/ZyZGXyWv1zMVRRRuhdeMR0iM0ohBD1nbEmzYqPeMdYuUyTYZPBSt96ALXF7?=
- =?us-ascii?Q?QtaDfYwMSBH6Jhn6KXs5DhpTrNSThDjiffTQHlqy+8TT0k2wbRhG1FgD2bTY?=
- =?us-ascii?Q?zhseaZHemOy0bXDXhjjz0LVgZjd/5IZNbwv+SJymu2Bv7BOzIUcks4KAEdhc?=
- =?us-ascii?Q?q/Wfa6cQpy+T0dkMudXtJKbVSsoKSfW6lGBQAktJJX02UuvyLuP48ebnNtsv?=
- =?us-ascii?Q?RacANvh1hT6bKE+YjOqVLnpLytMgFee9QlkuPtrELybbYgp5c7TJuaTmCCL5?=
- =?us-ascii?Q?RryzSPb3ixRlrKLOeHLELiBb5cK+CdQpTbibxdL2DRDIIxJ7sn906F+BW+Th?=
- =?us-ascii?Q?Y4jGNQah9aOPTchCzbTPNH3aVgJd05DtuUBZy1E7sEjJPoeD1k7/nI/O3TjT?=
- =?us-ascii?Q?ws29nN1B1Ui7Kf+NhpbMPW/CXNNhcoFSkYCgo0JRq5zdKN9etHEwE3CQruIT?=
- =?us-ascii?Q?a9z5EMXZ1/qUrO07Cqm5/Gc1mtHe4ihWSBuqub5nVHokEcDcsarr36VjRExR?=
- =?us-ascii?Q?H/kUUKxPgfMlZhsgk9aSzBis6XjjVmuwAEIJGtTRoBglFhKHfWM6Zr1+gA2P?=
- =?us-ascii?Q?QVMpgWthpDTsDIxeWKsB7e+2uROh91NFU4TWqLdLhLaE7o9wNyc1kWvNMZTR?=
- =?us-ascii?Q?rIYg5mLqEBC/cl306oYUxVj6OfKOyM4lxSYkl6ceoCSuCSzG1+tq/21iMOWj?=
- =?us-ascii?Q?l2LAMWvDsv3PhSsQ/OvbjtmolvuKhc5TSEXHyQux?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A516238178
+	for <linux-usb@vger.kernel.org>; Thu,  8 May 2025 08:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746694362; cv=none; b=Lt5RREi1gY+ZNZdk3bVsLCZsDwcKcaxZQyVjnaJL+tSUN7JmU0jRwrciTLFJ0dC3+pMZNVHytL1eIrS1/Hf9oPNN/vNvcV+f9hmYU8+B3+HRRhbBMbgyqSjJtN8/06PCXDShEY7hWnRrBVXUSV2pNZFRXgmPPyPyXpDe/MAvZ68=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746694362; c=relaxed/simple;
+	bh=7hb/9wCGqKPxrCN33zmqqog/8UFWoGcGlQk6uFFbQ5o=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SQAYL566JkMPkJsCAodaqPHvSC4rxmoiHr+KR2tufUpx8FFnWPgnpxLuR7DG/F02NWBaA89E488296Izyn0lpHv/PVA3ie1BovRL/pcf8Mx+3/hXLyVu8iXlmuxaBsniWHW9MTfiG0BzKL/Ed8Id4W8efuR7fn0PiJPZF958a7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3da720ff4a0so8753515ab.3
+        for <linux-usb@vger.kernel.org>; Thu, 08 May 2025 01:52:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746694359; x=1747299159;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n7aqf1RFZ8NyfDklbuzyfb2/V8iKPLDKy8JsxG49H8c=;
+        b=EQmJRx4Xevp1rg7UQvX/5quPGNzXHt/gWDcchsSLoK1kerjtw5VmBDCDoE2wKim8zV
+         mRy3SC/gf4SE3RwXGQAU0d46qwLMBMRwLBqHz9jwcmHjFZ373gO98CWQSHSCrT8CnMGG
+         MfLp5fLU2PIaO3V7ADZ87kr+Kj2T0i/VRK+nsliGIfVAGx+tnUsn8ypG/INasisDiLwa
+         1TbepxBUOXt2hbAQyU4yXcJHuApxiVyBuh8eU08IXreFI5rsGKq/KwEpiALklU5pQJE5
+         Unctw8KkgGudDd5KJEQ5UylXH2uQS2gN4vdlAT6fV+9T6wR+9Bqudi/rEMqFq1IpC6Hd
+         a9bg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhktUnxtF3zVI9IfBKvsU4ezpohoDt2/TLJui26aJ0hDI5woYSB+3tmlPzE7WFej+BqVfYpcJjAuI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRB+Hr3vA95EhSFBFN3U5Qn3v3OJXlfVxxZfB4tzEYZhTC4uuz
+	SUCR6V3ptCWAJkXZ7Zo9BYhHWqtmppbSazTU0/GMCIAarAPAaIqVQyJJvmIIbfYgjajdxN7FM6t
+	0IycvGH/G7bsOrW0FI+GMyIPeRSCQkbLwOdMBfuTasck8JSLMR00Tv1E=
+X-Google-Smtp-Source: AGHT+IGXqHjPWzxShGFKbPMDVg+g3TkFpDMrOrtt2YU7WYfYW/07SDfhYVdarpW2dYjIRre0ytM4f3gWuc1Pkmkm3N7JJCOJQjin
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aaa64de0-70bc-42d5-399a-08dd8dfbc2eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2025 06:44:20.2432
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YBKwF5tg2CE7Ob1lj4JBkxM2IDoIJB5la3YUMFs+b9C9C2tw2TI9mqQzZOIvcfn7IePU3ZwhCoXK0BqHMX9KzCDZiLGJNkU4s/3KNZfbb5U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB6892
-X-Authority-Analysis: v=2.4 cv=NL7V+16g c=1 sm=1 tr=0 ts=681c52c6 cx=c_pps a=0OKJ/AtwRMkc9g4riGvs8g==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=dt9VzEwgFbYA:10 a=Zpq2whiEiuAA:10 a=VwQbUJbxAAAA:8 a=Br2UW1UjAAAA:8 a=OL2gQ9fao7jpvXb_F8wA:9 a=CjuIK1q_8ugA:10 a=WmXOPjafLNExVIMTj843:22
-X-Proofpoint-ORIG-GUID: WVfDFhgPg2qvLbNeULEL8vNPWfN1XEzW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA4MDA1NiBTYWx0ZWRfXxK32etapGjt3 b8NwtAFptijfa5Jlj8tVhpWL6U+m5LUFjz+07ovScSyxc42NIxImhH5sIhPH11wQeov/Zf8d3j8 IdnjnxscKyTloF7c4wxmCibiVt642Nyx/xhW8EcVeXBncL/MnBf11zlYecsjt7LBbfc3aZtRtU4
- Y2KXuUcVMKeQVIhQgvqE/k9/sSu6rD6MEnVvJkW0R7MTwuiI2LSuSUL2xKQzjoXRR/T1Wh+XToo hI/4Z5cYmvhJ19Wr9qWiM7W07oX+R9iSHqnzA7YCIcYK2mB625G/U1lfhhzuSR/yPsfWR2Rb8KQ UZJ6yP4KzllnVB2XCZuB3jxTi6s5zxzIVlCHDPlf1n/EsdHNn+y+yXJWkd5yVfqMOBYgTgrNpSe
- 2DJGoIaHcKH/lmMM1vfaoDWBv3muPW/7RvwseDkaqBEKoN6nPmjjPwTfiHNpYcEdZ7FZ2Pep
-X-Proofpoint-GUID: WVfDFhgPg2qvLbNeULEL8vNPWfN1XEzW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-08_02,2025-05-07_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- adultscore=0 clxscore=1015 suspectscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2504070000 definitions=main-2505080056
+X-Received: by 2002:a05:6e02:152e:b0:3d8:3b31:5046 with SMTP id
+ e9e14a558f8ab-3da785986b8mr31927605ab.17.1746694359245; Thu, 08 May 2025
+ 01:52:39 -0700 (PDT)
+Date: Thu, 08 May 2025 01:52:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <681c70d7.050a0220.a19a9.00c6.GAE@google.com>
+Subject: [syzbot] [sound?] [usb?] WARNING: ODEBUG bug in snd_rawmidi_free
+From: syzbot <syzbot+d8f72178ab6783a7daea@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, perex@perex.cz, syzkaller-bugs@googlegroups.com, 
+	tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
 
->In some cases, there is a small-time gap in which CMD_RING_BUSY can be
->cleared by controller but adding command completion event to event ring wi=
-ll
->be delayed. As the result driver will return error code.
->This behavior has been detected on usbtest driver (test 9) with configurat=
-ion
->including ep1in/ep1out bulk and ep2in/ep2out isoc endpoint.
->Probably this gap occurred because controller was busy with adding some
->other events to event ring.
->The CMD_RING_BUSY is cleared to '0' when the Command Descriptor has
->been executed and not when command completion event has been added to
->event ring.
->
->To fix this issue for this test the small delay is sufficient less than 10=
-us) but to
->make sure the problem doesn't happen again in the future the patch
->introduce 3 retries to check with delay about 100us before returning error
->code
->
->Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP
->DRD Driver")
->cc: stable@vger.kernel.org
->Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->---
-> drivers/usb/cdns3/cdnsp-gadget.c | 18 +++++++++++++++++-
-> 1 file changed, 17 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-
->gadget.c
->index f773518185c9..0eb11b5dd9d3 100644
->--- a/drivers/usb/cdns3/cdnsp-gadget.c
->+++ b/drivers/usb/cdns3/cdnsp-gadget.c
->@@ -547,6 +547,7 @@ int cdnsp_wait_for_cmd_compl(struct cdnsp_device
->*pdev)
-> 	dma_addr_t cmd_deq_dma;
-> 	union cdnsp_trb *event;
-> 	u32 cycle_state;
->+	u32 retry =3D 3;
-> 	int ret, val;
-> 	u64 cmd_dma;
-> 	u32  flags;
->@@ -578,8 +579,23 @@ int cdnsp_wait_for_cmd_compl(struct cdnsp_device
->*pdev)
-> 		flags =3D le32_to_cpu(event->event_cmd.flags);
->
-> 		/* Check the owner of the TRB. */
->-		if ((flags & TRB_CYCLE) !=3D cycle_state)
->+		if ((flags & TRB_CYCLE) !=3D cycle_state) {
->+			/*
->+			 *Give some extra time to get chance controller
->+			 * to finish command before returning error code.
->+			 * Checking CMD_RING_BUSY is not sufficient because
->+			 * this bit is cleared to '0' when the Command
->+			 * Descriptor has been executed by controller
->+			 * and not when command completion event has
->+			 * be added to event ring.
->+			 */
->+			if (retry--) {
->+				usleep_range(90, 100);
+Hello,
 
-I was guided by the warning from checkpatch.pl script and changed udelay to=
- usleep_range.
-It was wrong. In this place must be used udelay.=20
-I will give some time linux community for commenting  and  I will send it a=
-gain in a few days.
+syzbot found the following issue on:
 
-Regards,
-Pawel
+HEAD commit:    2a239ffbebb5 Merge tag 'sound-6.15-rc5' of git://git.kerne..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15045b68580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9a25b7a36123454
+dashboard link: https://syzkaller.appspot.com/bug?extid=d8f72178ab6783a7daea
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cfd8d4580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=126c1a70580000
 
->+				continue;
->+			}
->+
-> 			return -EINVAL;
->+		}
->
-> 		cmd_dma =3D le64_to_cpu(event->event_cmd.cmd_trb);
->
->--
->2.43.0
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3398c42fd2ef/disk-2a239ffb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a3e276dc6661/vmlinux-2a239ffb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f0c67a315802/bzImage-2a239ffb.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d8f72178ab6783a7daea@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object: ffff888027cf0040 object type: timer_list hint: snd_usbmidi_error_timer+0x0/0x660 sound/usb/midi.c:2343
+WARNING: CPU: 0 PID: 10 at lib/debugobjects.c:615 debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Modules linked in:
+
+CPU: 0 UID: 0 PID: 10 Comm: kworker/0:1 Not tainted 6.15.0-rc4-syzkaller-00291-g2a239ffbebb5 #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/29/2025
+Workqueue: usb_hub_wq hub_event
+
+RIP: 0010:debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Code: 4c 89 ff e8 47 42 63 fd 4d 8b 0f 48 c7 c7 c0 db c1 8b 48 8b 34 24 4c 89 ea 89 e9 4d 89 f0 41 54 e8 aa a9 c5 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 57 95 c0 0a 48 83 c4 08 5b 41 5c 41 5d 41 5e 41
+RSP: 0018:ffffc900000f6990 EFLAGS: 00010296
+
+RAX: 847b0a2dc845ef00 RBX: dffffc0000000000 RCX: ffff88801b681e00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000002
+RBP: 0000000000000000 R08: ffffc900000f6667 R09: 1ffff9200001eccc
+R10: dffffc0000000000 R11: fffff5200001eccd R12: ffffffff892410d0
+R13: ffffffff8bc1dd40 R14: ffff888027cf0040 R15: ffffffff8b6cc2e0
+FS:  0000000000000000(0000) GS:ffff8881260cb000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff286001b8 CR3: 00000000316c4000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x3a2/0x470 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2311 [inline]
+ slab_free mm/slub.c:4642 [inline]
+ kfree+0x117/0x440 mm/slub.c:4841
+ snd_rawmidi_free+0x3bc/0x410 sound/core/rawmidi.c:1934
+ snd_rawmidi_dev_free+0x38/0x50 sound/core/rawmidi.c:1945
+ __snd_device_free+0x1d2/0x2e0 sound/core/device.c:76
+ snd_device_free_all+0xcf/0x180 sound/core/device.c:233
+ snd_card_do_free sound/core/init.c:587 [inline]
+ release_card_device+0x75/0x1b0 sound/core/init.c:153
+ device_release+0x99/0x1c0 drivers/base/core.c:-1
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x480 lib/kobject.c:737
+ snd_card_free_when_closed sound/core/init.c:618 [inline]
+ snd_card_free+0x110/0x190 sound/core/init.c:650
+ usb_audio_probe+0x18ea/0x1dc0 sound/usb/card.c:940
+ usb_probe_interface+0x641/0xbc0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26a/0x9a0 drivers/base/dd.c:657
+ __driver_probe_device+0x18c/0x2f0 drivers/base/dd.c:799
+ driver_probe_device+0x4f/0x430 drivers/base/dd.c:829
+ __device_attach_driver+0x2ce/0x530 drivers/base/dd.c:957
+ bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:462
+ __device_attach+0x2b8/0x400 drivers/base/dd.c:1029
+ bus_probe_device+0x185/0x260 drivers/base/bus.c:537
+ device_add+0x7b6/0xb50 drivers/base/core.c:3692
+ usb_set_configuration+0x1a87/0x20e0 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c1/0x390 drivers/usb/core/driver.c:291
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
