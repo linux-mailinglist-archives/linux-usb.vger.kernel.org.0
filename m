@@ -1,97 +1,112 @@
-Return-Path: <linux-usb+bounces-23799-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23800-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5B8AAF2DD
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 07:28:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA19AAF344
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 08:00:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67CE81BC1941
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 05:28:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C90CB3B29B3
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 06:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C20214234;
-	Thu,  8 May 2025 05:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QHX4nhr6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25A7E219300;
+	Thu,  8 May 2025 06:00:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A975212D7C;
-	Thu,  8 May 2025 05:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FC915B102;
+	Thu,  8 May 2025 06:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746682080; cv=none; b=gR1i87zPwA844OO9y2xtuYH1BHW6xr8EVVIDR3UJzuipfoAVcLGBK2C1ySxCg3lAPYUXYNe1B5LNK4czNZlYcGywQlzqSaYw1aXgmJBSCmtDPrvk5Yt5rbXM/8bfpsCyJUY8Ljh+kWWku5QHJIN3DRCUExtXT0ix/2fLMojTofk=
+	t=1746684004; cv=none; b=J4ooDdgu3dutXP10NKXz3e/ZaL+guT+ZM4O0wZDpEElC8fx9zMCeWp7C/w9Dy2C2GyrfmsdY+gX5JabpSBLg0Sgc1AvnIpXkquIrNf+fb4jFa5Gqr3O/yxJjhA4Gcgk0f//QhKZbeTve1HjWqIZ4fIsUMTNE6otKuCWAt9hP0kM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746682080; c=relaxed/simple;
-	bh=FKCN+xZrHEP+zcN12EM0hglv2leVoahfKiHhwm2cT64=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YtAXkROVvBgR8yW5AvYOZBKDLAF/d2gUndoXLbuHNGzHTdOlqjjTMTlfhJKnnCYs3VGBc+XhSNScOyJQJRMWqvxl9UKDBxNjB2jHq+IkDczc3rsX6ct/5lOTKW7Iisju8O9Z7tOnD9CThLsnVxRjjfaC6QW/0GHqGfcpy05++jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QHX4nhr6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0ECC4CEE8;
-	Thu,  8 May 2025 05:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746682079;
-	bh=FKCN+xZrHEP+zcN12EM0hglv2leVoahfKiHhwm2cT64=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QHX4nhr6QpIwmQ/3U+cImX4n5o3AWeFtkg/K7JUPUnxXWa5/e4GMcXlmseceAOXF3
-	 0F+gWW+C3tqqBpewZj0348ScbF4KLeeomT1B3pbBGUxBU+mFpTS8E0qEJuyqSPgZ3I
-	 HusN0Ik055WaHFJYvwU+xyXifcnvuCpVVVxKqbig=
-Date: Thu, 8 May 2025 07:27:56 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jiayi Li <lijiayi@kylinos.cn>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: quirks: Add NO_LPM quirk for SanDisk Extreme 55AE
-Message-ID: <2025050825-census-slum-6f37@gregkh>
-References: <20250508033123.673964-1-lijiayi@kylinos.cn>
+	s=arc-20240116; t=1746684004; c=relaxed/simple;
+	bh=fOAM++u9LTISAq68wmI6g+AZ7z3HPuYZIruMYuRA+eg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bM0sTqtpWokOWs9DznyMCul5nUM3mfBHguTubiyCbjr3R1WHwyEIVK4FoLBxRObWwKvYzCFraL8Sutsl246LLfyozIrH9rSqHFlZ9xwDqwSvBEYEKk8NqKxGAhTLu44lwEOee1VZdy6KDQiLzV8rMPr02CqcqOTOyktaMn1fjVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a954a2982bd111f0b29709d653e92f7d-20250508
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:155ab966-b04d-408a-9dff-5511a9da9f68,IP:0,U
+	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:6493067,CLOUDID:761a6035c5bd1a6e2667e3fd60517911,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:5,IP:nil,URL
+	:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
+	R:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: a954a2982bd111f0b29709d653e92f7d-20250508
+Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
+	(envelope-from <lijiayi@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 2093367211; Thu, 08 May 2025 13:59:53 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id D8A4B16003840;
+	Thu,  8 May 2025 13:59:52 +0800 (CST)
+X-ns-mid: postfix-681C4858-7324229
+Received: from kylin-pc.. (unknown [172.25.130.133])
+	by node4.com.cn (NSMail) with ESMTPA id 6D03616001CC7;
+	Thu,  8 May 2025 05:59:52 +0000 (UTC)
+From: Jiayi Li <lijiayi@kylinos.cn>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lijiayi@kylinos.cn
+Subject: [PATCH v2] usb: quirks: Add NO_LPM quirk for SanDisk Extreme 55AE
+Date: Thu,  8 May 2025 13:59:47 +0800
+Message-ID: <20250508055947.764538-1-lijiayi@kylinos.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250508033123.673964-1-lijiayi@kylinos.cn>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 08, 2025 at 11:31:23AM +0800, Jiayi Li wrote:
-> This device exhibits I/O errors during file transfers due to unstable
-> link power management (LPM) behavior. The kernel logs show repeated
-> warm resets and eventual disconnection when LPM is enabled:
-> 
-> [ 3467.810740] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0020
-> [ 3467.810740] usb usb2-port5: do warm reset
-> [ 3467.866444] usb usb2-port5: not warm reset yet, waiting 50ms
-> [ 3467.907407] sd 0:0:0:0: [sda] tag#12 sense submit err -19
-> [ 3467.994423] usb usb2-port5: status 02c0, change 0001, 10.0 Gb/s
-> [ 3467.994453] usb 2-5: USB disconnect, device number 4
-> 
-> The error -19 (ENODEV) occurs when the device disappears during write
-> operations. Adding USB_QUIRK_NO_LPM disables link power management
-> for this specific device, resolving the stability issues.
-> 
-> Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
-> ---
->  drivers/usb/core/quirks.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 36d3df7d040c..2bb70a34d4c5 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -372,6 +372,9 @@ static const struct usb_device_id usb_quirk_list[] = {
->  	/* SanDisk Corp. SanDisk 3.2Gen1 */
->  	{ USB_DEVICE(0x0781, 0x55a3), .driver_info = USB_QUIRK_DELAY_INIT },
->  
-> +	/* SanDisk Extreme 55AE */
-> +        { USB_DEVICE(0x0781, 0x55ae), .driver_info = USB_QUIRK_NO_LPM },
+This device exhibits I/O errors during file transfers due to unstable
+link power management (LPM) behavior. The kernel logs show repeated
+warm resets and eventual disconnection when LPM is enabled:
 
-Nit, you forgot to use a tab here :(
+[ 3467.810740] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0020
+[ 3467.810740] usb usb2-port5: do warm reset
+[ 3467.866444] usb usb2-port5: not warm reset yet, waiting 50ms
+[ 3467.907407] sd 0:0:0:0: [sda] tag#12 sense submit err -19
+[ 3467.994423] usb usb2-port5: status 02c0, change 0001, 10.0 Gb/s
+[ 3467.994453] usb 2-5: USB disconnect, device number 4
 
-I think scripts/checkpatch.pl should have caught this, right?
+The error -19 (ENODEV) occurs when the device disappears during write
+operations. Adding USB_QUIRK_NO_LPM disables link power management
+for this specific device, resolving the stability issues.
 
-thanks,
+Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
+---
+v1 -> v2: modify a format error.
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 36d3df7d040c..53d68d20fb62 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -372,6 +372,9 @@ static const struct usb_device_id usb_quirk_list[] =3D=
+ {
+ 	/* SanDisk Corp. SanDisk 3.2Gen1 */
+ 	{ USB_DEVICE(0x0781, 0x55a3), .driver_info =3D USB_QUIRK_DELAY_INIT },
+=20
++	/* SanDisk Extreme 55AE */
++	{ USB_DEVICE(0x0781, 0x55ae), .driver_info =3D USB_QUIRK_NO_LPM },
++
+ 	/* Realforce 87U Keyboard */
+ 	{ USB_DEVICE(0x0853, 0x011b), .driver_info =3D USB_QUIRK_NO_LPM },
+=20
+--=20
+2.47.1
+
 
