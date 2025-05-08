@@ -1,80 +1,144 @@
-Return-Path: <linux-usb+bounces-23806-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23807-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 626CFAAF703
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 11:45:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10840AAFE0C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 17:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 957031C07120
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 09:45:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6BE4461DB8
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 14:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E4F1F416C;
-	Thu,  8 May 2025 09:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044E9278E68;
+	Thu,  8 May 2025 14:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tJQEk/r2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owIkK/QB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FFC1C5D59;
-	Thu,  8 May 2025 09:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714201581E0;
+	Thu,  8 May 2025 14:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746697524; cv=none; b=MNgwRLPfb52iuNe5g0Bi+u/Ynmo2nPt31fgdfWONcajUfU64gZtsz19MgXM4EtiCJGiSyA2TTRUJALM7qVXjaw1+8twXx2JmVfJ/qbCe3wsTyQn4sWqqWMKuOkmL0EqhySh8LUtCWVxC3cTj2y7uF0+j+BhZkJP0zYSSd9UD1Do=
+	t=1746716290; cv=none; b=ZRpikn7eWbmOzdVHr2x3F3S9EsgyQQwfail8rvBJRz99VcZRFeXg4WqfI4ZaViy9XofVcxB+rQqF6BJFBRt3MlsfJr8AKZWwY2sQYwZtWYNNKKi5vqysKZ4xVUD1+4Au9BpS2fvqbSpXW0k/EF8sXpUJ44b3oevWbNfkkazTisc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746697524; c=relaxed/simple;
-	bh=OtBbZ26g2rNajWYoUamkRdqVOEmpJet2AEq0+kChBc8=;
+	s=arc-20240116; t=1746716290; c=relaxed/simple;
+	bh=2gQcav+TDe4DHa8UjsaDcHXzpSYYdWIU9InpqKfC1+I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qBwE3z36APR4rXZb6TEQxLehthn/bwDJqH5y8CqXI7TWQcbimN8Y9dmti22y19YSQHhPB4EStlUb8X8447p1qP3wOnBrwyoABvJef79e/ehoE5d4cRtOIc8XVofoL35qzRMmqFMqtS5HFYgRrZ0mJN+k6pSp9LF0UABSk/AADfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tJQEk/r2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C889C4CEE7;
-	Thu,  8 May 2025 09:45:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746697524;
-	bh=OtBbZ26g2rNajWYoUamkRdqVOEmpJet2AEq0+kChBc8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=XyMz+tVhoeV2N6bjufrWIlhUqUsOe2mnqBR0+pwta1WbgKXoVPoMwNyCDbrcouSFEaN9/87RfM9PfUqutKwUPZKcCSu2O7dKyXOeGS1QJRvBuL2nFka6d5/jy3m4MGvPwFjQxIzJyfsUxFJ7FPzC0YqhJ/C94W+l2rMsukg5ESA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owIkK/QB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1D4C4CEE7;
+	Thu,  8 May 2025 14:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746716289;
+	bh=2gQcav+TDe4DHa8UjsaDcHXzpSYYdWIU9InpqKfC1+I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tJQEk/r2+qd0PdPKQ3L7T31utZMvtPV0w2RPG/VBxzF2FhnFa39jhG6Vh5SRNZwVE
-	 yUs4DtMpuvIt7xX8AXE1KCeYg6o2+dqgbkXyldfJgzWlxcEj55aSH1NdcQcV/ECZqb
-	 baYJ+YjMQTbS9rHwe3yV6pQ4vjh9J87g2/GWYwsg=
-Date: Thu, 8 May 2025 11:45:20 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Zongmin Zhou <min_halo@163.com>
-Cc: rafael@kernel.org, dakr@kernel.org, markgross@kernel.org, arnd@arndb.de,
-	eric.piel@tremplin-utc.net, valentina.manea.m@gmail.com,
-	shuah@kernel.org, i@zenithal.me, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: Re: [PATCH 1/2] driver core:add device's platform_data set for faux
- device
-Message-ID: <2025050854-breeching-had-c9b3@gregkh>
-References: <cover.1746662386.git.zhouzongmin@kylinos.cn>
- <b03b374bc3adad275893e2ad60d4bf5a0ad358e3.1746662386.git.zhouzongmin@kylinos.cn>
+	b=owIkK/QBGYZgWx9bh+VKbw5vWsNUHRjIrO8u3i35g7gmYmXF1D8j/DBulSUnoI3tc
+	 4i4hiUJY18XmcFnMjkF8yyxKrdZPyWOpn3IstzqFvzRGdIRAglwyFlds82Z1jE6jzG
+	 MsAd96NjpBf8CcPnnYHxDDwXE5ykqVVx3qY4fB2J3VEuZpS5npaT2xrBewN1rgaI1L
+	 27e1M8Lu4MlpOpPt13emMBSMlY00rKs5fQdgaDGjUBzl2ipkfR88vKa/jD0NSqDTSs
+	 zyKkU7TyNG+yWg1JlgzVtMLTB6OopjffTk1XYV3CEqUA3KoJj0qqG9W+210G4Qsf83
+	 q33I/jLA21V7Q==
+Date: Thu, 8 May 2025 15:58:06 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Mike Looijmans <mike.looijmans@topic.nl>
+Cc: linux-usb@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: usb: ti,usb8041: Add binding for TI
+ USB8044 hub controller
+Message-ID: <20250508-prewashed-jawline-37f53c0f9429@spud>
+References: <20250507131143.2243079-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.3e03400f-766d-4690-8f43-cbea2cac93d8@emailsignatures365.codetwo.com>
+ <20250507131143.2243079-2-mike.looijmans@topic.nl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="3CJWpGckFSe2JlaA"
+Content-Disposition: inline
+In-Reply-To: <20250507131143.2243079-2-mike.looijmans@topic.nl>
+
+
+--3CJWpGckFSe2JlaA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b03b374bc3adad275893e2ad60d4bf5a0ad358e3.1746662386.git.zhouzongmin@kylinos.cn>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 08, 2025 at 05:11:47PM +0800, Zongmin Zhou wrote:
-> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
-> 
-> Most drivers based on platform bus may have specific data
-> for the device.And will get this specific data to use
-> after device added.
-> So keep the setting for device's platform_data is necessary
-> for converting platform device to faux device.
+On Wed, May 07, 2025 at 03:11:43PM +0200, Mike Looijmans wrote:
+> The TI USB8044 is similar to the USB8041.
 
-I do not understand, why not just use the platform_data field directly
-in the faux device structure?  Why change all callers to now have to
-keep track of an additional pointer in these create functions?  That
-just adds complexity for everyone when almost no one will need it.
+Similar how? Why's a fallback not suitable?
 
-thanks,
+>=20
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
+>=20
+>  Documentation/devicetree/bindings/usb/ti,usb8041.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Docu=
+mentation/devicetree/bindings/usb/ti,usb8041.yaml
+> index c2e29bd61e11..fd6b35a40a5b 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: TI USB8041 USB 3.0 hub controller
+> +title: TI USB8041 and USB8044 USB 3.0 hub controllers
+> =20
+>  maintainers:
+>    - Alexander Stein <alexander.stein@ew.tq-group.com>
+> @@ -17,6 +17,8 @@ properties:
+>      enum:
+>        - usb451,8140
+>        - usb451,8142
+> +      - usb451,8440
+> +      - usb451,8442
+> =20
+>    reg: true
+> =20
+> --=20
+> 2.34.1
+>=20
+>=20
+> Met vriendelijke groet / kind regards,
+>=20
+> Mike Looijmans
+> System Expert
+>=20
+>=20
+> TOPIC Embedded Products B.V.
+> Materiaalweg 4, 5681 RJ Best
+> The Netherlands
+>=20
+> T: +31 (0) 499 33 69 69
+> E: mike.looijmans@topic.nl
+> W: www.topic.nl
+>=20
+> Please consider the environment before printing this e-mail
 
-greg k-h
+--3CJWpGckFSe2JlaA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaBzGfQAKCRB4tDGHoIJi
+0ma7AQCYXSv4S/1olF9XH6ulUTdmcc5JJK/AU8jFkpD5MnJERgD9Ep63wcJybfZW
+LOsqIAeJ2CY5b8szOkBSmSwHapFXdAw=
+=qHIW
+-----END PGP SIGNATURE-----
+
+--3CJWpGckFSe2JlaA--
 
