@@ -1,111 +1,150 @@
-Return-Path: <linux-usb+bounces-23795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367F5AAF1B5
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 05:32:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17F87AAF1D1
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 05:47:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C25719C68C6
-	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 03:32:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 828817BB05C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 May 2025 03:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E8B20299E;
-	Thu,  8 May 2025 03:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAC5204F90;
+	Thu,  8 May 2025 03:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WdiC7YSb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058E1155335;
-	Thu,  8 May 2025 03:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EA82A1BB
+	for <linux-usb@vger.kernel.org>; Thu,  8 May 2025 03:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746675130; cv=none; b=QQKlypiRbtiprTaMYH3G8fNPYxCqi/DntdCawqDDSEaaWemXAXHeP89GCP30qFzfuHs48rCcDmL0cjYMRrVSwsULfbaqzBjmNnFJHggwpFOuUaDq/CQuZdo6C6zQKcBcJBUF3BLFw1qdcv1PCxkr4eSnoqdz5cdziLYaGCAGdRg=
+	t=1746676046; cv=none; b=hCvDZUCQvDVSi4VWleWhSKA2/h0eQ0NUIOjJE3kSqekxzo+DSCF18y+PlE178EExbP70zKnfKaJL403epVQFDd68vjYkM6TkvUoAyfL+T+YNfuKf7GBxXKeKnojQZKp4aoPuHFP57DeVl/ACKxR16xlAyoVyb9UChRNUVWRNZMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746675130; c=relaxed/simple;
-	bh=2CfUO8LNFdsBkXWfwUCWctX8x6NTN6GOYL2+F+fe2f4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qnipf1xME67FvFD7zkkcUM9Wkpv/pu5l0GF40n2txNeGZTbdlzinXUOb0yiNb/HxgIqqEr95msucU/+wPCo791SV5y8Mla0ro7MK0FgRz1j8dZJdLzppsWoqg6is0VL5jOs/F1IhVP8eCVmT1YBAxnGpYpZZ1BYHQhbAnjtJ4HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 00a470f62bbd11f0b29709d653e92f7d-20250508
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:3a67a1a9-df3e-40d6-9115-5533e3256cfd,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:6493067,CLOUDID:fea10e45fde6cb9dd38a69494230e30c,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:5,IP:nil,URL
-	:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
-	R:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 00a470f62bbd11f0b29709d653e92f7d-20250508
-Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
-	(envelope-from <lijiayi@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 272000526; Thu, 08 May 2025 11:32:00 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 9A88A16003840;
-	Thu,  8 May 2025 11:32:00 +0800 (CST)
-X-ns-mid: postfix-681C25B0-4612909
-Received: from kylin-pc.. (unknown [172.25.130.133])
-	by node4.com.cn (NSMail) with ESMTPA id 1889916001CC7;
-	Thu,  8 May 2025 03:31:59 +0000 (UTC)
-From: Jiayi Li <lijiayi@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lijiayi@kylinos.cn
-Subject: [PATCH] usb: quirks: Add NO_LPM quirk for SanDisk Extreme 55AE
-Date: Thu,  8 May 2025 11:31:23 +0800
-Message-ID: <20250508033123.673964-1-lijiayi@kylinos.cn>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1746676046; c=relaxed/simple;
+	bh=gMvqmUDQloM/OGi8vQ9oaLiFubDBuCvPI4E4jN9iTYU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rz4WXj7WPfUy6SV2YP4cTqeP3MheMqVvQuGyiMnrEc66xINy+r6QoAqwUQ+1T8UI2lGj3SD4bcaEn0KGv9sOz6aBhSQChvZRKXwEtwDWtljx0NwIQv1RBfbVLTHtgzf2I+bPGZSqBJzyRa/T7i6euWto3lFDmf42bMNeqQZG8SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WdiC7YSb; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22e6a088e16so4351835ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 May 2025 20:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1746676044; x=1747280844; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ajwTuAXKGu9zIQucAwG1LBx8zev6+XMsQE6hj821iRA=;
+        b=WdiC7YSbT0gO+yuQ54FzHmEEWfEJeB7xpCmD75sMK38l64VJCzVfLcikwmDxkD8vg0
+         u3d2HEyC0pLhoKGDDnVPqY/lFC79uBR1MYQUd2OoxiDemlcxzisuo5+h1LjbAoDozfeZ
+         XEhyO5doG3AvctrR3Jae0QS5m5LMZgonyX+0M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746676044; x=1747280844;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajwTuAXKGu9zIQucAwG1LBx8zev6+XMsQE6hj821iRA=;
+        b=I0UklFUNP7tyS2PmWtnYQpm0tg29fvIl7REaUBNaw6FmRmfJDHF1v4vJCpfPRPwk3W
+         t3VaQJ6WfrfmwkSzkT41t7oy/fEpGp4g+0EEYj+K3tg/biYcAwT3F9zfmKSH9s0lbgHo
+         BQyVSJrAvgNA31MkPitWtoOY8joPsf5mXdfTSEOgQTZYIioQAZ/+WCT86AbtykSM+Pyk
+         AurblbO0IKgQoNWb/5KF9O6mkGcNKL5mpO835BCBEDse4ZmzwNpjLYP2yYffunY4rLSZ
+         zalGcc/0QROYW3MwBgP3f1l5CRd7WhKDjV4ZngTMulqzTMzeh51zgOHFy4yykQI9Rx21
+         lakQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRHqQ+GCFUWwBrq8mCJritFaS25pNxW/WYasuanH6OGJPfktEIl9UWms9+taOZb4k1XKCn4/HUHpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGEoR1FRPQ8AczDkhJmURgwZK1Zw2fjMwgsLiGY8OHKY56jnVH
+	PxtwvcKYAB+VvBhoKPrKJz9u3js8qzOeAyY03ist1LIICJzbRsjG8CwKBcG2YA==
+X-Gm-Gg: ASbGncs/fdzEHwlOSge1Lygq8RVdIov9yQEqcRvSPobfqa+Dkq6wkZLRNSkBOLEcWgU
+	mqTbQ69XAjRfdUknAj9t9l9T10yp00teaxuJ/ZBqnSWQciHk8wuqcRSMthnReNrRaD+hgIi0iiV
+	PQwxoN6lCHpM49rSBDVpXhhWPqVcFFtlpJ4d/VwUotrx0dFjCUFEgnomZ4Lu204VLvBwYHaMdRF
+	OJI8LsZVVjhd8pfqGRXv1eKLtztsvBFyxsFJ3uH6zjso+euIC4sDk7UN/eSbhhhUK8RZO2LH2VO
+	HReoBZwHj4E1Pt7m3x4hE/pI1rlVL0ttxjgJMYLv14bA
+X-Google-Smtp-Source: AGHT+IGcl17l7VZA4rVy6AOSJ6DC+M8PTTH8SKwAHZrFUgJBfGe+LwYpbZdpVLRwNYkh8vHIu6cVwQ==
+X-Received: by 2002:a17:902:fc8d:b0:22e:457d:3989 with SMTP id d9443c01a7336-22e845bcb87mr29979685ad.0.1746676043927;
+        Wed, 07 May 2025 20:47:23 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:c794:38be:3be8:4c26])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e1522916esm102263245ad.196.2025.05.07.20.47.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 May 2025 20:47:23 -0700 (PDT)
+Date: Thu, 8 May 2025 12:47:18 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Mika Westerberg <westeri@kernel.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>, 
+	Michael Jamet <michael.jamet@intel.com>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCHv3] thunderbolt: do not double dequeue a request
+Message-ID: <ojkrbtd2kpweo5xcfulfobdavj5ab3ysxxle4kr5oa455me77s@p2o4jdwsr3m2>
+References: <20250327150406.138736-1-senozhatsky@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250327150406.138736-1-senozhatsky@chromium.org>
 
-This device exhibits I/O errors during file transfers due to unstable
-link power management (LPM) behavior. The kernel logs show repeated
-warm resets and eventual disconnection when LPM is enabled:
+On (25/03/28 00:03), Sergey Senozhatsky wrote:
+> Some of our devices crash in tb_cfg_request_dequeue():
+> 
+>  general protection fault, probably for non-canonical address 0xdead000000000122
+> 
+>  CPU: 6 PID: 91007 Comm: kworker/6:2 Tainted: G U W 6.6.65
+>  RIP: 0010:tb_cfg_request_dequeue+0x2d/0xa0
+>  Call Trace:
+>  <TASK>
+>  ? tb_cfg_request_dequeue+0x2d/0xa0
+>  tb_cfg_request_work+0x33/0x80
+>  worker_thread+0x386/0x8f0
+>  kthread+0xed/0x110
+>  ret_from_fork+0x38/0x50
+>  ret_from_fork_asm+0x1b/0x30
+> 
+> The circumstances are unclear, however, the theory is that
+> tb_cfg_request_work() can be scheduled twice for a request:
+> first time via frame.callback from ring_work() and second
+> time from tb_cfg_request().  Both times kworkers will execute
+> tb_cfg_request_dequeue(), which results in double list_del()
+> from the ctl->request_queue (the list poison deference hints
+> at it: 0xdead000000000122).
+> 
+> Do not dequeue requests that don't have TB_CFG_REQUEST_ACTIVE
+> bit set.
 
-[ 3467.810740] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0020
-[ 3467.810740] usb usb2-port5: do warm reset
-[ 3467.866444] usb usb2-port5: not warm reset yet, waiting 50ms
-[ 3467.907407] sd 0:0:0:0: [sda] tag#12 sense submit err -19
-[ 3467.994423] usb usb2-port5: status 02c0, change 0001, 10.0 Gb/s
-[ 3467.994453] usb 2-5: USB disconnect, device number 4
+Mika, as was discussed in [1] thread we rolled out the fix to
+our fleet and we don't see the crashes anymore.  So it's tested
+and verified.
 
-The error -19 (ENODEV) occurs when the device disappears during write
-operations. Adding USB_QUIRK_NO_LPM disables link power management
-for this specific device, resolving the stability issues.
+[1] https://lore.kernel.org/linux-kernel/20250327145543.GC3152277@black.fi.intel.com
 
-Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 36d3df7d040c..2bb70a34d4c5 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -372,6 +372,9 @@ static const struct usb_device_id usb_quirk_list[] =3D=
- {
- 	/* SanDisk Corp. SanDisk 3.2Gen1 */
- 	{ USB_DEVICE(0x0781, 0x55a3), .driver_info =3D USB_QUIRK_DELAY_INIT },
-=20
-+	/* SanDisk Extreme 55AE */
-+        { USB_DEVICE(0x0781, 0x55ae), .driver_info =3D USB_QUIRK_NO_LPM =
-},
-+
- 	/* Realforce 87U Keyboard */
- 	{ USB_DEVICE(0x0853, 0x011b), .driver_info =3D USB_QUIRK_NO_LPM },
-=20
---=20
-2.47.1
-
+> ---
+> 
+> v3: tweaked commit message
+> 
+>  drivers/thunderbolt/ctl.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+> index cd15e84c47f4..1db2e951b53f 100644
+> --- a/drivers/thunderbolt/ctl.c
+> +++ b/drivers/thunderbolt/ctl.c
+> @@ -151,6 +151,11 @@ static void tb_cfg_request_dequeue(struct tb_cfg_request *req)
+>  	struct tb_ctl *ctl = req->ctl;
+>  
+>  	mutex_lock(&ctl->request_queue_lock);
+> +	if (!test_bit(TB_CFG_REQUEST_ACTIVE, &req->flags)) {
+> +		mutex_unlock(&ctl->request_queue_lock);
+> +		return;
+> +	}
+> +
+>  	list_del(&req->list);
+>  	clear_bit(TB_CFG_REQUEST_ACTIVE, &req->flags);
+>  	if (test_bit(TB_CFG_REQUEST_CANCELED, &req->flags))
+> -- 
+> 2.49.0.395.g12beb8f557-goog
+> 
 
