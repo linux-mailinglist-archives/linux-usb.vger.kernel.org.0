@@ -1,134 +1,124 @@
-Return-Path: <linux-usb+bounces-23828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3528BAB1ABB
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 18:40:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B934AB1B53
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 19:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B7754C2CD9
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 16:40:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF82D1BA11FF
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 17:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EDB236A6D;
-	Fri,  9 May 2025 16:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1096239090;
+	Fri,  9 May 2025 17:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jakerice-dev.20230601.gappssmtp.com header.i=@jakerice-dev.20230601.gappssmtp.com header.b="uI51Jk74"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiYb3N0J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDAE235BE2
-	for <linux-usb@vger.kernel.org>; Fri,  9 May 2025 16:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490D420C030;
+	Fri,  9 May 2025 17:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746808828; cv=none; b=uE2vnGh0MFuNlS8jNXXfXhxaKWmXBbgKwIU1zCLWrIzGXackpZWXX+QADtPaTzKbc9HKd4bKO+gSWf7aDt1U04ScE0RUwRpDmyOCWewKREZjlvg6IkvPaSnZ/0T6Ylgl+6sLIITUiZ4k5nRXFBOngqwpD7SgZfscIsFmAillGlw=
+	t=1746810532; cv=none; b=rsDuUffRUSMHMLrxl+KjCseknN6NVbj3zMA/pILOJceZP+LJcLz+Egm8ILA2ToMObnsGW7KDS2qEdmdPAPVSEdLAcyctKwnoxAo/nGtsPtbGBuIDYCc9M3PcGAE//GGY+mI6gibaqifrG/rUYmfFRX3qNS74TERk6ztYZSnxb5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746808828; c=relaxed/simple;
-	bh=ZaydmkJ7eUryQN41xZ/nR0x6nuwulT7i+Qm7Ml1xIEE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nhFuUDgytp0EmghNC463h68aBnaayD79Et4WrXCvEh45Umu01OEKMl7roJmOd4BqbdudIabpkLyHWBj1tE/rkGoakxIOELRCXFcwovTSVo+J7xaNO5RZX7MLCvFatg+bzUjIr8K6A6yPLI2tATdjHS6B7pDWpaFSFP6njcuNV1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jakerice.dev; spf=pass smtp.mailfrom=jakerice.dev; dkim=pass (2048-bit key) header.d=jakerice-dev.20230601.gappssmtp.com header.i=@jakerice-dev.20230601.gappssmtp.com header.b=uI51Jk74; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jakerice.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jakerice.dev
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ad1e8e2ad6bso462534266b.0
-        for <linux-usb@vger.kernel.org>; Fri, 09 May 2025 09:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jakerice-dev.20230601.gappssmtp.com; s=20230601; t=1746808824; x=1747413624; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ezkh/c9YOiEB4YMEXS/lI8snDUy5hokGtG1LLPTxPBk=;
-        b=uI51Jk74pPlUmJ5NVoQiWj/ik3Y922O7/eRxx/s11vB/sOPtLoG4W7P3e5VYeD6iax
-         YS21ykUCkCh6geqoc2cr51R6DkGUg7MhiW27lyov/zgvwk+B2GJG+JOoU9JnnZdHeb+A
-         +7Xn7FH+fjuvr3SGnDCd4IVRthXKbYGIjZZ7BYKNEKyoW71g6I/JEE0YE3Og+CP4r0Oz
-         NiaH6Up4J5JH47NFcmy6CUkxd9bfVe0IpOlbvBUHLkUG7ZjxLJ46PpA+/zxGMC6GLgDl
-         nOt6rShOhCh/PLzh1FKbLtPrN0HIuLEYYjHXEbwOQhOMrKnWpwNjf2iF9Xu2S8dtAAh5
-         dxbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746808824; x=1747413624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ezkh/c9YOiEB4YMEXS/lI8snDUy5hokGtG1LLPTxPBk=;
-        b=QJC+8B8B8nJr1ngZSkhaiUr50/DdHUSIwNu24doQixW6JhSvUbWj7rX+utRRFiT2sq
-         EVUaSOGDJDlXXH3To7wdYttdgYO7q1b5MfpIYdO3pt4inZr3FVVLewsW9wBAtrvQNEtM
-         3oPpaFnT3p3SOnzoqlGsXCW3sp24cHs9a+5wRioZspcr8LRuFJLETpQ/goX87MnzuF/d
-         VjefRaHVky/mr7r8FNm6UG+iRTQiX/n6RhghqTh28SkzFHlLjCS8xca0AdAfIGAeEa6Y
-         g09cpFf8fz/9E3shmPEbi8/67A3W8LfPUEExeN3x84VfHEtQEHwwj6DOEEI+nzG6bSOs
-         oEwg==
-X-Gm-Message-State: AOJu0Yz+Ds+3b8hucuVE++1CM6bXE11Lp/qtjZyJYtx8lA7065CML/6z
-	O8QKggUFLJbJPSXRhWFgCPOJH4s1+ojyNZengYQ0xdWG+pDxe6AMNxgWtkdTEzHylS8oeybMn/U
-	BKTd3QegnRY0Y6CUyBKQXbVphGnyD7zrXIeOn94qt+a1ZKvRRYxs=
-X-Gm-Gg: ASbGncvGFUheoIzndNucoRdUbJ7D9RaXwyL6eKg0v/ee/c+vZltZOoBIt5lE50UimKj
-	2MDuJgbut8InKqxxAmoeYmWrfvVGeQp257b8nLKdVtnlLydxWDPvKp27paJQ8s8Zxk8nfa2WNLT
-	8+hQ9fmdRUOLzeBZivd+aGGQ==
-X-Google-Smtp-Source: AGHT+IELHOq+p1zsugnV+VNzt/Afocg2GfsLFr0ysmipqQxyw3r6Btx8j/xS4gE6FCiiWPehP3G6zP+mSkQ6SxfrKOM=
-X-Received: by 2002:a17:907:6a13:b0:ac7:81b0:62c8 with SMTP id
- a640c23a62f3a-ad218f8b0b6mr473399366b.31.1746808824446; Fri, 09 May 2025
- 09:40:24 -0700 (PDT)
+	s=arc-20240116; t=1746810532; c=relaxed/simple;
+	bh=gOabxqPVCCeC1bf1CjXU1L/Ezln0YWKVK5/9VrqkNVw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CLauhPiM77DeL85dstkpymmMN7pMzmlN/C0BatQnIY+n9ZoWLWFAedH0+I78val8wlUeVfwfWJPZCtiStJuJBfIVlQCU2KD666MUc2VGhKPunoYFQuv5mjvFMcEPxhAmm5LyYihIanI4D9mm0wcGzZTD1wdaDAXg7foFAcM4ITg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiYb3N0J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D262CC4CEE9;
+	Fri,  9 May 2025 17:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746810531;
+	bh=gOabxqPVCCeC1bf1CjXU1L/Ezln0YWKVK5/9VrqkNVw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SiYb3N0JM+KWd0Is4tyFI2b+RPtzYuFMBZ4qkF96hjMxjGKXr+eP5/ngvVC26GA6m
+	 VZDMxMA1XF+oP310s+M9a3+EIN/db0geJaRDBfx1QmQz7K/3OY26N8rmK+rOcJtH6I
+	 GivVOThm5Bj1a3SJEF8OkGZI5Q/294+mJnpGcjVXykBKXeHL862oU7X+sLSOBo+mJ9
+	 +ItRE8q7uk8kjJH19/MEQXJG1RvURWTJJRjpQvpBNTog8It+f+CDkp0X2YkodPT7Qr
+	 U14Vl25aiKU+1HN7VTHZwOxuLvpOTxj4RpXb7DN1Yw/DF4CXkvlPkMsVAbpVgOH5xD
+	 eP2kfzxIguZaA==
+Date: Fri, 9 May 2025 10:08:49 -0700
+From: Bjorn Andersson <andersson@kernel.org>
+To: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, maud_spierings@hotmail.com, dmitry.baryshkov@oss.qualcomm.com
+Subject: Re: (subset) [PATCH v4 0/4] X1E Asus Zenbook A14 support
+Message-ID: <pwbbwzqb3krnyqxzkch2wziqsnab47p575endvksa2tfudyqf5@wj6c4rzr6j2n>
+References: <20250426130203.37659-1-alex.vinarskis@gmail.com>
+ <174659505811.5380.3561194017032215136.b4-ty@kernel.org>
+ <CAMcHhXq1-=JeNspAZ61W0JqtjPkoKSi2W1sL07hoVsqFu5T--Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250506191531.3326-1-jake@jakerice.dev> <2025050927-bring-gusty-e850@gregkh>
-In-Reply-To: <2025050927-bring-gusty-e850@gregkh>
-From: Jake Rice <jake@jakerice.dev>
-Date: Fri, 9 May 2025 12:40:13 -0400
-X-Gm-Features: ATxdqUEOyTvQSEbd8Zcyxyv61W3TtwQMih5pSG6mXb-VTjDsGPOoVYP3FimSY2w
-Message-ID: <CAFd_ZdCmqfj_Y80ZJih5G5Zn1nW0pE-R+gRFBMWRULjN7SNCkA@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: storage: Add blockbuffer ptr to info struct of
- sddr09 driver
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMcHhXq1-=JeNspAZ61W0JqtjPkoKSi2W1sL07hoVsqFu5T--Q@mail.gmail.com>
 
-On Fri, May 9, 2025 at 10:45=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Tue, May 06, 2025 at 03:15:31PM -0400, Jake Rice wrote:
-> > Hi all,
+On Wed, May 07, 2025 at 06:36:12PM +0200, Aleksandrs Vinarskis wrote:
+> On Wed, 7 May 2025 at 07:18, Bjorn Andersson <andersson@kernel.org> wrote:
 > >
-> > This patch updates the sddr09 driver to allocate a reusable block
-> > buffer. Unfortunately, I don't have access to the SDDR-00 hardware
-> > (which I know is pretty ancient), so I'm requesting testing from anyone=
- who does.
-> > Please let me now if the patch causes any issues or improves performanc=
-e.
 > >
-> > Best,
-> > Jake
+> > On Sat, 26 Apr 2025 14:57:56 +0200, Aleksandrs Vinarskis wrote:
+> > > Introduce support for the mentioned laptop.
+> > >
+> > > Particular device exists in two model numbers:
+> > > * UX3407QA: X1P-42-100 or X1-26-100 (as tested)
+> > > * UX3407RA: X1E-78-100
+> > >
+> > > Mostly similar to other X1-based laptops. Notable differences are:
+> > > * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407QA
+> > >   and Qualcomm FastConnect 7800 on UX3407RA
+> > > * USB Type-C retimers are Parade PS8833, appear to behave identical
+> > >   to Parade PS8830
+> > > * gpio90 is TZ protected
+> > >
+> > > [...]
 > >
-> > ---
-> > Currently, upon every write the block buffer is allocated and freed whi=
-ch is
-> > computationally expensive. With this implementation, a buffer pointer
-> > is added as a member to the info struct and allocated when the card
-> > information is read. The buffer is freed during desconstruction if
-> > necessary.
->
-> As Alan said, this is really slow hardware so I doubt allocating/free
-> the buffer will even be noticeable.  Why make this change at all if you
-> don't have access to the hardware to test it?
->
-> thanks,
->
-> greg k-h
-Alan and Greg,
+> > Applied, thanks!
+> >
+> > [2/4] dt-bindings: arm: qcom: Add Asus Zenbook A14
+> >       commit: 9f2ae52acd5e6c95ddc55d1cc67f44860940a21b
+> 
+> 
+> Thanks!
+> 
+> I saw 2/4, 3/4 were applied. Is there a reason 4/4 was left behind,
+> eg. Does it have to go through different trees like 1/4?
 
-I apologize, I was learning about the usb subsystem/usb drivers and
-saw the TODO for this and figured it was a quick implementation. I
-should have waited until I got the hardware before submitting the
-change. It won't happen again.
+The reason is that patch 1 still hasn't been merged, so patch 4 fails
+dtbs_check at the moment. 
 
-In any case, thank you, I appreciate the feedback. I ordered the
-device to test this. If I find a significant performance improvement,
-I will re-submit.
+> I also saw that another later series with dtb changes for x1e devices
+> [1] has landed, so 4/4 of the current series won't apply anymore...
+> Would you like me to rebase & respin?
+> 
 
-Best,
-Jake
+Please resubmit patch 1 alone, so that it's convenient for USB
+maintainers to pick it up.
+
+Then once this binding change is in linux-next I can pick up patch 4.
+Yes it would be convenient for me if you rebase it on top of [1].
+
+Regards,
+Bjorn
+
+> Regards,
+> Alex
+> 
+> [1] https://lore.kernel.org/all/174659597008.7675.2301017495937908497.b4-ty@kernel.org/
+> >
+> > Best regards,
+> > --
+> > Bjorn Andersson <andersson@kernel.org>
 
