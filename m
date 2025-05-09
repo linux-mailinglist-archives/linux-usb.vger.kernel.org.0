@@ -1,142 +1,170 @@
-Return-Path: <linux-usb+bounces-23819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85CF6AB0F61
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 11:42:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03831AB10F3
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 12:43:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B51217A919B
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 09:41:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 228B71C24B56
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 10:43:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B6228DB5C;
-	Fri,  9 May 2025 09:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E085828ECDA;
+	Fri,  9 May 2025 10:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUaKP4rH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jFsaMByV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3563228DB57
-	for <linux-usb@vger.kernel.org>; Fri,  9 May 2025 09:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4A617BCE;
+	Fri,  9 May 2025 10:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746783708; cv=none; b=CTAPGlmUpwbPboi33jze6WygwFxhiLVnymRQhEnce+rtWEYxUpHIvl4UnfPfXINkSWgyFFmQ1BBF1TTSl+s7z6Y5KNH5uy/Rp5zm7gOCNudkdrlsdiai2WhY/ZAvWOSgenoSlh4x5aRC7AoDuBq3E5sq1Q405FZV4f9IYKqdbUU=
+	t=1746787386; cv=none; b=PM7Bs8YB+NVBOLdRiHTS63qliDCka4TNqYUhPMXQttbcAgddnIPRqC+h+Bk1GBrlwJWQGqjxyoMlt5g+JXrmQYq8E4a5ueAFysJ0qvFDZ7Mnpx3sRhZ4hm1Rid/DgqxSi7Xt+lVJbQkEt8v7tQiIQTA9Q4nNCP8s/zf7ZR3BKBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746783708; c=relaxed/simple;
-	bh=tM3jHQC0FzbG0zNDUbEMp6melenNS3754YzFOfUWIpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZFT4LLwSdUI9d3kEYqYyPiqBlcuiaAZx+hSD8K35rGxajoIt+vRF1DPe3GhzukJwnYcabZYta2RTB86GIR50Pve5tAMaUbQ1vSnMfJcXao0RVRDCo4Y3K8eZUAxw2fTkC5jTRixoC/viu6rnEcE+Ig8RogfXlamBWZ8U0BxVWII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUaKP4rH; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54fc80df9b7so487055e87.2
-        for <linux-usb@vger.kernel.org>; Fri, 09 May 2025 02:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746783704; x=1747388504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eo93QEWFKoPB7prBtCqkGvwnSudfeoxXBZplSqxpx9Q=;
-        b=CUaKP4rHpk+ZRDe2mgMHUUrHnUYtOJb1sLQX+qywAEi9vw1zSlzz6vLpS5KfrVHa4E
-         kM0za66IwXueptKoTQ+OLbMd86hstjqjvLx1e8a0/41molDGvkOtFUm1Es26TpmAy6tH
-         31/xo+AZPwJWcmunkvUrGKURUnx2KPmOmemovvvK7IKp4FQKqzn0Td/x7pbn9jGUkG0e
-         Ysw1VpPDAOXB1o6reBKNujqIs8wUNojQ80F67kXwcywT9i+f0tvoSTEEM1Blug55ktL/
-         Y2yso/BuKI5DQXT/JDbv4mZfEOfGZyzm2SR//O/HLW2j46wOkW7pjWWye6yUFt7x6cIX
-         7V3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746783704; x=1747388504;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eo93QEWFKoPB7prBtCqkGvwnSudfeoxXBZplSqxpx9Q=;
-        b=FalgvYzh/KhsgFYv6b6nbl8//hb95HWn+FyejyyWaACit6Rd3cQQJCwqtMKooBcOMz
-         CDCbD1nL/TOM34NSkfFXwj9kx3U69fGqZcd+cZ24pHzX5HULgDoVJNqzLwko9JEAUy7G
-         i5u4Z+5ucLDvBUq5hWAkG65nIZPtNo6+ayv+xBUg9ULmvMMBL4yBM4AiE4ioelID9SG+
-         WXN9PZqvzYdI3XFSwc9IBE2idTLh/5Wa2w2WbAXcj2UJ7ei0Amojn67eDa5jGsFNIKh0
-         bx1BFWXFf1AJG/cOicdpHHjaL10BQxqgTkis2Ifi/MHK7EMDEIC1BMSaUrUFMRFuzvmp
-         XZgA==
-X-Gm-Message-State: AOJu0YwFAY4KsawjvJdCU+BXKxWE+WBNhQQMscnwCupfp3MLhjKPPwFR
-	e3oCnnfiBM8h4FtBEWKCys65iuX9D6RQlhD3ZtL/EKDNBDHWkH2U
-X-Gm-Gg: ASbGncuKDH7n7ieWfFBu9F3K4HOl4s76QP74BMoltFCEqVM1JJP4Twaja/tI+q08Rid
-	HbX+i4EeC/f4RXcqRkXDFYQamliOT5vW4Ny5zbhLej2g5wbcW0ToMX3/vFRId4YoqZcKLhKLCbd
-	8CWCKo6q/rbTw4yeai88ElImaUGuT6ud1nPxRb8M4pwZ90F40beHQryKXIUCcRgE7BSx4nRAwH4
-	2xWhToLtljoiuIE9DJG/SuotUX7twt6UFsMtxzLqX5Llp01b8hl5ybHVzXox7KIRgIh0dxS84cZ
-	LrHl15z7q/VNdpmdwzU/QgGncY5jCH/V8Oz7Cyb6wCePZp2SSsQZK8s=
-X-Google-Smtp-Source: AGHT+IGxQfsnHZ7Ne46Us14jP7jpKkMcQFMcjuT5oXUYaS9xFGV0ho641XAZimBN5Gf/KtpJEZYaiQ==
-X-Received: by 2002:a05:6512:2619:b0:545:4cb:b25d with SMTP id 2adb3069b0e04-54fc67b7bb6mr600589e87.13.1746783703846;
-        Fri, 09 May 2025 02:41:43 -0700 (PDT)
-Received: from foxbook (adte44.neoplus.adsl.tpnet.pl. [79.185.216.44])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54fc64b6b7asm224878e87.151.2025.05.09.02.41.43
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 09 May 2025 02:41:43 -0700 (PDT)
-Date: Fri, 9 May 2025 11:41:38 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>, Mathias Nyman
- <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Problematic Set TR Deq error handling series in xhci-next
-Message-ID: <20250509114138.7052dd3b@foxbook>
+	s=arc-20240116; t=1746787386; c=relaxed/simple;
+	bh=ahUuwjqGna+vJo0oCKdBCeSVplQwA69T4/kkfII8pms=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5E0JxJaI/IrOBrgQxhXDr7jvFXLbtXXXVAAPZWLVIZh1BwK9E4U6P3Zvr+Rwxbpq+kPAjI/cPXKNcrZsrHrYUvXYTTVM1bRC1Z3stT5H5dVp6oEHd8PU2qTSM0UAeOKjDN3VPTb0AuUvrNuzQ0uy4UypByTXGlOnYCBObitxvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jFsaMByV; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746787385; x=1778323385;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ahUuwjqGna+vJo0oCKdBCeSVplQwA69T4/kkfII8pms=;
+  b=jFsaMByVmooNQjZ700lTpeu/B8E8Ggt4oJIvPlCS4Ei6uxUP3k2qPNPs
+   dyZda5U8JOZLmcEd3/2QsqRU7McWIEl11pI7FVkTIIXecxaeezCgsbSDK
+   57Zg/8nFdTZPiStrc2tOtDLJ+P8tNyiOP672h2gDpTd8gCcPx/foPItaq
+   P8JcOtKFzU3ua50dVOxnv6/Em6mTHaYOtRlDKkun4jVdIIdN7CYA6tjVM
+   hgpUBbHU3q7/7/I/yVp76l9TkT7JMSqwKC5EAvIGKSme+fMAqNCClRJmG
+   oIeLIVKxNEujbuAhb6NS39DWhgGv6QN23L9fvKZnmbsMVf/WtPzeteXMx
+   w==;
+X-CSE-ConnectionGUID: BO2S6kwDRDSVtuadEO96+Q==
+X-CSE-MsgGUID: ojt0IRDARqKJDaMzP8KSTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48524514"
+X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
+   d="scan'208";a="48524514"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 03:43:04 -0700
+X-CSE-ConnectionGUID: hIbvSYa8Q6a0Ki5hm2amaA==
+X-CSE-MsgGUID: UUXzAwMPTbeMMK3KQMIW6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
+   d="scan'208";a="136288448"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 09 May 2025 03:43:00 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uDLBx-000BxX-2k;
+	Fri, 09 May 2025 10:42:57 +0000
+Date: Fri, 9 May 2025 18:42:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zongmin Zhou <min_halo@163.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, dakr@kernel.org, markgross@kernel.org,
+	arnd@arndb.de, eric.piel@tremplin-utc.net,
+	valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: Re: [PATCH 2/2] usbip: convert to use faux_device
+Message-ID: <202505091836.sxOEZiIt-lkp@intel.com>
+References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
 
-Hi,
+Hi Zongmin,
 
-I noticed that xhci/for-usb-next now includes a series which tries
-to handle Set TR Deq errors. It strikes me as a solution looking for
-a problem, and frankly creating new problems where none existed ;)
+kernel test robot noticed the following build warnings:
 
-I am aware of three cases leading to errors being handled here, and
-none of them is addressed. One is harmless and easy to fix properly,
-but this series appears to turn it into a "never give back the URB"
-disaster. Tests pending, I hope to find some time this weekend.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.15-rc5 next-20250508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-There should be no need to handle these errors, they are prevented
-by not queuing the command in wrong states. When the command fails,
-it means the driver screwed up tracking endpoint state and other
-things are on fire too, so the actual bug should be fixed instead.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zongmin-Zhou/driver-core-add-device-s-platform_data-set-for-faux-device/20250508-171441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin%40kylinos.cn
+patch subject: [PATCH 2/2] usbip: convert to use faux_device
+config: x86_64-randconfig-002-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091836.sxOEZiIt-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091836.sxOEZiIt-lkp@intel.com/reproduce)
 
-The case of disabled endpoints is clear: no URBs are allowed, the
-core is broken. It would be more productive to sanity-check core:
-detect and nuke lingering URBs in places like endpoint_disable(),
-drop_endpoint(), reset_device(), free_dev(). If Set Deq is already
-pending at the time, give back the URB and let the command fail.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505091836.sxOEZiIt-lkp@intel.com/
 
-The case of "stopped" should outright never happen, we don't queue
-Stop Endpoint if Set TR Deq is pending. It triggers a known HW bug,
-so it's a bug. Note that this series already assumes that Stop EP
-isn't pending when it queues a new one.
+All warnings (new ones prefixed by >>):
 
-The case of "running" (or "halted", which "running" can morth into)
-is possibly more useful, because we assume it's caused by illegal
-state changes without driver's knowledge. But these are supposed to
-be detected and fixed by handle_cmd_stop_ep(), because they cause
-other problems too. It's unclear if retrying Stop Endpoint and Set
-TR Deq again will solve any case not solved yet, but risk exists of
-infinite retries on broken HW. (And HW is broken if we are here).
+>> drivers/usb/usbip/vhci_hcd.c:1531:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1531 |         return ret;
+         |                ^~~
+   drivers/usb/usbip/vhci_hcd.c:1501:12: note: initialize the variable 'ret' to silence this warning
+    1501 |         int i, ret;
+         |                   ^
+         |                    = 0
+   drivers/usb/usbip/vhci_hcd.c:1418:12: warning: unused function 'vhci_hcd_suspend' [-Wunused-function]
+    1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
+         |            ^~~~~~~~~~~~~~~~
+   drivers/usb/usbip/vhci_hcd.c:1462:12: warning: unused function 'vhci_hcd_resume' [-Wunused-function]
+    1462 | static int vhci_hcd_resume(struct faux_device *fdev)
+         |            ^~~~~~~~~~~~~~~
+   3 warnings generated.
 
-Queuing a Soft Retry and then doing Set TR Deq out of the halted TD
-instead of restarting the ring is a weird thing to do and IDK if HW
-will get it right. IIRC, some ASMedia had issues in similar cases:
-it would retry the TD anyway, despite Set TR Deq.
 
-The case of command TRB error looks wrong too. AFAIK, bad stream
-ID only halts the endpoint if it's in a packet from the device. The
-command just fails. And find_halted_td() will crash on Streams EPs.
+vim +/ret +1531 drivers/usb/usbip/vhci_hcd.c
 
-TRB error also happens on ASMedia HCs under unclear circumstances.
-It's either an HC bug, or (totally guessing) maybe a way the HC is
-telling us that the target stream is the Current Stream, forbidden
-by the spec. It only seems to happen with some UAS chips, and same
-chips also have issues (but no TRB errors) on other HCs. If anyone
-with access to the UAS spec (paywall) and a USB packet analyzer
-would like to debug it, I can provide detailed repro instructions. 
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1498  
+0392bbb6f6af31 drivers/staging/usbip/vhci_hcd.c matt mooney        2011-05-19  1499  static int __init vhci_hcd_init(void)
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1500  {
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1501  	int i, ret;
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1502  
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1503  	if (usb_disabled())
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1504  		return -ENODEV;
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1505  
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1506  	if (vhci_num_controllers < 1)
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1507  		vhci_num_controllers = 1;
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1508  
+89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1509  	vhcis = kcalloc(vhci_num_controllers, sizeof(struct vhci), GFP_KERNEL);
+89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1510  	if (vhcis == NULL)
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1511  		return -ENOMEM;
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1512  
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1513  	for (i = 0; i < vhci_num_controllers; i++) {
+17d6b82d2d6d46 drivers/usb/usbip/vhci_hcd.c     Hongren Zheng      2023-10-14  1514  		void *vhci = &vhcis[i];
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1515  		char vhci_name[16];
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1516  
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1517  		snprintf(vhci_name, 16, "%s.%d", driver_name, i);
+b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1518  
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1519  		vhcis[i].fdev = faux_device_create_with_groups(vhci_name, NULL, &vhci_driver, NULL, vhci);
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1520  		if (!vhcis[i].fdev) {
+b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1521  			while (i--)
+1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1522  				faux_device_destroy(vhcis[i].fdev);
+dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1523  			goto err_add_hcd;
+dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1524  		}
+0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1525  	}
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1526  
+b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1527  	return 0;
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1528  
+dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1529  err_add_hcd:
+89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1530  	kfree(vhcis);
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09 @1531  	return ret;
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1532  }
+04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1533  
 
-Regards,
-Michal
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
