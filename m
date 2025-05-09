@@ -1,118 +1,142 @@
-Return-Path: <linux-usb+bounces-23818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B34D7AB0EB2
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 11:19:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85CF6AB0F61
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 11:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF371C2708B
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 09:18:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B51217A919B
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 09:41:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 941FB27A471;
-	Fri,  9 May 2025 09:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B6228DB5C;
+	Fri,  9 May 2025 09:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JOJr/Koi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUaKP4rH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722B527A440;
-	Fri,  9 May 2025 09:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3563228DB57
+	for <linux-usb@vger.kernel.org>; Fri,  9 May 2025 09:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746782180; cv=none; b=RI7IJ/l6eZm9kuMUZvTlLfscl4+rX58YF8qzoa1MwqUWTnXc8elU1VqnVHKzOqnl4aH37MpvKmuZf9q59rdfIs7AQ2lpbpdPbbPdtWRtLjo6NbOtef1nyCy1uZbPxV2gWUHY2p4GEBlP/szi9MG2o+vbMF2bOj7Qqv+eCpkv/Sg=
+	t=1746783708; cv=none; b=CTAPGlmUpwbPboi33jze6WygwFxhiLVnymRQhEnce+rtWEYxUpHIvl4UnfPfXINkSWgyFFmQ1BBF1TTSl+s7z6Y5KNH5uy/Rp5zm7gOCNudkdrlsdiai2WhY/ZAvWOSgenoSlh4x5aRC7AoDuBq3E5sq1Q405FZV4f9IYKqdbUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746782180; c=relaxed/simple;
-	bh=GKY/jZpQLY+US/6VNTuAUDGj+GbpyYg9QGXXARr8MAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PnH4ux5uS6fuCctyIzHenrHsGf992hZC+4p075htzeB3RTQ9h78pdEzDNetE7JAEgtGrlp92MMJ+ipvmHkUN3+ss2fwgDmFsSUfpXRAaHXFw7DgjxjF/uC4pM4ElP5paotiHR/6apQcrzXstZI1WSnLL7pEY4BkAli/CzIzyVtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JOJr/Koi; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746782179; x=1778318179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GKY/jZpQLY+US/6VNTuAUDGj+GbpyYg9QGXXARr8MAo=;
-  b=JOJr/Koid177201SqodWDUvvV8knOGtrX3zfHjEUGaxs5uXf4UEeYNAM
-   Vvvoumfntwy5tJrxOXQFhXK+P0O264x3sWOvQ1rlLGX19NW84XuIqihk8
-   YWKfCYxKb7o3lHXwc9M/oQ3jhjRaiQ116VYRQxg9Li0n6+8/ewDz3c24p
-   O7xEkPhsoEcTqaqRghu/m4Sjpx3ws0ga/BIv7q0qstPW58x2iOAaNMQjw
-   IhiK44j7WRAzSSY0CRk1BYw7DVXnhgR8UbaV5zoEc23X70wfbFn7Bv8Ef
-   itZj26EzxQXu1Ma+gxp5qJ+WLpVwu2ua/catWUXt3sCOf07wY3JckwE6T
-   w==;
-X-CSE-ConnectionGUID: XczeReWmSjyyPre7xmon9Q==
-X-CSE-MsgGUID: FXkeoW/NQZWNNMUO9omzSA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48470791"
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="48470791"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 02:16:18 -0700
-X-CSE-ConnectionGUID: TC9K+ZGEQ9yYB5TqUtdVbQ==
-X-CSE-MsgGUID: N+2HiaJkRSWfXuFUfbC/hw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="159860354"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 09 May 2025 02:16:15 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 4AC2413B; Fri, 09 May 2025 12:16:14 +0300 (EEST)
-Date: Fri, 9 May 2025 12:16:14 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Mika Westerberg <westeri@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCHv3] thunderbolt: do not double dequeue a request
-Message-ID: <20250509091614.GB88033@black.fi.intel.com>
-References: <20250327150406.138736-1-senozhatsky@chromium.org>
- <ojkrbtd2kpweo5xcfulfobdavj5ab3ysxxle4kr5oa455me77s@p2o4jdwsr3m2>
+	s=arc-20240116; t=1746783708; c=relaxed/simple;
+	bh=tM3jHQC0FzbG0zNDUbEMp6melenNS3754YzFOfUWIpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZFT4LLwSdUI9d3kEYqYyPiqBlcuiaAZx+hSD8K35rGxajoIt+vRF1DPe3GhzukJwnYcabZYta2RTB86GIR50Pve5tAMaUbQ1vSnMfJcXao0RVRDCo4Y3K8eZUAxw2fTkC5jTRixoC/viu6rnEcE+Ig8RogfXlamBWZ8U0BxVWII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUaKP4rH; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54fc80df9b7so487055e87.2
+        for <linux-usb@vger.kernel.org>; Fri, 09 May 2025 02:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746783704; x=1747388504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eo93QEWFKoPB7prBtCqkGvwnSudfeoxXBZplSqxpx9Q=;
+        b=CUaKP4rHpk+ZRDe2mgMHUUrHnUYtOJb1sLQX+qywAEi9vw1zSlzz6vLpS5KfrVHa4E
+         kM0za66IwXueptKoTQ+OLbMd86hstjqjvLx1e8a0/41molDGvkOtFUm1Es26TpmAy6tH
+         31/xo+AZPwJWcmunkvUrGKURUnx2KPmOmemovvvK7IKp4FQKqzn0Td/x7pbn9jGUkG0e
+         Ysw1VpPDAOXB1o6reBKNujqIs8wUNojQ80F67kXwcywT9i+f0tvoSTEEM1Blug55ktL/
+         Y2yso/BuKI5DQXT/JDbv4mZfEOfGZyzm2SR//O/HLW2j46wOkW7pjWWye6yUFt7x6cIX
+         7V3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746783704; x=1747388504;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eo93QEWFKoPB7prBtCqkGvwnSudfeoxXBZplSqxpx9Q=;
+        b=FalgvYzh/KhsgFYv6b6nbl8//hb95HWn+FyejyyWaACit6Rd3cQQJCwqtMKooBcOMz
+         CDCbD1nL/TOM34NSkfFXwj9kx3U69fGqZcd+cZ24pHzX5HULgDoVJNqzLwko9JEAUy7G
+         i5u4Z+5ucLDvBUq5hWAkG65nIZPtNo6+ayv+xBUg9ULmvMMBL4yBM4AiE4ioelID9SG+
+         WXN9PZqvzYdI3XFSwc9IBE2idTLh/5Wa2w2WbAXcj2UJ7ei0Amojn67eDa5jGsFNIKh0
+         bx1BFWXFf1AJG/cOicdpHHjaL10BQxqgTkis2Ifi/MHK7EMDEIC1BMSaUrUFMRFuzvmp
+         XZgA==
+X-Gm-Message-State: AOJu0YwFAY4KsawjvJdCU+BXKxWE+WBNhQQMscnwCupfp3MLhjKPPwFR
+	e3oCnnfiBM8h4FtBEWKCys65iuX9D6RQlhD3ZtL/EKDNBDHWkH2U
+X-Gm-Gg: ASbGncuKDH7n7ieWfFBu9F3K4HOl4s76QP74BMoltFCEqVM1JJP4Twaja/tI+q08Rid
+	HbX+i4EeC/f4RXcqRkXDFYQamliOT5vW4Ny5zbhLej2g5wbcW0ToMX3/vFRId4YoqZcKLhKLCbd
+	8CWCKo6q/rbTw4yeai88ElImaUGuT6ud1nPxRb8M4pwZ90F40beHQryKXIUCcRgE7BSx4nRAwH4
+	2xWhToLtljoiuIE9DJG/SuotUX7twt6UFsMtxzLqX5Llp01b8hl5ybHVzXox7KIRgIh0dxS84cZ
+	LrHl15z7q/VNdpmdwzU/QgGncY5jCH/V8Oz7Cyb6wCePZp2SSsQZK8s=
+X-Google-Smtp-Source: AGHT+IGxQfsnHZ7Ne46Us14jP7jpKkMcQFMcjuT5oXUYaS9xFGV0ho641XAZimBN5Gf/KtpJEZYaiQ==
+X-Received: by 2002:a05:6512:2619:b0:545:4cb:b25d with SMTP id 2adb3069b0e04-54fc67b7bb6mr600589e87.13.1746783703846;
+        Fri, 09 May 2025 02:41:43 -0700 (PDT)
+Received: from foxbook (adte44.neoplus.adsl.tpnet.pl. [79.185.216.44])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54fc64b6b7asm224878e87.151.2025.05.09.02.41.43
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 09 May 2025 02:41:43 -0700 (PDT)
+Date: Fri, 9 May 2025 11:41:38 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Niklas Neronin <niklas.neronin@linux.intel.com>, Mathias Nyman
+ <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Problematic Set TR Deq error handling series in xhci-next
+Message-ID: <20250509114138.7052dd3b@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ojkrbtd2kpweo5xcfulfobdavj5ab3ysxxle4kr5oa455me77s@p2o4jdwsr3m2>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 08, 2025 at 12:47:18PM +0900, Sergey Senozhatsky wrote:
-> On (25/03/28 00:03), Sergey Senozhatsky wrote:
-> > Some of our devices crash in tb_cfg_request_dequeue():
-> > 
-> >  general protection fault, probably for non-canonical address 0xdead000000000122
-> > 
-> >  CPU: 6 PID: 91007 Comm: kworker/6:2 Tainted: G U W 6.6.65
-> >  RIP: 0010:tb_cfg_request_dequeue+0x2d/0xa0
-> >  Call Trace:
-> >  <TASK>
-> >  ? tb_cfg_request_dequeue+0x2d/0xa0
-> >  tb_cfg_request_work+0x33/0x80
-> >  worker_thread+0x386/0x8f0
-> >  kthread+0xed/0x110
-> >  ret_from_fork+0x38/0x50
-> >  ret_from_fork_asm+0x1b/0x30
-> > 
-> > The circumstances are unclear, however, the theory is that
-> > tb_cfg_request_work() can be scheduled twice for a request:
-> > first time via frame.callback from ring_work() and second
-> > time from tb_cfg_request().  Both times kworkers will execute
-> > tb_cfg_request_dequeue(), which results in double list_del()
-> > from the ctl->request_queue (the list poison deference hints
-> > at it: 0xdead000000000122).
-> > 
-> > Do not dequeue requests that don't have TB_CFG_REQUEST_ACTIVE
-> > bit set.
-> 
-> Mika, as was discussed in [1] thread we rolled out the fix to
-> our fleet and we don't see the crashes anymore.  So it's tested
-> and verified.
+Hi,
 
-Cool, thanks! Applied to thunderbolt.git/fixes.
+I noticed that xhci/for-usb-next now includes a series which tries
+to handle Set TR Deq errors. It strikes me as a solution looking for
+a problem, and frankly creating new problems where none existed ;)
+
+I am aware of three cases leading to errors being handled here, and
+none of them is addressed. One is harmless and easy to fix properly,
+but this series appears to turn it into a "never give back the URB"
+disaster. Tests pending, I hope to find some time this weekend.
+
+There should be no need to handle these errors, they are prevented
+by not queuing the command in wrong states. When the command fails,
+it means the driver screwed up tracking endpoint state and other
+things are on fire too, so the actual bug should be fixed instead.
+
+The case of disabled endpoints is clear: no URBs are allowed, the
+core is broken. It would be more productive to sanity-check core:
+detect and nuke lingering URBs in places like endpoint_disable(),
+drop_endpoint(), reset_device(), free_dev(). If Set Deq is already
+pending at the time, give back the URB and let the command fail.
+
+The case of "stopped" should outright never happen, we don't queue
+Stop Endpoint if Set TR Deq is pending. It triggers a known HW bug,
+so it's a bug. Note that this series already assumes that Stop EP
+isn't pending when it queues a new one.
+
+The case of "running" (or "halted", which "running" can morth into)
+is possibly more useful, because we assume it's caused by illegal
+state changes without driver's knowledge. But these are supposed to
+be detected and fixed by handle_cmd_stop_ep(), because they cause
+other problems too. It's unclear if retrying Stop Endpoint and Set
+TR Deq again will solve any case not solved yet, but risk exists of
+infinite retries on broken HW. (And HW is broken if we are here).
+
+Queuing a Soft Retry and then doing Set TR Deq out of the halted TD
+instead of restarting the ring is a weird thing to do and IDK if HW
+will get it right. IIRC, some ASMedia had issues in similar cases:
+it would retry the TD anyway, despite Set TR Deq.
+
+The case of command TRB error looks wrong too. AFAIK, bad stream
+ID only halts the endpoint if it's in a packet from the device. The
+command just fails. And find_halted_td() will crash on Streams EPs.
+
+TRB error also happens on ASMedia HCs under unclear circumstances.
+It's either an HC bug, or (totally guessing) maybe a way the HC is
+telling us that the target stream is the Current Stream, forbidden
+by the spec. It only seems to happen with some UAS chips, and same
+chips also have issues (but no TRB errors) on other HCs. If anyone
+with access to the UAS spec (paywall) and a USB packet analyzer
+would like to debug it, I can provide detailed repro instructions. 
+
+Regards,
+Michal
 
