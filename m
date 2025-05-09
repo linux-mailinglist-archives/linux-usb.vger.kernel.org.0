@@ -1,60 +1,65 @@
-Return-Path: <linux-usb+bounces-23829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B934AB1B53
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 19:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01B55AB1C71
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 20:39:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF82D1BA11FF
-	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 17:09:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5892B1C2856C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 May 2025 18:40:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1096239090;
-	Fri,  9 May 2025 17:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A2B242D77;
+	Fri,  9 May 2025 18:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiYb3N0J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOR3T+Ue"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490D420C030;
-	Fri,  9 May 2025 17:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E906D241139;
+	Fri,  9 May 2025 18:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746810532; cv=none; b=rsDuUffRUSMHMLrxl+KjCseknN6NVbj3zMA/pILOJceZP+LJcLz+Egm8ILA2ToMObnsGW7KDS2qEdmdPAPVSEdLAcyctKwnoxAo/nGtsPtbGBuIDYCc9M3PcGAE//GGY+mI6gibaqifrG/rUYmfFRX3qNS74TERk6ztYZSnxb5w=
+	t=1746815942; cv=none; b=Kj2Fjy6QyhhPYz6kF4iAqP05iB4Dgtu4f9ZnB9siBlxMXg8OsxmX8YC0eqp2OWQDLPq2Y9AyngQOthJu0u98jRtYco55gUqkxE8vlyZxY7RAWXHpigS4DDmmOYvPl4reOxztD7wNXmMPlzkxNPpf39r3Sej+hJMthX9GJXiNZzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746810532; c=relaxed/simple;
-	bh=gOabxqPVCCeC1bf1CjXU1L/Ezln0YWKVK5/9VrqkNVw=;
+	s=arc-20240116; t=1746815942; c=relaxed/simple;
+	bh=CNzigu9OBmuWrlsbb6lkAHKQvEmV0rXReJcmd4lUIG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CLauhPiM77DeL85dstkpymmMN7pMzmlN/C0BatQnIY+n9ZoWLWFAedH0+I78val8wlUeVfwfWJPZCtiStJuJBfIVlQCU2KD666MUc2VGhKPunoYFQuv5mjvFMcEPxhAmm5LyYihIanI4D9mm0wcGzZTD1wdaDAXg7foFAcM4ITg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiYb3N0J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D262CC4CEE9;
-	Fri,  9 May 2025 17:08:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AG7V0QtBF96zjRDYgHyCMkue5IwbQSavd2O0Jb5M2MuZ2WBfUOP+W2lxXgcjNyD/KbBHk6p0zzy2c0c+4kJ8LvsW7mO4qysJEL8jSmVX+bw7cTPQ/SwuRGz4xreQ6SAkp28/PPif/4VF+VWFEeM40pRsAV5MCsjyOZFNARU83ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOR3T+Ue; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5AFC4CEE4;
+	Fri,  9 May 2025 18:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746810531;
-	bh=gOabxqPVCCeC1bf1CjXU1L/Ezln0YWKVK5/9VrqkNVw=;
+	s=k20201202; t=1746815941;
+	bh=CNzigu9OBmuWrlsbb6lkAHKQvEmV0rXReJcmd4lUIG0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SiYb3N0JM+KWd0Is4tyFI2b+RPtzYuFMBZ4qkF96hjMxjGKXr+eP5/ngvVC26GA6m
-	 VZDMxMA1XF+oP310s+M9a3+EIN/db0geJaRDBfx1QmQz7K/3OY26N8rmK+rOcJtH6I
-	 GivVOThm5Bj1a3SJEF8OkGZI5Q/294+mJnpGcjVXykBKXeHL862oU7X+sLSOBo+mJ9
-	 +ItRE8q7uk8kjJH19/MEQXJG1RvURWTJJRjpQvpBNTog8It+f+CDkp0X2YkodPT7Qr
-	 U14Vl25aiKU+1HN7VTHZwOxuLvpOTxj4RpXb7DN1Yw/DF4CXkvlPkMsVAbpVgOH5xD
-	 eP2kfzxIguZaA==
-Date: Fri, 9 May 2025 10:08:49 -0700
-From: Bjorn Andersson <andersson@kernel.org>
-To: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, maud_spierings@hotmail.com, dmitry.baryshkov@oss.qualcomm.com
-Subject: Re: (subset) [PATCH v4 0/4] X1E Asus Zenbook A14 support
-Message-ID: <pwbbwzqb3krnyqxzkch2wziqsnab47p575endvksa2tfudyqf5@wj6c4rzr6j2n>
-References: <20250426130203.37659-1-alex.vinarskis@gmail.com>
- <174659505811.5380.3561194017032215136.b4-ty@kernel.org>
- <CAMcHhXq1-=JeNspAZ61W0JqtjPkoKSi2W1sL07hoVsqFu5T--Q@mail.gmail.com>
+	b=QOR3T+Uea/m9D1NaeSWXmmevBwXXe1rwMHM9tj20bdo5M/Q1Uz6xZw+S9DICifwPw
+	 mq+MEqH0ToOrWY8bUhm2sARgZvXf4NJp+4wzxRfO0ygybgggqztpqAMvpqm7kehrlw
+	 hELbnaCIrgfTjteCssiBoQPaMu0o0oO9jSFmt17Ugt91b0YEVY0KyRByE5AWVL3Egw
+	 iMIpJ6ihhnprEpw8MmmEwfOE4nghtEPK5HSt4MtTLU8qi+T0u5ZphiQdat+TJvlTtU
+	 /H5ahjFWOcwroMtB7aNubyLP5eN/MdKW6LyuF70OlcPx1kMmYPRMavi03kh3Edwb/M
+	 OO+/gygR1OmMg==
+Date: Fri, 9 May 2025 13:38:59 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+Cc: Benjamin Bara <benjamin.bara@skidata.com>,
+	linux-rockchip@lists.infradead.org, stable@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Klaus Goger <klaus.goger@theobroma-systems.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: usb: cypress,hx3: Add support for
+ all variants
+Message-ID: <174681593868.3912440.12960505435883876267.robh@kernel.org>
+References: <20250425-onboard_usb_dev-v2-0-4a76a474a010@thaumatec.com>
+ <20250425-onboard_usb_dev-v2-2-4a76a474a010@thaumatec.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,62 +68,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMcHhXq1-=JeNspAZ61W0JqtjPkoKSi2W1sL07hoVsqFu5T--Q@mail.gmail.com>
+In-Reply-To: <20250425-onboard_usb_dev-v2-2-4a76a474a010@thaumatec.com>
 
-On Wed, May 07, 2025 at 06:36:12PM +0200, Aleksandrs Vinarskis wrote:
-> On Wed, 7 May 2025 at 07:18, Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> >
-> > On Sat, 26 Apr 2025 14:57:56 +0200, Aleksandrs Vinarskis wrote:
-> > > Introduce support for the mentioned laptop.
-> > >
-> > > Particular device exists in two model numbers:
-> > > * UX3407QA: X1P-42-100 or X1-26-100 (as tested)
-> > > * UX3407RA: X1E-78-100
-> > >
-> > > Mostly similar to other X1-based laptops. Notable differences are:
-> > > * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407QA
-> > >   and Qualcomm FastConnect 7800 on UX3407RA
-> > > * USB Type-C retimers are Parade PS8833, appear to behave identical
-> > >   to Parade PS8830
-> > > * gpio90 is TZ protected
-> > >
-> > > [...]
-> >
-> > Applied, thanks!
-> >
-> > [2/4] dt-bindings: arm: qcom: Add Asus Zenbook A14
-> >       commit: 9f2ae52acd5e6c95ddc55d1cc67f44860940a21b
-> 
-> 
-> Thanks!
-> 
-> I saw 2/4, 3/4 were applied. Is there a reason 4/4 was left behind,
-> eg. Does it have to go through different trees like 1/4?
 
-The reason is that patch 1 still hasn't been merged, so patch 4 fails
-dtbs_check at the moment. 
-
-> I also saw that another later series with dtb changes for x1e devices
-> [1] has landed, so 4/4 of the current series won't apply anymore...
-> Would you like me to rebase & respin?
+On Fri, 25 Apr 2025 17:18:07 +0200, Lukasz Czechowski wrote:
+> The Cypress HX3 hubs use different default PID value depending
+> on the variant. Update compatibles list.
+> Becasuse all hub variants use the same driver data, allow the
+> dt node to have two compatibles: leftmost which matches the HW
+> exactly, and the second one as fallback.
+> 
+> Fixes: 1eca51f58a10 ("dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family")
+> Cc: stable@vger.kernel.org # 6.6
+> Cc: stable@vger.kernel.org # Backport of the patch ("dt-bindings: usb: usb-device: relax compatible pattern to a contains") from list: https://lore.kernel.org/linux-usb/20250418-dt-binding-usb-device-compatibles-v2-1-b3029f14e800@cherry.de/
+> Cc: stable@vger.kernel.org # Backport of the patch in this series fixing product ID in onboard_dev_id_table in drivers/usb/misc/onboard_usb_dev.c driver
+> Signed-off-by: Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
+> ---
+>  .../devicetree/bindings/usb/cypress,hx3.yaml          | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
 > 
 
-Please resubmit patch 1 alone, so that it's convenient for USB
-maintainers to pick it up.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Then once this binding change is in linux-next I can pick up patch 4.
-Yes it would be convenient for me if you rebase it on top of [1].
-
-Regards,
-Bjorn
-
-> Regards,
-> Alex
-> 
-> [1] https://lore.kernel.org/all/174659597008.7675.2301017495937908497.b4-ty@kernel.org/
-> >
-> > Best regards,
-> > --
-> > Bjorn Andersson <andersson@kernel.org>
 
