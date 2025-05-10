@@ -1,361 +1,253 @@
-Return-Path: <linux-usb+bounces-23833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23834-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12EE4AB2343
-	for <lists+linux-usb@lfdr.de>; Sat, 10 May 2025 12:11:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F74AB237F
+	for <lists+linux-usb@lfdr.de>; Sat, 10 May 2025 13:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF8643A1F6C
-	for <lists+linux-usb@lfdr.de>; Sat, 10 May 2025 10:10:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 608FAA0381C
+	for <lists+linux-usb@lfdr.de>; Sat, 10 May 2025 11:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3372222BB;
-	Sat, 10 May 2025 10:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjR86BR8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4188D2550D8;
+	Sat, 10 May 2025 11:00:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D8E1D7E42
-	for <linux-usb@vger.kernel.org>; Sat, 10 May 2025 10:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3407B1A2C27
+	for <linux-usb@vger.kernel.org>; Sat, 10 May 2025 11:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746871866; cv=none; b=f9ME2lCMKfOMrHZVMzzhC7tnQtrq6/x6kXRUGcOjJH+U1qkqBDJ14x9fXBw7fzcHsIAzWQ9mElw/6s8DUUCtMveP38L6cWSgc+7gVaSIS82fT06vUu3OodDiY2cKLrii++W9eqmxhiKui7F0VKvshQo5FebgxGfrZlWswCCJh8s=
+	t=1746874828; cv=none; b=jZoN9YckHHwXUEo4+Z5AD2BgtUDnqidxNzG7HQa1/hVRfqwh7OZmFF3EnwhUfIBGSQRNopnrNf8m9pkPx3iedIhu3S5Nx5G+7LnNYNUMdawcDb08Wl8h05yuoPZpd1DT7ABIL4aB7ynj6dLgfr//1+iZhTiNZzUv/gDQYBytNdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746871866; c=relaxed/simple;
-	bh=KtTPAfgB7hydyNWNi/aJAzPEPT6M2oRyFfuMrtWjpLc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=f65bLoZHDqiGpF9x7R2JdeDphXnf7qCD1lA+plvenwjEJdio4rULlq9SD2YK0qiYbY2gMbjxy5COZE7FgGwH037bI9Z2PqmAMIklwhJAK4s98rWGfxX9zsKjhKXMmCKXAbUV1kCC97iA5QUWTwFNlpVWCOH+03UGBugrlOXBRZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjR86BR8; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746871864; x=1778407864;
-  h=date:from:to:cc:subject:message-id;
-  bh=KtTPAfgB7hydyNWNi/aJAzPEPT6M2oRyFfuMrtWjpLc=;
-  b=PjR86BR8CnEp5o75YSMAnNT+vUU1UTq0QnpKOTFBuc6Q6OKsYW7wkI6t
-   q7eg9QCrL+CyvtL/abiLuNPEW5w7H66d/AxL4yo/pSF4eeCdgRAxnxWx1
-   Pppuf4Dg3uUNWjIYRFonian1wrQ+c+U5NkBX9KoSWmiDVJLKR6lzBbg2o
-   iiGshabrA7TOItkYAXd6Rfm08aKTiBM6kL/jCX7Q0gF5aHR0Y3XBscuw2
-   Am/JvBWpojxUOT4hLwdvECQv3nNq6AzrkX208CU5lseHCEI9xd2KimBTw
-   qowmhK8ai7uczDMBIkWujnyMNLsP1DP84Tiz2gXgj/Q6IVSJZ/DrihtE7
-   w==;
-X-CSE-ConnectionGUID: B4EGaEA3TC+No0RDEKxUug==
-X-CSE-MsgGUID: x/JGaNJ6QKyRo9+mS+Ngig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="59700399"
-X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
-   d="scan'208";a="59700399"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2025 03:11:03 -0700
-X-CSE-ConnectionGUID: 1UR2GKryR+mRvGsmMz7gWw==
-X-CSE-MsgGUID: OKZT+hdbT2aOvBSFfU+NPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
-   d="scan'208";a="141771316"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 10 May 2025 03:11:02 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uDhAa-000CzN-11;
-	Sat, 10 May 2025 10:11:00 +0000
-Date: Sat, 10 May 2025 18:10:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
- 0f73628e9da1ee39daf5f188190cdbaee5e0c98c
-Message-ID: <202505101837.qcMNJZ78-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1746874828; c=relaxed/simple;
+	bh=pXsl0jxifGZtwSvbaZNBoTIPsoR2HbMX7cQ25fwdh58=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tyQ0PprhGrbKXiQ5unWPufOdV3RjzBhm8OhcC3sm9lOFImTSCzeXWfpFUNDTzjbHnzPxfR+s86KtzwMzxDPzARnihEFb3ynVsB3V+JPI1KD2RDUFHKTyLUoV9Rww7y3JDAm2pWXqiZbM+pPlXGrMr0bdagQBbsj1KsdB4s5vMVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3d81b9bb1b3so23797525ab.1
+        for <linux-usb@vger.kernel.org>; Sat, 10 May 2025 04:00:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746874825; x=1747479625;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aq+tEvR2BX2GebmvQp4oKnTx8XxElrOxtRuDyDfClMg=;
+        b=s/NeDMWb1xIfB3Ye2bLY+EUEpD9yNcCwUcDBZ9DcjZ4CiQ/HlreE7VXzm9KA4K6L27
+         3GrHj/FV607LwcoOXsKazZhPBsbl8cMpVzx3JbqLiz+AWqaWV60OW3nf+rkJDdR8jP/l
+         cTbe5G0ZubeV5W9ets4uo0Uq3WDgBCwhxR1QLh3m5pXPW03RAIT3iD36anTS2QRW1cqd
+         b8xEyQMuJIucnZplCf9LknUczHtJHBMbmypCcd287aRI65XID/NqhL1c80jFRynspveo
+         gMz01UU7HDlmtkdHo9EO+HqYDRxCDIc+T5I1XVRm2HSCFteZagiD2PUXlY2QJy/YtPKk
+         wsxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURnM8rfn91Hi3WzEu1fxQn0oGxPxQFHAR1pLsCVFX4eO/dAZGxDZJRLxa6rLkMYrnyIfM/k1Fib3o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxteuSP/5txTwO//jpBKjC13dW1bzoxncq9EguioNbA0ff0+PT2
+	8qTWTpNO18z0FuuxqcdxCOUpJAlEtnBw/h3yhOEoJqa721oOPSQU9PGIqBbWGfSu9L4/YZPzDRx
+	Q7DOaj4y9PQj3t1YfoP/kHUHDewkgz50QKRJKp2lycQM1MJ1V1qx2y+E=
+X-Google-Smtp-Source: AGHT+IHeCXvwxGNn4cP9NeGk6LJV0a63u/0yHIUmGn1aoxB5Z4QtlTYTGnIVgQln3lh39ezlXGtJRwNWZh0b8EvkIIC+rVWpeCGE
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1689:b0:3d0:4b3d:75ba with SMTP id
+ e9e14a558f8ab-3da7e1e1b24mr78918425ab.4.1746874825238; Sat, 10 May 2025
+ 04:00:25 -0700 (PDT)
+Date: Sat, 10 May 2025 04:00:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <681f31c9.050a0220.f2294.0007.GAE@google.com>
+Subject: [syzbot] [usb?] KMSAN: uninit-value in usbnet_probe (3)
+From: syzbot <syzbot+3b6b9ff7b80430020c7b@syzkaller.appspotmail.com>
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
-branch HEAD: 0f73628e9da1ee39daf5f188190cdbaee5e0c98c  thunderbolt: Do not double dequeue a configuration request
+Hello,
 
-elapsed time: 1463m
+syzbot found the following issue on:
 
-configs tested: 268
-configs skipped: 9
+HEAD commit:    02ddfb981de8 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=128254d4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9dc42c34a3f5c357
+dashboard link: https://syzkaller.appspot.com/bug?extid=3b6b9ff7b80430020c7b
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168254d4580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16811768580000
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5ca57f5a3f77/disk-02ddfb98.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3f23cbc11e68/vmlinux-02ddfb98.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/73e63afac354/bzImage-02ddfb98.xz
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-14.2.0
-arc                                 defconfig    gcc-14.2.0
-arc                   randconfig-001-20250509    gcc-13.3.0
-arc                   randconfig-001-20250510    gcc-8.5.0
-arc                   randconfig-002-20250509    gcc-13.3.0
-arc                   randconfig-002-20250510    gcc-8.5.0
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-21
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-14.2.0
-arm                         bcm2835_defconfig    gcc-14.2.0
-arm                                 defconfig    gcc-14.2.0
-arm                      footbridge_defconfig    gcc-14.2.0
-arm                       imx_v4_v5_defconfig    gcc-14.2.0
-arm                        keystone_defconfig    gcc-14.2.0
-arm                         mv78xx0_defconfig    clang-21
-arm                        mvebu_v5_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250509    gcc-7.5.0
-arm                   randconfig-001-20250510    gcc-8.5.0
-arm                   randconfig-002-20250509    gcc-6.5.0
-arm                   randconfig-002-20250510    gcc-8.5.0
-arm                   randconfig-003-20250509    gcc-10.5.0
-arm                   randconfig-003-20250510    gcc-8.5.0
-arm                   randconfig-004-20250509    clang-21
-arm                   randconfig-004-20250510    gcc-8.5.0
-arm                           sunxi_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20250509    gcc-7.5.0
-arm64                 randconfig-001-20250510    gcc-8.5.0
-arm64                 randconfig-002-20250509    gcc-7.5.0
-arm64                 randconfig-002-20250510    gcc-8.5.0
-arm64                 randconfig-003-20250509    clang-21
-arm64                 randconfig-003-20250510    gcc-8.5.0
-arm64                 randconfig-004-20250509    gcc-5.5.0
-arm64                 randconfig-004-20250510    gcc-8.5.0
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20250509    gcc-14.2.0
-csky                  randconfig-001-20250510    clang-18
-csky                  randconfig-002-20250509    gcc-13.3.0
-csky                  randconfig-002-20250510    clang-18
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-21
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-21
-hexagon                             defconfig    gcc-14.2.0
-hexagon               randconfig-001-20250509    clang-20
-hexagon               randconfig-001-20250510    clang-18
-hexagon               randconfig-002-20250509    clang-21
-hexagon               randconfig-002-20250510    clang-18
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    clang-20
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250509    gcc-11
-i386        buildonly-randconfig-001-20250510    gcc-12
-i386        buildonly-randconfig-002-20250509    gcc-12
-i386        buildonly-randconfig-002-20250510    gcc-12
-i386        buildonly-randconfig-003-20250509    clang-20
-i386        buildonly-randconfig-003-20250510    gcc-12
-i386        buildonly-randconfig-004-20250509    clang-20
-i386        buildonly-randconfig-004-20250510    gcc-12
-i386        buildonly-randconfig-005-20250509    gcc-12
-i386        buildonly-randconfig-005-20250510    gcc-12
-i386        buildonly-randconfig-006-20250509    gcc-11
-i386        buildonly-randconfig-006-20250510    gcc-12
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250510    gcc-12
-i386                  randconfig-002-20250510    gcc-12
-i386                  randconfig-003-20250510    gcc-12
-i386                  randconfig-004-20250510    gcc-12
-i386                  randconfig-005-20250510    gcc-12
-i386                  randconfig-006-20250510    gcc-12
-i386                  randconfig-007-20250510    gcc-12
-i386                  randconfig-011-20250510    clang-20
-i386                  randconfig-012-20250510    clang-20
-i386                  randconfig-013-20250510    clang-20
-i386                  randconfig-014-20250510    clang-20
-i386                  randconfig-015-20250510    clang-20
-i386                  randconfig-016-20250510    clang-20
-i386                  randconfig-017-20250510    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20250509    gcc-13.3.0
-loongarch             randconfig-001-20250510    clang-18
-loongarch             randconfig-002-20250509    gcc-14.2.0
-loongarch             randconfig-002-20250510    clang-18
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                           mtx1_defconfig    gcc-14.2.0
-mips                        omega2p_defconfig    gcc-14.2.0
-mips                   sb1250_swarm_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250509    gcc-13.3.0
-nios2                 randconfig-001-20250510    clang-18
-nios2                 randconfig-002-20250509    gcc-13.3.0
-nios2                 randconfig-002-20250510    clang-18
-openrisc                          allnoconfig    clang-21
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-21
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20250509    gcc-6.5.0
-parisc                randconfig-001-20250510    clang-18
-parisc                randconfig-002-20250509    gcc-14.2.0
-parisc                randconfig-002-20250510    clang-18
-parisc64                            defconfig    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-21
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-21
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                      chrp32_defconfig    clang-21
-powerpc                      ep88xc_defconfig    gcc-14.2.0
-powerpc                        icon_defconfig    gcc-14.2.0
-powerpc                 mpc832x_rdb_defconfig    gcc-14.2.0
-powerpc                 mpc834x_itx_defconfig    gcc-14.2.0
-powerpc               mpc834x_itxgp_defconfig    clang-21
-powerpc                     ppa8548_defconfig    gcc-14.2.0
-powerpc                      ppc64e_defconfig    clang-21
-powerpc               randconfig-001-20250509    clang-16
-powerpc               randconfig-001-20250510    clang-18
-powerpc               randconfig-002-20250509    gcc-5.5.0
-powerpc               randconfig-002-20250510    clang-18
-powerpc               randconfig-003-20250509    gcc-7.5.0
-powerpc               randconfig-003-20250510    clang-18
-powerpc                     taishan_defconfig    gcc-14.2.0
-powerpc                     tqm8555_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250509    gcc-7.5.0
-powerpc64             randconfig-001-20250510    clang-18
-powerpc64             randconfig-002-20250509    clang-21
-powerpc64             randconfig-002-20250510    clang-18
-powerpc64             randconfig-003-20250509    gcc-10.5.0
-powerpc64             randconfig-003-20250510    clang-18
-riscv                            allmodconfig    clang-21
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-16
-riscv                            allyesconfig    gcc-14.2.0
-riscv                               defconfig    gcc-12
-riscv             nommu_k210_sdcard_defconfig    gcc-14.2.0
-riscv                 randconfig-001-20250509    clang-21
-riscv                 randconfig-001-20250510    clang-21
-riscv                 randconfig-002-20250509    clang-21
-riscv                 randconfig-002-20250510    clang-21
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20250509    clang-21
-s390                  randconfig-001-20250510    clang-21
-s390                  randconfig-002-20250509    clang-17
-s390                  randconfig-002-20250510    clang-21
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                        apsh4ad0a_defconfig    clang-21
-sh                                  defconfig    gcc-12
-sh                        dreamcast_defconfig    gcc-14.2.0
-sh                        edosk7705_defconfig    gcc-14.2.0
-sh                             espt_defconfig    clang-21
-sh                            hp6xx_defconfig    gcc-14.2.0
-sh                            migor_defconfig    clang-21
-sh                    randconfig-001-20250509    gcc-9.3.0
-sh                    randconfig-001-20250510    clang-21
-sh                    randconfig-002-20250509    gcc-5.5.0
-sh                    randconfig-002-20250510    clang-21
-sh                             shx3_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250509    gcc-6.5.0
-sparc                 randconfig-001-20250510    clang-21
-sparc                 randconfig-002-20250509    gcc-6.5.0
-sparc                 randconfig-002-20250510    clang-21
-sparc                       sparc64_defconfig    gcc-14.2.0
-sparc64                          alldefconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20250509    gcc-10.5.0
-sparc64               randconfig-001-20250510    clang-21
-sparc64               randconfig-002-20250509    gcc-6.5.0
-sparc64               randconfig-002-20250510    clang-21
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250509    clang-21
-um                    randconfig-001-20250510    clang-21
-um                    randconfig-002-20250509    gcc-12
-um                    randconfig-002-20250510    clang-21
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250509    gcc-11
-x86_64      buildonly-randconfig-001-20250510    clang-20
-x86_64      buildonly-randconfig-002-20250509    gcc-11
-x86_64      buildonly-randconfig-002-20250510    clang-20
-x86_64      buildonly-randconfig-003-20250509    clang-20
-x86_64      buildonly-randconfig-003-20250510    clang-20
-x86_64      buildonly-randconfig-004-20250509    clang-20
-x86_64      buildonly-randconfig-004-20250510    clang-20
-x86_64      buildonly-randconfig-005-20250509    gcc-12
-x86_64      buildonly-randconfig-005-20250510    clang-20
-x86_64      buildonly-randconfig-006-20250509    gcc-12
-x86_64      buildonly-randconfig-006-20250510    clang-20
-x86_64                              defconfig    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250510    clang-20
-x86_64                randconfig-002-20250510    clang-20
-x86_64                randconfig-003-20250510    clang-20
-x86_64                randconfig-004-20250510    clang-20
-x86_64                randconfig-005-20250510    clang-20
-x86_64                randconfig-006-20250510    clang-20
-x86_64                randconfig-007-20250510    clang-20
-x86_64                randconfig-008-20250510    clang-20
-x86_64                randconfig-071-20250510    gcc-11
-x86_64                randconfig-072-20250510    gcc-11
-x86_64                randconfig-073-20250510    gcc-11
-x86_64                randconfig-074-20250510    gcc-11
-x86_64                randconfig-075-20250510    gcc-11
-x86_64                randconfig-076-20250510    gcc-11
-x86_64                randconfig-077-20250510    gcc-11
-x86_64                randconfig-078-20250510    gcc-11
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-12
-x86_64                         rhel-9.4-kunit    gcc-12
-x86_64                           rhel-9.4-ltp    gcc-12
-x86_64                          rhel-9.4-rust    clang-18
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250509    gcc-12.4.0
-xtensa                randconfig-001-20250510    clang-21
-xtensa                randconfig-002-20250509    gcc-14.2.0
-xtensa                randconfig-002-20250510    clang-21
-xtensa                         virt_defconfig    gcc-14.2.0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3b6b9ff7b80430020c7b@syzkaller.appspotmail.com
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+aqc111 1-1:1.105 (unnamed net_device) (uninitialized): Failed to read(0x1) reg index 0x0001: -71
+aqc111 1-1:1.105 (unnamed net_device) (uninitialized): Failed to read(0x1) reg index 0x0001: -71
+aqc111 1-1:1.105 (unnamed net_device) (uninitialized): Failed to read(0x1) reg index 0x0001: -71
+=====================================================
+BUG: KMSAN: uninit-value in is_valid_ether_addr include/linux/etherdevice.h:208 [inline]
+BUG: KMSAN: uninit-value in usbnet_probe+0x2e57/0x4390 drivers/net/usb/usbnet.c:1830
+ is_valid_ether_addr include/linux/etherdevice.h:208 [inline]
+ usbnet_probe+0x2e57/0x4390 drivers/net/usb/usbnet.c:1830
+ usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5531 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5913
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb97/0x1d90 kernel/workqueue.c:3319
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3400
+ kthread+0xd59/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x6e/0x90 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Uninit was stored to memory at:
+ dev_addr_mod+0xb0/0x550 net/core/dev_addr_lists.c:582
+ __dev_addr_set include/linux/netdevice.h:4874 [inline]
+ eth_hw_addr_set include/linux/etherdevice.h:325 [inline]
+ aqc111_bind+0x35f/0x1150 drivers/net/usb/aqc111.c:717
+ usbnet_probe+0xbe6/0x4390 drivers/net/usb/usbnet.c:1772
+ usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5531 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5913
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb97/0x1d90 kernel/workqueue.c:3319
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3400
+ kthread+0xd59/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x6e/0x90 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Uninit was stored to memory at:
+ ether_addr_copy include/linux/etherdevice.h:305 [inline]
+ aqc111_read_perm_mac drivers/net/usb/aqc111.c:663 [inline]
+ aqc111_bind+0x794/0x1150 drivers/net/usb/aqc111.c:713
+ usbnet_probe+0xbe6/0x4390 drivers/net/usb/usbnet.c:1772
+ usb_probe_interface+0xd01/0x1310 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_set_configuration+0x3493/0x3b70 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xfc/0x290 drivers/usb/core/generic.c:250
+ usb_probe_device+0x38a/0x690 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x4d1/0xd90 drivers/base/dd.c:658
+ __driver_probe_device+0x268/0x380 drivers/base/dd.c:800
+ driver_probe_device+0x70/0x8b0 drivers/base/dd.c:830
+ __device_attach_driver+0x4ee/0x950 drivers/base/dd.c:958
+ bus_for_each_drv+0x3e0/0x680 drivers/base/bus.c:462
+ __device_attach+0x3c8/0x5c0 drivers/base/dd.c:1030
+ device_initial_probe+0x33/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3ba/0x5e0 drivers/base/bus.c:537
+ device_add+0x12a9/0x1c10 drivers/base/core.c:3666
+ usb_new_device+0x104b/0x20c0 drivers/usb/core/hub.c:2663
+ hub_port_connect drivers/usb/core/hub.c:5531 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x5588/0x7580 drivers/usb/core/hub.c:5913
+ process_one_work kernel/workqueue.c:3238 [inline]
+ process_scheduled_works+0xb97/0x1d90 kernel/workqueue.c:3319
+ worker_thread+0xedf/0x1590 kernel/workqueue.c:3400
+ kthread+0xd59/0xf00 kernel/kthread.c:464
+ ret_from_fork+0x6e/0x90 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Local variable buf.i created at:
+ aqc111_read_perm_mac drivers/net/usb/aqc111.c:656 [inline]
+ aqc111_bind+0x221/0x1150 drivers/net/usb/aqc111.c:713
+ usbnet_probe+0xbe6/0x4390 drivers/net/usb/usbnet.c:1772
+
+CPU: 0 UID: 0 PID: 1877 Comm: kworker/0:2 Not tainted 6.15.0-rc3-syzkaller-00094-g02ddfb981de8 #0 PREEMPT(undef) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/29/2025
+Workqueue: usb_hub_wq hub_event
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
