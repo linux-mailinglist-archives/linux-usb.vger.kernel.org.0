@@ -1,189 +1,228 @@
-Return-Path: <linux-usb+bounces-23876-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23877-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C38AB417D
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 20:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0652BAB45EA
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 23:04:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 915E846758E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 18:06:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02A89160862
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 21:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E28296FA4;
-	Mon, 12 May 2025 18:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96DA298CCA;
+	Mon, 12 May 2025 21:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXjXM7k/"
+	dkim=pass (2048-bit key) header.d=neat.no header.i=@neat.no header.b="Hw8lElRy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2090.outbound.protection.outlook.com [40.107.22.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5A5297A64;
-	Mon, 12 May 2025 18:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747073050; cv=none; b=SmuT7X5cOXFxAkwtatS6cBSieeyNvsA94P11mjXDXKKfBwrknX8qxBxXowUjeHvo9kEF5FobE/g1ZRpyQiWtxGzPVH/NJrn1SNBula0o0qAwP+iuRvQsjgLpL0/KE+DLMWyIAYA9L/r1Hzxpq97BFqohRIo2+7J8bRUTmhhE+d8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747073050; c=relaxed/simple;
-	bh=KTCTNddeHNcmSRUBzdv+55+85RQDahMaHZvsfCAXfCI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=O4WBePEomzNzhb6/6a4/g0GTgdRUEYvRLr4U7tFnhU7We9q5lhdoGpatt392ixZA4HqKxAObjkpM4bjWcIn8CUXcmHMI7QQ2/bR23AYRdx3bPStULIq8cn0z9VQrfKjzXvSNBcdXm/qkKYmbmr+9g3s/sO2RjJA0YroroK/+vHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXjXM7k/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F39EC4CEF0;
-	Mon, 12 May 2025 18:04:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747073049;
-	bh=KTCTNddeHNcmSRUBzdv+55+85RQDahMaHZvsfCAXfCI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qXjXM7k/xecgvGL2CxwS2xwb/BScLmWKbAE+bIOpggB+THNKfrPQq580hRftcXCzW
-	 RiT13+1l/zN0fVAfxHkefZCh1oq8Xhxq6AgGpoMdoJrbxfzXagLDDDCfaNCQ17ywMF
-	 N+6eHlyOE+jHB4zHWhEoAyzwUTAGZ0iiVDWoaR7CM4D+QAtrPJzsCqKBx3oD/c8h+S
-	 gEtHOHuhsbMwnmlZlxPY2p4+V26MXlp2ouwX4iOKrdsWpm4WKuOCtB+HGH/fXlXu2H
-	 fV+fRU1eB5vMqNSG1GB5L4+ayL3t12+cDGlZcpW/cbgZBJQOzycHORqAhsrdc0toJA
-	 vf7KFBvBRpEIQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Jonathan Bell <jonathan@raspberrypi.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 08/15] usb: xhci: Don't trust the EP Context cycle bit when moving HW dequeue
-Date: Mon, 12 May 2025 14:03:43 -0400
-Message-Id: <20250512180352.437356-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250512180352.437356-1-sashal@kernel.org>
-References: <20250512180352.437356-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38F41DFDE;
+	Mon, 12 May 2025 21:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.90
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747083833; cv=fail; b=R6NGZJlEjHHUpw7xjjEL+CZEC09wfSMFXhtr6m4LEnf2APQ0PuDNWSZ5oXjPCwyzd21X86P40vSq3HfBI7JBHD36eqjrlulfeUbH84w2U1uNoqxvCcfuzWWLSVkcJNFR3s8H0EB5mETJZgHyL81pCAfRLbce9Kn7vCl0qbZirnQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747083833; c=relaxed/simple;
+	bh=zHLN3jBMSiWBUThG9dnLI2ZIfPX6OlF90O/lmVSKbps=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=VSi5rHuX4BVE5ZoBM0ofDro61YfQbd5qKGveNgxYFF0isN1IoEtWZzLL82pgMGNKDFN9VhiriItiBhmwfHZ9SNwakvabCJ0+Ak4AuId3Gn6UR7kUFyzHF7c1QXpIf3g2S8FrZNEt9caPD+kBdv9fdWCkMi/mgnw9wd9dSx4MQPI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=neat.no; spf=fail smtp.mailfrom=neat.no; dkim=pass (2048-bit key) header.d=neat.no header.i=@neat.no header.b=Hw8lElRy; arc=fail smtp.client-ip=40.107.22.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=neat.no
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=neat.no
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LGU2rWYqzlwrxlepwGsgrvC40DsnqBEawLsKM/3f3GL12LhnFai+H9NcsEXTR/Tvynb97eayvBYCzhjJ0sT47MYAZTbueqa8uIi60tQyr4guLcVxap4vloYQ0EqvoL0q5pefCPAPfR6473FsnP2gVeaE673juHprMj8U1nPmoJjzysSEXeMv/BPMTWZTr3qhcX3Tc8f0LAPOLmVkLNhJpuKNZLu7kaPjlYzMa18E+NH7ztRM7H8PVeYstRacQFDLGWSgMKkQkY3oApZy5sD+X32lu1oY4oA2sVKxETuFAcLoQJ6VklHHEW4mBltFMavapNyR0KcqPQWhw8CnHvZxww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vG9s93xsnjWW4Q7qawis1EJw5+RqW1KX3+kVL213nY4=;
+ b=xWvq+O9lggAQriGVE/SEk354/xAdxJQ3UaQiGYYncEet/qb1i+2gAhPTZOkrsNnkR60K9AwDHTxljC8PY250LEQYviznysRf3+qdNqMXc643QRBWPqlEHFB0SV9Y2+2eq42RsqYb+4iTTJxZgAtU93ASI8aIWsXqbeqEjjCvD/rfpLH8NqzBBUhnPlrR6OAyyVEnPuYpaQ9RNVE9/kWz8iSpT2lwirfV9YZnv4I7WHWDDVBxi1+yivfT3dNedmrWDE9Ela3Q/SBBy9TicKJqu9gM6zRsKqmQuiUG8YVlRhZ9aI0dkUPjfJC0nysHerWNgpEXddU97iWqw+IXbV8pog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=neat.no; dmarc=pass action=none header.from=neat.no; dkim=pass
+ header.d=neat.no; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=neat.no; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vG9s93xsnjWW4Q7qawis1EJw5+RqW1KX3+kVL213nY4=;
+ b=Hw8lElRybhnLDNl6u3bL0k4EMVuJV+/nNULAcfeC5oPrBUV6WJUVy27a7h5eDVD2JJ4pYxyVo3Nmsi+dpeSnEplf265DgcnY/2DO4NeGFZdZUL9oIpP87zOwPK7dDJIH7CTwCkJLQhe/uexr4eoIGXheULXNNjcUu9jL9oWgQN9ziucC2jUwHEMOOAfxmlQkl9fVSgH/sPS2kkwZL2P7IkWuuGdThuAWo/C2RxB/Qwpo4jYGxa5sI3NTL47BlWHf+pFmv93LEE8b0ATk4DpnpHrtl5SdYqIl3MZbkHeI7QE3NHxs+Kw0tNW9CSbJbR2tLxioJoIWHbFSyxz4dg66Mw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=neat.no;
+Received: from AM9P251MB0223.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:3df::24)
+ by AS8P251MB0957.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:535::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Mon, 12 May
+ 2025 21:03:45 +0000
+Received: from AM9P251MB0223.EURP251.PROD.OUTLOOK.COM
+ ([fe80::f5d4:54a1:8303:1130]) by AM9P251MB0223.EURP251.PROD.OUTLOOK.COM
+ ([fe80::f5d4:54a1:8303:1130%5]) with mapi id 15.20.8722.027; Mon, 12 May 2025
+ 21:03:42 +0000
+Message-ID: <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
+Date: Mon, 12 May 2025 23:03:41 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+From: Krzysztof Opasiak <krzysztof.opasiak@neat.no>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>, linux-usb@vger.kernel.org,
+ linux-media@vger.kernel.org, balbi@kernel.org, paul.elder@ideasonboard.com,
+ kernel@pengutronix.de, nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
+ <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com> <Y4xaXHLoiPupWM6V@kroah.com>
+ <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
+ <2025051253-trimmer-displease-1dde@gregkh>
+ <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
+Content-Language: en-US
+In-Reply-To: <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: WA2P291CA0019.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1e::26) To AM9P251MB0223.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:3df::24)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.6
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9P251MB0223:EE_|AS8P251MB0957:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9de4c537-cf2a-4516-ee22-08dd91987a15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?czhkL3o2T05VNWNKS2pTT1NTeGpVTUZUWGsvL3ZvN0tkWXhxaUF6M01uYkJk?=
+ =?utf-8?B?dEhXMVdLdTdDVUZUM0p5UXowckEvYWtXOUU4ZE9LZTdaRGIvYkpoV2w3OXJL?=
+ =?utf-8?B?YnhxYmYzdlM0czlVTzBzVXpyZzJBUWhKcDJSeFpoVHhObUduVlNUTWpvM0py?=
+ =?utf-8?B?MEVSbkd1SHRnaWRPZDNDaS9Lbytzb3gwNktSLzg2Y2JJcUlIbWo3di8rMWdm?=
+ =?utf-8?B?dWxGc3REdXJ1ODJuK2xSanZ1eDZRNzVOSEllQzI3cXZmUStiSUYyZDJkcWEv?=
+ =?utf-8?B?R01oYTRUNUtsQ0VZREUwYU9wTHlIbkN4NmNacjJ5emtvdm1iZUNsb2drNTRH?=
+ =?utf-8?B?bmJUcXVsdDFwSkVXRVJrcTFFZml2dG4ybUJCWnlmeTVzQW5wU0QxSmkrTXkr?=
+ =?utf-8?B?bzZ6dEZmcXYvdHRkYXF4YTJsL2swZWUzcDhWeVF6czR6anBrenNDVi9kbmdM?=
+ =?utf-8?B?aE56NUhTZXJzUU9tVmlJTEVPQjFVVUdTZ1JoanVoVW5zaFY5TCtPbk1VVmwy?=
+ =?utf-8?B?WVNmKzVhRnZ1UG9sa3ZIVmprdDdoNDVqZWlHeGg4Y3JGZXQ4MU5GbUV0dnZR?=
+ =?utf-8?B?QUtFQTIyWEZBSU1kRzhKZ2g4UGU3cUJhODRGUnB4VHlMc3FjRnROenduWXJK?=
+ =?utf-8?B?OUgxZzRpd2xKZGdXbmRaemtCRzRWaTkvN0pjMGRadldmYmQvYnkxeDkzZ1E3?=
+ =?utf-8?B?Nlc4c0NKbnRyMWZvQnpmSnZSSDI1MEVEa1hCeEIvT2dmSWFHT2tNNDBPbHlH?=
+ =?utf-8?B?RmJsbnFqVHEzQmQrWTE5cndEUitwdy9hY2JsNTlnRW9MTUZxdzMwNkoyS2VP?=
+ =?utf-8?B?WFV6Q1FqeG1UeE9SK3R2bGgyL2czTk1OSkpIOGVyTi96TVBkeEZkSkt1Z0ln?=
+ =?utf-8?B?b2tCUklobFN2dFVCOTNkL3BvblJxZDlJdTNVRjUwaHZRZnFMSnZJVEVtbk9p?=
+ =?utf-8?B?Sm1hVmhITUtPdnVkd21xc0oyQWdKdUg2M2cySFpsa0RwQTZJNEhXMU5FMWdS?=
+ =?utf-8?B?Sy9yWU9sU3pYYkZ0SVJocnEwam1USWdwQndEdUdmMkVhd1grWHdZdVBERUh1?=
+ =?utf-8?B?SnBySEhVT2JKM3VBZmczbUxuUnlJcWZOWnV1VXlsWFFBUEJ6WmVaa2NKd1JH?=
+ =?utf-8?B?aXBvOWlYOWx1TnI1WEFrQVBPM0ZMNWZrOTdGUjdRZE9lRXZSNmp1ZFgwY1g3?=
+ =?utf-8?B?Yk9yZHZEbFByU3h6ZkNoZXJzenFOdEw3ZnRwSnRscmRyaDhpdmJ0cnJHM0Qy?=
+ =?utf-8?B?Z1dFYkFGMnExSDNUTGtkUnNFVEQ4MnJRMTFjdDlMeHJYWjA2SlFDVWNOMHJG?=
+ =?utf-8?B?VWdseG1QazJEUCtMSHZTQWhGTlJXZ2ZqNTdwTUdUSnlKcVNFUjNEaUJZdEdY?=
+ =?utf-8?B?aG1MKytxQWw5eGlIQWZWY09QeUEyLzdPcWJRcjNGWmVOUkNnOWdGWHFrZkE5?=
+ =?utf-8?B?VnVGbE5tRWpSN3FXS05XbVZpL3JyVlNxbVJtM2xiZDcxZHYwcTRpeUdSN0Vt?=
+ =?utf-8?B?UjdiUU1zZ0NFVkJQUzV5OGpQODAyTjVOUFFocUdHcGlYbGk4WWw0TTl2RGNM?=
+ =?utf-8?B?aDFBcDlnK3U2ZkdSQjU1Q29sSlU1RFFBZzFzMzUwRDFGNnQyKzZCT2tiVEdI?=
+ =?utf-8?B?ZFM1THoyVThkUFFJNmlKdXRnZC91eThEZXArczN4YmxmZEx0Q09XeS9UTzg2?=
+ =?utf-8?B?cXN3Vi9RZWZsZzlqMkhRRThQR3JhS1psb3owcU1jMUJha0NZdlR3ZVlsamhQ?=
+ =?utf-8?B?RnhQS0RPYjJPRTVwU1VIWXEweG9yTzh2K201UmpGWmZ4TjhqTCtuOUlWdXpp?=
+ =?utf-8?B?cmRTT3lzd0Nya2lyT0dWZ0duRFBkMXNqZ3RSR1MwamVvSFNLcUtzdlovYmFT?=
+ =?utf-8?B?RmlTNEQvNmtKbm8wbjFab051c2hYQlk5c1Q2MjdKdllaRCswZTlKRWdOMS9V?=
+ =?utf-8?Q?t8/hOKQQhtQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P251MB0223.EURP251.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z3JoanBaZmVpRVh3eG9OVkZzVStOQ1A1amFnZ3dTNFIvZXNRNFh3QzYvODQy?=
+ =?utf-8?B?eDRIUEozY3VvdGZhcXcxWnlWNUxOV09TWGZiaUZNSE5FQzF1bkdjWGwzYmxS?=
+ =?utf-8?B?K3R4b0VZa2U0MG82VW9IZkpGVkExcytKY0tWcDRzYzZYMmFZMTVwOTM1UTFh?=
+ =?utf-8?B?Y0VCalZPUGVlenNicUo2S2ZZRnRvL0ZZTGt0VXpuWnpncWpVeFJXc1k2NEZW?=
+ =?utf-8?B?T0k4blZoMU5ZVWJVT3NvM0grZFhpSld0ajNlYUFGbG4yMWVIZHcrNFFieEM0?=
+ =?utf-8?B?Nm5mY3JnQkdQb0dRS1ZaZTcrT2JDb1VFTG4zWEZXbkpPb0RiZFRiRHhTTGp6?=
+ =?utf-8?B?emg3TTY3bnh5T1Q1YWQ1eFZRWGxBeU9KRThWcjBzVW1YTkRLYzQwVXdFb0l1?=
+ =?utf-8?B?ZzUrRHdpVGhlWTc1NFM5cUFUQ3ZuQk45RDNpWml5T1F4SnNuNXVUeTRQYStv?=
+ =?utf-8?B?YTZkY01oVit2d01SYnlJVXBiVE9JeTZvUEEvNE1OZ1VvK0hQcDRnb0tWUkJi?=
+ =?utf-8?B?QmhTMzhkZWZ3Rm1GSlZGMUw3Z2tmME5GdWg3dkEwdzdRNWluL3VFUUh6ODZv?=
+ =?utf-8?B?OTZZbHlrZnRsblhuRjMwMFM0OStKbHZJWGYrbXFPVXZPRFEvNFZKWTZYZUJW?=
+ =?utf-8?B?NEpUdWRza0xJOTdaMEVlajFOb2NZZXIrYWVSSHo1Q0JtNDI4V2hHTWIzQ0Ir?=
+ =?utf-8?B?OHJobVd3Y3FSVXpVY2tzM2txcjIySTRCaE5jamU1Y3VJdWJvTFFGQnRQRnpm?=
+ =?utf-8?B?bS9IYWNMK1RiUmkzYWo2cjd5L044cERUcmxkRjZWcUN5YVlqVERLTVFpanBI?=
+ =?utf-8?B?ZllyMzV1SEhlZzl1M20yRTk3bm1yYndscWhSNXcrNUZqZXRaMEVrZ3dVOXhZ?=
+ =?utf-8?B?MFhram10b3dVMGV2eitCNGRQRnVYSEhHRWZndHJGV3BORTFkUVhCeU1tWnc0?=
+ =?utf-8?B?a2VybGxXc0JGc0t4VC9McUJJTE94MElqL0JLTkJVR051Z2ZrZzVaTkNtUXBC?=
+ =?utf-8?B?OGdnMFoySHdMa3ErSFhpWHBzSytqL0xzbndZZzg5RTYyM0tmRXgwSXBzaGlZ?=
+ =?utf-8?B?U3IrTGtmSHR2MzZBbGs5cENSL0dONmZqNi9vTzFOSTRMYVpLWXdJdG8wMmkx?=
+ =?utf-8?B?TGtieXN2S2JXOHZySlNaNWpkQ013QkpZNVFlUTFzY2VpRmlRbmNsVmV6b0hl?=
+ =?utf-8?B?UDhjTCs1aWcwNXZHd0FyREo1REJEQUJUSGlaRHZaQk5NUUJEUGlMeVZPdlAy?=
+ =?utf-8?B?OEVjOW01eUdiYWFER3JaeGRiZHh4Ujc5bFJHdU5neE9sNG1OTDVFckpUYkFO?=
+ =?utf-8?B?aVBsVk9qdXdkeGtIUFgyRU4zcmFuY3pPdUhzanBtakhWaGxpM0U2VFNUbVUz?=
+ =?utf-8?B?b1BEdE05OUxWMGcxUjZvc1hnRWVkUTFZM0lFSnp4UG1mcEJzTzdwQ0p3Unpz?=
+ =?utf-8?B?b2o5VlQwRmEraTcxc2VYR3pNbmJTT1ltVDYxR2tyejcwVWZzekR0MS9lSTIv?=
+ =?utf-8?B?ZUVBclJybmR1RVRsemRmTHRWZjhEVXpUR0RXTXVHd0p6NUMvUGc0R2pvaFV1?=
+ =?utf-8?B?Z3RVcjFQN29MOGRIdWo5THBJL1hLQW1jZmlXMVlWYS9CNjBhMldyR0JPOWdE?=
+ =?utf-8?B?VzdpRDBxYjVkekFKc0pISmgyTEpxTUpUakVrd1RXN0w4THhzR3dQSWxKMVFx?=
+ =?utf-8?B?Z3h0dHVKRlpNdEt5Q0lCbWQrL2t2QzdVNW0rQmFEOXluMG01L25RMjNWUWgv?=
+ =?utf-8?B?Q1F5K1dDSjIybHZsTTRDdWZZQ3lDcVdXNy9zZ0tIMUdGeENMZ2NyZ0gxRTJl?=
+ =?utf-8?B?R0tsczhoVVFta2tYSVU2M0x2Q0VBdXRtaGJMRUNvR3ZWSk5XTkdueFRRN2Yy?=
+ =?utf-8?B?alN5Sk1DTHI1ck5mVVJNSUROaE1ISWo4UzRqVjVwR1JqdXV3bUFpQ0NEc3FZ?=
+ =?utf-8?B?TkNHOHJFUHFwUzJEZDRKUVZUVkQwK3FNZVVIdm9MY3o0NWt6d3JoWTFuQjJj?=
+ =?utf-8?B?NVE1SXFwR2hnTnZBNGxMditsR3h5MUI2V0x6S0l3Q00zL0pRN0FTRVVKMnA0?=
+ =?utf-8?B?T1lTUStLKzRZTVhVRk5OVUdaSjkzdjBnUkR5c0hzek5GMmY0b1lPQnZ1M1lR?=
+ =?utf-8?B?ZTNzUklHTkRNeWptL293N3RFZDRJWHpNN0E0RWU0Vm92bnZGRGRMZnM5MGhN?=
+ =?utf-8?B?TWc9PQ==?=
+X-OriginatorOrg: neat.no
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9de4c537-cf2a-4516-ee22-08dd91987a15
+X-MS-Exchange-CrossTenant-AuthSource: AM9P251MB0223.EURP251.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 21:03:42.7762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 029c40c7-2844-4bf3-9532-45d5eff8c8f6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8sEJGxAO/lHnud651v5DmxEJ0VPsOLKZ4BFTjscxMHhhhCgcQV2JUEt8WQjPJAb6QvM5S08cBMfaud+6Uiszy4ovOqa1G+o3wVX9xD/LBZY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P251MB0957
 
-From: Michal Pecio <michal.pecio@gmail.com>
+On 12.05.2025 12:43, Krzysztof Opasiak wrote:
+> On 12.05.2025 12:38, Greg KH wrote:
+>> On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wrote:
+>>> Hi Greg,
+>>>
+>>> On 4.12.2022 09:29, Greg KH wrote:
+>>>> On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
+>>>>> Hi Michael,
+>>>>>
+>>>>> On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
+[...]
+>>>
+>>> Given that I'd like to suggest that it seems to actually make sense to
+>>> revert this unless there are some ideas how to fix it.
+>>
+>> Sorry about this, can you submit a patch series that reverts the
+>> offending commits?  As it was years ago, I don't exactly know what you
+>> are referring to anymore.
+>>
+> 
+> Sure! Will do.
+> 
 
-[ Upstream commit 6328bdc988d23201c700e1e7e04eb05a1149ac1e ]
+Would you prefer to have a set of actual reverts related to this:
 
-VIA VL805 doesn't bother updating the EP Context cycle bit when the
-endpoint halts. This is seen by patching xhci_move_dequeue_past_td()
-to print the cycle bits of the EP Context and the TRB at hw_dequeue
-and then disconnecting a flash drive while reading it. Actual cycle
-state is random as expected, but the EP Context bit is always 1.
+da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api calls"
+bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call"
+e56c767a6d3c Revert "usb: gadget: uvc: also use try_format in set_format"
+20f275b86960 Revert "usb: gadget: uvc: fix try format returns on 
+uncompressed formats"
+059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in 
+uvc_v4l2.c"
+e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam loadable again"
 
-This means that the cycle state produced by this function is wrong
-half the time, and then the endpoint stops working.
+but have a negative consequence that the series isn't really bisectable 
+from functional perspective. For example commit e6fd9b67414c breaks 
+g_uvc until we apply da692963df4e so the series would have to go in as a 
+whole.
 
-Work around it by looking at the cycle bit of TD's end_trb instead
-of believing the Endpoint or Stream Context. Specifically:
+Or you would prefer a single commit that technically isn't a revert but 
+it just "undoes" the negative consequences of "usb: gadget: uvc: add 
+v4l2 enumeration api calls" (kind of a squash of all commits above)?
 
-- rename cycle_found to hw_dequeue_found to avoid confusion
-- initialize new_cycle from td->end_trb instead of hw_dequeue
-- switch new_cycle toggling to happen after end_trb is found
-
-Now a workload which regularly stalls the device works normally for
-a few hours and clearly demonstrates the HW bug - the EP Context bit
-is not updated in a new cycle until Set TR Dequeue overwrites it:
-
-[  +0,000298] sd 10:0:0:0: [sdc] Attached SCSI disk
-[  +0,011758] cycle bits: TRB 1 EP Ctx 1
-[  +5,947138] cycle bits: TRB 1 EP Ctx 1
-[  +0,065731] cycle bits: TRB 0 EP Ctx 1
-[  +0,064022] cycle bits: TRB 0 EP Ctx 0
-[  +0,063297] cycle bits: TRB 0 EP Ctx 0
-[  +0,069823] cycle bits: TRB 0 EP Ctx 0
-[  +0,063390] cycle bits: TRB 1 EP Ctx 0
-[  +0,063064] cycle bits: TRB 1 EP Ctx 1
-[  +0,062293] cycle bits: TRB 1 EP Ctx 1
-[  +0,066087] cycle bits: TRB 0 EP Ctx 1
-[  +0,063636] cycle bits: TRB 0 EP Ctx 0
-[  +0,066360] cycle bits: TRB 0 EP Ctx 0
-
-Also tested on the buggy ASM1042 which moves EP Context dequeue to
-the next TRB after errors, one problem case addressed by the rework
-that implemented this loop. In this case hw_dequeue can be enqueue,
-so simply picking the cycle bit of TRB at hw_dequeue wouldn't work.
-
-Commit 5255660b208a ("xhci: add quirk for host controllers that
-don't update endpoint DCS") tried to solve the stale cycle problem,
-but it was more complex and got reverted due to a reported issue.
-
-Cc: Jonathan Bell <jonathan@raspberrypi.org>
-Cc: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20250505125630.561699-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/xhci-ring.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 5a0e361818c27..14b6fd91a7404 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -643,7 +643,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	int new_cycle;
- 	dma_addr_t addr;
- 	u64 hw_dequeue;
--	bool cycle_found = false;
-+	bool hw_dequeue_found = false;
- 	bool td_last_trb_found = false;
- 	u32 trb_sct = 0;
- 	int ret;
-@@ -659,25 +659,24 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
- 	new_seg = ep_ring->deq_seg;
- 	new_deq = ep_ring->dequeue;
--	new_cycle = hw_dequeue & 0x1;
-+	new_cycle = le32_to_cpu(td->end_trb->generic.field[3]) & TRB_CYCLE;
- 
- 	/*
--	 * We want to find the pointer, segment and cycle state of the new trb
--	 * (the one after current TD's end_trb). We know the cycle state at
--	 * hw_dequeue, so walk the ring until both hw_dequeue and end_trb are
--	 * found.
-+	 * Walk the ring until both the next TRB and hw_dequeue are found (don't
-+	 * move hw_dequeue back if it went forward due to a HW bug). Cycle state
-+	 * is loaded from a known good TRB, track later toggles to maintain it.
- 	 */
- 	do {
--		if (!cycle_found && xhci_trb_virt_to_dma(new_seg, new_deq)
-+		if (!hw_dequeue_found && xhci_trb_virt_to_dma(new_seg, new_deq)
- 		    == (dma_addr_t)(hw_dequeue & ~0xf)) {
--			cycle_found = true;
-+			hw_dequeue_found = true;
- 			if (td_last_trb_found)
- 				break;
- 		}
- 		if (new_deq == td->end_trb)
- 			td_last_trb_found = true;
- 
--		if (cycle_found && trb_is_link(new_deq) &&
-+		if (td_last_trb_found && trb_is_link(new_deq) &&
- 		    link_trb_toggles_cycle(new_deq))
- 			new_cycle ^= 0x1;
- 
-@@ -689,7 +688,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 			return -EINVAL;
- 		}
- 
--	} while (!cycle_found || !td_last_trb_found);
-+	} while (!hw_dequeue_found || !td_last_trb_found);
- 
- 	/* Don't update the ring cycle state for the producer (us). */
- 	addr = xhci_trb_virt_to_dma(new_seg, new_deq);
+Best regards,
 -- 
-2.39.5
-
+Krzysztof Opasiak | R&D Team
+neat.
 
