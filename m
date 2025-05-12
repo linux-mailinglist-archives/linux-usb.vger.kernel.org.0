@@ -1,165 +1,164 @@
-Return-Path: <linux-usb+bounces-23878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 934A6AB4600
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 23:16:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA18DAB470E
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 00:01:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5B6D188939A
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 21:16:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19A1E7B0171
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 21:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DEC299932;
-	Mon, 12 May 2025 21:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D246725C82D;
+	Mon, 12 May 2025 22:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnRhd7ZM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z+3Kztxl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C51383;
-	Mon, 12 May 2025 21:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D782324DFF1
+	for <linux-usb@vger.kernel.org>; Mon, 12 May 2025 22:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747084598; cv=none; b=t4sGzIkRm8graJ6A9jYFUsZpdta7va4X3JBWHQF/fKXNUhqxclmt603zu+Wi0k8Qx6uNCs46wQiTNQE5ild6vySPtT52fabPM/VR8Ub/dn+HqxYIRdLvZpMm3m2S9bm9j2Uy/MpKJ8ffgOLdIauOeG3ePK3LstLcoWrzYBHngu8=
+	t=1747087230; cv=none; b=bJTwiHwHJXQMUKnUIcufW4VUoBQR6JnzLuAp/SZpZGU0XrKruBgLgPNSUOApzdXhbA8crLtZwv3H48Q07n07DrKUXeAzyndGsx4NvpsQcjVuR3yffRrN0IpHuRPOnnqvcTZCgQoJsPcPMA63c+MTU8OJF8hxzXcZTxg2IDmfiSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747084598; c=relaxed/simple;
-	bh=REsOT5/Kf4epauIk/+gj5qaRQFY+1LyOd7d456HgZ10=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OukC+dnSAa10k8DCD830B1FGGap67LK2H8Jp+iMovxStLlbgKBzZPaG1uJbm+8/jcgkWwUltxk+yV3vkqDrBfXlohn9wx1u8ggvi4Usn0IfdaokjjsLpEXq1e0Ja8WDwTwWkjN7AMwoFT5cHRkBIf8x3UTNRqV2m8zxKq6HZmno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZnRhd7ZM; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54fc35a390eso5895226e87.3;
-        Mon, 12 May 2025 14:16:35 -0700 (PDT)
+	s=arc-20240116; t=1747087230; c=relaxed/simple;
+	bh=diOLJiRZFSJh9VcRUsMpdMJALVTGuXugiuhkAFp4UEs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fMQYfdsF6sUTg742xwW0Q2HIpJfblgF6+esOAYunu9E0MSf8P4xVQzW1R2KWDWR/U+hFCEKOVDo++GasuM8gbG5WxhG5LTOHWBt7E7jkl3cNJFA6tEqh50Vj9FWFS4mUlAGW1r26bDMu6Xn3w94F0jfPjX6GjIoHA572MukFPmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z+3Kztxl; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7425bd5a83aso1711327b3a.0
+        for <linux-usb@vger.kernel.org>; Mon, 12 May 2025 15:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747084593; x=1747689393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWbcMuS3JaNmPcNaeeeXONbeofrLDqA7Uwckra+1Fjk=;
-        b=ZnRhd7ZMRU8/MiruStLKg3znE5OwuWKDYsDQ0vY1bZ94PiVOhe2ECxh0QBVeP9HU0d
-         aIV3bnpgZKrMyxtc5WsUzGwIIoLb0vLCHCcIo2PBHaMU4jQFoL89yI5rYyk4Us3H6o7W
-         5cdbMkbYrxeBs8Mdmm976mIkNetXU/ma/DJdkbhbz98yCSzf4kM1+9py/z2VFkv28TSD
-         llujtqK2Mf7mxaPsYSiqUQ2EG46rv0qpW4eFo14Jo1iaLyC6ExnPkXnx5fRXTj7zZhH+
-         pCi/xVEe6M8q2sYKfkABiMFWDbFBhLKcSbXUgLD9MuIrR0lg/pKEyC8ooLEF9Vkdnejg
-         MlNw==
+        d=google.com; s=20230601; t=1747087228; x=1747692028; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5l00tHt9ZJ1/pub8XJ3X7haVxjAb2DQwjaiKyF9pcNQ=;
+        b=Z+3Kztxlktu/tR/kD48rbzqUgrI4TMHjIp7atnZrv9QKZjnO1+jOPb7fa46SaLxRga
+         HEQBk5CuzuzOFZz9Et3w05fpjEcKcemuYechcpBYxBXenDRbGDVf3j6/tvfqYiQJO5t4
+         3INkCnti8bcittkboT2cosiLU3vY6vJTtT4cb93yotAbTaCvsepzHYnxhIo9+PWdIehe
+         kGOAk0M02hVIBfRCyrcn9njBme9nUg6C+t/+5rZPKSnhGJ6l3945Ti4ZcQCGY6GjE8lM
+         V9kfdtruF/2RCpvY3uoMNyvMrEFBUSTIfjD7jfwgfiWVc5UTwdSupoKXpsIFL9N7xpju
+         KOBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747084593; x=1747689393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWbcMuS3JaNmPcNaeeeXONbeofrLDqA7Uwckra+1Fjk=;
-        b=FRiptOgInKpUCSvRW1cTverjSQ2OJV9ry4/yQGXIv/wUzoP91hbOuhoqWkbTb9rdSj
-         XNKTobe3okeCnIATeaMB4sEgpJiqpg63+KndpBBDmORiVQpN9S4taqzsXPmarzMgu2Cd
-         4f0yNhzGSzFc6vUCSJT9DI3vvI/qpmjFxCPagyb1l5IQepu2R5dqnvARA3Oh1loDslJM
-         S/s3N7rVl7UgAR3hax4741TR0cjeataU12Fh5RQdeM4YRyn1JIUEdNqJ5md/dOpaDyfL
-         EQtiCY+jrrbP/YHEkv95oZLmCNQXjniFqkQmumLtj/YpTC1MDwQ/6DN0YHfGiRhRHUAe
-         w2yg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeIfkb9nqoPONqFrKdrJWqhQ4zyX/Orv5cNUInxj0rNQHFVneNSNe6ixPnK0SeI3D+E8G8lwu2@vger.kernel.org, AJvYcCVTzKNVNBn7FDI4wzlP/+L6V/JP3li0kRaatvdfDky47aI/QP7SPNc93IuGmfHnCWstamaByjohOnUD@vger.kernel.org, AJvYcCXpP1Y/ZbB9GXLzdo0v86I/w7uyKyFyjgh1LlnKdfqZPjnteZCk1ne5N+WbZD/9dJWqOoaQ9pV0H05Iri0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygZFex2i07t++V8fhUCgPXNZ0NrpTHfefEaMJwkJUtVGGoLUez
-	6pFOth9fELI9xEudgYPH8vvvqWoZLqUHg3NC6bkWO8OIdYD9gTdS/XpMfw==
-X-Gm-Gg: ASbGncvoNLKUmm77Zi2IGr/p40wNtLMZHtj1GUoZJsShU35+HYToLXrM8pg+9qM1qVH
-	qpJ+fFDWRD+xJiOE8TMg/gahGmtzIbc4vQyb0X43l+viwIwsL66VQZJEDJc8BilyQfr++nBgoJ0
-	oNinNy5/Ak7u+ICEr3WKdRtFrejBCGfuSxBVlPF5qGFBUMi0rjCHg+a+CmmnABebBEZEulK/uVJ
-	FS3jzHkUSTv5/Jrb2bBWTvdtClSk+x4Z7XaayuoWUu6gOgbrIDKMSsubHbDIrrseJP/NNJzytnZ
-	AJoWiwlzDwCrqnl0H/qkKEquKLC9PrfvYRZ6B0rubz6aYl1IPV8v2lVGU7cASpP3LWvQ
-X-Google-Smtp-Source: AGHT+IFTxOz++Epfa9FUTfKl46pds1Z1TZVgLGjtOWGgDj44Awn8Wu6umfFxWxnIFLPiy+CDrfxGQw==
-X-Received: by 2002:a05:6512:2312:b0:54f:c65f:b908 with SMTP id 2adb3069b0e04-54fc67e2368mr5082998e87.49.1747084593039;
-        Mon, 12 May 2025 14:16:33 -0700 (PDT)
-Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54fc64b6fe9sm1608430e87.149.2025.05.12.14.16.31
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 12 May 2025 14:16:32 -0700 (PDT)
-Date: Mon, 12 May 2025 23:16:28 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: patches@lists.linux.dev, stable@vger.kernel.org, Jonathan Bell
- <jonathan@raspberrypi.org>, Oliver Neukum <oneukum@suse.com>, Mathias Nyman
- <mathias.nyman@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, mathias.nyman@intel.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.14 08/15] usb: xhci: Don't trust the EP
- Context cycle bit when moving HW dequeue
-Message-ID: <20250512231628.7f91f435@foxbook>
-In-Reply-To: <20250512180352.437356-8-sashal@kernel.org>
-References: <20250512180352.437356-1-sashal@kernel.org>
-	<20250512180352.437356-8-sashal@kernel.org>
+        d=1e100.net; s=20230601; t=1747087228; x=1747692028;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5l00tHt9ZJ1/pub8XJ3X7haVxjAb2DQwjaiKyF9pcNQ=;
+        b=BIzhQy1p/ilqjRWzi684no8cSgAsNZ5mS6blQV2ELuvWRz4PiMmuxa3bN+M72xCiS/
+         jkXVLlwS0YTy23uUZyqA/oT/PBlJcoxmPbnfBslVg9G0lNDFacm98ogapjAOFYOkODzF
+         QjHdxPJRgSUXNO/UwqD9OxMvsU3sSrLgTb65Y/XpMLAEQO90s3XJaOlxxQSHmU69h+PW
+         23T0Y6V4flUfHn3Q45ejwAI0Uv+qz+dRMM3azLhOZz16B0dQiFwJZ5kjPAZuGgmK8/2L
+         DP3OSbm/MXHkw/EbjxlMTo2cj9jlxyMeKvfL0jqEsmH5XsTG3O204SOttWr6PMpy16Wf
+         5oGA==
+X-Gm-Message-State: AOJu0YwelItmN+TkAV1Q2rqUsThcd8VbTMsAe9Dfdf0fIeIkH72IqS0Z
+	sOxlmIqmws9lRvUIRIfWb1GZbW+UGFHVgWvd/hyLtqzc7dU2d++B4YO0hg1lQw==
+X-Gm-Gg: ASbGncuOtar8tRcnTCyVq4RtKnCI7wkfoeBwlHn6gfF2bKz9krhGNZ+6L9q464DYWfh
+	pxXciKKJckXSLpPI9F5n0devnv6w9TExsMGyl+KuyrSS9U5PgRcXqxTRCvrBfUIlxIsdscrNldF
+	Gtv4na0Gw055tji3KqG/i4IbLH38ZRaku9orc3xEuFFXTjhquynP0ADfwimS9CTiXA2zai24buO
+	NvNgoY017lIDptp9/tsq//QAIF7DrVvOuGwCE66l7NmDQf/JqYf2T/BZGFK75/769wnMH387cDP
+	9MrAy4/InkDxpnqyjMu/9bXBdE0ZHhH4BZAtiT+JE8bsDa+01BTLXTWEgFV/g2tmxAt1DfA6HDx
+	of6MJNBttmiTmDHEEFLFSduv9hVhNRI8DiYxWyvGYK666a0zwqQ==
+X-Google-Smtp-Source: AGHT+IExj3eLQl26ZSvC2WJ+nSHOB4LhkmFdvTFL4ZsuUWO5eYrjUAy0qOg+cFqUIpnUOL1QIlRIzg==
+X-Received: by 2002:a05:6a00:802:b0:736:4110:5579 with SMTP id d2e1a72fcca58-7423bc02f2cmr18990453b3a.2.1747087227689;
+        Mon, 12 May 2025 15:00:27 -0700 (PDT)
+Received: from ?IPV6:2a00:79e0:2e14:7:464d:e081:1c2c:7358? ([2a00:79e0:2e14:7:464d:e081:1c2c:7358])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742377050bbsm6596858b3a.27.2025.05.12.15.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 May 2025 15:00:27 -0700 (PDT)
+Message-ID: <cd4f50fd-e418-45e0-81d8-0d34a5431a28@google.com>
+Date: Mon, 12 May 2025 15:00:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: tcpm: Use configured PD revision for
+ negotiation
+To: Cosmo Chou <chou.cosmo@gmail.com>, badhri@google.com,
+ heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ cosmo.chou@quantatw.com, "kyletso@google.com" <Kyletso@google.com>,
+ "rdbabiera@google.com" <rdbabiera@google.com>
+References: <20250508174756.1300942-1-chou.cosmo@gmail.com>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <20250508174756.1300942-1-chou.cosmo@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, 12 May 2025 14:03:43 -0400, Sasha Levin wrote:
-> From: Michal Pecio <michal.pecio@gmail.com>
-> 
-> [ Upstream commit 6328bdc988d23201c700e1e7e04eb05a1149ac1e ]
-> 
-> VIA VL805 doesn't bother updating the EP Context cycle bit when the
-> endpoint halts. This is seen by patching xhci_move_dequeue_past_td()
-> to print the cycle bits of the EP Context and the TRB at hw_dequeue
-> and then disconnecting a flash drive while reading it. Actual cycle
-> state is random as expected, but the EP Context bit is always 1.
-> 
-> This means that the cycle state produced by this function is wrong
-> half the time, and then the endpoint stops working.
-> 
-> Work around it by looking at the cycle bit of TD's end_trb instead
-> of believing the Endpoint or Stream Context. Specifically:
-> 
-> - rename cycle_found to hw_dequeue_found to avoid confusion
-> - initialize new_cycle from td->end_trb instead of hw_dequeue
-> - switch new_cycle toggling to happen after end_trb is found
-> 
-> Now a workload which regularly stalls the device works normally for
-> a few hours and clearly demonstrates the HW bug - the EP Context bit
-> is not updated in a new cycle until Set TR Dequeue overwrites it:
-> 
-> [  +0,000298] sd 10:0:0:0: [sdc] Attached SCSI disk
-> [  +0,011758] cycle bits: TRB 1 EP Ctx 1
-> [  +5,947138] cycle bits: TRB 1 EP Ctx 1
-> [  +0,065731] cycle bits: TRB 0 EP Ctx 1
-> [  +0,064022] cycle bits: TRB 0 EP Ctx 0
-> [  +0,063297] cycle bits: TRB 0 EP Ctx 0
-> [  +0,069823] cycle bits: TRB 0 EP Ctx 0
-> [  +0,063390] cycle bits: TRB 1 EP Ctx 0
-> [  +0,063064] cycle bits: TRB 1 EP Ctx 1
-> [  +0,062293] cycle bits: TRB 1 EP Ctx 1
-> [  +0,066087] cycle bits: TRB 0 EP Ctx 1
-> [  +0,063636] cycle bits: TRB 0 EP Ctx 0
-> [  +0,066360] cycle bits: TRB 0 EP Ctx 0
-> 
-> Also tested on the buggy ASM1042 which moves EP Context dequeue to
-> the next TRB after errors, one problem case addressed by the rework
-> that implemented this loop. In this case hw_dequeue can be enqueue,
-> so simply picking the cycle bit of TRB at hw_dequeue wouldn't work.
-> 
-> Commit 5255660b208a ("xhci: add quirk for host controllers that
-> don't update endpoint DCS") tried to solve the stale cycle problem,
-> but it was more complex and got reverted due to a reported issue.
-> 
-> Cc: Jonathan Bell <jonathan@raspberrypi.org>
-> Cc: Oliver Neukum <oneukum@suse.com>
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Link: https://lore.kernel.org/r/20250505125630.561699-2-mathias.nyman@linux.intel.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Hi Cosmo,
 
-Hi,
+Thanks for the patch!
 
-This wasn't tagged for stable because the function may potentially
-still be affected by some unforeseen HW bugs, and previous attempt
-at fixing the issue ran into trouble and nobody truly knows why.
+On 5/8/25 10:47 AM, Cosmo Chou wrote:
+> Initialize negotiated_rev and negotiated_rev_prime based on the port's
+> configured PD revision (rev_major) rather than always defaulting to
+> PD_MAX_REV. This ensures ports start PD communication using their
+> appropriate revision level.
+>
+> This allows proper communication with devices that require specific
+> PD revision levels, especially for the hardware designed for PD 1.0
+I didn't know PD1.0 is still used.
+> or 2.0 specifications.
+>
+> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 18 ++++++++++++++----
+>   1 file changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index a99db4e025cd..5a58c21c4d14 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4782,8 +4782,13 @@ static void run_state_machine(struct tcpm_port *port)
+>   		typec_set_pwr_opmode(port->typec_port, opmode);
+>   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>   		port->caps_count = 0;
+> -		port->negotiated_rev = PD_MAX_REV;
+> -		port->negotiated_rev_prime = PD_MAX_REV;
+> +		if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <= PD_MAX_REV + 1) {
 
-The problem is very old and not critically severe, so I think this
-can wait till 6.15. People don't like minor release regressions.
+For better readability, I'd prefer you use macros for the numerical 
+values and implement this logic as a switch case. This would make the 
+value difference between PD specification revision in PD Message header 
+vs PD max revision AMS transparent to the reader.
 
-Regards,
-Michal
+Thanks,
+
+Amit
+
+> +			port->negotiated_rev = port->pd_rev.rev_major - 1;
+> +			port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
+> +		} else {
+> +			port->negotiated_rev = PD_MAX_REV;
+> +			port->negotiated_rev_prime = PD_MAX_REV;
+> +		}
+>   		port->message_id = 0;
+>   		port->message_id_prime = 0;
+>   		port->rx_msgid = -1;
+> @@ -5048,8 +5053,13 @@ static void run_state_machine(struct tcpm_port *port)
+>   					      port->cc2 : port->cc1);
+>   		typec_set_pwr_opmode(port->typec_port, opmode);
+>   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+> -		port->negotiated_rev = PD_MAX_REV;
+> -		port->negotiated_rev_prime = PD_MAX_REV;
+> +		if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <= PD_MAX_REV + 1) {
+> +			port->negotiated_rev = port->pd_rev.rev_major - 1;
+> +			port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
+> +		} else {
+> +			port->negotiated_rev = PD_MAX_REV;
+> +			port->negotiated_rev_prime = PD_MAX_REV;
+> +		}
+>   		port->message_id = 0;
+>   		port->message_id_prime = 0;
+>   		port->rx_msgid = -1;
 
