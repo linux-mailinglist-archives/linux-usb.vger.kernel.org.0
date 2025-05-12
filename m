@@ -1,97 +1,175 @@
-Return-Path: <linux-usb+bounces-23850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23851-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB349AB2C26
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 01:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47622AB2CC2
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 03:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D7B017523E
-	for <lists+linux-usb@lfdr.de>; Sun, 11 May 2025 23:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A84CB16E917
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 01:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611C9264FBC;
-	Sun, 11 May 2025 23:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0rqyHio"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23DCE1B87C9;
+	Mon, 12 May 2025 01:22:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB48264FA7;
-	Sun, 11 May 2025 23:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E791D1BC4E;
+	Mon, 12 May 2025 01:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747004532; cv=none; b=cRRcdR+p5yLYl3e50yadQJ3y8r27G2YwL54iHvsrNplbhBk+/w+I90ORKc8GV8W7V4DtMjvRO26B24bee+IOMkOzpbMNVWX5O1liRjdhVRFC16aQlYOIB+ba+jQU0WKOusL8E8MsxRYPfGzNJScR6nLfH9FOvAxYUwEOj2cGejo=
+	t=1747012975; cv=none; b=jlrrVflkG+UcG6RaRffb5YdbKXbeCqkdV0XSmQkpLRXl3ToROOh7yNpgh/WqkhpX7y+7jWpPxo1uliNUhxJNTHEav1iiQWQsWUfWGFeaPlkOXL4g/Q+3OauiJ7dWvHyKeEEC3W+ifu7dkUo7nrQmOJHH6iRz6v+oBueNMVe3LQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747004532; c=relaxed/simple;
-	bh=UFuA45FsGmyDjU8NXAk4BHb7Iv4WUY9E2LHvtTm8Rco=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RZgVnjHmgrVqXEKulenHYhWctuI1aSSoCcn558+AKzEOiNkTx5X2ccKtE143UGu9UiKhyE5/8l2p8boNTcP+X4oRDCX5wOlaeVhKwz4XhroM3IpR6d1Ij9YaadHzVUbGaw2V9uVJdupkr/ucBJX4QQavK+u7lSftVO62VVoZFpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u0rqyHio; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6097AC4CEF2;
-	Sun, 11 May 2025 23:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747004532;
-	bh=UFuA45FsGmyDjU8NXAk4BHb7Iv4WUY9E2LHvtTm8Rco=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u0rqyHiov554yDFP4rMI9iGgksMQTYkeobC4fPGv2Ce+KvcYjJurI7LwVsvsfv0TZ
-	 tVSVz0Dh+5RB2sg84wuNe51zjOnPDed5s+D5N57RYCrqgfOwGPfVr6sRNUm01oRN2a
-	 nT7A2QdwgSrHFTtF/I/GNmVPPiHxgWHPjQ/zCGt24D2pzueUk9axTJE3oW6AaL8Imi
-	 HcBogZo1wBZpTlwMkOvVuE+5aKmQGVbFgY6ZVIATQJXxAYCabLcCxaqqo98eyqW3Gu
-	 0nsN0eKXrhkQCDzCudxeGHyBBSEdV7Eep7cCG3tXknhjEnKA1d3qiGGzxBCC+LoU9W
-	 3VxYuF0nqcJ0A==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Luca Weiss <luca.weiss@fairphone.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-usb@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v3 0/4] Fairphone 5 DisplayPort over USB-C support
-Date: Sun, 11 May 2025 18:01:42 -0500
-Message-ID: <174700447981.10930.18335388703422311749.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250425-fp5-pmic-glink-dp-v3-0-cc9c2aeb42fb@fairphone.com>
-References: <20250425-fp5-pmic-glink-dp-v3-0-cc9c2aeb42fb@fairphone.com>
+	s=arc-20240116; t=1747012975; c=relaxed/simple;
+	bh=wcp82npn+wUfrm/naB0FTQP5FtlBFA1AeVpXLqtoNtc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZDwwbhvZQZzdXB9fxtB6VF3RoVIxxuMLzwTvf0M44o4zUgFT+DLTXqvq/8ukLlKHYJpjOKlGc5p8mnOgMz0u8ApbziEo90tM2Tt6wTJG6txVWVYY25c66R1vi1LIMITFa0S1r4uShSKTQCrEKdCh+/jxUKGZwB9TGSGIXfGqkxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54C0e28Q006496;
+	Sun, 11 May 2025 18:22:43 -0700
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 46j233h335-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Sun, 11 May 2025 18:22:43 -0700 (PDT)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Sun, 11 May 2025 18:22:42 -0700
+Received: from pek-lpg-core1.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Sun, 11 May 2025 18:22:40 -0700
+From: <jianqi.ren.cn@windriver.com>
+To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>
+CC: <heikki.krogerus@linux.intel.com>, <rdbabiera@google.com>,
+        <linux-usb@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <jianqi.ren.cn@windriver.com>
+Subject: [PATCH 6.1.y] usb: typec: altmodes/displayport: create sysfs nodes as driver's default device attribute group
+Date: Mon, 12 May 2025 09:22:39 +0800
+Message-ID: <20250512012239.3323952-1-jianqi.ren.cn@windriver.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Authority-Analysis: v=2.4 cv=EojSrTcA c=1 sm=1 tr=0 ts=68214d63 cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=ag1SF4gXAAAA:8 a=t7CeM3EgAAAA:8 a=8qJ9y54MyL8qpMpceN8A:9
+ a=Yupwre4RP9_Eg_Bd0iYG:22 a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEyMDAxMiBTYWx0ZWRfX4hJQlAjQdHMe ya8Cu4FfC14vmqBdjliC8Ot9XW9e+rCk6CnmAgNVYnGbPNL/fEf7b8fSGchi64I2qgpB85XtV8G 1YlbFrdpREajCaHYAh4xyfxVSFzkvAjC70bMjhievoLRQohM0eO42f3ej6+u1rXDGdKAZOvrn+B
+ ZAYftecSl914pUQMvVYiYlIQ2hSLRgN7gJ6RnhkApoM7hnwR2+6bbBFHgcZm/F0gknAdAu5sPb8 dzo3HSCDF338zq+cfN2qRNgDJ3m+OZZK34m9pMEO+8YBqCFIiSmO4K4tzWJwjCOEUi+6OmKY1me mgFEVLnntlvjki0MUHmHX3zZyC99lb3lPtiux2kO4lko01jo+2mtKuVhvl4o7610XxstmskLbws
+ gGppcp0BVr26n/I7JfGxnOL2XCqvHuBTLg1eHocBphZovlyJmf+yZVAJYYKUSoRtlqGL+u/s
+X-Proofpoint-GUID: mxB03OUrCl4aPZAu8Lmba85tQsCtSUF5
+X-Proofpoint-ORIG-GUID: mxB03OUrCl4aPZAu8Lmba85tQsCtSUF5
+X-Sensitive_Customer_Information: Yes
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-11_10,2025-05-09_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
+ impostorscore=0 clxscore=1011 malwarescore=0 mlxscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2504070000
+ definitions=main-2505120012
 
+From: RD Babiera <rdbabiera@google.com>
 
-On Fri, 25 Apr 2025 09:08:11 +0200, Luca Weiss wrote:
-> This series adds all the necessary bits to enable DisplayPort-out over
-> USB-C on Fairphone 5.
-> 
-> Devicetree (patch 2-4) patches go via qcom tree
-> 
-> 
+commit 165376f6b23e9a779850e750fb2eb06622e5a531 upstream.
 
-Applied, thanks!
+The DisplayPort driver's sysfs nodes may be present to the userspace before
+typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
+a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
+hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
+NULL in those cases.
 
-[2/4] arm64: dts: qcom: qcm6490-fairphone-fp5: Add PTN36502 redriver
-      commit: 90485e48b8889deec74cf2ce07df174da84b1ac1
-[3/4] arm64: dts: qcom: qcm6490-fairphone-fp5: Add OCP96011 audio switch
-      commit: 1efa79c7536896b6fcd71760c3d4f0a0d40a9e1c
-[4/4] arm64: dts: qcom: qcm6490-fairphone-fp5: Hook up DisplayPort over USB-C
-      commit: 6b51f5e1811398dce5c1d67b746dde74c75f6ce7
+Remove manual sysfs node creation in favor of adding attribute group as
+default for devices bound to the driver. The ATTRIBUTE_GROUPS() macro is
+not used here otherwise the path to the sysfs nodes is no longer compliant
+with the ABI.
 
-Best regards,
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+Link: https://lore.kernel.org/r/20240229001101.3889432-2-rdbabiera@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[Minor conflict resolved due to code context change.]
+Signed-off-by: Jianqi Ren <jianqi.ren.cn@windriver.com>
+Signed-off-by: He Zhe <zhe.he@windriver.com>
+---
+Verified the build test
+---
+ drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index f564d0d471bb..f80124102328 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -543,15 +543,20 @@ static ssize_t pin_assignment_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(pin_assignment);
+ 
+-static struct attribute *dp_altmode_attrs[] = {
++static struct attribute *displayport_attrs[] = {
+ 	&dev_attr_configuration.attr,
+ 	&dev_attr_pin_assignment.attr,
+ 	NULL
+ };
+ 
+-static const struct attribute_group dp_altmode_group = {
++static const struct attribute_group displayport_group = {
+ 	.name = "displayport",
+-	.attrs = dp_altmode_attrs,
++	.attrs = displayport_attrs,
++};
++
++static const struct attribute_group *displayport_groups[] = {
++	&displayport_group,
++	NULL,
+ };
+ 
+ int dp_altmode_probe(struct typec_altmode *alt)
+@@ -559,7 +564,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	const struct typec_altmode *port = typec_altmode_get_partner(alt);
+ 	struct fwnode_handle *fwnode;
+ 	struct dp_altmode *dp;
+-	int ret;
+ 
+ 	/* FIXME: Port can only be DFP_U. */
+ 
+@@ -570,10 +574,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
+ 		return -ENODEV;
+ 
+-	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
+-	if (ret)
+-		return ret;
+-
+ 	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
+ 	if (!dp)
+ 		return -ENOMEM;
+@@ -604,7 +604,6 @@ void dp_altmode_remove(struct typec_altmode *alt)
+ {
+ 	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
+ 
+-	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
+ 	cancel_work_sync(&dp->work);
+ 
+ 	if (dp->connector_fwnode) {
+@@ -629,6 +628,7 @@ static struct typec_altmode_driver dp_altmode_driver = {
+ 	.driver = {
+ 		.name = "typec_displayport",
+ 		.owner = THIS_MODULE,
++		.dev_groups = displayport_groups,
+ 	},
+ };
+ module_typec_altmode_driver(dp_altmode_driver);
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.34.1
+
 
