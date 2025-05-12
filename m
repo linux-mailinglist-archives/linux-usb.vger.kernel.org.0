@@ -1,126 +1,175 @@
-Return-Path: <linux-usb+bounces-23866-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23867-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6744CAB3933
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 15:29:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4822AB3BA5
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 17:08:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DF161891532
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 13:27:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A823B86A1
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 15:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71052951D8;
-	Mon, 12 May 2025 13:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56656236443;
+	Mon, 12 May 2025 15:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MBXUqKSe"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nmKtDF93"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4476F4C9F;
-	Mon, 12 May 2025 13:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F252309B3;
+	Mon, 12 May 2025 15:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747056418; cv=none; b=DgwASnCQTzupq9aXyZaVECvmseoeEduaXcA+S02zKHja3UXbHjf8eL+YpEn1o+KL743ZKvAOm4UyqL3JshwCw1Ttez7Am2O4NJNDRDRe5flH851lG3l7LCcQM5VjebUWxk+k8NraSIp4fAiAGQR9GQs8atRTb4Pxl+pskdnpJhs=
+	t=1747062490; cv=none; b=jr/oBAQXsQZnQZCx7VUNY0cYlMV+UH9MzFnPrrh2BnGkPrX3IEyJJPuDEgKX5tlE2DNF58SSi2L/9fFHczdV/GUULISzf2ARC2ZAl/qiWhi1dz96Jb49htvaWlZ9inqzHluYOENeyTirdbP9l1mQPFHFMbT/UYxeoQMn3cibaOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747056418; c=relaxed/simple;
-	bh=5SYSxtirN3S0+dRopywjB9WAaqvLRtBwRqG/ATTUwMM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PRSHODpFoORKWalGiiHZzLHdFvdW5/55TvvxCZ/9xNAWT9JcnTWH22vaRv3Vbn/DHdqSL+QoD6gSCSdxjhZJZRbW6pv7EfctnsJToyhCKLsM44P3zpqrXYzU65wpm3Er0Vezp0tMxdFjVCPQVShGFKQAaz3IqaeumcCon6yjkog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MBXUqKSe; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from kreacher.localnet (unknown [217.114.34.19])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id AD92A666D36;
-	Mon, 12 May 2025 15:26:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1747056414;
-	bh=5SYSxtirN3S0+dRopywjB9WAaqvLRtBwRqG/ATTUwMM=;
-	h=From:Subject:Date;
-	b=MBXUqKSeBe68Qa6GWehjFXth20CtjVIVKN546eRr9nDz+sZoHyPAtHDgACUPqoG2Y
-	 VmogAeGXvg3ymWjYmfa3NBfNg3nK7BKZuNvMCtRrnGSYsLQK6B7nTRZiQNfXEaqeq/
-	 FNrHnzidEm+gqA8Ej8pRa/H2ibirjZJ3tVgbkscGFbvpUxTJ8KGnHD70MknQTovYPG
-	 obx/AArd235ZvJrVBafSD7rK4/zB7eNxjpWfvlziBdwGvP5iqpkCgJyBvIF8ze6s7b
-	 UFHU9LKvrMDV/2F5QIsv2WtclQ7QRR97CpVEDCnFOi7Ds1LfNjqISk1q1fjcECStSk
-	 y+NhVxMAmf7jQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>,
- Saravana Kannan <saravanak@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: [PATCH v1] ucsi_ccg: Disable async suspend in ucsi_ccg_probe()
-Date: Mon, 12 May 2025 15:26:53 +0200
-Message-ID: <6180608.lOV4Wx5bFT@rjwysocki.net>
+	s=arc-20240116; t=1747062490; c=relaxed/simple;
+	bh=ya1PXoj6K1yoFGFHvgkn8xDzl0UKTfF4IP9FQz7gfNs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kvtGDw9HDOCubZ2RRpwUpVaWotiXJgPVn5q5zehgY3uEdXHL2PNG3CF+2MM5/7mNVcYsk8/DkuBB2dLRoBM91SO9wrVLyJfR8LME/BtmC2DWP5rSnl4pChs33UiIdgMM2bv/dxNGHQZjX9ahFGStGpKjjK9EPWG7z2KuuT3oFVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nmKtDF93; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=tI
+	4q0Mc1q4PSwYa2K29AJnW0a4yN6ijZ6Fj4djm0HFA=; b=nmKtDF93rDpQ17gVa6
+	LHve6SWf169npfoby0DPhj40Ux6ZaNPIoC0K1jVoGJ7X4ctvEU1om/QYqnxVPAvU
+	CmWPWJybn5Fb0chCPdWuB+OSlzABWDetUpDE89yg6vVF4jkPcxwd2WEnWi0D1uUz
+	2h8p7voICjyLd+X5GeLBazEl8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3H+itDiJo1qybAw--.5044S4;
+	Mon, 12 May 2025 23:07:40 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	surenb@google.com,
+	kent.overstreet@linux.dev,
+	David Wang <00107082@163.com>
+Subject: [RFC] USB: core/xhci: add a buffer in urb for host controller private data
+Date: Mon, 12 May 2025 23:07:24 +0800
+Message-Id: <20250512150724.4560-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 217.114.34.19
-X-CLIENT-HOSTNAME: 217.114.34.19
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftddufeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddujedruddugedrfeegrdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudejrdduudegrdefgedrudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhonhgrthhhrghnhhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhrtghpthhtohephhgvihhkkhhirdhkrhh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-
-From: Jon Hunter <jonathanh@nvidia.com>
-
-Commit aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending
-children") had triggered a suspend issue on Tegra boards because it had
-reordered the syspend of devices with async suspend enabled with respect
-to some other devices.  Specifically, the devices with async suspend
-enabled that have no children are now suspended before any other devices
-unless there are device links pointing to them as suppliers.
-
-The investigation that followed the failure report uncovered that async
-suspend was enabled for the cypd4226 device that was a Type-C controller
-with a dependency on USB PHY and it turned out that disabling async
-suspend for that device made the issue go away.  Since async suspend
-takes dependencies between parents and children into account as well
-as other dependencies between devices represented by device links, this
-means that the cypd4226 has a dependency on another device that is
-not represented in any form in the kernel (a "hidden" dependency), in
-which case async suspend should not be enabled for it.
-
-Accordingly, make ucsi_ccg_probe() disable async suspend for the
-devices handled by, which covers the cypd4226 device on the Tegra
-boards as well as other devices likely to have similar "hidden"
-dependencies.
-
-Fixes: aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending children")
-Closes: https://lore.kernel.org/linux-pm/c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com/
-Reported-by: Jon Hunter <jonathanh@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Commit aa7a9275ab81 is in linux-next and it has not reached the mainline yet.
-
-Thanks!
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3H+itDiJo1qybAw--.5044S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGFWxWF4UtF1rKrWUXFyrJFb_yoWrAr4xpF
+	Z5Wry8Kr1rtr47XFZ8Gw1kAa1fJw4kuF9FgFWxC345Zr12yw17W3s2yF4S9Fn7Xr4kCrsY
+	q3Wqg3y8Wr1UJa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE1vVZUUUUU=
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqAZLqmgh6hWauQABsb
 
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c |    2 ++
- 1 file changed, 2 insertions(+)
+I was checking memory allocation behaviors (via memory profiling[1]),
+when I notice a high frequent memory allocation in xhci_urb_enqueue, about
+250/s when using a USB webcam. If those alloced buffer could be kept and
+reused, lots of memory allocations could be avoid over time.
 
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1483,6 +1483,8 @@
+This patch is just a POC, about 0/s memory allocation in xhci with this
+patch, when I use my USB devices, webcam/keyboard/mouse. 
+
+A dynamic cached memory would be better: URB keep host controller's
+private data, if larger size buffer needed for private data, old buffer
+released and a larger buffer alloced.
+
+I did not observe any nagative impact with xhci's 250/s allocations
+when using my system, hence no measurement of how useful this changes
+can make to user. Just want to collect feedbacks before putting more
+effort.
+
+
+[1] https://lore.kernel.org/all/20240221194052.927623-1-surenb@google.com/
+---
+xhci keeps allocing new memory when enque a urb for private data,
+and enque frequency could be high, about 250/s when using a usb
+webcam, about 30/s for high pace USB keyboard/mouse usage.
+Using a cache/buffer for those private data could avoid
+lots memory allocations.
+
+Signed-off-by: David Wang <00107082@163.com>
+---
+ drivers/usb/host/xhci-ring.c |  3 ++-
+ drivers/usb/host/xhci.c      | 14 +++++++++++---
+ include/linux/usb.h          |  1 +
+ 3 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 423bf3649570..bc350b307758 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -831,7 +831,8 @@ static void xhci_giveback_urb_in_irq(struct xhci_hcd *xhci,
+ 				usb_amd_quirk_pll_enable();
+ 		}
+ 	}
+-	xhci_urb_free_priv(urb_priv);
++	if (urb_priv != (void *)urb->hcpriv_buffer)
++		xhci_urb_free_priv(urb_priv);
+ 	usb_hcd_unlink_urb_from_ep(hcd, urb);
+ 	trace_xhci_urb_giveback(urb);
+ 	usb_hcd_giveback_urb(hcd, urb, status);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 90eb491267b5..85aa5fe526c8 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1539,6 +1539,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	unsigned int *ep_state;
+ 	struct urb_priv	*urb_priv;
+ 	int num_tds;
++	size_t private_size;
  
- 	i2c_set_clientdata(client, uc);
+ 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
  
-+	device_disable_async_suspend(uc->dev);
-+
- 	pm_runtime_set_active(uc->dev);
- 	pm_runtime_enable(uc->dev);
- 	pm_runtime_use_autosuspend(uc->dev);
-
-
+@@ -1552,7 +1553,13 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	else
+ 		num_tds = 1;
+ 
+-	urb_priv = kzalloc(struct_size(urb_priv, td, num_tds), mem_flags);
++	private_size = struct_size(urb_priv, td, num_tds);
++	if (private_size <= sizeof(urb->hcpriv_buffer)) {
++		memset(urb->hcpriv_buffer, 0, sizeof(urb->hcpriv_buffer));
++		urb_priv = (struct urb_priv *)urb->hcpriv_buffer;
++	} else {
++		urb_priv = kzalloc(private_size, mem_flags);
++	}
+ 	if (!urb_priv)
+ 		return -ENOMEM;
+ 
+@@ -1626,7 +1633,8 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 
+ 	if (ret) {
+ free_priv:
+-		xhci_urb_free_priv(urb_priv);
++		if (urb_priv != (void *)urb->hcpriv_buffer)
++			xhci_urb_free_priv(urb_priv);
+ 		urb->hcpriv = NULL;
+ 	}
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+@@ -1789,7 +1797,7 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+ 	return ret;
+ 
+ err_giveback:
+-	if (urb_priv)
++	if (urb_priv &&  urb_priv != (void *)urb->hcpriv_buffer)
+ 		xhci_urb_free_priv(urb_priv);
+ 	usb_hcd_unlink_urb_from_ep(hcd, urb);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b46738701f8d..4f82bb69081c 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1602,6 +1602,7 @@ struct urb {
+ 	struct kref kref;		/* reference count of the URB */
+ 	int unlinked;			/* unlink error code */
+ 	void *hcpriv;			/* private data for host controller */
++	u8 hcpriv_buffer[4096];         /* small buffer if private data can fit */
+ 	atomic_t use_count;		/* concurrent submissions counter */
+ 	atomic_t reject;		/* submissions will fail */
+ 
+-- 
+2.39.2
 
 
