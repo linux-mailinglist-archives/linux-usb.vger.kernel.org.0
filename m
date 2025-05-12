@@ -1,175 +1,115 @@
-Return-Path: <linux-usb+bounces-23867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4822AB3BA5
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 17:08:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BE71AB3C3D
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 17:35:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17A823B86A1
-	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 15:07:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C125B46179F
+	for <lists+linux-usb@lfdr.de>; Mon, 12 May 2025 15:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56656236443;
-	Mon, 12 May 2025 15:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8754323C510;
+	Mon, 12 May 2025 15:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nmKtDF93"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="l/ds3KL6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F252309B3;
-	Mon, 12 May 2025 15:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F09423C500
+	for <linux-usb@vger.kernel.org>; Mon, 12 May 2025 15:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747062490; cv=none; b=jr/oBAQXsQZnQZCx7VUNY0cYlMV+UH9MzFnPrrh2BnGkPrX3IEyJJPuDEgKX5tlE2DNF58SSi2L/9fFHczdV/GUULISzf2ARC2ZAl/qiWhi1dz96Jb49htvaWlZ9inqzHluYOENeyTirdbP9l1mQPFHFMbT/UYxeoQMn3cibaOE=
+	t=1747064087; cv=none; b=OZRQ+kjZZ1BCO3krsmPDM/QHXhi2iEg7gvl7jH9aMCw5fjDlBz+G/vS3R6DxSv722GYVlz/hEzHUg615LUbTvm2EOcXCGNpKhT6ywWd2fRtZUFfI9kOV8vvZqgfXaq7DzLYuuug5UuYkY7uCz2LsQ3DOZ6TAP3zi1kgGlRhCRS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747062490; c=relaxed/simple;
-	bh=ya1PXoj6K1yoFGFHvgkn8xDzl0UKTfF4IP9FQz7gfNs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kvtGDw9HDOCubZ2RRpwUpVaWotiXJgPVn5q5zehgY3uEdXHL2PNG3CF+2MM5/7mNVcYsk8/DkuBB2dLRoBM91SO9wrVLyJfR8LME/BtmC2DWP5rSnl4pChs33UiIdgMM2bv/dxNGHQZjX9ahFGStGpKjjK9EPWG7z2KuuT3oFVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nmKtDF93; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=tI
-	4q0Mc1q4PSwYa2K29AJnW0a4yN6ijZ6Fj4djm0HFA=; b=nmKtDF93rDpQ17gVa6
-	LHve6SWf169npfoby0DPhj40Ux6ZaNPIoC0K1jVoGJ7X4ctvEU1om/QYqnxVPAvU
-	CmWPWJybn5Fb0chCPdWuB+OSlzABWDetUpDE89yg6vVF4jkPcxwd2WEnWi0D1uUz
-	2h8p7voICjyLd+X5GeLBazEl8=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3H+itDiJo1qybAw--.5044S4;
-	Mon, 12 May 2025 23:07:40 +0800 (CST)
-From: David Wang <00107082@163.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	surenb@google.com,
-	kent.overstreet@linux.dev,
-	David Wang <00107082@163.com>
-Subject: [RFC] USB: core/xhci: add a buffer in urb for host controller private data
-Date: Mon, 12 May 2025 23:07:24 +0800
-Message-Id: <20250512150724.4560-1-00107082@163.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1747064087; c=relaxed/simple;
+	bh=BUkwgzL+MSLKCC2+REuz9ThllAAWTrnd1vUtZmKWiw0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rsus+vOvCWe1OAf23yVHAxsvslHvpTczda+fU/gYOVH9yGD6oyRr/434Du7j4l75YqcncfBrJvcSf2I35DSFoO9z5H3v1ZA53Ot11SMbG1iTRlpufhZqlNf/bhRzSLHEBPHY7/daz/svljGQ3VWvGBh4bxJEfn2qanIrwNTB3h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=l/ds3KL6; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-47ae894e9b7so87096671cf.3
+        for <linux-usb@vger.kernel.org>; Mon, 12 May 2025 08:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1747064084; x=1747668884; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h2IEqsFP6mbIlWzLtUHadM7bvGmNt6W1aQGNu23yom0=;
+        b=l/ds3KL6tIKam7TSWf/Lf6ADIj5Swve9HbgiBkjBGdDRDKRgbbrex+Br/9SfHoGomZ
+         AB464YIvyLqxMrdFZXeC1W4OqtPmJQ8+J2OgKQxCmg+kR9zPXmLS/O5byP65rua0CXyO
+         mwl6Evy5G7nuZKDGl8GuQKKjxkkdke6fp4wDdG3mMfHXPiIWw5WZKBwrgqri7clvHs2l
+         e4oil6u/pelzIpls1rlyK5daKsVFbZ3kaYWf5Z1dnK2BBS+b60hSitx9HBLrKeMHi9Qg
+         RjuJLDDM1hK8Ij3CIghuELrU23HbS/btYr9yyTwYRXH70rKDBDKIZFhiTy452I2O9RYF
+         udKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747064084; x=1747668884;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h2IEqsFP6mbIlWzLtUHadM7bvGmNt6W1aQGNu23yom0=;
+        b=WCQBHrWJknXfKvnF7xofxlza8SypexQYwBy1nR033wn1PeUol1zYqYrOtY+d+UJFTy
+         hcAKhxwk5x0ue/AxrP8tAHij6T/RDmNwKSyYAnLAuQm35poR/NG8Vo4LlWMj8nflgJBZ
+         3Xw06HsGX3DXHa4oDsWo5iocK7UP7XoJuyb1XD4VF39nq/btAaCjo6xGhZ/DiCtH0dLH
+         mMDBGl0Gc69ygSivVbSQDHj/lwDA7v2/JPZz8v9+pMIZSQXfAyIlnaIkCJlJ6t0z5jDI
+         1bUDsvW2MpPXoa0AUDgJqIqdU/x2nM0tLlR9sjBfFNDZT3l/BBM9x2r0gcb7SscX4RGm
+         gAWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfTHMpC7slMN6s/tNdFJU3M4hNHhd09fdS60QbizKbQHUz2zVcVYm98F8Hpc6X/Ary/5DSrpw9lSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjg3BdkLrTF70wK0Ekzy6RLsAY53zXG57CKivi+sB4V7c+C2n6
+	ds2gEhst77UTgqjnuesb5mij5cw5AmXReJ2z41Wk5fqtKkw3wqwKv+ZJf3j7Cw==
+X-Gm-Gg: ASbGncs1K1570PvA/9DOTaDgBmttOg51qGf9E0o/YunVHS7V64jZzStVAiY75sG+TBA
+	8EdDWbAnmFt9GUqiumTkQ0Eb9NJnGp4x3nP9xqFLvC3XcmjO382uqz1hROVJOrFgfNV24wyYbYV
+	uecjiWOb0HgGLmSWOtgTxPUKczIa01mewkcI4cTgFiqEoiKOEXGyp7erNe9eAEjVPSq1rLqYWke
+	ZNDIFaL6gnjz9yjnjrCXhLUey5VJpw7BwlsViqlx3GfRjbtipi65MgOTbePagikbJT/R+fDbLYE
+	CSdGbEIuULAXdyyTbrpHk1IW5LhDe1Tj+2M4MrORjewsyIX3WwIORHWHcdSxyiHG0IOBSLDy5E7
+	av8+H
+X-Google-Smtp-Source: AGHT+IH8OuHVn8EU95Z0dn+sa4fi7WbCN1/rL8STfDNceTR/nqBxCTh41lLOcwUGLyaoM7eK6RifBA==
+X-Received: by 2002:a05:622a:14b:b0:478:f4bd:8b8e with SMTP id d75a77b69052e-494527deb21mr217626471cf.39.1747064084310;
+        Mon, 12 May 2025 08:34:44 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4945259e3acsm51685791cf.72.2025.05.12.08.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 May 2025 08:34:43 -0700 (PDT)
+Date: Mon, 12 May 2025 11:34:41 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: David Wang <00107082@163.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	surenb@google.com, kent.overstreet@linux.dev
+Subject: Re: [RFC] USB: core/xhci: add a buffer in urb for host controller
+ private data
+Message-ID: <7fd35044-3719-44c1-b4cf-89551e27da26@rowland.harvard.edu>
+References: <20250512150724.4560-1-00107082@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3H+itDiJo1qybAw--.5044S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGFWxWF4UtF1rKrWUXFyrJFb_yoWrAr4xpF
-	Z5Wry8Kr1rtr47XFZ8Gw1kAa1fJw4kuF9FgFWxC345Zr12yw17W3s2yF4S9Fn7Xr4kCrsY
-	q3Wqg3y8Wr1UJa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE1vVZUUUUU=
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqAZLqmgh6hWauQABsb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250512150724.4560-1-00107082@163.com>
 
----
-I was checking memory allocation behaviors (via memory profiling[1]),
-when I notice a high frequent memory allocation in xhci_urb_enqueue, about
-250/s when using a USB webcam. If those alloced buffer could be kept and
-reused, lots of memory allocations could be avoid over time.
+On Mon, May 12, 2025 at 11:07:24PM +0800, David Wang wrote:
+> ---
+> I was checking memory allocation behaviors (via memory profiling[1]),
+> when I notice a high frequent memory allocation in xhci_urb_enqueue, about
+> 250/s when using a USB webcam. If those alloced buffer could be kept and
+> reused, lots of memory allocations could be avoid over time.
+> 
+> This patch is just a POC, about 0/s memory allocation in xhci with this
+> patch, when I use my USB devices, webcam/keyboard/mouse. 
+> 
+> A dynamic cached memory would be better: URB keep host controller's
+> private data, if larger size buffer needed for private data, old buffer
+> released and a larger buffer alloced.
 
-This patch is just a POC, about 0/s memory allocation in xhci with this
-patch, when I use my USB devices, webcam/keyboard/mouse. 
+This sounds like a better approach; you should try it.  Allocations and 
+dellocations from a private memory pool can be really quick.  And it 
+wouldn't waste space on buffers for URBs that don't need them (for 
+example, URBs used with other host controller drivers).
 
-A dynamic cached memory would be better: URB keep host controller's
-private data, if larger size buffer needed for private data, old buffer
-released and a larger buffer alloced.
-
-I did not observe any nagative impact with xhci's 250/s allocations
-when using my system, hence no measurement of how useful this changes
-can make to user. Just want to collect feedbacks before putting more
-effort.
-
-
-[1] https://lore.kernel.org/all/20240221194052.927623-1-surenb@google.com/
----
-xhci keeps allocing new memory when enque a urb for private data,
-and enque frequency could be high, about 250/s when using a usb
-webcam, about 30/s for high pace USB keyboard/mouse usage.
-Using a cache/buffer for those private data could avoid
-lots memory allocations.
-
-Signed-off-by: David Wang <00107082@163.com>
----
- drivers/usb/host/xhci-ring.c |  3 ++-
- drivers/usb/host/xhci.c      | 14 +++++++++++---
- include/linux/usb.h          |  1 +
- 3 files changed, 14 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 423bf3649570..bc350b307758 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -831,7 +831,8 @@ static void xhci_giveback_urb_in_irq(struct xhci_hcd *xhci,
- 				usb_amd_quirk_pll_enable();
- 		}
- 	}
--	xhci_urb_free_priv(urb_priv);
-+	if (urb_priv != (void *)urb->hcpriv_buffer)
-+		xhci_urb_free_priv(urb_priv);
- 	usb_hcd_unlink_urb_from_ep(hcd, urb);
- 	trace_xhci_urb_giveback(urb);
- 	usb_hcd_giveback_urb(hcd, urb, status);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 90eb491267b5..85aa5fe526c8 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1539,6 +1539,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	unsigned int *ep_state;
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
-+	size_t private_size;
- 
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
- 
-@@ -1552,7 +1553,13 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	else
- 		num_tds = 1;
- 
--	urb_priv = kzalloc(struct_size(urb_priv, td, num_tds), mem_flags);
-+	private_size = struct_size(urb_priv, td, num_tds);
-+	if (private_size <= sizeof(urb->hcpriv_buffer)) {
-+		memset(urb->hcpriv_buffer, 0, sizeof(urb->hcpriv_buffer));
-+		urb_priv = (struct urb_priv *)urb->hcpriv_buffer;
-+	} else {
-+		urb_priv = kzalloc(private_size, mem_flags);
-+	}
- 	if (!urb_priv)
- 		return -ENOMEM;
- 
-@@ -1626,7 +1633,8 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 
- 	if (ret) {
- free_priv:
--		xhci_urb_free_priv(urb_priv);
-+		if (urb_priv != (void *)urb->hcpriv_buffer)
-+			xhci_urb_free_priv(urb_priv);
- 		urb->hcpriv = NULL;
- 	}
- 	spin_unlock_irqrestore(&xhci->lock, flags);
-@@ -1789,7 +1797,7 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 	return ret;
- 
- err_giveback:
--	if (urb_priv)
-+	if (urb_priv &&  urb_priv != (void *)urb->hcpriv_buffer)
- 		xhci_urb_free_priv(urb_priv);
- 	usb_hcd_unlink_urb_from_ep(hcd, urb);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index b46738701f8d..4f82bb69081c 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1602,6 +1602,7 @@ struct urb {
- 	struct kref kref;		/* reference count of the URB */
- 	int unlinked;			/* unlink error code */
- 	void *hcpriv;			/* private data for host controller */
-+	u8 hcpriv_buffer[4096];         /* small buffer if private data can fit */
- 	atomic_t use_count;		/* concurrent submissions counter */
- 	atomic_t reject;		/* submissions will fail */
- 
--- 
-2.39.2
-
+Alan Stern
 
