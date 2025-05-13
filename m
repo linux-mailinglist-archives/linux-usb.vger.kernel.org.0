@@ -1,180 +1,165 @@
-Return-Path: <linux-usb+bounces-23903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2595AB510A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 12:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08808AB5309
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 12:44:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43DBD3A5C5C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 10:06:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99C869A6C3C
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 10:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899B12459C9;
-	Tue, 13 May 2025 10:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14F2239082;
+	Tue, 13 May 2025 10:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="bXTcTOeM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiT+2ot0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443EC242923
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 10:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017F23C4E7
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 10:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747130662; cv=none; b=ZiICnOx3yw6mDTpNEOG8kgVgGAObSkDKTiK/Q0fkQD/kx0s8x8HsQNMFfHA4iaRzqnT5Kig30wKhsJ4aKk6rikeLkTq24sEg03Z8NndXTXe8UpjB/Kyvx/bHFra6yZy1dAxtT2vsa69KVzY/K6F/RT08kFQe+ZWY4vmKVs8XE68=
+	t=1747132202; cv=none; b=YBHuGa3Zf0bgeYoKtCp2A27OnoXVZYjiuuvOlN6Q82PO0SrXycw7XorQBVTlwjnUSy5H5vkiec1YudV1SB0NiXJfyjdLU6ujJWlp4U7RTzz18DndUnsF5Rh27qecXIoCJcqcG7/iyINFqEm77xyu/VbFRUyA86iwTjvvmIwx/7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747130662; c=relaxed/simple;
-	bh=zEfhytstlDkqj82UOmgoPZOLmKEXdL1GRGuVw5WQqjU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XNmnBb3O6RScuKqn75WE3l/GRmrjb7Ojyx3KYTC4VwxuSPhny9Lfa2B+uerrF4We5oslifSlFXXJdNwZ04NIy14ZtKuTsSroiNStQLJteGMJYdL6j9ZZN4B82P0WDht0ygk4+QVi4PzgkzHVsq4C5D9nkSYMOXsAzqVDmbwIKW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=bXTcTOeM; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a0b135d18eso3117830f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 03:04:19 -0700 (PDT)
+	s=arc-20240116; t=1747132202; c=relaxed/simple;
+	bh=v7bzZFG8ljpDChj1tUYUnGr0e7oGG2NcjvbD/3kSYbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M9FlMySx1VqoZa5nnJI+NJbnp/PpYTW1lZuW+iyTorIDGFC0VW2PgOXtkZ8IMBK4PYbTtFkzagvb37h+WKdR1JcAhDI7NXst8uhMNgf0KSLDJkG/74ou8qj5Zqv8biq1VNmMNDPI1ycXP6lH4mXN7mY72c2IXLi1vL6fmXiTyR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiT+2ot0; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54e9021d2b5so8009177e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 03:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1747130658; x=1747735458; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zEfhytstlDkqj82UOmgoPZOLmKEXdL1GRGuVw5WQqjU=;
-        b=bXTcTOeM4Sk+kG6iE+o+W7wNRbb/RLwjjYtmGKp2AjdE7JpMb+vNG4bwFR8OnYuVnv
-         u3/YAobRtij8V6nAAZc86arXf+rVW51hCdZMOBLW7PDSUdCXlQ+ZNuHhpZiN6VTzImpQ
-         l3HCcIZAewpDQburTrnkNZas/RsQ7BNFScWLkLNjerBvug2MR6W6+bwqPin06sCi7aLt
-         33ba8EH6af34+lN/j8VmDg3GjASU67ddzn3gn5WfmXSq49mqEgWU0oX0I+cmMANQgjWH
-         cR+4bCWEVDi+CLPMOhxbnhsjoPHxRlNtqjKFw3F3TRIRxrTlZvjYWX4wuasFFTk1W6n5
-         7W8Q==
+        d=gmail.com; s=20230601; t=1747132198; x=1747736998; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v7bzZFG8ljpDChj1tUYUnGr0e7oGG2NcjvbD/3kSYbM=;
+        b=FiT+2ot0lRNnIItIYRwrak2WisaULDWXH6HgGBIhVVi1d9CmUOux847v7T2tpkPtfK
+         LrMoV6FXk5hu7HtLb44pilr9MdwZ1sh6eOoW3EigVG8GY7Au0tiCqnREOxxQC+d+y/Qy
+         fMMgL3Q5GBhS5F4/sxX5AgMzBjJsB84i4ACdgGXR7co/MKnLG4+g7y/luixSYjU8R+oR
+         zhehGOh1fwDdVOLdZm6Fr7UZTCx/vrYUXKNIUGnU6uZfZEF5nHJsGthK8xdfAeaKZTlg
+         u0dZKfB17O3jF0weERxBoCIhEekCmgjPWvanzfjjw1bXQpqSMjTQiHCQa3sHDYcykQJ0
+         rDpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747130658; x=1747735458;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zEfhytstlDkqj82UOmgoPZOLmKEXdL1GRGuVw5WQqjU=;
-        b=axgJm4tz1K86tA3jihPm63keunsrBHuzqk5ZFTwWQJ2QyDMDki95zNK87UWCrjLKXj
-         i37k4AE1PvKmNlBYae7CxAn1s1JaLRevpsp5i6qQM+8VxqqteBBCcBL4vqf3oyQwW1R4
-         SB0JIZg3qe/rKw8pHMrX67yneYaQPtPVs+4uk4+1iuv3aGXujjEIdQwwn/gprDivpqlt
-         cm3CGhuP4+vLT2DQeEyq2y0MjV+c7DYj7z4Ga0VdppOQLkisYOFoqsHaNrP/2cYkKomO
-         0L7XvOIvKo5pET/Qiw5CFid3T4qdaE5j9B8kaRcLzqgxMi3hzk9z+1mJZtzHovMKb1wr
-         B4IA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+Lh2HCLT8rQhAbAtpmcmsNFlebTVuoW2b+SyLI4rofI2JDXjK0lSDkGpoNSm7fM/Fv+VQinYpABk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmLtJlFMCZKj5UOC00ci8Hf0rSvX3j76IL17fSPDf80LJbNKmH
-	Tj8zrJEOcfd8xfyPTd/7N+eG/Y9FaJ5gzpFJkUWrxRY2lsvXlNnBzbGMqB+Dny4=
-X-Gm-Gg: ASbGncu6TkqYiDCTv0/H8aNjdiBE+6I/MLZkTOVTZrrWLVtWYLnw3pfI+2I253ZC3+d
-	mcDGpp07YEIeurIEPhgXDPgagQdC/9f3WIge9WrdL6spa8EsgZTFHn5GwmwDt8/sI7cC+LLIF5u
-	r3mXcLsQLbssxE4WYu6z1FZb18YayBaGudJRhs5ahaUDYimb6KBhF9lY1504O+nobTQTaP7XUuD
-	NZWtNo9SvYcN4adXtjuMslN0WgKaOuOHnCHXxKhta4qgRIfDrnLrzOkME4p5/85zU5fQeXVvTEN
-	c16qnA+4ohOiJLIJ15nVXumCZkXLon4vO96cKgrkUtBqFhHaA0s6srcAdT+7vVlzUw==
-X-Google-Smtp-Source: AGHT+IEdriQ4E+qJOA7Zn6jtHYXEGP6UeOKil83wAlQ3vQyDskBhkG/wY/RDNFCv5Lv0GFRWF0q0Qw==
-X-Received: by 2002:a05:6000:2212:b0:3a3:2aa5:11bc with SMTP id ffacd0b85a97d-3a32aa511d4mr2343546f8f.54.1747130658372;
-        Tue, 13 May 2025 03:04:18 -0700 (PDT)
-Received: from [10.68.117.232] ([146.0.27.145])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58ecb46sm15728048f8f.30.2025.05.13.03.04.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 03:04:17 -0700 (PDT)
-Message-ID: <e5cd5e9d64123b319bae1a73c96cd33a3ad9e805.camel@ndufresne.ca>
-Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
- implement v4l2 enum api calls
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Greg KH <gregkh@linuxfoundation.org>, Krzysztof Opasiak
-	 <krzysztof.opasiak@neat.no>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Michael Grzeschik	
- <m.grzeschik@pengutronix.de>, linux-usb@vger.kernel.org, 
-	linux-media@vger.kernel.org, balbi@kernel.org, paul.elder@ideasonboard.com,
- 	kernel@pengutronix.de, kieran.bingham@ideasonboard.com
-Date: Tue, 13 May 2025 12:04:17 +0200
-In-Reply-To: <2025051317-deflation-discuss-1201@gregkh>
-References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
-	 <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com> <Y4xaXHLoiPupWM6V@kroah.com>
-	 <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
-	 <2025051253-trimmer-displease-1dde@gregkh>
-	 <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
-	 <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
-	 <2025051317-deflation-discuss-1201@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
+        d=1e100.net; s=20230601; t=1747132198; x=1747736998;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v7bzZFG8ljpDChj1tUYUnGr0e7oGG2NcjvbD/3kSYbM=;
+        b=N556UeNIyyaWDGxN2K4MD4txK9lUXu1bDxZVduqzb3kfECbYey+ME6Aqgj1TKijupi
+         ZAgtE6dGG1fKhpHGOQ1sErOUZzN8mondQ3bGFfLWbvmbfnD1EFC2/1FGiYqLSdhb9J9D
+         lUfEsOBVOyIe3x0/hQCXQJ3gFc3rAbwOKAvdsVR5zPXZQf8ZpqZjyxsIAt4nFPnQQwiX
+         ToPV/SQbyEekm6LOb64pv39HOdfvSeSDl7az8VgKBq7WwYtd/NH9nsKBFF1lmaD/lSHe
+         hkoMhbbWSDnD2jK9HI49hZNXICL4r5kBNks4WEIpqHbIJDEfW0vpbOygFAusVBqlr1sW
+         kD9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVgWhQSCK/IyLnHwxVu3O23vzNvLIe3UsRoacZTKI0d9Vsv1KAB5ZeQMQ6o1UfnJ7xbBAiTsftqbEg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHCVF49HZK9w66xnaSFd0SKIlHoxX7h4gBdTQdMvbaDvPrGwNm
+	Lkr0/Li3z3wj0niQT6a90NFMBiCeb3RRs2zwtu4PSKcv23tgfjZf1PAJwg==
+X-Gm-Gg: ASbGncsSuP3Ir2IUGK+tSPwhOuhIX6j/3Swdtw5BxpapOKugB4y1uwiVnKzW7UPMv3D
+	qvbwJxNGPNm4XmqAHIzyqQmjMAyGzda6jW3/DhBfy0J1jczC/UpMRr2EMpSIJKYgt+xrtpXHxlF
+	gMWcy0qgETKf0sqYMxSCOspcBz0sPgRoYXWsAWm59IaYsKMvdcY53h5VgM/CNjZ0kXXMPavII0u
+	gK0tRe3CdX3wZ20QQ8biOfLpw//0rwbMpQIol/o5YQ2lFW8SelNJ1ybiL5Fp58bOvj5AOgHslX5
+	b0VGLty6NUAZGmMCp8kC0FAK1m35BVHsTjnCNVjhfLMamqdJGUu8XDVZcYGgqFR45aQU
+X-Google-Smtp-Source: AGHT+IEotVpDLtV0fzkfCT8VvGRShpU4/gzIMUnIxqho3V9QznFaFzreuDxipVQTlrYpvpm0GxGq7g==
+X-Received: by 2002:a05:6512:670d:b0:54e:784e:541 with SMTP id 2adb3069b0e04-550d0bc4982mr826172e87.14.1747132198020;
+        Tue, 13 May 2025 03:29:58 -0700 (PDT)
+Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54fc64bfe46sm1817227e87.194.2025.05.13.03.29.56
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 13 May 2025 03:29:57 -0700 (PDT)
+Date: Tue, 13 May 2025 12:29:52 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: Problematic Set TR Deq error handling series in xhci-next
+Message-ID: <20250513122952.5a729311@foxbook>
+In-Reply-To: <c606689d-e680-4796-bb65-87424a157e98@linux.intel.com>
+References: <20250509114138.7052dd3b@foxbook>
+	<c606689d-e680-4796-bb65-87424a157e98@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Greg, Krzysztof,
+On Mon, 12 May 2025 16:02:06 +0300, Neronin, Niklas wrote:
+> The purpose of this series is to add some error handling and improve
+> warning messages.
 
-Le mardi 13 mai 2025 =C3=A0 07:04 +0200, Greg KH a =C3=A9crit=C2=A0:
-> On Mon, May 12, 2025 at 11:03:41PM +0200, Krzysztof Opasiak wrote:
-> > On 12.05.2025 12:43, Krzysztof Opasiak wrote:
-> > > On 12.05.2025 12:38, Greg KH wrote:
-> > > > On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wrote:
-> > > > > Hi Greg,
-> > > > >=20
-> > > > > On 4.12.2022 09:29, Greg KH wrote:
-> > > > > > On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrot=
-e:
-> > > > > > > Hi Michael,
-> > > > > > >=20
-> > > > > > > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik w=
-rote:
-> > [...]
-> > > > >=20
-> > > > > Given that I'd like to suggest that it seems to actually make sen=
-se to
-> > > > > revert this unless there are some ideas how to fix it.
-> > > >=20
-> > > > Sorry about this, can you submit a patch series that reverts the
-> > > > offending commits?=C2=A0 As it was years ago, I don't exactly know =
-what you
-> > > > are referring to anymore.
-> > > >=20
-> > >=20
-> > > Sure! Will do.
-> > >=20
-> >=20
-> > Would you prefer to have a set of actual reverts related to this:
-> >=20
-> > da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api calls"
-> > bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call"
-> > e56c767a6d3c Revert "usb: gadget: uvc: also use try_format in set_forma=
-t"
-> > 20f275b86960 Revert "usb: gadget: uvc: fix try format returns on
-> > uncompressed formats"
-> > 059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in
-> > uvc_v4l2.c"
-> > e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam loadable again"
-> >=20
-> > but have a negative consequence that the series isn't really bisectable=
- from
-> > functional perspective. For example commit e6fd9b67414c breaks g_uvc un=
-til
-> > we apply da692963df4e so the series would have to go in as a whole.
-> >=20
-> > Or you would prefer a single commit that technically isn't a revert but=
- it
-> > just "undoes" the negative consequences of "usb: gadget: uvc: add v4l2
-> > enumeration api calls" (kind of a squash of all commits above)?
->=20
-> Ideally we can bisect at all places in the tree, so it's odd that
-> reverting patches would cause problems as when adding them all should
-> have been ok for every commit, right?
->=20
-> But if there are merge issues, or other problems, then yes, maybe just
-> one big one is needed, your choice.
+Adding more information to those messages is great and IMO it should
+have been done long ago instead of an xhci_dbg() that nobody enables.
+These errors are sporadically seen on bugzilla/linux-usb and it would
+be nice to know why they are happening.
 
-Won't a plain revert break userspace like GStreamer that have depended on
-that patch for years ? In such a delicate case, wouldn't it be less
-damageable to introduce workaround, like alias ? This is one personal
-script against numerous users of a generic framework implementation.
+I have done it on my system and it helped me understand some cases.
+I found nothing terribly concerning, by the way.
 
-I believe due to the delay, you are facing an unusual ABI breakage, which
-requires a more delicate handling.
+(That being said, I don't like multi-line messages: they reduce log
+rotation period and mix with others. I added info to existing logs.)
 
-regards,
-Nicolas
+> Fixing the root cause is another task altogether.
 
->=20
-> thanks,
->=20
-> greg k-h
+But if you don't know why something happens, can you really fix it?
+
+In normal operation these errors just don't happen, and in abnormal
+operation there is no guarantee that normal recovery will work. The
+driver already tried to avoid error by normal means and it failed.
+
+A code with no known trigger can't be tested, so it may have bugs.
+And it adds maintainance burden because people fear the unknown.
+
+> Before, the only difference between a Set TR Deq command failure
+> and success was that, in the case of failure, a warning was printed,
+> and the xhci driver ring dequeue pointer was not moved. Otherwise,
+> a Set TR Deq command failure behaved as if it were successful.
+
+This is adequate for two most common cases that I know. Fristly, the
+mysterious command TRB errors on ASMedia. The endpoint is stuck (but
+not halted) until UAS times out and resets the whole device. Same
+stuck endpoint behavior, but no TRB error, is seen on other HCs.
+
+Secondly, xhci_handle_halted_endpoint() doesn't queue Reset Endpoint
+when a SuperSpeed device is unplugged from the root hub. The endpoint
+stays halted forever, so Set TR Dequeue is unnecessary and it fails.
+
+Simply ignoring the failure is not a bug. Waiting for the endpoint to
+reset (which never happens) turns it into a bug.
+
+(This series generally fails to check for errors of command queuing
+functions, which are not guaranteed to succeed.)
+
+> In my opinion, instead of ignoring the Set TR Deq errors it would be
+> better to retry the command if the error is due to something easily
+> fixed, such as wrong EP state or Slot state.
+
+There is nothing easy about stopping an endpoint, last year we spent
+a few weeks with Mathias making it work.
+
+See commits fd9d55d190c0 and 42b758137601, in this order ;)
+
+We won't call xhci_invalidate_cancelled_tds() unless we are strongly
+convinced that the endpoint is in the Stopped state, or the HC seems
+to be completely disfunctional. (And I just facepalmed writing this,
+because it looks like 28a76fcc4c85 does more harm than good, I think
+will need to revert it.)
+
+There is one case which cannot be detected by handle_cmd_stop_ep():
+Stop Endpoint completes sucessfully, and later the endpoint changes
+state without a doorbell ring. ASMedia HCs actually do such things
+when they manage to corrupt their internal endpoint state. There
+are some cases when stopping and restarting a (periodic?) endpoint
+appears to corrupt the control endpoint; it generates no events or
+Transaction Errors for no reason, changes state together with other
+endpoints, etc. Resetting the xHC is the only solution I know.
+
+
+Michal
 
