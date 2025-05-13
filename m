@@ -1,135 +1,117 @@
-Return-Path: <linux-usb+bounces-23929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA88AB5D9D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 22:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 512BAAB5FCC
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 01:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A0F1B482A1
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 20:19:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08DBA1B402D2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 23:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5221F3BA4;
-	Tue, 13 May 2025 20:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F3720C489;
+	Tue, 13 May 2025 23:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNqMtHLP"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="PqoQm5V2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794201F1538
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 20:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531371EFFBE;
+	Tue, 13 May 2025 23:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747167549; cv=none; b=NVl9z5rqUSULOZO88aIYjYOj6G/XbFqWGWe5QhK+6zt2tEt7QXevoUgBGiHSpbfWESsIBrURdegGKl4g+6hblBtIdIBTfHJ8cMZUrsTYZ3YmJABEbXebvgUgi3fVLcvPVWwOvYWKfYRYDFPcqXFQBvR01W8NikNI8JA71ijCo70=
+	t=1747177801; cv=none; b=uZF+5qgdXnByUd9expAp9rg2tDvnwjixoBU7AilNoPKWUmqttWq8A09q7IYC7S9sPAfX2rVs+ScZA+UnJRrn+CKXFp6FE5/MGxS9e9z/H6tff3Y/KtrWzdY7zNbPQgw4x29bmQkjecXVaAOnyALyR4r72FDT4o8Xb7N6d2cAD+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747167549; c=relaxed/simple;
-	bh=HxKII0uQjussHoNkyaFNQGoWhh50MS9weUsiIGIqyR0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=kcRV11w7IbNKyubti22fcO1RTklOLa7Pm2Ri0nZ9rmNV6g9ZpPkXXvXDNHdo6mIOCbL4vC8k+/JYZRhQTYmMV5wcQajY/93aHeAxqSDGlhxKoRl2sSOUP0VYNwl7t6pLqEpryMKJA6mUmsLwgifARwsYFJIe5ufyeEDTvUcXJNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VNqMtHLP; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54998f865b8so6767346e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 13:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747167545; x=1747772345; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HxKII0uQjussHoNkyaFNQGoWhh50MS9weUsiIGIqyR0=;
-        b=VNqMtHLPTyXCj+AvEi1EI5z7l1qvoDXDWLp0FrslEGPIRNNnMxGPq8DMyUaG0vG2r+
-         Lti+Mjeq+p6ZXjYRaF0Xh8wkinjeq0zEQUbPrzXnTQCO7KDayB73dRwO1SCvNKw1Mdfs
-         cC092iGPcJIx+XuuX2ljrwvFMLZjAAeA1k5J6Ha34REGPetb1GRKW7iHiw9vRBl4vT3R
-         aGxXPTQgbUcFOL9R59hE2+jw8YMMuQJVJTRt3LIjc0LNBxSDGc5P+axkJlVZXR7+fmWJ
-         3KyYfX61UOoS6a2W5wHiHeZ1jX3N7cBNQNmgki3B0qUbJyvvRpsHWdEuOEt8hXEQCW5G
-         Ha7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747167545; x=1747772345;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HxKII0uQjussHoNkyaFNQGoWhh50MS9weUsiIGIqyR0=;
-        b=GjcShzoH2HHJNMgpQy1SgPExnv39krKC56AeUihQJxyb1c0Jr58sdD7UV8Qsn5hdXW
-         sLceHv9mvY5PFufdvsZtJEOO7l2Z68ybIEeP+vcnLyuSm9wJ7dunj4WfsmB6DShuKj5s
-         lEAXglCp0oiTnCtWMa3S5/WZocWkrO4M2Ao6kX7Y4T3+cXXwdgTOGj1274tv1XqFrZgi
-         mIUR6dzBJubb2N4SFfvoVDthjTm7rtSwZ+d/4uenvBhgUU4ZUD1yqIC7vLBck3rMypLu
-         6w7eG0oLHIFeh0IKT5E35FFKAnTgsZaDvl60BsFEAFFlUpyhmxAQ2s/YoWCHaYwi0Tvq
-         qo2Q==
-X-Gm-Message-State: AOJu0Yz1qRe1qCmB7MYyolIW5gHyWYldi27HffwcD6yVj8MjvHj43/xM
-	RDrWXvXvUilVU1ezJ8dqaGJptJ0aCTFRTFpQMWJ/BRYx3d+E5zUokOW9umMVb3e3LEPwPDIPQgm
-	QFbt943dpzrd3bx7HETlrjuS+bILxRA==
-X-Gm-Gg: ASbGncvvpl3uVRklleTXuUcl+yBK5i4qE3A9jHMgMgXAvkcUeVFPPL/yyIuGtTVPKCO
-	e32OTgmS18b0lXrWpGCWemSM62CjbDs+Md9RGie9PGf6zqXmTKotkoUmZ5V7bRgSu/EdotJJtsu
-	moLd49/LxXLWkzpu6PzPNt6s36ON3Ao39WDgw=
-X-Google-Smtp-Source: AGHT+IEBaqx41aAqLBPfLdQYdamSsoylugsfdAaKI6DQ4kBMBOyGzCzqmc5+luCjOddzBPTLNdzpjXxu2jJGOar1lTE=
-X-Received: by 2002:a05:6512:2588:b0:54f:c450:3121 with SMTP id
- 2adb3069b0e04-550d5fbebebmr215979e87.21.1747167544965; Tue, 13 May 2025
- 13:19:04 -0700 (PDT)
+	s=arc-20240116; t=1747177801; c=relaxed/simple;
+	bh=S6IFkDK9wWbIT48K5AkF79faJvzVr+hp/oQJgln5FrY=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=BzPOKaa1OwFHi89HV8qv8wj+9uuVORuGBmVDi1ZhzOO424vhsRml4seUFzqYP5TrN827hEpsStp5Leutb5zNfXuyciKtQrbl2gmrmQ4bdWZmLoLnDq0OLQsO065dq1S3XzSRpGbKqXbH8tcstGDQX4SLtRg1SA0OJy3ClSQIhps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=PqoQm5V2; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1747177788; bh=Ozf43I1JSIyHBWszg7fIjcbmty5EorEQyDyL2fU2o7Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PqoQm5V2Lt7RyIBiAAbATkjq7xEszKn6ULUt0vRkryXyy/H8nxzMmMmOrRdeZAeyK
+	 +N5sgkd+pxRqMLmwVLgC97yz4szq8ov8sL9WxCzGDApCW4KXGR+4GbWSJIExfBKEX4
+	 OIWUhIsGVu84a61/4btaGL9xJskUsRUTJZm34/Ls=
+Received: from pek-lxu-l1.corp.ad.wrs.com ([111.198.228.63])
+	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
+	id 490E644; Wed, 14 May 2025 07:01:09 +0800
+X-QQ-mid: xmsmtpt1747177269tz2o0pgv3
+Message-ID: <tencent_251BD325BCBA5EBB0533CD9EC71B1A4B9208@qq.com>
+X-QQ-XMAILINFO: NHTNowOA4hJdOFjT5vYTmoFmA7ieEAZqhEBd5XV3pVwUcL5e8gRRGrcEjvMNAH
+	 6d6NXurnO22Wz1mmEMIGRojiD2QRQCyzjf7hbet4X+rakPeOlrRmva3yJbIVJom7mW/OfBWG6y/V
+	 R/tpGIuUOvMvgNrGnIXMzl/FTo6hyiaHF4Ns44Y52rt4E1m3/7qYsoux4wThJ2gmdtPGFbts53ke
+	 RKNZXT2DUBb3/dqyT/5z8aja+esxhLpVkQIS7+7YxG0mYgjgzyesuFvjcHvbPKWv5teiHzItgmUc
+	 SP9xBF0WQ0YAo1CKY4IqPJhypnTRG/oKbi5ZG+k3zMETVT7LcgIWHNSRPbv+8JO+ziBKzZD6UZO9
+	 hU8vaP+3+O3Uhb7acRPoedADnmNKknUMnt7hgLbuzv0haKJhEmdzMwxJya86qPR08J2c+Ix+Kjy4
+	 /SCKMiaWSXH+hh523XSKS6PBWSzfeqpCE+frv+igVhTBJQMPnLjYtb25DEB3bOZum11KbysmuTc5
+	 s8iB1lRiKMeqpNVS1LUJwkwvSW4F927BQ5YVKFEz+NSBNWxqcpouiVR1NFrvLx+rPBlvTKW59OWE
+	 zIbOwArydaiGShkSOUUQIaKScC5PDIqWW1FM9Y0d75afg1dZLQalFSzLRHSpMjLHN+hjIqlOL1ho
+	 GZEzSjSNn1A/jhwaVl8Mf/Qwmr4e0tBG9OX8NPuoAVjEBxE029RRl2NU8LKVR6H11QgmWbKMzmS5
+	 4wm2y7OkyB9YrnWtl1iqCj8pgLi0kZJ4dI7mow8h4gtUMwSuIjtzRLxWveVFV5vmVWtMlRT8llt3
+	 W9tDjsx3BM+1F+Z5TKbN91SGWWisy5nlHsDh76OpJo75KP1SCyrgLcvgALBVXsH+Av7VaEkTJUI2
+	 pwwqhzouXqqoVkEsP2wKzErsN8OGgr8xtjpUaTdSVfVW/ZL3buEaHEmZgBi/w+rvCf++SfZHQ9N3
+	 ttbl3wQmcEefMaZWV9nEd+bJNHqNgC8bPows/JFxmXf/i71q3HWCBz7Z23P+rs
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+0dcc341ee61fc9e4032f@syzkaller.appspotmail.com
+Cc: anna-maria@linutronix.de,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de
+Subject: [PATCH] media: cxusb: Initialize medion after checking intf
+Date: Wed, 14 May 2025 07:01:09 +0800
+X-OQ-MSGID: <20250513230108.2456593-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <681688da.050a0220.11da1b.001c.GAE@google.com>
+References: <681688da.050a0220.11da1b.001c.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Tom Yan <tom.ty89@gmail.com>
-Date: Wed, 14 May 2025 04:18:53 +0800
-X-Gm-Features: AX0GCFsNAUxif11GO0OruuUk5-mI-4AaQm-bofzZeEHWveAuHRXbJDKmb8u_qbw
-Message-ID: <CAGnHSEnc3NUQgUbybq6RXQ__1SOx7wBDwtJJY0Y_K33epbu3LA@mail.gmail.com>
-Subject: Problem with only SuperSpeedPlus on different sets of hosts and devices
-To: linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+dvb_usb_device_exit() is entered because the number of alternate setting
+is less than 2. Check the USB interface in advance to avoid unnecessary
+dvb device initialization and exit.
 
-So I have been bumping into problems when using my
-SuperSpeedPlus-capable UAS drives/enclosures (with bridge chips from
-different vendors, namely ASMedia and Realtek).
+Reported-by: syzbot+0dcc341ee61fc9e4032f@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=0dcc341ee61fc9e4032f
+Tested-by: syzbot+0dcc341ee61fc9e4032f@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ drivers/media/usb/dvb-usb/cxusb.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-I don't exactly remember when I first noticed the problem because at
-that time I only had one cheap (Intel Alder Lake) laptop from a
-Chinese vendor (Chuwi) with Gen 2 ports (one A + one C) and I thought
-maybe they were fake or something, but it has probably been a year or
-longer. And now I am also experiencing it on a desktop with an XHCI
-card with two C ports (The controller is ASMedia ASM3142, I think).
+diff --git a/drivers/media/usb/dvb-usb/cxusb.c b/drivers/media/usb/dvb-usb/cxusb.c
+index f44529b40989..df86ae7106c1 100644
+--- a/drivers/media/usb/dvb-usb/cxusb.c
++++ b/drivers/media/usb/dvb-usb/cxusb.c
+@@ -1601,13 +1601,9 @@ static int cxusb_probe(struct usb_interface *intf,
+ 	int ret;
+ 
+ 	/* Medion 95700 */
+-	if (!dvb_usb_device_init(intf, &cxusb_medion_properties,
++	if (cxusb_medion_check_intf(intf) &&
++	    !dvb_usb_device_init(intf, &cxusb_medion_properties,
+ 				 THIS_MODULE, &dvbdev, adapter_nr)) {
+-		if (!cxusb_medion_check_intf(intf)) {
+-			ret = -ENODEV;
+-			goto ret_uninit;
+-		}
+-
+ 		_cxusb_power_ctrl(dvbdev, 1);
+ 		ret = cxusb_medion_set_mode(dvbdev, false);
+ 		if (ret)
+-- 
+2.43.0
 
-Basically the problem is that the device would seem to hang and/or
-reset, often (if not always) for just *either* reading or writing.
-Occasionally the same device (on the same host/port) will work
-perfectly fine. By that I mean it *feels like* whether the problem
-will show up is determined at the time the device is connected /
-"initialized" -- if things happen to have "gone right" at that stage,
-it will keep on working fine (until e.g. physical reconnection /
-driver reinitialization). (But it's not entirely conclusive whether
-that is really the case.)
-
-I don't think it is because any of the devices / ports / cables are
-broken or bad in any sense, because the problem occurs literally on
-*entirely different sets* of them (including host controller / ports).
-I remember it was first noticed on a few UAS-SATA enclosures that had
-an ASMedia ASM225CM (which is USB 3.x Gen 2) bridge, and the issue
-could be observed when the drive is connected to either the A port or
-the C port of my Intel laptop. And now I can observe similar problems
-on a few UAS-NVMe enclosures (which have either an ASMedia or a
-Realtek bridge). (And because of the SATA case, in which a WD Green
-SSD was inside, I don't think it has anything to do with insufficient
-/ unstable port power or so either.)
-
-The only way I can workaround this problem is to use a Gen 1 /
-SuperSpeed cable. So far I haven't had any problems with any of my
-devices whenever they are working at SuperSpeed. I also have an AMD
-laptop with only Gen 1 ports, and they work perfectly fine on that
-host as well.
-
-I've also tried to disable UAS by using the "u quirk", but the problem
-remains, so it doesn't seem to have anything to do with that.
-
-So has anyone ever experienced / heard of similar issues? Anything I
-could try / test further in order to isolate the cause? Is there any
-existing XHCI driver quirk or so that could be relevant?
-
-P.S. Both machines have Arch Linux (not any derivative) on them, so I
-have been rolling through the year(s) with pretty-recent (and
-pretty-upstream, AFAIK) kernels. No LTS or anything.
-
-Regards,
-Tom
 
