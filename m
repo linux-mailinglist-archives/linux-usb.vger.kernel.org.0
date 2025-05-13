@@ -1,85 +1,159 @@
-Return-Path: <linux-usb+bounces-23907-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51C0BAB5394
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:14:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1533CAB53F4
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:39:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E63E17CAD5
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 11:14:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE96A1B44E25
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 11:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AC728CF47;
-	Tue, 13 May 2025 11:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D141F1518;
+	Tue, 13 May 2025 11:39:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="KkxDlLyy"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mvFAUHeS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1FF1F1524;
-	Tue, 13 May 2025 11:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342D928CF7E;
+	Tue, 13 May 2025 11:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747134845; cv=none; b=OheaNJcalpsQ+LbCPzi3/47VUhl4xuqpFFfHHs7feX3BzNxeDgTIwAL4/5/kcTU9u+zZ81aqqfixm2t2ZwoBPPErCd1XYhz5+Ja4gzDaFgWIEXM5ZX9GtdZcJAv+Et+HqsL6nhyig1GqrypxmLHN7vwDR5zdRbqPrDnMjC1nrZc=
+	t=1747136365; cv=none; b=hOyFJAELjcClF/AxwZrOvckn6b9on4psCTg6dB99XES7y1xJkyo/31rbB7mPs9mlawBjDB18gtFSCS9wSy8HDzjYk29F7qGyAlLQN/7IakqaY+lW6MgNq0rreBij2VC788iwCPiaYB6CSw9EDRsVwsJtXNh0JEV1EjKfcBEG9yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747134845; c=relaxed/simple;
-	bh=1eaKnnauiDDzxRMDthN8gsYILStP0DWnof6rHGvECyo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=U+VQiHDOE5hUAyBoYZyrvGGzRrk9d7mvuSr1cFDQdHJZE5reyOeyWdM3S8NjdlXHkLjdMyKK8o+Vew+mpwEHJXqAokB1NHL+nj48ZWi413fzBq+AywzEORFbDxhs1i9gWswduWWeiLdDItDJzfyGXRHxi5NpRaHC6LW8fjvwIMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=KkxDlLyy reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
+	s=arc-20240116; t=1747136365; c=relaxed/simple;
+	bh=sakjGWFrGCsJtJMuNHZvf4IXAuWs0DjW6D7LHP/RS9w=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=lNgoJz5J9+P+WStUmtyXr3yucwbj6NeCOBCbJGaUioeBp6pfHqG1arjKfAZkoq+EO47yLB3MQ+9NQQ39uY4yptVN04ld6AJVWKIOv8yqNLzWaYNKIdsw8cIj2TphRsb46YrgEqvS7pD1VU3no43zt3Ah9i5NAmhSkgJWynqbbT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mvFAUHeS; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=PKtsvJDtnEfa84Pam4CObLn6iqlKvmlfdSp+lHkFVkg=; b=K
-	kxDlLyyumAtM0JLkRtTaUrnlATpK+N8/z390FmZQkzfIFThFDVXi4QHZodEJRSOp
-	yNsblihIKb5YwNJioxdrWnBKrLxWrukWu8pKzRwGhrFYv1USrD5Kg2kQxx9woPO3
-	nq2FcTjZgRJLnZ4V2h42eZDPjZkAk4/zb3NRkPZjMU=
-Received: from 00107082$163.com ( [111.35.191.17] ) by
- ajax-webmail-wmsvr-40-140 (Coremail) ; Tue, 13 May 2025 19:12:47 +0800
- (CST)
-Date: Tue, 13 May 2025 19:12:47 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Oliver Neukum" <oneukum@suse.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu, surenb@google.com,
-	kent.overstreet@linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] USB: core: add a memory pool to urb for
- host-controller private data
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <3fa2cbc3-fe81-4364-96c1-b753c52ddc16@suse.com>
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=D1
+	d5Mv3O2B4ADycUafrn1h0QXPGeO+8J5MjFluopYfY=; b=mvFAUHeS0wKcgzl+Nl
+	27I669SfkEft4YOkU/UNmLgMkZCHW+bdhAcAoncXE23BLkCtEmZ2E82cqfgvbrR1
+	ZlI/uT76icnLb4PINi7RHsPTk9bfHM85n47UDvjXXrkMiY7AtzRVP7bLB7WYcG+W
+	+az5lsHRHCWlgdMpgMDnAgH90=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wC3kuMqLyNotfVmBA--.12824S4;
+	Tue, 13 May 2025 19:38:33 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org,
+	oneukum@suse.com
+Cc: stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Wang <00107082@163.com>
+Subject: [PATCH v2 1/2] USB: core: add a memory pool to urb for host-controller private data
+Date: Tue, 13 May 2025 19:38:17 +0800
+Message-Id: <20250513113817.11962-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20250512150724.4560-1-00107082@163.com>
 References: <20250512150724.4560-1-00107082@163.com>
- <20250513055447.5696-1-00107082@163.com>
- <48d5cae9-ff7c-4076-8b71-8c16bcf00443@suse.com>
- <4006cec4.794d.196c8be2fd1.Coremail.00107082@163.com>
- <b07c7d9f-a20a-49bc-adbc-d43326b2d2df@suse.com>
- <3dd5e698.921f.196c90c33af.Coremail.00107082@163.com>
- <3fa2cbc3-fe81-4364-96c1-b753c52ddc16@suse.com>
-X-NTES-SC: AL_Qu2fBf2Yu08t4SaQYOkXn0oTju85XMCzuv8j3YJeN500hyXu0S8aeXBlN37a7cO+Ii2SvxeOXx1Xze5BeIVWXYPTkN5ahDXEcC/k3l+Bf3Hh
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <7259897e.9f89.196c958e24d.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:jCgvCgD3z_0wKSNoOYYDAA--.15400W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqA1MqmgjIbiEAAABsU
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC3kuMqLyNotfVmBA--.12824S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF17CFWxCw1DJF18Cw17ZFb_yoW5tFWUpF
+	4xA3s3tF1FqrW3XrZ3Gan7uayrJ3Wv9ryjkryfu345Xr17tw18A3Z2yFyrCr9xJr4Syw4Y
+	qFsIgan8Ww1UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEF1v7UUUUU=
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbB0hxMqmgjJyLldgAAs1
 
-CkF0IDIwMjUtMDUtMTMgMTk6MDI6NDIsICJPbGl2ZXIgTmV1a3VtIiA8b25ldWt1bUBzdXNlLmNv
-bT4gd3JvdGU6Cj4KPgo+T24gMTMuMDUuMjUgMTE6NDksIERhdmlkIFdhbmcgd3JvdGU6Cj4KPj4g
-SGksIEkgaGF2ZSBvbmUgcXVlc3Rpb24gYWJvdXQgbWVtIGZsYWdzLgo+PiBJZiB1c2Jfc3VibWl0
-X3VyYiB3YW50cyBhIG1lbW9yeSBpbiBjb250ZXh0IG9mIGZsYWdzIEEsIHNheSBHRlBfQVRPTUlD
-LCBidXQgSSBhbHJlYWR5IGhhdmUgYSBtZW1vcnkgYWxsb2Mgd2l0aCAgZmxhZ3MgQiAgYW5kIGl0
-cyBzaXplCj4+IGlzIGJpZyBlbm91Z2gsICBpcyBpdCBzYWZlIHRvIHJldHVybiB0aGlzIG1lbW9y
-eSAgdG8gdXNiX3N1Ym1pdF91cmIgIHdoaWNoIGlzIGluIHRoZSBjb250ZXh0IG9mIGZsYWdzIEE/
-Cj4KPlllcywgdGhhdCBpcyBwZXJmZWN0bHkgc2FmZS4KPgo+CUhUSAo+CQlPbGl2ZXIKCgoKQ29w
-eSB0aGF0fgoKClRoYW5rcwpEYXZpZAo=
+---
+Changes:
+1. Use caller's mem_flags if a larger memory is needed.
+Thanks to Oliver Neukum <oneukum@suse.com>'s review.
+---
+URB objects have long lifecycle, an urb can be reused between
+enqueue-dequeue loops; The private data needed by some host controller
+has very short lifecycle, the memory is alloced when enqueue, and
+released when dequeue. For example, on a system with xhci, several
+minutes of usage of webcam/keyboard/mouse have memory alloc counts:
+  drivers/usb/core/urb.c:75 [usbcore] func:usb_alloc_urb 661
+  drivers/usb/host/xhci.c:1555 [xhci_hcd] func:xhci_urb_enqueue 424863
+Memory allocation frequency for host-controller private data can reach
+~1k/s and above.
+
+High frequent allocations for host-controller private data can be
+avoided if urb take over the ownership of memory, the memory then shares
+the longer lifecycle with urb objects.
+
+Add a mempool to urb for hcpriv usage, the mempool only holds one block
+of memory and grows when larger size is requested.
+
+Signed-off-by: David Wang <00107082@163.com>
+---
+ drivers/usb/core/urb.c | 23 +++++++++++++++++++++++
+ include/linux/usb.h    |  3 +++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 5e52a35486af..51bf25125aeb 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -23,6 +23,7 @@ static void urb_destroy(struct kref *kref)
+ 
+ 	if (urb->transfer_flags & URB_FREE_BUFFER)
+ 		kfree(urb->transfer_buffer);
++	kfree(urb->hcpriv_mempool);
+ 
+ 	kfree(urb);
+ }
+@@ -1037,3 +1038,25 @@ int usb_anchor_empty(struct usb_anchor *anchor)
+ 
+ EXPORT_SYMBOL_GPL(usb_anchor_empty);
+ 
++/**
++ * urb_hcpriv_mempool_zalloc - alloc memory from mempool for hcpriv
++ * @urb: pointer to URB being used
++ * @size: memory size requested by current host controller
++ * @mem_flags: the type of memory to allocate
++ *
++ * Return: NULL if out of memory, otherwise memory are zeroed
++ */
++void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags)
++{
++	if (urb->hcpriv_mempool_size < size) {
++		kfree(urb->hcpriv_mempool);
++		urb->hcpriv_mempool_size = size;
++		urb->hcpriv_mempool = kmalloc(size, mem_flags);
++	}
++	if (urb->hcpriv_mempool)
++		memset(urb->hcpriv_mempool, 0, size);
++	else
++		urb->hcpriv_mempool_size = 0;
++	return urb->hcpriv_mempool;
++}
++EXPORT_SYMBOL_GPL(urb_hcpriv_mempool_zalloc);
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b46738701f8d..4400e41271bc 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1602,6 +1602,8 @@ struct urb {
+ 	struct kref kref;		/* reference count of the URB */
+ 	int unlinked;			/* unlink error code */
+ 	void *hcpriv;			/* private data for host controller */
++	void *hcpriv_mempool;           /* a single slot of cache for HCD's private data */
++	size_t hcpriv_mempool_size;     /* current size of the memory pool */
+ 	atomic_t use_count;		/* concurrent submissions counter */
+ 	atomic_t reject;		/* submissions will fail */
+ 
+@@ -1790,6 +1792,7 @@ extern int usb_wait_anchor_empty_timeout(struct usb_anchor *anchor,
+ extern struct urb *usb_get_from_anchor(struct usb_anchor *anchor);
+ extern void usb_scuttle_anchored_urbs(struct usb_anchor *anchor);
+ extern int usb_anchor_empty(struct usb_anchor *anchor);
++extern void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags);
+ 
+ #define usb_unblock_urb	usb_unpoison_urb
+ 
+-- 
+2.39.2
+
 
