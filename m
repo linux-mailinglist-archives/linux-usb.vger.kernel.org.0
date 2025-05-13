@@ -1,119 +1,111 @@
-Return-Path: <linux-usb+bounces-23919-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23920-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5EACAB576F
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 16:43:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6241AB57BC
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 16:57:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68C7B17A370
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 14:42:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B390C7B7303
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 14:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2305C24728C;
-	Tue, 13 May 2025 14:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5CD3183CC3;
+	Tue, 13 May 2025 14:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="hHg8Wc4B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J+VNIp/e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDAA19F40B;
-	Tue, 13 May 2025 14:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2723314B07A
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 14:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747147339; cv=none; b=Scpm186AaulwYtZYlxN8km6NZqRAcc28CRcnsEfcXtkogH0DIKPQiJg7gZbYitZk/LRPvk2ZvLh1Vu+82hOj0sO+G2LxoxcySfJ99VIA9hKh3q0GbYeYp5QBGiV7m5tfz+5rq+xg+Thdq4rkJ1T6tDaTerFaMBMad0Pz+BdwUbw=
+	t=1747148208; cv=none; b=X8MhVS1bmtn+wHZMaYoRb1dwNZv2HefCgg++LcJP6egdV26i/UTMNM/RLuxlPGLe6eIx8r52l23DdWVH2ALiOnPrCorObLog6dpI1qkaLDs8G6y9JI9EHysfikwrZbX0HKAvLzzobZOH8y8GtIG25BdhgnlNGGClB2eNV5sX6OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747147339; c=relaxed/simple;
-	bh=4KcevAX47uPd8DaXUGm9PtOGKEhO4cJO3Y3jn1NJaTM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=ZfW67izWJZn+dc2Ro9m9BAssImPmyT7GgNowNLY8mCtVYEvOM1YWVlUp9NQHYC7jmjGhdW/dGvKQbWiDULhcjpE131t1WEhdOJwh2cVLIZ8tKyPUfqrJylGtqR/1fLwFDjO4err6KpCNqs0oXIikOJPlB/CDuIveOnPl50fShpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=hHg8Wc4B reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=CxhojO/kTZI9+TtamrY1UhMIFJL84NcI0rqn1Hi2Wm4=; b=h
-	Hg8Wc4ByXLEeP5l6AXrRSzU9/5cHqViebCSJ8H6KivvRHGvgSgXobzmafOGkVDti
-	dFpcx3//ahFel56Fs9Mh6QTa/2V7TXYQ5n/hLBXZ7M+SFWi7MBXevNM7Gp2HyND5
-	rSBclBpfbwhLyxIN0LE6C6MQAfQzLOyrwSJzoC+hkk=
-Received: from 00107082$163.com ( [111.35.191.17] ) by
- ajax-webmail-wmsvr-40-114 (Coremail) ; Tue, 13 May 2025 22:41:45 +0800
- (CST)
-Date: Tue, 13 May 2025 22:41:45 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Alan Stern" <stern@rowland.harvard.edu>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, oneukum@suse.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
- host-controller private data
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
-References: <20250512150724.4560-1-00107082@163.com>
- <20250513113817.11962-1-00107082@163.com>
- <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
-X-NTES-SC: AL_Qu2fBf2fuEsr4yCRYOkZnEYQheY4XMKyuPkg1YJXOp80oyTWxTsHf19qHlLo1cmEJCmxkDi8TiBW9s9aZq9IW6koOKibP3HAyhtnfeHEjYaY
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1747148208; c=relaxed/simple;
+	bh=5WPYX2FUSaG//R9/fOLZtAnSly0lE7TEezO9CmjsOZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WuF2y2xI+sELxsxQ/Su0wCxdNrYKqLuzYKL1Q+2r8XircIBa0omV3L24D+XGqDFn0P+e8iai/zwH1sxXK24Nd/LMWiida5dm/C5cWVXmdWWjWjt+r1AUQSlbdzmaaHp1RSe/iMkIQR+R2w/06AELtnHm/yoDuU5+zaTYQ8hCIrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J+VNIp/e; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747148207; x=1778684207;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5WPYX2FUSaG//R9/fOLZtAnSly0lE7TEezO9CmjsOZc=;
+  b=J+VNIp/e9a5CGkV9aNp8lPeHO2wg0rvKl5Y04la9SZpb6x0fDIs1S9/y
+   g/mvR0GJWpDgtfoX0GNpLojthK4oBABurhMfZ5raEj5OCgblaxy5alG4X
+   mP2O558xHYr3J9uLnECizevnyOZNbT3ujyPGcNhRM3klyVnu4IpBfzmlS
+   jEvxTaKYHOjWdr1AJujbGPPjznMIxXLb+ps32ISK0K5P9JNkG7qLo5RGD
+   zOHdIu6z2niDw6jPbsLiUeQUBIV2T5mZrUNSVu1FDKUEyrop23KsCx8va
+   cmbzarvD9ipz2LwCvJtl0hZD1O9MXEEZMMUZUKXDTCuZLnfxrlPSI/T4h
+   g==;
+X-CSE-ConnectionGUID: OU+oDBDETMuw5+eAO6Ug0w==
+X-CSE-MsgGUID: fQZKrddVSxC4BKlL8NPiWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="52808584"
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="52808584"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 07:56:42 -0700
+X-CSE-ConnectionGUID: S0vdqwHNSVm4Sa+UMkEbaQ==
+X-CSE-MsgGUID: onbxJ8awSaGoVWRou0orqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="138715799"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa009.fm.intel.com with ESMTP; 13 May 2025 07:56:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id D14A3217; Tue, 13 May 2025 17:56:38 +0300 (EEST)
+Date: Tue, 13 May 2025 17:56:38 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [GIT PULL] USB4/Thunderbolt fix for v6.15-rc7
+Message-ID: <20250513145638.GM88033@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <69accee9.accf.196ca18308a.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:cigvCgD3v3sqWiNonJADAA--.29422W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqBBMqmgjNKfPMQAFs9
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-CgpBdCAyMDI1LTA1LTEzIDIyOjI1OjUwLCAiQWxhbiBTdGVybiIgPHN0ZXJuQHJvd2xhbmQuaGFy
-dmFyZC5lZHU+IHdyb3RlOgo+T24gVHVlLCBNYXkgMTMsIDIwMjUgYXQgMDc6Mzg6MTdQTSArMDgw
-MCwgRGF2aWQgV2FuZyB3cm90ZToKPj4gLS0tCj4+IENoYW5nZXM6Cj4+IDEuIFVzZSBjYWxsZXIn
-cyBtZW1fZmxhZ3MgaWYgYSBsYXJnZXIgbWVtb3J5IGlzIG5lZWRlZC4KPj4gVGhhbmtzIHRvIE9s
-aXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+J3MgcmV2aWV3Lgo+PiAtLS0KPj4gVVJCIG9i
-amVjdHMgaGF2ZSBsb25nIGxpZmVjeWNsZSwgYW4gdXJiIGNhbiBiZSByZXVzZWQgYmV0d2Vlbgo+
-PiBlbnF1ZXVlLWRlcXVldWUgbG9vcHM7IFRoZSBwcml2YXRlIGRhdGEgbmVlZGVkIGJ5IHNvbWUg
-aG9zdCBjb250cm9sbGVyCj4+IGhhcyB2ZXJ5IHNob3J0IGxpZmVjeWNsZSwgdGhlIG1lbW9yeSBp
-cyBhbGxvY2VkIHdoZW4gZW5xdWV1ZSwgYW5kCj4+IHJlbGVhc2VkIHdoZW4gZGVxdWV1ZS4gRm9y
-IGV4YW1wbGUsIG9uIGEgc3lzdGVtIHdpdGggeGhjaSwgc2V2ZXJhbAo+PiBtaW51dGVzIG9mIHVz
-YWdlIG9mIHdlYmNhbS9rZXlib2FyZC9tb3VzZSBoYXZlIG1lbW9yeSBhbGxvYyBjb3VudHM6Cj4+
-ICAgZHJpdmVycy91c2IvY29yZS91cmIuYzo3NSBbdXNiY29yZV0gZnVuYzp1c2JfYWxsb2NfdXJi
-IDY2MQo+PiAgIGRyaXZlcnMvdXNiL2hvc3QveGhjaS5jOjE1NTUgW3hoY2lfaGNkXSBmdW5jOnho
-Y2lfdXJiX2VucXVldWUgNDI0ODYzCj4+IE1lbW9yeSBhbGxvY2F0aW9uIGZyZXF1ZW5jeSBmb3Ig
-aG9zdC1jb250cm9sbGVyIHByaXZhdGUgZGF0YSBjYW4gcmVhY2gKPj4gfjFrL3MgYW5kIGFib3Zl
-Lgo+PiAKPj4gSGlnaCBmcmVxdWVudCBhbGxvY2F0aW9ucyBmb3IgaG9zdC1jb250cm9sbGVyIHBy
-aXZhdGUgZGF0YSBjYW4gYmUKPj4gYXZvaWRlZCBpZiB1cmIgdGFrZSBvdmVyIHRoZSBvd25lcnNo
-aXAgb2YgbWVtb3J5LCB0aGUgbWVtb3J5IHRoZW4gc2hhcmVzCj4+IHRoZSBsb25nZXIgbGlmZWN5
-Y2xlIHdpdGggdXJiIG9iamVjdHMuCj4+IAo+PiBBZGQgYSBtZW1wb29sIHRvIHVyYiBmb3IgaGNw
-cml2IHVzYWdlLCB0aGUgbWVtcG9vbCBvbmx5IGhvbGRzIG9uZSBibG9jawo+PiBvZiBtZW1vcnkg
-YW5kIGdyb3dzIHdoZW4gbGFyZ2VyIHNpemUgaXMgcmVxdWVzdGVkLgo+PiAKPj4gU2lnbmVkLW9m
-Zi1ieTogRGF2aWQgV2FuZyA8MDAxMDcwODJAMTYzLmNvbT4KPgo+SXQgc2hvdWxkIGJlIHBvc3Np
-YmxlIHRvIGRvIHdoYXQgeW91IHdhbnQgd2l0aG91dCB0b3VjaGluZyB0aGUgVVNCIGNvcmUgCj5j
-b2RlIGF0IGFsbCwgY2hhbmdpbmcgb25seSB4aGNpLWhjZC4gIFRoYXQncyB3aGF0IE1hdGhpYXMg
-aXMgc3VnZ2VzdGluZy4KPgo+SW5zdGVhZCBvZiBoYXZpbmcgYW4gVVJCIGtlZXAgb3duZXJzaGlw
-IG9mIGl0cyBleHRyYSBtZW1vcnkgYWZ0ZXIgaXQgCj5jb21wbGV0ZXMsIHhoY2ktaGNkIGNhbiBw
-dXQgdGhlIG1lbW9yeSBhcmVhIG9udG8gYSBmcmVlIGxpc3QuICBUaGVuIAo+bWVtb3J5IGFyZWFz
-IG9uIHRoZSBmcmVlIGxpc3QgY2FuIGJlIHJldXNlZCB3aXRoIGFsbW9zdCBubyBvdmVyaGVhZCB3
-aGVuIAo+VVJCcyBhcmUgZW5xdWV1ZWQgbGF0ZXIgb24uCgpJIGhhdmUgdG8gZGlzYWdyZWUsICB5
-b3VyIHN1Z2dlc3Rpb24gaGFzIG5vIG11Y2ggZGlmZmVyZW5jZSBmcm9tIHJlcXVlc3RpbmcgbWVt
-b3J5IGZyb20Kc3lzdGVtLCBsb2NrcyBhbmQgbWVtb3J5IHBvb2wgbWFuYWdlbWVudHMsIGFsbCB0
-aGUgc2FtZSBhcmUgbmVlZGVkLCB3aHkgYm90aGVyPwoKVGhlIHJlYXNvbiBJIGNob29zZSBVUkIg
-aXMgdGhhdCAgVVJCIGxpZmUgY3ljbGUgY29udGFpbnMgdGhlIHByaXZhdGUgZGF0YSdzIGxpZmVj
-eWNsZSwgCmFuZCBubyB0d28gSENEIGNhbiB0YWtlIG92ZXIgdGhlIHNhbWUgVVJCIGFzIHRoZSBz
-YW1lIHRpbWUuCgpJIHRoaW5rIHRoZSBtZW1vcnkgcG9vbCBoZXJlIGlzIG5vdCBhY3R1YWxseSBh
-IHBvb2wsICBvciBJIHNob3VsZCBzYXkgdGhlIG1lbXBvb2wgY29uc2lzdHMgb2YKcG9vbCBvZiBV
-UkJzLCBhbmQgZWFjaCBVUkIgaGF2ZSBvbmx5ICJzaW5nbGUgb25lIiBzbG90IG9mIG1lbSBwb29s
-IGluIGl0LgoKCj4KPlRoaXMgaWRlYSBjYW4gYmVjb21lIG1vcmUgZWxhYm9yYXRlIGlmIHlvdSBt
-YWludGFpbiBzZXBhcmF0ZSBmcmVlIGxpc3RzIAo+Zm9yIGRpZmZlcmVudCBkZXZpY2VzLCBvciBl
-dmVuIGZvciBkaWZmZXJlbnQgZW5kcG9pbnRzLCBvciBzb3J0IHRoZSBmcmVlIAo+bGlzdCBieSB0
-aGUgc2l6ZSBvZiB0aGUgbWVtb3J5IGFyZWFzLiAgQnV0IHRoZSBiYXNpYyBpZGVhIGlzIGFsd2F5
-cyB0aGUgCj5zYW1lOiBEb24ndCBjaGFuZ2UgdXNiY29yZSAoaW5jbHVkaW5nIHN0cnVjdCB1cmIp
-LCBhbmQgbWFrZSBnZXR0aW5nIGFuZCAKPnJlbGVhc2luZyB0aGUgZXh0cmEgbWVtb3J5IGFyZWFz
-IGhhdmUgZXh0cmVtZWx5IGxvdyBvdmVyaGVhZC4KCldoeSBpbXBsZW1lbnRzIGEgZGV2aWNlIGxl
-dmVsIG1lbW9yeSBwb29sIHdvdWxkIGhhdmUgZXh0cmVtZWx5IGxvdyBvdmVyaGVhZD8KV2h5ICBt
-YWtpbmcgY2hhbmdlcyB0byB1c2IgY29yZSBpcyBiYWQ/IFRoZSBpZGVhIGluIHRoaXMgdGhyZWFk
-IGlzIG1lYW50IGZvciBhbGwga2luZHMgb2YKaG9zdCBjb250cm9sbGVycywgeGhjaSBpcyB3aGF0
-IEkgaGF2ZSBpbiBteSBzeXN0ZW07IGkgdGhpbmsgc2ltaWxhciBjaGFuZ2VzIHdvdWxkIGJlbmVm
-aXQgb3RoZXIKSENzCgoKPgo+QWxhbiBTdGVybgo=
+Hi Greg,
+
+The following changes since commit 92a09c47464d040866cf2b4cd052bc60555185fb:
+
+  Linux 6.15-rc5 (2025-05-04 13:55:04 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.15-rc7
+
+for you to fetch changes up to 0f73628e9da1ee39daf5f188190cdbaee5e0c98c:
+
+  thunderbolt: Do not double dequeue a configuration request (2025-05-09 12:14:25 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Fix for v6.15-rc7
+
+This includes a single USB4/Thunderbolt fix for v6.15-rc7:
+
+  - Prevent crash in tb_cfg_request_dequeue().
+
+This has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Sergey Senozhatsky (1):
+      thunderbolt: Do not double dequeue a configuration request
+
+ drivers/thunderbolt/ctl.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
