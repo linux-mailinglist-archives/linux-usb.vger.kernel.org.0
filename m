@@ -1,116 +1,132 @@
-Return-Path: <linux-usb+bounces-23899-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23900-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EFA1AB4F02
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 11:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D0EAB4FB8
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 11:27:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 348391771B8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 09:17:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3871F166154
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 09:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E64B211A0C;
-	Tue, 13 May 2025 09:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4076E226183;
+	Tue, 13 May 2025 09:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nbc/86Gy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gYC5USjh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8461F1513
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 09:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A28E21FF22;
+	Tue, 13 May 2025 09:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747127850; cv=none; b=ZO8SL2rBPo8Xx09bgNdVi9vAXZCtP+c9+qP3hBee/iISij+0jtm6+7fIvefLD4uhgebMy46KuZ89Wzjlumn1ImHWomswDAYQP5D+0WafP1gXabrakKrnM8Ca+OHFSFnnRc2LNH8MjileW45Hvb8R74/FJl4d/ZBYBw0K3p99CAE=
+	t=1747128460; cv=none; b=kMY/6LM8kGKOO93OgzAlCGI0xmZ8agOrFiJh3kmz58iMFHqNeH2BcVwLpsuBiHelMw6bguXiCGcAapz0GO3R3VO3ogtMjXH8478cXBnn5EBSIgofR/cMDif0ncnC4HswDO7faRxWDtLN16IEMuMa4O/pEXTL9EnEhIw+kiQT/gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747127850; c=relaxed/simple;
-	bh=xLjtJRFUpDTO41kea4Cpp6uBjQ79SJoYjce+L4PGry4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m42wy/afLSkRGX9c7scpdq4OPyEFkEQ9TJDo2wHd0Zt/uqmzaA6V9FSR0ZxplcqGN8iMSHV3G9q8ECFiF4pG14gK8tIFYkVJqE9C3gImAaCjxx+wxRPs3gj2xNRYZXW/EyOF7OOEIszg/pVKJiEMJpPNpMqxFnGux5Ieq/pCYHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nbc/86Gy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FB51C4CEEF
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 09:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747127850;
-	bh=xLjtJRFUpDTO41kea4Cpp6uBjQ79SJoYjce+L4PGry4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Nbc/86GyaTGH+Exq6+Fbt6DfMO2KKq2Cxbiuu/j3QhjBQo7Pyg7Wxns/EvMpSitR8
-	 LovIRgzKr8Jq5brRMDCknXOzXrj+5ehQ0soZWTh/fnDPRY1BI+/gB8twgzwGNYRiRA
-	 FaBLEf9SAdHaIGhy4T6qHv3p5wvNFfriGDoR/3V3m+TYN6WLZjI56gYRp30twKyTEq
-	 qnH9+f/8zyzxAS2l2FKXNeTZkBjldKftMritXI32onVjZK5m7rMoNrPkUrKQcaNlhd
-	 Q2t0oJO0BZO88Yh7rEKJZ/Y01sHu4NUVwYFPWt5SMGb+HFlO+6nphPJxUsZzsIJojZ
-	 XQni921uCGnKA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 01AC3C4160E; Tue, 13 May 2025 09:17:29 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220033] xhci: Compliance Issue - avg_trb_len not set for EP0
- during Address Device Command
-Date: Tue, 13 May 2025 09:17:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: jay.chen@siemens.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220033-208809-KeX2VFBT6W@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220033-208809@https.bugzilla.kernel.org/>
-References: <bug-220033-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1747128460; c=relaxed/simple;
+	bh=qQ1Xl9OeIC7tmpYfxlEHSJMzlkn339EhffkvrA20+Z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ekSR9/9AAGrCseYcgeaDHYjplH7SZnGeOKInrRmJ6fu7bVkjRDYrqxCIqG+FlTIooZmKBYuu5I24yK24cWW5U7C/qQwZNUkajCg/fEv7ZQSsV6c6Uy8QOaFu4CCtxBp+nWTEeBFJJ3ZuAyTFK0t8t9w20LnJmvm1cIAQMXtCxm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gYC5USjh; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747128459; x=1778664459;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qQ1Xl9OeIC7tmpYfxlEHSJMzlkn339EhffkvrA20+Z8=;
+  b=gYC5USjh+SV1ArN2STnQ2OgtCRP/4iPLqOVJMbRvBbLmh7d2yzAHUKi4
+   /uYe743hvQAgbhvHCubMlCecNWwybICXJjCwXabtGPlIfukIMjjhqUCZ8
+   Zu6y8vP2JvCLhrh+UjsJoW8EfIaO8dLkiTGpoG0rlNkUmsJOBb8zRp0rc
+   1pVaqB8ykgDC36ZL4yRyvoMC405bkjTw/PKy4bVMeFcv2vJ5PlAy2ILwR
+   YIXOjzdiKMjFcItFkwDSnmmDH7wzrFCidKwnvJqAm3kK1N/wWyfAfTO3Y
+   PQC/d7GqRBVa+cjqAkRJAqKgakClB57I9C7JoXgNLZzdMZIHPndRwiNR4
+   A==;
+X-CSE-ConnectionGUID: n8C3EoRjQL6y8qJPMBHiRw==
+X-CSE-MsgGUID: TfLiL8SkQMSIp0/v95QP1A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="49128820"
+X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
+   d="scan'208";a="49128820"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 02:27:38 -0700
+X-CSE-ConnectionGUID: iDqGChQvRi+ArYgcLuNRUA==
+X-CSE-MsgGUID: EzMIU7fsTLGGO3x7pPVdxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
+   d="scan'208";a="142411317"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO [10.245.244.214]) ([10.245.244.214])
+  by orviesa003.jf.intel.com with ESMTP; 13 May 2025 02:27:36 -0700
+Message-ID: <76b2a5ae-31b1-4627-aa59-8ff023654c3d@intel.com>
+Date: Tue, 13 May 2025 12:27:34 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] USB: core/xhci: add a buffer in urb for host controller
+ private data
+To: David Wang <00107082@163.com>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ surenb@google.com, kent.overstreet@linux.dev
+References: <20250512150724.4560-1-00107082@163.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <20250512150724.4560-1-00107082@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220033
+Hi David
 
---- Comment #4 from Chen-Tzu-Chieh (jay.chen@siemens.com) ---
-Hi Mathias & Micha=C5=82,
+On 12.5.2025 18.07, David Wang wrote:
+> ---
+> I was checking memory allocation behaviors (via memory profiling[1]),
+> when I notice a high frequent memory allocation in xhci_urb_enqueue, about
+> 250/s when using a USB webcam. If those alloced buffer could be kept and
+> reused, lots of memory allocations could be avoid over time.
+> 
+> This patch is just a POC, about 0/s memory allocation in xhci with this
+> patch, when I use my USB devices, webcam/keyboard/mouse.
 
-Thanks for your response.
+Thanks for looking at this, this is something that obviously needs more
+attention
+
+> 
+> A dynamic cached memory would be better: URB keep host controller's
+> private data, if larger size buffer needed for private data, old buffer
+> released and a larger buffer alloced.
+> 
+> I did not observe any nagative impact with xhci's 250/s allocations
+> when using my system, hence no measurement of how useful this changes
+> can make to user. Just want to collect feedbacks before putting more
+> effort.
+> 
+
+I think we can make a xhci internal solution that doesn't affect other hosts
+or usb core.
+
+How about adding a list of struct urb_priv nodes for every usb device, or maybe
+even per endpoint? i.e. to struct xhci_virt_device or  struct xhci_virt_ep.
+
+Add size and list_head entries to struct urb_priv.
+
+In xhci_urb_enqueue() pick the first urb_priv node from list if it exists and is
+large enough, otherwise just allocate a new one and set the size.
+
+When giving back the URB zero everything in the struct urb_priv except the size,
+and add it to the list.
+
+When the device is freed there shouldn't be any nodes left in the list, but if
+there are then warn and free them.
+
+Isoc transfers are the ones with odd urb_priv sizes. If we have a per device or
+per endpoint urb_priv list then sizes will match better.
+
+Thanks
+Mathias
 
 
-I=E2=80=99ve already submitted a patch to fix this situation (by adding a l=
-ine of
-`ep0_ctx->tx_info |=3D cpu_to_le32(EP_AVG_TRB_LENGTH(8));` in
-`xhci_setup_addressable_virt_dev`).
-
-Link:
-https://lore.kernel.org/linux-usb/JH0PR06MB7294E46B393F1CA5FE0EE4F78396A@JH=
-0PR06MB7294.apcprd06.prod.outlook.com/T/#u
-
-
-> This function is only called from add_endpoint(), which doesn't seem to e=
-ver
-> be called on EP 0. But non-default control endpoints would be set to 8
-> indeed.
-
-
-Yes, I misunderstood that function, and thanks for the explanation.=20
-Inside `xhci_endpoint_init`, it sets `avg_trb_len` for the USB device's
-endpoints while the `xhci_setup_addressable_virt_dev` function initializes =
-the
-input context (ref: xHCI 1.2, Ch. 6.2.5 Input Context), and EP Context 0
-(Default Control Endpoint) is passed to the xHC hardware.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
