@@ -1,144 +1,130 @@
-Return-Path: <linux-usb+bounces-23888-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23890-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEF1AB4CF4
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 09:42:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCDBAAB4DBB
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 10:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA66319E334D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 07:42:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ADEE172547
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 08:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85BB1F12EF;
-	Tue, 13 May 2025 07:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEB731F7098;
+	Tue, 13 May 2025 08:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jAKeHnQ5"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aweRqgm2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB203FBA7;
-	Tue, 13 May 2025 07:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FC51F4E59
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 08:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747122131; cv=none; b=h9k159o/mTaW48Mxw/vryEBkpGADL1t7L7plM5bnPBD/d35a7PCcicMI4ZvhGIomjA38brAie5ns9Rgt4LI/XwHtN95kFv2OnolauxemWg7g/wGVqDxT8VONuWrrpdXfBy9WHyM0ripUOwqpKLbBdPzkj9Q42CJAo1tk+Edit4k=
+	t=1747123885; cv=none; b=P6xC9lMNOXe+EEzFvxJZFsHGL7i6tFf+OTYJ6+yYfREbPYsnf2RHm2nHKZ/sRKahafE/26wsFW/6+S/WW+R1+SdYJyAEKKVVR+ub2O4ZfBkBNkNbpdzgYOyL5ZTSPBk4zQUZap3niNhWmeYkwCTEUpvrApM6ifcI0qIEJrlsbNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747122131; c=relaxed/simple;
-	bh=M460D3zObSd+2Z7syVqEJCI611LBZLpaJavsxNSdSCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tfxZLqs09dha/tDV5mT9vF3Kl/urO4/sKCjBoS+5Y5rreJXbVDOwJOw9a5WT2e1K6Oi/vGer0pPkYVZy4F3UhB0GESlZfKqP73HZukRTswepFZJeBK3MuU0v2x7nTTDg7XdVTZB6SmH10APWRlPfcamLg+udI5gmT2oWizNCvsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jAKeHnQ5; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747122129; x=1778658129;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M460D3zObSd+2Z7syVqEJCI611LBZLpaJavsxNSdSCE=;
-  b=jAKeHnQ5fjo2mEPRRTXGVpFignvUZca7TR6u3DsZqCMmMtmxU+3/FKpM
-   w9Rx/aKnUeHt7/YyWpJjf0jS37b8BKmIfuyeO/mpMvVumRR6mv2Bgvul/
-   Uj+Arz/n9QC3Iy68sSnw7/uwUdA1BDCCu3wh9ihFgAtf7Ya1yOZB7lmxq
-   JUXLcmR46pJWTwvLH4AWLD1B4tUdfnB4s5tbLUZNSA9wwzEYHBU/6KASl
-   vz865DKnyqbP2KM5tz9vi0bf7GxxCBiK7pZRxW654DsAT6QEP0ww5Go6K
-   pK5YwJQZQ21tZ30AE2ETLIoZ6Sy2lb394LZlz0yJuO8lNDWNixxTz+tF/
-   Q==;
-X-CSE-ConnectionGUID: aIkc28mxTAqdmgMA7QmQUw==
-X-CSE-MsgGUID: KzT/QMZSSGigOrWjNGs24w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="36577130"
-X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
-   d="scan'208";a="36577130"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 00:42:08 -0700
-X-CSE-ConnectionGUID: 8vPDbHKqRxe5vi8sIZk5MQ==
-X-CSE-MsgGUID: zC07gZk1SImBsUmASNUdnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
-   d="scan'208";a="138556457"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa008.jf.intel.com with SMTP; 13 May 2025 00:42:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 13 May 2025 10:42:03 +0300
-Date: Tue, 13 May 2025 10:42:03 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1] ucsi_ccg: Disable async suspend in ucsi_ccg_probe()
-Message-ID: <aCL3yx_z61IpGgw0@kuha.fi.intel.com>
-References: <6180608.lOV4Wx5bFT@rjwysocki.net>
+	s=arc-20240116; t=1747123885; c=relaxed/simple;
+	bh=eLK2Yhsn+VZRa/Ep05rtZaSS2grqQRKnXKLj2vKbQqc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n3nB4CEBjdKO4/4xL65516NMYQnMGQNlzohGv1szyvU/UTn7JWzV8YbxL2M/MBJlmJMFyQUojGcAzosRQ3wVWYkF4I6oIQBWLj8oVsV0Lp8kD72mM+dDLC5sGZQrDkfq5j5L1KmaEYvqzkFUgvMFXNEgcdvKYNfQcxdi/dBhqZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aweRqgm2; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-442ea95f738so5481345e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 01:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1747123881; x=1747728681; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hvGnGy8q2OiAbegAf3KJYMp0rpcNQnC+vXgXl0BA3Ss=;
+        b=aweRqgm2fhRBCdSolDdmOEWXOdhooI4yfXJFMgUyCu8ZjfUJsy6+8SQK8a7oW7OJp2
+         TTvtfzSWvKNDNkkGosPllvJ2fY6AQ0LOui7ujrxjmzuYsSjpplQG6WqgfxvgRe/H3LEP
+         y4oM1OmXDeoEYd00JfpAQccSJl6r7rEYhfH1o7fg4LIUSuOT5Zxn7DAbplsyD9/4QyXx
+         4o98u1Z1EhhWQ2hLXqhnb7ghfpJi7HrPRoK69lVbw43NZ9AnGnrJGN+dJPddHSLRPUGz
+         RMbA94TcN06VtbLI4JPnZYNX5wfoCF1dfLKhO3HNyBSLgogBjt37MXEWdHEHJIHpUNTx
+         mkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747123881; x=1747728681;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hvGnGy8q2OiAbegAf3KJYMp0rpcNQnC+vXgXl0BA3Ss=;
+        b=vMIz6AxmPhLaGpda+nbqf2vmfBsYokgHm4n59ztzQY9caACvTJ8bDGRTQPZif0dgsX
+         R4MIbxtQI02lpWakle2/rSkuoOj/EIcokXaXURTa5HMdVRIrJWDAfa6MwdEkVGg1i36d
+         PDR6nRv4sRbSb5hYP726PHK6kRJ/oze7WqXDaRJf/3i6HtNM37X4bPY3LXnq+ldnjmee
+         3Wxbv4raC17kKiuMfUzSK5nl6GnmsrY422TDzt3W8Txo7WowsYg+rlHZdQ2x2R659POh
+         hFjQ8rWYSDmFxSdkXZdWgxQI1YIyBSwZGZcFqE9Q7OoFoIBqORDeq74h0MTl5IT9E4d5
+         Zq9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUxvYyK/E3lTLurLklgLQU2c36tt9Ym9p3UyN6DUKN1LptTx6QpIznloROAmOVwotiPDMsVeZpiy3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnSCEbXGPJrAaQHMmQOhlPsd59qoUShWtctq60jIz7C8lu/+so
+	911i/hSAtdIzk5DnTHDjSCN61GNCVppjZ67HMrKRPb9ndEnzvDK4fHh0zwS54s0=
+X-Gm-Gg: ASbGncsX5BhnIsuzPa2RjVtbveRqjCQXrIvqwSG0szSwHxtj8B6D7+cEY+w39SIkyAs
+	He5E1vbzJ+gn/+s//o3mn/bZxzikK3yy2wppoxqnnCPymMWIMzyZ0gEefA7WNmu75oL3lsldiWx
+	KZ4RoMX50vg/PHe7vakTV7S5WAmyzFk2u36CRoW3z7xC9rMgH9bLSCy2khWFRUsG7LD8kdnUeHE
+	2S3ZJyBuRIYoLIPqYOf+a7JaOVbtD4jsFv+IcHzK9t8qmLdi0E99tE8NbnFvtxlHbbU4JtuX2il
+	/BZ+LdvcmQb2JhrLCnPRqnU0Fx5k6MaLJUDlzIabjXBFsq3zBtcaphOT2okCbHilJnNAAuF7ARn
+	Gd6H64wnJwQOjnzBDEHwL7WW23mFjWQ==
+X-Google-Smtp-Source: AGHT+IFzj8clXhFhkyT0sQTuL5gbJ8zzjhwvoolehVcngTmUcthDp886cy7p+L6lZGuPae/gEMtNwQ==
+X-Received: by 2002:a05:600c:3f0f:b0:439:86fb:7340 with SMTP id 5b1f17b1804b1-442d6ddd73cmr140591975e9.30.1747123881469;
+        Tue, 13 May 2025 01:11:21 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1335:3601:f121:69fe:935a:67bd? ([2001:a61:1335:3601:f121:69fe:935a:67bd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd32f3c2sm199830195e9.15.2025.05.13.01.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 May 2025 01:11:21 -0700 (PDT)
+Message-ID: <48d5cae9-ff7c-4076-8b71-8c16bcf00443@suse.com>
+Date: Tue, 13 May 2025 10:11:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6180608.lOV4Wx5bFT@rjwysocki.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] USB: core: add a memory pool to urb for
+ host-controller private data
+To: David Wang <00107082@163.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org
+Cc: stern@rowland.harvard.edu, surenb@google.com, kent.overstreet@linux.dev,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250512150724.4560-1-00107082@163.com>
+ <20250513055447.5696-1-00107082@163.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250513055447.5696-1-00107082@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 12, 2025 at 03:26:53PM +0200, Rafael J. Wysocki wrote:
-> From: Jon Hunter <jonathanh@nvidia.com>
-> 
-> Commit aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending
-> children") had triggered a suspend issue on Tegra boards because it had
-> reordered the syspend of devices with async suspend enabled with respect
-> to some other devices.  Specifically, the devices with async suspend
-> enabled that have no children are now suspended before any other devices
-> unless there are device links pointing to them as suppliers.
-> 
-> The investigation that followed the failure report uncovered that async
-> suspend was enabled for the cypd4226 device that was a Type-C controller
-> with a dependency on USB PHY and it turned out that disabling async
-> suspend for that device made the issue go away.  Since async suspend
-> takes dependencies between parents and children into account as well
-> as other dependencies between devices represented by device links, this
-> means that the cypd4226 has a dependency on another device that is
-> not represented in any form in the kernel (a "hidden" dependency), in
-> which case async suspend should not be enabled for it.
-> 
-> Accordingly, make ucsi_ccg_probe() disable async suspend for the
-> devices handled by, which covers the cypd4226 device on the Tegra
-> boards as well as other devices likely to have similar "hidden"
-> dependencies.
-> 
-> Fixes: aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending children")
-> Closes: https://lore.kernel.org/linux-pm/c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com/
-> Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> Tested-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On 13.05.25 07:54, David Wang wrote:
+> URB objects have long lifecycle, an urb can be reused between
+> enqueue-dequeue loops; The private data needed by some host controller
+> has very short lifecycle, the memory is alloced when enqueue, and
+> released when dequeue. For example, on a system with xhci, several
+> minutes of usage of webcam/keyboard/mouse have memory alloc counts:
+>    drivers/usb/core/urb.c:75 [usbcore] func:usb_alloc_urb 661
+>    drivers/usb/host/xhci.c:1555 [xhci_hcd] func:xhci_urb_enqueue 424863
+> Memory allocation frequency for host-controller private data can reach
+> ~1k/s.
 
-> ---
-> 
-> Commit aa7a9275ab81 is in linux-next and it has not reached the mainline yet.
-> 
-> Thanks!
-> 
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -1483,6 +1483,8 @@
->  
->  	i2c_set_clientdata(client, uc);
->  
-> +	device_disable_async_suspend(uc->dev);
-> +
->  	pm_runtime_set_active(uc->dev);
->  	pm_runtime_enable(uc->dev);
->  	pm_runtime_use_autosuspend(uc->dev);
-> 
-> 
+First of all, thank you for trying to tackle this long running issue.
 
--- 
-heikki
+> @@ -77,6 +78,7 @@ struct urb *usb_alloc_urb(int iso_packets, gfp_t mem_flags)
+>   	if (!urb)
+>   		return NULL;
+>   	usb_init_urb(urb);
+> +	urb->hcpriv_mempool_flags = mem_flags;
+
+No. You cannot do this. The flags you pass to usb_alloc_urb()
+depend on the context you call it in. For example, if you are
+allocating it while holding a spinlock, ou need to use GFP_ATOMIC
+
+But that may or may not be the same context you submit the URB in.
+Recording mem_flags here makes no sense.
+
+	Regards
+		Oliver
+
 
