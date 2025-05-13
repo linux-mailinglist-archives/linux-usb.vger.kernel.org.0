@@ -1,124 +1,181 @@
-Return-Path: <linux-usb+bounces-23882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF774AB4ABD
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 07:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49DE8AB4AC3
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 07:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25C63AC1A9
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 05:06:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 958EA3A75A5
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 05:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228621E3762;
-	Tue, 13 May 2025 05:06:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634288BE8;
+	Tue, 13 May 2025 05:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yL5kwpRI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ksygQgw1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2AC1BEF9B;
-	Tue, 13 May 2025 05:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493451E1DF8
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 05:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747112780; cv=none; b=JWfxePc2EXCJchujeFtDxSFyAvg+Sjns3mTm7cD4+ZayYSmVqfnzUDF1da+EGqo10syVlEstptmCNwJuvvWi7BDswPXFgRQZnSasJ1XGwux+LTmNYt2GaiGra3sM/x4dI1VccBm9RF28EkiW785l7noKHvl4TgJvLD4YbZLfqaU=
+	t=1747113013; cv=none; b=NJRePZ5PfU9evhvg9lH1myHGlMP4x831Yrxuj/q+eDk/ANLSi8wLvcJknxA/0zyaeRE2UR5OnNT2XClyyG/KvJ/29Xc1deau0VUxRJdx+1pUkVz2CGJp/bo3nIcOiT0JV2UEwT1mgQEfVYbHdPQu7cDgkBjyXtnzedBAC5qdK+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747112780; c=relaxed/simple;
-	bh=AtGssVZ4UuorJIl79EDb8G16nKDDcFc3lXLT7kRReyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EsT5A409ZWImCEIixMUcgprno2mHek7NCl62f2TemJi9gBtaEmykwIhZWJhymh+ixhqVyR6AHMdOqEitr1RnZYcjGGv/V063e8XFjqdcbsp/Zo2QvLZ/aWvRECqaHm68VAxJMwBwQUfj4eHNnmlP2YmLcfvN81lsitohYzWpS2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yL5kwpRI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5907CC4CEE4;
-	Tue, 13 May 2025 05:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747112777;
-	bh=AtGssVZ4UuorJIl79EDb8G16nKDDcFc3lXLT7kRReyI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yL5kwpRI9VUVvIbAu4S9rUG2V/TOk1AqE2KxDpl7rq4F3qwJdmmfgopCB7GCIoHsb
-	 afqBEwm/PY9vcLSYIHc20y74dbRsz0FmVfjmbC20xK4ztVH9f/DbwPO1v+tdVTzpp/
-	 1VGPONndDy/XzeOY9FBZzVkhOtMlJ+sUyXZdKhr0=
-Date: Tue, 13 May 2025 07:04:29 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Krzysztof Opasiak <krzysztof.opasiak@neat.no>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	balbi@kernel.org, paul.elder@ideasonboard.com,
-	kernel@pengutronix.de, nicolas@ndufresne.ca,
-	kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
- implement v4l2 enum api calls
-Message-ID: <2025051317-deflation-discuss-1201@gregkh>
-References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
- <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
- <Y4xaXHLoiPupWM6V@kroah.com>
- <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
- <2025051253-trimmer-displease-1dde@gregkh>
- <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
- <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
+	s=arc-20240116; t=1747113013; c=relaxed/simple;
+	bh=cxqjrBx3kTpOHbacDXp/Fe0LkjauDwSUf53IzM3RIHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CJhrq+VAE+j4DsJ6pe4XFOoNuzWHqDZgpOPyfzpsuxO+V5koaw7MK4PXWpjBU/1KPVkomAAgTN5f1uhgKWZTrzsVOtIkNaBYxFU9vEIJMQZXGuFH8EHa8heVPqAIRBoHc0gXV23KTkVyvKe84spScDwmTXoMsLZzA41vPbF9aaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ksygQgw1; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b0db0b6a677so4663712a12.2
+        for <linux-usb@vger.kernel.org>; Mon, 12 May 2025 22:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747113010; x=1747717810; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=81hnT5JYAGOLBlSsNMic7sDzKs20VH/V/TIv7YvaGSs=;
+        b=ksygQgw1+2CEWLR/9hyvr9MEND03eeP5drRyK6cN0tk5ciG5MwJ9RU52hp1h+lCllW
+         jhQ2c65wQa20sTroWLD6y0YhdvO2m0IkHKX0VJbL6T6A0w6p8sV47F4PHWRcO78BNBrw
+         KHxrs6FjToatxWxhLgiluitqj4ExQo8hzpCcyAG0o7WaWFh1pGkITKAdYvIV2iX+BGhb
+         2oGxtjA4KLDe3jwD05vED9s1AR8Yg9YFfRcqQZPhehzpcHNDPQNTJQi5Snw+1hJjgXYH
+         oAqUduZYE5D1/ZqMgqIxPSV5ZCVC7FZeDUIkU7P9zyqq0rms9/210rzFf7TjlFR70LaW
+         DOgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747113010; x=1747717810;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=81hnT5JYAGOLBlSsNMic7sDzKs20VH/V/TIv7YvaGSs=;
+        b=kfzq4PQySEmEQPZjvW1q0CqSekRo1acfSgIiFerckB62TLaZNwfmMMnvd2ihDpyYuk
+         JhNTxtw9DvqoMY4XlpgPwyGNZS3yNBiK0tIy6Fm9nuG9Bw0HISQhotxqyVe1uA/CrUhE
+         BNRlPdTB4pCw4bjyonWzhl6hBSBzEg30jR21+c3vkgn+UBEnIkAc6pGMTy2iv+75CzNJ
+         ziAlySdHeMX4P8H2iIFEzTgw+bozsMwz/l0zJd/w431nAUXWmafBVeXTnUtdSymrrVGG
+         OmI1T4HTVb0so2yZjwhBIXpd417+u5Uh/jV8WvdCNxE8CSZiM6Xf/tKgY3wU4E/NzSY6
+         OyHg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+sDG0J5bYGnVT2t5m9Nnimo5S7XNRf5tS85rbD/nPhFU1SpB/lvs/m5r6fGuLKuZO+nwT23IbEJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwctqTVxzHEXD1V4fN/wTFrgM8lcG4lidd2lift71SSVYMmbMoX
+	UnOk/pOjuFDKbacTH7nCtuBjYzbqtXL8VgVeWHpNdxlV9XqPhpCewa9EoQ52OQ==
+X-Gm-Gg: ASbGncv1kab6Z6HvkBGiOVsWe6TPsEcH91zJsS02jH97ntzVjImaOE10pdjNA7sJf5o
+	dN+21BvzlIuiFiU0Tk7jEpShzX+vkJvzIUJKJ/aTt2bemlwCDFKqN9XtMyeoKBS27amkKOv6kvl
+	SdmCV85ZXQnKExPMIOk+zl3z1RG+XhCn9nwivhHHPVN7BLlTjtHkGBCgGoMkNQudIq2um9cXN5d
+	9tPDGS4DsXkyftqZKpdFkmWMhrtg2IttEHh3IlC0Kvd1zjste1Wtvh4P2HiTsHAyEpuByM5nThx
+	0+/w3rc3Uo5prO84LiuaaJpOGaDYVqDtL+RPrvMpV/2XQdQdJN/gIHVZGwxgzNbFCSE9xRf474L
+	LcuUBn7+ea8MFvD9Eb2lx
+X-Google-Smtp-Source: AGHT+IGfy5kPpmg1u05cDB23GMn6/iiBBg2PQjgjfT2slhmZBcXNsZ9nNvlTSHiycu8Z5JpPXl9tnw==
+X-Received: by 2002:a17:903:3bc7:b0:22f:a5ff:ec67 with SMTP id d9443c01a7336-22fc8b3399cmr209564955ad.17.1747113010228;
+        Mon, 12 May 2025 22:10:10 -0700 (PDT)
+Received: from ?IPV6:2600:1700:4570:89a0:d077:eefe:6c8:eb65? ([2600:1700:4570:89a0:d077:eefe:6c8:eb65])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc7549200sm71543555ad.10.2025.05.12.22.10.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 May 2025 22:10:09 -0700 (PDT)
+Message-ID: <bae35813-74fc-4a7f-bbad-a4744826bcdf@google.com>
+Date: Mon, 12 May 2025 22:10:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Len Brown <len.brown@intel.com>, Kyle Tso <kyletso@google.com>,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+ Badhri Jagan Sridharan <badhri@google.com>, Pavel Machek <pavel@kernel.org>
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <174667008518.3134866.16860556665392127379.robh@kernel.org>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <174667008518.3134866.16860556665392127379.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
 
-On Mon, May 12, 2025 at 11:03:41PM +0200, Krzysztof Opasiak wrote:
-> On 12.05.2025 12:43, Krzysztof Opasiak wrote:
-> > On 12.05.2025 12:38, Greg KH wrote:
-> > > On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wrote:
-> > > > Hi Greg,
-> > > > 
-> > > > On 4.12.2022 09:29, Greg KH wrote:
-> > > > > On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
-> > > > > > Hi Michael,
-> > > > > > 
-> > > > > > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
-> [...]
-> > > > 
-> > > > Given that I'd like to suggest that it seems to actually make sense to
-> > > > revert this unless there are some ideas how to fix it.
-> > > 
-> > > Sorry about this, can you submit a patch series that reverts the
-> > > offending commits?� As it was years ago, I don't exactly know what you
-> > > are referring to anymore.
-> > > 
-> > 
-> > Sure! Will do.
-> > 
-> 
-> Would you prefer to have a set of actual reverts related to this:
-> 
-> da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api calls"
-> bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call"
-> e56c767a6d3c Revert "usb: gadget: uvc: also use try_format in set_format"
-> 20f275b86960 Revert "usb: gadget: uvc: fix try format returns on
-> uncompressed formats"
-> 059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in
-> uvc_v4l2.c"
-> e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam loadable again"
-> 
-> but have a negative consequence that the series isn't really bisectable from
-> functional perspective. For example commit e6fd9b67414c breaks g_uvc until
-> we apply da692963df4e so the series would have to go in as a whole.
-> 
-> Or you would prefer a single commit that technically isn't a revert but it
-> just "undoes" the negative consequences of "usb: gadget: uvc: add v4l2
-> enumeration api calls" (kind of a squash of all commits above)?
+Hi Rob,
 
-Ideally we can bisect at all places in the tree, so it's odd that
-reverting patches would cause problems as when adding them all should
-have been ok for every commit, right?
+On 5/7/25 7:08 PM, Rob Herring (Arm) wrote:
+> On Wed, 07 May 2025 18:00:22 -0700, Amit Sunil Dhamne wrote:
+>> Extend ports property to model power lines going between connector to
+>> charger or battery/batteries. As an example, connector VBUS can supply
+>> power in & out of the battery for a DRP.
+>>
+>> Additionally, add ports property to maxim,max33359 controller example.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
+>>  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
+>>  2 files changed, 38 insertions(+), 7 deletions(-)
+>>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+I ran this and didn't see any errors on my side.
+> dtschema/dtc warnings/errors:
+>
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250507-batt_ops-v2-1-8d06130bffe6@google.com
+Even the build logs don't show any error log.
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
 
-But if there are merge issues, or other problems, then yes, maybe just
-one big one is needed, your choice.
+My patchset is based on v6.14-rc6 and I tested it on that.
 
-thanks,
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+>
+I did all of the above but make dt_binding_check still passes.
 
-greg k-h
+(.venv) amitsd@amitsd-gti:~/linaro-p6-image/src/linux$ make
+dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/connector/usb-connector.yaml
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+/usr/local/google/home/amitsd/linaro-p6-image/src/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml:
+mac-mode: missing type definition
+
+^ This is not newly introduced jfyi.
+
+  CHKDT   ./Documentation/devicetree/bindings
+  LINT    ./Documentation/devicetree/bindings
+  DTEX   
+Documentation/devicetree/bindings/connector/usb-connector.example.dts
+  DTC [C]
+Documentation/devicetree/bindings/connector/usb-connector.example.dtb
+
+(.venv) amitsd@amitsd-gti:~/linaro-p6-image/src/linux$ make
+dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+  CHKDT   ./Documentation/devicetree/bindings
+  LINT    ./Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/usb/maxim,max33359.example.dts
+  DTC [C] Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb
+
+Please can you advise on what I may be missing?
+
+Thanks,
+
+Amit
+
 
