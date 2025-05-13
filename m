@@ -1,178 +1,274 @@
-Return-Path: <linux-usb+bounces-23913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23914-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4253AB55A5
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 15:10:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8093AB562D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 15:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF5727B0B93
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:08:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7A3919E16E3
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D060028F520;
-	Tue, 13 May 2025 13:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NiQlxZiP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25AF292099;
+	Tue, 13 May 2025 13:35:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92D428ECCB;
-	Tue, 13 May 2025 13:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F33128F94E
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 13:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747141749; cv=none; b=AFTvYKj15DftKgleWC3whv1fbR51U5xNCV0h6eHDaMM8cofN3GMRfNwDxfW6+B68OAz71XF46Hdn3TtaKu2V/NwHj2S/P2k2JbAQ+8rbxYZm22kG1wF3//Uzz3iCH3BGSu8JcTgRgYHq9GYvW1fWrfyjUzRLkPMrBmLjyyKYXOw=
+	t=1747143307; cv=none; b=pzLOtC2iH9NHW0GOhd5TqVvPBkAnLSaTSj1weCTSUbIGl4wBxMh54TsYDtlrXgS03b9QabpE2bK/Z+Px79z6mTVY3pw5tGh1DYuLnMAP9zyNbguy8OzQh8x3HEtjYxVuX+mPgCb1Mwarcj79iAC+UEJpNkSi09HQjyGNvawTrp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747141749; c=relaxed/simple;
-	bh=5/Y6EJVmF4DB+oWCs6oaK0sniE4Ne4EigB/OJbPea9o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s4YZ67XBfLeEdJrQ5OHy7cBNHuaGf7mTUd2GrEy4oVGXtTOyAUy6u4eAaCJbW/bGPSQKHk/RK7NSXi4fNMzO7afQmspVp7LP3xjKxXR15HXfBgyjna7NjMeeR1P4/UsgzUBM69o+N8Cs7mKfF6CUNXktmSgMdf5jwbI35DSjkLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NiQlxZiP; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-741b3e37a1eso4477303b3a.1;
-        Tue, 13 May 2025 06:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747141747; x=1747746547; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8IPebdiQyz6+b4I6llbGi3nXjR0k6+4GTE2l/0cCeM=;
-        b=NiQlxZiPNpv63bijowMa+4I1JrFWlDwiJoQN9IMea98XMjiM5cN3+sSvP6I2Njj+th
-         vattxHOz8R3hKin8hGcgPrpIkDlIL+9dbwNyYdE35Th18qfOSyfI1EOnynWaIy5NsA26
-         s3e85mIkWRaFiMqXHdMEGyfBsoXBnAWnvMSHz7LS/vycUTVA2msu9zCe0BeHToI8/Av4
-         1csw8dewu7VLiI5+2u/cXJdNzQuECXRKMPketPO4wy9nJTIciK0WGXjdSyboTt/dSE07
-         WNhfqzcAJW7bcoFNXeM+jd1y3fPoHze6N7JU4G3ciw3idV7M4x6i4dkWml+X9a+hGL5W
-         DuIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747141747; x=1747746547;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B8IPebdiQyz6+b4I6llbGi3nXjR0k6+4GTE2l/0cCeM=;
-        b=oRLsAGLGVQm2ZSfvpt9V7V3ylpuP4ZXo27gGfHy0YeYSuHGgYhZh9sHlQ7DwKdumhJ
-         335YreIJHo/nWHqtTcBeon6K2BPb3g2qrUn5bttzln+Xek6UCX+ZIw/gQXF4g+nmXVq4
-         bF2DzEtvf3851Q7EcIXpGSmt3Qi+wj5GLEqi8mzVDo5hLtnkL2xEXDpphtZw05o0frgL
-         sGnUEIRty3Dk95/uMC05aSINWN6KNmsw7FLC1wYpL9Fi3zvlVHqs8c3tCD0rXGWvY3Qt
-         lNI93ZqxW/mpw3HK1uDLp2TmoyNlbSCXLd5ZxY2Fv/ve6+AImAHpXA0HhNTRsUNqUxlk
-         GwVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVAJdiCVyjubEsV553b/fS0Cb3tdTjMzU2r+Rssg9jnriw7wgPpt+Ek2VXwTRU0+I1NIaZ3hUd9+0zwKTg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOSTgRSl9BQF/pSzknPM28d43ysMx3JmT/B2UScT60SEi+Qbf8
-	77dIfsZPRq82ssNKxfDV2U/MjdIqyymeHGafw9Ki3toKf+ug+abJ
-X-Gm-Gg: ASbGncuYFwKm2uq1MrLjyCHNiRioi4L0nTsB1Ypovrhh8uSzmBFPF03L+M3kWaQO7Q6
-	wkd+sV+8ZvRtp8/ihJqa68nc7wRJK3lslDzmSSbIN29xoXKTv+WKEV3XshYBsj/25drfowpCgr3
-	AMeksbZ9R6TDias5PC5GZxbLRjWkJ3hhvkSPcSbKaPzg37KQnwv4HapBvl9dPQeH0Q2QMp55iQC
-	KQvl9GIYp8RezaQd3B6KiIHexiQvO7M/2a9UYs88NjI0r/Py0HDIgfnow2KURMLQ2WTw4ahkF8S
-	4BTSnMC5zOge7nvKbRVRlHb8C7MvVFiIuNkSFvjAAk8H0ijXYP4IAMEnUD0MSVtrw4TJ4ZRRu0G
-	N/vTbnbzlfI46W+xfaQtB38YvQzOhgdfvPjHg1bWfBnrS60fAUvDk
-X-Google-Smtp-Source: AGHT+IFQ3m4yCK+ppMcpl0QJccpa/po7ZnPQFvbBYq1xVipSJv4daPLsHxqkhFVZMg9x/w5RDCKieA==
-X-Received: by 2002:a17:903:32d0:b0:22e:421b:49b1 with SMTP id d9443c01a7336-22fc91aea35mr280650885ad.48.1747141747042;
-        Tue, 13 May 2025 06:09:07 -0700 (PDT)
-Received: from cosmo-ubuntu-2404.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc75469e0sm80248185ad.48.2025.05.13.06.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 06:09:06 -0700 (PDT)
-From: Cosmo Chou <chou.cosmo@gmail.com>
-To: badhri@google.com,
-	heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chou.cosmo@gmail.com,
-	cosmo.chou@quantatw.com
-Subject: [PATCH v2] usb: typec: tcpm: Use configured PD revision for negotiation
-Date: Tue, 13 May 2025 21:08:34 +0800
-Message-ID: <20250513130834.1612602-1-chou.cosmo@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1747143307; c=relaxed/simple;
+	bh=s6GW5Pvcduw6rnUJeBNVMo8uUk5Ykph08k3RJZ43SOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L2PqLLY26R00pp0xYpHscwfuusq7JaYc3L6kl9JRlQp09QdXh9VZA0/rxM6KHz4hXb9bBFu9JmlVp7YbAqKnyHbahYNwv/mfZdrL53GQc7mSBIqOG9ogQtFMop0VTtnEk5B/868bIWKUKiaUY18UcKYpgRshg85sejb7X8olFks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1uEpmf-00026v-Az; Tue, 13 May 2025 15:35:01 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1uEpme-002Y1Z-1k;
+	Tue, 13 May 2025 15:35:00 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1uEpme-002bJv-2o;
+	Tue, 13 May 2025 15:35:00 +0200
+Date: Tue, 13 May 2025 15:35:00 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Krzysztof Opasiak <krzysztof.opasiak@neat.no>
+Cc: Nicolas Dufresne <nicolas@ndufresne.ca>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	balbi@kernel.org, paul.elder@ideasonboard.com,
+	kernel@pengutronix.de, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+Message-ID: <aCNKhGKducVhTLeA@pengutronix.de>
+References: <Y4xaXHLoiPupWM6V@kroah.com>
+ <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
+ <2025051253-trimmer-displease-1dde@gregkh>
+ <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
+ <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
+ <2025051317-deflation-discuss-1201@gregkh>
+ <e5cd5e9d64123b319bae1a73c96cd33a3ad9e805.camel@ndufresne.ca>
+ <2efb125c-d8ef-468a-a7ea-afcb5b5bee44@neat.no>
+ <aCNBNbXceDz2xTCj@pengutronix.de>
+ <d2fec157-c1dd-414e-8d9b-e7054c48564b@neat.no>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mKzi7A47K4kDo+y4"
+Content-Disposition: inline
+In-Reply-To: <d2fec157-c1dd-414e-8d9b-e7054c48564b@neat.no>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Initialize negotiated_rev and negotiated_rev_prime based on the port's
-configured PD revision (rev_major) rather than always defaulting to
-PD_MAX_REV. This ensures ports start PD communication using their
-appropriate revision level.
 
-This allows proper communication with devices that require specific
-PD revision levels, especially for the hardware designed for PD 1.0
-or 2.0 specifications.
+--mKzi7A47K4kDo+y4
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
----
-Change log:
+On Tue, May 13, 2025 at 03:07:07PM +0200, Krzysztof Opasiak wrote:
+>On 13.05.2025 14:55, Michael Grzeschik wrote:
+>>Hi Greg, Krzysztof and Nicolas,
+>>
+>>On Tue, May 13, 2025 at 12:31:49PM +0200, Krzysztof Opasiak wrote:
+>>>On 13.05.2025 12:04, Nicolas Dufresne wrote:
+>>>>Hi Greg, Krzysztof,
+>>>>
+>>>>Le mardi 13 mai 2025 =E0 07:04 +0200, Greg KH a =E9crit=A0:
+>>>>>On Mon, May 12, 2025 at 11:03:41PM +0200, Krzysztof Opasiak wrote:
+>>>>>>On 12.05.2025 12:43, Krzysztof Opasiak wrote:
+>>>>>>>On 12.05.2025 12:38, Greg KH wrote:
+>>>>>>>>On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wrote:
+>>>>>>>>>Hi Greg,
+>>>>>>>>>
+>>>>>>>>>On 4.12.2022 09:29, Greg KH wrote:
+>>>>>>>>>>On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
+>>>>>>>>>>>Hi Michael,
+>>>>>>>>>>>
+>>>>>>>>>>>On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael=20
+>>>>>>>>>>>Grzeschik wrote:
+>>>>>>[...]
+>>>>>>>>>
+>>>>>>>>>Given that I'd like to suggest that it seems to=20
+>>>>>>>>>actually make sense to
+>>>>>>>>>revert this unless there are some ideas how to fix it.
+>>>>>>>>
+>>>>>>>>Sorry about this, can you submit a patch series that reverts the
+>>>>>>>>offending commits?=A0 As it was years ago, I don't exactly=20
+>>>>>>>>know what you
+>>>>>>>>are referring to anymore.
+>>>>>>>>
+>>>>>>>
+>>>>>>>Sure! Will do.
+>>>>>>>
+>>>>>>
+>>>>>>Would you prefer to have a set of actual reverts related to this:
+>>>>>>
+>>>>>>da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api calls"
+>>>>>>bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call"
+>>>>>>e56c767a6d3c Revert "usb: gadget: uvc: also use try_format=20
+>>>>>>in set_format"
+>>>>>>20f275b86960 Revert "usb: gadget: uvc: fix try format returns on
+>>>>>>uncompressed formats"
+>>>>>>059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in
+>>>>>>uvc_v4l2.c"
+>>>>>>e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam=20
+>>>>>>loadable again"
+>>>>>>
+>>>>>>but have a negative consequence that the series isn't really=20
+>>>>>>bisectable from
+>>>>>>functional perspective. For example commit e6fd9b67414c=20
+>>>>>>breaks g_uvc until
+>>>>>>we apply da692963df4e so the series would have to go in as a whole.
+>>>>>>
+>>>>>>Or you would prefer a single commit that technically isn't a=20
+>>>>>>revert but it
+>>>>>>just "undoes" the negative consequences of "usb: gadget: uvc: add v4l2
+>>>>>>enumeration api calls" (kind of a squash of all commits above)?
+>>>>>
+>>>>>Ideally we can bisect at all places in the tree, so it's odd that
+>>>>>reverting patches would cause problems as when adding them all should
+>>>>>have been ok for every commit, right?
+>>>>>
+>>>>>But if there are merge issues, or other problems, then yes, maybe just
+>>>>>one big one is needed, your choice.
+>>>>
+>>>>Won't a plain revert break userspace like GStreamer that have=20
+>>>>depended on
+>>>>that patch for years ? In such a delicate case, wouldn't it be less
+>>>>damageable to introduce workaround, like alias ? This is one personal
+>>>>script against numerous users of a generic framework implementation.
+>>>
+>>>Shouldn't GStreamer be robust enough to handle cases of old-kernel=20
+>>>which haven't had this feature at all?
+>>>
+>>>The main reason why I reported this is not really the name=20
+>>>limitation but the fact that this patch is just incorrect for=20
+>>>cases where you would like to expose different formats at=20
+>>>different speeds. This feature was there for years and we do have=20
+>>>products that depend on it and this change along with the further=20
+>>>commits that depend on it broke that support for us.
+>>>
+>>>You are absolutely right that those commits added a feature that=20
+>>>now someone else may depend thus it would be perfect to fix it in=20
+>>>a way that doesn't break anyone's userspace but the problem is=20
+>>>that due to the way v4l2 API is designed I really don't see a way=20
+>>>how we could make it "speed-aware" without breaking all the users.=20
+>>>That's why we are kind of stuck between:
+>>>
+>>>1. Leave those commits in and then you cannot different streaming=20
+>>>headers for different speeds but users of those API will keep=20
+>>>working.
+>>>
+>>>2. Revert and bring back the feature of UVC ConfigFS interface=20
+>>>that was there since its inception but break the users of "New=20
+>>>API".
+>>>
+>>>>
+>>>>I believe due to the delay, you are facing an unusual ABI=20
+>>>>breakage, which
+>>>>requires a more delicate handling.
+>>>
+>>>Agree. The situation isn't simple as whatever we do would break=20
+>>>some userspace... I'm not an expert on v4l2, so if anyone with a=20
+>>>better knowledge of v4l2 internals has a suggestion how we could=20
+>>>make this work with the existing API I'd be more than happy to try=20
+>>>to follow that path.
+>>
+>>As a shortcomming compromise I would suggest to support both worlds by
+>>conditionally set uvc->header if the directory h was found. If the
+>>uvc->header was not set then we could print some info and disable the
+>>main part of the possible uvc callbacks that depend on this uvc->header
+>>objects.
+>>
+>>The only downside with that would be that using directory h in the
+>>streaming header will implicitly create the limitations of not
+>>indipendent formats per speed that Krzysztof mentioned.
+>>
+>>The alternative would be to put more effort into this and parse all
+>>directories in the streaming header subnode. However since the idea of
+>>using the v4l2-api is already talked dead by a long discussion history,
+>>I would rather focus on transition the remaining functionality of the
+>>gstreamer uvcgadget plugin to finally become independent of the v4l2api.
+>>
+>>How about that transition path?
+>>
+>
+>If I understood you correctly, you are proposing that if the header=20
+>directories are named in a different way than h we would not set the=20
+>uvc->header pointer and make all the v4l2 callback that are using it=20
+>just return -ENOTSUP in this case? It would also mean that the=20
+>uvc_v4l2_set_format() would need to somehow be broad back to the=20
+>previous version which does not use -uvc_v4l2_try_format().
 
-v2:
-  - Add PD_CAP_REVXX macros and use switch-case for better readability.
+Yes.
 
----
- drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+>Although seems kind of hacky to change kernel behavior based on the=20
+>directory name I think if we add this to the doc this could be an=20
+>acceptable compromise that would make both scenarios work.=20
+>Alternatively, instead of basing that on the directory name maybe a=20
+>proper, named ConfigFS attribute somewhere inside UVC directory=20
+>"gstreamer_support" or something else would be more explicit for the=20
+>user?
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 8adf6f954633..48e9cfc2b49a 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -313,6 +313,10 @@ struct pd_data {
- 	unsigned int operating_snk_mw;
- };
- 
-+#define PD_CAP_REV10	0x1
-+#define PD_CAP_REV20	0x2
-+#define PD_CAP_REV30	0x3
-+
- struct pd_revision_info {
- 	u8 rev_major;
- 	u8 rev_minor;
-@@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
- 	}
- }
- 
-+static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port)
-+{
-+	switch (port->pd_rev.rev_major) {
-+	case PD_CAP_REV10:
-+		port->negotiated_rev = PD_REV10;
-+		break;
-+	case PD_CAP_REV20:
-+		port->negotiated_rev = PD_REV20;
-+		break;
-+	case PD_CAP_REV30:
-+		port->negotiated_rev = PD_REV30;
-+		break;
-+	default:
-+		port->negotiated_rev = PD_MAX_REV;
-+		break;
-+	}
-+	port->negotiated_rev_prime = port->negotiated_rev;
-+}
-+
- static void run_state_machine(struct tcpm_port *port)
- {
- 	int ret;
-@@ -4782,8 +4805,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		typec_set_pwr_opmode(port->typec_port, opmode);
- 		port->pwr_opmode = TYPEC_PWR_MODE_USB;
- 		port->caps_count = 0;
--		port->negotiated_rev = PD_MAX_REV;
--		port->negotiated_rev_prime = PD_MAX_REV;
-+		tcpm_set_initial_negotiated_rev(port);
- 		port->message_id = 0;
- 		port->message_id_prime = 0;
- 		port->rx_msgid = -1;
-@@ -5048,8 +5070,7 @@ static void run_state_machine(struct tcpm_port *port)
- 					      port->cc2 : port->cc1);
- 		typec_set_pwr_opmode(port->typec_port, opmode);
- 		port->pwr_opmode = TYPEC_PWR_MODE_USB;
--		port->negotiated_rev = PD_MAX_REV;
--		port->negotiated_rev_prime = PD_MAX_REV;
-+		tcpm_set_initial_negotiated_rev(port);
- 		port->message_id = 0;
- 		port->message_id_prime = 0;
- 		port->rx_msgid = -1;
--- 
-2.43.0
+This sounds even better. That way we would not depend on the hacky
+directory behaviour. And documenting this attribute would be even less
+shamefull.
 
+That sounds like it all should work out.
+
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--mKzi7A47K4kDo+y4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmgjSn8ACgkQC+njFXoe
+LGR/Eg//SpGzvyB750mmWfOVr19Aj9oQOpA1wNGz4vgQxOgFhBgus87HGHXaZblj
+weRasV+ioIxNz+L6U1KN/GFtBtIWN8CF2+gShnlTx/yUJF9AceQpKWy5W+/ObCPu
+3LBv6atA0LzzHLNXh7VeY0mpACeAZF54J0q0BTkfU6wKvDfVq2IImbYFn9QA3oMB
+8ayVM8EYX1/CMwUQwHd0iPxKcQu27KyPTbSl1w98z+LpbpckeC/+P8ZpaNGwWPy2
+bIsOlPb/WBoTCmwenfVB+BjExY/EQ2bZDuVxron5DlLHRQeYGnJpb0uzg4Ks2DEI
+YtcnurTCC9h0i+CZymsNvUQyjEXgzXIAsFn8InvCOsgGGbmAeDat1AR1Mo6nSU8j
+nxACOZ1/mCNKHZiGXekzJcvbVjKI9QEpbgH4AI897WP2CPjWLtoLqNvQtUaAPnII
+hOGe+IQgXXaW85vFnKuAZfWxcLWpHnf0g1dKOHJ1ZUC3zNIQt1qm/S45SMpjcW3D
+k7RcVSvrGXetKflEUwYbrn1zCQPf77VJTV+izOYZaTBIrbi5133RDqg4gJJOg+Hk
+gWZPiKL5B7ra4+ZYk2TJeS0cnD/D4LS79wu8uBtKP000vgqlwNjDbbQ3dsBZSZlu
+smKjmlsHNf0Z2xf0bbHTboTCqRTmG0fkRAoBAlvTJPVdknIIFtA=
+=DN2u
+-----END PGP SIGNATURE-----
+
+--mKzi7A47K4kDo+y4--
 
