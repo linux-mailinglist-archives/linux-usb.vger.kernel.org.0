@@ -1,54 +1,85 @@
-Return-Path: <linux-usb+bounces-23927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88931AB5CAA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 20:48:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA256AB5D59
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 21:47:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB13019E81FF
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 18:49:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4E0419E4D99
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 19:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4252F2BFC63;
-	Tue, 13 May 2025 18:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689DD2BFC9D;
+	Tue, 13 May 2025 19:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="TpzyOAFl"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="iE6bub0D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583D52BF96B;
-	Tue, 13 May 2025 18:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DABB3596B
+	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 19:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747162125; cv=none; b=Zv38mKJ0RFVr5A6xhHXXg0zeRVTxBQ54vxsBOWvrst6ADlxQ41O56W+yJSA/T+cHql4tDNAGeVShfujorvWzwouB4b4VskctzazfuSNXatqm+7Ck9VyOqlrDz7OLSHTNkf1pxbEUXdOAtsOyKrQ/+gcwxeWO8PFBYK0ACLruj7w=
+	t=1747165608; cv=none; b=DTSAxjyDQYfLMt5RuOb/S+0NJau4CmBsGPiKg2JvPkkzXKU41w1lrtGZNlHxSOtZvT8YL4rqidS/hNCCUH3+hvOuiw07IMckMRKFiOMcm99rVUqc1ZzHoWr+rdu/TqO740Od1d63oJYodH6cbX5Qevoa19ivNIpmSwiVIZCgp3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747162125; c=relaxed/simple;
-	bh=IKX7mVUZ/7u8tuGCUbtieZOFM2TzCKbQU9MJ0WCaJBk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=iSqpkRUSUC0TvuNcNnH/Or3YzIz+1TuHI3IlR0lKDGZ2CJGoKYuC9+8dFKO0QgavD0oiUfQZKmxpmZkG4dSTX5ygxyHP8xneqpNt9I5+4sfTLsNSEm4pzRyv27h0VWUCLjnyqd45z1oQHCtPA2FbOhDPJjtlvHM/jOkWT6mN+qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=TpzyOAFl reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=RWNTE90aG7EUPx1iaMWuFa2Ik/5xjdwz+oa9ogYlhH8=; b=T
-	pzyOAFlz8txz8sryNeuMHVV+roWZOtkZPpyZwltOu/dk9ONEyZfsp5KTMh1/SYjp
-	R4zJXo1Q3Oo80/tcULpe4KQRpiqLv0FO4r2ceeGAoAkZ/Xr0Xo8Lwp0IUQd+T/EF
-	Ur3XC+NPvaOeSPo0xRVCUqszVItGm8w6Q3Yk8mqBBc=
-Received: from 00107082$163.com ( [111.35.191.17] ) by
- ajax-webmail-wmsvr-40-140 (Coremail) ; Wed, 14 May 2025 02:48:21 +0800
- (CST)
-Date: Wed, 14 May 2025 02:48:21 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Alan Stern" <stern@rowland.harvard.edu>
+	s=arc-20240116; t=1747165608; c=relaxed/simple;
+	bh=MszmKtBNtjS/mCXs9S5eoJis8nie5o+i/1key2F4EpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ah+Osa8Gsf8iqsT8JMRAz2tMpniiu+9EhWTq1JnjhUBFOvtfCHlpqZURiUUTdA7D8hebhgJ7RqE5AvrWmEaeBran4HPZsq/gGnVFkpUOvZRML6+vu0u+WwF9ZytI2kCkxirfBRUIRyMbXWWGj8B1o68mXpz6SbJYTjxKW2sxmHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=iE6bub0D; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6f53c42cea6so57437156d6.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 12:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1747165604; x=1747770404; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Gfow+0jLuuX+jpDPFCaVboVDazQRdjtB0gETvpjt9w=;
+        b=iE6bub0DTWAtC297gUbFgS9sBUm2+JTh2uqjUS3Y+Ud8vrLrIZVU/ij/k0dZlgnFod
+         dXcdS89R43Lc3fe+4ljKfo9at6OFgd3ZPq1wVG3LQmf5L9JIdJoIUxLOkmzAaOZpIKdd
+         mPIhw1s7B0z1h1G2m5xfhYCrpzLb8OSEMTzaJK/l02Bq+l3DcQQVJ8ZNrU42pqaDTbOJ
+         rXjiJmxIKHW3FmLGH3XDT2tHecwm5xHCpXPypQvWOHmRh3hicuEsc5rqnqO4PUCRbZPc
+         XpP3fmHSkOTjSWg+0Z+m3SshYfS83VmvjhyKvttNLyKnRtMyCqPnBUD3MElv9h4VArMW
+         EDfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747165604; x=1747770404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Gfow+0jLuuX+jpDPFCaVboVDazQRdjtB0gETvpjt9w=;
+        b=gGcNaG2RakvSnKzbLlEyS9Gm+jKBaIXjFAZmwX8+l/BP4p/bTi1mJIn3vFWuFa2yD8
+         J7UOh9aRPPD0pXgOSu0YolYzH54+09XZ4iqDEXaRiZbbzaNA+IuCnhZnl919UVprEdW0
+         o8GlCdtekoofO7Uki4w7znYZ2pGJCdI/x+umDcKvfxQJUrEOC/U2/G9w0/VwXZ/u1iLb
+         hNpTFLY8WPssPsmh3w8f5ubIiLiJisLUqXxJfnsgnrNcp9Iqz24wYGZ/DHI2mpEpK8TL
+         kRkY1xcjemKJd+GTrPrZcbJ5mtqzQdt0Tm3e0rccfvJxsEc8zQz3MM8kIHMY4SxbNObj
+         Jn5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVQtx7P76pPaIpWCrBJ66XsfFyon40Y0eYGf/NnALz+zf7xUzLfuS4wEPYfL6WSIb7XgRQdgYcdagY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl05fVXayX44NKZKieodoNOlmJGTPaMIlX+ZZR9jMkijaSU+NH
+	ApcEW3VUV9hdLeJxiGlE3GjHFWObS3s0nJlfSjylen0426oh+n7eY5uQdGW1ow==
+X-Gm-Gg: ASbGncvBfy19iHBmP9oyi+yR+3cK2yzEMBZMVw9gMtN3NMbYqPcglFg60Fv8+yMeDoF
+	jQEPvsnzKCWKbWQ1oVlOWKcHsyOueBmXQDOqv5K3XwemfrDG7JkFUHkm9sZJxMXwshRdx6XD+Ef
+	xjR3uKe8YNM8age6fg7rYZYn7/qP9yVmWUlO73VCqc54wFGcPoCgwh5paDLXBjuioITH2dhcmK1
+	k7FFVVxtRqtqODFCZ+O0ayoB/8rhR7kL2kcrFLX1Sd7PbNh8gKoi3E/1Io4/r+kXuTFHQCrfK0y
+	b+BR7rtrVTfBRrbIPO7ljBuaB0F7iAqqo2Kqux1ExWt72wUKRwQYx/MKr36uSzXyZ7PnhFq32qN
+	YSg5qPA8xdTXh7uRdaTzMfuAHaZ0Vv4bLWu9QxX/+Mgrp
+X-Google-Smtp-Source: AGHT+IEQ1s26wkUIF5mIfJy/X2WZMgbORKbbBrxgLhKcXjfhLXPfNrdW83rnhJVDuRATHDAgFIYlmw==
+X-Received: by 2002:a05:6214:1bcb:b0:6f5:dd5:a594 with SMTP id 6a1803df08f44-6f896dfb53emr11435646d6.5.1747165604259;
+        Tue, 13 May 2025 12:46:44 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-28.harvard-secure.wrls.harvard.edu. [65.112.8.28])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f6e39e09b4sm70419606d6.6.2025.05.13.12.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 May 2025 12:46:43 -0700 (PDT)
+Date: Tue, 13 May 2025 15:46:41 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: David Wang <00107082@163.com>
 Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, oneukum@suse.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
  host-controller private data
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <ed0c2f75-f97b-4cad-ad35-78361edf142b@rowland.harvard.edu>
+Message-ID: <110b763e-30c3-4e2a-b06c-339e086a48fd@rowland.harvard.edu>
 References: <20250512150724.4560-1-00107082@163.com>
  <20250513113817.11962-1-00107082@163.com>
  <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
@@ -56,113 +87,48 @@ References: <20250512150724.4560-1-00107082@163.com>
  <b334ef97-1f79-4dd9-98f6-8fd7f360101e@rowland.harvard.edu>
  <40618da9.b062.196ca805193.Coremail.00107082@163.com>
  <ed0c2f75-f97b-4cad-ad35-78361edf142b@rowland.harvard.edu>
-X-NTES-SC: AL_Qu2fBf2dvUkr5yKaZOkZnEYQheY4XMKyuPkg1YJXOp80hyXTwyEaeXBZH1Xa7cOGEi2SvxeuTRJxycpYZol+WIO1UzmJW6aaRZ2q+CtseJfx
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+ <3aed7b55.b165.196caf9f5ec.Coremail.00107082@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <3aed7b55.b165.196caf9f5ec.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:jCgvCgDnv_32kyNoWp0DAA--.22865W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbBkA1MqmgjkNKYBAAAsu
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3aed7b55.b165.196caf9f5ec.Coremail.00107082@163.com>
 
-CgpBdCAyMDI1LTA1LTE0IDAyOjIxOjE1LCAiQWxhbiBTdGVybiIgPHN0ZXJuQHJvd2xhbmQuaGFy
-dmFyZC5lZHU+IHdyb3RlOgo+T24gV2VkLCBNYXkgMTQsIDIwMjUgYXQgMTI6MzU6MjlBTSArMDgw
-MCwgRGF2aWQgV2FuZyB3cm90ZToKPj4gCj4+IEF0IDIwMjUtMDUtMTMgMjM6Mzc6MjAsICJBbGFu
-IFN0ZXJuIiA8c3Rlcm5Acm93bGFuZC5oYXJ2YXJkLmVkdT4gd3JvdGU6Cj4+ID4+IEkgaGF2ZSB0
-byBkaXNhZ3JlZSwgIHlvdXIgc3VnZ2VzdGlvbiBoYXMgbm8gbXVjaCBkaWZmZXJlbmNlIGZyb20g
-cmVxdWVzdGluZyBtZW1vcnkgZnJvbQo+PiA+PiBzeXN0ZW0sIGxvY2tzIGFuZCBtZW1vcnkgcG9v
-bCBtYW5hZ2VtZW50cywgYWxsIHRoZSBzYW1lIGFyZSBuZWVkZWQsIHdoeSBib3RoZXI/Cj4+ID4K
-Pj4gPlRoZXJlIGFyZSB0d28gZGlmZmVyZW5jZXMuICBGaXJzdCwgeGhjaS1oY2QgYWxyZWFkeSBo
-YXMgaXRzIG93biBsb2NrIAo+PiA+dGhhdCBpdCBhY3F1aXJlcyB3aGVuIGVucXVldWluZyBvciBk
-ZXF1ZXVpbmcgVVJCcywgc28gbm8gYWRkaXRpb25hbCAKPj4gPmxvY2tzIHdvdWxkIGJlIG5lZWRl
-ZC4gIFNlY29uZCwgY29tcGxpY2F0ZWQgbWVtb3J5IHBvb2wgbWFuYWdlbWVudCBpc24ndCAKPj4g
-Pm5lY2Vzc2FyeTsgdGhlIG1hbmFnZW1lbnQgY2FuIGJlIGV4dHJlbWVseSBzaW1wbGUuICAoRm9y
-IGV4YW1wbGUsIAo+PiA+TWF0aGlhcyBzdWdnZXN0ZWQganVzdCByZXVzaW5nIHRoZSBtb3N0IHJl
-Y2VudGx5IHJlbGVhc2VkIG1lbW9yeSBhcmVhIAo+PiA+dW5sZXNzIGl0IGlzIHRvbyBzbWFsbC4p
-Cj4+IAo+PiBNeSBwYXRjaCBhbHNvIGp1c3QgcmV1c2UgbWVtb3J5LCAgaW4gYSBzaW1wbGVyIHdh
-eSBJIHdvdWxkIGFyZ3VlLi4uLgo+Cj5JIGRpZG4ndCBzYXkgeW91ciBhcHByb2FjaCB3YXNuJ3Qg
-c2ltcGxlLiAgSSBzYWlkIHRoYXQgbXkgYXBwcm9hY2ggaGFzIAo+dmVyeSBsb3cgb3ZlcmhlYWQs
-IGEgbG90IGxvd2VyIHRoYW4gdGhlIGV4aXN0aW5nIGNvZGUsIHdoZXJlYXMgeW91IHNhaWQgCj5t
-eSBhcHByb2FjaCAiaGFzIG5vIG11Y2ggZGlmZmVyZW5jZSIgZnJvbSB0aGUgZXhpc3RpbmcgY29k
-ZS4KPgo+PiA+PiA+VGhpcyBpZGVhIGNhbiBiZWNvbWUgbW9yZSBlbGFib3JhdGUgaWYgeW91IG1h
-aW50YWluIHNlcGFyYXRlIGZyZWUgbGlzdHMgCj4+ID4+ID5mb3IgZGlmZmVyZW50IGRldmljZXMs
-IG9yIGV2ZW4gZm9yIGRpZmZlcmVudCBlbmRwb2ludHMsIG9yIHNvcnQgdGhlIGZyZWUgCj4+ID4+
-ID5saXN0IGJ5IHRoZSBzaXplIG9mIHRoZSBtZW1vcnkgYXJlYXMuICBCdXQgdGhlIGJhc2ljIGlk
-ZWEgaXMgYWx3YXlzIHRoZSAKPj4gPj4gPnNhbWU6IERvbid0IGNoYW5nZSB1c2Jjb3JlIChpbmNs
-dWRpbmcgc3RydWN0IHVyYiksIGFuZCBtYWtlIGdldHRpbmcgYW5kIAo+PiA+PiA+cmVsZWFzaW5n
-IHRoZSBleHRyYSBtZW1vcnkgYXJlYXMgaGF2ZSBleHRyZW1lbHkgbG93IG92ZXJoZWFkLgo+PiA+
-PiAKPj4gPj4gV2h5IGltcGxlbWVudHMgYSBkZXZpY2UgbGV2ZWwgbWVtb3J5IHBvb2wgd291bGQg
-aGF2ZSBleHRyZW1lbHkgbG93IG92ZXJoZWFkPwo+PiA+Cj4+ID5CZWNhdXNlIHRoZW4gZ2V0dGlu
-ZyBvciByZWxlYXNpbmcgbWVtb3J5IGFyZWFzIGZyb20gdGhlIHBvb2wgY291bGQgYmUgCj4+ID5j
-YXJyaWVkIG91dCBqdXN0IGJ5IG1hbmlwdWxhdGluZyBhIGNvdXBsZSBvZiBwb2ludGVycy4KPj4g
-Cj4+IEEgY291cGxlIG9mIHBvaW50ZXJzIG1hbmlwdWxhdGlvbj8gYW5kIGl0IHdvdWxkIGJlIHNp
-bXBsZXIgdGhhbiBhIHJldXNhYmxlIGJ1ZmZlciBpbiBVUkI/Cj4+ICBJIGRvdWJ0IHRoYXQuCj4K
-PkkgZGlkbid0IHNheSBwb2ludGVyIG1hbmlwdWxhdGlvbiB3YXMgc2ltcGxlciB0aGFuIGEgcmV1
-c2FibGUgYnVmZmVyLiAgSSAKPnNhaWQgdGhhdCBpdCB3YXMgdmVyeSBsb3cgb3ZlcmhlYWQsIGlu
-IG9yZGVyIHRvIGFuc3dlciB5b3VyIHF1ZXN0aW9uOiAKPiJXaHkgaW1wbGVtZW50cyBhIGRldmlj
-ZSBsZXZlbCBtZW1vcnkgcG9vbCB3b3VsZCBoYXZlIGV4dHJlbWVseSBsb3cgCj5vdmVyaGVhZD8i
-CgpOb3cgSSBmZWVscyBpdCAgYmVjb21lcyBhIHdvcmRpbmcgZ2FtZSAuLi4uLgo+Cj4+IFRoZXJl
-IHdvdWxkIGJlIGxvdHMgb2YgZGV0YWlscyBuZWVkcyB0byBjb25zaWRlciwgIGRldGFpbCBpcyBk
-ZXZpbCBhbmQgdGhhdCB3aHkgd2UgcHJlZmVyIHNpbXBsZXIgc29sdXRpb24sCj4+IEkganVzdCBk
-b24ndCB1bmRlcnN0YW5kLCB5b3Ugc2VlbXMgaW1wbHkgdGhhdCBteSBwYXRjaCBpcyBub3Qgc2lt
-cGxlLCBjb3VsZCB5b3UgZWxhYm9yYXRlIG1vcmUgb24gaXQsCj4+IG9yIGl0IGlzIGp1c3QgdGhh
-dCBpbiBteSBtaW5kLCBtYWtlIGNoYW5nZXMgdG8gInVzYiBjb3JlIiBpcyBhIGJpZyBuby1ubyEK
-Pgo+TmVpdGhlciBvbmUuCj4gIAo+SG93ZXZlciwgeW91IGhhdmUgZm9yZ290dGVuIGFib3V0IG9u
-ZSB0aGluZzogV2l0aCB5b3VyIHBhdGNoLCBlYWNoIFVSQiAKPm1haW50YWlucyBvd25lcnNoaXAg
-b2YgYSBtZW1vcnkgYXJlYSBldmVuIHdoZW4gdGhlIFVSQiBpcyBub3QgaW4gdXNlLiAgCj5XaXRo
-IHRoZSBleGlzdGluZyBjb2RlLCB0aGF0IG1lbW9yeSBpcyBmcmVlZCB3aGVuIHRoZSBVUkIgaXMg
-bm90IGluIHVzZSwgCj5hbmQgd2l0aCBteSBhcHByb2FjaCB0aGUgbWVtb3J5IGlzIHNoYXJlZCBh
-bW9uZyBVUkJzLgo+Cj5JbiB0aGlzIHdheSwgeW91ciBwYXRjaCB3aWxsIHVzZSBtb3JlIG1lbW9y
-eSB0aGFuIHRoZSBleGlzdGluZyBjb2RlIG9yIAo+bXkgYXBwcm9hY2guICBUaGUgcXVlc3Rpb24g
-dG8gYW5zd2VyIGlzIHdoaWNoIGlzIGJldHRlcjogVXNpbmcgbW9yZSAKPm1lbW9yeSAoeW91ciBw
-YXRjaCkgb3IgdXNpbmcgbW9yZSB0aW1lICh0aGUgYWxsb2NhdGlvbnMgYW5kIAo+ZGVhbGxvY2F0
-aW9ucyBpbiB0aGUgZXhpc3RpbmcgY29kZSBvciBteSBhcHByb2FjaCk/Cj4KPj4gPklmIEkgd2Vy
-ZSByZWRlc2lnbmluZyBMaW51eCdzIGVudGlyZSBVU0Igc3RhY2sgZnJvbSB0aGUgYmVnaW5uaW5n
-LCBJIAo+PiA+d291bGQgY2hhbmdlIGl0IHNvIHRoYXQgVVJCcyB3b3VsZCBiZSBkZWRpY2F0ZWQg
-dG8gcGFydGljdWxhciBob3N0IAo+PiA+Y29udHJvbGxlcnMgYW5kIGVuZHBvaW50IHR5cGVzIC0t
-IG1heWJlIGV2ZW4gdG8gcGFydGljdWxhciBlbmRwb2ludHMuICAKPj4gPlRoZXkgd291bGQgY29u
-dGFpbiBhbGwgdGhlIGFkZGl0aW9uYWwgbWVtb3J5IHJlcXVpcmVkIGZvciB0aGUgSENEIHRvIHVz
-ZSAKPj4gPnRoZW0sIGFsbCBwcmUtYWxsb2NhdGVkLCBzbyB0aGF0IGR5bmFtaWMgYWxsb2NhdGlv
-biB3b3VsZCBub3QgYmUgbmVlZGVkIAo+PiA+ZHVyaW5nIG5vcm1hbCB1c2UuICAoVGhlIGdhZGdl
-dCBzdWJzeXN0ZW0gYmVoYXZlcyB0aGlzIHdheSBhbHJlYWR5LikKPj4gPgo+PiA+U3VjaCBhIGRy
-YXN0aWMgY2hhbmdlIGlzbid0IGZlYXNpYmxlIGF0IHRoaXMgcG9pbnQsIGFsdGhvdWdoIHdoYXQg
-eW91IAo+PiA+YXJlIHN1Z2dlc3RpbmcgaXMgYSBzdGVwIGluIHRoYXQgZGlyZWN0aW9uLiAgSW4g
-dGhlIGVuZCBpdCBjb21lcyBkb3duIAo+PiA+dG8gYSB0aW1lL3NwYWNlIHRyYWRlb2ZmLCBhbmQg
-aXQncyB2ZXJ5IGRpZmZpY3VsdCB0byBrbm93IHdoYXQgdGhlIGJlc3QgCj4+ID5iYWxhbmNlIGlz
-Lgo+PiBEcmFzdGljIGNoYW5nZT8gRG8geW91IG1lYW4gbWFrZSBjaGFuZ2UgdG8gVVNCIGNvcmU/
-Cj4KPk5vLCBJIG1lYW50IHJlZGVzaWduaW5nIHRoZSBlbnRpcmUgVVNCIHN0YWNrLiAgSXQgd291
-bGQgcmVxdWlyZSBjaGFuZ2luZyAKPmFsbCB0aGUgVVNCIGRyaXZlcnMgdG8gYWxsb2NhdGUgVVJC
-cyBkaWZmZXJlbnRseSBmcm9tIHRoZSB3YXkgdGhleSBkbyAKPm5vdy4gIEFuZCBjaGFuZ2luZyBl
-dmVyeSBIQyBkcml2ZXIgdG8gcHJlYWxsb2NhdGUgdGhlIG1lbW9yeSBpdCBuZWVkcyB0byAKPnBl
-cmZvcm0gdHJhbnNmZXJzLiAgSSB0aGluayB5b3UgY2FuIGFncmVlIHRoYXQgd291bGQgYmUgYSBw
-cmV0dHkgZHJhc3RpYyAKPmNoYW5nZS4KPgo+PiAgQmVjYXVzZSBjb3VudGluZyBieQo+PiBsaW5l
-cyBvZiBjaGFuZ2VzIGluIHRoaXMgcGF0Y2gsIEkgZmVlbCBteSBwYXRjaCBpcyBxdWl0ZSBzaW1w
-bGUgYW5kIGVmZmljaWVudC4KPj4gSSBhbHNvIGRvbid0IGdldCB5b3VyIHRpbWUvc3BhY2UgdHJh
-ZGVvZmYgaGVyZSwgIGFyZSB5b3UgdGFsa2luZyBhYm91dCBteSBwYXRjaD8KPj4gb3IgeW91IHdl
-cmUganVzdCB0YWxraW5nIGEgc29sdXRpb24gaW4geW91ciBtaW5kLi4uLgo+Cj5Cb3RoLiAgU2Vl
-IG15IGNvbW1lbnQgYWJvdmUuCj4KPj4gVGhpcyBwYXRjaCBvbmx5IG5lZWRzIGEgcG9pbnRlciBh
-bmQgYSBzaXplIGluIFVSQiwgYW5kIFVSQiBvYmplY3QgYWxsb2NhdGVkIGluIGEgc2xvdyBwYWNl
-Li4uCj4KPkl0IGFsc28gbmVlZHMgYW4gZXh0cmEgbWVtb3J5IGFyZWEgdGhhdCBpcyBhbGxvY2F0
-ZWQgdGhlIGZpcnN0IHRpbWUgdGhlIAo+VVJCIGlzIHVzZWQsIGFuZCBpcyBub3QgZGVhbGxvY2F0
-ZWQgdW50aWwgdGhlIFVSQiBpcyBkZXN0cm95ZWQuICBZb3UgCj5zZWVtIHRvIGJlIGlnbm9yaW5n
-IHRoaXMgZmFjdC4KPgo+QWxhbiBTdGVybgoKSXQgaXMgbm90IGFuICJleHRyYSIgbWVtb3J5IGFy
-ZWEsICB0aGUgbWVtb3J5IGlzIG5lZWRlZCBieSBIQyBhbnl3YXksIHRoZSBtZW1vcnkgcG9vbCBq
-dXN0IGNhY2hlIGl0LgpBbmQgYWJvdXQgbm90IGZyZWVpbmcgbWVtb3J5IHVudGlsIFVSQiByZWxl
-YXNlZCwgIHlvdSBzZWVtcyBmb3Jnb3QgdGhhdCB3ZSBhcmUgdGFsa2luZyAKYWJvdXQgIm1lbW9y
-eSBwb29sIiAuICBBIFVSQiBvbmx5IHVzZWQgb25jZSBjb3VsZCBiZSBjb25zaWRlcmVkIGEgbWVt
-b3J5IHBvb2wgbmV2ZXIgdXNlZC4KCklmIHlvdXIgbWVtb3J5IHBvb2wgYXBwcm9hY2ggd291bGQg
-bm90ICAid2FzdGUiIG1lbW9yeSwgSSB3b3VsZCAgcmF0aGVyIGhhcHB5IHRvIGxlYXJuLgoKSSB3
-YW50IHRvIG1lbnRpb24gdGhlIHB1cnBvc2Ugb2YgdGhpcyBwYXRjaCBhZ2FpbjogIApBIGxvdCBv
-ZiAicHJpdmF0ZSBkYXRhIiBhbGxvY2F0aW9uIGNvdWxkIGJlIGF2b2lkZWQgaWYgIHdlIHVzZSBh
-ICJtZW1wb29sIiB0byBjYWNoZSBhbmQgcmV1c2UgdGhvc2UgbWVtb3J5LgpBbmQgdXNlIFVSQiBh
-cyB0aGUgaG9sZGVyIGlzIGEgdmVyeSBzaW1wbGUgd2F5IHRvIGltcGxlbWVudCB0aGlzLC4gCgpB
-bmQgdG8gYWRkICwgYmFzZSBvbiBteSBtZW1vcnkgcHJvZmlsaW5nLCBVUkIgdXNhZ2UgaXMgdmVy
-eSBlZmZpY2llbnQuIEkgdGhpbmsgaXQgaXMgYSB2ZXJ5IGdvb2QgY2FuZGlkYXRlIHRvIGhvbGQK
-cHJpdmF0ZSBkYXRhIGNhY2hlIGZvciBIQ3MuCgoKRGF2aWQgIAoKCg==
+On Wed, May 14, 2025 at 02:48:21AM +0800, David Wang wrote:
+> It is not an "extra" memory area,  the memory is needed by HC anyway, the memory pool just cache it.
+> And about not freeing memory until URB released,  you seems forgot that we are talking 
+> about "memory pool" .  A URB only used once could be considered a memory pool never used.
+> 
+> If your memory pool approach would not  "waste" memory, I would  rather happy to learn.
+
+Here's a simple example to illustrate the point.  Suppose a driver uses 
+two URBs, call them A and B, but it never has more than one URB active 
+at a time.  Thus, when A completes B is submitted, and when B completes 
+A is submitted.
+
+With your approach A and B each have their own memory area.  With my 
+approach, a single memory area is shared between A and B.  Therefore my 
+approach uses less total memory.
+
+Now, I admit this pattern is probably not at all common.  Usually if a 
+driver is going to reuse an URB, it resubmits the URB as soon as the URB 
+completes rather than waiting for some other URB to complete.  Drivers 
+generally don't keep many unused URBs just sitting around -- although 
+there may be exceptions, like a driver for a media device when the 
+device isn't running.
+
+> I want to mention the purpose of this patch again:  
+> A lot of "private data" allocation could be avoided if  we use a "mempool" to cache and reuse those memory.
+> And use URB as the holder is a very simple way to implement this,. 
+> 
+> And to add , base on my memory profiling, URB usage is very efficient. I think it is a very good candidate to hold
+> private data cache for HCs.
+
+All right.  I withdraw any objection to your patches.
+
+Alan Stern
 
