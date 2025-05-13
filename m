@@ -1,274 +1,178 @@
-Return-Path: <linux-usb+bounces-23914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8093AB562D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 15:35:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D71AB564A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 15:39:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7A3919E16E3
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:35:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEFEF3B0D6F
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 13:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25AF292099;
-	Tue, 13 May 2025 13:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C2628F95B;
+	Tue, 13 May 2025 13:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fxu/sVpo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F33128F94E
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 13:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE96D28640E;
+	Tue, 13 May 2025 13:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747143307; cv=none; b=pzLOtC2iH9NHW0GOhd5TqVvPBkAnLSaTSj1weCTSUbIGl4wBxMh54TsYDtlrXgS03b9QabpE2bK/Z+Px79z6mTVY3pw5tGh1DYuLnMAP9zyNbguy8OzQh8x3HEtjYxVuX+mPgCb1Mwarcj79iAC+UEJpNkSi09HQjyGNvawTrp0=
+	t=1747143551; cv=none; b=O3YggUW94MZxaoVEAa6yL0QYwbn2Ysxkt5WND38QCxpYC0IfLvNGjQ2UGLjaX0inANj5y2GntIxPQGqkitskP8zI3PvtXxYQZ7hz/f6lKlhpfVPu3lfLDH8btuN6o2oV3RBlO2UO5NoGW9Zo5F9+h7qEeCqRniHj5WAMnc4SC6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747143307; c=relaxed/simple;
-	bh=s6GW5Pvcduw6rnUJeBNVMo8uUk5Ykph08k3RJZ43SOc=;
+	s=arc-20240116; t=1747143551; c=relaxed/simple;
+	bh=msob1qipX3+JtDxisx9UwJX1EHZgMW1H2/X4woFM/wk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L2PqLLY26R00pp0xYpHscwfuusq7JaYc3L6kl9JRlQp09QdXh9VZA0/rxM6KHz4hXb9bBFu9JmlVp7YbAqKnyHbahYNwv/mfZdrL53GQc7mSBIqOG9ogQtFMop0VTtnEk5B/868bIWKUKiaUY18UcKYpgRshg85sejb7X8olFks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1uEpmf-00026v-Az; Tue, 13 May 2025 15:35:01 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1uEpme-002Y1Z-1k;
-	Tue, 13 May 2025 15:35:00 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1uEpme-002bJv-2o;
-	Tue, 13 May 2025 15:35:00 +0200
-Date: Tue, 13 May 2025 15:35:00 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Krzysztof Opasiak <krzysztof.opasiak@neat.no>
-Cc: Nicolas Dufresne <nicolas@ndufresne.ca>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	balbi@kernel.org, paul.elder@ideasonboard.com,
-	kernel@pengutronix.de, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
- implement v4l2 enum api calls
-Message-ID: <aCNKhGKducVhTLeA@pengutronix.de>
-References: <Y4xaXHLoiPupWM6V@kroah.com>
- <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
- <2025051253-trimmer-displease-1dde@gregkh>
- <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
- <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
- <2025051317-deflation-discuss-1201@gregkh>
- <e5cd5e9d64123b319bae1a73c96cd33a3ad9e805.camel@ndufresne.ca>
- <2efb125c-d8ef-468a-a7ea-afcb5b5bee44@neat.no>
- <aCNBNbXceDz2xTCj@pengutronix.de>
- <d2fec157-c1dd-414e-8d9b-e7054c48564b@neat.no>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ictDEUiQhJRdRuq4j924DEZ+biXwdYahEezatzQWKAmLl4Lx1LejtxVcN2CrWdpQt5xJDRr4lMwZQfrJLlvZMo+UAQvyafV0X8U6dmx0K/xbAClCb2iPV0ZXt+nFWDrMk/x2b0ymVnH7h5O5uLk/mX7aAGjWPS0cbHjASPPYxMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fxu/sVpo; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747143550; x=1778679550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=msob1qipX3+JtDxisx9UwJX1EHZgMW1H2/X4woFM/wk=;
+  b=Fxu/sVpoMttpulczGwVtxNwYojabnbdQZk6QYdKgGIUzutCABwz8sv5G
+   LMtx8Chg9xI5O525BOFYBGYwH7oKcSqZ0vCF1d+wEF2gkvrWuSkogcxaV
+   SS1nTx4NFXz8nglmyXLYNxWA2ic9dCDgEpReYlgYex3wGL+2IrGtqO4Hy
+   gripm3Ogho6e5nXd57LmI6OX9lBcGRjnY6afN3xSzprUC2MxphbbtvU7Z
+   37747hb/j2ShTc0Hd4fIrsoyEZei0JJk8Bdjp/9sdLMMDqIJC46mPRKSk
+   wW9NebOrjsbXskJb3DcH79DaNf2SV3erztQ9jBrOpWzde9wTOFdAv3eGx
+   w==;
+X-CSE-ConnectionGUID: dDKLXlc3QQyO+y5Sanmkww==
+X-CSE-MsgGUID: NugCQfIzRvmshIzAMDpnmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="36615448"
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="36615448"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 06:39:09 -0700
+X-CSE-ConnectionGUID: r3WxKfrgSp6+nGbmN2CTuA==
+X-CSE-MsgGUID: k3lOBvBySteJTy+gX2ylGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="137635515"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa006.jf.intel.com with SMTP; 13 May 2025 06:39:06 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 13 May 2025 16:39:05 +0300
+Date: Tue, 13 May 2025 16:39:05 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Cosmo Chou <chou.cosmo@gmail.com>
+Cc: badhri@google.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	cosmo.chou@quantatw.com
+Subject: Re: [PATCH v2] usb: typec: tcpm: Use configured PD revision for
+ negotiation
+Message-ID: <aCNLeX1k34BSgPOV@kuha.fi.intel.com>
+References: <20250513130834.1612602-1-chou.cosmo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mKzi7A47K4kDo+y4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d2fec157-c1dd-414e-8d9b-e7054c48564b@neat.no>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20250513130834.1612602-1-chou.cosmo@gmail.com>
 
+On Tue, May 13, 2025 at 09:08:34PM +0800, Cosmo Chou wrote:
+> Initialize negotiated_rev and negotiated_rev_prime based on the port's
+> configured PD revision (rev_major) rather than always defaulting to
+> PD_MAX_REV. This ensures ports start PD communication using their
+> appropriate revision level.
+> 
+> This allows proper communication with devices that require specific
+> PD revision levels, especially for the hardware designed for PD 1.0
+> or 2.0 specifications.
+> 
+> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+> ---
+> Change log:
+> 
+> v2:
+>   - Add PD_CAP_REVXX macros and use switch-case for better readability.
+> 
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
+>  1 file changed, 25 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 8adf6f954633..48e9cfc2b49a 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -313,6 +313,10 @@ struct pd_data {
+>  	unsigned int operating_snk_mw;
+>  };
+>  
+> +#define PD_CAP_REV10	0x1
+> +#define PD_CAP_REV20	0x2
+> +#define PD_CAP_REV30	0x3
+> +
+>  struct pd_revision_info {
+>  	u8 rev_major;
+>  	u8 rev_minor;
+> @@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
+>  	}
+>  }
+>  
+> +static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port)
+> +{
+> +	switch (port->pd_rev.rev_major) {
+> +	case PD_CAP_REV10:
+> +		port->negotiated_rev = PD_REV10;
+> +		break;
+> +	case PD_CAP_REV20:
+> +		port->negotiated_rev = PD_REV20;
+> +		break;
+> +	case PD_CAP_REV30:
+> +		port->negotiated_rev = PD_REV30;
+> +		break;
+> +	default:
+> +		port->negotiated_rev = PD_MAX_REV;
+> +		break;
+> +	}
+> +	port->negotiated_rev_prime = port->negotiated_rev;
+> +}
 
---mKzi7A47K4kDo+y4
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do we need this? Couldn't you just add one to rev_major?
 
-On Tue, May 13, 2025 at 03:07:07PM +0200, Krzysztof Opasiak wrote:
->On 13.05.2025 14:55, Michael Grzeschik wrote:
->>Hi Greg, Krzysztof and Nicolas,
->>
->>On Tue, May 13, 2025 at 12:31:49PM +0200, Krzysztof Opasiak wrote:
->>>On 13.05.2025 12:04, Nicolas Dufresne wrote:
->>>>Hi Greg, Krzysztof,
->>>>
->>>>Le mardi 13 mai 2025 =E0 07:04 +0200, Greg KH a =E9crit=A0:
->>>>>On Mon, May 12, 2025 at 11:03:41PM +0200, Krzysztof Opasiak wrote:
->>>>>>On 12.05.2025 12:43, Krzysztof Opasiak wrote:
->>>>>>>On 12.05.2025 12:38, Greg KH wrote:
->>>>>>>>On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wrote:
->>>>>>>>>Hi Greg,
->>>>>>>>>
->>>>>>>>>On 4.12.2022 09:29, Greg KH wrote:
->>>>>>>>>>On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart wrote:
->>>>>>>>>>>Hi Michael,
->>>>>>>>>>>
->>>>>>>>>>>On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael=20
->>>>>>>>>>>Grzeschik wrote:
->>>>>>[...]
->>>>>>>>>
->>>>>>>>>Given that I'd like to suggest that it seems to=20
->>>>>>>>>actually make sense to
->>>>>>>>>revert this unless there are some ideas how to fix it.
->>>>>>>>
->>>>>>>>Sorry about this, can you submit a patch series that reverts the
->>>>>>>>offending commits?=A0 As it was years ago, I don't exactly=20
->>>>>>>>know what you
->>>>>>>>are referring to anymore.
->>>>>>>>
->>>>>>>
->>>>>>>Sure! Will do.
->>>>>>>
->>>>>>
->>>>>>Would you prefer to have a set of actual reverts related to this:
->>>>>>
->>>>>>da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api calls"
->>>>>>bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call"
->>>>>>e56c767a6d3c Revert "usb: gadget: uvc: also use try_format=20
->>>>>>in set_format"
->>>>>>20f275b86960 Revert "usb: gadget: uvc: fix try format returns on
->>>>>>uncompressed formats"
->>>>>>059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in
->>>>>>uvc_v4l2.c"
->>>>>>e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam=20
->>>>>>loadable again"
->>>>>>
->>>>>>but have a negative consequence that the series isn't really=20
->>>>>>bisectable from
->>>>>>functional perspective. For example commit e6fd9b67414c=20
->>>>>>breaks g_uvc until
->>>>>>we apply da692963df4e so the series would have to go in as a whole.
->>>>>>
->>>>>>Or you would prefer a single commit that technically isn't a=20
->>>>>>revert but it
->>>>>>just "undoes" the negative consequences of "usb: gadget: uvc: add v4l2
->>>>>>enumeration api calls" (kind of a squash of all commits above)?
->>>>>
->>>>>Ideally we can bisect at all places in the tree, so it's odd that
->>>>>reverting patches would cause problems as when adding them all should
->>>>>have been ok for every commit, right?
->>>>>
->>>>>But if there are merge issues, or other problems, then yes, maybe just
->>>>>one big one is needed, your choice.
->>>>
->>>>Won't a plain revert break userspace like GStreamer that have=20
->>>>depended on
->>>>that patch for years ? In such a delicate case, wouldn't it be less
->>>>damageable to introduce workaround, like alias ? This is one personal
->>>>script against numerous users of a generic framework implementation.
->>>
->>>Shouldn't GStreamer be robust enough to handle cases of old-kernel=20
->>>which haven't had this feature at all?
->>>
->>>The main reason why I reported this is not really the name=20
->>>limitation but the fact that this patch is just incorrect for=20
->>>cases where you would like to expose different formats at=20
->>>different speeds. This feature was there for years and we do have=20
->>>products that depend on it and this change along with the further=20
->>>commits that depend on it broke that support for us.
->>>
->>>You are absolutely right that those commits added a feature that=20
->>>now someone else may depend thus it would be perfect to fix it in=20
->>>a way that doesn't break anyone's userspace but the problem is=20
->>>that due to the way v4l2 API is designed I really don't see a way=20
->>>how we could make it "speed-aware" without breaking all the users.=20
->>>That's why we are kind of stuck between:
->>>
->>>1. Leave those commits in and then you cannot different streaming=20
->>>headers for different speeds but users of those API will keep=20
->>>working.
->>>
->>>2. Revert and bring back the feature of UVC ConfigFS interface=20
->>>that was there since its inception but break the users of "New=20
->>>API".
->>>
->>>>
->>>>I believe due to the delay, you are facing an unusual ABI=20
->>>>breakage, which
->>>>requires a more delicate handling.
->>>
->>>Agree. The situation isn't simple as whatever we do would break=20
->>>some userspace... I'm not an expert on v4l2, so if anyone with a=20
->>>better knowledge of v4l2 internals has a suggestion how we could=20
->>>make this work with the existing API I'd be more than happy to try=20
->>>to follow that path.
->>
->>As a shortcomming compromise I would suggest to support both worlds by
->>conditionally set uvc->header if the directory h was found. If the
->>uvc->header was not set then we could print some info and disable the
->>main part of the possible uvc callbacks that depend on this uvc->header
->>objects.
->>
->>The only downside with that would be that using directory h in the
->>streaming header will implicitly create the limitations of not
->>indipendent formats per speed that Krzysztof mentioned.
->>
->>The alternative would be to put more effort into this and parse all
->>directories in the streaming header subnode. However since the idea of
->>using the v4l2-api is already talked dead by a long discussion history,
->>I would rather focus on transition the remaining functionality of the
->>gstreamer uvcgadget plugin to finally become independent of the v4l2api.
->>
->>How about that transition path?
->>
->
->If I understood you correctly, you are proposing that if the header=20
->directories are named in a different way than h we would not set the=20
->uvc->header pointer and make all the v4l2 callback that are using it=20
->just return -ENOTSUP in this case? It would also mean that the=20
->uvc_v4l2_set_format() would need to somehow be broad back to the=20
->previous version which does not use -uvc_v4l2_try_format().
+        port->negotiated_rev = port->pd_rev.rev_major + 1;
+        port->negotiated_rev_prime = port->pd_rev.rev_major + 1;
 
-Yes.
+Or am I missing something?
 
->Although seems kind of hacky to change kernel behavior based on the=20
->directory name I think if we add this to the doc this could be an=20
->acceptable compromise that would make both scenarios work.=20
->Alternatively, instead of basing that on the directory name maybe a=20
->proper, named ConfigFS attribute somewhere inside UVC directory=20
->"gstreamer_support" or something else would be more explicit for the=20
->user?
+thanks,
 
-This sounds even better. That way we would not depend on the hacky
-directory behaviour. And documenting this attribute would be even less
-shamefull.
+>  static void run_state_machine(struct tcpm_port *port)
+>  {
+>  	int ret;
+> @@ -4782,8 +4805,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  		typec_set_pwr_opmode(port->typec_port, opmode);
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>  		port->caps_count = 0;
+> -		port->negotiated_rev = PD_MAX_REV;
+> -		port->negotiated_rev_prime = PD_MAX_REV;
+> +		tcpm_set_initial_negotiated_rev(port);
+>  		port->message_id = 0;
+>  		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> @@ -5048,8 +5070,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  					      port->cc2 : port->cc1);
+>  		typec_set_pwr_opmode(port->typec_port, opmode);
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+> -		port->negotiated_rev = PD_MAX_REV;
+> -		port->negotiated_rev_prime = PD_MAX_REV;
+> +		tcpm_set_initial_negotiated_rev(port);
+>  		port->message_id = 0;
+>  		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> -- 
+> 2.43.0
 
-That sounds like it all should work out.
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---mKzi7A47K4kDo+y4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmgjSn8ACgkQC+njFXoe
-LGR/Eg//SpGzvyB750mmWfOVr19Aj9oQOpA1wNGz4vgQxOgFhBgus87HGHXaZblj
-weRasV+ioIxNz+L6U1KN/GFtBtIWN8CF2+gShnlTx/yUJF9AceQpKWy5W+/ObCPu
-3LBv6atA0LzzHLNXh7VeY0mpACeAZF54J0q0BTkfU6wKvDfVq2IImbYFn9QA3oMB
-8ayVM8EYX1/CMwUQwHd0iPxKcQu27KyPTbSl1w98z+LpbpckeC/+P8ZpaNGwWPy2
-bIsOlPb/WBoTCmwenfVB+BjExY/EQ2bZDuVxron5DlLHRQeYGnJpb0uzg4Ks2DEI
-YtcnurTCC9h0i+CZymsNvUQyjEXgzXIAsFn8InvCOsgGGbmAeDat1AR1Mo6nSU8j
-nxACOZ1/mCNKHZiGXekzJcvbVjKI9QEpbgH4AI897WP2CPjWLtoLqNvQtUaAPnII
-hOGe+IQgXXaW85vFnKuAZfWxcLWpHnf0g1dKOHJ1ZUC3zNIQt1qm/S45SMpjcW3D
-k7RcVSvrGXetKflEUwYbrn1zCQPf77VJTV+izOYZaTBIrbi5133RDqg4gJJOg+Hk
-gWZPiKL5B7ra4+ZYk2TJeS0cnD/D4LS79wu8uBtKP000vgqlwNjDbbQ3dsBZSZlu
-smKjmlsHNf0Z2xf0bbHTboTCqRTmG0fkRAoBAlvTJPVdknIIFtA=
-=DN2u
------END PGP SIGNATURE-----
-
---mKzi7A47K4kDo+y4--
+-- 
+heikki
 
