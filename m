@@ -1,134 +1,119 @@
-Return-Path: <linux-usb+bounces-23918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D603AB570C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 16:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C5EACAB576F
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 16:43:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C890616AF2D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 14:26:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68C7B17A370
+	for <lists+linux-usb@lfdr.de>; Tue, 13 May 2025 14:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2655A2BE100;
-	Tue, 13 May 2025 14:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2305C24728C;
+	Tue, 13 May 2025 14:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EaOsQlFk"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="hHg8Wc4B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E232BE0F7
-	for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 14:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDAA19F40B;
+	Tue, 13 May 2025 14:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747146356; cv=none; b=uTN3plGc4B0fRUFJO5FdQXNDoMD+Djbpi7NacLZczmzRjnjaYpUtfwNK+UqGWP1ekKqwnfFqHpP5n6beOznNLcd8I7pylfNGLfLeGjT5U65p7Bgwpk/gZiFyjp3jjQzBe9p3/ssSr8OzaGpcdvaniaFo+zVnDBvkJqX74tA+2Qc=
+	t=1747147339; cv=none; b=Scpm186AaulwYtZYlxN8km6NZqRAcc28CRcnsEfcXtkogH0DIKPQiJg7gZbYitZk/LRPvk2ZvLh1Vu+82hOj0sO+G2LxoxcySfJ99VIA9hKh3q0GbYeYp5QBGiV7m5tfz+5rq+xg+Thdq4rkJ1T6tDaTerFaMBMad0Pz+BdwUbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747146356; c=relaxed/simple;
-	bh=HXRQwuROw8MKPijyfUq6N7s7cAR/L7i+mxofui1ruJo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFGbTqotGjAb6vSe3PVW419V2XOhW+mSU614rwinmcK+EPZYQ8NVr+PbivZIfHjIzgQJmErQthdnV0mHcrTpZgj5ZBAXM8/SvKQPzU6ey3PRzDNraShcWB1jEu/vRC1Sxppjglf/dP46jIEjCHqWhSzLl8x2sGn1TI6n208ytbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EaOsQlFk; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6f0ad74483fso64114106d6.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 May 2025 07:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1747146354; x=1747751154; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9cLoF/O57LNlYc+iwyGRZeR5b650X2MnqJnqGtm8eH8=;
-        b=EaOsQlFk2VwkdoXjMn0xqOBGWmlTY2/V9bAQTXhT9e8m8fH70Ixgg6eC15T6afJx9+
-         kOzs43BUV12otvR0zQ1Co3L8JwvWiu55aiJxZaId17fhgIEYZh5Mnox4Up6R6gz/Abr1
-         TDHrrANG6JLOtm51/4115PM45o38TylIudb2jxlA2SSDgePsB7RtBCxC5EUbQs2zHtmW
-         /guXxE+CpHIa+2F6GxK9RtbJ4zs+zsvo9YchHldC3pFCOW5+kCXYxeJgUqtAfvGucsJh
-         DRS1G/AzzjrXR5QP3Mh8CzBISUG6+v2DagEQsANvsPl5Mua5vi6MJHLGofPX2ibj3B1b
-         CRHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747146354; x=1747751154;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9cLoF/O57LNlYc+iwyGRZeR5b650X2MnqJnqGtm8eH8=;
-        b=Ff7GdtcNFZcFUo3HF/HlMyY3Qn6eacNVMUfp8xi7KzXdkv1y+BM5HXubBZ3Bz2RUfi
-         sWGTZQOi4qHfrKe/EYULI0a992e0gg6RGSiJ7NLvXi0RRX1qsEJu5bIeSCLbl6AIEZW1
-         5fbqmPfilbCOB8BXzX4mcIGW1q89vzYtFf2E4wHYb0PYfxYK/y7X86Cg5Qih0A0iuxcw
-         Rgxgw2Y4l7mA5dZc3KfnmQSNy48nN8F12xifg8ZhtmutB0wKS68d9UU+7TTpf5CkhAN6
-         /8m5fbIoZeLwk+5TLBlk+2s2VHa+LEyw/soE+DwZ4LgTIQRMO5OGgLM/zaOqcxUVYErT
-         TRnA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJnDOst3S8xMtyKCBNFJoWZussYyWfdyrPHk6/1qjnZ2uuzIwJNiiELxnco+8iZ8m5APM5oLjMFKI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/JM+gTy8ySkyveRkHae8dT97hzsbui2sIPiyDmS7aNJfVDa3t
-	Dn3TIrMI3fjT7/Y6mtH+zC+nAEgMd6O+MwdrN7zT6w6Sf1OxalOfBr5rgQ4+Gw==
-X-Gm-Gg: ASbGncuwREmDU3OzzCqlWue4yVMU4WCvL1SMro0fyImOpip0VBMMuenZ+B5CWbjGrqU
-	Wn2jHlw8SirNTADz/93jHk7ZVSuCilFzFNU0m1zsoBOlrfCAHG2DkJTDryav1we0mzKvUyGiepf
-	QRqjV3lU/7sXn/522z9tcmNef2s/EH4cy2yMRPMUDqNkRj9mHGxHiDUo4HvVnildz8U1bTRukXL
-	oYbRoAxaRrLHYB28+6PsC1qU1wNtW+7oESZkXxUv3wvkhRiiI7BCK/IxmOc8v/DTOTFb7t9QAPA
-	B8yTZmdauvqgmdw6arNyvyc5XDcp6ajNFT1rFfuHxY0AGuiuIpSA8uQ+csbhTmfXSRlSFg==
-X-Google-Smtp-Source: AGHT+IHJfcnXh9oYA31injeuwlKCu3XfVe0Yr+B5+cVM0kreyrVuVJNaR+vnji5+fhQz+vprtI6mGg==
-X-Received: by 2002:ad4:5aa5:0:b0:6f5:436:9e46 with SMTP id 6a1803df08f44-6f6e47c77eemr266308656d6.15.1747146353639;
-        Tue, 13 May 2025 07:25:53 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f6e39f4d78sm67586836d6.40.2025.05.13.07.25.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 07:25:53 -0700 (PDT)
-Date: Tue, 13 May 2025 10:25:50 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: David Wang <00107082@163.com>
+	s=arc-20240116; t=1747147339; c=relaxed/simple;
+	bh=4KcevAX47uPd8DaXUGm9PtOGKEhO4cJO3Y3jn1NJaTM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=ZfW67izWJZn+dc2Ro9m9BAssImPmyT7GgNowNLY8mCtVYEvOM1YWVlUp9NQHYC7jmjGhdW/dGvKQbWiDULhcjpE131t1WEhdOJwh2cVLIZ8tKyPUfqrJylGtqR/1fLwFDjO4err6KpCNqs0oXIikOJPlB/CDuIveOnPl50fShpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=hHg8Wc4B reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=CxhojO/kTZI9+TtamrY1UhMIFJL84NcI0rqn1Hi2Wm4=; b=h
+	Hg8Wc4ByXLEeP5l6AXrRSzU9/5cHqViebCSJ8H6KivvRHGvgSgXobzmafOGkVDti
+	dFpcx3//ahFel56Fs9Mh6QTa/2V7TXYQ5n/hLBXZ7M+SFWi7MBXevNM7Gp2HyND5
+	rSBclBpfbwhLyxIN0LE6C6MQAfQzLOyrwSJzoC+hkk=
+Received: from 00107082$163.com ( [111.35.191.17] ) by
+ ajax-webmail-wmsvr-40-114 (Coremail) ; Tue, 13 May 2025 22:41:45 +0800
+ (CST)
+Date: Tue, 13 May 2025 22:41:45 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Alan Stern" <stern@rowland.harvard.edu>
 Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, oneukum@suse.com,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
  host-controller private data
-Message-ID: <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
 References: <20250512150724.4560-1-00107082@163.com>
  <20250513113817.11962-1-00107082@163.com>
+ <8c963ad0-a38f-4627-be11-80ccb669d006@rowland.harvard.edu>
+X-NTES-SC: AL_Qu2fBf2fuEsr4yCRYOkZnEYQheY4XMKyuPkg1YJXOp80oyTWxTsHf19qHlLo1cmEJCmxkDi8TiBW9s9aZq9IW6koOKibP3HAyhtnfeHEjYaY
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250513113817.11962-1-00107082@163.com>
+Message-ID: <69accee9.accf.196ca18308a.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:cigvCgD3v3sqWiNonJADAA--.29422W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqBBMqmgjNKfPMQAFs9
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Tue, May 13, 2025 at 07:38:17PM +0800, David Wang wrote:
-> ---
-> Changes:
-> 1. Use caller's mem_flags if a larger memory is needed.
-> Thanks to Oliver Neukum <oneukum@suse.com>'s review.
-> ---
-> URB objects have long lifecycle, an urb can be reused between
-> enqueue-dequeue loops; The private data needed by some host controller
-> has very short lifecycle, the memory is alloced when enqueue, and
-> released when dequeue. For example, on a system with xhci, several
-> minutes of usage of webcam/keyboard/mouse have memory alloc counts:
->   drivers/usb/core/urb.c:75 [usbcore] func:usb_alloc_urb 661
->   drivers/usb/host/xhci.c:1555 [xhci_hcd] func:xhci_urb_enqueue 424863
-> Memory allocation frequency for host-controller private data can reach
-> ~1k/s and above.
-> 
-> High frequent allocations for host-controller private data can be
-> avoided if urb take over the ownership of memory, the memory then shares
-> the longer lifecycle with urb objects.
-> 
-> Add a mempool to urb for hcpriv usage, the mempool only holds one block
-> of memory and grows when larger size is requested.
-> 
-> Signed-off-by: David Wang <00107082@163.com>
-
-It should be possible to do what you want without touching the USB core 
-code at all, changing only xhci-hcd.  That's what Mathias is suggesting.
-
-Instead of having an URB keep ownership of its extra memory after it 
-completes, xhci-hcd can put the memory area onto a free list.  Then 
-memory areas on the free list can be reused with almost no overhead when 
-URBs are enqueued later on.
-
-This idea can become more elaborate if you maintain separate free lists 
-for different devices, or even for different endpoints, or sort the free 
-list by the size of the memory areas.  But the basic idea is always the 
-same: Don't change usbcore (including struct urb), and make getting and 
-releasing the extra memory areas have extremely low overhead.
-
-Alan Stern
+CgpBdCAyMDI1LTA1LTEzIDIyOjI1OjUwLCAiQWxhbiBTdGVybiIgPHN0ZXJuQHJvd2xhbmQuaGFy
+dmFyZC5lZHU+IHdyb3RlOgo+T24gVHVlLCBNYXkgMTMsIDIwMjUgYXQgMDc6Mzg6MTdQTSArMDgw
+MCwgRGF2aWQgV2FuZyB3cm90ZToKPj4gLS0tCj4+IENoYW5nZXM6Cj4+IDEuIFVzZSBjYWxsZXIn
+cyBtZW1fZmxhZ3MgaWYgYSBsYXJnZXIgbWVtb3J5IGlzIG5lZWRlZC4KPj4gVGhhbmtzIHRvIE9s
+aXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+J3MgcmV2aWV3Lgo+PiAtLS0KPj4gVVJCIG9i
+amVjdHMgaGF2ZSBsb25nIGxpZmVjeWNsZSwgYW4gdXJiIGNhbiBiZSByZXVzZWQgYmV0d2Vlbgo+
+PiBlbnF1ZXVlLWRlcXVldWUgbG9vcHM7IFRoZSBwcml2YXRlIGRhdGEgbmVlZGVkIGJ5IHNvbWUg
+aG9zdCBjb250cm9sbGVyCj4+IGhhcyB2ZXJ5IHNob3J0IGxpZmVjeWNsZSwgdGhlIG1lbW9yeSBp
+cyBhbGxvY2VkIHdoZW4gZW5xdWV1ZSwgYW5kCj4+IHJlbGVhc2VkIHdoZW4gZGVxdWV1ZS4gRm9y
+IGV4YW1wbGUsIG9uIGEgc3lzdGVtIHdpdGggeGhjaSwgc2V2ZXJhbAo+PiBtaW51dGVzIG9mIHVz
+YWdlIG9mIHdlYmNhbS9rZXlib2FyZC9tb3VzZSBoYXZlIG1lbW9yeSBhbGxvYyBjb3VudHM6Cj4+
+ICAgZHJpdmVycy91c2IvY29yZS91cmIuYzo3NSBbdXNiY29yZV0gZnVuYzp1c2JfYWxsb2NfdXJi
+IDY2MQo+PiAgIGRyaXZlcnMvdXNiL2hvc3QveGhjaS5jOjE1NTUgW3hoY2lfaGNkXSBmdW5jOnho
+Y2lfdXJiX2VucXVldWUgNDI0ODYzCj4+IE1lbW9yeSBhbGxvY2F0aW9uIGZyZXF1ZW5jeSBmb3Ig
+aG9zdC1jb250cm9sbGVyIHByaXZhdGUgZGF0YSBjYW4gcmVhY2gKPj4gfjFrL3MgYW5kIGFib3Zl
+Lgo+PiAKPj4gSGlnaCBmcmVxdWVudCBhbGxvY2F0aW9ucyBmb3IgaG9zdC1jb250cm9sbGVyIHBy
+aXZhdGUgZGF0YSBjYW4gYmUKPj4gYXZvaWRlZCBpZiB1cmIgdGFrZSBvdmVyIHRoZSBvd25lcnNo
+aXAgb2YgbWVtb3J5LCB0aGUgbWVtb3J5IHRoZW4gc2hhcmVzCj4+IHRoZSBsb25nZXIgbGlmZWN5
+Y2xlIHdpdGggdXJiIG9iamVjdHMuCj4+IAo+PiBBZGQgYSBtZW1wb29sIHRvIHVyYiBmb3IgaGNw
+cml2IHVzYWdlLCB0aGUgbWVtcG9vbCBvbmx5IGhvbGRzIG9uZSBibG9jawo+PiBvZiBtZW1vcnkg
+YW5kIGdyb3dzIHdoZW4gbGFyZ2VyIHNpemUgaXMgcmVxdWVzdGVkLgo+PiAKPj4gU2lnbmVkLW9m
+Zi1ieTogRGF2aWQgV2FuZyA8MDAxMDcwODJAMTYzLmNvbT4KPgo+SXQgc2hvdWxkIGJlIHBvc3Np
+YmxlIHRvIGRvIHdoYXQgeW91IHdhbnQgd2l0aG91dCB0b3VjaGluZyB0aGUgVVNCIGNvcmUgCj5j
+b2RlIGF0IGFsbCwgY2hhbmdpbmcgb25seSB4aGNpLWhjZC4gIFRoYXQncyB3aGF0IE1hdGhpYXMg
+aXMgc3VnZ2VzdGluZy4KPgo+SW5zdGVhZCBvZiBoYXZpbmcgYW4gVVJCIGtlZXAgb3duZXJzaGlw
+IG9mIGl0cyBleHRyYSBtZW1vcnkgYWZ0ZXIgaXQgCj5jb21wbGV0ZXMsIHhoY2ktaGNkIGNhbiBw
+dXQgdGhlIG1lbW9yeSBhcmVhIG9udG8gYSBmcmVlIGxpc3QuICBUaGVuIAo+bWVtb3J5IGFyZWFz
+IG9uIHRoZSBmcmVlIGxpc3QgY2FuIGJlIHJldXNlZCB3aXRoIGFsbW9zdCBubyBvdmVyaGVhZCB3
+aGVuIAo+VVJCcyBhcmUgZW5xdWV1ZWQgbGF0ZXIgb24uCgpJIGhhdmUgdG8gZGlzYWdyZWUsICB5
+b3VyIHN1Z2dlc3Rpb24gaGFzIG5vIG11Y2ggZGlmZmVyZW5jZSBmcm9tIHJlcXVlc3RpbmcgbWVt
+b3J5IGZyb20Kc3lzdGVtLCBsb2NrcyBhbmQgbWVtb3J5IHBvb2wgbWFuYWdlbWVudHMsIGFsbCB0
+aGUgc2FtZSBhcmUgbmVlZGVkLCB3aHkgYm90aGVyPwoKVGhlIHJlYXNvbiBJIGNob29zZSBVUkIg
+aXMgdGhhdCAgVVJCIGxpZmUgY3ljbGUgY29udGFpbnMgdGhlIHByaXZhdGUgZGF0YSdzIGxpZmVj
+eWNsZSwgCmFuZCBubyB0d28gSENEIGNhbiB0YWtlIG92ZXIgdGhlIHNhbWUgVVJCIGFzIHRoZSBz
+YW1lIHRpbWUuCgpJIHRoaW5rIHRoZSBtZW1vcnkgcG9vbCBoZXJlIGlzIG5vdCBhY3R1YWxseSBh
+IHBvb2wsICBvciBJIHNob3VsZCBzYXkgdGhlIG1lbXBvb2wgY29uc2lzdHMgb2YKcG9vbCBvZiBV
+UkJzLCBhbmQgZWFjaCBVUkIgaGF2ZSBvbmx5ICJzaW5nbGUgb25lIiBzbG90IG9mIG1lbSBwb29s
+IGluIGl0LgoKCj4KPlRoaXMgaWRlYSBjYW4gYmVjb21lIG1vcmUgZWxhYm9yYXRlIGlmIHlvdSBt
+YWludGFpbiBzZXBhcmF0ZSBmcmVlIGxpc3RzIAo+Zm9yIGRpZmZlcmVudCBkZXZpY2VzLCBvciBl
+dmVuIGZvciBkaWZmZXJlbnQgZW5kcG9pbnRzLCBvciBzb3J0IHRoZSBmcmVlIAo+bGlzdCBieSB0
+aGUgc2l6ZSBvZiB0aGUgbWVtb3J5IGFyZWFzLiAgQnV0IHRoZSBiYXNpYyBpZGVhIGlzIGFsd2F5
+cyB0aGUgCj5zYW1lOiBEb24ndCBjaGFuZ2UgdXNiY29yZSAoaW5jbHVkaW5nIHN0cnVjdCB1cmIp
+LCBhbmQgbWFrZSBnZXR0aW5nIGFuZCAKPnJlbGVhc2luZyB0aGUgZXh0cmEgbWVtb3J5IGFyZWFz
+IGhhdmUgZXh0cmVtZWx5IGxvdyBvdmVyaGVhZC4KCldoeSBpbXBsZW1lbnRzIGEgZGV2aWNlIGxl
+dmVsIG1lbW9yeSBwb29sIHdvdWxkIGhhdmUgZXh0cmVtZWx5IGxvdyBvdmVyaGVhZD8KV2h5ICBt
+YWtpbmcgY2hhbmdlcyB0byB1c2IgY29yZSBpcyBiYWQ/IFRoZSBpZGVhIGluIHRoaXMgdGhyZWFk
+IGlzIG1lYW50IGZvciBhbGwga2luZHMgb2YKaG9zdCBjb250cm9sbGVycywgeGhjaSBpcyB3aGF0
+IEkgaGF2ZSBpbiBteSBzeXN0ZW07IGkgdGhpbmsgc2ltaWxhciBjaGFuZ2VzIHdvdWxkIGJlbmVm
+aXQgb3RoZXIKSENzCgoKPgo+QWxhbiBTdGVybgo=
 
