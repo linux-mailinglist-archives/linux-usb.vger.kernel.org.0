@@ -1,109 +1,145 @@
-Return-Path: <linux-usb+bounces-23944-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23945-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FFB0AB67FC
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 11:51:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32A9FAB69BA
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 13:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AEDE4A3A46
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 09:51:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5EC81B45F23
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 11:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F7AD25DAE8;
-	Wed, 14 May 2025 09:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F371827467B;
+	Wed, 14 May 2025 11:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aNof1HXb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9148AD529;
-	Wed, 14 May 2025 09:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5412E42A82
+	for <linux-usb@vger.kernel.org>; Wed, 14 May 2025 11:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747216283; cv=none; b=tBlCQ3iJkwkAeF5dis5PYSXMLNcN4jfNTMDlGe0XPKJkq1MeXw+KJxjPpijyU3YK2NZ/uCzZYpGaeHCdSB9LMU1WCweG4/RhoemILN313kRGUBoIrymzSvtKy8Ur0sxYYqwU7KCBeEnd1ZN85TsxjliXjMUC/630i7p08InDPJo=
+	t=1747221788; cv=none; b=J+vTJHTox8u7qpYsGwKT5zNCZXHkkRxraHZdTvIx04ATeO6mDll8waZPtDHBXp/K8MhvDO2nUu8JEzK0kOAa6paF6FfPwYTq6+mtTcLBy1BWMqaqWxgVLh7cxB1H4JqTG4+jMJALqS6IHdWirEeGAcjdBeKwgjNu0g59Rc1iSxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747216283; c=relaxed/simple;
-	bh=pPytq2xngHnqIvsv89X3PysVr0XkI18QW8kCv6FzIoY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LYdk/n9FJpRFHOs0CBVrRq0V3aFAsVLGdWkFYs8NjtWKrpb5JaT+4m7a/P9msHcGjsUKQoMuOkQMAnTuiJ3zkM8V/Knn1g2ljbnkdiYvA9NHAxphzKBTDsBnSFWbSQSxfa7wMLJ1Axk12OCGBkAsWmQW00E2UEtmmcdj3SFUFS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [124.16.141.245])
-	by APP-05 (Coremail) with SMTP id zQCowAAHRQ2OZyRovH4uFQ--.28565S2;
-	Wed, 14 May 2025 17:51:11 +0800 (CST)
-From: Wentao Liang <vulab@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	u.kleine-koenig@baylibre.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: gadget: udc: renesas_usb3: Add null pointer check in usb3_irq_epc_pipe0_setup()
-Date: Wed, 14 May 2025 17:50:53 +0800
-Message-ID: <20250514095053.420-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.42.0.windows.2
+	s=arc-20240116; t=1747221788; c=relaxed/simple;
+	bh=EfetSGfqB81IHkN/PGxR2QwCQXA/JyJpHsnfb7Zgb8c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I+qG1/6Rq3WHJ4lX8quTIp8VsVAexe3GjXSSB2iseql+jHHFG1+UvdoAw4uF4wCBTyIOEKQ4wFcR9YOUCty9XdegU4ZJqYEe7GEWXTfCZjH1oZ/1OO+7XKzKYRK5laNNYgNqcLfVOf3CuHVIDzwKC3QhVLyUKMiNNz0+kBXQx+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aNof1HXb; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5f624291db6so11389719a12.3
+        for <linux-usb@vger.kernel.org>; Wed, 14 May 2025 04:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1747221783; x=1747826583; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=btVpNFKgUcPUatiYhN505Sc3nSf9yR9Iw/noU9VBOO0=;
+        b=aNof1HXbRXUR1cH1MIz/DrVjWmj9beSY3mN2uy0ppmjZ7oZEiwamT++74sUtBaBBRo
+         OPIjo7nc0f7nkcwA2jf7KFTiwNiAK02GB8SD5y01g2vOK375MOVkTHVQs73yWV10MLeJ
+         xlXJFccreWu3mi7pjk1O8kWAhmq9RV8vq8ekbNZiLkKthTaEoXfcubm/XdUrH67QyFZd
+         WSCIj8CTjaJraMP0P+q4NDnzi+xbXQWZVcrVH4y/90+qTCxCrGjOgtZYJiu5otZM5iD2
+         NT7lw+WoBCkx+qdD4eCfueUujEfnHJjTbb/SOzH58TzlZ+8Vo/OGn0ajd/MTNe7T3BEN
+         SwRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747221783; x=1747826583;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=btVpNFKgUcPUatiYhN505Sc3nSf9yR9Iw/noU9VBOO0=;
+        b=BBDZWKO5pb4sXmHzawAo9n/9WUxGUD0t5yy1hCQXXomiKr5Xx4kXdrXgLu80c8NCKs
+         NXbMf5WuVVh3Gxfn9itdBdBg1D+fR5DNlWuUuZA+DGbGefHLJF/Qi2PxlR0BB9u4Ldfm
+         u481/+11RYbmYF7yhcXLFuJpgPJfP7p24OnGxXRr+GnQFlIMirpyJMM6JloemBzqUVld
+         yYWeJRiuFictJm+DD4h2QzSc+NpW2w+dEa8Kk3SZ7SEB0xdZwqhYXCHiWr9MT49LY/02
+         vRDeI01sdfUCzzPGrX6v2i04OBYd2OBCUNVJN2gJ+EPf7h5mYCmOaPmDayUCvWluNHE5
+         Gf2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUKR5Q53oTAhKsdofOw04RMz6GybcQzHiDrTp4N2X8XN3fOraWYcfLRsT+q+GC+jQdbHr7KDjo78cM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7xevzbC23cmni7aX3E4eOBHJPS0qgPnEw/49ZX0G4APJybIJ6
+	jthhWYfH/tCOW+grNhtGFmcPhjCYSsKDmE3YUq8L3iss85WqrSk5wRHbRkd0qW0=
+X-Gm-Gg: ASbGncvEiuBdFVAKUxDpT9sV5UrLR68/KCVp7i384HP2hRC7yMCP7EpyGMCRUPLLmHM
+	hH5m9/2lG0e+KF/iXyvgwCscejwZA/bKUgmK8crSiSw9z/rLKVFmRxJwGGUGTHEoQheCKnBVo3J
+	UHecT4gMyMj06dshqbNaBn8Rtn0gkVes7QpOcRoNSw4jRQF3qQ5DVKTCDGt3EnC5YnJbYHP1Qjy
+	8iPa10LUZ8XgoLId3b9xzR/tx0tYxCITIDweK1gQN3/VKc260Q9iKiMX8Jt7gvrYP5arrz/fBha
+	v85WDFtEY+a17Bj/F0NoR3rOtCFw06tojPG6XB+VeOXFgYORLOGlehFdZpjnpxJBB1XcEez84ae
+	9Da35zFQ1HN6d6CZA/X/zjsbwJ96n
+X-Google-Smtp-Source: AGHT+IFd1ZVLlqOazM0JM6spYOaDAtNpkRG4R/J+DRb7NLGEkcdjusWFkZMkSqwh1fAuoOXWtmztPQ==
+X-Received: by 2002:a05:6402:4304:b0:5f6:218d:34e6 with SMTP id 4fb4d7f45d1cf-5ff988dc0famr2575205a12.26.1747221783487;
+        Wed, 14 May 2025 04:23:03 -0700 (PDT)
+Received: from ?IPV6:2001:a61:133d:b101:9ea2:16fa:3380:8e40? ([2001:a61:133d:b101:9ea2:16fa:3380:8e40])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fc9d700e6fsm8527536a12.62.2025.05.14.04.23.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 May 2025 04:23:03 -0700 (PDT)
+Message-ID: <51fe78fb-5d73-458f-b3d1-fc84cd6c5869@suse.com>
+Date: Wed, 14 May 2025 13:23:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAAHRQ2OZyRovH4uFQ--.28565S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrWrCrWDGF18tw1UXFy3XFb_yoW8XF13pa
-	1DGrZYyr4rJa1Yqay8G34kZF4Ykanxtry7uFWxtw4kC3WrX3ykAFnFqrW7KrnrAFWxAF4I
-	qFyDWw10kFy7CrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v2
-	6r126r1DMxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-	1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-	DU0xZFpf9x0JUatC7UUUUU=
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCQ4CA2gkZDgLRAAAsZ
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
+ host-controller private data
+To: David Wang <00107082@163.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org, oneukum@suse.com
+Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250512150724.4560-1-00107082@163.com>
+ <20250513113817.11962-1-00107082@163.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250513113817.11962-1-00107082@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The function usb3_irq_epc_pipe0_setup() calls the function
-usb3_get_request(), but does not check its return value which
-is a null pointer if the function fails. This can result in a
-null pointer dereference.
 
-Add a null pointer check for usb3_get_request() to avoid null
-pointer dereference when the function fails.
 
-Fixes: 746bfe63bba3 ("usb: gadget: renesas_usb3: add support for Renesas USB3.0 peripheral controller")
-Cc: stable@vger.kernel.org # v4.5
-Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
----
- drivers/usb/gadget/udc/renesas_usb3.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 13.05.25 13:38, David Wang wrote:
+> ---
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index fce5c41d9f29..51f2dd8cbf91 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -1920,11 +1920,13 @@ static void usb3_irq_epc_pipe0_setup(struct renesas_usb3 *usb3)
- {
- 	struct usb_ctrlrequest ctrl;
- 	struct renesas_usb3_ep *usb3_ep = usb3_get_ep(usb3, 0);
-+	struct renesas_usb3_request *usb3_req = usb3_get_request(usb3_ep);
- 
- 	/* Call giveback function if previous transfer is not completed */
-+	if (!usb3_req)
-+		return;
- 	if (usb3_ep->started)
--		usb3_request_done(usb3_ep, usb3_get_request(usb3_ep),
--				  -ECONNRESET);
-+		usb3_request_done(usb3_ep, usb3_req, -ECONNRESET);
- 
- 	usb3_p0_con_clear_buffer(usb3);
- 	usb3_get_setup_data(usb3, &ctrl);
--- 
-2.42.0.windows.2
+Hi,
+
+still an issue after a second review.
+I should have noticed earlier.
+
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -23,6 +23,7 @@ static void urb_destroy(struct kref *kref)
+>   
+>   	if (urb->transfer_flags & URB_FREE_BUFFER)
+>   		kfree(urb->transfer_buffer);
+> +	kfree(urb->hcpriv_mempool);
+
+What if somebody uses usb_init_urb()?
+  
+>   	kfree(urb);
+>   }
+> @@ -1037,3 +1038,25 @@ int usb_anchor_empty(struct usb_anchor *anchor)
+>   
+>   EXPORT_SYMBOL_GPL(usb_anchor_empty);
+>   
+> +/**
+> + * urb_hcpriv_mempool_zalloc - alloc memory from mempool for hcpriv
+> + * @urb: pointer to URB being used
+> + * @size: memory size requested by current host controller
+> + * @mem_flags: the type of memory to allocate
+> + *
+> + * Return: NULL if out of memory, otherwise memory are zeroed
+> + */
+> +void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags)
+> +{
+> +	if (urb->hcpriv_mempool_size < size) {
+> +		kfree(urb->hcpriv_mempool);
+> +		urb->hcpriv_mempool_size = size;
+> +		urb->hcpriv_mempool = kmalloc(size, mem_flags);
+
+That could use kzalloc().
+
+	Regards
+		Oliver
 
 
