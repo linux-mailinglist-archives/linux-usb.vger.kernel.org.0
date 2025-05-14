@@ -1,54 +1,77 @@
-Return-Path: <linux-usb+bounces-23938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D335AB647A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 09:33:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01A45AB656E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 10:13:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26D9B1884ADF
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 07:33:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F764A649E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 08:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7295202995;
-	Wed, 14 May 2025 07:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60DB21FF2D;
+	Wed, 14 May 2025 08:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yBJNzP/6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JtOZrvw5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7041A3155;
-	Wed, 14 May 2025 07:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84B921CC4F;
+	Wed, 14 May 2025 08:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747207994; cv=none; b=cLGdwrF8HsHE9dBez7lq1S/eFe6i+etqmhh+Dte7MbVABxGCLlPvoBxV7JxDf5m2+hgmVTllwmryDK+C5jPAIY5NLeYMfZqGtVUrKCfYYKOS4Ao6k7383zzx/yv/mL/fBIl11CZi/XP52yGJGBNWQNwqNGXTp1aThRaORZUiIr0=
+	t=1747210355; cv=none; b=WHNphrm8t7DfOXLfYWlQK8tl7602KYw5yaivbxdYmqgHlUgZXdb4Lm/vdE5s8/tTeIAu2Nvr70F55A/1dy8m/lXXmemishxfhrZGjoSjPXny05WHmQply3wfChOjGJN2m99XzR/Dr0HH0bWYQ05GXPUHe5cTzDi3RjY1kcjKv80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747207994; c=relaxed/simple;
-	bh=aMSOQWVWeoNv0lVBaoClSjorw3TTumNswBEIUZbZhII=;
+	s=arc-20240116; t=1747210355; c=relaxed/simple;
+	bh=ec+sa40LuHPteGzuo7nO5Z0yW/UhCJxWskwBNgf3WUc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ofc96Xot4ioekubvzccph/0dql05DeVsQe636Z6s0MtZTUawRq9gci86F8XfNP9MJLB/6AbcLzhvxop1GVQOubphuruPfrBI3dNKmAiKNpbxmLObnf22YHL8AOXty3kK26zbbtdL774i/Q51zQlirXyqm9bTZwqwuxtbLqqp4w4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yBJNzP/6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED6FC4CEF1;
-	Wed, 14 May 2025 07:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747207993;
-	bh=aMSOQWVWeoNv0lVBaoClSjorw3TTumNswBEIUZbZhII=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yBJNzP/61tfn1OQwYbB5+8TyTD+iK+MDo9jkU75tUSd7omI+LFjV5tTBaAQckGFd/
-	 0TNMvaLuJc/nnkQoD5fkqlRI3LVmbchTRxExww+0IM7j85DaF4G0IyaqI6H774bJRn
-	 L6lSXZhZJ12eck/2X2lap5xrg+RQiFQBhv+fO9KA=
-Date: Wed, 14 May 2025 09:31:25 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: "Chen, Jay" <jay.chen@siemens.com>
-Cc: "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Shao, Tzi Yang" <tziyang.shao@siemens.com>
-Subject: Re: [PATCH] usb: xhci: Set avg_trb_len = 8 for EP0 during Address
- Device
-Message-ID: <2025051451-pedicure-aspire-1c8d@gregkh>
-References: <JH0PR06MB7294E46B393F1CA5FE0EE4F78396A@JH0PR06MB7294.apcprd06.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IlusERg28MSwnbwjYOAXLgBnCKA7H2G6Q5PmvXAWj9VufEn1Qsljqq0+fRR0nk5Wa5T8qjkrAfblE5TFC4kuOg5qw47nVdp5gq5pbWV2ehdHzlfqqr195YouPZUIrQHEQu3uRTtyDdRoJ6ogVfrX30dCsA9p/Xd9RrsPbtrmDUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JtOZrvw5; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747210353; x=1778746353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ec+sa40LuHPteGzuo7nO5Z0yW/UhCJxWskwBNgf3WUc=;
+  b=JtOZrvw5ykgwVn97/Cm4mwNlLSmtygmwIcbrL0+uX6p8onKftPq09aS9
+   Hm4NmgMg0MsbcaeIh+3DPGElpP5E8qh5TRW40E85I6hQ+1p1ZV22zp8fi
+   vhdz00+GZvzDn665GHJ7P+GdxcJf6F8ta9m5UQPfgHPgg/3wtuHOUo3KY
+   fMTzhpEmqxQRED2uhViU41YceIHrhLnrQ4GZsBETVcouQXROu1G+WLJeu
+   ucaoBK2NHNuNmAG/LjzY5bWOiESTSrtkGZVtAw27GLly1n6OseALhQyx0
+   1iFK2jVFxiy24Nr3bkrdylhceCJohB+7gytdUGDzK7VCPMSe7d3Uikinc
+   Q==;
+X-CSE-ConnectionGUID: w9C4Wc4WSAaKhdhE6rekpQ==
+X-CSE-MsgGUID: a0xnmxQLSPCyMSNkK7LPvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="52901075"
+X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
+   d="scan'208";a="52901075"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 01:12:33 -0700
+X-CSE-ConnectionGUID: NcLBzkazTOKwsbob2udQzg==
+X-CSE-MsgGUID: xBXOTszMRC+r6/R6cUpNRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
+   d="scan'208";a="137844045"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa006.fm.intel.com with SMTP; 14 May 2025 01:12:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 May 2025 11:12:29 +0300
+Date: Wed, 14 May 2025 11:12:29 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Cosmo Chou <chou.cosmo@gmail.com>
+Cc: badhri@google.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	cosmo.chou@quantatw.com
+Subject: Re: [PATCH v2] usb: typec: tcpm: Use configured PD revision for
+ negotiation
+Message-ID: <aCRQbRCHFdFOCNw2@kuha.fi.intel.com>
+References: <20250513130834.1612602-1-chou.cosmo@gmail.com>
+ <aCNLeX1k34BSgPOV@kuha.fi.intel.com>
+ <aCNOOXcAuA_1B-0Z@kuha.fi.intel.com>
+ <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,80 +80,104 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <JH0PR06MB7294E46B393F1CA5FE0EE4F78396A@JH0PR06MB7294.apcprd06.prod.outlook.com>
+In-Reply-To: <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
 
-On Tue, May 13, 2025 at 09:07:00AM +0000, Chen, Jay wrote:
-> From fef893bcf0add89795b85bcc1f6bdae537f1dabe Mon Sep 17 00:00:00 2001
-> From: "jay.chen" <jay.chen@siemens.com>
-> Date: Tue, 13 May 2025 15:03:44 +0800
-> Subject: [PATCH] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device
-> Command
+On Tue, May 13, 2025 at 10:14:32PM +0800, Cosmo Chou wrote:
+> On Tue, May 13, 2025 at 04:50:49PM +0300, Heikki Krogerus wrote:
+> >
+> > On Tue, May 13, 2025 at 04:39:09PM +0300, Heikki Krogerus wrote:
+> > > On Tue, May 13, 2025 at 09:08:34PM +0800, Cosmo Chou wrote:
+> > > > Initialize negotiated_rev and negotiated_rev_prime based on the port's
+> > > > configured PD revision (rev_major) rather than always defaulting to
+> > > > PD_MAX_REV. This ensures ports start PD communication using their
+> > > > appropriate revision level.
+> > > >
+> > > > This allows proper communication with devices that require specific
+> > > > PD revision levels, especially for the hardware designed for PD 1.0
+> > > > or 2.0 specifications.
+> > > >
+> > > > Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+> > > > ---
+> > > > Change log:
+> > > >
+> > > > v2:
+> > > >   - Add PD_CAP_REVXX macros and use switch-case for better readability.
+> > > >
+> > > > ---
+> > > >  drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
+> > > >  1 file changed, 25 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > > index 8adf6f954633..48e9cfc2b49a 100644
+> > > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > > @@ -313,6 +313,10 @@ struct pd_data {
+> > > >     unsigned int operating_snk_mw;
+> > > >  };
+> > > >
+> > > > +#define PD_CAP_REV10       0x1
+> > > > +#define PD_CAP_REV20       0x2
+> > > > +#define PD_CAP_REV30       0x3
+> > > > +
+> > > >  struct pd_revision_info {
+> > > >     u8 rev_major;
+> > > >     u8 rev_minor;
+> > > > @@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
+> > > >     }
+> > > >  }
+> > > >
+> > > > +static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port)
+> > > > +{
+> > > > +   switch (port->pd_rev.rev_major) {
+> > > > +   case PD_CAP_REV10:
+> > > > +           port->negotiated_rev = PD_REV10;
+> > > > +           break;
+> > > > +   case PD_CAP_REV20:
+> > > > +           port->negotiated_rev = PD_REV20;
+> > > > +           break;
+> > > > +   case PD_CAP_REV30:
+> > > > +           port->negotiated_rev = PD_REV30;
+> > > > +           break;
+> > > > +   default:
+> > > > +           port->negotiated_rev = PD_MAX_REV;
+> > > > +           break;
+> > > > +   }
+> > > > +   port->negotiated_rev_prime = port->negotiated_rev;
+> > > > +}
+> > >
+> > > Do we need this? Couldn't you just add one to rev_major?
+> > >
+> > >         port->negotiated_rev = port->pd_rev.rev_major + 1;
+> > >         port->negotiated_rev_prime = port->pd_rev.rev_major + 1;
+> > >
+> > > Or am I missing something?
+> >
+> > Sorry, I mean minus one :-)
+> >
+> >         port->negotiated_rev = port->pd_rev.rev_major - 1;
+> >         port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
+> >
+> > --
+> > heikki
 > 
-> According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
-> TRB Length (avg_trb_len) for control endpoints should be set to 8.
+> It seems to be the PATCH v1:
+> https://lore.kernel.org/all/20250508174756.1300942-1-chou.cosmo@gmail.com/
 > 
-> Currently, during the Address Device Command, EP0's avg_trb_len remains 0,
-> which may cause some xHCI hardware to reject the Input Context, resulting
-> in device enumeration failures. In extreme cases, using a zero avg_trb_len
-> in calculations may lead to division-by-zero errors and unexpected system
-> crashes.
-> 
-> This patch sets avg_trb_len to 8 for EP0 in
-> xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
-> and improving compatibility across various host controller implementations.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
-> Signed-off-by: jay.chen <jay.chen@siemens.com>
-> ---
-> drivers/usb/host/xhci-mem.c | 2 ++
-> 1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index d698095fc88d..fed9e9d1990c 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
->       ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
->                                  dev->eps[0].ring->cycle_state);
-> 
-> +      ep0_ctx->tx_info |= cpu_to_le32(EP_AVG_TRB_LENGTH(8));
-> +
->       trace_xhci_setup_addressable_virt_device(dev);
-> 
->        /* Steps 7 and 8 were done in xhci_alloc_virt_device() */
-> -- 
-> 2.43.5
+> if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <= PD_MAX_REV + 1) {
+>         port->negotiated_rev = port->pd_rev.rev_major - 1;
+>         port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
+> } else {
+>         port->negotiated_rev = PD_MAX_REV;
+>         port->negotiated_rev_prime = PD_MAX_REV;
+> }
 
+Okay, sorry I missed that. I still don't like the extra definitions,
+but I don't have any better idea (I guess macro is not an option?).
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 thanks,
 
-greg k-h's patch email bot
+-- 
+heikki
 
