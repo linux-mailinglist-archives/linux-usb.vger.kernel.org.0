@@ -1,77 +1,69 @@
-Return-Path: <linux-usb+bounces-23939-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23940-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A45AB656E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 10:13:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF907AB660F
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 10:33:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F764A649E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 08:13:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8A257B4668
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 08:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60DB21FF2D;
-	Wed, 14 May 2025 08:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA25721C9F0;
+	Wed, 14 May 2025 08:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JtOZrvw5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6ojRjkB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84B921CC4F;
-	Wed, 14 May 2025 08:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1201B414E;
+	Wed, 14 May 2025 08:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747210355; cv=none; b=WHNphrm8t7DfOXLfYWlQK8tl7602KYw5yaivbxdYmqgHlUgZXdb4Lm/vdE5s8/tTeIAu2Nvr70F55A/1dy8m/lXXmemishxfhrZGjoSjPXny05WHmQply3wfChOjGJN2m99XzR/Dr0HH0bWYQ05GXPUHe5cTzDi3RjY1kcjKv80=
+	t=1747211627; cv=none; b=RWocUHhdBMEu1tZLWcx+N8DM79DJhixkhddKOFD7EeuM3f6JwxMTxaaZbOCm/eRN7S0X4bt9zZKWgAeLcDShopNZnmul8shAXaIRSNjjfFgFzvRnxyFN9KpQ+FAWwQ2RWCuGus11BD/18H+TsMeK7m7PFVvk2yBbsuKgspMYwZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747210355; c=relaxed/simple;
-	bh=ec+sa40LuHPteGzuo7nO5Z0yW/UhCJxWskwBNgf3WUc=;
+	s=arc-20240116; t=1747211627; c=relaxed/simple;
+	bh=AQgavCoFrn3p4kZpEsuTDbl2iBlKZHyz8RjR4wpvqDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IlusERg28MSwnbwjYOAXLgBnCKA7H2G6Q5PmvXAWj9VufEn1Qsljqq0+fRR0nk5Wa5T8qjkrAfblE5TFC4kuOg5qw47nVdp5gq5pbWV2ehdHzlfqqr195YouPZUIrQHEQu3uRTtyDdRoJ6ogVfrX30dCsA9p/Xd9RrsPbtrmDUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JtOZrvw5; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747210353; x=1778746353;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ec+sa40LuHPteGzuo7nO5Z0yW/UhCJxWskwBNgf3WUc=;
-  b=JtOZrvw5ykgwVn97/Cm4mwNlLSmtygmwIcbrL0+uX6p8onKftPq09aS9
-   Hm4NmgMg0MsbcaeIh+3DPGElpP5E8qh5TRW40E85I6hQ+1p1ZV22zp8fi
-   vhdz00+GZvzDn665GHJ7P+GdxcJf6F8ta9m5UQPfgHPgg/3wtuHOUo3KY
-   fMTzhpEmqxQRED2uhViU41YceIHrhLnrQ4GZsBETVcouQXROu1G+WLJeu
-   ucaoBK2NHNuNmAG/LjzY5bWOiESTSrtkGZVtAw27GLly1n6OseALhQyx0
-   1iFK2jVFxiy24Nr3bkrdylhceCJohB+7gytdUGDzK7VCPMSe7d3Uikinc
-   Q==;
-X-CSE-ConnectionGUID: w9C4Wc4WSAaKhdhE6rekpQ==
-X-CSE-MsgGUID: a0xnmxQLSPCyMSNkK7LPvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="52901075"
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="52901075"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 01:12:33 -0700
-X-CSE-ConnectionGUID: NcLBzkazTOKwsbob2udQzg==
-X-CSE-MsgGUID: xBXOTszMRC+r6/R6cUpNRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="137844045"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa006.fm.intel.com with SMTP; 14 May 2025 01:12:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 May 2025 11:12:29 +0300
-Date: Wed, 14 May 2025 11:12:29 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Cosmo Chou <chou.cosmo@gmail.com>
-Cc: badhri@google.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	cosmo.chou@quantatw.com
-Subject: Re: [PATCH v2] usb: typec: tcpm: Use configured PD revision for
- negotiation
-Message-ID: <aCRQbRCHFdFOCNw2@kuha.fi.intel.com>
-References: <20250513130834.1612602-1-chou.cosmo@gmail.com>
- <aCNLeX1k34BSgPOV@kuha.fi.intel.com>
- <aCNOOXcAuA_1B-0Z@kuha.fi.intel.com>
- <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i7AixbaCa9N7+cYecOxQx8kJJIbGDgELCLHoumAHkts/Mymp6TRrFPT2lHpnfrf5dPA9HLJQ1KqINQ6oLNxbWzg/OpxfN80OCQq11TfF4NmHIQnvivjsr0GrZ9CS0o7+gikx9gpYzvjNinWeIEMkSrv3bl2bMh5wt7YY3u8cufo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6ojRjkB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175A2C4CEE9;
+	Wed, 14 May 2025 08:33:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747211626;
+	bh=AQgavCoFrn3p4kZpEsuTDbl2iBlKZHyz8RjR4wpvqDk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H6ojRjkBJnyhqb+fdGrlVbRl1CkZXo09J3lhjAkNtgbF2/3sDyisvQtaep8xxk1pW
+	 ql5we5PXROfoE98FkW1DiiOwAIzJo1305qx3HV1/ni1jCVKotrsYUv7l/0/2WC3lBW
+	 mvxVJ/sJGB05lrGoZ+Q+Iuq8NtBiIkOUoE0wdLdRx8KAXNuiA4IfkUgykcaPqKSiuE
+	 q6kj2RiFfrc6c+i/EbqPqCopFiQ4d9/z5Dpnd/3XErvvNwCs8mgtsDX0vQyuxA/Uii
+	 MapWBnhHlxRj22z4I5qLxoax3VfHiEc7ewatwW0LljFq6vymzZbP8Gjnz5aBmuBn7A
+	 0raE+KVU2WzDg==
+Date: Wed, 14 May 2025 09:33:44 +0100
+From: Vinod Koul <vkoul@kernel.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Melody Olvera <melody.olvera@oss.qualcomm.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 06/10] phy: qcom: Add M31 based eUSB2 PHY driver
+Message-ID: <aCRVaNDQP/PdAXPR@vaman>
+References: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
+ <20250409-sm8750_usb_master-v4-6-6ec621c98be6@oss.qualcomm.com>
+ <Z/exOF4T+0vNLQwg@vaman>
+ <0517c37d-b1ba-466e-bffd-9f47b0d458d5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,104 +72,39 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
+In-Reply-To: <0517c37d-b1ba-466e-bffd-9f47b0d458d5@quicinc.com>
 
-On Tue, May 13, 2025 at 10:14:32PM +0800, Cosmo Chou wrote:
-> On Tue, May 13, 2025 at 04:50:49PM +0300, Heikki Krogerus wrote:
-> >
-> > On Tue, May 13, 2025 at 04:39:09PM +0300, Heikki Krogerus wrote:
-> > > On Tue, May 13, 2025 at 09:08:34PM +0800, Cosmo Chou wrote:
-> > > > Initialize negotiated_rev and negotiated_rev_prime based on the port's
-> > > > configured PD revision (rev_major) rather than always defaulting to
-> > > > PD_MAX_REV. This ensures ports start PD communication using their
-> > > > appropriate revision level.
-> > > >
-> > > > This allows proper communication with devices that require specific
-> > > > PD revision levels, especially for the hardware designed for PD 1.0
-> > > > or 2.0 specifications.
-> > > >
-> > > > Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
-> > > > ---
-> > > > Change log:
-> > > >
-> > > > v2:
-> > > >   - Add PD_CAP_REVXX macros and use switch-case for better readability.
-> > > >
-> > > > ---
-> > > >  drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
-> > > >  1 file changed, 25 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > > > index 8adf6f954633..48e9cfc2b49a 100644
-> > > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > > @@ -313,6 +313,10 @@ struct pd_data {
-> > > >     unsigned int operating_snk_mw;
-> > > >  };
-> > > >
-> > > > +#define PD_CAP_REV10       0x1
-> > > > +#define PD_CAP_REV20       0x2
-> > > > +#define PD_CAP_REV30       0x3
-> > > > +
-> > > >  struct pd_revision_info {
-> > > >     u8 rev_major;
-> > > >     u8 rev_minor;
-> > > > @@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
-> > > >     }
-> > > >  }
-> > > >
-> > > > +static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port)
-> > > > +{
-> > > > +   switch (port->pd_rev.rev_major) {
-> > > > +   case PD_CAP_REV10:
-> > > > +           port->negotiated_rev = PD_REV10;
-> > > > +           break;
-> > > > +   case PD_CAP_REV20:
-> > > > +           port->negotiated_rev = PD_REV20;
-> > > > +           break;
-> > > > +   case PD_CAP_REV30:
-> > > > +           port->negotiated_rev = PD_REV30;
-> > > > +           break;
-> > > > +   default:
-> > > > +           port->negotiated_rev = PD_MAX_REV;
-> > > > +           break;
-> > > > +   }
-> > > > +   port->negotiated_rev_prime = port->negotiated_rev;
-> > > > +}
-> > >
-> > > Do we need this? Couldn't you just add one to rev_major?
-> > >
-> > >         port->negotiated_rev = port->pd_rev.rev_major + 1;
-> > >         port->negotiated_rev_prime = port->pd_rev.rev_major + 1;
-> > >
-> > > Or am I missing something?
-> >
-> > Sorry, I mean minus one :-)
-> >
-> >         port->negotiated_rev = port->pd_rev.rev_major - 1;
-> >         port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
-> >
-> > --
-> > heikki
+On 16-04-25, 15:45, Wesley Cheng wrote:
+> Hi Vinod,
 > 
-> It seems to be the PATCH v1:
-> https://lore.kernel.org/all/20250508174756.1300942-1-chou.cosmo@gmail.com/
+> On 4/10/2025 4:53 AM, Vinod Koul wrote:
+> > On 09-04-25, 10:48, Melody Olvera wrote:
+> > 
+> >> +static int m31eusb2_phy_write_readback(void __iomem *base, u32 offset,
+> >> +					const u32 mask, u32 val)
+> >> +{
+> >> +	u32 write_val;
+> >> +	u32 tmp;
+> >> +
+> >> +	tmp = readl_relaxed(base + offset);
+> >> +	tmp &= ~mask;
+> >> +	write_val = tmp | val;
+> >> +
+> >> +	writel_relaxed(write_val, base + offset);
+> >> +
+> >> +	tmp = readl_relaxed(base + offset);
+> > 
+> > Why are you using _relaxed version here?
+> > 
 > 
-> if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <= PD_MAX_REV + 1) {
->         port->negotiated_rev = port->pd_rev.rev_major - 1;
->         port->negotiated_rev_prime = port->pd_rev.rev_major - 1;
-> } else {
->         port->negotiated_rev = PD_MAX_REV;
->         port->negotiated_rev_prime = PD_MAX_REV;
-> }
+> No particular reason.  I think someone pointed this out previously, and I
+> was open to use the non-relaxed variants, but I assume using the relaxed vs
+> non-relaxed apis comes down to preference in this case.
 
-Okay, sorry I missed that. I still don't like the extra definitions,
-but I don't have any better idea (I guess macro is not an option?).
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-thanks,
+Nope you cant! There _needs_ to be a specific reasons!
+When you are doing read, modify, write, it is very important to know the
+right version to use...
 
 -- 
-heikki
+~Vinod
 
