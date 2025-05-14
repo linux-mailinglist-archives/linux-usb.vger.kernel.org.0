@@ -1,110 +1,145 @@
-Return-Path: <linux-usb+bounces-23940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23941-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF907AB660F
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 10:33:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59903AB6678
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 10:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8A257B4668
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 08:32:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB30D7AADE8
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 08:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA25721C9F0;
-	Wed, 14 May 2025 08:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5A322257E;
+	Wed, 14 May 2025 08:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6ojRjkB"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="XwpkGXeS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1201B414E;
-	Wed, 14 May 2025 08:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626F4220F5A;
+	Wed, 14 May 2025 08:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747211627; cv=none; b=RWocUHhdBMEu1tZLWcx+N8DM79DJhixkhddKOFD7EeuM3f6JwxMTxaaZbOCm/eRN7S0X4bt9zZKWgAeLcDShopNZnmul8shAXaIRSNjjfFgFzvRnxyFN9KpQ+FAWwQ2RWCuGus11BD/18H+TsMeK7m7PFVvk2yBbsuKgspMYwZE=
+	t=1747212687; cv=none; b=Ng6bPWMoSrjS2v0K91rKXiHtLiDUKuOH9gtGKtUTjbNV1gZQWImL42y1awZSY0Ca8UIct56wXOwdR9SQM824wHvOLbAA1LvybuyoC6IjTWqyo394B8u19FWAYsGD0iXKG/dllxkmrC2Cmgw4wjPQMqRbdjU4BCPzI2BAuepFXzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747211627; c=relaxed/simple;
-	bh=AQgavCoFrn3p4kZpEsuTDbl2iBlKZHyz8RjR4wpvqDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i7AixbaCa9N7+cYecOxQx8kJJIbGDgELCLHoumAHkts/Mymp6TRrFPT2lHpnfrf5dPA9HLJQ1KqINQ6oLNxbWzg/OpxfN80OCQq11TfF4NmHIQnvivjsr0GrZ9CS0o7+gikx9gpYzvjNinWeIEMkSrv3bl2bMh5wt7YY3u8cufo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6ojRjkB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175A2C4CEE9;
-	Wed, 14 May 2025 08:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747211626;
-	bh=AQgavCoFrn3p4kZpEsuTDbl2iBlKZHyz8RjR4wpvqDk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H6ojRjkBJnyhqb+fdGrlVbRl1CkZXo09J3lhjAkNtgbF2/3sDyisvQtaep8xxk1pW
-	 ql5we5PXROfoE98FkW1DiiOwAIzJo1305qx3HV1/ni1jCVKotrsYUv7l/0/2WC3lBW
-	 mvxVJ/sJGB05lrGoZ+Q+Iuq8NtBiIkOUoE0wdLdRx8KAXNuiA4IfkUgykcaPqKSiuE
-	 q6kj2RiFfrc6c+i/EbqPqCopFiQ4d9/z5Dpnd/3XErvvNwCs8mgtsDX0vQyuxA/Uii
-	 MapWBnhHlxRj22z4I5qLxoax3VfHiEc7ewatwW0LljFq6vymzZbP8Gjnz5aBmuBn7A
-	 0raE+KVU2WzDg==
-Date: Wed, 14 May 2025 09:33:44 +0100
-From: Vinod Koul <vkoul@kernel.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Melody Olvera <melody.olvera@oss.qualcomm.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 06/10] phy: qcom: Add M31 based eUSB2 PHY driver
-Message-ID: <aCRVaNDQP/PdAXPR@vaman>
-References: <20250409-sm8750_usb_master-v4-0-6ec621c98be6@oss.qualcomm.com>
- <20250409-sm8750_usb_master-v4-6-6ec621c98be6@oss.qualcomm.com>
- <Z/exOF4T+0vNLQwg@vaman>
- <0517c37d-b1ba-466e-bffd-9f47b0d458d5@quicinc.com>
+	s=arc-20240116; t=1747212687; c=relaxed/simple;
+	bh=apq+BwYHOxkPhX8ok64w8r4oGNy7ByvWl3MYKvBniB8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=FLS+TTOWj9c03OKYfOgLul5+UgpsTZdYYJnXIfJ69ZnODfaq3rBrrQUNTInatLwi2zlX7yjmNvUb2xn/jEeASRv5Wz8jgLmXOviephV/GHJrbWliaKMbInOWJKT8vFGSdiqaSLubUEBPuYp+9fzuKZo9g/ix5RDxq+GbWU2xQWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=XwpkGXeS reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=sBFuoDoykQLtmTPGNVji36ZhaQVrt1lynL2bW5GsBiQ=; b=X
+	wpkGXeSBwF9sgNV/XM+nzpfhi2/6IcJFl8RYdcGTFpTd+4lDjLDVXRRavMfqQ1lS
+	D1rI+B+KoNIt6NET14u7c+nMwvyOQpQ/Wq0uqC27dI5cmycMZF3qMiZb4B7WagjM
+	9LqYFFQz2IomS5CzkX69Lh0z7sGK/u2M7qyYhGJrxo=
+Received: from 00107082$163.com ( [111.35.191.17] ) by
+ ajax-webmail-wmsvr-40-138 (Coremail) ; Wed, 14 May 2025 16:50:52 +0800
+ (CST)
+Date: Wed, 14 May 2025 16:50:52 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, oneukum@suse.com, stern@rowland.harvard.edu,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
+ host-controller private data
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <2025051405-glare-crazily-a9fa@gregkh>
+References: <20250513113817.11962-1-00107082@163.com>
+ <20250514064455.5488-1-00107082@163.com>
+ <2025051405-glare-crazily-a9fa@gregkh>
+X-NTES-SC: AL_Qu2fBf6avU4u5CibY+kZnEYQheY4XMKyuPkg1YJXOp80iCXjww4aeXB6GXr77cOqKSqSvxeqUxhu5uNYd61xTbA13njqx69rZwdQABWQVKxD
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0517c37d-b1ba-466e-bffd-9f47b0d458d5@quicinc.com>
+Message-ID: <4b376fc2.7e7e.196cdfd512a.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:iigvCgD3L9ttWSRo1UsEAA--.39926W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqAxNqmgkRDyyBAAGsH
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On 16-04-25, 15:45, Wesley Cheng wrote:
-> Hi Vinod,
-> 
-> On 4/10/2025 4:53 AM, Vinod Koul wrote:
-> > On 09-04-25, 10:48, Melody Olvera wrote:
-> > 
-> >> +static int m31eusb2_phy_write_readback(void __iomem *base, u32 offset,
-> >> +					const u32 mask, u32 val)
-> >> +{
-> >> +	u32 write_val;
-> >> +	u32 tmp;
-> >> +
-> >> +	tmp = readl_relaxed(base + offset);
-> >> +	tmp &= ~mask;
-> >> +	write_val = tmp | val;
-> >> +
-> >> +	writel_relaxed(write_val, base + offset);
-> >> +
-> >> +	tmp = readl_relaxed(base + offset);
-> > 
-> > Why are you using _relaxed version here?
-> > 
-> 
-> No particular reason.  I think someone pointed this out previously, and I
-> was open to use the non-relaxed variants, but I assume using the relaxed vs
-> non-relaxed apis comes down to preference in this case.
-
-Nope you cant! There _needs_ to be a specific reasons!
-When you are doing read, modify, write, it is very important to know the
-right version to use...
-
--- 
-~Vinod
+CkF0IDIwMjUtMDUtMTQgMTU6Mjk6NDIsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
+bi5vcmc+IHdyb3RlOgo+T24gV2VkLCBNYXkgMTQsIDIwMjUgYXQgMDI6NDQ6NTVQTSArMDgwMCwg
+RGF2aWQgV2FuZyB3cm90ZToKPj4gSGksIAo+PiAKPj4gVXBkYXRlIG1lbW9yeSBmb290cHJpbnRz
+IGFmdGVyIGhvdXJzIG9mIFVTQiBkZXZpY2VzIHVzYWdlCj4+IG9uIG15IHN5c3RlbToKPj4gKEkg
+aGF2ZSB3ZWJjYW0vbWljL2tleWJvYXJkL21vdXNlL2hhcmRkaXNrIGNvbm5lY3RlZCB2aWEgVVNC
+LAo+PiBhIGZ1bGwgcGljdHVyZSBvZiBtZW1vcnkgZm9vdHByaW50cyBpcyBhdHRhY2hlZCBiZWxv
+dykKPj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+Kwo+PiB8IGFjdGl2ZSBtZW1vcnkoYnl0ZXMpIHwgYWN0aXZlIG9iamVjdHMgfCAgICAgICAgICAg
+ICAgIGFsbG9jIGxvY2F0aW9uICAgICAgICAgICAgICB8IHRvdGFsIG9iamVjdHMgY3JlYXRlZCB8
+Cj4+ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsK
+Pj4gfCAgICAgICAgMjI5MTIgICAgICAgICB8ICAgICAgIDI0ICAgICAgIHwgY29yZS91cmIuYzox
+MDU0OnVyYl9oY3ByaXZfbWVtcG9vbF96YWxsb2MgfCAgICAgICAgIDEwNTIzICAgICAgICAgfAo+
+PiB8ICAgICAgICAxMTc3NiAgICAgICAgIHwgICAgICAgMzEgICAgICAgfCAgICAgICAgY29yZS91
+cmIuYzo3Njp1c2JfYWxsb2NfdXJiICAgICAgICB8ICAgICAgICAgMTEwMjcgICAgICAgICB8Cj4+
+ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsKPj4g
+Cj4+IFRoZSBjb3VudCBmb3IgYWN0aXZlIFVSQiBvYmplY3RzIHJlbWFpbiBhdCBsb3cgbGV2ZWws
+Cj4+IGl0cyBwZWFrIGlzIGFib3V0IDEyS0Igd2hlbiBJIGNvcGllZCAxMEcgZmlsZSB0byBteSBo
+YXJkZGlzay4KPj4gVGhlIG1lbW9yeSBwb29sIGluIHRoaXMgcGF0Y2ggdGFrZXMgYWJvdXQgMjJL
+QiwgaXRzIHBlYWsgaXMgMjNLQi4KPj4gVGhlIHBhdGNoIG1lYW50IHRvIHJldXNlIG1lbW9yeSB2
+aWEgYSBtZW1wb29sLCB0aGUgbWVtb3J5IGtlcHQgaW4gcG9vbCBpcyBpbmRlZWQKPj4gdGhlICJ0
+cmFkZW9mZiIgd2hlbiB0aGUgc3lzdGVtIGlzIGlkbGUuIChXZWxsLCB3ZSBhcmUgdGFsa2luZyBh
+Ym91dCBtZW1wb29sIGFueXdheS4pCj4+IEhvdyBiYWxhbmNlIHRoZSB0cmFkZW9mZiBpcyBkZXBl
+bmRzIG9uIGhvdyB3ZWxsIHRoZSBtZW1wb29sIGlzIG1hbmFnZWQuCj4+IFRoaXMgcGF0Y2ggdGFr
+ZXMgYSBlYXN5IGFwcHJvYWNoOiBwdXQgZmFpdGggaW4gVVJCIG9iamVjdHMgbWFuYWdlbWVudCBh
+bmQgcHV0Cj4+IGEgc2luZ2xlIHNsb3Qgb2YgbWVtcG9vbCBpbiBVUkIgb24gZGVtYW5kcy4gQW5k
+IHRoZSBjaGFuZ2VzLCBieSBjb3VudGluZyBsaW5lcwo+PiBpbiB0aGlzIHBhdGNoLCBhcmUgdmVy
+eSBzaW1wbGUuCj4+IEJhc2Ugb24gdGhlIHByb2ZpbGluZywgdGhlIG51bWJlciBvZiBhY3RpdmUg
+VVJCIG9iamVjdHMgYXJlIGtlcHQgYXQgYSB2ZXJ5IGxvdyBzY2FsZSwKPj4gb25seSBzZXZlcmFs
+IGNvdWxkIGhhdmUgYSB2ZXJ5IGxvbmcgbGlmZWN5Y2xlLgo+PiBJIHRoaW5rIFVSQiBpcyBhIGdv
+b2QgY2FuZGlkYXRlIGZvciBjYWNoaW5nIHRob3NlIG1lbW9yeSBuZWVkZWQgZm9yIHByaXZhdGUg
+ZGF0YS4KPj4gQnV0IEkgY291bGQgYmUgdmVyeSB3cm9uZywgZHVlIHNpbXBseSB0byB0aGUgbGFj
+ayBvZiBrbm93bGVkZ2UuCj4+IAo+PiBBbmQgYmVmb3JlLCB3aXRob3V0IHRoZSBwYXRjaCwgYSAx
+MCBtaW51dGVzIHdlYmNhbSB1c2FnZSBhbmQgY29weWluZyAxMEcgZmlsZSB0byBoYXJkZGlzawo+
+PiB3b3VsZCB5aWVsZCBoaWdoIHJhdGUgb2YgbWVtb3J5IGFsbG9jYXRpb24gZm9yIHByaXZpYXRl
+IGRhdGEgaW4geGhjaV91cmJfZW5xdWV1ZToKPj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0t
+LS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLSsKPj4gfCBhY3RpdmUgbWVtb3J5KGJ5dGVzKSB8IGFjdGl2ZSBvYmpl
+Y3RzIHwgICAgICAgICAgIGFsbG9jIGxvY2F0aW9uICAgICAgICAgIHwgdG90YWwgb2JqZWN0cyBj
+cmVhdGVkIHwKPj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLSstLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsK
+Pj4gfCAgICAgICAgMjI3ODQgICAgICAgICB8ICAgICAgIDIzICAgICAgIHwgaG9zdC94aGNpLmM6
+MTU1NTp4aGNpX3VyYl9lbnF1ZXVlIHwgICAgICAgICA4OTQyODEgPDwgZ3Jvd3xpbmcgdmVyeSBx
+dWljawo+PiB8ICAgICAgICAxMDg4MCAgICAgICAgIHwgICAgICAgMzEgICAgICAgfCAgICBjb3Jl
+L3VyYi5jOjc1OnVzYl9hbGxvY191cmIgICAgfCAgICAgICAgICA0MDI4ICAgICAgICAgfAo+PiAr
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKwo+PiBJIG9ic2VydmUg
+YSBoaWdoZXN0IGFsbG9jYXRpb24gcmF0ZSBvZiAxLjVLL3MgaW4geGhjaV91cmJfZW5xdWV1ZQo+
+PiB3aGVuIEkgd2FzIGNvcHlpbmcgMTBHIGZpbGUsIGFuZCBoYWQgbXkgd2ViY2FtIG9wZW5lZCBh
+dCB0aGUgc2FtZSB0aW1lLgo+PiAKPj4gQW5kIGFnYWluLCB0byBiZSBob25lc3QsIEkgZGlkIG5v
+dCBvYnNlcnZlIGFueSBvYnNlcnZhYmxlIHBlcmZvcm1hbmNlIGltcHJvdmVtZW50IGZyb20KPj4g
+YW4gZW5kdXNlcidzIHBvaW50IG9mIHZpZXcgd2l0aCB0aGlzIHBhdGNoLiBUaGUgb25seSBzaWdu
+aWZpY2FudCBpbXByb3ZlbWVudCBpcyBtZW1vcnkgZm9vdHByaW50Cj4+IF9udW1iZXJzXy4KPj4g
+SSBndWVzcyBtZW1vcnkgYWxsb2NhdGlvbiBpcyBpbmRlZWQgIl9yZWFsbHkgZGFtbiBmYXN0XyIs
+IGJ1dCBJIHN0aWxsIGhhdmUgdGhlIG1pbmRzZXQgb2YKPj4gInRoZSBsZXNzIGFsbG9jYXRpb24g
+dGhlIGJldHRlciIuCj4KPk5vLCB0aGlzIGlzbid0IG5lY2Vzc2FyaWx5IHRydWUgYXQgYWxsLiAg
+QWxsb2NhdGlvbnMgYXJlIGZhc3QsIGFuZCBpZiB3ZQo+ZnJlZS9hbGxvY2F0ZSB0aGluZ3MgcXVp
+Y2tseSwgaXQncyBldmVuIGZhc3Rlci4gIFVTQiBpcyBsaW1pdGVkIGJ5IHRoZQo+aGFyZHdhcmUg
+dGhyb3VnaHB1dCwgd2hpY2ggaXMgX3ZlcnlfIHNsb3cgY29tcGFyZWQgdG8gbWVtb3J5IGFjY2Vz
+c2VzIG9mCj50aGUgYWxsb2NhdG9yLgo+Cj5TbyB1bmxlc3MgeW91IGNhbiBzaG93IHRoYXQgd2Ug
+YXJlIHVzaW5nIGxlc3MgQ1BVIHRpbWUsIG9yIHNvbWV0aGluZwo+ZWxzZSAicmVhbCIgdGhhdCBp
+cyBtZWFzdXJhYmxlIGluIGEgcmVhbCB3YXkgaW4gdXNlcnNwYWNlLCB0aGF0IHdvdWxkCj5qdXN0
+aWZ5IHRoZSBleHRyYSBjb21wbGV4aXR5LCBpdCdzIGdvaW5nIHRvIGJlIGhhcmQgdG8gZ2V0IG1l
+IHRvIGFncmVlCj50aGF0IHRoaXMgaXMgc29tZXRoaW5nIHRoYXQgbmVlZHMgdG8gYmUgYWRkcmVz
+c2VkIGF0IGFsbC4KClRoYW5rcyBmb3IgZmVlZGJhY2tzfiEgClRoYXQncyB2ZXJ5IHJlYXNvbmFi
+bGUgdG8gbWUsICBhbmQgSSBoYXZlIGJlZW4gcG9uZGVyaW5nIG9uIGhvdwp0byBwcm9maWxlIGEg
+VVNCIHBlcmZvcm1hbmNlLCBidXQgc3RpbGwgbm8gY2x1ZS4KCiBJIHdpbGwga2VlcCB0aGlua2lu
+ZyBhYm91dCBpdCwgaG9wZWZ1bGx5IHRoaXMgMWsrL3MgYWxsb2NhdGlvbiB3b3VsZCBzaG93IHVw
+IHNvbWV3aGVyZSwgb3IgCmNvbmNsdWRlIHRoYXQgaXQgcmVhbGx5IGhhcyBubyBzaWduaWZpY2Fu
+dCBpbXBhY3QgYXQgYWxsLgoKClRoYW5rcwpEYXZpZAoKPgo+QWxzbywgSSdtIHRvdGFsbHkgY29u
+ZnVzZWQgYXMgdG8gd2hhdCB0aGUgImxhdGVzdCIgdmVyc2lvbiBvZiB0aGlzCj5wYXRjaHNldCBp
+cy4uLgo+CnNvcnJ5LCBJIHRoaW5rIEkgbWVzcyB1cCB0aGUgbWFpbHMgd2hlbiBJIGFkZCAicmVw
+bHktdG8iIGhlYWRlciB0byBuZXdlciBwYXRjaGVzCgo+dGhhbmtzLAo+Cj5ncmVnIGstaAo=
 
