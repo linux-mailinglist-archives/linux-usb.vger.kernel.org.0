@@ -1,73 +1,86 @@
-Return-Path: <linux-usb+bounces-23951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3244AB6C91
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 15:25:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4539AB6CFD
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 15:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C17B7AC16F
-	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 13:24:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C75093B299B
+	for <lists+linux-usb@lfdr.de>; Wed, 14 May 2025 13:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A6527A115;
-	Wed, 14 May 2025 13:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD89227A91E;
+	Wed, 14 May 2025 13:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GPRcTkS1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Etg9//1p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265E4278163;
-	Wed, 14 May 2025 13:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F0927A451;
+	Wed, 14 May 2025 13:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747229134; cv=none; b=oX6Zg0Xs32e3D+gmcR96V5KaUgd2YY+uwgPLdk88oygU1XKAsSpwa0kuDBMQp0nmK/V0weO6bQztPf6QSyeUxofui/UdLS40S79Oa4DzoID2XDoVUkfJiPRupkfmIb0LS0THGxXaL6eSr9sTG/G48mo5BKPoq88VbNdAhe0uSW8=
+	t=1747230084; cv=none; b=jf1ASiMUO8mqcNjGfStnPWBJVnsis6DhEgdebI8Df+Yj71DRD0+3J6/lmaqaxBRoUAkFWSlXNUdJvmDc1UfQF1GqtAmibFJfpAlTeHFasSw2Zusr6PSFvRZHRaIKWHwpsEP2pbTmf/3wHNelBTG2nJZYlQA2x1mjzsc3p5F05jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747229134; c=relaxed/simple;
-	bh=53vLwrSVby7htUFGZTClrn1Qd9Y6i8EySf11HbAypBs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cF686j/jw5DSgKIvkMC29nwmdasFBWaF7uUHtGUMP8lrGptTyDcYQaimSUD+tXbsZzzZ9aj7gBqbmtDoB71NGHQvn0lOI+afGF4VeDd0l3Kx+iw66pnzCa7b+wNWoSNVb2E366hqPW4ObSqXSsp1p3rgUCFhJzFlEPzD5hP2s6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GPRcTkS1; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747229132; x=1778765132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=53vLwrSVby7htUFGZTClrn1Qd9Y6i8EySf11HbAypBs=;
-  b=GPRcTkS171Zc1m4BBY1CoxLAvsP4t3VLQfr+LY9qSJmawNPsRAFKL1qv
-   gAY75N01wzR2JmGxNFbRp73paEO17VhZwYLa1G/Sl0VXITRAqFWDgz4YF
-   7ANgnqklmjCTiCqanUJqumD3fbMrkf3i+hUxy/xrvCGTp3p00p0NT/YBS
-   d3feq4mwmGu/t73xEh0h4GileD6mUCdLCf6msARu6s6KvR1Yank8u30uX
-   VjonK12VGqb/zZ0EK0GrBEcrgska/1KPXOHy17mf1Ge5SRibAfq1Aswp2
-   gnyZoXPCW9a8r3b+yfRfvGbkpQCh5WINnhhZXSmxrl+LV0WXVFCC2DbxK
-   w==;
-X-CSE-ConnectionGUID: Bb4Y9gURTHGdtiWOIsk4rA==
-X-CSE-MsgGUID: jf1ZsSkLRM6AQy9z3wLyKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="51764768"
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="51764768"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 06:25:31 -0700
-X-CSE-ConnectionGUID: VxiB1UZVS/CLHZU4GY9yPA==
-X-CSE-MsgGUID: cCjn3g7hS0GZkas/TQmBxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="168982290"
-Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 14 May 2025 06:25:30 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	<stern@rowland.harvard.edu>,
-	michal.pecio@gmail.com,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: Flush altsetting 0 endpoints before reinitializating them after reset.
-Date: Wed, 14 May 2025 16:25:20 +0300
-Message-ID: <20250514132520.225345-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1747230084; c=relaxed/simple;
+	bh=H/N51E0LqMl7HeehbCHJuuOwqwUbhjnbjpt/f0tR828=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D48H/IipBQ6xyWoflMfzpgsVO+fiTVG5q+pnU2D2KxKBMeXXE3D7Ef0jIyfdLsLpbUcrCgQNdPAhTknAQrzbUhlLHKQkNe3m+131goaysM0tATGFEwhnb5CvvSVQB8OzXtvZ7AbsScG3opmIJpNcLcNRiJ7dLqc7CZhhkm+upfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Etg9//1p; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7423df563d6so5484246b3a.0;
+        Wed, 14 May 2025 06:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747230082; x=1747834882; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rivdPuEvC6CEZBUy2Q25Rs7NDnkf11vHyvHzOhnGBpU=;
+        b=Etg9//1px8J5vEjRjbUpQ8SiiHsaeiXpvu50gTLsgtkig7FpcH92yOAA6taWISMO8A
+         8S2Ygyr0yFTopMz44RolI7cl8Q/IvZwLB0TlM/fwNsGAB+EgBlNqWyL+jJulxilVzwmH
+         vigmnpqsH18Y1iftgL21aWJsEvBPz2wNVmt0fZH0ubtR9HqILD7T4le209UpeyOWbHZI
+         ahF6UdWMSF1JY+oHTTA0JxwvbBRvhJ4bdO/6QVEd/nvYSnQgnnxBl+Nixi7Fo2dsciHr
+         Tj/XRwrgI/Ng8SvJHpvyYKM2YYZYkt+Cbmld4iZLlC8sfacBpdwN4I1QgYztoWUz/kP/
+         08rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747230082; x=1747834882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rivdPuEvC6CEZBUy2Q25Rs7NDnkf11vHyvHzOhnGBpU=;
+        b=SZomALA4Sl6tXx6WQuOKgK68tYRy2VJqxbUKl80YLBqVPG/hYmU/0r2am6DaMunRos
+         wvhxBw3ZLJlUJGyMMoXd12bNULh1Unfz8Ze3l2I3rhrqQyn/tLibgAbgnrh0ywdxT+bS
+         LBAXcnCslBdXF0Xslsn6TH7wKQ8OjDmxYaDXF2eEjKHijz1CmjRRsI5nrJCjR+ihvB/1
+         Q1o7vA/oaPhRhp3e3uTt1pbnb1wjTbMReiwlmrwFf7tt6X6OHGSJU6xVMp0K/dI7XmtN
+         on7qr1vviVyquzW3XKTwQKHtlu6OEOQWUvgFeV2s2ZcRRBNvMfJrLJz1lbaxOdrJxZJM
+         shUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdGsnbfKnL38EyHbqelNtu8oOEvJICubyfnZzZjmduibmYeC/7N3E1xLMN7UeF3EdyXr9c25HSWxkcYeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3+znSOPK8Pvgsm+dhToYPlywUeU+EQUjF1N5qiTIkALfQA1Vw
+	ttFkYNX28IS0phi+r1jV4/rJoj4HnqyhTeSYXC10WhXvHwc0iYMp
+X-Gm-Gg: ASbGncs3YhP+SwptVI9Xq0AdXpVM8Otc46jtiFOsnZqhwjRHF5tSgKAE3DszeZfzmG2
+	MpuO/EZwziD2FEkXEqo6tgTrwjxgSXp+3KkSHNmywkANyPvmAK6Nw7rZGxAzkWEQvXCw4a1rabz
+	sS8T5GKDQP1I+U0lftsCOEgnSATEIbHKzX56UBpGYqdDSJbqF9FPv3JABJkU1vvxriDAXeP5D2f
+	HIe9hCENzNVwbARojEn7zRZYoM/p2HMclTcuv10ULKP9aT868NFxewaxkGetnb2EPiVP0WQ4k7a
+	YIs8Wn+dLhTvmcf/rh7xqByb/hUqn1o1VXXbiS0eT8uVsfZQ81v93eM0YJG2gX9Q33/gOqf4kIW
+	jF2baWA9MhXcSwEHI/15QF/MtELElIg/wtBAuce4/eT7I
+X-Google-Smtp-Source: AGHT+IG7v5XjeboOI0O4h15ehtIlHLg82qIQw27/8YEWo2PzF+Jzb+j/iJWgUCU2QE1pyY8DnHYUKA==
+X-Received: by 2002:a05:6a21:b94:b0:215:eca3:c146 with SMTP id adf61e73a8af0-215ff1910fbmr5898909637.29.1747230081951;
+        Wed, 14 May 2025 06:41:21 -0700 (PDT)
+Received: from localhost.localdomain (123-194-189-72.dynamic.kbronet.com.tw. [123.194.189.72])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74237a0cde3sm9784501b3a.94.2025.05.14.06.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 06:41:21 -0700 (PDT)
+From: "jay.chen" <shawn2000100@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"jay.chen" <shawn2000100@gmail.com>
+Subject: [PATCH] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
+Date: Wed, 14 May 2025 21:40:08 +0800
+Message-ID: <20250514134011.16285-1-shawn2000100@gmail.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,73 +89,39 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-usb core avoids sending a Set-Interface altsetting 0 request after device
-reset, and instead relies on calling usb_disable_interface() and
-usb_enable_interface() to flush and reset host-side of those endpoints.
+According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
+TRB Length (avg_trb_len) for control endpoints should be set to 8.
 
-xHCI hosts allocate and set up endpoint ring buffers and host_ep->hcpriv
-during usb_hcd_alloc_bandwidth() callback, which in this case is called
-before flushing the endpoint in usb_disable_interface().
+Currently, during the Address Device Command, EP0's avg_trb_len remains 0,
+which may cause some xHCI hardware to reject the Input Context, resulting
+in device enumeration failures. In extreme cases, using a zero avg_trb_len
+in calculations may lead to division-by-zero errors and unexpected system
+crashes.
 
-Call usb_disable_interface() before usb_hcd_alloc_bandwidth() to ensure
-URBs are flushed before new ring buffers for the endpoints are allocated.
+This patch sets avg_trb_len to 8 for EP0 in
+xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
+and improving compatibility across various host controller implementations.
 
-Otherwise host driver will attempt to find and remove old stale URBs
-from a freshly allocated new ringbuffer.
-
-Cc: stable@vger.kernel.org
-Fixes: 4fe0387afa89 ("USB: don't send Set-Interface after reset")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
+Signed-off-by: jay.chen <shawn2000100@gmail.com>
 ---
- drivers/usb/core/hub.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-mem.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 0e1dd6ef60a7..9f19fc7494e0 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -6133,6 +6133,7 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 	struct usb_hub			*parent_hub;
- 	struct usb_hcd			*hcd = bus_to_hcd(udev->bus);
- 	struct usb_device_descriptor	descriptor;
-+	struct usb_interface		*intf;
- 	struct usb_host_bos		*bos;
- 	int				i, j, ret = 0;
- 	int				port1 = udev->portnum;
-@@ -6190,6 +6191,18 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 	if (!udev->actconfig)
- 		goto done;
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index d698095fc88d..fed9e9d1990c 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
+ 	ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
+ 				   dev->eps[0].ring->cycle_state);
  
-+	/*
-+	 * Some devices can't handle setting default altsetting 0 with a
-+	 * Set-Interface request. Disable host-side endpoints of those
-+	 * interfaces here. Enable and reset them back after host has set
-+	 * its internal endpoint structures during usb_hcd_alloc_bandwith()
-+	 */
-+	for (i = 0; i < udev->actconfig->desc.bNumInterfaces; i++) {
-+		intf = udev->actconfig->interface[i];
-+		if (intf->cur_altsetting->desc.bAlternateSetting == 0)
-+			usb_disable_interface(udev, intf, true);
-+	}
++	ep0_ctx->tx_info |= cpu_to_le32(EP_AVG_TRB_LENGTH(8));
 +
- 	mutex_lock(hcd->bandwidth_mutex);
- 	ret = usb_hcd_alloc_bandwidth(udev, udev->actconfig, NULL, NULL);
- 	if (ret < 0) {
-@@ -6221,12 +6234,11 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
- 	 */
- 	for (i = 0; i < udev->actconfig->desc.bNumInterfaces; i++) {
- 		struct usb_host_config *config = udev->actconfig;
--		struct usb_interface *intf = config->interface[i];
- 		struct usb_interface_descriptor *desc;
+ 	trace_xhci_setup_addressable_virt_device(dev);
  
-+		intf = config->interface[i];
- 		desc = &intf->cur_altsetting->desc;
- 		if (desc->bAlternateSetting == 0) {
--			usb_disable_interface(udev, intf, true);
- 			usb_enable_interface(udev, intf, true);
- 			ret = 0;
- 		} else {
+ 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
 -- 
-2.43.0
+2.43.5
 
 
