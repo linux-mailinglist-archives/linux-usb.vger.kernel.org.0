@@ -1,183 +1,164 @@
-Return-Path: <linux-usb+bounces-23962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEA31AB7B0B
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 03:40:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E16AB7C89
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 06:02:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C56288C7E3F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 01:40:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD5658C14E1
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 04:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4DBB27A11D;
-	Thu, 15 May 2025 01:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A001CCB40;
+	Thu, 15 May 2025 04:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mY4yBTIz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MnXvjXMU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-vk1-f201.google.com (mail-vk1-f201.google.com [209.85.221.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B2A279358
-	for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 01:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952384B1E4F
+	for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 04:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747273212; cv=none; b=enERlGNOkh4vEzUbzoqMd+n05JRiiJFiUEYx4y0yC6F8XWVPi18deZTzlP3L48mRNdV5b2OoLGo3GlkMbmTZyCNeDh2pXpgMzp4QfP6hLNMzBpMTcE58sSjWlfXzaCUHM6odnWcvyf9F+QgZOgYx+fgVp9mfk1LUxgcW3sPsdmc=
+	t=1747281757; cv=none; b=o54s9sYwjM4OeH8Vod2eG93ZCRXdkKHKkcm3GCTJkBdjgppwL4uJrIbuHHvlQGHZH5RzH3kKUrakTc9YHUzzSR7P8lfEAmpz0+MwAfvF7RY0alHQd7pOE5I4rvfSozhm44I4vBu0gPOkrDE07J6c1VbroGx03anoHtfieaHRsrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747273212; c=relaxed/simple;
-	bh=j3AQqh2bF+a1tTBBmMb6vQqukFWdDH12NEK3gDZ/zHw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:Cc:Content-Type; b=Q7uaT1HrzKdgXEVopHm1C/cQRO8VlzABiJeHbOShBhiSTSDHJfrlSqKxDw60g9sje0swO32oR0q1TkD1HHjVxzXB24jZYRllGAAHfz/6PazWV76eUaPYrKosN81XNmc1NZwBY/OFBuvr9LBWpSTBmI7tc7NASsXLPhCjPkkeWu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mY4yBTIz; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1747281757; c=relaxed/simple;
+	bh=35RyqXQeA7KWC5QOPkRVaxmTyklwSHLfq0BRuvBY2jw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=IhhUyY4Nye+99jWRFHlkUSjdZfEBQPtANJW3GIIIQ5IrEe1mxUw//Np31uBHh8/Y+TIvcyeBtc9GM+VcHQUnS2b5a9dQ7Z+QenwZaQHnr73WcNoei6cfSBG4qDOoTZcenKLOAoEmuCekprhEAw+eYVmn29b881N5RfyOIjmDTq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MnXvjXMU; arc=none smtp.client-ip=209.85.221.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30aab0f21a3so470804a91.3
-        for <linux-usb@vger.kernel.org>; Wed, 14 May 2025 18:40:09 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
+Received: by mail-vk1-f201.google.com with SMTP id 71dfb90a1353d-52c46d73350so113283e0c.2
+        for <linux-usb@vger.kernel.org>; Wed, 14 May 2025 21:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747273209; x=1747878009; darn=vger.kernel.org;
-        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+        d=google.com; s=20230601; t=1747281754; x=1747886554; darn=vger.kernel.org;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=IakyZJkj7nOlvLL2uNc9irIZAgoOcA1vyttW9qbfPnU=;
-        b=mY4yBTIzgZmK5j5zGfnDvG6JQm/gN6JTEo1tXzzkXxZy8vDFMgJp0S9V0JplwDYdgh
-         T4Jt3D116pUj+P2fqsBkLLf76tUCi97li2me8oSvwN3cYRwM0pBHF+08U4sWrCUK08DR
-         MVBalcLuDWN5kuXObLpRrWrb5UFrfqzmMtVJqHW554zbg7Dsfg2lVP5NmE46TWMoxGpn
-         YSEw6+P7scu6QlQOfOnHTuKFxmZFRrxK8PxwRW1KWtZWWZfPRab/ImDge4bQlrIMC/gB
-         saASXtqZrDZJfGvI5Hw/VuD4gCsa6MWb4k+rnuBslKRcCzzCLf2URUNQzNgtLnAZ2HXe
-         gKRw==
+        bh=7F3UVGrTtkYG0SSNHXNPOJ3LM1MwuA6O7PbUx1oz7HM=;
+        b=MnXvjXMUdytokzcZjEItCLOeEjEQHGmMsVaknGsP8FzeBia2weOgSq7h+5I9dvhrGJ
+         6D+F4g0kYbRegWst0Xl6s9By2xyMguqvDwflldwSJJXh/fGad0Y/9dR3uk1izsu+3ojY
+         qs1YR0ogTdpjlYkBPK7Sa7LX6pma8UvCs3s9Eiypo6ZFLnbm9WXabAGowr83dfVX87+x
+         XzZFU/sNavpzkb+LM4VfyfIhtsn9bVceCeW6sfQd+485F7jn+XDl3gOnP5X0WT4SWA4G
+         o8oMM09QU8QbQYh1DPlZV+PP0Hd87cYvqU5o4N8Yx+PKpazP+Nd0iFkKmKquhRjm/q2f
+         AsIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747273209; x=1747878009;
-        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=1e100.net; s=20230601; t=1747281754; x=1747886554;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IakyZJkj7nOlvLL2uNc9irIZAgoOcA1vyttW9qbfPnU=;
-        b=im+qMgBrtWHVpZ2vrbZdke7GhsyOJs3dcenXKVShQxG373+rEarq9NZ+ddwlCPfnBQ
-         aVZogf96NuEL0M5/lPnjyEg2tPyJCdohSwY5U2uBKb0IU1H8oIr78gfzIq2vKFEJ1eWT
-         CaaZzg/uZ+JvqyHfH7/MLMv30LcGcct69KbRbKBspY/TuzMlJObphIi61F6MlPDfUwAC
-         Ol8fCgM2/fbJ+SG0DBetbmSbPQrO+xXulXflNbywtpKjiQk2nsiDREuNIuEsaIWaNLJV
-         Xd/iMLQY9BcFGmvlyWp8ufbct/1OhGr1dzPLDCzXO1We+zyeMHtvPzdVYGlQVNTdXBWI
-         Udzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCW5blBj5ey1GyY80v84SGPi1xQFgx3XktxIli0m4PPc64WJ/xeaVUk60dNT928KGTNGtycMuwNb4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwunMNL+UZMVAAngv2a+0HHRzJVQ0Egs2leHEWNRLIM49ajTFXB
-	SH//YQkjg3VEazfZqR/4pQj2CMT7i0IHLA5Mq0Y5o71S/Ub3gxj6/0uVsdcvPayVnoXRFZb/XIE
-	5ITBrCTDsbT46QQ==
-X-Google-Smtp-Source: AGHT+IEyLvp3ghttpO9cVp/ndy7EDcY+GfCBT+shK3xrBkQdK1whbMrygpWLNQikJyJ78DDaeVfQrWnuBB9FBDk=
-X-Received: from pjbsu3.prod.google.com ([2002:a17:90b:5343:b0:2fc:3022:36b8])
- (user=rdbabiera job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3949:b0:2ea:a9ac:eee1 with SMTP id 98e67ed59e1d1-30e2e5e5a63mr9196895a91.10.1747273209002;
- Wed, 14 May 2025 18:40:09 -0700 (PDT)
-Date: Thu, 15 May 2025 01:40:02 +0000
+        bh=7F3UVGrTtkYG0SSNHXNPOJ3LM1MwuA6O7PbUx1oz7HM=;
+        b=cy+gvKZKqbTqqVecDfo9wWOigI/uG1pEo83n2TWrlokSqW/J7iE9ldGEM76uuqUaak
+         xdzXfeU1yKkr24vKvnrIc3nRsIzdwCIPGCGtOQsYSXiZeu8hEv8b+Vu0268pscf6I1hV
+         GUSL/i//3EC7s4PH9uQCl3cdNv2sWYcSKASjgLtQvmtzO0IsetKfkVCQGqQMF3OHaavn
+         9sUV6IWnimBdPNEnuIAoF55RxL232Y3J1WfPGDZ4r2yYNdTpPKZDKa6ZmVl7Bz2SBmtN
+         qSr1/qRy+dQ08TvNgVjC+d078j1HrjmHsRFJn7ZiTGIxn9A/+SQEa5HCX5S72VNKb5Rq
+         1Xdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYl34GBEvg9LZHpeus46C9AF1IIhOvDCcXMwbpvqP2wo4hTnSoJId5d7Pg59SxBRwajQWkkVUAXOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA+WwUfTdeKjpe/ieR+DNXkw9dFRdIZevQLiL9c04gGO3yUuTg
+	yh0aYpPWNxeXSDxcNzFjrReQKxJ2UdvUa3v4gJckBYInHdYuBiJNhtRTYYGJBjULMsCQycmBRUe
+	wRw==
+X-Google-Smtp-Source: AGHT+IHWJWslfUxDlLQ2wuw9w6C28/+/uJc7nRCodhYkI60OOtBYXIpcguot0fbMLL3afGQbQIYk0XaowbI=
+X-Received: from uabdb6.prod.google.com ([2002:a05:6130:2386:b0:871:d364:9800])
+ (user=royluo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6102:2c0c:b0:4de:81a:7d42
+ with SMTP id ada2fe7eead31-4df7dc8d136mr5289287137.1.1747281754453; Wed, 14
+ May 2025 21:02:34 -0700 (PDT)
+Date: Thu, 15 May 2025 04:02:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2883; i=rdbabiera@google.com;
- h=from:subject; bh=j3AQqh2bF+a1tTBBmMb6vQqukFWdDH12NEK3gDZ/zHw=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDBmqrp+nexnMyP91YvlDq4/t5j/2nvGYyf91ySyXoOzNO
- wrbRPRedZSyMIhxMMiKKbLo+ucZ3LiSumUOZ40xzBxWJpAhDFycAjCR9GqGf+ZF/zoNwq07ZgSm
- T7kyi9fm3pke0cUXr2TuN+VPPdd+VouRYeGMU16hm0Oenr75ZWHY7xdHmLpWdb378D6Jx/ix99t jRzkA
 X-Mailer: git-send-email 2.49.0.1045.g170613ef41-goog
-Message-ID: <20250515014003.1681068-2-rdbabiera@google.com>
-Subject: [PATCH v2] usb: typec: tcpm: apply vbus before data bringup in tcpm_src_attach
-From: RD Babiera <rdbabiera@google.com>
-Cc: heikki.krogerus@linux.intel.com, badhri@google.com, 
+Message-ID: <20250515040207.1253690-1-royluo@google.com>
+Subject: [PATCH v1 1/2] xhci: Add a quirk for full reset on removal
+From: Roy Luo <royluo@google.com>
+To: royluo@google.com, mathias.nyman@intel.com, quic_ugoswami@quicinc.com, 
 	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This patch fixes Type-C compliance test TD 4.7.6 - Try.SNK DRP Connect
-SNKAS.
+Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
+helper") introduced an optimization to xhci_reset() during xhci removal,
+allowing it to bail out early without waiting for the reset to complete.
 
-tVbusON has a limit of 275ms when entering SRC_ATTACHED. Compliance
-testers can interpret the TryWait.Src to Attached.Src transition after
-Try.Snk as being in Attached.Src the entire time, so ~170ms is lost
-to the debounce timer.
+This behavior can cause issues on SNPS DWC3 USB controller with dual-role
+capability. When the DWC3 controller exits host mode and removes xhci
+while a reset is still in progress, and then tries to configure its
+hardware for device mode, the ongoing reset leads to register access
+issues; specifically, all register reads returns 0. These issues extend
+beyond the xhci register space (which is expected during a reset) and
+affect the entire DWC3 IP block, causing the DWC3 device mode to
+malfunction.
 
-Setting the data role can be a costly operation in host mode, and when
-completed after 100ms can cause Type-C compliance test check TD 4.7.5.V.4
-to fail.
+To address this, introduce the `XHCI_FULL_RESET_ON_REMOVE` quirk. When this
+quirk is set, xhci_reset() always completes its reset handshake, ensuring
+the controller is in a fully reset state before proceeding.
 
-Turn VBUS on before tcpm_set_roles to meet timing requirement.
-
-Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state() helper")
+Signed-off-by: Roy Luo <royluo@google.com>
 ---
-Changes since v1:
-* Rebased on top of usb-linus for v6.15
----
- drivers/usb/typec/tcpm/tcpm.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/usb/host/xhci-plat.c | 3 +++
+ drivers/usb/host/xhci.c      | 8 +++++++-
+ drivers/usb/host/xhci.h      | 1 +
+ 3 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 8adf6f954633..05c62a1673af 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4353,16 +4353,6 @@ static int tcpm_src_attach(struct tcpm_port *port)
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 3155e3a842da..19c5c26a8e63 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -265,6 +265,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "xhci-skip-phy-init-quirk"))
+ 			xhci->quirks |= XHCI_SKIP_PHY_INIT;
  
- 	tcpm_enable_auto_vbus_discharge(port, true);
- 
--	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
--	if (ret < 0)
--		return ret;
--
--	if (port->pd_supported) {
--		ret = port->tcpc->set_pd_rx(port->tcpc, true);
--		if (ret < 0)
--			goto out_disable_mux;
--	}
--
- 	/*
- 	 * USB Type-C specification, version 1.2,
- 	 * chapter 4.5.2.2.8.1 (Attached.SRC Requirements)
-@@ -4372,12 +4362,22 @@ static int tcpm_src_attach(struct tcpm_port *port)
- 	    (polarity == TYPEC_POLARITY_CC2 && port->cc1 == TYPEC_CC_RA)) {
- 		ret = tcpm_set_vconn(port, true);
- 		if (ret < 0)
--			goto out_disable_pd;
-+			return ret;
++		if (device_property_read_bool(tmpdev, "xhci-full-reset-on-remove-quirk"))
++			xhci->quirks |= XHCI_FULL_RESET_ON_REMOVE;
++
+ 		device_property_read_u32(tmpdev, "imod-interval-ns",
+ 					 &xhci->imod_interval);
  	}
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 90eb491267b5..4f091d618c01 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -198,6 +198,7 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+ 	u32 command;
+ 	u32 state;
+ 	int ret;
++	unsigned int exit_state;
  
- 	ret = tcpm_set_vbus(port, true);
- 	if (ret < 0)
- 		goto out_disable_vconn;
-+	
-+	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
-+	if (ret < 0)
-+		goto out_disable_vbus;
+ 	state = readl(&xhci->op_regs->status);
+ 
+@@ -226,8 +227,13 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+ 	if (xhci->quirks & XHCI_INTEL_HOST)
+ 		udelay(1000);
+ 
++	if (xhci->quirks & XHCI_FULL_RESET_ON_REMOVE)
++		exit_state = 0;
++	else
++		exit_state = XHCI_STATE_REMOVING;
 +
-+	if (port->pd_supported) {
-+		ret = port->tcpc->set_pd_rx(port->tcpc, true);
-+		if (ret < 0)
-+			goto out_disable_mux;
-+	}
+ 	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->command,
+-				CMD_RESET, 0, timeout_us, XHCI_STATE_REMOVING);
++				CMD_RESET, 0, timeout_us, exit_state);
+ 	if (ret)
+ 		return ret;
  
- 	port->pd_capable = false;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 242ab9fbc8ae..ac65af788298 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1637,6 +1637,7 @@ struct xhci_hcd {
+ #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
+ #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
+ #define XHCI_ETRON_HOST	BIT_ULL(49)
++#define XHCI_FULL_RESET_ON_REMOVE	BIT_ULL(50)
  
-@@ -4389,14 +4389,14 @@ static int tcpm_src_attach(struct tcpm_port *port)
- 
- 	return 0;
- 
--out_disable_vconn:
--	tcpm_set_vconn(port, false);
--out_disable_pd:
--	if (port->pd_supported)
--		port->tcpc->set_pd_rx(port->tcpc, false);
- out_disable_mux:
- 	tcpm_mux_set(port, TYPEC_STATE_SAFE, USB_ROLE_NONE,
- 		     TYPEC_ORIENTATION_NONE);
-+out_disable_vbus:
-+	tcpm_set_vbus(port, false);
-+out_disable_vconn:
-+	tcpm_set_vconn(port, false);
-+
- 	return ret;
- }
- 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
 
-base-commit: 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
+base-commit: c94d59a126cb9a8d1f71e3e044363d654dcd7af8
 -- 
 2.49.0.1045.g170613ef41-goog
 
