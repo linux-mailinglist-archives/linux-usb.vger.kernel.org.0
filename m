@@ -1,108 +1,130 @@
-Return-Path: <linux-usb+bounces-23979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E6E5AB8705
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 14:54:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE554AB8897
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 15:56:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BE5A4E67D1
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 12:53:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D0461B65377
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 13:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060D529B22F;
-	Thu, 15 May 2025 12:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA7D1A08DB;
+	Thu, 15 May 2025 13:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="lQdljp3l"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fyTe9v/d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D2529ACEE;
-	Thu, 15 May 2025 12:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C247472634
+	for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 13:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747313467; cv=none; b=uPVpsmgPK4xaSoiDxExvzIrZgYAzhLtznQ9KoEe6a9WYCuU7djtw0dNt49wVCsLsm8eJ4T7iQrmxN9eItCo26vTpX3fAVeUkiv4a82+HB83SISZHaw9vwXQinY8E4jLG4wrGI6SJ9WwGfkNpAbTD2XTjr3Mx/zqU13Rn+7EWCdA=
+	t=1747317391; cv=none; b=uN5l1hl2NCQR4dIOD8HosGK1q6tBgxhJZ28Q4757t42VQrvXZmp6EcVxAkzwYSSUrf9WZvultZUC10JeGW2z6gWpJVhCzisRIpq0T2M/lLXyRQYpZr/XZpuZXLW2VpeU33e1gerEZm/QcPMSNrzPJtKWV326UKR4uUiKXLIXzeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747313467; c=relaxed/simple;
-	bh=3QC4ffM1Aa1pxu9uvJFwWx/DFJiMYK2jTahWSrSwVns=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eHZApsHIM8ylfhOKykrlHqe9tZSbymba9kWGDzZ/bAh6Mv6YxZ3aVHHeBEpa7OQuFU61bSpPgSCDhW87ECujWX+eIhno98C+FJngIe6pbuWJskaDV+JFmD4vkq1t9yqxOAdwW1qVhjLrdBp7OGDXn7obtvyB4/5jSi5DuvbgvU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=lQdljp3l; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=2dhwvLZ3lMVhmKEnca5rP7c57gf2pJHeBmKdCsIIeL0=; b=lQdljp3lEee35nVJq5VsP15Ac0
-	G3TV1N3nN47hq4ycpzthNv2Y4tRkox9fkOdp6bOQY2CT728MLhVqQ8ALawdPWo3zPOhO0XO42KSUm
-	u0Riq4EB4PdDqO/6oTdXb2W3TjmhWZBJFRHSvhgqrCzn7wvC8bwBl2NWXDHAm7jzX9IZyqrvUpVJE
-	IUxjNlLkgeGgWQHyM6lalXF0QKD3i098rkQ2mbjAytZ1/eSwkuKC+aJzeMBzKQi0fwYxbSQYXozwM
-	C2EY9zh7h9BMdHlQcxj8rDlfIBCz/yntxH9AKv6tinjh1F+NsRfbKbZSCvoErHVZLA1e3rzo9LekK
-	TvpW1NZQ==;
-Received: from i53875a50.versanet.de ([83.135.90.80] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uFY39-0004ph-BC; Thu, 15 May 2025 14:50:59 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Matthias Kaehlcke <mka@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benjamin Bara <benjamin.bara@skidata.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Klaus Goger <klaus.goger@theobroma-systems.com>,
-	Lukasz Czechowski <lukasz.czechowski@thaumatec.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	stable@vger.kernel.org,
-	Quentin Schulz <quentin.schulz@cherry.de>
-Subject: Re: (subset) [PATCH v2 0/5] Fix onboard USB hub instability on RK3399 Puma SoM
-Date: Thu, 15 May 2025 14:50:45 +0200
-Message-ID: <174731343062.2524804.11565347943974455778.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250425-onboard_usb_dev-v2-0-4a76a474a010@thaumatec.com>
-References: <20250425-onboard_usb_dev-v2-0-4a76a474a010@thaumatec.com>
+	s=arc-20240116; t=1747317391; c=relaxed/simple;
+	bh=OaUeONDiWztjM+3HgHvZGKWx7NJixojzqnxX9wR7Lb4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MJKDdnopmaBUl8CR8Y1yKJF6aGVm2X9Z3lIO6vRZyP9eNxVSkND5dQCLCtaof1SBCjxnHuDxeJRrR3T7CPdGejuFfLzS2H1n84KWC9FF6i+jqx56Dvxa6it3xPopx1V2klplBUnPuu4ZihmkYWwXys5fubQJTopideB52479q/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fyTe9v/d; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747317390; x=1778853390;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OaUeONDiWztjM+3HgHvZGKWx7NJixojzqnxX9wR7Lb4=;
+  b=fyTe9v/dLWWdoYxTe9vffFK8rUWKS35iN/u/YXNNAZO9knegd84woIHR
+   RmeOEr6S9D3UbuBSC6yaHuyUiNXQaIsuv2gR8hy6SINxRrhVAdAwEMA29
+   zZGxtEF2GF3QcSZsJvrrRg3q2RIVguMk6xtPIXSaa0L5CrU+BCfHQwo/+
+   kP3Nk/COWb0tEeXBc8bUs0VxyHXmHFGZD7GjbZDpgx8Q+8gEY4JWfyQhl
+   xdOF3+nzLKDbqY9+LHtF0bvMbD7S8uxMYbjbalA688L+3bc3IuR4XbXok
+   wxxMqfyRhBeAOIzsGn9qqTP18YyLsFjpn9jEjPh3PIZoj+blEmx2qC1pf
+   A==;
+X-CSE-ConnectionGUID: nFY+zwfNRfqiyM+p88Gfyg==
+X-CSE-MsgGUID: XvM12KMTQmGQx9nG7SH/zA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="60269981"
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="60269981"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 06:56:30 -0700
+X-CSE-ConnectionGUID: JTLVp9XFRxGvmZsTpSFNdg==
+X-CSE-MsgGUID: 4RoMmzTSTHaRRbv1w7ep6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="139372032"
+Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
+  by fmviesa009.fm.intel.com with ESMTP; 15 May 2025 06:56:28 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 00/24] xhci features for usb-next
+Date: Thu, 15 May 2025 16:55:57 +0300
+Message-ID: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
+Hi Greg
 
-On Fri, 25 Apr 2025 17:18:05 +0200, Lukasz Czechowski wrote:
-> The RK3399 Puma SoM contains the internal Cypress CYUSB3304 USB
-> hub, that shows instability due to improper reset pin configuration.
-> Currently reset pin is modeled as a vcc5v0_host regulator, that
-> might result in too short reset pulse duration.
-> Starting with the v6.6, the Onboard USB hub driver (later renamed
-> to Onboard USB dev) contains support for Cypress HX3 hub family.
-> It can be now used to correctly model the RK3399 Puma SoM hardware.
-> 
-> [...]
+A series of new xhci features and refactoring for usb next incuding
+  - Debugfs support for showing available port bandwidth
+  - xhci parts of eUSB2 double isoc bandwidth support
+  - refactoring to decouple allocation and initialzation 
+  - other misc cleanups and refactoring
 
-Applied, thanks!
+-Mathias
 
-[2/5] dt-bindings: usb: cypress,hx3: Add support for all variants
-      commit: 1ad4b5a7de16806afc1aeaf012337e62af04e001
-[3/5] arm64: dts: rockchip: fix internal USB hub instability on RK3399 Puma
-      commit: d7cc532df95f7f159e40595440e4e4b99481457b
-[4/5] arm64: dts: rockchip: disable unrouted USB controllers and PHY on RK3399 Puma
-      commit: 3373af1d76bacd054b37f3e10266dd335ce425f8
-[5/5] arm64: dts: rockchip: disable unrouted USB controllers and PHY on RK3399 Puma with Haikou
-      commit: febd8c6ab52c683b447fe22fc740918c86feae43
+Amardeep Rai (1):
+  xhci: Add host support for eUSB2 double isochronous bandwidth devices
 
-Best regards,
+Michal Pecio (1):
+  usb: xhci: Don't log transfer ring segment list on errors
+
+Niklas Neronin (21):
+  usb: xhci: relocate pre-allocation initialization
+  usb: xhci: move device slot enabling register write
+  usb: xhci: move command ring pointer write
+  usb: xhci: refactor xhci_set_cmd_ring_deq()
+  usb: xhci: move DCBAA pointer write
+  usb: xhci: move doorbell array pointer assignment
+  usb: xhci: move enabling of USB 3 device notifications
+  usb: xhci: remove error handling from xhci_add_interrupter()
+  usb: xhci: move initialization of the primary interrupter
+  usb: xhci: add individual allocation checks in xhci_mem_init()
+  usb: xhci: cleanup xhci_mem_init()
+  usb: xhci: set requested IMODI to the closest supported value
+  usb: xhci: improve Interrupt Management register macros
+  usb: xhci: guarantee that IMAN register is flushed
+  usb: xhci: remove '0' write to write-1-to-clear register
+  usb: xhci: rework Event Ring Segment Table Size mask
+  usb: xhci: rework Event Ring Segment Table Address mask
+  usb: xhci: cleanup IMOD register comments
+  usb: xhci: rename 'irq_pending' to 'iman'
+  usb: xhci: rename 'irq_control' to 'imod'
+  usb: xhci: add warning message specifying which Set TR Deq failed
+
+Xu Rao (1):
+  usb: xhci: Add debugfs support for xHCI port bandwidth
+
+ drivers/usb/host/xhci-caps.h    |   6 +-
+ drivers/usb/host/xhci-debugfs.c | 108 ++++++++++++
+ drivers/usb/host/xhci-hub.c     |   2 +-
+ drivers/usb/host/xhci-mem.c     | 282 ++++++++++++++++----------------
+ drivers/usb/host/xhci-ring.c    |  40 +++--
+ drivers/usb/host/xhci.c         | 222 ++++++++++++++++++++-----
+ drivers/usb/host/xhci.h         | 119 +++++++++-----
+ 7 files changed, 543 insertions(+), 236 deletions(-)
+
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.43.0
+
 
