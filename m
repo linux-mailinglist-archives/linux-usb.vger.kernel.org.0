@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-23993-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-23994-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295A4AB88B1
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 15:58:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72F48AB88B2
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 15:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25CA0A0235B
-	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 13:57:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98AF01898165
+	for <lists+linux-usb@lfdr.de>; Thu, 15 May 2025 13:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C50C19CC27;
-	Thu, 15 May 2025 13:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91271F4CAC;
+	Thu, 15 May 2025 13:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dl6D2yDD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fexOLHT/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282431A2557
-	for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 13:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74D11AF0C7
+	for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 13:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747317411; cv=none; b=bu5Y4OR7UsqyqZbCqC2mCI3QFwrsqa1N/s/9TjRy3mOtfZdNT3tQ+RrZY8kGcC9k0w4ZqtNNnPaMHvQtKm3zP6LxZuNTg0zudbneFTot0nBAKBped90MidnydCJBqfA0A5kX4yROdt16whlTp/5fO/DqM6zY274a9+SBGwisDjo=
+	t=1747317413; cv=none; b=q3ymfwIzSsyUgIp3RTb4WVfIqp93HfEr1VFSl5GIVGmLrfdoOULjXBPNiGlrVBU+HODg73noenUPLqTrYzWqRQhqRbxvGMF5Emei6DzVw4RWgRWES6pATdKs6HiW6iJcmRiJ8xUujIPZXS/qApQ1HI3fI/sy5X5xO51xHVNYyt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747317411; c=relaxed/simple;
-	bh=+OYHLXnnZ8oWDQqUhk9kc18xUGV79y4C3n2wGzzm69k=;
+	s=arc-20240116; t=1747317413; c=relaxed/simple;
+	bh=SB6/qac79QA5rG03Zep6Ww6TysQENB1XznR99XO5N/U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MHu9T40rxhPYXN17Jq7Kih8xUwYyI6FkQUJxzshcXl37rca2PC3VHUll5FP2l+3hF4zRSjOxg2TluBDtwInfqVNHKmMWwTcZ4cH7dq/lJ/ZFLYpUWPtdwGmRqINvzXG7818RpuAu4qYaW7XfTpa22rXhDN8CAoBT+Q2s9b9UT6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dl6D2yDD; arc=none smtp.client-ip=198.175.65.13
+	 MIME-Version; b=WwFu5OK4JjONmuqgc96s03Qp2v6aH8RE8Ld9PpqkXUxH9KxWusFahBAW3Yqe/aIJ9xSucEOPWXe9GIBVor1G17Xog7zF+hA4/z3625vh5CJT8CGkdmCwohxcTwcfzn9EK+MwGjsEFZ/j78heKQHrDRybHzmifgR1F7ORHd7xTQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fexOLHT/; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747317411; x=1778853411;
+  t=1747317412; x=1778853412;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+OYHLXnnZ8oWDQqUhk9kc18xUGV79y4C3n2wGzzm69k=;
-  b=dl6D2yDD8SHuSBlf8/OkHZMbzAyhL5Bb+VkL1fCLR7YkeZb9COpkI4wN
-   2a9DoCWjp9UufgjTzL9nCaWsSzRHSbUhJBgACX/PrRQtrJdbx1FCqgWpe
-   UNGzqJhjFj5o2VvNHQtMVPeB7K6wvo125s6ZgYiHSZelxFd+BR1aSUhY1
-   gwsmXxGsK04m1tTkxS4Q4p059UA7AnG/HXqrRD7pt7r6CuRgrv+7nDsXx
-   vDeB8vQiOBqdx+MqvaPzYjrYMoOOxZFxETCfYl+DOqmZdZy8QB+HqIvAh
-   4dbYWN+5k85a7y5HYjhOGRLV4SRJuyz8Vjhr2nVuDqQQaSOqriECAqEGL
-   Q==;
-X-CSE-ConnectionGUID: gGl6NlwASBmaFOfnXLy0aw==
-X-CSE-MsgGUID: IUimQOyWT26wHFHCJQVgXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="60270047"
+  bh=SB6/qac79QA5rG03Zep6Ww6TysQENB1XznR99XO5N/U=;
+  b=fexOLHT/+wjeTUnVBlxED2Jv/6eHE+2bnDaGwY4ei4Bu/Zsl4vDZIHie
+   6/nQ2SWs6wah7lS6eJnoWukoh0cMsregJexiq7qV4C597sAdYxHYSFEeP
+   ezGw+bN7tbpT1xbJxeRfTkrvHDxe11Ev2Vk2fgeDuWSzrgbIGYtgLEZfl
+   8Zi1OLoOJ5E6LX6SOXcVAOcl/PdKspQR30oPf/FgqUEO5kFBXRVZ/qKQJ
+   EhCwz3NJQEN5+xWgXS0DW/dX+V/ld0qd2zPG47v5fM8+Lmm1SQjs9/2WF
+   A0EUhX40AHRrih+ZdI54WWhgHR4hP5c+DpqFcvc83o6McnXTcxGlbkj0o
+   w==;
+X-CSE-ConnectionGUID: 5OxHqr/jQVicmvJwS2c4ew==
+X-CSE-MsgGUID: W+O8ibPQTiiItWjXy2/RWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="60270055"
 X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="60270047"
+   d="scan'208";a="60270055"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 06:56:50 -0700
-X-CSE-ConnectionGUID: y+0UwViMSreANGS1N4M2gQ==
-X-CSE-MsgGUID: A9Jug/sTQAG72Rw1Ib0DrA==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 06:56:52 -0700
+X-CSE-ConnectionGUID: WsxHU7cOTCOr95RDPM8a5g==
+X-CSE-MsgGUID: lGcspmqDQxigH4glauCQbA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="139372257"
+   d="scan'208";a="139372277"
 Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
-  by fmviesa009.fm.intel.com with ESMTP; 15 May 2025 06:56:48 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 15 May 2025 06:56:50 -0700
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 13/24] usb: xhci: cleanup xhci_mem_init()
-Date: Thu, 15 May 2025 16:56:10 +0300
-Message-ID: <20250515135621.335595-14-mathias.nyman@linux.intel.com>
+Subject: [PATCH 14/24] usb: xhci: set requested IMODI to the closest supported value
+Date: Thu, 15 May 2025 16:56:11 +0300
+Message-ID: <20250515135621.335595-15-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
 References: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
@@ -79,128 +79,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Cleanup indentation, spacing and comment formats.
+The function configures the Interrupt Moderation Interval (IMODI) via bits
+15:0 in the Interrupt Moderation Register. The IMODI value is specified in
+increments of 250 nanoseconds. For instance, an IMODI register value of 16
+corresponds to 4000 nanoseconds, resulting in an interrupt every ~1ms.
 
-Remove the "// " prefix from trace messages, as it is unnecessary and
-distracting.
+Currently, the function fails when a requested IMODI value is too large,
+only logging a warning message for secondary interrupters. Prevent this by
+automatically adjusting the IMODI value to the nearest supported value.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c | 52 +++++++++++++++++++------------------
- 1 file changed, 27 insertions(+), 25 deletions(-)
+ drivers/usb/host/xhci-mem.c | 5 +----
+ drivers/usb/host/xhci.c     | 7 +++++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 8cadd785ac0e..08513e5d321a 100644
+index 08513e5d321a..dcfe7774e9ed 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -2414,14 +2414,14 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	 * xHCI section 5.4.6 - Device Context array must be
- 	 * "physically contiguous and 64-byte (cache line) aligned".
- 	 */
--	xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma,
--			flags);
-+	xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma, flags);
- 	if (!xhci->dcbaa)
- 		goto fail;
+@@ -2393,10 +2393,7 @@ xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
+ 		return NULL;
+ 	}
+ 
+-	err = xhci_set_interrupter_moderation(ir, imod_interval);
+-	if (err)
+-		xhci_warn(xhci, "Failed to set interrupter %d moderation to %uns\n",
+-			  i, imod_interval);
++	xhci_set_interrupter_moderation(ir, imod_interval);
+ 
+ 	xhci_dbg(xhci, "Add secondary interrupter %d, max interrupters %d\n",
+ 		 ir->intr_num, xhci->max_interrupters);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index c6b517401c94..c3a1a67b6563 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -355,12 +355,15 @@ int xhci_set_interrupter_moderation(struct xhci_interrupter *ir,
+ {
+ 	u32 imod;
+ 
+-	if (!ir || !ir->ir_set || imod_interval > U16_MAX * 250)
++	if (!ir || !ir->ir_set)
+ 		return -EINVAL;
+ 
++	/* IMODI value in IMOD register is in 250ns increments */
++	imod_interval = umin(imod_interval / 250, ER_IRQ_INTERVAL_MASK);
 +
- 	xhci->dcbaa->dma = dma;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Device context base array address = 0x%pad (DMA), %p (virt)",
--			&xhci->dcbaa->dma, xhci->dcbaa);
-+		       "Device context base array address = 0x%pad (DMA), %p (virt)",
-+		       &xhci->dcbaa->dma, xhci->dcbaa);
+ 	imod = readl(&ir->ir_set->irq_control);
+ 	imod &= ~ER_IRQ_INTERVAL_MASK;
+-	imod |= (imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
++	imod |= imod_interval;
+ 	writel(imod, &ir->ir_set->irq_control);
  
- 	/*
- 	 * Initialize the ring segment pool.  The ring must be a contiguous
-@@ -2441,36 +2441,37 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 		goto fail;
- 
- 	/* See Table 46 and Note on Figure 55 */
--	xhci->device_pool = dma_pool_create("xHCI input/output contexts", dev,
--			2112, 64, xhci->page_size);
-+	xhci->device_pool = dma_pool_create("xHCI input/output contexts", dev, 2112, 64,
-+					    xhci->page_size);
- 	if (!xhci->device_pool)
- 		goto fail;
- 
--	/* Linear stream context arrays don't have any boundary restrictions,
-+	/*
-+	 * Linear stream context arrays don't have any boundary restrictions,
- 	 * and only need to be 16-byte aligned.
- 	 */
--	xhci->small_streams_pool =
--		dma_pool_create("xHCI 256 byte stream ctx arrays",
--			dev, SMALL_STREAM_ARRAY_SIZE, 16, 0);
-+	xhci->small_streams_pool = dma_pool_create("xHCI 256 byte stream ctx arrays",
-+						   dev, SMALL_STREAM_ARRAY_SIZE, 16, 0);
- 	if (!xhci->small_streams_pool)
- 		goto fail;
- 
--	xhci->medium_streams_pool =
--		dma_pool_create("xHCI 1KB stream ctx arrays",
--			dev, MEDIUM_STREAM_ARRAY_SIZE, 16, 0);
--	/* Any stream context array bigger than MEDIUM_STREAM_ARRAY_SIZE
--	 * will be allocated with dma_alloc_coherent()
-+	/*
-+	 * Any stream context array bigger than MEDIUM_STREAM_ARRAY_SIZE will be
-+	 * allocated with dma_alloc_coherent().
- 	 */
-+
-+	xhci->medium_streams_pool = dma_pool_create("xHCI 1KB stream ctx arrays",
-+						    dev, MEDIUM_STREAM_ARRAY_SIZE, 16, 0);
- 	if (!xhci->medium_streams_pool)
- 		goto fail;
- 
--	/* refer to xhci rev1_2 protocol 5.3.3 max ports is 255.
-+	/*
-+	 * refer to xhci rev1_2 protocol 5.3.3 max ports is 255.
- 	 * refer to xhci rev1_2 protocol 6.4.3.14 port bandwidth buffer need
- 	 * to be 16-byte aligned.
- 	 */
--	xhci->port_bw_pool =
--		dma_pool_create("xHCI 256 port bw ctx arrays",
--			dev, GET_PORT_BW_ARRAY_SIZE, 16, 0);
-+	xhci->port_bw_pool = dma_pool_create("xHCI 256 port bw ctx arrays",
-+					     dev, GET_PORT_BW_ARRAY_SIZE, 16, 0);
- 	if (!xhci->port_bw_pool)
- 		goto fail;
- 
-@@ -2478,20 +2479,20 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	xhci->cmd_ring = xhci_ring_alloc(xhci, 1, TYPE_COMMAND, 0, flags);
- 	if (!xhci->cmd_ring)
- 		goto fail;
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"Allocated command ring at %p", xhci->cmd_ring);
-+
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocated command ring at %p", xhci->cmd_ring);
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is 0x%pad",
--			&xhci->cmd_ring->first_seg->dma);
-+		       &xhci->cmd_ring->first_seg->dma);
- 
--	/* Reserve one command ring TRB for disabling LPM.
-+	/*
-+	 * Reserve one command ring TRB for disabling LPM.
- 	 * Since the USB core grabs the shared usb_bus bandwidth mutex before
- 	 * disabling LPM, we only need to reserve one TRB for all devices.
- 	 */
- 	xhci->cmd_ring_reserved_trbs++;
- 
- 	/* Allocate and set up primary interrupter 0 with an event ring. */
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--		       "Allocating primary event ring");
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating primary event ring");
- 	xhci->interrupters = kcalloc_node(xhci->max_interrupters, sizeof(*xhci->interrupters),
- 					  flags, dev_to_node(dev));
- 	if (!xhci->interrupters)
-@@ -2503,6 +2504,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 
- 	if (scratchpad_alloc(xhci, flags))
- 		goto fail;
-+
- 	if (xhci_setup_port_arrays(xhci, flags))
- 		goto fail;
- 
+ 	return 0;
 -- 
 2.43.0
 
