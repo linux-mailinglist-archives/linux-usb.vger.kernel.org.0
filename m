@@ -1,170 +1,220 @@
-Return-Path: <linux-usb+bounces-24019-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24020-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9D26AB9553
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 06:47:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9138EAB9567
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 07:10:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DACAB1BC077F
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 04:47:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC0217EABA
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E33C19CC3D;
-	Fri, 16 May 2025 04:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFDC21CC7D;
+	Fri, 16 May 2025 05:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JYrQ7mk1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hoUxlBPg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52D010E4
-	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 04:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095061FAA
+	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 05:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747370819; cv=none; b=o+I67ibhF0AuUvubQWdlJGvkucCsVrwOhLvFsYH4vG6OJHn8zwwVC9OMPR3tiMB/VT7I8itLeFSqXUy8jBdrzxRS0TyCiMe1xC+ZIKgI1il86WL5eeTnHSBfjN5sb30IYWWoCvEnCt/T/iQkx9LgDXw+MJLr+zC2HyYdKowcshU=
+	t=1747372245; cv=none; b=Y6tlBUKtDUc9ILqUXqFVafdO/kUXtin4bIH6MaTDfQSiU5ajPr9wURmsW5A+WUFO8ePXOR85Q0seGu8M1DOtjTH8WBTTNOctCv2e5sLOmOaBwibQl7ren8yoaj5m89Qo15hn67FGRSX8PcLhLNdualA+PvZxQTGy1hRSnrVoz3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747370819; c=relaxed/simple;
-	bh=YVuTc2bSEf4nvi4SFTWj2WF2nu6sLlHBK3XBb/RYm80=;
+	s=arc-20240116; t=1747372245; c=relaxed/simple;
+	bh=PBgrfDfjGMRv2RNzmim1ZNyY5R2PME9uUKJ/LS6bXtI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XrI6d4Lm3SRTRCksqRh1RHD/x9/mhCxVVR0DQrlb5h/+OWhQQS3iNaakCG/IqVpvsjeZM9Y5BLRPA3rZeyqpwoLbWJbMZ0Kd8o+0XJPeE7lUWwY10rexTYR942Z9qpwEG4FOCS609z1g5MipT/hvq8ApD7jZM1ADz3ae43xf/oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JYrQ7mk1; arc=none smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=IDleFrrdAv4lW20fnN/+uPPA7rNuTurtgARHEnNLleBzQo5KtvED0qekt9yLjoFFw8avOeO1X5GZimvwdX/NZiDaYAe/PgTJptoibfmbMQPY93xlR1EDbF6Wp+ZaoC1widDyQmuhueC7ELFI63No/0UCgiN9m8TYZ5E8eBtiUlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hoUxlBPg; arc=none smtp.client-ip=209.85.210.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5fce6c7598bso6658a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 21:46:57 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7302a769534so1513224a34.1
+        for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 22:10:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747370816; x=1747975616; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747372243; x=1747977043; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2p0J63BoeaEvteCr8KS2NoqHGRsgMBWEa842OReu8K8=;
-        b=JYrQ7mk1ucg2AijvN4hL4ITFM31ibFWr3SRJ027uMMA7uMMJsvWrrLe464PXCzf6aK
-         uqHryffKOQR7BgITf9YT0wDpL49c8RLkcn3pHRQ/DfDDkxr0D8XkFCret+Y4+JUTBLWz
-         v01Tm18if45qqCJDBYgRE/PZ9eASV6If8NRMAq9YTdUR127ozFoIxGOslxHN/IS+m0hB
-         TsWvzc4Wy4nC05UiCRaB6Wv4bVmV1XdyYCegbTwmyBz7+Mrdrhf0xtwmkxtopG/hXqE7
-         mDqnI4TsZVT2VYjL58eyOLQg/LRg4YxG48ZoIFqVdLTNFlrnQk3BeFluQo/y50c86Smz
-         SaiQ==
+        bh=rS14ehsKTRh0Yu2NCsmeKqi7C6zemUJM36Ay6+7ClPM=;
+        b=hoUxlBPgFMFWuvqAR+h3ExrVFQW3YwCJq8ua0+txH0fNV0EQ94vuZ5ECFk7ltBkefI
+         IeyFS2SmRrZyvK8r80z3s3JX6tSGvmRkjQHxFR4RbU5ARRm5tiIXc1aHVCLYHbfE3lIE
+         0cnhJm+QZ9fbFhpUwocBxET4Xc2Hc3ZGh7A5lIko26N//IsFtgJrPtc2CHznWP+mQ3Rx
+         HOEokBD+OkSmL/3S2d9vLVpOAHbAlCbYS5WlMprPtUnyWDFbO5vvgprIbqSKlQWS5Ljj
+         hODEXAsX4NhuUIr2Alj0uEZECFG9PA7DMxq1LM7j13PMj2zg/ltdo+qPC1VTlvuOBP76
+         at5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747370816; x=1747975616;
+        d=1e100.net; s=20230601; t=1747372243; x=1747977043;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2p0J63BoeaEvteCr8KS2NoqHGRsgMBWEa842OReu8K8=;
-        b=bVMui3QsoS3fP9+fcKkBxwQNDY0eTYFrqAhCQnSsBWpjNv9ecJqZxfXbxxPVnilsOU
-         hcQnTJmReQ9vc1PY+2Fk7YYgECpqfBWjf5TbEWJ1jV6FqnabEtck7nBsV/tqDSQUzHn7
-         vkhHZ6htvGD4fLTe1zMbsSlhJpmeLTmyO4djPnwIUIAXSa7q7NQ1G2obrFkdJB0Xz8YZ
-         4ybK42jLYQMWgxoin3GbuLGy/dqSmwftTE/gteegPmX9qAvI0o1Fs17a7gxOJHojHQn6
-         kLC5795HuTqgPrfuLWSEeAqc/iy4qHqlA2QlWeukdvQPrUBS739ktUhsY5XC1NhzX1o4
-         /SCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVg8dO1ZcAtrIZGCjQktyN37orR3XIhivq4yhjzL4+5w4HQwiUrd0uvuV9RBHpk+D4FBK8lirBx/Po=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNGf9/mYIvVCTSJaP2r0rHwca2ASjXO9xaFV/VsSDpECnvVgYe
-	krJkPu0BuMgc9dBbKSqgZ8lYAerI2PycbUCycO413JU63VlFOqE83F2SMg3FyMHLWXizk16DkSZ
-	NEs9O2kPO00SaXyBj/0spFBbhDk+INhRt2qdfBami
-X-Gm-Gg: ASbGncsLJoSbbkV+CKpN+JmgnGiyshpHCSIb1AAnL59ycmSOutq6Cp1PJVUqK8jXtkn
-	kNxUkOnJtTtaK7EdOtmLeopSMAtJdy7+9EtRTEaUFfdxJJjNJZkuuKI/pnXFvqzkoMWGKfJi1KG
-	+dqGQAOqDucq9vPIF62pZTXT2Wd72on1fu3CiudpPe0DsR6xwsWY/0K60=
-X-Google-Smtp-Source: AGHT+IFnmoFOBw17NS2NeC02qMp4/ejkZq6GrfrN6F7Vp/sqYPTFxrI/Eg+hDjqnmiO4OTE0pVaJT9sRsUCUWjBbxJ4=
-X-Received: by 2002:a50:c049:0:b0:5fd:28:c3f6 with SMTP id 4fb4d7f45d1cf-5ffc9dbe5b8mr187295a12.4.1747370815935;
- Thu, 15 May 2025 21:46:55 -0700 (PDT)
+        bh=rS14ehsKTRh0Yu2NCsmeKqi7C6zemUJM36Ay6+7ClPM=;
+        b=ojGlzPBfCpME+q7ZWM2zghxIpElDn0Siq/DPEppPNayizdyNpWy4ETIt2irtEETDpq
+         erPj3gp6/fIohJpipnegApOgdYzp2j0B6pTsMzBJ3oTdFQcSvLpdnzmkDtJxOTgbeThm
+         Vw8l9VY+wnZRi3qGLejmJSCwk5cRgpzAIsbvG9fmdYIKOS26FGGewXEyvvfMf8cLxvYs
+         pYFVA1+dNvJtGiE8pd8fa9ke3PZeprSorPo4p+ktL81sy4F0YzKA+4u1O/0NS7xW6wXt
+         E8HZdkdrgCQblng9tSNfHAx/XzuVp62FRKH3ZEdrT9oZogqbsU8BNfp/fTf6IGyFBR3f
+         gz3A==
+X-Forwarded-Encrypted: i=1; AJvYcCUXEJpbfv2MX8RKN83EBQE8MKSApChq2Z1MGCM6qglvqXYn2/1YL5UYnQjA8I4zxab/+GIUZVsVnIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlxuX+20P58KU2xL5ThPy+FhSNkJ51TC2HL3UdJ4bGv6Dl7Xac
+	+V4tZU4pIQVl+PVXB4+/h8yqILCoHYxaTOkUVrmFGybwYf9ileKUrTzvR34ABF11zQhCFH1gDtQ
+	JyDwdvQ4BxIsKrPMjtyEbN2h9OBXr0TI49I4HSEBI
+X-Gm-Gg: ASbGncsmavlm8Jv7dw4sA0s6GMXCH0CTiEYf+RYWH+hovG1j6UQSbkQ2ZzyBkzW8Cy/
+	XsHGgIKlPK9ICDXw/nFvEH+3NWSQeD6kvRzVrP2iE2GdT0ZBEIUBnIPdGwu17G+0A5QxqmKGbIS
+	10igaoRCMN1UC3gqlt0hZOCwsZ5mKXS7Dqnug8Sn290iomfRz5QII3XLdD2L4OTqy5wPkyzhcdQ
+	/WaP49ANkSTRKc=
+X-Google-Smtp-Source: AGHT+IG+EBPZr1Odrxpf1BvUc8QTj8b6UyQ5Vr/g6q7DusGK32UF2knRIwviRux7xsAeZ0mZs0vqZ6oxPUhtdWbBVBA=
+X-Received: by 2002:a05:6870:a7a5:b0:2c8:361a:da77 with SMTP id
+ 586e51a60fabf-2e3c1ed9f95mr1231548fac.26.1747372242630; Thu, 15 May 2025
+ 22:10:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250416144917.16822-1-guanyulin@google.com> <20250416144917.16822-3-guanyulin@google.com>
- <2025042540-implode-yelp-b8e5@gregkh>
-In-Reply-To: <2025042540-implode-yelp-b8e5@gregkh>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Fri, 16 May 2025 12:45:00 +0800
-X-Gm-Features: AX0GCFtgmPfhoBhTfthJn2kGFoSwJy9bgtoOW1SPfO4jiDRojCDEDAC7W0affGo
-Message-ID: <CAOuDEK1SUMBdxq49G6UxB_DubbM78xUe3w4V062AJ1Ok1NfCHg@mail.gmail.com>
-Subject: Re: [PATCH v12 2/4] usb: add apis for offload usage tracking
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu, sumit.garg@kernel.org, 
-	gargaditya08@live.com, kekrby@gmail.com, jeff.johnson@oss.qualcomm.com, 
-	quic_zijuhu@quicinc.com, andriy.shevchenko@linux.intel.com, 
-	ben@decadent.org.uk, broonie@kernel.org, quic_wcheng@quicinc.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250513130834.1612602-1-chou.cosmo@gmail.com>
+ <aCNLeX1k34BSgPOV@kuha.fi.intel.com> <aCNOOXcAuA_1B-0Z@kuha.fi.intel.com>
+ <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
+ <aCRQbRCHFdFOCNw2@kuha.fi.intel.com> <4245c9da-cb81-4494-93c6-224883057410@google.com>
+In-Reply-To: <4245c9da-cb81-4494-93c6-224883057410@google.com>
+From: Badhri Jagan Sridharan <badhri@google.com>
+Date: Thu, 15 May 2025 22:10:05 -0700
+X-Gm-Features: AX0GCFtsjDRTU_pVx4L7jEmXjCCPPMdleg_78CjSDC1A9ysVADujU6X9sZe26tg
+Message-ID: <CAPTae5+GFX7HpB6Vp68LQtFgy+iMCj8cCOuHUPyn8nZPBt7+zQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tcpm: Use configured PD revision for negotiation
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Cosmo Chou <chou.cosmo@gmail.com>, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, cosmo.chou@quantatw.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 25, 2025 at 7:12=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
+On Thu, May 15, 2025 at 12:15=E2=80=AFAM Amit Sunil Dhamne <amitsd@google.c=
+om> wrote:
 >
-> On Wed, Apr 16, 2025 at 02:43:02PM +0000, Guan-Yu Lin wrote:
-> > +int usb_offload_put(struct usb_device *udev)
-> > +{
-> > +     int ret;
-> > +
-> > +     if (udev->state =3D=3D USB_STATE_NOTATTACHED ||
-> > +                     udev->state =3D=3D USB_STATE_SUSPENDED)
-> > +             return -EAGAIN;
+> Hi Heikki,
 >
-> What's to prevent the state of the device from changing right after you
-> check for this?
->
+> On 5/14/25 1:12 AM, Heikki Krogerus wrote:
+> > On Tue, May 13, 2025 at 10:14:32PM +0800, Cosmo Chou wrote:
+> >> On Tue, May 13, 2025 at 04:50:49PM +0300, Heikki Krogerus wrote:
+> >>> On Tue, May 13, 2025 at 04:39:09PM +0300, Heikki Krogerus wrote:
+> >>>> On Tue, May 13, 2025 at 09:08:34PM +0800, Cosmo Chou wrote:
+> >>>>> Initialize negotiated_rev and negotiated_rev_prime based on the por=
+t's
+> >>>>> configured PD revision (rev_major) rather than always defaulting to
+> >>>>> PD_MAX_REV. This ensures ports start PD communication using their
+> >>>>> appropriate revision level.
+> >>>>>
+> >>>>> This allows proper communication with devices that require specific
+> >>>>> PD revision levels, especially for the hardware designed for PD 1.0
+> >>>>> or 2.0 specifications.
+> >>>>>
+> >>>>> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
 
-The caller of usb_offload_put() should hold the device lock, so I
-think the state of the usb device will remain the same within
-usb_offload_put().
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-> And why -EAGAIN, you don't mention that in the comment for the function.
->
-> Also, to pile on, sorry, the coding style needs to be fixed up here :)
->
+> >>>>> ---
+> >>>>> Change log:
+> >>>>>
+> >>>>> v2:
+> >>>>>   - Add PD_CAP_REVXX macros and use switch-case for better readabil=
+ity.
+> >>>>>
+> >>>>> ---
+> >>>>>  drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
+> >>>>>  1 file changed, 25 insertions(+), 4 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm=
+/tcpm.c
+> >>>>> index 8adf6f954633..48e9cfc2b49a 100644
+> >>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+> >>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> >>>>> @@ -313,6 +313,10 @@ struct pd_data {
+> >>>>>     unsigned int operating_snk_mw;
+> >>>>>  };
+> >>>>>
+> >>>>> +#define PD_CAP_REV10       0x1
+> >>>>> +#define PD_CAP_REV20       0x2
+> >>>>> +#define PD_CAP_REV30       0x3
+> >>>>> +
+> >>>>>  struct pd_revision_info {
+> >>>>>     u8 rev_major;
+> >>>>>     u8 rev_minor;
+> >>>>> @@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(st=
+ruct tcpm_port *port)
+> >>>>>     }
+> >>>>>  }
+> >>>>>
+> >>>>> +static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port=
+)
+> >>>>> +{
+> >>>>> +   switch (port->pd_rev.rev_major) {
+> >>>>> +   case PD_CAP_REV10:
+> >>>>> +           port->negotiated_rev =3D PD_REV10;
+> >>>>> +           break;
+> >>>>> +   case PD_CAP_REV20:
+> >>>>> +           port->negotiated_rev =3D PD_REV20;
+> >>>>> +           break;
+> >>>>> +   case PD_CAP_REV30:
+> >>>>> +           port->negotiated_rev =3D PD_REV30;
+> >>>>> +           break;
+> >>>>> +   default:
+> >>>>> +           port->negotiated_rev =3D PD_MAX_REV;
+> >>>>> +           break;
+> >>>>> +   }
+> >>>>> +   port->negotiated_rev_prime =3D port->negotiated_rev;
+> >>>>> +}
 
-I'll separate these 2 states into two error handling checks and
-provide appropriate error code respectively. Thanks for your advice.
+IMHO this looks better in terms of readability although V1 is more concise.
 
-> > +bool usb_offload_check(struct usb_device *udev)
-> > +{
-> > +     struct usb_device *child;
-> > +     bool active;
-> > +     int port1;
-> > +
-> > +     usb_hub_for_each_child(udev, port1, child) {
->
-> No locking is needed for this loop at all?  What happens if a device is
-> added or removed while it is looping?
->
+Thanks,
+Badhri
 
-Currently the expectation is that all the downstream usb devices
-should either go to suspend or be marked as "offload_at_suspend".
-Based on this, is there still a chance that usb devices are being
-added or removed? My understanding is device addition/removal requires
-locks for the upstream usb device, which we've already acquired before
-entering usb_offload_check().
-
-> > +             device_lock(&child->dev);
-> > +             active =3D usb_offload_check(child);
-> > +             device_unlock(&child->dev);
-> > +             if (active)
-> > +                     return true;
-> > +     }
-> > +
-> > +     return !!udev->offload_usage;
+> >>>> Do we need this? Couldn't you just add one to rev_major?
+> >>>>
+> >>>>         port->negotiated_rev =3D port->pd_rev.rev_major + 1;
+> >>>>         port->negotiated_rev_prime =3D port->pd_rev.rev_major + 1;
+> >>>>
+> >>>> Or am I missing something?
+> >>> Sorry, I mean minus one :-)
+> >>>
+> >>>         port->negotiated_rev =3D port->pd_rev.rev_major - 1;
+> >>>         port->negotiated_rev_prime =3D port->pd_rev.rev_major - 1;
 >
-> But the state can change right afterwards, so no one can do anything
-> with this value, right?  What is is used for?
+> The only reason I asked for macros is that in the case of Spec Revision
+> for header, the value for PD 3.0 is 0x2, PD 2.0 is 0x1 & so on. While
+> for PD max revisions, it's the exact values. Having a clear distinction
+> may be easier to follow. If you want to go with the +/- approach you can
+> add a comment stating the above.
 >
-> thanks,
+> I don't have a hard opinion on either approach :).
 >
-> greg k-h
-
-If we could ensure that all the downstream usb devices satisfy the
-following conditions, could the state still change?
-1. usb devices either are suspended or marked as "offload_at_suspend".
-2. "offload_usage" could only be modified when the usb device is
-neither suspended nor marked as "offload_at_suspend".
-Regarding point 1, I'll update the function description to state the
-function should only be called after we ensure the downstream usb
-devices are either suspended or marked as "offload_at_suspend".
-Regarding point 2, I'll update the usb_offload_get()/usb_offload_put()
-so that "offload_usage" changes only when the device is active and not
-marked as "offload_at_suspend".
-
-Regards,
-Guan-Yu
+> Thanks,
+>
+> Amit
+>
+> >>>
+> >>> --
+> >>> heikki
+> >> It seems to be the PATCH v1:
+> >> https://lore.kernel.org/all/20250508174756.1300942-1-chou.cosmo@gmail.=
+com/
+> >>
+> >> if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <=3D PD_MAX_R=
+EV + 1) {
+> >>         port->negotiated_rev =3D port->pd_rev.rev_major - 1;
+> >>         port->negotiated_rev_prime =3D port->pd_rev.rev_major - 1
+> >> } else {
+> >>         port->negotiated_rev =3D PD_MAX_REV;
+> >>         port->negotiated_rev_prime =3D PD_MAX_REV;
+> >> }
+> > Okay, sorry I missed that. I still don't like the extra definitions,
+> > but I don't have any better idea (I guess macro is not an option?).
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> >
+> > thanks,
+> >
 
