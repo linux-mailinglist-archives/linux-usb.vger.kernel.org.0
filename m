@@ -1,137 +1,170 @@
-Return-Path: <linux-usb+bounces-24018-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24019-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7B5AB94D7
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:41:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9D26AB9553
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 06:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91E9D7B1F93
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 03:40:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DACAB1BC077F
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 04:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321C522CBC4;
-	Fri, 16 May 2025 03:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E33C19CC3D;
+	Fri, 16 May 2025 04:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpNeCEYM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JYrQ7mk1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF9A157E6B;
-	Fri, 16 May 2025 03:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52D010E4
+	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 04:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747366906; cv=none; b=J2geOovr+6XVxDlLJF0O9fqIVmhKWe7HKQwO7lub1TK/uK3ujD1MfRhzs8QKi/CvZaf6AgLofjmwRXJw507Nw6wxIjxA+OIJz4iMOt18qfJyohzBV9+ab+ztZQXTDJZAz9s+EE6AaDygZnQpIZsbwepCn/tbib71peQUqlQvlZY=
+	t=1747370819; cv=none; b=o+I67ibhF0AuUvubQWdlJGvkucCsVrwOhLvFsYH4vG6OJHn8zwwVC9OMPR3tiMB/VT7I8itLeFSqXUy8jBdrzxRS0TyCiMe1xC+ZIKgI1il86WL5eeTnHSBfjN5sb30IYWWoCvEnCt/T/iQkx9LgDXw+MJLr+zC2HyYdKowcshU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747366906; c=relaxed/simple;
-	bh=WyVN/f3JMKOQ48HmDKOEVVs++v/H2ZPMhA4CZ9WQfqc=;
+	s=arc-20240116; t=1747370819; c=relaxed/simple;
+	bh=YVuTc2bSEf4nvi4SFTWj2WF2nu6sLlHBK3XBb/RYm80=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DuWWiii6UiZ7rkG1EHCpLfFqCCZDuuUZNwh+Sne64EGst/Og52WJaAWuZn0ZH0igmYiLBc6Lf+TJol+VL6G9j6+CXIRJCY7q4gd6smdCJ1CqmakYdYi2JHBZWzxhLDv9k5YAFxrO+oLKO5qcFHZOTvhdggCCYmNl5e4kYyBij1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpNeCEYM; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54ea69e9352so2208565e87.2;
-        Thu, 15 May 2025 20:41:42 -0700 (PDT)
+	 To:Cc:Content-Type; b=XrI6d4Lm3SRTRCksqRh1RHD/x9/mhCxVVR0DQrlb5h/+OWhQQS3iNaakCG/IqVpvsjeZM9Y5BLRPA3rZeyqpwoLbWJbMZ0Kd8o+0XJPeE7lUWwY10rexTYR942Z9qpwEG4FOCS609z1g5MipT/hvq8ApD7jZM1ADz3ae43xf/oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JYrQ7mk1; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5fce6c7598bso6658a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 21:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747366901; x=1747971701; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747370816; x=1747975616; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cv+Z5EyhamaRdEUyPKUKKXRXh2hCvdemmvs6xDGcfz0=;
-        b=LpNeCEYMjDBWnYg7fd1DSAwDbA+L2rGlhSVAmHgP3S0TBAVB7AHlGz+sUFO+BS3wq/
-         Vz+2MnkHYEaQ+hN94JX7NAb/fR2yNYxsfkY7i8UAyHiiFb3rRbxWeLSDEbXOOf3uYrbH
-         7BBEt0zImi4wk9IG2sTIVCXaVFE9wyWaPtCicqWQK/XCkuB76925INEhIuTmidy+B5/o
-         1qfvmSVvvArDr66+50++5cZ6PZEnvDIu/zNUSdrgrcyTbIZjAFWL3cyiT7WrTYhCwTMm
-         rt/tNRLUUvChr0fNi+FhJ8Qtlfp59w6PAyLmw8b56vjfXczaBPoTt0WHy6bLidwIUvrj
-         kvlA==
+        bh=2p0J63BoeaEvteCr8KS2NoqHGRsgMBWEa842OReu8K8=;
+        b=JYrQ7mk1ucg2AijvN4hL4ITFM31ibFWr3SRJ027uMMA7uMMJsvWrrLe464PXCzf6aK
+         uqHryffKOQR7BgITf9YT0wDpL49c8RLkcn3pHRQ/DfDDkxr0D8XkFCret+Y4+JUTBLWz
+         v01Tm18if45qqCJDBYgRE/PZ9eASV6If8NRMAq9YTdUR127ozFoIxGOslxHN/IS+m0hB
+         TsWvzc4Wy4nC05UiCRaB6Wv4bVmV1XdyYCegbTwmyBz7+Mrdrhf0xtwmkxtopG/hXqE7
+         mDqnI4TsZVT2VYjL58eyOLQg/LRg4YxG48ZoIFqVdLTNFlrnQk3BeFluQo/y50c86Smz
+         SaiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747366901; x=1747971701;
+        d=1e100.net; s=20230601; t=1747370816; x=1747975616;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cv+Z5EyhamaRdEUyPKUKKXRXh2hCvdemmvs6xDGcfz0=;
-        b=oigZOvtFoyO6HtKAoHWlGSKj7qHVIZnimGfIsFklf0r+/+mV1XLPvdX/CmTkxtIIQw
-         28Esuk1deqn1qU2m/T+HVdeREL9Jz//uSDMXU98MpjZOh9NzHL7+F3TwsMuTR9etP/Rb
-         FYXse33lbO/ArPxehUNRz68yy6s3uPfDeuXCxtf6UHuNlyblBh2JCG1edhAYC7r4IBN2
-         zm5vkvB1s2cRh7+VHuHXJtC4wnAuMHdUL8PI+AWY4e7ARKT1Vt9PWOHUJAeNeKcLojtP
-         ghWNeD6OQ899G2W1XDjnYRAe2F2fz7c2T3JjC+0YRQe/IDZwIT8xkgVGuxqqkGqWmmRz
-         WvEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZlxc4IbgvP2tk1ppvqs6s1ED6dYh1l7Hr2RnLirVi+dwB/wq6Lr52AJDrhK5845Zf1GWDik4iqxzqZNU=@vger.kernel.org, AJvYcCVNvbIu6VSFEdF8e+mrO5Srb1/RSKHeXp4at/SYGdYe3hXRy/P9Ln3B6nBODm9gVwipZS9Qi19nuQXX@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxqnrwd/UPEQMQHX/019MZjRTpN44eq3iN/7PYShVb3KuY4+61X
-	83IMYKOi34Hn4XCE+bsQRsjoBqqaq4Wd3XfqfzLuIN+RUm416x86LOCf0RCQdJfAWByKzRg6iVM
-	avp8AlMWjOQWVCw8Nu6HNNpnP3zR6r+o=
-X-Gm-Gg: ASbGncstVR4N2DszSjJTAUnhi6vwguuS5iQBKKcJqzvCm26qe/wc5TT3QAp28miMhfy
-	aGoFuTWampk/VDAv1sAO+l0AkTMAvh55KSCfZqolP4R0h0FNMkKiwL4nFPjlqh6/4AX4SB4AZ4g
-	Nnxr5gAZaAkvudvwRlxGFpV2S4z34lr5SBPHDiHCSC3o53aoCy+gP53Rs+oxkpTsjrzlc=
-X-Google-Smtp-Source: AGHT+IEYUFZ8fuKrx/1pcVQ6FEvGvLjYdBQdtB8zshOOJU4Yd+djbgw8jzpXtv1Xkjh3nzmr/oJYjoiNaMpJGWIccKE=
-X-Received: by 2002:a05:6512:228a:b0:549:8d16:7267 with SMTP id
- 2adb3069b0e04-550e962697cmr235202e87.10.1747366900677; Thu, 15 May 2025
- 20:41:40 -0700 (PDT)
+        bh=2p0J63BoeaEvteCr8KS2NoqHGRsgMBWEa842OReu8K8=;
+        b=bVMui3QsoS3fP9+fcKkBxwQNDY0eTYFrqAhCQnSsBWpjNv9ecJqZxfXbxxPVnilsOU
+         hcQnTJmReQ9vc1PY+2Fk7YYgECpqfBWjf5TbEWJ1jV6FqnabEtck7nBsV/tqDSQUzHn7
+         vkhHZ6htvGD4fLTe1zMbsSlhJpmeLTmyO4djPnwIUIAXSa7q7NQ1G2obrFkdJB0Xz8YZ
+         4ybK42jLYQMWgxoin3GbuLGy/dqSmwftTE/gteegPmX9qAvI0o1Fs17a7gxOJHojHQn6
+         kLC5795HuTqgPrfuLWSEeAqc/iy4qHqlA2QlWeukdvQPrUBS739ktUhsY5XC1NhzX1o4
+         /SCg==
+X-Forwarded-Encrypted: i=1; AJvYcCVg8dO1ZcAtrIZGCjQktyN37orR3XIhivq4yhjzL4+5w4HQwiUrd0uvuV9RBHpk+D4FBK8lirBx/Po=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNGf9/mYIvVCTSJaP2r0rHwca2ASjXO9xaFV/VsSDpECnvVgYe
+	krJkPu0BuMgc9dBbKSqgZ8lYAerI2PycbUCycO413JU63VlFOqE83F2SMg3FyMHLWXizk16DkSZ
+	NEs9O2kPO00SaXyBj/0spFBbhDk+INhRt2qdfBami
+X-Gm-Gg: ASbGncsLJoSbbkV+CKpN+JmgnGiyshpHCSIb1AAnL59ycmSOutq6Cp1PJVUqK8jXtkn
+	kNxUkOnJtTtaK7EdOtmLeopSMAtJdy7+9EtRTEaUFfdxJJjNJZkuuKI/pnXFvqzkoMWGKfJi1KG
+	+dqGQAOqDucq9vPIF62pZTXT2Wd72on1fu3CiudpPe0DsR6xwsWY/0K60=
+X-Google-Smtp-Source: AGHT+IFnmoFOBw17NS2NeC02qMp4/ejkZq6GrfrN6F7Vp/sqYPTFxrI/Eg+hDjqnmiO4OTE0pVaJT9sRsUCUWjBbxJ4=
+X-Received: by 2002:a50:c049:0:b0:5fd:28:c3f6 with SMTP id 4fb4d7f45d1cf-5ffc9dbe5b8mr187295a12.4.1747370815935;
+ Thu, 15 May 2025 21:46:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250514134011.16285-1-shawn2000100@gmail.com> <2025051444-among-posh-afcb@gregkh>
-In-Reply-To: <2025051444-among-posh-afcb@gregkh>
-From: =?UTF-8?B?6Zmz5a2Q5r2U?= <shawn2000100@gmail.com>
-Date: Fri, 16 May 2025 11:41:29 +0800
-X-Gm-Features: AX0GCFvQ2npPTUqwgxDkpb5F4pgkUEaZ5qECP3wQm-QLOHQh80mchMkIrgmMY7U
-Message-ID: <CAPwXWsD2JHO+MQS5+5+Zi8ic4uFY6G24Ug2Jd2dZ3zfSDvuxtQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: Set avg_trb_len = 8 for EP0 during Address
- Device Command
+References: <20250416144917.16822-1-guanyulin@google.com> <20250416144917.16822-3-guanyulin@google.com>
+ <2025042540-implode-yelp-b8e5@gregkh>
+In-Reply-To: <2025042540-implode-yelp-b8e5@gregkh>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Fri, 16 May 2025 12:45:00 +0800
+X-Gm-Features: AX0GCFtgmPfhoBhTfthJn2kGFoSwJy9bgtoOW1SPfO4jiDRojCDEDAC7W0affGo
+Message-ID: <CAOuDEK1SUMBdxq49G6UxB_DubbM78xUe3w4V062AJ1Ok1NfCHg@mail.gmail.com>
+Subject: Re: [PATCH v12 2/4] usb: add apis for offload usage tracking
 To: Greg KH <gregkh@linuxfoundation.org>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu, sumit.garg@kernel.org, 
+	gargaditya08@live.com, kekrby@gmail.com, jeff.johnson@oss.qualcomm.com, 
+	quic_zijuhu@quicinc.com, andriy.shevchenko@linux.intel.com, 
+	ben@decadent.org.uk, broonie@kernel.org, quic_wcheng@quicinc.com, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
-
-I got it, thank you so much for the effort!
-
-I already patched a newer version
-Link: https://lore.kernel.org/linux-usb/20250516033908.7386-1-shawn2000100@=
-gmail.com/T/#u
-
-
-On Wed, May 14, 2025 at 10:46=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
+On Fri, Apr 25, 2025 at 7:12=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
 >
-> On Wed, May 14, 2025 at 09:40:08PM +0800, jay.chen wrote:
-> > According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
-> > TRB Length (avg_trb_len) for control endpoints should be set to 8.
-> >
-> > Currently, during the Address Device Command, EP0's avg_trb_len remains=
- 0,
-> > which may cause some xHCI hardware to reject the Input Context, resulti=
-ng
-> > in device enumeration failures. In extreme cases, using a zero avg_trb_=
-len
-> > in calculations may lead to division-by-zero errors and unexpected syst=
-em
-> > crashes.
-> >
-> > This patch sets avg_trb_len to 8 for EP0 in
-> > xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
-> > and improving compatibility across various host controller implementati=
-ons.
-> >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220033
-> > Signed-off-by: jay.chen <shawn2000100@gmail.com>
+> On Wed, Apr 16, 2025 at 02:43:02PM +0000, Guan-Yu Lin wrote:
+> > +int usb_offload_put(struct usb_device *udev)
+> > +{
+> > +     int ret;
+> > +
+> > +     if (udev->state =3D=3D USB_STATE_NOTATTACHED ||
+> > +                     udev->state =3D=3D USB_STATE_SUSPENDED)
+> > +             return -EAGAIN;
 >
-> Please use your name, not your email alias.
+> What's to prevent the state of the device from changing right after you
+> check for this?
 >
-> And as you are now using a gmail account, please set the "From:" line at
-> the top of the patch properly as is documented.  Please work with others
-> at your company that know how to do all of this if you have questions.
+
+The caller of usb_offload_put() should hold the device lock, so I
+think the state of the usb device will remain the same within
+usb_offload_put().
+
+> And why -EAGAIN, you don't mention that in the comment for the function.
 >
-> Also, this is a v2 patch, so always document what changed to warrant a
-> new version.
+> Also, to pile on, sorry, the coding style needs to be fixed up here :)
+>
+
+I'll separate these 2 states into two error handling checks and
+provide appropriate error code respectively. Thanks for your advice.
+
+> > +bool usb_offload_check(struct usb_device *udev)
+> > +{
+> > +     struct usb_device *child;
+> > +     bool active;
+> > +     int port1;
+> > +
+> > +     usb_hub_for_each_child(udev, port1, child) {
+>
+> No locking is needed for this loop at all?  What happens if a device is
+> added or removed while it is looping?
+>
+
+Currently the expectation is that all the downstream usb devices
+should either go to suspend or be marked as "offload_at_suspend".
+Based on this, is there still a chance that usb devices are being
+added or removed? My understanding is device addition/removal requires
+locks for the upstream usb device, which we've already acquired before
+entering usb_offload_check().
+
+> > +             device_lock(&child->dev);
+> > +             active =3D usb_offload_check(child);
+> > +             device_unlock(&child->dev);
+> > +             if (active)
+> > +                     return true;
+> > +     }
+> > +
+> > +     return !!udev->offload_usage;
+>
+> But the state can change right afterwards, so no one can do anything
+> with this value, right?  What is is used for?
 >
 > thanks,
 >
 > greg k-h
+
+If we could ensure that all the downstream usb devices satisfy the
+following conditions, could the state still change?
+1. usb devices either are suspended or marked as "offload_at_suspend".
+2. "offload_usage" could only be modified when the usb device is
+neither suspended nor marked as "offload_at_suspend".
+Regarding point 1, I'll update the function description to state the
+function should only be called after we ensure the downstream usb
+devices are either suspended or marked as "offload_at_suspend".
+Regarding point 2, I'll update the usb_offload_get()/usb_offload_put()
+so that "offload_usage" changes only when the device is active and not
+marked as "offload_at_suspend".
+
+Regards,
+Guan-Yu
 
