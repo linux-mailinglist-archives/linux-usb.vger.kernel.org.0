@@ -1,55 +1,87 @@
-Return-Path: <linux-usb+bounces-24016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24017-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77EF1AB93B4
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 03:37:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50D75AB94D2
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3026C3AD66C
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 01:36:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D24F1BC4B2B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 03:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50FD22256B;
-	Fri, 16 May 2025 01:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9EFE22A4CD;
+	Fri, 16 May 2025 03:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GtS5xLwY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8A8216602;
-	Fri, 16 May 2025 01:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D34157E6B;
+	Fri, 16 May 2025 03:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747359394; cv=none; b=M1khtzSc4+Ad5Q0bEniF3EvNZ3YXWLC/0V4ewVJ0HFt4RLHaR6QfQoOcqtkHw8Qu412Dn3rZ75ocXXYZUjGopkbFNQYlU9Nd83pM/HuT1nBmz0h6RbDX5Lfr3W49yO5zxMq3+OoeSo4KfwKWFkTiW5Enz1mNBb0jaLFM1k8IAqs=
+	t=1747366811; cv=none; b=WQqZHU/dr3e6bs7qy3wmLIEpuKYNfp0ebKLpdpLsjQQVSvRLFv+Rhe/wIAHm3Xd1BU8wOfkR6//McuvI+DMSutGqHmmFEq4kbUuEtOQmHDLG1aeUtxyQFm42q8Xts07sYYtFGFcUaLbabaIpoHgHFGeoSiy23zKQ93roB7BhD60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747359394; c=relaxed/simple;
-	bh=sCkbU3RMh/bIIjYBcK3nrAk4RNNwNoNK1Yd3IBGCQqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=op5zx/sqBncooQeslBGA1BWbZq2YUz0fM9qvSUPs/HZSZ+mYXYXfBdfDeD2+GJ2IPKO5PHEshyEYGGsy51E0TCN2+/ae2jK7I2i05nOifbudbJC9To3MfnY2yFy5Sq/pf9hxh26D8awM/IOMNm7xyn1RG1FGQC+3G7LTzn8Q73c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [124.16.141.245])
-	by APP-05 (Coremail) with SMTP id zQCowACn4wuLliZo4bJOFg--.63396S2;
-	Fri, 16 May 2025 09:36:16 +0800 (CST)
-From: Wentao Liang <vulab@iscas.ac.cn>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ste3ls@gmail.com
-Cc: hayeswang@realtek.com,
-	dianders@chromium.org,
-	gmazyland@gmail.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1747366811; c=relaxed/simple;
+	bh=Z3ZvQcR+qZMr5q/39wrgedHCC59lo8O7hV//Rz187cU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uA4l+c5W9hcujL2QlyeZ/eTGP5lw1moLM8cdr1IYa4Sl46ed8bkrDJCmXJaPpTuRDDmfaZnk+xggr5nBHrupCBet7C6ddObGXqywYfxoLeF6TWNdezO4CWze8KeGSj3JzxTAJng2p9KzypScqAWxZTZCdqHo0ICj9ONBXUMPCSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GtS5xLwY; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22fb6eda241so22564175ad.1;
+        Thu, 15 May 2025 20:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747366809; x=1747971609; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/R39owgoQYskJ7CpqkwvTHcCWSwGQ0VHz7FMIJELl98=;
+        b=GtS5xLwYQ2uOsHG/5nuqLIJq8ovq+JuvmQwJslz06YXyABtTFTuOBDszWBXQCsyD/W
+         4UL/ZLInCeO2Bp7cnTCNYQ8AivPzPx9imCuR9JGgfPmxOkngBpqv+7FfUPEvgCmvO/py
+         rYMhBkbedg1lYvf4tDHjvWo3vr6FuGRCCxdIBqnu/nFl0s3v6iszJoJXaQaol6Xu3itc
+         G3RA5L1N8ITCFK3NT+K2kdyUmZg1p5JTNAoy5hN3Ge3bgiDvQSvpgpM5wWEdVwQsBYK+
+         JOVQwpzInHAk8GmGmVS+4JwR8S+au/wg4WQ7EmmkJRikuWnYGI0/A2SISqSAvLCnC47U
+         G6Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747366809; x=1747971609;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/R39owgoQYskJ7CpqkwvTHcCWSwGQ0VHz7FMIJELl98=;
+        b=ZV5trgvj23hXEnFgr/GPK0Go7wgHjik8Y/+6sfaMIQK/WOr+aO7Qa1mS/nyupQbkjg
+         TwWAXxuV4gAai15sikyxtidwYT/fST85hChG8f4KA2r8hBid469cYiUMpUpTTWy/O+2k
+         tN8p00G7t+D2QY8EdxaTjaTtaAcUG6eOgePqWMgvY6yq9Bv+fZHEeYQw79ayPbJzxk6w
+         LYKGHEgCzJf8AyjQpPoU0frw4hRY0AI/YLVJJyrZif09jalaXkotNqe52VJznFXvHFaa
+         HK597SpMcoPrwEQ69+h72GmS3LT6ozHjvmn/Ej7oHfJO9U38HGDzamPkQoinWyojl3DM
+         LftA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+/SCLtwRGvxyT4qwGwEtXLDsrJArmT0u0RL3woLToTkPgD8Zrj3CCZFSk/IfVqXUSWcupB0tB1kSOw2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhF26+G4v/TxgyAUvYWwNuM411I3XKXRtG0pMhIa4L43oIlBap
+	Ae699/OG8fyHbfYaMzIib714anH04XU7MidGwRLov8xrFeBXp4O45GJM
+X-Gm-Gg: ASbGnctkkuTCMIYe3JNkW4iK4tOONxeTAoajyAyBAf56uIIWotjoRS9ZED/jhmqpQt6
+	0CK0AXYY6qOQKCPIko2cN+jqF6f0vtox2mlWkN1s44H72vhvTqzjsD+Fps9VBed99CXCH7lKKNu
+	c8r3OLoaCUUU6fkJvRlarvvtkMFtupUsYs65gYgCF/5pw4dhEoxxhsAeuYAm4Zfg/HbE0IHRBgc
+	7vTbFNELf5LmEajTUC0Jgb3Tw2t/ugyNYq1WrY5tvip3QytpsI3aSkbmzX79wyaQ3AQruafWXp8
+	qiY441wfopSSyIPXfAHFkbkekYshcfL34mseTcGw3cN+Lz0OONrP30axQG/sqVUKFY4da05jatz
+	cAh3Pvu/ub3x/CDQmPrvTxDxkZKyT6SxBU1sNlKFr0pYi
+X-Google-Smtp-Source: AGHT+IHjaUQr5niEm7m1P01FxdajXDbmlvMCzpXL95Hrgbv2V4VFCIT7fnyOZE76rU6ndWn2JXe7TA==
+X-Received: by 2002:a17:903:41d0:b0:22e:3aaa:8bc5 with SMTP id d9443c01a7336-231d43bdb61mr25502355ad.24.1747366809003;
+        Thu, 15 May 2025 20:40:09 -0700 (PDT)
+Received: from localhost.localdomain (123-194-189-72.dynamic.kbronet.com.tw. [123.194.189.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4adb728sm5300755ad.60.2025.05.15.20.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 May 2025 20:40:08 -0700 (PDT)
+From: Jay Chen <shawn2000100@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] r8152: Add wake up function for RTL8153
-Date: Fri, 16 May 2025 09:35:52 +0800
-Message-ID: <20250516013552.798-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.42.0.windows.2
+	jay.chen@siemens.com,
+	Jay Chen <shawn2000100@gmail.com>
+Subject: [PATCH v3] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
+Date: Fri, 16 May 2025 11:39:05 +0800
+Message-ID: <20250516033908.7386-1-shawn2000100@gmail.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,58 +89,46 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACn4wuLliZo4bJOFg--.63396S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Wr4UGr1UWw1xGFy3XryUtrb_yoW8Jryfpa
-	y09rsFy348XFy0ga1UCr1IvrW3G398KryDGFWku34kuw4DZwn5Gw18trW0qa4vkrWkWF43
-	tFWkAFsxAwn8CrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-	0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
-	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
-	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
-	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBwkEA2gmkZUYnwAAsE
 
-In rtl8153_runtime_enable(), the runtime enable/disable logic for RTL8153
-devices was incomplete, missing r8153_queue_wake() to enable or disable
-the automatic wake-up function. A proper implementation can be found in
-rtl8156_runtime_enable().
+According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
+TRB Length (avg_trb_len) for control endpoints should be set to 8.
 
-Add r8153_queue_wake(tp, true) if enable flag is set true, and add
-r8153_queue_wake(tp, false) otherwise.
+Currently, during the Address Device Command, EP0's avg_trb_len remains 0,
+which may cause some xHCI hardware to reject the Input Context, resulting
+in device enumeration failures. In extreme cases, using a zero avg_trb_len
+in calculations may lead to division-by-zero errors and unexpected system
+crashes.
 
-Fixes: 02552754a7ac ("r8152: adjust rtl8153_runtime_enable function")
-Cc: stable@vger.kernel.org # v4.13
-Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+This patch sets avg_trb_len to 8 for EP0 in
+xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
+and improving compatibility across various host controller implementations.
+
+v3:
+- Corrected author name in commit metadata and added changelog.
+
+v2:
+- Fixed malformed patch formatting issue pointed out by maintainer.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
+Signed-off-by: Jay Chen <shawn2000100@gmail.com>
 ---
- drivers/net/usb/r8152.c | 2 ++
+ drivers/usb/host/xhci-mem.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 468c73974046..cb708b79a7af 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4004,10 +4004,12 @@ static void rtl_runtime_suspend_enable(struct r8152 *tp, bool enable)
- static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
- {
- 	if (enable) {
-+		r8153_queue_wake(tp, true);
- 		r8153_u1u2en(tp, false);
- 		r8153_u2p3en(tp, false);
- 		rtl_runtime_suspend_enable(tp, true);
- 	} else {
-+		r8153_queue_wake(tp, false);
- 		rtl_runtime_suspend_enable(tp, false);
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index d698095fc88d..fed9e9d1990c 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
+ 	ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
+ 				   dev->eps[0].ring->cycle_state);
  
- 		switch (tp->version) {
++	ep0_ctx->tx_info |= cpu_to_le32(EP_AVG_TRB_LENGTH(8));
++
+ 	trace_xhci_setup_addressable_virt_device(dev);
+ 
+ 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
 -- 
-2.42.0.windows.2
+2.43.5
 
 
