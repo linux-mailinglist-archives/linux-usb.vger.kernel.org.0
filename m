@@ -1,134 +1,137 @@
-Return-Path: <linux-usb+bounces-24017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D75AB94D2
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:40:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7B5AB94D7
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:41:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D24F1BC4B2B
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 03:40:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91E9D7B1F93
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 03:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9EFE22A4CD;
-	Fri, 16 May 2025 03:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321C522CBC4;
+	Fri, 16 May 2025 03:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GtS5xLwY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpNeCEYM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D34157E6B;
-	Fri, 16 May 2025 03:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF9A157E6B;
+	Fri, 16 May 2025 03:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747366811; cv=none; b=WQqZHU/dr3e6bs7qy3wmLIEpuKYNfp0ebKLpdpLsjQQVSvRLFv+Rhe/wIAHm3Xd1BU8wOfkR6//McuvI+DMSutGqHmmFEq4kbUuEtOQmHDLG1aeUtxyQFm42q8Xts07sYYtFGFcUaLbabaIpoHgHFGeoSiy23zKQ93roB7BhD60=
+	t=1747366906; cv=none; b=J2geOovr+6XVxDlLJF0O9fqIVmhKWe7HKQwO7lub1TK/uK3ujD1MfRhzs8QKi/CvZaf6AgLofjmwRXJw507Nw6wxIjxA+OIJz4iMOt18qfJyohzBV9+ab+ztZQXTDJZAz9s+EE6AaDygZnQpIZsbwepCn/tbib71peQUqlQvlZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747366811; c=relaxed/simple;
-	bh=Z3ZvQcR+qZMr5q/39wrgedHCC59lo8O7hV//Rz187cU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uA4l+c5W9hcujL2QlyeZ/eTGP5lw1moLM8cdr1IYa4Sl46ed8bkrDJCmXJaPpTuRDDmfaZnk+xggr5nBHrupCBet7C6ddObGXqywYfxoLeF6TWNdezO4CWze8KeGSj3JzxTAJng2p9KzypScqAWxZTZCdqHo0ICj9ONBXUMPCSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GtS5xLwY; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1747366906; c=relaxed/simple;
+	bh=WyVN/f3JMKOQ48HmDKOEVVs++v/H2ZPMhA4CZ9WQfqc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DuWWiii6UiZ7rkG1EHCpLfFqCCZDuuUZNwh+Sne64EGst/Og52WJaAWuZn0ZH0igmYiLBc6Lf+TJol+VL6G9j6+CXIRJCY7q4gd6smdCJ1CqmakYdYi2JHBZWzxhLDv9k5YAFxrO+oLKO5qcFHZOTvhdggCCYmNl5e4kYyBij1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpNeCEYM; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22fb6eda241so22564175ad.1;
-        Thu, 15 May 2025 20:40:09 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54ea69e9352so2208565e87.2;
+        Thu, 15 May 2025 20:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747366809; x=1747971609; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/R39owgoQYskJ7CpqkwvTHcCWSwGQ0VHz7FMIJELl98=;
-        b=GtS5xLwYQ2uOsHG/5nuqLIJq8ovq+JuvmQwJslz06YXyABtTFTuOBDszWBXQCsyD/W
-         4UL/ZLInCeO2Bp7cnTCNYQ8AivPzPx9imCuR9JGgfPmxOkngBpqv+7FfUPEvgCmvO/py
-         rYMhBkbedg1lYvf4tDHjvWo3vr6FuGRCCxdIBqnu/nFl0s3v6iszJoJXaQaol6Xu3itc
-         G3RA5L1N8ITCFK3NT+K2kdyUmZg1p5JTNAoy5hN3Ge3bgiDvQSvpgpM5wWEdVwQsBYK+
-         JOVQwpzInHAk8GmGmVS+4JwR8S+au/wg4WQ7EmmkJRikuWnYGI0/A2SISqSAvLCnC47U
-         G6Hw==
+        d=gmail.com; s=20230601; t=1747366901; x=1747971701; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cv+Z5EyhamaRdEUyPKUKKXRXh2hCvdemmvs6xDGcfz0=;
+        b=LpNeCEYMjDBWnYg7fd1DSAwDbA+L2rGlhSVAmHgP3S0TBAVB7AHlGz+sUFO+BS3wq/
+         Vz+2MnkHYEaQ+hN94JX7NAb/fR2yNYxsfkY7i8UAyHiiFb3rRbxWeLSDEbXOOf3uYrbH
+         7BBEt0zImi4wk9IG2sTIVCXaVFE9wyWaPtCicqWQK/XCkuB76925INEhIuTmidy+B5/o
+         1qfvmSVvvArDr66+50++5cZ6PZEnvDIu/zNUSdrgrcyTbIZjAFWL3cyiT7WrTYhCwTMm
+         rt/tNRLUUvChr0fNi+FhJ8Qtlfp59w6PAyLmw8b56vjfXczaBPoTt0WHy6bLidwIUvrj
+         kvlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747366809; x=1747971609;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/R39owgoQYskJ7CpqkwvTHcCWSwGQ0VHz7FMIJELl98=;
-        b=ZV5trgvj23hXEnFgr/GPK0Go7wgHjik8Y/+6sfaMIQK/WOr+aO7Qa1mS/nyupQbkjg
-         TwWAXxuV4gAai15sikyxtidwYT/fST85hChG8f4KA2r8hBid469cYiUMpUpTTWy/O+2k
-         tN8p00G7t+D2QY8EdxaTjaTtaAcUG6eOgePqWMgvY6yq9Bv+fZHEeYQw79ayPbJzxk6w
-         LYKGHEgCzJf8AyjQpPoU0frw4hRY0AI/YLVJJyrZif09jalaXkotNqe52VJznFXvHFaa
-         HK597SpMcoPrwEQ69+h72GmS3LT6ozHjvmn/Ej7oHfJO9U38HGDzamPkQoinWyojl3DM
-         LftA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+/SCLtwRGvxyT4qwGwEtXLDsrJArmT0u0RL3woLToTkPgD8Zrj3CCZFSk/IfVqXUSWcupB0tB1kSOw2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhF26+G4v/TxgyAUvYWwNuM411I3XKXRtG0pMhIa4L43oIlBap
-	Ae699/OG8fyHbfYaMzIib714anH04XU7MidGwRLov8xrFeBXp4O45GJM
-X-Gm-Gg: ASbGnctkkuTCMIYe3JNkW4iK4tOONxeTAoajyAyBAf56uIIWotjoRS9ZED/jhmqpQt6
-	0CK0AXYY6qOQKCPIko2cN+jqF6f0vtox2mlWkN1s44H72vhvTqzjsD+Fps9VBed99CXCH7lKKNu
-	c8r3OLoaCUUU6fkJvRlarvvtkMFtupUsYs65gYgCF/5pw4dhEoxxhsAeuYAm4Zfg/HbE0IHRBgc
-	7vTbFNELf5LmEajTUC0Jgb3Tw2t/ugyNYq1WrY5tvip3QytpsI3aSkbmzX79wyaQ3AQruafWXp8
-	qiY441wfopSSyIPXfAHFkbkekYshcfL34mseTcGw3cN+Lz0OONrP30axQG/sqVUKFY4da05jatz
-	cAh3Pvu/ub3x/CDQmPrvTxDxkZKyT6SxBU1sNlKFr0pYi
-X-Google-Smtp-Source: AGHT+IHjaUQr5niEm7m1P01FxdajXDbmlvMCzpXL95Hrgbv2V4VFCIT7fnyOZE76rU6ndWn2JXe7TA==
-X-Received: by 2002:a17:903:41d0:b0:22e:3aaa:8bc5 with SMTP id d9443c01a7336-231d43bdb61mr25502355ad.24.1747366809003;
-        Thu, 15 May 2025 20:40:09 -0700 (PDT)
-Received: from localhost.localdomain (123-194-189-72.dynamic.kbronet.com.tw. [123.194.189.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4adb728sm5300755ad.60.2025.05.15.20.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 20:40:08 -0700 (PDT)
-From: Jay Chen <shawn2000100@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jay.chen@siemens.com,
-	Jay Chen <shawn2000100@gmail.com>
-Subject: [PATCH v3] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
-Date: Fri, 16 May 2025 11:39:05 +0800
-Message-ID: <20250516033908.7386-1-shawn2000100@gmail.com>
-X-Mailer: git-send-email 2.43.5
+        d=1e100.net; s=20230601; t=1747366901; x=1747971701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cv+Z5EyhamaRdEUyPKUKKXRXh2hCvdemmvs6xDGcfz0=;
+        b=oigZOvtFoyO6HtKAoHWlGSKj7qHVIZnimGfIsFklf0r+/+mV1XLPvdX/CmTkxtIIQw
+         28Esuk1deqn1qU2m/T+HVdeREL9Jz//uSDMXU98MpjZOh9NzHL7+F3TwsMuTR9etP/Rb
+         FYXse33lbO/ArPxehUNRz68yy6s3uPfDeuXCxtf6UHuNlyblBh2JCG1edhAYC7r4IBN2
+         zm5vkvB1s2cRh7+VHuHXJtC4wnAuMHdUL8PI+AWY4e7ARKT1Vt9PWOHUJAeNeKcLojtP
+         ghWNeD6OQ899G2W1XDjnYRAe2F2fz7c2T3JjC+0YRQe/IDZwIT8xkgVGuxqqkGqWmmRz
+         WvEA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZlxc4IbgvP2tk1ppvqs6s1ED6dYh1l7Hr2RnLirVi+dwB/wq6Lr52AJDrhK5845Zf1GWDik4iqxzqZNU=@vger.kernel.org, AJvYcCVNvbIu6VSFEdF8e+mrO5Srb1/RSKHeXp4at/SYGdYe3hXRy/P9Ln3B6nBODm9gVwipZS9Qi19nuQXX@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqnrwd/UPEQMQHX/019MZjRTpN44eq3iN/7PYShVb3KuY4+61X
+	83IMYKOi34Hn4XCE+bsQRsjoBqqaq4Wd3XfqfzLuIN+RUm416x86LOCf0RCQdJfAWByKzRg6iVM
+	avp8AlMWjOQWVCw8Nu6HNNpnP3zR6r+o=
+X-Gm-Gg: ASbGncstVR4N2DszSjJTAUnhi6vwguuS5iQBKKcJqzvCm26qe/wc5TT3QAp28miMhfy
+	aGoFuTWampk/VDAv1sAO+l0AkTMAvh55KSCfZqolP4R0h0FNMkKiwL4nFPjlqh6/4AX4SB4AZ4g
+	Nnxr5gAZaAkvudvwRlxGFpV2S4z34lr5SBPHDiHCSC3o53aoCy+gP53Rs+oxkpTsjrzlc=
+X-Google-Smtp-Source: AGHT+IEYUFZ8fuKrx/1pcVQ6FEvGvLjYdBQdtB8zshOOJU4Yd+djbgw8jzpXtv1Xkjh3nzmr/oJYjoiNaMpJGWIccKE=
+X-Received: by 2002:a05:6512:228a:b0:549:8d16:7267 with SMTP id
+ 2adb3069b0e04-550e962697cmr235202e87.10.1747366900677; Thu, 15 May 2025
+ 20:41:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250514134011.16285-1-shawn2000100@gmail.com> <2025051444-among-posh-afcb@gregkh>
+In-Reply-To: <2025051444-among-posh-afcb@gregkh>
+From: =?UTF-8?B?6Zmz5a2Q5r2U?= <shawn2000100@gmail.com>
+Date: Fri, 16 May 2025 11:41:29 +0800
+X-Gm-Features: AX0GCFvQ2npPTUqwgxDkpb5F4pgkUEaZ5qECP3wQm-QLOHQh80mchMkIrgmMY7U
+Message-ID: <CAPwXWsD2JHO+MQS5+5+Zi8ic4uFY6G24Ug2Jd2dZ3zfSDvuxtQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: xhci: Set avg_trb_len = 8 for EP0 during Address
+ Device Command
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
-TRB Length (avg_trb_len) for control endpoints should be set to 8.
+Hi Greg,
 
-Currently, during the Address Device Command, EP0's avg_trb_len remains 0,
-which may cause some xHCI hardware to reject the Input Context, resulting
-in device enumeration failures. In extreme cases, using a zero avg_trb_len
-in calculations may lead to division-by-zero errors and unexpected system
-crashes.
+I got it, thank you so much for the effort!
 
-This patch sets avg_trb_len to 8 for EP0 in
-xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
-and improving compatibility across various host controller implementations.
+I already patched a newer version
+Link: https://lore.kernel.org/linux-usb/20250516033908.7386-1-shawn2000100@=
+gmail.com/T/#u
 
-v3:
-- Corrected author name in commit metadata and added changelog.
 
-v2:
-- Fixed malformed patch formatting issue pointed out by maintainer.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
-Signed-off-by: Jay Chen <shawn2000100@gmail.com>
----
- drivers/usb/host/xhci-mem.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index d698095fc88d..fed9e9d1990c 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
- 	ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
- 				   dev->eps[0].ring->cycle_state);
- 
-+	ep0_ctx->tx_info |= cpu_to_le32(EP_AVG_TRB_LENGTH(8));
-+
- 	trace_xhci_setup_addressable_virt_device(dev);
- 
- 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
--- 
-2.43.5
-
+On Wed, May 14, 2025 at 10:46=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
+g> wrote:
+>
+> On Wed, May 14, 2025 at 09:40:08PM +0800, jay.chen wrote:
+> > According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
+> > TRB Length (avg_trb_len) for control endpoints should be set to 8.
+> >
+> > Currently, during the Address Device Command, EP0's avg_trb_len remains=
+ 0,
+> > which may cause some xHCI hardware to reject the Input Context, resulti=
+ng
+> > in device enumeration failures. In extreme cases, using a zero avg_trb_=
+len
+> > in calculations may lead to division-by-zero errors and unexpected syst=
+em
+> > crashes.
+> >
+> > This patch sets avg_trb_len to 8 for EP0 in
+> > xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
+> > and improving compatibility across various host controller implementati=
+ons.
+> >
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220033
+> > Signed-off-by: jay.chen <shawn2000100@gmail.com>
+>
+> Please use your name, not your email alias.
+>
+> And as you are now using a gmail account, please set the "From:" line at
+> the top of the patch properly as is documented.  Please work with others
+> at your company that know how to do all of this if you have questions.
+>
+> Also, this is a v2 patch, so always document what changed to warrant a
+> new version.
+>
+> thanks,
+>
+> greg k-h
 
