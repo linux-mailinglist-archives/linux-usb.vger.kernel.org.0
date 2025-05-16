@@ -1,127 +1,102 @@
-Return-Path: <linux-usb+bounces-24043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB6E7AB9EA8
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 16:33:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 744F0ABA1B6
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 19:14:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBB099E0AC6
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 14:32:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 553E0188A614
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 17:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A70218C03F;
-	Fri, 16 May 2025 14:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A277E27054F;
+	Fri, 16 May 2025 17:14:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ib0nE5Bk"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="fwk8H0EY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E350216F8E9
-	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 14:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B14A200B9F;
+	Fri, 16 May 2025 17:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747405987; cv=none; b=bvGXyS4tKu4HNa82Rxy0kKIH2lGhwYLLM+/tAXRpaIpwhNWLU79Ycv0PwLAyR4rnyGsyAwd7GoU8h+bVfVQfMLb+sDmHcAlwcbFX6WGotivzGxeDFsYJ964B1+HhXojHme09IDec7/T+SZ6b7Kk7WD84fI5ofcVezDZYctkAqzw=
+	t=1747415661; cv=none; b=I+l3eqbXO/ncl7ZhrWeNvIosQXi6wJGZ55zeTgdOGR08KdctB9CaX5EWXnBWgwW0orEbMsv+Aw0onlMJyG2qnRDEFdqL9/aBKJqL9mshNJJ2tZkLO5DuVVVySgqMXp949OIt06Q1j/NitM4UQzRiujfnemdsrw47DUxkM5hmbxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747405987; c=relaxed/simple;
-	bh=7/j13nJR2Kakih/RHUllSV1ilEL+u9QciiQCL805t2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kNcxtHkA+a0rk4DZsUlyXGmtUnDJTkdgv5Ys0ywvPmuAoohPq8BNUSoQ1hVrija9VRFBRF/u02Y5OT2ynRPAWZocCZPDjBIHxgB9Gd29n9kVCavrxdo2NqD+x64ktQxIaECTLY0vVXpoAPRSLGvgjp7bVQzYRZiX0CrxnGBXXvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ib0nE5Bk; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747405986; x=1778941986;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7/j13nJR2Kakih/RHUllSV1ilEL+u9QciiQCL805t2Y=;
-  b=Ib0nE5Bkv5QJCC+pOCbuXt34T6G9GdqYqafb6Hgn+duTG+nPi04dWJMp
-   S7ucdFOHxO3u3QEJIb1Zgz/BpjsHCLB2rruImnfiiQpmEqpuwBYuIWMGD
-   6l/YeZGorU6TdZ2h9AMSEU2RRrB/rd1ibl6Jx4MGajKtkepPFW0To75FR
-   uoajMPr235QKRREJKPPMIa8hP25c9A5H3EtCXnGq8FGttkwZ+Dbqn3UJH
-   K+vW8FXEaCpdaLbtWrH34pOxfUjPg7iFswX/o3aZOSs542F+Kwbp+qb3d
-   d5KZtF3Lro9AO3eYkjKoHMW/LHSIf0eUKi7zm/7G4aPVhS0zhRQ2uoQVq
-   A==;
-X-CSE-ConnectionGUID: XAIO4wo0S+22BkMcoMfS7g==
-X-CSE-MsgGUID: lD5d6lGfRMK0rNsyNp2omA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49519767"
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="49519767"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 07:33:05 -0700
-X-CSE-ConnectionGUID: yyba99wJRiKAGlkwfGAl9Q==
-X-CSE-MsgGUID: M3iys2HzSK6VldYQkFLwQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="143827098"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.120.28]) ([10.245.120.28])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 07:33:00 -0700
-Message-ID: <2f38bb7e-d9d3-49a4-a5ea-c42f98be07ee@linux.intel.com>
-Date: Fri, 16 May 2025 17:32:35 +0300
+	s=arc-20240116; t=1747415661; c=relaxed/simple;
+	bh=b9Wp7ZxxHE3QqSQgRGTlMLm9m9x2s19tjDrqdDOk3rA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=JQvJXbtJ3MRdM2eSOeNBlfvOXNfMBIGbW+G6k/Vj76ox404imw91xYAbP90CXUlbrx9lIQBZk4JqyorMDvoSK3Bz1yTawxyyAxPZlNFCKQ99WjXBWWgFqIvPBWTXCRps6UdlxraP/w4g4854Sf5cWxfEI/h7MTHuNI+cxXh/FGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=fwk8H0EY reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=ITvCj/071s0fxBqJc3xYLvKHyLNlNZYigmrM6DCxXek=; b=f
+	wk8H0EYzh70d6sIE2XJ1+nZ/0MaQB5DEAyK1tfzNYtg0uidsJDjJxauQrMFLbSkc
+	byzTRHBf6fPJ2lLL6B+YTMFJBQdFJA4Rpn7oKKlDIG6vQ1pHUqMGkewAyDBUWhso
+	BFswTQolaBkRAOy2WT/aE+QUCvSMOz/sB4UpN/icfc=
+Received: from 00107082$163.com ( [111.35.191.17] ) by
+ ajax-webmail-wmsvr-40-113 (Coremail) ; Sat, 17 May 2025 01:13:22 +0800
+ (CST)
+Date: Sat, 17 May 2025 01:13:22 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Oliver Neukum" <oneukum@suse.com>, Jes.Sorensen@gmail.com
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+	stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] USB: core: add a memory pool to urb for
+ host-controller private data
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <7419cfbc-1269-46fc-95b9-502e6fe23226@suse.com>
+References: <20250512150724.4560-1-00107082@163.com>
+ <20250513113817.11962-1-00107082@163.com>
+ <51fe78fb-5d73-458f-b3d1-fc84cd6c5869@suse.com>
+ <484fe5f7.9d28.196cea2c6db.Coremail.00107082@163.com>
+ <7419cfbc-1269-46fc-95b9-502e6fe23226@suse.com>
+X-NTES-SC: AL_Qu2fBfiauk4r5CSYZukXn0oTju85XMCzuv8j3YJeN500oiTn6zACZm9AEmD4ws6ANDusoAiafxpE9+pkWK59UqXBml4MfZoTCCwoxars1hD0
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 23/24] usb: xhci: add warning message specifying which Set
- TR Deq failed
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
- <20250515135621.335595-24-mathias.nyman@linux.intel.com>
- <20250516144310.12b4f072@foxbook>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20250516144310.12b4f072@foxbook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-ID: <4f421ea5.ac18.196da1614e9.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:cSgvCgD3n_ozcidozo0GAA--.52657W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqAVPqmgnX6tR2AAIsy
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-
-
-On 16/05/2025 15.43, Michał Pecio wrote:
-> On Thu, 15 May 2025 16:56:20 +0300, Mathias Nyman wrote:
->> From: Niklas Neronin <niklas.neronin@linux.intel.com>
->>
->> Currently, errors from the Set TR Deq command are not handled.
->> Add a warning message to specify the slot, endpoint, and TRB address
->> when a Set TR Deq command fails. This additional information will aid
->> in debugging such failures.
->>
->> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->>  drivers/usb/host/xhci-ring.c | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-ring.c
->> b/drivers/usb/host/xhci-ring.c index e3c823e1caee..eff6b84dc915 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -1448,6 +1448,11 @@ static void xhci_handle_cmd_set_deq(struct
->> xhci_hcd *xhci, int slot_id, unsigned int ep_state;
->>  		unsigned int slot_state;
->>  
->> +		xhci_warn(xhci, "Set TR Deq error for TRB 0x%llx in slot %d ep %u\n",
->> +			  (unsigned long long)xhci_trb_virt_to_dma(ep->queued_deq_seg,
->> +						ep->queued_deq_ptr),
-> 
-> Is printing this pointer actually useful? It doesn't tell why
-> the error happened. It will not relate to other messages - the
-> command failed, so dequeue stays at its old position.
-> 
-
-Apologies, I should have retracted this patch as part of the Set TR Deq series.
-
-I still plan on trying to add the "Set TR Deq Error Handling" series in the future,
-with a few tweaks (infinite re-try loop). Then each case will have its own
-tailored warning, while this warning will print general error info.
-
-Best Regards,
-Niklas
-
+CgoKQXQgMjAyNS0wNS0xNCAyMDowMzowMiwgIk9saXZlciBOZXVrdW0iIDxvbmV1a3VtQHN1c2Uu
+Y29tPiB3cm90ZToKPgo+Cj5PbiAxNC4wNS4yNSAxMzo1MSwgRGF2aWQgV2FuZyB3cm90ZToKPiAg
+Cj4+IEkgYW0gbm90IHF1aXRlIHN1cmUgYWJvdXQgdGhlIGNvbmNlcm4gaGVyZSwgZG8geW91IG1l
+YW4gc29tZWJvZHkgY3JlYXRlIGEgdXJiLAo+PiBhbmQgdGhlbiB1c2JfaW5pdF91cmIoKSBoZXJl
+LCBhbmQgbmV2ZXIgdXNlIHVyYl9kZXN0cm95IHRvIHJlbGVhc2UgaXQ/Cj4KPlllcy4KPgo+PiAK
+Pj4gVGhhdCB3b3VsZCBjYXVzZSBtZW1vcnkgbGVhayBpZiB1cmJfZGVzdHJveSBpcyBub3QgY2Fs
+bGVkLi4uLi4uQnV0IGlzIHRoaXMgcmVhbGx5IHBvc3NpYmxlPy4KPgo+SSB0aGluayBhIGZldyBk
+cml2ZXJzIHVuZGVyIGRyaXZlcnMvbWVkaWEgZG8gc28uCgoKSSBzZWFyY2ggdGhyb3VnaCBjb2Rl
+cywgc29tZSBkcml2ZXJzIHdpbGwgdXNlIHVzYl9mcmVlX3VyYiB3aGljaCB3b3VsZCBpbnZva2Ug
+dXJiX2Rlc3Ryb3k7CkJ1dCB0aGVyZSBhcmUgaW5kZWVkIHNldmVyYWwgZHJpdmVycyB1c2UgdXJi
+IGFzIGEgc3RydWN0IG1lbWJlciwgd2hpY2ggaXMgbm90IGRpcmVjdGx5IGttYWxsb2NlZCBhbmQg
+CnNob3VsZCBub3QgYmUga2ZyZWVkIHZpYSB1c2JfZnJlZV91cmIuLi4uLiBJdCB3b3VsZCBpbnZv
+bHZlIGxvdHMgb2YgY2hhbmdlcy4uLi4uCgpPbiB0aGUgYnJpZ2h0IHNpZGUsIHdoZW4gSSBtYWRl
+IHRoZSBjb2RlIGNoZWNrLCBJIG5vdGljZSBzb21ldGhpbmcgb2ZmOgppbiBkcml2ZXJzL25ldC93
+aXJlbGVzcy9yZWFsdGVrL3J0bDh4eHh1L2NvcmUuYwoKCjUxNjggICAgICAgICAgICAgICAgIHVz
+Yl9mcmVlX3VyYigmdHhfdXJiLT51cmIpOwo1ODY4ICAgICAgICAgICAgICAgICB1c2JfZnJlZV91
+cmIoJnJ4X3VyYi0+dXJiKTsKNTg5MCAgICAgICAgICAgICAgICAgdXNiX2ZyZWVfdXJiKCZyeF91
+cmItPnVyYik7CjU5MzggICAgICAgICAgICAgICAgICAgICAgICAgdXNiX2ZyZWVfdXJiKCZyeF91
+cmItPnVyYik7Cgp1c2JfZnJlZV91cmIgd291bGQga2ZyZWUgdGhlIHVyYiBwb2ludGVyLCB3aGlj
+aCB3b3VsZCBiZSB3cm9uZyBoZXJlIHNpbmNlIHJ4X3VyYiBhbmQgdHhfdXJiIGRlZmluZWQgCmlu
+IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsOHh4eHUvcnRsOHh4eHUuaAoxOTQ0IHN0
+cnVjdCBydGw4eHh4dV9yeF91cmIgewoxOTQ1ICAgICAgICAgc3RydWN0IHVyYiB1cmI7CjE5NDYg
+ICAgICAgICBzdHJ1Y3QgaWVlZTgwMjExX2h3ICpodzsKMTk0NyAgICAgICAgIHN0cnVjdCBsaXN0
+X2hlYWQgbGlzdDsKMTk0OCB9OwoxOTQ5IAoxOTUwIHN0cnVjdCBydGw4eHh4dV90eF91cmIgewox
+OTUxICAgICAgICAgc3RydWN0IHVyYiB1cmI7CjE5NTIgICAgICAgICBzdHJ1Y3QgaWVlZTgwMjEx
+X2h3ICpodzsKMTk1MyAgICAgICAgIHN0cnVjdCBsaXN0X2hlYWQgbGlzdDsKMTk1NCB9OwoKCkhp
+LCBKZXMKCldvdWxkIHlvdSB0YWtlIGEgbG9vaz8gSSBmZWVsIHVzYl9mcmVlX3VyYiBuZWVkcyBh
+IHBvaW50ZXIgd2hpY2ggaXMgYWxsb2tlZGQgZGlyZWN0bHksIGJ1dCBJIHdvdWxkIGJlIHdyb25n
+Li4uLi4KCgpUaGFua3MKRGF2aWQKPgo+CVJlZ2FyZHMKPgkJT2xpdmVyCg==
 
