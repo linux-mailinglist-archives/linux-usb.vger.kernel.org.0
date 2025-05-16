@@ -1,220 +1,125 @@
-Return-Path: <linux-usb+bounces-24020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24021-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9138EAB9567
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 07:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7F5AAB9605
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 08:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC0217EABA
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 05:10:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 638B55026A6
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 06:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFDC21CC7D;
-	Fri, 16 May 2025 05:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B49224B09;
+	Fri, 16 May 2025 06:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hoUxlBPg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyrfVW3k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095061FAA
-	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 05:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809E11D88AC;
+	Fri, 16 May 2025 06:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747372245; cv=none; b=Y6tlBUKtDUc9ILqUXqFVafdO/kUXtin4bIH6MaTDfQSiU5ajPr9wURmsW5A+WUFO8ePXOR85Q0seGu8M1DOtjTH8WBTTNOctCv2e5sLOmOaBwibQl7ren8yoaj5m89Qo15hn67FGRSX8PcLhLNdualA+PvZxQTGy1hRSnrVoz3A=
+	t=1747377218; cv=none; b=QDu+MvvzkE9unJdwTcJdxJMjIviVFd8EIXbGe92Kw/HBc9yv9eMc0my2ylfPj79g602A+ZftmQOOour55fHyobp/IpyYqgstN/Bbly8Vdm7yCmhCc87glYcy048ZUkW+X/A36A/CsXX0Le90f2gXt7md0TNeVQDs3yfcf7sous8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747372245; c=relaxed/simple;
-	bh=PBgrfDfjGMRv2RNzmim1ZNyY5R2PME9uUKJ/LS6bXtI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IDleFrrdAv4lW20fnN/+uPPA7rNuTurtgARHEnNLleBzQo5KtvED0qekt9yLjoFFw8avOeO1X5GZimvwdX/NZiDaYAe/PgTJptoibfmbMQPY93xlR1EDbF6Wp+ZaoC1widDyQmuhueC7ELFI63No/0UCgiN9m8TYZ5E8eBtiUlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hoUxlBPg; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7302a769534so1513224a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 15 May 2025 22:10:43 -0700 (PDT)
+	s=arc-20240116; t=1747377218; c=relaxed/simple;
+	bh=ITiHYvPVbIk9Cqhu0/8qKyPCQGSeXSdTjNGJyN7gjH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JTAf5sSxvBCoNcNbhtqmPGdTYndvF/y0i5/Pqk/wkKsmwT6leQobepQ6qn1XiTcptALWu1oiHhNo5QLzx1UWG9JMzFPSV/7BCZf5ZtzmIiVnIi+Ops6Nqegh3YK25IHjObxootiQIsThMeWBXv0cqdpc7V/uY6l8RAid6RgrKZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyrfVW3k; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54e816aeca6so2361162e87.2;
+        Thu, 15 May 2025 23:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747372243; x=1747977043; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1747377214; x=1747982014; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rS14ehsKTRh0Yu2NCsmeKqi7C6zemUJM36Ay6+7ClPM=;
-        b=hoUxlBPgFMFWuvqAR+h3ExrVFQW3YwCJq8ua0+txH0fNV0EQ94vuZ5ECFk7ltBkefI
-         IeyFS2SmRrZyvK8r80z3s3JX6tSGvmRkjQHxFR4RbU5ARRm5tiIXc1aHVCLYHbfE3lIE
-         0cnhJm+QZ9fbFhpUwocBxET4Xc2Hc3ZGh7A5lIko26N//IsFtgJrPtc2CHznWP+mQ3Rx
-         HOEokBD+OkSmL/3S2d9vLVpOAHbAlCbYS5WlMprPtUnyWDFbO5vvgprIbqSKlQWS5Ljj
-         hODEXAsX4NhuUIr2Alj0uEZECFG9PA7DMxq1LM7j13PMj2zg/ltdo+qPC1VTlvuOBP76
-         at5Q==
+        bh=SBTw7n47tA9Za/6wjkrYsmCiKYOHmpnvJ9njSK+TKlc=;
+        b=TyrfVW3kpw2t2MLaY2NqUpFrFM1gC9j4Yio7aSGz4HW3Ncsh7YpQ79U/1PCc1h7Bs0
+         em8SSPUsIMMsZ5U/FEneK6MWbPOGIuBlf+cOtV/XdhTipUoq6lFI+ZNpAvMppm71VN42
+         n+X6zj/7Z/VvHhfEc1zoH78wglZ+0G6bpOoL1H6znYV5Cm7mJdyeqcMpYO5zvJyHAkKY
+         xdu0GOO3cnaQm2KtsKmXVWHN5i5EgP2C8hCCJjqb2Yc4X4OpVosXJKvLHut7zTQFtLSM
+         5ai8Oxkft+gb1fl3ph+sFveilrusaXqCAqBuUliB0WqWQCptCbYSNZyHQmcWSkt5gWoc
+         IfNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747372243; x=1747977043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1747377214; x=1747982014;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rS14ehsKTRh0Yu2NCsmeKqi7C6zemUJM36Ay6+7ClPM=;
-        b=ojGlzPBfCpME+q7ZWM2zghxIpElDn0Siq/DPEppPNayizdyNpWy4ETIt2irtEETDpq
-         erPj3gp6/fIohJpipnegApOgdYzp2j0B6pTsMzBJ3oTdFQcSvLpdnzmkDtJxOTgbeThm
-         Vw8l9VY+wnZRi3qGLejmJSCwk5cRgpzAIsbvG9fmdYIKOS26FGGewXEyvvfMf8cLxvYs
-         pYFVA1+dNvJtGiE8pd8fa9ke3PZeprSorPo4p+ktL81sy4F0YzKA+4u1O/0NS7xW6wXt
-         E8HZdkdrgCQblng9tSNfHAx/XzuVp62FRKH3ZEdrT9oZogqbsU8BNfp/fTf6IGyFBR3f
-         gz3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUXEJpbfv2MX8RKN83EBQE8MKSApChq2Z1MGCM6qglvqXYn2/1YL5UYnQjA8I4zxab/+GIUZVsVnIE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlxuX+20P58KU2xL5ThPy+FhSNkJ51TC2HL3UdJ4bGv6Dl7Xac
-	+V4tZU4pIQVl+PVXB4+/h8yqILCoHYxaTOkUVrmFGybwYf9ileKUrTzvR34ABF11zQhCFH1gDtQ
-	JyDwdvQ4BxIsKrPMjtyEbN2h9OBXr0TI49I4HSEBI
-X-Gm-Gg: ASbGncsmavlm8Jv7dw4sA0s6GMXCH0CTiEYf+RYWH+hovG1j6UQSbkQ2ZzyBkzW8Cy/
-	XsHGgIKlPK9ICDXw/nFvEH+3NWSQeD6kvRzVrP2iE2GdT0ZBEIUBnIPdGwu17G+0A5QxqmKGbIS
-	10igaoRCMN1UC3gqlt0hZOCwsZ5mKXS7Dqnug8Sn290iomfRz5QII3XLdD2L4OTqy5wPkyzhcdQ
-	/WaP49ANkSTRKc=
-X-Google-Smtp-Source: AGHT+IG+EBPZr1Odrxpf1BvUc8QTj8b6UyQ5Vr/g6q7DusGK32UF2knRIwviRux7xsAeZ0mZs0vqZ6oxPUhtdWbBVBA=
-X-Received: by 2002:a05:6870:a7a5:b0:2c8:361a:da77 with SMTP id
- 586e51a60fabf-2e3c1ed9f95mr1231548fac.26.1747372242630; Thu, 15 May 2025
- 22:10:42 -0700 (PDT)
+        bh=SBTw7n47tA9Za/6wjkrYsmCiKYOHmpnvJ9njSK+TKlc=;
+        b=SjzeirCs2n2u2C5j8/5l5zjAG3Yr4/2lsp2d+s1sb4bO6nOMaaDGM9W7Uly303jSDO
+         XWWANuv2JNGse7JzqwK2udknytCjvGn2AftvxDp9dcTTxIwM71yZ/glccXnTISQJPkfR
+         bzFzK4fB6GemzRfTYOD2aMwJERqy7w5fBhCsc8ehgb06WuZenNBXoHA4rYbnv6EPwD+f
+         iqGnxYhw/HqLgo9RNUFK2VZFlQBRp4fxdTQB0J8paoWqlRWN2TGQPLBKK5AOjX3xWxXV
+         AMOi1fLBTl+dM5i1M1EFP/CyYIE/vOTLd4NkCP0+e5FS8sCw60bTUGXB1nTvZbWjv1SM
+         j84Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUWswgoxlTBGU0U9Z7LbhipjoKfjBA4vHkD0Ysjp5YTv6EKU7BpVvz0vAnoNnUvojbCm79WVW3L@vger.kernel.org, AJvYcCVibBifrna5eTRWjs7eVQfqiCeygXPMV9+0GCasZJELK2iX34gC/mAI4qlIk/SUjLRUh4G7KKaDMavZ/Y8=@vger.kernel.org, AJvYcCX8+JgfsQhDBTEwgJQzp89vEDewzuOkKUkyajtcjZPzhjX+6l4SopYg6BYy4iEYwEiERs/jtrWWiDoL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym2FK5R98JGcolF9zf55poJ4gflxpp5TCb6HsFQCqjx8G+LjIw
+	//VDQCr1DSRBDODFUcud5AeKK1lGf+CXvFCXjV7jBi3stkpmTJwgGSWS
+X-Gm-Gg: ASbGnctluEClmoMAX3ZtUCMbGbZfPDTlpl3SF3YKuFOV6UsRItymfpIehlF/3Gvi/pi
+	9khYKxdYJuMcpElzDj9VrT5FdyRC7dpgkm+l7ox8FzoMPi7v3LWEwSfZtUTk0l3jm4Omud9rl2j
+	MXg+KMN40J3tLMJoCMvKAbfSyV+DNENg2qaaaw90nNx3Kk+OC/Oikom2DV5DYRMgLilAn0kxcHt
+	Vx48zIq5dPPS2QlH7Lv36IE1HEAHwsMqjvQLvTYGFSP1+5VYiH7PQ9N9js2z8COPG4VBru0SlIi
+	1215BUl6wIJ1SET8CD9oXsQ+Y6v5LtkLdNM1Rm6FNpxwoCknstn3zikjWJYDxzbwypp0gf9UwUF
+	W+Ow=
+X-Google-Smtp-Source: AGHT+IFXuvhTg0HwM4B7G448RH8kbjZAcl27kGgPEEicb7hYFOL5VilJkbVwHq1ibwD1yMKVeyUIrQ==
+X-Received: by 2002:a05:6512:2616:b0:54d:6aa1:8f5a with SMTP id 2adb3069b0e04-550e71a732dmr438740e87.13.1747377214256;
+        Thu, 15 May 2025 23:33:34 -0700 (PDT)
+Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e6f30e6csm281840e87.67.2025.05.15.23.33.32
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 15 May 2025 23:33:33 -0700 (PDT)
+Date: Fri, 16 May 2025 08:33:28 +0200
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Roy Luo <royluo@google.com>, "mathias.nyman@intel.com"
+ <mathias.nyman@intel.com>, "quic_ugoswami@quicinc.com"
+ <quic_ugoswami@quicinc.com>, "gregkh@linuxfoundation.org"
+ <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] xhci: Add a quirk for full reset on removal
+Message-ID: <20250516083328.228813ec@foxbook>
+In-Reply-To: <20250515234244.tpqp375x77jh53fl@synopsys.com>
+References: <20250515185227.1507363-1-royluo@google.com>
+	<20250515185227.1507363-2-royluo@google.com>
+	<20250515234244.tpqp375x77jh53fl@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250513130834.1612602-1-chou.cosmo@gmail.com>
- <aCNLeX1k34BSgPOV@kuha.fi.intel.com> <aCNOOXcAuA_1B-0Z@kuha.fi.intel.com>
- <CAOeEDyuFmFqacy1N8TtpuJRdv-3K2f1DzXNwR1MpyNn4Nrug7A@mail.gmail.com>
- <aCRQbRCHFdFOCNw2@kuha.fi.intel.com> <4245c9da-cb81-4494-93c6-224883057410@google.com>
-In-Reply-To: <4245c9da-cb81-4494-93c6-224883057410@google.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Thu, 15 May 2025 22:10:05 -0700
-X-Gm-Features: AX0GCFtsjDRTU_pVx4L7jEmXjCCPPMdleg_78CjSDC1A9ysVADujU6X9sZe26tg
-Message-ID: <CAPTae5+GFX7HpB6Vp68LQtFgy+iMCj8cCOuHUPyn8nZPBt7+zQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Use configured PD revision for negotiation
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Cosmo Chou <chou.cosmo@gmail.com>, 
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, cosmo.chou@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 15, 2025 at 12:15=E2=80=AFAM Amit Sunil Dhamne <amitsd@google.c=
-om> wrote:
->
-> Hi Heikki,
->
-> On 5/14/25 1:12 AM, Heikki Krogerus wrote:
-> > On Tue, May 13, 2025 at 10:14:32PM +0800, Cosmo Chou wrote:
-> >> On Tue, May 13, 2025 at 04:50:49PM +0300, Heikki Krogerus wrote:
-> >>> On Tue, May 13, 2025 at 04:39:09PM +0300, Heikki Krogerus wrote:
-> >>>> On Tue, May 13, 2025 at 09:08:34PM +0800, Cosmo Chou wrote:
-> >>>>> Initialize negotiated_rev and negotiated_rev_prime based on the por=
-t's
-> >>>>> configured PD revision (rev_major) rather than always defaulting to
-> >>>>> PD_MAX_REV. This ensures ports start PD communication using their
-> >>>>> appropriate revision level.
-> >>>>>
-> >>>>> This allows proper communication with devices that require specific
-> >>>>> PD revision levels, especially for the hardware designed for PD 1.0
-> >>>>> or 2.0 specifications.
-> >>>>>
-> >>>>> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+On Thu, 15 May 2025 23:42:50 +0000, Thinh Nguyen wrote:
+> In any case, this is basically a revert of this change:
+> 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
+> helper")
+> 
+> Can't we just revert or fix the above patch that causes a regression?
 
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+Also note that 6ccb83d6c497 claimed to fix actual problems, so
+disabling it on selected hardware could bring the old bug back:
 
-> >>>>> ---
-> >>>>> Change log:
-> >>>>>
-> >>>>> v2:
-> >>>>>   - Add PD_CAP_REVXX macros and use switch-case for better readabil=
-ity.
-> >>>>>
-> >>>>> ---
-> >>>>>  drivers/usb/typec/tcpm/tcpm.c | 29 +++++++++++++++++++++++++----
-> >>>>>  1 file changed, 25 insertions(+), 4 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm=
-/tcpm.c
-> >>>>> index 8adf6f954633..48e9cfc2b49a 100644
-> >>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
-> >>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> >>>>> @@ -313,6 +313,10 @@ struct pd_data {
-> >>>>>     unsigned int operating_snk_mw;
-> >>>>>  };
-> >>>>>
-> >>>>> +#define PD_CAP_REV10       0x1
-> >>>>> +#define PD_CAP_REV20       0x2
-> >>>>> +#define PD_CAP_REV30       0x3
-> >>>>> +
-> >>>>>  struct pd_revision_info {
-> >>>>>     u8 rev_major;
-> >>>>>     u8 rev_minor;
-> >>>>> @@ -4665,6 +4669,25 @@ static void tcpm_set_initial_svdm_version(st=
-ruct tcpm_port *port)
-> >>>>>     }
-> >>>>>  }
-> >>>>>
-> >>>>> +static void tcpm_set_initial_negotiated_rev(struct tcpm_port *port=
-)
-> >>>>> +{
-> >>>>> +   switch (port->pd_rev.rev_major) {
-> >>>>> +   case PD_CAP_REV10:
-> >>>>> +           port->negotiated_rev =3D PD_REV10;
-> >>>>> +           break;
-> >>>>> +   case PD_CAP_REV20:
-> >>>>> +           port->negotiated_rev =3D PD_REV20;
-> >>>>> +           break;
-> >>>>> +   case PD_CAP_REV30:
-> >>>>> +           port->negotiated_rev =3D PD_REV30;
-> >>>>> +           break;
-> >>>>> +   default:
-> >>>>> +           port->negotiated_rev =3D PD_MAX_REV;
-> >>>>> +           break;
-> >>>>> +   }
-> >>>>> +   port->negotiated_rev_prime =3D port->negotiated_rev;
-> >>>>> +}
+> In some situations where xhci removal happens parallel to
+> xhci_handshake, we encounter a scenario where the xhci_handshake
+> can't succeed, and it polls until timeout.
+> 
+> If xhci_handshake runs until timeout it can on some platforms result
+> in a long wait which might lead to a watchdog timeout.
 
-IMHO this looks better in terms of readability although V1 is more concise.
+But on the other hand, xhci_handshake() has long timeouts because
+the handshakes themselves can take a surprisingly long time (and
+sometimes still succeed), so any reliance on handshake completing
+before timeout is frankly a bug in itself.
 
-Thanks,
-Badhri
-
-> >>>> Do we need this? Couldn't you just add one to rev_major?
-> >>>>
-> >>>>         port->negotiated_rev =3D port->pd_rev.rev_major + 1;
-> >>>>         port->negotiated_rev_prime =3D port->pd_rev.rev_major + 1;
-> >>>>
-> >>>> Or am I missing something?
-> >>> Sorry, I mean minus one :-)
-> >>>
-> >>>         port->negotiated_rev =3D port->pd_rev.rev_major - 1;
-> >>>         port->negotiated_rev_prime =3D port->pd_rev.rev_major - 1;
->
-> The only reason I asked for macros is that in the case of Spec Revision
-> for header, the value for PD 3.0 is 0x2, PD 2.0 is 0x1 & so on. While
-> for PD max revisions, it's the exact values. Having a clear distinction
-> may be easier to follow. If you want to go with the +/- approach you can
-> add a comment stating the above.
->
-> I don't have a hard opinion on either approach :).
->
-> Thanks,
->
-> Amit
->
-> >>>
-> >>> --
-> >>> heikki
-> >> It seems to be the PATCH v1:
-> >> https://lore.kernel.org/all/20250508174756.1300942-1-chou.cosmo@gmail.=
-com/
-> >>
-> >> if (port->pd_rev.rev_major > 0 && port->pd_rev.rev_major <=3D PD_MAX_R=
-EV + 1) {
-> >>         port->negotiated_rev =3D port->pd_rev.rev_major - 1;
-> >>         port->negotiated_rev_prime =3D port->pd_rev.rev_major - 1
-> >> } else {
-> >>         port->negotiated_rev =3D PD_MAX_REV;
-> >>         port->negotiated_rev_prime =3D PD_MAX_REV;
-> >> }
-> > Okay, sorry I missed that. I still don't like the extra definitions,
-> > but I don't have any better idea (I guess macro is not an option?).
-> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >
-> > thanks,
-> >
+Regards,
+Michal
 
