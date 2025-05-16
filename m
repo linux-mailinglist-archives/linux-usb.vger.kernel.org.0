@@ -1,116 +1,127 @@
-Return-Path: <linux-usb+bounces-24042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E1A1AB9E6B
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 16:16:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB6E7AB9EA8
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 16:33:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 353224E258B
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 14:16:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBB099E0AC6
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 14:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271EF156228;
-	Fri, 16 May 2025 14:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A70218C03F;
+	Fri, 16 May 2025 14:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nu4aWrEU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ib0nE5Bk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F6B3209;
-	Fri, 16 May 2025 14:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E350216F8E9
+	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 14:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747404967; cv=none; b=hf3sxXjWyqyG13OEleBetbmM/kj6to82+WkAj/g7C9h8HPr5BEN5jco+G1630P8PNeaAsSLWOTyqhYU6z/9jX/Ml9A0gZ/jkGQNP1rVX38wHQf+mNomxedtX/xeYoRW3Vz3sAc6JBmaT10FCJbM4Ryfpx5KiMKSBH8UaAf2nfI4=
+	t=1747405987; cv=none; b=bvGXyS4tKu4HNa82Rxy0kKIH2lGhwYLLM+/tAXRpaIpwhNWLU79Ycv0PwLAyR4rnyGsyAwd7GoU8h+bVfVQfMLb+sDmHcAlwcbFX6WGotivzGxeDFsYJ964B1+HhXojHme09IDec7/T+SZ6b7Kk7WD84fI5ofcVezDZYctkAqzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747404967; c=relaxed/simple;
-	bh=Ir57TohQL0KRns31TnG4/ir/T9F377bTIMsPI537Qvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nX0xQKzclwlRfIu3p0XTWTnnoSdBO8wrUR3jg0wFXMkRFasiNedr5dR6i/tg1uNQ3Z7gabR/XYGXS3xCrBFOSQ7YqhqLu6lif4BL9S2wakPh7rHUWCQjKGf7tJFcSHfdpR+q4rOG/74cBnZQAWlRh3V4ehCVRztxNBW6E8InWdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nu4aWrEU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE996C4CEEF;
-	Fri, 16 May 2025 14:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747404967;
-	bh=Ir57TohQL0KRns31TnG4/ir/T9F377bTIMsPI537Qvo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nu4aWrEUI/5uqe3wKQxK2G6ddxYztWjS/tlakBcslFmqlFhuQN5AyNPn9DzFhqYzM
-	 ay2//QXgJHaZg1ZxRohNy+0nkyXTzH/WvIhyse573PEawRazrkmsEiETzNQSo4Q+Ew
-	 QhMH+ZaTf7WhesfSL3ZHBc8SKs5k3BeAznCujNNgcPvj2G4JQGxnlMh3JXxxCzxap3
-	 Q73YUlGBAMfg+FzSiqqzMQDGqdVYtaGAVpEJLCenbTwomlPfpm5hrfngsdkOBL/fh8
-	 rCbu5moP6gIhSchaimz5vKWCoV4pcr1PMKr60iFgQhiasQInQJmGHrnynyfqmIEfxM
-	 GTvu0t7jA9+cg==
-Date: Fri, 16 May 2025 15:16:02 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, michal.simek@amd.com,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	git@amd.com
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: allow dma-coherent
-Message-ID: <20250516-exclusion-suffocate-94a1c87c1262@spud>
-References: <1747401516-286356-1-git-send-email-radhey.shyam.pandey@amd.com>
+	s=arc-20240116; t=1747405987; c=relaxed/simple;
+	bh=7/j13nJR2Kakih/RHUllSV1ilEL+u9QciiQCL805t2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kNcxtHkA+a0rk4DZsUlyXGmtUnDJTkdgv5Ys0ywvPmuAoohPq8BNUSoQ1hVrija9VRFBRF/u02Y5OT2ynRPAWZocCZPDjBIHxgB9Gd29n9kVCavrxdo2NqD+x64ktQxIaECTLY0vVXpoAPRSLGvgjp7bVQzYRZiX0CrxnGBXXvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ib0nE5Bk; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747405986; x=1778941986;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7/j13nJR2Kakih/RHUllSV1ilEL+u9QciiQCL805t2Y=;
+  b=Ib0nE5Bkv5QJCC+pOCbuXt34T6G9GdqYqafb6Hgn+duTG+nPi04dWJMp
+   S7ucdFOHxO3u3QEJIb1Zgz/BpjsHCLB2rruImnfiiQpmEqpuwBYuIWMGD
+   6l/YeZGorU6TdZ2h9AMSEU2RRrB/rd1ibl6Jx4MGajKtkepPFW0To75FR
+   uoajMPr235QKRREJKPPMIa8hP25c9A5H3EtCXnGq8FGttkwZ+Dbqn3UJH
+   K+vW8FXEaCpdaLbtWrH34pOxfUjPg7iFswX/o3aZOSs542F+Kwbp+qb3d
+   d5KZtF3Lro9AO3eYkjKoHMW/LHSIf0eUKi7zm/7G4aPVhS0zhRQ2uoQVq
+   A==;
+X-CSE-ConnectionGUID: XAIO4wo0S+22BkMcoMfS7g==
+X-CSE-MsgGUID: lD5d6lGfRMK0rNsyNp2omA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49519767"
+X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
+   d="scan'208";a="49519767"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 07:33:05 -0700
+X-CSE-ConnectionGUID: yyba99wJRiKAGlkwfGAl9Q==
+X-CSE-MsgGUID: M3iys2HzSK6VldYQkFLwQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
+   d="scan'208";a="143827098"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.245.120.28]) ([10.245.120.28])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 07:33:00 -0700
+Message-ID: <2f38bb7e-d9d3-49a4-a5ea-c42f98be07ee@linux.intel.com>
+Date: Fri, 16 May 2025 17:32:35 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="++J8wUPqIH71Ph6D"
-Content-Disposition: inline
-In-Reply-To: <1747401516-286356-1-git-send-email-radhey.shyam.pandey@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 23/24] usb: xhci: add warning message specifying which Set
+ TR Deq failed
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+References: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
+ <20250515135621.335595-24-mathias.nyman@linux.intel.com>
+ <20250516144310.12b4f072@foxbook>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <20250516144310.12b4f072@foxbook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
---++J8wUPqIH71Ph6D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 16, 2025 at 06:48:36PM +0530, Radhey Shyam Pandey wrote:
-> On Versal Gen 2 SoC the LPD USB DMA controller is coherent with the CPU
-> so allow specifying the information.
+On 16/05/2025 15.43, Michał Pecio wrote:
+> On Thu, 15 May 2025 16:56:20 +0300, Mathias Nyman wrote:
+>> From: Niklas Neronin <niklas.neronin@linux.intel.com>
+>>
+>> Currently, errors from the Set TR Deq command are not handled.
+>> Add a warning message to specify the slot, endpoint, and TRB address
+>> when a Set TR Deq command fails. This additional information will aid
+>> in debugging such failures.
+>>
+>> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>>  drivers/usb/host/xhci-ring.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c
+>> b/drivers/usb/host/xhci-ring.c index e3c823e1caee..eff6b84dc915 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -1448,6 +1448,11 @@ static void xhci_handle_cmd_set_deq(struct
+>> xhci_hcd *xhci, int slot_id, unsigned int ep_state;
+>>  		unsigned int slot_state;
+>>  
+>> +		xhci_warn(xhci, "Set TR Deq error for TRB 0x%llx in slot %d ep %u\n",
+>> +			  (unsigned long long)xhci_trb_virt_to_dma(ep->queued_deq_seg,
+>> +						ep->queued_deq_ptr),
+> 
+> Is printing this pointer actually useful? It doesn't tell why
+> the error happened. It will not relate to other messages - the
+> command failed, so dequeue stays at its old position.
+> 
 
-Sounds like it should actually be marked required on this platform, no?
+Apologies, I should have retracted this patch as part of the Set TR Deq series.
 
->=20
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Doc=
-umentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> index 379dacacb526..36f5c644d959 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> @@ -26,6 +26,8 @@ properties:
-> =20
->    ranges: true
-> =20
-> +  dma-coherent: true
-> +
->    power-domains:
->      description: specifies a phandle to PM domain provider node
->      maxItems: 1
->=20
-> base-commit: 8566fc3b96539e3235909d6bdda198e1282beaed
-> --=20
-> 2.34.1
->=20
+I still plan on trying to add the "Set TR Deq Error Handling" series in the future,
+with a few tweaks (infinite re-try loop). Then each case will have its own
+tailored warning, while this warning will print general error info.
 
---++J8wUPqIH71Ph6D
-Content-Type: application/pgp-signature; name="signature.asc"
+Best Regards,
+Niklas
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaCdIogAKCRB4tDGHoIJi
-0iOiAQDWypdVROV/PgOlz0vB9+pT8ItFOLzc373ZCWhYPG4v9wEAs590WVLjPkDS
-zFLXLiN0iThggG8xi6fqQW6pQFIthgs=
-=2pq7
------END PGP SIGNATURE-----
-
---++J8wUPqIH71Ph6D--
 
