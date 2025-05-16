@@ -1,125 +1,124 @@
-Return-Path: <linux-usb+bounces-24021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24024-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F5AAB9605
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 08:33:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E56AB96EB
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 09:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 638B55026A6
-	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 06:33:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6764DA01505
+	for <lists+linux-usb@lfdr.de>; Fri, 16 May 2025 07:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B49224B09;
-	Fri, 16 May 2025 06:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7523B22DF82;
+	Fri, 16 May 2025 07:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyrfVW3k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OXLNPQPs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809E11D88AC;
-	Fri, 16 May 2025 06:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6BF22ACD3
+	for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 07:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747377218; cv=none; b=QDu+MvvzkE9unJdwTcJdxJMjIviVFd8EIXbGe92Kw/HBc9yv9eMc0my2ylfPj79g602A+ZftmQOOour55fHyobp/IpyYqgstN/Bbly8Vdm7yCmhCc87glYcy048ZUkW+X/A36A/CsXX0Le90f2gXt7md0TNeVQDs3yfcf7sous8=
+	t=1747381963; cv=none; b=e/Zve890r+a0hRL3rs02qsVgptI2VMD9lCdq3Fh5zYwvOqj01/GV6K3DYUE8TxkBsx6YDrQk9psOoLwVFLtLc0vEAvs3XA8IdMRdpIM7ACA9aeCGF5jKyl8mVaSNaqA9tg4IOTo2QFWX9hayILiJ85C1RhzwO6OMq6e2s9mUPCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747377218; c=relaxed/simple;
-	bh=ITiHYvPVbIk9Cqhu0/8qKyPCQGSeXSdTjNGJyN7gjH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JTAf5sSxvBCoNcNbhtqmPGdTYndvF/y0i5/Pqk/wkKsmwT6leQobepQ6qn1XiTcptALWu1oiHhNo5QLzx1UWG9JMzFPSV/7BCZf5ZtzmIiVnIi+Ops6Nqegh3YK25IHjObxootiQIsThMeWBXv0cqdpc7V/uY6l8RAid6RgrKZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyrfVW3k; arc=none smtp.client-ip=209.85.167.50
+	s=arc-20240116; t=1747381963; c=relaxed/simple;
+	bh=9bp3+/dLtXcLrNFNRpJG7Qm8n89dMqnYYLs/E95z+lc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bKvqcVSf0UGlui0Kd2BjH4DVSC2HQm79N4/5vb7zGbsLvE7OpDo7lmFgjX3utX1RrwC3hxs0KMJ8JPuqXMN3Sk0E/Txe9jYdze+L2PPEx80tvtZ7t5z/rlc48wNSoB04oHJ/hbJ3pTq6KPiQ2Ra0oRCfGknB6+FQhZT7Woy77Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OXLNPQPs; arc=none smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54e816aeca6so2361162e87.2;
-        Thu, 15 May 2025 23:33:36 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-72a4793d4e2so1549381a34.2
+        for <linux-usb@vger.kernel.org>; Fri, 16 May 2025 00:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747377214; x=1747982014; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBTw7n47tA9Za/6wjkrYsmCiKYOHmpnvJ9njSK+TKlc=;
-        b=TyrfVW3kpw2t2MLaY2NqUpFrFM1gC9j4Yio7aSGz4HW3Ncsh7YpQ79U/1PCc1h7Bs0
-         em8SSPUsIMMsZ5U/FEneK6MWbPOGIuBlf+cOtV/XdhTipUoq6lFI+ZNpAvMppm71VN42
-         n+X6zj/7Z/VvHhfEc1zoH78wglZ+0G6bpOoL1H6znYV5Cm7mJdyeqcMpYO5zvJyHAkKY
-         xdu0GOO3cnaQm2KtsKmXVWHN5i5EgP2C8hCCJjqb2Yc4X4OpVosXJKvLHut7zTQFtLSM
-         5ai8Oxkft+gb1fl3ph+sFveilrusaXqCAqBuUliB0WqWQCptCbYSNZyHQmcWSkt5gWoc
-         IfNw==
+        d=gmail.com; s=20230601; t=1747381960; x=1747986760; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HU/iFedIL6SKDZLCTi7zcWWyb1XrUafF6XzReJbzvr8=;
+        b=OXLNPQPsUtVmS23BOeO2ntoEDVAzhTkCcSGyHjDzhqC1RIVi7bMS0y0cOlwndn5OYr
+         HMTb/O3mxwUkq9dQEn85+yD6KWWceh9qt3d0UDE+xtyBGtyAVyKa7Bym6AAr+DCufZGu
+         teJk53q2lyIbKTiaVMf5iGimKs5lcHpn9tkGbS+mhoABwJaXwR+nIkWnM3yPf4X6R/Y9
+         /3zCqm4OhR4WkxVdu1vCBHZ9JM57GuywfFONtZEEoA/OYQ9tVJDSeZl0QORtHaWuBFln
+         D4ALs1r/UwChmIuNFbay3Kl0J+muif+BwM4fps2qQ9bjpo3ZeoJkNrYIn78ED8oqqFfC
+         YbiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747377214; x=1747982014;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SBTw7n47tA9Za/6wjkrYsmCiKYOHmpnvJ9njSK+TKlc=;
-        b=SjzeirCs2n2u2C5j8/5l5zjAG3Yr4/2lsp2d+s1sb4bO6nOMaaDGM9W7Uly303jSDO
-         XWWANuv2JNGse7JzqwK2udknytCjvGn2AftvxDp9dcTTxIwM71yZ/glccXnTISQJPkfR
-         bzFzK4fB6GemzRfTYOD2aMwJERqy7w5fBhCsc8ehgb06WuZenNBXoHA4rYbnv6EPwD+f
-         iqGnxYhw/HqLgo9RNUFK2VZFlQBRp4fxdTQB0J8paoWqlRWN2TGQPLBKK5AOjX3xWxXV
-         AMOi1fLBTl+dM5i1M1EFP/CyYIE/vOTLd4NkCP0+e5FS8sCw60bTUGXB1nTvZbWjv1SM
-         j84Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUWswgoxlTBGU0U9Z7LbhipjoKfjBA4vHkD0Ysjp5YTv6EKU7BpVvz0vAnoNnUvojbCm79WVW3L@vger.kernel.org, AJvYcCVibBifrna5eTRWjs7eVQfqiCeygXPMV9+0GCasZJELK2iX34gC/mAI4qlIk/SUjLRUh4G7KKaDMavZ/Y8=@vger.kernel.org, AJvYcCX8+JgfsQhDBTEwgJQzp89vEDewzuOkKUkyajtcjZPzhjX+6l4SopYg6BYy4iEYwEiERs/jtrWWiDoL@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym2FK5R98JGcolF9zf55poJ4gflxpp5TCb6HsFQCqjx8G+LjIw
-	//VDQCr1DSRBDODFUcud5AeKK1lGf+CXvFCXjV7jBi3stkpmTJwgGSWS
-X-Gm-Gg: ASbGnctluEClmoMAX3ZtUCMbGbZfPDTlpl3SF3YKuFOV6UsRItymfpIehlF/3Gvi/pi
-	9khYKxdYJuMcpElzDj9VrT5FdyRC7dpgkm+l7ox8FzoMPi7v3LWEwSfZtUTk0l3jm4Omud9rl2j
-	MXg+KMN40J3tLMJoCMvKAbfSyV+DNENg2qaaaw90nNx3Kk+OC/Oikom2DV5DYRMgLilAn0kxcHt
-	Vx48zIq5dPPS2QlH7Lv36IE1HEAHwsMqjvQLvTYGFSP1+5VYiH7PQ9N9js2z8COPG4VBru0SlIi
-	1215BUl6wIJ1SET8CD9oXsQ+Y6v5LtkLdNM1Rm6FNpxwoCknstn3zikjWJYDxzbwypp0gf9UwUF
-	W+Ow=
-X-Google-Smtp-Source: AGHT+IFXuvhTg0HwM4B7G448RH8kbjZAcl27kGgPEEicb7hYFOL5VilJkbVwHq1ibwD1yMKVeyUIrQ==
-X-Received: by 2002:a05:6512:2616:b0:54d:6aa1:8f5a with SMTP id 2adb3069b0e04-550e71a732dmr438740e87.13.1747377214256;
-        Thu, 15 May 2025 23:33:34 -0700 (PDT)
-Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e6f30e6csm281840e87.67.2025.05.15.23.33.32
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 15 May 2025 23:33:33 -0700 (PDT)
-Date: Fri, 16 May 2025 08:33:28 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Roy Luo <royluo@google.com>, "mathias.nyman@intel.com"
- <mathias.nyman@intel.com>, "quic_ugoswami@quicinc.com"
- <quic_ugoswami@quicinc.com>, "gregkh@linuxfoundation.org"
- <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] xhci: Add a quirk for full reset on removal
-Message-ID: <20250516083328.228813ec@foxbook>
-In-Reply-To: <20250515234244.tpqp375x77jh53fl@synopsys.com>
-References: <20250515185227.1507363-1-royluo@google.com>
-	<20250515185227.1507363-2-royluo@google.com>
-	<20250515234244.tpqp375x77jh53fl@synopsys.com>
+        d=1e100.net; s=20230601; t=1747381960; x=1747986760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HU/iFedIL6SKDZLCTi7zcWWyb1XrUafF6XzReJbzvr8=;
+        b=k31fGW4qd1nJM45isFPupNkGSB8NviRQAGKJHjT6X9IYR54iicRWuGEGy6api1c8je
+         S3JKtkjTuXguluSvNjTNgQG4+xrdhhTFCmGE0Itx/t/HuNanLKO07lSqX1BE9+Z80xj2
+         /R14+VkU4sB0FHkKDuBthxynOF+2I4JgpDmBaf97z70EldNRzT+sAXiOTjEzS5za40M2
+         9ca4Y41tBpvb1pABUSizGOVdR8DlCCLt1/fmct+TATt9jK5at4jveb7cJytQktThwcoT
+         zRlIP8tLYucFzoGp5A2HAIvVPegEL9M4TC3f7KlQn1fQ834IDE0fL7Ti9lCu6LEUqFZS
+         NF8g==
+X-Forwarded-Encrypted: i=1; AJvYcCX7XOxsV6LEc6CYdtqxHvEMnxbT2Y3UqViMMQwd8XY21tWvH1KbjQNTlxirZjGDqk9pjdJf6cTFqTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvMasoqoZtvedEND2QZmTYJ6ua6t4RiCwGJVqfE/AWu10usSCb
+	4g/VJkcJ+GFtlQbvKjpxNCC+z0whMnpTY2uYUBDIxLD87BsqrFpd4TJxmv9cb7o8
+X-Gm-Gg: ASbGncuqaviheJ1Vx+H0Pr0x1Hy6NOye5UIP+fdefkowAVm61bpwSTEPOk1zlX7pZTp
+	Im5FuDHqZWwMeKz0QPNbnpv1lThBK2XyrsHn3Q5qZfmPcnTj1KtYTB7Xcp1JL6xpfe33TYYwvWp
+	as3DtWlB+KNrPY/6cnO3cbbAm09FTdJJpZ8Nr+qwt/yDa9KXGAoe/ucfe6BwZMG3Ig1XSxetv/v
+	1P0nqC5EJJ7TMCs+UEmRV+gElujhFh1j8OEC8hSyc7GBX/7yl8tT2gg5eXRwLSZm7k6XYKNnW9V
+	BU+17wCyCRX001Fk3F+qu2uu3Pv0KyIZP4KMtcp+IqI=
+X-Google-Smtp-Source: AGHT+IE6t2Kp2tDEzBaG+9zEoq2qKzxW65vWFTTqNW0T7DOgbcf90YpE79z0227c9a6Xq3cri8gzhw==
+X-Received: by 2002:a05:6e02:b4a:b0:3da:7cbe:f47b with SMTP id e9e14a558f8ab-3db843348fbmr30575395ab.21.1747381949751;
+        Fri, 16 May 2025 00:52:29 -0700 (PDT)
+Received: from dell.. ([185.223.112.22])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc4aa6cfsm281438173.113.2025.05.16.00.52.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 May 2025 00:52:29 -0700 (PDT)
+From: Vadym Hrynchyshyn <vadimgrn@gmail.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	linux-usb@vger.kernel.org
+Cc: Vadym Hrynchyshyn <vadimgrn@gmail.com>
+Subject: [PATCH 1/3] [1/3] usbipd: enable SO_KEEPALIVE socket option for accepted connection
+Date: Fri, 16 May 2025 10:52:02 +0300
+Message-ID: <20250516075204.7950-1-vadimgrn@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 15 May 2025 23:42:50 +0000, Thinh Nguyen wrote:
-> In any case, this is basically a revert of this change:
-> 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
-> helper")
-> 
-> Can't we just revert or fix the above patch that causes a regression?
+    - If usbip client does not close a TCP/IP connection to a daemon
+      gracefully, the daemon will keep this connection open indefinitely.
 
-Also note that 6ccb83d6c497 claimed to fix actual problems, so
-disabling it on selected hardware could bring the old bug back:
+    - The issue is that the client cannot attach this device again
+      until the device will be rebinded on server side by commands:
+      usbip unbind -b X-Y
+      usbip bind -b X-Y
 
-> In some situations where xhci removal happens parallel to
-> xhci_handshake, we encounter a scenario where the xhci_handshake
-> can't succeed, and it polls until timeout.
-> 
-> If xhci_handshake runs until timeout it can on some platforms result
-> in a long wait which might lead to a watchdog timeout.
+    - usbip client enables tcp keepalive by calling
+      usbip_net_set_keepalive from usbip_net_tcp_connect.
+      usbip daemon now enables this socket option too
+      for accepted connection.
 
-But on the other hand, xhci_handshake() has long timeouts because
-the handshakes themselves can take a surprisingly long time (and
-sometimes still succeed), so any reliance on handshake completing
-before timeout is frankly a bug in itself.
+Signed-off-by: Vadym Hrynchyshyn <vadimgrn@gmail.com>
+---
+ tools/usb/usbip/src/usbipd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Michal
+diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
+index 48398a78e88a..d89633d8f799 100644
+--- a/tools/usb/usbip/src/usbipd.c
++++ b/tools/usb/usbip/src/usbipd.c
+@@ -119,6 +119,7 @@ static int recv_request_import(int sockfd)
+ 	if (found) {
+ 		/* should set TCP_NODELAY for usbip */
+ 		usbip_net_set_nodelay(sockfd);
++		usbip_net_set_keepalive(sockfd);
+ 
+ 		/* export device needs a TCP/IP socket descriptor */
+ 		status = usbip_export_device(edev, sockfd);
+-- 
+2.43.0
+
 
