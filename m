@@ -1,132 +1,195 @@
-Return-Path: <linux-usb+bounces-24052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6105ABA82D
-	for <lists+linux-usb@lfdr.de>; Sat, 17 May 2025 06:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF79ABA8E0
+	for <lists+linux-usb@lfdr.de>; Sat, 17 May 2025 10:36:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A44E71B67E5E
-	for <lists+linux-usb@lfdr.de>; Sat, 17 May 2025 04:40:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93FE71BA3267
+	for <lists+linux-usb@lfdr.de>; Sat, 17 May 2025 08:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071041925AF;
-	Sat, 17 May 2025 04:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765911DC994;
+	Sat, 17 May 2025 08:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YVnc7u8j"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TtxTEE1q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1CD1865EE;
-	Sat, 17 May 2025 04:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918632581;
+	Sat, 17 May 2025 08:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747456810; cv=none; b=U9dqI6sEUEdVJGe6redlm2IuQaNRwiK3dTb/vZObuWVBp4Oq9ZsjRHbaw05Oc32SmYf7QwgGZbsS3BGdbe3YevlnhCl9eeiQ0UJnBMI/PNMTHDldLvCqbVTocmYbInXsOzX2GKg6GInAwAVc9OrDB3sUFHI/4L9JEny2WGBZ6xg=
+	t=1747470995; cv=none; b=Kv2WNzPn514oi9XWeCvD03PrWY6nJ6hZrY66VP4HfVtmvFWuzvfD2NEt3TF0yE437Ex1L2DyL3PQ0X0o0gUjsTHZRy3OK82mu+f55KAche3w8tFZsp1XUEV/bom7Uo//LjLtKcpvHWgPrD7cm6MzjNRUoboePSlfacS4rBXVPIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747456810; c=relaxed/simple;
-	bh=ebe3QJED/rJ/u/3kHQPUsrofn8Zx6DQCElbyHghmxFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lilxsYU0CbHQMBQ9GmUPi9oxo6EkEI7A2wix2YbV4LSja25bl51CAfd1/fMpVE5Pw8LX8N8YbsVuMz6+TpwFX+ZAntQVnVblR7EOPD0TQBBAaiWVcwM+WOrQRUADH5HDv5/ozscPBg987FXW5St/cLaZsgC7O56qfmrrcINR3w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YVnc7u8j; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54d6f933152so3995309e87.1;
-        Fri, 16 May 2025 21:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747456807; x=1748061607; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yoKIuVITN42/N/HS1yycmrVP5+KZGVqyhHsLSfQ1BFg=;
-        b=YVnc7u8jxd28unU8mkV77rc1i9IydrCIreEIGr/V11cJ9saKmjjFBRqOh8osexNFeT
-         t+5pxJWO7GyrXYljk8l/0+70Hy9QL+YaU+0j+/uD2/ZUFp2FjI2WLmnpLZVGVTUHkRVV
-         y6iJeUqsHB9f6m4ffxTnRqDGQiFmQuegrVMn3ciYIOtuBCkKsmnPurb1S4ctYRg5/kR1
-         Xu8n9wwgPZtKgv8PxwZdY5ti3pcn+cjkUXfzRxV9d5I8PHQ+pVIusl7r/1yMuoq1lZE0
-         1WQBCdgdDSeFiziFTyvauAZoGVeQBc4HpYq1kyWFsMawca5ThJz2yJ1xz/jc8UFz7wjs
-         KEeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747456807; x=1748061607;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yoKIuVITN42/N/HS1yycmrVP5+KZGVqyhHsLSfQ1BFg=;
-        b=dGLAzR3mgmHYw2cKjAOop/31OvwV29UzHa9ElVxJIHQYJ7Ck3DYS2AWPvrJi2xRyOr
-         dlJS3grkfJpPjRnr+/HcV/yKNMxciNxh40Ydq3IMvQTP6wOJZfcBEdPCs1v08SG/irFP
-         3HtmAYLOIDeFBLatKDPWj3hhu+YfSQQ0eCSJAz6CyXrTfFTdZUdbTnxg/6KkqllTnarV
-         dgdekdAf3zn3jBCbe4EVBPDPVUOUvuOWgwVEZFCdqtFI+wmCozpXJREpnWjfG4MsrAdl
-         eQZRMuu5yZ5gpL+5s72uwyWzEIM8IJwRgOVwnK/K8XBSCeea0LPYhhaKxyklf8hV2bl7
-         ON/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVFsbhgBtMDF2+7e8TjpfcljLMDvs0I0IBT7cQYEL7SvofUpbqu3nJF8AxAyknqhnU+BgcrYmwh@vger.kernel.org, AJvYcCW/nAPEYv1qlN5l1qzdl5nMYUzHYZepNUwBz1N0YEnddeYEFfVUJO3o32kpENy7Hdizl6XNXVKkviyilGw=@vger.kernel.org, AJvYcCWG0TaJs5VhVrYBFwLtX8159JxR7wfJh6TeHOfZRgD5FfEflNje0vRzH/vPKXJUCbjxmjO2Mw2/STEy@vger.kernel.org
-X-Gm-Message-State: AOJu0YydXz3VucP6+RF/ndbfRMkRa86AY7ji3r06Bgg0AhYh0Nnp755g
-	oy3Xn2jh9I/cKap42xMY6QTcwHkc1eQr1qpxlf2AG6lIe7YckAYGJZ02
-X-Gm-Gg: ASbGncvYPzFxcPDbqrEIR68Coiug8UZdF+RpcTWnMo6jK+4MHxvbi8QH0q+TGq8y7mo
-	tfbGlcaZe3fXsoCfh5WRuLX8hTnf3UCt5JbeBgs2yHL2hRXGin5diMNqfCf1Gkfmob6E6kY5DEC
-	GzMHqWVCDTx3VafQyRAYxE+5OLBwJJiDW6B1D5OZMeDckBO1TiLRnR/lD0h9gfznbmXzahgtg7l
-	M6Sc2Wl9kHVo0fsmnutximJ6aYYIub+g82H3YxMQX8Iy8QTxatBJICJBrxjkMy61o4hFgSwVtB2
-	8HwjcCw2nWD9myT5U7MFRQWroZ6C4mKOvFXSJ+6Ppcreh/8/a6gC1L7wuTsB6Bjp/frJ
-X-Google-Smtp-Source: AGHT+IHB9x5ku6+0IEVf8hhhXbFevmvNwmZiwm/6HKtVrDb5d9FUQCNV0VIpf/PLWPPz5iuVLVeMVg==
-X-Received: by 2002:a05:6512:650e:b0:549:91e0:143 with SMTP id 2adb3069b0e04-550e971b35fmr1522746e87.5.1747456806450;
-        Fri, 16 May 2025 21:40:06 -0700 (PDT)
-Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e6f30355sm719753e87.89.2025.05.16.21.40.04
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 16 May 2025 21:40:04 -0700 (PDT)
-Date: Sat, 17 May 2025 06:39:59 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Roy Luo <royluo@google.com>, "mathias.nyman@intel.com"
- <mathias.nyman@intel.com>, "quic_ugoswami@quicinc.com"
- <quic_ugoswami@quicinc.com>, "gregkh@linuxfoundation.org"
- <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] xhci: Add a quirk for full reset on removal
-Message-ID: <20250517063959.28b3537b@foxbook>
-In-Reply-To: <20250516233829.ibffgnicnxgchbim@synopsys.com>
-References: <20250515185227.1507363-1-royluo@google.com>
-	<20250515185227.1507363-2-royluo@google.com>
-	<20250515234244.tpqp375x77jh53fl@synopsys.com>
-	<20250516083328.228813ec@foxbook>
-	<CA+zupgwSVRNyf40JiDi6ugSLHX_rXkyS2=pwc9_VHsSXj4AV5g@mail.gmail.com>
-	<20250516233829.ibffgnicnxgchbim@synopsys.com>
+	s=arc-20240116; t=1747470995; c=relaxed/simple;
+	bh=FuYd1quEjWlTUddvHV5PWIiQz01t2FOLxj0MwYm1KMg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g8/ecz1FTNPkKyLwhix9SprpoDvG1mLUfLABw6FId2gMHj2WxNJl7vYZxilMcUz+eekc5VGa00U5W9gS0O1NnUg58Q9+IaG+aXnTFaKYONNd9gBTxjg0PtPkw/OZBCTwKoA6PjaJ65oxhuPaLt9YTkLCjbwvyC4OpQCXrUh6Or8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TtxTEE1q; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=5t
+	6mYNPUiC+VwT0d7hvui4Car5obr9bgjGKLCKCD4Ik=; b=TtxTEE1quubbGMb0x+
+	njPG3iwDGelKwC2wG8LpEsuodSJpMJcVyOyXDLnUgTRqViMMGuhA2qFgwOSkgl2Q
+	ivb6q3BnDAhdzXuvjeqEZ16BaYlLxwDdrhcstUEbk7inpu2md3VqJeLXVNttATD6
+	aa5qKBuLGI+PxEzwgmyokEleY=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wCn8yRMSihoUAlGCA--.21541S4;
+	Sat, 17 May 2025 16:35:38 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: =gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: oneukum@suse.com,
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Wang <00107082@163.com>
+Subject: [PATCH v3 1/2] USB: core: add a memory pool to urb caching host-controller private data
+Date: Sat, 17 May 2025 16:35:22 +0800
+Message-Id: <20250517083523.5917-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCn8yRMSihoUAlGCA--.21541S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF17Aw4DZry5WrW7ArWDArb_yoWrtFWkpF
+	4fGwn3tF1rXrW3JrZ3Jan7CayrJ3Wv9FyjkFyfu345ZwnFyw18A3Z2kFyrGr9xtr4ftwsI
+	qF4qqFn8Ww1UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE8nYUUUUUU=
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqBFQqmgoQ9CvLgAAsR
 
-On Fri, 16 May 2025 23:38:33 +0000, Thinh Nguyen wrote:
-> > > But on the other hand, xhci_handshake() has long timeouts because
-> > > the handshakes themselves can take a surprisingly long time (and
-> > > sometimes still succeed), so any reliance on handshake completing
-> > > before timeout is frankly a bug in itself. =20
-> >=20
-> > This patch simply honors the contract between the software and
-> > hardware, allowing the handshake to complete. It doesn't assume the
-> > handshake will finish on time. If it times out, then it times out
-> > and returns a failure.
-> >  =20
->=20
-> As Micha=C5=82 pointed out, disregarding the xhci handshake timeout is not
-> proper. The change 6ccb83d6c497 seems to workaround some different
-> watchdog warning timeout instead of resolving the actual issue. The
-> watchdog timeout should not be less than the handshake timeout here.
+---
+Changes since v2:
+1. activat the pool only when the urb object is created via
+usb_alloc_urb()
+Thanks to Oliver Neukum <oneukum@suse.com>'s review.
+---
+URB objects have long lifecycle, an urb can be reused between
+submit loops; The private data needed by some host controller
+has very short lifecycle, the memory is alloced when enqueue, and
+released when dequeue. For example, on a system with xhci, in
+xhci_urb_enqueue:
+Using a USB webcam would have ~250/s memory allocation;
+Using a USB mic would have ~1K/s memory allocation;
 
-There is certainly one real problem, which has likely existed since
-forever: some of those handshakes cause system-wide freezes. I haven't
-investigated it thoroughly, but I suspect the main culprit is the one
-in xhci_abort_cmd_ring(), which holds the spinlock for a few seconds
-if the xHC is particularly slow to complete the abort. This probably
-causes xhci_irq() to spin and disrupt other IRQs.
+High frequent allocations for host-controller private data can be
+avoided if urb take over the ownership of memory, the memory then shares
+the longer lifecycle with urb objects.
 
-I encounter it sometimes with ASMedia controllers, but I guess anyone
-can simulate it by inserting artificial delays near xhci_handshake().
+Add a mempool to urb for hcpriv usage, the mempool only holds one block
+of memory and grows when larger size is requested.
 
-Regards,
-Michal
+The mempool is activated only when the URB object is created via
+usb_alloc_urb() in case some drivers create a URB object by other
+means and manage it lifecycle without corresponding usb_free_urb.
+
+The performance difference with this change is insignificant when
+system is under no memory pressure or under heavy memory pressure.
+There could be a point inbetween where extra 1k/s memory alloction
+would dominate the preformance, but very hard to pinpoint it.
+
+Signed-off-by: David Wang <00107082@163.com>
+---
+ drivers/usb/core/urb.c | 45 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb.h    |  5 +++++
+ 2 files changed, 50 insertions(+)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 5e52a35486af..53117743150f 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -23,6 +23,8 @@ static void urb_destroy(struct kref *kref)
+ 
+ 	if (urb->transfer_flags & URB_FREE_BUFFER)
+ 		kfree(urb->transfer_buffer);
++	if (urb->hcpriv_mempool_activated)
++		kfree(urb->hcpriv_mempool);
+ 
+ 	kfree(urb);
+ }
+@@ -77,6 +79,8 @@ struct urb *usb_alloc_urb(int iso_packets, gfp_t mem_flags)
+ 	if (!urb)
+ 		return NULL;
+ 	usb_init_urb(urb);
++	/* activate hcpriv mempool when urb is created via usb_alloc_urb */
++	urb->hcpriv_mempool_activated = true;
+ 	return urb;
+ }
+ EXPORT_SYMBOL_GPL(usb_alloc_urb);
+@@ -1037,3 +1041,44 @@ int usb_anchor_empty(struct usb_anchor *anchor)
+ 
+ EXPORT_SYMBOL_GPL(usb_anchor_empty);
+ 
++/**
++ * urb_hcpriv_mempool_zalloc - alloc memory from mempool for hcpriv
++ * @urb: pointer to URB being used
++ * @size: memory size requested by current host controller
++ * @mem_flags: the type of memory to allocate
++ *
++ * Return: NULL if out of memory, otherwise memory are zeroed
++ */
++void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags)
++{
++	if (!urb->hcpriv_mempool_activated)
++		return kzalloc(size, mem_flags);
++
++	if (urb->hcpriv_mempool_size < size) {
++		kfree(urb->hcpriv_mempool);
++		urb->hcpriv_mempool_size = size;
++		urb->hcpriv_mempool = kmalloc(size, mem_flags);
++	}
++	if (urb->hcpriv_mempool)
++		memset(urb->hcpriv_mempool, 0, size);
++	else
++		urb->hcpriv_mempool_size = 0;
++	return urb->hcpriv_mempool;
++}
++EXPORT_SYMBOL_GPL(urb_hcpriv_mempool_zalloc);
++
++/**
++ * urb_free_hcpriv - free hcpriv data if necessary
++ * @urb: pointer to URB being used
++ *
++ * If mempool is activated, private data's lifecycle
++ * is managed by urb object.
++ */
++void urb_free_hcpriv(struct urb *urb)
++{
++	if (!urb->hcpriv_mempool_activated) {
++		kfree(urb->hcpriv);
++		urb->hcpriv = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(urb_free_hcpriv);
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b46738701f8d..27bc394b8141 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1602,6 +1602,9 @@ struct urb {
+ 	struct kref kref;		/* reference count of the URB */
+ 	int unlinked;			/* unlink error code */
+ 	void *hcpriv;			/* private data for host controller */
++	void *hcpriv_mempool;           /* a single slot of cache for HCD's private data */
++	size_t hcpriv_mempool_size;     /* current size of the memory pool */
++	bool hcpriv_mempool_activated;  /* flag the mempool usage */
+ 	atomic_t use_count;		/* concurrent submissions counter */
+ 	atomic_t reject;		/* submissions will fail */
+ 
+@@ -1790,6 +1793,8 @@ extern int usb_wait_anchor_empty_timeout(struct usb_anchor *anchor,
+ extern struct urb *usb_get_from_anchor(struct usb_anchor *anchor);
+ extern void usb_scuttle_anchored_urbs(struct usb_anchor *anchor);
+ extern int usb_anchor_empty(struct usb_anchor *anchor);
++extern void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags);
++extern void urb_free_hcpriv(struct urb *urb);
+ 
+ #define usb_unblock_urb	usb_unpoison_urb
+ 
+-- 
+2.39.2
+
 
