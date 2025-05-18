@@ -1,140 +1,114 @@
-Return-Path: <linux-usb+bounces-24069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EF94ABAFA9
-	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 12:59:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A49ABB01B
+	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 13:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E47B8168795
-	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 10:59:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC70A175A69
+	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 11:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED44218AA2;
-	Sun, 18 May 2025 10:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2CF6219A80;
+	Sun, 18 May 2025 11:49:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfWcevTV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c0i7oNn8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882C32153D0;
-	Sun, 18 May 2025 10:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B85205AB2;
+	Sun, 18 May 2025 11:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747565940; cv=none; b=UxK+CEBjMLPsxzcbZPofu/gCHvIWMktaEQ2GrAAsPh53IUEkV+g9UaLrk1WpIOEDBZz7nlF5+99oBYdFtWC7NvNEn9nZgx8YMbQkHSSDS+bM+S49zP4EZa9OQL+slr+JTOVUNOgsyoeF2BqxYwin3fMWJk6b4Orkf2BOZzbFK1k=
+	t=1747568957; cv=none; b=C0fqKEv0voUuwnfcXp1P/+b1WUKqTtsaknBDPq0kyrRlbFWDoJAsXP/6OB3/pBZPkbSO7s/EsupczLYZQXJfJeGGqKwwUBfxI0VGaHR9b/f3tVjfi6CiHWG/OTNJLVvODmQXwuTNQp9eezCuVFItnC0BL5uZPSqfKF9+B4Ftp0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747565940; c=relaxed/simple;
-	bh=+B72IZFw02ArbQ8uQ70t9KwfeGBjLrHsMlrlHwl77mI=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=KGL0V8Z1jNe/mhzSWAwi7DPo8ipjev69ZIbmclSyoIehsZLbyylSdSk20jm4tx6yTKiFOIECN0/2MZejW4P2CzgW1vvDEhMURbuVMeaCFZvKOUNAK9VtSXDlbsqlnbkXjeYY1uYZ3DL7zRpWJSk2AxhjS4niaqd7dZYlSVi+AJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfWcevTV; arc=none smtp.client-ip=209.85.217.41
+	s=arc-20240116; t=1747568957; c=relaxed/simple;
+	bh=HiKOzxeOt45QTgKhQrYLef7NcSGu+e/SqcM3but3h/0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lNrJyKvjz1tKIsKWnokfIPe3crcitJ4wHyfigmyF5LBaqJ1pdDgmVQh78jN4cfCzEiQNXzzSnVxbO9BMVb1R7EU3ND4ybXYKwsIY0FDZ47tWAQpB/6zaXqV4pej7tzrSVDCZGYFDYBq2+lPf3hWj7bft+h+RxmMMwlZv39ObGy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c0i7oNn8; arc=none smtp.client-ip=209.85.221.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4e1aa5d8039so712472137.0;
-        Sun, 18 May 2025 03:58:58 -0700 (PDT)
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-52edc9ad68aso33747e0c.0;
+        Sun, 18 May 2025 04:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747565937; x=1748170737; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8n+H86ZLL5zAR4uGMu8GS7+ruBBphwvspKCvbQPyTDc=;
-        b=VfWcevTVrJXMtK/X+Wn8oR5Y9/BraihBGWku0+QZIlyZo0kZNgJIacM4ONCDChcyHC
-         d4AEafzfhHnxN7TPl8iAF1MYOJ/EV+djVnlPXG/ZNIxO0Hh1kuPFAUT1yCnme0j4Rd0I
-         dc/uUy6/W4kZEcR2cB4PmAJwYllml9/yeTqluydfjObD9oAoJfy44AxPmc1LO6DkdNcE
-         9YQH1YyU6A7663DtZkLDbgYeZA5tNXtr5NaloXbjrDlVTo53NRfAf2Y2wKPvBb6+raRx
-         bB+cwJFBrWr4R1GPYsas9f5lnHp5Wg6Rp7timo6FLpCnkCnJP0JO3NH63gC4VlSuEk06
-         xdtw==
+        d=gmail.com; s=20230601; t=1747568955; x=1748173755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVCyW1p+zUGd8ZnX+1lDj4SV+WumcGrGBjrEJGb8j2c=;
+        b=c0i7oNn8PUh8B823T34SNEVq9lPwegVWhwLAoOIWvOPpdB0w6kbRoTs+2tn8ZXWMVs
+         R25cBJ//M87fx/dnUFOS7LAcrTQ5jyKajwVWb9KUDEPq3z1d6ZTKi3cwpU2uoDeCQYnv
+         peCwN0SxLFNCecmOW11lDWoDxNi46+E3z538yMNmYWsOtMtIKhXh+bns1I6sjD4hGGgL
+         9Fg3cLQjE6s768wBADHgfOwl+WpAzHXz30rd0NaOcWzs0yg0D4lwaEJH+J8Z+yhojDpV
+         8WUirl/qHk/PPK9cOOFJuD4nHY+FOMa6ef9HjOmryBa9rf5dJfihyrooszDaQh4MnKfk
+         wXSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747565937; x=1748170737;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8n+H86ZLL5zAR4uGMu8GS7+ruBBphwvspKCvbQPyTDc=;
-        b=q8VOBV3z+Ikdyq0x6lUCrv9kZ1inFS7lAy5lj4pefQMrMyEVeadOcstGtMvGlSOZmd
-         iFdyGvitXkQ0evg3a2aYWGOpOlzj91sc3qTw9+QvNzL7nw5IRolmZLCCWDalBTmevMQj
-         QNjhF9z6yRVtyrDT+Gl8S+zI4Au03cQjbl3DzgIbZj19ajpaKqmib8jU8WAK/ot4ZCci
-         U85NfJO3GN9TDvwEdyZRrA8Ql+Zs3E3r1IkrEP7RwLvTbtQ39eZD15Lsf/frE5ftL2ZG
-         eAhljBI308+qecizR91g4dYRXRjh0xf+1J3P/e0foTFuJVycvZlG4DlV5VxTzeM4t0Px
-         K6gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHo4dgI2Q/xZOXFZdoJC+41Ezt3kkgWfwWm+d1Jy73zur4IrCd/2gL9QI7DfzcCouyhdKCG90t+bfH@vger.kernel.org, AJvYcCXl0xjL3saSWzuN8HtolOZsepSzCXWRbt6oC5bDaAMypJqFxXwHDhPbMnN4CAaIbXZfB/g/Is+m/PBr8G4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySUYk01CgXBMBJhABrpPqxBCCdTw3gRKokgracbfKn5oQYvvyI
-	iJSQm2gjAFixldxn8oHkzpAiJY4QUDw8wVPQTm14dya9TnDWOlKy65ndJ6jc/g==
-X-Gm-Gg: ASbGncsGhsF8z9+JqPDr8PqgHizJxtFiU5InoeP4VhFx6WTAYHeSlWkXlo0soCjp7UZ
-	QjsGB/BIf7gah8EXWbT1qMBmwnCQtmvr31zQdHX5dUMoYfG6//EEt8iR52PIX+p78PrmHIPHaZR
-	z6jsGTfnoPhoBI7bPP+6jEl08R/tiUGpuoq1WFJLSRdV3SiL1NM4kofKuPHpOEm0aNvV4oIl39U
-	XBsvfJ1r7CillTg07T91tfHvdywxNyPyd8qliGzif5ES3O88ZSm+ZHHKlY7EXA8Gam2yqZzX2Kt
-	2wC+9vaHShdBkudMXcBrvt46HWj/gUrvJrUDAnjN5iLen/qL19RIygXD37MB3IP59ZF4EpOQJLp
-	zHwfatRQhoT9raa/qb1rAs7G9jVa1uQEYx+8AkoT4ZvoX/4mOVCsWjzc4PA0P9cvICvKOFAC9LQ
-	==
-X-Google-Smtp-Source: AGHT+IEl9irR0u6FuLfHhwoXtd6mLOFkEUPaa1IU6VPGWTz5l/8h3UQP6qS+XRUO9guQyyiuysQbEg==
-X-Received: by 2002:a05:6102:1587:b0:4db:e01:f2db with SMTP id ada2fe7eead31-4dfa6944a54mr10717885137.0.1747565937158;
-        Sun, 18 May 2025 03:58:57 -0700 (PDT)
-Received: from smtpclient.apple (2603-9000-d600-0325-05ca-4eab-4fb3-c377.inf6.spectrum.com. [2603:9000:d600:325:5ca:4eab:4fb3:c377])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87bec1220b5sm4393735241.11.2025.05.18.03.58.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 18 May 2025 03:58:56 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+        d=1e100.net; s=20230601; t=1747568955; x=1748173755;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZVCyW1p+zUGd8ZnX+1lDj4SV+WumcGrGBjrEJGb8j2c=;
+        b=kxZsDKbweXs9Xgz8Phgi/JWgFD+ptvu68D5JfSqZlPcNAmFiqGWAboD5Xg+3VXJjA0
+         AOcImcYe0VVtuKthUgFq7GCi/toO/qH2CW0ezyQhxSOq98NjpKtLtiwTKr8PvhfMRrM8
+         NVSrBvnM3P6XT4e7aCPgtv8LF1SnV2qI3M3Nk6ZeRt4bYgMvHxdTX86+JmdV41qXYe0H
+         vi7e1fsBKXJ7Xgd6TPlySRX6Oy+QmHlLZU3/zTHI5TbWgVD10bUa31rVu687LoqlNd7Y
+         5dNUoCMjsTspuxQ0IzeD7Tfx1VtrV8rfAH6NTXL4C/22geARRGwWi5t3ja5m3QId9bHQ
+         vepw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwsurd6abe24Pqbad0Ehb4yldEAHKt3poai1QCHo3ZMkiFv/97jL9mL+vF4hb11PdnwXLa1GTcoJeJYso=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYGML0l3aAhlIMPjfR2Tmedut4Bi+YntngTME/lK8zmFvExNY1
+	uUyLVv5g96iNdc1hZtBPJR5RzkP03eb267+mFv1NO2SR3GlEiM91JnqL
+X-Gm-Gg: ASbGnct+Lt3WOJrEyYSG4qOd4nd2MAHPRBPuyWMhCtQLIiaKgs/5U6oZ4rwAINTET0f
+	5opqMpZM0K6egeN+sFOpKMPyBsQKwamG2xxKdsEkFDBNd9BBE4FXWZ13aZ62VDn5wFiSAigjHB5
+	xSzwX5C9eoxpt8LQ2VQ3WgEkyMX6xoo28zrwNbbmlLdw8PVZwkznyvhwJXS808zqNkOClEtdE4x
+	ZiyI1mSC5IquGWt7POYmgz2/qYEqSIVCNnKK5ZBXmovWYcoE6QEkSSOeXjG7XTtXdAOfSvioZCY
+	ilXqKRxROjPpvczAanHjGMJ++FRK5sJnJtGfb8DFUMOSnRPDiYb8+2+HnX7+6UQbN04Gw5NXLna
+	pGnAGoPG1O4Zahdqf2f1gze9VRmZw
+X-Google-Smtp-Source: AGHT+IG+foBn+D+HEw6LXJFoab8xmAOzeSF/BhV0UQskSTow3H49661XYEZ6YEFTViFVpOW4DpnRXQ==
+X-Received: by 2002:a05:6122:6170:b0:52b:789:2d0 with SMTP id 71dfb90a1353d-52dbcd389e5mr6752245e0c.5.1747568954636;
+        Sun, 18 May 2025 04:49:14 -0700 (PDT)
+Received: from Ubuntu.. (syn-097-097-020-058.res.spectrum.com. [97.97.20.58])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52dba910b9dsm5088621e0c.4.2025.05.18.04.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 May 2025 04:49:14 -0700 (PDT)
+From: Jonathan Velez <jonvelez12345@gmail.com>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonathan Velez <jonvelez12345@gmail.com>
+Subject: [PATCH] docs: usb: dwc3: add documentation of 'sg' field in dwc3_request struct
+Date: Sun, 18 May 2025 11:48:59 +0000
+Message-ID: <20250518114859.9215-1-jonvelez12345@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.10\))
-Subject: Re: [PATCH] docs: usb: dwc3: add documentation of 'sg' field in
- dwc3_request struct
-From: Jonathan Velez <jonvelez12345@gmail.com>
-In-Reply-To: <2025051804-cherisher-rage-d7ad@gregkh>
-Date: Sun, 18 May 2025 06:58:55 -0400
-Cc: Thinh.Nguyen@synopsys.com,
- linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <230951E4-7C86-4ECD-9D61-B7936B445A71@gmail.com>
-References: <20250516235447.17466-1-jonvelez12345@gmail.com>
- <2025051804-cherisher-rage-d7ad@gregkh>
-To: Greg KH <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.10)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+core: Add documentation of "sg" field in the dwc3_request struct.
 
+Signed-off-by: Jonathan Velez <jonvelez12345@gmail.com>
+---
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> On May 18, 2025, at 1:48 AM, Greg KH <gregkh@linuxfoundation.org> =
-wrote:
->=20
-> On Fri, May 16, 2025 at 11:54:47PM +0000, Jonathan Velez wrote:
->> Signed-off-by: Jonathan Velez <jonvelez12345@gmail.com>
->> ---
->> drivers/usb/dwc3/core.h | 1 +
->> 1 file changed, 1 insertion(+)
->>=20
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index f11570c8ffd0..bb140dde07d6 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -942,6 +942,7 @@ struct dwc3_hwparams {
->>  * @request: struct usb_request to be transferred
->>  * @list: a list_head used for request queueing
->>  * @dep: struct dwc3_ep owning this request
->> + * @sg: pointer to the scatter-gather list for transfers
->>  * @start_sg: pointer to the sg which should be queued next
->>  * @num_pending_sgs: counter to pending sgs
->>  * @remaining: amount of data remaining
->> --=20
->> 2.43.0
->>=20
->>=20
->=20
-> For obvious reasons, we can't take patches without any changelog text =
-at
-> all (and you wouldn't want us to.)
-
-  Agreed! I=E2=80=99m sending an updated patch with change log text.
-
->=20
-> sorry,
->=20
-> greg k-h
-
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index f11570c8ffd0..bb140dde07d6 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -942,6 +942,7 @@ struct dwc3_hwparams {
+  * @request: struct usb_request to be transferred
+  * @list: a list_head used for request queueing
+  * @dep: struct dwc3_ep owning this request
++ * @sg: pointer to the scatter-gather list for transfers
+  * @start_sg: pointer to the sg which should be queued next
+  * @num_pending_sgs: counter to pending sgs
+  * @remaining: amount of data remaining
+-- 
+2.43.0
 
 
