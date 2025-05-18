@@ -1,151 +1,115 @@
-Return-Path: <linux-usb+bounces-24071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24072-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A308ABB257
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 00:57:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F4F8ABB284
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 01:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0DB11730EF
-	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 22:57:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 125D93B2581
+	for <lists+linux-usb@lfdr.de>; Sun, 18 May 2025 23:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D2920F08E;
-	Sun, 18 May 2025 22:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFD2A20B1F5;
+	Sun, 18 May 2025 23:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3y/FncJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYM1Gt5d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714AA1D5CC7;
-	Sun, 18 May 2025 22:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597512CA6
+	for <linux-usb@vger.kernel.org>; Sun, 18 May 2025 23:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747609044; cv=none; b=r2naCjpgUqSr+KrnnkaydAvC4G98ZDt9fHJRsJSm2LaHQ9uYi5BuyVpzJ/KcAB7tWARwjGsuwcPcxsT3uMuwKmFWvfYNHswytsrANvJKrEEIfKq+GE2iTXAQxK4KQqX0W8/Scs4HSxTZm/N6WIjDAq/F/0Cin4hNvpU1RphsuFA=
+	t=1747611480; cv=none; b=SUVt04Zm1Ib8I8HoUbDrjaU4ztKEKCDnDUJRmSyrhB2xnN9+9LzNBBOXtcub+ccj0VuVIJfZ+gvXLpxkQXmfZwJrFL2KCDCJ4oqo3eA9hjtqLnhYInsJqosm2pCN2StVGOGcgP/lkG9kwMop8VxNapeURp7Zvup8aq01EsX9Zc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747609044; c=relaxed/simple;
-	bh=yowWa6pSn0T/KbzG+5rviDwqhzTDjFxuWOZdq74H1BQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AIpd16UnnJAB8tP7otNYPTLmOpwpVHJPAvuGwc5EsSSDDi3vBBF62YqVdmAjkjsFoHupnp8929jk9/8cV/paagXSAaAkAnM/FLby9f+QmmF7PKCr2wJL71x8RiBbBnCo3AodDRNHbM/SFtV5+tU9K29Q8xFy8hX2EDsz4je1oVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3y/FncJ; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54b166fa41bso5700643e87.0;
-        Sun, 18 May 2025 15:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747609040; x=1748213840; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H2expOzKdfcVjHpwet97BjvVsz+R8rCtLpKyQivyIAU=;
-        b=R3y/FncJy+dhcDpBHKXQbhG+OkkxBTFuCIMnPEBOZCTnOi99jqrTe9Jyys1rcrk8xw
-         3BKBA2OEbBhMJuG1TSWzAdrVNlZasZ8ncfFKf09D2RRFP8T9vK+6mMPRe1NRbFs53bUU
-         xjfMFbR6thW87gbkg5iOdoVqK4Q2Jrv449dwKzEq7bx19H0EdEQynleoms5cfy/Nsnrf
-         2KQfUnOTuA9GVHRCa6ZboJpo9/RFtabTlHbOYKFJeA9PcdUMMeeqeIFjNyAKS7Zij1cp
-         sjSO6uUTupVOLSnwGKwTJQhSBEbmJG1IHIx79wfv4YTsyAxTcEHXbGpICBNhxHhSBQ6x
-         2OiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747609040; x=1748213840;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H2expOzKdfcVjHpwet97BjvVsz+R8rCtLpKyQivyIAU=;
-        b=ZZJjDbYOKB8Cv9b7SA+UAfEqpfx5TWQFZrRI8NivXkdiCp+zh7COhO3VJRA2H2OMh4
-         NvKvO2ChbfW1N4XWmiaMz4y1nZN1Y/AG8EElanjClxXDDg8KN6mc6xZyWqicAKUP6gN5
-         S1UNRuRJAoioYEnvLJEsE53zYBX7EZoKoVGegNjPigjNk730R9Lx8nDeHeKOZY/lJE0F
-         34ywtBTl7SiryYW8teNv4qOdOBDmdpk1ShwfwgR/6Uvtqc4kOG6pbHSsknDFAFbBw7TN
-         tHiwKmnZZkqLktrRL3aM8uEKR0/4t9T8qhPPuP+KrvvRwAPnOKykCh2jKOd43X1UxsFv
-         83EA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6StbJR4uY2goeyhJVlEMrRZrbshuLdiIpIK9MOJqCgt6WeX+pWK+uNMvAsdNEMVRO7Zouka0Pp0O3+BY=@vger.kernel.org, AJvYcCW75B9WS1DYcSAuEH11gXSOBcHa9JaXGK/nYTMa0z/G8TY8OUXNnyHTPQRWqesQ3tJ6h+zS/GXxMQb7@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBRzgrdUm4uz4ns/N7BmLkdKzpuFdwyLA1TUFDU99yACWXTmC8
-	lV0lg0J5/f5vd8wtQAq4a3VG+0JA/379kDaeg3vIakki8gnSpXCylXqN
-X-Gm-Gg: ASbGncsZ7JB3lvv/RshILqgDo7r6Js5ivSicaJJvNa0e4L6h4F4vT85ZhkWQLUA/yyZ
-	PXwKc1VzoZs+eMi91TKYweF/G06TUNk8CC7SLFFQKaLmKkFIG7tImOF7fz8ZldO3pjw6YedaR4T
-	Bjt6ZLefWZA+KrIsmXAsu7W5v85WrDXKX8jLdctujer5rnCxRV+yAIVSDuGsA91QVFvexO4PckR
-	+TA8HXBGKwWOALRu79+OgMw+MXNBsdTM0hlvQTTxYSb0eW0YfPngrFSz9Ntu7QTpiqwPQNsOkv+
-	8d8A1k0N6lS2HPPg6HGasG+8YTsZIAUjDIjR8HBuJoCIBM8kj9jeLtvLf9n9iwfQQypH
-X-Google-Smtp-Source: AGHT+IGx9jOKMKwgpNkuCpuyVRwftEon4VRfg9krjw1d6vvtn9U0gLvgWwJ/Lj/oFiLwUvtziJCkLA==
-X-Received: by 2002:a05:6512:2915:b0:550:e5b3:b1af with SMTP id 2adb3069b0e04-550e71954e8mr2481593e87.10.1747609040209;
-        Sun, 18 May 2025 15:57:20 -0700 (PDT)
-Received: from foxbook (adqk186.neoplus.adsl.tpnet.pl. [79.185.144.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e703e7a6sm1600680e87.218.2025.05.18.15.57.19
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 18 May 2025 15:57:19 -0700 (PDT)
-Date: Mon, 19 May 2025 00:57:15 +0200
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Jay Chen <shawn2000100@gmail.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- jay.chen@siemens.com
-Subject: Re: [PATCH v3] usb: xhci: Set avg_trb_len = 8 for EP0 during
- Address Device Command
-Message-ID: <20250519005715.532cf34d@foxbook>
-In-Reply-To: <20250516033908.7386-1-shawn2000100@gmail.com>
-References: <20250516033908.7386-1-shawn2000100@gmail.com>
+	s=arc-20240116; t=1747611480; c=relaxed/simple;
+	bh=jh7BIAe1wunhss9mL1rrKhFcoAXuscYE32CMz4NRo1c=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AHTmGybsdwrbg70tMvIbCrytSnul2z5Wm674g3u2Zn7vq6g5zE2BQpH6JdbhuW8tLvYYcYznnDYGlE80Fb2LIxLp2FiHRiP3Wu7CMWDB8qYUzrkvbOdNbNKi4lgLpYQ6O3JR8CnQ8+BMxzDOQYwb/1+l+VqJUr80PJSIc/xkiAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYM1Gt5d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2CC8C4AF09
+	for <linux-usb@vger.kernel.org>; Sun, 18 May 2025 23:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747611479;
+	bh=jh7BIAe1wunhss9mL1rrKhFcoAXuscYE32CMz4NRo1c=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZYM1Gt5dnPcfC0QGTVTIGz5mJPuFmPr0u1FVBbZa3B5C0RzEcMYVPuIrCT7M6iYv0
+	 eit4j+r6SLGNUhnv2CwvUah4MWnC4g4eFpA+YVUTunZeVebOX5WcM9p8vGfsnEl34y
+	 sb4Uce0JAb7swwv4rqRzyX2KP0uJf5Dgcbv3dRYVl0x/yk3hSZZ5epJt0gGIFKIU42
+	 kBXNN9I7TR5bzTuQCVXHHYWFQerzY4Cv7kkSORgJG+nA949WCmYjKP1LFCTq4VEDMm
+	 argAqrYs5rZ9/LsrXGwpvvedDZX8c/ifQRi2s9ks7EbnCUlcpenfgqUzpfHus2wiRO
+	 cuO9KSYBlmISg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B7661C53BBF; Sun, 18 May 2025 23:37:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220069] [6.13.9] regression USB controller dies
+Date: Sun, 18 May 2025 23:37:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220069-208809-vLhBCBPPa7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
+References: <bug-220069-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 16 May 2025 11:39:05 +0800, Jay Chen wrote:
-> According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
-> TRB Length (avg_trb_len) for control endpoints should be set to 8.
-> 
-> Currently, during the Address Device Command,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
 
-Not only during this command, but forever.
+--- Comment #54 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+avg_trb_len doesn't seem to be an issue for my ASMedia/Promontory HCs, they
+still have their usual bugs after changing it to 8 as per spec.
 
-> EP0's avg_trb_len remains 0, which may cause some xHCI hardware to
-> reject the Input Context, resulting in device enumeration failures.
-> In extreme cases, using a zero avg_trb_len in calculations may lead
-> to division-by-zero errors and unexpected system crashes.
+By the way, the simplest way to break ASMedia chips is running
+  while true ; do ifconfig ethN up ; ifconfig ethN down ; done
+on a SuperSpeed NIC (AX88179 and RTL8153 known to work). This is what the l=
+imit
+endpoint interval quirk appears to be helping with, though recently I found
+some case (NIC behind a SuperSpeed hub) where it didn't help.
 
-Only the xHC internal firmware could crash or misbeahve from that.
+I am also not convinced that the "clearing xHC resources" patch is relevant,
+because it's hard to explain why nothing bad happens when you run reset
+manually. I found no problems resetting devices on my AMD B350, ASM3142 and
+ASM1142, despite the dubious command sequence always being there. Your logs
+show malfunction before we even get to this point. Indeed, the reason the h=
+ub
+is being reset is because attempting to resume it normally suddenly failed.
 
-> This patch sets avg_trb_len to 8 for EP0 in
-> xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
-> and improving compatibility across various host controller
-> implementations.
 
-Any particular problems which motivated this effort?
+So the outcome of testing is that the problem occurs if both the unlucky hub
+and the unlucky webcam are present on the same X670 bus, and disappears if =
+they
+are on different X670 buses at the same time?
 
-I tried an equivalent change (with = instead of |=) on several HCs
-and found no difference, including no elimination of known HW bugs.
- 
-> v3:
-> - Corrected author name in commit metadata and added changelog.
-> 
-> v2:
-> - Fixed malformed patch formatting issue pointed out by maintainer.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
-> Signed-off-by: Jay Chen <shawn2000100@gmail.com>
-> ---
->  drivers/usb/host/xhci-mem.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index d698095fc88d..fed9e9d1990c 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
->  	ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
->  				   dev->eps[0].ring->cycle_state);
->  
-> +	ep0_ctx->tx_info |= cpu_to_le32(EP_AVG_TRB_LENGTH(8));
+And it's happening on 6.13.9 or newer, but not on 6.13.7? I have no explana=
+tion
+for that...
 
-The rest of ep0 tx_info is zero, so this could be = instead of |=.
+--=20
+You may reply to this email to add a comment.
 
-> +
->  	trace_xhci_setup_addressable_virt_device(dev);
->  
->  	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
-> -- 
-> 2.43.5
-> 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
