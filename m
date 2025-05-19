@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-24088-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24089-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53D5FABBE5A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 14:53:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CAADABBEDE
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 15:14:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606E1189FF57
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 12:53:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A59B7A209E
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 13:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1DA278E75;
-	Mon, 19 May 2025 12:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782162797BC;
+	Mon, 19 May 2025 13:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d2qvmrfe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UmtinjsE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE71F1C683;
-	Mon, 19 May 2025 12:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDDC27979C;
+	Mon, 19 May 2025 13:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747659178; cv=none; b=Z2xteLTv0LedfrcgJXkJlblAWFISWy6YcBR1cYnH1N8Ory0i8hT2Qro5q2YZTu3duUcz7WCcZ9SJ6a4775Cg9Bd7AL8XfMA+UfT16somaWgLjFtWu7hnZz7BjVWnrX926y4FmMIg6dvy0Y0+934uhctVQE/jQnqnJVxA6nooQ4g=
+	t=1747660479; cv=none; b=NQiqxOcRdShz5I0d9z161dX/pd7CdNRGDQq+4JNt/079/OVEIiag6Xo36SxRbqPts4Hz1v2315T7pBGJcIZJ6o3SqZlGv0TUzKDyfAxo0Uc05JZvcpDKowM1x/40jPse64Tb4c9v5s4ydPQB54ZLiLAJensFtLs6OAgzBDB/Zmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747659178; c=relaxed/simple;
-	bh=x3xvYVGXBZZpUoVLsbCNPd67Q3UDjJPR1pi9qAO5+GI=;
+	s=arc-20240116; t=1747660479; c=relaxed/simple;
+	bh=uShxAUxcxPdbOfd/u4AtqcQod/Y/hU2CBAFvjqiM1w8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CzE2znZbO9nQsPZwCRnW7ZEzUuKVrN6RcYrUJdj6l2JL3GEHg3n7PYdDd7uKjvBNBHC+0RdqiEWyfdoLwfvub3B05b/872UnIrjwbEpESvU1s3wPLzyfolV1uw98LlKqR8KPmyeqsbIi2z4FCr6wNXTy6c15n3117OQDs1R8PBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d2qvmrfe; arc=none smtp.client-ip=198.175.65.12
+	 In-Reply-To:Content-Type; b=czq94HSiec/Xokc8zCF9frPhmzVbkb47YYhC+jdA+UUmftkdgqctGyeVwwkTl6DFoFoZVvvvHnExOyuJ/PUbscEC9p9RJQvj2igACIO4xui0P4REylen+cJiqBr2s1rIiRSCSF5mcaPRJbnzFzNTfrCZyyWTtvm4+WDZjcGl3kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UmtinjsE; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747659177; x=1779195177;
+  t=1747660477; x=1779196477;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=x3xvYVGXBZZpUoVLsbCNPd67Q3UDjJPR1pi9qAO5+GI=;
-  b=d2qvmrfehHh6agv8tLFg90DD/ycrjIfyAoltGMaJJr+Pp++yFMfhxOkD
-   5NayNrZOhsPl86Aq0ALly1Y08U7TtpY3k8H+UEanfVCfrCmbq75NRtNxX
-   nPs2cDeuvnZ/pOA0MahQgfvBKaBzR1edFtG1vwPuWX+R3JzqlPm8lu+x2
-   KReY/d7SsyaMUJCex54QozgNiivpvNHg5nofeJZ1QR3WUTHPL1Q5+Fp9y
-   p5i/0GA69tkIBkPZ2NacjKduQAobx6MVS6Gn35tUqwU286ew6NMwJk6/i
-   KOY/Dk/qIV0sr0piJZycYIohPDLUJq+5ThhG7gmko8+vf7jk71n2AWP/E
-   Q==;
-X-CSE-ConnectionGUID: 2eS69JDRRlGyP8ecEWPPXg==
-X-CSE-MsgGUID: JoqhC/c2QtqJyrkc5S8DkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60950652"
+  bh=uShxAUxcxPdbOfd/u4AtqcQod/Y/hU2CBAFvjqiM1w8=;
+  b=UmtinjsE4gRYC5tt5Jd4CJlxAxfgVQJOBeDT87qmjBiZVill/E8W4HOj
+   4CsHJuM2Bmp3eGiaod8rN18v1b+Ffy6880Vv7isRCdi3pZlQp9Q4u6pkG
+   f7qQ9Ny6D9arxs5ktxYa1BrkxxbD4K0pwraeB0EGmOLEeqSY7yJJov/zk
+   mNV0E1BsG2B8GQuK2aY3NSb7d5wCHlaLdvOvj2+fMVY1QTjpOfKt/okO/
+   l8gDRw5calOiA7ZCXoaUl4eU5fHa1pUTmxR9K4tpzdW4TdFtTbteBraK4
+   ZNaZeEgcBChORE81n0S7SFV2EwRPlWp9ISlyUjKY+OK699WZhcVOdadTj
+   g==;
+X-CSE-ConnectionGUID: GboEk6SyTQGTvH3PlPkkpQ==
+X-CSE-MsgGUID: mxbmre61RCideA5HtG0mKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60194120"
 X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="60950652"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 05:52:57 -0700
-X-CSE-ConnectionGUID: oGNm2gWUQIKUauBGoUZW0g==
-X-CSE-MsgGUID: PtWEXZPYSnSs1ViA9nCAHQ==
+   d="scan'208";a="60194120"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 06:14:37 -0700
+X-CSE-ConnectionGUID: Vb1VrETuSKusmjLX1RCtUw==
+X-CSE-MsgGUID: Up3uOHhlRdW2rIMYzV8ihA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="139855553"
+   d="scan'208";a="139408918"
 Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 19 May 2025 05:52:53 -0700
-Message-ID: <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
-Date: Mon, 19 May 2025 15:52:52 +0300
+  by fmviesa007.fm.intel.com with ESMTP; 19 May 2025 06:14:35 -0700
+Message-ID: <e87a80d9-9603-4d27-99a7-a34eeda8c6f5@linux.intel.com>
+Date: Mon, 19 May 2025 16:14:33 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,58 +67,49 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] Revert "usb: xhci: Implement
- xhci_handshake_check_state() helper"
-To: Roy Luo <royluo@google.com>, mathias.nyman@intel.com,
- quic_ugoswami@quicinc.com, Thinh.Nguyen@synopsys.com,
- gregkh@linuxfoundation.org, michal.pecio@gmail.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-References: <20250517043942.372315-1-royluo@google.com>
+Subject: Re: [PATCH v3] usb: xhci: Set avg_trb_len = 8 for EP0 during Address
+ Device Command
+To: Jay Chen <shawn2000100@gmail.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ jay.chen@siemens.com
+References: <20250516033908.7386-1-shawn2000100@gmail.com>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250517043942.372315-1-royluo@google.com>
+In-Reply-To: <20250516033908.7386-1-shawn2000100@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 17.5.2025 7.39, Roy Luo wrote:
-> This reverts commit 6ccb83d6c4972ebe6ae49de5eba051de3638362c.
+On 16.5.2025 6.39, Jay Chen wrote:
+> According to the xHCI 1.2 spec (Section 6.2.3, p.454), the Average
+> TRB Length (avg_trb_len) for control endpoints should be set to 8.
+
+Maybe add here "But section 4.8.2 "Endpoint Context Initialization"
+states that all fields of an Input Endpoint Context data structure
+(including the Reserved fields) shall be initialized to 0
+> > Currently, during the Address Device Command, EP0's avg_trb_len remains 0,
+> which may cause some xHCI hardware to reject the Input Context, resulting
+> in device enumeration failures. In extreme cases, using a zero avg_trb_len
+> in calculations may lead to division-by-zero errors and unexpected system
+> crashes.
+
+Would be good to specify here which exact hardware requires avg_trb_len to be
+set before the 'Address Device Command'. This way we can later create a
+quirk for it in case it turns out other existing controllers can't handle it.
+
+So far it seems other hosts can handle it well, and quirks may not be needed
+at all. Thanks to Michał for testing.
+
+Thanks
+Mathias
+
 > 
-> Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
-> helper") was introduced to workaround watchdog timeout issues on some
-> platforms, allowing xhci_reset() to bail out early without waiting
-> for the reset to complete.
-> 
-> Skipping the xhci handshake during a reset is a dangerous move. The
-> xhci specification explicitly states that certain registers cannot
-> be accessed during reset in section 5.4.1 USB Command Register (USBCMD),
-> Host Controller Reset (HCRST) field:
-> "This bit is cleared to '0' by the Host Controller when the reset
-> process is complete. Software cannot terminate the reset process
-> early by writinga '0' to this bit and shall not write any xHC
-> Operational or Runtime registers until while HCRST is '1'."
-> 
-> This behavior causes a regression on SNPS DWC3 USB controller with
-> dual-role capability. When the DWC3 controller exits host mode and
-> removes xhci while a reset is still in progress, and then tries to
-> configure its hardware for device mode, the ongoing reset leads to
-> register access issues; specifically, all register reads returns 0.
-> These issues extend beyond the xhci register space (which is expected
-> during a reset) and affect the entire DWC3 IP block, causing the DWC3
-> device mode to malfunction.
+> This patch sets avg_trb_len to 8 for EP0 in
+> xhci_setup_addressable_virt_dev(), ensuring compliance with the spec
+> and improving compatibility across various host controller implementations.
 
-I agree with you and Thinh that waiting for the HCRST bit to clear during
-reset is the right thing to do, especially now when we know skipping it
-causes issues for SNPS DWC3, even if it's only during remove phase.
-
-But reverting this patch will re-introduce the issue originally worked
-around by Udipto Goswami, causing regression.
-
-Best thing to do would be to wait for HCRST to clear for all other platforms
-except the one with the issue.
-
-Udipto Goswami, can you recall the platforms that needed this workaroud?
-and do we have an easy way to detect those?
+I'd skip the 'compliance with spec..' part as spec is a bit unclear on this
+issue.
 
 Thanks
 Mathias
