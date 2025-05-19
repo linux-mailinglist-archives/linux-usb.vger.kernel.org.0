@@ -1,129 +1,85 @@
-Return-Path: <linux-usb+bounces-24086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E4E1ABBD59
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 14:08:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B213ABBDAE
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 14:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49B4817BDB3
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 12:08:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17D3A17D2EA
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 12:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B1F276034;
-	Mon, 19 May 2025 12:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3D52777E4;
+	Mon, 19 May 2025 12:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PeQwiM+k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWQVXcgj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD7920C00E
-	for <linux-usb@vger.kernel.org>; Mon, 19 May 2025 12:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FE22777E0;
+	Mon, 19 May 2025 12:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747656530; cv=none; b=DMbwm+PAOQkmwTtuuajVf7qxYSmRK90cJcQW0DuPYgH4XdNMsc2lHsC7fbc28fIWEh2MKTUDOpe437XPiM6TxPX96X8Lw0sMc5N+rAXWL6nny2Lh0zLhG5Q78TFPABsQDwF2Eup5S4GKf+EhtUO2AlxylKQ82bf8SXsDK9ZcC7k=
+	t=1747657609; cv=none; b=hDVSnJtPkgiClStAa3wKlsxdiMntQBIo2PkDlcb5Ksy+vQzo6xIzL3w37fMgYnOyMFAJg9ME3ZBO6HfARFrgh9x6tPJ7jVVFB1KIZfBSClxzZxqckKF8CCjWgIsahV5h+esMazSkcBTs9X7kvRlkKWOV6EyyVzCSBKtC/TnhdvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747656530; c=relaxed/simple;
-	bh=U+PsFdpceM2mRyBHXJX4gpOgSdKMftO3sC1ljctg538=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BYYYmnf5umzqLy18GXOR6gWMAHJv5IWV/DECK/aCldc9dZ5ktw0xiIrq1IftzezEHKhYhTmQ4xyawsdfz7xAJ69EJuGVwok8WwzB8JUj+onhJ/Xll1AJfFpyWX4Q4HQqqV8aMXoWJvLeYbS1VM1NTGzSgjX+vWs25CYveCIK8pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PeQwiM+k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2529C4CEF0
-	for <linux-usb@vger.kernel.org>; Mon, 19 May 2025 12:08:49 +0000 (UTC)
+	s=arc-20240116; t=1747657609; c=relaxed/simple;
+	bh=DPicR1+C76ccRqNyEUDpjoZuZjeKz6Q8YWTFHNuB6II=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1dWqXdI41cNqvpKAg/q9zttJdGHyzUCC+4qVpTXacxrIEKaYbI9s6djyWHt6LARwDrWxvUj5KPzwsZPyyKrBwbSUFjKEiSzanN+R1e34L1gqQSLE3aRj99LZtHbbLq4o4lRfeGWda9jShbKXBj4i6IA6EipzSkrlorx0o9CQVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWQVXcgj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A44EC4CEEF;
+	Mon, 19 May 2025 12:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747656530;
-	bh=U+PsFdpceM2mRyBHXJX4gpOgSdKMftO3sC1ljctg538=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PeQwiM+kC+7jy8kGctEXpquwbmYxDib6QwfCmaaYZ7tHqqnSOIblnIIqoBBfqbp4C
-	 Zpi6BGTu0TOxQyS2Bxs53Wnxu8snnCRlL9pP3sKap3NzMBKQ2Dm9c9p0FpMOTjetty
-	 MOAboBeXGaPxUbAfkCdqnBgDl0hQp5IwyIJjKTrL3SkrVBJfIZ16nUwG2U1Qj9qN32
-	 7keGZ5RjMJ8GeZkhcdbOzC/1FQpbmvOaO6NMumlfgvLBFm4Dk0IvMhGfD74MfGn9xe
-	 gZvc2GD2Tdujw9sPNNpjWxzPp/9ylzBHmE8+QZcIbIxwBHRvZIDfVQHEC//nPqit7D
-	 w4P8YnMaZe5jA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id DCA9FC41614; Mon, 19 May 2025 12:08:49 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Mon, 19 May 2025 12:08:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: cwunder@gnome.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220069-208809-yNTugOD37j@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
-References: <bug-220069-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1747657609;
+	bh=DPicR1+C76ccRqNyEUDpjoZuZjeKz6Q8YWTFHNuB6II=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tWQVXcgj0MssGQ1+YRNson9Zo8ldCsHdJKJom7hRu6CLjJA0gS5bLWEK3tqOQz4DF
+	 CfEjSVNbxPTcjaUXTu8OrSLduDqGElMXzc91CpNRst0GDO7Akh3HRCjcxX9uj9m7AG
+	 0SoHIeMqdTnvgp3WAwncP42VB3U5lwG2rTXIP8QfZoq259ne0eINbb3NkoH/JUyJJq
+	 zvns5lQajfqp2DTNPlHeXHlyOr0tvlvVmIaEu67xXsTC6TTbbyS3gZeugDcsazs2jn
+	 jJD0SDOLZkhYD29D6inbcfeXhV1H0/VhCpNPDdkEaFY1ADh168m8NFzeXmsC74R985
+	 hNeLotEFjHSmg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uGzZs-000000006KG-1Pv8;
+	Mon, 19 May 2025 14:26:44 +0200
+Date: Mon, 19 May 2025 14:26:44 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Dominik Karol =?utf-8?Q?Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND 0/6] USB: serial: ftdi_sio: Code style cleanup
+Message-ID: <aCsjhIbX5iT3ZALw@hovoldconsulting.com>
+References: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+On Mon, Apr 14, 2025 at 08:28:10PM +0000, Dominik Karol Piątkowski wrote:
+> This series fixes spotted code style issues in ftdi_sio driver.
 
---- Comment #58 from Claudio Wunder (cwunder@gnome.org) ---
-Afaik the changes are on /boot (contents of `/boot/grub2/grub.cfg`)
+> Dominik Karol Piątkowski (6):
+>   USB: serial: ftdi_sio: Remove space before comma
+>   USB: serial: ftdi_sio: Add missing blank line after declarations
+>   USB: serial: ftdi_sio: Remove superfluous space before statements
+>   USB: serial: ftdi_sio: Fix indentation made with spaces
+>   USB: serial: ftdi_sio: Fix misaligned block comment
+>   USB: serial: ftdi_sio: Remove space before tabs
 
-````
-# This section was generated by a script. Do not modify the generated file -
-all changes
-# will be lost the next time file is regenerated. Instead edit the
-BootLoaderSpec files.
-#
-# The blscfg command parses the BootLoaderSpec files stored in
-/boot/loader/entries and
-# populates the boot menu. Please refer to the Boot Loader Specification
-documentation
-# for the files format: https://systemd.io/BOOT_LOADER_SPECIFICATION/.
+You should not be running checkpatch.pl (as you've clearly done here) on
+code that's already in the kernel.
 
-# The kernelopts variable should be defined in the grubenv file. But to ens=
-ure
-that menu
-# entries populated from BootLoaderSpec files that use this variable work
-correctly even
-# without a grubenv file, define a fallback kernelopts variable if this has=
- not
-been set.
-#
-# The kernelopts variable in the grubenv file can be modified using the gru=
-bby
-tool or by
-# executing the grub2-mkconfig tool. For the latter, the values of the
-GRUB_CMDLINE_LINUX
-# and GRUB_CMDLINE_LINUX_DEFAULT options from /etc/default/grub file are us=
-ed
-to set both
-# the kernelopts variable in the grubenv file and the fallback kernelopts
-variable.
-if [ -z "${kernelopts}" ]; then
-  set kernelopts=3D"root=3DUUID=3D4349ca0b-5bb9-4ad2-83a9-78d7440c02f9 ro q=
-uiet
-splash xhci_hcd.quirks=3D0x4000000 "
-fi
-```
+The exception is drivers/staging where patches like these are welcome so
+that new contributers can practise on creating patches.
 
-But let me try 4.5 approach.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
 
