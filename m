@@ -1,85 +1,126 @@
-Return-Path: <linux-usb+bounces-24087-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24088-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B213ABBDAE
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 14:26:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53D5FABBE5A
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 14:53:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17D3A17D2EA
-	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 12:26:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606E1189FF57
+	for <lists+linux-usb@lfdr.de>; Mon, 19 May 2025 12:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3D52777E4;
-	Mon, 19 May 2025 12:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1DA278E75;
+	Mon, 19 May 2025 12:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWQVXcgj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d2qvmrfe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FE22777E0;
-	Mon, 19 May 2025 12:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE71F1C683;
+	Mon, 19 May 2025 12:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747657609; cv=none; b=hDVSnJtPkgiClStAa3wKlsxdiMntQBIo2PkDlcb5Ksy+vQzo6xIzL3w37fMgYnOyMFAJg9ME3ZBO6HfARFrgh9x6tPJ7jVVFB1KIZfBSClxzZxqckKF8CCjWgIsahV5h+esMazSkcBTs9X7kvRlkKWOV6EyyVzCSBKtC/TnhdvU=
+	t=1747659178; cv=none; b=Z2xteLTv0LedfrcgJXkJlblAWFISWy6YcBR1cYnH1N8Ory0i8hT2Qro5q2YZTu3duUcz7WCcZ9SJ6a4775Cg9Bd7AL8XfMA+UfT16somaWgLjFtWu7hnZz7BjVWnrX926y4FmMIg6dvy0Y0+934uhctVQE/jQnqnJVxA6nooQ4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747657609; c=relaxed/simple;
-	bh=DPicR1+C76ccRqNyEUDpjoZuZjeKz6Q8YWTFHNuB6II=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1dWqXdI41cNqvpKAg/q9zttJdGHyzUCC+4qVpTXacxrIEKaYbI9s6djyWHt6LARwDrWxvUj5KPzwsZPyyKrBwbSUFjKEiSzanN+R1e34L1gqQSLE3aRj99LZtHbbLq4o4lRfeGWda9jShbKXBj4i6IA6EipzSkrlorx0o9CQVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWQVXcgj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A44EC4CEEF;
-	Mon, 19 May 2025 12:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747657609;
-	bh=DPicR1+C76ccRqNyEUDpjoZuZjeKz6Q8YWTFHNuB6II=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tWQVXcgj0MssGQ1+YRNson9Zo8ldCsHdJKJom7hRu6CLjJA0gS5bLWEK3tqOQz4DF
-	 CfEjSVNbxPTcjaUXTu8OrSLduDqGElMXzc91CpNRst0GDO7Akh3HRCjcxX9uj9m7AG
-	 0SoHIeMqdTnvgp3WAwncP42VB3U5lwG2rTXIP8QfZoq259ne0eINbb3NkoH/JUyJJq
-	 zvns5lQajfqp2DTNPlHeXHlyOr0tvlvVmIaEu67xXsTC6TTbbyS3gZeugDcsazs2jn
-	 jJD0SDOLZkhYD29D6inbcfeXhV1H0/VhCpNPDdkEaFY1ADh168m8NFzeXmsC74R985
-	 hNeLotEFjHSmg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uGzZs-000000006KG-1Pv8;
-	Mon, 19 May 2025 14:26:44 +0200
-Date: Mon, 19 May 2025 14:26:44 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Dominik Karol =?utf-8?Q?Pi=C4=85tkowski?= <dominik.karol.piatkowski@protonmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND 0/6] USB: serial: ftdi_sio: Code style cleanup
-Message-ID: <aCsjhIbX5iT3ZALw@hovoldconsulting.com>
-References: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
+	s=arc-20240116; t=1747659178; c=relaxed/simple;
+	bh=x3xvYVGXBZZpUoVLsbCNPd67Q3UDjJPR1pi9qAO5+GI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CzE2znZbO9nQsPZwCRnW7ZEzUuKVrN6RcYrUJdj6l2JL3GEHg3n7PYdDd7uKjvBNBHC+0RdqiEWyfdoLwfvub3B05b/872UnIrjwbEpESvU1s3wPLzyfolV1uw98LlKqR8KPmyeqsbIi2z4FCr6wNXTy6c15n3117OQDs1R8PBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d2qvmrfe; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747659177; x=1779195177;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x3xvYVGXBZZpUoVLsbCNPd67Q3UDjJPR1pi9qAO5+GI=;
+  b=d2qvmrfehHh6agv8tLFg90DD/ycrjIfyAoltGMaJJr+Pp++yFMfhxOkD
+   5NayNrZOhsPl86Aq0ALly1Y08U7TtpY3k8H+UEanfVCfrCmbq75NRtNxX
+   nPs2cDeuvnZ/pOA0MahQgfvBKaBzR1edFtG1vwPuWX+R3JzqlPm8lu+x2
+   KReY/d7SsyaMUJCex54QozgNiivpvNHg5nofeJZ1QR3WUTHPL1Q5+Fp9y
+   p5i/0GA69tkIBkPZ2NacjKduQAobx6MVS6Gn35tUqwU286ew6NMwJk6/i
+   KOY/Dk/qIV0sr0piJZycYIohPDLUJq+5ThhG7gmko8+vf7jk71n2AWP/E
+   Q==;
+X-CSE-ConnectionGUID: 2eS69JDRRlGyP8ecEWPPXg==
+X-CSE-MsgGUID: JoqhC/c2QtqJyrkc5S8DkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60950652"
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="60950652"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 05:52:57 -0700
+X-CSE-ConnectionGUID: oGNm2gWUQIKUauBGoUZW0g==
+X-CSE-MsgGUID: PtWEXZPYSnSs1ViA9nCAHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="139855553"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa010.fm.intel.com with ESMTP; 19 May 2025 05:52:53 -0700
+Message-ID: <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
+Date: Mon, 19 May 2025 15:52:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250414202750.9013-1-dominik.karol.piatkowski@protonmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] Revert "usb: xhci: Implement
+ xhci_handshake_check_state() helper"
+To: Roy Luo <royluo@google.com>, mathias.nyman@intel.com,
+ quic_ugoswami@quicinc.com, Thinh.Nguyen@synopsys.com,
+ gregkh@linuxfoundation.org, michal.pecio@gmail.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+References: <20250517043942.372315-1-royluo@google.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250517043942.372315-1-royluo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 14, 2025 at 08:28:10PM +0000, Dominik Karol Piątkowski wrote:
-> This series fixes spotted code style issues in ftdi_sio driver.
+On 17.5.2025 7.39, Roy Luo wrote:
+> This reverts commit 6ccb83d6c4972ebe6ae49de5eba051de3638362c.
+> 
+> Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
+> helper") was introduced to workaround watchdog timeout issues on some
+> platforms, allowing xhci_reset() to bail out early without waiting
+> for the reset to complete.
+> 
+> Skipping the xhci handshake during a reset is a dangerous move. The
+> xhci specification explicitly states that certain registers cannot
+> be accessed during reset in section 5.4.1 USB Command Register (USBCMD),
+> Host Controller Reset (HCRST) field:
+> "This bit is cleared to '0' by the Host Controller when the reset
+> process is complete. Software cannot terminate the reset process
+> early by writinga '0' to this bit and shall not write any xHC
+> Operational or Runtime registers until while HCRST is '1'."
+> 
+> This behavior causes a regression on SNPS DWC3 USB controller with
+> dual-role capability. When the DWC3 controller exits host mode and
+> removes xhci while a reset is still in progress, and then tries to
+> configure its hardware for device mode, the ongoing reset leads to
+> register access issues; specifically, all register reads returns 0.
+> These issues extend beyond the xhci register space (which is expected
+> during a reset) and affect the entire DWC3 IP block, causing the DWC3
+> device mode to malfunction.
 
-> Dominik Karol Piątkowski (6):
->   USB: serial: ftdi_sio: Remove space before comma
->   USB: serial: ftdi_sio: Add missing blank line after declarations
->   USB: serial: ftdi_sio: Remove superfluous space before statements
->   USB: serial: ftdi_sio: Fix indentation made with spaces
->   USB: serial: ftdi_sio: Fix misaligned block comment
->   USB: serial: ftdi_sio: Remove space before tabs
+I agree with you and Thinh that waiting for the HCRST bit to clear during
+reset is the right thing to do, especially now when we know skipping it
+causes issues for SNPS DWC3, even if it's only during remove phase.
 
-You should not be running checkpatch.pl (as you've clearly done here) on
-code that's already in the kernel.
+But reverting this patch will re-introduce the issue originally worked
+around by Udipto Goswami, causing regression.
 
-The exception is drivers/staging where patches like these are welcome so
-that new contributers can practise on creating patches.
+Best thing to do would be to wait for HCRST to clear for all other platforms
+except the one with the issue.
 
-Johan
+Udipto Goswami, can you recall the platforms that needed this workaroud?
+and do we have an easy way to detect those?
+
+Thanks
+Mathias
+
 
