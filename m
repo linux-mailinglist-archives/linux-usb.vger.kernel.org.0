@@ -1,203 +1,136 @@
-Return-Path: <linux-usb+bounces-24121-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24122-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E91ABE480
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 22:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 582E3ABE62C
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 23:33:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FC484C5E70
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 20:10:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 137444C83C1
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 21:33:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291FE288C07;
-	Tue, 20 May 2025 20:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E527E25E833;
+	Tue, 20 May 2025 21:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P7RnoFCy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3VL1+gF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5B9287506
-	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 20:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C524C09E;
+	Tue, 20 May 2025 21:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747771830; cv=none; b=AG4UsACwKwba4f8NMTRJr7NJv4gDgPdGW6HfARIB5pT2O/6vnodEQHmaWeQUxvLYrwVSQkBOUBB6gxltnmUiJjGJxE4NjplpJCRjIauNa0USqq4TchNpJpTiIRO5WwjM0kEkh3RS9MMyZeDCrSYGJ5dQLx5DWsNf/XpGgZapAOY=
+	t=1747776824; cv=none; b=BG4NHua2dY6u1/EPm2vPDRejZA6QgUD/Tw19FACYiBehGkdLk7Mo3r4TDdpvyq0O8pSStOORQQp1/ObF2CbV4mSLgmlv5WPHWB28qW/EGiM0c/Jc20cQ7xFQuV6S+HLnmSFhjA5XiSRV5TiqNgNDMu41YlA5OpqPpt70Vn01DP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747771830; c=relaxed/simple;
-	bh=17Oo7t3drcmTUprT7YAGKDrd3hI3NBO5nbodblx74cU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ejECwh8LwBBDhFBu9DNE30+EFAgw0bIZenGFl+gOErJZ9oCngHDwfByFIzaHi8MSeXYXvRPT4Z73qZr+F4a1BlHz1twstwDTW3lKblT6rDZSMaBa2QKGeF2kk01yfg/VKDzWWrm+8514uAZtZjtSYAJyHIkkKpCMuD0ON4YLD8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P7RnoFCy; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-af51596da56so4545333a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 13:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747771828; x=1748376628; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3+KhD19TGWdJCr6+1OZ/eYxZVtdk3nOv6YbmASHwaj4=;
-        b=P7RnoFCy5D17T6Ielpfz02tldjKtnHtSe6A3fkzMNRNzcP/jH8v2/shtvgeAOJrr25
-         kYwJ5gta8ZjVQ0aajeFw5efi7r1jrdHDwsx5RIguG0TFNPCykxFw7ZlW9FHEZWQ0iNZ8
-         3XHPk8I/LT4s1UoTpwcqHPIPpUv19L0cuYjV1QsxSA/6i61iZkWXRysbrsDjBMSwZOUP
-         0RF/S/oLg0+VE5CDTwla9OImFzIj8sOXm7usUzDvPom7sEmsWuY7DEBTHQzWVnN2f0Q2
-         EbRMXb8cIPoeF4J8JxuCILZ3E4vzNMoe8g+eGhBHn6GlTbrFxj3vGJ9E5e+fZlGhDmdc
-         iEEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747771828; x=1748376628;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+KhD19TGWdJCr6+1OZ/eYxZVtdk3nOv6YbmASHwaj4=;
-        b=T3gRpNBojv6PDcYK1UjBQ6jiEeeTDFfLkvPR1RN06BiWNtE4iU/+wD1EenqSnfDqtS
-         gzqIm5maGdX1LI4L4tbHxYXG642v9fjUVznLfSCiIgGmzqHcw3MN+B4sX3vb3rrH4D47
-         xlKrX/ixCkSuaDBbOHJjSy7VZbzLu3n3Q/NewUu1xjEZ2snecwcItfJI3cwy/Dqj12UX
-         vzKuMIkaDB41KlIrLtvYnMK09W/htq1DaJSJM4LMg+FNuXK60w/S5FcTDoUs5XvtQJZv
-         W8+/IaUpIMPYx6PMLayeXqug/M9gnoGJAZttS5mu1SGW2nOtbRAEqhGFbv6dyAEz5rsV
-         Qnaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjnMDsJ27+XLSkUZUQkdWITXQ7Dug+EFY7qXQ9JUQSAcgyZxpTZa2at6M2ikPijEiKfVuDAviwLVQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAEswv5Wo0oGgJhjwEB99bwh/Bh+5tcHVVTiJRPDpkhPv5/TWz
-	4C7YSsHd66czVjw2ObjkVSy/mWW7ddqgSM9yqkP9CNXcWTwHFDcylLUXRVkvI1sj6w==
-X-Gm-Gg: ASbGnctCGVgrrLecS8lpv4z0oBI2FGUY2SghhrShA5z4OO+Z4xq2mwa3bCmY2IvEv0G
-	7vDFvz+M3KDysFjKgvoPLtbqSQrnRhGG+4WEYXDy5s/0na+jv0tVuxi2DV0mtjiSXfZFYJo5Xve
-	/l5TK08IjlHOvpQO8tnKsTTQRSuFzxZrUpad50DEeXQ6vTPBJerduFRit4vzhh9bgGoJH80ftKh
-	td+lrJlBDbeDGB0/N1oXkrAkOIIUjHs6PtX/3PEIdvqhMIUWF0xgcL42RivimO43pbSjoOLI04D
-	5xZFaKWe2Zdc0VZH0chvbzQxg3e9qyl1X+yoCLWYEZN+ldtWggHjztMyMoZIyOUxQNcmyQUmdKW
-	l472q8WeX0XDNWKb8ySzXE36OO77cdbYmXVojwpvnkNWCZTFwXIUDIrAuvw==
-X-Google-Smtp-Source: AGHT+IE/aaJHqzivD7gsDmjX9hv8lRsiGnVJAxn/l+ejoBOCUQrJanyH91/M2gPTmHWZeXIyOLokeQ==
-X-Received: by 2002:a17:903:32cf:b0:22e:40d7:3718 with SMTP id d9443c01a7336-231d45ab9e9mr232041875ad.47.1747771827986;
-        Tue, 20 May 2025 13:10:27 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e14:8:658c:7a8:df68:611d? ([2a00:79e0:2e14:8:658c:7a8:df68:611d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9530sm80833475ad.48.2025.05.20.13.10.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 13:10:27 -0700 (PDT)
-Message-ID: <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
-Date: Tue, 20 May 2025 13:10:25 -0700
+	s=arc-20240116; t=1747776824; c=relaxed/simple;
+	bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mV/twWMJeYfcGzs1uNwmtMrYTsfNZ9+Z7oM1GmU0V8wXuTMesf9vLKbKxxfIGbzxh0x76mdgxkV2zAGoN9pTb9rf/LaJJU5r06SPYaok3C6Y4l/2QU7j+FaaQocA3ap9yHFIbG7kXN1ICaeVPFgOe9l9jdz/QlsT4HZVJkvmAmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3VL1+gF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747776823; x=1779312823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
+  b=U3VL1+gFt75Uj4DOsCKLH8QYfNgR1GPQY25lWmrGXmqBYWIqCGGvhOI2
+   98x8ef9oOE/zUESh2vz7JOiX7n743wjbCbOU+oxyMjIg3tbpIB4aTTSm2
+   K5vsfPpNre5pjFCby2u4AH7tyQBT0JnnpmUhGSfbwr9O/2CyIpw9+1n94
+   j37ai65XObRaCs62/h/1ZFZttnMil1/YAh3VFSKGLR7RklFSiKxqgQboX
+   HVARqCR13II+eoh8NNPg3E0ZwHbWIIcAHbntV2JaCeI05dPCE0pyHIdbf
+   lnwATr0nFw+A4a7E90pYxamnvm1QWvlv4q5/I2Y47Qed1yKy9qHXwf5mu
+   g==;
+X-CSE-ConnectionGUID: FX8r+Xt7Q9SzCLKEYX4Fig==
+X-CSE-MsgGUID: dvasTuh4QGuMPUdGONXEgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49886560"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="49886560"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 14:33:41 -0700
+X-CSE-ConnectionGUID: qKGsHbZ/Soe+T5yrGWF48w==
+X-CSE-MsgGUID: Rx5ednNxSfq2WVZorJIWPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="143811827"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 20 May 2025 14:33:35 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHUab-000NaO-0J;
+	Tue, 20 May 2025 21:33:33 +0000
+Date: Wed, 21 May 2025 05:32:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <202505210555.mud6jZoi-lkp@intel.com>
+References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
- model power connections
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
- <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
- <20250514194249.GA2881453-robh@kernel.org>
-From: Amit Sunil Dhamne <amitsd@google.com>
-Content-Language: en-US
-In-Reply-To: <20250514194249.GA2881453-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 
-Hi Rob,
+Hi,
 
-Thanks for your response!
+kernel test robot noticed the following build errors:
 
-On 5/14/25 12:42 PM, Rob Herring wrote:
-> On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
->> Extend ports property to model power lines going between connector to
->> charger or battery/batteries. As an example, connector VBUS can supply
->> power in & out of the battery for a DRP.
->>
->> Additionally, add ports property to maxim,max33359 controller example.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
->>  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
->>  2 files changed, 38 insertions(+), 7 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -181,16 +181,16 @@ properties:
->>  
->>    port:
->>      $ref: /schemas/graph.yaml#/properties/port
->> -    description: OF graph bindings modeling a data bus to the connector, e.g.
->> -      there is a single High Speed (HS) port present in this connector. If there
->> -      is more than one bus (several port, with 'reg' property), they can be grouped
->> -      under 'ports'.
->> +    description: OF graph binding to model a logical connection between a device
->> +      and connector. This connection may represent a data bus or power line. For
->> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
->> +      If there is more than one connection (several port, with 'reg' property),
->> +      they can be grouped under 'ports'.
-> 'port' and 'port@0' are equivalent. So you can't be changing its 
-> definition.
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
+[cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Noted!
+url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
+patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
+      12 | #include <linux<mfd/core.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 
-> I'm not sure showing a power connection with the graph is the right 
-> approach.
+vim +12 drivers/hwmon/nct6694-hwmon.c
 
-I want to provide some more context and rationale behind using this design.
+  > 12	#include <linux<mfd/core.h>
+    13	#include <linux/mfd/nct6694.h>
+    14	#include <linux/module.h>
+    15	#include <linux/platform_device.h>
+    16	#include <linux/slab.h>
+    17	
 
-From a hardware perspective:
-
-The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
-(FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
-with the charger IP via circuitry & from there on to the battery. The FG
-is connected to the battery in parallel. As it can be seen that while
-these IPs are interconnected, there's no direct connection of the fuel
-gauge & the connector.
-
-For this feature, I am interested in getting the reference to the FG. As
-per graph description: "...These common bindings do not contain any
-information about the direction or type of the connections, they just
-map their existence." This works for my case because I just want the
-connector to be aware of the Fuel gauge device without imposing a
-specific directionality in terms of power supplier/supplied. This is
-also the reason why I didn't use
-"/schemas/power/supply/power-supply.yaml#power-supplies" binding.
-
-> We have a binding for that already with the regulator binding.
-
-I haven't explored the option of using regulator bindings. But in my
-case I am interested in fuel gauge and unfortunately, they're modeled as
-power_supply devices.
-
-
->  
-> Perhaps the connector needs to be a supply. It's already using that 
-> binding in the supplying power to the connector case.
-
-Want to clarify, in this case you mean
-/schemas/regulator/regulator.yaml#*-supply$ right?
-
-Adding to my response above, the reason I don't want to impose a
-directionality in terms of supplier/supplied is that in case of USB Dual
-Role Port they're dynamic i.e., when USB is source, the power is
-supplied out of the battery (battery/FG will be supplier) and in case
-USB is sink, battery is supplied power. Whether the connector port is in
-source or sink role is determined on a connection to connection basis.
-Also, the knowledge of the supply direction is of no consequence for
-this feature.
-
-
-Please let me know what you think.
-
-Thanks,
-
-Amit
-
-
-> Rob
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
