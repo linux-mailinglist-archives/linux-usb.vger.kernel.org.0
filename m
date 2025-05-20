@@ -1,91 +1,151 @@
-Return-Path: <linux-usb+bounces-24118-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24119-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F07ABE0A2
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 18:27:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 433CCABE233
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 19:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8B0B4C6351
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 16:22:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B5BC1B6396B
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 17:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41DC2571C8;
-	Tue, 20 May 2025 16:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C66225C6EE;
+	Tue, 20 May 2025 17:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UDYpPRiw"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="T61sqpL/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393CA1C8603
-	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 16:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1E525B1D3
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 17:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747758169; cv=none; b=a9E5Ev24ZQ4buEgD86I8Yn5K9coa0Igcg4aCUGoW5Xbfq26wp5llu6DGSy6mUiSjR+459r9eDROlvjrRjQScWmvQ6KpjB6UUz8OdCfQB2JH42ddrbFzoUVQ7MrXbTCZ7tLGeA2z3vP3ERDCaXt6zHxZwVUV6YAhq1Ycj47BInEs=
+	t=1747763861; cv=none; b=MPFOUJDKyFWfOHiGU96zeLQy+8Px/trnRGLThzDIn2OJYrh75uwlt/XB6Z0Mr6evhqzqfc4r22bTmiiBjnw1TDa9nzkIl8nuy2x5kXYUEPqT1tYTKWCdI03vVN1orV/c5wW47j/icUG2VMDC8zkH/8JRqCILkOB3hN8IZ7VkXkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747758169; c=relaxed/simple;
-	bh=ZSTfMZ2YmxAegw6+Br9YUHH1SH/P83wc0PWyvbBJvuI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EQ4oW56UFJBp4PB9IgABZ2r9NlOeNeO6E0OlAAIyfk4rX+BkDQZxrKA8+5nsPQRY3Q9L6YDWNuSh+H6qW3Eets7rYBQkWxPYPw58o4AGghEFt4hhip1EpCuKPOnJKn4gBal2DPVvQplK0NRM1MBHnJCVecg3EhLH1azkg6CH+tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UDYpPRiw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3255C4CEEF
-	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 16:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747758168;
-	bh=ZSTfMZ2YmxAegw6+Br9YUHH1SH/P83wc0PWyvbBJvuI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=UDYpPRiwQNGop/Uyu90av4yre9RKybb3JTCfw2Cyb6PkXZyeu5NM4W9kXUh+/j1cF
-	 Srz0nrh66NESiLMEua3g5v3M2B2/BwqrblOxf2IdGg6taTxPUsGMFxlDFCefn4aJBZ
-	 PVLZVXTEhyLFwz+EqQpDzFQdBlftZhUADW+xMwMRQonY5Mu6MvWlSjgoUEN+/YwChw
-	 Ongmk87ehLPkXNWGZCjhJEYt9PZ2duZrvU/2NPSkqlfWvbcC89O4dR364Mpdl33Xwh
-	 Z3w3wtpRmERoFdgNPXV9oUFzLoHK46zFakM1Gq3MsCJv86t3saIvI7Ib937FgGXB8n
-	 U7B3xN+GD+DjQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 950A9C41614; Tue, 20 May 2025 16:22:48 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220069] [6.13.9] regression USB controller dies
-Date: Tue, 20 May 2025 16:22:48 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: cwunder@gnome.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220069-208809-NYxqvDKyGh@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
-References: <bug-220069-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1747763861; c=relaxed/simple;
+	bh=1M9X6QHw8QpmM9UT7xnHYungjw7J2YeWavwZ8Jbo5wo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DDny9MaNAwg37hv3Lf75AgO2sV5q0y55fTyWa92W/qDRQkVDb+AJidyQdc/MZzok0Tv08g/ZrOQYWef9foxOewzXru4NLvutKxPSgOmZNtqsTo5GtPveg379JWmwQxIB5IJDnzY5xWfjtMZRSZ0QsZyMKKx9ECjyOCf30uPyTyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=T61sqpL/; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-742c9563fafso2620632b3a.0
+        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 10:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1747763859; x=1748368659; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkQx5a2rXQrbUi0huGR//kMdqarRCpuGjmWJng00MH0=;
+        b=T61sqpL/7PkArTAQVIDSw++5sdrXLZHbC94raz1/qOPF+s6TX4XHQOktM5DTgJwB9i
+         4DFUTRiAHD7GzxNZRDMyEPtK9ZxwxYYCP9V4v74yHHY6mcG+LZARTQnWdrs+TaqcR3zt
+         RTwXiKKpmzK34Mvj1rRoVmxCciPaCeibIQw1E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747763859; x=1748368659;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lkQx5a2rXQrbUi0huGR//kMdqarRCpuGjmWJng00MH0=;
+        b=gBhZJpPLrVMRzRxbdAfqUkRoJZvTmSfqRvbZOiSlLQ4iJqp7uSECjdBLYjGK9IWdJL
+         xHLyWk95tXKsrwdxR1nmXSEgZR/Ias0/EvelzHr+9W97DjFrlnET2tX0WYJQcYWTJDAF
+         mFNdSzjOtZPx8xFas/TnWooiiVGuVBpTQ9oCTyoQcf/eXF8ic170YGmOB2WY43ulBd5R
+         +Gd/Wj0ceWHYbDOyNUU5obNbC7YjYIq4OShfcJ8HpH0AuLAmIiWW/Smia4EsaaZRxqoR
+         MYy6/UodxBjvFnTMNKO8dJW9ajbKSGdf7lNVWpH3wBUdrO6farkd4uPFhDKL7wbaQ5kQ
+         4m+A==
+X-Forwarded-Encrypted: i=1; AJvYcCWwmKvBV/FwmuO6r1CJhzaz/ja88oMgbWHYtkYjL4EpnVbO/ZH7z5cF7axOH4m0hTO0n3FAdb1EXwU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2RY9jjFnMbgjmzeWL8t/5k5kf+NLidgX6chmk/18ecW/HUdg+
+	lPX1E4mdKpo2J1MXtItsKg0w5bboUJFwRDqr99itw4QZ0NFxza28rPzaJUvg4qu1Jw==
+X-Gm-Gg: ASbGncuEqPAV2qyALi6WezhPEG8CQckU2PsWyTvMl2bbQnmRDMud/E/GCo0EorGTSWR
+	3yVgq+Epnq4GOWNDVeXgeBwC3lKcuZNLDBPDbUZHfvvFiC4NFYtTJx72NUyTpeE7zxh++Muf54/
+	9z+jLHufrgjWw+aTtvut7svr06gC7zmN/erkFmYUtp+eCj/5J2HGDvj4+8MWg+Ug2uCISrhI0zz
+	2c+ZgWTsrBUNMYCaA/54mlr4ejeHb/K0FdQfYZifmprvWGi6yT4K0Tn/a9HZA8vFn4W1UsiuZNw
+	FopOO/VrR/1k1RAjT5NXeFcLRXwu43Vbwqb3tqqlLg/YZ3QtdxPOmsQogIM6q7XSaCueMaMiuc3
+	W9KjQEyhwJPuSil8KFLHCXbYrHQ==
+X-Google-Smtp-Source: AGHT+IGSYLANxnLLAnM0uR33FTX21jqDSKnmTyPRmRqzlfjjZkaFjTCDN44LrfmyPnhRWOP6pDsJKg==
+X-Received: by 2002:a05:6a00:9186:b0:736:5e28:cfba with SMTP id d2e1a72fcca58-742a98a323bmr23868341b3a.18.1747763859603;
+        Tue, 20 May 2025 10:57:39 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a982b7ffsm8484079b3a.104.2025.05.20.10.57.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 May 2025 10:57:38 -0700 (PDT)
+Message-ID: <45057903-7eab-451b-94c6-23c3d552f144@broadcom.com>
+Date: Tue, 20 May 2025 10:57:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/3] net: phy: fixed_phy: remove irq argument
+ from fixed_phy_add
+To: Heiner Kallweit <hkallweit1@gmail.com>, Greg Ungerer
+ <gerg@linux-m68k.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Vladimir Oltean <olteanv@gmail.com>, Doug Berger <opendmb@gmail.com>,
+ Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+ Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+ Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+ Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Russell King - ARM Linux <linux@armlinux.org.uk>,
+ David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
+Cc: Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org,
+ Linux USB Mailing List <linux-usb@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
+ <b3b9b3bc-c310-4a54-b376-c909c83575de@gmail.com>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <b3b9b3bc-c310-4a54-b376-c909c83575de@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
+On 5/17/25 13:34, Heiner Kallweit wrote:
+> All callers pass PHY_POLL, therefore remove irq argument from
+> fixed_phy_add().
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
---- Comment #60 from Claudio Wunder (cwunder@gnome.org) ---
-(I also found that I should use `rpm-ostree kargs --editor` for editing ker=
-nel
-args.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
