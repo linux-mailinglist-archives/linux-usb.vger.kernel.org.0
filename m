@@ -1,78 +1,80 @@
-Return-Path: <linux-usb+bounces-24120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24121-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6CCBABE23A
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 19:59:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8E91ABE480
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 22:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08EA7172FB1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 17:59:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FC484C5E70
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 20:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5403B27AC30;
-	Tue, 20 May 2025 17:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291FE288C07;
+	Tue, 20 May 2025 20:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="iEIwP1kx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P7RnoFCy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEA41FECC3
-	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 17:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5B9287506
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 20:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747763970; cv=none; b=LEGku/4y6SClEI28f1Zkwuik74UVma5gn5X3e1VoH62Qwv2Ir4i/Xjbg7xgTAQVIsPR789OyDCMJ7OC+NFNWRnL3Pnp/cxKvTgay+vbeEs6lF/lc7lyCpoEpR6dI5yuQh8nChI6hlOmDqYV1rxInJepQ3wlQqRi8+XGAIPqGlXo=
+	t=1747771830; cv=none; b=AG4UsACwKwba4f8NMTRJr7NJv4gDgPdGW6HfARIB5pT2O/6vnodEQHmaWeQUxvLYrwVSQkBOUBB6gxltnmUiJjGJxE4NjplpJCRjIauNa0USqq4TchNpJpTiIRO5WwjM0kEkh3RS9MMyZeDCrSYGJ5dQLx5DWsNf/XpGgZapAOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747763970; c=relaxed/simple;
-	bh=sk1HYXDvnKjUBm5wbIYL2hxbtPS8MQRRAHhR6ynndh0=;
+	s=arc-20240116; t=1747771830; c=relaxed/simple;
+	bh=17Oo7t3drcmTUprT7YAGKDrd3hI3NBO5nbodblx74cU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GfiDa1virXRhSnGug5fKRLm5O/vMYJTtw37qaIC9TfWWRV4Dl225V1hz+OTr6E3s7IMls/Z0GqEyPyhtRxdy5F0FEW34unF5RRkG45CaY6UOdQcFX81e8xmfJ/rlUOnUPmVOpfUjRcQU88Li9snDPNQL+PwA94nql8sJvW3v9g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=iEIwP1kx; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b0db0b6a677so5059859a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 10:59:29 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=ejECwh8LwBBDhFBu9DNE30+EFAgw0bIZenGFl+gOErJZ9oCngHDwfByFIzaHi8MSeXYXvRPT4Z73qZr+F4a1BlHz1twstwDTW3lKblT6rDZSMaBa2QKGeF2kk01yfg/VKDzWWrm+8514uAZtZjtSYAJyHIkkKpCMuD0ON4YLD8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P7RnoFCy; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-af51596da56so4545333a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 13:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1747763969; x=1748368769; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=INM95q65BeODTHlD+8KmvZymICq+GNLSDmmtrJVHoBo=;
-        b=iEIwP1kx6xxDp2mo+ru0MoTqDkVU1t9mzCEACFgPVfAlZ41Cn8cWToKoUzQCujG7VK
-         Lo2SfPcAT1WgW0LVqstsY1dGY1palUJ6D6MBbHZ3PANDwGmc9U3TLegbH/koAFnighr4
-         Xam03WPX2Hh4F5h8EwtkOzNJlDAXOp2HCO038=
+        d=google.com; s=20230601; t=1747771828; x=1748376628; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3+KhD19TGWdJCr6+1OZ/eYxZVtdk3nOv6YbmASHwaj4=;
+        b=P7RnoFCy5D17T6Ielpfz02tldjKtnHtSe6A3fkzMNRNzcP/jH8v2/shtvgeAOJrr25
+         kYwJ5gta8ZjVQ0aajeFw5efi7r1jrdHDwsx5RIguG0TFNPCykxFw7ZlW9FHEZWQ0iNZ8
+         3XHPk8I/LT4s1UoTpwcqHPIPpUv19L0cuYjV1QsxSA/6i61iZkWXRysbrsDjBMSwZOUP
+         0RF/S/oLg0+VE5CDTwla9OImFzIj8sOXm7usUzDvPom7sEmsWuY7DEBTHQzWVnN2f0Q2
+         EbRMXb8cIPoeF4J8JxuCILZ3E4vzNMoe8g+eGhBHn6GlTbrFxj3vGJ9E5e+fZlGhDmdc
+         iEEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747763969; x=1748368769;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=INM95q65BeODTHlD+8KmvZymICq+GNLSDmmtrJVHoBo=;
-        b=b1Yonq7hIAl3SOC9I6NHNzWt+rskm2rJzc0Xlzr9rB530wA/H+gqa4yBHm2ItZx8OD
-         qCrmCZRyX0/NJj/UBmbF7oCgNVPPi/NRsKm8iK0LhxoviVUbduBNMDl5pnar8THOTDtX
-         Z4HuvCc3jO+9eXRgmamrzAUIolWdOZCw46PUJlLaijwkzwZ4fb2V0FK7crFdSiwIJc5M
-         1SqSDi76rHt8rhn63PKWxuoYWci7Hlk5GiA9qH/Fc5Y5uXtJk0BpSJngEFBtYk8Dk0N3
-         N7Izeb2phu4mOASvpKsw/xS6ObLWIJEewC9gTltiQ5cYC0GL7P0ppF1tNUgj991PDAYv
-         cM8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWupdP/anCwrgi81rTmXcpHJu8VdVF1RXsZC81DaLKD+rO+99YR9vLNb1dCc3G04XZPsm27+/EvykM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZTARv26pey8h3Vt+tBAeOuOE4YaHNbnnlbTiQloxOizZHpOfB
-	0kk7FIi0DCVEEIq5TjF8rni2Y9ZTRWZp3ZxLplPxjbFknQELEM6OWmyADy3gFsvWAg==
-X-Gm-Gg: ASbGnctjBesCIBzFacjS+vPe2ckTyrCWsNhK+c/oa8+Zz8CuVcRSJY2qSGnEnYsZe1U
-	Hp+//QV8TjjXa3+JTbuoByNuxJHSDydhBEJLDOrthxsZTvii0v8HX5qqyD2QZAIKkgmfCPGNmrs
-	Bv2xFNEeaw2aTv24SeCid7TCj9Oq2qNqsg1TWRp9X6OOyNNCnKYThwgU7VtD1YyASuzNtsy3Iiy
-	bMoW05HOvEEEKfeqM26iwOLXIQahhRJwvI2z5PgKe7apvU5gBNytEVSHV8CxLnF65fdqzVlx5mL
-	aKqzcNhtx0VMzX9NzYKdtXgnGzbbIKnAYsbTpP4fieL5rXYIA1XakxC9eovBTUxNqhp7r7L1AtI
-	6Xn3mBabyRl0GaW0=
-X-Google-Smtp-Source: AGHT+IFaM8IaByeAyzbZ1A4gVDC35Pyz8pR9kNbpble9jg5fMy8ANLnTcAmpKkH3tcHj+isuz15jMQ==
-X-Received: by 2002:a17:90b:574c:b0:308:7270:d6ea with SMTP id 98e67ed59e1d1-30e7d5b7b41mr26127527a91.30.1747763968605;
-        Tue, 20 May 2025 10:59:28 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e10039b2esm7535809a91.0.2025.05.20.10.59.23
+        d=1e100.net; s=20230601; t=1747771828; x=1748376628;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+KhD19TGWdJCr6+1OZ/eYxZVtdk3nOv6YbmASHwaj4=;
+        b=T3gRpNBojv6PDcYK1UjBQ6jiEeeTDFfLkvPR1RN06BiWNtE4iU/+wD1EenqSnfDqtS
+         gzqIm5maGdX1LI4L4tbHxYXG642v9fjUVznLfSCiIgGmzqHcw3MN+B4sX3vb3rrH4D47
+         xlKrX/ixCkSuaDBbOHJjSy7VZbzLu3n3Q/NewUu1xjEZ2snecwcItfJI3cwy/Dqj12UX
+         vzKuMIkaDB41KlIrLtvYnMK09W/htq1DaJSJM4LMg+FNuXK60w/S5FcTDoUs5XvtQJZv
+         W8+/IaUpIMPYx6PMLayeXqug/M9gnoGJAZttS5mu1SGW2nOtbRAEqhGFbv6dyAEz5rsV
+         Qnaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUjnMDsJ27+XLSkUZUQkdWITXQ7Dug+EFY7qXQ9JUQSAcgyZxpTZa2at6M2ikPijEiKfVuDAviwLVQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAEswv5Wo0oGgJhjwEB99bwh/Bh+5tcHVVTiJRPDpkhPv5/TWz
+	4C7YSsHd66czVjw2ObjkVSy/mWW7ddqgSM9yqkP9CNXcWTwHFDcylLUXRVkvI1sj6w==
+X-Gm-Gg: ASbGnctCGVgrrLecS8lpv4z0oBI2FGUY2SghhrShA5z4OO+Z4xq2mwa3bCmY2IvEv0G
+	7vDFvz+M3KDysFjKgvoPLtbqSQrnRhGG+4WEYXDy5s/0na+jv0tVuxi2DV0mtjiSXfZFYJo5Xve
+	/l5TK08IjlHOvpQO8tnKsTTQRSuFzxZrUpad50DEeXQ6vTPBJerduFRit4vzhh9bgGoJH80ftKh
+	td+lrJlBDbeDGB0/N1oXkrAkOIIUjHs6PtX/3PEIdvqhMIUWF0xgcL42RivimO43pbSjoOLI04D
+	5xZFaKWe2Zdc0VZH0chvbzQxg3e9qyl1X+yoCLWYEZN+ldtWggHjztMyMoZIyOUxQNcmyQUmdKW
+	l472q8WeX0XDNWKb8ySzXE36OO77cdbYmXVojwpvnkNWCZTFwXIUDIrAuvw==
+X-Google-Smtp-Source: AGHT+IE/aaJHqzivD7gsDmjX9hv8lRsiGnVJAxn/l+ejoBOCUQrJanyH91/M2gPTmHWZeXIyOLokeQ==
+X-Received: by 2002:a17:903:32cf:b0:22e:40d7:3718 with SMTP id d9443c01a7336-231d45ab9e9mr232041875ad.47.1747771827986;
+        Tue, 20 May 2025 13:10:27 -0700 (PDT)
+Received: from ?IPV6:2a00:79e0:2e14:8:658c:7a8:df68:611d? ([2a00:79e0:2e14:8:658c:7a8:df68:611d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9530sm80833475ad.48.2025.05.20.13.10.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 10:59:27 -0700 (PDT)
-Message-ID: <e6b8d2c5-5e3a-42b3-a68c-ceeda2fd8632@broadcom.com>
-Date: Tue, 20 May 2025 10:59:22 -0700
+        Tue, 20 May 2025 13:10:27 -0700 (PDT)
+Message-ID: <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
+Date: Tue, 20 May 2025 13:10:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,77 +82,122 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/3] net: phy: fixed_phy: remove irq argument
- from fixed_phy_register
-To: Heiner Kallweit <hkallweit1@gmail.com>, Greg Ungerer
- <gerg@linux-m68k.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
- Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Vladimir Oltean <olteanv@gmail.com>, Doug Berger <opendmb@gmail.com>,
- Thangaraj Samynathan <Thangaraj.S@microchip.com>,
- Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
- Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
- Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Russell King - ARM Linux <linux@armlinux.org.uk>,
- David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
-Cc: Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org,
- Linux USB Mailing List <linux-usb@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
- <31cdb232-a5e9-4997-a285-cb9a7d208124@gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Sebastian Reichel <sre@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <20250514194249.GA2881453-robh@kernel.org>
+From: Amit Sunil Dhamne <amitsd@google.com>
 Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <31cdb232-a5e9-4997-a285-cb9a7d208124@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20250514194249.GA2881453-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/17/25 13:35, Heiner Kallweit wrote:
-> All callers pass PHY_POLL, therefore remove irq argument from
-> fixed_phy_register().
-> 
-> Note: I keep the irq argument in fixed_phy_add_gpiod() for now,
-> for the case that somebody may want to use a GPIO interrupt in
-> the future, by e.g. adding a call to fwnode_irq_get() to
-> fixed_phy_get_gpiod().
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Hi Rob,
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+Thanks for your response!
+
+On 5/14/25 12:42 PM, Rob Herring wrote:
+> On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
+>> Extend ports property to model power lines going between connector to
+>> charger or battery/batteries. As an example, connector VBUS can supply
+>> power in & out of the battery for a DRP.
+>>
+>> Additionally, add ports property to maxim,max33359 controller example.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
+>>  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
+>>  2 files changed, 38 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
+>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> @@ -181,16 +181,16 @@ properties:
+>>  
+>>    port:
+>>      $ref: /schemas/graph.yaml#/properties/port
+>> -    description: OF graph bindings modeling a data bus to the connector, e.g.
+>> -      there is a single High Speed (HS) port present in this connector. If there
+>> -      is more than one bus (several port, with 'reg' property), they can be grouped
+>> -      under 'ports'.
+>> +    description: OF graph binding to model a logical connection between a device
+>> +      and connector. This connection may represent a data bus or power line. For
+>> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
+>> +      If there is more than one connection (several port, with 'reg' property),
+>> +      they can be grouped under 'ports'.
+> 'port' and 'port@0' are equivalent. So you can't be changing its 
+> definition.
+
+Noted!
+
+
+> I'm not sure showing a power connection with the graph is the right 
+> approach.
+
+I want to provide some more context and rationale behind using this design.
+
+From a hardware perspective:
+
+The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
+(FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
+with the charger IP via circuitry & from there on to the battery. The FG
+is connected to the battery in parallel. As it can be seen that while
+these IPs are interconnected, there's no direct connection of the fuel
+gauge & the connector.
+
+For this feature, I am interested in getting the reference to the FG. As
+per graph description: "...These common bindings do not contain any
+information about the direction or type of the connections, they just
+map their existence." This works for my case because I just want the
+connector to be aware of the Fuel gauge device without imposing a
+specific directionality in terms of power supplier/supplied. This is
+also the reason why I didn't use
+"/schemas/power/supply/power-supply.yaml#power-supplies" binding.
+
+> We have a binding for that already with the regulator binding.
+
+I haven't explored the option of using regulator bindings. But in my
+case I am interested in fuel gauge and unfortunately, they're modeled as
+power_supply devices.
+
+
+>  
+> Perhaps the connector needs to be a supply. It's already using that 
+> binding in the supplying power to the connector case.
+
+Want to clarify, in this case you mean
+/schemas/regulator/regulator.yaml#*-supply$ right?
+
+Adding to my response above, the reason I don't want to impose a
+directionality in terms of supplier/supplied is that in case of USB Dual
+Role Port they're dynamic i.e., when USB is source, the power is
+supplied out of the battery (battery/FG will be supplier) and in case
+USB is sink, battery is supplied power. Whether the connector port is in
+source or sink role is determined on a connection to connection basis.
+Also, the knowledge of the supply direction is of no consequence for
+this feature.
+
+
+Please let me know what you think.
+
+Thanks,
+
+Amit
+
+
+> Rob
 
