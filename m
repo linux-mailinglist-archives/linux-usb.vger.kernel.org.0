@@ -1,123 +1,142 @@
-Return-Path: <linux-usb+bounces-24114-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24115-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25043ABD9E1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 15:47:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AE6FABDB77
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 16:11:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16BB1891AC4
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 13:47:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A38894A0FD6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 14:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E132459F5;
-	Tue, 20 May 2025 13:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FAC2459F3;
+	Tue, 20 May 2025 14:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hfpkv31o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTCtQwdy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC61A243378
-	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 13:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210262F37;
+	Tue, 20 May 2025 14:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747748800; cv=none; b=GzNrkwcQqOJ0nF2NY004kgYC1z+iKnL78sVK5XEsG9NqsTusMnqj2dvitkemD6c8V09VVPJmgFzllPvYZvoxmjOMXJk4rJBQpRPdB9X+t/21LSzmqlVS0EsK1qfpOmMCu1yVhSMvP8LRUhQoMlf3hw47fezlUTeLxZXFlzx7CEI=
+	t=1747749891; cv=none; b=agxjxtLW2HfJHEGDGdVrusKKyoUkg2ZD9tgs+MxAItSvRsClJcEwnRUMMaXIrZDXVNGaIkrjrvVc/p05hktm6JLQCyoQts8whlmg76u4XIcPLPzk+tfj8IlHGvjz/HPmYWhfYYUi435xuEd5wzWOtftticq8SQx/f4jzIdLknZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747748800; c=relaxed/simple;
-	bh=HNi/fBupM8V0uCd8n5v5erSjfON7H2afkO3wD7izDQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kqG4pz+OzadVCpfFThcbsdHRZyh2f9aNKfHP0MJgChCt+ipcsM4BrQBo7jYiKhT52TehfeINw7vTF+whUS0Rj1HKhRFbRnRw6NZX55lBZjxjMQJcWAWmgYRZ28cp6fn4flNVy64r4WvCpynN8OApXSgeLh0XclKmlQmygSnqikQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hfpkv31o; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747748797;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ttZdwX7pocHD4KH7bapGwxeFxmxnKsH58aUosyTWGQc=;
-	b=hfpkv31oYLgWmFKuR/WZ3AOEN5DRv5lk1tp1enWgIonu1AjYuZSfpw01FGgIVkp5XWetBg
-	k9zH64kX1VBrzkhsILTEYHMXUkWsMYGf6JN7lsxpfw0r6L8De9MBaw5wJg/oTitfDjf26l
-	VsFaoN5nhxOC4TUQo1NohiO155/yNEY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-x8PuFq4QNyuXlTSYkUYO5g-1; Tue, 20 May 2025 09:46:36 -0400
-X-MC-Unique: x8PuFq4QNyuXlTSYkUYO5g-1
-X-Mimecast-MFC-AGG-ID: x8PuFq4QNyuXlTSYkUYO5g_1747748794
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-442cdf07ad9so32979645e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 06:46:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747748794; x=1748353594;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttZdwX7pocHD4KH7bapGwxeFxmxnKsH58aUosyTWGQc=;
-        b=bN+vGslI4PvziaLVmMEpg0IAEadIJflhQq2Ei37ybhOliSRI6GPXNthas74uipFVbV
-         k6MU5Ids1s2O72EIrCxBFAcECzoKS6rf5IJ623lix1VMI/tcQerFQ0W2/bl6WjaP+Br9
-         Ie+ddg3Qw3SX2SOilksuXKFpMVhpR1XluYBLEHbzSeMU5vRx0fKk5yV/wnQwxszaQOok
-         +zFOJ0aeCu2wzDt4FDPcVo8hUto/duNUmJG6Et7JdPAqRjMuzFAfiknpWTin7hol9C+7
-         fVe4hDpeU7JiDSM11+Ef1T2OXlBvnX0lAykIvgKcux3S86UcTZgUfX8eosyZqdtraWJ+
-         5pHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUg02LYJXmnAeQi1YctSUikCVdVVTA1sQcQ9rrKx/VqF7CHX/Vr9lCl0wao7Fyprz6fT50qPOaay10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaPKnaV4d/FAUjK8cQLc7IyYTnsoNCo0Tw0nuwPlPSdPYNaWmA
-	x9xQnES11qAoAs72C//l82EBtNiAI3P0qinb/V1pvM0GcIyNawa6pJxq17+C4lPprPW+CIlAFqm
-	87lNh85lRYSWrrHa0w2LLdATFdG1lXqnTCmyfCmwcIv3U65dQyfmVaCutRWPey4EcuaNURlPV
-X-Gm-Gg: ASbGncuPclJxtVrhfbBRrG7JD7k1B9iw3Yl266M5Rb52ee4smqbhDQXV7c0Jh4PLgMf
-	7egURBKtcnFJfYMVlTg6iNVf1AMnU5ckkd6O2YUpHpBHhMJE2ecCrgcVJiZZvNcsA5IhoYjHL6x
-	yZms57F2+rz4WJIpmi7R5NAZI0bS7PpswPfKIppBcOdeveQEqr6bIsGwzP3NX1q3IYmikYijhHS
-	6cH/zaRtWNZac6ijRgwX/LEFGpfPTfYo2f5W3zZvZGbsXvLM7SQt063MZxCZ5aCvpqxYKnpB4kO
-	AYdapPG9L/tXYJIxKLU=
-X-Received: by 2002:a05:600c:c8c:b0:442:f4a3:b5ec with SMTP id 5b1f17b1804b1-442fefd5f8dmr167588015e9.4.1747748793771;
-        Tue, 20 May 2025 06:46:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEraeeZ8dXT6jFTOV2vUtyjUlfu0PJDbiOGJ7n9ISNv0+w1r+DJhMjQd230y3rw1DDHt2o+QA==
-X-Received: by 2002:a05:600c:c8c:b0:442:f4a3:b5ec with SMTP id 5b1f17b1804b1-442fefd5f8dmr167587725e9.4.1747748793394;
-        Tue, 20 May 2025 06:46:33 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:244f:5710::f39? ([2a0d:3344:244f:5710::f39])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca4d1f9sm16268918f8f.1.2025.05.20.06.46.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 06:46:32 -0700 (PDT)
-Message-ID: <f818a2a6-2c14-4b55-92f4-c55f27010339@redhat.com>
-Date: Tue, 20 May 2025 15:46:31 +0200
+	s=arc-20240116; t=1747749891; c=relaxed/simple;
+	bh=VgDUsWQh9mJ8cHhZPRAtRTcBXf6NeJtKdNxp+2kehWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ciXDQ94kUZE1a8KW3CBaiUw1sL4/w1xUpqqagXQ38GiTuh+yGqxh4TKqeMyIPQTaOGxT1XCJB062UcLfcaX6l6sAoISot+T5qH78YpImztF4srCfRR0lXDSwiHDFC3h1LEih8QKSeUU3HKhcZd26cc31NGzjmYKwXIFrjMSn3rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTCtQwdy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B247FC4CEEF;
+	Tue, 20 May 2025 14:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747749890;
+	bh=VgDUsWQh9mJ8cHhZPRAtRTcBXf6NeJtKdNxp+2kehWw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JTCtQwdyidM6pLDCi79WvGZpz7jCqUd+nRz7nld6DZUJFUHc+zlC4bR6Hn9bsB1wX
+	 KaticX7V/hO2295lHp5hLHcDFDr+AABnFHPxvOzRrZhh2bICRZCzyzJ+uikiZcrTyh
+	 Ej4P9kmreibTSTLerjdGokH03Bf+zSdq0bK/7vq9ZmfNw9TqjZgKZlzlVeyosKpLKj
+	 tsJwF+5C700BfJCzL4Jj/YL8gaGJubGp+cSs+QAY3Dhf3cXilDqxZ91oecoB4BXxez
+	 qBcCk9WST7H9kWuRFkhogHGjGjoVrdgmoDcWGcfW8PjMffjyIp/tRLyMId8ypMPlOP
+	 RN5h9QlACoPhQ==
+Date: Tue, 20 May 2025 10:04:49 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: patches@lists.linux.dev, stable@vger.kernel.org,
+	Jonathan Bell <jonathan@raspberrypi.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.14 08/15] usb: xhci: Don't trust the EP Context
+ cycle bit when moving HW dequeue
+Message-ID: <aCyMAdNzTPgS0urL@lappy>
+References: <20250512180352.437356-1-sashal@kernel.org>
+ <20250512180352.437356-8-sashal@kernel.org>
+ <20250512231628.7f91f435@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] r8152: Add wake up function for RTL8153
-To: Wentao Liang <vulab@iscas.ac.cn>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, ste3ls@gmail.com
-Cc: hayeswang@realtek.com, dianders@chromium.org, gmazyland@gmail.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250515151130.1401-1-vulab@iscas.ac.cn>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250515151130.1401-1-vulab@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250512231628.7f91f435@foxbook>
 
-On 5/15/25 5:11 PM, Wentao Liang wrote:
-> In rtl8153_runtime_enable(), the runtime enable/disable logic for RTL8153
-> devices was incomplete, missing r8153_queue_wake() to enable or disable
-> the automatic wake-up function. A proper implementation can be found in
-> rtl8156_runtime_enable().
-> 
-> Add r8153_queue_wake(tp, true) if enable flag is set true, and add
-> r8153_queue_wake(tp, false) otherwise.
+On Mon, May 12, 2025 at 11:16:28PM +0200, Michał Pecio wrote:
+>On Mon, 12 May 2025 14:03:43 -0400, Sasha Levin wrote:
+>> From: Michal Pecio <michal.pecio@gmail.com>
+>>
+>> [ Upstream commit 6328bdc988d23201c700e1e7e04eb05a1149ac1e ]
+>>
+>> VIA VL805 doesn't bother updating the EP Context cycle bit when the
+>> endpoint halts. This is seen by patching xhci_move_dequeue_past_td()
+>> to print the cycle bits of the EP Context and the TRB at hw_dequeue
+>> and then disconnecting a flash drive while reading it. Actual cycle
+>> state is random as expected, but the EP Context bit is always 1.
+>>
+>> This means that the cycle state produced by this function is wrong
+>> half the time, and then the endpoint stops working.
+>>
+>> Work around it by looking at the cycle bit of TD's end_trb instead
+>> of believing the Endpoint or Stream Context. Specifically:
+>>
+>> - rename cycle_found to hw_dequeue_found to avoid confusion
+>> - initialize new_cycle from td->end_trb instead of hw_dequeue
+>> - switch new_cycle toggling to happen after end_trb is found
+>>
+>> Now a workload which regularly stalls the device works normally for
+>> a few hours and clearly demonstrates the HW bug - the EP Context bit
+>> is not updated in a new cycle until Set TR Dequeue overwrites it:
+>>
+>> [  +0,000298] sd 10:0:0:0: [sdc] Attached SCSI disk
+>> [  +0,011758] cycle bits: TRB 1 EP Ctx 1
+>> [  +5,947138] cycle bits: TRB 1 EP Ctx 1
+>> [  +0,065731] cycle bits: TRB 0 EP Ctx 1
+>> [  +0,064022] cycle bits: TRB 0 EP Ctx 0
+>> [  +0,063297] cycle bits: TRB 0 EP Ctx 0
+>> [  +0,069823] cycle bits: TRB 0 EP Ctx 0
+>> [  +0,063390] cycle bits: TRB 1 EP Ctx 0
+>> [  +0,063064] cycle bits: TRB 1 EP Ctx 1
+>> [  +0,062293] cycle bits: TRB 1 EP Ctx 1
+>> [  +0,066087] cycle bits: TRB 0 EP Ctx 1
+>> [  +0,063636] cycle bits: TRB 0 EP Ctx 0
+>> [  +0,066360] cycle bits: TRB 0 EP Ctx 0
+>>
+>> Also tested on the buggy ASM1042 which moves EP Context dequeue to
+>> the next TRB after errors, one problem case addressed by the rework
+>> that implemented this loop. In this case hw_dequeue can be enqueue,
+>> so simply picking the cycle bit of TRB at hw_dequeue wouldn't work.
+>>
+>> Commit 5255660b208a ("xhci: add quirk for host controllers that
+>> don't update endpoint DCS") tried to solve the stale cycle problem,
+>> but it was more complex and got reverted due to a reported issue.
+>>
+>> Cc: Jonathan Bell <jonathan@raspberrypi.org>
+>> Cc: Oliver Neukum <oneukum@suse.com>
+>> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Link: https://lore.kernel.org/r/20250505125630.561699-2-mathias.nyman@linux.intel.com
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Hi,
+>
+>This wasn't tagged for stable because the function may potentially
+>still be affected by some unforeseen HW bugs, and previous attempt
+>at fixing the issue ran into trouble and nobody truly knows why.
+>
+>The problem is very old and not critically severe, so I think this
+>can wait till 6.15. People don't like minor release regressions.
 
-The existing initialization for r8153 is actually different from
-rtl8156. Lacking the datasheet, I tend to think that the missing
-queue_wake is actually unneeded.
+I'll drop it, thanks!
 
-A 3rd party test would be helpful.
-
+-- 
 Thanks,
-
-Paolo
-
+Sasha
 
