@@ -1,213 +1,193 @@
-Return-Path: <linux-usb+bounces-24112-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24113-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 575CAABD80B
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 14:16:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9368FABD838
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 14:31:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FBB54C3C76
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 12:10:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A01241B620C6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 12:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DD8280CFC;
-	Tue, 20 May 2025 12:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB73F19DFB4;
+	Tue, 20 May 2025 12:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BAYIgmSB"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EJS4Cv0g"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E60727F171;
-	Tue, 20 May 2025 12:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E0318BBAE
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 12:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747742987; cv=none; b=MA+BCimeQ9HLxcBFTKSXeNsYskkKazwZaY15J7MUvDgkX70dx7quRh0m9lEl40GwZEMjnDePU08XBwW5whGKS19vBbQcFPcS11FIlOTi33o0PLMliZhLasxEyIPpjXxvUOjbtMoA2PwNMAUWaqa7+M4mUQx5Ab6PMQBBjZroaWw=
+	t=1747744261; cv=none; b=aUUWHoBwGNRM/gQdkDxMPoPv6h8gXhBoa4FYimN34gtHXz72qb/jdZ+2wj6QolRvnGjj/OHqY0DEOUZiz7erumjA1qyVT9xllkVci9gLN61rAh4Dmxasfk0w0MTcU2ZjfrbrObPqxcA1cwev0ELT34C0jaKRsS5v/7AfG1DsOzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747742987; c=relaxed/simple;
-	bh=IkV86RtFSVfKB5OH7kk/gXmCGvsE/032zCO6iEOLJ84=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FJSVXdeI2k+BbCNDESqTDH/C59dd8ms1hzsZlnwdTnHXBedv3Xsryk68Tffdr3OvWHs+dtoo10B78nJHY39uBnWi2KMKaJZtzXVUPnUfqnh6Q7GgzqCvuaC5dnU3b+hwQv6PajWBoXn48C/8p1y57dcQWNGfu9XXuKIR+d+d93E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BAYIgmSB; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E76043228;
-	Tue, 20 May 2025 12:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1747742979;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tmSn5XfAasjudyDa3E7vYwoQxs1qbpTg+SqpnL3/lgM=;
-	b=BAYIgmSBs6mhhyGy2RRs4bl/ABgZgU9O9gwvpemZvJBjVSMe2X+HxtSOWNu7nDMHC9tk9k
-	8PeTBBH+eUSGWTza172pWuhU41j1GKojEai+tBIepog9XasT7KdgSKVMFBVqGTcrhdUBej
-	0alsNCnvKpv0MoSRYARTostwdmaQC+M4qRXWhFBmupRxh1FOii57oCETZhgUUsc59t4Hzn
-	PCwk6pBHbETHnYAyXDxY9msScVsqINON0Y3gRSq31WExMW8676FENnGTYXoN3w9AFLnazs
-	0MqJH96I9k9wiiwQRH9PLFBtbBGZLFCaT7FfXPAVcJqr8LUNB7gSLAPyjiE4fw==
-Date: Tue, 20 May 2025 14:09:36 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, Kever Yang <kever.yang@rock-chips.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, =?UTF-8?B?SGVydsOp?= Codina
- <herve.codina@bootlin.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Stefan Wahren <wahrenst@gmx.net>, Fabrice
- Gasnier <fabrice.gasnier@foss.st.com>
-Subject: Re: DWC2 gadget: unexpected device reenumeration on Rockchip RK3308
-Message-ID: <20250520140936.08d72db6@booty>
-In-Reply-To: <329f68fb-a097-ff3d-da9d-f535a8429ea7@synopsys.com>
-References: <20250414185458.7767aabc@booty>
-	<a96409af-4f82-4b65-b822-dd8c71508212@rowland.harvard.edu>
-	<cf84f5ca-8c7a-b6c6-492c-c9cf6f73130d@synopsys.com>
-	<20250415162825.083f351c@booty>
-	<8c2e18a9-44d1-47b3-8fe4-46bdc5be8d76@rowland.harvard.edu>
-	<20250502155308.11a991d4@booty>
-	<cc80988c-5941-46f3-8183-f3f9acb7dd5d@rowland.harvard.edu>
-	<20250509091738.4ae76d18@booty>
-	<329f68fb-a097-ff3d-da9d-f535a8429ea7@synopsys.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1747744261; c=relaxed/simple;
+	bh=06+bqTZRg6ptyJRvbT7uUPZ5sbC90XpRGa1TPKHK3ak=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qz5NwdNG+G4epwQkLxCoeeDmsJaHdNeDoesrkei6s1U7Ki2cUnwyDHwOSCBUpEE6PPiLbYbVfsgfnntQUuPML3tvRRIZi8/y39w9k7F4YUc9jojiMwY9Pc7qYjx/PYfAFXzlnkVN5yXsYW9M2ye8YIZQZVSpu4SROIs8dveXM6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EJS4Cv0g; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54K7BAdw002214
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 12:30:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	rXBDW4Zj2qm1riop642/edycQKRUKMuQeCUhQ63b6q8=; b=EJS4Cv0giDcYWB+q
+	tydSuaxk5wnXQffmNjNIqrEXlhg4UMyIH2J9ITJ66l5kwZrK0FUugWh52w8KoLAp
+	z/pbxDaNE4dGHzfyJ4k3w8/nQ3YAkUz1fXUkAi8734kFcaDugo2GLEer42LimKx8
+	JXKdFWp1TgbiFT9/3QULIoOGJIkkoov9b4+J8J3sW0aWCoYmI0VR1DimBMPHzXOF
+	mvzuzdhFoKmivrbfcyYI5X6uB5syuzxNIerJikZmjNgJeLOQxef7OJqNovaxPaJF
+	XSDYEAhq6CLsx2wNr3TWRcM3iwMD9IQkIq1ShleA33w/ElYmOso+kA/y5qQjDoj8
+	SbzBhQ==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46r1atm0dv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 12:30:58 +0000 (GMT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-30ebd48a3c7so2868209a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 05:30:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747744257; x=1748349057;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rXBDW4Zj2qm1riop642/edycQKRUKMuQeCUhQ63b6q8=;
+        b=plccApTKIrTvtY/vXd1zU3AHeVdPifhe6OODDcRrZOjFeqOBO7N5FVyBrZ5jWl6Vi1
+         yQIQz/EM5Lqde6F/Ka5Wx0AQp58o0y1SjgF9dK0sgBBFmDrfdyYOUL5L3QWPbk8Fps+c
+         /w8chBlrq/6xoKqVl5uhwk0zRoo12k/2mb4KS/004mKFP9B9tpZar/KrALf55LNDULNR
+         Ifdz1TXwc3dYwreZc7uLEiORVdFCNxN9dvBLOIAEKNxFlN9xRnWeX8/b4f7xH4GJ73An
+         GEnCueswuMLNR/ZXyZi3ZGGvTg3uClNDyqAa+mVeY1aBK60lEE2daxzDPRzDnKJ+ULnK
+         z5rg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7YMZQpBozwmay1fu9/WYJ6UP+D81MJSDuL/vZzmDz+7/ksB3Rz0W+DNOGEljAiqJHJuLFoNkk+g8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtRR6HLVq8rsdnT/J/e1p0vpxOQggUIV/pF/oR3A/1MWUU1Rhk
+	sa0ycF6e4xyGp++qmWWQ1oSSa4in3dt+CeD+YFk8TKpyX3QIsFVQG4qbvVAJ1RrRNNuUGO9HmrV
+	szXn5Hcfh08W68HoyJd4QWkFkYdnULZPLUqMypE7D3Lr6RWCne2OpGblTZjmhx8mwfd7Ac71rZV
+	lwC8hcZtEeibfTNbsb1clV2UKoyeDwaJktGyvmMQ==
+X-Gm-Gg: ASbGncuRY5VNkJeGb+CPuTyjER9mRaSZd7ONoMMYKCDP4iro1LClDyNmeeFQKzSxDjG
+	1zohOiOuwb1lzpwy2q9iZXv3fcAdY+TS0QObfVtfXsqN/658z37VielyzYY6XhKEl4e83FQ==
+X-Received: by 2002:a17:90b:5251:b0:308:5273:4dee with SMTP id 98e67ed59e1d1-30e7d542b40mr25042989a91.15.1747744256974;
+        Tue, 20 May 2025 05:30:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG7LERFtBGK7AEaAksZZ5SwMMPuSxqQKo8q2KlrpzNtpoBMKejcFG+jY35m4O/WHIROL/D8IyAak0xNsIBjlSM=
+X-Received: by 2002:a17:90b:5251:b0:308:5273:4dee with SMTP id
+ 98e67ed59e1d1-30e7d542b40mr25042930a91.15.1747744256579; Tue, 20 May 2025
+ 05:30:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeglefffefghefhtddvfeeufeeiveekgffgleekieduteekkeetvdehudekgfdvvdenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopefoihhnrghsrdfjrghruhhthihunhihrghnsehshihnohhpshihshdrtghomhdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtoheplhhinhhugidquhhss
- gesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvghvvghrrdihrghnghesrhhotghkqdgthhhiphhsrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: luca.ceresoli@bootlin.com
+References: <20250517043942.372315-1-royluo@google.com> <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
+ <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com> <20250520003201.57f12dff@foxbook>
+In-Reply-To: <20250520003201.57f12dff@foxbook>
+From: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
+Date: Tue, 20 May 2025 18:00:44 +0530
+X-Gm-Features: AX0GCFv2SiJ3q2jRbyIfdSpQtz2ju4Vl5p2bc-eQmtKh68-w0TJPHdu1d6PX364
+Message-ID: <CAMTwNXBkAVjwaERAu-UHEHmH-BNe7T3iRfntLw+076g1OWgrPA@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "usb: xhci: Implement xhci_handshake_check_state()
+ helper"
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Roy Luo <royluo@google.com>,
+        mathias.nyman@intel.com, quic_ugoswami@quicinc.com,
+        Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=OfqYDgTY c=1 sm=1 tr=0 ts=682c7602 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10
+ a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=pGLkceISAAAA:8 a=TLaf8UyukAPKd0nM82IA:9
+ a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: d7C8Gx9uM8aSLIfxaOX4eF2MyuU-qUhM
+X-Proofpoint-GUID: d7C8Gx9uM8aSLIfxaOX4eF2MyuU-qUhM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIwMDEwMCBTYWx0ZWRfX1nmwq6PQRXEl
+ job2EjaRpjIIsywL8y02oEAK/K4cW8Fw7XeTOzi0/DarEHsbNdaG2Q2ktBonA4iMetaQsdWx+g5
+ CwOFKNJsSxXt8/n9P7gnukKtC72oUWRJk6vW2ZJvCM3vp/i/zXy+IFTKINfzz+5mzc5VHToxL/a
+ wgbTs526piZmT/npTkRSFNZ4PsMnIIivQ05LbOk30pLQVH+ENPG5/C5HadB2jNzx090MojEjXP6
+ a6Nuzp+H3yIywD6L92sXU0J/bI0J/4lnvW2DCV9INaSH6bsz1mbJsMM7ILBYQ2DfKVhlTEW0r5P
+ suTjkOp1EjwqjMVE4E0TrkZNYbTkBzrjAw7eq1qsIyaRuDSlfuH/5XTbzP8yjpq+FDf7nKbPNVQ
+ 1aoU5+VJOCT7mksqYy33UAShR5u5DervMwFAn+Ry92wHopDHt0nGopv0eaycokCQFPlJ1+VL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-20_05,2025-05-16_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505200100
 
-Hello Minas,
+On Tue, May 20, 2025 at 4:02=E2=80=AFAM Micha=C5=82 Pecio <michal.pecio@gma=
+il.com> wrote:
+>
+> On Mon, 19 May 2025 23:43:21 +0530, Udipto Goswami wrote:
+> > Hi Mathias,
+> >
+> > From what I recall, we saw this issue coming up on our QCOM mobile
+> > platforms but it was not consistent. It was only reported in long runs
+> > i believe. The most recent instance when I pushed this patch was with
+> > platform SM8650, it was a watchdog timeout issue where xhci_reset() ->
+> > xhci_handshake() polling read timeout upon xhci remove.
+>
+> Was it some system-wide watchdog, i.e. unrelated tasks were locking up?
+Hi Michal,
+Not exactly, I could see the other tasks were not stuck, only the
+readl which we do as part of xhci_handshake with a 10 sec timer.
+Our watchdog barks out at 10 sec and we saw in that timeframe it
+didn't respond i.e the readl_poll_timeout_atomic  was still polling.
+Since the timer is exactly aligned to the Watchdog timer here
+therefore it crashed.
 
-On Tue, 13 May 2025 07:35:40 +0000
-Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> wrote:
 
-> >> I don't know anything about that driver, though.  Minas is the expert.
-> >> You really need his advice.  
-> > 
-> > In the meanwhile I did two event captures, one with the mainline kernel
-> > and one with the vendor kernel, using the same laptop setup and no hub
-> > in between, and for each test I captured both the usbmon log and a
-> > wireshark file. Both are available if needed.
-> > 
-> > By analyzing those captures I found that the communication between host
-> > and gadget is almost identical. The only differenceis the get
-> > configuration descriptor response has one more descriptor in the vendor
-> > case (the working one). Here it is:
-> > 
-> > OTG Descriptor:
-> >    bLength                 3
-> >    bDescriptorType         9
-> >    bmAttributes         0x03
-> >      SRP (Session Request Protocol)
-> >      HNP (Host Negotiation Protocol)
-> > 
-> > I don't know exacty what that implies, but for a quick test I went in
-> > the mainline kernel and found that it can add the same descriptor if
-> > both of these is true:
-> > 
-> >   * dr_mode = "otg" in device tree
-> >   * "DWC2 Mode Selection" is "Dual role mode" in kconfig
-> >     (i.e. CONFIG_USB_DWC2_DUAL_ROLE=y)
-> > 
-> > While I had:
-> > 
-> >   * dr_mode = "peripheral"
-> >   * "DWC2 Mode Selection" = "Gadget only mode"
-> >     (i.e. CONFIG_USB_DWC2_PERIPHERAL=y)
-> > 
-> > With those two changes the mainline kernel now behaves correctly, just
-> > like the vendor kernel. No more disconnection after 5-6 seconds.
-> > 
-> > For the records, the vendor kernel already had dr_mode = "otg" and
-> > CONFIG_USB_DWC2_DUAL_ROLE=y.
-> > 
-> > Based on my very limited knowledge of USB, intuitively it looks that:
-> > 
-> >   * in peripheral-only mode the OTG Descriptor should not be sent
-> >   * in peripheral-only mode SRP does not make sense
-> >   * in peripheral-only mode HNP does not make sense
-> > 
-> > Are the above correct?
-> > 
-> > Whether the answer, I think these new findings do not yet explain the
-> > problem nor point to a correct solution. Apart from the added
-> > descriptor, all of the initial enumeration events seen by usbmon is
-> > identical in the two cases.
-> > 
-> > Minas, were you able to have a look at the info I collected?
-> > Do they suggesting you anything about the dwc2 driver?
-> >   
-> Configuration parameters: CONFIG_USB_DWC2_HOST, 
-> CONFIG_USB_DWC2_PERIPHERAL and CONFIG_USB_DWC2_DUAL_ROLE have impact 
-> only on build process. Based on these parameters driver can build as 
-> host only, device only or host + device.
-> 
-> OTG functionality of depend on:
-> 1. On core configuration - GHWCFG2 bits 0:2:
-> Mode of Operation (OtgMode)
-> 3'b000: HNP- and SRP-Capable OTG (Host & Device)
-> 3'b001: SRP-Capable OTG (Host & Device)
-> 3'b010: Non-HNP and Non-SRP Capable OTG (Host and Device)
-> 3'b011: SRP-Capable Device
-> 3'b100: Non-OTG Device
-> 3'b101: SRP-Capable Host
-> 3'b110: Non-OTG Host
-> Others: Reserved
-> As you can see above, device only mode can support OTG, i.e. 
-> "SRP-capable device".
-> Based on provided OTG descriptor your core's OTG mode is equal to 0, 
-> which means "HNP- and SRP-Capable OTG (Host & Device)".
-> 2. Depend on platform (see dwc2/param.c) OTG functionality can be 
-> updated, if it allowed by above core configuration OTG parameter.
-> 3. OTG functionality can updated also through devicetree parameters 
-> settings.
+> It looks similar to that command abort freeze: xhci_resume() calls
+> xhci_reset() under xhci->lock, and xhci_handshake() spins for a few
+> seconds with the spinlock held. Anything else (workers, IRQs) trying
+> to grab the lock will also spin and delay unrelated things.
+>
+> Not sure why your commit message says "Use this helper in places where
+> xhci_handshake is called unlocked and has a long timeout", because you
+> end up calling it from two places where the lock is (incorrectly) held.
+> That's why adding the early bailout helped, I guess.
+>
+I think we had re-worded the patch a little, this was my original commit:
 
-Thanks for the clarification. FYI the GHWCFG2 value is 0x228e2450 on
-the RK3308, so OtgMode = "3'b000: HNP- and SRP-Capable OTG (Host &
-Device)".
+"In some situations where xhci removal happens parallel to
+xhci_handshake, we enoughter a scenario where the xhci_handshake will
+fails because the status does not change the entire duration of
+polling. This causes the xhci_handshake to timeout resulting in long
+wait which might lead to watchdog timeout." The API  handles command
+timeout which may happen upon XHCI stack removal. Check for xhci state
+and exit the handshake if xhci is removed.
+https://lore.kernel.org/all/20230919085847.8210-1-quic_ugoswami@quicinc.com=
+/
 
-And I confirm the outcome of my tests:
+But yeah the main motive was to bail out handshake to get around this.
 
- A) if dr_mode = "otg" in DT AND CONFIG_USB_DWC2_DUAL_ROLE=y:
-    - OTG descriptor is sent
-    - no disconnection, no re-enumeration
+So you could say my main problem was that the CMD_RESET was stuck for
+a long time.
+In other cases the reset passes in very short amount of time. It was
+unusual for this case.
 
- B) if dr_mode = "peripheral" in DT OR CONFIG_USB_DWC2_PERIPHERAL=y:
-    - OTG descriptor is not sent
-    - disconnection+enumeration after ~6 seconds
+> > Unfortunately I was not able to simulate the scenario for more
+> > granular testing and had validated it with long hours stress testing.
+>
+> Looking at xhci_resume(), it will call xhci_reset() if the controller
+> has known bugs (e.g. the RESET_ON_RESUME quirk) or it fails resuming.
+>
+> I guess you could simulate this case by forcing the quirk with a module
+> parameter and adding some extra delay to xhci_handshake(), so you are
+> not dependent on the hardware actually failing in any manner.
 
-The disconnection in case B should _not_ happen.
+This would definitely bark, but like I mentioned my case was that the
+CMD_RESET didn't exit the poll in the 10 sec.
+I'm not sure if that points to the controller stuck at processing
+something else?
+Please correct me if i'm wrong here.
 
-The presence/absence of the OTG descriptor is not wrong AFAICU. I'm
-mentioning it just because it might give some clues.
-
-I did a comparison of /sys/kernel/debug/usb/ff400000.usb/regdump in
-cases A and B. The only relevant difference is that bit
-USBOTG_GUSBCFG.ForceDevMode is 1 in case B. Based on the TRM, this
-seems correct.
-
-Doing other checks on registers and adding some logging to the code
-showed everything appears to be configured correctly.
-
-So, nothing explains why after about 6 seconds there is a disconnect.
-
-My tests are done on mainline Linux v6.15-rc2.
-
-Minas, do you have any hints or advice to understand why there is a
-disconnect about ~6 seconds after a successful enumeration in gadget
-mode?
-
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+-Udipto
 
