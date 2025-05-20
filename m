@@ -1,182 +1,134 @@
-Return-Path: <linux-usb+bounces-24116-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24117-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A784ABE078
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 18:21:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD324ABE08D
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 18:23:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22D468C1762
-	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 16:18:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9ADA16D0B7
+	for <lists+linux-usb@lfdr.de>; Tue, 20 May 2025 16:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AD0262FC3;
-	Tue, 20 May 2025 16:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2011B252287;
+	Tue, 20 May 2025 16:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DTLDJenN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMSags/C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B714A06;
-	Tue, 20 May 2025 16:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5B417CA17
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 16:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747757907; cv=none; b=mm7BBnESYatPWpek+ox9zcv8/UfxYOgYc2phBSaAAziYnGe8XyQdqFK3YcGfgFMIvs+ZKCNT9rrz5O6rrlr6ft4/vS366E77FVa0UoTfZJdEZRuqD4dQP9RFVeqnfd2dmgm6tAf61aZFK8YTDKf9h2keeT4/CcV/UIJy+dSIukg=
+	t=1747757940; cv=none; b=oTZfUIwrfCsjY36ne9+R6Jqdm4LPle/qIyVWperHDBzNv11lwdVy0HDlAlUy1CZ3e6QGrzN2bOrNbCkmjNBnhR8dn6zoCywyemTNLsHunnaZsn0wvPeNiMh2ubvb1rAWv/3RhFNPwbEN6MMB8b1OPhF/SzWmtuGtze6MeBndYOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747757907; c=relaxed/simple;
-	bh=FWAcuH6OHyVpX6QxTtnReOCIzbpcnElu4hy+ppdiWoM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jLVdbsfrWGLhYw1QyVEOIlCIcZ5aPfaxKs7bJmkKy6zZqsaFF8KUnoDEcwXC1HPqdvPQQ/yC8wQZjdvf8+Pyi75v09OTqz9pDW6OhyzCqf9dIGIzeXrd0vdrkqzersdtcU4ZiDzv8eAVGPHUJ+VX88uerhMGVQ8qrmEq8COgNfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DTLDJenN; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747757906; x=1779293906;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FWAcuH6OHyVpX6QxTtnReOCIzbpcnElu4hy+ppdiWoM=;
-  b=DTLDJenNbtlFRQToq/fWlSIw/fYB+T2B/HXcrv+iE8aF/M2wnGOT9lH8
-   vV6EdYB3/I7ixHBwImY64ovk+LWfPz0cNWYC8pXQ+dVY7+WK0baYNjvRO
-   NrMNxoa0+tZGK/l9K7BgFlPrkWomIR6YFsMazsGmOyihUw3hccyXHOuC5
-   urEVyjLPxk7twi9QuHNy0DKtoarfTOxoPdCW9E46z/tjDgNRe8zJwRSMT
-   J0XDo0VDtGlFTQWfB5riL+XsCz//cfHOfE9+gIE68jPS51jtAHyzqiREq
-   04ealoUXTAeijlEnFvSQUy06aT6lwsSherqQ922f/9otaqpuEBeSHimtc
-   Q==;
-X-CSE-ConnectionGUID: 0yFcgpNoSwO/XTctvTq2yA==
-X-CSE-MsgGUID: WWT48XaDSGSwUDWJFW5E2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="48957789"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="48957789"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 09:18:25 -0700
-X-CSE-ConnectionGUID: YOrPUupMTlikiM1ZUpcNcQ==
-X-CSE-MsgGUID: ruB6orzDSRONDzk4DrROZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="140154366"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa008.fm.intel.com with ESMTP; 20 May 2025 09:18:23 -0700
-Message-ID: <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com>
-Date: Tue, 20 May 2025 19:18:21 +0300
+	s=arc-20240116; t=1747757940; c=relaxed/simple;
+	bh=mJ4NUMNT7wt47b7yrQ1W+nlKYIg2JJyeoXQS3nDKlFg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pH+AfmFnPBtbn8/O8hpokX+lYZkkAUawXLeFFYXRK748h8H4xFj+MIt6yWp70X/sqSoIA1gK2rjx24ey02cjQQ36WH7DeWUuGo1SEL85lNtXGmmmeXJAlCPJyfuaoxYgmj/kf9SgRngWR2IPLQLIa7CkGS2KJiaYngYWm3/BfQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMSags/C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C92A6C4CEEF
+	for <linux-usb@vger.kernel.org>; Tue, 20 May 2025 16:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747757939;
+	bh=mJ4NUMNT7wt47b7yrQ1W+nlKYIg2JJyeoXQS3nDKlFg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=nMSags/ClWFCN0YgO9jMVefwDY0iQtC/8rQp/1abnBuGTSZ0K4to0qjYKvm7mQwO+
+	 BTj8dxSXS1ypqe4N2ZFEkqz8DB3y8tp+i2YHlmnQfDKmZmLpHYwJEl6fLn3cF/dLKX
+	 Jpa81w8wze5h+KT8ZsEKerKJzfDm9ur11cZfnc51SVYq+5r/5QEBf/8bvHTVCLPk5W
+	 4/L63jRHXMoTQWZ2qrSMGgM8jkeEOcaxYhVST4uRHHllEm/aPQtsmQpxe4DHtSDqwo
+	 AztCQfhhNEEWox1yMXkDf9d0M0QI6yveaPiWp9DW2pIb+7RG6R93Acp4+8vnDpKox1
+	 aEKvXAODUm+qw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id BAB9BC41614; Tue, 20 May 2025 16:18:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220069] [6.13.9] regression USB controller dies
+Date: Tue, 20 May 2025 16:18:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: cwunder@gnome.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220069-208809-Jy2cveRKpS@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220069-208809@https.bugzilla.kernel.org/>
+References: <bug-220069-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] Revert "usb: xhci: Implement
- xhci_handshake_check_state() helper"
-To: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
-Cc: Roy Luo <royluo@google.com>, mathias.nyman@intel.com,
- quic_ugoswami@quicinc.com, Thinh.Nguyen@synopsys.com,
- gregkh@linuxfoundation.org, michal.pecio@gmail.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20250517043942.372315-1-royluo@google.com>
- <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
- <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 19.5.2025 21.13, Udipto Goswami wrote:
-> On Mon, May 19, 2025 at 6:23 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 17.5.2025 7.39, Roy Luo wrote:
->>> This reverts commit 6ccb83d6c4972ebe6ae49de5eba051de3638362c.
->>>
->>> Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state()
->>> helper") was introduced to workaround watchdog timeout issues on some
->>> platforms, allowing xhci_reset() to bail out early without waiting
->>> for the reset to complete.
->>>
->>> Skipping the xhci handshake during a reset is a dangerous move. The
->>> xhci specification explicitly states that certain registers cannot
->>> be accessed during reset in section 5.4.1 USB Command Register (USBCMD),
->>> Host Controller Reset (HCRST) field:
->>> "This bit is cleared to '0' by the Host Controller when the reset
->>> process is complete. Software cannot terminate the reset process
->>> early by writinga '0' to this bit and shall not write any xHC
->>> Operational or Runtime registers until while HCRST is '1'."
->>>
->>> This behavior causes a regression on SNPS DWC3 USB controller with
->>> dual-role capability. When the DWC3 controller exits host mode and
->>> removes xhci while a reset is still in progress, and then tries to
->>> configure its hardware for device mode, the ongoing reset leads to
->>> register access issues; specifically, all register reads returns 0.
->>> These issues extend beyond the xhci register space (which is expected
->>> during a reset) and affect the entire DWC3 IP block, causing the DWC3
->>> device mode to malfunction.
->>
->> I agree with you and Thinh that waiting for the HCRST bit to clear during
->> reset is the right thing to do, especially now when we know skipping it
->> causes issues for SNPS DWC3, even if it's only during remove phase.
->>
->> But reverting this patch will re-introduce the issue originally worked
->> around by Udipto Goswami, causing regression.
->>
->> Best thing to do would be to wait for HCRST to clear for all other platforms
->> except the one with the issue.
->>
->> Udipto Goswami, can you recall the platforms that needed this workaroud?
->> and do we have an easy way to detect those?
-> 
-> Hi Mathias,
-> 
->  From what I recall, we saw this issue coming up on our QCOM mobile
-> platforms but it was not consistent. It was only reported in long runs
-> i believe. The most recent instance when I pushed this patch was with
-> platform SM8650, it was a watchdog timeout issue where xhci_reset() ->
-> xhci_handshake() polling read timeout upon xhci remove. Unfortunately
-> I was not able to simulate the scenario for more granular testing and
-> had validated it with long hours stress testing.
-> The callstack was like so:
-> 
-> Full call stack on core6:
-> -000|readl([X19] addr = 0xFFFFFFC03CC08020)
-> -001|xhci_handshake(inline)
-> -001|xhci_reset([X19] xhci = 0xFFFFFF8942052250, [X20] timeout_us = 10000000)
-> -002|xhci_resume([X20] xhci = 0xFFFFFF8942052250, [?] hibernated = ?)
-> -003|xhci_plat_runtime_resume([locdesc] dev = ?)
-> -004|pm_generic_runtime_resume([locdesc] dev = ?)
-> -005|__rpm_callback([X23] cb = 0xFFFFFFE3F09307D8, [X22] dev =
-> 0xFFFFFF890F619C10)
-> -006|rpm_callback(inline)
-> -006|rpm_resume([X19] dev = 0xFFFFFF890F619C10,
-> [NSD:0xFFFFFFC041453AD4] rpmflags = 4)
-> -007|__pm_runtime_resume([X20] dev = 0xFFFFFF890F619C10, [X19] rpmflags = 4)
-> -008|pm_runtime_get_sync(inline)
-> -008|xhci_plat_remove([X20] dev = 0xFFFFFF890F619C00)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220069
 
-Thank you for clarifying this.
+--- Comment #59 from Claudio Wunder (cwunder@gnome.org) ---
+Got it:
 
-So patch avoids the long timeout by always cutting xhci reinit path short in
-xhci_resume() if resume was caused by pm_runtime_get_sync() call in
-xhci_plat_remove()
+````
+bash-5.2# dmesg | grep xhci.*quirks
+[    0.000000] Command line:
+BOOT_IMAGE=3D(hd0,gpt2)/ostree/default-5c836f8b9cf21db25d8ea8042cfcac18de42=
+950e638fd2ab6f1bf522afe3bf57/vmlinuz-6.14.6-102.bazzite.fc42.x86_64
+rhgb quiet root=3DUUID=3D4349ca0b-5bb9-4ad2-83a9-78d7440c02f9 rootflags=3Ds=
+ubvol=3Droot
+rw
+ostree=3D/ostree/boot.0/default/5c836f8b9cf21db25d8ea8042cfcac18de42950e638=
+fd2ab6f1bf522afe3bf57/0
+bluetooth.disable_ertm=3D1 preempt=3Dfull xhci_hcd.quirks=3D0x4000000
+[    0.064435] Kernel command line:
+BOOT_IMAGE=3D(hd0,gpt2)/ostree/default-5c836f8b9cf21db25d8ea8042cfcac18de42=
+950e638fd2ab6f1bf522afe3bf57/vmlinuz-6.14.6-102.bazzite.fc42.x86_64
+rhgb quiet root=3DUUID=3D4349ca0b-5bb9-4ad2-83a9-78d7440c02f9 rootflags=3Ds=
+ubvol=3Droot
+rw
+ostree=3D/ostree/boot.0/default/5c836f8b9cf21db25d8ea8042cfcac18de42950e638=
+fd2ab6f1bf522afe3bf57/0
+bluetooth.disable_ertm=3D1 preempt=3Dfull xhci_hcd.quirks=3D0x4000000
+[    0.613780] xhci_hcd 0000:03:00.2: hcc params 0x0110ffc5 hci version 0x1=
+20
+quirks 0x0000000204000010
+[    0.615279] xhci_hcd 0000:3b:00.0: hcc params 0x20007fc1 hci version 0x1=
+10
+quirks 0x0000000204009810
+[    0.671965] xhci_hcd 0000:68:00.0: hcc params 0x0200ef81 hci version 0x1=
+10
+quirks 0x0000000204000010
+[    0.730414] xhci_hcd 0000:6a:00.0: hcc params 0x0200ef81 hci version 0x1=
+10
+quirks 0x0000000204000010
+[    0.733142] xhci_hcd 0000:6c:00.3: hcc params 0x0120ffc5 hci version 0x1=
+20
+quirks 0x0000000204000010
+[    0.734136] xhci_hcd 0000:6c:00.4: hcc params 0x0120ffc5 hci version 0x1=
+20
+quirks 0x0000000204000010
+[    0.736031] xhci_hcd 0000:6d:00.0: hcc params 0x0110ffc5 hci version 0x1=
+20
+quirks 0x0000000204000010
+````
 
-void xhci_plat_remove(struct platform_device *dev)
-{
-	xhci->xhc_state |= XHCI_STATE_REMOVING;
-	pm_runtime_get_sync(&dev->dev);
-	...
-}
+Gonna wait for crashes to happen.
 
-I think we can revert this patch, and just make sure that we don't reset the
-host in the reinit path of xhci_resume() if XHCI_STATE_REMOVING is set.
-Just return immediately instead.
+--=20
+You may reply to this email to add a comment.
 
-xhci_reset() will be called with a shorter timeout later in the remove path
-
-Not entirely sure remove path needs to call pm_runtime_get_sync().
-I think it just tries to prevent runtime suspend/resume from racing with remove.
-PCI code seems to call pm_runtime_get_noresume() in remove path instead.
-
-Thanks
-Mathias
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
