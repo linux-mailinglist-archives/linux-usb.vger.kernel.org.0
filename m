@@ -1,137 +1,125 @@
-Return-Path: <linux-usb+bounces-24170-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24171-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5846ABF42D
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:20:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 350F4ABF455
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDAC6166CA8
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:19:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E493A4E0B8C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:28:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE4926A1D5;
-	Wed, 21 May 2025 12:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D254B267392;
+	Wed, 21 May 2025 12:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LaH+pyo1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ebaUAPLJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFF4269813;
-	Wed, 21 May 2025 12:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87117264FB0;
+	Wed, 21 May 2025 12:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747829852; cv=none; b=bnmBgcZxZI9yxb6Me/Eynn+w29VxZnqqs0YgY9ORo5Ao1CQj/ZAfTsvDBXikQYCb5D3X+gk0B7mNQnYXAoWifR9+eLMu4JSfudHsoazC4GMScAZu4ZPE0eHfCfYOqQqPyKGrdboSCvGjtj1NVbC7huAd02mHM2wkTpCw0R6ZrZc=
+	t=1747830503; cv=none; b=fhT+RzvkX5u2kQc3jDlwtn6wHyKd+8X52VFW7O/Lmlznz5i+iG45zIJL0+l8QhhveFejvAs9Y8jApffyzsnKZ4GvaQmBq6CsBaB73MXObVokUXT6VI6/OGG9gPoim2PXBrkiN/NaQzkiISmEPBLT/8YBV0lBEhqTCdnHntIibU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747829852; c=relaxed/simple;
-	bh=Fb9BRWO1ogcE647To3q6WgSr60w6091YC7O9FyRF6gE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GY2EhqB6wIt5YHRBHfvTEgwN8oaW0IAsqpQWI/GU/D1+iz0pm1IJexXtsMhufxUyyW2xwhPoarq6NO5gn/OQk+xp+wooYGeZBESkrhbPm2OpK00wkK4pfPzMFgVoHYmx9qHy2tbWQRT5dsOKAPOtOstIwzpjCyr1LzA2rBX1Pco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LaH+pyo1; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-442ea95f738so56259515e9.3;
-        Wed, 21 May 2025 05:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747829846; x=1748434646; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=94Ov1y6vudYSmo/RcJZAA1bs9J9A2lRPHxSejXpSw2Y=;
-        b=LaH+pyo1+VARtOsUGBtnBFs6t5c1dSnwTFrqabq6Bj76Zxm0j2IZm5FBJFwpIiJRtQ
-         uPEKxjFiMDnefWr1XO2qZXryzQzH8IaVtDX7lv/fZwlhgnCCj00poT1UWJU05YvRqAJu
-         012IH1qtAe92e4xQeVBmssXi+ZsTnjzwdH619KounmpMVVCdneTnIA8Hhaq8w0LXXNJ8
-         KvtwlDVjWz41HLunmIFDPg2UAq/AFivEVbZMg4VCq5Qa16nlhWF13K3rnubYInKSR8tM
-         57D4R2ic9TXlCynjTxGDK9kMGzYrZPVXap9MX4jL4b+bOM2ObKrEZQc8XocrDJQ0Ue4p
-         jbmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747829846; x=1748434646;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=94Ov1y6vudYSmo/RcJZAA1bs9J9A2lRPHxSejXpSw2Y=;
-        b=Z9L+oq3ch68LDc+mJIhysgg0gfYSYTwGN5gCBJ9q/t9gcXIgzAaHWUY8QXq/foGp2W
-         2ZAKWmYMPiuCAcpH6H72gzN02VfqqtcxlOWdTb/yJdHjRhKY2Gr8K0AW/cFem0KGjs8g
-         SYVZDF97Pem49CieY8pAyR3DrfNbacBY0ipKvx3WS1lIKXtpfjMcsuAj/qWVuQp0tqzl
-         31i9SQoow6pA5yrEiQyC81bGjwUj7W8O9zs1AGnuobzKK6RscYk8L5M8kLDA6cPTLlez
-         7SfiKdCT/e60n3FodNDJLcyPeUCvkpktE6DjRbFg9gLhGCquu+Af4/GtHcnW5WIBp+9a
-         FDdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXPTP9TkmWYDIcqmFnQULt3+7J1PDQSRhEq7rIhtvn8tH4nAAZFk6/P+q2DgItwhyGiIaVCUycc3Jw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGQ7+ics01MRL+PKiak68LRCgj9ImULujqC7ZN1AntxMYdWmo0
-	DOhHizrVpAqEsfAd5eRT842yKeVhUXqipbK2sIb7Sc9/n37WxrwlUVK1
-X-Gm-Gg: ASbGnctXRrKqBOSwwqn6Obw2IeYoIV1BtXUvQkFhuzekM30/noC3QbTYp3Jjr/snAo2
-	2phyLigfveSdBBZ58OCT/nNOsv5kMOsB6r1X7qJecsKiBHWFo2AFsvSQNtwT6ZIaL797/SXnScH
-	PKpaatPcnVYvKS7bchEYxZpzGUfRnDfAehP5ehQauOk1AOrdP36dG44bLIJ9veGaxuQZSKczaWg
-	YHwWZ+oKQ7s2XSWxK+nrIZod8I4tu3W0G7L3UIagh2cV/B/5Mk+oZSmiK1ImW1K0u9nUCiPOugL
-	658KqEk3oERcv/ubqi3JuxkaykKZf7HuEAAykFrId/bDNwDLbQN/YzM7mY47KOGhZs95r8LAB/G
-	N3kZB+D/DUmA=
-X-Google-Smtp-Source: AGHT+IHAcB1HgpHxoAMZuCpgwFNk499Y7O9muQyJdcKNacIh8Sbex7s/w1tWsc2n+LrN352qy8GdCQ==
-X-Received: by 2002:a05:600c:6285:b0:43d:683:8caa with SMTP id 5b1f17b1804b1-442fd63c726mr240296945e9.15.1747829846137;
-        Wed, 21 May 2025 05:17:26 -0700 (PDT)
-Received: from localhost.localdomain (82-64-73-52.subs.proxad.net. [82.64.73.52])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f6f0552esm66327845e9.11.2025.05.21.05.17.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 May 2025 05:17:25 -0700 (PDT)
-From: Dave Penkler <dpenkler@gmail.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: stable@vger.kernel.org,
-	guido.kiener@rohde-schwarz.com,
-	Dave Penkler <dpenkler@gmail.com>
-Subject: [PATCH 2/2] usb: usbtmc: Fix timeout value in get_stb
-Date: Wed, 21 May 2025 14:16:56 +0200
-Message-ID: <20250521121656.18174-4-dpenkler@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250521121656.18174-1-dpenkler@gmail.com>
-References: <20250521121656.18174-1-dpenkler@gmail.com>
+	s=arc-20240116; t=1747830503; c=relaxed/simple;
+	bh=qu/epRmiXykPhanq0RDGrw+4P7/CFr+xmyjZ3UDxo0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OHPuj6aDLkpV6cQ+R5Uyuo7Ej4iwQiI6UXrdHG9zTH6YPDOVi54OxLZRrp0NUFNHmj46X2Sx2QVgAlOPaoB/vyDDz4So+NVxoTxhG75f4WJPnWA1faMD8WIjw7n9J8m5SYcY9EkXbBK/LxRxK9D55rvW8q9or3/a7usdI2iBRik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ebaUAPLJ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747830502; x=1779366502;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qu/epRmiXykPhanq0RDGrw+4P7/CFr+xmyjZ3UDxo0c=;
+  b=ebaUAPLJD8bq9dgYy88qnKzUxAo0rsCe1DWf0gGbQn/i70SOUSxKmBNV
+   34NV5gWFaD61dFNUrnjkeliycbURtb+l9TMcuSSD1yk771sHjE9zSzWLT
+   k2W5kiBIr+MgqB7SDZCTvTAnxRL8ImmU27hqLplPDSeDMKqxyZAgkshYg
+   dyt6jOx7D4Z/jBC8WzYYSoWeXVC9s1FU18RWoXzlVxuN7Q5x0hFXrB1wg
+   hbbPoNmFmyXqJNLRn83a8shzrckylf8gCiceJUSOlhrrJLph7MOGOGv04
+   OSQVajzH4AakGyK2DgP0ERVGMvSdhAU9t/D4R65L/ZEN52EgXqsuAbx5O
+   Q==;
+X-CSE-ConnectionGUID: nAFt3BalQmCQo6cvFWp/GQ==
+X-CSE-MsgGUID: a+K6GEDwQX+Sb0xXaSX4nQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="49680177"
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="49680177"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 05:28:21 -0700
+X-CSE-ConnectionGUID: 5en+cvpgSB2571Kf+/6/5g==
+X-CSE-MsgGUID: /8OMT5gLQiqQTNy//jOHZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="170924053"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa002.jf.intel.com with ESMTP; 21 May 2025 05:28:19 -0700
+Message-ID: <e6f782db-5818-4d6c-99e0-bcf300fc5b4f@intel.com>
+Date: Wed, 21 May 2025 15:28:17 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] USB: core: add a memory pool to urb caching
+ host-controller private data
+To: David Wang <00107082@163.com>, gregkh@linuxfoundation.org
+Cc: oneukum@suse.com, stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250517083819.6127-1-00107082@163.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <20250517083819.6127-1-00107082@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-wait_event_interruptible_timeout requires a timeout argument
-in units of jiffies. It was being called in usbtmc_get_stb
-with the usb timeout value which is in units of milliseconds.
+On 17.5.2025 11.38, David Wang wrote:
+> ---
+> Changes since v2:
+> 1. activat the pool only when the urb object is created via
+> usb_alloc_urb()
+> Thanks to Oliver Neukum <oneukum@suse.com>'s review.
+> ---
+> URB objects have long lifecycle, an urb can be reused between
+> submit loops; The private data needed by some host controller
+> has very short lifecycle, the memory is alloced when enqueue, and
+> released when dequeue. For example, on a system with xhci, in
+> xhci_urb_enqueue:
+> Using a USB webcam would have ~250/s memory allocation;
+> Using a USB mic would have ~1K/s memory allocation;
+> 
+> High frequent allocations for host-controller private data can be
+> avoided if urb take over the ownership of memory, the memory then shares
+> the longer lifecycle with urb objects.
+> 
+> Add a mempool to urb for hcpriv usage, the mempool only holds one block
+> of memory and grows when larger size is requested.
+> 
+> The mempool is activated only when the URB object is created via
+> usb_alloc_urb() in case some drivers create a URB object by other
+> means and manage it lifecycle without corresponding usb_free_urb.
 
-Pass the timeout argument converted to jiffies.
+Won't this still allocate a lot of unnecessary memory for the roothub urbs?
+i.e. the ones queued with rh_urb_enqueue(hcd, urb).
+The host drivers don't use the urb->hcpriv of those URBs.
 
-Fixes: 048c6d88a021 ("usb: usbtmc: Add ioctls to set/get usb timeout")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dave Penkler <dpenkler@gmail.com>
----
- drivers/usb/class/usbtmc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This would be the roothub status URB, and every hub request sent
+during device enumeration for devices connected to the roothub.
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 08511442a27f..75de29725a45 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -483,6 +483,7 @@ static int usbtmc_get_stb(struct usbtmc_file_data *file_data, __u8 *stb)
- 	u8 tag;
- 	int rv;
- 	long wait_rv;
-+	unsigned long expire;
- 
- 	dev_dbg(dev, "Enter ioctl_read_stb iin_ep_present: %d\n",
- 		data->iin_ep_present);
-@@ -512,10 +513,11 @@ static int usbtmc_get_stb(struct usbtmc_file_data *file_data, __u8 *stb)
- 	}
- 
- 	if (data->iin_ep_present) {
-+		expire = msecs_to_jiffies(file_data->timeout);
- 		wait_rv = wait_event_interruptible_timeout(
- 			data->waitq,
- 			atomic_read(&data->iin_data_valid) != 0,
--			file_data->timeout);
-+			expire);
- 		if (wait_rv < 0) {
- 			dev_dbg(dev, "wait interrupted %ld\n", wait_rv);
- 			rv = wait_rv;
--- 
-2.49.0
+Is this whole URB hcpriv mempool addition an actual issue that needs fixing?
+
+If yes then I still think it's better to do it in the host driver like I
+described earlier. I don't think it will be too complex
+
+Thanks
+-Mathias
+
+
 
 
