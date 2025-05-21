@@ -1,106 +1,158 @@
-Return-Path: <linux-usb+bounces-24165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BF49ABF2F7
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:37:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08D00ABF31F
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:42:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6B258C0ACC
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:36:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2511691BC
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A598525EF8B;
-	Wed, 21 May 2025 11:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3B62641CA;
+	Wed, 21 May 2025 11:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q3fsLOYy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZKRdLU6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B216E262FC3
-	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 11:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C69821516E;
+	Wed, 21 May 2025 11:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747827411; cv=none; b=Afuhsb6N0vDe1/1K82PD9UMqCHmyJMmEbfGGthN/7WQyxsdVvreGZBZHi6RnrqeSkWEzEaVUM0TTnYDE8h7Qwx7w+bEFUdPDXtxstd79oC4YD5blDgf3/v9KABrLEbr9cODxJkVgfqDlFNXfceoKhFHsCLCk4UXYedtnS5/FdNw=
+	t=1747827721; cv=none; b=O5SV17+r5HNnrMr7gslMEHr7mPRtZlaHhu7SmkHQ5PU0+1la6HQcF06dntIxCoZ+dC/zLqbCog4O9bXm2zW3INLSBN6DmpYUZuckhmd9xgiwWVUOrwCao+vZrU8bsAS1kZIkbvCOnVnM1D8FkBQglvJ2s8urn073Bz6bklC4xMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747827411; c=relaxed/simple;
-	bh=fcXgeC+r3iIbjsAW0kESyJagNBWSYRUmV9AgVW8ceDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C35jm9DQRfKJJqAEtLeYoz/0wJD6Kmj3P1NEWLvnSBEjxx521GWoRtN+wRgO1UWjVGwrEtj64deh2NhoihACCCKLpW90Waunit46rYms1I5B/Zr24z1rZBm02YxC+0e8h+uP5C2bVkKVdQpuV+ZWC4b1ndewvuVNK+KnlEuf4JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q3fsLOYy; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747827409; x=1779363409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fcXgeC+r3iIbjsAW0kESyJagNBWSYRUmV9AgVW8ceDU=;
-  b=Q3fsLOYyUsgq75PW0lB0P6Z9Nk+z3S/CYrV1cqYd2oIqOaAYSasdVOkf
-   HaGUIPYbk1jNNl1xcQ5JkdBuZFYmBxQrkqQPXE6zPEIKQefz/nCi4Y+xg
-   gWTYRB1+X9IJhgIYtx/u1UHlCnvvQZioAp1LJkoVOKI+W9quAeD4U45YV
-   eZYElE2kZFm418UA7pzaO5Bnd8wJDVe3FntPfooxpxfzkpIbqmvbiMwoq
-   oHl6bE/wnFx56jGeirnsCLww3fNQsF3jdCKXbLlvvcMa+huNt87WLIdo7
-   9gl9A1dNHtuIg1abAw45QmmPExfFS7FFfaoZhs+1JZGki98JocNloGWN6
-   w==;
-X-CSE-ConnectionGUID: DzFmJ/FKRM6JVcXGJyNccA==
-X-CSE-MsgGUID: Qo4u7qWiQsSr+7y1GONE3Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="53607827"
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="53607827"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 04:36:49 -0700
-X-CSE-ConnectionGUID: /QS9LsPMReu+Kbow8eAQag==
-X-CSE-MsgGUID: yJspxjYPRU25hrLWLf/uxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="141093043"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 21 May 2025 04:36:47 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 39933376; Wed, 21 May 2025 14:36:46 +0300 (EEST)
-Date: Wed, 21 May 2025 14:36:46 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB4/Thunderbolt fix for v6.15-rc7
-Message-ID: <20250521113646.GI88033@black.fi.intel.com>
-References: <20250513145638.GM88033@black.fi.intel.com>
- <2025052127-supermom-radish-5b37@gregkh>
+	s=arc-20240116; t=1747827721; c=relaxed/simple;
+	bh=AnIvJC5zV6udTTe7BFOtw+I6KuBjO6JtpR1FV0hUS0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IddBZq/obSXFDhN9QKI7pp5iuW1UauSiYbLwx/OfqgmKeUlBdClFMJIk6DGvMDL7UAHGqhSuJu7K3L+SeSwlx3UAAwBuSy5OcgWdvNJqJQPBtX4VjFuhmyugQ/a1tL3i1dSCnbWD3TGpGM+DtfYopW5VpQeuPbhzLo8CAiyXtVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZKRdLU6; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-231c86bffc1so68523315ad.0;
+        Wed, 21 May 2025 04:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747827719; x=1748432519; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1zqkw80WD8KrwlgJGk0dS2pTq4ixxOK5I/FQ75WFcIg=;
+        b=SZKRdLU63FtJ+nGl7skul6B7H7ac0gLGJ53nY0sf9qCIupoXSjcGCYt4lAesSK5weK
+         oC/tRMJKm2dB8OsHkWvRQ7X70+i1Vw5k6MpolSrsg5HiCkx8nrNZHwTbOrMi1suSCXGR
+         tXp3n7vqkqHjH5ECu9nkYiSQ32+MJxgkaPp/dFVp0tC6aY8VnsnyKeNFRQK9ODLFbnFG
+         ynDcyCz5QoJZNJueK1HVt5OVLZ50KIUlJQciCf3qNFMgwGky7+/4XX2h3kc/0YWMQd3s
+         jOTxGDC7WJrvv89y1LobYG8qMYuJPUTVXKAQj3htUmQy+eJj+1au0bPkFxhYXyj+30gk
+         H1fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747827719; x=1748432519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1zqkw80WD8KrwlgJGk0dS2pTq4ixxOK5I/FQ75WFcIg=;
+        b=U9aD4pt1GaYjg94mM55WW9J0c3lcfkR/0NtZfbYi7UiwT+CDRAVEfRyqkOGlUEwIdv
+         VEV+uUgaJPufDijnwqeTtvgMZkh0khbNOfuhrJkSDJwYL75j6LMfxfe1VOsbFDKizt6n
+         vFoZHwZ5Cuj1739OAsmqhyuYDsi0Du47GdMLU7psfqqs9u/WZkucIosQWA6GWyN6ASR9
+         vDFGFKXDt7p4nD8PywQYoz85cVIMPAOEdPR1yDREP0XNz0cgr99QGbYTzklaG0yM1f5c
+         VeigsW0SyTaduvOjsaGmDFiWpzIS2Mi2QiR2aA2vYCci49mR6e44MYaVZAvqEgxmdyZf
+         zSSg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTmO521Qy/C2kRO7ZSfV1b4Fs5f8PRJj8aVa51CdIGUPYsL84j9jhhqCSM/rQwQmOju8MzB4THPjQKzoc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRH/XLq61u158xAIFOGa+07nEynuebHArNlMoo5LcUyZl0cG4z
+	IVre597VKhq3FK/D1jiYoSkUhC1ZXQHrquFRC+nQJXNfplKN8dTGEf+i7D9w5I/a
+X-Gm-Gg: ASbGncuOahgWhi1cqC0XmXOfut5E1nUwbMGdNh6ryXtfB3QNxIhgquVfiyRQI2IFGZE
+	KrJ1+MGG2JyKtdKSfJmnfeWNGx4YGHWWzhIlW6cdlQ98J1ZexY0ecC1QG3eCITemdLQXYgcgT9s
+	5a2ARntpaqSoKsYcJVy5Jz4MGQmmPKUFk4lhvNNenuJz/1+3yta73sCVL/gshIIe3EaU4dxy45c
+	2Sb0LDvWWCFenl1x3rqcOCN36eo8vB7Tyki9Q1hNhJ4FkOsN3huUTi+9kxAU7/4pnXq8YRV0THI
+	zYek/mp/RHY11FlnMWDJxumRP0DhdtU+Ix2skBaY5zw9UgVYjrvvQ+TkcWqi1hGQNTEl9k0UzgZ
+	M1r/VMcMzu5RLNojZQ+eE582lxPBY+JZdFH6Jr7EYz7sl
+X-Google-Smtp-Source: AGHT+IEwcFaaI0EPp7BGh4qVy4HDpC91n8Rw7EWMA5J6W2m4rRIaXOs3gnTh9cCoZIekNXV1FdM/iw==
+X-Received: by 2002:a17:902:e801:b0:231:7f29:bda0 with SMTP id d9443c01a7336-231de5b0ba7mr262590205ad.52.1747827718964;
+        Wed, 21 May 2025 04:41:58 -0700 (PDT)
+Received: from localhost.localdomain (123-194-189-72.dynamic.kbronet.com.tw. [123.194.189.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2320418f249sm73208305ad.215.2025.05.21.04.41.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 May 2025 04:41:58 -0700 (PDT)
+From: Jay Chen <shawn2000100@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jay.chen@siemens.com,
+	Jay Chen <shawn2000100@gmail.com>
+Subject: [PATCH v5] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
+Date: Wed, 21 May 2025 19:40:25 +0800
+Message-ID: <20250521114047.18001-1-shawn2000100@gmail.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2025052127-supermom-radish-5b37@gregkh>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 21, 2025 at 12:28:04PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, May 13, 2025 at 05:56:38PM +0300, Mika Westerberg wrote:
-> > Hi Greg,
-> > 
-> > The following changes since commit 92a09c47464d040866cf2b4cd052bc60555185fb:
-> > 
-> >   Linux 6.15-rc5 (2025-05-04 13:55:04 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.15-rc7
-> > 
-> > for you to fetch changes up to 0f73628e9da1ee39daf5f188190cdbaee5e0c98c:
-> > 
-> >   thunderbolt: Do not double dequeue a configuration request (2025-05-09 12:14:25 +0300)
-> 
-> It's too late for my branch to get stuff into -final, sorry, I was
-> traveling last week.  I'll take this now and get it into -rc1 and then
-> backport to the needed stable trees.
+There is a subtle contradiction between sections of the xHCI 1.2 spec
+regarding the initialization of Input Endpoint Context fields. Section
+4.8.2 ("Endpoint Context Initialization") states that all fields should
+be initialized to 0. However, Section 6.2.3 ("Endpoint Context", p.453)
+specifies that the Average TRB Length (avg_trb_len) field shall be
+greater than 0, and explicitly notes (p.454): "Software shall set
+Average TRB Length to '8' for control endpoints."
 
-Sure, thanks!
+Strictly setting all fields to 0 during initialization conflicts with
+the specific recommendation for control endpoints. In practice, setting
+avg_trb_len = 0 is not meaningful for the hardware/firmware, as the
+value is used for bandwidth calculation.
+
+Motivation: Our company is developing a custom Virtual xHC hardware
+platform that strictly follows the xHCI spec and its recommendations.
+During validation, we observed that enumeration fails and a parameter
+error (TRB Completion Code = 5) is reported if avg_trb_len for EP0 is
+not set to 8 as recommended by Section 6.2.3. This demonstrates the
+importance of assigning a meaningful, non-zero value to avg_trb_len,
+even in virtualized or emulated environments.
+
+This patch explicitly sets avg_trb_len to 8 for EP0 in
+xhci_setup_addressable_virt_dev(), as recommended in Section 6.2.3, to
+prevent potential issues with xHCI host controllers that enforce the
+spec strictly.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=220033
+Signed-off-by: Jay Chen <shawn2000100@gmail.com>
+---
+Change log:
+
+v5:
+- Move changelog to below the '---' line as required by kernel patch format.
+
+v4:
+- Clarify relevant spec sections and document their conflict.
+- Remove language about "ensuring compliance with the spec" per reviewer suggestion.
+- Update assignment to use '=' instead of '|='.
+
+v3:
+- Corrected author name in commit metadata and added changelog.
+
+v2:
+- Fixed malformed patch formatting issue.
+
+---
+drivers/usb/host/xhci-mem.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index d698095fc88d..26d0ab37bd5b 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1166,6 +1166,8 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
+ 	ep0_ctx->deq = cpu_to_le64(dev->eps[0].ring->first_seg->dma |
+ 				   dev->eps[0].ring->cycle_state);
+ 
++	ep0_ctx->tx_info = cpu_to_le32(EP_AVG_TRB_LENGTH(8));
++
+ 	trace_xhci_setup_addressable_virt_device(dev);
+ 
+ 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
+-- 
+2.43.5
+
 
