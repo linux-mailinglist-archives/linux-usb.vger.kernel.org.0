@@ -1,125 +1,90 @@
-Return-Path: <linux-usb+bounces-24171-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24172-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 350F4ABF455
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:28:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B54DABF465
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:34:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E493A4E0B8C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:28:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453C24E74F4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:34:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D254B267392;
-	Wed, 21 May 2025 12:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F002264A9D;
+	Wed, 21 May 2025 12:34:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ebaUAPLJ"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ef//jObW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87117264FB0;
-	Wed, 21 May 2025 12:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1353923909C;
+	Wed, 21 May 2025 12:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747830503; cv=none; b=fhT+RzvkX5u2kQc3jDlwtn6wHyKd+8X52VFW7O/Lmlznz5i+iG45zIJL0+l8QhhveFejvAs9Y8jApffyzsnKZ4GvaQmBq6CsBaB73MXObVokUXT6VI6/OGG9gPoim2PXBrkiN/NaQzkiISmEPBLT/8YBV0lBEhqTCdnHntIibU8=
+	t=1747830864; cv=none; b=IwuvnAAOswvuM1oA5E3Q4k/nW61umAxiL7zsJCMtqqWiSM36LGPXUTAQlAsRAZvspqpbFeClrBiFbSIl9mEzxeovOAIte5tjNDaxFT4SYykt1OhsJH2Hv0gTl5aeqFL9TD4HCQlBmQ0nO128Tnz5CYfRi0zqZXbhT6MrBYesN4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747830503; c=relaxed/simple;
-	bh=qu/epRmiXykPhanq0RDGrw+4P7/CFr+xmyjZ3UDxo0c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OHPuj6aDLkpV6cQ+R5Uyuo7Ej4iwQiI6UXrdHG9zTH6YPDOVi54OxLZRrp0NUFNHmj46X2Sx2QVgAlOPaoB/vyDDz4So+NVxoTxhG75f4WJPnWA1faMD8WIjw7n9J8m5SYcY9EkXbBK/LxRxK9D55rvW8q9or3/a7usdI2iBRik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ebaUAPLJ; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747830502; x=1779366502;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qu/epRmiXykPhanq0RDGrw+4P7/CFr+xmyjZ3UDxo0c=;
-  b=ebaUAPLJD8bq9dgYy88qnKzUxAo0rsCe1DWf0gGbQn/i70SOUSxKmBNV
-   34NV5gWFaD61dFNUrnjkeliycbURtb+l9TMcuSSD1yk771sHjE9zSzWLT
-   k2W5kiBIr+MgqB7SDZCTvTAnxRL8ImmU27hqLplPDSeDMKqxyZAgkshYg
-   dyt6jOx7D4Z/jBC8WzYYSoWeXVC9s1FU18RWoXzlVxuN7Q5x0hFXrB1wg
-   hbbPoNmFmyXqJNLRn83a8shzrckylf8gCiceJUSOlhrrJLph7MOGOGv04
-   OSQVajzH4AakGyK2DgP0ERVGMvSdhAU9t/D4R65L/ZEN52EgXqsuAbx5O
-   Q==;
-X-CSE-ConnectionGUID: nAFt3BalQmCQo6cvFWp/GQ==
-X-CSE-MsgGUID: a+K6GEDwQX+Sb0xXaSX4nQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="49680177"
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="49680177"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 05:28:21 -0700
-X-CSE-ConnectionGUID: 5en+cvpgSB2571Kf+/6/5g==
-X-CSE-MsgGUID: /8OMT5gLQiqQTNy//jOHZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
-   d="scan'208";a="170924053"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 21 May 2025 05:28:19 -0700
-Message-ID: <e6f782db-5818-4d6c-99e0-bcf300fc5b4f@intel.com>
-Date: Wed, 21 May 2025 15:28:17 +0300
+	s=arc-20240116; t=1747830864; c=relaxed/simple;
+	bh=/+8NUsmoNssJxYA0RzXXY7/+dbkVqd/qvdK98c4x3UM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t8sT9DEnjpDDEdfto+7cBVk5VoDrxit8KxnWdAaDnPY0ZkQy6czmttF21OS3eH2KDq7iCAnSPnhXbZPCAC/JAYziFupZ/evNOhd9nD7DExbgli94LvxzGANsJkolFbr4FPOYMjInNCmYgGUK7XD9Ty7sW9RYuayr7j1tmVNxkk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ef//jObW; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=qEPg1tXQmSMVouRlKQXAp5F4RbrwowS/jmvNYKyuEDc=; b=ef//jObWa5RZuUnWZB/+bJUiO4
+	YYfsG6SmPTzUD4W1/CLQe0QXcnJcatMoDITomTyP5fC8uzzcS8pq4BBFLNRQgpSqEmyuvE7DzKuy0
+	ObcfgwpNW9+kuEALtqGJHIfQ5+dX/kYTbfBh7E477Q7P+6zAJW1Si31HfyN7onQSuZK8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uHie4-00DGkL-D2; Wed, 21 May 2025 14:34:04 +0200
+Date: Wed, 21 May 2025 14:34:04 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+3b6b9ff7b80430020c7b@syzkaller.appspotmail.com,
+	lvc-project@linuxtesting.org
+Subject: Re: [PATCH net-next] net: usb: aqc111: fix error handling of usbnet
+ read calls
+Message-ID: <39e2951b-6e57-4003-b1c7-c68947f579be@lunn.ch>
+References: <20250520113240.2369438-1-n.zhandarovich@fintech.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] USB: core: add a memory pool to urb caching
- host-controller private data
-To: David Wang <00107082@163.com>, gregkh@linuxfoundation.org
-Cc: oneukum@suse.com, stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250517083819.6127-1-00107082@163.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20250517083819.6127-1-00107082@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520113240.2369438-1-n.zhandarovich@fintech.ru>
 
-On 17.5.2025 11.38, David Wang wrote:
-> ---
-> Changes since v2:
-> 1. activat the pool only when the urb object is created via
-> usb_alloc_urb()
-> Thanks to Oliver Neukum <oneukum@suse.com>'s review.
-> ---
-> URB objects have long lifecycle, an urb can be reused between
-> submit loops; The private data needed by some host controller
-> has very short lifecycle, the memory is alloced when enqueue, and
-> released when dequeue. For example, on a system with xhci, in
-> xhci_urb_enqueue:
-> Using a USB webcam would have ~250/s memory allocation;
-> Using a USB mic would have ~1K/s memory allocation;
+On Tue, May 20, 2025 at 02:32:39PM +0300, Nikita Zhandarovich wrote:
+> Syzkaller, courtesy of syzbot, identified an error (see report [1]) in
+> aqc111 driver, caused by incomplete sanitation of usb read calls'
+> results. This problem is quite similar to the one fixed in commit
+> 920a9fa27e78 ("net: asix: add proper error handling of usb read errors").
 > 
-> High frequent allocations for host-controller private data can be
-> avoided if urb take over the ownership of memory, the memory then shares
-> the longer lifecycle with urb objects.
-> 
-> Add a mempool to urb for hcpriv usage, the mempool only holds one block
-> of memory and grows when larger size is requested.
-> 
-> The mempool is activated only when the URB object is created via
-> usb_alloc_urb() in case some drivers create a URB object by other
-> means and manage it lifecycle without corresponding usb_free_urb.
+> For instance, usbnet_read_cmd() may read fewer than 'size' bytes,
+> even if the caller expected the full amount, and aqc111_read_cmd()
+> will not check its result properly. As [1] shows, this may lead
+> to MAC address in aqc111_bind() being only partly initialized,
+> triggering KMSAN warnings.
 
-Won't this still allocate a lot of unnecessary memory for the roothub urbs?
-i.e. the ones queued with rh_urb_enqueue(hcd, urb).
-The host drivers don't use the urb->hcpriv of those URBs.
+It looks like __ax88179_read_cmd() has the same issue? Please could
+you have a look around and see if more of the same problem exists.
 
-This would be the roothub status URB, and every hub request sent
-during device enumeration for devices connected to the roothub.
+Are there any use cases where usbnet_read_cmd() can actually return
+less than size and it not being an error? Maybe this check for ret !=
+size can be moved inside usbnet_read_cmd()?
 
-Is this whole URB hcpriv mempool addition an actual issue that needs fixing?
-
-If yes then I still think it's better to do it in the host driver like I
-described earlier. I don't think it will be too complex
-
-Thanks
--Mathias
-
-
-
+	Andrew
 
