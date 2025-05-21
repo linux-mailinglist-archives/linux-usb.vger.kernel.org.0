@@ -1,53 +1,55 @@
-Return-Path: <linux-usb+bounces-24160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24161-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 359ACABF26C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:09:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC06FABF27B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 835BE1897904
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:09:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9669F4E57BF
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A742609DB;
-	Wed, 21 May 2025 11:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F028262D14;
+	Wed, 21 May 2025 11:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CTGTrPSa"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="C3wGx23I"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F344025F79C;
-	Wed, 21 May 2025 11:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C390E2609DB;
+	Wed, 21 May 2025 11:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747825733; cv=none; b=XuaMNCeC5w42g1iKx2ClEOn2D5BrzMNTrVaDI1YqKNM0MQYyguHcYI4qbWIpFi+u/0j8Bfubb+kPTlWeNvdcrCSspit4WERJ3rrDYTnI+qi4bpFFnrwBw+gqikFD3hIrDY6dLxwAYgMBnxxsU9XsYgAXkntItwB5Zl9Vftx8fIM=
+	t=1747825878; cv=none; b=DFDe8130lZg9JTxJa4XBUgWOTSm0UxU5iPXC5YjWWXmW1fsGBaKB0/e06UeSHIbe3qEuQKzqQXBt6db7sCVR5bcJV+tTP+P7mfzRcdZxSgiOziKbO0m4+wFdxdLFReTSbn58wavvcLIcaXsqEV0CAoQHwAwWx8FIeSAcQ76qilw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747825733; c=relaxed/simple;
-	bh=DU9lEj51ny5qY/eu02WgK8o4IIepp1BzWBzJ768LIN8=;
+	s=arc-20240116; t=1747825878; c=relaxed/simple;
+	bh=QKalJhRWAYNTqYRsDY84n12XM0NIIzFxBP9AFKFTh8s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sLLbPW51dYwTUlqdWuVbYL97PZdX9fu4Yoe2uPUDsLCoAMLloLYWIqHSaLE2wPmXhL1TuFvE7Z0pwP3Sh0PlznVuu0km++M/TX8z8VrihzGUpeZSM0Kfm/aCGgQcoCbrJjiCa8Gx36hhoLLvovaTnF2AxworeLHXsvCB26K4CI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CTGTrPSa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE884C4CEEA;
-	Wed, 21 May 2025 11:08:51 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PLs3pq66VxH7wk5bbnw38NS1HS6uUghzQ276A/vSo3g6inUUXoDIbt7vEkUQ3bpgHfJMu0HPjp9DvLty1eJU5O4MqqHUDdMCc2t0d7FWdHyG9UNIoEF4p64+5agVEevV8M4bGODIRJrCQ3IIhalfh1Z/JL2pAHCc1+7rH1BHdjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=C3wGx23I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88F7C4CEEF;
+	Wed, 21 May 2025 11:11:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747825732;
-	bh=DU9lEj51ny5qY/eu02WgK8o4IIepp1BzWBzJ768LIN8=;
+	s=korg; t=1747825877;
+	bh=QKalJhRWAYNTqYRsDY84n12XM0NIIzFxBP9AFKFTh8s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CTGTrPSaZisMA1dmjMamDDZ9jowr+m0+RqDOT7zX2VrH8X9i9dMPdPZGzIHyS/ZKr
-	 dfNv8LSxuv6bhuXBldEm/Z1YNLAWhfWHHZ1rMXO9ZzlszycJ+4SkrkElHvkcY0nWl9
-	 AHQ42A55/uYJoQNzkPzRGqCOoodHEwmK0sVlCMyA=
-Date: Wed, 21 May 2025 13:08:49 +0200
+	b=C3wGx23ITn4mc1GJo9GZD65A3xKcMh4aCNG9nBdTFDEEY5A9QHOkFqIjJQ6LOFhTT
+	 YQ/EdwUOrlQcKa5n4xLsZaL1IUz4BUis0BAgWAkLOyu6+hsqO3ZPk610x59kT6oyOB
+	 F5gMHa4iuEa+Z3sRk/xsjIbwKO6oapB7qQazE60w=
+Date: Wed, 21 May 2025 13:11:14 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	John Youn <John.Youn@synopsys.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v 3] usb: dwc2: gadget: Fix enter to hibernation for
- UTMI+ PHY
-Message-ID: <2025052119-bunch-catsup-2ac0@gregkh>
-References: <6242fbe1b81f16adeb96079448f0df92b6b8b664.1746442461.git.Minas.Harutyunyan@synopsys.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1] ucsi_ccg: Disable async suspend in ucsi_ccg_probe()
+Message-ID: <2025052158-venture-bottling-a3f8@gregkh>
+References: <6180608.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,28 +58,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6242fbe1b81f16adeb96079448f0df92b6b8b664.1746442461.git.Minas.Harutyunyan@synopsys.com>
+In-Reply-To: <6180608.lOV4Wx5bFT@rjwysocki.net>
 
-On Mon, May 05, 2025 at 11:48:02AM +0000, Minas Harutyunyan wrote:
-> For UTMI+ PHY, according to programming guide, first should be set
-> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
-> Remote Wakeup, then host notices disconnect instead.
-> For ULPI PHY, above mentioned bits must be set in reversed order:
-> STOPPCLK then PMUACTV.
+On Mon, May 12, 2025 at 03:26:53PM +0200, Rafael J. Wysocki wrote:
+> From: Jon Hunter <jonathanh@nvidia.com>
 > 
-> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
-> Cc: stable@vger.kernel.org
-> Reported-by: Tomasz Mon <tomasz.mon@nordicsemi.no>
-> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+> Commit aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending
+> children") had triggered a suspend issue on Tegra boards because it had
+> reordered the syspend of devices with async suspend enabled with respect
+> to some other devices.  Specifically, the devices with async suspend
+> enabled that have no children are now suspended before any other devices
+> unless there are device links pointing to them as suppliers.
+> 
+> The investigation that followed the failure report uncovered that async
+> suspend was enabled for the cypd4226 device that was a Type-C controller
+> with a dependency on USB PHY and it turned out that disabling async
+> suspend for that device made the issue go away.  Since async suspend
+> takes dependencies between parents and children into account as well
+> as other dependencies between devices represented by device links, this
+> means that the cypd4226 has a dependency on another device that is
+> not represented in any form in the kernel (a "hidden" dependency), in
+> which case async suspend should not be enabled for it.
+> 
+> Accordingly, make ucsi_ccg_probe() disable async suspend for the
+> devices handled by, which covers the cypd4226 device on the Tegra
+> boards as well as other devices likely to have similar "hidden"
+> dependencies.
+> 
+> Fixes: aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending children")
+> Closes: https://lore.kernel.org/linux-pm/c6cd714b-b0eb-42fc-b9b5-4f5f396fb4ec@nvidia.com/
+> Reported-by: Jon Hunter <jonathanh@nvidia.com>
+> Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  Changes in v3:
->  - Rebased on top of 6.15-rc4
->  Changes in v2:
->  - Added Cc: stable@vger.kernel.org
+> 
+> Commit aa7a9275ab81 is in linux-next and it has not reached the mainline yet.
 
-AS it's too late for 6.15-final, I tried to apply this to the usb-next
-branch and it fails there due to other changes to this codepath.  Can
-you rebase it and submit it there?
+I'm guessing that's in your tree, so can you take this through that?
 
 thanks,
 
