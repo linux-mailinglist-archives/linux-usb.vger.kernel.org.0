@@ -1,78 +1,104 @@
-Return-Path: <linux-usb+bounces-24138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69BB6ABE8D3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 03:06:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39738ABE8EA
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 03:20:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD64F17FDE3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 01:05:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7015D1B67B99
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 01:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C502E433D1;
-	Wed, 21 May 2025 01:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4EF51714B4;
+	Wed, 21 May 2025 01:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+rrYzLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJT4t/1k"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBEB13D8A0;
-	Wed, 21 May 2025 01:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F68165F13;
+	Wed, 21 May 2025 01:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747789538; cv=none; b=IbUXj4SNmQygeRsub0LD8gZ2KwvIh+F0REq6NS3JNSDR5Tm9M5XjMBFVntqgbBymBPbhK2hdWvqPsP2BzmasYRpkbsa7bMoEqZRKZjNBAPz/zZeDzl0/phxw3YYlgFwRro1hFtH6Znz0bsA6HiHcQi95p/a+L/nfnbf9GnjNb2M=
+	t=1747790415; cv=none; b=X9NvjP+OFajmG1TLxNX7h2UN5z4ixoHT8XriLMtXucmUOYG67o+qVwyiKPVQ9O+3vC3B4ltR9PWzzIHlGdpL6R9LtRVzkfQsdUx4KIrsASE3xCbXg+4Lfzf/CcOQxJqVBTalux6hhEOPHkgr+0qwjhXHwdj3J7odFyKAUtPTQDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747789538; c=relaxed/simple;
-	bh=mjJH9AG9tTP/Tg3XQixBhGC19W0ImUuio5yB+96LAQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LwgFzrJJt7nQbmgD5K5vaHQjOGgpHCofHV1jkJGXPKfsXjdydfDhEA/No4UTqiIL+2GM3djTiWeNjEz1FYzH0amGCaxGas4bmVdwzuyIzGTFVQaEbpUIFI35rgm+My1asnWLiseuNC6dJU8arlW9nsaTVcq34l8qxxjNXg8ykds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+rrYzLE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300C9C4CEE9;
-	Wed, 21 May 2025 01:05:37 +0000 (UTC)
+	s=arc-20240116; t=1747790415; c=relaxed/simple;
+	bh=J42QwgN71K7lVleEFOdNDdi7sYwtPu6FjJUMG6HIEFo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=mTJZq+BGvUa5MwqqVUdAt0nvf1pyfGLV6AAfjCUCmYrdEmwaZKTnwy9JSAKXHn4iChBFIvfcnALGc11wb4093KLgQoF+Y/LHZr+bviBzTHhQfYUHtIcKIGy3+A8wHb403Cw71DcYyrei1TuVj2rogZwh51xmvftc0E9QgaEVKC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJT4t/1k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96581C4CEF0;
+	Wed, 21 May 2025 01:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747789537;
-	bh=mjJH9AG9tTP/Tg3XQixBhGC19W0ImUuio5yB+96LAQo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=F+rrYzLEBsXkguc601/3H5YSVH5gq41LP1rxyioHMLPqjits9zKP+IMYRr4vd9Bcl
-	 dOQvOXL77dyLs8PHV4Z1qJAs4fK0GOTYt3V+OcH6nM3RMMBDwwMaTPR6J/5QQxOkct
-	 JQzIQXQ7T0fdsA2YDSbzKeb4dRjcQPHNUf0CjXYvc+h+VilNtM0kstItzVO1dIT2H5
-	 XEnx4VK/iYzkOn+4MaZLoGRRbB178sHp8T+a/py9SEV5FliOe/gOnD3SPuFwp1r3zG
-	 QI1rJJADyGGoJ2PIqh9/sBK/OOs/+cSaNhp783l7Xv/QomoFqlaNzco68byxLbikzS
-	 61heOne/kYzdQ==
-Date: Tue, 20 May 2025 18:05:31 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Wentao Liang <vulab@iscas.ac.cn>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, ste3ls@gmail.com, hayeswang@realtek.com,
- dianders@chromium.org, gmazyland@gmail.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Subject: Re: [PATCH v2] r8152: Add wake up function for RTL8153
-Message-ID: <20250520180531.44930f89@kernel.org>
-In-Reply-To: <20250516013552.798-1-vulab@iscas.ac.cn>
-References: <20250516013552.798-1-vulab@iscas.ac.cn>
+	s=k20201202; t=1747790414;
+	bh=J42QwgN71K7lVleEFOdNDdi7sYwtPu6FjJUMG6HIEFo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=WJT4t/1kxoSPKUy1x69rtULOXnbjNvc/Qi2JOt7DdEfdRcurMShTXqxj42JQqb2Bu
+	 gxag8cc1jM9ebuO2kYAWV6rKjpCqrb+TAF0j2smU3z8x/x0q1Z9kS8iV5B43UQ/kSr
+	 WxK+/kpBbZWiVmChxVBw33dAxlcV+3AfRNoDpuEx7+pW0SY5nyyiIQl3P/C1sM0mnY
+	 x7D5FPnq3a7iVIDobJdoiTJnRqUDj0ed73QOj9rAcmU3ewKVG07WjSh2QOxkuPcfdf
+	 7qe8XQwqbleOxU+hwSAxUiI6MhdPM3NSGFSJcHbRgeqh0R6iwWifO+qy6bsSiMl0Pn
+	 bs2dz3sE/2AAw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD4D380AAD0;
+	Wed, 21 May 2025 01:20:51 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/3] net: phy: fixed_phy: simplifications and
+ improvements
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174779045049.1526198.18389815848433022265.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 01:20:50 +0000
+References: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
+In-Reply-To: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: gerg@linux-m68k.org, geert@linux-m68k.org, hauke@hauke-m.de,
+ zajec5@gmail.com, tsbogend@alpha.franken.de, olteanv@gmail.com,
+ opendmb@gmail.com, florian.fainelli@broadcom.com, Thangaraj.S@microchip.com,
+ Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com, andrew@lunn.ch,
+ andrew+netdev@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ bcm-kernel-feedback-list@broadcom.com, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org
 
-On Fri, 16 May 2025 09:35:52 +0800 Wentao Liang wrote:
-> In rtl8153_runtime_enable(), the runtime enable/disable logic for RTL8153
-> devices was incomplete, missing r8153_queue_wake() to enable or disable
-> the automatic wake-up function. A proper implementation can be found in
-> rtl8156_runtime_enable().
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sat, 17 May 2025 22:33:23 +0200 you wrote:
+> This series includes two types of changes:
+> - All callers pass PHY_POLL, therefore remove irq argument
+> - constify the passed struct fixed_phy_status *status
 > 
-> Add r8153_queue_wake(tp, true) if enable flag is set true, and add
-> r8153_queue_wake(tp, false) otherwise.
+> Heiner Kallweit (3):
+>   net: phy: fixed_phy: remove irq argument from fixed_phy_add
+>   net: phy: fixed_phy: remove irq argument from fixed_phy_register
+>   net: phy: fixed_phy: constify status argument where possible
+> 
+> [...]
 
-Please explain how the problem was discovered and on what HW (if any)
-the patch was tested.
+Here is the summary with links:
+  - [net-next,1/3] net: phy: fixed_phy: remove irq argument from fixed_phy_add
+    https://git.kernel.org/netdev/net-next/c/3f1716ee0f6c
+  - [net-next,2/3] net: phy: fixed_phy: remove irq argument from fixed_phy_register
+    https://git.kernel.org/netdev/net-next/c/d23b4af5df39
+  - [net-next,3/3] net: phy: fixed_phy: constify status argument where possible
+    https://git.kernel.org/netdev/net-next/c/4ba1c5bb4811
+
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
