@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-24157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24158-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3534AABF23E
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:59:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8732EABF24E
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:02:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3A524E4CC1
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 10:59:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB2DE3BB98C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9854626156E;
-	Wed, 21 May 2025 10:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8732620D1;
+	Wed, 21 May 2025 11:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="M3RALjd4"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gyhkiq5n"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1413C253B5E;
-	Wed, 21 May 2025 10:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFAA2609C2;
+	Wed, 21 May 2025 11:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747825154; cv=none; b=dLENtx0ekZA+E/88OUz9IDYfSR8Wa7FopBEvIg/7TcPideILwiyB3DoeVhzeqDM4xTIQL+EEPHkF3Ev9VwW4+cMl6AL7rlbxayPcyO63AJAB3N59W6XR5AKyaGBcoONVpAX/+I/xBB1ISM0JU1YNxi5cvSinmbz5+6Oh1FtdnTw=
+	t=1747825346; cv=none; b=BnUhYaf9hIUjeitunCraN/iVUiImG54sJhZfk2t5QXjBYzVTXPRjSRw2T5wFahlrboiHfZuILohT0/ugtX8c0+v0WBaHQN5p6L8NRtvgsTCKVxjprthAGuNuuy1b5j8q486MD/HCmYeG9mRqSN1N/qu0PoK8/f9ut4uN01MUGV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747825154; c=relaxed/simple;
-	bh=OAPtjhvGq2rqLYOSN3p3U2UsnP7gFs9SLcjeVDkoB/w=;
+	s=arc-20240116; t=1747825346; c=relaxed/simple;
+	bh=NwM+NGfKHHnT2OLIKq+FHRN4Gio7xbZtXQnXe5DJhQY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NPalB9NUrUGm6e8N8UpuLsrokSuPsbpv9uMwJNmw/BA2TR/+kWvNK61U991PbO1QNn6+Lml4Xq6ni8UTyFboijnwP7XJ9qkvgP25hGCYRXPVwBH0H6fXttshdAZmFzsfs5xuHtPhkWH+88hBao5khCcWql/9UNiZG+d8Aj9Ye70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=M3RALjd4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B4DC4CEED;
-	Wed, 21 May 2025 10:59:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLLRTXN22juRwNDKXO3Id9JBTmanfIWncPyWzpi5PiIfJwPJtQ8HNrcIySPyZN0pjfYwS+RXGIJiWDwQBRKHBPK7LT+JqcqU9jre//hD0tQZXYBIfwXBtO6D6PpF60qpuLx+cEE5wdW+zndOInZzV0wSh/If9UAPmWT6H30bi24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gyhkiq5n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D74EC4CEE4;
+	Wed, 21 May 2025 11:02:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747825153;
-	bh=OAPtjhvGq2rqLYOSN3p3U2UsnP7gFs9SLcjeVDkoB/w=;
+	s=korg; t=1747825345;
+	bh=NwM+NGfKHHnT2OLIKq+FHRN4Gio7xbZtXQnXe5DJhQY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M3RALjd4MZ6xII4SHpXnUz/mbl1P+P6a6UUibxCyRdMuN5yZqkZnZutqsVGCAv/vR
-	 nJOjQYrs76Y0llc6g+8rpiOrob2kXzWXVODvK7ubB9ghsPmVrp7c87WE3Ksi+iqj57
-	 kruH+X8BD4pV87/VXXNqrWPrOrHyIdD4mgdduJwo=
-Date: Wed, 21 May 2025 12:59:10 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Ethan Carter Edwards <ethan@ethancedwards.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: misc: adutux: replace kmalloc() with kmalloc_array()
-Message-ID: <2025052111-able-unfocused-cdcf@gregkh>
-References: <20250503-adutux_kmalloc_array-v1-1-80c74c4bd3e7@ethancedwards.com>
+	b=gyhkiq5n2tRrqHP+RpenrYEMzU/SyB5KuqdW/U3aRN9wKlCD1qdbbs2DLk4kcDqpE
+	 3+ZThVMbp3UqV/xpqo8Bg9XXz0tMcba1DvavI49Ev8L3s7jWHAY/fj8Rd7oTO7zZ8H
+	 yoqMsfzaATTqlp8C9Gc41lj6JlUjgWQruodE8cak=
+Date: Wed, 21 May 2025 13:02:22 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: u.kleine-koenig@baylibre.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Add null pointer check
+ in usb3_irq_epc_pipe0_setup()
+Message-ID: <2025052142-waking-monopoly-37a6@gregkh>
+References: <20250514095053.420-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,50 +55,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250503-adutux_kmalloc_array-v1-1-80c74c4bd3e7@ethancedwards.com>
+In-Reply-To: <20250514095053.420-1-vulab@iscas.ac.cn>
 
-On Sat, May 03, 2025 at 04:43:21PM -0400, Ethan Carter Edwards wrote:
-> Replace kmalloc with internal multiplication with kmalloc_array to
-> improve code readability and prevent potential overflows.
-
-But this is not an array of a structure size.
-
+On Wed, May 14, 2025 at 05:50:53PM +0800, Wentao Liang wrote:
+> The function usb3_irq_epc_pipe0_setup() calls the function
+> usb3_get_request(), but does not check its return value which
+> is a null pointer if the function fails. This can result in a
+> null pointer dereference.
 > 
-> Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
+> Add a null pointer check for usb3_get_request() to avoid null
+> pointer dereference when the function fails.
+> 
+> Fixes: 746bfe63bba3 ("usb: gadget: renesas_usb3: add support for Renesas USB3.0 peripheral controller")
+> Cc: stable@vger.kernel.org # v4.5
+> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
 > ---
->  drivers/usb/misc/adutux.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/gadget/udc/renesas_usb3.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/adutux.c b/drivers/usb/misc/adutux.c
-> index ed6a19254d2ff9fead898adad0b3996822e10167..000a3ade743258f381d85397395a43c28a8481cc 100644
-> --- a/drivers/usb/misc/adutux.c
-> +++ b/drivers/usb/misc/adutux.c
-> @@ -680,7 +680,7 @@ static int adu_probe(struct usb_interface *interface,
->  	in_end_size = usb_endpoint_maxp(dev->interrupt_in_endpoint);
->  	out_end_size = usb_endpoint_maxp(dev->interrupt_out_endpoint);
+> diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+> index fce5c41d9f29..51f2dd8cbf91 100644
+> --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> @@ -1920,11 +1920,13 @@ static void usb3_irq_epc_pipe0_setup(struct renesas_usb3 *usb3)
+>  {
+>  	struct usb_ctrlrequest ctrl;
+>  	struct renesas_usb3_ep *usb3_ep = usb3_get_ep(usb3, 0);
+> +	struct renesas_usb3_request *usb3_req = usb3_get_request(usb3_ep);
 >  
-> -	dev->read_buffer_primary = kmalloc((4 * in_end_size), GFP_KERNEL);
-> +	dev->read_buffer_primary = kmalloc_array(4, in_end_size, GFP_KERNEL);
+>  	/* Call giveback function if previous transfer is not completed */
+> +	if (!usb3_req)
+> +		return;
 
-This is a buffer and you need the size to be correct based on the
-commands, right?  It's not an array of a structure, but rather a stream
-of bytes.
+Why is this check below the comment?  Shouldn't it be above it?
 
-
->  	if (!dev->read_buffer_primary)
->  		goto error;
+>  	if (usb3_ep->started)
+> -		usb3_request_done(usb3_ep, usb3_get_request(usb3_ep),
+> -				  -ECONNRESET);
+> +		usb3_request_done(usb3_ep, usb3_req, -ECONNRESET);
 >  
-> @@ -690,7 +690,7 @@ static int adu_probe(struct usb_interface *interface,
->  	memset(dev->read_buffer_primary + (2 * in_end_size), 'c', in_end_size);
->  	memset(dev->read_buffer_primary + (3 * in_end_size), 'd', in_end_size);
->  
-> -	dev->read_buffer_secondary = kmalloc((4 * in_end_size), GFP_KERNEL);
-> +	dev->read_buffer_secondary = kmalloc_array(4, in_end_size, GFP_KERNEL);
+>  	usb3_p0_con_clear_buffer(usb3);
+>  	usb3_get_setup_data(usb3, &ctrl);
+> -- 
+> 2.42.0.windows.2
 
-Same here.
-
-I think the original code is just fine as there's no bug here or way it
-can overflow, right?
+How was this tested?
 
 thanks,
 
