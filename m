@@ -1,131 +1,187 @@
-Return-Path: <linux-usb+bounces-24205-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24206-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD605ABFF1C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 23:49:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E04ABFF79
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 00:27:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3033E9E5B2B
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 21:48:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9EB3164548
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 22:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53884237173;
-	Wed, 21 May 2025 21:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4147F23A58B;
+	Wed, 21 May 2025 22:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="au0RUgf/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BAtglIIX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428D516F288;
-	Wed, 21 May 2025 21:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C5E1428E7
+	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 22:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747864143; cv=none; b=umg9/FbwMtJ2QBvRk/a49ZRNxf9wpQt7kdO5OF9TNCyluE+LrRJD/4hygY3kh5Xj7ZHzsP/kd1nXWsIYJTZPPXig8Jz5SPJ3wrh+ENgjkshvUE8PlkXFwQaes3eU4HLpKRbtmQAGyuvy5E+OupcgiubnGZA9TLRP8uScSwXPz88=
+	t=1747866445; cv=none; b=gqNRcXj6FPFs5wO6s1WRyWii3XhK92N8FJQAr22S99KRbliknLv22/UpuTyipSev3S7JQXy9Osa1oPr4ASgpf87nPipi7Pqt8F5VsPexXirZlLUrhzCotTaQ9AO64rXmcVo2+2b1GTBS7pminIhWMOLwNTD7L/hQg1hJ1RJS+OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747864143; c=relaxed/simple;
-	bh=v6oyws5czAbNgfpmZs07oRxCWMBQkASJkZzDQDtqUhM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dof+eTY6XOoItwrPk0Pl161kGCGwri/CRHAqwNmIikiHJjuio5Lm5Ub9V1tuYhjt0EANEKePv06SlYB/clHMG7WC0dFTZDPdBasUOtzL5yjmxSjERN7lZtyycndoR9x3vMvkvpY5BnwjlOoxc+u5WGg2m2cou7GwRJ86LCNdUHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=au0RUgf/; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-acae7e7587dso1064803066b.2;
-        Wed, 21 May 2025 14:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747864140; x=1748468940; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E7XZXU0VEJ18cU2BxFX9o9WteQEjbnzJPBFFWBFf2cs=;
-        b=au0RUgf/F6OTb6R6s8IXnJpgzfXRMdTP1GCt0/ZBVumH53GRThSQKnuW8NfuB3AAfB
-         nfVHUMj6sTuCacnFtwn6Cz7Hg3bDn3Iaqd1Ooeln5OZR83oCuY3r0sjMdeFY1l4Hbl9Z
-         ThtmuBuP3ruSrFKpsDRS0tTF8cTyOXBnrtx6it+06IKtBlSSp4XQYX//DZAuRWx/ZGEi
-         us+IoWEQtl7/vN5qrvaZsIeiuqaVmV5RD9w39mAK69Rbv/gwgE9tXWO3XahzPSOBSFyG
-         OMpEZOm8pme4bctrqj4s9uM62g7waLxBa21XFhzSVZhTQkZGvn53acya2DyWAM1AoPAM
-         GAnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747864140; x=1748468940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E7XZXU0VEJ18cU2BxFX9o9WteQEjbnzJPBFFWBFf2cs=;
-        b=nwv/J+fXcXL/7+YgS0LhdpWpGx8gLOAGpsUckTjyZU3NL2rLPY1c0aESu9nHJ4MA03
-         SbziRkl8v0iAWvEx2iQAm1NwEufVdbCEIEzd3mFhSQN53keb9FhWj4PYLsAeWhz4dh8j
-         qmiZObGBkDvAJoi5LxOqSukKUM3BgeF8NXvpgXM7UfkZz7f59VEG7irg4i9Z5nT4yEDR
-         I8EWr/wHWSJJ9BA4h7LrDlXhrut7UfEoPdKQdvvhn379ZjMnmpgQQDlpVmTNJ8oSgA6L
-         KqM2bng2c/jq0Q8MzFNSKF3BtVOXjBXFzzFfQcGReHhvojLN5INjUCedsNErJSpUxebT
-         G+dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ4qzt+ESy0qnbOMEkcmzyG2aVPptIU6q0/kwtcFSQfcwDOZH8S8/lmg4a36TozbPTbgKgFP1YdKYdsWg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0L3FFgpPcD20uZxqeCX7UNwTKAunElKcrKVALEDl01WFlRMTf
-	nB3MR7J4IZtAj3gf5oVPY9RghLit6xuu02diBPn7NMrkIOIIxRZR/n8=
-X-Gm-Gg: ASbGnctA4twIPWt2DJU2Ntcfc07iGx9qSATNSZUVtW/VO67tdBjk3iniaw8u/I2nU02
-	neDumjr1qLNV5bNOqQNKPTfCywINUBPo6L6aOiYpnHmkN9mQ+oBUiEqmmd1ybYMRPKXVIaa+uXT
-	fkjgP7JwxnDyzat0+EaqRucQFSAc5FKPbBj2f36PFW4wfZzaV+3fRg77q6phGst34WuxvqNy5VV
-	DdBwR7Omzz5Q70pKZwlHA2cVAQKPcHFDR0cen9eHUdU72ByO8nV9EigRvA9bVjejgWVScZIyIwz
-	NKH/+92nd6Iuf0SsdFXjHERj6++3/Czd7E7IIoZkCQxueTrU98LkDSUHRCozbZ7Afzl0k22/yDn
-	y
-X-Google-Smtp-Source: AGHT+IEGpGKyn2SjbG73jckuIvkuAriIecmkA7h43Y5pgW3r7LcfmeLczUiVBIZTzZhCpPXrY3HTfw==
-X-Received: by 2002:a17:907:d06:b0:ad2:1a60:f83b with SMTP id a640c23a62f3a-ad52d443a2amr2108668666b.11.1747864140348;
-        Wed, 21 May 2025 14:49:00 -0700 (PDT)
-Received: from localhost.localdomain ([2a0d:e487:157f:5941:a21f:c1c7:6140:7de5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d4cc5dbsm957451666b.169.2025.05.21.14.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 May 2025 14:48:59 -0700 (PDT)
-From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	jihed.chaibi.dev@gmail.com
-Subject: [PATCH 1/1] usb: typec: tipd: fix typo in TPS_STATUS_HIGH_VOLAGE_WARNING macro
-Date: Wed, 21 May 2025 23:48:51 +0200
-Message-Id: <20250521214851.386796-1-jihed.chaibi.dev@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1747866445; c=relaxed/simple;
+	bh=TBarqKSFX9bxLv+qOpWl2XT+t1ZUtMPIuuna6xNszlE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sdjdL6Mqv+XypIJ9UJF9P8d4OuSOfd/r5UUzwKn5r6YZKeRHe8KWAnxMQEk4ffZbKIR78hOWWIPR9IjAAY6KWX+fZRan1d4B19X1hKWCDisJaK83UT7xB9rlEVpCkvC9IQbTMMEsmdjLJBNBedRAkSJPj8yGshAAV65F34zNPIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BAtglIIX; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747866444; x=1779402444;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TBarqKSFX9bxLv+qOpWl2XT+t1ZUtMPIuuna6xNszlE=;
+  b=BAtglIIXBWutXaNiubA9w+6DBfAEDJuZ1KoKYHw9e8BwVulp+7BvNzr7
+   1aWP/SQdLwSkvoladkRtF0li3n+E/UfTyKm49hL5j+OHWb2AXuwl+J29U
+   eUw5vG3Hvlcv3vM1bb3Aqn6hy7zDMga4x1x9JvUBJrIahP8JrkCR2G0RD
+   /HwZV2ZaMlucNgli7TrxEMxW371QH2VqQZACZ2bywAsksEjpi/hM55PGp
+   K8wju5KBV7UV+uFroSGVKRIq9XYhsA78FHz12pETs+9svAPIIhtikEspI
+   n8v+onC515oKitTE8SucxKYxOvJOvjTaC6cVEgo6L+Onqah6XtHuRo0hT
+   A==;
+X-CSE-ConnectionGUID: JcRgZBbhRLGYSrNEW6KX2g==
+X-CSE-MsgGUID: tG9aOMs/TO+3EvnD7mWyBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="75265412"
+X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
+   d="scan'208";a="75265412"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 15:27:23 -0700
+X-CSE-ConnectionGUID: KOjeMz1RR82jkj5XGuH3LA==
+X-CSE-MsgGUID: lJat/osMT92Rsyfb9JULZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
+   d="scan'208";a="177439000"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 21 May 2025 15:27:22 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHruB-000Ofy-1Y;
+	Wed, 21 May 2025 22:27:19 +0000
+Date: Thu, 22 May 2025 06:26:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Stroud <jonathan.stroud@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [usb:usb-testing 46/52] drivers/usb/misc/onboard_usb_dev.c:358:12:
+ warning: 'onboard_dev_5744_i2c_write_byte' defined but not used
+Message-ID: <202505220644.tD2JYSkV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-"VOLAGE" should become "VOLTAGE"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   342e4955a1f1ce28c70a589999b76365082dbf10
+commit: 1143d41922c0f87504f095417ba1870167970143 [46/52] usb: misc: onboard_usb_dev: Fix usb5744 initialization sequence
+config: xtensa-randconfig-002-20250522 (https://download.01.org/0day-ci/archive/20250522/202505220644.tD2JYSkV-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505220644.tD2JYSkV-lkp@intel.com/reproduce)
 
-Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
----
- drivers/usb/typec/tipd/tps6598x.h | 2 +-
- drivers/usb/typec/tipd/trace.h    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505220644.tD2JYSkV-lkp@intel.com/
 
-diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-index 9b23e9017..cecb8d11d 100644
---- a/drivers/usb/typec/tipd/tps6598x.h
-+++ b/drivers/usb/typec/tipd/tps6598x.h
-@@ -27,7 +27,7 @@
- #define TPS_STATUS_OVERCURRENT		BIT(16)
- #define TPS_STATUS_GOTO_MIN_ACTIVE	BIT(26)
- #define TPS_STATUS_BIST			BIT(27)
--#define TPS_STATUS_HIGH_VOLAGE_WARNING	BIT(28)
-+#define TPS_STATUS_HIGH_VOLTAGE_WARNING	BIT(28)
- #define TPS_STATUS_HIGH_LOW_VOLTAGE_WARNING BIT(29)
- 
- #define TPS_STATUS_CONN_STATE_MASK		GENMASK(3, 1)
-diff --git a/drivers/usb/typec/tipd/trace.h b/drivers/usb/typec/tipd/trace.h
-index 0669cca12..bea383f2d 100644
---- a/drivers/usb/typec/tipd/trace.h
-+++ b/drivers/usb/typec/tipd/trace.h
-@@ -153,7 +153,7 @@
- 		      { TPS_STATUS_OVERCURRENT,		"OVERCURRENT" }, \
- 		      { TPS_STATUS_GOTO_MIN_ACTIVE,	"GOTO_MIN_ACTIVE" }, \
- 		      { TPS_STATUS_BIST,		"BIST" }, \
--		      { TPS_STATUS_HIGH_VOLAGE_WARNING,	"HIGH_VOLAGE_WARNING" }, \
-+		      { TPS_STATUS_HIGH_VOLTAGE_WARNING,	"HIGH_VOLTAGE_WARNING" }, \
- 		      { TPS_STATUS_HIGH_LOW_VOLTAGE_WARNING, "HIGH_LOW_VOLTAGE_WARNING" })
- 
- #define show_tps25750_status_flags(flags) \
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/misc/onboard_usb_dev.c:358:12: warning: 'onboard_dev_5744_i2c_write_byte' defined but not used [-Wunused-function]
+     358 | static int onboard_dev_5744_i2c_write_byte(struct i2c_client *client, u16 addr, u8 data)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/misc/onboard_usb_dev.c:313:12: warning: 'onboard_dev_5744_i2c_read_byte' defined but not used [-Wunused-function]
+     313 | static int onboard_dev_5744_i2c_read_byte(struct i2c_client *client, u16 addr, u8 *data)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/onboard_dev_5744_i2c_write_byte +358 drivers/usb/misc/onboard_usb_dev.c
+
+   312	
+ > 313	static int onboard_dev_5744_i2c_read_byte(struct i2c_client *client, u16 addr, u8 *data)
+   314	{
+   315		struct i2c_msg msg[2];
+   316		u8 rd_buf[3];
+   317		int ret;
+   318	
+   319		u8 wr_buf[7] = {0, USB5744_CREG_MEM_ADDR, 4,
+   320				USB5744_CREG_READ, 1,
+   321				addr >> 8 & 0xff,
+   322				addr & 0xff};
+   323		msg[0].addr = client->addr;
+   324		msg[0].flags = 0;
+   325		msg[0].len = sizeof(wr_buf);
+   326		msg[0].buf = wr_buf;
+   327	
+   328		ret = i2c_transfer(client->adapter, msg, 1);
+   329		if (ret < 0)
+   330			return ret;
+   331	
+   332		wr_buf[0] = USB5744_CMD_CREG_ACCESS;
+   333		wr_buf[1] = USB5744_CMD_CREG_ACCESS_LSB;
+   334		wr_buf[2] = 0;
+   335		msg[0].len = 3;
+   336	
+   337		ret = i2c_transfer(client->adapter, msg, 1);
+   338		if (ret < 0)
+   339			return ret;
+   340	
+   341		wr_buf[0] = 0;
+   342		wr_buf[1] = USB5744_CREG_MEM_RD_ADDR;
+   343		msg[0].len = 2;
+   344	
+   345		msg[1].addr = client->addr;
+   346		msg[1].flags = I2C_M_RD;
+   347		msg[1].len = 2;
+   348		msg[1].buf = rd_buf;
+   349	
+   350		ret = i2c_transfer(client->adapter, msg, 2);
+   351		if (ret < 0)
+   352			return ret;
+   353		*data = rd_buf[1];
+   354	
+   355		return 0;
+   356	}
+   357	
+ > 358	static int onboard_dev_5744_i2c_write_byte(struct i2c_client *client, u16 addr, u8 data)
+   359	{
+   360		struct i2c_msg msg[2];
+   361		int ret;
+   362	
+   363		u8 wr_buf[8] = {0, USB5744_CREG_MEM_ADDR, 5,
+   364				USB5744_CREG_WRITE, 1,
+   365				addr >> 8 & 0xff,
+   366				addr & 0xff,
+   367				data};
+   368		msg[0].addr = client->addr;
+   369		msg[0].flags = 0;
+   370		msg[0].len = sizeof(wr_buf);
+   371		msg[0].buf = wr_buf;
+   372	
+   373		ret = i2c_transfer(client->adapter, msg, 1);
+   374		if (ret < 0)
+   375			return ret;
+   376	
+   377		msg[0].len = 3;
+   378		wr_buf[0] = USB5744_CMD_CREG_ACCESS;
+   379		wr_buf[1] = USB5744_CMD_CREG_ACCESS_LSB;
+   380		wr_buf[2] = 0;
+   381	
+   382		ret = i2c_transfer(client->adapter, msg, 1);
+   383		if (ret < 0)
+   384			return ret;
+   385	
+   386		return 0;
+   387	}
+   388	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
