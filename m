@@ -1,180 +1,107 @@
-Return-Path: <linux-usb+bounces-24152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889F3ABF1AB
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:32:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4DFAABF1BE
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:35:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D727C18911B0
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 10:32:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA54B16B92D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 10:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67CF925F79B;
-	Wed, 21 May 2025 10:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C83D925C834;
+	Wed, 21 May 2025 10:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BWOBJMM+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CVSg2+3/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D690C25A326;
-	Wed, 21 May 2025 10:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAFD238C3A
+	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 10:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747823533; cv=none; b=o0V3TZtlkgUnOmBzgBJ/hmFbPsXXZN4yFSL4H6JNbgMKLolUB79E1jrvCWpHhKQBSgH4GXEJgHy+AmxOQW3i9cTdCnl349XjhAZEyQcmoTbRTkGhsyIHqexjFzJ82SttXOkSbksuE1b3p1PkzkEn6rT4CiMYP93lAuOK/DFJonA=
+	t=1747823682; cv=none; b=OCt1xuW5xi2+Zj/DhC+/vVjqQs0Ym98sU6gkY+X9UnIp4Bor+RmewWuR9w8UOt1J/SzUAQ+7kYN0svpQ3IBoPicO98CagAgH8SfunSAK7mNA8IponF5xHJUfMy8fDNXZX9NEKOUByeL8HNjsbPEskH3ToeTrUs1/uVp93eyeFX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747823533; c=relaxed/simple;
-	bh=7L99yt1gugpvwhYiMmt3ZZK42PIRijia6HyKCSi3NPc=;
+	s=arc-20240116; t=1747823682; c=relaxed/simple;
+	bh=5HSwGNpGlgaEB7RBQ1YVouQF3RCe3t95wrthor0FxcQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K7eBoa/lDqFJB+beNwaoIDm3knZe1BxvfwSp3T48SgTrgq1M+jQl2sSlT3HfQ+Ko+5LUaPh9CZGavM3aJ9S245tZp2DnppzkpifnBj4d+Yug/fa2ZvRmqox7qpGsLh5h6n1VsJjpue005ZoHXz0rf+yYpsxzfbTtaAuCuockWgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BWOBJMM+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BC1C4CEE4;
-	Wed, 21 May 2025 10:32:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ave6lEVekK0vJCMdfJ3xLVnyM2EBaqGAYmX6550GltwuxkEe/DlDpOfzLmAuRrw4oCnMqZrggnMr3qmZql/9gs/jgo3w5UDm3/ZcnzXDuT1/hqwoENXas0cbK/grjU0oEPYq1zcbCiejB3hPQ0eF0eFQhN7kisQwDoMcms9Kf3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CVSg2+3/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358CBC4CEE4;
+	Wed, 21 May 2025 10:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747823533;
-	bh=7L99yt1gugpvwhYiMmt3ZZK42PIRijia6HyKCSi3NPc=;
+	s=korg; t=1747823680;
+	bh=5HSwGNpGlgaEB7RBQ1YVouQF3RCe3t95wrthor0FxcQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BWOBJMM+K/22XkIz9N2UbKVsPoZTUgPx8F2u1XQKpFAICfX4ue5F9qjXKysDFnnXf
-	 gZ4eg51ESTpVNnFDKfgDIK+KDH4+lnpYVfh40IabD/D1asArF1HOLEG+1YfHW0mZdu
-	 Aqy0+VdOJAmQJk9YoatjpvhBr+F2tMXqMnib9UVA=
-Date: Wed, 21 May 2025 12:32:09 +0200
+	b=CVSg2+3/Cb2YCizTz/GABIN82w5u93NFxl2cSCXxHjYf+5PvAZgTsY7DQynVLbAg3
+	 0Ap8racdZMy4UmH8zb47HvIk7aKre5cCCo3fww2D2LwD2htXJIAgDw9UGK0i8AJl3i
+	 4dQb/OF9VLJWSTeR4XMRIZw0+M0gI8LYJbLaX9aY=
+Date: Wed, 21 May 2025 12:34:37 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
-To: David Wang <00107082@163.com>
-Cc: mathias.nyman@intel.com, oneukum@suse.com, stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] USB: core: add a memory pool to urb caching
- host-controller private data
-Message-ID: <2025052148-cannot-football-74e1@gregkh>
-References: <20250517083819.6127-1-00107082@163.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
+	linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: Re: [PATCH 23/24] usb: xhci: add warning message specifying which
+ Set TR Deq failed
+Message-ID: <2025052136-apostle-floral-9c23@gregkh>
+References: <20250515135621.335595-1-mathias.nyman@linux.intel.com>
+ <20250515135621.335595-24-mathias.nyman@linux.intel.com>
+ <20250516144310.12b4f072@foxbook>
+ <c6c2a7f6-35fb-4f92-9d07-b0a2fa703223@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250517083819.6127-1-00107082@163.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c6c2a7f6-35fb-4f92-9d07-b0a2fa703223@linux.intel.com>
 
-On Sat, May 17, 2025 at 04:38:19PM +0800, David Wang wrote:
-> ---
-> Changes since v2:
-> 1. activat the pool only when the urb object is created via
-> usb_alloc_urb()
-> Thanks to Oliver Neukum <oneukum@suse.com>'s review.
+On Mon, May 19, 2025 at 05:33:41PM +0300, Mathias Nyman wrote:
+> On 16.5.2025 15.43, Michał Pecio wrote:
+> > On Thu, 15 May 2025 16:56:20 +0300, Mathias Nyman wrote:
+> > > From: Niklas Neronin <niklas.neronin@linux.intel.com>
+> > > 
+> > > Currently, errors from the Set TR Deq command are not handled.
+> > > Add a warning message to specify the slot, endpoint, and TRB address
+> > > when a Set TR Deq command fails. This additional information will aid
+> > > in debugging such failures.
+> > > 
+> > > Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> > > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > > ---
+> > >   drivers/usb/host/xhci-ring.c | 5 +++++
+> > >   1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-ring.c
+> > > b/drivers/usb/host/xhci-ring.c index e3c823e1caee..eff6b84dc915 100644
+> > > --- a/drivers/usb/host/xhci-ring.c
+> > > +++ b/drivers/usb/host/xhci-ring.c
+> > > @@ -1448,6 +1448,11 @@ static void xhci_handle_cmd_set_deq(struct
+> > > xhci_hcd *xhci, int slot_id, unsigned int ep_state;
+> > >   		unsigned int slot_state;
+> > > +		xhci_warn(xhci, "Set TR Deq error for TRB 0x%llx in slot %d ep %u\n",
+> > > +			  (unsigned long long)xhci_trb_virt_to_dma(ep->queued_deq_seg,
+> > > +						ep->queued_deq_ptr),
+> > 
+> > Is printing this pointer actually useful? It doesn't tell why
+> > the error happened. It will not relate to other messages - the
+> > command failed, so dequeue stays at its old position.
+> Printing the DMA address has turned out to be quite useful, quickly shows corner
+> cases like end or beginning of ring segment, or address missing upper 32 bits.
 
-Changes go below the bottom --- line, not at the top.  Please read the
-documentation for how to do this.
+Printing kernel addresses is not allowed.  If you really want to do
+this, use the proper printk flag for it (%p I think).
 
-Also, these are not "threaded" together, making them hard to pick out.
-Please when you resend, make them be together using git send-email or
-some such tool.
+> Comparable with the "trb not in TD" error messages
 
-> ---
-> URB objects have long lifecycle, an urb can be reused between
-> submit loops; The private data needed by some host controller
-> has very short lifecycle, the memory is alloced when enqueue, and
-> released when dequeue. For example, on a system with xhci, in
-> xhci_urb_enqueue:
-> Using a USB webcam would have ~250/s memory allocation;
-> Using a USB mic would have ~1K/s memory allocation;
-> 
-> High frequent allocations for host-controller private data can be
-> avoided if urb take over the ownership of memory, the memory then shares
-> the longer lifecycle with urb objects.
-> 
-> Add a mempool to urb for hcpriv usage, the mempool only holds one block
-> of memory and grows when larger size is requested.
-> 
-> The mempool is activated only when the URB object is created via
-> usb_alloc_urb() in case some drivers create a URB object by other
-> means and manage it lifecycle without corresponding usb_free_urb.
-> 
-> The performance difference with this change is insignificant when
-> system is under no memory pressure or under heavy memory pressure.
-> There could be a point inbetween where extra 1k/s memory alloction
-> would dominate the preformance, but very hard to pinpoint it.
-> 
-> Signed-off-by: David Wang <00107082@163.com>
-> ---
->  drivers/usb/core/urb.c | 45 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h    |  5 +++++
->  2 files changed, 50 insertions(+)
-> 
-> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> index 5e52a35486af..53117743150f 100644
-> --- a/drivers/usb/core/urb.c
-> +++ b/drivers/usb/core/urb.c
-> @@ -23,6 +23,8 @@ static void urb_destroy(struct kref *kref)
->  
->  	if (urb->transfer_flags & URB_FREE_BUFFER)
->  		kfree(urb->transfer_buffer);
-> +	if (urb->hcpriv_mempool_activated)
-> +		kfree(urb->hcpriv_mempool);
->  
->  	kfree(urb);
->  }
-> @@ -77,6 +79,8 @@ struct urb *usb_alloc_urb(int iso_packets, gfp_t mem_flags)
->  	if (!urb)
->  		return NULL;
->  	usb_init_urb(urb);
-> +	/* activate hcpriv mempool when urb is created via usb_alloc_urb */
-> +	urb->hcpriv_mempool_activated = true;
->  	return urb;
->  }
->  EXPORT_SYMBOL_GPL(usb_alloc_urb);
-> @@ -1037,3 +1041,44 @@ int usb_anchor_empty(struct usb_anchor *anchor)
->  
->  EXPORT_SYMBOL_GPL(usb_anchor_empty);
->  
-> +/**
-> + * urb_hcpriv_mempool_zalloc - alloc memory from mempool for hcpriv
-> + * @urb: pointer to URB being used
-> + * @size: memory size requested by current host controller
-> + * @mem_flags: the type of memory to allocate
-> + *
-> + * Return: NULL if out of memory, otherwise memory are zeroed
-> + */
-> +void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags)
-> +{
-> +	if (!urb->hcpriv_mempool_activated)
-> +		return kzalloc(size, mem_flags);
-> +
-> +	if (urb->hcpriv_mempool_size < size) {
-> +		kfree(urb->hcpriv_mempool);
-> +		urb->hcpriv_mempool_size = size;
-> +		urb->hcpriv_mempool = kmalloc(size, mem_flags);
-> +	}
-> +	if (urb->hcpriv_mempool)
-> +		memset(urb->hcpriv_mempool, 0, size);
-> +	else
-> +		urb->hcpriv_mempool_size = 0;
-> +	return urb->hcpriv_mempool;
-> +}
-> +EXPORT_SYMBOL_GPL(urb_hcpriv_mempool_zalloc);
-> +
-> +/**
-> + * urb_free_hcpriv - free hcpriv data if necessary
-> + * @urb: pointer to URB being used
-> + *
-> + * If mempool is activated, private data's lifecycle
-> + * is managed by urb object.
-> + */
-> +void urb_free_hcpriv(struct urb *urb)
-> +{
-> +	if (!urb->hcpriv_mempool_activated) {
-> +		kfree(urb->hcpriv);
-> +		urb->hcpriv = NULL;
-
-You seem to set this to NULL for no reason, AND check for
-hcpriv_mempool_activated.  Only one is going to be needed, you don't
-need to have both, right?  Why not just rely on hcdpriv being set?
-
-And are you sure that the hcd can actually use a kmalloced "mempool"?  I
-don't understand why xhci can't just do this in its driver instead of
-this being required in the usb core and adding extra logic and size to
-every urb in the system.
+Should that be fixed too?  Again, don't print kernel addresses please,
+people consider that an information leak.
 
 thanks,
 
