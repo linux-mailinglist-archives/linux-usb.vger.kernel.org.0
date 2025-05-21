@@ -1,187 +1,301 @@
-Return-Path: <linux-usb+bounces-24206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E04ABFF79
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 00:27:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7AA0AC006A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 01:08:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9EB3164548
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 22:27:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52B0C1BC4745
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 23:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4147F23A58B;
-	Wed, 21 May 2025 22:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5522223C8A8;
+	Wed, 21 May 2025 23:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BAtglIIX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="bepJksC9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C5E1428E7
-	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 22:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE61C23C8DB
+	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 23:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747866445; cv=none; b=gqNRcXj6FPFs5wO6s1WRyWii3XhK92N8FJQAr22S99KRbliknLv22/UpuTyipSev3S7JQXy9Osa1oPr4ASgpf87nPipi7Pqt8F5VsPexXirZlLUrhzCotTaQ9AO64rXmcVo2+2b1GTBS7pminIhWMOLwNTD7L/hQg1hJ1RJS+OE=
+	t=1747868899; cv=none; b=DipXMLnJTZ4A1w2hnq/v5P0w3sTNdlp/LjLvY75xuMjc15r5dKPHL++mYgllVX4ZUpgAkoJ1yiszZMPcNfWhrz15DE856WLK/5+bO7S/0Bp3IGznR5pRBw+8gdrQpmYYxgf/JTndiSsbLQZ9LVrT7PEZ3nPALx+5jIkVrqVPRNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747866445; c=relaxed/simple;
-	bh=TBarqKSFX9bxLv+qOpWl2XT+t1ZUtMPIuuna6xNszlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sdjdL6Mqv+XypIJ9UJF9P8d4OuSOfd/r5UUzwKn5r6YZKeRHe8KWAnxMQEk4ffZbKIR78hOWWIPR9IjAAY6KWX+fZRan1d4B19X1hKWCDisJaK83UT7xB9rlEVpCkvC9IQbTMMEsmdjLJBNBedRAkSJPj8yGshAAV65F34zNPIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BAtglIIX; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747866444; x=1779402444;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TBarqKSFX9bxLv+qOpWl2XT+t1ZUtMPIuuna6xNszlE=;
-  b=BAtglIIXBWutXaNiubA9w+6DBfAEDJuZ1KoKYHw9e8BwVulp+7BvNzr7
-   1aWP/SQdLwSkvoladkRtF0li3n+E/UfTyKm49hL5j+OHWb2AXuwl+J29U
-   eUw5vG3Hvlcv3vM1bb3Aqn6hy7zDMga4x1x9JvUBJrIahP8JrkCR2G0RD
-   /HwZV2ZaMlucNgli7TrxEMxW371QH2VqQZACZ2bywAsksEjpi/hM55PGp
-   K8wju5KBV7UV+uFroSGVKRIq9XYhsA78FHz12pETs+9svAPIIhtikEspI
-   n8v+onC515oKitTE8SucxKYxOvJOvjTaC6cVEgo6L+Onqah6XtHuRo0hT
-   A==;
-X-CSE-ConnectionGUID: JcRgZBbhRLGYSrNEW6KX2g==
-X-CSE-MsgGUID: tG9aOMs/TO+3EvnD7mWyBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="75265412"
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="75265412"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 15:27:23 -0700
-X-CSE-ConnectionGUID: KOjeMz1RR82jkj5XGuH3LA==
-X-CSE-MsgGUID: lJat/osMT92Rsyfb9JULZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="177439000"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 May 2025 15:27:22 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uHruB-000Ofy-1Y;
-	Wed, 21 May 2025 22:27:19 +0000
-Date: Thu, 22 May 2025 06:26:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jonathan Stroud <jonathan.stroud@amd.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [usb:usb-testing 46/52] drivers/usb/misc/onboard_usb_dev.c:358:12:
- warning: 'onboard_dev_5744_i2c_write_byte' defined but not used
-Message-ID: <202505220644.tD2JYSkV-lkp@intel.com>
+	s=arc-20240116; t=1747868899; c=relaxed/simple;
+	bh=a61dKM+sOIM0W5tW48Pob5ugW7t7gLWfNmxKzXb3ZUY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lXmULwZT2b5gSHSSVHvqNajmI5R3VM7P9OTSMqGS1br7j9cbZi8DQ5/QIivBRjAK7cf1X4N11oDq8tm+c/tWazHtpmKSivbzohOcno3S0LGuzLsjmba5tw38+YkIKxEg+4TKrWxVfZu/2RODxsjju5ptdUncs9TSfavr2P91tZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=bepJksC9; arc=none smtp.client-ip=44.202.169.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
+	by cmsmtp with ESMTPS
+	id HkvMuxarQiuzSHsXiu91BF; Wed, 21 May 2025 23:08:11 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id HsXiuWKPM1vNyHsXiueepl; Wed, 21 May 2025 23:08:10 +0000
+X-Authority-Analysis: v=2.4 cv=VMQWnMPX c=1 sm=1 tr=0 ts=682e5cda
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=efVMuJ2jJG67FGuSm7J3ww==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=20KFwNOVAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8
+ a=Ikd4Dj_1AAAA:8 a=8AirrxEcAAAA:8 a=Q-fNiiVtAAAA:8 a=P-IC7800AAAA:8
+ a=vggBfdFIAAAA:8 a=kVnt-_iYu5xLd2SthAEA:9 a=QEXdDO2ut3YA:10
+ a=y1Q9-5lHfBjTkpIzbSAN:22 a=ST-jHhOKWsTCqRlWije3:22 a=d3PnA9EDa4IxuAV0gXij:22
+ a=xYX6OU9JNrHFPr8prv8u:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=OOmlzPBtUod15P9R+5e8Nw5tXEBviOvhwK88h6lKd3o=; b=bepJksC97ML9IvPhF7R0GsUE39
+	iDt8KE0iZROL8TgvVT9PzNwW9sKKBRJIhmxUFgGMA4kRLMqCqmH91zI6xfv4az4R0oAueD2N1pUNA
+	bervFDvFSZHb9jsR3chCY5xthPhQ0Cl/+MKfCN4IxcuwZC/eNjc6eJT48KNq7zmhswlELymKhpwJ9
+	IE+aST75QjzkaqovTJCwxM0OOGiP/qFBJJhUXJj2Q+x9IJWsqcd9FDDhPrBZF1ucKo6mywih6j/rj
+	bOl+lJogaVAvYC+9j/8hT2QnS2oen4Ab7a1MoDN1moAJWQOY79Q+3qkhREtWoNHjvcT3rbLY8DX1O
+	KwaRGQqw==;
+Received: from [177.238.17.151] (port=34848 helo=[192.168.0.27])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.98.1)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1uHsXZ-00000000Kdy-1IG9;
+	Wed, 21 May 2025 18:08:01 -0500
+Message-ID: <ebba72b4-9245-4be5-8f0d-87f7b326d468@embeddedor.com>
+Date: Wed, 21 May 2025 17:07:28 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 8/8] net: core: Convert
+ dev_set_mac_address_user() to use struct sockaddr_storage
+To: Kees Cook <kees@kernel.org>, Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jason Wang <jasowang@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Cosmin Ratiu <cratiu@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, Maxim Georgiev
+ <glipus@gmail.com>, netdev@vger.kernel.org,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+ Chaitanya Kulkarni <kch@nvidia.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ Max Gurtovoy <mgurtovoy@nvidia.com>, Maurizio Lombardi
+ <mlombard@redhat.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>,
+ Mingzhe Zou <mingzhe.zou@easystack.cn>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Dr. David Alan Gilbert" <linux@treblig.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, Lei Yang
+ <leiyang@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
+ Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+ Paul Fertser <fercerpav@gmail.com>, Alexander Aring <alex.aring@gmail.com>,
+ Stefan Schmidt <stefan@datenfreihafen.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>, Hayes Wang
+ <hayeswang@realtek.com>, Douglas Anderson <dianders@chromium.org>,
+ Grant Grundler <grundler@chromium.org>, Jay Vosburgh <jv@jvosburgh.net>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Jiri Pirko <jiri@resnulli.us>,
+ Aleksander Jan Bajkowski <olek2@wp.pl>, Philipp Hahn <phahn-oss@avm.de>,
+ Eric Biggers <ebiggers@google.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Al Viro <viro@zeniv.linux.org.uk>, Ahmed Zaki <ahmed.zaki@intel.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Xiao Liang <shaw.leon@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, linux-wpan@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20250521204310.it.500-kees@kernel.org>
+ <20250521204619.2301870-8-kees@kernel.org>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20250521204619.2301870-8-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 177.238.17.151
+X-Source-L: No
+X-Exim-ID: 1uHsXZ-00000000Kdy-1IG9
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.0.27]) [177.238.17.151]:34848
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKfzUANhm/H5kmecNnXMw6plzwMClwiOE4LRVWtAHo3isJrQrX/umHoVZDj65D3YOSZ/LhKW0FHP7BnbQY87jIr5w3FEbv3R/iv+sEFdlUt5Wflb0hIk
+ TjwZNEbuEqfZuarOrI+mwrEnBlKPVei1Ku/RaNfqK2ZMWZCF8ju/KQFYfNMkQRA6IsBhR+X499ims0LHVXshxEigHk63FgqXlZ8=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   342e4955a1f1ce28c70a589999b76365082dbf10
-commit: 1143d41922c0f87504f095417ba1870167970143 [46/52] usb: misc: onboard_usb_dev: Fix usb5744 initialization sequence
-config: xtensa-randconfig-002-20250522 (https://download.01.org/0day-ci/archive/20250522/202505220644.tD2JYSkV-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505220644.tD2JYSkV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505220644.tD2JYSkV-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/misc/onboard_usb_dev.c:358:12: warning: 'onboard_dev_5744_i2c_write_byte' defined but not used [-Wunused-function]
-     358 | static int onboard_dev_5744_i2c_write_byte(struct i2c_client *client, u16 addr, u8 data)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/misc/onboard_usb_dev.c:313:12: warning: 'onboard_dev_5744_i2c_read_byte' defined but not used [-Wunused-function]
-     313 | static int onboard_dev_5744_i2c_read_byte(struct i2c_client *client, u16 addr, u8 *data)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/onboard_dev_5744_i2c_write_byte +358 drivers/usb/misc/onboard_usb_dev.c
+On 21/05/25 14:46, Kees Cook wrote:
+> Convert callers of dev_set_mac_address_user() to use struct
+> sockaddr_storage. Add sanity checks on dev->addr_len usage.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-   312	
- > 313	static int onboard_dev_5744_i2c_read_byte(struct i2c_client *client, u16 addr, u8 *data)
-   314	{
-   315		struct i2c_msg msg[2];
-   316		u8 rd_buf[3];
-   317		int ret;
-   318	
-   319		u8 wr_buf[7] = {0, USB5744_CREG_MEM_ADDR, 4,
-   320				USB5744_CREG_READ, 1,
-   321				addr >> 8 & 0xff,
-   322				addr & 0xff};
-   323		msg[0].addr = client->addr;
-   324		msg[0].flags = 0;
-   325		msg[0].len = sizeof(wr_buf);
-   326		msg[0].buf = wr_buf;
-   327	
-   328		ret = i2c_transfer(client->adapter, msg, 1);
-   329		if (ret < 0)
-   330			return ret;
-   331	
-   332		wr_buf[0] = USB5744_CMD_CREG_ACCESS;
-   333		wr_buf[1] = USB5744_CMD_CREG_ACCESS_LSB;
-   334		wr_buf[2] = 0;
-   335		msg[0].len = 3;
-   336	
-   337		ret = i2c_transfer(client->adapter, msg, 1);
-   338		if (ret < 0)
-   339			return ret;
-   340	
-   341		wr_buf[0] = 0;
-   342		wr_buf[1] = USB5744_CREG_MEM_RD_ADDR;
-   343		msg[0].len = 2;
-   344	
-   345		msg[1].addr = client->addr;
-   346		msg[1].flags = I2C_M_RD;
-   347		msg[1].len = 2;
-   348		msg[1].buf = rd_buf;
-   349	
-   350		ret = i2c_transfer(client->adapter, msg, 2);
-   351		if (ret < 0)
-   352			return ret;
-   353		*data = rd_buf[1];
-   354	
-   355		return 0;
-   356	}
-   357	
- > 358	static int onboard_dev_5744_i2c_write_byte(struct i2c_client *client, u16 addr, u8 data)
-   359	{
-   360		struct i2c_msg msg[2];
-   361		int ret;
-   362	
-   363		u8 wr_buf[8] = {0, USB5744_CREG_MEM_ADDR, 5,
-   364				USB5744_CREG_WRITE, 1,
-   365				addr >> 8 & 0xff,
-   366				addr & 0xff,
-   367				data};
-   368		msg[0].addr = client->addr;
-   369		msg[0].flags = 0;
-   370		msg[0].len = sizeof(wr_buf);
-   371		msg[0].buf = wr_buf;
-   372	
-   373		ret = i2c_transfer(client->adapter, msg, 1);
-   374		if (ret < 0)
-   375			return ret;
-   376	
-   377		msg[0].len = 3;
-   378		wr_buf[0] = USB5744_CMD_CREG_ACCESS;
-   379		wr_buf[1] = USB5744_CMD_CREG_ACCESS_LSB;
-   380		wr_buf[2] = 0;
-   381	
-   382		ret = i2c_transfer(client->adapter, msg, 1);
-   383		if (ret < 0)
-   384			return ret;
-   385	
-   386		return 0;
-   387	}
-   388	
+Acked-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
+-Gustavo
+
+> ---
+> Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: Andrew Lunn <andrew+netdev@lunn.ch>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Simon Horman <horms@kernel.org>
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Cc: Cosmin Ratiu <cratiu@nvidia.com>
+> Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+> Cc: Kory Maincent <kory.maincent@bootlin.com>
+> Cc: Maxim Georgiev <glipus@gmail.com>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: <netdev@vger.kernel.org>
+> ---
+>   include/linux/netdevice.h |  2 +-
+>   drivers/net/tap.c         | 14 +++++++++-----
+>   drivers/net/tun.c         |  8 +++++++-
+>   net/core/dev_api.c        |  5 +++--
+>   net/core/dev_ioctl.c      |  6 ++++--
+>   5 files changed, 24 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index b4242b997373..adb14db25798 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -4216,7 +4216,7 @@ int netif_set_mac_address(struct net_device *dev, struct sockaddr_storage *ss,
+>   			  struct netlink_ext_ack *extack);
+>   int dev_set_mac_address(struct net_device *dev, struct sockaddr_storage *ss,
+>   			struct netlink_ext_ack *extack);
+> -int dev_set_mac_address_user(struct net_device *dev, struct sockaddr *sa,
+> +int dev_set_mac_address_user(struct net_device *dev, struct sockaddr_storage *ss,
+>   			     struct netlink_ext_ack *extack);
+>   int dev_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name);
+>   int dev_get_port_parent_id(struct net_device *dev,
+> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+> index d4ece538f1b2..bdf0788d8e66 100644
+> --- a/drivers/net/tap.c
+> +++ b/drivers/net/tap.c
+> @@ -923,7 +923,7 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
+>   	unsigned int __user *up = argp;
+>   	unsigned short u;
+>   	int __user *sp = argp;
+> -	struct sockaddr sa;
+> +	struct sockaddr_storage ss;
+>   	int s;
+>   	int ret;
+>   
+> @@ -1000,16 +1000,17 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
+>   			return -ENOLINK;
+>   		}
+>   		ret = 0;
+> -		dev_get_mac_address(&sa, dev_net(tap->dev), tap->dev->name);
+> +		dev_get_mac_address((struct sockaddr *)&ss, dev_net(tap->dev),
+> +				    tap->dev->name);
+>   		if (copy_to_user(&ifr->ifr_name, tap->dev->name, IFNAMSIZ) ||
+> -		    copy_to_user(&ifr->ifr_hwaddr, &sa, sizeof(sa)))
+> +		    copy_to_user(&ifr->ifr_hwaddr, &ss, sizeof(ifr->ifr_hwaddr)))
+>   			ret = -EFAULT;
+>   		tap_put_tap_dev(tap);
+>   		rtnl_unlock();
+>   		return ret;
+>   
+>   	case SIOCSIFHWADDR:
+> -		if (copy_from_user(&sa, &ifr->ifr_hwaddr, sizeof(sa)))
+> +		if (copy_from_user(&ss, &ifr->ifr_hwaddr, sizeof(ifr->ifr_hwaddr)))
+>   			return -EFAULT;
+>   		rtnl_lock();
+>   		tap = tap_get_tap_dev(q);
+> @@ -1017,7 +1018,10 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
+>   			rtnl_unlock();
+>   			return -ENOLINK;
+>   		}
+> -		ret = dev_set_mac_address_user(tap->dev, &sa, NULL);
+> +		if (tap->dev->addr_len > sizeof(ifr->ifr_hwaddr))
+> +			ret = -EINVAL;
+> +		else
+> +			ret = dev_set_mac_address_user(tap->dev, &ss, NULL);
+>   		tap_put_tap_dev(tap);
+>   		rtnl_unlock();
+>   		return ret;
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 7babd1e9a378..1207196cbbed 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -3193,7 +3193,13 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>   
+>   	case SIOCSIFHWADDR:
+>   		/* Set hw address */
+> -		ret = dev_set_mac_address_user(tun->dev, &ifr.ifr_hwaddr, NULL);
+> +		if (tun->dev->addr_len > sizeof(ifr.ifr_hwaddr)) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		ret = dev_set_mac_address_user(tun->dev,
+> +					       (struct sockaddr_storage *)&ifr.ifr_hwaddr,
+> +					       NULL);
+>   		break;
+>   
+>   	case TUNGETSNDBUF:
+> diff --git a/net/core/dev_api.c b/net/core/dev_api.c
+> index 6011a5ef649d..1bf0153195f2 100644
+> --- a/net/core/dev_api.c
+> +++ b/net/core/dev_api.c
+> @@ -84,14 +84,15 @@ void dev_set_group(struct net_device *dev, int new_group)
+>   	netdev_unlock_ops(dev);
+>   }
+>   
+> -int dev_set_mac_address_user(struct net_device *dev, struct sockaddr *sa,
+> +int dev_set_mac_address_user(struct net_device *dev,
+> +			     struct sockaddr_storage *ss,
+>   			     struct netlink_ext_ack *extack)
+>   {
+>   	int ret;
+>   
+>   	down_write(&dev_addr_sem);
+>   	netdev_lock_ops(dev);
+> -	ret = netif_set_mac_address(dev, (struct sockaddr_storage *)sa, extack);
+> +	ret = netif_set_mac_address(dev, ss, extack);
+>   	netdev_unlock_ops(dev);
+>   	up_write(&dev_addr_sem);
+>   
+> diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
+> index fff13a8b48f1..616479e71466 100644
+> --- a/net/core/dev_ioctl.c
+> +++ b/net/core/dev_ioctl.c
+> @@ -572,9 +572,11 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
+>   		return dev_set_mtu(dev, ifr->ifr_mtu);
+>   
+>   	case SIOCSIFHWADDR:
+> -		if (dev->addr_len > sizeof(struct sockaddr))
+> +		if (dev->addr_len > sizeof(ifr->ifr_hwaddr))
+>   			return -EINVAL;
+> -		return dev_set_mac_address_user(dev, &ifr->ifr_hwaddr, NULL);
+> +		return dev_set_mac_address_user(dev,
+> +						(struct sockaddr_storage *)&ifr->ifr_hwaddr,
+> +						NULL);
+>   
+>   	case SIOCSIFHWBROADCAST:
+>   		if (ifr->ifr_hwaddr.sa_family != dev->type)
+
 
