@@ -1,127 +1,175 @@
-Return-Path: <linux-usb+bounces-24163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBFD8ABF2BA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:24:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4E98ABF2BD
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 13:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B5361B67B9F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:25:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44EC98E08A6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 11:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB4A262FDD;
-	Wed, 21 May 2025 11:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B5E262FC8;
+	Wed, 21 May 2025 11:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhPlanBI"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="caXheAlM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA851F869E;
-	Wed, 21 May 2025 11:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89BF23498F;
+	Wed, 21 May 2025 11:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747826686; cv=none; b=psCoVUiI8b77cmjwYlJHSambLHZlyjYHqz9BYAtUpJQARgmcnVY/HQpU8h9fdnfo8Pl+HigT192I27Xc9H/xiu9l5MYwl9uUdNKhYeYUDB+f5BrfFzpQ5mju3NRABN44bLZJ81uj8JUPxQqvxDnyQRjJ9pL0gKQqPXa19uYscxM=
+	t=1747826755; cv=none; b=otZTQqUg/BDDM5Howu1RtgiIH2Yp62afNE6Gtcecgz+yZSl0EgiICxm+fEuHpEntbdjSrsbDHf/f/8XnKNWqllJA0i7ArVlaLDiaEVizA5rs+y+HbhroEiU+/dQ6DX/jNOdRgIHVaszIzcoviVwLtepBKdmRi6mYbAtrci5RnTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747826686; c=relaxed/simple;
-	bh=mLNmfdLuIwuQVtiVC4nR0oWRA8XNs6X92h+G1nfsW/4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I1OuhvyMvXW2Hx4aiwke6ag8byYwugREjg2TmHU2rUIG9h8SKYCKwSBugsyaqwOq6tol/uZAn9mvsgBBToHTYQl6lC4kCQ3XamEAZNEH0LC0ClpKfsp/QAHs9jm5VoExjwTLDC8WDIOopDn/+1Mi0z4cI1zcKhUErre9Oaekso4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhPlanBI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA8DC4CEF3;
-	Wed, 21 May 2025 11:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747826686;
-	bh=mLNmfdLuIwuQVtiVC4nR0oWRA8XNs6X92h+G1nfsW/4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YhPlanBIpg261hemEQ+5H6SZJ9usP0ai00liNP8klwPpTFaINPvhyt5a2XjFyihgU
-	 CZ3eigaQkVQk8iEUG8NhhEvv4y403FZ5xwUbKObX07F1GvErUlrHsruXK1Rz6IeEfH
-	 zv4bwaJKDpSdxOFFGY6OOO0HMg+DnWtDPQGHJNpMCPfJMvWUubvsurjzqhd9ods24W
-	 FGxE2MDqZorSt+9R8J2sb0HggSo5nIISij/+XWgEoU6BZOiKlRdlyWu0HBSL7gc4AD
-	 Bp4DOvcLZym3SRmAVBjTC0qxoIwpZqstoE/J6ebDFsot0EG1asyn432WSOju0AcKh5
-	 USVuvr9vAy+3g==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-60638c07cabso3805270eaf.3;
-        Wed, 21 May 2025 04:24:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWAOMxqKbPka4ycl5Lm2cRvtwHH7+iDk0uiGXkdg28dvYHfZZgoOw5la8jxVW9jXX9aNe5LgvV6OO8F@vger.kernel.org, AJvYcCXPbuaNQ6xpUuJBu02hUbr7ALUslmVsLnotmwoWqaWXjbYsRykKl18Q9I0coZo5IYjwkJb9Eq8GrkYe+FE=@vger.kernel.org, AJvYcCXPmzsdSNNj6cn1LmcrHDuZAdxCqyjBGGW3R1qyyKZ+5VDusPhtra8O+sg+wm+dNSD+525FB/E089Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziDXs0USUsbB1fKdW0dQIH+hR7qKEVzYFt/cx3eEbu/7ePD85n
-	9/r+pOpYwpqFTvgbe49uMKhIN5ahoG713GS/6OEEie8/G9wKZoLraDU2g/q6mUHCze1j5ai3Co9
-	G8puRIKugL7Gf77gcpTcUNpxJZxkfRkQ=
-X-Google-Smtp-Source: AGHT+IEXE7uqWMn78PfoHPkPyJ0TvFJ8r94/Hhu4v7FXyu5CBcMr7cVPb8NMjy+x+UZr/ig5utvqqPWv+WJcL8+5+Xo=
-X-Received: by 2002:a05:6820:1795:b0:60a:32a:b016 with SMTP id
- 006d021491bc7-60a032ab17emr10304012eaf.6.1747826685293; Wed, 21 May 2025
- 04:24:45 -0700 (PDT)
+	s=arc-20240116; t=1747826755; c=relaxed/simple;
+	bh=YSJr2T4XnqeqeFgSzwbmX4VsIAayGl4xfl7vvEqjQWY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=DCQoJP+KuCNStrTeW90b0L2sThYXUsDDBQcCZFlhrFy2JQtZlWGQPQQBeeFGZw/9j4TVUp19h2bVQs/CXAOb5cHLsNM1S1z3oGle+B9Aeg9kfpw+kxXWbz7LwrwdwjVW84L0SemmIR/IzzpsbZTVu7SaB+FFxptmRDOPf6nd16o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=caXheAlM; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=YSJr2T4XnqeqeFgSzwbmX4VsIAayGl4xfl7vvEqjQWY=; b=c
+	aXheAlM6Tus8xQelHROi8nen+JrJdQ5b79v1YOCin+qzZSyjQSvc6cYAxLVXn7jd
+	zgKIO2YWPqLpb5s12LuoNSfy2s73Fa3geTcvx8qrySoPSwIaHV/hxK8PaHF59d2S
+	6Jq0bqAO2Y1azVUceM2xNZqhjDP9oG3CwxSaib6e0E=
+Received: from 00107082$163.com ( [111.35.189.95] ) by
+ ajax-webmail-wmsvr-40-135 (Coremail) ; Wed, 21 May 2025 19:25:12 +0800
+ (CST)
+Date: Wed, 21 May 2025 19:25:12 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, oneukum@suse.com, stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] USB: core: add a memory pool to urb caching
+ host-controller private data
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <2025052148-cannot-football-74e1@gregkh>
+References: <20250517083819.6127-1-00107082@163.com>
+ <2025052148-cannot-football-74e1@gregkh>
+X-NTES-SC: AL_Qu2fBfSZuU8q5CKRZ+kZnEYQheY4XMKyuPkg1YJXOp80hiXs5y0de1tdNELQyv2tARCglDysXjJszPZVeZNJZIzUWsaqQn71Vs0GuuoeEge7
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6180608.lOV4Wx5bFT@rjwysocki.net> <2025052158-venture-bottling-a3f8@gregkh>
-In-Reply-To: <2025052158-venture-bottling-a3f8@gregkh>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 21 May 2025 13:24:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jR88ZNLFiJ-B_FEi=1--Z5tg2on6xCyLJF_K0ynmF_5A@mail.gmail.com>
-X-Gm-Features: AX0GCFs0RLHS39pyygbfr00TxMqjnMJWIOPWP6863CYgiRxyqZvU5NkS1W5Y_z0
-Message-ID: <CAJZ5v0jR88ZNLFiJ-B_FEi=1--Z5tg2on6xCyLJF_K0ynmF_5A@mail.gmail.com>
-Subject: Re: [PATCH v1] ucsi_ccg: Disable async suspend in ucsi_ccg_probe()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>, 
-	Saravana Kannan <saravanak@google.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <572f1814.9a08.196f2971eea.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:hygvCgD3fxkZuC1oOvEJAA--.25155W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqBJUqmgtpCXuHQAKs5
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Wed, May 21, 2025 at 1:11=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, May 12, 2025 at 03:26:53PM +0200, Rafael J. Wysocki wrote:
-> > From: Jon Hunter <jonathanh@nvidia.com>
-> >
-> > Commit aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending
-> > children") had triggered a suspend issue on Tegra boards because it had
-> > reordered the syspend of devices with async suspend enabled with respec=
-t
-> > to some other devices.  Specifically, the devices with async suspend
-> > enabled that have no children are now suspended before any other device=
-s
-> > unless there are device links pointing to them as suppliers.
-> >
-> > The investigation that followed the failure report uncovered that async
-> > suspend was enabled for the cypd4226 device that was a Type-C controlle=
-r
-> > with a dependency on USB PHY and it turned out that disabling async
-> > suspend for that device made the issue go away.  Since async suspend
-> > takes dependencies between parents and children into account as well
-> > as other dependencies between devices represented by device links, this
-> > means that the cypd4226 has a dependency on another device that is
-> > not represented in any form in the kernel (a "hidden" dependency), in
-> > which case async suspend should not be enabled for it.
-> >
-> > Accordingly, make ucsi_ccg_probe() disable async suspend for the
-> > devices handled by, which covers the cypd4226 device on the Tegra
-> > boards as well as other devices likely to have similar "hidden"
-> > dependencies.
-> >
-> > Fixes: aa7a9275ab81 ("PM: sleep: Suspend async parents after suspending=
- children")
-> > Closes: https://lore.kernel.org/linux-pm/c6cd714b-b0eb-42fc-b9b5-4f5f39=
-6fb4ec@nvidia.com/
-> > Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> > Tested-by: Jon Hunter <jonathanh@nvidia.com>
-> > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > Commit aa7a9275ab81 is in linux-next and it has not reached the mainlin=
-e yet.
->
-> I'm guessing that's in your tree, so can you take this through that?
+QXQgMjAyNS0wNS0yMSAxODozMjowOSwgIkdyZWcgS0giIDxncmVna2hAbGludXhmb3VuZGF0aW9u
+Lm9yZz4gd3JvdGU6Cj5PbiBTYXQsIE1heSAxNywgMjAyNSBhdCAwNDozODoxOVBNICswODAwLCBE
+YXZpZCBXYW5nIHdyb3RlOgo+PiAtLS0KPj4gQ2hhbmdlcyBzaW5jZSB2MjoKPj4gMS4gYWN0aXZh
+dCB0aGUgcG9vbCBvbmx5IHdoZW4gdGhlIHVyYiBvYmplY3QgaXMgY3JlYXRlZCB2aWEKPj4gdXNi
+X2FsbG9jX3VyYigpCj4+IFRoYW5rcyB0byBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
+PidzIHJldmlldy4KPgo+Q2hhbmdlcyBnbyBiZWxvdyB0aGUgYm90dG9tIC0tLSBsaW5lLCBub3Qg
+YXQgdGhlIHRvcC4gIFBsZWFzZSByZWFkIHRoZQo+ZG9jdW1lbnRhdGlvbiBmb3IgaG93IHRvIGRv
+IHRoaXMuCj4KPkFsc28sIHRoZXNlIGFyZSBub3QgInRocmVhZGVkIiB0b2dldGhlciwgbWFraW5n
+IHRoZW0gaGFyZCB0byBwaWNrIG91dC4KPlBsZWFzZSB3aGVuIHlvdSByZXNlbmQsIG1ha2UgdGhl
+bSBiZSB0b2dldGhlciB1c2luZyBnaXQgc2VuZC1lbWFpbCBvcgo+c29tZSBzdWNoIHRvb2wuCgo+
+CgpSb2dlciB0aGF0fgoKCj4+IC0tLQo+PiBVUkIgb2JqZWN0cyBoYXZlIGxvbmcgbGlmZWN5Y2xl
+LCBhbiB1cmIgY2FuIGJlIHJldXNlZCBiZXR3ZWVuCj4+IHN1Ym1pdCBsb29wczsgVGhlIHByaXZh
+dGUgZGF0YSBuZWVkZWQgYnkgc29tZSBob3N0IGNvbnRyb2xsZXIKPj4gaGFzIHZlcnkgc2hvcnQg
+bGlmZWN5Y2xlLCB0aGUgbWVtb3J5IGlzIGFsbG9jZWQgd2hlbiBlbnF1ZXVlLCBhbmQKPj4gcmVs
+ZWFzZWQgd2hlbiBkZXF1ZXVlLiBGb3IgZXhhbXBsZSwgb24gYSBzeXN0ZW0gd2l0aCB4aGNpLCBp
+bgo+PiB4aGNpX3VyYl9lbnF1ZXVlOgo+PiBVc2luZyBhIFVTQiB3ZWJjYW0gd291bGQgaGF2ZSB+
+MjUwL3MgbWVtb3J5IGFsbG9jYXRpb247Cj4+IFVzaW5nIGEgVVNCIG1pYyB3b3VsZCBoYXZlIH4x
+Sy9zIG1lbW9yeSBhbGxvY2F0aW9uOwo+PiAKPj4gSGlnaCBmcmVxdWVudCBhbGxvY2F0aW9ucyBm
+b3IgaG9zdC1jb250cm9sbGVyIHByaXZhdGUgZGF0YSBjYW4gYmUKPj4gYXZvaWRlZCBpZiB1cmIg
+dGFrZSBvdmVyIHRoZSBvd25lcnNoaXAgb2YgbWVtb3J5LCB0aGUgbWVtb3J5IHRoZW4gc2hhcmVz
+Cj4+IHRoZSBsb25nZXIgbGlmZWN5Y2xlIHdpdGggdXJiIG9iamVjdHMuCj4+IAo+PiBBZGQgYSBt
+ZW1wb29sIHRvIHVyYiBmb3IgaGNwcml2IHVzYWdlLCB0aGUgbWVtcG9vbCBvbmx5IGhvbGRzIG9u
+ZSBibG9jawo+PiBvZiBtZW1vcnkgYW5kIGdyb3dzIHdoZW4gbGFyZ2VyIHNpemUgaXMgcmVxdWVz
+dGVkLgo+PiAKPj4gVGhlIG1lbXBvb2wgaXMgYWN0aXZhdGVkIG9ubHkgd2hlbiB0aGUgVVJCIG9i
+amVjdCBpcyBjcmVhdGVkIHZpYQo+PiB1c2JfYWxsb2NfdXJiKCkgaW4gY2FzZSBzb21lIGRyaXZl
+cnMgY3JlYXRlIGEgVVJCIG9iamVjdCBieSBvdGhlcgo+PiBtZWFucyBhbmQgbWFuYWdlIGl0IGxp
+ZmVjeWNsZSB3aXRob3V0IGNvcnJlc3BvbmRpbmcgdXNiX2ZyZWVfdXJiLgo+PiAKPj4gVGhlIHBl
+cmZvcm1hbmNlIGRpZmZlcmVuY2Ugd2l0aCB0aGlzIGNoYW5nZSBpcyBpbnNpZ25pZmljYW50IHdo
+ZW4KPj4gc3lzdGVtIGlzIHVuZGVyIG5vIG1lbW9yeSBwcmVzc3VyZSBvciB1bmRlciBoZWF2eSBt
+ZW1vcnkgcHJlc3N1cmUuCj4+IFRoZXJlIGNvdWxkIGJlIGEgcG9pbnQgaW5iZXR3ZWVuIHdoZXJl
+IGV4dHJhIDFrL3MgbWVtb3J5IGFsbG9jdGlvbgo+PiB3b3VsZCBkb21pbmF0ZSB0aGUgcHJlZm9y
+bWFuY2UsIGJ1dCB2ZXJ5IGhhcmQgdG8gcGlucG9pbnQgaXQuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5
+OiBEYXZpZCBXYW5nIDwwMDEwNzA4MkAxNjMuY29tPgo+PiAtLS0KPj4gIGRyaXZlcnMvdXNiL2Nv
+cmUvdXJiLmMgfCA0NSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysK
+Pj4gIGluY2x1ZGUvbGludXgvdXNiLmggICAgfCAgNSArKysrKwo+PiAgMiBmaWxlcyBjaGFuZ2Vk
+LCA1MCBpbnNlcnRpb25zKCspCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY29yZS91
+cmIuYyBiL2RyaXZlcnMvdXNiL2NvcmUvdXJiLmMKPj4gaW5kZXggNWU1MmEzNTQ4NmFmLi41MzEx
+Nzc0MzE1MGYgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvdXNiL2NvcmUvdXJiLmMKPj4gKysrIGIv
+ZHJpdmVycy91c2IvY29yZS91cmIuYwo+PiBAQCAtMjMsNiArMjMsOCBAQCBzdGF0aWMgdm9pZCB1
+cmJfZGVzdHJveShzdHJ1Y3Qga3JlZiAqa3JlZikKPj4gIAo+PiAgCWlmICh1cmItPnRyYW5zZmVy
+X2ZsYWdzICYgVVJCX0ZSRUVfQlVGRkVSKQo+PiAgCQlrZnJlZSh1cmItPnRyYW5zZmVyX2J1ZmZl
+cik7Cj4+ICsJaWYgKHVyYi0+aGNwcml2X21lbXBvb2xfYWN0aXZhdGVkKQo+PiArCQlrZnJlZSh1
+cmItPmhjcHJpdl9tZW1wb29sKTsKPj4gIAo+PiAgCWtmcmVlKHVyYik7Cj4+ICB9Cj4+IEBAIC03
+Nyw2ICs3OSw4IEBAIHN0cnVjdCB1cmIgKnVzYl9hbGxvY191cmIoaW50IGlzb19wYWNrZXRzLCBn
+ZnBfdCBtZW1fZmxhZ3MpCj4+ICAJaWYgKCF1cmIpCj4+ICAJCXJldHVybiBOVUxMOwo+PiAgCXVz
+Yl9pbml0X3VyYih1cmIpOwo+PiArCS8qIGFjdGl2YXRlIGhjcHJpdiBtZW1wb29sIHdoZW4gdXJi
+IGlzIGNyZWF0ZWQgdmlhIHVzYl9hbGxvY191cmIgKi8KPj4gKwl1cmItPmhjcHJpdl9tZW1wb29s
+X2FjdGl2YXRlZCA9IHRydWU7Cj4+ICAJcmV0dXJuIHVyYjsKPj4gIH0KPj4gIEVYUE9SVF9TWU1C
+T0xfR1BMKHVzYl9hbGxvY191cmIpOwo+PiBAQCAtMTAzNywzICsxMDQxLDQ0IEBAIGludCB1c2Jf
+YW5jaG9yX2VtcHR5KHN0cnVjdCB1c2JfYW5jaG9yICphbmNob3IpCj4+ICAKPj4gIEVYUE9SVF9T
+WU1CT0xfR1BMKHVzYl9hbmNob3JfZW1wdHkpOwo+PiAgCj4+ICsvKioKPj4gKyAqIHVyYl9oY3By
+aXZfbWVtcG9vbF96YWxsb2MgLSBhbGxvYyBtZW1vcnkgZnJvbSBtZW1wb29sIGZvciBoY3ByaXYK
+Pj4gKyAqIEB1cmI6IHBvaW50ZXIgdG8gVVJCIGJlaW5nIHVzZWQKPj4gKyAqIEBzaXplOiBtZW1v
+cnkgc2l6ZSByZXF1ZXN0ZWQgYnkgY3VycmVudCBob3N0IGNvbnRyb2xsZXIKPj4gKyAqIEBtZW1f
+ZmxhZ3M6IHRoZSB0eXBlIG9mIG1lbW9yeSB0byBhbGxvY2F0ZQo+PiArICoKPj4gKyAqIFJldHVy
+bjogTlVMTCBpZiBvdXQgb2YgbWVtb3J5LCBvdGhlcndpc2UgbWVtb3J5IGFyZSB6ZXJvZWQKPj4g
+KyAqLwo+PiArdm9pZCAqdXJiX2hjcHJpdl9tZW1wb29sX3phbGxvYyhzdHJ1Y3QgdXJiICp1cmIs
+IHNpemVfdCBzaXplLCBnZnBfdCBtZW1fZmxhZ3MpCj4+ICt7Cj4+ICsJaWYgKCF1cmItPmhjcHJp
+dl9tZW1wb29sX2FjdGl2YXRlZCkKPj4gKwkJcmV0dXJuIGt6YWxsb2Moc2l6ZSwgbWVtX2ZsYWdz
+KTsKPj4gKwo+PiArCWlmICh1cmItPmhjcHJpdl9tZW1wb29sX3NpemUgPCBzaXplKSB7Cj4+ICsJ
+CWtmcmVlKHVyYi0+aGNwcml2X21lbXBvb2wpOwo+PiArCQl1cmItPmhjcHJpdl9tZW1wb29sX3Np
+emUgPSBzaXplOwo+PiArCQl1cmItPmhjcHJpdl9tZW1wb29sID0ga21hbGxvYyhzaXplLCBtZW1f
+ZmxhZ3MpOwo+PiArCX0KPj4gKwlpZiAodXJiLT5oY3ByaXZfbWVtcG9vbCkKPj4gKwkJbWVtc2V0
+KHVyYi0+aGNwcml2X21lbXBvb2wsIDAsIHNpemUpOwo+PiArCWVsc2UKPj4gKwkJdXJiLT5oY3By
+aXZfbWVtcG9vbF9zaXplID0gMDsKPj4gKwlyZXR1cm4gdXJiLT5oY3ByaXZfbWVtcG9vbDsKPj4g
+K30KPj4gK0VYUE9SVF9TWU1CT0xfR1BMKHVyYl9oY3ByaXZfbWVtcG9vbF96YWxsb2MpOwo+PiAr
+Cj4+ICsvKioKPj4gKyAqIHVyYl9mcmVlX2hjcHJpdiAtIGZyZWUgaGNwcml2IGRhdGEgaWYgbmVj
+ZXNzYXJ5Cj4+ICsgKiBAdXJiOiBwb2ludGVyIHRvIFVSQiBiZWluZyB1c2VkCj4+ICsgKgo+PiAr
+ICogSWYgbWVtcG9vbCBpcyBhY3RpdmF0ZWQsIHByaXZhdGUgZGF0YSdzIGxpZmVjeWNsZQo+PiAr
+ICogaXMgbWFuYWdlZCBieSB1cmIgb2JqZWN0Lgo+PiArICovCj4+ICt2b2lkIHVyYl9mcmVlX2hj
+cHJpdihzdHJ1Y3QgdXJiICp1cmIpCj4+ICt7Cj4+ICsJaWYgKCF1cmItPmhjcHJpdl9tZW1wb29s
+X2FjdGl2YXRlZCkgewo+PiArCQlrZnJlZSh1cmItPmhjcHJpdik7Cj4+ICsJCXVyYi0+aGNwcml2
+ID0gTlVMTDsKPgo+WW91IHNlZW0gdG8gc2V0IHRoaXMgdG8gTlVMTCBmb3Igbm8gcmVhc29uLCBB
+TkQgY2hlY2sgZm9yCj5oY3ByaXZfbWVtcG9vbF9hY3RpdmF0ZWQuICBPbmx5IG9uZSBpcyBnb2lu
+ZyB0byBiZSBuZWVkZWQsIHlvdSBkb24ndAoKPm5lZWQgdG8gaGF2ZSBib3RoLCByaWdodD8gIFdo
+eSBub3QganVzdCByZWx5IG9uIGhjZHByaXYgYmVpbmcgc2V0PwoKSSBuZWVkcyB0byBkaXN0aW5n
+dWlzaCB0d28gc2l0dWF0aW9uczsKMS4gIHRoZSBtZW1vcnkgcG9vbCBpcyB1c2VkLCB0aGVuIHRo
+ZSB1cmJfZnJlZV9oY3ByaXYgc2hvdWxkIGRvIG5vdGhpbmcKMi4gIHRoZSBtZW1vcnkgd2FzIGFs
+bG9jZWQgYnkgaGNkLCAgdGhlbiB0aGUgbWVtb3J5IHNob3VsZCBiZSBrZnJlZWQKClVzaW5nIGhj
+cHJpdl9tZW1wb29sX2FjdGl2YXRlZCBkb2VzIGxvb2sgY29uZnVzaW5nLi4uCndoYXQgYWJvdXQg
+Zm9sbG93aW5nIGNoYW5nZXM6CgorCWlmICh1cmItPmhjcHJpdiAhPSB1cmItPmhjcHJpdl9tZW1w
+b29sKSB7CisJCWtmcmVlKHVyYi0+aGNwcml2KTsKKwkJdXJiLT5oY3ByaXYgPSBOVUxMOworCX0K
+Cj4KPkFuZCBhcmUgeW91IHN1cmUgdGhhdCB0aGUgaGNkIGNhbiBhY3R1YWxseSB1c2UgYSBrbWFs
+bG9jZWQgIm1lbXBvb2wiPyAgSQoKVGhlIHBhdGNoIGZvciB4aGNpIGlzIGhlcmU6ICBodHRwczov
+L2xvcmUua2VybmVsLm9yZy9sa21sLzIwMjUwNTE3MDgzNzUwLjYwOTctMS0wMDEwNzA4MkAxNjMu
+Y29tLwp4aGNpIHdhcyBremFsbG9jaW5nIG1lbW9yeSBmb3IgaXRzIHByaXZhdGUgZGF0YSwgYW5k
+IHdoZW4gdXNpbmcgVVNCIHdlYmNhbS9taWMsIEkgY2FuIG9ic2VydmUgMWsrL3Mga3phbGxvY3MK
+QW5kIHdpdGggdGhpcyBwYXRjaCwgZHVyaW5nIG15IG9icyBzZXNzaW9uKHdpdGggVVNCIHdlYmNh
+bS9taWMpLCBubyBtZW1vcnkgYWxsb2NhdGlvbgpvYnNlcnZlZCBmb3IgdXNiIHN1YiBzeXN0ZW07
+Cgo+ZG9uJ3QgdW5kZXJzdGFuZCB3aHkgeGhjaSBjYW4ndCBqdXN0IGRvIHRoaXMgaW4gaXRzIGRy
+aXZlciBpbnN0ZWFkIG9mCj50aGlzIGJlaW5nIHJlcXVpcmVkIGluIHRoZSB1c2IgY29yZSBhbmQg
+YWRkaW5nIGV4dHJhIGxvZ2ljIGFuZCBzaXplIHRvCj5ldmVyeSB1cmIgaW4gdGhlIHN5c3RlbS4K
+ClllcywgaXQgaXMgcG9zc2libGUgdG8gbWFrZSBhIG1lbXBvb2wgaW4gaGNkcy4gQnV0IHRoZSBs
+aWZlY3ljbGUgbWFuYWdlbWVudCB3b3VsZCBub3QgYmUgYW4gZWFzeSBvbmUsCmJhc2ljYWxseSBh
+ICJtZW1wb29sIiB3b3VsZCBuZWVkIHRvIGJlIGJ1aWxkIHVwIGZyb20gemVyby1ncm91bmQsIGxv
+dHMgb2YgZGV0YWlscyBuZWVkIHRvIGJlIGFkZHJlc3NlZCwKZS5nLiB3aGVuIHNob3VsZCByZXNp
+emUgdGhlIG1lbXBvb2wgd2hlbiBtZW1wb29sIGlzIHRvbyBiaWcuClVzaW5nIFVSQiBhcyBhIG1l
+bXBvb2wgc2xvdCBob2xkZXIgd291bGQgYmUgYSB2ZXJ5IHNpbXBsZSBhcHByb2FjaC4gVGhlIFVS
+QiBvYmplY3RzICBhcmUgYWxyZWFkeSB3ZWxsIG1hbmFnZWQ6CmJhc2VkIG9uIG15IG1lbW9yeSBw
+cm9maWxpbmcsIHRoZSBhbGl2ZSB1cmIgb2JqZWN0cyBhbmQgdGhlIHJhdGUgb2YgY3JlYXRpbmcg
+bmV3ICB1cmIgb2JqZWN0cyBhcmUgYm90aCBhdCBzbWFsbCBzY2FsZS4KUmV1c2luZyB1cmIgbGlm
+ZWN5Y2xlIG1hbmFnZW1lbnQgd291bGQgc2F2ZSBsb3RzIG9mIHRyb3VibGVzLCBJIGltYWdlLi4u
+LgoKQWxzbywgSSB3b3VsZCBpbWFnZSBvdGhlciBoY2RzIGNvdWxkIHVzZSBzaW1pbGFyIHNpbXBs
+ZSBjaGFuZ2VzIHRvIGNhY2hlIGl0cyBwcml2YXRlIGRhdGEgd2hlbiB0aGV5IGdldCBob2xkIG9u
+IGEgVVJCIG9iamVjdC4KClRoYW5rcwpEYXZpZCAKCgoKPgo+dGhhbmtzLAo+Cj5ncmVnIGstaAo=
 
-Sure.
-
-Done already.
-
-Thanks!
 
