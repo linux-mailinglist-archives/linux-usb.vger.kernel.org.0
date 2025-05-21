@@ -1,107 +1,171 @@
-Return-Path: <linux-usb+bounces-24146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF383ABEB32
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 07:18:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D8D1ABEBE2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 08:23:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A7CE7A4B2B
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 05:17:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9BB44A61E8
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 06:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E445A22FF30;
-	Wed, 21 May 2025 05:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08CD023182B;
+	Wed, 21 May 2025 06:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgLmllFK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eb2Hb2A7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425341A5B85;
-	Wed, 21 May 2025 05:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783901A317D
+	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 06:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747804697; cv=none; b=PcLhupM+bXFWp+COW4I8ygZiU5AeZCBMgCpp/TZTGSWW4qFubLTs9kh7iqHyksLhdp+656kh/RCpQjLbJHFn4FF5QK0+aQmTVVHLStMUL9v5cYGy6IwK8dBDvBRW5Ct2ZJAqyJaKCnQMhizmIbQfKfAygo/DSLLII9ktB5M3Z+Y=
+	t=1747808630; cv=none; b=egI9flSWH0IRF1t/TqZezt9WyokcbzjW/KaM0hIy2Roiz0Cf0Y8yQA4rTisLUppNOvu21rliOkdAAm2e21TKJ1DUOfsTQrzAZsaGyrbGnw5yLK4fB9cnpdEVyF3Mw9yW6a1r+6AbPmSnixvvwd+asLEilwTlyNsQUoWRjaoKkBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747804697; c=relaxed/simple;
-	bh=u7/3KY1Kz6KkAfhTKudlFFJOir6E8UHZ7GaPRxnGVG0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=STEQVYShTCUat/lFDOWX5pXy0pH7zXc4G/ifE3591082TLvwjZ3rvSo/NFCwDmqqcx/asQAiLuUNLr236/AtPc2iqxgY3bULAvm3FnMOe8H802/TRzdLVXuVGpn8S130QRFkAKaA8rhBketzFLsv0h5wspz5o7OyYqBw8ry9jRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgLmllFK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85763C4CEE4;
-	Wed, 21 May 2025 05:18:15 +0000 (UTC)
+	s=arc-20240116; t=1747808630; c=relaxed/simple;
+	bh=nfE5Xc2flz7UA5TjPHShzZZPFp7oxnIiDnaeNcGV0dg=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=jrOJiEvNA2WeXqtpVG52ucAJmPJJpAeHgMXifNeHPLirtgnElSKfaWiiUaldgEpyIScAidDzNdecZzJG5S2Hj9Sr1UK7e/ujf+TLdvw6huZM+H/jvJayrTmlTx4doKOAQ9n9xrY163PoN7XFt28iuOjhtWO/HU7LJyporixb5KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eb2Hb2A7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D736CC4CEE4
+	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 06:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747804695;
-	bh=u7/3KY1Kz6KkAfhTKudlFFJOir6E8UHZ7GaPRxnGVG0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=EgLmllFK8fwvA9p9id9HO7R4iI6aKQsfDw/X/h2+hfPmpkQ4DxvO881/tl+XpcCJC
-	 5oQFMAy3BrZh7rbm2O7tXqo70WumhO6wz3lSF/pIcmWHDahcv04G7RVxIAqRu6ZRzy
-	 BpDwShIP2aI5p40uo2K/YjKCMk4xjVe051SnhFz58o6blPfFVcx8jNTp8Y9LLln2nO
-	 SD/q1UOiIcM8zkEg6kY9MJBgaBL/tbj9Y6SdzEe3Mi8iGLrVxlnVueP7SM/LQXqAsn
-	 fw5T9KMJ7HjPfWWxACu/HIAdhc/hnY4EyLwE2uXwdONaICh7Iq84FBAhHkuR7NljEV
-	 uupqc0PXuoqjw==
-Date: Tue, 20 May 2025 22:18:10 -0700
-From: Kees Cook <kees@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Kuniyuki Iwashima <kuniyu@amazon.com>, ahmed.zaki@intel.com,
- aleksander.lobakin@intel.com, alex.aring@gmail.com, andrew+netdev@lunn.ch,
- ardb@kernel.org, christophe.leroy@csgroup.eu, cratiu@nvidia.com,
- d.bogdanov@yadro.com, davem@davemloft.net, decui@microsoft.com,
- dianders@chromium.org, ebiggers@google.com, edumazet@google.com,
- fercerpav@gmail.com, gmazyland@gmail.com, grundler@chromium.org,
- haiyangz@microsoft.com, hayeswang@realtek.com, hch@lst.de, horms@kernel.org,
- idosch@nvidia.com, jiri@resnulli.us, jv@jvosburgh.net, kch@nvidia.com,
- kys@microsoft.com, leiyang@redhat.com, linux-hardening@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org, linux@treblig.org,
- martin.petersen@oracle.com, mgurtovoy@nvidia.com,
- michael.christie@oracle.com, mingzhe.zou@easystack.cn,
- miquel.raynal@bootlin.com, mlombard@redhat.com, netdev@vger.kernel.org,
- pabeni@redhat.com, phahn-oss@avm.de, sagi@grimberg.me, sam@mendozajonas.com,
- sdf@fomichev.me, shaw.leon@gmail.com, stefan@datenfreihafen.org,
- target-devel@vger.kernel.org, viro@zeniv.linux.org.uk, wei.liu@kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_0/7=5D_net=3A_Convert_dev=5Fset=5Fm?=
- =?US-ASCII?Q?ac=5Faddress=28=29_to_struct_sockaddr=5Fstorage?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250520200929.1b9ae5ec@kernel.org>
-References: <20250520222452.work.063-kees@kernel.org> <20250521001931.7761-1-kuniyu@amazon.com> <202505201741.AFA146E7F6@keescook> <20250520200929.1b9ae5ec@kernel.org>
-Message-ID: <935B5950-190B-47D8-BF45-1CBAE904DB71@kernel.org>
+	s=k20201202; t=1747808629;
+	bh=nfE5Xc2flz7UA5TjPHShzZZPFp7oxnIiDnaeNcGV0dg=;
+	h=From:To:Subject:Date:From;
+	b=Eb2Hb2A7xXOI4bJZzj8sOo31TAlVZPe5Pg3Y+jGj+/1nQF8LpyPKX4ZGyHx/Ri5hI
+	 jYeoQQFcJ3khOngwOm0MuAgsV+cK2HqZO95lAKRzYqRstNohIapzhFPEvuax8Dvsty
+	 v59dKwKmRDUHsvlSQXQGggFJ7A21BcNawm8Fyn4qtoWlxZBLKt/veOxCsJtCqBlTB2
+	 7DUVegh8SZRMM5VdKqpG3ZaeI7PWUbR0UQyaUKbrBMk4bnpPAMiYIuoUzKFNSjdDu8
+	 WztdHv7NGJQiwvtPOq+0B/S1g6Q/IVPNDHzB7yliR5w3qBUxoxsSruztfDMFKSMX5v
+	 hjj69SPuyBotg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C35B3C433E1; Wed, 21 May 2025 06:23:49 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: =?UTF-8?B?W0J1ZyAyMjAxNDNdIE5ldzogRExaIENyZWF0b3IgWFMgKFVTQiBB?=
+ =?UTF-8?B?dWRpbykgbm90IHdvcmtpbmcg4oCTIGFjY2VwdHMgaHcgcGFyYW1zIGJ1dCBw?=
+ =?UTF-8?B?bGF5YmFjayBmYWlscyAod3JpdGUgZXJyb3IgLTc3KQ==?=
+Date: Wed, 21 May 2025 06:23:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: maps@knutsson.it
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys bug_status bug_severity priority
+ component assigned_to reporter cf_regression
+Message-ID: <bug-220143-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220143
 
+            Bug ID: 220143
+           Summary: DLZ Creator XS (USB Audio) not working =E2=80=93 accept=
+s hw
+                    params but playback fails (write error -77)
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.14.0-15-generic
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: maps@knutsson.it
+        Regression: No
 
-On May 20, 2025 8:09:29 PM PDT, Jakub Kicinski <kuba@kernel=2Eorg> wrote:
->On Tue, 20 May 2025 17:42:32 -0700 Kees Cook wrote:
->> Ah yes, I can include that in the next version if you want? I was tryin=
-g
->> to find a stopping point since everything kind of touches everything =
-=2E=2E=2E
->
->Looks like the build considers -Wincompatible-pointer-types to always
->imply -Werror or some such? We explicitly disable CONFIG_WERROR in our
->CI, but we still get:
->
->drivers/net/macvlan=2Ec:1302:34: error: incompatible pointer types passin=
-g 'struct sockaddr *' to parameter of type 'struct __kernel_sockaddr_storag=
-e *' [-Werror,-Wincompatible-pointer-types]
-> 1302 |                 dev_set_mac_address(port->dev, &sa, NULL);
->      |                                                ^~~
->
->on this series :(
+The Mackie / LOUD Audio DLZ Creator XS USB audio interface is detected
+correctly by ALSA, and presents itself with:
+Vendor ID: 0a73
+Product ID: 003a
 
-I'll get this fixed and add dev_set_mac_address_user() for v3=2E=2E=2E
+USB interface: High-speed
 
+ALSA detection: card 2 (via aplay -l)
+
+The device only accepts:
+
+Format: S32_LE
+
+Sample rate: 48000 Hz
+
+Channel count: 4
+
+When using:
+speaker-test -D hw:2,0 -c 4 -F S32_LE -r 48000
+=E2=80=A6the device accepts snd_pcm_hw_params() successfully but fails at p=
+layback:
+
+Write error: -77, File descriptor in bad state
+xrun_recovery failed: -77
+The same happens with:
+
+aplay -D hw:2,0 <converted 4ch/32bit/48000Hz file>
+The interface disconnects and reconnects after such playback attempts in ma=
+ny
+cases. No audio is heard. All simpler formats (e.g., 1 or 2 channels, or
+16-bit) are rejected with Invalid argument.
+
+Reproduce Steps:
+Plug in DLZ Creator XS to USB 2.0 or 3.0 port
+
+Confirm device appears via aplay -l
+
+Run:
+speaker-test -D hw:2,0 -c 4 -F S32_LE -r 48000
+Observe that device accepts format, then playback fails
+
+lsusb -v output:
+Bus 003 Device 013: ID 0a73:003a Mackie Designs DLZ Creator XS
+iManufacturer           1 LOUD Audio, LLC
+iProduct                2 DLZ Creator XS
+iSerial                 3 no serial number
+
+Tested with
+Ubuntu 24.04 (kernel 6.5)
+Ubuntu 25.05 (kernel 6.14)
+
+Same behavior across systems
+
+Device works flawlessly under Windows with official driver
+
+Comment
+It appears the device requires a very specific channel layout and potential=
+ly
+vendor-specific initialization or control messaging before playback is
+possible. If this device is non-compliant with UAC2 spec, perhaps it should=
+ be
+explicitly blacklisted or set up with a vendor-specific quirk?
+
+I would be happy to run more usbmon/alsa-info traces if needed.
+
+I apologize beforehand, as I have not filled out a bug report before.
 
 --=20
-Kees Cook
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
