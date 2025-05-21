@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-24173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51589ABF4F3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:58:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA8BABF4F9
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 14:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3A5A17C824
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:58:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ABA31BC149F
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 12:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDECF26D4C5;
-	Wed, 21 May 2025 12:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBC926D4F0;
+	Wed, 21 May 2025 12:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="02P8Ky43"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="flMAcnKw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4045D231A37;
-	Wed, 21 May 2025 12:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9319A26C380;
+	Wed, 21 May 2025 12:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747832302; cv=none; b=Rmqrd1L9ZGdWVQZOTEJ/uO6I6aaVGhq44f+BeRAvRgfnP1E8mozO6HRWwVC9NZKJFzU40gwY0mHxG1cDgzxWGIAwf398aqoQ5/O/Bya/uYtbhk9fwgq3T1jJfV7DJN4xPGHFvWFWxYkPnfKWo2WKuNu6HZQKcmerPTNAimbQ0is=
+	t=1747832346; cv=none; b=Wu16cNC14Jt7t/hQ4zWJ363G4AhQGCtvc8SLvf60eIXpO6nVwnmxsakesc7gaSfYGOx2n4VXWPEfv4CYCKCnsC/BTlS3lJ72zxgkoFehkCW0ACMPhaHcAOhvOUg8xrZIe295gzlCQdjMSMlZp8SDAsBT8AQqPmN2y2KzJbBSNHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747832302; c=relaxed/simple;
-	bh=58Oh3/h7mqEgTFhUuHPK8QfEC4NFrkIxG3oxOXabV44=;
+	s=arc-20240116; t=1747832346; c=relaxed/simple;
+	bh=bNwOd62uldLrd0Oo1ZUt+cxdvOJNKGn9/3zegQjYUbk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cq6GJ7bpVXVXEhg+Lj1OPXZT2wNtXaxSSe4/uesFWM3BLmfC9RNublrKT4VZ/GqmKsgYPN0X7IyZKpeIjYVa3jJYD5Nki6ezfNDjXZlZ459qR4uN9nueAX8vILssbDxILujqbMtEotmi152CRSxoPegM2LSQ+iVMydayd0ACKHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=02P8Ky43; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F3E9C4CEE4;
-	Wed, 21 May 2025 12:58:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pSRNbWHXJUQzK9Q3/KR+tnJ3pdzpTNpmHOooBfCRf0Fosf3rdyFM6ptVy3Df2sq6FFYjDd+8MapHAvMLKqlfWmShVT+TBtCzlce1z4/2knWN8Zzxc4RNOndtZQNN4ps74uxNAi18D16N3Qs38jUaWQqbRAVPmRm5/ecAHkrMSuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=flMAcnKw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA16AC4CEE4;
+	Wed, 21 May 2025 12:59:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747832301;
-	bh=58Oh3/h7mqEgTFhUuHPK8QfEC4NFrkIxG3oxOXabV44=;
+	s=korg; t=1747832345;
+	bh=bNwOd62uldLrd0Oo1ZUt+cxdvOJNKGn9/3zegQjYUbk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=02P8Ky43TECwO1jXNFxaeBXIHKpm8OXfV8qJzPQQg1WZ2gN1n88D1tmNqgOq+yxH1
-	 rTw4+esF1GrT25yW+LVK8PSXbJbSIUe7rd0yk1/piWaJ/D+LAPIi7jzVXvs1PgdhDO
-	 5K2hxNm+eWSX0573vwlFnn2+PD7LXQWJCElj3Dvc=
-Date: Wed, 21 May 2025 14:58:18 +0200
+	b=flMAcnKwMJccwzaxfmgqrSXfLtQm/Tylh7IIH4uTzTSwBLEbNTZe7r7MsRikh9irc
+	 dUfgEJb76ZfJyWoZcIH1c88cbDwY4FkPwGWZPRF6HiTEjums3cik6eQ4tI4fMuXIt8
+	 L5cIUym5Or5Mr7IKwwSlDctQ8uVQ3R08TeIpM4xM=
+Date: Wed, 21 May 2025 14:59:02 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: David Wang <00107082@163.com>
 Cc: mathias.nyman@intel.com, oneukum@suse.com, stern@rowland.harvard.edu,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3 1/2] USB: core: add a memory pool to urb caching
  host-controller private data
-Message-ID: <2025052116-prorate-hamburger-f329@gregkh>
+Message-ID: <2025052132-sloped-strewn-397a@gregkh>
 References: <20250517083819.6127-1-00107082@163.com>
  <2025052148-cannot-football-74e1@gregkh>
  <572f1814.9a08.196f2971eea.Coremail.00107082@163.com>
@@ -208,19 +208,10 @@ On Wed, May 21, 2025 at 07:25:12PM +0800, David Wang wrote:
 > Yes, it is possible to make a mempool in hcds. But the lifecycle management would not be an easy one,
 > basically a "mempool" would need to be build up from zero-ground, lots of details need to be addressed,
 > e.g. when should resize the mempool when mempool is too big.
-> Using URB as a mempool slot holder would be a very simple approach. The URB objects  are already well managed:
-> based on my memory profiling, the alive urb objects and the rate of creating new  urb objects are both at small scale.
-> Reusing urb lifecycle management would save lots of troubles, I image....
-> 
-> Also, I would image other hcds could use similar simple changes to cache its private data when they get hold on a URB object.
 
-There is already a hcd-specific pointer in the urb, why can't they just
-use that?
-
-Also, while I know you saw less allocation/freeing happening, was that
-actually measurable in a real way?  Without that, the added complexity
-feels wrong (i.e. you are optimizing for something that is not really
-needed.)
+That's up to the HCD to manage, IF they need this.  Otherwise this is a
+burden on all other systems with the increased memory size for no needed
+reason.
 
 thanks,
 
