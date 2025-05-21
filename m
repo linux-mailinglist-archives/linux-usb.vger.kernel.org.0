@@ -1,113 +1,78 @@
-Return-Path: <linux-usb+bounces-24137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66B20ABE89F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 02:43:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69BB6ABE8D3
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 03:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEFC31BA85F9
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 00:43:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD64F17FDE3
+	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 01:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BBE3148827;
-	Wed, 21 May 2025 00:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C502E433D1;
+	Wed, 21 May 2025 01:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAT9lG8L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+rrYzLE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DB1632;
-	Wed, 21 May 2025 00:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBEB13D8A0;
+	Wed, 21 May 2025 01:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747788155; cv=none; b=nkzbjS7asdV3fEQLSo0+qKadqni+aUpCaT+P4fyiL7FWDYI8R+ALSi1ko3DOLfEQuuLwGa1ih15N8vOAtvn6nfqLDQBBoFxnrpvuASxc7cmf3kaK0+uMZaTAjFnqN/uDk4HRw9WvrnMQ5JA9qkPAicRp0VeiCSqcqsAFxd+ZkIM=
+	t=1747789538; cv=none; b=IbUXj4SNmQygeRsub0LD8gZ2KwvIh+F0REq6NS3JNSDR5Tm9M5XjMBFVntqgbBymBPbhK2hdWvqPsP2BzmasYRpkbsa7bMoEqZRKZjNBAPz/zZeDzl0/phxw3YYlgFwRro1hFtH6Znz0bsA6HiHcQi95p/a+L/nfnbf9GnjNb2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747788155; c=relaxed/simple;
-	bh=/RrFroAnx4HggKLHMMSIYYEaz83wGtiW3hYlxlEWXWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IQ+4SNgTSnMiaSHkde1LcF91PROcidadIZ06+uIzWi01eyUV+MIOf08cPXcBzKBf9l5ejsO45OIxZCexysVILy1ej8SXP+Q5puQfdBaaLW2os3InAStgSfEQoqO0N5sULf+sQVk5eL2na96Ra5D6KfEchE8hfWPbLXv/hrBq188=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAT9lG8L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49812C4CEEA;
-	Wed, 21 May 2025 00:42:35 +0000 (UTC)
+	s=arc-20240116; t=1747789538; c=relaxed/simple;
+	bh=mjJH9AG9tTP/Tg3XQixBhGC19W0ImUuio5yB+96LAQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LwgFzrJJt7nQbmgD5K5vaHQjOGgpHCofHV1jkJGXPKfsXjdydfDhEA/No4UTqiIL+2GM3djTiWeNjEz1FYzH0amGCaxGas4bmVdwzuyIzGTFVQaEbpUIFI35rgm+My1asnWLiseuNC6dJU8arlW9nsaTVcq34l8qxxjNXg8ykds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+rrYzLE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300C9C4CEE9;
+	Wed, 21 May 2025 01:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747788155;
-	bh=/RrFroAnx4HggKLHMMSIYYEaz83wGtiW3hYlxlEWXWY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PAT9lG8LPkxAwkRVnnhNYAd60AAeYfGIAO9KTdifgfX1guOO6r/bZruvcFf+ZgGeK
-	 e06AbBhuFWam87cQ3brvBfJnjJ4FY7zJmv4K2XAuwaA/yFYmzhhj6r0NDIpmZvFU+y
-	 wpRvnlt6ifBX1N2Mx7kcy4ma021PfVMTh5iOMpOtm4AhHfRogi3QGhnOBCbZ36pgqI
-	 xPS0M84CixKHPB+rQn/Kjn0RuyrcD3sXwAluk3g7XEoMyD2IaQIzCuqS8NIiNA6jYc
-	 r5xaeYB4j4q0Lbx3epkEl6n0pdfwMZTK8h15UIC+s8VYG5jf0b1LSwWnolulVZ2TGo
-	 jdvs6R+aniuSg==
-Date: Tue, 20 May 2025 17:42:32 -0700
-From: Kees Cook <kees@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: ahmed.zaki@intel.com, aleksander.lobakin@intel.com,
-	alex.aring@gmail.com, andrew+netdev@lunn.ch, ardb@kernel.org,
-	christophe.leroy@csgroup.eu, cratiu@nvidia.com,
-	d.bogdanov@yadro.com, davem@davemloft.net, decui@microsoft.com,
-	dianders@chromium.org, ebiggers@google.com, edumazet@google.com,
-	fercerpav@gmail.com, gmazyland@gmail.com, grundler@chromium.org,
-	haiyangz@microsoft.com, hayeswang@realtek.com, hch@lst.de,
-	horms@kernel.org, idosch@nvidia.com, jiri@resnulli.us,
-	jv@jvosburgh.net, kch@nvidia.com, kuba@kernel.org,
-	kys@microsoft.com, leiyang@redhat.com,
-	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wpan@vger.kernel.org, linux@treblig.org,
-	martin.petersen@oracle.com, mgurtovoy@nvidia.com,
-	michael.christie@oracle.com, mingzhe.zou@easystack.cn,
-	miquel.raynal@bootlin.com, mlombard@redhat.com,
-	netdev@vger.kernel.org, pabeni@redhat.com, phahn-oss@avm.de,
-	sagi@grimberg.me, sam@mendozajonas.com, sdf@fomichev.me,
-	shaw.leon@gmail.com, stefan@datenfreihafen.org,
-	target-devel@vger.kernel.org, viro@zeniv.linux.org.uk,
-	wei.liu@kernel.org
-Subject: Re: [PATCH 0/7] net: Convert dev_set_mac_address() to struct
- sockaddr_storage
-Message-ID: <202505201741.AFA146E7F6@keescook>
-References: <20250520222452.work.063-kees@kernel.org>
- <20250521001931.7761-1-kuniyu@amazon.com>
+	s=k20201202; t=1747789537;
+	bh=mjJH9AG9tTP/Tg3XQixBhGC19W0ImUuio5yB+96LAQo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=F+rrYzLEBsXkguc601/3H5YSVH5gq41LP1rxyioHMLPqjits9zKP+IMYRr4vd9Bcl
+	 dOQvOXL77dyLs8PHV4Z1qJAs4fK0GOTYt3V+OcH6nM3RMMBDwwMaTPR6J/5QQxOkct
+	 JQzIQXQ7T0fdsA2YDSbzKeb4dRjcQPHNUf0CjXYvc+h+VilNtM0kstItzVO1dIT2H5
+	 XEnx4VK/iYzkOn+4MaZLoGRRbB178sHp8T+a/py9SEV5FliOe/gOnD3SPuFwp1r3zG
+	 QI1rJJADyGGoJ2PIqh9/sBK/OOs/+cSaNhp783l7Xv/QomoFqlaNzco68byxLbikzS
+	 61heOne/kYzdQ==
+Date: Tue, 20 May 2025 18:05:31 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, ste3ls@gmail.com, hayeswang@realtek.com,
+ dianders@chromium.org, gmazyland@gmail.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH v2] r8152: Add wake up function for RTL8153
+Message-ID: <20250520180531.44930f89@kernel.org>
+In-Reply-To: <20250516013552.798-1-vulab@iscas.ac.cn>
+References: <20250516013552.798-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250521001931.7761-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 20, 2025 at 05:19:20PM -0700, Kuniyuki Iwashima wrote:
-> From: Kees Cook <kees@kernel.org>
-> Date: Tue, 20 May 2025 15:30:59 -0700
-> > Hi,
-> > 
-> > As part of the effort to allow the compiler to reason about object sizes,
-> > we need to deal with the problematic variably sized struct sockaddr,
-> > which has no internal runtime size tracking. In much of the network
-> > stack the use of struct sockaddr_storage has been adopted. Continue the
-> > transition toward this for more of the internal APIs. Specifically:
-> > 
-> > - inet_addr_is_any()
-> > - netif_set_mac_address()
-> > - dev_set_mac_address()
-> > 
-> > Only 3 callers of dev_set_mac_address() needed adjustment; all others
-> > were already using struct sockaddr_storage internally.
+On Fri, 16 May 2025 09:35:52 +0800 Wentao Liang wrote:
+> In rtl8153_runtime_enable(), the runtime enable/disable logic for RTL8153
+> devices was incomplete, missing r8153_queue_wake() to enable or disable
+> the automatic wake-up function. A proper implementation can be found in
+> rtl8156_runtime_enable().
 > 
-> I guess dev_set_mac_address_user() was missed on the way ?
-> 
-> For example, tap_ioctl() still uses sockaddr and calls
-> dev_set_mac_address_user(), which cast it to _storage.
+> Add r8153_queue_wake(tp, true) if enable flag is set true, and add
+> r8153_queue_wake(tp, false) otherwise.
 
-Ah yes, I can include that in the next version if you want? I was trying
-to find a stopping point since everything kind of touches everything ...
-:P
-
+Please explain how the problem was discovered and on what HW (if any)
+the patch was tested.
 -- 
-Kees Cook
+pw-bot: cr
 
