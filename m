@@ -1,157 +1,229 @@
-Return-Path: <linux-usb+bounces-24209-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E1F7AC04A8
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 08:36:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33F72AC059A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 09:25:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18D724A7026
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 06:36:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3CFE16634D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 07:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B45F22155F;
-	Thu, 22 May 2025 06:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07EA221DB3;
+	Thu, 22 May 2025 07:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bKGm0jYx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27FC2B9B7
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 06:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C6B320F;
+	Thu, 22 May 2025 07:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747895799; cv=none; b=A78x3HsKseTWxmUhQAYfEmOiTlHSDQHdOfJsWxeZqz7S8gSdpxOXx39rUHoNqcxqJy4ruRhZpblR/iy0PxfIvqLiLFoD/yH5zlnzI+311gVkqQfBg06spwIUrH81t6opYsLLFtTVwNtPf5G63DQQ2INDu9ejEATBR6PdINSX2h8=
+	t=1747898735; cv=none; b=grbWBT3wYU8Pr6+pFuKrz5+hEnWyg36xAaTSGiAyvEupxhPMWFlTjeTwhENmn3sbCXfEmWTBjVr99LVzNOp6dq4Ol7AR2ido+LLMbtliTzzEGZhOCQeZCNx8pyA4w/wQZ4OkbyQGgurThwKPzfFA/v3ZWRc+giyH4XSGR0WwX/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747895799; c=relaxed/simple;
-	bh=mHhMz48zmTfbdAHT6nAUMVyJ6JP+5bV9RJ7zi8JFo80=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=O4lyGxr7Vv/D+4sH2awsxWxM3s0qDnHPFXOUPRp1G1L67HUMqXZnkejnuOrfRyFClwEi5paYxM3z96SxxUu4MrgwoZqZN8HoBbmlkzT5rdTBpwfFTNykQFJzMW3fPs5sbzUzZMXKJS0QsYIofCojA14co43icx/BGAqfdoXXElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3dc83674dbbso28785875ab.2
-        for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 23:36:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747895797; x=1748500597;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i+28ZBqCHdGJpYTfl5Txc9FnefB+Ye1SC10s5aGa14c=;
-        b=Dxw5boQGzMBGx4/hxgXpoZHFAByoPLK8WWOoY2zPrLm9FxB9rSclHiYKLtMg2tOwCn
-         4ZycSPOBXQPwfZXPfTgKxtWRkTSxnvcvUZQMLJc0qC4xItkQohYCIpLr4uPUL83fBMLb
-         VDffZbZUdnutVDJn4R2GegYTJtSp2e0AxCuJM4u0kTt6FAEjFXtawJJyDMkqFWy6AncG
-         EZUVxkcPEQ4D6F1FqJPbPYz1M12VNCk8y+G5WgvWjilzlM6CHLEnpsn+BbCDM6xHNVh7
-         tY2h6+yuPKx9qOKn+bc+UUlAXP2oTNflRlheq41ji8mRfO2vgS8SWdg5RLHsEhe1aUIe
-         30Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2Y+seTLLdZSRSoHdDyVG5Melm13uRD7cGlv5lVBcMErz5MjkOHdk8V5ldBtSJc78rtMj3eaOMJ10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziDLNFf2YRzyaBP4+YhxCSh/+AElWUlTnm59Ha2DCxmWhEBkOO
-	j01SQl/Q440pYTTL3drWYyzZE3IZO72pLyN7YxX0FG6Evkvw5FI6cfORtEsVTj4ZUrgl/LXsjJP
-	YU+RYQpa17N+bN2TYEAXvCNojdgmmg27jvVSkYatOlSZFXh6hYgy/m9VPdSo=
-X-Google-Smtp-Source: AGHT+IG1EtV86rdulCWLkddnrTGcVk4ivQNEdjUc2j/wGK7KNYYu99nncN87HNXKbzsbACZB7In0oWweAntOo1UPoOv8rrEh4pJ8
+	s=arc-20240116; t=1747898735; c=relaxed/simple;
+	bh=gtcQiVv8C/ThkqirllVBFHa40vSa2FjD+GV/VeHq2io=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mD/kTzmD6EKWMkkrJXDJSlE3FESSSJHXyF4nPRfNQzs6BB9mU4yBLQxTEE2a+i7ODA7fhkGNsYQ1xBT9titE2Pp/cTlZ7iWqn4NMV1+JhCmif2E1YApUcw8xdGN9M8+uACtO7c/s75NUjdXxV6nmaB++Y8oJI/EHV5kBrqnIFvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bKGm0jYx; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Yy
+	XzRmLJrmjlX+RlPnQIdYO0P6MdtW6Vfq9iIZQfCt4=; b=bKGm0jYxNcq65xY5n9
+	JQD3/rdf2N5k7OZuMgL49/Uyi2tEc4RO7ZmKqBt/1+GxgbMBlVLxk3bz13SAkJMy
+	lYG0NruLAw/md26m+yDMkdkVLc5s1LYVRoGJz0nlRfI69IngpoipngfvMZe+BpWA
+	L0qoXNcTm1IDjb+uXCbM4gBUY=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgDnl2O4zS5oEWbhBQ--.29592S4;
+	Thu, 22 May 2025 15:09:55 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: oneukum@suse.com,
+	stern@rowland.harvard.edu,
+	hminas@synopsys.com,
+	rui.silva@linaro.org,
+	jgross@suse.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Wang <00107082@163.com>
+Subject: [PATCH v4 1/2] USB: core: add a memory pool to urb caching host-controller private data
+Date: Thu, 22 May 2025 15:09:43 +0800
+Message-Id: <a235e322e270942dc3d607d4b46ff7db29abeb2d.1747897366.git.00107082@163.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:19cb:b0:3dc:80e6:3819 with SMTP id
- e9e14a558f8ab-3dc80e638edmr89155415ab.22.1747895796846; Wed, 21 May 2025
- 23:36:36 -0700 (PDT)
-Date: Wed, 21 May 2025 23:36:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <682ec5f4.a00a0220.2a3337.000e.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in dtv5100_i2c_msg/usb_submit_urb
-From: syzbot <syzbot+0335df380edd9bd3ff70@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgDnl2O4zS5oEWbhBQ--.29592S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Xr47CF15uryrtryftw1UKFg_yoWxWF4UpF
+	WfJwn3tF18XrW3JrZ3GF4kuayfta1kCFy2kFyfu34UZwnFywn5Aas2yFyrur9Fyr4fJwsI
+	qa1DKFn8Ww1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piJGYdUUUUU=
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbBkBxVqmguzbwBUwAAsW
 
-Hello,
+When using USB devices, there are lots of memory allocations for
+host controller's private data. For example, on a system with xhci,
+using a webcam and a mic would needs ~250 and ~1k kzallocs per
+second, respectively.
 
-syzbot found the following issue on:
+Some HCDs use kmem_cache to handle the high frequency of memory
+allocation during device usages. There are several drawbacks:
+1. The lifespan of kmem_cache entry has weak correlation with
+device usages: when devices are in idle, those memory is still
+kept in slab until system decide to reclaim it, if reclaimable.
+2. kmem_cache is only used for fix-sized memory allocation, if a
+HCD needs private data of m different sizes, m different kmem_cache
+would be needed, and the overhead of kmem_cache is multiplied by m.
+When m is large, as some HCD needs variable length private data,
+kmem_cache approach is inflexible to use.
+3. A system may have multiple HCDs in use, then the overhead of
+kmem_cache would be multiplied again by the number of HCDs.
 
-HEAD commit:    5723cc3450bc Merge tag 'dmaengine-fix-6.15' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=176c5f68580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c3f0e807ec5d1268
-dashboard link: https://syzkaller.appspot.com/bug?extid=0335df380edd9bd3ff70
-compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
+URB objects have long lifespans, an urb can be reused between
+submit loops while the devices are being used. And with following
+premise:
+1. Each URB cannot be used by more than one HCDs at the same time.
+2. The lifespan of HC private data is contained in its URB object's
+lifespan.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+high frequent allocations for HCD private data can be avoided if
+urb take over the ownership of memory, the memory then shares
+the longer lifespan with urb objects.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0539c6646d88/disk-5723cc34.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3e53f83634f7/vmlinux-5723cc34.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/23a89b974355/bzImage-5723cc34.xz
+The memory pool in URB works this way:
+1. A URB object holds only one slot of memory pool.
+2. When created, memory pool is NULL. If no private data requested,
+no memory pool alloced for the URB.
+3. The memory pool slot will grow when larger size is requested.
+4. Memory pool slot will be released only when URB is destroyed.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0335df380edd9bd3ff70@syzkaller.appspotmail.com
+Normally the hcpriv pointer in URB structure is the same as memory
+pool slot, but considering some drivers may still have its own
+management of urb->hcpriv, a hcpriv_mempool pointer is added, to make
+sure no impact on existing drivers.
 
-------------[ cut here ]------------
-usb 3-1: BOGUS control dir, pipe 80006980 doesn't match bRequestType c0
-WARNING: CPU: 0 PID: 15834 at drivers/usb/core/urb.c:413 usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 0 UID: 0 PID: 15834 Comm: syz.3.2930 Not tainted 6.15.0-rc6-syzkaller-00346-g5723cc3450bc #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-RIP: 0010:usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
-Code: 0f b6 44 05 00 84 c0 0f 85 38 06 00 00 45 0f b6 04 24 48 c7 c7 00 86 12 8c 48 8b 74 24 18 4c 89 fa 44 89 f1 e8 5f f7 6e fa 90 <0f> 0b 90 90 49 bd 00 00 00 00 00 fc ff df e9 2b f4 ff ff 89 e9 80
-RSP: 0018:ffffc90004b3f610 EFLAGS: 00010246
-RAX: f5838b6742b91e00 RBX: ffff88801ff35300 RCX: 0000000000080000
-RDX: ffffc90010c7f000 RSI: 0000000000004945 RDI: 0000000000004946
-RBP: 1ffff11003fd2d6c R08: ffff8880b8923e93 R09: 1ffff110171247d2
-R10: dffffc0000000000 R11: ffffed10171247d3 R12: ffff88801fe96b60
-R13: dffffc0000000000 R14: 0000000080006980 R15: ffff8881422eaa60
-FS:  00007f2867dba6c0(0000) GS:ffff8881260c2000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2867d99d58 CR3: 0000000067e32000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x114/0x4c0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
- dtv5100_i2c_msg+0x250/0x330 drivers/media/usb/dvb-usb/dtv5100.c:60
- dtv5100_i2c_xfer+0x1a4/0x3c0 drivers/media/usb/dvb-usb/dtv5100.c:86
- __i2c_transfer+0x871/0x2170 drivers/i2c/i2c-core-base.c:-1
- i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2315
- i2c_transfer_buffer_flags+0x105/0x190 drivers/i2c/i2c-core-base.c:2343
- i2c_master_send include/linux/i2c.h:109 [inline]
- i2cdev_write+0x112/0x1b0 drivers/i2c/i2c-dev.c:183
- do_loop_readv_writev include/linux/uio.h:-1 [inline]
- vfs_writev+0x4a5/0x9a0 fs/read_write.c:1057
- do_writev+0x14d/0x2d0 fs/read_write.c:1101
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xf6/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f2866f8e969
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2867dba038 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-RAX: ffffffffffffffda RBX: 00007f28671b5fa0 RCX: 00007f2866f8e969
-RDX: 0000000000000001 RSI: 00002000000012c0 RDI: 0000000000000005
-RBP: 00007f2867010ab1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 00007f28671b5fa0 R15: 00007f28672dfa28
- </TASK>
+A hcpriv_mempool_size field is needed for making sure that the mempool
+slot is big enough, if not, more memory would be requested from system.
 
+Existing drivers may have it own allocation of URB object, not via
+usb_alloc_urb(), this may cause memory leak if URB has a active mempool
+slot but it is not released via usb_free_urb(); A hcpriv_mempool_activated
+flag is added to address this issue, it is set only in usb_alloc_urb().
+When requesting a hcpriv memory to a URB which has hcpriv_mempool_activated
+not set, the memory will be requested from system directly.
 
+One of the drawbacks is URB object now have 3 more fields even if the
+object would never be requested for HCD private data.
+
+From an end-user's perspective, the performance difference with this change
+is insignificant when system is under no memory pressure, and when under
+heavy memory pressure. When system is under heavy memory pressure,
+everything is slow.  There could be a point in-between no memory pressure
+and heavy memory pressure where these 1k+/s memory allocations would
+dominate the performance, but very hard to pinpoint it.
+
+Signed-off-by: David Wang <00107082@163.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/core/urb.c | 45 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb.h    |  5 +++++
+ 2 files changed, 50 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 5e52a35486af..2cf218d4fb73 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -23,6 +23,8 @@ static void urb_destroy(struct kref *kref)
+ 
+ 	if (urb->transfer_flags & URB_FREE_BUFFER)
+ 		kfree(urb->transfer_buffer);
++	if (urb->hcpriv_mempool_activated)
++		kfree(urb->hcpriv_mempool);
+ 
+ 	kfree(urb);
+ }
+@@ -77,6 +79,8 @@ struct urb *usb_alloc_urb(int iso_packets, gfp_t mem_flags)
+ 	if (!urb)
+ 		return NULL;
+ 	usb_init_urb(urb);
++	/* activate hcpriv mempool when urb is created via usb_alloc_urb */
++	urb->hcpriv_mempool_activated = true;
+ 	return urb;
+ }
+ EXPORT_SYMBOL_GPL(usb_alloc_urb);
+@@ -1037,3 +1041,44 @@ int usb_anchor_empty(struct usb_anchor *anchor)
+ 
+ EXPORT_SYMBOL_GPL(usb_anchor_empty);
+ 
++/**
++ * urb_hcpriv_mempool_zalloc - alloc memory from mempool for hcpriv
++ * @urb: pointer to URB being used
++ * @size: memory size requested by current host controller
++ * @mem_flags: the type of memory to allocate
++ *
++ * Return: NULL if out of memory, otherwise memory are zeroed
++ */
++void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags)
++{
++	if (!urb->hcpriv_mempool_activated)
++		return kzalloc(size, mem_flags);
++
++	if (urb->hcpriv_mempool_size < size) {
++		kfree(urb->hcpriv_mempool);
++		urb->hcpriv_mempool_size = size;
++		urb->hcpriv_mempool = kmalloc(size, mem_flags);
++	}
++	if (urb->hcpriv_mempool)
++		memset(urb->hcpriv_mempool, 0, size);
++	else
++		urb->hcpriv_mempool_size = 0;
++	return urb->hcpriv_mempool;
++}
++EXPORT_SYMBOL_GPL(urb_hcpriv_mempool_zalloc);
++
++/**
++ * urb_free_hcpriv - free hcpriv data if necessary
++ * @urb: pointer to URB being used
++ *
++ * If mempool is activated, private data's lifecycle
++ * is managed by urb object.
++ */
++void urb_free_hcpriv(struct urb *urb)
++{
++	if (urb->hcpriv != urb->hcpriv_mempool) {
++		kfree(urb->hcpriv);
++		urb->hcpriv = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(urb_free_hcpriv);
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b46738701f8d..27bc394b8141 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1602,6 +1602,9 @@ struct urb {
+ 	struct kref kref;		/* reference count of the URB */
+ 	int unlinked;			/* unlink error code */
+ 	void *hcpriv;			/* private data for host controller */
++	void *hcpriv_mempool;           /* a single slot of cache for HCD's private data */
++	size_t hcpriv_mempool_size;     /* current size of the memory pool */
++	bool hcpriv_mempool_activated;  /* flag the mempool usage */
+ 	atomic_t use_count;		/* concurrent submissions counter */
+ 	atomic_t reject;		/* submissions will fail */
+ 
+@@ -1790,6 +1793,8 @@ extern int usb_wait_anchor_empty_timeout(struct usb_anchor *anchor,
+ extern struct urb *usb_get_from_anchor(struct usb_anchor *anchor);
+ extern void usb_scuttle_anchored_urbs(struct usb_anchor *anchor);
+ extern int usb_anchor_empty(struct usb_anchor *anchor);
++extern void *urb_hcpriv_mempool_zalloc(struct urb *urb, size_t size, gfp_t mem_flags);
++extern void urb_free_hcpriv(struct urb *urb);
+ 
+ #define usb_unblock_urb	usb_unpoison_urb
+ 
+-- 
+2.39.2
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
