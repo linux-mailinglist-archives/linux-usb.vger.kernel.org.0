@@ -1,219 +1,153 @@
-Return-Path: <linux-usb+bounces-24211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04DD4AC0563
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 09:15:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD0E6AC0612
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 09:48:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2880E9E2015
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 07:14:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7496A8C18F6
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 07:48:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1193221FCF;
-	Thu, 22 May 2025 07:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D14E224AF8;
+	Thu, 22 May 2025 07:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="isrcQykd"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=brighamcampbell.com header.i=@brighamcampbell.com header.b="Fojo3Oc3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AE9149C6F
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 07:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F13224249
+	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 07:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747898057; cv=none; b=bqcXDP1DGHt8/Y/WZynd+2YCKpeEXogWnUU14XCHT3bihbNaRWQ65g8EZG11U8lggM3xz68k5i6FWhFy34tv0BDLgJJrtvkhvAf1OhaxuhBOV9g7AA5AL4GfUkuYJDC2gL1J0Pxyg3YuyQdpWluAG6iMdPczCFginrOipZk8WFA=
+	t=1747900079; cv=none; b=ciXIIyZPDZb05x1fp40abSvuELcjPTdWpaUMSduQY4ABZWpN0iqWM5JkShKmAZ96fyLaSy+tMzGeeAVwLymLIxI1jS8q6HgtcGrMgVNxdMDmOH9KBiIQikoXGK0Gq8/1IaEyH/Dk6o5fgzLrVr2O4Tr+BXTHZzNZufUixWzLDUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747898057; c=relaxed/simple;
-	bh=vUUaaZG9LVVnBh5v7+qC+r5qM/j7uDr8qiMk2zpS6l4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=edi1jKnYsTQt2F9Uel71yr/Quu/HUZ+jvfeu2t52Ez/vLewiaE3Sm4JmARb14TAe2WaRuIxPxMHL0xiyYdia2TRDMYLWBkNjUkNxA5Hu6D76kJGb/0KoTvVlwzsmNY3dI+efHMYx7r5Az3P/4+HTmExNXduVFw/MBgrduPMRivI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=isrcQykd; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747898055; x=1779434055;
-  h=date:from:to:cc:subject:message-id;
-  bh=vUUaaZG9LVVnBh5v7+qC+r5qM/j7uDr8qiMk2zpS6l4=;
-  b=isrcQykd3SnI8Wqijz1O/GX3BXrs2m/QKEx5w8Fs4rnhnU3QNAW5C5TK
-   D8SCxlwKtx1TG9D0nQuP49zIigwbht6/pC30iNKwInRFQBOYSxwQtm7sO
-   PmbNKMjR697TeMHNC3BN1BCGJH+Vmb7NfAhygortZFwESHIZh4gwote7k
-   4OA582lTIm8hJwxGNpIG4/XTIZVtKERfJMX7q06HpBnRKgtujxtCT9Gq5
-   q1pJZe6aNkYNv8vA9hEpEQlT5C4kxEzdrmmZlDVFiMX7rmUVicd3wgQsX
-   8Y3R3hgQZCMsSuPGpT1MgAYBfw/8+WHAtaTkaB9fjSa089av/RvNSsafc
-   Q==;
-X-CSE-ConnectionGUID: 9YjB6S2yT42w7Mu78K7d9g==
-X-CSE-MsgGUID: XItF4rnyT3Ozq6KrxEWUFQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="49023034"
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="49023034"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 00:14:14 -0700
-X-CSE-ConnectionGUID: NSgGZHQzR1CkiBezfVaC+g==
-X-CSE-MsgGUID: B2TmgOKISVabU5niPTg2/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="145323297"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 22 May 2025 00:14:13 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uI083-000P1g-0i;
-	Thu, 22 May 2025 07:14:11 +0000
-Date: Thu, 22 May 2025 15:13:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 6381f9950440f78bc89b4384292a613e721f604e
-Message-ID: <202505221528.cWRz9dT9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1747900079; c=relaxed/simple;
+	bh=oawndc3u6OFeNXbkn8onoaiERrlvNEUPYPsJqnlMj3g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=TdU2cak9RG9WdUlyb2TOuInHKTjUnmzW7CO1/ijr93tS29nAJbmdX8euciiitUWQ4XEVJljBoCJKDLVFob5TDRfcFqRHkRQ6JchVZn6RcGqEwEgjmnh5syFPFnnRJJoj59LfKlzLoZHakFF8pLqfok4te90HYFFcdbj43VJwvEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brighamcampbell.com; spf=pass smtp.mailfrom=brighamcampbell.com; dkim=fail (0-bit key) header.d=brighamcampbell.com header.i=@brighamcampbell.com header.b=Fojo3Oc3 reason="key not found in DNS"; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brighamcampbell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brighamcampbell.com
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3db6ddcef4eso67294475ab.2
+        for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 00:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brighamcampbell.com; s=google; t=1747900076; x=1748504876; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSRz3DaXBxnm8FuwtommREWFzr69OZg5+bKQaLg1jag=;
+        b=Fojo3Oc3H06coOR7chfBFvcK8GGYRppOZgKiv/ZZ32e5UXpuXTpVyrPl51ke3EaLOR
+         YZNThfr6NT2MUlQBaA+ZWtzd9Tj3HDt9LcL+b32QbWTvsUgG6mZnRYogFNpvf4wzeUdh
+         +4XJUG6bdEp4rEqNIAW3yJFgGB5lTgZo6KxJQZxSadJpu/z1AuidoVGEUfaHrgaLoifB
+         knYLGmxDduePn/EoEA6uUY2+wsLhfboXZtzC082v1tpMv2ZDOW8aEko181dp6snaL4xW
+         4w4Y5lr3xvAQeWmH10eYcZc1LS0dhrdkT9EA2yppPE+p+Z/KjZ2D9wF7WKZYUbMzLsVL
+         Vv1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747900076; x=1748504876;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qSRz3DaXBxnm8FuwtommREWFzr69OZg5+bKQaLg1jag=;
+        b=Fg7eSVNv1F1i/1iENGB1FjvCf7+FXLNh3VSb/YJXJyikJ2Sto5KcuZUcJ9I28bq1Bt
+         4H/4qLuyllLKJtMsmSgh+Efemed/qdXE/9q23l3GEdDVrgdiA16zpH2FGvDOp840Xmuo
+         Q+FewgWo8N9AHs1DRNm8jPK5gxlZKmaFijfxVQUs24Mxynt9gKyWdAzdYawD7bPYlijV
+         V2Oq3LNKm5yP7Wcd9Ddyzv0IfI9vH7xT9IA/CNFtU7Mg1JRkNIVaOA0v0jj+ykLCi70O
+         cPuGwfvF//rpR/aBrV6uMjei5ks5VKBIKCNOWxSIc7g+mUIOU2ygZgPy09MO/QC2XnGT
+         XRjQ==
+X-Gm-Message-State: AOJu0YxfUcsg8+qWlQX6hAkf/W1y6L1nLEVMQjIxyMJOtlwo/fnxiZ2a
+	dzjCxnPrT67gq/jlc8Hhh9xcedHfqdLI2mcknCl0UX5Tm3CFAIMhZgLY3kTmI5c0Ox0=
+X-Gm-Gg: ASbGnct6778IJONquk5bWEk22XG52VWnopgk0AThQpW+Y1sumBpOn6Kq3pbuAgGlnAx
+	jV2Js1//00e2wqQu+tLVMbhNTtoVgPF4orOqAANk5SJyhj/K2YLEAm//yOGX+tRx3nUeHt+7ws5
+	LULSU7iTGcKOoPZb+GOsKLHmdwEgpGv4YLDnlVAsYYgYC4e4cxG2VsKBBkEKCCpkZ4JWpXWL02g
+	wGisgKvXfJPd7oRTdAnr2ZWde8jwNcmqrtmLw3WcdkXT1lofwwZk+ADcBSgUGG6UepV9j42N1LX
+	S75EnI56KVLIu3lCXhEW4XiMfzuxqvMDEn0MzDcs87LeNRcDvu+eLt+Aqec=
+X-Google-Smtp-Source: AGHT+IEG8W77MeONJnBqaY3Kk6tuHXRXvYrpqiOJH8hduazBrd/kiXsmtoZpvJrUizpMHw69vmC2bQ==
+X-Received: by 2002:a05:6e02:3784:b0:3d9:6cb5:3be4 with SMTP id e9e14a558f8ab-3db84322dfamr259928015ab.15.1747900076239;
+        Thu, 22 May 2025 00:47:56 -0700 (PDT)
+Received: from localhost ([64.71.154.6])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc38a5besm3021494173.13.2025.05.22.00.47.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 00:47:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 22 May 2025 01:47:54 -0600
+Message-Id: <DA2IV4ZGT2M8.3QXO3L57VXSA5@brighamcampbell.com>
+Subject: Re: [PATCH 1/1] usb: typec: tipd: fix typo in
+ TPS_STATUS_HIGH_VOLAGE_WARNING macro
+From: "Brigham Campbell" <me@brighamcampbell.com>
+To: "Jihed Chaibi" <jihed.chaibi.dev@gmail.com>,
+ <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kernel-mentees@lists.linux.dev>, <skhan@linuxfoundation.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250521214851.386796-1-jihed.chaibi.dev@gmail.com>
+In-Reply-To: <20250521214851.386796-1-jihed.chaibi.dev@gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 6381f9950440f78bc89b4384292a613e721f604e  Merge tag 'thunderbolt-for-v6.16-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+On Wed May 21, 2025 at 3:48 PM MDT, Jihed Chaibi wrote:
+> "VOLAGE" should become "VOLTAGE"
+>
+> Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
 
-elapsed time: 1242m
+Nice work! I was able to successfully compile this driver with your
+changes and I don't see any further references to the misspelled macro.
 
-configs tested: 126
-configs skipped: 3
+Patches which fix issues which were introduced in some previous commit
+typically indicate the offending commit via the "Fixes" tag. Admittedly,
+I don't know if the tag is reserved for technical bugs rather than typos
+such as the one you addressed, but such a tag would look like the
+following for this patch:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fixes: e011178579b57c03 ("usb: typec: tipd: fix typo in TPS_STATUS_HIGH_VOL=
+AGE_WARNING macro")
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                      axs103_smp_defconfig    gcc-14.2.0
-arc                     haps_hs_smp_defconfig    gcc-14.2.0
-arc                   randconfig-001-20250521    gcc-10.5.0
-arc                   randconfig-002-20250521    gcc-12.4.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-14.2.0
-arm                            dove_defconfig    gcc-14.2.0
-arm                       multi_v4t_defconfig    clang-16
-arm                   randconfig-001-20250521    clang-21
-arm                   randconfig-002-20250521    clang-21
-arm                   randconfig-003-20250521    clang-16
-arm                   randconfig-004-20250521    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250521    gcc-6.5.0
-arm64                 randconfig-002-20250521    gcc-6.5.0
-arm64                 randconfig-003-20250521    gcc-8.5.0
-arm64                 randconfig-004-20250521    gcc-8.5.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250521    gcc-10.5.0
-csky                  randconfig-002-20250521    gcc-12.4.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250521    clang-20
-hexagon               randconfig-002-20250521    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250521    clang-20
-i386        buildonly-randconfig-002-20250521    clang-20
-i386        buildonly-randconfig-003-20250521    gcc-12
-i386        buildonly-randconfig-004-20250521    clang-20
-i386        buildonly-randconfig-005-20250521    gcc-12
-i386        buildonly-randconfig-006-20250521    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250521    gcc-15.1.0
-loongarch             randconfig-002-20250521    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                            mac_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                           gcw0_defconfig    clang-21
-mips                           ip32_defconfig    clang-21
-mips                           mtx1_defconfig    clang-21
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250521    gcc-14.2.0
-nios2                 randconfig-002-20250521    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20250521    gcc-13.3.0
-parisc                randconfig-002-20250521    gcc-11.5.0
-parisc64                         alldefconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-21
-powerpc                        cell_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250521    clang-21
-powerpc               randconfig-002-20250521    gcc-8.5.0
-powerpc               randconfig-003-20250521    gcc-6.5.0
-powerpc                        warp_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250521    gcc-8.5.0
-powerpc64             randconfig-002-20250521    gcc-6.5.0
-powerpc64             randconfig-003-20250521    clang-21
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250522    gcc-9.3.0
-riscv                 randconfig-002-20250522    clang-18
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250522    clang-19
-s390                  randconfig-002-20250522    clang-18
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                        edosk7760_defconfig    gcc-14.2.0
-sh                            hp6xx_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250522    gcc-13.3.0
-sh                    randconfig-002-20250522    gcc-13.3.0
-sh                           sh2007_defconfig    gcc-14.2.0
-sh                          urquell_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250522    gcc-14.2.0
-sparc                 randconfig-002-20250522    gcc-6.5.0
-sparc64               randconfig-001-20250522    gcc-14.2.0
-sparc64               randconfig-002-20250522    gcc-12.4.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250522    gcc-12
-um                    randconfig-002-20250522    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250521    clang-20
-x86_64      buildonly-randconfig-002-20250521    clang-20
-x86_64      buildonly-randconfig-003-20250521    gcc-12
-x86_64      buildonly-randconfig-004-20250521    gcc-12
-x86_64      buildonly-randconfig-005-20250521    clang-20
-x86_64      buildonly-randconfig-006-20250521    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250522    gcc-14.2.0
-xtensa                randconfig-002-20250522    gcc-10.5.0
+> ---
+>  drivers/usb/typec/tipd/tps6598x.h | 2 +-
+>  drivers/usb/typec/tipd/trace.h    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/t=
+ps6598x.h
+> index 9b23e9017..cecb8d11d 100644
+> --- a/drivers/usb/typec/tipd/tps6598x.h
+> +++ b/drivers/usb/typec/tipd/tps6598x.h
+> @@ -27,7 +27,7 @@
+>  #define TPS_STATUS_OVERCURRENT		BIT(16)
+>  #define TPS_STATUS_GOTO_MIN_ACTIVE	BIT(26)
+>  #define TPS_STATUS_BIST			BIT(27)
+> -#define TPS_STATUS_HIGH_VOLAGE_WARNING	BIT(28)
+> +#define TPS_STATUS_HIGH_VOLTAGE_WARNING	BIT(28)
+>  #define TPS_STATUS_HIGH_LOW_VOLTAGE_WARNING BIT(29)
+> =20
+>  #define TPS_STATUS_CONN_STATE_MASK		GENMASK(3, 1)
+> diff --git a/drivers/usb/typec/tipd/trace.h b/drivers/usb/typec/tipd/trac=
+e.h
+> index 0669cca12..bea383f2d 100644
+> --- a/drivers/usb/typec/tipd/trace.h
+> +++ b/drivers/usb/typec/tipd/trace.h
+> @@ -153,7 +153,7 @@
+>  		      { TPS_STATUS_OVERCURRENT,		"OVERCURRENT" }, \
+>  		      { TPS_STATUS_GOTO_MIN_ACTIVE,	"GOTO_MIN_ACTIVE" }, \
+>  		      { TPS_STATUS_BIST,		"BIST" }, \
+> -		      { TPS_STATUS_HIGH_VOLAGE_WARNING,	"HIGH_VOLAGE_WARNING" }, \
+> +		      { TPS_STATUS_HIGH_VOLTAGE_WARNING,	"HIGH_VOLTAGE_WARNING" }, \
+>  		      { TPS_STATUS_HIGH_LOW_VOLTAGE_WARNING, "HIGH_LOW_VOLTAGE_WARNING=
+" })
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Consider making "HIGH_LOW_VOLTAGE_WARNING" inline with
+"HIGH_VOLTAGE_WARNING", or vice versa.
+
+> =20
+>  #define show_tps25750_status_flags(flags) \
+
+Reviewed-by: Brigham Campbell <me@brighamcampbell.com>
+
 
