@@ -1,313 +1,518 @@
-Return-Path: <linux-usb+bounces-24222-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24223-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F336AAC09C1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 12:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB8B8AC0A25
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 12:57:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49B177B31FB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 10:26:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B0C07A3D25
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 10:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562872874EE;
-	Thu, 22 May 2025 10:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24772289361;
+	Thu, 22 May 2025 10:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="rpoF1ZLb";
-	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="0il8Vn9J"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IiPJxeLu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A775F1E3DED;
-	Thu, 22 May 2025 10:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747909678; cv=fail; b=AdePAQM71/e/iOSzJP1nQs6JRoDPxI881W6VQOjrWjbaDxbFYLH67URG8a0q22j5iw4LXYlzcDayUQNNyrDDgzWGFK/hyOO74yxDZGkPGcJHA/syAzvzcI+mvRlcN/U8zcEHCQW/Hnke3yHbokxSa40SZ5/+U+DFmqvPnOEPU4c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747909678; c=relaxed/simple;
-	bh=BhbRbMxl7VcMGNaQwFGwerSWAL32JdUM3izEHjFMdBM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uVpENOVbXnvYuvnCpN8v0OEZ/KKGEifZItWPpx2yj9pRGlYHdVs96pmxodmRvXftmsilYf4jSQhbhjCtfUMQEz28ae2+d0e0Gg2L4yPbDd3iViMgHBpRMHNxkCHrXM386WaoTxVXVNG1iooHsZaSUyRREMxwFV9qeCnDyPKahiU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=rpoF1ZLb; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=0il8Vn9J; arc=fail smtp.client-ip=208.86.201.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54M6ADHl003623;
-	Thu, 22 May 2025 03:27:40 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80812356CF;
+	Thu, 22 May 2025 10:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747911445; cv=none; b=VWBNJWP5URojf08lC78A6cI8NUaX4/CtCh0pkWmJunQSSdw30XPI7EDEL4uuSUpWkctyOtvxNiGV3J2PS4emrJILUmjRviemnphtUdifbubGF4tn7ujW1eTfEHC0lrZVbp6j6rJsaIjRCeoXyaTF9ak95XTxYqElUV++ff2sYuM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747911445; c=relaxed/simple;
+	bh=/atbM+F3Z6q1/dnKhxRbxfstEXPEcBTp0bKwVcZKKIc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YWxXRqpkQYXFHjnrR7jAzEY7s/wgKAA5loEncXPekndJgBZf8LtUbbm/9VQ4zOUMcYjcicBMRobpewxq4dQPvdeWYv3gILnqOY5Vc31UiDqal4K/ftT/BdzzmxjwZqJWCCUyh1k798DKnk9Z5FC+k7QO2zF2QlA1v8Oig2UaH0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IiPJxeLu; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54M90jgp014544;
+	Thu, 22 May 2025 10:57:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=proofpoint;
-	 bh=PIWIXQa5hm64sm6JZIFrFNkKqEL31fXodKLfENyIcjE=; b=rpoF1ZLbVs96
-	EkY1UeLH4BjSr/KVFCjeN90T0UHtRRj+ppKJSFQt4rSSiQUD12ctrtMQlnJVD1ni
-	6cv6WZQftXC9UChim7fJF7dQ3EDlDD0S9hn8AKnqCBZnx69ep4EENF66mYd9zj7r
-	LiwizIA8Zatey+Tt/oKzrl88nWyB4V3A1XjXaoC1EgMJ4jiM8yg8UHL9h7KqG1H3
-	4yKrgbDvIjUniFRhQJiUMsyQsDtljaoi06GzOdeEtI1F/6FoSPlmstD6QodskQ1U
-	2MIKHp0cFJmuIti/OU+yFgacWMEauBqljVfGwl0yUXGK7T9RtV6EjE6+R9E5dnDe
-	UlT/Kqa+tA==
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
-	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 46rwfq96sc-1
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/ZfEVpJzvva0/TdFo8d2LCzpR9mlvgvbYdHhqnw6CY4=; b=IiPJxeLu9L9fgwxU
+	n/L6eDkHyCWvGfUryUVsswcam2mRxs1P2rXCQYQ0KaMBze/b+sOHU7lf24963Euz
+	k8Qnr2tnjdiFxXxGT8x/bbsPNs+VJSF7JiasSq2Au6yAW0u2O8z/K2pkbrF9jZDx
+	nAgc1yQB08SqtIOgSv41gGq8lxhckbVtfeEWQI0OmdhvR1e5zQnsksOdImCbGfAj
+	Gl4ec82jTQ535EjkPhSm7lwbeF0/U+IGQWFLbaRT5/cMFDIL/SwYjSP4c1Fhxorp
+	bFE76qadT8psoGw02VLhuCWq58qhcfQ2vrYIarwM9HlI0/J3rWyFbU0hXojz25o2
+	AnZDVw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46s8c24n1a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 May 2025 03:27:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=islVfwvfu4Rf9L1x2tH7x2gurvwzZmpjgiZyhACZ9YtksequTWwb4LulQcabOJdEesi4IFCFWf4ZTVTSYD8dvQSBJuJQisVjcxA5S/pF3d73GAftRyTY4hYbkaxt+I6gcKE8gDzQoNNhadsdphksaj84WrdY4gjO/gmYpRg22rPY8efCZoyzYijL6vOCvZfPxIZ7Y+bBd9o0m6F+oB5rn9UkkkGjjnTjcJAc98EXFxsHsca4UFzurvho+4EjgyDxN45E6JAwST4iT3kzAo+UaGuqeS/iEEsmwlB3e21FYBVdS83B5d8D2JDjl5N5vFdbuF/NWk/rHkHoHVCxwBs9jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PIWIXQa5hm64sm6JZIFrFNkKqEL31fXodKLfENyIcjE=;
- b=aTyHyMIiFhEChktxYAcn8CpMfyEP/oF3OAsYl9LO2o+r8MuS4+tEZsPHV27GkYVr1AJDYF5xos/VcYFMi7Mz0NCd6kf+IrWDGxSdohIyPooIZm8h9+jbwfLUi3UHy1LKuzc8ZXwb5Aqfqvse45DozOa1/tx6oQ2RF+TRwpFj4DOS+xNr7FOTgYarvAq04U6IMXI3HvobtKPenUwaCA0P8j6Ju7aQhTpUyurxawL2LPcn9VB6Iq8DLfnbyETX8A36rC4EnU+YVU2Fl0Sr/+3fP6lBRBYkJndFU/w3F/b3RJ6rGuKHfrqopp1TT1uaUoN5cwreZkhd3cc0DDE9ijZySQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PIWIXQa5hm64sm6JZIFrFNkKqEL31fXodKLfENyIcjE=;
- b=0il8Vn9J5JcjQ1j+1Wt27SUvrbb0upZ03fRoJVg+M/godETfG2to7BooXMDNUe1eSmhe0USr/zK6A+kUueA9gCA3QFFwDpRmrTkdK7le4TsMgjSqNLSgSLCfVk0MP8FrTu871STbINqlfEZc/2KCGHEUMs3g8A6zhJd9WoFVrhI=
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
- by CH2PPF2C798BB0B.namprd07.prod.outlook.com (2603:10b6:61f:fc00::25d) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.21; Thu, 22 May
- 2025 10:27:36 +0000
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::5dbd:49e3:4dc:ccc7%5]) with mapi id 15.20.8699.022; Thu, 22 May 2025
- 10:27:36 +0000
-From: Pawel Laszczak <pawell@cadence.com>
-To: =?iso-8859-2?Q?Micha=B3_Pecio?= <michal.pecio@gmail.com>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
-        "make_ruc2021@163.com" <make_ruc2021@163.com>,
-        "peter.chen@nxp.com"
-	<peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        Pawel Eichler <peichler@cadence.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3] usb: hub: lack of clearing xHC resources
-Thread-Topic: [PATCH v3] usb: hub: lack of clearing xHC resources
-Thread-Index: AQHbibVtMdBQbgcSHUi7NaX2HmZ3QLPVfimAgAXvhVCAA4EhUA==
-Date: Thu, 22 May 2025 10:27:36 +0000
-Message-ID:
- <PH7PR07MB953881F6F9DFA2DCFFFA2F97DD99A@PH7PR07MB9538.namprd07.prod.outlook.com>
-References: <20250228074307.728010-1-pawell@cadence.com>
-	<PH7PR07MB953841E38C088678ACDCF6EEDDCC2@PH7PR07MB9538.namprd07.prod.outlook.com>
- <20250516115627.5e79831f@foxbook>
- <PH7PR07MB9538F4ED153A621B6BD26D5CDD9FA@PH7PR07MB9538.namprd07.prod.outlook.com>
-In-Reply-To:
- <PH7PR07MB9538F4ED153A621B6BD26D5CDD9FA@PH7PR07MB9538.namprd07.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|CH2PPF2C798BB0B:EE_
-x-ms-office365-filtering-correlation-id: a9beeb33-c199-4374-4d04-08dd991b4536
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-2?Q?oovDSbFS0I86M3adFAzkDSxBITJf3tmLTJ4rgXl9frf28paPe9z8QeHUM4?=
- =?iso-8859-2?Q?je8JVP78gwYOnt4JL923jqoJIC3DbSwqwoI2XBMQC1Mq8BuFirnZmkc5DT?=
- =?iso-8859-2?Q?rVlGoUYOdZoaFVTX4IkxLz38/tdjKvRG/3wkwkmws+riEQXeDKZ5c04SSv?=
- =?iso-8859-2?Q?vlqHM3O920Pg0uhRi9Ioy9LSkQeEA2qUqWRAZjJYDX2s423mygX0170ZsI?=
- =?iso-8859-2?Q?GmArGAydmn9gg9BmrcEVH/tIp7rvsZGu5PvBktfemutpPTzVfJj5JixHAP?=
- =?iso-8859-2?Q?cDT83Js8Er5aXConkh5/YoWTwazcAZwdzjB0LExLGJ+UubQ8WPz2oJ8Qon?=
- =?iso-8859-2?Q?vBUw/URCqJSeo88SC15yBH+kKb5ncogP691H1B9W8eNd+CHcd6RuC9ZYGS?=
- =?iso-8859-2?Q?NggKGsmWaXVycK+0uCpj1VA5OO1nkd6MzlVA25vpi3BUzj0HE3Pemy9ay1?=
- =?iso-8859-2?Q?wrtNQW3afleQsJC+/kYQUt0MABPO3ajjPtLS76ic456S+n1eO9jmkrB1g6?=
- =?iso-8859-2?Q?R1g8IRYG1H3cRTAFMtZV1MLmMjgAtFJV2spXMGoELbTzYq2WcaAZOzTgFD?=
- =?iso-8859-2?Q?vZjh6iDZCcWm7THwR/2EgFT3ouRD3j+AW8oA6EmOWK/lYiCbhVZysxDlj2?=
- =?iso-8859-2?Q?ijU7nLWDWDwJ5ZYFsopsruYeMSs5BOt+97T+1qbFkdPqX2PYLVXarwpRbm?=
- =?iso-8859-2?Q?/KyCfDT83JTvyW3jTf9NLq1Lb7WRof3MQEOx8leBUY6De7h5NVJuVAAUHg?=
- =?iso-8859-2?Q?JERC1L18sLPR2CFiSZGhuGV983zoNeR598e+IcW9GQ39+zEj0gcybPPDe+?=
- =?iso-8859-2?Q?BPV5EZLvFeAXyjRCJtnkVyOzNXUw9qDQ/rlkT3qkqYqu+79l/tMFZex00J?=
- =?iso-8859-2?Q?8XVmx7Dz9tMzJ/HQjZUqmzHLdgndK4pRRFBGyGXRmvO98v6MF993n5KtQq?=
- =?iso-8859-2?Q?YBjhGtPZ9V90v/hm5EXxWwDxgmyBrPr/SgMeW3YmxPnVMvNZ+9ef+vW3Lb?=
- =?iso-8859-2?Q?3MwcmFZTC0AcpoVLr8e2GGNRoTi/bwKqmukGdakPP17VRo3WsVKh1/fzcH?=
- =?iso-8859-2?Q?hZgBTMXXY/hbdcrukSdHpWsoTuTH4Lt+Hz1aCjHsHAVi9Um1DEzUWfGazP?=
- =?iso-8859-2?Q?1W7sdOHkshwas0WEqoRrXF0i2qAEgXpDmiL6ceMnr6U6Ns78WYXI/hyXe6?=
- =?iso-8859-2?Q?Z3Q2SebkgDkGRYZljx+9svXzoVLrOsz9SSZMqatjG5KD05CzrjCVgkW32H?=
- =?iso-8859-2?Q?Z+C/JfOsnYEQI9ErmkeCosfPIcVjN0ictNK4jqQOsCaWTO1Nr4nuE6kqk1?=
- =?iso-8859-2?Q?Jtd0OLqAFTks5LzswK7Js5yoKRv4YwnELO4QAcPy7aRCsF5AP1Uu74BqWK?=
- =?iso-8859-2?Q?Qq34e8tWFSpP3CJ10b1fzRv11gASrrinGIiVCrKP+5QpDJOku2wbCFrJmn?=
- =?iso-8859-2?Q?l3PR0nj7Vh9Mgn/roFCVffqS4qg/P4owax+6WzGeYeFOLyDO4XP48LKjhR?=
- =?iso-8859-2?Q?o=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?rcG8dx9/IRF7aFeizTZF5yXnz5eG45BDT2vA5dHHQbyUjsZjkjQn9KXDyU?=
- =?iso-8859-2?Q?fDEqV6PA9vUdHQhmxL7cAH56c2blHEaWLZAdQc1TS2tUENO98R9e80Tl+A?=
- =?iso-8859-2?Q?nYTU4BG5/IbusB1UhmHGRu5zMquvWX9EdPBAonxoFpfKxknTrxb1tOx22n?=
- =?iso-8859-2?Q?f80vZYUl0SXB2nv1T1DBP3/7O9BFyMk0w2bKVDje94bUiIxjy4NY4kZGLJ?=
- =?iso-8859-2?Q?6kz3q+BiVV4chxf9CZjg6Lb5d7B1QvrTu8ALdCkFpPdmQD6jQOf+BXDQpi?=
- =?iso-8859-2?Q?4fKGiHY+rWzGfe95e2YSb6f6usVWWoYK3COGzmxOdFRjxzsmPCuQC92YyR?=
- =?iso-8859-2?Q?B/5Gw24lFqghl3RpMjCWhNOmF55+yTcG/HWJpP9LzjF+VNk+qDLl72SWKa?=
- =?iso-8859-2?Q?075dCQi/QDnf4fCXBojxRE+4m3C70QfSF1kVOk8yWig41NLFI4oSZwvh0U?=
- =?iso-8859-2?Q?zXnzutkclzbkLJVEm+MKNZ9Mm/GKhqq3w5R3OmjP7HSDJMxlSTROoK+n5N?=
- =?iso-8859-2?Q?FV1sQFvKcmL5WVpoqoUsmNzTVUgx42YPDThnh5VNp9Unn+dbtp/wcZkLhM?=
- =?iso-8859-2?Q?tUxH/mae1i4lNqcPm41QRH/qw+f/Jd429NiRUPDk91oWPcsU5k+90ERajX?=
- =?iso-8859-2?Q?7o1xXBeRunvmvzPYgBFhgO53Wr44o6ANG+fGsnV2M8Gg9rx6lqQlABwibl?=
- =?iso-8859-2?Q?a2FfCNhl/wA5arAm3ruJBIz3zpDoY5v8GtOrV5mR4kvyXuGeBjiv6NcNY9?=
- =?iso-8859-2?Q?t0JP8XYLJODhp973KQsKzquK3CW0Td8pg4+BK7iCJJaHcR3n16+wFsCyjU?=
- =?iso-8859-2?Q?ro/VoiOUe+G5R58unrUTxK7/uCupN/7CLwf27/0P0PpSbbHghwhJ0KLzwU?=
- =?iso-8859-2?Q?MW1a4Wj31Y5spa/Y10dV1ylXoSYlcoSTA4r0xS9AGGbfh/GFgrQ1iwr9ry?=
- =?iso-8859-2?Q?+zie9+qORE/BCyn8/ejreQL9TlyvWcwDYRw6KZyqlpvvpIBn6j5AtKXl2W?=
- =?iso-8859-2?Q?XkydWaWvZDlqQVZNyzobaqvlfNQi0M+4MBNh0EQGhzJ1k5Pdfh7Apfcf9U?=
- =?iso-8859-2?Q?Nvyi/HdDOc7sZIsAipT2ww9kTztWLsFQ7yM2xaMVImPNYy0G3M5PWB9WqG?=
- =?iso-8859-2?Q?TVB+ErNI3yV9xoqv0rukmcUxiJH5sJGsjksd6y50fvRr05B4GLPMLinPg/?=
- =?iso-8859-2?Q?Vzxm4n59emYtT2Bt7V+EgqDgAOlIB4CpTELiSMcinoPiH1qtHFm6bNrabf?=
- =?iso-8859-2?Q?Sy1JDxCcV6tfjCL2FAGtKl3STihz8XPDCW4Pz1btUNaziaf2KuALEanulk?=
- =?iso-8859-2?Q?lvf9uA2NogRcgA6Vm2uHOJFNF8TK3hs4v8urmky02mCNv+GvO5D7Mt3WWM?=
- =?iso-8859-2?Q?CHaXHJMnBgte9g/9qZe771IXgmk3Yd9vamkxDLAYYmm1n1hlJFEsl/SQs2?=
- =?iso-8859-2?Q?cVrUP8mc1jH6/ebQedAQVm2P+OpCs+ZzGr2bu3qFWS/1QovD1GPDyI76dP?=
- =?iso-8859-2?Q?jDZJtoghDBKVdV8jCOZvC2saQHOKz1RyWBkRmMxcv74O8fxpLxZCjTBoPo?=
- =?iso-8859-2?Q?reQpCnulRJgM2wqz5vLJD7yhta46zHNYaCYJO+B/MxNzaTRsbGmfGD5z8V?=
- =?iso-8859-2?Q?MIKybN0Nf5o187KCBsGTPu9utRLUD7MTOT?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+	Thu, 22 May 2025 10:57:10 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54MAv9vo017218
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 May 2025 10:57:09 GMT
+Received: from [10.239.133.118] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 22 May
+ 2025 03:57:02 -0700
+Message-ID: <7f82b59d-f1c0-44ad-a623-3dfb86c95c7e@quicinc.com>
+Date: Thu, 22 May 2025 18:56:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9beeb33-c199-4374-4d04-08dd991b4536
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2025 10:27:36.0448
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EwH/vctfK1OHFjTn1eiwlgMN9BW6ABcpZwG3L6T2QB67JZmCXUs6zrFrXFrjHahroC1VI2dT2b/6B+UIgPqQ2sJhMnq22Wf3R0N4RSfyXnU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PPF2C798BB0B
-X-Proofpoint-GUID: 5RqBnvk_J0rwPXioFmtpfOL1t6rDZQry
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIyMDEwNSBTYWx0ZWRfX2jqaFBBGVnLC ropbvNx9k3+8sSEK5WG3QYeXVxYU5sMwO39VsdpUZWiw9a9ML1/4/YwU1tBL0R799vybu53LMU1 5+p9UZkuI6RBoCNBG9L+CQEpEP9v1dG7OxWNaruTg+RWHggGffIq8O+M3QItyciEie7HEjzko5+
- bV9CqtSyWIevotNecadwOe8z7ZPOUukbDpfOFaIMGN0Nlh01UkoUoM2JEDkDG2ClANQ3++iQgJt mAvvBPqDgb9RCPehfcGifUaQU2RbCXLRaKCtr4kd+AmtBGr5VafY/FBs3aPWU5+NWUnR3nLywe8 wvMgguhpQFTS+zXUPpb6DWnN6qsS06C7sbmuZOfo0t3F8rtB6zqsJfywTfF9f0ivo1zzBOFJpIc
- xMj+bKcpB3Zzs4ujGx095IKhr6XXygqNdGX1d0MDTTApeH17Y1pEpH6ouQKPrHKmgfEJ5ANc
-X-Proofpoint-ORIG-GUID: 5RqBnvk_J0rwPXioFmtpfOL1t6rDZQry
-X-Authority-Analysis: v=2.4 cv=XuD6OUF9 c=1 sm=1 tr=0 ts=682efc1c cx=c_pps a=rPWB9DPlu1VaKM/QD/CSBg==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=-CRmgG0JhlAA:10
- a=dt9VzEwgFbYA:10 a=Zpq2whiEiuAA:10 a=uherdBYGAAAA:8 a=VwQbUJbxAAAA:8 a=Br2UW1UjAAAA:8 a=VGop_ogpvA3uZrVJk4EA:9 a=jiObf9B0YAUA:10 a=WmXOPjafLNExVIMTj843:22
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 06/10] phy: qcom: Add M31 based eUSB2 PHY driver
+To: Melody Olvera <melody.olvera@oss.qualcomm.com>,
+        Vinod Koul
+	<vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Dmitry
+ Baryshkov" <dmitry.baryshkov@oss.qualcomm.com>
+References: <20250421-sm8750_usb_master-v5-0-25c79ed01d02@oss.qualcomm.com>
+ <20250421-sm8750_usb_master-v5-6-25c79ed01d02@oss.qualcomm.com>
+Content-Language: en-US
+From: Song Xue <quic_songxue@quicinc.com>
+In-Reply-To: <20250421-sm8750_usb_master-v5-6-25c79ed01d02@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIyMDEwOSBTYWx0ZWRfX374c1d1uGsnZ
+ ZQoMKeNFdT45sWltYsZwqiZrvizUCjQXICQp4JMXXmf52fj2ofs8pVRs0U42mKk72dCCZMsCEUZ
+ K4Xs3YmvSiLAS2TWIFNSXlyYr2AV0kxMb/UsW11alemWJKmNiUGlf9GqGI+L12Hojjnv31cDjty
+ Q+TMm7vVQ3xMP4KHaPxdVIFJIG3MeZfCYZ0nI2mX6W31WWJwwipzpbMv4c5FLfK5CGDD338ZB4N
+ a/j3pJZGhSeErjCjK4TWbyH3mOgAeB1Vao1+t9T1+WXL3TPjps6ohl7T9WCOU6KkpIRF81VbLse
+ A78CcT6LcowTlHgl+kyJKcJO2+GXRyGDyGtr+MzifqOETD5Lslbhs2HJOnmO7JFDsfLSNwyow6q
+ JQ4+fDVvxXJjucZVpgaYHTe8U+jE1h4E1Exs05lG+86BxzQTyK7igWB/hKmnXvj/XXGoAzss
+X-Authority-Analysis: v=2.4 cv=RIuzH5i+ c=1 sm=1 tr=0 ts=682f0306 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8
+ a=EUspDBNiAAAA:8 a=PEaZieolgOolILN68LgA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 6mLG8CnhHTfe7QfGBCxFraR_UpqaR_PB
+X-Proofpoint-GUID: 6mLG8CnhHTfe7QfGBCxFraR_UpqaR_PB
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-22_05,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 impostorscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- clxscore=1015 bulkscore=0 spamscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505160000 definitions=main-2505220105
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ adultscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505220109
 
->>
->>On Fri, 28 Feb 2025 07:50:25 +0000, Pawel Laszczak wrote:
->>> The xHC resources allocated for USB devices are not released in
->>> correct order after resuming in case when while suspend device was
->>> reconnected.
->>>
->>> This issue has been detected during the fallowing scenario:
->>> - connect hub HS to root port
->>> - connect LS/FS device to hub port
->>> - wait for enumeration to finish
->>> - force host to suspend
->>> - reconnect hub attached to root port
->>> - wake host
->>>
->>> For this scenario during enumeration of USB LS/FS device the Cadence
->>> xHC reports completion error code for xHC commands because the xHC
->>> resources used for devices has not been properly released.
->>> XHCI specification doesn't mention that device can be reset in any
->>> order so, we should not treat this issue as Cadence xHC controller
->>> bug. Similar as during disconnecting in this case the device
->>> resources should be cleared starting form the last usb device in tree
->>> toward the root hub. To fix this issue usbcore driver should call
->>> hcd->driver->reset_device for all USB devices connected to hub which
->>> was reconnected while suspending.
->>>
->>> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
->>> USBSSP DRD Driver")
->>> cc: <stable@vger.kernel.org>
->>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>
->>Taking discussion about this patch out of bugzilla
->>https://urldefense.com/v3/__https://bugzilla.kernel.org/show_bug.cgi?id
->>=3D220
->>069*c42__;Iw!!EHscmS1ygiU1lA!FD7UdYLwKPptb8LI646boayHRFMR7zLGkto
->3
->>rhb0whLx1-CVUGaYVVgrG5Y6EyLj-QcTuuUHSpaZcVPaTTRM$
->>
->>As Mathias pointed out, this whole idea is an explicit spec violation,
->>because it puts multiple Device Slots into the Default state.
->>
->>(Which has nothing to do with actually resetting the devices, by the
->>way. USB core will still do it from the root towards the leaves. It
->>only means the xHC believes that they are reset when they are not.)
->>
->>
->>A reset-resume of a whole tree looks like a tricky case, because on one
->>hand a hub must resume (here: be reset) before its children in order to
->>reset them, but this apparently causes problems when some xHCs consider
->>the hub "in use" by the children (or its TT in use by their endpoints,
->>I suspect that's the case here and the reason why this patch helps).
->>
->>I have done some experimentation with reset-resuming from autosuspend,
->>either by causing Transaction Errors while resuming (full speed only)
->>or simulating usb_get_std_status() error in finish_port_resume().
->>
->>Either way, I noticed that the whole device tree ends up logically
->>disconnected and reconnected during reset-resume, so perhaps it would
->>be acceptable to disable all xHC Device Slots (leaf to root) before
->>resetting everything and re-enable Slots (root to leaf) one by one?
->
 
-What about such fix:
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index cfb3abafeacd..46e640679eac 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -6093,8 +6093,8 @@ static void hub_hc_release_resources(struct usb_devic=
-e *udev)
-                if (hub->ports[i]->child)
-                        hub_hc_release_resources(hub->ports[i]->child);
+On 4/22/2025 6:00 AM, Melody Olvera wrote:
+> From: Wesley Cheng <quic_wcheng@quicinc.com>
+> 
+> SM8750 utilizes an eUSB2 PHY from M31.  Add the initialization
+> sequences to bring it out of reset and into an operational state.  This
+> differs to the M31 USB driver, in that the M31 eUSB2 driver will
+> require a connection to an eUSB2 repeater.  This PHY driver will handle
+> the initialization of the associated eUSB2 repeater when required.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Melody Olvera <melody.olvera@oss.qualcomm.com>
+> ---
+>   drivers/phy/qualcomm/Kconfig              |  10 +
+>   drivers/phy/qualcomm/Makefile             |   1 +
+>   drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 325 ++++++++++++++++++++++++++++++
+>   3 files changed, 336 insertions(+)
+> 
+> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
+> index 3cfb4c9d3d10dce49bb93b241f9b56c75b934601..5d55ed0bd198d786d31d5dbee8f32e6fbed875a9 100644
+> --- a/drivers/phy/qualcomm/Kconfig
+> +++ b/drivers/phy/qualcomm/Kconfig
+> @@ -167,6 +167,16 @@ config PHY_QCOM_UNIPHY_PCIE_28LP
+>   	  handles PHY initialization, clock management required after
+>   	  resetting the hardware and power management.
+>   
+> +config PHY_QCOM_M31_EUSB
+> +	tristate "Qualcomm M31 eUSB2 PHY driver support"
+> +	depends on USB && (ARCH_QCOM || COMPILE_TEST)
+> +	select GENERIC_PHY
+> +	help
+> +	  Enable this to support M31 EUSB2 PHY transceivers on Qualcomm
+> +	  chips with DWC3 USB core. It supports initializing and cleaning
+> +	  up of the associated USB repeater that is paired with the eUSB2
+> +	  PHY.
+> +
+>   config PHY_QCOM_USB_HS
+>   	tristate "Qualcomm USB HS PHY module"
+>   	depends on USB_ULPI_BUS
+> diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
+> index 42038bc30974a376bb2e3749d57d0518a82c35fe..4a5907816c65ec15b85e1fa5d22003ee8e2a3e97 100644
+> --- a/drivers/phy/qualcomm/Makefile
+> +++ b/drivers/phy/qualcomm/Makefile
+> @@ -5,6 +5,7 @@ obj-$(CONFIG_PHY_QCOM_EDP)		+= phy-qcom-edp.o
+>   obj-$(CONFIG_PHY_QCOM_IPQ4019_USB)	+= phy-qcom-ipq4019-usb.o
+>   obj-$(CONFIG_PHY_QCOM_IPQ806X_SATA)	+= phy-qcom-ipq806x-sata.o
+>   obj-$(CONFIG_PHY_QCOM_M31_USB)		+= phy-qcom-m31.o
+> +obj-$(CONFIG_PHY_QCOM_M31_EUSB)		+= phy-qcom-m31-eusb2.o
+>   obj-$(CONFIG_PHY_QCOM_PCIE2)		+= phy-qcom-pcie2.o
+>   
+>   obj-$(CONFIG_PHY_QCOM_QMP_COMBO)	+= phy-qcom-qmp-combo.o phy-qcom-qmp-usbc.o
+> diff --git a/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8746218914afbd814ca90639edd8e2cf47ff99f1
+> --- /dev/null
+> +++ b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
+> @@ -0,0 +1,325 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/slab.h>
+> +
+> +#include <linux/regulator/consumer.h>
+> +
+> +#define USB_PHY_UTMI_CTRL0		(0x3c)
+> +#define SLEEPM				BIT(0)
+> +
+> +#define USB_PHY_UTMI_CTRL5		(0x50)
+> +#define POR				BIT(1)
+> +
+> +#define USB_PHY_HS_PHY_CTRL_COMMON0	(0x54)
+> +#define SIDDQ_SEL			BIT(1)
+> +#define SIDDQ				BIT(2)
+> +#define FSEL				GENMASK(6, 4)
+> +#define FSEL_38_4_MHZ_VAL		(0x6)
+> +
+> +#define USB_PHY_HS_PHY_CTRL2		(0x64)
+> +#define USB2_SUSPEND_N			BIT(2)
+> +#define USB2_SUSPEND_N_SEL		BIT(3)
+> +
+> +#define USB_PHY_CFG0			(0x94)
+> +#define UTMI_PHY_CMN_CTRL_OVERRIDE_EN	BIT(1)
+> +
+> +#define USB_PHY_CFG1			(0x154)
+> +#define PLL_EN				BIT(0)
+> +
+> +#define USB_PHY_FSEL_SEL		(0xb8)
+> +#define FSEL_SEL			BIT(0)
+> +
+> +#define USB_PHY_XCFGI_39_32		(0x16c)
+> +#define HSTX_PE				GENMASK(3, 2)
+> +
+> +#define USB_PHY_XCFGI_71_64		(0x17c)
+> +#define HSTX_SWING			GENMASK(3, 0)
+> +
+> +#define USB_PHY_XCFGI_31_24		(0x168)
+> +#define HSTX_SLEW			GENMASK(2, 0)
+> +
+> +#define USB_PHY_XCFGI_7_0		(0x15c)
+> +#define PLL_LOCK_TIME			GENMASK(1, 0)
+> +
+> +#define M31_EUSB_PHY_INIT_CFG(o, b, v)	\
+> +{				\
+> +	.off = o,		\
+> +	.mask = b,		\
+> +	.val = v,		\
+> +}
+> +
+> +struct m31_phy_tbl_entry {
+> +	u32 off;
+> +	u32 mask;
+> +	u32 val;
+> +};
+> +
+> +struct m31_eusb2_priv_data {
+> +	const struct m31_phy_tbl_entry	*setup_seq;
+> +	unsigned int			setup_seq_nregs;
+> +	const struct m31_phy_tbl_entry	*override_seq;
+> +	unsigned int			override_seq_nregs;
+> +	const struct m31_phy_tbl_entry	*reset_seq;
+> +	unsigned int			reset_seq_nregs;
+> +	unsigned int			fsel;
+> +};
+> +
+> +static const struct m31_phy_tbl_entry m31_eusb2_setup_tbl[] = {
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, UTMI_PHY_CMN_CTRL_OVERRIDE_EN, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, POR, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG1, PLL_EN, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_FSEL_SEL, FSEL_SEL, 1),
+> +};
+> +
+> +static const struct m31_phy_tbl_entry m31_eusb_phy_override_tbl[] = {
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_39_32, HSTX_PE, 0),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_71_64, HSTX_SWING, 7),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_31_24, HSTX_SLEW, 0),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_XCFGI_7_0, PLL_LOCK_TIME, 0),
+> +};
+> +
+> +static const struct m31_phy_tbl_entry m31_eusb_phy_reset_tbl[] = {
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, USB2_SUSPEND_N_SEL, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, USB2_SUSPEND_N, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL0, SLEEPM, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, SIDDQ_SEL, 1),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL_COMMON0, SIDDQ, 0),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_UTMI_CTRL5, POR, 0),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_HS_PHY_CTRL2, USB2_SUSPEND_N_SEL, 0),
+> +	M31_EUSB_PHY_INIT_CFG(USB_PHY_CFG0, UTMI_PHY_CMN_CTRL_OVERRIDE_EN, 0),
+> +};
+> +
+> +static const struct regulator_bulk_data m31_eusb_phy_vregs[] = {
+> +	{ .supply = "vdd" },
+> +	{ .supply = "vdda12" },
+> +};
+> +
+> +#define M31_EUSB_NUM_VREGS		ARRAY_SIZE(m31_eusb_phy_vregs)
+> +
+> +struct m31eusb2_phy {
+> +	struct phy			 *phy;
+> +	void __iomem			 *base;
+> +	const struct m31_eusb2_priv_data *data;
+> +	enum phy_mode			 mode;
+> +
+> +	struct regulator_bulk_data	 *vregs;
+> +	struct clk			 *clk;
+> +	struct reset_control		 *reset;
+> +
+> +	struct phy			 *repeater;
+> +};
+> +
+> +static int m31eusb2_phy_write_readback(void __iomem *base, u32 offset,
+> +					const u32 mask, u32 val)
+> +{
+> +	u32 write_val;
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(base + offset);
+> +	tmp &= ~mask;
+> +	write_val = tmp | val;
+> +
+> +	writel_relaxed(write_val, base + offset);
+> +
+> +	tmp = readl_relaxed(base + offset);
+is it better to use "readl" which can guarantee write visibility?
 
--       if (hcd->driver->reset_device)
--               hcd->driver->reset_device(hcd, udev);
-+       if (hcd->driver->free_dev)
-+                hcd->driver->free_dev(hcd, udev);
- }
+With best wishes,
+Song Xue
+> +	tmp &= mask;
+> +
+> +	if (tmp != val) {
+> +		pr_err("write: %x to offset: %x FAILED\n", val, offset);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int m31eusb2_phy_write_sequence(struct m31eusb2_phy *phy,
+> +				       const struct m31_phy_tbl_entry *tbl,
+> +				       int num)
+> +{
+> +	int i;
+> +	int ret;
+> +
+> +	for (i = 0 ; i < num; i++, tbl++) {
+> +		dev_dbg(&phy->phy->dev, "Offset:%x BitMask:%x Value:%x",
+> +			tbl->off, tbl->mask, tbl->val);
+> +
+> +		ret = m31eusb2_phy_write_readback(phy->base,
+> +						   tbl->off, tbl->mask,
+> +						   tbl->val << __ffs(tbl->mask));
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int m31eusb2_phy_set_mode(struct phy *uphy, enum phy_mode mode, int submode)
+> +{
+> +	struct m31eusb2_phy *phy = phy_get_drvdata(uphy);
+> +
+> +	phy->mode = mode;
+> +
+> +	return phy_set_mode_ext(phy->repeater, mode, submode);
+> +}
+> +
+> +static int m31eusb2_phy_init(struct phy *uphy)
+> +{
+> +	struct m31eusb2_phy *phy = phy_get_drvdata(uphy);
+> +	const struct m31_eusb2_priv_data *data = phy->data;
+> +	int ret;
+> +
+> +	ret = regulator_bulk_enable(M31_EUSB_NUM_VREGS, phy->vregs);
+> +	if (ret) {
+> +		dev_err(&uphy->dev, "failed to enable regulator, %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = phy_init(phy->repeater);
+> +	if (ret) {
+> +		dev_err(&uphy->dev, "repeater init failed. %d\n", ret);
+> +		goto disable_vreg;
+> +	}
+> +
+> +	ret = clk_prepare_enable(phy->clk);
+> +	if (ret) {
+> +		dev_err(&uphy->dev, "failed to enable cfg ahb clock, %d\n", ret);
+> +		goto disable_repeater;
+> +	}
+> +
+> +	/* Perform phy reset */
+> +	reset_control_assert(phy->reset);
+> +	udelay(5);
+> +	reset_control_deassert(phy->reset);
+> +
+> +	m31eusb2_phy_write_sequence(phy, data->setup_seq, data->setup_seq_nregs);
+> +	m31eusb2_phy_write_readback(phy->base,
+> +				     USB_PHY_HS_PHY_CTRL_COMMON0, FSEL,
+> +				     FIELD_PREP(FSEL, data->fsel));
+> +	m31eusb2_phy_write_sequence(phy, data->override_seq, data->override_seq_nregs);
+> +	m31eusb2_phy_write_sequence(phy, data->reset_seq, data->reset_seq_nregs);
+> +
+> +	return 0;
+> +
+> +disable_repeater:
+> +	phy_exit(phy->repeater);
+> +disable_vreg:
+> +	regulator_bulk_disable(M31_EUSB_NUM_VREGS, phy->vregs);
+> +
+> +	return 0;
+> +}
+> +
+> +static int m31eusb2_phy_exit(struct phy *uphy)
+> +{
+> +	struct m31eusb2_phy *phy = phy_get_drvdata(uphy);
+> +
+> +	clk_disable_unprepare(phy->clk);
+> +	regulator_bulk_disable(M31_EUSB_NUM_VREGS, phy->vregs);
+> +	phy_exit(phy->repeater);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops m31eusb2_phy_gen_ops = {
+> +	.init		= m31eusb2_phy_init,
+> +	.exit		= m31eusb2_phy_exit,
+> +	.set_mode	= m31eusb2_phy_set_mode,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int m31eusb2_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct phy_provider *phy_provider;
+> +	const struct m31_eusb2_priv_data *data;
+> +	struct device *dev = &pdev->dev;
+> +	struct m31eusb2_phy *phy;
+> +	int ret;
+> +
+> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	data = device_get_match_data(dev);
+> +	if (IS_ERR(data))
+> +		return -EINVAL;
+> +	phy->data = data;
+> +
+> +	phy->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->base))
+> +		return PTR_ERR(phy->base);
+> +
+> +	phy->reset = devm_reset_control_get_exclusive(dev, NULL);
+> +	if (IS_ERR(phy->reset))
+> +		return PTR_ERR(phy->reset);
+> +
+> +	phy->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(phy->clk))
+> +		return dev_err_probe(dev, PTR_ERR(phy->clk),
+> +				     "failed to get clk\n");
+> +
+> +	phy->phy = devm_phy_create(dev, NULL, &m31eusb2_phy_gen_ops);
+> +	if (IS_ERR(phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
+> +				     "failed to create phy\n");
+> +
+> +	ret = devm_regulator_bulk_get_const(dev, M31_EUSB_NUM_VREGS,
+> +					    m31_eusb_phy_vregs, &phy->vregs);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				"failed to get regulator supplies\n");
+> +
+> +	phy_set_drvdata(phy->phy, phy);
+> +
+> +	phy->repeater = devm_of_phy_get_by_index(dev, dev->of_node, 0);
+> +	if (IS_ERR(phy->repeater))
+> +		return dev_err_probe(dev, PTR_ERR(phy->repeater),
+> +				     "failed to get repeater\n");
+> +
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +	if (!IS_ERR(phy_provider))
+> +		dev_info(dev, "Registered M31 USB phy\n");
+> +
+> +	return PTR_ERR_OR_ZERO(phy_provider);
+> +}
+> +
+> +static const struct m31_eusb2_priv_data m31_eusb_v1_data = {
+> +	.setup_seq = m31_eusb2_setup_tbl,
+> +	.setup_seq_nregs = ARRAY_SIZE(m31_eusb2_setup_tbl),
+> +	.override_seq = m31_eusb_phy_override_tbl,
+> +	.override_seq_nregs = ARRAY_SIZE(m31_eusb_phy_override_tbl),
+> +	.reset_seq = m31_eusb_phy_reset_tbl,
+> +	.reset_seq_nregs = ARRAY_SIZE(m31_eusb_phy_reset_tbl),
+> +	.fsel = FSEL_38_4_MHZ_VAL,
+> +};
+> +
+> +static const struct of_device_id m31eusb2_phy_id_table[] = {
+> +	{ .compatible = "qcom,sm8750-m31-eusb2-phy", .data = &m31_eusb_v1_data },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, m31eusb2_phy_id_table);
+> +
+> +static struct platform_driver m31eusb2_phy_driver = {
+> +	.probe = m31eusb2_phy_probe,
+> +	.driver = {
+> +		.name = "qcom-m31eusb2-phy",
+> +		.of_match_table = m31eusb2_phy_id_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(m31eusb2_phy_driver);
+> +
+> +MODULE_AUTHOR("Wesley Cheng <quic_wcheng@quicinc.com>");
+> +MODULE_DESCRIPTION("eUSB2 Qualcomm M31 HSPHY driver");
+> +MODULE_LICENSE("GPL");
+> 
 
-It will free some resource and disable Slot from leaf to root. Later during=
- resuming process
-one by one Slot will enabled in xhci_discover_or_reset_device function.
-This solution passed my test, but they are limited.
-
-Pawel
-
->Are you able recreate  this issue with different xHC controllers or only w=
-ith
->one specific xHCI?
->I try to recreate this issue but without result.
->
->Regards,
->Pawel
->
->>
->>
->>By the way, it's highly unclear if bug 220069 is caused by this spec
->>violation (I think it's not), but this is still very sloppy code.
->
->
->>
->>Regards,
->>Michal
 
