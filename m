@@ -1,81 +1,113 @@
-Return-Path: <linux-usb+bounces-24230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 393C7AC0B99
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 14:30:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DB13AC0C12
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 14:58:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 506621BC4C1E
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 12:30:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D76E97A3EE7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 12:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5623B28A408;
-	Thu, 22 May 2025 12:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wAEFq2XG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D892B28BAB5;
+	Thu, 22 May 2025 12:58:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6B728A3FC
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 12:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193D828BA83
+	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 12:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747917009; cv=none; b=akloExXOsRN7bhqRbZ4nlcXFy5TrD/8VuJxmMNfQ3V00oR0UC9CgP1LYbNSz7HLaCmNBFWC6h6bpG3N0Vp0fs3RctLm47oaAAmH41wZr59UqiNacwsQpxBeYdPyhPfUvF1v813aVMjKjxx+FVgz3Qa6XSgSUeQ9NIz0QVBQzsL4=
+	t=1747918710; cv=none; b=k5efwHLXJAE4cXAlfUA92m8IExH8MxHl6tVFFNy451037NMlZn8wc6WEgDNr3gmmM4s9PtlNdJ4OqXpP/YEL0Xp+wFk5kXKnnTICvN+3eLcUj7Q1g1XCDLf6GOJb9UQPWymH8OkXrbwUOtJ9KTL0VZx08W+smqIKJLvF3FYXigs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747917009; c=relaxed/simple;
-	bh=MZS1CgAHjzbdMj2ymiyL2y3V6Vusz2/D2/Dle1BDaNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwwT5sk/nN6BkNPf15HCUldNn44kjdf1GV04FuwqpBmnptOW3+XWVWYkGTNT6367Le9b/P1iYXCo385WgQJ5QS5ZLMCUvxvvYFbZAQvPj4MEnvGEhYrMRYBjvwxD7aDLz04lXMP2Wu/6KcdHZw6ejEphqOMqjiF7xgBTgS00dpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wAEFq2XG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35ADC4CEE4;
-	Thu, 22 May 2025 12:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747917009;
-	bh=MZS1CgAHjzbdMj2ymiyL2y3V6Vusz2/D2/Dle1BDaNI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wAEFq2XGWOAm7b5DnuwKjy+iTtrr1KT19fk0//h2rkFOBUXTrK2gP55RDGHKclfwI
-	 Fe9ue0a8LcQpXCg22Xtka4iOrFXDRJ4NzllZKiUZHRJB+U7he+hnXP2oIBFE1kzj4m
-	 pgL4p9ZeCDEz5kqs/AKLPwLcEqJ7Gjl1taSS1nKY=
-Date: Thu, 22 May 2025 14:30:05 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: typec: fix const issue in typec_match()
-Message-ID: <2025052244-mockup-dreadlock-bb3e@gregkh>
-References: <2025052126-scholar-stainless-ad55@gregkh>
- <aC8TH03vOhXI9IYW@kuha.fi.intel.com>
+	s=arc-20240116; t=1747918710; c=relaxed/simple;
+	bh=9NEiDlZ/5EMv3utNxd98rgwGqf0oxLDu+Ao4Q9/HPHU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=TImxDIQAjCbpwaCauOrJxyh6BPDnO1LiW1hXGcNUuSNYOPlTb0QoI4kHG8KovNV3r3XYAg1f2lXzFH04YTmeFyVLaPYHJkudw8k8AOKzXwcDiBaY4F22GO89HFcLjcVvAkD00PH4KqRPzMH7qyk+ISniG2bBwVbebxXG6JnqVJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-85b418faf73so1350842639f.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 05:58:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747918708; x=1748523508;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8GUGOx1mbmwZ48+UsYwPMItPU9r/8O8GI2wCz84pUa0=;
+        b=wsQW5RUjTY1vpRCVpl4grWmoeEu4KwAKdCz4fUkBN1BiTsJvm4lwVicMj4I/X5x0i8
+         jlwDbT+ShrBuujE8hSBJP9fVKPbWfkTrGerx0+MH1Gr5HqdVmCtxTri4kEIQK+jRGcgx
+         fNSgBzRx0JTGlIKA013GvYJ/lEkGWObpEpIRLh7Tx2wieL0vM1gxTxKKY1MGFDtBZEOp
+         feEwFSKgy+YOOWckMmAMDWFjgXwrGkrcyM9vcu5Q1zFqcCsTKLIGImUfdyP6ov2BQmcQ
+         cWNZ1vTpx7ChVdlLaiaP7LrlZk2J91zDokw6GZ4NeDH/UmyGx5HrttK6X4TczmNiWBPS
+         0CeA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnaAHbmayWxTxoMb83lDGaSW0mvrH3YOhmXjgvlz/VObkSxXinR02uKI1DtAFaIA7xTmxlV7tOaXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgxVrkKbf5gVax4voVvpY9HPR+JKsd1lEwfbw+5X3hHlJgYybI
+	O9RAdqZdhxYowOrqjvTMwxuw4tIvW24ctpGrpvhCKRtKvhxo3v7cQK4fxirjbmxEssCUD5sjL8f
+	2+HE3P6vf5XEsmSM/5rBgPLkQatYStf7tA0VMChY7eDSEYMAy/gSPpNeuVAk=
+X-Google-Smtp-Source: AGHT+IHDEHTPqZiK/6s0Uuc9IWjO0zZ9IirjgjLcS19OmRsKitxdrlf75FTDHbk6UEphj0Wz+jqq4EFCwYJIjBH4WxA/zuVnOO8a
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aC8TH03vOhXI9IYW@kuha.fi.intel.com>
+X-Received: by 2002:a05:6602:4087:b0:864:4ab4:adf1 with SMTP id
+ ca18e2360f4ac-86a2327d22cmr3043569939f.13.1747918708146; Thu, 22 May 2025
+ 05:58:28 -0700 (PDT)
+Date: Thu, 22 May 2025 05:58:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <682f1f74.a00a0220.2a3337.001b.GAE@google.com>
+Subject: [syzbot] Monthly usb report (May 2025)
+From: syzbot <syzbot+list431b29af76eb8b41eafb@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 22, 2025 at 03:05:51PM +0300, Heikki Krogerus wrote:
-> Hi Greg,
-> 
-> On Wed, May 21, 2025 at 03:41:27PM +0200, Greg Kroah-Hartman wrote:
-> > typec_match() takes a const pointer, and then decides to cast it away
-> > into a non-const one, which is not a good thing to do overall.  Fix this
-> > up by properly setting the pointers to be const to preserve that
-> > attribute.
-> > 
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Shouldn't there be a Fixes tag? git blame gives commit d69d804845985
+Hello usb maintainers/developers,
 
-Yes, as Johan pointed out, this is my fault :)  I'll add that when I
-commit this.
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+During the period, 6 new issues were detected and 1 were fixed.
+In total, 95 issues are still open and 378 have already been fixed.
 
-thanks for the review!
+Some of the still happening issues:
 
-greg k-h
+Ref  Crashes Repro Title
+<1>  14709   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
+                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
+<2>  9154    Yes   WARNING in ath6kl_bmi_get_target_info (2)
+                   https://syzkaller.appspot.com/bug?extid=92c6dd14aaa230be6855
+<3>  4164    Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<4>  3644    Yes   WARNING in plfxlc_mac_release
+                   https://syzkaller.appspot.com/bug?extid=51a42f7c2e399392ea82
+<5>  2125    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<6>  1513    Yes   WARNING in usb_free_urb
+                   https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
+<7>  1460    Yes   KASAN: use-after-free Read in v4l2_fh_open
+                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
+<8>  1149    Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<9>  798     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
+<10> 752     Yes   WARNING in enable_work
+                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
