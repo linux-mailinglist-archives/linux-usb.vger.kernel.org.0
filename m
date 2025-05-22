@@ -1,208 +1,157 @@
-Return-Path: <linux-usb+bounces-24208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5CAAC026F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 04:22:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E1F7AC04A8
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 08:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D1CE17395A
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 02:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18D724A7026
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 06:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31BD78F4B;
-	Thu, 22 May 2025 02:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zSeL6So1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B45F22155F;
+	Thu, 22 May 2025 06:36:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB5E6ADD
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 02:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27FC2B9B7
+	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 06:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747880555; cv=none; b=s9hMK9+EGhbGdtPqI8SMA0TezxDEObWBe4XL0p2uJyzcPAbtOfrEDcuY20QMnm5RsdT0gMSBH7nlR/jFqcHxRiS6dzWR0iyhIxQBTxNmDwLA6Ww/SQThRWq58lhoXydvOiAZCF8jAZMDYl78u7TbFmIK5MdEisqpASYJcOIt8e0=
+	t=1747895799; cv=none; b=A78x3HsKseTWxmUhQAYfEmOiTlHSDQHdOfJsWxeZqz7S8gSdpxOXx39rUHoNqcxqJy4ruRhZpblR/iy0PxfIvqLiLFoD/yH5zlnzI+311gVkqQfBg06spwIUrH81t6opYsLLFtTVwNtPf5G63DQQ2INDu9ejEATBR6PdINSX2h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747880555; c=relaxed/simple;
-	bh=SbJQmBmxZPR8coPCUMiUL7otI69+WcCa0485S2sBHh4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KZW3PXwVxvNvXBoJ5KG3XBR0T2I+Eeaoaif640zTYtPfSo/GKixPOAX3AlDpEhGftUIUcjoI/gi0nDErvc6VJnk1aWXPq79JCb6nfqa5lqlLKzg9BOhMVtHuPAFP8K4kY/V3hZJ4Lw6J0e9ASSuTX+nh5tPArJ7JcR0HtRsjxg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zSeL6So1; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6f8a87f0c0fso72333216d6.0
-        for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 19:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747880553; x=1748485353; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cdUzQUue9v8nSaPVDipR0NdMbJfNS0IJI4RFISwRhr4=;
-        b=zSeL6So1axiAzw0s0YRJNhgRJmqRq/AcJt8ZOE/O/7FTfJ7Fxxqp5el8AiIdtlHA9Q
-         38gKo9tZcmS0XkHTRr+oDbTUS4B6iRGREGvNWalE233C84olQ+dWeZtQH9qEO7+YRqBH
-         b1VzTdbk86NtSzI6KKKhGNaIt/vVkf6ZoUgRlm9MR7KHlw4Hn+G+7n+h/JVFKwYm4kdV
-         0fVZEMHc9Ig+xS2JUnXdB/n6cVFibzh+rkZEMmfv45a+XV9A2vmfgZ+A+dX4XfC8DlZr
-         el7nKcpBvKISKyuPhjuliVui+ZPeh1JjfGXfLXvnmpxOGssKby3RZWhzWnfHkLQEMx0b
-         fOpw==
+	s=arc-20240116; t=1747895799; c=relaxed/simple;
+	bh=mHhMz48zmTfbdAHT6nAUMVyJ6JP+5bV9RJ7zi8JFo80=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=O4lyGxr7Vv/D+4sH2awsxWxM3s0qDnHPFXOUPRp1G1L67HUMqXZnkejnuOrfRyFClwEi5paYxM3z96SxxUu4MrgwoZqZN8HoBbmlkzT5rdTBpwfFTNykQFJzMW3fPs5sbzUzZMXKJS0QsYIofCojA14co43icx/BGAqfdoXXElo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3dc83674dbbso28785875ab.2
+        for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 23:36:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747880553; x=1748485353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cdUzQUue9v8nSaPVDipR0NdMbJfNS0IJI4RFISwRhr4=;
-        b=Z0TlQ8pei8y5CLCBJ4IHRx4WDTjYAewsc9yk80RbP7jvpEeE077M9zs9U319B0hR9j
-         DgiVgXqSXknSjSXStdan20JX0I24Fv3Tnc2Ij7OkvV82BcVEWfEHjuowgsRX3HWumm/G
-         u8PJmv3w5ZA5Q+rY8qs5n8yUiF1Z22eXnbe8e/GoIHWQcVJ+SQKbdUNbjfxZs/fVOcLQ
-         DiteX+7ywjZy989FQt8CnpewLoZzh9Nvsh9/WHGkd3tQNnsvtozJzyHYj8N8rrWdV070
-         0et8Y8N4WQuXqEvravHgpUwlDVqob2BDyCUNeca4Gw8jaT3CcLoUWfA5uHIxPm/yZAJJ
-         FkrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXn9XRcdhBvZd23wW/i9GNKNzAlQUP3uVxi+uKTIS4ueoxXHn+jM9SQwwDpvswdZz9Rsl3cvqvLbwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7qWhxMTZ1J20tNLJCCB/6bLvVx6IgoQheuYqqyEvHtuYkHwVa
-	3Fz6MGEUblVZnIsmhNiNSGiZpwZbPyobryV9qbKhXt1H4yGvjMr25ACDAEGoDcyZnU2TyUnfiyQ
-	e0Dj6M7PaxGiqwvTyMM6PVTKDiZRtO+iM59uzJhh/
-X-Gm-Gg: ASbGncvoLlii/nOnPOdYGft1x4PcR3SSCgJwRaVIhtdWsUAAA4Ya5voZoB/I88er+Er
-	7A4W+M3Gx0X7frgVNGbNnh1PJeqcEACZFMPR95D6X0a3p82SUIh8sDdm1WBGcJA/HRWQNh2ryrd
-	YPnGLzKNaYAcmZo76YPm7B9UqkH0cjQpeP180GkJrGyNsRkrs+Ikro
-X-Google-Smtp-Source: AGHT+IGvvbhx/OpA0ADthVbZJdPu7pa/8lX6HpZ2/4FqctQxusP4BwE7BrxBFTW4uqHmQiW92Q2I875vsEXDKNgKAo0=
-X-Received: by 2002:a05:6214:202e:b0:6e8:9dfa:d932 with SMTP id
- 6a1803df08f44-6f8b0836cc1mr397664296d6.15.1747880552448; Wed, 21 May 2025
- 19:22:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747895797; x=1748500597;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i+28ZBqCHdGJpYTfl5Txc9FnefB+Ye1SC10s5aGa14c=;
+        b=Dxw5boQGzMBGx4/hxgXpoZHFAByoPLK8WWOoY2zPrLm9FxB9rSclHiYKLtMg2tOwCn
+         4ZycSPOBXQPwfZXPfTgKxtWRkTSxnvcvUZQMLJc0qC4xItkQohYCIpLr4uPUL83fBMLb
+         VDffZbZUdnutVDJn4R2GegYTJtSp2e0AxCuJM4u0kTt6FAEjFXtawJJyDMkqFWy6AncG
+         EZUVxkcPEQ4D6F1FqJPbPYz1M12VNCk8y+G5WgvWjilzlM6CHLEnpsn+BbCDM6xHNVh7
+         tY2h6+yuPKx9qOKn+bc+UUlAXP2oTNflRlheq41ji8mRfO2vgS8SWdg5RLHsEhe1aUIe
+         30Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2Y+seTLLdZSRSoHdDyVG5Melm13uRD7cGlv5lVBcMErz5MjkOHdk8V5ldBtSJc78rtMj3eaOMJ10=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziDLNFf2YRzyaBP4+YhxCSh/+AElWUlTnm59Ha2DCxmWhEBkOO
+	j01SQl/Q440pYTTL3drWYyzZE3IZO72pLyN7YxX0FG6Evkvw5FI6cfORtEsVTj4ZUrgl/LXsjJP
+	YU+RYQpa17N+bN2TYEAXvCNojdgmmg27jvVSkYatOlSZFXh6hYgy/m9VPdSo=
+X-Google-Smtp-Source: AGHT+IG1EtV86rdulCWLkddnrTGcVk4ivQNEdjUc2j/wGK7KNYYu99nncN87HNXKbzsbACZB7In0oWweAntOo1UPoOv8rrEh4pJ8
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250517043942.372315-1-royluo@google.com> <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
- <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com> <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com>
-In-Reply-To: <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com>
-From: Roy Luo <royluo@google.com>
-Date: Wed, 21 May 2025 19:21:56 -0700
-X-Gm-Features: AX0GCFvMkPkxo-3aieFdeqIqShCAfovkwXEc0Hi9O2cZxOCA7YSaj1sjHUDCI0Q
-Message-ID: <CA+zupgyU2czaczPcqavYBi=NrPqKqgp7SbrUocy0qbJ0m9np6g@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "usb: xhci: Implement xhci_handshake_check_state()
- helper"
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Udipto Goswami <udipto.goswami@oss.qualcomm.com>, mathias.nyman@intel.com, 
-	quic_ugoswami@quicinc.com, Thinh.Nguyen@synopsys.com, 
-	gregkh@linuxfoundation.org, michal.pecio@gmail.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+X-Received: by 2002:a05:6e02:19cb:b0:3dc:80e6:3819 with SMTP id
+ e9e14a558f8ab-3dc80e638edmr89155415ab.22.1747895796846; Wed, 21 May 2025
+ 23:36:36 -0700 (PDT)
+Date: Wed, 21 May 2025 23:36:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <682ec5f4.a00a0220.2a3337.000e.GAE@google.com>
+Subject: [syzbot] [usb?] WARNING in dtv5100_i2c_msg/usb_submit_urb
+From: syzbot <syzbot+0335df380edd9bd3ff70@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 20, 2025 at 9:18=E2=80=AFAM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 19.5.2025 21.13, Udipto Goswami wrote:
-> > On Mon, May 19, 2025 at 6:23=E2=80=AFPM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> >>
-> >> On 17.5.2025 7.39, Roy Luo wrote:
-> >>> This reverts commit 6ccb83d6c4972ebe6ae49de5eba051de3638362c.
-> >>>
-> >>> Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state=
-()
-> >>> helper") was introduced to workaround watchdog timeout issues on some
-> >>> platforms, allowing xhci_reset() to bail out early without waiting
-> >>> for the reset to complete.
-> >>>
-> >>> Skipping the xhci handshake during a reset is a dangerous move. The
-> >>> xhci specification explicitly states that certain registers cannot
-> >>> be accessed during reset in section 5.4.1 USB Command Register (USBCM=
-D),
-> >>> Host Controller Reset (HCRST) field:
-> >>> "This bit is cleared to '0' by the Host Controller when the reset
-> >>> process is complete. Software cannot terminate the reset process
-> >>> early by writinga '0' to this bit and shall not write any xHC
-> >>> Operational or Runtime registers until while HCRST is '1'."
-> >>>
-> >>> This behavior causes a regression on SNPS DWC3 USB controller with
-> >>> dual-role capability. When the DWC3 controller exits host mode and
-> >>> removes xhci while a reset is still in progress, and then tries to
-> >>> configure its hardware for device mode, the ongoing reset leads to
-> >>> register access issues; specifically, all register reads returns 0.
-> >>> These issues extend beyond the xhci register space (which is expected
-> >>> during a reset) and affect the entire DWC3 IP block, causing the DWC3
-> >>> device mode to malfunction.
-> >>
-> >> I agree with you and Thinh that waiting for the HCRST bit to clear dur=
-ing
-> >> reset is the right thing to do, especially now when we know skipping i=
-t
-> >> causes issues for SNPS DWC3, even if it's only during remove phase.
-> >>
-> >> But reverting this patch will re-introduce the issue originally worked
-> >> around by Udipto Goswami, causing regression.
-> >>
-> >> Best thing to do would be to wait for HCRST to clear for all other pla=
-tforms
-> >> except the one with the issue.
-> >>
-> >> Udipto Goswami, can you recall the platforms that needed this workarou=
-d?
-> >> and do we have an easy way to detect those?
-> >
-> > Hi Mathias,
-> >
-> >  From what I recall, we saw this issue coming up on our QCOM mobile
-> > platforms but it was not consistent. It was only reported in long runs
-> > i believe. The most recent instance when I pushed this patch was with
-> > platform SM8650, it was a watchdog timeout issue where xhci_reset() ->
-> > xhci_handshake() polling read timeout upon xhci remove. Unfortunately
-> > I was not able to simulate the scenario for more granular testing and
-> > had validated it with long hours stress testing.
-> > The callstack was like so:
-> >
-> > Full call stack on core6:
-> > -000|readl([X19] addr =3D 0xFFFFFFC03CC08020)
-> > -001|xhci_handshake(inline)
-> > -001|xhci_reset([X19] xhci =3D 0xFFFFFF8942052250, [X20] timeout_us =3D=
- 10000000)
-> > -002|xhci_resume([X20] xhci =3D 0xFFFFFF8942052250, [?] hibernated =3D =
-?)
-> > -003|xhci_plat_runtime_resume([locdesc] dev =3D ?)
-> > -004|pm_generic_runtime_resume([locdesc] dev =3D ?)
-> > -005|__rpm_callback([X23] cb =3D 0xFFFFFFE3F09307D8, [X22] dev =3D
-> > 0xFFFFFF890F619C10)
-> > -006|rpm_callback(inline)
-> > -006|rpm_resume([X19] dev =3D 0xFFFFFF890F619C10,
-> > [NSD:0xFFFFFFC041453AD4] rpmflags =3D 4)
-> > -007|__pm_runtime_resume([X20] dev =3D 0xFFFFFF890F619C10, [X19] rpmfla=
-gs =3D 4)
-> > -008|pm_runtime_get_sync(inline)
-> > -008|xhci_plat_remove([X20] dev =3D 0xFFFFFF890F619C00)
->
-> Thank you for clarifying this.
->
-> So patch avoids the long timeout by always cutting xhci reinit path short=
- in
-> xhci_resume() if resume was caused by pm_runtime_get_sync() call in
-> xhci_plat_remove()
->
-> void xhci_plat_remove(struct platform_device *dev)
-> {
->         xhci->xhc_state |=3D XHCI_STATE_REMOVING;
->         pm_runtime_get_sync(&dev->dev);
->         ...
-> }
->
-> I think we can revert this patch, and just make sure that we don't reset =
-the
-> host in the reinit path of xhci_resume() if XHCI_STATE_REMOVING is set.
-> Just return immediately instead.
->
+Hello,
 
-Just to be sure, are you proposing that we skip xhci_reset() within
-the reinit path
-of xhci_resume()? If we do that, could that lead to issues with
-subsequent operations
-in the reinit sequence, such as xhci_init() or xhci_run()?
+syzbot found the following issue on:
 
-Do you prefer to group the change to skip xhci_reset() within the
-reinit path together
-with this revert? or do you want it to be sent and reviewed separately?
+HEAD commit:    5723cc3450bc Merge tag 'dmaengine-fix-6.15' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=176c5f68580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c3f0e807ec5d1268
+dashboard link: https://syzkaller.appspot.com/bug?extid=0335df380edd9bd3ff70
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
 
-Thanks,
-Roy
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0539c6646d88/disk-5723cc34.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3e53f83634f7/vmlinux-5723cc34.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/23a89b974355/bzImage-5723cc34.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0335df380edd9bd3ff70@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+usb 3-1: BOGUS control dir, pipe 80006980 doesn't match bRequestType c0
+WARNING: CPU: 0 PID: 15834 at drivers/usb/core/urb.c:413 usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
+Modules linked in:
+CPU: 0 UID: 0 PID: 15834 Comm: syz.3.2930 Not tainted 6.15.0-rc6-syzkaller-00346-g5723cc3450bc #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+RIP: 0010:usb_submit_urb+0x1112/0x1870 drivers/usb/core/urb.c:411
+Code: 0f b6 44 05 00 84 c0 0f 85 38 06 00 00 45 0f b6 04 24 48 c7 c7 00 86 12 8c 48 8b 74 24 18 4c 89 fa 44 89 f1 e8 5f f7 6e fa 90 <0f> 0b 90 90 49 bd 00 00 00 00 00 fc ff df e9 2b f4 ff ff 89 e9 80
+RSP: 0018:ffffc90004b3f610 EFLAGS: 00010246
+RAX: f5838b6742b91e00 RBX: ffff88801ff35300 RCX: 0000000000080000
+RDX: ffffc90010c7f000 RSI: 0000000000004945 RDI: 0000000000004946
+RBP: 1ffff11003fd2d6c R08: ffff8880b8923e93 R09: 1ffff110171247d2
+R10: dffffc0000000000 R11: ffffed10171247d3 R12: ffff88801fe96b60
+R13: dffffc0000000000 R14: 0000000080006980 R15: ffff8881422eaa60
+FS:  00007f2867dba6c0(0000) GS:ffff8881260c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2867d99d58 CR3: 0000000067e32000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x114/0x4c0 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
+ dtv5100_i2c_msg+0x250/0x330 drivers/media/usb/dvb-usb/dtv5100.c:60
+ dtv5100_i2c_xfer+0x1a4/0x3c0 drivers/media/usb/dvb-usb/dtv5100.c:86
+ __i2c_transfer+0x871/0x2170 drivers/i2c/i2c-core-base.c:-1
+ i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2315
+ i2c_transfer_buffer_flags+0x105/0x190 drivers/i2c/i2c-core-base.c:2343
+ i2c_master_send include/linux/i2c.h:109 [inline]
+ i2cdev_write+0x112/0x1b0 drivers/i2c/i2c-dev.c:183
+ do_loop_readv_writev include/linux/uio.h:-1 [inline]
+ vfs_writev+0x4a5/0x9a0 fs/read_write.c:1057
+ do_writev+0x14d/0x2d0 fs/read_write.c:1101
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xf6/0x210 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f2866f8e969
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2867dba038 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 00007f28671b5fa0 RCX: 00007f2866f8e969
+RDX: 0000000000000001 RSI: 00002000000012c0 RDI: 0000000000000005
+RBP: 00007f2867010ab1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 00007f28671b5fa0 R15: 00007f28672dfa28
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
