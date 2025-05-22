@@ -1,301 +1,208 @@
-Return-Path: <linux-usb+bounces-24207-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24208-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7AA0AC006A
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 01:08:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C5CAAC026F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 04:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52B0C1BC4745
-	for <lists+linux-usb@lfdr.de>; Wed, 21 May 2025 23:08:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D1CE17395A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 02:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5522223C8A8;
-	Wed, 21 May 2025 23:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31BD78F4B;
+	Thu, 22 May 2025 02:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="bepJksC9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zSeL6So1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE61C23C8DB
-	for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 23:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB5E6ADD
+	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 02:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747868899; cv=none; b=DipXMLnJTZ4A1w2hnq/v5P0w3sTNdlp/LjLvY75xuMjc15r5dKPHL++mYgllVX4ZUpgAkoJ1yiszZMPcNfWhrz15DE856WLK/5+bO7S/0Bp3IGznR5pRBw+8gdrQpmYYxgf/JTndiSsbLQZ9LVrT7PEZ3nPALx+5jIkVrqVPRNQ=
+	t=1747880555; cv=none; b=s9hMK9+EGhbGdtPqI8SMA0TezxDEObWBe4XL0p2uJyzcPAbtOfrEDcuY20QMnm5RsdT0gMSBH7nlR/jFqcHxRiS6dzWR0iyhIxQBTxNmDwLA6Ww/SQThRWq58lhoXydvOiAZCF8jAZMDYl78u7TbFmIK5MdEisqpASYJcOIt8e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747868899; c=relaxed/simple;
-	bh=a61dKM+sOIM0W5tW48Pob5ugW7t7gLWfNmxKzXb3ZUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lXmULwZT2b5gSHSSVHvqNajmI5R3VM7P9OTSMqGS1br7j9cbZi8DQ5/QIivBRjAK7cf1X4N11oDq8tm+c/tWazHtpmKSivbzohOcno3S0LGuzLsjmba5tw38+YkIKxEg+4TKrWxVfZu/2RODxsjju5ptdUncs9TSfavr2P91tZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=bepJksC9; arc=none smtp.client-ip=44.202.169.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
-Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
-	by cmsmtp with ESMTPS
-	id HkvMuxarQiuzSHsXiu91BF; Wed, 21 May 2025 23:08:11 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id HsXiuWKPM1vNyHsXiueepl; Wed, 21 May 2025 23:08:10 +0000
-X-Authority-Analysis: v=2.4 cv=VMQWnMPX c=1 sm=1 tr=0 ts=682e5cda
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=efVMuJ2jJG67FGuSm7J3ww==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
- a=pGLkceISAAAA:8 a=20KFwNOVAAAA:8 a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8
- a=Ikd4Dj_1AAAA:8 a=8AirrxEcAAAA:8 a=Q-fNiiVtAAAA:8 a=P-IC7800AAAA:8
- a=vggBfdFIAAAA:8 a=kVnt-_iYu5xLd2SthAEA:9 a=QEXdDO2ut3YA:10
- a=y1Q9-5lHfBjTkpIzbSAN:22 a=ST-jHhOKWsTCqRlWije3:22 a=d3PnA9EDa4IxuAV0gXij:22
- a=xYX6OU9JNrHFPr8prv8u:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=OOmlzPBtUod15P9R+5e8Nw5tXEBviOvhwK88h6lKd3o=; b=bepJksC97ML9IvPhF7R0GsUE39
-	iDt8KE0iZROL8TgvVT9PzNwW9sKKBRJIhmxUFgGMA4kRLMqCqmH91zI6xfv4az4R0oAueD2N1pUNA
-	bervFDvFSZHb9jsR3chCY5xthPhQ0Cl/+MKfCN4IxcuwZC/eNjc6eJT48KNq7zmhswlELymKhpwJ9
-	IE+aST75QjzkaqovTJCwxM0OOGiP/qFBJJhUXJj2Q+x9IJWsqcd9FDDhPrBZF1ucKo6mywih6j/rj
-	bOl+lJogaVAvYC+9j/8hT2QnS2oen4Ab7a1MoDN1moAJWQOY79Q+3qkhREtWoNHjvcT3rbLY8DX1O
-	KwaRGQqw==;
-Received: from [177.238.17.151] (port=34848 helo=[192.168.0.27])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1uHsXZ-00000000Kdy-1IG9;
-	Wed, 21 May 2025 18:08:01 -0500
-Message-ID: <ebba72b4-9245-4be5-8f0d-87f7b326d468@embeddedor.com>
-Date: Wed, 21 May 2025 17:07:28 -0600
+	s=arc-20240116; t=1747880555; c=relaxed/simple;
+	bh=SbJQmBmxZPR8coPCUMiUL7otI69+WcCa0485S2sBHh4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KZW3PXwVxvNvXBoJ5KG3XBR0T2I+Eeaoaif640zTYtPfSo/GKixPOAX3AlDpEhGftUIUcjoI/gi0nDErvc6VJnk1aWXPq79JCb6nfqa5lqlLKzg9BOhMVtHuPAFP8K4kY/V3hZJ4Lw6J0e9ASSuTX+nh5tPArJ7JcR0HtRsjxg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zSeL6So1; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6f8a87f0c0fso72333216d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 21 May 2025 19:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747880553; x=1748485353; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cdUzQUue9v8nSaPVDipR0NdMbJfNS0IJI4RFISwRhr4=;
+        b=zSeL6So1axiAzw0s0YRJNhgRJmqRq/AcJt8ZOE/O/7FTfJ7Fxxqp5el8AiIdtlHA9Q
+         38gKo9tZcmS0XkHTRr+oDbTUS4B6iRGREGvNWalE233C84olQ+dWeZtQH9qEO7+YRqBH
+         b1VzTdbk86NtSzI6KKKhGNaIt/vVkf6ZoUgRlm9MR7KHlw4Hn+G+7n+h/JVFKwYm4kdV
+         0fVZEMHc9Ig+xS2JUnXdB/n6cVFibzh+rkZEMmfv45a+XV9A2vmfgZ+A+dX4XfC8DlZr
+         el7nKcpBvKISKyuPhjuliVui+ZPeh1JjfGXfLXvnmpxOGssKby3RZWhzWnfHkLQEMx0b
+         fOpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747880553; x=1748485353;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cdUzQUue9v8nSaPVDipR0NdMbJfNS0IJI4RFISwRhr4=;
+        b=Z0TlQ8pei8y5CLCBJ4IHRx4WDTjYAewsc9yk80RbP7jvpEeE077M9zs9U319B0hR9j
+         DgiVgXqSXknSjSXStdan20JX0I24Fv3Tnc2Ij7OkvV82BcVEWfEHjuowgsRX3HWumm/G
+         u8PJmv3w5ZA5Q+rY8qs5n8yUiF1Z22eXnbe8e/GoIHWQcVJ+SQKbdUNbjfxZs/fVOcLQ
+         DiteX+7ywjZy989FQt8CnpewLoZzh9Nvsh9/WHGkd3tQNnsvtozJzyHYj8N8rrWdV070
+         0et8Y8N4WQuXqEvravHgpUwlDVqob2BDyCUNeca4Gw8jaT3CcLoUWfA5uHIxPm/yZAJJ
+         FkrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXn9XRcdhBvZd23wW/i9GNKNzAlQUP3uVxi+uKTIS4ueoxXHn+jM9SQwwDpvswdZz9Rsl3cvqvLbwA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7qWhxMTZ1J20tNLJCCB/6bLvVx6IgoQheuYqqyEvHtuYkHwVa
+	3Fz6MGEUblVZnIsmhNiNSGiZpwZbPyobryV9qbKhXt1H4yGvjMr25ACDAEGoDcyZnU2TyUnfiyQ
+	e0Dj6M7PaxGiqwvTyMM6PVTKDiZRtO+iM59uzJhh/
+X-Gm-Gg: ASbGncvoLlii/nOnPOdYGft1x4PcR3SSCgJwRaVIhtdWsUAAA4Ya5voZoB/I88er+Er
+	7A4W+M3Gx0X7frgVNGbNnh1PJeqcEACZFMPR95D6X0a3p82SUIh8sDdm1WBGcJA/HRWQNh2ryrd
+	YPnGLzKNaYAcmZo76YPm7B9UqkH0cjQpeP180GkJrGyNsRkrs+Ikro
+X-Google-Smtp-Source: AGHT+IGvvbhx/OpA0ADthVbZJdPu7pa/8lX6HpZ2/4FqctQxusP4BwE7BrxBFTW4uqHmQiW92Q2I875vsEXDKNgKAo0=
+X-Received: by 2002:a05:6214:202e:b0:6e8:9dfa:d932 with SMTP id
+ 6a1803df08f44-6f8b0836cc1mr397664296d6.15.1747880552448; Wed, 21 May 2025
+ 19:22:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 8/8] net: core: Convert
- dev_set_mac_address_user() to use struct sockaddr_storage
-To: Kees Cook <kees@kernel.org>, Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jason Wang <jasowang@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Cosmin Ratiu <cratiu@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Kory Maincent <kory.maincent@bootlin.com>, Maxim Georgiev
- <glipus@gmail.com>, netdev@vger.kernel.org,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- Chaitanya Kulkarni <kch@nvidia.com>,
- Mike Christie <michael.christie@oracle.com>,
- Max Gurtovoy <mgurtovoy@nvidia.com>, Maurizio Lombardi
- <mlombard@redhat.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>,
- Mingzhe Zou <mingzhe.zou@easystack.cn>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Dr. David Alan Gilbert" <linux@treblig.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, Lei Yang
- <leiyang@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
- Samuel Mendoza-Jonas <sam@mendozajonas.com>,
- Paul Fertser <fercerpav@gmail.com>, Alexander Aring <alex.aring@gmail.com>,
- Stefan Schmidt <stefan@datenfreihafen.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>, Hayes Wang
- <hayeswang@realtek.com>, Douglas Anderson <dianders@chromium.org>,
- Grant Grundler <grundler@chromium.org>, Jay Vosburgh <jv@jvosburgh.net>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Jiri Pirko <jiri@resnulli.us>,
- Aleksander Jan Bajkowski <olek2@wp.pl>, Philipp Hahn <phahn-oss@avm.de>,
- Eric Biggers <ebiggers@google.com>, Ard Biesheuvel <ardb@kernel.org>,
- Al Viro <viro@zeniv.linux.org.uk>, Ahmed Zaki <ahmed.zaki@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Xiao Liang <shaw.leon@gmail.com>, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, linux-wpan@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20250521204310.it.500-kees@kernel.org>
- <20250521204619.2301870-8-kees@kernel.org>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20250521204619.2301870-8-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 177.238.17.151
-X-Source-L: No
-X-Exim-ID: 1uHsXZ-00000000Kdy-1IG9
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.27]) [177.238.17.151]:34848
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKfzUANhm/H5kmecNnXMw6plzwMClwiOE4LRVWtAHo3isJrQrX/umHoVZDj65D3YOSZ/LhKW0FHP7BnbQY87jIr5w3FEbv3R/iv+sEFdlUt5Wflb0hIk
- TjwZNEbuEqfZuarOrI+mwrEnBlKPVei1Ku/RaNfqK2ZMWZCF8ju/KQFYfNMkQRA6IsBhR+X499ims0LHVXshxEigHk63FgqXlZ8=
+References: <20250517043942.372315-1-royluo@google.com> <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
+ <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com> <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com>
+In-Reply-To: <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com>
+From: Roy Luo <royluo@google.com>
+Date: Wed, 21 May 2025 19:21:56 -0700
+X-Gm-Features: AX0GCFvMkPkxo-3aieFdeqIqShCAfovkwXEc0Hi9O2cZxOCA7YSaj1sjHUDCI0Q
+Message-ID: <CA+zupgyU2czaczPcqavYBi=NrPqKqgp7SbrUocy0qbJ0m9np6g@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "usb: xhci: Implement xhci_handshake_check_state()
+ helper"
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Udipto Goswami <udipto.goswami@oss.qualcomm.com>, mathias.nyman@intel.com, 
+	quic_ugoswami@quicinc.com, Thinh.Nguyen@synopsys.com, 
+	gregkh@linuxfoundation.org, michal.pecio@gmail.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, May 20, 2025 at 9:18=E2=80=AFAM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 19.5.2025 21.13, Udipto Goswami wrote:
+> > On Mon, May 19, 2025 at 6:23=E2=80=AFPM Mathias Nyman
+> > <mathias.nyman@linux.intel.com> wrote:
+> >>
+> >> On 17.5.2025 7.39, Roy Luo wrote:
+> >>> This reverts commit 6ccb83d6c4972ebe6ae49de5eba051de3638362c.
+> >>>
+> >>> Commit 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state=
+()
+> >>> helper") was introduced to workaround watchdog timeout issues on some
+> >>> platforms, allowing xhci_reset() to bail out early without waiting
+> >>> for the reset to complete.
+> >>>
+> >>> Skipping the xhci handshake during a reset is a dangerous move. The
+> >>> xhci specification explicitly states that certain registers cannot
+> >>> be accessed during reset in section 5.4.1 USB Command Register (USBCM=
+D),
+> >>> Host Controller Reset (HCRST) field:
+> >>> "This bit is cleared to '0' by the Host Controller when the reset
+> >>> process is complete. Software cannot terminate the reset process
+> >>> early by writinga '0' to this bit and shall not write any xHC
+> >>> Operational or Runtime registers until while HCRST is '1'."
+> >>>
+> >>> This behavior causes a regression on SNPS DWC3 USB controller with
+> >>> dual-role capability. When the DWC3 controller exits host mode and
+> >>> removes xhci while a reset is still in progress, and then tries to
+> >>> configure its hardware for device mode, the ongoing reset leads to
+> >>> register access issues; specifically, all register reads returns 0.
+> >>> These issues extend beyond the xhci register space (which is expected
+> >>> during a reset) and affect the entire DWC3 IP block, causing the DWC3
+> >>> device mode to malfunction.
+> >>
+> >> I agree with you and Thinh that waiting for the HCRST bit to clear dur=
+ing
+> >> reset is the right thing to do, especially now when we know skipping i=
+t
+> >> causes issues for SNPS DWC3, even if it's only during remove phase.
+> >>
+> >> But reverting this patch will re-introduce the issue originally worked
+> >> around by Udipto Goswami, causing regression.
+> >>
+> >> Best thing to do would be to wait for HCRST to clear for all other pla=
+tforms
+> >> except the one with the issue.
+> >>
+> >> Udipto Goswami, can you recall the platforms that needed this workarou=
+d?
+> >> and do we have an easy way to detect those?
+> >
+> > Hi Mathias,
+> >
+> >  From what I recall, we saw this issue coming up on our QCOM mobile
+> > platforms but it was not consistent. It was only reported in long runs
+> > i believe. The most recent instance when I pushed this patch was with
+> > platform SM8650, it was a watchdog timeout issue where xhci_reset() ->
+> > xhci_handshake() polling read timeout upon xhci remove. Unfortunately
+> > I was not able to simulate the scenario for more granular testing and
+> > had validated it with long hours stress testing.
+> > The callstack was like so:
+> >
+> > Full call stack on core6:
+> > -000|readl([X19] addr =3D 0xFFFFFFC03CC08020)
+> > -001|xhci_handshake(inline)
+> > -001|xhci_reset([X19] xhci =3D 0xFFFFFF8942052250, [X20] timeout_us =3D=
+ 10000000)
+> > -002|xhci_resume([X20] xhci =3D 0xFFFFFF8942052250, [?] hibernated =3D =
+?)
+> > -003|xhci_plat_runtime_resume([locdesc] dev =3D ?)
+> > -004|pm_generic_runtime_resume([locdesc] dev =3D ?)
+> > -005|__rpm_callback([X23] cb =3D 0xFFFFFFE3F09307D8, [X22] dev =3D
+> > 0xFFFFFF890F619C10)
+> > -006|rpm_callback(inline)
+> > -006|rpm_resume([X19] dev =3D 0xFFFFFF890F619C10,
+> > [NSD:0xFFFFFFC041453AD4] rpmflags =3D 4)
+> > -007|__pm_runtime_resume([X20] dev =3D 0xFFFFFF890F619C10, [X19] rpmfla=
+gs =3D 4)
+> > -008|pm_runtime_get_sync(inline)
+> > -008|xhci_plat_remove([X20] dev =3D 0xFFFFFF890F619C00)
+>
+> Thank you for clarifying this.
+>
+> So patch avoids the long timeout by always cutting xhci reinit path short=
+ in
+> xhci_resume() if resume was caused by pm_runtime_get_sync() call in
+> xhci_plat_remove()
+>
+> void xhci_plat_remove(struct platform_device *dev)
+> {
+>         xhci->xhc_state |=3D XHCI_STATE_REMOVING;
+>         pm_runtime_get_sync(&dev->dev);
+>         ...
+> }
+>
+> I think we can revert this patch, and just make sure that we don't reset =
+the
+> host in the reinit path of xhci_resume() if XHCI_STATE_REMOVING is set.
+> Just return immediately instead.
+>
 
+Just to be sure, are you proposing that we skip xhci_reset() within
+the reinit path
+of xhci_resume()? If we do that, could that lead to issues with
+subsequent operations
+in the reinit sequence, such as xhci_init() or xhci_run()?
 
-On 21/05/25 14:46, Kees Cook wrote:
-> Convert callers of dev_set_mac_address_user() to use struct
-> sockaddr_storage. Add sanity checks on dev->addr_len usage.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Do you prefer to group the change to skip xhci_reset() within the
+reinit path together
+with this revert? or do you want it to be sent and reviewed separately?
 
-Acked-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks!
--Gustavo
-
-> ---
-> Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Andrew Lunn <andrew+netdev@lunn.ch>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Simon Horman <horms@kernel.org>
-> Cc: Stanislav Fomichev <sdf@fomichev.me>
-> Cc: Cosmin Ratiu <cratiu@nvidia.com>
-> Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
-> Cc: Kory Maincent <kory.maincent@bootlin.com>
-> Cc: Maxim Georgiev <glipus@gmail.com>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: <netdev@vger.kernel.org>
-> ---
->   include/linux/netdevice.h |  2 +-
->   drivers/net/tap.c         | 14 +++++++++-----
->   drivers/net/tun.c         |  8 +++++++-
->   net/core/dev_api.c        |  5 +++--
->   net/core/dev_ioctl.c      |  6 ++++--
->   5 files changed, 24 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index b4242b997373..adb14db25798 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -4216,7 +4216,7 @@ int netif_set_mac_address(struct net_device *dev, struct sockaddr_storage *ss,
->   			  struct netlink_ext_ack *extack);
->   int dev_set_mac_address(struct net_device *dev, struct sockaddr_storage *ss,
->   			struct netlink_ext_ack *extack);
-> -int dev_set_mac_address_user(struct net_device *dev, struct sockaddr *sa,
-> +int dev_set_mac_address_user(struct net_device *dev, struct sockaddr_storage *ss,
->   			     struct netlink_ext_ack *extack);
->   int dev_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name);
->   int dev_get_port_parent_id(struct net_device *dev,
-> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-> index d4ece538f1b2..bdf0788d8e66 100644
-> --- a/drivers/net/tap.c
-> +++ b/drivers/net/tap.c
-> @@ -923,7 +923,7 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
->   	unsigned int __user *up = argp;
->   	unsigned short u;
->   	int __user *sp = argp;
-> -	struct sockaddr sa;
-> +	struct sockaddr_storage ss;
->   	int s;
->   	int ret;
->   
-> @@ -1000,16 +1000,17 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
->   			return -ENOLINK;
->   		}
->   		ret = 0;
-> -		dev_get_mac_address(&sa, dev_net(tap->dev), tap->dev->name);
-> +		dev_get_mac_address((struct sockaddr *)&ss, dev_net(tap->dev),
-> +				    tap->dev->name);
->   		if (copy_to_user(&ifr->ifr_name, tap->dev->name, IFNAMSIZ) ||
-> -		    copy_to_user(&ifr->ifr_hwaddr, &sa, sizeof(sa)))
-> +		    copy_to_user(&ifr->ifr_hwaddr, &ss, sizeof(ifr->ifr_hwaddr)))
->   			ret = -EFAULT;
->   		tap_put_tap_dev(tap);
->   		rtnl_unlock();
->   		return ret;
->   
->   	case SIOCSIFHWADDR:
-> -		if (copy_from_user(&sa, &ifr->ifr_hwaddr, sizeof(sa)))
-> +		if (copy_from_user(&ss, &ifr->ifr_hwaddr, sizeof(ifr->ifr_hwaddr)))
->   			return -EFAULT;
->   		rtnl_lock();
->   		tap = tap_get_tap_dev(q);
-> @@ -1017,7 +1018,10 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
->   			rtnl_unlock();
->   			return -ENOLINK;
->   		}
-> -		ret = dev_set_mac_address_user(tap->dev, &sa, NULL);
-> +		if (tap->dev->addr_len > sizeof(ifr->ifr_hwaddr))
-> +			ret = -EINVAL;
-> +		else
-> +			ret = dev_set_mac_address_user(tap->dev, &ss, NULL);
->   		tap_put_tap_dev(tap);
->   		rtnl_unlock();
->   		return ret;
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 7babd1e9a378..1207196cbbed 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -3193,7 +3193,13 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
->   
->   	case SIOCSIFHWADDR:
->   		/* Set hw address */
-> -		ret = dev_set_mac_address_user(tun->dev, &ifr.ifr_hwaddr, NULL);
-> +		if (tun->dev->addr_len > sizeof(ifr.ifr_hwaddr)) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +		ret = dev_set_mac_address_user(tun->dev,
-> +					       (struct sockaddr_storage *)&ifr.ifr_hwaddr,
-> +					       NULL);
->   		break;
->   
->   	case TUNGETSNDBUF:
-> diff --git a/net/core/dev_api.c b/net/core/dev_api.c
-> index 6011a5ef649d..1bf0153195f2 100644
-> --- a/net/core/dev_api.c
-> +++ b/net/core/dev_api.c
-> @@ -84,14 +84,15 @@ void dev_set_group(struct net_device *dev, int new_group)
->   	netdev_unlock_ops(dev);
->   }
->   
-> -int dev_set_mac_address_user(struct net_device *dev, struct sockaddr *sa,
-> +int dev_set_mac_address_user(struct net_device *dev,
-> +			     struct sockaddr_storage *ss,
->   			     struct netlink_ext_ack *extack)
->   {
->   	int ret;
->   
->   	down_write(&dev_addr_sem);
->   	netdev_lock_ops(dev);
-> -	ret = netif_set_mac_address(dev, (struct sockaddr_storage *)sa, extack);
-> +	ret = netif_set_mac_address(dev, ss, extack);
->   	netdev_unlock_ops(dev);
->   	up_write(&dev_addr_sem);
->   
-> diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
-> index fff13a8b48f1..616479e71466 100644
-> --- a/net/core/dev_ioctl.c
-> +++ b/net/core/dev_ioctl.c
-> @@ -572,9 +572,11 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
->   		return dev_set_mtu(dev, ifr->ifr_mtu);
->   
->   	case SIOCSIFHWADDR:
-> -		if (dev->addr_len > sizeof(struct sockaddr))
-> +		if (dev->addr_len > sizeof(ifr->ifr_hwaddr))
->   			return -EINVAL;
-> -		return dev_set_mac_address_user(dev, &ifr->ifr_hwaddr, NULL);
-> +		return dev_set_mac_address_user(dev,
-> +						(struct sockaddr_storage *)&ifr->ifr_hwaddr,
-> +						NULL);
->   
->   	case SIOCSIFHWBROADCAST:
->   		if (ifr->ifr_hwaddr.sa_family != dev->type)
-
+Thanks,
+Roy
 
