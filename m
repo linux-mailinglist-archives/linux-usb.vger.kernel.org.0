@@ -1,212 +1,94 @@
-Return-Path: <linux-usb+bounces-24241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AA49AC14BC
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 21:20:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D83A1AC1567
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 22:11:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B11799E0DB3
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 19:20:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 404671C00857
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 20:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B2AD1E7C10;
-	Thu, 22 May 2025 19:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4237C2BF3C9;
+	Thu, 22 May 2025 20:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kz1ddCio"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.ch header.i=@protonmail.ch header.b="poEzFVVv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4325.protonmail.ch (mail-4325.protonmail.ch [185.70.43.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1DA158874
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 19:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234C82BE7D3
+	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 20:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747941619; cv=none; b=SwnllBj1anUSbso+W1oIt7a7J5IQJOxyULgtrS9KOx7ixIt+8KzGR1bZHE1Vzj/B/HtXdSyVYS4uz3M0ZUROUoCR1/+SNgZbIdlW1SaoE7HwugVbFxQZuBFZGTA/kJzfDmxWvUdoxlovHGeLCwq1gwZOrrQjr0NszG0XzEqnFak=
+	t=1747944684; cv=none; b=UU4p8B2QfkuIKpAE7/KmoGKuoYBru00LlFfHdSOSEZ+tH7+7rCbaSHM7g/eUiwxTgCkEMQRPKswoLiO8OwW0Vq8nM+etivy13NYfui80PT2L2rmtAkWZWOoWQRjWegCYRU29lC56jo90+9Wu7e299dNV5+qN4UM5lX0AFb7KW7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747941619; c=relaxed/simple;
-	bh=Flu/isAmyCbTrz9xwLn13hoRVk9PwsB7V2D3/wlR9aE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F0YjbKi8tXC0DQ4ppiv/jMFoLKKZPAT7Ex7t4BPxJhWBnhxcshZWWjVf3uyrG4jB+50DWWWXk1O32Idit3HNKNZ1LVUFW43Tm2ca/y4B56kVbhoRR8FShvJXh6yVxWPHPDy2fznMfn9DdtV4IOZREgCWV3yBXDylVrfMalJRlgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kz1ddCio; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6f8cf00d96fso54971576d6.0
-        for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 12:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747941617; x=1748546417; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgIZQIPQ0j6raACnSoKFPNh2DzvC29iIOKiCMVH+gE8=;
-        b=Kz1ddCio8Wg6juUFw3ZmZyvlB8xlyqBYYUdchO6LhII0ZV4DRwiyr76eJXnFRG+hoO
-         elC8V1mbezzrlEHIKqZcUfQ3idyrN1jgBnxmbXl6a1JuZ6lowKhRDaTWEETCQ83eaDQS
-         XL17dW1jw7dxZl/UrecyXvGHZJuA9hFYZuo0sIVpQtMWEwn46CxPa+C4KxOh0HOyYNYf
-         SzQTenoVJO7ZtTb12PSKawsXDi/28va9Kqh+qzSIWzQLgx7db3KgJimnSdMv4Uz6DTcT
-         4mDc9vXOlLfHHWyK36rE9/ghJpEXWijuUBtPzGB4uACRmck4NXIcr7n+5/jYHNf/ZWbA
-         v3Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747941617; x=1748546417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PgIZQIPQ0j6raACnSoKFPNh2DzvC29iIOKiCMVH+gE8=;
-        b=g93Yv59qIjAHmcbMtkogeh3GkIkvV0Rzl3A/C4YnsBSOKv9xkE1UYqZCLldty0r62e
-         tvt0YQslLWIUHtLLxYuf+Xrs0LLAzK9o2T92Ett5sauLRC2wmCeGI3pU5N2BfX6CZAXF
-         EMMZRSHO6M8eoqxee3LxEEyRF21rQqBxNvAqZNPSrldwfEmbu76p9X2V/NFFXMBKbc95
-         kdUALUKhRQ/TzzZtvCQhccKVbC/rtVlyaOLFFvAmX5zE66fbA3oXzjSDcnF94udl1BxK
-         KPrAVqZSfsqCYusq+Ahr2BkxryuLyk7Dh19kWAfO90uUxgXI0WjZOlOoGxalD1rSHVgQ
-         SR+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXQNkjA1z5yafMv8yGU+0UayZME5rA1bK7I2/tim57pyTG7ppi/i3zX5BNDwkQDqAIij5eFOOE/IiM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+Exl1aVSH0hRHbXvverZ4/GPwuCs7AQRdx6i5N1KmQvUGZOGh
-	tfxGqiQC1/5px0Ngwz26ierG8iK6B+1fj9HKlf9jdeugS9I9xZLrtelR4A5n+DIyjuPLKUHo5sK
-	EqF+tT+Wa8y8+fyxe4bFUSWRjhwtOlO7qmAIk7B2F
-X-Gm-Gg: ASbGncu62G1XI4aaeYh7W+QkEMahbF1o/tEYRvIPb44Mt7mVBYDxj1uvDE79qaDbA00
-	acCL6TFBzpicdAIH6Xcbpo5aR9bUES3UAyM55QCn0kZk1PuwSoFaOyFJIyT9szAbG6WQVITaJ+w
-	OT9a3VhjxLD7Jc63dB7JblDlvJAJfPlgc5gfJqH4+w6ccUg0wHROsG8QT6eIay9zV6s6TeDSfy2
-	wMRX46vM78s
-X-Google-Smtp-Source: AGHT+IGm1Btmu3cb/tiOOdp0UebQ2jl7A41+6mFY13R7UjK0iunERZC6D0vXs4YT7J5HKX2YgiexhtSR0yQfkPA2JxA=
-X-Received: by 2002:a05:6214:2345:b0:6f8:a7c2:bb11 with SMTP id
- 6a1803df08f44-6fa93a29fddmr4939596d6.6.1747941616531; Thu, 22 May 2025
- 12:20:16 -0700 (PDT)
+	s=arc-20240116; t=1747944684; c=relaxed/simple;
+	bh=ykfx4zEfkPJfD8WwsU5C8Nk1yDWEBwjY87/MbjpxZOA=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hv+gtGFowKSdbCc+BeVYsUkCHiub4Biu6Tjw3LZH7b5AMiH1LaijrK5STg5D3IPgtt/RmEatbPjGLWGxfBqSDLIzWH6B+zMr9LdzNfHDh/H9yY+o/3n/zjW1gbybxAkK5yitqr/hVaY45GActbH8veDoDJtT6Zyw3CKqT6N3AY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.ch; spf=pass smtp.mailfrom=protonmail.ch; dkim=pass (2048-bit key) header.d=protonmail.ch header.i=@protonmail.ch header.b=poEzFVVv; arc=none smtp.client-ip=185.70.43.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
+	s=protonmail3; t=1747944673; x=1748203873;
+	bh=I98BSED0n9TGha8/hIe2pFeSKwv/4ehj3ZCQsbq0MQ0=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=poEzFVVv2x98r5cakyfArfJw713PobMRyFWYA072hzMToOI+CA678zpS6biyCwOly
+	 bFJgFdkWO9Dru5j6Qg6xvh5EIQx2eWcrU1NkOcoU4cD+o3u3YnPK12joQmFce0mIxf
+	 gpX1ZCKwT0TMApH6Vz2v58tWfdGJlPo7gVjQdMt2cjO6PhBnTMzSSGLPw+5spkXrWF
+	 e8vhtrOkQZ9hnTWQQblh9pQrBD6KCD2hHCdXjW7FYwPNkTSoU8hNSd0PIwZJO3Ih1w
+	 vEFXPmlj/g4wrKrgCLX24GwWdkDzA7ZxQ304hz3dkoAtxCkCK4a7iDkmyQApQPgUON
+	 rbhj063KFLFDQ==
+Date: Thu, 22 May 2025 20:11:07 +0000
+To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From: Kampalus <kampalus@protonmail.ch>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: quirks: disable LPM for Xiaomi fastboot
+Message-ID: <NlJ7bhWZBDatLxx8gt6X9CKi8u2oiRtCatIn6yHo68o8KUYM-qBCqPyNLSbCQx6th39-0uMLtTk18AYC4TQFj-aHEt2Xw9rPJzWMFgWexmI=@protonmail.ch>
+Feedback-ID: 30624081:user:proton
+X-Pm-Message-ID: c2f17cec743f1b7a1b8a126421e90d6d4547ed5f
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250517043942.372315-1-royluo@google.com> <8f023425-3f9b-423c-9459-449d0835c608@linux.intel.com>
- <CAMTwNXB0QLP-b=RmLPtRJo=T_efN_3H4dd5AiMNYrJDXddJkMA@mail.gmail.com>
- <fbf92981-6601-4ee9-a494-718e322ac1b9@linux.intel.com> <CA+zupgyU2czaczPcqavYBi=NrPqKqgp7SbrUocy0qbJ0m9np6g@mail.gmail.com>
- <6bfee225-7519-41ab-8ae9-99267c5ce06e@intel.com>
-In-Reply-To: <6bfee225-7519-41ab-8ae9-99267c5ce06e@intel.com>
-From: Roy Luo <royluo@google.com>
-Date: Thu, 22 May 2025 12:19:40 -0700
-X-Gm-Features: AX0GCFuJzBzMPdmywUarQdKbXYdF5W_yqGe-afth_QCS9OITwqZ39S_C5IBtRsY
-Message-ID: <CA+zupgxkvm9HxG4Aj1avPA-ZgjVxmg3T3GtbfnV=rXk9P7-pFQ@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "usb: xhci: Implement xhci_handshake_check_state()
- helper"
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, 
-	Udipto Goswami <udipto.goswami@oss.qualcomm.com>, quic_ugoswami@quicinc.com, 
-	Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, michal.pecio@gmail.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 22, 2025 at 5:24=E2=80=AFAM Mathias Nyman <mathias.nyman@intel.=
-com> wrote:
->
-> On 22.5.2025 5.21, Roy Luo wrote:
-> >>>> Udipto Goswami, can you recall the platforms that needed this workar=
-oud?
-> >>>> and do we have an easy way to detect those?
-> >>>
-> >>> Hi Mathias,
-> >>>
-> >>>   From what I recall, we saw this issue coming up on our QCOM mobile
-> >>> platforms but it was not consistent. It was only reported in long run=
-s
-> >>> i believe. The most recent instance when I pushed this patch was with
-> >>> platform SM8650, it was a watchdog timeout issue where xhci_reset() -=
->
-> >>> xhci_handshake() polling read timeout upon xhci remove. Unfortunately
-> >>> I was not able to simulate the scenario for more granular testing and
-> >>> had validated it with long hours stress testing.
-> >>> The callstack was like so:
-> >>>
-> >>> Full call stack on core6:
-> >>> -000|readl([X19] addr =3D 0xFFFFFFC03CC08020)
-> >>> -001|xhci_handshake(inline)
-> >>> -001|xhci_reset([X19] xhci =3D 0xFFFFFF8942052250, [X20] timeout_us =
-=3D 10000000)
-> >>> -002|xhci_resume([X20] xhci =3D 0xFFFFFF8942052250, [?] hibernated =
-=3D ?)
-> >>> -003|xhci_plat_runtime_resume([locdesc] dev =3D ?)
-> >>> -004|pm_generic_runtime_resume([locdesc] dev =3D ?)
-> >>> -005|__rpm_callback([X23] cb =3D 0xFFFFFFE3F09307D8, [X22] dev =3D
-> >>> 0xFFFFFF890F619C10)
-> >>> -006|rpm_callback(inline)
-> >>> -006|rpm_resume([X19] dev =3D 0xFFFFFF890F619C10,
-> >>> [NSD:0xFFFFFFC041453AD4] rpmflags =3D 4)
-> >>> -007|__pm_runtime_resume([X20] dev =3D 0xFFFFFF890F619C10, [X19] rpmf=
-lags =3D 4)
-> >>> -008|pm_runtime_get_sync(inline)
-> >>> -008|xhci_plat_remove([X20] dev =3D 0xFFFFFF890F619C00)
-> >>
-> >> Thank you for clarifying this.
-> >>
-> >> So patch avoids the long timeout by always cutting xhci reinit path sh=
-ort in
-> >> xhci_resume() if resume was caused by pm_runtime_get_sync() call in
-> >> xhci_plat_remove()
-> >>
-> >> void xhci_plat_remove(struct platform_device *dev)
-> >> {
-> >>          xhci->xhc_state |=3D XHCI_STATE_REMOVING;
-> >>          pm_runtime_get_sync(&dev->dev);
-> >>          ...
-> >> }
-> >>
-> >> I think we can revert this patch, and just make sure that we don't res=
-et the
-> >> host in the reinit path of xhci_resume() if XHCI_STATE_REMOVING is set=
-.
-> >> Just return immediately instead.
-> >>
-> >
-> > Just to be sure, are you proposing that we skip xhci_reset() within
-> > the reinit path
-> > of xhci_resume()? If we do that, could that lead to issues with
-> > subsequent operations
-> > in the reinit sequence, such as xhci_init() or xhci_run()?
->
-> I suggest to only skip xhci_reset in xhci_resume() if XHCI_STATE_REMOVING=
- is set.
->
-> This should be similar to what is going on already.
->
-> xhci_reset() currently returns -ENODEV if XHCI_STATE_REMOVING is set, unl=
-ess reset
-> completes extremely fast. xhci_resume() bails out if xhci_reset() returns=
- error:
->
-> xhci_resume()
->    ...
->    if (power_lost) {
->      ...
->      retval =3D xhci_reset(xhci, XHCI_RESET_LONG_USEC);
->      spin_unlock_irq(&xhci->lock);
->      if (retval)
->        return retval;
-> >
-> > Do you prefer to group the change to skip xhci_reset() within the
-> > reinit path together
-> > with this revert? or do you want it to be sent and reviewed separately?
->
-> First a patch that bails out from xhci_resume() if XHCI_STATE_REMOVING is=
- set
-> and we are in the reinit (power_lost) path about to call xhci_reset();
->
-> Then a second patch that reverts 6ccb83d6c497 ("usb: xhci: Implement
-> xhci_handshake_check_state()
->
-> Does this sound reasonable?
->
-> should avoid the QCOM 10sec watchdog issue as next xhci_rest() called
-> in xhci_remove() path has a short 250ms timeout, and ensure the
-> SNPS DWC3 USB regression won't trigger.
->
-> Thanks
-> Mathias
->
+Both Xiaomi smartphones and AMD Ryzen systems have sketchy USB setups. When=
+ combined, fastboot
+fails to read and write data properly. Disabling Link Power Management work=
+s around that.
 
-Thanks for the clarification! SGTM.
-I've sent out a new patchset accordingly
-https://lore.kernel.org/linux-usb/20250522190912.457583-1-royluo@google.com=
-/
+Despite only being useful for certain setups, let's enable this globally as=
+ it does
+not hurt healthy setups.
 
-Thanks,
-Roy
+Signed-off-by: Kampalus <kampalus@protonmail.ch>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 13171454f..57f747776 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -552,6 +552,9 @@ static const struct usb_device_id usb_quirk_list[] =3D =
+{
+ =09/* INTEL VALUE SSD */
+ =09{ USB_DEVICE(0x8086, 0xf1a5), .driver_info =3D USB_QUIRK_RESET_RESUME }=
+,
+=20
++=09/* Xiaomi smartphones in fastboot mode */
++=09{ USB_DEVICE(0x18d1, 0xd00d), .driver_info =3D USB_QUIRK_NO_LPM },
++
+ =09{ }  /* terminating entry must be last */
+ };
+=20
+--=20
+2.46.0
 
