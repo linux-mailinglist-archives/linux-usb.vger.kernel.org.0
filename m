@@ -1,98 +1,85 @@
-Return-Path: <linux-usb+bounces-24219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D8E7AC07E5
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 10:57:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84962AC08F8
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 11:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 695AE3AD219
-	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 08:56:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60DAC173370
+	for <lists+linux-usb@lfdr.de>; Thu, 22 May 2025 09:48:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8862286413;
-	Thu, 22 May 2025 08:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1232882C7;
+	Thu, 22 May 2025 09:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jisc/KJb"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="MGX/qAUj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15D52356C9
-	for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 08:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE4119ABDE;
+	Thu, 22 May 2025 09:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747904137; cv=none; b=eo5iuliRjdWoTZ9Ob28DZj+3FQ20NDzh472AtVZqb+nC+oJFpUs7Ga/RK6H+whJEBQvtEefb4N2B6WiKt/Xc0jZ9vrREgNxLlZQkfpawUQgtOTcrSAbMpYKNrtCREyJaDRepp8Ss1MTIcaq7fVb6Xd6qwRcJhP/LMmssXSUlwNc=
+	t=1747907260; cv=none; b=nYou9YFtdrtR2vIOHE/TLiSL8N2wwtIOXyFV/E+fEf5l5xUJ2CqvdOv3a5YrDruV0CfNLov9SrOQs+YLlbKA/rP/l4CNy0k3w67cBnQYjjp8L/9gqAb0vEZYq/PpFAOseFGx4BaE/0aXstNqiUrVdzE64QfqTn+mC/+xGfPOmIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747904137; c=relaxed/simple;
-	bh=CpauFDWXlkQ7aXN74FLEkhjk+C+tiXJyIbkc9eB/thA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g+GFcNxiaaQwQNTZipLEPRexQfKijV6kMWEJAqyklQ1P3ABa/yRqZKdZJMPIw/yRoX+qf+PwHDNU7mfawE6M8+julYUvmQFkX3ujz4+MFp3/ZBAEXiB3GFtjr0X8U2eyiLrpxr1qodLAq6qxe+S6Gxg4+AWJ34GZCoLO7qiSoBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jisc/KJb; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6f8ae08e38dso79879626d6.2
-        for <linux-usb@vger.kernel.org>; Thu, 22 May 2025 01:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747904134; x=1748508934; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CpauFDWXlkQ7aXN74FLEkhjk+C+tiXJyIbkc9eB/thA=;
-        b=Jisc/KJbu4KMlSmLJn791KFWXIQWoEpsob44LDw2jOpYzUpkqniwvHuchzW+akjizz
-         3XHJ4nzH1WIA4H4I4vtY3N9XN/Tqh00hhf+7/5MHbm4IVSG5ni5VqVUjHvQ2bHkYDbOP
-         iNj5bbOXqKmJM8PEAjGFkTpMztK+ruFEzmCJtprzs3Ys7qEy8eLe1vXPgZ4Iu7vH1Vd9
-         vXkDZsiPJN8AAHtWGXVJ3FUcGH5B4bPVHhI2HR91uiIHHlfvqlm+i7qX3/ZZjEDHlQZ1
-         o7YUXxtuETQp3g7mHvg2Xy+TYu6L7yNPFbC70D5wy8Mw5YLNvxDowMzfeY4UASQQ2B1i
-         DJhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747904134; x=1748508934;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CpauFDWXlkQ7aXN74FLEkhjk+C+tiXJyIbkc9eB/thA=;
-        b=qd1lipgMz5sp7yC4YruVuXn6s8NKsajITOOIYZS/mZoMDa2xfpYgB3QGdephSZBB+B
-         YtOlj5/rY+2NejDGzaykf39zkDBLBf6arGVlxSkL7xs8W5US/MzVe8BHwl36zHM5IIha
-         HXy9KQ0GTyzqhJQAsTFg0FnNf+XODhP3sEpPdYAgFy39QN4G9Eie4WXVaj6ZpJ6XHHBp
-         6Hc2LAHD6PuIja5PEvtgcY5QgwFWDF4qgE8+8eJtyWDXOn3RXMoMuenfX5uTgcNnN6nD
-         rmoUsYJhHUZdC2BWHNyvyJ+e5uBfp/ArEFFJWPD6C6sYMAYrrSUfgJRDh3JnNmNL3ZMI
-         T4WA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4vdkuuCFBq0If3fRhz+uRBTnWn6e3NADgxw71itFyjdDV9q/HecRAerX4UBfgq5KKagRPXKQjpEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyPu8Cf1KGyzKqs0OBiMEeaYhau6oIRJroavEmAmUAh8N2DdgP
-	mwXG8q6l0XmzKWpTubBtq6NjnSZCvFknrU8jwsh+b79QTm2DU4n32DUyZMLeENEOJDdCbaqaJo9
-	MYAwclfnrD1BA8j6xmO5pboP5X5w30bM=
-X-Gm-Gg: ASbGncu0TPcng2VMes7zE7r73rxxQKjaHYjYeOS5do3/GP46Osc9ZYmJ/kqnAc2M5Au
-	agmZ7OUR+ek2CkX5fgQ9Yq/Piv3McwxXCVpwYwKQd05ok6kAKKeqe0eZVAd/k82W+91uZZh9AB2
-	fb9MZ5g0v8E2ackPQg8HNgx84LI+rZWirP0g==
-X-Google-Smtp-Source: AGHT+IFSrd0xHS0//0Vx1Qf6C8nWL8cI9xEXdCYw7pywGHt3ZTIRQsKQeS/aTcA4ugwR+rMnKQLrKVNWLW4bR2htLvo=
-X-Received: by 2002:a05:6214:cc2:b0:6e8:9b52:7a1d with SMTP id
- 6a1803df08f44-6f8b082872amr389160986d6.8.1747904134671; Thu, 22 May 2025
- 01:55:34 -0700 (PDT)
+	s=arc-20240116; t=1747907260; c=relaxed/simple;
+	bh=Q/JtzSsynX2wUmCK1eEor5G/XtxF0d+v18cJ5Ise+c8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=LETHg81pEvr62CKM2LI6+SpvNwmRjWCFE4GYUaI3OtxFMlsl5VVlWT8bwdpnMxLrRF3gvlP4aSj9ChWbRjzxX60ri28eVjZ7Mu50aWVIeEsWSGOljWSnvHhoPpGkvCuDCMWRmTie+QhhCdoIefVRKIe5RtrzfTtbGuydBzkXdNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=MGX/qAUj reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=UkSR7r/KpcJT49OPCs8Qy98yUDr2Bj0rxe+RJe/hqD0=; b=M
+	GX/qAUjDTJgIUt2mcAIMmT6/3vBpiJSnPYHJWlw0PebKeO18qfPYACXADub4SZmm
+	qUlntSYcmtF76KizoD906deKxvJ76WMLybu1ykQaHR8zeNti9nq3eTO1dc9jZhqP
+	A5tEJ4sDdZQksUP8LN+xBFUKrAQ/d/EpLIzCKe+Xtc=
+Received: from 00107082$163.com ( [111.35.189.95] ) by
+ ajax-webmail-wmsvr-40-100 (Coremail) ; Thu, 22 May 2025 17:47:17 +0800
+ (CST)
+Date: Thu, 22 May 2025 17:47:17 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Greg KH" <gregkh@linuxfoundation.org>, mathias.nyman@intel.com,
+	oneukum@suse.com, stern@rowland.harvard.edu
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] USB: core: add a memory pool to urb caching
+ host-controller private data
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <2025052257-expectant-macarena-69ee@gregkh>
+References: <a235e322e270942dc3d607d4b46ff7db29abeb2d.1747897366.git.00107082@163.com>
+ <2025052257-expectant-macarena-69ee@gregkh>
+X-NTES-SC: AL_Qu2fBfWbuEoo4SOQYOkZnEYQheY4XMKyuPkg1YJXOp80siTL9w4MZm9zFkDN986wFQWhoAiIdylMx/1of7R9bZKdajeYGU2/DaUyEP9X97ij
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250521132354.1104-1-charlesyeh522@gmail.com>
- <aC3u6uCMin_0SXWQ@hovoldconsulting.com> <aC3vf5l4WacJcykH@hovoldconsulting.com>
- <CAAZvQQ7=UueHS_jbJVsiKMm+kf2cTW8gqHXvr44dbOdYLMgqqA@mail.gmail.com> <aC7ji_pJtOGXlnBN@hovoldconsulting.com>
-In-Reply-To: <aC7ji_pJtOGXlnBN@hovoldconsulting.com>
-From: Charles Yeh <charlesyeh522@gmail.com>
-Date: Thu, 22 May 2025 16:55:23 +0800
-X-Gm-Features: AX0GCFu_MlK96JdZhrIUZ9KB92gCaGmf2OwiCZ-SZvTEXSfGPG_kcB7mXcIeXPo
-Message-ID: <CAAZvQQ4Cn38swq8k897w=wfWR1RdG5r3mgv-twhiVKBp8MAwDA@mail.gmail.com>
-Subject: Re: [PATCH] Add Proliic new chip: PL2303GC-Q20 & PL2303GT-2AB
-To: Johan Hovold <johan@kernel.org>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	charles-yeh@prolific.com.tw, joy-yeh@prolific.com.tw
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <2ffd5bed.9108.196f763d60d.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:ZCgvCgDnzwOm8i5oi8oKAA--.22741W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbBkBBVqmgu58u1pQACsH
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-Hi Johan,
-
-> There's no need to send a new version of this patch as I fixed up the
-> summary when applying. It was just a reminder for future patches.
-
-Thanks again for your guidance and support.
-
-Charles.
+CkF0IDIwMjUtMDUtMjIgMTY6MzM6NDIsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
+bi5vcmc+IHdyb3RlOgo+T24gVGh1LCBNYXkgMjIsIDIwMjUgYXQgMDM6MDk6NDNQTSArMDgwMCwg
+RGF2aWQgV2FuZyB3cm90ZToKPj4gRnJvbSBhbiBlbmQtdXNlcidzIHBlcnNwZWN0aXZlLCB0aGUg
+cGVyZm9ybWFuY2UgZGlmZmVyZW5jZSB3aXRoIHRoaXMgY2hhbmdlCj4+IGlzIGluc2lnbmlmaWNh
+bnQgd2hlbiBzeXN0ZW0gaXMgdW5kZXIgbm8gbWVtb3J5IHByZXNzdXJlLCBhbmQgd2hlbiB1bmRl
+cgo+PiBoZWF2eSBtZW1vcnkgcHJlc3N1cmUuIFdoZW4gc3lzdGVtIGlzIHVuZGVyIGhlYXZ5IG1l
+bW9yeSBwcmVzc3VyZSwKPj4gZXZlcnl0aGluZyBpcyBzbG93LiAgVGhlcmUgY291bGQgYmUgYSBw
+b2ludCBpbi1iZXR3ZWVuIG5vIG1lbW9yeSBwcmVzc3VyZQo+PiBhbmQgaGVhdnkgbWVtb3J5IHBy
+ZXNzdXJlIHdoZXJlIHRoZXNlIDFrKy9zIG1lbW9yeSBhbGxvY2F0aW9ucyB3b3VsZAo+PiBkb21p
+bmF0ZSB0aGUgcGVyZm9ybWFuY2UsIGJ1dCB2ZXJ5IGhhcmQgdG8gcGlucG9pbnQgaXQuCj4KPkZv
+ciB0aGlzIHJlYXNvbiBhbG9uZSBJIGNhbid0IHRha2UgdGhpcyBjaGFuZ2UsIHNvcnJ5LgoKU3Rp
+bGwsIHJlYXNvbmFibGUgdG8gbWUuLi4uCj4KPkFsc28sIGFzIG90aGVycyBoYXZlIHN0YXRlZCwg
+dGhpcyBjb3VsZCBiZSBkb25lIGluIHRoZSBoY2QgZHJpdmVycwo+dGhlbXNlbHZlcyBpZiB0aGV5
+IHdhbnQgdG8sIG5vIG5lZWQgdG8gcHVzaCB0aGlzIGludG8gdGhlIHVzYiBjb3JlLgoKCj4KPnRo
+YW5rcywKPgo+Z3JlZyBrLWgKCgpUaGFua3MgYWxsIHlvdSBndXlzIGZvciB0YWtpbmcgdGltZSBy
+ZXZpZXdpbmcvZGlzY3Vzc2luZyB0aGlzLgoKRGF2aWQK
 
