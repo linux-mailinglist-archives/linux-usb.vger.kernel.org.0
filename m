@@ -1,85 +1,89 @@
-Return-Path: <linux-usb+bounces-24247-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5238CAC1F52
-	for <lists+linux-usb@lfdr.de>; Fri, 23 May 2025 11:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5966FAC1F53
+	for <lists+linux-usb@lfdr.de>; Fri, 23 May 2025 11:08:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F244A283D6
-	for <lists+linux-usb@lfdr.de>; Fri, 23 May 2025 09:07:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78F0DA43FBB
+	for <lists+linux-usb@lfdr.de>; Fri, 23 May 2025 09:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDE322422F;
-	Fri, 23 May 2025 09:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DBE139CFA;
+	Fri, 23 May 2025 09:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLmz6SWU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c+qJ+24q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A74139CFA
-	for <linux-usb@vger.kernel.org>; Fri, 23 May 2025 09:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FC31E7C32
+	for <linux-usb@vger.kernel.org>; Fri, 23 May 2025 09:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747991289; cv=none; b=NY9wyW3tPQkdE7aQcIxZgOPoctS9LoKIbvi2LnCA4Xc2vBq29JtAq7KUPUqwJlhXW5OxqFrzpUF3SetFTN7XAn854K11/Zef/JpBeybA6QoDEF0E327dYGFPCtSVFQcZgi3dkcdQyrzBigsUwQw4BlL8WPPyDinUM40c156Jzvw=
+	t=1747991290; cv=none; b=qVCljcKEHH/hyY46ydi/coOuPZpk3/+k2yIwJPsZB19pv+04IDq/jWGtCcRQVAjZYh3o+5LhuA0qjClb0lKoyX8pmD3EgX6cWljdHjTL9l6yRTCnmCZzfD/8V53HCjrsfe9+1ZaIBmsJXKsZA6Nso3H6ahAN38kIuF7l0GCe2tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747991289; c=relaxed/simple;
-	bh=2AXImvXC2U+jciUy6Q9slWinGE+PUtwlbqOyjuFWelE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oUlZFc2Z1kpUKvsFnuXfSACuplxTYef9X1+0416q97Gk+8VMC+S41S08LiZGh1N2VRILuG+QrYUJRXT4D/j+mezmHYaQ5LOzSzhqRxHpmxuo3ZpARJF5+Ir1kxJrAU7dRs3uestIRlh6VUdFGDHN0FoZu8cv2lnpLWwuEfj0FLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLmz6SWU; arc=none smtp.client-ip=209.85.208.177
+	s=arc-20240116; t=1747991290; c=relaxed/simple;
+	bh=k1dqZ0kFB+LOVqkoEiNlvqrKaBdWzq2c3C2pwLckiRM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bIoUYoSPu9uShpWYZ1VZatSiqIQtBnC2UdGMHlJxeoMR7AVyOcFrYAGk8f2KR3QANmugVCnmpYQZctHiJh923cIdCvOmyLDBJqpJ9OHx8EkOszq4a2acnU9vvWZFK7xzOvE5jwX7/UwcCWURjQJhlDbnk5X475dJ2kd2moUQ/XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c+qJ+24q; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-32928704a28so49244961fa.1
-        for <linux-usb@vger.kernel.org>; Fri, 23 May 2025 02:08:07 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54acc0cd458so11660382e87.0
+        for <linux-usb@vger.kernel.org>; Fri, 23 May 2025 02:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747991286; x=1748596086; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JFHgM3SHIuxNhWaRJX2MPgsa000o0uwl1Q3M+csxEKk=;
-        b=iLmz6SWUoarD3lodcYOIR5JSw20NnBXv6bJH4JeZIFGkcr3wRj9K/9uwuaWtRPUQBU
-         cvUZ4fwTfIPLzC0YZNk76UrK1LdxE7IqwnzZ/Aggk3Gkz2UDQdG3ILqQLh9J4Rfp7fao
-         OIOE8PCqN1CXuB7uY1HZ1G5wR8DGl/2OybkSPl1sA3QYzhGhZf7NuLhgJnRN63EZkZVI
-         Lh7fvuuOSnIWTwpTdY/O0GXgOJ7wiOvSAQzwB1pWesuXAvJhyWx8/wodKgAUoREeIK9n
-         oOiKCq7E2r3tRbrjT2lxOym+ED8QJmUhNA22Luxp8pggv0XuTbM1LpJxYECKQfVtiE+Q
-         lEKA==
+        d=gmail.com; s=20230601; t=1747991287; x=1748596087; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kQVeZLzFfLaFmKmQnzAoUlM0L/vwewHzFvrSLVi6Xyg=;
+        b=c+qJ+24q7rwJ/HEf5lBQe1Scl2pIxcm6B6joLz0jjlLg5pDAfpwpLgLgaxcjM7rOmr
+         QfEOPohRXh3QBCX79LOKHH8w0oZnp1+V/tns7G8+YfRlBevBB6jGy11Vy9UaWnuuS1j+
+         f9jpIUbCfXpJb2VCsvzFQvzuyfvh9hHjl0RCsA5OwJ+LrmcMBmy0Xn4ikx/H8a/lwTh5
+         KkIzQAAzzzDStLo7ZQx/XZi5euKnZxJrKRbCIhmyyAuOdzSK3ywMWAhHB/W64K3+Qrov
+         FaovZEtx9t8nKOK46HU0xL3r3hD/iB+mfit6CAG4OFvbg1Lrmi9/MHp7K+WbMPaj8Ise
+         i29g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747991286; x=1748596086;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JFHgM3SHIuxNhWaRJX2MPgsa000o0uwl1Q3M+csxEKk=;
-        b=cswbnt6W6K+cMJnaePPGj+6zcnkBomSSG9ELP2pyoJvfGc30/LcnFyeqzH/4C8n8PR
-         NX6WS1sKvEPgu6YNLjtIZ1DmpPz6qcpNDRc05RJp91azasPkW0ROmFk42cFEOfZLSXMp
-         WUEWkoDaxiQduEDxrs+dONZw3LFtdapLeRNoj6/jPiDmsw1uLEnulW1oPbcPoZ0fhoh1
-         s0BuP3NAyG5fqeiUtNMefMUN9+MonfqXmH10bPCMIoMaXx72mWUGgzkj2CpEqvKYCKs/
-         mku4TGkVe4WB1EAt7+H+hdKMtd9oi8gGvgFMyIwpRMNjgYP2GDRE71hNNefq0ZxOEz/d
-         hv6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUxm7iEmTgmRK/b9BnSCUOtHzIAVkgby/G18vYa7hT+o6TJHRjcBlqvDNw2NcH2oKBJgr/nUk4PtxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKyqgF0PrHl9d/Tbblq/XoxTBpImybLbOxGUPyOlQQ4fqwwSRy
-	QO1OCjHp6aaI4xm+eWGln/dLWr7Da5xA4D5mVSaQ20LG9sSw/g7Sijzh
-X-Gm-Gg: ASbGncvA9UDAvs0P7Ud4zugX+x1xVrjJDy11/0ngbl1XhMFFdf54vyozavzDPpCaPAr
-	w3E6euicNDV+RQ1S9vBdt5310E1/mYEu5E2yilYfD3kD7UBGGTwebrz2rvpMDtkbScKI50rDGFC
-	8f0r9HgIN9mCPRSPtP3u55BJJnKP5zFYcqqrn2FUX96afNHh/pSJuYbx+IQDYYqvtvDwMJKTNkS
-	QZApB+kEsXpchw561bcpi7MBhuFdqPxvDDy3KhHpjDCIlb3KbIeb5r7mV/VGcl1ivKylMsH9Y6l
-	QEau0KeLDz9G2JfyShYTDcbSugAgjrM1BBZgCpV8
-X-Google-Smtp-Source: AGHT+IFo3bD7UQARJlaurSosD1wnNDYhcNQvyriSzS4ofS0yIEYtib06UaVWleWw/u/Efg82HWK3jA==
-X-Received: by 2002:a2e:8a94:0:b0:30c:719:1145 with SMTP id 38308e7fff4ca-328077432a3mr75089341fa.17.1747991285539;
-        Fri, 23 May 2025 02:08:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747991287; x=1748596087;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kQVeZLzFfLaFmKmQnzAoUlM0L/vwewHzFvrSLVi6Xyg=;
+        b=QeLqLsKATSE8EL8cVubYggDZId7ozVVkp9fDY6ZtQC8n3RQtcJX6OshbLMrxB5ojrd
+         ACaggYaRGpaVrW1CA8Cy/ZnnKjEuImzQrOHGl2wyIdLwH6gk6sgABmFaNajAI5JcKvD4
+         dHCfhY7UBu4k/u96Fkizc+CrSHpwDbzfirVqk69qBQtVDQtNdHDWAM8ZPw7xn6j7yVb+
+         rt/pF7v9joEUsOsU/oL4/Smab7kIpKFMI0cHUta/03GUxJL+huyyve6o0ZMfIxYE4g7n
+         hGgPU3CNzgK53PcBVrqXds42EO5I+LaDzx+mv/4llel63rF8zlyaa7b30TzKN0PaaVRg
+         UFFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxbP3Uy5q+O/XJ8yE3wAIoih6S9A56mW34flHoJ2CJy0EZG90hLkP7ZSxzSMYooOaAVapQjw0fiBM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMJD5QcWaGMLYIaeVDPL4VnugFDddMICUnzsLJ7NMg+5n8cpuk
+	O4uEwgasklnmt3YbM+WNbF+iqCmbk6O+XTZO2NxCVSn6pbrnkjbe4FDODcBXHy65
+X-Gm-Gg: ASbGncuANkn+GckUnz0+BI/tyz+V43JZuFTkom1BuhIhZQ+w4ebX9QxhrYT8OvQe7O0
+	Yui5R5K39qNV3XsAl9zYrR8zhGM7NOb5OERF2ikMB62RVpjppMifH7rvmsItfmCiX3nIhdTAwIY
+	1yYrfntBcbb7wZj/IsH1JJYl1TYfppu8VYnPiZN+wyJ75d+c6YTQ93JaQU3pTOb4nJpkvgXnkn9
+	ShqYr1nOegEH18tDqAqOw1y6jYoPPj15tAzt02xh3Lw+p/2VbqGnpztXK1m7mAZ4h6iARdNi8Cz
+	M0argkUBbayaosyE+G+byVmlH7Qdri1+fPJRIoQr
+X-Google-Smtp-Source: AGHT+IGcBUij0C4PQIAAvUZYcOoCJx7DD4I8Kw7yeUjLualHAm54Qa3q1VL75mWq/cLLikQhjcdxaA==
+X-Received: by 2002:a05:651c:2214:b0:30c:518e:452 with SMTP id 38308e7fff4ca-3280771e0c9mr101751271fa.13.1747991286480;
+        Fri, 23 May 2025 02:08:06 -0700 (PDT)
 Received: from dell.. ([193.0.218.35])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-328085f64a0sm35318391fa.114.2025.05.23.02.08.04
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-328085f64a0sm35318391fa.114.2025.05.23.02.08.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 02:08:05 -0700 (PDT)
+        Fri, 23 May 2025 02:08:06 -0700 (PDT)
 From: Vadym Hrynchyshyn <vadimgrn@gmail.com>
 To: valentina.manea.m@gmail.com,
 	shuah@kernel.org,
 	i@zenithal.me,
 	linux-usb@vger.kernel.org
 Cc: Vadym Hrynchyshyn <vadimgrn@gmail.com>
-Subject: [PATCH v2 0/3] usbipd: enable tcp keepalive and set its options for accepted connection
-Date: Fri, 23 May 2025 12:07:22 +0300
-Message-ID: <20250523090802.17987-1-vadimgrn@gmail.com>
+Subject: [PATCH v2 1/3] usbipd: enable SO_KEEPALIVE socket option for accepted connection
+Date: Fri, 23 May 2025 12:07:23 +0300
+Message-ID: <20250523090802.17987-2-vadimgrn@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250523090802.17987-1-vadimgrn@gmail.com>
+References: <20250523090802.17987-1-vadimgrn@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,33 +96,31 @@ If usbip client does not close a TCP/IP connection to a daemon
 gracefully, the daemon will keep this connection open indefinitely.
 
 The issue is that the client cannot attach this device again
-until the device will be rebinded by commands:
-"usbip unbind -b ..." and "usbip bind -b ...".
+until the device will be rebinded on server side by commands:
+usbip unbind -b X-Y
+usbip bind -b X-Y
 
-This issue was reported by a user, look for details here 
-https://github.com/vadimgrn/usbip-win2/issues/109.
+usbip client enables tcp keepalive by calling usbip_net_set_keepalive
+from usbip_net_tcp_connect. usbip daemon now enables this socket option
+too for accepted connection.
 
-To reproduce this issue, run "usbip attach ..." to attach remote usb 
-device and make a hard reset of this PC by pressing Reset button.
-usbipd will keep this connection forever and will not allow to
-attach this device again until unbind/bind will be executed.
+Signed-off-by: Vadym Hrynchyshyn <vadimgrn@gmail.com>
+---
+ tools/usb/usbip/src/usbipd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-To fix that, enable SO_KEEPALIVE for accepted connection and set keepalive
-parameters if corresponding program options are passed.
-
-Vadym Hrynchyshyn (3):
-  usbipd: enable SO_KEEPALIVE socket option for accepted connection
-  usbipd: add long options to set TCP_KEEPIDLE/TCP_KEEPCNT/TCP_KEEPINTVL
-    socket options
-  usbipd: use usbip_to_int to simplify usbip_setup_port_number
-    implementation
-
- tools/usb/usbip/configure.ac        | 24 +++++++-
- tools/usb/usbip/src/usbip_network.c | 96 +++++++++++++++++++++++++----
- tools/usb/usbip/src/usbip_network.h | 14 +++++
- tools/usb/usbip/src/usbipd.c        | 58 +++++++++++++++--
- 4 files changed, 174 insertions(+), 18 deletions(-)
-
+diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
+index 48398a78e88a..d89633d8f799 100644
+--- a/tools/usb/usbip/src/usbipd.c
++++ b/tools/usb/usbip/src/usbipd.c
+@@ -119,6 +119,7 @@ static int recv_request_import(int sockfd)
+ 	if (found) {
+ 		/* should set TCP_NODELAY for usbip */
+ 		usbip_net_set_nodelay(sockfd);
++		usbip_net_set_keepalive(sockfd);
+ 
+ 		/* export device needs a TCP/IP socket descriptor */
+ 		status = usbip_export_device(edev, sockfd);
 -- 
 2.43.0
 
