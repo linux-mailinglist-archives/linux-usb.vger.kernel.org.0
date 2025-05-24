@@ -1,57 +1,87 @@
-Return-Path: <linux-usb+bounces-24273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24274-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B0CAC2EF5
-	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 12:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3829AC2F3D
+	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 13:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFDAD1BA4545
-	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 10:51:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57F321BC30E7
+	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 11:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 283E31DFDB9;
-	Sat, 24 May 2025 10:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB501E5B9B;
+	Sat, 24 May 2025 11:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="vG44CBST"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="N/Fcyp/N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29519DF8D;
-	Sat, 24 May 2025 10:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04E61E5B72
+	for <linux-usb@vger.kernel.org>; Sat, 24 May 2025 11:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748083871; cv=none; b=NAM37DfQg4cUmvXjeOHo44QE6FyTs2QzFLFE4tAFvkQWuFy2Jm8wzRSia0IuQ+S+Tairny1H4aiTuoPTVCD0upBrwjahkg8J2/X4LpZTBmL8H6CuoOLrMVsJGACsXel2GbjgtBz1L8M3Ncxslo0IkrZ7dbbpEzz/hdRoX4gfO14=
+	t=1748084473; cv=none; b=ISa7646vv6nzBkVqPemapGigVA/A4VlIUgXxlrl9ri5Go0f2B/bbJM1Vvd72H8EIlwAqdM2Y2KeN2U/8M5pEwRXK+weTiI9rfW1a2Is/8YNPXqOtOJENDZS0ytUa1WFZWH2iYM0XHV9qJgZCpTCMFD1pH2+LOHLIHHZmX4X+128=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748083871; c=relaxed/simple;
-	bh=V+8gcksgA34Mb1jQ/H076ofeWB/Ytb2Wb9fhfJ3Dbls=;
+	s=arc-20240116; t=1748084473; c=relaxed/simple;
+	bh=uBT8QXnAoYnSly3TgloEh2i3dSX3runD8Ha/A6cIC/A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X2TrzXCfowfy6HGbUfsbEQkdAQovcN8RZB3Hzic29FVTNCuv5o+A8WqryOTo0b0qcQ+9t2ZmNgJpHTD2BIsDsOQ82wHfu0eFiQMpbdbpn4mN/tliIPeM86I6BRYZjyLbu9ZfDZjBgnfHllkpzl0/vsxkY2H7/BnWnf7X5LDk+2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=vG44CBST; arc=none smtp.client-ip=212.227.17.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1748083848; x=1748688648;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=V+8gcksgA34Mb1jQ/H076ofeWB/Ytb2Wb9fhfJ3Dbls=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=vG44CBSTSn21UNvz6yvAkFjtROBT8/wA1PBSCmWhcVWanJ7ifZgdc4SqO+LJjvQ2
-	 ubyQPrtKb4N8kADNi6Gd0HL7iXkh8TNafQ2aVQb1GFdt2x1BVfgPCeDDbETymSpJ5
-	 xvQR9Xh7NXSVGqRcrB8AvRbrTTfb3fVBjFYfYOEdabTdE7hxMOtxilprPVEcn0p30
-	 mB5Q5icuj6BGGKOBcpl76gChXjmlVANI7crKOU0B154CSZOVmGKgHuGpC4edEeXMY
-	 Vcjcy4D3a27NE8FUmNYBkWvJxljLoh5WCUi4Vj0gE2B5SkhJMpAoAXOAg+I7MLmet
-	 5iB3C8vDj6CLxSE6mw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.39] ([62.226.41.128]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MaIKJ-1uO3Zh1kRx-00MAMB; Sat, 24 May 2025 12:36:20 +0200
-Message-ID: <342fadba-978a-4aa6-a393-22221715a5cf@oldschoolsolutions.biz>
-Date: Sat, 24 May 2025 12:36:16 +0200
+	 In-Reply-To:Content-Type; b=Y36jeJseYmPUZCq0bSEFbV8qbCKLROixuCiEGXmaZJiRtfBDMRccvC0SEbdDTe6B9noRn64njhvNwGtu6RP8m1Wo7utK/oaxuIgNwcuj0iZK/dkUfBJzv9p0ohurV3ag9SJkDLqlhsvNxcTjhxD0R5LscuBpDLUprqjv3SvMx7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=N/Fcyp/N; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54OAwo5o010250
+	for <linux-usb@vger.kernel.org>; Sat, 24 May 2025 11:01:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	uBT8QXnAoYnSly3TgloEh2i3dSX3runD8Ha/A6cIC/A=; b=N/Fcyp/NC9GTtEYW
+	yK/AFO3BxuesYqSkqbvhSRXAQHcjASZ+zoyYOVp7tHxa34C50CgY6Hdcf2ZjWbBd
+	Gfobap/24NjIDUqQx5mPuGK3LTTXaZGqr2B2XhLCJkv4K75ydgUXki92AKmmnmOd
+	SZN3ddUrZMwTxQC0O3pwC1OVTQNhDkcHLMGR2N1sGPriALxZuY1mYWnMx/96ZMYr
+	Z/DQHuK72Z85lcM4u7osURHktBPnckx9ysb+L8KfqqaURKWyUOy+bvJiPvzYZUN5
+	1D4mkEzlJ5phJzkKdetVT1sC+J+jVTOZHpbeZM4OqZNtFODtUjfuBOjbWECP9RQn
+	YRLkEA==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u66w8hgk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Sat, 24 May 2025 11:01:05 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6fa9cc8eb70so425376d6.0
+        for <linux-usb@vger.kernel.org>; Sat, 24 May 2025 04:01:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748084464; x=1748689264;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uBT8QXnAoYnSly3TgloEh2i3dSX3runD8Ha/A6cIC/A=;
+        b=NYiYsJJkXE8ifvaZNFzUQS68ykVRhQLuJ2oMXemxZbpD6TVtOclvcCwaevFgwdwA4l
+         v/AdeSp9V1zyovNrR7dYO6Mn7Ff/shBKtft30pvkbIbg44tQ48Q0cNb+Dt1tF8fZmow/
+         owG2W7wchcll7LXOyrjvgayQld6cHNfHHywWsQW04zE8sLFbhYHfO8zTLL6j/tjR3zaU
+         yxpVDBLIdcByjYnq+GbtzJ6zEybYtc8fO7xQbczxW5tCzJcgupMy6gpzh8MVnmvUgZhu
+         LPxbWLhVkCwtFsFYzazlPPyzk8fv6T4DY2Z+KTKnINh1wWZ2LZtsvmIM8vKB9rexmDvi
+         /YjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKOqLiY9bQ1qK/KnqVKl2Mk+ti8aD0ZfHiEyn3s6riCseBC4AP0rksHNkvNY3SVlPuU9Hya6MRIms=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzrr5oQDGXZkd8DZ2X9saHNoGP5u1hXQa7xeJMc6uiRkYBbKEbZ
+	dd9YNSu8lHF4KmYBgkRICZBIXCmsCcgDaNbVlUEw6rqRgm+6XX24FMDB4t4EF6q+6ca0MAzije5
+	3sjisqZ3uqFHh5XJFZiVDipU7F6TLI8tcxgztbBsWMPdfOq8sGZ21Wt7fre15D78=
+X-Gm-Gg: ASbGncsD4HMjotFGVNF+Bj8ednzJlmBE+05YS2qFFJ/SMoZ5rPGHytemB72ar1FzsmA
+	nODIhv4Q6NgAHrJsJfJ7W4GaSk88vG3VvDrkWrxuDz6r7bkldv5fquzs4jkeDX1tRztlaT4zydA
+	kw42RN2UZPLo7E8q6Tks7VIF5cmX7nwYt0ewYnE2Opr72gP17tf7/gxeO9VwqOIg56zEVVFzJGD
+	RbuKYNpgCIOFDV8/KQ7WNOgumnxRPI4IiAqZrF4T2xGcJuL4A12O23Lk4Rq8Bkye6A91QeIG+Jd
+	OhEK//r+PpmXtXDx6L8PUbDcJcf2yABxQUo0/J1wpRzM+OGY4GscyMLuw/wN5y6TTw==
+X-Received: by 2002:a05:6214:2a4e:b0:6e6:9c39:ae44 with SMTP id 6a1803df08f44-6fa9d396e18mr13300226d6.10.1748084464323;
+        Sat, 24 May 2025 04:01:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFt3zT9ObE4H3laeqssPI6a1m8vVV+uGCihBhTUhjMgPqOlKiS/ZHkjAau8uvxRtp/e5FS/WQ==
+X-Received: by 2002:a05:6214:2a4e:b0:6e6:9c39:ae44 with SMTP id 6a1803df08f44-6fa9d396e18mr13300066d6.10.1748084463739;
+        Sat, 24 May 2025 04:01:03 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d438086sm1369934466b.89.2025.05.24.04.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 May 2025 04:01:03 -0700 (PDT)
+Message-ID: <bbfc2598-6820-4d0f-ac09-406933771365@oss.qualcomm.com>
+Date: Sat, 24 May 2025 13:00:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,65 +91,67 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 5/6] arm64: dts: qcom: x1p42100: Add Lenovo ThinkBook
  16 G7 QOY
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Cc: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Douglas Anderson <dianders@chromium.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
- Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, linux-usb@vger.kernel.org,
- dri-devel@lists.freedesktop.org
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
 References: <20250524-tb16-dt-v3-0-17e26d935e73@oldschoolsolutions.biz>
  <20250524-tb16-dt-v3-5-17e26d935e73@oldschoolsolutions.biz>
  <6iuro54yed6tqfej6l2l2ky7dletbs73nwjnfufbuulkw3kl46@okoj2v3wvck3>
+ <342fadba-978a-4aa6-a393-22221715a5cf@oldschoolsolutions.biz>
 Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <6iuro54yed6tqfej6l2l2ky7dletbs73nwjnfufbuulkw3kl46@okoj2v3wvck3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <342fadba-978a-4aa6-a393-22221715a5cf@oldschoolsolutions.biz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:CEXvmp4XCv+8zPPu+FcRtrcVcIxIkzBQVcfODOJhdqb7Xq5nhl2
- iYumIEoYBXlBZZ3Asv1pLlVyv8B6IyUTNMfwrGnSNjuzKsFFeMAzXxKDKxUA+63MbZhzxVU
- AcE60yDuRzxqTw7NwXQhR/u7VUz7PwFW+rxOAX5wKLQh4GXX8Z2GbRSadCWUC0rLSE//4QY
- HaYDaaBgb/Xlj8nhFretA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:h4CAzilZimU=;zbk78YgQufcWfxxf4+ETUMk+xN+
- LI8EYn2AN1rhQOx+IXFj2cK4480tQGQgRl2PBihS+m3mEcqFOnUIrI8NlSAht/Kk5+Blgwo2O
- R2rEp2b2D80XoKrMHLzKAmOhyO7BG/MIq9Ye3ReeVnj7WVegyV6tZzofa5+MBpsvmI20F6okW
- tQCUfHdelfwQr3m0164NCcbSmHGXaPLRxBFGDnsR0l/6VfV1PJc325zE+bUlqJLdB+zx2fgG9
- RChDM2qG7cfHlm7y9Z98/FoQRJhKPw6nR+6jPstHXi5JG+LBVeTBWP67UjHIwfpgSHNJBdt13
- vKc1OKIxnSLjM8B9jk+afac1H6HCDDazinGUfZZ2iUuzOPtWev9ccVViIgZ7hBVMWWl6ag+AO
- qPmGgxgn8uHZECZfqHnSPuBoY4oVopYszb5BuDoP1G1Gx8JI8WT7nKJZl/6IseCeUapFEW8VY
- +8F1iJhihO+yf+3J+SQw35FILQkYN3xdWmrR1/P/NAv9VWquMGOWUWTX/0QutZmX/CbTcFKsy
- KVePBkK7vKuDci1pyPNGUdj9o8cxLQL5x1AGscSXBQnmMKDH7Y29WOdDwA87/DeWrvLx9LhgN
- fJ5aZngsrVxFvVlfRKYuLhF847fIBs+IBjzj3PB/kE2ZFUgnGV7UwMglW3XNAwDozckMJygCt
- i4U1Pw59X2LBV1j6jAjfc3AR+y+RqlpSv6owzIvJWOlQrLxmSopomgqlaSLxFiJBqo4a5IBOf
- 59xPFfMo0VPp+DAvQ75ikZ4GF3EWAkc3dm2cc4VKlAjgVHUwPNBxFXmuy0m7VmNP5LVQdlcgm
- 1b8M//w1C3Cx+Mo9UCF2uUBi/Ml+UiCWIvA+NKqBOffS+LEJmmEK1iUwjqxFVCC4h3DYMbtyC
- TC88jmJvk1IXrujGzNzHzaDtWh7ybsvPC76dimJ3mWxvse3gH+ogxJ7/uUZFIpEqzv7DoGhVj
- kSPKBmuctOk9k11Ir3xhJOpD1Kz4ST6rxPQuuxvvmMoLS+C9oTe8mqn9LcFNL15s9ijCfD1U1
- INdWTXRosAkDr7FADQSuzxaKlMIYyIbBliPJnKW+OptGu9AxeprSLDBHwCWr09q0Lx76BfF2v
- TKPo82ebye6BfjooinhX23/++4iRlcHd/P2Oa4KGSAuh36GYNseFg430higOP+NKhPYcD8B43
- EkZMQyYuO7WH3pOgMKKjSr6Fn9myuh8QcNb4C1rIw0bOaJIf105nu2ticMA/TBsLsrQ3Y39r/
- N+TOlgcriL6SWlQfhrAAemVchgd3U3KvyYeQbaR7O3Vzt5Yksv/N8ldNGH/0z5zy48fALPqMA
- 8Y/qlIkxaDNKWYqMs9aFYcyyqbriyhrCjVSmvo5oCgtCBb1IjwogOaQKiEYR8hGWnGOzNUUEG
- JnMyNI7Jbq8EF1kDKirevA82G77F+nVD+M29JLTKAc5P1Le1LQmFuOZd2N
+X-Authority-Analysis: v=2.4 cv=aYJhnQot c=1 sm=1 tr=0 ts=6831a6f1 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=Rz0-UGbwDQDUX_AfhhUA:9
+ a=QEXdDO2ut3YA:10 a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-ORIG-GUID: rAePclXAW4lZ1SrapLEDyW3hTiXBQEDy
+X-Proofpoint-GUID: rAePclXAW4lZ1SrapLEDyW3hTiXBQEDy
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI0MDA5OSBTYWx0ZWRfXyV6kWd21I1wu
+ EQqy2dVgJR4s1w/PQqIXImOPEbnd41TiqhY8RyhOLv5fY7abEitxQbOE+m3U8VJ1QMbJci7eAuD
+ lmZpsdsf1Rv3psPLzoEuTx/HWhpZyyafw5q7fJrkFzCC9udBIF7tKuKxb0+XBs2Rhz8fuW28XIW
+ 1DiLizJXYPkEnLj0sp3kyaHZ0wGSPzPiYIqstXhpG4CBbtn9Y34Osvyi1Yb71VMI7VW/r4eGSp7
+ /kYUJxMrw2k+Ur+WTFNezjMImm0cOfYX3MQOmqY/RSdmnQ1FBarpFFeM7xtgn6Nma51yYZwc/7e
+ x0HzX8SzYk9T5Qzvo/hSwZAo5Ta4FmKJyy4i/sqojtq0+Z/CbgyD36IwikbYnc6vZ5jOlNqWyH/
+ u2sWtZgYlN01unEkwkuR8l1Dkb1ppNsN7mg1fT1q7IIDCPpSVZbTQddxMafGpQ2d6BBWBMW1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-24_05,2025-05-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=754 lowpriorityscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ clxscore=1015 bulkscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505160000 definitions=main-2505240099
 
-Am 24.05.25 um 12:11 schrieb Dmitry Baryshkov:
-> This will break without the next patch. They need to be squashet into a
-> single patch.
->
-Changing the order wouldn't suffice? No problem, will squash
+On 5/24/25 12:36 PM, Jens Glathe wrote:
+> Am 24.05.25 um 12:11 schrieb Dmitry Baryshkov:
+>> This will break without the next patch. They need to be squashet into a
+>> single patch.
+>>
+> Changing the order wouldn't suffice?
 
-with best regards
+It would, but that would then mean you're introducing dead (i.e. not
+compiled) code in one of the patches
 
-Jens
-
+Konrad
 
