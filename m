@@ -1,256 +1,198 @@
-Return-Path: <linux-usb+bounces-24275-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24279-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18470AC2F64
-	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 13:41:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A90B3AC2F7F
+	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 13:49:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDBD04A5432
-	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 11:41:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3000E7A7349
+	for <lists+linux-usb@lfdr.de>; Sat, 24 May 2025 11:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9B21E1E19;
-	Sat, 24 May 2025 11:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219CB1E8320;
+	Sat, 24 May 2025 11:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HliTy75j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmCNCMIP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4658733E4
-	for <linux-usb@vger.kernel.org>; Sat, 24 May 2025 11:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624B01DF27C;
+	Sat, 24 May 2025 11:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748086853; cv=none; b=Yu+jzh2uenOPuMJ1R2zG4EXpQvA1xXOS0m0DS6cwI2R1k1YUYOjafm2Rd8NSPdY5O8t5JRX+wRq3fImSV5ZAYFu/X0x9rl746kwvcFfs88LDezIiCIYY1v7vpEuYY0iGaBX4IeYFmVTJgZZFuxWhJClljwKwCLb1lrxFe4K07a4=
+	t=1748087325; cv=none; b=JhO35IsbOYTMCEMvgaP73oJso8hV/Y3chtdB35FWNN64Gk7YJ1RP4mfRm6qsu/P9NMfl3OCTQitlKxJdHxyGRE3aKB5SwqTCcHesTg+0dgfrsKjLGSHEMWFnghU9T6NsRs0vZAt8I8Gsb/gyWwaM5tAweJm1cy+Ukqpg9hRGHw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748086853; c=relaxed/simple;
-	bh=t4inW5MfwCWYgxzaVvn5AFo/CaWu4R5vGgQmhZ1Qmkw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CinXMk5yymSxmm7aTorMcTXEedZZdJ1b4HbfoqfUWD89c3KJO+TnbyJQRJ8yqGYaYPvukS/iwDuoB0Viwx7KwhoRnsufWzoMQ1E5o2mTeYSZtwr6VuZUDQRj3dk6ZjC7FkMVw523sD/WHRx0eCet43ti+omEpykDldsI2kzO57Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HliTy75j; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748086852; x=1779622852;
-  h=date:from:to:cc:subject:message-id;
-  bh=t4inW5MfwCWYgxzaVvn5AFo/CaWu4R5vGgQmhZ1Qmkw=;
-  b=HliTy75jOqIkJj1smZEYuOIX+OJPgb4teIU7I8a3wvns4V0UThthJMPu
-   ZnI9jkXwJS7E7+Bnp9UgXNl4l9enemv4QYvpAsVBdt+7bW2EP7mrdFj0r
-   vEOReLQhMZsjj3Aa7GaIZu1mrV0pBx0RteI0mjG9qWW1MjD92ysKHK9xl
-   yIyiMQ4+Gg1LukA9vqFzDB6yU6iSNU5CizjOyJqXofMeooUKKynZN+MFJ
-   SCx3yymklmy5CMTEx599tLI+F8tvTxOHdIQHGufilREfGSqet9xtjCHlE
-   0cSmbjI1iIjvkH8f252Kbe+iQ0aFItZD4LTVkodiJP3hUbZepnvoe4Dnl
-   g==;
-X-CSE-ConnectionGUID: FzQR9k6NQQWCqSt55ND+Jw==
-X-CSE-MsgGUID: fUAYzrd0S0yTCTpIY+w3XQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="49830353"
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="49830353"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 04:40:51 -0700
-X-CSE-ConnectionGUID: SEAWaiQ/Sk2ElDA9WObDGQ==
-X-CSE-MsgGUID: B5ipWmu7Q9qEADTTYEm9Jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="141396878"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 24 May 2025 04:40:49 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uInF9-000RAW-11;
-	Sat, 24 May 2025 11:40:47 +0000
-Date: Sat, 24 May 2025 19:39:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS WITH WARNING
- e60acc420368e3fcb8c158207d37a502c4eee9e2
-Message-ID: <202505241937.ZkLscr6M-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1748087325; c=relaxed/simple;
+	bh=cDAGEvaEut9Wx4ncI5G3ZNgyLhjTpeeMC7Uy6xv4YFA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=j7IgptCdwyZ+H/7Fx4w549mx43ybTCPdvR3dV8S+kdPBl5KVxNZ++qbHhT0RMfl8drNjkHeq6qdGnO08FDEdjFhcrH6Nk1eY+wAA0TVUgpFK/m/vp1UKFvBnPLCg1XGNiAC58DclyObvssknyMnUIq8B+RP+w631jblha1O9LUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmCNCMIP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD24AC4CEEE;
+	Sat, 24 May 2025 11:48:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748087324;
+	bh=cDAGEvaEut9Wx4ncI5G3ZNgyLhjTpeeMC7Uy6xv4YFA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=PmCNCMIPKShYaUUA5GEM5O+Q22q1ymWWR6/mCOVdF13J2dOk18XfVN4orNSaWqD/n
+	 Md0jWoa80UQ6vSLEp+EmiLNR1x+S0BnNzVAKdBNLVG/5yDJw+gwOdSWpw1QY0uEccK
+	 EF3umwhEmXYEUEg1vWgiwGCfW6bhCytvk01mL/w/zWv0KNlOjDbf4sJoL7v/sxZVeW
+	 Ai0OX+I+D8GiPadJKq00pm9iLAhTfuWqhNafuNsOMXkrIU98DapQ/WEWFZ8ZhFnkM5
+	 ddm4uBJ1TgopfS7apZQH+dFqjLEiFiGfy/Kr4aguXw0mIASG6++VvqZK3ICE1JWUCY
+	 63RKrnjE5+IhQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8F31C54F32;
+	Sat, 24 May 2025 11:48:44 +0000 (UTC)
+From: Jens Glathe via B4 Relay <devnull+jens.glathe.oldschoolsolutions.biz@kernel.org>
+Subject: [PATCH v4 0/5] arm64: dts: qcom: Add Lenovo ThinkBook 16 device
+ tree
+Date: Sat, 24 May 2025 13:48:35 +0200
+Message-Id: <20250524-tb16-dt-v4-0-2c1e6018d3f0@oldschoolsolutions.biz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABOyMWgC/33OTQ6CMBCG4auQrq2hvxRX3sO4gHaUJoSatjYq4
+ e4WEoWNLt8vkyczogDeQkCHYkQekg3WDTn4rkC6a4YrYGtyI1pSUQpCcGyJxCZiUFxzxoyqWoL
+ y9c3DxT4W6XTO3dkQnX8ucCLz+jHE10gEl9hoobhsqNBcHV1vgu6c64Pr7zH/EvatfaEZTHSLy
+ BWhGak0r2tphAIj/yJsg1C+IiwjpAIqTc0EVOwnMk3TGwXWGUE1AQAA
+X-Change-ID: 20250511-tb16-dt-e84c433d87b1
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Douglas Anderson <dianders@chromium.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jessica Zhang <quic_jesszhan@quicinc.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>, 
+ Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, linux-usb@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, 
+ Jens Glathe <jens.glathe@oldschoolsolutions.biz>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1748087323; l=4168;
+ i=jens.glathe@oldschoolsolutions.biz; s=20240919;
+ h=from:subject:message-id;
+ bh=cDAGEvaEut9Wx4ncI5G3ZNgyLhjTpeeMC7Uy6xv4YFA=;
+ b=rUuueDf7GE4lvcyoT3SdhoYXBsm46XHUp/epyPMPZjSHdhQgT7lrqMYg5tNcmtML8CjSNIFFG
+ 1Qch+QyZi4jApmk/vZ6WFXNcaLaKT/uXueOMyr1iC/c7+5oiPiMTJrg
+X-Developer-Key: i=jens.glathe@oldschoolsolutions.biz; a=ed25519;
+ pk=JcRJqJc/y8LsxOlPakALD3juGfOKmFBWtO+GfELMJVg=
+X-Endpoint-Received: by B4 Relay for
+ jens.glathe@oldschoolsolutions.biz/20240919 with auth_id=216
+X-Original-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Reply-To: jens.glathe@oldschoolsolutions.biz
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: e60acc420368e3fcb8c158207d37a502c4eee9e2  usb: typec: tipd: fix typo in TPS_STATUS_HIGH_VOLAGE_WARNING macro
+Device tree for the Lenovo Thinkbook 16 G7 QOY
 
-Warning (recently discovered and may have been fixed):
+The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1].
 
-    https://lore.kernel.org/oe-kbuild-all/202505220522.rT5u07uk-lkp@intel.com
-    https://lore.kernel.org/oe-kbuild-all/202505220644.tD2JYSkV-lkp@intel.com
+Supported features:
 
-    drivers/usb/misc/onboard_usb_dev.c:313:12: warning: 'onboard_dev_5744_i2c_read_byte' defined but not used [-Wunused-function]
-    drivers/usb/misc/onboard_usb_dev.c:358:12: warning: 'onboard_dev_5744_i2c_write_byte' defined but not used [-Wunused-function]
-    sound/usb/qcom/qc_audio_offload.c:1019: warning: Excess function parameter 'xfer_buf' description in 'uaudio_transfer_buffer_setup'
-    sound/usb/qcom/qc_audio_offload.c:1019: warning: Function parameter or struct member 'xfer_buf_cpu' not described in 'uaudio_transfer_buffer_setup'
+- USB type-c and type-a ports
+- Keyboard
+- Touchpad (all that are described in the dsdt)
+- Touchscreen (described in the dsdt, no known SKUss)
+- Display including PWM backlight control
+- PCIe devices
+- nvme
+- SDHC card reader
+- ath12k WCN7850 Wifi and Bluetooth
+- ADSP and CDSP
+- GPIO keys (Lid switch)
+- Sound via internal speakers / DMIC / USB / headphone jack
+- DP Altmode with 2 lanes (as all of these still do)
+- Integrated fingerprint reader (FPC)
+- Integrated UVC camera
 
-Warning ids grouped by kconfigs:
+Not supported yet:
 
-recent_errors
-|-- alpha-allyesconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-|-- csky-randconfig-002-20250523
-|   |-- drivers-usb-misc-onboard_usb_dev.c:warning:onboard_dev_5744_i2c_read_byte-defined-but-not-used
-|   `-- drivers-usb-misc-onboard_usb_dev.c:warning:onboard_dev_5744_i2c_write_byte-defined-but-not-used
-|-- hexagon-allmodconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-|-- hexagon-allyesconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-|-- s390-allmodconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-|-- s390-allyesconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-|-- um-allmodconfig
-|   |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-|   `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
-`-- um-allyesconfig
-    |-- sound-usb-qcom-qc_audio_offload.c:warning:Excess-function-parameter-xfer_buf-description-in-uaudio_transfer_buffer_setup
-    `-- sound-usb-qcom-qc_audio_offload.c:warning:Function-parameter-or-struct-member-xfer_buf_cpu-not-described-in-uaudio_transfer_buffer_setup
+- HDMI port.
+- EC and some fn hotkeys.
 
-elapsed time: 1450m
+Limited support yet:
 
-configs tested: 128
-configs skipped: 3
+- SDHC card reader is based on the on-chip sdhc_2 controller, but the driver from
+the Snapdragon Dev Kit is only a partial match. It can do normal slow sd cards,
+but not UHS-I (SD104) and UHS-II.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                                 defconfig    gcc-14.2.0
-arc                   randconfig-001-20250523    gcc-15.1.0
-arc                   randconfig-002-20250523    gcc-10.5.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-14.2.0
-arm                          ep93xx_defconfig    clang-21
-arm                      footbridge_defconfig    clang-17
-arm                       imx_v4_v5_defconfig    clang-21
-arm                        keystone_defconfig    gcc-14.2.0
-arm                       netwinder_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250523    clang-16
-arm                   randconfig-002-20250523    gcc-8.5.0
-arm                   randconfig-003-20250523    gcc-7.5.0
-arm                   randconfig-004-20250523    clang-21
-arm                           sama5_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250523    gcc-8.5.0
-arm64                 randconfig-002-20250523    clang-16
-arm64                 randconfig-003-20250523    clang-21
-arm64                 randconfig-004-20250523    gcc-8.5.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250523    gcc-10.5.0
-csky                  randconfig-002-20250523    gcc-14.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250523    clang-21
-hexagon               randconfig-002-20250523    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250523    clang-20
-i386        buildonly-randconfig-002-20250523    clang-20
-i386        buildonly-randconfig-003-20250523    clang-20
-i386        buildonly-randconfig-004-20250523    clang-20
-i386        buildonly-randconfig-005-20250523    clang-20
-i386        buildonly-randconfig-006-20250523    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250523    gcc-15.1.0
-loongarch             randconfig-002-20250523    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                         amcore_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                           gcw0_defconfig    clang-21
-mips                        qi_lb60_defconfig    clang-21
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250523    gcc-10.5.0
-nios2                 randconfig-002-20250523    gcc-10.5.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20250523    gcc-9.3.0
-parisc                randconfig-002-20250523    gcc-7.5.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-21
-powerpc                 mpc832x_rdb_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250523    clang-21
-powerpc               randconfig-002-20250523    clang-21
-powerpc               randconfig-003-20250523    clang-20
-powerpc                    sam440ep_defconfig    gcc-14.2.0
-powerpc                     tqm8555_defconfig    gcc-14.2.0
-powerpc                      tqm8xx_defconfig    clang-19
-powerpc64             randconfig-001-20250523    clang-21
-powerpc64             randconfig-002-20250523    clang-19
-powerpc64             randconfig-003-20250523    clang-21
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250523    gcc-8.5.0
-riscv                 randconfig-002-20250523    clang-17
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                          debug_defconfig    gcc-14.2.0
-s390                  randconfig-001-20250523    gcc-6.5.0
-s390                  randconfig-002-20250523    clang-21
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                             espt_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250523    gcc-12.4.0
-sh                    randconfig-002-20250523    gcc-6.5.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250523    gcc-10.3.0
-sparc                 randconfig-002-20250523    gcc-10.3.0
-sparc64               randconfig-001-20250523    gcc-9.3.0
-sparc64               randconfig-002-20250523    gcc-7.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250523    gcc-12
-um                    randconfig-002-20250523    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250523    gcc-12
-x86_64      buildonly-randconfig-002-20250523    clang-20
-x86_64      buildonly-randconfig-003-20250523    clang-20
-x86_64      buildonly-randconfig-004-20250523    clang-20
-x86_64      buildonly-randconfig-005-20250523    clang-20
-x86_64      buildonly-randconfig-006-20250523    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250523    gcc-9.3.0
-xtensa                randconfig-002-20250523    gcc-11.5.0
+- The GPU is not yet supported. Graphics is only software rendered.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This work was done without any schematics or non-public knowledge of the device.
+So, it is based on the existing x1 device trees, dsdt analysis, using HWInfo
+ARM64, and pure guesswork. It has been confirmed, however, that the device really
+has 4 NXP PTN3222 eUSB2 repeaters, one of which doesn't have a reset GPIO (eusb5
+@43).
+
+I have brought up the Thinkbook over the last 4 months since the x1p42100-crd
+patches were available. The laptop is very usable now, and quite solid as a dev/
+test platform. GPU support would be nice, though :)
+
+Big thanks to Aleksandrs Vinarskis for helping (and sort of persisting) on the
+fingerprint, camera and HDMI issues.
+
+[1]: https://psref.lenovo.com/syspool/Sys/PDF/ThinkBook/ThinkBook_16_G7_QOY/ThinkBook_16_G7_QOY_Spec.pdf
+
+Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+---
+Changes in v4:
+- squashed Makefile and dts commits to one
+- picked up r-b from Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+- Link to v3: https://lore.kernel.org/r/20250524-tb16-dt-v3-0-17e26d935e73@oldschoolsolutions.biz
+
+Changes in v3:
+- removed changes in x1e80100.dtsi and x1p42100.dtsi - resolved with [2]
+- fixed schema errors with correct compatible string for the model
+- added power management for the camera via onboard_usb_dev.c
+- amended node ordering
+- changed the panel driver used to edp-panel, added panel in the driver
+- amended x1e80100.dtsi for exposing PM8010: This one is not present in the design, 
+  added /delete-node/ for it.
+- removed commented-out lines for sdhc, specified which don't work.
+- corrected ZAP shader firmware name
+- Link to v2: https://lore.kernel.org/r/20250516-tb16-dt-v2-0-7c4996d58ed6@oldschoolsolutions.biz
+
+Changes in v2:
+- removed nodes that gave DTC compile errors (pm8010_thermal, edp0_hpd_active)
+- amended qcom.yaml
+- shortened the commit titles to fit 75 chars
+- Link to v1: https://lore.kernel.org/r/20250515-tb16-dt-v1-0-dc5846a25c48@oldschoolsolutions.biz
+
+[2]: 20250520-topic-x1p4_tsens-v2-1-9687b789a4fb@oss.qualcomm.com
+
+---
+Jens Glathe (5):
+      dt-bindings: arm: qcom: Add Lenovo TB16 support
+      drm/panel-edp: add N160JCE-ELL CMN panel for Lenovo Thinkbook 16
+      usb: misc: onboard_usb_dev: Add Bison Electronics Inc. Integrated Camera
+      firmware: qcom: scm: Allow QSEECOM on Lenovo Thinkbook 16
+      arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY device tree
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    3 +
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi       |    2 +-
+ .../boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts | 1655 ++++++++++++++++++++
+ drivers/firmware/qcom/qcom_scm.c                   |    1 +
+ drivers/gpu/drm/panel/panel-edp.c                  |    1 +
+ drivers/usb/misc/onboard_usb_dev.c                 |    2 +
+ drivers/usb/misc/onboard_usb_dev.h                 |    8 +
+ 8 files changed, 1672 insertions(+), 1 deletion(-)
+---
+base-commit: 176e917e010cb7dcc605f11d2bc33f304292482b
+change-id: 20250511-tb16-dt-e84c433d87b1
+
+Best regards,
+-- 
+Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+
+
 
