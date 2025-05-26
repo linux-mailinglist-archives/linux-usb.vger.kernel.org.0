@@ -1,184 +1,167 @@
-Return-Path: <linux-usb+bounces-24302-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24303-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEB26AC38B4
-	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 06:34:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7A69AC3AC9
+	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 09:40:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E98D18917D8
-	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 04:35:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61F9C1894D73
+	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 07:40:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27BB1A83E4;
-	Mon, 26 May 2025 04:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B201D1DF99C;
+	Mon, 26 May 2025 07:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1zmuGmE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NqtRUhMw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB3214D29B;
-	Mon, 26 May 2025 04:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B5CEAE7;
+	Mon, 26 May 2025 07:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748234083; cv=none; b=meGy52UO+J/7wXrFXTL/9t6CAHbgHXBrwHgihJ8DjyvEeliADkhOpw+E9BBzo1A55lytp++OyV94DnZtON7kmRGYuvXP/rzhwztB0XN0Bv6lRUSXlLur2ZuCc5ATHUEDmBSWpxJmh0/gJvUPOnf/FNMZfYfHGv83qMNNmFhi/DQ=
+	t=1748245193; cv=none; b=fdP8TbHhM1p94YTWJw0c7JY0JHUE8tor4Kb21x8UJw2Uh9NxW7Swtsubw0b43POd8PVstHd3uGX76iP6nsHQAVaqIKyFU9A/E7FjwGBraD8jIH59MZsbUQNRkTPQSfHPAVZMcs/+u7YQvlABH2xdbq/zxBhFVttNMfR4yVjI1SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748234083; c=relaxed/simple;
-	bh=8SORB+Gtjm+0iyAAYxHA2Reo+gdvTPRF6aFFxqcu7wg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S3cXFW8QXnBEJ+nmeGycVCmFL3l9uXWIYHlCDYESxl9gJTeQDbI5nr+DZ3bQA6M4HHt2wipdKzpjIj9ZH7gsciEv7+DkWRidQ6mPtW7r+InQR2GmXQ5AS1lzA9rAY8v+c8sCn/oPRG1aTQSzf/YGoS9YSDu+3edc9prahakCt6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W1zmuGmE; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso1123675b3a.2;
-        Sun, 25 May 2025 21:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748234081; x=1748838881; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rpYj8itDK4L5wE/M7/hM6tOuRa6rFUXJoS7o5oXlxCw=;
-        b=W1zmuGmEz5RSrbgVcKzuRDNVPrqTxinMtsIbkHAUVV0ZlT/TQxfC8dxrr4Pzb9dm8e
-         vnm3JTgeRib1alsWuQh4rv2gy4+MGnF++O6Np4LigHK1Y/3OePPa/JQQbnIYG6MW3XTy
-         OgEH02Fr7qlNniCpVr+t+PoX4J97ncF6oZbADycRgiJfNKYjD42+omKpTZcdnPct4mDI
-         l/9KVUPN76DhYoFIpg9MLvXsAbMwpfHS39JxtHcI82YVDYS/hhNULt9aIB84fJcy8B+d
-         tzBK+FzMYHhaCZ2bXzscFRtV7loZl1IFGIpxIoxlIKNfSOwBw0QGCJiR+1dBY1mM2Kbz
-         zGhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748234081; x=1748838881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rpYj8itDK4L5wE/M7/hM6tOuRa6rFUXJoS7o5oXlxCw=;
-        b=iyjAoE7aCpqWG13fNB9oYfd9AHimhdApSQWAoelEB6lGjsatW4WPxg7uK1Lf1xrjKV
-         7JmnzFWBIsP+r7mvwylWNYGNd3tcHSJ/NPwk+UpfbJ3IhXhAmAOsK6lPkzhu/oPWgv3i
-         o0/5fBMsgoUGCQVVeCKw919Hy3tyOMEUR2gt3MmehM8PCGhAoDMK5rSyc2K6lei6a8ec
-         3+RXRYYwzM5tEV8HPoQY7Z/SXjlTCPLapxcC5fgpnA3D7duR77DF3NoLGfN/KtuIeVp/
-         K7hzIGATSqAztmeDHpTG6yfglgzzeMAilaNciMa09LSzgSV3H4KUKigLUboB0HReh27e
-         WRFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXblqskTGf+66Leah5g4RkHOSrllA0JwPk63Sgpy9clKLKix13j09m6gN1NCnVHE5O+TUfKjjWJi2Ov1t0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHgAfBZsKeHov+nQaU71ShalGkNUuj7xHm97uJRSxYV6NOMoaP
-	CsvLEewQf2UomqQ3J6DvnzB7+vuGCffNm1WM2y1BXc1Y6Z78Nkh/xR9S
-X-Gm-Gg: ASbGnctxIrGpgI2LqipxMi7v5N+cw8+EQVKdU2hZ1hIcSeJhSvpbwEbqqGqyupuq6LS
-	Q4hG+sAuC03N6atnYgCCcF9FF+mu64mf3jJ3Lk7XxjEglXDLvWUBk8T1i3y9UG2+Kz+EHHLUR3e
-	9Qq9SREDpFutErXkYaECNftqv4Xt6XgR9+h+Wve5JnRuVFEDviGyNK3FS3flleK36KUUG92mk9g
-	uJtYrmf7IGgBoBtmZ/3PtSubAFrlYakvt0yOdQgbm2OoDZqpRiZ6OcOR0SN351L18tM/SndSU6Z
-	frVpP/EXis9uQKfBA+hCq1JI8GnTqYB/9Sa4vLNo2C6K3YgVNHri8ZI1JPt64Y5vKDOm2mBtJW9
-	zppa/1WE=
-X-Google-Smtp-Source: AGHT+IEhIpUrTY4pcMXHRLsWmSAvbbjH3A82MNSLEvp0ddvItt6vFgiIKuz1HatoYVkFE9eQo8gcEQ==
-X-Received: by 2002:a05:6a20:3ca6:b0:203:addb:5a29 with SMTP id adf61e73a8af0-2188c3c7982mr11822221637.40.1748234080874;
-        Sun, 25 May 2025 21:34:40 -0700 (PDT)
-Received: from giraffesnn.localdomain ([106.37.191.2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2c3b85d967sm96722a12.61.2025.05.25.21.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 May 2025 21:34:40 -0700 (PDT)
-From: Yongbo Zhang <giraffesnn123@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yongbo Zhang <giraffesnn123@gmail.com>
-Subject: [PATCH] usb: typec: fusb302: fix scheduling while atomic when using virtio-gpio
-Date: Mon, 26 May 2025 12:34:33 +0800
-Message-ID: <20250526043433.673097-1-giraffesnn123@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1748245193; c=relaxed/simple;
+	bh=IBYAM02gDnPNQWz4PJvgXSa+zSTTw55qR4Wjew9vvcA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N20vTkm+tf86nwPM7TQ/Z1956XebWEPXOb0aLE2RlPLUPcR1eC5cFnwr3yLr9t7G4UY4gugfohQBQgPK3r1/j6ABf31QhCYzN6JezNjmHDxln/vInnC6dvIl8yIDvPgSvt8q3D8k2KWBwt/hs65KFrJb04Od79yue53acwejrlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NqtRUhMw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748245191; x=1779781191;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IBYAM02gDnPNQWz4PJvgXSa+zSTTw55qR4Wjew9vvcA=;
+  b=NqtRUhMwZPv068y92INuiwkrNvMh3wllX87sRSXuJ7vPIKdClv+OfAaP
+   /e+/SM6z6XgkwtO+Hp09UPoHfZ1eMLsV/zDL9qi1ikC/HEiGsrxf9c215
+   9zExfYIlSVBnurhdzBqBFg9TCEofskKsiADLw+2rwuuh0m6sMQ2DD/WkM
+   wfclbNfMSnt4an40yFT472zn7gXLzNxnEhel3iMBSxb2rBV+TydPL1D89
+   QNViMcAkPlQS6ny+i5Q6Jvr3gBAr85yfqj0N5Bd0SK5Be50lN5ZabRtN/
+   JGWj+Y3i7uYFS/qYQ1jjOnTMvcgrdTSY/NRwVbq9NQo3buhIVcNo+Z3i0
+   Q==;
+X-CSE-ConnectionGUID: bQ5DraHTSXG/FzuiSpFJ1A==
+X-CSE-MsgGUID: t4d0K/PxS+CSmg3kc/hRYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11444"; a="50266426"
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="50266426"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2025 00:39:50 -0700
+X-CSE-ConnectionGUID: Y9e57ER8SDy5G6wGIUAEmw==
+X-CSE-MsgGUID: RVKkfV8RTK6gwePf1FzckQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="147412219"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 26 May 2025 00:39:48 -0700
+Message-ID: <b982ff0e-1ae8-429d-aa11-c3e81a9c14e5@linux.intel.com>
+Date: Mon, 26 May 2025 10:39:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] usb: xhci: Skip xhci_reset in xhci_resume if xhci
+ is being removed
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+ Roy Luo <royluo@google.com>
+Cc: "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "michal.pecio@gmail.com" <michal.pecio@gmail.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20250522190912.457583-1-royluo@google.com>
+ <20250522190912.457583-2-royluo@google.com>
+ <20250523230633.u46zpptaoob5jcdk@synopsys.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250523230633.u46zpptaoob5jcdk@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When the gpio irqchip connected to a slow bus(e.g., i2c bus or virtio
-bus), calling disable_irq_nosync() in top-half ISR handler will trigger
-the following kernel BUG:
+On 24.5.2025 2.06, Thinh Nguyen wrote:
+> Hi Mathias, Roy,
+> 
+> On Thu, May 22, 2025, Roy Luo wrote:
+>> xhci_reset() currently returns -ENODEV if XHCI_STATE_REMOVING is
+>> set, without completing the xhci handshake, unless the reset completes
+>> exceptionally quickly. This behavior causes a regression on Synopsys
+>> DWC3 USB controllers with dual-role capabilities.
+>>
+>> Specifically, when a DWC3 controller exits host mode and removes xhci
+>> while a reset is still in progress, and then attempts to configure its
+>> hardware for device mode, the ongoing, incomplete reset leads to
+>> critical register access issues. All register reads return zero, not
+>> just within the xHCI register space (which might be expected during a
+>> reset), but across the entire DWC3 IP block.
+>>
+>> This patch addresses the issue by preventing xhci_reset() from being
+>> called in xhci_resume() and bailing out early in the reinit flow when
+>> XHCI_STATE_REMOVING is set.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 6ccb83d6c497 ("usb: xhci: Implement xhci_handshake_check_state() helper")
+>> Suggested-by: Mathias Nyman <mathias.nyman@intel.com>
+>> Signed-off-by: Roy Luo <royluo@google.com>
+>> ---
+>>   drivers/usb/host/xhci.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 90eb491267b5..244b12eafd95 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -1084,7 +1084,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+>>   		xhci_dbg(xhci, "Stop HCD\n");
+>>   		xhci_halt(xhci);
+>>   		xhci_zero_64b_regs(xhci);
+>> -		retval = xhci_reset(xhci, XHCI_RESET_LONG_USEC);
+>> +		if (xhci->xhc_state & XHCI_STATE_REMOVING)
+>> +			retval = -ENODEV;
+>> +		else
+>> +			retval = xhci_reset(xhci, XHCI_RESET_LONG_USEC);
+> 
+> How can this prevent the xhc_state from changing while in reset? There's
+> no locking in xhci-plat.
 
-BUG: scheduling while atomic: RenderEngine/253/0x00010002
-...
-Call trace:
- dump_backtrace+0x0/0x1c8
- show_stack+0x1c/0x2c
- dump_stack_lvl+0xdc/0x12c
- dump_stack+0x1c/0x64
- __schedule_bug+0x64/0x80
- schedule_debug+0x98/0x118
- __schedule+0x68/0x704
- schedule+0xa0/0xe8
- schedule_timeout+0x38/0x124
- wait_for_common+0xa4/0x134
- wait_for_completion+0x1c/0x2c
- _virtio_gpio_req+0xf8/0x198
- virtio_gpio_irq_bus_sync_unlock+0x94/0xf0
- __irq_put_desc_unlock+0x50/0x54
- disable_irq_nosync+0x64/0x94
- fusb302_irq_intn+0x24/0x84
- __handle_irq_event_percpu+0x84/0x278
- handle_irq_event+0x64/0x14c
- handle_level_irq+0x134/0x1d4
- generic_handle_domain_irq+0x40/0x68
- virtio_gpio_event_vq+0xb0/0x130
- vring_interrupt+0x7c/0x90
- vm_interrupt+0x88/0xd8
- __handle_irq_event_percpu+0x84/0x278
- handle_irq_event+0x64/0x14c
- handle_fasteoi_irq+0x110/0x210
- __handle_domain_irq+0x80/0xd0
- gic_handle_irq+0x78/0x154
- el0_irq_naked+0x60/0x6c
+Patch 2/2, which is the revert of 6ccb83d6c497 prevents xhci_reset() from
+aborting due to xhc_state flags change.
 
-This patch replaces request_irq() with devm_request_threaded_irq() to
-avoid the use of disable_irq_nosync().
+This patch makes sure xHC is not reset twice if xhci is resuming due to
+remove being called. (XHCI_STATE_REMOVING is set).
+The Qcom platform has watchdog issues with the 10 second XHCI_RESET_LONG_USEC
+timeout reset during resume at remove.
 
-Signed-off-by: Yongbo Zhang <giraffesnn123@gmail.com>
----
- drivers/usb/typec/tcpm/fusb302.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> I would suggest to simply revert the commit 6ccb83d6c497 that causes
+> regression first. We can investigate and look into a solution to the
+> specific Qcom issue afterward.
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index f15c63d3a8f4..f2801279c4b5 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1477,9 +1477,6 @@ static irqreturn_t fusb302_irq_intn(int irq, void *dev_id)
- 	struct fusb302_chip *chip = dev_id;
- 	unsigned long flags;
+Why intentionally bring back the Qcom watchdog issue by only reverting
+6ccb83d6c497 ?. Can't we solve both in one go?
 
--	/* Disable our level triggered IRQ until our irq_work has cleared it */
--	disable_irq_nosync(chip->gpio_int_n_irq);
--
- 	spin_lock_irqsave(&chip->irq_lock, flags);
- 	if (chip->irq_suspended)
- 		chip->irq_while_suspended = true;
-@@ -1622,7 +1619,6 @@ static void fusb302_irq_work(struct work_struct *work)
- 	}
- done:
- 	mutex_unlock(&chip->lock);
--	enable_irq(chip->gpio_int_n_irq);
- }
+> 
+> Note that this commit may impact role-switching flow for all DRD dwc3
+> (and perhaps others), which may also impact other Qcom DRD platforms.
 
- static int init_gpio(struct fusb302_chip *chip)
-@@ -1747,9 +1743,10 @@ static int fusb302_probe(struct i2c_client *client)
- 		goto destroy_workqueue;
- 	}
+Could you expand on this, I'm not sure I follow.
 
--	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
--			  IRQF_ONESHOT | IRQF_TRIGGER_LOW,
--			  "fsc_interrupt_int_n", chip);
-+	ret = devm_request_threaded_irq(dev, chip->gpio_int_n_irq,
-+					NULL, fusb302_irq_intn,
-+					IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-+					"fsc_interrupt_int_n", chip);
- 	if (ret < 0) {
- 		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
- 		goto tcpm_unregister_port;
-@@ -1774,7 +1771,6 @@ static void fusb302_remove(struct i2c_client *client)
- 	struct fusb302_chip *chip = i2c_get_clientdata(client);
+xHC will be reset later in remove path:
 
- 	disable_irq_wake(chip->gpio_int_n_irq);
--	free_irq(chip->gpio_int_n_irq, chip);
- 	cancel_work_sync(&chip->irq_work);
- 	cancel_delayed_work_sync(&chip->bc_lvl_handler);
- 	tcpm_unregister_port(chip->tcpm_port);
---
-2.49.0
+xhci_plat_remove()
+   usb_remove_hcd()
+     hcd->driver->stop(hcd) -> xhci_stop()
+       xhci_reset(xhci, XHCI_RESET_SHORT_USEC);
+
+Thanks
+Mathias
 
 
