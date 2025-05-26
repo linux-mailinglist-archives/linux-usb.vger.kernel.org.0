@@ -1,263 +1,227 @@
-Return-Path: <linux-usb+bounces-24312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A8EAC41A6
-	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 16:42:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84E67AC4244
+	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 17:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD9723A5D2E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 14:41:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F6711793E7
+	for <lists+linux-usb@lfdr.de>; Mon, 26 May 2025 15:28:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7432E2144B4;
-	Mon, 26 May 2025 14:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88F7E212D67;
+	Mon, 26 May 2025 15:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNlgbMZA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B2A212FB0;
-	Mon, 26 May 2025 14:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5828C21423F;
+	Mon, 26 May 2025 15:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748270463; cv=none; b=fNEdMaJTx1f8tPxFyT/rUeFHFXg4FpoML8ohbfQgB7MPQjgCd67pKViGJ0j3YQve14ZShQWu8Of10cwqkYub0lik1NHhlaxV+K0ifdT3Vsd0wj1xCyicgzI1AohL2ZM1Dyfef2+CxoBudhUcv6wBoTFIvHO5BncrH2hw6VrZIVA=
+	t=1748273298; cv=none; b=TMOOZ1jBctnbRlPbsbQqZg3dIEO0aVhEjToMJfhW3R0UA/kFQHZkzNJgTe5mDPJN2wTTEF+SD8ldfmTjZB1Qdxn9SS/5jXZkvzvrD6S08oVzi51dC1CPAOs6f2ALvfxnL/5jP6SQ6ktu5ZZ0ZUzP1Ot1u8PuPBJk0zKGRJiEpQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748270463; c=relaxed/simple;
-	bh=cGVbOqpUYlVjPJ9sdnL9JMn3K7BgmO8hSIFFZcC21rQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Fn2M1uhhvRKSQIaFGwtpd63L4vd4/t4fCgdh9ISDdOdoc+Gm0Qcqna3UhsQnARjvXBY88AcBrl0pqxdePJhj3iDFabdXphBkMkWYQw2Vc1pI+XfKydf+0al4n+fSy2Aq87uuSnVxLC0/oujhDoWtantaoPcXRSAOVdgFZ7RUyjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
-Received: from [127.0.0.1] (gy-adaptive-ssl-proxy-3-entmail-virt135.gy.ntes [27.18.99.37])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 16709a33f;
-	Mon, 26 May 2025 22:40:50 +0800 (GMT+08:00)
-From: Ze Huang <huangze@whut.edu.cn>
-Date: Mon, 26 May 2025 22:40:20 +0800
-Subject: [PATCH v4 4/4] riscv: dts: spacemit: add usb3.0 support for K1
+	s=arc-20240116; t=1748273298; c=relaxed/simple;
+	bh=XgpvUG9KykTN5yAtg1OwU7QbpXzVIwV1QV+ipNPAC7E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ikQaAR3D6yy70W/PsuJop0vkYkNJXUNuJ7DlkugEUqpuwYmCKqwWaGZ8khwXUDYeLup/bOwpSb8iIAr4p1Ki50mJvcOIhi5oo+z5TOeiJ/so+2FjgO08BgAnqxvSvKBClUe9FDYyCeGCBPZcaFfQK3Y9SBupdxkM8UIzspJdrS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hNlgbMZA; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-8647e143f28so186955939f.1;
+        Mon, 26 May 2025 08:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748273295; x=1748878095; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ok85kvavAOBcumYOi4zTE1YwoECPNwKxwTVh7Dm7eVw=;
+        b=hNlgbMZAs1DDgZ3l8JaV7O9HkNHhLyWFK5UfCD34DLVSosnultiOimUSU+YO8z8qWk
+         AUYvPeorwT7XNIMoCUDoEjQAws54n0l2e/XCN/8nDP6sUf/rdk7XRct/hlEz/zc0mnF1
+         BTzQIGuNATJKQGYhxK7ronXS0NHFsVfowqtPSNe+V9FQd9f6V2T108htgTeQSXSAudlp
+         0j0mBYGSaDougpAC26CkWIPcTp+lkA4itlpMDl5hXYSTPEKLMaRAdZ5pR6ardMKJZSn6
+         klqzyZpaLzi1cjFFQ4Ac+3uRTuUO4V3utg6uVA/Ri69NcXvhgLYEAoXHwHpurp0fl9pL
+         1jkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748273295; x=1748878095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ok85kvavAOBcumYOi4zTE1YwoECPNwKxwTVh7Dm7eVw=;
+        b=JepQQcLn2sxLIBlZPKOzgseq7yP5N7JeJPCSY/KhV0sAaPAJ8+COFc2WGZdYLKWnZ/
+         Hh7z/AtZpP2jWXbqCIdAc9XK1VZKJOgp7XfvD2XoCbdHzml2ti91hgIlesM3JGOVLd05
+         I7M5HTQtNVk3PYBUS6d8ap+wVUfpiWbfjqt6BK0wGRWXsWQG5Ctv7jhqY7G4itBig79/
+         FCfcsux8OQeFb5CaJf0XGhW4ktXF0TqbsjN0irMPCVbGfZsXobAD2ihYmEfmwj5VeYhz
+         eVC9F/Y82LtMjcWoXqdo4QPnbW6aicGv0tRX3GOq/+HpA11ZLpnRRl2T5vEXhDWB1a77
+         DR0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUiyRrT2pn3QEqyfIevaMKEaLB4r7uZ776RQDYHwTQLvCwSCZPs2LY9RuVPdnFB0g5x/kMxc32G/7r2/a/5WQ==@vger.kernel.org, AJvYcCWSMDhUr/6+pMO4bwVPIlN8OKJjMlpMOdNJgcBjf+HKkxRqal/zxOwjY1RoHW7tGBlk+Vg8s9F+b2jhO+P4@vger.kernel.org, AJvYcCWV5K3dZprBlpKSX02lgfEMO/uqQOn6KiT3kF0OyfrbyifzrqjlWnhb0PunEinUUH6UYmCCU5dD7Fs5@vger.kernel.org, AJvYcCXl981C1isytE+cIppeKx/zTXspHnYgTPYyTpi7mMJJ/aWeSo4E9iaP7rM2J/w/i9f+acmHPXF7SwTc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtZH3IwkDImlyOEpGMBsLr/GtCcFXDnfadAwNd0Ak/13cnpWs3
+	LjaZSqq2NIL3PONbwTFSROyYo1M1Kpsz41xhAxHSqFys99CrfLnLAxM1Vki3jcb2PcVWm5eCM43
+	icclI3wPvmJKveWuCBeroy471vIvWW/o=
+X-Gm-Gg: ASbGncsN4r/a0V0zuMkxSZ3P/4caBvQUWna1QT+WSRYtaiL3sjvMtT0DK6znw8JkxkB
+	XI8oO/M2GV3HqQm8wnwV2LoyKZm9sH+tAiNtqlOeBslUecQp1ONTuGYH0SeE0QlGPP92kald/c9
+	nZeudgf9rMJXHh/3xAbEdM8wuU6eXE9xtdf6Xc84N7yHt4l2CBmUQQ5Skyrg32dB9U
+X-Google-Smtp-Source: AGHT+IHnjEOHDEa+vpbuy9fu6OzuQBLctXm8e94NFAA5PAxQ1vPEMihVba1OMwmRFrSVy6hhC0EPPpaB3XtabMoYhcY=
+X-Received: by 2002:a05:6e02:1a26:b0:3dc:8075:ccde with SMTP id
+ e9e14a558f8ab-3dc9b68097amr86275465ab.4.1748273295224; Mon, 26 May 2025
+ 08:28:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250526-b4-k1-dwc3-v3-v4-4-63e4e525e5cb@whut.edu.cn>
-References: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
-In-Reply-To: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-kernel@vger.kernel.org, Ze Huang <huangze@whut.edu.cn>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1748270423; l=5426;
- i=huangze@whut.edu.cn; s=20250325; h=from:subject:message-id;
- bh=cGVbOqpUYlVjPJ9sdnL9JMn3K7BgmO8hSIFFZcC21rQ=;
- b=dvUL5idzS2fqYMvI0gmi9yeE8UN14gsHQUVnnAR5LvJGp5WR/4J8RqMrM/PWSx01FX6z+kN2K
- qehbIV1k72sAULbGHhGZM40nRnWqpDmugEUNRdZDvuBNm1VZGoKSshL
-X-Developer-Key: i=huangze@whut.edu.cn; a=ed25519;
- pk=C3zfn/kH6oMJickaXBa8dxTZO68EBiD93F+tAenboRA=
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSBhIVkNPS00YSEMeGB9NGlYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJTFVKQ1VCQlVITFlXWRYaDxIVHRRZQVlPS0hVSktJQk1KSlVKS0tVS1kG
-X-HM-Tid: 0a970d0a072803a1kunm5f56ec4c12f04
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pz46FAw6QjEyOgw4CjYBFDcy
-	EgMaCQ1VSlVKTE9DSUxLT05MTElPVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
-	TFVKQ1VCQlVITFlXWQgBWUFNQk9NNwY+
+References: <20250524-tb16-dt-v4-0-2c1e6018d3f0@oldschoolsolutions.biz>
+ <20250524-tb16-dt-v4-5-2c1e6018d3f0@oldschoolsolutions.biz>
+ <g7vlyqma6ow6tdsaqt2rfwvblxqwbqlwmoueio7i4vqvjy76kw@5bz4g33pq4t7>
+ <CAMcHhXoYkQru_0n5siMGGkTcHu8yWRZWfT4ByiD8D0ieZHF+wQ@mail.gmail.com>
+ <vwoixgdyjjzcjlv4muwrzv7wztnqyidtj7ghacgkjg6hgkkyl7@ji53bhiltaef>
+ <CAMcHhXqDFuo+x99KOK0pQFj-FyTdQoZS_JvehNE2AC_JSoQ2gQ@mail.gmail.com> <rvyfkow43atquc64p6slck6lpfsot67v47ngvfnuhxqo222h6k@kdvbsmf3fwsr>
+In-Reply-To: <rvyfkow43atquc64p6slck6lpfsot67v47ngvfnuhxqo222h6k@kdvbsmf3fwsr>
+From: Rob Clark <robdclark@gmail.com>
+Date: Mon, 26 May 2025 08:28:03 -0700
+X-Gm-Features: AX0GCFth23zIDl8jXgXc3hV3XSnIr7KUSlHYudJjPTsDM7Pwue023yHnh3K8dkQ
+Message-ID: <CAF6AEGvr_foMVwaE_VSVWLT50cbGi8i3UGwo2e=rORD-1JmTmA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY
+ device tree
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, jens.glathe@oldschoolsolutions.biz, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Kaehlcke <mka@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Douglas Anderson <dianders@chromium.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <quic_jesszhan@quicinc.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>, 
+	linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add USB 3.0 support for the SpacemiT K1 SoC, including the
-following components:
+On Mon, May 26, 2025 at 1:36=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@oss.qualcomm.com> wrote:
+>
+> On Sun, May 25, 2025 at 09:43:36PM +0200, Aleksandrs Vinarskis wrote:
+> > On Sun, 25 May 2025 at 15:33, Dmitry Baryshkov
+> > <dmitry.baryshkov@oss.qualcomm.com> wrote:
+> > >
+> > > On Sat, May 24, 2025 at 07:58:13PM +0200, Aleksandrs Vinarskis wrote:
+> > > > On Sat, 24 May 2025 at 17:33, Dmitry Baryshkov
+> > > > <dmitry.baryshkov@oss.qualcomm.com> wrote:
+> > > > >
+> > > > > On Sat, May 24, 2025 at 01:48:40PM +0200, Jens Glathe via B4 Rela=
+y wrote:
+> > > > > > From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> > > > > >
+> > > > > > Device tree for the Lenovo Thinkbook 16 G7 QOY
+> > > > > >
+> > > > > > The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1=
+].
+> > > > > >
+> > > > > > Supported features:
+> > > > > >
+> > > > > > - USB type-c and type-a ports
+> > > > > > - Keyboard
+> > > > > > - Touchpad (all that are described in the dsdt)
+> > > > > > - Touchscreen (described in the dsdt, no known SKUss)
+> > > > > > - Display including PWM backlight control
+> > > > > > - PCIe devices
+> > > > > > - nvme
+> > > > > > - SDHC card reader
+> > > > > > - ath12k WCN7850 Wifi and Bluetooth
+> > > > > > - ADSP and CDSP
+> > > > > > - GPIO keys (Lid switch)
+> > > > > > - Sound via internal speakers / DMIC / USB / headphone jack
+> > > > > > - DP Altmode with 2 lanes (as all of these still do)
+> > > > > > - Integrated fingerprint reader (FPC)
+> > > > > > - Integrated UVC camera
+> > > > > >
+> > > > > > Not supported yet:
+> > > > > >
+> > > > > > - HDMI port.
+> > > > > > - EC and some fn hotkeys.
+> > > > > >
+> > > > > > Limited support yet:
+> > > > > >
+> > > > > > - SDHC card reader is based on the on-chip sdhc_2 controller, b=
+ut the driver from
+> > > > > > the Snapdragon Dev Kit is only a partial match. It can do norma=
+l slow sd cards,
+> > > > > > but not UHS-I (SD104) and UHS-II.
+> > > > > >
+> > > > > > - The GPU is not yet supported. Graphics is only software rende=
+red.
+> > > > > >
+> > > > > > This work was done without any schematics or non-public knowled=
+ge of the device.
+> > > > > > So, it is based on the existing x1e device trees, dsdt analysis=
+, using HWInfo
+> > > > > > ARM64, and pure guesswork. It has been confirmed, however, that=
+ the device really
+> > > > > > has 4 NXP PTN3222 eUSB2 repeaters, one of which doesn't have a =
+reset GPIO (eusb5
+> > > > > > @43).
+> > > > > >
+> > > > > > Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> > > > > > Co-developed by: Aleksandrs Vinarskis <alex.vinarskis@gmail.com=
+>
+> > > > > > ---
 
-- USB 2.0 PHY nodes
-- USB 3.0 combo PHY node
-- USB 3.0 host controller
-- USB 3.0 hub and vbus regulator (usb3_vhub, usb3_vbus)
-- DRAM interconnect node for USB DMA ("dma-mem")
+[snip]
 
-The `usb3_vbus` and `usb3_vhub` regulator node provides a fixed 5V
-supply to power the onboard USB 3.0 hub and usb vbus.
+> > > > > I think that you wrote that GPU isn't supported (yet).
+> > > >
+> > > > GPU is not supported on SoC level (x1p42100/purwa), not device
+> > > > specific. The idea I suggested to Jens was to mimic Asus Zenbook A1=
+4
+> > > > as per discussion abou purwa GPU and purwa firmware in general [1]:=
+ to
+> > > > already include correct filename and firmware path (since these are
+> > > > known) such that once SoC lands the GPU support laptops with that S=
+oC
+> > > > will gain GPU support 'automatically'. As nothing consumes this
+> > > > property (on purwa) just yet, adding it already does not cause any
+> > > > harm.
+> > >
+> > >
+> > > Not quite. A14 specified the firmware name, but didn't enable the GPU=
+.
+> > > This patch actually enables the GPU device. Which means, that we are
+> > > going to probe a driver on an unsupported device, using invalid GPU i=
+ds.
+> > >
+> >
+> > A14 also enables the GPU, just in the .dsti, not in the purwa .dts.
+> > Though now looking at it, perhaps it's a bit misleading.
+>
+> It should be enabled in the board.dts, not in the interim dtsi.
+>
+> > Yes you are right, it does give GPU-related error in dmesg, which
+> > appear to be otherwise harmless. Perhaps because `x1p42100.dtsi`
+> > deletes the compatible of the GPU, hence no driver is probing it?
+> >
+> > ```
+> > [    3.085697] msm_dpu ae01000.display-controller: no GPU device was fo=
+und
+> > ```
+> >
+> > Otherwise, if you still say GPU should be disabled regardless, shall I
+> > also disable it on A14's purwa variant?
+>
+> Yes, please. Don't set okay status for the GPU until it gets enabled.
 
-On K1, some DMA transfers from devices to memory use separate buses with
-different DMA address translation rules from the parent node. We express
-this relationship through the interconnects node "dma-mem", similar to [1].
+Drive-by: Shouldn't the dtb describe the hw and not the state of the
+linux kernel's support for the hw?  Ie. if bad things happen if we
+describe hw which is missing driver support, shouldn't we fix that in
+the driver.
 
-Link: https://lore.kernel.org/all/09e5e29a4c54ec7337e4e62e5d6001b69d92b103.1554108995.git-series.maxime.ripard@bootlin.com [1]
+(In the case of the GPU there is the slight wrinkle that we don't have
+a gpu-id yet so there is no compatible in the dtb yet.)
 
-Signed-off-by: Ze Huang <huangze@whut.edu.cn>
----
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 51 +++++++++++++++++++
- arch/riscv/boot/dts/spacemit/k1.dtsi            | 67 +++++++++++++++++++++++++
- 2 files changed, 118 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index 816ef1bc358ec490aff184d5915d680dbd9f00cb..1f4585fe30b64a63ee643ed9596a3a97db8c0f0d 100644
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@ -28,6 +28,25 @@ led1 {
- 			default-state = "on";
- 		};
- 	};
-+
-+	usb3_vhub: regulator-vhub-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB30_VHUB";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio K1_GPIO(123) GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	usb3_vbus: regulator-vbus-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB30_VBUS";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		gpio = <&gpio K1_GPIO(97) GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
- };
- 
- &uart0 {
-@@ -35,3 +54,35 @@ &uart0 {
- 	pinctrl-0 = <&uart0_2_cfg>;
- 	status = "okay";
- };
-+
-+&usbphy2 {
-+	status = "okay";
-+};
-+
-+&combphy {
-+	status = "okay";
-+};
-+
-+&usb_dwc3 {
-+	dr_mode = "host";
-+	vbus-supply = <&usb3_vbus>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	hub_2_0: hub@1 {
-+		compatible = "usb2109,2817";
-+		reg = <0x1>;
-+		vdd-supply = <&usb3_vhub>;
-+		peer-hub = <&hub_3_0>;
-+		reset-gpios = <&gpio K1_GPIO(124) GPIO_ACTIVE_LOW>;
-+	};
-+
-+	hub_3_0: hub@2 {
-+		compatible = "usb2109,817";
-+		reg = <0x2>;
-+		vdd-supply = <&usb3_vhub>;
-+		peer-hub = <&hub_2_0>;
-+		reset-gpios = <&gpio K1_GPIO(124) GPIO_ACTIVE_LOW>;
-+	};
-+};
-diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
-index 61f5ca250ded0da7b91cd4bbd55a5574a89c6ab0..e57b39bba877f90d52227349c983ce638559e601 100644
---- a/arch/riscv/boot/dts/spacemit/k1.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
-@@ -4,6 +4,8 @@
-  */
- 
- #include <dt-bindings/clock/spacemit,k1-syscon.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/phy/phy.h>
- 
- /dts-v1/;
- / {
-@@ -346,6 +348,15 @@ soc {
- 		dma-noncoherent;
- 		ranges;
- 
-+		mbus0: dram-controller@0 {
-+			compatible = "spacemit,k1-mbus";
-+			reg = <0x0 0x00000000 0x0 0x80000000>;
-+			dma-ranges = <0x0 0x00000000 0x0 0x00000000 0x0 0x80000000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			#interconnect-cells = <0>;
-+		};
-+
- 		syscon_rcpu: system-controller@c0880000 {
- 			compatible = "spacemit,k1-syscon-rcpu";
- 			reg = <0x0 0xc0880000 0x0 0x2048>;
-@@ -358,6 +369,62 @@ syscon_rcpu2: system-controller@c0888000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		usb_dwc3: usb@c0a00000 {
-+			compatible = "spacemit,k1-dwc3";
-+			reg = <0x0 0xc0a00000 0x0 0x10000>;
-+			clocks = <&syscon_apmu CLK_USB30>;
-+			clock-names = "usbdrd30";
-+			interconnects = <&mbus0>;
-+			interconnect-names = "dma-mem";
-+			interrupts = <125>;
-+			phys = <&usbphy2>, <&combphy PHY_TYPE_USB3>;
-+			phy-names = "usb2-phy", "usb3-phy";
-+			phy_type = "utmi";
-+			resets = <&syscon_apmu RESET_USB3_0>;
-+			snps,hsphy_interface = "utmi";
-+			snps,dis_enblslpm_quirk;
-+			snps,dis-u2-freeclk-exists-quirk;
-+			snps,dis-del-phy-power-chg-quirk;
-+			snps,dis_u2_susphy_quirk;
-+			snps,dis_u3_susphy_quirk;
-+			snps,dis_rxdet_inp3_quirk;
-+			status = "disabled";
-+		};
-+
-+		usbphy0: phy@c0940000 {
-+			compatible = "spacemit,k1-usb2-phy";
-+			reg = <0x0 0xc0940000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB_AXI>;
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		usbphy1: phy@c09c0000 {
-+			compatible = "spacemit,k1-usb2-phy";
-+			reg = <0x0 0xc09c0000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB_P1>;
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		usbphy2: phy@c0a30000 {
-+			compatible = "spacemit,k1-usb2-phy";
-+			reg = <0x0 0xc0a30000 0x0 0x200>;
-+			clocks = <&syscon_apmu CLK_USB30>;
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		combphy: phy@c0b10000 {
-+			compatible = "spacemit,k1-combphy";
-+			reg = <0x0 0xc0b10000 0x0 0x800>,
-+			      <0x0 0xd4282910 0x0 0x400>;
-+			reg-names = "ctrl", "sel";
-+			resets = <&syscon_apmu RESET_PCIE0>;
-+			#phy-cells = <1>;
-+			status = "disabled";
-+		};
-+
- 		syscon_apbc: system-control@d4015000 {
- 			compatible = "spacemit,k1-syscon-apbc";
- 			reg = <0x0 0xd4015000 0x0 0x1000>;
-
--- 
-2.49.0
-
+BR,
+-R
 
