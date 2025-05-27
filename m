@@ -1,103 +1,58 @@
-Return-Path: <linux-usb+bounces-24332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59AB8AC5A2F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 20:43:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 484DDAC5AA4
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 21:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A50831BA7AC1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 18:43:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C328188116F
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 19:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB6C280A51;
-	Tue, 27 May 2025 18:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14BE288C08;
+	Tue, 27 May 2025 19:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SAJg/lTs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbWgiM8B"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CDF27C854;
-	Tue, 27 May 2025 18:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC042882C0;
+	Tue, 27 May 2025 19:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748371392; cv=none; b=RUWDeZlQUqpCC++jbTqovwYlNKI6HMjdEpYe0pCKLNrK2kHaAtAhT7hiVB3Pdm+6OhJosNOSB2s+0KxLp5bLC015sUOPWp2CkkKUtpxEIFHuBSS66q/2RXHyuhoOXQqXp+bQP8fBDSDabkxFDNEuOk1E9Iwntvu1dyD3ToFayu4=
+	t=1748373995; cv=none; b=hYR9oFxQFpKE67jbOfeDNycUvJl18sLDAsS1gfQiVBkz8965RaHZUxHZ2O6BhLHC3pUT0sdDfK6dy0kqgm6SiHn1q0/1c1w1Gq9kRGc9XaHuuE+HWVcXcbiulBjUIjHA9+RHh3AH7051Jc/Fn7UcVxouJVGQ1Pt5Kf67JZ2lboI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748371392; c=relaxed/simple;
-	bh=unrEi+Z8Vcid2frmRc00TpoL+pz62h5Wsf8KIjX1MAI=;
+	s=arc-20240116; t=1748373995; c=relaxed/simple;
+	bh=8b7Ot1h0kWRufg9jq3azIqDVbfLb610Zg17izxeq5mE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mfV8VJxNi/USAC+PEZeRUtNWnRYUO4jmF+ImjSIVibgz88fh9BeTUWJtpk9tP4U1A9FIosoix8bCpgwOY3HF8tTM5yS0BxCrsBSNSorpnIeJXBxo8oNH0BfDl7//Hbjpbr88kcZ/DmkJujm7JNlB1hv11DcmMHK5zWx/6RYhcmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SAJg/lTs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1049DC4CEEA;
-	Tue, 27 May 2025 18:43:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TO50rmw4Fx3nw91OL2I4mOb5djwk5qLpk0v5dSBI1J2wYtPYBDyKEaPtQPFJXLxEq/PTe+N00kOdCJFrGJptRC/mRybX04rzJZMzxhOEqEOAUH+POgLdZiHrczpFpyO8l5/f4VLTIU5vWE+GYMmDCMJFjg4foiZQBzvqZM2Tk/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbWgiM8B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE022C4CEE9;
+	Tue, 27 May 2025 19:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748371392;
-	bh=unrEi+Z8Vcid2frmRc00TpoL+pz62h5Wsf8KIjX1MAI=;
+	s=k20201202; t=1748373995;
+	bh=8b7Ot1h0kWRufg9jq3azIqDVbfLb610Zg17izxeq5mE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SAJg/lTsHFPpMmZvVmP+0XJugy76N/WOctdJIssWWs7qNHSBbzmSYg8xkWQak4g5C
-	 LfZgHKgxVCZb8p0qamVGEV/1YiZTk2afQEafhl37cp97dLgGRdjvi7trKjD2XXdMuP
-	 LbrGzfua9UHyhqt54e4WAAnlTo1NpBqK2l+IKnh1JQUdMKF4EbO60uwu4lUOeBUiiD
-	 wKIfF3Uo87tWndWoi9LDxjhMwmt61Lxnq3QWSMVbr06JAV1rHQ9XUs10fwb75pWBr3
-	 anGW5bNZOirMCaMIcgBCgcjqJ5Vcm09HGhEIuw7KuVAzISErwpzi7uyi2a2hStymIg
-	 Mw76bx9c3WLMA==
-Date: Tue, 27 May 2025 11:43:08 -0700
-From: Kees Cook <kees@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Cosmin Ratiu <cratiu@nvidia.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Maxim Georgiev <glipus@gmail.com>, netdev@vger.kernel.org,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	Max Gurtovoy <mgurtovoy@nvidia.com>,
-	Maurizio Lombardi <mlombard@redhat.com>,
-	Dmitry Bogdanov <d.bogdanov@yadro.com>,
-	Mingzhe Zou <mingzhe.zou@easystack.cn>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Lei Yang <leiyang@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
-	Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-	Paul Fertser <fercerpav@gmail.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Stefan Schmidt <stefan@datenfreihafen.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Hayes Wang <hayeswang@realtek.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Grant Grundler <grundler@chromium.org>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Philipp Hahn <phahn-oss@avm.de>, Eric Biggers <ebiggers@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Xiao Liang <shaw.leon@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org, linux-wpan@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH net-next v2 8/8] net: core: Convert
- dev_set_mac_address_user() to use struct sockaddr_storage
-Message-ID: <202505271142.EA78EAB04@keescook>
-References: <20250521204310.it.500-kees@kernel.org>
- <20250521204619.2301870-8-kees@kernel.org>
- <e1429351-3c9b-40e0-b50d-de6527d0a05b@redhat.com>
+	b=lbWgiM8BThAq1FK9PnBWXw5Ea3jqTSikytUKVSl2TLgIvZiMebu1I70wy7sHvHuV7
+	 Mx/asaNJz8aXte7R/VQGO8OmA0QEHjtpQFGO49Maw23fNLD9mlu4DFAzMgV4I59AAb
+	 IrD8YsHZJjl7I19eX2M46MssS503LfabJ0eWIMs5JRxImghckhaDwOZqrsbOI/pMcm
+	 6C/wZe6lWOWaDmLT1mXeTBqbVocwP1SCkqJc8BT8PdsIkF7GOvXfztLu+pIyaLzC4+
+	 fYJpolT/yc9BItvVIXwfUO+pOxtQag+8D6zR40aLbQfp73D5JycanCY7u7jvq4bHkP
+	 6yjMeVfux3lLA==
+Date: Tue, 27 May 2025 14:26:33 -0500
+From: Rob Herring <robh@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+	gregkh@linuxfoundation.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	michal.simek@amd.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, git@amd.com
+Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: allow dma-coherent
+Message-ID: <20250527192633.GA1084631-robh@kernel.org>
+References: <1747401516-286356-1-git-send-email-radhey.shyam.pandey@amd.com>
+ <20250516-exclusion-suffocate-94a1c87c1262@spud>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -106,36 +61,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1429351-3c9b-40e0-b50d-de6527d0a05b@redhat.com>
+In-Reply-To: <20250516-exclusion-suffocate-94a1c87c1262@spud>
 
-On Tue, May 27, 2025 at 09:02:28AM +0200, Paolo Abeni wrote:
-> On 5/21/25 10:46 PM, Kees Cook wrote:
-> > diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
-> > index fff13a8b48f1..616479e71466 100644
-> > --- a/net/core/dev_ioctl.c
-> > +++ b/net/core/dev_ioctl.c
-> > @@ -572,9 +572,11 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
-> >  		return dev_set_mtu(dev, ifr->ifr_mtu);
-> >  
-> >  	case SIOCSIFHWADDR:
-> > -		if (dev->addr_len > sizeof(struct sockaddr))
-> > +		if (dev->addr_len > sizeof(ifr->ifr_hwaddr))
-> >  			return -EINVAL;
-> > -		return dev_set_mac_address_user(dev, &ifr->ifr_hwaddr, NULL);
-> > +		return dev_set_mac_address_user(dev,
-> > +						(struct sockaddr_storage *)&ifr->ifr_hwaddr,
-> > +						NULL);
+On Fri, May 16, 2025 at 03:16:02PM +0100, Conor Dooley wrote:
+> On Fri, May 16, 2025 at 06:48:36PM +0530, Radhey Shyam Pandey wrote:
+> > On Versal Gen 2 SoC the LPD USB DMA controller is coherent with the CPU
+> > so allow specifying the information.
 > 
-> Side note for a possible follow-up: the above pattern is repeated a
-> couple of times: IMHO consolidating it into an helper would be nice.
+> Sounds like it should actually be marked required on this platform, no?
 
-Yeah, I will look at that.
+Should still work without it, just more overhead of unnecessary cache 
+flushes.
 
-> Also such helper could/should explicitly convert ifr->ifr_hwaddr to
-> sockaddr_storage and avoid the cast.
-
-It's UAPI, so it looked verrrry painful to change.
-
--- 
-Kees Cook
+Rob
 
