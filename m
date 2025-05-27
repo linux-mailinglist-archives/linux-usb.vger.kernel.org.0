@@ -1,125 +1,99 @@
-Return-Path: <linux-usb+bounces-24321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24322-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E1EAC490F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 09:10:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2262AC4C04
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 12:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DBF3178DA9
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 07:10:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CD6317C03C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 10:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8411FDA97;
-	Tue, 27 May 2025 07:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EE3253B7B;
+	Tue, 27 May 2025 10:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrgbPE5q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nS1dVZQD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778DB1F582A;
-	Tue, 27 May 2025 07:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17454253959
+	for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 10:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748329802; cv=none; b=I7ZraOQPgK/6ZrkTYCDFZQh+j16WLFHrIjDcSlWT0jagLx1EZQ223qDviulneK/1rcChj3UbU4YC3RYx3FHkfnfFVFmztF2F07LyEogJFAElW9MwqSoh7als3gPD0drlzShhg6gcSZiKkaY9BbpfEbp6x9uvRy32PnFiXAnbcn4=
+	t=1748340540; cv=none; b=KkUSBFuT8x1ZINkkVn+OYJgM/NsSD+3WCcaWjCHm1wLoB0gPl6AfqMHCA+PFdHzY/GD8Ti8T5mCfJjfgHeTDRMVk5lxvzxoxY7F9e3LFfgfWIb83+cOsZ5qOcuno0PC8ikSp9E+C1yVF/xATIAEmk+YZbCME5hjJm09cT/kFm2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748329802; c=relaxed/simple;
-	bh=xzocwWaxsjqNHkYeqf5FJ8YRMOeK+a1p789rrCvbcaI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=a5b7USDQk5JlzMOoAKyo2MlPbOaD4RqQzJ5PzHtS7KOYu0L0yUaBrZg+AaA+vorsECI0OLepHkR/N7ougQOqm2+JMen3B3NrnI3ym4kmKr9TT78+SWUE+07ychReITS2gfKrWfpAyOBjx555DPzxxVrG90S7WruaSjqVREd3FAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrgbPE5q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C58C4CEEA;
-	Tue, 27 May 2025 07:10:01 +0000 (UTC)
+	s=arc-20240116; t=1748340540; c=relaxed/simple;
+	bh=N1sswxZmMY1biwvP9v+9jESQxvqJa8hX4wUj53VT34c=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=um6d7NDEcDN7CLiKHEyMozDfvGzlWVS723IUtF312h2JyNJhrXgtTNivNOlo67LiAIqvo2D6bNLAjQi7TTT+2oiHgw2s8eOnMfgGkJd6YxL9xYFaM44Ar7BYx+BUzLU3k/lj2ieqaQ3eVuPVCSyEqSjQYqagN7g0ktpqumzEF/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nS1dVZQD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 78105C4CEEA
+	for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 10:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748329801;
-	bh=xzocwWaxsjqNHkYeqf5FJ8YRMOeK+a1p789rrCvbcaI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UrgbPE5q4jkBMJPBz0vBsgfEVAEjT8rQtASyZM66x7/l2vsgjoMEDe4YFAyOw2/Fp
-	 MYFicSzJNkJQPk13KM7yMcj34YPqaP9hbPhluW66y0Q7O17srHfP2Tun7T5CVpbYve
-	 C7RK0i5ryfbfDxL4v2+e/lvDC3x1SVtXtlAbOQit4jH/c5Hj8R+cE0cUWFR28YwGUN
-	 IidlV185WTMCyWB2ReejMkcYX05KWvxhPJvpL2VH73QkrMNvRFtsM2aADgK2g9Y01J
-	 N+hsNnfYc4LXpAhl/NnN01iegKwJzty3MQVJGETldQvNIRcTj350ps34FPuwKVTiS/
-	 3WU2iphe/13Iw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D18380AAE2;
-	Tue, 27 May 2025 07:10:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1748340539;
+	bh=N1sswxZmMY1biwvP9v+9jESQxvqJa8hX4wUj53VT34c=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=nS1dVZQDLcHlixODpGpOD2PTnDszcIF0xhapIzGr+vv6+ELq+7bWXnxrI5xtOTwpN
+	 qb0DktRPtez862wII+6zBIweIR93HUTw9kAVTeLsVjWhPfcVcaFLoaceI/4ooBqgRH
+	 gSmBzNhp54SOifuM5wNYLKwHliq9NqcqpStW8RJ+kv5vbygZchDTZ+Ejl2NUzTYIGC
+	 fkTdpTvzLIX6CmFwelKA9Mr6fNEj936IW0Eqci1BmpLhwt/PHkVBFneGSxlLkxDSXW
+	 xI/5QjA16XQof5L5ZEl5WUEU1ig8JSIeUz7rIpiYDFfUHIMAjEmCKulAgQhCnwTShH
+	 wCc2wmBWZMs7g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 6AB73C433E1; Tue, 27 May 2025 10:08:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220044] rndis_host: Zyxel 5G portable router seen as a WWAN
+ device and not an Ethernet one in 6.13
+Date: Tue, 27 May 2025 10:08:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bigon@bigon.be
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-220044-208809-LUN2kypIqG@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220044-208809@https.bugzilla.kernel.org/>
+References: <bug-220044-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/8] net: Convert dev_set_mac_address() to struct
- sockaddr_storage
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174832983626.1188942.1099978775563244121.git-patchwork-notify@kernel.org>
-Date: Tue, 27 May 2025 07:10:36 +0000
-References: <20250521204310.it.500-kees@kernel.org>
-In-Reply-To: <20250521204310.it.500-kees@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: kuniyu@amazon.com, willemdebruijn.kernel@gmail.com,
- martin.petersen@oracle.com, hch@lst.de, sagi@grimberg.me, kch@nvidia.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- michael.christie@oracle.com, mgurtovoy@nvidia.com, mlombard@redhat.com,
- d.bogdanov@yadro.com, mingzhe.zou@easystack.cn, christophe.leroy@csgroup.eu,
- horms@kernel.org, linux@treblig.org, gustavoars@kernel.org,
- andrew+netdev@lunn.ch, sdf@fomichev.me, cratiu@nvidia.com,
- leiyang@redhat.com, idosch@nvidia.com, sam@mendozajonas.com,
- fercerpav@gmail.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
- miquel.raynal@bootlin.com, hayeswang@realtek.com, dianders@chromium.org,
- grundler@chromium.org, jv@jvosburgh.net, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- jiri@resnulli.us, jasowang@redhat.com, vladimir.oltean@nxp.com,
- florian.fainelli@broadcom.com, kory.maincent@bootlin.com, glipus@gmail.com,
- olek2@wp.pl, phahn-oss@avm.de, ebiggers@google.com, ardb@kernel.org,
- viro@zeniv.linux.org.uk, ahmed.zaki@intel.com, aleksander.lobakin@intel.com,
- shaw.leon@gmail.com, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, netdev@vger.kernel.org,
- linux-wpan@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-hardening@vger.kernel.org
 
-Hello:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220044
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Laurent Bigonville (bigon@bigon.be) changed:
 
-On Wed, 21 May 2025 13:46:08 -0700 you wrote:
-> v2:
->   - add conversion of dev_set_mac_address_user() (kuniyu)
->   - fix missed sockaddr/sockaddr_storage conversion (kuba)
->  v1: https://lore.kernel.org/all/20250520222452.work.063-kees@kernel.org/
-> 
-> Hi,
-> 
-> [...]
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-Here is the summary with links:
-  - [net-next,v2,1/8] net: core: Convert inet_addr_is_any() to sockaddr_storage
-    (no matching commit)
-  - [net-next,v2,2/8] net: core: Switch netif_set_mac_address() to struct sockaddr_storage
-    https://git.kernel.org/netdev/net-next/c/161972650d67
-  - [net-next,v2,3/8] net/ncsi: Use struct sockaddr_storage for pending_mac
-    https://git.kernel.org/netdev/net-next/c/db586cad6f45
-  - [net-next,v2,4/8] ieee802154: Use struct sockaddr_storage with dev_set_mac_address()
-    https://git.kernel.org/netdev/net-next/c/7da6117ea144
-  - [net-next,v2,5/8] net: usb: r8152: Convert to use struct sockaddr_storage internally
-    https://git.kernel.org/netdev/net-next/c/79deac8d538d
-  - [net-next,v2,6/8] net: core: Convert dev_set_mac_address() to struct sockaddr_storage
-    (no matching commit)
-  - [net-next,v2,7/8] rtnetlink: do_setlink: Use struct sockaddr_storage
-    https://git.kernel.org/netdev/net-next/c/6b12e0a3c3c9
-  - [net-next,v2,8/8] net: core: Convert dev_set_mac_address_user() to use struct sockaddr_storage
-    (no matching commit)
+--- Comment #2 from Laurent Bigonville (bigon@bigon.be) ---
+OK, the problematic code has been reverted, this can be closed now
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested with 6.15-RC7
 
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
