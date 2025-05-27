@@ -1,175 +1,223 @@
-Return-Path: <linux-usb+bounces-24323-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24324-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 609C2AC4C7F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 12:55:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C594AC4CF1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 13:15:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB1533B7929
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 10:55:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22D3D189F84E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 11:15:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E432580CF;
-	Tue, 27 May 2025 10:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Otw7rrQu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C44625A2B2;
+	Tue, 27 May 2025 11:13:14 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC08F255F3B
-	for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 10:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6C271459;
+	Tue, 27 May 2025 11:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748343314; cv=none; b=GnKIB4p5Vdv02+huMhf9QyR9xGNM17DwMI65sT8kVTbc5MLjFUXo/WdXwNN2x1mEpqww5ZufnBoJj/PHc5M4uq/Ro0mtxbWgSHGRZumJB0dwOdf9u/+v9tZraNZIueOGmSd3lMCxldI3FO5vknXmFJ36fEeruBs8tpIgXMB++4M=
+	t=1748344393; cv=none; b=OTp4eQiChxROXNsTdyW1wX9xkGaeMZx5leyikrbkGUmNSxcHWrwhSXHS8LjYvnm7jXTBdE9ajrfcXNI32NP52RP/M9AYOrtKVQ8OxW6SAdSabUHmYPzWrnX5CiTDI2sIjljRSkPeYNcy0quthLLNBkExNB1gWJNmfPO7X6FcMXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748343314; c=relaxed/simple;
-	bh=O0CKMs1r875V1oP4qm65pFEA4G9zLyPyriURw406bEo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=skAVmdZqvYuNLDOGEEKVYL7SmY30tukw3cDXnT/8oZ5soqGVHcY4SLA7c8bJ0PxFh6Hqd0XOILatpkBWhvGu0+Ck21wmizQjoNkk/P1ao720wFZb0+v1pj4EjLeF1UpcvcWhURx4G9eAdegH4wCAxq0sPzYr6SIg9SqfAixnzUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Otw7rrQu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54RAOm6a002523
-	for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 10:55:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0QaN0jDgPB/5r3SY7bQD6QOdm26/CK5MylAtZs3M0Wg=; b=Otw7rrQu9o3Bd9nY
-	gqO8p+fVniWgwLC6FBk5cDzZ4kUoQn/DCksFoErmbw2QWh++0rtmWf7o3RLWYbON
-	H/WwCT6n1luUYXqetqtpkY3fPG8T4o4otAA4gvnY5Ou7mzAl7eE6WUgLp0mKbYHi
-	cvVlQALrNXSiss0hbpwCRH6ZEJ87s8NeH9uqXr8IHbLqxhSnRVh/Pa6rlBBPnZu9
-	iWE++XbHf5tYnWkfxqixFIVwUZ/qGS7CAETBBzabGGdE4xWMD0c43N6WLSZi0Ta/
-	sFXwAeI7NkthQsX6rzcq24cwXa4msauUXZzXWEltHR5vHMn22QLlO4igclXTB7i1
-	mN7FRQ==
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u6vjpju3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 10:55:11 +0000 (GMT)
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6faa8342503so3315246d6.3
-        for <linux-usb@vger.kernel.org>; Tue, 27 May 2025 03:55:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748343310; x=1748948110;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0QaN0jDgPB/5r3SY7bQD6QOdm26/CK5MylAtZs3M0Wg=;
-        b=khKX5FR3qrSybAM0gmdmQnVk4JxNXgHHWBy/4KMvsBuuz+qOZg7YqSRyLU4+ydaEpB
-         2U4xtpGfEtPIFiKzUE3QAkJXnxH8LkxFroG0dURxRB0y6YUnz0K83oV/GlwN5/8KgCBM
-         sl6YZpl6RIrZKhdx2+8fXaYKH5AnNoKKZWW2WJ+6DtVG1SVUJzNakmOqkNqJtMqcHOuS
-         1SvEPQqqC6EVJP/gVagZqJ/zBVV5kEuyPo8bmGPwNIXxpzhUlsA9D/6ilfY98En0L7bG
-         0bPKQSBTeASeuX/lebjadlMKPN9oygxc58LkzshbFOZBCAI7CYt9BMTEmeRRJvKvHJot
-         IPzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUbxNbcftmr2rCIh0EfBW0H6wwuAohuQ7rG9gm5VQN3b9ay+Q1C9EjgwYfKUdz0zcuEobADRJvZGY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqNxREHniJGgmW2j9JdWPE89IW45fxE+lggL87jt78gs2aXMo1
-	VESdYNdW0jU3D7NucBADqOqmwHUkW3TYTf639Yc9toHg6Ql2FDjOT8Pz//ygHrv+yXRj/j7QPe3
-	qqu3XWs+KutpZ9qXiDHPLkisszTKjM1LbjylFqTTQwamH+jJYWjZ7dZEjaNg+lJQ=
-X-Gm-Gg: ASbGnctwFSCEW1xKVx8ZlqiJ+aM289Zcr6QAFB3FytDU3hXm6OZ3k4Q56kxRE9h/pZA
-	RgcW+DaXobVJo98V1T7O/MVcmPv3ySlU1tZP9s2x/b42+Sl2v64CPkN6evJYwKluQruqTT/NkwN
-	4ECr+Q5ou1HTpLtGGU5P75Q8conUpRGjvWogDxbYSbkyhH6kReJyHUfMYuUOIiRVSM6bnjFucKY
-	D2kwSGKsLKkmg+pO4vQf/D0JZeaQSHbQYwS6qsMY8YkPNriAgSmCdraUEclJEv5jVwGK2UkHEXU
-	MC8sVcEJlmPPKkSSYmtfAGu+cxXacxH9G8gIYn7t8l3TA/Rd/vEm/PtdeIAYJc01eg==
-X-Received: by 2002:a05:6214:2482:b0:6f8:b4aa:2a52 with SMTP id 6a1803df08f44-6fa9d270dd0mr67671226d6.4.1748343310286;
-        Tue, 27 May 2025 03:55:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGTJV7hGI3ZkwSkprGN+pDgA9B/aLbKDp2MQye2teLhkvThg0W2kSQO/Ud2VQBEXioadf+3JQ==
-X-Received: by 2002:a05:6214:2482:b0:6f8:b4aa:2a52 with SMTP id 6a1803df08f44-6fa9d270dd0mr67671096d6.4.1748343309770;
-        Tue, 27 May 2025 03:55:09 -0700 (PDT)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-602cd35e2fcsm5162433a12.73.2025.05.27.03.55.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 May 2025 03:55:09 -0700 (PDT)
-Message-ID: <152f5150-30b0-400c-9816-13e4710a4156@oss.qualcomm.com>
-Date: Tue, 27 May 2025 12:55:06 +0200
+	s=arc-20240116; t=1748344393; c=relaxed/simple;
+	bh=BRmYYMvaki8BNTEhpCWVyr4VVraTkLE+BoW8c4vBS88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UHYPtTqSuA+FnB9Tq+z9BOynI+FA1iK6TiYRmhqYyIDj+lQVPgQpfzpE/HrotpxwlPMKmtChUY+w+ikzBNk0pjlN/5ZgpUomsoeaobeP0xMqQymcfeLbRinGTFjK7A+dLo+rjTRwuitYzRjHofSQfywHMYQ4DmdCrnmhV5Mzjtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
+Received: from localhost (gy-adaptive-ssl-proxy-3-entmail-virt135.gy.ntes [27.18.99.37])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1691f3ea4;
+	Tue, 27 May 2025 19:13:05 +0800 (GMT+08:00)
+Date: Tue, 27 May 2025 19:13:05 +0800
+From: Ze Huang <huangze@whut.edu.cn>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Ze Huang <huangze@whut.edu.cn>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] dt-bindings: soc: spacemit: Add K1 MBUS controller
+Message-ID: <aDWeQfqKfxrgTA__@jean.localdomain>
+References: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
+ <20250526-b4-k1-dwc3-v3-v4-2-63e4e525e5cb@whut.edu.cn>
+ <20250527-energetic-pink-cricket-a282fd@kuoka>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/5] arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY
- device tree
-To: Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
-        jens.glathe@oldschoolsolutions.biz,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20250524-tb16-dt-v4-0-2c1e6018d3f0@oldschoolsolutions.biz>
- <20250524-tb16-dt-v4-5-2c1e6018d3f0@oldschoolsolutions.biz>
- <g7vlyqma6ow6tdsaqt2rfwvblxqwbqlwmoueio7i4vqvjy76kw@5bz4g33pq4t7>
- <CAMcHhXoYkQru_0n5siMGGkTcHu8yWRZWfT4ByiD8D0ieZHF+wQ@mail.gmail.com>
- <vwoixgdyjjzcjlv4muwrzv7wztnqyidtj7ghacgkjg6hgkkyl7@ji53bhiltaef>
- <CAMcHhXqDFuo+x99KOK0pQFj-FyTdQoZS_JvehNE2AC_JSoQ2gQ@mail.gmail.com>
- <rvyfkow43atquc64p6slck6lpfsot67v47ngvfnuhxqo222h6k@kdvbsmf3fwsr>
- <CAF6AEGvr_foMVwaE_VSVWLT50cbGi8i3UGwo2e=rORD-1JmTmA@mail.gmail.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <CAF6AEGvr_foMVwaE_VSVWLT50cbGi8i3UGwo2e=rORD-1JmTmA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=UOXdHDfy c=1 sm=1 tr=0 ts=68359a0f cx=c_pps
- a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=EUspDBNiAAAA:8 a=vupSWsNl5j4Ukh8iwq0A:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
-X-Proofpoint-ORIG-GUID: JXDI2dQqhKL-z4Zeap0unG5nh8nsWIur
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI3MDA5MCBTYWx0ZWRfX9+k4+qWyZgo2
- 7dK8e18dZBQLstw4t0DiunuTpFLMMUbF76+zNWxAR+l906XIT7vDXVEFoocR4rsnz7vXXCKfRtx
- dCvLYuLO89GoNX3igIDp7Y/ucWAfxtOc6/fkeNjBLiicfcCvjR+D6f9mtf0LjfKjyxkSDNs4Cl8
- rgt5lcjnnO+ShgRDnmy16WE59QryC7WFcagQkbi/hxTFFk6r+4fErvCgTnHyDCS4BHZLrK6i1Z2
- 4ahaiS8Hkz8xug9uady+ONfciG0wu4r3etxN6a4yfjTysYlbeJ8zxuyTCmZiTMD/3jkB98L+/dV
- o8ZtdJrskGR7LCrkI92NIYEVI9iu47LTshYKKCE7uHb5HTa3dKX+wUkDEPhxug2P4RPLkbHqSJ/
- X2izVQ0mr3YZfnPSUkanFlmUbp5lsbe9BuPVZVB5U6rJPt/z2yj26VDVl3xcHjFVF8vSfq/m
-X-Proofpoint-GUID: JXDI2dQqhKL-z4Zeap0unG5nh8nsWIur
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-27_05,2025-05-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- mlxlogscore=833 bulkscore=0 malwarescore=0 impostorscore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505160000 definitions=main-2505270090
+In-Reply-To: <20250527-energetic-pink-cricket-a282fd@kuoka>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDHhkdVk9NHx8fTx4aGklLGlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJTFVKQ1VCQlVITFlXWRYaDxIVHRRZQVlPS0hVSktISk5MT1VKS0tVSkJLS1
+	kG
+X-HM-Tid: 0a971172311503a1kunm501ea4fda7052
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MDo6Cgw5CjE6PlY3ORchTzcP
+	MD8aFBVVSlVKTE9DSE9PSENNQkxIVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
+	TFVKQ1VCQlVITFlXWQgBWUFNSUJINwY+
 
-On 5/26/25 5:28 PM, Rob Clark wrote:
-> On Mon, May 26, 2025 at 1:36 AM Dmitry Baryshkov
-> <dmitry.baryshkov@oss.qualcomm.com> wrote:
->>
->> On Sun, May 25, 2025 at 09:43:36PM +0200, Aleksandrs Vinarskis wrote:
->>> On Sun, 25 May 2025 at 15:33, Dmitry Baryshkov
->>> <dmitry.baryshkov@oss.qualcomm.com> wrote:
->>>>
-
-[...]
-
->> Yes, please. Don't set okay status for the GPU until it gets enabled.
+On Tue, May 27, 2025 at 08:51:19AM +0200, Krzysztof Kozlowski wrote:
+> On Mon, May 26, 2025 at 10:40:18PM GMT, Ze Huang wrote:
+> > Some devices on the SpacemiT K1 SoC perform DMA through a memory bus
+> > (MBUS) that is not their immediate parent in the device tree. This bus
+> > uses a different address mapping than the CPU.
+> > 
+> > To express this topology properly, devices are expected to use the
+> > interconnects with name "dma-mem" to reference the MBUS controller.
 > 
-> Drive-by: Shouldn't the dtb describe the hw and not the state of the
-> linux kernel's support for the hw?  Ie. if bad things happen if we
-> describe hw which is missing driver support, shouldn't we fix that in
-> the driver.
+> I don't get it, sorry. Devices performing DMA through foo-bar should use
+> dmas property for foo-bar DMA controller. Interconnects is not for that.
 > 
-> (In the case of the GPU there is the slight wrinkle that we don't have
-> a gpu-id yet so there is no compatible in the dtb yet.)
 
-My two cents are that it's okay to enable it, at least in this case..
+Hi Krzysztof,
 
-Konrad
+Sorry for not clarifying this earlier - let me provide some context.
+
+The purpose of this node is to describe the address translation used for DMA
+device to memory transactions. I’m using the "interconnects" property with the
+reserved name "dma-mem" [1] in consumer devices to express this relationship.
+The actual translation is handled by the `of_translate_dma_address()` [2].
+This support was introduced in the series linked in [3].
+
+This setup is similar to what we see on platforms like Allwinner sun5i,
+sun8i-r40, and NVIDIA Tegra. [4][5]
+
+I considered reusing the existing Allwinner MBUS driver and bindings.
+However, the Allwinner MBUS includes additional functionality such as
+bandwidth monitoring and frequency control - features that are either
+absent or undocumented on the SpacemiT K1 SoC.
+
+For this reason, I opted to introduce a minimal binding that only expresses
+the required DMA mapping relationship.
+
+Let me know if this makes sense or if you'd like me to adjust further.
+
+Thanks!
+
+Ze
+
+Link: https://elixir.bootlin.com/linux/v6.15/source/Documentation/devicetree/bindings/interconnect/interconnect.txt#L60 [1]
+Link: https://elixir.bootlin.com/linux/v6.15/source/drivers/of/address.c#L635 [2]
+Link: https://lore.kernel.org/all/cover.f8909884585996f28d97f4ef95efbcab19527dc4.1554108995.git-series.maxime.ripard@bootlin.com/ [3]
+Link: https://elixir.bootlin.com/linux/v6.15/source/arch/arm/boot/dts/allwinner/sun8i-r40.dtsi#L328 [4]
+Link: https://elixir.bootlin.com/linux/v6.15/source/arch/arm64/boot/dts/nvidia/tegra234.dtsi#L3052 [5]
+
+> 
+> > 
+> > Signed-off-by: Ze Huang <huangze@whut.edu.cn>
+> > ---
+> >  .../bindings/soc/spacemit/spacemit,k1-mbus.yaml    | 55 ++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml b/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..533cf99dff689cf55a159118c32a676054294ffa
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml
+> > @@ -0,0 +1,55 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/soc/spacemit/spacemit,k1-mbus.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SpacemiT Memory Bus controller
+> > +
+> > +maintainers:
+> > +  - Ze Huang <huangze9015@gmail.com>
+> > +
+> > +description: |
+> > +  On the SpacemiT K1 SoC, some devices do not perform DMA through their
+> > +  immediate parent node in the device tree. Instead, they access memory
+> > +  through a separate memory bus (MBUS) that uses a different address
+> > +  mapping from the CPU.
+> > +
+> > +  To correctly describe the DMA path, such devices must reference the MBUS
+> > +  controller through an interconnect with the reserved name "dma-mem".
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: spacemit,k1-mbus
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  dma-ranges:
+> > +    maxItems: 1
+> > +
+> > +  "#address-cells": true
+> > +
+> > +  "#size-cells": true
+> 
+> No improvements.
+> 
+> 
+> > +
+> > +  "#interconnect-cells":
+> > +    const: 0
+> 
+> This is not a interconnect provider, but DMA controller, according to
+> youro description.
+> 
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - dma-ranges
+> > +  - "#interconnect-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    dram-controller@0 {
+> 
+> Either dma-controller or memory-controller, decide what is this.
+> 
+
+I think memory-controller is better.
+
+>
+> > +        compatible = "spacemit,k1-mbus";
+> > +        reg = <0x00000000 0x80000000>;
+> > +        dma-ranges = <0x00000000 0x00000000 0x80000000>;
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> 
+> Nothing improved.
+> 
+
+The #address-cells and #size-cells properties are included here to satisfy
+`make dt_binding_check` and `make CHECK_DTBS`.
+
+Without them, warnings will be triggered during validation.
+
+    dram-controller@0: dma-ranges: [[0], [0], [0], [2147483648]] is too long
+
+>
+> > +        #interconnect-cells = <0>;
+> > +    };
+> > 
+> > -- 
+> > 2.49.0
+> > 
+> 
+> 
+> 
 
