@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-24316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90534AC489A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 08:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6212AC48A2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 08:51:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93C00166F53
-	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 06:47:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B00981676FF
+	for <lists+linux-usb@lfdr.de>; Tue, 27 May 2025 06:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC2C1F8AC8;
-	Tue, 27 May 2025 06:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CD31F9A8B;
+	Tue, 27 May 2025 06:51:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qdO6IYtn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wh+b9Akh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76AA23A6;
-	Tue, 27 May 2025 06:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F6F522A;
+	Tue, 27 May 2025 06:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748328458; cv=none; b=sZO1GJ+/+1ejyZWO7FrNvLBXImK7FVyWE4uwx7hXHFZiRxDtc7fpLM6gh5/98QruL5fmt101/FhHN5+58gh72QkoJURYkw0lNuUJO+fp78q7ZjpBsy/xL6C+OP7POiPmWqKRyj4j9lNEgmLctlMqGMfu2rgh0v27GM+euQMPTXY=
+	t=1748328682; cv=none; b=DJFutCACYU2XvbflLvHVrG18FAyECWPU67j5b/IaaEoF6y1j/ivye0QY5X63tMgxnoY5LAXwOvpX1aY7kOTMba0UZiy1CDujOCwfVuXzty/YlEpMwkqvcohYhBlXdc7d1DWTbYFEq8mv9ZI4HZuHlQu0YH9g/X2WXrMXBpIYgPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748328458; c=relaxed/simple;
-	bh=/pstASAAdU5HMcN6gKRnngJO2l7aRoiRmGIw04Yt6CA=;
+	s=arc-20240116; t=1748328682; c=relaxed/simple;
+	bh=GyLshxmTVFon2TnwhUpFaApuHuBTyELSnTFqumadByA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RtkKwZjf3Ofg2eYKghOQHo+OnLOfHXZuptt+upZ2qTdoMkcintpCS6vp4wIGZIWg4bADMTCRq0qdyAy6hE09XHqT06deVWbVQYYWhVkS9GPHtkfds9rYwMMR/JErf8NtyYxDZmexpkZeIPXVtKqJfNZiPVGJP9hMC0pfID3vPXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qdO6IYtn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC02C4CEEA;
-	Tue, 27 May 2025 06:47:36 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8cz7EHc/R5NTEfuJsWUAOuUFRSlxv0pWVzIFOlfqAUhooBRO7Y7nyFnGOmDaLRibV3F+swBrlSUJX8mwquuI+8ATFMdA43G5KTJZn5rXjp0nsOlZBZwPw/NJtr0a+BklVdIzH/4X0Zei9BkZgPwqMBeRGoK/FsGN3J1JgVG96s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wh+b9Akh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FD5C4CEEE;
+	Tue, 27 May 2025 06:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748328457;
-	bh=/pstASAAdU5HMcN6gKRnngJO2l7aRoiRmGIw04Yt6CA=;
+	s=k20201202; t=1748328682;
+	bh=GyLshxmTVFon2TnwhUpFaApuHuBTyELSnTFqumadByA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qdO6IYtnl/A0QJHyrMkXYCudtVIAs0GvVdFdvYWhIeFJKbwhNy3CE7zuRM1PX3tqN
-	 oXXVxyUHqzExPCwnAjvm3Wfj2PPVUaoRMlp/+aBilqBkuBYf487nHOuWE01D5LriHu
-	 NdS4Eg3vzyMgTzVRa9r0Ih1hzVS3KwrJWMztztKEsMcUmeCVi0lxEjv60IBvxwQlLN
-	 hmtAiWIDvZV8BuDJxXhKREJs6/Wb1Hz4YIdzkqJL7kaavH8shfkue2i/YVFwzJqaA9
-	 fhQSXvDjFJFBfuuEFjJJv3GlYYHJ+/5OOmnA7G125tD94GEcsizwM8WqqHNv+QmYdE
-	 c+3yfpTSAOWqw==
-Date: Tue, 27 May 2025 08:47:34 +0200
+	b=Wh+b9AkhGc9pqdWY0YH4mmFPkSB41l0YnTQNG7zxMMs9d8hG9ugmazSDX/DESsEdZ
+	 Oyir4rLP4YJYCNHOM31HmVMfLsP3RnAkkRAKt7ydjjKu2NzzCQXP2yDbJEOFzggs3H
+	 48vnv2INWQw77m7c9yP131Ipo+75Oer5+ptrtUN5FzYWwvuGUjpQrKFjDpVfspwRFJ
+	 xrVwnnDqLqep96FxaIh3OSpLr9je7+y7wcZgHwGjAkXF9KJzIFehPuKxEJ1UazYN+E
+	 oZD8Vw5wioLTG039XzzgPyfZSpwioReS3vzsuLO8y8hkuG2aGwyz8B+N1O8vs5C2vf
+	 QqqH8LkJY2lbQ==
+Date: Tue, 27 May 2025 08:51:19 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Ze Huang <huangze@whut.edu.cn>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -52,11 +52,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, linux-usb@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: usb: dwc3: add support for SpacemiT
- K1
-Message-ID: <20250527-amazing-hedgehog-of-opposition-bc968b@kuoka>
+Subject: Re: [PATCH v4 2/4] dt-bindings: soc: spacemit: Add K1 MBUS controller
+Message-ID: <20250527-energetic-pink-cricket-a282fd@kuoka>
 References: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
- <20250526-b4-k1-dwc3-v3-v4-1-63e4e525e5cb@whut.edu.cn>
+ <20250526-b4-k1-dwc3-v3-v4-2-63e4e525e5cb@whut.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,22 +64,103 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250526-b4-k1-dwc3-v3-v4-1-63e4e525e5cb@whut.edu.cn>
+In-Reply-To: <20250526-b4-k1-dwc3-v3-v4-2-63e4e525e5cb@whut.edu.cn>
 
-On Mon, May 26, 2025 at 10:40:17PM GMT, Ze Huang wrote:
-> Add support for the USB 3.0 Dual-Role Device (DRD) controller embedded
-> in the SpacemiT K1 SoC. The controller is based on the Synopsys
-> DesignWare Core USB 3 (DWC3) IP, supporting USB3.0 host mode and USB 2.0
-> DRD mode.
+On Mon, May 26, 2025 at 10:40:18PM GMT, Ze Huang wrote:
+> Some devices on the SpacemiT K1 SoC perform DMA through a memory bus
+> (MBUS) that is not their immediate parent in the device tree. This bus
+> uses a different address mapping than the CPU.
+> 
+> To express this topology properly, devices are expected to use the
+> interconnects with name "dma-mem" to reference the MBUS controller.
+
+I don't get it, sorry. Devices performing DMA through foo-bar should use
+dmas property for foo-bar DMA controller. Interconnects is not for that.
+
+
 > 
 > Signed-off-by: Ze Huang <huangze@whut.edu.cn>
 > ---
->  .../devicetree/bindings/usb/spacemit,k1-dwc3.yaml  | 116 +++++++++++++++++++++
->  1 file changed, 116 insertions(+)
+>  .../bindings/soc/spacemit/spacemit,k1-mbus.yaml    | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml b/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..533cf99dff689cf55a159118c32a676054294ffa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-mbus.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/spacemit/spacemit,k1-mbus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SpacemiT Memory Bus controller
+> +
+> +maintainers:
+> +  - Ze Huang <huangze9015@gmail.com>
+> +
+> +description: |
+> +  On the SpacemiT K1 SoC, some devices do not perform DMA through their
+> +  immediate parent node in the device tree. Instead, they access memory
+> +  through a separate memory bus (MBUS) that uses a different address
+> +  mapping from the CPU.
+> +
+> +  To correctly describe the DMA path, such devices must reference the MBUS
+> +  controller through an interconnect with the reserved name "dma-mem".
+> +
+> +properties:
+> +  compatible:
+> +    const: spacemit,k1-mbus
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  dma-ranges:
+> +    maxItems: 1
+> +
+> +  "#address-cells": true
+> +
+> +  "#size-cells": true
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+No improvements.
 
-Best regards,
-Krzysztof
 
+> +
+> +  "#interconnect-cells":
+> +    const: 0
+
+This is not a interconnect provider, but DMA controller, according to
+youro description.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - dma-ranges
+> +  - "#interconnect-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    dram-controller@0 {
+
+Either dma-controller or memory-controller, decide what is this.
+
+> +        compatible = "spacemit,k1-mbus";
+> +        reg = <0x00000000 0x80000000>;
+> +        dma-ranges = <0x00000000 0x00000000 0x80000000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+
+Nothing improved.
+
+> +        #interconnect-cells = <0>;
+> +    };
+> 
+> -- 
+> 2.49.0
+> 
 
