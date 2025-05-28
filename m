@@ -1,219 +1,190 @@
-Return-Path: <linux-usb+bounces-24350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24351-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5FBAC645C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 10:25:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCAE3AC6537
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 11:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E575DA21618
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 08:23:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57703188D932
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 09:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199B1244685;
-	Wed, 28 May 2025 08:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6D22749F3;
+	Wed, 28 May 2025 09:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LqImgGfK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xk2cagd3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393165464E;
-	Wed, 28 May 2025 08:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3671026A096
+	for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 09:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748420617; cv=none; b=J44wW8mFt5kD2Zb3J046B6APkLVvYUWUSpTv2YK9Jgo7X1EhDBfNYF++sJGw6GzCvBAbS8AStjmLNPdOSBxaoVoeCxGUVLZCMLGm6qj7rdmZmRQGYO7JBns1v59fYrXS28sPC7QCFuOQ74HCL8UBYY3E5XsrachAGqMcyZsyHjQ=
+	t=1748423343; cv=none; b=bxpHfcW4ZbRsC0oapB33iTHXYmwtNrJ2zMi5t9hyZU2qLUevg4YumWHxgn+a0HPX0N8oQ2OJMXprmQ2VZR3lPiV0qm4NUX2fFcdl4wMjz/e+pV1OkckzGTaqrD7992bVXDMKu9bb2XPmyP7L0yPWB7/+ZpqojlfRPSND0mrfFaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748420617; c=relaxed/simple;
-	bh=kK59nSQeZRnZhVrcA5DcPYiSMQQqlQStnEkyPKvgl0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHTxm7wdBQWlK7SRRBrkIYPvS8PktWJTifL9EL75YTkXbj7ZRijM17hs3g8WOtjj74dNkHSK6mVePGyzjWd3UWAqqwVUql9m79XZqbFXFn5mlNveva3NrgUTXGkPEXEsKq/+rt8eeNvui9NT5tOF2FtUGrZIQtanFIcdPaXN2mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LqImgGfK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E121C4CEE7;
-	Wed, 28 May 2025 08:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1748420616;
-	bh=kK59nSQeZRnZhVrcA5DcPYiSMQQqlQStnEkyPKvgl0g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LqImgGfKigRFT3Lm1iqjTjeAWQePbq4cmQKEskLdi4tYWPPkTo2gniIlOoPyAbYhB
-	 b7SxgG0+JmBb+WaBdImrYusQXUrQVBIUWQ82k33C6SgIQs01jvPPCJ//xWy/IxRTMP
-	 aJKSHvMrfmQMm9c0JYMJ8bvkmAxhzOnB0WnDmNwE=
-Date: Wed, 28 May 2025 10:21:41 +0200
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Kuen-Han Tsai <khtsai@google.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v4] usb: dwc3: Abort suspend on soft disconnect failure
-Message-ID: <2025052819-affluent-reputably-83bb@gregkh>
-References: <20250416100515.2131853-1-khtsai@google.com>
- <20250419012408.x3zxum5db7iconil@synopsys.com>
- <CAKzKK0qi9Kze76G8NGGoE=-VTrtf47BbTWCA9XWbKK1N=rh9Ew@mail.gmail.com>
+	s=arc-20240116; t=1748423343; c=relaxed/simple;
+	bh=eiX09S5BKqy9xMij/1u12OxiEIwlPw+RMfyIwBOrzf0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RCWP/Cjl6hA6cH30Y0NbUMBYlFRpEsUk3UomINcKV4fFHtBzdMKzTUrTXugPZIKLJmG7pvkz7iYORrwlr7PvI2ilWbUJhkvVvt4ovYJ7eax1UHJ3lAoDhINDdFj9/tO5s0nA5eKvbSJErhFJ3vAy77MatUFg5o2XNmRh6fBMCFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xk2cagd3; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-74089884644so3834998b3a.3
+        for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 02:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748423340; x=1749028140; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T99kYukxUty4zOqJeP0a/rQaEU86hy4Z0zxbBcK8xas=;
+        b=xk2cagd3kgip7RKTlJdSNc07Vz4V8Sn0L+zpNt+vHkZ2MTb24dh4xK2vqjEefG/M9B
+         hapt3k8nBpW0IgFEP2RPcUM+GbOUHhP+3y1vD5nsytzMIpLB4AEZ3d/bl4n9TPc9jQjF
+         Ia4y/6J8zj+vStQP+DHQwa73P3iV1uxp7erhHNWAk6Sm48SOTUGUTsYmoKaEtXX2ow17
+         3GTAOTyjFECpFiLeFPEFELy39mB0O3baTk0laYUx0AkQBpdZLfQl8xoY6Ks/lVID1y5M
+         zlW9yMNGMThTpfOv/uvx9swGXJcOeajbETQRBy8AfrzABOM3XdTJYbqOrQpYZ/+PkRfi
+         7Rlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748423340; x=1749028140;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T99kYukxUty4zOqJeP0a/rQaEU86hy4Z0zxbBcK8xas=;
+        b=VYKcGpmKtYA0Xq+TJ0y8pouyrtFXZd+TKc8ZmdgdMI8PAus0fnBRDG5HZVbFdc0egT
+         RkNH4SzD6DwuWL47VA2fRdafdazdeRGeVy2tWF/LVjdxJvxO66ct3rcpE0Qkn+bGVmPw
+         0pewSH0KsN2XoRWcacnE18+Ib9JtvRTFoTFcl0wMU0LCpI/rZ+k4COeljtU8Vys9nmCB
+         l94+/xTEF0sZ3awssaaNVpIEgQa5uAiO6A+PvbVZPgy0i/MqYz4rvukidgBRA3w7WX10
+         qte2kVqrfppe6C9Oln3fvUQSJ7kBm2jMpOkGBBQIO6HmXz6h5ndp+YRl38B2Z6EZ4/uI
+         +EVQ==
+X-Gm-Message-State: AOJu0Yzt8YFRKucerzRbTrLv6xeVRRr+gAUfq4mqfPLaVqLz9ewm4OOS
+	R7ZR5x5lmfBf+29ClSqEtavtiiHKyQ1NnwTuYcmJZdaVTNtut2Q4GWHVl+K87+5CalQqp2eqiR3
+	Im4jV+ZCwJ8UJV446PA==
+X-Google-Smtp-Source: AGHT+IHwyH5Xt+WEHDetf0XcaouNA/NQCgRzuM+vQdQMig7ruB/anK0URE/icgj28urxMR2Np2YKJTxTWOxr6oo=
+X-Received: from pgbdl10.prod.google.com ([2002:a05:6a02:d0a:b0:b0c:3032:f595])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:328d:b0:215:eafc:abd8 with SMTP id adf61e73a8af0-2188c24716cmr25545788637.15.1748423340399;
+ Wed, 28 May 2025 02:09:00 -0700 (PDT)
+Date: Wed, 28 May 2025 09:04:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKzKK0qi9Kze76G8NGGoE=-VTrtf47BbTWCA9XWbKK1N=rh9Ew@mail.gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1164.gab81da1b16-goog
+Message-ID: <20250528090849.2095085-1-guanyulin@google.com>
+Subject: [PATCH v13 0/4] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, gargaditya08@live.com, 
+	kekrby@gmail.com, jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com, 
+	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk, broonie@kernel.org, 
+	quic_wcheng@quicinc.com, krzysztof.kozlowski@linaro.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 28, 2025 at 03:35:15PM +0800, Kuen-Han Tsai wrote:
-> On Sat, Apr 19, 2025 at 9:24 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-> >
-> > On Wed, Apr 16, 2025, Kuen-Han Tsai wrote:
-> > > When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
-> > > going with the suspend, resulting in a period where the power domain is
-> > > off, but the gadget driver remains connected.  Within this time frame,
-> > > invoking vbus_event_work() will cause an error as it attempts to access
-> > > DWC3 registers for endpoint disabling after the power domain has been
-> > > completely shut down.
-> > >
-> > > Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
-> > > controller and proceeds with a soft connect.
-> > >
-> > > Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
-> > > CC: stable@vger.kernel.org
-> > > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > > ---
-> > >
-> > > Kernel panic - not syncing: Asynchronous SError Interrupt
-> > > Workqueue: events vbus_event_work
-> > > Call trace:
-> > >  dump_backtrace+0xf4/0x118
-> > >  show_stack+0x18/0x24
-> > >  dump_stack_lvl+0x60/0x7c
-> > >  dump_stack+0x18/0x3c
-> > >  panic+0x16c/0x390
-> > >  nmi_panic+0xa4/0xa8
-> > >  arm64_serror_panic+0x6c/0x94
-> > >  do_serror+0xc4/0xd0
-> > >  el1h_64_error_handler+0x34/0x48
-> > >  el1h_64_error+0x68/0x6c
-> > >  readl+0x4c/0x8c
-> > >  __dwc3_gadget_ep_disable+0x48/0x230
-> > >  dwc3_gadget_ep_disable+0x50/0xc0
-> > >  usb_ep_disable+0x44/0xe4
-> > >  ffs_func_eps_disable+0x64/0xc8
-> > >  ffs_func_set_alt+0x74/0x368
-> > >  ffs_func_disable+0x18/0x28
-> > >  composite_disconnect+0x90/0xec
-> > >  configfs_composite_disconnect+0x64/0x88
-> > >  usb_gadget_disconnect_locked+0xc0/0x168
-> > >  vbus_event_work+0x3c/0x58
-> > >  process_one_work+0x1e4/0x43c
-> > >  worker_thread+0x25c/0x430
-> > >  kthread+0x104/0x1d4
-> > >  ret_from_fork+0x10/0x20
-> > >
-> > > ---
-> > > Changelog:
-> > >
-> > > v4:
-> > > - correct the mistake where semicolon was forgotten
-> > > - return -EAGAIN upon dwc3_gadget_suspend() failure
-> > >
-> > > v3:
-> > > - change the Fixes tag
-> > >
-> > > v2:
-> > > - move declarations in separate lines
-> > > - add the Fixes tag
-> > >
-> > > ---
-> > >  drivers/usb/dwc3/core.c   |  9 +++++++--
-> > >  drivers/usb/dwc3/gadget.c | 22 +++++++++-------------
-> > >  2 files changed, 16 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 66a08b527165..f36bc933c55b 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -2388,6 +2388,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  {
-> > >       u32 reg;
-> > >       int i;
-> > > +     int ret;
-> > >
-> > >       if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
-> > >               dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
-> > > @@ -2406,7 +2407,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >       case DWC3_GCTL_PRTCAP_DEVICE:
-> > >               if (pm_runtime_suspended(dwc->dev))
-> > >                       break;
-> > > -             dwc3_gadget_suspend(dwc);
-> > > +             ret = dwc3_gadget_suspend(dwc);
-> > > +             if (ret)
-> > > +                     return ret;
-> > >               synchronize_irq(dwc->irq_gadget);
-> > >               dwc3_core_exit(dwc);
-> > >               break;
-> > > @@ -2441,7 +2444,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >                       break;
-> > >
-> > >               if (dwc->current_otg_role == DWC3_OTG_ROLE_DEVICE) {
-> > > -                     dwc3_gadget_suspend(dwc);
-> > > +                     ret = dwc3_gadget_suspend(dwc);
-> > > +                     if (ret)
-> > > +                             return ret;
-> > >                       synchronize_irq(dwc->irq_gadget);
-> > >               }
-> > >
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index 89a4dc8ebf94..630fd5f0ce97 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
-> > >       int ret;
-> > >
-> > >       ret = dwc3_gadget_soft_disconnect(dwc);
-> > > -     if (ret)
-> > > -             goto err;
-> > > -
-> > > -     spin_lock_irqsave(&dwc->lock, flags);
-> > > -     if (dwc->gadget_driver)
-> > > -             dwc3_disconnect_gadget(dwc);
-> > > -     spin_unlock_irqrestore(&dwc->lock, flags);
-> > > -
-> > > -     return 0;
-> > > -
-> > > -err:
-> > >       /*
-> > >        * Attempt to reset the controller's state. Likely no
-> > >        * communication can be established until the host
-> > >        * performs a port reset.
-> > >        */
-> > > -     if (dwc->softconnect)
-> > > +     if (ret && dwc->softconnect) {
-> > >               dwc3_gadget_soft_connect(dwc);
-> > > +             return -EAGAIN;
-> >
-> > This may make sense to have -EAGAIN for runtime suspend. I supposed this
-> > should be fine for system suspend since it doesn't do anything special
-> > for this error code.
-> >
-> > When you tested runtime suspend, did you observe that the device
-> > successfully going into suspend on retry?
-> >
-> > In any case, I think this should be good. Thanks for the fix:
-> >
-> > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> >
-> > Thanks,
-> > Thinh
-> 
-> Hi Greg,
-> 
-> It looks like this patch hasn't been cherry-picked into the usb-next
-> branch yet. Am I missing something?
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the system to sleep
+(suspend-to-RAM) and save power. However, Linux's System Sleep model halts
+the USB host controller when the main system isn't managing any USB
+transfers. To address this, the proposal modifies the system to recognize
+offloaded USB transfers and manage power accordingly. This way, offloaded
+USB transfers could still happen during system sleep (Suspend-to-RAM).
 
-It's somehow not in my queue anymore, sorry.  Can you please resend it
-and I'll pick it up after -rc1 is out.
+This involves two key steps:
+1. Transfer Status Tracking: Propose offload_usage and corresponding apis
+drivers could track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(xhci host controller driver, and USB device drivers) allow the system to
+sleep (Suspend-to-RAM) without disrupting co-processor managed USB
+transfers. This involves adding conditional checks to bypass some power
+management operations in the System Sleep model.
 
-thanks,
+changelog
+----------
+Changes in v13:
+- Ensure offload_usage is modified only when the device is neither
+  suspended nor marked as "offload_at_suspend".
+- Move lock manipulations into usb_offload_get()/usb_offload_put().
+- Cosmetics changes on coding style.
 
-greg k-h
+Changes in v12:
+- Rebase on TOT.
+- Cosmetics changes on coding style.
+
+Changes in v11:
+- Use USB subsystem wrappers in usb_offload_get()/usb_offload_put().
+- Refine logics and add comment in usb_suspend_both()/usb_resume_both().
+
+Changes in v10:
+- Remove unnecessary operations in dwc3 driver.
+- Introduce CONFIG_USB_XHCI_SIDEBAND_SUSPEND to enable/disable offloaded
+  usb transfers during system Suspend-to-RAM.
+- Modify the approach to detect offloaded USB transfers when the system
+  resumes from Suspend-to-RAM.
+- Mark sideband activity when sideband interrupters are created/removed.
+- Cosmetics changes on coding style.
+
+Changes in v9:
+- Remove unnecessary white space change.
+
+Changes in v8:
+- Change the runtime pm api to correct the error handling flow.
+- Not flushing endpoints of actively offloaded USB devices to avoid
+  possible USB transfer conflicts.
+
+Changes in v7:
+- Remove counting mechanism in struct usb_hcd. The USB device's offload
+  status will be solely recorded in each related struct usb_device.
+- Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
+  control the suspend flow of USB interfaces and associated USB endpoints.
+  This addresses the need to support interrupt transfers generated by
+  offloaded USB devices while the system is suspended.
+- Block any offload_usage change during USB device suspend period.
+
+Changes in v6:
+- Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
+- Explicitly specify the data structure of the drvdata refereced in
+  dwc3_suspend(), dwc3_resume().
+- Move the initialization of counters to the patches introducing them.
+
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
+Changes in v2:
+- Cosmetics changes on coding style.
+
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+---
+
+Guan-Yu Lin (4):
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for offload usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable USB offload during system sleep
+
+ drivers/usb/core/driver.c         | 175 +++++++++++++++++++++++++++++-
+ drivers/usb/core/usb.c            |   1 +
+ drivers/usb/host/Kconfig          |  11 ++
+ drivers/usb/host/xhci-plat.c      |  42 ++++++-
+ drivers/usb/host/xhci-plat.h      |   1 +
+ drivers/usb/host/xhci-sideband.c  |  38 +++++++
+ include/linux/usb.h               |  18 +++
+ include/linux/usb/xhci-sideband.h |   9 ++
+ 8 files changed, 285 insertions(+), 10 deletions(-)
+
+-- 
+2.49.0.1164.gab81da1b16-goog
+
 
