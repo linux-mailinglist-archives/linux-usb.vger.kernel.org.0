@@ -1,98 +1,264 @@
-Return-Path: <linux-usb+bounces-24348-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24349-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24FBCAC60CD
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 06:36:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01B0CAC6320
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 09:35:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCB0A4A383A
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 04:36:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B23B74A3E7F
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 07:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7095B1C84AA;
-	Wed, 28 May 2025 04:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D190C24501C;
+	Wed, 28 May 2025 07:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mlSt5XKz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pLEgx4p5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52074C9F
-	for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 04:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694042441B8
+	for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 07:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748406956; cv=none; b=lIfgHcngx/LExLVdVGmW1c7sHGBQQdWZ37uY2sOdQyXSiiQGi7/1ryPRV6zF8MG75HNzwCEkTlg63a0EK0tYpagwLW427t+CP4uQTTzW0s3zxrwJcUvAsVtp6T7+Miyjc6hZUHV41K1W8wn8AT48RVuTW9+jhUOeC7nYxybsMAM=
+	t=1748417746; cv=none; b=vElGnFg7pF6I/BTJ+mmuyr9ayz0VlyHRjI9ID+HO+RgnNigBKl0wwM6COjYQd1HIziDvgKcpiP4kt8c0RImViF2qw8Oxvsve/eGPB1xBPgVrtYKtOtR2kAMRmPd0QxbeAJN6OTkpbDrzV9lRmFzzIFj/gQOjAoi0HMqsB8faqWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748406956; c=relaxed/simple;
-	bh=gcVVKtoTBKJT2QMHiYzxfdOWANOnr7z/wGTEKuoVdv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+uuV9HvPVTMYVTurHC2coemOhS4huVh6mn4wWWc2Y7cEtEC3yy3H4c9355x1fDHyDHGoTDdnI+dvPArwDEFoGCr2YD0sI7DtzrZi5hZcr63jcQ7b1ITWVxQeKzD7t+eqGRUo40B9Y+XBYyVbtSO5Z/zjMOaHo9wfnVigwQptwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mlSt5XKz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D12C4CEE7;
-	Wed, 28 May 2025 04:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1748406956;
-	bh=gcVVKtoTBKJT2QMHiYzxfdOWANOnr7z/wGTEKuoVdv8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mlSt5XKzX/7lPS5lVlpODyVQPXLxzQxi9XaeUZdBm3IimgrgwynvhWMP0l4batI1p
-	 bd6PKX5niL8UGRu4AeqxxCHk0xvH6VnjddQO8rwEY4K5CRgAwHF6t+TwLXFs5IMkH+
-	 U8lhORc6y0UYNfTOz51XHQnGZvcCXLYPOEBl+NK8=
-Date: Wed, 28 May 2025 06:34:01 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Josh Cabarrus <joshcabarrus@gmail.com>
-Cc: linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-	balbi@kernel.org
-Subject: Re: g_webcam UVC gadget causes USB\DEVICE_DESCRIPTOR_FAILURE on
- Windows 11
-Message-ID: <2025052821-certified-remission-05fd@gregkh>
-References: <CAD=osaSH51vGF_zq2ArWY-6jCuG0LfMO5guSE9mgGpc-YPWOtw@mail.gmail.com>
+	s=arc-20240116; t=1748417746; c=relaxed/simple;
+	bh=ojn98cYobv8qkM4itGJX5hRlTmzBGUDcqXxDm4IrqQo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z11w3SDNi7ZdTDmIAzVHzEC3rY8IBuohQOf+uPz7IKAstZ3QJK4m9uWTrAtEijqn0gfaSdN/RkTl+N0RY6XTAOmAHAvplPyU3oXQanuoapt6/cFflgVNfjRwyr39iA66W6JaT86yY5sm0LIjXBUe+nHTbelrayeAmnYLbgoRfwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pLEgx4p5; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-551f007a303so4009e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 00:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748417742; x=1749022542; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zOJ/Erz3NJEWEC/FBnmroRUFyLvJzHrkOgqhXobzPPA=;
+        b=pLEgx4p519hz6HzqbX7CBpIldy9HZWvzxSgxLjotp3NtiqGeIwYdNHQgi87QGY10ag
+         OkdGDkjZ0e6BS1BjfWfg7mmpS/yxqKd6IGkxSVPr/kCKrMcTBzhaWPUNabrYLmfffW6R
+         Ndw1ncOJAor0Z4WyonS6RhTldVkVDzqXCTRIipXerhZM5qj+VcK8Bk3ppdWqKQ/A/dqg
+         FWrOcisZI3QeSBsrq76QhxhE6l1ngtNHZH0KzfnTsVjqfIyD9IjY90nwFVTc0jsSDPrH
+         HlfYbumqSZk0bStQ5Nh868RbLk167acGjjcPdkuVOiBft7n2xt0WAuZ99/4QFWyQ8Itr
+         AhAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748417742; x=1749022542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zOJ/Erz3NJEWEC/FBnmroRUFyLvJzHrkOgqhXobzPPA=;
+        b=gYbulaMOWindPgJC5x4RdLPyNRc7a7woOBBiMX25flXR2uEa6DHXDwqf1/yMZd3qJp
+         b1YdQHwA1rz5/8y8L8sICnhrXX6MrY2iCk1Q3NGNXAlTRjVYMXfnAjxxxvBt0j+0iG8d
+         ywbkXgXPzyX0NSFOdQX6lHAsiqlFtwk4Y3ui5Bgbi3UM8O1FZaLKvDlOaazMCJqe0BdJ
+         uprz0V3RLRDCODK7PD/bdIsUs8ZHalk8Zxu+svCcitN5TskTiSFPP653l3CpQ9ChBLYB
+         TZzEO2vWRDrwyTbRsSxlOEW7aQOHCzLjoHlNJ7KW9qrTMz8BWOtcnvJsI112dogDWIKt
+         DbQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWj07dUk7SZebDANAbINn/sfgsvtMNTrhi8HGUqpaN7VhzxuH6CaDqnRwECdKKTvI6cXx2t1xlpRd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR+M25p2QLuELgXnDyisRgSBKTmeuBZM/dxSj4orgSRssNYG7P
+	F+WRizDrh6LZEAxO/5taYQ8zCrLiC1a6AbucIJSU1VEUts6LVWdLVPxeJlz8vIbHZcwK0n+0BWu
+	Muxdwi3lBsLK5jHawGqIj/yJ5zz+mB/oi3I+UT+wqLnzGVTqfMrtiqhT6sa4=
+X-Gm-Gg: ASbGncvK43rDZAUVfiAHmNZHoQ4AdFuAOnG1Mvw5RESOhJ/87gk9lWbEvVGrrZlzaiJ
+	+w/hIhpCMOUwuKEgKIF5aRvhYBgeX+EfW5CnOAf0eQIwu4KnCG/hDjfjPbIYJGf8t8KY/IUfqvT
+	XlPTAYNLWK6l8JN78z/2Px/7b9jCG3uR2QN6bgACnRlXOUzehlgztsnRecSU+F82LZFOO9aZk=
+X-Google-Smtp-Source: AGHT+IG+Mn1V+0c8QsQxG5c4rJueBt0y7/DVe9ZoPgIASiHSjGTjAuBSn8DXHY3zE+rzvci8KtUFh03pCmzzb6qQqs0=
+X-Received: by 2002:a19:c212:0:b0:542:6b39:1d57 with SMTP id
+ 2adb3069b0e04-5532ef82470mr123218e87.3.1748417742176; Wed, 28 May 2025
+ 00:35:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=osaSH51vGF_zq2ArWY-6jCuG0LfMO5guSE9mgGpc-YPWOtw@mail.gmail.com>
+References: <20250416100515.2131853-1-khtsai@google.com> <20250419012408.x3zxum5db7iconil@synopsys.com>
+In-Reply-To: <20250419012408.x3zxum5db7iconil@synopsys.com>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Wed, 28 May 2025 15:35:15 +0800
+X-Gm-Features: AX0GCFtkf15X4Sr4-XlDSBRSZecuoEyX3tXHqe5snVtx6egSAV0hGdIdZpP3X8Y
+Message-ID: <CAKzKK0qi9Kze76G8NGGoE=-VTrtf47BbTWCA9XWbKK1N=rh9Ew@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Abort suspend on soft disconnect failure
+To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 27, 2025 at 08:48:20PM -0600, Josh Cabarrus wrote:
-> Bug Report: g_webcam UVC gadget incompatible with Windows 11 USB
-> descriptor validation
+On Sat, Apr 19, 2025 at 9:24=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> On Wed, Apr 16, 2025, Kuen-Han Tsai wrote:
+> > When dwc3_gadget_soft_disconnect() fails, dwc3_suspend_common() keeps
+> > going with the suspend, resulting in a period where the power domain is
+> > off, but the gadget driver remains connected.  Within this time frame,
+> > invoking vbus_event_work() will cause an error as it attempts to access
+> > DWC3 registers for endpoint disabling after the power domain has been
+> > completely shut down.
+> >
+> > Abort the suspend sequence when dwc3_gadget_suspend() cannot halt the
+> > controller and proceeds with a soft connect.
+> >
+> > Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
+> > CC: stable@vger.kernel.org
+> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+> > ---
+> >
+> > Kernel panic - not syncing: Asynchronous SError Interrupt
+> > Workqueue: events vbus_event_work
+> > Call trace:
+> >  dump_backtrace+0xf4/0x118
+> >  show_stack+0x18/0x24
+> >  dump_stack_lvl+0x60/0x7c
+> >  dump_stack+0x18/0x3c
+> >  panic+0x16c/0x390
+> >  nmi_panic+0xa4/0xa8
+> >  arm64_serror_panic+0x6c/0x94
+> >  do_serror+0xc4/0xd0
+> >  el1h_64_error_handler+0x34/0x48
+> >  el1h_64_error+0x68/0x6c
+> >  readl+0x4c/0x8c
+> >  __dwc3_gadget_ep_disable+0x48/0x230
+> >  dwc3_gadget_ep_disable+0x50/0xc0
+> >  usb_ep_disable+0x44/0xe4
+> >  ffs_func_eps_disable+0x64/0xc8
+> >  ffs_func_set_alt+0x74/0x368
+> >  ffs_func_disable+0x18/0x28
+> >  composite_disconnect+0x90/0xec
+> >  configfs_composite_disconnect+0x64/0x88
+> >  usb_gadget_disconnect_locked+0xc0/0x168
+> >  vbus_event_work+0x3c/0x58
+> >  process_one_work+0x1e4/0x43c
+> >  worker_thread+0x25c/0x430
+> >  kthread+0x104/0x1d4
+> >  ret_from_fork+0x10/0x20
+> >
+> > ---
+> > Changelog:
+> >
+> > v4:
+> > - correct the mistake where semicolon was forgotten
+> > - return -EAGAIN upon dwc3_gadget_suspend() failure
+> >
+> > v3:
+> > - change the Fixes tag
+> >
+> > v2:
+> > - move declarations in separate lines
+> > - add the Fixes tag
+> >
+> > ---
+> >  drivers/usb/dwc3/core.c   |  9 +++++++--
+> >  drivers/usb/dwc3/gadget.c | 22 +++++++++-------------
+> >  2 files changed, 16 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 66a08b527165..f36bc933c55b 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2388,6 +2388,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >  {
+> >       u32 reg;
+> >       int i;
+> > +     int ret;
+> >
+> >       if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
+> >               dwc->susphy_state =3D (dwc3_readl(dwc->regs, DWC3_GUSB2PH=
+YCFG(0)) &
+> > @@ -2406,7 +2407,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >       case DWC3_GCTL_PRTCAP_DEVICE:
+> >               if (pm_runtime_suspended(dwc->dev))
+> >                       break;
+> > -             dwc3_gadget_suspend(dwc);
+> > +             ret =3D dwc3_gadget_suspend(dwc);
+> > +             if (ret)
+> > +                     return ret;
+> >               synchronize_irq(dwc->irq_gadget);
+> >               dwc3_core_exit(dwc);
+> >               break;
+> > @@ -2441,7 +2444,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, =
+pm_message_t msg)
+> >                       break;
+> >
+> >               if (dwc->current_otg_role =3D=3D DWC3_OTG_ROLE_DEVICE) {
+> > -                     dwc3_gadget_suspend(dwc);
+> > +                     ret =3D dwc3_gadget_suspend(dwc);
+> > +                     if (ret)
+> > +                             return ret;
+> >                       synchronize_irq(dwc->irq_gadget);
+> >               }
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 89a4dc8ebf94..630fd5f0ce97 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -4776,26 +4776,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+> >       int ret;
+> >
+> >       ret =3D dwc3_gadget_soft_disconnect(dwc);
+> > -     if (ret)
+> > -             goto err;
+> > -
+> > -     spin_lock_irqsave(&dwc->lock, flags);
+> > -     if (dwc->gadget_driver)
+> > -             dwc3_disconnect_gadget(dwc);
+> > -     spin_unlock_irqrestore(&dwc->lock, flags);
+> > -
+> > -     return 0;
+> > -
+> > -err:
+> >       /*
+> >        * Attempt to reset the controller's state. Likely no
+> >        * communication can be established until the host
+> >        * performs a port reset.
+> >        */
+> > -     if (dwc->softconnect)
+> > +     if (ret && dwc->softconnect) {
+> >               dwc3_gadget_soft_connect(dwc);
+> > +             return -EAGAIN;
+>
+> This may make sense to have -EAGAIN for runtime suspend. I supposed this
+> should be fine for system suspend since it doesn't do anything special
+> for this error code.
+>
+> When you tested runtime suspend, did you observe that the device
+> successfully going into suspend on retry?
+>
+> In any case, I think this should be good. Thanks for the fix:
+>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>
+> Thanks,
+> Thinh
 
-Has this ever worked in the past?  If so, what kernel versions did work,
-and can you use git bisect to track down the offending commits?
+Hi Greg,
 
-If it has never worked, any patches to change the code to make it work
-would be appreciated.
+It looks like this patch hasn't been cherry-picked into the usb-next
+branch yet. Am I missing something?
 
-> Could the maintainers investigate updating g_webcam's USB descriptors
-> to meet Windows 11's stricter validation requirements? The fact that
-> g_serial works but g_webcam fails suggests this is a
-> descriptor-specific issue rather than hardware or driver framework
-> problem.
+Regards,
+Kuen-Han
 
-g_serial is trivial compared to g_webcam, so this is not really a fair
-comparison.  What changed in windows 11 descriptor requirements?  Do you
-have a pointer to the relevant documentation for where it is explained
-what has changed?
-
-And what exact descriptors are failing here?
-
-> I can provide:
-> 
-> USB protocol analyzer captures
-> Testing with different Windows versions
-
-Did windows 10 work?
-
-> Comparison with working UVC implementations
-
-Great, that might be the simplest, what descriptors work, and what do
-not?
-
-thanks,
-
-greg k-h
+>
+> > +     }
+> >
+> > -     return ret;
+> > +     spin_lock_irqsave(&dwc->lock, flags);
+> > +     if (dwc->gadget_driver)
+> > +             dwc3_disconnect_gadget(dwc);
+> > +     spin_unlock_irqrestore(&dwc->lock, flags);
+> > +
+> > +     return 0;
+> >  }
+> >
+> >  int dwc3_gadget_resume(struct dwc3 *dwc)
+> > --
+> > 2.49.0.604.gff1f9ca942-goog
+> >
 
