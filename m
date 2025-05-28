@@ -1,164 +1,132 @@
-Return-Path: <linux-usb+bounces-24376-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24377-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFA01AC71DE
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 22:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 435EEAC7215
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 22:20:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65CC6A412B0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 19:57:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC643B0C9B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 May 2025 20:16:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00AF21FF44;
-	Wed, 28 May 2025 19:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F960220F46;
+	Wed, 28 May 2025 20:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WvsJoBS4"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="KWZ2M/Rx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B031721ABB7
-	for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 19:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCA2210F49
+	for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 20:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748462267; cv=none; b=QeJPWGb/Iow83+mm5yBwsdQo9NZhbTqGjQ7QS074nVK141pAviFfXEs3q75ApmBvLoJXpze0JEHhjzsEjRlUoxhG96lsdh8sk5A2IAPVvl5+ZgTceFXWKceVtR80MMIpstwWdtY21Qq9haY3meavxKDtATlHDK//86HsXIj9OlA=
+	t=1748463396; cv=none; b=ppcxeu64pF3pETFGhJOvtCpe24RcSebm8ApG6iMwSV22fjlwHp6/1NNlBeRBYmvcDcMfEsLps/0ODMByjEP42BuNCAwegxQ5Y6DGV306K/8T34KcuZ7rnGY/uUHJC7Wa3hc/GkMIfltMtsrgORZBcZX3PPg9PDMxj9XLE9FeLv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748462267; c=relaxed/simple;
-	bh=HxJNYY9IRB2fTnRgpeLfBfNMV4c9x5sL0a7Gxl/lSqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=DYS1NpiS4YVaQm5iBAs+yfalCSydU4dxXLrD9lvSwufUnBuuQawHsv1E3bUZr75pk4y5TNHnQYvSOggJ7azZavBoxgZVSOXj5Zn7eNYjgXxU+BRzFo6nqNFj/kLrDPDaC4/tWzquI8d9MRiTaCLn8tYnvdlYu6kTVxKnlKFTEQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WvsJoBS4; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-450cfb6a794so262045e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 12:57:45 -0700 (PDT)
+	s=arc-20240116; t=1748463396; c=relaxed/simple;
+	bh=LZcbrYMWjl7rCmnKTWkpUvLhbC2EmiJSa/uslHoWZhU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eoLAAtGWyBwNRhc0pRbwud4Si2QqPa/sP9kVuhSv8/fVf/M89SOpE6f4oPdeA+PHFQ/yYlOnQlvahecaxmE3pEgMJAIwK0LwasE8ZzQgPDWqjIVdXA8CNDCgqDKdfSA81svSRlZEuBXo1TRJ6ovIRnQBxmUNvwNYB31AiVAZmRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=KWZ2M/Rx; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-af548cb1f83so206498a12.3
+        for <linux-usb@vger.kernel.org>; Wed, 28 May 2025 13:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748462264; x=1749067064; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=daVisNFo2JYOWor9frp9fd1E3MXvxdVufApsYKXj4R0=;
-        b=WvsJoBS4r3XoWTURdvUVsEgn9z1Pkwv0XjMjWl17B7CcJq6trEszWb90LOm+F/GMxF
-         5cVYwzlqqISHt/uGKPlXLCV1uHq08X7Dq7noE+9eFz3+6MpJULRyaxS2WYZtsrCcKYTD
-         fN9u1e0flhF6ebl03OEkqdZKiJPfRh2lOH/S4SBl83jwmx73ZL2O6C3NranZMwHkH9vU
-         6lyEnmyEsjNc3VUcBWfouppZb6Q18LgfRH3zum9AF0bmxunmr/7Gv8Fhlbt0h2fBguL3
-         ljjfyJ7s0ersC/Npx8/4ceDrSJseofX4eA/+ybSUbrepBcdNqkHcCQlJzm5+Qcb7QM05
-         cPRw==
+        d=rowland.harvard.edu; s=google; t=1748463394; x=1749068194; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XlflE3W2a3akeMQBqgUqFu0YqDFCnqAH8aHLfP8pyks=;
+        b=KWZ2M/Rxv3F55ZHGhY6Upr7KI/hDP7AYLHARdFiY0BV/jzvR85UT1SLsfaP4BpPfmv
+         BLSjgNJ+QbDzs3u+GQ7u5DvZWiLxTuOLIwb8oyAXTI6rKmdupQsGmEuyKUv8DYSa4daX
+         OgqM7+H0RN/aCuNYaACa0AiyINjWiugp3u92WRGMa65vZ3EpDA31jtIGkDjsNhRLGvm/
+         RjsB+ylW4z6IHL/mB8Q/n8N+IM6l//1HppVrAF/JqESZDWhfcOhv4o9JcNm4Ni1zFKMM
+         iJ3jZX7sEUeqZouhOfsitnNU99JP0dlvEP/h+KUdotbyPD/NHpApF/Fc/s+0UWVfgeOn
+         RfSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748462264; x=1749067064;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=daVisNFo2JYOWor9frp9fd1E3MXvxdVufApsYKXj4R0=;
-        b=xS6GNP5B93A9erIX4Jpdyrx29YUmFdCs1ggMbnSCg89aK+5MF6Q21aL1uqjxIa7gSF
-         z5kbVaT7SYnudlIr/u2LMpvGcscCi+tznALALgKVRZHm4BQgaSrLUfsQMlfxclMH9sxA
-         4AqnBByOijknA9n9B65FULW7eayjqHwOyZwfZ0pEAQOeaUi7TUj6rjAKtQOEcCwDZE0y
-         tbt7BWCO6usXKSR8dE2X8JmQa8BvPIbt85RRaWNHSlKluOFhBi2/ttTyytRNczknNRK2
-         rx23kRkGwBAD6cx9Ii1yE1Izh/tmqUh6ptfMn4dzKkMdMksTWICIhmey9APRTQvhcf2o
-         JF8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ531mF45oj1PesCkxMFgQ3RGTguzPyDR/xVEsAihs6p2OWzrSob02bl8dyls5/FEr1vd6GoznyMA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9YxIbIBkEJsGV82O5H647DYRMYC5nD6I2hF6GyP2WAK6uSWPC
-	C7EhZ+BHBfGW01gqwwpZpF3kAO7JGGHTe10yK6wJCNkSftSCnyFpt/3kfNO2GGWzefg=
-X-Gm-Gg: ASbGncuNWLCNk2yuqCQsxsgISBbQs3i8cRTyabBe+mpYldI0qC+tvsNKl+T4w39ZNLb
-	sSg1CVFF9MI1GbaXnJuF14uq6M1DYpTHhnWVhS2V+dAzHv+gsEXQeOCUsy4qu59/Np2xtTEyHvC
-	kUKLz9kKFpOwG98mZe6jZ1wKnjFKdMVHSKmo4vdwA/+tn7jMJDbtxnRHdcU93ksxQioDN5Yi2iq
-	EdPN5QSiUw8kg/E/UuljCz53tf1LLIoEj14yWAY+qEUj9elCDw27TkzyZFPfgRIqzBq9+v3XlEN
-	6bJxXc+QyVYkUW+1RgQfP6eDGwk77hMsAvMEf4lc1jMvz9p8Hv1UI/8=
-X-Google-Smtp-Source: AGHT+IHg9XasKs+N0t/qumXHpJiiJ8sMTppJmHwcsmrYSwVnYilz8ut2u+dvhBQCw0zXqxv2hFdsXA==
-X-Received: by 2002:a05:6000:240d:b0:3a4:d6ed:8df8 with SMTP id ffacd0b85a97d-3a4d6eda63bmr10797738f8f.39.1748462264092;
-        Wed, 28 May 2025 12:57:44 -0700 (PDT)
-Received: from localhost ([41.210.143.146])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a4eace3260sm2353096f8f.90.2025.05.28.12.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 12:57:43 -0700 (PDT)
-Date: Wed, 28 May 2025 22:57:39 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Peter Chen <peter.chen@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>, s32@nxp.com,
-	linaro-s32@linaro.org
-Subject: [PATCH 4/4] usb: chipidea: s32g: Add usb support for s32g3
-Message-ID: <c7c9319793b439cb35909621381ca2d4a78699dd.1748461536.git.dan.carpenter@linaro.org>
+        d=1e100.net; s=20230601; t=1748463394; x=1749068194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XlflE3W2a3akeMQBqgUqFu0YqDFCnqAH8aHLfP8pyks=;
+        b=FRUT4SiPSuFnbpf87q+pFvM003MyUS4CtRdeB52vQ892IR/MqAKMW28GFmJD+/hcKe
+         9dmGPAJQ08LQJrQZH4CRQnajuyno5Fr9X/sT0FgA9mxLRzBDZTE214ghBy0KHA62BMor
+         KvcjUIl7TjUx8OBQkfo6IO9AvwShnpG9Th3BFIXY0n89vhockG4ol/K1jmc+vVec1/Qq
+         tqw8Cm9zmVeaYmAKkuXeQt+NoqKJSwTLhHSDEwj8upGUyFMwVIEmNCRvSyyjbWqUofnZ
+         v+mNN9E4c6FleYbnrLZxIePkekEZex7wqXuAXer6r59yTrkcGN5v7iGkvai3ImlWUmVN
+         UVMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUprRNihuBjHnGrfy10tFvVNIWmjIMFyG4RH6SQkCDi2o//gLFpGPzaS6K65PcebTg8EUVBiNNsrPA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZSJAz5PThaFflIOuaUlA0UZZpTzBUMUKwckbfXDHPgSIo5bAS
+	Jx39sQrKqseDj4k1F2E0b3yXrXRrbPT3SKUGMx0MwgKnUrscQZ6AO2TBt9MyuqgmprmxLwTy8bb
+	etok2ORNqZ9E3hIYsK9uS+dgrEWGAOWneDUS+NHzp
+X-Gm-Gg: ASbGncttGTIquz9RZSgmfWDbfkbtLi2eRMSHy7c+XUkMstW5t1z4Qy4P/3qc0jxpXUH
+	mpeALniiuLgrz8DkqI00N+sAPlC4XCtdg9jf2d3PXoARCU8TXqYBxRrX1HqxuaFcZuY+ChxfsGC
+	SxIjBs6+22WXSJMoro3zOXQuVybk8tXNr9+A==
+X-Google-Smtp-Source: AGHT+IEbzD4dK8cOpUc/SPnSTr0/q9POJtIYt5FZDgdkw1rUB7DCCT7GF+7V1yqq0ARc9GyC7IdW4RGwpUbj5bwumgk=
+X-Received: by 2002:a17:90b:2789:b0:311:baa0:89ce with SMTP id
+ 98e67ed59e1d1-311baa0945amr11939710a91.12.1748463394345; Wed, 28 May 2025
+ 13:16:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1748453565.git.dan.carpenter@linaro.org>
+References: <68351d36.a70a0220.253bc2.009d.GAE@google.com> <df01d028-cf41-49be-8f70-b512f57c5cc6@suse.com>
+In-Reply-To: <df01d028-cf41-49be-8f70-b512f57c5cc6@suse.com>
+From: Alan Stern <stern@rowland.harvard.edu>
+Date: Wed, 28 May 2025 16:16:17 -0400
+X-Gm-Features: AX0GCFuOr2egM6jCm14HTPWnC_M2ECP58RsFUbSycoMBuK6T9yYYC7THb-xebpk
+Message-ID: <CANsfzsQ7zSS2Usk3apniSvK-zfggRt-sjN-dYoLVr6+2EXtDog@mail.gmail.com>
+Subject: Re: [syzbot] [usb?] WARNING in dtv5100_i2c_msg/usb_submit_urb
+To: Oliver Neukum <oneukum@suse.com>
+Cc: syzbot <syzbot+0335df380edd9bd3ff70@syzkaller.appspotmail.com>, 
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+On Wed, May 28, 2025 at 9:02=E2=80=AFAM Oliver Neukum <oneukum@suse.com> wr=
+ote:
+>
+> On 27.05.25 04:02, syzbot wrote:
+>
+> >
+> > ------------[ cut here ]------------
+> > usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
+> > WARNING: CPU: 0 PID: 5833 at drivers/usb/core/urb.c:413 usb_submit_urb+=
+0x1112/0x1870 drivers/usb/core/urb.c:411
+>
+> [..]
+> > Call Trace:
+> >   <TASK>
+> >   usb_start_wait_urb+0x114/0x4c0 drivers/usb/core/message.c:59
+> >   usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+> >   usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
+> >   dtv5100_i2c_msg+0x250/0x330 drivers/media/usb/dvb-usb/dtv5100.c:60
+> >   dtv5100_i2c_xfer+0x1a4/0x3c0 drivers/media/usb/dvb-usb/dtv5100.c:86
+>
+> Hi,
+>
+> these transfers are done via control transfers to endpoint 0.
+> So this is not yet another one of those cases that a driver fails
+> to verify that it operates on the intended hardware.
+> I'd say that a driver can assume that endpoint 0 exists and is
+> a control endpoint.
+>
+> But I am afraid we never check that. Should we?
 
-Enable USB driver for the s32g3 USB device.
+That's not the problem here.  The problem is the same as in other USB
+I2C drivers, and
+Wolfgang Sang has been fixing them up one by one.  Namely, these
+devices send I2C
+messages as control transfers over ep0, and this doesn't work right
+with the client asks
+for a 0-length read transfer (since USB doesn't support 0-length read
+control transfers,
+only 0-length writes).
 
-Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/chipidea/ci_hdrc_imx.c |  1 +
- drivers/usb/chipidea/usbmisc_imx.c | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index ce207f8566d5..d062399ce15e 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -95,6 +95,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
- 	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
- 	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
- 	{ .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
-+	{ .compatible = "nxp,s32g3-usb", .data = &s32g_usb_data},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, ci_hdrc_imx_dt_ids);
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 43098a150e83..34fd26faa303 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -677,6 +677,11 @@ static int usbmisc_s32g2_init(struct imx_usbmisc_data *data)
- 	return usbmisc_s32g_init(data, S32G_UCMALLBE);
- }
- 
-+static int usbmisc_s32g3_init(struct imx_usbmisc_data *data)
-+{
-+	return usbmisc_s32g_init(data, 0);
-+}
-+
- static int usbmisc_imx7d_set_wakeup
- 	(struct imx_usbmisc_data *data, bool enabled)
- {
-@@ -1200,6 +1205,12 @@ static const struct usbmisc_ops s32g2_usbmisc_ops = {
- 	.flags = REINIT_DURING_RESUME,
- };
- 
-+static const struct usbmisc_ops s32g3_usbmisc_ops = {
-+	.init = usbmisc_s32g3_init,
-+	.set_wakeup = usbmisc_s32g_set_wakeup,
-+	.flags = REINIT_DURING_RESUME,
-+};
-+
- static inline bool is_imx53_usbmisc(struct imx_usbmisc_data *data)
- {
- 	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-@@ -1432,6 +1443,10 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
- 		.compatible = "nxp,s32g2-usbmisc",
- 		.data = &s32g2_usbmisc_ops,
- 	},
-+	{
-+		.compatible = "nxp,s32g3-usbmisc",
-+		.data = &s32g3_usbmisc_ops,
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
--- 
-2.47.2
-
+Alan Stern
 
