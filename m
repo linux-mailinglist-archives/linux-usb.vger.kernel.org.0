@@ -1,127 +1,126 @@
-Return-Path: <linux-usb+bounces-24385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E8DAC7B1B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 May 2025 11:32:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 559E3AC8427
+	for <lists+linux-usb@lfdr.de>; Fri, 30 May 2025 00:22:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40907500958
-	for <lists+linux-usb@lfdr.de>; Thu, 29 May 2025 09:32:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC5CB170D0F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 May 2025 22:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5876321CC4E;
-	Thu, 29 May 2025 09:32:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63CF21D5BA;
+	Thu, 29 May 2025 22:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXx3dEHb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGliEGuf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACFD15E97;
-	Thu, 29 May 2025 09:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C4219303;
+	Thu, 29 May 2025 22:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748511129; cv=none; b=EXqIM22XzBjlJFDwrq54YeJYVK6FYJnOl0Dm9tWzCOqNPuhYDTRDgWsm/a7ii+KtnDCkkJw7iEm1SBPY7qq76wJIR3zTox8vNr0BnDRL0RCC6oZnkcTlvP2jfbwD81IIoffcb9h3L2FspMpvdKS2lT/CwtRxOFaV1UOMF9126G0=
+	t=1748557345; cv=none; b=Ol4wBBaAUbrdjyDKpOIAXC5ZLXIkxDXQ/PcFkeDc5GoCa9vPlAofrmr1usEPn5N7/tAQE8cUKB25hfhghupu6cFUxHbP/QRR0Rw7AmwySuUA0i0Tfn6C1cy+oTebLzwczJJCH4OGUaNNl3IqUugf/ra8dJ2s0+XgCf4xA0uPA1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748511129; c=relaxed/simple;
-	bh=LI+P8we4jYjZFSJzzUJ5hWqGC0PG9IihR1wzIw4dWXQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MrGGVsPwdmX5fT1TZUGS+60fRh+sc5hmI/DZLWgpGMotrG6JLrX4HYP+Hb5FcND+LWd/+BEb/VoLv2zpzy1NqxxiAtsR3fCdtK+q+nJjs00a9t1tOrw09f0gLR9uHw3UzDN0/pKilrtg0KWUmbW7pX2Dk6EPYASyBMoxW2Um0m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXx3dEHb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0590DC4CEEB;
-	Thu, 29 May 2025 09:32:05 +0000 (UTC)
+	s=arc-20240116; t=1748557345; c=relaxed/simple;
+	bh=qiABFbsJcWyIhPq0FNeTctPGJf0KQJvA0uRNtOQkP0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=leisMT+74XsVX40alLIXEtIhqM4l98k7aA2TfZ+ZqLStv5iMFQCDGEjQUXO5nRxvTTYdtlYNz6ZrPdHQfuR5+k4qAWnCWDyigkOlQEQCAMjLOzCBK0mMf8QBinAe9+fXaTo0F+IeHkdtLagKquuxEFOZSH1F8OX7m4jzSqZ4NRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGliEGuf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85753C4CEE7;
+	Thu, 29 May 2025 22:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748511129;
-	bh=LI+P8we4jYjZFSJzzUJ5hWqGC0PG9IihR1wzIw4dWXQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bXx3dEHbE+nxNLiysH5/sPePztBh3f2h8U+cC5/cPg2I3b5lUaS5nwkCMttHS8aXi
-	 Nm9ADd0eibC+8yT/8byylUEaXMpTVFy50yKC3EDyaDWmWQdbb5dHMyQHmzirHaIOuZ
-	 3/1NlLdWU4TReMTM5jSxeKgOhFjBxqEy5OxsJ8QLhrlb/rkxYwozuY34jYqrIDGHAm
-	 jaukPrzj5kNwzMXbNel/SHCPJpAZBOu2DZPkZLwwnyNKjesemmUhZ8DCVnTtYx99A4
-	 8ULkgiBuybs7thhSbQL4Pt2Rzms+duMCjIg2HX1xP1Wr6n8pdTDoX35qFKnhEDsCZQ
-	 nNCM+vn36mr9Q==
-Message-ID: <dad12b2d-3c5d-4106-bec6-1aeaec72288a@kernel.org>
-Date: Thu, 29 May 2025 11:32:04 +0200
+	s=k20201202; t=1748557344;
+	bh=qiABFbsJcWyIhPq0FNeTctPGJf0KQJvA0uRNtOQkP0A=;
+	h=Date:From:To:Cc:Subject:From;
+	b=aGliEGufqyb+DIOC8pTu31skuxGM1Z9/+SBkPULyPbr7nBDcxTbfxm5e2OUf5hw8Q
+	 QvfhKaZWDrf+WxR0bBbtdSw4ly+IGFJlVwH0yuuoVWkXfDfdZgWq0tglZ66zaN1TXX
+	 NLLHhx4s4PPmLeWSmxMN5eeH3mtObhhx5LGnKjSysl2JX+gnwni6m7HXwkvfBLqb+9
+	 nZ0FVDBfrx2BRLfPAIgpjIRalxKEdgKsh2zSfdfVpTO34nmT7w9gTdK9bn33O9NOfP
+	 lc9QNYhRqvj2kWX969thEjACIxvGrrqO0l/8li70WgBdyuUXaPYaO0kICEoHBeF7gy
+	 +2dY6S4VzDr0Q==
+Date: Thu, 29 May 2025 17:22:23 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: linux-pci@vger.kernel.org
+Cc: Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	linux-usb@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: [bugzilla-daemon@kernel.org: [Bug 220175] New: NVMe SSD doesn't work
+ via Thunderbolt enclosure on Framework 13 (Ryzen AI 300)]
+Message-ID: <20250529222223.GA119209@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: usb: Add compatible strings for
- s32g2/s32g3
-To: Dan Carpenter <dan.carpenter@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Xu Yang <xu.yang_2@nxp.com>,
- Peng Fan <peng.fan@nxp.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>, s32@nxp.com,
- linaro-s32@linaro.org, Larisa Grigore <larisa.grigore@nxp.com>,
- Ionut Vicovan <Ionut.Vicovan@nxp.com>
-References: <cover.1748453565.git.dan.carpenter@linaro.org>
- <2a4317353557e4fac2a7bfa4261a75886eebe41b.1748453565.git.dan.carpenter@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <2a4317353557e4fac2a7bfa4261a75886eebe41b.1748453565.git.dan.carpenter@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 28/05/2025 21:57, Dan Carpenter wrote:
-> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-> 
-> Add the compatible strings for the NXP s32g2 and s32g3.
+[+cc pciehp, thunderbolt, nvme folks;
+ +bcc Andrey (reporter)]
 
+Andrey, sorry that you tripped over this, and thank you very much for
+reporting it.  I'm forwarding this to the mailing lists because most
+subsystems don't really pay attention to the bugzilla.
 
-Why these are not compatible? Explain the hardware in the commit msg.
-Your driver, although you did not Cc me on it, suggests they are
-compatible. Anyway you have entire commit msg to explain unusual things.
+Obviously we don't want to have to use kernel args to make things
+work, and we also don't want to have to use /sys/bus/pci/rescan after
+a hot-add.
 
-Best regards,
-Krzysztof
+IIUC, if you boot while the SSD in the enclosure is already attached
+to the USB 3.2 port, everything works fine?  Could you please attach a
+complete dmesg log from such a boot to the bugzilla, just as a
+baseline?
+
+----- Forwarded message from bugzilla-daemon@kernel.org -----
+
+https://bugzilla.kernel.org/show_bug.cgi?id=220175
+
+           Summary: NVMe SSD doesn't work via Thunderbolt enclosure on
+                    Framework 13 (Ryzen AI 300)
+
+Created attachment 308180
+  --> https://bugzilla.kernel.org/attachment.cgi?id=308180&action=edit
+lspci -vvv
+
+I have a Samsung 970 Evo Plus SSD installed in an ACASIS TBU401E USB4
+enclosure. When I connect it to the USB 3.2 port, everything is fine, the SSD
+is detected by the scsi driver and shows up in the system as /dev/sdb. But when
+I plug it into the USB4 port, the device doesn't show up.
+
+However, I can connect and use this disk by using kernel args
+`nvme_core.default_ps_max_latency_us=0 pcie_aspm=off pcie_port_pm=off` and
+doing `echo 1 | sudo tee /sys/bus/pci/rescan` after connecting the SSD.
+
+Solution described in https://bugzilla.kernel.org/show_bug.cgi?id=216000#c65
+doesn't help and breaks most of the PCIe devices in the system.
+
+More info:
+
+```
+$ uname -r
+6.14.6-300.fc42.x86_64
+$ ls /dev/nvme*    
+zsh: no matches found: /dev/nvme*
+$ cat /sys/bus/thunderbolt/devices/1-2/vendor_name         
+ACASIS
+$ cat /sys/bus/thunderbolt/devices/1-2/authorized         
+1
+$ inxi -MC           
+Machine:
+  Type: Laptop System: Framework product: Laptop 13 (AMD Ryzen AI 300 Series)
+    v: A9 serial: <superuser required>
+  Mobo: Framework model: FRANMGCP09 v: A9 serial: <superuser required>
+    UEFI: INSYDE v: 03.03 date: 03/10/2025
+CPU:
+  Info: 12-core model: AMD Ryzen AI 9 HX 370 w/ Radeon 890M bits: 64
+```
 
