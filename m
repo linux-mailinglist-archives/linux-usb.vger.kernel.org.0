@@ -1,126 +1,119 @@
-Return-Path: <linux-usb+bounces-24386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24387-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 559E3AC8427
-	for <lists+linux-usb@lfdr.de>; Fri, 30 May 2025 00:22:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E3CAC88AC
+	for <lists+linux-usb@lfdr.de>; Fri, 30 May 2025 09:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC5CB170D0F
-	for <lists+linux-usb@lfdr.de>; Thu, 29 May 2025 22:22:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17DD13BF926
+	for <lists+linux-usb@lfdr.de>; Fri, 30 May 2025 07:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63CF21D5BA;
-	Thu, 29 May 2025 22:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGliEGuf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F4620D51A;
+	Fri, 30 May 2025 07:18:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C4219303;
-	Thu, 29 May 2025 22:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365661898F8;
+	Fri, 30 May 2025 07:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748557345; cv=none; b=Ol4wBBaAUbrdjyDKpOIAXC5ZLXIkxDXQ/PcFkeDc5GoCa9vPlAofrmr1usEPn5N7/tAQE8cUKB25hfhghupu6cFUxHbP/QRR0Rw7AmwySuUA0i0Tfn6C1cy+oTebLzwczJJCH4OGUaNNl3IqUugf/ra8dJ2s0+XgCf4xA0uPA1c=
+	t=1748589538; cv=none; b=NfwJW2Yh5eVjHMLvYtN8ehYN+5pk9bOB4gGaxfqTXAyNJYnnpsqQjBaBwsdeCO36lH2rW2wDAzzeHm8aosyQK4ABkfkjEUTvt/hTu4R+96BqVEcCa33ZfOocTIbTQS1ikQjG4IkI/8Ic1uMNePQKAAJ9M6bhLq23n2XD5uP6EhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748557345; c=relaxed/simple;
-	bh=qiABFbsJcWyIhPq0FNeTctPGJf0KQJvA0uRNtOQkP0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=leisMT+74XsVX40alLIXEtIhqM4l98k7aA2TfZ+ZqLStv5iMFQCDGEjQUXO5nRxvTTYdtlYNz6ZrPdHQfuR5+k4qAWnCWDyigkOlQEQCAMjLOzCBK0mMf8QBinAe9+fXaTo0F+IeHkdtLagKquuxEFOZSH1F8OX7m4jzSqZ4NRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGliEGuf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85753C4CEE7;
-	Thu, 29 May 2025 22:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748557344;
-	bh=qiABFbsJcWyIhPq0FNeTctPGJf0KQJvA0uRNtOQkP0A=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aGliEGufqyb+DIOC8pTu31skuxGM1Z9/+SBkPULyPbr7nBDcxTbfxm5e2OUf5hw8Q
-	 QvfhKaZWDrf+WxR0bBbtdSw4ly+IGFJlVwH0yuuoVWkXfDfdZgWq0tglZ66zaN1TXX
-	 NLLHhx4s4PPmLeWSmxMN5eeH3mtObhhx5LGnKjSysl2JX+gnwni6m7HXwkvfBLqb+9
-	 nZ0FVDBfrx2BRLfPAIgpjIRalxKEdgKsh2zSfdfVpTO34nmT7w9gTdK9bn33O9NOfP
-	 lc9QNYhRqvj2kWX969thEjACIxvGrrqO0l/8li70WgBdyuUXaPYaO0kICEoHBeF7gy
-	 +2dY6S4VzDr0Q==
-Date: Thu, 29 May 2025 17:22:23 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: linux-pci@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	linux-usb@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: [bugzilla-daemon@kernel.org: [Bug 220175] New: NVMe SSD doesn't work
- via Thunderbolt enclosure on Framework 13 (Ryzen AI 300)]
-Message-ID: <20250529222223.GA119209@bhelgaas>
+	s=arc-20240116; t=1748589538; c=relaxed/simple;
+	bh=fOAM++u9LTISAq68wmI6g+AZ7z3HPuYZIruMYuRA+eg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=R6ZwyE815heQ4sErSS4unTvMZhIRASrB6TFhe6o3UdT8V2Vm8dcnR/viLT6zHpCsnpoYFqJdktIP5QYUm1PqNG4lPlGu8PffskcY5nx4eaJIiIq523TmIq/bUgyxsMtkP30vbx/EjupGsRzkgGdRSmq7XA5W7LwrQt9Wed4JD/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 539ca1503d2611f0b29709d653e92f7d-20250530
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:ee96e855-b6fc-499e-a774-5c0bfd2a5ede,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:3f1983991b840bf5a8054f82d285f2e9,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3,IP:
+	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
+	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 539ca1503d2611f0b29709d653e92f7d-20250530
+Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
+	(envelope-from <lijiayi@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1256206541; Fri, 30 May 2025 15:18:46 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id AE87116001A01;
+	Fri, 30 May 2025 15:18:46 +0800 (CST)
+X-ns-mid: postfix-68395BD6-5408331627
+Received: from kylin-pc.. (unknown [172.25.130.133])
+	by node4.com.cn (NSMail) with ESMTPA id CE81116001CC7;
+	Fri, 30 May 2025 07:18:45 +0000 (UTC)
+From: Jiayi Li <lijiayi@kylinos.cn>
+To: gregkh@linuxfoundation.org,
+	limiao@kylinos.cn,
+	huanglei@kylinos.cn,
+	mathias.nyman@linux.intel.com,
+	oneukum@suse.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lijiayi@kylinos.cn
+Subject: [PATCH v2] usb: quirks: Add NO_LPM quirk for SanDisk Extreme 55AE
+Date: Fri, 30 May 2025 15:18:39 +0800
+Message-ID: <20250530071839.2110556-1-lijiayi@kylinos.cn>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250508033123.673964-1-lijiayi@kylinos.cn>
+References: <20250508033123.673964-1-lijiayi@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[+cc pciehp, thunderbolt, nvme folks;
- +bcc Andrey (reporter)]
+This device exhibits I/O errors during file transfers due to unstable
+link power management (LPM) behavior. The kernel logs show repeated
+warm resets and eventual disconnection when LPM is enabled:
 
-Andrey, sorry that you tripped over this, and thank you very much for
-reporting it.  I'm forwarding this to the mailing lists because most
-subsystems don't really pay attention to the bugzilla.
+[ 3467.810740] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0020
+[ 3467.810740] usb usb2-port5: do warm reset
+[ 3467.866444] usb usb2-port5: not warm reset yet, waiting 50ms
+[ 3467.907407] sd 0:0:0:0: [sda] tag#12 sense submit err -19
+[ 3467.994423] usb usb2-port5: status 02c0, change 0001, 10.0 Gb/s
+[ 3467.994453] usb 2-5: USB disconnect, device number 4
 
-Obviously we don't want to have to use kernel args to make things
-work, and we also don't want to have to use /sys/bus/pci/rescan after
-a hot-add.
+The error -19 (ENODEV) occurs when the device disappears during write
+operations. Adding USB_QUIRK_NO_LPM disables link power management
+for this specific device, resolving the stability issues.
 
-IIUC, if you boot while the SSD in the enclosure is already attached
-to the USB 3.2 port, everything works fine?  Could you please attach a
-complete dmesg log from such a boot to the bugzilla, just as a
-baseline?
+Signed-off-by: Jiayi Li <lijiayi@kylinos.cn>
+---
+v1 -> v2: modify a format error.
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
------ Forwarded message from bugzilla-daemon@kernel.org -----
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 36d3df7d040c..53d68d20fb62 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -372,6 +372,9 @@ static const struct usb_device_id usb_quirk_list[] =3D=
+ {
+ 	/* SanDisk Corp. SanDisk 3.2Gen1 */
+ 	{ USB_DEVICE(0x0781, 0x55a3), .driver_info =3D USB_QUIRK_DELAY_INIT },
+=20
++	/* SanDisk Extreme 55AE */
++	{ USB_DEVICE(0x0781, 0x55ae), .driver_info =3D USB_QUIRK_NO_LPM },
++
+ 	/* Realforce 87U Keyboard */
+ 	{ USB_DEVICE(0x0853, 0x011b), .driver_info =3D USB_QUIRK_NO_LPM },
+=20
+--=20
+2.47.1
 
-https://bugzilla.kernel.org/show_bug.cgi?id=220175
-
-           Summary: NVMe SSD doesn't work via Thunderbolt enclosure on
-                    Framework 13 (Ryzen AI 300)
-
-Created attachment 308180
-  --> https://bugzilla.kernel.org/attachment.cgi?id=308180&action=edit
-lspci -vvv
-
-I have a Samsung 970 Evo Plus SSD installed in an ACASIS TBU401E USB4
-enclosure. When I connect it to the USB 3.2 port, everything is fine, the SSD
-is detected by the scsi driver and shows up in the system as /dev/sdb. But when
-I plug it into the USB4 port, the device doesn't show up.
-
-However, I can connect and use this disk by using kernel args
-`nvme_core.default_ps_max_latency_us=0 pcie_aspm=off pcie_port_pm=off` and
-doing `echo 1 | sudo tee /sys/bus/pci/rescan` after connecting the SSD.
-
-Solution described in https://bugzilla.kernel.org/show_bug.cgi?id=216000#c65
-doesn't help and breaks most of the PCIe devices in the system.
-
-More info:
-
-```
-$ uname -r
-6.14.6-300.fc42.x86_64
-$ ls /dev/nvme*    
-zsh: no matches found: /dev/nvme*
-$ cat /sys/bus/thunderbolt/devices/1-2/vendor_name         
-ACASIS
-$ cat /sys/bus/thunderbolt/devices/1-2/authorized         
-1
-$ inxi -MC           
-Machine:
-  Type: Laptop System: Framework product: Laptop 13 (AMD Ryzen AI 300 Series)
-    v: A9 serial: <superuser required>
-  Mobo: Framework model: FRANMGCP09 v: A9 serial: <superuser required>
-    UEFI: INSYDE v: 03.03 date: 03/10/2025
-CPU:
-  Info: 12-core model: AMD Ryzen AI 9 HX 370 w/ Radeon 890M bits: 64
-```
 
