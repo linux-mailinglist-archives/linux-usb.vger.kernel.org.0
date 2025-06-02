@@ -1,162 +1,105 @@
-Return-Path: <linux-usb+bounces-24409-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24410-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C632AC9E85
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jun 2025 14:52:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B023ACA804
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 03:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CB027A9A33
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Jun 2025 12:51:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D87677A9EB2
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 01:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227DE1CB518;
-	Sun,  1 Jun 2025 12:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63411E0DD9;
+	Mon,  2 Jun 2025 01:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pYhcm36W"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=shdwchn.io header.i=@shdwchn.io header.b="r51K+Rni"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-24421.protonmail.ch (mail-24421.protonmail.ch [109.224.244.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A26D299
-	for <linux-usb@vger.kernel.org>; Sun,  1 Jun 2025 12:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DA01B4139
+	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 01:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748782341; cv=none; b=BpBbM5bS6kNDJBazOoLQ91XKlpNyHkBn0k/T3GYsmSqi5ISOm1BLl+IfErcGFvxMB2ReOgMKw5LHNek0Gz7liD+PQk8SOBKbqR3ZUUNyWJnMKaI8L2Jqyqf2ZrUlnvcqWYZxYFu45asY1xU0lWfbWUPmp8cS0ffcCspUHLrX5II=
+	t=1748826594; cv=none; b=uhARgRNPReWiXqNWna3UqgKs7rUiP5soAJG3zsHlVbawXylsXprkB01mcE5Td6GyR+DspWcLHvXilj1xSxFd02iQNGcZLrZvBgyQavTDu07g7yadDfXyIC8mB4s4v+2nO8fpEC4ajNjIAioC3AWiADHHdXehlS3Op/YVFxJFUn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748782341; c=relaxed/simple;
-	bh=TSoJ0tU94vOB3heClaxPaWS8kPUOikT2q+DUMUYvu5s=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=h93YPI75Jhavkj5QKL9jFbAdqWse+Y01AeuulwjXc/iq5prpl/YCOn/UKaZlgHrTVzGJQ+W+svuuv35YUHVvOYZrD4bvLDRwZZ+yupdZqdGVxXuqEazKB14ToRTuKAEeu65m8aIUuk+gumBzAkR9FSDOmolpPu0X3uLlQkStgJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pYhcm36W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E039C4CEE7
-	for <linux-usb@vger.kernel.org>; Sun,  1 Jun 2025 12:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748782341;
-	bh=TSoJ0tU94vOB3heClaxPaWS8kPUOikT2q+DUMUYvu5s=;
-	h=From:To:Subject:Date:From;
-	b=pYhcm36W3aa5DJHoOXpr5h8xZolYkKEcgRu3Gyt0CzKkP2XZSjaJr+1wqK4rB8ZyV
-	 nZy94Hlwx2dWwPk3gAg/3TlFMQ188IN2G5x8LNJnvLaGQp2vDKRieC+YN1nt3SU+PN
-	 dzTXijDP729pQethcBK5oslhItvNi/I2cTOvtqFCPOKdwJIex3C0CoQCvIRE1+5pI7
-	 KmwLzhCRs+fVTBVfnaLospzXt3GPjh6H+jqdj062FY6fYNubk1F9V9DJLbPIAlIAfX
-	 XU0UaiGty2tO0fvEbkW2ZtQ+lUiGxdKaKpE5b9GFi/Gs6Q66VgZ+1oqpUkdFFQP/DI
-	 PEuy2/28bM+fA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 49967C3279F; Sun,  1 Jun 2025 12:52:21 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIE5ldzogVXNlcnMgYWNyb3NzIGRpc3RyaWJ1?=
- =?UTF-8?B?dGlvbnMgc2VlIOKAnGNvbmZpZyBmYWlsZWQsIGh1YiBkb2VzbuKAmXQgaGF2?=
- =?UTF-8?B?ZSBhbnkgcG9ydHMhIChlcnIgLTE5KeKAnSBmcm9tIHhoY2lfaGNkIGF0IGJv?=
- =?UTF-8?B?b3Qu?=
-Date: Sun, 01 Jun 2025 12:52:21 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: 6svcyk03@rokejulianlockhart.addy.io
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-220181-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1748826594; c=relaxed/simple;
+	bh=EZaYfANRHxPJfwY2Ec0dCf9g+tUnQCVVVD04Q668M64=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UnqHQhyAhsxawgq+RPFXP/f5Gyg653cvpbQ2P15ga4U7gGmN+WPrVGZu6MmioKRzbFf9T76D9QbKvubiBzNoXWHDoX71IUNUVno8GuFkPcOz5VDTMDFsujfkaPQhGfnTVmu8DGitI4R0Fi3CuLoqJ3SW8utePFS4LBrn7QIiTxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shdwchn.io; spf=pass smtp.mailfrom=shdwchn.io; dkim=pass (2048-bit key) header.d=shdwchn.io header.i=@shdwchn.io header.b=r51K+Rni; arc=none smtp.client-ip=109.224.244.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shdwchn.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shdwchn.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shdwchn.io;
+	s=protonmail; t=1748826584; x=1749085784;
+	bh=EZaYfANRHxPJfwY2Ec0dCf9g+tUnQCVVVD04Q668M64=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=r51K+RnibSqXDJ9sWk4GZdY60sU1KizK+DyFBcAKY8RThoaAP/Swpnp1dIc8e34SX
+	 Z44YuP/bfbAHGBzXW5rhr8hagTRjc7ovBTeylmoNNuQWkHReLY/vPks1I34ltDioMB
+	 hgSBJVgMTbP7SakEVCm7RZkGm6YmpXKGNXZnL4ntmLYpb3KnD+WZsl2/q8h/6fSlA+
+	 j++gg4jd4dUZeNs/eToITse25ypPc6rPwTTgYWGRFa+9Y0FQddK/2WEHzzV+OSKPiq
+	 WDi2SExIp13Z/EGlYwg6AFUIdh2sDOsEIowKUAOcl9bXaW8isatesCpJNyKX0/HhG5
+	 WUCsLesJTRtzA==
+Date: Mon, 02 Jun 2025 01:09:41 +0000
+To: Bjorn Helgaas <helgaas@kernel.org>
+From: Andrey Brusnik <dev@shdwchn.io>
+Cc: linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, linux-usb@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [bugzilla-daemon@kernel.org: [Bug 220175] New: NVMe SSD doesn't work via Thunderbolt enclosure on Framework 13 (Ryzen AI 300)]
+Message-ID: <JeHMKChVhpNReeCujhPWnnVXkEuC9YpTrwt8mqZ8c8wwMQqeIg7ZVlAmqRlJ9MCmgak5KvAdVJkGDr-vfehzT0T66ALA082JEOMaXGrE6Qg=@shdwchn.io>
+In-Reply-To: <20250529222223.GA119209@bhelgaas>
+References: <20250529222223.GA119209@bhelgaas>
+Feedback-ID: 27773722:user:proton
+X-Pm-Message-ID: b8164dfafc7d193af4022fa99ba236eeb36c7ed4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------5a1b726c2bb2cadc38536e69d746567d4d9f909c73e39e41a9773a96532cbdba"; charset=utf-8
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------5a1b726c2bb2cadc38536e69d746567d4d9f909c73e39e41a9773a96532cbdba
+Content-Type: multipart/mixed;boundary=---------------------02b76b9018760c600334190c3c7e05f7
 
-            Bug ID: 220181
-           Summary: Users across distributions see =E2=80=9Cconfig failed, =
-hub
-                    doesn=E2=80=99t have any ports! (err -19)=E2=80=9D from=
- xhci_hcd at
-                    boot.
-           Product: Drivers
-           Version: 2.5
-          Hardware: AMD
-                OS: Linux
-            Status: NEW
-          Severity: low
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: 6svcyk03@rokejulianlockhart.addy.io
-        Regression: No
+-----------------------02b76b9018760c600334190c3c7e05f7
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;charset=utf-8
 
-At boot, I see the undermentioned in red in `dmesg`:
+On Friday, May 30th, 2025 at 02:22, Bjorn Helgaas <helgaas@kernel.org> wro=
+te:
 
-> ~~~log
-> config failed, hub doesn't have any ports! (err -19)
-> ~~~
+> IIUC, if you boot while the SSD in the enclosure is already attached
+> to the USB 3.2 port, everything works fine? Could you please attach a
+> complete dmesg log from such a boot to the bugzilla, just as a
+> baseline?
 
-I've one entry for each boot in `journalctl`.
+I added a complete dmesg with USB 3.2 (and USB4 too) connection before boo=
+t to the bugzilla. USB 3.2 connection works fine both when connected befor=
+e boot and when hotplugged. Is any other information I can provide needed?
 
-Using the first section of the error:
+--
+Andrey
+-----------------------02b76b9018760c600334190c3c7e05f7--
 
-> ~~~YAML
-> hub 12-0:1.0
-> ~~~
+--------5a1b726c2bb2cadc38536e69d746567d4d9f909c73e39e41a9773a96532cbdba
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-...I believe that I've ascertained what the cause is. Using `lsusb -t`, I f=
-ind:
+-----BEGIN PGP SIGNATURE-----
+Version: ProtonMail
 
-> ~~~YAML
-> /:  Bus 012.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/0p, 50=
-00M
-> ~~~
+wnUEARYKACcFgmg8+cUJkC2//WlsAqGpFiEEowm2UA7MQsEG7isELb/9aWwC
+oakAAHLgAQDHDnoBE5k8UqkQkiCJutsW6wbD18grUGgGPBvEoMsmogD/cDPr
+BM4C+1+peIvFcYEZW8gXPKf0cLx2NGskPTppswc=
+=ROpA
+-----END PGP SIGNATURE-----
 
-`Driver=3Dxhci_hcd/0p` means it has 0 ports, which is invalid, hence the er=
-ror.
 
-I tried to `readlink /sys/class/usb_host/usb12` it to ascertain what the ca=
-use
-is, but that fails, because the device unsuccessfully enumerated. Consequen=
-tly,
-I used `readlink /sys/bus/usb/devices/usb12` to verify the device ID:
+--------5a1b726c2bb2cadc38536e69d746567d4d9f909c73e39e41a9773a96532cbdba--
 
-> ~~~log
-> ../../../devices/pci0000:00/0000:00:08.3/0000:5a:00.0/usb12
-> ~~~
-
-When known, I used `5a:00.0` to locate the cause with `lspci -s 5a:00.0`:
-
-> ~~~YAML
-> 5a:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Raphael/Granit=
-e Ridge USB 2.0 xHCI
-> ~~~
-
-It's the virtual "Advanced Micro Devices, Inc. [AMD] Raphael/Granite Ridge =
-USB
-2.0 xHCI" USB controller, not exposing any ports despite the driver purport=
-edly
-requiring it. However, there obviously aren't ports on a virtual device.
-
-At
-https://discussion.fedoraproject.org/t/what-does-config-failed-hub-doesnt-h=
-ave-any-ports-err-19-mean/153954,
-I cite corroborations from Kali Linux, Ubuntu, Debian and Fedora. However, =
-I've
-also received a personal e-mail from an interested party who claims to
-reproduce this on openSUSE.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
