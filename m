@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-24418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24419-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 553C9ACACE7
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 12:59:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DF8FACAD03
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 13:10:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306E24011E9
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 10:59:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD0E189DFCA
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 11:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CDD32054E4;
-	Mon,  2 Jun 2025 10:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681D0205AD7;
+	Mon,  2 Jun 2025 11:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeMd7o33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrtUE/uQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B101DF261
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 10:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BA114F70
+	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748861986; cv=none; b=I26ngcPBcZa/bMCF26E+lTbGxmm3kfhB9zNJUnI0/aFv793QYKDpeas+Q5vbn7uN7OiGmVlbOuOF/JCaViUdrVx4KOF97fw6n+x2hK21IGVNa+ixCsxyvGkKjWqg94bVpUENmlx0k0qAuJCUfvjYhPFrJ5HXMjbmCGow5IrV+2Q=
+	t=1748862653; cv=none; b=bNOiysM5vhy1h6zt4s/EdsC5g7U5OqEjd16vG0OM6HvPllpkiBB8wxYz/mA/WjLUegcymGjAOsNo5MpjMCgKInBBxR+0wIjGXgVTycz01UNHu+86HFfRTFHVcbToWrqN00Eq/oj8tBZLbyee18PAdDJmri2ivX4HcDuDx+/uIIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748861986; c=relaxed/simple;
-	bh=QgaRr5YDEnxzwpwdXaiV6SBb6dxzDK9q096FZQ+DCd4=;
+	s=arc-20240116; t=1748862653; c=relaxed/simple;
+	bh=f8yv4fzomNDxXAbSOcfu9uko7IEFCJHrT44kE95HkLQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=csRr5ElvMZIpmic4gMfd1cEDbSnE50ZvE7uAmR1De+21jJYCMfskt480CQNzHen/8r22m/8Uy/4UKcZPgp1zGEobVozqgHaiQiAmlRaPHtIMEJpjhYkl4aPER1AyPDzBvdUJiMNfBMv2EFGytB0Mh2Jwdo6BvoGeD4ib/iMFszw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeMd7o33; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D96EC4CEEB
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 10:59:46 +0000 (UTC)
+	 Content-Type:MIME-Version; b=R5HUYP1/aqxgx92oCNiMADNJpLMYHbB3oI7miRwcrz4E/wWXqIigpduNxPNYouIWJvp3wU5BaUa1jwNZHu9NxWd2ZZFvvrKmHvOBRhKLK4t1yCve09kixQHWc9dPfkxwgFUu4+zLlqUJ61tABXWj8pg/u0dFKYPEytmvKTKC3MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrtUE/uQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60817C4CEED
+	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748861986;
-	bh=QgaRr5YDEnxzwpwdXaiV6SBb6dxzDK9q096FZQ+DCd4=;
+	s=k20201202; t=1748862653;
+	bh=f8yv4fzomNDxXAbSOcfu9uko7IEFCJHrT44kE95HkLQ=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JeMd7o33RwLwIWiBv8p3CRFiZha4surxZZ5Nhzumb/Xpsg9WRvw3zHLXv3gferRhT
-	 jvyqBs2ne0Sp41o5XD+2SKbyzsN8XCaIB4LAIlw1fPLpWBv08FzEY6kIZpZ1dsNv+c
-	 gwCh1czJ5w6/VxhPMW7ZVWDJPq15WDU5/a5cKLvr+8YoQnHqPWWjiccySmFfXQnAhR
-	 YQ1pyAS4L1202FNQJf/AoeDdETkjrAoIqE/yN30aam2USiC8KMcFiWZ8B+BdyANIlP
-	 71pWQi8Ctpx5P44aZmhy5qWJHR2r5ixqAm+ESKbDURidsw6mJ5fDSn2RCsXtead0EB
-	 7y6xNc7vezH8w==
+	b=KrtUE/uQfgeMrEHm4un/Izd8AQ5WZjadWQtv6CUyo2DvamA0IsNmT66SsLXqDazRX
+	 pnyRLisQ3M5rmjV192JrWjCyqW3T6AUhUjHgTtz7T3GcIM8OUds3o560cNtgD+kfQK
+	 jG2p0vY+5bmctwnCImofnQxlyz9LlZex7C+aEiQDQIGetxznroR2Ji09kF8XKExgm7
+	 rB67FjmE7ofqa+ryzkqVZ/e9b1ST1l0rPYkkI8peFvvo4cZlyNeSVXObZqN/5HNIHP
+	 Ac4E8G8FKdblrGMwFci7bu4OWRcH/si/GVyerJ87fR/fhuROidKLK32dHWaZLsetgp
+	 AyjySZGh4qdQA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 13929C41612; Mon,  2 Jun 2025 10:59:46 +0000 (UTC)
+	id 577ECC41613; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
  =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
  =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
-Date: Mon, 02 Jun 2025 10:59:45 +0000
+Date: Mon, 02 Jun 2025 11:10:53 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -57,14 +57,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: low
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Who: 6svcyk03@rokejulianlockhart.addy.io
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220181-208809-Nweh3SDOhX@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220181-208809-XKbWuzg6MN@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
 References: <bug-220181-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,23 +80,15 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+--- Comment #3 from Mr. Beedell, Roke Julian Lockhart (RJLB) (6svcyk03@roke=
+julianlockhart.addy.io) ---
+(In reply to Mathias Nyman from comment #2)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+> Or does this xHC host have 0 ports on usb2 roothub as well?
 
---- Comment #2 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-xhci "core" driver support hosts with only usb2 ports, (0 ports on usb3
-roothub).
-
-It's just missing some minor pieces for PCI xHC hosts in xhci-pci.c
-
-Patform and MediaTek xHC have the support ready, as can be seen by the
-"xhci->allow_single_roothub =3D 1" setting in xhci-plat.c and xhci-mtk.c
-
-Or does this xHC host have 0 ports on usb2 roothub as well?
+I dare say that I'm operating at the boundaries of my lay man's knowledge a=
+s it
+is. How do you suggest that I ascertain this?
 
 --=20
 You may reply to this email to add a comment.
