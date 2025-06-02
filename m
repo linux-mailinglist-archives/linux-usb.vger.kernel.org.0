@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-24419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF8FACAD03
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 13:10:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47083ACAD95
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 13:54:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD0E189DFCA
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 11:11:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23F343B43AD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 11:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681D0205AD7;
-	Mon,  2 Jun 2025 11:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1393A20E336;
+	Mon,  2 Jun 2025 11:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrtUE/uQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XXq+V+jn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BA114F70
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1E02B9A9
+	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748862653; cv=none; b=bNOiysM5vhy1h6zt4s/EdsC5g7U5OqEjd16vG0OM6HvPllpkiBB8wxYz/mA/WjLUegcymGjAOsNo5MpjMCgKInBBxR+0wIjGXgVTycz01UNHu+86HFfRTFHVcbToWrqN00Eq/oj8tBZLbyee18PAdDJmri2ivX4HcDuDx+/uIIw=
+	t=1748865243; cv=none; b=eiKENz1OxlG+lZjYNuHlU6bbhD9amPMNo493ZJdtA24Z9Foej3a3i86oVXVVfFd63M9E1Qp1noU4TtWbU1TdI5TgWe6DtPDn1R8nlahkel5OYlQ6eS4parJVpSeKqmcpPjgzU5Dzatv80lPcq2iJiKhkaA6hzJXenTuYK6M1HiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748862653; c=relaxed/simple;
-	bh=f8yv4fzomNDxXAbSOcfu9uko7IEFCJHrT44kE95HkLQ=;
+	s=arc-20240116; t=1748865243; c=relaxed/simple;
+	bh=ZRhuUzfAeLWU1EMsHqsx7CWK6vmqonJ4N6zI0bOmssA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R5HUYP1/aqxgx92oCNiMADNJpLMYHbB3oI7miRwcrz4E/wWXqIigpduNxPNYouIWJvp3wU5BaUa1jwNZHu9NxWd2ZZFvvrKmHvOBRhKLK4t1yCve09kixQHWc9dPfkxwgFUu4+zLlqUJ61tABXWj8pg/u0dFKYPEytmvKTKC3MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrtUE/uQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60817C4CEED
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
+	 Content-Type:MIME-Version; b=B7wbYgeKf95VSmsJB8UzLjjgFmV/FuKkWLnGWH36xvfRErsT338f2wEo838atH2iVJNxl81WYwYF+ZkXlaW+Sh6aPj6a9SY/QEUOj+vdmyPjmQns+tEpf81XIiSAFsh5I7cr+VZVHbpjjzfJXsKVMbxCzU/03bGbYLgXtMDny/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XXq+V+jn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2B08C4CEEB
+	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 11:54:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748862653;
-	bh=f8yv4fzomNDxXAbSOcfu9uko7IEFCJHrT44kE95HkLQ=;
+	s=k20201202; t=1748865243;
+	bh=ZRhuUzfAeLWU1EMsHqsx7CWK6vmqonJ4N6zI0bOmssA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KrtUE/uQfgeMrEHm4un/Izd8AQ5WZjadWQtv6CUyo2DvamA0IsNmT66SsLXqDazRX
-	 pnyRLisQ3M5rmjV192JrWjCyqW3T6AUhUjHgTtz7T3GcIM8OUds3o560cNtgD+kfQK
-	 jG2p0vY+5bmctwnCImofnQxlyz9LlZex7C+aEiQDQIGetxznroR2Ji09kF8XKExgm7
-	 rB67FjmE7ofqa+ryzkqVZ/e9b1ST1l0rPYkkI8peFvvo4cZlyNeSVXObZqN/5HNIHP
-	 Ac4E8G8FKdblrGMwFci7bu4OWRcH/si/GVyerJ87fR/fhuROidKLK32dHWaZLsetgp
-	 AyjySZGh4qdQA==
+	b=XXq+V+jn57ZWIgLaz0k0tO2iBfNY+2RLayCrkwhkgVo8AA02ERg1iKRYx8OQtvhRP
+	 ixqIgPerjzP4lF59XYrP4NQHxmmhXcf/ZdpFmBNN69vsyDOVmHDOr5Enf0VARwKwpi
+	 d/OkXG5pg932nzEILfXzfiGy3w2kwziUyOd1SnP215Hp2GeiWvraeRwZYvqDyCK9XJ
+	 A4+TMUJ1Qp611zdcdFYjZho293FtR9ZKPL1HiMbXVRO/tWnyMQm0UsntlLoPBEm/3n
+	 7U2EvsyHmzbpOyFQ+Ke8UwD92a25+6mxS/jHWfLyErYeM+4Q0Q9geubCLWAYN4eMWH
+	 wF5mTMSFQlBLg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 577ECC41613; Mon,  2 Jun 2025 11:10:53 +0000 (UTC)
+	id E40A7C41613; Mon,  2 Jun 2025 11:54:02 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
  =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
  =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
-Date: Mon, 02 Jun 2025 11:10:53 +0000
+Date: Mon, 02 Jun 2025 11:54:02 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -57,14 +57,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: low
-X-Bugzilla-Who: 6svcyk03@rokejulianlockhart.addy.io
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220181-208809-XKbWuzg6MN@https.bugzilla.kernel.org/>
+Message-ID: <bug-220181-208809-UWiKXEsFRy@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
 References: <bug-220181-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,15 +80,42 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
 
---- Comment #3 from Mr. Beedell, Roke Julian Lockhart (RJLB) (6svcyk03@roke=
-julianlockhart.addy.io) ---
-(In reply to Mathias Nyman from comment #2)
+--- Comment #4 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+(In reply to Mr. Beedell, Roke Julian Lockhart (RJLB) from comment #3)
+> (In reply to Mathias Nyman from comment #2)
+>=20
+> > Or does this xHC host have 0 ports on usb2 roothub as well?
+>=20
+> I dare say that I'm operating at the boundaries of my lay man's knowledge=
+ as
+> it is. How do you suggest that I ascertain this?
 
-> Or does this xHC host have 0 ports on usb2 roothub as well?
+Probably best to take a closer at the xHC port information of this host
 
-I dare say that I'm operating at the boundaries of my lay man's knowledge a=
-s it
-is. How do you suggest that I ascertain this?
+The reg-ext-protocol:00 and reg-ext-protocol:01 files in debugfs should show
+all info about the ports the host provides:
+
+Example, this machine has only one xHC at PCI address 0000:00:14.0:
+
+cat /sys/kernel/debug/usb/xhci/0000:00:14.0/reg-ext-protocol*
+EXTCAP_REVISION =3D 0x02000802
+EXTCAP_NAME =3D 0x20425355
+EXTCAP_PORTINFO =3D 0x30010e01
+EXTCAP_PORTTYPE =3D 0x00000000
+EXTCAP_MANTISSA1 =3D 0x000c0021
+EXTCAP_MANTISSA2 =3D 0x05dc0012
+EXTCAP_MANTISSA3 =3D 0x01e00023
+
+EXTCAP_REVISION =3D 0x03000802
+EXTCAP_NAME =3D 0x20425355
+EXTCAP_PORTINFO =3D 0x10000610
+EXTCAP_PORTTYPE =3D 0x00000000
+EXTCAP_MANTISSA1 =3D 0x00050134
+
+
+Above shows:
+EXTCAP_REVISION tells if ports are USB3 or USB2,
+EXTCAP_PORTNINFO =3D 0x****AA**, where AA tells us how many ports
 
 --=20
 You may reply to this email to add a comment.
