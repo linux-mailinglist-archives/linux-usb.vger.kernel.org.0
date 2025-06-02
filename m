@@ -1,183 +1,183 @@
-Return-Path: <linux-usb+bounces-24424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EAF5ACBB12
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 20:26:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 209D1ACBB37
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 20:48:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AEB53A4748
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 18:26:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5B20174E26
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Jun 2025 18:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8843F1922F5;
-	Mon,  2 Jun 2025 18:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="sDZBrXrk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0D31FCFE2;
+	Mon,  2 Jun 2025 18:48:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C9840849
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 18:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84B62C3259;
+	Mon,  2 Jun 2025 18:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748888800; cv=none; b=HDSwfB4lgNHoyxo+K40r+PqaBqxuk68Tabbx425LTSD9cgtsy2PROWiJ5qdFx8nHkWTa7lulmvA04n0q2B46Qrt1gpOFhq1kRYO98NfHpLsF3HzqjOBBJEOkqHJTF71G9UdD4I3URyEcQBI43GDpSKz+lALvxgGTw5aDfUNLxss=
+	t=1748890086; cv=none; b=eqhUQs1ajUUxWldFmdOof/lxv9qVkWc0TUXYb6iOnzmGzgVIJnE66DcvGH1f0fLYfRmTfRvPa4TksYrB8+kWXAbRSTbawr2pHM28LFkuEiQGgOrpZv/TEx1jezNCy5E8vc0fAKAOwNSDd98Hx826QDb7vIEQiVlZjLzgo1h205k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748888800; c=relaxed/simple;
-	bh=0kJ2WRrP/CIxdNzwnMJMxwH/M4XiX0kPqYG+skLGwx8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LtYlXZWhVLAvMWp43jlLgnX1jemC5EZN3QDeHO0YjBXJlhNnV/XJl3ccRDgMltNPt0TEsjEtCJBL6ppItt+Hn5LhMOSYUM22rHGR1wtWoViMdeI6ueVhCxXUQUNxiUd5whpx8hdcDkjhoMZG12nhpAynrJUqzuRX9RUglqMiSXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=sDZBrXrk; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id D4E48240027
-	for <linux-usb@vger.kernel.org>; Mon,  2 Jun 2025 20:26:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1748888790; bh=0kJ2WRrP/CIxdNzwnMJMxwH/M4XiX0kPqYG+skLGwx8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
-	b=sDZBrXrkwhjYUQAtZBla/ETKw+3nqv8/GGtM1IICEpOfXHI5VEHK24AVWJIE4/ukd
-	 UxRqNKrxIozPMMsj8wnCjUwcZKnQIamaQFyiZkV/SIzsCybINecq3UQbpwcNRP0o24
-	 orXTWXI+iLzV6144vAtSAuBU6IXPXXivQaGd5M3UDya3b6PbRDu93CbpGEjVgitQK4
-	 opCA+uM6GHu+wECj8GAQwHSJjrSAETumP1ZQHuypnBWQCu7qSwnSDA5BFUA5lS2Y6M
-	 jcVCdgh/w5iTs5/bZeU9YxSIt+jD85WznjgJseYyA3A8XjD7C/zcpr8zuBFI+A2CNp
-	 EBRiOIz4TqnDw==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4bB2Nj5PdSz9rxR;
-	Mon,  2 Jun 2025 20:26:29 +0200 (CEST)
-From: Charalampos Mitrodimas <charmitro@posteo.net>
-Date: Mon, 02 Jun 2025 18:26:17 +0000
-Subject: [PATCH] usb: misc: apple-mfi-fastcharge: Make power supply names
- unique
+	s=arc-20240116; t=1748890086; c=relaxed/simple;
+	bh=cmN4E7QwYJkLiRF5DqyisjEoGNTL0dbj6ohx5Qglb9E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NRSVt2G7HLYB8BnsnXizwf2LUcAGaYChShSJS3vI7f3kDMpYWERAdA3xsTpCnmSd/vyMU6oT6xn8C1CWjpBwtH0Yoklog0rvlPYDQcsSGrscXl6iAM3ydj7wMX4TA/gzl8Ne+ZoBRJ37wG0OxkyH8SZLcUxG0vRzwT0eoPE2P2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net; spf=pass smtp.mailfrom=hadess.net; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hadess.net
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4611843A70;
+	Mon,  2 Jun 2025 18:48:01 +0000 (UTC)
+Message-ID: <5a610d364c8a8148e48d5bf7a95e73fc81650e5a.camel@hadess.net>
+Subject: Re: [PATCH] usb: misc: apple-mfi-fastcharge: Make power supply
+ names unique
+From: Bastien Nocera <hadess@hadess.net>
+To: Charalampos Mitrodimas <charmitro@posteo.net>, Greg Kroah-Hartman
+	 <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 02 Jun 2025 20:48:00 +0200
+In-Reply-To: <20250602-apple-mfi-fastcharge-duplicate-sysfs-v1-1-5d84de34fac6@posteo.net>
+References: 
+	<20250602-apple-mfi-fastcharge-duplicate-sysfs-v1-1-5d84de34fac6@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250602-apple-mfi-fastcharge-duplicate-sysfs-v1-1-5d84de34fac6@posteo.net>
-X-B4-Tracking: v=1; b=H4sIAMjsPWgC/x2NQQqDQAwAvyI5G1jXKuJXioetJhpQu2y2pSL+v
- cHjwDBzglISUuiLExJ9ReW9G1RlAeMS9plQJmPwzjeudR5DjCvhxoIcNJuTzJk+cZUxZEI9lBU
- dcd21j5evuANLxUQsv3vzHK7rDwlAdCt2AAAA
-X-Change-ID: 20250602-apple-mfi-fastcharge-duplicate-sysfs-0ef3864b21f8
-To: Bastien Nocera <hadess@hadess.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Charalampos Mitrodimas <charmitro@posteo.net>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1748888780; l=3417;
- i=charmitro@posteo.net; s=20250526; h=from:subject:message-id;
- bh=0kJ2WRrP/CIxdNzwnMJMxwH/M4XiX0kPqYG+skLGwx8=;
- b=1pF/mprj1Qox2fiDlRv8AmhHjDakDfBE0ewmUKN6MVze2/fPeTZen3GPaDphlbZ7baNuGvWcH
- ndneKFKcKZIDSd0cUk1AcVS4n5aCqMYhQgLlt7LdBBVdFw1rocG9Xcz
-X-Developer-Key: i=charmitro@posteo.net; a=ed25519;
- pk=PNHEh5o1dcr5kfKoZhfwdsfm3CxVfRje7vFYKIW0Mp4=
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefkeegfeculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpeeurghsthhivghnucfpohgtvghrrgcuoehhrgguvghssheshhgruggvshhsrdhnvghtqeenucggtffrrghtthgvrhhnpeeifffgheettdeggfejgefgffeguedvgeevkeevjeefkeekudejheetffeufeffueenucfkphepvdgrtddumegvfeegmegvtgejfeemtghfvddtmeejudgurgemfegsugemvddtrgelmedufeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvfeegmegvtgejfeemtghfvddtmeejudgurgemfegsugemvddtrgelmedufeefpdhhvghloheplgfkrfhvieemvdgrtddumegvfeegmegvtgejfeemtghfvddtmeejudgurgemfegsugemvddtrgelmedufeefngdpmhgrihhlfhhrohhmpehhrgguvghssheshhgruggvshhsrdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheptghhrghrmhhithhrohesphhoshhtvghordhnvghtpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepshhtvghrn
+ hesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: hadess@hadess.net
 
-When multiple Apple devices are connected concurrently, the
-apple-mfi-fastcharge driver fails to probe the subsequent devices with
-the following error:
+On Mon, 2025-06-02 at 18:26 +0000, Charalampos Mitrodimas wrote:
+> When multiple Apple devices are connected concurrently, the
+> apple-mfi-fastcharge driver fails to probe the subsequent devices
+> with
+> the following error:
+>=20
+> =C2=A0=C2=A0=C2=A0 sysfs: cannot create duplicate filename
+> '/class/power_supply/apple_mfi_fastcharge'
+> =C2=A0=C2=A0=C2=A0 apple-mfi-fastcharge 5-2.4.3.3: probe of 5-2.4.3.3 fai=
+led with
+> error -17
+>=20
+> This happens because the driver uses a fixed power supply name
+> ("apple_mfi_fastcharge") for all devices, causing a sysfs name
+> conflict when a second device is connected.
+>=20
+> Fix this by generating unique names using the USB bus and device
+> number (e.g., "apple_mfi_fastcharge_5-12"). This ensures each
+> connected device gets a unique power supply entry in sysfs.
+>=20
+> The change requires storing a copy of the power_supply_desc structure
+> in the per-device mfi_device struct, since the name pointer needs to
+> remain valid for the lifetime of the power supply registration.
+>=20
+> Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for
+> iOS devices")
+> Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
+> ---
+> =C2=A0drivers/usb/misc/apple-mfi-fastcharge.c | 24 +++++++++++++++++++++-=
+-
+> -
+> =C2=A01 file changed, 21 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c
+> b/drivers/usb/misc/apple-mfi-fastcharge.c
+> index
+> ac8695195c13c8752076e4391ac81a9da3780c44..8e852f4b8262e6e8fcd33883be8
+> c5696f19b9ee9 100644
+> --- a/drivers/usb/misc/apple-mfi-fastcharge.c
+> +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
+> @@ -44,6 +44,7 @@ MODULE_DEVICE_TABLE(usb, mfi_fc_id_table);
+> =C2=A0struct mfi_device {
+> =C2=A0	struct usb_device *udev;
+> =C2=A0	struct power_supply *battery;
+> +	struct power_supply_desc battery_desc;
+> =C2=A0	int charge_type;
+> =C2=A0};
+> =C2=A0
+> @@ -178,6 +179,7 @@ static int mfi_fc_probe(struct usb_device *udev)
+> =C2=A0{
+> =C2=A0	struct power_supply_config battery_cfg =3D {};
+> =C2=A0	struct mfi_device *mfi =3D NULL;
+> +	char *battery_name;
+> =C2=A0	int err;
+> =C2=A0
+> =C2=A0	if (!mfi_fc_match(udev))
+> @@ -187,23 +189,38 @@ static int mfi_fc_probe(struct usb_device
+> *udev)
+> =C2=A0	if (!mfi)
+> =C2=A0		return -ENOMEM;
+> =C2=A0
+> +	battery_name =3D kasprintf(GFP_KERNEL,
+> "apple_mfi_fastcharge_%d-%d",
+> +				 udev->bus->busnum, udev->devnum);
 
-    sysfs: cannot create duplicate filename '/class/power_supply/apple_mfi_fastcharge'
-    apple-mfi-fastcharge 5-2.4.3.3: probe of 5-2.4.3.3 failed with error -17
+Looks fine to me although I don't know how common this construct is.
 
-This happens because the driver uses a fixed power supply name
-("apple_mfi_fastcharge") for all devices, causing a sysfs name
-conflict when a second device is connected.
+If others think this won't work, you can use the ever increasing id as
+used in drivers/hid/hid-steelseries.c
 
-Fix this by generating unique names using the USB bus and device
-number (e.g., "apple_mfi_fastcharge_5-12"). This ensures each
-connected device gets a unique power supply entry in sysfs.
+Cheers
 
-The change requires storing a copy of the power_supply_desc structure
-in the per-device mfi_device struct, since the name pointer needs to
-remain valid for the lifetime of the power supply registration.
-
-Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for iOS devices")
-Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
----
- drivers/usb/misc/apple-mfi-fastcharge.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
-index ac8695195c13c8752076e4391ac81a9da3780c44..8e852f4b8262e6e8fcd33883be8c5696f19b9ee9 100644
---- a/drivers/usb/misc/apple-mfi-fastcharge.c
-+++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-@@ -44,6 +44,7 @@ MODULE_DEVICE_TABLE(usb, mfi_fc_id_table);
- struct mfi_device {
- 	struct usb_device *udev;
- 	struct power_supply *battery;
-+	struct power_supply_desc battery_desc;
- 	int charge_type;
- };
- 
-@@ -178,6 +179,7 @@ static int mfi_fc_probe(struct usb_device *udev)
- {
- 	struct power_supply_config battery_cfg = {};
- 	struct mfi_device *mfi = NULL;
-+	char *battery_name;
- 	int err;
- 
- 	if (!mfi_fc_match(udev))
-@@ -187,23 +189,38 @@ static int mfi_fc_probe(struct usb_device *udev)
- 	if (!mfi)
- 		return -ENOMEM;
- 
-+	battery_name = kasprintf(GFP_KERNEL, "apple_mfi_fastcharge_%d-%d",
-+				 udev->bus->busnum, udev->devnum);
-+	if (!battery_name) {
-+		err = -ENOMEM;
-+		goto err_free_mfi;
-+	}
-+
-+	mfi->battery_desc = apple_mfi_fc_desc;
-+	mfi->battery_desc.name = battery_name;
-+
- 	battery_cfg.drv_data = mfi;
- 
- 	mfi->charge_type = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
- 	mfi->battery = power_supply_register(&udev->dev,
--						&apple_mfi_fc_desc,
-+						&mfi->battery_desc,
- 						&battery_cfg);
- 	if (IS_ERR(mfi->battery)) {
- 		dev_err(&udev->dev, "Can't register battery\n");
- 		err = PTR_ERR(mfi->battery);
--		kfree(mfi);
--		return err;
-+		goto err_free_name;
- 	}
- 
- 	mfi->udev = usb_get_dev(udev);
- 	dev_set_drvdata(&udev->dev, mfi);
- 
- 	return 0;
-+
-+err_free_name:
-+	kfree(battery_name);
-+err_free_mfi:
-+	kfree(mfi);
-+	return err;
- }
- 
- static void mfi_fc_disconnect(struct usb_device *udev)
-@@ -213,6 +230,7 @@ static void mfi_fc_disconnect(struct usb_device *udev)
- 	mfi = dev_get_drvdata(&udev->dev);
- 	if (mfi->battery)
- 		power_supply_unregister(mfi->battery);
-+	kfree(mfi->battery_desc.name);
- 	dev_set_drvdata(&udev->dev, NULL);
- 	usb_put_dev(mfi->udev);
- 	kfree(mfi);
-
----
-base-commit: cd2e103d57e5615f9bb027d772f93b9efd567224
-change-id: 20250602-apple-mfi-fastcharge-duplicate-sysfs-0ef3864b21f8
-
-Best regards,
--- 
-Charalampos Mitrodimas <charmitro@posteo.net>
-
+> +	if (!battery_name) {
+> +		err =3D -ENOMEM;
+> +		goto err_free_mfi;
+> +	}
+> +
+> +	mfi->battery_desc =3D apple_mfi_fc_desc;
+> +	mfi->battery_desc.name =3D battery_name;
+> +
+> =C2=A0	battery_cfg.drv_data =3D mfi;
+> =C2=A0
+> =C2=A0	mfi->charge_type =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> =C2=A0	mfi->battery =3D power_supply_register(&udev->dev,
+> -						&apple_mfi_fc_desc,
+> +						&mfi->battery_desc,
+> =C2=A0						&battery_cfg);
+> =C2=A0	if (IS_ERR(mfi->battery)) {
+> =C2=A0		dev_err(&udev->dev, "Can't register battery\n");
+> =C2=A0		err =3D PTR_ERR(mfi->battery);
+> -		kfree(mfi);
+> -		return err;
+> +		goto err_free_name;
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	mfi->udev =3D usb_get_dev(udev);
+> =C2=A0	dev_set_drvdata(&udev->dev, mfi);
+> =C2=A0
+> =C2=A0	return 0;
+> +
+> +err_free_name:
+> +	kfree(battery_name);
+> +err_free_mfi:
+> +	kfree(mfi);
+> +	return err;
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void mfi_fc_disconnect(struct usb_device *udev)
+> @@ -213,6 +230,7 @@ static void mfi_fc_disconnect(struct usb_device
+> *udev)
+> =C2=A0	mfi =3D dev_get_drvdata(&udev->dev);
+> =C2=A0	if (mfi->battery)
+> =C2=A0		power_supply_unregister(mfi->battery);
+> +	kfree(mfi->battery_desc.name);
+> =C2=A0	dev_set_drvdata(&udev->dev, NULL);
+> =C2=A0	usb_put_dev(mfi->udev);
+> =C2=A0	kfree(mfi);
+>=20
+> ---
+> base-commit: cd2e103d57e5615f9bb027d772f93b9efd567224
+> change-id: 20250602-apple-mfi-fastcharge-duplicate-sysfs-0ef3864b21f8
+>=20
+> Best regards,
 
