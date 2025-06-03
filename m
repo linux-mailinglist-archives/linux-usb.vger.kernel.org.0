@@ -1,98 +1,113 @@
-Return-Path: <linux-usb+bounces-24459-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24460-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB0EBACCCA2
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 20:03:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A844ACCD13
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 20:31:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F3FB1891370
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 18:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9CEE3A53FB
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 18:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CA91EEA54;
-	Tue,  3 Jun 2025 18:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A62B1F4163;
+	Tue,  3 Jun 2025 18:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Umyz/H57"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYZJeI5D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC661EDA14
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 18:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A3CBA34
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 18:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748973776; cv=none; b=sh9SKZWpox7I16QH7kD1dgjxB3VFsBUqCPx5RbFhYzD5w7+qIoYKZX/Cr3X462aaNaxhaAOeakmg8jdM811hds7J68hVUV8LKC6xQt2meaSn8L9yFDu2hXiJut3/LmAEOfiMcfveKTVRaU9odYOWF9tPABxzZCiwWzcETAsF7Os=
+	t=1748975494; cv=none; b=iQys1jiJ82WYyvYKySUzCy8ASqjYzjeOetK6XJSG9j8WV6DxLWGJ4gd5MSdmGa5nC3LkR75xr4iy2oRlXLm1KPSqi37/cDvp33saraz5cCs+oNaW9jE+fajR1GfqMkE300W8eZ3bv4PNtFwusF/6hTcDnNLJNUnW9Yg49qbVVxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748973776; c=relaxed/simple;
-	bh=vWLmrVNcT29C8KsJhhxyPsfz6vvMC5hsmwliaeSSWY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eufn+z7BdsFyqqP+soaBsoEXEMqPQvzv7jiD3drExOYe7cTBjzjgLK4WrxpdYEtcT+x4ZOUYsoI+BxVPPAXN0rDgwBZdf+C+dNd/fCle/kTmfeCt0XG9WYuXLsZwWOG4p3zOz7gGp7NlTVsqkNT/Rp1JkH8rsa5+78/R9Mve2+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Umyz/H57; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=bKKC2iIV+I4AOP
-	uePqJbIyB5K0aSdCWcGxhWmHkvUxk=; b=Umyz/H57Tc6SvGd1pR2dYh9FKWqmZ5
-	tD3uQKZB/RiabheDl3poL+Ca83GsoRl7LAOyyrJZPE8N92iyCKkOeInstdaLQwAr
-	hUPbI5jx/G9AQyUeF5ebs/Lz1xDru4Hr+RzoicYs02vFgPf/ksKe193qMZCcCl/n
-	YzhaQn4bEIMMIQuEksBfDC1m0fLqlJLwWcUiwgD46rWX0vNbane+X5VApNAfs+4X
-	zXLnE/jTykzKW6uz3RQV3Aca3ZK7nE6PzYi+LJ3bDcDTb7jJpGtjET1QBgtKojwn
-	sAZXQH4Vz1e4Gxh33WBz0e+uirfu5FFmogBj5Q78iAu0ycgkfjXBu4dw==
-Received: (qmail 364279 invoked from network); 3 Jun 2025 20:02:43 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2025 20:02:43 +0200
-X-UD-Smtp-Session: l3s3148p1@CATgr642qNMujnuc
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: renesas_usbhs: use proper DMAENGINE API for termination
-Date: Tue,  3 Jun 2025 19:58:54 +0200
-Message-ID: <20250603180131.14579-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1748975494; c=relaxed/simple;
+	bh=midQSonWOIVXMJ0zZmE2sBsHq0+dc5LxlcnQVDUaJZ8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RLihkSgi8HTY3l1LdljLCbqmT7pKP0kK0iUhjlxuHWl254g4IQuhQlR3MNZnYZaMg6AVB/GQL9+6z6VU0ZexPzqLVDas9Ns+uvangeHB1jAC+gShNMm4kiDKKsuqO+bMtrx0XK1BnHSkII7vZSLwYe/Y42/r2nmAzco1MOZ5c+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYZJeI5D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19029C4CEF4
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 18:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748975493;
+	bh=midQSonWOIVXMJ0zZmE2sBsHq0+dc5LxlcnQVDUaJZ8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=fYZJeI5DitzU109BbBGoHoD7oh90ITX+ySD/oM4rsZgBzGrTjCZvwP+cfCl6xyEjK
+	 00Nr5Oos3silQO2hhDAOjd9iwokfC9uWY/9IhShjKWkkz6HlQqvdfYolzSdrwcm1S1
+	 Rcu5zamp09kBqW0CRvY9N7vD5QmNIxEVJTR1I8VL35aDcuRsH3W7jkkjRxqz8tGuOD
+	 Tn6/ipDGV5DEATsdXlIsx7lRRHNrr5ZOXJUu7DCpwVbdKhgdXlubywWUHuw+ql8X2Z
+	 JYNP+zHWwCcv08sXOIB6UTNy2JyxzYlwAmLBHXbNyZeRmmp3oPPp/8EA85rtQjhTUa
+	 addWgrdLrhdMA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 0F7ACC41616; Tue,  3 Jun 2025 18:31:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
+ EEXIST, overlapping mappings aren't supported
+Date: Tue, 03 Jun 2025 18:31:32 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: linux@roeck-us.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215740-208809-3FV0gZ3jW5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
+References: <bug-215740-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-it should be sync or async. Here, we want dmaengine_terminate_sync()
-because there is no other synchronization code in the driver to handle
-an async case.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
+--- Comment #43 from Guenter Roeck (linux@roeck-us.net) ---
+Like this ?
 
-This was an RFC 4 years ago [1], and then slipped through the cracks.
-Shimoda-san agreed to this patch, but we decided to let a change of his
-go in first. This has happened meanwhile, so according to the back then
-discussion, it should be good now.
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index d5a8ab98035c..7b38a4bba9a5 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -507,6 +507,19 @@ static inline bool kmem_dump_obj(void *object) { return
+false; }
+ #endif
+ #endif
 
-[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20210623100304.3697-1-wsa+renesas@sang-engineering.com/
++/*
++ * Align memory allocations to cache lines if DMA API debugging is active
++ * to avoid false positive DMA overlapping error messages. .
++ */
++#ifdef CONFIG_DMA_API_DEBUG
++#ifndef ARCH_KMALLOC_MINALIGN
++#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
++#elif ARCH_KMALLOC_MINALIGN < L1_CACHE_BYTES
++#undef ARCH_KMALLOC_MINALIGN
++#define ARCH_KMALLOC_MINALIGN  L1_CACHE_BYTES
++#endif
++#endif
++
 
- drivers/usb/renesas_usbhs/fifo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
-index 10607e273879..bac6f8fd0055 100644
---- a/drivers/usb/renesas_usbhs/fifo.c
-+++ b/drivers/usb/renesas_usbhs/fifo.c
-@@ -123,7 +123,7 @@ struct usbhs_pkt *usbhs_pkt_pop(struct usbhs_pipe *pipe, struct usbhs_pkt *pkt)
- 		if (fifo)
- 			chan = usbhsf_dma_chan_get(fifo, pkt);
- 		if (chan) {
--			dmaengine_terminate_all(chan);
-+			dmaengine_terminate_sync(chan);
- 			usbhsf_dma_unmap(pkt);
- 		} else {
- 			if (usbhs_pipe_is_dir_in(pipe))
--- 
-2.47.2
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
