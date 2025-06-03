@@ -1,169 +1,245 @@
-Return-Path: <linux-usb+bounces-24448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24449-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3E7ACC250
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 10:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B9BFACC331
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:35:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42A2E189166F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 08:47:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40CB718903C8
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 09:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC950281524;
-	Tue,  3 Jun 2025 08:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFEC2820BC;
+	Tue,  3 Jun 2025 09:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2g6sRKo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="srDdJSkP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB0C281378
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 08:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6264720C482;
+	Tue,  3 Jun 2025 09:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748940397; cv=none; b=Xo6WtknIt50FNqLtn18gadPRzhegxNXTLaSV/Grc5B67i2uupBHrvT/LlSARz6O31M7uK9TBmpRCt2zHExJHV1ohosQpeTYeAlDAP0Lti16lyP3CDrUXz7ar2QaT2Zd2SXFGXHaYtaDDb+wIcqPsWJh5TkdEgTPwsjrte8tDh9E=
+	t=1748943296; cv=none; b=XLOd/czUvTcBRgWLLwPt6uH/TvwjvFfRY1DW56+3iBf8Pxcca3JX8lKDzJ2cWVzy2LpJCc7rFALw1SzKyqszsQfROhEhXmjo5orB3AwAPstRR3YHDMSUErsKn0R/B5ECm0tSr9sN2yImE2zdL8ab8+5pJ4TjhOTt51tIbZFLdQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748940397; c=relaxed/simple;
-	bh=GHyD4CpAhBWwsgVBdk73lj4IVsCmxUf4Mu39EiZILnY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S8d74lBYD3D3ssaee+YZBctwPVgpJExqsgXL7IXwTHRf0Jccm4s+f0LR426mPyzkyOdhURexRj/nHFaLjos8sDltyhwQEi6fApKoLOw621gpYUH08/Q+70yH8GN7eaN/2aXuPFIvdGzFX53/I+Otrbm65cbDK4bD+Yi+7x1wTPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2g6sRKo; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6000791e832so5823a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 01:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748940394; x=1749545194; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWAWEh/2YYsa14fENY1/1kOhGKvOx6iFO5AiVN3BwTw=;
-        b=H2g6sRKoVeVpRvSn2GCL3KOZiRg0QA+VwBjlcUiNZ3Wnu6V34CqkZrNUI1m15AL5B4
-         gKlHtBOO8UKuN0t8x6zNIOfNWBSnI4UtFKoZ7QJ/RlTdsRb4e0OkIqV6vhKe8u9OhNBR
-         arvsgbs5/d/iBH5wul/0goNI/DRKWdQ0oTh43gbedUKw0CakGJVtLjdn5DKXfGSLk0qN
-         YI6AeCBKBqVdeCT8J7oKSOcC52s8tRxBlcrzCh9zMeilrpgXcizHHy9C/k4pP0YlaYqV
-         tNMmNd+JNih6hI2rYCcYYGK2cwHdUUZNp/x0a6b68SGTaHtkckQg1U3IMN1hYfWXg4Tz
-         7wTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748940394; x=1749545194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zWAWEh/2YYsa14fENY1/1kOhGKvOx6iFO5AiVN3BwTw=;
-        b=Xfe2LnwtRzYm7VwsZHGmT4U8k4kRrXpbTSzdGwuQuLm8KycckdJ7zzuzmiXN1v0YyR
-         1XCxi2NVVHNkSenL6uUCGP2bfilu+JHJcvSokWoIch3QIBMyLXjPqW7BNhIpu1T+ua1i
-         aislyWaU9UGRy263rtiiVHg/HGPG1qk87YQbEsQmFtpCJ47s1Gpz1k9BX3/8iNDpEOze
-         TRYwqa2wqoch3nMNsESBZ7pdaegPpaGxC8s381+EXhf+Cpy7PcInXt6bfNSRveJghUiJ
-         4AJuxPqurt3bcSSD0o9Fhk2rjQLYnQfxVACPbl9bGxLgQJq6/fkRr1F6kzAfu9hb4xb6
-         Ptsw==
-X-Forwarded-Encrypted: i=1; AJvYcCXlGMBIFjdzBYPsrmkxOwvDfGOQMCKlhVoO0rZ1YlI0s9eXw6lX6CUXmOXWI50TEiL4x60RAGhMdeM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq/q5sjfS02WvMW67zW5ZuYt0EocN01K+EeoFu1IIqDxwt+P54
-	sn/l9QbZoeX1JGCynQs52EUrgMjgtkdKY2yQuSUlw0MfBfoqtDCMnZ8aJEHWhfS3le8WNO2AhK8
-	f5iRM5dck0TNuj2p7IY7VxVTJi1Nl+zRVqK41Cv1n
-X-Gm-Gg: ASbGncsBheggo7rQgxvsQdcOHMO/fvUQrhzlFsz4n4G+kTMAWkH3XrifgoOnX9cth7B
-	Z1LfTz2pP0SLwHRP27NkL5aYD9+slREX2PpxRxH/YQ4rKrikEXL4tTz5b+HkOyCFQS1iE84ERDm
-	us9I2HQvuvECwdOkJRcH+lrjhBDHEl/4ShaVY4vSeCRnfLNu2/RUnbNSmPdR6lwJx+lI8xkiaKw
-	g==
-X-Google-Smtp-Source: AGHT+IGHH8Vo149BamuTxG6GaezBYSZirqyxqSNVi3kfQuRKjlrau9iqmOu6TKC54cBRwHP7T9QBTOCF+qcXoVYMeAM=
-X-Received: by 2002:aa7:d8da:0:b0:606:b6da:5028 with SMTP id
- 4fb4d7f45d1cf-606b6da50b0mr34647a12.0.1748940393661; Tue, 03 Jun 2025
- 01:46:33 -0700 (PDT)
+	s=arc-20240116; t=1748943296; c=relaxed/simple;
+	bh=SzH0hLM90X54zNxf3UOoXPCdHZQgrQSH/0xF6n5l+Ew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YA2ZVJXWSK10wSzD+4qatG9Ko7LE4b5QPY9pxJeipeCWNtWtZf3CUufZS3cCspvxin6POSMF9gayHacz/7jyj9zTtAxtmM6eRLLZZW3AxHMFe2wGbHtSRs3tZ8rlYCA+gp5uvGeMnYXjhtXEMTwQ773+2TuV5sEIS0/iTKdc11Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=srDdJSkP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937F4C4CEEF;
+	Tue,  3 Jun 2025 09:34:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748943293;
+	bh=SzH0hLM90X54zNxf3UOoXPCdHZQgrQSH/0xF6n5l+Ew=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=srDdJSkP2e3NBR54PwK7tPn+pnEmkbWWCDYUriloqP4gJ2ngGGPBIjVANul9CvKVa
+	 txe2qIZAn1DlaTiT1nsubDpoMA/bLrJc950ORVoD2rOchfo8bL8QAphXLynhbm/iTv
+	 AZnghSR8pEduFhjQrXNwYOtMk4ZXEJym1QFN3RgWW0/IFccZ58f4KVwkDBRBeoyv5d
+	 PLdV0J/xYV1l5DCt8s81ZfTvf5c5jatDpX1EhYV5rSXCWvE/t4l8f55pwRrdpORxCx
+	 1yQ0SWuIzn1SdrSGzA/GxN1fewLgF+WsB/lWDQmuiGJ9KMzI7MTIOM+eesAZaG+ylj
+	 ZXf/tJNFPvJvg==
+Message-ID: <898e998f-11b2-4b08-9580-263046c0615a@kernel.org>
+Date: Tue, 3 Jun 2025 11:34:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250528090849.2095085-1-guanyulin@google.com>
- <20250528090849.2095085-3-guanyulin@google.com> <2025052808-shown-sitting-1ff9@gregkh>
-In-Reply-To: <2025052808-shown-sitting-1ff9@gregkh>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Tue, 3 Jun 2025 16:46:00 +0800
-X-Gm-Features: AX0GCFvq5Eo0j-QZZ4AMBsa6Dfa8KmibGHbeMgCDIJvB8M919kj3wpH71zF_c-8
-Message-ID: <CAOuDEK28-ruD-DabsD7V0B8M8zZPVDu0vv1aYRnwYq+qTUua6Q@mail.gmail.com>
-Subject: Re: [PATCH v13 2/4] usb: add apis for offload usage tracking
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: mathias.nyman@intel.com, gargaditya08@live.com, kekrby@gmail.com, 
-	jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com, 
-	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk, broonie@kernel.org, 
-	quic_wcheng@quicinc.com, krzysztof.kozlowski@linaro.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/8] dt-bindings: soc: qcom: pmic-glink: Move X1E80100
+ out of fallbacks
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+ Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+ David Collins <david.collins@oss.qualcomm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ kernel@oss.qualcomm.com, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-6-9e377193a656@oss.qualcomm.com>
+ <4e093835-af3b-4a84-b42f-fa7d3a6f60a1@kernel.org>
+ <14cba9ae-e3bb-46e8-a800-be5d979b2e06@oss.qualcomm.com>
+ <b07200a2-4e7b-480e-a683-d116e7da8de8@kernel.org>
+ <c4be4b97-6104-45e3-b555-6691e369c3a4@oss.qualcomm.com>
+ <bcf487c9-e522-44a3-b094-daf98823a195@kernel.org>
+ <a840aa80-75ef-4527-bc17-226ba5157a85@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <a840aa80-75ef-4527-bc17-226ba5157a85@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 28, 2025 at 5:16=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Wed, May 28, 2025 at 09:04:07AM +0000, Guan-Yu Lin wrote:
-> > @@ -2036,6 +2036,131 @@ int usb_disable_usb2_hardware_lpm(struct usb_de=
-vice *udev)
-> >
-> >  #endif /* CONFIG_PM */
-> >
-> > +#if IS_ENABLED(CONFIG_USB_XHCI_SIDEBAND_SUSPEND)
->
-> ifdef in .c files are messy and hard to maintain.
->
-> Also, why is an xhci-specific option enabling/disabling core USB
-> functions like this?  Shouldn't it be a generic USB config option name
-> instead?
->
+On 03/06/2025 09:41, Fenglin Wu wrote:
+> 
+> On 6/3/2025 3:06 PM, Krzysztof Kozlowski wrote:
+>> On 03/06/2025 08:59, Fenglin Wu wrote:
+>>> On 6/3/2025 2:47 PM, Krzysztof Kozlowski wrote:
+>>>> On 03/06/2025 08:42, Fenglin Wu wrote:
+>>>>> On 6/2/2025 3:40 PM, Krzysztof Kozlowski wrote:
+>>>>>> On 30/05/2025 09:35, Fenglin Wu via B4 Relay wrote:
+>>>>>>> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+>>>>>>>
+>>>>>>> Move X1E80100 out of the fallbacks of SM8550 in pmic-glink support.
+>>>>>> Why?
+>>>>>>
+>>>>>> Do not describe what you do here, it's obvious. We see it from the diff.
+>>>>>>
+>>>>>>
+>>>>>> Best regards,
+>>>>>> Krzysztof
+>>>>> Previously, in qcom_battmgr driver, x1e80100 was specified with a match
+>>>>> data the same as sc8280xp, also sm8550 was treated a fallback of sm8350
+>>>>> without the need of a match data.
+>>>>>
+>>>>> In ucsi_glink driver, sm8550 had a match data and x1e80100 was treated
+>>>>> as a fallback of sm8550. There was no issues to make x1e80100 as a
+>>>>> fallback of sm8550 from both qcom_battmgr and ucsi_glink driver perspective.
+>>>>>
+>>>>> In patch [5/8] in this series, in qcom_battmgr driver, it added charge
+>>>>> control functionality for sm8550 and x1e80100 differently hence
+>>>>> different match data was specified for them, and it makes x1e80100 ad
+>>>>> sm8550 incompatible and they need to be treated differently.
+>>>> So you break ABI and that's your problem to fix. You cannot make devices
+>>>> incompatible without good justification.
+>>> I would say x1e80100 and sm8550 are different and incompatible from a
+>>> battery management firmware support perspective. The x1e80100 follows
+>>> the sc8280xp as a compute platform, whereas the sm8550 follows the
+>>> sm8350 as a mobile platform.
+>> Not correct arguments for compatibility.
+>>
+>>> The difference between them was initially ignored because the sm8550
+>>> could use everything that the sm8350 has, and no match data needed to be
+>>> specified for it. However, now the sm8550 has new features that the
+>>> sm8350 doesn't have, requiring us to treat it differently, thus the
+>>> incompatibility was acknowledged.
+>> So they are perfectly compatible.
+>>
+>> I really do not understand what we are discussing here. Explain in
+>> simple terms of DT spec: what is incompatible that SW cannot use one
+>> interface to handle the other?
+> 
+> 1. x1e80100 was a fallback of sc8280xp, it used "sc8280xp_bat_psy_desc" 
 
-To address the above 2 suggestions, I'll move related codes into a new
-file offload.c, and create a new config to manage them.
 
-> > +int usb_offload_get(struct usb_device *udev)
-> > +{
-> > +     int ret;
-> > +
-> > +     usb_lock_device(udev);
-> > +     if (udev->state =3D=3D USB_STATE_NOTATTACHED) {
-> > +             ret =3D -ENODEV;
-> > +             goto unlock_device;
->
-> Shouldn't we using the guard logic here instead?  That would make all of
-> this look much simpler and easier to maintain over time.
->
+No, that's not true. Read the binding again:
 
-Thanks for the suggestion. Guard logics would be adapted in the next versio=
-n.
+              - qcom,x1e80100-pmic-glink
+           - const: qcom,sm8550-pmic-glink
 
-> > +
-> > +     if (ret < 0)
->
-> Why the blank line?
->
+No fallback to sc8280xp.
 
-I'll remove the blank line. Thanks for the heads up.
 
-> > +bool usb_offload_check(struct usb_device *udev)
-> > +{
-> > +     struct usb_device *child;
-> > +     bool active;
-> > +     int port1;
-> > +
-> > +     usb_hub_for_each_child(udev, port1, child) {
-> > +             usb_lock_device(child);
-> > +             active =3D usb_offload_check(child);
-> > +             usb_unlock_device(child);
-> > +             if (active)
-> > +                     return true;
-> > +     }
-> > +
-> > +     return !!udev->offload_usage;
->
-> I think you forgot to mark this function as requiring that the lock be
-> held, right?  Just documenting it isn't going to be simple to notice or
-> maintain over time...
->
-> thanks,
->
-> greg k-h
+> when registering the power supply device.
+> 
+> 2. sm8550 was a fallback of sm8350, and they all used 
 
-__must_hold marco would be added in the next version. Thanks for the heads =
-up.
 
-Regards,
-Guan-Yu
+Also not true. The remaining fallback is not sm8350.
+
+
+> "sm8350_bat_psy_desc" when registering the power supply device.
+> 
+> 3. x1e80100 and sm8550 they are incompatible as they are using different 
+> data structure of "xxx_bat_psy_desc"  and other “psy_desc" too, such as, 
+> ac/usb/wls.
+
+Look at the driver and bindings now - they are compatible. It looks like
+you made it incompatible and now you claim the "they are incompatible".
+No, you did it. Look at the driver.
+
+
+
+> 
+> 4. For charge control functionality, it's only supported in the battery 
+> management firmware in x1e80100 and sm8550 platforms. And the change in 
+> battmgr driver (patch [5/8]) adds the support by using 2 additional 
+> power supply properties, which eventually need to be added in the 
+> "properties" data member of "xxx_bat_psy_desc" when registering power 
+> supply devices. Hence, "x1e80100_bat_psy_desc" and "sm8550_bat_psy_desc" 
+> are created and used separately when registering power supply device 
+> according to the "variant" value defined in the match data.
+> 
+> The main code change is in [5/8], I am pasting a snippet which might 
+> help to explain this a little bit:
+> 
+> -       if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
+> -               battmgr->bat_psy = devm_power_supply_register(dev, 
+> &sc8280xp_bat_psy_desc, &psy_cfg);
+> +       if (battmgr->variant == QCOM_BATTMGR_SC8280XP || 
+> battmgr->variant == QCOM_BATTMGR_X1E80100) {
+> +               if (battmgr->variant == QCOM_BATTMGR_X1E80100)
+> +                       psy_desc = &x1e80100_bat_psy_desc;
+> +               else
+> +                       psy_desc = &sc8280xp_bat_psy_desc;
+> +
+> +               battmgr->bat_psy = devm_power_supply_register(dev, 
+> psy_desc, &psy_cfg);
+>                  if (IS_ERR(battmgr->bat_psy))
+>                          return dev_err_probe(dev, 
+> PTR_ERR(battmgr->bat_psy),
+
+
+This explains nothing to me. I think you did not get my questions at all
+and just want to push whatever you have in drivers.
+
+Such ping pongs are just tiring, so go back to my previous email, read
+it carefully and try harder to understand what compatibility means.
+
+
+NAK, you are affecting the users and ABI with justification "I make it
+now incompatible, so it is incompatible".
+
+Best regards,
+Krzysztof
 
