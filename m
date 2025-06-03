@@ -1,213 +1,488 @@
-Return-Path: <linux-usb+bounces-24453-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24454-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD3DACC51D
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 13:13:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3457ACC60D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 13:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92D9B169005
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:13:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75DFC16CE06
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00E422DF86;
-	Tue,  3 Jun 2025 11:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8B0235063;
+	Tue,  3 Jun 2025 11:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="X5BQGNtz"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FdyS8OdC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34E822DA17
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 11:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C79235050
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 11:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748949146; cv=none; b=fVoybj3me5tuOS50uMK33OnvMrFfy/D7AdwRaLrW6UPthTAIoXszJ7Ppo8nlrL0lYM2veEazYpsBy6km6NNdILz4AVmoXNVVURy1IOrzc2iEQBchqxSUrvVRsNlox3x5zcjzMcQTI1pbnT+iyiLPHJCP4VsM/ws3a+OgexcTi7k=
+	t=1748951865; cv=none; b=LQX1iEme3atUJvFqdHycq2xZpwwEZid8ioadWU48YXLTZNUo0dyHUVGB76xyDiEaUriAhnKadXjdlpi8S9D6Z+AGzU9ktXcl/gKWp9IVG1oKfLKhugXl31EnTCdtcA/7RWfNBra2NUPBxl8MDW+p1SlLpjedH2DQwKtiJjdEpyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748949146; c=relaxed/simple;
-	bh=qdh9/dDTAHJ1D1UfBX8nbhQ6ExAns2R+yt6F9EWW8Jc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WotlK9dFlIzTcJaBDqxz4dShfrLUwlOQSZyRLSJVu+KRflekLUP5nUzbW1wNdxO1Hd4BPoHDRgtaKUV+mxsCtl0JaavlTF01eopSLdahTw8YMKlt3TUjO6n2BF3450vIzcuAg/avRYKAPY+4nfnGfMFbQLSLdRY/MXNZli51kOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=X5BQGNtz; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 1DC33240101
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 13:12:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1748949136; bh=qdh9/dDTAHJ1D1UfBX8nbhQ6ExAns2R+yt6F9EWW8Jc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:From;
-	b=X5BQGNtzvlgXjSdalWTL3W6/XIIwefWOzV/Q1BJEcd2xQIFRDItGxZjD0LNIl0Uzr
-	 fIk52n2jdy45XlCvxSU4Jsg1EkX6BLCwnsAGzSH2xbYPKfK9MfY3+o+1DNSNHafete
-	 7LFKKFgGB7CjXtQSx//ECrr7nCHsCKxNXaj62Fcs7ZHWNSnzjrkcTWApS5+wqtU9DH
-	 jzz4NIERMbu2DgBvesG9+Enm57j9YhNSIsbu2f5qor+kUD+Sv3dhEuzSViJ29IPvRa
-	 FPFBEpOZO5Die9CnOwwSkv5qWvjM8ZNMLwrdCrR4jDV11XmAn0J9vh0egviR6b6V0M
-	 PBs2q9Halu/Nw==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4bBSjC1K4Dz9rxB;
-	Tue,  3 Jun 2025 13:12:15 +0200 (CEST)
-From: Charalampos Mitrodimas <charmitro@posteo.net>
-To: Bastien Nocera <hadess@hadess.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,  Alan Stern
- <stern@rowland.harvard.edu>,  linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: misc: apple-mfi-fastcharge: Make power supply
- names unique
-In-Reply-To: <5a610d364c8a8148e48d5bf7a95e73fc81650e5a.camel@hadess.net>
-References: <20250602-apple-mfi-fastcharge-duplicate-sysfs-v1-1-5d84de34fac6@posteo.net>
-	<5a610d364c8a8148e48d5bf7a95e73fc81650e5a.camel@hadess.net>
-Date: Tue, 03 Jun 2025 11:12:04 +0000
-Message-ID: <87r001uliz.fsf@posteo.net>
+	s=arc-20240116; t=1748951865; c=relaxed/simple;
+	bh=gbbddoWIkSxtgMbjiStS9u+ATaAQTgpY4F0QR3RS7bg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VbwHU/TEgJHBleDHUss97hJ+F7LTVc51T0gkIqFYbDvqY3qsQyVn9C69Fq0Wi77OsxDDJchqtgOjchm91CisOLAwjm3+fMAgzd8v5wGDqEFgxKcwYzE1/G2JV6UPBAr6iITRQYuG6zSrTAGmQxysBnw0M3sIG5jNPP5VXQcy3sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FdyS8OdC; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-acacb8743a7so1066407166b.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 04:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1748951861; x=1749556661; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jZPvUCvE2vPO2qd4IMAnQgX90yJMpfw/oC9yH8/Z6qM=;
+        b=FdyS8OdCqbSsAPgUFNHOOg+JSNKlznimiWW5JZFs2xn77aC3JFUHKamQSoLwBrwBFI
+         wDU6c9WI4qGk/5b+sWBnC834bE0ghfpk4w9VNQUdpUtj9BYecTPufTDwX4HMkYq0cwV7
+         v/06vIaUe6PC8aNFvaMtjiCo4ogkUsXa4j5259xCXeTDbOmGWxjl2Hh/GHmoc53EmOS2
+         OA5LHuPaUlhuuRbHvZes35sb0w4KVsioDIF9tL5YcEcaP1borfm2k/O/HyqzPsvvzTdd
+         v4hsFzOGmQlID246iznyboGot20TFmfzVGiOOeYOnwA7y3y1495yjlZGMPXapht5uesj
+         pSMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748951861; x=1749556661;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZPvUCvE2vPO2qd4IMAnQgX90yJMpfw/oC9yH8/Z6qM=;
+        b=iVk/aRon4sS/RlDmD29ZJBkBTwuZSD6ioVqGtVaoKAg9oqpKUi9Eo7x6Qml4wYuNRm
+         cUzA/1dSK4oyL7XDlFD5ete12AWEAf9a+oSk0LRVw0geHgCgOonN0zT+jnpzjqUapZAe
+         F6uxcWXCDmJjDpB9hX0ykaSnY7HZcFJp7ebb2lt5V1QfLZbDCB8qy5WP4TV8p7NRyleY
+         8DVRwRX1VQiDy4PU30m8Bn+2qtf+K7//VctGEKg6ZeOqP0VefKS2JfpWNBV/rznsoRFq
+         j4AD2fh57nrV0dY6LCvRrsW1XcjAKLt0tJFm9yiRTFra5TFLglPUqv9d2tzjkDuEp+E1
+         RQ/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVu6lES3igEerUGxhxEUnEf7cP+Uu+df64tEQuJhg5t8VJSRWFKU4QPY0YklBJmpntHLY0PzLtck0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxZb9U0IiqdfxG5A3pmPzpX6WmKOgeIn4j9ex5wKOKCLUtY/hP
+	sMlv+uk5YgDYgvZg6Yk0N/6sASex48wUBAUi1Str6XeKI9mB1FgmnzRk+zzC+pIgY14=
+X-Gm-Gg: ASbGncuOyP/VbkvMhijAPkjKg8CUBQZK/JJC2lOR3MbPzSD/5tugbjguwncvtKeZTyo
+	JAfaCPTwe8v8+y5hzEsWyE6TlkUawl+9PeobwVVVhPuFSXqvYDAFBmn+AmL3ssbLJlwJhE79az2
+	/jtI0hdT54PmQQDWhkzwUkuf6ovJEWsjAPU6e+QNO1cEBbfRQjwyTNkVRbPqYj8L9QDNfELC9UC
+	9abYymLrAQNE1zC8iX0TmuGSRv1ojLuu5ECFi/tgr+9gVUf4CXSo51SrRm8RGHUjYeZMLjIUbuc
+	s0UrJg+dXTMjGuix4RPpZSDkLDKA56hu4DSwE/Jy4oiCMLG4tyUBv6n8uQPsVB5aBH2wNYu3Ani
+	Fzj+f/+E97zPv8hvwrv0lnG30AcS+Vw==
+X-Google-Smtp-Source: AGHT+IHLlMuP+TZs4HVRxvQpw+pqDPLlMsQ1ntB8DXhAeDV1zQadXo1krOr1aO2nMZq2ulkc+ahj4A==
+X-Received: by 2002:a17:907:2d07:b0:ad5:4cde:fb97 with SMTP id a640c23a62f3a-adde606f7c3mr232767466b.29.1748951860722;
+        Tue, 03 Jun 2025 04:57:40 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13d8:aa01:df7e:747c:99cb:b944? ([2001:a61:13d8:aa01:df7e:747c:99cb:b944])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ada5dd045e2sm945247366b.90.2025.06.03.04.57.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jun 2025 04:57:40 -0700 (PDT)
+Message-ID: <2ff4dd60-7579-40ce-a4e5-3ad846659f9c@suse.com>
+Date: Tue, 3 Jun 2025 13:57:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] USB: serial: nct_usb_serial: add support for
+ Nuvoton USB adapter
+To: hsyemail2@gmail.com, Johan Hovold <johan@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Sheng-Yuan Huang <syhuang3@nuvoton.com>
+References: <20250603032057.5174-1-syhuang3@nuvoton.com>
+ <20250603032057.5174-2-syhuang3@nuvoton.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250603032057.5174-2-syhuang3@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Bastien Nocera <hadess@hadess.net> writes:
+Hi,
 
-> On Mon, 2025-06-02 at 18:26 +0000, Charalampos Mitrodimas wrote:
->> When multiple Apple devices are connected concurrently, the
->> apple-mfi-fastcharge driver fails to probe the subsequent devices
->> with
->> the following error:
->>=20
->> =C2=A0=C2=A0=C2=A0 sysfs: cannot create duplicate filename
->> '/class/power_supply/apple_mfi_fastcharge'
->> =C2=A0=C2=A0=C2=A0 apple-mfi-fastcharge 5-2.4.3.3: probe of 5-2.4.3.3 fa=
-iled with
->> error -17
->>=20
->> This happens because the driver uses a fixed power supply name
->> ("apple_mfi_fastcharge") for all devices, causing a sysfs name
->> conflict when a second device is connected.
->>=20
->> Fix this by generating unique names using the USB bus and device
->> number (e.g., "apple_mfi_fastcharge_5-12"). This ensures each
->> connected device gets a unique power supply entry in sysfs.
->>=20
->> The change requires storing a copy of the power_supply_desc structure
->> in the per-device mfi_device struct, since the name pointer needs to
->> remain valid for the lifetime of the power supply registration.
->>=20
->> Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for
->> iOS devices")
->> Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
->> ---
->> =C2=A0drivers/usb/misc/apple-mfi-fastcharge.c | 24 +++++++++++++++++++++=
---
->> -
->> =C2=A01 file changed, 21 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c
->> b/drivers/usb/misc/apple-mfi-fastcharge.c
->> index
->> ac8695195c13c8752076e4391ac81a9da3780c44..8e852f4b8262e6e8fcd33883be8
->> c5696f19b9ee9 100644
->> --- a/drivers/usb/misc/apple-mfi-fastcharge.c
->> +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
->> @@ -44,6 +44,7 @@ MODULE_DEVICE_TABLE(usb, mfi_fc_id_table);
->> =C2=A0struct mfi_device {
->> =C2=A0	struct usb_device *udev;
->> =C2=A0	struct power_supply *battery;
->> +	struct power_supply_desc battery_desc;
->> =C2=A0	int charge_type;
->> =C2=A0};
->> =C2=A0
->> @@ -178,6 +179,7 @@ static int mfi_fc_probe(struct usb_device *udev)
->> =C2=A0{
->> =C2=A0	struct power_supply_config battery_cfg =3D {};
->> =C2=A0	struct mfi_device *mfi =3D NULL;
->> +	char *battery_name;
->> =C2=A0	int err;
->> =C2=A0
->> =C2=A0	if (!mfi_fc_match(udev))
->> @@ -187,23 +189,38 @@ static int mfi_fc_probe(struct usb_device
->> *udev)
->> =C2=A0	if (!mfi)
->> =C2=A0		return -ENOMEM;
->> =C2=A0
->> +	battery_name =3D kasprintf(GFP_KERNEL,
->> "apple_mfi_fastcharge_%d-%d",
->> +				 udev->bus->busnum, udev->devnum);
->
-> Looks fine to me although I don't know how common this construct is.
->
-> If others think this won't work, you can use the ever increasing id as
-> used in drivers/hid/hid-steelseries.c
+On 03.06.25 05:20, hsyemail2@gmail.com wrote:
+> From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> 
+> Add support for the Nuvoton USB-to-serial adapter, which provides
+> multiple serial ports over a single USB interface.
+> 
+> The device exposes one control endpoint, one bulk-in endpoint, and
+> one bulk-out endpoint for data transfer. Port status is reported via
+> an interrupt-in or bulk-in endpoint, depending on device configuration.
 
-Hi Bastien,
+I am afraid there are a few issue that will not to be addressed
+before this can be merged.
 
-Thanks for the review!
+> This driver implements basic TTY operations.
+> 
+> Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> ---
+>   drivers/usb/serial/nct_usb_serial.c | 1523 +++++++++++++++++++++++++++
+>   1 file changed, 1523 insertions(+)
+>   create mode 100644 drivers/usb/serial/nct_usb_serial.c
+> 
+> diff --git a/drivers/usb/serial/nct_usb_serial.c b/drivers/usb/serial/nct_usb_serial.c
+> new file mode 100644
+> index 000000000000..424c604229b3
+> --- /dev/null
+> +++ b/drivers/usb/serial/nct_usb_serial.c
 
-FWIW, this has been tested in QEMU via,
+> +/* Index definition */
+> +enum {
+> +	NCT_VCOM_INDEX_0 = 0,
+> +	NCT_VCOM_INDEX_1,
+> +	NCT_VCOM_INDEX_2,
+> +	NCT_VCOM_INDEX_3,
+> +	NCT_VCOM_INDEX_4,
+> +	NCT_VCOM_INDEX_5,
+> +	NCT_VCOM_INDEX_GLOBAL = 0xF,
+> +};
 
-      -device usb-host,bus=3Dehci.0,vendorid=3D0x05ac,productid=3D0x12a8
-      -device usb-host,bus=3Dehci.0,vendorid=3D0x05ac,productid=3D0x12ab
+What use is this? A number is a number.
 
-And works as expected,
+> +/* Command */
+> +enum {
+> +	NCT_VCOM_GET_NUM_PORTS = 0,
+> +	NCT_VCOM_GET_PORTS_SUPPORT,
+> +	NCT_VCOM_GET_BAUD,
+> +	NCT_VCOM_SET_INIT,
+> +	NCT_VCOM_SET_CONFIG,
+> +	NCT_VCOM_SET_BAUD,
+> +	NCT_VCOM_SET_HCR,
+> +	NCT_VCOM_SET_OPEN_PORT,
+> +	NCT_VCOM_SET_CLOSE_PORT,
+> +	NCT_VCOM_SILENT,
+> +	/* Use bulk-in status instead of interrupt-in status */
+> +	NCT_VCON_SET_BULK_IN_STATUS,
+> +};
 
-$ ls /sys/class/power_supply
-apple_mfi_fastcharge_2_2  apple_mfi_fastcharge_2_3
+No. This is an abuse of enumeration. These are just commands that
+happen to use the number space consecutively. These need to be
+defines.
 
-C. Mitrodimas
+> +union nct_vendor_cmd {
+> +	struct pkg0 {
+> +		u16 index:4;
+> +		u16 cmd:8;
+> +	} p;
+> +	u16 val;
+> +} __packed;
 
->
-> Cheers
->
->> +	if (!battery_name) {
->> +		err =3D -ENOMEM;
->> +		goto err_free_mfi;
->> +	}
->> +
->> +	mfi->battery_desc =3D apple_mfi_fc_desc;
->> +	mfi->battery_desc.name =3D battery_name;
->> +
->> =C2=A0	battery_cfg.drv_data =3D mfi;
->> =C2=A0
->> =C2=A0	mfi->charge_type =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
->> =C2=A0	mfi->battery =3D power_supply_register(&udev->dev,
->> -						&apple_mfi_fc_desc,
->> +						&mfi->battery_desc,
->> =C2=A0						&battery_cfg);
->> =C2=A0	if (IS_ERR(mfi->battery)) {
->> =C2=A0		dev_err(&udev->dev, "Can't register battery\n");
->> =C2=A0		err =3D PTR_ERR(mfi->battery);
->> -		kfree(mfi);
->> -		return err;
->> +		goto err_free_name;
->> =C2=A0	}
->> =C2=A0
->> =C2=A0	mfi->udev =3D usb_get_dev(udev);
->> =C2=A0	dev_set_drvdata(&udev->dev, mfi);
->> =C2=A0
->> =C2=A0	return 0;
->> +
->> +err_free_name:
->> +	kfree(battery_name);
->> +err_free_mfi:
->> +	kfree(mfi);
->> +	return err;
->> =C2=A0}
->> =C2=A0
->> =C2=A0static void mfi_fc_disconnect(struct usb_device *udev)
->> @@ -213,6 +230,7 @@ static void mfi_fc_disconnect(struct usb_device
->> *udev)
->> =C2=A0	mfi =3D dev_get_drvdata(&udev->dev);
->> =C2=A0	if (mfi->battery)
->> =C2=A0		power_supply_unregister(mfi->battery);
->> +	kfree(mfi->battery_desc.name);
->> =C2=A0	dev_set_drvdata(&udev->dev, NULL);
->> =C2=A0	usb_put_dev(mfi->udev);
->> =C2=A0	kfree(mfi);
->>=20
->> ---
->> base-commit: cd2e103d57e5615f9bb027d772f93b9efd567224
->> change-id: 20250602-apple-mfi-fastcharge-duplicate-sysfs-0ef3864b21f8
->>=20
->> Best regards,
+This definition is an endianness bug waiting to happen.
+If this goes over the wire, it has a defined endianness,
+which needs to be declared.
+
+> +#define NCT_HDR_MAGIC		0xA5
+> +#define NCT_HDR_MAGIC2		0x5A
+> +#define NCT_HDR_MAGIC_STATUS	0x5B
+> +
+> +struct nct_packet_header {
+> +	unsigned int magic:8;
+> +	unsigned int magic2:8;
+> +	unsigned int idx:4;
+> +	unsigned int len:12;
+> +} __packed;
+
+Again endianness.
+
+> +/* The definitions are for the feilds of nct_ctrl_msg */
+> +#define NCT_VCOM_1_STOP_BIT		0
+> +#define NCT_VCOM_2_STOP_BITS		1
+> +#define NCT_VCOM_PARITY_NONE		0
+> +#define NCT_VCOM_PARITY_ODD		1
+> +#define NCT_VCOM_PARITY_EVEN		2
+> +#define NCT_VCOM_DL5			0
+> +#define NCT_VCOM_DL6			1
+> +#define NCT_VCOM_DL7			2
+> +#define NCT_VCOM_DL8			3
+> +#define NCT_VCOM_DISABLE_FLOW_CTRL	0
+> +#define NCT_VCOM_XOFF			1
+> +#define NCT_VCOM_RTS_CTS		2
+> +union nct_ctrl_msg {
+> +	struct pkg1 {
+> +		u16 stop_bit:1;
+> +		u16 parity:2;
+> +		u16 data_len:2;
+> +		u16 flow:2;
+> +		u16 spd:5;
+> +		u16 reserved:4;
+> +	} p;
+> +	u16 val;
+> +} __packed;
+
+At the risk of repeating myself: endianness
+
+> +
+> +/* Read from USB control pipe */
+> +static int nct_vendor_read(struct usb_interface *intf, union nct_vendor_cmd cmd,
+> +			   unsigned char *buf, int size)
+> +{
+> +	struct device *dev = &intf->dev;
+> +	struct usb_device *udev = interface_to_usbdev(intf);
+> +	u8 *tmp_buf;
+> +	int res;
+> +
+> +	tmp_buf = kmalloc(NCT_MAX_VENDOR_READ_SIZE, GFP_KERNEL);
+> +	if (!tmp_buf)
+> +		return -ENOMEM;
+> +
+> +	if (size > NCT_MAX_VENDOR_READ_SIZE)
+> +		dev_err(dev, NCT_DRVNAME ": %s - failed to read [%04x]: over size %d\n",
+> +			__func__, cmd.p.cmd, size);
+
+And you just go on and overwrite kernel memory?
+If you test for plausibility, do something with the result.
+
+
+> +static int nct_vendor_write(struct usb_interface *intf, union nct_vendor_cmd cmd, u16 val)
+> +{
+> +	struct device *dev = &intf->dev;
+> +	struct usb_device *udev = interface_to_usbdev(intf);
+> +	int res;
+> +	u8 *buf_val;
+
+Why is this u8* ?
+It should be le16*
+
+> +	buf_val = kmalloc(2, GFP_KERNEL);
+> +	if (!buf_val)
+> +		return -ENOMEM;
+> +
+> +	/* Copy data to the buffer for sending */
+> +	buf_val[0] = val & 0xff;
+> +	buf_val[1] = (val >> 8) & 0xff;
+
+We have macros for that.
+
+> +static u16 nct_set_baud(struct usb_interface *intf, u16 index, unsigned int cflag)
+> +{
+> +	union nct_ctrl_msg msg;
+> +	union nct_vendor_cmd cmd;
+> +	u16 i;
+> +
+> +	msg.val = 0;
+> +	cmd.p.cmd = NCT_VCOM_SET_BAUD;
+> +	msg.p.spd = NCT_DEFAULT_BAUD;
+> +	cmd.p.index = index;
+> +	dev_dbg(&intf->dev, NCT_DRVNAME ": %s tty baud: 0x%X\n", __func__,
+> +		(cflag & CBAUD));
+> +	for (i = 0; i < ARRAY_SIZE(NCT_BAUD_SUP); i++) {
+> +		if ((cflag & CBAUD) == NCT_BAUD_SUP[i]) {
+> +			msg.p.spd = i;
+> +			dev_dbg(&intf->dev,
+> +				NCT_DRVNAME ": %s index %d set baud: NCT_BAUD_SUP[%d]=%d\n",
+> +				__func__, cmd.p.index, msg.p.spd, NCT_BAUD_SUP[i]);
+> +			if (nct_vendor_write(intf, cmd, msg.val))
+> +				dev_err(&intf->dev,
+> +					NCT_DRVNAME ": %s - Set index: %d speed error\n",
+> +					__func__, cmd.p.index);
+> +
+> +			break;
+> +		}
+
+If nothing matches, you do nothing?
+> +	}
+> +
+> +	return msg.p.spd;
+
+So errors are ignored?
+
+
+> +static int nct_serial_tiocmset(struct tty_struct *tty, unsigned int set,
+> +			       unsigned int clear)
+> +{
+> +	return nct_tiocmset_helper(tty, set, clear);
+> +}
+
+Why? Does this function do anything useful?
+
+> +static void nct_rx_throttle(struct tty_struct *tty)
+> +{
+> +	unsigned int set;
+> +	unsigned int clear = 0;
+
+Why?
+
+> +
+> +	/* If we are implementing RTS/CTS, control that line */
+> +	if (C_CRTSCTS(tty)) {
+> +		set = 0;
+> +		clear = TIOCM_RTS;
+> +		nct_tiocmset_helper(tty, set, clear);
+> +	}
+> +}
+> +
+> +static void nct_rx_unthrottle(struct tty_struct *tty)
+> +{
+> +	unsigned int set;
+> +	unsigned int clear = 0;
+
+Why?
+
+> +	/* If we are implementing RTS/CTS, control that line */
+> +	if (C_CRTSCTS(tty)) {
+> +		set = 0;
+> +		set |= TIOCM_RTS;
+> +		nct_tiocmset_helper(tty, set, clear);
+> +	}
+> +}
+> +
+> +static int nct_serial_write_data(struct tty_struct *tty, struct usb_serial_port *port,
+> +				 const unsigned char *buf, int count)
+> +{
+> +	int ret;
+> +	unsigned long flags;
+> +	struct nct_packet_header hdr;
+> +	int wr_len;
+> +	struct nct_tty_port *tport = usb_get_serial_port_data(port);
+> +
+> +	wr_len = min((unsigned int)count, NCT_MAX_SEND_BULK_SIZE - sizeof(hdr));
+> +
+> +	if (!wr_len)
+> +		return 0;
+> +
+> +	spin_lock_irqsave(&tport->port_lock, flags);
+> +
+> +	if (tport->write_urb_in_use) {
+> +		spin_unlock_irqrestore(&tport->port_lock, flags);
+> +		return 0;
+> +	}
+> +
+> +	/* Fill header */
+> +	hdr.magic = NCT_HDR_MAGIC;
+> +	hdr.magic2 = NCT_HDR_MAGIC2;
+> +	hdr.idx = tport->hw_idx; /* The 'hw_idx' is based on 1 */
+
+Endianness.
+
+> +
+> +	/* Copy data */
+> +	memcpy(port->write_urb->transfer_buffer + sizeof(hdr),
+> +	       (const void *)buf, wr_len);
+> +
+> +	hdr.len = wr_len; /* File filed 'len' of header */
+
+Endiannes
+
+> +static int nct_startup_device(struct usb_serial *serial)
+> +{
+> +	int ret = 0;
+> +	struct nct_serial *serial_priv = usb_get_serial_data(serial);
+> +	struct usb_serial_port *port;
+> +	unsigned long flags;
+> +
+> +	/* Be sure this happens exactly once */
+> +	spin_lock_irqsave(&serial_priv->serial_lock, flags);
+> +
+> +	if (serial_priv->device_init) {
+> +		spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
+> +		return 0;
+> +	}
+> +	serial_priv->device_init = true;
+> +	spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
+> +
+> +	/* Start reading from bulk in endpoint */
+> +	port = serial->port[0];
+> +	if (!port->read_urb)
+> +		dev_dbg(&port->dev, NCT_DRVNAME ": %s: port->read_urb is null, index=%d\n",
+> +			__func__, 0);
+> +
+> +	ret = usb_submit_urb(port->read_urb, GFP_KERNEL);
+> +	if (ret)
+> +		dev_err(&port->dev,
+> +			NCT_DRVNAME ": %s: usb_submit_urb failed, ret=%d, port=%d\n",
+> +			__func__, ret, 0);
+
+Error handling?
+> +
+> +	/* For getting status from interrupt-in */
+> +	if (!serial_priv->status_trans_mode) {
+> +		/* Start reading from interrupt pipe */
+> +		port = serial->port[0];
+> +		ret = usb_submit_urb(port->interrupt_in_urb, GFP_KERNEL);
+> +		if (ret)
+> +			dev_err(&port->dev,
+> +				NCT_DRVNAME ": %s: usb_submit_urb(intr) failed, ret=%d, port=%d\n",
+> +				__func__, ret, 0);
+> +	}
+> +	return ret;
+> +}
+> +
+> +static void nct_serial_port_end(struct usb_serial_port *port)
+> +{
+> +	struct nct_tty_port *tport = usb_get_serial_port_data(port);
+> +	struct usb_serial *serial = port->serial;
+> +	struct usb_interface *intf = serial->interface;
+> +	union nct_ctrl_msg msg;
+> +	union nct_vendor_cmd cmd;
+> +
+> +	/* Send 'Close Port' to the device */
+> +	cmd.p.index = (u16)tport->hw_idx;
+> +	cmd.p.cmd = NCT_VCOM_SET_CLOSE_PORT;
+
+Endianness
+
+
+> +again:
+> +	spin_lock_irqsave(&serial_priv->serial_lock, flags);
+> +	tport = serial_priv->cur_port;
+> +	if (!tport) {
+> +		/*
+> +		 * Handle a new data package (i.e., it is not
+> +		 * the remaining data without a header).
+> +		 * The package does not need to be combined this time.
+> +		 */
+> +
+> +		for (i = 0; i < urb->actual_length; i++) {
+> +			hdr = (struct nct_packet_header *)data;
+> +			/* Decode the header */
+> +
+> +			if (serial_priv->status_trans_mode) {
+> +				/*
+> +				 * Status data is also transmitted via bulk-in
+> +				 * pipe.
+> +				 */
+> +				if (hdr->magic == NCT_HDR_MAGIC &&
+> +				    hdr->magic2 == NCT_HDR_MAGIC_STATUS &&
+> +				    hdr->len == 24 && actual_len >= 28) {
+
+Endianness
+
+> +					/*
+> +					 * Notice: actual_len will be decreased,
+> +					 * it is equal to urb->actual_length
+> +					 * only at the beginning.
+> +					 */
+> +
+> +					/*
+> +					 * Status report.
+> +					 * It should be a standalone package in
+> +					 * one URB
+> +					 */
+> +					data += sizeof(struct nct_packet_header);
+> +					actual_len -=
+> +						sizeof(struct nct_packet_header);
+> +
+> +					nps = (struct nct_port_status *)data;
+> +
+> +					for (j = 0; j < actual_len - 4; j++) {
+> +						nct_update_status(serial,
+> +								  (unsigned char *)nps);
+> +						nps++;
+> +					}
+> +
+> +					spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
+> +					return;
+> +				}
+> +			}
+> +
+> +			if (hdr->magic == NCT_HDR_MAGIC &&
+> +			    hdr->magic2 == NCT_HDR_MAGIC2 &&
+> +			    hdr->idx <= NCT_MAX_NUM_COM_DEVICES &&
+> +			    hdr->len <= 512)
+> +				break;
+
+Endianness
+
+	Regards
+		Oliver
+
 
