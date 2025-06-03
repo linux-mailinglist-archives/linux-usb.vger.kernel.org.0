@@ -1,98 +1,214 @@
-Return-Path: <linux-usb+bounces-24462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24464-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761FFACCD81
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 21:09:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2067AACCE4F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 22:39:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB52C188D766
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 19:10:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB0B93A38D4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 20:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701EC216605;
-	Tue,  3 Jun 2025 19:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32F521C16D;
+	Tue,  3 Jun 2025 20:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBdB8YCN"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="sgk0VBiU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42941DE3D6
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 19:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B6517C224;
+	Tue,  3 Jun 2025 20:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748977781; cv=none; b=qRwCWdkJ578BNNpVLeHvoOx6SS5QrN7UviHcO1+1ZqIAwDy9m+kU+9BEcFuXl8rqqW7HtwKBpUzEnZ86HG0xxRQQefEugem8jgL03GPBP8IupPZAcarjCBwTflOt3WShuA0o49mYu+9DZQxqTF2WRXiQaRRzJbggNAuC3GsjEws=
+	t=1748983161; cv=none; b=UwIcrL7UhsRlEQGbdtZQdwMWcCpoxnfBCtzW2X6ivNq0hocAjrJvELQk4eESL2eomThZfCeF98OGS3vsqmslJDtoUKB0HjeRdTLE2i51Sz2mgeEXXv9FJzXCHbEtPZEHL16mY9IDyjIUXm4GVwks7KVC7k4Zz5Gw9SENRiViNTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748977781; c=relaxed/simple;
-	bh=REXzQXnsRnk41CgyfOgL8lsm+oDzIEcWZmgE50ptzDg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XciS5xs0R5bM2QOwV/dd5zVkb2oW3deFUJgIvNJ+9ho6tm1+Jn8FxmELStz64HTf4pv0YXsva1FbA9Bm9xPKcLKgCFp/40mrr6fd4q1dvxaUJQDz8drtbNUg4/lrLcVR+Us1v7dTkIaI+rz0DxzCFc/fjDeMsO/2loPNfw4eI+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBdB8YCN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56EBFC4CEF4
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 19:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748977780;
-	bh=REXzQXnsRnk41CgyfOgL8lsm+oDzIEcWZmgE50ptzDg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LBdB8YCN8a1mdwLpbydtkQIhfqM09Lgx6iEHOUTGZ481mj0xO++Fe91DVBQmNCSWI
-	 JMGsA72VBu0y8769U79Eomsj2Kjs4tPhNZ8lh8L4Lo3GkN4jjm8qWB7tyVINEQUB2N
-	 xn+PAp3RzHOqYZDeAc/XWKdVe62JadvW1K4xRD9rDqFS+9BARh8n12N6iQSUAglRrb
-	 aNw0gG/ChSl7Ilb5tow4Lqk0rQXwtJeH4wTToWsEUMEJ910N/8WKIB0ME0f3S3LiS4
-	 qJ82Hvc/e42HyZxzs7mJcwBIDXkXD4Z+2kWF4oxC03gqEAuG2HbtKbqgRobkb2Y1Yw
-	 dURYAtnQuIZww==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4C3EAC41616; Tue,  3 Jun 2025 19:09:40 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Tue, 03 Jun 2025 19:09:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215740-208809-vJtwCqkZ9S@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1748983161; c=relaxed/simple;
+	bh=lrn9yhVHbHWZ5mXEe9CH6pC/dm0YLGaICm/gri4Dj9A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FZgVN6sUVLQfGWRfiO8p0BgkH6KpbFpJZNZfBCsgqLKEnr3B7M1TPvCuVORKAWbI9W9DXSqLLW2B6q/PiNM7/W60DQGRWWebXIUGV3lrbvgeFwEmtQ8XRQeh3VoUZllkdaCTI8FruTVVkRVLYxM4p9MAV6jKBMhCrUgcGJ8jzPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=sgk0VBiU; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=Bay90DQT92IuqmHtqLW5SL201i6ewsYeFfNYqS0IHf4=; b=sgk0VBiUEWhXTmfR
+	yqQdx0YdmKK87a8TZVf++8Ve/7Aj8IvwXwObDNDZLwMLQWawxVSBdUUe44hxcc38pi4YzoMVery+Y
+	VAHTVDDHYFQ/wepIOrmsx5oPRDErmJ0RJGrz4cbONYjInP9vGqors7YVlNzi7FnWlOrPPnxBXXvJR
+	LnixHqi/efuDJ4H23674/cNLbRBvx3pYWntoy9qxgBcCwx85hNchcNyqR1fLghE7HeoIE4yC5/0MH
+	yykmE0pAmX7AcbkDOFj2Hvg6w+i9+jiX9zOwUfyVSFgo//O9iiqyBv5Wsdrj1d8jyerOHelrv0kEw
+	k98plQc7vacY1N8bzg==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1uMYPa-007TPC-2Q;
+	Tue, 03 Jun 2025 20:39:06 +0000
+From: linux@treblig.org
+To: thierry.reding@gmail.com,
+	jonathanh@nvidia.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH] usb: phy: tegra: Remove unused functions
+Date: Tue,  3 Jun 2025 21:39:05 +0100
+Message-ID: <20250603203905.279307-1-linux@treblig.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
---- Comment #44 from Alan Stern (stern@rowland.harvard.edu) ---
-That seems reasonable.
+tegra_ehci_phy_restore_start() and tegra_ehci_phy_restore_end()
+last use was removed in 2013 by
+commit a4faa54e3aa2 ("USB: EHCI: tegra: remove all power management")
 
-Some people may object, on the grounds that turning on debugging should not
-affect the way the kernel (memory allocation in particular) behaves --
-otherwise what you're debugging isn't the same as what normally happens.  B=
-ut
-given the way the DMA API debugging is set up, I don't see any alternative.
+tegra_usb_phy_preresume() and tegra_usb_phy_postresume() last
+use was removed in 2020 by
+commit c3590c7656fb ("usb: host: ehci-tegra: Remove the driver")
+(Although that one makes me wonder how much of the rest of the file
+is actually used)
 
-Can somebody test this patch?
+Remove both sets.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ drivers/usb/phy/phy-tegra-usb.c   | 89 -------------------------------
+ include/linux/usb/tegra_usb_phy.h |  9 ----
+ 2 files changed, 98 deletions(-)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index bee222967f6b..fb9031628d39 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -711,58 +711,6 @@ static int utmi_phy_power_off(struct tegra_usb_phy *phy)
+ 	return utmip_pad_power_off(phy);
+ }
+ 
+-static void utmi_phy_preresume(struct tegra_usb_phy *phy)
+-{
+-	void __iomem *base = phy->regs;
+-	u32 val;
+-
+-	val = readl_relaxed(base + UTMIP_TX_CFG0);
+-	val |= UTMIP_HS_DISCON_DISABLE;
+-	writel_relaxed(val, base + UTMIP_TX_CFG0);
+-}
+-
+-static void utmi_phy_postresume(struct tegra_usb_phy *phy)
+-{
+-	void __iomem *base = phy->regs;
+-	u32 val;
+-
+-	val = readl_relaxed(base + UTMIP_TX_CFG0);
+-	val &= ~UTMIP_HS_DISCON_DISABLE;
+-	writel_relaxed(val, base + UTMIP_TX_CFG0);
+-}
+-
+-static void utmi_phy_restore_start(struct tegra_usb_phy *phy,
+-				   enum tegra_usb_phy_port_speed port_speed)
+-{
+-	void __iomem *base = phy->regs;
+-	u32 val;
+-
+-	val = readl_relaxed(base + UTMIP_MISC_CFG0);
+-	val &= ~UTMIP_DPDM_OBSERVE_SEL(~0);
+-	if (port_speed == TEGRA_USB_PHY_PORT_SPEED_LOW)
+-		val |= UTMIP_DPDM_OBSERVE_SEL_FS_K;
+-	else
+-		val |= UTMIP_DPDM_OBSERVE_SEL_FS_J;
+-	writel_relaxed(val, base + UTMIP_MISC_CFG0);
+-	usleep_range(1, 10);
+-
+-	val = readl_relaxed(base + UTMIP_MISC_CFG0);
+-	val |= UTMIP_DPDM_OBSERVE;
+-	writel_relaxed(val, base + UTMIP_MISC_CFG0);
+-	usleep_range(10, 100);
+-}
+-
+-static void utmi_phy_restore_end(struct tegra_usb_phy *phy)
+-{
+-	void __iomem *base = phy->regs;
+-	u32 val;
+-
+-	val = readl_relaxed(base + UTMIP_MISC_CFG0);
+-	val &= ~UTMIP_DPDM_OBSERVE;
+-	writel_relaxed(val, base + UTMIP_MISC_CFG0);
+-	usleep_range(10, 100);
+-}
+-
+ static int ulpi_phy_power_on(struct tegra_usb_phy *phy)
+ {
+ 	void __iomem *base = phy->regs;
+@@ -1123,43 +1071,6 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy)
+ 	return err;
+ }
+ 
+-void tegra_usb_phy_preresume(struct usb_phy *u_phy)
+-{
+-	struct tegra_usb_phy *phy = to_tegra_usb_phy(u_phy);
+-
+-	if (!phy->is_ulpi_phy)
+-		utmi_phy_preresume(phy);
+-}
+-EXPORT_SYMBOL_GPL(tegra_usb_phy_preresume);
+-
+-void tegra_usb_phy_postresume(struct usb_phy *u_phy)
+-{
+-	struct tegra_usb_phy *phy = to_tegra_usb_phy(u_phy);
+-
+-	if (!phy->is_ulpi_phy)
+-		utmi_phy_postresume(phy);
+-}
+-EXPORT_SYMBOL_GPL(tegra_usb_phy_postresume);
+-
+-void tegra_ehci_phy_restore_start(struct usb_phy *u_phy,
+-				  enum tegra_usb_phy_port_speed port_speed)
+-{
+-	struct tegra_usb_phy *phy = to_tegra_usb_phy(u_phy);
+-
+-	if (!phy->is_ulpi_phy)
+-		utmi_phy_restore_start(phy, port_speed);
+-}
+-EXPORT_SYMBOL_GPL(tegra_ehci_phy_restore_start);
+-
+-void tegra_ehci_phy_restore_end(struct usb_phy *u_phy)
+-{
+-	struct tegra_usb_phy *phy = to_tegra_usb_phy(u_phy);
+-
+-	if (!phy->is_ulpi_phy)
+-		utmi_phy_restore_end(phy);
+-}
+-EXPORT_SYMBOL_GPL(tegra_ehci_phy_restore_end);
+-
+ static int read_utmi_param(struct platform_device *pdev, const char *param,
+ 			   u8 *dest)
+ {
+diff --git a/include/linux/usb/tegra_usb_phy.h b/include/linux/usb/tegra_usb_phy.h
+index e6c14f2b1f9b..40afcee8b4f5 100644
+--- a/include/linux/usb/tegra_usb_phy.h
++++ b/include/linux/usb/tegra_usb_phy.h
+@@ -80,13 +80,4 @@ struct tegra_usb_phy {
+ 	bool powered_on;
+ };
+ 
+-void tegra_usb_phy_preresume(struct usb_phy *phy);
+-
+-void tegra_usb_phy_postresume(struct usb_phy *phy);
+-
+-void tegra_ehci_phy_restore_start(struct usb_phy *phy,
+-				 enum tegra_usb_phy_port_speed port_speed);
+-
+-void tegra_ehci_phy_restore_end(struct usb_phy *phy);
+-
+ #endif /* __TEGRA_USB_PHY_H */
+-- 
+2.49.0
+
 
