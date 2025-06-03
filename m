@@ -1,176 +1,286 @@
-Return-Path: <linux-usb+bounces-24451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CBACACC486
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 12:37:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4601ACC507
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 13:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC3FE16782F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 10:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C2BC3A57F2
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54CD219DF4A;
-	Tue,  3 Jun 2025 10:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hlcSe1b2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69D322E3F7;
+	Tue,  3 Jun 2025 11:09:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EDB221F06
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 10:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282C022F754
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 11:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748947033; cv=none; b=kPicR98Rl1pyrPE9paO7looTyTQ6VQxtNUnH9axoHIhRDaWfg9z3BEj3ciBwH5Irkjv3ZQgOGduSbg1XNpPp8M+WDVlE+v1+5i0/xSH4DWcn6Se29oT5ZlowQVGMv3tnlGENIWjXaZNZTUmigt8D8wSwxBCik6IpGrUYreZWwiQ=
+	t=1748948970; cv=none; b=OcC+A06AEYbp+Xkn91PLYiOgUr40sF+hsecnqOU436nMzJdIiQwNBqq0YumRtxaxA0tuoZfyntHmYXpSfke9LOQeozvWwx8IlOsqcEmUsSgg3IEOsoocELQo5tnDh9gtcuLeNsrCA8H+p0RC0Ocrl+5S38gTL+7pHzfwx4VjC2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748947033; c=relaxed/simple;
-	bh=uqpOJv2wigJPKhBBU0tlE5lRcyIvfno4JsOZUYts/FY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mk+ntwRJAS8b1iGy1+EPZKIGKNH0We3pNhPGtvo/ZJ5EHrdVcJ5cC37IVHST4YOHe2gO+Y/au8DqCqkFXgf0pvwm4zpplPbT1MXn3jNUSVCdblDCUZInOBfym9I+dJtXYFaTN8fCMcYEP2FVPhWfs8iMVAkKziZizDIWCrruo40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hlcSe1b2; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5539JHg5000708
-	for <linux-usb@vger.kernel.org>; Tue, 3 Jun 2025 10:37:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	w9uWNnzZMN7gxXGGetcBuxHkVFtdiwfBWdURBEwcqsI=; b=hlcSe1b2m80sbOH+
-	HrmJDeiCebvVITjj3d/gHYyowy3NuP8JYUV/BR5d8mbbzf1KTrwRKFRvXBzzL8uv
-	HrhbhuseCaIT2KZe4HGcmug2znR5CnaNSW7jRx6v4bcAO9He3/4vmow2zhOJHBWR
-	mZmkryhInHOTzytu69Vh/R0rsIhRX5ta/bM31l5wufZUzxvKvH4Uafjx0XhS9p4A
-	Y8jCnyLguivFvriquzrkWchJZO7/c92KkacJ/py5QD8onnTTmI3+OBg5i9LMqcMg
-	DX2MnNFuXPgLHNQt5SkdcuIR99f4AANY9XAoSetwDrpq1EVR3I5HxSIOTo6RbqRG
-	LPv4bQ==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 471g8q2a1m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 10:37:11 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c9305d29abso867383385a.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 03:37:10 -0700 (PDT)
+	s=arc-20240116; t=1748948970; c=relaxed/simple;
+	bh=7AJk0uaMxjhbGSEw1O8hovlbaal+cQYmGtNQ5JanFdI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=XKJv5c0IgAMVFk5RupXcFvzRexlimzVuqgZPgym1Ory2CVM8ZRe62uz+XcVyzOYiPTJhoH4DuLAvzoyQghzDDs7Ypsu77U1Q40rby0NR4/R5mC2sL5cwlL0uiVARUndhNDVYm54OaFosQnKNME/l+0qddQJbmy2kdfIMRE8sBAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3ddbc8be478so581385ab.0
+        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 04:09:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748947030; x=1749551830;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w9uWNnzZMN7gxXGGetcBuxHkVFtdiwfBWdURBEwcqsI=;
-        b=TIKR6H2rFHTJH0KGAO6ZoH36HVb0dB64cX7akSTuUEp3fAEwK17rY9MQ4T1eSVP5mS
-         cBzHKcT+FsajJGU2OdOBjzy+DnlqgiFeqqORD/2qEO9+unrstI3I3dTXlqupNTRaHxo4
-         VZgMS30K1GXlZtDYC9dO82b6zcfjGoHbJWHR3WEttBMOn8laqJmsCpRD56msOuCgLrcd
-         jJYkJSVUsCiDeTQN6LlgdjDuMIjVJ+c7mz78Jn8/4oIX9//El/nyEXBYTNDhrjyhvkRh
-         vxv+bkZe8K9Lcv+zAvwh+llA2nv6CimyXbCFC9LDuEoPuHG8y0KIwRGFHCd6ndMnQuMd
-         M3cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWECZx6zp273uvxfkzrOPMofu9t+W5S8/LumL19TpNre/ZqTDRvQZfD60CqYn8cvPl9cQ7qjxDrbT0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBsqtmsD5KI1ARXDfk4OP3kjcQ9JC8v1nVno4EZi6SnpF1drj8
-	yFEl5rfeVFxOtwYWFzByJpAeCvCp4+ULzkNOqQ02mBiA1/sLKXC9GqttGWbuD20tCIT2LiqC/dD
-	JY1NT+yxw8+X1YLtCX9E1dW7OLPbhRmH2T9kjeQBJItBvlpHsgoN85hQRrdT/ZvQ=
-X-Gm-Gg: ASbGncuKK2VokF7W4Qvg6al7rRDGUQzwpcKJiE9JnFf0c6dvJMM9qOVG8nZ11i0FGXX
-	xeuWlcDvvPhbi2L+9kZt5oQAnpS1WlVUI6ml5SDAMclt7tGTYVEfHbfACKo+i4MwqaH0wyUhJvV
-	WCR4xgSZ2r0h+s2pBvRSQZMy4cf9NUrc4jLwxaly6CR3sBFsZmcFnlyU7Scj71EKZCnfDJq4pR5
-	4kP6O4Wiu/k/YvuOiSG/x+u+yNts1+/HN0pgEDJgmLn4prplm0bCOwX70jSAyPHNk7H92xV+MVi
-	6fal4A7IQJKZjQB1Dyvzo3PZSnlERkSlaWEsHUn3dfTErhY8g7VTuTWvYa4eZ2Cwif/D+ca+uod
-	6ME6RITU9Lw==
-X-Received: by 2002:a05:620a:3f85:b0:7c3:cd78:df43 with SMTP id af79cd13be357-7d0a203c941mr2733684485a.58.1748947029997;
-        Tue, 03 Jun 2025 03:37:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGcaWHfUMt/J84blqUHOVj38V1G/bCnq6PQ19HYI5oXarRw/p2CQ+daA0/OPAIVimxK24L/Xw==
-X-Received: by 2002:a05:620a:3f85:b0:7c3:cd78:df43 with SMTP id af79cd13be357-7d0a203c941mr2733680685a.58.1748947029464;
-        Tue, 03 Jun 2025 03:37:09 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553378a00d8sm1888642e87.82.2025.06.03.03.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jun 2025 03:37:08 -0700 (PDT)
-Date: Tue, 3 Jun 2025 13:37:06 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: =?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
- support
-Message-ID: <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
- <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
- <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1748948967; x=1749553767;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8J7/1M2viPHa1zyUPQ9DGdd2Fw+RRfPsqvU0OMau/Us=;
+        b=mREyXexTWDyCT8Yrf79EdjkbgmvMGFrqE1qdeDsct0CyuLmOkNe6r0c9Uc1jSaMjNN
+         0KTchlg/isOIJiT+9U/ATNkNhe5Hzm5OcK87UscHiIQwl7ETSGjPqxn269fireZr2qSO
+         JJjD1DY5jU2xIKlit+8K6WFOwUOmPkkWy6vt2NYshY/r1VfOi8cDJmeEeJLahoaLupH0
+         /HKI3CY+QpQDoN9jTnS8Z2fr+kGeo9VtdeVXZFtFBzE+fcZ0nbDulDrVo+ghXy7K0uID
+         VH8Qgt0NxaQ+uZqjT6JI07xfokqIuAaEqQAeeg8Yl2Nn6ZEKXJitoQP6rMZWxG8qsfFj
+         aInQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWuqyTzd1eI+hcH7ACBiorn2Sr/7r0VGy0Qan0BHiLFBr/eIZKOpbRexbvdUqNHZzSevKmqKjQDPhw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1lnyH48c/bqsInonYgBdXWbE1RZEVy+gXC8fVV9RbDJ4/Co3q
+	23MT8WBi9jCf6OGe3ukktZfYqrK3ySBPkrMuMlUkKemGvW2stdnufp0/n5k1p4LFaZUeSRiL396
+	aOiSF6J444YnoGhlLbIdA+CrX+0TNRtn3ZTSfHWotNW4DKVOtb3KOZyk0BuI=
+X-Google-Smtp-Source: AGHT+IEmMad6/B7CXdhY1eKM8Ogg3XYyd8oS+a0ExqT8gARwd0Zv12FC3vRGW2Q0JrDe2Tcozch7eWhqH0A4udEWIzOJO4osr8NZ
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
-X-Proofpoint-GUID: 3nFosLC2IVcVODWrzh53e41A0PoySKmj
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDA5MiBTYWx0ZWRfX2BkDdsGi40du
- L1saJ1k6Ln/y0tQ7tfFM/A7r1jn3oSKcfZyQpVXkYY9k0rPpbpaogvxoLwVdfW7cSwMKNUYhBHw
- 0Buqx9gDnEQ8peA3Red04zs5yKLh05qsOJwAZ5aJdAdYMSOu0jjXxvDQKYmlsYRIZR7WW+fHSat
- 7jO3/eYpIWFka6rzChhSE8nKaHWx21pYLvz2YE6oHJIANs+qQ4sNLSWmp2CV98ZCEFWFBGu9HlM
- +uNnE9urirveR6Rh952zQwjnbnG/3FzIto3c/n4bpt1jD6QHQiupN5btxgs8YKQGGvdMgC/b8h8
- N3E5102/n3oSMSYvllmQaV7y2hPgXX5D7LHq2R7F4CbMOPjcZ8YOfyOgFovGN5KoJmmjAjZVZz0
- EGdFsRrJm+0eflUzJgoW9HmFEXduQ6aK3fQVUwTbFXTorskq/ctEMlmbRVaFuyPWXKZEXuAx
-X-Proofpoint-ORIG-GUID: 3nFosLC2IVcVODWrzh53e41A0PoySKmj
-X-Authority-Analysis: v=2.4 cv=PrmTbxM3 c=1 sm=1 tr=0 ts=683ed057 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
- a=6IFa9wvqVegA:10 a=DVxyIStym39DqTwfPQkA:9 a=3ZKOabzyN94A:10
- a=wPNLvfGTeEIA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-03_01,2025-06-02_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 mlxlogscore=681 mlxscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 spamscore=0 clxscore=1015 adultscore=0
- suspectscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506030092
+X-Received: by 2002:a05:6e02:681:b0:3dc:9d32:6373 with SMTP id
+ e9e14a558f8ab-3ddb7808fc6mr14842615ab.2.1748948966912; Tue, 03 Jun 2025
+ 04:09:26 -0700 (PDT)
+Date: Tue, 03 Jun 2025 04:09:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <683ed7e6.a00a0220.d8eae.006b.GAE@google.com>
+Subject: [syzbot] [usb?] KASAN: slab-use-after-free Read in raw_event_queue_add
+From: syzbot <syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com>
+To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
-> 
-> On 5/31/2025 6:36 PM, György Kurucz wrote:
-> > > Add charge control support for SM8550 and X1E80100.
-> > 
-> > Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works
-> > well, I finally don't have to worry about leaving my laptop plugged in
-> > for too long.
-> > 
-> > One small thing I noticed is that after setting the sysfs values and
-> > rebooting, they report 0 again. The limiting appears to stay in effect
-> > though, so it seems that the firmware does keep the values, but Linux
-> > does not read them back. Indeed, looking at the code, it seems that
-> > actually reading back the values is only implemented for the SM8550.
-> 
-> Right.
-> 
-> Based on offline information, X1E80100 doesn't support reading back those
-> threshold values in battery management firmware, so I can only use the
-> cached values for sysfs read.
+Hello,
 
-Which limits usablity of the attribute, it is now impossible to identify
-whether it is enabled or disabled. Is there a chance of fixing that for
-the X1E80100 platform?
+syzbot found the following issue on:
 
-> 
-> > 
-> > Anyway, this is just a small nitpick, this does not really affect the
-> > functionality, and I would support merging this series regardless of
-> > whether the read back values are always correct.
-> > 
-> > György
+HEAD commit:    90b83efa6701 Merge tag 'bpf-next-6.16' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f34ed4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e08eccd6d0881a82
+dashboard link: https://syzkaller.appspot.com/bug?extid=1e3edf922962b5ea40a4
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
--- 
-With best wishes
-Dmitry
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-90b83efa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f11f969da590/vmlinux-90b83efa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a3cff7a358cf/bzImage-90b83efa.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com
+
+usb usb7-port1: attempt power cycle
+==================================================================
+BUG: KASAN: slab-use-after-free in raw_event_queue_add+0x1e0/0x220 drivers/usb/gadget/legacy/raw_gadget.c:81
+Read of size 4 at addr ffff888064f0a978 by task kworker/0:3/5979
+
+CPU: 0 UID: 0 PID: 5979 Comm: kworker/0:3 Not tainted 6.15.0-syzkaller-07774-g90b83efa6701 #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:408 [inline]
+ print_report+0xcd/0x680 mm/kasan/report.c:521
+ kasan_report+0xe0/0x110 mm/kasan/report.c:634
+ raw_event_queue_add+0x1e0/0x220 drivers/usb/gadget/legacy/raw_gadget.c:81
+ raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:239 [inline]
+ gadget_disconnect+0x5a/0x130 drivers/usb/gadget/legacy/raw_gadget.c:387
+ set_link_state+0x8e8/0xf70 drivers/usb/gadget/udc/dummy_hcd.c:471
+ dummy_hub_control+0x1620/0x1f00 drivers/usb/gadget/udc/dummy_hcd.c:2147
+ rh_call_control drivers/usb/core/hcd.c:656 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:821 [inline]
+ usb_hcd_submit_urb+0xc3c/0x1c60 drivers/usb/core/hcd.c:1529
+ usb_submit_urb+0x87c/0x1730 drivers/usb/core/urb.c:581
+ usb_start_wait_urb+0x104/0x4b0 drivers/usb/core/message.c:59
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x326/0x4a0 drivers/usb/core/message.c:154
+ usb_clear_port_feature drivers/usb/core/hub.c:454 [inline]
+ usb_hub_set_port_power+0x128/0x190 drivers/usb/core/hub.c:892
+ hub_port_connect drivers/usb/core/hub.c:5571 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
+ port_event drivers/usb/core/hub.c:5831 [inline]
+ hub_event+0x3a68/0x4fa0 drivers/usb/core/hub.c:5913
+ process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3321 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
+ kthread+0x3c2/0x780 kernel/kthread.c:464
+ ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+Allocated by task 12010:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0xaa/0xb0 mm/kasan/common.c:394
+ kmalloc_noprof include/linux/slab.h:905 [inline]
+ kzalloc_noprof include/linux/slab.h:1039 [inline]
+ dev_new drivers/usb/gadget/legacy/raw_gadget.c:192 [inline]
+ raw_open+0x8b/0x500 drivers/usb/gadget/legacy/raw_gadget.c:434
+ misc_open+0x35a/0x420 drivers/char/misc.c:179
+ chrdev_open+0x234/0x6a0 fs/char_dev.c:414
+ do_dentry_open+0x741/0x1c10 fs/open.c:964
+ vfs_open+0x82/0x3f0 fs/open.c:1094
+ do_open fs/namei.c:3887 [inline]
+ path_openat+0x1de4/0x2cb0 fs/namei.c:4046
+ do_filp_open+0x20b/0x470 fs/namei.c:4073
+ do_sys_openat2+0x11b/0x1d0 fs/open.c:1437
+ do_sys_open fs/open.c:1452 [inline]
+ __do_sys_openat fs/open.c:1468 [inline]
+ __se_sys_openat fs/open.c:1463 [inline]
+ __x64_sys_openat+0x174/0x210 fs/open.c:1463
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Freed by task 12010:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
+ poison_slab_object mm/kasan/common.c:247 [inline]
+ __kasan_slab_free+0x51/0x70 mm/kasan/common.c:264
+ kasan_slab_free include/linux/kasan.h:233 [inline]
+ slab_free_hook mm/slub.c:2380 [inline]
+ slab_free mm/slub.c:4642 [inline]
+ kfree+0x2b4/0x4d0 mm/slub.c:4841
+ kref_put include/linux/kref.h:65 [inline]
+ raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
+ __fput+0x3ff/0xb70 fs/file_table.c:465
+ task_work_run+0x150/0x240 kernel/task_work.c:227
+ exit_task_work include/linux/task_work.h:40 [inline]
+ do_exit+0xae2/0x2c70 kernel/exit.c:959
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1108
+ get_signal+0x2673/0x26d0 kernel/signal.c:3034
+ arch_do_signal_or_restart+0x8f/0x7d0 arch/x86/kernel/signal.c:337
+ exit_to_user_mode_loop+0x84/0x110 kernel/entry/common.c:111
+ exit_to_user_mode_prepare include/linux/entry-common.h:330 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:414 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:449 [inline]
+ do_syscall_64+0x3f6/0x4c0 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+The buggy address belongs to the object at ffff888064f0a000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 2424 bytes inside of
+ freed 4096-byte region [ffff888064f0a000, ffff888064f0b000)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x64f08
+head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 00fff00000000040 ffff88801b443040 ffffea000149da00 dead000000000002
+raw: 0000000000000000 0000000000040004 00000000f5000000 0000000000000000
+head: 00fff00000000040 ffff88801b443040 ffffea000149da00 dead000000000002
+head: 0000000000000000 0000000000040004 00000000f5000000 0000000000000000
+head: 00fff00000000003 ffffea000193c201 00000000ffffffff 00000000ffffffff
+head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5951, tgid 5951 (udevd), ts 82327432149, free_ts 82174938248
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x1c0/0x230 mm/page_alloc.c:1710
+ prep_new_page mm/page_alloc.c:1718 [inline]
+ get_page_from_freelist+0x135c/0x3950 mm/page_alloc.c:3680
+ __alloc_frozen_pages_noprof+0x261/0x23f0 mm/page_alloc.c:4970
+ alloc_pages_mpol+0x1fb/0x550 mm/mempolicy.c:2301
+ alloc_slab_page mm/slub.c:2450 [inline]
+ allocate_slab mm/slub.c:2618 [inline]
+ new_slab+0x23b/0x330 mm/slub.c:2672
+ ___slab_alloc+0xd9c/0x1940 mm/slub.c:3858
+ __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3948
+ __slab_alloc_node mm/slub.c:4023 [inline]
+ slab_alloc_node mm/slub.c:4184 [inline]
+ __do_kmalloc_node mm/slub.c:4326 [inline]
+ __kmalloc_noprof+0x2f2/0x510 mm/slub.c:4339
+ kmalloc_noprof include/linux/slab.h:909 [inline]
+ tomoyo_realpath_from_path+0xc2/0x6e0 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x274/0x460 security/tomoyo/file.c:822
+ security_inode_getattr+0x116/0x290 security/security.c:2377
+ vfs_getattr fs/stat.c:259 [inline]
+ vfs_statx_path fs/stat.c:299 [inline]
+ vfs_statx+0x121/0x3e0 fs/stat.c:356
+ vfs_fstatat+0x7b/0xf0 fs/stat.c:375
+ __do_sys_newfstatat+0x97/0x120 fs/stat.c:542
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+page last free pid 5939 tgid 5939 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1254 [inline]
+ __free_frozen_pages+0x7fe/0x1180 mm/page_alloc.c:2717
+ discard_slab mm/slub.c:2716 [inline]
+ __put_partials+0x16d/0x1c0 mm/slub.c:3185
+ qlink_free mm/kasan/quarantine.c:163 [inline]
+ qlist_free_all+0x4d/0x120 mm/kasan/quarantine.c:179
+ kasan_quarantine_reduce+0x195/0x1e0 mm/kasan/quarantine.c:286
+ __kasan_slab_alloc+0x69/0x90 mm/kasan/common.c:329
+ kasan_slab_alloc include/linux/kasan.h:250 [inline]
+ slab_post_alloc_hook mm/slub.c:4147 [inline]
+ slab_alloc_node mm/slub.c:4196 [inline]
+ kmem_cache_alloc_noprof+0x1cb/0x3b0 mm/slub.c:4203
+ alloc_empty_file+0x55/0x1e0 fs/file_table.c:234
+ alloc_file fs/file_table.c:351 [inline]
+ alloc_file_pseudo+0x13a/0x230 fs/file_table.c:380
+ sock_alloc_file+0x50/0x210 net/socket.c:470
+ sock_map_fd net/socket.c:500 [inline]
+ __sys_socket+0x1c0/0x260 net/socket.c:1692
+ __do_sys_socket net/socket.c:1697 [inline]
+ __se_sys_socket net/socket.c:1695 [inline]
+ __x64_sys_socket+0x72/0xb0 net/socket.c:1695
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Memory state around the buggy address:
+ ffff888064f0a800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888064f0a880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888064f0a900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                                ^
+ ffff888064f0a980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888064f0aa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
