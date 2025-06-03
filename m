@@ -1,286 +1,213 @@
-Return-Path: <linux-usb+bounces-24452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4601ACC507
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 13:10:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD3DACC51D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 13:13:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C2BC3A57F2
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:10:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92D9B169005
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 11:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69D322E3F7;
-	Tue,  3 Jun 2025 11:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00E422DF86;
+	Tue,  3 Jun 2025 11:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="X5BQGNtz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282C022F754
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 11:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34E822DA17
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 11:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748948970; cv=none; b=OcC+A06AEYbp+Xkn91PLYiOgUr40sF+hsecnqOU436nMzJdIiQwNBqq0YumRtxaxA0tuoZfyntHmYXpSfke9LOQeozvWwx8IlOsqcEmUsSgg3IEOsoocELQo5tnDh9gtcuLeNsrCA8H+p0RC0Ocrl+5S38gTL+7pHzfwx4VjC2o=
+	t=1748949146; cv=none; b=fVoybj3me5tuOS50uMK33OnvMrFfy/D7AdwRaLrW6UPthTAIoXszJ7Ppo8nlrL0lYM2veEazYpsBy6km6NNdILz4AVmoXNVVURy1IOrzc2iEQBchqxSUrvVRsNlox3x5zcjzMcQTI1pbnT+iyiLPHJCP4VsM/ws3a+OgexcTi7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748948970; c=relaxed/simple;
-	bh=7AJk0uaMxjhbGSEw1O8hovlbaal+cQYmGtNQ5JanFdI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=XKJv5c0IgAMVFk5RupXcFvzRexlimzVuqgZPgym1Ory2CVM8ZRe62uz+XcVyzOYiPTJhoH4DuLAvzoyQghzDDs7Ypsu77U1Q40rby0NR4/R5mC2sL5cwlL0uiVARUndhNDVYm54OaFosQnKNME/l+0qddQJbmy2kdfIMRE8sBAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3ddbc8be478so581385ab.0
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 04:09:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748948967; x=1749553767;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8J7/1M2viPHa1zyUPQ9DGdd2Fw+RRfPsqvU0OMau/Us=;
-        b=mREyXexTWDyCT8Yrf79EdjkbgmvMGFrqE1qdeDsct0CyuLmOkNe6r0c9Uc1jSaMjNN
-         0KTchlg/isOIJiT+9U/ATNkNhe5Hzm5OcK87UscHiIQwl7ETSGjPqxn269fireZr2qSO
-         JJjD1DY5jU2xIKlit+8K6WFOwUOmPkkWy6vt2NYshY/r1VfOi8cDJmeEeJLahoaLupH0
-         /HKI3CY+QpQDoN9jTnS8Z2fr+kGeo9VtdeVXZFtFBzE+fcZ0nbDulDrVo+ghXy7K0uID
-         VH8Qgt0NxaQ+uZqjT6JI07xfokqIuAaEqQAeeg8Yl2Nn6ZEKXJitoQP6rMZWxG8qsfFj
-         aInQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWuqyTzd1eI+hcH7ACBiorn2Sr/7r0VGy0Qan0BHiLFBr/eIZKOpbRexbvdUqNHZzSevKmqKjQDPhw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1lnyH48c/bqsInonYgBdXWbE1RZEVy+gXC8fVV9RbDJ4/Co3q
-	23MT8WBi9jCf6OGe3ukktZfYqrK3ySBPkrMuMlUkKemGvW2stdnufp0/n5k1p4LFaZUeSRiL396
-	aOiSF6J444YnoGhlLbIdA+CrX+0TNRtn3ZTSfHWotNW4DKVOtb3KOZyk0BuI=
-X-Google-Smtp-Source: AGHT+IEmMad6/B7CXdhY1eKM8Ogg3XYyd8oS+a0ExqT8gARwd0Zv12FC3vRGW2Q0JrDe2Tcozch7eWhqH0A4udEWIzOJO4osr8NZ
+	s=arc-20240116; t=1748949146; c=relaxed/simple;
+	bh=qdh9/dDTAHJ1D1UfBX8nbhQ6ExAns2R+yt6F9EWW8Jc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WotlK9dFlIzTcJaBDqxz4dShfrLUwlOQSZyRLSJVu+KRflekLUP5nUzbW1wNdxO1Hd4BPoHDRgtaKUV+mxsCtl0JaavlTF01eopSLdahTw8YMKlt3TUjO6n2BF3450vIzcuAg/avRYKAPY+4nfnGfMFbQLSLdRY/MXNZli51kOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=X5BQGNtz; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 1DC33240101
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 13:12:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1748949136; bh=qdh9/dDTAHJ1D1UfBX8nbhQ6ExAns2R+yt6F9EWW8Jc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=X5BQGNtzvlgXjSdalWTL3W6/XIIwefWOzV/Q1BJEcd2xQIFRDItGxZjD0LNIl0Uzr
+	 fIk52n2jdy45XlCvxSU4Jsg1EkX6BLCwnsAGzSH2xbYPKfK9MfY3+o+1DNSNHafete
+	 7LFKKFgGB7CjXtQSx//ECrr7nCHsCKxNXaj62Fcs7ZHWNSnzjrkcTWApS5+wqtU9DH
+	 jzz4NIERMbu2DgBvesG9+Enm57j9YhNSIsbu2f5qor+kUD+Sv3dhEuzSViJ29IPvRa
+	 FPFBEpOZO5Die9CnOwwSkv5qWvjM8ZNMLwrdCrR4jDV11XmAn0J9vh0egviR6b6V0M
+	 PBs2q9Halu/Nw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4bBSjC1K4Dz9rxB;
+	Tue,  3 Jun 2025 13:12:15 +0200 (CEST)
+From: Charalampos Mitrodimas <charmitro@posteo.net>
+To: Bastien Nocera <hadess@hadess.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,  Alan Stern
+ <stern@rowland.harvard.edu>,  linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: misc: apple-mfi-fastcharge: Make power supply
+ names unique
+In-Reply-To: <5a610d364c8a8148e48d5bf7a95e73fc81650e5a.camel@hadess.net>
+References: <20250602-apple-mfi-fastcharge-duplicate-sysfs-v1-1-5d84de34fac6@posteo.net>
+	<5a610d364c8a8148e48d5bf7a95e73fc81650e5a.camel@hadess.net>
+Date: Tue, 03 Jun 2025 11:12:04 +0000
+Message-ID: <87r001uliz.fsf@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:681:b0:3dc:9d32:6373 with SMTP id
- e9e14a558f8ab-3ddb7808fc6mr14842615ab.2.1748948966912; Tue, 03 Jun 2025
- 04:09:26 -0700 (PDT)
-Date: Tue, 03 Jun 2025 04:09:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <683ed7e6.a00a0220.d8eae.006b.GAE@google.com>
-Subject: [syzbot] [usb?] KASAN: slab-use-after-free Read in raw_event_queue_add
-From: syzbot <syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com>
-To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Bastien Nocera <hadess@hadess.net> writes:
 
-syzbot found the following issue on:
+> On Mon, 2025-06-02 at 18:26 +0000, Charalampos Mitrodimas wrote:
+>> When multiple Apple devices are connected concurrently, the
+>> apple-mfi-fastcharge driver fails to probe the subsequent devices
+>> with
+>> the following error:
+>>=20
+>> =C2=A0=C2=A0=C2=A0 sysfs: cannot create duplicate filename
+>> '/class/power_supply/apple_mfi_fastcharge'
+>> =C2=A0=C2=A0=C2=A0 apple-mfi-fastcharge 5-2.4.3.3: probe of 5-2.4.3.3 fa=
+iled with
+>> error -17
+>>=20
+>> This happens because the driver uses a fixed power supply name
+>> ("apple_mfi_fastcharge") for all devices, causing a sysfs name
+>> conflict when a second device is connected.
+>>=20
+>> Fix this by generating unique names using the USB bus and device
+>> number (e.g., "apple_mfi_fastcharge_5-12"). This ensures each
+>> connected device gets a unique power supply entry in sysfs.
+>>=20
+>> The change requires storing a copy of the power_supply_desc structure
+>> in the per-device mfi_device struct, since the name pointer needs to
+>> remain valid for the lifetime of the power supply registration.
+>>=20
+>> Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for
+>> iOS devices")
+>> Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
+>> ---
+>> =C2=A0drivers/usb/misc/apple-mfi-fastcharge.c | 24 +++++++++++++++++++++=
+--
+>> -
+>> =C2=A01 file changed, 21 insertions(+), 3 deletions(-)
+>>=20
+>> diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c
+>> b/drivers/usb/misc/apple-mfi-fastcharge.c
+>> index
+>> ac8695195c13c8752076e4391ac81a9da3780c44..8e852f4b8262e6e8fcd33883be8
+>> c5696f19b9ee9 100644
+>> --- a/drivers/usb/misc/apple-mfi-fastcharge.c
+>> +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
+>> @@ -44,6 +44,7 @@ MODULE_DEVICE_TABLE(usb, mfi_fc_id_table);
+>> =C2=A0struct mfi_device {
+>> =C2=A0	struct usb_device *udev;
+>> =C2=A0	struct power_supply *battery;
+>> +	struct power_supply_desc battery_desc;
+>> =C2=A0	int charge_type;
+>> =C2=A0};
+>> =C2=A0
+>> @@ -178,6 +179,7 @@ static int mfi_fc_probe(struct usb_device *udev)
+>> =C2=A0{
+>> =C2=A0	struct power_supply_config battery_cfg =3D {};
+>> =C2=A0	struct mfi_device *mfi =3D NULL;
+>> +	char *battery_name;
+>> =C2=A0	int err;
+>> =C2=A0
+>> =C2=A0	if (!mfi_fc_match(udev))
+>> @@ -187,23 +189,38 @@ static int mfi_fc_probe(struct usb_device
+>> *udev)
+>> =C2=A0	if (!mfi)
+>> =C2=A0		return -ENOMEM;
+>> =C2=A0
+>> +	battery_name =3D kasprintf(GFP_KERNEL,
+>> "apple_mfi_fastcharge_%d-%d",
+>> +				 udev->bus->busnum, udev->devnum);
+>
+> Looks fine to me although I don't know how common this construct is.
+>
+> If others think this won't work, you can use the ever increasing id as
+> used in drivers/hid/hid-steelseries.c
 
-HEAD commit:    90b83efa6701 Merge tag 'bpf-next-6.16' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15f34ed4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e08eccd6d0881a82
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e3edf922962b5ea40a4
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+Hi Bastien,
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks for the review!
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-90b83efa.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f11f969da590/vmlinux-90b83efa.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a3cff7a358cf/bzImage-90b83efa.xz
+FWIW, this has been tested in QEMU via,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com
+      -device usb-host,bus=3Dehci.0,vendorid=3D0x05ac,productid=3D0x12a8
+      -device usb-host,bus=3Dehci.0,vendorid=3D0x05ac,productid=3D0x12ab
 
-usb usb7-port1: attempt power cycle
-==================================================================
-BUG: KASAN: slab-use-after-free in raw_event_queue_add+0x1e0/0x220 drivers/usb/gadget/legacy/raw_gadget.c:81
-Read of size 4 at addr ffff888064f0a978 by task kworker/0:3/5979
+And works as expected,
 
-CPU: 0 UID: 0 PID: 5979 Comm: kworker/0:3 Not tainted 6.15.0-syzkaller-07774-g90b83efa6701 #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:408 [inline]
- print_report+0xcd/0x680 mm/kasan/report.c:521
- kasan_report+0xe0/0x110 mm/kasan/report.c:634
- raw_event_queue_add+0x1e0/0x220 drivers/usb/gadget/legacy/raw_gadget.c:81
- raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:239 [inline]
- gadget_disconnect+0x5a/0x130 drivers/usb/gadget/legacy/raw_gadget.c:387
- set_link_state+0x8e8/0xf70 drivers/usb/gadget/udc/dummy_hcd.c:471
- dummy_hub_control+0x1620/0x1f00 drivers/usb/gadget/udc/dummy_hcd.c:2147
- rh_call_control drivers/usb/core/hcd.c:656 [inline]
- rh_urb_enqueue drivers/usb/core/hcd.c:821 [inline]
- usb_hcd_submit_urb+0xc3c/0x1c60 drivers/usb/core/hcd.c:1529
- usb_submit_urb+0x87c/0x1730 drivers/usb/core/urb.c:581
- usb_start_wait_urb+0x104/0x4b0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x326/0x4a0 drivers/usb/core/message.c:154
- usb_clear_port_feature drivers/usb/core/hub.c:454 [inline]
- usb_hub_set_port_power+0x128/0x190 drivers/usb/core/hub.c:892
- hub_port_connect drivers/usb/core/hub.c:5571 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
- port_event drivers/usb/core/hub.c:5831 [inline]
- hub_event+0x3a68/0x4fa0 drivers/usb/core/hub.c:5913
- process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3321 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3402
- kthread+0x3c2/0x780 kernel/kthread.c:464
- ret_from_fork+0x5d4/0x6f0 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
+$ ls /sys/class/power_supply
+apple_mfi_fastcharge_2_2  apple_mfi_fastcharge_2_3
 
-Allocated by task 12010:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
- __kasan_kmalloc+0xaa/0xb0 mm/kasan/common.c:394
- kmalloc_noprof include/linux/slab.h:905 [inline]
- kzalloc_noprof include/linux/slab.h:1039 [inline]
- dev_new drivers/usb/gadget/legacy/raw_gadget.c:192 [inline]
- raw_open+0x8b/0x500 drivers/usb/gadget/legacy/raw_gadget.c:434
- misc_open+0x35a/0x420 drivers/char/misc.c:179
- chrdev_open+0x234/0x6a0 fs/char_dev.c:414
- do_dentry_open+0x741/0x1c10 fs/open.c:964
- vfs_open+0x82/0x3f0 fs/open.c:1094
- do_open fs/namei.c:3887 [inline]
- path_openat+0x1de4/0x2cb0 fs/namei.c:4046
- do_filp_open+0x20b/0x470 fs/namei.c:4073
- do_sys_openat2+0x11b/0x1d0 fs/open.c:1437
- do_sys_open fs/open.c:1452 [inline]
- __do_sys_openat fs/open.c:1468 [inline]
- __se_sys_openat fs/open.c:1463 [inline]
- __x64_sys_openat+0x174/0x210 fs/open.c:1463
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+C. Mitrodimas
 
-Freed by task 12010:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
- poison_slab_object mm/kasan/common.c:247 [inline]
- __kasan_slab_free+0x51/0x70 mm/kasan/common.c:264
- kasan_slab_free include/linux/kasan.h:233 [inline]
- slab_free_hook mm/slub.c:2380 [inline]
- slab_free mm/slub.c:4642 [inline]
- kfree+0x2b4/0x4d0 mm/slub.c:4841
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
- __fput+0x3ff/0xb70 fs/file_table.c:465
- task_work_run+0x150/0x240 kernel/task_work.c:227
- exit_task_work include/linux/task_work.h:40 [inline]
- do_exit+0xae2/0x2c70 kernel/exit.c:959
- do_group_exit+0xd3/0x2a0 kernel/exit.c:1108
- get_signal+0x2673/0x26d0 kernel/signal.c:3034
- arch_do_signal_or_restart+0x8f/0x7d0 arch/x86/kernel/signal.c:337
- exit_to_user_mode_loop+0x84/0x110 kernel/entry/common.c:111
- exit_to_user_mode_prepare include/linux/entry-common.h:330 [inline]
- syscall_exit_to_user_mode_work include/linux/entry-common.h:414 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:449 [inline]
- do_syscall_64+0x3f6/0x4c0 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff888064f0a000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 2424 bytes inside of
- freed 4096-byte region [ffff888064f0a000, ffff888064f0b000)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x64f08
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 00fff00000000040 ffff88801b443040 ffffea000149da00 dead000000000002
-raw: 0000000000000000 0000000000040004 00000000f5000000 0000000000000000
-head: 00fff00000000040 ffff88801b443040 ffffea000149da00 dead000000000002
-head: 0000000000000000 0000000000040004 00000000f5000000 0000000000000000
-head: 00fff00000000003 ffffea000193c201 00000000ffffffff 00000000ffffffff
-head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5951, tgid 5951 (udevd), ts 82327432149, free_ts 82174938248
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x1c0/0x230 mm/page_alloc.c:1710
- prep_new_page mm/page_alloc.c:1718 [inline]
- get_page_from_freelist+0x135c/0x3950 mm/page_alloc.c:3680
- __alloc_frozen_pages_noprof+0x261/0x23f0 mm/page_alloc.c:4970
- alloc_pages_mpol+0x1fb/0x550 mm/mempolicy.c:2301
- alloc_slab_page mm/slub.c:2450 [inline]
- allocate_slab mm/slub.c:2618 [inline]
- new_slab+0x23b/0x330 mm/slub.c:2672
- ___slab_alloc+0xd9c/0x1940 mm/slub.c:3858
- __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3948
- __slab_alloc_node mm/slub.c:4023 [inline]
- slab_alloc_node mm/slub.c:4184 [inline]
- __do_kmalloc_node mm/slub.c:4326 [inline]
- __kmalloc_noprof+0x2f2/0x510 mm/slub.c:4339
- kmalloc_noprof include/linux/slab.h:909 [inline]
- tomoyo_realpath_from_path+0xc2/0x6e0 security/tomoyo/realpath.c:251
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_perm+0x274/0x460 security/tomoyo/file.c:822
- security_inode_getattr+0x116/0x290 security/security.c:2377
- vfs_getattr fs/stat.c:259 [inline]
- vfs_statx_path fs/stat.c:299 [inline]
- vfs_statx+0x121/0x3e0 fs/stat.c:356
- vfs_fstatat+0x7b/0xf0 fs/stat.c:375
- __do_sys_newfstatat+0x97/0x120 fs/stat.c:542
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-page last free pid 5939 tgid 5939 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1254 [inline]
- __free_frozen_pages+0x7fe/0x1180 mm/page_alloc.c:2717
- discard_slab mm/slub.c:2716 [inline]
- __put_partials+0x16d/0x1c0 mm/slub.c:3185
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x4d/0x120 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x195/0x1e0 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x69/0x90 mm/kasan/common.c:329
- kasan_slab_alloc include/linux/kasan.h:250 [inline]
- slab_post_alloc_hook mm/slub.c:4147 [inline]
- slab_alloc_node mm/slub.c:4196 [inline]
- kmem_cache_alloc_noprof+0x1cb/0x3b0 mm/slub.c:4203
- alloc_empty_file+0x55/0x1e0 fs/file_table.c:234
- alloc_file fs/file_table.c:351 [inline]
- alloc_file_pseudo+0x13a/0x230 fs/file_table.c:380
- sock_alloc_file+0x50/0x210 net/socket.c:470
- sock_map_fd net/socket.c:500 [inline]
- __sys_socket+0x1c0/0x260 net/socket.c:1692
- __do_sys_socket net/socket.c:1697 [inline]
- __se_sys_socket net/socket.c:1695 [inline]
- __x64_sys_socket+0x72/0xb0 net/socket.c:1695
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Memory state around the buggy address:
- ffff888064f0a800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888064f0a880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888064f0a900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                                ^
- ffff888064f0a980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888064f0aa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> Cheers
+>
+>> +	if (!battery_name) {
+>> +		err =3D -ENOMEM;
+>> +		goto err_free_mfi;
+>> +	}
+>> +
+>> +	mfi->battery_desc =3D apple_mfi_fc_desc;
+>> +	mfi->battery_desc.name =3D battery_name;
+>> +
+>> =C2=A0	battery_cfg.drv_data =3D mfi;
+>> =C2=A0
+>> =C2=A0	mfi->charge_type =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+>> =C2=A0	mfi->battery =3D power_supply_register(&udev->dev,
+>> -						&apple_mfi_fc_desc,
+>> +						&mfi->battery_desc,
+>> =C2=A0						&battery_cfg);
+>> =C2=A0	if (IS_ERR(mfi->battery)) {
+>> =C2=A0		dev_err(&udev->dev, "Can't register battery\n");
+>> =C2=A0		err =3D PTR_ERR(mfi->battery);
+>> -		kfree(mfi);
+>> -		return err;
+>> +		goto err_free_name;
+>> =C2=A0	}
+>> =C2=A0
+>> =C2=A0	mfi->udev =3D usb_get_dev(udev);
+>> =C2=A0	dev_set_drvdata(&udev->dev, mfi);
+>> =C2=A0
+>> =C2=A0	return 0;
+>> +
+>> +err_free_name:
+>> +	kfree(battery_name);
+>> +err_free_mfi:
+>> +	kfree(mfi);
+>> +	return err;
+>> =C2=A0}
+>> =C2=A0
+>> =C2=A0static void mfi_fc_disconnect(struct usb_device *udev)
+>> @@ -213,6 +230,7 @@ static void mfi_fc_disconnect(struct usb_device
+>> *udev)
+>> =C2=A0	mfi =3D dev_get_drvdata(&udev->dev);
+>> =C2=A0	if (mfi->battery)
+>> =C2=A0		power_supply_unregister(mfi->battery);
+>> +	kfree(mfi->battery_desc.name);
+>> =C2=A0	dev_set_drvdata(&udev->dev, NULL);
+>> =C2=A0	usb_put_dev(mfi->udev);
+>> =C2=A0	kfree(mfi);
+>>=20
+>> ---
+>> base-commit: cd2e103d57e5615f9bb027d772f93b9efd567224
+>> change-id: 20250602-apple-mfi-fastcharge-duplicate-sysfs-0ef3864b21f8
+>>=20
+>> Best regards,
 
