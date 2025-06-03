@@ -1,196 +1,98 @@
-Return-Path: <linux-usb+bounces-24458-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24459-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34FDACCA47
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 17:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0EBACCCA2
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 20:03:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FE80188CB83
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 15:36:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F3FB1891370
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 18:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5743B23C8A8;
-	Tue,  3 Jun 2025 15:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CA91EEA54;
+	Tue,  3 Jun 2025 18:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JDXuhQ+l"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Umyz/H57"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4B123BF9F
-	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 15:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC661EDA14
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 18:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748964980; cv=none; b=buJU5YXx4oDx1y2HkAwJZsZi8atBvRgSdSA8osSZM2c+iDFs1L4iAFnV8+qn0XsQw/T0Hmf40bZgb2PwdKQ1dbllbIorvaIAQkXgLqXCRGsudYNLlyb/86KwaoS6ZI9g7L9rZu8vjyrBQE59PDj+gn2CZiODPC/ZomKG/L+Oj9k=
+	t=1748973776; cv=none; b=sh9SKZWpox7I16QH7kD1dgjxB3VFsBUqCPx5RbFhYzD5w7+qIoYKZX/Cr3X462aaNaxhaAOeakmg8jdM811hds7J68hVUV8LKC6xQt2meaSn8L9yFDu2hXiJut3/LmAEOfiMcfveKTVRaU9odYOWF9tPABxzZCiwWzcETAsF7Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748964980; c=relaxed/simple;
-	bh=so5Cd5VO/ohDqiSM1PiA8yaYZigYUNqPmXEXIixW9MQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=c5ocRCBf6/61yBFACg3oySyspTMdlSBcZnKw0ZEoRhhhS2up56srXdHmX8h53BLvOFvG6LBPsIyFYgpU/yh0H4h/xd+0M1dLcBRt3uEHohdROrMSlUfWqoi3jb0m+x6A4skTkx7K8+ToDH54U+xAE2KEfB+d7PC7jj2Wn5R/qYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JDXuhQ+l; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748964976;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/LvaDhDxbF96xKIaUKjht39c2AE1OP7X/UE1kJNGLGU=;
-	b=JDXuhQ+lRB8SCGPuxzTFMqguyn6PwLcgegOEoeYo+3NM/83uCj8ridM5itACfmfktx24Nd
-	CODmVtXbr0wY+yQ0eRdqgJgpeSiVrylpEQhKOgaBmD6/QjukwWp8Mb3RZ0irpSRYBQqlGS
-	0HZidPqXBBLInNgpzoco8OvMLspMt1M=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-MO2h415uMH6o1INzqgyWTA-1; Tue, 03 Jun 2025 11:36:15 -0400
-X-MC-Unique: MO2h415uMH6o1INzqgyWTA-1
-X-Mimecast-MFC-AGG-ID: MO2h415uMH6o1INzqgyWTA_1748964974
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a4f7f1b932so3232414f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 08:36:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748964974; x=1749569774;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/LvaDhDxbF96xKIaUKjht39c2AE1OP7X/UE1kJNGLGU=;
-        b=HkGawqN52zcbTDqAbg2BuO3z2UKcrKVjqGJxbMOjdjTUzFf59GA1jmFCpLl58WI2hT
-         KqQvLOr1Z9VVIOLk4Voo0aDUk2qDSSbrIlVZAbQSeRtLqVXFJvs0gf6VJ33ytcHltli7
-         JEqfP8O5pgihk/TtR/OG0e5qzWDQoGbTx/1YBSGi3Cn3ZU9Gzz+Hs+k6kFoM7lq+kqEB
-         2Udo95fDJ5OFn0bjuVTdz8tMEJ0NhJxr0qDmw13vz/ZLMbDIzWC1+IMFMhUevTQL9i+n
-         zwlUkF4qjICaX8RxUnrMkvjhrwvZ1tvRwQZGzkGtp7aoa7gH911cnT0Y62T9/MwxWYiY
-         bu2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVRKVPHGbL8NSwQGUA7TAUaueEQvm2WqKbSV0RFm9kr68UVEZ01jv2587RDOVyp19iUvz8cNrgPc7o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqnJj3ukf/Aci5mRBfZKVEbody0LLWz8MoRZTjjZFg/OQIQ7Vf
-	ZWe4QNIypH1MrXBioHyaVFltFnmoSYjW4bMutVF4wK3wPF0zDha4W5CjNrE1UtH5AYrzqutvGRu
-	PP2DYNhE1T4WDMSDfn2MB050zZYHRxwxigQpwawEUBKWVNYVscdrd7crVCQeZLw==
-X-Gm-Gg: ASbGncsUIS3uf8m4Egwf2hlca9q/XplD8jsFCxCG8mDLgYTFnHdvQ8fH8TaF+vg4Lm0
-	XrcFTfJ1CIK66gq5tG5M8kZgu5jDyU0LY9MTUUEJYLxSweLiLXPvpXdzlPCtCeS8MDzRSuUwr3k
-	vzk2F1t3KUNPQ4mlHSHxUVxnU3iWrTzKCL5gJ284RZW2MZ9LqCzMkRa9tuYMtossPFCjoEQKA7r
-	b5eumBTor8RkUrHINkIK7HK95x6abKQxM+GM3rLUFmYripiGtCw4lv6LDEfbGYL8eYTbDQytid1
-	eB7Kl5e09FxMN0wCh9k=
-X-Received: by 2002:a05:6000:2c0f:b0:3a4:e6e7:3acd with SMTP id ffacd0b85a97d-3a4fe16a68cmr10464445f8f.18.1748964974425;
-        Tue, 03 Jun 2025 08:36:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IElEymzG/EMNgRgbugoUUsqwa+rCR/+NQMtZ2sPmIuqTSEPZMFYrzKmWz2URs19s4oUNJJ5cQ==
-X-Received: by 2002:a05:6000:2c0f:b0:3a4:e6e7:3acd with SMTP id ffacd0b85a97d-3a4fe16a68cmr10464410f8f.18.1748964973922;
-        Tue, 03 Jun 2025 08:36:13 -0700 (PDT)
-Received: from ?IPV6:2a0d:3341:cc2d:3210::f39? ([2a0d:3341:cc2d:3210::f39])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4efe6c842sm18390715f8f.29.2025.06.03.08.36.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jun 2025 08:36:13 -0700 (PDT)
-Message-ID: <c5bc7d2e-6a2e-4d33-a5bc-14bd61be3a0c@redhat.com>
-Date: Tue, 3 Jun 2025 17:36:11 +0200
+	s=arc-20240116; t=1748973776; c=relaxed/simple;
+	bh=vWLmrVNcT29C8KsJhhxyPsfz6vvMC5hsmwliaeSSWY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eufn+z7BdsFyqqP+soaBsoEXEMqPQvzv7jiD3drExOYe7cTBjzjgLK4WrxpdYEtcT+x4ZOUYsoI+BxVPPAXN0rDgwBZdf+C+dNd/fCle/kTmfeCt0XG9WYuXLsZwWOG4p3zOz7gGp7NlTVsqkNT/Rp1JkH8rsa5+78/R9Mve2+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Umyz/H57; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=bKKC2iIV+I4AOP
+	uePqJbIyB5K0aSdCWcGxhWmHkvUxk=; b=Umyz/H57Tc6SvGd1pR2dYh9FKWqmZ5
+	tD3uQKZB/RiabheDl3poL+Ca83GsoRl7LAOyyrJZPE8N92iyCKkOeInstdaLQwAr
+	hUPbI5jx/G9AQyUeF5ebs/Lz1xDru4Hr+RzoicYs02vFgPf/ksKe193qMZCcCl/n
+	YzhaQn4bEIMMIQuEksBfDC1m0fLqlJLwWcUiwgD46rWX0vNbane+X5VApNAfs+4X
+	zXLnE/jTykzKW6uz3RQV3Aca3ZK7nE6PzYi+LJ3bDcDTb7jJpGtjET1QBgtKojwn
+	sAZXQH4Vz1e4Gxh33WBz0e+uirfu5FFmogBj5Q78iAu0ycgkfjXBu4dw==
+Received: (qmail 364279 invoked from network); 3 Jun 2025 20:02:43 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2025 20:02:43 +0200
+X-UD-Smtp-Session: l3s3148p1@CATgr642qNMujnuc
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: renesas_usbhs: use proper DMAENGINE API for termination
+Date: Tue,  3 Jun 2025 19:58:54 +0200
+Message-ID: <20250603180131.14579-4-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [net?] WARNING in ipmr_rules_exit (2)
-To: syzbot <syzbot+a25af2d6c990a65eca95@syzkaller.appspotmail.com>,
- davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
- horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- syzkaller-bugs@googlegroups.com
-References: <683f1551.050a0220.55ceb.0016.GAE@google.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <683f1551.050a0220.55ceb.0016.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/3/25 5:31 PM, syzbot wrote:
-> syzbot found the following issue on:
-> 
-> HEAD commit:    342e4955a1f1 usb: usbtmc: Fix timeout value in get_stb
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=135a19f4580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cc73a376913a3005
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a25af2d6c990a65eca95
-> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/3d4486b9330e/disk-342e4955.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/b0b416348409/vmlinux-342e4955.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/053a330bcf59/bzImage-342e4955.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a25af2d6c990a65eca95@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 13600 at net/ipv4/ipmr.c:440 ipmr_free_table net/ipv4/ipmr.c:440 [inline]
-> WARNING: CPU: 0 PID: 13600 at net/ipv4/ipmr.c:440 ipmr_rules_exit+0x13a/0x1c0 net/ipv4/ipmr.c:361
-> Modules linked in:
-> 
-> CPU: 0 UID: 0 PID: 13600 Comm: syz-executor Not tainted 6.15.0-rc6-syzkaller-00166-g342e4955a1f1 #0 PREEMPT(voluntary) 
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-> RIP: 0010:ipmr_free_table net/ipv4/ipmr.c:440 [inline]
-> RIP: 0010:ipmr_rules_exit+0x13a/0x1c0 net/ipv4/ipmr.c:361
-> Code: ff df 48 c1 ea 03 80 3c 02 00 75 7c 48 c7 85 58 09 00 00 00 00 00 00 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc e8 d7 79 16 fb 90 <0f> 0b 90 eb 93 e8 cc 79 16 fb 0f b6 1d 73 37 05 04 31 ff 89 de e8
-> RSP: 0018:ffffc90014e2fc10 EFLAGS: 00010293
-> 
-> RAX: 0000000000000000 RBX: ffff88812c1dc000 RCX: ffffffff8665f0fd
-> RDX: ffff8881222c9d40 RSI: ffffffff8665f169 RDI: 0000000000000005
-> RBP: ffff88812ea70000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-> R13: ffff88812ea70958 R14: ffff88812ea70000 R15: fffffbfff148e04c
-> FS:  000055558afcb500(0000) GS:ffff8882691c2000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fc07c1d33d0 CR3: 000000014620e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  ipmr_net_exit_batch+0x53/0xa0 net/ipv4/ipmr.c:3160
->  ops_exit_list+0x128/0x180 net/core/net_namespace.c:177
->  setup_net+0x4e8/0x850 net/core/net_namespace.c:396
->  copy_net_ns+0x2a6/0x5f0 net/core/net_namespace.c:518
->  create_new_namespaces+0x3ea/0xad0 kernel/nsproxy.c:110
->  unshare_nsproxy_namespaces+0xc0/0x1f0 kernel/nsproxy.c:228
->  ksys_unshare+0x45b/0xa40 kernel/fork.c:3375
->  __do_sys_unshare kernel/fork.c:3446 [inline]
->  __se_sys_unshare kernel/fork.c:3444 [inline]
->  __x64_sys_unshare+0x31/0x40 kernel/fork.c:3444
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7f31d7a50167
-> Code: 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 10 01 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffe9bbc8f18 EFLAGS: 00000206
->  ORIG_RAX: 0000000000000110
-> RAX: ffffffffffffffda RBX: 00007f31d7c75f40 RCX: 00007f31d7a50167
-> RDX: 0000000000000005 RSI: 00007ffe9bbc8de0 RDI: 0000000040000000
-> RBP: 00007f31d7c76738 R08: 00007f31d87a7d60 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000008
-> R13: 0000000000000003 R14: 0000000000000009 R15: 0000000000000000
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
+dmaengine_terminate_all() is deprecated in favor of explicitly saying if
+it should be sync or async. Here, we want dmaengine_terminate_sync()
+because there is no other synchronization code in the driver to handle
+an async case.
 
-#syz fix: mr: consolidate the ipmr_can_free_table() checks.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+
+This was an RFC 4 years ago [1], and then slipped through the cracks.
+Shimoda-san agreed to this patch, but we decided to let a change of his
+go in first. This has happened meanwhile, so according to the back then
+discussion, it should be good now.
+
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20210623100304.3697-1-wsa+renesas@sang-engineering.com/
+
+ drivers/usb/renesas_usbhs/fifo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+index 10607e273879..bac6f8fd0055 100644
+--- a/drivers/usb/renesas_usbhs/fifo.c
++++ b/drivers/usb/renesas_usbhs/fifo.c
+@@ -123,7 +123,7 @@ struct usbhs_pkt *usbhs_pkt_pop(struct usbhs_pipe *pipe, struct usbhs_pkt *pkt)
+ 		if (fifo)
+ 			chan = usbhsf_dma_chan_get(fifo, pkt);
+ 		if (chan) {
+-			dmaengine_terminate_all(chan);
++			dmaengine_terminate_sync(chan);
+ 			usbhsf_dma_unmap(pkt);
+ 		} else {
+ 			if (usbhs_pipe_is_dir_in(pipe))
+-- 
+2.47.2
 
 
