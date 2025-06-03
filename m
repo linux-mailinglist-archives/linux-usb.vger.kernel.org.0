@@ -1,324 +1,160 @@
-Return-Path: <linux-usb+bounces-24456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B883ACC9BA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 16:59:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DB29ACCA3C
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 17:32:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38C2616A6B5
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 14:59:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 398313A5D17
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Jun 2025 15:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF0923A984;
-	Tue,  3 Jun 2025 14:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="naSpZpPp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E5723D2A3;
+	Tue,  3 Jun 2025 15:31:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013048.outbound.protection.outlook.com [40.107.162.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251CA231A55;
-	Tue,  3 Jun 2025 14:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748962769; cv=fail; b=n5FaF5qe9z7E+MPRYxsjCR+0Nm6HqKwAFXTUJic/22A7m7E9yAcma2qHHQ7VFGcJxB8Fcis+Kj+fXUHp8SRqP07f6AHGfGu4TPCqe/EPR3mW7ZWg/aK4BO9VAzb3Hx6rL3h3g09Ip/R7eozfV/XdufLrXceA/RHN7EcRFNb6mPA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748962769; c=relaxed/simple;
-	bh=4W5oAhzOHI1RMfpXSjN9mcCJ39mF20Enf1EEU/NUczU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=WpEWCvTqko/OXyak2d2z1P2q2R4Mdn8fzIJx8jYjjz4NLwDh7taIyG7eWuVY+MFbeGKCAG8WcG14xDitR9okTgHnOpW80Qr6qPZ4xlhsodQ3hFpurMnmH+f1ivA+SWN67rOFhrkgMm4qn/GGfXzKamnp5biCse+2s3dbUrM6pww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=naSpZpPp; arc=fail smtp.client-ip=40.107.162.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iWF9ytieQQhrL0dlANE0UWAX0F5gL6x/zGUdeHqhnkYP+CXP4DIJjaBJFDR8Peq4Fh8eDbVqElZ9OFiPc4Z5hoDCX2hq81H5E2jMRK3oe6u1GbFFq+KqPmgCCOLqTAq0ROrjdBOqeXOkcrNtaQTd8J0+jWgxoX6s91HgFWa2uSP9HOat4O8cALgSDPGA2F90kJQMvdgh08hInhsLlD3Ez8Iy5bwoz3pEm07tjYS6iJAzdaws7tmg7oCSVozmKxyNAEUbtJ20RHHEAmYhf3UaV5R6Ayk43GQY/BHoiEKAN4y0CIEXZF5ycTW/j2t3x2gifKmGJmDa0ESSnPY9VW1aUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ipGZ4icafR69h4+TEVJ7FyDt4dNtiqgVjhECasxU9aA=;
- b=x1XvPh5+55LbaJ8MAudyQi6/Elf9yPzMxRZ6fw2Pve+q1IQ4MLSEgItbjEysmxFOKp338YRT11ZKyD+6kWb0JMFMbSiRbeVsM06AuLoPWOTVLYzIyGYIy0edlFi78jUSVguy0wO1tU/i5VLEbtuhBhxVe1QegCREEBp5bKeyqEe0MEC34WuovM2RloeVRWgocH1CeeZSaVrI/29+EeFpb+tAMVgB2Y1Ks+PJVe90Vh0C45yJe5VcKraYMnys/DBxpSSipC3YEisrMbA31gXUa/4u3pKkONa9tgrdyH/yGZOsMReT67EFBk2lEVZAwZ1yfCDXPaNxNEz+qCpbZwXL+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ipGZ4icafR69h4+TEVJ7FyDt4dNtiqgVjhECasxU9aA=;
- b=naSpZpPprES4yNCn2ID8wT9ZFlVwG6fFPR9/VeEZjk3p14JkDFqE+9L7AUJrSK50xzWzg+Wk83V3QK9YNZlxM2JlR0lnoFADtzUxQgmrCC2AA1s+A37l9T3SJucucKK6vY3oWfSuoGIEqpuQQch9XhfGxDRDc66+Tgoax9HoVa7en08zGC9C2szDmRfC/sMySKZMsIwIiV85b53Ga2wPiyrSoZKX1GDOSevk36oSqScT0sjT2AYBaY5NnoD/spiVW2aGMSnM9C/64/EdWKobne4Cxaha3YlrW+m+ByR89+XLZLbuKV3MXvqaOMQhAftrLOBSbzcy+CuWfXLWB033yQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DB8PR04MB7194.eurprd04.prod.outlook.com (2603:10a6:10:127::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.36; Tue, 3 Jun
- 2025 14:59:24 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8769.025; Tue, 3 Jun 2025
- 14:59:23 +0000
-Date: Tue, 3 Jun 2025 10:59:17 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"bjorn.andersson@oss.qualcomm.com" <bjorn.andersson@oss.qualcomm.com>
-Subject: Re: [PATCH 2/3] usb: dwc3: add layerscape dwc3 support
-Message-ID: <aD8NxfmJjSMeQKOu@lizhi-Precision-Tower-5810>
-References: <20250602-ls_dma_coherence-v1-0-c67484d6ab64@nxp.com>
- <20250602-ls_dma_coherence-v1-2-c67484d6ab64@nxp.com>
- <20250603012259.gyat6ungxyufhhbe@synopsys.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250603012259.gyat6ungxyufhhbe@synopsys.com>
-X-ClientProxiedBy: PH7P221CA0049.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:510:33c::32) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BCE23CEE5
+	for <linux-usb@vger.kernel.org>; Tue,  3 Jun 2025 15:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748964691; cv=none; b=bvs3wiLSdixF//3hHgtJV9qfwbpXEVMZv1zsYbk4NtDrARYzkJ//i93gtt999tOBg3uiivTQm0xqPapBugcRVSD7YhVUrGvSEiKbzUTGNU5AhaOZJzRCjWDARr3J5FEBc2tirPrXG96HFr9ur+R3PicFTPACfPSxuLehbib5mRU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748964691; c=relaxed/simple;
+	bh=PFXJYGFLtLX7vFLrt0z8PSAtWdECtHV3t2TAjCiIyF0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=B32vRlFR8hCf9Y3aTC0VH7x0vGLjBM1JGXlkToD7O78bFli1IKsuaIluFgCsFfLq8ncJL3N/CxEVBHF+uJYyH65Tua09VzbcWK5kdIWVXNy0uJmFOqiQZhY1hdMm027CbK3+F7XM/fmvCWpSc51tqNaEgUhLpZ1y2I0rXA9B0OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3ddba1b53e8so8266135ab.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Jun 2025 08:31:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748964689; x=1749569489;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GAVSA8Z20LfJYI8icc/3dunATI/t7i9/bRad+C4O4Xc=;
+        b=P5H2Zx0uEszwE/AKjLD2TFPj65GO6pvzfynkxSQzMdwILOhFa0eFRb0zCfZGcO+si2
+         ag1Vcu82Hfl2wGDMl3YZ5wyMv2NqlpGQ57gf8jOKxPE4rf+m8N2S0IlJ64jVCVDOLKmn
+         8rJLDvjdRDLutl8AudDDPAT6cFVxaTogQI3EDrM4IQDIxMIfU0Nw4H9Vwzf+wT6jBsav
+         WwvUm52K0i1+sM0fBjH4aR0+hpDiPwt2khFYM1JaIp8y96SeWDy2SM/0poGHdaeFNHLY
+         GZR2w+u3IAB4Kxzz9VLPxRU86fbduDsat1TbJ9i9vtSyV0arOZPeMtfGIhLxTSvj3gtE
+         Sx0g==
+X-Forwarded-Encrypted: i=1; AJvYcCUo9+LW1oomS+QL0l/Vy+PHIKFo/3GeAUXZxT7RCrlDExz57T3Wksc9zJMvgpEko4X6BjbZa/IOSb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWtwPpHtjfJfPATYfk5+KMswOF/EGSSr3Ta2iF145lo8sAOF/x
+	4nHbLgquiWDaLdV7H8WhuglxrorwFv6VGfF1VRLhLAfsGLnBtDwLvH98ewUEsvxmM6GWw9kC5qn
+	jOlXR7Uk9kSSg5rNoht2tyFnVSxQSbW9K+kut8CfI4AGBjI7Wcu4VdcU75HE=
+X-Google-Smtp-Source: AGHT+IGKu2HbwU02zkRnkBN+6fEeYWhnjL9Z+Yug9QKyorhWRczyHHu96xE+PHUz0q0+ck5gsb/d2JLCI2sC7S6zjMkhJmUNG6lx
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB8PR04MB7194:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f93af23-3b19-488e-de86-08dda2af3a47
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mj2LiIrQBh0MYOqM/vFMqoQrprvt1ansIjGKNY0x+Nqb5X64235K5XF2pVpE?=
- =?us-ascii?Q?gzijXjmBUlE/WFXTdcFaQuWDcKCYn8dGGDuK5WXZyA/OQ0UWeDnhz7VFdfwj?=
- =?us-ascii?Q?BZh2PD0/rd5Q4hE889JEf7BTKos3uNjQVLUlIHMdhibYsbh6UThlSX/CUaQQ?=
- =?us-ascii?Q?ktaW6ulEYL7NywztKrzv/wv0UtOcVTtenwMPLtpfv7M/UvO+p0uuDkZenbE0?=
- =?us-ascii?Q?vvKthiPvawKXjC3zGEtLZa5KCslvfvRN4r8JJjxXKbYPhC6rgiEzqKYo/aZ2?=
- =?us-ascii?Q?F1uxX4B2f4+7k1s5jlGZPIzxsZAvFqb8VWNqoiWtUFVZfW9P4o3aLKmW4BY/?=
- =?us-ascii?Q?7z1pTWJJKPEOg6xRxS0IvXejtvQUFQto7D31HEKk5c9CMLSW7SaubXIMX4eE?=
- =?us-ascii?Q?UVVLSeyc1bvmk8fE7WB0VzTkhoWs8De2e0JvCe12ejirFSLWH+YJOveI6O7R?=
- =?us-ascii?Q?clYWBhpY3QQHubfsYo238D88Ox2f2RxOqgFRXSVRvc+YHCA2ZViIBrw09GDU?=
- =?us-ascii?Q?zKHyKt7zPMgtmudyPZNC5fIDg+Eyx4MXflKkY1AZiKqq3icsxeMzsf3xjInh?=
- =?us-ascii?Q?qqTlCR0bqZ1Aec7aYANXwRgKrgKKTXs670gkUQ6stCo50mJ9ji0Wkp2BlGiE?=
- =?us-ascii?Q?nEOJq6EPiBoYmhVVJaemsOx5bXdDN8mij+OLOXAezvUK8cnnpphVb1erkTWF?=
- =?us-ascii?Q?z8jUui1NnYd2YosMJVhk/Zh4QoyEtBvLglzAeRbdlZl/wPCkGNTQ+rzBKFtt?=
- =?us-ascii?Q?q1PaTEIriVSZXqT7MKqk57hynYDv/0Fz5eYcFUIObPf3h24J+9SfPh7y3v8Y?=
- =?us-ascii?Q?rAtDG8U8jIkw+3lBDyEcRXQRTDjnGa/TUHdAR1wZDbrNBd7Jsj+H38R5RYUi?=
- =?us-ascii?Q?jq7rtBThJlC3R8O3yB71Fq0snCig/6AptHxPIpq53f6baWgW3k2ncU5AVNkS?=
- =?us-ascii?Q?sxk/Bhsd21Unwuqb8jfxZPpGynxD6sYTM/6OGq1mqqeq9pz9lx31ibU/rP4O?=
- =?us-ascii?Q?0F+oCyH9ybRxJHTs+cKQdLe3BLfJSXCy5LPm1wv5oyUYlMTKVOZxN75M1rjC?=
- =?us-ascii?Q?1QZtmp2Xpux5szxaZiwJl2m876BJgqD/xeLQxpH7D7lYUhuS1lkQA2muRQ1G?=
- =?us-ascii?Q?quTCnbYwoNf4KwHBM+aQiJeP75Ts1FzEJCBlk5pstqrnb+SMoYMrd9YrRozy?=
- =?us-ascii?Q?lEzFpQO9o5AXGgxhuoxK25yxUEvM+EHCqv4brCqKk4Z3AF52/HE6Ri7qUL1O?=
- =?us-ascii?Q?mGzDslKl5ehwQWL9CRUE5kURiygXuhoEcubTFql0EChl30Fmjrf193LHyA3N?=
- =?us-ascii?Q?9dRWZpedzYc5nUf6zGgd7S9Y213v6NI+QEbYdJ1tnToWGbaEAN8UVwDAV0xa?=
- =?us-ascii?Q?WHxzHnROyO5DRMmAXWf7XCnQgIgbTPjHKkGi+Cpo72KlRme5unX6cny3DaQM?=
- =?us-ascii?Q?ApV534zP4Y8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DyJsy0wWBAkTkrjVFLiuiIUr+KMs6yo0a9d7oj4V9hzKyt8F2/oMoXHQo2/i?=
- =?us-ascii?Q?/LBEKqkWwiBULD2Oec8NHuOT0oNrt/mIKkyDRerO0A0RMXTL2incnQ+ccUcq?=
- =?us-ascii?Q?Oi8NmYiIAaosp3mPihuZSfMp7cVVhKbRsC574lcNVugwaatsmVPwsEBihMj2?=
- =?us-ascii?Q?Ey4tlyXGmJ9/32RA2ExXI8ZXqctGc3VyiSVvNWjE/rT9G94irlz0lzSR77NA?=
- =?us-ascii?Q?NR/+fo+17/cU27ZqlSwSESlzwOJXLoRibxN4Wqb1mh93eLJxOr1S6VudkyB6?=
- =?us-ascii?Q?ODYYLh5GKUH5gYDldrFS3K9AhwjwXe5hrK8zBNPYsaVXkdF/795+Y4BPXL/N?=
- =?us-ascii?Q?QXZmTpA+ir3sjfLXqDa2bjXPB3mU4o87pDSWcyHkmuGrcfNZKVt2DzI9GxpL?=
- =?us-ascii?Q?62HyUvClefpOB9CfbvmRs8PNMsFHw90rxmocWQWKaxn8X1Edb4MqlZsPbI/F?=
- =?us-ascii?Q?5Gf2K9N90yUzgu2MmRosZ9VBsQ2NOBxwtcdb6gqrtjqESiwbjoVLzmJxgeD0?=
- =?us-ascii?Q?YjFrm8TPZqpOjr7Of5KM2koSYpAWqkcuN7q0KU+76whOx35EALyKS598K5Nd?=
- =?us-ascii?Q?RJdRvutsAK8i4pQ7UTjQ+cTFMS9kzpg48JA4OLPnICqCU95S+CWiqVKiqO0K?=
- =?us-ascii?Q?sItFHnJ4NlhciJYj+sLbB5c6KDN6Hf/eqaAE01WVaQdqULw8oicnZqxdLziK?=
- =?us-ascii?Q?boN+G/U+TVkLqDTshgaaBzWAP0EYyhQYkQbKnUgYSI1d/wKNP4trMwlZ+ZeY?=
- =?us-ascii?Q?VZtROqwv3Vfsy4c1a/T8IBeuuIFioodi12KUMfijl2I3qrQCwNADcMKY/N8T?=
- =?us-ascii?Q?t1EPSM9BgQFDAhT3ArXHTHoifLIOmm5XU491CYdmtY2uIT8VjNK2tROzOwaC?=
- =?us-ascii?Q?mzSZx6ELH6K1jcoYe2vhMv5Kn2iLBOPLXQbIWgVGw+ybgJYI/BD3wQE59Djy?=
- =?us-ascii?Q?keWzbB3f90fTrScgyZFKA0Yvoat4Ktf+VPT92OykV7KzL7LRG3ydkJG2Daws?=
- =?us-ascii?Q?PklI6UUg44n/6c8BTVewv6TyGJ0AArbm1PRCS7saKCEzLXX6izVoO3lb04rX?=
- =?us-ascii?Q?RgFJ5fs7eFC/tLe8TDwbdJTwkbN5RL43C+0caas6faZ8g1SNpNx1XCMp+XP+?=
- =?us-ascii?Q?bLBgjdiSeBH+g6xrSltg1oRfENKKyanNbwXyWm9VnFiVSge32/PUna0xIwxT?=
- =?us-ascii?Q?DFkb763EiJDFWwXuJ/pqCJOmFVIbUiQPi4NXQ3djYwXByTuUoO4Y5O2F6W5i?=
- =?us-ascii?Q?43Qgp+h62PC/VfbDPAwhDnGc0QpdzRSTkpQPe1FaHdTDazpLkTUpDfzXjhfw?=
- =?us-ascii?Q?FwZooAD01Q9l3VUxtbyE9FVvWifsCZMWvRHj8aadB15jU6BSsfEpqDdQDm0K?=
- =?us-ascii?Q?06S0hSSdAkgbHEjpV/wedOBJytwLa/QUH/V0PQBaOEPsQSUTMOCWrRRKw2KO?=
- =?us-ascii?Q?FOKPfwoUIl8PnBxGoVaQ4EFjn0FHkf3ubN+sQnrMC9LRX2jg5I6zuuqncSxt?=
- =?us-ascii?Q?EcPbc4OsmlLFAEODsp4GIiHxjuugEk/CbOsD6klo28Cq+ACFrNttnUCsRtpW?=
- =?us-ascii?Q?0hRT5G6HqFZbkwIh6wqSzCJgc1m5ZJMKZYJ+llZJ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f93af23-3b19-488e-de86-08dda2af3a47
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 14:59:23.8938
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: spLnKiKMhqxDGIlxos4Pb1AyOerwamf0LBpCkCL1HZkTZ3s0YaymkNDZXvv8RYPtWUoOJtSokSwObsfl8DSL7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7194
+X-Received: by 2002:a05:6e02:16c5:b0:3dd:b4f4:2bba with SMTP id
+ e9e14a558f8ab-3ddb4f42c4fmr68966565ab.22.1748964689170; Tue, 03 Jun 2025
+ 08:31:29 -0700 (PDT)
+Date: Tue, 03 Jun 2025 08:31:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <683f1551.050a0220.55ceb.0016.GAE@google.com>
+Subject: [syzbot] [net?] WARNING in ipmr_rules_exit (2)
+From: syzbot <syzbot+a25af2d6c990a65eca95@syzkaller.appspotmail.com>
+To: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 03, 2025 at 01:23:03AM +0000, Thinh Nguyen wrote:
-> Hi,
->
-> On Mon, Jun 02, 2025, Frank Li wrote:
-> > Add layerscape dwc3 support by using flatten dwc3 core library. Layerscape
-> > dwc3 need set software managed property snps,gsbuscfg0-reqinfo as 0x2222
-> > when dma-coherence set.
-> >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> >  drivers/usb/dwc3/Kconfig           | 10 +++++
-> >  drivers/usb/dwc3/Makefile          |  1 +
-> >  drivers/usb/dwc3/dwc3-layerscape.c | 88 ++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 99 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-> > index 310d182e10b50..13a86cf03b94b 100644
-> > --- a/drivers/usb/dwc3/Kconfig
-> > +++ b/drivers/usb/dwc3/Kconfig
-> > @@ -150,6 +150,16 @@ config USB_DWC3_IMX8MP
-> >  	  functionality.
-> >  	  Say 'Y' or 'M' if you have one such device.
-> >
-> > +config USB_DWC3_LAYERSCAPE
-> > +	tristate "NXP Layerscape Platform"
-> > +	depends on OF && COMMON_CLK
-> > +	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-> > +	default USB_DWC3
-> > +	help
-> > +	  NXP LAYERSCAPE SoC use DesignWare Core IP for USB2/3
-> > +	  functionality.
-> > +	  Say 'Y' or 'M' if you have one such device.
-> > +
-> >  config USB_DWC3_XILINX
-> >  	tristate "Xilinx Platforms"
-> >  	depends on (ARCH_ZYNQMP || COMPILE_TEST) && OF
-> > diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-> > index 830e6c9e5fe07..cd635b77902fb 100644
-> > --- a/drivers/usb/dwc3/Makefile
-> > +++ b/drivers/usb/dwc3/Makefile
-> > @@ -54,6 +54,7 @@ obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
-> >  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
-> >  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom-legacy.o
-> >  obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
-> > +obj-$(CONFIG_USB_DWC3_LAYERSCAPE)	+= dwc3-layerscape.o
-> >  obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
-> >  obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
-> >  obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
-> > diff --git a/drivers/usb/dwc3/dwc3-layerscape.c b/drivers/usb/dwc3/dwc3-layerscape.c
-> > new file mode 100644
-> > index 0000000000000..d093f178e1e35
-> > --- /dev/null
-> > +++ b/drivers/usb/dwc3/dwc3-layerscape.c
-> > @@ -0,0 +1,88 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2020 NXP
-> > + */
-> > +
-> > +#include <linux/of.h>
-> > +#include <linux/of_address.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/usb/of.h>
-> > +
-> > +#include "core.h"
-> > +#include "glue.h"
-> > +
-> > +struct dwc3_ls {
-> > +	struct device *dev;
-> > +	struct dwc3 dwc;
-> > +};
-> > +
-> > +static int dwc3_ls_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device_node *np = pdev->dev.of_node;
-> > +	struct dwc3_probe_data probe_data = {};
-> > +	struct property_entry props[2] = {};
-> > +	struct device *dev = &pdev->dev;
-> > +	struct resource *res;
-> > +	struct dwc3_ls *ls;
-> > +	int prop_idx = 0;
-> > +	int ret = 0;
-> > +
-> > +	ls = devm_kzalloc(&pdev->dev, sizeof(*ls), GFP_KERNEL);
-> > +	if (!ls)
-> > +		return -ENOMEM;
-> > +
-> > +	ls->dev = &pdev->dev;
-> > +
-> > +	ls->dwc.dev = dev;
-> > +
-> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res)
-> > +		dev_err_probe(&pdev->dev, -ENODEV, "missing memory resource\n");
-> > +
-> > +	if (of_dma_is_coherent(np))
-> > +		props[prop_idx++] = PROPERTY_ENTRY_U16("snps,gsbuscfg0-reqinfo", 0x2222);
-> > +
-> > +	if (prop_idx)
-> > +		ret = device_create_managed_software_node(dev, props, NULL);
-> > +
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "fail create software managed property node\n");
-> > +
-> > +	probe_data.dwc = &ls->dwc;
-> > +	probe_data.res = res;
-> > +	ret = dwc3_core_probe(&probe_data);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void dwc3_ls_remove(struct platform_device *pdev)
-> > +{
-> > +	struct dwc3 *dwc = platform_get_drvdata(pdev);
-> > +
-> > +	dwc3_core_remove(dwc);
-> > +}
-> > +
-> > +static const struct of_device_id of_dwc3_ls_match[] = {
-> > +	{
-> > +		.compatible = "fsl,ls1028a-dwc3"
-> > +	},
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, of_dwc3_ls_match);
-> > +
-> > +static struct platform_driver dwc3_ls_driver = {
-> > +	.probe	  = dwc3_ls_probe,
-> > +	.remove	 = dwc3_ls_remove,
-> > +	.driver	 = {
-> > +		.name   = "ls-dwc3",
-> > +		.of_match_table = of_dwc3_ls_match,
-> > +	},
-> > +};
-> > +
-> > +module_platform_driver(dwc3_ls_driver);
-> > +
-> > +MODULE_AUTHOR("Frank Li <frank.li@nxp.com>");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_DESCRIPTION("Freescale Layerscape USB3 Controller Driver");
-> >
-> > --
-> > 2.34.1
-> >
->
-> Is this something that can be enhanced in dwc3-generic-plat glue from Ze
-> Huang:
+Hello,
 
-Yes, I can base on Zehuang's work with little modify. Please let me know
-when his patch merged.
+syzbot found the following issue on:
 
-Frank
+HEAD commit:    342e4955a1f1 usb: usbtmc: Fix timeout value in get_stb
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=135a19f4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cc73a376913a3005
+dashboard link: https://syzkaller.appspot.com/bug?extid=a25af2d6c990a65eca95
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
->
-> https://lore.kernel.org/linux-usb/20250526-b4-k1-dwc3-v3-v4-3-63e4e525e5cb@whut.edu.cn/T/#u
->
-> Thanks,
-> Thinh
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3d4486b9330e/disk-342e4955.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b0b416348409/vmlinux-342e4955.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/053a330bcf59/bzImage-342e4955.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a25af2d6c990a65eca95@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 13600 at net/ipv4/ipmr.c:440 ipmr_free_table net/ipv4/ipmr.c:440 [inline]
+WARNING: CPU: 0 PID: 13600 at net/ipv4/ipmr.c:440 ipmr_rules_exit+0x13a/0x1c0 net/ipv4/ipmr.c:361
+Modules linked in:
+
+CPU: 0 UID: 0 PID: 13600 Comm: syz-executor Not tainted 6.15.0-rc6-syzkaller-00166-g342e4955a1f1 #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+RIP: 0010:ipmr_free_table net/ipv4/ipmr.c:440 [inline]
+RIP: 0010:ipmr_rules_exit+0x13a/0x1c0 net/ipv4/ipmr.c:361
+Code: ff df 48 c1 ea 03 80 3c 02 00 75 7c 48 c7 85 58 09 00 00 00 00 00 00 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc e8 d7 79 16 fb 90 <0f> 0b 90 eb 93 e8 cc 79 16 fb 0f b6 1d 73 37 05 04 31 ff 89 de e8
+RSP: 0018:ffffc90014e2fc10 EFLAGS: 00010293
+
+RAX: 0000000000000000 RBX: ffff88812c1dc000 RCX: ffffffff8665f0fd
+RDX: ffff8881222c9d40 RSI: ffffffff8665f169 RDI: 0000000000000005
+RBP: ffff88812ea70000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff88812ea70958 R14: ffff88812ea70000 R15: fffffbfff148e04c
+FS:  000055558afcb500(0000) GS:ffff8882691c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc07c1d33d0 CR3: 000000014620e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ipmr_net_exit_batch+0x53/0xa0 net/ipv4/ipmr.c:3160
+ ops_exit_list+0x128/0x180 net/core/net_namespace.c:177
+ setup_net+0x4e8/0x850 net/core/net_namespace.c:396
+ copy_net_ns+0x2a6/0x5f0 net/core/net_namespace.c:518
+ create_new_namespaces+0x3ea/0xad0 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc0/0x1f0 kernel/nsproxy.c:228
+ ksys_unshare+0x45b/0xa40 kernel/fork.c:3375
+ __do_sys_unshare kernel/fork.c:3446 [inline]
+ __se_sys_unshare kernel/fork.c:3444 [inline]
+ __x64_sys_unshare+0x31/0x40 kernel/fork.c:3444
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x260 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f31d7a50167
+Code: 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 10 01 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe9bbc8f18 EFLAGS: 00000206
+ ORIG_RAX: 0000000000000110
+RAX: ffffffffffffffda RBX: 00007f31d7c75f40 RCX: 00007f31d7a50167
+RDX: 0000000000000005 RSI: 00007ffe9bbc8de0 RDI: 0000000040000000
+RBP: 00007f31d7c76738 R08: 00007f31d87a7d60 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000008
+R13: 0000000000000003 R14: 0000000000000009 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
