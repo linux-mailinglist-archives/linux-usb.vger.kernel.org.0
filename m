@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-24467-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24468-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DF4AACD34A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 03:16:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B070ACD3D2
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 03:23:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B6DA3A3E4B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 01:16:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 368137A8412
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 01:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644361FCCEB;
-	Wed,  4 Jun 2025 01:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98583267F72;
+	Wed,  4 Jun 2025 01:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NmzWxTbJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebg3HsuD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74A327726;
-	Wed,  4 Jun 2025 01:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BBF195B37;
+	Wed,  4 Jun 2025 01:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998914; cv=none; b=TXK0MIjgWwvXmuc6fK7opnBDEo8egoWv4t5ZZ7qYUAUyQdGVqotNQ33H0WURgg54n26QpnRJKBihbx1UsW+DdZhLQF+bNwekLy3QxfDboVwmJxHvW1JdCL0/lkG7AScVzRwBMj9I3d3lzhD3TyjitR8J4fOmaeQoaRHrpKd/Ao0=
+	t=1748999031; cv=none; b=ZLtho7ztkLr4rHzvgqBwHbFTyitXDjtMc77Rh3NRGmNTvbj01c/Rp84ksBgBpnRKxZ28cyqQBsgIyPMwjIt41NU/DdLzh6K1uiAQRqnIwmsDEp2NJKrQ6yqxS7dTXt5GakCNc6AVnvSs0bL93L+4kU599qgxZvE+RsHt3hpGCmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998914; c=relaxed/simple;
-	bh=KVolGAcX7oueIE0Sbb+ta5lMCGBforILEJpbrcfIY7c=;
+	s=arc-20240116; t=1748999031; c=relaxed/simple;
+	bh=kyfjgGiE6DtB0Ssz56HXje2jJdNAE6ko1u4hE4WvZbQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HxyN4kX6u5FKoUuOPMaEJkXHm9LS9trhQ6xxh2IvwDb9oNjdeCDkdtOOQ8x9BwUcFWwUQ8k/h4CKgtz+Pb3S4qiMY8n4bRDaTq40kVoW5+CQz9fmJF2ZE00Zl2ryK2oyQWDUalbokqVVF8fq0K8H5DY3g4gTJzowyxtZ2xCqAXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NmzWxTbJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9947EC4CEED;
-	Wed,  4 Jun 2025 01:01:52 +0000 (UTC)
+	 MIME-Version:Content-Type; b=SRqsBWrlbqlrUs8dMzME5xRfZC4YFKKWTndAbPD7uW8reYumv5/HI20qxMipQnoPqu9e6AnQ46ahJgeWrhHuncR9iSI2Wm86ZEOJSIT35cziJJ/EhzcofugVVmK+GMScvP2jYpiMx3T7kfSwRK0jo3PZVOrxvEqRZJpOTpR5VIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebg3HsuD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF34FC4CEED;
+	Wed,  4 Jun 2025 01:03:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998913;
-	bh=KVolGAcX7oueIE0Sbb+ta5lMCGBforILEJpbrcfIY7c=;
+	s=k20201202; t=1748999031;
+	bh=kyfjgGiE6DtB0Ssz56HXje2jJdNAE6ko1u4hE4WvZbQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NmzWxTbJRZAyjByuygPzZrwiBcIbc+JbLrYbKYTEK8z/SjduKPpkCBW8LnegUhEWA
-	 mPKuli+wIxv8xesbJr38F70RFjaM0s/K3FasvW+8H6jfu0JwzgPVtp23f+NV4XrSWW
-	 y/smCdW7ETMTlRXIwyx1XVlP3cTlCpn20MWABUnNSJWzCpKzo0Pm0YU7BPDlNJoUDo
-	 PGJL49k0mQNNrHAl49Q2iBPrGzg3E2uvhiE3ZHkraPEyVk9VI3LPyMJJbQdEy8XYMG
-	 nU/ICxko6h27FoKpUWiE6TnOO9MVUUuSIchqgNyrCp+C7yF9H6lRzdNxQ/w6dJAS6X
-	 pK1w/KuOm5EMw==
+	b=ebg3HsuDhpPGXUL/HVnN90/nbqn1h16A0lnAm6GBrbK6y048vZpD5m/Y7MHsI34WQ
+	 0IUrEOGE9m+m5KP3pzKShgk9UtCySeoME/v9MbyRcnqN+Sb5jcrKki2B9UQtERYKGs
+	 V6MYllmMlid5Y2YXf6WG+v+aPcClaaS4lMzuqKNsvIwnFE4S1gbd9UCcl/ACQ9JdHu
+	 PBsa6l8k/BWTRBFofutqsgnprvi3xkaFOfYXHvn2FPhZcdoNXtyk+KnqL1/+Lx8Slj
+	 sNo6ioHsZkhlfP4yjfSxuN+KPva3JGnARY670/SA0kYBADiR6qGrNILl6Y9faKSiL6
+	 k88FAtU7xyq+A==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
 	max.schulze@online.de,
 	linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 84/93] usbnet: asix AX88772: leave the carrier control to phylink
-Date: Tue,  3 Jun 2025 20:59:10 -0400
-Message-Id: <20250604005919.4191884-84-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 54/62] usbnet: asix AX88772: leave the carrier control to phylink
+Date: Tue,  3 Jun 2025 21:02:05 -0400
+Message-Id: <20250604010213.3462-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604005919.4191884-1-sashal@kernel.org>
-References: <20250604005919.4191884-1-sashal@kernel.org>
+In-Reply-To: <20250604010213.3462-1-sashal@kernel.org>
+References: <20250604010213.3462-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.31
+X-stable-base: Linux 6.6.92
 Content-Transfer-Encoding: 8bit
 
 From: Krzysztof Hałasa <khalasa@piap.pl>
@@ -189,7 +189,7 @@ index 72ffc89b477ad..7fd763917ae2c 100644
  {
  	int ret;
 diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index da24941a6e444..9b0318fb50b55 100644
+index ec4dcf89cbedd..119295f5f3b35 100644
 --- a/drivers/net/usb/asix_devices.c
 +++ b/drivers/net/usb/asix_devices.c
 @@ -752,7 +752,6 @@ static void ax88772_mac_link_down(struct phylink_config *config,
