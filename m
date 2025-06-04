@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-24465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC35ACD1CD
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 03:00:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4334FACD2E9
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 03:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC5E16B8B1
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 00:59:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 122B1188553A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 01:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4B91C84DF;
-	Wed,  4 Jun 2025 00:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256161C84A6;
+	Wed,  4 Jun 2025 00:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZGPVaSNL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dhz5ulfA"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024F138F9C;
-	Wed,  4 Jun 2025 00:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DE438F91;
+	Wed,  4 Jun 2025 00:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998496; cv=none; b=YCT6Mv0rUwb5vKkT9UKgVBi4Mz6Z5VqghVpJxFgTBkZYAY99ViLuaFIA8ZaYOKoaNGx653Fk4SO1i9V2En9IoZ/zMVFvcZ6qjyCG6eP3LtL1m4oyAvGFG8pXEv9RgI7Kpk2/m32Be8bsmCjxpVkfDTFOn9IxR1KqkYFXv8NNsHU=
+	t=1748998729; cv=none; b=Y6BDN6zTfOM4cCD8svVPglW30SvJpbpRT3Gr04KYTuiTsT2+NZaP/07V6qElL+h25t4cRlm02OJ70sngl2lE6G7I6RT9RtHuBKdUECI2OwnVQb6j5ed+h/k9Ukkps5yBk6mDOJvRg46I62eatiMqI4ueOrWbhqMajwC1HpE8vrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998496; c=relaxed/simple;
+	s=arc-20240116; t=1748998729; c=relaxed/simple;
 	bh=KVolGAcX7oueIE0Sbb+ta5lMCGBforILEJpbrcfIY7c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gba1Wk2Ra5o1Y23cNrvYzY2gi+fL3zl+g19vAxJc3m2vfxdCzKGGxH9aKD9+bpo5rOuSsG3ysma7iEUlMzftK+4dYdK8mCY6EOJsiOUtc80sRKZf0ihALT/PSWTCpRVY0NfN/GqM1UEQOXTA0ykN5b34xNSVHTFOwvSJiRD719Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZGPVaSNL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F9DC4CEED;
-	Wed,  4 Jun 2025 00:54:54 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Lt0AnWUo7P0Hs12TW7oiiX4znGS+YXvx+XlQcaW6kGPiCj2DWjFTNsOHrKH1pSO+a2Mg+RoIY+Lt9rCGfxKdnDBG0/y23L7pzLfflrinBJRzSU3cf95ypPyCOlIplfJONQCvvH6VkPHwdAGjrq46Dcu+5SNdlK79NHRdXNko41E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dhz5ulfA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541AEC4CEED;
+	Wed,  4 Jun 2025 00:58:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998495;
+	s=k20201202; t=1748998729;
 	bh=KVolGAcX7oueIE0Sbb+ta5lMCGBforILEJpbrcfIY7c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZGPVaSNLhQaU+M4RR2tK6emAluNicF19NU7t7Mcc/Fe+WLdszQQKz5rKqfOXNqAoD
-	 qRbkVHW0cncfAhRdeWltMlFgXsxkoKMaotZRcAsLUWWwsiipCEVLDR+j95rIEzu054
-	 6OZ7fERo/NG7OdRHi21I2ew/yukXB+G5IUDx/s8q8shYD6fs52m1VNOgW/5y1ckI6z
-	 1EQGARXCCfDjF8v35KG16TqMRTEs+HQ6/ZpIel9oDTTynQ80Ir+jNsra9cKhcR5+Zx
-	 cPDX2Nr73jCw+JlqKfI8KlpEyx1uh+Hq1B+1zv+78sumfHOnrKJDkbTmrHF4E2NI6n
-	 whuSxN8n0Zegg==
+	b=Dhz5ulfAIazIh7K+ZxZcz6NcnjugHQF/rXXs3im6+cTz6l7EPMytg/7ZQxMkJpNAV
+	 8XMpmwNwowkEISa93cA98Y+URjB13KkMRE46c+IrEEDvUeCzPlwcn0sXZKg0+Q+miB
+	 vAAnysfJyqPvV+B894n3B9V37XLtmTgCiyQGoXK7BLIh3ofudasfpDxRmAHUS4uUCX
+	 eGleNiq2na+BUXfgBZKoLUftrNV/Qyu3r7edGmy1x+9TMtFpLmYdh2ZKBbFdqrPRgN
+	 gPwcsjAbDsGyhuTfvcFgKZxNDZbTGdjOPVcfYiEAzbrYOMk5WQnufQN5Mz+QqgEULg
+	 Tvw5lsJnSJ01A==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
 	max.schulze@online.de,
 	linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 105/118] usbnet: asix AX88772: leave the carrier control to phylink
-Date: Tue,  3 Jun 2025 20:50:36 -0400
-Message-Id: <20250604005049.4147522-105-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 096/108] usbnet: asix AX88772: leave the carrier control to phylink
+Date: Tue,  3 Jun 2025 20:55:19 -0400
+Message-Id: <20250604005531.4178547-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604005049.4147522-1-sashal@kernel.org>
-References: <20250604005049.4147522-1-sashal@kernel.org>
+In-Reply-To: <20250604005531.4178547-1-sashal@kernel.org>
+References: <20250604005531.4178547-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15
+X-stable-base: Linux 6.14.9
 Content-Transfer-Encoding: 8bit
 
 From: Krzysztof Hałasa <khalasa@piap.pl>
