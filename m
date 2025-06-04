@@ -1,114 +1,93 @@
-Return-Path: <linux-usb+bounces-24490-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24491-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E5EACDBD9
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 12:21:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9900ACDC31
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 12:56:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A23CB176068
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 10:20:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 249D61899793
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Jun 2025 10:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E3728DF2C;
-	Wed,  4 Jun 2025 10:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931DA28DB7D;
+	Wed,  4 Jun 2025 10:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="NIYrsHCd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tTqGyC6r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55EE28DB4F;
-	Wed,  4 Jun 2025 10:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BA52C327E;
+	Wed,  4 Jun 2025 10:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749032424; cv=none; b=XeQnQG5yhM5zrt03VXmplnUK1x48oWl3i7yIOzgC4lyToCxT/gnZ3kt/FKdi+U5+Til9KfK+pbdct87v+HDvpW6KNI0RlsrR2DShBnn1C0884baUlmr4cVJVXKt5HvzCHZoPrCMvRsvZB8lB64hX6abzk93LLnLMXAvDbJrVn2E=
+	t=1749034564; cv=none; b=HwVzQhJf3qvT/orUP0TthJpcmF4EizmDL70j5tZcYiLxsN/ndS8pmWfR0OQELx7EmXmdRSbQzG4u4AjVXZQvUdEvo7vBfiBmU20224sQC379jXS2+ls55QKN8AzlmqLyAGNvJbLncZDmXJ/di3J+CBC+vhgK6UxvmPi2D2/W/gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749032424; c=relaxed/simple;
-	bh=SI8hKINZA8ZOjnngj3VI4gk5fVqroFWExXzS49Plxbg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kU1qh2tiBhfSqR3PDYriOBDbvDMkPGV83nl09vqXaFgtD/i6R/O29Cr9UuX8E/Q1pp70YsTmRhyoyZek7KuY7nte57Qe8gFx4tQvnXRe+S1u3AUpUQkFQ4ySBpBx5DfnWwl93kq+rYZuk1U7RhmqU9DSWX9hBklHpNta+8h4aRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=NIYrsHCd; arc=none smtp.client-ip=193.252.22.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id MlDzuEUloXQs6MlE1uxdmP; Wed, 04 Jun 2025 12:20:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1749032412;
-	bh=f3saFh4IWjuvEXxBtC57if+A82mqTstaTkfFE0fvKtg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=NIYrsHCdw63o6pQVgtEauY0CxUs3bQOHE+QFt5XnMaFYdI1PC9wWt7jC+7IufUft/
-	 93HtXBP7z/ZNIXkbUU4urmoxoQO2V9Z5UR/T9GD38IyOwVUmyiXs5Pj91L7w/X91ep
-	 S+MvilUt7wZR6JSuEmZ/YoxHg43mxroFJUyQ79F1yqJSjRKeRa2+xR//ESBMX1SSS+
-	 jJrExTzsNfpXIktW+OjrrFGv6Hnvskd5G43guF1ui29xr94gc97cv3/9REgxDjDbfZ
-	 752n6Ekgb+sdoDkhW10A0eFzxJ8nxsaQ8P1dAYlRpPgwiNjSOSTwIG6XAuJ1wYcCID
-	 VFxECmNYqPH8w==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 04 Jun 2025 12:20:12 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <460dee11-4cb2-4ec3-80c4-feca344e0ea0@wanadoo.fr>
-Date: Wed, 4 Jun 2025 19:19:58 +0900
+	s=arc-20240116; t=1749034564; c=relaxed/simple;
+	bh=PTR/RCyK2e6HQxlFTyr65MmvnXHyyyrK+apYSD459UU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iBsGxxJAl4DNBjHlwF88vW7s9qAblUgRywvomS8Sy8ANMSSJPD+xhK/Jdpi/w6dq+srjGXkKoiGGmQs1fRIyy6mMP3YCz20rTsDPHARvA7UpLxT0Njxyh137VS98DUQi4b6Q2Ehay4rRkjUblweg5mrH749c3Kaf22Wqusjsm8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tTqGyC6r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF3FC4CEE7;
+	Wed,  4 Jun 2025 10:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1749034563;
+	bh=PTR/RCyK2e6HQxlFTyr65MmvnXHyyyrK+apYSD459UU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tTqGyC6r69NMq/Ro36XGPbxC/P5UWL2ERimFZMcuP+Q2B4ERq2KH3bD0hv51hd3gK
+	 Pfu6xr0Ous+eV+CzuZ/CDzQqED0rfYygjSUnHMIs73kPjjwbpPjPGGngTqKHI9530i
+	 pkUn94A5uuX9Nl9Ew1GUlYh1V7nWAjrx4V6T1vOw=
+Date: Wed, 4 Jun 2025 12:56:00 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: mathias.nyman@intel.com, gargaditya08@live.com, kekrby@gmail.com,
+	jeff.johnson@oss.qualcomm.com, quic_zijuhu@quicinc.com,
+	andriy.shevchenko@linux.intel.com, ben@decadent.org.uk,
+	broonie@kernel.org, quic_wcheng@quicinc.com,
+	krzysztof.kozlowski@linaro.org, sumit.garg@kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v14 0/4] Support system sleep with offloaded usb transfers
+Message-ID: <2025060407-geologic-excuse-9ca5@gregkh>
+References: <20250604082449.2029156-1-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: a0282524688@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-5-tmyu0@nuvoton.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250604041418.1188792-5-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250604082449.2029156-1-guanyulin@google.com>
 
-On 04/06/2025 at 13:14, a0282524688@gmail.com wrote:
-> From: Ming Yu <tmyu0@nuvoton.com>
+On Wed, Jun 04, 2025 at 08:23:06AM +0000, Guan-Yu Lin wrote:
+> Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+> to handle some USB transfers, potentially allowing the system to sleep
+> (suspend-to-RAM) and save power. However, Linux's System Sleep model halts
+> the USB host controller when the main system isn't managing any USB
+> transfers. To address this, the proposal modifies the system to recognize
+> offloaded USB transfers and manage power accordingly. This way, offloaded
+> USB transfers could still happen during system sleep (Suspend-to-RAM).
 > 
-> This driver supports Socket CANFD functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> This involves two key steps:
+> 1. Transfer Status Tracking: Propose offload_usage and corresponding apis
+> drivers could track USB transfers on the co-processor, ensuring the
+> system is aware of any ongoing activity.
+> 2. Power Management Adjustment:  Modifications to the USB driver stack
+> (xhci host controller driver, and USB device drivers) allow the system to
+> sleep (Suspend-to-RAM) without disrupting co-processor managed USB
+> transfers. This involves adding conditional checks to bypass some power
+> management operations in the System Sleep model.
 
-You are sending this from a0282524688@gmail.com, but your signature says
-tmyu0@nuvoton.com.
+Is there a reason you aren't cc:ing the developers from a "big android
+device company" that is currently testing and finding problems with this
+patchset in their device testing?  I will require their signed-off-by or
+tested-by in order to even consider accepting this patch series based on
+the issues they seem to be finding with it in an
+internal-company-bug-reporting-platform that I seem to be also copied
+on.
 
-Can you use your actual email address in the signature?
+thanks,
 
-Aside from that:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-Thank you!
-
-
-Yours sincerely,
-Vincent Mailhol
-
+greg k-h
 
