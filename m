@@ -1,320 +1,522 @@
-Return-Path: <linux-usb+bounces-24505-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24506-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCAEACE78B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 02:33:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13374ACE7B4
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 03:15:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E6E57A52FD
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 00:31:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E85D1898C1E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 01:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED5F134CB;
-	Thu,  5 Jun 2025 00:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597292B9A8;
+	Thu,  5 Jun 2025 01:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="Wv1AtdEs";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="NEx/vZmG";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="aXoZYy1c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nxonrskf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1EE1FDA;
-	Thu,  5 Jun 2025 00:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749083580; cv=fail; b=rWj2THRSiVY0qacpMbqrui4hpv3rArUHtVGKcCL+eO9X8ar2pFdfow6l1PNdR0PCXPW3XQ1gGYe+dIwkNDmNWvnYjNnn/fLkBlm3pnerDSaeJjnv9CEv4Bf+2a76OgxiiD24DXV6h6qZutlihdbVvk8KD9YrFyHhjmckmD6kk+k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749083580; c=relaxed/simple;
-	bh=gaboMplUbmndToDvrckqVg9nIFlh9BdUkSIvgxJxVxk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=pxfAl6JwHffcpZW/sBgdHZuqA2IJQVl57R9JuE/ioKyfB7lfdCw6KYfkM3jZImohY1h8F6YpzO7KcmZ0TDWkhjsWACkLGYR4HpE0H5Q0Hj32QZj+5GXqcaJmF5xrlfinlpQZGE8UqpsvJOaWWms0YgKFgoUGxogOP8OyVEDJZuc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=Wv1AtdEs; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=NEx/vZmG; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=aXoZYy1c reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 554Gv3Jt029855;
-	Wed, 4 Jun 2025 17:32:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	cc:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pfptdkimsnps; bh=gaboMplUbmndToDvrckqVg9nIFlh9BdUkSIvgxJxVxk=; b=
-	Wv1AtdEs2j11AfZbruJrOfMZ2n0RLoTpJumcP938J9Akaf7VhreVwaRby3drsemF
-	kXSLexd2IWkKt7Wi7XN6WA5owJJWxCpBjQeF0fSjiJ9MJjt18/W9GxgkuEQ84A0D
-	+v+kmY5hz3vH6bFzRqTnaK40AMA56IQHAkyGgd10lAQovAbPlr1gFpklpBII7K/9
-	+vR0muOXSftFGe758ZlDgi43Qa6e9NpuJ+O3xeFDOLJRZKFkNm5O8tIEfo7zoibJ
-	Xu03MWnfYYf96/mic9m0IXdpSr5eqxweKvmHVQ1hBZf82ioUp8LR9H3BvI8dAyVS
-	P1vITNUsYXdLW0fwDHqVXw==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 471g94my91-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Jun 2025 17:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1749083573; bh=gaboMplUbmndToDvrckqVg9nIFlh9BdUkSIvgxJxVxk=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=NEx/vZmGauMfDi0S/IS+wrGgP2hPd0oncVE3e5W0RAsXWh+5rQ3ecLAk7UCYGjBAf
-	 3UFO0XBXPIMkuJyZaaM6Njsmiku4/jGfW67+S7rAK1PqFmWA1NupE1dlYMzvaq3N2c
-	 ZePTtBLvW/fM6G94uefyZJeOpj+iSh/J66RahoQx14Pt5UJ3Nl7ZuKrkjG1bm+X3u6
-	 MdZ41ux4XsDvvKuE5KwGqolDBH/10at+r3/tImx6aMEPimjR5hXZR+jxsEBN8Z29gB
-	 P1ccPouPuutcnx2AFM7Otspjk4g/JAfBPaivtcAwFDroTpSy28eSjH+1aOvYzRhZZd
-	 Pw/QlRV34kDYQ==
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2326A40114;
-	Thu,  5 Jun 2025 00:32:53 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (not verified))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id EA7B9A0104;
-	Thu,  5 Jun 2025 00:32:51 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=aXoZYy1c;
-	dkim-atps=neutral
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256
-	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 09554401CC;
-	Thu,  5 Jun 2025 00:32:51 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SuB9pNKn7X9QzuizkU6C2lPzfr+uMckZb1U6RVgET2+47ibf0+dCQ7uiAMJ06MOFVuaGJDP/y+mPgt0ERRTiy7/VLOXZNqfa1Fj0bMDZcfFDRkoA8QgAUQ0io1/35qdd3RSyizR/mrrkeefYCIe8zJ6u0r0pjmxDAbkNwYbdRmMRI4IffJRYW6c1iEoJoOlYehhKViu1eA0Gbr+Yx2kiq2PZMQaxeko4waJ5AS16xJ0tz/DJ8dOYpsIoqtD58ZLU9Mw6oKIDiTmBLWg65IrxDcafhI5Fn7dYjntor7JzIDbuQ+lxHmKN5FEId4/ylT4uLO2rLNXBWcF3akfZUWC54Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gaboMplUbmndToDvrckqVg9nIFlh9BdUkSIvgxJxVxk=;
- b=Hkq0keIZZCDnFLUjdpX/kxnLLgTqCdvmLFQz0Gg+LsEIWVtdzESHur19rZ0uOiDxWEVa5zDsE5RwdHpaWsLvwO/Y0RK6eIp59Gq5H9LYb6DhPRT3of8UM4J6HF5muUPIoKLP8OHoEYBhaEyLNUh+0hH++5oSlO44U3qRIn55DFoNEW+15c/jCvmKQyLNi96sIbpqJqB9JQhKtOC8Q6I4eSCFKbyp+3Hj1ZsSJDouIQilOxAl16syOUBEnvebRWIj45aRIsgQhOYdHqj7x91tQIlXkKf+3yLhX8/wSQuhWc29z1t9lhizqhMSq06ojRePpHJIJ+Pc0wF4eKqvDZnqYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gaboMplUbmndToDvrckqVg9nIFlh9BdUkSIvgxJxVxk=;
- b=aXoZYy1cB+6f2JQ2n54ImgK69P5KxEgHkhUmyKHr+gs6yQSoH/9HFc0BJYycYhK08Z9gIOIEu91Bnoy1AKcrUh9jDBGk2A0on/Y8aqyYaFVS3WI1Wq8ppY2H4mwBUquADDfq3y2DzRr9+BpbqbnK85smBXMUn24pa9/fChHHU+I=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by SA1PR12MB7344.namprd12.prod.outlook.com (2603:10b6:806:2b7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Thu, 5 Jun
- 2025 00:32:45 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8%6]) with mapi id 15.20.8792.033; Thu, 5 Jun 2025
- 00:32:44 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "michal.simek@amd.com" <michal.simek@amd.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git@amd.com" <git@amd.com>
-Subject: Re: [PATCH] usb: dwc3: xilinx: set coherency mode for AMD versal
- adaptive platform
-Thread-Topic: [PATCH] usb: dwc3: xilinx: set coherency mode for AMD versal
- adaptive platform
-Thread-Index: AQHb1Ljd8a3zyu17sE6FRmCUVuhWPbPzuT4A
-Date: Thu, 5 Jun 2025 00:32:44 +0000
-Message-ID: <20250605003240.f66u3jf4r4ft2qtr@synopsys.com>
-References: <1748976818-710088-1-git-send-email-radhey.shyam.pandey@amd.com>
-In-Reply-To: <1748976818-710088-1-git-send-email-radhey.shyam.pandey@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|SA1PR12MB7344:EE_
-x-ms-office365-filtering-correlation-id: d57ae962-be29-46b9-7f00-08dda3c87d27
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?T2twWmhCNU5zSDhPUjh6ZjBPa1VROXpreHRkOWJsV0REZWRCMGc1UVRGMzly?=
- =?utf-8?B?M2N6MzJtZmNqYnM2VXQzS0pqMGt2Vk1VT3RzL2piTVBwUWRzQkpaT3h5bUhP?=
- =?utf-8?B?R3kxYlJiRnF1Z3IveHNmaGNzWmNIQnNTY0twQnNwSEpJNWpBZHY0d1hBSDV1?=
- =?utf-8?B?NWI3azYxbFhTWkdIRG81TnhTeEhOVVBpQTNnQzNUV3JvRmVFZDg0RVNSVyty?=
- =?utf-8?B?QXpLOU9UclRkZGlKOHpKN1d2Z3JNQmNhOFBYeHhJa2RlTDhwQ25abGdiWkE3?=
- =?utf-8?B?YXdFN1FnYzYreFR1bk1DTExEK0YwSVVtNThUV2NwTlhWNFRJSTZOSWxSaURC?=
- =?utf-8?B?Wjc5OXJaVVQxcjBLakpJSlE1S3BGclhIendxd0tvZVlmS0s1NmFuc3hFdlBm?=
- =?utf-8?B?cGpxNUZtTmU1cVdDMTNPbEtmZzMrbWNyQllwUjZhbTd1eFZ4azJWcEZOc20w?=
- =?utf-8?B?UXJBNUcrMy9QOHZ4ZzhnQnpKTDNUQytFanpJWmZSclJIbExGWUJ0UENWQURD?=
- =?utf-8?B?VnRyajlPL3pKa3BXQ3lZVVBEMGE3S3hPa3lFUjRwaW0ra0FoODhaSzZGR3R1?=
- =?utf-8?B?THhCWXJBT0xQZjlLWG9GNkZvbWpxWlZqVjhBZ3J6b1krYzRTaFZjd2ozR3l6?=
- =?utf-8?B?YnlWaXkzYXdKWnFITmhEN0RRY0dnb1h1M1paQjdEK2dmdEZ1a0hLRTMrUEM1?=
- =?utf-8?B?Wm45eC9RcUlMWjJjalBxNmxwbXJaM2RIcjBnNFFqMzlkOFNia1FadVlZOUxn?=
- =?utf-8?B?NndiS0l4Q3M1dnQ3V1VBWHJOdGU3b3lvZ0I4bUdiRGNMWTkxaTJQZ1Biei9t?=
- =?utf-8?B?dmo4L2tMeUprMlpUK0RDbm9tbDRySW1VOXdPcFhmVFZwVlpEUTBlWTRpalRP?=
- =?utf-8?B?ZnJ6K052YU1vY3lURHhlUU41cFJtditrOXNGQ05ESzMvM1g5aTB6TG9VOGtZ?=
- =?utf-8?B?WlJEUVpreEVaNDZtUXpXQW9SaGk1VWFDcVhTQ0I4eHhpMlowSVloQ2swQzZK?=
- =?utf-8?B?eU1saElhRlRKdzFrRnpqaXA5OGZIODJlUEd6MW9LWFFUeTI5aW1qNlc2RTlP?=
- =?utf-8?B?RE1sVnB6V0JEWjVJQ2RFYXZSb0xtY0RtWFQrNTJnSDF3eGh2NnBsd0llVzkz?=
- =?utf-8?B?c3lSSzNoV3YzVStFdlRVenJTZHFtZFlvNWpzcHd3YmFsV3FjRlk1bDEyTURI?=
- =?utf-8?B?NkZIM3NEbE1YRGhjUzdrc2RpTEU1cmJGWVVOQmdGTnh2VGpmSEkrazZHQk5I?=
- =?utf-8?B?cWdkTE5acHpYRTRsNWxvUWlkemt3T3k1RUVBcUplZnZmV3pkMVd5bXlMSEFi?=
- =?utf-8?B?NlVOamxEU3ZHcHQrdHBnOUxXT1IvbXhDTW84V1RNMHhGdVZabTJ3UHVkODRs?=
- =?utf-8?B?M2RNU3V5NHBPQktUT242SXJOV1lLTkpaN29admtweXUzWjJoUjk2aWNIZ1dJ?=
- =?utf-8?B?eXRRNmRuUU9jNXdWM0FyTkNiclRpZjdjMi80VE80eW5oWWN3U3E3WS94OVk4?=
- =?utf-8?B?Z1FDS2RSUllkNXcxa1N1Yk13Sjc0d0JDV2dTdU9iZ3RjN2tQY0N2K2J3WGVK?=
- =?utf-8?B?ZlNZVnZ6WkpJVnRxNnY3aTFoZVh0dGJqUFJaOHZMWnhHRHVpN2RpYXZlSnkr?=
- =?utf-8?B?dHkyV1lmcmtoRW1TMFJENThac1NGemhtZG0ybk9Lblg2RGRqUUxwWU1uQllr?=
- =?utf-8?B?OXJ4aXlzQnRZTWYxdENxNzZlOHJYM2VtY3RXNkwrMHJ2M2o1bXdHZXUrRDdR?=
- =?utf-8?B?Zlc1SlpmRm1hcGZwcW9JSkV6QnRHVDh6N1RuOFNBMzJCTG81NjlseDlRWFl1?=
- =?utf-8?B?OXBMWXB6TFowY0lDUjcxa1lEMUxpNnJGQkFFZXEwaXNNQjJmU1ZsQzJic1E4?=
- =?utf-8?B?UFpMU3FjNTJ5MXoyZ1lobk1QVnhOakFUVlAya3B3TU5zUjBRWFdMenpjanV4?=
- =?utf-8?B?dDBScThSNmdxaUxneFVBVzAzSVMrYy9vVFR4UThuUjJqVU1ITlZnc0VNN1Nx?=
- =?utf-8?Q?GVmcS6C5bI3gVy22PbWNI/iuBM0WGE=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?OTVoVUVUU0dEamxOUVRlRFhQSStCVVBNTjBaSlgyTFJId0k3TGY5eEZRdGpV?=
- =?utf-8?B?RCtiMGhxY1ROb0l4RFc1SjFSTGV3b1ZhVEpmV1hJdUt6cDdwemlZZTFLUkRC?=
- =?utf-8?B?cTRrci9keC9yTlBkOElMYUVleXFnWERYdmcvVElmc1FraWp5amFwV3J6amRS?=
- =?utf-8?B?L0VjRzJPWjZ1SjNlTXBub3VjZWtYR3cwVnk3TDFVUlhEQWF4bENzTnBYNTVn?=
- =?utf-8?B?aWJUc0ZwVUZoQ1dhMmlxYzIzQmloWFNuTEdsVDNVMnVzSElrVkVPMHRIN0hu?=
- =?utf-8?B?NTFjUDNsNmk5aUgwMG9PNkpxV3RKcmdSNWJ3TWVuWlhpSTNSaXZCa3JtVFJu?=
- =?utf-8?B?ZTM0VFpVU0o2eFNON3lXcmE0S3FFd29GYnhFSFJreWxiWlBqbytNc1lZYWox?=
- =?utf-8?B?YjMvQm1mNXFiNHQ1OTNrNWVRSjBJZTdCTHdReFZvcmxIUHpvZ0w4a0pZWUVJ?=
- =?utf-8?B?K1RlL1d1elZRa013cHFtK3F3UlJSM21oYU1QaU02NVF0NXoxeHdXaCthQ0dI?=
- =?utf-8?B?eFRyWnpqcWFyMENOOENkOVhVSm1OZ2MvdEVPalVoSVJKWU1rSFd6Vmk1VDFO?=
- =?utf-8?B?U05nQTdGV0FpenhWc0lQQ0ZjL3pWN2xRQ0dlbjdrMnlSNGw1MTFmcFMwVUNW?=
- =?utf-8?B?K0NoVDdmZmV0R3RnbDhGN1ZDdi84Ulg1WGc1TjB5aE15TUtDWSszTmpKWHIv?=
- =?utf-8?B?Q2tqdlpxZkdkbU1Ubmh0WWx1ZjZOVTVjTDJrTWo2eGNuc0RSV3MxV21WSXNt?=
- =?utf-8?B?S0dpU21tWVZydzlZOUxQYnA3N2ZnSmQxZlBEa0xqK3ljMzU3WHMvYlZYSUds?=
- =?utf-8?B?UlBOVFpTdDRGNEYzQU9ldkMvMkF0SkVCamxsak42aWRONEYyY3JNazNRM3pa?=
- =?utf-8?B?T0JiWkxrUHhJTHBWSjY1eFYyUlF4cUpPQnB6U1FVTEdQYVE1aE1qc3RnVTFz?=
- =?utf-8?B?Z0JLZjVxaHd2L3VUekF2YzdQZWw3MnVlWis2RllXWXZwV1VPQ3BYVlF1OHQ2?=
- =?utf-8?B?ZDNPOU83SEcxMjhHUFZBMGJONURxUDVwWTB3WkFaei91U0YzcUlUSlVES2dK?=
- =?utf-8?B?ajZJRUZwcWNBaHl6ZkhYWXN3Vyt5NStLdXRiaHlQNUNHZGRGL1RGaWcrNG5m?=
- =?utf-8?B?VjhiMGZNYmc2NkxVUW5WOXlWZWl1NGhHaURuRGxoeldOV2g0MzBpcE1zMENq?=
- =?utf-8?B?d2laOWh0b2hMQTh4SGdOT2YwOHhnMVl0RlNpUkp6Rk5UQzNpUGtFVUx1RUtj?=
- =?utf-8?B?MkFFWUs3ZnIxSHVXbHZMaDJlazdndlQrMDBLSGVjTERWVnFtRzRvbVBPWXZU?=
- =?utf-8?B?MmxaTG11RnpJWEoxQWRGeG55MGRlbjlaZmRZOEg3RTZVT3BPUk1xZVU4MFo2?=
- =?utf-8?B?djZ6cHVRcU5nM2Y0TjRMNENyeDJLUUQ0ZS80bThrSldVWE5LS2RjckpOWlVB?=
- =?utf-8?B?dDB3QU1IUTJVcFBTcjc3TVkwNlZwN3FyS0tya2kremhORWEvUjVpbWNEYTlV?=
- =?utf-8?B?YVFoM3hxdFFtOTdlckE0ZGZWOW0rekVpWVJjV0xCV1BKVnFac051UnoxeUVn?=
- =?utf-8?B?YWlWYmZKUitFalMyZks2ZDFyRnJ0N3h4NWM3MXZJWkUyeFpsSVVPRCtLQTV4?=
- =?utf-8?B?OFFpeWgwMGlWNmUwRFBVZ2I2dUZoT01xN1oyNlJmN1MxQ00veXJLSFFkQ0Yv?=
- =?utf-8?B?RW9MNm1vTUFpWjF5VERXZWsxZUdwNVIraFErU2VHOTVLUW40ZC9ZQVBvSEJX?=
- =?utf-8?B?aTJwTkVjV2d3OTRLR1hnT3BQOTFUOWt1V1pvUEhxV0Q5Yko1WjkxaWJmOWdN?=
- =?utf-8?B?RkFpQ1R4QngyK0dtZ0RjcjEyaWl6allVUkwxOTBkTVJrdzFkUkduR2FlcExx?=
- =?utf-8?B?VXVyVk5rQ0FkUlNQQlBUUWg4ZWNQbzQ1RWg4MEh6YytKMi9mSzNBRlNwSU0z?=
- =?utf-8?B?QVB5WG5XNHU5RGNGWXFaUmFvanFlclJQUGlzdGhnRHNDL3ZHY2xzZE1KU2lm?=
- =?utf-8?B?SkZQcWJwbncvT3hZRFZ4YVRVMEJpd1NRakJkOTJJNThTdmVLOXBoV3pBZnhM?=
- =?utf-8?B?YlRtbE4rQSs2SVc1QmNQZStqWUZESW9oSm1BbitlM2ZRS3BScXY1Z2xQUlNh?=
- =?utf-8?Q?Jd3iqGqtlZiNIhmeHEgFi6B/j?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <496C7525A9F7E44CABD5E4B288BFD79F@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09B5320F;
+	Thu,  5 Jun 2025 01:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749086139; cv=none; b=U1zNQUrEc0an3REi+5UShPFKca/dAtmwptCsQXO/qNnW9MKOiLSj3WDqo2r2DpagYxPImPiDK2LhV0rL0vtJwEmpibcK/mfJMHhpOScByqJcG1UCBzntxPpgZACjQd+fY8FQLRYziyo0ei9622FHu4OkEASZkK9+yuucPlMHdwc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749086139; c=relaxed/simple;
+	bh=7HW7x9nbWp4Qj2yNnx1v2h+XGemgVAdodEL5eVmunzI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=doBTZTh2GJWkb4KUmHIFnYU7HSENV7S+wJ9n/wDzk+2fqvT1XygpNgPetbsBrcdeBJMpvGW/Q4sEWn3hIvA2+eL6zvheVhCaZ2pNunMnOWaXGbBScj2dydXtAHo/1oLsWDhlfbzk6G3woqdyMR6ya5sfEIewbXJaUu6rPIo0rGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nxonrskf; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60727e46168so427763a12.0;
+        Wed, 04 Jun 2025 18:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749086136; x=1749690936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AxzhpDYdLonLZrJHBHeQGT9e3gBAhmynhF48vRJrIp0=;
+        b=NxonrskfueqPzF/yV2auhMapn1F0DWneNwen0fMP+5RjFYunIgG6nYDzBzxO9k6XZe
+         +uvr+ZlSQFZkQRjaAfmzKBaKwAtPb32Hl/lTv2E/EavwqD1y8UGaNJziz5O/ss0F5lUF
+         Mhjm1vafQbHjy/lMK1gE1RNCQOBmmr0h8EgNZg3WLz6lfI4PaIbeDZufNiO3LDsYmvMB
+         eOtuNIu1eb8F0BWAGjf4rdVhVAGoVxmw1FFJ0ZiRGluItX2L/+SCdjzR4rOqrk4uzCqG
+         fq/Dnng07TQYhIcOu+bCUNGSibMvn6cH86vr6LT4wMO4XM+Xf26sV1PkYzA8RbJ9KoFb
+         gx9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749086136; x=1749690936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AxzhpDYdLonLZrJHBHeQGT9e3gBAhmynhF48vRJrIp0=;
+        b=cupu8e35yZIQvaoY0qEE7pC5IBy/s6527T+KB6fy6k6LOpviGBYtijSzqsxCvG45AV
+         On3Gq3F3vrRZF79TaiFQesLPPQmeq06CRI235ZN1rpqUjQ4QoNF0A6VgQoYNDa196Wco
+         x0cSxRbMB66UpuRk8DYcKZbAIWL+MnApAmsPd4/IhylQYCChipwJ7YsEcHxrRw8pnaIt
+         JVy3osXwEBaBe+pfCD3WsOQJUMdODLqAU7NPwlpCC84/RYNBA1vsrNV4dk2Vjc/Flw0Q
+         3nSc0r0+PqnVgeD0nV5d6aGsfqYd6RDDNhaUbykDAle8TYffn/fXcHhENRZUDEF4bkVf
+         97FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVLXGrkm+b3+/GS7SOJZj9lAGjCj/jX+eJ1O41Zs9mWHFvVfs+Z+TxUjHc7rvtR4SMC6jwo6LNHYfz@vger.kernel.org, AJvYcCX9xkouPBkZ9wTOppWwBkCVJfBO8U2l6RWeFF8H+jcy4D0vhFWcEgywa03CzutWYvV2pRF+rl4YsEfhKLs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwipQkdoiQXBlDHHkBlDFhxnQimVrf2kZ1G5gLQDGq3aMLOz2T
+	xS+QGqllmMfuI8pKp+bEB/pF8kxdv1DFXlt/avtrJ3+IWZnsEhUA/DIyD2iFwROUy8ZSZme70/A
+	9uPQpbM3aW+LkQml6oZBn5yTT+/bt5oM=
+X-Gm-Gg: ASbGnct1iYtNKme5lYky460QTAl5RWCDdfQeOK3myJgyDtUfbZGn5WFUnke6VheMQVW
+	xk1+vcWld5OcU/b9LJxyPqf/NuEEbNFgt2tI6Ma/o/xgLii7gSJZ3wzS2HHJYGcIN0Q2iyuMCpQ
+	WgD7Ck3aAu0/zlPpfbVe7/8+IfSEwBm6t4xgMu3ujMgVR+Gt8ioQPeDnsHf8Gj4pps3HSlkH0Rz
+	Syh
+X-Google-Smtp-Source: AGHT+IGK4dCQjzgObFv1N9hvDW+ltpyh1QBv5ebBJlLbvX9/MegcFFdkItiwSB83rawVGaHKkb7BjUEwlcAlWvw9pIQ=
+X-Received: by 2002:a17:907:7f94:b0:adb:2a7d:1e78 with SMTP id
+ a640c23a62f3a-addf8cca163mr474106066b.1.1749086135846; Wed, 04 Jun 2025
+ 18:15:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	Gb+hpfprLODHMQdUbupLjssx2uhKTIOXrLMFGvu7ejAy4V422MOxU+c/YRloOmqT+mIsecJvkBCMwmTx4PYQpenPiII0t383h1XsBt6TgB0CAUim33U6nPJM+CVCrF//bCJhrBnqyKw903SQ0BG7TxgQu2xRr7JT2oIP2OP2sSo4XNzjzUuVylZxfOhsjXwWZURVDgCPACDHMHPAoWZ3+yOWQZUYnVghtu2gPHluGYqpvNQi9oSmQRXpCEqgXcfOgPWFqH3RTsULfRHp2A806k+u9bL9RnWMjM0CaTs3DvtHjeRiftVGXMJUoHxIYvcX9lG9o/sZtEuoZBkGjA+Y/lkJ49rRm2njM3SoGA90WkmjMDuONKZNqhYf+yMK4gxP0TN0aPFO+JozsOIkRNHbnILTYTOuQgCGUz6U+1uC61swTQOiubILCaxDJfLAU2nNO1zey+0i/AzUaLlktTdHf3ncVMWPLwPhKl9IAS0Z0DbRZ3QLE81B1YQ3M2NjDjRAfw3g53kCtTmLwokQ2+4H0Kp3pl3eUTJL5hLiQHTz65ZNQ1kusXwRqVfZh8aq/uyrXYtdB7SsAREfxeG3dcbgpiZbnxfBkS1jgRQi4YqtLEAkA5FWn7/PFKE8b99i+5N61moW67HCzU47e/YWMKqHjg==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d57ae962-be29-46b9-7f00-08dda3c87d27
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2025 00:32:44.4500
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f5eNSD9kJohbBSNeZAPe9Rbi0bTNWkngni5Mq5hE3nMYvk+m3Y0QhtbH7dXU+7n/o6ItWUyL65Ek6j5tOd4eBg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7344
-X-Proofpoint-GUID: rIEfo8i9-v_3O8Uli_OMKPROAAEsYgH-
-X-Proofpoint-ORIG-GUID: rIEfo8i9-v_3O8Uli_OMKPROAAEsYgH-
-X-Authority-Analysis: v=2.4 cv=a4Yw9VSF c=1 sm=1 tr=0 ts=6840e5b5 cx=c_pps
- a=8EbXvwLXkpGsT4ql/pYRAw==:117 a=8EbXvwLXkpGsT4ql/pYRAw==:17
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6IFa9wvqVegA:10 a=qPHU084jO2kA:10 a=zd2uoN0lAAAA:8 a=jIQo8A4GAAAA:8
- a=I6jb1Ebjir4p6W1hDLsA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA1MDAwNCBTYWx0ZWRfX1N2PFArfVRRM
- LzFIxPC0DjtHlHZqoPmVBuNBHnLXYwI9AF2xMJMRVHNVilw5eL1ni4dPS9cXiXErjU9jQy06D7k
- 9Q7QD3iRK4aTh5NBXZLtXq3ANOSGYCA4rJ1nSV7WEWBC8o9xQOYfDE4MQGyFZu9AceOGWoaS79L
- KD6lTOsfGPmKiZppFCyrSVkn0F8y3kj/DWsKfH5xHnqvwqzI2Y1U9m/eEXib/tLRFt7xnHdOC4R
- W9U8fKOkcxTxWB0cYWQdJ7puupVmKQFOt8e5dU4KLNUNevtd6/gkvVDOH44WLPLlRDpzeGPj/Vl
- ovGuMIwwFzIRtz6nErLoblxGOrJDQmymqw+JWD+0fu5fhUqFFWBRt9NMKmJnewdaBZ1N6GWCbMm
- pUgAf9sAu+c8B+UCDpru6ieqeowzxV+HobHYde3LiprgDOmHqUt23SV+qf6yQsqfX4Egtldz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-04_05,2025-06-03_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
- policy=outbound_active_cloned score=0 priorityscore=1501 phishscore=0
- impostorscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 adultscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 mlxlogscore=996 bulkscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505280000 definitions=main-2506050004
+References: <20250603032057.5174-1-syhuang3@nuvoton.com> <20250603032057.5174-2-syhuang3@nuvoton.com>
+ <2ff4dd60-7579-40ce-a4e5-3ad846659f9c@suse.com>
+In-Reply-To: <2ff4dd60-7579-40ce-a4e5-3ad846659f9c@suse.com>
+From: =?UTF-8?B?6YC45puJ5aG1?= <hsyemail2@gmail.com>
+Date: Thu, 5 Jun 2025 09:15:24 +0800
+X-Gm-Features: AX0GCFtpm1wTVvJO7sVs8FLKaCKz79NJb441LgwKHHm0aiaO-tbf7_xpB8LWoMk
+Message-ID: <CACW=pY7P_i7gUjg5vOS9_kh2Z4jivP_nO5o8jH1+7UzU6MvuzQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] USB: serial: nct_usb_serial: add support for
+ Nuvoton USB adapter
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Sheng-Yuan Huang <syhuang3@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gV2VkLCBKdW4gMDQsIDIwMjUsIFJhZGhleSBTaHlhbSBQYW5kZXkgd3JvdGU6DQo+IElmIGRl
-dmljZSBpcyBjb2hlcmVudCBvciBpZiBETUEgKGRpcmVjdCBtZW1vcnkgYWNjZXNzKSBpcyB0cmFu
-c2xhdGVkIGJ5DQo+IGFuIElPTU1VIHRoZW4gcHJvZ3JhbSBVU0IyLjAgSVAgdG8gcm91dGUgdHJh
-bnNhY3Rpb25zIHRocm91Z2ggdGhlIENDSSBmb3INCj4gY29oZXJlbmN5IGV2ZW4gaWYgdGhlIHRh
-cmdldCBvZiB0cmFuc2FjdGlvbiBpcyBpbiBsb3cgcG93ZXIgZG9tYWluIChMUEQpLg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogUmFkaGV5IFNoeWFtIFBhbmRleSA8cmFkaGV5LnNoeWFtLnBhbmRleUBh
-bWQuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL2R3YzMvZHdjMy14aWxpbnguYyB8IDM0ICsr
-KysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyMiBp
-bnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9kd2MzL2R3YzMteGlsaW54LmMgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMteGlsaW54LmMN
-Cj4gaW5kZXggNGNhN2Y2MjQwZDA3Li4wMGU2MTNjNGQ4YzAgMTAwNjQ0DQo+IC0tLSBhL2RyaXZl
-cnMvdXNiL2R3YzMvZHdjMy14aWxpbnguYw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMt
-eGlsaW54LmMNCj4gQEAgLTMyLDYgKzMyLDkgQEANCj4gICNkZWZpbmUgWExOWF9VU0JfVFJBRkZJ
-Q19ST1VURV9DT05GSUcJCTB4MDA1Qw0KPiAgI2RlZmluZSBYTE5YX1VTQl9UUkFGRklDX1JPVVRF
-X0ZQRAkJMHgxDQo+ICANCj4gKy8qIFVTQiAyLjAgSVAgUmVnaXN0ZXIgKi8NCj4gKyNkZWZpbmUg
-WExOWF9VU0IyX1RSQUZGSUNfUk9VVEVfQ09ORklHCQkweDAwNDQNCj4gKw0KPiAgI2RlZmluZSBY
-TE5YX1VTQl9GUERfUElQRV9DTEsJCQkweDdjDQo+ICAjZGVmaW5lIFBJUEVfQ0xLX0RFU0VMRUNU
-CQkJMQ0KPiAgI2RlZmluZSBQSVBFX0NMS19TRUxFQ1QJCQkJMA0KPiBAQCAtNjYsNiArNjksMjMg
-QEAgc3RhdGljIHZvaWQgZHdjM194bG54X21hc2tfcGh5X3JzdChzdHJ1Y3QgZHdjM194bG54ICpw
-cml2X2RhdGEsIGJvb2wgbWFzaykNCj4gIAl3cml0ZWwocmVnLCBwcml2X2RhdGEtPnJlZ3MgKyBY
-TE5YX1VTQl9QSFlfUlNUX0VOKTsNCj4gIH0NCj4gIA0KPiArc3RhdGljIHZvaWQgZHdjM194bG54
-X3NldF9jb2hlcmVuY3koc3RydWN0IGR3YzNfeGxueCAqcHJpdl9kYXRhLCB1MzIgY29oZXJlbmN5
-X29mZnNldCkNCj4gK3sNCj4gKwlzdHJ1Y3QgZGV2aWNlCQkqZGV2ID0gcHJpdl9kYXRhLT5kZXY7
-DQo+ICsJdTMyCQkJcmVnOw0KPiArDQo+ICsJLyoNCj4gKwkgKiBUaGlzIHJvdXRlcyB0aGUgVVNC
-IERNQSB0cmFmZmljIHRvIGdvIHRocm91Z2ggRlBEIHBhdGggaW5zdGVhZA0KPiArCSAqIG9mIHJl
-YWNoaW5nIEREUiBkaXJlY3RseS4gVGhpcyB0cmFmZmljIHJvdXRpbmcgaXMgbmVlZGVkIHRvDQo+
-ICsJICogbWFrZSBTTU1VIGFuZCBDQ0kgd29yayB3aXRoIFVTQiBETUEuDQo+ICsJICovDQo+ICsJ
-aWYgKG9mX2RtYV9pc19jb2hlcmVudChkZXYtPm9mX25vZGUpIHx8IGRldmljZV9pb21tdV9tYXBw
-ZWQoZGV2KSkgew0KPiArCQlyZWcgPSByZWFkbChwcml2X2RhdGEtPnJlZ3MgKyBjb2hlcmVuY3lf
-b2Zmc2V0KTsNCj4gKwkJcmVnIHw9IFhMTlhfVVNCX1RSQUZGSUNfUk9VVEVfRlBEOw0KPiArCQl3
-cml0ZWwocmVnLCBwcml2X2RhdGEtPnJlZ3MgKyBjb2hlcmVuY3lfb2Zmc2V0KTsNCj4gKwl9DQo+
-ICt9DQo+ICsNCj4gIHN0YXRpYyBpbnQgZHdjM194bG54X2luaXRfdmVyc2FsKHN0cnVjdCBkd2Mz
-X3hsbnggKnByaXZfZGF0YSkNCj4gIHsNCj4gIAlzdHJ1Y3QgZGV2aWNlCQkqZGV2ID0gcHJpdl9k
-YXRhLT5kZXY7DQo+IEBAIC05Miw2ICsxMTIsNyBAQCBzdGF0aWMgaW50IGR3YzNfeGxueF9pbml0
-X3ZlcnNhbChzdHJ1Y3QgZHdjM194bG54ICpwcml2X2RhdGEpDQo+ICAJfQ0KPiAgDQo+ICAJZHdj
-M194bG54X21hc2tfcGh5X3JzdChwcml2X2RhdGEsIHRydWUpOw0KPiArCWR3YzNfeGxueF9zZXRf
-Y29oZXJlbmN5KHByaXZfZGF0YSwgWExOWF9VU0IyX1RSQUZGSUNfUk9VVEVfQ09ORklHKTsNCj4g
-IA0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiBAQCAtMTAyLDcgKzEyMyw2IEBAIHN0YXRpYyBpbnQg
-ZHdjM194bG54X2luaXRfenlucW1wKHN0cnVjdCBkd2MzX3hsbnggKnByaXZfZGF0YSkNCj4gIAlz
-dHJ1Y3QgcmVzZXRfY29udHJvbAkqY3JzdCwgKmhpYnJzdCwgKmFwYnJzdDsNCj4gIAlzdHJ1Y3Qg
-Z3Bpb19kZXNjCSpyZXNldF9ncGlvOw0KPiAgCWludAkJCXJldCA9IDA7DQo+IC0JdTMyCQkJcmVn
-Ow0KPiAgDQo+ICAJcHJpdl9kYXRhLT51c2IzX3BoeSA9IGRldm1fcGh5X29wdGlvbmFsX2dldChk
-ZXYsICJ1c2IzLXBoeSIpOw0KPiAgCWlmIChJU19FUlIocHJpdl9kYXRhLT51c2IzX3BoeSkpIHsN
-Cj4gQEAgLTIxOSwxNyArMjM5LDcgQEAgc3RhdGljIGludCBkd2MzX3hsbnhfaW5pdF96eW5xbXAo
-c3RydWN0IGR3YzNfeGxueCAqcHJpdl9kYXRhKQ0KPiAgCQl1c2xlZXBfcmFuZ2UoNTAwMCwgMTAw
-MDApOw0KPiAgCX0NCj4gIA0KPiAtCS8qDQo+IC0JICogVGhpcyByb3V0ZXMgdGhlIFVTQiBETUEg
-dHJhZmZpYyB0byBnbyB0aHJvdWdoIEZQRCBwYXRoIGluc3RlYWQNCj4gLQkgKiBvZiByZWFjaGlu
-ZyBERFIgZGlyZWN0bHkuIFRoaXMgdHJhZmZpYyByb3V0aW5nIGlzIG5lZWRlZCB0bw0KPiAtCSAq
-IG1ha2UgU01NVSBhbmQgQ0NJIHdvcmsgd2l0aCBVU0IgRE1BLg0KPiAtCSAqLw0KPiAtCWlmIChv
-Zl9kbWFfaXNfY29oZXJlbnQoZGV2LT5vZl9ub2RlKSB8fCBkZXZpY2VfaW9tbXVfbWFwcGVkKGRl
-dikpIHsNCj4gLQkJcmVnID0gcmVhZGwocHJpdl9kYXRhLT5yZWdzICsgWExOWF9VU0JfVFJBRkZJ
-Q19ST1VURV9DT05GSUcpOw0KPiAtCQlyZWcgfD0gWExOWF9VU0JfVFJBRkZJQ19ST1VURV9GUEQ7
-DQo+IC0JCXdyaXRlbChyZWcsIHByaXZfZGF0YS0+cmVncyArIFhMTlhfVVNCX1RSQUZGSUNfUk9V
-VEVfQ09ORklHKTsNCj4gLQl9DQo+IC0NCj4gKwlkd2MzX3hsbnhfc2V0X2NvaGVyZW5jeShwcml2
-X2RhdGEsIFhMTlhfVVNCX1RSQUZGSUNfUk9VVEVfQ09ORklHKTsNCj4gIGVycjoNCj4gIAlyZXR1
-cm4gcmV0Ow0KPiAgfQ0KPiANCj4gYmFzZS1jb21taXQ6IGEwYmVhOWUzOTAzNWVkYzU2YTk5NDYz
-MGU2MDQ4YzhhMTkxYTk5ZDgNCj4gLS0gDQo+IDIuMzQuMQ0KPiANCg0KQWNrZWQtYnk6IFRoaW5o
-IE5ndXllbiA8VGhpbmguTmd1eWVuQHN5bm9wc3lzLmNvbT4NCg0KQlIsDQpUaGluaA==
+Hi Oliver Neukum,
+Appreciate the excellent suggestions! I'm in the process of revising
+the code based on your input. It'll take me a little while to
+thoroughly address everything, but I'll post an update here when I
+have something new to share. Thank you very much.
+
+
+Oliver Neukum <oneukum@suse.com> =E6=96=BC 2025=E5=B9=B46=E6=9C=883=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=887:57=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On 03.06.25 05:20, hsyemail2@gmail.com wrote:
+> > From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> >
+> > Add support for the Nuvoton USB-to-serial adapter, which provides
+> > multiple serial ports over a single USB interface.
+> >
+> > The device exposes one control endpoint, one bulk-in endpoint, and
+> > one bulk-out endpoint for data transfer. Port status is reported via
+> > an interrupt-in or bulk-in endpoint, depending on device configuration.
+>
+> I am afraid there are a few issue that will not to be addressed
+> before this can be merged.
+>
+> > This driver implements basic TTY operations.
+> >
+> > Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> > ---
+> >   drivers/usb/serial/nct_usb_serial.c | 1523 ++++++++++++++++++++++++++=
++
+> >   1 file changed, 1523 insertions(+)
+> >   create mode 100644 drivers/usb/serial/nct_usb_serial.c
+> >
+> > diff --git a/drivers/usb/serial/nct_usb_serial.c b/drivers/usb/serial/n=
+ct_usb_serial.c
+> > new file mode 100644
+> > index 000000000000..424c604229b3
+> > --- /dev/null
+> > +++ b/drivers/usb/serial/nct_usb_serial.c
+>
+> > +/* Index definition */
+> > +enum {
+> > +     NCT_VCOM_INDEX_0 =3D 0,
+> > +     NCT_VCOM_INDEX_1,
+> > +     NCT_VCOM_INDEX_2,
+> > +     NCT_VCOM_INDEX_3,
+> > +     NCT_VCOM_INDEX_4,
+> > +     NCT_VCOM_INDEX_5,
+> > +     NCT_VCOM_INDEX_GLOBAL =3D 0xF,
+> > +};
+>
+> What use is this? A number is a number.
+>
+> > +/* Command */
+> > +enum {
+> > +     NCT_VCOM_GET_NUM_PORTS =3D 0,
+> > +     NCT_VCOM_GET_PORTS_SUPPORT,
+> > +     NCT_VCOM_GET_BAUD,
+> > +     NCT_VCOM_SET_INIT,
+> > +     NCT_VCOM_SET_CONFIG,
+> > +     NCT_VCOM_SET_BAUD,
+> > +     NCT_VCOM_SET_HCR,
+> > +     NCT_VCOM_SET_OPEN_PORT,
+> > +     NCT_VCOM_SET_CLOSE_PORT,
+> > +     NCT_VCOM_SILENT,
+> > +     /* Use bulk-in status instead of interrupt-in status */
+> > +     NCT_VCON_SET_BULK_IN_STATUS,
+> > +};
+>
+> No. This is an abuse of enumeration. These are just commands that
+> happen to use the number space consecutively. These need to be
+> defines.
+>
+> > +union nct_vendor_cmd {
+> > +     struct pkg0 {
+> > +             u16 index:4;
+> > +             u16 cmd:8;
+> > +     } p;
+> > +     u16 val;
+> > +} __packed;
+>
+> This definition is an endianness bug waiting to happen.
+> If this goes over the wire, it has a defined endianness,
+> which needs to be declared.
+>
+> > +#define NCT_HDR_MAGIC                0xA5
+> > +#define NCT_HDR_MAGIC2               0x5A
+> > +#define NCT_HDR_MAGIC_STATUS 0x5B
+> > +
+> > +struct nct_packet_header {
+> > +     unsigned int magic:8;
+> > +     unsigned int magic2:8;
+> > +     unsigned int idx:4;
+> > +     unsigned int len:12;
+> > +} __packed;
+>
+> Again endianness.
+>
+> > +/* The definitions are for the feilds of nct_ctrl_msg */
+> > +#define NCT_VCOM_1_STOP_BIT          0
+> > +#define NCT_VCOM_2_STOP_BITS         1
+> > +#define NCT_VCOM_PARITY_NONE         0
+> > +#define NCT_VCOM_PARITY_ODD          1
+> > +#define NCT_VCOM_PARITY_EVEN         2
+> > +#define NCT_VCOM_DL5                 0
+> > +#define NCT_VCOM_DL6                 1
+> > +#define NCT_VCOM_DL7                 2
+> > +#define NCT_VCOM_DL8                 3
+> > +#define NCT_VCOM_DISABLE_FLOW_CTRL   0
+> > +#define NCT_VCOM_XOFF                        1
+> > +#define NCT_VCOM_RTS_CTS             2
+> > +union nct_ctrl_msg {
+> > +     struct pkg1 {
+> > +             u16 stop_bit:1;
+> > +             u16 parity:2;
+> > +             u16 data_len:2;
+> > +             u16 flow:2;
+> > +             u16 spd:5;
+> > +             u16 reserved:4;
+> > +     } p;
+> > +     u16 val;
+> > +} __packed;
+>
+> At the risk of repeating myself: endianness
+>
+> > +
+> > +/* Read from USB control pipe */
+> > +static int nct_vendor_read(struct usb_interface *intf, union nct_vendo=
+r_cmd cmd,
+> > +                        unsigned char *buf, int size)
+> > +{
+> > +     struct device *dev =3D &intf->dev;
+> > +     struct usb_device *udev =3D interface_to_usbdev(intf);
+> > +     u8 *tmp_buf;
+> > +     int res;
+> > +
+> > +     tmp_buf =3D kmalloc(NCT_MAX_VENDOR_READ_SIZE, GFP_KERNEL);
+> > +     if (!tmp_buf)
+> > +             return -ENOMEM;
+> > +
+> > +     if (size > NCT_MAX_VENDOR_READ_SIZE)
+> > +             dev_err(dev, NCT_DRVNAME ": %s - failed to read [%04x]: o=
+ver size %d\n",
+> > +                     __func__, cmd.p.cmd, size);
+>
+> And you just go on and overwrite kernel memory?
+> If you test for plausibility, do something with the result.
+>
+>
+> > +static int nct_vendor_write(struct usb_interface *intf, union nct_vend=
+or_cmd cmd, u16 val)
+> > +{
+> > +     struct device *dev =3D &intf->dev;
+> > +     struct usb_device *udev =3D interface_to_usbdev(intf);
+> > +     int res;
+> > +     u8 *buf_val;
+>
+> Why is this u8* ?
+> It should be le16*
+>
+> > +     buf_val =3D kmalloc(2, GFP_KERNEL);
+> > +     if (!buf_val)
+> > +             return -ENOMEM;
+> > +
+> > +     /* Copy data to the buffer for sending */
+> > +     buf_val[0] =3D val & 0xff;
+> > +     buf_val[1] =3D (val >> 8) & 0xff;
+>
+> We have macros for that.
+>
+> > +static u16 nct_set_baud(struct usb_interface *intf, u16 index, unsigne=
+d int cflag)
+> > +{
+> > +     union nct_ctrl_msg msg;
+> > +     union nct_vendor_cmd cmd;
+> > +     u16 i;
+> > +
+> > +     msg.val =3D 0;
+> > +     cmd.p.cmd =3D NCT_VCOM_SET_BAUD;
+> > +     msg.p.spd =3D NCT_DEFAULT_BAUD;
+> > +     cmd.p.index =3D index;
+> > +     dev_dbg(&intf->dev, NCT_DRVNAME ": %s tty baud: 0x%X\n", __func__=
+,
+> > +             (cflag & CBAUD));
+> > +     for (i =3D 0; i < ARRAY_SIZE(NCT_BAUD_SUP); i++) {
+> > +             if ((cflag & CBAUD) =3D=3D NCT_BAUD_SUP[i]) {
+> > +                     msg.p.spd =3D i;
+> > +                     dev_dbg(&intf->dev,
+> > +                             NCT_DRVNAME ": %s index %d set baud: NCT_=
+BAUD_SUP[%d]=3D%d\n",
+> > +                             __func__, cmd.p.index, msg.p.spd, NCT_BAU=
+D_SUP[i]);
+> > +                     if (nct_vendor_write(intf, cmd, msg.val))
+> > +                             dev_err(&intf->dev,
+> > +                                     NCT_DRVNAME ": %s - Set index: %d=
+ speed error\n",
+> > +                                     __func__, cmd.p.index);
+> > +
+> > +                     break;
+> > +             }
+>
+> If nothing matches, you do nothing?
+> > +     }
+> > +
+> > +     return msg.p.spd;
+>
+> So errors are ignored?
+>
+>
+> > +static int nct_serial_tiocmset(struct tty_struct *tty, unsigned int se=
+t,
+> > +                            unsigned int clear)
+> > +{
+> > +     return nct_tiocmset_helper(tty, set, clear);
+> > +}
+>
+> Why? Does this function do anything useful?
+>
+> > +static void nct_rx_throttle(struct tty_struct *tty)
+> > +{
+> > +     unsigned int set;
+> > +     unsigned int clear =3D 0;
+>
+> Why?
+>
+> > +
+> > +     /* If we are implementing RTS/CTS, control that line */
+> > +     if (C_CRTSCTS(tty)) {
+> > +             set =3D 0;
+> > +             clear =3D TIOCM_RTS;
+> > +             nct_tiocmset_helper(tty, set, clear);
+> > +     }
+> > +}
+> > +
+> > +static void nct_rx_unthrottle(struct tty_struct *tty)
+> > +{
+> > +     unsigned int set;
+> > +     unsigned int clear =3D 0;
+>
+> Why?
+>
+> > +     /* If we are implementing RTS/CTS, control that line */
+> > +     if (C_CRTSCTS(tty)) {
+> > +             set =3D 0;
+> > +             set |=3D TIOCM_RTS;
+> > +             nct_tiocmset_helper(tty, set, clear);
+> > +     }
+> > +}
+> > +
+> > +static int nct_serial_write_data(struct tty_struct *tty, struct usb_se=
+rial_port *port,
+> > +                              const unsigned char *buf, int count)
+> > +{
+> > +     int ret;
+> > +     unsigned long flags;
+> > +     struct nct_packet_header hdr;
+> > +     int wr_len;
+> > +     struct nct_tty_port *tport =3D usb_get_serial_port_data(port);
+> > +
+> > +     wr_len =3D min((unsigned int)count, NCT_MAX_SEND_BULK_SIZE - size=
+of(hdr));
+> > +
+> > +     if (!wr_len)
+> > +             return 0;
+> > +
+> > +     spin_lock_irqsave(&tport->port_lock, flags);
+> > +
+> > +     if (tport->write_urb_in_use) {
+> > +             spin_unlock_irqrestore(&tport->port_lock, flags);
+> > +             return 0;
+> > +     }
+> > +
+> > +     /* Fill header */
+> > +     hdr.magic =3D NCT_HDR_MAGIC;
+> > +     hdr.magic2 =3D NCT_HDR_MAGIC2;
+> > +     hdr.idx =3D tport->hw_idx; /* The 'hw_idx' is based on 1 */
+>
+> Endianness.
+>
+> > +
+> > +     /* Copy data */
+> > +     memcpy(port->write_urb->transfer_buffer + sizeof(hdr),
+> > +            (const void *)buf, wr_len);
+> > +
+> > +     hdr.len =3D wr_len; /* File filed 'len' of header */
+>
+> Endiannes
+>
+> > +static int nct_startup_device(struct usb_serial *serial)
+> > +{
+> > +     int ret =3D 0;
+> > +     struct nct_serial *serial_priv =3D usb_get_serial_data(serial);
+> > +     struct usb_serial_port *port;
+> > +     unsigned long flags;
+> > +
+> > +     /* Be sure this happens exactly once */
+> > +     spin_lock_irqsave(&serial_priv->serial_lock, flags);
+> > +
+> > +     if (serial_priv->device_init) {
+> > +             spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
+> > +             return 0;
+> > +     }
+> > +     serial_priv->device_init =3D true;
+> > +     spin_unlock_irqrestore(&serial_priv->serial_lock, flags);
+> > +
+> > +     /* Start reading from bulk in endpoint */
+> > +     port =3D serial->port[0];
+> > +     if (!port->read_urb)
+> > +             dev_dbg(&port->dev, NCT_DRVNAME ": %s: port->read_urb is =
+null, index=3D%d\n",
+> > +                     __func__, 0);
+> > +
+> > +     ret =3D usb_submit_urb(port->read_urb, GFP_KERNEL);
+> > +     if (ret)
+> > +             dev_err(&port->dev,
+> > +                     NCT_DRVNAME ": %s: usb_submit_urb failed, ret=3D%=
+d, port=3D%d\n",
+> > +                     __func__, ret, 0);
+>
+> Error handling?
+> > +
+> > +     /* For getting status from interrupt-in */
+> > +     if (!serial_priv->status_trans_mode) {
+> > +             /* Start reading from interrupt pipe */
+> > +             port =3D serial->port[0];
+> > +             ret =3D usb_submit_urb(port->interrupt_in_urb, GFP_KERNEL=
+);
+> > +             if (ret)
+> > +                     dev_err(&port->dev,
+> > +                             NCT_DRVNAME ": %s: usb_submit_urb(intr) f=
+ailed, ret=3D%d, port=3D%d\n",
+> > +                             __func__, ret, 0);
+> > +     }
+> > +     return ret;
+> > +}
+> > +
+> > +static void nct_serial_port_end(struct usb_serial_port *port)
+> > +{
+> > +     struct nct_tty_port *tport =3D usb_get_serial_port_data(port);
+> > +     struct usb_serial *serial =3D port->serial;
+> > +     struct usb_interface *intf =3D serial->interface;
+> > +     union nct_ctrl_msg msg;
+> > +     union nct_vendor_cmd cmd;
+> > +
+> > +     /* Send 'Close Port' to the device */
+> > +     cmd.p.index =3D (u16)tport->hw_idx;
+> > +     cmd.p.cmd =3D NCT_VCOM_SET_CLOSE_PORT;
+>
+> Endianness
+>
+>
+> > +again:
+> > +     spin_lock_irqsave(&serial_priv->serial_lock, flags);
+> > +     tport =3D serial_priv->cur_port;
+> > +     if (!tport) {
+> > +             /*
+> > +              * Handle a new data package (i.e., it is not
+> > +              * the remaining data without a header).
+> > +              * The package does not need to be combined this time.
+> > +              */
+> > +
+> > +             for (i =3D 0; i < urb->actual_length; i++) {
+> > +                     hdr =3D (struct nct_packet_header *)data;
+> > +                     /* Decode the header */
+> > +
+> > +                     if (serial_priv->status_trans_mode) {
+> > +                             /*
+> > +                              * Status data is also transmitted via bu=
+lk-in
+> > +                              * pipe.
+> > +                              */
+> > +                             if (hdr->magic =3D=3D NCT_HDR_MAGIC &&
+> > +                                 hdr->magic2 =3D=3D NCT_HDR_MAGIC_STAT=
+US &&
+> > +                                 hdr->len =3D=3D 24 && actual_len >=3D=
+ 28) {
+>
+> Endianness
+>
+> > +                                     /*
+> > +                                      * Notice: actual_len will be dec=
+reased,
+> > +                                      * it is equal to urb->actual_len=
+gth
+> > +                                      * only at the beginning.
+> > +                                      */
+> > +
+> > +                                     /*
+> > +                                      * Status report.
+> > +                                      * It should be a standalone pack=
+age in
+> > +                                      * one URB
+> > +                                      */
+> > +                                     data +=3D sizeof(struct nct_packe=
+t_header);
+> > +                                     actual_len -=3D
+> > +                                             sizeof(struct nct_packet_=
+header);
+> > +
+> > +                                     nps =3D (struct nct_port_status *=
+)data;
+> > +
+> > +                                     for (j =3D 0; j < actual_len - 4;=
+ j++) {
+> > +                                             nct_update_status(serial,
+> > +                                                               (unsign=
+ed char *)nps);
+> > +                                             nps++;
+> > +                                     }
+> > +
+> > +                                     spin_unlock_irqrestore(&serial_pr=
+iv->serial_lock, flags);
+> > +                                     return;
+> > +                             }
+> > +                     }
+> > +
+> > +                     if (hdr->magic =3D=3D NCT_HDR_MAGIC &&
+> > +                         hdr->magic2 =3D=3D NCT_HDR_MAGIC2 &&
+> > +                         hdr->idx <=3D NCT_MAX_NUM_COM_DEVICES &&
+> > +                         hdr->len <=3D 512)
+> > +                             break;
+>
+> Endianness
+>
+>         Regards
+>                 Oliver
+>
 
