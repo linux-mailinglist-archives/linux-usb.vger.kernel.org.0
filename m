@@ -1,106 +1,319 @@
-Return-Path: <linux-usb+bounces-24512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E52ACF0C9
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 15:35:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57F6CACF0C2
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 15:35:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A8AC3AD786
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 13:33:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D33077A6C3C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Jun 2025 13:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7421238D2B;
-	Thu,  5 Jun 2025 13:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oO89MaWR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6903325A2D2;
+	Thu,  5 Jun 2025 13:34:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E922327A1
-	for <linux-usb@vger.kernel.org>; Thu,  5 Jun 2025 13:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756BE256C80;
+	Thu,  5 Jun 2025 13:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749130420; cv=none; b=EU0f4Bgi8JGXJ0HI7C9cZOHw4a/8tFKpcp74OWkoY0eEi/vAsAqWhMftsX5BEFQUi1QC2WjnHIAy22r7rhb+um0LU1UN122ptEMjuM6uEGKGRvnbasf7P0NGpz2x8itioohD7SNdlDI5yRE/DNcLmv6JI2ss+p/zeZF4lz+keVg=
+	t=1749130482; cv=none; b=TVms3TLlVdpiwoxu+25s10ZTMwo300xHpVIlXtzgvc0pdz7wO2HMjuZTBmzg8zznxBnfgtWQw9JDJaLInHxitvtwp1klJ4nNLXtRl43nUKXJW6Slf66X/SZEcAGCCV63QMPkq6xIY528kcsTKUc35fMWNDnUkhh8VFDekJxMW/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749130420; c=relaxed/simple;
-	bh=VUknEBTdSjzH3vSAyO97+fdwjTdAd0iU+EtfDLbIzJg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pn0aRA8pyK42ZNmskV/ESZh8B06YUSIwNYsrYVbqd97j0UVvyV45eMw3yP2N2KCKpj9DUp7nhDHzRj44ef6fAoMZpBZ99d9jHa1MxJiB1ZSpcuR4DLCrg+d68pJIkngYvlK06Nl6fbOCxBo1NpqNpSITuseA8HsRxG2yXeU9/pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oO89MaWR; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-553543ddfc7so1078954e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Jun 2025 06:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749130415; x=1749735215; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VUknEBTdSjzH3vSAyO97+fdwjTdAd0iU+EtfDLbIzJg=;
-        b=oO89MaWRZQYYIdAXI0QboMa2M695ugR4shKTGo10iJ0LW2logpiSHxfroMIGzb4DcP
-         R6oCTjJdKjljUutH3L4DnXSQP1xbN9nXmb2HAPstu7YADkVy7q+iqKaa6CJD2tbePkBg
-         zvIk5VnvXTeA2NosMkH0zF6zDTHNSwhGtmOApci4nQ2epnN16XL8fMKNrBNzsMq1xPHq
-         /0FzV1Kc4MyBQ4+67xvYcS+Vp/qxCnd0I4GCfFmID9lGAquHmQXz0M+b837i2Aa0Mcv3
-         dQn3LX7yzeHuCpLjHdBwgh7mcffoq/DCghjebZli08LnmYU00WifHt+uVauxSTUgORtL
-         DZvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749130415; x=1749735215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VUknEBTdSjzH3vSAyO97+fdwjTdAd0iU+EtfDLbIzJg=;
-        b=IgRsE2QCGkOtqiGhwArniHncVYKVVLfwvuytqEqJ9cWSdIURQ3D/B6hGoxCzdt0GxD
-         nCxy/+FQ3RcUt37oRqsyD6nn+7VC//CpOyZt5aoGrKZMCHXP0R1bV6/xX28IEjz7Trc7
-         Dy8DvJp6xiZvRo8n2vsZQ3mwzBQqZUYF8e3PF73uDu8PuiXhLcdd0nDXeEATKO0qD/5z
-         Eni2p40AmIgY9zTIuLDAcFNVuhLi584FTl976+NBWlFAwSIEZUbUNGKFMdae8p3pDoV4
-         8WMCY8SrYrMi+sN6ICaRCot53voV7sAFY9UjuXpWySVrDmPnnf98In+P0arF4Xu7uQMx
-         fBCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVFQvkQCx8VucWSaEnGwqmj5Wh8L4pyEEwblYkjr0SLuPPBFd4rdxy74cHwUoLpx50kggOwBppk5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNQsF9WZrI2gLI8hMVj8ZLKaoc0AcvuDqZUB7/bdJbeoO4AWRE
-	21EGLp+PUzLcOJ4Da7G5lSHMMG77Re9FL5e0Sd9s5pST9eJ2xF+TRglJP9p+UoUM3tHJvsVIt+D
-	hI/ozFa38BTaAWo0WApMjiqQpTOk7C3J+I22D2Ia7pw==
-X-Gm-Gg: ASbGnct0l52eMR31X5fdq/Sc64QLIjmt7G3vxYbvJJwAMYbehPwWmTmQh4jyGd3jtoE
-	zrcutYNMUpFL2d7GVsdcq31IC5nLNeaI/Dm/QxFRcfowoYEa3BEpKHHzmwNNu/8XIs4DALgZtxb
-	CmNOMOgFyaj7JH0IzsnG8Pj7UJaRjtdBZETkrp157DzaETqvYTDGb/sg==
-X-Google-Smtp-Source: AGHT+IEgjC4fcmg+OD5IGVLjZUrIMPEfYs/w9+6VTW1vagtiTaUcBabncwsUcBazgBGF/ZYxoheFQtZJR4MPvZFNfsc=
-X-Received: by 2002:a05:6512:3c85:b0:553:2e37:6952 with SMTP id
- 2adb3069b0e04-55356df1e50mr2121333e87.55.1749130415411; Thu, 05 Jun 2025
- 06:33:35 -0700 (PDT)
+	s=arc-20240116; t=1749130482; c=relaxed/simple;
+	bh=T5wNBhaigilJ3oKCmgpQHNaAmsXMsPPSdnJJJThaI8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eVDSfl0cB5RYm1joMqK6T6oDram9o3tbPw44enqB0Oit0JTOSAlggj6e8Y1H110PAILa/cryc4QpJGm55ZZrgEdkTHbQ+DL7rmEm4/Fz3zPHpi3oEGYO2g9mYV+XyCwYKoNZi40KjgmkKb1t93Kh11/bTlUAetomeufCXwrX5/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from localhost (unknown [IPv6:240e:45b:7e90:d32d:3a26:ba44:aeb4:61b0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id 54FDD3430F0;
+	Thu, 05 Jun 2025 13:34:38 +0000 (UTC)
+Date: Thu, 5 Jun 2025 13:34:27 +0000
+From: Yixun Lan <dlan@gentoo.org>
+To: Ze Huang <huangze@whut.edu.cn>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] usb: dwc3: add generic driver to support
+ flattened DT
+Message-ID: <20250605133427.GYA18884.dlan.gentoo>
+References: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
+ <20250526-b4-k1-dwc3-v3-v4-3-63e4e525e5cb@whut.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250531212331.3635269-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250531212331.3635269-1-andriy.shevchenko@linux.intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 5 Jun 2025 15:33:24 +0200
-X-Gm-Features: AX0GCFvHxiWRpP5cMCB8iSavv_JwXNB2m6sizTI16LHxsIHw9CZ-Y-5vnZK5ofQ
-Message-ID: <CACRpkdYD1F_AGXkeEhKcfS8BZxgznmfj_r3BBaK8LJLQJkDMvg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] gpiolib: get rid of devm_gpio_request()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, 
-	Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>, Daniel Mack <daniel@zonque.org>, 
-	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250526-b4-k1-dwc3-v3-v4-3-63e4e525e5cb@whut.edu.cn>
 
-On Sat, May 31, 2025 at 11:23=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Hi Ze,
 
-> devm_gpio_request() is used by a single driver. Replace it there and
-> kill the legacy API. Assumed to be routed via GPIO tree.
+On 22:40 Mon 26 May     , Ze Huang wrote:
+> To support flattened dwc3 dt model and drop the glue layer, introduce the
+> `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
+> and offers an alternative to the existing glue driver `dwc3-of-simple`.
+> 
+> Signed-off-by: Ze Huang <huangze@whut.edu.cn>
+> ---
+>  drivers/usb/dwc3/Kconfig             |   9 ++
+>  drivers/usb/dwc3/Makefile            |   1 +
+>  drivers/usb/dwc3/dwc3-generic-plat.c | 189 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 199 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> index 310d182e10b50b253d7e5a51674806e6ec442a2a..082627f39c9726ee4e0c5f966c5bc454f5541c9a 100644
+> --- a/drivers/usb/dwc3/Kconfig
+> +++ b/drivers/usb/dwc3/Kconfig
+> @@ -118,6 +118,15 @@ config USB_DWC3_OF_SIMPLE
+>  	  Currently supports Xilinx and Qualcomm DWC USB3 IP.
+>  	  Say 'Y' or 'M' if you have one such device.
+>  
+> +config USB_DWC3_GENERIC_PLAT
+> +       tristate "DWC3 Generic Platform Driver"
+> +       depends on OF && COMMON_CLK
+> +       default USB_DWC3
+> +       help
+> +         Support USB3 functionality in simple SoC integrations.
+> +         Currently supports SpacemiT DWC USB3 IP.
+> +         Say 'Y' or 'M' if you have one such device.
+> +
+>  config USB_DWC3_ST
+>  	tristate "STMicroelectronics Platforms"
+>  	depends on (ARCH_STI || COMPILE_TEST) && OF
+> diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+> index 830e6c9e5fe073c1f662ce34b6a4a2da34c407a2..96469e48ff9d189cc8d0b65e65424eae2158bcfe 100644
+> --- a/drivers/usb/dwc3/Makefile
+> +++ b/drivers/usb/dwc3/Makefile
+> @@ -57,3 +57,4 @@ obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
+>  obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
+>  obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
+>  obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
+> +obj-$(CONFIG_USB_DWC3_GENERIC_PLAT)	+= dwc3-generic-plat.o
+> diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8ff4626d324c40ecb52e115832c803fed7d38354
+> --- /dev/null
+> +++ b/drivers/usb/dwc3/dwc3-generic-plat.c
+> @@ -0,0 +1,189 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * dwc3-generic-plat.c - DesignWare USB3 generic platform driver
+> + *
+> + * Copyright (C) 2025 Ze Huang <huangze9015@gmail.com>
+> + *
+> + * Inspired by dwc3-qcom.c and dwc3-of-simple.c
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include "glue.h"
+> +
+> +struct dwc3_generic {
+> +	struct device		*dev;
+> +	struct dwc3		dwc;
+> +	struct clk_bulk_data	*clks;
+> +	int			num_clocks;
+> +	struct reset_control	*resets;
+> +};
+> +
+> +static int dwc3_generic_probe(struct platform_device *pdev)
+> +{
+> +	struct dwc3_probe_data probe_data = {};
+> +	struct device *dev = &pdev->dev;
+> +	struct dwc3_generic *dwc3;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	dwc3 = devm_kzalloc(dev, sizeof(*dwc3), GFP_KERNEL);
+> +	if (!dwc3)
+> +		return -ENOMEM;
+> +
+> +	dwc3->dev = dev;
+> +
+> +	platform_set_drvdata(pdev, dwc3);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(&pdev->dev, "missing memory resource\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	dwc3->resets = of_reset_control_array_get_optional_exclusive(dev->of_node);
+> +	if (IS_ERR(dwc3->resets))
+> +		return dev_err_probe(dev, PTR_ERR(dwc3->resets), "failed to get reset\n");
+> +
+> +	ret = reset_control_assert(dwc3->resets);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to assert reset\n");
+> +
+> +	usleep_range(10, 1000);
+> +
+> +	ret = reset_control_deassert(dwc3->resets);
+> +	if (ret) {
+> +		dev_err(dev, "failed to deassert reset\n");
+> +		goto reset_assert;
+> +	}
+> +
+> +	ret = clk_bulk_get_all(dwc3->dev, &dwc3->clks);
+can you check if able to use devres api for reset/clock here?
+(functions start devm_ prefix)
 
-Excellent cleanup, as always!
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to get clocks\nt");
+> +		goto reset_assert;
+> +	}
+> +
+> +	dwc3->num_clocks = ret;
+> +
+> +	ret = clk_bulk_prepare_enable(dwc3->num_clocks, dwc3->clks);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable clocks\n");
+> +		goto reset_assert;
+> +	}
+> +
+> +	dwc3->dwc.dev = dev;
+> +	probe_data.dwc = &dwc3->dwc;
+> +	probe_data.res = res;
+> +	probe_data.ignore_clocks_and_resets = true;
+> +	ret = dwc3_core_probe(&probe_data);
+> +	if (ret)  {
+> +		dev_err(dev, "failed to register DWC3 Core\n");
+> +		goto clk_disable;
+> +	}
+> +
+> +	return 0;
+> +
+> +clk_disable:
+> +	clk_bulk_disable_unprepare(dwc3->num_clocks, dwc3->clks);
+> +	clk_bulk_put_all(dwc3->num_clocks, dwc3->clks);
+> +
+> +reset_assert:
+> +	reset_control_assert(dwc3->resets);
+> +
+> +	return ret;
+> +}
+> +
+> +static void dwc3_generic_remove(struct platform_device *pdev)
+> +{
+> +	struct dwc3_generic *dwc3 = platform_get_drvdata(pdev);
+> +
+> +	dwc3_core_remove(&dwc3->dwc);
+> +
+> +	clk_bulk_disable_unprepare(dwc3->num_clocks, dwc3->clks);
+> +	clk_bulk_put_all(dwc3->num_clocks, dwc3->clks);
+> +
+> +	reset_control_assert(dwc3->resets);
+> +}
+> +
+> +static int __maybe_unused dwc3_generic_suspend(struct device *dev)
+> +{
+> +	struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = dwc3_pm_suspend(&dwc3->dwc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	clk_bulk_disable_unprepare(dwc3->num_clocks, dwc3->clks);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused dwc3_generic_resume(struct device *dev)
+> +{
+> +	struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = clk_bulk_prepare_enable(dwc3->num_clocks, dwc3->clks);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = dwc3_pm_resume(&dwc3->dwc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused dwc3_generic_runtime_suspend(struct device *dev)
+> +{
+> +	struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
+> +
+> +	return dwc3_runtime_suspend(&dwc3->dwc);
+> +}
+> +
+> +static int __maybe_unused dwc3_generic_runtime_resume(struct device *dev)
+> +{
+> +	struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
+> +
+> +	return dwc3_runtime_resume(&dwc3->dwc);
+> +}
+> +
+> +static int __maybe_unused dwc3_generic_runtime_idle(struct device *dev)
+> +{
+> +	struct dwc3_generic *dwc3 = dev_get_drvdata(dev);
+> +
+> +	return dwc3_runtime_idle(&dwc3->dwc);
+> +}
+> +
+> +static const struct dev_pm_ops dwc3_generic_dev_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+> +	SET_RUNTIME_PM_OPS(dwc3_generic_runtime_suspend, dwc3_generic_runtime_resume,
+> +			   dwc3_generic_runtime_idle)
+> +};
+> +
+> +static const struct of_device_id dwc3_generic_of_match[] = {
+> +	{ .compatible = "spacemit,k1-dwc3", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, dwc3_generic_of_match);
+> +
+> +static struct platform_driver dwc3_generic_driver = {
+> +	.probe		= dwc3_generic_probe,
+> +	.remove		= dwc3_generic_remove,
+> +	.driver		= {
+> +		.name	= "dwc3-generic-plat",
+> +		.of_match_table = dwc3_generic_of_match,
+> +#ifdef CONFIG_PM_SLEEP
+> +		.pm	= &dwc3_generic_dev_pm_ops,
+> +#endif /* CONFIG_PM_SLEEP */
+> +	},
+> +};
+> +module_platform_driver(dwc3_generic_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("DesignWare USB3 generic platform driver");
+> 
+> -- 
+> 2.49.0
+> 
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+-- 
+Yixun Lan (dlan)
+Gentoo Linux Developer
+GPG Key ID AABEFD55
 
