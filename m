@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-24531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF051ACFACB
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 03:38:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0081ACFACC
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 03:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B0813AEE3B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 01:38:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 792371896FA4
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 01:39:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7E93596A;
-	Fri,  6 Jun 2025 01:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1533A8F7;
+	Fri,  6 Jun 2025 01:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nmjpv+1g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AhfUMlFk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4352BD1B
-	for <linux-usb@vger.kernel.org>; Fri,  6 Jun 2025 01:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B5D2BD1B
+	for <linux-usb@vger.kernel.org>; Fri,  6 Jun 2025 01:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749173929; cv=none; b=F67XcnyuOFUGXtZ9tdgfSu3laBZnAlqo5oMWhyp9ijk9AfE3SGwPNwwbA0VKqhb2WpKIK30HiTtFLhjKSB692qv7v0sMrCODao+dZEhpgHc9Fq9hs0IpTHxR2GhPRCZsCUkZHzIXPa+otW81oa5SkI48gs2NOGbMUhDA+LsCAIw=
+	t=1749173941; cv=none; b=dw3N8romFCVIwVH2VindTdOO7Bb6hWSrkoxK5pGr7SmYmop3OmPnbTskYSkyKa0FwcaLRT5lNTCuObDpn954iC7OclSIyqDkEMYi/5Op7ItLa6xAsvW+0C8aNTXL1GsJdWuPFI6hb/au8BfDEwEGUyma6oN+F8WqU3iMINwd2lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749173929; c=relaxed/simple;
-	bh=3jUQ9Ocy6Ru2CZgNAylcRjqTTpOBSPPJ34sgvgYxOcw=;
+	s=arc-20240116; t=1749173941; c=relaxed/simple;
+	bh=rbFBCepi0mQKHVHCeg50/wRkHwHUX3ypUbUi2JtQ7Gc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GkWnO2Xu+ljELA6f6kwT5qy/Rlx+fnP1lnYH5LlH0Hx4Ek25Q2DAveGJol+qA1mb3vX28ZLjlU+1BCUfmAjcdqiEma3+yqiAKiA0xwa2FzQ3VZVAcSfKXnWZvX8Z5GfhTaGKEhRIDt/mjHeYZH+l5eZ+Gehyi9XvErrjpur7mlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nmjpv+1g; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=p7H5k1NZL+sdsAUbZMafpYexAs7MuQIeVBOowF98l1zGVIRMLFpu+zaK0M6RjjlEiCtj4ucAnE7oWVtU7SYNBspMN4wJLNvqJEwJFzT0CsFoPP7XpUzVdZ+QXYDm6975BIBLJ6T14wPlxPM8QFNkaAYVc4bFi83s+5xehqTGzt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AhfUMlFk; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749173928; x=1780709928;
+  t=1749173939; x=1780709939;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3jUQ9Ocy6Ru2CZgNAylcRjqTTpOBSPPJ34sgvgYxOcw=;
-  b=Nmjpv+1ghL0NV7OHFbRVm1O2wMCDFAhPfil6QRbnCSSctsLKwdHTWguO
-   GD9OzxOjBHFcFjx+E5jUmp1pB2GhW5lS85hcG+MX/4TvhCjA1/HK43KWm
-   O9XOvG7ruhtTU0zZFx6qb7Woves9VbJFevqHeTXuV4603kATUpcUEac7K
-   SRG2t4zHpgtPSzb7zKTg3vvKipjB0GLF6ycdm9oRL8krFwX7HhT1cSQpR
-   xfqon/O6W0L5QNI9/UlmupepwsYqM0lvuIl8Urq/AsFpUo4b5gaXHon3W
-   MD8qStntubDpcjBOmuL/XQfBkAXvEV+ZBDnHjzrexdgOKkvjZmwx2gRhg
-   g==;
-X-CSE-ConnectionGUID: nFhDbhq+TVWtvyD9LMLaoQ==
-X-CSE-MsgGUID: e6dafjgoQZOXOHeyj4I9QQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="38947572"
+  bh=rbFBCepi0mQKHVHCeg50/wRkHwHUX3ypUbUi2JtQ7Gc=;
+  b=AhfUMlFkJ3onPSbmaan/jCKhdbPGMu7uug+oAcWgry/ovJXUezO/6Yjo
+   O3cdQRbif5w+k4KLKvh3pLofYBL6TIxIf9H1RNa5wuRgp5sGSJUmwwzzj
+   +8kS54pmI7m6esK4tcn7LRuQ+m5PqkjAskT/9VJU6MBIq96TxxkTbFZpC
+   FssfxBU0ASOq8b1WYPlmWdfaIEC9UdRpzBtGcpdvgCYM7ZvsqGP+nZmNV
+   Tvr3uQ0Z2NsPH811cDLsi8U24bx2bUmslB6hviTywJPEdqApTihX2a2mK
+   oj63wY4vGvkGidEv/ypTCTPVWoErmfqpBZSoHrXNQuYPTeSntH1jpQfma
+   w==;
+X-CSE-ConnectionGUID: 8KwNNEZzQHSBs7WW8ypmEQ==
+X-CSE-MsgGUID: z5yUOjTXSbmdqWfBSRPrdQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="38947581"
 X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
-   d="scan'208";a="38947572"
+   d="scan'208";a="38947581"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 18:38:47 -0700
-X-CSE-ConnectionGUID: slQdRHSdQQqdcjdkzeeuCQ==
-X-CSE-MsgGUID: p/d/ddRpRoafL93ES5Yb6w==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 18:38:59 -0700
+X-CSE-ConnectionGUID: sWWF7vrlTDW/gZG6YUfZlA==
+X-CSE-MsgGUID: ju1ptKKSSIG28j6QZs1KEg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
-   d="scan'208";a="146276831"
+   d="scan'208";a="146276868"
 Received: from pooja-lin-vm.fm.intel.com ([10.80.128.159])
-  by orviesa007.jf.intel.com with ESMTP; 05 Jun 2025 18:38:47 -0700
+  by orviesa007.jf.intel.com with ESMTP; 05 Jun 2025 18:38:59 -0700
 From: Pooja Katiyar <pooja.katiyar@intel.com>
 To: linux-usb@vger.kernel.org,
 	gregkh@linuxfoundation.org
 Cc: heikki.krogerus@linux.intel.com,
 	andriy.shevchenko@linux.intel.com,
 	pooja.katiyar@intel.com
-Subject: [PATCH 1/3] usb: typec: ucsi: Add support for message out data structure
-Date: Thu,  5 Jun 2025 18:38:13 -0700
-Message-Id: <fc7574af6943abd10d25583c43add275f189270a.1749142912.git.pooja.katiyar@intel.com>
+Subject: [PATCH 2/3] usb: typec: ucsi: Enable debugfs for message_out data structure
+Date: Thu,  5 Jun 2025 18:38:14 -0700
+Message-Id: <faff193e6dbe86ed3076d425f0cb91e28e5739fc.1749142912.git.pooja.katiyar@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1749142912.git.pooja.katiyar@intel.com>
 References: <cover.1749142912.git.pooja.katiyar@intel.com>
@@ -78,82 +78,96 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for updating message out data structure for UCSI ACPI
-interface for UCSI 2.1 and UCSI 3.0 commands such as Set PDOs and
-LPM Firmware Update.
+Add debugfs entry for writing message_out data structure to handle
+UCSI 2.1 and 3.0 commands through debugfs interface.
 
-Additionally, introduce a wrapper function to access this operation
-via debugfs.
+Users writing to the message_out debugfs file should ensure the input
+data adheres to the following format:
+1. Input must be a non-empty valid hexadecimal string.
+2. Input length of hexadecimal string must not exceed 256 bytes of
+   length to be in alignment with the message out data structure size
+   as per the UCSI specification v2.1.
+3. If the input string length is odd, then user needs to prepend a
+   '0' to the first character for proper hex conversion.
+
+Below are examples of valid hex strings. Note that these values are
+just examples. The exact values depend on specific command use case.
+
+	#echo 1A2B3C4D > message_out
+	#echo 01234567 > message_out
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
 ---
- drivers/usb/typec/ucsi/ucsi.h      | 10 ++++++++++
- drivers/usb/typec/ucsi/ucsi_acpi.c | 16 ++++++++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/usb/typec/ucsi/debugfs.c | 26 ++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.h    |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 9c5278a0c5d4..14e3e362c54d 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -79,6 +79,7 @@ struct ucsi_operations {
- 	int (*read_cci)(struct ucsi *ucsi, u32 *cci);
- 	int (*poll_cci)(struct ucsi *ucsi, u32 *cci);
- 	int (*read_message_in)(struct ucsi *ucsi, void *val, size_t val_len);
-+	int (*write_message_out)(struct ucsi *ucsi, void *data, size_t data_len);
- 	int (*sync_control)(struct ucsi *ucsi, u64 command, u32 *cci,
- 			    void *data, size_t size);
- 	int (*async_control)(struct ucsi *ucsi, u64 command);
-@@ -532,6 +533,15 @@ struct ucsi_connector {
- int ucsi_send_command(struct ucsi *ucsi, u64 command,
- 		      void *retval, size_t size);
+diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
+index eae2b18a2d8a..004587ce3427 100644
+--- a/drivers/usb/typec/ucsi/debugfs.c
++++ b/drivers/usb/typec/ucsi/debugfs.c
+@@ -76,6 +76,30 @@ static int ucsi_resp_show(struct seq_file *s, void *not_used)
+ }
+ DEFINE_SHOW_ATTRIBUTE(ucsi_resp);
  
-+static inline int ucsi_send_message_out(struct ucsi *ucsi,
-+					void *data, size_t size)
++static ssize_t ucsi_message_out_write(struct file *file,
++				      const char __user *data, size_t count, loff_t *ppos)
 +{
-+	if (!ucsi->ops->write_message_out)
-+		return -EOPNOTSUPP;
++	struct ucsi *ucsi = file->private_data;
++	int ret;
 +
-+	return ucsi->ops->write_message_out(ucsi, data, size);
++	char *buf __free(kfree) = memdup_user_nul(data, count);
++	if (IS_ERR(buf))
++		return PTR_ERR(buf);
++
++	ret = hex2bin(ucsi->debugfs->message_out, buf,
++		      min(count / 2, sizeof(ucsi->debugfs->message_out)));
++	if (ret)
++		return ret;
++
++	return count;
 +}
 +
- void ucsi_altmode_update_active(struct ucsi_connector *con);
- int ucsi_resume(struct ucsi *ucsi);
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 6b92f296e985..01d85e079d08 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -86,6 +86,21 @@ static int ucsi_acpi_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
- 	return 0;
++static const struct file_operations ucsi_message_out_fops = {
++	.open = simple_open,
++	.write = ucsi_message_out_write,
++	.llseek = generic_file_llseek,
++};
++
+ void ucsi_debugfs_register(struct ucsi *ucsi)
+ {
+ 	ucsi->debugfs = kzalloc(sizeof(*ucsi->debugfs), GFP_KERNEL);
+@@ -85,6 +109,8 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
+ 	ucsi->debugfs->dentry = debugfs_create_dir(dev_name(ucsi->dev), ucsi_debugfs_root);
+ 	debugfs_create_file("command", 0200, ucsi->debugfs->dentry, ucsi, &ucsi_cmd_fops);
+ 	debugfs_create_file("response", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_resp_fops);
++	debugfs_create_file("message_out", 0200, ucsi->debugfs->dentry, ucsi,
++			    &ucsi_message_out_fops);
  }
  
-+static int ucsi_acpi_write_message_out(struct ucsi *ucsi, void *data, size_t data_len)
-+{
-+	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+ void ucsi_debugfs_unregister(struct ucsi *ucsi)
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 14e3e362c54d..e7453b055ff7 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -429,6 +429,8 @@ struct ucsi_bitfield {
+ 
+ /* -------------------------------------------------------------------------- */
+ 
++#define MESSAGE_OUT_MAX_LEN 256
 +
-+	if (!data || !data_len)
-+		return -EINVAL;
-+
-+	if (ucsi->version <= UCSI_VERSION_1_2)
-+		memcpy(ua->base + UCSI_MESSAGE_OUT, data, data_len);
-+	else
-+		memcpy(ua->base + UCSIv2_MESSAGE_OUT, data, data_len);
-+
-+	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
-+}
-+
- static int ucsi_acpi_async_control(struct ucsi *ucsi, u64 command)
- {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-@@ -101,6 +116,7 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.read_cci = ucsi_acpi_read_cci,
- 	.poll_cci = ucsi_acpi_poll_cci,
- 	.read_message_in = ucsi_acpi_read_message_in,
-+	.write_message_out = ucsi_acpi_write_message_out,
- 	.sync_control = ucsi_sync_control_common,
- 	.async_control = ucsi_acpi_async_control
+ struct ucsi_debugfs_entry {
+ 	u64 command;
+ 	struct ucsi_data {
+@@ -436,6 +438,7 @@ struct ucsi_debugfs_entry {
+ 		u64 high;
+ 	} response;
+ 	u32 status;
++	u8 message_out[MESSAGE_OUT_MAX_LEN];
+ 	struct dentry *dentry;
  };
+ 
 -- 
 2.34.1
 
