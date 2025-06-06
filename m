@@ -1,134 +1,222 @@
-Return-Path: <linux-usb+bounces-24547-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24548-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C13C5AD074B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 19:19:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7056AD0774
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 19:24:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 711D61893753
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 17:19:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A5B83AA5E7
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 17:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8BB28A1D7;
-	Fri,  6 Jun 2025 17:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNKd3Yv7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E8D28A71D;
+	Fri,  6 Jun 2025 17:24:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9066C288CA0;
-	Fri,  6 Jun 2025 17:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C469228A1F5
+	for <linux-usb@vger.kernel.org>; Fri,  6 Jun 2025 17:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749230372; cv=none; b=Dn6CSr0NVgvdOwQ5uVTclXFPYJBaQcllbE+nAwsXuvriWUZWQTBlWZa/7WI/dryKUf809Y1ucg4Ct2HKDRvduREtfFXug00tao+ajOlZZzibrlB6Nl32/v6atxTNPbJBfhiLRia1MAeyBaJrBk9R7i7GUGkXphzlHpnIvf2lRY4=
+	t=1749230676; cv=none; b=a4HLhxS50D2tRYf7NylnSIaIYtKo6wDUnCMmJEaE1KvcGA710SIlXkdxlwmqc8xlBQDKH6spw8X+BVEiTBSIQUyK2LRRPLwTIy8xodZMKw5lWk+9lWZkqaWhlW/8OqcEv/fU2FMf71P10vaXtjv/cCFCTnZSFl3lgAmRLWF27po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749230372; c=relaxed/simple;
-	bh=x6laAoy3QD2K+2/AJoLXGeHldfereL54lffctppYl0I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pqxj5V1J3IqZvtbRokzRexPNHWxgpGtVp87DO2Mw/iz/kPfvJYRaRdST8369Z4ro+eL9RLfZsm5rqf2RAmAbXnE/8gzZH4AvihhXvWQojFC/cm8tqLHlwFEoNv1pC6cn0jP9a/ZKrjvzyegLajlMWpREksgcipMnIh2Mg3wFMw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNKd3Yv7; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-450ccda1a6eso21869595e9.2;
-        Fri, 06 Jun 2025 10:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749230369; x=1749835169; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NzYcJ7Nj5b2zwcKVWL6Rr1IRHpMp8BCZe/bISvoFqd8=;
-        b=nNKd3Yv7KY5tHztN+k9eIbGdCFCe0oQnhctQ0M11oBdrNZmqxLX4k/dZHEey9S2J9t
-         pcxtXSTNgtqXi27c0aoRE41Ytls44KkZQcKfNPGBeQc3Bp1FuAERkyF+b5bPOGQJioTC
-         /IwcfkgnKsDOHV5g+T7P+piCt4RnJCKEZwyza36L3QviJQr33qvco9pjH8D0T3POZ7PM
-         jrTwuZ9DcpS90YjQYP6vIxVfbuYbImvgVSif0XB9Lf38LIotSDLDcZDtAjtsQ5ZMhw/W
-         sCjuCknyIlkaMWeBBTYgfCa5i9swIWjA4TpM/6au3ZkSzOyy8GVWUg5wHskZxOFZpNft
-         iOZw==
+	s=arc-20240116; t=1749230676; c=relaxed/simple;
+	bh=OfmI4hYuk7S0k7xDrzF8qpyHJ4ezPJC4LnnM2RV3zJg=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JutDasS4vGJhFv8d+Ydj2kaR4cubJnrmGM61Csw4BK7wezDk5+skIrnq6awoVawi82VN5LpuhhUd/Ozcu+do2EwFN6RRkpA5ZHF50sVMpgXKLT83mH55kRO7aS7eV4tOK7RryI7qPG7KQY8Z2RZgFFBvC36KEesZJHqo9Z98l/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3ddc9ee4794so21617525ab.0
+        for <linux-usb@vger.kernel.org>; Fri, 06 Jun 2025 10:24:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749230369; x=1749835169;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NzYcJ7Nj5b2zwcKVWL6Rr1IRHpMp8BCZe/bISvoFqd8=;
-        b=UT1ld6H5dQ7vHIG+sZbqBMGlGV0whFPSX+dMcoEzkgLE3++8lwKTNuuV4nu51VGShq
-         8aR91OJnnk1N8fNxp9zA6DH0wybloXISBptsRkitQe0E5SgraV6TcErvJhSavEc/2AZh
-         y1RBXLmGSvlh1nGqbmnPdQLjKiQZzq1YFQXBTnCFOwEm54lPN5ZT/r1q6Na5KOWLOa3b
-         oirZhCjW4ln6oKE+C/D+5/kl6pHpd0rcx+IEZ3CDjxoO2vjCwo/wdJr9r/KiweC1ID7n
-         axw6CW4HvK9/QLknFIjOyGppnfanldhW5PH3CSJDXqgqK2P1sH+b+9kYxCx/dgpBS6LK
-         DY2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUANl1aEMQzuDLuXUany/Vh4yLQ3lUdQxyRYeFAzi3FwJsbZeMY2mcLa6PDsy6tz0zqsX2OPVF4PsvS7YA=@vger.kernel.org, AJvYcCV52F2W0uCU8IuK7ijRY9LRqGq2+fYMrG+r987YHIUnjd3LJq6ZT9pmrVcTD4lwS5pDVdKag4A+@vger.kernel.org, AJvYcCXZIPrFJCjUC4MSd4q01jNMn5AiqJLI16TC7PaZc3lP/Z/NqxjGUo/jtc2Cg6uaPwgTFQNY9mCzj1mH@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhgKg93NsaNRMZ2jPs0T5TFDdLPA6w5eiB4+2qAz8SJuYYohOI
-	dVmuYhnr65fvYf3hsCq3mVD6kt/h+x40kg+sjuOSqMs6LraBYf51flPi
-X-Gm-Gg: ASbGncuvB5OZ5QhcjMkfpG1QO06R6V0GPUQvb1ZA5tFA2yb9e/XRUMUYjrQHgZXpNw/
-	d70qIuBAykmj+5j5IOwPI5uCPM8Ot3AlegSyqvv9aHbDZlxI62m8jUfXyU9MzQpqs286Xvnimxb
-	bfBHFoIo5c15hVn4f8ZUbckQEuuP+82egkQZ7BJPZGRH/Mf7o/uRelJVN7rj8wWaDWvi9mAvV56
-	MVnrmxFsXgAPu6DeDjZPS14CUKtFdUEFwNQdhTX2VboMsOYG6+A0y1hzyD1BLRQ93LauCZwnND4
-	9KByhdadOlxkllmnd1fLyXuHN+q6BTuV/i0yUTcoJ0KEdWYBEQ/XndSQVQfY
-X-Google-Smtp-Source: AGHT+IGNgMP5C9900vobDulHCGStzylMDLNyV3zE2D76G5K6z3KVUNBhpwPmkrC3Mc6l9hShfAhLBA==
-X-Received: by 2002:a05:600c:3b0e:b0:43c:f8fe:dd82 with SMTP id 5b1f17b1804b1-4520147f41emr47574495e9.18.1749230368682;
-        Fri, 06 Jun 2025 10:19:28 -0700 (PDT)
-Received: from gmail.com ([2a02:c7c:6696:8300:44e7:a1ae:b1f1:d5a4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f82878acsm35979185e9.0.2025.06.06.10.19.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 10:19:27 -0700 (PDT)
-Date: Fri, 6 Jun 2025 18:19:25 +0100
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ch9200: use BIT macro for bitmask constants
-Message-ID: <aEMjFjQo1QZoKEXw@gmail.com>
-References: <20250606160723.12679-1-qasdev00@gmail.com>
- <486738a4-c3ea-4af2-ba78-53bf8522ccb1@lunn.ch>
+        d=1e100.net; s=20230601; t=1749230674; x=1749835474;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NAVXPMJdCcVOsE8gmQnKvDRTVEWIXrEwrI1rszWDhOs=;
+        b=SIRSDI+vhYUrgp0exm06wIRudsN7plwiO9P+zfQUu3gED9n6Jbm1BxuK8h2bRdbV+Y
+         EKsB3HUtFeZrH20Wt38cUF97FodAHMunkP0DSt0AoHYRE2WP5Fue/6rIqlrUdZ40a0/9
+         poxsAK32YhEZ6p7KS6tFYjvoqSRpgRzArZlwLAB14J+obG9NlC4lCUPTrsbY+Xvqf9WX
+         V0weC5skDpJOvidExKbBaaboPBskasZsR1yQBVHMIbMJXiUbKvIkua1I45KfT3RiGeco
+         itPrdvJVTdsI6yPTQJUXJB+6RmAUO1z+Fz6cF441ALRs8LAzrSea8pTPKtrgv7C/dugk
+         czMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWwqPfbu1bmM+01lywBFJ246O44ioiXJQWUphRMLwf0rgolWQZuQivPaO0HUIVx2mhxAZAGlc0CYf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgoZZl9/iodSuXBRzFE35O7gJYVN8OynnkE2zNbi8QrZ1jZXQA
+	6gW4I+5cqN5ZERZA3Fnb2QtbQkK0VEXGvnGmyEBC8zfh14cJi7TJlo5DUZQIDzrGJ9jpUxgPI7q
+	LANj3910UYZikbpDsQ/qPuysXJ6isFE1lw7swN8yW+NHkK8zG4pxpdZp72F4=
+X-Google-Smtp-Source: AGHT+IEzZYA8JWRsTTDM8ueo2eOwGEnueuWH/zYo7Cnlm+sskH68rYp7JXKFweqIhiROqV2jx3fypQGQof10pSlhgpQtqBb0vAvD
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <486738a4-c3ea-4af2-ba78-53bf8522ccb1@lunn.ch>
+X-Received: by 2002:a05:6e02:250d:b0:3dc:7a9a:44d5 with SMTP id
+ e9e14a558f8ab-3ddce530818mr58573735ab.22.1749230673994; Fri, 06 Jun 2025
+ 10:24:33 -0700 (PDT)
+Date: Fri, 06 Jun 2025 10:24:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68432451.a00a0220.29ac89.0047.GAE@google.com>
+Subject: [syzbot] [wireless?] general protection fault in carl9170_usb_rx_complete
+From: syzbot <syzbot+0d8afba53e8fb2633217@syzkaller.appspotmail.com>
+To: johannes@sipsolutions.net, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jun 06, 2025 at 06:46:25PM +0200, Andrew Lunn wrote:
-> On Fri, Jun 06, 2025 at 05:07:23PM +0100, Qasim Ijaz wrote:
-> > Use the BIT() macro for bitmask constants.
-> 
-> What you fail to answer is the question 'Why?'.
+Hello,
 
-I made this change mainly as a small clean-up, it makes the code a tad
-bit easier to read.
+syzbot found the following issue on:
 
-> 
-> This driver is old and stable. It has in fact had no feature
-> development work done on it since 2015. All the patches since then
-> have been tree wide sort of changes.
-> 
-> Most would consider your change just pointless churn. It does not fix
-> anything which is broken. So why make this change?
+HEAD commit:    882826f58b2c ALSA: usb-audio: qcom: fix USB_XHCI dependency
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=113fc1d4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cc73a376913a3005
+dashboard link: https://syzkaller.appspot.com/bug?extid=0d8afba53e8fb2633217
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ba180c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a9d80c580000
 
-Yea that makes sense.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/211f4b32c93c/disk-882826f5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8b1eeb82b8a1/vmlinux-882826f5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c4696fbe4f76/bzImage-882826f5.xz
 
-> 
-> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#clean-up-patches
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0d8afba53e8fb2633217@syzkaller.appspotmail.com
 
-Ah i see thank you, I will keep this in mind next time.
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000038: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x00000000000001c0-0x00000000000001c7]
+CPU: 1 UID: 0 PID: 38 Comm: kworker/1:1 Not tainted 6.15.0-rc6-syzkaller-00177-g882826f58b2c #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__queue_work+0x9d/0x10f0 kernel/workqueue.c:2256
+Code: 85 db 0f 84 ae 04 00 00 e8 b0 da 33 00 49 8d 86 c0 01 00 00 48 89 c2 48 89 44 24 10 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e8 0c 00 00 41 8b 9e c0 01 00
+RSP: 0018:ffffc900001a8a48 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff8148954e
+RDX: 0000000000000038 RSI: ffffffff81489090 RDI: 0000000000000005
+RBP: ffff88810ff73bd0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000008
+R13: 0000000000000000 R14: 0000000000000000 R15: 0100000000000004
+FS:  0000000000000000(0000) GS:ffff8882692c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd9d9eca0c8 CR3: 0000000124b4e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ queue_work_on+0x15f/0x1f0 kernel/workqueue.c:2392
+ queue_work include/linux/workqueue.h:662 [inline]
+ ieee80211_queue_work net/mac80211/util.c:906 [inline]
+ ieee80211_queue_work+0x113/0x180 net/mac80211/util.c:899
+ carl9170_usb_rx_complete+0x275/0x2b0 drivers/net/wireless/ath/carl9170/usb.c:448
+ __usb_hcd_giveback_urb+0x38a/0x6e0 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x39b/0x450 drivers/usb/core/hcd.c:1734
+ dummy_timer+0x180e/0x3a20 drivers/usb/gadget/udc/dummy_hcd.c:1994
+ __run_hrtimer kernel/time/hrtimer.c:1761 [inline]
+ __hrtimer_run_queues+0x1ff/0xad0 kernel/time/hrtimer.c:1825
+ hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1842
+ handle_softirqs+0x205/0x8d0 kernel/softirq.c:579
+ __do_softirq kernel/softirq.c:613 [inline]
+ invoke_softirq kernel/softirq.c:453 [inline]
+ __irq_exit_rcu+0xfa/0x160 kernel/softirq.c:680
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:696
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:console_flush_all+0x9a2/0xc60 kernel/printk/printk.c:3227
+Code: 00 e8 72 c5 27 00 9c 5b 81 e3 00 02 00 00 31 ff 48 89 de e8 e0 08 20 00 48 85 db 0f 85 55 01 00 00 e8 62 0d 20 00 fb 4c 89 e0 <48> c1 e8 03 42 80 3c 38 00 0f 84 11 ff ff ff 4c 89 e7 e8 17 d3 7b
+RSP: 0018:ffffc90000287438 EFLAGS: 00000293
+RAX: ffffffff895ba678 RBX: 0000000000000000 RCX: ffffffff815c5dd0
+RDX: ffff8881062b0000 RSI: ffffffff815c5dde RDI: 0000000000000007
+RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff895ba678
+R13: ffffffff895ba620 R14: ffffc900002874c8 R15: dffffc0000000000
+ __console_flush_and_unlock kernel/printk/printk.c:3285 [inline]
+ console_unlock+0xd8/0x210 kernel/printk/printk.c:3325
+ vprintk_emit+0x418/0x6d0 kernel/printk/printk.c:2450
+ dev_vprintk_emit drivers/base/core.c:4917 [inline]
+ dev_printk_emit+0xfa/0x140 drivers/base/core.c:4928
+ __dev_printk+0xf5/0x270 drivers/base/core.c:4940
+ _dev_info+0xe4/0x120 drivers/base/core.c:4986
+ show_string drivers/usb/core/hub.c:2369 [inline]
+ show_string drivers/usb/core/hub.c:2365 [inline]
+ announce_device drivers/usb/core/hub.c:2388 [inline]
+ usb_new_device+0x94c/0x1a20 drivers/usb/core/hub.c:2644
+ hub_port_connect drivers/usb/core/hub.c:5535 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5675 [inline]
+ port_event drivers/usb/core/hub.c:5835 [inline]
+ hub_event+0x2f85/0x5030 drivers/usb/core/hub.c:5917
+ process_one_work+0x9cc/0x1b70 kernel/workqueue.c:3238
+ process_scheduled_works kernel/workqueue.c:3319 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3400
+ kthread+0x3c2/0x780 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__queue_work+0x9d/0x10f0 kernel/workqueue.c:2256
+Code: 85 db 0f 84 ae 04 00 00 e8 b0 da 33 00 49 8d 86 c0 01 00 00 48 89 c2 48 89 44 24 10 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e8 0c 00 00 41 8b 9e c0 01 00
+RSP: 0018:ffffc900001a8a48 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff8148954e
+RDX: 0000000000000038 RSI: ffffffff81489090 RDI: 0000000000000005
+RBP: ffff88810ff73bd0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000008
+R13: 0000000000000000 R14: 0000000000000000 R15: 0100000000000004
+FS:  0000000000000000(0000) GS:ffff8882692c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd9d9eca0c8 CR3: 0000000124b4e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	85 db                	test   %ebx,%ebx
+   2:	0f 84 ae 04 00 00    	je     0x4b6
+   8:	e8 b0 da 33 00       	call   0x33dabd
+   d:	49 8d 86 c0 01 00 00 	lea    0x1c0(%r14),%rax
+  14:	48 89 c2             	mov    %rax,%rdx
+  17:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  23:	fc ff df
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e e8 0c 00 00    	jle    0xd22
+  3a:	41                   	rex.B
+  3b:	8b                   	.byte 0x8b
+  3c:	9e                   	sahf
+  3d:	c0 01 00             	rolb   $0x0,(%rcx)
 
-> 
-> Do you have the hardware? If you do, maybe consider porting it to
-> phylib?
-> 
 
-I don't, I did try to buy it but after searching for it but I couldn't
-find it anywhere. I do however have the hardware for the this:
- 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/usb/dm9601.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Would the phylib porting apply to this too? If so I would love to work
-on it.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thanks
-Qasim
-> 	Andrew
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
