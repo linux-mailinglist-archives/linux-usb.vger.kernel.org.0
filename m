@@ -1,121 +1,96 @@
-Return-Path: <linux-usb+bounces-24536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AD03ACFC24
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 07:16:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC67DACFC26
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 07:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0D943A24C1
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 05:16:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489261897538
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 05:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF29D1D88A4;
-	Fri,  6 Jun 2025 05:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mpvTEYAK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009131E5201;
+	Fri,  6 Jun 2025 05:16:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B1E2CA6;
-	Fri,  6 Jun 2025 05:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42914323D
+	for <linux-usb@vger.kernel.org>; Fri,  6 Jun 2025 05:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749186978; cv=none; b=JAOLfRSob1/TChNPgp+x48KIxsu3q2BCSxt3oykfwiCpQCAg9vvtsVaKif7BUK5A6jEul9S8sPOK9w0cJWeQWYCfevK2kKqeunWwJ+6JeXVCMiwTc9WzExa/7z/A+bEhNGA4JlzhbZouWrXb3ctUs9NFlR6KGXt7aD+/K0na0iw=
+	t=1749186979; cv=none; b=OihnPRCXyZXX/lJnBgcxPf45bNvS+PTkOrInuoACq+VYu5IJnrvhQ/Zspo2a9PLkiDBxT+pIKaGGjEd8J3Vk0QTOPjBwBU6X611n0J1Rv5tyJKPcZKeSyaIt5CjY3PbymPDN1oKo6fH+QbteTzQKkv4Cd1T0xIqiRo2d0befrcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749186978; c=relaxed/simple;
-	bh=+irILc+2nYSszpYh9ApL/OLSuszJVYgcIjfeGD+MLQg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=I/lUQx61yd4tHy4hsAceO6UYJG8GeS9ms9XsXnD8XTBuAM0dtqG8TiczUOkVhRpJyQm979BA52axQub3+0pSwp4HD+bMyqFnGtowx5uoUrqy7MBl6bpJ4IeuV64SYX+Kku/F80YtQ/wAadqPj4yMBYf5yhwa1y3BA2U0MozxMcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mpvTEYAK; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7482377b086so621585b3a.1;
-        Thu, 05 Jun 2025 22:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749186976; x=1749791776; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:reply-to:content-language
-         :from:subject:references:cc:to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZX3xmkUdfFteJ2rivFM2ocYLUJSDoSf3f4y8JQQLdoU=;
-        b=mpvTEYAKAzd3TIe5SlJywx5c8tlwCCr/Tk5NqMHWvlhdLs2kDKHl+n4K+dCe2TWGre
-         s38/Q2VirGazQBouT//PP6AnuT/lJk8Mu9iogS5SNJ9EosezkCcjhu5GrV2YNxC77u3/
-         k2/3IRouioRL3y/QuhNYGdpTtr/cNk3pcCFkok3ZMAyP1sEzPPn7tWNSJVWSCy/xyz9J
-         LYTNFAvZbv7QovMQMjsGU5zAKawK4i47fd8Yb3VeOBBALOTelYAPgxNoCbEGGspf9YuS
-         LmM1gVWErN5NG25RpSkARNv5cDdYISQeFf3mylKvSCSGMHBpmKj8JL1MoxcQJFLt7q1Q
-         qG2w==
+	s=arc-20240116; t=1749186979; c=relaxed/simple;
+	bh=IxwqCHrACqYgymgSUXeVUNou/uoy837foUaUXgA+0k8=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=V9CxZdUvZ19f16ziUdM8KunjwkTZT+DYAFyRfolwQk0MgtR7uvhsj+xN/faojlmGSAPwxjsHWvX8QbMkW7j5Zl4hQ1lznrU0jVjB8HIT8TZIrG/93G/NfqiUmFnQkFhmCWfZkPyvxlwcAkKbwNPQXEOzy3AhM0my1NKyb5ZHP1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3ddbfe1fc8fso35769865ab.2
+        for <linux-usb@vger.kernel.org>; Thu, 05 Jun 2025 22:16:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749186976; x=1749791776;
-        h=content-transfer-encoding:in-reply-to:reply-to:content-language
-         :from:subject:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZX3xmkUdfFteJ2rivFM2ocYLUJSDoSf3f4y8JQQLdoU=;
-        b=YDWQnAmNhTc+tkMxZ0QNjqpUMf0e28tuysidcCPTDGUm7oOQNYD1fjXYmD7F5GXWp1
-         FLMSrVqNop3dIweuwHLkRxONngjixRWf7q9wYzODdYWuGtBA3ncUu9MV/OYIomjTeE2p
-         CXAJR9MNtP+h3hNbrlwWo9N5KVaXYelV9lrZMaYBivi9x1Qiy6Fau92r7Cw8+Qnyt3WN
-         qJ+IeHGKxN7O8NVy65qOISEL3iX79O4Lnn2m89KsHbr/7pBuikMIXYBUeEj5vm9KQfJz
-         poP7n9aX38N93xU7FAfNegJp1o2MG00wVa55BTSWtQfeSe0v3WuuL8uEJSged8XQRcew
-         IDyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjAsr4Rui+3hYrTgtr/rh5jYSUbQb06G0wDmsc8fq9SqB+qiQ+5nJ34mo7zATAa0EoiJLZedhfMd8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwALSrnlHHftwoS0i1zx/38viDEOZYNCey6OuCYsQJS07Frmess
-	KoCXho4Cm2iXyEefIVyPld9olDlFV1AbpSkwZI6Sn2ZUaVqNPaBR2/E6
-X-Gm-Gg: ASbGncs+9QbbRAqwGRrYzUZ8bdD6C9Iy032d4a2I/0fG3N2k4bZBzwMTJXHZdHAjbj4
-	qHmluNjeey74XeVTiWF9oRzXkTcTL5zotLHx6sW5/vZYhYz1JWQekhsqvReSDTVWx/0FyC90Apj
-	BiIVSLhCTmBNBqvo2S38uZyDQ7/ZqbGoLB54sBqt1bljzOJc5UI0btReYd0dZDq/JKfJY5S2ht/
-	6ZVAYHM50jfy2mND06x7NedeZEPt4GQg4G6baDtoNQN4lcRMReNn5k1tvt0mjvJqGZQs61fpGNl
-	D949IxuUZ9auCKSozY13iSP8JNaAoReVsyBXG7jZw70yhP/iXUzhiA7KT1HEwRHVuKc0pHkKWD7
-	TZNeQIDX69jCfRwPHY0Eg3e29YU/F01Oq4Y623oK7rjeO
-X-Google-Smtp-Source: AGHT+IGnz0WO7cFkCLeiJ6kzt2oxFldXQhnc1MTHztAzzaY3L8rPspdl4LAHvxH9iI7Szoy09bMGCw==
-X-Received: by 2002:a05:6a00:993:b0:73e:23be:11fc with SMTP id d2e1a72fcca58-74827f379b0mr3082030b3a.22.1749186976222;
-        Thu, 05 Jun 2025 22:16:16 -0700 (PDT)
-Received: from ?IPV6:2601:646:a000:5fc0:7240:3059:4e87:e658? ([2601:646:a000:5fc0:7240:3059:4e87:e658])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482af38404sm496834b3a.35.2025.06.05.22.16.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jun 2025 22:16:15 -0700 (PDT)
-Message-ID: <4a7f4d21-8b1c-4616-82bb-210395215035@gmail.com>
-Date: Fri, 6 Jun 2025 01:16:15 -0400
+        d=1e100.net; s=20230601; t=1749186977; x=1749791777;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cCYACXMzeBDcelPE4ghIGAS5eRuewYDXuoVSiKWHsIc=;
+        b=faoBMfZ4BzsQKW0feUETltHiz17rchDbrBrEjzlA1ekVg06sOYU8ZRqRqOyEkIi7kw
+         wQt6NIXLdoZTNQqmemMpHgFolvbougyaDHTLTdaOHSA5jdiok4cDoWKOluq9elBrjQUH
+         bvKFfq4WOP+8n3JtCBaw8d+xPBisvsH7O7oQionglJbtrRh9GQWLBwKrzXvx5alO43db
+         Hc+Hezuzjq7boRTdu/6zdC5a0GxFqSlFkD/1KJswxPrvp4djgkF2wi48phc3S+gbFHdP
+         P3d4tIi5RFI2sAasHul5pIduqeAtdQXI+rY0wG3vM50rk5KPXbgkcP+Tep1ee87AMraH
+         isrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpPvymbWb4zdcUdfjAz464i5qESZl2MrkHqlkEcvCFI1g7MjdKGnYFnxiFA+wWAmoUAN+xyusrChY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2nbGia79bZoOIDCfojhr2wxTuRCNnW8EB9KlbpzG3bwUJg24i
+	yzcZ5gpt8K/dKfaIh4TUF2901g/1CtocUMtK12AhBKTRTH6rMxJX85j/7tnpr3pKy6u56JQzEKB
+	OmEwD/G+xd4ImqKjbwizNVzhI9hhAQ/5kmfbJB7EXBSEzC8O0QFRQvw54GPA=
+X-Google-Smtp-Source: AGHT+IGhuvLpAqQS7I+2m7Z9XzaPSkpAbybNsBDhKs5bekdBoj/OxhLRNHPqegbI4xxKRxzGwDGBXZgJ2CNvGDnzLy8AZrhAqumS
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- syzkaller-bugs@googlegroups.com
-References: <683ed7e6.a00a0220.d8eae.006b.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in
- raw_event_queue_add
-From: Ivan Pravdin <ipravdin.official@gmail.com>
-Content-Language: en-US
-Reply-To: 683ed7e6.a00a0220.d8eae.006b.GAE@google.com
-In-Reply-To: <683ed7e6.a00a0220.d8eae.006b.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:74a:b0:3dd:cdff:2160 with SMTP id
+ e9e14a558f8ab-3ddce505a66mr23928265ab.17.1749186977327; Thu, 05 Jun 2025
+ 22:16:17 -0700 (PDT)
+Date: Thu, 05 Jun 2025 22:16:17 -0700
+In-Reply-To: <4a7f4d21-8b1c-4616-82bb-210395215035@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <684279a1.050a0220.2461cf.0038.GAE@google.com>
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in raw_event_queue_add
+From: syzbot <syzbot+1e3edf922962b5ea40a4@syzkaller.appspotmail.com>
+To: ipravdin.official@gmail.com
+Cc: ipravdin.official@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-#syz test
+> #syz test
 
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index 20165e1582d9..d7fca01afbf1 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -120,9 +120,13 @@ static struct usb_raw_event *raw_event_queue_fetch(
- static void raw_event_queue_destroy(struct raw_event_queue *queue)
- {
-        int i;
-+       unsigned long flags;
- 
-+       spin_lock_irqsave(&queue->lock, flags);
-        for (i = 0; i < queue->size; i++)
-                kfree(queue->events[i]);
-+       spin_unlock_irqrestore(&queue->lock, flags);
-+
-        queue->size = 0;
- }
+This crash does not have a reproducer. I cannot test it.
 
-Ivan Pravdin
-
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index 20165e1582d9..d7fca01afbf1 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -120,9 +120,13 @@ static struct usb_raw_event *raw_event_queue_fetch(
+>  static void raw_event_queue_destroy(struct raw_event_queue *queue)
+>  {
+>         int i;
+> +       unsigned long flags;
+>  
+> +       spin_lock_irqsave(&queue->lock, flags);
+>         for (i = 0; i < queue->size; i++)
+>                 kfree(queue->events[i]);
+> +       spin_unlock_irqrestore(&queue->lock, flags);
+> +
+>         queue->size = 0;
+>  }
+>
+> Ivan Pravdin
+>
 
