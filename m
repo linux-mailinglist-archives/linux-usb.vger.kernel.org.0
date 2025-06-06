@@ -1,137 +1,176 @@
-Return-Path: <linux-usb+bounces-24544-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24545-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85271AD028B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 14:50:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89191AD066B
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 18:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CED17A9D6D
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 12:49:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA0FF3AE6BF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 16:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861E928850D;
-	Fri,  6 Jun 2025 12:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FA2289820;
+	Fri,  6 Jun 2025 16:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ix5pt9hO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmV6czw6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A895D1E4AB;
-	Fri,  6 Jun 2025 12:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A5314AD2B;
+	Fri,  6 Jun 2025 16:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749214233; cv=none; b=Ll2Bi3vMTUsTDpy/xmha1qP8wGNXXr8pJtCaqZLCTHC5UCWhhrUxZDvGZKiVGIgiH44z1TJZXtnOOzCOsK4LPhmdBbJ2ZqPHhC8BXg5GriT32SOm1KkZz0b0KPXYBrLp4ArP+UaM63/7Ej69ZM2dFZ2Q73lJbh6TWkefnDslKEA=
+	t=1749226059; cv=none; b=rTFIzEzBYYHMPAJ/Y4VPWEDVUpO/E8TKzU7wfZ23Klwfwoh/+muaVftgUrzdp2eE37ZgwvvVlGxvt8awRBs6s58G74+tc1Ff8T0uK3EcnhPTEWFuTm6GHFxvRH2b21Oq3OkR53RScQIwooxEwaBJVEielpdi+w0ABJPp2/QjqB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749214233; c=relaxed/simple;
-	bh=W+LlfNk2HsbBqdZ79RTapibL/KsF2dILx+zv70pwrYI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R/FvPRYWLJ2YZE833dbZJZ6L7TIACoIBVlALzWyA76QsDW/WbmiO3EelxQbmZzdacu+l0Be/NVHAcJHMAgEnSKnjkdrbr/gSWNpmy5R6xOyTQqwrYXfWRdIaDHZVXagRTtuKbcUSwFOuKOQMKiUL9Ao9Z1QjSrl0rVUHz2de6QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ix5pt9hO; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1749226059; c=relaxed/simple;
+	bh=aCBYs3HYbqHCtSKb89ZiDyardqdxI2f1i3HiuFqwWtE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TqvAHktPJv8ke2iqPbNuNMbblq0nS5RJ3dr/ZHJNKnal+4B1AoF1SRdbu2H44b9Zmwn4B9qN5pHi+AUQi/9IpN/P1/rtENpYX3DCyRxsBeKsku8+OkFXvP+RluTSEHcSZnQLlDHLF8JuxIsajwgH6MzyWCbBXEgTAkEBgMF46Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmV6czw6; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-235a6b89dfaso3281905ad.3;
-        Fri, 06 Jun 2025 05:50:31 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-450cfb6a794so15901545e9.1;
+        Fri, 06 Jun 2025 09:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749214231; x=1749819031; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0J3vuS2o0FutGzGx+1kPPU7uFTM+MDxsKMVlIteTB4Q=;
-        b=Ix5pt9hOwGA+OYCfEhci34fbRDASA9xb7JYJy0ewotj0CcCYNKaBdD60cZwPgf26ek
-         AZU907C1ujZmPFeNvdNl1WQs3VTjqrpV/xN4XaMvi2q9dFFTPjbMNeZ43Rv8oSPCl4UR
-         486VLSs6iVNI+MQ8MxGgnUX+XT7U42eZz8OSOkz9jwGKoMubIADDzBtRkSFH9fE3vqWL
-         8nTfT40KDtwDpqZyhByFwjxCTcqOSHmPJx+WkHcs0j7U60ISzUfpN3O+95pXBnfnBjqm
-         Hj7UQvkzfX+ze0uDuPgdzx2FjsN7zr2YYSas1f3VSVdWc/92HjIrWnqiILylgEovn519
-         RYXQ==
+        d=gmail.com; s=20230601; t=1749226056; x=1749830856; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmxqTl8zXhUJWzbEhSbM4iH/Woj92FmKhTvp/ZOVPhY=;
+        b=NmV6czw6ejLXnlWyTEEJFLctsgsE/QRFzEzZJ8WwO984vySQX34oUffkyLsc6t6Efq
+         73Muksj0CijOTRtE+qZAATBcYWeE3jxF2nY7wgyHsu++ZeYUukVZ5RlEn6fyTMiLaPRI
+         yYRsOqUtOKlGj0kRkN9pi84gx1+FOIe7NhiIi5Gdd7YirbAqY5VqDyc3l3Z3bl4+cIQy
+         vbYF5iDIBfNlD8ZD8h9F4N1KDI4VKarkkc8+yHaoNG5Jg+WHy3w5no8xJ+XDF9kKDkPa
+         RsD+2cwfzflvUgrbOXqIUfw/I93pQwKCKZ+5aKutRcfGH/+L1lcoTeUo2L5JHNk1LUiB
+         Lo/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749214231; x=1749819031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0J3vuS2o0FutGzGx+1kPPU7uFTM+MDxsKMVlIteTB4Q=;
-        b=KTa2OczGEE5nJuVGNet+abeZRET9akrXrHbbu+bRXVb4vXQe+8U+HpLvcWv3GCN2L4
-         sfI3xudGE7C7E4yQTqBvtf04muWU75n3gBFLrJRhWKGdpyO1FH6qIcuuj7ZVsrEXK0JA
-         taLPlUNb7PvTx2ReebzAbSpZCEznosmDgfWIby7Uzv7dTxj4zj6/5ysJvcHx1fFnTC3H
-         P2b7l/lXQvMhy/XxUERRAVpJwRQWUqr8AiCut0bihcre17JU/rRmFeDmdp+M72W/aSOF
-         yjdfSA00PW5Pra0Q35dQGb4X3VjaJdgEp09VKpg2EVQLBz4EMjy9PYn7w4szfdN5nUz1
-         lHFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjyb/h631Q9Inl6Ux1HXPyo2+tCNcfBcM1tSI4mxq1NrxYlW+0kc+3EAWKk45zTK1VSIEAMPBADQK4NkU=@vger.kernel.org, AJvYcCVzznssAneEzPFuEPyofOzbrsoslUA0exMB+7Z/ewwl0noG/9O2N+U6MmTivxFo8HAKn7vABWax9UGs@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYcpdBeV7BYPXJa1yQdOfjxR3GdnRk17WWjWyHTbI+XqqvkLNe
-	NDjTw0vk9ueKDn/9wBPCzxJPP4yNVC7Zn62ZuPtsfU/yH0U77lToWHs=
-X-Gm-Gg: ASbGnctQW+en5blSkafQh4BCYYL9byruFWqguDD9OOH2oCIx6sCa6In0RZChL5P2TC0
-	/FSEGyH653kxPmwE9BJ2aT1BViqvjo5uczh+jA3AmQHIT37b1KSBVsHjFu332nLZHp1kHNbjXsZ
-	1lbWuTzXGxlMUhjS2+4J77/70w0vFCSVT8Zrepedo4c/XzQy7B5uy7btKACl+C3Zc4g7PmBkGo3
-	+oA3D1PQFtAHVQ+Cj5XxP0IkV9VXmxr4wan1nNN3rTFgf4iTslqb63BHCfUeeqYGjSw28HvFs3R
-	bH5c6DWxYKfDueFFcbuflE8aPCw4ErTI+RLC/swq1kasPtW7ZNzUvhollCv5mi5eiLPvQTv3GWt
-	p08AITMiCPP6HaCp3v/ASNxpaxq0=
-X-Google-Smtp-Source: AGHT+IHx0FKv5yZh74fOjj8IoRFYxtYWCQ/LS+Nkl4PMdKvrGGqAR3s4MnLBPejuysbls23PDTgzig==
-X-Received: by 2002:a17:902:f54d:b0:235:caf9:8b1d with SMTP id d9443c01a7336-236040902d7mr13142645ad.12.1749214230898;
-        Fri, 06 Jun 2025 05:50:30 -0700 (PDT)
-Received: from ?IPV6:2406:7400:56:b5f1:3fae:6c04:a3e1:b0f3? ([2406:7400:56:b5f1:3fae:6c04:a3e1:b0f3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23603092f50sm11705095ad.71.2025.06.06.05.50.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jun 2025 05:50:30 -0700 (PDT)
-Message-ID: <6f02afbe-cc55-4fe2-8615-1547f1d43efa@gmail.com>
-Date: Fri, 6 Jun 2025 18:20:27 +0530
+        d=1e100.net; s=20230601; t=1749226056; x=1749830856;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GmxqTl8zXhUJWzbEhSbM4iH/Woj92FmKhTvp/ZOVPhY=;
+        b=KyEaaHXnIe3aawiPOyFxLS3tuVMXUDr5hfS4gzKKJSJEpaxfZH6Af/suu5Y2ZyFI5G
+         x9o4m9otwMGwWbjvdUjUbnt5UsLkvl7Vx2PtAT9I0ZFK25TP+xzSPtIQY8II9kDoY8BJ
+         8ksWa49eHYgQjILcwvHvEoO7bpBLk5gj6lrmYJvqHOD+h1i3J9C59joIpIQ3TDZ5KAsz
+         1/GIrvMaHnxPQjR5x6IiBZFXE+iXO63wXUJbYFDUQSgTQTEkqsY+Ko4FfIvPYP6i0UZt
+         ttQiN6OsAv4hdLnUejfhFH2sOUlemy2Z3IvByYHe2GtxQzqhwjRF4Ed688yrewRegLXE
+         Wcsg==
+X-Forwarded-Encrypted: i=1; AJvYcCWNtX43m4eFTlwqHzxI+FbBbZPAyFJQUOBVGf1akfG+PvIRajN09nnN+Uce5QHXgLmP5iKy/aj3IH6n6Ac=@vger.kernel.org, AJvYcCWyDxNGmDWQoQaGBKLDgUof0MfeTeXQ4Y78u3Po+srRClJqvTmlHUbyX1AqOgR1Apb1JQ/6VXkf@vger.kernel.org
+X-Gm-Message-State: AOJu0YwByEYvl8iUMquLOS1EcEZZHNCe9fXAy8nNiY3W+3g6tGb0Yz1L
+	NdKMi7r6BGfLaa2zFq3CJP/t+C/VMux9QTQsK/I1pY8jr2MupcBLweiYIcpx9g==
+X-Gm-Gg: ASbGncsAzQx1T7aOgNxM3PEsbZ5T98tVGCtLdsaxyWnmi2CPTDbUbtwUmWwZ0960mSQ
+	/JtKC4ZtT+G7vABrRNqQRPH4jUA9+VR6+yoCH1D6VSG1qxbr5a5idX18Fy2k1fA9LtfIX/K9yK5
+	P0uu8Ihn+upWWZw7hsuM0u12ZDjUtoiXd03k+zvLQgC/q2f+tq2aGDGbcI54r65R/qs0s0oLRjx
+	SsrrFOfWuTvLkZft8QRsLKyhQ94L6RR7ah/O8vdsrc/u9a2Hym5WIRM+jrylSNwQ9JIJJ/a4Mmn
+	cMoAB/CFwBiHZwCuM0PrJxsigMg6gZSC17cqy5uSEIikUzKnuxurI3KYtxxdnLw=
+X-Google-Smtp-Source: AGHT+IHSPmMAHUVKafg9JMqrfsTW9IVMgChgGgQ5N7vYRn20mw+68UMyYTnoSjJ3+qTqY0HgNX2N0A==
+X-Received: by 2002:a05:600c:a49:b0:43c:fceb:91a with SMTP id 5b1f17b1804b1-452013512a3mr41720205e9.11.1749226055624;
+        Fri, 06 Jun 2025 09:07:35 -0700 (PDT)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:44e7:a1ae:b1f1:d5a4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45209ce458bsm28732025e9.15.2025.06.06.09.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jun 2025 09:07:35 -0700 (PDT)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] net: ch9200: use BIT macro for bitmask constants
+Date: Fri,  6 Jun 2025 17:07:23 +0100
+Message-Id: <20250606160723.12679-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] usb-serial-simple: device conflict with Owon VDS1022I
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: johan@kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <6430992c-d50b-4cfd-bcb9-d7d376c53444@gmail.com>
- <2025060620-twister-starved-3fb8@gregkh>
-Content-Language: en-US
-From: Amit <lestoppe@gmail.com>
-In-Reply-To: <2025060620-twister-starved-3fb8@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Greg,
+Use the BIT() macro for bitmask constants.
 
-     You've made valid points on both. Let me check with the authors of 
-the software, there is an ongoing discussion on this.
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+---
+ drivers/net/usb/ch9200.c | 50 ++++++++++++++++++++--------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-regards,
+diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
+index a206ffa76f1b..bfe27a7dcbb4 100644
+--- a/drivers/net/usb/ch9200.c
++++ b/drivers/net/usb/ch9200.c
+@@ -59,42 +59,42 @@
+  *
+  * Note: bits 13 and 15 are reserved
+  */
+-#define LOOPBACK		(0x01 << 14)
+-#define BASE100X		(0x01 << 12)
+-#define MBPS_10			(0x01 << 11)
+-#define DUPLEX_MODE		(0x01 << 10)
+-#define PAUSE_FRAME		(0x01 << 9)
+-#define PROMISCUOUS		(0x01 << 8)
+-#define MULTICAST		(0x01 << 7)
+-#define BROADCAST		(0x01 << 6)
+-#define HASH			(0x01 << 5)
+-#define APPEND_PAD		(0x01 << 4)
+-#define APPEND_CRC		(0x01 << 3)
+-#define TRANSMITTER_ACTION	(0x01 << 2)
+-#define RECEIVER_ACTION		(0x01 << 1)
+-#define DMA_ACTION		(0x01 << 0)
++#define LOOPBACK		BIT(14)
++#define BASE100X		BIT(12)
++#define MBPS_10			BIT(11)
++#define DUPLEX_MODE		BIT(10)
++#define PAUSE_FRAME		BIT(9)
++#define PROMISCUOUS		BIT(8)
++#define MULTICAST		BIT(7)
++#define BROADCAST		BIT(6)
++#define HASH			BIT(5)
++#define APPEND_PAD		BIT(4)
++#define APPEND_CRC		BIT(3)
++#define TRANSMITTER_ACTION	BIT(2)
++#define RECEIVER_ACTION		BIT(1)
++#define DMA_ACTION		BIT(0)
+ 
+ /* Status register bits
+  *
+  * Note: bits 7-15 are reserved
+  */
+-#define ALIGNMENT		(0x01 << 6)
+-#define FIFO_OVER_RUN		(0x01 << 5)
+-#define FIFO_UNDER_RUN		(0x01 << 4)
+-#define RX_ERROR		(0x01 << 3)
+-#define RX_COMPLETE		(0x01 << 2)
+-#define TX_ERROR		(0x01 << 1)
+-#define TX_COMPLETE		(0x01 << 0)
++#define ALIGNMENT		BIT(6)
++#define FIFO_OVER_RUN		BIT(5)
++#define FIFO_UNDER_RUN		BIT(4)
++#define RX_ERROR		BIT(3)
++#define RX_COMPLETE		BIT(2)
++#define TX_ERROR		BIT(1)
++#define TX_COMPLETE		BIT(0)
+ 
+ /* FIFO depth register bits
+  *
+  * Note: bits 6 and 14 are reserved
+  */
+ 
+-#define ETH_TXBD		(0x01 << 15)
+-#define ETN_TX_FIFO_DEPTH	(0x01 << 8)
+-#define ETH_RXBD		(0x01 << 7)
+-#define ETH_RX_FIFO_DEPTH	(0x01 << 0)
++#define ETH_TXBD		BIT(15)
++#define ETN_TX_FIFO_DEPTH	BIT(8)
++#define ETH_RXBD		BIT(7)
++#define ETH_RX_FIFO_DEPTH	BIT(0)
+ 
+ static int control_read(struct usbnet *dev,
+ 			unsigned char request, unsigned short value,
+-- 
+2.39.5
 
-Amit
-
-On 06/06/25 17:47, Greg KH wrote:
-> On Fri, Jun 06, 2025 at 05:00:29PM +0530, Amit wrote:
->> Hi,
->>
->>      PATCH 6.1 082/167 adds serial support for OWON HDS200 through the simple
->> usb serial driver (). This causes issues with Owon VDS1022. The VID and PID
->> is the same for both devices so the the Linux kernel loads the serial
->> driver, preventing the associated software from working.
-> As vendors are not supposed to use the same device id for different
-> devices, that's against the USB.org rules, so that's on them, not us :)
->
->>      My current work around for this is to blacklist usb_serial_simple. Given
->> that this driver change was recent and still under testing, could we find a
->> solution for this that doesn't involve such hacks at my end.
->>
->>      I  was able to root cause this issue only because the USB device and
->> software was working correctly before. A new user would just assume that the
->> device is not Linux compatible.
->>
->>      I've filed a bugzilla report here :
->> https://bugzilla.kernel.org/show_bug.cgi?id=220193
->>
->>      This is the software : https://github.com/florentbr/OWON-VDS1022
-> As that's just using libusb, it can disconnect the device from the
-> usb-serial driver if it needs to from the program itself.  Why not
-> suggest this change to the authors of the software, OR just change it to
-> use the serial connection that the kernel now presents instead of
-> attempting to talk to it directly from userspace?
->
-> thanks,
->
-> greg k-h
 
