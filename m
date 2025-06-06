@@ -1,113 +1,116 @@
-Return-Path: <linux-usb+bounces-24539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24540-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2C05ACFEB5
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 11:04:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 598E0AD0137
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 13:30:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C0C188AEC3
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 09:04:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC6933AE4E0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 11:30:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF56286405;
-	Fri,  6 Jun 2025 09:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AFE2882B4;
+	Fri,  6 Jun 2025 11:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aNZi1Zxl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JR5M25zy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05851FECDD
-	for <linux-usb@vger.kernel.org>; Fri,  6 Jun 2025 09:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44F31E412A;
+	Fri,  6 Jun 2025 11:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749200674; cv=none; b=phxvCXLLWycsPUOAd9+AE5dkmMI/ojDqn5Q7bAeJ0VKRPbG9fdeqDMW5IZQ/13rXSNqlnZS8gccc6oOc3in9LIQ5hJHlVcN1TgRxoY+lce0uo4SCtBbkDHfSvUE1wnIQg+Vu7kEh+aopgAnPHxAUphITVq7Lu9P5IyIFVN3pMBw=
+	t=1749209435; cv=none; b=albAn1a0UhjbCqNkNk3s7CF1hpTqLZaNgAFNOrTNPn4lZDvHv60PV/aUP6Omu++qHf8YjkcrOhnQVtTaRsFR8nAJbFEI6w0EWy04jUJ3Oyj6aUTuNaNYQmGrKmfbbmV+qGxFFrZO2D8qHbnOtMzjDqFzOn4l28Op+w4oixlw/HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749200674; c=relaxed/simple;
-	bh=dowZAHyU/1JzGMhPupx7+xzSlNcAvgxWj8ecPOpmWxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZtjuEiSXl8WpNcUGSTljHca1DpXbTHDhPHRie3cTeGXEMtMXTzpAaPhXGCd5MJc670OiLesN/zvL5R495BVSOelbxxND1brsB5S/dQ2Y7IxQPiou/B0e/9ksDEkIgqqeWIrUeUfR3jLGUYbVK81hMdiNNB5XR7PUg6WA8M8FuJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aNZi1Zxl; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749200673; x=1780736673;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dowZAHyU/1JzGMhPupx7+xzSlNcAvgxWj8ecPOpmWxw=;
-  b=aNZi1ZxlzIR/vvfwlfykoz8SA8yoOt4QjjVLIrMoGX1ZeggQdjaGrN9a
-   1O/5HQ5YrCWRVHIAexaTxHKGV0uU5q+PlJ9Hveeuof0mUiEam9+E/gJ1Y
-   aXFePr9M2fhXXsWzsi2fhRbq28JZgEqeL2jsshorrE6k2RyGcsz5ZdvC/
-   esydUcQxuLBSsbXGBWINY9ZRvUI+VJqnEAOfWiyiO+KA8+91TdtaGaacn
-   Rt+8SYJsTQU2WsT4/1E0velOKtoU+AxkM5a5BGygDBsUWOam+y2ZUbzGI
-   +Wrr1wtOhiT5s+zvyGkg50cy19jziCBe8CnlzYvGtUz3Yfx/WrmmHfOXS
-   A==;
-X-CSE-ConnectionGUID: pi1+JBhvQC+LNTuNnE3S6Q==
-X-CSE-MsgGUID: +oSv1VNVSYqI5voSoL92JQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51491338"
-X-IronPort-AV: E=Sophos;i="6.16,214,1744095600"; 
-   d="scan'208";a="51491338"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 02:03:32 -0700
-X-CSE-ConnectionGUID: 43TxCsTXRlWiKRU4JMGxbg==
-X-CSE-MsgGUID: kF/t06bgR+eN14O9lmk8hw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,214,1744095600"; 
-   d="scan'208";a="146361015"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 02:03:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uNSz0-000000048kw-27ym;
-	Fri, 06 Jun 2025 12:03:26 +0300
-Date: Fri, 6 Jun 2025 12:03:26 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Pooja Katiyar <pooja.katiyar@intel.com>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-	heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 2/3] usb: typec: ucsi: Enable debugfs for message_out
- data structure
-Message-ID: <aEKu3qgoRvJvyxxe@smile.fi.intel.com>
-References: <cover.1749142912.git.pooja.katiyar@intel.com>
- <faff193e6dbe86ed3076d425f0cb91e28e5739fc.1749142912.git.pooja.katiyar@intel.com>
+	s=arc-20240116; t=1749209435; c=relaxed/simple;
+	bh=jmFalxl+IjOuauT3NekbWCs/KPsAGvLXHGBFChS7x1o=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=CMljesR0tsSw/NuMM08PMGZV0zVlXCDFgVt/1lL40KRMpw3bPv9OLlk0Q72AiAiaoMKgdq5efjjac18u0htWdjhLQaKcfjMJa84x+LNjoeLyFJqPct+x6yUehVcfNYzMOYMjGdSSPccv2uVeprwLBIZ/2yUTU13iBnBGRa095tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JR5M25zy; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7481adb0b90so75071b3a.1;
+        Fri, 06 Jun 2025 04:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749209433; x=1749814233; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kMRMKtR8HGzEv7gbQn+3NSkzgRpxdmG10HTMD5pS2Rg=;
+        b=JR5M25zy67pM+lxKmulkzmTY7x7UGOhB/KfV0MyfZDAlXtEUwbxdSjS1rr5BgPKW5g
+         Nkgtr7eYVOnTlUtVUzUfx3YF/JnxK15LQa6sKU2LvcyYwuSWPH8UClydaHkL0tMXBdat
+         HITSwe52Zc9UatXShexgLpP8lTyHNNL6j6kKIX4Sn5dIY9vlvrcMK1UtgpQQ871mmGfh
+         +S2/Q0XswabWLe/W8fcaCtukqwwGP8h2JqhK5SZhbpu7hG3/HNy1Di/p0mGjIUYXSbUq
+         M2TVDGmDrG4aufAqON3Xop4LEsHDY2GrehlqTSr3Jo6QhLHPaYgBztxJIGRj0S7PLFUN
+         i1yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749209433; x=1749814233;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kMRMKtR8HGzEv7gbQn+3NSkzgRpxdmG10HTMD5pS2Rg=;
+        b=cOOM5Uthd8SnUxazDBtm/kDUP5Uw/wLzCfGGI7N/6naOPye3zk5IVjDQ2peGeRslbd
+         Uv4zD1DqwQzCfTxHBeAOxmXHsXga48Rq7BRS/JGnG+Z2cK73mNMagVNjHde9P29zWM5U
+         xHWl9DqPdVndU4bI21O07vfjMJ3T112UOcEGj1f4ZDWnSLaCWHJ4YRvIWJdzDC/OQ69q
+         UxlVAWLDTnYk12oZKjEkq8QXRcdu2YAQaVBuL3ZVHrZHd1GUs1v3QSub2S4v7UJBZ3IV
+         NVlLoFXd8sAdWTTNDjgg/3MUfKva9YfusM3c8idQQKI79NAQKK5qJ0KUi284QLGdyQs8
+         88rQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDFY9AyfQazRqVTgbryAew+LKv5yvgd1tADEztJ41snzru+BkYjYEEkw4WgKPZHqHvz1SjANFIz9HY1eg=@vger.kernel.org, AJvYcCXiBKPpRllnn8SP0lf0av3HBOA2Vw9xWDWn3ERB/F0K70yeRNn4XEkR0rTmUl7P2xF0eXzvWXuxYTy3@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBA9HSuybm+v6Yg93Kg+MCoPVjQhLmIHq8V/gUd6urMzTQexuk
+	gKwhxS4GwAVLExsE4FNMm6lrv3k2SJGaHVmX+EpXakKbQ8cMJrNL6NU+mHMvmPI=
+X-Gm-Gg: ASbGncupKtZJKduHYjxxfFoYAhJG29k3J27WJFbxiuo7iZN8q+AaDXwvyDDncgDpkGu
+	pGjA2O4RHjpoRDSbetuoMgXSFjdrBk5C3101AlE3D1sbv3N5qJgK4UJBMMP2m+7h6UcDJX3QhaV
+	Pl0phbZnQAaRkZyVN3liqzqRKRhvYDZtWDD+Ac5ZoI8DSkpRpqM0NNaE4zbFeIk2sb6xQxro9cH
+	vCv//tf/ih1XYLmrdp/zAePqwVQP2YBcToUwQh9zO9parQQVfzfu5ARl6pF8b3ctI/V0wvYGcDO
+	Jg5AhTMaPmhNp8WC+ndJ75rnAqfE0Hx6nOImxb/h+jl8/eQkUONcGuT45V6Z3Z2S1YHUivuftDN
+	QDVKDTmNUTgdTzF3L
+X-Google-Smtp-Source: AGHT+IEe775tc9IgVBaDFigw7nF+8klI4feYgHHUK8AIhyENn/tQSWUCLbyTAiy60D9ylimH2aEWmQ==
+X-Received: by 2002:a05:6a00:4646:b0:725:f462:2ebb with SMTP id d2e1a72fcca58-7482d17eee6mr953176b3a.0.1749209432927;
+        Fri, 06 Jun 2025 04:30:32 -0700 (PDT)
+Received: from ?IPV6:2406:7400:56:b5f1:3fae:6c04:a3e1:b0f3? ([2406:7400:56:b5f1:3fae:6c04:a3e1:b0f3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482fc43a1esm720591b3a.38.2025.06.06.04.30.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jun 2025 04:30:32 -0700 (PDT)
+Message-ID: <6430992c-d50b-4cfd-bcb9-d7d376c53444@gmail.com>
+Date: Fri, 6 Jun 2025 17:00:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faff193e6dbe86ed3076d425f0cb91e28e5739fc.1749142912.git.pooja.katiyar@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: johan@kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, lestoppe@gmail.com
+From: Amit <lestoppe@gmail.com>
+Subject: [BUG] usb-serial-simple: device conflict with Owon VDS1022I
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 05, 2025 at 06:38:14PM -0700, Pooja Katiyar wrote:
-> Add debugfs entry for writing message_out data structure to handle
-> UCSI 2.1 and 3.0 commands through debugfs interface.
-> 
-> Users writing to the message_out debugfs file should ensure the input
-> data adheres to the following format:
-> 1. Input must be a non-empty valid hexadecimal string.
-> 2. Input length of hexadecimal string must not exceed 256 bytes of
->    length to be in alignment with the message out data structure size
->    as per the UCSI specification v2.1.
-> 3. If the input string length is odd, then user needs to prepend a
->    '0' to the first character for proper hex conversion.
-> 
-> Below are examples of valid hex strings. Note that these values are
-> just examples. The exact values depend on specific command use case.
-> 
-> 	#echo 1A2B3C4D > message_out
-> 	#echo 01234567 > message_out
+Hi,
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+     PATCH 6.1 082/167 adds serial support for OWON HDS200 through the 
+simple usb serial driver (). This causes issues with Owon VDS1022. The 
+VID and PID is the same for both devices so the the Linux kernel loads 
+the serial driver, preventing the associated software from working.
 
+     My current work around for this is to blacklist usb_serial_simple. 
+Given that this driver change was recent and still under testing, could 
+we find a solution for this that doesn't involve such hacks at my end.
 
--- 
-With Best Regards,
-Andy Shevchenko
+     I  was able to root cause this issue only because the USB device 
+and  software was working correctly before. A new user would just assume 
+that the device is not Linux compatible.
 
+     I've filed a bugzilla report here : 
+https://bugzilla.kernel.org/show_bug.cgi?id=220193
+
+     This is the software : https://github.com/florentbr/OWON-VDS1022
+
+regards,
+
+Amit
 
 
