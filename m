@@ -1,98 +1,93 @@
-Return-Path: <linux-usb+bounces-24542-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24543-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79ED9AD0155
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 13:43:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F03AD0218
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 14:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 089B61892F50
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 11:44:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B840317161D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 12:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744ED2882D4;
-	Fri,  6 Jun 2025 11:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7501628750B;
+	Fri,  6 Jun 2025 12:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JoajqsKz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3FD20330;
-	Fri,  6 Jun 2025 11:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5C91A5B8A;
+	Fri,  6 Jun 2025 12:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749210226; cv=none; b=qMHhcsVapKcoJJp13p9LSvNi/uWWNLIUrEAIFxYfzMf7vMbuO+ueq5tT0FlrBQDkRcPx7Imsr8aGvzmuzwKBLR131/tw/cyr7Uvh50FgQ2rzxVkPmQGzlKq+m28cK1+sZkofVe4svENzd+XlSBYKiYaiva2gM/DF39jkYYTjU8Q=
+	t=1749212246; cv=none; b=jEOSLVHHDUokcIPxr/5oUrL6DQKOFt8Mq6jdhEWZhHI8dJ0B23VP2XNDR8tzF11SK8jzIGpD/O9I8XjrTev91PHgcoNx/RuCmknZyhSWvqw0L8H5LefZxkBWcvjN1+bvQemajswKWh27/UC3FAC99SfS/z96NRlkhRDd50aR3vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749210226; c=relaxed/simple;
-	bh=/Af4YCmRpDYeBf586N1KH8WQtJcvshKud41TMzf13FQ=;
+	s=arc-20240116; t=1749212246; c=relaxed/simple;
+	bh=6PGymhfnENjOEJYOPptbq9PMQC1IUAFIloZolJHBnn8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mvp2rEaLIUzhA3n4vwthPGO/sXlZg3jbvE4PKAn6oQPYLow4jjGMHf42IIHD6Q2FATWaGhM77QQ6cKwypT49whOm3uSous/W+8Vx0adE9kiItloqfS+Sy73r2HvcumOSf0i4IJvIx40f8yQQHidlYoux+lXzTtbsxcmGNGSlarc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn; spf=pass smtp.mailfrom=whut.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=whut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=whut.edu.cn
-Received: from localhost (gy-adaptive-ssl-proxy-2-entmail-virt205.gy.ntes [27.17.176.245])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 17c6f2803;
-	Fri, 6 Jun 2025 19:43:38 +0800 (GMT+08:00)
-Date: Fri, 6 Jun 2025 19:43:38 +0800
-From: Ze Huang <huangze@whut.edu.cn>
-To: Yixun Lan <dlan@gentoo.org>, Ze Huang <huangze@whut.edu.cn>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	 Content-Type:Content-Disposition:In-Reply-To; b=RajBzv5T1WRT2UJhy7bFKG5fWsZ4poJ54wtU3xvFHb9W2I0Mu7ychil+k/8JKpNssqwtKUjmq79VLFPW04QE6vt24xk9asJM59iUBq7kJcA0ZLSJ9XTILR+6ltxBKaeA8aSR6eBXcnIMpLQohcb1JdgaBnTDTB1f6I77CcEnKg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JoajqsKz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A509C4CEEB;
+	Fri,  6 Jun 2025 12:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1749212245;
+	bh=6PGymhfnENjOEJYOPptbq9PMQC1IUAFIloZolJHBnn8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JoajqsKzP2dnm5UqGXu9+jJ1ELbbCSofvf0cAcYG89knubSKbvRWdk94wbP8TOwXp
+	 La34a4OnhdCFwX+Mnny0AVaCjo7mx37gIBMYRMwA9gMoSJ1U5CHfTJ6j4qxTd1sP/C
+	 3fnX5rdNm0XcA61uXbZAReUVMkvm4tyUlf2NeU6g=
+Date: Fri, 6 Jun 2025 14:17:23 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Amit <lestoppe@gmail.com>
+Cc: johan@kernel.org, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] usb: dwc3: add generic driver to support
- flattened DT
-Message-ID: <aELUajmfzmb7w3W9@jean.localdomain>
-References: <20250526-b4-k1-dwc3-v3-v4-0-63e4e525e5cb@whut.edu.cn>
- <20250526-b4-k1-dwc3-v3-v4-3-63e4e525e5cb@whut.edu.cn>
- <20250605213443.17a7aa26b@smtp.qiye.163.com>
+Subject: Re: [BUG] usb-serial-simple: device conflict with Owon VDS1022I
+Message-ID: <2025060620-twister-starved-3fb8@gregkh>
+References: <6430992c-d50b-4cfd-bcb9-d7d376c53444@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250605213443.17a7aa26b@smtp.qiye.163.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSkkfVkoeTU4ZH0xDGEweQ1YeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJTFVKTFVKTE1VSU9OWVdZFhoPEhUdFFlBWU9LSFVKS0lIQkhCVUpLS1VKQk
-	tLWQY+
-X-HM-Tid: 0a97450dc07b03a1kunmea2195ced05ae
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ogg6Phw5ODE1SBgyIwoTFiMq
-	CjcaCkpVSlVKTE9CSUpLSUpCTUlPVTMWGhIXVRMOGhUcAR47DBMOD1UeHw5VGBVFWVdZEgtZQVlJ
-	TFVKTFVKTE1VSU9OWVdZCAFZQUpCTE83Bg++
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6430992c-d50b-4cfd-bcb9-d7d376c53444@gmail.com>
 
-On Thu, Jun 05, 2025 at 01:34:27PM +0000, Yixun Lan wrote:
-> Hi Ze,
+On Fri, Jun 06, 2025 at 05:00:29PM +0530, Amit wrote:
+> Hi,
 > 
-> On 22:40 Mon 26 May     , Ze Huang wrote:
-> > To support flattened dwc3 dt model and drop the glue layer, introduce the
-> > `dwc3-generic` driver. This enables direct binding of the DWC3 core driver
-> > and offers an alternative to the existing glue driver `dwc3-of-simple`.
-> > 
-> > Signed-off-by: Ze Huang <huangze@whut.edu.cn>
-> > ---
-...
-> > +	ret = reset_control_deassert(dwc3->resets);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to deassert reset\n");
-> > +		goto reset_assert;
-> > +	}
-> > +
-> > +	ret = clk_bulk_get_all(dwc3->dev, &dwc3->clks);
-> can you check if able to use devres api for reset/clock here?
-> (functions start devm_ prefix)
-> 
+>     PATCH 6.1 082/167 adds serial support for OWON HDS200 through the simple
+> usb serial driver (). This causes issues with Owon VDS1022. The VID and PID
+> is the same for both devices so the the Linux kernel loads the serial
+> driver, preventing the associated software from working.
 
-OK, will do
+As vendors are not supposed to use the same device id for different
+devices, that's against the USB.org rules, so that's on them, not us :)
+
+>     My current work around for this is to blacklist usb_serial_simple. Given
+> that this driver change was recent and still under testing, could we find a
+> solution for this that doesn't involve such hacks at my end.
+> 
+>     I  was able to root cause this issue only because the USB device and 
+> software was working correctly before. A new user would just assume that the
+> device is not Linux compatible.
+> 
+>     I've filed a bugzilla report here :
+> https://bugzilla.kernel.org/show_bug.cgi?id=220193
+> 
+>     This is the software : https://github.com/florentbr/OWON-VDS1022
+
+As that's just using libusb, it can disconnect the device from the
+usb-serial driver if it needs to from the program itself.  Why not
+suggest this change to the authors of the software, OR just change it to
+use the serial connection that the kernel now presents instead of
+attempting to talk to it directly from userspace?
+
+thanks,
+
+greg k-h
 
