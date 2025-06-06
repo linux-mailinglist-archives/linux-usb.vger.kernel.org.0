@@ -1,80 +1,79 @@
-Return-Path: <linux-usb+bounces-24549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 975A3AD0865
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 21:00:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C47DEAD08FD
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 22:12:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 289573B4157
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 19:00:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 051B33B45C5
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Jun 2025 20:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6400F1EEA40;
-	Fri,  6 Jun 2025 19:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4108C22259C;
+	Fri,  6 Jun 2025 20:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="qPy/3hOP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0wEEUSf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379CB1D5ABA;
-	Fri,  6 Jun 2025 19:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C8D221FC1;
+	Fri,  6 Jun 2025 20:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749236430; cv=none; b=KXqK6b4tYT4EMhpw4St4ND9FU15yd8ciSLtI3a6ta+LVT9l0q/c3b7mhTEPevX6hauSbER1acpWT7X1OSYnqtYC2TGKjPiRvaEPwDOFnqZ0D6sPFp6Dm+ptIQsuFnp7nbxncD/rc0ZBM46XqlYaa+pGFQ8GOa32xUsuvApuJrE0=
+	t=1749240657; cv=none; b=VGvrN/H6DLnFRUOIn5+kvucPyrSV1q3yP1O5iwB+8cLOXPCrNHT0W0FHa2bLw17ZhdGKLVbatMFoWLA6HiKlcsllKPGgDoNet5NqOmifHW3jY+runlB5a/1tv8ZsL4QhRtmC1Np10I2bRJlu2uxoKfAgmkVeBy6KWz3ftTtv2d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749236430; c=relaxed/simple;
-	bh=5KcYOuP9Bp6AaoJ7GHk98O3XtDcUIlK36IsMsvU9YlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KyPFDIMoALsPK/o7srnd+MioszMPNJ2hLwVoVnI5R9XmJUWyiFyZlsv3l4stI6GHGkBLIq5FKUF1/ONq1+pWU0jyLONAmi5NRvM7uER+P06QJ9eRo7yuOsqAB5wx5eczj2APH4DIAoktIs+n5W+PxSILcdfCnLyxfUMYOyeOhmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=qPy/3hOP; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=qVdfQHxOR4Lbp77RPtgpucjvQYLMZtLojILsgf+H/8M=; b=qPy/3hOPPe0qm/j1t/HvUP3tKC
-	Zhqcjg/r+Ocu3Y/1UrMclkOyntGdiznqhJpcE0XpG7cOSyBh4Ae/j6hvsOKk+CkY9umrvBZaWFqZi
-	PdoskEUC2JvzBvFfj0UDCQ5LrTF2+N3uX/PGacMy8pL4poa+dnooDDk60fjV32k2vAN0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uNcIb-00EvRL-Qr; Fri, 06 Jun 2025 21:00:17 +0200
-Date: Fri, 6 Jun 2025 21:00:17 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Qasim Ijaz <qasdev00@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ch9200: use BIT macro for bitmask constants
-Message-ID: <d4bd7daf-b7a0-4640-a888-6f5e269d69b1@lunn.ch>
-References: <20250606160723.12679-1-qasdev00@gmail.com>
- <486738a4-c3ea-4af2-ba78-53bf8522ccb1@lunn.ch>
- <aEMjFjQo1QZoKEXw@gmail.com>
+	s=arc-20240116; t=1749240657; c=relaxed/simple;
+	bh=eSh+JZyia4EdQ1Y3PBrOLZqesTXb2fkYWhoXK2grdRU=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=En353q1yvSMB/N3q/WDr8JBShfX3Z+tQXqYVPjkyIFlQkeNRTnXZu373QmE6Y0tgluxtCLGe+DETJHsl/lHxR8NPHSw6acIvlVrRZgA68xwH8lUhft68oMySdJhKYn7wLwTtjvPic4Oub4r/LLHK9Qp0Y9uS0nxcBA5s5qDfKbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0wEEUSf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C769C4CEEF;
+	Fri,  6 Jun 2025 20:10:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749240657;
+	bh=eSh+JZyia4EdQ1Y3PBrOLZqesTXb2fkYWhoXK2grdRU=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=c0wEEUSfV30HjgbTyC4+q4Ed3zyINRPR+NKFT3xMmQTP5t6KpC6Lx7UACqZv98jry
+	 OZ2B9oGUsN7ZO5oogt7eHQOs8ZLrPmSqyH6/PqYbM0TzXG1DrZbCF4OzoK1rJNhN8i
+	 jENFR5KWeeayZXDFhgBeqiyUSnMdfYdgnLTME7mDCKkLbBXr2WdGltqv/6+sy/R/RL
+	 p20UVqUhvvaUzLQyVk6/l/iuGUEbt/wUxFEh22dz4NCA93QhfwpCTmrznhfvAZY3R4
+	 fw8RtzZr/e+h6rWp8OvXCJ/nrr1EYojBNdIHX2e3yUeYE+rchR5plNbZ9O8m9WhGk/
+	 7rubVtAfNuGnA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7C55439F1DF9;
+	Fri,  6 Jun 2025 20:11:30 +0000 (UTC)
+Subject: Re: [GIT PULL] USB / Thunderbolt changes for 6.16-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <aEKpczs8HIdTz2mB@kroah.com>
+References: <aEKpczs8HIdTz2mB@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <aEKpczs8HIdTz2mB@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.16-rc1
+X-PR-Tracked-Commit-Id: 882826f58b2c48cafc7084a799207e76f2c74fe0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c0c9379f235df33a12ceae94370ad80c5278324d
+Message-Id: <174924068919.3964077.3034326566105316080.pr-tracker-bot@kernel.org>
+Date: Fri, 06 Jun 2025 20:11:29 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aEMjFjQo1QZoKEXw@gmail.com>
 
-> I don't, I did try to buy it but after searching for it but I couldn't
-> find it anywhere. I do however have the hardware for the this:
->  
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/usb/dm9601.c
-> 
-> Would the phylib porting apply to this too? If so I would love to work
-> on it.
+The pull request you sent on Fri, 6 Jun 2025 10:40:19 +0200:
 
-Yes, please do work on that. Having the hardware makes a big
-difference. And you are likely to learn a lot more with hardware you
-can test with.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.16-rc1
 
-	Andrew
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c0c9379f235df33a12ceae94370ad80c5278324d
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
