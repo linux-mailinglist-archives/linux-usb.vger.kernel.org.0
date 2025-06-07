@@ -1,173 +1,218 @@
-Return-Path: <linux-usb+bounces-24553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24556-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77153AD0C45
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 11:46:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DD1AD0EEC
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 20:42:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A216F188F9D8
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 09:46:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06A653AED67
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 18:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA438F6B;
-	Sat,  7 Jun 2025 09:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6335E218AB0;
+	Sat,  7 Jun 2025 18:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="T7lx1wwo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pROam3FP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D901EDA16
-	for <linux-usb@vger.kernel.org>; Sat,  7 Jun 2025 09:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8785202960;
+	Sat,  7 Jun 2025 18:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749289578; cv=none; b=TLSHnmi1omEVDn/6f3CCe9LvAJFEogqFKxK6mLZad4B9qpTvv/OYZ/1qlrYPyWYNUI9N0K4fInq9XdCu0IG4uMKE21P6VX4twXEepZYO3ZshqMPxjuUAUqotB24KoAOibZKN4rR0FsLmr/RdWRT4xxmtxi/goolh8+oJ7SdDtuo=
+	t=1749321734; cv=none; b=UofjH4JerhUsdCXCQlXNrHFOInWIjT9GOnoxkMAFRIl4oPtfefIlf3ljzQMCGX+vxGC0o0s7du4N2JHxoCLg7OjCRMD+OL67mIPUJzAfhbno4+1kGCD0bATFizhZUhopkmz4oS1A5g2RTtQqFz0WGryC+DOfJHInGWgjiPzL8gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749289578; c=relaxed/simple;
-	bh=RTIekZYMXT1HPwL+6JH2s6iXA9/KsXv5nouYl86M74U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Id4z3HGaZ4g9GtmKtxgfWD6MEma89x/LLWeVAs05CpPj6kY4FjKAor79kvXZYaoT5bjD4UFh+6HT+En8abEeJK8zqfOigtKDj3ZNIk+XnGs1ZW7142CFjoN1JEXik1Le7hnRjrN8ze0sDspn9/+BMn68cIgmPvGkVNZtdtLZjLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=T7lx1wwo; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5574Y7GS026967
-	for <linux-usb@vger.kernel.org>; Sat, 7 Jun 2025 09:46:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hOT1OH7Zs3RcqZzob/2wXtn6yUgIoxAj6wC5h6Z407U=; b=T7lx1wwoaYXYXFZu
-	PWnTFfTJK53Q6R96BuWU/Vh70ppOHy0+pWHqAhGzxsvO0xQuCRKh/W4x+77rE0e7
-	5KQfB9DiuhUKr2lxytKI3eP6fbnU/din7Ia8xVTf1l2il4BcF3JL2hT2X2PTNRYM
-	X3kk7PUddjajdjxFZbwTRidUWCOb4ZyhecP1W0dz8xAv79OgM5GKK1V/HAcUsdnl
-	pgvBpl8ilmWnew9u6KHuRjKJZzahyBUwCos3eAD0+7NDYEk8FCO/tJ/+QfxWJKo1
-	NN+wmNmm3MKaGSxq+hH8N5WoTiL7HqQZgs5IYjUAuWNQMS0IsoYhY9o/f3gJsggo
-	i8YnWA==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 474dgxgd96-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 09:46:15 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d0a9d20c2eso56111385a.0
-        for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 02:46:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749289574; x=1749894374;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hOT1OH7Zs3RcqZzob/2wXtn6yUgIoxAj6wC5h6Z407U=;
-        b=OxEJ1/dEzae0K78HlgUamNSS8td9Co2xMEERSMWbFJmxJHYveXRw+XXy6j7AD+rixH
-         1nE/USh09b6NcCKve7nNp5LBEdj4A9m2Lwihs2Xqg0FSANKMklLWJKSdPUjq5le0ZXQG
-         5aBnsU1APyNdOCpMjb88Y6oCP18pRKn5w3MWtO0QFtCTosVc+ifNHFrwa5t5xUAhXxQ5
-         iot2jh3VJtjPFlNesfXftNglzo7PQF9nQ3VTat3gqJ4m75oQnuJgsFqS6ZxeBQJDLDtE
-         371mIE59HbUjenF+QjP85ZQWecbNICGGJujYTOYUfmvWynVmDMpn6xeyJSPi1zhKOK4q
-         UKXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQVu61A0k1V8ZClWoD20NoE8DUF7/Bw7hsv4DWk/cTxCsSzEai0H6zNDsmpCG0VzWFFPuOFWwobOc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnR9hKFtB/GNiXorsI4dtX145OnRSJcyWe65ANXqo6CJka69C7
-	P/b7C/zBOfasS0IRZv/L0d6uyTIFgGcgvvjLld7Ara9QoHG10wVORJn6BSCPoQn8Y+uXfhBB32E
-	njvFyZ71i5UBW0/F9mYYllFDox7xWkN6SJCAqCUJ2kloDnNrDqn4YCokoVvLBW98=
-X-Gm-Gg: ASbGncvYJfaqiDM30zEFM9Mh1tABtjHT8liSGebmPMf9F/GMA/4ANxmrSlgHMc/udDa
-	gXO8zN3U8MukUh0MAgBDi37Er6L3e8v4lHmWma6Ctepwo5DSr44U1hS6jpz589AYuN29Cnezo/p
-	55RqtQdtyqPshqOJfGCK9X13Tq59mrPlvwRtHOTC8cI7ygUdpAys/eKgDTYjw+gkDcPdXZuOJZf
-	hZO+CUKy8zKY6m/hZjeLEhqVAIAjjvrZeWi6bW3a1MRJPqMhkja/aKkN7rJz96dSeD5dTLT6C1b
-	SPKsqgmOII2PAI1Q/NOxGwic8CaamHUnjsCzUhF+Pf612pe5pDHda09Ckt0Hb1BJ0pxHwVi0J0K
-	z
-X-Received: by 2002:a05:622a:ca:b0:494:b4c4:8d7e with SMTP id d75a77b69052e-4a6691b6c5emr32043891cf.12.1749289574329;
-        Sat, 07 Jun 2025 02:46:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFwWPtI2+ioHKumywO8IMNaOAQ5iYNQdemythHKIGMF/B1bpE+Qxn0ZZITwuEqzQ+j9BmQlPQ==
-X-Received: by 2002:a05:622a:ca:b0:494:b4c4:8d7e with SMTP id d75a77b69052e-4a6691b6c5emr32043651cf.12.1749289573920;
-        Sat, 07 Jun 2025 02:46:13 -0700 (PDT)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783c0581sm2174164a12.51.2025.06.07.02.46.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jun 2025 02:46:13 -0700 (PDT)
-Message-ID: <219a46d0-446c-4eed-8809-4f2400de0ef9@oss.qualcomm.com>
-Date: Sat, 7 Jun 2025 11:46:10 +0200
+	s=arc-20240116; t=1749321734; c=relaxed/simple;
+	bh=/bdP5Y4XIkeFFzTKAV1RK/3leIObSWu65+5yj+3skYA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WAGUFXmHzOkE3zEGPgYN7F+pGqOh7/rxHTq0Xngt3RDxkv+U1XL4vbBm049q84bRK9nMdUOFrl3wHNHU2lK3a6EK68uOuo+KBFuCrRoAdDKEN65Gbn0Vp38C37byT3/QmUdPVPD2nNI2S1956bX3T3+Fzeznyw7FofwfXM3jU68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pROam3FP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24832C4CEE4;
+	Sat,  7 Jun 2025 18:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749321734;
+	bh=/bdP5Y4XIkeFFzTKAV1RK/3leIObSWu65+5yj+3skYA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=pROam3FPpojQo9hU28/X3W/rbHg5YVhVQRsUUqSOwC0Ot5OYSPP1/++1MY4XR+xrS
+	 4+rG4S161f28LVH3cKBKHEKvG0reOhoGEhr64r8M7+lDh/7ufkcYC+/ABE/QnCMxX8
+	 sHkiKJufIar98I60q9cSi+LQNBctxc6EUTJBR8tYFo6Y+sRfMlVxeBIvB8RQsEq51r
+	 33d4AN6GDTU/ghDlCuXbLv8BOL22K9lPpR5pHq0/Y4+WmscKrQtagGWULWkboDU16X
+	 oL5TNCahsjePhQH0hN0X42r+N+K5SsvZ58Mn4+QFb0v2E7foSU76ilwtMd/kIMQ9KR
+	 bZujgXvC+Kf5g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1232BC61CE8;
+	Sat,  7 Jun 2025 18:42:14 +0000 (UTC)
+From: Jens Glathe via B4 Relay <devnull+jens.glathe.oldschoolsolutions.biz@kernel.org>
+Subject: [PATCH v5 0/4] arm64: dts: qcom: Add Lenovo ThinkBook 16 device
+ tree
+Date: Sat, 07 Jun 2025 20:41:58 +0200
+Message-Id: <20250607-tb16-dt-v5-0-ae493364f525@oldschoolsolutions.biz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
- support
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-        David Collins <david.collins@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
- <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
- <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
- <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 0EX2LF9hL8O62jOXutRvsLsYgnupb-yS
-X-Authority-Analysis: v=2.4 cv=HMbDFptv c=1 sm=1 tr=0 ts=68440a67 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=j_8uj707ZTFaWRZCUGIA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-ORIG-GUID: 0EX2LF9hL8O62jOXutRvsLsYgnupb-yS
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA3MDA2OSBTYWx0ZWRfX+fN9z8i31PbL
- 4ghKTrQkYnMSPpTl7d3HcJj7JNbyxKBLArenz3ZBR6Nq2q4gWqN4QV7XdncsoEgPV0Ey1eJJx7i
- FZJ3GW+LrVdqlXnnsxhyStIxvnRfPrnmewD7hbo/7qyCu8ygNPH8P8zfgnH/gi9TJzQvztYAh+H
- CsqmFAQpUs5lziJgn4yMh/w3XtPHdFR/NAiWTWRlxPhuYMOpyPpo/ZThfx2UTXeqJ/qg7mD/+QD
- T75NwA+Fb5fB6TwJjz3nlMEbtgkM3C82puVUumibj5+7+9cps9qO3keChYkMIifA39MlnB/5+zo
- Yty7sJ3FIb6NwqhfeBseNmV708JzMW6GwY2ridkf9S3FUVLBkXXL6/EuK4ezCQM/yOzemXLwIxk
- x9sphOL07tUF/2kikr45oSpSw7SMdEIeF98A8JwNob9K/0paBU1V2+/Nc44N3YDB23KcUIFG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-07_04,2025-06-05_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 mlxlogscore=637 priorityscore=1501 impostorscore=0
- suspectscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- adultscore=0 mlxscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506070069
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPaHRGgC/33OywrCMBCF4VeRrI1kcmvqyvcQFzYztYFipKnFC
+ 313Y0HbjS7/w/AxT5aoC5TYdvVkHQ0hhXjOYdYr5pvj+UQ8YG4mhTTCAPC+Asux5+S010qhKyp
+ g+frSUR1uk7Q/5G5C6mN3n+AB3uvHMF9jAC44euO0PUrjtdvFFpNvYmxTbK99/iVtqvBgb3CQS
+ 8TOiMxI4XVZWjSO0P5F1AKRekZURqAgabFUhgr1F9E/EJ0R6YGsAIeqFj+RcRxfra9QAnoBAAA
+ =
+X-Change-ID: 20250511-tb16-dt-e84c433d87b1
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Jens Glathe <jens.glathe@oldschoolsolutions.biz>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749321732; l=5507;
+ i=jens.glathe@oldschoolsolutions.biz; s=20240919;
+ h=from:subject:message-id;
+ bh=/bdP5Y4XIkeFFzTKAV1RK/3leIObSWu65+5yj+3skYA=;
+ b=qu7Mu3ZpUTkmFFfiYvRG/H02cRBGAxbtrro34NWY+SJNzN8u3TPWLlhM/DwNOvg8RkPEcTd6H
+ G71iwbbsh/+B/sOx40Dgb4inmrESsjccHknfn7tQn/7UaU/PH4OOmOz
+X-Developer-Key: i=jens.glathe@oldschoolsolutions.biz; a=ed25519;
+ pk=JcRJqJc/y8LsxOlPakALD3juGfOKmFBWtO+GfELMJVg=
+X-Endpoint-Received: by B4 Relay for
+ jens.glathe@oldschoolsolutions.biz/20240919 with auth_id=216
+X-Original-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Reply-To: jens.glathe@oldschoolsolutions.biz
 
-On 6/3/25 12:37 PM, Dmitry Baryshkov wrote:
-> On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
->>
->> On 5/31/2025 6:36 PM, György Kurucz wrote:
->>>> Add charge control support for SM8550 and X1E80100.
->>>
->>> Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works
->>> well, I finally don't have to worry about leaving my laptop plugged in
->>> for too long.
->>>
->>> One small thing I noticed is that after setting the sysfs values and
->>> rebooting, they report 0 again. The limiting appears to stay in effect
->>> though, so it seems that the firmware does keep the values, but Linux
->>> does not read them back. Indeed, looking at the code, it seems that
->>> actually reading back the values is only implemented for the SM8550.
->>
->> Right.
->>
->> Based on offline information, X1E80100 doesn't support reading back those
->> threshold values in battery management firmware, so I can only use the
->> cached values for sysfs read.
-> 
-> Which limits usablity of the attribute, it is now impossible to identify
-> whether it is enabled or disabled. Is there a chance of fixing that for
-> the X1E80100 platform?
+Device tree for the Lenovo Thinkbook 16 G7 QOY
 
-Is there a chance we store that value in SDAM and can read it back?
+The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1].
 
-Konrad
+Supported features:
+
+- USB type-c and type-a ports
+- Keyboard
+- Touchpad (all that are described in the dsdt)
+- Touchscreen (described in the dsdt, no known SKUss)
+- Display including PWM backlight control
+- PCIe devices
+- nvme
+- SDHC card reader
+- ath12k WCN7850 Wifi and Bluetooth
+- ADSP and CDSP
+- GPIO keys (Lid switch)
+- Sound via internal speakers / DMIC / USB / headphone jack
+- DP Altmode with 2 lanes (as all of these still do)
+- Integrated fingerprint reader (FPC)
+- Integrated UVC camera
+
+Not supported yet:
+
+- HDMI port.
+- EC and some fn hotkeys.
+
+Limited support yet:
+
+- SDHC card reader is based on the on-chip sdhc_2 controller, but the driver from
+the Snapdragon Dev Kit is only a partial match. It can do normal slow sd cards,
+but not UHS-I (SD104) and UHS-II.
+
+- The GPU is not yet supported. Graphics is only software rendered. However, the 
+node is defined and active since the available of the X1-45 support is soon-ish
+and the Laptop boots with it enabled, too.
+
+Notes:
+
+- Putting the camera behind usb_2_dwc3 results in the camera switched of after 30 
+seconds. With the stand-alone node as previously defined it stays usable and 
+suspends, as intended. Sincethe sole reason for the USB camera to be in the 
+devicetree is the required extra supply (which is guessed, as mentioned), and
+its handling by power management, I would propose to keep it this way.
+
+- The gpi_dma nodes appear to be implicitly enabled when a serial device is used.
+I added them, no change in behaviour, though. Since this would be the only X1 
+device adding them afaik, I left them out.
+
+- The cma-memory is removed, it is not on all x1 devices as I assumed. 
+Haven't found a case where it is required.
+
+- i2c2 defines the keyboard and 4 different touchpad interfaces. With the bundling
+of the pinctrl it seems to work better. I've had issues with only clock and touchpad
+pinctrl on the i2c2 node, and not keyboard.
+
+This work was done without any schematics or non-public knowledge of the device.
+So, it is based on the existing x1 device trees, dsdt analysis, using HWInfo
+ARM64, and pure guesswork. It has been confirmed, however, that the device really
+has 4 NXP PTN3222 eUSB2 repeaters, one of which doesn't have a reset GPIO (eusb5
+@43).
+
+I have brought up the Thinkbook over the last 4 months since the x1p42100-crd
+patches were available. The laptop is very usable now, and quite solid as a dev/
+test platform. GPU support would be nice, though :)
+
+Big thanks to Aleksandrs Vinarskis for helping (and sort of persisting) on the
+fingerprint, camera and HDMI issues.
+
+[1]: https://psref.lenovo.com/syspool/Sys/PDF/ThinkBook/ThinkBook_16_G7_QOY/ThinkBook_16_G7_QOY_Spec.pdf
+
+Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+---
+Changes in v5:
+- removed patch for the CMN N160JCE-ELL panel, got reviewed
+- re-ordered code in onboard_usb_dev as requested by Dmitry Baryshkov
+- amended device tree with review notes from Dmitry Baryshkov where possible
+  and resuting in a working laptop - added notes section
+- Link to v4: https://lore.kernel.org/r/20250524-tb16-dt-v4-0-2c1e6018d3f0@oldschoolsolutions.biz
+
+Changes in v4:
+- squashed Makefile and dts commits to one
+- picked up r-b from Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+- Link to v3: https://lore.kernel.org/r/20250524-tb16-dt-v3-0-17e26d935e73@oldschoolsolutions.biz
+
+Changes in v3:
+- removed changes in x1e80100.dtsi and x1p42100.dtsi - resolved with [2]
+- fixed schema errors with correct compatible string for the model
+- added power management for the camera via onboard_usb_dev.c
+- amended node ordering
+- changed the panel driver used to edp-panel, added panel in the driver
+- amended x1e80100.dtsi for exposing PM8010: This one is not present in the design, 
+  added /delete-node/ for it.
+- removed commented-out lines for sdhc, specified which don't work.
+- corrected ZAP shader firmware name
+- Link to v2: https://lore.kernel.org/r/20250516-tb16-dt-v2-0-7c4996d58ed6@oldschoolsolutions.biz
+
+Changes in v2:
+- removed nodes that gave DTC compile errors (pm8010_thermal, edp0_hpd_active)
+- amended qcom.yaml
+- shortened the commit titles to fit 75 chars
+- Link to v1: https://lore.kernel.org/r/20250515-tb16-dt-v1-0-dc5846a25c48@oldschoolsolutions.biz
+
+[2]: 20250520-topic-x1p4_tsens-v2-1-9687b789a4fb@oss.qualcomm.com
+
+---
+Jens Glathe (4):
+      dt-bindings: arm: qcom: Add Lenovo TB16 support
+      usb: misc: onboard_usb_dev: Add Bison Electronics Inc. Integrated Camera
+      firmware: qcom: scm: Allow QSEECOM on Lenovo Thinkbook 16
+      arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY device tree
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    2 +
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi       |    2 +-
+ .../boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts | 1648 ++++++++++++++++++++
+ drivers/firmware/qcom/qcom_scm.c                   |    1 +
+ drivers/usb/misc/onboard_usb_dev.c                 |    2 +
+ drivers/usb/misc/onboard_usb_dev.h                 |    8 +
+ 7 files changed, 1663 insertions(+), 1 deletion(-)
+---
+base-commit: 475c850a7fdd0915b856173186d5922899d65686
+change-id: 20250511-tb16-dt-e84c433d87b1
+
+Best regards,
+-- 
+Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+
+
 
