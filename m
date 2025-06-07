@@ -1,223 +1,173 @@
-Return-Path: <linux-usb+bounces-24552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0CEAD0AC9
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 03:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77153AD0C45
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 11:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27432188D7CA
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 01:16:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A216F188F9D8
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 09:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F38D2512F1;
-	Sat,  7 Jun 2025 01:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA438F6B;
+	Sat,  7 Jun 2025 09:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="T7lx1wwo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7351D251793
-	for <linux-usb@vger.kernel.org>; Sat,  7 Jun 2025 01:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D901EDA16
+	for <linux-usb@vger.kernel.org>; Sat,  7 Jun 2025 09:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749258990; cv=none; b=R/r+RIYqlSmLOgx8UM9FjiQQk10GQjkP79bJ1PSAyTkyR4u8+IShx8BxK/3rRndeO5BEvEDR9Eg4HbxQHE0oKJgOQ4Jgx6BJYalLIffG48QnSmgxMvGnuQEVpNUXIumFJ73E1LSRK8yvz3srYR7ymjH51nE58kZZ/KQA95NeyTk=
+	t=1749289578; cv=none; b=TLSHnmi1omEVDn/6f3CCe9LvAJFEogqFKxK6mLZad4B9qpTvv/OYZ/1qlrYPyWYNUI9N0K4fInq9XdCu0IG4uMKE21P6VX4twXEepZYO3ZshqMPxjuUAUqotB24KoAOibZKN4rR0FsLmr/RdWRT4xxmtxi/goolh8+oJ7SdDtuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749258990; c=relaxed/simple;
-	bh=CY70dFmXDKIoT3YRR12Hwsmgpg5TB3IvZaWppqjdr3g=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=a5pPRfvDKum5X4JV9kDJclIYvk7Fd+nTVw6t/4q1zq8qces4p261KdRxRaDyGf5BLcoRONYqcxquu8L/CtElZJdXxNt1fHF5tpqkeX/WcVQDmNjYpQLbC5yLVN3gOO/useTOlwN6pps1CJxyNas8Z3OtR2oJVOhPWLAOPU576ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-86cf89ff625so223655339f.0
-        for <linux-usb@vger.kernel.org>; Fri, 06 Jun 2025 18:16:28 -0700 (PDT)
+	s=arc-20240116; t=1749289578; c=relaxed/simple;
+	bh=RTIekZYMXT1HPwL+6JH2s6iXA9/KsXv5nouYl86M74U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Id4z3HGaZ4g9GtmKtxgfWD6MEma89x/LLWeVAs05CpPj6kY4FjKAor79kvXZYaoT5bjD4UFh+6HT+En8abEeJK8zqfOigtKDj3ZNIk+XnGs1ZW7142CFjoN1JEXik1Le7hnRjrN8ze0sDspn9/+BMn68cIgmPvGkVNZtdtLZjLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=T7lx1wwo; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5574Y7GS026967
+	for <linux-usb@vger.kernel.org>; Sat, 7 Jun 2025 09:46:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	hOT1OH7Zs3RcqZzob/2wXtn6yUgIoxAj6wC5h6Z407U=; b=T7lx1wwoaYXYXFZu
+	PWnTFfTJK53Q6R96BuWU/Vh70ppOHy0+pWHqAhGzxsvO0xQuCRKh/W4x+77rE0e7
+	5KQfB9DiuhUKr2lxytKI3eP6fbnU/din7Ia8xVTf1l2il4BcF3JL2hT2X2PTNRYM
+	X3kk7PUddjajdjxFZbwTRidUWCOb4ZyhecP1W0dz8xAv79OgM5GKK1V/HAcUsdnl
+	pgvBpl8ilmWnew9u6KHuRjKJZzahyBUwCos3eAD0+7NDYEk8FCO/tJ/+QfxWJKo1
+	NN+wmNmm3MKaGSxq+hH8N5WoTiL7HqQZgs5IYjUAuWNQMS0IsoYhY9o/f3gJsggo
+	i8YnWA==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 474dgxgd96-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 09:46:15 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d0a9d20c2eso56111385a.0
+        for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 02:46:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749258987; x=1749863787;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=viQc7sIXGySKplhOlBYYnNqFF+RSKL+DcKgMgR9qxCQ=;
-        b=vQZ4gY0JkP06EZaORWVO2zgTDjXsqM4D0AGif1l0D6rZEGdLgfkNUAhIuAsmu1HOxn
-         pGlZMRJrmN6i/d/amuD5s0baNWxRf5wzV7Q79rlf4/STFRuO5TjWzM60/GzdjT7Gyt5W
-         zVVe0S0wwU+9a9U3KoQJeJ0uuWE5pZ3Q2I0/i3kkNG/6PfCvTWUjt7gTWdvPf88sohKE
-         ZKThZ4QgnlGsnxH9eBo+CfHF+/mh/r+obI56WNzNyGEDE0Sgqwcjtbqm1hMmxdUB8/ol
-         fE7QNdt5hScud9Ux55YtK0UZAFrUnylXMqbg84HviRcAcZYZEeqevOeCPLso5k19vwjV
-         X60A==
-X-Forwarded-Encrypted: i=1; AJvYcCWasWLPcTG5XCewVrGhLVMDtaoTJidCMvvIoMQocuDEOd+PkjFZahlV/eNaEHFP6KbIzgdmx99lI8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhDzkazs0s8sDCwgQSARaLwPhwYf1MP4Sj0V9EKDZVsuFAK5KI
-	rpRL4xfxCFwI9l4+W4717JkZ29IW7wC0EVRkw0U3KuMct4cecECctBuuCxESe1aqQ8rsNaQ0opE
-	4Rxv0typcJvcE8z2bD4huMd9lTDvuUgsjBWh2ZlsiQaMJGQ3S3uCZvKzIVY8=
-X-Google-Smtp-Source: AGHT+IFESxBhGNj87C1lxPw1fq/SqtPYueHBQ7aQzMp5D8sitgEe9uoXErH+V82nsyeg/1U9rtHxoSBjmcoKXuv1L5TRmVanEekE
+        d=1e100.net; s=20230601; t=1749289574; x=1749894374;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hOT1OH7Zs3RcqZzob/2wXtn6yUgIoxAj6wC5h6Z407U=;
+        b=OxEJ1/dEzae0K78HlgUamNSS8td9Co2xMEERSMWbFJmxJHYveXRw+XXy6j7AD+rixH
+         1nE/USh09b6NcCKve7nNp5LBEdj4A9m2Lwihs2Xqg0FSANKMklLWJKSdPUjq5le0ZXQG
+         5aBnsU1APyNdOCpMjb88Y6oCP18pRKn5w3MWtO0QFtCTosVc+ifNHFrwa5t5xUAhXxQ5
+         iot2jh3VJtjPFlNesfXftNglzo7PQF9nQ3VTat3gqJ4m75oQnuJgsFqS6ZxeBQJDLDtE
+         371mIE59HbUjenF+QjP85ZQWecbNICGGJujYTOYUfmvWynVmDMpn6xeyJSPi1zhKOK4q
+         UKXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQVu61A0k1V8ZClWoD20NoE8DUF7/Bw7hsv4DWk/cTxCsSzEai0H6zNDsmpCG0VzWFFPuOFWwobOc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnR9hKFtB/GNiXorsI4dtX145OnRSJcyWe65ANXqo6CJka69C7
+	P/b7C/zBOfasS0IRZv/L0d6uyTIFgGcgvvjLld7Ara9QoHG10wVORJn6BSCPoQn8Y+uXfhBB32E
+	njvFyZ71i5UBW0/F9mYYllFDox7xWkN6SJCAqCUJ2kloDnNrDqn4YCokoVvLBW98=
+X-Gm-Gg: ASbGncvYJfaqiDM30zEFM9Mh1tABtjHT8liSGebmPMf9F/GMA/4ANxmrSlgHMc/udDa
+	gXO8zN3U8MukUh0MAgBDi37Er6L3e8v4lHmWma6Ctepwo5DSr44U1hS6jpz589AYuN29Cnezo/p
+	55RqtQdtyqPshqOJfGCK9X13Tq59mrPlvwRtHOTC8cI7ygUdpAys/eKgDTYjw+gkDcPdXZuOJZf
+	hZO+CUKy8zKY6m/hZjeLEhqVAIAjjvrZeWi6bW3a1MRJPqMhkja/aKkN7rJz96dSeD5dTLT6C1b
+	SPKsqgmOII2PAI1Q/NOxGwic8CaamHUnjsCzUhF+Pf612pe5pDHda09Ckt0Hb1BJ0pxHwVi0J0K
+	z
+X-Received: by 2002:a05:622a:ca:b0:494:b4c4:8d7e with SMTP id d75a77b69052e-4a6691b6c5emr32043891cf.12.1749289574329;
+        Sat, 07 Jun 2025 02:46:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFwWPtI2+ioHKumywO8IMNaOAQ5iYNQdemythHKIGMF/B1bpE+Qxn0ZZITwuEqzQ+j9BmQlPQ==
+X-Received: by 2002:a05:622a:ca:b0:494:b4c4:8d7e with SMTP id d75a77b69052e-4a6691b6c5emr32043651cf.12.1749289573920;
+        Sat, 07 Jun 2025 02:46:13 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783c0581sm2174164a12.51.2025.06.07.02.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Jun 2025 02:46:13 -0700 (PDT)
+Message-ID: <219a46d0-446c-4eed-8809-4f2400de0ef9@oss.qualcomm.com>
+Date: Sat, 7 Jun 2025 11:46:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:180e:b0:3dd:cc26:61c7 with SMTP id
- e9e14a558f8ab-3ddce454199mr65010095ab.20.1749258987570; Fri, 06 Jun 2025
- 18:16:27 -0700 (PDT)
-Date: Fri, 06 Jun 2025 18:16:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <684392eb.a00a0220.29ac89.004f.GAE@google.com>
-Subject: [syzbot] [usb?] stack segment fault in __usb_hcd_giveback_urb
-From: syzbot <syzbot+9a4aec827829942045ff@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, marcello.bauer@9elements.com, 
-	stern@rowland.harvard.edu, sylv@sylv.io, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/8] power: supply: qcom_battmgr: Add charge control
+ support
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
+ <20250530-qcom_battmgr_update-v2-5-9e377193a656@oss.qualcomm.com>
+ <f2e0f1da-c626-4cf0-8158-8a5805138871@kuruczgy.com>
+ <8bb3a056-c00f-4ae0-a790-d742d31f229a@oss.qualcomm.com>
+ <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <5knsdgk7o5zifkvzlrqiplmhztnsyhlxnqiuikqf4l7wkx2qvh@s3vzkiezw2bc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 0EX2LF9hL8O62jOXutRvsLsYgnupb-yS
+X-Authority-Analysis: v=2.4 cv=HMbDFptv c=1 sm=1 tr=0 ts=68440a67 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=j_8uj707ZTFaWRZCUGIA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-ORIG-GUID: 0EX2LF9hL8O62jOXutRvsLsYgnupb-yS
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA3MDA2OSBTYWx0ZWRfX+fN9z8i31PbL
+ 4ghKTrQkYnMSPpTl7d3HcJj7JNbyxKBLArenz3ZBR6Nq2q4gWqN4QV7XdncsoEgPV0Ey1eJJx7i
+ FZJ3GW+LrVdqlXnnsxhyStIxvnRfPrnmewD7hbo/7qyCu8ygNPH8P8zfgnH/gi9TJzQvztYAh+H
+ CsqmFAQpUs5lziJgn4yMh/w3XtPHdFR/NAiWTWRlxPhuYMOpyPpo/ZThfx2UTXeqJ/qg7mD/+QD
+ T75NwA+Fb5fB6TwJjz3nlMEbtgkM3C82puVUumibj5+7+9cps9qO3keChYkMIifA39MlnB/5+zo
+ Yty7sJ3FIb6NwqhfeBseNmV708JzMW6GwY2ridkf9S3FUVLBkXXL6/EuK4ezCQM/yOzemXLwIxk
+ x9sphOL07tUF/2kikr45oSpSw7SMdEIeF98A8JwNob9K/0paBU1V2+/Nc44N3YDB23KcUIFG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-07_04,2025-06-05_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 mlxlogscore=637 priorityscore=1501 impostorscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506070069
 
-Hello,
+On 6/3/25 12:37 PM, Dmitry Baryshkov wrote:
+> On Tue, Jun 03, 2025 at 01:48:11PM +0800, Fenglin Wu wrote:
+>>
+>> On 5/31/2025 6:36 PM, György Kurucz wrote:
+>>>> Add charge control support for SM8550 and X1E80100.
+>>>
+>>> Thank you for this, tested on my Lenovo Yoga Slim 7x, the limiting works
+>>> well, I finally don't have to worry about leaving my laptop plugged in
+>>> for too long.
+>>>
+>>> One small thing I noticed is that after setting the sysfs values and
+>>> rebooting, they report 0 again. The limiting appears to stay in effect
+>>> though, so it seems that the firmware does keep the values, but Linux
+>>> does not read them back. Indeed, looking at the code, it seems that
+>>> actually reading back the values is only implemented for the SM8550.
+>>
+>> Right.
+>>
+>> Based on offline information, X1E80100 doesn't support reading back those
+>> threshold values in battery management firmware, so I can only use the
+>> cached values for sysfs read.
+> 
+> Which limits usablity of the attribute, it is now impossible to identify
+> whether it is enabled or disabled. Is there a chance of fixing that for
+> the X1E80100 platform?
 
-syzbot found the following issue on:
+Is there a chance we store that value in SDAM and can read it back?
 
-HEAD commit:    7f9039c524a3 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10e2180c580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6acfdd5e5c8ef3d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=9a4aec827829942045ff
-compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e07757-1~exp1~20250514183223.118), Debian LLD 20.1.6
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13fd0570580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c7c1d4580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/28a04aa25fd8/disk-7f9039c5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5f13feaf2dfc/vmlinux-7f9039c5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5f3d17075519/bzImage-7f9039c5.xz
-
-The issue was bisected to:
-
-commit a7f3813e589fd8e2834720829a47b5eb914a9afe
-Author: Marcello Sylvester Bauer <sylv@sylv.io>
-Date:   Thu Apr 11 14:51:28 2024 +0000
-
-    usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a2b80c580000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a2b80c580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a2b80c580000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9a4aec827829942045ff@syzkaller.appspotmail.com
-Fixes: a7f3813e589f ("usb: gadget: dummy_hcd: Switch to hrtimer transfer scheduler")
-
-Oops: stack segment: 0000 [#1] SMP KASAN PTI
-CPU: 0 UID: 0 PID: 5905 Comm: kworker/0:9 Not tainted 6.15.0-syzkaller-11061-g7f9039c524a3 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:__queue_work+0x9e/0xfe0 kernel/workqueue.c:2256
-Code: 8b 1d de 93 11 11 31 ff 89 de e8 fd 95 35 00 85 db 0f 85 fc 0c 00 00 e8 b0 91 35 00 49 8d 97 c0 01 00 00 48 89 d5 48 c1 ed 03 <42> 0f b6 44 25 00 84 c0 48 89 54 24 08 0f 85 44 0d 00 00 8b 1a 89
-RSP: 0018:ffffc90000007708 EFLAGS: 00010002
-RAX: ffffffff818ac930 RBX: 0000000000000000 RCX: ffff888030365a00
-RDX: 00000000000001c0 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000038 R08: ffff88807e0d3bf7 R09: 1ffff1100fc1a77e
-R10: dffffc0000000000 R11: ffffed100fc1a77f R12: dffffc0000000000
-R13: ffff88807e0d3bf0 R14: 0000000000000008 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff888125c5e000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007efc1f35ecf0 CR3: 0000000075fe4000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- queue_work_on+0x181/0x270 kernel/workqueue.c:2392
- __usb_hcd_giveback_urb+0x41a/0x690 drivers/usb/core/hcd.c:1650
- dummy_timer+0x862/0x4550 drivers/usb/gadget/udc/dummy_hcd.c:1994
- __run_hrtimer kernel/time/hrtimer.c:1761 [inline]
- __hrtimer_run_queues+0x52c/0xc60 kernel/time/hrtimer.c:1825
- hrtimer_run_softirq+0x187/0x2b0 kernel/time/hrtimer.c:1842
- handle_softirqs+0x283/0x870 kernel/softirq.c:579
- __do_softirq kernel/softirq.c:613 [inline]
- invoke_softirq kernel/softirq.c:453 [inline]
- __irq_exit_rcu+0xca/0x1f0 kernel/softirq.c:680
- irq_exit_rcu+0x9/0x30 kernel/softirq.c:696
- common_interrupt+0xbb/0xe0 arch/x86/kernel/irq.c:285
- </IRQ>
- <TASK>
- asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:693
-RIP: 0010:console_flush_all+0x7f7/0xc40 kernel/printk/printk.c:3227
-Code: 48 21 c3 0f 85 e9 01 00 00 e8 e5 22 1f 00 48 8b 5c 24 20 4d 85 f6 75 07 e8 d6 22 1f 00 eb 06 e8 cf 22 1f 00 fb 48 8b 44 24 28 <42> 80 3c 20 00 74 08 48 89 df e8 8a ac 82 00 48 8b 1b 48 8b 44 24
-RSP: 0018:ffffc900047ef0a0 EFLAGS: 00000293
-RAX: 1ffffffff1d36baf RBX: ffffffff8e9b5d78 RCX: ffff888030365a00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc900047ef1f0 R08: ffffffff8fa0e0f7 R09: 1ffffffff1f41c1e
-R10: dffffc0000000000 R11: fffffbfff1f41c1f R12: dffffc0000000000
-R13: 0000000000000001 R14: 0000000000000200 R15: ffffffff8e9b5d20
- __console_flush_and_unlock kernel/printk/printk.c:3285 [inline]
- console_unlock+0xc4/0x270 kernel/printk/printk.c:3325
- vprintk_emit+0x5b7/0x7a0 kernel/printk/printk.c:2450
- dev_vprintk_emit+0x337/0x3f0 drivers/base/core.c:4917
- dev_printk_emit+0xe0/0x130 drivers/base/core.c:4928
- _dev_info+0x10a/0x160 drivers/base/core.c:4986
- usb_disconnect+0xdd/0x910 drivers/usb/core/hub.c:2298
- hub_port_connect drivers/usb/core/hub.c:5371 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5671 [inline]
- port_event drivers/usb/core/hub.c:5831 [inline]
- hub_event+0x1cdb/0x4a00 drivers/usb/core/hub.c:5913
- process_one_work kernel/workqueue.c:3238 [inline]
- process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3321
- worker_thread+0x8a0/0xda0 kernel/workqueue.c:3402
- kthread+0x711/0x8a0 kernel/kthread.c:464
- ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__queue_work+0x9e/0xfe0 kernel/workqueue.c:2256
-Code: 8b 1d de 93 11 11 31 ff 89 de e8 fd 95 35 00 85 db 0f 85 fc 0c 00 00 e8 b0 91 35 00 49 8d 97 c0 01 00 00 48 89 d5 48 c1 ed 03 <42> 0f b6 44 25 00 84 c0 48 89 54 24 08 0f 85 44 0d 00 00 8b 1a 89
-RSP: 0018:ffffc90000007708 EFLAGS: 00010002
-RAX: ffffffff818ac930 RBX: 0000000000000000 RCX: ffff888030365a00
-RDX: 00000000000001c0 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000038 R08: ffff88807e0d3bf7 R09: 1ffff1100fc1a77e
-R10: dffffc0000000000 R11: ffffed100fc1a77f R12: dffffc0000000000
-R13: ffff88807e0d3bf0 R14: 0000000000000008 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff888125c5e000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007efc1f35ecf0 CR3: 0000000075fe4000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8b 1d de 93 11 11    	mov    0x111193de(%rip),%ebx        # 0x111193e4
-   6:	31 ff                	xor    %edi,%edi
-   8:	89 de                	mov    %ebx,%esi
-   a:	e8 fd 95 35 00       	call   0x35960c
-   f:	85 db                	test   %ebx,%ebx
-  11:	0f 85 fc 0c 00 00    	jne    0xd13
-  17:	e8 b0 91 35 00       	call   0x3591cc
-  1c:	49 8d 97 c0 01 00 00 	lea    0x1c0(%r15),%rdx
-  23:	48 89 d5             	mov    %rdx,%rbp
-  26:	48 c1 ed 03          	shr    $0x3,%rbp
-* 2a:	42 0f b6 44 25 00    	movzbl 0x0(%rbp,%r12,1),%eax <-- trapping instruction
-  30:	84 c0                	test   %al,%al
-  32:	48 89 54 24 08       	mov    %rdx,0x8(%rsp)
-  37:	0f 85 44 0d 00 00    	jne    0xd81
-  3d:	8b 1a                	mov    (%rdx),%ebx
-  3f:	89                   	.byte 0x89
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Konrad
 
