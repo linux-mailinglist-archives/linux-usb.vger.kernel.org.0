@@ -1,173 +1,174 @@
-Return-Path: <linux-usb+bounces-24564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31A7BAD0FA4
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 22:11:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D4F4AD1060
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Jun 2025 00:48:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D82881890EF0
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 20:11:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A42DD3ACB07
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Jun 2025 22:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12BB3218E9F;
-	Sat,  7 Jun 2025 20:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D89820ADD6;
+	Sat,  7 Jun 2025 22:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="o7dWBebX"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="cCozPKiy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19EC215793
-	for <linux-usb@vger.kernel.org>; Sat,  7 Jun 2025 20:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0771A239F
+	for <linux-usb@vger.kernel.org>; Sat,  7 Jun 2025 22:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749326919; cv=none; b=MwER5D14EvHrXyJIE6pOi+5fN+mO684PBXus/wMSPCwykSOUVI6Y2FaGAIsyIO2Gr9yQlLgBA8GazbWztTQ9wOD6nNPfz9oKo+arwoM3VN8o141arXNncfNtg9gUgMOj9kWGHlcnw++D4hTsjKCymP6J0DpI5APIc0Xo/V47+IM=
+	t=1749336483; cv=none; b=fX+1BZI+eKq+Q/ddMc/8aR1Wdy2sb4dNbv21wQZPA9dj//1bolCBDLYTVYZ9+LSt0Qfwn73DSu6h2w4q9oDnv/jlaucP4Kkib/YyjpZUk4srd7opd0wCaSrZTnzmN8aR+Uv9gjEkyqSMuSecysGMF1q35vC+aiCjVdj6WtUG5D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749326919; c=relaxed/simple;
-	bh=VCmRdOUHHx69BMRY8Zh21+gZfzCtkEfrMaDX1Ai28fY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M69qHO/3OTxQU1ZNHJVCcli2TaelvGQl8YSyZ2L+vrO1nZglbkoup2K/h5zTs7koSmGW2k5OUTyLNjLfX2CgVa/v2DJHCyUbJuSFGIUgXTVvJhci6dgJ6XAFyTr67vYFRWuKUeflK0oe2x7TCxo/OxzFk1yWp17+jERz1VFyFpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=o7dWBebX; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 557CiRxh021645
-	for <linux-usb@vger.kernel.org>; Sat, 7 Jun 2025 20:08:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=LcGfjI1c42cfgKc7S4/kHbha
-	JgN+ngahbXwD1Is9qfk=; b=o7dWBebXGy2Cs22/xuJV35Pxmnsjac75jmvdr0S3
-	dtGm9z7kVKJL9nLHnG6beiYIxvRYu+LqzPWTLQzF88i/j7voi9xVL346mIrHCvPI
-	CDYTeSpDaA7xAQvzQ6mrZERBuJ4q7yKHxn/2OebdZheO10KrUyS7PSw2Wn77ZGX3
-	hVrN2ocOs2yjxgl8pNeQueDxjq8RGxy3cL4lWw035nGiKw2DW1NiXrjL/0CidDCC
-	smmHUHqxrA2w36Ku5DWop5gvZAFpEnxTO8g7J4Pp3o5d4XCcpdtybvFq+YCpvwyY
-	qyxlp5KeUs8rvM20sdLLnww+iJHURWvT2sJULIOyvjB56A==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 474b4j16dq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 20:08:35 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d38fe2eff2so31754185a.2
-        for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 13:08:35 -0700 (PDT)
+	s=arc-20240116; t=1749336483; c=relaxed/simple;
+	bh=/Fy/nW9OiVtT8uxbpQbL+4fFCzKa95apeIKmTE7VAFk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Y6h+YWnW9Xsf6b7TpNHo7SoEfRHdsYjJiZ5LV6j6aQH+YQV7LwV0PRk2J3wsBN7zxt54srlwfD7KxUrKOxrk8LN0/zwRJcNNtnHEG9nLNIOJRSlsd8woFRgaHAxUpZUqMsLZO/eV/ByzVK5P49Qv9LCv7LiIgXAJnS8V071kfRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=cCozPKiy; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ad8a6c202ffso588723066b.3
+        for <linux-usb@vger.kernel.org>; Sat, 07 Jun 2025 15:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749336478; x=1749941278; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qczp5FmoFG1M1v3fyvNDLe4WYftbg83lfesrzOgMfXc=;
+        b=cCozPKiyCXucrne2Lqxp3Gak+wQxB4XsPGMBctEwiGUsQUlKVEJQO3aZKoVmPRS6Tq
+         A1/JS8B1jpD7GQljY76yFxigutGmLbbj7QP2UMTe8l2v44EySqyGpntjkUdxkK5EkITE
+         ynAFj/GCovyv998yA5TX7xFHGHCxhfC7iNUcssjbsN5TcZ/vkoiKIF8gm43xMo7TAAxt
+         8IKwpXRYbEN2gRqFIQKxKXLXQvhSejuLkMLxLKU/pocQZsMdUZXQLYX3tx2PQ4wAeNjG
+         pRoyfQFKYyR+YnXCDSA5XVEE5dnkO4PZNgHzZJqVvigL7TUE+6x946BCz89syuOMRzU8
+         9P9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749326914; x=1749931714;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LcGfjI1c42cfgKc7S4/kHbhaJgN+ngahbXwD1Is9qfk=;
-        b=OUHbzxaZS25g2UYrcPSGsOwRAeli7GFcI1rFk8oXPdes7b3RzRnSVakasTLjNFao/T
-         SGi6vOKgEd5rXc3GV6ZhWmUamuPGIc4wComciW3k0GjqgX8PKzJ6CCssbeaQcpJyHvOl
-         xqhDppUSkhXHpihWCcNDJslxOLHsOtrdfDE1y1gK5m38hV26wjsbGcmmpw1Esv3ahzdq
-         iuO63ey1WBNsh2W+tPGkB2aWIfuYnT8YnCrTt8raqxO6EpVO3br/Ue4FwIAUzgLmf/xZ
-         oTJgnDPm4BNslYYs/61ttNIwMTzAUklKqvhxsr1ebSlqy6kzxwJge0BKoz29PmSpHhtb
-         r9lQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV9U8OZiGjAif0KZIRwS8U6WkEeIwKrnsNzGassyoAUhlmve+4kVav7AaBwsGXxzYRfIJBeRbn2sI0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuLvu23mC2G0lkwwN2I7Pg3Iu7a31vFdURiA2kEUEifG3rReae
-	rowDxtXcKvaFBlcwbUhvSXkfIWc1OgPgxm/H+x1wkyY36TPY/gIuzBiFKwzd+2E5IqUTBkLB16L
-	t437zSiJYVprdezSNg7O1MHt+sm2Hpnq6Co4Zz8Y2MazeEwnwolmU/HTq+VAHuvc=
-X-Gm-Gg: ASbGncuieOaijHkZdFnqgM7MjT18O25RAQqwTwKSx3YHE4H2eZsTt+qJ9z30qEJYkeA
-	HTv7xU1YiSHYV41jUauDQmE7RmK0Llc6mBs3G3wBugL8GUAHm7YAcgHxdG6KW+h8clWIODnigfN
-	Q8jJmSvUDwBiJXVhS3Wez5UH798v6zVsg3cz232JGl1t+WkxUgvwBCDHP0csmHOJzF1COcam9l+
-	4pQlP19EIOUotIBAD6jz0uBZA6WAPbDBbZ7IzhjtpuZSOURPwcoy0iWXcdA7rW63HSCzRMFPHAz
-	xCVhbW0zKwT2TLkASvT2hzjJeK1DACR6o9XG94tLSCkVUamAL2bKbyFMYX4XiMc5S6102hSxVwE
-	U6HavFj2y8Q==
-X-Received: by 2002:a05:620a:199f:b0:7c5:5883:8fbf with SMTP id af79cd13be357-7d22988e34emr1206537685a.21.1749326914457;
-        Sat, 07 Jun 2025 13:08:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFjhcwfKBxBqhK/w/iqBpz8K5IgFSPkf/a8LQCs/4fz1R0yrkN5KXByabTonhsJQyxPWceGJg==
-X-Received: by 2002:a05:620a:199f:b0:7c5:5883:8fbf with SMTP id af79cd13be357-7d22988e34emr1206534285a.21.1749326914070;
-        Sat, 07 Jun 2025 13:08:34 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55367731785sm595624e87.216.2025.06.07.13.08.32
+        d=1e100.net; s=20230601; t=1749336478; x=1749941278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qczp5FmoFG1M1v3fyvNDLe4WYftbg83lfesrzOgMfXc=;
+        b=takeXJSerYkojYA76RWaj9O6IJmPGlHpRiahw8kVQRVrpnJLovoSmqLkTvgPPmyKbE
+         fRGVnPUcMmTUzJVzARQMl5uBfB8KAj0d7HFAn86RpIqMthGNTnTFx4r1mK19xAr1ljRN
+         QLpaZW4TXp3m6StWm4lBNT7Y4Zh0XBSSjVW5BCOloZXC1JTHGsilzZ0YyhJvFDGyr3Qe
+         /hiRymPLZVOeM9Nxou91SXY7OWwy+HtgwK5dRHW6y6zOYvSF+WZyOl67qLxXKoJiQUFx
+         yGsE2tCteIqOUqHLd386/eqH3X/wcI8BUeu5DmJkufw7kiOfnRdiMVUAdY3tBbUILXav
+         EVVw==
+X-Gm-Message-State: AOJu0Ywfo63MlDc8Z8g6+fiI4DJwkfZclVg0pM+ZYGJKilhfh8fOKHEJ
+	dn6ipD6QTHx3T1Ak+906siWwCLBK99uVzHjgriS+i4ID38fHZu9ekdXbLdGX8TNPrmA=
+X-Gm-Gg: ASbGncvR6py5uYl50JjP591Ekq73JI3gY2zGvA4PiN+ArRJWdFWjV1i4Dv5zfbTtaAn
+	XFDFbTL+c/uXG7oIxp3OKaTT0rSCai9NC8isqp8mn/1cKJjGdVk0QjpeRvhDwMVZdBidI4Itv83
+	ZY4ASL4Bdo1oqY7Vupziu/iAEu/tAcxfbI6USkkLEy5hyf8XNsr8qKnMH4UoBmx2BFSfGM2LVsy
+	9eG4+3WkSB3OE5NukDTqWxNgocj7vwZ7qgUhwlLSRb31rKYc7M/UqU6y1JZfIlxx4G9a/MBCkbs
+	DRBxoeRt6+HjINEQD9BKxfm7l0nXJcKHIEwIxXTxHkEQ72y/umzpVw+hLT9wM0qlVmU=
+X-Google-Smtp-Source: AGHT+IGdpeCCT321N9wG/RSugGN7S6TZ/72B+qWT65PFz5F7Yefdeo3cKVuD06LOdUQW/F61eYyxDw==
+X-Received: by 2002:a17:907:7248:b0:ad8:8529:4f9b with SMTP id a640c23a62f3a-ade1aa07b54mr732528866b.38.1749336478063;
+        Sat, 07 Jun 2025 15:47:58 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ade1d7542bcsm327160066b.32.2025.06.07.15.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jun 2025 13:08:33 -0700 (PDT)
-Date: Sat, 7 Jun 2025 23:08:31 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: jens.glathe@oldschoolsolutions.biz
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] usb: misc: onboard_usb_dev: Add Bison Electronics
- Inc. Integrated Camera
-Message-ID: <lx6z62sadq5ijteuww3o5mriti45abty64ucmzig5bdaijumzn@dponhgcugds3>
-References: <20250607-tb16-dt-v6-0-61a31914ee72@oldschoolsolutions.biz>
- <20250607-tb16-dt-v6-2-61a31914ee72@oldschoolsolutions.biz>
+        Sat, 07 Jun 2025 15:47:57 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: linux-usb@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH] docs: usb: gadget: Reindent numbered list
+Date: Sun,  8 Jun 2025 00:47:46 +0200
+Message-ID: <20250607224747.3653041-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250607-tb16-dt-v6-2-61a31914ee72@oldschoolsolutions.biz>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA3MDE0NiBTYWx0ZWRfX1hUQzC5sYCvU
- 7XwPxVC/xfF/4pKHn+k6L3ULadVLIZ/SEZa8kQPenrLLtFytyYI3wVcVY0n42zxyhQRlA4Agnwk
- czE5rkrFHEH96WyuvCo6v6az39oKcz/2/k4G4qd0JXIj8Ctlid1M6/LOLmBMY+iLPynGXXqXTRt
- AIgx15BpVMeAjN+iZWUjUVn9gjGitnDalqiF8c9sg+59NnZ0hPe1DsS8Ko2O+kgwGdIF3VyYkbl
- WmpOmkY9WzLEM1TNwJyXCmkRpv3D2SHN3Dv+5EzWDTqUlue04jRQFpeSaXlGMQVBtko+/d8ZD5u
- GNma68vjNuQcmq8MDry8pqo+AcXcm3Jxb2GqjWAHCgigAFW2J3ERj+4J1k6iuVytBjdCAhlmTrW
- KGwdn7VS5E5DxV7eIKHsvETYZLDcEkViBb/AZ9+VxC11LGpUxCFxwFdsNZeJO0aurB2eDuGC
-X-Proofpoint-GUID: UpL4DOV16yJdVCDAu8aa9WfJPgl0xytc
-X-Authority-Analysis: v=2.4 cv=Te6WtQQh c=1 sm=1 tr=0 ts=68449c43 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6IFa9wvqVegA:10 a=gxl3bz0cAAAA:8 a=EUspDBNiAAAA:8 a=gIeN6KSkFSykCpat-AUA:9
- a=CjuIK1q_8ugA:10 a=PEH46H7Ffwr30OY-TuGO:22 a=kiRiLd-pWN9FGgpmzFdl:22
-X-Proofpoint-ORIG-GUID: UpL4DOV16yJdVCDAu8aa9WfJPgl0xytc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-07_08,2025-06-05_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0
- mlxlogscore=999 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506070146
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4127; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=/Fy/nW9OiVtT8uxbpQbL+4fFCzKa95apeIKmTE7VAFk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoRMGUT6SBRf3qEsfPeMbxAcrKfNAhOeXCsHIlT LIgpGGkxqKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaETBlAAKCRCPgPtYfRL+ TjpaCACV9rC0Aku7EgtA57HF8WYiAIG8ViZ3FwD5Gh/pPLnVV11e63Wd2nvMB7Yk55hhGzzwO/9 Etekyst31SJj0vBdIIP5MTYbue8wP/w+MWmuZq6ClnFD1PwuLaP7HU4lwWnfTMw629GYQT8f0Cv s05sfqtru6JHsMJ2JHpyWbdCSY5yQGCzhq0r/fsrDLVyn/wGmbc6Qy6KF7Prezxm4SJepsmm281 2STYLIOvye4XPZO2+56/Y+O3bEBsDeV8Eh30f6EIyKOixbOIXhjSREyEdBY4Pp5XLkxUbPVszeW Wtx3qfEqzLsD94dIBmtiJxm1/Ylof0Vc0HVwD4b4XlaTyObW
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 07, 2025 at 09:19:37PM +0200, Jens Glathe via B4 Relay wrote:
-> From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> 
-> The Camera is built into the Thinkbook 16 G7 QOY and directly attached on the
-> usb_2 controller (dwc3 USB2 only). It has a separate power supply that needs
-> to be controlled for PM.
-> 
-> Add the support for this device for the power supply.
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> ---
->  drivers/usb/misc/onboard_usb_dev.c | 2 ++
->  drivers/usb/misc/onboard_usb_dev.h | 8 ++++++++
->  2 files changed, 10 insertions(+)
-> 
-> @@ -127,6 +134,7 @@ static const struct of_device_id onboard_dev_match[] = {
->  	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
->  	{ .compatible = "usb451,8440", .data = &ti_tusb8041_data, },
->  	{ .compatible = "usb451,8442", .data = &ti_tusb8041_data, },
-> +	{ .compatible = "usb5986,1198", .data = &bison_intcamera_data, },
+Paragraphs that are part of a numbered list must be indented to render
+correctly in html. Do that right here. There are only whitespace changes
+in this patch.
 
-The list is sorted, so this should be the last entry.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+Hello,
 
-With that fixed:
+not sure this is worth to be backported, so I didn't add a Fixes: line.
+If you really want, the commit that should have fixed that is probably
+d80b5005c5dd ("docs: usb: convert documents to ReST").
 
+To see the wrong rendering, look at the numbered list at the end of
+https://docs.kernel.org/usb/gadget_configfs.html before this patch is
+applied. There only the paragraphs numbered 3 and 5 are
+ordered lists (with one item each 🙄).
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Best regards
+Uwe
 
+ Documentation/usb/gadget_configfs.rst | 35 +++++++++++++--------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
 
->  	{ .compatible = "usb4b4,6504", .data = &cypress_hx3_data, },
->  	{ .compatible = "usb4b4,6506", .data = &cypress_hx3_data, },
->  	{ .compatible = "usb4b4,6570", .data = &cypress_hx2vl_data, },
-> 
-> -- 
-> 2.48.1
-> 
-> 
+diff --git a/Documentation/usb/gadget_configfs.rst b/Documentation/usb/gadget_configfs.rst
+index 868e118a2644..f069d2a0d092 100644
+--- a/Documentation/usb/gadget_configfs.rst
++++ b/Documentation/usb/gadget_configfs.rst
+@@ -369,18 +369,18 @@ For more information on configfs please see
+ The concepts described above translate to USB gadgets like this:
+ 
+ 1. A gadget has its config group, which has some attributes (idVendor,
+-idProduct etc) and default sub-groups (configs, functions, strings).
+-Writing to the attributes causes the information to be stored in
+-appropriate locations. In the configs, functions and strings sub-groups
+-a user can create their sub-groups to represent configurations, functions,
+-and groups of strings in a given language.
++   idProduct etc) and default sub-groups (configs, functions, strings).
++   Writing to the attributes causes the information to be stored in appropriate
++   locations. In the configs, functions and strings sub-groups a user can
++   create their sub-groups to represent configurations, functions, and groups
++   of strings in a given language.
+ 
+ 2. The user creates configurations and functions, in the configurations
+-creates symbolic links to functions. This information is used when the
+-gadget's UDC attribute is written to, which means binding the gadget
+-to the UDC. The code in drivers/usb/gadget/configfs.c iterates over
+-all configurations, and in each configuration it iterates over all
+-functions and binds them. This way the whole gadget is bound.
++   creates symbolic links to functions. This information is used when the
++   gadget's UDC attribute is written to, which means binding the gadget to the
++   UDC. The code in drivers/usb/gadget/configfs.c iterates over all
++   configurations, and in each configuration it iterates over all functions and
++   binds them. This way the whole gadget is bound.
+ 
+ 3. The file drivers/usb/gadget/configfs.c contains code for
+ 
+@@ -388,13 +388,12 @@ functions and binds them. This way the whole gadget is bound.
+ 	- gadget's default groups (configs, functions, strings)
+ 	- associating functions with configurations (symlinks)
+ 
+-4. Each USB function naturally has its own view of what it wants
+-configured, so config_groups for particular functions are defined
+-in the functions implementation files drivers/usb/gadget/f_*.c.
++4. Each USB function naturally has its own view of what it wants configured, so
++   config_groups for particular functions are defined in the functions
++   implementation files drivers/usb/gadget/f_*.c.
+ 
+ 5. Function's code is written in such a way that it uses
+-
+-usb_get_function_instance(), which, in turn, calls request_module.
+-So, provided that modprobe works, modules for particular functions
+-are loaded automatically. Please note that the converse is not true:
+-after a gadget is disabled and torn down, the modules remain loaded.
++   usb_get_function_instance(), which, in turn, calls request_module.  So,
++   provided that modprobe works, modules for particular functions are loaded
++   automatically. Please note that the converse is not true: after a gadget is
++   disabled and torn down, the modules remain loaded.
 
+base-commit: e271ed52b344ac02d4581286961d0c40acc54c03
 -- 
-With best wishes
-Dmitry
+2.47.2
+
 
