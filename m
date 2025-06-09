@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-24618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37472AD1FEC
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:50:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77E4AAD201D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:53:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BCC2160CAA
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:48:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C77188D91E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C4F1E87B;
-	Mon,  9 Jun 2025 13:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CA225F962;
+	Mon,  9 Jun 2025 13:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvxZPAhc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSVhmChF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B35D8F5B;
-	Mon,  9 Jun 2025 13:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AE925A2B4;
+	Mon,  9 Jun 2025 13:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749476899; cv=none; b=QQYoGh/kEAGhyP0ZBZZNBJGhO+oH61P7n5iEqQu19FswwRNr3PFvV8YHLetUI7qU1kUz2+YSkAIt/bgCyHJA/EQUBmdSz1B5OM+k6BkY6BUibqfwx0U+eTSUae8jLaeN+ArXG1vRc5uucm2JK+VLBwsaZ+5yRcLM+i0zIddIoSQ=
+	t=1749476920; cv=none; b=MuHgvsHAlXFLVMTLjW8hoWkB3UnMec090p2+K0TZAv/X6vdJmcAgAufaImxZ4Q4O4I+sdJxZ8MqnBnF1cOmNldJ7u+fUXSFhU99ZYVv92j4YA182p9suFHTIozxnuU8ZOvrj9p6Z9fKtOeCbFyad7cQ8exfNBAEwqgO+lQU2q3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749476899; c=relaxed/simple;
-	bh=OnEQIhFCYleM29aR7j69W7dZds73BHXWIthCtRK73hA=;
+	s=arc-20240116; t=1749476920; c=relaxed/simple;
+	bh=aPHHwZAuIzinFE5xeLVEcGVaE9eTES3VLnxMT82TSPE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HVrYa2mOSnmvUPXvSaeTz7HuZjA0e1RapC93B1sXkQZwRIVey7gjTNzELZHaJCn6eWR1QaAmxM1GjoJl0qS6FP/CxViUyaOI1uFImowFUV3lgZ1PyXe7/Sxuj+B/Pj4uLStlRIiiHiHYLIboZfDDG0UO7io6dLlFefb2iQ0PQy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvxZPAhc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992B9C4CEED;
-	Mon,  9 Jun 2025 13:48:18 +0000 (UTC)
+	 MIME-Version:Content-Type; b=KLSE1V57yocaq7W5rOvqZNSNgmqDDnQjQbRiu/bxKaxvhuH0aTQvnuB0aDV5kE7U1dAnBw7AtWcfjTT0WVarwXF+gGaSgA1jDvNjtivEZbZbTBLv8c4psIrbJyGDcta7AnZfKwJeiMFYRhSXdcN8nuY1Ash+wZPU4kvSt4uFW/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSVhmChF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB02C4CEF0;
+	Mon,  9 Jun 2025 13:48:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749476899;
-	bh=OnEQIhFCYleM29aR7j69W7dZds73BHXWIthCtRK73hA=;
+	s=k20201202; t=1749476919;
+	bh=aPHHwZAuIzinFE5xeLVEcGVaE9eTES3VLnxMT82TSPE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cvxZPAhcDL2Yn6eY4JEbhd8cK42YhRFlyOsb6XSS7fIS2BiASDqAn+C3zUWV8GCKe
-	 Fc1ltx2TcppcGaWwKdczo3D1hOs8XJ6kGtq6oFdQkrtcixBLGWCpfHLXLAY7DWI9me
-	 o6ZHOdkNhehJltNCQl0OkYpzddgD7heAnBZLOO9p3D6UYc0TQH7Ll7r83pBcWwdP0c
-	 +x/km9HiK13OXDh35ADMm5oHODi//DHQQqdi+rjhLYLWYnlWZ/f3Dza4+sbjvKonBA
-	 WuGUc8lrdhTuUyk1FRAu7ra18cohcnikeXExHS2GoYqzQRpg5drX0Q6cVXQzvJs4ZC
-	 9Gm8sB+6rZHoQ==
+	b=sSVhmChF4fnRvQOWMh+oMCQQTig7Ljj623KPrxV9d5pUafUrr1H5ANW6nzvMq7bha
+	 7lswPhOVwxlpJDZ/Z9hIrckgGe50MPa8OoxUfGZ9clIyk6Ae1770pRlc9LT2aIKCre
+	 HqaSvN9Td16ek9XEwZkaaKydd42H+YFffvGR9m7mPlhOaxC7l3vjOcgMVEwwGDNCUs
+	 XV3it4WQ8/n3s4Bv+mcSpujcZfAOJ8E9o54mfFmBhlCc6m1K/eRag6RjBHgYCfMnpk
+	 l5ji+GkG5Vi/57pC16xJRIwkydP424GObplfyHt3fg53tCnqzH9oBVYI86ZI2GwnIk
+	 N+WIELrr8DFjg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jos Wang <joswang@lenovo.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 12/12] usb: typec: displayport: Receive DP Status Update NAK request exit dp altmode
-Date: Mon,  9 Jun 2025 09:47:55 -0400
-Message-Id: <20250609134755.1345286-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 9/9] usb: typec: displayport: Receive DP Status Update NAK request exit dp altmode
+Date: Mon,  9 Jun 2025 09:48:20 -0400
+Message-Id: <20250609134820.1345562-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250609134755.1345286-1-sashal@kernel.org>
-References: <20250609134755.1345286-1-sashal@kernel.org>
+In-Reply-To: <20250609134820.1345562-1-sashal@kernel.org>
+References: <20250609134820.1345562-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,7 +64,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.185
+X-stable-base: Linux 5.10.238
 Content-Transfer-Encoding: 8bit
 
 From: Jos Wang <joswang@lenovo.com>
@@ -177,10 +177,10 @@ compatibility fix that stable trees are designed to address.
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 97a912f0c4eed..c76b872535d17 100644
+index e0456e5e10b68..a577db01e67e1 100644
 --- a/drivers/usb/typec/altmodes/displayport.c
 +++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -298,6 +298,10 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+@@ -304,6 +304,10 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
  		break;
  	case CMDT_RSP_NAK:
  		switch (cmd) {
