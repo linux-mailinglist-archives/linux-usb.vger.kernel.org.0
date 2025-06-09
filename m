@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-24605-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24606-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81BCDAD1F6E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:46:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34C9BAD1F7F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66C5B188E7CE
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:46:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10852188F154
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A304325A347;
-	Mon,  9 Jun 2025 13:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E8DF25A35D;
+	Mon,  9 Jun 2025 13:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OipSWAHE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qLNqQHAp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2332F8F5B;
-	Mon,  9 Jun 2025 13:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C158F5B;
+	Mon,  9 Jun 2025 13:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749476741; cv=none; b=HNZG/ZCzuZI+V+XkNof+93RgesbU0LgXZfAOjRdS3pE2LwTIKj4GrJYWMmrZeunfIxQC8M5+u/uXr4oAa1fU0v4ACY7VNdY+mmirDLHPvAaGl6usq9+zcgZRic3uH/yhDecetHYgnc6LYsrRkGidq/Z/4zyfAcSE6FmiUl8LU1c=
+	t=1749476762; cv=none; b=suknPcYYuii+edj9FCBt+D74I/SsC53hbcUvlv8Zv1YbS7Q5qEtw8Qm/FfszJiHSIREagEXJ5+ylEZw4wscGC6LpT4oaicQot2Hy7JXKsvH1S8t5Qa5FLIZRo/RKlIGkSaiu+KEOzLBn5Tj9JQGYit83V2rd60HY6bfm6pHX4Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749476741; c=relaxed/simple;
-	bh=nrqqEGo6jaJwQGs6JIAmZhKgMNrOYuEAvZ+Ai/B8Nko=;
+	s=arc-20240116; t=1749476762; c=relaxed/simple;
+	bh=9uj5fqE9tylNERsX/rBTOCw9EOsZwUz2zxDSfGw0s2Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pdGD5VCHRxS1cOl474b7D+Um4oaOb9i2cpQ2ND+q/hudAqctYd+LuiaGavJsFj1dk2MpOch4Pyok/R6fE7hZvFiyBSzF66AIpOpGhfwv17q0b0mJm/0leswZkiKcya7ZKvV35GoekLuBpewMMZrmjGNgCuczmVm3TEaio5Gpvyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OipSWAHE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DBBC4CEEB;
-	Mon,  9 Jun 2025 13:45:40 +0000 (UTC)
+	 MIME-Version:Content-Type; b=orj2Om3sl0KCiYTKDf3O6H5HQQYqg+5ziB8Ucp0aPV0H7joVSiJokLUVTAwYJkEB2Eo503k41qQyUpD31mDUXxVwb9YpjfZDWCBthdP6wKLLx7Yqi3yMrUdbGDNomubE/S0fRnDJvCXMbohNKFTshqMT7/QoiLolk/SHxS1wGdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qLNqQHAp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D6CC4CEED;
+	Mon,  9 Jun 2025 13:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749476741;
-	bh=nrqqEGo6jaJwQGs6JIAmZhKgMNrOYuEAvZ+Ai/B8Nko=;
+	s=k20201202; t=1749476762;
+	bh=9uj5fqE9tylNERsX/rBTOCw9EOsZwUz2zxDSfGw0s2Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OipSWAHEAdoHbs2jJrEnifkr41u7qorFfBoIIQ86O3wMUkAL7j7JPyWHQ58vkf1ha
-	 buwGgTGwb7k0ZKYM53SqBVQTym7ei3KfqJBgTDFTWUrS7oKSUwojQrXZ4C9mnS53AC
-	 xUypkalhkp/GpB6q+XAEBBV7M0cP+2I4SjRdUe4UJfcGwee696a77JAyU5T7GeWVTK
-	 Mct1TNAXIr32YsShogrlIB/bK4ZhQHo5jHGoEUvrZP/gfTtmdvSS8cMkSuhQls0et7
-	 5xGBJaYSxG95yO2WQCzttpArFdGlOtWGu4sfi7dtD5tcigQzOe4cKuq2DQ2ZSPocHU
-	 CHxuiUY+wxORg==
+	b=qLNqQHApxzuHu21k5jEl3LR79jVDSCm2Fhnm7ZbOMhSaxdTdPtPapoxQIQhEv0D0z
+	 6iqjFHaKTKov3pfEUKeIfIfc6BwV0sISkctuHbB9BTqPyGJEhzV8nKTcXa9wsafInc
+	 Es8IQihu7+0N5JIse8ULWV2NqFdU25uXEpKxaNbK5vshpdt71TLm8rognvxr5b99jK
+	 tGYRmMHXdgyom5A70qm5sfsP2FzxtY5YG9b7u9O1/t3fhsk0cvUlWN8YcqpkCk9Euy
+	 GuXA2c7CXciMeLnX21P88pbzsk/NWpsoVW1xmoYXrH99uZBWm1vQoK0kv7uAiF9+CF
+	 Pyex5ZprmeASA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Minas Harutyunyan <hminas@synopsys.com>,
+Cc: Jos Wang <joswang@lenovo.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 14/29] usb: dwc2: also exit clock_gating when stopping udc while suspended
-Date: Mon,  9 Jun 2025 09:44:55 -0400
-Message-Id: <20250609134511.1342999-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 26/29] usb: typec: displayport: Receive DP Status Update NAK request exit dp altmode
+Date: Mon,  9 Jun 2025 09:45:07 -0400
+Message-Id: <20250609134511.1342999-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250609134511.1342999-1-sashal@kernel.org>
 References: <20250609134511.1342999-1-sashal@kernel.org>
@@ -61,34 +61,40 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14.10
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+From: Jos Wang <joswang@lenovo.com>
 
-[ Upstream commit af076a41f8a28faf9ceb9dd2d88aef2c202ef39a ]
+[ Upstream commit b4b38ffb38c91afd4dc387608db26f6fc34ed40b ]
 
-It is possible that the gadget will be disabled, while the udc is
-suspended. When enabling the udc in that case, the clock gating
-will not be enabled again. Leaving the phy unclocked. Even when the
-udc is not enabled, connecting this powered but not clocked phy leads
-to enumeration errors on the host side.
+Although some Type-C DRD devices that do not support the DP Sink
+function (such as Huawei Mate 40Pro), the Source Port initiates
+Enter Mode CMD, but the device responds to Enter Mode ACK, the
+Source port then initiates DP Status Update CMD, and the device
+responds to DP Status Update NAK.
 
-To ensure that the clock gating will be in an valid state, we ensure
-that the clock gating will be enabled before stopping the udc.
+As PD2.0 spec ("6.4.4.3.4 Enter Mode Command")，A DR_Swap Message
+Shall Not be sent during Modal Operation between the Port Partners.
+At this time, the source port initiates DR_Swap message through the
+"echo device > /sys/class/typec/port0/data_role" command to switch
+the data role from host to device. The device will initiate a Hard
+Reset for recovery, resulting in the failure of data role swap.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Link: https://lore.kernel.org/r/20250417-dwc2_clock_gating-v1-1-8ea7c4d53d73@pengutronix.de
+Therefore, when DP Status Update NAK is received, Exit Mode CMD is
+initiated to exit the currently entered DP altmode.
+
+Signed-off-by: Jos Wang <joswang@lenovo.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20250209071926.69625-1-joswang1221@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-Based on my analysis of the code, similar commits, and the context, here
-is my assessment:
+Based on my analysis of the commit and the code, here is my assessment:
 
 **YES**
 
@@ -97,89 +103,94 @@ extensive analysis:
 
 ## Code Analysis
 
-The commit adds clock gating exit logic to the `dwc2_hsotg_udc_stop()`
-function in drivers/usb/dwc2/gadget.c. Specifically, it adds these lines
-before shutting down endpoints:
+The commit adds a simple but important fix to handle a specific NAK
+response scenario in the DisplayPort alternate mode driver.
+Specifically, it adds this code block:
 
 ```c
-/* Exit clock gating when driver is stopped. */
-if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
-    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
-    dwc2_gadget_exit_clock_gating(hsotg, 0);
-}
+case CMDT_RSP_NAK:
+    switch (cmd) {
++   case DP_CMD_STATUS_UPDATE:
++       if (typec_altmode_exit(alt))
++           dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
++       break;
+    case DP_CMD_CONFIGURE:
+        dp->data.conf = 0;
+        ret = dp_altmode_configured(dp);
+        break;
 ```
 
-## Rationale for Backporting
+## Why This Should Be Backported
 
-1. **Follows Established Pattern**: The code change exactly matches the
-   pattern used throughout the dwc2 driver in other similar contexts. I
-   found identical condition checks and dwc2_gadget_exit_clock_gating()
-   calls in:
-   - `drivers/usb/dwc2/platform.c:333-336` (driver removal)
-   - `drivers/usb/dwc2/core_intr.c:314-317` (session request interrupt)
-   - `drivers/usb/dwc2/core_intr.c:447-450` (wakeup detected interrupt)
-   - `drivers/usb/dwc2/gadget.c:3738-3741` (USB reset detect interrupt)
+**1. Fixes a Real Hardware Compatibility Issue**
+- The commit specifically addresses compatibility with devices like
+  "Huawei Mate 40Pro" that don't support DP Sink function
+- These devices respond with NAK to DP Status Update commands, creating
+  a problematic state
 
-2. **Fixes a Real Bug**: The commit message describes a specific
-   hardware state issue: "Even when the udc is not enabled, connecting
-   this powered but not clocked phy leads to enumeration errors on the
-   host side." This indicates a functional problem that affects users.
+**2. Prevents System Instability**
+- According to the commit message, without this fix, attempts to perform
+  DR_Swap operations result in Hard Reset from the device
+- This causes data role swap failures, which is a significant functional
+  regression
 
-3. **Low Risk, High Consistency**: The fix simply adds the same clock
-   gating exit pattern that already exists in 4+ other locations in the
-   same driver. This demonstrates it's a well-tested, safe pattern.
+**3. Follows USB PD Specification**
+- The fix aligns with PD2.0 spec section 6.4.4.3.4 which states "A
+  DR_Swap Message Shall Not be sent during Modal Operation"
+- By exiting DP altmode when NAK is received, it allows proper DR_Swap
+  operation
 
-4. **Critical Hardware State Management**: Clock gating is a fundamental
-   power management feature, and incorrect state handling can cause
-   system hangs or hardware enumeration failures, as evidenced by the
-   related fix in commit 2c6b6afa59e7 which had to be marked for stable.
+**4. Small, Contained, Low-Risk Change**
+- The change is only 4 lines of code
+- It's confined to a specific error handling path (NAK response to
+  STATUS_UPDATE)
+- Uses existing, well-tested `typec_altmode_exit()` function
+- No new functionality or architectural changes
 
-5. **Matches Historical Precedent**: Looking at the reference commits:
-   - Similar Commit #2 (YES): "usb: dwc2: gadget: Fix exiting from clock
-     gating" - This shows clock gating exit fixes are considered
-     backport-worthy
-   - Similar Commit #3 (YES): "usb: dwc2: do not gate off the hardware
-     if it does not support clock gating" - This reinforces that clock
-     gating correctness is critical
+**5. Clear Bug Fix Pattern**
+- Similar to commit #4 in the reference examples (which was marked YES
+  for backport)
+- Both involve adding proper exit handling in response to specific
+  conditions
+- Both are small, targeted fixes for real-world device compatibility
 
-6. **Stable Tree Criteria Met**:
-   - ✅ Fixes important bug (PHY enumeration errors)
-   - ✅ Small and contained change (6 lines)
-   - ✅ No architectural changes
-   - ✅ Minimal regression risk (uses existing, proven pattern)
-   - ✅ Confined to dwc2 subsystem
+**6. Stable Tree Criteria Met**
+- ✅ Fixes important bugs affecting real hardware
+- ✅ Minimal risk of regression
+- ✅ Doesn't introduce new features
+- ✅ No architectural changes
+- ✅ Confined to specific subsystem (USB Type-C DP altmode)
 
-7. **Recent Historical Context**: The git history shows multiple recent
-   clock gating fixes that were marked for stable (31f42da31417,
-   2c6b6afa59e7), indicating this subsystem area is actively maintained
-   and these types of fixes are important for stable trees.
+**7. Reference Pattern Alignment**
+The commit pattern closely matches Similar Commit #4 which was marked
+for backport:
+- Both add exit mode handling for specific error conditions
+- Both are small, targeted fixes for real device compatibility
+- Both prevent system-level issues (Hard Reset in this case)
 
-The commit addresses a state consistency issue where the clock gating
-state becomes invalid when the UDC is stopped while suspended, leading
-to hardware enumeration problems. This is exactly the type of subtle but
-important hardware state management bug that stable trees are designed
-to fix.
+The change correctly handles an edge case where devices NAK the Status
+Update command, ensuring clean exit from DP altmode to prevent
+subsequent operational issues. This is exactly the type of hardware
+compatibility fix that stable trees are designed to address.
 
- drivers/usb/dwc2/gadget.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/typec/altmodes/displayport.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index bd4c788f03bc1..d3d0d75ab1f59 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4604,6 +4604,12 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
- 	if (!hsotg)
- 		return -ENODEV;
- 
-+	/* Exit clock gating when driver is stopped. */
-+	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
-+	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
-+		dwc2_gadget_exit_clock_gating(hsotg, 0);
-+	}
-+
- 	/* all endpoints should be shutdown */
- 	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
- 		if (hsotg->eps_in[ep])
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index ac84a6d64c2fb..b09b58d7311de 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -393,6 +393,10 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+ 		break;
+ 	case CMDT_RSP_NAK:
+ 		switch (cmd) {
++		case DP_CMD_STATUS_UPDATE:
++			if (typec_altmode_exit(alt))
++				dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
++			break;
+ 		case DP_CMD_CONFIGURE:
+ 			dp->data.conf = 0;
+ 			ret = dp_altmode_configured(dp);
 -- 
 2.39.5
 
