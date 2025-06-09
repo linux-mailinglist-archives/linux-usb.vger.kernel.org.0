@@ -1,100 +1,132 @@
-Return-Path: <linux-usb+bounces-24587-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24588-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89CF9AD172F
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 04:49:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21235AD1856
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 07:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 607017A28FD
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 02:47:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA3931655AB
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 05:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C4D24C676;
-	Mon,  9 Jun 2025 02:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF6C28002D;
+	Mon,  9 Jun 2025 05:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZvKR70r"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="OP+3WZHn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E310624BBFC;
-	Mon,  9 Jun 2025 02:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A8E280031;
+	Mon,  9 Jun 2025 05:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749437207; cv=none; b=ocKW8SGCDnK+6SYuIHhbu7nfvKePN4Mp7nAwskxVgksia5V/CV1ihS/dmVHCv+dUA2h9a85SfOGGUkJogtAF3O7uBzhj8YRhXgddt0TMOM05uAlC0bs8t4E7UAyIkdMHvDlpNXpFivfX0a8zCKmloG63MpbUQc6hJQk8xD70Ldg=
+	t=1749447114; cv=none; b=JHk4q24GWkXasc1/Q8PoDgP53wxoObxcg0Rj3fRd55M48IE/V9XE4npZ/8UksOmKQ9GJn2qO2KBOjgA9Toq9GEIOimmHIrEyQjrMIsmGFx49KB8dmLDuPO7B1KD147G8q4n7DiV1FeiD9c50s4PrwZ+xFtWTPElqCaF6FdTu2fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749437207; c=relaxed/simple;
-	bh=kU6/5PrnoLPvsSRESMinNLoRD724Pj4qIwsER9avoT8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jR8oXmZbDbaAPxp3eCoAHPQ5FntdHuUGEU+9ttqn/1EUkVUC0wsFJFXOnAIbQXZusv4kx6LdPvm+80qZavvmfLly1bgOyIatHTcJEs+mP7xhV2Z2UMA8mEYWXbmRjq3fvAivibokbgdRwWtYMdeDr0GFHOmtwpynNnjKKSyAD3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZvKR70r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18763C4CEF5;
-	Mon,  9 Jun 2025 02:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749437205;
-	bh=kU6/5PrnoLPvsSRESMinNLoRD724Pj4qIwsER9avoT8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UZvKR70rBdP3dlik5UAP5m+f8VYflYUmi6Tv6l+mEvoC6VJoRyzu72O2599XlVn6o
-	 lTbUVQVIXEEJ5cIkl8pyOEmdDI0u+JD3VgxZdsCcuspODUmLpVKUQeOYStOAqyfGXi
-	 8+hE9sFcPQSXmOwE2dZ7B+78khv437ikXt8MvsaU+SCwJv3ERtK89bUgI8FyUURrln
-	 9Z93cSsv/BfCw9XgQWzpUOo3PHl8nMgL9M6EjIAT/aUDdd0bjtam5aFsMD7tA7tN6y
-	 IrtbehRzta/vL2J+cYTVxEnBuZIm84+eMthlOe9pjxOuqjTjeqSwvMXcScVRtb8dbN
-	 QdaudT+cjQWow==
-From: Mario Limonciello <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Cc: amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list),
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 5/5] usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
-Date: Sun,  8 Jun 2025 21:46:19 -0500
-Message-ID: <20250609024619.407257-6-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250609024619.407257-1-superm1@kernel.org>
-References: <20250609024619.407257-1-superm1@kernel.org>
+	s=arc-20240116; t=1749447114; c=relaxed/simple;
+	bh=xwHgyoHajGhFY1G2n44w1WEmYaier/b42ADmqkITLwU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YSgn1KJwVo0Rn4WlcGrc/2Q4iDRxFodSUm+XYYQzo694t+qhO/kTWlaZx6+fQaYKTb4Jq4mP5ZBSOPwjU4O1vir/P2f1A3uNZ7FjIJbR0sxmP7pvUjzocbFJjw2Qr9mlpk7nOPQIDOAYKeivV02hfVnfv94FwuFE7wBuyiHIX14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=OP+3WZHn; arc=none smtp.client-ip=1.95.21.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=AvQOg1tPoDT2meHewRVvm4BILZo75QenErRGTw3BX5U=;
+	b=OP+3WZHnqjLcnJefGNCXPvOIJyNhaV/AI6aKi6ETAnFOWcnwXt4JmA+G6Vvx4o
+	mJBMvduyWSxhAiH5OqvrzgFfTZgrDT08wtWzEptDF9Plbr4UHoVL7b463733ZhOl
+	CSu0fUEjEu1UulZudSBk1Q8LczQx9oWkDafIoIm331Nwg=
+Received: from dragon (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgD33+yacUZoxUA_AA--.25782S3;
+	Mon, 09 Jun 2025 13:31:08 +0800 (CST)
+Date: Mon, 9 Jun 2025 13:31:06 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Xu Yang <xu.yang_2@nxp.com>, Peter Chen <peter.chen@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>, imx@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: i.MX kernel hangup caused by chipidea USB gadget driver
+Message-ID: <aEZxmlHmjeWcXiF3@dragon>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-CM-TRANSID:Ms8vCgD33+yacUZoxUA_AA--.25782S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr47JF43WrW5AF13WFy7GFg_yoW8Zw47pa
+	13Aw17CrnxJFyxKF4Iy34jkFZ8Aa95JryqgF13X3y8Z3W5Cr9xCr4UKFyfXasFvF95Ca1q
+	yr4UW34xGFy8WF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jTT5QUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiIBwvlGhGcZz+bAAA3W
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+Hi Xu, Peter,
 
-When the ACPI core uses hibernation callbacks for shutdown drivers
-will receive PM_EVENT_POWEROFF and should handle it the same as
-PM_EVENT_HIBERNATE would have been used.
+I'm seeing a kernel hangup on imx8mm-evk board.  It happens when:
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/usb/host/sl811-hcd.c | 1 +
- 1 file changed, 1 insertion(+)
+ - USB gadget is enabled as Ethernet
+ - There is data transfer over USB Ethernet
+ - Device is going in/out suspend
 
-diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index ea3cab99c5d40..5d6dba681e503 100644
---- a/drivers/usb/host/sl811-hcd.c
-+++ b/drivers/usb/host/sl811-hcd.c
-@@ -1748,6 +1748,7 @@ sl811h_suspend(struct platform_device *dev, pm_message_t state)
- 		break;
- 	case PM_EVENT_SUSPEND:
- 	case PM_EVENT_HIBERNATE:
-+	case PM_EVENT_POWEROFF:
- 	case PM_EVENT_PRETHAW:		/* explicitly discard hw state */
- 		port_power(sl811, 0);
- 		break;
--- 
-2.43.0
+A simple way to reproduce the issue could be:
+
+ 1. Copy a big file (like 500MB) from host PC to device with scp
+
+ 2. While the file copy is ongoing, suspend & resume the device like:
+
+    $ echo +3 > /sys/class/rtc/rtc0/wakealarm; echo mem > /sys/power/state
+
+ 3. The device will hang up there
+
+I reproduced on the following kernels:
+
+ - Mainline kernel
+ - NXP kernel lf-6.6.y
+ - NXP kernel lf-6.12.y
+
+But NXP kernel lf-6.1.y doesn't have this problem.  I tracked it down to
+Peter's commit [1] on lf-6.1.y, and found that the gadget disconnect &
+connect calls got lost from suspend & resume hooks, when the commit were
+split and pushed upstream.  I confirm that adding the calls back fixes
+the hangup.
+
+---8<--------------------
+
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 8a9b31fd5c89..72329a7eac4d 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -2374,6 +2374,9 @@ static void udc_suspend(struct ci_hdrc *ci)
+         */
+        if (hw_read(ci, OP_ENDPTLISTADDR, ~0) == 0)
+                hw_write(ci, OP_ENDPTLISTADDR, ~0, ~0);
++
++       if (ci->driver && ci->vbus_active && (ci->gadget.state != USB_STATE_SUSPENDED))
++               usb_gadget_disconnect(&ci->gadget);
+ }
+ 
+ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+@@ -2384,6 +2387,9 @@ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+                                        OTGSC_BSVIS | OTGSC_BSVIE);
+                if (ci->vbus_active)
+                        usb_gadget_vbus_disconnect(&ci->gadget);
++       } else {
++               if (ci->driver && ci->vbus_active)
++                       usb_gadget_connect(&ci->gadget);
+        }
+ 
+        /* Restore value 0 if it was set for power lost check */
+
+---->8------------------
+
+But it's unclear to me why the hangup happens and how the change above
+fix the problem.  Do you guys have any insight here?
+
+Shawn
+
+[1] https://github.com/reMarkable/linux-imx/commit/0791d25578cb0e46fd93ae7a3c36ff7a424f3547
 
 
