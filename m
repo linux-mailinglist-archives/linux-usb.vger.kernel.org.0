@@ -1,58 +1,56 @@
-Return-Path: <linux-usb+bounces-24575-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24576-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307FCAD165A
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 02:43:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6667DAD169C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 04:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306143AB476
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 00:43:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 302A93A97CF
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 02:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29D72940D;
-	Mon,  9 Jun 2025 00:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3788F171092;
+	Mon,  9 Jun 2025 02:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hc6z34FV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d+vuPMlr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA5E17597;
-	Mon,  9 Jun 2025 00:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6362F3E;
+	Mon,  9 Jun 2025 02:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749429808; cv=none; b=IhbgUWGvEaIIDFFgSeV7xQ1nIR6UM30DMFaxd9U1bQ3z9ey+50UjSQPEB2DChQy5qZQFzY6+n+xz16D++9wgmFRY/Kqm6CSmZBxZg69xNRHCX13ZjIFdhPGIgvjjwisKq8XgwzHHJIzFTT34yeG1qPsErQ99ydKsd+oHefSdzTM=
+	t=1749434548; cv=none; b=pDiB8UfyYILUfpUvFkxCzLSrP+tPxzZ3FAw9Cv0M+lkQEc2HL5+nZmpXO7jeXmt+moHz3hwOex8SH2pZ1h8CyWgi4mCx1fN9afa+ZhUNeWKn7Gar8NSZC59W7gqhb7S9a0NC1fpfkyGD7mtX6EBQe3tSqhRRHH1e0BET+DaUReE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749429808; c=relaxed/simple;
-	bh=0VhPIT4X4Bsr/vXEgo6KBOHU3XZtB3TmwwJ++rKE5UM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BOk7wIcXRjhW6G15Rc55neCl9uU7rhsfGw0HY/qwK08IZyFtF44jAgmFLDKhUTj1a1Dj3OSkYR40/AgUt1eAqNw6uA9Z3GYH622kBg8Tl5eVs7wLEiYI1WfbT7/3y4B++FMkAzcl5WsUiBgpCEGTw6+d69kWh7YrhFCsLzR6r4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hc6z34FV; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=s9ZwIRupw7AZC9X39pOlp8JbCxF4TegF7yM50iL/ESM=; b=hc6z34FVzELU7tl4
-	mMpSH9JmSUloxSPstSFCQkJtR+nX9FKTvcqsi2Jp8LnWJMZWHbB3xze+amHEY3diszsY22b9PWcsY
-	7ESQj2coZzmMuVQUvk27adRzqDIZVVolj0vgYwClsAN8M437dMXoOOiuHosqTPUJDa3nzJASXjhxC
-	PwSA2UbkCaQw7FRXXuaUgSQeKjLhTadgJ+E1U/BJRV369wg63fjK47kLMns3cdojRFcqxMNh24FFt
-	lGsHLQIrGHEvsWREoxnTdoQ6xEkX9cG1jz0trTvDT37YlobP7ENDutDKkOGyHtVk6jZH80q+H7vY5
-	6U+zi6uYDbNf4T3+BA==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1uOQbg-008JKd-0F;
-	Mon, 09 Jun 2025 00:43:20 +0000
-From: linux@treblig.org
-To: heikki.krogerus@linux.intel.com,
+	s=arc-20240116; t=1749434548; c=relaxed/simple;
+	bh=GKVVPYW7fsLWGXJ27H82XRFr2G8LyYDvCFJXp7kftDM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ymbzyn77UO2Jh7eb9bEmSQaahGSCTiRuzlgLRIfl5qHOfFbGFzc2XIW5PkwSouV63I3OamYKHf3GxGa/9g3CrlUP68P3cBxQgptx3R3FwS4MAwKt/wfRYhH/POxSiV6/U1N43kISeiqeb8fzUvZqu2v56JKq9nOFwUAddI67Opg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d+vuPMlr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E89AC4CEEE;
+	Mon,  9 Jun 2025 02:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749434548;
+	bh=GKVVPYW7fsLWGXJ27H82XRFr2G8LyYDvCFJXp7kftDM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=d+vuPMlrArewNLO10ylBrR43TXVjJkg+Z5G/yyUZss4LR0PNGEXVAPgp/ew2fPdUF
+	 YryKycaaDbmUk0CFen1KoynEOflMjLDt+xWO6rXXQJ2Dqifg6b9E0ET4H/m2xYPECb
+	 Zzs8rGgsHWyt4N1u4SurayanjnzN8C4gWvCW84JZvuJo3tOrd8n8g6bDxjrXEwnUWp
+	 1MuXHNiTGBiRir69b+ScRyy2bTKflT0nt3zt9fgJov3v62eMKi/XBZqwAMI0nBQaQ5
+	 ccP5yOfibe0NXVR/lrNrZo6ECYblOiZWa2pRr5G4bO+vxOW9i0mvq8EUD7xmtOJhKj
+	 B8JmCYGy+77kQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: mario.limonciello@amd.com,
+	bhelgaas@google.com,
 	gregkh@linuxfoundation.org,
+	mathias.nyman@intel.com
+Cc: linux-pci@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] usb: typec: Remove unused ucsi_cci_str
-Date: Mon,  9 Jun 2025 01:43:19 +0100
-Message-ID: <20250609004319.209143-1-linux@treblig.org>
-X-Mailer: git-send-email 2.49.0
+Subject: [PATCH 0/4] Don't make noise about disconnected USB4 devices
+Date: Sun,  8 Jun 2025 20:58:00 -0500
+Message-ID: <20250609020223.269407-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,60 +59,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-ucsi_cci_str() last use was removed in 2019 by
-commit 2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+When a USB4 or TBT3 dock is disconnected a lot of warnings and errors
+are emitted related to the PCIe tunnels and XHCI controllers in th
+dock.
 
-Remove it.
+The messages are loud, but it's mostly because the functions that
+emit the messages don't check whether the device is actually alive.
+The PCIe hotplug services mark the device as perm dead, so that
+can be used to hide some of the messsages.
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/usb/typec/ucsi/trace.c | 17 -----------------
- drivers/usb/typec/ucsi/trace.h |  1 -
- 2 files changed, 18 deletions(-)
+In the XHCI driver the device is marked as dying already, so that
+can also be used to hide messages.
 
-diff --git a/drivers/usb/typec/ucsi/trace.c b/drivers/usb/typec/ucsi/trace.c
-index 596a9542d401..13a38422743a 100644
---- a/drivers/usb/typec/ucsi/trace.c
-+++ b/drivers/usb/typec/ucsi/trace.c
-@@ -33,23 +33,6 @@ const char *ucsi_cmd_str(u64 raw_cmd)
- 	return ucsi_cmd_strs[(cmd >= ARRAY_SIZE(ucsi_cmd_strs)) ? 0 : cmd];
- }
- 
--const char *ucsi_cci_str(u32 cci)
--{
--	if (UCSI_CCI_CONNECTOR(cci)) {
--		if (cci & UCSI_CCI_ACK_COMPLETE)
--			return "Event pending (ACK completed)";
--		if (cci & UCSI_CCI_COMMAND_COMPLETE)
--			return "Event pending (command completed)";
--		return "Connector Change";
--	}
--	if (cci & UCSI_CCI_ACK_COMPLETE)
--		return "ACK completed";
--	if (cci & UCSI_CCI_COMMAND_COMPLETE)
--		return "Command completed";
--
--	return "";
--}
--
- static const char * const ucsi_recipient_strs[] = {
- 	[UCSI_RECIPIENT_CON]		= "port",
- 	[UCSI_RECIPIENT_SOP]		= "partner",
-diff --git a/drivers/usb/typec/ucsi/trace.h b/drivers/usb/typec/ucsi/trace.h
-index 41701dee7056..9554a0207276 100644
---- a/drivers/usb/typec/ucsi/trace.h
-+++ b/drivers/usb/typec/ucsi/trace.h
-@@ -10,7 +10,6 @@
- #include <linux/usb/typec_altmode.h>
- 
- const char *ucsi_cmd_str(u64 raw_cmd);
--const char *ucsi_cci_str(u32 cci);
- const char *ucsi_recipient_str(u8 recipient);
- 
- DECLARE_EVENT_CLASS(ucsi_log_command,
+Mario Limonciello (4):
+  PCI: Don't show errors on inaccessible PCI devices
+  PCI: Fix runtime PM usage count underflow
+  usb: xhci: Avoid showing errors during surprise removal
+  usb: xhci: Avoid showing warnings for dying controller
+
+ drivers/pci/pci-driver.c     | 3 ++-
+ drivers/pci/pci.c            | 5 +++--
+ drivers/usb/host/xhci-ring.c | 7 +++++--
+ drivers/usb/host/xhci.c      | 6 ++++--
+ 4 files changed, 14 insertions(+), 7 deletions(-)
+
 -- 
-2.49.0
+2.43.0
 
 
