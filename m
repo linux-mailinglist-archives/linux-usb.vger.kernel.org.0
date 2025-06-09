@@ -1,263 +1,180 @@
-Return-Path: <linux-usb+bounces-24590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F96AD18F5
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 09:24:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3202AD19CE
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 10:31:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2BBC3A6250
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 07:24:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A69167941
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 08:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA0D1DB551;
-	Mon,  9 Jun 2025 07:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DC0211297;
+	Mon,  9 Jun 2025 08:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBf36a/7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edm/kAxs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234DE4C8E;
-	Mon,  9 Jun 2025 07:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD4718024;
+	Mon,  9 Jun 2025 08:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749453871; cv=none; b=IT7/auGEnIBUC0xxNue6cL1xGAi1Q6aKMbzKCwixAdU2CYH7o1vHMbeBzvzVpOvExil4ejyboDtAWNKrjWK+7VNGPRuVHEbaobyGIrZ9iL3OnT10w5cVdrRW+oKS+2zMUcuGgjdTK9kWJ7wtoM/9nYxp3LJ/fRBBuEUR2Q8QYMI=
+	t=1749457845; cv=none; b=QeudpX3drshd/wihWg6ubQ1l+qRoFjQEzFY2bADGdl1A7nmGMqqH82sqCAuFgqeEsGMmP+N9vJM1i2mV4GRDhZ/vOk+Si6OZEN6gMwUMxhMVpyTKP5WK7/nqtV4Bv+RzncJTFJSIoAy0ZNdegCNHu76H71hcO+lWKyvhKjVy61k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749453871; c=relaxed/simple;
-	bh=3ljawuBOat+sFkbFb7aaplfWBLhlV0i7hxNBCDQ4eQ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W+fuzKe7PwOcCt2WJuOr+1ueiuYgXB0M3Vw5DaKohhAWLvHq7QH0wTFsthKH7lVz09L8Tuv6p0ycB7VEFmRAxhgX4EUHYaEmG9tvJ+9xjh3AHC5YWXHuWnwm19k69V+SeBP8/DrohF3So5JsrF5Wuh7nVHVCltd1qjeNlziplvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBf36a/7; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1749457845; c=relaxed/simple;
+	bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lx3d/pxYLx5RwHK6adrhB34k8lzmmj1zcwLECrbRGerL4YwAskkuP9+KwzM8+geIPMGpuojW2jZiH3EudI+vvoegXJkYh9Kh0uR7pk/cFtQNyU+y5cLzGhmbpZFd5RRYbv2CBuIYMsfNzv4rafIA4CHQUi6dCOC9i2bnli1vShg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edm/kAxs; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749453870; x=1780989870;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3ljawuBOat+sFkbFb7aaplfWBLhlV0i7hxNBCDQ4eQ8=;
-  b=fBf36a/7dGZgk/4H/ATO7vrypbSw6teb1cNdZmNl2NP3C8t6NGm5PG0t
-   xCXp2rsEBZeO39iRnHeEBCkcV4MgIAG4XRiDAdTIPs2LRPMrcF4pARaSt
-   rwU4isQ6r3P6piGcfwNmTr4ou0JMQ7A8hrInqgmG3etwzdejGMqBA35pM
-   OJeqEKAPnTCRSjyKpRfHVBDr2bALBo6YgfZYrJbMIo6DCPY60arC/zWUf
-   Ps5fyne8bLVMxk8Nq1I+7Q5jkuP+rBBqAHYbf3WmDRRH7xsL+UlQudQgw
-   mPhoB79qyiPw30nQ6lsZy+pAs47xKitc1Kdd55rLvGZsUrFj5wg2aG/Fm
-   A==;
-X-CSE-ConnectionGUID: rtTzrC5/Rb+ym3u6/Sknsw==
-X-CSE-MsgGUID: QdiWsfk9ToG4dA/HAs6yGg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="51660392"
-X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="51660392"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 00:24:29 -0700
-X-CSE-ConnectionGUID: ORBvnORDQMeAIq6jHUjitA==
-X-CSE-MsgGUID: +bwyh8opQFy0M5HH2CIVsA==
+  t=1749457844; x=1780993844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
+  b=edm/kAxssvUiFX2AcN+EAlNgiGMoSEqPkcBZtMlOhpUwUXLrUuj7mzzw
+   COAFDJK46yujl/+lQuGZo7lQhVdJRENo0wf5r8lHxQTHi83ACMsmJQTG1
+   JR0psujnKpCBT3TRqoVCFZIZ5p1uaDPt8EdqVF1q4V0RjA+gVAqAMOV4D
+   rPhfLUU7oZRnzX6m/nUwHM0byacBMDnQEKb4a/NVHZCtYDNzzx/hf4Gpw
+   +pJZ7AiWgT7rKZV9p+dJDcTDs/rYQekVeC/Y3EahooJEd4ofKpQznAOYU
+   niSDK5EDgQiiZdrB5Q0pr8DfpbCwNDchmYge14oYb+L/ZMmwRoQS11KRY
+   Q==;
+X-CSE-ConnectionGUID: H0y8W1G6RayvBnUH528R/w==
+X-CSE-MsgGUID: 2CJuj0fVT/+dmO9qPYi/Rw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="76921921"
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="76921921"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:30:43 -0700
+X-CSE-ConnectionGUID: 5Pkjg0zRSoW7rgRyVlx9Gg==
+X-CSE-MsgGUID: h31gkaVcRXapdesgq+80fQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="146957257"
-Received: from ubuntu.bj.intel.com ([10.238.156.109])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Jun 2025 00:24:26 -0700
-From: Jun Miao <jun.miao@intel.com>
-To: oneukum@suse.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org
-Cc: netdev@vger.kernel.org,
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="147382809"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 09 Jun 2025 01:30:38 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uOXts-0006t3-0L;
+	Mon, 09 Jun 2025 08:30:36 +0000
+Date: Mon, 9 Jun 2025 16:29:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <superm1@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	amd-gfx@lists.freedesktop.org,
+	"(open list:HIBERNATION (aka Software Suspend, aka swsusp))" <linux-pm@vger.kernel.org>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jun.miao@intel.com
-Subject: [PATCH] net: usb: Convert tasklet API to new bottom half workqueue mechanism
-Date: Mon,  9 Jun 2025 15:26:10 +0800
-Message-Id: <20250609072610.2024729-1-jun.miao@intel.com>
-X-Mailer: git-send-email 2.32.0
+	Mario Limonciello <mario.limonciello@amd.com>,
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Denis Benato <benato.denis96@gmail.com>,
+	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>
+Subject: Re: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into
+ D3 at hibernate
+Message-ID: <202506091639.HaxwbWtd-lkp@intel.com>
+References: <20250609024619.407257-3-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250609024619.407257-3-superm1@kernel.org>
 
- Migrate tasklet APIs to the new bottom half workqueue mechanism. It
- replaces all occurrences of tasklet usage with the appropriate workqueue
- APIs throughout the usbnet driver. This transition ensures compatibility
- with the latest design and enhances performance.
+Hi Mario,
 
-Signed-off-by: Jun Miao <jun.miao@intel.com>
----
- drivers/net/usb/usbnet.c   | 36 ++++++++++++++++++------------------
- include/linux/usb/usbnet.h |  2 +-
- 2 files changed, 19 insertions(+), 19 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index c04e715a4c2a..566127b4e0ba 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -461,7 +461,7 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
- 
- 	__skb_queue_tail(&dev->done, skb);
- 	if (dev->done.qlen == 1)
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	spin_unlock(&dev->done.lock);
- 	spin_unlock_irqrestore(&list->lock, flags);
- 	return old_state;
-@@ -549,7 +549,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
- 		default:
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "rx submit, %d\n", retval);
--			tasklet_schedule (&dev->bh);
-+			queue_work(system_bh_wq, &dev->bh_work);
- 			break;
- 		case 0:
- 			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
-@@ -709,7 +709,7 @@ void usbnet_resume_rx(struct usbnet *dev)
- 		num++;
- 	}
- 
--	tasklet_schedule(&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
- 
- 	netif_dbg(dev, rx_status, dev->net,
- 		  "paused rx queue disabled, %d skbs requeued\n", num);
-@@ -778,7 +778,7 @@ void usbnet_unlink_rx_urbs(struct usbnet *dev)
- {
- 	if (netif_running(dev->net)) {
- 		(void) unlink_urbs (dev, &dev->rxq);
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	}
- }
- EXPORT_SYMBOL_GPL(usbnet_unlink_rx_urbs);
-@@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
- 	/* deferred work (timer, softirq, task) must also stop */
- 	dev->flags = 0;
- 	timer_delete_sync(&dev->delay);
--	tasklet_kill(&dev->bh);
-+	disable_work_sync(&dev->bh_work);
- 	cancel_work_sync(&dev->kevent);
- 
- 	/* We have cyclic dependencies. Those calls are needed
- 	 * to break a cycle. We cannot fall into the gaps because
- 	 * we have a flag
- 	 */
--	tasklet_kill(&dev->bh);
-+	disable_work_sync(&dev->bh_work);
- 	timer_delete_sync(&dev->delay);
- 	cancel_work_sync(&dev->kevent);
- 
-@@ -955,7 +955,7 @@ int usbnet_open (struct net_device *net)
- 	clear_bit(EVENT_RX_KILL, &dev->flags);
- 
- 	// delay posting reads until we're fully open
--	tasklet_schedule (&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
- 	if (info->manage_power) {
- 		retval = info->manage_power(dev, 1);
- 		if (retval < 0) {
-@@ -1123,7 +1123,7 @@ static void __handle_link_change(struct usbnet *dev)
- 		 */
- 	} else {
- 		/* submitting URBs for reading packets */
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	}
- 
- 	/* hard_mtu or rx_urb_size may change during link change */
-@@ -1198,11 +1198,11 @@ usbnet_deferred_kevent (struct work_struct *work)
- 		} else {
- 			clear_bit (EVENT_RX_HALT, &dev->flags);
- 			if (!usbnet_going_away(dev))
--				tasklet_schedule(&dev->bh);
-+				queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
--	/* tasklet could resubmit itself forever if memory is tight */
-+	/* workqueue could resubmit itself forever if memory is tight */
- 	if (test_bit (EVENT_RX_MEMORY, &dev->flags)) {
- 		struct urb	*urb = NULL;
- 		int resched = 1;
-@@ -1224,7 +1224,7 @@ usbnet_deferred_kevent (struct work_struct *work)
- fail_lowmem:
- 			if (resched)
- 				if (!usbnet_going_away(dev))
--					tasklet_schedule(&dev->bh);
-+					queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
-@@ -1325,7 +1325,7 @@ void usbnet_tx_timeout (struct net_device *net, unsigned int txqueue)
- 	struct usbnet		*dev = netdev_priv(net);
- 
- 	unlink_urbs (dev, &dev->txq);
--	tasklet_schedule (&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
- 	/* this needs to be handled individually because the generic layer
- 	 * doesn't know what is sufficient and could not restore private
- 	 * information if a remedy of an unconditional reset were used.
-@@ -1547,7 +1547,7 @@ static inline void usb_free_skb(struct sk_buff *skb)
- 
- /*-------------------------------------------------------------------------*/
- 
--// tasklet (work deferred from completions, in_irq) or timer
-+// workqueue (work deferred from completions, in_irq) or timer
- 
- static void usbnet_bh (struct timer_list *t)
- {
-@@ -1601,16 +1601,16 @@ static void usbnet_bh (struct timer_list *t)
- 					  "rxqlen %d --> %d\n",
- 					  temp, dev->rxq.qlen);
- 			if (dev->rxq.qlen < RX_QLEN(dev))
--				tasklet_schedule (&dev->bh);
-+				queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 		if (dev->txq.qlen < TX_QLEN (dev))
- 			netif_wake_queue (dev->net);
- 	}
- }
- 
--static void usbnet_bh_tasklet(struct tasklet_struct *t)
-+static void usbnet_bh_workqueue(struct work_struct *work)
- {
--	struct usbnet *dev = from_tasklet(dev, t, bh);
-+	struct usbnet *dev = from_work(dev, work, bh_work);
- 
- 	usbnet_bh(&dev->delay);
- }
-@@ -1742,7 +1742,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	skb_queue_head_init (&dev->txq);
- 	skb_queue_head_init (&dev->done);
- 	skb_queue_head_init(&dev->rxq_pause);
--	tasklet_setup(&dev->bh, usbnet_bh_tasklet);
-+	INIT_WORK (&dev->bh_work, usbnet_bh_workqueue);
- 	INIT_WORK (&dev->kevent, usbnet_deferred_kevent);
- 	init_usb_anchor(&dev->deferred);
- 	timer_setup(&dev->delay, usbnet_bh, 0);
-@@ -1971,7 +1971,7 @@ int usbnet_resume (struct usb_interface *intf)
- 
- 			if (!(dev->txq.qlen >= TX_QLEN(dev)))
- 				netif_tx_wake_all_queues(dev->net);
--			tasklet_schedule (&dev->bh);
-+			queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index 0b9f1e598e3a..208682f77179 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -58,7 +58,7 @@ struct usbnet {
- 	unsigned		interrupt_count;
- 	struct mutex		interrupt_mutex;
- 	struct usb_anchor	deferred;
--	struct tasklet_struct	bh;
-+	struct work_struct	bh_work;
- 
- 	struct work_struct	kevent;
- 	unsigned long		flags;
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge mkp-scsi/for-next jejb-scsi/for-next linus/master v6.16-rc1 next-20250606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Use-hibernate-flows-for-system-power-off/20250609-105658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250609024619.407257-3-superm1%40kernel.org
+patch subject: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into D3 at hibernate
+config: i386-buildonly-randconfig-003-20250609 (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506091639.HaxwbWtd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/pci-driver.c:1221:7: error: call to undeclared function 'pci_pm_set_prepare_bus_pm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1221 |         if (!pci_pm_set_prepare_bus_pm(pci_dev))
+         |              ^
+   1 error generated.
+
+
+vim +/pci_pm_set_prepare_bus_pm +1221 drivers/pci/pci-driver.c
+
+  1195	
+  1196	static int pci_pm_poweroff_noirq(struct device *dev)
+  1197	{
+  1198		struct pci_dev *pci_dev = to_pci_dev(dev);
+  1199		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+  1200	
+  1201		if (dev_pm_skip_suspend(dev))
+  1202			return 0;
+  1203	
+  1204		if (pci_has_legacy_pm_support(pci_dev))
+  1205			return pci_legacy_suspend_late(dev);
+  1206	
+  1207		if (!pm) {
+  1208			pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+  1209			return 0;
+  1210		}
+  1211	
+  1212		if (pm->poweroff_noirq) {
+  1213			int error;
+  1214	
+  1215			error = pm->poweroff_noirq(dev);
+  1216			suspend_report_result(dev, pm->poweroff_noirq, error);
+  1217			if (error)
+  1218				return error;
+  1219		}
+  1220	
+> 1221		if (!pci_pm_set_prepare_bus_pm(pci_dev))
+  1222			goto Fixup;
+  1223	
+  1224		/*
+  1225		 * The reason for doing this here is the same as for the analogous code
+  1226		 * in pci_pm_suspend_noirq().
+  1227		 */
+  1228		if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+  1229			pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+  1230	
+  1231	Fixup:
+  1232		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+  1233	
+  1234		return 0;
+  1235	}
+  1236	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
