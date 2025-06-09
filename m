@@ -1,191 +1,120 @@
-Return-Path: <linux-usb+bounces-24574-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24575-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19C20AD164A
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 02:30:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 307FCAD165A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 02:43:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8793A89FF
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 00:29:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306143AB476
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 00:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FA2B288D6;
-	Mon,  9 Jun 2025 00:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29D72940D;
+	Mon,  9 Jun 2025 00:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="nll3BYm1"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hc6z34FV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309A917597;
-	Mon,  9 Jun 2025 00:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA5E17597;
+	Mon,  9 Jun 2025 00:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749429001; cv=none; b=AFppbzQoNUWPfmd6GqQTYoq1WMXR7eKQp18OgUpFnuU49swqCoy3vM/pRvbWSlREpCpTqa63gBqdHkWi6C3UehjAvt3AfytrZR6qe3HfgTHuLUWtm9gyQk0wavji82WkXZfhcp24oJI0etHFV8M3XWGUZz5VN+BfdGjybBm9lgs=
+	t=1749429808; cv=none; b=IhbgUWGvEaIIDFFgSeV7xQ1nIR6UM30DMFaxd9U1bQ3z9ey+50UjSQPEB2DChQy5qZQFzY6+n+xz16D++9wgmFRY/Kqm6CSmZBxZg69xNRHCX13ZjIFdhPGIgvjjwisKq8XgwzHHJIzFTT34yeG1qPsErQ99ydKsd+oHefSdzTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749429001; c=relaxed/simple;
-	bh=0jYDCBNZ6DwUBMSWLHRaFKu/hxwP8QN5LAEctm4z0rA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J7mCcefgJsFKog+we3NqgIjmtsH+wlOQG5hu+98Ye1YWe/3nLCau+C0E96Xst2yBqfKlPyk4et1pr2FZUM59BVZbqNNchf5O2YDUBDq4Q7E4edG0DeJNwzGHQCNOXO66DhwObjb5D3tRAAG3ElhEl75DEmRkbLK40YF/2ld25hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=nll3BYm1; arc=none smtp.client-ip=46.235.229.95
+	s=arc-20240116; t=1749429808; c=relaxed/simple;
+	bh=0VhPIT4X4Bsr/vXEgo6KBOHU3XZtB3TmwwJ++rKE5UM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BOk7wIcXRjhW6G15Rc55neCl9uU7rhsfGw0HY/qwK08IZyFtF44jAgmFLDKhUTj1a1Dj3OSkYR40/AgUt1eAqNw6uA9Z3GYH622kBg8Tl5eVs7wLEiYI1WfbT7/3y4B++FMkAzcl5WsUiBgpCEGTw6+d69kWh7YrhFCsLzR6r4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hc6z34FV; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=ejOiuAu+r1wLg7BZWzmD/TtBER1FPcOof82sSDt9gCM=; b=nll3BYm1Any6boC2
-	3JtKnvEveQ1ZucuqZ8iBrckUXIil0zsldm/bMGSFgKnJORsq7sUJtrgGy08yzGgtY/6YNsxAqSX76
-	SpgrOp4RSo/4iwoZ45meIn9RE3j+LuSqjVn+V41PUpe5NPukgBM926gjonRAoMQBXmBFkjXGEGSn7
-	ti2UX3wECoTjlrq9fwb7n6uls+CfnQpSNzkT0fAwlu6ylVs0fBNB9rdgWRLya7KPGMtDSfmmDGT0K
-	vM9P3jzvUwzsBGofgdM5FHxj8h/E22GgFr34/ur1dR/XDvPJ0UcdBAti9pN1UY5E0pAPK4qqqkGca
-	TD7Ic6qVmb0ICGjSFw==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1uOQOe-008JGS-2v;
-	Mon, 09 Jun 2025 00:29:52 +0000
-Date: Mon, 9 Jun 2025 00:29:52 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, corbet@lwn.net,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Remove unused usb_unlink_anchored_urbs
-Message-ID: <aEYrADEFcXYFPpud@gallifrey>
-References: <20250608235617.200731-1-linux@treblig.org>
- <f154dfd9-006a-43e0-9127-9f7f2e377027@infradead.org>
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=s9ZwIRupw7AZC9X39pOlp8JbCxF4TegF7yM50iL/ESM=; b=hc6z34FVzELU7tl4
+	mMpSH9JmSUloxSPstSFCQkJtR+nX9FKTvcqsi2Jp8LnWJMZWHbB3xze+amHEY3diszsY22b9PWcsY
+	7ESQj2coZzmMuVQUvk27adRzqDIZVVolj0vgYwClsAN8M437dMXoOOiuHosqTPUJDa3nzJASXjhxC
+	PwSA2UbkCaQw7FRXXuaUgSQeKjLhTadgJ+E1U/BJRV369wg63fjK47kLMns3cdojRFcqxMNh24FFt
+	lGsHLQIrGHEvsWREoxnTdoQ6xEkX9cG1jz0trTvDT37YlobP7ENDutDKkOGyHtVk6jZH80q+H7vY5
+	6U+zi6uYDbNf4T3+BA==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1uOQbg-008JKd-0F;
+	Mon, 09 Jun 2025 00:43:20 +0000
+From: linux@treblig.org
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH] usb: typec: Remove unused ucsi_cci_str
+Date: Mon,  9 Jun 2025 01:43:19 +0100
+Message-ID: <20250609004319.209143-1-linux@treblig.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <f154dfd9-006a-43e0-9127-9f7f2e377027@infradead.org>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-34-amd64 (x86_64)
-X-Uptime: 00:29:18 up 42 days,  8:42,  1 user,  load average: 0.00, 0.00, 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Content-Transfer-Encoding: 8bit
 
-* Randy Dunlap (rdunlap@infradead.org) wrote:
-> 
-> 
-> On 6/8/25 4:56 PM, linux@treblig.org wrote:
-> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > 
-> > usb_unlink_anchored_urbs() has been unused since it's last use was
-> 
-> s/it's/its/ (same in previous patch's description)
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-Oops, I'm terrible for doing that.
+ucsi_cci_str() last use was removed in 2019 by
+commit 2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
 
-> > removed in 2009 by
-> > commit 9b9c5aaeedfd ("ar9170: xmit code revamp")
-> > 
-> > Remove it.
-> > 
-> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Remove it.
 
-Thanks for the fast ack's.
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ drivers/usb/typec/ucsi/trace.c | 17 -----------------
+ drivers/usb/typec/ucsi/trace.h |  1 -
+ 2 files changed, 18 deletions(-)
 
-Dave
-
-> Thanks.
-> 
-> > ---
-> >  Documentation/driver-api/usb/anchors.rst | 11 ---------
-> >  drivers/usb/core/urb.c                   | 29 +++---------------------
-> >  include/linux/usb.h                      |  1 -
-> >  3 files changed, 3 insertions(+), 38 deletions(-)
-> > 
-> > diff --git a/Documentation/driver-api/usb/anchors.rst b/Documentation/driver-api/usb/anchors.rst
-> > index 4b248e691bd6..5a93d171e76c 100644
-> > --- a/Documentation/driver-api/usb/anchors.rst
-> > +++ b/Documentation/driver-api/usb/anchors.rst
-> > @@ -45,17 +45,6 @@ This function kills all URBs associated with an anchor. The URBs
-> >  are called in the reverse temporal order they were submitted.
-> >  This way no data can be reordered.
-> >  
-> > -:c:func:`usb_unlink_anchored_urbs`
-> > -----------------------------------
-> > -
-> > -
-> > -This function unlinks all URBs associated with an anchor. The URBs
-> > -are processed in the reverse temporal order they were submitted.
-> > -This is similar to :c:func:`usb_kill_anchored_urbs`, but it will not sleep.
-> > -Therefore no guarantee is made that the URBs have been unlinked when
-> > -the call returns. They may be unlinked later but will be unlinked in
-> > -finite time.
-> > -
-> >  :c:func:`usb_scuttle_anchored_urbs`
-> >  -----------------------------------
-> >  
-> > diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> > index 5e52a35486af..0e58a8531d6e 100644
-> > --- a/drivers/usb/core/urb.c
-> > +++ b/drivers/usb/core/urb.c
-> > @@ -597,10 +597,9 @@ EXPORT_SYMBOL_GPL(usb_submit_urb);
-> >   * code).
-> >   *
-> >   * Drivers should not call this routine or related routines, such as
-> > - * usb_kill_urb() or usb_unlink_anchored_urbs(), after their disconnect
-> > - * method has returned.  The disconnect function should synchronize with
-> > - * a driver's I/O routines to insure that all URB-related activity has
-> > - * completed before it returns.
-> > + * usb_kill_urb(), after their disconnect method has returned. The
-> > + * disconnect function should synchronize with a driver's I/O routines
-> > + * to insure that all URB-related activity has completed before it returns.
-> >   *
-> >   * This request is asynchronous, however the HCD might call the ->complete()
-> >   * callback during unlink. Therefore when drivers call usb_unlink_urb(), they
-> > @@ -890,28 +889,6 @@ void usb_unpoison_anchored_urbs(struct usb_anchor *anchor)
-> >  	spin_unlock_irqrestore(&anchor->lock, flags);
-> >  }
-> >  EXPORT_SYMBOL_GPL(usb_unpoison_anchored_urbs);
-> > -/**
-> > - * usb_unlink_anchored_urbs - asynchronously cancel transfer requests en masse
-> > - * @anchor: anchor the requests are bound to
-> > - *
-> > - * this allows all outstanding URBs to be unlinked starting
-> > - * from the back of the queue. This function is asynchronous.
-> > - * The unlinking is just triggered. It may happen after this
-> > - * function has returned.
-> > - *
-> > - * This routine should not be called by a driver after its disconnect
-> > - * method has returned.
-> > - */
-> > -void usb_unlink_anchored_urbs(struct usb_anchor *anchor)
-> > -{
-> > -	struct urb *victim;
-> > -
-> > -	while ((victim = usb_get_from_anchor(anchor)) != NULL) {
-> > -		usb_unlink_urb(victim);
-> > -		usb_put_urb(victim);
-> > -	}
-> > -}
-> > -EXPORT_SYMBOL_GPL(usb_unlink_anchored_urbs);
-> >  
-> >  /**
-> >   * usb_anchor_suspend_wakeups
-> > diff --git a/include/linux/usb.h b/include/linux/usb.h
-> > index 1b2545b4363b..e8662843e68c 100644
-> > --- a/include/linux/usb.h
-> > +++ b/include/linux/usb.h
-> > @@ -1780,7 +1780,6 @@ extern void usb_block_urb(struct urb *urb);
-> >  extern void usb_kill_anchored_urbs(struct usb_anchor *anchor);
-> >  extern void usb_poison_anchored_urbs(struct usb_anchor *anchor);
-> >  extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
-> > -extern void usb_unlink_anchored_urbs(struct usb_anchor *anchor);
-> >  extern void usb_anchor_suspend_wakeups(struct usb_anchor *anchor);
-> >  extern void usb_anchor_resume_wakeups(struct usb_anchor *anchor);
-> >  extern void usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor);
-> 
-> -- 
-> ~Randy
+diff --git a/drivers/usb/typec/ucsi/trace.c b/drivers/usb/typec/ucsi/trace.c
+index 596a9542d401..13a38422743a 100644
+--- a/drivers/usb/typec/ucsi/trace.c
++++ b/drivers/usb/typec/ucsi/trace.c
+@@ -33,23 +33,6 @@ const char *ucsi_cmd_str(u64 raw_cmd)
+ 	return ucsi_cmd_strs[(cmd >= ARRAY_SIZE(ucsi_cmd_strs)) ? 0 : cmd];
+ }
+ 
+-const char *ucsi_cci_str(u32 cci)
+-{
+-	if (UCSI_CCI_CONNECTOR(cci)) {
+-		if (cci & UCSI_CCI_ACK_COMPLETE)
+-			return "Event pending (ACK completed)";
+-		if (cci & UCSI_CCI_COMMAND_COMPLETE)
+-			return "Event pending (command completed)";
+-		return "Connector Change";
+-	}
+-	if (cci & UCSI_CCI_ACK_COMPLETE)
+-		return "ACK completed";
+-	if (cci & UCSI_CCI_COMMAND_COMPLETE)
+-		return "Command completed";
+-
+-	return "";
+-}
+-
+ static const char * const ucsi_recipient_strs[] = {
+ 	[UCSI_RECIPIENT_CON]		= "port",
+ 	[UCSI_RECIPIENT_SOP]		= "partner",
+diff --git a/drivers/usb/typec/ucsi/trace.h b/drivers/usb/typec/ucsi/trace.h
+index 41701dee7056..9554a0207276 100644
+--- a/drivers/usb/typec/ucsi/trace.h
++++ b/drivers/usb/typec/ucsi/trace.h
+@@ -10,7 +10,6 @@
+ #include <linux/usb/typec_altmode.h>
+ 
+ const char *ucsi_cmd_str(u64 raw_cmd);
+-const char *ucsi_cci_str(u32 cci);
+ const char *ucsi_recipient_str(u8 recipient);
+ 
+ DECLARE_EVENT_CLASS(ucsi_log_command,
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+2.49.0
+
 
