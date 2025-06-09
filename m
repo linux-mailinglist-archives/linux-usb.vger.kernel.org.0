@@ -1,91 +1,186 @@
-Return-Path: <linux-usb+bounces-24601-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24602-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A572BAD1E7A
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:07:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30870AD1F3D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70379162741
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:07:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9230016B2D0
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37562571A2;
-	Mon,  9 Jun 2025 13:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 357F725A347;
+	Mon,  9 Jun 2025 13:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QiftTRxd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j0twCcFr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D31BC148
-	for <linux-usb@vger.kernel.org>; Mon,  9 Jun 2025 13:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAB913B788;
+	Mon,  9 Jun 2025 13:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749474450; cv=none; b=NPFMLGwCzAFt1m65Obf0XRFLbMAgdueeaX09aTwmvCgi0oINTECMcqEdSAcrQMO8TFMoIllE9iaGGkcNiYh8NnYa6Cmm9uMJpzgWzJojtygBxDQ0dPw7YPWM+7ymgsH4svxSewB2ajOtuPZuKDjVrP1hoUi/clBwGuwJ1C1OUgw=
+	t=1749476677; cv=none; b=D8ICcKFuqN4oeipsJp1rWEg3M/C1wW8prQqN4zkD6NBPQg37sOxIrqGwikjnm+RrsLfMBHT5RVxfuEYntZJ/4Nz2bbEna7N2BwLzLHawcWzNpGnINhQbaiHnc7I2hTjB0Ft3gwU7+DQm546lrb1frQQHzOVrOagRyWBRNthCipk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749474450; c=relaxed/simple;
-	bh=4KI7I/4G3f9DwzIE0i8vJo0YT+Ol855YEn779oAU6/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qi2UpPIPb3sePPuuaKvC7m3RtwED2EWhJ0LOZJI/sxl2ZTWZL0sFKtl4bEe7qWIxew9U+2jcmPsxz9u+btNmy2CpV22LqeQvrERCioWtCS97jzTVJ3+mSk/0Fvb7K2rIEgmz9Mni53/+hWpcmelCI7Fb64dKb7IF83YvKZ/ZHso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QiftTRxd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D629EC4CEEB;
-	Mon,  9 Jun 2025 13:07:28 +0000 (UTC)
+	s=arc-20240116; t=1749476677; c=relaxed/simple;
+	bh=UmE7ouPJ2PVa1vmqFLBv36UfKNyyrCTlqI08GQje9XM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=r7YagTL3ZMkQ9sxVhUCO2gUzslALNCT19oJ41+fntaRX/sAc/Nc3oZbsrbc8DG/sIwNUPZQchO6UeZOTtMdAWDx4caEM4oOyh3CA619gwbED322y3xAGoQF38VIedNN+gHin6awgPr0rbZhXqBZ3tXyUd8FxW6nWoGPQGQtojTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j0twCcFr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEEA2C4CEF2;
+	Mon,  9 Jun 2025 13:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749474450;
-	bh=4KI7I/4G3f9DwzIE0i8vJo0YT+Ol855YEn779oAU6/o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QiftTRxdFTVorkSvsZJ/bSaGyJv8F8ZH6UscQUTxZYSZpa9L1jDVrF41OCrb1MlUQ
-	 f2zUZqd/kQzbcv0oc7OOrwGpQaI1MCLIXR9CNl2s7buWgaj7XVEGRK5gjDtj+7RcLX
-	 dFW/br1oTnjyOYPkORb4vJG1uJfWT0MhYuRtS6j3e9mejFc2YB60v7rAUzPsK3wbEJ
-	 PagG8Z2pImaoX0qu6tVLrXIVVDw8xL44VJUdzXpmTSK/5S6zuEbyYa9lZpn+R3uS0S
-	 eSFIz6f1SfOBCo+iR0ihqgbUqNH74sN+EGdab103V5MxIxuCGAIwuQH2M1KXupnlnC
-	 VzY6sYfMdmfdA==
-Message-ID: <af65c710-8dcf-47e5-ab97-f23839f6278e@kernel.org>
-Date: Mon, 9 Jun 2025 08:07:27 -0500
+	s=k20201202; t=1749476677;
+	bh=UmE7ouPJ2PVa1vmqFLBv36UfKNyyrCTlqI08GQje9XM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=j0twCcFrXc5DwZN8QuSLfm9wXTHelImQsXVweRsdBiW8w329obTXA1C/r5sKcE8kH
+	 C4H1/2O2pErCnXNMGqsbhq9LCiGWXgpHcz8kwEUBdFkQjV/46nS8nxxeMvFHDq0p5g
+	 mBDM7ZPn+JB3ZRCTj0Hrwpr2vd/ikSpeKoEjmKZMHHNI2fBRaxJVajKHDACHzo4tTX
+	 CqG8uOu2FiyoHEruL6Vp5BJ9dQXMnOsv13YLpnMa8Q58rcVBKk9nUpV0HiAjwYlaKI
+	 5jfTG3EEnD/9nWn/viSRNU1M31TV26owqJgEy588XKKG0UrwjMubY+INegOuznrMb/
+	 CVTD05dpYyVUA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 19/35] usb: dwc2: also exit clock_gating when stopping udc while suspended
+Date: Mon,  9 Jun 2025 09:43:35 -0400
+Message-Id: <20250609134355.1341953-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250609134355.1341953-1-sashal@kernel.org>
+References: <20250609134355.1341953-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] usb: xhci: Avoid showing errors during surprise
- removal
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, mario.limonciello@amd.com,
- mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org
-References: <20250609020223.269407-1-superm1@kernel.org>
- <20250609020223.269407-4-superm1@kernel.org>
- <12a8fd39-e910-4558-8fec-d41d2eecfd15@linux.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <12a8fd39-e910-4558-8fec-d41d2eecfd15@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 6/9/2025 7:42 AM, Mathias Nyman wrote:
-> On 9.6.2025 4.58, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> When a USB4 dock is unplugged from a system it won't respond to ring
->> events. The PCI core handles the surprise removal event and notifies
->> all PCI drivers. The XHCI PCI driver sets a flag that the device is
->> being removed as well.
->>
->> When that flag is set don't show messages in the cleanup path for
->> marking the controller dead.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> 
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-Thanks for the acks Mathias!
+[ Upstream commit af076a41f8a28faf9ceb9dd2d88aef2c202ef39a ]
 
-All 4 patches were sent together because of the relation but they really 
-don't have a dependency to need to be committed together.
+It is possible that the gadget will be disabled, while the udc is
+suspended. When enabling the udc in that case, the clock gating
+will not be enabled again. Leaving the phy unclocked. Even when the
+udc is not enabled, connecting this powered but not clocked phy leads
+to enumeration errors on the host side.
 
-Would you mind picking up the patches for 3 and 4 to USB tree and I'll 
-keep discussing 1 and 2 with linux-pci M/L.
+To ensure that the clock gating will be in an valid state, we ensure
+that the clock gating will be enabled before stopping the udc.
+
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Link: https://lore.kernel.org/r/20250417-dwc2_clock_gating-v1-1-8ea7c4d53d73@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+Based on my analysis of the code, similar commits, and the context, here
+is my assessment:
+
+**YES**
+
+This commit should be backported to stable kernel trees. Here's my
+extensive analysis:
+
+## Code Analysis
+
+The commit adds clock gating exit logic to the `dwc2_hsotg_udc_stop()`
+function in drivers/usb/dwc2/gadget.c. Specifically, it adds these lines
+before shutting down endpoints:
+
+```c
+/* Exit clock gating when driver is stopped. */
+if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
+    dwc2_gadget_exit_clock_gating(hsotg, 0);
+}
+```
+
+## Rationale for Backporting
+
+1. **Follows Established Pattern**: The code change exactly matches the
+   pattern used throughout the dwc2 driver in other similar contexts. I
+   found identical condition checks and dwc2_gadget_exit_clock_gating()
+   calls in:
+   - `drivers/usb/dwc2/platform.c:333-336` (driver removal)
+   - `drivers/usb/dwc2/core_intr.c:314-317` (session request interrupt)
+   - `drivers/usb/dwc2/core_intr.c:447-450` (wakeup detected interrupt)
+   - `drivers/usb/dwc2/gadget.c:3738-3741` (USB reset detect interrupt)
+
+2. **Fixes a Real Bug**: The commit message describes a specific
+   hardware state issue: "Even when the udc is not enabled, connecting
+   this powered but not clocked phy leads to enumeration errors on the
+   host side." This indicates a functional problem that affects users.
+
+3. **Low Risk, High Consistency**: The fix simply adds the same clock
+   gating exit pattern that already exists in 4+ other locations in the
+   same driver. This demonstrates it's a well-tested, safe pattern.
+
+4. **Critical Hardware State Management**: Clock gating is a fundamental
+   power management feature, and incorrect state handling can cause
+   system hangs or hardware enumeration failures, as evidenced by the
+   related fix in commit 2c6b6afa59e7 which had to be marked for stable.
+
+5. **Matches Historical Precedent**: Looking at the reference commits:
+   - Similar Commit #2 (YES): "usb: dwc2: gadget: Fix exiting from clock
+     gating" - This shows clock gating exit fixes are considered
+     backport-worthy
+   - Similar Commit #3 (YES): "usb: dwc2: do not gate off the hardware
+     if it does not support clock gating" - This reinforces that clock
+     gating correctness is critical
+
+6. **Stable Tree Criteria Met**:
+   - ✅ Fixes important bug (PHY enumeration errors)
+   - ✅ Small and contained change (6 lines)
+   - ✅ No architectural changes
+   - ✅ Minimal regression risk (uses existing, proven pattern)
+   - ✅ Confined to dwc2 subsystem
+
+7. **Recent Historical Context**: The git history shows multiple recent
+   clock gating fixes that were marked for stable (31f42da31417,
+   2c6b6afa59e7), indicating this subsystem area is actively maintained
+   and these types of fixes are important for stable trees.
+
+The commit addresses a state consistency issue where the clock gating
+state becomes invalid when the UDC is stopped while suspended, leading
+to hardware enumeration problems. This is exactly the type of subtle but
+important hardware state management bug that stable trees are designed
+to fix.
+
+ drivers/usb/dwc2/gadget.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 300ea4969f0cf..f323fb5597b32 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4604,6 +4604,12 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+ 	if (!hsotg)
+ 		return -ENODEV;
+ 
++	/* Exit clock gating when driver is stopped. */
++	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
++		dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
++
+ 	/* all endpoints should be shutdown */
+ 	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
+ 		if (hsotg->eps_in[ep])
+-- 
+2.39.5
+
 
