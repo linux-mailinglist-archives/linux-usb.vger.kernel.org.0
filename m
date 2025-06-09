@@ -1,114 +1,121 @@
-Return-Path: <linux-usb+bounces-24626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A0EAD216B
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 16:52:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164A8AD2174
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 16:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17A03A280D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 14:52:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5503188D459
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 14:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6CD718FDAF;
-	Mon,  9 Jun 2025 14:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C5F19E83C;
+	Mon,  9 Jun 2025 14:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ShyRZ2wF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lXv0l26b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6AA1E505
-	for <linux-usb@vger.kernel.org>; Mon,  9 Jun 2025 14:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0172606;
+	Mon,  9 Jun 2025 14:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749480753; cv=none; b=dRNiWSSZffnSQ+uTeT9rSwSaPPBL2h5Ngm0+tEBpWM1ycih7uddrUrPlYUHewfycGRsMFV13gWPFjetRStEXoLQWX6nvFbUAz1ifZq46JfMBC4QXw1xpcTF5GZNYThmnVHv9gOoBOsxuy4zRPYSK92KWaL/4pSVSQ7GsxsFOnf4=
+	t=1749481000; cv=none; b=LMGEzcBkTOJrPyQbr+sinYfdSyOHVbUCS5Xk+seF0SfBwlXl24s6Gs/7wAQJou8KqdhJX6A2FHTnq2tyqersv/CZdKXQ3xOBQ/hykfjTFIH7xppIf/y8gfSUIYhV1jvehTCUi3oLP0KhOPChh1egdRpcTB42l3i08Kawn11sF+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749480753; c=relaxed/simple;
-	bh=uwMfSkOStJvIxOEMWI0q4sAOo3X//MEikdjky1qV1j8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lDue7+y2tXlnH9wSJvtjqFFFXJqm1G0LVUfr6rj5tdwR1zn5Mrb5lzOo8jxqQlzrWFo9SOocmrFiQCyOoJJjMHZsFlYA20HKOg6bkA87KqO5AzuBzWBlDiHcxg8KHsXny0o3yeAeAU0hh83wXIjNRpsgYJ01C31bIE1LFyu4bpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ShyRZ2wF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749480751; x=1781016751;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uwMfSkOStJvIxOEMWI0q4sAOo3X//MEikdjky1qV1j8=;
-  b=ShyRZ2wFgnDuTrvEiPxqw3ImVGaf0PBGd9GyXqZej47YF0HtRl6ealWl
-   ZL78v2rrO3fJvatFGv0PPzm5sS4rQLhZa2KSoUxf5EJy65Woc1HD/SQFO
-   CCbgaouUvG4j0KNKUEYpnuis0TP4sQS4Jsy+FooUKpRw5IDYzMvqU3EI6
-   nZmmiO44eHX4dHCZ04qsuAXZ0arE7+EU7yX8kNa5qkNEjznZ9NtloeWGs
-   wCmW6ohAPheVmZhRlPSTQjaXozDmGHwyfVT2+ibK59uYu7qPpo3dVrBPs
-   R3yM6Fnh8S41DGhkHbY+8/qlKVFTz3sF9p6OmzaHs/sp5fW3OCvVz8Li1
-   w==;
-X-CSE-ConnectionGUID: mMfNIfiBTDu9I0sqIcwioQ==
-X-CSE-MsgGUID: /EDL0lzNRhuq2v78BeS/Ag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="50785635"
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="50785635"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 07:52:31 -0700
-X-CSE-ConnectionGUID: FCcsKT4VRQ2v0TeUEWZiTw==
-X-CSE-MsgGUID: 0YloRCNPRD2O+BjC+hSW/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="146892126"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Jun 2025 07:52:29 -0700
-Message-ID: <8cbe501d-1194-42b6-b29d-e3c81301a9f7@linux.intel.com>
-Date: Mon, 9 Jun 2025 17:52:28 +0300
+	s=arc-20240116; t=1749481000; c=relaxed/simple;
+	bh=L2+6Eah1O8TlZJlFrgG8KAyfFea7SFLLoPZ6PJdG/Lk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B6SvqWYy9eFy8C+jTikF/2WuChFrcqeIvZEuiobqfFniaZ86La5ssYhrzf9ZQPqbKoT6rA245O+iQI9OwdZJt+KW3NjJWQ2iBG57I2rZdvj6Rk8KaG+v2ewbaoLsepjOtp9bwF0xL68UGsdXjN0WY7qtGOm1RRAdEnnzRpg1A78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lXv0l26b; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a3798794d3so3743112f8f.1;
+        Mon, 09 Jun 2025 07:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749480996; x=1750085796; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AD8CdEe2djCXyzMtatbTa8JQVgDN2iS28PWMu7pGIKg=;
+        b=lXv0l26bxoVH8jLz0F/d/WaeUfKQ1PnoiwKXEgaxuEzYulo6wj5URbnswaj+cOqjFe
+         81qZ2NiGTNg18xYzRg0u1yz2lXlzz3cgENx62w8DBX4SCuO/hyZIH2Nbfan6BXHbdGVL
+         yGfnjqQ5y5D8KYQeo9+KVuawQuQISAcS7IrpyXrFG/E3Du8urnSIXoO5HKI/+eDJ/9Yi
+         wcbAzvbX9ZMgyvJeGrT13Nik78kHi/NCK/Vvqt6QzX8NBdUYZ2Cn8+Fcm/5pnyWMlb+f
+         O2erMNNodNmvNviQ11pyGYJ58ydKv7CsYpE+RctFQjNG71thf/JxLJraDBnV6cvXvQUV
+         /iVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749480996; x=1750085796;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AD8CdEe2djCXyzMtatbTa8JQVgDN2iS28PWMu7pGIKg=;
+        b=YaYdl7WWw/y15URMZysZA+9zx0nA9OIABqD8ONlMtlSWkVCH7bZBl5S1/lHEa2/G84
+         aNzMc0j1dGNqxvtDV+iIx7NnpEzCtBLzZyleP88BnIZypmnv/Of+74qw5Z0DJzTw7Xji
+         dK1hWkw32Tvc2m+5Em3z8HHxD3eo5NiueIxraALr3261okgSksByg5j8itvzR6+D/nAF
+         Uw2wx7E2jrk4UcDjq3y9SZUAToETXW1S+mOdRsW3+y+gLeDvinO9VpL+ayMuAOUUoSgr
+         2Prf6guc87D4uzzAL1tHWIJRgT93iXrsKlOtKyf4FFJc5P7ocn3PnxsrW2zrvxxTeSPT
+         LzXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVI6JQw2AOCtTVfA/v9G0ZKbJgbgz0QoiCVegHYWzCiWtYKzwY6cbJDFT8v+w0bLcuzem6SdnO6v/XRv7o=@vger.kernel.org, AJvYcCVU/+ZV+9iDhPHemQc1/SARGMorVzs2D/lAj5SYTOlnKJXp5w0n4qabHZx3oo10EpngUeCIv3ZS7DVn@vger.kernel.org, AJvYcCVxdgI2KAk8sI3FirzWKcwQXrkbF2xbgRvtFUiYgI4+hf38zUlyImbo9ceCbVUcJGB7URrMrgg7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxlk784eUAb+a5tS8CfLe3Fpn4ensLmkwvtSOM4Kbov7nzbL9j1
+	FEvNkG1Eoh/J8n4/Jojx0MqRBXR9u0tGS6UOkYxv9vWiW+hnVMux5sIz
+X-Gm-Gg: ASbGnctdTkDSv2mi7R/7tfsr6pnYKIjYUzJyjzM6Sqxv4gcnIALiudE+QnXbNcpcszp
+	p2ICy97q7lSaBkrKtUj40PxOvP+C75kQvjgIwtxnD5KQkEXoVpGVRqZuWSh3vvf6OKSACRTCi26
+	rHMSzLKWB1gfbCD+MdGTyxvAxDqBqtZ20fyVyGOsNKWtEm38UByjh45gC9sPqV+nB7j9eqJrN0j
+	CGioH5D9MPRMZqWkT8fPRwvJLpZPxR4HfO9p2hKx04kBqox3Gw0NeHJe0OxM0YNsXlVhnlCW38Y
+	ODsJBrndGLtsn9lrncz245vLXEpop5282be8KhB1C7pcayxOt36vGQaby91ZOGPUGeu33H/qH4u
+	D7UWzJwQ=
+X-Google-Smtp-Source: AGHT+IGX2Bg9tpEHhKD1YfVaIZemrvrQcBkDBqvQcEA5ekwjfXwM5An+osvXDtZHbYPcteYXA6aidw==
+X-Received: by 2002:a05:6000:250e:b0:3a5:2670:e220 with SMTP id ffacd0b85a97d-3a531cb01b7mr10249454f8f.32.1749480995918;
+        Mon, 09 Jun 2025 07:56:35 -0700 (PDT)
+Received: from lucas-OptiPlex-755.. ([79.117.136.19])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a5322a9bbdsm9553024f8f.21.2025.06.09.07.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 07:56:35 -0700 (PDT)
+From: Lucas Sanchez Sagrado <lucsansag@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: Lucas Sanchez Sagrado <lucsansag@gmail.com>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: usb: r8152: Add device ID for TP-Link UE200
+Date: Mon,  9 Jun 2025 16:55:36 +0200
+Message-Id: <20250609145536.26648-1-lucsansag@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] usb: xhci: Avoid showing errors during surprise
- removal
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
- mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org
-References: <20250609020223.269407-1-superm1@kernel.org>
- <20250609020223.269407-4-superm1@kernel.org>
- <12a8fd39-e910-4558-8fec-d41d2eecfd15@linux.intel.com>
- <af65c710-8dcf-47e5-ab97-f23839f6278e@kernel.org>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <af65c710-8dcf-47e5-ab97-f23839f6278e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9.6.2025 16.07, Mario Limonciello wrote:
-> On 6/9/2025 7:42 AM, Mathias Nyman wrote:
->> On 9.6.2025 4.58, Mario Limonciello wrote:
->>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>
->>> When a USB4 dock is unplugged from a system it won't respond to ring
->>> events. The PCI core handles the surprise removal event and notifies
->>> all PCI drivers. The XHCI PCI driver sets a flag that the device is
->>> being removed as well.
->>>
->>> When that flag is set don't show messages in the cleanup path for
->>> marking the controller dead.
->>>
->>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>
->> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>
-> 
-> Thanks for the acks Mathias!
-> 
-> All 4 patches were sent together because of the relation but they really don't have a dependency to need to be committed together.
-> 
-> Would you mind picking up the patches for 3 and 4 to USB tree and I'll keep discussing 1 and 2 with linux-pci M/L.
+The TP-Link UE200 is a RTL8152B based USB 2.0 Fast Ethernet adapter. This 
+patch adds its device ID. It has been tested on Ubuntu 22.04.5.
 
-I can do that yes.
-Added patches 3/4 and 4/4 to my for-usb-next branch
+Signed-off-by: Lucas Sanchez Sagrado <lucsansag@gmail.com>
+---
+ drivers/net/usb/r8152.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks
-Mathias
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index d6589b24c68d..44cba7acfe7d 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -10054,6 +10054,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
++	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0602) },
+ 	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
+ 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
+ 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
+
+base-commit: 2c7e4a2663a1ab5a740c59c31991579b6b865a26
+-- 
+2.34.1
+
 
