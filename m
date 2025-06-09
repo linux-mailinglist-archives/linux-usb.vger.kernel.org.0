@@ -1,88 +1,84 @@
-Return-Path: <linux-usb+bounces-24621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F794AD2042
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:56:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C082AD205E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:59:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BEFE7A66B0
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:55:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50423188456C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 13:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D875325C6FE;
-	Mon,  9 Jun 2025 13:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86D9259CB0;
+	Mon,  9 Jun 2025 13:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j9TqEKoB"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="r/tJo3/l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C6925A62D
-	for <linux-usb@vger.kernel.org>; Mon,  9 Jun 2025 13:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB54E13635C
+	for <linux-usb@vger.kernel.org>; Mon,  9 Jun 2025 13:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749477290; cv=none; b=tOS1O6F0AD8NhilS6+7aY/k4bJcOfnsKKSBKZZNqHDVCsots0D57Q0YoFiMWEhVW+kq8GRT+NMVSwfTlJvnmnOBZo0RIejaOwGV/LU6ZAvbp+QDQLowl1i2Q74LVWiT8ME3xqiAioFvnSRLMi982hjmeb73QRUjCPYBBGB4919k=
+	t=1749477427; cv=none; b=THtnLffcoWmI7+1EKJjJYYCXbL6lf+2io42faaAZDSnK7uTNHYk4FsCOQ2ojncZbuAWO+fYTZG/k+CaD9N0CplbGLXg68Ak48s3mvhOFZukYLlIm4qRh+DM/KwIqumeBel5JrWUEvGmHdmQqhiubBBAwv4xikm3pV7YIgtkIuPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749477290; c=relaxed/simple;
-	bh=AtQ5DeLqMLMiqzfDfVnJQLhsl7WhKEqsNLlvztdlvto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W0XYmvwctbwi1jcio8/LY7jUsRGqp+h5bVataxSeUtGBecJdwg5O8L9yc7Z7kGiwqwmmFpMoaRAGmS0GPdHVF/ejd+4C/9uJXOz8rrlYOlUUj5E0A1NXftpqyP6udqdz9ocCT02/atgUiv2tjuzHoI6hHPfNec0TPjHc7r1Z7mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j9TqEKoB; arc=none smtp.client-ip=209.85.222.170
+	s=arc-20240116; t=1749477427; c=relaxed/simple;
+	bh=YBFSexhUOkEouSh7RKW6MTPhUxDiCL0aNF4x8OABeRY=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rl4iiAYcYDeO/1DciWiSgNbDsk8iaC+Y7blOru4hJVe9yunskxiJObTlG0liLc3xzDn7xlKoQQ8qwlEzEMsweoWcgH8yo0TImgiBcihahjaOnLbrEQI+cTKj3jPd7SKnvuIxkcpVvoxHeVxZqiELnAgC6iSihZh3olhEbLEXb28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=r/tJo3/l; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7d219896edeso432465685a.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Jun 2025 06:54:48 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7d38d562a55so173729385a.2
+        for <linux-usb@vger.kernel.org>; Mon, 09 Jun 2025 06:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1749477287; x=1750082087; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1749477425; x=1750082225; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJhuQ7RdzX4335yHFkIwjS6KGL5adc0rcojL7oXLCRo=;
-        b=j9TqEKoBMywOEfcnhaVJwWvQBq/XrTbFJ54DCMJY51GAyOsvZYuz4XYZt5hQEffDWF
-         gsLlfUM74vgZ9KA+v9yWwKuMBIFg89Ws6V6DBpUfo77HvLq+d3p9x2k5o7NKZASW2/Dr
-         GZnRDdKEmc8EU99vlX7EZuBtihki8V8nl2ebwvjMg2sW6BV0Gt61YiJWYJ0PYM8RySH+
-         sc4iOitHh7zvzCGsMdTnOy+ijhT/8VweAMrh+f+jf6kVfVoY9czTpK0UtfWhtWj5Sib+
-         K24zbIRmwjUHBVXixM7d1EOFSBxnXWgBS2rhdIQ2B+Xly0qeqjGcLkxHq4qgDQapwgFF
-         GJQQ==
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYx9A3gzkNusqreOQVdEyO5G+prJ2lACwhXai3B0Zis=;
+        b=r/tJo3/l7T8QJUtCk8E4nSJ6E4hxqJrJutu4tPDHNVVpVYbCtJdW4S2E2a9BTWzh13
+         zo48N+m8El6LGd9UMNRNI6v3hKBR4SgeztNvMXNxsbTKs9BcWQHkIIHQC5bHBQIAeKhm
+         K+o/6N2tPnTFwVbk2+ZrYwC2/hcfKQcHKsQcxq1CwffAigYpv0IorEQQDNCOzH4zqsWL
+         iWjpEBbSLY1+QBJtoCE3GF4YGzJREOHZvte+fPkIJPSZO7ovEPRK1YkFIpP8H6wDsLP4
+         9ggnWZ+xHr36aZqQGpeNmOdG6d2gLzG6/FwTk3SCe0M7MH5IR6xShQyY29iTOee+ne2x
+         H7fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749477287; x=1750082087;
+        d=1e100.net; s=20230601; t=1749477425; x=1750082225;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TJhuQ7RdzX4335yHFkIwjS6KGL5adc0rcojL7oXLCRo=;
-        b=FEOw4sQ4anF/RqDQWCy5lzHOx4DIoQUnnBlTDbHzVhIo6DWcejRvZlK3uvVl8olz5A
-         foGkdtdke+vnfrVhbh87TmgO/J+aE5tE6U+Yp+hvcu8uKGLX4ff2B1lnXsAAhyxWBAMB
-         pT3ez9mdKn1uqWtxDl5jfePri6boBLQw/q1x3NdnfQWqNE8iTTae4K0Yaz5KduYX7tV+
-         c8CX5M7kjHybmBck+aZjQ27ZN9/897DOAKnXmjLDK6TWoWJSIdzwg0OD90VuadYMuBvL
-         QNqLYC6N8N1L+EWhMxq1c9kHFe4FjV/NGt0CLlCX/3pTSfW2juVruB1bTn/wTD2+Uy80
-         oS6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ3U9lECzAWd9gSMuvKRi9UKG/mBVA225SL1FMNjF9MyFlfSIQONqe9KaGOOxMXI0BpzAygT3VNuM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyT3A2uP1cbvfAOOQdP5G27RSemZQg51Pzdd1GU9dS8GQ6ko1el
-	U/lciMkXrRcPzMQilX1ypS6L1J2W+8MraEh55w3Uz/jkIRYCFDB4tvpAFuwmdVudTw==
-X-Gm-Gg: ASbGncujl6WelUi6z3DpFiOZ/tcA7xzduYPOTkrLWQD+nvzh6cRNNowuQvPl256swQ8
-	OzaPKlukHUaIE+xDeoPihg6aKhLaC3jEkopbEWEuAx73xQzBY3k9lhZ1CKxvcodaxBlx/+K1ppr
-	4gDht9kE9VJQTerVwLLtZWo07WlmN3lFronNYBXTsA8fUS5w6J+eAagScobxdE6Yr01B13zn0w1
-	Vv4jSgXiQMddbQdoit7KfJ3eodvEA1Ia1mTdGl1E6yAopvpS1yX5L33mTNub0EFX4Q40QgSTkl7
-	oRlreUnhjospORJjedEmaG0g7z49CwSUO4xsSLSTJDQQxpTkUZo/Q6DztNE5qhWPzV9M0bgibvk
-	3Lnvz
-X-Google-Smtp-Source: AGHT+IFmfPwn0la8Bjg0x9fgItMpfqDL+xE2KxSEQfR+WeIFu+KstQKcIkZH8uGDncVhKeEIwi22SA==
-X-Received: by 2002:a05:620a:178c:b0:7c5:962b:e87c with SMTP id af79cd13be357-7d2298ce851mr2069583185a.44.1749477287608;
-        Mon, 09 Jun 2025 06:54:47 -0700 (PDT)
+        bh=rYx9A3gzkNusqreOQVdEyO5G+prJ2lACwhXai3B0Zis=;
+        b=hLCOHSZdGqfsD2BJ3WNcogb2z64a8b5FTrvMGSiVNf8cqxLZHezL6NBH5Qc8pFuEy+
+         KnXgxdlstOoSSw5Lzt/GpYFrB7BGPDFLi8s0FOzKn7jYik+s23B4gjUx4bvkzVQvhLRm
+         dGljw/gYWnEswv5BAUtLm102qOlP7m9yXND8oGPZWxV1KPXW/npRu1QBZsSsZypSsynw
+         SXWkyCdH5W68JkuVvaBtZDWEoMZrANWqnDnkdYv9iJuRChOdSy4ZiYN28KibkLdFumMl
+         1gUBvTHfStBxpjSRfLBU2IRzfl+/He6bxZ+fYCGPk1mzYYahVfdVKcV2ULScJQq0EvW1
+         qmbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWRFxk9piJKR0nZFKyv4AzWunJ3bhc0+p+FmBCBNkKOLtb8DZRjbxgkvUgRTgdIo5YYtFHGTnPmV8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhvANqmIL3wP0z4ssuApgnN0fd/oqEHYyPpQtPMP80EuzNShff
+	wL743n40/ueiSzJbjBYq2a8pBAwsEYWl4dyqr4o+2R0bu4fyfWOF11vM2kcJd8fXjQ==
+X-Gm-Gg: ASbGncvmUw/k6GVV0J7uRbO6DvhJasSXpHWMuVwiCspNcEDysNYbx9BJrKqV7en4z+D
+	ynARmNqKuUG09JHLgBkavVDQNKCDl97wRsosIQL8ibDLQpnx64AedL8bwSWLtADE/skof3vYDCZ
+	ngp5xek9vxbKFPDRa42sR3E7bp68kR2dtuS48/wA/DC/fdkwC5Ui3pHSYrDD/IQlJZOK2kB8xXB
+	Sz2q/XEt8SmotaOkk4Pximd5NXUDRJPwcmxQQBJ3mReJtufu9mVsXLxe8luYZf1YVIuFY/lBqaB
+	JjwIjQ5DAr92k40ZnAZKZq4JbvH3YXuc0UErUxECh99/6sR88dF1DtKdbMaAZHup2z/a2w==
+X-Google-Smtp-Source: AGHT+IEN8w7qJR1SVWmJSoWPT8dkDPpWvoNnB0WOYWLljZ/pbgx7wTL/m+GcB+DkyqUj+gpNQaaRjA==
+X-Received: by 2002:a05:620a:471e:b0:7ca:f41a:546b with SMTP id af79cd13be357-7d2298481c6mr2148530485a.6.1749477424648;
+        Mon, 09 Jun 2025 06:57:04 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d25a535794sm545282185a.26.2025.06.09.06.54.46
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d25a61b7cesm548272685a.78.2025.06.09.06.57.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 06:54:47 -0700 (PDT)
-Date: Mon, 9 Jun 2025 09:54:45 -0400
+        Mon, 09 Jun 2025 06:57:04 -0700 (PDT)
+Date: Mon, 9 Jun 2025 09:57:02 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Shawn Guo <shawnguo2@yeah.net>, Peter Chen <peter.chen@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>, imx@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
-Message-ID: <c7bfdfec-bc49-4ce5-8dd9-7a69d8e24ceb@rowland.harvard.edu>
-References: <aEZxmlHmjeWcXiF3@dragon>
- <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: hub: fix detection of high tier USB3 devices behind
+ suspended hubs
+Message-ID: <8541d1a3-15e6-4253-a01c-af02a58869d5@rowland.harvard.edu>
+References: <20250609122047.1945539-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,46 +87,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
+In-Reply-To: <20250609122047.1945539-1-mathias.nyman@linux.intel.com>
 
-On Mon, Jun 09, 2025 at 07:53:22PM +0800, Xu Yang wrote:
-> Hi Shawn,
+On Mon, Jun 09, 2025 at 03:20:47PM +0300, Mathias Nyman wrote:
+> USB3 devices connected behind several external suspended hubs may not
+> be detected when plugged in due to aggressive hub runtime pm suspend.
 > 
-> Thanks for your reports!
+> The hub driver immediately runtime-suspends hubs if there are no
+> active children or port activity.
 > 
-> On Mon, Jun 09, 2025 at 01:31:06PM +0800, Shawn Guo wrote:
-> > Hi Xu, Peter,
-> > 
-> > I'm seeing a kernel hangup on imx8mm-evk board.  It happens when:
-> > 
-> >  - USB gadget is enabled as Ethernet
-> >  - There is data transfer over USB Ethernet
-> >  - Device is going in/out suspend
-
-> During the scp process, the usb host won't put usb device to suspend state.
-> In current design, then the ether driver doesn't know the system has
-> suspended after echo mem. The root cause is that ether driver is still tring
-> to queue usb request after usb controller has suspended where usb clock is off,
-> then the system hang.
+> There is a delay between the wake signal causing hub resume, and driver
+> visible port activity on the hub downstream facing ports.
+> Most of the LFPS handshake, resume signaling and link training done
+> on the downstream ports is not visible to the hub driver until completed,
+> when device then will appear fully enabled and running on the port.
 > 
-> With the above changes, I think the ether driver will fail to eth_start_xmit() 
-> at an ealier stage, so the issue can't be triggered.
+> This delay between wake signal and detectable port change is even more
+> significant with chained suspended hubs where the wake signal will
+> propagate upstream first. Suspended hubs will only start resuming
+> downstream ports after upstream facing port resumes.
 > 
-> I think the ether driver needs call gether_suspend() accordingly, to do this,
-> the controller driver need explicitly call suspend() function when it's going
-> to be suspended. Could you check whether below patch fix the issue?
+> The hub driver may resume a USB3 hub, read status of all ports, not
+> yet see any activity, and runtime suspend back the hub before any
+> port activity is visible.
+> 
+> This exact case was seen when conncting USB3 devices to a suspended
+> Thunderbolt dock.
+> 
+> USB3 specification defines a 100ms tU3WakeupRetryDelay, indicating
+> USB3 devices expect to be resumed within 100ms after signaling wake.
+> if not then device will resend the wake signal.
+> 
+> Give the USB3 hubs twice this time (200ms) to detect any port
+> changes after resume, before allowing hub to runtime suspend again.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 596d789a211d ("USB: set hub's default autosuspend delay as 0")
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
 
-The situation is more complicated than this.
-
-In general, a USB gadget cannot allow itself to be suspended while the 
-USB bus it is connected to remains active.  Not unless it can be set to 
-wake up when a USB packet arrives, and even that probably won't work 
-because the wakeup sequence would take too long and the USB transfer 
-would time out on the host.
-
-The best way to fix this problem is for the gadget to disconnect itself 
-from the USB bus whenever it goes into suspend, and to reconnect when it 
-resumes.
-
-Alan Stern
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
