@@ -1,155 +1,107 @@
-Return-Path: <linux-usb+bounces-24669-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24670-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 687A4AD3BEA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 16:57:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4DF6AD3C35
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 17:07:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C572F3ABE22
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 14:56:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 282D31BA009A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 15:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7C3227EBF;
-	Tue, 10 Jun 2025 14:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b="EH5b2L+i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7272D23A9A3;
+	Tue, 10 Jun 2025 15:03:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from borehabit.cfd (ip160.ip-51-81-179.us [51.81.179.160])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D4222B8AB
-	for <linux-usb@vger.kernel.org>; Tue, 10 Jun 2025 14:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.179.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCFD235355;
+	Tue, 10 Jun 2025 15:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.181.117.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749567374; cv=none; b=tRZ9YOVjxf27VWYpBcy8GNwxXFVsZWbnlBGbOGbx6FxO9AknR2hHbCg86BP6WN6ImP/OrO+27feYjS0mUxRep8P9xmgU92gmWXmzttPRB+jXXYy8McoHI7rve3jmxlnlch3ysCuudP2/MDN4p9dy7oTKtTsob8UvpC95/Q9qUgs=
+	t=1749567816; cv=none; b=Nj4tghxfEK9j+rrLj4rstNla5EBLbvsZI2YnRy4q3w9vr+0too7vJULvMXi8goWPSVuPCoZqXvPZYNUAXQRF0Vgp1yXoIhyc9j6MAmFm40M2HPveOxh7fcAtG5/nkqqK9EiWqcqDJk21HfSj91vWVAVAlyPUjlxNakfNvljyle0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749567374; c=relaxed/simple;
-	bh=j/qZ6nCFDOcbnwIbag40JF9HDzOLw0n9TJz9U1mz3X8=;
-	h=To:Subject:Date:From:Message-ID:MIME-Version:Content-Type; b=kIoaiOUOknGcxabjGv26v+SNsu4+R+W9NetzdgzabJqxNoAi1RAAlNGRZ4cfwTXGkitklP5TZuPnv7MjNVPG2G+bv1tqVeP8AszIqoYFGQScF7p2WiouCxqqHhw40HDcE0e/Te4cv4W0JSxaZbLzey06FP2oovywKSKTtcscv3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd; spf=pass smtp.mailfrom=borehabit.cfd; dkim=pass (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b=EH5b2L+i; arc=none smtp.client-ip=51.81.179.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=borehabit.cfd
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=borehabit.cfd; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CFYjPvEUim5mD5QwWelE+Axpgk7p2gwnF2M5gpb++Rg=; b=EH5b2L+ipTAn0dGruSG+3Invzl
-	yFDRGM+chiI4E/pQYZNPYuIBkJ5PYiPbuvwL7r6lPw1u8GfhPNkkyQ1qG+M5EYIPSpS2YnnjVTle8
-	qw92lKpvO5ZJxYdkGJ6xibcZ1EEyw/SmICW1KmNHyNnO3UvZxCLeYlrecwdzFYUdaKYA=;
-Received: from admin by borehabit.cfd with local (Exim 4.90_1)
-	(envelope-from <support@borehabit.cfd>)
-	id 1uP0Oa-000WHB-9M
-	for linux-usb@vger.kernel.org; Tue, 10 Jun 2025 21:56:12 +0700
-To: linux-usb@vger.kernel.org
-Subject: WTS Available laptops and Memory
-Date: Tue, 10 Jun 2025 14:56:12 +0000
-From: Exceptional One PC <support@borehabit.cfd>
-Reply-To: info@exceptionalonepc.com
-Message-ID: <7a9269f82219b8cdb226a8dc3796df1e@borehabit.cfd>
+	s=arc-20240116; t=1749567816; c=relaxed/simple;
+	bh=PTMdhk67xc7XKkOuFv//TWr5oxho4kXHuNSuGFjH+xE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=F7C7RTumPeTJExmIYIqgMNu6WmRAWQrvsZal/XofyVTT9AB/gdC3apGv9QB7Bem6NGGA3XnUGmeKQz7VEaSWckOgdUYzxj9WczPnaQrjmVfz00po28VEssBfZesKf889UpThLnIGR8Q/Oh75CWoUtOVTKgZahit0J6ttUD+6E9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se; spf=pass smtp.mailfrom=actia.se; arc=none smtp.client-ip=212.181.117.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=actia.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=actia.se
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 10 Jun
+ 2025 17:03:25 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.039; Tue, 10 Jun 2025 17:03:25 +0200
+From: John Ernberg <john.ernberg@actia.se>
+To: Shawn Guo <shawnguo2@yeah.net>
+CC: Xu Yang <xu.yang_2@nxp.com>, Peter Chen <peter.chen@kernel.org>, Shawn Guo
+	<shawnguo@kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
+Thread-Topic: i.MX kernel hangup caused by chipidea USB gadget driver
+Thread-Index: AQHb2Uk8r5zPXewyY0SsDNZZa8wLobP7lMcAgADIvwA=
+Date: Tue, 10 Jun 2025 15:03:24 +0000
+Message-ID: <8b48c88f-4d70-403a-b1a5-bb80643086ed@actia.se>
+References: <aEZxmlHmjeWcXiF3@dragon>
+ <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
+ <aEbstxkQmji4tfjf@w447anl.localdomain> <aEeg1s9A0F8x0U2+@dragon>
+In-Reply-To: <aEeg1s9A0F8x0U2+@dragon>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B14453627660
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9A91E4C4EE6A4C4B8F9753C8D81719A4@actia.se>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hello,
-
-Looking for a buyer to move any of the following Items located in USA.
-
-
-Used MICRON SSD 7300 PRO 3.84TB 
-U.2 HTFDHBE3T8TDF SSD 2.5" NVMe 3480GB
-Quantity 400, price $100 EACH 
-
-
- 005052112 _ 7.68TB HDD -$200 PER w/ caddies refurbished 
- Quantity 76, price $100
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2000 EACH
-
-
-Brand New C9200L-48T-4X-E
-$1,200 EACH
-QTY4
-
-HP 1040G3 Elite Book Folio Processor :- Intel Core i5
-◻Processor :- Intel Core i5
-◻Generation :- 6th
-◻RAM :- 16GB
-◻Storage :- 256G SSD
-◻Display :- 14 inch" Touch Screen 
-QTY 340 $90 EA
-
-
-
-SK HYNIX 16GB 2RX4 PC4 - 2133P-RAO-10
-HMA42GR7AFR4N-TF TD AB 1526
-QTY560 $20 EA
-
-
-Xeon Gold 6442Y (60M Cache, 2.60 GHz)	
- PK8071305120500	 
- QTY670 700 each 
-
-
-SAMSUNG 64GB 4DRX4 PC4-2666V-LD2-12-MAO
-M386A8K40BM2-CTD60 S
-QTY 320 $42 each
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2500 EACH
-
-
-Core i3-1315U (10M Cache, up to 4.50 GHz)	
- FJ8071505258601
-QTY50  $80 EA
-
-Intel Xeon Gold 5418Y Processors
-QTY28 $780 each
-
-
-Brand New C9200L-48T-4X-E  
-$1000 EACH
-QTY4
-
-
-Brand New Gigabyte NVIDIA GeForce RTX 5090 AORUS
-MASTER OC Graphics Card GPU 32GB GDDR7
-QTY50 $1,300
-
-
- Brand New N9K-C93108TC-FX-24 Nexus
-9300-FX w/ 24p 100M/1/10GT & 6p 40/100G
-Available 4
-$3000 each
-
-
-
-Brand New NVIDIA GeForce RTX 4090 Founders
-Edition 24GB - QTY: 56 - $700 each
-
-
-
-
-Charles Lawson
-Exceptional One PC
-3645 Central Ave, Riverside
-CA 92506, United States
-www.exceptionalonepc.com
-info@exceptionalonepc.com
-Office: (951)-556-3104
-
+SGkgU2hhd24sDQoNCk9uIDYvMTAvMjUgNTowNCBBTSwgU2hhd24gR3VvIHdyb3RlOg0KPiBIaSBK
+b2huLA0KPiANCj4gT24gTW9uLCBKdW4gMDksIDIwMjUgYXQgMDI6MTc6MzBQTSArMDAwMCwgSm9o
+biBFcm5iZXJnIHdyb3RlOg0KPiANCj4gPHNuaXA+DQo+IA0KPj4gV2UgcHJvYmFibHkgcmFuIGlu
+dG8gdGhlIHNhbWUgcHJvYmxlbSB0cnlpbmcgdG8gYnJpbmcgb25ib2FyZCA2LjEyLCBnb2luZw0K
+Pj4gZnJvbSA2LjEsIG9uIGlNWDhRWFAuIEkgbWFuYWdlZCB0byB0cmFjZSB0aGUgaGFuZyB0byBF
+UCBwcmltaW5nIHRocm91Z2ggYQ0KPj4gY29tYmluYXRpb24gb2YgZGVidWcgdHJhY2luZyBhbmQg
+QlVHX09OIGV4cGVyaW1lbnRzLiBTZWUgaWYgaXQgc3RhcnRzDQo+PiBzcGxhdGluIHdpdGggdGhl
+IGJlbG93IGNoYW5nZS4NCj4+DQo+PiAtLS0tLS0tLS0tLS0tLS0tLT44LS0tLS0tLS0tLS0tLS0t
+LS0tDQo+Pg0KPj4gIEZyb20gMDkyNTk5YWI2ZjllMjA0MTJhN2NhMWViMTE4ZGQyYmU4MGNkMThm
+ZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDENCj4+IEZyb206IEpvaG4gRXJuYmVyZyA8am9obi5l
+cm5iZXJnQGFjdGlhLnNlPg0KPj4gRGF0ZTogTW9uLCA1IE1heSAyMDI1IDA5OjA5OjAxICswMjAw
+DQo+PiBTdWJqZWN0OiBbUEFUQ0hdIFVTQjogY2k6IGdhZGdldDogUGFuaWMgaWYgcHJpbWluZyB3
+aGVuIGdhZGdldCBvZmYNCj4+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy91c2IvY2hpcGlkZWEvdWRj
+LmMgfCA0ICsrKy0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
+dGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS91ZGMuYyBi
+L2RyaXZlcnMvdXNiL2NoaXBpZGVhL3VkYy5jDQo+PiBpbmRleCAyZmVhMjYzYTVlMzAuLjU0NGFh
+NGZhMmQxZCAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvdXNiL2NoaXBpZGVhL3VkYy5jDQo+PiAr
+KysgYi9kcml2ZXJzL3VzYi9jaGlwaWRlYS91ZGMuYw0KPj4gQEAgLTIwMyw4ICsyMDMsMTAgQEAg
+c3RhdGljIGludCBod19lcF9wcmltZShzdHJ1Y3QgY2lfaGRyYyAqY2ksIGludCBudW0sIGludCBk
+aXIsIGludCBpc19jdHJsKQ0KPj4NCj4+ICAgICAgaHdfd3JpdGUoY2ksIE9QX0VORFBUUFJJTUUs
+IH4wLCBCSVQobikpOw0KPj4NCj4+IC0gICB3aGlsZSAoaHdfcmVhZChjaSwgT1BfRU5EUFRQUklN
+RSwgQklUKG4pKSkNCj4+ICsgICB3aGlsZSAoaHdfcmVhZChjaSwgT1BfRU5EUFRQUklNRSwgQklU
+KG4pKSkgew0KPj4gICAgICAgICAgY3B1X3JlbGF4KCk7DQo+PiArICAgICAgIEJVR19PTihkaXIg
+PT0gVFggJiYgIWh3X3JlYWQoY2ksIE9QX0VORFBUQ1RSTCArIG51bSwgRU5EUFRDVFJMX1RYRSkp
+Ow0KPj4gKyAgIH0NCj4+ICAgICAgaWYgKGlzX2N0cmwgJiYgZGlyID09IFJYICYmIGh3X3JlYWQo
+Y2ksIE9QX0VORFBUU0VUVVBTVEFULCBCSVQobnVtKSkpDQo+PiAgICAgICAgICByZXR1cm4gLUVB
+R0FJTjsNCj4+DQo+PiAtLS0tLS0tLS0tLS0tLS0tLT44LS0tLS0tLS0tLS0tLS0tLS0tDQo+IA0K
+PiBIbW0sIEkganVzdCB0ZXN0ZWQgdGhlIGNoYW5nZSBvbiBpLk1YOE1NIGJ1dCBkaWRuJ3Qgc2Vl
+IHRoZSBzcGxhdHRpbmcuDQo+IE1heWJlIHdlIGFyZSBydW5uaW5nIGludG8gYSBzbGlnaHRseSBk
+aWZmZXJlbnQgcHJvYmxlbXM/DQo+IA0KPiBTaGF3bg0KPiANCg0KUGVyaGFwcyB0aGUgaGFuZ2lu
+ZyBwb2ludCBpcyBkaWZmZXJlbnQgaW4gaS5NWDhNTSwgSSB1bmZvcnR1bmF0ZWx5IGRvIA0Kbm90
+IGhhdmUgYW55IGJvYXJkcyB3aXRoIHRoYXQgU29DIG9uIHRoZW0uIFdoZW4gSSB0cmFja2VkIGRv
+d24gdGhlIA0KcHJvYmxlbSBvbiBRWFAgSSB0aHJldyBzaW1pbGFyIEJVR19PTiBzdGF0ZW1lbnRz
+IGluIG1vc3Qgd2hpbGUgbG9vcHMuDQoNCkJ1dCBzaW5jZSBhIGZpeCBpcyB2ZXJ5IGxpa2VseSBp
+ZGVudGlmaWVkIGFscmVhZHkgYnkgeW91IEknbSBub3Qgc3VyZSBpbiANCnRoZSB2YWx1ZSBvZiBm
+aW5kaW5nIHRoZSBleGFjdCBzcG90Lg0KDQpCZXN0IHJlZ2FyZHMgLy8gSm9obiBFcm5iZXJn
 
