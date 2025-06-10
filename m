@@ -1,135 +1,119 @@
-Return-Path: <linux-usb+bounces-24644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0D1FAD32BD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 11:52:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3699AD32CD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 11:54:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68DDD1739E7
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 09:52:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68A903B88DC
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 09:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF3B28C5D0;
-	Tue, 10 Jun 2025 09:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E264D28B7C3;
+	Tue, 10 Jun 2025 09:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="qNGD5sEG"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Pkud2SEv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811A028BAB4;
-	Tue, 10 Jun 2025 09:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5702528B401
+	for <linux-usb@vger.kernel.org>; Tue, 10 Jun 2025 09:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749549070; cv=none; b=Xv+k/Qiy2zQquV2a8xGhrUFmXpWmxGh2SceoxS2ShMgIKKNec6MwPtztW5ZmUYEC/Szxt6VMgs5eHEUre42sMNbIxd/2PqTRIWXAg5aO7ATXVnta9hWcft0Oeta28AzR5A4a4BQcOPA4UE7nErHK/L2ruDwlLGa8aQFyc5nI5HQ=
+	t=1749549201; cv=none; b=l0hz0numCA6NigXthPxGWyt4PHMgysC2+sHc0IR3br6Lnpwsz3I+gGoQC4FFRpdWx6FAv20czuP0wnrf74hCVewSCW4kd1EUy8WvzzJlWNz6+qvLm06InFUgGJtYZUxVW/xEXzJHji6UK21X0oqtwawBdm8JNfwFNh2nfxK4Y2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749549070; c=relaxed/simple;
-	bh=iRyRHdm7eGgLOrCqyLMS8X2C4VLY3ck/40Q2IurUp70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pd3HbOBMCmdn3Q2+wFZ3V6lcrkrWTWz3Dl+R78pv5KhLn2MKrDR2NZovsqRoBa87gzpuFFESGQOGSoBP/FsKYj03LfHlBKqXRZIZc5b8qVXUaOr9rsMMLI0KoKEu0NO9lRM1pMtOpqL2na41k2N/0lh7skqEYfKDDWNPLFzMBMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=qNGD5sEG; arc=none smtp.client-ip=220.197.32.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=nUVTmfdkyIz2sCibo8CQYdH/ADMQuNhoQmpTEzyRL5M=;
-	b=qNGD5sEGGVHWy8tTwX792dVz/FOchRHUWGIobOMMn684dG2AfKdMafxMgMN6yL
-	oNo1c1YramDqSCyFpDJxlToxQXLxDGO+L2i8mV0ZmdjtY7CK+tZzBpsGerCLqGyR
-	q/PPFm6yl4jVK8fL/eoZl7Kw4TyqKglkseO32kQd4YnY8=
-Received: from dragon (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgD3xx3b_0doxXNVAA--.50837S3;
-	Tue, 10 Jun 2025 17:50:21 +0800 (CST)
-Date: Tue, 10 Jun 2025 17:50:19 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	imx@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
-Message-ID: <aEf/2+3MU5ED2sxE@dragon>
-References: <aEZxmlHmjeWcXiF3@dragon>
- <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
+	s=arc-20240116; t=1749549201; c=relaxed/simple;
+	bh=lf/Q0CP0+3JGF8skn4vJN8mCuS9rEjV0RqPQBwzodGc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hXVIKC4/23wDUkMnDskz8BbNu2kJimZh6bh4MCwUmdTzxWDizwjYIDa4cnwK17B1WxsYvB/kakVSDpKqK4Hsc1X2fngMhyv4dg2Czns7FGHdyTlWfCkTWUaggMiQDh8eiDGNIMlCOtafF8VI7YTZRE/EzZnEXMzcaTYU21972JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Pkud2SEv; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45024721cbdso45425035e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 10 Jun 2025 02:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1749549198; x=1750153998; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9IEkGDFBIs7IrBtufGEQ1UvIq45B77cgWp5iZKKgIpk=;
+        b=Pkud2SEv4d5Zd8qEFxIsJJyS650FzgonHEnjoeteyOCLnwMNXSRVlxKjWX785MUMpd
+         ISwCy07c2Xyt+xs2SKBEEBUXnSVsPFYI7QMzwMvP1hoDyWgDIDTSTXsgvj2vHiKkzleE
+         6NYiFsKvp8XmTcSDh8RII1yggx0PS0yJ9tSlfOI1dmHE6UhO7VCYQ5yB72CJZZmQ/BFx
+         dwi7ZZOtTRTNU5P8XdKAXRDPJvJEb8vnlPmLoTvj2TXv07o2BA+i/q1VQ2fvYVid3loJ
+         exsJETJ1B+e6wctTjXtPfHGUv6Gm9NiTOe97p8WaLIBFxBvaGaQgABKn+nRHz71tgGdf
+         N2GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749549198; x=1750153998;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9IEkGDFBIs7IrBtufGEQ1UvIq45B77cgWp5iZKKgIpk=;
+        b=WpDVEGW2RQU6qFH9g+OU2qgFxKsR5Yl8cCreVTLa2lhCe6LZBzc6iP1i5hHayMiAsy
+         /1GJu60vowGmo8b6kREDrqRp0rCu8LimqMyKAwHHg9tgxc7MqLVSdeUwViTCtH4mXGkI
+         9YUBmick69MOSlK3UMElUqxGUODv4i6luerEgeptiIBZ5unVAs9hbn4wboDjYEzrkIKV
+         Uiuynl4YtwZCphoYNaiqGpZE1uDzqGxnFOIR1NcpvL3Dz04h50jeQKNiprdsvaEyQRyX
+         h5KTj3OzKE1Szp2cGrwafbHB/DkO20Sc40f8TK/D6MrSWY0PDb7lJ4sKHVOrOyqRsYDE
+         FO8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWvnMfxiKkj0YElPauNuIbLpLDBw/Q5RBlBWDyOzdWpRaPiviS5A61nnV2YG/Bm6Ied1HupoCYUjq8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdxdizZbATJub93BWoQSnTd9BbjEnwNV4ESzEV51p9gFHGU9Iu
+	eSgdQyFaSXncptCZXdU96I+hlJJqLeSAlcE4EI2VvS1tqvu3sdl19RjSA0svEoq9RZ8=
+X-Gm-Gg: ASbGnctkRhcaqzwMZYcZtSsMubFyhwsrAnO754xVvVNh7YpYazC3cxMnj5zkE+LfQTm
+	oF02fEIDzgKxWsZKj9651h0zPybFQrfypT41fK8W8oKy/1W637O7LY9Wdvds6vkcs7tOQtSJtfs
+	0Mk+kWE9DOoUHoxXn2/XGS30G7n19AY03Aj+fNDfwmvckjCzLukG5CGzcL41sc5IpldHMRp0+MY
+	Vca9DJyF6fEU/zevVTtTkm0ATb0ZM2xkK4fj8bILCPGavAVyo9RD41DH4+Kp3tQPvFzE2fkp8mM
+	mkw0OdobWb+BRlC6PZG/nynOKm8eiYUEBHbQfwFiirPBgHQ17z3aPEoMXgBbJ3mRhZRM1sNRBIz
+	4JP7yvCkMdML2j98Dd+C0aWdOJv3b
+X-Google-Smtp-Source: AGHT+IF43HoF+ckI+JNZf8sM8mBLEsIZIzrQldZAYBnhq+ZWk+6w2oq6oTjq3frqJQUO14CjjL46AQ==
+X-Received: by 2002:a05:6000:40c7:b0:3a4:f430:2547 with SMTP id ffacd0b85a97d-3a55226cd6amr1466032f8f.6.1749549197729;
+        Tue, 10 Jun 2025 02:53:17 -0700 (PDT)
+Received: from ?IPV6:2001:a61:1316:3301:be75:b4b4:7520:e2e4? ([2001:a61:1316:3301:be75:b4b4:7520:e2e4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a532131df6sm11612214f8f.0.2025.06.10.02.53.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jun 2025 02:53:17 -0700 (PDT)
+Message-ID: <dc4e3500-b5fb-4aa1-b74c-c37708146c3c@suse.com>
+Date: Tue, 10 Jun 2025 11:53:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
-X-CM-TRANSID:M88vCgD3xx3b_0doxXNVAA--.50837S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAFykZw4DZF1kKFWUtw1xGrg_yoW5WF17pa
-	1ayFWIka1kGa4rGr47Kw17KFyUXa9YkrWqkryxGw4xXFy3ur95GF17K34Fvr90kryfJanF
-	yF4qgw1DAFyvga7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UC1v3UUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCwVoZWhH4ayQ7wAAse
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usb: Convert tasklet API to new bottom half
+ workqueue mechanism
+To: "Miao, Jun" <jun.miao@intel.com>, Subbaraya Sundeep <sbhatta@marvell.com>
+Cc: "oneukum@suse.com" <oneukum@suse.com>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "kuba@kernel.org" <kuba@kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250609072610.2024729-1-jun.miao@intel.com>
+ <aEajxQxP_aWhqHHB@82bae11342dd>
+ <PH7PR11MB84552A6D3723B68D5B83E4BE9A6BA@PH7PR11MB8455.namprd11.prod.outlook.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <PH7PR11MB84552A6D3723B68D5B83E4BE9A6BA@PH7PR11MB8455.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 09, 2025 at 07:53:22PM +0800, Xu Yang wrote:
+On 09.06.25 11:53, Miao, Jun wrote:
 
-<snip>
-
-> During the scp process, the usb host won't put usb device to suspend state.
-> In current design, then the ether driver doesn't know the system has
-> suspended after echo mem. The root cause is that ether driver is still tring
-> to queue usb request after usb controller has suspended where usb clock is off,
-> then the system hang.
+>> You can change it to GFP_KERNEL since this is not atomic context now.
+>>
 > 
-> With the above changes, I think the ether driver will fail to eth_start_xmit() 
-> at an ealier stage, so the issue can't be triggered.
-> 
-> I think the ether driver needs call gether_suspend() accordingly, to do this,
-> the controller driver need explicitly call suspend() function when it's going
-> to be suspended. Could you check whether below patch fix the issue?
+> Thanks,  the usbnet_bh() function only be called by usbnet_bh_workqueue which is sleepable.
 
-Thanks for the patch, Xu!  It does fix the hangup but seems to be less
-reliable than my/Peter's change (disconnecting gadget), per my testing
-on a custom i.MX8MM board.  With your change, host/PC doesn't disconnect
-gadget when the board suspends.  After a few suspend cycles, Ethernet
-gadget stops working and the following workqueue lockup is seen.  There
-seems to some be other bugs?
+Yes, but it can be waited on in usbnet_stop(), which in turn can
+be called for a device reset. Hence this must be GFP_NOIO, not
+GFP_KERNEL.
 
-[  223.047990] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[  223.054097] rcu:     1-...0: (7 ticks this GP) idle=bb7c/1/0x4000000000000000 softirq=5368/5370 fqs=2431
-[  223.063318] rcu:     (detected by 0, t=5252 jiffies, g=4705, q=2400 ncpus=4)
-[  223.070105] Task dump for CPU 1:
-[  223.073330] task:systemd-network state:R  running task     stack:0     pid:406   ppid:1      flags:0x00000202
-[  223.083248] Call trace:
-[  223.085692]  __switch_to+0xc0/0x124
-[  246.747996] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 43s!
-
-However, your change seems working fine on i.MX8MM EVK.  It's probably
-due to the fact that host disconnects gadget for some reason when EVK
-suspends.  This is a different behavior from the custom board above.
-We do not really expect this disconnecting, do we?
-
-Shawn
-
->  ---8<--------------------
-> 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 8a9b31fd5c89..27a7674ed62c 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -2367,6 +2367,8 @@ static void udc_id_switch_for_host(struct ci_hdrc *ci)
->  #ifdef CONFIG_PM_SLEEP
->  static void udc_suspend(struct ci_hdrc *ci)
->  {
-> +       ci->driver->suspend(&ci->gadget);
-> +
->         /*
->          * Set OP_ENDPTLISTADDR to be non-zero for
->          * checking if controller resume from power lost
-> @@ -2389,6 +2391,8 @@ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
->         /* Restore value 0 if it was set for power lost check */
->         if (hw_read(ci, OP_ENDPTLISTADDR, ~0) == 0xFFFFFFFF)
->                 hw_write(ci, OP_ENDPTLISTADDR, ~0, 0);
-> +
-> +       ci->driver->resume(&ci->gadget);
->  }
->  #endif
-> 
->  ---->8------------------
+	Regards
+		Oliver
 
 
