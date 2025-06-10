@@ -1,118 +1,172 @@
-Return-Path: <linux-usb+bounces-24633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B56C9AD2C13
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 05:05:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3AEAAD2C24
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 05:17:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BC5A1891D6F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 03:06:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 688177A462A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 03:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4489F23C39A;
-	Tue, 10 Jun 2025 03:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B29A21FF25;
+	Tue, 10 Jun 2025 03:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="T3fXJE10"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BVWsOk9n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4112E9460;
-	Tue, 10 Jun 2025 03:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE088F40;
+	Tue, 10 Jun 2025 03:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749524744; cv=none; b=RRvQardFVWDLEuX4Tkt2IZAbL+iAvrK+cu4Lzzsv3vzyMQM2PMmqaghD88qpHuxN0VLV41Xr8FoEqchfTFjL7vl3q7rTZVBe/z6EMFG8oA8KsWeqhyICLq8L30qsZsOPPoIAUvQQxxAvIuIOEAmCu9kUyTftTeiSkgc49UcOun4=
+	t=1749525450; cv=none; b=UIeZIgIZMwY9YR/bXKeAMGSnTQrcpIFQUniOYWWrc+LT+3QwxjWHVckNKJwhvyXWgO9sXS9WaavB1LlCBx3oNzcm5XmfDRHddIGS9cFflqwESbsqJBQFu7T02qSNqbz4uY/TJNPFj1HLSIMDTcaNnO+CT5IQDqSwkB9gaGdVEkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749524744; c=relaxed/simple;
-	bh=avO+mpvfE5wXQHQ2LrbvaocbDPERuQtijditQmDk+9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oT4Xb+ZDKsH+M89W9Q9NyTLPVNZWVKjMOb4NGP1xNfcG/qayByLp6VdMSO+dKLJqh+jFGl08ncLNV/eDhmubKKC/BFSu7TqTIlSPJXmWE+hDxfH/N123ll6Vg4NcEUJfC6XRQfl1OT4vtUG9EFxqeLUJ2lzXimQvXSrxtnQxWbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=T3fXJE10; arc=none smtp.client-ip=220.197.32.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=bPCNvaiweglADLcDUZiaSHWSdRXaEgPafPmAEsUXP6w=;
-	b=T3fXJE10vejU41LKzdrPWuTUns6SjQOmeRrEvrVLgaqIwiKIYITKGz/9ph0Ai+
-	SwFdd1vMNo9CS4O2Jq9oe8fBNWttECuh9a+YO4tbkdX4bg57EX6TFJ56d226VDgV
-	4mkiQTOFF04SAc0BgQ1L6ZmDAy4Ha0+YNtT/7t2DEVSM8=
-Received: from dragon (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgD3HzjXoEdoKoVPAA--.46618S3;
-	Tue, 10 Jun 2025 11:04:56 +0800 (CST)
-Date: Tue, 10 Jun 2025 11:04:54 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: John Ernberg <john.ernberg@actia.se>
-Cc: Xu Yang <xu.yang_2@nxp.com>, Peter Chen <peter.chen@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
-Message-ID: <aEeg1s9A0F8x0U2+@dragon>
-References: <aEZxmlHmjeWcXiF3@dragon>
- <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
- <aEbstxkQmji4tfjf@w447anl.localdomain>
+	s=arc-20240116; t=1749525450; c=relaxed/simple;
+	bh=45fnjTdYMVBPljf/aBVpxnA2I6FnEJGXBo6km1ABqaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fKovybnTZn2vuvzFnqIHty30+vwqxYoDZavFBUKqwguZCn92YD0PKxCK1HmKS7AVX7WPpuzbQpi8Ze0ACxKf5tX7an/hQ22gY96psWnI19C9oy4tX0+39pumb0sPcVVGaF1H5xnkta2A5eg7+VHG5ZK4EIutoDRA5gR5IHmdmPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BVWsOk9n; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-742c46611b6so6250783b3a.1;
+        Mon, 09 Jun 2025 20:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749525448; x=1750130248; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm6kdcI4n1koVKJTIy10thiRxaSDuouUmD5o5Uuwua0=;
+        b=BVWsOk9nObSf+DJaDodr7lOBoOOu406tRH6dMasdQFr8Vdl3cJlPek3VXDr0ZwXt6K
+         y/5qjO9K8LUyOOGk+jm2BxmM5qj08b1+MQX4NkNw4wpGPlr8eYGlsiLMNIdegbmVdf1l
+         oK7TzRqP1H0zPe3sW2vKtdr4b+Ucs889IsRjdOEsV8glZOX+aNV0B8t1B6GL/OCYJBZ4
+         bB0N6lsc4J1WkW+GsU6U8/JHjpQDT7F7Wa1c/bvf0nSZh+MJgBwU0Ga/+avbxXjLo8Kp
+         VbaHpyOgnU0Pk8m2hBVqv+JU2q48gonwFwRMNhMJBKahVH4qGDr9q2BCa3wAlSau5lND
+         emVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749525448; x=1750130248;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rm6kdcI4n1koVKJTIy10thiRxaSDuouUmD5o5Uuwua0=;
+        b=MyH5QqiEkXVce3eMe4TAcUSYomETC8y63nZ6jltipWDYjBHkvheIzUJiiNxFNNbOrr
+         9lSxBr6ddVzUjv1yUxWqRzUZR95Iaqa6L7rUSKpPCy8VsEjWhhTCfGVvcNf41LXusBHs
+         ya4ushxEpC6Ot/8tsgW8cWBRljyzfPaGYgryYxJQkZVg9A1AItvtZoAzaK0kQmFaGCtc
+         9W69sZsu1533tq5H0Re0kJKuRpax0tA1u+mxtW5CstER3LhiEQhLSLJNcVS4ZBwvhLc5
+         zOK726A+kgvCjYB/U2BBGafAdQxkWf4BQAm+DaADK1o90mYkOYKejboEs+Co78bDZkuu
+         fwGA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8/60gwF1qb/8vsMiGPl3qPvo2ik6FpZ5fYi/9i0NEwfjW9n94usNhJ0xVwyuPGZviWsazgSfSZA8=@vger.kernel.org, AJvYcCWY2jb/sh4jF8UXfZhOaR3O0MIuCJ1vaXFLMPFuL+5ETn1VpeAduUTXpE4s/o+9ABGaIAV1V6obT9PS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6G1kstCV46ei53bE1wvIGEctpVRwaLI+474UFpl2aWYoLt+ML
+	klVSoUqFQnlr4/5YNGse9JJSdEzZWb6WysN7581AONA2Ek/fNlya0fd2QMbWIw==
+X-Gm-Gg: ASbGncveJL+xGYVW80udIqShMTIgbtI4MIESWjbC7NYIOidb3Tbz6EoA+OJ0ioJyYkz
+	TPbU16p8nroGH+uhu+zYBVOI9MjagikTh1KUdmyC9Yu95z4fNlwI2vsN1MWP6eTQ0GIjNQ4xMNQ
+	ZPUeeUdZ5oIJFb4dDmDWvJl/RgDZGM5w/099FdwpJdc17HRrI2BL7rI1iIQ/+/b5K197iBaebJV
+	bonWslIjGJEpgCLDcyFXoY2Rix1Lp3GR0bitsYYfs5M4wUgAlWYH9VIs7TDtotlUJyHEZQmnY4J
+	ePMtodKlw7Jk9nlDA+1e4QQItP1ULFd1lsPPC5YsPs7HPYAP4pXKQqCdqZhG/g==
+X-Google-Smtp-Source: AGHT+IEvGrJH/l6/FleC+QIu6MpwoaBeq8cz4bgANMbiASmq7sOeOqr8hsR2xrYcawmWcsj7v+S3VQ==
+X-Received: by 2002:a05:6a00:855:b0:736:5c8e:baaa with SMTP id d2e1a72fcca58-74827e52592mr20318563b3a.2.1749525448311;
+        Mon, 09 Jun 2025 20:17:28 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482af7b606sm6705494b3a.67.2025.06.09.20.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 20:17:27 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 19C7E4209E8C; Tue, 10 Jun 2025 10:17:25 +0700 (WIB)
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Documentation <linux-doc@vger.kernel.org>,
+	Linux USB <linux-usb@vger.kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH] Documentation: usb: gadget: Wrap remaining usage snippets in literal code block
+Date: Tue, 10 Jun 2025 10:17:06 +0700
+Message-ID: <20250610031705.32774-2-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aEbstxkQmji4tfjf@w447anl.localdomain>
-X-CM-TRANSID:M88vCgD3HzjXoEdoKoVPAA--.46618S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJr4kZr1xtFyDJr4DZw1DJrb_yoW8XFyrpF
-	4fCr17AFsYqa4UJr1qqrsxuryrJa1kJrW8KFy2939YqrWa9w45Kr1UX3s5WF9rKry7W3W8
-	tFs8Jw1UC3WxCF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UjYL9UUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBBhoZWhHgimwwAAAsl
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2707; i=bagasdotme@gmail.com; h=from:subject; bh=45fnjTdYMVBPljf/aBVpxnA2I6FnEJGXBo6km1ABqaU=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDBnuiy1fmVcu2xR+/tqDtyGCR7wO20v0c7jtDGMsrY0w9 slsWvano5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABPxLWf4K/02JcKy/MiushVB bKIrqyN01rrplP5k0Xs51eHXLOsFCgz/nd5oze/p8DC6YdhxOKn7cXKvhWPEgeWeSmFT7KJjlE+ yAgA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 
-Hi John,
+Several configfs usage snippets forget to be formatted as literal code
+blocks. These were outputted in htmldocs output as normal paragraph
+instead. In particular, snippet for custom string descriptors as added
+in 15a7cf8caabee4 ("usb: gadget: configfs: Support arbitrary string
+descriptors") is shown as single combined paragraph, rather than two
+command lines.
 
-On Mon, Jun 09, 2025 at 02:17:30PM +0000, John Ernberg wrote:
+Wrap them like the rest of snippets.
 
-<snip>
+Fixes: 5e654a4655c3 ("Documentation/usb: gadget_configfs")
+Fixes: d80b5005c5dd ("docs: usb: convert documents to ReST")
+Fixes: 15a7cf8caabe ("usb: gadget: configfs: Support arbitrary string descriptors")
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+This patch is based on Uwe's numbered list indentation patch [1].
 
-> We probably ran into the same problem trying to bring onboard 6.12, going
-> from 6.1, on iMX8QXP. I managed to trace the hang to EP priming through a
-> combination of debug tracing and BUG_ON experiments. See if it starts
-> splatin with the below change.
-> 
-> ----------------->8------------------
-> 
-> From 092599ab6f9e20412a7ca1eb118dd2be80cd18ff Mon Sep 17 00:00:00 2001
-> From: John Ernberg <john.ernberg@actia.se>
-> Date: Mon, 5 May 2025 09:09:01 +0200
-> Subject: [PATCH] USB: ci: gadget: Panic if priming when gadget off
-> 
-> ---
->  drivers/usb/chipidea/udc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 2fea263a5e30..544aa4fa2d1d 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -203,8 +203,10 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
->  
->     hw_write(ci, OP_ENDPTPRIME, ~0, BIT(n));
->  
-> -   while (hw_read(ci, OP_ENDPTPRIME, BIT(n)))
-> +   while (hw_read(ci, OP_ENDPTPRIME, BIT(n))) {
->         cpu_relax();
-> +       BUG_ON(dir == TX && !hw_read(ci, OP_ENDPTCTRL + num, ENDPTCTRL_TXE));
-> +   }
->     if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num)))
->         return -EAGAIN;
->  
-> ----------------->8------------------
+[1]: https://lore.kernel.org/linux-doc/20250607224747.3653041-2-u.kleine-koenig@baylibre.com/
 
-Hmm, I just tested the change on i.MX8MM but didn't see the splatting.
-Maybe we are running into a slightly different problems?
+Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Shawn
+ Documentation/usb/gadget_configfs.rst | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/usb/gadget_configfs.rst b/Documentation/usb/gadget_configfs.rst
+index f069d2a0d09251..ada57c0e34aa8a 100644
+--- a/Documentation/usb/gadget_configfs.rst
++++ b/Documentation/usb/gadget_configfs.rst
+@@ -92,7 +92,7 @@ Then the strings can be specified::
+ 
+ Further custom string descriptors can be created as directories within the
+ language's directory, with the string text being written to the "s" attribute
+-within the string's directory:
++within the string's directory::
+ 
+ 	$ mkdir strings/0x409/xu.0
+ 	$ echo <string text> > strings/0x409/xu.0/s
+@@ -104,9 +104,9 @@ string descriptors to associate those strings with class descriptors.
+ ------------------------------
+ 
+ Each gadget will consist of a number of configurations, their corresponding
+-directories must be created:
++directories must be created::
+ 
+-$ mkdir configs/<name>.<number>
++        $ mkdir configs/<name>.<number>
+ 
+ where <name> can be any string which is legal in a filesystem and the
+ <number> is the configuration's number, e.g.::
+@@ -246,7 +246,7 @@ a symlink to a function being removed from the configuration, e.g.::
+ 	...
+ 	...
+ 
+-Remove strings directories in configurations:
++Remove strings directories in configurations::
+ 
+ 	$ rmdir configs/<config name>.<number>/strings/<lang>
+ 
+@@ -270,7 +270,7 @@ e.g.::
+ 	...
+ 	...
+ 
+-Remove functions (function modules are not unloaded, though):
++Remove functions (function modules are not unloaded, though)::
+ 
+ 	$ rmdir functions/<name>.<instance name>
+ 
+-- 
+An old man doll... just what I always wanted! - Clara
 
 
