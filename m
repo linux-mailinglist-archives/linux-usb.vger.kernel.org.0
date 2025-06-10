@@ -1,121 +1,189 @@
-Return-Path: <linux-usb+bounces-24630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24631-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6B1AD2305
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 17:56:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B50B6AD2B12
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 02:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3378A18894A1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Jun 2025 15:56:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B01D170A64
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 00:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B1721517C;
-	Mon,  9 Jun 2025 15:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C5A17A30F;
+	Tue, 10 Jun 2025 00:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Zi32pe91"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1GVp70T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B4D3398B;
-	Mon,  9 Jun 2025 15:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B03151985;
+	Tue, 10 Jun 2025 00:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749484565; cv=none; b=Pzdm5KWZgFukI/rrnDaLxV1vaL3BW60bBWmUVhtseB6QLH82RsqA6EL/rkm5dYZHNcl5HxjF8mclNktyNHhc+u7mEI9aabxHCuo9p3bBWyOevnEAgFmXdR6uBR1eFcOdj9iEmQjoLmZdqdhj6cqHM4ienG1Kl3AV9nmLIl68NZk=
+	t=1749517030; cv=none; b=L8O7+z4H21jLcQOPFbRKtqurE8QW0IDTJLFgbpZGbDBDthrIiqAMLKPZcuvOar2sdzNlrMfmZovuEatButRB0rCG+lZkjAoiG4+L1dE+K8pW6/3srwEKmzY47dnRNgb8Y65T50pe3Y6kBcynCGoElFo+SR7rjLtDMXxyAToTqRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749484565; c=relaxed/simple;
-	bh=v/HOs5wYPXahQ/BppAotUsbvMIqbvajKilLGW22iZyA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8AIXZyK3/y9DNNh6yB9kCo3N5T2hfsfboQL+EqPkqyg7mm82ZjLUHxFm+XGps19oeF4kArdiEyGmKLGDbE4SaRfcMc/mOjkMdkgelk005NewmrEqfRuBOpmhHqgqA8NNFvrOoNRKUWLw3pBA9rMEY9HLlYYISO2QPgR66U2x+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Zi32pe91; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55998ewc029069;
-	Mon, 9 Jun 2025 08:55:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=c7wxP6T9T+fWiIwiyEdpN+6mV
-	3/fDKk1w5mqHrm9StU=; b=Zi32pe91oTdDj9pWov31QZFZFi74GIDH1O5oveE3M
-	X3RWZqP6wqjDvod05hzTTTtdrSPIRUqj/pouyXkn3pxBMaLKQFkGchkCz1qXbATi
-	HNLIZXXa4dda/G95aVX0kua6jPgWjoIbkdXTWm4yPFJHuVioVD8i594xlilcgE07
-	KbxDEzer8xft5hrMdl0hGA9dyeR5GjIrRhwMXwStB7XyzGmsLzbWZ53yNOmP+740
-	J9NRa6EShWUeESzHjmr5NvEQAQD7jonHY3bPGHTmvqnntp3Vcic0dBE9EDYjeaoz
-	O8V8Gz6BlTSJN1BRvTFuXQ4wt1sZICQ9/2OHYGDqSdV0A==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 475vq80qhv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Jun 2025 08:55:55 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 9 Jun 2025 08:55:54 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Mon, 9 Jun 2025 08:55:54 -0700
-Received: from 64799e4f873a (unknown [10.28.168.138])
-	by maili.marvell.com (Postfix) with SMTP id 2A91F3F704D;
-	Mon,  9 Jun 2025 08:55:50 -0700 (PDT)
-Date: Mon, 9 Jun 2025 15:55:49 +0000
-From: Subbaraya Sundeep <sbhatta@marvell.com>
-To: Lucas Sanchez Sagrado <lucsansag@gmail.com>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <linux-usb@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: usb: r8152: Add device ID for TP-Link UE200
-Message-ID: <aEcEBUBIbLUM3dHn@64799e4f873a>
-References: <20250609145536.26648-1-lucsansag@gmail.com>
+	s=arc-20240116; t=1749517030; c=relaxed/simple;
+	bh=oyLK1slm11FPI7N6OT2cVJrkfcmoYwMafSrBI9soMLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lCwi11fiaIH7eqg8tLDreVBGOC1PNh2VxOyx0rQK1P8kqU0wuF+K80I3L2zjOeo/Z2SIEfmcYk3g2cBnzzntT0lt5bGZeMUhvTPKeVX3SKMYyzc4DPsqDRbzoBtdhKjrkKoGT6vKhAHADyhZSHnb2VFv7eEVqFYn1ZOih1AjxSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1GVp70T; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23636167afeso3483615ad.3;
+        Mon, 09 Jun 2025 17:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749517028; x=1750121828; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ty8YG6nww55Bq685tuv7oGe3iUWWWOLruj06ufM5JYo=;
+        b=N1GVp70Tjg2Ns6gmIe7WnZ64BgNroMnKT8epw5Kw2QRzvBxZHYkyWn7ZijjdwgzRhD
+         to3np6hASFc7N0XNnvsSQlxJMbVgamf9iTB8LkKgqeUP5TlOzGxSUsJhXaYQaUoGrtIj
+         JjSQddXpEexNvd1yK8c7lgoSTOZ2MjwyZ9U2YCutI84qG/loZulBPMqa2L6pGsPvM1i0
+         2drq/+X+RLzfnFs5rISnFktx9v+jX3wuSBLI60keUkXGWoui4SX9lWWvDuxCrBHRpOFH
+         1LRn5Tq0nt2ZspYQxFQeNIBKIJTaM6icNdXyOAdsJGE1GMtC27U1ETNHe+bPyqjM/+Xz
+         Mnpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749517028; x=1750121828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ty8YG6nww55Bq685tuv7oGe3iUWWWOLruj06ufM5JYo=;
+        b=VHY9mwm7g7iQSejGUcGOUOFupBGU/GEe6pUfgTl4hDRUI7xBAnfJPkzco2Hc5w6jXH
+         Sjr69htMtvb7xQqmCD8tf6gdsPuSCP6Rdu5MAmxeZlkzt5822FDaGBEaFQnnXzINJPb2
+         0cFaTf2obAbaY/R8SWnw//TopmNQWGkY72n4EjUWxF8B/YIFEyGVIEMswtMP00hsEVpp
+         Ngpq+Rj4NtTrpw6Wg9U58YpbvyWwTXQ9EhKArdY58hLU5vULO9FYPOi3RlWgB2DrJPZy
+         OcXjE5xp5XBfvrkJEo6PVVPtAk36RCgU9feFJTewyS/uce/hvbhjWYP41+tBVrzcSn15
+         wZog==
+X-Forwarded-Encrypted: i=1; AJvYcCVbnvSM6XIVZOl+/Jmofr5apShHqbWqjuycEJUt2CdO9Q3jVkf+k6dnHTIUNb/tt8OCe4Hp22DtTOQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgHJbtbyfgKN77zrXvyYkgLDI5H/zXl7Ro+8eoOgDSZITLxw5S
+	H2U+9swgqZyfJpfTGMRWOCveBW18RKrE9fQGXW7s1h2qrtSxGGJ3uaC/ACOziQ==
+X-Gm-Gg: ASbGncu2fts16kRpjAgMIktTfaNdGV08HQyRDZEFY/5b6g7ceDRwxBtTYVs3NSyWbnk
+	vXTUXdf/YADuHvKfZfN8DekNYe8SodErH3gi5S8mWG955fg4NLgruWVwmlyxqYgt2a9SPJ7eb3d
+	R/QoDbSFM+HarFdc2JN8c+bX5dms9rFVauL1RlahCPmX5tdQrubXsn+GmxCiS7nWCFue591DNIb
+	chWYWuCBZys4L3f4UKQtXYNKFshc9V49r6cDd1AC7BYEdGHB9pUoCQ/UmOJK2THj9mbDt1yrecQ
+	2jaJPT86prkbr08HJL41NZ5Nu5LuqiFaT7vnGfDEYoP5EHUrW98gaWvIZOsyEw==
+X-Google-Smtp-Source: AGHT+IH7BBaj8bKam+xZYWR9TBindDzHs4YpRVhqJW0AYYVb4JYQJSYcjYQ8qRvEu+1rR/mmGoXIBQ==
+X-Received: by 2002:a17:903:986:b0:235:be0:db4c with SMTP id d9443c01a7336-23601dc45aemr225505225ad.41.1749517027584;
+        Mon, 09 Jun 2025 17:57:07 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3134b13ad70sm6143860a91.33.2025.06.09.17.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 17:57:06 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 1F1B14209E8C; Tue, 10 Jun 2025 07:57:03 +0700 (WIB)
+Date: Tue, 10 Jun 2025 07:57:03 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs: usb: gadget: Reindent numbered list
+Message-ID: <aEeC33xHpqh2qoEw@archie.me>
+References: <20250607224747.3653041-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Y4LFNU5afeVxv6jH"
 Content-Disposition: inline
-In-Reply-To: <20250609145536.26648-1-lucsansag@gmail.com>
-X-Proofpoint-ORIG-GUID: YnLukZZsPclCQ0iSRB4HiC2_56FMn0V9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDExOCBTYWx0ZWRfX3wMz8Kq5K4J7 o4eCWRf5NSxIimD1gXU/0WBMV/seau+8Uj9UfmL2QLRcatUw+YgmSE5sk/hPEcAOhqyDO8sczVv eEzuj2nJgH60DyVoWHH+vVT7dN375hEbf6KD2lXdOpbbqz6kgFJ4aRIX1c7drQjLUZsAvDrsoqt
- TxDu+8c9/EAlw5YCYFyYZNq+GFLgoxhCfxhARjqI2hmWLrNuFctIgVKFYpdpKs6kfR8dLmlgsj3 hbYytFppx2EeQxQNyt6/reBWv/soj9/qgjnEiQAAE5pjlIumXuXIhkStQDpgbX7fiFMWUs2uY6S M3bI9ofU6gzm/ISL92yaYkdDsP8FOEDV7gm4GbtyVBvJpsUGKTdeXCXilUIvWVzIVerpjZTK3vU
- 79fgpmt6CEdQxDFExZ3eebvgbU3XfJoW4CnhIAwOcoRpTNZITOGVyiYqwwZW8zthnYWWOF9T
-X-Authority-Analysis: v=2.4 cv=Rp3FLDmK c=1 sm=1 tr=0 ts=6847040b cx=c_pps a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=pGLkceISAAAA:8 a=M5GUcnROAAAA:8 a=H9Uv-0vqiJoLvD0a3_0A:9 a=CjuIK1q_8ugA:10
- a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-GUID: YnLukZZsPclCQ0iSRB4HiC2_56FMn0V9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-09_06,2025-06-09_01,2025-03-28_01
+In-Reply-To: <20250607224747.3653041-2-u.kleine-koenig@baylibre.com>
 
-On 2025-06-09 at 14:55:36, Lucas Sanchez Sagrado (lucsansag@gmail.com) wrote:
-> The TP-Link UE200 is a RTL8152B based USB 2.0 Fast Ethernet adapter. This 
-> patch adds its device ID. It has been tested on Ubuntu 22.04.5.
-> 
-> Signed-off-by: Lucas Sanchez Sagrado <lucsansag@gmail.com>
 
-Reviewed-by: Subbaraya Sundeep <sbhatta@marvell.com>
+--Y4LFNU5afeVxv6jH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Sundeep
+On Sun, Jun 08, 2025 at 12:47:46AM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> diff --git a/Documentation/usb/gadget_configfs.rst b/Documentation/usb/ga=
+dget_configfs.rst
+> index 868e118a2644..f069d2a0d092 100644
+> --- a/Documentation/usb/gadget_configfs.rst
+> +++ b/Documentation/usb/gadget_configfs.rst
+> @@ -369,18 +369,18 @@ For more information on configfs please see
+>  The concepts described above translate to USB gadgets like this:
+> =20
+>  1. A gadget has its config group, which has some attributes (idVendor,
+> -idProduct etc) and default sub-groups (configs, functions, strings).
+> -Writing to the attributes causes the information to be stored in
+> -appropriate locations. In the configs, functions and strings sub-groups
+> -a user can create their sub-groups to represent configurations, function=
+s,
+> -and groups of strings in a given language.
+> +   idProduct etc) and default sub-groups (configs, functions, strings).
+> +   Writing to the attributes causes the information to be stored in appr=
+opriate
+> +   locations. In the configs, functions and strings sub-groups a user can
+> +   create their sub-groups to represent configurations, functions, and g=
+roups
+> +   of strings in a given language.
+> =20
+>  2. The user creates configurations and functions, in the configurations
+> -creates symbolic links to functions. This information is used when the
+> -gadget's UDC attribute is written to, which means binding the gadget
+> -to the UDC. The code in drivers/usb/gadget/configfs.c iterates over
+> -all configurations, and in each configuration it iterates over all
+> -functions and binds them. This way the whole gadget is bound.
+> +   creates symbolic links to functions. This information is used when the
+> +   gadget's UDC attribute is written to, which means binding the gadget =
+to the
+> +   UDC. The code in drivers/usb/gadget/configfs.c iterates over all
+> +   configurations, and in each configuration it iterates over all functi=
+ons and
+> +   binds them. This way the whole gadget is bound.
+> =20
+>  3. The file drivers/usb/gadget/configfs.c contains code for
+> =20
+> @@ -388,13 +388,12 @@ functions and binds them. This way the whole gadget=
+ is bound.
+>  	- gadget's default groups (configs, functions, strings)
+>  	- associating functions with configurations (symlinks)
+> =20
+> -4. Each USB function naturally has its own view of what it wants
+> -configured, so config_groups for particular functions are defined
+> -in the functions implementation files drivers/usb/gadget/f_*.c.
+> +4. Each USB function naturally has its own view of what it wants configu=
+red, so
+> +   config_groups for particular functions are defined in the functions
+> +   implementation files drivers/usb/gadget/f_*.c.
+> =20
+>  5. Function's code is written in such a way that it uses
+> -
+> -usb_get_function_instance(), which, in turn, calls request_module.
+> -So, provided that modprobe works, modules for particular functions
+> -are loaded automatically. Please note that the converse is not true:
+> -after a gadget is disabled and torn down, the modules remain loaded.
+> +   usb_get_function_instance(), which, in turn, calls request_module.  S=
+o,
+> +   provided that modprobe works, modules for particular functions are lo=
+aded
+> +   automatically. Please note that the converse is not true: after a gad=
+get is
+> +   disabled and torn down, the modules remain loaded.
+>=20
 
-> ---
->  drivers/net/usb/r8152.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index d6589b24c68d..44cba7acfe7d 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -10054,6 +10054,7 @@ static const struct usb_device_id rtl8152_table[] = {
->  	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
->  	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
->  	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
-> +	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0602) },
->  	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
->  	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
->  	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
-> 
-> base-commit: 2c7e4a2663a1ab5a740c59c31991579b6b865a26
-> -- 
-> 2.34.1
-> 
+Looks good, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Y4LFNU5afeVxv6jH
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaEeC2gAKCRD2uYlJVVFO
+ozf0AP90prqe9cMUXHT99RW/8zDpCP1XNI3WQtNK1NSTdPTKuwEAnL6nVIxCPXn4
+mGDFtdK0G8qYBLDsxPU2/r3EydMhVQM=
+=NV47
+-----END PGP SIGNATURE-----
+
+--Y4LFNU5afeVxv6jH--
 
