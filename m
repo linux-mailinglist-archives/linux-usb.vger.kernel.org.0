@@ -1,107 +1,108 @@
-Return-Path: <linux-usb+bounces-24649-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24650-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FC2DAD3390
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 12:28:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00087AD33DE
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 12:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7C3B16E5A3
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 10:28:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BEF818949A6
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 10:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCB528C2AF;
-	Tue, 10 Jun 2025 10:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A654728CF4D;
+	Tue, 10 Jun 2025 10:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="jG12wcnh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IV0umCMb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-8160.188.com (mail-8160.188.com [60.191.81.60])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D8E25A62B;
-	Tue, 10 Jun 2025 10:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.81.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD24280021;
+	Tue, 10 Jun 2025 10:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749551322; cv=none; b=uoyWW3Xubyi9iSvDVahHVPbmgE9Fn8MPM8SebvXXxH29HuluNaldaf/vwIfU3i7iJja1UMMZKBm3mAL1+2+3B/OYGnbhAI1u9Qbot9vznElE8/wxFZpj0P8oicyO09krvZCfLIN668SCz4KinVtdX6fMozr8wdxGh0j6rL7ixLM=
+	t=1749552226; cv=none; b=jRngHN9ch7mTnGVZMNxOsVyoYovG1G8ugWnixR7wC98se+YJWPzIAsQFdZra75YIrW9M7ov842812Jy9oga9hmJuNhuZc0M5+rlo6fxN1dQT8RVyPa0lSYwEdJqhnGUeTxtq8FyNvQczstsZgTgKj9PMNsfW7gBsa58vTW2VubI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749551322; c=relaxed/simple;
-	bh=zPVnp1uFz6ezXexDiXFt/QExs+FjII/ZQVdaoHxweBY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N79Y+QP6RhVd4xxTi1rNwORie//OdYPdUEIlI8Zs4ZjMe/OBa22HYRb8daRd4+asPC2iXVjqiLfqEauMhGLXJGzHSc2KsX3Pp3KXMJVNuXBYo02Np7j+PGryLiBHqanK6731ZBqmAnCG9NHI68uCQU5uIllFHaeOHffclCILEKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=jG12wcnh; arc=none smtp.client-ip=60.191.81.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=Pgg2mLehIG4sW1T+6g2YquviHKO39IVuKuCo2yGa6ec=;
-	b=jG12wcnhget0oYtzN2fj4tLvRJetIqjOpBoGVKmuIbqv8rcHUCsfvHsqh9zDyO
-	tXh5wa75Egbi9zPJFsL3SN8TZ5c6SXffLIWMIruvnmn8ni7LjSRCKekefFo0GAJp
-	SENzwVIxKPLZLaWicytt7ptq20dmOOj0A3PsFr3EVqA9U=
-Received: from dragon (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id Mc8vCgAHnk8wBkhoU2NXAA--.14402S3;
-	Tue, 10 Jun 2025 18:17:22 +0800 (CST)
-Date: Tue, 10 Jun 2025 18:17:20 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: "Peter Chen (CIX)" <peter.chen@kernel.org>
-Cc: John Ernberg <john.ernberg@actia.se>, Xu Yang <xu.yang_2@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
-Message-ID: <aEgGMCCdO3rc6Dkg@dragon>
-References: <aEZxmlHmjeWcXiF3@dragon>
- <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
- <aEbstxkQmji4tfjf@w447anl.localdomain>
- <20250610021243.GA1610560@nchen-desktop>
+	s=arc-20240116; t=1749552226; c=relaxed/simple;
+	bh=A7R2GZyqD4651NDlEsKavR7BsMMFDmWIlAxeRoLf964=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KhHUwsBy2jguIHiJmeYKQ7Crk53o8X9sTYJEaHZaGL2CxTZacZorfMwCEgCF7scqhV/g5tCiJW3Wz+YldV6scMdybt/Ibfr2nQA5AdJ+uMjiGrnU6G8tEH266TKrbLdzb799OLH7xXjhu/lUm14p9naOpJ9R1madlYBTSu1XtM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IV0umCMb; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749552225; x=1781088225;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=A7R2GZyqD4651NDlEsKavR7BsMMFDmWIlAxeRoLf964=;
+  b=IV0umCMbWbS8Is7D4XjkpmwhN6XqDos9H+7NNlCUnRRkGdclXmWR2SCr
+   zSSlA1bdfsjXjeaYPN11N0b3pYazrO9eQ9vnr5kqWiAX1apcL8dRSbF/9
+   FDz7qIJtzjDPg5hK77NkUiGFppQr52EAi7jTYfr2b+OUDvVtJ+mhmaBig
+   /Q6gtZebb7hLMIYs0ih4Rrc5tToeGaqJbwQWU/hbClLlZIdpgM8eAWw0m
+   mLgYjbxydaUpbXNdKlhEnG/0Lzdq8hg7Oruvtqcm4naylqyvb2/aa+d1b
+   uP/LQVjlf+d02c6VdGR/GcxmlL8kthq1X1liT0Mmk0ZsbLu1iWR3ZD2Tg
+   A==;
+X-CSE-ConnectionGUID: c6EhfwkMQn+P3V8IQaa1tw==
+X-CSE-MsgGUID: VY00Mt3nToSj2j8fBWD2wQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="51534181"
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="51534181"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 03:43:45 -0700
+X-CSE-ConnectionGUID: PIJVXdHNR7uwrC+aJeXHYA==
+X-CSE-MsgGUID: 0XYP3sdBT8WOCNQYhg6Cnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="147303800"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa010.fm.intel.com with ESMTP; 10 Jun 2025 03:43:42 -0700
+Message-ID: <f77df7da-c068-499f-8f55-bcb095b8fc4a@linux.intel.com>
+Date: Tue, 10 Jun 2025 13:43:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250610021243.GA1610560@nchen-desktop>
-X-CM-TRANSID:Mc8vCgAHnk8wBkhoU2NXAA--.14402S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uFWfXFWfury8Xw47Cr45ZFb_yoW8Ww1fpa
-	yakw4fKw4DtrWYyFnF9r1xta4jkan8tr45CrZrJ345Za43u34Sqr4xKry5K3WUGr13uw1q
-	vr4jqw18CrnruaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Um_M3UUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiNBK5H2hIBjIyvQAA3b
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: hub: fix detection of high tier USB3 devices behind
+ suspended hubs
+To: Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+ stable@vger.kernel.org
+References: <20250609122047.1945539-1-mathias.nyman@linux.intel.com>
+ <66b3847a-a3b8-43fa-b448-570f60b775be@suse.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <66b3847a-a3b8-43fa-b448-570f60b775be@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 10, 2025 at 10:12:43AM +0800, Peter Chen (CIX) wrote:
-> Like Alan and Xu's suggestion, there are probably two problems here:
-> - When the system enters the suspend, the USB bus may neither at suspend
-> nor disconnect state if USB controller/phy's power is not off and VBUS
-> is there. So, the host still considers the device is active, it could
-> trigger transfer any time. If the transfer occurs during system resume,
-> the USB controller triggers interrupt to CPU, and USB's interrupt handler
-> is triggered. If the USB's hardware is still at low power mode (or clock
-> is gated off), it may cause system hang (CPU gets error response from USB)
-> after access register.
+On 10.6.2025 12.34, Oliver Neukum wrote:
+> On 09.06.25 14:20, Mathias Nyman wrote:
 > 
-> With Shawn's change, it pulls D+ down during the suspend, and the host
-> is notified of disconnection, so the host will not trigger transfer
-> until D+ is pulled up by calling usb_gadget_connect. The USB leaves
-> low power mode (and turn clock on) before that, the access register
-> will not cause system hang.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 596d789a211d ("USB: set hub's default autosuspend delay as 0")
+> 
+> Is that the correct breaker commit? It seems to me that it marks
+> only the commit which turned the problem into the default. It
+> was always possible.
 
-Thanks for the input, Peter!  It's very helpful and well explaining what
-I'm seeing here.
+True, user could trigger the issue by manually setting autosuspend delay to 0
+before that patch,
 
-> - The current chipidea driver doesn't notify gadget driver when it
-> enters system suspend routine. In fact, during system suspend/resume,
-> the controller driver may not respond middle layer's (network) request 
-> well due to it enters low power mode, so calling usb_gadget_driver->
-> disconnect (composite_disconnect) is needed during controller's suspend
-> routine, it calls function->disable for USB function driver and
-> ends/stop middle layer process.
+Maybe a better Fixes commit would be:
+2839f5bcfcfc ("USB: Turn on auto-suspend for USB 3.0 hubs.")
 
-This problem can also be addressed by Xu's suggestion, i.e. calling
-gadget driver's suspend hook from udc_suspend()?
+Both are from 2012 so not sure it really matters anymore
+  
+("USB: Turn on auto-suspend for USB 3.0 hubs.") was added to v3.4 kernel
+("USB: set hub's default autosuspend delay as 0") was added to v3.8 kernel
 
-Shawn
+Thanks
+-Mathias
 
 
