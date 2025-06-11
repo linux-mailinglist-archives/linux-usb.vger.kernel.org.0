@@ -1,88 +1,84 @@
-Return-Path: <linux-usb+bounces-24695-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24696-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B6BAAD5808
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 16:08:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F100EAD582F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 16:12:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 145F43A66C0
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 14:08:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 904377AD8E0
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 14:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C2BF28C028;
-	Wed, 11 Jun 2025 14:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9151B29AB16;
+	Wed, 11 Jun 2025 14:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="p0Xdys8X"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Xg5ZF+TE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D170B2882A0
-	for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 14:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA35288CA0
+	for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 14:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749650929; cv=none; b=cbiH+v5/NuZ+MOLYnIKGXmqVF3+0tsPu11XNXY4WSMpIqsOdMQMZp3G6RQVFMT8VI2JOxxcgSnOROFAtbrB4pOiq2lhJk3Cqi+o5Irpkofr3A1VUy6X3T7hy/QyAoHmTELhcZYeHqBtRHRwHV/Yg8cYrVMljnbhDyl44abWOM4U=
+	t=1749651128; cv=none; b=ueAAjFPVzQavtGIl/3vGrx8eACRciQ+bwWstJzrBnUeO9/z0K7F2pOSRnlF4n5eUsUGw4JTXftl19rnK6pBUwhZScRdOiQU87dqYfC6KIHfZ5BvcQwmrevssVJc5wzW3oUmOMDXprZFAzwPgkbdgAiN9Sq8t1K7BldvIZ66ONdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749650929; c=relaxed/simple;
-	bh=BiUBiEP4mtMU0sgm8Ro7YfKxN/VojxVwmdYi69ZqhB0=;
+	s=arc-20240116; t=1749651128; c=relaxed/simple;
+	bh=BU1SQHbz5p7yIRR3u2cVQoI3rv3QL3LyjpzU0bCIxlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ct17xuINHCIpftsNgYM1k/pjs7EwK+C5UiW5Yhc7fByuz1ejkRHkyA3EICp9AxeIoDqAp1Cct0iBUJ9hJ9cAooi9XZ66KHcsrvq8CVP6vFqglCJYBM1G6ZFl10tPgBymBdXN4TMe4pcLNzwQBRyA0y1GiYIJkMyRBMyyBdYVg7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=p0Xdys8X; arc=none smtp.client-ip=209.85.222.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=IPfHWJ8ByVUZ1KCyKbrjQIBY+2vgEbM8XJxMOs9Is5cKnc5nulE1koPRSZWip+oByuVqIkXgENIFJRJ4OYAmQhw7RSTmrsVZdgpIdNy19D5mzrDSm76gwebxkKyTtuCQbwfZfmTDwjjDn8gfgc2XGvBWgeN9Ij/G+kUbChUihJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Xg5ZF+TE; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7d38ddc198eso386706685a.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 07:08:47 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ecf99dd567so81305086d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 07:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1749650926; x=1750255726; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1749651125; x=1750255925; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2mkrF7hMJ7XIqcp+rcg2pb5auO8TVNGaEQdRmstp3lk=;
-        b=p0Xdys8XKYbh2EZNSBDrLUlYjRVriEjeUCtYvrh8vSJgbfETNNa34VoAda83g44XTF
-         i8hNFdE96aRP0wKHxYjSXa1Fdld4At818/2vW8hgOUaGqPUmShc9L1aKKQdhHUa/ZbCb
-         A6n7GAiyrijuSARVvydri62e843IBcOfS3nmnn4pwUW2v/pEWzVF7wHl7ng5x9hjNUKV
-         MYqc/Ht6EQZ55WO73vdRajsw1yduBgxZJ8G7xg5OBIper7+oMJR63xB9alyJiqGuUymq
-         Vm1tnbRCf6TmjGl6gSLAWYttu9oe3m8IUV7dxI8mNIwIYsa/7eBJksJs3cZg532Nyg8a
-         ZgxQ==
+        bh=tKNBSXIC3pUcb4prxvKtajAChUKnJxzgTWlpYZg0Yyk=;
+        b=Xg5ZF+TEDVlGEYnEiyppkHkriOaq+vyc8qZN/C0Ko9A+FnA3p/QL0BLD25LCsIgVpU
+         jEERQNB7MdUes96es7HnxqJQaSMTF6yudrLk7zXRhHlQ2xzL3CbJ8vjKbquD9LSY7a4a
+         uM8BXMAVUGWr8X6TMMX54IP/gAPve1NZq0dmaSsbMXAjhTiwx5ujMaTr3RZZSbXh3y5X
+         HVqcA9m/PFhzPyjs1XFKg/XWxwUHeNiizUsxKxZNBmZczNi9GmfuLQD4mgdKeAOb/59c
+         qLMJS8y4uDFjc93muI9yV2Fhlrgc8Ews1daqzy4NdaeBUegpsQlkb+6jecAxxAdFjYia
+         sl0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749650927; x=1750255727;
+        d=1e100.net; s=20230601; t=1749651125; x=1750255925;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2mkrF7hMJ7XIqcp+rcg2pb5auO8TVNGaEQdRmstp3lk=;
-        b=IO9X3q5ysJxkiGu0LeVDVaj2+DljN540+lMb0U5Y/dJWWTpjKY7jFu2dXOpxyaTNHz
-         oa6/Pm8XHVfu9k5sp+w1cpSEUOtO+h+BxfCgRRyh1UNfXULAz6PbecdozCdW6xLG3F2e
-         AVNom2osiGhclcJdGSW7EpM0fewTPac+++JFEzMgVQAxmWsPCHczFMtrDsvVQLf8ITdK
-         46OpO/FdgYrriPTUiry4CPu8C44Kuli6EDYMBkp1SWEPNoPYPfpxMVCMCeUeuGU8YvLF
-         8DsORQjhTwkyOyWhtD2LQhC2Akj1eyOG8m1ocDE1ZWLi3smB8X9vBLtA4LfgxX9zAbXQ
-         +fhw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+C27Sb+j9/Zcjk9xYd1zqBte/0BU9kLfnCaa7uAUAlWFh/yhU4aSkZPlIzpV96Y6fNi/UUM9M8aY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlc9v5LfAY4zwYYdU1I6bVuGeqxc2vNZPDT8D0qLT1GEsDPesx
-	tnviLkwLcSBvVNTgtCBc41A7ARXbbKaQmDlOGn6tOGuMlrfkfdqxCuEm6eaOKY0LEg==
-X-Gm-Gg: ASbGncuFIY3sr+mBh2qqcvA/SuM8tWNsYyQpHTaRtlEUHCYFiSzZ6FeMXLa25MAZSvP
-	LnUkPfGdQdpK2D/SFpvfhGmC6Uc90+BIPsA2uhQMv5EVuYmH3ucuTX6e3rcblDlh8ZM8G5caGEb
-	bzPlzlj4IFdMq2NlZN1h1ansNt4Bax/gbA/ETXIrgo+bPl2Pmy/7xN3/dl9ZwLAmuD+JPADkqcC
-	JBDDY5psHcX7lT8IqWP5rCg/MXmxlTppHVZ245Td4YivI+6THXB7PUWUmtHJV5Pyb/R/Euomeb9
-	C64Ls6aLYL1d8P52Adkj1gti8wrcUlB1VN2+2O3M6ZbvxRDGtprDKs8SV5Exydyp0gvz3FtYGce
-	ZZpEr
-X-Google-Smtp-Source: AGHT+IFSaTTLDfYx+UWWlDovaDt70hJSIR1Xh3wlmjJQPRnGgcY8c3QuDCpwsHT6wqBwpIU2/viMsA==
-X-Received: by 2002:a05:620a:f05:b0:7ca:f447:c676 with SMTP id af79cd13be357-7d3a887d47cmr524768785a.43.1749650924532;
-        Wed, 11 Jun 2025 07:08:44 -0700 (PDT)
+        bh=tKNBSXIC3pUcb4prxvKtajAChUKnJxzgTWlpYZg0Yyk=;
+        b=ULvkb+uV9+H7qWnVz72WyldKqoBtbZDaMs6CDCFLvwrMcP4a4eJxjXVYZd0GaQkySs
+         Bbb5JZp8pKt9rd/UCrnICFBKPqyQP7NeB8z6MJyJJMb2Q81VfSrKh5M6VT2rGWPXHI1w
+         CPl1JC/zTtEi1jZg7oI1rnI8VT4vIDAUOreMAeDlC+ai8fYScM6pHeruW71pGZ1BNjqY
+         9ULJZwESaR9lUUoQZ0Lnte1zOJ/wIAkXg1RXy+MDsBka3YH1YCtLH5LNsjP8MbHX57vS
+         x4PdU0kbjTxjacYXN/53Ra/uJ6lZRwdwqSwMlr1499F8+kqxOWddgzYEFU+m7cHeLKeb
+         av0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWSgHoIRAZ0k24/GbF7XkZbloyGFo5g91ohdWBzwI7Tvc10rPwav3eUkJ2l8Zk8E/03jLdttlMpQ8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsfVN4DX+9es6vlUCCse+/9LGnQiGMoG5C4+/tHNIqk9hIgFau
+	QlBdo3twdU9iQtEuVjSe62qafipik30leZ4r+7jyPP0fhdIX0tS3UoPRi4c4mMVhFw==
+X-Gm-Gg: ASbGncumcJMoBNPkfwnz/NYuF2z529QzH46DrImHiblDInEEpzU37DQ+QxWU543bNA4
+	2Eq5+TGt+xpVoF+Ubi3E0rGbCKVX3Qs7hnG1C4+QD24eU/SluqbF1kCs41Hvs8vZHIjyp5mgBML
+	rQ2rEE0TNHobTW8Sx+e+Q3Qr82p2l8VVHpxkfUKMHHxbulLqyZdXDFJPxI9TeNyZptELIlNbCuo
+	Per856n6ij9KXvATepDRjrkoTJ+Eav6sW++eFv+ZpDbRbD+VtyNA1tWS7ImNhsRdOg9nmU7GCer
+	Qk9q5MnhiKAr01qNyJKU7GTOVonQeFpOWgA18R0nVPVqBd0P+l5gtYgwfzA/CMqECUPlX1vL4Qz
+	ADtlU
+X-Google-Smtp-Source: AGHT+IG2vW3k3qhQ1BJwguwzFkFBoRhcCp+cYZj+tgb0fudCLKixIcsxK+s6Ee8T8CkTeQOGYKR38g==
+X-Received: by 2002:ad4:5c6c:0:b0:6fa:c55e:86a with SMTP id 6a1803df08f44-6fb2c365cc3mr63248786d6.28.1749651125331;
+        Wed, 11 Jun 2025 07:12:05 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d25170613csm865441585a.6.2025.06.11.07.08.43
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb09ac83besm82563226d6.28.2025.06.11.07.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 07:08:43 -0700 (PDT)
-Date: Wed, 11 Jun 2025 10:08:41 -0400
+        Wed, 11 Jun 2025 07:12:04 -0700 (PDT)
+Date: Wed, 11 Jun 2025 10:12:03 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Mihai Sain <mihai.sain@microchip.com>
-Cc: gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-at91: Use dynamic device name for OHCI HCD
- creation
-Message-ID: <afaf4c79-ccec-46ad-889c-e8347454c065@rowland.harvard.edu>
-References: <20250611075414.4239-2-mihai.sain@microchip.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: core: usb_submit_urb: downgrade type check
+Message-ID: <efd8d1dd-e8d1-4f40-9124-f34ba39e3d93@rowland.harvard.edu>
+References: <20250611135231.2380902-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,28 +87,47 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250611075414.4239-2-mihai.sain@microchip.com>
+In-Reply-To: <20250611135231.2380902-1-oneukum@suse.com>
 
-On Wed, Jun 11, 2025 at 10:54:15AM +0300, Mihai Sain wrote:
-> Use the dynamic device name instead of the hardcoded string "at91"
-> when creating the OHCI host controller driver.
-> This ensures that the device name is more flexible
-> and correctly reflects the actual device in the system.
-> This will be in sync with ehci at91 driver.
-> 
-> [root@sam9x75eb ~]$ dmesg | grep usb
-> [    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc1 ehci_hcd
-> [    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
-> [    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc1 ohci_hcd
-> [    1.601406] usb usb2: SerialNumber: 600000.usb-ohci
-> 
-> [root@sam9x75eb ~]$ cat /proc/iomem | grep usb
-> 00600000-006fffff : 600000.usb-ohci usb-ohci@600000
-> 00700000-007fffff : 700000.usb-ehci usb-ehci@700000
+On Wed, Jun 11, 2025 at 03:52:25PM +0200, Oliver Neukum wrote:
+> Checking for the endpoint type is no reason for a WARN,
+> as that can cause a reboot. A driver not checking the
+> endpoint type must not cause a reboot, as there is just
+> no point in this.
+> We cannot prevent a device from doing something incorrect
+> as a reaction to a transfer. Hence warning for a mere
+> assumption being wrong is not sensible.
 
-Are these two outputs supposed to make some sort of point?  It would be 
-better to have a before-and-after comparison, so we can see what the 
-effect of the patch is.
+Agreed.  On the other hand, we (or at least, I) don't want these 
+messages to get lost because people haven't enabled dynamic debugging.
+And even though we can't change the way the device behaves, we can alter 
+the kernel's behavior.
+
+How about using dev_warn_once() instead?
 
 Alan Stern
+
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/usb/core/urb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> index 5e52a35486af..acf74ad36326 100644
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -500,7 +500,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+>  
+>  	/* Check that the pipe's type matches the endpoint's type */
+>  	if (usb_pipe_type_check(urb->dev, urb->pipe))
+> -		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+> +		dev_dbg(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+>  			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+>  
+>  	/* Check against a simple/standard policy */
+> -- 
+> 2.49.0
+> 
+> 
 
