@@ -1,74 +1,73 @@
-Return-Path: <linux-usb+bounces-24691-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24692-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50A35AD5372
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 13:15:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF55DAD53C9
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 13:24:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7014F3A7029
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 11:14:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9289D166766
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 11:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7AD52E6125;
-	Wed, 11 Jun 2025 11:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9C82E6108;
+	Wed, 11 Jun 2025 11:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5EVTs2C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TRRxI7RT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49632E6111;
-	Wed, 11 Jun 2025 11:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F1F25BF12;
+	Wed, 11 Jun 2025 11:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749640461; cv=none; b=PRltIDgEI4lXKudC8XphVgH3V6gSjthlczQ2NSF5oYXcJfDauOkDTXlVQPBuGFRxJf+x/Eroifdndoyv6RtyCjHRtE7UAFrz+Fsrri4jConYjeU443eYPEQH9svtwMsukzbETgKGlroPt3KiO94FryyzPv/wwhHI4+jDxMWuhlY=
+	t=1749641089; cv=none; b=sROKjhXvVnJUXsHM+TCVbzZ9+TfQedTLgbtOP4V33C6j9TnsAQqtBRgj8RHxiyHpPl2YKavyrS0LqH4dD64I/6+OAveBmmdSPFs1ujt0VvgheQuDO5Ec06bHlhN8+pPjNjuM+/P0b0nUGufs/EmxHyqqwzFnL+zn9ODjrFWf5Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749640461; c=relaxed/simple;
-	bh=y925YUPVV5s/vp2niWj79RIoOFMnpOxmI/oV+HU43X4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MbXbV5bHroy1SAltIJR/jLsvh9uy1pR5HASHA1L+WExM3NPx4tuyZPSCzP9xTXTEDMgpDkgCt6oVTOx9i+/2/I6lV+KLKRmPxI9CnX035OPnGZclfqemT2SRCvNjWajICerF3xToug/pYXEJ5U0+B+Q4xbWoMCs7+oVlFK8/ilE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5EVTs2C; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1749641089; c=relaxed/simple;
+	bh=45OTs96SolJdrCk/3ZXKGzBS5ed4Uf4wNLfyXvH+FB4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U+wsvZzrqGVceZvM1I6YS1LHga7Mq6fidQGN57bEISgzKKJMMCGA+/FJH+HMBpCbj86FuzQ9SJPD93mn1FngTGNswPno/aTYepeGb7B1RuX8K6qRXOvcow16PeQqgDe7BATGwf+HaYP7tKSgKPk+lmz/IIvKMNKIwOph0g+JnBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TRRxI7RT; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749640460; x=1781176460;
+  t=1749641088; x=1781177088;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=y925YUPVV5s/vp2niWj79RIoOFMnpOxmI/oV+HU43X4=;
-  b=K5EVTs2CjpkoUfxg1s5bv/5CjBQl4fWja7Fo/BphoDsZWCMAcfOscsFp
-   2a3cJGCXSINJeV9mt8XPTZ6/BmXlS/XNaUcGStE8Tw9frjc75vAMFHCGF
-   a9OWaEhb74qL/jeyUMGqrNz7ImMkivSmgSmar0O6jQC5VGZ8TRQbBAORG
-   6IqyTloFrzee0rwM4tnXWoU2IU+FyZcn3mMkeK2D8aycxtX7X5LjYZLI9
-   zgOx1e3xqJvbZKn7tORyCbpM/MRbnPOh8tDf6tutDcElsGA7r9UeSkL7h
-   qByMnEIk5sOrNkLLy7Hm37p0XLRhfIH2al5cVPKCdUV8MvZMcZYoC50/w
+  bh=45OTs96SolJdrCk/3ZXKGzBS5ed4Uf4wNLfyXvH+FB4=;
+  b=TRRxI7RTOcyuye+5o8mMmBTxqt3BdpaLhglFwauVTZ/jt7Xlr1DBxWOe
+   44olYSspEure4pZLU4yAVALH6BXDRaKIamIYjLA0uYExbxniKRiJS5s1q
+   zg7aE52kYjHWXO+Rckvbeb64giAFJVnzxKfEb1O+ZH/LscikO5xh7IJFl
+   tLlxLx0kFNEO3rkFfKjmzQFZvGGUvI+88NulQHJK0cf5hXfN5LpiG/YMx
+   /SsU/t2FI2fzHgQZysJ4JKtwoMVlw+GLzdvalmiC/p6Hi/rVOkh/jkTK8
+   Sw+VthZQZp44WaRZAheqCQ9ok+9dng/Tl/16U6jDxIDp0vK3xdQd31p6S
    w==;
-X-CSE-ConnectionGUID: xuiwMWvXSrSodmYe2vg2ew==
-X-CSE-MsgGUID: TxzrF4h2TL6yW0sEiu/UdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11460"; a="51641391"
+X-CSE-ConnectionGUID: 8jrqCqpVTka/uxbeR5UPww==
+X-CSE-MsgGUID: /HuR7tuWQCSDWuWhA5IZqg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11460"; a="63190072"
 X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="51641391"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 04:14:19 -0700
-X-CSE-ConnectionGUID: BtCC/FP3RW+OIba4AN2NGw==
-X-CSE-MsgGUID: zo6/TCtHTZ2zD0s0cWfmGw==
+   d="scan'208";a="63190072"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 04:24:47 -0700
+X-CSE-ConnectionGUID: u2jI68zpRpe/dXtonFhg8A==
+X-CSE-MsgGUID: 2fR8dGo/T7aK4yVneHoIEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="147524461"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 11 Jun 2025 04:14:17 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	linux-usb@vger.kernel.org,
+   d="scan'208";a="152447742"
+Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
+  by orviesa005.jf.intel.com with ESMTP; 11 Jun 2025 04:24:45 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	<stern@rowland.harvard.edu>,
+	oneukum@suse.com,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	stable@vger.kernel.org
-Subject: [PATCH v1] usb: acpi: fix device link removal
-Date: Wed, 11 Jun 2025 14:14:15 +0300
-Message-ID: <20250611111415.2707865-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+Subject: [PATCH v2] usb: hub: fix detection of high tier USB3 devices behind suspended hubs
+Date: Wed, 11 Jun 2025 14:24:41 +0300
+Message-ID: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,75 +76,126 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The device link to the USB4 host interface has to be removed
-manually since it's no longer auto removed.
+USB3 devices connected behind several external suspended hubs may not
+be detected when plugged in due to aggressive hub runtime pm suspend.
 
-Fixes: 623dae3e7084 ("usb: acpi: fix boot hang due to early incorrect 'tunneled' USB3 device links")
+The hub driver immediately runtime-suspends hubs if there are no
+active children or port activity.
+
+There is a delay between the wake signal causing hub resume, and driver
+visible port activity on the hub downstream facing ports.
+Most of the LFPS handshake, resume signaling and link training done
+on the downstream ports is not visible to the hub driver until completed,
+when device then will appear fully enabled and running on the port.
+
+This delay between wake signal and detectable port change is even more
+significant with chained suspended hubs where the wake signal will
+propagate upstream first. Suspended hubs will only start resuming
+downstream ports after upstream facing port resumes.
+
+The hub driver may resume a USB3 hub, read status of all ports, not
+yet see any activity, and runtime suspend back the hub before any
+port activity is visible.
+
+This exact case was seen when conncting USB3 devices to a suspended
+Thunderbolt dock.
+
+USB3 specification defines a 100ms tU3WakeupRetryDelay, indicating
+USB3 devices expect to be resumed within 100ms after signaling wake.
+if not then device will resend the wake signal.
+
+Give the USB3 hubs twice this time (200ms) to detect any port
+changes after resume, before allowing hub to runtime suspend again.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: 2839f5bcfcfc ("USB: Turn on auto-suspend for USB 3.0 hubs.")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/core/hub.c      | 3 +++
- drivers/usb/core/usb-acpi.c | 4 +++-
- include/linux/usb.h         | 2 ++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+ v2 changes
+ - Update commit in Fixes tag
+ - Add Ack from Alan Stern
+
+ drivers/usb/core/hub.c | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 770d1e91183c..14229dcb0952 100644
+index 770d1e91183c..5c12dfdef569 100644
 --- a/drivers/usb/core/hub.c
 +++ b/drivers/usb/core/hub.c
-@@ -2337,6 +2337,9 @@ void usb_disconnect(struct usb_device **pdev)
- 	usb_remove_ep_devs(&udev->ep0);
- 	usb_unlock_device(udev);
- 
-+	if (udev->usb4_link)
-+		device_link_del(udev->usb4_link);
-+
- 	/* Unregister the device.  The device driver is responsible
- 	 * for de-configuring the device and invoking the remove-device
- 	 * notifier chain (used by usbfs and possibly others).
-diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
-index ea1ce8beb0cb..489dbdc96f94 100644
---- a/drivers/usb/core/usb-acpi.c
-+++ b/drivers/usb/core/usb-acpi.c
-@@ -157,7 +157,7 @@ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
+@@ -68,6 +68,12 @@
   */
- static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
- {
--	const struct device_link *link;
-+	struct device_link *link;
- 	struct usb_port *port_dev;
- 	struct usb_hub *hub;
+ #define USB_SHORT_SET_ADDRESS_REQ_TIMEOUT	500  /* ms */
  
-@@ -188,6 +188,8 @@ static int usb_acpi_add_usb4_devlink(struct usb_device *udev)
- 	dev_dbg(&port_dev->dev, "Created device link from %s to %s\n",
- 		dev_name(&port_dev->child->dev), dev_name(nhi_fwnode->dev));
- 
-+	udev->usb4_link = link;
++/*
++ * Give SS hubs 200ms time after wake to train downstream links before
++ * assuming no port activity and allowing hub to runtime suspend back.
++ */
++#define USB_SS_PORT_U0_WAKE_TIME	200  /* ms */
 +
- 	return 0;
+ /* Protect struct usb_device->state and ->children members
+  * Note: Both are also protected by ->dev.sem, except that ->state can
+  * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
+@@ -1068,11 +1074,12 @@ int usb_remove_device(struct usb_device *udev)
+ 
+ enum hub_activation_type {
+ 	HUB_INIT, HUB_INIT2, HUB_INIT3,		/* INITs must come first */
+-	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME,
++	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME, HUB_POST_RESUME,
+ };
+ 
+ static void hub_init_func2(struct work_struct *ws);
+ static void hub_init_func3(struct work_struct *ws);
++static void hub_post_resume(struct work_struct *ws);
+ 
+ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ {
+@@ -1095,6 +1102,13 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 			goto init2;
+ 		goto init3;
+ 	}
++
++	if (type == HUB_POST_RESUME) {
++		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
++		hub_put(hub);
++		return;
++	}
++
+ 	hub_get(hub);
+ 
+ 	/* The superspeed hub except for root hub has to use Hub Depth
+@@ -1343,6 +1357,16 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		device_unlock(&hdev->dev);
+ 	}
+ 
++	if (type == HUB_RESUME && hub_is_superspeed(hub->hdev)) {
++		/* give usb3 downstream links training time after hub resume */
++		INIT_DELAYED_WORK(&hub->init_work, hub_post_resume);
++		queue_delayed_work(system_power_efficient_wq, &hub->init_work,
++				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
++		usb_autopm_get_interface_no_resume(
++			to_usb_interface(hub->intfdev));
++		return;
++	}
++
+ 	hub_put(hub);
  }
  
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 1b2545b4363b..92c752f5446f 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -614,6 +614,7 @@ struct usb3_lpm_parameters {
-  *	FIXME -- complete doc
-  * @authenticated: Crypto authentication passed
-  * @tunnel_mode: Connection native or tunneled over USB4
-+ * @usb4_link: device link to the USB4 host interface
-  * @lpm_capable: device supports LPM
-  * @lpm_devinit_allow: Allow USB3 device initiated LPM, exit latency is in range
-  * @usb2_hw_lpm_capable: device can perform USB2 hardware LPM
-@@ -724,6 +725,7 @@ struct usb_device {
- 	unsigned reset_resume:1;
- 	unsigned port_is_suspended:1;
- 	enum usb_link_tunnel_mode tunnel_mode;
-+	struct device_link *usb4_link;
+@@ -1361,6 +1385,13 @@ static void hub_init_func3(struct work_struct *ws)
+ 	hub_activate(hub, HUB_INIT3);
+ }
  
- 	int slot_id;
- 	struct usb2_lpm_parameters l1_params;
++static void hub_post_resume(struct work_struct *ws)
++{
++	struct usb_hub *hub = container_of(ws, struct usb_hub, init_work.work);
++
++	hub_activate(hub, HUB_POST_RESUME);
++}
++
+ enum hub_quiescing_type {
+ 	HUB_DISCONNECT, HUB_PRE_RESET, HUB_SUSPEND
+ };
 -- 
-2.47.2
+2.43.0
 
 
