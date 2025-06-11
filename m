@@ -1,118 +1,119 @@
-Return-Path: <linux-usb+bounces-24685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F33DAD4DAD
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 09:57:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 202FFAD4EE3
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 10:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B908160A16
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 07:57:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B71463A5DF5
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 08:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A54231A41;
-	Wed, 11 Jun 2025 07:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E26227E89;
+	Wed, 11 Jun 2025 08:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Z90ms/Ok"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OJhdtKg4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0382E29D19;
-	Wed, 11 Jun 2025 07:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3401723F40C
+	for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 08:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749628547; cv=none; b=CrgG8Kk+Yog/hwIC6B1UWvi+9+ZI7PBJPG0TxKWPN3h7xRM1T0ZfkWWSljuR9CQeKVtB3yLjsvuJOT0+JtO1iJKAmNyyL1G2MpW5/U5Ej/2dipWFsh+f2kokSfyLnMEQgaQMRJwxnrY1FLfbajaKdHqHNxBPPQNG8dTb2xq6UfI=
+	t=1749631982; cv=none; b=geMWLLbiDlLTjJmrnhPXwUHG3gB1GNfbrxt5VZZ8YKB5TbNLws6LT8W6SzFqQP6WsdtN9FdncLQ+TYYgFcoYnEXAKu4B3S3TgHYFSPPWBsfYxk6jncd0WetPCsYep18A58lnLdZiMWqz3ux7li3SF4ALORINfMgR37TS2sOhCGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749628547; c=relaxed/simple;
-	bh=7klCgbHcdnpc/FRIacQPzSTO7zTDa1Elo06y8mgwqAM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XisCV8yq+9v4imuAxlxVDdpQIKAgp29JSs5wTW2kO7CJbxl3v9HJ/5Kh3wcuDK5alOOVqU6akWDxt+u2Yz8kzulEAO2sVWUdDV5tzgPJNDbuEbd3GJ1oB34GGZg4pjUnPfC5/GT7yzvPMziroiS6Ja4ad1OpTMQ5MXqY2QV9Prg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Z90ms/Ok; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1749631982; c=relaxed/simple;
+	bh=WAD/QXh7mGLXLpFBQNSmkUNmAA6Qk6llpAPvcGqTJwY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXNiL44IvNYJtUi62nkIcls3q6w6j5mGmFE+tCW8Ee9Fx4rR2UrLiSaoVkJQwx1qfWI9fbblpUT1PNb6iJzliMbAvCaLgv0tgPRHrItn5vYhiH4eN3NVBn11sw73REX++2bfs1fl5MxMoPuN2m8KDeurqEpufv0KhTdMsjb7lQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OJhdtKg4; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1749628546; x=1781164546;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7klCgbHcdnpc/FRIacQPzSTO7zTDa1Elo06y8mgwqAM=;
-  b=Z90ms/Oklus59q3uhQX/Syf/gaZcbR0SdiXtGHaoB8mkLG5jlIp0TpH/
-   XcpDeHJYx+LpBvLMzCYUFvQjOZVlskkIaDm0GJ37ISXXoM4olFRobJYrc
-   +ka1UXEvHEoY3hvSxQB9fSQ6K++RZi3a8UMErBei3L/lBMCa2bzHWpxol
-   yyHJEXmTkN6sT2FZuWO2fNnPUSVr7dwFp1dSS94DojX5H+jwnSmmV7KBl
-   2Py+R6EL7VnbzET3qg/JCQgIBfKx4laFRZr2qdaZL9NtgtoJe779T3qW3
-   emkAwLH2E3Quh5VtoXGq8urWB5FILOZIQSgxIct1CQ6T47spd/xIbyJRo
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749631981; x=1781167981;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WAD/QXh7mGLXLpFBQNSmkUNmAA6Qk6llpAPvcGqTJwY=;
+  b=OJhdtKg4nXEjbtxyyzvtx3XmuTtM8yZ2Hgs1QX8Kc+DDFaIO0xetT93J
+   nDvhcXHCKupw72OebUfrhP9OnfX8tSSsQcwgzZxKjBMRIC1nbAEiczERZ
+   gyxG/bf4r7kpNpnSOtp3plb2FygRAinbW288GPwtLZfO6699CS/WYwliN
+   dkG479vki2ImreDj7hVEyCjWN3RXG2hoIopL5i+BO9X9+hC/2p8hVmVp0
+   xUKwEWpr48jC7dASm1OVwr8/5S5zGFCMhURGUZCXSa+wIXxZAfykYvNXF
+   pfF88eyiivdTyEti18U5Vz2J2UXhrO4Wap3SqiEZiVqmBUJrmR91IcF7F
    A==;
-X-CSE-ConnectionGUID: SyFxjzU6S2+ui+bvqltq4w==
-X-CSE-MsgGUID: 9ORByZ58QxymSLdZMDcnuA==
+X-CSE-ConnectionGUID: fgsb33eiTsW7yPTkML0CKQ==
+X-CSE-MsgGUID: Rs8CpOrVRAewntLGJWd8PA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11460"; a="50990082"
 X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="43238999"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Jun 2025 00:55:45 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 11 Jun 2025 00:55:05 -0700
-Received: from archlinux.mchp-main.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Wed, 11 Jun 2025 00:55:03 -0700
-From: Mihai Sain <mihai.sain@microchip.com>
-To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC: Mihai Sain <mihai.sain@microchip.com>
-Subject: [PATCH] usb: ohci-at91: Use dynamic device name for OHCI HCD creation
-Date: Wed, 11 Jun 2025 10:54:15 +0300
-Message-ID: <20250611075414.4239-2-mihai.sain@microchip.com>
-X-Mailer: git-send-email 2.49.0
+   d="scan'208";a="50990082"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 01:53:00 -0700
+X-CSE-ConnectionGUID: /1drkylLR8aRszhiyCvnBg==
+X-CSE-MsgGUID: i3uiOHUdR4ei3PFUihMyrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
+   d="scan'208";a="178045052"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa002.jf.intel.com with SMTP; 11 Jun 2025 01:52:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 Jun 2025 11:52:57 +0300
+Date: Wed, 11 Jun 2025 11:52:57 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Pooja Katiyar <pooja.katiyar@intel.com>, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH 3/3] usb: typec: ucsi: Add support for SET_PDOS command
+Message-ID: <aElD6dwH6v9voSz8@kuha.fi.intel.com>
+References: <cover.1749142912.git.pooja.katiyar@intel.com>
+ <72f048b49e5b9375a57ff69e47151ae19a05169f.1749142912.git.pooja.katiyar@intel.com>
+ <zimwy2vru7iouhc4zu7vckv6onr7agg4oljpgth7apnkhmkdtd@ka76nwq3q53a>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zimwy2vru7iouhc4zu7vckv6onr7agg4oljpgth7apnkhmkdtd@ka76nwq3q53a>
 
-Use the dynamic device name instead of the hardcoded string "at91"
-when creating the OHCI host controller driver.
-This ensures that the device name is more flexible
-and correctly reflects the actual device in the system.
-This will be in sync with ehci at91 driver.
+On Fri, Jun 06, 2025 at 06:24:06AM +0300, Dmitry Baryshkov wrote:
+> On Thu, Jun 05, 2025 at 06:38:15PM -0700, Pooja Katiyar wrote:
+> > Add support for UCSI SET_PDOS command as per UCSI specification v2.1 and
+> > above to debugfs.
+> > 
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
+> > ---
+> >  drivers/usb/typec/ucsi/debugfs.c | 6 ++++++
+> >  drivers/usb/typec/ucsi/ucsi.h    | 4 ++++
+> >  2 files changed, 10 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
+> > index 004587ce3427..1c8003121d6e 100644
+> > --- a/drivers/usb/typec/ucsi/debugfs.c
+> > +++ b/drivers/usb/typec/ucsi/debugfs.c
+> > @@ -36,6 +36,12 @@ static int ucsi_cmd(void *data, u64 val)
+> >  	case UCSI_SET_NEW_CAM:
+> >  		ret = ucsi_send_command(ucsi, val, NULL, 0);
+> >  		break;
+> > +	case UCSI_SET_PDOS:
+> > +		ret = ucsi_send_message_out(ucsi, ucsi->debugfs->message_out,
+> > +					    UCSI_COMMAND_DATA_LEN(val));
+> 
+> I think this goes against current UCSI command support code. I'd suggest
+> you to:
+> 
+> - extend .sync_control to also include message_out fields
+> - return -EINVAL if the write_message_out() callback is not set
+> - make ucsi_send_command() accept message_out data.
 
-[root@sam9x75eb ~]$ dmesg | grep usb
-[    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc1 ehci_hcd
-[    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
-[    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc1 ohci_hcd
-[    1.601406] usb usb2: SerialNumber: 600000.usb-ohci
+This makes sense to me.
 
-[root@sam9x75eb ~]$ cat /proc/iomem | grep usb
-00600000-006fffff : 600000.usb-ohci usb-ohci@600000
-00700000-007fffff : 700000.usb-ehci usb-ehci@700000
+thanks,
 
-Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
----
- drivers/usb/host/ohci-at91.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index 5df793dcb25d..12fdb18934cf 100644
---- a/drivers/usb/host/ohci-at91.c
-+++ b/drivers/usb/host/ohci-at91.c
-@@ -193,7 +193,7 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
- 	if (irq < 0)
- 		return irq;
- 
--	hcd = usb_create_hcd(driver, dev, "at91");
-+	hcd = usb_create_hcd(driver, dev, dev_name(dev));
- 	if (!hcd)
- 		return -ENOMEM;
- 	ohci_at91 = hcd_to_ohci_at91_priv(hcd);
-
-base-commit: aef17cb3d3c43854002956f24c24ec8e1a0e3546
 -- 
-2.49.0
-
+heikki
 
