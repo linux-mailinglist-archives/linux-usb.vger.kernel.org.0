@@ -1,93 +1,142 @@
-Return-Path: <linux-usb+bounces-24693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0730AD540F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 13:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1E7FAD5793
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 15:52:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5C93A3DDB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 11:31:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 873C83A5BF7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 13:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C40242D99;
-	Wed, 11 Jun 2025 11:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72F2289E19;
+	Wed, 11 Jun 2025 13:52:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P40SRLOH"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="n7o1VGnx";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="n7o1VGnx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA9321FF2B;
-	Wed, 11 Jun 2025 11:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31EB27BF95
+	for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 13:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749641409; cv=none; b=ic2EahfHBzgtkKSOY44EXphNIKnB4LpCz7sPI3GXeClxLf/tyUUlfymW1DvoOMc5egBWA0Q+dTUDo8Z0mDNi1Q+78OsUYHOxkmKP0pChTFpfDG8UdNY9x8L0KJDbt1feBnuGVqCELtgBThbNNBfN69iJ79aw/7xlmgxMEy98n+Y=
+	t=1749649959; cv=none; b=uQCLy5oTEBckcCeomysEC4ztZ21XwvKFRHyLxDS72iG7KQ4qnk9G7LIKa4zOWpLwtZlcjx5nm9FKJY5j/8XcX8pYMpD4UsTRJ6U3awOGiBvt0FvoBy1k7zYd/99uqVKKupVOjK0HRp6S//rd192u92QVzqM182qAXAvdBdI9SlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749641409; c=relaxed/simple;
-	bh=VB8JmS6BkzO33e6buulQO1O8Ftm+eUk6uCK5i1h+3bo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UI8FigpGC0Qwie+AK3EhfXHhcrvuJGIvn5g0favwyfPM+SYkxmMnESlJsC3zWTSa0AZF8JXtyC5Su8I0BNBsd9+vJz/9L62edusbEh96ft/sViDxnk9wSxd06qYObWUAJVn6WXLH8wk8XVmcqXLLUkIZ7RzTZUD30Uj/6nxrhHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P40SRLOH; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749641408; x=1781177408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VB8JmS6BkzO33e6buulQO1O8Ftm+eUk6uCK5i1h+3bo=;
-  b=P40SRLOH2iEqmjLvqRzPZmf8fV4el6Utf9USQgcemVuReR2pbKfdxd9h
-   8DRN39IJPFq6zY5k+NGQYK+Y9wYq4MFCtKGbsZuuj3lYw3lhv2Q4iXLhm
-   uYTbkh3em4A7e4ibfWRHKpqqbLumQMvQvRNvCkKuJKgNt+NZuf6MRE7zd
-   Op66uCqPDUKdg4MWvpumwkECMDL9nPXMkwS15zWza8Tg1eIS2Rg0R+mLE
-   EtZE0TRqqgaff7DfatYf0DlGwPR5QqcBKEX8SDbiUei/o6zVllVSzcp/q
-   pb9o0QZrElztfwS2toO+4tK7cuZaMy+Mz4vQtHyt40tch/fmnX3BSwusz
-   Q==;
-X-CSE-ConnectionGUID: Ll9r3PVMT+Wo4Bg7ym9npw==
-X-CSE-MsgGUID: TgdhKGx0TCiff3o6X/599A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11460"; a="51773157"
-X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="51773157"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 04:30:07 -0700
-X-CSE-ConnectionGUID: uBK6fAPPRzK7dr7ewiRNHQ==
-X-CSE-MsgGUID: gjpTy9KXSYqg376srKwAqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="150972729"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Jun 2025 04:30:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 7D97F1CF; Wed, 11 Jun 2025 14:30:03 +0300 (EEST)
-Date: Wed, 11 Jun 2025 14:30:03 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: acpi: fix device link removal
-Message-ID: <20250611113003.GG2063270@black.fi.intel.com>
-References: <20250611111415.2707865-1-heikki.krogerus@linux.intel.com>
+	s=arc-20240116; t=1749649959; c=relaxed/simple;
+	bh=QFWYW5kaiGDetj1OfsAqHY/vd4zHU6YIDGCQ6JCtW8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ptAwzptlsL3qnZyLKzSy8QgOPbbWy+xE2LGvqBahHkOcg/KtSDuSPU70bQamEKL4JTd+Hg+scNoMYX0mRNI5qq4YCU7Tg+ct9VWkpNYe3+7m2n9NNHPRs56StVn/0XNhfxl5vjUCsn8QLzNpQ/45B04QqblCNlM59iMpbzIeAwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=n7o1VGnx; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=n7o1VGnx; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B4E471F7CE;
+	Wed, 11 Jun 2025 13:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1749649954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=B0LSww1OyUykeUdWBVJJiHmlCWoXXu/ch1OC67pWnck=;
+	b=n7o1VGnxuTW2Z41mLdi53/X6Jr/Xhno5yoofE16AQPbhn2NnFro2nIPpdP8zlnNc1o5Jba
+	ru5sWg0zfK8kcx8p29SN0efA0RTeHCVAGHLmmpy3eCX2SkETu9i08R8gWMRWDae5jU42eY
+	jAMwdUOXk/gAYes+2iEF8jNWmkam8l4=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=n7o1VGnx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1749649954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=B0LSww1OyUykeUdWBVJJiHmlCWoXXu/ch1OC67pWnck=;
+	b=n7o1VGnxuTW2Z41mLdi53/X6Jr/Xhno5yoofE16AQPbhn2NnFro2nIPpdP8zlnNc1o5Jba
+	ru5sWg0zfK8kcx8p29SN0efA0RTeHCVAGHLmmpy3eCX2SkETu9i08R8gWMRWDae5jU42eY
+	jAMwdUOXk/gAYes+2iEF8jNWmkam8l4=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8BA9E139CE;
+	Wed, 11 Jun 2025 13:52:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id AgnaICKKSWhnVwAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Wed, 11 Jun 2025 13:52:34 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregKH@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] usb: core: usb_submit_urb: downgrade type check
+Date: Wed, 11 Jun 2025 15:52:25 +0200
+Message-ID: <20250611135231.2380902-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250611111415.2707865-1-heikki.krogerus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: B4E471F7CE
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:mid,suse.com:dkim,suse.com:email];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[suse.com:+]
+X-Spam-Score: -3.01
+X-Spam-Level: 
 
-On Wed, Jun 11, 2025 at 02:14:15PM +0300, Heikki Krogerus wrote:
-> The device link to the USB4 host interface has to be removed
-> manually since it's no longer auto removed.
-> 
-> Fixes: 623dae3e7084 ("usb: acpi: fix boot hang due to early incorrect 'tunneled' USB3 device links")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Checking for the endpoint type is no reason for a WARN,
+as that can cause a reboot. A driver not checking the
+endpoint type must not cause a reboot, as there is just
+no point in this.
+We cannot prevent a device from doing something incorrect
+as a reaction to a transfer. Hence warning for a mere
+assumption being wrong is not sensible.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/core/urb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 5e52a35486af..acf74ad36326 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -500,7 +500,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 
+ 	/* Check that the pipe's type matches the endpoint's type */
+ 	if (usb_pipe_type_check(urb->dev, urb->pipe))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
++		dev_dbg(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+ 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+ 
+ 	/* Check against a simple/standard policy */
+-- 
+2.49.0
+
 
