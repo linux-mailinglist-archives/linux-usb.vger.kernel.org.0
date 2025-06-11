@@ -1,93 +1,88 @@
-Return-Path: <linux-usb+bounces-24681-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24682-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B92DAD44F9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 23:50:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3193AD4917
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 05:00:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 451F37AB499
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Jun 2025 21:48:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50FC017CA3F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 03:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61BC283C9C;
-	Tue, 10 Jun 2025 21:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D135A22578D;
+	Wed, 11 Jun 2025 03:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/2kXy8w"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="kzqwNKMt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EDD245007;
-	Tue, 10 Jun 2025 21:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1086D2253A7;
+	Wed, 11 Jun 2025 03:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749592199; cv=none; b=UnDqZUMDMYRP2GW6IBgpiDBNF27JF5Pu7KMnH4soItdIfJGqXbv31L3aF0VTCFw+n+y5Sqam5vJxYHsu5N1vC9qJdMcfxXthcWwcbcYxcfTpFV/cqq9NV/lNbuQF0dSeRlKfslk5mehP7ZuJPAQHE50iNSQaYkxcfaNa4Fyuai4=
+	t=1749610847; cv=none; b=dDBXG8UhHXrInybx24C0sNQ/hiGYyFoCnGFHkS7WPubWUWi3MVc56HQxKqni3xxeHFowAg55Q0PR4XTTz92ekyCRC3cU5OSBf8MvGRasWqjrBS6j6CiAlR7LJ9KS+ZZBtUlk39s598M9y1fccsYgHGMjh58VcQZlUWy1vCrh8K8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749592199; c=relaxed/simple;
-	bh=3v3KDffzGVIHhQCWFOO/7kXK7VpNLiWoC7TKe7D8+ZA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=n4wD/lunirSxQWx+Pm65aoy7M0zY1TQZHwauC9rx4SDoSp40ZLYAjqpvTJUQDjoFWpSuapvLjZBc+Vr1iC/vLBt9TRJbKDzdeqJaG5nRJv9imERxB338z26Ochxt5+7tUbEhIiusQUvkwrskBer6JyZdk/RkGsv7/ATOD5ZF6QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/2kXy8w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F73FC4CEED;
-	Tue, 10 Jun 2025 21:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749592198;
-	bh=3v3KDffzGVIHhQCWFOO/7kXK7VpNLiWoC7TKe7D8+ZA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=J/2kXy8wfSc5VREM5/rp6OlcwFkpNwr35MByowjDjJImTKIhiu6sHp4oJv1zM/gWG
-	 ldOegAUosq8s1V7DLTguiFCilktgfZ9Lwhm5uZMrzO4fUTJc9xjPIHDh0Ib0D2ImbN
-	 fw0lrqhHBXoRvNwY03mrvywhzMEI3s4kHdMgee6fCLp5Bs2QsiK4EviK2UwxuEoFig
-	 8cDLqozqYmjFKfUiIPZ22LhBrxhtb3dr48faWOhYWJ4Tpbc5FF1+3HZJ5V6IU3yEq3
-	 toitefVVrF2tSFc1h248UF5p6780T9stRESefiYh0K4253VpO12pkaksUCoG29OYcP
-	 C78mtbtoGaJUw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D8538111E3;
-	Tue, 10 Jun 2025 21:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1749610847; c=relaxed/simple;
+	bh=PI6sDkmKAkCiovsJ+3Bmcgbdp7V7i0NlEWK++v1zyu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aoIJm7f4ii2+VQLpqOT9EtG9dGgA8ipICzpSb/EDkgujEqkSVZbeydYlUWAYauqFuFPA1a9fuLTaTcQhEwiLniwunNuiAABSksOnqpjHaI2C8WSSjh6fGacxYdPhQUwl0kWOzd41T+qQm67JdvIF2yJe3o55Ix/g4d/2w7FlQ5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=kzqwNKMt; arc=none smtp.client-ip=1.95.21.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=wnQvkwGgcyocQYZ5N13vAZvfg+eJZRbaALNxFcVziF4=;
+	b=kzqwNKMtsQfkoSb4+g7xlmAS/SErRvHoRj7RvKZyBVZkrfdut767/7Wh7MDZ/P
+	zpAN8ELhJTKULjghRr8TQTIdRj1lrtEg0AV8vT99PZbDUPZmk2j2ypJrczii65p9
+	UuQZwKdlufLiIThN86J8wg4p/B9XwheuUfbD4B1SwXgjo=
+Received: from dragon (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgA3rw4n8UhoKPphAA--.40571S3;
+	Wed, 11 Jun 2025 10:59:52 +0800 (CST)
+Date: Wed, 11 Jun 2025 10:59:51 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	imx@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: i.MX kernel hangup caused by chipidea USB gadget driver
+Message-ID: <aEjxJ3atSw/8JwNo@dragon>
+References: <aEZxmlHmjeWcXiF3@dragon>
+ <c56pgxmfscg6tpqxjayu4mvxc2g5kgmfitpvp36lxulpq4jxmg@ces5l7ofab6s>
+ <aEf/2+3MU5ED2sxE@dragon>
+ <emdju6mml2o65hmtiyf5jwlzhudmbpyx433wz5a73lkpinzbyp@2oexfo2ra7xs>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: usb: r8152: Add device ID for TP-Link UE200
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174959222900.2621984.6053351569462412932.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Jun 2025 21:50:29 +0000
-References: <20250609145536.26648-1-lucsansag@gmail.com>
-In-Reply-To: <20250609145536.26648-1-lucsansag@gmail.com>
-To: Lucas Sanchez Sagrado <lucsansag@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <emdju6mml2o65hmtiyf5jwlzhudmbpyx433wz5a73lkpinzbyp@2oexfo2ra7xs>
+X-CM-TRANSID:M88vCgA3rw4n8UhoKPphAA--.40571S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWfGF17WryxZw4UKF18AFb_yoW3XrcEvr
+	4DGw4DKw1kJryfXas3tF1rGr45G397KrWUXw1fXr4YvryfJF92yFWDC3sFv3Z5Zay2gr9I
+	9rn0g34Y9w409jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUppB3UUUUU==
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiEhlpZWhI2xltwgAAsK
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  9 Jun 2025 16:55:36 +0200 you wrote:
-> The TP-Link UE200 is a RTL8152B based USB 2.0 Fast Ethernet adapter. This
-> patch adds its device ID. It has been tested on Ubuntu 22.04.5.
+On Tue, Jun 10, 2025 at 07:54:41PM +0800, Xu Yang wrote:
+> > However, your change seems working fine on i.MX8MM EVK.  It's probably
+> > due to the fact that host disconnects gadget for some reason when EVK
+> > suspends.  This is a different behavior from the custom board above.
+> > We do not really expect this disconnecting, do we?
 > 
-> Signed-off-by: Lucas Sanchez Sagrado <lucsansag@gmail.com>
-> ---
->  drivers/net/usb/r8152.c | 1 +
->  1 file changed, 1 insertion(+)
+> It's an expected behavior on i.MX8MM EVK. The host will see device disconnected
+> after imx8mm do system suspend. It's because the usb phy power will be off after
+> system suspend. If you enable wakeup capabiklity for usb phy, the usb phy power
+> will keep on and you will not see disconnect event anymore.
 > 
-> [...]
+> # echo enabled > /sys/devices/platform/usbphynop1/power/wakeup
 
-Here is the summary with links:
-  - [net-next] net: usb: r8152: Add device ID for TP-Link UE200
-    https://git.kernel.org/netdev/net/c/dc9c67820f81
+Ah, indeed!  Thanks for the information!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Shawn
 
 
