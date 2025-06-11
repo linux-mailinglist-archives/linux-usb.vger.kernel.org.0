@@ -1,199 +1,137 @@
-Return-Path: <linux-usb+bounces-24698-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24699-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF23BAD5EDD
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 21:16:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64737AD5EE0
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 21:17:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1A011E1797
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 19:16:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E6B0189E3F1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Jun 2025 19:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CCB244678;
-	Wed, 11 Jun 2025 19:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4F027CCDB;
+	Wed, 11 Jun 2025 19:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IkBvjPn1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jRXt3QTR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA41198A1A;
-	Wed, 11 Jun 2025 19:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CD879C4
+	for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 19:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749669398; cv=none; b=PCq1DMJd5PbstwPty6vO21i4XQrnbBDsvbAaIccAgPfP8sJ9s4wOLhe/j+NK5JB98qOxJJctbUMC1Krflz48KJ9UyFjrkk0u0u3yKHE8eEffmM3Mjem1eFwu6IQ1n3k40q+09l8jqV3jMNK6GwhV1VPK1NORP6tGg4Xaz2M+hp0=
+	t=1749669472; cv=none; b=Osoty/qtU/opiXNIjCHOzqnp16Qdlf5DNO50MAl5W7pb7PtoGXRRiI+qrd/FVTqLKbvSCgNkZGN2LXgtMOMQtn+GlbKTE6hi+0ljIV+xX51AilkcyVb8s5pUD6HvX7dJqT/uw8pvkG1oMcDrNdGnvDyu0yD2n/fZmHeFBRpPgOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749669398; c=relaxed/simple;
-	bh=358NUKtMN4W7Wp9Bs1V/sn98LAqFcku5eccdeJV4uBg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sxr5xw1KsL2hkFFCDJymQunbbLTebWU3biLKK+BuDOqVjQNZbe5rnEBg3wwf8zJQkNZ5KGPtSezEUFfnb9UcnMxSW9zwSSfQlaOugk8c8pi0KOCxhwpgGmAFKWdkdMjlozVc5sFPrvfYQfF2qC4oMv1ScFXn8aARzeoOxnWwEN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IkBvjPn1; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so1401215e9.2;
-        Wed, 11 Jun 2025 12:16:35 -0700 (PDT)
+	s=arc-20240116; t=1749669472; c=relaxed/simple;
+	bh=fUrUvj/NKrnOKNMJe9QMJYc8JHU2TblrN3dQxgOBq8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HUK1ZLYpvzlzN2qy0m0DlNPeHpHru7vd9AQ9+7zjJOWgD8l8Cj6sFuk0LqsLdaEEyUzyodWP9UknrKIAeZImRI03oScl2+gcul95I1Y+nLq6APwTxVN4hVniDhBweSZRFfaXyhTNnW75qtR61uI61LViO4BmwAe5kC2TbvTkOOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jRXt3QTR; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4531e146a24so973505e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 11 Jun 2025 12:17:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749669394; x=1750274194; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/kIfdniyUa+utFuJ2JYd4o20expQw7bHU8xr65qBkM=;
-        b=IkBvjPn1GIm2nNz37zOqACc7F9QH5eiWgtQQh0RkXscyYU4nqyW5onVmMKiwY4810W
-         FfKyU7OwFmE/GEVhTRhmpisWPh5CH5bi8SDtYSp9lPhzdWArVOyYC6n4Pp146O8OeiAa
-         ZOHgmHLS0SuA8n1JUl8+O6ja4gWtSy10n9DK8qugGiM5VLrC51c36+8kVUbDX5VtXxZJ
-         /1Ve4BjPupkvZ2e5BDxpvVKfu+UcdG20FplGZTRd3OdatizexPcuUBupnOAN2+gCPoc7
-         JhzmrdC5EaKjYfFsrbk2ulRGQZeTew/bnCl8wL0I8QhX2mrgwDZcayuuz3L7VKYg4CL5
-         nsww==
+        d=linaro.org; s=google; t=1749669469; x=1750274269; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cnqd7Mp+YWPevCABnNJ+cz/TVLBtwGacs5s2BQshssM=;
+        b=jRXt3QTR0RkTFpZZ9RHIHotyB/bNZ6Ph723nU/rrsLoadckzIJbf8Ifp5Srk4b2sDs
+         0HZSKV2YCrT7w5Y8EMT+yejZgbQdujrHJ6TBgPAqn/PuIjzX4dwXyin62EWbgLr1n0z5
+         nN8tAGrW8breBBMCvG7WnWV6Ra7ktuOlaDzi6Qp5GeLcC99nfVtUJFxCswUhOgrAl5l6
+         m9zNPu4bouUVN18QOSUuveL06OKc3s3BJ848tvIiNGWnKznIdi6GpWo6idHkMhMjXxVH
+         Z1eNRkWKc4BcaZTHm3rOvNQD30dN2tXMQ7E9TFRausAaP+2Bc/B9PC6U1bjLhLCcjPEY
+         Lr1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749669394; x=1750274194;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1749669469; x=1750274269;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9/kIfdniyUa+utFuJ2JYd4o20expQw7bHU8xr65qBkM=;
-        b=ZFPLbZFuIV3ps2xfyF6ltLw4Y8IjxHLVaWg0C079EZ6aE0r0cA4lM3BjJyJDrTB35t
-         npNM9Pq0gayaQ0LKQ+dizWS0B/j5VNsiKBuiZwvfKcfib3ZSgGUSOCKdzEWNe4LD3KNl
-         XSFkgnPgenKH9aYXoPBwdw7OIJSQwU8J8lqu52mm26Xe2/VZsrICPu/zYx/0kAJYGiNf
-         LYDHovtzo4WrSjIZCRX8xMq34LoktDuafFklOKJemg9umpXkB3oTM8ABWz+FFv1y6yp8
-         YWeXti3P8DMK3Kyz970rl/kE5clriIta3auE3krCZS78hvIInUfI2yOVdB3z2CghjAO1
-         55+A==
-X-Forwarded-Encrypted: i=1; AJvYcCU3GdNImRkvZyMLBSZ7Vl6IXkBGc8kCpOGMGCI9LGjqh7kJLLB7oqyXi5lvooQcYSW/ltzmk5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRkfbKIqD8g9a1ekU/DPAcnQQu/mTrQnYMNm0dEu4Rf8gDAvOY
-	uqj79nqpCb85bx0pYSpY6t/VDFJzp1sqMIxTV+sCErYtCxN9rXK8uMlC
-X-Gm-Gg: ASbGncu3dvPexERLi7Vrsl8d3gtMyS+MDpAnRw7tQfYHmI90Z5+YRb3mGin6mcCJdjD
-	Y/FAtzPxjKBeav7o8kGBBcFeZUA2igkdNjSpk5DBN7AYgNdd4/7uh+7k0iFA6Q0y9V1jmXbQsu+
-	WxC78NF9TsrdzT6m1z5h8Cxg3UMXNI9pT3DYSLIBQL/Gw4FpKt4dnRwTqEXwUPCLHIi3Wlog4T+
-	TDlpBvB/GfNvPkiICMHsrH81YTBNJ5nJNC/lejPjgYKp9NodTJGgwCx19s3X/7EeSZAePvQZ9nh
-	/DrzHiTDmEvptBHBfdZGVYDwhSndoRABwU+Zc22fUKwuEhJILoQuXicJBpGG/nWsObstF5450cp
-	DaODQQ8RXb526VVW6T+cQNgZ8iMwALDdbKhu+cXRzxB2qawz87vD2avqpKCtvwD9B+JXaOIc3Vb
-	yvCP1QY/rBgo5zApv2+Q16KheGjQ==
-X-Google-Smtp-Source: AGHT+IFz1DBINgpCFr/2Gx965i6I9Wyiocv1WZccwFZVJk3cQt99+Dx0h87QP3USUCk11ij2IOoFHQ==
-X-Received: by 2002:a05:600c:3f09:b0:442:e0e0:250 with SMTP id 5b1f17b1804b1-4532d31d85dmr1325015e9.29.1749669393296;
-        Wed, 11 Jun 2025 12:16:33 -0700 (PDT)
-Received: from ?IPV6:2003:ea:8f1d:5400:69f2:2062:82e9:fc02? (p200300ea8f1d540069f2206282e9fc02.dip0.t-ipconnect.de. [2003:ea:8f1d:5400:69f2:2062:82e9:fc02])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-45325141606sm30843635e9.1.2025.06.11.12.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jun 2025 12:16:32 -0700 (PDT)
-Message-ID: <be4598a3-7880-4efc-a1c7-d5093f4c9eaf@gmail.com>
-Date: Wed, 11 Jun 2025 21:16:37 +0200
+        bh=cnqd7Mp+YWPevCABnNJ+cz/TVLBtwGacs5s2BQshssM=;
+        b=UnYte4ERLdunwau2dtiT1PsldkMYyk4tdG3zkvRvgDdHZesbdHt89lVyyG/7FvYT+v
+         0NshpBTmKcU1lx0EFp8qsb4h2z4s7GXtA1fiHScBrfPb0RVdOSUg33p0o6jro5YHazrr
+         Ujg3aXfntEpOkY9joW1G6ryzhvUXKruRhuzfSyTtMqxCC6D/cnp9bUv0AE8uZgtncLka
+         1BPOgvZZ/0Jr8zqpuTNOtp9Tm02RuLEKm1Q6k8JArskhmQx/KTbnfok2N/C6XpS78NE1
+         XUp7gFufHxoFV0MHvHfO352p2Bb0xB3Rh0hun6tatEsGnq6SE66TdxQ+RKWbe00r70rJ
+         s2zw==
+X-Forwarded-Encrypted: i=1; AJvYcCWv64J4kNFxmcjSeiHewAiIQwtt+1jo27ZXW4UN05sDJrLhBTA7wnc5P2OJ5B9bCDuNZqZnTCkwPnY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE5Cp6tlbTUZWFm9AfURtkaTBMT9UvYazTbyMP3UxQkipXR7pd
+	PCRHTiZVbucBpG0XNYX5DSEqQqgodYWGuqGLJbwcs7nILQk1dIVYZpFZQDokVlsA/XA=
+X-Gm-Gg: ASbGncvxGqIoOBblUMk++CNTUysSA1i6bv5wZQwPlsGoik2GPZE3trycfLluaZbhOEp
+	V8KLI9oZPSXOfl1IWYfJ6pI2krCsd0jbpEjyMfDMahYm1tqRzZucLEcP+SFT+N1fB+8A5LpVHXR
+	GYZzh10MAJ1kd8jghcueD0M3todqIRK0JTcyce7n5YXVtc6LfkemRzKBN9tCZybcTlNGhNxpkIa
+	irsfVigi7xhDP+XmUOmON15baRXuvxHbm9zPnDeBIMfUqM9ao+lzd4obrdToPfipOy9b5avIrSH
+	z4pu6yI1Xb8PtFxFwgnb7HAkV7UT24fAlOhdwqcelAHr8vNyLNR0dkhgNtRXMAABxyI=
+X-Google-Smtp-Source: AGHT+IGJ3NQ8AU+WANwLf0nZAuX7XDSfVjhF8GwX89vHnWLiFcZb6a/55FgYJ7VjRdDmwl1wu3ltxw==
+X-Received: by 2002:a05:600c:6612:b0:44a:ac77:26d5 with SMTP id 5b1f17b1804b1-4532487b346mr48416505e9.14.1749669468976;
+        Wed, 11 Jun 2025 12:17:48 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45325176cf5sm29370725e9.21.2025.06.11.12.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jun 2025 12:17:48 -0700 (PDT)
+Date: Wed, 11 Jun 2025 22:17:44 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Peter Chen <peter.chen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>, s32@nxp.com,
+	linaro-s32@linaro.org
+Subject: Re: [PATCH 4/4] usb: chipidea: s32g: Add usb support for s32g3
+Message-ID: <aEnWWPgXseRGdSz1@stanley.mountain>
+References: <cover.1748453565.git.dan.carpenter@linaro.org>
+ <c7c9319793b439cb35909621381ca2d4a78699dd.1748461536.git.dan.carpenter@linaro.org>
+ <aDeCwUsYTh7z7uuo@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 net-next] net: usb: lan78xx: make struct fphy_status
- static const
-To: Thangaraj.S@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- Rengarajan.S@microchip.com, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, UNGLinuxDriver@microchip.com
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org
-References: <0890f92e-a03d-4aa7-8bc8-94123d253f22@gmail.com>
- <58e97a033835bc9347e24ff50aea26275054e9b2.camel@microchip.com>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
- sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
- MVE4yNwdS+UsPeCF/6CQQTzHc+n7DomE7fjJD5J1hOJjqz2XWe71fTvYXzxCFLwXXbBiqDC9
- dNqOe5odPsa4TsWZ09T33g5n2nzTJs4Zw8fCy8rLqix/raVsqr8fw5qM66MVtdmEljFaJ9N8
- /W56qGCp+H8Igk/F7CjlbWXiOlKHA25mPTmbVp7VlFsvsmMokr/imQr+0nXtmvYVaKEUwY2g
- 86IU6RAOuA8E0J5bD/BeyZdMyVEtX1kT404UJZekFytJZrDZetwxM/cAH+1fMx4z751WJmxQ
- J7mIXSPuDfeJhRDt9sGM6aRVfXbZt+wBogxyXepmnlv9K4A13z9DVLdKLrYUiu9/5QEl6fgI
- kPaXlAZmJsQfoKbmPqCHVRYj1lpQtDM/2/BO6gHASflWUHzwmBVZbS/XRs64uJO8CB3+V3fa
- cIivllReueGCMsHh6/8wgPAyopXOWOxbLsZ291fmZqIR0L5Y6b2HvdFN1Xhc+YrQ8TKK+Z4R
- mJRDh0wNQ8Gm89g92/YkHji4jIWlp2fwzCcx5+lZCQ1XdqAiHQARAQABzSZIZWluZXIgS2Fs
- bHdlaXQgPGhrYWxsd2VpdDFAZ21haWwuY29tPsLBjgQTAQgAOBYhBGxfqY/yOyXjyjJehXLe
- ig9U8DoMBQJf9GRVAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHLeig9U8DoMSycQ
- AJbfg8HZEK0ljV4M8nvdaiNixWAufrcZ+SD8zhbxl8GispK4F3Yo+20Y3UoZ7FcIidJWUUJL
- axAOkpI/70YNhlqAPMsuudlAieeYZKjIv1WV5ucNZ3VJ7dC+dlVqQdAr1iD869FZXvy91KhJ
- wYulyCf+s4T9YgmLC6jLMBZghKIf1uhSd0NzjyCqYWbk2ZxByZHgunEShOhHPHswu3Am0ftt
- ePaYIHgZs+Vzwfjs8I7EuW/5/f5G9w1vibXxtGY/GXwgGGHRDjFM7RSprGOv4F5eMGh+NFUJ
- TU9N96PQYMwXVxnQfRXl8O6ffSVmFx4H9rovxWPKobLmqQL0WKLLVvA/aOHCcMKgfyKRcLah
- 57vGC50Ga8oT2K1g0AhKGkyJo7lGXkMu5yEs0m9O+btqAB261/E3DRxfI1P/tvDZpLJKtq35
- dXsj6sjvhgX7VxXhY1wE54uqLLHY3UZQlmH3QF5t80MS7/KhxB1pO1Cpcmkt9hgyzH8+5org
- +9wWxGUtJWNP7CppY+qvv3SZtKJMKsxqk5coBGwNkMms56z4qfJm2PUtJQGjA65XWdzQACib
- 2iaDQoBqGZfXRdPT0tC1H5kUJuOX4ll1hI/HBMEFCcO8++Bl2wcrUsAxLzGvhINVJX2DAQaF
- aNetToazkCnzubKfBOyiTqFJ0b63c5dqziAgzsFNBF/0ZFUBEADF8UEZmKDl1w/UxvjeyAeX
- kghYkY3bkK6gcIYXdLRfJw12GbvMioSguvVzASVHG8h7NbNjk1yur6AONfbUpXKSNZ0skV8V
- fG+ppbaY+zQofsSMoj5gP0amwbwvPzVqZCYJai81VobefTX2MZM2Mg/ThBVtGyzV3NeCpnBa
- 8AX3s9rrX2XUoCibYotbbxx9afZYUFyflOc7kEpc9uJXIdaxS2Z6MnYLHsyVjiU6tzKCiVOU
- KJevqvzPXJmy0xaOVf7mhFSNQyJTrZpLa+tvB1DQRS08CqYtIMxRrVtC0t0LFeQGly6bOngr
- ircurWJiJKbSXVstLHgWYiq3/GmCSx/82ObeLO3PftklpRj8d+kFbrvrqBgjWtMH4WtK5uN5
- 1WJ71hWJfNchKRlaJ3GWy8KolCAoGsQMovn/ZEXxrGs1ndafu47yXOpuDAozoHTBGvuSXSZo
- ythk/0EAuz5IkwkhYBT1MGIAvNSn9ivE5aRnBazugy0rTRkVggHvt3/7flFHlGVGpBHxFUwb
- /a4UjJBPtIwa4tWR8B1Ma36S8Jk456k2n1id7M0LQ+eqstmp6Y+UB+pt9NX6t0Slw1NCdYTW
- gJezWTVKF7pmTdXszXGxlc9kTrVUz04PqPjnYbv5UWuDd2eyzGjrrFOsJEi8OK2d2j4FfF++
- AzOMdW09JVqejQARAQABwsF2BBgBCAAgFiEEbF+pj/I7JePKMl6Fct6KD1TwOgwFAl/0ZFUC
- GwwACgkQct6KD1TwOgxUfg//eAoYc0Vm4NrxymfcY30UjHVD0LgSvU8kUmXxil3qhFPS7KA+
- y7tgcKLHOkZkXMX5MLFcS9+SmrAjSBBV8omKoHNo+kfFx/dUAtz0lot8wNGmWb+NcHeKM1eb
- nwUMOEa1uDdfZeKef/U/2uHBceY7Gc6zPZPWgXghEyQMTH2UhLgeam8yglyO+A6RXCh+s6ak
- Wje7Vo1wGK4eYxp6pwMPJXLMsI0ii/2k3YPEJPv+yJf90MbYyQSbkTwZhrsokjQEaIfjrIk3
- rQRjTve/J62WIO28IbY/mENuGgWehRlTAbhC4BLTZ5uYS0YMQCR7v9UGMWdNWXFyrOB6PjSu
- Trn9MsPoUc8qI72mVpxEXQDLlrd2ijEWm7Nrf52YMD7hL6rXXuis7R6zY8WnnBhW0uCfhajx
- q+KuARXC0sDLztcjaS3ayXonpoCPZep2Bd5xqE4Ln8/COCslP7E92W1uf1EcdXXIrx1acg21
- H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
- lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
- OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <58e97a033835bc9347e24ff50aea26275054e9b2.camel@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aDeCwUsYTh7z7uuo@lizhi-Precision-Tower-5810>
 
-On 11.06.2025 09:02, Thangaraj.S@microchip.com wrote:
-> Hi Heiner,
-> Thanks for the patch
-> On Tue, 2025-06-10 at 22:58 +0200, Heiner Kallweit wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you
->> know the content is safe
->>
->> Constify variable fphy_status and make it static.
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->> v2:
->> - extend commit message
->> ---
->>  drivers/net/usb/lan78xx.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
->> index 759dab980..17c23eada 100644
->> --- a/drivers/net/usb/lan78xx.c
->> +++ b/drivers/net/usb/lan78xx.c
->> @@ -2630,7 +2630,7 @@ static int lan78xx_configure_flowcontrol(struct
->> lan78xx_net *dev,
->>   */
->>  static struct phy_device *lan78xx_register_fixed_phy(struct
->> lan78xx_net *dev)
->>  {
->> -       struct fixed_phy_status fphy_status = {
->> +       static const struct fixed_phy_status fphy_status = {
->>                 .link = 1,
->>                 .speed = SPEED_1000,
->>                 .duplex = DUPLEX_FULL,
->> --
->> 2.49.0
->>
+On Wed, May 28, 2025 at 05:40:17PM -0400, Frank Li wrote:
+> On Wed, May 28, 2025 at 10:57:39PM +0300, Dan Carpenter wrote:
+> > From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+> >
+> > Enable USB driver for the s32g3 USB device.
+> >
+> > Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > ---
+> >  drivers/usb/chipidea/ci_hdrc_imx.c |  1 +
+> >  drivers/usb/chipidea/usbmisc_imx.c | 15 +++++++++++++++
+> >  2 files changed, 16 insertions(+)
+> >
+> > diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> > index ce207f8566d5..d062399ce15e 100644
+> > --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> > +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> > @@ -95,6 +95,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+> >  	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
+> >  	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
+> >  	{ .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
+> > +	{ .compatible = "nxp,s32g3-usb", .data = &s32g_usb_data},
 > 
-> This patch changes fphy_status to static const, but as far as I can tell,the function is only called once during probe, and the struct is
-> initialized and used immediately. Since it's not reused and doesn't
-> need to persist beyond the function call, I don't see a clear reason
-> for making it static const. Is there a specific motivation behind this
-> change?
+> If it is same, suggest compatible string fallback to nxp,s32g2-usb
 > 
-From a compiler perspective there's not much of a difference, also as of today
-the compiler uses a pre-filled struct instead of creating it dynamically.
-At least that's the case for me with gcc 15.1.1. Just that with the change
-the prefilled struct is properly placed in the rodata segment.
+> compatible = "nxp,s32g3-usb", "nxp,s32g2-usb".
+> 
 
-Main reason is to make clear to the reader, and to the compiler, that this
-is immutable configuration data. Not different from e.g. regmap users, where
-typically a static const struct regmap_config is used for initialization.
+These are the same, yeah.  I'm not sure I understand.  Did you mean just
+add the "nxp,s32g2-usb" string to the driver, and put both the g2 and g3
+in the devicetree file?
 
-> Thanks,
-> Thangaraj Samynathan
+regards,
+dan carpenter
 
-Heiner
 
