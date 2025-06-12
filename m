@@ -1,93 +1,59 @@
-Return-Path: <linux-usb+bounces-24714-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24715-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3467BAD79FE
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jun 2025 20:52:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC47FAD7C9E
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jun 2025 22:47:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 544513A9991
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Jun 2025 18:51:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0672C3A7742
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Jun 2025 20:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE8B2D29D0;
-	Thu, 12 Jun 2025 18:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18822D661D;
+	Thu, 12 Jun 2025 20:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LwcSVhA2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+mXMN/9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1FF2D29C2
-	for <linux-usb@vger.kernel.org>; Thu, 12 Jun 2025 18:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D121B4F1F;
+	Thu, 12 Jun 2025 20:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749754276; cv=none; b=WOwN/UZxz01mcs5saQmSWjoGuwLxEVwSHGFLi4Ah19RqeUTVUmwjdZw42C/Xm43xA5dDi7qQsZOAGrbE4hCS9cGSmsPwafTd6nY8IM1JkaID6FehE7hk+MMsnBhJt3I9hgcqO/ztc4XIG6x0UZtDvXtRoQjlJhFJe1gdsvVOeMU=
+	t=1749761221; cv=none; b=uhzKly7rpLO2X7Fw9yaO8Zg500QEPjswM6TXNW6Rh/xK9onVYicqZhSfP9UakmC/Bpn5y1KjfN1Pyf8oNRsddb2u5bQxClcV34gX5GG2V4D3yX8RkiMBkQDP1NiuibNMbZokoHXjKIx9eGn6Noj0Ta6KiF++tGOpayuZnsJ5UFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749754276; c=relaxed/simple;
-	bh=IWlKY+BMG19gHf6CAGx0zr0/tTNrF1H4xaMS/LlJU2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SiT67J8GrLq/VjZoyeNjmjH2HcOk9K3RVjtNG7QDTMevX7hRcUIX3TJkVKPGQBxZHUZOqKnfPOG3Ay44H06RNod33eoH+TtlA/TrGmoQOnydyp/kK9+slBFKv8RKDChUdGuGrrEw5wvW5zOVR6l6FE76kZFgRLMfZdpcgwkZQw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LwcSVhA2; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso871893f8f.2
-        for <linux-usb@vger.kernel.org>; Thu, 12 Jun 2025 11:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749754273; x=1750359073; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RttzpPmx4+I2vFDRVVqMPeYipRESqQyZkl6IDrQJbiw=;
-        b=LwcSVhA2evGpPWYLNDAJwbo2w5+fh0wRw9GnuzQUbFoRHD50Qj8t0/7fYENrz+ekAZ
-         nldua6oEWWvKPqCMtEWNDiv5zNtXFpvjUheRFoMgI5HKJ2y5ojwYIQ1YxSxUiZCcgKJi
-         nIq4MEmnV1geVCbAM77Qhoj3eyloy7qAM1Pdb1lT3vKbHLSjL/F6sbZ91/P2dVt7itTX
-         Nh3Xzq2mHOJc3v/Juy3YrKl9YH0sjPw0U92G+JIis2dId7JpZ5HT3TDGaGCH8xnj8o6z
-         V4VvkttWTkHom4B7akL5Ed+EnLNqcE3gwmhiPDfTrLd81oB4Mp2hIcOSoCNwgoDteM0S
-         KAAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749754273; x=1750359073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RttzpPmx4+I2vFDRVVqMPeYipRESqQyZkl6IDrQJbiw=;
-        b=VfqJ97dkWSYAengl4mqMGqgGNrOkOLbVOL24Ie3iF/7cYYP8fISNBX5D+tG9hJeojG
-         EDbO84da8OiRMpc24ol2PkpOCk2MrdN22rWpCTXALZDPyfTKPz3W7V6K05vGifyMJQIt
-         mc/2GouwQ0RAjrPKzFEsBv4IaW15rtCrXSaCg4faRYeER1SG1/X0nsh0ZBCFRFFYC98R
-         x1fVL61IpCDM6Tg69ZkTgaIo5W/wJHW6LBCFGAXWMBXjW1PaX+u/lwW0Ete99zvPjzXC
-         jaA4Z0xi/715pxbWkkkN1cXC/oR5VgxedFXPth+lKDyXBldK8JSMaopXCWw9su3mwgoG
-         cxmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/x0+X0TIaHFoWp2PpKYB3r1JT2d3rZSIW8EQ7o0dPe83/QnNZwCTCTJ2NdUXMtFmH7ocMn0TRCGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaoUMiwSVZq1Esx6GLPu/12+NTaFIVLqt1g8qVnl5K1N8CRL3a
-	oPv/GV5N7wXQGl13AMb1ajWWzBHKTtGvvC/G10mD1mT99cQC/HeeSCntjRHnQ59TWUQ=
-X-Gm-Gg: ASbGncuQV5dRJGdtnSvXnLPRflujeslESxAXkEyLaBE3jY1QvU0Jt2Mwa2dfaOt8C3U
-	STPMbY2m0Ux1TE6T4VVyNM7bL5suanb2Jel5nioogfrE0PGVTJr6TYm/6WN5zKq5KmSEDYJS3Um
-	hO09oIbZtFuvJFovfX6S76D7lcz/28CMY3q1QIisk4gkXE6/pvUXkqGxPc4SH3d+jrPzJnXLcQG
-	Qtb+ZFBdVxi8+LNdaU2jxUWa9uzNgjS1efnTZLDSXsCyFZkfJ/TfkcoTg5GxhOjBZ474PjTpwH6
-	cXcuZoTfsUn9UhYUaHsapoCNDMDp0XVxV4NFS1zo4qOOpYL8mec65huL0Qa7hBbpI1k=
-X-Google-Smtp-Source: AGHT+IF8J8y/ngnpoyOUShRv9/aJkdzYRnZ60F/4jSk31esEVM/l95MI9oTPjOP8gHOhRdPMBTj3gA==
-X-Received: by 2002:a5d:5f91:0:b0:3a5:5270:a52c with SMTP id ffacd0b85a97d-3a5684cc429mr399383f8f.0.1749754273164;
-        Thu, 12 Jun 2025 11:51:13 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a568a7f8f9sm113600f8f.42.2025.06.12.11.51.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 11:51:12 -0700 (PDT)
-Date: Thu, 12 Jun 2025 21:51:09 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Peter Chen <peter.chen@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, s32@nxp.com,
-	linaro-s32@linaro.org, Larisa Grigore <larisa.grigore@nxp.com>,
-	Ionut Vicovan <Ionut.Vicovan@nxp.com>,
-	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-Subject: [PATCH 3/3 v2] usb: chipidea: s32g: Add usb support for s32g3
-Message-ID: <957b91eb2270113a857474ddaa29c99198ed95ab.1749747898.git.dan.carpenter@linaro.org>
-References: <cover.1749747898.git.dan.carpenter@linaro.org>
+	s=arc-20240116; t=1749761221; c=relaxed/simple;
+	bh=O3+xFnBWba41Et0B2Fwfa+WsL68zmh90ddIlEpOkDtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Us82K6vFfuoOYQVbBHJ4MRYbGytKZUFxhZQSNYEJBl4Smwq6D2f1yCtbkC07QuTKBCQTX3pSQnmjJ6kHYyR6ORs4c3Gf3O0J9Lh9gDUe6uUkfureTds2niNzVqE8rDDBmEOndJulxlgDcgYd9HnlrOrM35B8a+favgN4cnB9K6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+mXMN/9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DF6C4CEEA;
+	Thu, 12 Jun 2025 20:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749761220;
+	bh=O3+xFnBWba41Et0B2Fwfa+WsL68zmh90ddIlEpOkDtI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=U+mXMN/91W85CUD0Sekr9crOser7JYlZErcNXh7GJ7NMhS2Bo+BjoIHYGZP1he2pr
+	 cbTQVq1uKPm76qQW7ED6QRCHoXegOj0tjb/6J6UBGJw85IB6eAqe2Xs5j6DNnYXl8f
+	 flPymIS9EteF4/vRFdme0sr3byzK/VsezEaEoom995vUSw7yx4X84ANbOb3DdLOrpT
+	 terjUgHD6EE5040OuV9aqcTnYCgspoo8/YUYdRrsnNeYW/O5gi4KSmyKJeZzoVlIDm
+	 ILuAKB1AooEKfHbWKVFe7dpwE3lrE4TFG/BUpMzv6+vdfSaX7zV+Sd4KTIW3pBHJNi
+	 ZHbnBCzPaxXeA==
+Date: Thu, 12 Jun 2025 15:46:59 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: linux-pci@vger.kernel.org
+Cc: Mario Limonciello <superm1@kernel.org>, Lukas Wunner <lukas@wunner.de>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+Subject: [bugzilla-daemon@kernel.org: [Bug 220216] New: Intel Corporation
+ JHL7440 Thunderbolt 3 Bridge: Unable to change power state from D3hot to D0,
+ device inaccessible]
+Message-ID: <20250612204659.GA928209@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -96,64 +62,91 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1749747898.git.dan.carpenter@linaro.org>
 
-From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+[+cc Mario, Lukas, Rafael, thunderbolt folks; submitter in bcc
+Possibly related to
+https://lore.kernel.org/linux-pci/20250609020223.269407-1-superm1@kernel.org/?]
 
-Enable USB driver for the s32g3 USB device.
+Laurent, you mentioned that you see this on 6.15.1.  Is this a new
+problem that you didn't see on older kernels?
 
-Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-Changes since v1:
-* Drop the changes to ci_hdrc_imx.c since that part is compatible with
-  the s32g2 chip.
-* Use the .power_lost_check() callback.
+----- Forwarded message from bugzilla-daemon@kernel.org -----
 
- drivers/usb/chipidea/usbmisc_imx.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+https://bugzilla.kernel.org/show_bug.cgi?id=220216
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 67ff073ad806..d5389156e157 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -673,6 +673,11 @@ static int usbmisc_s32g2_init(struct imx_usbmisc_data *data)
- 	return usbmisc_s32g_init(data, S32G_UCMALLBE);
- }
- 
-+static int usbmisc_s32g3_init(struct imx_usbmisc_data *data)
-+{
-+	return usbmisc_s32g_init(data, 0);
-+}
-+
- static int usbmisc_imx7d_set_wakeup
- 	(struct imx_usbmisc_data *data, bool enabled)
- {
-@@ -1201,6 +1206,12 @@ static const struct usbmisc_ops s32g2_usbmisc_ops = {
- 	.power_lost_check = usbmisc_s32g_power_lost_check,
- };
- 
-+static const struct usbmisc_ops s32g3_usbmisc_ops = {
-+	.init = usbmisc_s32g3_init,
-+	.set_wakeup = usbmisc_s32g_set_wakeup,
-+	.power_lost_check = usbmisc_s32g_power_lost_check,
-+};
-+
- static inline bool is_imx53_usbmisc(struct imx_usbmisc_data *data)
- {
- 	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-@@ -1430,6 +1441,10 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
- 		.compatible = "nxp,s32g2-usbmisc",
- 		.data = &s32g2_usbmisc_ops,
- 	},
-+	{
-+		.compatible = "nxp,s32g3-usbmisc",
-+		.data = &s32g3_usbmisc_ops,
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+            Bug ID: 220216
+           Summary: Intel Corporation JHL7440 Thunderbolt 3 Bridge: Unable
+                    to change power state from D3hot to D0, device
+                    inaccessible
+        Regression: No
+
+Created attachment 308224
+  --> https://bugzilla.kernel.org/attachment.cgi?id=308224&action=edit
+Full dmesg
+
+Hello,
+
+On debian with kernel 6.15.1, I get the following messages in dmesg:
+
+[    0.453279] pci 0000:02:04.0: [8086:15ef] type 01 class 0x060400 PCIe Switch
+Downstream Port
+[    0.453327] pci 0000:02:04.0: PCI bridge to [bus 04-38]
+[    0.453342] pci 0000:02:04.0:   bridge window [mem 0x8a000000-0x9fcfffff]
+[    0.453360] pci 0000:02:04.0:   bridge window [mem 0x6000000000-0x6021ffffff
+64bit pref]
+[    0.453383] pci 0000:02:04.0: enabling Extended Tags
+[    0.453569] pci 0000:02:04.0: supports D1 D2
+[    0.453569] pci 0000:02:04.0: PME# supported from D0 D1 D2 D3hot D3cold
+[    0.454686] pci 0000:02:04.0: PCI bridge to [bus 04-38]
+[    0.863766] pci 0000:02:04.0: bridge window [io  0x4000-0x4fff]: assigned
+[    0.863788] pci 0000:02:04.0: PCI bridge to [bus 04-38]
+[    0.863791] pci 0000:02:04.0:   bridge window [io  0x4000-0x4fff]
+[    0.863797] pci 0000:02:04.0:   bridge window [mem 0x8a000000-0x9fcfffff]
+[    0.863802] pci 0000:02:04.0:   bridge window [mem 0x6000000000-0x6021ffffff
+64bit pref]
+[    0.865332] pci 0000:02:04.0: Adding to iommu group 18
+[    1.044101] pcieport 0000:02:04.0: pciehp: Slot #4 AttnBtn- PwrCtrl- MRL-
+AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
+[    1.885142] pcieport 0000:02:04.0: Unable to change power state from D3hot
+to D0, device inaccessible
+[    1.885352] pcieport 0000:02:04.0: Runtime PM usage count underflow!
+[   18.615343] pci 0000:02:04.0: [8086:15ef] type 01 class 0x060400 PCIe Switch
+Downstream Port
+[   18.615392] pci 0000:02:04.0: PCI bridge to [bus 00]
+[   18.615404] pci 0000:02:04.0:   bridge window [io  0x0000-0x0fff]
+[   18.615409] pci 0000:02:04.0:   bridge window [mem 0x00000000-0x000fffff]
+[   18.615429] pci 0000:02:04.0:   bridge window [mem 0x00000000-0x000fffff
+64bit pref]
+[   18.615453] pci 0000:02:04.0: enabling Extended Tags
+[   18.615649] pci 0000:02:04.0: supports D1 D2
+[   18.615650] pci 0000:02:04.0: PME# supported from D0 D1 D2 D3hot D3cold
+[   18.615903] pci 0000:02:04.0: Adding to iommu group 18
+[   18.616047] pci 0000:02:04.0: bridge configuration invalid ([bus 00-00]),
+reconfiguring
+[   18.617062] pci 0000:02:04.0: PCI bridge to [bus 04-38]
+[   18.617099] pci 0000:02:04.0: bridge window [mem 0x00100000-0x001fffff 64bit
+pref] to [bus 04-38] add_size 100000 add_align 100000
+[   18.617102] pci 0000:02:04.0: bridge window [mem 0x00100000-0x001fffff] to
+[bus 04-38] add_size 100000 add_align 100000
+[   18.617119] pci 0000:02:04.0: bridge window [mem 0x8a100000-0x9fdfffff]:
+assigned
+[   18.617120] pci 0000:02:04.0: bridge window [mem 0x6000100000-0x6021ffffff
+64bit pref]: assigned
+[   18.617122] pci 0000:02:04.0: bridge window [io  0x5000-0x5fff]: assigned
+[   18.617157] pci 0000:02:04.0: PCI bridge to [bus 04-38]
+[   18.617160] pci 0000:02:04.0:   bridge window [io  0x5000-0x5fff]
+[   18.617167] pci 0000:02:04.0:   bridge window [mem 0x8a100000-0x9fdfffff]
+[   18.617172] pci 0000:02:04.0:   bridge window [mem 0x6000100000-0x6021ffffff
+64bit pref]
+[   18.617803] pcieport 0000:02:04.0: enabling device (0000 -> 0003)
+[   18.617969] pcieport 0000:02:04.0: pciehp: Slot #4 AttnBtn- PwrCtrl- MRL-
+AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
+
+
+Note the "Unable to change power state from D3hot to D0, device inaccessible"
+and "Runtime PM usage count underflow!"
+
+Laptop is a Dell latitude 5530
+
 -- 
-2.47.2
-
 
