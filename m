@@ -1,307 +1,336 @@
-Return-Path: <linux-usb+bounces-24728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24729-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27DCAAD8B30
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 13:52:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2854AD8B58
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 13:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F3E318992E8
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 11:50:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B0831885954
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 11:55:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A8B2E2EF2;
-	Fri, 13 Jun 2025 11:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BACC6275B03;
+	Fri, 13 Jun 2025 11:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zfF5sIaq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awFN4Dtc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2AB2D8797;
-	Fri, 13 Jun 2025 11:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749815120; cv=fail; b=BYYu6HmGLe+coONBq2uz5bBD4+aWzAH7zB9uFmergrGHIMnVCS/br7oVp7dD1Z0IxtOblJGbRiSWl6ArgGwdUJrhTSU+zi8P6S4cB+nz49HraGsC05q2KL2ERLwmWiFOfwB2w4co/AIRFYFVQsGFGtxM5baFav9gT6TRBu/fWUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749815120; c=relaxed/simple;
-	bh=vCCEKatrNf88sdLQNDU2Jpot4wls7xd2lcp2QRAgbtU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hEhhhTrsXc8s8u972hF2M4w3W9XsXcmdJ5WFvMx3FGm33YlhHoWUWC4Hv59XDAktNx4TVY7s7Jfny9yi69FcPIWsUbsVFCNlN9bZICP1eOB4Vam4N3CaqnX6O39ZE5DpqQEfkY+1A36fUDSYlb4pAFqnqXlEuIgGxQKFLimQi/Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zfF5sIaq; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=co7bYy5IkCtnDaQcGOraV2L/ICo7KrYccEfVaWqlTKSjyxFXkbChejmR6U5ppJXQSuf52W8jahb0RzLYI1fSadqpr2oP6nvsDqmvjPLAODCAEfqZR7I6Sk01TUjWdnUCcZcEsbIeBhlGyLGXYo+lQlzkw86qYkyNc3pJEgB1cAzM9Iid3ltO82RrEXrHQJOBpA65nf3pY7MhuHH3vKUrHle3DY5DncFS2yC4lRFEH8T5cHk3JqcbuK2Q4lhKndYaFnm+OTHvJXe0ifKs0NWZtBclQavJbAocooj+SJMJnxaMgZvV/y5wFsCRNqZiyaxqG8gbzRNMeaTNCBn7Wkv76g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cdYQYEg7K+fQUJ8Jxybsqn26/ssihp3Qg6XuLldyuTU=;
- b=V+AM6OH5kHsJxTWiwmlGaKBl1kmbbesiZWFiJoJEzb0ts7MWf01zGvu7A/pxV29peYF27WZAWjrrhJiibbIYqFmiKAoRjO9YHGZVKlMWVQ8oM7vxLLVxeaYlhRPdXXKYkS0w9Ijd5FCqCa6kMLZb5bqMyqAtM22PoO30lv2LIw6oNpAnFTNALgVl4/EznU+e0hgyUpm5jclaY66rLXm+G3m5GpM0HB4nsH3buozhGkP2P6I9z41MZf7AeGtj3UnT0CGkEiWGznxoqIb13F7yizx5kUx5N3oVATSr4mHvvtXVnxpUSsjfYql56QnPoffDtmOAyivmoLbw3hqPICXc/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cdYQYEg7K+fQUJ8Jxybsqn26/ssihp3Qg6XuLldyuTU=;
- b=zfF5sIaqwQQZe6HNfu9y7ZA2YlUt9/m4ODasEzxM9Gfxr8BUzUV53QDfP65v2bb5JHIg7Fvd2YTAK0gDIX4PkrtfIrwJ4YUESuby7+bjsQkCrXzr1JBZ/FSJktGnNgpUWORCaXY1UMHE0xdRfeZOTGhRWL7xvLI1DsOZsgo5eiM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8109.namprd12.prod.outlook.com (2603:10b6:a03:4f5::8)
- by DM4PR12MB7598.namprd12.prod.outlook.com (2603:10b6:8:10a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.18; Fri, 13 Jun
- 2025 11:45:14 +0000
-Received: from SJ2PR12MB8109.namprd12.prod.outlook.com
- ([fe80::7f35:efe7:5e82:5e30]) by SJ2PR12MB8109.namprd12.prod.outlook.com
- ([fe80::7f35:efe7:5e82:5e30%7]) with mapi id 15.20.8835.018; Fri, 13 Jun 2025
- 11:45:14 +0000
-Message-ID: <0f22b60a-abfa-4cfa-9104-127d83edd883@amd.com>
-Date: Fri, 13 Jun 2025 13:45:10 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: microchip,usb5744: Add support for
- configurable board reset delays
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
- gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, git@amd.com
-References: <1749148171-1729610-1-git-send-email-radhey.shyam.pandey@amd.com>
- <f1b83b96-7cac-4014-b791-e073d2299c01@kernel.org>
- <2e03b43e-5917-4581-9aed-780dec9e3ea9@amd.com>
- <896e09a1-6376-4516-901d-354993ac4afc@kernel.org>
-Content-Language: en-US
-From: Michal Simek <michal.simek@amd.com>
-Autocrypt: addr=michal.simek@amd.com; keydata=
- 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
- mpwx1d8=
-In-Reply-To: <896e09a1-6376-4516-901d-354993ac4afc@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0251.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::16) To SJ2PR12MB8109.namprd12.prod.outlook.com
- (2603:10b6:a03:4f5::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47470275AF3;
+	Fri, 13 Jun 2025 11:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749815730; cv=none; b=MocD/cqoKiZg93mumDeAMlh75WZ27itVCp6q699zr8U6MnoHUrXJaRx+E0SsknwermqL8AJUj8ovCj2pEPG0c937XRRKAf1JbnwnedCZCqGGgvBcOEPsv2BTA3wP0YU952xTNF26jGSzlCJrf7L1I8LeevR3Ir2eLk/OGK39sXM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749815730; c=relaxed/simple;
+	bh=rDUmv2bR1gX7GTZT1kxvTtzQT29+yRG2+x7FPLdhHLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lkYKyVTDZ9nuCOPOj6H7cOdL/+wpA1Qg2SVY/JRoFJPD+0TnvD3b19c+goDXCOxfc/bst05WJgrklCASf/Y7H6QA9w6b3D5duFFUWQW2QG92cE2QLG3BmKWp5UjoetEVu4Daxnk9xIInv3KYolTixaYzai0/WY8FsW7AhbmGj9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awFN4Dtc; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-451d6ade159so17577215e9.1;
+        Fri, 13 Jun 2025 04:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749815727; x=1750420527; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xO4lHSnHfpkX9ey6V1hK+cOGeHbT22KfbfOMN9lyAQI=;
+        b=awFN4DtcbiEPj9Szsl07POIlmnOpEftVlY4JPSYOh3eNwIwqQkkM7Vh9CC7Sd4YNdh
+         +Mdnh0CPORZwUePmnAO8GTJN5Je55EM95WgIuwm5gvk5IYCtavwQdCmiY97t6jPhZDaY
+         GH6mAAZL8IchfJ9DptjnVb6VWIMh8pv/yzWq6HEGBvYQZsJVojEmfahelNuJTKOWv6q5
+         3OJ/HR1/u2LGLfQHiuWBLDbvAPzaL5ky5I5IZuRE5b00sf6sK53lIe+Bc8wPVm0I5lb6
+         tzg0TYvXv8/KX58vEfkuF3tRk9o9taiVFK5fSFAObZXrY9IUpFZJPXLAq0ySdZUOkwKV
+         iEQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749815727; x=1750420527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xO4lHSnHfpkX9ey6V1hK+cOGeHbT22KfbfOMN9lyAQI=;
+        b=Y1nKbURnwmLiUSnGx751+dZSHwcf6dRA5R/YXkvFws9nWdiRVSERZhC7pPuUODwHKv
+         BTleNZ2XQKuQ6mzOJmP/hPW+YI89xDHw7aAf6vxD7FnYfwDg7D0NaO1Ljm07hRh6AqkJ
+         08S+Bf/t6ovxsAfYjLnur99vRnxlt/5rRQyvx/B+ZGaRK0imdl1CpkXs0L6G5k/Vb8om
+         jE8Jz5TH9cazWpvhp96aBW681nZO0dvukvO+TUoEnmRXLlmcU/9Hj2L2TAuQkyqWCu+z
+         GA/ng7MUk3tcTJzLt0AJDfXUcz06h2Iq/ekR/4u3cs62bIrYQ9gB6jPMFdf7shD2wl0d
+         iTyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWWgKmxxazjDt/C03oj2VUu2+pjoiJ2SWRhv46Mmrn2JgOl3IHfQ6IqBHopxJfz6roqVwr3aDcDj+QN34qWbxg=@vger.kernel.org, AJvYcCWWyLk4bFgvPqOb2y0onEjdf0x+N9ohpMcE+MRGpQimLqAAVNwmP2UieBmELXQYOWHili2B855c0t7O@vger.kernel.org, AJvYcCX+e1YIpgx/1zQqTBMGxMeRjKCwAL1XMmcDMeabDFbELVU9D/nrt31sctnp+sKFlPBJiugQHjUNDxZCPEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy57QDnlDqwDOEI9zQz4f08PKqbd/F87WAsaoHg23IQto/qqLS/
+	BiqXUZvM08hQrIe+el7XRxJe9GZAPSBBD73Lp72ytN2fYpNa5rxwGZEM
+X-Gm-Gg: ASbGncsZFao5CqdRxxAqNIMU0yu1m7KiKOpQlMyntQGIVqNryDSq8nQmfuVJvqbCqEi
+	kt+x6xC1+MiHtEy10NIP+5QFBXy2VWYeURxdlEVeo7hFXMx5fIgwXTxUc+sAPElvjXbFqpEjvJ+
+	ROWJVLD4BUcfW4LwGGiGEzwafMX0Bym33ZHALmO8k3WvOdxWLXNl8Xt8FjiL+srxCOPD3qw2UOA
+	3uXhWJpHUvbPSk83Xp+gKq92I0CD0CLWLeyoJDLw6XNnJWL1uT8JZC0JcSn8zqNU2L5qr8mBuY3
+	diyeWhI4wDRrWHIEbM5hSGvamftYb4lURKq7Qu+2did+FrRHh0e7euGhmIaWgduGCGVSZA==
+X-Google-Smtp-Source: AGHT+IF90CtrNYbBnmdORu8/pLVZKEnKFH8SYtwc5YbhuQ8Be6X/il+Uo2k5UArsErZqC0gE2pksjA==
+X-Received: by 2002:a05:600c:3d97:b0:43d:fa59:cc8f with SMTP id 5b1f17b1804b1-45334b07fe9mr26480615e9.33.1749815726197;
+        Fri, 13 Jun 2025 04:55:26 -0700 (PDT)
+Received: from fedora ([94.73.34.56])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e22460bsm52636405e9.6.2025.06.13.04.55.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 04:55:25 -0700 (PDT)
+Date: Fri, 13 Jun 2025 13:55:22 +0200
+From: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>,
+	Greg KH <gregkh@linuxfoundation.org>, Jonathan.Cameron@huawei.com,
+	airlied@gmail.com, aleksander.lobakin@intel.com,
+	andriy.shevchenko@linux.intel.com, bhelgaas@google.com,
+	broonie@kernel.org, dakr@kernel.org,
+	dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+	lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, louis.chauvet@bootlin.com,
+	lukas@wunner.de, lyude@redhat.com,
+	maarten.lankhorst@linux.intel.com, mairacanal@riseup.net,
+	melissa.srw@gmail.com, mripard@kernel.org, quic_zijuhu@quicinc.com,
+	rafael@kernel.org, robin.murphy@arm.com,
+	rust-for-linux@vger.kernel.org, simona@ffwll.ch
+Subject: Re: [PATCH v4 9/9] drm/vkms: convert to use faux_device
+Message-ID: <aEwRqrqn4M32ScxN@fedora>
+References: <2025022643-scouting-petticoat-492b@gregkh>
+ <20250311172054.2903-1-jose.exposito89@gmail.com>
+ <2025031218-oxidize-backing-e278@gregkh>
+ <Z9LqHcj4n7Dd8A-H@phenom.ffwll.local>
+ <Z9MT23hgX2c21xNA@fedora>
+ <fa5f9e9c-09f6-4f92-8f6d-4e057f9fc5a9@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8109:EE_|DM4PR12MB7598:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1457eeb-8b16-4574-6063-08ddaa6fc2ff
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MldiNmxYTU1XY3B3Rk53M3FxbHFIU2tFL3kxM09pb2VOTWpHSmthdTFmMjFt?=
- =?utf-8?B?YVQ1dDZnU0gyVGJWM0JHamN4K2pOMWFNdlpoaGgwUVMwTUJBNEd4NG1INlRl?=
- =?utf-8?B?dTg4REFYOTdQWGJlNVVDd2dyWHlUc2piZzN4ZW8vcHlSUjVyOU1CR2tXZDRi?=
- =?utf-8?B?RWpQUUJsV3RJL1VyTzM1akRIVVNoZlFkbTNHWUpEaEpzcEVJQjJjQlRpZG9z?=
- =?utf-8?B?UFF1RVBHTkVidjdvUjU1TXpSemM1Mmc5cWtpMjI5MUdQeVBkL1lRUFcrMUtC?=
- =?utf-8?B?SmhqOWJvczd4WGRFY0lzUHdRalYxOU4xTW00ZGtTMmFYOUNodWFlQ3NhTUd1?=
- =?utf-8?B?dXJPQmRFNGZtQUFHcU5EbStuUzZrZGppNDg1UXg0V3R0ZVlEZFdZaHBpbkJV?=
- =?utf-8?B?bG1RM1VqODQ5TEdTT2NLNDBPaThORy9oWitieFYyeUtSajZyWVBQNWJEM2RY?=
- =?utf-8?B?a25EZCsxQmRJbkpOeWtVb0xqZGJzTTZWTmZtTDNjSGllRFhVK3plUytGT3h3?=
- =?utf-8?B?VytFS2xESkljNGJzV3E4NEFCSEdMMnVoZk12bSsxY3Vpd3pKUWtJby9kRG95?=
- =?utf-8?B?bDR0TzI4SFhWbUJCeCtSaERwRlBDL2p1WWFYYXUxWFBGL05jN3ZEQW54N3Nl?=
- =?utf-8?B?ZzY5dDg4bHhPdVd1Z0E0RVRYT2R4TFhlekZWeDdCNzBjYnB0SFVZenRQbU5O?=
- =?utf-8?B?dzhQZnBJcGtjdTBycURrRmJoZGlOV3o0RmhMNEdWV1Z3bE1EZWRYU3Z2b3FM?=
- =?utf-8?B?eHFudFRoWWhJaDBwb0pNLzErY0RBMEZRRURtL3F2SU1BMmlRN0N6ZWZncnd2?=
- =?utf-8?B?dm5MS2lTTE1IelYzZURSUENMTzNFK0NGV2MydjRUNG1QaDJML3dQN1lLUkJB?=
- =?utf-8?B?VlRHNnlaRWRJYkl5ZEhrMytzT2RtM0xPb3NxYS9CSlBUSXBHRGhWZDVBM0FY?=
- =?utf-8?B?QjJueUJDTVhqUjh1SS81WlA5OXVpQWdaNkMycWVpZGdnQis2a2twbHhzclFU?=
- =?utf-8?B?N0ZCeFQyRXFSSVFvbjhocGlsbWNiSXRiMmtMNUVGT1Vmc1diY204ZXowUmYr?=
- =?utf-8?B?Q1FrVFNIQndHcWwzNFJsRVRLWkxIaWloV1p1aTc1R1hzdVArV2kveUx1bVds?=
- =?utf-8?B?WEZ6KzIyWVJJSG5QR2NTOE02bDlQd3RSZ05MdnhtRlJoa3J1VnhKR2RVUnJI?=
- =?utf-8?B?ZW53K3RoNks3NitXMm9Bb0ZURlJSVkJ5SnlLK3RiY0NTZVJDU0xQMVJFVU5k?=
- =?utf-8?B?bkV6a29UaFNFeG9hbnRXQ1krUmdrdmlzSTZSanFya1V3c3dZb2dtbG5CYzlw?=
- =?utf-8?B?c1FVQ2Nzd2JuZitjbzBGbnAzd0hEblRTK1VMdFltRVYwK3hZTHdkNnNCcHpo?=
- =?utf-8?B?YnJTWnZEQXplRkcydkdJeTlYZjJCVm8yZVpGdnEzR0MrVVQyMXFzUlZXWnJD?=
- =?utf-8?B?SmhuOEZERFYyVmdrZWxEU01odmJnTlNpZUVoaHI0WGNtZTdKUzRJK2RQeDN4?=
- =?utf-8?B?Smc3N0k3aUcyQUVKell3N0xYK29GWVF2ZnA5Nnh6WTYvZU1nRVJGcVljMnJZ?=
- =?utf-8?B?TXFaTkV0a2xoTnkybGpGRnJza25PRm8wSjZoUy9OcGlsUXZZczR6bnBlb0Nu?=
- =?utf-8?B?UkJ0WGxMbUVyWjlOS3hrTXV2TXdFdXM4MjZhcFlYM0VsYXFUbXQyOHpHUlNw?=
- =?utf-8?B?NWFsQzBzUGd2ZVpUUXFjN1QzMlRVVmRBcG5mbmRIVHZSMmJXVURYUmhnVHE4?=
- =?utf-8?B?Mlhud0xJUERSVjRHcEhmK2p6SFB1Q0kyelcwL2xVRDlEVm1VUjRFNSt2LzlG?=
- =?utf-8?B?T1VKUXdXc3BRTFZIcTRQcGFVdXI5QmtveG1GL0FVRSt4VllYVHp3aGVoRXJR?=
- =?utf-8?B?RUNzc2Fjb3lUWWt6Ukw1and3N3VodEkxZTRPOEZKQXliKzFmS052RXJHN3g0?=
- =?utf-8?Q?yygK8JCqXTE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SEJQUUptN00zaFowa2pKTWVMY1RhYXVLQ3FkVThqaGw4Y0ZVaWZiY0NqMmc3?=
- =?utf-8?B?MHg5T3ROb25relJPQzFYcS92WEtXdUZYVHYvQUFKU3d3cnRPcEJaVkR3QzVM?=
- =?utf-8?B?eitxcUROOC82eEhsZVEvTnI4LzVsUnh4Um5odDFycEU1MDRRNDFCQmV5WFo1?=
- =?utf-8?B?dVBkU3JvdEp6T3UyekZram53UFJqbkxwdlpxbWExMzArWDRqNW9RaFJzcHps?=
- =?utf-8?B?a0VpTGk1enBLbGx3R0pEeE41eUkvSyt4NUprWldOeS9kdG11RHExT2VhOC9I?=
- =?utf-8?B?SFZNMGN6aFhmcDVNTi80bnRiUzNzNm4wT2JsWkxTclRteUZUNVUvd2pFaHRl?=
- =?utf-8?B?VE1DWGtOb09FcE5xS2FUSE1pdFBaMzRONGFyb1M0N0t6NTZKUXdGT0FGS0tU?=
- =?utf-8?B?U0RuK3Q1MjZYaERMaGRzTlVIZjFzSXZVRWVyMzB3RjNTTGU1LysxakdvTlFD?=
- =?utf-8?B?RSt6bndpMzExMVlxVGM3Y3Y4eWVvaEN0czhDNGZMK2ZaSjVLaG11RkpGOTRh?=
- =?utf-8?B?QzhvZWRzVzJEc3pRT1NJSGpKNlMwM3pwa3dTWDlydGFkcVNMZjF0OWQza1ds?=
- =?utf-8?B?bVI5dm43L2lRaFdxWExGK1hxS21NbGNaUTZEYUYzYjkvMHU2VDBMQUxTY3Zs?=
- =?utf-8?B?b2F2WkFiMmtaRW9pbVUrbFg1MWxicFJROFQ0Wk1mVHQwTm9SVTlVRWlOTkh5?=
- =?utf-8?B?eDNMcVJ3enNPRmwwMm1NaVdGUFhKdGdtWjNkK0w5YlJMYThBN0tVb3FIdmQ3?=
- =?utf-8?B?Tkl4cTFYZ3ZtNURuRjU0UnllY0wrU01mTTZZOW1MQlhlNW1lZG1vSmNlSFMw?=
- =?utf-8?B?NGhpUmtPQzFvdEw4Q0tPK0dqWFJCMmIzUmhJMzdzbkJ0NS8xWEg1dlhEVW4z?=
- =?utf-8?B?UXFtWHBqSXZqZ3dMbnREekdVanRIRUZNTk5mM0tpNE5vSUVhdE9FSk9EenJW?=
- =?utf-8?B?aDN5ZjJUWkZ4UUNNRXh1T3VqSlBXWTduU09wRG5VTGRYYzVJS1l0WGdlNC9t?=
- =?utf-8?B?dEozMmNTZEVXZVpRbDJ4Y3N5T3REbnBraFJNaWRWb29YalZYNVkxSTRFNnBJ?=
- =?utf-8?B?MVU5MkVIOUhhU3h6OS9ucHZsdFBnTnRVT0IvdDQxK1g5ZkRkNjd5RWJUV1cv?=
- =?utf-8?B?aG9IZS8xZTY1SjI4Z1QyOVpVUkovSktySHFCZll3NS9NdWQvanUvUjM5VUpa?=
- =?utf-8?B?MWEvR29ldFk2WExDTTRWUWJqUFVpNFZUZUZmTHFXekJwSjQxUE1UQzMybUI4?=
- =?utf-8?B?RmNudDYza3l1elZoWkc2djkyNXc0dTZpV2ptU0VCTUtaYlpON25lckQ0YklH?=
- =?utf-8?B?U2FTZWdUcVRwSW85UmdFVVNZZXl3bHFoQWNCSk1XQytGSlF2ZHBJeWhGRjBE?=
- =?utf-8?B?dVFSeUVWb1JxZDVoRlFmTDFoLzFqV2hmWklxOTBPZVNKV0FmVTRyNDhGOHFH?=
- =?utf-8?B?VVlhYzJIN1psSTFWRGxTRVBDcFc1Zk15OEQyRWVVTE5zMTZJSURha1E4R3ZG?=
- =?utf-8?B?eDdYTjU3Rjlqek1pakx5aDlkL0tMZ0srdFNyZ09vdXNuY0RmcHpqc3FGbDlU?=
- =?utf-8?B?UElTQkNkaEZ0V1ZnNUxSK2NhMHBtYmFFQVY5K3BUcHZyMXcxQ1VOOVo4Ym5G?=
- =?utf-8?B?YWFsR3A2T2JGZEJEbzRic2pPYmdWYnN1QnpiT1JVK1pYbGtMZEpWaklnSzha?=
- =?utf-8?B?dTVRVFJkMVpHcUZQMkpUS1YvWVhnVUQwMlNJTGRlTFdRZXZLdFNiWHdoVkIy?=
- =?utf-8?B?TGpHNDE0eG4yM1V1T3NNMkxTOTZJVEhMcjlxUTkycytHU2tObTB6MU5pSFRm?=
- =?utf-8?B?ZDdVa3QxZTJ4dXB3ZHV3eUpkNG5UVVlUTmpqVk5VV3F4d2tWaEpNT0ExbXln?=
- =?utf-8?B?NkhpN3drOEUvZE8raVdTUUthaWl0eUxPWkVoWDErai8yQlVOdnZYZ0hobXky?=
- =?utf-8?B?TVc4bmt2TkM1bEp0Y0VkeVVmSzljMWdvd0kzMDJId3VVb1cvNXhjcTh3QmpT?=
- =?utf-8?B?T0NyUW04eTdKczk4WmM1QVhWWjE5VGVCQkdyZkJsQ00zV2NXKzZ1cWtiN3ZE?=
- =?utf-8?B?WVFjbnZDVDZRT29oMTVHNXRSSXZjL1lELzNLZFJnZEx3N3c5bXJrTnFnZ1N2?=
- =?utf-8?Q?ZkWP2NrfdLvvGzFCVFD+4tmoT?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1457eeb-8b16-4574-6063-08ddaa6fc2ff
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8109.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2025 11:45:14.6932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O9el+xiOChGr4hw0K9GYd6GVE7IE0KJNbuWfJqluUsbGHd8boh+CUxtl0Xyqa+L1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7598
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fa5f9e9c-09f6-4f92-8f6d-4e057f9fc5a9@suse.de>
 
+Hi Thomas,
 
+Thanks for the heads up, this issue fall through the cracks.
 
-On 6/13/25 13:12, Krzysztof Kozlowski wrote:
-> On 13/06/2025 11:13, Michal Simek wrote:
->>
->>
->> On 6/13/25 10:47, Krzysztof Kozlowski wrote:
->>> On 05/06/2025 20:29, Radhey Shyam Pandey wrote:
->>>> Introduce 'reset-delay-us' and 'power-on-delay-us' properties. Default
->>>> delays in datasheet are not good enough for Xilinx Kria KR260 Robotics
->>>> Starter Kit (and others) so there is a need to program board specific
->>>> reset and power on delay via DT.
->>>>
->>>> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
->>>> ---
->>>> Taken reference from mdio.yaml[1]
->>>> [1]: Documentation/devicetree/bindings/net/mdio.yaml
->>>> ---
->>>>    .../devicetree/bindings/usb/microchip,usb5744.yaml   | 12 ++++++++++++
->>>>    1 file changed, 12 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>>> index c68c04da3399..94a2bebd32da 100644
->>>> --- a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>>> @@ -52,6 +52,16 @@ properties:
->>>>        description:
->>>>          phandle of an usb hub connected via i2c bus.
->>>>    
->>>> +  reset-delay-us:
->>>> +    description:
->>>> +      RESET pulse width in microseconds.
->>>
->>> I don't understand - there is no user for this in USB. Why do we need an
->>> ABI if no one ever uses it (and commit msg should clearly explain that)?
+On Fri, Jun 13, 2025 at 10:15:05AM +0200, Thomas Zimmermann wrote:
+> Hi
 > 
-> This still needs solving.
-
-Let's solve discussion below first.
-
->>>
->>>> +
->>>> +  power-on-delay-us:
->>>
->>> No user here, either. Plus I just wonder if you are mixing here RC
->>> delays or regulator ramp delays, because datasheet does not mention any
->>> delay.
->>>
->>> Can you point me to datasheet page explaining these delays?
->>
->> Here is datasheet.
->>
->> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/USB5744-Data-Sheet-DS00001855.pdf
->>
->> 10.6.3 chapter
->>
->> minimum assert time is 5us this corresponds to reset-delay-us and then there is
->> requirement for minimum 1ms for configuration strap.
->> On Kria platforms 5us and 1ms is used in U-Boot usb onboard driver but that
->> times needs to be extended to be able to configure hub over i2c.
+> Am 13.03.25 um 18:20 schrieb José Expósito:
+> > On Thu, Mar 13, 2025 at 03:22:21PM +0100, Simona Vetter wrote:
+> > > On Wed, Mar 12, 2025 at 07:22:07AM +0100, Greg KH wrote:
+> > > > On Tue, Mar 11, 2025 at 06:20:53PM +0100, José Expósito wrote:
+> > > > > Hi everyone,
+> > > > > 
+> > > > > > On Tue, Feb 25, 2025 at 02:51:40PM +0100, Louis Chauvet wrote:
+> > > > > > > 
+> > > > > > > Le 25/02/2025 à 12:41, Thomas Zimmermann a écrit :
+> > > > > > > > Hi
+> > > > > > > > 
+> > > > > > > > Am 10.02.25 um 15:37 schrieb Louis Chauvet:
+> > > > > > > > > On 10/02/25 - 13:30, Greg Kroah-Hartman wrote:
+> > > > > > > > > > The vkms driver does not need to create a platform device, as there is
+> > > > > > > > > > no real platform resources associated it,  it only did so because it was
+> > > > > > > > > > simple to do that in order to get a device to use for resource
+> > > > > > > > > > management of drm resources.  Change the driver to use the faux device
+> > > > > > > > > > instead as this is NOT a real platform device.
+> > > > > > > > > > 
+> > > > > > > > > > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > > > > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+> > > > > > > > > > Cc: Simona Vetter <simona@ffwll.ch>
+> > > > > > > > > > Cc: Melissa Wen <melissa.srw@gmail.com>
+> > > > > > > > > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > > > > > > > > > Cc: Maxime Ripard <mripard@kernel.org>
+> > > > > > > > > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > > > > > > > > > Cc: David Airlie <airlied@gmail.com>
+> > > > > > > > > > Cc: dri-devel@lists.freedesktop.org
+> > > > > > > > > > Reviewed-by: Lyude Paul <lyude@redhat.com>
+> > > > > > > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > > Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> > > > > > > > 
+> > > > > > > > > Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > > > Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> > > > > > > > > 
+> > > > > > > > > Thanks for the modification, it seems to work.
+> > > > > > > > Should this patch be merged through DRM trees? drm-misc-next is at
+> > > > > > > > v6.14-rc4 and has struct faux_device.
+> > > > > > > Hi,
+> > > > > > > 
+> > > > > > > I was not aware the faux-device was merged, as it is a new feature, I
+> > > > > > > expected it to reach drm-misc-next on 6.15-rc1.
+> > > > > > I added it to Linus's tree just so that DRM could get these changes into
+> > > > > > their tree now :)
+> > > > > > 
+> > > > > > > I plan to merge [1] today/tomorrow (well tested with platform_device), and
+> > > > > > > then I will submit an updated version of this patch (only trivial conflicts,
+> > > > > > > but never tested with multiple VKMS devices).
+> > > > > > > 
+> > > > > > > [1]:https://lore.kernel.org/all/20250218101214.5790-1-jose.exposito89@gmail.com/
+> > > > > > Great, thanks!
+> > > > > > 
+> > > > > > greg k-h
+> > > > > Testing this patch again as part of some IGT tests I'm working on,
+> > > > > I noticed that, applying this patch on top of the latest drm-misc-next
+> > > > > triggers a warning at drivers/gpu/drm/drm_gem.c:571, in
+> > > > > drm_gem_get_pages():
+> > > > > 
+> > > > >      if (WARN_ON(!obj->filp))
+> > > > >              return ERR_PTR(-EINVAL);
+> > > > I don't see how the faux bus change would have anything to do with a
+> > > > filp as that's not related as far as I can tell.  But I don't know the
+> > > > drm layer at all, where does that filp come from?
+> > > Yeah that filp is the shmem file that backs gem bo. That's very far away
+> > > from anything device/driver related datastrctures. If this is a new
+> > > failure due to the aux bux conversion then it would be really surprising.
+> > Agreed, I find it surprising, but reverting the patch removes the warning.
+> > 
+> > It's most likely an issue on my side, but I decided to double check just
+> > in case someone else is also seeing this warning.
 > 
+> Any news on this issue?
+
+I tested again with drm-misc-next. At the moment of writing this, the last
+commit is 6bd90e700b42 ("drm/xe: Make dma-fences compliant with the safe
+access rules") and I still see a similar warning. The stack trace changed,
+but the warning is still present.
+
+I'm going to detail the exact steps I followed. Let's see if someone else is
+able to reproduce the issue:
+
+I started by applying the patches from this series that are not already merged:
+
+ - [PATCH v4 4/9] x86/microcode: move away from using a fake platform
+ - [PATCH v4 5/9] wifi: cfg80211: move away from using a fake
+ - [PATCH v4 8/9] drm/vgem/vgem_drv convert to use faux_device
+ - [PATCH v4 9/9] drm/vkms: convert to use faux_device
+
+The last patch has small conflict in vkms_drv.h that I solved like this:
+
+	struct vkms_device {
+		struct drm_device drm;
+		struct faux_device *faux_dev;
+		const struct vkms_config *config;
+	};
+
+And in vkms_drv.c:
+
+	static int vkms_create(struct vkms_config *config)
+	{
+		int ret;
+		struct faux_device *fdev;
+		struct vkms_device *vkms_device;
+		const char *dev_name;
+
+		dev_name = vkms_config_get_device_name(config);
+		fdev = faux_device_create(dev_name, NULL, NULL);
+		if (!fdev)
+			return -ENODEV;
+
+Next, I installed the new kernel in a QEMU virtual machine running Fedora 41.
+There is nothing special about my Fedora, it is the regular desktop version.
+
+After a reboot, "sudo modprobe vkms" shows a similar warning in dmesg.
+For reference, the warning is at the end of my email.
+
+Am I the only one sawing this warning?
+
+Jose
+
+---
+
+[   69.417850] [drm] Initialized vkms 1.0.0 for vkms on minor 1
+[   69.419446] faux_driver vkms: [drm] fb1: vkmsdrmfb frame buffer device
+[   69.520944] ------------[ cut here ]------------
+[   69.520954] WARNING: CPU: 2 PID: 1015 at drivers/dma-buf/dma-buf.c:1518 dma_buf_vmap+0x212/0x540
+[   69.520992] Modules linked in: vkms snd_seq_dummy snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables rfkill qrtr sunrpc binfmt_misc ppdev pktcdvd parport_pc parport pcspkr i2c_piix4 e1000 i2c_smbus joydev loop nfnetlink vsock_loopback zram vmw_vsock_virtio_transport_common vmw_vsock_vmci_transport vmw_vmci vsock bochs serio_raw ata_generic pata_acpi fuse qemu_fw_cfg
+[   69.521082] CPU: 2 UID: 42 PID: 1015 Comm: KMS thread Not tainted 6.16.0-rc1+ #3 PREEMPT(voluntary) 
+[   69.521092] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-4.fc42 04/01/2014
+[   69.521095] RIP: 0010:dma_buf_vmap+0x212/0x540
+[   69.521105] Code: 7c 41 ff 03 0f 85 0a 02 00 00 c9 e9 c8 47 0c 01 80 3c 06 00 0f 85 c4 01 00 00 48 c7 01 00 00 00 00 48 85 d2 0f 85 bd fe ff ff <0f> 0b b8 ea ff ff ff eb af 48 85 f6 0f 85 cf 01 00 00 48 89 4c 24
+[   69.521112] RSP: 0018:ffffc90006a5f690 EFLAGS: 00010246
+[   69.521125] RAX: dffffc0000000000 RBX: 1ffff92000d4beea RCX: ffff88811467dcc8
+[   69.521128] RDX: 0000000000000000 RSI: 1ffff110228cfb99 RDI: ffff88811467dcd0
+[   69.521131] RBP: ffffc90006a5f728 R08: 1ffff92000d4bed9 R09: fffff52000d4bef1
+[   69.521162] R10: fffff52000d4bef2 R11: ffff8881017f4e28 R12: ffff8881149594f0
+[   69.521165] R13: ffff888114959400 R14: 1ffff11023146b29 R15: ffff88811467dcc8
+[   69.521168] FS:  00007fbbdd1ff6c0(0000) GS:ffff888417580000(0000) knlGS:0000000000000000
+[   69.521172] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   69.521174] CR2: 00007fbbcc0345c8 CR3: 000000011ec5a000 CR4: 00000000000006f0
+[   69.521179] Call Trace:
+[   69.521182]  <TASK>
+[   69.521185]  ? __pfx_dma_buf_vmap+0x10/0x10
+[   69.521193]  ? dma_resv_get_singleton+0x9a/0x2a0
+[   69.521197]  drm_gem_shmem_vmap_locked+0xc2/0x5f0
+[   69.521208]  ? __pfx_drm_gem_shmem_vmap_locked+0x10/0x10
+[   69.521212]  ? __pfx_ww_mutex_lock+0x10/0x10
+[   69.521225]  ? sched_clock_noinstr+0xd/0x20
+[   69.521230]  ? local_clock_noinstr+0x13/0xf0
+[   69.521233]  drm_gem_shmem_object_vmap+0xd/0x20
+[   69.521237]  drm_gem_vmap_locked+0x70/0xf0
+[   69.521247]  drm_gem_vmap+0x4c/0xa0
+[   69.521250]  drm_gem_fb_vmap+0xb2/0x3b0
+[   69.521255]  vkms_prepare_fb+0x6f/0x90 [vkms]
+[   69.521264]  ? drm_atomic_helper_setup_commit+0xb7b/0x1320
+[   69.521268]  drm_atomic_helper_prepare_planes+0x19f/0xb90
+[   69.521272]  ? __pfx_drm_atomic_helper_commit+0x10/0x10
+[   69.521276]  drm_atomic_helper_commit+0x126/0x2d0
+[   69.521279]  ? __pfx_drm_atomic_helper_commit+0x10/0x10
+[   69.521282]  drm_atomic_commit+0x205/0x2d0
+[   69.521290]  ? _raw_spin_lock_irqsave+0x97/0xf0
+[   69.521295]  ? __pfx_drm_atomic_commit+0x10/0x10
+[   69.521299]  ? __pfx___drm_printfn_info+0x10/0x10
+[   69.521313]  ? drm_event_reserve_init+0x1cd/0x260
+[   69.521318]  drm_mode_atomic_ioctl+0x1c79/0x2d30
+[   69.521323]  ? __pfx_drm_mode_atomic_ioctl+0x10/0x10
+[   69.521326]  ? __kasan_check_write+0x18/0x20
+[   69.521339]  drm_ioctl_kernel+0x17b/0x2f0
+[   69.521343]  ? __pfx_drm_mode_atomic_ioctl+0x10/0x10
+[   69.521349]  ? __pfx_drm_ioctl_kernel+0x10/0x10
+[   69.521353]  ? __pfx_do_vfs_ioctl+0x10/0x10
+[   69.521361]  ? __kasan_check_write+0x18/0x20
+[   69.521365]  drm_ioctl+0x51b/0xbd0
+[   69.521369]  ? __pfx_drm_mode_atomic_ioctl+0x10/0x10
+[   69.521373]  ? __pfx_drm_ioctl+0x10/0x10
+[   69.521378]  ? selinux_file_ioctl+0xfc/0x260
+[   69.521390]  __x64_sys_ioctl+0x143/0x1d0
+[   69.521394]  x64_sys_call+0xf4b/0x1d70
+[   69.521404]  do_syscall_64+0x82/0x2a0
+[   69.521408]  ? __kasan_check_write+0x18/0x20
+[   69.521411]  ? do_user_addr_fault+0x491/0xa60
+[   69.521420]  ? irqentry_exit+0x3f/0x50
+[   69.521423]  ? exc_page_fault+0x8b/0xe0
+[   69.521426]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   69.521430] RIP: 0033:0x7fbc078fd8ed
+[   69.521441] Code: 04 25 28 00 00 00 48 89 45 c8 31 c0 48 8d 45 10 c7 45 b0 10 00 00 00 48 89 45 b8 48 8d 45 d0 48 89 45 c0 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1a 48 8b 45 c8 64 48 2b 04 25 28 00 00 00
+[   69.521444] RSP: 002b:00007fbbdd1fd9b0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[   69.521449] RAX: ffffffffffffffda RBX: 00007fbbcc02af60 RCX: 00007fbc078fd8ed
+[   69.521452] RDX: 00007fbbdd1fda50 RSI: 00000000c03864bc RDI: 0000000000000035
+[   69.521455] RBP: 00007fbbdd1fda00 R08: 00000000000000e0 R09: 0000000000000001
+[   69.521457] R10: 0000000000000003 R11: 0000000000000246 R12: 00007fbbdd1fda50
+[   69.521459] R13: 00000000c03864bc R14: 0000000000000035 R15: 00007fbbcc02acf0
+[   69.521464]  </TASK>
+[   69.521466] ---[ end trace 0000000000000000 ]---
+
+
+
+> Best regards
+> Thomas
 > 
-> And why minimums don't work? Because of some RC circuitry? If so, we
-> have bindings for GPIO delays as well.
-
-There is slg7xl45106 device which is likely adding delays.
-But maybe this is something what can be validated on different board without slg 
-device to see differences.
-Let me look at gpio delays too.
-
-
-> Or regulator-ramp-delay... but I already said about these two.
-
-Not this one because there is physical regulator to wait for. Second time is 
-configuration strap one and power-on-delay is likely misleading and should be 
-renamed in the driver.
-
-Thanks,
-Michal
-
-
-
+> > 
+> > Jose
+> > 
+> > > -Sima
+> > > 
+> > > -- 
+> > > Simona Vetter
+> > > Software Engineer, Intel Corporation
+> > > http://blog.ffwll.ch
+> 
+> -- 
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Frankenstrasse 146, 90461 Nuernberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> HRB 36809 (AG Nuernberg)
+> 
 
