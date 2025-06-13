@@ -1,160 +1,74 @@
-Return-Path: <linux-usb+bounces-24716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE03AD805B
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 03:33:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23147AD808B
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 03:51:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB5E33B2C2C
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 01:32:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A12653AD888
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Jun 2025 01:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322CF1ADC90;
-	Fri, 13 Jun 2025 01:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824661E3775;
+	Fri, 13 Jun 2025 01:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hvD/0exg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FxX/k8GD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91032F4317;
-	Fri, 13 Jun 2025 01:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D42F4317;
+	Fri, 13 Jun 2025 01:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749778360; cv=none; b=DlhJLU5whVxv1oOAxM31grHAO5z83Swxt0PWDkjzhBoGImSbKAmlInYsMWwtqYm2TlxeGqQZt5RL2qc0tQhK9GycQ5BfdIWit8fAvWziR6bCFJBk/95j/MthJidBdywzW7qxSADXLgAaC+KkVlDNtooKGEl5MaOhq7mAwHg2cmU=
+	t=1749779493; cv=none; b=KjGAUc8iBZPhLWR29ZgIY9XxteiRi2PbKE8Yo9eRUfJ3E7/2AnYjcWx941U2HsZDSbxosNQRcSJ8ZRU/vj7Kg0GwyEt6gsDwVS1gPggEY6+gBGwkhwg0waqK584aGe8m3ttLIZoIbYVg505d/NofyGC8QbtE8MCrzUCWTee2jdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749778360; c=relaxed/simple;
-	bh=pn+oHDKPFKb/AQ0GEV0M5QZ4zuj0uyM6csVBW8V0McM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vyp02v65UGp0gDN8SdhH4FKgTMq267cOopFTK6L5G1oWb+DgMFZbAKp26eeLqUCQgpuiBSXTZccjtk7zepHKeZG7gR+9khZSTDiKVfOVZVE2O490m+kJyNaJ1wUc2PH8VZ/MjLijq2lx8qvff6c2MQ/3pWWHc9IF5jfPWRajzmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hvD/0exg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF137C4CEEA;
-	Fri, 13 Jun 2025 01:32:39 +0000 (UTC)
+	s=arc-20240116; t=1749779493; c=relaxed/simple;
+	bh=WerzmcePogAhOAEUQKyKl7DNHF7nIdPv2rjso8/0Jxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NWRVSO0yDT8DA/i0Dkx0j6r8eI2wq8V6pK35uXCSH3Ot68yAdYFe+1fhnDQXX3CTBmtQKYZfY54ePQoiKHL1gq2Xds2QYtghQVhTs3TcPRRit2NbJbmDuvE+pwUq0l02zIvRC6oGLIEkzfNK2LjI+zPni8+78giJnD6w3PlhVFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FxX/k8GD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AFF6C4CEEA;
+	Fri, 13 Jun 2025 01:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749778360;
-	bh=pn+oHDKPFKb/AQ0GEV0M5QZ4zuj0uyM6csVBW8V0McM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hvD/0exgnhLJd5FbtCet+Gx3Csao8jiBtDt9I0MzSMcb57LJn9jlgWGGM1ClFkghY
-	 Zq9b+z8SaT1QSLUMDkkqGJ6SNrayvZShiG6xYK30J64tny6f5s2/WTaHJSbR7PIbaN
-	 /U3ErY9IP1prK1i+6mpJLgqlS7wFAtQz3VSYXSzdilnBfkEQABmggpoJn840aoKUq6
-	 nQiwwjOBEEosNtpOEJWCei8VRIl2nZ3c9VnpviFKQ68Wnq7jqHW3hHhqaSC/MNTWhC
-	 pUuXiBL/eLAE+zbf9LIeSPe3jog5r8iklyTFeEnv3rVHrQcikmISTFl3wxs2nw4QiP
-	 wH4MDmvzVHsbA==
-Message-ID: <aad0131c-64e0-4f16-a0c9-91e72a49fa4d@kernel.org>
-Date: Thu, 12 Jun 2025 18:32:39 -0700
+	s=k20201202; t=1749779492;
+	bh=WerzmcePogAhOAEUQKyKl7DNHF7nIdPv2rjso8/0Jxg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FxX/k8GDCQTidgCSb0fHWD2KanNqCxoSUADDHy6bhDpjgglsYeVdhhsifLy57hJ1O
+	 Pz2UiAPZC30S4WsLOBk0LT4Nsy/cFdtLddYh+RtQmxfLB+fI1vUb2s/CbuyZSTh2WA
+	 KRSKqvvOKm4GBzaJf8tXY/OG/zKrqxJOFKuoyIhCO9RQqNRunugPvV6F2Fvjxix68B
+	 6mz/cQuEhtIOXqtlM22I8TSbOVaQic4OjalUu1wHtTSfe7qDIJ4gx3aVuff3c2AS53
+	 mD5vWoinai5rtOO0n+DASr1UIthz2I479L582gVGT1Owe8ld9m+O6aVy6JmFkXeR9n
+	 ZOcpQDrj1mFlA==
+Date: Thu, 12 Jun 2025 18:51:31 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Jun Miao <jun.miao@intel.com>
+Cc: oneukum@suse.com, sbhatta@marvell.com, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] net: usb: Convert tasklet API to new bottom half
+ workqueue mechanism
+Message-ID: <20250612185131.2dc7218a@kernel.org>
+In-Reply-To: <20250610145403.2289375-1-jun.miao@intel.com>
+References: <20250610145403.2289375-1-jun.miao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bugzilla-daemon@kernel.org: [Bug 220216] New: Intel Corporation
- JHL7440 Thunderbolt 3 Bridge: Unable to change power state from D3hot to D0,
- device inaccessible]
-To: Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>, Mika Westerberg
- <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>,
- linux-usb@vger.kernel.org
-References: <20250612204659.GA928209@bhelgaas>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20250612204659.GA928209@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 6/12/2025 1:46 PM, Bjorn Helgaas wrote:
-> [+cc Mario, Lukas, Rafael, thunderbolt folks; submitter in bcc
-> Possibly related to
-> https://lore.kernel.org/linux-pci/20250609020223.269407-1-superm1@kernel.org/?]
-> 
-> Laurent, you mentioned that you see this on 6.15.1.  Is this a new
-> problem that you didn't see on older kernels?
+On Tue, 10 Jun 2025 22:54:03 +0800 Jun Miao wrote:
+> -			if (rx_alloc_submit(dev, GFP_ATOMIC) == -ENOLINK)
+> +			if (rx_alloc_submit(dev, GFP_NOIO) == -ENOLINK)
 
-I've left a comment on the bug, but this looks expected and yes I feel 
-that my patch series will clean up these messages.
-
-> 
-> ----- Forwarded message from bugzilla-daemon@kernel.org -----
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=220216
-> 
->              Bug ID: 220216
->             Summary: Intel Corporation JHL7440 Thunderbolt 3 Bridge: Unable
->                      to change power state from D3hot to D0, device
->                      inaccessible
->          Regression: No
-> 
-> Created attachment 308224
->    --> https://bugzilla.kernel.org/attachment.cgi?id=308224&action=edit
-> Full dmesg
-> 
-> Hello,
-> 
-> On debian with kernel 6.15.1, I get the following messages in dmesg:
-> 
-> [    0.453279] pci 0000:02:04.0: [8086:15ef] type 01 class 0x060400 PCIe Switch
-> Downstream Port
-> [    0.453327] pci 0000:02:04.0: PCI bridge to [bus 04-38]
-> [    0.453342] pci 0000:02:04.0:   bridge window [mem 0x8a000000-0x9fcfffff]
-> [    0.453360] pci 0000:02:04.0:   bridge window [mem 0x6000000000-0x6021ffffff
-> 64bit pref]
-> [    0.453383] pci 0000:02:04.0: enabling Extended Tags
-> [    0.453569] pci 0000:02:04.0: supports D1 D2
-> [    0.453569] pci 0000:02:04.0: PME# supported from D0 D1 D2 D3hot D3cold
-> [    0.454686] pci 0000:02:04.0: PCI bridge to [bus 04-38]
-> [    0.863766] pci 0000:02:04.0: bridge window [io  0x4000-0x4fff]: assigned
-> [    0.863788] pci 0000:02:04.0: PCI bridge to [bus 04-38]
-> [    0.863791] pci 0000:02:04.0:   bridge window [io  0x4000-0x4fff]
-> [    0.863797] pci 0000:02:04.0:   bridge window [mem 0x8a000000-0x9fcfffff]
-> [    0.863802] pci 0000:02:04.0:   bridge window [mem 0x6000000000-0x6021ffffff
-> 64bit pref]
-> [    0.865332] pci 0000:02:04.0: Adding to iommu group 18
-> [    1.044101] pcieport 0000:02:04.0: pciehp: Slot #4 AttnBtn- PwrCtrl- MRL-
-> AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
-> [    1.885142] pcieport 0000:02:04.0: Unable to change power state from D3hot
-> to D0, device inaccessible
-> [    1.885352] pcieport 0000:02:04.0: Runtime PM usage count underflow!
-> [   18.615343] pci 0000:02:04.0: [8086:15ef] type 01 class 0x060400 PCIe Switch
-> Downstream Port
-> [   18.615392] pci 0000:02:04.0: PCI bridge to [bus 00]
-> [   18.615404] pci 0000:02:04.0:   bridge window [io  0x0000-0x0fff]
-> [   18.615409] pci 0000:02:04.0:   bridge window [mem 0x00000000-0x000fffff]
-> [   18.615429] pci 0000:02:04.0:   bridge window [mem 0x00000000-0x000fffff
-> 64bit pref]
-> [   18.615453] pci 0000:02:04.0: enabling Extended Tags
-> [   18.615649] pci 0000:02:04.0: supports D1 D2
-> [   18.615650] pci 0000:02:04.0: PME# supported from D0 D1 D2 D3hot D3cold
-> [   18.615903] pci 0000:02:04.0: Adding to iommu group 18
-> [   18.616047] pci 0000:02:04.0: bridge configuration invalid ([bus 00-00]),
-> reconfiguring
-> [   18.617062] pci 0000:02:04.0: PCI bridge to [bus 04-38]
-> [   18.617099] pci 0000:02:04.0: bridge window [mem 0x00100000-0x001fffff 64bit
-> pref] to [bus 04-38] add_size 100000 add_align 100000
-> [   18.617102] pci 0000:02:04.0: bridge window [mem 0x00100000-0x001fffff] to
-> [bus 04-38] add_size 100000 add_align 100000
-> [   18.617119] pci 0000:02:04.0: bridge window [mem 0x8a100000-0x9fdfffff]:
-> assigned
-> [   18.617120] pci 0000:02:04.0: bridge window [mem 0x6000100000-0x6021ffffff
-> 64bit pref]: assigned
-> [   18.617122] pci 0000:02:04.0: bridge window [io  0x5000-0x5fff]: assigned
-> [   18.617157] pci 0000:02:04.0: PCI bridge to [bus 04-38]
-> [   18.617160] pci 0000:02:04.0:   bridge window [io  0x5000-0x5fff]
-> [   18.617167] pci 0000:02:04.0:   bridge window [mem 0x8a100000-0x9fdfffff]
-> [   18.617172] pci 0000:02:04.0:   bridge window [mem 0x6000100000-0x6021ffffff
-> 64bit pref]
-> [   18.617803] pcieport 0000:02:04.0: enabling device (0000 -> 0003)
-> [   18.617969] pcieport 0000:02:04.0: pciehp: Slot #4 AttnBtn- PwrCtrl- MRL-
-> AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
-> 
-> 
-> Note the "Unable to change power state from D3hot to D0, device inaccessible"
-> and "Runtime PM usage count underflow!"
-> 
-> Laptop is a Dell latitude 5530
-> 
-
+Sorry, I think Subbaraya mislead you. v1 was fine.
+If we want to change the flags (which Im not sure is correct) it should
+be a separate commit. Could you repost v1? There is no need to attribute
+reviewers with Suggested-by tags. They can send their review tags if
+they so wish.
+-- 
+pw-bot: cr
 
