@@ -1,147 +1,220 @@
-Return-Path: <linux-usb+bounces-24757-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24758-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAEC9AD9D68
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 16:17:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1254EAD9F82
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 21:39:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA7B3189B256
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 14:17:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2455C1890FD0
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 19:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFBE2DA755;
-	Sat, 14 Jun 2025 14:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DC928ECD1;
+	Sat, 14 Jun 2025 19:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="s/7TKoqL"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WvVdejBK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017E270808;
-	Sat, 14 Jun 2025 14:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837CC188000
+	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 19:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749910626; cv=none; b=qNLtuKGzOWRu1ivyhE5+gHHQvVcRqUrGx6B4WfXxUS76Y+J+HsUXz80E0Rjg5h0gZQK4/oQQ+BYbza/nLQ6BKhO2HoNFORFhTG2W5zVnfPo5nOoSuqQAr44wEtslSoMtjvhBieYMdiQvGPrGyaHpvUgfsS9AnuUOc2pKgsILD2I=
+	t=1749929971; cv=none; b=I8fkbINW/9hW+2PbtnrIyxPcQNTRON6K20Gp+KI1vXUCaznWkplJYuoF54lbmakZ7tvH6RK5+ronlIZWeAyZzBtNURjgMPmocmhQck8NSCysS9bIPlyAqlNTdBh0cnyya2ugWcBXGdHIczEtDOlJsBsRychmh2+82GCGHsAx4cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749910626; c=relaxed/simple;
-	bh=r81LIaPmXQ/xJrl22YxOKvr5pcoDhEJL8IYVM3F4dpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kcReYv6Bw5e+y4sg3kVVPUL6as9BUxY+1o0SqM9acQ/20aBDJrFZUWraYpHIp7wpIbfqubGMX+G6QU85/AhwRdcEo7XHSvTd5L3CgRiTrDIZhpMV6+gHngBFbdUVr56NLBItWUMAgM5cJG+njeHpdqe9/Tfq7yQZJ4AyKmSKjAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=s/7TKoqL; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A70D741;
-	Sat, 14 Jun 2025 16:16:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1749910612;
-	bh=r81LIaPmXQ/xJrl22YxOKvr5pcoDhEJL8IYVM3F4dpQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s/7TKoqLG6twgWd7iJPobhuzYkMM77JhkpNG4TUPfOfpn4LRiVLE3YWz3Ft6hZUUB
-	 sUP4iaCwNmq0+yUorGIO2u1X8FY2QD1WfNhjhYoPvlLn/cyQ3xfp3n8tSdU3ms5oTH
-	 ztFoNmD8337akuUwXNMHpgQEgi3jz58ZiCM0A2Zc=
-Date: Sat, 14 Jun 2025 17:16:47 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-	hdegoede@redhat.com, mchehab@kernel.org,
-	jeff.johnson@oss.qualcomm.com, linux-media@vger.kernel.org,
-	linux-usb@vger.kernel.org, jun.li@nxp.com, imx@lists.linux.dev
-Subject: Re: [PATCH 1/2] usbmon: do dma sync for cpu read if the buffer is
- not dma coherent
-Message-ID: <20250614141647.GM25137@pendragon.ideasonboard.com>
-References: <20250614132446.251218-1-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1749929971; c=relaxed/simple;
+	bh=zSkcy+9QC/FsH2JbyDzo+e5oYZeRb6hCJ+NReJzsy5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OyNPzmEnFX41w1lTFZbRDBFQtlyqoNf0/aQTQXnmImSXJLUJS+moloSc2ChhkQHxRVlm2Z6uwGWBBZW9yL5afaAqWesPPEBEj/CQF+Q0EKGFR+JutXGlN/P+r0dZfClqKIJAr2xsf2/Cs3rkOn2LZi4kGPax5tRB0/cseTCR+As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WvVdejBK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55E8vJP8016883
+	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 19:39:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	OcxiXXKnkOWfPgGikwQVTCvvEomIPuV/EyKApCfjq2c=; b=WvVdejBKlY5Z5fvW
+	qQhz/3eJrRsNKCmoVpRynF2+3ysfqUiq8WbFJGC58zxaZJ1+8dA2kz8Jv5q5KKZa
+	o2Y3pEVayJMHLogafs3k7DrkAY9UUlSRcm7x90+NTDy3gP+7jLv5zVMkxYESSMP1
+	J6Kfp4OVdnf1KVU3gdo4cDH0I4ao74DWTuB1xl8ImytKoCQkN7TC6WPvotfDq9Da
+	HbSToywQHpwF59NOg092OeU26BTNeww/wrBZ+hJJLeLd3bTK5yEO0cddwwK55r08
+	BuPSsgxMS60G7EZSBPUAaNnPbHOFoF6CXpD8C1YifYzbYqUy/W0vvBZDQJuF1LwC
+	U/paiQ==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47928m8wes-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 19:39:28 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4a517ff0ebdso7558461cf.3
+        for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 12:39:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749929967; x=1750534767;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OcxiXXKnkOWfPgGikwQVTCvvEomIPuV/EyKApCfjq2c=;
+        b=Jbfj97DzipeQZrr1Z8dWHd5aY4qRrJpdADbx6F5NP/IwaVtDeRZWxdK0SmMBKJDdB0
+         9P6LY/F5HuN4KiwwT9dg8AxPAwUDAIQDm9OMS/DihJJjVM5crWem+x502p+hshDEqKtn
+         d6Z04QI9Y/kxv+NTwmhLlt82gtnM5/el4/qn6Ml+Z2RC7AmNNnPeO3M1L8nwTiRrKuoH
+         +Z6JprQg6J9CFj4IU/mTlZnGA/jWHwM0SX+EdGkktaR2GSlAr6J6nM3A78OI7gym5AQx
+         WFI37HO5OyiUgwL9wudXkL/MSpcS8WWFGmMHCfVvwIZXSfCsXfk9t794XnPI7ItntmGg
+         nejg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKVtpTbAcumpGLGgZ5f3TwuAsAhe8laULKWs/sgXPE+GL6vMhMuXsalEPU6KtaZkcVhDclIeFxLFo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMlTeXtFpCHIKYQajHheZev78x8YsBxLogTQpL4/cIeH5+cEYc
+	yKZKjcvl2ovpAxDr/ksiBUC5FwjAeThauLogMVJYNdgwya6dQKXIslOKKfYnOuTIJVoNchk8THN
+	53sqTFI76jq4cqLO9SY1Fmq0WPxDDsOEq95p6fU/zC/lC9sZeZ1MJ1V/vQYkEEVo=
+X-Gm-Gg: ASbGncvI1oEAM6MdAKyVO+bAhZzx2Vsd+pN7xL65txyNJZaUQV4tvXWN6yfbsZZ2CLc
+	yNZr7kITFILTbNacCJ81MEv1Jomiq310aKKJIyfBFkBu5Hhv/GsVW9YfNWah5DXykxTCkQL7S+z
+	T6Kkv2dYRqXuHwe8CJQ/xPXlt5P9yIxTwjQelrYMYH62KNQUbo7bye8s8mjgYflxjcIR8gdynu5
+	Co/alN6spvOylWk4o2LkmNecsBv2OZhRxUBQSKdLNsXUFS6zP+5e+sEqDPkZVJkWuxQ1PoQKY6C
+	bXsUKq8SqQab7r8rIqr7T10jc1racwyqX83qjmay2dwKKCjyAdHI2khc8Tgy6t13Pp5x1o3PH9M
+	NfmM=
+X-Received: by 2002:a05:622a:60e:b0:494:b869:ac06 with SMTP id d75a77b69052e-4a73c4f0986mr22710911cf.6.1749929966902;
+        Sat, 14 Jun 2025 12:39:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF8dmtvab1DD72NJPA+fqrTATOvFUC8Y320lY5T4Vp6J43nwiKHvw9BkAW22BjuNAMnhrTD7w==
+X-Received: by 2002:a05:622a:60e:b0:494:b869:ac06 with SMTP id d75a77b69052e-4a73c4f0986mr22710791cf.6.1749929966424;
+        Sat, 14 Jun 2025 12:39:26 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b48cb761sm3224336a12.17.2025.06.14.12.39.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Jun 2025 12:39:25 -0700 (PDT)
+Message-ID: <ee088b5a-e792-4704-8f1e-e709f1b0c5fc@oss.qualcomm.com>
+Date: Sat, 14 Jun 2025 21:39:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250614132446.251218-1-xu.yang_2@nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/4] arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY
+ device tree
+To: jens.glathe@oldschoolsolutions.biz,
+        Bjorn Andersson
+ <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250607-tb16-dt-v6-0-61a31914ee72@oldschoolsolutions.biz>
+ <20250607-tb16-dt-v6-4-61a31914ee72@oldschoolsolutions.biz>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250607-tb16-dt-v6-4-61a31914ee72@oldschoolsolutions.biz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE0MDE2NCBTYWx0ZWRfX/C8v209mXkpf
+ W6nWYsnO0/90DjkyKvtvuQqucfpCK0TC6DZGeQepXloMyuGbDCvZyoH0Q3iy975Bc2eaERBWZZk
+ BqBffmYAObB0hW4YTXrKsWMlQdGXWIUN1rUWIbCRYqKHIe/+7S2oh4MXH/CtjDtQx6UFHHk6JVp
+ WQBNXqrOz1HHkxa/et83shAuFzsYCOutyo+2GmdwRijHakEKu90I7E8NmeuatesRUiWsdVx6IXR
+ Wf1JreQL98g+pLKpN9G3rG0U8Ud1a5fnwzrpps5Kri4CoeMZr+L3iS5SwXSInux39psrQXk/6ks
+ +bQytKRXU6mcK8GKwwp9DfuS0Ccd8qtydIHQPZEtYLcEJohNR38QVthwNMD9b+of57rY+vaxJi7
+ zAOe/QX8VtLEzPhQY5ok0BcXIOa7q6Co2+knF4QYBuA3UOXs6iork0ZE8XeN/bI3h6ACRGrI
+X-Authority-Analysis: v=2.4 cv=fvbcZE4f c=1 sm=1 tr=0 ts=684dcff0 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=gxl3bz0cAAAA:8 a=pGLkceISAAAA:8
+ a=Lh12ZzDr1oTyhi1fLBkA:9 a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
+ a=kiRiLd-pWN9FGgpmzFdl:22
+X-Proofpoint-GUID: vBKE9eYKX2GNFNFuDYxNQrGXpAYiMl-U
+X-Proofpoint-ORIG-GUID: vBKE9eYKX2GNFNFuDYxNQrGXpAYiMl-U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-14_07,2025-06-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=935 phishscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ adultscore=0 spamscore=0 suspectscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506140164
 
-On Sat, Jun 14, 2025 at 09:24:45PM +0800, Xu Yang wrote:
-> The urb->transfer_dma may not be dma coherent, in this case usb monitor
-> may get old data. For example, commit "20e1dbf2bbe2 media: uvcvideo:
-> Use dma_alloc_noncontiguous API" is allocating non-coherent buffer.
+On 6/7/25 9:19 PM, Jens Glathe via B4 Relay wrote:
+> From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
 > 
-> To make usbmon result more reliable, this will add a flag
-> URB_USBMON_NEED_SYNC to indicate that usb monitor need do dma sync
-> before reading buffer data.
+> Device tree for the Lenovo Thinkbook 16 G7 QOY
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1].
+> 
+> Supported features:
+> 
+> - USB type-c and type-a ports
+> - Keyboard
+> - Touchpad (all that are described in the dsdt)
+> - Touchscreen (described in the dsdt, no known SKUss)
+> - Display including PWM backlight control
+> - PCIe devices
+> - nvme
+> - SDHC card reader
+> - ath12k WCN7850 Wifi and Bluetooth
+> - ADSP and CDSP
+> - GPIO keys (Lid switch)
+> - Sound via internal speakers / DMIC / USB / headphone jack
+> - DP Altmode with 2 lanes (as all of these still do)
+> - Integrated fingerprint reader (FPC)
+> - Integrated UVC camera
+> 
+> Not supported yet:
+> 
+> - HDMI port.
+> - EC and some fn hotkeys.
+> 
+> Limited support yet:
+> 
+> - SDHC card reader is based on the on-chip sdhc_2 controller, but the driver from
+> the Snapdragon Dev Kit is only a partial match. It can do normal slow sd cards,
+> but not UHS-I (SD104) and UHS-II.
+> 
+> - The GPU is not yet supported. Graphics is only software rendered.
+> 
+> This work was done without any schematics or non-public knowledge of the device.
+> So, it is based on the existing x1e device trees, dsdt analysis, using HWInfo
+> ARM64, and pure guesswork. It has been confirmed, however, that the device really
+> has 4 NXP PTN3222 eUSB2 repeaters, one of which doesn't have a reset GPIO (eusb5
+> @43).
+> 
+> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> Co-developed by: Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
 > ---
->  drivers/usb/mon/mon_main.c | 7 +++++++
->  include/linux/usb.h        | 1 +
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
-> index af852d53aac6..b9d5c1b46b85 100644
-> --- a/drivers/usb/mon/mon_main.c
-> +++ b/drivers/usb/mon/mon_main.c
-> @@ -14,6 +14,7 @@
->  #include <linux/slab.h>
->  #include <linux/notifier.h>
->  #include <linux/mutex.h>
-> +#include <linux/dma-mapping.h>
->  
->  #include "usb_mon.h"
->  
-> @@ -142,6 +143,12 @@ static void mon_complete(struct usb_bus *ubus, struct urb *urb, int status)
->  {
->  	struct mon_bus *mbus;
->  
-> +	if (urb->transfer_flags & URB_USBMON_NEED_SYNC)
-> +		dma_sync_single_for_cpu(ubus->sysdev,
-> +					urb->transfer_dma,
-> +					urb->transfer_buffer_length,
-> +					DMA_FROM_DEVICE);
 
-This will result in a double sync, impacting performance. Futhermore,
-the sync code in uvc_video.c reads as
-
-	/* Sync DMA and invalidate vmap range. */
-	dma_sync_sgtable_for_cpu(uvc_stream_to_dmadev(uvc_urb->stream),
-				 uvc_urb->sgt, uvc_stream_dir(stream));
-	invalidate_kernel_vmap_range(uvc_urb->buffer,
-				     uvc_urb->stream->urb_size);
-
-The difference makes me think something has been overlooked here.
-Finally, uvcvideo supports output devices, so the DMA_FROM_DEVICE
-direction doesn't seem universally applicable.
-
-It seems there are quite a few issues to solve to merge this feature. If
-the DMA sync operation can be done in a generic way in usbmon, then we
-should consider moving it to the USB core and avoid the sync in the
-driver. That may remove too much flexibility from drivers though, in
-which case it may be best to let the driver handle the sync in a way
-that guarantees it gets performed before usbmon inspects the data.
-
-The issue doesn't seem specific to the uvcvideo driver. All drivers that
-set URB_NO_TRANSFER_DMA_MAP seem to be affected. A more generic
-mechanism to handle that would also be good.
+[...]
 
 > +
->  	mbus = ubus->mon_bus;
->  	if (mbus != NULL)
->  		mon_bus_complete(mbus, urb, status);
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 1b2545b4363b..d31baee4ffa6 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1368,6 +1368,7 @@ extern int usb_disabled(void);
->  #define URB_ISO_ASAP		0x0002	/* iso-only; use the first unexpired
->  					 * slot in the schedule */
->  #define URB_NO_TRANSFER_DMA_MAP	0x0004	/* urb->transfer_dma valid on submit */
-> +#define URB_USBMON_NEED_SYNC	0x0008	/* usb monitor need do dma sync for cpu read */
->  #define URB_ZERO_PACKET		0x0040	/* Finish bulk OUT with short packet */
->  #define URB_NO_INTERRUPT	0x0080	/* HINT: no non-error interrupt
->  					 * needed */
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wcd_default>;
 
--- 
-Regards,
+property-n
+property-names
 
-Laurent Pinchart
+please
+
+[...]
+
+> +	/*
+> +	 * This is an odd one. The camera is physically behind the eusb9 repeater (confirmed) but
+> +	 * if it is placed below the usb_2_dwc3 node, it will be switched of after ~30 seconds.
+> +	 * The whole reason it is described in the dt (as an USB device) is its requirement for
+> +	 * that additional regulator, and to get power management to switch it off when suspended.
+> +	 * Defining it stand-alone does work.
+> +	 */
+
+Looks like DWC3 only does of_platform_populate() ("probe drivers for
+child nodes") in drd.c, and your dt sets everything to host-only..
+
+[...]
+
+> +&tlmm {
+> +	gpio-reserved-ranges = <34 2>, /* Unused */
+> +		<72 2>, /* Secure EC I2C connection (?) */
+> +		<238 1>; /* UFS Reset */
+
+Please align the '<'s
+
+Konrad
+
 
