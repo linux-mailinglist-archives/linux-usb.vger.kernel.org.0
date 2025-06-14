@@ -1,154 +1,169 @@
-Return-Path: <linux-usb+bounces-24743-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24744-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A015AD99E3
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 05:08:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52B12AD9A37
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 07:25:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C9FF4A0D3B
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 03:08:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8B1189E85B
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 05:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEBC51AF0B4;
-	Sat, 14 Jun 2025 03:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1234D1DED70;
+	Sat, 14 Jun 2025 05:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ui1+g3uh"
+	dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b="QkrhhmNr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACB61C28E;
-	Sat, 14 Jun 2025 03:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20AD1DE4D8
+	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 05:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749870522; cv=none; b=M7BJIIcY+p2PAmZqXS+HQ/6vzUnXkA4Z2sB3CoKDoJvwgh02Qmqmuc2ChEP9mlDfPcIuUAVmqhqch/zi92K8JYNfson+LjSH5WQOfZE4nZok8bjtwZHWztYEJItT3D4scTQ7c2tjIdlLvcbV+b4z2+gUO52NJQPp0UJ+QkmFbVc=
+	t=1749878739; cv=none; b=BcOpvU4P51ZWhk8FXhUMappKygrkaXDhA89mxKe+VL0KHHECr+PAnQjfX+/8O/rASUBovW/YUBbjp1E9XUs/cg/szHjekqhTSRR78s+lZikoUkwDronjfwm8dd86jn+nCakMFaKNAzL+eOCijT7Shw9CI8qblVLg9odwVjaHOyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749870522; c=relaxed/simple;
-	bh=slU5/gRGZ+X+AdD9Jx/KursslTeI+BhugpMonKjI2tA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ph2PSe8mXEvE65JDflSMB/uhCNUwYpxXT5J86ONIvM9EdU53mWcmeXGMRtC6CaXF41ba+ijq+pPeynZTJrfWbqZMAZf3iSkmj5hrt8e+04+Yq3nYESZK/GUn5gGhRlzUCQSbmVwB7z3K2S1bGtoXpq4PmpkhsfiEafbcy3dpHJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ui1+g3uh; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b2c4331c50eso2254775a12.3;
-        Fri, 13 Jun 2025 20:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749870517; x=1750475317; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=slU5/gRGZ+X+AdD9Jx/KursslTeI+BhugpMonKjI2tA=;
-        b=Ui1+g3uhj+wkRTRD0EhNPCq0mkod8DZX8dzJYapp3AQSGrrWkcksSYBMSflc6hBxtX
-         Uw+eEcnwVFe5j+Vfdq0BG+boK/FdmB8e0oGY1SpKITAGzBccLb40CEYUzaQ9JBa+gCK7
-         tivzcy8kzgtkImPIgVwQ8nAsW8mSK+uZK5VmPZhi24xPY81pLhpquXs9D0yReATtjArd
-         0vyAGQHSWQTRVcI6pwbIWtEBrpQ0aj5ugupHJxzNJgdE45GSNQFeKFNBbtbZ/IXwx8En
-         kHipCMG19p3RX4zITSHw+A7pRL03zxh+kST4mc40/D2x7fbp61litvEkbP0ZxKcAOEJ2
-         ojvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749870517; x=1750475317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=slU5/gRGZ+X+AdD9Jx/KursslTeI+BhugpMonKjI2tA=;
-        b=mELYatinwJKhWL36RF3A9mpzaX1GEJJjAmKTdrctpq9qb9ex5nLmAQYECjqbtVWZUB
-         TlKV+NL7uX/FYC7gJyK4AsejAkGuvj6qHSunh3yJrLjdWeOZKWA8rly9ooeaWNZmIkHL
-         p/gzrImNK0FtOFEchdnc8qMtqOwyT107/5niqpbWIC6y9UN2pqyXVBcepJsy3mg/xIpl
-         W6MflpXLkUeVO4jrgm63AsfMp4vt8LpHKTkyt+cbECWpxwtoMRG8Y/1/XxcMkYuTvDSZ
-         qOsTRmitOqYoxJo0yhm1TZBJnvlNxykWeCzueI4WWdZBGNKS8cOP86qYOcWea0pAR/KK
-         s6JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2FXVQQJWfHK6/h1hbKYJCYC5lhAQ7x2gj17/QXSAwDEFkpypAZ+KQnpAWR6BH3PB7Rg5tZpGa0WU=@vger.kernel.org, AJvYcCUuGVXNRBsaYjHfBPsyhFl8+qS7zUp/Xbj7sFk601fDFE5KDo8Y3JT3SPlXzc71RPMHbQObptLf@vger.kernel.org, AJvYcCVFeCFHmb2EPnBKLAO0Xw2Dq9zL9rQV/AQALmunElpd81o1/nXSdFZttuIHHF9fPtjxG9g2oxYLJHeAjw==@vger.kernel.org, AJvYcCVUGwP8ikxoeggWR5tG3Pgc2HmhPHXsQKMrs58N/TrSF6SR6WGpUb5AhOOnVrsiDeQsRW5cMfQjwCxq@vger.kernel.org, AJvYcCXZ5uWTBXxZaa42X096vGEwO+xdU3U/yt158uLqJ5SEOR1fMUXrHWLAYHW0I9+Y1LgUQh5veWW3y9ib@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb+uTpXARfBAauKJ6HCire6V6520geMtezaB9ix+ve3V8IhHjN
-	dqV7FOgUF8lCVZjxWTmzvTyDVWvu18tHTzL9U7z687wiH71eg5ULUSmE
-X-Gm-Gg: ASbGncsSDYeTD8yyyod1gXZFrjNOQ7jDgHUSl2JkZdL7EJjQOH2REaLVZbHY/D1JVqM
-	YzTM8fqrdZHhtTKdwhPUa93A4Uaj66iT96B/gdsaY6iM1sEUZEDAGL+yIziOVexoe8+jjQHbDLz
-	TuedGumZmUYRuvhJC1DUdOsk19ART8gwRrZO2OrNZQ2Rf7ZCCXp//bEaP27rTm5cM2KcoXb9CYD
-	fnr2sHDd97bzs0Gz931ZSZeIjoOKsW+nv96iOZxWf0gAcKEFkY01MKXd1AaBtt/B3FcwGEtqz9u
-	cCo7uSWDRklzgYAQbr1zJ0tH6p5lynD/DwcRsbzS++DsEZKvgYLQ4hY2vYR0JA==
-X-Google-Smtp-Source: AGHT+IGNdmkR+4nBshMH2dcC/WUsJgI6udsfA1wK5+AWZ7uxqXLAyPWbVmTGd4AoyOxlg6NwRnO3dg==
-X-Received: by 2002:a05:6a21:69b:b0:1ee:e655:97ea with SMTP id adf61e73a8af0-21fbd68e749mr2351293637.41.1749870517124;
-        Fri, 13 Jun 2025 20:08:37 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1639eb8sm2147060a12.10.2025.06.13.20.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 20:08:35 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 90EDE4241807; Sat, 14 Jun 2025 10:08:29 +0700 (WIB)
-Date: Sat, 14 Jun 2025 10:08:29 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux GPIO <linux-gpio@vger.kernel.org>,
-	Linux MTD <linux-mtd@vger.kernel.org>,
-	Linux Networking <netdev@vger.kernel.org>,
-	Linux USB <linux-usb@vger.kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] Documentation: treewide: Replace remaining spinics links
- with lore
-Message-ID: <aEznrV9XoXNpYKwa@archie.me>
-References: <20250611065254.36608-2-bagasdotme@gmail.com>
- <20250613130753.GE414686@horms.kernel.org>
+	s=arc-20240116; t=1749878739; c=relaxed/simple;
+	bh=aUQediynNeIt4Zd4O4po1UWxvrAAcfZz8SYP3eM6f1A=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=ML0v+hD9Y4zpxT2P7OBdA/Tj1IrHS6I/t6E/Eotm57q+89czFO4MdJcVJ7LACyoT6ZsZJ/35cIlRYk/8Zhf0VfUkcR2dGVxmOgsp7hsxLuFTxil0m0Bskxd5UJ5+KMj724llDxtIk1QXip+yNgrmFMDyCYRdfXBdzuoEv4bhuqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b=QkrhhmNr; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.com;
+	s=s31663417; t=1749878735; x=1750483535; i=quwenruo.btrfs@gmx.com;
+	bh=nz6Hk9xulxE8Wq0JdWBds+O/fcCRO8fx0Ye//AaTpqQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:From:Subject:
+	 Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=QkrhhmNrrgkMNPjne4dp2PknHTyZfE1SMLsYkX0IL9nObLqPwDGDppB1IgZ+WjNY
+	 kRT7PkzwBgOztQ9bz9KNyGFUI4hPWh4YXBDlHrQYNlDK2UANlqOkFVbYnMFxXwlCs
+	 MRU4O9UsNtOqe9I336nE2lJmLFZYv0Iwv04hQU6J1gTOE/IBO+9ku/Vit777Vr7e6
+	 Ty3oTqNnybzrVTcD9Wd8BlC9yCvmUfFldrLtoccTidZQRjXYogU2CF9EO6afvBvy2
+	 DTU4w/f0gbovrvRfEE+3zVcFM44GaoYFSTxPgyko7/Zf668mn4s3Mql+BC9n2wNqY
+	 UlBsOnYBKNTFfoxY8Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.16.0.229] ([159.196.52.54]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MaJ3t-1uKeUN1Doj-00Q7e7 for
+ <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 07:25:34 +0200
+Message-ID: <36908687-b1b9-4cbe-aa89-e9035001070e@gmx.com>
+Date: Sat, 14 Jun 2025 14:55:31 +0930
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GUjbLh60lsjawVfy"
-Content-Disposition: inline
-In-Reply-To: <20250613130753.GE414686@horms.kernel.org>
-
-
---GUjbLh60lsjawVfy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org
+Content-Language: en-US
+From: Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: How to check the highest speed and supported alt-mode for a usb-host?
+Autocrypt: addr=quwenruo.btrfs@gmx.com; keydata=
+ xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
+ 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
+ 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
+ 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
+ gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
+ AAHNIlF1IFdlbnJ1byA8cXV3ZW5ydW8uYnRyZnNAZ214LmNvbT7CwJQEEwEIAD4CGwMFCwkI
+ BwIGFQgJCgsCBBYCAwECHgECF4AWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1YAUJEP5a
+ sQAKCRDCPZHzoSX+qF+mB/9gXu9C3BV0omDZBDWevJHxpWpOwQ8DxZEbk9b9LcrQlWdhFhyn
+ xi+l5lRziV9ZGyYXp7N35a9t7GQJndMCFUWYoEa+1NCuxDs6bslfrCaGEGG/+wd6oIPb85xo
+ naxnQ+SQtYLUFbU77WkUPaaIU8hH2BAfn9ZSDX9lIxheQE8ZYGGmo4wYpnN7/hSXALD7+oun
+ tZljjGNT1o+/B8WVZtw/YZuCuHgZeaFdhcV2jsz7+iGb+LsqzHuznrXqbyUQgQT9kn8ZYFNW
+ 7tf+LNxXuwedzRag4fxtR+5GVvJ41Oh/eygp8VqiMAtnFYaSlb9sjia1Mh+m+OBFeuXjgGlG
+ VvQFzsBNBFnVga8BCACqU+th4Esy/c8BnvliFAjAfpzhI1wH76FD1MJPmAhA3DnX5JDORcga
+ CbPEwhLj1xlwTgpeT+QfDmGJ5B5BlrrQFZVE1fChEjiJvyiSAO4yQPkrPVYTI7Xj34FnscPj
+ /IrRUUka68MlHxPtFnAHr25VIuOS41lmYKYNwPNLRz9Ik6DmeTG3WJO2BQRNvXA0pXrJH1fN
+ GSsRb+pKEKHKtL1803x71zQxCwLh+zLP1iXHVM5j8gX9zqupigQR/Cel2XPS44zWcDW8r7B0
+ q1eW4Jrv0x19p4P923voqn+joIAostyNTUjCeSrUdKth9jcdlam9X2DziA/DHDFfS5eq4fEv
+ ABEBAAHCwHwEGAEIACYCGwwWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1gQUJEP5a0gAK
+ CRDCPZHzoSX+qHGpB/kB8A7M7KGL5qzat+jBRoLwB0Y3Zax0QWuANVdZM3eJDlKJKJ4HKzjo
+ B2Pcn4JXL2apSan2uJftaMbNQbwotvabLXkE7cPpnppnBq7iovmBw++/d8zQjLQLWInQ5kNq
+ Vmi36kmq8o5c0f97QVjMryHlmSlEZ2Wwc1kURAe4lsRG2dNeAd4CAqmTw0cMIrR6R/Dpt3ma
+ +8oGXJOmwWuDFKNV4G2XLKcghqrtcRf2zAGNogg3KulCykHHripG3kPKsb7fYVcSQtlt5R6v
+ HZStaZBzw4PcDiaAF3pPDBd+0fIKS6BlpeNRSFG94RYrt84Qw77JWDOAZsyNfEIEE0J6LSR/
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:r1bdeEG+PQx1cg5g1+tj8YseRKP5CNO9tCosDYZjpgHF3P1UaF3
+ h5wFsCEdlCtekxIB0fWyDdo4haV0p0FM3lYXvtLEMZ1rKlmpTT1q7c/B0DoEYrt0L0Ozz7i
+ o0iXtmIq1kUyEpzMfKKtyyf86BkUjsD/KOAG+O0MWgKjB7YaE4xuXFA4VPQHU0ZVF9UZ32C
+ 6Whs/YUEdIlmD+w40YXrA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ELQsX6poeec=;EyMYTAbeuJFXs64FU1M1hBg5ns4
+ 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
 
-On Fri, Jun 13, 2025 at 02:07:53PM +0100, Simon Horman wrote:
-> I am wondering if you considered also addressing
-> the spinics.net links in gadget-testing.rst.
-> They are the only other instances I see under Documentation.
+Hi,
 
-I can't find on lore remaing spinics threads ([1], [2], [3]). These are all
-=66rom 2012-2013 and somehow lore doesn't have linux-usb archive on that ye=
-ar.
+With more and more usb-c hosts (and their alt-modes) found in=20
+laptops/pcs, I'm wondering what's the most accurate way inside linux to=20
+check the highest speed and hopefully alt modes.
 
-Andrzej, Sebastian, what do you think?
+There is `lsusb -tv`, but the speed only shows upto 10Gbps, meanwhile my=
+=20
+usb host supports USB4, thus I think it should be much higher:
 
-Thanks.
+/:  Bus 006.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/1p,=20
+10000M <<<
+     ID 1d6b:0003 Linux Foundation 3.0 root hub
+     |__ Port 001: Dev 002, If 0, Class=3DImaging, Driver=3D[none], 5000M
+         ID 18d1:4ee1 Google Inc. Nexus/Pixel Device (MTP)
 
-[1]: https://lore.kernel.org/all/?q=3Ds%3A%22f_phonet+with+SOCK_DGRAM%22
-[2]: https://lore.kernel.org/all/?q=3Ds%3A%22pnxmit.c%2C+test+program%22
-[3]: https://lore.kernel.org/all/?q=3Ds%3A%22usb%2Fgadget%3A+the+start+of+t=
-he+configfs+interface%22
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---GUjbLh60lsjawVfy
-Content-Type: application/pgp-signature; name=signature.asc
+Another thing is related to alt-mode, which I understand is very hard to=
+=20
+check because the controller may support alt-mode but has no DP input=20
+connected etc.
 
------BEGIN PGP SIGNATURE-----
+But if there is some interface reporting the supported alt-modes of a=20
+host controller, it will be very helpful.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaEznqAAKCRD2uYlJVVFO
-ozmUAP9e7U+IepwBR1/uxeix0k9gN0MnJUuM0zLK08IHd/ZQIwD/fznXO/qTwDWY
-XqpwyY9Zte61Q4ES2LZvcwCIW8VqzQk=
-=szxl
------END PGP SIGNATURE-----
-
---GUjbLh60lsjawVfy--
+Thanks,
+Qu
 
