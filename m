@@ -1,227 +1,285 @@
-Return-Path: <linux-usb+bounces-24745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864A3AD9A61
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 08:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 098A4AD9B04
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 09:22:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34EFC17BEF5
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 06:29:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A531F17D37B
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 07:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B241DF73D;
-	Sat, 14 Jun 2025 06:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E7A1F4C96;
+	Sat, 14 Jun 2025 07:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="YGwdqC8J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8B78836
-	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 06:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02981F4626;
+	Sat, 14 Jun 2025 07:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749882563; cv=none; b=H1G38tcuHrPlqr3ItayzFcmMxYAkp1r0aKZUilqnUXZNPxhpd+Jw/VUNIdyA6/k5hKfW8l9jAiB3OKB6oA50mNi78CBDR18qTEq1krJUfZ0g01WI7QLDunL4iNAKuGFX0oMnc9rkNRoJq43xzvlaqKAvwOrgrnwdZOUZ6NZkeIY=
+	t=1749885575; cv=none; b=ZWzp6RLD0mBRmPp0fxwXkV2De4Q5D9XcNBU6GE9+jNrCHqBJws0TfLwMog5Fekv8D2s330SlI3CM2VMyICXRG+qJ5ohFrj9VJfqrm0fVSO63NcZVPgdzD7uw3tEf3K223n7FrKerjhVz+QSmzWxS6t7Lws36rJhSrRtbVf/EOUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749882563; c=relaxed/simple;
-	bh=Wp3j9rdFacpQqxklX4uir0gel5n0x7E4r7NiuhO41WE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Aks1D7eELexBzAX12bbhNCDumQAwXVY5H0p0b1Zt+lRBrfBx2JNnv8qKHg9sJ1SoJAdqi01fMwwwR6vUNnaDEG/iHeF7G9nJidKliPJXgZ5boNpOkptGUrgTdHEzrJ7P4ES646eJq/z1AVDxN075SkitxjkGqNACyF8vC6BsulU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-8730ca8143eso381784139f.0
-        for <linux-usb@vger.kernel.org>; Fri, 13 Jun 2025 23:29:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749882560; x=1750487360;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RoWfEbRuIwoHSSqwO0H4QyNnNt1jeR1C0ze3saklv2c=;
-        b=lRm0HRtChyZq6n0jsYQjgcfPNEmVaQcwA0tsmnEfHgQaPqFLxpTxW+mkInQGZ2uvJ7
-         zQxoVNozrAqzlas3Da0dp52ijs4hfVt4KVifqR9JuCkly/AAyKj58R0VSVrcJq70q1EN
-         0xUP6gIR2AuYxdlJzC3qkBab3H11C2uIrad+AKe4jkf5hiEoymfmg6xDGzHYSKMjXCB5
-         tKSjS6i/zxtVCDaR/8tfKpZfG1Sik3nH7g8ZTE86qofTx2IUG/9vDps/iNY6xdar7lNO
-         Yc1OsT/WFcYfHCzfoaP0vMi/xwUfMUNYdstiHODPa+PW52K9Vz9HSthaP4CoORXnv+Vc
-         lFhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUi6nR0IIc9KgwJ/aomCxAaOBbf2h2p1GcpeZzTsyrNXPy1lD50PEhEuwB8Z2kUyCTmZspcB/BvBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN8EQ8FYY1S9pZ7MiHCsaZ4Sw6cARoC4xnsgxHC3KqBx7JZc9m
-	sfyaRKCGvbhO2FNIgVMx6lch4qbQJHMWXhxD3uRXrE0pyIcxX8TQUdNFN3DUlqlV3ZPEJXriY68
-	usxOdn1rb5IMCQr+TZUxXWQ+SVOs9LqUc8wvyxasHgyyZGHSc0axwFXQNZkg=
-X-Google-Smtp-Source: AGHT+IFFobBnKh7vj03+nPhS+2zsD1k7nvV1qIUnvHMmQaX9FT6wRKSFsa7XcQz2TxYQz5Kmg0iuw6gp5XS8g0oer2iCQPEpq+fA
+	s=arc-20240116; t=1749885575; c=relaxed/simple;
+	bh=8rtOYA/WZA+rjDDAmZHHbofQb/8+nZK6tFv8eqgUPvg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JfDGL1GqDrdxP9NKwY8wlMlzVHXL7AnNB+eUEEQnVbOfu8EGYwyx7LnwE8CcfKXdDgtMyHvZHLUP164rY1ilfTipNtSDBKd9hCKLg97QCTb3WFcIuNo5SAxQa7pMVhUhbKVIdEg2boQIRGGMsWo577//ByRmlSxMv6Ti8U5Xu20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=YGwdqC8J; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55E6txwR019299;
+	Sat, 14 Jun 2025 00:19:19 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=R9EP+4e5xygse6/H3jcmwVm8O
+	FDv9fIdVCviaza10iE=; b=YGwdqC8JcLmsj9oosnKqycpRNAvT0nm9rGJdhw2oD
+	zJIf5aPTZwp1v0lfXCb3uYFec19xkOw79nfVvtP0us5tYgwfUZljmT5F+ip99b0O
+	HfS8rJjMKw+HoHaFK89JwFFJY3T2X9rfaz/qfaR9aAeoHklJdF8vrtxbRUkIH+nQ
+	76VBmj5CLMxHwgA668jYi3WzzBD5J7dsqUeu1Sv8FKZ5gvUKPPtceYnFE6l0SIKH
+	A8p8ArUoPECs28bvZ9VQwXkA8o2WvC4mx+n1Tw68gjN0/djq+PdWd9I1Iwq4qZAG
+	mCFcNHWwcYHCeNkjlIac1eWIDEqdCZSTxEpPPWCGZ0RWQ==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4792mkr3vq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 14 Jun 2025 00:19:19 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Sat, 14 Jun 2025 00:19:18 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Sat, 14 Jun 2025 00:19:18 -0700
+Received: from 3763e0283353 (unknown [10.28.168.138])
+	by maili.marvell.com (Postfix) with SMTP id CFEF25C68E2;
+	Sat, 14 Jun 2025 00:19:14 -0700 (PDT)
+Date: Sat, 14 Jun 2025 07:19:12 +0000
+From: Subbaraya Sundeep <sbhatta@marvell.com>
+To: Jun Miao <jun.miao@intel.com>
+CC: <kuba@kernel.org>, <oneukum@suse.com>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <qiang.zhang@linux.dev>
+Subject: Re: [PATCH v1] net: usb: Convert tasklet API to new bottom half
+ workqueue mechanism
+Message-ID: <aE0icNX2nBiopztj@3763e0283353>
+References: <20250613124318.2451947-1-jun.miao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:ce51:0:b0:3dd:c1d1:b6b3 with SMTP id
- e9e14a558f8ab-3de065e766emr28724685ab.6.1749882560587; Fri, 13 Jun 2025
- 23:29:20 -0700 (PDT)
-Date: Fri, 13 Jun 2025 23:29:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <684d16c0.050a0220.be214.02ac.GAE@google.com>
-Subject: [syzbot] [usb?] KASAN: invalid-free in dev_free (2)
-From: syzbot <syzbot+dd2af0b2069a926d6991@syzkaller.appspotmail.com>
-To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250613124318.2451947-1-jun.miao@intel.com>
+X-Authority-Analysis: v=2.4 cv=IPYCChvG c=1 sm=1 tr=0 ts=684d2277 cx=c_pps a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=QyXUC8HyAAAA:8 a=X-fdUdr0RTnJSFWCzdYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE0MDA1OSBTYWx0ZWRfX1/NaLzmyzXcQ P+N/xhthkRf0gQQg7aXpL27ZTMCN4Vy2gMiYCCQl7KeMLSGKN0nbrNjZxC1UvqYNwqBKRAhbOus cfMhjtqO/rsZSVJgMxl3L6iducG7sz5aJlrjdv711K/xY/P4uFPQZXn56WJvXrdtPfU6zGf5PSr
+ OAk4ZLk1FZIU9+nX9VF4ZuFmOFbwrNW4u0alN15wctM8kmrqF6wZBUhSr22gdvvfg0g0HH0zf6n 3ldg1AOp4RlEI+jObj9sjVz647QBRilvR03kvQ5yeL9IxV0KLDyvMKYZVsjB5fV491Zf3eusjm3 WqbjobEh24C6oKPBsiZ8fSgo3V/7/S2BecPrc0MQ3LrliJTtsD/tzSOuRoUzka1Zvv1CsQUYOFK
+ xLD1ke2sqSkjwEjcqDwgLDLlRUviScfD/a7Rcb9KA+v5iSxb7CFuveqRjYY+vfMsdSu/OCAY
+X-Proofpoint-ORIG-GUID: 4roc--ARxm2PqOErGhr521HfKxQCMqsW
+X-Proofpoint-GUID: 4roc--ARxm2PqOErGhr521HfKxQCMqsW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-14_02,2025-06-13_01,2025-03-28_01
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On 2025-06-13 at 12:43:18, Jun Miao (jun.miao@intel.com) wrote:
+> Migrate tasklet APIs to the new bottom half workqueue mechanism. It
+> replaces all occurrences of tasklet usage with the appropriate workqueue
+> APIs throughout the usbnet driver. This transition ensures compatibility
+> with the latest design and enhances performance.
+> 
+> Signed-off-by: Jun Miao <jun.miao@intel.com>
+> ---
+>  drivers/net/usb/usbnet.c   | 36 ++++++++++++++++++------------------
+>  include/linux/usb/usbnet.h |  2 +-
+>  2 files changed, 19 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index c04e715a4c2a..566127b4e0ba 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -461,7 +461,7 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
+>  
+>  	__skb_queue_tail(&dev->done, skb);
+>  	if (dev->done.qlen == 1)
+> -		tasklet_schedule(&dev->bh);
+> +		queue_work(system_bh_wq, &dev->bh_work);
+>  	spin_unlock(&dev->done.lock);
+>  	spin_unlock_irqrestore(&list->lock, flags);
+>  	return old_state;
+> @@ -549,7 +549,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
+>  		default:
+>  			netif_dbg(dev, rx_err, dev->net,
+>  				  "rx submit, %d\n", retval);
+> -			tasklet_schedule (&dev->bh);
+> +			queue_work(system_bh_wq, &dev->bh_work);
+>  			break;
+>  		case 0:
+>  			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
+> @@ -709,7 +709,7 @@ void usbnet_resume_rx(struct usbnet *dev)
+>  		num++;
+>  	}
+>  
+> -	tasklet_schedule(&dev->bh);
+> +	queue_work(system_bh_wq, &dev->bh_work);
+>  
+>  	netif_dbg(dev, rx_status, dev->net,
+>  		  "paused rx queue disabled, %d skbs requeued\n", num);
+> @@ -778,7 +778,7 @@ void usbnet_unlink_rx_urbs(struct usbnet *dev)
+>  {
+>  	if (netif_running(dev->net)) {
+>  		(void) unlink_urbs (dev, &dev->rxq);
+> -		tasklet_schedule(&dev->bh);
+> +		queue_work(system_bh_wq, &dev->bh_work);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(usbnet_unlink_rx_urbs);
+> @@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
+>  	/* deferred work (timer, softirq, task) must also stop */
+>  	dev->flags = 0;
+>  	timer_delete_sync(&dev->delay);
+> -	tasklet_kill(&dev->bh);
+> +	disable_work_sync(&dev->bh_work);
+>  	cancel_work_sync(&dev->kevent);
+>  
+>  	/* We have cyclic dependencies. Those calls are needed
+>  	 * to break a cycle. We cannot fall into the gaps because
+>  	 * we have a flag
+>  	 */
+> -	tasklet_kill(&dev->bh);
+> +	disable_work_sync(&dev->bh_work);
+>  	timer_delete_sync(&dev->delay);
+>  	cancel_work_sync(&dev->kevent);
+>  
+> @@ -955,7 +955,7 @@ int usbnet_open (struct net_device *net)
+>  	clear_bit(EVENT_RX_KILL, &dev->flags);
+>  
+>  	// delay posting reads until we're fully open
+> -	tasklet_schedule (&dev->bh);
+> +	queue_work(system_bh_wq, &dev->bh_work);
+>  	if (info->manage_power) {
+>  		retval = info->manage_power(dev, 1);
+>  		if (retval < 0) {
+> @@ -1123,7 +1123,7 @@ static void __handle_link_change(struct usbnet *dev)
+>  		 */
+>  	} else {
+>  		/* submitting URBs for reading packets */
+> -		tasklet_schedule(&dev->bh);
+> +		queue_work(system_bh_wq, &dev->bh_work);
+>  	}
+>  
+>  	/* hard_mtu or rx_urb_size may change during link change */
+> @@ -1198,11 +1198,11 @@ usbnet_deferred_kevent (struct work_struct *work)
+>  		} else {
+>  			clear_bit (EVENT_RX_HALT, &dev->flags);
+>  			if (!usbnet_going_away(dev))
+> -				tasklet_schedule(&dev->bh);
+> +				queue_work(system_bh_wq, &dev->bh_work);
+>  		}
+>  	}
+>  
+> -	/* tasklet could resubmit itself forever if memory is tight */
+> +	/* workqueue could resubmit itself forever if memory is tight */
+>  	if (test_bit (EVENT_RX_MEMORY, &dev->flags)) {
+>  		struct urb	*urb = NULL;
+>  		int resched = 1;
+> @@ -1224,7 +1224,7 @@ usbnet_deferred_kevent (struct work_struct *work)
+>  fail_lowmem:
+>  			if (resched)
+>  				if (!usbnet_going_away(dev))
+> -					tasklet_schedule(&dev->bh);
+> +					queue_work(system_bh_wq, &dev->bh_work);
+>  		}
+>  	}
+>  
+> @@ -1325,7 +1325,7 @@ void usbnet_tx_timeout (struct net_device *net, unsigned int txqueue)
+>  	struct usbnet		*dev = netdev_priv(net);
+>  
+>  	unlink_urbs (dev, &dev->txq);
+> -	tasklet_schedule (&dev->bh);
+> +	queue_work(system_bh_wq, &dev->bh_work);
+>  	/* this needs to be handled individually because the generic layer
+>  	 * doesn't know what is sufficient and could not restore private
+>  	 * information if a remedy of an unconditional reset were used.
+> @@ -1547,7 +1547,7 @@ static inline void usb_free_skb(struct sk_buff *skb)
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> -// tasklet (work deferred from completions, in_irq) or timer
+> +// workqueue (work deferred from completions, in_irq) or timer
+>  
+>  static void usbnet_bh (struct timer_list *t)
+>  {
+> @@ -1601,16 +1601,16 @@ static void usbnet_bh (struct timer_list *t)
+>  					  "rxqlen %d --> %d\n",
+>  					  temp, dev->rxq.qlen);
+>  			if (dev->rxq.qlen < RX_QLEN(dev))
+> -				tasklet_schedule (&dev->bh);
+> +				queue_work(system_bh_wq, &dev->bh_work);
+>  		}
+>  		if (dev->txq.qlen < TX_QLEN (dev))
+>  			netif_wake_queue (dev->net);
+>  	}
+>  }
+>  
+> -static void usbnet_bh_tasklet(struct tasklet_struct *t)
+> +static void usbnet_bh_workqueue(struct work_struct *work)
+>  {
+> -	struct usbnet *dev = from_tasklet(dev, t, bh);
+> +	struct usbnet *dev = from_work(dev, work, bh_work);
+>  
+>  	usbnet_bh(&dev->delay);
+>  }
+> @@ -1742,7 +1742,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+>  	skb_queue_head_init (&dev->txq);
+>  	skb_queue_head_init (&dev->done);
+>  	skb_queue_head_init(&dev->rxq_pause);
+> -	tasklet_setup(&dev->bh, usbnet_bh_tasklet);
+> +	INIT_WORK (&dev->bh_work, usbnet_bh_workqueue);
 
-HEAD commit:    19272b37aa4f Linux 6.16-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e80e82580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4d9d9f47f21a57a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd2af0b2069a926d6991
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+WARNING: space prohibited between function name and open parenthesis '('
+#160: FILE: drivers/net/usb/usbnet.c:1745:
++	INIT_WORK (&dev->bh_work, usbnet_bh_workqueue);
 
-Unfortunately, I don't have any reproducer for this issue yet.
+total: 0 errors, 1 warnings, 0 checks, 144 lines checked
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e543cc3aa537/disk-19272b37.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d10d00e58ed2/vmlinux-19272b37.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8fce30072145/bzImage-19272b37.xz
+checkpatch warning here please fix this minor thing and resubmit.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dd2af0b2069a926d6991@syzkaller.appspotmail.com
+Thanks,
+Sundeep
 
-==================================================================
-BUG: KASAN: double-free in dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
-Free of addr ffff888105bccfa0 by task syz.6.761/10689
-
-CPU: 0 UID: 0 PID: 10689 Comm: syz.6.761 Not tainted 6.16.0-rc1-syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:408 [inline]
- print_report+0xcd/0x680 mm/kasan/report.c:521
- kasan_report_invalid_free+0xb8/0xe0 mm/kasan/report.c:596
- check_slab_allocation+0xe8/0x110 mm/kasan/common.c:225
- kasan_slab_pre_free include/linux/kasan.h:198 [inline]
- slab_free_hook mm/slub.c:2326 [inline]
- slab_free mm/slub.c:4643 [inline]
- kfree+0xf3/0x470 mm/slub.c:4842
- dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
- __fput+0x402/0xb70 fs/file_table.c:465
- task_work_run+0x14d/0x240 kernel/task_work.c:227
- exit_task_work include/linux/task_work.h:40 [inline]
- do_exit+0x864/0x2bd0 kernel/exit.c:955
- do_group_exit+0xd3/0x2a0 kernel/exit.c:1104
- get_signal+0x2673/0x26d0 kernel/signal.c:3034
- arch_do_signal_or_restart+0x8f/0x7d0 arch/x86/kernel/signal.c:337
- exit_to_user_mode_loop+0x7c/0xe0 kernel/entry/common.c:111
- exit_to_user_mode_prepare include/linux/entry-common.h:330 [inline]
- syscall_exit_to_user_mode_work include/linux/entry-common.h:414 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:449 [inline]
- do_syscall_64+0x3e9/0x4b0 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f5e0825d58a
-Code: Unable to access opcode bytes at 0x7f5e0825d560.
-RSP: 002b:00007f5e068c6ff0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f5e08485fa0 RCX: 00007f5e0825d58a
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f5e082e0b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000004 R11: 0000000000000293 R12: 0000000000000000
-R13: 0000000000000000 R14: 00007f5e08485fa0 R15: 00007ffcf639b2e8
- </TASK>
-
-Allocated by task 10692:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
- __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:394
- kasan_kmalloc include/linux/kasan.h:260 [inline]
- __do_kmalloc_node mm/slub.c:4328 [inline]
- __kmalloc_node_track_caller_noprof+0x212/0x4c0 mm/slub.c:4347
- memdup_user+0x2a/0xe0 mm/util.c:220
- raw_ioctl_ep_enable drivers/usb/gadget/legacy/raw_gadget.c:847 [inline]
- raw_ioctl+0xc1f/0x2c30 drivers/usb/gadget/legacy/raw_gadget.c:1318
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:907 [inline]
- __se_sys_ioctl fs/ioctl.c:893 [inline]
- __x64_sys_ioctl+0x18b/0x210 fs/ioctl.c:893
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4b0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Freed by task 10689:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
- poison_slab_object mm/kasan/common.c:247 [inline]
- __kasan_slab_free+0x37/0x50 mm/kasan/common.c:264
- kasan_slab_free include/linux/kasan.h:233 [inline]
- slab_free_hook mm/slub.c:2381 [inline]
- slab_free mm/slub.c:4643 [inline]
- kfree+0x283/0x470 mm/slub.c:4842
- dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
- __fput+0x402/0xb70 fs/file_table.c:465
- fput_close_sync+0x118/0x260 fs/file_table.c:570
- __do_sys_close fs/open.c:1589 [inline]
- __se_sys_close fs/open.c:1574 [inline]
- __x64_sys_close+0x8b/0x120 fs/open.c:1574
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4b0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff888105bccfa0
- which belongs to the cache kmalloc-16 of size 16
-The buggy address is located 0 bytes inside of
- 16-byte region [ffff888105bccfa0, ffff888105bccfb0)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff888105bcc640 pfn:0x105bcc
-flags: 0x200000000000200(workingset|node=0|zone=2)
-page_type: f5(slab)
-raw: 0200000000000200 ffff888100041640 ffff888100040408 ffffea00040bfd10
-raw: ffff888105bcc640 0000000000800045 00000000f5000000 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0xd2cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 10228667957, free_ts 0
- create_dummy_stack mm/page_owner.c:94 [inline]
- register_dummy_stack+0x89/0xd0 mm/page_owner.c:100
- init_page_owner+0x48/0x7b0 mm/page_owner.c:118
- invoke_init_callbacks mm/page_ext.c:148 [inline]
- page_ext_init+0x7aa/0xcc0 mm/page_ext.c:497
- mm_core_init+0x211/0x250 mm/mm_init.c:2783
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff888105bcce80: fa fb fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
- ffff888105bccf00: 00 00 fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
->ffff888105bccf80: 00 00 fc fc fa fb fc fc 00 00 fc fc 00 00 fc fc
-                               ^
- ffff888105bcd000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888105bcd080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>  	INIT_WORK (&dev->kevent, usbnet_deferred_kevent);
+>  	init_usb_anchor(&dev->deferred);
+>  	timer_setup(&dev->delay, usbnet_bh, 0);
+> @@ -1971,7 +1971,7 @@ int usbnet_resume (struct usb_interface *intf)
+>  
+>  			if (!(dev->txq.qlen >= TX_QLEN(dev)))
+>  				netif_tx_wake_all_queues(dev->net);
+> -			tasklet_schedule (&dev->bh);
+> +			queue_work(system_bh_wq, &dev->bh_work);
+>  		}
+>  	}
+>  
+> diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+> index 0b9f1e598e3a..208682f77179 100644
+> --- a/include/linux/usb/usbnet.h
+> +++ b/include/linux/usb/usbnet.h
+> @@ -58,7 +58,7 @@ struct usbnet {
+>  	unsigned		interrupt_count;
+>  	struct mutex		interrupt_mutex;
+>  	struct usb_anchor	deferred;
+> -	struct tasklet_struct	bh;
+> +	struct work_struct	bh_work;
+>  
+>  	struct work_struct	kevent;
+>  	unsigned long		flags;
+> -- 
+> 2.32.0
+> 
 
