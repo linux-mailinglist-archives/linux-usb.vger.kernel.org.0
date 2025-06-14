@@ -1,169 +1,227 @@
-Return-Path: <linux-usb+bounces-24744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B12AD9A37
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 07:25:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 864A3AD9A61
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 08:29:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8B1189E85B
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 05:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34EFC17BEF5
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 06:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1234D1DED70;
-	Sat, 14 Jun 2025 05:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b="QkrhhmNr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B241DF73D;
+	Sat, 14 Jun 2025 06:29:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20AD1DE4D8
-	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 05:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8B78836
+	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 06:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749878739; cv=none; b=BcOpvU4P51ZWhk8FXhUMappKygrkaXDhA89mxKe+VL0KHHECr+PAnQjfX+/8O/rASUBovW/YUBbjp1E9XUs/cg/szHjekqhTSRR78s+lZikoUkwDronjfwm8dd86jn+nCakMFaKNAzL+eOCijT7Shw9CI8qblVLg9odwVjaHOyY=
+	t=1749882563; cv=none; b=H1G38tcuHrPlqr3ItayzFcmMxYAkp1r0aKZUilqnUXZNPxhpd+Jw/VUNIdyA6/k5hKfW8l9jAiB3OKB6oA50mNi78CBDR18qTEq1krJUfZ0g01WI7QLDunL4iNAKuGFX0oMnc9rkNRoJq43xzvlaqKAvwOrgrnwdZOUZ6NZkeIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749878739; c=relaxed/simple;
-	bh=aUQediynNeIt4Zd4O4po1UWxvrAAcfZz8SYP3eM6f1A=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=ML0v+hD9Y4zpxT2P7OBdA/Tj1IrHS6I/t6E/Eotm57q+89czFO4MdJcVJ7LACyoT6ZsZJ/35cIlRYk/8Zhf0VfUkcR2dGVxmOgsp7hsxLuFTxil0m0Bskxd5UJ5+KMj724llDxtIk1QXip+yNgrmFMDyCYRdfXBdzuoEv4bhuqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b=QkrhhmNr; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.com;
-	s=s31663417; t=1749878735; x=1750483535; i=quwenruo.btrfs@gmx.com;
-	bh=nz6Hk9xulxE8Wq0JdWBds+O/fcCRO8fx0Ye//AaTpqQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:From:Subject:
-	 Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=QkrhhmNrrgkMNPjne4dp2PknHTyZfE1SMLsYkX0IL9nObLqPwDGDppB1IgZ+WjNY
-	 kRT7PkzwBgOztQ9bz9KNyGFUI4hPWh4YXBDlHrQYNlDK2UANlqOkFVbYnMFxXwlCs
-	 MRU4O9UsNtOqe9I336nE2lJmLFZYv0Iwv04hQU6J1gTOE/IBO+9ku/Vit777Vr7e6
-	 Ty3oTqNnybzrVTcD9Wd8BlC9yCvmUfFldrLtoccTidZQRjXYogU2CF9EO6afvBvy2
-	 DTU4w/f0gbovrvRfEE+3zVcFM44GaoYFSTxPgyko7/Zf668mn4s3Mql+BC9n2wNqY
-	 UlBsOnYBKNTFfoxY8Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [172.16.0.229] ([159.196.52.54]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MaJ3t-1uKeUN1Doj-00Q7e7 for
- <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 07:25:34 +0200
-Message-ID: <36908687-b1b9-4cbe-aa89-e9035001070e@gmx.com>
-Date: Sat, 14 Jun 2025 14:55:31 +0930
+	s=arc-20240116; t=1749882563; c=relaxed/simple;
+	bh=Wp3j9rdFacpQqxklX4uir0gel5n0x7E4r7NiuhO41WE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Aks1D7eELexBzAX12bbhNCDumQAwXVY5H0p0b1Zt+lRBrfBx2JNnv8qKHg9sJ1SoJAdqi01fMwwwR6vUNnaDEG/iHeF7G9nJidKliPJXgZ5boNpOkptGUrgTdHEzrJ7P4ES646eJq/z1AVDxN075SkitxjkGqNACyF8vC6BsulU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-8730ca8143eso381784139f.0
+        for <linux-usb@vger.kernel.org>; Fri, 13 Jun 2025 23:29:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749882560; x=1750487360;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RoWfEbRuIwoHSSqwO0H4QyNnNt1jeR1C0ze3saklv2c=;
+        b=lRm0HRtChyZq6n0jsYQjgcfPNEmVaQcwA0tsmnEfHgQaPqFLxpTxW+mkInQGZ2uvJ7
+         zQxoVNozrAqzlas3Da0dp52ijs4hfVt4KVifqR9JuCkly/AAyKj58R0VSVrcJq70q1EN
+         0xUP6gIR2AuYxdlJzC3qkBab3H11C2uIrad+AKe4jkf5hiEoymfmg6xDGzHYSKMjXCB5
+         tKSjS6i/zxtVCDaR/8tfKpZfG1Sik3nH7g8ZTE86qofTx2IUG/9vDps/iNY6xdar7lNO
+         Yc1OsT/WFcYfHCzfoaP0vMi/xwUfMUNYdstiHODPa+PW52K9Vz9HSthaP4CoORXnv+Vc
+         lFhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUi6nR0IIc9KgwJ/aomCxAaOBbf2h2p1GcpeZzTsyrNXPy1lD50PEhEuwB8Z2kUyCTmZspcB/BvBU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN8EQ8FYY1S9pZ7MiHCsaZ4Sw6cARoC4xnsgxHC3KqBx7JZc9m
+	sfyaRKCGvbhO2FNIgVMx6lch4qbQJHMWXhxD3uRXrE0pyIcxX8TQUdNFN3DUlqlV3ZPEJXriY68
+	usxOdn1rb5IMCQr+TZUxXWQ+SVOs9LqUc8wvyxasHgyyZGHSc0axwFXQNZkg=
+X-Google-Smtp-Source: AGHT+IFFobBnKh7vj03+nPhS+2zsD1k7nvV1qIUnvHMmQaX9FT6wRKSFsa7XcQz2TxYQz5Kmg0iuw6gp5XS8g0oer2iCQPEpq+fA
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org
-Content-Language: en-US
-From: Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: How to check the highest speed and supported alt-mode for a usb-host?
-Autocrypt: addr=quwenruo.btrfs@gmx.com; keydata=
- xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
- 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
- 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
- 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
- gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
- AAHNIlF1IFdlbnJ1byA8cXV3ZW5ydW8uYnRyZnNAZ214LmNvbT7CwJQEEwEIAD4CGwMFCwkI
- BwIGFQgJCgsCBBYCAwECHgECF4AWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1YAUJEP5a
- sQAKCRDCPZHzoSX+qF+mB/9gXu9C3BV0omDZBDWevJHxpWpOwQ8DxZEbk9b9LcrQlWdhFhyn
- xi+l5lRziV9ZGyYXp7N35a9t7GQJndMCFUWYoEa+1NCuxDs6bslfrCaGEGG/+wd6oIPb85xo
- naxnQ+SQtYLUFbU77WkUPaaIU8hH2BAfn9ZSDX9lIxheQE8ZYGGmo4wYpnN7/hSXALD7+oun
- tZljjGNT1o+/B8WVZtw/YZuCuHgZeaFdhcV2jsz7+iGb+LsqzHuznrXqbyUQgQT9kn8ZYFNW
- 7tf+LNxXuwedzRag4fxtR+5GVvJ41Oh/eygp8VqiMAtnFYaSlb9sjia1Mh+m+OBFeuXjgGlG
- VvQFzsBNBFnVga8BCACqU+th4Esy/c8BnvliFAjAfpzhI1wH76FD1MJPmAhA3DnX5JDORcga
- CbPEwhLj1xlwTgpeT+QfDmGJ5B5BlrrQFZVE1fChEjiJvyiSAO4yQPkrPVYTI7Xj34FnscPj
- /IrRUUka68MlHxPtFnAHr25VIuOS41lmYKYNwPNLRz9Ik6DmeTG3WJO2BQRNvXA0pXrJH1fN
- GSsRb+pKEKHKtL1803x71zQxCwLh+zLP1iXHVM5j8gX9zqupigQR/Cel2XPS44zWcDW8r7B0
- q1eW4Jrv0x19p4P923voqn+joIAostyNTUjCeSrUdKth9jcdlam9X2DziA/DHDFfS5eq4fEv
- ABEBAAHCwHwEGAEIACYCGwwWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1gQUJEP5a0gAK
- CRDCPZHzoSX+qHGpB/kB8A7M7KGL5qzat+jBRoLwB0Y3Zax0QWuANVdZM3eJDlKJKJ4HKzjo
- B2Pcn4JXL2apSan2uJftaMbNQbwotvabLXkE7cPpnppnBq7iovmBw++/d8zQjLQLWInQ5kNq
- Vmi36kmq8o5c0f97QVjMryHlmSlEZ2Wwc1kURAe4lsRG2dNeAd4CAqmTw0cMIrR6R/Dpt3ma
- +8oGXJOmwWuDFKNV4G2XLKcghqrtcRf2zAGNogg3KulCykHHripG3kPKsb7fYVcSQtlt5R6v
- HZStaZBzw4PcDiaAF3pPDBd+0fIKS6BlpeNRSFG94RYrt84Qw77JWDOAZsyNfEIEE0J6LSR/
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:r1bdeEG+PQx1cg5g1+tj8YseRKP5CNO9tCosDYZjpgHF3P1UaF3
- h5wFsCEdlCtekxIB0fWyDdo4haV0p0FM3lYXvtLEMZ1rKlmpTT1q7c/B0DoEYrt0L0Ozz7i
- o0iXtmIq1kUyEpzMfKKtyyf86BkUjsD/KOAG+O0MWgKjB7YaE4xuXFA4VPQHU0ZVF9UZ32C
- 6Whs/YUEdIlmD+w40YXrA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ELQsX6poeec=;EyMYTAbeuJFXs64FU1M1hBg5ns4
- hj5uURJqig9EBeYmQg14D/hq/PMjy8Axat3wLAiSapRiVQpyhQReqxllEa5bxsSGd1OY+b497
- vTlVVBSyp8EAFYUZfVbcv/oPX9D/MXibGNpq1fZqoY6rgDvEpXxS03OJVzoKGB46GJzt2HlL1
- 5fmAUqh2n/y9JQEYFU3j2XG1SDrywgO9Fjc1Lke5a4YyPDuOKVJEBjtWXVZZc0c5hgLKIanwe
- Tci0BbLcjY/ki08gKH+/9OxyUHYDbHgeRr62zyuh3aq3UMSjlJydcZJc2ghyE1Oc5d/8/Ecsz
- qFe5b3qLbi0EIn4TV86ll6FgpBj57umfVEFNWDEOcp3Igng0rsZopyorSjYRSUkG5Z0LrjH0R
- gOmnWyf1AsLP0YdFIQ/zOzPMm7XhnAxEM3NBBhpSGiXgLfU2GsOTnlXDJZRx0mPTBPh4H1RP2
- Im6s4D2vtEwsxQkdZnKrMdB9gAgDtxIXOXsPplAXNBx9aLTsfVSOJV1ihhYGdPe27Hvow4MnE
- ud3w1E+jLAGm7PYGb0b6TxMMgkDzy04jzz7uW3HaxLtD3AZ2FfCs6EeykMOf2DqQg3Axx4jkk
- 9gq8wPlCG+2x6pYTtdXj3VnwK6PYd3PM6l9DAGH+cbWYdY0PyKonhg+ED54WH6+ttn0dZSD3K
- Kuc34dtC4uQ7Xx/v7p0AdbS6qe0NlKXNSLY0EM3ynrOhZEk8n7BXuPTD91pt8YWVSzxnoSs3g
- 6tqOSgYPs+ru2Su7oILXfJQLwxg8RLW9D0kRLu0crBH4RtLbrwEiS8y1M/W8WJfHC0wVDhXFP
- sz9eFYYd++D6tgbuiiUStaJ6j3pjA3pYulLlDstd/Et36bthq1vGuXDU62m7aOt+UCzDg6gmW
- TtLiifTbY0EjY/qH+DHfyQc5DTvKyW814ZKJ4H/D6VEuGMS+oN5g6uos7q//5lsrZ4Wti0mLT
- V49F7yDqHfglc6QHYwCXXJCC31EzbPrPdJrDS3rlbxMZwfdB08w626kd641GrzL3Wv2tbmgrJ
- 0XyUnt6iQ9+Gy519IL8Pdss1359VrMG9i8/r2YeFGYgr9yxEL/1t3yugQ6bBDhiiEMegaR2Em
- lmxH+N6EwlU8/QohHdVl5BEGsupsECtPoM9YLMpt+7BmgnJ9KQrBoLKuKHnn3o9nswNAOWsyN
- KKUBdENdR6HLGE7H0G8V1ra+Nt1kNAxH3HeEXX+M03dTmUamKWG1VcOEQSMnEKt0vobhuoC8p
- miLfiuxbfoxt2lDa7ve6K9BXDqNzAjbBSGjBSmOr2uHgObT7FYnyrBHF934zOe2OaikqvTh3T
- FQaqfaKsmfckdwByRXpCf8/Nq/Zy3ln0RyUz+Z1JSYPj4FQ72MWPLlLwD85dgjLYMKNDQWtoO
- Nu+wHeuJzdWeAELzNu7bS71LIee10Mz3A3NpQ32vDc/MdjVSODy4enqiISKVyuwrOBoxd/QXN
- gcy9NN7L+KmILuOqdOk3k+jXQxZRavcTJhcKj5KdF1wTtMEJL7Snm00eAbDKUXRFTmfvqzEJU
- hH5y1NeYpNYGjew7/nb7JnMEYfcRdc+knlJyfyJMEuyBpjuFKi10wWg8OwsYQOcdRdUtB1Ygb
- RlBw7G8qor9gHbkAXParehOzr9uZz79tF6zFXIL0VuLrxqAGevXeMzzKflsYTg+mNO+47IODb
- QYQ7zJkYo1mg4ptwkW847mT4sOR6Y50LBIRIPBv9gsEESMKEnhQQ+aDKQcMYZF82k5U0NkO6t
- Z7wBPp3W4Q5vFU3HJfCL2RDh2bZjDOalUsCF0+H3ca9MYzqpCP1VhbPJOowlLAxeklVf+6wq2
- djJuTo2FfPYCEh7H6w0zEZXMuVVmhRyPmW2QUOjBj7AI+ETtMCTQ3Nz8Lnf+N3oZ16cJsAKPq
- uoAZF9/d1xX/TObbk1mt6mIrsBmIVjaSX3+EDIZiOF+MbK3qapxOXO5h3uUxzZ7CsYmai/b+a
- 5SwTJgMTDpfULX0yT+rLYgidCNJzj2DrW3fbY2rIxXRZHx+kzvr9jiQqtUyoD3CiZaH8gbeuy
- ppP8hNvWhJsdbIRe5D2F2etA4SHnhwh7FP4l9WFyIqaH+2JiOKcT06zt0VtvlbFJ7W8ey7E41
- gLt7DLsPZoJ3cCXy29Tqbkn8BVKecW6jCZ/fTzJam6ukRLqGF+k0fpppXMgHkTsG1RF57VYlV
- b9I4Jgtgk0gKKpKTEeIy5iVj/W7RRHJCJgvmVGmrzfk53JKoS1coyigKiAwgsMWYaxfEph02G
- ttQs5o4MNLlNfyCt9Skh/d6RM+ryD/Rnwf7N34GpUlFAXbgbyJPM9xC4jtyxJk83Lq4Eb5+BP
- NjEv+/pXnjuj4tPzPMuMJt1cGgP+K1zcuRSTEyRlpfdpodlFTKjI5v/t9QJ3/DebaRqNZIUHD
- 364pqqUPHAr+i3SE0clCSgNNr1E+fCSZCKYo7x//Lo++LkAKHcpzB/CQ82d5xnS9uzR7IuUM1
- Zs0jO6d50cMqqA/8JJALXAaWv/w6AHQWNpJLe+dqJhenmHPtSPx5zialfJLAzQ7JzErfWJROc
- hzZYaiXH4TvCv8NwoCS1Jxo5gfhSqtSvc2N9c0RniXwWb7NlHmzki/UP/VsV2i1tgOTlL5ruD
- WBum3AXqKgK4uqh41TGturqHQ88pghuCXc3yc98mddCUTdpWN0VOG9aM9rFuAknBLdU47KTDF
- 2Vkpbi5zCaHs/37lLqNRyOafgr+vLRbYku7J2/ktjuFHYcy/FfY0vHYJlaNYnNRf/P6sAumIc
- lJ9NsuRVc+wpv0rq9Sd7ElhugA7LFv9wCTaTWymCuvLKhj13mkP9Nf75qQgAwfnmQ1MJsLzha
- hEhPVNtvEfbU+S45pGacHuAE2i3RDXS/EJpswlq1Fg14h9QPAevRiX3VrardaBVsP0mzCQzo3
- AK/7psm7VfcCMJqwEZv3o+OGyXNmPA6XpeRU2BS+e9xoEHm0NKrBMOnN6G3YbuFKMs1znG+du
- 3lFIm3C/S0NBN+n1s9OqEejhCJCXBmfCr46xZ+TuEzo0riXnoc3oRqbAl+tjVQyBsE6wMTQyY
- UK6bG3PnNVizMw5wxcWAsXEuaPtfZTBTS63F9JoAghjHLAUSHPR+N44bggn4VUVVGU7Xo2sGC
- EOTnMDPG4zcPDYTsBtKWfTQ350YSNYd0cW7eCgDPmahL0mPyatqkUOBFkyE4MjJeMKEmqz6pR
- 8VXjGFFybf4U8q/VI2f3c7srs3ZhPd65N1AcA+GFq0BccNv+WAMFdW085/tffzE2Ut+s=
+X-Received: by 2002:a92:ce51:0:b0:3dd:c1d1:b6b3 with SMTP id
+ e9e14a558f8ab-3de065e766emr28724685ab.6.1749882560587; Fri, 13 Jun 2025
+ 23:29:20 -0700 (PDT)
+Date: Fri, 13 Jun 2025 23:29:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <684d16c0.050a0220.be214.02ac.GAE@google.com>
+Subject: [syzbot] [usb?] KASAN: invalid-free in dev_free (2)
+From: syzbot <syzbot+dd2af0b2069a926d6991@syzkaller.appspotmail.com>
+To: andreyknvl@gmail.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hello,
 
-With more and more usb-c hosts (and their alt-modes) found in=20
-laptops/pcs, I'm wondering what's the most accurate way inside linux to=20
-check the highest speed and hopefully alt modes.
+syzbot found the following issue on:
 
-There is `lsusb -tv`, but the speed only shows upto 10Gbps, meanwhile my=
-=20
-usb host supports USB4, thus I think it should be much higher:
+HEAD commit:    19272b37aa4f Linux 6.16-rc1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e80e82580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d9d9f47f21a57a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=dd2af0b2069a926d6991
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-/:  Bus 006.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/1p,=20
-10000M <<<
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
-     |__ Port 001: Dev 002, If 0, Class=3DImaging, Driver=3D[none], 5000M
-         ID 18d1:4ee1 Google Inc. Nexus/Pixel Device (MTP)
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e543cc3aa537/disk-19272b37.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d10d00e58ed2/vmlinux-19272b37.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8fce30072145/bzImage-19272b37.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dd2af0b2069a926d6991@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: double-free in dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
+Free of addr ffff888105bccfa0 by task syz.6.761/10689
+
+CPU: 0 UID: 0 PID: 10689 Comm: syz.6.761 Not tainted 6.16.0-rc1-syzkaller #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:408 [inline]
+ print_report+0xcd/0x680 mm/kasan/report.c:521
+ kasan_report_invalid_free+0xb8/0xe0 mm/kasan/report.c:596
+ check_slab_allocation+0xe8/0x110 mm/kasan/common.c:225
+ kasan_slab_pre_free include/linux/kasan.h:198 [inline]
+ slab_free_hook mm/slub.c:2326 [inline]
+ slab_free mm/slub.c:4643 [inline]
+ kfree+0xf3/0x470 mm/slub.c:4842
+ dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
+ kref_put include/linux/kref.h:65 [inline]
+ raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
+ __fput+0x402/0xb70 fs/file_table.c:465
+ task_work_run+0x14d/0x240 kernel/task_work.c:227
+ exit_task_work include/linux/task_work.h:40 [inline]
+ do_exit+0x864/0x2bd0 kernel/exit.c:955
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1104
+ get_signal+0x2673/0x26d0 kernel/signal.c:3034
+ arch_do_signal_or_restart+0x8f/0x7d0 arch/x86/kernel/signal.c:337
+ exit_to_user_mode_loop+0x7c/0xe0 kernel/entry/common.c:111
+ exit_to_user_mode_prepare include/linux/entry-common.h:330 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:414 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:449 [inline]
+ do_syscall_64+0x3e9/0x4b0 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f5e0825d58a
+Code: Unable to access opcode bytes at 0x7f5e0825d560.
+RSP: 002b:00007f5e068c6ff0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007f5e08485fa0 RCX: 00007f5e0825d58a
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007f5e082e0b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000004 R11: 0000000000000293 R12: 0000000000000000
+R13: 0000000000000000 R14: 00007f5e08485fa0 R15: 00007ffcf639b2e8
+ </TASK>
+
+Allocated by task 10692:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:394
+ kasan_kmalloc include/linux/kasan.h:260 [inline]
+ __do_kmalloc_node mm/slub.c:4328 [inline]
+ __kmalloc_node_track_caller_noprof+0x212/0x4c0 mm/slub.c:4347
+ memdup_user+0x2a/0xe0 mm/util.c:220
+ raw_ioctl_ep_enable drivers/usb/gadget/legacy/raw_gadget.c:847 [inline]
+ raw_ioctl+0xc1f/0x2c30 drivers/usb/gadget/legacy/raw_gadget.c:1318
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:907 [inline]
+ __se_sys_ioctl fs/ioctl.c:893 [inline]
+ __x64_sys_ioctl+0x18b/0x210 fs/ioctl.c:893
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x4b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Freed by task 10689:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
+ poison_slab_object mm/kasan/common.c:247 [inline]
+ __kasan_slab_free+0x37/0x50 mm/kasan/common.c:264
+ kasan_slab_free include/linux/kasan.h:233 [inline]
+ slab_free_hook mm/slub.c:2381 [inline]
+ slab_free mm/slub.c:4643 [inline]
+ kfree+0x283/0x470 mm/slub.c:4842
+ dev_free+0x47e/0x740 drivers/usb/gadget/legacy/raw_gadget.c:225
+ kref_put include/linux/kref.h:65 [inline]
+ raw_release+0x168/0x2b0 drivers/usb/gadget/legacy/raw_gadget.c:473
+ __fput+0x402/0xb70 fs/file_table.c:465
+ fput_close_sync+0x118/0x260 fs/file_table.c:570
+ __do_sys_close fs/open.c:1589 [inline]
+ __se_sys_close fs/open.c:1574 [inline]
+ __x64_sys_close+0x8b/0x120 fs/open.c:1574
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0x4b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+The buggy address belongs to the object at ffff888105bccfa0
+ which belongs to the cache kmalloc-16 of size 16
+The buggy address is located 0 bytes inside of
+ 16-byte region [ffff888105bccfa0, ffff888105bccfb0)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff888105bcc640 pfn:0x105bcc
+flags: 0x200000000000200(workingset|node=0|zone=2)
+page_type: f5(slab)
+raw: 0200000000000200 ffff888100041640 ffff888100040408 ffffea00040bfd10
+raw: ffff888105bcc640 0000000000800045 00000000f5000000 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0xd2cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 10228667957, free_ts 0
+ create_dummy_stack mm/page_owner.c:94 [inline]
+ register_dummy_stack+0x89/0xd0 mm/page_owner.c:100
+ init_page_owner+0x48/0x7b0 mm/page_owner.c:118
+ invoke_init_callbacks mm/page_ext.c:148 [inline]
+ page_ext_init+0x7aa/0xcc0 mm/page_ext.c:497
+ mm_core_init+0x211/0x250 mm/mm_init.c:2783
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888105bcce80: fa fb fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
+ ffff888105bccf00: 00 00 fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
+>ffff888105bccf80: 00 00 fc fc fa fb fc fc 00 00 fc fc 00 00 fc fc
+                               ^
+ ffff888105bcd000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888105bcd080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Another thing is related to alt-mode, which I understand is very hard to=
-=20
-check because the controller may support alt-mode but has no DP input=20
-connected etc.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-But if there is some interface reporting the supported alt-modes of a=20
-host controller, it will be very helpful.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Thanks,
-Qu
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
