@@ -1,100 +1,174 @@
-Return-Path: <linux-usb+bounces-24759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21D38AD9F95
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 21:57:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C5D6ADA06D
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Jun 2025 02:42:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6EA81741FC
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Jun 2025 19:57:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1F6D1893731
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Jun 2025 00:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 384F52E6D37;
-	Sat, 14 Jun 2025 19:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ssDgUG9n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311AE219ED;
+	Sun, 15 Jun 2025 00:42:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEE4148830
-	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 19:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC08367
+	for <linux-usb@vger.kernel.org>; Sun, 15 Jun 2025 00:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749931038; cv=none; b=phUILdsAeGu+zIN96AfWtQ5ZOgHOfJVMdr2EO5C2EvT9FH+cwvbevz/OIFs9QztXVBqeYPL6GRPvs60jAEvKyQ4Xn/g8iiFHdk0fY/ljoSFCDvRqb4yp3ixOPMe8lLFNc7+QEI9zkai2Wzw3iRkz5tiG4xoxrHgYXrAuBxF79yQ=
+	t=1749948142; cv=none; b=hxnSK2Y5OjAFr+doCPnnl49LizsOoPiI/Go1yKV8blUo6TdW8R5GRvvKnVYMZC27tLukqNEiZrZiMOU2YJIcqkcDgHStI0i0wPFyPaQAqnPL6YKLgGYQ2cJRLgNeFYICQuJE4DhLO6vEjTzP6sLhlMvSNq2L8FY7JCDDn4B3cNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749931038; c=relaxed/simple;
-	bh=N8tm2DJbbLKUj1SqZgIlpe6ygf+7NYgMu/VRGgNdvDs=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ee1Y9TPm4t3XLxE2RxLT0BjXa7QPs+nm3WazkQ1WOOi9VdCw1WRP5zczggAQLslWUU4+lp5D/N3r6e1cj06TaFOjdGifdDTVuVPP8ZNnQnOCijmipsDAzErxWarkN48Swb/G8aTJBj9mJ1SdTzEloVlhvrNdxJoQn+5u/voy4OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ssDgUG9n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A5F7C4CEF0
-	for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 19:57:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749931037;
-	bh=N8tm2DJbbLKUj1SqZgIlpe6ygf+7NYgMu/VRGgNdvDs=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ssDgUG9nOB4rsIWv6nCtvq3zEr8uD5u+rPd4W2f6zpEBejjNQpCWj29bM9FQ5AmvQ
-	 9XhBAHCbVuq7pzhs3RKIOC8Qc81qZJRhv9UBv8ZGn+g8Fhd41J6T2wZlKpGcvIYd2w
-	 eD0NJVqay+Oh2OraHTeBgj47x+oKniyI0mGnTa0Zy2HTlklZs1kkl4Ov+w83qtj+RU
-	 54lMt0jttA5vMMpjG+js/80QylX1OIHhRv0aAifoq5rmalJdqiQSAefZOTIlHDScQt
-	 6xuD/Ihz1VWkyMzeZUKUFB4nsrLqMHMDsvjBj5LWtfISZ7YQmDjMrFb3ASFUR5+ZgM
-	 iBO0pefal9lTA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 295CEC3279F; Sat, 14 Jun 2025 19:57:17 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: =?UTF-8?B?W0J1ZyAyMjAxODFdIFVzZXJzIGFjcm9zcyBkaXN0cmlidXRpb25z?=
- =?UTF-8?B?IHNlZSDigJxjb25maWcgZmFpbGVkLCBodWIgZG9lc27igJl0IGhhdmUgYW55?=
- =?UTF-8?B?IHBvcnRzISAoZXJyIC0xOSnigJ0gZnJvbSB4aGNpX2hjZCBhdCBib290Lg==?=
-Date: Sat, 14 Jun 2025 19:57:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: gnw3@acm.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220181-208809-Rm4b47mT8V@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220181-208809@https.bugzilla.kernel.org/>
-References: <bug-220181-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1749948142; c=relaxed/simple;
+	bh=bL7YyxIB0s5gNPXg2TrXgHXey8HIVW0X4Mokk0mXEW4=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=rbPp5MGhGDgrdpqenl3nfa31FFb4a7wAH66AjJHij43UY8lJVTb4BepkB0WN0NgsvMXkUsV6mG8639zJod2qV+twHIJU7kS6+ru+e0OujeHuByxS5y2Cauao3nJ8ZSgeKcis5XoV9kYbulX7DXv3fltH5Hsc1hOhpTBuS8gRMlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-8649be94fa1so678057539f.0
+        for <linux-usb@vger.kernel.org>; Sat, 14 Jun 2025 17:42:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749948140; x=1750552940;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hAdMfYGwJjjzAMIkq28e7PDUPb7jkYELlDQPgD5JKAk=;
+        b=Qn4WbhophXn+mj7suxGJLwuqNXzeHdw7Hesbh6rOFsC4xBl9Zy6gk1DaBpZq1NArxb
+         zjrj8H64oyhVPaq91Qjig9wp37HYPjyyiX7DwUmli5qHFEvNQVXevEghlf2vPy4/xqZ9
+         0WpeWI+FuXBj6NEEJ9f41QaDO3yr6k+V9EeW9cikctSudbW7DnqefhuAwcQY6kBJ0V5W
+         UWzAeBWZEWKYN8IU8GxSqMYRvoQmjEpsm0KxOORCtW0SLa4UKr3oSRhbOJaE22zOJXdK
+         7DV/OHpHaNXK8h6hAc7jLQoFkohrrrtZNQ6od5dJVufv2jEBamSk7MJgkk2+SR2x+p5b
+         J6OA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9O3v4Sp0SPSZObXO4jbh1yG7WTdzftvRZaf+7HXMU6GLcVEdFt3h3W0/7vlkd0TmWcORsTUOGwg0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzXysc/atxf8N95uKl0KzY+zRMWzbjU3bmeWSZaHCHKrGXyIVx
+	F6Y8cK1XUsmc1Q0ZVeM+id89A61l8OkS7vJQWJ/ILf0q+jG+FZePdPCWYiL10KGwS+hlONLjlUp
+	zIgCclbgFcCT66oMp0D/ZKD7MV2ZSK5aPWSeo9W4H8vp/CDUnlsnewZ4hkdQ=
+X-Google-Smtp-Source: AGHT+IGhe6KD2jaBryXaTJnD3UNYvgwMEAWsau1A6WbK97zyds5Z/M7JDReqxn9XdBAVWaR/uBfZjoe4J/g5xLJ2s830Guqwn5pS
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6602:2dc1:b0:873:1cc0:4e10 with SMTP id
+ ca18e2360f4ac-875deda6af4mr568626739f.3.1749948140437; Sat, 14 Jun 2025
+ 17:42:20 -0700 (PDT)
+Date: Sat, 14 Jun 2025 17:42:20 -0700
+In-Reply-To: <684df1ed.a00a0220.279073.0024.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <684e16ec.050a0220.be214.02b7.GAE@google.com>
+Subject: Re: [syzbot] [usb?] WARNING: refcount bug in hdm_disconnect
+From: syzbot <syzbot+d175ca7205b4f18390b1@syzkaller.appspotmail.com>
+To: dakr@kernel.org, gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220181
+syzbot has found a reproducer for the following issue on:
 
-George N. White III (gnw3@acm.org) changed:
+HEAD commit:    4774cfe3543a Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14cf25d4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=706b535f9c369932
+dashboard link: https://syzkaller.appspot.com/bug?extid=d175ca7205b4f18390b1
+compiler:       arm-linux-gnueabi-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14bb3d70580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1448f10c580000
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |gnw3@acm.org
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/98a89b9f34e4/non_bootable_disk-4774cfe3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cae525065b5b/vmlinux-4774cfe3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ce14ef6ecfe2/zImage-4774cfe3.xz
 
---- Comment #8 from George N. White III (gnw3@acm.org) ---
-A Fedora user with a system with USB4 ports is seeing=20=20
-`fedora kernel: hub 6-0:1.0: config failed, hub doesn't have any ports! (err
--19)`.
-I wonder if the "the zero USB3 ports" issue is at fault.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d175ca7205b4f18390b1@syzkaller.appspotmail.com
 
---=20
-You may reply to this email to add a comment.
+usb 1-1: USB disconnect, device number 2
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 97 at lib/refcount.c:28 refcount_warn_saturate+0x13c/0x174 lib/refcount.c:28
+refcount_t: underflow; use-after-free.
+Modules linked in:
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+CPU: 0 UID: 0 PID: 97 Comm: kworker/0:2 Not tainted 6.16.0-rc1-syzkaller #0 PREEMPT 
+Hardware name: ARM-Versatile Express
+Workqueue: usb_hub_wq hub_event
+Call trace: 
+[<80201a00>] (dump_backtrace) from [<80201afc>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:257)
+ r7:00000000 r6:8282083c r5:00000000 r4:82259bd0
+[<80201ae4>] (show_stack) from [<8021fd94>] (__dump_stack lib/dump_stack.c:94 [inline])
+[<80201ae4>] (show_stack) from [<8021fd94>] (dump_stack_lvl+0x54/0x7c lib/dump_stack.c:120)
+[<8021fd40>] (dump_stack_lvl) from [<8021fdd4>] (dump_stack+0x18/0x1c lib/dump_stack.c:129)
+ r5:00000000 r4:82a6dd18
+[<8021fdbc>] (dump_stack) from [<80202614>] (panic+0x120/0x374 kernel/panic.c:382)
+[<802024f4>] (panic) from [<802585b8>] (check_panic_on_warn kernel/panic.c:273 [inline])
+[<802024f4>] (panic) from [<802585b8>] (get_taint+0x0/0x1c kernel/panic.c:268)
+ r3:8280c684 r2:00000001 r1:822406fc r0:822480ac
+ r7:808c00f4
+[<80258544>] (check_panic_on_warn) from [<8025871c>] (__warn+0x80/0x188 kernel/panic.c:777)
+[<8025869c>] (__warn) from [<80258a0c>] (warn_slowpath_fmt+0x1e8/0x1f4 kernel/panic.c:812)
+ r8:00000009 r7:822b1be4 r6:df9b5bfc r5:833a1800 r4:00000000
+[<80258828>] (warn_slowpath_fmt) from [<808c00f4>] (refcount_warn_saturate+0x13c/0x174 lib/refcount.c:28)
+ r10:00000001 r9:829ca3e8 r8:844d4c88 r7:844d6474 r6:8419ffb4 r5:844d6400
+ r4:84571800
+[<808bffb8>] (refcount_warn_saturate) from [<819fce88>] (__refcount_sub_and_test include/linux/refcount.h:400 [inline])
+[<808bffb8>] (refcount_warn_saturate) from [<819fce88>] (__refcount_dec_and_test include/linux/refcount.h:432 [inline])
+[<808bffb8>] (refcount_warn_saturate) from [<819fce88>] (refcount_dec_and_test include/linux/refcount.h:450 [inline])
+[<808bffb8>] (refcount_warn_saturate) from [<819fce88>] (kref_put include/linux/kref.h:64 [inline])
+[<808bffb8>] (refcount_warn_saturate) from [<819fce88>] (kobject_put+0x158/0x1f4 lib/kobject.c:737)
+[<819fcd30>] (kobject_put) from [<80b307e8>] (put_device+0x18/0x1c drivers/base/core.c:3800)
+ r7:844d6474 r6:8419ffb4 r5:844d6400 r4:8419f800
+[<80b307d0>] (put_device) from [<81418e74>] (hdm_disconnect+0x90/0x9c drivers/most/most_usb.c:1129)
+[<81418de4>] (hdm_disconnect) from [<80e8cd04>] (usb_unbind_interface+0x84/0x2b4 drivers/usb/core/driver.c:458)
+ r7:844d6474 r6:844d6430 r5:00000000 r4:844d4c00
+[<80e8cc80>] (usb_unbind_interface) from [<80b38870>] (device_remove drivers/base/dd.c:569 [inline])
+[<80e8cc80>] (usb_unbind_interface) from [<80b38870>] (device_remove+0x64/0x6c drivers/base/dd.c:561)
+ r10:00000001 r9:844d4c88 r8:00000044 r7:844d6474 r6:829ca3e8 r5:00000000
+ r4:844d6430
+[<80b3880c>] (device_remove) from [<80b39d60>] (__device_release_driver drivers/base/dd.c:1272 [inline])
+[<80b3880c>] (device_remove) from [<80b39d60>] (device_release_driver_internal+0x18c/0x200 drivers/base/dd.c:1295)
+ r5:00000000 r4:844d6430
+[<80b39bd4>] (device_release_driver_internal) from [<80b39dec>] (device_release_driver+0x18/0x1c drivers/base/dd.c:1318)
+ r9:844d4c88 r8:832d5d40 r7:832d5d38 r6:832d5d0c r5:844d6430 r4:832d5d30
+[<80b39dd4>] (device_release_driver) from [<80b37ec4>] (bus_remove_device+0xcc/0x120 drivers/base/bus.c:579)
+[<80b37df8>] (bus_remove_device) from [<80b32220>] (device_del+0x148/0x38c drivers/base/core.c:3881)
+ r9:844d4c88 r8:833a1800 r7:04208060 r6:00000000 r5:844d6430 r4:844d6474
+[<80b320d8>] (device_del) from [<80e8a754>] (usb_disable_device+0xd4/0x1e8 drivers/usb/core/message.c:1418)
+ r10:00000001 r9:00000000 r8:00000000 r7:844d6400 r6:844d4c00 r5:84791288
+ r4:60000013
+[<80e8a680>] (usb_disable_device) from [<80e7f4d0>] (usb_disconnect+0xec/0x29c drivers/usb/core/hub.c:2316)
+ r9:84571c00 r8:844d4ccc r7:83b56400 r6:844d4c88 r5:844d4c00 r4:60000013
+[<80e7f3e4>] (usb_disconnect) from [<80e82190>] (hub_port_connect drivers/usb/core/hub.c:5375 [inline])
+[<80e7f3e4>] (usb_disconnect) from [<80e82190>] (hub_port_connect_change drivers/usb/core/hub.c:5675 [inline])
+[<80e7f3e4>] (usb_disconnect) from [<80e82190>] (port_event drivers/usb/core/hub.c:5835 [inline])
+[<80e7f3e4>] (usb_disconnect) from [<80e82190>] (hub_event+0xe78/0x194c drivers/usb/core/hub.c:5917)
+ r10:00000001 r9:00000100 r8:83caed00 r7:844d4c00 r6:83b55c00 r5:83b56610
+ r4:00000001
+[<80e81318>] (hub_event) from [<8027e2e8>] (process_one_work+0x1b4/0x4f4 kernel/workqueue.c:3238)
+ r10:832d5f70 r9:8380e205 r8:833a1800 r7:dddced40 r6:8380e200 r5:83caed00
+ r4:83338e80
+[<8027e134>] (process_one_work) from [<8027ef30>] (process_scheduled_works kernel/workqueue.c:3321 [inline])
+[<8027e134>] (process_one_work) from [<8027ef30>] (worker_thread+0x1fc/0x3d8 kernel/workqueue.c:3402)
+ r10:61c88647 r9:833a1800 r8:83338eac r7:82804d40 r6:dddced40 r5:dddced60
+ r4:83338e80
+[<8027ed34>] (worker_thread) from [<80285f5c>] (kthread+0x12c/0x280 kernel/kthread.c:464)
+ r10:00000000 r9:83338e80 r8:8027ed34 r7:df841e60 r6:83338f00 r5:833a1800
+ r4:00000001
+[<80285e30>] (kthread) from [<80200114>] (ret_from_fork+0x14/0x20 arch/arm/kernel/entry-common.S:137)
+Exception stack(0xdf9b5fb0 to 0xdf9b5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+ r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:80285e30
+ r4:83335080
+Rebooting in 86400 seconds..
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
