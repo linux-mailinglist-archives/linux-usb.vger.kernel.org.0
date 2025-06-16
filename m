@@ -1,128 +1,159 @@
-Return-Path: <linux-usb+bounces-24808-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24809-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC366ADBA48
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 21:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA5BADBB6F
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 22:46:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81D98170159
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 19:43:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58018176668
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 20:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957A9289E2E;
-	Mon, 16 Jun 2025 19:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cx2HqPE5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CD41DE2D8;
+	Mon, 16 Jun 2025 20:46:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84B8289E2C
-	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 19:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAFF1E89C;
+	Mon, 16 Jun 2025 20:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750102987; cv=none; b=rOD+YOZLLNSCILEefOaoG8RtcQI1FL921tXG383LvPGukmYGEctjbOPGNLVvcNlW6ppG2uxtJV1Hl0Bax88i66R/2OQKYcNI7MihUoV9az3Rtm8pk3LJi6ewfDNEDCkoz9lDH8nZ8MK3RVpN68EQLabo/IxZIadjCWkYOTDH64s=
+	t=1750106794; cv=none; b=OQRJDs5nRb0jGoltB+IJdXpIDozzqMrnzr9+Pg6vob7S5LgXwLDf0nXYCshd03EjdZWZsKfVrrOr1luS1UyDY83/Ed8QEZQBe7zVjJ3XQXzBTZSEPCfmjHXDB7Nb4XkrN+oqgWPO8K270q158Ar7azLRrhgCM2RMXC+ECLPtv1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750102987; c=relaxed/simple;
-	bh=4GXtdJIt4heRHXVxGyZI7LVV8sINiu3XKNwn1Nmm8ac=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BxBw1P+8wTa5iCZWdFXeUBsR6bqceQSkfyoiVhm1gEKN4FKuJePDQlWoYkoWBkfZ1FeLum8bWsdlHHPrQwR7joi2SjdOd13cOKFGFYUAgt+RTjLi7dfgz7yC4VZHqAxzB7TQGv7epPguoPpdWTFExt+FdqeK2A1FSdhyB4ZlVn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cx2HqPE5; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-73972a54919so4270267b3a.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 12:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1750102985; x=1750707785; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wt5vEBoX/7CZPzuyH4aIpdA7WQr2k5uAvo+zHY/RWMw=;
-        b=cx2HqPE5ITLOKP+itfe2BXrgNdhPZb+jEZjU9WLTxUjfKorOhsZI/s3nZcfRBUGcCs
-         0M1rnl3tlnbtaN+cdbPnTTykvmIWwvFFnqoGE+yXkGeeeLmQz6WCqU2ywL4Hb1NcYBZZ
-         I+y9YWS4PuB47HnC5QhIQDgVZA5PAVnsseRow=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750102985; x=1750707785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wt5vEBoX/7CZPzuyH4aIpdA7WQr2k5uAvo+zHY/RWMw=;
-        b=NBURxlmHTWLjdVqIcGGDocODxdpVRWqZIIa4wRXRn/DoiwDR4rGRhSesbWrcWnjRQV
-         14FzSOoneBHF8TJUkEV+1ETWK7zm/3ci876GFxex2MqJdIjPMLQaIjE9QVlBmhh5Ubig
-         phFaAGihEItuNAzFXsMOTsG1i2YnRX6XDMQeaxrRcWq+6jXCntsZmc8rPji5jh7mwTU7
-         aXZkPgC+ZyNzxcW+psc0k3KjIsrai5YYxFTg5xiZ27rk6nvizYsFspBp6VvnqHR/Vwqx
-         nAwROxg7vt9pOBY7ogiSnE7dan+lb8vPaAbUG8ktbUQjsj5LeqwQpjbb2iA1SR67eZN6
-         qJGg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5LH2blWH6DOj84tHTrMquHv9pqkeFAiH7t5EQVS0NOfIJ2M02WsMmsy8YbrE5/5cBxxeG/MLqC4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8rA/GiHv9wLcv4DVhYTiD85Vlk6m1FHp+zE9tgQE7XHzrePeQ
-	33zWwVFFXJ6JwgaqxyBvv1mhZnKBOloH/IQ5WFkgyo6IHHf0DCYDpgnweMGAnD2fDVUd2OJwaNL
-	azqr6jR3xJDoaRICAdmx20MPXiWQWIADET4INPoNc
-X-Gm-Gg: ASbGncuOR5A2gLkdqE+l79riTY8W+RweIz/cvjcnsMc5ZEAUFpL1qj3/3L6UJrrBP65
-	H9sbbZYlVqUUwOF8Pyuf85m4kM8t6hcN5WXcAac7pYydKlcyRnDIf0bt++E+AnQ98NqJV/BhX28
-	GyIPmZ0iOBemsdy2yqAEto2KE/ng9oNYP0FEE84OQHwQ==
-X-Google-Smtp-Source: AGHT+IHg3+dqJWa4H+fZqAabDzILCcABfw73ZiZnurFMysI5YMbqJFlOWJudAKNQbZsNaHnRlMJ68o95/n7AayxSldk=
-X-Received: by 2002:a05:6a00:3a04:b0:736:d297:164 with SMTP id
- d2e1a72fcca58-7489cf6aad9mr14779236b3a.1.1750102984856; Mon, 16 Jun 2025
- 12:43:04 -0700 (PDT)
+	s=arc-20240116; t=1750106794; c=relaxed/simple;
+	bh=eAyF1yEkPz/7b1iwDBdEM7HpOPPG+s3E1OAnGVTGLq4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=FTux6G4zA3CPz6SHPcv/yi0CtivEH2AfSHWndO1kuA/aALp+hgs4CxDF7NNAZlt7pKXjBYn8o6DbdJkevIIPbsL3AFBw7VCPZExTG4H+JEXoBx2uz9XVUrOalI9dWh7K02kuBdIA+3mNPf6f9rxE4YH479xA1V5vBxn7Bv0V9qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.150.136) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Mon, 16 Jun
+ 2025 23:30:59 +0300
+Message-ID: <8809cfc6-6e49-4c9c-bc0e-8eb581478d11@omp.ru>
+Date: Mon, 16 Jun 2025 23:30:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616133147.1835939-1-akuchynski@chromium.org>
- <20250616133147.1835939-7-akuchynski@chromium.org> <2025061623-ammonium-outskirts-e89e@gregkh>
-In-Reply-To: <2025061623-ammonium-outskirts-e89e@gregkh>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Mon, 16 Jun 2025 21:42:53 +0200
-X-Gm-Features: AX0GCFtdGIjZUFsa_hlqAkw8MFj1EgMmaIch8V2HBLolVrJ7BiBJkQmysNKbhAw
-Message-ID: <CAMMMRMebxSLorxTRzre6MDEn0bdC3hrNVQzZyf0NH=TNUk+YGw@mail.gmail.com>
-Subject: Re: [PATCH 06/10] Revert "usb: typec: displayport: Receive DP Status
- Update NAK request exit dp altmode"
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Dmitry Baryshkov <lumag@kernel.org>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Jameson Thies <jthies@google.com>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Guenter Roeck <groeck@chromium.org>, Pooja Katiyar <pooja.katiyar@intel.com>, 
-	Badhri Jagan Sridharan <badhri@google.com>, RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+User-Agent: Mozilla Thunderbird
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH] usb: gadget: composite: fix possible kernel oops in
+ composite_setup()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	<linux-usb@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>, Fedor
+ Pchelkin <pchelkin@ispras.ru>
+References: <0e61b364-8f26-4f98-9f10-9b9800b1cd41@omp.ru>
+Content-Language: en-US
+Organization: Open Mobile Platform
+In-Reply-To: <0e61b364-8f26-4f98-9f10-9b9800b1cd41@omp.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 06/16/2025 20:19:32
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 194079 [Jun 16 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 62 0.3.62
+ e2af3448995f5f8a7fe71abf21bb23519d0f38c3
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.150.136 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.150.136 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.150.136
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/16/2025 20:20:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/16/2025 2:43:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Mon, Jun 16, 2025 at 4:15=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jun 16, 2025 at 01:31:43PM +0000, Andrei Kuchynski wrote:
-> > This reverts commit b4b38ffb38c91afd4dc387608db26f6fc34ed40b.
-> >
-> > The commit introduced a deadlock with the cros_ec_typec driver.
-> > The deadlock occurs due to a recursive lock acquisition of
-> > `cros_typec_altmode_work::mutex`.
-> > The call chain is as follows:
-> > 1. cros_typec_altmode_work() acquires the mutex
-> > 2. typec_altmode_vdm() -> dp_altmode_vdm() ->
-> > 3. typec_altmode_exit() -> cros_typec_altmode_exit()
-> > 4. cros_typec_altmode_exit() attempts to acquire the mutex again
-> >
-> > This revert is considered safe as no other known driver sends back
-> > DP_CMD_STATUS_UPDATE command with the NAK flag.
-> >
-> > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > ---
-> >  drivers/usb/typec/altmodes/displayport.c | 4 ----
-> >  1 file changed, 4 deletions(-)
->
-> Why isn't this being sent as a separate patch for 6.16-final?  And why
-> not put a fixes: line?
->
+On 4/29/25 11:32 PM, Sergey Shtylyov wrote:
 
-Hi Greg,
+   Hm, 1.5 months passed and no reaction whatsoever... :-/
 
-The issue will emerge only after this series is applied, so 6.16
-remains secure as this code is not executable.
-I will submit it as a separate patch, with the relevant tags included.
+> list_first_entry() should never return NULL -- which makes Svace complain
+> about the next *if* statement's condition being always false. What's worse,
+> list_first_entry() won't work correctly when the list is empty -- in that
+> case, passing config->descriptors[0] to memcpy() further below will cause
+> dereferencing of a garbage pointer read from cdev->qw_sign[] and so (most
+> probably) a kernel oops. Use list_first_entry_or_null() that returns NULL
+> if the list is empty; fix the strange indentation below, while at it...
+> 
+> TTBOMK, this situation shouldn't happen with the current gadget drivers --
+> however there's no guarantee that usb_add_config[_only]() is called by any
+> gadget driver; and anyway, Svace's complaints would be silenced...
+> 
+> Found by Linux Verification Center (linuxtesting.org) with the Svace static
+> analysis tool.
+> 
+> Fixes: 53e6242db8d6 ("usb: gadget: composite: add USB_DT_OTG request handling")
+> Suggested-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> ---
+> This patch is against the usb-linus branch of Greg KH's usb.git repo.
+> 
+>  drivers/usb/gadget/composite.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Index: usb/drivers/usb/gadget/composite.c
+> ===================================================================
+> --- usb.orig/drivers/usb/gadget/composite.c
+> +++ usb/drivers/usb/gadget/composite.c
+> @@ -1887,8 +1887,8 @@ composite_setup(struct usb_gadget *gadge
+>  				if (cdev->config)
+>  					config = cdev->config;
+>  				else
+> -					config = list_first_entry(
+> -							&cdev->configs,
+> +					config = list_first_entry_or_null(
 
-Thanks,
-Andrei
+   So we either need to do this...
+
+> +						&cdev->configs,
+>  						struct usb_configuration, list);
+>  				if (!config)
+
+   ... or this check needs to be removed.
+
+>  					goto done;
+
+   OK, I've tried (unsuccessfully!) reaching Greg on IRC, both privately and
+on the OFTC's IRC channel #kernelnewbies -- and now I can't even connect to
+irc.oftc.net:6697 for some reason. Thought I should try following up on the
+linux-usb ML, just in case...
+   So Greg, I'd still like to know: do you ignore all patches from .ru, all
+patches from omp.ru or just all patches from me? :-)
+
+MBR, Sergey
 
