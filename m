@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-24796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24797-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D841ADB3BF
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:28:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A5FDADB3C9
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:29:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FDA53B701E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:23:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D58E4188B0F0
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B352820DA;
-	Mon, 16 Jun 2025 14:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20288218EA8;
+	Mon, 16 Jun 2025 14:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qiDS3uJY"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="nj0pQHFS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDCF2820CD
-	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 14:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5BF214209
+	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 14:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750083644; cv=none; b=PrNM5iztGvPQ0JcSvVjAmL4OV+kisRcH9+875KAW5cdKVza6A7m9msfIxs2eCDp6Rrkl1p2Ufyj74LoslJgibcJuG/USC/i8+atuhpP2eVi30PbWwtPtqGQ39juxBT/9TZFV7VQWh9O7MKpSGcmwIv/Zw3UCtXjRTh4YEcJhwhA=
+	t=1750083728; cv=none; b=HbIUcIA2vb0KImfCOHBJ0OaKVB9Laq91ZujjvsyZGhK4HRC4aCSF2VYJV4JKjd5NGNjJvN7cPRssuuIxpMObkliHfL7u9jadF7Dlt2YY9Wv1UhUOuyBsMt6OIZN7huNiCFs2VicPG091fYmSmpEuF1sBr9/H2gtL6T+JHiL9rng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750083644; c=relaxed/simple;
-	bh=5cylBjR2JasUZkv4OpRrf94Tu0nKiuVq0okzHEArjzE=;
+	s=arc-20240116; t=1750083728; c=relaxed/simple;
+	bh=EcxvIpEWclMxaJAsph2NWesfM1qns9ecQ6lEnW7wk6s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fv3x/VD+roGw1ONIsmLHJk2PYARdnPEgR7lF7nyV3nUM8jvhzoWB8Jzniv+aPuHuplYJ14IRsoynH3yX9dig9OV6QE9WNkZ8dt1C8JSAt/YxyTTmOuS+ccKrTTLZ3IDYvRgkcAIy7vtlcgE38JYkatoauF/AcWciw4450pvPHFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qiDS3uJY; arc=none smtp.client-ip=209.85.222.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=MvWzhoDZdchjCT+6vqt9jmEvv0rRzP5sXUb/Rk6pIoIUXKzZlNtbvcfg7SnWTHrbkw+GMw43LXbm9DIWP3RSSL3YmZC7aL9nLrHWV+6u7itvd6rB4fp7dpa4C0eCWGcoT5UWNPqDZQINyf1AJdY9JaEzIS6l4gdrq0yheQNWALI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=nj0pQHFS; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c5b8d13f73so509929685a.0
-        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 07:20:42 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4a4312b4849so54184981cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 07:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1750083641; x=1750688441; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1750083726; x=1750688526; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDbQeIKQedNL3NEzD8YAm+JX1HrTgVcpjWLbIbYI9Ck=;
-        b=qiDS3uJYXLxMB2pZ7dpUJjBtKnW4pVsOuEcN8ydtVI3FCXlpuf03Ebjq27JTHndMu5
-         U5HqMPoT6hlSuW6jakEHoCpSf/3vGKSPLfaGWA0yKelPkpILTUgDkNsHb0zFkRcyo8bT
-         OqdxPCMrMopslXHgPwLu4kf2qqoffNLvL0Rawqb05KkF2/oW56Ew3KolPYOpGcPQ09ia
-         NBFXsYXm57GXGjEbAs4k964l5rrfg5gHviK8+b8XLw8b28h5jbQ75kAyZTamRM09Cl/g
-         q3L/7506VFYG4xvDZOaTPbG186ISSIRDCY7gFgjrF57MyJYq3H9YEVP6cBUD6w1PwP5m
-         yn5g==
+        bh=fozdmCAWMyOAs3p72EEWYMApG9+X4azDWL8aPdMiZic=;
+        b=nj0pQHFSdbZas/rfvZGCsOotygAIBiJvISmNekC01pEO++L2xy7jOv9JQnDAWh10Hx
+         1pyPRH1uawqG7Ju2sLjfgk9uDaEcmK0zfPUrYx88rJh3E+Xey39lVds9ax9OwGMmqgIp
+         bqU5YKBOYPXgJl4KaPpp5d/hYHsQG9Hi9A6OTEQdX0x+n9riyZXZpzhcnxqD4I5cFUqo
+         4T9rKtACTZPyey4IpaulTAhF1HCO35y/BjgQo9bAANqqSEAFxqxhQKvsr5arsS0gte4D
+         x5sxATA6EZWeFA4AdWBXQD2/WbUTjdjQ7N+UQtTx9MMhTPzlM2e6AkV0WNjCDHYT45gG
+         33bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750083641; x=1750688441;
+        d=1e100.net; s=20230601; t=1750083726; x=1750688526;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pDbQeIKQedNL3NEzD8YAm+JX1HrTgVcpjWLbIbYI9Ck=;
-        b=QhPUzHm/YoEg6CWpCLOJ6tOVTw30qtR+kMRmlc5eoOhy5fLSvy3tRp9istvac9ZkqW
-         ZbC7+fH+yPpHuASwsDohZx5A9XBeGQ6o2y2IOGu04308ERFiHVFbVZVgeuldXl9yF8QZ
-         Vfxd4rmHBeocJuaPPwOLmvtQThYRIt3gS6GNCuWROjcTmL0gfS2M5d9cc7Rx94aLo/SH
-         TJqxjhCjj2g7PhIhsSbwFlNg/QKEDLjw2idZSQYlPiu1zYDDNGyQgDriBEHAO/JX8stV
-         sVW5lktP67WrUssXQIu0f0rF7pcb2tABebEhV7kpaMDu6jWsxUWRRhZ8TKnZBHF2MEWS
-         dStg==
-X-Forwarded-Encrypted: i=1; AJvYcCUScNWvPQR2tKhauCa2aOYG/GUoHlTUxGdur+e72HVUAU8SowrBUpMVIOK8T57T2j72JzjntC6XmYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqNUb2Erv5BA1b40lfn4RpE+R6av4Vr6q/L9q68WvoC+zcyRH6
-	hcNy+yEyGQ0c8zlry5tWwfxy7/knToUalqh/Ooi0zZgBlyMyhSN5pg5jKxF7GYbyXw==
-X-Gm-Gg: ASbGnctNPhFyzZsgkrwMS/1ubOgnxC+tgTC5RCgVMOD2fjmoaoGzeODBfAk84sEB6bf
-	+1FRcdc6sEoWd2qI0SgPNe1NDvINwvuwcQB27bLI4CsldnOC9f0av8vy9VRJv0SQaJCN4Ae627Y
-	bX1y1qXQ5gM5KIGWOa6cvOnmsZkai+1WhXKU2WJ+W+wFP4+r4RmV3yXh90QAAADWTiVAdm9OZZU
-	86yOHpW+EWWAdcgnoCUEkvNIip/ffOKzJn4sGr9+WwyXNI0K90JWLMftBt1YtHIaiEzSgpDIVCv
-	JfoYl8lizZTS2UsUly/hNwfDGKuXcF/9rUJ4FsGAHGmyoncoTEkDNkciObyGyRXwEmASfFVvRku
-	iPknw
-X-Google-Smtp-Source: AGHT+IEv+f3ZtoaV0bo+Dcs1xLfwwB1HrNMEo6Pfx6jOdLikPtpJR0gYvmJsKVgbMy7nAFyaoNhS/A==
-X-Received: by 2002:a05:620a:3195:b0:7d2:1a54:f646 with SMTP id af79cd13be357-7d3c6c0e558mr1751582285a.7.1750083641177;
-        Mon, 16 Jun 2025 07:20:41 -0700 (PDT)
+        bh=fozdmCAWMyOAs3p72EEWYMApG9+X4azDWL8aPdMiZic=;
+        b=qZk85Bq8LUXsxO0b5qFLPU9J71F6jjkGkt+NCMi34ewMRuROQHzleKi8r0PIZcBBgi
+         2CHD/K1zo0L2grFe2NcBNHf0uY78+Kb9NGYVGtOomhzfpt4+RXjESjgMbdBN08EbHQvY
+         G9DE5K6kZTXXBZYKCt352QjRD5jWgtPiH0D8lMOR5LyOfF/3KOCGr40T3TARQXVEIGk0
+         IGvbacjRZJ01lhFuZT5kOQabCS2uIBCSDfDpHDwmz2VczLi3o7ASXomYKUHdSU+TVGe6
+         HdvXq6HurvPiK1W3jYQHwkzcxoyDu1iK+jd8N0ypZ6mfYTpBtiFrx/ItykP1SwWHKCwf
+         zm2w==
+X-Forwarded-Encrypted: i=1; AJvYcCV7r/fEoV4jjftvddf3+GqehusVAJiuZG8JFuL1YzXDuBzDdRVdO9PedTmRPXPA/i07tF29EWMEm0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6PZQu4gz0WBCFhXvit8qn4xuVsYHDEM5jzz4+ccVgvVuDfvmv
+	FiC8HrD+TzRCvNwLnow0Eyf8RNDnK+pogYj4F7rlpPCY4oc4O+4WsK9tSjnWRKxKjGK9dZ58sTI
+	+6WI=
+X-Gm-Gg: ASbGncsF5RsGuvWntGDXnGBsdCnKYeojm1TeQhhzHelSooce0N7/ROs+szXsl78OYua
+	LUkkTPlzZMaD+vVLppkPxsxiOw7bHjjWYDEzQnVNULYLKy4cCqhjH6ObZiELNWHy4B65PabfBSJ
+	pN3CY8yuKJfgpe8hnQFrLGbsuQb4TGcXVpMNBLViGNhkS7XlLyTZAkizF6RPSQLgJf9YNDRby70
+	taHMsEWP7i7CT+r6sM7AR4M3FTjp3p0UdMwIOagoEEY4iZB2c0J5V+lOmryShC763Mef4O5xBkQ
+	3opYZ5Xh4dPkxMMx98kBK3HcvHUWtDb+kd0OtrOqNCialeVaHKRS6/dg5tEYDDvdp4nbPz/t+xO
+	oGmaA
+X-Google-Smtp-Source: AGHT+IF+uW7h6BydcaXEhoofxRMfhUEGoTFOUQys1M++I5eYRv90JMsfWUu2mw7xHfP3lolLk7Wl8Q==
+X-Received: by 2002:a05:622a:303:b0:476:8288:9558 with SMTP id d75a77b69052e-4a73c5c1853mr140268961cf.46.1750083725716;
+        Mon, 16 Jun 2025 07:22:05 -0700 (PDT)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8e1cf5esm528554285a.49.2025.06.16.07.20.40
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a313418sm49589591cf.34.2025.06.16.07.22.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 07:20:40 -0700 (PDT)
-Date: Mon, 16 Jun 2025 10:20:38 -0400
+        Mon, 16 Jun 2025 07:22:05 -0700 (PDT)
+Date: Mon, 16 Jun 2025 10:22:03 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
-	hdegoede@redhat.com, mchehab@kernel.org,
-	jeff.johnson@oss.qualcomm.com, linux-media@vger.kernel.org,
-	linux-usb@vger.kernel.org, jun.li@nxp.com, imx@lists.linux.dev
-Subject: Re: [PATCH 1/2] usbmon: do dma sync for cpu read if the buffer is
- not dma coherent
-Message-ID: <d5a3e6aa-73e2-4086-908f-e95b522112cc@rowland.harvard.edu>
-References: <20250614132446.251218-1-xu.yang_2@nxp.com>
- <20250614141647.GM25137@pendragon.ideasonboard.com>
+To: Mihai Sain <mihai.sain@microchip.com>
+Cc: gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: ohci-at91: Use dynamic device name for OHCI HCD
+ creation
+Message-ID: <7378855b-7ff0-4f9b-bb7a-f187aeb41956@rowland.harvard.edu>
+References: <20250616061759.3384-2-mihai.sain@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,82 +92,55 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250614141647.GM25137@pendragon.ideasonboard.com>
+In-Reply-To: <20250616061759.3384-2-mihai.sain@microchip.com>
 
-On Sat, Jun 14, 2025 at 05:16:47PM +0300, Laurent Pinchart wrote:
-> On Sat, Jun 14, 2025 at 09:24:45PM +0800, Xu Yang wrote:
-> > The urb->transfer_dma may not be dma coherent, in this case usb monitor
-> > may get old data. For example, commit "20e1dbf2bbe2 media: uvcvideo:
-> > Use dma_alloc_noncontiguous API" is allocating non-coherent buffer.
-> > 
-> > To make usbmon result more reliable, this will add a flag
-> > URB_USBMON_NEED_SYNC to indicate that usb monitor need do dma sync
-> > before reading buffer data.
-> > 
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > ---
-> >  drivers/usb/mon/mon_main.c | 7 +++++++
-> >  include/linux/usb.h        | 1 +
-> >  2 files changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
-> > index af852d53aac6..b9d5c1b46b85 100644
-> > --- a/drivers/usb/mon/mon_main.c
-> > +++ b/drivers/usb/mon/mon_main.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/notifier.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/dma-mapping.h>
-> >  
-> >  #include "usb_mon.h"
-> >  
-> > @@ -142,6 +143,12 @@ static void mon_complete(struct usb_bus *ubus, struct urb *urb, int status)
-> >  {
-> >  	struct mon_bus *mbus;
-> >  
-> > +	if (urb->transfer_flags & URB_USBMON_NEED_SYNC)
-> > +		dma_sync_single_for_cpu(ubus->sysdev,
-> > +					urb->transfer_dma,
-> > +					urb->transfer_buffer_length,
-> > +					DMA_FROM_DEVICE);
+On Mon, Jun 16, 2025 at 09:18:00AM +0300, Mihai Sain wrote:
+> Use the dynamic device name instead of the hardcoded string "at91"
+> when creating the OHCI host controller driver.
+> This ensures that the device name is more flexible
+> and correctly reflects the actual device in the system.
+> This will be in sync with ehci at91 driver.
 > 
-> This will result in a double sync, impacting performance. Futhermore,
-> the sync code in uvc_video.c reads as
+> Before this patch:
 > 
-> 	/* Sync DMA and invalidate vmap range. */
-> 	dma_sync_sgtable_for_cpu(uvc_stream_to_dmadev(uvc_urb->stream),
-> 				 uvc_urb->sgt, uvc_stream_dir(stream));
-> 	invalidate_kernel_vmap_range(uvc_urb->buffer,
-> 				     uvc_urb->stream->urb_size);
+> [root@sam9x75eb ~]$ dmesg | grep usb
+> [    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc2 ehci_hcd
+> [    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
+> [    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc2 ohci_hcd
+> [    1.601406] usb usb2: SerialNumber: at91
 > 
-> The difference makes me think something has been overlooked here.
-> Finally, uvcvideo supports output devices, so the DMA_FROM_DEVICE
-> direction doesn't seem universally applicable.
+> After this patch:
 > 
-> It seems there are quite a few issues to solve to merge this feature. If
-> the DMA sync operation can be done in a generic way in usbmon, then we
-> should consider moving it to the USB core and avoid the sync in the
-> driver. That may remove too much flexibility from drivers though, in
-> which case it may be best to let the driver handle the sync in a way
-> that guarantees it gets performed before usbmon inspects the data.
+> [root@sam9x75eb ~]$ dmesg | grep usb
+> [    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc2 ehci_hcd
+> [    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
+> [    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc2 ohci_hcd
+> [    1.601406] usb usb2: SerialNumber: 600000.usb-ohci
 > 
-> The issue doesn't seem specific to the uvcvideo driver. All drivers that
-> set URB_NO_TRANSFER_DMA_MAP seem to be affected. A more generic
-> mechanism to handle that would also be good.
+> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+> ---
 
-Handling this in the core does seem like the best approach.  Waiting 
-until the class driver's callback does a DMA sync won't work for usbmon, 
-because the usbmon callback occurs first.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-It also won't work right with OUT transfers, because usbmon will read 
-data from the buffer after it has been synced by the driver.  (While 
-this might not actually hurt anything, I think it's still a violation of 
-the DMA API.)
-
-The places where usbcore does normal DMA mapping for URBs are okay:
-after usbmon during submission, before usbmon during giveback.  But it 
-doesn't handle unusual mapping schemes, only the commonly used ones.
-
-Alan Stern
+>  drivers/usb/host/ohci-at91.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+> index 5df793dcb25d..12fdb18934cf 100644
+> --- a/drivers/usb/host/ohci-at91.c
+> +++ b/drivers/usb/host/ohci-at91.c
+> @@ -193,7 +193,7 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
+>  	if (irq < 0)
+>  		return irq;
+>  
+> -	hcd = usb_create_hcd(driver, dev, "at91");
+> +	hcd = usb_create_hcd(driver, dev, dev_name(dev));
+>  	if (!hcd)
+>  		return -ENOMEM;
+>  	ohci_at91 = hcd_to_ohci_at91_priv(hcd);
+> 
+> base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+> -- 
+> 2.49.0
+> 
 
