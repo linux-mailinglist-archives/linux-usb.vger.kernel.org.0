@@ -1,132 +1,133 @@
-Return-Path: <linux-usb+bounces-24775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24776-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 121F6ADB115
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 15:06:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F80ADB1A4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 15:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 543F9188728C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 13:06:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73FA81650FD
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 13:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01AA5292B3D;
-	Mon, 16 Jun 2025 13:06:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01CA2C08B4;
+	Mon, 16 Jun 2025 13:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CCmB4lLy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mlYg7lMM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f201.google.com (mail-lj1-f201.google.com [209.85.208.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9A42E427E;
-	Mon, 16 Jun 2025 13:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3816292B24
+	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 13:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750079182; cv=none; b=KpdFn4NastjOQ8ZIo7j6UWwLkK37qlLRiAKKzu9a62J6hycYRga1+6WHJ1qxMOE86wyeraCHriTkLShz2tmjo7nTzGvqdrSAd3AUv6F+wwl96TCkkHaXlCvRCbG1vSD3TFsm4kbfwqbjzeBWOokRRBstoCV5SZTF0/+H0Sz5fJY=
+	t=1750080121; cv=none; b=cC+pMz7N+IcXSDZoyuOuW6NnzqAmd89c+NqX5MVfuAkLcZHTgNIfyySVARzerXcaYSBfaphBcDccRK3orx9esQGPVcdRh3wgc+qPkRmNKnGwfo3xN4NvwGYiN18WfskluscPmyWmSchHRsQXxNfBbAjXgETv3xJwowzNH/w8Sg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750079182; c=relaxed/simple;
-	bh=v37e3M4Zm2k6n1fyHgSCEZmIq9tiiJWNpQq+eCbJo6E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YVuNePkIkQXwGR9X1j/svxth0ZSz2qBPhdMns22bQOx+/t8JJC1DMV4PljgFgJgNZTCmOhE7KOxt3LC5txzrlyVMIqe5Vx+aKvCN/08nBvpwO5HCyPX+88nsQfv/xYE7MnjZZlr6TYMIXnzwwot1adL/5Y39gjz39Usa9XRXf14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CCmB4lLy; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750079181; x=1781615181;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=v37e3M4Zm2k6n1fyHgSCEZmIq9tiiJWNpQq+eCbJo6E=;
-  b=CCmB4lLyNCKQZWJsgPkBSVGQD93NCmu4TvL+Dkwp3m35z7dhiordxp9x
-   oWMQljhDAvdSqHq2CcZUGK1GQ+dlFUP5WDq16wINlcsmRR0EJg37Bi/hq
-   uIz4kEMUcY9yM22g2q/jBS8NZzbVTCiuUTRj7WVoUgjYKa/nIoyji8jZd
-   wtqj6lCXx/lDcmOSzXZhGb8UFZY3OqP0BbflxvI/jEZOja/LPRjoPYFHe
-   JkknGNwapfUjgdAnzlaGexfuZuBC7Sl8JJBIiSG5ug3QE/YgIYd3cvPgZ
-   Td4g1tTPwadjSRilgj5egrWqZLj/VVyu3gOtwVljH5bFi5a76cb4LQeLF
-   w==;
-X-CSE-ConnectionGUID: Z+wbwUNXQ6q2i499LshI2g==
-X-CSE-MsgGUID: On8rXGwaQWGcuFHaUJX46Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="39829683"
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="39829683"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 06:05:58 -0700
-X-CSE-ConnectionGUID: MqFyVQ8XQl+cnkZHDjqx0g==
-X-CSE-MsgGUID: vR7wmNhQRTS/WV2ELwD2FA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="179363597"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 16 Jun 2025 06:05:56 -0700
-Message-ID: <7ab7cd9e-3100-4996-9357-5350e4c46824@linux.intel.com>
-Date: Mon, 16 Jun 2025 16:05:54 +0300
+	s=arc-20240116; t=1750080121; c=relaxed/simple;
+	bh=snoRr8xqPCX1q6v5UT3e3qOJLLdkgkfB8xSf2/kc2og=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EFLrgfQYkl5sCU+M71JrZpEVsbGt8c9/IAXVq/SIsGuX7G4yMHHtuW/IlZsTzGBmntB9zzj3RhU6VvJ9/hmeZ2THWd/jJpxhF3HP6gZG74oGd4PhbZNtgGvEK4RmWzUn84V98UXTM0tzo7sXJNnnuGqkJFkxZJAX7WlN5xSVprc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mlYg7lMM; arc=none smtp.client-ip=209.85.208.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-lj1-f201.google.com with SMTP id 38308e7fff4ca-32b4a06b780so8383311fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 06:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750080118; x=1750684918; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+wpesHRUPDqi60RLXef7EtIJEHtOo2/d8OA6QGc6qao=;
+        b=mlYg7lMMRBZdpCKfK5wDvDPK56fWpJ1S7CdMF5dM/RlMe9Z0EmdncWPY8T8+k/NxLW
+         5RBMNJv/1rAqd8fQiUu6bNyENERPbZTdru5xNCMPQsF4J3nO6RwtbPiT0Qlv4amuwfiL
+         jfkvRCDj5Rqrs44jy97FX4dpH9aboNddRBFdmS+0aX8DLKk4QRdyXUBEedy3vanm8zZO
+         Pqb34J4Xbn3ICxil3HZ9Mgv5SkK6TW7xvxSBpvDIspzNDrwAQruvkntgoExDvtrOQoL7
+         eMlB+LK9Dctw0+KCB9aw4gOkX+egAtXSKvvb15Il5JGj5vutX+KFXEDeFZNi3nz6he1b
+         NFtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750080118; x=1750684918;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+wpesHRUPDqi60RLXef7EtIJEHtOo2/d8OA6QGc6qao=;
+        b=UMEl2KGnqgQqx9tzFzBtZINlMpxhZssiVFUbPbP6ii5adh8bhAEPjw6PPbY0W7uY7U
+         Ke6AiiQySR1GR1y0F/yOPz/ysFpwbuCryMPt8QV0VxFcCp5UkTOXJJwz1l4Zrho8AWtt
+         ToU1zah9RocmyRyJI+cA8PeI7v7OM9l6ibbyIZx8pgigqq74wIyN4dQQgUjB3Hgd0ZcT
+         fdd0cZI8D9zlq09Ov7CTidM94ojX+l8CuiWAeDq8rzCNjzbLx89iz7zKGYvVTXj87VP0
+         poWefegfCG8DPPrxL6kVmHMHJ++/A+MfDeU3xASm38JNsmyLrOIyRJUaPL7PuvSBBu/j
+         YX1g==
+X-Gm-Message-State: AOJu0Ywp4P7KNqYS/DgqBKmI5qf4ZaXIB5pJbGA675E/9lPC/UIsyOZ3
+	Yv20/P4xIaXxsaF1qpIiNkK15WP4TYbN2hecymIGtD3LOdoq2fbTZiQ+jY2q0eDJhYFpNGiqyfT
+	mBYN17g==
+X-Google-Smtp-Source: AGHT+IEUw7ShAXSFd4hYcxCe9dpyjAp50IoBjuXCACE4y+U6F8ljTk3RT64JstZyf6/UEAq3f4cLeQifNjs=
+X-Received: from ljpy22.prod.google.com ([2002:a05:651c:1556:b0:328:a1d:30a9])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:b20:b0:32a:847c:a1c0
+ with SMTP id 38308e7fff4ca-32b4a0c5893mr21717061fa.6.1750080118053; Mon, 16
+ Jun 2025 06:21:58 -0700 (PDT)
+Date: Mon, 16 Jun 2025 21:21:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] media: uvcvideo: eUSB2 double isochronous bandwidth
- support
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-media@vger.kernel.org, hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
- Tao Q Tao <tao.q.tao@intel.com>, Amardeep Rai <amardeep.rai@intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20250616093730.2569328-1-mathias.nyman@linux.intel.com>
- <20250616093730.2569328-4-mathias.nyman@linux.intel.com>
- <20250616094359.GB32454@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250616094359.GB32454@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc2.692.g299adb8693-goog
+Message-ID: <20250616132152.1544096-1-khtsai@google.com>
+Subject: [PATCH 1/2] Revert "usb: gadget: u_serial: Add null pointer check in gs_start_io"
+From: Kuen-Han Tsai <khtsai@google.com>
+To: gregkh@linuxfoundation.org, prashanth.k@oss.qualcomm.com, 
+	khtsai@google.com, hulianqin@vivo.com, krzysztof.kozlowski@linaro.org, 
+	mwalle@kernel.org, jirislaby@kernel.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 16.6.2025 12.43, Laurent Pinchart wrote:
-> Hi Mathias,
-> 
-> Thank you for the patch.
-> 
-> On Mon, Jun 16, 2025 at 12:37:30PM +0300, Mathias Nyman wrote:
->> From: Tao Q Tao <tao.q.tao@intel.com>
->>
->> Add eUSB2 support to check total number of bytes, isochronous endpoint
->> will transfer every service interval(SI).
->>
->> Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
->> Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
->> Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
->> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->>   drivers/media/usb/uvc/uvc_video.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
->> index e3567aeb0007..a888f84208c6 100644
->> --- a/drivers/media/usb/uvc/uvc_video.c
->> +++ b/drivers/media/usb/uvc/uvc_video.c
->> @@ -1906,6 +1906,11 @@ u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
->>   	case USB_SPEED_SUPER:
->>   	case USB_SPEED_SUPER_PLUS:
->>   		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
->> +	case USB_SPEED_HIGH:
->> +		psize = usb_endpoint_maxp(&ep->desc);
->> +		if (psize == 0 && le16_to_cpu(dev->descriptor.bcdUSB) == 0x220)
->> +			return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
->> +		fallthrough;
-> 
-> Instead of adding yet another case here, and eventually in a bunch of
-> other drivers, could we centralize retrieval of the maximum bpi value in
-> a helper function provided by the USB core ?
+This reverts commit ffd603f214237e250271162a5b325c6199a65382.
 
-Sounds reasonable to me.
-I'm not sure if any other drivers will need it as this feature seems to be made
-specifically for integrated webcams, but things evolve.
+Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
+gs_start_io") adds null pointer checks at the beginning of the
+gs_start_io() function to prevent a null pointer dereference. However,
+these checks are redundant because the function's comment already
+requires callers to hold the port_lock and ensure port.tty and port_usb
+are not null. All existing callers already follow these rules.
 
-Thanks
-Mathias
+The true cause of the null pointer dereference is a race condition. When
+gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
+is temporarily released for usb_ep_queue(). This allows port.tty and
+port_usb to be cleared.
 
+Cc: stable@vger.kernel.org
+Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+---
+ drivers/usb/gadget/function/u_serial.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index ab544f6824be..c043bdc30d8a 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -544,20 +544,16 @@ static int gs_alloc_requests(struct usb_ep *ep, struct list_head *head,
+ static int gs_start_io(struct gs_port *port)
+ {
+ 	struct list_head	*head = &port->read_pool;
+-	struct usb_ep		*ep;
++	struct usb_ep		*ep = port->port_usb->out;
+ 	int			status;
+ 	unsigned		started;
+ 
+-	if (!port->port_usb || !port->port.tty)
+-		return -EIO;
+-
+ 	/* Allocate RX and TX I/O buffers.  We can't easily do this much
+ 	 * earlier (with GFP_KERNEL) because the requests are coupled to
+ 	 * endpoints, as are the packet sizes we'll be using.  Different
+ 	 * configurations may use different endpoints with a given port;
+ 	 * and high speed vs full speed changes packet sizes too.
+ 	 */
+-	ep = port->port_usb->out;
+ 	status = gs_alloc_requests(ep, head, gs_read_complete,
+ 		&port->read_allocated);
+ 	if (status)
+-- 
+2.50.0.rc2.692.g299adb8693-goog
 
 
