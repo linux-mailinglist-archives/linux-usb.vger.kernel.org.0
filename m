@@ -1,54 +1,89 @@
-Return-Path: <linux-usb+bounces-24795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 592F7ADB3AF
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D841ADB3BF
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:28:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FB133A6291
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:21:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FDA53B701E
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAE322127C;
-	Mon, 16 Jun 2025 14:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B352820DA;
+	Mon, 16 Jun 2025 14:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sLNFJMq3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qiDS3uJY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484E61FFC59;
-	Mon, 16 Jun 2025 14:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDCF2820CD
+	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 14:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750083496; cv=none; b=NDKm260JxfeWzyFTXSs9CumFU1qPAC6RMqARb96mpsLdvl0CT1h/NWZXuaQStDWtx0YuEF0kPN+dXomF1Kpx+QwlD97i289Xfzz6XsKAdGsg3DGIMknz4jhZrWoCiKz6sNoGBNP0cjPfoohK/VtSFxPV/BP7j/a9wJsuMBxmXWs=
+	t=1750083644; cv=none; b=PrNM5iztGvPQ0JcSvVjAmL4OV+kisRcH9+875KAW5cdKVza6A7m9msfIxs2eCDp6Rrkl1p2Ufyj74LoslJgibcJuG/USC/i8+atuhpP2eVi30PbWwtPtqGQ39juxBT/9TZFV7VQWh9O7MKpSGcmwIv/Zw3UCtXjRTh4YEcJhwhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750083496; c=relaxed/simple;
-	bh=5adsMQ0TDAhlIaGYvF670/1IDRxVrU+Q3eKWf6nrccg=;
+	s=arc-20240116; t=1750083644; c=relaxed/simple;
+	bh=5cylBjR2JasUZkv4OpRrf94Tu0nKiuVq0okzHEArjzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DS165uT1O6+TgrG85OIal22POk7HpPwfu/m4tjwNn+zdRwSmwI8GRVNftFVRCqj36iM87gEIWz6mtLqO3OTx4TKK6Slhv8Cbc8Czj0z8tqzNbvEuQV11elV/csvBJGmWVU7HYwzcdSAW0YUsQhcTTWffVT22856ASZcDoa63kUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sLNFJMq3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74816C4CEED;
-	Mon, 16 Jun 2025 14:18:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750083495;
-	bh=5adsMQ0TDAhlIaGYvF670/1IDRxVrU+Q3eKWf6nrccg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sLNFJMq3h3shBLwZpvAliCw36NIXJ9+FZhnZRWBEnv62iTXStnesZo9T4RHqxd3T2
-	 vK06AaAlS4aFBmznsJWtMlfZyI/9FOpxXpGVFzDOX8L67FsSKfxi0K0saLprcF1AYL
-	 4emc4YhJcZrQIkztzBAHq/oPneHG7IN8VnikzIGU=
-Date: Mon, 16 Jun 2025 16:18:13 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Kuen-Han Tsai <khtsai@google.com>
-Cc: prashanth.k@oss.qualcomm.com, hulianqin@vivo.com,
-	krzysztof.kozlowski@linaro.org, mwalle@kernel.org,
-	jirislaby@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] Revert "usb: gadget: u_serial: Add null pointer
- check in gs_start_io"
-Message-ID: <2025061642-likeness-heaving-dd75@gregkh>
-References: <20250616132152.1544096-1-khtsai@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fv3x/VD+roGw1ONIsmLHJk2PYARdnPEgR7lF7nyV3nUM8jvhzoWB8Jzniv+aPuHuplYJ14IRsoynH3yX9dig9OV6QE9WNkZ8dt1C8JSAt/YxyTTmOuS+ccKrTTLZ3IDYvRgkcAIy7vtlcgE38JYkatoauF/AcWciw4450pvPHFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qiDS3uJY; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c5b8d13f73so509929685a.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 07:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1750083641; x=1750688441; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pDbQeIKQedNL3NEzD8YAm+JX1HrTgVcpjWLbIbYI9Ck=;
+        b=qiDS3uJYXLxMB2pZ7dpUJjBtKnW4pVsOuEcN8ydtVI3FCXlpuf03Ebjq27JTHndMu5
+         U5HqMPoT6hlSuW6jakEHoCpSf/3vGKSPLfaGWA0yKelPkpILTUgDkNsHb0zFkRcyo8bT
+         OqdxPCMrMopslXHgPwLu4kf2qqoffNLvL0Rawqb05KkF2/oW56Ew3KolPYOpGcPQ09ia
+         NBFXsYXm57GXGjEbAs4k964l5rrfg5gHviK8+b8XLw8b28h5jbQ75kAyZTamRM09Cl/g
+         q3L/7506VFYG4xvDZOaTPbG186ISSIRDCY7gFgjrF57MyJYq3H9YEVP6cBUD6w1PwP5m
+         yn5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750083641; x=1750688441;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pDbQeIKQedNL3NEzD8YAm+JX1HrTgVcpjWLbIbYI9Ck=;
+        b=QhPUzHm/YoEg6CWpCLOJ6tOVTw30qtR+kMRmlc5eoOhy5fLSvy3tRp9istvac9ZkqW
+         ZbC7+fH+yPpHuASwsDohZx5A9XBeGQ6o2y2IOGu04308ERFiHVFbVZVgeuldXl9yF8QZ
+         Vfxd4rmHBeocJuaPPwOLmvtQThYRIt3gS6GNCuWROjcTmL0gfS2M5d9cc7Rx94aLo/SH
+         TJqxjhCjj2g7PhIhsSbwFlNg/QKEDLjw2idZSQYlPiu1zYDDNGyQgDriBEHAO/JX8stV
+         sVW5lktP67WrUssXQIu0f0rF7pcb2tABebEhV7kpaMDu6jWsxUWRRhZ8TKnZBHF2MEWS
+         dStg==
+X-Forwarded-Encrypted: i=1; AJvYcCUScNWvPQR2tKhauCa2aOYG/GUoHlTUxGdur+e72HVUAU8SowrBUpMVIOK8T57T2j72JzjntC6XmYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqNUb2Erv5BA1b40lfn4RpE+R6av4Vr6q/L9q68WvoC+zcyRH6
+	hcNy+yEyGQ0c8zlry5tWwfxy7/knToUalqh/Ooi0zZgBlyMyhSN5pg5jKxF7GYbyXw==
+X-Gm-Gg: ASbGnctNPhFyzZsgkrwMS/1ubOgnxC+tgTC5RCgVMOD2fjmoaoGzeODBfAk84sEB6bf
+	+1FRcdc6sEoWd2qI0SgPNe1NDvINwvuwcQB27bLI4CsldnOC9f0av8vy9VRJv0SQaJCN4Ae627Y
+	bX1y1qXQ5gM5KIGWOa6cvOnmsZkai+1WhXKU2WJ+W+wFP4+r4RmV3yXh90QAAADWTiVAdm9OZZU
+	86yOHpW+EWWAdcgnoCUEkvNIip/ffOKzJn4sGr9+WwyXNI0K90JWLMftBt1YtHIaiEzSgpDIVCv
+	JfoYl8lizZTS2UsUly/hNwfDGKuXcF/9rUJ4FsGAHGmyoncoTEkDNkciObyGyRXwEmASfFVvRku
+	iPknw
+X-Google-Smtp-Source: AGHT+IEv+f3ZtoaV0bo+Dcs1xLfwwB1HrNMEo6Pfx6jOdLikPtpJR0gYvmJsKVgbMy7nAFyaoNhS/A==
+X-Received: by 2002:a05:620a:3195:b0:7d2:1a54:f646 with SMTP id af79cd13be357-7d3c6c0e558mr1751582285a.7.1750083641177;
+        Mon, 16 Jun 2025 07:20:41 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8e1cf5esm528554285a.49.2025.06.16.07.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 07:20:40 -0700 (PDT)
+Date: Mon, 16 Jun 2025 10:20:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
+	hdegoede@redhat.com, mchehab@kernel.org,
+	jeff.johnson@oss.qualcomm.com, linux-media@vger.kernel.org,
+	linux-usb@vger.kernel.org, jun.li@nxp.com, imx@lists.linux.dev
+Subject: Re: [PATCH 1/2] usbmon: do dma sync for cpu read if the buffer is
+ not dma coherent
+Message-ID: <d5a3e6aa-73e2-4086-908f-e95b522112cc@rowland.harvard.edu>
+References: <20250614132446.251218-1-xu.yang_2@nxp.com>
+ <20250614141647.GM25137@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,30 +92,82 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250616132152.1544096-1-khtsai@google.com>
+In-Reply-To: <20250614141647.GM25137@pendragon.ideasonboard.com>
 
-On Mon, Jun 16, 2025 at 09:21:46PM +0800, Kuen-Han Tsai wrote:
-> This reverts commit ffd603f214237e250271162a5b325c6199a65382.
+On Sat, Jun 14, 2025 at 05:16:47PM +0300, Laurent Pinchart wrote:
+> On Sat, Jun 14, 2025 at 09:24:45PM +0800, Xu Yang wrote:
+> > The urb->transfer_dma may not be dma coherent, in this case usb monitor
+> > may get old data. For example, commit "20e1dbf2bbe2 media: uvcvideo:
+> > Use dma_alloc_noncontiguous API" is allocating non-coherent buffer.
+> > 
+> > To make usbmon result more reliable, this will add a flag
+> > URB_USBMON_NEED_SYNC to indicate that usb monitor need do dma sync
+> > before reading buffer data.
+> > 
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > ---
+> >  drivers/usb/mon/mon_main.c | 7 +++++++
+> >  include/linux/usb.h        | 1 +
+> >  2 files changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/usb/mon/mon_main.c b/drivers/usb/mon/mon_main.c
+> > index af852d53aac6..b9d5c1b46b85 100644
+> > --- a/drivers/usb/mon/mon_main.c
+> > +++ b/drivers/usb/mon/mon_main.c
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/slab.h>
+> >  #include <linux/notifier.h>
+> >  #include <linux/mutex.h>
+> > +#include <linux/dma-mapping.h>
+> >  
+> >  #include "usb_mon.h"
+> >  
+> > @@ -142,6 +143,12 @@ static void mon_complete(struct usb_bus *ubus, struct urb *urb, int status)
+> >  {
+> >  	struct mon_bus *mbus;
+> >  
+> > +	if (urb->transfer_flags & URB_USBMON_NEED_SYNC)
+> > +		dma_sync_single_for_cpu(ubus->sysdev,
+> > +					urb->transfer_dma,
+> > +					urb->transfer_buffer_length,
+> > +					DMA_FROM_DEVICE);
 > 
-> Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
-> gs_start_io") adds null pointer checks at the beginning of the
-> gs_start_io() function to prevent a null pointer dereference. However,
-> these checks are redundant because the function's comment already
-> requires callers to hold the port_lock and ensure port.tty and port_usb
-> are not null. All existing callers already follow these rules.
+> This will result in a double sync, impacting performance. Futhermore,
+> the sync code in uvc_video.c reads as
 > 
-> The true cause of the null pointer dereference is a race condition. When
-> gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
-> is temporarily released for usb_ep_queue(). This allows port.tty and
-> port_usb to be cleared.
+> 	/* Sync DMA and invalidate vmap range. */
+> 	dma_sync_sgtable_for_cpu(uvc_stream_to_dmadev(uvc_urb->stream),
+> 				 uvc_urb->sgt, uvc_stream_dir(stream));
+> 	invalidate_kernel_vmap_range(uvc_urb->buffer,
+> 				     uvc_urb->stream->urb_size);
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
+> The difference makes me think something has been overlooked here.
+> Finally, uvcvideo supports output devices, so the DMA_FROM_DEVICE
+> direction doesn't seem universally applicable.
+> 
+> It seems there are quite a few issues to solve to merge this feature. If
+> the DMA sync operation can be done in a generic way in usbmon, then we
+> should consider moving it to the USB core and avoid the sync in the
+> driver. That may remove too much flexibility from drivers though, in
+> which case it may be best to let the driver handle the sync in a way
+> that guarantees it gets performed before usbmon inspects the data.
+> 
+> The issue doesn't seem specific to the uvcvideo driver. All drivers that
+> set URB_NO_TRANSFER_DMA_MAP seem to be affected. A more generic
+> mechanism to handle that would also be good.
 
-As this is removing unneeded checks, why is it cc: stable?  What bug is
-being resolved here?
+Handling this in the core does seem like the best approach.  Waiting 
+until the class driver's callback does a DMA sync won't work for usbmon, 
+because the usbmon callback occurs first.
 
-confused,
+It also won't work right with OUT transfers, because usbmon will read 
+data from the buffer after it has been synced by the driver.  (While 
+this might not actually hurt anything, I think it's still a violation of 
+the DMA API.)
 
-greg k-h
+The places where usbcore does normal DMA mapping for URBs are okay:
+after usbmon during submission, before usbmon during giveback.  But it 
+doesn't handle unusual mapping schemes, only the commonly used ones.
+
+Alan Stern
 
