@@ -1,102 +1,128 @@
-Return-Path: <linux-usb+bounces-24807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD238ADB81F
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 19:52:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC366ADBA48
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 21:43:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E2F0188F278
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 17:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81D98170159
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 19:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6755A28B400;
-	Mon, 16 Jun 2025 17:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957A9289E2E;
+	Mon, 16 Jun 2025 19:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7ow5wJg"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cx2HqPE5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB6828A737;
-	Mon, 16 Jun 2025 17:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84B8289E2C
+	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 19:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750096240; cv=none; b=fYWdi5/dh3afUUAisvUurr7gIRkyzLDdsxZAEh5sVeKmWwZjlJsu7WAxzaMFb/b3AOtrvTWSOdZnV+rN7m7wF4IncMc6NxCkGS34GQgk08jVf6Eea+JcYI+sIiekkgM0qDjQFiJAsSBFkhYGPTUMiWQbSl2eDSUX/ACC7Sc/3/8=
+	t=1750102987; cv=none; b=rOD+YOZLLNSCILEefOaoG8RtcQI1FL921tXG383LvPGukmYGEctjbOPGNLVvcNlW6ppG2uxtJV1Hl0Bax88i66R/2OQKYcNI7MihUoV9az3Rtm8pk3LJi6ewfDNEDCkoz9lDH8nZ8MK3RVpN68EQLabo/IxZIadjCWkYOTDH64s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750096240; c=relaxed/simple;
-	bh=kzKMod4I7trzDSgNu24uRFQQmwK7y0+QIxuaSSqQlpQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S9Ti30IWSF9Ki1g1CK+OzKVu3JhxGwFNDhsq0UVFRTphq/nXOM3Li4fBkgocBjWKWvGB9Up/zDMJIbpqpjC1gm8If5fAs30baHZsQ/CGMmzfAFMP4N2VjnrMe296joxd5a8dREBNzOoP2D9LsHLYz+4WwR2mkafhqgpfo9be/84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7ow5wJg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A46AC4CEF0;
-	Mon, 16 Jun 2025 17:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750096240;
-	bh=kzKMod4I7trzDSgNu24uRFQQmwK7y0+QIxuaSSqQlpQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=h7ow5wJgVkPm9yWdKVjD60KWlSRkSmm6cw/oTDox6/0rJnALyI2LzVVZmftnEbk1a
-	 cj19J5s9m/xSEt0Q1lGfyisLPD/xhUWj3eJ09ZV7Cq2eDPmHpFKxV9ttKVAXRYO9xL
-	 t3i75y+Zn+c41hwcIVmbXzN/gyJv/L/HXJ9RMmvRcJWAYVbn7Jsm+qspDe1DC5VhaI
-	 cwuktwZSEI59MRvzFnWWFepW6VoI0xSUtYpv3awwFbio469BFaBdVvfj8WcGXMvj9t
-	 TFKV9Aoh0KnDwKQtpZ/8VlqOm2A7m2x7gAcDDj2Nru3AaKfILw0lJ+N9Iz9jFs4TIV
-	 bTShavQtFBzpQ==
-From: Mario Limonciello <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Cc: amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list),
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v4 5/5] usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
-Date: Mon, 16 Jun 2025 12:50:19 -0500
-Message-ID: <20250616175019.3471583-6-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250616175019.3471583-1-superm1@kernel.org>
-References: <20250616175019.3471583-1-superm1@kernel.org>
+	s=arc-20240116; t=1750102987; c=relaxed/simple;
+	bh=4GXtdJIt4heRHXVxGyZI7LVV8sINiu3XKNwn1Nmm8ac=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BxBw1P+8wTa5iCZWdFXeUBsR6bqceQSkfyoiVhm1gEKN4FKuJePDQlWoYkoWBkfZ1FeLum8bWsdlHHPrQwR7joi2SjdOd13cOKFGFYUAgt+RTjLi7dfgz7yC4VZHqAxzB7TQGv7epPguoPpdWTFExt+FdqeK2A1FSdhyB4ZlVn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cx2HqPE5; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-73972a54919so4270267b3a.3
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 12:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1750102985; x=1750707785; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wt5vEBoX/7CZPzuyH4aIpdA7WQr2k5uAvo+zHY/RWMw=;
+        b=cx2HqPE5ITLOKP+itfe2BXrgNdhPZb+jEZjU9WLTxUjfKorOhsZI/s3nZcfRBUGcCs
+         0M1rnl3tlnbtaN+cdbPnTTykvmIWwvFFnqoGE+yXkGeeeLmQz6WCqU2ywL4Hb1NcYBZZ
+         I+y9YWS4PuB47HnC5QhIQDgVZA5PAVnsseRow=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750102985; x=1750707785;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wt5vEBoX/7CZPzuyH4aIpdA7WQr2k5uAvo+zHY/RWMw=;
+        b=NBURxlmHTWLjdVqIcGGDocODxdpVRWqZIIa4wRXRn/DoiwDR4rGRhSesbWrcWnjRQV
+         14FzSOoneBHF8TJUkEV+1ETWK7zm/3ci876GFxex2MqJdIjPMLQaIjE9QVlBmhh5Ubig
+         phFaAGihEItuNAzFXsMOTsG1i2YnRX6XDMQeaxrRcWq+6jXCntsZmc8rPji5jh7mwTU7
+         aXZkPgC+ZyNzxcW+psc0k3KjIsrai5YYxFTg5xiZ27rk6nvizYsFspBp6VvnqHR/Vwqx
+         nAwROxg7vt9pOBY7ogiSnE7dan+lb8vPaAbUG8ktbUQjsj5LeqwQpjbb2iA1SR67eZN6
+         qJGg==
+X-Forwarded-Encrypted: i=1; AJvYcCW5LH2blWH6DOj84tHTrMquHv9pqkeFAiH7t5EQVS0NOfIJ2M02WsMmsy8YbrE5/5cBxxeG/MLqC4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8rA/GiHv9wLcv4DVhYTiD85Vlk6m1FHp+zE9tgQE7XHzrePeQ
+	33zWwVFFXJ6JwgaqxyBvv1mhZnKBOloH/IQ5WFkgyo6IHHf0DCYDpgnweMGAnD2fDVUd2OJwaNL
+	azqr6jR3xJDoaRICAdmx20MPXiWQWIADET4INPoNc
+X-Gm-Gg: ASbGncuOR5A2gLkdqE+l79riTY8W+RweIz/cvjcnsMc5ZEAUFpL1qj3/3L6UJrrBP65
+	H9sbbZYlVqUUwOF8Pyuf85m4kM8t6hcN5WXcAac7pYydKlcyRnDIf0bt++E+AnQ98NqJV/BhX28
+	GyIPmZ0iOBemsdy2yqAEto2KE/ng9oNYP0FEE84OQHwQ==
+X-Google-Smtp-Source: AGHT+IHg3+dqJWa4H+fZqAabDzILCcABfw73ZiZnurFMysI5YMbqJFlOWJudAKNQbZsNaHnRlMJ68o95/n7AayxSldk=
+X-Received: by 2002:a05:6a00:3a04:b0:736:d297:164 with SMTP id
+ d2e1a72fcca58-7489cf6aad9mr14779236b3a.1.1750102984856; Mon, 16 Jun 2025
+ 12:43:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250616133147.1835939-1-akuchynski@chromium.org>
+ <20250616133147.1835939-7-akuchynski@chromium.org> <2025061623-ammonium-outskirts-e89e@gregkh>
+In-Reply-To: <2025061623-ammonium-outskirts-e89e@gregkh>
+From: Andrei Kuchynski <akuchynski@chromium.org>
+Date: Mon, 16 Jun 2025 21:42:53 +0200
+X-Gm-Features: AX0GCFtdGIjZUFsa_hlqAkw8MFj1EgMmaIch8V2HBLolVrJ7BiBJkQmysNKbhAw
+Message-ID: <CAMMMRMebxSLorxTRzre6MDEn0bdC3hrNVQzZyf0NH=TNUk+YGw@mail.gmail.com>
+Subject: Re: [PATCH 06/10] Revert "usb: typec: displayport: Receive DP Status
+ Update NAK request exit dp altmode"
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Dmitry Baryshkov <lumag@kernel.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Jameson Thies <jthies@google.com>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Guenter Roeck <groeck@chromium.org>, Pooja Katiyar <pooja.katiyar@intel.com>, 
+	Badhri Jagan Sridharan <badhri@google.com>, RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Mon, Jun 16, 2025 at 4:15=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jun 16, 2025 at 01:31:43PM +0000, Andrei Kuchynski wrote:
+> > This reverts commit b4b38ffb38c91afd4dc387608db26f6fc34ed40b.
+> >
+> > The commit introduced a deadlock with the cros_ec_typec driver.
+> > The deadlock occurs due to a recursive lock acquisition of
+> > `cros_typec_altmode_work::mutex`.
+> > The call chain is as follows:
+> > 1. cros_typec_altmode_work() acquires the mutex
+> > 2. typec_altmode_vdm() -> dp_altmode_vdm() ->
+> > 3. typec_altmode_exit() -> cros_typec_altmode_exit()
+> > 4. cros_typec_altmode_exit() attempts to acquire the mutex again
+> >
+> > This revert is considered safe as no other known driver sends back
+> > DP_CMD_STATUS_UPDATE command with the NAK flag.
+> >
+> > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> > ---
+> >  drivers/usb/typec/altmodes/displayport.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+>
+> Why isn't this being sent as a separate patch for 6.16-final?  And why
+> not put a fixes: line?
+>
 
-When the ACPI core uses hibernation callbacks for shutdown drivers
-will receive PM_EVENT_POWEROFF and should handle it the same as
-PM_EVENT_HIBERNATE would have been used.
+Hi Greg,
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v3: https://lore.kernel.org/linux-pm/20250609024619.407257-1-superm1@kernel.org/T/#me6db0fb946e3d604a8f3d455128844ed802c82bb
----
- drivers/usb/host/sl811-hcd.c | 1 +
- 1 file changed, 1 insertion(+)
+The issue will emerge only after this series is applied, so 6.16
+remains secure as this code is not executable.
+I will submit it as a separate patch, with the relevant tags included.
 
-diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index ea3cab99c5d40..5d6dba681e503 100644
---- a/drivers/usb/host/sl811-hcd.c
-+++ b/drivers/usb/host/sl811-hcd.c
-@@ -1748,6 +1748,7 @@ sl811h_suspend(struct platform_device *dev, pm_message_t state)
- 		break;
- 	case PM_EVENT_SUSPEND:
- 	case PM_EVENT_HIBERNATE:
-+	case PM_EVENT_POWEROFF:
- 	case PM_EVENT_PRETHAW:		/* explicitly discard hw state */
- 		port_power(sl811, 0);
- 		break;
--- 
-2.43.0
-
+Thanks,
+Andrei
 
