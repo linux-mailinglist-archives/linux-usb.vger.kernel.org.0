@@ -1,146 +1,235 @@
-Return-Path: <linux-usb+bounces-24797-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24798-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A5FDADB3C9
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C459ADB41A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:41:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D58E4188B0F0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:24:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775A61885A08
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20288218EA8;
-	Mon, 16 Jun 2025 14:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33041207DEF;
+	Mon, 16 Jun 2025 14:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="nj0pQHFS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exqkcegY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5BF214209
-	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 14:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEE71BC3F;
+	Mon, 16 Jun 2025 14:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750083728; cv=none; b=HbIUcIA2vb0KImfCOHBJ0OaKVB9Laq91ZujjvsyZGhK4HRC4aCSF2VYJV4JKjd5NGNjJvN7cPRssuuIxpMObkliHfL7u9jadF7Dlt2YY9Wv1UhUOuyBsMt6OIZN7huNiCFs2VicPG091fYmSmpEuF1sBr9/H2gtL6T+JHiL9rng=
+	t=1750084716; cv=none; b=ahL2ke2yjmfYUfsbokSWrIzq3KGRsc8AmCNOzNNU5OpS6cCuB8cS/MW69n7bIF4Q2vKZaDLqGn/aq6OMp+3yE5ucTqfUZOfzfA0iZI8aHCZsZO6xZuQf71aDu0ofMlkW+eRi1Bm2/JCyy5ItQ1wNGL5aI2KSh9Od8rs+pC9WcAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750083728; c=relaxed/simple;
-	bh=EcxvIpEWclMxaJAsph2NWesfM1qns9ecQ6lEnW7wk6s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MvWzhoDZdchjCT+6vqt9jmEvv0rRzP5sXUb/Rk6pIoIUXKzZlNtbvcfg7SnWTHrbkw+GMw43LXbm9DIWP3RSSL3YmZC7aL9nLrHWV+6u7itvd6rB4fp7dpa4C0eCWGcoT5UWNPqDZQINyf1AJdY9JaEzIS6l4gdrq0yheQNWALI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=nj0pQHFS; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4a4312b4849so54184981cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 07:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1750083726; x=1750688526; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fozdmCAWMyOAs3p72EEWYMApG9+X4azDWL8aPdMiZic=;
-        b=nj0pQHFSdbZas/rfvZGCsOotygAIBiJvISmNekC01pEO++L2xy7jOv9JQnDAWh10Hx
-         1pyPRH1uawqG7Ju2sLjfgk9uDaEcmK0zfPUrYx88rJh3E+Xey39lVds9ax9OwGMmqgIp
-         bqU5YKBOYPXgJl4KaPpp5d/hYHsQG9Hi9A6OTEQdX0x+n9riyZXZpzhcnxqD4I5cFUqo
-         4T9rKtACTZPyey4IpaulTAhF1HCO35y/BjgQo9bAANqqSEAFxqxhQKvsr5arsS0gte4D
-         x5sxATA6EZWeFA4AdWBXQD2/WbUTjdjQ7N+UQtTx9MMhTPzlM2e6AkV0WNjCDHYT45gG
-         33bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750083726; x=1750688526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fozdmCAWMyOAs3p72EEWYMApG9+X4azDWL8aPdMiZic=;
-        b=qZk85Bq8LUXsxO0b5qFLPU9J71F6jjkGkt+NCMi34ewMRuROQHzleKi8r0PIZcBBgi
-         2CHD/K1zo0L2grFe2NcBNHf0uY78+Kb9NGYVGtOomhzfpt4+RXjESjgMbdBN08EbHQvY
-         G9DE5K6kZTXXBZYKCt352QjRD5jWgtPiH0D8lMOR5LyOfF/3KOCGr40T3TARQXVEIGk0
-         IGvbacjRZJ01lhFuZT5kOQabCS2uIBCSDfDpHDwmz2VczLi3o7ASXomYKUHdSU+TVGe6
-         HdvXq6HurvPiK1W3jYQHwkzcxoyDu1iK+jd8N0ypZ6mfYTpBtiFrx/ItykP1SwWHKCwf
-         zm2w==
-X-Forwarded-Encrypted: i=1; AJvYcCV7r/fEoV4jjftvddf3+GqehusVAJiuZG8JFuL1YzXDuBzDdRVdO9PedTmRPXPA/i07tF29EWMEm0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6PZQu4gz0WBCFhXvit8qn4xuVsYHDEM5jzz4+ccVgvVuDfvmv
-	FiC8HrD+TzRCvNwLnow0Eyf8RNDnK+pogYj4F7rlpPCY4oc4O+4WsK9tSjnWRKxKjGK9dZ58sTI
-	+6WI=
-X-Gm-Gg: ASbGncsF5RsGuvWntGDXnGBsdCnKYeojm1TeQhhzHelSooce0N7/ROs+szXsl78OYua
-	LUkkTPlzZMaD+vVLppkPxsxiOw7bHjjWYDEzQnVNULYLKy4cCqhjH6ObZiELNWHy4B65PabfBSJ
-	pN3CY8yuKJfgpe8hnQFrLGbsuQb4TGcXVpMNBLViGNhkS7XlLyTZAkizF6RPSQLgJf9YNDRby70
-	taHMsEWP7i7CT+r6sM7AR4M3FTjp3p0UdMwIOagoEEY4iZB2c0J5V+lOmryShC763Mef4O5xBkQ
-	3opYZ5Xh4dPkxMMx98kBK3HcvHUWtDb+kd0OtrOqNCialeVaHKRS6/dg5tEYDDvdp4nbPz/t+xO
-	oGmaA
-X-Google-Smtp-Source: AGHT+IF+uW7h6BydcaXEhoofxRMfhUEGoTFOUQys1M++I5eYRv90JMsfWUu2mw7xHfP3lolLk7Wl8Q==
-X-Received: by 2002:a05:622a:303:b0:476:8288:9558 with SMTP id d75a77b69052e-4a73c5c1853mr140268961cf.46.1750083725716;
-        Mon, 16 Jun 2025 07:22:05 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a313418sm49589591cf.34.2025.06.16.07.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 07:22:05 -0700 (PDT)
-Date: Mon, 16 Jun 2025 10:22:03 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Mihai Sain <mihai.sain@microchip.com>
-Cc: gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: ohci-at91: Use dynamic device name for OHCI HCD
- creation
-Message-ID: <7378855b-7ff0-4f9b-bb7a-f187aeb41956@rowland.harvard.edu>
-References: <20250616061759.3384-2-mihai.sain@microchip.com>
+	s=arc-20240116; t=1750084716; c=relaxed/simple;
+	bh=/B8FSd3Uau34QUMdkt+6mwLGvL84YtuejKwGuVYL1ZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SzTkdCdcABN1AVURxsLZBJWkO33j1xv7l+fNexKu2mea63ul4Jud11f7xNN1/1s5Y5k1vUbGF0armO+Ube1mbQoI5juWg0ucTU0vVtblWVgb9Xhxxhd0INTjC5bLq88D+3QRq/d63kv62P2i5v/rwB/zKMZL3x2pfTeYbKRSXD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exqkcegY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BC64C4CEEA;
+	Mon, 16 Jun 2025 14:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750084716;
+	bh=/B8FSd3Uau34QUMdkt+6mwLGvL84YtuejKwGuVYL1ZU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=exqkcegYYED3EXr4O7fP3HnJh5vzpJKGf32T+jkidW0pzXfCxB7FPTe2OlAenqhbC
+	 1p450Tr/MONUGzGhLtaflsLe7MO9xZ1yS4rKvldPJJRddDhoTe7slqRT8wh83sgbbK
+	 +rNlDx86d1eMZNEnPcaQkRuIRnD3z4UvhDo0CNmPYZBhDyrf8Cd8CQjcmC3Cf/AdgK
+	 FQ+Q0xxtTQzwQfqYBnl+TWuawffV/H8F2zUJxayZEV11pX82ZQ1xMn1pEKBk323EQx
+	 1kFlP35+objUm7Wybzi/lbbX/xoHVjf7w41IfEaBhTSdsIJp9AGGnAUA6s70TboKCY
+	 cPZxMmzoAl5YA==
+Message-ID: <d1e5942b-f8e5-42c6-98ae-d346927df3cb@kernel.org>
+Date: Mon, 16 Jun 2025 16:38:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250616061759.3384-2-mihai.sain@microchip.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/4] media: uvcvideo: Auto-set UVC_QUIRK_MSXU_META
+To: Ricardo Ribalda <ribalda@chromium.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250604-uvc-meta-v6-0-7141d48c322c@chromium.org>
+ <20250604-uvc-meta-v6-4-7141d48c322c@chromium.org>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250604-uvc-meta-v6-4-7141d48c322c@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 16, 2025 at 09:18:00AM +0300, Mihai Sain wrote:
-> Use the dynamic device name instead of the hardcoded string "at91"
-> when creating the OHCI host controller driver.
-> This ensures that the device name is more flexible
-> and correctly reflects the actual device in the system.
-> This will be in sync with ehci at91 driver.
+Hi Ricardo,
+
+On 4-Jun-25 14:16, Ricardo Ribalda wrote:
+> If the camera supports the MSXU_CONTROL_METADATA control, auto set the
+> MSXU_META quirk.
 > 
-> Before this patch:
-> 
-> [root@sam9x75eb ~]$ dmesg | grep usb
-> [    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc2 ehci_hcd
-> [    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
-> [    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc2 ohci_hcd
-> [    1.601406] usb usb2: SerialNumber: at91
-> 
-> After this patch:
-> 
-> [root@sam9x75eb ~]$ dmesg | grep usb
-> [    1.464487] usb usb1: Manufacturer: Linux 6.16.0-rc2 ehci_hcd
-> [    1.470210] usb usb1: SerialNumber: 700000.usb-ehci
-> [    1.595683] usb usb2: Manufacturer: Linux 6.16.0-rc2 ohci_hcd
-> [    1.601406] usb usb2: SerialNumber: 600000.usb-ohci
-> 
-> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+> Reviewed-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/host/ohci-at91.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/media/usb/uvc/uvc_metadata.c | 72 ++++++++++++++++++++++++++++++++++++
+>  include/linux/usb/uvc.h              |  3 ++
+>  2 files changed, 75 insertions(+)
 > 
-> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-> index 5df793dcb25d..12fdb18934cf 100644
-> --- a/drivers/usb/host/ohci-at91.c
-> +++ b/drivers/usb/host/ohci-at91.c
-> @@ -193,7 +193,7 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
->  	if (irq < 0)
->  		return irq;
+> diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
+> index df3f259271c675feb590c4534dad95b3b786f082..cd58427578ff413591b60abe0a210b90802dddc7 100644
+> --- a/drivers/media/usb/uvc/uvc_metadata.c
+> +++ b/drivers/media/usb/uvc/uvc_metadata.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/list.h>
+>  #include <linux/module.h>
+>  #include <linux/usb.h>
+> +#include <linux/usb/uvc.h>
+>  #include <linux/videodev2.h>
 >  
-> -	hcd = usb_create_hcd(driver, dev, "at91");
-> +	hcd = usb_create_hcd(driver, dev, dev_name(dev));
->  	if (!hcd)
->  		return -ENOMEM;
->  	ohci_at91 = hcd_to_ohci_at91_priv(hcd);
+>  #include <media/v4l2-ioctl.h>
+> @@ -188,11 +189,82 @@ static const struct v4l2_file_operations uvc_meta_fops = {
+>  	.mmap = vb2_fop_mmap,
+>  };
+>  
+> +static const u8 uvc_msxu_guid[16] = UVC_GUID_MSXU_1_5;
+> +
+> +static struct uvc_entity *uvc_meta_find_msxu(struct uvc_device *dev)
+> +{
+> +	struct uvc_entity *entity;
+> +
+> +	list_for_each_entry(entity, &dev->entities, list) {
+> +		if (!memcmp(entity->guid, uvc_msxu_guid, sizeof(entity->guid)))
+> +			return entity;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +#define MSXU_CONTROL_METADATA 0x9
+> +static int uvc_meta_detect_msxu(struct uvc_device *dev)
+> +{
+> +	u32 *data __free(kfree) = NULL;
+> +	struct uvc_entity *entity;
+> +	int ret;
+> +
+> +	entity = uvc_meta_find_msxu(dev);
+> +	if (!entity)
+> +		return 0;
+> +
+> +	/*
+> +	 * USB requires buffers aligned in a special way, simplest way is to
+> +	 * make sure that query_ctrl will work is to kmalloc() them.
+> +	 */
+> +	data = kmalloc(sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	/* Check if the metadata is already enabled. */
+> +	ret = uvc_query_ctrl(dev, UVC_GET_CUR, entity->id, dev->intfnum,
+> +			     MSXU_CONTROL_METADATA, data, sizeof(*data));
+> +	if (ret)
+> +		return 0;
+> +
+> +	if (*data) {
+> +		dev->quirks |= UVC_QUIRK_MSXU_META;
+> +		return 0;
+> +	}
+> +
+> +	/*
+> +	 * We have seen devices that require 1 to enable the metadata, others
+> +	 * requiring a value != 1 and others requiring a value >1. Luckily for
+> +	 * us, the value from GET_MAX seems to work all the time.
+> +	 */
+> +	ret = uvc_query_ctrl(dev, UVC_GET_MAX, entity->id, dev->intfnum,
+> +			     MSXU_CONTROL_METADATA, data, sizeof(*data));
+> +	if (ret || !*data)
+> +		return 0;
+> +
+> +	/*
+> +	 * If we can set MSXU_CONTROL_METADATA, the device will report
+> +	 * metadata.
+> +	 */
+> +	ret = uvc_query_ctrl(dev, UVC_SET_CUR, entity->id, dev->intfnum,
+> +			     MSXU_CONTROL_METADATA, data, sizeof(*data));
+> +	if (!ret)
+> +		dev->quirks |= UVC_QUIRK_MSXU_META;
+
+Since we set the ctrl to enable MSXU fmt metadata here, this means that
+cameras which also support V4L2_META_FMT_D4XX will be switched to MSXU
+metadata mode at probe() time.
+
+So even if cameras exist which support both metadata formats, since we
+switch to MSXU at probe() time, disabling V4L2_META_FMT_D4XX support,
+the uvcvideo driver will only support 1 metadata fmt per camera.
+Which is fine supporting more then 1 metadata fmt is not worth
+the trouble IMHO.
+
+This means that Laurent's remark on [PATCH v5 4/4]:
+
+"I would prefer if you could instead add a metadata format field in the
+uvc_device structure (I'd put it right after the info field, and while
+at it you could move the quirks field to that section too). The metadata
+format would be initialized from dev->info (when available) or set to
+the UVC format, and overridden when the MSXU is detected."
+
+is still relevant, which will also make patch 3/4 cleaner.
+
+The idea is to (in patch 3/4):
+
+1. Introduce a dev->meta_format which gets initialized from dev->info->meta_format
+2. Keep the quirk and if the quirk is set override dev->meta_format to
+   V4L2_META_FMT_UVC_MSXU_1_5 thus still allowing testing for MSXU metadata on
+   cameras which lack the MSXU_CONTROL_METADATA control.
+
+Doing things this way avoids the need for the complexity added to
+uvc_meta_v4l2_try_format() / uvc_meta_v4l2_set_format() /
+uvc_meta_v4l2_enum_format(). Instead the only changes necessary there now will
+be replacing dev->info->meta_format with dev->meta_format.
+
+Regards,
+
+Hans
+
+
+
+
+
+> +
+> +	return 0;
+> +}
+> +
+>  int uvc_meta_register(struct uvc_streaming *stream)
+>  {
+>  	struct uvc_device *dev = stream->dev;
+>  	struct video_device *vdev = &stream->meta.vdev;
+>  	struct uvc_video_queue *queue = &stream->meta.queue;
+> +	int ret;
+> +
+> +	ret = uvc_meta_detect_msxu(dev);
+> +	if (ret)
+> +		return ret;
+>  
+>  	stream->meta.format = V4L2_META_FMT_UVC;
+>  
+> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
+> index bce95153e5a65613a710d7316fc17cf5462b5bce..ee19e9f915b8370c333c426dc1ee4202c7b75c5b 100644
+> --- a/include/linux/usb/uvc.h
+> +++ b/include/linux/usb/uvc.h
+> @@ -29,6 +29,9 @@
+>  #define UVC_GUID_EXT_GPIO_CONTROLLER \
+>  	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
+>  	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
+> +#define UVC_GUID_MSXU_1_5 \
+> +	{0xdc, 0x95, 0x3f, 0x0f, 0x32, 0x26, 0x4e, 0x4c, \
+> +	 0x92, 0xc9, 0xa0, 0x47, 0x82, 0xf4, 0x3b, 0xc8}
+>  
+>  #define UVC_GUID_FORMAT_MJPEG \
+>  	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
 > 
-> base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
-> -- 
-> 2.49.0
-> 
+
 
