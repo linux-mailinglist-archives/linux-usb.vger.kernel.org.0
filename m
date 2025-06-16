@@ -1,55 +1,54 @@
-Return-Path: <linux-usb+bounces-24794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D50EADB391
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:22:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 592F7ADB3AF
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:25:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B06317541B
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:21:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FB133A6291
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CE921C9F1;
-	Mon, 16 Jun 2025 14:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAE322127C;
+	Mon, 16 Jun 2025 14:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JBx8fsLo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sLNFJMq3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5A41FDE31;
-	Mon, 16 Jun 2025 14:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484E61FFC59;
+	Mon, 16 Jun 2025 14:18:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750083454; cv=none; b=oVrlVkcnX7C5WwNhgrU81+e4eg+C+ZwF7s1nEXSjUbNFjVkjtpJoro0ZXWIgQRrHYt9IjTpvZvESneD7Ry4KW6X5d0Ryg+1SXak+lmOw2njCC7GawsV+fXTNHtPcFIozqoyTyNSt13aixYeovcaBg9BqNCtt+81QW8O0iRKRE64=
+	t=1750083496; cv=none; b=NDKm260JxfeWzyFTXSs9CumFU1qPAC6RMqARb96mpsLdvl0CT1h/NWZXuaQStDWtx0YuEF0kPN+dXomF1Kpx+QwlD97i289Xfzz6XsKAdGsg3DGIMknz4jhZrWoCiKz6sNoGBNP0cjPfoohK/VtSFxPV/BP7j/a9wJsuMBxmXWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750083454; c=relaxed/simple;
-	bh=7vD+jdFcbRODnTyocCRqC2CBnN4fjCfLQDbcXwpnOFU=;
+	s=arc-20240116; t=1750083496; c=relaxed/simple;
+	bh=5adsMQ0TDAhlIaGYvF670/1IDRxVrU+Q3eKWf6nrccg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zsvpf4a/h+sG7F9ep7+s7eOiXxGvlMYQxblfqArMD3u6NoUOTFTJurzqaRnV54UWH9nJJofpM0SzfXzy0e/+X71znyhEIpZuLdiC/t11NfB3OfLU9meHVzCkmYIXsOrsLj9Sy7Qnj5Q6C8XWX4lVYVX9JRGhv/XZn52NOm8zwLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JBx8fsLo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E27C4CEEA;
-	Mon, 16 Jun 2025 14:17:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DS165uT1O6+TgrG85OIal22POk7HpPwfu/m4tjwNn+zdRwSmwI8GRVNftFVRCqj36iM87gEIWz6mtLqO3OTx4TKK6Slhv8Cbc8Czj0z8tqzNbvEuQV11elV/csvBJGmWVU7HYwzcdSAW0YUsQhcTTWffVT22856ASZcDoa63kUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=sLNFJMq3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74816C4CEED;
+	Mon, 16 Jun 2025 14:18:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750083454;
-	bh=7vD+jdFcbRODnTyocCRqC2CBnN4fjCfLQDbcXwpnOFU=;
+	s=korg; t=1750083495;
+	bh=5adsMQ0TDAhlIaGYvF670/1IDRxVrU+Q3eKWf6nrccg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JBx8fsLok416/BE/CRF9cIHl1X7u6rcJT9hirMbzyUtEPyE5nP27OqsGSo9d6VcrM
-	 rnZk3M53sB+oeNQ815/7F89jqwyJQKRNenNBCsH3tGIn8P9ceUPGhfNFWnwJF1IcLx
-	 qQUPXZUK/1AftN5AznCXG0ZbWdTZRICNSZ0IiRdg=
-Date: Mon, 16 Jun 2025 16:17:30 +0200
+	b=sLNFJMq3h3shBLwZpvAliCw36NIXJ9+FZhnZRWBEnv62iTXStnesZo9T4RHqxd3T2
+	 vK06AaAlS4aFBmznsJWtMlfZyI/9FOpxXpGVFzDOX8L67FsSKfxi0K0saLprcF1AYL
+	 4emc4YhJcZrQIkztzBAHq/oPneHG7IN8VnikzIGU=
+Date: Mon, 16 Jun 2025 16:18:13 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Kuen-Han Tsai <khtsai@google.com>
 Cc: prashanth.k@oss.qualcomm.com, hulianqin@vivo.com,
 	krzysztof.kozlowski@linaro.org, mwalle@kernel.org,
 	jirislaby@kernel.org, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: gadget: u_serial: Fix race condition in TTY
- wakeup
-Message-ID: <2025061634-heavily-outrage-603a@gregkh>
+Subject: Re: [PATCH 1/2] Revert "usb: gadget: u_serial: Add null pointer
+ check in gs_start_io"
+Message-ID: <2025061642-likeness-heaving-dd75@gregkh>
 References: <20250616132152.1544096-1-khtsai@google.com>
- <20250616132152.1544096-2-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,55 +57,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250616132152.1544096-2-khtsai@google.com>
+In-Reply-To: <20250616132152.1544096-1-khtsai@google.com>
 
-On Mon, Jun 16, 2025 at 09:21:47PM +0800, Kuen-Han Tsai wrote:
-> A race condition occurs when gs_start_io() calls either gs_start_rx() or
-> gs_start_tx(), as those functions briefly drop the port_lock for
-> usb_ep_queue(). This allows gs_close() and gserial_disconnect() to clear
-> port.tty and port_usb, respectively.
+On Mon, Jun 16, 2025 at 09:21:46PM +0800, Kuen-Han Tsai wrote:
+> This reverts commit ffd603f214237e250271162a5b325c6199a65382.
 > 
-> Use the null-safe TTY Port helper function to wake up TTY.
+> Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
+> gs_start_io") adds null pointer checks at the beginning of the
+> gs_start_io() function to prevent a null pointer dereference. However,
+> these checks are redundant because the function's comment already
+> requires callers to hold the port_lock and ensure port.tty and port_usb
+> are not null. All existing callers already follow these rules.
+> 
+> The true cause of the null pointer dereference is a race condition. When
+> gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
+> is temporarily released for usb_ep_queue(). This allows port.tty and
+> port_usb to be cleared.
 > 
 > Cc: stable@vger.kernel.org
-> Fixes: 35f95fd7f234 ("TTY: usb/u_serial, use tty from tty_port")
-> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> ---
-> Explanation:
->     CPU1:                            CPU2:
->     gserial_connect() // lock
->                                      gs_close() // await lock
->     gs_start_rx()     // unlock
->     usb_ep_queue()
->                                      gs_close() // lock, reset port_tty and unlock
->     gs_start_rx()     // lock
->     tty_wakeup()      // dereference
+> Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
 
-Why isn't this up in the changelog?
+As this is removing unneeded checks, why is it cc: stable?  What bug is
+being resolved here?
 
-> 
-> Stack traces:
-> [   51.494375][  T278] ttyGS1: shutdown
-> [   51.494817][  T269] android_work: sent uevent USB_STATE=DISCONNECTED
-> [   52.115792][ T1508] usb: [dm_bind] generic ttyGS1: super speed IN/ep1in OUT/ep1out
-> [   52.516288][ T1026] android_work: sent uevent USB_STATE=CONNECTED
-> [   52.551667][ T1533] gserial_connect: start ttyGS1
-> [   52.565634][ T1533] [khtsai] enter gs_start_io, ttyGS1, port->port.tty=0000000046bd4060
-> [   52.565671][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
-> [   52.591552][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
-> [   52.619901][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
-> [   52.638659][ T1325] [khtsai] gs_close, lock port ttyGS1
-> [   52.656842][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) ...
-> [   52.683005][ T1325] [khtsai] gs_close, clear ttyGS1
-> [   52.683007][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) done!
-> [   52.708643][ T1325] [khtsai] gs_close, unlock port ttyGS1
-> [   52.747592][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
-> [   52.747616][ T1533] [khtsai] gs_start_io, ttyGS1, going to call tty_wakeup(), port->port.tty=0000000000000000
-> [   52.747629][ T1533] Unable to handle kernel NULL pointer dereference at virtual address 00000000000001f8
-
-What is [khtsai] from?
-
-thanks,
+confused,
 
 greg k-h
 
