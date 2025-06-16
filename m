@@ -1,105 +1,143 @@
-Return-Path: <linux-usb+bounces-24791-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24792-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6963CADB265
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 15:46:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A5B4ADB30B
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:07:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770CB1883541
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 13:44:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85BB516B4ED
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7107285C86;
-	Mon, 16 Jun 2025 13:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3AA21D6DB5;
+	Mon, 16 Jun 2025 14:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kVOWMnbB"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="MeKBSpTS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497272877F4;
-	Mon, 16 Jun 2025 13:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F078B1B4247
+	for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 14:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750081423; cv=none; b=tHhZv8+KpQ1FRXz013wVg/GXYh/RcwrBtPdRpU6U0d4Ozl4ymFnhk4xpcX1CPX0aoQezMFb3abwKivN9xYRtMajQmOOmhUs2NDHnDj2Do0DS2h2LCL8gh3In1Nxb+nBxzF5NSiVQJESQbXPG8qCGyjzB77f/uEo2hZe4uwki5VM=
+	t=1750082855; cv=none; b=plQeqlNkZh1ASWeupM7pO424WYC+NOfzjf89Oeqgo2QQiRSXaQiR3Vk63msrevtQAyQfa8o1IlYplosU9EYLGQr0Fge7cTeHYgxdzi0vWdqGPkjLcR5I6tNaS9xGs19fmkpMC+B42rh5sqxvJW7qp8eXwK1xgvVsL3g0lmJYsoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750081423; c=relaxed/simple;
-	bh=k7LiXmpneGGZlKOZqJATN5n77gx0tL5sRJlWmRS/GVk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C/oUJ6alN11geMoP1s3Q8+6/CDJ25LP3eXoQ/e4OltgjePI3Db/S01tgyP68qp4UsF+2sTl4KTxozlwMrcMCt0l4tV+Y++aXwb7gUHWDdaSmY/Sv8yS3tCDtXFTTeEO8EebScTR1EVIlajXUt2oufXLGYam6t+WoQLNh6pOpZQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kVOWMnbB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F13C4CEED;
-	Mon, 16 Jun 2025 13:43:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750081422;
-	bh=k7LiXmpneGGZlKOZqJATN5n77gx0tL5sRJlWmRS/GVk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kVOWMnbBQoMPe8SvitQMN7FT5af8R2dLwfFhrJnhKNg90ZNk9w6nYrswggObowW9b
-	 /G9SLzGPT9C2kDEw1P5U/Vowp2ELFxQMffaKoA199d/tVDOUjimfC2P3o9oX9tpN/l
-	 juUiSJoBYpqRhtQbnuRMzCN/rsktvkgAJ9rYDk/BUHUb0IPNF5cVo2wlLB/eIC+HNM
-	 kFx4TEZreikiDnjGugENNwmpquggC1yozLmliPDfEgNujCX+G++VsXm7YSNKPmeW5P
-	 X5tvtypzLS4TAbGM2WU2SM1Cy7Y9u4K994xENnZyXwismWtslqp+b1ASJ1EQBT08dw
-	 JmG7+uahAKJNg==
-Message-ID: <6c414772-6bff-4509-b7ec-4aef2982e758@kernel.org>
-Date: Mon, 16 Jun 2025 15:43:38 +0200
+	s=arc-20240116; t=1750082855; c=relaxed/simple;
+	bh=VOlFTK+czEYRjfGf+Dzen6MJPjhAC1FwiHRCDVvik0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oyBLOaM72fexfFj8NafAOMoI/VsDt/yKscRNZceaFdlbbzg1TWJGY+cP7z8oPEj+ROQ5K+r1p/fUOPtfHaTrDT1R9il47bmAuLX/sNm5dIlTCCV3kTtRYi1O3vp7HrOTts8/xGTGqeVVt8pvBIqhOoJxRZSFkeU3ZEq8g9fmoXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=MeKBSpTS; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c56a3def84so469729385a.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 07:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1750082852; x=1750687652; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6iXQWbgKb41RQoxa2LzxIBSkI5h3O7I/P68z8+crXOE=;
+        b=MeKBSpTS33WPffEAV00cEKY+mGhd4T8g49serRPzI13thcd8lNjqEDoFOnhFoOp41K
+         yiHjZtaAatZJ59GV45Sy9WCOT64YKuCYMwt8XhTmSSCZ8v4xIoEm2aIpKvc9E6lSnv/0
+         goUthPT8E+KYsvVRxckqMBcjVgrl0rWgFWXyX3kpBETXWD0HbTaCzsCy/KfcebgBJQ0c
+         s9V2KeMiL5YbJW8v6CEjKKJtOm8z1+kzIxKBBnEcd9c7JsP0vebez8JjtKfd3AztlOeD
+         bdRclxPW69FZLmIxwTVGMvtq/hDCQmUB9G6YylPAIX2+l52sMUgQiabLyagHglomGMds
+         mQxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750082852; x=1750687652;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6iXQWbgKb41RQoxa2LzxIBSkI5h3O7I/P68z8+crXOE=;
+        b=Q455RTX9fqPnUrRll7P5ZPY1t3Y0y/iKQnjqm7rA9V9A6+Y2aevSRugyDmRbryty6Z
+         WMzJNQh3BaHduOSkDTKBMjXxmns1kZRj4A5CEVmNC4gYBbjpvj+5OkYOxLAeBzcEJIqN
+         TPTnZTn6EQepVWctBbS/I6J9HVJJpNwCDltLIaikgN/rQGd/gv6RVRXXSieiET+CV7Ai
+         9uBdylqFLjxHLuYkCsiEdTuOaKONpAr9g6AwPxq8mb2LkKxB+F5FLxB+9o3QO2vabiF5
+         Ziw2N3ECu/HvtSBjXQU1qBJaD/x1TdhUYoL+VWwed0Nz+k4wZIhHqbDx6PdhKuWb4LxF
+         IfvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5E+sCWWX+3iL0MnEkF4nLjjoPe+eGGu+2rf0LJN1MPRXh04Jpvgt/Q6cgynhop/6m0QtZ6T95XMY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFCoYVJjQf6v5Azo18HA2xEapuhcAxOjQ2Dcn0AoS7yNmsL8HD
+	F+WaveTreaseF4X1IFwwSCxOFs7H7/SaKS4KQk8aOUiujrFNtoypzI7w2/IHpBV7eg==
+X-Gm-Gg: ASbGncvcX5+K8SenhuUGObGL29yTnJrB2hiOWcEV/KaWSUPHHOqvoNb6Rmqe3ygaw4B
+	hzu7YB40jFeDRjp0igjOwj81l8chdH12AxtjRZCbLkh6jDGEE9Nt4AeEi3NDFkxeD/8XLrFvSlr
+	CnL/BFN4CWT0Mgu2ettHHhfryop+5INSNer7fvB1YO4DHh+kHVpii0eh9kD90ZoqSc0rt4Oo1xY
+	HeHP8NRzRngT7UE+aro1Lj814ut/yeN5jAW76dr549Cg4qUkMMnb6ZRkOMHCHIm81OvGVE5kVCj
+	OhuYJNajyR74GOfvRJyKW+2bZ9f6ZzXAvszpUD5U5V/a0gaaeZIe/Ew0uETQiISJVgFSRW3uj4Q
+	ip+BY
+X-Google-Smtp-Source: AGHT+IFkSUYnJV0/yN77bju16oisYocc1x/yEGqbjZIhUKVVF4Zf2CxdRQFefSRz1+8JbH1TMEjCvQ==
+X-Received: by 2002:a05:620a:19a7:b0:7c7:9a85:d395 with SMTP id af79cd13be357-7d3c6ceb724mr1373478185a.44.1750082851704;
+        Mon, 16 Jun 2025 07:07:31 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8eceaf6sm533663985a.78.2025.06.16.07.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 07:07:31 -0700 (PDT)
+Date: Mon, 16 Jun 2025 10:07:28 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+	hdegoede@redhat.com, Thinh.Nguyen@synopsys.com,
+	Amardeep Rai <amardeep.rai@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH 2/3] USB: core: support eUSB2 double bandwidth large isoc
+ URB frames
+Message-ID: <c82aa592-7904-44c1-b595-ede6eed14ee4@rowland.harvard.edu>
+References: <20250616093730.2569328-1-mathias.nyman@linux.intel.com>
+ <20250616093730.2569328-3-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] media: uvcvideo: add URB_USBMON_NEED_SYNC urb flag
-To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
- stern@rowland.harvard.edu, laurent.pinchart@ideasonboard.com,
- mchehab@kernel.org, jeff.johnson@oss.qualcomm.com
-Cc: linux-media@vger.kernel.org, linux-usb@vger.kernel.org, jun.li@nxp.com,
- imx@lists.linux.dev
-References: <20250614132446.251218-1-xu.yang_2@nxp.com>
- <20250614132446.251218-2-xu.yang_2@nxp.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250614132446.251218-2-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250616093730.2569328-3-mathias.nyman@linux.intel.com>
 
-Hi,
-
-On 14-Jun-25 15:24, Xu Yang wrote:
-> Since commit "20e1dbf2bbe2 media: uvcvideo: Use dma_alloc_noncontiguous
-> API", the driver is allocating non-coherent buffer for urb. This will
-> add URB_USBMON_NEED_SYNC flag to inform usb monitor needs do dma sync
-> when record data.
+On Mon, Jun 16, 2025 at 12:37:29PM +0300, Mathias Nyman wrote:
+> From: Amardeep Rai <amardeep.rai@intel.com>
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
-
-
+> eUSB2 double isochronous in bandwidth devices support up to 6 transactions
+> per microframe, and thus doubles the total bytes possible to receive per
+> microframe.
+> 
+> Support larger URB isoc frame sizes for eUSB2 double isoc in endpoints.
+> 
+> Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
->  drivers/media/usb/uvc/uvc_video.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/usb/core/urb.c | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index e3567aeb0007..446b3f16545d 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -1946,7 +1946,8 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
->  		urb->context = uvc_urb;
->  		urb->pipe = usb_rcvisocpipe(stream->dev->udev,
->  				ep->desc.bEndpointAddress);
-> -		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
-> +		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP |
-> +				      URB_USBMON_NEED_SYNC;
->  		urb->transfer_dma = uvc_urb->dma;
->  		urb->interval = ep->desc.bInterval;
->  		urb->transfer_buffer = uvc_urb->buffer;
+> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> index 5e52a35486af..911091b92fd7 100644
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -372,6 +372,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+>  	struct usb_host_endpoint	*ep;
+>  	int				is_out;
+>  	unsigned int			allowed;
+> +	bool				is_eusb2_isoch_double;
+>  
+>  	if (!urb || !urb->complete)
+>  		return -EINVAL;
+> @@ -434,7 +435,12 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+>  		return -ENODEV;
+>  
+>  	max = usb_endpoint_maxp(&ep->desc);
+> -	if (max <= 0) {
+> +	is_eusb2_isoch_double = dev->speed == USB_SPEED_HIGH &&
+> +				xfertype == USB_ENDPOINT_XFER_ISOC &&
+> +				usb_endpoint_dir_in(&ep->desc) &&
+> +				le16_to_cpu(dev->descriptor.bcdUSB == 0x220) &&
+> +				le16_to_cpu(ep->desc.wMaxPacketSize == 0);
+> +	if (max < 0 || (max == 0 && !is_eusb2_isoch_double)) {
 
+Minor point: It's impossible to have max < 0 here, because 
+usb_endpoint_maxp() always returns a non-negative value (the return 
+value is &'ed with 0x07ff).  That part of the test can be removed.
+
+Alan Stern
 
