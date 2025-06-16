@@ -1,62 +1,55 @@
-Return-Path: <linux-usb+bounces-24793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABB25ADB345
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:15:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D50EADB391
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 16:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAE8C1888C41
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:15:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B06317541B
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Jun 2025 14:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12211F3D20;
-	Mon, 16 Jun 2025 14:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CE921C9F1;
+	Mon, 16 Jun 2025 14:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wmVyzyo2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JBx8fsLo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8131474CC;
-	Mon, 16 Jun 2025 14:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5A41FDE31;
+	Mon, 16 Jun 2025 14:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750083309; cv=none; b=UQFsP1eWHlpv+GtHcKeMzXXJnyykLMT3QvSSoP/wrNzlZmte4OaCigmtXDHPeUKDOiUEAmVF9s72A12Emav6Xy75fRkPj4l97U/cyjcjj9z6ohqeZlyAIDnRtxaru2zouKSD8bhnMlcPBL/zEf1JVBir6A1VIIl2nXU/6bvGzsQ=
+	t=1750083454; cv=none; b=oVrlVkcnX7C5WwNhgrU81+e4eg+C+ZwF7s1nEXSjUbNFjVkjtpJoro0ZXWIgQRrHYt9IjTpvZvESneD7Ry4KW6X5d0Ryg+1SXak+lmOw2njCC7GawsV+fXTNHtPcFIozqoyTyNSt13aixYeovcaBg9BqNCtt+81QW8O0iRKRE64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750083309; c=relaxed/simple;
-	bh=pb1/Z+qqLZWMdwVqPLBQCuY4k1jN6nOv8S1+j7rAwR4=;
+	s=arc-20240116; t=1750083454; c=relaxed/simple;
+	bh=7vD+jdFcbRODnTyocCRqC2CBnN4fjCfLQDbcXwpnOFU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lfWxb+IqnGvqWHuDTvd8ua0V8Uv473MYdTl1QwEbbRX3C+JFm69A52MgMmyC6VyuZ631i+sEmCRjll+3MsfmvlINWz+JaK/wSut4Mt6GJtLB29bicPCYQ4RiGuX75yvpUp3ZOhYc8f5GuG0qffIxEVsBMJVwPHD0Z5ynuXLkOfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wmVyzyo2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B88C4CEF1;
-	Mon, 16 Jun 2025 14:15:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zsvpf4a/h+sG7F9ep7+s7eOiXxGvlMYQxblfqArMD3u6NoUOTFTJurzqaRnV54UWH9nJJofpM0SzfXzy0e/+X71znyhEIpZuLdiC/t11NfB3OfLU9meHVzCkmYIXsOrsLj9Sy7Qnj5Q6C8XWX4lVYVX9JRGhv/XZn52NOm8zwLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JBx8fsLo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E27C4CEEA;
+	Mon, 16 Jun 2025 14:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750083308;
-	bh=pb1/Z+qqLZWMdwVqPLBQCuY4k1jN6nOv8S1+j7rAwR4=;
+	s=korg; t=1750083454;
+	bh=7vD+jdFcbRODnTyocCRqC2CBnN4fjCfLQDbcXwpnOFU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wmVyzyo2+F/T8YD7Qs0HgbdTUEf+dA9SPF4uMsXx7kdgZZSIQ6M7YZjl6kZijs25J
-	 8pGD2w+UjZLXsPlnLfX8FdmvQnS6mbXezvQ4yTt058I+PwjGs7rpEhkgUFY4Ob/Cld
-	 wcpNO4/CSIzrZJCh2j3u2yH1/akr3hLtKpeFkIiU=
-Date: Mon, 16 Jun 2025 16:15:06 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 06/10] Revert "usb: typec: displayport: Receive DP Status
- Update NAK request exit dp altmode"
-Message-ID: <2025061623-ammonium-outskirts-e89e@gregkh>
-References: <20250616133147.1835939-1-akuchynski@chromium.org>
- <20250616133147.1835939-7-akuchynski@chromium.org>
+	b=JBx8fsLok416/BE/CRF9cIHl1X7u6rcJT9hirMbzyUtEPyE5nP27OqsGSo9d6VcrM
+	 rnZk3M53sB+oeNQ815/7F89jqwyJQKRNenNBCsH3tGIn8P9ceUPGhfNFWnwJF1IcLx
+	 qQUPXZUK/1AftN5AznCXG0ZbWdTZRICNSZ0IiRdg=
+Date: Mon, 16 Jun 2025 16:17:30 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: prashanth.k@oss.qualcomm.com, hulianqin@vivo.com,
+	krzysztof.kozlowski@linaro.org, mwalle@kernel.org,
+	jirislaby@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: gadget: u_serial: Fix race condition in TTY
+ wakeup
+Message-ID: <2025061634-heavily-outrage-603a@gregkh>
+References: <20250616132152.1544096-1-khtsai@google.com>
+ <20250616132152.1544096-2-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,30 +58,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250616133147.1835939-7-akuchynski@chromium.org>
+In-Reply-To: <20250616132152.1544096-2-khtsai@google.com>
 
-On Mon, Jun 16, 2025 at 01:31:43PM +0000, Andrei Kuchynski wrote:
-> This reverts commit b4b38ffb38c91afd4dc387608db26f6fc34ed40b.
+On Mon, Jun 16, 2025 at 09:21:47PM +0800, Kuen-Han Tsai wrote:
+> A race condition occurs when gs_start_io() calls either gs_start_rx() or
+> gs_start_tx(), as those functions briefly drop the port_lock for
+> usb_ep_queue(). This allows gs_close() and gserial_disconnect() to clear
+> port.tty and port_usb, respectively.
 > 
-> The commit introduced a deadlock with the cros_ec_typec driver.
-> The deadlock occurs due to a recursive lock acquisition of
-> `cros_typec_altmode_work::mutex`.
-> The call chain is as follows: 
-> 1. cros_typec_altmode_work() acquires the mutex
-> 2. typec_altmode_vdm() -> dp_altmode_vdm() ->
-> 3. typec_altmode_exit() -> cros_typec_altmode_exit()
-> 4. cros_typec_altmode_exit() attempts to acquire the mutex again
+> Use the null-safe TTY Port helper function to wake up TTY.
 > 
-> This revert is considered safe as no other known driver sends back
-> DP_CMD_STATUS_UPDATE command with the NAK flag.
-> 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> Cc: stable@vger.kernel.org
+> Fixes: 35f95fd7f234 ("TTY: usb/u_serial, use tty from tty_port")
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 > ---
->  drivers/usb/typec/altmodes/displayport.c | 4 ----
->  1 file changed, 4 deletions(-)
+> Explanation:
+>     CPU1:                            CPU2:
+>     gserial_connect() // lock
+>                                      gs_close() // await lock
+>     gs_start_rx()     // unlock
+>     usb_ep_queue()
+>                                      gs_close() // lock, reset port_tty and unlock
+>     gs_start_rx()     // lock
+>     tty_wakeup()      // dereference
 
-Why isn't this being sent as a separate patch for 6.16-final?  And why
-not put a fixes: line?
+Why isn't this up in the changelog?
+
+> 
+> Stack traces:
+> [   51.494375][  T278] ttyGS1: shutdown
+> [   51.494817][  T269] android_work: sent uevent USB_STATE=DISCONNECTED
+> [   52.115792][ T1508] usb: [dm_bind] generic ttyGS1: super speed IN/ep1in OUT/ep1out
+> [   52.516288][ T1026] android_work: sent uevent USB_STATE=CONNECTED
+> [   52.551667][ T1533] gserial_connect: start ttyGS1
+> [   52.565634][ T1533] [khtsai] enter gs_start_io, ttyGS1, port->port.tty=0000000046bd4060
+> [   52.565671][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
+> [   52.591552][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
+> [   52.619901][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
+> [   52.638659][ T1325] [khtsai] gs_close, lock port ttyGS1
+> [   52.656842][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) ...
+> [   52.683005][ T1325] [khtsai] gs_close, clear ttyGS1
+> [   52.683007][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) done!
+> [   52.708643][ T1325] [khtsai] gs_close, unlock port ttyGS1
+> [   52.747592][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
+> [   52.747616][ T1533] [khtsai] gs_start_io, ttyGS1, going to call tty_wakeup(), port->port.tty=0000000000000000
+> [   52.747629][ T1533] Unable to handle kernel NULL pointer dereference at virtual address 00000000000001f8
+
+What is [khtsai] from?
 
 thanks,
 
