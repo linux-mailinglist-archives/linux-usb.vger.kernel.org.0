@@ -1,218 +1,154 @@
-Return-Path: <linux-usb+bounces-24827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24828-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA1FADC690
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 11:33:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEAB9ADC72E
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 11:54:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E76BF7A17F8
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 09:32:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C0711772A5
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 09:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C592949F4;
-	Tue, 17 Jun 2025 09:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A462DBF4A;
+	Tue, 17 Jun 2025 09:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FvTEgw9U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SeHok1Cz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A331DE2BF;
-	Tue, 17 Jun 2025 09:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985462C08CD;
+	Tue, 17 Jun 2025 09:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750152799; cv=none; b=VZmFm+uKt4BQgchSelL6Ebbg8oGDrgw+hGFXwkTQBFjFYlZf1XpHxlhfb0fJ/aeWq3/RsjvOnuNVYViWNqeO8eE3hmJ4xJjX/Z7Ul9N1ZJxRUU/Jvyikx8zWGiU8HMoaGHqTT/WK3CyabwGHq9Xmg9gXp4LPAG39RixLgrRMvTM=
+	t=1750153854; cv=none; b=qV6ZPk5/lPuIJv56TkmzKXocOVkUOEFMOAm+H46gnFJtmwDqqkbtL5EYxSBuLwJB6LJrGUVMIr+vfdcZgQsA8rso4/BvLCkZ7L9dUODIx8H8Q+B70c1Prd3JYH04MH65RvMX7mWoaT1Zxl4PsOAuo5yXhEJ1HcKpmvLSaST2RKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750152799; c=relaxed/simple;
-	bh=KyzMbQfhZJNmDrTnESBqCjvNW4ddcm/X4dit05DF09A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UhsZxyQT9QKVCWBpjZaWYlbwc0uZhOIyV/xlwfwBnSvZRPh6KJo2Uj4wgn1/kI4El9L9jn3RycosLyVLUeedlFmv3J09QtRYRT7SsrU1AwpL0oqiMfqc/7nHQvB393L5ZWkvmmdtcnePQWlZZJxsvV3iinHzLcdToSci8x09J4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FvTEgw9U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08452C4CEE3;
-	Tue, 17 Jun 2025 09:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750152797;
-	bh=KyzMbQfhZJNmDrTnESBqCjvNW4ddcm/X4dit05DF09A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FvTEgw9UmFMMc1dqWUmhZ94c2FSeqzHYW0RewK1Zb4PVvQHjAeont1yXOUbM4U53T
-	 9Vqmug6RGUbD7DoaArpYISACU4ws7xZ4GtSQTAfZH4UqQLOW1WV4gyIYPtAZwSum79
-	 h2/KNlh1vGVyJUmBKTbc78UMtGSfKp52mCyRO8Vyxlcvkl9pNOIKhii4u2OWkkgX9Q
-	 kfkIo9A+N6IXLUdiuAO/ANP9GYHCMQAZhwka6Nos9ZL8YxFUqr8wotDQB0q5e2c+8z
-	 6wyc8k4+CEuv3be9KbmdzR8OL06yiWq5jL7NJWYGzfryP3+HHXmDt3SWI658KAMNJB
-	 QEY6sQiuTVusg==
-Message-ID: <9233836e-c50e-4118-95f6-0be02dc0c45e@kernel.org>
-Date: Tue, 17 Jun 2025 11:33:14 +0200
+	s=arc-20240116; t=1750153854; c=relaxed/simple;
+	bh=q1yjPxJXKLdryIt38GRRT/giXd0/MkzlEEaOqBtmCAg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GuZqa+ZbH20TR8DXfQxe0PwiLHzakCSj62P9971wqO4OFpg+XYHD1oPy+r89WA4xPx71mTOhUnX1x/gxx1Fp3+mrh/qcWa8/rFpi0vLcgoTZBRecs4tEsSz27Y2aAa6Z5s7s1LMfjGYswqN3xn/qGGS7LksvwqYLWggVCxfSasA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SeHok1Cz; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750153852; x=1781689852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q1yjPxJXKLdryIt38GRRT/giXd0/MkzlEEaOqBtmCAg=;
+  b=SeHok1CzuYQlK6THjPpPyuMKP0QJwguQszNdazc4l3+t1F5MvXRpXUMC
+   ND5pLzv6GHntDiuekigsphJ0By0pr1SPy2xzaDbcI0IXEIV0laj73pQpN
+   yXfEpOhTBRSRTLgUxjBagp4kncpKGCwQqmc0QXsbSHQXnmbVB/jUhFU/h
+   JirJ+wxcCohucfhrA35it5yTYJCDa4f9ti+q8bvospp7+8WZTCin9gilz
+   MBM/P09ZEkffvbWefc0ZFZyfsrhZO3DJocziLFfxz2ZilTUm68f+PdsbS
+   zqSJP1Rx+xuG/f3Pq0FMuyw3lpMsrfjY4ZNbezouiIIMxq7VAhB9g6Loi
+   g==;
+X-CSE-ConnectionGUID: j73jUkNwS/GH5+ORKq6Cfg==
+X-CSE-MsgGUID: YUHB0l3YTveHyuZ4nf3qYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="52302917"
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="52302917"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 02:50:51 -0700
+X-CSE-ConnectionGUID: dF+nS/xTT0KJDY+DwP/xxA==
+X-CSE-MsgGUID: ZvDK7tNjShe+8GtAL1GJVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="153923847"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa004.fm.intel.com with SMTP; 17 Jun 2025 02:50:46 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Jun 2025 12:50:46 +0300
+Date: Tue, 17 Jun 2025 12:50:46 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Dmitry Baryshkov <lumag@kernel.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: Re: [PATCH 04/10] usb: typec: Expose alternate mode priorities via
+ sysfs
+Message-ID: <aFE6dnxet4_sm8b1@kuha.fi.intel.com>
+References: <20250616133147.1835939-1-akuchynski@chromium.org>
+ <20250616133147.1835939-5-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/4] media: uvcvideo: Auto-set UVC_QUIRK_MSXU_META
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hans de Goede <hdegoede@redhat.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250604-uvc-meta-v6-0-7141d48c322c@chromium.org>
- <20250604-uvc-meta-v6-4-7141d48c322c@chromium.org>
- <d1e5942b-f8e5-42c6-98ae-d346927df3cb@kernel.org>
- <CANiDSCtXmXYkv3b_62iegTFOxBVrGUv9+mbioxvQvPsadwBpqg@mail.gmail.com>
- <ec722aa6-17d4-4264-b99f-bdae1d908713@kernel.org>
- <CANiDSCu1b2n9c7WH2ZHysOY2xV1RbV9Z6AHBuXXfF8fV8OwYgg@mail.gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <CANiDSCu1b2n9c7WH2ZHysOY2xV1RbV9Z6AHBuXXfF8fV8OwYgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250616133147.1835939-5-akuchynski@chromium.org>
 
-Hi,
-
-On 16-Jun-25 11:02 PM, Ricardo Ribalda wrote:
-> Hi Hans
+On Mon, Jun 16, 2025 at 01:31:41PM +0000, Andrei Kuchynski wrote:
+> This sysfs attribute specifies the preferred order for enabling
+> DisplayPort alt-mode, Thunderbolt alt-mode, and USB4 mode.
 > 
-> On Mon, 16 Jun 2025 at 22:47, Hans de Goede <hansg@kernel.org> wrote:
->>
->> Hi Ricardo,
->>
->> On 16-Jun-25 5:04 PM, Ricardo Ribalda wrote:
->>> Hi Hans
->>>
->>> On Mon, 16 Jun 2025 at 16:38, Hans de Goede <hansg@kernel.org> wrote:
->>>>
->>>> Hi Ricardo,
->>>>
->>>> On 4-Jun-25 14:16, Ricardo Ribalda wrote:
->>>>> If the camera supports the MSXU_CONTROL_METADATA control, auto set the
->>>>> MSXU_META quirk.
->>>>>
->>>>> Reviewed-by: Hans de Goede <hansg@kernel.org>
->>>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->>>>> ---
->>>>>  drivers/media/usb/uvc/uvc_metadata.c | 72 ++++++++++++++++++++++++++++++++++++
->>>>>  include/linux/usb/uvc.h              |  3 ++
->>>>>  2 files changed, 75 insertions(+)
->>>>>
->>>>> diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
->>>>> index df3f259271c675feb590c4534dad95b3b786f082..cd58427578ff413591b60abe0a210b90802dddc7 100644
->>>>> --- a/drivers/media/usb/uvc/uvc_metadata.c
->>>>> +++ b/drivers/media/usb/uvc/uvc_metadata.c
->>>>> @@ -10,6 +10,7 @@
->>>>>  #include <linux/list.h>
->>>>>  #include <linux/module.h>
->>>>>  #include <linux/usb.h>
->>>>> +#include <linux/usb/uvc.h>
->>>>>  #include <linux/videodev2.h>
->>>>>
->>>>>  #include <media/v4l2-ioctl.h>
->>>>> @@ -188,11 +189,82 @@ static const struct v4l2_file_operations uvc_meta_fops = {
->>>>>       .mmap = vb2_fop_mmap,
->>>>>  };
->>>>>
->>>>> +static const u8 uvc_msxu_guid[16] = UVC_GUID_MSXU_1_5;
->>>>> +
->>>>> +static struct uvc_entity *uvc_meta_find_msxu(struct uvc_device *dev)
->>>>> +{
->>>>> +     struct uvc_entity *entity;
->>>>> +
->>>>> +     list_for_each_entry(entity, &dev->entities, list) {
->>>>> +             if (!memcmp(entity->guid, uvc_msxu_guid, sizeof(entity->guid)))
->>>>> +                     return entity;
->>>>> +     }
->>>>> +
->>>>> +     return NULL;
->>>>> +}
->>>>> +
->>>>> +#define MSXU_CONTROL_METADATA 0x9
->>>>> +static int uvc_meta_detect_msxu(struct uvc_device *dev)
->>>>> +{
->>>>> +     u32 *data __free(kfree) = NULL;
->>>>> +     struct uvc_entity *entity;
->>>>> +     int ret;
->>>>> +
->>>>> +     entity = uvc_meta_find_msxu(dev);
->>>>> +     if (!entity)
->>>>> +             return 0;
->>>>> +
->>>>> +     /*
->>>>> +      * USB requires buffers aligned in a special way, simplest way is to
->>>>> +      * make sure that query_ctrl will work is to kmalloc() them.
->>>>> +      */
->>>>> +     data = kmalloc(sizeof(*data), GFP_KERNEL);
->>>>> +     if (!data)
->>>>> +             return -ENOMEM;
->>>>> +
->>>>> +     /* Check if the metadata is already enabled. */
->>>>> +     ret = uvc_query_ctrl(dev, UVC_GET_CUR, entity->id, dev->intfnum,
->>>>> +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
->>>>> +     if (ret)
->>>>> +             return 0;
->>>>> +
->>>>> +     if (*data) {
->>>>> +             dev->quirks |= UVC_QUIRK_MSXU_META;
->>>>> +             return 0;
->>>>> +     }
->>>>> +
->>>>> +     /*
->>>>> +      * We have seen devices that require 1 to enable the metadata, others
->>>>> +      * requiring a value != 1 and others requiring a value >1. Luckily for
->>>>> +      * us, the value from GET_MAX seems to work all the time.
->>>>> +      */
->>>>> +     ret = uvc_query_ctrl(dev, UVC_GET_MAX, entity->id, dev->intfnum,
->>>>> +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
->>>>> +     if (ret || !*data)
->>>>> +             return 0;
->>>>> +
->>>>> +     /*
->>>>> +      * If we can set MSXU_CONTROL_METADATA, the device will report
->>>>> +      * metadata.
->>>>> +      */
->>>>> +     ret = uvc_query_ctrl(dev, UVC_SET_CUR, entity->id, dev->intfnum,
->>>>> +                          MSXU_CONTROL_METADATA, data, sizeof(*data));
->>>>> +     if (!ret)
->>>>> +             dev->quirks |= UVC_QUIRK_MSXU_META;
->>>>
->>>> Since we set the ctrl to enable MSXU fmt metadata here, this means that
->>>> cameras which also support V4L2_META_FMT_D4XX will be switched to MSXU
->>>> metadata mode at probe() time.
->>>
->>> Not sure that I completely follow you. D4XX cameras will not be
->>> switched to MSXU, they will support MSXU and D4XX with the current
->>> patchset.
->>
->> Is MSXU an extension on top of D4XX ? If not then we need to tell
->> the camera which metadata we want in uvc_meta_v4l2_set_format()
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec | 17 ++++
+>  drivers/usb/typec/Makefile                  |  2 +-
+>  drivers/usb/typec/class.c                   | 26 ++++++
+>  drivers/usb/typec/class.h                   |  2 +
+>  drivers/usb/typec/mode_selection.c          | 93 +++++++++++++++++++++
+>  drivers/usb/typec/mode_selection.h          |  5 ++
+>  include/linux/usb/typec_altmode.h           |  7 ++
+>  7 files changed, 151 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/usb/typec/mode_selection.c
+>  create mode 100644 drivers/usb/typec/mode_selection.h
 > 
-> I think I know where the miss-comunication happened :)
-> 
-> MSXU is indeed a superset of D4xx. D4xx metadata is formatted in MSXU.
-> 
-> If an app fetches D4XX and MSXU from an Intel D4xx device, they are identical.
-> 
-> Or in other words, if D4XX devices have MSXU_CONTROL_METADATA, they
-> are probably today initialized with a value != 0.
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 38e101c17a00..46eee82042ab 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -162,6 +162,23 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
+>  		- usb3 (USB 3.2)
+>  		- usb4 (USB4)
+>  
+> +What:		/sys/class/typec/<port>/altmode_priorities
+> +Date:		June 2025
+> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
+> +Description:	Lists the alternate modes supported by the port and their
+> +		priorities. The priority setting determines the order in which
+> +		Displayport alt-mode, Thunderbolt alt-mode and USB4 mode will be
+> +		activated, indicating the preferred selection sequence. A value of -1
+> +		disables automatic entry into a specific mode, while lower numbers
+> +		indicate higher priority. The default priorities can be modified by
+> +		assigning new values. Modes without explicitly set values default to -1,
+> +		effectively disabling them.
+> +
+> +		Example values:
+> +		- "USB4=0 TBT=1 DP=2"
+> +		- "USB4=-1 TBT=0"
+> +		- "DP=-1 USB4=-1 TBT=-1"
 
-Ok I see. But I still think the way this is handled in patch 3/4
-is a bit "clunky". I think we should maybe add a 0 terminated
-meta_format array to struct uvc_device and populate that during
-probe with (again maybe) a uvc_device_add_metadata_fmt() helper?
+No. If you want to disable entry to a mode by default, then you
+deactivate that mode, so -1 is not needed. USB4 is also not an alt
+mode, so this at the very least should be named differently.
 
-Having such an array should make uvc_meta_v4l2_try_format() /
-uvc_meta_v4l2_set_format() / uvc_meta_v4l2_enum_format() much
-cleaner. And maybe we can even use a single implementation
-for try and set?
+But I'm not sure this is the correct way to handle the modes in
+general. Can you please explain what exactly is the use case you are
+thinking?
 
-Can you give this approach a try ?
+If you just need to prevent for example USB4 entry by default, then
+you write usb3 (or usb2) to the usb_capability. The alt modes you can
+deactivate by default, no?
 
-Regards,
+I can appreciate the convenience that you get from a single file like
+that, but it does not really give much room to move if for example the
+user space needs to behave differently in case of failures to enter a
+specific mode compared to successful entries.
 
-Hans
+Br,
 
-
-
+-- 
+heikki
 
