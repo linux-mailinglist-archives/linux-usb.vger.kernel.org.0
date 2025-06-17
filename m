@@ -1,173 +1,123 @@
-Return-Path: <linux-usb+bounces-24832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24833-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF89EADCD87
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 15:37:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4DEAADCF92
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 16:24:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93EE53AA094
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 13:30:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B499178D61
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 14:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EBE2E4241;
-	Tue, 17 Jun 2025 13:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 703CA2E9737;
+	Tue, 17 Jun 2025 14:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="prbJUmT0"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="oJ3WvqhK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA3328D85F;
-	Tue, 17 Jun 2025 13:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B09B2E265D
+	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 14:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750166891; cv=none; b=AzSxim8OJCMu4vJE+kRkIMerYKRwO8A7Kodrk7UR2qcja0sgT4i30cO/ovvhn8wGZFALHrBp1KRqIdrHWYFerqbcxYwPiifCypq+s8GvPWCS2xBZhmsnLbi9svV+qZWIyXSFEfR1syQikmUETuT5Gz5DT65oxcR1w1oWsV5j4NA=
+	t=1750169579; cv=none; b=XKBCPtDy3egIa3WLlircHg+n7t3vCFDx3cAqrTTc/zP22/imwVCiJaGJP/odUpwzqABWkjqsiJd7QLBb0ahGR2+xstdvdpIqci9BynYIwI0KZxjj9QevPVjdJBUlWCqNuLGTrik57entTPQeTl5Ly5/u5g1RBe0rolOx4Zn8cDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750166891; c=relaxed/simple;
-	bh=Yq6koQedkWqteV35qFEPdkin2DPwyajpivV5+B4wGbs=;
+	s=arc-20240116; t=1750169579; c=relaxed/simple;
+	bh=iXFWqOrb+/Jnfho8Pu3WTaW8yur5lMtfl0eVlqQfmrk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8WvWs13SaFRVC5c2D62oPYmUuq2JmMb2CUPw9d2vF+1WKOraZAftgKY061RwQm8oWO1JZL95fCANqOwpuJn73yYFugjHIkX216F90iunmxLtfRVd8DiTbmRbk9gdLXoWhTHH99/RDXZKYX3xfpuyGEkcOBDV8YrKD4OB24Ti0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=prbJUmT0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FABBC4CEE3;
-	Tue, 17 Jun 2025 13:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750166891;
-	bh=Yq6koQedkWqteV35qFEPdkin2DPwyajpivV5+B4wGbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=prbJUmT0BTl1+9tbTuJuhUFkpNnAYp/XbaH27k1msZyciuzIewanqiKN1vSe6Uz23
-	 tuQcJBQTRXiznHS/F8pWQ/wjhVUyK/MwKYQqIgKKzOjXKseCEFh03+XaZ11Vi9K2+t
-	 hXyRhfYmKQSP7D0EMKrFxjkn3YW088GqZZTO2jmY=
-Date: Tue, 17 Jun 2025 15:28:07 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 04/10] usb: typec: Expose alternate mode priorities via
- sysfs
-Message-ID: <2025061727-crinkle-drew-4a0d@gregkh>
-References: <20250616133147.1835939-1-akuchynski@chromium.org>
- <20250616133147.1835939-5-akuchynski@chromium.org>
- <aFE6dnxet4_sm8b1@kuha.fi.intel.com>
- <CAMMMRMdwUyxdMy42tA_ccYo77nf=6C+KgokDLHBLEYDa5aOHQw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z0Or5PstIXx19jmn3LPKM18ZYmTg79WqttOvIT8mQ1hlj/3VdO8lZDqi3JXGYpT/nrCVGgYEi2jf4HWb5g7p0eHryFMTDQH0Dy2z1ymiq0t0PhDMSRELeWFHYMHV2REJyeZMJruADhx81r9VLKn4hG/m2PKnhSUkLFRtCqTm98g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=oJ3WvqhK; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4a6f0bcdf45so71832661cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 07:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1750169576; x=1750774376; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0s0DAhwLG2vmOgwqQDSJ2RWGZLNBfRIYPMMOb2htwqc=;
+        b=oJ3WvqhKK0jE8ek3aFENWu3zZqU2Dbjs9cC1AncuQ5UIUfgIoW1pVISayxbjS109kM
+         g/krkRI/uQmNyyJ4ceFFdO9/n+TLU9LOPoqXI/ugl364xGwpIR38zA1Rap0/zR6r4Zuz
+         8Rq6I4k+XyScjdgN8n/mMe0bzYxD2biBJwYp1FwuNoHgsmU1aDwmV0649Rk5H8xto7HT
+         9VD9NL+4Td5SW/zCHqzFdg4AO+Hi+E1y6i6/CO4Qf+FoXUTCWFUms8m0s84WU8hu3SfS
+         hSoxHZ9/3zkxRst24oPO+G6PaxclZeoA6Y2NPh/EnPYejz8WrT7jbiffZ2nS4Vcu9NXN
+         VpOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750169576; x=1750774376;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0s0DAhwLG2vmOgwqQDSJ2RWGZLNBfRIYPMMOb2htwqc=;
+        b=jQBvYsYH5n0TwZK5Lum0cprFOySrY58mRb/S27IAxi64jeKsniln/2MaOv9kQzI5D6
+         VEeZPvaMzcc7Il2A/YvoU038ckhMFcAdkTbrXNzzTR9767nPqEj20o4YSV8Z9PSsQ+jm
+         H2uvHqv+vTjuJg9Vf2zzHd5akKwXhhJMPpN6UoIgj97Bi+zR4KRbXwyiU9crvDKxOSFr
+         cxKk4GTctdsqhQfHodCqJKnb0MSDVfHh8fZ7+mbeU+qljQB38sTNynIVCcjpxTHb2eNK
+         fkk5UL4bguNGrC54Pt1JxEWc4pRPU1TOpg58XWPBNJN4HwTnbOwwa3bV/4MCv9uK/Kv3
+         1CUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpPz24i8UGrbUDCsXgJIo5/hEjApjdl/oSbHYxElRjMgQhUZhviEXhyYCAlhh96/YmPYF6Ag1egA4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYM8hkgYvZclOJtv71U7ex29D9MwFTOBvedyXybdH12RPNs2Of
+	921r2ZuFvXRCbuLBpXr2WJZfBl3bjbH2MzQRbNI3kVpUL5Dat4SUdiB7U3aYgJqUbg==
+X-Gm-Gg: ASbGncvSJYVGIEu/QhUQVNsWJ1owNw58TMxScxFRuvNyMb0/12Gq7QFF+ka3KXfbL0Y
+	fXFZIez1232fiH4lW/2k7+IgRvrYsi2sR2knDOzXqMXJR6+subJy0blg+9/wZPKJAvigq3SXGbK
+	0M5Ao9SgASWYsuPZk6YF/Ncx1lX3N6dA+eNOcuGbkSucPfOI/rHRsMf6UXlRmgIzOvFs0z5gbOm
+	qRMuU57lFWAEI3YE5qllCVNCger0V28f4gZdkvwoqR6GYb4EXDlcq8hnCndRYq3l5K4FdQAA0Kz
+	sMamNFEE+QkOEtIc0ePVZJc+SYGvGclmQVGDg/tHwyVtAda+lk6pczrvXc82sIi3RVYf+BcSr02
+	C3eYG
+X-Google-Smtp-Source: AGHT+IGGcniDBP3SWlANTec+HJ71BhVMTML0YMUxfK7tDS3/o0KB69JVRk+rjJDhnEFWiDvo2nce4Q==
+X-Received: by 2002:a05:622a:1309:b0:4a4:330f:a796 with SMTP id d75a77b69052e-4a73c62dd7amr230360571cf.28.1750169576347;
+        Tue, 17 Jun 2025 07:12:56 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a2bf125sm61138851cf.13.2025.06.17.07.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 07:12:55 -0700 (PDT)
+Date: Tue, 17 Jun 2025 10:12:53 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: ohci-spear: Remove unnecessary NULL check before
+ clk_disable_unprepare()
+Message-ID: <0a36b344-33dd-47ed-8140-76b9535e34ea@rowland.harvard.edu>
+References: <20250617042050.1930940-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMMMRMdwUyxdMy42tA_ccYo77nf=6C+KgokDLHBLEYDa5aOHQw@mail.gmail.com>
+In-Reply-To: <20250617042050.1930940-1-nichen@iscas.ac.cn>
 
-On Tue, Jun 17, 2025 at 02:38:04PM +0200, Andrei Kuchynski wrote:
-> On Tue, Jun 17, 2025 at 11:50 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Mon, Jun 16, 2025 at 01:31:41PM +0000, Andrei Kuchynski wrote:
-> > > This sysfs attribute specifies the preferred order for enabling
-> > > DisplayPort alt-mode, Thunderbolt alt-mode, and USB4 mode.
-> > >
-> > > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-typec | 17 ++++
-> > >  drivers/usb/typec/Makefile                  |  2 +-
-> > >  drivers/usb/typec/class.c                   | 26 ++++++
-> > >  drivers/usb/typec/class.h                   |  2 +
-> > >  drivers/usb/typec/mode_selection.c          | 93 +++++++++++++++++++++
-> > >  drivers/usb/typec/mode_selection.h          |  5 ++
-> > >  include/linux/usb/typec_altmode.h           |  7 ++
-> > >  7 files changed, 151 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/usb/typec/mode_selection.c
-> > >  create mode 100644 drivers/usb/typec/mode_selection.h
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > > index 38e101c17a00..46eee82042ab 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > @@ -162,6 +162,23 @@ Description:     Lists the supported USB Modes. The default USB mode that is used
-> > >               - usb3 (USB 3.2)
-> > >               - usb4 (USB4)
-> > >
-> > > +What:                /sys/class/typec/<port>/altmode_priorities
-> > > +Date:                June 2025
-> > > +Contact:     Andrei Kuchynski <akuchynski@chromium.org>
-> > > +Description: Lists the alternate modes supported by the port and their
-> > > +             priorities. The priority setting determines the order in which
-> > > +             Displayport alt-mode, Thunderbolt alt-mode and USB4 mode will be
-> > > +             activated, indicating the preferred selection sequence. A value of -1
-> > > +             disables automatic entry into a specific mode, while lower numbers
-> > > +             indicate higher priority. The default priorities can be modified by
-> > > +             assigning new values. Modes without explicitly set values default to -1,
-> > > +             effectively disabling them.
-> > > +
-> > > +             Example values:
-> > > +             - "USB4=0 TBT=1 DP=2"
-> > > +             - "USB4=-1 TBT=0"
-> > > +             - "DP=-1 USB4=-1 TBT=-1"
-> >
-> > No. If you want to disable entry to a mode by default, then you
-> > deactivate that mode, so -1 is not needed. USB4 is also not an alt
-> > mode, so this at the very least should be named differently.
-> >
-> > But I'm not sure this is the correct way to handle the modes in
-> > general. Can you please explain what exactly is the use case you are
-> > thinking?
+On Tue, Jun 17, 2025 at 12:20:50PM +0800, Chen Ni wrote:
+> clk_disable_unprepare() already checks NULL by using IS_ERR_OR_NULL.
+> Remove unneeded NULL check for clk here.
 > 
-> Hi Heikki,
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/host/ohci-spear.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> This implements the mode selection logic within the kernel, replacing
-> its userspace counterpart. Implementing this in the kernel offers
-> advantages, making the process both more robust and far easier to
-> manage.
-> This eliminates the need for user space to verify port, partner, or
-> cable capabilities, and to control the mode entry process. User space
-> doesn't even need to know if USB4 mode is supported by the port or
-> partner; unsupported modes are automatically skipped.
-
-But that's all things that userspace can do, so it should be doing it.
-You need to justify why userspace can NOT do something in order to move
-that logic into the kernel.
-
-> User space's role is now limited to high-level tasks like security,
-> with the kernel managing technical implementation. Mode selection and
-> activation can occur without user space intervention at all if no
-> special rules apply and the default policy (USB4 -> TBT -> DP) is
-> acceptable.
-
-What is wrong with "userspace intervention"?  Is the current api broken
-somehow?
-
-> > If you just need to prevent for example USB4 entry by default, then
-> > you write usb3 (or usb2) to the usb_capability. The alt modes you can
-> > deactivate by default, no?
-> >
-> > I can appreciate the convenience that you get from a single file like
-> > that, but it does not really give much room to move if for example the
-> > user space needs to behave differently in case of failures to enter a
-> > specific mode compared to successful entries.
-> >
+> diff --git a/drivers/usb/host/ohci-spear.c b/drivers/usb/host/ohci-spear.c
+> index d7131e5a4477..6843d7cb3f9f 100644
+> --- a/drivers/usb/host/ohci-spear.c
+> +++ b/drivers/usb/host/ohci-spear.c
+> @@ -103,8 +103,7 @@ static void spear_ohci_hcd_drv_remove(struct platform_device *pdev)
+>  	struct spear_ohci *sohci_p = to_spear_ohci(hcd);
+>  
+>  	usb_remove_hcd(hcd);
+> -	if (sohci_p->clk)
+> -		clk_disable_unprepare(sohci_p->clk);
+> +	clk_disable_unprepare(sohci_p->clk);
+>  
+>  	usb_put_hcd(hcd);
+>  }
+> -- 
+> 2.25.1
 > 
-> You are right, this patch series is proposed for its convenience. It
-> offers a more convenient method for users to enable or activate any
-> mode, without altering existing methods. Users can decide whether they
-> prioritize more control or an easier mode selection method.
-
-So now you are going to maintain 2 different ways to do this for the
-next 40+ years?  How are you going to test this over time to make sure
-nothing breaks/changes?
-
-thanks,
-
-greg k-h
 
