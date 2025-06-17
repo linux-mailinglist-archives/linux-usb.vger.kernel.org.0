@@ -1,57 +1,83 @@
-Return-Path: <linux-usb+bounces-24825-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24826-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05502ADC516
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 10:33:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84CFBADC573
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 10:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E133B1103
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 08:33:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B5A516A899
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 08:54:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C01728FA83;
-	Tue, 17 Jun 2025 08:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E0D28FFEC;
+	Tue, 17 Jun 2025 08:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P9L/oFFW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9zRLv3F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8983B1DE3DC;
-	Tue, 17 Jun 2025 08:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F89229B28;
+	Tue, 17 Jun 2025 08:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750149222; cv=none; b=tyKWQkYxgHnoALqtRKjaKYzaFb9XsARq34Ya3/PFbyr4NYzxfmu2BgWPnFEWT+vF94yWE7uWFTo4ZL2HLfgyj4UgrR5sv3KBseLknG8O2aD0yeeecq9rQ9WOyWLh5lz8Ldu25bbgwNcqJNmgNNabXft3/4Oe6rUOauPficpkEBQ=
+	t=1750150488; cv=none; b=fvN2gZhBrOZDA1a9NmoPza3cNFxqmESu2lREpDg2w3l5wJQB+57ILRG+bd5JiKKRy2aSGTj8uXc8MCz/ja9P0cw4YdBJCD3b5jPxSiHbfP2HsW2fVyC2ZH5Snqb942JgqB9/bTtmdCnCHy9wYSP2cAiF1UCMBhMddwecxkSF7Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750149222; c=relaxed/simple;
-	bh=m+8n+ffzJd8l66Jfjz0sF6qoqRZzq+G/9rK+epTI7eY=;
+	s=arc-20240116; t=1750150488; c=relaxed/simple;
+	bh=gi83ut+L/fFlrJRjwZ/UO/0sSnXEyFlsXE9bEeWJdEg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EmWVhXyGu72MsCE5COiQJckraL2JGUGTCGOsCpNVSZSQrYFAynEQDzoU6Z85OJyPIoi4erxrs0iPghxC3eehvlSx3HPFhrp4kXTiy1tW2wwSZsOzHu3AHYt/ThzrpBb50CT869kqlIm9lK3PVY8GE3XKMYWVqRV/tEGucAVxo/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P9L/oFFW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20ABBC4CEE3;
-	Tue, 17 Jun 2025 08:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750149222;
-	bh=m+8n+ffzJd8l66Jfjz0sF6qoqRZzq+G/9rK+epTI7eY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P9L/oFFW8YoxSHlypTtC+3V7rn4DKoCckU5vZfuR0t8yEr15sgPD+yHTK1brHcXh4
-	 vLq1NJ7Mq85O+DKEqOj/SibGhDt29q2Eo7+MZrCQnMhD+t1Hn8j2dHTQU6LfbiuiI6
-	 YNryJ4LSnMwQOyojT23EIKIv8PksqBFYE6SbYwyUxUCFUzABaEnIevjjSC5DSC5zs+
-	 w/8XR7RpntPVW4e1jHohM07ZjnjSi3AdgzEIHpYNA/yArsngClzegwE+oj58S2J++J
-	 8yG96lGgA9Jnvp0gjOxymvaBuofbrQlID5DyIWtMl4gBESYmRSuNtNxhhZXA8jxocA
-	 po9WUij+bkzNw==
-Date: Tue, 17 Jun 2025 16:33:35 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: Fix issue with CV Bad Descriptor test
-Message-ID: <20250617083335.GC1716298@nchen-desktop>
-References: <20250617071045.128040-1-pawell@cadence.com>
- <PH7PR07MB95388A30AE3E50D42E0592CADD73A@PH7PR07MB9538.namprd07.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUp4kQ6FJWBb78z1MqltrGohJIQ4S2piKSPLp5YV0t2spZaWeNwdEdcSWMXZ6gJRXCrX+/wGSY+RauVgCu3IhDPTo4X5OuSy5Vc/hMCosuedWIxmKIkz9nJI9yq3WpagT0uIV6gKt2i9Dzq9UiSpJLJAyrXEc1nhMwXoMt2jp80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9zRLv3F; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750150486; x=1781686486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gi83ut+L/fFlrJRjwZ/UO/0sSnXEyFlsXE9bEeWJdEg=;
+  b=n9zRLv3FFB2CUu3kj8Sz/yh0hBKYA0JW5vJ+Zahvm3F2MZLRk1fT1mZE
+   KoVZ9dcWQtOAarIXU8GS/0TW17ZagjlIjoE5FE+BshBf0pJayS8FnDTJb
+   LBW9uA4KS9i2/aXIlW6ThU46ARu0Lb2U7JGBFWUjkQ/yyjZZ9LHDBHA27
+   qYq49Q1cGHoIVN15DDDSRQ23ZwJq5nDOaxOy+KeDJ4nLy+iL9C55aWvPr
+   u21MOr4GFkLr/B9L5frkFL8cLr38g+QBuHFUCmSj46PL+xXZVlm5GFw1S
+   AwB0lN9gqvK38uJRagwz/uBcZTeF6BBKpYKfQn7LS2BqrvxpvOgJuxJx2
+   A==;
+X-CSE-ConnectionGUID: QL78lqSwRHG8tODQts7DuQ==
+X-CSE-MsgGUID: xj/zayvORVWW3dJLLghlwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62968011"
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="62968011"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 01:54:45 -0700
+X-CSE-ConnectionGUID: 9LOb3JqSSAif8ITz9rPKEQ==
+X-CSE-MsgGUID: ZxcRlcFARNGiRTsvANYcqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="149081447"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa008.fm.intel.com with SMTP; 17 Jun 2025 01:54:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Jun 2025 11:54:39 +0300
+Date: Tue, 17 Jun 2025 11:54:39 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Dmitry Baryshkov <lumag@kernel.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	RD Babiera <rdbabiera@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: Re: [PATCH 06/10] Revert "usb: typec: displayport: Receive DP Status
+ Update NAK request exit dp altmode"
+Message-ID: <aFEtT5JAaGQIs-vG@kuha.fi.intel.com>
+References: <20250616133147.1835939-1-akuchynski@chromium.org>
+ <20250616133147.1835939-7-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,126 +86,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95388A30AE3E50D42E0592CADD73A@PH7PR07MB9538.namprd07.prod.outlook.com>
+In-Reply-To: <20250616133147.1835939-7-akuchynski@chromium.org>
 
-On 25-06-17 07:15:06, Pawel Laszczak wrote:
-> The SSP2 controller has extra endpoint state preserve bit (ESP) which
-> setting causes that endpoint state will be preserved during
-> Halt Endpoint command. It is used only for EP0.
-> Without this bit the Command Verifier "TD 9.10 Bad Descriptor Test"
-> failed.
-> Setting this bit doesn't have any impact for SSP controller.
+Hi Andrei,
+
+On Mon, Jun 16, 2025 at 01:31:43PM +0000, Andrei Kuchynski wrote:
+> This reverts commit b4b38ffb38c91afd4dc387608db26f6fc34ed40b.
 > 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> The commit introduced a deadlock with the cros_ec_typec driver.
+> The deadlock occurs due to a recursive lock acquisition of
+> `cros_typec_altmode_work::mutex`.
+> The call chain is as follows: 
+> 1. cros_typec_altmode_work() acquires the mutex
+> 2. typec_altmode_vdm() -> dp_altmode_vdm() ->
+> 3. typec_altmode_exit() -> cros_typec_altmode_exit()
+> 4. cros_typec_altmode_exit() attempts to acquire the mutex again
+> 
+> This revert is considered safe as no other known driver sends back
+> DP_CMD_STATUS_UPDATE command with the NAK flag.
+> 
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 > ---
->  drivers/usb/cdns3/cdnsp-debug.h  |  5 +++--
->  drivers/usb/cdns3/cdnsp-ep0.c    | 17 ++++++++++++++---
->  drivers/usb/cdns3/cdnsp-gadget.h |  3 +++
->  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
->  4 files changed, 22 insertions(+), 6 deletions(-)
+>  drivers/usb/typec/altmodes/displayport.c | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
-> index cd138acdcce1..86860686d836 100644
-> --- a/drivers/usb/cdns3/cdnsp-debug.h
-> +++ b/drivers/usb/cdns3/cdnsp-debug.h
-> @@ -327,12 +327,13 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
->  	case TRB_RESET_EP:
->  	case TRB_HALT_ENDPOINT:
->  		ret = scnprintf(str, size,
-> -				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
-> +				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c %c",
->  				cdnsp_trb_type_string(type),
->  				ep_num, ep_id % 2 ? "out" : "in",
->  				TRB_TO_EP_INDEX(field3), field1, field0,
->  				TRB_TO_SLOT_ID(field3),
-> -				field3 & TRB_CYCLE ? 'C' : 'c');
-> +				field3 & TRB_CYCLE ? 'C' : 'c',
-> +				field3 & TRB_ESP ? 'P' : 'p');
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index b09b58d7311d..ac84a6d64c2f 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -393,10 +393,6 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
 >  		break;
->  	case TRB_STOP_RING:
->  		ret = scnprintf(str, size,
-> diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-> index f317d3c84781..567ccfdecded 100644
-> --- a/drivers/usb/cdns3/cdnsp-ep0.c
-> +++ b/drivers/usb/cdns3/cdnsp-ep0.c
-> @@ -414,6 +414,7 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
->  void cdnsp_setup_analyze(struct cdnsp_device *pdev)
->  {
->  	struct usb_ctrlrequest *ctrl = &pdev->setup;
-> +	struct cdnsp_ep *pep;
->  	int ret = -EINVAL;
->  	u16 len;
->  
-> @@ -428,9 +429,19 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
->  	}
->  
->  	/* Restore the ep0 to Stopped/Running state. */
-> -	if (pdev->eps[0].ep_state & EP_HALTED) {
-> -		trace_cdnsp_ep0_halted("Restore to normal state");
-> -		cdnsp_halt_endpoint(pdev, &pdev->eps[0], 0);
-> +	if (pep->ep_state & EP_HALTED) {
-> +		/*
-> +		 * Halt Endpoint Command for SSP2 for ep0 preserve current
-> +		 * endpoint state and driver has to synchronise the
+>  	case CMDT_RSP_NAK:
+>  		switch (cmd) {
+> -		case DP_CMD_STATUS_UPDATE:
+> -			if (typec_altmode_exit(alt))
+> -				dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
+> -			break;
 
-%s/synchronise/synchronize
+Commit b4b38ffb38c9 ("usb: typec: displayport: Receive DP Status
+Update NAK request exit dp altmode") addressed a very real problem
+with failure to execute data role swap. You are not really offering
+anything else for that issue here.
 
-> +		 * software endpointp state with endpoint output context
+Is it not an option to just schedule the mode exit here instead to
+solve the problem?
 
-%s/endpointp/endpoint
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index b09b58d7311d..2abbe4de3216 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -394,8 +394,7 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+        case CMDT_RSP_NAK:
+                switch (cmd) {
+                case DP_CMD_STATUS_UPDATE:
+-                       if (typec_altmode_exit(alt))
+-                               dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
++                       dp->state = DP_STATE_EXIT;
+                        break;
+                case DP_CMD_CONFIGURE:
+                        dp->data.conf = 0;
 
-> +		 * state.
-> +		 */
-> +		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_HALTED) {
-> +			cdnsp_halt_endpoint(pdev, pep, 0);
-> +		} else {
-> +			pep->ep_state &= ~EP_HALTED;
-> +			pep->ep_state |= EP_STOPPED;
-> +		}
->  	}
->  
->  	/*
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-> index 2afa3e558f85..c26abef6e1c9 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> @@ -987,6 +987,9 @@ enum cdnsp_setup_dev {
->  #define STREAM_ID_FOR_TRB(p)		((((p)) << 16) & GENMASK(31, 16))
->  #define SCT_FOR_TRB(p)			(((p) << 1) & 0x7)
->  
-> +/* Halt Endpoint Command TRB field. */
-> +#define TRB_ESP				BIT(9)
-> +
-
-Please add comment it is specific for SSP2.
-
-Peter
-
->  /* Link TRB specific fields. */
->  #define TRB_TC				BIT(1)
->  
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index fd06cb85c4ea..d397d28efc6e 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -2483,7 +2483,8 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
->  {
->  	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_HALT_ENDPOINT) |
->  			    SLOT_ID_FOR_TRB(pdev->slot_id) |
-> -			    EP_ID_FOR_TRB(ep_index));
-> +			    EP_ID_FOR_TRB(ep_index) |
-> +			    (!ep_index ? TRB_ESP : 0));
->  }
->  
->  void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
-> -- 
-> 2.43.0
-> 
 
 -- 
-
-Best regards,
-Peter
+heikki
 
