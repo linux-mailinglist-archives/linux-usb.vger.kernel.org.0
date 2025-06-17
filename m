@@ -1,95 +1,136 @@
-Return-Path: <linux-usb+bounces-24818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B841ADC048
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 06:21:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59342ADC136
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 07:09:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 249823B5EEA
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 04:21:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE023173F27
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 05:09:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65CDF1E521D;
-	Tue, 17 Jun 2025 04:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A57B23ED5E;
+	Tue, 17 Jun 2025 05:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QtriyEwb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-lj1-f201.google.com (mail-lj1-f201.google.com [209.85.208.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD576CA6F;
-	Tue, 17 Jun 2025 04:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A60523B63E
+	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 05:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750134082; cv=none; b=fDq+j5kXzbeVGUzNSRnVgAIGOEnT3K5m+xaERqBjFh71u9gOFti6cpxb0ohGM+CP86TTM8EUB8LiGqDY1p7vcnzaucs7Ux3wV39rNYespH2Q4tyku1y+iqBw1/w0JM2a60nE2rmL5Gux5errCrD2vDws4QBL5QLYxVQ78Gx8mCM=
+	t=1750136932; cv=none; b=pLe8ZkG70+XKLywkadaPmUbF7kp+M+oe0CCK4zto33dU2nUcs2JYEZflN68unNMRNDOls+gWliG+dULgVC6gID77rQtuEsVwhc6gAI3jbADoa2Lm1/Eq0j8IYb5F0THp7Prbf/mybg59Tvw9o8CwdxQB/O2MarE4OigVEjg2Gk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750134082; c=relaxed/simple;
-	bh=sWOJgWiT5ir4cBianDJs0fWxwF6frPPYdHH+x20jiVc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BLbDHuv+himQN43zQVJjX5MSked4qpEd9S6Ig7sBhrmNIqyApcOui5mChcb/LaUyKLu7EMN1L9ULKHMVTwr/AUhGHLasQJ7b8BTpLqFVMGQEUJcZ7il0rZC0MMlSPFz8q5QSxuCFqYyaEHI/WvfitZF3oYsVSVPAH3Z9FETSIHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowABHXFQ67VBobZoTBw--.100S2;
-	Tue, 17 Jun 2025 12:21:14 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] usb: ohci-spear: Remove unnecessary NULL check before clk_disable_unprepare()
-Date: Tue, 17 Jun 2025 12:20:50 +0800
-Message-Id: <20250617042050.1930940-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1750136932; c=relaxed/simple;
+	bh=+7dQxfUhGAy4SS1ZpusUklS9/5+phcCn7k7KJyX8YGk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=t3As310OA4hWt2gppKqbHGZUv+JOZ2GLN8ihQ1+Np7G3hV3soZZUkhHw3WDRrH4BOfixhQ2D9yX2Hz640R3+1HxzSVuAc7CWpdhJJ/fWV4ux2o0TbaEy8INPg5F9DjtPzc2tbHcJ3LtDR+mgRbER/oa8TA54d7PRm4N7v6AMjCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QtriyEwb; arc=none smtp.client-ip=209.85.208.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-lj1-f201.google.com with SMTP id 38308e7fff4ca-32b4a06b780so11682701fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 22:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750136928; x=1750741728; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=i4dXhN7ywt5V6z7FHvJ0Inv2dYG936KTwLKv+c4EnAc=;
+        b=QtriyEwboByUju6vVYF/5SO9P9TVo30yx270KgBvhSwB4IrkQNlaLH/aQqhuBa9UyA
+         n7FkFTpgdrLLWEwGnZLPjtofqNHcUAKEa4GikOlYxi7jFlvF67Rpvvil1kIoL8Y897VN
+         4KkzMwnU0rcu2TE+h3mX1WRP1OaLXMguKc++S9wWuqC4OYvhcOAFJYm7Wfa5bWNo54Fv
+         Pjs9znkUitRXmbVHfyGDiEeWC/9Bk82eyzJxYUQwPUOqCoe1dmyMRzN4SKWEPvlGo7Bm
+         8dkrYcbOkvD61RIneuLbrV98CFapRgaFcXevo3SG0ds3dZwi3+aLHNKd5pbgGAgX6fb/
+         jYAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750136928; x=1750741728;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i4dXhN7ywt5V6z7FHvJ0Inv2dYG936KTwLKv+c4EnAc=;
+        b=evXC4UiFHN53ERA+rEbQx6dMQAIT1aY0dg0RAcRlbMILNZdYLm7YjVnv4jlEyVeCFM
+         9m1RZoqRNp19wHCqBpNPVxyA2cDCurId3etSnqOA3u43WDf3/Ktaj8cl6s/nTdQy+nRU
+         tWT2MyYRzUw1G7aEAcduhyhzNgCsuALaKcjS4GPwVadMxsYYS4yjZFgeQx5UNJiyveii
+         /x1Ad2NrK3Cq/arbOobJKXwbJD+SMHd54taExUIabhbO0EmWzDwSg7h3BfgeYP6T+540
+         CKFcqycvRUne8jESY+9/4DpBhTMFwkfp6n3RG5Og81QEPI+oyYhW3yAj1QGnlPtbpw+O
+         Dc7w==
+X-Gm-Message-State: AOJu0Yzsqj3TLT9HEZ58p0gJ1K7ymHkjgGEHRY4/dGAaJY3YnIMeaHGf
+	y16BlAXn1jVrMD/FgjfE3X+w61CPke16j/0XmIWqbjbBSVgZeTuciRIyv/4w0sjPyaKOL0L5C0I
+	1SQk7XQ==
+X-Google-Smtp-Source: AGHT+IH4I8plCvioKdZPJMsYCNlKjSMJlVrKTpGxX4/Kq8vkc4UpNbDk8MhbJk4PV7yT/LvA0ujCcpLOmy4=
+X-Received: from ljbq21.prod.google.com ([2002:a2e:a015:0:b0:32b:3deb:7b97])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:b20:b0:32a:847c:a1c0
+ with SMTP id 38308e7fff4ca-32b4a0c5893mr29872581fa.6.1750136928270; Mon, 16
+ Jun 2025 22:08:48 -0700 (PDT)
+Date: Tue, 17 Jun 2025 13:07:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABHXFQ67VBobZoTBw--.100S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFyrKF1DXr47tr17ZFykAFb_yoW3Awc_Cr
-	y5Gr1kGF109rn0q34jqF15ArZrtF1DuFsaqF97tw45Ka4qvrn8ursrZrZ3Aay5G3y8tF9r
-	Cw1DZryfAr1IkjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbskFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJV
-	W0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
-	AVWUtwCY02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjfU80PfDUUUU
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc2.692.g299adb8693-goog
+Message-ID: <20250617050844.1848232-1-khtsai@google.com>
+Subject: [PATCH v2 1/2] Revert "usb: gadget: u_serial: Add null pointer check
+ in gs_start_io"
+From: Kuen-Han Tsai <khtsai@google.com>
+To: gregkh@linuxfoundation.org, prashanth.k@oss.qualcomm.com, 
+	khtsai@google.com, hulianqin@vivo.com, krzysztof.kozlowski@linaro.org, 
+	mwalle@kernel.org, jirislaby@kernel.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-clk_disable_unprepare() already checks NULL by using IS_ERR_OR_NULL.
-Remove unneeded NULL check for clk here.
+This reverts commit ffd603f214237e250271162a5b325c6199a65382.
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
+gs_start_io") adds null pointer checks at the beginning of the
+gs_start_io() function to prevent a null pointer dereference. However,
+these checks are redundant because the function's comment already
+requires callers to hold the port_lock and ensure port.tty and port_usb
+are not null. All existing callers already follow these rules.
+
+The true cause of the null pointer dereference is a race condition. When
+gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
+is temporarily released for usb_ep_queue(). This allows port.tty and
+port_usb to be cleared.
+
+Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
- drivers/usb/host/ohci-spear.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+v2:
+- Remove Cc: stable
 
-diff --git a/drivers/usb/host/ohci-spear.c b/drivers/usb/host/ohci-spear.c
-index d7131e5a4477..6843d7cb3f9f 100644
---- a/drivers/usb/host/ohci-spear.c
-+++ b/drivers/usb/host/ohci-spear.c
-@@ -103,8 +103,7 @@ static void spear_ohci_hcd_drv_remove(struct platform_device *pdev)
- 	struct spear_ohci *sohci_p = to_spear_ohci(hcd);
- 
- 	usb_remove_hcd(hcd);
--	if (sohci_p->clk)
--		clk_disable_unprepare(sohci_p->clk);
-+	clk_disable_unprepare(sohci_p->clk);
- 
- 	usb_put_hcd(hcd);
- }
--- 
-2.25.1
+---
+ drivers/usb/gadget/function/u_serial.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index ab544f6824be..c043bdc30d8a 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -544,20 +544,16 @@ static int gs_alloc_requests(struct usb_ep *ep, struct list_head *head,
+ static int gs_start_io(struct gs_port *port)
+ {
+ 	struct list_head	*head = &port->read_pool;
+-	struct usb_ep		*ep;
++	struct usb_ep		*ep = port->port_usb->out;
+ 	int			status;
+ 	unsigned		started;
+
+-	if (!port->port_usb || !port->port.tty)
+-		return -EIO;
+-
+ 	/* Allocate RX and TX I/O buffers.  We can't easily do this much
+ 	 * earlier (with GFP_KERNEL) because the requests are coupled to
+ 	 * endpoints, as are the packet sizes we'll be using.  Different
+ 	 * configurations may use different endpoints with a given port;
+ 	 * and high speed vs full speed changes packet sizes too.
+ 	 */
+-	ep = port->port_usb->out;
+ 	status = gs_alloc_requests(ep, head, gs_read_complete,
+ 		&port->read_allocated);
+ 	if (status)
+--
+2.50.0.rc2.692.g299adb8693-goog
 
 
