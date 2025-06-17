@@ -1,135 +1,158 @@
-Return-Path: <linux-usb+bounces-24819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59342ADC136
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 07:09:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E83E3ADC13C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 07:10:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE023173F27
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 05:09:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7119D3B3FE9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 05:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A57B23ED5E;
-	Tue, 17 Jun 2025 05:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC0724DCF7;
+	Tue, 17 Jun 2025 05:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QtriyEwb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z2Nd4Hg5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-lj1-f201.google.com (mail-lj1-f201.google.com [209.85.208.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A60523B63E
-	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 05:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA98F23B625
+	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 05:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750136932; cv=none; b=pLe8ZkG70+XKLywkadaPmUbF7kp+M+oe0CCK4zto33dU2nUcs2JYEZflN68unNMRNDOls+gWliG+dULgVC6gID77rQtuEsVwhc6gAI3jbADoa2Lm1/Eq0j8IYb5F0THp7Prbf/mybg59Tvw9o8CwdxQB/O2MarE4OigVEjg2Gk8=
+	t=1750136938; cv=none; b=iwEcJxVK7bUNlxY8rcZ1ZubWhI9mRPXTt2GYzlTdUZR/r7yWmmov0Cg8or7Wl3xQzStsDjsSRdlAk3wp8A2nDMo/syIFLXDh3UnAmirksaOt4QR1N9T3MHb69v5nr2QZ0LwEjZwfF9wgxNoqL4rcqnAmiK2EJdCbdf/Pmz9kgWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750136932; c=relaxed/simple;
-	bh=+7dQxfUhGAy4SS1ZpusUklS9/5+phcCn7k7KJyX8YGk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=t3As310OA4hWt2gppKqbHGZUv+JOZ2GLN8ihQ1+Np7G3hV3soZZUkhHw3WDRrH4BOfixhQ2D9yX2Hz640R3+1HxzSVuAc7CWpdhJJ/fWV4ux2o0TbaEy8INPg5F9DjtPzc2tbHcJ3LtDR+mgRbER/oa8TA54d7PRm4N7v6AMjCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QtriyEwb; arc=none smtp.client-ip=209.85.208.201
+	s=arc-20240116; t=1750136938; c=relaxed/simple;
+	bh=YoOKZWDe3bgJ0VNg0eea3oWFhS1QY5GJUZB2g124DaM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NRe9ib/opbjPuPvvU19Pa3YCDoWRraZRRPtN1swlYStiQjDK7zHGdin9RKOLFIWuP5VxcwFNSfYs8dxsJLFa5qxx8YRtjoVip/rcnMkUB0CKR/G9q9FU3472tmU/60WWPCskns7aHbsSa51Te3SLSOGX7pkycqwLXSWV2P6yuZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z2Nd4Hg5; arc=none smtp.client-ip=209.85.208.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-lj1-f201.google.com with SMTP id 38308e7fff4ca-32b4a06b780so11682701fa.0
-        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 22:08:49 -0700 (PDT)
+Received: by mail-lj1-f201.google.com with SMTP id 38308e7fff4ca-32b2de6033bso31743131fa.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Jun 2025 22:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750136928; x=1750741728; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=i4dXhN7ywt5V6z7FHvJ0Inv2dYG936KTwLKv+c4EnAc=;
-        b=QtriyEwboByUju6vVYF/5SO9P9TVo30yx270KgBvhSwB4IrkQNlaLH/aQqhuBa9UyA
-         n7FkFTpgdrLLWEwGnZLPjtofqNHcUAKEa4GikOlYxi7jFlvF67Rpvvil1kIoL8Y897VN
-         4KkzMwnU0rcu2TE+h3mX1WRP1OaLXMguKc++S9wWuqC4OYvhcOAFJYm7Wfa5bWNo54Fv
-         Pjs9znkUitRXmbVHfyGDiEeWC/9Bk82eyzJxYUQwPUOqCoe1dmyMRzN4SKWEPvlGo7Bm
-         8dkrYcbOkvD61RIneuLbrV98CFapRgaFcXevo3SG0ds3dZwi3+aLHNKd5pbgGAgX6fb/
-         jYAA==
+        d=google.com; s=20230601; t=1750136934; x=1750741734; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1f3cBdI8xhkfW1PldN25AHnH1CARokeiI9s7jI03ZKc=;
+        b=z2Nd4Hg5HqvusKgpB32GJ1XMbAfQqFY5ncKCgWb3l7CqCyVvlXnKZX8Lp+1Z8M7FtO
+         0fqXzxfT9iZ/0j+b+kSe8CVleph3y4kUTClpT2BleMkDc5Cey9Fn2rLRjyG4yMJMAlBP
+         Vi/Ymt/1q8z/7WdBke5bioCNP2Po5/zpaCKY6Z/WnLrtu7pwF7enTGE2tf8ZsVXXdupc
+         /T2ruzjPW1FGIQfemPWzr35xaqvoyd/Np4z8DFmlaOlEWGIdbP14hGMAwOgs5dQT+/Fx
+         j/l8cmhBXtByPbrcoOf3kDE8nRmPrO9K9v0HBXNMIuprIbofklnu1QrY520dCUcXZKFM
+         cmnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750136928; x=1750741728;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i4dXhN7ywt5V6z7FHvJ0Inv2dYG936KTwLKv+c4EnAc=;
-        b=evXC4UiFHN53ERA+rEbQx6dMQAIT1aY0dg0RAcRlbMILNZdYLm7YjVnv4jlEyVeCFM
-         9m1RZoqRNp19wHCqBpNPVxyA2cDCurId3etSnqOA3u43WDf3/Ktaj8cl6s/nTdQy+nRU
-         tWT2MyYRzUw1G7aEAcduhyhzNgCsuALaKcjS4GPwVadMxsYYS4yjZFgeQx5UNJiyveii
-         /x1Ad2NrK3Cq/arbOobJKXwbJD+SMHd54taExUIabhbO0EmWzDwSg7h3BfgeYP6T+540
-         CKFcqycvRUne8jESY+9/4DpBhTMFwkfp6n3RG5Og81QEPI+oyYhW3yAj1QGnlPtbpw+O
-         Dc7w==
-X-Gm-Message-State: AOJu0Yzsqj3TLT9HEZ58p0gJ1K7ymHkjgGEHRY4/dGAaJY3YnIMeaHGf
-	y16BlAXn1jVrMD/FgjfE3X+w61CPke16j/0XmIWqbjbBSVgZeTuciRIyv/4w0sjPyaKOL0L5C0I
-	1SQk7XQ==
-X-Google-Smtp-Source: AGHT+IH4I8plCvioKdZPJMsYCNlKjSMJlVrKTpGxX4/Kq8vkc4UpNbDk8MhbJk4PV7yT/LvA0ujCcpLOmy4=
-X-Received: from ljbq21.prod.google.com ([2002:a2e:a015:0:b0:32b:3deb:7b97])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:b20:b0:32a:847c:a1c0
- with SMTP id 38308e7fff4ca-32b4a0c5893mr29872581fa.6.1750136928270; Mon, 16
- Jun 2025 22:08:48 -0700 (PDT)
-Date: Tue, 17 Jun 2025 13:07:11 +0800
+        d=1e100.net; s=20230601; t=1750136934; x=1750741734;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1f3cBdI8xhkfW1PldN25AHnH1CARokeiI9s7jI03ZKc=;
+        b=Y86Q4EAVQngwtorX3yCcrpp5IC4UW/ehLHfCxNoWGGMIyMR4CAu9OFhN4psCc3knmB
+         8DB+ojht+EGjh1ch21SBlK+isN716bvpXcEEz93dnLE3UszNT+SGNpEyMF5HCGiamw2x
+         ajJQTO5ouD7afJYOf63wwT7t1d5Qij0jZCDF1GT69xV+SLhoi8dnEhxbvg0oa2jLbMbL
+         XvC7AXxrH7seYvBD3ZB3MzB8gr6QYp0XIij7PIIINf28C7zQdlCe5wL+eQDd4SeldtAm
+         NwkYzWmzHD64QZJgeR201iBYApRJpKex2oZiexUEwQl/iZZC6c6S95Z+oQSTqkvZ9kZ4
+         Na2Q==
+X-Gm-Message-State: AOJu0YzSp0ihfYrLav3HkwBJEGpdcdg8acyT7L1k0XM50w1ZJXy4MLyF
+	wr0uzqfu9DUgP8VtHjI6seUD3UgtIj1RWi9A5Nm7Au1jGDjOJWLUxFqhttme2l7olg9HidsFH0f
+	a85bdFw==
+X-Google-Smtp-Source: AGHT+IFYSpjBdNE9GBi8neTP2Ze6oQSxzs3XDaNIiK3QW1FHbqEsFzdEHcQZ/oyym4KEV3rZRaUJ4kszYmQ=
+X-Received: from ljqj16.prod.google.com ([2002:a2e:a910:0:b0:32a:807c:a3a7])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:651c:154b:b0:32b:4932:d5ad
+ with SMTP id 38308e7fff4ca-32b49508ae0mr28534501fa.10.1750136933782; Mon, 16
+ Jun 2025 22:08:53 -0700 (PDT)
+Date: Tue, 17 Jun 2025 13:07:12 +0800
+In-Reply-To: <20250617050844.1848232-1-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250617050844.1848232-1-khtsai@google.com>
 X-Mailer: git-send-email 2.50.0.rc2.692.g299adb8693-goog
-Message-ID: <20250617050844.1848232-1-khtsai@google.com>
-Subject: [PATCH v2 1/2] Revert "usb: gadget: u_serial: Add null pointer check
- in gs_start_io"
+Message-ID: <20250617050844.1848232-2-khtsai@google.com>
+Subject: [PATCH v2 2/2] usb: gadget: u_serial: Fix race condition in TTY wakeup
 From: Kuen-Han Tsai <khtsai@google.com>
 To: gregkh@linuxfoundation.org, prashanth.k@oss.qualcomm.com, 
 	khtsai@google.com, hulianqin@vivo.com, krzysztof.kozlowski@linaro.org, 
 	mwalle@kernel.org, jirislaby@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This reverts commit ffd603f214237e250271162a5b325c6199a65382.
+A race condition occurs when gs_start_io() calls either gs_start_rx() or
+gs_start_tx(), as those functions briefly drop the port_lock for
+usb_ep_queue(). This allows gs_close() and gserial_disconnect() to clear
+port.tty and port_usb, respectively.
 
-Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
-gs_start_io") adds null pointer checks at the beginning of the
-gs_start_io() function to prevent a null pointer dereference. However,
-these checks are redundant because the function's comment already
-requires callers to hold the port_lock and ensure port.tty and port_usb
-are not null. All existing callers already follow these rules.
+Use the null-safe TTY Port helper function to wake up TTY.
 
-The true cause of the null pointer dereference is a race condition. When
-gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
-is temporarily released for usb_ep_queue(). This allows port.tty and
-port_usb to be cleared.
+Example
+  CPU1:			      CPU2:
+  gserial_connect() // lock
+  			      gs_close() // await lock
+  gs_start_rx()     // unlock
+  usb_ep_queue()
+  			      gs_close() // lock, reset port.tty and unlock
+  gs_start_rx()     // lock
+  tty_wakeup()      // NPE
 
-Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
+Fixes: 35f95fd7f234 ("TTY: usb/u_serial, use tty from tty_port")
+Cc: stable@vger.kernel.org
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
 v2:
-- Remove Cc: stable
+- Move the example up to the changelog
 
+Traces:
+[   51.494375][  T278] ttyGS1: shutdown
+[   51.494817][  T269] android_work: sent uevent USB_STATE=DISCONNECTED
+[   52.115792][ T1508] usb: [dm_bind] generic ttyGS1: super speed IN/ep1in OUT/ep1out
+[   52.516288][ T1026] android_work: sent uevent USB_STATE=CONNECTED
+[   52.551667][ T1533] gserial_connect: start ttyGS1
+[   52.565634][ T1533] [khtsai] enter gs_start_io, ttyGS1, port->port.tty=0000000046bd4060
+[   52.565671][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
+[   52.591552][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
+[   52.619901][ T1533] [khtsai] gs_start_rx, unlock port ttyGS1
+[   52.638659][ T1325] [khtsai] gs_close, lock port ttyGS1
+[   52.656842][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) ...
+[   52.683005][ T1325] [khtsai] gs_close, clear ttyGS1
+[   52.683007][ T1325] gs_close: ttyGS1 (0000000046bd4060,00000000be9750a5) done!
+[   52.708643][ T1325] [khtsai] gs_close, unlock port ttyGS1
+[   52.747592][ T1533] [khtsai] gs_start_rx, lock port ttyGS1
+[   52.747616][ T1533] [khtsai] gs_start_io, ttyGS1, going to call tty_wakeup(), port->port.tty=0000000000000000
+[   52.747629][ T1533] Unable to handle kernel NULL pointer dereference at virtual address 00000000000001f8
 ---
- drivers/usb/gadget/function/u_serial.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/usb/gadget/function/u_serial.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index ab544f6824be..c043bdc30d8a 100644
+index c043bdc30d8a..540dc5ab96fc 100644
 --- a/drivers/usb/gadget/function/u_serial.c
 +++ b/drivers/usb/gadget/function/u_serial.c
-@@ -544,20 +544,16 @@ static int gs_alloc_requests(struct usb_ep *ep, struct list_head *head,
- static int gs_start_io(struct gs_port *port)
- {
- 	struct list_head	*head = &port->read_pool;
--	struct usb_ep		*ep;
-+	struct usb_ep		*ep = port->port_usb->out;
- 	int			status;
- 	unsigned		started;
+@@ -295,8 +295,8 @@ __acquires(&port->port_lock)
+ 			break;
+ 	}
 
--	if (!port->port_usb || !port->port.tty)
--		return -EIO;
--
- 	/* Allocate RX and TX I/O buffers.  We can't easily do this much
- 	 * earlier (with GFP_KERNEL) because the requests are coupled to
- 	 * endpoints, as are the packet sizes we'll be using.  Different
- 	 * configurations may use different endpoints with a given port;
- 	 * and high speed vs full speed changes packet sizes too.
- 	 */
--	ep = port->port_usb->out;
- 	status = gs_alloc_requests(ep, head, gs_read_complete,
- 		&port->read_allocated);
- 	if (status)
+-	if (do_tty_wake && port->port.tty)
+-		tty_wakeup(port->port.tty);
++	if (do_tty_wake)
++		tty_port_tty_wakeup(&port->port);
+ 	return status;
+ }
+
+@@ -574,7 +574,7 @@ static int gs_start_io(struct gs_port *port)
+ 		gs_start_tx(port);
+ 		/* Unblock any pending writes into our circular buffer, in case
+ 		 * we didn't in gs_start_tx() */
+-		tty_wakeup(port->port.tty);
++		tty_port_tty_wakeup(&port->port);
+ 	} else {
+ 		/* Free reqs only if we are still connected */
+ 		if (port->port_usb) {
 --
 2.50.0.rc2.692.g299adb8693-goog
 
