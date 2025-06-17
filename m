@@ -1,177 +1,83 @@
-Return-Path: <linux-usb+bounces-24843-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24844-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E3B7ADDE0B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 23:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C879ADDF93
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 01:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10C6B189E46A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 21:33:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA78E189D645
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 23:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E386A2F94AD;
-	Tue, 17 Jun 2025 21:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F4D298994;
+	Tue, 17 Jun 2025 23:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmarUdqc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dwq6pGBS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E272F30CC;
-	Tue, 17 Jun 2025 21:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CDE296153;
+	Tue, 17 Jun 2025 23:22:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750195903; cv=none; b=YyXbgnKGU5fBBnG/viMoxabLCi3Oi3x5KdGDZDPqdovyFh2d4pQhPg0tAwIu0psdWQvCdzngwhPfs8FfK+aElKZCwH914IEtvbv4pctSFyOP3+2HpYZaq2twYhSmBYB4yW58RyTCAldb/qBJIKuQXEWHicI/Mz1A3RMy49dru9c=
+	t=1750202536; cv=none; b=EoQ7tyNGwLdNp05diqdJyduf7e1ivbO4V6F3oEwtD8ISzqEZyucrtiHLHDS7EECPbTNZXw3m5NS3IPOZZ+SRq8IN6pgoCGMBtCMqAXGZnvQ3ZsDuKyYFUlCNqQJDy7+8zr1tW0OZQ6CyHWNFrq0VS9QLm63q1NwNiNPIvUOFbCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750195903; c=relaxed/simple;
-	bh=1YfwZW+S936XwdA8SGfJ1ZJvlipD9uTXygNO4srMawo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BWrl/fwZcbwWBEcKxMkQFCJPUAghwLr4ETQ3G0/zqBGUnvzaVwO+umBbCrqaHe9Wt2xY1m0b6lkI/Jp7FrJr2E00mA8gPxcCrk3hPGMaKqW877GTFTqBfep3XdCaFEKktQZnkAFa+SxNOGWu57oLURUcQOEumwlHExYURyd/FKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmarUdqc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBBFC4CEF1;
-	Tue, 17 Jun 2025 21:31:36 +0000 (UTC)
+	s=arc-20240116; t=1750202536; c=relaxed/simple;
+	bh=NjwTBIJNWdaAO3rdV1mrracyLIkoRvYZKQnvZdhwQTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oERTF/ip8Z1R/os/RX1oZM5FdIe22qKV+FxbLGpyvNUuGu6NfsDscIokzSm3gH4rUONnoUpwA3nR0CiTrmswj9K5zJnwsSR6klzUZOIEzcbaJozVGtnOMO6w8oylC08Ow4C5nCFukaoI7L/+TvGDGWa6TLX0Ck6W0DMzBbSK0Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dwq6pGBS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 656DEC4CEE3;
+	Tue, 17 Jun 2025 23:22:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750195902;
-	bh=1YfwZW+S936XwdA8SGfJ1ZJvlipD9uTXygNO4srMawo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YmarUdqcOEke0FSqL0Xg4J8Lsf3Wt1uxrnUTrBql9tooIzqRSqrJXRb/RthUG96tM
-	 UhmIuCJamZ3RxGpHFDGNgVGHqRgU1HHltdd03/dUDd3yZXgKOp1z4NJsBzWdqKZRoT
-	 Nhpr9RanMRtnDUygTTyNdDrv/EZ+9j1PkN20sbSIICvlIom/jxXKO7Iy/l/5DOxHrK
-	 Bbs/ObfLHkXDYrqiBgMagOsKvqyvb6JzIr1I9Liskj/HU2yXXiA0ZapCnbVd5Mg2Kc
-	 jqYO7cFto/25mDOQtAHCbJcXHeN3ftaqa2xSE6M8SFyV/zeuKzmBhVcfLIJFp6Mr6z
-	 Mn6XCuVHjg8Yw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	Lee Jones <lee@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alex Elder <elder@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Andy Gross <agross@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	David Wronek <david@mainlining.org>,
-	Jens Reidel <adrian@mainlining.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Danila Tikhonov <danila@jiaxyga.com>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	iommu@lists.linux.dev,
-	linux-remoteproc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-hardening@vger.kernel.org,
-	linux@mainlining.org,
-	~postmarketos/upstreaming@lists.sr.ht,
-	Connor Mitchell <c.dog29@hotmail.com>
-Subject: Re: (subset) [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and Google Pixel 4a
-Date: Tue, 17 Jun 2025 16:31:26 -0500
-Message-ID: <175019588888.714929.17490930593303808143.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
-References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+	s=k20201202; t=1750202534;
+	bh=NjwTBIJNWdaAO3rdV1mrracyLIkoRvYZKQnvZdhwQTk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Dwq6pGBSN1yObu0KYQzgsgOSuGP99/j84eB92CGU8NKTBtoHy8R4fnd7/UFQaKMK0
+	 iZJZ7wG/vnybEtrPUxVe+SE9zHcvZhUSzyCb2nY/HaT5Mdz5Y80P2guNMlMA4vme3T
+	 xjwuRGtIb30VkONf3UYfs/bm3wJECAka37fzJXOv23Km6Q9+bPiWRwSBtdP3p8zqBp
+	 KizUaXr3Rveb0xN9IEZ6usmD67/VyP7h/mzEzaz7WM0YHpmRw1x113Pc2tdUcDysMU
+	 AwojGV92r6uoQnZYEoMOiWbDkC6U7CIy04i6I0qJ3tcXU/vQxocAH0mRu5zzs6TwZa
+	 4tlPfe9Vv6KVg==
+Date: Tue, 17 Jun 2025 16:22:13 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Jun Miao <jun.miao@intel.com>
+Cc: sbhatta@marvell.com, oneukum@suse.com, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ qiang.zhang@linux.dev
+Subject: Re: [PATCH v4] net: usb: Convert tasklet API to new bottom half
+ workqueue mechanism
+Message-ID: <20250617162213.45d693a8@kernel.org>
+In-Reply-To: <20250615015315.2535159-1-jun.miao@intel.com>
+References: <20250615015315.2535159-1-jun.miao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-
-On Tue, 22 Apr 2025 23:17:01 +0300, Danila Tikhonov wrote:
-> This patch series adds support for the Qualcomm Snapdragon 730/730G/732G
-> (SM7150) platform along with the Google Pixel 4a (sunfish) device. Since
-> the most critical drivers were submitted and applied in separate patch
-> series, this series is largely composed of DT bindings and device‑trees.
+On Sun, 15 Jun 2025 09:53:15 +0800 Jun Miao wrote:
+> -static void usbnet_bh_tasklet(struct tasklet_struct *t)
+> +static void usbnet_bh_workqueue(struct work_struct *work)
+>  {
+> -	struct usbnet *dev = from_tasklet(dev, t, bh);
+> +	struct usbnet *dev = from_work(dev, work, bh_work);
 > 
-> To date, we’ve tested SM7150 support on the following eleven devices:
-> - Google Pixel 4a (sunfish)
-> - Samsung Galaxy A71 (a715f)
-> - Lenovo Tab P11 Pro (j706f)
-> - Xiaomi POCO X2 (phoenix)
-> - Xiaomi POCO X3 (karna) / POCO X3 NFC (surya)
-> - Xiaomi Redmi Note 10 Pro (sweet)
-> - Xiaomi Redmi Note 12 Pro (sweet_k6a)
-> - Xiaomi Mi 9T / Redmi K20 (davinci)
-> - Xiaomi Mi Note 10 Lite (toco)
-> - Xiaomi Mi Note 10 (CC9 Pro) & Mi Note 10 Pro (CC9 Pro Premium) (tucana)
-> - Xiaomi Mi 11 Lite 4G (courbet)
-> 
-> [...]
+>  	usbnet_bh(&dev->delay);
+>  }
+> @@ -1742,7 +1742,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+>  	skb_queue_head_init (&dev->txq);
+>  	skb_queue_head_init (&dev->done);
+>  	skb_queue_head_init(&dev->rxq_pause);
+> -	tasklet_setup(&dev->bh, usbnet_bh_tasklet);
+> +	INIT_WORK(&dev->bh_work, usbnet_bh_workqueue);
 
-Applied, thanks!
-
-[01/33] dt-bindings: arm: cpus: Add Kryo 470 CPUs
-        commit: 7b768d1235dbd98ef7268596995d86df31afce21
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+workqueue is the queue, here we're talking about the work entry.
+And we use the system workqueue to schedule on (system_bh_wq)
+Please replace the workqueue with work here and in the comments
 
