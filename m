@@ -1,105 +1,117 @@
-Return-Path: <linux-usb+bounces-24840-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24841-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 504DEADDBA7
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 20:50:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7482ADDD5F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 22:45:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 385893ACFD9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 18:49:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DCD04A07A0
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Jun 2025 20:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B78D2DFF3D;
-	Tue, 17 Jun 2025 18:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBDD25BF0E;
+	Tue, 17 Jun 2025 20:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ruxQYE+S"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9XklDxX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9210528504C
-	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 18:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864FE25A2C2;
+	Tue, 17 Jun 2025 20:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750186219; cv=none; b=KKx1ZskEzcDmIuHQzuW72I/60Sd3aKEEIDWE1Dp0wNQXjCwcXUM68tq6+BEqV8I/qm/IgNdEf96Dp5gabN6GxwAA60uUzYuzsou5ti6wvkFa7dGfPGblN6aW7g+zoK+IISAoe+k6UwsNT4KKwrGWb49jqAYufs6Ofu/NsAwHqss=
+	t=1750193108; cv=none; b=LiaLfLUopmt/NBJSO7iRYZa5L8BWWETtBgHMBVdLSWp6uvgBAWjBUjiOHF/M+KbJsWk0UEIjJHcgpQOYahz6hI+FsH+Q9LF7clQ6zls2cBU5FBnFLRxQSpgTQIahJ9mJmCw7jjBfEPk6sm3B6CahYmBLdi2i8H+zs0lC3Ir/8ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750186219; c=relaxed/simple;
-	bh=8rGzAgfFH3pt0s5ZDc5eAh4iGfIDKfU+T12YIP6XBOw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UfjRNdsRu0VRpsNk1r/0WN09TU20UWUuKKXECM3uhCqEcuGMfp8pirOGSxggJ0af3qakdN4iQutx8Ka+WD1TSPNiJNRbmUXR6xMn+jddlrG2WIGOsDh8YhFg+3/1rJNusSMGUft67skbYnN99ZysoxxC6amNl2b9vGWgKDHjJA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ruxQYE+S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C618C4CEF4
-	for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 18:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750186218;
-	bh=8rGzAgfFH3pt0s5ZDc5eAh4iGfIDKfU+T12YIP6XBOw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ruxQYE+SfiTECITgFfiaMy4zA7V3oZA1SFUJjLCTTEjqarGqynLh9Ciwc9uvo31FP
-	 I9rPBLpytDcbvQFNNGlb8INbzUGr1ZbtX5m/mG/LuA6H87+Fx+H5J6048FF4jgi35e
-	 uiJzJQOnE4KcFSdIKZCDIIMOqqYsJFmcXe61HbZvfg/vCqB30ssI4Pr2fahbEj9EFN
-	 8y36Gz6NkiMeiPXSE2qu06h/Aw91QDDtD6MRbAoaQztciZ5hsBX698eYhRDrP0qcR0
-	 5UJPvX2QZclpTYLChhp4eWo0TW/WMToLzp/4d3LA+fvZQV9GWeaFCabxneeLDQJOeH
-	 ZFv8LjP/QSHsQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 23BB3C4160E; Tue, 17 Jun 2025 18:50:18 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220236] Corsair K100 USB keyboard not working after resume from
- suspend on AMD platform (ASUS B650E-F, Ryzen 7800X3D)
-Date: Tue, 17 Jun 2025 18:50:17 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: Input Devices
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_input-devices@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: component assigned_to
-Message-ID: <bug-220236-208809-PrVtn0xkJ0@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220236-208809@https.bugzilla.kernel.org/>
-References: <bug-220236-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1750193108; c=relaxed/simple;
+	bh=YO2pgphW5ix2G641Cyt99AzxDf6RghmJ03fQI+EU4qM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oPBcWze4oNbESRzyNd7vHlpix55vShLSG+lcixUbcPCtXrLM13aEW3+DRoxr4RbpFJXvsO8cO3/yehEbcb83rFGbG2Hiunx/Bmh1fCTxXR8UJMiSMbn+zHuDBgx+ZqUixq0Yxt46ZRf2CeVAEqyh81ks8s4ps94eb+7ojbK2/cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9XklDxX; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d3da67de87so225527685a.3;
+        Tue, 17 Jun 2025 13:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750193105; x=1750797905; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gpU9B+2Z/eErONpWTKeNVO2o1qMt7HuQeN7CFpLreI0=;
+        b=L9XklDxXO8yT/scdZ0MhKVmitXa+blK8GzzOYNRBJpIgQbAbrSEXlVzwcuY0kL9kHb
+         bz1WgEmE9bLSumoE+jKkFEfCyeBKUMjjH2QCXLRGqSIMugXbmg2Nqyab7zaW9xHjkO56
+         KykY2nDcdiTgzeRmxVyrIpB9LspRwJwFqz14HPUK2kD0UbtNlr4RxhQcx55MFlVVzKvc
+         bBJnb9jFoSnDejb1YHWjkZHSFTxqSfYZXPLN5QOvJossuyRo3GpHetjKs7b42Gu8G6MF
+         9R/O0tknskshVvCUI+I1wGZoPPergqYTxjlNCIASUGx6vJeNEJCR7kwFnlogbe2WZ/oO
+         5C1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750193105; x=1750797905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gpU9B+2Z/eErONpWTKeNVO2o1qMt7HuQeN7CFpLreI0=;
+        b=AZBmMqJoXNG0VdqIddR75Z0un1CJg1hio+MuLdVw/qWbb8UhabbMy0+P8+li7Cu6hT
+         GtTRLvpzpRJfnYukTLAp9pireN1RGVNRHCZlhvj20/RB9n+ssjAlm0EaUR8TojMolwKn
+         Dh2C0dpzcZbqys9Xi6Rng+LuMRLlrJBLgLKDkaE6STV58Baca5sCYrZ8ItopNSonnDKp
+         zfGyXoMYDyIDp2ulXPAdbOdKDLMMV4XJkhBLbOz/2MBYPPZSurRUBz6L2Xirb2z6hHWA
+         8X5y9GgBOlprcmLWNk5m81qWB2Yk0eGdS9qBkrjlavtn1saIfhCTe92ogyE0qT4xUPWd
+         uUeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUV1JFjyD03JW7feUFGs1a7WNHzWNJAeGk9L0TEQoApHGAWU6Rbg8mbePsrFHWQAUIOA7gyPxzL+g1vPRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDYac/KXlWLluMAuojI2c0zr/pSIWDpdcRirnR0JAmRMse+mAb
+	+QHdFOh7xqqVCILLgebNSGeIOde0BzuQDutxT4M9JQITIZUCA7dMCiaF
+X-Gm-Gg: ASbGnctDydzVlrh1ekaNX5aZAgcXIpsAhsFRPHc8ZFNla/yzP1Z0dhWiN9+yQfe32tJ
+	1t7TbnzmtP+kE6t0mQ4baEPpbW4fezgf6Cyc9pD8aCZ+SY32XZPDzTG2WXWaH/kor3K9NMxdpZC
+	lJxO7/A+JnKdvD9E7Ekjul+c9K13gZHz+qqn1RebUOfrNdbAx+3/67Gm0z3d+2cg6lQseJzebfi
+	RlDBBgjizVgl5JDDNguAnU0Z0/mx4zHTRrMZ0aiHCkXsQU304+FTZgEISG8sOdcVdp5bHH7i+Xx
+	MlUcYSe/WCS14c4IuHWoTVWr9DCw08nNHI67qGnsMmFi4TzwQVB27D8kvMe6Maef5JqltN5/zIq
+	YCe8iAGueYmZfGNb3RHixRBkWCxJ8AxAIlR6Gre7UdwqTio3ZRvJxdKid86k+Hh+waX6W
+X-Google-Smtp-Source: AGHT+IFRAps+zO/vJX6pDZ2o+vNJWC8FCSCWhveQTRcKO3q7pJ5/kTdWBwmiavE/8mZtjpkCAy4M3Q==
+X-Received: by 2002:a05:620a:8086:b0:7ce:e010:88bb with SMTP id af79cd13be357-7d3c6c1ab89mr2449431985a.22.1750193105160;
+        Tue, 17 Jun 2025 13:45:05 -0700 (PDT)
+Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.81])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8f10887sm691056685a.105.2025.06.17.13.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 13:45:04 -0700 (PDT)
+From: pip-izony <eeodqql09@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pip-izony <eeodqql09@gmail.com>
+Subject: [PATCH] usb: host: xhci-plat: fix incorrect type for of_match variable in xhci_plat_probe()
+Date: Tue, 17 Jun 2025 16:45:00 -0400
+Message-ID: <20250617204500.346984-1-eeodqql09@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220236
+The variable `of_match` was incorrectly declared as a `bool`.
+It is assigned the return value of of_match_device(), which is a pointer of
+type `const struct of_device_id *`.
 
-Artem S. Tashkinov (aros@gmx.com) changed:
+Signed-off-by: pip-izony <eeodqql09@gmail.com>
+---
+ drivers/usb/host/xhci-plat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-          Component|USB                         |Input Devices
-           Assignee|drivers_usb@kernel-bugs.ker |drivers_input-devices@kerne
-                   |nel.org                     |l-bugs.osdl.org
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 6dab142e7278..49eb874b1d81 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -152,7 +152,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 	int			ret;
+ 	int			irq;
+ 	struct xhci_plat_priv	*priv = NULL;
+-	bool			of_match;
++	const struct of_device_id *of_match;
+ 
+ 	if (usb_disabled())
+ 		return -ENODEV;
+-- 
+2.43.0
 
---- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
-Would be great if you bisected.
-
-https://docs.kernel.org/admin-guide/bug-bisect.html
-
-If you absolutely cannot, please at least upload the full dmesg (which incl=
-udes
-at least one suspend/resume cycle) for a working kernel and kernel 6.15.x
-(likewise, with a suspend/resume cycle).
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
