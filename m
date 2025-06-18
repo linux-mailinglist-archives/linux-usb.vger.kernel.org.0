@@ -1,99 +1,114 @@
-Return-Path: <linux-usb+bounces-24855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3658BADE20B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 06:10:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96925ADE23C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 06:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9BAC1791E6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 04:09:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599EC189A18D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 04:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDF41FBCAD;
-	Wed, 18 Jun 2025 04:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V11UbOjh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944601EEA40;
+	Wed, 18 Jun 2025 04:13:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94241F4192;
-	Wed, 18 Jun 2025 04:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3981EB182;
+	Wed, 18 Jun 2025 04:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750219773; cv=none; b=AKju1IIVZjxy1gHBUuj+2ftYGlfD3cC81I74pJ5Zt37xpKeP3vbCKcBQkq2gpzQb+G+jCWSdfei2XaXCKmNdfPfewR80tCDnUD0wXwBZxFDm/Dm78SbIHuQrQdYSSke9QO65BFs3uUPRS8ekHm9aL/uPJfonRWkLVWzOeAdUT0U=
+	t=1750219991; cv=none; b=eZ/pQGcOqB7k3hiSCCZm6SJbQLl4Rjp62BWqcFwJTNwdv87/6wcfeFZpaDs6Ie0qpEJ8PbSlQB/U54Tuovi4kv3uT+qvR/u/DqEXCAnguI79agjHc/CJMupDwrFrQsUHqdU6y82twT99AWER9Z/EYhIsVp+hum8h2U8LCMcXiuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750219773; c=relaxed/simple;
-	bh=IYXNJRGtSfp5Ce5y022NctjZUNhEDLJExv72PoDcEx0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oQzN/VmfU12mlqS0QODoZFM8yvHJegT9HnfgdO75Gf3rOHwXVU/Ebwln/2m3uAaDNe4zTcBKGfo2udbVabCA8Diq7oiZtYJVrgLOL6aFjZXgTYOjno+A4RkO5f8JtgxGk/TECSEqV/GML+oZmuxk6A/slFFB4gkIADEzqYHxKMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V11UbOjh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D621C4CEEF;
-	Wed, 18 Jun 2025 04:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750219773;
-	bh=IYXNJRGtSfp5Ce5y022NctjZUNhEDLJExv72PoDcEx0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V11UbOjhSSpCHu+/5Kz0F/v2Ke/B1PQNfbVNa/4m5wyRuW6G3Gehuzrx9LGQZhSqG
-	 dYsEXroK7zvIlkFWc6moZWaPn05hlFSih2NQqc333JYgtLwGrLbJ/1P1aPfdoro+zt
-	 gVRuKAlhuanME3nBnneomW7lU9Kv+zrhJKAhB90OyEFHoXRcFwdXftos5/FrmTT3o3
-	 dhI9ykdnvISLUhZTRxI1wnC8EGBK7hXv1mGakc9D2ganz4+k+5HeZYjiSS9SfVJdfJ
-	 bTeNKb+scU7KK0TpBMOxyEPylPpE5fPFP2NjaiOMyI015KQJ8t0qLw/zRxNArwUPlI
-	 4rvk/GOifLJVg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1750219991; c=relaxed/simple;
+	bh=wLvjh3pCu9KQGwBHwTutcFY0aeOTXXdLuEBCPSdOpTc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dRR0TKfr0Vm5ViRlgltiZcGx9Su4NYNr4y6gnDaV1b4zgNR5d9Iq/9NIEjVQylNe1e67fA/dKOCh4/NKaZyYX+c33y0FB4js1hFtZyF196UdUXq7WcDXbNkr1xq5H2PkwKOs4yBFNbxu+aS5xF8TR2AxgCJ/dNB0J9Ohd+Kw4Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowACH2FDLPFJooa5HBw--.34075S2;
+	Wed, 18 Jun 2025 12:12:59 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: gregkh@linuxfoundation.org,
+	michal.simek@amd.com,
+	u.kleine-koenig@baylibre.com,
+	liqiong@nfschina.com,
+	colin.i.king@gmail.com
+Cc: linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Aleksandrs Vinarskis <alex.vinarskis@gmail.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	maud_spierings@hotmail.com,
-	dmitry.baryshkov@oss.qualcomm.com
-Subject: Re: (subset) [PATCH v4 0/4] X1E Asus Zenbook A14 support
-Date: Tue, 17 Jun 2025 23:09:17 -0500
-Message-ID: <175021976629.732077.4176179596531014776.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250426130203.37659-1-alex.vinarskis@gmail.com>
-References: <20250426130203.37659-1-alex.vinarskis@gmail.com>
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] usb: gadget: udc-xilinx: Use USB API functions rather than constants
+Date: Wed, 18 Jun 2025 12:12:22 +0800
+Message-Id: <20250618041222.408372-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowACH2FDLPFJooa5HBw--.34075S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF43KFyxJw47Cw13Kr4Uurg_yoW8Jw48pF
+	n7Gay8GrWvy3yUX3W5AF1DZFyrGa9F934qyFy2g3yavF1Sqws3tFWrJr1fKrnrCFW3Aa13
+	trs8t3ZFqFW7CrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWrXVW3AwAv7VC2z280aVAFwI0_GcC_XcWlOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+	tVW8ZwCY02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjTRiOz3UUUUU
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
+Use the function usb_endpoint_num() and usb_endpoint_type()
+rather than constants.
 
-On Sat, 26 Apr 2025 14:57:56 +0200, Aleksandrs Vinarskis wrote:
-> Introduce support for the mentioned laptop.
-> 
-> Particular device exists in two model numbers:
-> * UX3407QA: X1P-42-100 or X1-26-100 (as tested)
-> * UX3407RA: X1E-78-100
-> 
-> Mostly similar to other X1-based laptops. Notable differences are:
-> * Wifi/Bluetooth combo being Qualcomm FastConnect 6900 on UX3407QA
->   and Qualcomm FastConnect 7800 on UX3407RA
-> * USB Type-C retimers are Parade PS8833, appear to behave identical
->   to Parade PS8830
-> * gpio90 is TZ protected
-> 
-> [...]
+The Coccinelle semantic patch is as follows:
 
-Applied, thanks!
+@@ struct usb_endpoint_descriptor *epd; @@
 
-[4/4] arm64: dts: qcom: Add support for X1-based Asus Zenbook A14
-      commit: 6516961352a1ef39184a34690ff3cc06953f6fea
+- (epd->bEndpointAddress & \(USB_ENDPOINT_NUMBER_MASK\|0x0f\))
++ usb_endpoint_num(epd)
 
-Best regards,
+@@ struct usb_endpoint_descriptor *epd; @@
+
+- (epd->bmAttributes & \(USB_ENDPOINT_XFERTYPE_MASK\|3\))
++ usb_endpoint_type(epd)
+
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/usb/gadget/udc/udc-xilinx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index fa94cc065274..8d803a612bb1 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -813,10 +813,10 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
+ 
+ 	ep->is_in = ((desc->bEndpointAddress & USB_DIR_IN) != 0);
+ 	/* Bit 3...0:endpoint number */
+-	ep->epnumber = (desc->bEndpointAddress & 0x0f);
++	ep->epnumber = usb_endpoint_num(desc);
+ 	ep->desc = desc;
+ 	ep->ep_usb.desc = desc;
+-	tmp = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
++	tmp = usb_endpoint_type(desc);
+ 	ep->ep_usb.maxpacket = maxpacket = le16_to_cpu(desc->wMaxPacketSize);
+ 
+ 	switch (tmp) {
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.25.1
+
 
