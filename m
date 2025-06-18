@@ -1,51 +1,52 @@
-Return-Path: <linux-usb+bounces-24871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75D75ADE521
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 10:06:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FAB9ADE71D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 11:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A8373BCBD2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 08:06:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CDE34032C7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 09:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FF12063E7;
-	Wed, 18 Jun 2025 08:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51541283FEA;
+	Wed, 18 Jun 2025 09:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wyraz.de header.i=@wyraz.de header.b="E5WsFh7Y"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fyWZozvw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.wyraz.net (mail.wyraz.net [46.38.234.247])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2058E78F36
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 08:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.38.234.247
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B581E2312;
+	Wed, 18 Jun 2025 09:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750233983; cv=none; b=Duh9IMXzceHtj4Z1IYNnhf7vhYUMPRRzf62j4hgecRsRim2ibCE2my1kZbVhMQDNwA2ClEce1xlsc+SvP6ouyj/PwDlNs9mE1YzoC6Ak33OkZIXA1FSJc1GKOwutFNDqFqUrKIVpOm56tZyJLoTUqGokn6gQayCKLuLqOimCJh4=
+	t=1750239101; cv=none; b=hTxVvomaXmKkDy+VLpiYnt7yXQTpD/fLDWOXNitL+s5Z1BgqZJPcQpEE6Tqy57C+/hVqSDBEZP730S1esaep0ZHDaesCBjwfBnG5izAudNx/i36tYwyTLAyfYnIKlF3XJrzWk3F9b7MIqh38Pxw6dsuzZeCarCiQIGGJ8osPyzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750233983; c=relaxed/simple;
-	bh=l3pJeI8wIgdjLVHbiN/CiMZBKMlmOTw1i5wOxfmjSno=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WTKO8t2OQCoBXV69Yf/x7UVG/PoVF/dwIeE/NCrvfOwgj/hINZH3FpJXMUk5HwbtobmbQr+0EiSFrV0IGQUzco/meYyDJy4qe9/4N9bHdASYGHCgTYIqJpoaQiKuSASKWSBXPPwF0QBGmCl/K/lnXbksGZgrM0WTemt51JFbmio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wyraz.de; spf=pass smtp.mailfrom=wyraz.de; dkim=pass (2048-bit key) header.d=wyraz.de header.i=@wyraz.de header.b=E5WsFh7Y; arc=none smtp.client-ip=46.38.234.247
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=wyraz.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wyraz.de
-Date: Wed, 18 Jun 2025 10:06:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wyraz.de; s=dkim;
-	t=1750233976;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type;
-	bh=sL+8kzDmpcHRBeaT3jczwV5Ixtbi0xa4/tgqcFdstpM=;
-	b=E5WsFh7YUfRXNP0b2xyEZPJPNDNEk/S0LvWnTX0wVyhQNB2EZHuSCXCZPnxLlB1IBUv8Ve
-	rHN7BwEcncQZwp5hK9xNtvzwsz7ot8QNPIEAGb9K+4QwGlcG41ncij3ry19EqZuX5wxXZ6
-	IvK6gEdh8sJYVy5ZiO8obZNa92E/uknUKFGyNBwEMT7+3x8ErpvAu9IlGH8nTxFvi8ulht
-	n0NCeE9M//XOp4W9Xp5P27oW0gCLigMjXPyeq6yfl62OujzDLyvIIptHa7EQO1atvNPQ7F
-	o8ktgTUsHJIMxRqvJ+jb3M7nrdsdKqksrGYCkmHvLGTONVduWqXf/XGyP8fl9A==
-Authentication-Results: mail.wyraz.net;
-	auth=pass smtp.mailfrom=michael@wyraz.de
-From: Michael Wyraz <michael@wyraz.de>
-To: linux-usb@vger.kernel.org
-Subject: [PATCH] Add Marvell ML352 to drivers/usb/serial/option.c
-Message-ID: <aFJzdxe_ykNw6cP_@homebase1>
+	s=arc-20240116; t=1750239101; c=relaxed/simple;
+	bh=3Z0xQCvFb/abBaZUrRdrq6mu6yGaXylQBFf0l9XBU5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qwtEUa7hn8OiWTOsnvi0dM99/I/rhR/a6v9z3Ex1NGXfLUsmc0NyUPr4Bsp1rtgkLVWR3gk8y99y0mUkpea9quRlgapaAnHsvD8cZHNqWdFD1JBH+IF8pypUdAixfwXOw9FQFP9TyjoffY1l7Fos6+GuR6VU/G1OttHMf38JS2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fyWZozvw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D58C4CEF0;
+	Wed, 18 Jun 2025 09:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750239101;
+	bh=3Z0xQCvFb/abBaZUrRdrq6mu6yGaXylQBFf0l9XBU5Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fyWZozvwhojXFUFfkGR/0tn0UBw+AyB9Uuj1H1lTEZBzD/zwLVoXIFR9tNmG9mVZL
+	 fwcy/iR8gH3WpYEcuRNN6iY5Fe6qtQBljvu6ZYj43nIybx497g/7kjqIQ/0lK5B3Za
+	 hB3rmGiu6R+sTaQRo3fgzUTB27rb6xUvhh6Krb9U=
+Date: Wed, 18 Jun 2025 11:31:38 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: xiehongyu1@kylinos.cn
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	mathias.nyman@intel.com, oneukum@suse.de, stable@vger.kernel.org
+Subject: Re: [PATCH v2] xhci: Disable stream for xHC controller with
+ XHCI_BROKEN_STREAMS
+Message-ID: <2025061826-slapstick-duration-6221@gregkh>
+References: <20250618074648.109879-1-xiehongyu1@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,40 +55,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spamd-Bar: --
+In-Reply-To: <20250618074648.109879-1-xiehongyu1@kylinos.cn>
 
-Add the device id of the Marvell ML352 to option.c so that the
-device is recognized as usb-serial device.
+On Wed, Jun 18, 2025 at 03:46:48PM +0800, xiehongyu1@kylinos.cn wrote:
+> From: Hongyu Xie <xiehongyu1@kylinos.cn>
+> 
+> Disable stream for platform xHC controller with broken stream.
+> 
+> Fixes: 14aec589327a6 ("storage: accept some UAS devices if streams are unavailable")
+> Cc: stable@vger.kernel.org # 5.4
+> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 6dab142e72789..c79d5ed48a08b 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -328,7 +328,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>  	}
+>  
+>  	usb3_hcd = xhci_get_usb3_hcd(xhci);
+> -	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4)
+> +	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
+> +	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
+>  		usb3_hcd->can_do_streams = 1;
+>  
+>  	if (xhci->shared_hcd) {
+> -- 
+> 2.25.1
+> 
+> 
 
-Signed-off-by: Michael Wyraz <michael@wyraz.de>
----
- drivers/usb/serial/option.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi,
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 5cd26dac2069..3bfdab641369 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -619,6 +619,10 @@ static void option_instat_callback(struct urb *urb);
- /* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
- #define LUAT_PRODUCT_AIR720U			0x4e00
- 
-+/* Marvell products */
-+#define MARVELL_VENDOR_ID			0x1286
-+#define MARVELL_PRODUCT_ML352		0x4e3c
-+
- /* Device flags */
- 
- /* Highest interface number which can be used with NCTRL() and RSVD() */
-@@ -2434,6 +2438,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
-+	{ USB_DEVICE(MARVELL_VENDOR_ID, MARVELL_PRODUCT_ML352) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
- 	  .driver_info = NCTRL(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
--- 
-2.49.0
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
