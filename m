@@ -1,58 +1,51 @@
-Return-Path: <linux-usb+bounces-24882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02B82ADED23
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 14:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B28E8ADED28
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 14:59:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E074318912F4
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 12:58:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25BE6189330C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 12:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958C62E2EF2;
-	Wed, 18 Jun 2025 12:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCA72E2651;
+	Wed, 18 Jun 2025 12:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEGgLj/u"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1sYAmuO9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF252E2651
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47CE2E3AE7
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251475; cv=none; b=ayMckmQrbdNxtryWJ8Im9BpSPJ0b7h/PkQzNrVwaz1bdm1H2VFk6BMA/FCs7W8k5Hr0hdQ5sLvdzBUUOb6SL7u5TGw1+v/3036If4YH+oG6Wf6NW2s1u3dinjoZxUcTFu1ADYx/n2fXC6bKiL+UzEmHQ1IXHzG+3hMMMKwhYQzo=
+	t=1750251537; cv=none; b=Kmfcoi+GyXnuGBtiERq5xq9JOi+vlBYcza3opaFezNIdO8YHo2D9YqYwYFvg0oVktZ7BFpCmbw0gJE8xdTFLVyZzm61LHed6oxnnOXLYBRZRD8zJJ1stTnRpP6YyxgGYdHwGGIvMz7FSUAsCqiqPAM2O3VYPwux1mtfasPmdmRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251475; c=relaxed/simple;
-	bh=Y2IvOcS/oGdlNC7lpQT8ahw1kB0Bt0ONG4kmKXVpVDA=;
+	s=arc-20240116; t=1750251537; c=relaxed/simple;
+	bh=lkmylJBdl4mOw5yUPl3JSYo2WSEISIeqi1EVEl87jfs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FId2vv+hoLqMne/PrhZviYpCrVdG+NpQ9Dh0YRTJarvB4Qx3wnMPCuGtrSDzVjIFK4FMQbx1pGeokmGkfALYxsN+mjy7ZP33U8VQNwzkj6YcFuGBFfqvWe5vkDr1k0k8SsUBHz+MkarJjzxYAqZRQuq5TgEqAZkXL6xTGEQ43Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEGgLj/u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C600C4CEE7;
-	Wed, 18 Jun 2025 12:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750251474;
-	bh=Y2IvOcS/oGdlNC7lpQT8ahw1kB0Bt0ONG4kmKXVpVDA=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+IjM7Qg1NtAwCYpYmcCiYy36yFM1P0fgYsrUcQRz/w6GSIehKL+EackCgMXVFUtLPMS/zWwb7s3rbYW9jPzSyAysOOMtkR1pdNmGJLFcxbnUHKGdvUniI+wAgTPbr6rlC+Q0J9XkkfPScrWEl8JlWh8ojkPz2GZicDDsf0DUjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1sYAmuO9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9BCC4CEE7;
+	Wed, 18 Jun 2025 12:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750251536;
+	bh=lkmylJBdl4mOw5yUPl3JSYo2WSEISIeqi1EVEl87jfs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PEGgLj/uSwGMBMf0K9ZxPocG4dX2UCnsPd0Q06frN+4zf6ufmJOpTeVR5t2QVoeQt
-	 U/LH1d2lOsVJpDnP3633N70rBhT0bIoaDPj0PKp57yYNejCJzFx4vzKnrUPRDpeHJC
-	 DRdcdIthcUFXVQaNk6LUqvTDqZpAVGqTkgWTLf9TlIBekKk1ggrELP5ACW4qKuRfKT
-	 Jozb8sW2LznqEj8sbhJ1rZSuHiPpazIdxyrPwJcctHVW6K2ZAs31x+KDqov6dvfmet
-	 vTFrQqVj8s4jOVFxwgDBwPixKwuxpy8F7GpvtmtLssy6a/Pack7l/5/28C2IyakwUP
-	 KpnAnt7UTXxlQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uRsMT-000000002bY-46CL;
-	Wed, 18 Jun 2025 14:57:54 +0200
-Date: Wed, 18 Jun 2025 14:57:53 +0200
-From: Johan Hovold <johan@kernel.org>
+	b=1sYAmuO9JCyvqB/vKjpfn/9mnGvbpGGSb1gFuhUrfJOqdCU+oPhGwh4GSZZWFNyrP
+	 NWk4YsiaLPNGFinQujUjnzjYJsJ40O9a866rcdDLx7+QsqQz954ps5rLDHIZgl4UNK
+	 cPGAhSLuCtkdl2MNBaWXdLwwvZwHb+06SFAtMjCo=
+Date: Wed, 18 Jun 2025 14:58:53 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
 To: Charles Yeh <charlesyeh522@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+Cc: johan@kernel.org, linux-usb@vger.kernel.org,
 	charles-yeh@prolific.com.tw, joy-yeh@prolific.com.tw
 Subject: Re: [PATCH] USB: serial: pl2303: add PL2303G GPIO_A and GPIO_B
  functions
-Message-ID: <aFK30fcz0ujRbKBj@hovoldconsulting.com>
+Message-ID: <2025061801-popcorn-xbox-9f5f@gregkh>
 References: <20250618123513.12-1-charlesyeh522@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -93,11 +86,16 @@ On Wed, Jun 18, 2025 at 08:35:13PM +0800, Charles Yeh wrote:
 >  
 > +
 > +struct PL2303G_GPIO {
+
+Didn't checkpatch complain about this?  Linux structures are all
+lowercase.
+
 > +	u8 GP_Branch;
 > +	u8 Number;
 > +	u8 Value;
 
-We use lower case symbol names in the kernel.
+Same here, always use checkpatch.pl on your changes before sending them
+out to catch basic coding style issues please.
 
 > +};
 > +
@@ -107,18 +105,21 @@ We use lower case symbol names in the kernel.
 > +#define GPIO_AB_SET_VALUE		_IOW(0x81, 12, struct PL2303G_GPIO)
 > +#define GPIO_AB_GET_VALUE		_IOR(0x81, 13, struct PL2303G_GPIO)
 
-No, custom ioctls won't do. We have a standard interface for accessing
-GPIOs so you need to model this as gpio chips similar to what the
-ftdi_sio and cp210x drivers do.
+Why are you adding custom ioctls for just this driver?
 
-> +static int pl2303_ioctl(struct tty_struct *tty,
-> +			unsigned int cmd, unsigned long arg)
-> +{
-> +	int retval = 0;
-> +	struct serial_struct ser;
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct usb_serial *serial = port->serial;
-> +
+And where is the user/kernel api definition of this so that userspace
+could know about it properly?  You can't bury it in a driver like this.
+
+And where did 0x81 and the other numbers come from?
+
+Also, the structure here will not work in the user/kernel api at all,
+always use the proper user/kernel data structures if you are going to do
+this.
+
+But overall, no, don't add a new user/kernel api for gpio devices, we
+have at least 2 already, please don't add another one.  What is wrong
+with the current ones?
+
 > +	switch (cmd) {
 > +	case TIOCGSERIAL:
 > +		memset(&ser, 0, sizeof(ser));
@@ -126,38 +127,10 @@ ftdi_sio and cp210x drivers do.
 > +		ser.line = port->minor;
 > +		ser.port = port->port_number;
 > +		ser.baud_base = 460800;
-> +
-> +		if (copy_to_user((void __user *)arg, &ser, sizeof(ser)))
-> +			return -EFAULT;
-> +
-> +		return 0;
 
-This looks unrelated.
+Are you sure this baud_base is correct?
 
-> +	case GPIO_AB_CONTROL_MODE:
-> +		retval = pl2303N_gpio_set(serial, (void __user *) arg,
-> +								PL2303N_CE_MODE);
-> +		break;
-> +	case GPIO_AB_OUTPUT_MODE:
-> +		retval = pl2303N_gpio_set(serial, (void __user *) arg,
-> +								PL2303N_OE_MODE);
-> +		break;
-> +	case GPIO_AB_SET_VALUE:
-> +		retval = pl2303N_gpio_set(serial, (void __user *) arg,
-> +								PL2303N_SET_MODE);
-> +		break;
-> +	case GPIO_AB_GET_VALUE:
-> +		retval = pl2303N_gpio_get(serial, (void __user *) arg,
-> +								PL2303N_GET_MODE);
-> +		break;
-> +	default:
-> +		retval = -ENOIOCTLCMD;
-> +		break;
-> +	}
-> +
-> +	return retval;
-> +
-> +}
+thanks,
 
-Johan
+greg k-h
 
