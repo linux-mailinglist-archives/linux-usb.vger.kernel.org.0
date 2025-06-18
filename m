@@ -1,102 +1,51 @@
-Return-Path: <linux-usb+bounces-24851-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24852-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 609D7ADE181
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 05:13:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01E21ADE1E8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 05:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB6E71899C4F
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 03:13:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ED5B3A62FF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 03:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3448E1E260A;
-	Wed, 18 Jun 2025 03:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMmfFaKZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE32A1E1A31;
+	Wed, 18 Jun 2025 03:57:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E661DFE09;
-	Wed, 18 Jun 2025 03:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131C128F5;
+	Wed, 18 Jun 2025 03:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750216379; cv=none; b=USZgs2TeQ95FtRN0FugMUjd+sUCEePhS8oGCgZOEOBT4/rxaq9kmG8iSPOxzVfGKsO/OiH5Yga2zut0MxPlAtjvkGz400xLtJgYD+VV4Ta6JRmTqowSRd3ZmCgGH6OQwj9c3TyAaVshykuhK8dxpmCYrrIYgoBtI900poI36Azo=
+	t=1750219023; cv=none; b=Zy3K2bSy9Bm/oOkCdZaiQ0lOpGKHms/81d42dadZmdAlQRB2d0OmVUkvayWYagPBm8QOyN9m4VWMiR99sykgx1Guli1+prtR3SCkT9KyazyqFNFlkQBobQVnx8QKHUExHEcvkRZNtBV6jGoxoit7BytKvpC807ugykSPLcAZkwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750216379; c=relaxed/simple;
-	bh=CaIBrWdHA8A6Hl+8od7bG7PtDXCOvZVEVSYJx4ibA8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pCLTmdKHr73vjVtc2PjsnhqxDVABzTFJsUgNKC2dFOHc/op/VgK7efpeHJb4rmxZH5Dqnjv0khAbkt59sKkrGCEGZr8tF7XcgNsvobqbWe955yKD4JjW2h0Vs7SwWjTfH7LK4JkgLXZR+7LN3KRLUxgyQafRVdLYeXTfW34yc+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMmfFaKZ; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23633a6ac50so93629405ad.2;
-        Tue, 17 Jun 2025 20:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750216377; x=1750821177; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rVmw5bZbkl4jrrqCt8IvJKSgjCMD7aRK/gZMumHgDnk=;
-        b=NMmfFaKZoDx/OjsULVrdQQXkDfLrQuZPCcp7bdl/3+EEo+Hf1z3PIGjGpvAMPiXegy
-         askk2n97c6v6DkGS/scxxO1sktTjnwqUNSm/qsJSsKz1jPuYuyfQl5Odb+X/OK292ygt
-         uG/ceoYf2m+TVkVBkJRLA9Mqv60B43Tl89oz54BrKacKtk8QjrL6I44//Hj+Gx95y+xE
-         RKVtMxfDw41727a46obtH3ON0pKzqQ+iHrd2qXhRpLH+D3ObG3zAK9WEZamCOx7Ni5tF
-         mI8bIqAHTcO4SiRxMnIxfM1Bv0q90SYznvIzuOy4hgaHtQ25PM+w9NRGyQPfY/wjMl97
-         ZRvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750216377; x=1750821177;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rVmw5bZbkl4jrrqCt8IvJKSgjCMD7aRK/gZMumHgDnk=;
-        b=oUIJ7oafFPIFtJJBhAOIN4Onqrjedq5W35wUl+QTAPJX3HgId0a9gSwOPBJu/wPp1G
-         85VymOFMKtN5gUShk1rtTPm22vNybwVVsCQUx+m1d14OcIi9/Vku644XBnU6msr9xIl+
-         M3M7Xf3dtVxCPA+1kfmLr/LFRgL2oYbZZoMmJbgtpIIjGiqmvUzIp/R2/jM52FKlpbnq
-         Gcxb7dLWfOZJPzKFsVzmtzY9gILXEAv6trI3sime4RUGWWX6+yhEngJLYGzvo9TxkLcs
-         GIZ+NDBK2A5DytspaCRTh+v8P3zqVCS0bWO5GjOl1sQ7PXo3WrvEJTRhboeXwwD5mavA
-         /VvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbpTTvAJaFOcPgmjcZDoGVT0AKB3aE6Hhw18fTIPPgw2sed0vxKE2RnT08rOK7sCnqHLvNAnmYS7X9@vger.kernel.org, AJvYcCX1d1akTr1YME2Ks3btV05odUUgfayGksE9VrAY+xgsQzUf3xizgXKKFaFYALal5t2FolQczpKBA8NNYF6u@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1E4CRhCYOl/V1jMTkAfaY/lgobVF7mSKCqeXraO9gr//r5r5E
-	CCimnjVYfTdq/LsX+B8qHiOHxpwWZpyDQ0hqknNFB1Q8y0WAFoWMPsTm
-X-Gm-Gg: ASbGncuTkXUmn81xxVEKRpO0/CmQV/lpoJdYWL/82qzQQduACNVOxSihgY3uTeSfs2C
-	iVt8MO0Yl33zcq/yCxqrlMwe4usmF9CxuUd3Zrd2XUa+kksTG06p8SNgSiDKWRyknkrEZ0EGOt2
-	1LOYrNQDS9cwwSr6WiXc9l7094p0xFrAoacd5b7bJgMHvG937YmVfFev0dTCvAzteB507CiDM3A
-	+jpoZ96UEp5ABNq6JIrFGL162UE/OkFyjOLe5R/BOZw1m9O6xvJANZuGSR0SsnKJistHU3tvqf4
-	6Xx//nBQGe5/nBiNPyGCiPpiWcll2S9sZMIXYkd6KwhXNWIMOeP9KxQovRmx6BBUExxWixsp
-X-Google-Smtp-Source: AGHT+IH8hgD1LGsHJfDQnAXl9HvOeBTvxQ0AmdkVrJ64/WhDiqReq6a0y9o7OxH1H5lmzbPMTmNXgw==
-X-Received: by 2002:a17:902:ce81:b0:234:f1ac:c036 with SMTP id d9443c01a7336-2366b40b7c2mr211182775ad.50.1750216377556;
-        Tue, 17 Jun 2025 20:12:57 -0700 (PDT)
-Received: from localhost ([2001:19f0:ac00:4eb8:5400:5ff:fe30:7df3])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b2fe1642ecfsm9772763a12.19.2025.06.17.20.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 20:12:57 -0700 (PDT)
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>
+	s=arc-20240116; t=1750219023; c=relaxed/simple;
+	bh=SztlRYvEq9KkoTnU3UqT175UKB4nWXSpAYJEifPKT8g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NrhjoQ6Im187z+7wLkWZ/hzOzYPZTVa6KD0C27SIkWxdQIxHkeMIQyGs8q6pxRT6yHJxLYXSEMZrX7vtPglV6YPgAdqSjwl38X5Zsbyw0rB5dpNu9BMjmRMqqO4hgJc1Cf61aDHY2GiU3KTVQGI7CH0+W9mXfDj1hHaAaHbG784=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowADXJ1D9OFJoNPVGBw--.7843S2;
+	Wed, 18 Jun 2025 11:56:45 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: gregkh@linuxfoundation.org,
+	prashanth.k@oss.qualcomm.com,
+	jeff.johnson@oss.qualcomm.com,
+	Thinh.Nguyen@synopsys.com,
+	peter@korsgaard.com,
+	snovitoll@gmail.com,
+	michal.vrastil@hidglobal.com
 Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	sophgo@lists.linux.dev,
-	Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>
-Subject: [PATCH 2/2] usb: dwc2: follow compatible string change for Sophgo CV18XX/SG200X series SoC
-Date: Wed, 18 Jun 2025 11:11:30 +0800
-Message-ID: <20250618031132.373216-3-inochiama@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250618031132.373216-1-inochiama@gmail.com>
-References: <20250618031132.373216-1-inochiama@gmail.com>
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] usb: gadget: composite: Use USB API functions rather than constants
+Date: Wed, 18 Jun 2025 11:55:40 +0800
+Message-Id: <20250618035540.290411-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -104,31 +53,53 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowADXJ1D9OFJoNPVGBw--.7843S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JrWfur1UJr4ktr4fCFy7GFg_yoWfAFg_CF
+	WjkwsrWrnrWFy5Cw13Aw13Gr4qkwsFq3W0vFnYgF9xAas8XayUXrykXrWkJF12vr10grn8
+	C34Iqrn8GF4xJjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbf8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26rxl6rkdMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI4
+	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRRID7JUUUUU==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-As the wildcard name is dropped and favor new compatible string
-which match a real SoC, and it is not used for any board at now.
+Use the function usb_endpoint_num() rather than constants.
 
-Rename it to sophgo,cv1800b-usb to match the binding change.
+The Coccinelle semantic patch is as follows:
 
-Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
+@@ struct usb_endpoint_descriptor *epd; @@
+
+- (epd->bEndpointAddress & \(USB_ENDPOINT_NUMBER_MASK\|0x0f\))
++ usb_endpoint_num(epd)
+
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 ---
- drivers/usb/dwc2/params.c | 2 +-
+ drivers/usb/gadget/composite.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 4d73fae80b12..ea6bd537e337 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -334,7 +334,7 @@ const struct of_device_id dwc2_of_match_table[] = {
- 	  .data = dwc2_set_amlogic_a1_params },
- 	{ .compatible = "amcc,dwc-otg", .data = dwc2_set_amcc_params },
- 	{ .compatible = "apm,apm82181-dwc-otg", .data = dwc2_set_amcc_params },
--	{ .compatible = "sophgo,cv1800-usb",
-+	{ .compatible = "sophgo,cv1800b-usb",
- 	  .data = dwc2_set_cv1800_params },
- 	{ .compatible = "st,stm32f4x9-fsotg",
- 	  .data = dwc2_set_stm32f4x9_fsotg_params },
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 8dbc132a505e..12634f0b45a8 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1011,7 +1011,7 @@ static int set_config(struct usb_composite_dev *cdev,
+ 
+ 			ep = (struct usb_endpoint_descriptor *)*descriptors;
+ 			addr = ((ep->bEndpointAddress & 0x80) >> 3)
+-			     |  (ep->bEndpointAddress & 0x0f);
++			     |  usb_endpoint_num(ep);
+ 			set_bit(addr, f->endpoints);
+ 		}
+ 
 -- 
-2.49.0
+2.25.1
 
 
