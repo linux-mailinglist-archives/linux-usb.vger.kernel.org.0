@@ -1,140 +1,137 @@
-Return-Path: <linux-usb+bounces-24895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598FCADF734
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 21:50:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A61ADF99C
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 00:50:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 223403AFF23
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 19:50:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2A12189A2E5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 22:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2394E21B199;
-	Wed, 18 Jun 2025 19:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2249528002C;
+	Wed, 18 Jun 2025 22:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LgEJMibC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n5AqRyCP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EBC21A443;
-	Wed, 18 Jun 2025 19:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076B927E04C
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 22:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750276215; cv=none; b=YU5QIJAbXDgg5vEgbw/XTkcRwWP+gbuKdH+IrVz3jJ6R37x7XxJNdhJcY4bd/sFpDYQndTE5z14UUr+aA0HcHMzELsW5xH9yT++hnCCMpmFTykFKbgCEGb+8DtpAXPwzRYyC35Ccwwy3h949LWvrGgyhJ5/oHp8NnYUfmlBTM9o=
+	t=1750286997; cv=none; b=P5/Nt4DHKwh1ZOrqml1VJuz/coDA5B61hcNxatEhINs4pHQvsKjCvXa5JZy3FB7SNt2tBkgx16bo15g5YGg4OxZ1xDFRaweYtt252y2h6uqDaQQuiYh/68eN0YAxgiOKs19uFK4Wo9/XTdptSqdRfHvXAigEsS2TMpdFIN6OO4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750276215; c=relaxed/simple;
-	bh=24rRaj+riLcN6nNTA2ySQ+hr2w7EcDiuFRRjnmlYPBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QfgNd0edhclSr0KMutDcg5lcabCRxi4OuCek6QHJxEM+akr43c9t7KS57ILKoTNjap3JF3nyuJQy4OfaJ5ZkQe/UZ2QuH5zoqTcKd0vmamUfnPG/KVayjSNpikDYjPIGrp3XYlMDx7KMPGiBFGWhSwcSlKmFhdqq50QiLoY3/gM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LgEJMibC; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4a56cc0def0so124142901cf.3;
-        Wed, 18 Jun 2025 12:50:14 -0700 (PDT)
+	s=arc-20240116; t=1750286997; c=relaxed/simple;
+	bh=vR1hDO6HkeWPDLUa5nkH6iq8NsHnUdWRXAnQvHPkV58=;
+	h=Date:Mime-Version:Message-ID:Subject:From:Cc:Content-Type; b=tXJBvtvctAmeAPnMaEYdtRqVVKdUUSoQfOW5LpN+ezRgfHT0AAwFPHE4yKjJOvSMo6dYzFciA665vAwwg46RcOXckVHSUj8lA419TKhF4gV3BddCZQ/MzoM0aAaBxySNAXbOHxewbPUQuPFiE3bRiicWwk4KLatFp5YHp5EN+jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n5AqRyCP; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3139c0001b5so67345a91.2
+        for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 15:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750276213; x=1750881013; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bTiYGH9s90MOiZvQtQe8c1eAjqU7s3NEhM25qAZHZ7o=;
-        b=LgEJMibC1eB+BS3i0gg301Lq4ubxgcXnTAxXAP0/qmN9jNylmMLLVJOq/xbsDyafYx
-         bhVP3KTw8nXwGJCNtSzvF2JYcOIllZ0+Itj+FYwiOuQzaC2GQBFHZ1jAv81G5DObE3cO
-         /a/OUHqQVgvTxUAg3XNLXJH64sztGIAb/hRubqSaKL3c6G6bxZAykSsgsFWZZp6R/cJ3
-         pCIUfG0rlDne1eXrE4GmsVT0l7IsXQlKTamE2iFV6PbFRJePI3UJTtOfI/95lpYF8dCa
-         EAS1gXOXAsyDJ2BSNtYBGtqt9I6bZRxIPUY578W7oRAi3h1ZxSla8zdYqb09ew8JLEff
-         WB7Q==
+        d=google.com; s=20230601; t=1750286994; x=1750891794; darn=vger.kernel.org;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ayl3My5WkFPC4pHPZB0vUsI7Z8MvSCFfFwq+uySbSpk=;
+        b=n5AqRyCP2z/0VwcyMbMpDozv0H227k8e79EzlBQtP2QibgqqDWy4BZ48ZY1o1DYf6D
+         zCV8LqQbmqxna0Za0hCgiCcmwky+yez86swTrvs1ZF91Ll97BK01Rvf4QYjQtfqQfaeH
+         wQtbSkEZUteWy3O3bUMve+05QsFiIm+A55C9ohSkxo2cxHP25kw43jYANqw3Y6aH0WbQ
+         /nRRm3weTY99shvqNBGUrVqtKkcXOJWUPpN08Tmw9Y2DEPGKIOD1GUNxH85DLMsV+Ytp
+         ytpb7jkC7DT3D+cQ5/n9KOw1wY3vynUBk4FnB1PmyH8E+5q1jLRkZPszQhv1wZDRjSa9
+         J1CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750276213; x=1750881013;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bTiYGH9s90MOiZvQtQe8c1eAjqU7s3NEhM25qAZHZ7o=;
-        b=Ny4uU7ycsKmghbhj1+zdQ9al3Gh1se6KvUkBY37sDRJUPvOUcMDB5B1xUwclfngX1z
-         5O7TKYq3eU3SrdejR5HCSgWTXMFbiHqqgn2SR1iYvAOoaaaZxgI3srWRTcCPGL2D9M4C
-         u1UtV8qNmndDcbCJQ8/0ODlWDjCXr7RAAMKRRkYBnE3CO7LpvPoJuMKp2SJ5/tINXSGE
-         nn6FCTkTdGIIFNh1hjXl9OHH43cJ8V1pS7BgPt9yLgj0qmXqTeKVgOBXFuUV2fufAmJx
-         bxKu2tByn5nvb2HmSqn3bb7Y4EOGvJRwGzpg2GdJNM5+k9Z1/x/x+TmwdUckGVMo9w80
-         fjpg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6+EGI7bbEP0WCy9y6ZDMG6Q+nV26alBvYehJZ8XAwZw3JvVfmkoJjX5OXRia9iDE4xjq9Uk1LtP/7QAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy1Z2lT8vAoP9FkLhiZ5WugRSa6E3vJorM0t0ZyaMF+ujGjtUo
-	eXWsRsjMeu0HyIet7CdG3LFFOBv23NbxXbZfZftTOtyp2IyEy4Ryj809
-X-Gm-Gg: ASbGncshqC7y3dN8more8NwCcLN7dvXMF7vXBh4pu2gnBbp8cyTwUm025Ns5GJoPMi1
-	LALbvEFFFldmymCimufGRz9Us2hLEDIyt5ffUBJrjxiIL6TCPG+ut/dg5aQdvjCpZ8m+C4au7cN
-	hV+pFwQIt0sUIs+xMpMHSAZ3yPJZ38aUz8NaO9qJtOSnJlraCgZYhdcCks4tFDTd4e0te3JnK4O
-	qnnnAakezTGHHig1ARv8HSl5za1mggWla9p/JWOHlRqACCvRfnFu1bdbDbgzWHkXU81o44tK2qv
-	tuqXL9lO2VMD3lZ9l19Bp3Wb1umED/e8JQVvHmshKTq+6buUWwQmLkqvcwGZdLuZBfg4aVsa84G
-	PLGXWuagwVai5o9evWiti9A/WxEe4kqdV4ENPiGn0sLy+golXCF+DhB9+FA==
-X-Google-Smtp-Source: AGHT+IHKjnlIi1+ZbN9Cv9pOmHXRsgVkPdVQJFqdjmvVyd8mttL28Pc0L/VGBS7loLcKsvWreMVKnA==
-X-Received: by 2002:a05:622a:1a29:b0:476:6cd3:d898 with SMTP id d75a77b69052e-4a73c4ca299mr301278841cf.18.1750276213025;
-        Wed, 18 Jun 2025 12:50:13 -0700 (PDT)
-Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.81])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8ed0150sm801300985a.86.2025.06.18.12.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 12:50:12 -0700 (PDT)
-From: Seungjin Bae <eeodqql09@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pip-izony <eeodqql09@gmail.com>
-Subject: [PATCH] usb: host: xhci-plat: fix incorrect type for of_match variable in xhci_plat_probe()
-Date: Wed, 18 Jun 2025 15:27:14 -0400
-Message-ID: <20250618192713.20668-2-eeodqql09@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <2025061804-existing-taking-1f9c@gregkh>
-References: <2025061804-existing-taking-1f9c@gregkh>
+        d=1e100.net; s=20230601; t=1750286994; x=1750891794;
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ayl3My5WkFPC4pHPZB0vUsI7Z8MvSCFfFwq+uySbSpk=;
+        b=roRJS0nmUvJgkgGdE5sQtpLN/3iLkU/7If/oTKF2GrgYmVM1T26Qh5JhF5nCcI752G
+         Dh2lP+cGE0dLfG2CoTE5DuKCvEt92rYjkCM16RGq9bWb+xxxD9Gv5JZI0suoaXVyx+nv
+         dmU02y4l+GqUU5ugtkUPXctRCtkeKaml03Neq+lJYIcQPw9YtsFH29nWyOo1JRWDDTq3
+         pJkPoDk6TyCuYTBxgQrc0I+9ATP0Er4GmyYXQ+YAfXXXDT0V8jPIrqXk5Rm9UltTCGnx
+         V271RZkl/QOle27sX8BVctSnmo6SXW1FnPZnCzqAXuAk5xVSmDAz6qekf1EdxVHo2x+G
+         ybsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUA3eC+P4pmKXakPZih/CONI4Ox3XREBIPWE/VVW7N8ReQCp8QJFzVuM2uBgr2tKAf/ofCK1Bw0zJ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl2p3a7f5yiszfGAYWs3mmxCmHqLhtPrVdJWf0LH+96jy/pheu
+	j/5+WBudOOCy5Q+nMgVAdHgZ/NBABwY59qq1kOxyPiyOIFDYMN/0h4K3KnEp/LHyRYTKRktHRkR
+	EDHRek0JHtd2OVfELoQ==
+X-Google-Smtp-Source: AGHT+IHr9qOVgKGEtI7EYFQwlsRPK9+nzjmac/ouiSvqH8RgqHomihH3zCg0rOGkHhU0lCmTZ2jW4kJpj+/YoOM=
+X-Received: from pjee7.prod.google.com ([2002:a17:90b:5787:b0:311:b3fb:9f74])
+ (user=rdbabiera job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90a:dfc6:b0:311:b413:f5e1 with SMTP id 98e67ed59e1d1-313f1e22ec0mr22543572a91.32.1750286994389;
+ Wed, 18 Jun 2025 15:49:54 -0700 (PDT)
+Date: Wed, 18 Jun 2025 22:49:42 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1902; i=rdbabiera@google.com;
+ h=from:subject; bh=vR1hDO6HkeWPDLUa5nkH6iq8NsHnUdWRXAnQvHPkV58=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDBnBTu0XepbJf6oVF8wvVOrTc2RJfymzxCbgaVlv5bnGk
+ /e1Dyl0lLIwiHEwyIopsuj65xncuJK6ZQ5njTHMHFYmkCEMXJwCMJHWZoY//Le7z5V/ilyluIbZ
+ abrOnoaLIs0ZjxiW/GXd5nm6r+vLckaG3voXkSzmcw88TZm6LeTyLLmbbp86Xvn+7r19/JmQecx 3DgA=
+X-Mailer: git-send-email 2.50.0.rc2.701.gf1e915cc24-goog
+Message-ID: <20250618224943.3263103-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: do not index invalid pin_assignments
+From: RD Babiera <rdbabiera@google.com>
+Cc: heikki.krogerus@linux.intel.com, badhri@google.com, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: pip-izony <eeodqql09@gmail.com>
+A poorly implemented DisplayPort Alt Mode port partner can indicate
+that its pin assignment capabilities are greater than the maximum
+value, DP_PIN_ASSIGN_F. In this case, calls to pin_assignment_show
+will cause a BRK exception due to an out of bounds array access.
 
-The variable `of_match` was incorrectly declared as a `bool`.
-It is assigned the return value of of_match_device(), which is a pointer of
-type `const struct of_device_id *`.
+Prevent for loop in pin_assignment_show from accessing
+invalid values in pin_assignments by adding DP_PIN_ASSIGN_MAX
+value in typec_dp.h and using i < DP_PIN_ASSIGN_MAX as a loop
+condition.
 
-Fixes: 16b7e0cccb243 ("USB: xhci-plat: fix legacy PHY double init")
-
-Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/host/xhci-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/typec/altmodes/displayport.c | 2 +-
+ include/linux/usb/typec_dp.h             | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 6dab142e7278..49eb874b1d81 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -152,7 +152,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 	int			ret;
- 	int			irq;
- 	struct xhci_plat_priv	*priv = NULL;
--	bool			of_match;
-+	const struct of_device_id *of_match;
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index b09b58d7311d..773786129dfb 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -677,7 +677,7 @@ static ssize_t pin_assignment_show(struct device *dev,
  
- 	if (usb_disabled())
- 		return -ENODEV;
+ 	assignments = get_current_pin_assignments(dp);
+ 
+-	for (i = 0; assignments; assignments >>= 1, i++) {
++	for (i = 0; assignments && i < DP_PIN_ASSIGN_MAX; assignments >>= 1, i++) {
+ 		if (assignments & 1) {
+ 			if (i == cur)
+ 				len += sprintf(buf + len, "[%s] ",
+diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
+index f2da264d9c14..acb0ad03bdac 100644
+--- a/include/linux/usb/typec_dp.h
++++ b/include/linux/usb/typec_dp.h
+@@ -57,6 +57,7 @@ enum {
+ 	DP_PIN_ASSIGN_D,
+ 	DP_PIN_ASSIGN_E,
+ 	DP_PIN_ASSIGN_F, /* Not supported after v1.0b */
++	DP_PIN_ASSIGN_MAX,
+ };
+ 
+ /* DisplayPort alt mode specific commands */
+
+base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
 -- 
-2.43.0
+2.50.0.rc2.701.gf1e915cc24-goog
 
-Hello Greg,
-
-Thank you for your review and the helpful feedback.
-
-I've corrected Signed-off-by line to use my real name.
-I also updated Fixes tag in the commit.
-
-Regarding the original issue:
-I'm not exactly sure why the compiler didn't catch this,
-but I assume implicit casting from pointer to bool is allowed in this context.
-
-Thank you for your email!
-
-Best regards,
-Seungjin Bae
 
