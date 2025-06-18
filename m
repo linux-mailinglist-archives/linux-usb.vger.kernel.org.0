@@ -1,141 +1,122 @@
-Return-Path: <linux-usb+bounces-24867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19D3CADE470
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 09:21:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEED2ADE49F
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 09:32:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD3C1165ECE
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 07:21:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ED1F1888A75
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 07:33:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E91277CB3;
-	Wed, 18 Jun 2025 07:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1F927EFE1;
+	Wed, 18 Jun 2025 07:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DW+0m7jR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1485B1F1311;
-	Wed, 18 Jun 2025 07:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2937B277804;
+	Wed, 18 Jun 2025 07:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750231307; cv=none; b=aWqgUmsoBQsZ/kstIn4RziuwIaajzOa2wIPAOX6fN5zYpnMcmRS+LxuUvB6nVEK8F5MYWDn1YNce6pMWdXH7UMhV5biW8/Hpv2ihRzvF3ASQ7fSA3TlePMXO9NL3JQSG2ztxQwBJST5T+uwrQcGgyiyEz3Ms14dKyTCFPVanIoc=
+	t=1750231953; cv=none; b=jMYaMtNvEavgvyswJmghqNE5qHmKvjO/OnqHEOgLOCrEO6GD9H98meGnf5yLFVwtcC0mdf4Xa8KV+xfgpyYj2HNvNtqvPkY1sKxx1hQixhMIO0oqgpENOWFAHODJCBLyyyFfEX8xIRSNKoXszPP8J/DDyurdwWoGin053oJ5YTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750231307; c=relaxed/simple;
-	bh=DMaB0EHiDpQuMdteGAVlGxafPWBqSdMDnpiM9/ZjDhA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BkAwRiAHyk21cpkHpc3vnFICcNP7cBWphZBSIAT3NFmS4bPtKdbMKJS2cKkWKg5X852RG8LC9WhNG+z4awv11McCVDck6rAXk5+EimvBkgjQkzALGYcrDQw004oZFb+9CtevtDgKupAh4DT1Sev6/8POKRf2Ha5+gumobpociok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-306b6ae4fb2so5609963a91.3;
-        Wed, 18 Jun 2025 00:21:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750231303; x=1750836103;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7silFJzIQOSJ2p48fGBWjoys8hVPbth2sPLOSzgJX8=;
-        b=EYdyieHCpHWkeaFjsRkHL98jYvtw6oumb4I0KxhrGqf3IioxAlytcbHKnW1eZgbMLn
-         EiyjV+yFtLERVfx9yzcAxc2v3Ov4xAM/ih8dvlpAnC8E4f8SPRppbteR3qFnXl6SHAel
-         4U3Y8MOFBq/W/RXlYhQN4wrnyl/FGgiJen8cgguITQznTUiRS6FYD0s/ZOAu+/xuAAJr
-         tgIhHK9UED7yhEfUWbbwsSSMg3en8b3jNpMsbHjDh7NqB8LD5uDdXJEAp7gRBJD7aBsF
-         uHhnKr3Qmfx+RU7BEJEcc/jVXrC0UYr8G+N8wXl8rAb3ZQri0S9tGO9jDN1ps80sg32s
-         Fg+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXtWE313fHsMm6rY6JKlC7s3qj/ca3XU0Ya9qXc3KRbxNH72ZOCZep/Ra1FJNwiQFS2+u0WFR4izj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYMCvANOrzJO7paGSpW+bL+UnGjo2JBJaE866gKgxIoYQBIcGr
-	zfYfvnNDD4yUo942DJmH5i5l0lOWRxDBWspyjEbAOndZQvctju/TD88HGxlnDfrW
-X-Gm-Gg: ASbGncu2rzO85/bPfTwN3tgmjrTW76iog7hy1RwdwneauxPj9ZqnqjVm9QtCys2dTg8
-	5yRcDxa5vsl8XLumEMI1zPDsuXQXr50vnbUrPzx4/dJdTmJa+0XkVOd2cKsv6AlbLSpQ64QlLfQ
-	DUxmmx0U56ZAwyE5R4vq0NOoKmyDXzZhQ1JjnDrdSX10Ecn1XgyNElryTOMVncrU0ul7ADYQTMF
-	JnJ+dRfgyFZFtctMorHQpbNcSkieat8LBFplVoEZGnvrrqlmRqfVqlQ939pndIapJ/BB5ms+z89
-	voJcLgFoGoM1oZn1agpQCeEZ0fT+jkjpNlTcsB4hNTfiC+B+WWme48M2XvoABWfNeM6YswNXNeq
-	443c=
-X-Google-Smtp-Source: AGHT+IH5gzaTw/dLw9epqMSHijmnw8AGlszrvq51ErM/AmUob6WJX2tI5qO299c/fYYL6byJTxV2KQ==
-X-Received: by 2002:a17:90b:4cce:b0:312:639:a058 with SMTP id 98e67ed59e1d1-313f1d96ee5mr25133456a91.27.1750231303190;
-        Wed, 18 Jun 2025 00:21:43 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c1bd9a31sm11959305a91.13.2025.06.18.00.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 00:21:42 -0700 (PDT)
-From: xiehongyu1@kylinos.cn
-To: gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com,
-	xiehongyu1@kylinos.cn
+	s=arc-20240116; t=1750231953; c=relaxed/simple;
+	bh=LVwGURChkwBiY5Cp8D81sB5+JCpkpaZuIaeZH9YkgHk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lRascUizKidCdAtTY55v9tBbfS8kNmPOwwGB6dlQoFFZDxj/ZDwxUxhSOlzg1H8pGYdt3LopNH4eI6M17/ZtmpSfamO4itJn6atCIOKCwx76Yc8Dp3KvdMbZvEd3DCCt0rUvgTYieM//RgvL2G2GtCxzdtWXFTr6UMFdBDu46j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DW+0m7jR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515DBC4CEE7;
+	Wed, 18 Jun 2025 07:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750231952;
+	bh=LVwGURChkwBiY5Cp8D81sB5+JCpkpaZuIaeZH9YkgHk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DW+0m7jRs/ZwWQqb9KQfAt2SnRbzJ1aNs3noi5fYOAV7sLyIBY7seJdnXx5EhFXoZ
+	 GERSSH9N4LL0CmXRnhimezKbLk0cvKY/tN3/4CLcM3q5/Q9bzMmjkd1xtCPhE0rTKb
+	 PkedKCSa3CYpS32YUBRIADUXaB+wVbmP7rqqA568=
+Date: Wed, 18 Jun 2025 09:32:29 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: xiehongyu1@kylinos.cn
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	mathias.nyman@intel.com
 Subject: Re: [PATCH v1] xhci: Disable stream for xHC controller with
  XHCI_BROKEN_STREAMS
-Date: Wed, 18 Jun 2025 15:21:36 +0800
-Message-Id: <6708fa25-2cfe-42e7-ae24-2d7e943b093a@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2025061801-gosling-urchin-c2cb@gregkh>
+Message-ID: <2025061838-grumbly-basically-d01e@gregkh>
 References: <20250618055133.62638-1-xiehongyu1@kylinos.cn>
  <2025061801-gosling-urchin-c2cb@gregkh>
+ <b623ea20-84cd-414d-9b5a-f94d972f819f@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
- attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc: imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b623ea20-84cd-414d-9b5a-f94d972f819f@kylinos.cn>
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>=0D
+On Wed, Jun 18, 2025 at 03:08:09PM +0800, xiehongyu1@kylinos.cn wrote:
+> From: Hongyu Xie
+> 
+> Hi Greg
 
-Hi greg=0D
-=0D
-=E5=9C=A8 2025/6/18 14:03, Greg KH =E5=86=99=E9=81=93:=0D
-> On Wed, Jun 18, 2025 at 01:51:33PM +0800,xiehongyu1@kylinos.cn wrote:=0D
->> From: Hongyu Xie<xiehongyu1@kylinos.cn>=0D
->>=0D
->> Disable stream for platform xHC controller with broken stream.=0D
->>=0D
->> Signed-off-by: Hongyu Xie<xiehongyu1@kylinos.cn>=0D
->> ---=0D
->>   drivers/usb/host/xhci-plat.c | 3 ++-=0D
->>   1 file changed, 2 insertions(+), 1 deletion(-)=0D
->>=0D
->> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c=
-=0D
->> index 6dab142e72789..c79d5ed48a08b 100644=0D
->> --- a/drivers/usb/host/xhci-plat.c=0D
->> +++ b/drivers/usb/host/xhci-plat.c=0D
->> @@ -328,7 +328,8 @@ int xhci_plat_probe(struct platform_device *pdev, st=
-ruct device *sysdev, const s=0D
->>   	}=0D
->>   =0D
->>   	usb3_hcd =3D xhci_get_usb3_hcd(xhci);=0D
->> -	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >=3D 4)=0D
->> +	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >=3D 4 &&=0D
->> +	    !(xhci->quirks & XHCI_BROKEN_STREAMS))=0D
->>   		usb3_hcd->can_do_streams =3D 1;=0D
->>   =0D
->>   	if (xhci->shared_hcd) {=0D
->> -- =0D
->> 2.25.1=0D
->>=0D
->>=0D
-> Should this be backported to stable kernels?  if so, how far back?=0D
-At least 5.4 lts.=0D
-> What commit id does this fix?  Or what hardware does this fix?=0D
-=0D
-I'm not sure. can_do_streams was introduced by 14aec589327a6 ("storage: =0D
-accept some UAS devices if streams are unavailable") in Feb 11 20:36:04 =0D
-2014 before=0D
-=0D
-XHCI_BROKEN_STREAMS was introduced by 8f873c1ff4ca0 ("xhci: Blacklist =0D
-using streams on the Etron EJ168 controller") in Fri Jul 25 22:01:18 2014.=
-=0D
-=0D
-> thanks,=0D
->=0D
-> greg k-h=0D
+Please do not sent html email, the mailing lists reject it :(
+
+> 在 2025/6/18 14:03, Greg KH 写道:
+> 
+>     On Wed, Jun 18, 2025 at 01:51:33PM +0800, xiehongyu1@kylinos.cn wrote:
+> 
+>         From: Hongyu Xie <xiehongyu1@kylinos.cn>
+> 
+>         Disable stream for platform xHC controller with broken stream.
+> 
+>         Signed-off-by: Hongyu Xie
+>         ---
+>          drivers/usb/host/xhci-plat.c | 3 ++-
+>          1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+>         diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>         index 6dab142e72789..c79d5ed48a08b 100644
+>         --- a/drivers/usb/host/xhci-plat.c
+>         +++ b/drivers/usb/host/xhci-plat.c
+>         @@ -328,7 +328,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>                 }
+> 
+>                 usb3_hcd = xhci_get_usb3_hcd(xhci);
+>         -       if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4)
+>         +       if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
+>         +           !(xhci->quirks & XHCI_BROKEN_STREAMS))
+>                         usb3_hcd->can_do_streams = 1;
+> 
+>                 if (xhci->shared_hcd) {
+>         --
+>         2.25.1
+> 
+> 
+> 
+>     Should this be backported to stable kernels?  if so, how far back?
+> 
+> At least 5.4 lts.
+
+Great, please mark it properly.
+
+>     What commit id does this fix?  Or what hardware does this fix?
+> 
+> I'm not sure. can_do_streams was introduced by 14aec589327a6 ("storage: accept
+> some UAS devices if streams are unavailable") in Feb 11 20:36:04 2014
+> 
+> before XHCI_BROKEN_STREAMS was introduced by 8f873c1ff4ca0 ("xhci: Blacklist
+> using streams on the Etron EJ168 controller") in Fri Jul 25 22:01:18 2014.
+
+Pick the proper one as you obviously have hardware here that you have
+tested that needs this change, right?  :)
+
+thanks,
+
+greg k-h
 
