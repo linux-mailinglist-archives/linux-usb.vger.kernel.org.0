@@ -1,114 +1,167 @@
-Return-Path: <linux-usb+bounces-24856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96925ADE23C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 06:13:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2931ADE2FA
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 07:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599EC189A18D
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 04:13:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4EBA2175D2B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 05:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944601EEA40;
-	Wed, 18 Jun 2025 04:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B29261FAC23;
+	Wed, 18 Jun 2025 05:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kfse6n61"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3981EB182;
-	Wed, 18 Jun 2025 04:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810831E5702
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 05:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750219991; cv=none; b=eZ/pQGcOqB7k3hiSCCZm6SJbQLl4Rjp62BWqcFwJTNwdv87/6wcfeFZpaDs6Ie0qpEJ8PbSlQB/U54Tuovi4kv3uT+qvR/u/DqEXCAnguI79agjHc/CJMupDwrFrQsUHqdU6y82twT99AWER9Z/EYhIsVp+hum8h2U8LCMcXiuQ=
+	t=1750224161; cv=none; b=o1LhOf/aNSx7edOJyV93oddVQ0BfuJELHItdSgCeqQ6WwfNfoO7tYuRjxY2Ggbx7iX9RG4xWxngBByTiYscLg9BCm+xBFtWD7CEmJUGIc0AD91vBhAZE3EbrmCG75zo4eg0oNTY2RSSv3+fZ0WtPkKF5bUbnek84tgwnApjN/9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750219991; c=relaxed/simple;
-	bh=wLvjh3pCu9KQGwBHwTutcFY0aeOTXXdLuEBCPSdOpTc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dRR0TKfr0Vm5ViRlgltiZcGx9Su4NYNr4y6gnDaV1b4zgNR5d9Iq/9NIEjVQylNe1e67fA/dKOCh4/NKaZyYX+c33y0FB4js1hFtZyF196UdUXq7WcDXbNkr1xq5H2PkwKOs4yBFNbxu+aS5xF8TR2AxgCJ/dNB0J9Ohd+Kw4Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowACH2FDLPFJooa5HBw--.34075S2;
-	Wed, 18 Jun 2025 12:12:59 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	michal.simek@amd.com,
-	u.kleine-koenig@baylibre.com,
-	liqiong@nfschina.com,
-	colin.i.king@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] usb: gadget: udc-xilinx: Use USB API functions rather than constants
-Date: Wed, 18 Jun 2025 12:12:22 +0800
-Message-Id: <20250618041222.408372-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1750224161; c=relaxed/simple;
+	bh=zNSLyQ418h7s2pWnKQbVJL3Hx6AjPoaLpAlu4+qN/Q4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RdihDWaY881y1tQl+0RXYVE2yPZvja4NsavFTarzSxtCRB8W3w2IS5dmf7zj4ZFlfJN/P+XE7m3nvo70a0DO+wJr3APJmVxelep3YlGDmPaMe8mI7Wo2GCro9eZe+nj5G9cuUQcizA+CZgx83EcjQyOm44ExplDjQT1wZZC6zwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kfse6n61; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55I21WVc005767
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 05:22:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	rfTFGFpiffzYmC6fjsBnbW+eD86WS8MQlLmrP9ufxVM=; b=kfse6n61g+u1w6r/
+	lmrZunITbmNH5P24rjw+yVDEdLVaen0WDglvkS1lQl0glQsN8l4/qlEMrP0FO+vp
+	pjt1SS/sVrzHODJ9Ba7ICZ0fsAAHEVlTOvU8Gx2Sc7yozk0Taniq6DyUzloOSC/u
+	B4zJl9fRoZ7v8e7+W/D445s6GqGj57NNNb2iMySg1U55alWtZON1P8GZlJJ66y+c
+	JSs7aqdEjqL70zHXBq/sSRYa6PXTl3kycNKo5RRjDruJdagck0cwWwYIt2Uy2M5t
+	GBL8KKXXTAep6Aa53nVRzXf3SgsdHG3K5zxGtUmiYAVP7w82rbtsD+4Th6RjFP9R
+	RAEH1g==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791hd2wd0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 05:22:38 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-747dd44048cso5361796b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Jun 2025 22:22:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750224157; x=1750828957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rfTFGFpiffzYmC6fjsBnbW+eD86WS8MQlLmrP9ufxVM=;
+        b=AXj42qVXbMidK5WCtZWtUbRBO4NtdLZGsRr0UPhYwDrC+CUR0m+DJ9w6P/PoLVkAFY
+         f32mnFbzkZuVQdZEzKzjrAwkputgel8m+1OJQHpKCCOqB2LHeOxdLR1tm1EsZzCXdV//
+         wGAaAYIhVlw7MLrCwxOADcmQxMygXS/zGyGUGpuQPp5WhqgXf/npVOCMUIM0LXYCP5Fb
+         EVW9uElk/1UhjzVWYDk0qGPbGn8XS+5iMX/yjrkAySTrGvY0uJSnbDDjGK8rESOCqJ93
+         ubPbJBCgjxUY2s/7+MxxutqpgMQUnOLRSu1+XOdleo9mOYArNZh9oTmPJyOCG3g7TS1F
+         YpQA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBS2KB4ISFJLmDDRVW47KNT34sXJPaq1HakcZYKBgmqxgVBGQNF2uOoP9ecbaqj1DY1i0jktFsds4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzziY5WUPZEpxKXE6KS1+3ylieZV/KUwh/5sAhIui8pN6PEvQqL
+	HQ3EtuWlPxPGuwHJk45CsLHPKvP+0XQobnJmapy9u21HCQs9Vw8UqUgHIUVC4ecEQeEsqcICF5r
+	WXj63t735qnPmggfBM95VlqwQbqrDVxlAe71T9cvP1mhPfBxhpJCC5b4sOfmII3o=
+X-Gm-Gg: ASbGncsUKcu28TlGq77BlQs15Zd/9Yk672a1eg8ir02A0HoxPgWw1/7ibmOtOCh1hB2
+	3UECf3hckw6S4whtOBWmHhpVMhmiBY2EzmccArrllKB2q4UMU1B7NZGLASeRb0J8ecNWpdrHkfh
+	aavNJV1fzUN41FdgwuOSCXUAfk0BR2k8kYLbkTXimZPkogFgjNe5R+lwZTMQOaoRK04v5p+BS03
+	wnH0HtELcfo6vyn3hULxIZIlgbmZtXXO5ZXTqzaU1+FLruM7fofRe5+a9LlH0E7iWItz/dsFyTl
+	W8ez79yOwiXUZP+/n+LCE4u73hYxg9jGlNDDBM07U0onarxOt3VR4Q==
+X-Received: by 2002:a05:6a00:1255:b0:748:33f3:8da3 with SMTP id d2e1a72fcca58-7489d0335f6mr21012549b3a.19.1750224157578;
+        Tue, 17 Jun 2025 22:22:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEwXyKvQ8Xiz0pixedDfbHKQlZlOr+c8lkODmf6tgRR9I5uagxkblxgMGrvDShoOMlSPgKJOA==
+X-Received: by 2002:a05:6a00:1255:b0:748:33f3:8da3 with SMTP id d2e1a72fcca58-7489d0335f6mr21012515b3a.19.1750224157157;
+        Tue, 17 Jun 2025 22:22:37 -0700 (PDT)
+Received: from [10.92.170.132] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74890082b10sm10373395b3a.105.2025.06.17.22.22.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jun 2025 22:22:36 -0700 (PDT)
+Message-ID: <948e0112-1ba0-40b7-acd7-19fa9d93559c@oss.qualcomm.com>
+Date: Wed, 18 Jun 2025 10:52:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACH2FDLPFJooa5HBw--.34075S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43KFyxJw47Cw13Kr4Uurg_yoW8Jw48pF
-	n7Gay8GrWvy3yUX3W5AF1DZFyrGa9F934qyFy2g3yavF1Sqws3tFWrJr1fKrnrCFW3Aa13
-	trs8t3ZFqFW7CrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWrXVW3AwAv7VC2z280aVAFwI0_GcC_XcWlOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
-	tVW8ZwCY02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjTRiOz3UUUUU
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: qcom: Don't leave BCR asserted
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250604060019.2174029-1-krishna.kurapati@oss.qualcomm.com>
+ <20250606001139.jaods5yefjccqni2@synopsys.com>
+ <b8f5c24b-d9f2-4a3f-9dda-183dff203003@oss.qualcomm.com>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <b8f5c24b-d9f2-4a3f-9dda-183dff203003@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE4MDA0MyBTYWx0ZWRfX8PUu4LIxnONw
+ 6q+o7/dvy8igJQG2iQd5EZ7vP4NoWTUPommIo3oR1ep4TeSUNzJuT+KKL3ABP9tMV4IcIdUoYbf
+ LdVkxpBBNpsel9sV2RUdwW7Bv/uK8s/OA3V3hUJtJyS3i5RlXIzynVveMVcLlX2Pj7C6mXNCLMm
+ 9XekHnD+zNpCO/A/B9d+GcBEStC9Eqg3lmFKvP0fH5hZoL7do4HuhxdnszaeRMcv4GxJQZMcjEX
+ Mk4nVqphit2UEsebbgfEkoPDB0LfXdiChge9Z4mCIeat6j0bCPJN3cwj3CHO3YVWMOxMb2ZvKJg
+ G4x7lAwEUCHUm4VQHZ59fUZ+BXDMKhPFF21DLYreM/kQgl6UrlvJODEWbrVHROfB/R9F9CW3VQX
+ O8p6fhRD98FdVx3nkmAm08REWbtZe8NZGOF4KXb3Kx1gwrd0vMPheJJEBX5GntrH8tGag90O
+X-Authority-Analysis: v=2.4 cv=PtaTbxM3 c=1 sm=1 tr=0 ts=68524d1e cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=6Q_x32ss1i95r1sQoNUA:9
+ a=QEXdDO2ut3YA:10 a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-ORIG-GUID: orcsF1OmQ8CZ55b9sowQGzp2o1f9dP2h
+X-Proofpoint-GUID: orcsF1OmQ8CZ55b9sowQGzp2o1f9dP2h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-18_02,2025-06-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1015 mlxlogscore=369 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506180043
 
-Use the function usb_endpoint_num() and usb_endpoint_type()
-rather than constants.
 
-The Coccinelle semantic patch is as follows:
 
-@@ struct usb_endpoint_descriptor *epd; @@
+On 6/18/2025 2:58 AM, Konrad Dybcio wrote:
+> On 6/6/25 2:11 AM, Thinh Nguyen wrote:
+>> On Wed, Jun 04, 2025, Krishna Kurapati wrote:
+>>> Leaving the USB BCR asserted prevents the associated GDSC to turn on. This
+>>> blocks any subsequent attempts of probing the device, e.g. after a probe
+>>> deferral, with the following showing in the log:
+>>>
+>>> [    1.332226] usb30_prim_gdsc status stuck at 'off'
+>>>
+>>> Leave the BCR deasserted when exiting the driver to avoid this issue.
+>>>
+>>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+>>
+>> Is this a fix? Does this need to be backported to stable?
+> 
+> yes and "might as well" - this file was re-made last cycle and this
+> patch won't apply without the recent
+> 
+> e33ebb133a24 ("usb: dwc3: qcom: Use bulk clock API and devres")
+> 
 
-- (epd->bEndpointAddress & \(USB_ENDPOINT_NUMBER_MASK\|0x0f\))
-+ usb_endpoint_num(epd)
+I sent the patch on top of usb-next. Perhaps when I made this patch, the 
+above mentioned patch was already present.
 
-@@ struct usb_endpoint_descriptor *epd; @@
+Thanks for the review. Will send a v2 with cc'ing stable and adding a 
+fixes tag.
 
-- (epd->bmAttributes & \(USB_ENDPOINT_XFERTYPE_MASK\|3\))
-+ usb_endpoint_type(epd)
+Regards,
+Krishna,
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/usb/gadget/udc/udc-xilinx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index fa94cc065274..8d803a612bb1 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -813,10 +813,10 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
- 
- 	ep->is_in = ((desc->bEndpointAddress & USB_DIR_IN) != 0);
- 	/* Bit 3...0:endpoint number */
--	ep->epnumber = (desc->bEndpointAddress & 0x0f);
-+	ep->epnumber = usb_endpoint_num(desc);
- 	ep->desc = desc;
- 	ep->ep_usb.desc = desc;
--	tmp = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-+	tmp = usb_endpoint_type(desc);
- 	ep->ep_usb.maxpacket = maxpacket = le16_to_cpu(desc->wMaxPacketSize);
- 
- 	switch (tmp) {
--- 
-2.25.1
-
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> Konrad
 
