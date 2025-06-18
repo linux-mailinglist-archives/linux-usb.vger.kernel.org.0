@@ -1,186 +1,322 @@
-Return-Path: <linux-usb+bounces-24880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 739D3ADECA8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 14:38:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B7FADECCC
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 14:42:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF8E91617A0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 12:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8BEB3B3E70
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 12:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C142A2EE5EA;
-	Wed, 18 Jun 2025 12:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0B02E6D3B;
+	Wed, 18 Jun 2025 12:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MZPG4WKA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A3YC5DW+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B152EE274
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047E4295DA5
+	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750249707; cv=none; b=T3jUsZWkA3PmgGDsD+O7wN/rDK0EYti7B7qmBMg3dSyYjaEDDRETwMeGGj3XhW821qn5K2JhI2AFjpwl7n7aGOCYJgAgcM/CYwLI7kxe2Os/iy2JW979WrJXqAQi4gCnuES+Bw7QwkttyiOf+Afwl+DLNG1bipuNxJ+aYjjrB4U=
+	t=1750250132; cv=none; b=QZDUG+CWFmHSf64m76ufePyC6rhnq2EJ+mGK5tZrbF0F3UrFqzsiINeL8K2ZGctWbXPPpi0y80bmPCuT2GmrnHPfv6kIFj3h+XZbyLNC5yJoqRS2Jb5LsyyFfiemDLeaioYnvYijDuAowpizC5Lf/HuKc5DAgLQ0anf8fesVyVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750249707; c=relaxed/simple;
-	bh=SGGHR1NqClMJ+M0KMBTSpiEtbyInmggJO689JFl72EQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4P+eWSu8y6AiNdlU8SR04sUC6nrtinyPsbR2bpD+fpyax68NRH7YGkvg2eTjJydxZ6zcZO9uTnWkZdjWehBIyLI3qlTCtD6BUvm/hakxlrdaSmK1zSk0Tv3l1/v77wdmrtxe5UJpF1Rxwgs4atmnkvsJAjtScRCdv4rPtBwJFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MZPG4WKA; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55I9iOUv005767
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:28:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	p6xOgbRbrA02R3HdzmsRIbjOdD2Sg37CCZtJoQqYbhk=; b=MZPG4WKAV0kt7XDj
-	quCCDZ8Wo/h02Nrvsnn0wdVIbIyNcQxmq6/vzaxOohmASW0V3ugYzTvMB1xgfdW7
-	cTgUrpNYqWQvils8cdFpl0TaC10qOCjJYhm71e+O0PYquvFC8pjGOZ09S3lra0xS
-	eVSiRM2D32M1fT9a3Emhd/QvSjMjk2TTC5DXYNErB3W+9huUeSKJc9oHbuFzMjQS
-	8pzKNbjjSGPIeAvXhwO/J9Ex63p5bv31W07F2EPnKmviK485bmj0duAFrGvdaCyu
-	tuNXd0tZwE1S82ldLvv0bBfAqePg3l3Q0jgkk6tH+Yf3xXZ7Y8uJCOVZDFKpO++Q
-	aQMn8Q==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791hd46pa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 12:28:23 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-311ef4fb5fdso6060119a91.1
-        for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 05:28:23 -0700 (PDT)
+	s=arc-20240116; t=1750250132; c=relaxed/simple;
+	bh=AbYDDaIja78YBw9bZOJ9k726JfeEPcq/CghCS/AfyZc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E1Pky68bK+Ossz5pmvFVt/rBvt3+KAmRI6TqD25jxPEtmf7W6dWZz7G2AU+oSY6hfOZcDFYVCrGtQ6tfUQEnpScINySrQkmcibV3rIgBY2TpC+7xC4Fk8A9so9B/TwjxkaKe0oSa1A/X2pAn/RSTFuKKnoYvSJDc1eNkP6Wk5jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A3YC5DW+; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b26f5f47ba1so5723266a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 05:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750250130; x=1750854930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NTqnvbPxiN8oRREt4xqbbET/T50YDFlqznNyzQ9K46o=;
+        b=A3YC5DW+0F/7h4vXFrWDorO0XqqQXknRGngeEFBF9YzHk5L6pNHXxKDUhBxCRQRyGp
+         OuXTK9FLgO9S7Ff+ARAQHu6HTMO0KtEnEnrLFnpeeUffiIKyLHGsIPhCC8cdAez0oErF
+         Kw+XvNFDE8EbqHs9rd4EBSoxlo7YYgmpGYiPup3qxtjx4b0c8PI5r+6OakpmYsccva6d
+         wBFFIIUqmW3spk6ZN4kkns7aRIdDNexml5aULhfYBcfbNcqOA1a8Gmxq8ld023shmU0h
+         1udfOhnWh3A9ha0AtARFgcaZApXVGhNUXEJcGPJBRoS9T47IGn3smixYNrvYVyXR9FHq
+         iYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750249702; x=1750854502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p6xOgbRbrA02R3HdzmsRIbjOdD2Sg37CCZtJoQqYbhk=;
-        b=v/gBonqFgngbl/8DuqTHd/UxxoZroMOcTN5NOvphvR7OkuWrNI5e+lb1Zlp4kmM5NS
-         q0k/dzr3Ce7D33d9kTdsLiAnFSCVdmWOUvUwflB4x1c/nKA/y+y6DWdqkIoI7eEjvtCP
-         uQ4kTJq+j6g2p5MEnRn21PjqiG/DkefFMElWWSAL5aBc1dGm0/F1AyrmycLn7LdLEks1
-         shOjuijqO2g81r44giTnsjdn5fygx3M/4068pK0iJQHg9WPTpF2J0ybkgrToBnUwkjwp
-         nMOHltAicw6HS7VvKtTHF3ThTwr6phq8Izac2qiH9O7XoAu2EBLd1sNRvHwFeDygHsC5
-         fu1Q==
-X-Gm-Message-State: AOJu0Yxz8KRX5hFqejeo/8/SmAbc8Tp12897/hfXAGIiLn6o/bpT0hul
-	n1ZxN3/sWAzWZ4zh1TzmDHmBTO+FvT5ZNHwmTUX2P9yyeAYjoSVAkansnBZYTTHC3oTUwpF5d/X
-	/8VvKtNFvKDKkYdIvJykic88I2rhyj7W7zk01xqwfC8DRxp40wINBxGXtkzFlMxQ=
-X-Gm-Gg: ASbGncvUv1Rdp60Oe61+Xidc8A3sIAOZIs0I4xr3Ayac1QncL9bf/s+QzHWeR085Bs0
-	RZzgNli9DwBPinHPZXw2bZAT3Uuzd5DJy4agmDM023/ziRVONV9jkWlJ6ykXLGOePGYbWTkPvpb
-	dW9WQ4ncfDe+3IYHiQfF9qP2LqrxjvBAYUn7HtveJJ+xhTb/+6QHWbXFJvgL9w9RQs3a6TaEmpz
-	RGjBMRWOz0cAUI+Zs8UnSXBtHyQgtup4WGVL5AHzN9hTf2aKVjZ5ZRS9J7mz9MIWw2o+EeHI3Oi
-	ig0N8pNxCE3wXdXcuGUfT8jHci/G3ox43+UdN5dkY1wl/Oft+xY=
-X-Received: by 2002:a17:90b:3c48:b0:311:a54d:8492 with SMTP id 98e67ed59e1d1-313f1be19abmr24396521a91.6.1750249702460;
-        Wed, 18 Jun 2025 05:28:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG0s0iFtkw1AOj/1npoQmPFdLviiscI3pzr93fmguRPHGKNJ3kN5JB6C41oFBZfgOjZSxk+9g==
-X-Received: by 2002:a17:90b:3c48:b0:311:a54d:8492 with SMTP id 98e67ed59e1d1-313f1be19abmr24396472a91.6.1750249701999;
-        Wed, 18 Jun 2025 05:28:21 -0700 (PDT)
-Received: from [10.218.10.142] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c1bd9ae1sm14159310a91.18.2025.06.18.05.28.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 05:28:21 -0700 (PDT)
-Message-ID: <2fadb854-f838-44c9-968e-96f0c00f4d3e@oss.qualcomm.com>
-Date: Wed, 18 Jun 2025 17:58:16 +0530
+        d=1e100.net; s=20230601; t=1750250130; x=1750854930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NTqnvbPxiN8oRREt4xqbbET/T50YDFlqznNyzQ9K46o=;
+        b=Wyt39P4R2xXNCE9+vxKt+akChvTOpDWCyCoKxnPldSo6Npt5Q5INC42bGLDn7+Cjbc
+         s+jJOl5UcnYz24Qo4jAc9a5OevD5d69Fb9QKWSWjfUpvRenGdISO/FXzos/7YcVDkaPi
+         9pZ5ZOL7wbZHO/8AuyPptgokxGr7Wwssk1mS1dPqkVwZnP8b5ZoObFAhYjwXnyFTdh7o
+         VczoypLeuy/g/MiSYxGPoGaYc3uWfYZry3Wd811yz63S9/kcue5HhdaysC3cO6SGed2+
+         bbV9mXHrwIEM+fwVMREY5km2wmvfOjuY9k0BqiA94W5h8W5Y95qaRGko25WsjrxE3+YQ
+         RhQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXuoOwWRpFelbBGsTbsZciJjmZ6eGGHxRi3f2o7lkHr5TDh8jrM6gebrIJS/csVX4ugG+XSQ9s7X2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzawxIdZDv25rhy/aEaGxfjPNzqm8nWZplWR5Lb16/lK1L6lU4B
+	PVAmveyswn0PUszAjIrBGA5tWu4cwY1bVABTcFQMtugd8u4zvhXf/ZhB
+X-Gm-Gg: ASbGncs3Zdi44l8rMXdyb8ZO3fAqdPOTj14ZoT9pNK49IjWU61hACA1/KHmB4+j4czM
+	EAXQQmo2PcmdDjihcm4HpEw3/kzHfWPR8gnyGMZRbDz+DZ0zdhUKCnlUtCiXD6RTi+W3O3sTf2+
+	BlFWCfFJ/7ktzOfkeA4RkTGMDxGSqr8xJGQhmJq8cZC/rHO5PmQjOavzU8hgXSq8HcYC4hFJLMw
+	ezZIJYCPt7ro4wPl1msxm1cMExndCQ58fKZmXp9UShRKcDMYclDbcPpLuJGaeZ23lvZnE9KfYL3
+	5OCyaYl/TrfU1FwYsz8oU5dIEeVW5cRifPHorxXQYKOEzj3dcCFT38IcdgH8qgABWeG+wJ9qDF0
+	E39z3y9luQFGMgIkFQefSfEAVlZpTSMskx5WdBYj+qn8gHK+Zz2pz7uvTdFm9tCwZCDSglYUn1J
+	9w/2zDAY6Lboc=
+X-Google-Smtp-Source: AGHT+IHDcTJn0l/WoJAZPQs26Lks+6rd3gOB6UkJFeQdy304HXssI5Syqwol5sm2vQblN0OTfUIu6w==
+X-Received: by 2002:a17:90b:1cc3:b0:311:d05c:936 with SMTP id 98e67ed59e1d1-313f1daa6a7mr29748232a91.17.1750250130179;
+        Wed, 18 Jun 2025 05:35:30 -0700 (PDT)
+Received: from localhost.localdomain (2001-b011-381b-1978-817c-4b59-2b5a-333e.dynamic-ip6.hinet.net. [2001:b011:381b:1978:817c:4b59:2b5a:333e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365d8a4d82sm99105125ad.72.2025.06.18.05.35.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 05:35:29 -0700 (PDT)
+From: Charles Yeh <charlesyeh522@gmail.com>
+To: gregkh@linuxfoundation.org,
+	johan@kernel.org,
+	linux-usb@vger.kernel.org
+Cc: charles-yeh@prolific.com.tw,
+	joy-yeh@prolific.com.tw,
+	Charles Yeh <charlesyeh522@gmail.com>
+Subject: [PATCH] USB: serial: pl2303: add PL2303G GPIO_A and GPIO_B functions
+Date: Wed, 18 Jun 2025 20:35:13 +0800
+Message-Id: <20250618123513.12-1-charlesyeh522@gmail.com>
+X-Mailer: git-send-email 2.32.0.windows.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] Revert "usb: gadget: u_serial: Add null pointer
- check in gs_start_io"
-To: Kuen-Han Tsai <khtsai@google.com>, gregkh@linuxfoundation.org,
-        hulianqin@vivo.com, krzysztof.kozlowski@linaro.org, mwalle@kernel.org,
-        jirislaby@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250617050844.1848232-1-khtsai@google.com>
-Content-Language: en-US
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-In-Reply-To: <20250617050844.1848232-1-khtsai@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE4MDEwNSBTYWx0ZWRfXydxPr67ySHIP
- c7jGWVhphnOLRGQoyqsC3b8BxuY06qv5AKPgZ7+8v32AYYVCSqs4W0QlbfqNG/RBOTMR8Y/ARdY
- oBxCTzAFuDD+INOCwkMEdEd9IUxYP+/iCfcum3ocwFlY4zddaaJPR0E2hgpt+8hZPaZej+AUxzg
- Mjw396z3pryjQ3g5whIK3tbIGO0I9NEw5SpJGlAT567Kxhya+IW7tCad05MKvLfdUoCMIkOPQ1V
- kx/OoSQi1CbIq2yxDEvLcC/QqBv54lcUy7C2FJA3T582FMbLcERwKQloWtCqLQacupzwYAr3x5i
- zzUAQecAZzgZ4RlpYwlneJocMmUsno8Bwb0/k2fk26Y7KTFOTJgRmzDA7IwDLxXG0MGzkPdeTqf
- q2kbmaf/R9K2g5UMr1HbeoALiqhRZSOdWYhzjlctXyal/LISOOYHLQFwkQEMkTjJoEwo7dez
-X-Authority-Analysis: v=2.4 cv=PtaTbxM3 c=1 sm=1 tr=0 ts=6852b0e7 cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=1XWaLZrsAAAA:8 a=EUspDBNiAAAA:8
- a=-OAJHiNwx6N_JZPXFJwA:9 a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22
-X-Proofpoint-ORIG-GUID: 3ZMK4B4OsUw8d6evlSD1ncg1kApAU_1Z
-X-Proofpoint-GUID: 3ZMK4B4OsUw8d6evlSD1ncg1kApAU_1Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-18_05,2025-06-18_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1015 mlxlogscore=551 suspectscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506180105
+Content-Transfer-Encoding: 8bit
 
+PL2303G (TYPE_HXN) series ICs: PL2303GC, PL2303GS, PL2303GT, PL2303GR,.. etc.
 
+For example:
+PL2303GC can provide up to 16 GPIO (general purpose input/output) signals.
+they are composed of GPIO_A0~A7 and GPIO_B0~B7 respectively.
 
-On 6/17/2025 10:37 AM, Kuen-Han Tsai wrote:
-> This reverts commit ffd603f214237e250271162a5b325c6199a65382.
-> 
-> Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
-> gs_start_io") adds null pointer checks at the beginning of the
-> gs_start_io() function to prevent a null pointer dereference. However,
-> these checks are redundant because the function's comment already
-> requires callers to hold the port_lock and ensure port.tty and port_usb
-> are not null. All existing callers already follow these rules.
-> 
-> The true cause of the null pointer dereference is a race condition. When
-> gs_start_io() calls either gs_start_rx() or gs_start_tx(), the port_lock
-> is temporarily released for usb_ep_queue(). This allows port.tty and
-> port_usb to be cleared.
-> 
-> Fixes: ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in gs_start_io")
-> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> ---
+In addition to the original UART functions such as Tx, Rx, RTS, CTS, etc.,
+users can also use GPIO to implement certain applications,
+such as turning on/off the LED power.
 
-Reviewed-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+Users can download the PL2303G Linux GPIO app: PL2303G_Linux_GPIO_Test.c
+from the Prolific website.
 
-> v2:
-> - Remove Cc: stable
-> 
-> ---
->  drivers/usb/gadget/function/u_serial.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index ab544f6824be..c043bdc30d8a 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -544,20 +544,16 @@ static int gs_alloc_requests(struct usb_ep *ep, struct list_head *head,
->  static int gs_start_io(struct gs_port *port)
->  {
->  	struct list_head	*head = &port->read_pool;
-> -	struct usb_ep		*ep;
-> +	struct usb_ep		*ep = port->port_usb->out;
->  	int			status;
->  	unsigned		started;
-> 
-> -	if (!port->port_usb || !port->port.tty)
-> -		return -EIO;
-> -
->  	/* Allocate RX and TX I/O buffers.  We can't easily do this much
->  	 * earlier (with GFP_KERNEL) because the requests are coupled to
->  	 * endpoints, as are the packet sizes we'll be using.  Different
->  	 * configurations may use different endpoints with a given port;
->  	 * and high speed vs full speed changes packet sizes too.
->  	 */
-> -	ep = port->port_usb->out;
->  	status = gs_alloc_requests(ep, head, gs_read_complete,
->  		&port->read_allocated);
->  	if (status)
-> --
-> 2.50.0.rc2.692.g299adb8693-goog
-> 
+Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
+---
+ drivers/usb/serial/pl2303.c | 182 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 182 insertions(+)
+
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 22579d0d8ab8..be7e695bea60 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -175,6 +175,37 @@ MODULE_DEVICE_TABLE(usb, id_table);
+ #define PL2303_HXN_FLOWCTRL_RTS_CTS	0x18
+ #define PL2303_HXN_FLOWCTRL_XON_XOFF	0x0c
+ 
++
++struct PL2303G_GPIO {
++	u8 GP_Branch;
++	u8 Number;
++	u8 Value;
++};
++
++
++#define GPIO_AB_CONTROL_MODE		_IOW(0x81, 10, struct PL2303G_GPIO)
++#define GPIO_AB_OUTPUT_MODE		_IOW(0x81, 11, struct PL2303G_GPIO)
++#define GPIO_AB_SET_VALUE		_IOW(0x81, 12, struct PL2303G_GPIO)
++#define GPIO_AB_GET_VALUE		_IOR(0x81, 13, struct PL2303G_GPIO)
++
++#define GPIO_A_DATA_REG		0x00
++#define GPIO_A_OE_REG		0x02
++#define GPIO_A_CE_REG		0x04
++
++#define GPIO_B_DATA_REG		0x01
++#define GPIO_B_OE_REG		0x03
++#define GPIO_B_CE_REG		0x05
++
++#define PL2303N_CE_MODE		0
++#define PL2303N_OE_MODE		1
++#define PL2303N_SET_MODE	2
++#define PL2303N_GET_MODE	2
++
++#define GET_GPIO_REG(mode, branch) \
++		((mode) == 0 ? ((branch) == 0 ? GPIO_A_CE_REG : GPIO_B_CE_REG) : \
++		(mode) == 1 ? ((branch) == 0 ? GPIO_A_OE_REG : GPIO_B_OE_REG) : \
++					((branch) == 0 ? GPIO_A_DATA_REG : GPIO_B_DATA_REG))
++
+ static int pl2303_set_break(struct usb_serial_port *port, bool enable);
+ 
+ enum pl2303_type {
+@@ -1095,6 +1126,156 @@ static int pl2303_carrier_raised(struct usb_serial_port *port)
+ 	return 0;
+ }
+ 
++static int pl2303N_gpio_get(struct usb_serial *serial, void __user *data, u8 u8Mode)
++{
++	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
++	struct PL2303G_GPIO gpio;
++	unsigned char *buf;
++	u8 channel;
++	u8 kdatPar;
++	int retval = 0;
++
++	/* only support TYPE_HXN */
++	if (spriv->type != &pl2303_type_data[TYPE_HXN])
++		return -ENOIOCTLCMD;
++
++	buf = kmalloc(1, GFP_KERNEL);
++	if (!buf)
++		return -ENOIOCTLCMD;
++
++	if (copy_from_user(&gpio, data, sizeof(gpio))) {
++		retval = -EFAULT;
++		goto err_out;
++	}
++
++	channel = GET_GPIO_REG(u8Mode, gpio.GP_Branch);
++
++	retval = pl2303_vendor_read(serial, channel, buf);
++
++	if (retval < 0)
++		goto err_out;
++
++	if (gpio.Number <= 7)
++		kdatPar = 1 << gpio.Number;
++	else
++		kdatPar = 0x01;
++
++	if (*buf & kdatPar)
++		gpio.Value = 1;
++	else
++		gpio.Value = 0;
++
++	if (copy_to_user(data, &gpio, sizeof(gpio))) {
++		retval = -EFAULT;
++		goto err_out;
++	}
++
++err_out:
++
++	kfree(buf);
++
++	return retval;
++
++}
++
++static int pl2303N_gpio_set(struct usb_serial *serial, void __user *data, u8 u8Mode)
++{
++	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
++	struct PL2303G_GPIO gpio;
++	unsigned char *buf;
++	u8 kdatPar;
++	u8 channel;
++	int retval = 0;
++
++	/* only support TYPE_HXN */
++	if (spriv->type != &pl2303_type_data[TYPE_HXN])
++		return -ENOIOCTLCMD;
++
++	buf = kmalloc(1, GFP_KERNEL);
++	if (!buf)
++		return -ENOIOCTLCMD;
++
++	if (copy_from_user(&gpio, data, sizeof(gpio))) {
++		retval = -EFAULT;
++		goto err_out;
++	}
++
++	channel = GET_GPIO_REG(u8Mode, gpio.GP_Branch);
++
++	retval = pl2303_vendor_read(serial, channel, buf);
++
++	if (retval < 0)
++		goto err_out;
++
++	if (gpio.Number <= 7)
++		kdatPar = 1 << gpio.Number;
++	else
++		kdatPar = 0x01;
++
++	if (gpio.Value)
++		*buf |= kdatPar;
++	else
++		*buf &= ~kdatPar;
++
++	retval = pl2303_vendor_write(serial, channel, *buf);
++
++	if (retval < 0)
++		goto err_out;
++
++err_out:
++
++	kfree(buf);
++
++	return retval;
++
++}
++
++
++static int pl2303_ioctl(struct tty_struct *tty,
++			unsigned int cmd, unsigned long arg)
++{
++	int retval = 0;
++	struct serial_struct ser;
++	struct usb_serial_port *port = tty->driver_data;
++	struct usb_serial *serial = port->serial;
++
++	switch (cmd) {
++	case TIOCGSERIAL:
++		memset(&ser, 0, sizeof(ser));
++		ser.type = PORT_16654;
++		ser.line = port->minor;
++		ser.port = port->port_number;
++		ser.baud_base = 460800;
++
++		if (copy_to_user((void __user *)arg, &ser, sizeof(ser)))
++			return -EFAULT;
++
++		return 0;
++	case GPIO_AB_CONTROL_MODE:
++		retval = pl2303N_gpio_set(serial, (void __user *) arg,
++								PL2303N_CE_MODE);
++		break;
++	case GPIO_AB_OUTPUT_MODE:
++		retval = pl2303N_gpio_set(serial, (void __user *) arg,
++								PL2303N_OE_MODE);
++		break;
++	case GPIO_AB_SET_VALUE:
++		retval = pl2303N_gpio_set(serial, (void __user *) arg,
++								PL2303N_SET_MODE);
++		break;
++	case GPIO_AB_GET_VALUE:
++		retval = pl2303N_gpio_get(serial, (void __user *) arg,
++								PL2303N_GET_MODE);
++		break;
++	default:
++		retval = -ENOIOCTLCMD;
++		break;
++	}
++
++	return retval;
++
++}
++
+ static int pl2303_set_break(struct usb_serial_port *port, bool enable)
+ {
+ 	struct usb_serial *serial = port->serial;
+@@ -1285,6 +1466,7 @@ static struct usb_serial_driver pl2303_device = {
+ 	.close =		pl2303_close,
+ 	.dtr_rts =		pl2303_dtr_rts,
+ 	.carrier_raised =	pl2303_carrier_raised,
++	.ioctl =		pl2303_ioctl,
+ 	.break_ctl =		pl2303_break_ctl,
+ 	.set_termios =		pl2303_set_termios,
+ 	.tiocmget =		pl2303_tiocmget,
+-- 
+2.48.1
 
 
