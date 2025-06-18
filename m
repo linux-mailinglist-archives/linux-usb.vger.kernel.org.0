@@ -1,100 +1,136 @@
-Return-Path: <linux-usb+bounces-24873-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24874-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88F3AADE730
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 11:40:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E0BADE911
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 12:33:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35F1C7A3B20
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 09:39:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F21C189EC56
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 10:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CB62836A3;
-	Wed, 18 Jun 2025 09:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD05283FDF;
+	Wed, 18 Jun 2025 10:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="cG61MWmE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2If1hIL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3869A1E0E14
-	for <linux-usb@vger.kernel.org>; Wed, 18 Jun 2025 09:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FA827E7FC;
+	Wed, 18 Jun 2025 10:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750239621; cv=none; b=guahz6JglT1zXn3ISXqvEBjqOSSL7vKMjWZVYIK9XdhExOz5OVawPoEf51rzpgCzNIoNvvW/tvxPEoZM9W1uXg1IzWAOOtHB1r4tSvaEOQGMO29s40u/i+w45J1gZs8mZQ8Brds/lPkIYk42sl7KbRHcp+oBy+YY/D9YoeJp6xM=
+	t=1750242813; cv=none; b=HMIaZpeVMn4Tmp6M8hk4C2qc6YVxRMsMKvpkdHhQ379Z/f+TBEGuhcTC1VlLjgvJz2ThDEKHJ15xI72CVar6iG/zSSVljl/NjxOttr7DFIlEWvRmmhNVhLYUDQWvWO14y2Q2+J+chSI9AEBoLZ3mQf6JcB79wUaKnec3EGF/Frw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750239621; c=relaxed/simple;
-	bh=3z/uxWRCRYWPYa0uJv7jlHImU15BLQJIRchXDVfZXzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=bDW0gNRVDSHFzj7NMVEZuBxXq9+8srO/zmlm9ILgBTylO1Ix/utSiBmzQLjS9J8oFJ4zScBnvoNrln9X31HcQlXXskvOS7RyAiokZDlIM6T/Gw8ga6oYZrFuMb6rxg9/rycVkAUpw9khUuM/FLXXC+i6JxjTqJZQJAjLqpnNat0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=cG61MWmE; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from localhost (unknown [10.10.165.4])
-	by mail.ispras.ru (Postfix) with ESMTPSA id CE5AC401014B;
-	Wed, 18 Jun 2025 09:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru CE5AC401014B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1750239612;
-	bh=A5YhXi2y5S6EYl4mv1b74AtVE5sbxA8Oj9mEmOpCmPg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=cG61MWmEDioUVMcHjDb5QgQnafZEJ0jH4oKzFd3jvvgTq09EdOhoLlA/RXMVcZn54
-	 orOCemzsY9IBjJPmYsrQtPLAeLxQal7GbjFoOUzta0UjEe7dvPZdaJwkPtTCSbUqsv
-	 44m/mgl4iiou0g8QM8PO0MOq8rj6s7ZDjqE13TZc=
-Date: Wed, 18 Jun 2025 12:40:12 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Dmitry Antipov <dmantipov@yandex.ru>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>, Yuyang Du <yuyang.du@intel.com>, 
-	linux-usb@vger.kernel.org, syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/2] usbip: vhci-hcd: do not show port status if the
- latter is not ready
-Message-ID: <rayccu3lpptyzxwcactdxtzvy2byedfd2ez34e7xwtut24rhiz@2hienne7w62f>
+	s=arc-20240116; t=1750242813; c=relaxed/simple;
+	bh=NH1gdj2JHsPz7N0JYPEoq2KF4u27xaLK2wSxMVVbO7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3gH43wU9UjNh4ynmbLVd9LxNdg7IaRGuseZkrev/KECarv7n8nJ9AK7+1nXXD6Gc8sscp8lVjkASZQRPQMWT76114bDEgFp5rsmW0NVlNAloFsGv6YDBscnR/LH4syeds6rdqXbMaaQmZ3sv0PzuUni+pIQ5JgATf8WJfrOXUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2If1hIL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565AFC4CEE7;
+	Wed, 18 Jun 2025 10:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750242811;
+	bh=NH1gdj2JHsPz7N0JYPEoq2KF4u27xaLK2wSxMVVbO7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k2If1hILU75Fm5Wwemre5KnEqAomySUKfRnRpvbLTPvPgsMzP0pV1XhQn9i/rpi+d
+	 R0t6EYPJoRRfhrmsSycIAZnuQyodbw4B1vt02rS+mSC2u+VyjNQlHYuVE154mGX6WM
+	 KhnsSNc5LmnF2kFHPmlE9p7OGcRAk3D80xuQtlJO79GslXStFAOwUNdFFuNLzS4JZJ
+	 YTQR7daEDvkJjaUdiDydVNVHUQcpOIshwXl+Fxg3d8UjsRtEK0OVFutiNgEfAMmsqC
+	 9yS2jK/DTtHJm0af8MBuUWjuGiw/rhaUm1Iw/+wYdh+M9QSbv1ztkg0KGKd845BF4Q
+	 ReG/aqj3tfUAg==
+Date: Wed, 18 Jun 2025 18:33:23 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, john.ernberg@actia.se,
+	jun.li@nxp.com, linux-usb@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH] usb: chipidea: udc: disconnect/reconnect from host when
+ do suspend/resume
+Message-ID: <20250618103323.GA34284@nchen-desktop>
+References: <20250614124914.207540-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250610131717.2316278-1-dmantipov@yandex.ru>
+In-Reply-To: <20250614124914.207540-1-xu.yang_2@nxp.com>
 
-On Tue, 10 Jun 2025 16:17:16 +0300 Dmitry Antipov wrote:
-> In 'status_show_vhci()', do not go further if the port is
-> not actually running but just emit 'dev_warn()' instead.
+On 25-06-14 20:49:14, Xu Yang wrote:
+> Shawn and John reported a hang issue during system suspend as below:
 > 
-> Reported-by: syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=83976e47ec1ef91e66f1
-> Fixes: 03cd00d538a6 ("usbip: vhci-hcd: Set the vhci structure up to work")
-> Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+>  - USB gadget is enabled as Ethernet
+>  - There is data transfer over USB Ethernet (scp a big file between host
+>                                              and device)
+>  - Device is going in/out suspend (echo mem > /sys/power/state)
+> 
+> The root cause is the USB device controller is suspended but the USB bus
+> is still active which caused the USB host continues to transfer data with
+> device and the device continues to queue USB requests (in this case, a
+> delayed TCP ACK packet trigger the issue) after controller is suspended,
+> however the USB controller clock is already gated off. Then if udc driver
+> access registers after that point, the system will hang.
+> 
+> The correct way to avoid such issue is to disconnect device from host when
+> the USB bus is not at suspend state. Then the host will receive disconnect
+> event and stop data transfer in time. To continue make USB gadget device
+> work after system resume, this will reconnect device automatically.
+> 
+> To make usb wakeup work if USB bus is already at suspend state, this will
+> keep connection for it only when USB device controller has enabled wakeup
+> capability.
+> 
+> Reported-by: Shawn Guo <shawnguo@kernel.org>
+> Reported-by: John Ernberg <john.ernberg@actia.se>
+> Closes: https://lore.kernel.org/linux-usb/aEZxmlHmjeWcXiF3@dragon/
+> Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
+> Fixes: 235ffc17d014 ("usb: chipidea: udc: add suspend/resume support for device controller")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Jun Li <jun.li@nxp.com>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+
+Acked-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
 > ---
->  drivers/usb/usbip/vhci_sysfs.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/chipidea/udc.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-> index d5865460e82d..8c8e90646e6b 100644
-> --- a/drivers/usb/usbip/vhci_sysfs.c
-> +++ b/drivers/usb/usbip/vhci_sysfs.c
-> @@ -76,6 +76,10 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index 8a9b31fd5c89..1a48e6440e6c 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -2374,6 +2374,10 @@ static void udc_suspend(struct ci_hdrc *ci)
+>  	 */
+>  	if (hw_read(ci, OP_ENDPTLISTADDR, ~0) == 0)
+>  		hw_write(ci, OP_ENDPTLISTADDR, ~0, ~0);
+> +
+> +	if (ci->gadget.connected &&
+> +	    (!ci->suspended || !device_may_wakeup(ci->dev)))
+> +		usb_gadget_disconnect(&ci->gadget);
+>  }
+>  
+>  static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+> @@ -2384,6 +2388,9 @@ static void udc_resume(struct ci_hdrc *ci, bool power_lost)
+>  					OTGSC_BSVIS | OTGSC_BSVIE);
+>  		if (ci->vbus_active)
+>  			usb_gadget_vbus_disconnect(&ci->gadget);
+> +	} else if (ci->vbus_active && ci->driver &&
+> +		   !ci->gadget.connected) {
+> +		usb_gadget_connect(&ci->gadget);
 >  	}
 >  
->  	hcd = platform_get_drvdata(pdev);
-> +	if (hcd == NULL) {
-> +		dev_warn(&pdev->dev, "port is not ready\n");
-> +		return 0;
-> +	}
-
-Please have a look at discussion [1]. If checking for NULL actually
-eliminates the problem, not just hides the symptom, this should be
-thoroughly explained in the commit message.
-
-[1]: https://lore.kernel.org/all/8f65d5d0-5142-400e-9486-34efe9a0ca47@rowland.harvard.edu/
-
->  	vhci_hcd = hcd_to_vhci_hcd(hcd);
->  	vhci = vhci_hcd->vhci;
->  
+>  	/* Restore value 0 if it was set for power lost check */
 > -- 
-> 2.49.0
+> 2.34.1
+> 
+
+-- 
+
+Best regards,
+Peter
 
