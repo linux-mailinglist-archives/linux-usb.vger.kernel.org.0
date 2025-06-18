@@ -1,75 +1,89 @@
-Return-Path: <linux-usb+bounces-24890-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24892-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA28FADF037
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 16:52:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC585ADF2E2
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 18:48:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B013B18899B3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 14:52:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78B0B1727DE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Jun 2025 16:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A28F2EE29B;
-	Wed, 18 Jun 2025 14:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45C02F235C;
+	Wed, 18 Jun 2025 16:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kyxde150"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LaqDvgaf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6152EE28F;
-	Wed, 18 Jun 2025 14:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C249E2EFDA7;
+	Wed, 18 Jun 2025 16:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750258323; cv=none; b=LRnHrJJgLxISjtnINFZZnMjv6dEJM4/yCMNSel+jcsAgC8u8Yy4pfA+Bl8QBb6n+M866NPrCvEkhTYkRiF95TIjEEkgLM9oXs6bQ054s1ZtSdqPqUZIaffrHUyfJ8jqzqJJTeKF5TVwQ2xoGesGq69Dx4c3Za8Je3Gqf/vXZmCs=
+	t=1750265277; cv=none; b=kh4doGkOqJEddPjG8BUl92JEtCmpU21E0feEy6xe6vcjUdRLlVbCySeDhannWFJT9u2RIVj9eznXFskinjzYZR1CRmPvf59nU0cgjvuasI5FNwjSFAaLnRa51N4I7Eq7GTy+dpOSD2a629b08xggzYKHdkVLfXbimlZwo3LTyDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750258323; c=relaxed/simple;
-	bh=ZR0aYzFLYzw8xtKJTwgv2QhyruI/blScqAFzbyXCJRo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qwc0ATRkRBC3P12TYMNHY1MalYbE32+T+TAKQDXj63dZR372mmxgcuccY5nFX8IHLbG7FsG+Yfu29FzAQ+2e6xh10ja04z6eH7r5s1uM8Q7gw85wT40B6kxyuTCwqhpJgN6AC3eL/ok9e2ZiH76QiaQMryA2MvDokgsGEmudWPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kyxde150; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750258322; x=1781794322;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZR0aYzFLYzw8xtKJTwgv2QhyruI/blScqAFzbyXCJRo=;
-  b=Kyxde150Sy6mB5L7x9Tx/xfC5yVSs2P1GPE3/BInT/QooYn8FpwcviRH
-   O1g6GK05ewTRyDeHF2nDAVMTEuX1YW4X/fFdUGgA+hAkEKcQEx0DHcgNk
-   I4HA+CAfyWnV619tRW6M9xf024rPZaH9gJWMImh5ZATHmsW0aFkKX8WbS
-   P7KOz8pxYR58LiTHSiMYFPvnu2eKjo9ZAzkFEarY9GEMnmUIVxNxHtDht
-   lYv2eqiDplhLnmFQk18a7PcBzVbknCqi8KbKrsKT7xWpCJZyepnw1CMNM
-   pg2D0zLnooljVi+hFMvC3343Mw3PYUd/OoLk7aQUJ3jAiUKerDFKANYWF
-   w==;
-X-CSE-ConnectionGUID: ejFpLlK1SrWgmU/FLAAnkw==
-X-CSE-MsgGUID: /Y9fiyT1Svar6POj0ygo+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="63906560"
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="63906560"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 07:52:01 -0700
-X-CSE-ConnectionGUID: cbVYe/VMSBS5k7xHh7+T1g==
-X-CSE-MsgGUID: eJMYhv7SQSuJeDYu6iY72Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="180709387"
-Received: from unknown (HELO CannotLeaveINTEL.bj.intel.com) ([10.238.153.146])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Jun 2025 07:51:59 -0700
-From: Jun Miao <jun.miao@intel.com>
-To: sbhatta@marvell.com,
-	kuba@kernel.org,
-	oneukum@suse.com
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1750265277; c=relaxed/simple;
+	bh=hIUF1W2kQbNBkJA9y0/7IYXS/DTzn2iOQBfMawanAnQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VbMuemFowYGYjnpG+vLEMETrWaSc7GVOGSMe8vCYzN5hWAGp6+G+ePy8XQBxlywWjy1tCDnSuGm60awFspoHJCEwz9Hb5C0ImQnX26GqgLqoxr6cLXkKHDApD97Ty095YINwTfB9qUfyOotWeLpHIVzUsrK9VSgHrS+TR4BlqsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LaqDvgaf; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ad891bb0957so1306715466b.3;
+        Wed, 18 Jun 2025 09:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750265274; x=1750870074; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+qv1GHOU/ShU2OJAJa6dB0bDSAG6lFZVxU0lASK27k=;
+        b=LaqDvgafzN72UzGjWTX4hGDsuTBPEAkBQ+tpA9TAjYBODp5811u4lmjwOAr0zAMsZC
+         FSR1Ydmg/K2k6SSPxfWGJ68iJYyWUPiEdMttj96jaXM07rWdQtRYkH7iqdEsk9CyMrhS
+         W/l6pG896cag0vLyTgD6unx/jQ8cXRqwOJLpUYVAQelfdTi5pyNFlfXaPncCdxsvTgbz
+         pdt2rO8PHoUWt2UoNzuU03j+i7l2pO7XPPWZX04aaHQOFR9SpjTH68npFq2oG4D9spJs
+         lYPyWdJG0n9MUj18vHbD9ioALFYPNwVZfHgyCKh2ojXFRt+AmpmPlA9V1R9szC8N7HdA
+         y5/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750265274; x=1750870074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N+qv1GHOU/ShU2OJAJa6dB0bDSAG6lFZVxU0lASK27k=;
+        b=bXbVUC6HmSGe6eyQzqd8WMEWOzqcZpTe/lUd1aKJV2TrNOxq7d/1Jvg3FqhNAa7OLi
+         99T9/lX1bJc0JAkb9QhWQ36YhLqL1LC5Efp8GyC51xTstTYCI1J9DwhhnBcjP/HbcYrk
+         lJ15Ml82Qon4/dFOm5hDGqdSKRYZOBnzbhPQWUWb8XMr6wPvdj/uJ+t5mD8np6rlxOwp
+         ZBx+XZwSuz5YkvJrfaX4d941QaEOvfN+04/yEbYey9G8WaVAYrYiLrijQDQjHecJohMn
+         LJwOOUFBWCxm761vzzTLHVxhPvLzgHOH2wjy/ykN3I3Ks/mFm9s8ELyAEUbX21xowHy6
+         Njhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXei5A9xV3z1axoXjNQdrNspvVrPHS9IpQukCR8MPyyipFi2+EEonYeHw2prKAqeCYWtvfwvTNeYStI8+c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGYzZxmnRbjxRshfXAd4yFzwaqikb8G9/d8+ODDliREp0lwY0d
+	nQmvgS+gJInIPtNvXIGlqGHyYOQVcdlvotDEWPHrkFula5Vm3ehEmP9F3NsWuKvN
+X-Gm-Gg: ASbGncvjrFy0dnGL2pkZwOQ6meLFdUcSAdifEeSNMmZSgnjVITeisdAjMtwnAtHluIw
+	yVYHXP7tOecOovI5XLi6hY2AjH+SBQIqXZMngrckYqA7Kaegcxy9L6OsG8OPaKdfvqCBx5BZR3F
+	51iDv4dtl30szNieCTPIo0SM5Tl/TbjtOCMyz2SNQ7TbZnASkBGw2rpWqiBOdlA+41sumtl39lg
+	1EJbMrzBvrgvl5qvOaniswaJKdqMUG6SlEf39mlBv1DfkHcxgetteCql6zk/dpRvCTxAe5MaN4i
+	wGhv7jqax+GEnF+H9vi/IrE3k3QTy9N8ohb2Q09CbVy2428cyh4koNvY5En1Pd9I4iz3JD9u/Dj
+	6FWVxhvo=
+X-Google-Smtp-Source: AGHT+IF7CCKVAgk6WUozUwLRY/+4SzLJ63FajrazwZc0+Ifd6OQCqqeNXYovSAUeenIgd24XLetrcA==
+X-Received: by 2002:a17:907:1c08:b0:add:f62e:a300 with SMTP id a640c23a62f3a-adfad29f4e2mr1862867166b.2.1750265273477;
+        Wed, 18 Jun 2025 09:47:53 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:3030:ae0:5873:67f3:9dc3:7778:59f4])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adf9ad8a155sm935481566b.84.2025.06.18.09.47.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 09:47:53 -0700 (PDT)
+From: RubenKelevra <rubenkelevra@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	shawnguo@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-imx@nxp.com,
 	linux-kernel@vger.kernel.org,
-	qiang.zhang@linux.dev,
-	jun.miao@intel.com
-Subject: [PATCH v6] net: usb: Convert tasklet API to new bottom half workqueue mechanism
-Date: Wed, 18 Jun 2025 13:39:23 -0400
-Message-ID: <20250618173923.950510-1-jun.miao@intel.com>
-X-Mailer: git-send-email 2.43.0
+	galak@kernel.crashing.org,
+	RubenKelevra <rubenkelevra@gmail.com>
+Subject: [PATCH] include: fsl_devices.h: drop unused, misspelled FLS_USB2_WORKAROUND_ENGCM09152
+Date: Wed, 18 Jun 2025 18:47:43 +0200
+Message-ID: <20250618164743.1916838-1-rubenkelevra@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,200 +92,34 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Migrate tasklet APIs to the new bottom half workqueue mechanism. It
-replaces all occurrences of tasklet usage with the appropriate workqueue
-APIs throughout the usbnet driver. This transition ensures compatibility
-with the latest design and enhances performance.
+The macro was introduced in commit 69cb1ec4ce4d ("mxc_udc: add
+workaround for ENGcm09152 for i.MX35") on 2010-10-15, but its prefix was
+misspelled as **FLS_** instead of the usual **FSL_**.
 
-Signed-off-by: Jun Miao <jun.miao@intel.com>
+Its last in-tree user disappeared with commit a390bef7db1f ("usb:
+gadget: fsl_mxc_udc: Remove the driver") on 2020-12-10, so the macro has
+been completely unused since then.
+
+Remove the dead and wrongly named definition.
+
+Signed-off-by: RubenKelevra <rubenkelevra@gmail.com>
 ---
-v1->v2:
-	Check patch warning, delete the more spaces.
-v2->v3:
-	Fix the kernel test robot noticed the following build errors:
-	>> drivers/net/usb/usbnet.c:1974:47: error: 'struct usbnet' has no member named 'bh'
-v3->v4:
-	Keep "GFP_ATOMIC" flag as it is.
-	If someone want to change the flags (which Im not sure is correct) it should be a separate commit.
-v4->v5:
-	As suggested by Jakub, we have used the system workqueue to schedule on(system_bh_wq),
-	replace the workqueue with work in usbnet_bh_workqueue() and the comments.
-v5->v6:
-	Delete the "suggested by" review comments in commit message.
+ include/linux/fsl_devices.h | 1 -
+ 1 file changed, 1 deletion(-)
 
----
- drivers/net/usb/usbnet.c   | 36 ++++++++++++++++++------------------
- include/linux/usb/usbnet.h |  2 +-
- 2 files changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index c39dfa17813a..234d47bbfec8 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -461,7 +461,7 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
+diff --git a/include/linux/fsl_devices.h b/include/linux/fsl_devices.h
+index 5d231ce8709be..49f20c2f99bf0 100644
+--- a/include/linux/fsl_devices.h
++++ b/include/linux/fsl_devices.h
+@@ -118,7 +118,6 @@ struct fsl_usb2_platform_data {
+ #define FSL_USB2_PORT0_ENABLED	0x00000001
+ #define FSL_USB2_PORT1_ENABLED	0x00000002
  
- 	__skb_queue_tail(&dev->done, skb);
- 	if (dev->done.qlen == 1)
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	spin_unlock(&dev->done.lock);
- 	spin_unlock_irqrestore(&list->lock, flags);
- 	return old_state;
-@@ -549,7 +549,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
- 		default:
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "rx submit, %d\n", retval);
--			tasklet_schedule (&dev->bh);
-+			queue_work(system_bh_wq, &dev->bh_work);
- 			break;
- 		case 0:
- 			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
-@@ -709,7 +709,7 @@ void usbnet_resume_rx(struct usbnet *dev)
- 		num++;
- 	}
+-#define FLS_USB2_WORKAROUND_ENGCM09152	(1 << 0)
  
--	tasklet_schedule(&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
+ struct spi_device;
  
- 	netif_dbg(dev, rx_status, dev->net,
- 		  "paused rx queue disabled, %d skbs requeued\n", num);
-@@ -778,7 +778,7 @@ void usbnet_unlink_rx_urbs(struct usbnet *dev)
- {
- 	if (netif_running(dev->net)) {
- 		(void) unlink_urbs (dev, &dev->rxq);
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	}
- }
- EXPORT_SYMBOL_GPL(usbnet_unlink_rx_urbs);
-@@ -861,14 +861,14 @@ int usbnet_stop (struct net_device *net)
- 	/* deferred work (timer, softirq, task) must also stop */
- 	dev->flags = 0;
- 	timer_delete_sync(&dev->delay);
--	tasklet_kill(&dev->bh);
-+	disable_work_sync(&dev->bh_work);
- 	cancel_work_sync(&dev->kevent);
- 
- 	/* We have cyclic dependencies. Those calls are needed
- 	 * to break a cycle. We cannot fall into the gaps because
- 	 * we have a flag
- 	 */
--	tasklet_kill(&dev->bh);
-+	disable_work_sync(&dev->bh_work);
- 	timer_delete_sync(&dev->delay);
- 	cancel_work_sync(&dev->kevent);
- 
-@@ -955,7 +955,7 @@ int usbnet_open (struct net_device *net)
- 	clear_bit(EVENT_RX_KILL, &dev->flags);
- 
- 	// delay posting reads until we're fully open
--	tasklet_schedule (&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
- 	if (info->manage_power) {
- 		retval = info->manage_power(dev, 1);
- 		if (retval < 0) {
-@@ -1123,7 +1123,7 @@ static void __handle_link_change(struct usbnet *dev)
- 		 */
- 	} else {
- 		/* submitting URBs for reading packets */
--		tasklet_schedule(&dev->bh);
-+		queue_work(system_bh_wq, &dev->bh_work);
- 	}
- 
- 	/* hard_mtu or rx_urb_size may change during link change */
-@@ -1198,11 +1198,11 @@ usbnet_deferred_kevent (struct work_struct *work)
- 		} else {
- 			clear_bit (EVENT_RX_HALT, &dev->flags);
- 			if (!usbnet_going_away(dev))
--				tasklet_schedule(&dev->bh);
-+				queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
--	/* tasklet could resubmit itself forever if memory is tight */
-+	/* work could resubmit itself forever if memory is tight */
- 	if (test_bit (EVENT_RX_MEMORY, &dev->flags)) {
- 		struct urb	*urb = NULL;
- 		int resched = 1;
-@@ -1224,7 +1224,7 @@ usbnet_deferred_kevent (struct work_struct *work)
- fail_lowmem:
- 			if (resched)
- 				if (!usbnet_going_away(dev))
--					tasklet_schedule(&dev->bh);
-+					queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
-@@ -1325,7 +1325,7 @@ void usbnet_tx_timeout (struct net_device *net, unsigned int txqueue)
- 	struct usbnet		*dev = netdev_priv(net);
- 
- 	unlink_urbs (dev, &dev->txq);
--	tasklet_schedule (&dev->bh);
-+	queue_work(system_bh_wq, &dev->bh_work);
- 	/* this needs to be handled individually because the generic layer
- 	 * doesn't know what is sufficient and could not restore private
- 	 * information if a remedy of an unconditional reset were used.
-@@ -1547,7 +1547,7 @@ static inline void usb_free_skb(struct sk_buff *skb)
- 
- /*-------------------------------------------------------------------------*/
- 
--// tasklet (work deferred from completions, in_irq) or timer
-+// work (work deferred from completions, in_irq) or timer
- 
- static void usbnet_bh (struct timer_list *t)
- {
-@@ -1601,16 +1601,16 @@ static void usbnet_bh (struct timer_list *t)
- 					  "rxqlen %d --> %d\n",
- 					  temp, dev->rxq.qlen);
- 			if (dev->rxq.qlen < RX_QLEN(dev))
--				tasklet_schedule (&dev->bh);
-+				queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 		if (dev->txq.qlen < TX_QLEN (dev))
- 			netif_wake_queue (dev->net);
- 	}
- }
- 
--static void usbnet_bh_tasklet(struct tasklet_struct *t)
-+static void usbnet_bh_work(struct work_struct *work)
- {
--	struct usbnet *dev = from_tasklet(dev, t, bh);
-+	struct usbnet *dev = from_work(dev, work, bh_work);
- 
- 	usbnet_bh(&dev->delay);
- }
-@@ -1742,7 +1742,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	skb_queue_head_init (&dev->txq);
- 	skb_queue_head_init (&dev->done);
- 	skb_queue_head_init(&dev->rxq_pause);
--	tasklet_setup(&dev->bh, usbnet_bh_tasklet);
-+	INIT_WORK(&dev->bh_work, usbnet_bh_work);
- 	INIT_WORK (&dev->kevent, usbnet_deferred_kevent);
- 	init_usb_anchor(&dev->deferred);
- 	timer_setup(&dev->delay, usbnet_bh, 0);
-@@ -1971,7 +1971,7 @@ int usbnet_resume (struct usb_interface *intf)
- 
- 			if (!(dev->txq.qlen >= TX_QLEN(dev)))
- 				netif_tx_wake_all_queues(dev->net);
--			tasklet_schedule (&dev->bh);
-+			queue_work(system_bh_wq, &dev->bh_work);
- 		}
- 	}
- 
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index 0b9f1e598e3a..208682f77179 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -58,7 +58,7 @@ struct usbnet {
- 	unsigned		interrupt_count;
- 	struct mutex		interrupt_mutex;
- 	struct usb_anchor	deferred;
--	struct tasklet_struct	bh;
-+	struct work_struct	bh_work;
- 
- 	struct work_struct	kevent;
- 	unsigned long		flags;
 -- 
-2.43.0
+2.49.0
 
 
