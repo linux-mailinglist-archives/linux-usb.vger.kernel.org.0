@@ -1,126 +1,146 @@
-Return-Path: <linux-usb+bounces-24906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB0B8ADFD6B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 07:58:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8432AE0119
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 11:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42F18189CD9B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 05:58:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D87F7AE862
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 09:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B9324337D;
-	Thu, 19 Jun 2025 05:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4D027FD71;
+	Thu, 19 Jun 2025 09:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tlxp+2tl"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="bztpo7PG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CDE242D8E;
-	Thu, 19 Jun 2025 05:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E75D22B588
+	for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 09:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750312690; cv=none; b=NjwVGKyQFYEXB1090yg90cqie+Y/0o3vC5z/siAMHyBs/TB9JoyvrwBLVIWDf0ZBXH9GUZrY0NC0EXJdVtfYmMfcbPUGGrmsEFiY/drbZVpudy/7aBs9gioR221agigCb0bdvHWMCCLtQrVBykiLLITxYwJ2RhP9+g3tybd+eWc=
+	t=1750323780; cv=none; b=AQD9RQM3E0t51n00gF0EqzDuetTGb02zJ49PiQa+/l6ObwESurjbEIdzhZL3DTAYyNS1/t7HI1n+83DebWbZu+99txjUtMrvNSrF+0HfAEp9VBGY/hSxp81/XkrLHQYL5495gt2zTepKdDfCJGR9MY+KYV/R/4OlgL+IpQ+lfiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750312690; c=relaxed/simple;
-	bh=UPM/iUMRZV02JBzFSJZaNVgOriCBzjVhqgGwDNTwmuE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t1q8IUvEv65PbTZpfEJuxLjzP737iU+6a+yE99d3hiUn6qplRuNEqnO8WB8UFEUPsp5b58J6OVesh9IA6lBJBh6UnyCfm5B8ZkKiRFr1bGgDGYOtyIpyJC0RY7PhHifTwbWOhWMS2uT69zjrafqxDWMmSizTHAxFngVDvaMLFDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tlxp+2tl; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4a6f3f88613so3466401cf.1;
-        Wed, 18 Jun 2025 22:58:09 -0700 (PDT)
+	s=arc-20240116; t=1750323780; c=relaxed/simple;
+	bh=p68X2LwCukixUyKxNtKjThY5BUyTXZHMnFUBGp0QScw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=J9yqOObT8KsE19ennO04uL1iNYw1IRcT5DsDjZ4QgRA2BHGZU785WpaBCxuSA1nQ9aMuhydwcttiULqXUXaHKejkQg3AYul9ucsLiHRUZU/MssQFUKmfURFTqqZe5r2VU4CgnbvNVz0ap9ezEMpB1hiY1IxMkfrK4vzQXosSh30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=bztpo7PG; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a54700a463so294539f8f.1
+        for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 02:02:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750312688; x=1750917488; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E6ieeSo4vRKELhw8/rOXktM5LV24RcohaY2mZD0DT+A=;
-        b=Tlxp+2tlcu4fKgRV2Bvd4AFMANmeOYrkStP/ajqSTquahTcfmtkLPzzxAHbwAao/Ey
-         lIJJqye2GjnExvA6Ta3XcXndNKWp62s6lfafpAwSxJsgewtRqtsj1tUQEIULwU1so8mQ
-         3/4dDB6XynU+DQRQrLaAKGCGUEr1F27Q9Feh0mpdv3z4EPYeZsvYwBqPcOoGF0yugNz0
-         qVUwDYkWh/pd8yyVxAktbFryUhYCe9BFw/6AGSKUOF+Xvkm/HSE3EF6N/NRARPq4j9KU
-         B1ylyj1wIzPXwMQcdSoQvwTzD+IXzqF0UacymdbOmfjMAb3JApaQCEkAU/u7ZVnqYkel
-         Ilqw==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1750323777; x=1750928577; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DusPyjFwA6hQUAOLAD+62j5hfi8cHkigQfHDAENKko8=;
+        b=bztpo7PGFWGOo0MnpW5cqBV60KndDVA7f88dcwff90pVDBdKvRMkqVONkvztXQQ1S5
+         h4Y1NmCaVcpHgPM1Dg6dUgr+N24Tn4REHeAyRauu9szgH+JmRmpeeh7YycrH3lQ6CgoP
+         fWZL5HmsIA169BeMKyV53R9YCm53rKEEO9CN/tAGH9IF1UeTI0cb4tb84EsczT+sWBaN
+         btR8yHiZQlqpY3hlUHKWZdq7Y+54EsRT5LeobsEKfx8ZIqW5LVEqDqC0/eS2IlQdZVbw
+         ni4cWx+Byf1EataG+W+W+mG/DD38FaLvuIcYtLpltY//glRRu70ETrXayEtc/VEnvj3W
+         iG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750312688; x=1750917488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E6ieeSo4vRKELhw8/rOXktM5LV24RcohaY2mZD0DT+A=;
-        b=ST8XjInVxl3ZrA1UF8oA95necjbsxmiV8dDyzI4O37k/fcIo/jgBagCoHi2rwrx4VQ
-         WAU6UVr8ehnSbKXY/Z7P2z+EQEdt0OJpc34bxX/9BWYG6UAQ1WZ2qlCbpJgdKo/LfspD
-         vmfFWpMe1yORrak/9d2+vAsg4M6g03Dj9S0vUQOZ1hMrsWVT9tvrUEJl1BFNxYnzQSSd
-         g7HfjdRapoagJJUBUV2+5D4vyD+MtQxvswrmqKK6wANMd4sRQPNnZaWtHGQRqz6niU3l
-         9bhSrvKPhi/tc75lM7P36lRFZt9xY2Io9HxbyHxxv3SGzESAzr00FVXDIC8jmGZI7ohB
-         GNww==
-X-Forwarded-Encrypted: i=1; AJvYcCUqBZOMaIU6F1KLFbGgjiDyisySFo0TLkOKYVexM9ZQmEhUbtlDBHvRiscy0k+6scojGTwWn4PlORwq+Qs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzog1ZJeIs2URnod1BNjqaHa5Q8+0B0Hclp8bX6j6z1BG35f56s
-	/yYqoS7/qIl3d2fEpAMd+SDmOR2Uv55S9HBD93VULyQ29oXQEHtYFJnG
-X-Gm-Gg: ASbGnctpkCXDG0HE/bzbPcuQ7js017Gu5yAsmGP9OTlqro1ImNkNO5ZLKz+gef5ZyW6
-	QhhNxaLyKXgwGDQVGeAep7cZNGLtx+RrwB6pKoTxEEHgJCYCsaawacIm6RCFni9+pkUIWPNb7Cm
-	CDqD6hkU0qPQOYb6Enj26a920ygiX+udExXcB+iTcUq8Z7s0PV9TNuYkiTW0m+TkyAacI6NWwdG
-	S+dmZo6nV7II1iqUIjEXpJ+mH96fz0I3SnMjKoZzarEyEOGpG4MhjfhnCVXmewhO5MyvASZ105o
-	xsLhZM3j7r2MaRV9D9IOfMpP4kyhpJLYqCkLEs286/+/d5PSwOOAUENrZ360QkNj2yh5hyzFokG
-	8vrFHI8zdrz0GbOTaWV33W8pw8KWTcKXszu7XrhN1oAaaMcbFjWqd6p695Q==
-X-Google-Smtp-Source: AGHT+IEcgaKg2OtQgkTumlR6bZwenvChQUzb8wcskNs+GOrGozd81FZRDCNpNjG99v/XM9+ZEvANAA==
-X-Received: by 2002:a05:622a:118f:b0:4a4:3449:2b82 with SMTP id d75a77b69052e-4a73c55b6a5mr377120781cf.13.1750312688133;
-        Wed, 18 Jun 2025 22:58:08 -0700 (PDT)
-Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.81])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a2e750bsm79171421cf.17.2025.06.18.22.58.06
+        d=1e100.net; s=20230601; t=1750323777; x=1750928577;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DusPyjFwA6hQUAOLAD+62j5hfi8cHkigQfHDAENKko8=;
+        b=SoDV95fJrT602WXkcBAQULury4C3MTvKgnbSybBgrceaRpLde7YhUvpf+XJDmAFjkK
+         HOhj6014z+FJR7K58Zd2SAdZbkAsZS/zjeb19rZH5cZ50IvZIhMuAkiobVFhNYziFvQi
+         TuJmKi7h3M7LTnkduHU35WHpluTC6A1xTe1MLQG2qTyphPuobdVfNtlg2Wk482V7+Uac
+         4Xn9MQ3I+tWvoGazYEriVhioavxePIYHCkNTl2W59xC4PypVDWp8Y9V9ABiKNVReQ0R8
+         RxeogN/GlurmCrwErW4d+6NWWpcA5jAmSZV9dZHJtoAA7AXiG1rsLj24+UIMLBzMq/k0
+         v7iQ==
+X-Gm-Message-State: AOJu0YwDgRjNUA7+kZKS8PIdK+mcKwXYjv5TP13S1qGvVh9AthBL723q
+	i5vPGzFepphqpDieEPDXoj3oHdmJ2A24BusUaa+1XkBr8WnCVYTbTK8v4D+EPR6l9UE=
+X-Gm-Gg: ASbGnctcv0ZXZKvgGy0tVfrONBte0Y4AyQyo5L/BYEiNGKAVJC45ha/wn3qolrALlzn
+	aRqZxFTlOkWCbCur9zcI+mbvr6HaMCjkAbkkDwI/HtwGpqkpFerSdC92g53DvO/nPtS3H9PAVt5
+	ufrZhy410iDhb/SJOJm+7MjrNLZNcbXsFrste20NEMG4gOrRvwYU4w0d5ghtvmbeBrSMbeVAqs9
+	yhkmvWFuyFQYbNVdablUQeZk0R+StDs+LsVfF6uQzWj0XJHU7ruJi0564DEkg43jpY3wc5fdu1f
+	sO1XE9qqCdVooHbToC9MbAKNI6PIN7xZvYTWvNVPSseIdVsKp6rO6gjM
+X-Google-Smtp-Source: AGHT+IGvE5L837+Dg0xhWf5Cmw4XLAlAsHE88dQx10xuxUobHFHpSpEqxC+bUzkw2NgPb1hll5IFsw==
+X-Received: by 2002:a05:6000:1448:b0:3a3:6478:e08 with SMTP id ffacd0b85a97d-3a6c96e5663mr1961814f8f.23.1750323776675;
+        Thu, 19 Jun 2025 02:02:56 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:c485:fe15:c9ab:c72f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b798d3sm18874645f8f.100.2025.06.19.02.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 22:58:06 -0700 (PDT)
-From: Seungjin Bae <eeodqql09@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Seungjin Bae <eeodqql09@gmail.com>
-Subject: [PATCH v4] usb: host: xhci-plat: fix incorrect type for of_match variable in xhci_plat_probe()
-Date: Thu, 19 Jun 2025 01:57:47 -0400
-Message-ID: <20250619055746.176112-2-eeodqql09@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <2025061950-frown-cesarean-a1e3@gregkh>
-References: <2025061950-frown-cesarean-a1e3@gregkh>
+        Thu, 19 Jun 2025 02:02:56 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v2 0/2] USB: serial: use new GPIO line value setter
+ callbacks
+Date: Thu, 19 Jun 2025 11:02:39 +0200
+Message-Id: <20250619-gpiochip-set-rv-usb-serial-v2-0-8c43e4a4c810@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC/SU2gC/33NQQ6CMBCF4auQWTumLcWIK+9hWNQywCSEkik2G
+ sLdLbh3+b/F91aIJEwRbsUKQokjhymHORXgBzf1hNzmBqNMpSpTYj9z8APPGGlBSfiKT9wNN6L
+ tbGu9N21FHWRgFur4feCPJvfAcQnyOb6S3tcfe9HqH5s0KnR1aUvvtKrpeh95chLOQXpotm37A
+ hrMKNnFAAAA
+X-Change-ID: 20250523-gpiochip-set-rv-usb-serial-4f4d4cc2d5ef
+To: Johan Hovold <johan@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1247;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=p68X2LwCukixUyKxNtKjThY5BUyTXZHMnFUBGp0QScw=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBoU9I7wwYr2jSwqkCaWIaVoeDQRgiQ/aT58vBFn
+ z+TiHfxJKOJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaFPSOwAKCRARpy6gFHHX
+ clUyD/9wujfUhGZ85OqdpaLV0cZHT1NKmp5g+8X1yCp8eIxUGZ2JMTeOrU+JfdtL1+a23JXXwZu
+ tDFEbeLuhpRLog9LRe1C7a8hrNWzkRU5PDDAzILP2jkZeoSKsS5f0b9mJUeQw1luF2G0EJv+zMj
+ 2Z9rrpSmwD/L7jVG2fOLAgKDA4Lj0WPsxRxru4tfUWsLEDqqcYbTa4a3d0urImTDzZyuWY/+785
+ 9sHGGFXU2UdseUt0ST4UX4sqtPIlRBcuOa2AAPthKPFHjjDG2prYMCU+F8Eq39dpEehqQnqYc3S
+ uIkIwmhlxObUCQOellJYTfkHpgcmYwOqS4nk5Izv2g9ofSfigCiS/8c6QeIAxCBUGkaGUR00NF5
+ dB+2Rh2xKG4ldF5j00S5qpnwc7GfM3a6dzBGOoWLR2XMSy22JIfbu8GxsifIvstBYBlch+0OgLz
+ I77ULq0j9jHW3ceRtOQjcb42fTVk3bDFSbIfEVa6RP/gAttNWRFrPki7mjOrKrR3dI4YY0Zajz5
+ 6wnxWLt8kufHFq7qnHFEKbV+ckud0LS0d/Ppp3yCwZZopL4LWFZC7n4lPnUOxLhIPvm+JNAzo8e
+ PTgSIOMLm913shGugix4yrMuEhE1swvNbHiE/IRRux7l0xMRVEmn+CoLraPvvaIHX76sCeP5aqN
+ KEXLB8+kaQOBYXA==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-The variable `of_match` was incorrectly declared as a `bool`.
-It is assigned the return value of of_match_device(), which is a pointer of
-type `const struct of_device_id *`.
+Commit 98ce1eb1fd87e ("gpiolib: introduce gpio_chip setters that return
+values") added new line setter callbacks to struct gpio_chip. They allow
+to indicate failures to callers. We're in the process of converting all
+GPIO controllers to using them before removing the old ones. This series
+converts all GPIO chips implemented under drivers/usb/serial/.
 
-Fixes: 16b7e0cccb243 ("USB: xhci-plat: fix legacy PHY double init")
-Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- v3 -> v4: Corrected a typo in the changelog
- v2 -> v3: Added version of patch and used real name
- v1 -> v2: Updated Fixes tag and corrected Signed-off-by line
- 
- drivers/usb/host/xhci-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- reduce the number of changes in patch 2/2 by simply changing the
+  function prototype and returning a value without reshuffling the
+  implementation (Johan)
+- Link to v1: https://lore.kernel.org/r/20250610-gpiochip-set-rv-usb-serial-v1-0-a9343ca109e8@linaro.org
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 6dab142e7278..49eb874b1d81 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -152,7 +152,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 	int			ret;
- 	int			irq;
- 	struct xhci_plat_priv	*priv = NULL;
--	bool			of_match;
-+	const struct of_device_id *of_match;
- 
- 	if (usb_disabled())
- 		return -ENODEV;
+---
+Bartosz Golaszewski (2):
+      USB: serial: ftdi_sio: use new GPIO line value setter callbacks
+      USB: serial: cp210x: use new GPIO line value setter callbacks
+
+ drivers/usb/serial/cp210x.c   | 10 ++++++----
+ drivers/usb/serial/ftdi_sio.c | 18 ++++++++++++------
+ 2 files changed, 18 insertions(+), 10 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250523-gpiochip-set-rv-usb-serial-4f4d4cc2d5ef
+
+Best regards,
 -- 
-2.43.0
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 
