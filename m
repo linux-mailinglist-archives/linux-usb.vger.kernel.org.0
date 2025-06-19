@@ -1,88 +1,164 @@
-Return-Path: <linux-usb+bounces-24914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F380AE0307
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 13:02:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F89EAE0464
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 13:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2A6A1BC2D27
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 11:02:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40D473A8133
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 11:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358A322579B;
-	Thu, 19 Jun 2025 11:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4819022FAD4;
+	Thu, 19 Jun 2025 11:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SD5L/rCA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLK1SjZk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978A7221FB5;
-	Thu, 19 Jun 2025 11:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE8521FF26;
+	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750330940; cv=none; b=p3dReJHL6fj5ocz5dDoW8JLVJemLkSHD0YnzO6doLr3lRA2rseG8W35oFNcBSVQ8PJWcgCrQsQ7afriiOmhXd+K1HwhWjOnlss5YHQ2PcTHyEh8zFQspKxtwqw+nYwekY2cGLDAsF9hB6pBhQrrGOYucv+589U5Lyknxp7kzd+k=
+	t=1750334032; cv=none; b=s+P+uH55Ibacxvjb7GtNO5Iew/h5QcYDdyKt6OOWhBYj3ZkKaieilmOUhE7g2my+wLc3K1o10pwJ5D/B8C768tfMZY34/jamT8ZJcNW/pf2hPfwf5/d+wwdUH2bQbAII7uz49lIWpo3Qj5e9Gg90uUpR3r+XCqZNMmNydoid5F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750330940; c=relaxed/simple;
-	bh=rhh8ZPdaSugp4Pd5Flh3dwvFCLv+71zUHnyvuzCIHy0=;
+	s=arc-20240116; t=1750334032; c=relaxed/simple;
+	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G5cXqjAsPhvG5jQYYdHLXjdUoFTuM6aBtPJfjbA29PTSVbDJ7c9ZGLjPjjSmHCOCIAJymRHCYSWo/32yy5gNO+cQB2IByT3kD/y5V9MvZB1/iDJkG9K/QoXDRn23UKNYYFeySP+avDSBZ+JW7raNaGu39QPTemvrKTQ7g5TZmIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SD5L/rCA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F14C4CEEA;
-	Thu, 19 Jun 2025 11:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750330940;
-	bh=rhh8ZPdaSugp4Pd5Flh3dwvFCLv+71zUHnyvuzCIHy0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSf9Nhytq9rykCyvfgCBC5HfpXUckT+wNhN1p6gWDaG/xN43ROh+VKDxa3pRNlIe5R1PZXNKFd1Tr9r9MIYbqVMw10EbcrxCAM2jGxRuCm28JO3EPvJxuItvKknaiX86m6zvCbeuhx1YFtUTRnBhGewiPDXIwvOV4fR3zdmG5XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLK1SjZk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61C3C4CEEA;
+	Thu, 19 Jun 2025 11:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750334032;
+	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SD5L/rCAAjrZfus/UIUTx4tebUg29e0ywo6UqzNvaptelYZaC4VC2ewEO5Mep6uvV
-	 1ajwKzjsV5eY7a7aWSuNpL0gb5EAoY+5OcYniQfJKFWyJqCVrhbnHr1ZGk6aGnZbgm
-	 wsmCj8tJ16WByHMVHsSUImDJhLeiOyXnLcN6LEvk=
-Date: Thu, 19 Jun 2025 13:02:17 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Zongmin Zhou <min_halo@163.com>, shuah@kernel.org,
-	valentina.manea.m@gmail.com, i@zenithal.me,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	zhouzongmin@kylinos.cn
-Subject: Re: [PATCH v2] usbip: convert to use faux_device
-Message-ID: <2025061955-pungent-overripe-f8e4@gregkh>
-References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
- <20250604065410.76069-1-min_halo@163.com>
- <1a9cea94-c198-4cc4-bd69-d36f6511a121@linuxfoundation.org>
+	b=TLK1SjZkJKtOa2GDJx0KT8zWbLM0Onmv52DVFQ4AgL5lHXTrikKxzDBx0mCXJu0EN
+	 Kikw4V92eV1H6BgfWAD0506FOAnY8rnH1rNzo65+cKAO7IxMzGgfpByWyUWKoN/oQZ
+	 a/375VH0yWoRtXkMpmxMPNo+RdAMgQClaCjI+Lt8kFC68jMuzWKaiaPhAm3LPn25eI
+	 5Vy86Tzf6tejlWflhZQN+1rjxhvEe5apntIF1YAuOrVyqUvW7YVikRy+Q996WPIZP4
+	 kAlTbt4BkJHrwYniPmoJu47rcDrOBqbU6tXRNpgMfWqdRT9Ggd1nwTem3wpNIbwqLL
+	 kNsKtxHhfGesA==
+Date: Thu, 19 Jun 2025 12:53:45 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250619115345.GL587864@google.com>
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
+ <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com>
+ <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+ <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1a9cea94-c198-4cc4-bd69-d36f6511a121@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
 
-On Tue, Jun 10, 2025 at 09:15:51AM -0600, Shuah Khan wrote:
-> On 6/4/25 00:54, Zongmin Zhou wrote:
-> > From: Zongmin Zhou <zhouzongmin@kylinos.cn>
-> > 
-> > The vhci driver does not need to create a platform device,
-> > it only did so because it was simple to do that in order to
-> > get a place in sysfs to hang some device-specific attributes.
-> > Now the faux device interface is more appropriate,change it
-> > over to use the faux bus instead.
-> > 
-> > Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
-> > ---
-> > Changes in v2:
-> > - don't change faux create api,just call probe on vhci_hcd_init.
+On Fri, 13 Jun 2025, Ming Yu wrote:
+
+> Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+> >
+> > On Fri, 13 Jun 2025, Ming Yu wrote:
+> >
+> > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
+> > > >
+> > > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > > >
+> > > > > Dear Lee,
+> > > > >
+> > > > > Thank you for reviewing,
+> > > > >
+> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
+> > > > > >
+> > > > > ...
+> > > > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > > +
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > > >
+> > > > > > Why have we gone back to this silly numbering scheme?
+> > > > > >
+> > > > > > What happened to using IDA in the child driver?
+> > > > > >
+> > > > >
+> > > > > In a previous version, I tried to maintain a static IDA in each
+> > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
+> > > > > devices are bound to the same driver — in that case, the IDs are not
+> > > > > fixed and become unusable for my purpose.
+> > > >
+> > > > Not sure I understand.
+> > > >
+> > >
+> > > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > > However, when a second NCT6694 device is connected to the system, it
+> > > will receive IDs 16~31.
+> > > Because of this behavior, I switched back to using platform_device->id.
+> >
+> > Each of the devices will probe once.
+> >
+> > The first one will be given 0, the second will be given 1, etc.
+> >
+> > Why would you give multiple IDs to a single device bound to a driver?
+> >
 > 
-> I will defer the review to Greg on this.
+> The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
+> adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+> is independently addressable, has its own register region, and can
+> operate in isolation. The IDs are used to distinguish between these
+> instances.
+> For example, the GPIO driver will be probed 16 times, allocating 16
+> separate gpio_chip instances to control 8 GPIO lines each.
 > 
-> I am fine with the change if Greg is happy with it. :)
+> If another device binds to this driver, it is expected to expose
+> peripherals with the same structure and behavior.
 
-Well the build errors aren't that good, but overall, yes, it's a nice
-change :)
+I still don't see why having a per-device IDA wouldn't render each
+probed device with its own ID.  Just as you have above.
 
-thanks,
-
-greg k-h
+-- 
+Lee Jones [李琼斯]
 
