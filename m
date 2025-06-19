@@ -1,106 +1,180 @@
-Return-Path: <linux-usb+bounces-24922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7E74AE08B0
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 16:26:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B815AE0A52
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 17:25:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 575AA1890EAD
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 14:26:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCCBB16F3F4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 15:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F35F21D3F6;
-	Thu, 19 Jun 2025 14:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A547A225788;
+	Thu, 19 Jun 2025 15:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="RfXK4v/A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJC2Vtci"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4751F5842
-	for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 14:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265001917CD;
+	Thu, 19 Jun 2025 15:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750343156; cv=none; b=HdCBgjdj+Hj2JFN+TdsBZ0BYyL9MaiNo+KG6jQGe1bANbSEl/0f8SYepnswhjHaKxjcUPfZIy/P1IkIJNTsTf7AehdkOG6EHx+TlHuKF/HHWifkhBPxXQtVyvT9XZnoqQGZ8pTQPd95zJrNqRhP3T/V3fVxJtXYDTJnD9GiKPdE=
+	t=1750346708; cv=none; b=UeRoU4rseEvJLHqFGrwH6py9pXk0dbLuu3G1TtxA+vfrUsWDAb5z5V26cQ4jv6YJX8nltOBmOujwkHMmWpunQ6Jgt9Ap0cxWi5xzs8YQmR6qp5F8uiop8pfC6TZVYzkG7407QICyjQOnNZcjIfpTTbgXu8hmK5AkUyB03fHHnck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750343156; c=relaxed/simple;
-	bh=XivIsKtLHxsnTwVlRhl4Dr8yCQ88AWH5wGjsQuso/gU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oFqhqccQ2tTAe5zg7YzbRIna7obqDfIz9/AMvygJ9egjE8uiR1GFPMmvllxpf2qxjJj9zGmLSpcbZtM1sEzZBDpOUwNxDE8Ofm6ocmIVCfrRWvD+9NscpzM3qtnnLrBKyV89uYW01PyAJdaMaUpI5GFp+lDlF+YMrywj0OUZ1U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=RfXK4v/A; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4a585dc5f4aso9035801cf.2
-        for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 07:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1750343154; x=1750947954; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDxodWZZFiLGzD+rmeop7HWG34rN9saTSNItB0iBSXQ=;
-        b=RfXK4v/AQrQn8u1D6IQkkveHHV7R8mSRQC3iwZ5WF9TNBqVE50bOk/nA56/RlroWF8
-         WsO8aDcQWq81dQjIRcnQuYly4BgJvCIPCYMcY6dW4nrobOpcbj5AlWhUIPp7JhIfJ702
-         AZY4fqqzVZi6BkDYKMiJl1NtYuTUF9X6VYW/wZYfz2mxUkkDH0hsLqW0YgeqolVmuLdK
-         XWs9iJlT+90wxRaccg9ESb5aqRdtZdw+tDxGewasHaNoL2dx2JSg7PycwpF55wzAUEt/
-         f4y7K7u4+KVtmb1TKmV2/gPy5uoslLQcB1KZr2pS9YoFylRlFMpfdpSEVMxNWUfHvzb5
-         F9uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750343154; x=1750947954;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aDxodWZZFiLGzD+rmeop7HWG34rN9saTSNItB0iBSXQ=;
-        b=IDEvj+fY2XLR4beHYdDcvVzXL4rFiLZShuf/AWQW3g/QqrKSMLqckXIqR6svuXLUJC
-         UDGYwBGPf1laXBZhMfzv2fAJIYuhTv+4AqCtdjSCyYvPwM+oGx8BlgVcw7F1wgE6wWT5
-         2RGfNUl9yOQIG2kdoBj0738te2jqBpt2e4KSx8aeWNgI4yvywiW4pYuZju2n+M9bVyxa
-         NbuW0YsGxikwzIdb9xOgxHB2JBzsTTcMbJJHRh+ZUH7bfjq8W7hEu+tLB5PbYJ84pefx
-         liwxw/O+tjVLYY91oJf7miiNI2HhqKUE+f4WVfOIlsGocJVKxjJx+BPNeiTdP1b35U0b
-         d58w==
-X-Forwarded-Encrypted: i=1; AJvYcCUdPzVKY6YsvRJoiFHaoXn3zmJQ56EV8YRUhhMfd47ADwVuQZAzKyeFPzDRv6a8bNvXqY88Oe4WnSw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkmAAmYIV5YTRkCGXm0nrW3QFrioZSxSq40qLY+LB7DyNLP53y
-	gnQa/6RZGdAiDTjZmtOQrmZiQGmTWtX4ILATQDq1e5/eVaVABL6GaF4rWSJbGlHeo/oeJkwEZOd
-	kfhs=
-X-Gm-Gg: ASbGnctIUgbd+rOmBpbvIftFoqYRP13u25cS3xATwbWPjYCa92kZ7slRmf9hxLvViBe
-	Sioc1AbNxGiYBPtxvOwjfZl+4l9bXUyDFCNNEGxQ6x/nwbStAdy4VxWQZm9RfVqymCZis+D0EM0
-	AVJosZm8SJbhHkvszLs+66/hVqEnoMlt4p2qm+DLwHjxjY1FhUkkUJfve+Uo8CWgcH8DgJHy6p9
-	kOC7X67Rw0TBApU831jjWZuUiVV4K1y6i68smJnwlgrsJgwOu0AHkI5HnbA01l3wtbE3IVJ7lSn
-	O0Y3ulagtGsOHN1XBGT9TEE92GUJj5R5A06PZG7etTh8UHq1KD/oMIePdvQz2c8=
-X-Google-Smtp-Source: AGHT+IHoxGFmOWyxo0l5cv3zNYUJJmLzJxOJmUnEXBZTUwO3KalFcEgAIn0/tUUNPftUnsVKxRmxVg==
-X-Received: by 2002:a05:620a:2a11:b0:7d0:99dc:d026 with SMTP id af79cd13be357-7d3c6c0c737mr2951152985a.12.1750343153662;
-        Thu, 19 Jun 2025 07:25:53 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::9ca8])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3f8dc9378sm3558485a.9.2025.06.19.07.25.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 07:25:53 -0700 (PDT)
-Date: Thu, 19 Jun 2025 10:25:50 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
-Cc: gregkh@linuxfoundation.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ehci: replace scnprintf() with sysfs_emit()
-Message-ID: <20d37e05-c496-499a-97a2-bcde9b7fe958@rowland.harvard.edu>
-References: <20250619120711.552662-1-hendrik.hamerlinck@hammernet.be>
+	s=arc-20240116; t=1750346708; c=relaxed/simple;
+	bh=QuMCe32n2jXZF4TjVOnNTrne2sMCYVjrFrv05fJ6uWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LidFYBVAIb6m4d5MkgNtsm2oDUvU7jxOKI6heOjeMna+hICUoOZ4RdrI1n56IZTq/cV/kuk1SrsCC4JfFLJtN+IEyCwyFZvN1oLLH6C/froXkliwUk+QUdKNqQnZwnxjt242s+/0YhAdplguN3zdipANdCEaeGgINWOG2Zg0ko8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJC2Vtci; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06D6C4CEEA;
+	Thu, 19 Jun 2025 15:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750346707;
+	bh=QuMCe32n2jXZF4TjVOnNTrne2sMCYVjrFrv05fJ6uWo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WJC2VtcinPqfIVB8eEXkNXgozwIKAWIE7I36+f81lB5hPhDR16/c7aQ7SBW862f2B
+	 coe7n3JLgEMeOfQW1wzNXUcd3NtrXevBI+u6XSaAKGtAmuigjqrVQ2KCQJP1cSqb8q
+	 iqVCkwFujfNghpvxZ6eoW4t0735Eqs70znQYvm2vnzNsnhXcT/+43xv8Df8SZgg99k
+	 gLxqW11EVcbz6PkFSWvSnLORXUYWxGBmBBfwft8IkHTOz75vv5C3WZiDXcwH624a7A
+	 TLr81B09MTcsMRIWTde/gVErl8e3PlTq2TVCwkvCqkIS8JsUE+3OKMHScmdNYD3x9V
+	 AOf8icLj738ew==
+From: Mario Limonciello <superm1@kernel.org>
+To: mario.limonciello@amd.com,
+	andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	westeri@kernel.org,
+	YehezkelShB@gmail.com
+Cc: stable@vger.kernel.org,
+	Alexander Kovacs <Alexander.Kovacs@amd.com>,
+	mika.westerberg@linux.intel.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2] thunderbolt: Fix wake on connect at runtime
+Date: Thu, 19 Jun 2025 10:24:58 -0500
+Message-ID: <20250619152501.697723-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250619120711.552662-1-hendrik.hamerlinck@hammernet.be>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 19, 2025 at 02:07:11PM +0200, Hendrik Hamerlinck wrote:
-> Per Documentation/filesystems/sysfs.rst, show() methods should only
-> use sysfs_emit() or sysfs_emit_at() when formatting values to be
-> returned to userspace.
-> 
-> Convert the uses of scnprintf() in sysfs show() methods to
-> sysfs_emit() and sysfs_emit_at() for better safety and consistency.
-> 
-> Signed-off-by: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
-> ---
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+commit 1a760d10ded37 ("thunderbolt: Fix a logic error in wake on connect")
+fixated on the USB4 port sysfs wakeup file not working properly to control
+policy, but it had an unintended side effect that the sysfs file controls
+policy both at runtime and at suspend time. The sysfs file is supposed to
+only control behavior while system is suspended.
+
+Pass whether programming a port for runtime into usb4_switch_set_wake()
+and if runtime then ignore the value in the sysfs file.
+
+Cc: stable@vger.kernel.org
+Reported-by: Alexander Kovacs <Alexander.Kovacs@amd.com>
+Tested-by: Alexander Kovacs <Alexander.Kovacs@amd.com>
+Fixes: 1a760d10ded37 ("thunderbolt: Fix a logic error in wake on connect")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v2:
+ * Fix kdoc issue reported by lkp robot
+---
+ drivers/thunderbolt/switch.c |  8 ++++----
+ drivers/thunderbolt/tb.h     |  2 +-
+ drivers/thunderbolt/usb4.c   | 10 +++++-----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 28febb95f8fa1..e9809fb57c354 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -3437,7 +3437,7 @@ void tb_sw_set_unplugged(struct tb_switch *sw)
+ 	}
+ }
+ 
+-static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
++static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime)
+ {
+ 	if (flags)
+ 		tb_sw_dbg(sw, "enabling wakeup: %#x\n", flags);
+@@ -3445,7 +3445,7 @@ static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 		tb_sw_dbg(sw, "disabling wakeup\n");
+ 
+ 	if (tb_switch_is_usb4(sw))
+-		return usb4_switch_set_wake(sw, flags);
++		return usb4_switch_set_wake(sw, flags, runtime);
+ 	return tb_lc_set_wake(sw, flags);
+ }
+ 
+@@ -3521,7 +3521,7 @@ int tb_switch_resume(struct tb_switch *sw, bool runtime)
+ 		tb_switch_check_wakes(sw);
+ 
+ 	/* Disable wakes */
+-	tb_switch_set_wake(sw, 0);
++	tb_switch_set_wake(sw, 0, true);
+ 
+ 	err = tb_switch_tmu_init(sw);
+ 	if (err)
+@@ -3603,7 +3603,7 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
+ 		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
+ 	}
+ 
+-	tb_switch_set_wake(sw, flags);
++	tb_switch_set_wake(sw, flags, runtime);
+ 
+ 	if (tb_switch_is_usb4(sw))
+ 		usb4_switch_set_sleep(sw);
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 87afd5a7c504b..f503bad864130 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1317,7 +1317,7 @@ int usb4_switch_read_uid(struct tb_switch *sw, u64 *uid);
+ int usb4_switch_drom_read(struct tb_switch *sw, unsigned int address, void *buf,
+ 			  size_t size);
+ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw);
+-int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags);
++int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime);
+ int usb4_switch_set_sleep(struct tb_switch *sw);
+ int usb4_switch_nvm_sector_size(struct tb_switch *sw);
+ int usb4_switch_nvm_read(struct tb_switch *sw, unsigned int address, void *buf,
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index fce3c0f2354a7..d46d9434933c4 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -403,10 +403,11 @@ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw)
+  * usb4_switch_set_wake() - Enabled/disable wake
+  * @sw: USB4 router
+  * @flags: Wakeup flags (%0 to disable)
++ * @runtime: Wake is being programmed during system runtime
+  *
+  * Enables/disables router to wake up from sleep.
+  */
+-int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
++int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime)
+ {
+ 	struct usb4_port *usb4;
+ 	struct tb_port *port;
+@@ -438,13 +439,12 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 			val |= PORT_CS_19_WOU4;
+ 		} else {
+ 			bool configured = val & PORT_CS_19_PC;
++			bool wakeup = runtime || device_may_wakeup(&usb4->dev);
+ 			usb4 = port->usb4;
+ 
+-			if (((flags & TB_WAKE_ON_CONNECT) &&
+-			      device_may_wakeup(&usb4->dev)) && !configured)
++			if ((flags & TB_WAKE_ON_CONNECT) && wakeup && !configured)
+ 				val |= PORT_CS_19_WOC;
+-			if (((flags & TB_WAKE_ON_DISCONNECT) &&
+-			      device_may_wakeup(&usb4->dev)) && configured)
++			if ((flags & TB_WAKE_ON_DISCONNECT) && wakeup && configured)
+ 				val |= PORT_CS_19_WOD;
+ 			if ((flags & TB_WAKE_ON_USB4) && configured)
+ 				val |= PORT_CS_19_WOU4;
+-- 
+2.43.0
+
 
