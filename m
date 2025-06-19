@@ -1,180 +1,191 @@
-Return-Path: <linux-usb+bounces-24923-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24924-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B815AE0A52
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 17:25:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B723AE0A77
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 17:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCCBB16F3F4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 15:25:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BFDA188F2DC
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 15:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A547A225788;
-	Thu, 19 Jun 2025 15:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0BC235046;
+	Thu, 19 Jun 2025 15:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJC2Vtci"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtEyfa2K"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265001917CD;
-	Thu, 19 Jun 2025 15:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E023085DB;
+	Thu, 19 Jun 2025 15:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750346708; cv=none; b=UeRoU4rseEvJLHqFGrwH6py9pXk0dbLuu3G1TtxA+vfrUsWDAb5z5V26cQ4jv6YJX8nltOBmOujwkHMmWpunQ6Jgt9Ap0cxWi5xzs8YQmR6qp5F8uiop8pfC6TZVYzkG7407QICyjQOnNZcjIfpTTbgXu8hmK5AkUyB03fHHnck=
+	t=1750346901; cv=none; b=lAVDOS7/lcSUPqoZbHHgIueyFRYRSpTZycSgTi2ZbjExpjYo0FQVgDhuEEpHKj35pwQ+MpYA9V1uY3Nrx7Zj/ROJms1vikHVP/WDF11Gny5sBWxZ8gTne+ru9AIOLGKUAMkUr/N9mEN6jo8a2h4jUyQvmigy0u9DF//ETqqo0us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750346708; c=relaxed/simple;
-	bh=QuMCe32n2jXZF4TjVOnNTrne2sMCYVjrFrv05fJ6uWo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LidFYBVAIb6m4d5MkgNtsm2oDUvU7jxOKI6heOjeMna+hICUoOZ4RdrI1n56IZTq/cV/kuk1SrsCC4JfFLJtN+IEyCwyFZvN1oLLH6C/froXkliwUk+QUdKNqQnZwnxjt242s+/0YhAdplguN3zdipANdCEaeGgINWOG2Zg0ko8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJC2Vtci; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06D6C4CEEA;
-	Thu, 19 Jun 2025 15:25:06 +0000 (UTC)
+	s=arc-20240116; t=1750346901; c=relaxed/simple;
+	bh=nkBVuy8yaSRVyY7240jNJJUyi5FunCZ+peQkhFA/csM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FpPcsarb3ZkS2yenQdTwbl1sEcdDb4b+XBqz1xBN/b9HH1ecVWsUXObt/nAMPCJI27vFQq8QlLA4tsiX5rGMimzK+60E57ghnXSnn8cqpBT9DCEQJ5r2Q+ZFeI9DjUNUERc50po21EpIf3IWOTvtVZGqZsTNniRIfAcM80L0Bw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtEyfa2K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DFBC4CEEA;
+	Thu, 19 Jun 2025 15:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750346707;
-	bh=QuMCe32n2jXZF4TjVOnNTrne2sMCYVjrFrv05fJ6uWo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=WJC2VtcinPqfIVB8eEXkNXgozwIKAWIE7I36+f81lB5hPhDR16/c7aQ7SBW862f2B
-	 coe7n3JLgEMeOfQW1wzNXUcd3NtrXevBI+u6XSaAKGtAmuigjqrVQ2KCQJP1cSqb8q
-	 iqVCkwFujfNghpvxZ6eoW4t0735Eqs70znQYvm2vnzNsnhXcT/+43xv8Df8SZgg99k
-	 gLxqW11EVcbz6PkFSWvSnLORXUYWxGBmBBfwft8IkHTOz75vv5C3WZiDXcwH624a7A
-	 TLr81B09MTcsMRIWTde/gVErl8e3PlTq2TVCwkvCqkIS8JsUE+3OKMHScmdNYD3x9V
-	 AOf8icLj738ew==
-From: Mario Limonciello <superm1@kernel.org>
-To: mario.limonciello@amd.com,
-	andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	westeri@kernel.org,
-	YehezkelShB@gmail.com
-Cc: stable@vger.kernel.org,
-	Alexander Kovacs <Alexander.Kovacs@amd.com>,
-	mika.westerberg@linux.intel.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v2] thunderbolt: Fix wake on connect at runtime
-Date: Thu, 19 Jun 2025 10:24:58 -0500
-Message-ID: <20250619152501.697723-1-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20201202; t=1750346901;
+	bh=nkBVuy8yaSRVyY7240jNJJUyi5FunCZ+peQkhFA/csM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UtEyfa2K8XZUovYXxPzSvi1B6sGFrKKf5w0404gJgSUfaiqDcwouKi3F5OY2vJRwH
+	 tEgizBKEFsPK6NAhMu9Y/vxnEiUcvIgudryHoLidQKCNtyMfMFsbJ2KRPgMJellZkA
+	 DvsqCB6tYVkm6bWc8YNG5fVkPRo/+2b0M2llnbJmkeyb8A8BZalVR1qZTL0MUwtMjE
+	 fUbvdqYyJCLosgCmBnjTwqMXDbtNCghKERGQ0pxjoJRXMrAY/Q926eA1djUl3KWfyo
+	 xa2Jztnw1w/aJ8IC1u3MaO2fGMLXMAcNndfCWf8NMyngNoWUdvkQjvLl/VzhJRKUUr
+	 tkiEIDhWMvGcg==
+Date: Thu, 19 Jun 2025 16:28:14 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250619152814.GK795775@google.com>
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
+ <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com>
+ <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+ <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+ <20250619115345.GL587864@google.com>
+ <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Thu, 19 Jun 2025, Ming Yu wrote:
 
-commit 1a760d10ded37 ("thunderbolt: Fix a logic error in wake on connect")
-fixated on the USB4 port sysfs wakeup file not working properly to control
-policy, but it had an unintended side effect that the sysfs file controls
-policy both at runtime and at suspend time. The sysfs file is supposed to
-only control behavior while system is suspended.
+> Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
+> >
+> > On Fri, 13 Jun 2025, Ming Yu wrote:
+> >
+> > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+> > > >
+> > > > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > > >
+> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
+> > > > > >
+> > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > > > > >
+> > > > > > > Dear Lee,
+> > > > > > >
+> > > > > > > Thank you for reviewing,
+> > > > > > >
+> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
+> > > > > > > >
+> > > > > > > ...
+> > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > > > > +
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > > > > >
+> > > > > > > > Why have we gone back to this silly numbering scheme?
+> > > > > > > >
+> > > > > > > > What happened to using IDA in the child driver?
+> > > > > > > >
+> > > > > > >
+> > > > > > > In a previous version, I tried to maintain a static IDA in each
+> > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
+> > > > > > > devices are bound to the same driver — in that case, the IDs are not
+> > > > > > > fixed and become unusable for my purpose.
+> > > > > >
+> > > > > > Not sure I understand.
+> > > > > >
+> > > > >
+> > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > > > > However, when a second NCT6694 device is connected to the system, it
+> > > > > will receive IDs 16~31.
+> > > > > Because of this behavior, I switched back to using platform_device->id.
+> > > >
+> > > > Each of the devices will probe once.
+> > > >
+> > > > The first one will be given 0, the second will be given 1, etc.
+> > > >
+> > > > Why would you give multiple IDs to a single device bound to a driver?
+> > > >
+> > >
+> > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
+> > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+> > > is independently addressable, has its own register region, and can
+> > > operate in isolation. The IDs are used to distinguish between these
+> > > instances.
+> > > For example, the GPIO driver will be probed 16 times, allocating 16
+> > > separate gpio_chip instances to control 8 GPIO lines each.
+> > >
+> > > If another device binds to this driver, it is expected to expose
+> > > peripherals with the same structure and behavior.
+> >
+> > I still don't see why having a per-device IDA wouldn't render each
+> > probed device with its own ID.  Just as you have above.
+> >
+> 
+> For example, when the MFD driver and the I2C sub-driver are loaded,
+> connecting the first NCT6694 USB device to the system results in 6
+> nct6694-i2c platform devices being created and bound to the
+> i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
+> 
+> However, when a second NCT6694 USB device is connected, its
+> corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
+> instead of 0 through 5 as I originally expected.
+> 
+> If I've misunderstood something, please feel free to correct me. Thank you!
 
-Pass whether programming a port for runtime into usb4_switch_set_wake()
-and if runtime then ignore the value in the sysfs file.
+In the code above you register 6 I2C devices.  Each device will be
+assigned a platform ID 0 through 5. The .probe() function in the I2C
+driver will be executed 6 times.  In each of those calls to .probe(),
+instead of pre-allocating a contiguous assignment of IDs here, you
+should be able to use IDA in .probe() to allocate those same device IDs
+0 through 5.
 
-Cc: stable@vger.kernel.org
-Reported-by: Alexander Kovacs <Alexander.Kovacs@amd.com>
-Tested-by: Alexander Kovacs <Alexander.Kovacs@amd.com>
-Fixes: 1a760d10ded37 ("thunderbolt: Fix a logic error in wake on connect")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2:
- * Fix kdoc issue reported by lkp robot
----
- drivers/thunderbolt/switch.c |  8 ++++----
- drivers/thunderbolt/tb.h     |  2 +-
- drivers/thunderbolt/usb4.c   | 10 +++++-----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+What am I missing here?
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 28febb95f8fa1..e9809fb57c354 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -3437,7 +3437,7 @@ void tb_sw_set_unplugged(struct tb_switch *sw)
- 	}
- }
- 
--static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
-+static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime)
- {
- 	if (flags)
- 		tb_sw_dbg(sw, "enabling wakeup: %#x\n", flags);
-@@ -3445,7 +3445,7 @@ static int tb_switch_set_wake(struct tb_switch *sw, unsigned int flags)
- 		tb_sw_dbg(sw, "disabling wakeup\n");
- 
- 	if (tb_switch_is_usb4(sw))
--		return usb4_switch_set_wake(sw, flags);
-+		return usb4_switch_set_wake(sw, flags, runtime);
- 	return tb_lc_set_wake(sw, flags);
- }
- 
-@@ -3521,7 +3521,7 @@ int tb_switch_resume(struct tb_switch *sw, bool runtime)
- 		tb_switch_check_wakes(sw);
- 
- 	/* Disable wakes */
--	tb_switch_set_wake(sw, 0);
-+	tb_switch_set_wake(sw, 0, true);
- 
- 	err = tb_switch_tmu_init(sw);
- 	if (err)
-@@ -3603,7 +3603,7 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
- 		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
- 	}
- 
--	tb_switch_set_wake(sw, flags);
-+	tb_switch_set_wake(sw, flags, runtime);
- 
- 	if (tb_switch_is_usb4(sw))
- 		usb4_switch_set_sleep(sw);
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 87afd5a7c504b..f503bad864130 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1317,7 +1317,7 @@ int usb4_switch_read_uid(struct tb_switch *sw, u64 *uid);
- int usb4_switch_drom_read(struct tb_switch *sw, unsigned int address, void *buf,
- 			  size_t size);
- bool usb4_switch_lane_bonding_possible(struct tb_switch *sw);
--int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags);
-+int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime);
- int usb4_switch_set_sleep(struct tb_switch *sw);
- int usb4_switch_nvm_sector_size(struct tb_switch *sw);
- int usb4_switch_nvm_read(struct tb_switch *sw, unsigned int address, void *buf,
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index fce3c0f2354a7..d46d9434933c4 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -403,10 +403,11 @@ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw)
-  * usb4_switch_set_wake() - Enabled/disable wake
-  * @sw: USB4 router
-  * @flags: Wakeup flags (%0 to disable)
-+ * @runtime: Wake is being programmed during system runtime
-  *
-  * Enables/disables router to wake up from sleep.
-  */
--int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
-+int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags, bool runtime)
- {
- 	struct usb4_port *usb4;
- 	struct tb_port *port;
-@@ -438,13 +439,12 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
- 			val |= PORT_CS_19_WOU4;
- 		} else {
- 			bool configured = val & PORT_CS_19_PC;
-+			bool wakeup = runtime || device_may_wakeup(&usb4->dev);
- 			usb4 = port->usb4;
- 
--			if (((flags & TB_WAKE_ON_CONNECT) &&
--			      device_may_wakeup(&usb4->dev)) && !configured)
-+			if ((flags & TB_WAKE_ON_CONNECT) && wakeup && !configured)
- 				val |= PORT_CS_19_WOC;
--			if (((flags & TB_WAKE_ON_DISCONNECT) &&
--			      device_may_wakeup(&usb4->dev)) && configured)
-+			if ((flags & TB_WAKE_ON_DISCONNECT) && wakeup && configured)
- 				val |= PORT_CS_19_WOD;
- 			if ((flags & TB_WAKE_ON_USB4) && configured)
- 				val |= PORT_CS_19_WOU4;
 -- 
-2.43.0
-
+Lee Jones [李琼斯]
 
