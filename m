@@ -1,164 +1,149 @@
-Return-Path: <linux-usb+bounces-24915-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24916-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F89EAE0464
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 13:54:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D4F2AE0511
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 14:08:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40D473A8133
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 11:53:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9EC5175BAE
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 12:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4819022FAD4;
-	Thu, 19 Jun 2025 11:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B251252299;
+	Thu, 19 Jun 2025 12:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLK1SjZk"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oKYlR/i3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE8521FF26;
-	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E9F246BB4
+	for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 12:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334032; cv=none; b=s+P+uH55Ibacxvjb7GtNO5Iew/h5QcYDdyKt6OOWhBYj3ZkKaieilmOUhE7g2my+wLc3K1o10pwJ5D/B8C768tfMZY34/jamT8ZJcNW/pf2hPfwf5/d+wwdUH2bQbAII7uz49lIWpo3Qj5e9Gg90uUpR3r+XCqZNMmNydoid5F4=
+	t=1750334631; cv=none; b=NUWWaazq4dtoZINFTQIMbvUNMD8Ejel+RiOPJAQeqXE3/GZ/tByAfHdUoqlQQ7J3biFJBAp+NNxvn2nGshQ5UhqMrr4Bcfv84z3HdommFLUVebNdx3JFQxXdhSftLwfLiiZuLmu5Snz/m5SX9V2iYKouTmcSNDCO/1dtUFNdI1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334032; c=relaxed/simple;
-	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NSf9Nhytq9rykCyvfgCBC5HfpXUckT+wNhN1p6gWDaG/xN43ROh+VKDxa3pRNlIe5R1PZXNKFd1Tr9r9MIYbqVMw10EbcrxCAM2jGxRuCm28JO3EPvJxuItvKknaiX86m6zvCbeuhx1YFtUTRnBhGewiPDXIwvOV4fR3zdmG5XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLK1SjZk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61C3C4CEEA;
-	Thu, 19 Jun 2025 11:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750334032;
-	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TLK1SjZkJKtOa2GDJx0KT8zWbLM0Onmv52DVFQ4AgL5lHXTrikKxzDBx0mCXJu0EN
-	 Kikw4V92eV1H6BgfWAD0506FOAnY8rnH1rNzo65+cKAO7IxMzGgfpByWyUWKoN/oQZ
-	 a/375VH0yWoRtXkMpmxMPNo+RdAMgQClaCjI+Lt8kFC68jMuzWKaiaPhAm3LPn25eI
-	 5Vy86Tzf6tejlWflhZQN+1rjxhvEe5apntIF1YAuOrVyqUvW7YVikRy+Q996WPIZP4
-	 kAlTbt4BkJHrwYniPmoJu47rcDrOBqbU6tXRNpgMfWqdRT9Ggd1nwTem3wpNIbwqLL
-	 kNsKtxHhfGesA==
-Date: Thu, 19 Jun 2025 12:53:45 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250619115345.GL587864@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com>
- <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com>
- <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+	s=arc-20240116; t=1750334631; c=relaxed/simple;
+	bh=BYv1wKzoEogSiFAnybZR9Kuco3a8+54+9dV70GXXuV8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iXxEpCQQMw2R88nEOBAbf7AtE4grJJIq84BNyAjTFQ05Rc6zoAiTVRkYa7q3cJ77hthGKx34BwoeAe6o30Oey8mKK5mf7EpQhGlhzBLlNzKec+px97QFN6eC0nCXRdLsN+Mffj8na9U7AkLtmoi791skVCGC4CMvfTIEkFw7QXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oKYlR/i3; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55J4fjSY005657
+	for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 12:03:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=5nn72h/qaf4NeAzriwbTHooNzuUElEUmweZ
+	aL3/DEzs=; b=oKYlR/i3W5WhSERMx040GTIyHrcKJiIpOXI2fhxUvVBrvvcuP3O
+	0qGVI32ia2XWmlAfvXkEkV3KG7jUT7meC0Eo/jsC7N9uW+hEupA6EqONx43PDDTB
+	QTNZNUOGpgu/iotcyYZG2587HqCtUUu+LbYMKe1Fa7rT8IX4iXRiAJGCWCm2XTmf
+	5TJjnmJz8psoEE250vpieSv9tso1AqhL/3UTGz+Ibfh+EyEmXbcd2Znig5+L9q3f
+	0DAjaxI5wL6lEEkDjaeCgS0V04fxwVElZeWCJO06Bv1NdCSc1PY3dFIKEKckR3/a
+	do9Sgzz3XOs3YA7gcvwUKvD6O07KwV5+58Q==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47c0rvk1qt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 12:03:48 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-747d29e90b4so755737b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 05:03:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750334626; x=1750939426;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5nn72h/qaf4NeAzriwbTHooNzuUElEUmweZaL3/DEzs=;
+        b=NeNuckrAqdjo4/fnzsfZpvjJMxjbHCCVX7z5/o++q4NAu8dR5BqFOxu1oeX0vFtxRB
+         Nq0iAtifguzRcFQRBGbhCFU0LSIpouL1ZvU5v21ccxAienBXYFTKHH43y/ndfiD7h+c9
+         HR3AwAgxvAu/BK3aNnINEJ3QlS7pxU33ciEKcHjTMtXT+6pa9RmNRk+IWhsROzKfqCfb
+         9B7H9gywD/Bc5MLWcmm1osimqqMhgEezLvBaioz5WIaOLRG9Oc7HTnKQxaRhsCmMZ8MA
+         9z1DmeYRyfGJTU/RY2qSu3cwnLslQdIx6bQcM1JXBAE+TRwyzCdsO7kMz1KHWVULhovP
+         8k8w==
+X-Gm-Message-State: AOJu0YwtO1n4t5ugg2jPSGCLq8xZljJrmhVqS9FuTbsRO5nEG2zNKLZe
+	CrkibwmSFESqxoXwHIz7kjfG2ty8Xds9jdQYe6hWem7YIJJw0wctZu1L6qJRHUVyhCgy1odhj8u
+	axocU+EZAXeUGpPCiA5rmlZ4hlx6rFf9+sOWq0UvtrAEEUBRaeGMp+ywPQo/62QVULk7T2SA=
+X-Gm-Gg: ASbGncttiuWk2CAUoanMgCfrfqSfWtEHyer6r/ShOD8+NaUv1Bm6AemOFYsp8OgNNgJ
+	ntLa3LDnTQG2UtAX3lQlzLskfE7on1UsLkbIHjMapJFSsmreSmdlQzylqSRd3QV/ChI2Pr/4YC/
+	Ivm5OLXlCNaibOSq4cfN5fEErtnpIBHsLJyRWqp9hgIkbY6cLTQ/vS+DwPiKmzDVqwJ+HcWCCP5
+	oPO5SnA4QwJRMJ1neX6+DiOanEkW1Ehj/+ek/jjnZZ0aG0QnTGURk2jsDVSa2RdiV5D4gqE6suk
+	OJcV9qTiKnI8nbRRTNNzxDuChBEKorZh/g6w2GBLFEAV3pmaX+w=
+X-Received: by 2002:a05:6a00:4b4a:b0:736:5c8e:baaa with SMTP id d2e1a72fcca58-7489cfc2784mr27835387b3a.2.1750334626445;
+        Thu, 19 Jun 2025 05:03:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEhH0iV1FehZN/HsECMB0SAFpUyNm20MWg0wM1POjItQCw6FXfAX2uMuWWmq9njzsMHDO4LkA==
+X-Received: by 2002:a05:6a00:4b4a:b0:736:5c8e:baaa with SMTP id d2e1a72fcca58-7489cfc2784mr27835345b3a.2.1750334625933;
+        Thu, 19 Jun 2025 05:03:45 -0700 (PDT)
+Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d2554sm13500312b3a.170.2025.06.19.05.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 05:03:45 -0700 (PDT)
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prashanth K <prashanth.k@oss.qualcomm.com>
+Subject: [PATCH] usb: dwc3: gadget: Remove duplicate check while setting xfer resource
+Date: Thu, 19 Jun 2025 17:33:39 +0530
+Message-Id: <20250619120339.847708-1-prashanth.k@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDEwMCBTYWx0ZWRfX2LdhpHOUGZ6G
+ WZnNNl/hNk+nmeAlvVcboQbI+oq2F9hYQMuuLvrlsIksimFMHiz3EtCuiLyVlidcwIpM9jCieTA
+ q3M4i/E59/08Du+JQYwj0C7eX5V4gmPtWsR+qvfrC93sXw7C5qSPuAgb8WPgG6l3ddz5YFxvHIU
+ lYZnR/z5QtzjLYHLoEx2cKxDnJ8djAdo+Q3t7WXkXY6kt45GVu3SUQUdNHMmX1w67FW3M3rcu0d
+ ZPjIN9NSyM8TPxWlha+O5g6PF8z34TXJpJT2PR+3f73h+JBsmESm7LXgLPzksmgcS6lFfbxru4/
+ +bN6Dff5FnLKIJT/rU5OLK8p3fOdXmunGrcflAttO8a+d1+JAb8XKo3ZwheyA6TJ8Kz8bcEtYnQ
+ WoRNjWZjZwzKvA57Wr3bdORZbSug9JRiTpYDygqfSNPfKk+0qVzy2PRN+xUgbIIP22sXcaiW
+X-Proofpoint-GUID: vUomqvslLMLLmFa230MXJLA8bXdvfYwe
+X-Authority-Analysis: v=2.4 cv=btJMBFai c=1 sm=1 tr=0 ts=6853fca4 cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=Ue6Mik-S3He3DxBvPj4A:9
+ a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-ORIG-GUID: vUomqvslLMLLmFa230MXJLA8bXdvfYwe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-19_04,2025-06-18_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 malwarescore=0 spamscore=0 mlxlogscore=785
+ bulkscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506190100
 
-On Fri, 13 Jun 2025, Ming Yu wrote:
+Remove the duplicate check for DWC3_EP_RESOURCE_ALLOCATED flag,
+as its already checked inside dwc3_gadget_set_xfer_resource()
 
-> Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
-> >
-> > On Fri, 13 Jun 2025, Ming Yu wrote:
-> >
-> > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
-> > > >
-> > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > >
-> > > > > Dear Lee,
-> > > > >
-> > > > > Thank you for reviewing,
-> > > > >
-> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> > > > > >
-> > > > > ...
-> > > > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > > +
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > > >
-> > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > >
-> > > > > > What happened to using IDA in the child driver?
-> > > > > >
-> > > > >
-> > > > > In a previous version, I tried to maintain a static IDA in each
-> > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
-> > > > > devices are bound to the same driver — in that case, the IDs are not
-> > > > > fixed and become unusable for my purpose.
-> > > >
-> > > > Not sure I understand.
-> > > >
-> > >
-> > > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > > However, when a second NCT6694 device is connected to the system, it
-> > > will receive IDs 16~31.
-> > > Because of this behavior, I switched back to using platform_device->id.
-> >
-> > Each of the devices will probe once.
-> >
-> > The first one will be given 0, the second will be given 1, etc.
-> >
-> > Why would you give multiple IDs to a single device bound to a driver?
-> >
-> 
-> The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
-> adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-> is independently addressable, has its own register region, and can
-> operate in isolation. The IDs are used to distinguish between these
-> instances.
-> For example, the GPIO driver will be probed 16 times, allocating 16
-> separate gpio_chip instances to control 8 GPIO lines each.
-> 
-> If another device binds to this driver, it is expected to expose
-> peripherals with the same structure and behavior.
+Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+---
+ drivers/usb/dwc3/gadget.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-I still don't see why having a per-device IDA wouldn't render each
-probed device with its own ID.  Just as you have above.
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 321361288935..e45f7cb17d72 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -924,11 +924,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!(dep->flags & DWC3_EP_RESOURCE_ALLOCATED)) {
+-		ret = dwc3_gadget_set_xfer_resource(dep);
+-		if (ret)
+-			return ret;
+-	}
++	ret = dwc3_gadget_set_xfer_resource(dep);
++	if (ret)
++		return ret;
+ 
+ 	if (!(dep->flags & DWC3_EP_ENABLED)) {
+ 		struct dwc3_trb	*trb_st_hw;
 -- 
-Lee Jones [李琼斯]
+2.25.1
+
 
