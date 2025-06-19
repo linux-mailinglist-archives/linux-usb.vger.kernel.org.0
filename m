@@ -1,55 +1,53 @@
-Return-Path: <linux-usb+bounces-24911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24912-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65342AE01DC
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 11:40:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C25AE02C6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 12:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9645B188562B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 09:40:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6842189F191
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 10:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38E6218851;
-	Thu, 19 Jun 2025 09:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099B62248B9;
+	Thu, 19 Jun 2025 10:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oLY2Jgmb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eb6tu/4s"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEB91E3DE8;
-	Thu, 19 Jun 2025 09:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E340224234;
+	Thu, 19 Jun 2025 10:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750326004; cv=none; b=Fwh7J3YRrv0TVXbkrFAkggPX3p+decC1nQPxgBgQGF7tTPqRIk4tyTT8ebbGHi1oCuwq45pshE3kO+goq7PqAfmiRdBZNiWvT/iiUDoA80Ul8Paib11pyVJL2cVMC6+Kl02HEmnQzJWE4HWgVjCMJJO05lPgy7lU866Dg1Nz1V0=
+	t=1750329335; cv=none; b=fzT1fTnmNpNOALCliR24yfV8gRDmhBrNDJbGue4fdi9/Oy1r13Ni5a/bdiUyeaWfp6xKdkKXZDQIKn3oE7yG6aTOTfTnLZhHDBC815frp/wyeXfikcQs5exRXcTD+lTJH50sYnd0AkpYhaIogR5NRyLBUPkWuip8FGQuBzoU05w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750326004; c=relaxed/simple;
-	bh=fZlPKatLYwNanCWk1nXGV7+CVjeRqV2c1wAmnP45Qm4=;
+	s=arc-20240116; t=1750329335; c=relaxed/simple;
+	bh=/ovHqXT6Fuayc9VrPcOHFmgWIiw9d4rNMOeKWBJe2sQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qgTnMOItZqceMJnARBVaC+FeMj25+24oabDzn2TYV9iLLM2XTKvYl6tL6Vg/Jto+bnQhDCBjp4arqgf0jgQAI5mC9Kj0tJIneKgvTHmv3k0Znz8ccojSntEJvUqRelqU5Xlv/Lf4cfoF7ZhqLsNHs4P3ydl7A2QuppJLTIyRCCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oLY2Jgmb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A77C4CEEA;
-	Thu, 19 Jun 2025 09:40:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YREnClHfTWZ98YHbiJxrWUPgB/ZcUE9NJG8SZ3G2eWBh5MDDsEFDY6HFK8oaa0ULsna2TGE/tNlB2FoTd5sN9OyNXs4dwimiri8Dpmb1CGkS7mOlkfBAeL+M0KNuQNHug9wy0F1GVJsfShrE3onbYf+FjPYGYP972BHQ008TZHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eb6tu/4s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A93D4C4CEED;
+	Thu, 19 Jun 2025 10:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750326003;
-	bh=fZlPKatLYwNanCWk1nXGV7+CVjeRqV2c1wAmnP45Qm4=;
+	s=korg; t=1750329335;
+	bh=/ovHqXT6Fuayc9VrPcOHFmgWIiw9d4rNMOeKWBJe2sQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oLY2Jgmby5OXr8e6VFw0ZJRi0yWT9ESi+JJQ3OroiymaPBvBmDfMdRh0AIXs7Fxwa
-	 GO6RzZGwTEYNCFZvNVEp+oN/LkJdrZjFcv7vWwDDaG6VK4UmUiMi6ULgCqBeA38XMM
-	 m+6uYLCwzahdQ6WoOR2qITOTKl0uLZqFSvTRZqz0=
-Date: Thu, 19 Jun 2025 11:40:00 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: hsyemail2@gmail.com
-Cc: johan@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sheng-Yuan Huang <syhuang3@nuvoton.com>
-Subject: Re: [PATCH v2 1/1] USB: serial: nct_usb_serial: add support for
- Nuvoton USB adapter
-Message-ID: <2025061941-dexterous-basket-fc7f@gregkh>
-References: <2025060325-everyone-padlock-931a@gregkh>
- <20250604025154.10165-1-syhuang3@nuvoton.com>
- <20250604025154.10165-2-syhuang3@nuvoton.com>
+	b=eb6tu/4snZMbu+FSby+w2x7UTIGWGyj0wQPJAokfSP0MsD7cyHSTNYqhNpBNdx6hV
+	 ONv05hsBPHjr/EgSOFWqoK9iKp9hJ+f3KKv/G1KaPHm80lzy26m1bhkfHd3s9i6j/X
+	 hVlzNOytczBBG7gh69CK8ym3OwvLCBDB+JWlZ+00=
+Date: Thu, 19 Jun 2025 12:35:32 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	John Youn <John.Youn@synopsys.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v 4] usb: dwc2: gadget: Fix enter to hibernation for
+ UTMI+ PHY
+Message-ID: <2025061922-tripping-obsolete-abfd@gregkh>
+References: <35036b774510b46191500985ca6db57390d4a246.1748856956.git.Minas.Harutyunyan@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,30 +56,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250604025154.10165-2-syhuang3@nuvoton.com>
+In-Reply-To: <35036b774510b46191500985ca6db57390d4a246.1748856956.git.Minas.Harutyunyan@synopsys.com>
 
-On Wed, Jun 04, 2025 at 10:51:54AM +0800, hsyemail2@gmail.com wrote:
-> From: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+On Tue, Jun 03, 2025 at 07:16:32AM +0000, Minas Harutyunyan wrote:
+> For UTMI+ PHY, according to programming guide, first should be set
+> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
+> Remote Wakeup, then host notices disconnect instead.
+> For ULPI PHY, above mentioned bits must be set in reversed order:
+> STOPPCLK then PMUACTV.
 > 
-> Add support for the Nuvoton USB-to-serial adapter, which provides
-> multiple serial ports over a single USB interface.
-> 
-> The device exposes one control endpoint, one bulk-in endpoint, and
-> one bulk-out endpoint for data transfer. Port status is reported via
-> an interrupt-in or bulk-in endpoint, depending on device configuration.
-> 
-> This driver implements basic TTY operations.
-> 
-> Signed-off-by: Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
+> Cc: stable@vger.kernel.org
+> Reported-by: Tomasz Mon <tomasz.mon@nordicsemi.no>
+> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 > ---
->  drivers/usb/serial/nct_usb_serial.c | 1480 +++++++++++++++++++++++++++
->  1 file changed, 1480 insertions(+)
->  create mode 100644 drivers/usb/serial/nct_usb_serial.c
+>  Changes in v4:
+>  - Rebased on top of Linux 6.15-rc6
+>  Changes in v3:
+>  - Rebased on top of 6.15-rc4
+>  Changes in v2:
+>  - Added Cc: stable@vger.kernel.org
+> 
+>  drivers/usb/dwc2/gadget.c | 37 +++++++++++++++++++++++++------------
+>  1 file changed, 25 insertions(+), 12 deletions(-)
 
-This patch does not actually allow the .c file to be built, so how was
-this tested?
+Fails to apply on top of 6.16-rc2 :(
 
-confused,
-
-greg k-h
 
