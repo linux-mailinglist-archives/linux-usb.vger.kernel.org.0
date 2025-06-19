@@ -1,78 +1,53 @@
-Return-Path: <linux-usb+bounces-24902-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24903-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09991ADFBCA
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 05:16:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2C4ADFC1D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 06:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C733188179D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 03:16:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B95EE7ADCB1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Jun 2025 03:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8A822370F;
-	Thu, 19 Jun 2025 03:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6DB23A987;
+	Thu, 19 Jun 2025 04:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kgqULIaO"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dL5pI0S1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFAF747F;
-	Thu, 19 Jun 2025 03:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D28207A27;
+	Thu, 19 Jun 2025 04:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750302969; cv=none; b=QVaI895ToVNvaLPL1DWExOKLLKUhOE67LdrvlNXHhw8+IOtm802wmRuxFbA7qH2/A+euy0Rn+oM+LfyMBUC3GqTMcIMJ6bnl6gpaZyb0dYlMAMZ4uLHB/QVcVBRNsuXqJl/FXKI8DEL40uLo4mVh9n8Qc3MWPXCSyK2PFsPbtaw=
+	t=1750305667; cv=none; b=dnDfU2Ja9atPn/Skx7T9vP1mBEc7zR0OYU0f2cEw7stobA9x4sWucKWOsCwRu7VbWPBEt3izTPiXgZxGiu+0fnw4AiP9Waceqp6nAgR14fKCDQZQG9LYeJQNNT+G39YWrk3iegn1/DBnB9iHy9txSm85EAGtrMcV1C2595eFK14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750302969; c=relaxed/simple;
-	bh=5sH5Wz1HUKV90VGTx6qnpjtvAboF1jBUTgU2GkBERGc=;
+	s=arc-20240116; t=1750305667; c=relaxed/simple;
+	bh=uzfB+BZlFnvaD08LGcyN98GOijg8o/DIDcLcrxwZEog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qiEdM7PxswDyEHgvJ7yAH6pkcybtolmWXNlS16sKC0+8MTzHY0GqT9DT4b8t/J5TmquHouVhQj9GfrYDuRjzYlmxHT9d5SAuY2tnkeBvl0Gb+AIuHVmE3NvaoZt9mcwApzV/k4j+WXM8WxU34JSPffIxU6/0wnpmQZ32K61iTFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kgqULIaO; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750302967; x=1781838967;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5sH5Wz1HUKV90VGTx6qnpjtvAboF1jBUTgU2GkBERGc=;
-  b=kgqULIaO3cP3ogbPqcc3OgU5I7SYDuk8caxkSSVrAEC497xFru9hTxd4
-   1aAzwoGkQu1xIKFj1VN9NWG0mkcwUZUEEmHM1FeIDOM/eLbAAA1zp3H+z
-   tGjbl2Q5SknFERQYJcSSNf2ZOzT88sxnLPMmFfOQ26xtdElA6gYLBGGKo
-   YF+hlYxWEBA4bRzx3iaR/w02w78Hxf4Uol9OmGHqUOkivfmhV2vzWtcem
-   LJMdpQOiX1hF8ccgBN47HmWQHyvgIjNAr0dDo7bdDKKKo2VrW7Fzq4GoS
-   KG0VJNOSLeGcnCZ/DeebAJPZe3hiKZhHRx/9oxNrvGLBbrQLpQSDsDbtU
-   g==;
-X-CSE-ConnectionGUID: x7KsbY7pTbCYC+Vop7LfRw==
-X-CSE-MsgGUID: 5i0hITkbSbWnym9D+5dDLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52411221"
-X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
-   d="scan'208";a="52411221"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 20:16:07 -0700
-X-CSE-ConnectionGUID: hjOCqu8GQ3uqYhmM01HOgw==
-X-CSE-MsgGUID: 0YJZIqslRDWbDMWq6F3Mng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
-   d="scan'208";a="154345832"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 18 Jun 2025 20:16:04 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uS5kw-000KMg-0W;
-	Thu, 19 Jun 2025 03:16:02 +0000
-Date: Thu, 19 Jun 2025 11:15:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	westeri@kernel.org, YehezkelShB@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, stable@vger.kernel.org,
-	Alexander Kovacs <Alexander.Kovacs@amd.com>,
-	mika.westerberg@linux.intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix wake on connect at runtime
-Message-ID: <202506191059.us9cF6qt-lkp@intel.com>
-References: <20250618145911.3266251-1-superm1@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GI/oqusZ6yJNKgELGLYWNhw+ETdCDJ8AmIDOcsVYf8jl4DkN8aDCWmUo4Sa6aALiveMK4639ZXIaqai+nSmGSqbPXTImdU64WUFCb+tPmB7GuQ7Sj3mzqa6XE5xNmCUoRw8N6gpT9/ZDqpC15pyutTM24TDU27qUa/Klhz2Rq9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dL5pI0S1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F3EC4CEEA;
+	Thu, 19 Jun 2025 04:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750305666;
+	bh=uzfB+BZlFnvaD08LGcyN98GOijg8o/DIDcLcrxwZEog=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dL5pI0S1hAuBwv9hHH7stkQ2KhBOeyWRS+A3iGg7A0hVNlQTRmHKYyWBWobk3hZAc
+	 WG5wxRDchXmvSRdf+dAC08yEu8D8AaBNF0lzbyzuAfkh/FqOnHyaUDgxI2BXdQ+y2X
+	 qltLHtdTbVtXoSQMN7y9tyXZW9HZ9TDzO3gM1//s=
+Date: Thu, 19 Jun 2025 06:01:03 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Seungjin Bae <eeodqql09@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: xhci-plat: fix incorrect type for of_match
+ variable in xhci_plat_probe()
+Message-ID: <2025061950-frown-cesarean-a1e3@gregkh>
+References: <2025061804-existing-taking-1f9c@gregkh>
+ <20250618192713.20668-2-eeodqql09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,36 +56,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250618145911.3266251-1-superm1@kernel.org>
+In-Reply-To: <20250618192713.20668-2-eeodqql09@gmail.com>
 
-Hi Mario,
+On Wed, Jun 18, 2025 at 03:27:14PM -0400, Seungjin Bae wrote:
+> From: pip-izony <eeodqql09@gmail.com>
 
-kernel test robot noticed the following build warnings:
+This line doesn't match up with:
 
-[auto build test WARNING on westeri-thunderbolt/next]
-[also build test WARNING on linus/master v6.16-rc2 next-20250618]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> The variable `of_match` was incorrectly declared as a `bool`.
+> It is assigned the return value of of_match_device(), which is a pointer of
+> type `const struct of_device_id *`.
+> 
+> Fixes: 16b7e0cccb243 ("USB: xhci-plat: fix legacy PHY double init")
+> 
+> Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/thunderbolt-Fix-wake-on-connect-at-runtime/20250618-230420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-patch link:    https://lore.kernel.org/r/20250618145911.3266251-1-superm1%40kernel.org
-patch subject: [PATCH] thunderbolt: Fix wake on connect at runtime
-config: parisc-randconfig-r072-20250619 (https://download.01.org/0day-ci/archive/20250619/202506191059.us9cF6qt-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506191059.us9cF6qt-lkp@intel.com/reproduce)
+That line :(
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506191059.us9cF6qt-lkp@intel.com/
+Also, no need for a blank line after Fixes:
 
-All warnings (new ones prefixed by >>):
+Also:
 
->> Warning: drivers/thunderbolt/usb4.c:409 function parameter 'runtime' not described in 'usb4_switch_set_wake'
+> ---
+>  drivers/usb/host/xhci-plat.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 6dab142e7278..49eb874b1d81 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -152,7 +152,7 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+>  	int			ret;
+>  	int			irq;
+>  	struct xhci_plat_priv	*priv = NULL;
+> -	bool			of_match;
+> +	const struct of_device_id *of_match;
+>  
+>  	if (usb_disabled())
+>  		return -ENODEV;
+> -- 
+> 2.43.0
+> 
+> Hello Greg,
+> 
+> Thank you for your review and the helpful feedback.
+> 
+> I've corrected Signed-off-by line to use my real name.
+> I also updated Fixes tag in the commit.
+> 
+> Regarding the original issue:
+> I'm not exactly sure why the compiler didn't catch this,
+> but I assume implicit casting from pointer to bool is allowed in this context.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That info should go below the --- line, and this is a version 2 of this
+change, right?  Take a look at the kernel documentation for how to
+number your patch revisions.
+
+thanks,
+
+greg k-h
 
