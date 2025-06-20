@@ -1,117 +1,122 @@
-Return-Path: <linux-usb+bounces-24938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13250AE11FA
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 05:58:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B124AE1280
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 06:29:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CEFA7A90B4
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 03:56:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E4F94A40FC
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 04:29:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2711E5207;
-	Fri, 20 Jun 2025 03:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9140E1EB5F8;
+	Fri, 20 Jun 2025 04:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kbYkHeQF"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z4ned6lB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A1481E0E0B;
-	Fri, 20 Jun 2025 03:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6DC1E376E;
+	Fri, 20 Jun 2025 04:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750391882; cv=none; b=FL1WHdhHOcrvlCGJ2H15bP66N7q6Oz5u+AWtU/Blwq/O6CSJ0VAFJlkHJVRo1PWVr1HiRNMX9ZEIsqS+vZ61sHFvJZ8fKVISS9hG3Y3BrPAQ7vAM+/qp0CGlq+c4yOSkl7TrEPAIGFGUqlFFmz2dP+HhjomHu/upKAPFSaAIhWo=
+	t=1750393781; cv=none; b=cwTwJE2R9fNyIJ96t/DJadqPy0tHjri85EQkyrrUkz3JnWd2RcZC2YgRETdrp8F8+ncV20NnVx/JjdaGi/M2pAvYj23HDHfqGLbkfYldCmK8WdZvEuZJb/QanQWsMgoJzsmosWRyLpvbet1bbKxKz/SDx8RSsoXouk8/ZHJ7nv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750391882; c=relaxed/simple;
-	bh=mGGH4+LX20Lz7gjk338dFdf0YY/zBMdmlsAb6Bg5GUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R/f19KnUOVSlp8tg+GKgT1kyowCcXh9nMjpJ/3oKmbLX+v+sre+D/n2o7UDOcLzrsiRUkav2Pi4N9mr2q9VYVGI1SJrSc3o1lbiqTM+wIyZUn7Yo9OV9BzOLUfOuy319Bbg3WtAmU/7bpHE0/yV6eWaEVoyFYSMNjythgQx79pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kbYkHeQF; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=v1
-	MY5svTzooeYXZdwoxm/E1bt38bsGX5VCg90q6L8DA=; b=kbYkHeQFzyirDC/h4P
-	O0QzhmnGUEfpaPqH2zEdqnEqM4ZhPGO/SrwBIqzZb1Uo5cOcrLcpTKLZWk3iewSm
-	/BRuskOFEhCiqHL+onFQphMiuMnQrpA9kSqQ29hq6E3xnUnN+LjVio25O/3g/Hc0
-	/N11HMhQ+X/Cu9IUhR9Eph/70=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnz7so3FRoiipkAg--.27513S2;
-	Fri, 20 Jun 2025 11:57:29 +0800 (CST)
-From: Slark Xiao <slark_xiao@163.com>
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] USB: serial: option: add Foxconn T99W640
-Date: Fri, 20 Jun 2025 11:57:21 +0800
-Message-Id: <20250620035721.6450-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1750393781; c=relaxed/simple;
+	bh=6xjHdq3+8GeIYmGoNXg8Sb7EjScZbbPi8vugBxeQkkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gNxSRXEj6dRXRXsp7iOy2OjmWSY4fF143RlbGXituXZbOW4W+2RnmN4B6rEXjFQY4c8ON6d2paC8hYLlVVZEalj9idWxoAxCM8oY/BQO/fomaLju5X1PDqxB4tw2DRzWdDWkWQZppqbygv0m3Th6vDoqyonZmoAoqMhIQlkEGGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z4ned6lB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0B3DC4CEE3;
+	Fri, 20 Jun 2025 04:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750393780;
+	bh=6xjHdq3+8GeIYmGoNXg8Sb7EjScZbbPi8vugBxeQkkI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z4ned6lBe4terW135Wq0aOvEvs9s/NsHzfMMc5s36uF8lLKPsqJOgbe3y5DyTuDuQ
+	 9Hf9DNprN4ZVK/BJ1jdG/OsVFDH6rId4HnFA1KxglkQ2m72drj/aJERIR72KyLNvBS
+	 ghlpVLKdjSoSQ73b1iubjNI1turGiOhzDXw2eQWk=
+Date: Fri, 20 Jun 2025 06:29:36 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Zongmin Zhou <min_halo@163.com>
+Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	zhouzongmin@kylinos.cn
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+Message-ID: <2025062010-hardiness-flashily-cb0f@gregkh>
+References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+ <20250604065410.76069-1-min_halo@163.com>
+ <2025061926-paycheck-footnote-a2b8@gregkh>
+ <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnz7so3FRoiipkAg--.27513S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ur4kJFWUurWDZr47CF4Durg_yoW8Kr1xpF
-	4UJFWavFZ5Xa4YgF9Ikrn7ZayFgan3Wry2gasrXw4SqFWSyws7J34UArWSgrnF9r4Syr4q
-	vr4qk3y8GF97JFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRfcT9UUUUU=
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiMBxyZGhUvGMQoAABso
+In-Reply-To: <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
 
-T99W640 is designed based on Qualconn SDX72 chip. There are 3
-serial ports to be enumerated: Diag, NMEA and AT.
+On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
+> 
+> On 2025/6/19 19:01, Greg KH wrote:
+> > On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
+> > > From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+> > > 
+> > > The vhci driver does not need to create a platform device,
+> > > it only did so because it was simple to do that in order to
+> > > get a place in sysfs to hang some device-specific attributes.
+> > > Now the faux device interface is more appropriate,change it
+> > > over to use the faux bus instead.
+> > > 
+> > > Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+> > > ---
+> > > Changes in v2:
+> > > - don't change faux create api,just call probe on vhci_hcd_init.
+> > > 
+> > >   drivers/usb/usbip/vhci.h             |  4 +-
+> > >   drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
+> > >   drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
+> > >   tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
+> > >   4 files changed, 72 insertions(+), 88 deletions(-)
+> > I get the following build errors from this patch:
+> > 
+> > drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
+> >   1462 | static int vhci_hcd_resume(struct faux_device *fdev)
+> >        |            ^~~~~~~~~~~~~~~
+> > drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
+> >   1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
+> >        |            ^~~~~~~~~~~~~~~~
+> > cc1: all warnings being treated as errors
+> > 
+> > Are you sure you tested this?
+> I apologize for not enabling -Werror, which resulted in missing this error
+> warning.
+> I have tested usbip feature use the new patch,but not test system
+> suspend/resume.
+> The faux bus type don't add pm function,and vhci-hcd driver can't register
+> it.
+> Maybe have to add suspend/resume for it.like below:
+> static const struct bus_type faux_bus_type = {
+>     .name        = "faux",
+>     .match        = faux_match,
+>     .probe        = faux_probe,
+>     .remove        = faux_remove,
+>     .resume     = faux_resume,
+>     .suspend    = faux_suspend,
+> };
+> 
+> Is that right?
+> Your expertise would be greatly valued.
 
-Test evidence as below:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=0489 ProdID=e167 Rev=05.15
-S:  Manufacturer=QCOM
-S:  Product=SDXPINNL USB WWAN Adapter
-S:  SerialNumber=cc1f1d92
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+As this is not real hardware, why do you need the suspend/resume
+callbacks at all?  What is happening here that requires them?
 
-0&1: MBIM, 2:Modem, 3:GNSS(non-serial port), 4: NMEA, 5:Diag
+thanks,
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 27879cc57536..c0c44e594d36 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2343,6 +2343,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe145, 0xff),			/* Foxconn T99W651 RNDIS */
- 	  .driver_info = RSVD(5) | RSVD(6) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe167, 0xff),                     /* Foxconn T99W640 MBIM */
-+	  .driver_info = RSVD(3) },
- 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
- 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (AT mode) */
--- 
-2.25.1
-
+greg k-h
 
