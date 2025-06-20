@@ -1,161 +1,117 @@
-Return-Path: <linux-usb+bounces-24937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8426AE1184
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 05:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13250AE11FA
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 05:58:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AFD97A9AE1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 03:03:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CEFA7A90B4
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 03:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903421B3956;
-	Fri, 20 Jun 2025 03:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2711E5207;
+	Fri, 20 Jun 2025 03:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kbYkHeQF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A712BB04
-	for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 03:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A1481E0E0B;
+	Fri, 20 Jun 2025 03:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750388668; cv=none; b=f6sONXwZdHtQV0OqMmlhpK2MUnWNrw2DjoN+mRFqtoHBOXcnIZG7AL6udozqXh95pGQjdK+RAMuvE+6ibGJKcRLHifBQVM/+gayVu9oPyfQ1z38jSXHGtKyLmFrC+7U2Dd76vcMU2Q0aqEaizV7f2CU0v8lxZNjjRwHcHIANAEw=
+	t=1750391882; cv=none; b=FL1WHdhHOcrvlCGJ2H15bP66N7q6Oz5u+AWtU/Blwq/O6CSJ0VAFJlkHJVRo1PWVr1HiRNMX9ZEIsqS+vZ61sHFvJZ8fKVISS9hG3Y3BrPAQ7vAM+/qp0CGlq+c4yOSkl7TrEPAIGFGUqlFFmz2dP+HhjomHu/upKAPFSaAIhWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750388668; c=relaxed/simple;
-	bh=VMNJHOUG2mv6ydAixpnR8WSFS54WiEIaJZICTn6LhoA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=E38RkPqsmXjlqUf5lysD5CYHBlmL15tift8wEabYvl2i9e1MgNDPGAt7NOQVesWsbrYmCDXb9qDBo61ntNq4KW1JnS4qKFk3EY7uGOq34J2ZwIm/jh4qIT/rQC+oruPst7HlAq/XhNDtuHM204XcdNFovTzGjtvFixLb+GnMOAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3ddb4a92e80so17222485ab.3
-        for <linux-usb@vger.kernel.org>; Thu, 19 Jun 2025 20:04:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750388666; x=1750993466;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGMTxdQ6cfnwXI0nK8qaXneVbaNONzdfvAkERpjAdz4=;
-        b=cEbZVeEVY25hJJ8nbiKjvaicR91e23kxXpIDGFg8MkZxy2NDAxhfbhpcc2KuGCJYiu
-         kdh0xuVgV2/HUXrwJ2cjhpxn6Zr2eHt0JX4o/y2j6CxnmxdczRt0kb/iK8oyqj5kvAcB
-         auGKndjcshvIm+WxIHgCfSlYHlXgDAaPmzvZBJtadOwy92iN4vYHi+B6ujuDEW0opkuE
-         0LJwWcrDzp/mr2XckeMFnbRCCoWbqxQmHqEKXuzuVGcrVnSLrsxpSM3jNypGsDx0n6wk
-         E3jXzBGrKHVcsD/XZ9eafMgTQdmoSmMKCnIfIm2Rc+5yxcCCYcxnD3sLH+KIEtc8DzqI
-         fsGA==
-X-Forwarded-Encrypted: i=1; AJvYcCXiltw9l4gD6jKx3t3PI3m1UNxDhDrmV45kmp0iBbYG7lKMuVBIJqniJC1XI5cHWa2NAcNGRNjzDYA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoSD01y9TR+kD1I9h8A35IimkNt9kvUN452Ju6BUby0N1PUtro
-	l+FEi8w8U+eNbFO5p+IMdd9fprJd7t8Ij9DUPslt3Jq7HFcF6+61SPMspU2fbMBfn8DhN3tmvO3
-	QqlvQBvi8AoTqxUwpdJqvuMC3A+QT1kMKrSrpKdMr5TbThRMKT38cebhuACM=
-X-Google-Smtp-Source: AGHT+IH1W+a8ekFqQ2D9tBLxcVcBOo+VcQ4gcMAddGVYjssy/9q5Nxi5nk116dXt+232A0CbVrao2E5sm529VPw4WRwuWLRWVtEP
+	s=arc-20240116; t=1750391882; c=relaxed/simple;
+	bh=mGGH4+LX20Lz7gjk338dFdf0YY/zBMdmlsAb6Bg5GUk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R/f19KnUOVSlp8tg+GKgT1kyowCcXh9nMjpJ/3oKmbLX+v+sre+D/n2o7UDOcLzrsiRUkav2Pi4N9mr2q9VYVGI1SJrSc3o1lbiqTM+wIyZUn7Yo9OV9BzOLUfOuy319Bbg3WtAmU/7bpHE0/yV6eWaEVoyFYSMNjythgQx79pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kbYkHeQF; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=v1
+	MY5svTzooeYXZdwoxm/E1bt38bsGX5VCg90q6L8DA=; b=kbYkHeQFzyirDC/h4P
+	O0QzhmnGUEfpaPqH2zEdqnEqM4ZhPGO/SrwBIqzZb1Uo5cOcrLcpTKLZWk3iewSm
+	/BRuskOFEhCiqHL+onFQphMiuMnQrpA9kSqQ29hq6E3xnUnN+LjVio25O/3g/Hc0
+	/N11HMhQ+X/Cu9IUhR9Eph/70=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnz7so3FRoiipkAg--.27513S2;
+	Fri, 20 Jun 2025 11:57:29 +0800 (CST)
+From: Slark Xiao <slark_xiao@163.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] USB: serial: option: add Foxconn T99W640
+Date: Fri, 20 Jun 2025 11:57:21 +0800
+Message-Id: <20250620035721.6450-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1fec:b0:3dc:87c7:a5a8 with SMTP id
- e9e14a558f8ab-3de38c1bf73mr14006835ab.2.1750388665825; Thu, 19 Jun 2025
- 20:04:25 -0700 (PDT)
-Date: Thu, 19 Jun 2025 20:04:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6854cfb9.a00a0220.137b3.0028.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in dib0700_ctrl_rd/usb_submit_urb
-From: syzbot <syzbot+0cd0fb4cf3f4722d6663@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnz7so3FRoiipkAg--.27513S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur4kJFWUurWDZr47CF4Durg_yoW8Kr1xpF
+	4UJFWavFZ5Xa4YgF9Ikrn7ZayFgan3Wry2gasrXw4SqFWSyws7J34UArWSgrnF9r4Syr4q
+	vr4qk3y8GF97JFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRfcT9UUUUU=
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiMBxyZGhUvGMQoAABso
 
-Hello,
+T99W640 is designed based on Qualconn SDX72 chip. There are 3
+serial ports to be enumerated: Diag, NMEA and AT.
 
-syzbot found the following issue on:
+Test evidence as below:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=0489 ProdID=e167 Rev=05.15
+S:  Manufacturer=QCOM
+S:  Product=SDXPINNL USB WWAN Adapter
+S:  SerialNumber=cc1f1d92
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-HEAD commit:    9afe652958c3 Merge tag 'x86_urgent_for_6.16-rc3' of git://..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=154c2370580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5f3f62311f35cdd9
-dashboard link: https://syzkaller.appspot.com/bug?extid=0cd0fb4cf3f4722d6663
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a3b50c580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a3b50c580000
+0&1: MBIM, 2:Modem, 3:GNSS(non-serial port), 4: NMEA, 5:Diag
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad9d856c993f/disk-9afe6529.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f58228c24de9/vmlinux-9afe6529.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/809c5234f87e/bzImage-9afe6529.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0cd0fb4cf3f4722d6663@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
-WARNING: CPU: 1 PID: 5836 at drivers/usb/core/urb.c:411 usb_submit_urb+0x13c3/0x1790 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 1 UID: 0 PID: 5836 Comm: syz-executor308 Not tainted 6.16.0-rc2-syzkaller-00024-g9afe652958c3 #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-RIP: 0010:usb_submit_urb+0x13c3/0x1790 drivers/usb/core/urb.c:411
-Code: e8 b2 12 89 fa 4c 89 ef e8 ba b7 d5 fe 44 8b 44 24 28 44 89 f9 48 8b 54 24 38 48 89 c6 48 c7 c7 40 06 73 8c e8 fe d7 47 fa 90 <0f> 0b 90 90 e9 84 ef ff ff e8 7f 12 89 fa 0f b6 2d d9 8d 5d 09 31
-RSP: 0018:ffffc90003eff980 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff888020ef6800 RCX: ffffffff817ae248
-RDX: ffff888012e9bc00 RSI: ffffffff817ae255 RDI: 0000000000000001
-RBP: ffff888140fef058 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88803498ce80
-R13: ffff888140fef0b0 R14: 0000000000000001 R15: 0000000080000280
-FS:  0000555558039380(0000) GS:ffff88812485a000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000200000002580 CR3: 0000000073ffa000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x104/0x4b0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x326/0x4a0 drivers/usb/core/message.c:154
- dib0700_ctrl_rd+0x1b2/0x350 drivers/media/usb/dvb-usb/dib0700_core.c:95
- dib0700_i2c_xfer_legacy drivers/media/usb/dvb-usb/dib0700_core.c:315 [inline]
- dib0700_i2c_xfer+0xa9a/0xe40 drivers/media/usb/dvb-usb/dib0700_core.c:361
- __i2c_transfer+0x6b6/0x2190 drivers/i2c/i2c-core-base.c:2258
- i2c_transfer drivers/i2c/i2c-core-base.c:2314 [inline]
- i2c_transfer+0x1da/0x380 drivers/i2c/i2c-core-base.c:2290
- i2cdev_ioctl_rdwr+0x373/0x710 drivers/i2c/i2c-dev.c:306
- i2cdev_ioctl+0x5ff/0x820 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:907 [inline]
- __se_sys_ioctl fs/ioctl.c:893 [inline]
- __x64_sys_ioctl+0x18e/0x210 fs/ioctl.c:893
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xcd/0x4c0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fa17e8248f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd59dafc98 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa17e8248f9
-RDX: 0000200000002580 RSI: 0000000000000707 RDI: 0000000000000004
-RBP: 00007fa17e8975f0 R08: 00232d6332692f76 R09: 0000000000000006
-R10: 000000000000001f R11: 0000000000000246 R12: 0000000000000001
-R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-
-
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 27879cc57536..c0c44e594d36 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2343,6 +2343,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe145, 0xff),			/* Foxconn T99W651 RNDIS */
+ 	  .driver_info = RSVD(5) | RSVD(6) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x0489, 0xe167, 0xff),                     /* Foxconn T99W640 MBIM */
++	  .driver_info = RSVD(3) },
+ 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
+ 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
+ 	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (AT mode) */
+-- 
+2.25.1
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
