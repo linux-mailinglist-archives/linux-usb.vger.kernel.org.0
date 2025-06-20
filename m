@@ -1,131 +1,180 @@
-Return-Path: <linux-usb+bounces-24957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30C2BAE1DF1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:56:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC885AE200B
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 18:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48522188E1FF
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 14:57:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D7523A679A
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403E02BDC06;
-	Fri, 20 Jun 2025 14:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8E82E719A;
+	Fri, 20 Jun 2025 16:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="qAmC/gaW"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="DU/J5Ppt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2491A2BD5B2;
-	Fri, 20 Jun 2025 14:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DC92BEC5F
+	for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 16:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750431404; cv=none; b=facMwWWbYDSN41B0VKukap3UEDK9a2QEqO9KQd2kfyHfeDZyCqY7Vf82lvI70sajGfPK92XUHSXA3zMWqpUM3YXetkNfi2a3QHEVDwqKSl2HaLLHKVLOUfeFuWLsvo03RK8Fg9uPNolhqTOd/opb3PsTUbK8Cs+s7gjztfJXVtI=
+	t=1750436761; cv=none; b=HLeSvQD/nUwmEsCdkh2VWFr/jCNCVAyFP8uzEgKJDaLMFja7WhPize2i7r3Q59y1ToNy75mWWq6JyXo8dcYv4WiUE9NPAYNIgadJeOSYCwa5wn0UF5LQIzaA/UtNcrLY5Me8XIAwdknvol1GJ2sWMjk3ZElz7V5TZNJc+okm8Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750431404; c=relaxed/simple;
-	bh=UkSrktSOg3YT49HTJ0lLuUoG6GbizoE9w6yhT72IHIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cQrc4Fe/Et25Rme6vT46P4U9GJxh5zXf8bnrW0hQym+5gD+xq1xWvsZHR9B+lHouS15x0RceyDH/lmAcQRJ8ZUteewW+P+aWckMqglN9p62t0CV0plnTwQihufdKbf8nwiCl0z63chdwDeDC3JQo7QwG5TK3f58UI4d7/hm1Xgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=qAmC/gaW; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=O/jZjNo754y8qhJ/PUhLRJEDi9tOJZ9ysoGunWSd/Pg=; b=qAmC/gaW/hDih7Sc0s+DEgDlk3
-	/r3ar2kJyp4sZ9xyaM5FYOBtyMMjiTOkPMhW9VzHfEGDEcEeX7Fyazf3yQ8yXkQAa3WyLk5fgRKTK
-	Iuw5uEaCJZHgNvgRhCxdh48HXsPF8/7L2eNMsrhugYIZPIOJgGxS/8uBI67rgQUsbt/H2z5UuFUYQ
-	gLI56cs17iCLLOTeGkMLesfK7KJVRkDb9FCFmwo3iFQe/qLQVhVjBxdoaSTXYZEaR4ivShNBqudiW
-	hSlejcd5R67Ak5sz51LIvq0kLrg5mkwEmXdyQlW1it5qzM6GkFezAvOQakw+IZt27HYKqd6mmixqb
-	GMKSycsg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45204)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1uSdAG-00015l-0m;
-	Fri, 20 Jun 2025 15:56:24 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1uSdA0-0000WH-02;
-	Fri, 20 Jun 2025 15:56:08 +0100
-Date: Fri, 20 Jun 2025 15:56:07 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	thomas.petazzoni@bootlin.com, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Mark Einon <mark.einon@gmail.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>,
-	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Sunil Goutham <sgoutham@marvell.com>,
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ioana Ciornei <ioana.ciornei@nxp.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Jian Shen <shenjian15@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	MD Danish Anwar <danishanwar@ti.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Jiawen Wu <jiawenwu@trustnetic.com>,
-	Mengyuan Lou <mengyuanlou@net-swift.com>,
-	Imre Kaloz <kaloz@openwrt.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Steve Glendinning <steve.glendinning@shawell.net>,
-	UNGLinuxDriver@microchip.com, Simon Horman <horms@kernel.org>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH net-next RFC] net: Throw ASSERT_RTNL into phy_detach
-Message-ID: <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
-References: <20250620143341.2158655-1-kory.maincent@bootlin.com>
+	s=arc-20240116; t=1750436761; c=relaxed/simple;
+	bh=2lpfuT+UJ73xh83VqKPWIoYBmbgIzKWaPVoLMY4rhrI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jq+oRrb4Cj5DmzXPdgW1+6ZuYCBY9/f7LGz450jelItet3EKd1bbzG/0QRl1zrpd8SUlk6JJKJdglJkfUK+pF+I1/vVx9SmwU6UGSZbscHtU+jT6K3PxPNNQUo3NTxTPVZ+jcBSxVa6uJlOWOhRmmCOcY2RvOgbqpzzZJu+oGr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=DU/J5Ppt; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so23188435e9.1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 09:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1750436758; x=1751041558; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Alqg+WicKPYUIWXmnQXqsBN2VhHsKxxFP4ePyG0B/vk=;
+        b=DU/J5PptjWdlJAqQaZD2jvC/tSBZrpcFT7r8u4oFD9vEx6UA+nZ9mVBAFRrZ20h+Bp
+         O8PHKcThXHvlOqA4L8DydUqHeTTfd8qdVhFpZ9dR1a7pAJvyeD9SNfRD10xS5bRpuOLI
+         WlKEE0x00EnGNzLZznjnumWgB30vM1eCm4ekg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750436758; x=1751041558;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Alqg+WicKPYUIWXmnQXqsBN2VhHsKxxFP4ePyG0B/vk=;
+        b=XjmMoWtrQcrG3HaQj18j0mmkuNY/y1ZR0EvTTteEKbVsJ9viwsbqEHqNTp/RN9JBUG
+         74GWVFHwVqx86MNRu49BqTCF1Z+AGfarcppecpYkQ64iNcvzFzHFzJlS0dXigFxLch0z
+         /mORaZUkglrjku7VCI+6Gz2ABv7d31zGnFFUfQcl/+D7XGTT1kWY1BfjQAps/AipHvsf
+         ea1J2frEfRHAa0ocJOjh+GbXtWR2NCU0IzOJ982KJMIOX8iAWgajjhanhB+X6tluQI/K
+         piAdTPMoZIikkMj6MrbdXeHCZZsUBRmBqldjcK1nQO1upoaIYhPLQ0n+G3llrCYMqJXi
+         4Ngg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXJ+sluSWwYn5M17TK47Tpm9C85sr9haL4yQ5VLcncbf41W0J7a+8dNN3POd+RC4T4kHCqTzgxofs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz7rgrIh6u9fXfS0dad4oSKGOTuKbjZVdk/xoBsxsX2q83ROxl
+	YRj+r+QpslPzINmNHQTsj6tdB95W7pfzhGqOjhGcqMKtisKvoehovvR6aV2WDTIC9g==
+X-Gm-Gg: ASbGncvvZ/C2o6UKuuUfrBmpwxU2becFnXvpqfhgD8iRQED79J+lkiZj03y7edG+Uns
+	G+gz4YvKks8Teoj2+3fPWD+JLOnAfvEvwVYSybGp/64JQ9jNWooyf28HEb4cPcmiEJPCmHwCQj+
+	nhGcN3p/IFR2lr//K+SrA12eHOTZNfGOmRr70f8iIFQNkDIBuRlfLDgK4bqSIeNH9x7GJh4zYPu
+	wfOlX3N2oaV7ezRd0qSCZnCFSNS3Q+4Ap7VWlw4rZatPxfjoD+9ZU/9druDYkq3vNB/2O2RS6/B
+	Z1VN51KYm3JyOVJTuZ0XlKjbT1lYx2HNmuTcuPm/RhvW4RV9GVWpFvkbZJXbEfdk6nRoGRnwoJx
+	z7VDCnc/UxdFmBEj6vsTUWtB6ktDkmt56TLIK
+X-Google-Smtp-Source: AGHT+IGRwKx0AynK+ibMBUFo43qWTcsiEdtRRQuC50E0G+K6arFeZxJbV27lEJE+xU2l8nMbP/C7jw==
+X-Received: by 2002:a05:600c:4f8a:b0:43d:fa59:a685 with SMTP id 5b1f17b1804b1-453659f5049mr31054025e9.33.1750436758174;
+        Fri, 20 Jun 2025 09:25:58 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535eac8bb6sm64450535e9.25.2025.06.20.09.25.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jun 2025 09:25:57 -0700 (PDT)
+Message-ID: <e683862b-3eb2-4783-aa4e-c457b7113b7d@broadcom.com>
+Date: Fri, 20 Jun 2025 09:25:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620143341.2158655-1-kory.maincent@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next RFC] net: Throw ASSERT_RTNL into phy_detach
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+ Kory Maincent <kory.maincent@bootlin.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ thomas.petazzoni@bootlin.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+ Manivannan Sadhasivam <mani@kernel.org>, Mark Einon <mark.einon@gmail.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+ Keyur Chudgar <keyur@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>,
+ =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+ Michael Chan <michael.chan@broadcom.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <rafal@milecki.pl>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Doug Berger <opendmb@gmail.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Sunil Goutham <sgoutham@marvell.com>,
+ Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Ioana Ciornei <ioana.ciornei@nxp.com>, Jijie Shao <shaojijie@huawei.com>,
+ Jian Shen <shenjian15@huawei.com>, Salil Mehta <salil.mehta@huawei.com>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ MD Danish Anwar <danishanwar@ti.com>, Roger Quadros <rogerq@kernel.org>,
+ Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou
+ <mengyuanlou@net-swift.com>, Imre Kaloz <kaloz@openwrt.org>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ Steve Glendinning <steve.glendinning@shawell.net>,
+ UNGLinuxDriver@microchip.com, Simon Horman <horms@kernel.org>,
+ Vladimir Oltean <olteanv@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>
+References: <20250620143341.2158655-1-kory.maincent@bootlin.com>
+ <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 20, 2025 at 04:33:27PM +0200, Kory Maincent wrote:
-> phy_detach needs the rtnl lock to be held. It should have been added before
-> to avoid this massive change among lots of net drivers but there was no
-> clear evidence of such needs at that time. This imply a lock change in
-> this API. Add phy_detach_rtnl, phy_diconnect_rtnl, phylink_connect_phy_rtnl
-> and phylink_fwnode_phy_connect_rtnl helpers to take the lock before calling
-> their respective function.
+On 6/20/25 07:56, Russell King (Oracle) wrote:
+> On Fri, Jun 20, 2025 at 04:33:27PM +0200, Kory Maincent wrote:
+>> phy_detach needs the rtnl lock to be held. It should have been added before
+>> to avoid this massive change among lots of net drivers but there was no
+>> clear evidence of such needs at that time. This imply a lock change in
+>> this API. Add phy_detach_rtnl, phy_diconnect_rtnl, phylink_connect_phy_rtnl
+>> and phylink_fwnode_phy_connect_rtnl helpers to take the lock before calling
+>> their respective function.
+> 
+> Please don't increase the number of API functions for phylink for the
+> long term. I'd prefer all callers of the phylink phy_connect functions
+> be updated to hold the RTNL, just like phylink_disconnect() requires.
+> 
 
-Please don't increase the number of API functions for phylink for the
-long term. I'd prefer all callers of the phylink phy_connect functions
-be updated to hold the RTNL, just like phylink_disconnect() requires.
-
+Yes, I completely agree, this should also make for a smaller patch set 
+to review.
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Florian
 
