@@ -1,62 +1,107 @@
-Return-Path: <linux-usb+bounces-24956-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24957-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B42FAE1DEA
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:54:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C2BAE1DF1
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:56:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8A8C188BF03
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 14:54:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48522188E1FF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 14:57:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8F22BD5B5;
-	Fri, 20 Jun 2025 14:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403E02BDC06;
+	Fri, 20 Jun 2025 14:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tx0+Mufu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="qAmC/gaW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD5C27E06D;
-	Fri, 20 Jun 2025 14:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2491A2BD5B2;
+	Fri, 20 Jun 2025 14:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750431271; cv=none; b=IKa5GLQOGI5bHPOzWUgI7HnK7GRM1985QWK2yCX1CNvFpm/p7L70wNUlA0MFttUKaH0EokRlolHmHfVO65tx0Ea24uH6H08Wio+BMOTCAZBs2/YW+rMgtZTwEt0GN1SfdU8wG+oDNxFdMoPDbi5MMXEdG1eL9AnKBi1ni++oPcE=
+	t=1750431404; cv=none; b=facMwWWbYDSN41B0VKukap3UEDK9a2QEqO9KQd2kfyHfeDZyCqY7Vf82lvI70sajGfPK92XUHSXA3zMWqpUM3YXetkNfi2a3QHEVDwqKSl2HaLLHKVLOUfeFuWLsvo03RK8Fg9uPNolhqTOd/opb3PsTUbK8Cs+s7gjztfJXVtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750431271; c=relaxed/simple;
-	bh=2lQ3H1t6+IN+7snjljZ9bQpsGdJOcZIe4RxA3UQstrw=;
+	s=arc-20240116; t=1750431404; c=relaxed/simple;
+	bh=UkSrktSOg3YT49HTJ0lLuUoG6GbizoE9w6yhT72IHIU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NPDwvKq7QcJevPz2YEWoCscXsDFrEgwZCcs2mniltQx+Ta6fp8MbifXPWSZw0WXwKr/8rvqQfdiYaF6iVp55yGd9XF+uA9UHUHw9qQnVtqS5uErJ17aV4dxYh1XqpUShA51X5gZhUt+KABqVQxvYYHSkSGeLQbJeO/AIpWl48W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tx0+Mufu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A8FC4CEE3;
-	Fri, 20 Jun 2025 14:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750431271;
-	bh=2lQ3H1t6+IN+7snjljZ9bQpsGdJOcZIe4RxA3UQstrw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tx0+Mufuzq1sVt+Blo8kgoP9ETj8PphYr9ucL1jeurZO5sYHBCghVqs6J2W4QcxHZ
-	 fu/THVoIBYXBvO7RDklmks7AV0ihuZZq7LeEjAjZAYif3/Vh7IRwwtUGAlFffhc942
-	 W4hHegzafNPDL2eVkIsgz+PpwY4rfXMkYBMaehhI=
-Date: Fri, 20 Jun 2025 16:54:28 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: nicolas.bouchinet@oss.cyber.gouv.fr
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Kannappan R <r.kannappan@intel.com>,
-	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Pawel Laszczak <pawell@cadence.com>, Ma Ke <make_ruc2021@163.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>,
-	Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>,
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH 2/4] usb: core: Introduce usb authentication feature
-Message-ID: <2025062059-dangling-coping-1e17@gregkh>
-References: <20250620-usb_authentication-v1-0-0d92261a5779@ssi.gouv.fr>
- <20250620-usb_authentication-v1-2-0d92261a5779@ssi.gouv.fr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQrc4Fe/Et25Rme6vT46P4U9GJxh5zXf8bnrW0hQym+5gD+xq1xWvsZHR9B+lHouS15x0RceyDH/lmAcQRJ8ZUteewW+P+aWckMqglN9p62t0CV0plnTwQihufdKbf8nwiCl0z63chdwDeDC3JQo7QwG5TK3f58UI4d7/hm1Xgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=qAmC/gaW; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=O/jZjNo754y8qhJ/PUhLRJEDi9tOJZ9ysoGunWSd/Pg=; b=qAmC/gaW/hDih7Sc0s+DEgDlk3
+	/r3ar2kJyp4sZ9xyaM5FYOBtyMMjiTOkPMhW9VzHfEGDEcEeX7Fyazf3yQ8yXkQAa3WyLk5fgRKTK
+	Iuw5uEaCJZHgNvgRhCxdh48HXsPF8/7L2eNMsrhugYIZPIOJgGxS/8uBI67rgQUsbt/H2z5UuFUYQ
+	gLI56cs17iCLLOTeGkMLesfK7KJVRkDb9FCFmwo3iFQe/qLQVhVjBxdoaSTXYZEaR4ivShNBqudiW
+	hSlejcd5R67Ak5sz51LIvq0kLrg5mkwEmXdyQlW1it5qzM6GkFezAvOQakw+IZt27HYKqd6mmixqb
+	GMKSycsg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45204)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1uSdAG-00015l-0m;
+	Fri, 20 Jun 2025 15:56:24 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1uSdA0-0000WH-02;
+	Fri, 20 Jun 2025 15:56:08 +0100
+Date: Fri, 20 Jun 2025 15:56:07 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	thomas.petazzoni@bootlin.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Mark Einon <mark.einon@gmail.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>,
+	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Sunil Goutham <sgoutham@marvell.com>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Jian Shen <shenjian15@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
+	MD Danish Anwar <danishanwar@ti.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	Imre Kaloz <kaloz@openwrt.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com, Simon Horman <horms@kernel.org>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next RFC] net: Throw ASSERT_RTNL into phy_detach
+Message-ID: <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
+References: <20250620143341.2158655-1-kory.maincent@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,212 +110,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620-usb_authentication-v1-2-0d92261a5779@ssi.gouv.fr>
+In-Reply-To: <20250620143341.2158655-1-kory.maincent@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-First off, thanks so much for doing this work, I've been wondering if
-anyone would ever do it :)
+On Fri, Jun 20, 2025 at 04:33:27PM +0200, Kory Maincent wrote:
+> phy_detach needs the rtnl lock to be held. It should have been added before
+> to avoid this massive change among lots of net drivers but there was no
+> clear evidence of such needs at that time. This imply a lock change in
+> this API. Add phy_detach_rtnl, phy_diconnect_rtnl, phylink_connect_phy_rtnl
+> and phylink_fwnode_phy_connect_rtnl helpers to take the lock before calling
+> their respective function.
 
-Just a few quick review comments that you might want to do for the next
-round of your patches for some basic style things:
+Please don't increase the number of API functions for phylink for the
+long term. I'd prefer all callers of the phylink phy_connect functions
+be updated to hold the RTNL, just like phylink_disconnect() requires.
 
-On Fri, Jun 20, 2025 at 04:27:17PM +0200, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
-> +#include <linux/types.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/ch9.h>
-> +#include <linux/usb/hcd.h>
-> +#include <linux/usb/quirks.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/device.h>
-> +#include <linux/delay.h>
-> +#include <asm/byteorder.h>
-> +
-> +#include "authent_netlink.h"
-> +
-> +#include "authent.h"
-
-No need for the blank lines there.
-
-> +static int usb_authent_req_digest(struct usb_device *dev, uint8_t *const buffer,
-> +				  uint8_t digest[256], uint8_t *mask)
-> +{
-> +	int ret = 0;
-> +	struct usb_authent_digest_resp *digest_resp = NULL;
-> +
-> +	if (unlikely((buffer == NULL || mask == NULL))) {
-> +		pr_err("invalid arguments\n");
-> +		return -EINVAL;
-> +	}
-> +	ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0), AUTH_IN, USB_DIR_IN,
-> +			      (USB_SECURITY_PROTOCOL_VERSION << 8) +
-> +				      USB_AUTHENT_DIGEST_REQ_TYPE,
-> +			      0, buffer, 260, USB_CTRL_GET_TIMEOUT);
-> +	if (ret < 0) {
-> +		pr_err("Failed to get digest: %d\n", ret);
-> +		ret = -ECOMM;
-> +		goto exit;
-> +	}
-> +
-> +	// Parse received digest response
-> +	digest_resp = (struct usb_authent_digest_resp *)buffer;
-> +	pr_notice("received digest response:\n");
-> +	pr_notice("	protocolVersion: %x\n", digest_resp->protocolVersion);
-> +	pr_notice("	messageType: %x\n", digest_resp->messageType);
-> +	pr_notice("	capability: %x\n", digest_resp->capability);
-> +	pr_notice("	slotMask: %x\n", digest_resp->slotMask);
-
-Always use the dev_*() macros instead of pr_*() ones as that way you
-know what device is making the message please.
-
-> +
-> +	*mask = digest_resp->slotMask;
-> +	memcpy(digest, digest_resp->digests, 256);
-> +
-> +	ret = 0;
-> +
-> +exit:
-> +
-> +	return ret;
-> +}
-> +
-> +struct usb_auth_cert_req {
-> +	uint16_t offset;
-> +	uint16_t length;
-> +} __packed;
-
-Kernel types are u16, not uint16_t.  The uint*_t types are from
-userspace C code, not kernel code.  Yes, they are slowly sliding in in
-places, but let's not do that unless really required for some specific
-reason.
-
-And why packed?
-
-And what about endian issues, the data from the devices should be in a
-specific format, right?
-
-
-> +
-> +/**
-> + * @brief Request a specific part of a certificate chain from the device
-
-Are you sure this is proper kerneldoc style?  Does this build properly?
-
-> + *
-> + * Context: task context, might sleep
-> + *
-> + * Possible errors:
-> + *  - ECOMM : failed to send or receive a message to the device
-> + *  - EINVAL : if buffer or cert_part is NULL
-> + *
-> + * @param [in]     dev       : handle to the USB device
-> + * @param [in,out] buffer    : buffer used for communication, caller allocated
-> + * @param [in]     slot      : slot in which to read the certificate
-> + * @param [in]     offset    : at which the certificate fragment must be read
-> + * @param [in]     length    : of the certificate fragment to read
-> + * @param [out]    cert_part : buffer to hold the fragment, caller allocated
-
-Again, I don't think this is kerneldoc format.  Please build the kernel
-documentation output and see what this results in.
-
-> + *
-> + * @return 0 on SUCCESS else an error code
-> + */
-> +static int usb_auth_read_cert_part(struct usb_device *dev, uint8_t *const buffer,
-> +				   const uint8_t slot, const uint16_t offset,
-> +				   const uint16_t length, uint8_t *cert_part)
-> +{
-> +	struct usb_auth_cert_req cert_req = { 0 };
-> +	int ret = -1;
-
-Use real error values, not random integers :)
-
-> +
-> +	if (unlikely(buffer == NULL || cert_part == NULL)) {
-
-Only use likely/unlikely if you can measure the speed difference.  For
-USB, and probe sequences, that will never be the casae.
-
-> +		pr_err("invalid argument\n");
-
-Again, dev_err()?
-
-But how can these parameters not be set properly?  You control how they
-are called, no need to always verify that you wrote the code properly :)
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	cert_req.offset = offset;
-> +	cert_req.length = length;
-> +
-> +	// AUTH OUT request transfer
-> +	memcpy(buffer, &cert_req, sizeof(struct usb_auth_cert_req));
-> +	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), AUTH_OUT,
-> +			      USB_DIR_OUT,
-> +			      (USB_SECURITY_PROTOCOL_VERSION << 8) +
-> +				      USB_AUTHENT_CERTIFICATE_REQ_TYPE,
-> +			      (slot << 8), buffer,
-> +			      sizeof(struct usb_auth_cert_req),
-> +			      USB_CTRL_GET_TIMEOUT);
-> +	if (ret < 0) {
-> +		pr_err("Failed to send certificate request: %d\n", ret);
-> +		ret = -ECOMM;
-> +		goto cleanup;
-> +	}
-> +
-> +	// AUTH IN certificate read
-> +	ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0), AUTH_IN, USB_DIR_IN,
-> +			      (USB_SECURITY_PROTOCOL_VERSION << 8) +
-> +				      USB_AUTHENT_CERTIFICATE_RESP_TYPE,
-> +			      (slot << 8), buffer, length + 4,
-> +			      USB_CTRL_GET_TIMEOUT);
-> +	if (ret < 0) {
-> +		pr_notice("Failed to get certificate from peripheral: %d\n", ret);
-> +		ret = -ECOMM;
-> +		goto cleanup;
-> +	}
-> +
-> +	// TODO: parse received header
-> +	memcpy(cert_part, buffer + 4, length);
-> +
-> +	ret = 0;
-> +
-> +cleanup:
-> +
-> +	return ret;
-
-As "cleanup:" does nothing, no need for it, just return the error value
-above when you were doing a goto line.
-
-> +}
-> +
-> +/**
-> + * usb_authent_read_certificate - Read a device certificate
-> + * @dev:		[in] pointer to the usb device to query
-> + * @buffer:		[inout] buffer to hold request data, caller allocated
-> + * @slot:		[in] certificate chain to be read
-> + * @cert_der:   [out] buffer to hold received certificate chain
-> + * @cert_len:   [out] length of received certificate
-> + *
-> + * Context: task context, might sleep.
-> + *
-> + * Possible errors:
-> + *  - EINVAL : NULL pointer or invalid slot value
-> + *  - ECOMM  : failed to send request to device
-> + *  - ENOMEM : failed to allocate memory for certificate
-> + *
-> + * Return: If successful, zero. Otherwise, a negative  error number.
-> + */
-> +static int usb_authent_read_certificate(struct usb_device *dev, uint8_t *const buffer,
-> +					uint8_t slot, uint8_t **cert_der, size_t *cert_len)
-> +{
-> +	uint16_t read_offset = 0;
-> +	uint16_t read_length = 0;
-> +	uint8_t chain_part[64] = { 0 };
-
-Again, u16 and u8 please.
-
-thanks,
-
-greg k-h
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
