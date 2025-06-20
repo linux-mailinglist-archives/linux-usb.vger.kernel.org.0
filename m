@@ -1,332 +1,288 @@
-Return-Path: <linux-usb+bounces-24949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24955-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF4CDAE1A06
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 13:31:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F2AAAE1DCF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:48:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ECAF1BC04DE
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 11:31:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC663B2898
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 14:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3691C289E25;
-	Fri, 20 Jun 2025 11:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DC5299A98;
+	Fri, 20 Jun 2025 14:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J/yMXbb8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="R2JA26jZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from pf-012.whm.fr-par.scw.cloud (pf-012.whm.fr-par.scw.cloud [51.159.173.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F9830E841
-	for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 11:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D32E5BAF0;
+	Fri, 20 Jun 2025 14:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.173.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750419071; cv=none; b=unvS1iIXby0n1oheQOX5jqjrelYlkSHzxGGWscmTJaQSNPztEdFw5HRi/X3BECUXO6JQ+QU6NfudWqx7FJS15GA5R5tzVqsUtbP+/30FcoucfEsGUd+rxc0nW5zsIZEEJfJVf7oAOb26sa8nEaWpKZuLQSgfPDbsDgS3+7hI+H0=
+	t=1750430801; cv=none; b=H6PEoMtdKsSckjetJkatzH9LtljWHy7hzQ+GQnlR3h9cXu/ynWSx8Aaox4MeP/zIUFoIo7fecKEHlJI1ye1UrwDuj3ISufRqgi+Jz1IJrHW1aVkTpWPXWNJ/5rWdtgRSgG7sJv12yZ6woBJW0CZVly+yLMQL9wHmwOsCpYR+hU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750419071; c=relaxed/simple;
-	bh=qlkgrYrttEoly8F95lJgCI7nP8kVF82KIudUHPw0jPA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=q+lU3tzoLjOGDwnVdvEenxwKrmOSZtFtIpe/NrmFAe6SUfVQlwh3jbRLLhO0xucbi0pLxLUY/pTpQw2Y8JR/NRxhKWLeKk+SziwCCllrExXXBb+vVvopWW/UfXfDaIyXQixCGufagM2ncbFMuf0jIdreCrP4r4XWYApcKUF9bMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J/yMXbb8; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750419069; x=1781955069;
-  h=date:from:to:cc:subject:message-id;
-  bh=qlkgrYrttEoly8F95lJgCI7nP8kVF82KIudUHPw0jPA=;
-  b=J/yMXbb8yVzU+EUaK4nY7trOqglNaPETxkotWGQAl5yl3hhG7qsZzW0Z
-   0+8axDiORplN6zJ1bCZxtfROwJKlaV5Dv56anVBT/nvtEB1idMPeWhdiN
-   npzz3J2rPMUYyr4nEUJSBz8LyaoHdmIdKjgr71Ewp5aQlL/eQ/fUD6Wd9
-   aFZ0dcpUy6glH4ueofSyvaP/+KUYDhbvKwCIvrqDfXOEDWhieQAUxDMsR
-   2StD2VXnFM26i04Z2U8FUSJX5gl7C9GcOCNiwOT1OKzzbRlWdkMzjEPxq
-   GWJsTtwbZDp0yPpEb1gPmgdS0yQWCADXFJ7YaRX14ZVzwKOBgI3RMOhoo
-   w==;
-X-CSE-ConnectionGUID: MHh2+M/nQnGWd6oX88/o9A==
-X-CSE-MsgGUID: HM+A23lHT+qDOs4Q9KdacA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="56359285"
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="56359285"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 04:31:09 -0700
-X-CSE-ConnectionGUID: pec6dw2LSNag+TgJ2t4cCQ==
-X-CSE-MsgGUID: 5gDIfcA3S6uujnD31ThvUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="181765106"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Jun 2025 04:31:07 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSZxY-000LhD-2g;
-	Fri, 20 Jun 2025 11:31:04 +0000
-Date: Fri, 20 Jun 2025 19:30:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 7aed15379db9c6ec67999cdaf5c443b7be06ea73
-Message-ID: <202506201933.tTrOk2pW-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1750430801; c=relaxed/simple;
+	bh=ABf6EwWTGkcZcPTeOeyFfUPP2cHPPDEntIOdF3urxX8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UVX7qhCsqRh1X8jnVugnybgK3Oezzndhs46tWhBsD9tvjfw03Wbm1AFnU+xJdJfROFmZT5xWh5iUrvh8/MIYxzPGHt/6ihX4oOwTNnSLgS9M9rQcFja5cM0z6krNMO0e2REaEhHmccDAkAUFZ2ySJYyA1ZR4i/cgtyOuknNmWYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=R2JA26jZ; arc=none smtp.client-ip=51.159.173.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Orp3DJwdoLCPJivzW1fDqgU7aiPGhytEa2iFmC1YDdM=; b=R2JA26jZ0BrujI9rFnb9eL99L2
+	PFXTbh86tFuEbsw28Cdki8KTSRniTlCNDe+0+lwJ9vxKZNxhLUN6A9Q7znNIpDSY5Y3t4ijZLf7Vo
+	RYJPXBosaR1GxykTh8WxbvO/6jGN+E9hr6aOiv4pScI+kV0H6Qth9CQ6ZqVoGElCQLL/wK61LjruT
+	5uYKy8WIBRyiAaGhvcKkkZtoTL+CL58lXkEWhCMnwCDDOhUcXv2a00zipHEVC7Bib6HME4y8FF17v
+	zPBgAXBBC1OM3Qiu5YCNT1Ll5JpHpaJIVVm8ZVce11tzQbNfmRSCmq9rnMCUWIAIK/STJstaPtVoa
+	pvuW75rA==;
+Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:43571 helo=[10.224.8.110])
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
+	id 1uSciZ-00000007rNQ-0bb5;
+	Fri, 20 Jun 2025 16:27:44 +0200
+From: nicolas.bouchinet@oss.cyber.gouv.fr
+Subject: [RFC PATCH 0/4] Support for usb authentication
+Date: Fri, 20 Jun 2025 16:27:15 +0200
+Message-Id: <20250620-usb_authentication-v1-0-0d92261a5779@ssi.gouv.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMNvVWgC/x2MSQqAMBDAviJztlA76MGviEiXqc6lShcRpH+3e
+ AwkeSFRZEowdy9EujnxGRoMfQf20GEnwa4xKKlGOSkpSjKbLvmgkNnq3HSBiMbpySN6ghZekTw
+ //3RZa/0AN0n0YWQAAAA=
+X-Change-ID: 20250620-usb_authentication-333bda6f33fe
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, 
+ Kannappan R <r.kannappan@intel.com>, 
+ Sabyrzhan Tasbolatov <snovitoll@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Stefan Eichenberger <stefan.eichenberger@toradex.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Pawel Laszczak <pawell@cadence.com>, 
+ Ma Ke <make_ruc2021@163.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, 
+ Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>, 
+ Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>, 
+ Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 7aed15379db9c6ec67999cdaf5c443b7be06ea73  Revert "usb: xhci: Implement xhci_handshake_check_state() helper"
+We have been working on the implementation of the USB authentication
+protocol in the kernel.
 
-elapsed time: 1447m
+You can find our work here https://github.com/ANSSI-FR/usb_authentication.
 
-configs tested: 239
-configs skipped: 5
+It is still work in progress but we would like to start discussions
+about the implementation design and its possible integration to the
+Linux kernel.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best regards,
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-15.1.0
-arc                          axs103_defconfig    clang-21
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20250619    gcc-15.1.0
-arc                   randconfig-001-20250620    clang-21
-arc                   randconfig-002-20250619    gcc-15.1.0
-arc                   randconfig-002-20250620    clang-21
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-15.1.0
-arm                         axm55xx_defconfig    clang-21
-arm                                 defconfig    gcc-15.1.0
-arm                   randconfig-001-20250619    clang-21
-arm                   randconfig-001-20250620    clang-21
-arm                   randconfig-002-20250619    gcc-8.5.0
-arm                   randconfig-002-20250620    clang-21
-arm                   randconfig-003-20250619    gcc-8.5.0
-arm                   randconfig-003-20250620    clang-21
-arm                   randconfig-004-20250619    gcc-10.5.0
-arm                   randconfig-004-20250620    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20250619    gcc-8.5.0
-arm64                 randconfig-001-20250620    clang-21
-arm64                 randconfig-002-20250619    gcc-9.5.0
-arm64                 randconfig-002-20250620    clang-21
-arm64                 randconfig-003-20250619    gcc-10.5.0
-arm64                 randconfig-003-20250620    clang-21
-arm64                 randconfig-004-20250619    gcc-10.5.0
-arm64                 randconfig-004-20250620    clang-21
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20250619    gcc-11.5.0
-csky                  randconfig-001-20250620    clang-21
-csky                  randconfig-002-20250619    gcc-9.3.0
-csky                  randconfig-002-20250620    clang-21
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-21
-hexagon                             defconfig    gcc-15.1.0
-hexagon               randconfig-001-20250619    clang-21
-hexagon               randconfig-001-20250620    clang-21
-hexagon               randconfig-002-20250619    clang-21
-hexagon               randconfig-002-20250620    clang-21
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    clang-20
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250619    gcc-12
-i386        buildonly-randconfig-001-20250620    clang-20
-i386        buildonly-randconfig-002-20250619    gcc-12
-i386        buildonly-randconfig-002-20250620    clang-20
-i386        buildonly-randconfig-003-20250619    clang-20
-i386        buildonly-randconfig-003-20250620    clang-20
-i386        buildonly-randconfig-004-20250619    clang-20
-i386        buildonly-randconfig-004-20250620    clang-20
-i386        buildonly-randconfig-005-20250619    clang-20
-i386        buildonly-randconfig-005-20250620    clang-20
-i386        buildonly-randconfig-006-20250619    clang-20
-i386        buildonly-randconfig-006-20250620    clang-20
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250620    gcc-12
-i386                  randconfig-002-20250620    gcc-12
-i386                  randconfig-003-20250620    gcc-12
-i386                  randconfig-004-20250620    gcc-12
-i386                  randconfig-005-20250620    gcc-12
-i386                  randconfig-006-20250620    gcc-12
-i386                  randconfig-007-20250620    gcc-12
-i386                  randconfig-011-20250620    gcc-12
-i386                  randconfig-012-20250620    gcc-12
-i386                  randconfig-013-20250620    gcc-12
-i386                  randconfig-014-20250620    gcc-12
-i386                  randconfig-015-20250620    gcc-12
-i386                  randconfig-016-20250620    gcc-12
-i386                  randconfig-017-20250620    gcc-12
-loongarch                        allmodconfig    gcc-15.1.0
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch                           defconfig    gcc-15.1.0
-loongarch             randconfig-001-20250619    gcc-15.1.0
-loongarch             randconfig-001-20250620    clang-21
-loongarch             randconfig-002-20250619    gcc-15.1.0
-loongarch             randconfig-002-20250620    clang-21
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-m68k                           virt_defconfig    clang-21
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                               defconfig    gcc-15.1.0
-nios2                 randconfig-001-20250619    gcc-8.5.0
-nios2                 randconfig-001-20250620    clang-21
-nios2                 randconfig-002-20250619    gcc-8.5.0
-nios2                 randconfig-002-20250620    clang-21
-openrisc                          allnoconfig    clang-21
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-21
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20250619    gcc-11.5.0
-parisc                randconfig-001-20250620    clang-21
-parisc                randconfig-002-20250619    gcc-8.5.0
-parisc                randconfig-002-20250620    clang-21
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    clang-21
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    gcc-15.1.0
-powerpc                      cm5200_defconfig    clang-21
-powerpc                     mpc5200_defconfig    clang-21
-powerpc                     ppa8548_defconfig    clang-21
-powerpc               randconfig-001-20250619    gcc-9.3.0
-powerpc               randconfig-001-20250620    clang-21
-powerpc               randconfig-002-20250619    clang-21
-powerpc               randconfig-002-20250620    clang-21
-powerpc               randconfig-003-20250619    gcc-10.5.0
-powerpc               randconfig-003-20250620    clang-21
-powerpc64             randconfig-001-20250619    gcc-11.5.0
-powerpc64             randconfig-001-20250620    clang-21
-powerpc64             randconfig-002-20250619    clang-21
-powerpc64             randconfig-002-20250620    clang-21
-powerpc64             randconfig-003-20250619    gcc-10.5.0
-powerpc64             randconfig-003-20250620    clang-21
-riscv                            allmodconfig    gcc-15.1.0
-riscv                             allnoconfig    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                            allyesconfig    gcc-15.1.0
-riscv                               defconfig    gcc-12
-riscv                 randconfig-001-20250619    gcc-11.5.0
-riscv                 randconfig-001-20250620    gcc-13.3.0
-riscv                 randconfig-002-20250619    clang-16
-riscv                 randconfig-002-20250620    gcc-13.3.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20250619    clang-19
-s390                  randconfig-001-20250620    gcc-13.3.0
-s390                  randconfig-002-20250619    gcc-13.2.0
-s390                  randconfig-002-20250620    gcc-13.3.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-12
-sh                            hp6xx_defconfig    clang-21
-sh                    randconfig-001-20250619    gcc-9.3.0
-sh                    randconfig-001-20250620    gcc-13.3.0
-sh                    randconfig-002-20250619    gcc-9.3.0
-sh                    randconfig-002-20250620    gcc-13.3.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250619    gcc-14.3.0
-sparc                 randconfig-001-20250620    gcc-13.3.0
-sparc                 randconfig-002-20250619    gcc-10.3.0
-sparc                 randconfig-002-20250620    gcc-13.3.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20250619    gcc-13.3.0
-sparc64               randconfig-001-20250620    gcc-13.3.0
-sparc64               randconfig-002-20250619    gcc-8.5.0
-sparc64               randconfig-002-20250620    gcc-13.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250619    clang-19
-um                    randconfig-001-20250620    gcc-13.3.0
-um                    randconfig-002-20250619    clang-21
-um                    randconfig-002-20250620    gcc-13.3.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250619    clang-20
-x86_64      buildonly-randconfig-001-20250620    gcc-12
-x86_64      buildonly-randconfig-002-20250619    gcc-12
-x86_64      buildonly-randconfig-002-20250620    gcc-12
-x86_64      buildonly-randconfig-003-20250619    clang-20
-x86_64      buildonly-randconfig-003-20250620    gcc-12
-x86_64      buildonly-randconfig-004-20250619    gcc-12
-x86_64      buildonly-randconfig-004-20250620    gcc-12
-x86_64      buildonly-randconfig-005-20250619    clang-20
-x86_64      buildonly-randconfig-005-20250620    gcc-12
-x86_64      buildonly-randconfig-006-20250619    gcc-12
-x86_64      buildonly-randconfig-006-20250620    gcc-12
-x86_64                              defconfig    clang-20
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250620    clang-20
-x86_64                randconfig-002-20250620    clang-20
-x86_64                randconfig-003-20250620    clang-20
-x86_64                randconfig-004-20250620    clang-20
-x86_64                randconfig-005-20250620    clang-20
-x86_64                randconfig-006-20250620    clang-20
-x86_64                randconfig-007-20250620    clang-20
-x86_64                randconfig-008-20250620    clang-20
-x86_64                randconfig-071-20250620    clang-20
-x86_64                randconfig-072-20250620    clang-20
-x86_64                randconfig-073-20250620    clang-20
-x86_64                randconfig-074-20250620    clang-20
-x86_64                randconfig-075-20250620    clang-20
-x86_64                randconfig-076-20250620    clang-20
-x86_64                randconfig-077-20250620    clang-20
-x86_64                randconfig-078-20250620    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-12
-x86_64                         rhel-9.4-kunit    gcc-12
-x86_64                           rhel-9.4-ltp    gcc-12
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250619    gcc-9.3.0
-xtensa                randconfig-001-20250620    gcc-13.3.0
-xtensa                randconfig-002-20250619    gcc-8.5.0
-xtensa                randconfig-002-20250620    gcc-13.3.0
+Nicolas and Luc
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+USB peripherals are an important attack vector in personal computers and
+pose a risk to the cyber security of companies and organizations.
+
+The USB foundation has published a standard to allow the authentication
+of USB peripherals ([1] and [2]). It defines a mechanism for the host to
+request credentials and issue an authentication challenge to USB-2 or
+USB-3 peripherals, either upon connection or later during the use of the
+peripheral.
+
+We currently envision the following use cases for USB authentication:
+
+- company networks where computers and peripherals can be privately
+  controlled and administered;
+- USB cleaning or decontamination stations;
+- individuals who want to prevent unauthorized device plug-in into their
+  machine.
+
+The implementation of this feature will obviously necessitate efforts
+from both the kernel community and peripherals vendors. We believe that
+providing an implementation of the host side of the protocol in the
+Linux kernel will encourage constructors to include this feature in
+their devices. On the other hand, we are working on implementing
+reference code for embedded devices, notably for Zephyr OS.
+
+The USB authentication protocol is based on a simple signature
+challenge. Devices hold between 1 and 8 pairs of private signing key and
+x509 certificate. Hosts must possess a store of root Certificate
+Authority certificates provided by device vendors.
+
+The protocol exchange is driven by the host and can be decomposed into
+three, mostly independent, phases:
+
+- The Host can request a digest of each certificate owned by the
+  peripheral.
+- If the Host does not recognize the peripheral from one of its digests,
+  it can read one or more certificates from the device until a valid one
+  is found.
+- The Host can issue an authentication challenge to the peripheral.
+
+On the host side, this requires the following functions:
+
+- handling the protocol exchange with the peripheral;
+- X509 certificates validation and administration (root CA loading,
+  certificate revocation…);
+- cryptographic functions for the challenge (random number generation
+  and ECDSA with the NIST P256 -secp256r1- curve);
+- security policy management;
+- authorization decision enforcement.
+
+We chose to implement the authentication protocol exchange directly in
+the kernel USB stack during the device enumeration. This is done by
+first requesting the device BOS to detect its capacity at handling
+authentication, then if supported starting the authentication sequence
+with a digest request.
+
+The implementation of the other functions is open to several design
+alternatives, mainly based on their distribution between kernel and user
+space. In this first implementation, we chose to implement most (all) of
+the cryptographic functions, certificate management and security policy
+management in user space in order to limit impact on the kernel side.
+This allows for more personalization later on. The communication between
+the kernel USB stack authentication function and user space is done via
+a generic netlink socket.
+
+The authorization decision enforcement can be done via the authorized
+field of the usb_device and the associated authorization and
+deauthorization functions. The usb_device also contains an authenticated
+field that could be used to track the result of the authentication
+process and allow for more complex security policy: the user could
+manually authorize a device that failed the authentication, or manually
+deauthorize a device that was previously authenticated.
+
+The USB authentication protocol come with some inherent limitations, [3]
+does a good job at describing most of them. During the implementation,
+we also found that the value encoding of the Validity field in the x509
+certificate differs from the RFC5280 [4]. This has prevented us from
+using the x509 parser included in the Linux kernel or OpenSSL, we chose
+to use the mbedtls library instead [5]. This obviously does not prevent
+others to replace it with their preferred implementation. It will also
+open discussions on the protocol enhancement.
+
+The architectural choice to place most of the cryptographic and security
+management functions in user space comes with its own limitations.
+
+First it introduces a dependency on the user space program availability.
+It will probably be necessary to introduce a fail-safe mechanism if the
+authentication can not be completed. Also, during early boot stages the
+user space service will be needed in one form or another in the
+initramfs.
+
+The second limitation is that the device initialization process is
+paused multiple times. Each time, the hub lock is released in order not
+to block the rest of the stack; and then reacquired when a response has
+been received from user space. The resuming of the operation on the
+device must be done with great care.
+
+Last, we do not yet interface properly with the rest of the usb stack
+and thus do not enforce a strict control of the two authenticated and
+authorized fields. Other sections of the kernel or userspace are able to
+overwrite those fields using the sysfs exposed files for example.
+
+The current kernel implementation of the USB authentication protocol is
+experimental and has the following limitations:
+
+- It does not yet handle all possible protocol errors.
+- It has been tested with a QEMU mock device, but tests with real
+  hardware are still in progress. As such, the over-the-wire protocol
+  has not yet been fully validated.
+- The kernel/user space communication has not yet been completely
+  validated, including the interruption of the worker thread and its
+  resuming.
+- Device authorization and deauthorization has not been completely
+  implemented.
+- It lacks an overall documentation and test suite.
+
+Our current kernel patch is obviously a work-in-progress and not yet
+ready for merging. We feel it is best to start a discussion on the
+architectural choices and gather early comments that could be used to
+improve the design.
+
+Concerning the user space functions, they are currently implemented in a
+small independent executable as a proof-of-concept. In the future,
+integrating it in existing larger projects, like USBGuard [6], would
+allow presenting a homogeneous USB administration interface to the user.
+
+We would like to get comments on the proposed architectural choices
+regarding the repartition of functions between kernel and user space and
+on the implementation in the USB stack, mostly concerning the releasing
+and reacquiring the hub lock multiple times during the authentication
+process.
+
+You can find in the following repository [7] the necessary code for
+creating a test environment:
+
+- the Linux kernel patches;
+- a python utility to generate a small PKI for device enrollment;
+- a C minimalist service to implement the USB policy engine;
+- patches for QEMU to implement a mock USB device with the
+  authentication capability;
+- a testbed to compile and test the project.
+
+- [1] “Universal Serial Bus Security Foundation Specification”, Revision
+  1.0 with ECN and Errata through January 7, 2019
+- [2] “Universal Serial Bus Type-C Authentication Specification”,
+  Revision 1.0 with ECN and Errata through January 7, 2019
+- [3] J. Tian, N. Scaife, D. Kumar, M. Bailey, A. Bates and K. Butler,
+  "SoK: "Plug & Pray" Today – Understanding USB Insecurity in Versions 1
+  Through C," 2018 IEEE Symposium on Security and Privacy (SP), San
+  Francisco, CA, USA, 2018, pp. 1032-1047, doi: 10.1109/SP.2018.00037
+- [4] RFC 5280, Internet X.509 Public Key Infrastructure Certificate and
+  Certificate Revocation List (CRL) Profile, May 2008
+- [5] https://www.trustedfirmware.org/projects/mbed-tls/
+- [6] https://usbguard.github.io/
+- [7] https://github.com/ANSSI-FR/usb_authentication
+
+Signed-off-by: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>
+Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+---
+Nicolas Bouchinet (4):
+      usb: core: Introduce netlink usb authentication policy engine
+      usb: core: Introduce usb authentication feature
+      usb: core: Plug the usb authentication capability
+      usb: core: Add Kconfig option to compile usb authorization
+
+ drivers/usb/core/Kconfig                  |    8 +
+ drivers/usb/core/Makefile                 |    4 +
+ drivers/usb/core/authent.c                |  631 +++++++++++++++++
+ drivers/usb/core/authent.h                |  166 +++++
+ drivers/usb/core/authent_netlink.c        | 1080 +++++++++++++++++++++++++++++
+ drivers/usb/core/authent_netlink.h        |  157 +++++
+ drivers/usb/core/config.c                 |   51 +-
+ drivers/usb/core/hub.c                    |    6 +
+ drivers/usb/core/usb.c                    |    5 +
+ include/linux/usb.h                       |    2 +
+ include/uapi/linux/usb/usb_auth_netlink.h |   67 ++
+ 11 files changed, 2176 insertions(+), 1 deletion(-)
+---
+base-commit: fc85704c3dae5ac1cb3c94045727241cd72871ff
+change-id: 20250620-usb_authentication-333bda6f33fe
+
+Best regards,
+-- 
+Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+
 
