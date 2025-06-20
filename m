@@ -1,78 +1,78 @@
-Return-Path: <linux-usb+bounces-24958-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24959-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC885AE200B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 18:26:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE0EDAE20DC
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 19:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D7523A679A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 16:25:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 837204A628E
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 17:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8E82E719A;
-	Fri, 20 Jun 2025 16:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA4D2EA16A;
+	Fri, 20 Jun 2025 17:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="DU/J5Ppt"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D6KCD2ZG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DC92BEC5F
-	for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 16:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BE22EA147
+	for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 17:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750436761; cv=none; b=HLeSvQD/nUwmEsCdkh2VWFr/jCNCVAyFP8uzEgKJDaLMFja7WhPize2i7r3Q59y1ToNy75mWWq6JyXo8dcYv4WiUE9NPAYNIgadJeOSYCwa5wn0UF5LQIzaA/UtNcrLY5Me8XIAwdknvol1GJ2sWMjk3ZElz7V5TZNJc+okm8Ss=
+	t=1750440375; cv=none; b=dYEoAhbdXnV0n0u/c/azedMagNHgIxM3YRj51+EWjOXo8XGZbGgtGJtJWWT2yfFhy5pHsXo+cN/nF1mUsFxsy2yugsGU8SfbvYhxFsOE8lhoMyltKQOKySrHgyd+coy/2/TU4aiGUA7BXPd+ngwOTf3E98klrQ+1x4CH1aGvtZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750436761; c=relaxed/simple;
-	bh=2lpfuT+UJ73xh83VqKPWIoYBmbgIzKWaPVoLMY4rhrI=;
+	s=arc-20240116; t=1750440375; c=relaxed/simple;
+	bh=DMDp7KdSg0OADmqXMvg+hhhIHuQ3+bHuc1JTtsSwrkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jq+oRrb4Cj5DmzXPdgW1+6ZuYCBY9/f7LGz450jelItet3EKd1bbzG/0QRl1zrpd8SUlk6JJKJdglJkfUK+pF+I1/vVx9SmwU6UGSZbscHtU+jT6K3PxPNNQUo3NTxTPVZ+jcBSxVa6uJlOWOhRmmCOcY2RvOgbqpzzZJu+oGr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=DU/J5Ppt; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so23188435e9.1
-        for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 09:25:59 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=lkndpjqJKxqWo3X2QWHl8bcWR9YdiepRT5uy9y53cMqnfRs6Jw08bf6NwWvwRj5uct7U/ifcre4GFtPsQNsdzjgXza7VrJYnIYGh5iAFtlqzeDZGhlajN5IzWGK3/9RfdPa+2Hd5YRRk/xAqkJCcOI5OOz+r6GBzYGknug+fyiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D6KCD2ZG; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3de39d642a9so8621795ab.1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Jun 2025 10:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1750436758; x=1751041558; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Alqg+WicKPYUIWXmnQXqsBN2VhHsKxxFP4ePyG0B/vk=;
-        b=DU/J5PptjWdlJAqQaZD2jvC/tSBZrpcFT7r8u4oFD9vEx6UA+nZ9mVBAFRrZ20h+Bp
-         O8PHKcThXHvlOqA4L8DydUqHeTTfd8qdVhFpZ9dR1a7pAJvyeD9SNfRD10xS5bRpuOLI
-         WlKEE0x00EnGNzLZznjnumWgB30vM1eCm4ekg=
+        d=linuxfoundation.org; s=google; t=1750440372; x=1751045172; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qMdgn8VeeI3SGgeQXZkzCb+QOrUsQueKBj98VA1GvRo=;
+        b=D6KCD2ZGhxNZkKRy/ghsKIDKOMElOtUg7zH0N2/SMptp+uehuSsPsA5xgruyysugoF
+         Ydxr+btzmrm+aGFk/aQTyOhX0+8UVlJR8PqxhphUL9W830Yfjjby6rM/DuJAN5/bg9FY
+         1EsX+TNl0AmwsgtW5/TW9OJU3QsiJ0AAq6LDE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750436758; x=1751041558;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Alqg+WicKPYUIWXmnQXqsBN2VhHsKxxFP4ePyG0B/vk=;
-        b=XjmMoWtrQcrG3HaQj18j0mmkuNY/y1ZR0EvTTteEKbVsJ9viwsbqEHqNTp/RN9JBUG
-         74GWVFHwVqx86MNRu49BqTCF1Z+AGfarcppecpYkQ64iNcvzFzHFzJlS0dXigFxLch0z
-         /mORaZUkglrjku7VCI+6Gz2ABv7d31zGnFFUfQcl/+D7XGTT1kWY1BfjQAps/AipHvsf
-         ea1J2frEfRHAa0ocJOjh+GbXtWR2NCU0IzOJ982KJMIOX8iAWgajjhanhB+X6tluQI/K
-         piAdTPMoZIikkMj6MrbdXeHCZZsUBRmBqldjcK1nQO1upoaIYhPLQ0n+G3llrCYMqJXi
-         4Ngg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXJ+sluSWwYn5M17TK47Tpm9C85sr9haL4yQ5VLcncbf41W0J7a+8dNN3POd+RC4T4kHCqTzgxofs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz7rgrIh6u9fXfS0dad4oSKGOTuKbjZVdk/xoBsxsX2q83ROxl
-	YRj+r+QpslPzINmNHQTsj6tdB95W7pfzhGqOjhGcqMKtisKvoehovvR6aV2WDTIC9g==
-X-Gm-Gg: ASbGncvvZ/C2o6UKuuUfrBmpwxU2becFnXvpqfhgD8iRQED79J+lkiZj03y7edG+Uns
-	G+gz4YvKks8Teoj2+3fPWD+JLOnAfvEvwVYSybGp/64JQ9jNWooyf28HEb4cPcmiEJPCmHwCQj+
-	nhGcN3p/IFR2lr//K+SrA12eHOTZNfGOmRr70f8iIFQNkDIBuRlfLDgK4bqSIeNH9x7GJh4zYPu
-	wfOlX3N2oaV7ezRd0qSCZnCFSNS3Q+4Ap7VWlw4rZatPxfjoD+9ZU/9druDYkq3vNB/2O2RS6/B
-	Z1VN51KYm3JyOVJTuZ0XlKjbT1lYx2HNmuTcuPm/RhvW4RV9GVWpFvkbZJXbEfdk6nRoGRnwoJx
-	z7VDCnc/UxdFmBEj6vsTUWtB6ktDkmt56TLIK
-X-Google-Smtp-Source: AGHT+IGRwKx0AynK+ibMBUFo43qWTcsiEdtRRQuC50E0G+K6arFeZxJbV27lEJE+xU2l8nMbP/C7jw==
-X-Received: by 2002:a05:600c:4f8a:b0:43d:fa59:a685 with SMTP id 5b1f17b1804b1-453659f5049mr31054025e9.33.1750436758174;
-        Fri, 20 Jun 2025 09:25:58 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535eac8bb6sm64450535e9.25.2025.06.20.09.25.48
+        d=1e100.net; s=20230601; t=1750440372; x=1751045172;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMdgn8VeeI3SGgeQXZkzCb+QOrUsQueKBj98VA1GvRo=;
+        b=V0BQS17QsI4bRMIKa+gqmsyvUZzc8hXYLPzgtb5bC+9BlV4OY+YCkaaJ+Fpfsy0OlN
+         z+8EUV2Yno929o5cU23rQF2Csntby5/nP6Zssz95srjx8KioBrkYa98EElcx0glrj/iV
+         /wEdKHvqsFa1uZ93cAvvfAdZhtB3ZitHGZHWy0DGcFNAhvnntvdcezWE4jWwl0swJIYh
+         qsG6PFEOva0W1nDmIMBsM45LvU9erRYxGrrPBQEd3QV9jmV+5ngEXh3Ayxm7Xvd7Tam5
+         5JoSXt2VByx6MQXW4XvxY2wFqOS2CTb5ZLViOGkfZmfeRosogiFOHYUkXgI6gcgtuMjJ
+         A9HA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHfu8+wqaFr6wM/2/QR8WufPtuOs8KeOHam03swg8ew9NykeU27wjB74WyAg4aJKOsoHYpz/GDUu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJOsM2TULLGEwjSj3h9p/VU5wCUwXi195yLllWewchBxQDUc2y
+	Pm4DjGvKjNyE3bY5BN+wjq9tB+31JGfePPKNjOJHSEIhY+xZYRF7iZb1GCqX+oidaxQ7jaG2vkT
+	VH+L+
+X-Gm-Gg: ASbGncsvGlW9CSEWYOsVSL1WzHUno1CHHzCiZwgcx9DOV/t9ea31+XM0toS5Kq6RjCl
+	VkivJRmV528JufZ4lgA6e5eJGtDK3SyZUBoS2MKStOIWjx5qEy+2OD93BkNLSjLPXz5nr04gvXD
+	3r7WEEqi1wsttWmkgOlrBKN8vpxFaKI4h6loG25IuTM4kRTtxPAXr4GY7n17ivDBUWYec+wLL81
+	8Un7GpAnQ8/O0MVGjmJErkO85QcuS2qfSLyLjYIZ+9Xj+u/SqSUMWbxyFJ+WFOaJG/AEDlaN2UZ
+	r3fuKCOoB8GIP1Sg4/Epv/6+evQW6tBrws/G8akNman9a8aOCpJHF86S0g6EZa39GKgTutCq8Q=
+	=
+X-Google-Smtp-Source: AGHT+IGPqrLcEbc+zJorqkrwKIBd+2amU6zwdAIEOSPTFzmh/L/RFTuNfBUdby9GSMEYeFYE0aSWoQ==
+X-Received: by 2002:a05:6e02:3a03:b0:3de:251c:211e with SMTP id e9e14a558f8ab-3de38cbf701mr36839325ab.17.1750440372219;
+        Fri, 20 Jun 2025 10:26:12 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5019e05048dsm473385173.83.2025.06.20.10.26.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jun 2025 09:25:57 -0700 (PDT)
-Message-ID: <e683862b-3eb2-4783-aa4e-c457b7113b7d@broadcom.com>
-Date: Fri, 20 Jun 2025 09:25:46 -0700
+        Fri, 20 Jun 2025 10:26:11 -0700 (PDT)
+Message-ID: <2e0bbc5a-e74a-4fb5-884c-686dbaf99caf@linuxfoundation.org>
+Date: Fri, 20 Jun 2025 11:26:11 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,101 +80,140 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next RFC] net: Throw ASSERT_RTNL into phy_detach
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>,
- Kory Maincent <kory.maincent@bootlin.com>
-Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- thomas.petazzoni@bootlin.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
- Manivannan Sadhasivam <mani@kernel.org>, Mark Einon <mark.einon@gmail.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- Iyappan Subramanian <iyappan@os.amperecomputing.com>,
- Keyur Chudgar <keyur@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>,
- =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
- Michael Chan <michael.chan@broadcom.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Doug Berger <opendmb@gmail.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Sunil Goutham <sgoutham@marvell.com>,
- Hans Ulli Kroll <ulli.kroll@googlemail.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Ioana Ciornei <ioana.ciornei@nxp.com>, Jijie Shao <shaojijie@huawei.com>,
- Jian Shen <shenjian15@huawei.com>, Salil Mehta <salil.mehta@huawei.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- MD Danish Anwar <danishanwar@ti.com>, Roger Quadros <rogerq@kernel.org>,
- Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou
- <mengyuanlou@net-swift.com>, Imre Kaloz <kaloz@openwrt.org>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- Steve Glendinning <steve.glendinning@shawell.net>,
- UNGLinuxDriver@microchip.com, Simon Horman <horms@kernel.org>,
- Vladimir Oltean <olteanv@gmail.com>,
- Richard Cochran <richardcochran@gmail.com>
-References: <20250620143341.2158655-1-kory.maincent@bootlin.com>
- <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+To: Greg KH <gregkh@linuxfoundation.org>, Zongmin Zhou <min_halo@163.com>
+Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ zhouzongmin@kylinos.cn, Shuah Khan <skhan@linuxfoundation.org>
+References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+ <20250604065410.76069-1-min_halo@163.com>
+ <2025061926-paycheck-footnote-a2b8@gregkh>
+ <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
+ <2025062010-hardiness-flashily-cb0f@gregkh>
+ <9d95bb75-586c-48dc-9e34-432cc13fd99f@163.com>
+ <2025062004-navy-emboss-4743@gregkh>
 Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <aFV2h4w3MLtjyfPb@shell.armlinux.org.uk>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <2025062004-navy-emboss-4743@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/20/25 07:56, Russell King (Oracle) wrote:
-> On Fri, Jun 20, 2025 at 04:33:27PM +0200, Kory Maincent wrote:
->> phy_detach needs the rtnl lock to be held. It should have been added before
->> to avoid this massive change among lots of net drivers but there was no
->> clear evidence of such needs at that time. This imply a lock change in
->> this API. Add phy_detach_rtnl, phy_diconnect_rtnl, phylink_connect_phy_rtnl
->> and phylink_fwnode_phy_connect_rtnl helpers to take the lock before calling
->> their respective function.
-> 
-> Please don't increase the number of API functions for phylink for the
-> long term. I'd prefer all callers of the phylink phy_connect functions
-> be updated to hold the RTNL, just like phylink_disconnect() requires.
-> 
+On 6/20/25 03:27, Greg KH wrote:
+> On Fri, Jun 20, 2025 at 05:19:33PM +0800, Zongmin Zhou wrote:
+>>
+>> On 2025/6/20 12:29, Greg KH wrote:
+>>> On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
+>>>> On 2025/6/19 19:01, Greg KH wrote:
+>>>>> On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
+>>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>>
+>>>>>> The vhci driver does not need to create a platform device,
+>>>>>> it only did so because it was simple to do that in order to
+>>>>>> get a place in sysfs to hang some device-specific attributes.
+>>>>>> Now the faux device interface is more appropriate,change it
+>>>>>> over to use the faux bus instead.
+>>>>>>
+>>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>> ---
+>>>>>> Changes in v2:
+>>>>>> - don't change faux create api,just call probe on vhci_hcd_init.
+>>>>>>
+>>>>>>     drivers/usb/usbip/vhci.h             |  4 +-
+>>>>>>     drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
+>>>>>>     drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
+>>>>>>     tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
+>>>>>>     4 files changed, 72 insertions(+), 88 deletions(-)
+>>>>> I get the following build errors from this patch:
+>>>>>
+>>>>> drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
+>>>>>     1462 | static int vhci_hcd_resume(struct faux_device *fdev)
+>>>>>          |            ^~~~~~~~~~~~~~~
+>>>>> drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
+>>>>>     1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
+>>>>>          |            ^~~~~~~~~~~~~~~~
+>>>>> cc1: all warnings being treated as errors
+>>>>>
+>>>>> Are you sure you tested this?
+>>>> I apologize for not enabling -Werror, which resulted in missing this error
+>>>> warning.
+>>>> I have tested usbip feature use the new patch,but not test system
+>>>> suspend/resume.
+>>>> The faux bus type don't add pm function,and vhci-hcd driver can't register
+>>>> it.
+>>>> Maybe have to add suspend/resume for it.like below:
+>>>> static const struct bus_type faux_bus_type = {
+>>>>       .name        = "faux",
+>>>>       .match        = faux_match,
+>>>>       .probe        = faux_probe,
+>>>>       .remove        = faux_remove,
+>>>>       .resume     = faux_resume,
+>>>>       .suspend    = faux_suspend,
+>>>> };
+>>>>
+>>>> Is that right?
+>>>> Your expertise would be greatly valued.
+>>> As this is not real hardware, why do you need the suspend/resume
+>>> callbacks at all?  What is happening here that requires them?
+>> @greg,
+>> The vhci_hcd_suspend/vhci_hcd_resume interfaces are not designed for this
+>> faux device, but rather to
+>> manipulate the HCD_FLAG_HW_ACCESSIBLE bit in the hcd flags associated with
+>> the faux device.
+>> For example:
+>> During system standby: clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>> During system wakeup: set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>>
+>> Previously, these two functions were registered through platform_driver,
+>> but faux bus does not have the relevant interface, so they were not called,
+>> resulting in this compilation warning error.
+>>
+>> This raises the question: Should the faux bus implement PM-related
+>> interface?
+>> I'm uncertain whether these functions are essential for the vhci-hcd driver
+>> or if they can be safely removed.
+>>
+>> However, during system standby/wakeup tests with remote USB devices bound to
+>> the vhci-hcd driver,
+>> I observed consistent failure scenarios across both the original platform
+>> bus and faux bus patch implementations.
 
-Yes, I completely agree, this should also make for a smaller patch set 
-to review.
--- 
-Florian
+suspend and resume hooks have been in the code from beginning
+in the CONFIG_PM path. The original authors are skeptical about
+what should happen during suspend"
+
+/* what should happen for USB/IP under suspend/resume? */
+suspend hook checks for active connections and sends EBBUSY
+back to pm core.
+
+Active connection means any of the ports are in USB_PORT_STAT_CONNECTION
+state. So as long as there are active connections between vhci client
+and the host, suspend won't work. So we really don't know what happens
+to the active connections if there are no suspend/resume hooks.
+
+If there are no active connections, then it will clear the HCD_FLAG_HW_ACCESSIBLE
+bit and returns to pm core to continue with suspend.
+
+resume sets the HCD_FLAG_HW_ACCESSIBLE flag to indicate hardware is accessible
+and initiates port status poll.
+
+- suspend hook prevents suspend
+
+With faux device since there is no suspend and resume hook, I would expect
+these hooks are not a factor in suspend and resume.
+
+vhci_hcd is a special case virtual driver as it is a proxy for controlling
+hardware on the host.
+
+Zongmin,
+
+Do suspend/resume work when vhci_hcd is not loaded?
+What happens when when system suspends and resumes with faux device?
+Can you send me dmesg logs and pm logs?
+
+thanks,
+-- Shuah
+
+
+
+
 
