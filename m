@@ -1,57 +1,63 @@
-Return-Path: <linux-usb+bounces-24962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848EEAE26A3
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 02:37:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFC65AE27BE
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 09:22:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1435517F5DF
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 00:37:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8029D189C010
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 07:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9202F849C;
-	Sat, 21 Jun 2025 00:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5A11D54C2;
+	Sat, 21 Jun 2025 07:22:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFZ9rPcG"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nCF2hhqU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0997118D;
-	Sat, 21 Jun 2025 00:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AFB196C7C;
+	Sat, 21 Jun 2025 07:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750466213; cv=none; b=tZgWuWGeXlJr6gaHY/43E7ctRSB57OsRXST1yvDSQQz99drHe3nvw3T/H9+J+m3a2sZvL9fj6uEXvP3MeEIE1AuIND+e7gllA1JMQkQ55OSXOR1rW3cIb+7+FEc1b7mbuKOYTJdYu+HFoxWNv//qlHialS6sDUTu4EWKNaikAcU=
+	t=1750490559; cv=none; b=sYRv0PLlvOBFq18nLq+T0qvCb7VG6JbaAgDU9uoPZp5Ksp3f7FYvWOt7i4/NuxHV1sNz20042+A8w5Y31RlmFQlgtLinumSMThgQYC/oMy/QMck+MWk2xnWbJYLZaWR4oq2vUyPtCcLjFyhr6LndBaurKel1RW/2S1lCKG9X6mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750466213; c=relaxed/simple;
-	bh=cpoeRYl68AdZV72kJE/G36W5Kkk3qHbamShIfbeav40=;
+	s=arc-20240116; t=1750490559; c=relaxed/simple;
+	bh=oundpO0MzuwbebUlC6NeXUr8PiL9fGQdjYk3FvfM+kk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JiDLh360TpYFRNQS0o4keNWSBXhsl8TdjLJEEwlNAckoGFy7cEPmZtod7v5VMgiEj0sfGSaCoAQkTDd+bg1fwu0L2VrCtN1MV/u9rDe8h0wni2/QnAxem6qI4/sh9vgi8/YqOeYeIqRzijcOTg8w2cWm50pq0y254UaZAAEwuRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFZ9rPcG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98983C4CEE3;
-	Sat, 21 Jun 2025 00:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750466211;
-	bh=cpoeRYl68AdZV72kJE/G36W5Kkk3qHbamShIfbeav40=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=cbj6BqwFoFdMGctFHDm6LxyP7ib5I5Qsqyr29RROPAEMgE+mwtf0sLTMNkobrMaqH2gM28xa/Tdu8EjYd9fYz1YpL2y+NWsV26cYSOlYUT7lyo91sxE38/1lCHqgSD1ZkwOotzYIYOremYXWxI69LSYOipaSNuR6NfFYugS7XBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nCF2hhqU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1F6C4CEE7;
+	Sat, 21 Jun 2025 07:22:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750490559;
+	bh=oundpO0MzuwbebUlC6NeXUr8PiL9fGQdjYk3FvfM+kk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BFZ9rPcGeXTNAuPRrFtIG8AnVUCQ7hpoSOpX+cTf48z6OP56M+/4KtlBBBZe4n6hc
-	 4Ige1VCefhniVOxYDl5X8t8UlVHQf/0aNQDXX7EXvFNdHfyjatc64zZIBeAqfXBXnB
-	 xMABUTxPIwNd80UjjzEtFVDKTstU5o8KC0Ybbo10PcDO3IKeurVhdz01i+x4tLKP8L
-	 awz8bM0pv9ic9GsUMIHGzxCe0UqFoo1Da0AuH9nuk6NnSS7nYNPvTrbZ1ChfO6OljH
-	 qwxcYlqODuWncKMYq2TXG1YJpC/uwf/I+dYwnN0slIFRxsYT+iJJJ/n1xWk4Y808c1
-	 disqASKiLeDNw==
-Date: Sat, 21 Jun 2025 08:36:43 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: cdnsp: Fix issue with CV Bad Descriptor test
-Message-ID: <20250621003643.GA41153@nchen-desktop>
-References: <20250620074306.2278838-1-pawell@cadence.com>
- <PH7PR07MB95382CCD50549DABAEFD6156DD7CA@PH7PR07MB9538.namprd07.prod.outlook.com>
+	b=nCF2hhqUGiAm6EhzbRFQ34hm1J0Ia4r/t+lhmy8AOThvBubPmpziA9EHRwr3m7w5I
+	 ruqVg+u8p8xTAOJjZTNfwbsQ0dto98UnE6S8V3y5HXIRV0KlxCHbaIViTxkbwVTyZa
+	 K4NWbIPOLCt3hpxMh2OO24PGmn2Ujsfva1Yp9EVM=
+Date: Sat, 21 Jun 2025 09:22:36 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: nicolas.bouchinet@oss.cyber.gouv.fr
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Kannappan R <r.kannappan@intel.com>,
+	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Pawel Laszczak <pawell@cadence.com>, Ma Ke <make_ruc2021@163.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>,
+	Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>,
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH 4/4] usb: core: Add Kconfig option to compile usb
+ authorization
+Message-ID: <2025062104-debate-compactly-9aee@gregkh>
+References: <20250620-usb_authentication-v1-0-0d92261a5779@ssi.gouv.fr>
+ <20250620-usb_authentication-v1-4-0d92261a5779@ssi.gouv.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,134 +66,37 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95382CCD50549DABAEFD6156DD7CA@PH7PR07MB9538.namprd07.prod.outlook.com>
+In-Reply-To: <20250620-usb_authentication-v1-4-0d92261a5779@ssi.gouv.fr>
 
-On 25-06-20 08:23:12, Pawel Laszczak wrote:
-> The SSP2 controller has extra endpoint state preserve bit (ESP) which
-> setting causes that endpoint state will be preserved during
-> Halt Endpoint command. It is used only for EP0.
-> Without this bit the Command Verifier "TD 9.10 Bad Descriptor Test"
-> failed.
-> Setting this bit doesn't have any impact for SSP controller.
+On Fri, Jun 20, 2025 at 04:27:19PM +0200, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
+> From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> This enables the usb authentication protocol implementation.
+> 
+> Co-developed-by: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>
+> Signed-off-by: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>
+> Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > ---
-> Changelog:
-> v3:
-> - removed else {}
+>  drivers/usb/core/Kconfig  | 8 ++++++++
+>  drivers/usb/core/Makefile | 4 ++++
+>  2 files changed, 12 insertions(+)
 > 
-> v2:
-> - removed some typos
-> - added pep variable initialization
-> - updated TRB_ESP description
-> 
->  drivers/usb/cdns3/cdnsp-debug.h  |  5 +++--
->  drivers/usb/cdns3/cdnsp-ep0.c    | 18 +++++++++++++++---
->  drivers/usb/cdns3/cdnsp-gadget.h |  6 ++++++
->  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
->  4 files changed, 26 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
-> index cd138acdcce1..86860686d836 100644
-> --- a/drivers/usb/cdns3/cdnsp-debug.h
-> +++ b/drivers/usb/cdns3/cdnsp-debug.h
-> @@ -327,12 +327,13 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
->  	case TRB_RESET_EP:
->  	case TRB_HALT_ENDPOINT:
->  		ret = scnprintf(str, size,
-> -				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
-> +				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c %c",
->  				cdnsp_trb_type_string(type),
->  				ep_num, ep_id % 2 ? "out" : "in",
->  				TRB_TO_EP_INDEX(field3), field1, field0,
->  				TRB_TO_SLOT_ID(field3),
-> -				field3 & TRB_CYCLE ? 'C' : 'c');
-> +				field3 & TRB_CYCLE ? 'C' : 'c',
-> +				field3 & TRB_ESP ? 'P' : 'p');
->  		break;
->  	case TRB_STOP_RING:
->  		ret = scnprintf(str, size,
-> diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-> index f317d3c84781..5cd9b898ce97 100644
-> --- a/drivers/usb/cdns3/cdnsp-ep0.c
-> +++ b/drivers/usb/cdns3/cdnsp-ep0.c
-> @@ -414,6 +414,7 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
->  void cdnsp_setup_analyze(struct cdnsp_device *pdev)
->  {
->  	struct usb_ctrlrequest *ctrl = &pdev->setup;
-> +	struct cdnsp_ep *pep;
->  	int ret = -EINVAL;
->  	u16 len;
+> diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+> index 58e3ca7e479392112f656384c664efc36bb1151a..07ba67137b7fe16ecb1e993a51dbbfd4dd3ada88 100644
+> --- a/drivers/usb/core/Kconfig
+> +++ b/drivers/usb/core/Kconfig
+> @@ -143,3 +143,11 @@ config USB_DEFAULT_AUTHORIZATION_MODE
+>  	  ACPI selecting value 2 is analogous to selecting value 0.
 >  
-> @@ -427,10 +428,21 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
->  		goto out;
->  	}
->  
-> +	pep = &pdev->eps[0];
+>  	  If unsure, keep the default value.
 > +
->  	/* Restore the ep0 to Stopped/Running state. */
-> -	if (pdev->eps[0].ep_state & EP_HALTED) {
-> -		trace_cdnsp_ep0_halted("Restore to normal state");
-> -		cdnsp_halt_endpoint(pdev, &pdev->eps[0], 0);
-> +	if (pep->ep_state & EP_HALTED) {
-> +		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_HALTED)
-> +			cdnsp_halt_endpoint(pdev, pep, 0);
-> +
-> +		/*
-> +		 * Halt Endpoint Command for SSP2 for ep0 preserve current
-> +		 * endpoint state and driver has to synchronize the
-> +		 * software endpoint state with endpoint output context
-> +		 * state.
-> +		 */
-> +		pep->ep_state &= ~EP_HALTED;
-> +		pep->ep_state |= EP_STOPPED;
+> +config USB_AUTHENTICATION
+> +	bool "Enable USB authentication function"
+> +	default n
 
-You do not reset endpoint by calling clear_halt, could we change ep_state
-directly?
+Nit, "default n" is the default, no need to ever list it.
 
-Peter
->  	}
->  
->  	/*
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-> index 2afa3e558f85..a91cca509db0 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.h
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
-> @@ -987,6 +987,12 @@ enum cdnsp_setup_dev {
->  #define STREAM_ID_FOR_TRB(p)		((((p)) << 16) & GENMASK(31, 16))
->  #define SCT_FOR_TRB(p)			(((p) << 1) & 0x7)
->  
-> +/*
-> + * Halt Endpoint Command TRB field.
-> + * The ESP bit only exists in the SSP2 controller.
-> + */
-> +#define TRB_ESP				BIT(9)
-> +
->  /* Link TRB specific fields. */
->  #define TRB_TC				BIT(1)
->  
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index fd06cb85c4ea..d397d28efc6e 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -2483,7 +2483,8 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
->  {
->  	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_HALT_ENDPOINT) |
->  			    SLOT_ID_FOR_TRB(pdev->slot_id) |
-> -			    EP_ID_FOR_TRB(ep_index));
-> +			    EP_ID_FOR_TRB(ep_index) |
-> +			    (!ep_index ? TRB_ESP : 0));
->  }
->  
->  void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
-> -- 
-> 2.43.0
-> 
+thanks,
 
--- 
-
-Best regards,
-Peter
+greg k-h
 
