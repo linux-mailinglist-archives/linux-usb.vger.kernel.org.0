@@ -1,133 +1,193 @@
-Return-Path: <linux-usb+bounces-24961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24962-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90398AE2321
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 21:57:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 848EEAE26A3
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 02:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1193D3B978F
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Jun 2025 19:57:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1435517F5DF
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 00:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D44227EBB;
-	Fri, 20 Jun 2025 19:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9202F849C;
+	Sat, 21 Jun 2025 00:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Li4bwqAo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFZ9rPcG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-69.smtpout.orange.fr [80.12.242.69])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B97521FF45;
-	Fri, 20 Jun 2025 19:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0997118D;
+	Sat, 21 Jun 2025 00:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750449448; cv=none; b=rdueY2zjkv7qt6FEGK31YmIIajRfz4IiL60dGn7EbJl8dybPDFNV1EbGMAJ82+mYHUA3ZxxAgb29agq6Hl2wvgjvbRA/VxC4chOOVE9H26hfnlwTQFtpux762vz9wroFWzHASvz+froYalozfjVSh9CKlM5BHxbGdXplch5dQa4=
+	t=1750466213; cv=none; b=tZgWuWGeXlJr6gaHY/43E7ctRSB57OsRXST1yvDSQQz99drHe3nvw3T/H9+J+m3a2sZvL9fj6uEXvP3MeEIE1AuIND+e7gllA1JMQkQ55OSXOR1rW3cIb+7+FEc1b7mbuKOYTJdYu+HFoxWNv//qlHialS6sDUTu4EWKNaikAcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750449448; c=relaxed/simple;
-	bh=T4bxQ+js+L+kONrcFFUZeo6KEMGpgi936gQ6NG55uXQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FBM+CiqTL4h9WkEigqr3WmKYo5LB0kf//3cmH1n71eAzeZ/vmTQ5JJj6NOBwYzx80QhCfOJwh1ki2eRlGRGujp6l80l1MBwgYkjoA/VdVf8mJPs7BP6udW/LrGIi2bKNj7bQTaIvIqZPPt7D8HwrDx2TKWyCOOZwkzfyVw8dLJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Li4bwqAo; arc=none smtp.client-ip=80.12.242.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
- ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id ShqLu160RuKiMShqLu11Jb; Fri, 20 Jun 2025 21:56:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1750449370;
-	bh=N1N+ytm2H1ykrHgavGmyyf72iaKD39Hn7O7RanLWe/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Li4bwqAoJ1C5LWmO1J5WuRq4tQUwwJ8a7HnUzPaNkfqsiGF4FP0n3wvKjYg68WU9X
-	 kDh4OcvD616QQ0RVLHietKltaPWHEKpR4yrvTCGweYafRSinO2FamC0vTypX6nUR6U
-	 nunnI/1blUerp+XYSAK8vZIKHArqe+hl6hVLJzhn6ordIcjLkJPBR4uEuZyhur5SWz
-	 HkOa4PM+tX9dpOdhW8oEmiXrLHJUV/6JI/cMoOSvlfMWEE0FuQ93Jq5+/e5zdUbymH
-	 B25PVcP1J7XV7XD2BdT+SyiJU+2PotssQei4iG3CBU8ITsM97tqjz95YCCA3jubSWw
-	 2imEt5y+FyasQ==
-X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Fri, 20 Jun 2025 21:56:10 +0200
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-Message-ID: <d2d321cd-7ca7-42d9-8eb8-7ab639dddfa6@wanadoo.fr>
-Date: Fri, 20 Jun 2025 21:56:09 +0200
+	s=arc-20240116; t=1750466213; c=relaxed/simple;
+	bh=cpoeRYl68AdZV72kJE/G36W5Kkk3qHbamShIfbeav40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JiDLh360TpYFRNQS0o4keNWSBXhsl8TdjLJEEwlNAckoGFy7cEPmZtod7v5VMgiEj0sfGSaCoAQkTDd+bg1fwu0L2VrCtN1MV/u9rDe8h0wni2/QnAxem6qI4/sh9vgi8/YqOeYeIqRzijcOTg8w2cWm50pq0y254UaZAAEwuRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFZ9rPcG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98983C4CEE3;
+	Sat, 21 Jun 2025 00:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750466211;
+	bh=cpoeRYl68AdZV72kJE/G36W5Kkk3qHbamShIfbeav40=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BFZ9rPcGeXTNAuPRrFtIG8AnVUCQ7hpoSOpX+cTf48z6OP56M+/4KtlBBBZe4n6hc
+	 4Ige1VCefhniVOxYDl5X8t8UlVHQf/0aNQDXX7EXvFNdHfyjatc64zZIBeAqfXBXnB
+	 xMABUTxPIwNd80UjjzEtFVDKTstU5o8KC0Ybbo10PcDO3IKeurVhdz01i+x4tLKP8L
+	 awz8bM0pv9ic9GsUMIHGzxCe0UqFoo1Da0AuH9nuk6NnSS7nYNPvTrbZ1ChfO6OljH
+	 qwxcYlqODuWncKMYq2TXG1YJpC/uwf/I+dYwnN0slIFRxsYT+iJJJ/n1xWk4Y808c1
+	 disqASKiLeDNw==
+Date: Sat, 21 Jun 2025 08:36:43 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: cdnsp: Fix issue with CV Bad Descriptor test
+Message-ID: <20250621003643.GA41153@nchen-desktop>
+References: <20250620074306.2278838-1-pawell@cadence.com>
+ <PH7PR07MB95382CCD50549DABAEFD6156DD7CA@PH7PR07MB9538.namprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: ehci: replace scnprintf() with sysfs_emit()
-To: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>,
- stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc: skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250619120711.552662-1-hendrik.hamerlinck@hammernet.be>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250619120711.552662-1-hendrik.hamerlinck@hammernet.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR07MB95382CCD50549DABAEFD6156DD7CA@PH7PR07MB9538.namprd07.prod.outlook.com>
 
-Le 19/06/2025 à 14:07, Hendrik Hamerlinck a écrit :
-> Per Documentation/filesystems/sysfs.rst, show() methods should only
-> use sysfs_emit() or sysfs_emit_at() when formatting values to be
-> returned to userspace.
+On 25-06-20 08:23:12, Pawel Laszczak wrote:
+> The SSP2 controller has extra endpoint state preserve bit (ESP) which
+> setting causes that endpoint state will be preserved during
+> Halt Endpoint command. It is used only for EP0.
+> Without this bit the Command Verifier "TD 9.10 Bad Descriptor Test"
+> failed.
+> Setting this bit doesn't have any impact for SSP controller.
 > 
-> Convert the uses of scnprintf() in sysfs show() methods to
-> sysfs_emit() and sysfs_emit_at() for better safety and consistency.
-> 
-> Signed-off-by: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> cc: stable@vger.kernel.org
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
->   drivers/usb/host/ehci-sysfs.c | 15 +++++----------
->   1 file changed, 5 insertions(+), 10 deletions(-)
+> Changelog:
+> v3:
+> - removed else {}
 > 
-> diff --git a/drivers/usb/host/ehci-sysfs.c b/drivers/usb/host/ehci-sysfs.c
-> index 8f75cb7b197c..3786e81b0ed9 100644
-> --- a/drivers/usb/host/ehci-sysfs.c
-> +++ b/drivers/usb/host/ehci-sysfs.c
-> @@ -12,21 +12,18 @@ static ssize_t companion_show(struct device *dev,
->   			      char *buf)
->   {
->   	struct ehci_hcd		*ehci;
-> -	int			nports, index, n;
-> -	int			count = PAGE_SIZE;
-> -	char			*ptr = buf;
-> +	int			nports, index;
-> +	int			len = 0;
->   
->   	ehci = hcd_to_ehci(dev_get_drvdata(dev));
->   	nports = HCS_N_PORTS(ehci->hcs_params);
->   
->   	for (index = 0; index < nports; ++index) {
->   		if (test_bit(index, &ehci->companion_ports)) {
-> -			n = scnprintf(ptr, count, "%d\n", index + 1);
-> -			ptr += n;
-> -			count -= n;
-> +			len += sysfs_emit_at(buf, len, "%d\n", index + 1);
->   		}
+> v2:
+> - removed some typos
+> - added pep variable initialization
+> - updated TRB_ESP description
+> 
+>  drivers/usb/cdns3/cdnsp-debug.h  |  5 +++--
+>  drivers/usb/cdns3/cdnsp-ep0.c    | 18 +++++++++++++++---
+>  drivers/usb/cdns3/cdnsp-gadget.h |  6 ++++++
+>  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+>  4 files changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
+> index cd138acdcce1..86860686d836 100644
+> --- a/drivers/usb/cdns3/cdnsp-debug.h
+> +++ b/drivers/usb/cdns3/cdnsp-debug.h
+> @@ -327,12 +327,13 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
+>  	case TRB_RESET_EP:
+>  	case TRB_HALT_ENDPOINT:
+>  		ret = scnprintf(str, size,
+> -				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
+> +				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c %c",
+>  				cdnsp_trb_type_string(type),
+>  				ep_num, ep_id % 2 ? "out" : "in",
+>  				TRB_TO_EP_INDEX(field3), field1, field0,
+>  				TRB_TO_SLOT_ID(field3),
+> -				field3 & TRB_CYCLE ? 'C' : 'c');
+> +				field3 & TRB_CYCLE ? 'C' : 'c',
+> +				field3 & TRB_ESP ? 'P' : 'p');
+>  		break;
+>  	case TRB_STOP_RING:
+>  		ret = scnprintf(str, size,
+> diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
+> index f317d3c84781..5cd9b898ce97 100644
+> --- a/drivers/usb/cdns3/cdnsp-ep0.c
+> +++ b/drivers/usb/cdns3/cdnsp-ep0.c
+> @@ -414,6 +414,7 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
+>  void cdnsp_setup_analyze(struct cdnsp_device *pdev)
+>  {
+>  	struct usb_ctrlrequest *ctrl = &pdev->setup;
+> +	struct cdnsp_ep *pep;
+>  	int ret = -EINVAL;
+>  	u16 len;
+>  
+> @@ -427,10 +428,21 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
+>  		goto out;
+>  	}
+>  
+> +	pep = &pdev->eps[0];
+> +
+>  	/* Restore the ep0 to Stopped/Running state. */
+> -	if (pdev->eps[0].ep_state & EP_HALTED) {
+> -		trace_cdnsp_ep0_halted("Restore to normal state");
+> -		cdnsp_halt_endpoint(pdev, &pdev->eps[0], 0);
+> +	if (pep->ep_state & EP_HALTED) {
+> +		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_HALTED)
+> +			cdnsp_halt_endpoint(pdev, pep, 0);
+> +
+> +		/*
+> +		 * Halt Endpoint Command for SSP2 for ep0 preserve current
+> +		 * endpoint state and driver has to synchronize the
+> +		 * software endpoint state with endpoint output context
+> +		 * state.
+> +		 */
+> +		pep->ep_state &= ~EP_HALTED;
+> +		pep->ep_state |= EP_STOPPED;
 
-Nitpick: extra { } looks useless now.
+You do not reset endpoint by calling clear_halt, could we change ep_state
+directly?
 
->   	}
-> -	return ptr - buf;
-> +	return len;
->   }
->   
->   /*
-> @@ -70,11 +67,9 @@ static ssize_t uframe_periodic_max_show(struct device *dev,
->   					char *buf)
->   {
->   	struct ehci_hcd		*ehci;
-> -	int			n;
->   
->   	ehci = hcd_to_ehci(dev_get_drvdata(dev));
-> -	n = scnprintf(buf, PAGE_SIZE, "%d\n", ehci->uframe_periodic_max);
-> -	return n;
-> +	return sysfs_emit(buf, "%d\n", ehci->uframe_periodic_max);
->   }
->   
->   
+Peter
+>  	}
+>  
+>  	/*
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
+> index 2afa3e558f85..a91cca509db0 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.h
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
+> @@ -987,6 +987,12 @@ enum cdnsp_setup_dev {
+>  #define STREAM_ID_FOR_TRB(p)		((((p)) << 16) & GENMASK(31, 16))
+>  #define SCT_FOR_TRB(p)			(((p) << 1) & 0x7)
+>  
+> +/*
+> + * Halt Endpoint Command TRB field.
+> + * The ESP bit only exists in the SSP2 controller.
+> + */
+> +#define TRB_ESP				BIT(9)
+> +
+>  /* Link TRB specific fields. */
+>  #define TRB_TC				BIT(1)
+>  
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index fd06cb85c4ea..d397d28efc6e 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2483,7 +2483,8 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
+>  {
+>  	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_HALT_ENDPOINT) |
+>  			    SLOT_ID_FOR_TRB(pdev->slot_id) |
+> -			    EP_ID_FOR_TRB(ep_index));
+> +			    EP_ID_FOR_TRB(ep_index) |
+> +			    (!ep_index ? TRB_ESP : 0));
+>  }
+>  
+>  void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
+> -- 
+> 2.43.0
+> 
 
+-- 
+
+Best regards,
+Peter
 
