@@ -1,63 +1,97 @@
-Return-Path: <linux-usb+bounces-24963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC65AE27BE
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 09:22:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8580AAE27D2
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 09:49:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8029D189C010
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 07:23:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9F23AD67A
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 07:48:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5A11D54C2;
-	Sat, 21 Jun 2025 07:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC85A1DACB1;
+	Sat, 21 Jun 2025 07:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nCF2hhqU"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="UfFDcif/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AFB196C7C;
-	Sat, 21 Jun 2025 07:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD921A5B92;
+	Sat, 21 Jun 2025 07:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750490559; cv=none; b=sYRv0PLlvOBFq18nLq+T0qvCb7VG6JbaAgDU9uoPZp5Ksp3f7FYvWOt7i4/NuxHV1sNz20042+A8w5Y31RlmFQlgtLinumSMThgQYC/oMy/QMck+MWk2xnWbJYLZaWR4oq2vUyPtCcLjFyhr6LndBaurKel1RW/2S1lCKG9X6mM=
+	t=1750492150; cv=none; b=jjSsYi0zYJmy6jDsrAR/3mT1DeN/6wnZFfUyLaVV1GqSD48Q8Mckqx1moUkv0z7DxvwYI2vjN9kGuELlf1Y92+PcGUmCkeZWK031kKxURx+NeClfmwMY1PPeTrXriTcSNLZwuLLaEAIVyFTQn8EB1Or7OD6RAT53dEO6ao7yaFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750490559; c=relaxed/simple;
-	bh=oundpO0MzuwbebUlC6NeXUr8PiL9fGQdjYk3FvfM+kk=;
+	s=arc-20240116; t=1750492150; c=relaxed/simple;
+	bh=riedDhamIxPVl4kiJ6Gpc+XKm7V9/2sxZKIPr7BRD5Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cbj6BqwFoFdMGctFHDm6LxyP7ib5I5Qsqyr29RROPAEMgE+mwtf0sLTMNkobrMaqH2gM28xa/Tdu8EjYd9fYz1YpL2y+NWsV26cYSOlYUT7lyo91sxE38/1lCHqgSD1ZkwOotzYIYOremYXWxI69LSYOipaSNuR6NfFYugS7XBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nCF2hhqU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1F6C4CEE7;
-	Sat, 21 Jun 2025 07:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750490559;
-	bh=oundpO0MzuwbebUlC6NeXUr8PiL9fGQdjYk3FvfM+kk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nCF2hhqUGiAm6EhzbRFQ34hm1J0Ia4r/t+lhmy8AOThvBubPmpziA9EHRwr3m7w5I
-	 ruqVg+u8p8xTAOJjZTNfwbsQ0dto98UnE6S8V3y5HXIRV0KlxCHbaIViTxkbwVTyZa
-	 K4NWbIPOLCt3hpxMh2OO24PGmn2Ujsfva1Yp9EVM=
-Date: Sat, 21 Jun 2025 09:22:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: nicolas.bouchinet@oss.cyber.gouv.fr
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Kannappan R <r.kannappan@intel.com>,
-	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Pawel Laszczak <pawell@cadence.com>, Ma Ke <make_ruc2021@163.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>,
-	Luc Bonnafoux <luc.bonnafoux@oss.cyber.gouv.fr>,
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] usb: core: Add Kconfig option to compile usb
- authorization
-Message-ID: <2025062104-debate-compactly-9aee@gregkh>
-References: <20250620-usb_authentication-v1-0-0d92261a5779@ssi.gouv.fr>
- <20250620-usb_authentication-v1-4-0d92261a5779@ssi.gouv.fr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=W3Jgsyv7ehR13tggn4wlKjZpZzux1fX17ihl72P+0oQymizSYmajHX6MgQ1F76ppIgchiM9e+dhIviBmTB3QUcaqm5ZcYJawoitib9Vhm/oL0pR44lTKut5wXTBvK97ZGKKD/gxqNxRvq6f4E6DTGl50lxFht60K/4mHoBs7n2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=UfFDcif/; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=zYaB1DlldGqizxY5vhtPCShgVb/Bxfuf0aPOV2eFYk8=; b=UfFDcif/rzsbiq+2cUiLy3JXbs
+	tRIlg0zDrBjJ3UPyAQjv+IBB6AsBgjgqUolPtYvliFRC6SYFgE/4g5g/BxGaoN4RYVGbTfNrwi4p4
+	huusiJdjr4uhxau7X9JpLQam7z1KRlIGdd4oOtKe89q6qBe+HeIXNLTXxHAgn1wY2ugQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uSsy9-00GZFX-V4; Sat, 21 Jun 2025 09:48:57 +0200
+Date: Sat, 21 Jun 2025 09:48:57 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	thomas.petazzoni@bootlin.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Mark Einon <mark.einon@gmail.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>,
+	=?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Sunil Goutham <sgoutham@marvell.com>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Jian Shen <shenjian15@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
+	MD Danish Anwar <danishanwar@ti.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	Imre Kaloz <kaloz@openwrt.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com, Simon Horman <horms@kernel.org>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next RFC] net: Throw ASSERT_RTNL into phy_detach
+Message-ID: <44e36ef6-6ee4-4cc5-87a9-aa6441eb0e16@lunn.ch>
+References: <20250620143341.2158655-1-kory.maincent@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,37 +100,20 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620-usb_authentication-v1-4-0d92261a5779@ssi.gouv.fr>
+In-Reply-To: <20250620143341.2158655-1-kory.maincent@bootlin.com>
 
-On Fri, Jun 20, 2025 at 04:27:19PM +0200, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
-> From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> 
-> This enables the usb authentication protocol implementation.
-> 
-> Co-developed-by: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>
-> Signed-off-by: Luc Bonnafoux <luc.bonnafoux@ssi.gouv.fr>
-> Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> ---
->  drivers/usb/core/Kconfig  | 8 ++++++++
->  drivers/usb/core/Makefile | 4 ++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-> index 58e3ca7e479392112f656384c664efc36bb1151a..07ba67137b7fe16ecb1e993a51dbbfd4dd3ada88 100644
-> --- a/drivers/usb/core/Kconfig
-> +++ b/drivers/usb/core/Kconfig
-> @@ -143,3 +143,11 @@ config USB_DEFAULT_AUTHORIZATION_MODE
->  	  ACPI selecting value 2 is analogous to selecting value 0.
->  
->  	  If unsure, keep the default value.
-> +
-> +config USB_AUTHENTICATION
-> +	bool "Enable USB authentication function"
-> +	default n
+On Fri, Jun 20, 2025 at 04:33:27PM +0200, Kory Maincent wrote:
+> phy_detach needs the rtnl lock to be held. It should have been added before
+> to avoid this massive change among lots of net drivers but there was no
+> clear evidence of such needs at that time. This imply a lock change in
+> this API. Add phy_detach_rtnl, phy_diconnect_rtnl, phylink_connect_phy_rtnl
+> and phylink_fwnode_phy_connect_rtnl helpers to take the lock before calling
+> their respective function.
 
-Nit, "default n" is the default, no need to ever list it.
+Did you count how many instances don't need to take the lock, because
+it is already held? I'm just wondering if the opposite patch would be
+smaller, making phy_detach() take RTNL, and add a new function which
+does not.
 
-thanks,
-
-greg k-h
+	Andrew
 
