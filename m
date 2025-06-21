@@ -1,103 +1,113 @@
-Return-Path: <linux-usb+bounces-24969-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24970-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0C4AE2923
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 15:23:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B2F7AE29AA
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 16:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5263D3BFF27
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 13:22:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E76321785C7
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 14:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93985211A27;
-	Sat, 21 Jun 2025 13:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A496B20C010;
+	Sat, 21 Jun 2025 14:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3Ijb//P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lm5lqK56"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0B716F0FE;
-	Sat, 21 Jun 2025 13:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281AF1A285;
+	Sat, 21 Jun 2025 14:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750512191; cv=none; b=bFG6fmTSGaCagbaNE/CcoqoJy5pJQD2xFA8c8c9liC35a402HRgmr3HUSHd880+FqbtTAOKVM+Ot9T2VkFo8Q2Ywt+TlDGtLBhR70V5c80R3ts32IV4t2+36qzz1+fIWZvx2ObKeaQaT4sKBTd7geTmt/s7XEk76b+HCg8T7Mvk=
+	t=1750517981; cv=none; b=SHIE39f2ZK63zPB/covjyhaVRDZknWGcTDIOHqkeWc/DZxg6YfS5eHO442wjBOY5jmErCuz2vxytLHQn/C2cT20AYHSl7FruIBWcIktiTOP424JHFH2cbXdWmFrPtZNJKohwawpFMn7lEUeAnsSKe4X6fPN+URS5q0FVLaYsQgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750512191; c=relaxed/simple;
-	bh=9/kDo39FB0aHZUKLe2CdAfbU2bgRJXBgchFq5Yb0SGI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nAnB47ek4lw1rWSDsF59cseXitTLiHNyc9SLQZcvG7Q6ENIaAtB5u8CyTimAIs3jXHuUgmh1f+2RQ7Ef8zG1NmvMv68n4ViWjHzRekXYQPWuXohc9+qpHx1EfiX/9L6/qODEG0zToXEMrUGP4RiU4ZspsC+YXYKhfwGifkc/J44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3Ijb//P; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2360ff7ac1bso18823765ad.3;
-        Sat, 21 Jun 2025 06:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750512189; x=1751116989; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/kDo39FB0aHZUKLe2CdAfbU2bgRJXBgchFq5Yb0SGI=;
-        b=R3Ijb//P1aX9to2IqHrVO9RF2ah/CnOXT9jrnr6t25FrcvISy+LCFHfdpJxtDX1rn4
-         I+YfOs4DHoVWhQhq0FS1tMnFrrFaRYpwjRuO0fWu6tgDP4OAhjS020zgUy8QW9WllxBi
-         SMRji1NQKbSk3yqMhHE/s8h/id959LGCmEA/pS4Tx8y1eqGTdqZWfsFR2PVeai4oUOLg
-         Qx50RbnjQJJOWdD0OdFFwVGPtrc/8VrOhRasdSyPekgYI/tFCI53Cl2aXFP3qBrweV8g
-         6qWSi2cytd7/Z7SX8VjE9LSPoGqYMUc1J9pYQpneZqF4F2LDtBcC0z+9lQTyuelJlbVN
-         e0eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750512189; x=1751116989;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/kDo39FB0aHZUKLe2CdAfbU2bgRJXBgchFq5Yb0SGI=;
-        b=iQBXEpYYGArmoGS/iopczf/I+1kD0WS+UOgkh9dy5ylQQABl4fI/yLitjwMOFg1vOM
-         sFPPSsHm8Fr4Ybaglg4/XOwl7NhpHZNzOb4Ngo//AGqRxl52T3PbftKsjnYgQnY1fAtq
-         RnWnSwEeF/DOGAPdW0ubGIbGOG/A6tE1Ha7LhbEU0CDEonhnCbE+7OdrdTnNqHAjoiY+
-         d3M7lMX3R3MyQcomVNAYBMAzdhrpo0+TFdwDAtdqBhYTXxthQL0IilwHay9XpCKM1kOS
-         t3AxNEg0P/6TLkdPKTc/jy1dUo0zhb0enVOJdetjJYJYMeB03U7eSGEYTwEYxIlxe1Xd
-         R6iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhduodxaNC9t7YLnivHeF5zXvxHEgsCkTbNRi/7UB6dibWP2oXoqSvhvsKfaFk94MnbTh8vcSbjuxmEO8=@vger.kernel.org, AJvYcCWgpcWiNbXzjlZ0CP7Acc2CbpSL+FXBkChE83Si5obTrw5oel0bCa0hecJEwyFjmOHUTYheSFGpmxfM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2N6lj4pE7Bgs43mO4Rfm+IUllcUXqIXAzpUXtup4P8h/Aip1L
-	gBQCzx0ztddbA8QFAlZquOMI4sgKoegyoq9u+yfbdas9TJrDCvB8XpoN
-X-Gm-Gg: ASbGncsrXCLpm5tf9flaxBNLNq45/5diogLpJKlSS6d1J4WUkQp4Oh/3lbxzjgCKJua
-	aCspGZlReQg45/JNFCxNkj9Us++iRxJyc3aIeMrAhfEbdpCXm87EtknJOau3z4P1fVzPnzS6ROP
-	X4el3sKqVbZBEGzem2IrsUybbpI9zd4WHzjAG6PIiVtmU+FoJ3VGlV2V6gH13UihHtqNI9Vxpg7
-	K9glScUALHLzQeRBsgmA/cH/S26jtyEkqD1BqpJu3zBMFK4P60ISM6to/fqTNAT4tmONhr3VzM9
-	PqegxIYJM8+fj8o3Li4YvZnjlcqy9KTt+7bqeCShD7Un4Z3KwXjiuwjULOwmuqj3VxowCG7OiXJ
-	LlnLPAd3deMnNXu90VaqRDQjvq0vdFYeiBGkrabigP/DApJTR8tA+84o=
-X-Google-Smtp-Source: AGHT+IH6a8rgZCZ7mDc5Htk5zycsKfVJ3ZPKASDb7eu82shEau8bQ023Uc10bFTZ8TyT9YbjG+8lOg==
-X-Received: by 2002:a17:903:4b27:b0:223:653e:eb09 with SMTP id d9443c01a7336-237d97c7f5dmr93509315ad.7.1750512189002;
-        Sat, 21 Jun 2025 06:23:09 -0700 (PDT)
-Received: from localhost.localdomain (123-194-189-72.dynamic.kbronet.com.tw. [123.194.189.72])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d83d101esm41473435ad.64.2025.06.21.06.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jun 2025 06:23:08 -0700 (PDT)
-From: Jay Chen <shawn2000100@gmail.com>
-To: shawn2000100@gmail.com
-Cc: gregkh@linuxfoundation.org,
-	jay.chen@siemens.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com
-Subject: Re: [PATCH v5] usb: xhci: Set avg_trb_len = 8 for EP0 during Address Device Command
-Date: Sat, 21 Jun 2025 21:21:53 +0800
-Message-ID: <20250621132205.4617-1-shawn2000100@gmail.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250521114047.18001-1-shawn2000100@gmail.com>
-References: <20250521114047.18001-1-shawn2000100@gmail.com>
+	s=arc-20240116; t=1750517981; c=relaxed/simple;
+	bh=WaLizQgql2nLcEHIJUXeW2T7zBzGVp1VY2hbKzdMvVc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=b17CuCyGnOfSvcJpQ7A9BJEbWVwD+oGCO1EHzDyQmet9jR2mEApv3c1M8nbygaDslgDTIOlAtcv5yWuGkdnpL8NIA6NjNiPGNYlQOUNq1laJ19iFENDYbfJIuzQWnV/oNntEtbeAI9VMD37wf+6w655V9l117aGBXgLIymwqs9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lm5lqK56; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9894CC4CEE7;
+	Sat, 21 Jun 2025 14:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750517980;
+	bh=WaLizQgql2nLcEHIJUXeW2T7zBzGVp1VY2hbKzdMvVc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=lm5lqK56N3FXKi+uf2Dv5Pcu/+vCaLzb/mbYP+c4LjDN7GIpiqVPZAwe1xGoYGUEd
+	 Aoj5quq7MgKGRGTBYzk4+QU52ujop+taQsJlLmGdb5DQu4SimslMbq/tiEBYzdSPaG
+	 sXEfR7w0tOiI+CT11gyjrj4Mk73lIO0/9Hdg7koHRUJNyke5mANWUA+FoucXItP7zZ
+	 7ypwLZJUU5sA3CIRenLxKayQpWzw481pTMhHGeiaOjiQpkFIFItri+t0mLKPMg5DJM
+	 tbj9XTp+/vipd7y/Pdv/Fjh+CC7vR5I0FdTYXn5yEUAS3nS0HkWAyDYiAbKl3Xpr6a
+	 XfriiSj2UZjUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CAA38111DD;
+	Sat, 21 Jun 2025 15:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: qmi_wwan: add SIMCom 8230C composition
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175051800827.1877807.14040034751571912650.git-patchwork-notify@kernel.org>
+Date: Sat, 21 Jun 2025 15:00:08 +0000
+References: <tencent_21D781FAA4969FEACA6ABB460362B52C9409@qq.com>
+In-Reply-To: <tencent_21D781FAA4969FEACA6ABB460362B52C9409@qq.com>
+To: dataonline <dataonline@foxmail.com>
+Cc: bjorn@mork.no, kuba@kernel.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, xiaowei.li@simcom.com
 
-Hi Greg, maintainers,
+Hello:
 
-friendly bump — anyone any thoughts?
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thx.
+On Fri, 20 Jun 2025 10:27:02 +0800 you wrote:
+> From: Xiaowei Li <xiaowei.li@simcom.com>
+> 
+> Add support for SIMCom 8230C which is based on Qualcomm SDX35 chip.
+> 0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet
+> T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1e0e ProdID=9071 Rev= 5.15
+> S:  Manufacturer=SIMCOM
+> S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+> S:  SerialNumber=0123456789ABCDEF
+> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+> E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=none
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> [...]
+
+Here is the summary with links:
+  - net: usb: qmi_wwan: add SIMCom 8230C composition
+    https://git.kernel.org/netdev/net/c/0b39b055b5b4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
