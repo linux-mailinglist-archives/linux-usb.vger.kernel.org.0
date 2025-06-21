@@ -1,88 +1,89 @@
-Return-Path: <linux-usb+bounces-24975-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24976-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BE87AE2B0F
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 20:15:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F983AE2B11
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 20:15:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B0281893FED
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 18:15:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C68D1177080
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Jun 2025 18:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFE0270554;
-	Sat, 21 Jun 2025 18:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B110126A1DE;
+	Sat, 21 Jun 2025 18:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MkWpKB4N"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aRDdACQs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628EB26FDA5
-	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BB42701D2
+	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750529661; cv=none; b=RNqjtuAIRvDrWQgujJI4wgKzYpKcb8PjCjvrsB5tQZIjW+BhN5UpfXN7Q3g71wqCvRivLflSR8BIpWIDcGbqWkkq5vQBTJsrdyn89qrOJCN4Rv0C70GpGo34cqi7dH6Fab+MPql6MwzZVxr5yyJSZJ7ZnvObR+wVSoGmijZlz0k=
+	t=1750529663; cv=none; b=DUwaEmMq3PZ1s71e/h4cJRyNDf29IJueFgstw0OSPZllOA1tjodlkNdg1KSW0nmYVgA6Qnmt/jf93nWqjocwOzyte933Vpb/gFsH0451ZmXM8+Qf08Yagb2fYTGGGsU3GkmwVxPiMHR8PVMqBG2kRsUHv1Cs4tuUg0Hs/vpH/bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750529661; c=relaxed/simple;
-	bh=4CYOA9AagDnQlzLO8jvRE7LipR/5rn+iPGyR5z/1opc=;
+	s=arc-20240116; t=1750529663; c=relaxed/simple;
+	bh=JNYxpLLFOBRtvMlzQKm/ZNif0iwVlobtKiwFXihfikY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pdAqNn/F4YjTVzTxJAiPoio/kMu84fEEyHbhAo6v9TmSpaZN+p/E4omkYIX1nGqKiVz5EbIOC47JfQaBjjBDwj9ZMncPSfA+KaAGI3ZO+DedURsUtTvkM6obWLc7IQTgeIjl0/w3BdzKfOiruYOBQ5iSQrRA4XRGf6dmEmyYia4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MkWpKB4N; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:Cc; b=JTIdacYm4BaOrEiFJNh+083nt7X3PTZ/nPaQOhMjxlgKEz8TXfOyBqRWRcP09lZ35qUKR9SIwVARnTOdHpBqEh/SBvvM6eFhcSi9Z9tiUwVwVY1ssiWnqEUQ/nZZhhiRcQ8aOvVyXamtCYS/CtcBtS7azygE7+XMLyrMw1XDuzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aRDdACQs; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55LEN1Zq007788
-	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:19 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55LHuE72028405
+	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zowIyNUEyO7rt+gljYGoF/edvYqN+vq2B4rXcDP0lxM=; b=MkWpKB4NGOYwGE5i
-	5Kqzq4iziOFtR228nkHelZnK4XWLVSZmphg/p54UqhzNH1wWU1DN+RG7qsNk5x0d
-	3Szm84sTJVRRnvF15IYTGFYWf/NmoaB6pQ7C+njcOqMA2PfKVrCv4origrBKnHSa
-	ONrSat6u7iGAcfGEYtU6wNYcySqI1/SlGQP0syWUk6s8qYW3C20W1la5Ve+xPqR1
-	b3rFysi9R6xA+iF3osCtpN5UFccZDUxN56+9Vl6qAoZeD3DPH+YKpYaTGWlyKWMf
-	ErhZlFG/0S6lW3U/j9VqYU79gLsJwGu7IY6neo4RWSdRuh/zmJHsuP+HBG5kM3lv
-	UrX1ww==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47dxejr7p9-1
+	oirU1+a/+8yORbmhMEzS0Sl226rFq5hViGnYuTM/r30=; b=aRDdACQsnsIKaPsC
+	6EZNmwi6rj2coudCih1V8klJVqj86soO3SEdo7N3QcThVWq9zCL/Ok0AgjQDprBZ
+	wLa7VQ8+Ma61A45+ZrN2kim6u6Z5FocCufIEQ6NlgBlRU5i1M474Pd23FQuEpKWc
+	bkS4OyaX04vTHy+BG6xwGfowwQvtecDUoXQtjzcHVLjB45ltYY6mvf8nKjgSoSQp
+	00JloOXa6c5e+SL9s0MpbWgdjpe3cn536etUE3XcsS+ZQMK/nxYvnvIHWZWNq3rr
+	YcX85/P/hMtn8VfPT7J72i6elHDHBK+Xyg4RmwDEoklbueL+dCQDDbp/y+7jD1N8
+	OUtz9Q==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ds7s0km8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:19 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d3cbf784acso774642885a.0
-        for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 11:14:19 -0700 (PDT)
+	for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 18:14:20 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c760637fe5so425672685a.0
+        for <linux-usb@vger.kernel.org>; Sat, 21 Jun 2025 11:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750529658; x=1751134458;
+        d=1e100.net; s=20230601; t=1750529659; x=1751134459;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zowIyNUEyO7rt+gljYGoF/edvYqN+vq2B4rXcDP0lxM=;
-        b=Wjr2ZdHQ6W9b2oUxBuAPRqQsb5TCJeqeRyowYn6BcfOA0iQBYoBubozn88NCnTuqXN
-         e+DSO4vA6e0/vh9i+if/n+cOyiLsGOhElVmXb5+vPcQgp5Q6SCUzB2TGOXu8K5DSAv3p
-         go8E+mbZyrC1RsQAcXCHRrE260VmbAXKXIkhBXLW3ftcwGE0ZGw7fTg0aSWAkRnRyc3e
-         7GfyMSKaN6FBRdfnFV2zuQ38phibJNfDQBpzgFhKJInciF/mJevcQ2XOtHDahp2bC+I+
-         rk4hziheW5uuc874CEpwHsKbkb+Nl04B5wT9V4bzJd3GmszCzs4GDHsKgJdvRbj3F2th
-         jywQ==
-X-Gm-Message-State: AOJu0YyEQKVoEPtcAUuhUvSMbJBXQUzkYrOycRZHlyNrQF2PE3n9Cv4m
-	PdtVpOQgo8KBLwRwrbsDo9BNoCYbl2PO3iiBNnmW9FPFKZS5n1IR18Xh1VbL17WIR18fxPfCG7k
-	2AGsvWTVOGLo4OnXASsTQupCixzgDH6tCKBlZbXzytd4HoH1fJX6juddMjiHmZC0=
-X-Gm-Gg: ASbGncsK6neS9nSU0aJfQ/6uFz+qROLIaDdA9L2dLoWfBXAlj1pLV4iKDtYwaCpsXIb
-	cml1kPLm0WbuejvNNwec+wS/03d8HCwrPnApIRYXZEPBPplaqiutRdJDPh7crId34I1WGto/JBi
-	IdgFRZ6C8BhP50OlJUIO6Qv+q+axYPRm1lcN5U+qcN2qtm8ZmnLxmLA3Q0BtcEIMUP6lHYEVao0
-	h/cBU8M2D8lcq+JQxf9ePGWxPeZq/SWHCuMU3wIhiXpjE1j+qAqBPgrBWXC9S6M8Xf0MqxLbXso
-	pgtv/8gf3Bc3FSxLmw/miEgVj84rEtv1iXQ0JCrPMHzl+kbBTWTSHVsX4L7DocQOFVJDvm2CXpe
-	2CoLrNbqup9qjHZfgavSvE+JlR9mOQuljMUI=
-X-Received: by 2002:a05:620a:1906:b0:7d0:a1d2:436 with SMTP id af79cd13be357-7d3f9932ab0mr942601285a.33.1750529658154;
-        Sat, 21 Jun 2025 11:14:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE1/0MhQYuKfBpzeVErFNYZh8FZs6s89lsKMD66pGJWLmGvzYlwhn1nDZIEbwBmB1PBHWKAUw==
-X-Received: by 2002:a05:620a:1906:b0:7d0:a1d2:436 with SMTP id af79cd13be357-7d3f9932ab0mr942598985a.33.1750529657781;
-        Sat, 21 Jun 2025 11:14:17 -0700 (PDT)
+        bh=oirU1+a/+8yORbmhMEzS0Sl226rFq5hViGnYuTM/r30=;
+        b=w5s+3eg4GE4K+/Fg4jiuBrNF2VQ6xpTfU3NEzON4lckzqeR3aBUyKOufMHSWx7VFc7
+         A0KCxpHNhrzDtBXiBSI2aQdIVoIHDu+a1tAmFeJeohBWh/YJNBC6IA/U/ZNuFypUy/bA
+         Al2xQbWvFUsjxp6gLa2yiwblZsv1dEHhDgSXkQsPIdF01+2rBEjs4B6eiKXxdPEE6BWS
+         InCTwCKZSeIDzKOB7J3yNcBhn1FtMJ9xhQaWKlV/PVyY724uwnu1Ea6p6MrmG6GjF5wF
+         2HSAVyIFH4rIuxBCG/GVMGpSEuTKlO3BVri0Cq3jd8gne9Y3U6k8guyr3ympsugtfXbu
+         F2Ng==
+X-Gm-Message-State: AOJu0Yy8tpkqYKaongucZXhjXuycMPnYOWTw4lyKUT9PSYmdge798Moi
+	HxJFQUdeBLQQGPl+BbOsGhSNk1W+oP9xTORIqzPbnrxenEdmD9jYq9g7LMeYNDcVtq4P/r2ukXv
+	5OF/By8H2Usyn6lCnzs45KKGYCv67qEAvTIp+XLH6Qb/ETWmcNCxabwZ+u8t80Oo=
+X-Gm-Gg: ASbGncvKWis1dau581ymSOVKbrBzWdBwAd3yXJ+UI08JKyIc3SuD7vS91YCxMAp9Q8f
+	8CT5kV+8G6QpWLkE4Bf1LVXb+v4a5K+zP5a5JkSsSHgIdtF7iUR+GjMc8nXPJZVGmBqxLbDAac5
+	oBfWU2D78ZFoBvplNEGVc0MUep8zd9eq5vmqmWGZPdOuGxHZmvAsv4pbQ3a+NrAU0nndC+JyjOw
+	cGc5Ta1AQuF/PFiQ3KRRX6sIz4irujZErvj8wgst/ONsE7lbl7gKf6zxrKi5cSdS2rzsxsJLb4T
+	h/HW4163GEoTMSIGFu0o/PdXH+SzQ/2VjeRp9D8HTEsb1XcWk/AjYbLt+24kz6cE//rM/eDA0nH
+	0tPsR1n7dFU9t+C9XNWm3tQruiX1eGn5Yfto=
+X-Received: by 2002:a05:620a:8087:b0:7d3:a7a7:27ad with SMTP id af79cd13be357-7d3f9923f29mr1085888685a.37.1750529659589;
+        Sat, 21 Jun 2025 11:14:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGBm728IxfVCsHScLqUKxUSwnu6QjuV90MNM2egI9dUzP6ktUhVo2klu+wAiUSpjtngW1id+A==
+X-Received: by 2002:a05:620a:8087:b0:7d3:a7a7:27ad with SMTP id af79cd13be357-7d3f9923f29mr1085885285a.37.1750529659186;
+        Sat, 21 Jun 2025 11:14:19 -0700 (PDT)
 Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553e414cf36sm752336e87.86.2025.06.21.11.14.16
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553e414cf36sm752336e87.86.2025.06.21.11.14.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jun 2025 11:14:16 -0700 (PDT)
+        Sat, 21 Jun 2025 11:14:18 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Sat, 21 Jun 2025 21:12:58 +0300
-Subject: [PATCH 3/8] usb: typec: ucsi: yoga-c630: remove duplicate AltModes
+Date: Sat, 21 Jun 2025 21:12:59 +0300
+Subject: [PATCH 4/8] usb: typec: ucsi: yoga-c630: remove extra AltModes for
+ port 1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,7 +92,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250621-c630-ucsi-v1-3-a86de5e11361@oss.qualcomm.com>
+Message-Id: <20250621-c630-ucsi-v1-4-a86de5e11361@oss.qualcomm.com>
 References: <20250621-c630-ucsi-v1-0-a86de5e11361@oss.qualcomm.com>
 In-Reply-To: <20250621-c630-ucsi-v1-0-a86de5e11361@oss.qualcomm.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -103,94 +104,93 @@ To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2145;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2166;
  i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
- bh=4CYOA9AagDnQlzLO8jvRE7LipR/5rn+iPGyR5z/1opc=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBoVvZzEwCSquoV5Q2Y0LnJ2z5hijlfP4HmCo0CY
- WaWygQHwP6JATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaFb2cwAKCRCLPIo+Aiko
- 1UWdB/9erkAZ/EL2NpUqbd0w3OylzoPIom7LGhqMTEJFDyP2tBqOczET09Z+xyhim9bUXRRvoM2
- VSaa23CqxqeoilfJMB67B/BTP06kqCv07Mum81lER5PQoqeLh5MiKfKLjhupdFeHxUt/umpkmoR
- nwMW0W3NtoedisLaIv+r68ZLWHMQhU/nxOW72rMU/5QshyNtZ92+VbaMffjE+uo8miBDynSaAEu
- btb1zSAgosSHqaOu0+9Hd9WJ4V5Ep0/bHZQVowFqjGI/8zoBpV9UMBaodNJ86Lc1SOLBNlHNux3
- M7VZpB0tHP4flQMmrqaFNMgWuzozAfvPzzx8CArzMlLyZNbB
+ bh=JNYxpLLFOBRtvMlzQKm/ZNif0iwVlobtKiwFXihfikY=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBoVvZzb6rUS5eMMljhrS0Q+E/0bKqx4EhaapoTC
+ S/gAg8Wn3mJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaFb2cwAKCRCLPIo+Aiko
+ 1cxcB/9Cy6IVelfifZerWEZXrYultMWDVJdyoWiBy6c0sL9bdpy6ECtRtiIw5OaGPpz0F6cwEYE
+ x44jPn8Lz3vuShxXYwFwp1mFWQIJeidrdEKh5elCZDfvRVdXZqMCvQL6zFkUtuXP/wkBIAIZgIL
+ Ipo3XzsKrczew5P7JvHGrYWtPIE3+pr6VZY4KNym4wxbjxXYlZkxeTzSRpc2SzG2NyxpNSIAf6T
+ UMU9j+jmu3iacNjuVkjTrJJDuvurdsBq1rVYzH9mK0yBK8r3/JAWUES/Bc1q9bbBgXd28dpRdm/
+ tRNp6uTiYNnpB3SWqkgUMhk01YUo3xCInk21AWqsJ5CAqimA
 X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
-X-Proofpoint-GUID: LvGdc9L1OPO9UIureqt4sn2tP5naORH5
-X-Proofpoint-ORIG-GUID: LvGdc9L1OPO9UIureqt4sn2tP5naORH5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIxMDExNSBTYWx0ZWRfXxugwTFFK/QK4
- Y4Cd50sjUNjZ9l7AFWGHLL4Y337tlcXWlsY0HRx01BFgVrCj5OFHGiVlIzUPt2yUzxt3ug4y8nZ
- aEFgmBHJLUm1SLYAbEezbQWu+dmfBMeTOFypJOBUDE/R3zFkT08jltNehiWksQoT2JWDgObeJDz
- UzNZPjW8q+W8vLO5ZrRVJ1LPXSauR3wvsdYOfZ585rpBF0IivapZlEbfiF3+FBbJFyEWLecIyia
- 3bBaDJ2Yo78lAKvDx6qoMZBpdssSX+NklEqpClESwu3M7X93BJQUioFLe0HYvEldve49cfo71C9
- fTh4ZB4J2mubG9j43HHzv+mvDtjl61eqRIZGqUkQU8qLdfqvPRvDS4bqN0INAk+k+r10Uf9zXmC
- 8ViwDTYu/HnSnPhc2og5QT1XH6u8miNB2g/peddX+Xpu43hYQ5k8gfnsM5fq4d1htT0nLSWe
-X-Authority-Analysis: v=2.4 cv=GcwXnRXL c=1 sm=1 tr=0 ts=6856f67b cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=AZjPiHVZ31VRnYr7GT0A:9 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: dD0tcFG0ZiT2UzgEhc8I0gNwyjv9XCCl
+X-Authority-Analysis: v=2.4 cv=cIPgskeN c=1 sm=1 tr=0 ts=6856f67c cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=L9Ihpj2tn0joOnW3KS4A:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-ORIG-GUID: dD0tcFG0ZiT2UzgEhc8I0gNwyjv9XCCl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIxMDExNSBTYWx0ZWRfX7hwkDz3yjJOl
+ 5BUtBk9tDVaFmGlkyCsQchvsr6MxJ54xqk1C2uSr/kMvkThx8mwJsdEHgbx+/zxVPQFTp39Uocl
+ K8d0BYq6RANhn0XX5kYdWA8cXqCiOZMyMMg4YHwAQuEfvJZjV9WTLj4PbSYAa/zxVw7JuQkpFTt
+ geVmwi5lvrV44WUf0RCOGp2I/mb/HQbqu7Yes/O+9cEVQketZv7kgJEjtfLgzctGCqOkDOu70A0
+ BdgTrgP0iz/mWWeC1Q90FJUK/jjJ2seac6eBiW1SRzBXKP1VeRojtUv6BPb4m6Zl4gOIiBlsbMr
+ mzumbjxuzMMo1H/A5ukD0eMZ94LIH4eBwLN/VKHQ5XaKj5l2ANXxxrYwYTcFlJpUqA0dYFdX7If
+ LF1e3eURrH+/bqqC7pFBIvIMhzXNbNJIX5tAfX2g68dRtMMiDm2rwQW+pz/HNCbWM0f72UNO
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-21_06,2025-06-20_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 priorityscore=1501 phishscore=0 spamscore=0 suspectscore=0
- malwarescore=0 impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0
- mlxlogscore=999 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506210115
+ mlxscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506210115
 
-On Lenovo Yoga C630 the EC firmware is buggy and it returns duplicate
-AltModes over and over again instead of returning an empty one, as
-demanded by the spec. Ignore extra altmodes by zeroing them in the
-update_altmodes() callback. It is not possible to shortcut that in the
-sync_control() callback since we need to know if the AltMode matches the
-first reported AltMode or not.
+On Lenovo Yoga C630 the EC firmware is buggy and it cat return altmodes
+for a device pushed into the port 0 (right) when the driver asks for
+altmodes for port 1 (left). Since the left Type-C port doesn't support
+DP anyway, ignore all UCSI_GET_ALTERNATE_MODES commands destined to the
+port 1.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 ---
- drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-index 47e8dd5b255b2b306dd9c3d6ac8c3b896954981a..7cc1342d6e2f1d2c6f5b95caa48a711a280b91d3 100644
+index 7cc1342d6e2f1d2c6f5b95caa48a711a280b91d3..2005f64ebfe43ca2bcada2231ff99c578fdce877 100644
 --- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
 +++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-@@ -71,6 +71,28 @@ static int yoga_c630_ucsi_async_control(struct ucsi *ucsi, u64 command)
+@@ -71,6 +71,27 @@ static int yoga_c630_ucsi_async_control(struct ucsi *ucsi, u64 command)
  	return yoga_c630_ec_ucsi_write(uec->ec, (u8*)&command);
  }
  
-+static bool yoga_c630_ucsi_update_altmodes(struct ucsi *ucsi,
-+					   u8 recipient,
-+					   struct ucsi_altmode *orig,
-+					   struct ucsi_altmode *updated)
++static int yoga_c630_ucsi_sync_control(struct ucsi *ucsi,
++				       u64 command,
++				       u32 *cci,
++				       void *data, size_t size)
 +{
-+	int i;
-+
-+	if (orig[0].svid == 0 || recipient != UCSI_RECIPIENT_SOP)
-+		return false;
-+
-+	/* EC is nice and repeats altmodes again and again. Ignore copies. */
-+	for (i = 1; i < UCSI_MAX_ALTMODES; i++) {
-+		if (orig[i].svid == orig[0].svid) {
-+			dev_dbg(ucsi->dev, "Found duplicate altmodes, starting from %d\n", i);
-+			memset(&orig[i], 0, (UCSI_MAX_ALTMODES - i) * sizeof(*orig));
-+			break;
-+		}
++	/*
++	 * EC can return AltModes present on CON1 (port0, right) for CON2
++	 * (port1, left) too. Ignore all requests going to CON2 (it doesn't
++	 * support DP anyway).
++	 */
++	if (UCSI_COMMAND(command) == UCSI_GET_ALTERNATE_MODES &&
++	    UCSI_GET_ALTMODE_GET_CONNECTOR_NUMBER(command) == 2) {
++		dev_dbg(ucsi->dev, "ignoring altmodes for con2\n");
++		memset(data, 0, size);
++		*cci = UCSI_CCI_COMMAND_COMPLETE;
++		return 0;
 +	}
 +
-+	return false;
++	return ucsi_sync_control_common(ucsi, command, cci, data, size);
 +}
 +
- static const struct ucsi_operations yoga_c630_ucsi_ops = {
- 	.read_version = yoga_c630_ucsi_read_version,
+ static bool yoga_c630_ucsi_update_altmodes(struct ucsi *ucsi,
+ 					   u8 recipient,
+ 					   struct ucsi_altmode *orig,
+@@ -98,7 +119,7 @@ static const struct ucsi_operations yoga_c630_ucsi_ops = {
  	.read_cci = yoga_c630_ucsi_read_cci,
-@@ -78,6 +100,7 @@ static const struct ucsi_operations yoga_c630_ucsi_ops = {
+ 	.poll_cci = yoga_c630_ucsi_read_cci,
  	.read_message_in = yoga_c630_ucsi_read_message_in,
- 	.sync_control = ucsi_sync_control_common,
+-	.sync_control = ucsi_sync_control_common,
++	.sync_control = yoga_c630_ucsi_sync_control,
  	.async_control = yoga_c630_ucsi_async_control,
-+	.update_altmodes = yoga_c630_ucsi_update_altmodes,
+ 	.update_altmodes = yoga_c630_ucsi_update_altmodes,
  };
- 
- static int yoga_c630_ucsi_notify(struct notifier_block *nb,
 
 -- 
 2.39.5
