@@ -1,198 +1,124 @@
-Return-Path: <linux-usb+bounces-24987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E92E9AE2DD3
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Jun 2025 03:27:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFF1AE3044
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Jun 2025 16:05:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 731941895AFE
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Jun 2025 01:27:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A01A18858F8
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Jun 2025 14:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D2778F4F;
-	Sun, 22 Jun 2025 01:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 609471D8E01;
+	Sun, 22 Jun 2025 14:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="VFI/kT8L"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OEzpGeNP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455DF2581;
-	Sun, 22 Jun 2025 01:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750555629; cv=pass; b=nngl/8Puoo3GZafzOEFhKMhl2asd4V1JZ4nJtl7sMLP3j0RSbdT1fYk51pFrrOiU0UsGRw4l5gENHetuS5yV6wwwmxtdslEM88hfBECF9A7MjJcgexyx0dGMbAhIr0j8wxxe/RnYXW4c2TfxHqRNoYnH/jAetcbA7Maprx2tigQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750555629; c=relaxed/simple;
-	bh=D0UPu1HNdTRNwid4W5kqZ802BggmR9+6yj1qcBOgkEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DS7EzMzOISaqrV+MNP3Ax+r9DeTaMIs6OPBYnlgIQIP32SCzPJ3LyZIl/3lQHygrOxiVMHl0O+H6g5aJbwCrBYomo9dVsEs6KHbJy8ImJfJMsiOurA+ZTr1LNsjbeH6AiPNH3j/BfSrM9QD9BYDRCVB38y3PppPhguZNoi/Dx3Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=VFI/kT8L; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1750555617; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=RBJdQL/GN8H1veCJwnJYZhSuSxiU5BtZeTkGn+2uZTfIzwQ/gIvDl1SslquWPR3FC6kGFTszHCE9PFaXYmWBQPFr4F5riQrlinoeNEzaDMxVRri84bR8a/HFHWI6WRiKZF1MJx7rF0tI9k0hhAX1kNl36QSxtTkj1VgHVhdBZNM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750555617; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=gQIUsgIGn42vlwD+axbELwPL5aL0OuQaX/33hU+2LEQ=; 
-	b=SI9jsbjC9++rbY849bJYx3LU+zalp6Hv7etzjgH9DI5WE+m0O0KdOPuSevaDoRs62MVkWwQYKEp0pM2wAsygbgLvo9gEnp53Uz4r6wHcpaTge+eJL8zwBM0ZM0vnIGWZnEYn8xb/gbHsG8IR8GIxgoV0qLnH2BWAQAhGnhawh58=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750555617;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=gQIUsgIGn42vlwD+axbELwPL5aL0OuQaX/33hU+2LEQ=;
-	b=VFI/kT8LjLT2u+mdk5MbO3eRgskaZOuVmWN9OkpN9eVuXjim+QNc8JG4kFsVmpXO
-	/jG2z294vQDc70VukhWK1pTflsyQmQ1V//QJHGsLQ4F2lEFKAXsEcqUqM8Pdu4YCZko
-	ImVFPRSxGEvPCSVWa9bVb/G3PchH/mv2o9xYHCds=
-Received: by mx.zohomail.com with SMTPS id 1750555615992395.33436908947795;
-	Sat, 21 Jun 2025 18:26:55 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id E9303180692; Sun, 22 Jun 2025 03:26:50 +0200 (CEST)
-Date: Sun, 22 Jun 2025 03:26:50 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: fenglin.wu@oss.qualcomm.com
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	kernel@oss.qualcomm.com, devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
- property
-Message-ID: <b7m55sjc2rtvtelvez6sxnjvdostvxmfjhhsr4uxhyhh4bxrcd@xmioz2bsgis2>
-References: <20250530-qcom_battmgr_update-v2-0-9e377193a656@oss.qualcomm.com>
- <20250530-qcom_battmgr_update-v2-1-9e377193a656@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7A41ACED7
+	for <linux-usb@vger.kernel.org>; Sun, 22 Jun 2025 14:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750601107; cv=none; b=RVNWP0WX8CMOKmahWKgzBTXCwUvREyj2+dL9fLpfPtEHK1dwtOaWEGIw2TNcH6qJos55IjsvMcI9bucyg1gq3oDCRLn7NTQoE11xyudAyWq6xdr4zGU2c0JOw/vyrumNIqNpN/NkAWu2k4BLEMghTvLhVE1nItjmH7D4UvcAbvE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750601107; c=relaxed/simple;
+	bh=DRERbPBTTzUi6NNQ7zo50FEjd4vV3AF9vM+vtzoZLOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FEbb46ITIA9647ugTIULdAtH9UQybOSKMJEeqGIn4DQwpgWKa/1nO2ntDW2+gVZZJaqeX6riIrIYLXclVmpOqGD6Z4LbSYB8yrzBxfkyHCp2i6J/lREaNDjLAacYUFhb48gxeUMNQ8ljDLinheIkaFwwpGJFtkHAJDCkHUsfovs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=OEzpGeNP; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55MCfqHr020858;
+	Sun, 22 Jun 2025 14:04:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=kxCGSHTo64fATEnBssUIqh8BKosMa
+	9miDGoROoUAUOU=; b=OEzpGeNPbEQ7kjTOb0bcQoqMHmBjhjZellkc4d9p13x4+
+	1Ksp34j6wCvzLqiQdMpfSzzutYCAO709p8irOblmcAJO8vwQtARqG/jC/z3F+41n
+	wDs4grAzvKffL/FAY1sGqtYltovTnOnDPd6FV3xfBVW+V+DydeKppnb69B0F1Y2Q
+	i/R5kJbNQ4WqiMF/+arwDFs6ItnmE/iM2sygyptTlHIhrZG3nI65Z1kiqTxhzLes
+	CKG6BwRgxvGG2H3tjyjzAxwBWe7wsHIiu2jKNfIY/G1Rb85OKy+Ksy+QcIqALyHj
+	nkMQoDJKmoz5NYHer77Kk8XhfMgB8Jef902hSNJyA==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47ds8y15eh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 22 Jun 2025 14:04:59 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55MCHJ1Z031423;
+	Sun, 22 Jun 2025 14:04:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ehpn18mp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 22 Jun 2025 14:04:58 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55ME4wv7004034;
+	Sun, 22 Jun 2025 14:04:58 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 47ehpn18mj-1;
+	Sun, 22 Jun 2025 14:04:57 +0000
+From: Alok Tiwari <alok.a.tiwari@oracle.com>
+To: westeri@kernel.org, michael.jamet@intel.com,
+        heikki.krogerus@linux.intel.com, YehezkelShB@gmail.com,
+        mika.westerberg@linux.intel.com, wonchung@google.com,
+        andreas.noever@gmail.com
+Cc: alok.a.tiwari@oracle.com, linux-usb@vger.kernel.org
+Subject: [QUERY] thunderbolt: Should usb4_port_device_add() return ERR_PTR() on component_add() failure?
+Date: Sun, 22 Jun 2025 07:04:51 -0700
+Message-ID: <20250622140455.2884518-1-alok.a.tiwari@oracle.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ucvcx4vh7elpfixl"
-Content-Disposition: inline
-In-Reply-To: <20250530-qcom_battmgr_update-v2-1-9e377193a656@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/250.540.22
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-22_04,2025-06-20_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2506220088
+X-Proofpoint-ORIG-GUID: kS-tcWMlTuPc8wV4hBCCMnp0i62qTnvD
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIyMDA4OCBTYWx0ZWRfX/yJ9WPQP54r3 FgOyoD7WWwh9g28zwI6ZZy3NG/dWEsTtb5/gSVo2P7Ptfcx23OI+ayJpjycg5Lmyy6bylDPm/jE +LdmOPIwgKtcOBTIalBsJuoapybBO93dGISPzXVEpZ4q0dfSW9A60a+q3hABw3TCeCvdKE5xjNn
+ SHJs+mNM0L/76vDHRG1lwa60l/A6X8tlnaTqcbNiH4MnQN42VpvTV1r/NQ4mywHiWzrxIGmnM9j Pi6p1zN7PnjMSpCbEyzOPiC8wAjeIl0sBlimQ6XsImLQSE/LXHajcf88DlF6kFOB3ihtbHjhFdE TGlj+vokJ1IvwA74oaw1gvKN5dI3EoP+cTgZOdlNGyF2AM44ylTPLxw69cm9IQ2RON9Bphl1eMJ
+ I5Sug8hEPs9y1Le8x7Jx9rppYRdjAIC+waqH/QopjBRdM2FrlZseoQuo9ey07K6NujQrk8H4
+X-Proofpoint-GUID: kS-tcWMlTuPc8wV4hBCCMnp0i62qTnvD
+X-Authority-Analysis: v=2.4 cv=PqSTbxM3 c=1 sm=1 tr=0 ts=68580d8b cx=c_pps a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17 a=6IFa9wvqVegA:10 a=xuhGjhNUwvrpSHUj0fIA:9
 
+I noticed that in usb4_port_device_add(), when component_add() fails,
+the function logs an error and calls device_unregister(),
+but does not return an ERR_PTR(ret) immediately:
+Should this be changed to return ERR_PTR(ret); right after device_unregister()?
 
---ucvcx4vh7elpfixl
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/8] power: supply: core: Add resistance power supply
- property
-MIME-Version: 1.0
+ret = component_add(&usb4->dev, &connector_ops);
+if (ret) {
+    dev_err(&usb4->dev, "failed to add component\n");
+    device_unregister(&usb4->dev);
+    // Missing return here?
+}
 
-Hi,
+Thanks,
+Alok
 
-On Fri, May 30, 2025 at 03:35:06PM +0800, Fenglin Wu via B4 Relay wrote:
-> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
->=20
-> Some battery drivers provide the ability to export resistance as a
-> parameter. Add resistance power supply property for that purpose.
+---
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index 852a45fcd19d1..6db4a0c8e4496 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -323,6 +323,7 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
+        if (ret) {
+                dev_err(&usb4->dev, "failed to add component\n");
+                device_unregister(&usb4->dev);
++               return ERR_PTR(ret);
+        }
 
-This is missing some information and the naming is bad.
+        if (!tb_is_upstream_port(port))
+-- 
+2.47.1
 
-Which resistance (I suppose battery internal resistance)?
-
-That is heavily dependent on the battery temperature. So this needs
-to document if this is for the current temperature or for some
-specific one.
-
--- Sebastian
-
-> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
->  drivers/power/supply/power_supply_sysfs.c   |  1 +
->  include/linux/power_supply.h                |  1 +
->  3 files changed, 12 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index 560124cc31770cde03bcdbbba0d85a5bd78b15a0..22a565a6a1c509461b8c483e1=
-2975295765121d6 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -552,6 +552,16 @@ Description:
->  			Integer > 0: representing full cycles
->  			Integer =3D 0: cycle_count info is not available
-> =20
-> +What:		/sys/class/power_supply/<supply_name>/resistance
-> +Date:		May 2025
-> +Contact:	linux-arm-msm@vger.kernel.org
-> +Description:
-> +		Reports the resistance of the battery power supply.
-> +
-> +		Access: Read
-> +
-> +		Valid values: Represented in microohms
-> +
->  **USB Properties**
-> =20
->  What:		/sys/class/power_supply/<supply_name>/input_current_limit
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index a438f7983d4f6a832e9d479184c7c35453e1757c..dd829148eb6fda5dcd7eab53f=
-c70f99081763714 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -220,6 +220,7 @@ static struct power_supply_attr power_supply_attrs[] =
-__ro_after_init =3D {
->  	POWER_SUPPLY_ATTR(MANUFACTURE_YEAR),
->  	POWER_SUPPLY_ATTR(MANUFACTURE_MONTH),
->  	POWER_SUPPLY_ATTR(MANUFACTURE_DAY),
-> +	POWER_SUPPLY_ATTR(RESISTANCE),
->  	/* Properties of type `const char *' */
->  	POWER_SUPPLY_ATTR(MODEL_NAME),
->  	POWER_SUPPLY_ATTR(MANUFACTURER),
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index c4cb854971f53a244ba7742a15ce7a5515da6199..de3e88810e322546470b21258=
-913abc7707c86a7 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -174,6 +174,7 @@ enum power_supply_property {
->  	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
->  	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
->  	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-> +	POWER_SUPPLY_PROP_RESISTANCE,
->  	/* Properties of type `const char *' */
->  	POWER_SUPPLY_PROP_MODEL_NAME,
->  	POWER_SUPPLY_PROP_MANUFACTURER,
->=20
-> --=20
-> 2.34.1
->=20
->=20
-
---ucvcx4vh7elpfixl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhXW9oACgkQ2O7X88g7
-+prIkg//VtGhxAwUOJRpgVT7zHHrczHnFqP2fQHOqxnfV3iO6rQqf9gNloR4lPIL
-e03Rm3ye13Mq7bBQxVT9dEUh5qPLJGGeHz+gyaNGMdOqXcA2a9wlMpwpW7OG/L1Z
-tq9ku5MA/NCdp5AjcFo0OdYPzm+Cy7byM9W4dFb3CJcwJds3uDMG5zrgiJPQ2ksI
-myIzRLHNr1tk8kProac4dmeatdeM226sRJ9RbGuQ8mz33++F0ztycPTVoYwMMdD7
-DhT7O/KFjyxfoHqT/j8RFK3RYcF6cHMF2UH8pd9eBjEn60W6555Z1te55Ubgoh4N
-M0PzpIBv3qlKIJknVAUHD3ib/6qGpZZ0fJdruLPTa3kgSaWqyQlPl1MP6MdRubtA
-3nXL0GcsSF4PNh1XOcMwVAeWfmUACWWQgjCjul1bam/rLLUJSPJTBLAZ3Ig9RGfS
-LumDXFMx3lhy5//ISZKxPOVif1cQmux23YITkqyMJCR6/ogqs1vHQzfA3hAmPLRR
-UuIvEW/lIVrze93msOPXqKF0LCw4RYBl+qeebyOzl+qJVO8h1w6QpoTSNB58BCYm
-gg/nHCb6FFlOGvc3D4YGAT4zDjs6/zKw4/LDgHGEtONbjhDLpFvFzYeTnfJJgMrE
-MsqAjVdQUM80LqBYoT4FP1AEZ2xkwr+QuYAMYCq6eAtaGCpqNCg=
-=xaOD
------END PGP SIGNATURE-----
-
---ucvcx4vh7elpfixl--
 
