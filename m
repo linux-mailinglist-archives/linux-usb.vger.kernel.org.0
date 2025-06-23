@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-25028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CE9BAE5347
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 23:51:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B2A4AE5526
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 00:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4476D1B66B59
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 21:51:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 032231BC37F1
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 22:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF9F223DD0;
-	Mon, 23 Jun 2025 21:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96069225771;
+	Mon, 23 Jun 2025 22:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="RBuZ8fn3"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="G9hXsTzR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3196519049B;
-	Mon, 23 Jun 2025 21:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42CC7080E;
+	Mon, 23 Jun 2025 22:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750715493; cv=pass; b=XLNHxmy2edxpPTjrEV3QIB/XJa/k5wbl9uZMor+YCByvEXAEgm7X6KTvOnjUPWHoJF7Wv72B6NqOtmteYudy97GE5/ttBdUc7pBrV+g6trC0JvXRWDkAWJhZK9Z2CR2oY5iErIZRH7rKujmcLVnAM849DIhwz1PjIMTpAlVt4HM=
+	t=1750716504; cv=pass; b=r19VpoOHjotOf3Z1NlTwRHIbQ+oFOoOCymUbZDxp9Aqy6+UbmBtxifLFAdl9axfLNATmgmeSoPY+sV9dyin03zT000h1sx1eZofkN0YrBDi9i5Zlgcsu8OOgKifz+ajVA8ybtZMZ7hj1Ayp6/i5staRffSbMd+fyXJMWHpW089c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750715493; c=relaxed/simple;
-	bh=kUZ55aDwauHOi8YtXsztylF8oB2dhM0+AijzN5t7kiw=;
+	s=arc-20240116; t=1750716504; c=relaxed/simple;
+	bh=JDPs4eXH1GKDynFvyfnMIazD78wsvR6WqglIGDUk0RI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UXULbz3wVK2wMUdthaEJ2Krx7Aw+kJo2vjA/LQiHba/DEc1PLD2utYZ+4VpYDjwg4Bb3e0rmelJp9gXzXgF6M4QHMPyFH8MUN5hgyO/EkRmYZkPGdjCBfm8k6HwLEQsbn91HexbG3PuxrpEh9ELJQ8ubta+ZJj8leEzydtg9UMo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=RBuZ8fn3; arc=pass smtp.client-ip=136.143.188.112
+	 Content-Type:Content-Disposition:In-Reply-To; b=G+WP2QojV/0OXelSQ5HmUvHHYCiT3EP+jE4BTy2fIZSmZhH1EgNfw9O84bJdcmf5EXgz942cYaqeR/9glLP92rEdQaexaSRahHOeELReguM+8p8LrpMFi9i4x3Sf4D4qk6r5V1Wz0mtxCR/Zjz2h/BzrEXMZIyFVNm8dInoQrRE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=G9hXsTzR; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1750715481; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1750716490; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=XhA1f5X3vvs0h91NAHltQwTYl98YE2dKJwtll4jLSdW1LQdlNQsflFGiooMNCfYXYc/9SkCv9awxPOztsULBDnTS9Xfs1z07TidtDykdBgsAxQY8BEAHvmAH2kdATLEE5kRtCPejDxF+Mp6/0FUXOLd8FzZa0TIPWi8K6CiT3UU=
+	b=YRbDsl6UDTgqiLNXD6FOOYF7QMs4k1Fof/h54LtAlOcWESaMYSLv0M/F82t7uYA6QpZoMMnYJE/YgZfr8vMlH9Vd+wgChJw+EJMJzdusBj8xRYHKg207idBBvxWLdgYinzO655PU+7j83auyS5gYrga4zrqbMtySkmH4zV2kD18=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750715481; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=GFXliCzQION6XnWXAAKpg1SFLETXLk2/Ys00udwEZjY=; 
-	b=XDE3mjnhDXHO+kZ8iECMHhkO1l3kgb1FsTq0pvfVk4TpdZBl6CHyx6tw4E9fcBK4pXprzgnnCxw/aSoKqlcblrzGCdyGYlO9Pdp2Oc/Q1SpU+OR9ykiQXai0P5HLFDjKai80iwGIxeu6efnSbARhuFNYMVrny7Gn+hROa+v0Jdo=
+	t=1750716490; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/BXgpXwhzYtQIWwdqXLgsVk4WStiLAj0XHlChIgBw3M=; 
+	b=XL21455Ail7tSBw/eAf7lhtRyw5tOHGFGHcePKq5uYirNsaKLY9L765rFqUF+lsrA4ea/BOgcT3kLz1nL1+zCs6UeBQ1g7Tm65Cnl/DLKnyEjUfJ1gt+an8UNE5c5LtsCzDjAZeO4Awg/m0/Ct5b0PqLZZDmfpXWlszGAVOf4MQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750715481;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750716490;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=GFXliCzQION6XnWXAAKpg1SFLETXLk2/Ys00udwEZjY=;
-	b=RBuZ8fn3jwpchuu3RcWAH+Fh5g/fAYD6KnLpCsXzrprX2sLjPxvqWyAp9gV9NTb0
-	aDz8q8NV+0tDf1cNG8kTyjucs+JFn4RJyUpFpsapxj6kf7tkKC4sOkqLCDGk+mzPDjv
-	42kyBiDN1jM7ehAl2y8VvHHnYVrmyuulTvUNbsw4=
-Received: by mx.zohomail.com with SMTPS id 1750715478062347.17253157085406;
-	Mon, 23 Jun 2025 14:51:18 -0700 (PDT)
+	bh=/BXgpXwhzYtQIWwdqXLgsVk4WStiLAj0XHlChIgBw3M=;
+	b=G9hXsTzREqibMweZdE0PXJ/yFt539DBxTgFgiU0D1+YLJudVvNqIYpZXOKMfyPVL
+	2uPPmYL9u5lSzxm3ulNwoQ94vtD1/KZ/SLp76EHW3JwHJCm5a+IvSzg6zRmQqc6jO4q
+	JsvsIvix4nJrXwQ5fb+AN4ZOnLLmpTY628e+Jarc=
+Received: by mx.zohomail.com with SMTPS id 1750716488768202.2640415999;
+	Mon, 23 Jun 2025 15:08:08 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id 5E5E2180AAB; Mon, 23 Jun 2025 23:51:13 +0200 (CEST)
-Date: Mon, 23 Jun 2025 23:51:13 +0200
+	id 0B36B180AAB; Tue, 24 Jun 2025 00:08:04 +0200 (CEST)
+Date: Tue, 24 Jun 2025 00:08:03 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: amitsd@google.com
+To: Amit Sunil Dhamne <amitsd@google.com>
 Cc: Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
@@ -63,11 +63,13 @@ Cc: Rob Herring <robh@kernel.org>,
 	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] usb: typec: tcpm: Add support for Battery Cap
- response message
-Message-ID: <g5w3ydcvtxwvcu5armmnt4v6y6wsymt7rothnvaesdql6kdscz@rhkxzx3y47iv>
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+Message-ID: <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
 References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
- <20250507-batt_ops-v2-5-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <20250514194249.GA2881453-robh@kernel.org>
+ <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,274 +77,191 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4ffhg6s33jsl77op"
+	protocol="application/pgp-signature"; boundary="boxpunqqsxkyyd4w"
 Content-Disposition: inline
-In-Reply-To: <20250507-batt_ops-v2-5-8d06130bffe6@google.com>
+In-Reply-To: <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
 X-Zoho-AV-Stamp: zmail-av-1.4.3/250.696.82
 X-ZohoMailClient: External
 
 
---4ffhg6s33jsl77op
+--boxpunqqsxkyyd4w
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 5/5] usb: typec: tcpm: Add support for Battery Cap
- response message
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
 MIME-Version: 1.0
 
 Hi,
 
-On Wed, May 07, 2025 at 06:00:26PM -0700, Amit Sunil Dhamne via B4 Relay wr=
-ote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
+On Tue, May 20, 2025 at 01:10:25PM -0700, Amit Sunil Dhamne wrote:
+> Hi Rob,
 >=20
-> Add support for responding to Get_Battery_Cap (extended) request with a
-> a Battery_Capabilities (extended) msg. The requester will request
-> Battery Cap for a specific battery using an index in Get_Battery_Cap. In
-> case of failure to identify battery, TCPM shall reply with an
-> appropriate message indicating so.
+> Thanks for your response!
 >=20
-> Support has been added only for fixed batteries and not hot swappable
-> ones.
+> On 5/14/25 12:42 PM, Rob Herring wrote:
+> > On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
+> >> Extend ports property to model power lines going between connector to
+> >> charger or battery/batteries. As an example, connector VBUS can supply
+> >> power in & out of the battery for a DRP.
+> >>
+> >> Additionally, add ports property to maxim,max33359 controller example.
+> >>
+> >> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> >> ---
+> >>  .../bindings/connector/usb-connector.yaml          | 20 +++++++++++--=
+----
+> >>  .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 +++++++++++++=
++++++++++
+> >>  2 files changed, 38 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/connector/usb-connector=
+=2Eyaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> >> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece=
+8b0c1e831d04d51eb7 100644
+> >> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> >> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> >> @@ -181,16 +181,16 @@ properties:
+> >> =20
+> >>    port:
+> >>      $ref: /schemas/graph.yaml#/properties/port
+> >> -    description: OF graph bindings modeling a data bus to the connect=
+or, e.g.
+> >> -      there is a single High Speed (HS) port present in this connecto=
+r. If there
+> >> -      is more than one bus (several port, with 'reg' property), they =
+can be grouped
+> >> -      under 'ports'.
+> >> +    description: OF graph binding to model a logical connection betwe=
+en a device
+> >> +      and connector. This connection may represent a data bus or powe=
+r line. For
+> >> +      e.g. a High Speed (HS) data port present in this connector or V=
+BUS line.
+> >> +      If there is more than one connection (several port, with 'reg' =
+property),
+> >> +      they can be grouped under 'ports'.
+> > 'port' and 'port@0' are equivalent. So you can't be changing its=20
+> > definition.
 >=20
-> As the Battery Cap Data Block size is 9 Bytes (lesser than
-> MaxExtendedMsgChunkLen of 26B), only a single chunk is required to
-> complete the AMS.
+> Noted!
 >=20
-> Support for Battery_Capabilities message is required for sinks that
-> contain battery as specified in USB PD Rev3.1 v1.8
-> ("Applicability of Data Messages" section).
 >=20
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Kyle Tso <kyletso@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 96 +++++++++++++++++++++++++++++++++++++=
-++++--
->  include/linux/usb/pd.h        | 31 ++++++++++++++
->  2 files changed, 123 insertions(+), 4 deletions(-)
+> > I'm not sure showing a power connection with the graph is the right=20
+> > approach.
 >=20
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 98df0c7ce00e43f6c95ab49237a414e1b4413369..4731126fbf19a50178be0cf88=
-67b3fe08595724c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -228,7 +228,8 @@ enum pd_msg_request {
->  	PD_MSG_DATA_SINK_CAP,
->  	PD_MSG_DATA_SOURCE_CAP,
->  	PD_MSG_DATA_REV,
-> -	PD_MSG_DATA_BATT_STATUS
-> +	PD_MSG_DATA_BATT_STATUS,
-> +	PD_MSG_EXT_BATT_CAP,
->  };
-> =20
->  enum adev_actions {
-> @@ -597,8 +598,8 @@ struct tcpm_port {
->  	u8 fixed_batt_cnt;
-> =20
->  	/*
-> -	 * Variable used to store battery_ref from the Get_Battery_Status
-> -	 * request to process Battery_Status messages.
-> +	 * Variable used to store battery_ref from the Get_Battery_Status &
-> +	 * Get_Battery_Caps request to process Battery_Status messages.
->  	 */
->  	u8 batt_request;
->  #ifdef CONFIG_DEBUG_FS
-> @@ -1414,6 +1415,81 @@ static int tcpm_pd_send_batt_status(struct tcpm_po=
-rt *port)
->  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->  }
-> =20
-> +static int tcpm_pd_send_batt_cap(struct tcpm_port *port)
-> +{
-> +	struct pd_message msg;
-> +	struct power_supply *batt;
-> +	struct batt_cap_ext_msg bcdb;
-> +	u32 batt_id =3D port->batt_request;
-> +	int ret;
-> +	union power_supply_propval val;
-> +	bool batt_present =3D false;
-> +	u16 batt_design_cap =3D BATTERY_PROPERTY_UNKNOWN;
-> +	u16 batt_charge_cap =3D BATTERY_PROPERTY_UNKNOWN;
-> +	u8 data_obj_cnt;
-> +	/*
-> +	 * As per USB PD Rev3.1 v1.8, if battery reference is incorrect,
-> +	 * then set the VID field to 0xffff.
-> +	 * If VID field is set to 0xffff, always set the PID field to
-> +	 * 0x0000.
-> +	 */
-> +	u16 vid =3D BATTERY_PROPERTY_UNKNOWN;
-> +	u16 pid =3D 0x0;
-> +
-> +	memset(&msg, 0, sizeof(msg));
-> +
-> +	if (batt_id < MAX_NUM_FIXED_BATT && port->fixed_batt[batt_id]) {
-> +		batt_present =3D true;
+> I want to provide some more context and rationale behind using this desig=
+n.
+>=20
+> From a hardware perspective:
+>=20
+> The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
+> (FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
+> with the charger IP via circuitry & from there on to the battery. The FG
+> is connected to the battery in parallel. As it can be seen that while
+> these IPs are interconnected, there's no direct connection of the fuel
+> gauge & the connector.
+>=20
+> For this feature, I am interested in getting the reference to the FG. As
+> per graph description: "...These common bindings do not contain any
+> information about the direction or type of the connections, they just
+> map their existence." This works for my case because I just want the
+> connector to be aware of the Fuel gauge device without imposing a
+> specific directionality in terms of power supplier/supplied. This is
+> also the reason why I didn't use
+> "/schemas/power/supply/power-supply.yaml#power-supplies" binding.
+>=20
+> > We have a binding for that already with the regulator binding.
+>=20
+> I haven't explored the option of using regulator bindings. But in my
+> case I am interested in fuel gauge and unfortunately, they're modeled as
+> power_supply devices.
 
-This should also handle POWER_SUPPLY_PROP_PRESENT.
+=46rom hardware point of view there is no direct connection at all
+between the fuel gauge and the connector. The usual hardware
+connection is
+
+connector -> charger -> battery
+
+With the charger potentially supporting reverse operation to provide
+energy from the battery to the connector (with "battery" I assume
+a "smart" battery, so the raw cells and some kind of fuel gauge).
+
+Thus the following example should properly document the hardware
+connections:
+
+---------------------------------------
+typec-connector {
+    /* ... */
+};
+
+charger {
+    /* ... */
+    power-supplies =3D <&connector>;
+};
+
+fuel-gauge {
+    /* ... */
+    power-supplies =3D <&charger>;
+};
+---------------------------------------
+
+It means instead of the direct graph lookup for the fuel gauge,
+you would need a function walking through the graph build by the
+power-supplies phandles. But it also means that the DT properly
+describes the hardware instead of adding random graph connections.
 
 Greetings,
 
 -- Sebastian
 
-> +		batt =3D port->fixed_batt[batt_id];
-> +		ret =3D power_supply_get_property(batt,
-> +						POWER_SUPPLY_PROP_USBIF_VENDOR_ID,
-> +						&val);
-> +		if (!ret)
-> +			vid =3D val.intval;
-> +
-> +		if (vid !=3D BATTERY_PROPERTY_UNKNOWN) {
-> +			ret =3D power_supply_get_property(batt,
-> +							POWER_SUPPLY_PROP_USBIF_PRODUCT_ID,
-> +							&val);
-> +			if (!ret)
-> +				pid =3D val.intval;
-> +		}
-> +
-> +		ret =3D power_supply_get_property(batt,
-> +						POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
-> +						&val);
-> +		if (!ret)
-> +			batt_design_cap =3D (u16)UWH_TO_WH(val.intval * 10);
-> +
-> +		ret =3D power_supply_get_property(batt,
-> +						POWER_SUPPLY_PROP_ENERGY_FULL,
-> +						&val);
-> +		if (!ret)
-> +			batt_charge_cap =3D (u16)UWH_TO_WH(val.intval * 10);
-> +	}
-> +
-> +	bcdb.vid =3D cpu_to_le16(vid);
-> +	bcdb.pid =3D cpu_to_le16(pid);
-> +	bcdb.batt_design_cap =3D cpu_to_le16(batt_design_cap);
-> +	bcdb.batt_last_chg_cap =3D cpu_to_le16(batt_charge_cap);
-> +	bcdb.batt_type =3D !batt_present ? BATT_CAP_BATT_TYPE_INVALID_REF : 0;
-> +	memcpy(msg.ext_msg.data, &bcdb, sizeof(bcdb));
-> +	msg.ext_msg.header =3D PD_EXT_HDR_LE(sizeof(bcdb),
-> +					   0, /* Denotes if request chunk */
-> +					   0, /* Chunk number */
-> +					   1  /* Chunked */);
-> +
-> +	data_obj_cnt =3D count_chunked_data_objs(sizeof(bcdb));
-> +	msg.header =3D cpu_to_le16(PD_HEADER(PD_EXT_BATT_CAP,
-> +					   port->pwr_role,
-> +					   port->data_role,
-> +					   port->negotiated_rev,
-> +					   port->message_id,
-> +					   data_obj_cnt,
-> +					   1 /* Denotes if ext header */));
-> +	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
-> +}
-> +
->  static void mod_tcpm_delayed_work(struct tcpm_port *port, unsigned int d=
-elay_ms)
->  {
->  	if (delay_ms) {
-> @@ -3711,8 +3787,12 @@ static void tcpm_pd_ext_msg_request(struct tcpm_po=
-rt *port,
->  		tcpm_pd_handle_msg(port, PD_MSG_DATA_BATT_STATUS,
->  				   GETTING_BATTERY_STATUS);
->  		break;
-> -	case PD_EXT_SOURCE_CAP_EXT:
->  	case PD_EXT_GET_BATT_CAP:
-> +		port->batt_request =3D ext_msg->data[0];
-> +		tcpm_pd_handle_msg(port, PD_MSG_EXT_BATT_CAP,
-> +				   GETTING_BATTERY_CAPABILITIES);
-> +		break;
-> +	case PD_EXT_SOURCE_CAP_EXT:
->  	case PD_EXT_BATT_CAP:
->  	case PD_EXT_GET_MANUFACTURER_INFO:
->  	case PD_EXT_MANUFACTURER_INFO:
-> @@ -3921,6 +4001,14 @@ static bool tcpm_send_queued_message(struct tcpm_p=
-ort *port)
->  					 ret);
->  			tcpm_ams_finish(port);
->  			break;
-> +		case PD_MSG_EXT_BATT_CAP:
-> +			ret =3D tcpm_pd_send_batt_cap(port);
-> +			if (ret)
-> +				tcpm_log(port,
-> +					 "Failed to send battery cap ret=3D%d",
-> +					 ret);
-> +			tcpm_ams_finish(port);
-> +			break;
->  		default:
->  			break;
->  		}
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index 4efa7bfd9863915dfc8048da264116d9b05a447b..c89594177da57f4398b75c89c=
-1991b4937614a70 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -204,6 +204,37 @@ struct pd_message {
->  	};
->  } __packed;
-> =20
-> +/*
-> + * count_chunked_data_objs: Helper to calculate number of Data Objects o=
-n a 4
-> + *   byte boundary.
-> + * @size: Size of data block for extended message. Should *not* include =
-extended
-> + *   header size.
-> + */
-> +static inline u8 count_chunked_data_objs(u32 size)
-> +{
-> +	size +=3D offsetof(struct pd_chunked_ext_message_data, data);
-> +	return ((size / 4) + (size % 4 ? 1 : 0));
-> +}
-> +
-> +/**
-> + * batt_cap_ext_msg - Battery capability extended PD message
-> + * @vid: Battery Vendor ID (assigned by USB-IF)
-> + * @pid: Battery Product ID (assigned by battery or device vendor)
-> + * @batt_design_cap: Battery design capacity in 0.1Wh
-> + * @batt_last_chg_cap: Battery last full charge capacity in 0.1Wh
-> + * @batt_type: Battery Type. bit0 when set indicates invalid battery ref=
-erence.
-> + *             Rest of the bits are reserved.
-> + */
-> +struct batt_cap_ext_msg {
-> +	__le16 vid;
-> +	__le16 pid;
-> +	__le16 batt_design_cap;
-> +	__le16 batt_last_chg_cap;
-> +	u8 batt_type;
-> +} __packed;
-> +
-> +#define BATT_CAP_BATT_TYPE_INVALID_REF			BIT(0)
-> +
->  /* PDO: Power Data Object */
->  #define PDO_MAX_OBJECTS		7
-> =20
+> > Perhaps the connector needs to be a supply. It's already using that=20
+> > binding in the supplying power to the connector case.
 >=20
-> --=20
-> 2.49.0.987.g0cc8ee98dc-goog
+> Want to clarify, in this case you mean
+> /schemas/regulator/regulator.yaml#*-supply$ right?
 >=20
+> Adding to my response above, the reason I don't want to impose a
+> directionality in terms of supplier/supplied is that in case of USB Dual
+> Role Port they're dynamic i.e., when USB is source, the power is
+> supplied out of the battery (battery/FG will be supplier) and in case
+> USB is sink, battery is supplied power. Whether the connector port is in
+> source or sink role is determined on a connection to connection basis.
+> Also, the knowledge of the supply direction is of no consequence for
+> this feature.
+>=20
+>=20
+> Please let me know what you think.
+>=20
+> Thanks,
+>=20
+> Amit
+>=20
+>=20
+> > Rob
 >=20
 
---4ffhg6s33jsl77op
+--boxpunqqsxkyyd4w
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhZzFAACgkQ2O7X88g7
-+pp/ohAAmhwozxPOZbt+0M9zZ6EZHKbxIA4dyREIo4bxCyozSGJq/qVY6p+kUK9K
-c8HtERDjM0VixLFk/eNC4oMj2AeczzCSR3Y5BCoqJstXqLqznquXnKjER6U1i8uY
-iaFHQEPVjZCtD96B/NTkeJ0Z7A6+A5EXLNpRjUc+sOw02sXVp7z1TWPDPkB6gZri
-MVHzZlKJwmua5cvBFBPYVd/UevbZleQ2HY3XzyPjRlhUurhCkZt7ZyLaWJqDS7ek
-tsbg8WNiai1QZ/b7oDI8k7ICJsxjaPWPCBrmYrr+97ibHJ8WMWN/Mo6aAb/U8MWs
-Agfrd1k6tEQAPeftdNpwQp5qktcrbcVrOwEgToHIdLVc+qC8iezju9S0ui41L8gy
-Bl3ljdW/p4YrEnxQkHnyU5e02v0+zZohWA/fnLx6w33au6o0l4m9YgjCYlGSdSy0
-/XaPyfL0lVsCeiscUITSXETSzupCalzaJX3WbNsTLAnVfnC1ZatDIdXPFy4Nm5I8
-QFJl0D2p/0Jedzd74SBRZY2DnzfN+npRBCIgh2t0NFWhEUXtx04Yc52SRfE4pMC9
-2SqZQpWNN20AgWtW+bd/AMvUaNf0EkkssdyVJkdxbENqtpW7dy8vEIEUeUpGloOb
-PLBXHO4enu/j9tQadA8mr946DnYF3PZTSwqPgcpALXvOU6WSyYc=
-=27wT
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmhZ0EAACgkQ2O7X88g7
++pomEA//YVUVu98W2c34fvdaBGPXhG5LICkMydDQzHm/ycXUSLBKZdQwKFMoVYrs
+GLUUn8a5VFSCBLfcUSUTN889escHyOEwjNVZlQhGhAuwaq3AVlXPR2QchgPm/JXw
+kE9zcBKbzGk9KMPs/MdlGxF4gHJG2RULAQSYo3i6HgVCIKkPIoUYDMbTLOMBedWu
+9kNCd6JQ0w8y/aWEfE17rwkr5wO8/tEurfBri/5NTOYSHvEZOEddKlIwNis/SZR7
+BMYx8aV1cdIo+90sdyvGZdB6LQ1MbV8eI3xDOtp/8kwpvPUWUnlFmm/We1MOvrAH
+uVX1kflR63hKzTxfYFqyyQV2hCBQYGInT3jocBHYhWLOm5kkmGgODpYS3xthlMdO
+7uiP5fbHVW+SZYfkB8bjUlu3lT9IRLuvJ6KvMEBYsxvmMoANl7ZwXHssRqVTGygy
+UbLnHLdMrVgukw6qq6cgFvbN5JygzUAW4c3+1s4s5vQ0g4bAju+Ym8m25h0F5RRo
+ns9HwYaa9G+BtC/uteHyx9j7NjaSNhbmWOvp7cG+b93X7uPE2ljyvYbiPL0IGand
+W6TDVRP4sZTqL64FU/4G/0iHeBkrMc1ou2CxIMRyOLlmUJepLMpjR8aA3asuHQZ4
+iJZJQoFHn0RgQuAjG6wqSZUJXNtCBhPhDMliv811CFrC9L7SB1I=
+=jjhP
 -----END PGP SIGNATURE-----
 
---4ffhg6s33jsl77op--
+--boxpunqqsxkyyd4w--
 
