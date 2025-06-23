@@ -1,234 +1,223 @@
-Return-Path: <linux-usb+bounces-25022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25023-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CAFDAE4E2B
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 22:31:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B15EBAE4E3B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 22:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BF2B17D3E6
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 20:31:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A476171AC6
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 20:41:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499512D3A97;
-	Mon, 23 Jun 2025 20:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7222E2D5438;
+	Mon, 23 Jun 2025 20:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LbTXO1cJ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="e3qpw8GI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013017.outbound.protection.outlook.com [40.107.159.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DD61EFF9F
-	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750710685; cv=none; b=jCwareytVKBBzUnVjT66s6RQEBzFxx/gqIoEPhUTTUC/mdkSIoZD3nXbpZss8y6wQfSp3GhPXUkl8yzrtf0xk2m5M1r8fmIYBH/Q2B+a4SBWV8MbM4g0euA+XByWbV6uS2scT0OEnLWh+Rn+izWnq6ClqNCCbJfC5FWzk0jBPK8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750710685; c=relaxed/simple;
-	bh=XtezxSdOP+UjFwJsKuZxcQFunjHVQrFml5JuZ4SELms=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l+bbXE14NpB+gA9XCIwxGfKrTxOhAW8y6hsJfbnkIW3g8Ez5k5uy5nokOyHvgx4s2LsqQrdnI3og2TXLzccuFaDmCa8OT/BxTjypy6B3Wq8biqRGdHkQMph8OUl5h94lgX2hP67tZR32Ua7GT9HOf95lhxsVOgqlnf2qXrNXSJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LbTXO1cJ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55NI3Fal021510
-	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AM7e+WI1WjWum2hqHb+x3pciVPxEtvXw/CoY4ovDRVE=; b=LbTXO1cJsevhn1gw
-	qbDyV0jBQYG7wl2/Ugt2HLZQ2YNZNWLbreRtj0RpHhShlPQKpCcFH9WEWJcfaxAc
-	oU7bD1v0qhQ6CDlyKhBvXFABo68mxNNYoJBpHOrsv9cArI5U25mN2PZ+2w3nxbYu
-	Ztv1kL/PLyhueZHJ32bsIqdPegRVoGwipbkUHNXzmwsKLf28AP5LVi4gmXdPNiao
-	wanEp/wY0344x3qhsd/0/to690GNxjpEQqERUiEYyI8l48/HOgMCVzHBD31sjUa/
-	kt5UP8yDS56m0UqqUBUaSKAt0SD4w62XJ+sOj3B3v/MH12gIhL/6Ac9r9Ob2n6AK
-	VMD7/w==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47esa4k6ca-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:22 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d0979e6263so13397985a.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 13:31:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750710681; x=1751315481;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AM7e+WI1WjWum2hqHb+x3pciVPxEtvXw/CoY4ovDRVE=;
-        b=fsjSWqbGAlvzOlNYnx05yVB7aRqbU29E3fxxL387ZP/yKuN4WYsH6eBKo3K5KSkoFp
-         k98uJkkYYEmVEEdg8tk7F6U6E9jxSy93UFfWerjguD9gtlT5eukm60fv68vwV+v90svk
-         NCBwNsbTA8OCMBBQ6n1Apy/Gez92yy09sL+1yX3jg3KuPuyqn/R6Q+wfffUZfGAt8idT
-         scPEJkaJ0uT+lF5c7NysB0sB3ZARpnu+DSMySexoNnbnrnnY0gRuSK1XlmHQigSv07e0
-         0VV0RP2d7YUj0hSbcxwDg3U70OI6nNupUKcRPF3pE+dHfA4GMd9m4J0YwGg/jc0pwHpW
-         rE8Q==
-X-Gm-Message-State: AOJu0Yy4l3HFOuHs3KgU6j4IEgijbQauC22cklUZe0XlP7fHOm05yEPZ
-	J9qLRxz+MGb3n/RCgAXXNNt+loeF1PCqAlI01Gly8ScI4n/mSLNkoXInNgXLo6+qF/MmWtxxj24
-	NrnF2hRad4k7NfhYPLWzK0+jKxo6jGTm5ORR/04VeOqCOsWoUbGZMmnkOeG9teRM=
-X-Gm-Gg: ASbGncuoVr1MNJHxsdpQIgUI0BSmyhPWZ2INFoKt5QoARQEOMatMWsEECccJA2Zhi8s
-	zvzXM8WDTFB00khoC62IW5tkK0h7NqoHSDXiRSSy9ToPUBt9ixAMF4P5wi07GCSCNVXlntCPeM/
-	iOTW4wj2UXAc0IKkvTKtOX8CwQQruBN4ddp74lZ/UKCUarEOEMEVJt5h71wgRlNvo8ZxGg24XMv
-	3vV9a11N/zhUbE9PhXHcatVgzYQ0d1Gd6mB57aJeRS7H5ayl2NqQn2jnWQzUzHiA/6FHTDsnwhf
-	d3U4qT+gt0WNNYt+nwOMK1zWxZQjyWA7rnOIxboScd8Wh0PUBCjx/SWTYkTE7WVF0jJv0OSibhL
-	qf60=
-X-Received: by 2002:a05:620a:1709:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7d3f98e0f77mr751552285a.7.1750710680675;
-        Mon, 23 Jun 2025 13:31:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG2QiIiGmM7antIjBt+7B/nWxD3Vu79fMhrZLayBKhhmi2EdbbLBrOXxNxUombVXn8rh4ofRw==
-X-Received: by 2002:a05:620a:1709:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7d3f98e0f77mr751550685a.7.1750710680162;
-        Mon, 23 Jun 2025 13:31:20 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f196c79sm12687a12.4.2025.06.23.13.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jun 2025 13:31:19 -0700 (PDT)
-Message-ID: <acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com>
-Date: Mon, 23 Jun 2025 22:31:17 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEFE2D323F;
+	Mon, 23 Jun 2025 20:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750711273; cv=fail; b=BA3Xwq1vXfOw3Hgf63kW6NyS5TY5PntJulQ6malh6W0Ulje3PfGHaEnfHfyW851j1b5LO2zPVrcShAOgIgmSHhW5isJYGSRDxHK5HzqGXxrdTXsIPSgNgOynjHk6XEnpNivIKqTU+gOGaziUxiroSzpWOuEbahuZBVZYjjJJhog=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750711273; c=relaxed/simple;
+	bh=C5hYULTvsu+uCQpNdJmLCaqtpHmVUrFpvYQIwDu6C2o=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ZPV55Uc1XDe+53Uce4ML1E2SXUnARKgA9oOWHSbl6Er93Pm9GaBZfXJRHGusEHOCHfXvMInoK9ccNlvftT6BoWr3bxlGXs7JaQRArknt9nxqFhJoTGji4iuVZO5ASaa2/T7H6ZBpVKnaEQEZ6Zr5b0w5cOvdW24npVnU2oWpVLo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=e3qpw8GI; arc=fail smtp.client-ip=40.107.159.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dB5wtEr0YItEot4cy/dHXdKBvQZ56VN1WIu7BeT5VbTj/FMzAsFCY+N035pUPGz0k8kpeYRuFu4PlqGUhGKo0yUzaGZcE25ZRHLdAz0TbYtuiGCYEUL75TsbWSnh5iz2t7IQHHJ+7OwPH8/8Y41TNA5TTNo2ak9ku7Zp87rbV59mMAXkOzlgKp75mE7sEP6pCuHxeYktI1TdLECO/3ezl2kG1fPSh1g1/IsJ4tzg7JHdtKnO8KuqMsDqRepezIdPJUCKx1EfJZK/cPmsUvF00VWa81v+DoMEPLEWuTWIWVUkW51Qf0pJjXlmWcxfQqTgKHHvuApjrPEqH861bEbd6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LGRLR1RiE1m4cV/vpYfuV8bVcjLYgmRRcrMjnNI42tc=;
+ b=hC+vq2aNXBsjQnupEM+MFVGKqX7Ch3fdo8b1q0eDn6YODEUZgIIqW4LkWXKqKubX1b1vyVSSbryudtwbYLWbE+q2QduUWhuAelv9l8jVObtl3BcGi1L8S3KhlCEWhaThH6DDmDKG5bNzKiozdBFYHvpQTy+XE3Yt1z38umQem60BGUX6nH6q6aeA2xqjLysNRYfyjaCk+b7zT4WgMYbjWr0izkyW8JToJJJIDRUYJBuydW6G7OzXbbni4mLxRi3nF5IuQ0qQOYi0t5Qk1neNqwuLkA4sDjj/rPW01enVavOiYhnV8bBeVwsz56CV0qrF0qqEhax032aBX6idv8IMDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LGRLR1RiE1m4cV/vpYfuV8bVcjLYgmRRcrMjnNI42tc=;
+ b=e3qpw8GIrftljLnyzn6Hc33lI14PwJ0OeFCzJadsqcEYK3w8R0pUXZbLUGRQ8E4xkSSLwrWAl8C79L46OMHQ33Nl4/ocg5znK2ebmBZurTDK2ivs6BqwqhgLK8TBQ28iKDPsfkyQ9tbrdXut/GGe11WQrren33nyYpjExXkZZVfmEJW0ffW7//ek8uvMOJ5LBX4SKiz3aOVNzB+Je4zjAJOnXJQca+gdS+pKJvFmMMybTMhbq2Q0pzUCxAEGkJpB3Dj0/yFUS9TY9Kp77djS62+NCio0nA9ggNihCyJJ4QTMMN3xz26Te9WgySch/UEyPMvknHjc0oEDHQB9NOu79w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by DUZPR04MB10061.eurprd04.prod.outlook.com (2603:10a6:10:4df::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.29; Mon, 23 Jun
+ 2025 20:41:05 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8835.027; Mon, 23 Jun 2025
+ 20:41:04 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michal Simek <michal.simek@amd.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+Cc: imx@lists.linux.dev
+Subject: [PATCH 1/1] dt-bindings: trivial-devices: add compatible string nxp,isp1301 from isp1301.txt
+Date: Mon, 23 Jun 2025 16:40:46 -0400
+Message-Id: <20250623204048.2493819-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0002.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::7) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: hub: fix detection of high tier USB3 devices
- behind suspended hubs
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
-        stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-References: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=eLYTjGp1 c=1 sm=1 tr=0 ts=6859b99a cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
- a=tT9duwjsjWl6H1QRmFEA:9 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-GUID: 7Ia5ncYYiewgR1H-yaIh9SztGvxUwTFm
-X-Proofpoint-ORIG-GUID: 7Ia5ncYYiewgR1H-yaIh9SztGvxUwTFm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIzMDEzNiBTYWx0ZWRfXwVlUP3MM0A4x
- 9F/rdti6tJStAYU3hXjje+RbtdhvowjJKaMWfCMGzFN3NoOnpnC/MzeTrNuEu46w4rpxvi5C3Gp
- 37clBTrtFwTmKyOcNg0LtlcZgobtbl3XOZI/9wH9I+hKkYNTFEvfTrQsmnekcQvPwAYgW7xPSGZ
- /IY8JxCmsRVPwmUFWXZ/HcvQZMYUdg0Wi3tjdE+Oy59BUm/kWdZXjkKgFMIMa9xqeBAnu2MokUn
- FftfRjZ7gOlgsNMrYTjn/ANsdzg+auXaWF3qmee2LgvUDRi0JvVV9wvL1JKAekEiBaXZrZ9CgGH
- 5SxhdvAUseEw1/JIPJfmSO7TBeG5+hVJK0ZSso8QTdDSAUcEDbtdYyEEwhzrjdadEYDVFLVwglX
- wqRqNFuie+5UelJZXBSgrDUy/ODM6jKbIzCg1kMG6zFVT+4zy7mCOOOX9htyL9zFP/EHgy26
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-23_06,2025-06-23_07,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 mlxlogscore=707
- suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- adultscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506230136
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DUZPR04MB10061:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d18ea3f-d7f5-4cf4-6e4a-08ddb2964605
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?i0KE5VrTaUPjTMqa62lIGcVRbs4fCI4zca3Rw7SmY9Fy/hUua5k59hVS4YaS?=
+ =?us-ascii?Q?qUdfH8+TLrNaSCLpJDPyYxDVO8MPHtOTsxImhNcJl8b/s2iWnQiiwMVSUQTA?=
+ =?us-ascii?Q?ZZtNxCSz/KlCg+FA4D8RMSw7C2x7m5D5O1zMVio67de9v6KJgWX6vGGaRGPh?=
+ =?us-ascii?Q?YoKOlN3DF5CnUIAxQ1ChWvxZj0zZoZcEFkeSdh6ViCeTi+1nndRQfTOkTMCz?=
+ =?us-ascii?Q?XzuvmR3qrB/aDfYzOQIMrSdAXb4usaPpleW6Rj2GfOw7e5+66wuTiVgmrtW8?=
+ =?us-ascii?Q?nK1XsrMFTjWlpSauppwsrE/qmrra11algI4uv+GoWCnyRSjCyuZENHGFwDbL?=
+ =?us-ascii?Q?OFrkpqtKYP3I2NqqrxirtRHjSBR6JI3dKx7cYYvAG5FwNjo6av+rB22Q4w3V?=
+ =?us-ascii?Q?SUQpFO29iv2cVj0WMU7Bb2AU8nivf0+hMBuDSTRsChuhyaoj1KfxcZpUHaCE?=
+ =?us-ascii?Q?1hyprBHy/4OuV2rxPYzZSalNDk9RdNmVmUxr+FXlpirZsaGyTb4QQPbCFBtW?=
+ =?us-ascii?Q?4prPH++h/SnzdjAQRSfVqD1IvkqwLqyEvCAe2mLK10Ocl90CQq3uZ/2YWeHC?=
+ =?us-ascii?Q?nIia3f+eEG2xFvobhBQqABzNkjAthJX9gfC/zQpXVRNpXFyuwrhB2cZZ9QLf?=
+ =?us-ascii?Q?AtSAs6msKmcFbewAXq61iSSv4miJeJjZA0W9HFpjU4AEX5groI0JNcu7YSA7?=
+ =?us-ascii?Q?CzqaudUqFXf6UmM9pb+VSyDkNdhjKkH7kS6XNWzJ0pkeOGl8ldd8lG4lJnmX?=
+ =?us-ascii?Q?pPhHb4N+MejMQ3uhhCoQN57+mXB2VepWuV4JUTj/VSttqQM+B2AYjll7mPFG?=
+ =?us-ascii?Q?XY2HCqY6ig2S3gZ32EF+rSCnQXX18yYQAesWKgxE+bl0F4MEZ2uGijSuoBn4?=
+ =?us-ascii?Q?iaW+QpG8oovML27PEZz+Fhd/LYHLgFtK3jravrwowy7ODLAJqdLWlQq4pewn?=
+ =?us-ascii?Q?Hr7oyCaEUjgUsNwHcm2EFKq5mMqd14Tl03G7xwpr5T38uyyTPeDu2tFgJ0pf?=
+ =?us-ascii?Q?HtxNjBek642fI0ve+NA8NpuuJ/STCF/ix/6ywe1ynyScY0BdeDfAQrmh8lmw?=
+ =?us-ascii?Q?5ibDUMiBGpWOMCwYicIO8Hq9uAejvCUhef5rq0xZd50CplKksMnb8K/pm49N?=
+ =?us-ascii?Q?K3z2UBPEGQrJ9IeqCFTZM4p8LenpEXaIyQGdpdu9nFFNK/yA8FwSEKJNYKQ8?=
+ =?us-ascii?Q?ewtcivv9Bdx2PnqKUhPpVYRM/wNCuC2NBwYG/grJx6OSeui2b3+foemdyxQZ?=
+ =?us-ascii?Q?zyTUD0H9jtkSococFOJSJQfS7E2G+ZIolOENR/S61m070NS1gD3TaXGn0J2F?=
+ =?us-ascii?Q?6JyCeUAJFqBwozcZAISbcFn7sJkfOjVOp/FSZygQhJfEv+VVQVN+WCkl9V25?=
+ =?us-ascii?Q?hbtJTHYs1tkQWZJCkqYVPQGrp09DHNb+qrZbwAdYMwKWgaV5WarCNPgivBH5?=
+ =?us-ascii?Q?1ndrtKb6jvU5LtdmBZuQBbag1+2twEYVc1ewo+iSTWjQ04zP+6YxInqH6Xpm?=
+ =?us-ascii?Q?CZ/XIE64LGqDsgY=3D?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?CV4vBvGTccXyv2n0TOmw3QjkpcPGfwh9CaYDaTgqI7daG7ezkie717eaR6eP?=
+ =?us-ascii?Q?bfX7Krsup5xb8BJodokwigTTa0no+Zdm50uOt3ntmhCVSXtKrGJPOuGHdar9?=
+ =?us-ascii?Q?FySVxV1He9mLTvUw3tZv22paVdciY/+HIsKpbhT0vgfPeTpHFEwVj7IJ1h6u?=
+ =?us-ascii?Q?sbGsMENNz/Qh8/KmYGodyZyh6AeOwpYnxEwvchCssA0kJd7cQiA0UlhjZJdt?=
+ =?us-ascii?Q?C2N3VGKNKxC2sbqoY3fipKadXGnIe0dLlOMLroh12VYb1eysaIXIam56p9t7?=
+ =?us-ascii?Q?nRMebSzsdVEdQKBS1MwlMy3wGViY5sGueZi3TXwlM++D0+VahfuKmfJ5Vl4J?=
+ =?us-ascii?Q?CwKHTItTHDp6eGOqqrbT//7xT0dpWxPF/GmV3l2+D+Hd647NrfTiGFMNQzca?=
+ =?us-ascii?Q?HR/K5DkccDeZ6qVugRd6hEfLfprRhjR85Eul9EJLG50dKsLtyj8YOS+RA4FZ?=
+ =?us-ascii?Q?VpW0agzx3SEEF7iQQ1Bq+EYQt6+jaTfzzoFRtb7v9H4R2LrV51nMpKe6VAUN?=
+ =?us-ascii?Q?GYHvXHJJCUVjOJbMo3qTdiLx63X5bRUOinH3yWDTkrkMyIhTGcuos1oqC85+?=
+ =?us-ascii?Q?SbXTsfzUBL1Avy1kggUtKdkb0o8Bg31Tv9WMYId5cWRXPmhq8VwE/kHCUger?=
+ =?us-ascii?Q?W9lCILIbiqy0NWw2fwNpJE6y0YFZ7x3IZFHko4YNuAqV3pMRLMvWfwWm2TR6?=
+ =?us-ascii?Q?ONXUi9b/HD9nsU/BOtRUK6KSe8t/eqmkzrVm37QvUM50wwMHWPLd9sFG7NXQ?=
+ =?us-ascii?Q?FiSY1FOE8dXdnnYKK33ySyCowEAlk52lrsfXmpBbYYxYl27jFIAoIzQjaFfs?=
+ =?us-ascii?Q?K8LEGkzfHh2u/WsoqBLLISp51xw3Qo7GaxuUCb2JOB0sG0eeIaSVhGM/JzwB?=
+ =?us-ascii?Q?dXYr3NHURy2U/5UGbZM2aTz4XlYb5pF7E0V1akNGL5YAvk5PZ0eemXIg37H5?=
+ =?us-ascii?Q?Mnwy+M8W1luzXgLyhxHpepasXHLBu9fgdc9UE9iwjH6PQXfS9LLTHpbXjJWf?=
+ =?us-ascii?Q?s+KRUvKCJBB6+RzZYZtvBwjzxpu5MykHPJXHSWCoOA9PKRSPmkHHQq94rmJU?=
+ =?us-ascii?Q?+lbOtFONKLhpD2pPwZOTK2B/VGWSP0QGekeg2L5eeRfQDHqRHuJm5F3LAUBB?=
+ =?us-ascii?Q?Fc6ksG/0N7buAJMTfuSeiFUwLRopDMCfk09oJg22Iynej9CM4n7cxqatTRyA?=
+ =?us-ascii?Q?3O107baJWZyt4Yi7BrFshIR0k2zx4WU/gRdHMgbBJOCwJwMHCLNqse+0gm/C?=
+ =?us-ascii?Q?K9sCr9EGjR/E9xjp92V0Nm4nB/JAA0JAmIuCTbrx0gW5ReF7rRkiJ8ZTQPf1?=
+ =?us-ascii?Q?DEIi7yDi1BqRDVTo162LQ8j65vllpl2KQft9z6vKz5BG3KGNd5/nNB+x/Qjm?=
+ =?us-ascii?Q?lIjjEi1Vh3MmOO8tGhaKhh5DsOmzPRxPR32oQt/Q9GgMg0PRKNDYtxJIQpfu?=
+ =?us-ascii?Q?36+IYlllhxXfybPRlMnoXcqwz3Uslvk+269MchchpFi5sxUF0NEtqdJBKJEb?=
+ =?us-ascii?Q?YxzeJTM0qHxqo1og4yrrbEeWjvHFYldol0Qfe+MNyISYaLR1MkCjBh1uY1Fg?=
+ =?us-ascii?Q?zTd3MSC748RddhrG4TZsivbE8hcLKYJJl8/6AXWN?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d18ea3f-d7f5-4cf4-6e4a-08ddb2964605
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2025 20:41:04.8212
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nF8EEBvNC6je0TJch7AbjJdhS1jJOKCgQn9PlnVEQ+oHhf/dW6c3TQnz8HMTDcWHB5mLKyZdVWQAa85IBlJSZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB10061
 
-On 6/11/25 1:24 PM, Mathias Nyman wrote:
-> USB3 devices connected behind several external suspended hubs may not
-> be detected when plugged in due to aggressive hub runtime pm suspend.
-> 
-> The hub driver immediately runtime-suspends hubs if there are no
-> active children or port activity.
-> 
-> There is a delay between the wake signal causing hub resume, and driver
-> visible port activity on the hub downstream facing ports.
-> Most of the LFPS handshake, resume signaling and link training done
-> on the downstream ports is not visible to the hub driver until completed,
-> when device then will appear fully enabled and running on the port.
-> 
-> This delay between wake signal and detectable port change is even more
-> significant with chained suspended hubs where the wake signal will
-> propagate upstream first. Suspended hubs will only start resuming
-> downstream ports after upstream facing port resumes.
-> 
-> The hub driver may resume a USB3 hub, read status of all ports, not
-> yet see any activity, and runtime suspend back the hub before any
-> port activity is visible.
-> 
-> This exact case was seen when conncting USB3 devices to a suspended
-> Thunderbolt dock.
-> 
-> USB3 specification defines a 100ms tU3WakeupRetryDelay, indicating
-> USB3 devices expect to be resumed within 100ms after signaling wake.
-> if not then device will resend the wake signal.
-> 
-> Give the USB3 hubs twice this time (200ms) to detect any port
-> changes after resume, before allowing hub to runtime suspend again.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2839f5bcfcfc ("USB: Turn on auto-suspend for USB 3.0 hubs.")
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
-Hi, this patch seems to cause the following splat on QC
-SC8280XP CRD board when resuming the system:
+Delete isp1301.txt and add compatible string nxp,isp1301 to trivial-devices
+because this i2c device have only reg propepty.
 
-[root@sc8280xp-crd ~]# ./suspend_test.sh 
-[   37.887029] PM: suspend entry (s2idle)
-[   37.903850] Filesystems sync: 0.012 seconds
-[   37.915071] Freezing user space processes
-[   37.920925] Freezing user space processes completed (elapsed 0.001 seconds)
-[   37.928138] OOM killer disabled.
-[   37.931479] Freezing remaining freezable tasks
-[   37.937476] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
-[   38.397272] Unable to handle kernel paging request at virtual address dead00000000012a
-[   38.405444] Mem abort info:
-[   38.408349]   ESR = 0x0000000096000044
-[   38.412231]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   38.417712]   SET = 0, FnV = 0
-[   38.420873]   EA = 0, S1PTW = 0
-[   38.424133]   FSC = 0x04: level 0 translation fault
-[   38.429168] Data abort info:
-[   38.432150]   ISV = 0, ISS = 0x00000044, ISS2 = 0x00000000
-[   38.437804]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
-[   38.443014]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[   38.448495] [dead00000000012a] address between user and kernel address ranges
-[   38.455852] Internal error: Oops: 0000000096000044 [#1]  SMP
-[   38.461693] Modules linked in:
-[   38.464872] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.16.0-rc3-next-20250623-00003-g85d3e4a2835b #12226 NONE 
-[   38.475880] Hardware name: Qualcomm QRD, BIOS 6.0.230525.BOOT.MXF.1.1.c1-00114-MAKENA-1 05/25/2023
-[   38.485096] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   38.492263] pc : __run_timer_base+0x1e0/0x330
-[   38.496784] lr : __run_timer_base+0x1c4/0x330
-[   38.501291] sp : ffff800080003e80
-[   38.504718] x29: ffff800080003ee0 x28: ffff800080003e98 x27: dead000000000122
-[   38.512069] x26: 0000000000000000 x25: 0000000000000000 x24: ffffbc2c54fcdc80
-[   38.519417] x23: 0000000000000101 x22: ffff0000871002d0 x21: 00000000ffff99c6
-[   38.526766] x20: ffffbc2c54fc1f08 x19: ffff0001fef65dc0 x18: ffff800080005028
-[   38.534113] x17: 0000000000000001 x16: ffff0001fef65e60 x15: ffff0001fef65e20
-[   38.541472] x14: 0000000000000040 x13: ffff0000871002d0 x12: ffff800080003ea0
-[   38.548819] x11: 00000000e0000cc7 x10: ffffbc2c54f647c8 x9 : ffff800080003e98
-[   38.556178] x8 : dead000000000122 x7 : 0000000000000000 x6 : ffffbc2c5133c620
-[   38.563526] x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-[   38.570884] x2 : 0000000000000079 x1 : 000000000000007b x0 : 0000000000000001
-[   38.578233] Call trace:
-[   38.580771]  __run_timer_base+0x1e0/0x330 (P)
-[   38.585279]  run_timer_softirq+0x40/0x78
-[   38.589333]  handle_softirqs+0x14c/0x3dc
-[   38.593404]  __do_softirq+0x1c/0x2c
-[   38.597025]  ____do_softirq+0x18/0x28
-[   38.600825]  call_on_irq_stack+0x3c/0x50
-[   38.604890]  do_softirq_own_stack+0x24/0x34
-[   38.609220]  __irq_exit_rcu+0xc4/0x174
-[   38.613108]  irq_exit_rcu+0x18/0x40
-[   38.616718]  el1_interrupt+0x40/0x5c
-[   38.620423]  el1h_64_irq_handler+0x20/0x30
-[   38.624662]  el1h_64_irq+0x6c/0x70
-[   38.628181]  arch_local_irq_enable+0x8/0xc (P)
-[   38.632787]  cpuidle_enter+0x40/0x5c
-[   38.636484]  call_cpuidle+0x24/0x48
-[   38.640104]  do_idle+0x1a8/0x228
-[   38.643452]  cpu_startup_entry+0x3c/0x40
-[   38.647507]  kernel_init+0x0/0x138
-[   38.651026]  start_kernel+0x334/0x3f0
-[   38.654828]  __primary_switched+0x90/0x98
-[   38.658990] Code: 36000428 a94026c8 f9000128 b4000048 (f9000509) 
-[   38.665273] ---[ end trace 0000000000000000 ]---
-[   38.670045] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-[   38.677126] SMP: stopping secondary CPUs
-Waiting for ssh to finish
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ .../devicetree/bindings/usb/isp1301.txt       | 24 -------------------
+ 2 files changed, 2 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/isp1301.txt
 
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index dbec1300bb7ed..c2d5159054596 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -310,6 +310,8 @@ properties:
+           - national,lm92
+             # Nuvoton Temperature Sensor
+           - nuvoton,w83773g
++            # NXP ISP1301 USB transceiver
++          - nxp,isp1301
+             # OKI ML86V7667 video decoder
+           - oki,ml86v7667
+             # ON Semiconductor ADT7462 Temperature, Voltage Monitor and Fan Controller
+diff --git a/Documentation/devicetree/bindings/usb/isp1301.txt b/Documentation/devicetree/bindings/usb/isp1301.txt
+deleted file mode 100644
+index ecd607dacba55..0000000000000
+--- a/Documentation/devicetree/bindings/usb/isp1301.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-* NXP ISP1301 USB transceiver
+-
+-Required properties:
+-- compatible: must be "nxp,isp1301"
+-- reg: I2C address of the ISP1301 device
+-
+-Optional properties of devices using ISP1301:
+-- transceiver: phandle of isp1301 - this helps the ISP1301 driver to find the
+-               ISP1301 instance associated with the respective USB driver
+-
+-Example:
+-
+-	isp1301: usb-transceiver@2c {
+-		compatible = "nxp,isp1301";
+-		reg = <0x2c>;
+-	};
+-
+-	usbd@31020000 {
+-		compatible = "nxp,lpc3220-udc";
+-		reg = <0x31020000 0x300>;
+-		interrupt-parent = <&mic>;
+-		interrupts = <0x3d 0>, <0x3e 0>, <0x3c 0>, <0x3a 0>;
+-		transceiver = <&isp1301>;
+-	};
+-- 
+2.34.1
 
-Konrad
 
