@@ -1,264 +1,234 @@
-Return-Path: <linux-usb+bounces-25021-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25022-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49FC7AE4E26
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 22:30:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CAFDAE4E2B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 22:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9D78189C6CF
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 20:30:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BF2B17D3E6
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Jun 2025 20:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5880F6136;
-	Mon, 23 Jun 2025 20:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499512D3A97;
+	Mon, 23 Jun 2025 20:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="mhgvXClz"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LbTXO1cJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013050.outbound.protection.outlook.com [40.107.162.50])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CD33C26;
-	Mon, 23 Jun 2025 20:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750710629; cv=fail; b=a8OZFs//XhVvGGjsDQHtWgBU6XeH82oMB22HJELjLIDj9QWUzGwNOCeoAlANriu6aLIC0leQvJJ8g7sQTUuDo/1CyxaJKMwYrawARTfCbC96e9gBPshesnQ8sXlfbj5/8ohQAPL3htAMRO6mK12FrDQcYVNZkVD0otCeS11SpWg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750710629; c=relaxed/simple;
-	bh=tOi+QEC/MdpQCFED/4ZtuBqa9MXSRTvKaZ63oNdu7ik=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=RAFiWD5z9EzPjQXwQCG/XTt3gJ68LCeTkIDTma4YT1tCtgH2ck07W5Z892f2Nr8WlNbYYQjERLz9pUD5H5Hp8NBE8QMpyex/PF9iwkSTidhQRW986kLvWeTWxUxJb9TT2K8aH+MbNmqImBAbZoc1TQFJPGPsoC/ozQE1NcHefEI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=mhgvXClz; arc=fail smtp.client-ip=40.107.162.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EN3dEnASby4mk+7PmoypQsA4E/5b9EUtfapHy6lDHsFZsbGYIB1egT4VYPFHa5Oaxiz9CDzFSUiMkh/MATD2p147KhgH3EGt0MXT+g5MmnDrNMEcVIc3Qr5+4aTrggmXhdBaCtCoQCrBOXtkBKP0MZB5QTuyxKY2oHL7UQcZhiW4TZmjciM7oSFz0mjljrL2beWGHGWSM7J1L7Eo9wGC4B0xQ7RsNvjpMDNU+2VK9FWLcfeZ/TCo92UMQF/HNz2U10uq2RKrtmVkIM9EiRnlpdNxIDz05h3SYteAzTIJ4S8ZfCx5KKoXo02xNgiIFDdmoKlXOICVzJteK95ii6bSrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mnYgWtXKMflq5vzb/M7bvhhaCC3ccowezPBHg8rwtXA=;
- b=UX+iMyM5NH5egRUaKUFLBM3WKn2g04YcCI2iVR6zbeRRyx6xiCeYLSaszZKF4eD5M+te7VrrtVFpC5h7ALa2ed5qxYcME9RuQJzCuqoTjUJSjrplfkmHym1Djf3Q2jZV7LUyotRwnpyK5reKXLtON8+M2Vb3S6CCMVlAxlxDbVrl6Q+KmRE1nKx8Kb2d76kHO9wVK3W05ZLW5GHQI/OLHzgsmoxheEsCCkSoo1iTOqn3hyw3ub+kkUR+a60vmCrXS8RPWUN4V6MxsGN2bau3MKrlv+6kIPjeVYHkoyVy/rVbGaR0mMlO5rGhFr4Wf7LxfmBoLRZoiebI+OITd1uw8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mnYgWtXKMflq5vzb/M7bvhhaCC3ccowezPBHg8rwtXA=;
- b=mhgvXClzJ0eurb/1A9+tG6eECqUMaY5WyuwduSjP29D890CQIoAVJ6RvYUmZ6P9JJBrkADjyRTmFwpik5HW4qv8grTC2u10sZnmlSjfZ1H3X6gZsSlxnCW9JWK/8OOrqhq+FPTl3Fzv3/pn0r7bScCfX2qnbaQv/67i2IO/bYs/aa4slLVMmTZ9kVkbb5lgFb/2gmX7YT5E4J3G4w8iQrDoj51JhgCXFBNcDgqILEj17mNFC6b3pgVBN3hDW0swCxEscy3xx5KP8W+B5JjvYDD5ZVEmWKqdOO9krX1gDbp+iTpiJLbK3L4WitDHqwIqmfNZzuVYKRTJFeHupt1brnQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DB8PR04MB7065.eurprd04.prod.outlook.com (2603:10a6:10:127::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.29; Mon, 23 Jun
- 2025 20:30:24 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8835.027; Mon, 23 Jun 2025
- 20:30:24 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/LPC32XX SOC SUPPORT),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] dt-bindings: usb: convert lpc32xx-udc.txt to yaml format
-Date: Mon, 23 Jun 2025 16:30:10 -0400
-Message-Id: <20250623203011.2473290-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0012.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::25) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DD61EFF9F
+	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750710685; cv=none; b=jCwareytVKBBzUnVjT66s6RQEBzFxx/gqIoEPhUTTUC/mdkSIoZD3nXbpZss8y6wQfSp3GhPXUkl8yzrtf0xk2m5M1r8fmIYBH/Q2B+a4SBWV8MbM4g0euA+XByWbV6uS2scT0OEnLWh+Rn+izWnq6ClqNCCbJfC5FWzk0jBPK8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750710685; c=relaxed/simple;
+	bh=XtezxSdOP+UjFwJsKuZxcQFunjHVQrFml5JuZ4SELms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l+bbXE14NpB+gA9XCIwxGfKrTxOhAW8y6hsJfbnkIW3g8Ez5k5uy5nokOyHvgx4s2LsqQrdnI3og2TXLzccuFaDmCa8OT/BxTjypy6B3Wq8biqRGdHkQMph8OUl5h94lgX2hP67tZR32Ua7GT9HOf95lhxsVOgqlnf2qXrNXSJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LbTXO1cJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55NI3Fal021510
+	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	AM7e+WI1WjWum2hqHb+x3pciVPxEtvXw/CoY4ovDRVE=; b=LbTXO1cJsevhn1gw
+	qbDyV0jBQYG7wl2/Ugt2HLZQ2YNZNWLbreRtj0RpHhShlPQKpCcFH9WEWJcfaxAc
+	oU7bD1v0qhQ6CDlyKhBvXFABo68mxNNYoJBpHOrsv9cArI5U25mN2PZ+2w3nxbYu
+	Ztv1kL/PLyhueZHJ32bsIqdPegRVoGwipbkUHNXzmwsKLf28AP5LVi4gmXdPNiao
+	wanEp/wY0344x3qhsd/0/to690GNxjpEQqERUiEYyI8l48/HOgMCVzHBD31sjUa/
+	kt5UP8yDS56m0UqqUBUaSKAt0SD4w62XJ+sOj3B3v/MH12gIhL/6Ac9r9Ob2n6AK
+	VMD7/w==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47esa4k6ca-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 20:31:22 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d0979e6263so13397985a.2
+        for <linux-usb@vger.kernel.org>; Mon, 23 Jun 2025 13:31:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750710681; x=1751315481;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AM7e+WI1WjWum2hqHb+x3pciVPxEtvXw/CoY4ovDRVE=;
+        b=fsjSWqbGAlvzOlNYnx05yVB7aRqbU29E3fxxL387ZP/yKuN4WYsH6eBKo3K5KSkoFp
+         k98uJkkYYEmVEEdg8tk7F6U6E9jxSy93UFfWerjguD9gtlT5eukm60fv68vwV+v90svk
+         NCBwNsbTA8OCMBBQ6n1Apy/Gez92yy09sL+1yX3jg3KuPuyqn/R6Q+wfffUZfGAt8idT
+         scPEJkaJ0uT+lF5c7NysB0sB3ZARpnu+DSMySexoNnbnrnnY0gRuSK1XlmHQigSv07e0
+         0VV0RP2d7YUj0hSbcxwDg3U70OI6nNupUKcRPF3pE+dHfA4GMd9m4J0YwGg/jc0pwHpW
+         rE8Q==
+X-Gm-Message-State: AOJu0Yy4l3HFOuHs3KgU6j4IEgijbQauC22cklUZe0XlP7fHOm05yEPZ
+	J9qLRxz+MGb3n/RCgAXXNNt+loeF1PCqAlI01Gly8ScI4n/mSLNkoXInNgXLo6+qF/MmWtxxj24
+	NrnF2hRad4k7NfhYPLWzK0+jKxo6jGTm5ORR/04VeOqCOsWoUbGZMmnkOeG9teRM=
+X-Gm-Gg: ASbGncuoVr1MNJHxsdpQIgUI0BSmyhPWZ2INFoKt5QoARQEOMatMWsEECccJA2Zhi8s
+	zvzXM8WDTFB00khoC62IW5tkK0h7NqoHSDXiRSSy9ToPUBt9ixAMF4P5wi07GCSCNVXlntCPeM/
+	iOTW4wj2UXAc0IKkvTKtOX8CwQQruBN4ddp74lZ/UKCUarEOEMEVJt5h71wgRlNvo8ZxGg24XMv
+	3vV9a11N/zhUbE9PhXHcatVgzYQ0d1Gd6mB57aJeRS7H5ayl2NqQn2jnWQzUzHiA/6FHTDsnwhf
+	d3U4qT+gt0WNNYt+nwOMK1zWxZQjyWA7rnOIxboScd8Wh0PUBCjx/SWTYkTE7WVF0jJv0OSibhL
+	qf60=
+X-Received: by 2002:a05:620a:1709:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7d3f98e0f77mr751552285a.7.1750710680675;
+        Mon, 23 Jun 2025 13:31:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG2QiIiGmM7antIjBt+7B/nWxD3Vu79fMhrZLayBKhhmi2EdbbLBrOXxNxUombVXn8rh4ofRw==
+X-Received: by 2002:a05:620a:1709:b0:7c0:be0e:cb09 with SMTP id af79cd13be357-7d3f98e0f77mr751550685a.7.1750710680162;
+        Mon, 23 Jun 2025 13:31:20 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f196c79sm12687a12.4.2025.06.23.13.31.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jun 2025 13:31:19 -0700 (PDT)
+Message-ID: <acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com>
+Date: Mon, 23 Jun 2025 22:31:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB8PR04MB7065:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9bedbab-78bf-4bdd-09a1-08ddb294c84b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|7416014|376014|366016|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?eH76Gr2uwNd5FCIvMRnLRvLcS6/VQrSqvFmI6h4gKdBDf+mtZ4A2omB6LcxB?=
- =?us-ascii?Q?xPFDN1uZtcdUSrVw5j/6r5HEo1e3w+9AaOva4KW4yDikJAiYdgCDNctoPqus?=
- =?us-ascii?Q?uA5U0iQO0WtDxMRmhu3nbMp0z9ceFf1plEAZ3ZLXppF5cxZ2B98pFYlDfNNO?=
- =?us-ascii?Q?TAbpwGD08jYqBkTpqmziGxcaT+wTuR6wQiBPeNBQNUPV9UNIt6h9wqE0ocoh?=
- =?us-ascii?Q?6uFRa7EJvp7yuMNElTgBJbMw3qKVxfi3+z6jVVDwAD6XfxEy0q4Dl+zQz/2z?=
- =?us-ascii?Q?b/sae+EMk7pQJitfODJM7672hiS9+GV4JVADBZdDcy4J+djpY3QmFd7+hjhe?=
- =?us-ascii?Q?RegtHwUbkzMuGxva+VTfC6/qvp5xPtaaBVMkK2LsEHxVAaqY/pqxQZo5MF62?=
- =?us-ascii?Q?6snyTE/SsCQ4kd2QMZKH9JJhMGNsaPl7pQLyyL+Ms+bg2SwnZZjWQbKsfwnn?=
- =?us-ascii?Q?btohS/J02MBOM6MqXYqPX3sDqq6qK6CVMK/o5IcMQGpqWJW1y4qXpGJt+AqN?=
- =?us-ascii?Q?W/XTMr8/e0JzNjt5OqN86+B9gauYsVHEVtzz7wb6oXYA/xuuXWXtevrXB30Z?=
- =?us-ascii?Q?AK//zcQHENgEz+y0u1vasqwvtdb6j63gR2QWAgauUNG4svmQ1sFDX2rUaiwh?=
- =?us-ascii?Q?+svTykhNWf/ZH2XsqewuGY6yqkSYhmHgfN00mmXRBNI7c64wtYbmy2tsuKx+?=
- =?us-ascii?Q?F54hxqbW+7DKEwHG61IAfI3x1BgpjtEwMai1Dl0Qms9AXDGNXeVwL3T+LZd9?=
- =?us-ascii?Q?D8DPk7wZevrLThOghwIH7gW4iBltPQoVHRwC6mnq5XM3ODB/GS06gccMv6pf?=
- =?us-ascii?Q?Rq4GBy4MtP6wdb8yjJmZxROAZ+w3EXtWrRgEydKfzQcvDBQ9K1SLuqoavg1T?=
- =?us-ascii?Q?lpGgmJemUZLbKM1BKd1hHpDvXnH+aCRb1KXbjw4Od2jdRnLYQukynG+WqWHb?=
- =?us-ascii?Q?4ZmdB2PNqYVPNe452wGUD4jQOYo2hxVuXHbdG2cGIY2KAIS89zLZDspTKoI0?=
- =?us-ascii?Q?ehzbOlZrxp5ZMiwXeFoXfici4ZQk0f5upTB8qj3nTHQQQogWl7SfK+UDJTRI?=
- =?us-ascii?Q?rilZlMfKrDawU7PZ4R0Ms7DJehfwFeNb8F0giRK0K/HPRuumULHjD9NjlcwK?=
- =?us-ascii?Q?12NYmLbf017atjYDf577cv3g4RGIoJI15x85tbYDtLd3REOFIxfHJXPQZmhf?=
- =?us-ascii?Q?L4bWQf4Jc8K3rEo9rOVvUlU/5bwLxL7LIRBXEkitAvnhlHI47AgNFUabIvqw?=
- =?us-ascii?Q?8cdxkySD6CRxzyBfbgAC5AG+reS8c3wE6BXtAjVv9cHOogJXEQvx1lziehi/?=
- =?us-ascii?Q?CPXhsZhn81u6Uvw3Vm88C0DtTG1BSc0U3ORwbnniL2eEz7x0Xi9intUBFLcV?=
- =?us-ascii?Q?lNlKutcToOPQ2fY2UgTI5dKqYFwCLC4Uk/wIPQBMykUA5me+xiv9oHGM/yK2?=
- =?us-ascii?Q?B1ZiqvYWjaqn5ow1FJuvh3DEL0C1/SHN?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(7416014)(376014)(366016)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?JOaM/3Sm+wAd6RbilF3XQcF4cn4n7DGd/9c5Asp45wRh+e5KfBWLvqAFN7Ih?=
- =?us-ascii?Q?XuHlvzcO7GxtS/MxHM2z2Y2ze4iOzZXiXdfcK12tSkz2Fujk/TBjUIpHzPEX?=
- =?us-ascii?Q?KlCat4BG1fAx9vZ5KXOM4P4JRcdd73sO7TqLdAW3VyYNdQ8UYIUUkoGSiijv?=
- =?us-ascii?Q?F0e4W8OCtF2UJERSgjS5E31R+AfKPUqk19Z6Jvbafy4vBd58AiYC/rUGgprr?=
- =?us-ascii?Q?jc4CSX55V7V6+aha0IHQsQOKLMsdrxt59P2ONMJaQ9iYPsCwXSDM5kdJOVOn?=
- =?us-ascii?Q?xxCw5EQgUjL9+32fPdri1tM8fdGcsoKnkoKoFcypJQsAAwMaCuyYtOsvC34f?=
- =?us-ascii?Q?07aCAzu0kKwN9PTMZqAajH9vCkzbo2iPxUUDQQwcN9TS0TLTRrTFmvVKh8mV?=
- =?us-ascii?Q?zC5zLpvdOZaOrbt+8Zp4cGIveqaSDIzYMy8VeH4ekLIW1Im4K7v+t7fi2BgS?=
- =?us-ascii?Q?RnKO5gvuklr5tDwg1ngPQyyqMpLnVqBf3lNWxte2l7OS7U3ptEwtuBju+U/8?=
- =?us-ascii?Q?BIW1jpQt2FLx1nanXgwiSE51yv67X5UoI0awjGvNQCZyMA3iuLVo6GDGuoyh?=
- =?us-ascii?Q?b+9Tdi8Nf8t5xJB+2ua38LvtFLr/nfkO/LjBBio3uH+o+718StsIBXfCuigj?=
- =?us-ascii?Q?5wRISM67e329eVwCfIk20YtEx953yokCgrIoyvxdrDTbcMEUG4OSOpQ88Jwb?=
- =?us-ascii?Q?rJu5rAD5WAYKO1gEuj0LHAxZW5NfNGstCfPCc8PgodivDceO/RNJ/I3dqqqX?=
- =?us-ascii?Q?0doOs2GGj4rUASzOTZllIwHZm0bQpriGulyvTHbywoYryVwFrLExht+vdTeb?=
- =?us-ascii?Q?LwG0at4Kmk5mRvV9WiOSrwBsfmH+Q2znAj4c1Y0PDQqiUrb0+ZF5FnMzet63?=
- =?us-ascii?Q?kisSLNCk3V7XgSGWZN54G8Bmi6YpqRGzxuVl0VNjDEwF9v/6NnKFxDB5r0zH?=
- =?us-ascii?Q?zg0F4vlx4a0VBJ6MJYlPNAXfL+WGgaUhYdyUjNDrYFewGpxjBn+T1m+Bu8vl?=
- =?us-ascii?Q?07e841ozG14xzauHvVlaF46XW0TE38Yck0FysMliczXy8Pw/X8kUMinbhm5G?=
- =?us-ascii?Q?2SnD1MhtV3ayd0AKBWTZ6G+4OtMzh/HhcU5TfBKVT/KbwWEQzamk4wS+qA25?=
- =?us-ascii?Q?70z3yb5JdcfvjKvLvVMCtzEd+j1MTx6ZMupkVAINYC1DTrmAtZukz0QJChYB?=
- =?us-ascii?Q?oPfqDpCP0jUoDJtFSmTvsKTjPplUKr1K69LuVwYuXGQsM4JV6dytXUgSZyTk?=
- =?us-ascii?Q?R+MW7yJx+K+NE+psusv0mgb3NK8QaukL+3FuZI5PoJHZeXE+mughfBKJFFQR?=
- =?us-ascii?Q?LGfasCy4HstUrIbUALFfJ5XZtzvh3cOWlpRTvmVP5KTaZE4u/3+HgKZ7ayTV?=
- =?us-ascii?Q?otpSbG956nhEig0eZMz/dNF2iZK5PeYIsDMNaDDPlpinloq7RTTp4kyHRMDn?=
- =?us-ascii?Q?XqBjBt0wlt50gNwJxAxZK9tL6PfTd/1csB5ASYTrzoMI8X1VToihLHMWfGUu?=
- =?us-ascii?Q?TvqZ+SQ20HSKKhccF4+yxy9ZPpzK9xF+AbNX1s/pvKFDB/4dJnXUH4pvIGCY?=
- =?us-ascii?Q?UKZNBERDw+H15p/w8PPZyJg8xIejo8tBfHmmmEej?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9bedbab-78bf-4bdd-09a1-08ddb294c84b
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2025 20:30:24.3820
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NOeiJgrF084/hsDB13SNQUCAMDMSPV9jmsIoAdqcpe8eSdvhCALXE6zTEr/eaUNvbjySUi0WIgs6zI8BsuAx3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7065
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: hub: fix detection of high tier USB3 devices
+ behind suspended hubs
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+References: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=eLYTjGp1 c=1 sm=1 tr=0 ts=6859b99a cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
+ a=tT9duwjsjWl6H1QRmFEA:9 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-GUID: 7Ia5ncYYiewgR1H-yaIh9SztGvxUwTFm
+X-Proofpoint-ORIG-GUID: 7Ia5ncYYiewgR1H-yaIh9SztGvxUwTFm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIzMDEzNiBTYWx0ZWRfXwVlUP3MM0A4x
+ 9F/rdti6tJStAYU3hXjje+RbtdhvowjJKaMWfCMGzFN3NoOnpnC/MzeTrNuEu46w4rpxvi5C3Gp
+ 37clBTrtFwTmKyOcNg0LtlcZgobtbl3XOZI/9wH9I+hKkYNTFEvfTrQsmnekcQvPwAYgW7xPSGZ
+ /IY8JxCmsRVPwmUFWXZ/HcvQZMYUdg0Wi3tjdE+Oy59BUm/kWdZXjkKgFMIMa9xqeBAnu2MokUn
+ FftfRjZ7gOlgsNMrYTjn/ANsdzg+auXaWF3qmee2LgvUDRi0JvVV9wvL1JKAekEiBaXZrZ9CgGH
+ 5SxhdvAUseEw1/JIPJfmSO7TBeG5+hVJK0ZSso8QTdDSAUcEDbtdYyEEwhzrjdadEYDVFLVwglX
+ wqRqNFuie+5UelJZXBSgrDUy/ODM6jKbIzCg1kMG6zFVT+4zy7mCOOOX9htyL9zFP/EHgy26
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-23_06,2025-06-23_07,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 mlxlogscore=707
+ suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ adultscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506230136
 
-Convert lpc32xx-udc.txt to yaml format.
+On 6/11/25 1:24 PM, Mathias Nyman wrote:
+> USB3 devices connected behind several external suspended hubs may not
+> be detected when plugged in due to aggressive hub runtime pm suspend.
+> 
+> The hub driver immediately runtime-suspends hubs if there are no
+> active children or port activity.
+> 
+> There is a delay between the wake signal causing hub resume, and driver
+> visible port activity on the hub downstream facing ports.
+> Most of the LFPS handshake, resume signaling and link training done
+> on the downstream ports is not visible to the hub driver until completed,
+> when device then will appear fully enabled and running on the port.
+> 
+> This delay between wake signal and detectable port change is even more
+> significant with chained suspended hubs where the wake signal will
+> propagate upstream first. Suspended hubs will only start resuming
+> downstream ports after upstream facing port resumes.
+> 
+> The hub driver may resume a USB3 hub, read status of all ports, not
+> yet see any activity, and runtime suspend back the hub before any
+> port activity is visible.
+> 
+> This exact case was seen when conncting USB3 devices to a suspended
+> Thunderbolt dock.
+> 
+> USB3 specification defines a 100ms tU3WakeupRetryDelay, indicating
+> USB3 devices expect to be resumed within 100ms after signaling wake.
+> if not then device will resend the wake signal.
+> 
+> Give the USB3 hubs twice this time (200ms) to detect any port
+> changes after resume, before allowing hub to runtime suspend again.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 2839f5bcfcfc ("USB: Turn on auto-suspend for USB 3.0 hubs.")
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
+Hi, this patch seems to cause the following splat on QC
+SC8280XP CRD board when resuming the system:
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../devicetree/bindings/usb/lpc32xx-udc.txt   | 28 -----------
- .../bindings/usb/nxp,lpc3220-udc.yaml         | 50 +++++++++++++++++++
- 2 files changed, 50 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/lpc32xx-udc.txt
- create mode 100644 Documentation/devicetree/bindings/usb/nxp,lpc3220-udc.yaml
+[root@sc8280xp-crd ~]# ./suspend_test.sh 
+[   37.887029] PM: suspend entry (s2idle)
+[   37.903850] Filesystems sync: 0.012 seconds
+[   37.915071] Freezing user space processes
+[   37.920925] Freezing user space processes completed (elapsed 0.001 seconds)
+[   37.928138] OOM killer disabled.
+[   37.931479] Freezing remaining freezable tasks
+[   37.937476] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+[   38.397272] Unable to handle kernel paging request at virtual address dead00000000012a
+[   38.405444] Mem abort info:
+[   38.408349]   ESR = 0x0000000096000044
+[   38.412231]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   38.417712]   SET = 0, FnV = 0
+[   38.420873]   EA = 0, S1PTW = 0
+[   38.424133]   FSC = 0x04: level 0 translation fault
+[   38.429168] Data abort info:
+[   38.432150]   ISV = 0, ISS = 0x00000044, ISS2 = 0x00000000
+[   38.437804]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
+[   38.443014]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[   38.448495] [dead00000000012a] address between user and kernel address ranges
+[   38.455852] Internal error: Oops: 0000000096000044 [#1]  SMP
+[   38.461693] Modules linked in:
+[   38.464872] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.16.0-rc3-next-20250623-00003-g85d3e4a2835b #12226 NONE 
+[   38.475880] Hardware name: Qualcomm QRD, BIOS 6.0.230525.BOOT.MXF.1.1.c1-00114-MAKENA-1 05/25/2023
+[   38.485096] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   38.492263] pc : __run_timer_base+0x1e0/0x330
+[   38.496784] lr : __run_timer_base+0x1c4/0x330
+[   38.501291] sp : ffff800080003e80
+[   38.504718] x29: ffff800080003ee0 x28: ffff800080003e98 x27: dead000000000122
+[   38.512069] x26: 0000000000000000 x25: 0000000000000000 x24: ffffbc2c54fcdc80
+[   38.519417] x23: 0000000000000101 x22: ffff0000871002d0 x21: 00000000ffff99c6
+[   38.526766] x20: ffffbc2c54fc1f08 x19: ffff0001fef65dc0 x18: ffff800080005028
+[   38.534113] x17: 0000000000000001 x16: ffff0001fef65e60 x15: ffff0001fef65e20
+[   38.541472] x14: 0000000000000040 x13: ffff0000871002d0 x12: ffff800080003ea0
+[   38.548819] x11: 00000000e0000cc7 x10: ffffbc2c54f647c8 x9 : ffff800080003e98
+[   38.556178] x8 : dead000000000122 x7 : 0000000000000000 x6 : ffffbc2c5133c620
+[   38.563526] x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+[   38.570884] x2 : 0000000000000079 x1 : 000000000000007b x0 : 0000000000000001
+[   38.578233] Call trace:
+[   38.580771]  __run_timer_base+0x1e0/0x330 (P)
+[   38.585279]  run_timer_softirq+0x40/0x78
+[   38.589333]  handle_softirqs+0x14c/0x3dc
+[   38.593404]  __do_softirq+0x1c/0x2c
+[   38.597025]  ____do_softirq+0x18/0x28
+[   38.600825]  call_on_irq_stack+0x3c/0x50
+[   38.604890]  do_softirq_own_stack+0x24/0x34
+[   38.609220]  __irq_exit_rcu+0xc4/0x174
+[   38.613108]  irq_exit_rcu+0x18/0x40
+[   38.616718]  el1_interrupt+0x40/0x5c
+[   38.620423]  el1h_64_irq_handler+0x20/0x30
+[   38.624662]  el1h_64_irq+0x6c/0x70
+[   38.628181]  arch_local_irq_enable+0x8/0xc (P)
+[   38.632787]  cpuidle_enter+0x40/0x5c
+[   38.636484]  call_cpuidle+0x24/0x48
+[   38.640104]  do_idle+0x1a8/0x228
+[   38.643452]  cpu_startup_entry+0x3c/0x40
+[   38.647507]  kernel_init+0x0/0x138
+[   38.651026]  start_kernel+0x334/0x3f0
+[   38.654828]  __primary_switched+0x90/0x98
+[   38.658990] Code: 36000428 a94026c8 f9000128 b4000048 (f9000509) 
+[   38.665273] ---[ end trace 0000000000000000 ]---
+[   38.670045] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+[   38.677126] SMP: stopping secondary CPUs
+Waiting for ssh to finish
 
-diff --git a/Documentation/devicetree/bindings/usb/lpc32xx-udc.txt b/Documentation/devicetree/bindings/usb/lpc32xx-udc.txt
-deleted file mode 100644
-index 29f12a533f666..0000000000000
---- a/Documentation/devicetree/bindings/usb/lpc32xx-udc.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--* NXP LPC32xx SoC USB Device Controller (UDC)
--
--Required properties:
--- compatible: Must be "nxp,lpc3220-udc"
--- reg: Physical base address of the controller and length of memory mapped
--  region.
--- interrupts: The USB interrupts:
--              * USB Device Low Priority Interrupt
--              * USB Device High Priority Interrupt
--              * USB Device DMA Interrupt
--              * External USB Transceiver Interrupt (OTG ATX)
--- transceiver: phandle of the associated ISP1301 device - this is necessary for
--               the UDC controller for connecting to the USB physical layer
--
--Example:
--
--	isp1301: usb-transceiver@2c {
--		compatible = "nxp,isp1301";
--		reg = <0x2c>;
--	};
--
--	usbd@31020000 {
--		compatible = "nxp,lpc3220-udc";
--		reg = <0x31020000 0x300>;
--		interrupt-parent = <&mic>;
--		interrupts = <0x3d 0>, <0x3e 0>, <0x3c 0>, <0x3a 0>;
--		transceiver = <&isp1301>;
--	};
-diff --git a/Documentation/devicetree/bindings/usb/nxp,lpc3220-udc.yaml b/Documentation/devicetree/bindings/usb/nxp,lpc3220-udc.yaml
-new file mode 100644
-index 0000000000000..be0457a068616
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/nxp,lpc3220-udc.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/nxp,lpc3220-udc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP LPC32xx SoC USB Device Controller (UDC)
-+
-+maintainers:
-+  - Frank Li <Frank.Li@nxp.com>
-+
-+properties:
-+  compatible:
-+    const: nxp,lpc3220-udc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: USB Device Low Priority Interrupt
-+      - description: USB Device High Priority Interrupt
-+      - description: USB Device DMA Interrupt
-+      - description: External USB Transceiver Interrupt (OTG ATX)
-+
-+  clocks:
-+    maxItems: 1
-+
-+  transceiver:
-+    description:
-+      phandle of the associated ISP1301 device - this is necessary for
-+      the UDC controller for connecting to the USB physical layer
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - transceiver
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usbd@31020000 {
-+        compatible = "nxp,lpc3220-udc";
-+        reg = <0x31020000 0x300>;
-+        interrupt-parent = <&mic>;
-+        interrupts = <0x3d 0>, <0x3e 0>, <0x3c 0>, <0x3a 0>;
-+        transceiver = <&isp1301>;
-+    };
--- 
-2.34.1
 
+Konrad
 
