@@ -1,88 +1,54 @@
-Return-Path: <linux-usb+bounces-25063-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25064-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00A0EAE65F2
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:15:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD8AAE661C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:22:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DE5516AF56
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 13:08:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 596C63B9AAE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 13:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E248D290D85;
-	Tue, 24 Jun 2025 13:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142632BEC5E;
+	Tue, 24 Jun 2025 13:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QbZx1uyl"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ARkii1Ec"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0992291C28
-	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB86822D9ED;
+	Tue, 24 Jun 2025 13:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750770510; cv=none; b=u1zFCRx9AMEqvkioymrV2xpIrgoW0O2C46w+zxf1oXV3wXLPMmbYCELRZ9B5c5z4fk0d0JdnrNTywM6QxVEZ3pBRfoiQtAWv3mRbBE22hUbICxcxvGAsfWpadXp/u1uwHhoTwX1T65s/MowQVr93oalTh1Vm1w5G9rploJS6DTM=
+	t=1750771312; cv=none; b=ZLgQ9V/nJpW2MqR6VnadYOP5uIpnhEjlMCIIuFyM6z1rPwzln1hIGQOkG8lA3mQG7YNW5hV0yD7GWMGQiUZhdt5Kx3JKQtwympUgGiaC1vZUyKFDmdgDC51gNQbkhPp2fe1fidmXsnlXwscMqyi/dCG23JNThm2XHBs7FLKt5Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750770510; c=relaxed/simple;
-	bh=OWhxjim2hzRwp44IATiri7aWjY41RYVfuAGrMg9lkKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hlBKrTZOS7IyEOOkz234dq2x05ELpCZ3ISDeDXD6uV3VqNHf+6z4asajd0k+BGW7J9DxGKcqAtNaoSvW7HAXh/xd39m1FewsYY4o50VfMntXkOu8cFXxal+sLQrNVd2+0bvNtsOZoyNAo7+fGuij9pirOcpAKIHcLNbl6BYEQBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QbZx1uyl; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55OBwHEL026045
-	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:08:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GXCLZ7wAY3gbFYvClwpaaAkNVDWwCvFGSPtbvkJl6S4=; b=QbZx1uylK1oDoaHE
-	AxheQ3bLH0vLEbfkRRSrZr/l2/yYim17/kmALfwpQKFR+X7ovIUY+p+RU1+vC2X5
-	16iDRtyt4ZtNqI5TQ3L9yhwhFrAByVNva9qHM7gfny2S9up19BvOq6IeuWY8wYBR
-	LVNGeTg/p3/rL63xnhH4ICX3TOjSiWEiI6v1bOtNBAZQRzGeA9Drh6rO2C3uoPMG
-	UX4/IRvcJTzQHoHMWehZfO/2pQ/FhCv0SvK2L5cRcsJWUK5mNfn4ovwOQr+AkjIn
-	3nObZbjWy0cXguNZsKogCNwLcEPrDKXEvNE/gosHHSTce7idiG0uCHwontU8EFH2
-	c3cdoA==
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47f8ymu7eh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:08:28 +0000 (GMT)
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b1ffc678adfso311468a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 06:08:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750770507; x=1751375307;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GXCLZ7wAY3gbFYvClwpaaAkNVDWwCvFGSPtbvkJl6S4=;
-        b=pi6/wwulRzMN+19Ijb1fGeHMo1MH+8Ayu5AmzvivnNsuMkj09Ba/F+4rTNEV88JQkL
-         MXW7q/EbWKv7GKmdJ7lGQh8IuJWgxOo1/OttZScw5EH3O+PHKzxbxjwYFodZr5GuTjip
-         /1e9tEBun5CTwFFUXb7Pb+0BbefHUMTzKykY1QUY+67EulOudSBdnbgyDT2GFafuUw0b
-         MkvewYfW3sgqg9THwgAZy1g9/v1OiXk2YMNahk/rw4HCQ3WgtiFvz9Sk0U/x6P1liOiu
-         h2D0vEP9KZIsqfBNJpm/Q/XuXAMZ5FK8Ybmqb6BTle1kLtHq+fwho8ziaiV60JLsKDi7
-         VNVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVdwA8XQXq1ijuIY3mr9UvLYz590hbP0zEcVKRPajyToCcK9DjLiBY+KnNWR2+V6D7SCxt8bAapTOc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWvhR/mYuGqAZgXI7Sfc6ebo1Y1cJgRj+g3M2MPItP2CQw51aA
-	CkjIz9+XJjdth1Sysk0/PJc+hYQdlzH3Sbl3d6IomB+xMr6whKPyAYW2RVhHB8RTwH339ZInuQ3
-	QjuKylWg+iTwcUmqmW/2cauWbm+XA09XLplsKUCGJFcW0WphLdn17gRsIsWpbg+Q=
-X-Gm-Gg: ASbGncugi+trP7n+gC7LQN+zHfn09WjCA7qsnrQhUddD4nAwlmqjgdQ2aL1GWn7rvW9
-	CMS1SEcHSwqE7kZ5UTWVfqIg1OYd9OBnH6izE0s5ig/Xcytl0Q7asmRydLmB2LStGGs04Kg/xqy
-	pGd7EYVKLH2FUGhLfHxpHTy3P5MKB7FvZooC+8OS3giaGLI5mbdHq/KHWIlY4E6t+gu7U39NKZq
-	FmlVluvAIB1N4oJIfzdFblXvPNIdJImYGI0UntlBMGbQbYp08EWWZ0JKh/mWcoBDIrAVjMuYsIJ
-	STyJwg4SdRqH5hsNs7pY/HseaucsR25ypTxIX1I/MUQ3d8/GqgulcAOvbXuevelOubgwqjrT7A=
-	=
-X-Received: by 2002:a05:6a00:9a0:b0:749:93d:b098 with SMTP id d2e1a72fcca58-7490db4278fmr17729268b3a.22.1750770507030;
-        Tue, 24 Jun 2025 06:08:27 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFaLKteWP9POVkOhi2cCkGrtK+lX6AAeVvFFXqxc3EwlHw8pY4QVWlpLKOHl1nNiBko7q5DOw==
-X-Received: by 2002:a05:6a00:9a0:b0:749:93d:b098 with SMTP id d2e1a72fcca58-7490db4278fmr17729252b3a.22.1750770506624;
-        Tue, 24 Jun 2025 06:08:26 -0700 (PDT)
-Received: from [192.168.0.126] ([2401:fb00:ffff:fffc:0:1:ac11:493f])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-749c88721b9sm1836215b3a.150.2025.06.24.06.08.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jun 2025 06:08:26 -0700 (PDT)
-Message-ID: <72f9de63-dc19-4467-b883-8637f95a8e82@oss.qualcomm.com>
-Date: Tue, 24 Jun 2025 18:38:22 +0530
+	s=arc-20240116; t=1750771312; c=relaxed/simple;
+	bh=DZU6YBpPgIQVFPwzTLHaIpQBBubuJeCfLo61Clqxhk0=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=g/pnaWESu5Ea+gymAjGSosfPDAh0xD+mzQLNaZ9VjAcJcmEFgTBDYMZ4uoIZexUm1XxpgN6pqfSipyeZLfNIi1qExKwy4mJGep0+V2kIsxlErqa8uxQ+RVmpNYdIE/9kzCJRjyIBm6bM+D8jS3vDCKhE8QTpHmxyLC9b/uaKrPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ARkii1Ec; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1750771301; x=1751376101; i=markus.elfring@web.de;
+	bh=qRMSLkuE2eUd/JTqEQFPTKEE5Lezk/EsRWxuxZY3QmM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ARkii1EcnA+16PPab+S5fmRyuyL0yXZqcVPE8NFv16pEzB0pIZ4vFZSxMlCj0R19
+	 O1Y1XK7VoU9KVskQ857IXUF5AsxDU46Tnbpay7d9cg8g7T7ChMdqPhr4yJBRELUxs
+	 NRPEpyZ9ih9s/cuCIw4I+OR0pUgKkAMYpYaPxi4DN4c64AWYMBPaDi6MSBqOYGei9
+	 C29UYDiogpra13M0Rl/nZ/ticzAQ8PAHgP/o6pmTtxhjsh8gUm4XEQ8hRWZ4ZlPyR
+	 MF5IUECNomUSnAJtyO52+FJB244YgxSgj+2ss/JxTRoXUDPQ4KZQU4NhM5O2Y8FZB
+	 yv2b/iNPP7c6GOcmNA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.200]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MHmqC-1uYz0F0u5W-008WsL; Tue, 24
+ Jun 2025 15:21:41 +0200
+Message-ID: <f4981e10-a56a-4197-827f-13d43d0c03c8@web.de>
+Date: Tue, 24 Jun 2025 15:21:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,156 +56,106 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] usb: dwc3: qcom: Facilitate autosuspend during
- host mode
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com>
- <20250610091357.2983085-4-krishna.kurapati@oss.qualcomm.com>
- <20250623235856.b2jwgf5j6yup2sww@synopsys.com>
-Content-Language: en-US
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <20250623235856.b2jwgf5j6yup2sww@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI0MDExMCBTYWx0ZWRfX0C7vfrKleqIA
- 4tnFPsX8zyyJXoVcQu1bvc0ADYCQug2NfEh1ziixoxdyQ9kfAX520X6o5ef+SkjlZdbMUgN5lIH
- ed+3IJ9VGElcYGup00wq4NbDVdKtAbJDmQbe4SkVwP/vJGwirWImkykTUww1wcRU/qVViwcqpdi
- DLks+zZy1sMWVBleeg7NijCNvw/tNkm3lm+yZWtOP50iE13G308ZyXltWhZ0MFbdY0ozanZpJ0m
- zJAG4gcL065jNBc0SHY5ca4Qd3m3eRnyuG+lv06Tk452zXGBeiIxVIn0lZbjF9hbSqd5Ifo4mfu
- 8EL9OxYtMm5X4wk/n/zHbfVdJCWFRogMwjYdgCLlbGvWM6MHn+iJL9Bi6T+ZCDYx4ulnNpngqO8
- CDtQuuCgLCaHloDnkANSFf9/w9gDsm0Bdjb43PwTIM2cxe1CmkOlWPrmFCVXP7M+rmc2Bnbw
-X-Proofpoint-ORIG-GUID: o8WcntGZPOca3nQ0V4otC4G_FerZpQv4
-X-Proofpoint-GUID: o8WcntGZPOca3nQ0V4otC4G_FerZpQv4
-X-Authority-Analysis: v=2.4 cv=GLYIEvNK c=1 sm=1 tr=0 ts=685aa34c cx=c_pps
- a=rz3CxIlbcmazkYymdCej/Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=biFwQZO8mOkSj3tXal0A:9 a=QEXdDO2ut3YA:10
- a=bFCP_H2QrGi7Okbo017w:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-24_05,2025-06-23_07,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 spamscore=0 impostorscore=0 clxscore=1015 malwarescore=0
- bulkscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- priorityscore=1501 adultscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506240110
+To: linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Cristian Birsan <cristian.birsan@microchip.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-GB, de-DE
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Chen Ni <nichen@iscas.ac.cn>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: gadget: udc: atmel: Use usb_endpoint_num() rather than
+ duplicating its implementation
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ygupd27R5j3lu4oMHRpR/dvmACwj91rlGfFyCBHJjvWRbsYWUSV
+ BFuVL87O+rHe/BiC/ePHZiyilBbT40jBoWArsd7IB1RLFYbPJ8jElsbXNiUBxBQk2rLgtg2
+ LTz46kDimXOf28N+Y3m0T0+C9gG29P5McbGkqRR5zqPeT9BDiDH2J1aqEaw1NtgQDFbMk9k
+ wA4kk79BIlPV2scwzJ1Gg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:vfBSgLlAv6c=;PkQqSc29Ls7pBjMJBSDoed/R/ly
+ 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
+ Ewlq2oAiAVPSPUck4oJg==
 
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Tue, 24 Jun 2025 15:08:46 +0200
+Subject: [PATCH] usb: gadget: udc: atmel: Use usb_endpoint_num() rather th=
+an duplicating its implementation
 
+Reuse existing functionality from usb_endpoint_num() instead of keeping
+duplicate source code.
 
-On 6/24/2025 5:29 AM, Thinh Nguyen wrote:
-> On Tue, Jun 10, 2025, Krishna Kurapati wrote:
->> When in host mode, it is intended that the controller goes to suspend
->> state to save power and wait for interrupts from connected peripheral
->> to wake it up. This is particularly used in cases where a HID or Audio
->> device is connected. In such scenarios, the usb controller can enter
->> auto suspend and resume action after getting interrupts from the
->> connected device.
->>
->> Allow autosuspend for and xhci device and allow userspace to decide
->> whether to enable this functionality.
->>
->> a) Register to usb-core notifications in set_role vendor callback to
->> identify when root hubs are being created. Configure them to
->> use_autosuspend.
->>
->> b) Identify usb core notifications where the HCD is being added and
->> enable autosuspend for that particular xhci device.
->>
->> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+The source code was transformed by using the Coccinelle software.
 
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
+diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/=
+udc/atmel_usba_udc.c
+index 0c6f2ad81d37..35d0909ab812 100644
+=2D-- a/drivers/usb/gadget/udc/atmel_usba_udc.c
++++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
+@@ -580,7 +580,7 @@ usba_ep_enable(struct usb_ep *_ep, const struct usb_en=
+dpoint_descriptor *desc)
+=20
+ 	maxpacket =3D usb_endpoint_maxp(desc);
+=20
+-	if (((desc->bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) !=3D ep->index)
++	if (usb_endpoint_num(desc) !=3D ep->index
+ 			|| ep->index =3D=3D 0
+ 			|| desc->bDescriptorType !=3D USB_DT_ENDPOINT
+ 			|| maxpacket =3D=3D 0
+=2D-=20
+2.50.0
 
->> +static int dwc3_xhci_event_notifier(struct notifier_block *nb,
->> +				    unsigned long event, void *ptr)
->> +{
->> +	struct dwc3_qcom  *qcom	= container_of(nb, struct dwc3_qcom, xhci_nb);
->> +	struct dwc3	  *dwc	= &qcom->dwc;
->> +	struct usb_bus	  *ubus	= ptr;
->> +	struct usb_hcd	  *hcd;
->> +
->> +	if (!dwc->xhci)
->> +		goto done;
->> +
->> +	hcd = platform_get_drvdata(dwc->xhci);
->> +	if (!hcd)
->> +		goto done;
->> +
->> +	if (event != USB_BUS_ADD)
->> +		goto done;
->> +
->> +	if (strcmp(dev_name(ubus->sysdev), dev_name(dwc->sysdev)) != 0)
-> 
-> Can this be false? If possible, I'd like to avoid these pointers and
-> strcmp here.
-> 
-
-Needed this to identify if the dwc3 pointer corresponds to this glue or 
-not. This can be false.
-
-BTW, Dmitry suggested to just do "runtime_use_autosuspend" inside probe 
-of xhci-plat.c and remove this logic. Hope that would be fine ?
-
->> +		goto done;
->> +
->> +	if (event == USB_BUS_ADD) {
-> 
-> This condition is redundant when you have the check a few lines above.
-> 
-
-ACK.
-
->> +		/*
->> +		 * Identify instant of creation of primary hcd and
->> +		 * mark xhci as autosuspend capable at this point.
->> +		 */
->> +		pm_runtime_use_autosuspend(&dwc->xhci->dev);
->> +	}
->> +
->> +done:
->> +	return NOTIFY_DONE;
->> +}
->> +
->>   static void dwc3_qcom_set_role_notifier(struct dwc3 *dwc, enum usb_role next_role)
->>   {
->>   	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
->> @@ -659,12 +694,22 @@ static void dwc3_qcom_set_role_notifier(struct dwc3 *dwc, enum usb_role next_rol
->>   		return;
->>   	}
->>   
->> -	if (qcom->current_role == USB_ROLE_DEVICE &&
->> -	    next_role != USB_ROLE_DEVICE)
->> +	if (qcom->current_role == USB_ROLE_NONE) {
->> +		if (next_role == USB_ROLE_DEVICE) {
->> +			dwc3_qcom_vbus_override_enable(qcom, true);
->> +		} else if (next_role == USB_ROLE_HOST) {
->> +			qcom->xhci_nb.notifier_call = dwc3_xhci_event_notifier;
->> +			usb_register_notify(&qcom->xhci_nb);
->> +		}
->> +	} else if (qcom->current_role == USB_ROLE_DEVICE &&
->> +		   next_role != USB_ROLE_DEVICE) {
->>   		dwc3_qcom_vbus_override_enable(qcom, false);
->> -	else if ((qcom->current_role != USB_ROLE_DEVICE) &&
->> -		 (next_role == USB_ROLE_DEVICE))
->> -		dwc3_qcom_vbus_override_enable(qcom, true);
->> +	} else if (qcom->current_role == USB_ROLE_HOST) {
->> +		if (next_role == USB_ROLE_NONE)
->> +			usb_unregister_notify(&qcom->xhci_nb);
->> +		else if (next_role == USB_ROLE_DEVICE)
->> +			dwc3_qcom_vbus_override_enable(qcom, true);
-> 
-> We don't unregister the notifier when switching from host to device?
-> 
-
-ACK. My bad, missed it.
-
-Thanks for the review.
-
-Regards,
-Krishna,
 
