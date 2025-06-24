@@ -1,150 +1,221 @@
-Return-Path: <linux-usb+bounces-25054-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25055-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F29C2AE6148
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:49:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41E01AE6266
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 12:28:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC28A18908EE
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:49:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4866C3AE19E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 10:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11BC527AC31;
-	Tue, 24 Jun 2025 09:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B138428540E;
+	Tue, 24 Jun 2025 10:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bTguxfQT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a7IzUTm9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07010279DC8;
-	Tue, 24 Jun 2025 09:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E8E27C866
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 10:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750758548; cv=none; b=Vioh54n7Ivks4g7SQJfOfE+HAL92+tKoPlFP0bEwkCoUMwjBdgEnXhqbSaIz4/x7nx51axxRfaugdbE52hVBhMT+RClKjGbomy82eBjUzvIp3yh/OWHT8PfwHVoc3rcfujpD1soSUegXXWylQTQ/WAohKoOgEFvPdrWHWn3Z7SQ=
+	t=1750760888; cv=none; b=ASf0v3jrQAoUR8wyEbZYGHTNWM1UVwddiGFPRl3uE0xndC94DCYh0AHL/8TjbnlILCChYqvOS8zXmbKmdQuVTNBscXoGVOykfIJ0RAoBT6aZ9eAPCYWsDO4sF37bRAiH5DbnmXDwe44KkHiHPuTFRm1uEFlj3rUtM5Q8RW67Dps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750758548; c=relaxed/simple;
-	bh=Df2lQ1yM1VLk0AsfFlVcfqKjKTRsXS/akMtYJso9klg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hyxvtYbTUEw+dbxhEbNUrs3ROeJS12a0CIyxF7snU3eCrxCeoWLcK75bnh1R5jZx0naVuSwdN6D5cUOavRtlYXX86BaAW7jLPiRouH4iS97jEZhSvUnz5YfdLOVdoZPPLNIDuOe/jMyl3QxCfDaUNbGmMxb41GWJjdMfZHldJZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bTguxfQT; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1750760888; c=relaxed/simple;
+	bh=n9DAeVtdFP+anIT+HLJO0rfQq+NVnsgWUynhfT34VwE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=J2u73uJBkcflkOpz0SIC4Z3kv2aEmAzH4WZIowLs5HLmxjgqGeTcSrH0+Uq2xabBTosk4R3XxgF1FoozEWBsXhzSohFKB85nM3zfiBuFbS4PW6IQSGrrWsudHSDq7r+GuRYTodeoeUxDWUqD+vCkWKRd/iqsznTB/speDASLjts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a7IzUTm9; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750758547; x=1782294547;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Df2lQ1yM1VLk0AsfFlVcfqKjKTRsXS/akMtYJso9klg=;
-  b=bTguxfQTHI6I7TeJPJvMafezohKNz/CWPTebQ8LUrKkl3RKry/nDSXhx
-   RE5nSEY/UXtiIwPbo9Q29kTIih7usGJZTfb8vtaSvPSHbO3Gy4OdW5+Rz
-   e+6OLk9+HbodPZvC81bEPY7doarq4IDgGRF0u5r1LSo3E6oLpwVs7+GIh
-   8MtNewdRrGumtuDsKDY1y540SwPIfrJqodBeVQGVbfdG1DKpUawSPPWGQ
-   Iz/FrFy+V75UfFcXnvC0tB0ID6N7gwfjjHufucf8e1/Y0IDef+efRtxMb
-   mmk4Q4HG0GC1Ty3uxfWrmMfZ5ovPoAwGr8ys3GwmDwY7SiuLKdU0bk2PS
+  t=1750760887; x=1782296887;
+  h=date:from:to:cc:subject:message-id;
+  bh=n9DAeVtdFP+anIT+HLJO0rfQq+NVnsgWUynhfT34VwE=;
+  b=a7IzUTm9W2usVJRWjNJ6S35Fp1CZWQaf7UfnZ/9afr9hi5AG5IQMHS8G
+   3Iyu9s9YYsL045XO0/HvdL9EOBF8GguYWyijf52qz2ZEFxv8ACbQzTCKq
+   0bnwDYYg3tl1I0EPYmrUZgcxAC94qdks6YAJXfiapptZD6bQu3d/Ti/f0
+   5uB+endeR1WfehKAbA3GpSvKAHottSqR4kQhExZSn4KsruxPlz1fW/f0f
+   yn5/688BCiBX6UqYCRLD+vSQbGAf6PeZCEw+kIppbrkDFw7VbD7tJWodT
+   r8ywo/h90fgxwzMJGj5E87xnMnpFsfpk2NqJnBN3expfD7jxlhwFM2F20
    A==;
-X-CSE-ConnectionGUID: JK2cnU2IRsiKYygQjrqLiw==
-X-CSE-MsgGUID: Osjh1hWIQbON+COD+gCy9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="53061711"
+X-CSE-ConnectionGUID: O4CeAyweTROaJ6io6aTdHQ==
+X-CSE-MsgGUID: k5/c2/JfRhWQSALKo6iTZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="53132667"
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="53061711"
+   d="scan'208";a="53132667"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:49:05 -0700
-X-CSE-ConnectionGUID: 0Xvbar7yQgSREy1AAYbIFQ==
-X-CSE-MsgGUID: V/CL9jIrTliknCeygMx8zw==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 03:28:05 -0700
+X-CSE-ConnectionGUID: oKFNHHuZREmqm5X5lVKbnw==
+X-CSE-MsgGUID: CVGO0LRNRKO6sEOJE4xOVQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="151463661"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa007.fm.intel.com with ESMTP; 24 Jun 2025 02:49:03 -0700
-Message-ID: <e0b58ddf-8593-474e-aa32-156ebb8a92ad@linux.intel.com>
-Date: Tue, 24 Jun 2025 12:49:02 +0300
+   d="scan'208";a="151473028"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 24 Jun 2025 03:28:04 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uU0sk-000S1I-0G;
+	Tue, 24 Jun 2025 10:28:02 +0000
+Date: Tue, 24 Jun 2025 18:27:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 2d1beba54fdaac0d624b016025d4ec5856713fb1
+Message-ID: <202506241855.L0tMV3X1-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: hub: fix detection of high tier USB3 devices
- behind suspended hubs
-To: Alan Stern <stern@rowland.harvard.edu>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, oneukum@suse.com,
- stable@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-References: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
- <acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com>
- <c73fbead-66d7-497a-8fa1-75ea4761090a@rowland.harvard.edu>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <c73fbead-66d7-497a-8fa1-75ea4761090a@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 24.6.2025 2.32, Alan Stern wrote:
-> On Mon, Jun 23, 2025 at 10:31:17PM +0200, Konrad Dybcio wrote:
->> On 6/11/25 1:24 PM, Mathias Nyman wrote:
->>> USB3 devices connected behind several external suspended hubs may not
->>> be detected when plugged in due to aggressive hub runtime pm suspend.
->>>
->>> The hub driver immediately runtime-suspends hubs if there are no
->>> active children or port activity.
->>>
->>> There is a delay between the wake signal causing hub resume, and driver
->>> visible port activity on the hub downstream facing ports.
->>> Most of the LFPS handshake, resume signaling and link training done
->>> on the downstream ports is not visible to the hub driver until completed,
->>> when device then will appear fully enabled and running on the port.
->>>
->>> This delay between wake signal and detectable port change is even more
->>> significant with chained suspended hubs where the wake signal will
->>> propagate upstream first. Suspended hubs will only start resuming
->>> downstream ports after upstream facing port resumes.
->>>
->>> The hub driver may resume a USB3 hub, read status of all ports, not
->>> yet see any activity, and runtime suspend back the hub before any
->>> port activity is visible.
->>>
->>> This exact case was seen when conncting USB3 devices to a suspended
->>> Thunderbolt dock.
->>>
->>> USB3 specification defines a 100ms tU3WakeupRetryDelay, indicating
->>> USB3 devices expect to be resumed within 100ms after signaling wake.
->>> if not then device will resend the wake signal.
->>>
->>> Give the USB3 hubs twice this time (200ms) to detect any port
->>> changes after resume, before allowing hub to runtime suspend again.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: 2839f5bcfcfc ("USB: Turn on auto-suspend for USB 3.0 hubs.")
->>> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>> ---
->> Hi, this patch seems to cause the following splat on QC
->> SC8280XP CRD board when resuming the system:
->>
->> [root@sc8280xp-crd ~]# ./suspend_test.sh
->> [   37.887029] PM: suspend entry (s2idle)
->> [   37.903850] Filesystems sync: 0.012 seconds
->> [   37.915071] Freezing user space processes
->> [   37.920925] Freezing user space processes completed (elapsed 0.001 seconds)
-> I don't know what could be causing this problem.
-> 
-> However, Mathias, I did notice a minor error in the patch when I read it
-> again.  It's in the new part of hub_activate() which does this:
-> 
-> +		queue_delayed_work(system_power_efficient_wq, &hub->init_work,
-> +				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
-> +		usb_autopm_get_interface_no_resume(
-> +			to_usb_interface(hub->intfdev));
-> 
-> Once queue_delayed_work() has been called, it's possible that the work
-> routine will run before the usb_autopm_get_interface_no_resume() call
-> gets executed.  These two calls should be made in the opposite order.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 2d1beba54fdaac0d624b016025d4ec5856713fb1  thunderbolt: Fix typos in documentation comments
 
-Thanks, I'll fix that
+elapsed time: 1410m
 
--Mathias
+configs tested: 128
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-15.1.0
+arc                   randconfig-001-20250623    gcc-10.5.0
+arc                   randconfig-001-20250624    gcc-8.5.0
+arc                   randconfig-002-20250623    gcc-8.5.0
+arc                   randconfig-002-20250624    gcc-8.5.0
+arm                              allmodconfig    clang-19
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                               allnoconfig    gcc-15.1.0
+arm                              allyesconfig    clang-19
+arm                              allyesconfig    gcc-15.1.0
+arm                   randconfig-001-20250623    gcc-10.5.0
+arm                   randconfig-001-20250624    gcc-8.5.0
+arm                   randconfig-002-20250623    clang-21
+arm                   randconfig-002-20250624    gcc-8.5.0
+arm                   randconfig-003-20250623    gcc-8.5.0
+arm                   randconfig-003-20250624    gcc-8.5.0
+arm                   randconfig-004-20250623    gcc-10.5.0
+arm                   randconfig-004-20250624    gcc-8.5.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250623    gcc-14.3.0
+arm64                 randconfig-001-20250624    gcc-8.5.0
+arm64                 randconfig-002-20250623    gcc-14.3.0
+arm64                 randconfig-002-20250624    gcc-8.5.0
+arm64                 randconfig-003-20250623    gcc-9.5.0
+arm64                 randconfig-003-20250624    gcc-8.5.0
+arm64                 randconfig-004-20250623    clang-16
+arm64                 randconfig-004-20250624    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-21
+hexagon                           allnoconfig    gcc-15.1.0
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-21
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250623    clang-20
+i386        buildonly-randconfig-001-20250624    gcc-12
+i386        buildonly-randconfig-002-20250623    gcc-11
+i386        buildonly-randconfig-002-20250624    gcc-12
+i386        buildonly-randconfig-003-20250623    gcc-12
+i386        buildonly-randconfig-003-20250624    gcc-12
+i386        buildonly-randconfig-004-20250623    clang-20
+i386        buildonly-randconfig-004-20250624    gcc-12
+i386        buildonly-randconfig-005-20250623    gcc-12
+i386        buildonly-randconfig-005-20250624    gcc-12
+i386        buildonly-randconfig-006-20250623    gcc-11
+i386        buildonly-randconfig-006-20250624    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-15.1.0
+loongarch                         allnoconfig    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-15.1.0
+openrisc                          allnoconfig    clang-21
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-21
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-21
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-21
+powerpc                          allyesconfig    gcc-15.1.0
+riscv                            allmodconfig    clang-21
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    gcc-15.1.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250623    clang-20
+x86_64      buildonly-randconfig-001-20250624    clang-20
+x86_64      buildonly-randconfig-002-20250623    gcc-12
+x86_64      buildonly-randconfig-002-20250624    clang-20
+x86_64      buildonly-randconfig-003-20250623    gcc-12
+x86_64      buildonly-randconfig-003-20250624    clang-20
+x86_64      buildonly-randconfig-004-20250623    gcc-12
+x86_64      buildonly-randconfig-004-20250624    clang-20
+x86_64      buildonly-randconfig-005-20250623    gcc-12
+x86_64      buildonly-randconfig-005-20250624    clang-20
+x86_64      buildonly-randconfig-006-20250623    clang-20
+x86_64      buildonly-randconfig-006-20250624    clang-20
+x86_64                              defconfig    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-12
+x86_64                         rhel-9.4-kunit    gcc-12
+x86_64                           rhel-9.4-ltp    gcc-12
+x86_64                          rhel-9.4-rust    clang-18
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
