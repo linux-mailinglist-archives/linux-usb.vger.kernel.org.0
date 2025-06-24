@@ -1,192 +1,227 @@
-Return-Path: <linux-usb+bounces-25069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93B9BAE69CF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 16:57:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B245AE6A90
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 17:20:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F5843B5556
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 14:50:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0AF1731B2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F932E62C0;
-	Tue, 24 Jun 2025 14:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB932D8DC0;
+	Tue, 24 Jun 2025 15:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="S3y6qg2Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cP2gGrpE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690952E62A1;
-	Tue, 24 Jun 2025 14:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBBF2EBDCF;
+	Tue, 24 Jun 2025 15:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750776224; cv=none; b=a3Pff/isyShgm+BNDhLix6AFjw++udjnkbZQy+Nw/72AYmm45eV9LKQia3BCHktnTCWv+yoBEYHYlPXd0ZC1aYPJK2NkwLgaKAqxivK98wf79SMc2J5b4QurngEvQypRVmOW76mNiOXpZyMjkFE97RDUok/EjqsGj99dTm7PNLQ=
+	t=1750777719; cv=none; b=P13YolriFdae853WsHd4jNFtaxPkEb/EqYnCoslZRBsMdC+uis7+RRi+W+gvK8Vz0wDKTA3hY6ew6KPruOTJWprORXaWyvNmFxboe0aGGI0/DynmSTjRTiMnAZmac21ETz1oVqQQS02MDruThrLdmbKHIuSXPvJLcFG2aI7RiqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750776224; c=relaxed/simple;
-	bh=Y7BP8KdPd8H6cxd2c8dwNisTp7TEPtBxOSdosnEuTr8=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=jTcSBzOet8qWeFh2bHH4TxG1NpzZ3o7cPGTxTpAoplkXITvjOdeZK3q3wkESEOS+vslYOyGh/aCYqZWuvpJ4qzN37zghlMmzdp+5iWnfa4iFZ2NOHvIcOjCRFn1ZlhOV54JPgHfI87dRxgboIuWH1L5OqGKpgiAs3U0Q+CQBWys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=S3y6qg2Y; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1750776196; x=1751380996; i=markus.elfring@web.de;
-	bh=slW1HY6NogLYGpkBA3UndyleR92HTWdOgcZcNz1CxfI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=S3y6qg2YxQOAz4en194ljaCRjuxyoyAkS/MvRk/bPNjjCho0wCppuruhe09MS31q
-	 0CMp+nYPuPvdfcQ2v1cnuFmKz1BIrBSkQbk4izL9JAMXzHOyEQuaZsDxU+ww7VMkC
-	 j/rdygfiv7QUjphvS+hHKP5kx2EyMXC+Wf3sL8a7hm4mYcm2reif/tX6BJwUDGBJm
-	 SXdhoGWqTX8Qn3GVGha5+Mup9dahy+tbC7kaDB/JykmVbSWjXFEyBjtxHNOqHlC7H
-	 +JxWWMMbFfGT8tfUl4tOUuo7PFIj2ogDawhctLkPuZpwwg9cF8hcKLmjsCrRzncEv
-	 RjXGxcu5KA3ARjCA7Q==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.200]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MWi5i-1uEggu28gy-00Q4GN; Tue, 24
- Jun 2025 16:43:16 +0200
-Message-ID: <b4544835-2cac-4501-bcf4-6f105e3667d4@web.de>
-Date: Tue, 24 Jun 2025 16:43:10 +0200
+	s=arc-20240116; t=1750777719; c=relaxed/simple;
+	bh=NuFaFx/Jlrn7Uzv/YpfDCKRC95PSFqVCthK20kI/oQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GqAKfn3Bd1nmnpGdoMGjxVkq02F/Jd3GouM2QvQlKBEZv67D+0ExLD+gSEyQTVqHaWQQfmE4joDoZevx0ffeT1ZQiMU9LcIk7NTPfUR/AlDvQG1AvywOIJ6ATUmIC+YYUDt7Rnf5r/3gJHFHHmHXiTo2ekRZSlQAx0I8TxOrakc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cP2gGrpE; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-604bff84741so1170668a12.2;
+        Tue, 24 Jun 2025 08:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750777715; x=1751382515; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NPe580k9SnUeLtOTdaxzcN6ec7qD36w8YTL5HYQln/Q=;
+        b=cP2gGrpEk7CZLdQyXf3b25wyjbvblbEPkJokzOByA8+AFo0IMRcwmaeiSGIZIf6Lek
+         z/ZACo0PNJCTpfbThiHNOSUp3OvRrLrCB8meXvNJQI+oGktuBDdeIRFXYy6u2FNqNpRJ
+         n98XsKdxQiK0O/bnaBbieR8ifKsfJ0voeOTvlR7gUJc1B1yr2/knm0FtK47UeV5RSbBD
+         VEYN0IKqhaDKSvyqdcClyN6JgX00e8KEtAgCqDujAlPS1dATi5k4DVdgem9Tu3L1ulDS
+         vKdJZxFpuxPF/VEQzoxBWlqU4hTI90ZLXY2MPYuR8SsqhZ9dIot7/znizsNJbgD59d0F
+         dzOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750777715; x=1751382515;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NPe580k9SnUeLtOTdaxzcN6ec7qD36w8YTL5HYQln/Q=;
+        b=N80Agk4bkOZ3so8KiUXdJ+vO2j6M48JaP4P4gZkgFYdSvVBaRe2oYhfu5EI8kxK4eI
+         SsCEfpeTseWSaA1VmXF3ZdIjs7NgMV/z8BD1Sfb6h1NC2S46r4qoix7Okvq/lsee66If
+         Le6P+/vS61+R1onDFyGqhFq4eD/t3th+RNFJOaMLZmFh5lVfW/kxt2s5nYs6hbezSJ+T
+         RbKJX9YVc41t3ZVMPnQ7uVGGeL4Z3mqxbBUN/39U7j2HsFIs5BkR1/gtABoD83KmF3BG
+         DsYS62B0Jc8uu7v7xbh9pHfuslS1NG2KZrv1v9ciRPPIH3Bkn19ZCLDLeAUJYBD8UCnc
+         dpVw==
+X-Forwarded-Encrypted: i=1; AJvYcCW4OSnujYxEJe1meEzqoeALMx92tYhPw5B1fPUz9RBL4TGsJ99Gsu3Llkb1q2TIfZFoGu99IIzaD1nv@vger.kernel.org, AJvYcCWBaOQ5qSFHAPHbxzO2N/AVhRh4f7C/kM459q3CHXS219hM9Fzt7C72B8IPvuGa/f2T2KOd9SqZKsKnEOE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlkW38pIz5SQp8DneTa1PziYJeXQHKydiXSbRD5w3A3wsI8Qxk
+	hEeVriCTJUG14tAZOJv1CmVaQNp2NXsnbZXpttu2SJkUPN/OZlljzlzp
+X-Gm-Gg: ASbGncsBVjiqQ3uBGEACyMFXeDlGnXP81nGIV7pdAYaELyAQTtHhqBaybZZcNFF+fT2
+	GXpUBrUBL/5nFcci1HTRDdTqIghlJPkKYHr+ZahcKH8W064lsey5dt0kbfQYJI2emJTeK1d5+Zp
+	mNTp2PHGA62iOey9BlpFLkooH4D7VHFrayDFtLuyKADfAUy7m+VVVgK3DKd+OT73PoiA6AFfFJk
+	odH4ZlKgkEBAV6ngpHU2QZv/oQU7GoFruY3k9GaeUjAv1IIKsEKuW5UMrR1eKl7TJGFsbNlRxTy
+	CnPfvxpybWHWr0KHWJDVvM5SxPrPTTefPiXTXhgTyS2F9nuBE+4AwyjYk+B1QZumVYrGWb04qka
+	/z6HVjti+38ob7N9C65DWtclJULHH18g8NPwlBVabYi/YUh+r2M8PyxNc7xKePw==
+X-Google-Smtp-Source: AGHT+IHy5CQXuAwnEZr15uqPSOadrd6iZ0m9VPaArcL1biwJzP259ImtZVizKwEUiRu8h5CVftquWA==
+X-Received: by 2002:a05:6402:2548:b0:608:f493:871e with SMTP id 4fb4d7f45d1cf-60a1ccb522fmr15773402a12.14.1750777714903;
+        Tue, 24 Jun 2025 08:08:34 -0700 (PDT)
+Received: from ernest.hoecke-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f1ae73dsm1148911a12.26.2025.06.24.08.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jun 2025 08:08:34 -0700 (PDT)
+Date: Tue, 24 Jun 2025 17:08:32 +0200
+From: Ernest Van Hoecke <ernestvanhoecke@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Roger Quadros <rogerq@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	Chance Yang <chance.yang@kneron.us>, Prashanth K <prashanth.k@oss.qualcomm.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: dwc3-am62/usb-conn-gpio: USB gadget not added when booting in host
+ mode
+Message-ID: <taw2mvbj6a2lqwy5h3tuqeifqy2w4gt4pzh4uahxuw27yw64q2@koxg54wgp2a2>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- Al Viro <viro@zeniv.linux.org.uk>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Yan Zhen <yanzhen@vivo.com>
-Content-Language: en-GB, de-DE
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
- Chen Ni <nichen@iscas.ac.cn>
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] usb: gadget: fsl: Use usb_endpoint_type() rather than
- duplicating its implementation
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:I7qV3JknpoGbkjG1a5NsvY0sDnSX3fJTGBJC1TXjonrd3RCs2Zw
- cgUYPHMBS312n6EAGFi+WxAGdCU8b/AI9G7I1f6f1tuAS4GPbJf9Zn3XWmiY8qKVYzl+2PK
- 3uTr6yXTta/Fv3xqoGqaGkiAiaTgv9kRBS1BfrW7exkDhhJWEQQGVZnjZc84HSzczaYc1m/
- kCE/33R8XfEtc8b3YOwwg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:njaM1S0s3ZE=;/vbP6Fd1kSwSsr0GwcvLAImMc0p
- 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
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Tue, 24 Jun 2025 16:33:53 +0200
+Hi all,
 
-Reuse existing functionality from usb_endpoint_type() instead of keeping
-duplicate source code.
+On the TI AM62 when using a USB OTG port, I found some unexpected
+behaviour when booting with this port in host mode.
 
-The source code was transformed by using the Coccinelle software.
+This happens, for example, when booting with a USB pen drive inserted.
+When the pen drive is later removed, the OTG port correctly switches
+to "device" mode instead of "host" mode, but the related USB gadget
+does not come up (in my case, a CDC NCM configuration).
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/gadget/udc/fsl_qe_udc.c   | 4 ++--
- drivers/usb/gadget/udc/fsl_udc_core.c | 6 ++----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+This issue only occurs when CONFIG_USB_CONN_GPIO and
+CONFIG_USB_DWC3_AM62 are set to m and not when these modules are
+built-in.
 
-diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/=
-fsl_qe_udc.c
-index aacfde06387c..6ee3da32cc4e 100644
-=2D-- a/drivers/usb/gadget/udc/fsl_qe_udc.c
-+++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
-@@ -533,7 +533,7 @@ static int qe_ep_init(struct qe_udc *udc,
- 	/* Refer to USB2.0 spec table 9-13,
- 	*/
- 	if (pipe_num !=3D 0) {
--		switch (desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) {
-+		switch (usb_endpoint_type(desc)) {
- 		case USB_ENDPOINT_XFER_BULK:
- 			if (strstr(ep->ep.name, "-iso")
- 					|| strstr(ep->ep.name, "-int"))
-@@ -636,7 +636,7 @@ static int qe_ep_init(struct qe_udc *udc,
-=20
- 	/* initialize ep structure */
- 	ep->ep.maxpacket =3D max;
--	ep->tm =3D (u8)(desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK);
-+	ep->tm =3D (u8) usb_endpoint_type(desc);
- 	ep->ep.desc =3D desc;
- 	ep->stopped =3D 0;
- 	ep->init =3D 1;
-diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/ud=
-c/fsl_udc_core.c
-index 4dea8bc30cf6..19c74ba82e16 100644
-=2D-- a/drivers/usb/gadget/udc/fsl_udc_core.c
-+++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-@@ -599,16 +599,14 @@ static int fsl_ep_enable(struct usb_ep *_ep,
- 	struct_ep_qh_setup(udc, (unsigned char) ep_index(ep),
- 			(unsigned char) ((desc->bEndpointAddress & USB_DIR_IN)
- 					?  USB_SEND : USB_RECV),
--			(unsigned char) (desc->bmAttributes
--					& USB_ENDPOINT_XFERTYPE_MASK),
-+			(unsigned char) usb_endpoint_type(desc),
- 			max, zlt, mult);
-=20
- 	/* Init endpoint ctrl register */
- 	dr_ep_setup((unsigned char) ep_index(ep),
- 			(unsigned char) ((desc->bEndpointAddress & USB_DIR_IN)
- 					? USB_SEND : USB_RECV),
--			(unsigned char) (desc->bmAttributes
--					& USB_ENDPOINT_XFERTYPE_MASK));
-+			(unsigned char) usb_endpoint_type(desc));
-=20
- 	spin_unlock_irqrestore(&udc->lock, flags);
- 	retval =3D 0;
-=2D-=20
-2.50.0
+I tried to find the differences in their setup using ftrace and printk.
 
+When they are built-in, I can see that the USB connector module
+(usb-conn-gpio) is always probed (usb_conn_probe()) after dwc3-am62.
+
+When built as modules, usb_conn_probe can happen before the probe of
+dwc3-am62 is finished. This is problematic since the USB Role Switch
+device needs to be registered first by DWC3. Namely, `dwc3_drd_init()`
+calls `usb_role_switch_register()`, and `usb_conn_probe()` gets it with
+`usb_role_switch_get()`. When `usb_conn_probe()` cannot get the role
+switch device, it defers its probe until it can. This logic seems to
+be working well, so the only difference here seems to be probe order.
+
+In both cases:
+ * The (last) usb_conn_probe gets the correct usb role switch.
+ * The dual role mode is the same, and switches as expected
+
+When the pen drive is unplugged, the USB OTG port correctly switches
+to device mode for both cases. `dwc3_gadget_init()` is then called, but
+when built as modules, strange things seem to happen once this method
+hits `usb_add_gadget()`. Ftrace shows that it is executed, and executes
+its body and returns, but my printk's after this point don't end up in
+the kernel log anymore.
+
+Ftrace snippet in working (builtin) case:
+[...]
+     kworker/1:2-52      [001] .....    80.070233: dwc3_gadget_init <-__dwc3_set_mode
+     kworker/1:2-52      [001] .....    80.073332: usb_initialize_gadget <-dwc3_gadget_init
+[...]
+     kworker/1:2-52      [001] .....    80.855694: dwc3_debugfs_create_endpoint_dir <-dwc3_gadget_init
+     kworker/1:2-52      [001] .....    80.875767: usb_add_gadget <-dwc3_gadget_init
+     kworker/1:2-52      [001] .....    80.896299: usb_udc_uevent <-dev_uevent
+   systemd-udevd-132     [000] .....    80.898973: usb_udc_uevent <-dev_uevent
+   (udev-worker)-469     [000] .....    80.899839: usb_udc_uevent <-dev_uevent
+     kworker/1:3-53      [001] .....    80.900302: usb_gadget_state_work <-process_one_work
+   gadget-import-512     [000] .....    80.963264: gadgets_make <-configfs_mkdir
+[...]
+
+Ftrace snippet in nonworking (modules) case:
+[...]
+     kworker/0:4-60      [000] .....   104.112791: dwc3_gadget_init <-__dwc3_set_mode
+     kworker/0:4-60      [000] .....   104.115912: usb_initialize_gadget <-dwc3_gadget_init
+[...]
+     kworker/0:4-60      [000] .....   104.918814: usb_add_gadget <-dwc3_gadget_init
+     kworker/0:4-60      [000] .....   104.939290: usb_udc_uevent <-dev_uevent
+   systemd-udevd-127     [000] .....   104.943682: usb_udc_uevent <-dev_uevent
+     kworker/0:0-9       [000] .....   104.944201: usb_gadget_state_work <-process_one_work
+   (udev-worker)-417     [001] .....   104.944411: usb_udc_uevent <-dev_uevent
+[end of ]
+
+When built as modules, gadgets_make() is never called, and the resulting
+chain of gadget events thus does not happen.
+
+My printk logging after unplugging the pen drive shows the following:
+
+Builtin:
+usb_conn_isr
+usb_conn_queue_dwork
+usb_conn_detect_cable
+usb_role_string
+usb_role_string
+usb_conn_detect_cable role host -> device, gpios: id 1, vbus 1
+usb_role_switch_set_role
+usb_role_switch_get_drvdata
+dwc3_usb_role_switch_set, role: 2
+usb_role_switch_uevent
+__dwc3_set_mode: dwc->current_dr_role: 1
+__dwc3_set_mode: desired_dr_role: 2
+usb_role_switch_uevent
+usb_role_switch_uevent
+dwc3_gadget_init
+dwc3_gadget_init: usb_initialize_gadget
+dwc3_gadget_init: dwc3_gadget_init_endpoints
+dwc3_gadget_init: usb_add_gadget
+dwc3_gadget_check_config
+dwc3_gadget_start
+__dwc3_gadget_start
+dwc3_gadget_start_config, resource_index: 0
+dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 9, params: 0000000013236000
+__dwc3_gadget_ep_enable, dep: ep0out, action: 0
+dwc3_gadget_set_ep_config, dep: ep0out, action: 0
+dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 1, params: 0000000013236000
+dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 2, params: 0000000013236000
+__dwc3_gadget_ep_enable, dep: ep0in, action: 0
+dwc3_gadget_set_ep_config, dep: ep0in, action: 0
+dwc3_send_gadget_ep_cmd, dep: ep0in, cmd: 1, params: 0000000013236000
+dwc3_send_gadget_ep_cmd, dep: ep0in, cmd: 2, params: 0000000013236000
+dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 6, params: 00000000c3883fbf
+dwc3_gadget_run_stop: start
+
+Modules:
+usb_conn_isr
+usb_conn_queue_dwork
+usb_conn_detect_cable
+usb_role_string
+usb_role_string
+usb_conn_detect_cable role host -> device, gpios: id 1, vbus 1
+usb_role_switch_set_role
+usb_role_switch_get_drvdata
+dwc3_usb_role_switch_set, role: 2
+usb_role_switch_uevent
+__dwc3_set_mode: dwc->current_dr_role: 1
+usb_role_switch_uevent
+__dwc3_set_mode: desired_dr_role: 2
+usb_role_switch_uevent
+dwc3_gadget_init
+dwc3_gadget_init: usb_initialize_gadget
+dwc3_gadget_init: dwc3_gadget_init_endpoints
+
+
+Logs before the unplug are identical to each other except for the
+usb_conn_probe that can happen earlier in the boot and potentially get
+deferred.
+
+I will be investigating this further, any input is more than welcome.
+
+Thanks,
+Ernest
 
