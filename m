@@ -1,61 +1,74 @@
-Return-Path: <linux-usb+bounces-25040-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25041-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE74EAE5FAA
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 10:42:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAC8AE5FBA
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 10:44:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4C8617D2ED
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 08:42:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18DFB3A9BD6
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 08:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E02426AA8F;
-	Tue, 24 Jun 2025 08:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142BE26B2AD;
+	Tue, 24 Jun 2025 08:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EipKQb84"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XHVl1BJw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C9A223DFA;
-	Tue, 24 Jun 2025 08:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C50D1C84DF;
+	Tue, 24 Jun 2025 08:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750754536; cv=none; b=mBCMr0GJknYwsg/WKgLTmGweItpgxxrhk2nEZ2wkH8OjnjltFBiY6Y6AkNcnVEvWUIUDBfmc5HRNXCzOoylz39Mz6WHiLqEvEbKAs4lwoXuN3kod9y6KGYUEBt963jtTUZw7SBpXQQqMz/7zXSu9bJPyJmAE8+eySH0iD3PYZ+I=
+	t=1750754637; cv=none; b=fxNSuk8b4xixRh4JgtKsBF1BasOsjfAy+qj/POrrjaA9ks/jbhwoM/pT8hhKeikJKbOb2PjhdtO6raJA9oXN2bXw6Kf2IswtboRVExBP7eAgYyBdGWDMPh7Gu39qREXNOiCIfZKts5cBnwI3RY/7jbOdgnr6gEo1iqZhvEfkHKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750754536; c=relaxed/simple;
-	bh=XQXISaxxdSM0YQGejcm+29YU7RBs4G6bK6BX2G2DI5I=;
+	s=arc-20240116; t=1750754637; c=relaxed/simple;
+	bh=L45NXoZ+NSjgNfFv1Uc2lmPuDY4v3Gli3c8yBbV7E7w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEwQq0bvbXHWLiB0aN2GR6VHFMY7VdCajhKcNILWWDgtLOudK23aS+dPiY2yzbEhsKt8389nX9SPMk33N13RHGkNqdvQtV2mtSIU2iSoHKl5Olre5vweZm+lKJIkLoGm7c6H05DOBn/23zwHcAo1IMeuw3FX5b/5dVCW2v52oiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EipKQb84; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EA6C4AF09;
-	Tue, 24 Jun 2025 08:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750754535;
-	bh=XQXISaxxdSM0YQGejcm+29YU7RBs4G6bK6BX2G2DI5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EipKQb84jORiV01NbhjTTqhSaSXN+yXhTmm7huCrMSqZCsmYexcgHlJA94O8K5/7k
-	 HtxJTWOPsgYegfn/EyFKcb6SVx7Q4s+BBlZTV7NuFYyRoAfeI9D3C+i8uebevWuXwd
-	 4lC68DlCHc/EbcvI5S5i3vmK4ASQaIh178VoXc/y/mrQYCtdt3P86jouUvnpqhMpJ9
-	 Gk0o07iVPfm8hYmak5mQTw/eYCBtIwYbIvW6spHL96amiQBjCdpH+V6TRCCab0UN0Z
-	 R4/Xz1CCgdNcS6Jdd7Du3leRPjri/uWQGEkeatmS8b239gRmDJs8z6MvVQZt1gzLPA
-	 NXfulx+W8hW1A==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uTzEK-000000005wQ-3JlL;
-	Tue, 24 Jun 2025 10:42:13 +0200
-Date: Tue, 24 Jun 2025 10:42:12 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2 0/2] USB: serial: use new GPIO line value setter
- callbacks
-Message-ID: <aFpk5P3YU4BW6pN-@hovoldconsulting.com>
-References: <20250619-gpiochip-set-rv-usb-serial-v2-0-8c43e4a4c810@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bh/UQfgq51SPSYM+Yk+o84rGWZdwEI9mQPAHVZxRHdc5eClEN2go+tZF+SKb4Q5OAcF7Jfr6oiqeoAWZ+yCa6vUb0uAC1aGiBxpykWqO+hfJsbMKVnQ/zqUmrtvh7Il971A0y8rNp3KUu1Vq2+5d/eDHPf9PbYJgK5aiZbO1Z0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XHVl1BJw; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750754636; x=1782290636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L45NXoZ+NSjgNfFv1Uc2lmPuDY4v3Gli3c8yBbV7E7w=;
+  b=XHVl1BJwW5fEfgTbW2fjpBy7RTiwWYDE//WvYkQo7Ljhxv83Ib83MQs/
+   Ol98vf60KqIfIR5ZEKJs/iSSqN8Lahf7ZSoFYFb3oVCl20eljDtZdT7Fx
+   ncNxKIrqNvANmDpklC1n07ATLhX+MqX7+Z94xVYwY+9LLaZBo4lCXl42w
+   f04vQ3F7hU28rPOPz/TbaVuXlMI7elCaaiUr7iPtj7B8Es4g8XviAKkyC
+   DQSZmjV070ah/N/dO4YlKMcZKwXWG4gpoTvOJsam2fCc9QE+dm8w784AW
+   dadPDuy5p10IxZk1l5rhQFl6Soqwe6eKpBDhRMF9hjT3QK1LeoT2ZcgTL
+   g==;
+X-CSE-ConnectionGUID: tldknDeiRs21TRzIeNvquA==
+X-CSE-MsgGUID: AF+S4X9aTN2CQrIyUCGxrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52214092"
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="52214092"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 01:43:56 -0700
+X-CSE-ConnectionGUID: 2vYRGkSnQs618htWM63nfA==
+X-CSE-MsgGUID: OmmttEKCRhOgi6grzXo9MA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="152023769"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa007.jf.intel.com with SMTP; 24 Jun 2025 01:43:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 11:43:51 +0300
+Date: Tue, 24 Jun 2025 11:43:50 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: badhri@google.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: altmodes/displayport: do not index
+ invalid pin_assignments
+Message-ID: <aFplRgD8nju9ShAO@kuha.fi.intel.com>
+References: <20250618224943.3263103-2-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,24 +77,61 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250619-gpiochip-set-rv-usb-serial-v2-0-8c43e4a4c810@linaro.org>
+In-Reply-To: <20250618224943.3263103-2-rdbabiera@google.com>
 
-On Thu, Jun 19, 2025 at 11:02:39AM +0200, Bartosz Golaszewski wrote:
-> Commit 98ce1eb1fd87e ("gpiolib: introduce gpio_chip setters that return
-> values") added new line setter callbacks to struct gpio_chip. They allow
-> to indicate failures to callers. We're in the process of converting all
-> GPIO controllers to using them before removing the old ones. This series
-> converts all GPIO chips implemented under drivers/usb/serial/.
+On Wed, Jun 18, 2025 at 10:49:42PM +0000, RD Babiera wrote:
+> A poorly implemented DisplayPort Alt Mode port partner can indicate
+> that its pin assignment capabilities are greater than the maximum
+> value, DP_PIN_ASSIGN_F. In this case, calls to pin_assignment_show
+> will cause a BRK exception due to an out of bounds array access.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Prevent for loop in pin_assignment_show from accessing
+> invalid values in pin_assignments by adding DP_PIN_ASSIGN_MAX
+> value in typec_dp.h and using i < DP_PIN_ASSIGN_MAX as a loop
+> condition.
+> 
+> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
-> Changes in v2:
-> - reduce the number of changes in patch 2/2 by simply changing the
->   function prototype and returning a value without reshuffling the
->   implementation (Johan)
-> - Link to v1: https://lore.kernel.org/r/20250610-gpiochip-set-rv-usb-serial-v1-0-a9343ca109e8@linaro.org
+>  drivers/usb/typec/altmodes/displayport.c | 2 +-
+>  include/linux/usb/typec_dp.h             | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index b09b58d7311d..773786129dfb 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -677,7 +677,7 @@ static ssize_t pin_assignment_show(struct device *dev,
+>  
+>  	assignments = get_current_pin_assignments(dp);
+>  
+> -	for (i = 0; assignments; assignments >>= 1, i++) {
+> +	for (i = 0; assignments && i < DP_PIN_ASSIGN_MAX; assignments >>= 1, i++) {
+>  		if (assignments & 1) {
+>  			if (i == cur)
+>  				len += sprintf(buf + len, "[%s] ",
+> diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
+> index f2da264d9c14..acb0ad03bdac 100644
+> --- a/include/linux/usb/typec_dp.h
+> +++ b/include/linux/usb/typec_dp.h
+> @@ -57,6 +57,7 @@ enum {
+>  	DP_PIN_ASSIGN_D,
+>  	DP_PIN_ASSIGN_E,
+>  	DP_PIN_ASSIGN_F, /* Not supported after v1.0b */
+> +	DP_PIN_ASSIGN_MAX,
+>  };
+>  
+>  /* DisplayPort alt mode specific commands */
+> 
+> base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+> -- 
+> 2.50.0.rc2.701.gf1e915cc24-goog
 
-Thanks for respinning, now applied.
-
-Johan
+-- 
+heikki
 
