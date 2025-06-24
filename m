@@ -1,58 +1,78 @@
-Return-Path: <linux-usb+bounces-25042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F9DAE5FD5
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 10:47:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA322AE602F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:06:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59C5B1921C5E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 08:47:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95CFD7A6363
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E3327979A;
-	Tue, 24 Jun 2025 08:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32CAB27AC31;
+	Tue, 24 Jun 2025 09:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQCxN10U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WSDkpNtB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD4C2376E1;
-	Tue, 24 Jun 2025 08:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A4319CD01;
+	Tue, 24 Jun 2025 09:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750754841; cv=none; b=QJp37Jl+B8MCGuOTwQBLqmNZbcdWinpyH0Hcu8bsPXSK3/TrivDa1rCxxubIkLjg4ZmO58cfFW7ibistEFy+68FcPjKRAZ9xuqpNiuGG8qVtCk9fBYXY9kOPitBTcdiGZ4m+K6KJWRyLTWx7q/8uUKxaNGzQXimlqGpKPDYHdNk=
+	t=1750755953; cv=none; b=ehnOLnmu752yBhinJ6WJt0mMv4QMfb3yyUrIvpsv96hBy79hlfo+cym9Am1hfvSPdyMte7UT/n+th2q+g5n195KRWiD81Rloh+gAjhtalWQjWXTEgaODtpBpP4lNFYlyXFC2aR3ww3oiIRq5K/3ZUKGfY4dZjiVqiJyq2xJclvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750754841; c=relaxed/simple;
-	bh=bScyVOHb0BVyHX8S+iERUocAUydzqBlTmi/mEsaMen4=;
+	s=arc-20240116; t=1750755953; c=relaxed/simple;
+	bh=Kdr7XdnAFcDOh1tDuY6cmVBs5NYiJeppVVlFCEqaASg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dqmitsw+r1YTfP+ebVSXNs3X8RM0DuV1HEFdwPBu6s62BaBsrXzyhKRpGNeX/C7fHTJs6dYOkT7lz2o8mzrVpa5UftEu08hEtUG0ULS2i3DMCEG5gRHe50UVJCpl6LAB1by5E1Tnm4GTl4y5qzThppVCFW1/l3vgptc1fHnguck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQCxN10U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8268C4CEE3;
-	Tue, 24 Jun 2025 08:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750754840;
-	bh=bScyVOHb0BVyHX8S+iERUocAUydzqBlTmi/mEsaMen4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BQCxN10Use2yAkGa3Kjq1SwcWBhyK6DXQf/2aOQVeAlpSlNRKKbGoTHgf/reXSBDl
-	 peAmuwedcWBdLj/+qryp6fXzpgqGXmbUSaTflHhuUlhxEqx/50q2BZ6lWt9ySbtMPK
-	 j6qvlTjmEMb+hYa6zyAfGWhpeqn2WUsFJfC9J9l57J68oNeBKj8TIKOCJaxk9rLFIB
-	 2hN+HJheFpsDjYT9PuU3uCNJ+/NiOQMAy2Q94dDPlQiS4CQHER9Og7BzU+NMr8dxnT
-	 cHg+ZmwtdTq27unPGg9kUILBr1WI01PdSYJZoqFlzYlOUrmWpt9CggJO1hZ7eFLJxy
-	 DbZJmoOEl4vCA==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uTzJG-000000006Pd-2XwX;
-	Tue, 24 Jun 2025 10:47:18 +0200
-Date: Tue, 24 Jun 2025 10:47:18 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Slark Xiao <slark_xiao@163.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Foxconn T99W640
-Message-ID: <aFpmFk-t5430Tkg4@hovoldconsulting.com>
-References: <20250620035721.6450-1-slark_xiao@163.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AusuXYOp62DCc4xWYU1Fw0LUgT7WV1dD5Y+ldC6PVQz/R9aU71WpTQUjHoyLkuaklZzrpaRSDdYjEwtZPByFMYS/HCsRj0DX52HwMBvRuUFLAkNpZ64PCFUNdQzRkQoPwCFbkdFyvNRZ1jRQ+ytdcqMDKymiyK4hTU3PjSYHUZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WSDkpNtB; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750755953; x=1782291953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kdr7XdnAFcDOh1tDuY6cmVBs5NYiJeppVVlFCEqaASg=;
+  b=WSDkpNtB7HCVmkHRvvg6l4MwneyW2gQGobjk/c/uHX+OH5ZmDmDHCIk/
+   B9+OZT7NpAt0dhv7upLSMXandsFHa9dP3IygLGI5atuXm6B3txofvisC/
+   gMo1MrM7uIVkd81dwMxTBCc/yIoHpDgsXYS87DablyFort/cFOr2w09oX
+   YFD2A2APQgiUIvo9aS7//L9Jdc/kwE6ucrzqOe9wvXgUfyv/LzS/+CPyQ
+   lYkb9OZyVWwRNg6Gw6cVFjQS7hnnKaDaQRiYtSJj6tu/vZFGVA9D4rNlL
+   3UmlyxRnu48+wkrJa8uP4BJ8iegGbUXX8v2OoWx/WNWn9nlK5eyZymkAL
+   Q==;
+X-CSE-ConnectionGUID: dpROhMPdT+iq7lq5IkP7tg==
+X-CSE-MsgGUID: pt034b0/TPucn995mZEsMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="63251834"
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="63251834"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:05:52 -0700
+X-CSE-ConnectionGUID: xNoTi//jR8m+1PLwMqr0eA==
+X-CSE-MsgGUID: HvLYdZz4RhKlC4zagbKIfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="151608959"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa009.jf.intel.com with SMTP; 24 Jun 2025 02:05:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 12:05:47 +0300
+Date: Tue, 24 Jun 2025 12:05:47 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/8] usb: typec: ucsi: yoga-c630: fix error and remove
+ paths
+Message-ID: <aFpqaylonUQwJfoV@kuha.fi.intel.com>
+References: <20250621-c630-ucsi-v1-0-a86de5e11361@oss.qualcomm.com>
+ <20250621-c630-ucsi-v1-1-a86de5e11361@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,17 +81,65 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620035721.6450-1-slark_xiao@163.com>
+In-Reply-To: <20250621-c630-ucsi-v1-1-a86de5e11361@oss.qualcomm.com>
 
-On Fri, Jun 20, 2025 at 11:57:21AM +0800, Slark Xiao wrote:
-> T99W640 is designed based on Qualconn SDX72 chip. There are 3
-> serial ports to be enumerated: Diag, NMEA and AT.
-
-> 0&1: MBIM, 2:Modem, 3:GNSS(non-serial port), 4: NMEA, 5:Diag
+On Sat, Jun 21, 2025 at 09:12:56PM +0300, Dmitry Baryshkov wrote:
+> Fix memory leak and call ucsi_destroy() from the driver's remove
+> function and probe's error path in order to remove debugfs files and
+> free the memory. Also call yoga_c630_ec_unregister_notify() in the
+> probe's error path.
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Applied, thanks.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Johan
+> ---
+>  drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> index d33e3f2dd1d80f7b49d9c5e7355fb14a97c74dd5..47e8dd5b255b2b306dd9c3d6ac8c3b896954981a 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> @@ -133,17 +133,30 @@ static int yoga_c630_ucsi_probe(struct auxiliary_device *adev,
+>  
+>  	ret = yoga_c630_ec_register_notify(ec, &uec->nb);
+>  	if (ret)
+> -		return ret;
+> +		goto err_destroy;
+> +
+> +	ret = ucsi_register(uec->ucsi);
+> +	if (ret)
+> +		goto err_unregister;
+> +
+> +	return 0;
+>  
+> -	return ucsi_register(uec->ucsi);
+> +err_unregister:
+> +	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
+> +
+> +err_destroy:
+> +	ucsi_destroy(uec->ucsi);
+> +
+> +	return ret;
+>  }
+>  
+>  static void yoga_c630_ucsi_remove(struct auxiliary_device *adev)
+>  {
+>  	struct yoga_c630_ucsi *uec = auxiliary_get_drvdata(adev);
+>  
+> -	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
+>  	ucsi_unregister(uec->ucsi);
+> +	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
+> +	ucsi_destroy(uec->ucsi);
+>  }
+>  
+>  static const struct auxiliary_device_id yoga_c630_ucsi_id_table[] = {
+> 
+> -- 
+> 2.39.5
+
+-- 
+heikki
 
