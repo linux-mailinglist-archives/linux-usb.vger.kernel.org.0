@@ -1,250 +1,293 @@
-Return-Path: <linux-usb+bounces-25060-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25061-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48ED4AE6365
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 13:13:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BF30AE65D5
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6F5C1673CB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:13:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2C261927649
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 13:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFF728A71D;
-	Tue, 24 Jun 2025 11:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0670C2BEC26;
+	Tue, 24 Jun 2025 13:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="gER8GOgy"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="E6C4+HLo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012016.outbound.protection.outlook.com [52.101.66.16])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F521288C8B;
-	Tue, 24 Jun 2025 11:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750763571; cv=fail; b=r1oL/jBKCciXJTD18sdfcqQH19gzWQup7T2ZDqkC5F9lMVxwKwjjh0tsAbdwaPeRPPH/vuz8weSZD6bwNCHttwIPo04HdGcNX31S2sG0+iR8/1xWQoLtJZiObzgdEBYLXAj+1q2pdJXnU87UWWFf5wWCDA5iiGFbzNX5jFC0mPE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750763571; c=relaxed/simple;
-	bh=oj4GNtO/PqhGIkXb4RdAH0cu0IsJfgwqzGgYkSv7U+k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=D2q/TtkGCHP6+ap5s1Mv165ePAxaQc1vrQLy74CZmdoGkCXM83AIZ5TbnoSiyDDpUG8dXO2Qn0+l6dwVGUyMg+DTIQv+7EDfZ0lYIf8e9XELGZ321+Bgnj2JwY/3FnPllNjQ/XUzvcNJFkKI4dJrQYowAhwTajq1My21VvSkkds=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com; spf=fail smtp.mailfrom=leica-geosystems.com; dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b=gER8GOgy; arc=fail smtp.client-ip=52.101.66.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z3YLzHJ46gGz4lZwil2wZ7wNME3D8A68bR9YEtTS9If9dvHzsYOQAeg5PHU7bTy9RFZP5/VH5N0n9yBus3JrKjUV6y3VvpKy78lolCqBbITsRUFHF9NRubLj95wyD5G3RAN97EtCOX0otplWDkM25q5GqWvxrl2EiKzyoyubWd/tcehxBUmgjnDiSklZqv62/HvHB8s36isbmc7SCtorzUH4WE9UxMvww8/r0hs14UTpKAPiG95Wpgm0lQxYm/820KSxfL65T3YxCp9rYjVH7EeDm6F6n0K8UISAA1A5TTJ+ob3W/OdotegZ+58PW3YPwBoLvDVLrJdCZ7JAXo9GdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Le5vGmyZA1h+5Sm8OjkVwDwbiGbANwZbgmpHNqn5Isg=;
- b=dtDzm89RC43zmb5dq8epJdEWdeckSolQoLXalxS2yb+SJfDd/6ryShTtHMJUDnOCVtf9KcWJ0rLrssMwkZVCQHZuxAGcbez+isnzURFkUsmphanVxAnt2ZeCrjECVNBYpTlthw01w2xVF+NwhpUBGbQgcKsWJuWsVT18zBb0otZIuVLgCoCaf/67pLitG5eMWSKc65p+qpcadnl7AWD/9CLK0dljasSBB06G7J+Q5o/iXIstKqJ9R0CBIx5JX1An6nH5goLntnl2UXrXZRNnSylZd/f/Iizp6J0rHQpheXICuU2VxCH4up1uZwQs5c5qQ5PSG7t19NDT553JF0NcxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Le5vGmyZA1h+5Sm8OjkVwDwbiGbANwZbgmpHNqn5Isg=;
- b=gER8GOgy1o2KtXrOCkiPWZLpiVPvTGDyTuvwoxSXySUeNrl9z/rgWZFBRNkF7RGKdvIUIjzK5ysioPyNylAoVrouCUr161Fl1dHOAANF07GHdoSaL1Tc9VO3VaAKaa4iz891PxQwYX/9cfd12XDgW2lZlHFWhLMQanBiXsxg6sw=
-Received: from AM8PR06MB7521.eurprd06.prod.outlook.com (2603:10a6:20b:355::8)
- by PR3PR06MB7097.eurprd06.prod.outlook.com (2603:10a6:102:8a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.29; Tue, 24 Jun
- 2025 11:12:46 +0000
-Received: from AM8PR06MB7521.eurprd06.prod.outlook.com
- ([fe80::1797:2a6b:ecc5:f7b8]) by AM8PR06MB7521.eurprd06.prod.outlook.com
- ([fe80::1797:2a6b:ecc5:f7b8%5]) with mapi id 15.20.8857.026; Tue, 24 Jun 2025
- 11:12:46 +0000
-From: SCHNEIDER Johannes <johannes.schneider@leica-geosystems.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: Pengutronix Kernel Team <kernel@pengutronix.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH v2 0/2] usb: dwc3: Fix TRB reclaim regression and clean up
- reclaim logic
-Thread-Topic: [PATCH v2 0/2] usb: dwc3: Fix TRB reclaim regression and clean
- up reclaim logic
-Thread-Index: AQHb5PZBeagS3RTNW0GOo6iHVRl/KbQSJu+4
-Date: Tue, 24 Jun 2025 11:12:46 +0000
-Message-ID:
- <AM8PR06MB7521B4FD884B6DBAA33F5B47BC78A@AM8PR06MB7521.eurprd06.prod.outlook.com>
-References:
- <20250624-dwc3-fix-gadget-mtp-v2-0-0e2d9979328f@leica-geosystems.com>
-In-Reply-To:
- <20250624-dwc3-fix-gadget-mtp-v2-0-0e2d9979328f@leica-geosystems.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM8PR06MB7521:EE_|PR3PR06MB7097:EE_
-x-ms-office365-filtering-correlation-id: 3065bbdf-e6ba-462a-a2ce-08ddb3100c4d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?Windows-1252?Q?VKgZmw/Yo3Q9j55XxsC3JIKHMPaJZz410JSBGnrFI+OOyIbJuuM/DP9E?=
- =?Windows-1252?Q?jItzvTjMyPXqGAV+cP+Lvx2Vwaw3yIbAAuB2/E0MryPKri5Vux3xlkr1?=
- =?Windows-1252?Q?7n1Ivg4tIrBCrrWlnJz3YiSIRi3muortniMxrbEKYcgv2gS+wIHa/Vjq?=
- =?Windows-1252?Q?X6oOE9XOfM/yHohiXNnJrB+ZQ0FkQdxR4hG2nVqraGLIl04XykLep50p?=
- =?Windows-1252?Q?naorXA5Nk2kCFhmEbv85HNkpYKTkLxkX0/7SfFU54ucdlQ/vLjycrp/W?=
- =?Windows-1252?Q?cPW5IsZSxfK3MIR298nVI6uS85Qy6xPon+5/n1vCOQydhnkfNoP40Hkm?=
- =?Windows-1252?Q?b2VKaj6bxWW6VsX+24U7IPTWXyfdOTsAE2Cs9X1fla0gpW1tPzv3tGMu?=
- =?Windows-1252?Q?P9GLWAnV4WHk9I+qakXDWiJjriqaP5nK2sIs/Sev/aakWbiFITF5FNCh?=
- =?Windows-1252?Q?whVsUP8f/vnocIiZlHgO41yisweXsmzVlikT3Ove4iUTq525Hx7xu3Hm?=
- =?Windows-1252?Q?SWod289UoRMKqqe8fXWVTG/yRhXCyjeKbqGPsF6VBvNSThJ5WOiIQZLC?=
- =?Windows-1252?Q?qUUo+vvQ+BXKzm+T7MY429V0sch3z9tf79xQZXXyIXO54oYBvrBDgRW6?=
- =?Windows-1252?Q?+2UPJumL7ws7n8ddpbXAwcVIBm4g8jht5Sd9dQ4Tf5/KtLaAVga+myl2?=
- =?Windows-1252?Q?skRyFtSJP2LVABjsmLIwar8+SeGNwZLHQc5Snnpq61nVTfsnWq36cQAT?=
- =?Windows-1252?Q?f0NPoJuOQKyIv5i5mxTnVKVH4OXodoHvytZFf/A+zSjX/I9JhXsya3EI?=
- =?Windows-1252?Q?iZqgY4RsHcMXUbYwGGfgXKvURg+shuvQSdH1NLCIuNZtVbwmgQUSBn+W?=
- =?Windows-1252?Q?I3S+4vCCTilHDkok9Ce1wdDtVNHiz0WZit9RpyhwRV+QYxglPPhUxK8o?=
- =?Windows-1252?Q?n6Gv1N+g9Wq3XN6jQKJ90lSqWTSjc56uLw4bvvNtYw2OUVUyO24Bv54c?=
- =?Windows-1252?Q?2wHNw1f4sThmf6hLOTRHky8zwrMIUEDjRC9D5EZokSJfQEjnFuMe5lgz?=
- =?Windows-1252?Q?0s39IUSgYtadUAJpBtesvcfPxV3Gd9eAv5boB9ieLp0G3R148mW2vitu?=
- =?Windows-1252?Q?RQTLUOJM+3Ay1I6WlQDsWJ5nYRtuhaTwOG7q2DYD6g9vEJq9HqU5+cxI?=
- =?Windows-1252?Q?lwFtdDQ06uUFR9/iARwhRsaN1+gn7UQORC+8naQBmXySxdSbB7zhcPX3?=
- =?Windows-1252?Q?NIDB7QJsEf/ksOZy9u6zv/Rg8WT4a9dWdfwrr2ctjTa6ekEMn9zz7na2?=
- =?Windows-1252?Q?IEwnMWNdJ9RnYJmqy+x1DdueRr/PK5Mqd2PnmKbaMKl1P65VsVcxrzj2?=
- =?Windows-1252?Q?CWeKkm09cF2uaBuDKQoojGEFt07UZB3dzhEG43DgtXb4Lg+glMv822hn?=
- =?Windows-1252?Q?vthEVQU3dEWkb4f3khg8lbxBDtMUZ2v8zZdelKwEfgGUmcjgpyKm60gn?=
- =?Windows-1252?Q?D1anRC+WwJ71CIh97+jcnkAadky0Ko+ZzeUvEHRWhfFMB4zuNfjaWrhG?=
- =?Windows-1252?Q?FLm5fgRot39Spmnr1U+/yKq1ZLQSl8joztMqEldG/txskIvOYoMmIp+3?=
- =?Windows-1252?Q?LuI=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR06MB7521.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?Windows-1252?Q?St/+k8E/PWcp4uxqDNHknkjJ/bxcKcDt0EeTZ2T9AlGDyFPKYhLdHdAR?=
- =?Windows-1252?Q?l0gn/IJoWuH9TpDaac7+KfOxLdOa1F6lTTM4rSRz9Cm3mGi4+mNFaoMj?=
- =?Windows-1252?Q?7fAkTsIsPgsua97GakQHfzzIJAQ0uKvp67BCpqWWMtnqy/t5QnB7JIsq?=
- =?Windows-1252?Q?TlN0eHy8lnLLqwFdPp8zaevLRFvwZqCJ/5Hsj/Nqe6sGO1jAwNJCf2iv?=
- =?Windows-1252?Q?Ux1+KvU0rn0sxWwmk2kA2+so+FpFQb5ZJ49wlnit0ls9JDZ0Rhm1Mweh?=
- =?Windows-1252?Q?6kPhdF5RpFJ29wyoaYC1f8T3Nl+vo0nqK7RxdFJCeK6ne9jgrYDE2HpO?=
- =?Windows-1252?Q?Q//oDP5rKVfp2rVMn+21e9fAA5Hz6u22w3nCm4kM5wMZMnrs8L1kBq0j?=
- =?Windows-1252?Q?jSTbfzpOOwfhBtwmQsxJueZxFkz6cvwNTqNeHF5IZmnWVpUGQL3uoeRH?=
- =?Windows-1252?Q?X9V8iHXM+mjqkOwmhzZ+V4gS86nnplQk1X05dDJlp6nUnaxdtUNUd2Mn?=
- =?Windows-1252?Q?auh2/W+8oYIIrJ6zNBMpvL0fdgj+uxCH8zXXzaFkFuBFmixrbcS4iCev?=
- =?Windows-1252?Q?F6umtQfrPmlEQu6jutUM6kClodjfwGAmInwOWSf1qYohqOP4mxNhZf/a?=
- =?Windows-1252?Q?l/bKizHCkYCP5SL81GNq37CjtMtkg6jxhaqkQ+141wRb3nvZr5K/Mpmu?=
- =?Windows-1252?Q?LazZwMUOOaPFfZdYlFsEXfpWYJDrJljxU2HjDCGT93NimsjIl34iGyIm?=
- =?Windows-1252?Q?W73mbWY97xiQCtAV5gJS4RwF2egHoWMGregcWql6pkBZQMoQMr4IBiSY?=
- =?Windows-1252?Q?oBZqJdl16sJMYKkuuSTiRgkvLqqloYE0ourJoNARBitfYtNwbWvylB/w?=
- =?Windows-1252?Q?P5ZM1Hz1TTf+H2+jIQDZFLjU9PEoQj2FYDj1icTN9EYuLPT9t1vY69P5?=
- =?Windows-1252?Q?YzRN6VENZQoNMlbeuEzBeqZmM3j0GIiAlCT2/t/QCeVSSXKgW//9VaEa?=
- =?Windows-1252?Q?L94pM3nY54Gkcxt6TljVZ1xjZX7CIHheVZp1oZRAcFXMHnkRj0MpBCrY?=
- =?Windows-1252?Q?JwtZVJ3fuGUJZiBT5WGpUorVi4N7oFVQvtTfxysFH3uNIknrnlqQ7apm?=
- =?Windows-1252?Q?wZu2G/FhHWnWypYOytO64zXNuXNXvzdt8I2AGE3qMdOZuzEUjekb3bB7?=
- =?Windows-1252?Q?QQpzQHgqF819/ZFUmlfwZSLicWE2ayMoaD33opFf404AcdfENuBW+DoR?=
- =?Windows-1252?Q?9Uoqf5lLQ9+QO+JgDFWreb+JUKKEcofe5sifoI5rb1h34GaujkYZvJ2k?=
- =?Windows-1252?Q?g9jgQcB8XZ2LBz0eWLVrxqLMrZrMst2gsweR2R1nBKVl5BT8Y8GeXUqa?=
- =?Windows-1252?Q?vGpBeGlHFrMXJSMQvTSP2VNyxspcd7kdiyXL/LYU6AbYpm7lcOzQqa3w?=
- =?Windows-1252?Q?3kwPz8i+5+pqmpozAOMJIOWtKdbnDsjjs9NLqESt/8AJyinoirIk77dm?=
- =?Windows-1252?Q?KE08FntApAgN1iIUoM8SG0+XkEJOc3wunQGrBbhxwFF39PKNiP1PtXQ+?=
- =?Windows-1252?Q?5UuUmrLlA4NV78J3fIGJQqEb53YMQIX99m78ysBarKFMkZt4aZQha+Qf?=
- =?Windows-1252?Q?Zebvo7qADjULjnXXw8RFjq1vhhK6OXUAkcKHUWdngOG/cDy5IAWW2ysJ?=
- =?Windows-1252?Q?vTu/AO+Hm26ixXVfXAELgG397sk5Nlmh3cSmxIBnh3knuu3JKJwhEbNT?=
- =?Windows-1252?Q?LYFrICN9tBT6ySUVJtw=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6294528D8FA
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750770203; cv=none; b=oNnHViT+J16DmcEcfA4yBbHg9rjH5UZqDJcxOVJeOxWYqc8X3iqQddNEnDdmMFxlnE+iyVqYvmTwuTsqSFBUTCWsF4yWdGcID61yC/UcT1HRxSBNjGfdJhOClWh8iLF7tkkf4dwiOL9w6FhnA/0K8vOxNiWoJkT/Ru6NwGSHJ8w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750770203; c=relaxed/simple;
+	bh=75wsxsNgUyNQLyNdOc9A1QsWJWj6M0Lsclil2BJlKdc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NySh9gnm2gSuGzNnQeDDVteaYrWLfR66k2aCd2rP+2ouQGPDfzYVEHgJ8/m3wbQqFgnv7PfXv/JbIwwp4/ubXU6TwzOfbsycroRWapSp1Djwe88M6DUAdifL8Vg2e1cIuqc67hMk2HJIgoAOwBb9sl1a6vuffz1V3dh/QHXxnz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=E6C4+HLo; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55O8wj7s021903
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	B+NZqPiRQVJEnBQ7mFloFIHp+/MaZrKBFhk4xTqfODM=; b=E6C4+HLoH+r9i57e
+	juXN7kW0j3QayiUIYps7g0PhEgfaO12q5iqKmYQYlv5L78GmZxG9RzARxPCYY1QB
+	utmbZL9WtE1tnlT9DFKNcXuuztX/aaAa97xSs+7gQiTm2bphoH+x6SZwiMlLkPlt
+	6EMjk6pImSH47uPvKdFsHQr6rD4xqok+e555bUiOoz/rm6vrwFVzZX0QIS7hNtKy
+	qAplA+YThw/CxCZfTzxJj+GZIfejKT2aACV0kgXD+z4RYjM2dPCYKn7gXDvUahWQ
+	IFQbItGhJIxvhdMQIfgY5jGMrlbl7us7TwKR/fH832hlMKunswNSEfH9RGfVcKUw
+	8t8lVA==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47f3bgc5uq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 13:03:19 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-23632fd6248so48379345ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 06:03:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750770199; x=1751374999;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+NZqPiRQVJEnBQ7mFloFIHp+/MaZrKBFhk4xTqfODM=;
+        b=FVSOM+EolLnq7P4bvng0D1MPTdNr/FzkrGzJbVi5Nj3m7ZYccDDz2LdUbq5xKp5QAl
+         uYdHvIi/KOW5pA57Z6w3OFhTVEpltEPIjHgxQf3VJT8Mgz9IsSt4iYVhuvjU8tF4lE4r
+         Dmw1/XO+vO00Y0LXgJjT1WzJXwlbBtLcxuPwk4tvKK3y6jvuSGDy30d0uzC1hXWawN8c
+         iQugqQWwn1XMbzENj25ZyvkPIydBHPMKLfiSvUCQYCa4hFMa5et7vs8cHisHso+Eb9NI
+         sQ2zw030sOgKlUxBzaShJrz2/rLKu0hdgmWENa+/ZBXefw9Kdlq9+neQJnwVa6eTV3wH
+         iM/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVHNQfFR7UUSvwa0S6Ehf87KJp8KcOnj4eDOT69VZSYpQXx3Hvz/y3hU5bkf955j3OLlSGwoHAJOxo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3S7Al8panfYRWv4KKSx97mxqa3ziWk/8pPcL8ZVQrcFG0DHGh
+	gapJ3MmOg5rfuW+gy4nVpiMt7TfbCLK8EUZMAyVamUyJbQKYNfi7J2SpEf69hN4NmvPBoNZCvnc
+	D9M2WqL4QlRDK4qkqTPkZFg5Xqdedf+L7WL4MbRXE+AYNp59ggSUiHCz93ESOpy0=
+X-Gm-Gg: ASbGncuPji4SmfFSMhoBTz+Om399l9nl+9+S1cVBaRPM6HzYowVZ17BA1ZUJbvpiCti
+	o+SSGtTc96fnnYeKNn1KizE97yNFv4ZRRIzUJ4ZnNFKyFNE/Fzw/MT5re5/wzqjNCb57XvDeQrF
+	4OU0NOVdC8ndbsmYhhIEAQ/xdCXsC2w1NpAPEWWNtCNJ+NNARpAI82TonkY+hmnfbz2mHn2JeCI
+	uZkTaygtnrIsdA0Djfsv2FWwpXJT+JDGcIlRwPke8d+qK7FocCG8oTJDleNMoXWMt803AWygfTl
+	hCKBuDPE6Dq7KqYypec+m1iHSN5LUuD7LXFhv8YUXSuN+B8HkZDTnj5+xA==
+X-Received: by 2002:a17:903:4b27:b0:234:d292:be8f with SMTP id d9443c01a7336-237d9779db6mr254755695ad.1.1750770198578;
+        Tue, 24 Jun 2025 06:03:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHI6fYyc4+LHFjvwoJMDaFlLmDYoZJBOOAxpL9d40WBBKJB6HOruCK5F8CKlq5GaxX3zM+yAA==
+X-Received: by 2002:a17:903:4b27:b0:234:d292:be8f with SMTP id d9443c01a7336-237d9779db6mr254755155ad.1.1750770198110;
+        Tue, 24 Jun 2025 06:03:18 -0700 (PDT)
+Received: from [192.168.0.126] ([175.101.107.119])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d86f701csm107251445ad.217.2025.06.24.06.03.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jun 2025 06:03:17 -0700 (PDT)
+Message-ID: <2c9ce2ed-c21d-496d-9563-237547142a29@oss.qualcomm.com>
+Date: Tue, 24 Jun 2025 18:33:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR06MB7521.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3065bbdf-e6ba-462a-a2ce-08ddb3100c4d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2025 11:12:46.3224
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WQ2y9tZ8wh9+zcRW43BoLIDSmmeXb3PM/DzWThFbGccrXU9xpmIaKEVYqzne57nYgmxg6anH/yNVhduzJaKuzaySgxLi/yKewG1RJrTeeJHsEZnrv7q4J0qQTzmCvUoc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR06MB7097
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] usb: dwc3: core: Introduce glue callbacks for
+ flattened implementations
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250610091357.2983085-1-krishna.kurapati@oss.qualcomm.com>
+ <20250610091357.2983085-2-krishna.kurapati@oss.qualcomm.com>
+ <20250623232433.apv23svbaql7ce4u@synopsys.com>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20250623232433.apv23svbaql7ce4u@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Ym4IvTbT2O4d-o1Qt8Vn2e5NAOvz5Fw-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI0MDExMCBTYWx0ZWRfXwlIe+IRxRr0s
+ 8BtCBsZFJMzGVlIjaTwNwitn4SImSe4tKEZdVlwTy3LbMppLLXOqhDbs9UIGMkD67BYkMvRc1nk
+ piOp5xU4GN8uuhKKuZA0jWJCPirEaWNu95Vrwju4/nkgNhuPWLZ+i7tesUFafAmCZ8HhaVbZUfi
+ UBH7eU3PDBu+Zq9bHzF5FX7yAWLaOAAnHuKhxXQOQKKNI8YTTA6ujyHC2JoVZvYAjFl+fHH8Ier
+ Su55Ji7Iq7g1zNgh2DG30lSMIcaAh6m//+khlcc/18teGd14V3UQzoYHksSr7Q18Kc6whSbeikf
+ ZeXODN4ajBF1mf62Lzrfhk+QHK20ZosoPvLxHXLTLwi9eSFOSjBjIpmi6C4Bb+kSsMG5zciAGKm
+ a9J9YgK5ebfsYf8y5QmhiYxyc1m2EkwEq5oEdffJ+kdBHlQBoCP6n4rgqyWfdXNBT/RTvjSr
+X-Authority-Analysis: v=2.4 cv=L4kdQ/T8 c=1 sm=1 tr=0 ts=685aa218 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=yWXLeC16oIbqf35128AjHQ==:17
+ a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=-jcnzw04F3U9awwRRK4A:9
+ a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-GUID: Ym4IvTbT2O4d-o1Qt8Vn2e5NAOvz5Fw-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-24_05,2025-06-23_07,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506240110
 
-Hoi,
 
-> This patch series fixes a subtle regression introduced in the recent
-> scatter-gather cleanup for the DWC3 USB gadget driver, and follows up
-> with two clean-up patches to simplify and clarify related logic.
->
-> Background:
->
-> Commit 61440628a4ff ("usb: dwc3: gadget: Cleanup SG handling") removed
-> some redundant state tracking in the DWC3 gadget driver, including how
-> scatter-gather TRBs are reclaimed after use. However, the reclaim logic
-> began relying on the TRB CHN (chain) bit to determine whether TRBs
-> belonged to a chain =97 which led to missed TRB reclamation in some
-> cases.
->
-> This broke userspace-facing protocols like MTP (Media Transfer Protocol)
-> when used via FunctionFS, causing incomplete transfers due to skipped
-> zero-length packets (ZLPs) or improperly reclaimed short TRBs.
->
-> The "offending" chunk from 61440628a4ff:
-> 80                 ret =3D dwc3_gadget_ep_reclaim_completed_trb(dep, req,
-> 81 -                               trb, event, status, true);
-> 82 +                               trb, event, status,
-> 83 +                               !!(trb->ctrl & DWC3_TRB_CTRL_CHN));
->
-> Patch 1 fixes the issue by ensuring the HWO bit is always cleared
-> on reclaimed TRBs, regardless of the CHN bit.
->
-> Patches 2 and 3 follow up with simplifications:
-> - Patch 2 removes the now-redundant `chain` argument to the reclaim funct=
-ion
-> - Patch 3 simplifies the logic in `dwc3_needs_extra_trb()` to make the co=
-nditions easier to read and maintain
->
-> All three patches have been tested on a imx8mp based hardware, with
-> userspace MTP (viveris/uMTP-Responder) over FunctionFS and resolve the
-> regression while preserving the recent cleanup work.
->
-> Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.co=
-m>
-> ---
-> Changes in v2:
-> - dropped Patch 3, as it did change the logic
-> - CC to stable
-> - Link to v1: https://lore.kernel.org/r/20250621-dwc3-fix-gadget-mtp-v1-0=
--a45e6def71bb@leica-geosystems.com
->
 
-please disregard v2 - a colleague (and the kernel test robot) pointed out t=
-o me that this is not the way :-)
--> i'll split the patch-stack and send them separately to mainline and stab=
-le as suggested
+On 6/24/2025 4:54 AM, Thinh Nguyen wrote:
+> On Tue, Jun 10, 2025, Krishna Kurapati wrote:
+>> In certain situations like role switching, the glue layers need to be
+>> informed of these events, so that they can take any necessary action.
+>> But in non-flattened implementations, the glue drivers have no data on
+>> when the core driver probe was successful post invoking of_platform_
+>> populate. Now that the core driver supports flattened implementations
+>> as well, introduce vendor callbacks that can be passed on from glue to
+>> core before invoking dwc3_core_probe.
+>>
+>> Introduce callbacks to notify glue layer of role_switch and run_stop
+>> changes. These can be used by flattened implementation of Qualcomm
+>> glue layer to generate connect/disconnect events in controller during
+>> cable connect and run stop modifications by udc in device mode.
+>>
+>> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+>> ---
+>>   drivers/usb/dwc3/core.c   |  1 +
+>>   drivers/usb/dwc3/core.h   | 26 ++++++++++++++++++++++++++
+>>   drivers/usb/dwc3/drd.c    |  1 +
+>>   drivers/usb/dwc3/gadget.c |  1 +
+>>   4 files changed, 29 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 2bc775a747f2..c01b15e3710f 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -2351,6 +2351,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   		return -ENOMEM;
+>>   
+>>   	dwc->dev = &pdev->dev;
+>> +	dwc->glue_ops = NULL;
+>>   
+>>   	probe_data.dwc = dwc;
+>>   	probe_data.res = res;
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index d5b985fa12f4..a803884be4ed 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -992,6 +992,17 @@ struct dwc3_scratchpad_array {
+>>   	__le64	dma_adr[DWC3_MAX_HIBER_SCRATCHBUFS];
+>>   };
+>>   
+>> +/*
+> 
+> Let's keep consistent with the doc style /**
+> 
 
-sorry for the chatter
-Gru=DF
-Johannes
+ACK.
 
->
-> ---
-> Johannes Schneider (2):
->       usb: dwc3: gadget: Fix TRB reclaim logic for short transfers and ZL=
-Ps
->       usb: dwc3: gadget: Simplify TRB reclaim logic by removing redundant=
- 'chain' argument
->
->  drivers/usb/dwc3/gadget.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> ---
-> base-commit: d0c22de9995b624f563bc5004d44ac2655712a56
-> change-id: 20250621-dwc3-fix-gadget-mtp-3c09a6ab84c6
->
-> Best regards,
-> --
-> Johannes Schneider <johannes.schneider@leica-geosystems.com>
->
+>> + * struct dwc3_glue_ops - The ops indicate the notifications that
+>> + *				need to be passed on to glue layer
+>> + * @notify_set_role: Notify glue of role switch notifications
+>> + * @notify_run_stop: Notify run stop enable/disable information to glue
+>> + */
+>> +struct dwc3_glue_ops {
+>> +	void	(*notify_set_role)(struct dwc3 *dwc, enum usb_role role);
+>> +	void	(*notify_run_stop)(struct dwc3 *dwc, bool is_on);
+> 
+> Use pre_ or prep_ prefix instead of notify_ indicating callbacks for
+>glue driver to perform updates before set_role or run_stop.
 
+ACK. Will change it accordingly.
+
+> 
+>> +};
+>> +
+>>   /**
+>>    * struct dwc3 - representation of our controller
+>>    * @drd_work: workqueue used for role swapping
+>> @@ -1168,6 +1179,7 @@ struct dwc3_scratchpad_array {
+>>    * @wakeup_pending_funcs: Indicates whether any interface has requested for
+>>    *			 function wakeup in bitmap format where bit position
+>>    *			 represents interface_id.
+>> + * @glue_ops: Vendor callbacks for flattened device implementations.
+>>    */
+>>   struct dwc3 {
+>>   	struct work_struct	drd_work;
+>> @@ -1400,6 +1412,8 @@ struct dwc3 {
+>>   	struct dentry		*debug_root;
+>>   	u32			gsbuscfg0_reqinfo;
+>>   	u32			wakeup_pending_funcs;
+>> +
+>> +	struct dwc3_glue_ops	*glue_ops;
+> 
+> Use const, and move this closer on top. Perhaps below gadget_driver.
+> 
+
+ACK.
+
+>>   };
+>>   
+>>   #define INCRX_BURST_MODE 0
+>> @@ -1614,6 +1628,18 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+>>   int dwc3_core_soft_reset(struct dwc3 *dwc);
+>>   void dwc3_enable_susphy(struct dwc3 *dwc, bool enable);
+>>   
+>> +static inline void dwc3_notify_set_role(struct dwc3 *dwc, enum usb_role role)
+>> +{
+>> +	if (dwc->glue_ops && dwc->glue_ops->notify_set_role)
+>> +		dwc->glue_ops->notify_set_role(dwc, role);
+>> +}
+>> +
+>> +static inline void dwc3_notify_run_stop(struct dwc3 *dwc, bool is_on)
+>> +{
+>> +	if (dwc->glue_ops && dwc->glue_ops->notify_run_stop)
+>> +		dwc->glue_ops->notify_run_stop(dwc, is_on);
+>> +}
+>> +
+>>   #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>>   int dwc3_host_init(struct dwc3 *dwc);
+>>   void dwc3_host_exit(struct dwc3 *dwc);
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index 7977860932b1..408551768a95 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -464,6 +464,7 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+>>   		break;
+>>   	}
+>>   
+>> +	dwc3_notify_set_role(dwc, role);
+> 
+> This should be done in __dwc3_set_mode(). Perhaps right before setting
+> PRTCAPDIR?
+> 
+
+Qualcomm glue driver needs ROLE (device /host and none) information. Set 
+mode gives device and host mode information. So added set_role callback 
+to get cable disconnect information.
+
+>>   	dwc3_set_mode(dwc, mode);
+>>   	return 0;
+>>   }
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 321361288935..73bed11bccaf 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2641,6 +2641,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+>>   	if (saved_config)
+>>   		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+>>   
+>> +	dwc3_notify_run_stop(dwc, is_on);
+> 
+> This should be done right before writing to DCTL.run_stop.
+> 
+
+ACK.
+
+>>   	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+>>   	if (is_on) {
+>>   		if (DWC3_VER_IS_WITHIN(DWC3, ANY, 187A)) {
+>> -- 
+>> 2.34.1
+>>
+> 
+
+Thanks for the review Thinh.
+
+Regards,
+Krishna,
 
