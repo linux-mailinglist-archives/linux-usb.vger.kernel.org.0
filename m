@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-25043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA322AE602F
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:06:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE303AE603F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95CFD7A6363
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:04:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 780454C1AFC
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32CAB27AC31;
-	Tue, 24 Jun 2025 09:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CE0027AC44;
+	Tue, 24 Jun 2025 09:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WSDkpNtB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cXpk7PdQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A4319CD01;
-	Tue, 24 Jun 2025 09:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B521279DD4;
+	Tue, 24 Jun 2025 09:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750755953; cv=none; b=ehnOLnmu752yBhinJ6WJt0mMv4QMfb3yyUrIvpsv96hBy79hlfo+cym9Am1hfvSPdyMte7UT/n+th2q+g5n195KRWiD81Rloh+gAjhtalWQjWXTEgaODtpBpP4lNFYlyXFC2aR3ww3oiIRq5K/3ZUKGfY4dZjiVqiJyq2xJclvQ=
+	t=1750756054; cv=none; b=WYHrFzq1lbZmV4sa5I2zFrV1gy/y22H87TDQqyiByljW7FxQXSlbM+p7AoaBoAGTCqzYNO+3Kzcgopw5+vYvHBDuC3gwgGaDUwDNIwTOLawegO/USJwemNQK2gGKPoddjWtw+67boiqlsuVZTf0h0icAAqLEAegEvIVMU/w0GTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750755953; c=relaxed/simple;
-	bh=Kdr7XdnAFcDOh1tDuY6cmVBs5NYiJeppVVlFCEqaASg=;
+	s=arc-20240116; t=1750756054; c=relaxed/simple;
+	bh=LImjdI/yU6Pe3jIPDaALZwPgLQGhX4tSMeDeFG4akNI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AusuXYOp62DCc4xWYU1Fw0LUgT7WV1dD5Y+ldC6PVQz/R9aU71WpTQUjHoyLkuaklZzrpaRSDdYjEwtZPByFMYS/HCsRj0DX52HwMBvRuUFLAkNpZ64PCFUNdQzRkQoPwCFbkdFyvNRZ1jRQ+ytdcqMDKymiyK4hTU3PjSYHUZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WSDkpNtB; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=U3ifqAVWnsMYfkeVFTk0GuDW0PwA5TZWbf/eR17hOy8OUBEU600rHssvxqaxzKd1kNbkOjISMEbugPDe0b2y09zN0P3CrhZq6gBH7Ykl5XDbWu4pMZIILYggzjftfEvu+FNCUY+8XZZMwt8Rw0HF20ECb3vGZih3lbz9OcjZrRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cXpk7PdQ; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750755953; x=1782291953;
+  t=1750756054; x=1782292054;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Kdr7XdnAFcDOh1tDuY6cmVBs5NYiJeppVVlFCEqaASg=;
-  b=WSDkpNtB7HCVmkHRvvg6l4MwneyW2gQGobjk/c/uHX+OH5ZmDmDHCIk/
-   B9+OZT7NpAt0dhv7upLSMXandsFHa9dP3IygLGI5atuXm6B3txofvisC/
-   gMo1MrM7uIVkd81dwMxTBCc/yIoHpDgsXYS87DablyFort/cFOr2w09oX
-   YFD2A2APQgiUIvo9aS7//L9Jdc/kwE6ucrzqOe9wvXgUfyv/LzS/+CPyQ
-   lYkb9OZyVWwRNg6Gw6cVFjQS7hnnKaDaQRiYtSJj6tu/vZFGVA9D4rNlL
-   3UmlyxRnu48+wkrJa8uP4BJ8iegGbUXX8v2OoWx/WNWn9nlK5eyZymkAL
-   Q==;
-X-CSE-ConnectionGUID: dpROhMPdT+iq7lq5IkP7tg==
-X-CSE-MsgGUID: pt034b0/TPucn995mZEsMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="63251834"
+  bh=LImjdI/yU6Pe3jIPDaALZwPgLQGhX4tSMeDeFG4akNI=;
+  b=cXpk7PdQSwENHkV7oOU0MfNOcFZOicbs316bmV0E59SSOsh4hW1uvWNs
+   evfUsgU7HcZPFtaOPwbAvx8DF3hRshgyUUuFAnFq3+qq3c0c+3MX8RQrW
+   tKskYvP827GQsmv++UB0q+NsL7uzbTFhpPRkkiSyBxSuHHOgYFd8k5SH6
+   EYRtpBgBcXGsVYoyu4YssaDL1tuoITN5hWkt1cahooxkyrVdZ19DCkoQD
+   WNiyqJ0zBXd0IBQ/UZvQydx2s0B/PpwlY2QRzXmpqe/sRHJE53fLP25eZ
+   G86HoAsoAt+8SvvasfV2s6lYtvjwS9odMZBRyz0BnOPEU4abCgb+r2AOe
+   g==;
+X-CSE-ConnectionGUID: 1Rcl+j4WQn6UljEdQnSivA==
+X-CSE-MsgGUID: +uINwZwvRLKNHKB5WCxiuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="63251918"
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="63251834"
+   d="scan'208";a="63251918"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:05:52 -0700
-X-CSE-ConnectionGUID: xNoTi//jR8m+1PLwMqr0eA==
-X-CSE-MsgGUID: HvLYdZz4RhKlC4zagbKIfg==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:07:33 -0700
+X-CSE-ConnectionGUID: LNJ52oFbQHuKRGfw+S9VOg==
+X-CSE-MsgGUID: mZKINAqeRj+hasMGPN8SIg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="151608959"
+   d="scan'208";a="151609097"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa009.jf.intel.com with SMTP; 24 Jun 2025 02:05:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 12:05:47 +0300
-Date: Tue, 24 Jun 2025 12:05:47 +0300
+  by orviesa009.jf.intel.com with SMTP; 24 Jun 2025 02:07:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 12:07:28 +0300
+Date: Tue, 24 Jun 2025 12:07:28 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,11 +68,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/8] usb: typec: ucsi: yoga-c630: fix error and remove
- paths
-Message-ID: <aFpqaylonUQwJfoV@kuha.fi.intel.com>
+Subject: Re: [PATCH 2/8] usb: typec: ucsi: add recipient arg to
+ update_altmodes() callback
+Message-ID: <aFpq0GutBucmKWLw@kuha.fi.intel.com>
 References: <20250621-c630-ucsi-v1-0-a86de5e11361@oss.qualcomm.com>
- <20250621-c630-ucsi-v1-1-a86de5e11361@oss.qualcomm.com>
+ <20250621-c630-ucsi-v1-2-a86de5e11361@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,61 +81,81 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250621-c630-ucsi-v1-1-a86de5e11361@oss.qualcomm.com>
+In-Reply-To: <20250621-c630-ucsi-v1-2-a86de5e11361@oss.qualcomm.com>
 
-On Sat, Jun 21, 2025 at 09:12:56PM +0300, Dmitry Baryshkov wrote:
-> Fix memory leak and call ucsi_destroy() from the driver's remove
-> function and probe's error path in order to remove debugfs files and
-> free the memory. Also call yoga_c630_ec_unregister_notify() in the
-> probe's error path.
+On Sat, Jun 21, 2025 at 09:12:57PM +0300, Dmitry Baryshkov wrote:
+> The update_altmodes() is executed only for connetor's AltModes, because
+> that's what required on the CCG platforms. Other platforms (like Lenovo
+> Yoga C630) requires similar fix for partner's AltModes. Extend
+> update_altmodes() callback to accept the recipient as an argument and
+> move corresponding check to the CCG UCSI driver.
 > 
-> Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c     | 5 ++---
+>  drivers/usb/typec/ucsi/ucsi.h     | 3 ++-
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 4 ++++
+>  3 files changed, 8 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> index d33e3f2dd1d80f7b49d9c5e7355fb14a97c74dd5..47e8dd5b255b2b306dd9c3d6ac8c3b896954981a 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> @@ -133,17 +133,30 @@ static int yoga_c630_ucsi_probe(struct auxiliary_device *adev,
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 01ce858a1a2b3466155db340e213c767d1e79479..e913d099f934c7728cb678fc8e21e75ab0a00cce 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -531,13 +531,12 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+>  	 * Update the original altmode table as some ppms may report
+>  	 * multiple DP altmodes.
+>  	 */
+> -	if (recipient == UCSI_RECIPIENT_CON)
+> -		multi_dp = ucsi->ops->update_altmodes(ucsi, orig, updated);
+> +	multi_dp = ucsi->ops->update_altmodes(ucsi, recipient, orig, updated);
 >  
->  	ret = yoga_c630_ec_register_notify(ec, &uec->nb);
->  	if (ret)
-> -		return ret;
-> +		goto err_destroy;
-> +
-> +	ret = ucsi_register(uec->ucsi);
-> +	if (ret)
-> +		goto err_unregister;
-> +
-> +	return 0;
->  
-> -	return ucsi_register(uec->ucsi);
-> +err_unregister:
-> +	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
-> +
-> +err_destroy:
-> +	ucsi_destroy(uec->ucsi);
-> +
-> +	return ret;
+>  	/* now register altmodes */
+>  	for (i = 0; i < max_altmodes; i++) {
+>  		memset(&desc, 0, sizeof(desc));
+> -		if (multi_dp && recipient == UCSI_RECIPIENT_CON) {
+> +		if (multi_dp) {
+>  			desc.svid = updated[i].svid;
+>  			desc.vdo = updated[i].mid;
+>  		} else {
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 5a8f947fcece29f98c0458f9eb05c0c5ede2d244..d02f6a3e2f50a4044eb3f22276931017cc624532 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -82,7 +82,8 @@ struct ucsi_operations {
+>  	int (*sync_control)(struct ucsi *ucsi, u64 command, u32 *cci,
+>  			    void *data, size_t size);
+>  	int (*async_control)(struct ucsi *ucsi, u64 command);
+> -	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
+> +	bool (*update_altmodes)(struct ucsi *ucsi, u8 recipient,
+> +				struct ucsi_altmode *orig,
+>  				struct ucsi_altmode *updated);
+>  	void (*update_connector)(struct ucsi_connector *con);
+>  	void (*connector_status)(struct ucsi_connector *con);
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index e9a9df1431af3a52c00cc456f5c920b9077a1ade..d83a0051c737336af2543fc2f6d53a131ffe9583 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -394,6 +394,7 @@ static void ucsi_ccg_update_get_current_cam_cmd(struct ucsi_ccg *uc, u8 *data)
 >  }
 >  
->  static void yoga_c630_ucsi_remove(struct auxiliary_device *adev)
+>  static bool ucsi_ccg_update_altmodes(struct ucsi *ucsi,
+> +				     u8 recipient,
+>  				     struct ucsi_altmode *orig,
+>  				     struct ucsi_altmode *updated)
 >  {
->  	struct yoga_c630_ucsi *uec = auxiliary_get_drvdata(adev);
+> @@ -402,6 +403,9 @@ static bool ucsi_ccg_update_altmodes(struct ucsi *ucsi,
+>  	int i, j, k = 0;
+>  	bool found = false;
 >  
-> -	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
->  	ucsi_unregister(uec->ucsi);
-> +	yoga_c630_ec_unregister_notify(uec->ec, &uec->nb);
-> +	ucsi_destroy(uec->ucsi);
->  }
->  
->  static const struct auxiliary_device_id yoga_c630_ucsi_id_table[] = {
+> +	if (recipient != UCSI_RECIPIENT_CON)
+> +		return false;
+> +
+>  	alt = uc->orig;
+>  	new_alt = uc->updated;
+>  	memset(uc->updated, 0, sizeof(uc->updated));
 > 
 > -- 
 > 2.39.5
