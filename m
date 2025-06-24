@@ -1,227 +1,153 @@
-Return-Path: <linux-usb+bounces-25070-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25071-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B245AE6A90
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 17:20:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02B8BAE6B91
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 17:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0AF1731B2
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:15:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0D997A8A52
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 15:44:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB932D8DC0;
-	Tue, 24 Jun 2025 15:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02855274B39;
+	Tue, 24 Jun 2025 15:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cP2gGrpE"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="C9SQsR3q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBBF2EBDCF;
-	Tue, 24 Jun 2025 15:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F6C307482;
+	Tue, 24 Jun 2025 15:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750777719; cv=none; b=P13YolriFdae853WsHd4jNFtaxPkEb/EqYnCoslZRBsMdC+uis7+RRi+W+gvK8Vz0wDKTA3hY6ew6KPruOTJWprORXaWyvNmFxboe0aGGI0/DynmSTjRTiMnAZmac21ETz1oVqQQS02MDruThrLdmbKHIuSXPvJLcFG2aI7RiqY=
+	t=1750779961; cv=none; b=tkH8FTbNbcZqwYi5HEriIJ4iJX8wfwCILYcdwa9XtwrQuyRB0UhjvWQuCvA0JowcAoVJIJ65Vv3ay4LGO7ndgJH3d/fON5mwlMthdQjZyZPvuPgjBGNt0V8nOustRrV/OkZsnUGbsi8b/4MtLW487tTzUtX2VDorP/u90Gl6tag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750777719; c=relaxed/simple;
-	bh=NuFaFx/Jlrn7Uzv/YpfDCKRC95PSFqVCthK20kI/oQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GqAKfn3Bd1nmnpGdoMGjxVkq02F/Jd3GouM2QvQlKBEZv67D+0ExLD+gSEyQTVqHaWQQfmE4joDoZevx0ffeT1ZQiMU9LcIk7NTPfUR/AlDvQG1AvywOIJ6ATUmIC+YYUDt7Rnf5r/3gJHFHHmHXiTo2ekRZSlQAx0I8TxOrakc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cP2gGrpE; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-604bff84741so1170668a12.2;
-        Tue, 24 Jun 2025 08:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750777715; x=1751382515; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NPe580k9SnUeLtOTdaxzcN6ec7qD36w8YTL5HYQln/Q=;
-        b=cP2gGrpEk7CZLdQyXf3b25wyjbvblbEPkJokzOByA8+AFo0IMRcwmaeiSGIZIf6Lek
-         z/ZACo0PNJCTpfbThiHNOSUp3OvRrLrCB8meXvNJQI+oGktuBDdeIRFXYy6u2FNqNpRJ
-         n98XsKdxQiK0O/bnaBbieR8ifKsfJ0voeOTvlR7gUJc1B1yr2/knm0FtK47UeV5RSbBD
-         VEYN0IKqhaDKSvyqdcClyN6JgX00e8KEtAgCqDujAlPS1dATi5k4DVdgem9Tu3L1ulDS
-         vKdJZxFpuxPF/VEQzoxBWlqU4hTI90ZLXY2MPYuR8SsqhZ9dIot7/znizsNJbgD59d0F
-         dzOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750777715; x=1751382515;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPe580k9SnUeLtOTdaxzcN6ec7qD36w8YTL5HYQln/Q=;
-        b=N80Agk4bkOZ3so8KiUXdJ+vO2j6M48JaP4P4gZkgFYdSvVBaRe2oYhfu5EI8kxK4eI
-         SsCEfpeTseWSaA1VmXF3ZdIjs7NgMV/z8BD1Sfb6h1NC2S46r4qoix7Okvq/lsee66If
-         Le6P+/vS61+R1onDFyGqhFq4eD/t3th+RNFJOaMLZmFh5lVfW/kxt2s5nYs6hbezSJ+T
-         RbKJX9YVc41t3ZVMPnQ7uVGGeL4Z3mqxbBUN/39U7j2HsFIs5BkR1/gtABoD83KmF3BG
-         DsYS62B0Jc8uu7v7xbh9pHfuslS1NG2KZrv1v9ciRPPIH3Bkn19ZCLDLeAUJYBD8UCnc
-         dpVw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4OSnujYxEJe1meEzqoeALMx92tYhPw5B1fPUz9RBL4TGsJ99Gsu3Llkb1q2TIfZFoGu99IIzaD1nv@vger.kernel.org, AJvYcCWBaOQ5qSFHAPHbxzO2N/AVhRh4f7C/kM459q3CHXS219hM9Fzt7C72B8IPvuGa/f2T2KOd9SqZKsKnEOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlkW38pIz5SQp8DneTa1PziYJeXQHKydiXSbRD5w3A3wsI8Qxk
-	hEeVriCTJUG14tAZOJv1CmVaQNp2NXsnbZXpttu2SJkUPN/OZlljzlzp
-X-Gm-Gg: ASbGncsBVjiqQ3uBGEACyMFXeDlGnXP81nGIV7pdAYaELyAQTtHhqBaybZZcNFF+fT2
-	GXpUBrUBL/5nFcci1HTRDdTqIghlJPkKYHr+ZahcKH8W064lsey5dt0kbfQYJI2emJTeK1d5+Zp
-	mNTp2PHGA62iOey9BlpFLkooH4D7VHFrayDFtLuyKADfAUy7m+VVVgK3DKd+OT73PoiA6AFfFJk
-	odH4ZlKgkEBAV6ngpHU2QZv/oQU7GoFruY3k9GaeUjAv1IIKsEKuW5UMrR1eKl7TJGFsbNlRxTy
-	CnPfvxpybWHWr0KHWJDVvM5SxPrPTTefPiXTXhgTyS2F9nuBE+4AwyjYk+B1QZumVYrGWb04qka
-	/z6HVjti+38ob7N9C65DWtclJULHH18g8NPwlBVabYi/YUh+r2M8PyxNc7xKePw==
-X-Google-Smtp-Source: AGHT+IHy5CQXuAwnEZr15uqPSOadrd6iZ0m9VPaArcL1biwJzP259ImtZVizKwEUiRu8h5CVftquWA==
-X-Received: by 2002:a05:6402:2548:b0:608:f493:871e with SMTP id 4fb4d7f45d1cf-60a1ccb522fmr15773402a12.14.1750777714903;
-        Tue, 24 Jun 2025 08:08:34 -0700 (PDT)
-Received: from ernest.hoecke-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f1ae73dsm1148911a12.26.2025.06.24.08.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 08:08:34 -0700 (PDT)
-Date: Tue, 24 Jun 2025 17:08:32 +0200
-From: Ernest Van Hoecke <ernestvanhoecke@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Roger Quadros <rogerq@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Chance Yang <chance.yang@kneron.us>, Prashanth K <prashanth.k@oss.qualcomm.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: dwc3-am62/usb-conn-gpio: USB gadget not added when booting in host
- mode
-Message-ID: <taw2mvbj6a2lqwy5h3tuqeifqy2w4gt4pzh4uahxuw27yw64q2@koxg54wgp2a2>
+	s=arc-20240116; t=1750779961; c=relaxed/simple;
+	bh=P2Qa/gv/zq28yLSnvAfc5EzlQGG7eIAdfHf1FUfTNsY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=l4QPHQ9GA2SdBlvZmmfnC3QeJYthrB+ZHBI1eFhIazdcaq6fN+xHIxRMe3Z7GJNBZOdWkYyfFepnjwdw1BtyUqxQCqTrblv+45zQf0y40XexTjch3rk28U2OZdywRh855ezW7Uo7Xoke6f11lzF2seFpLtmZ0+n2D4z3Mnoo7lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=C9SQsR3q; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1750779952; x=1751384752; i=markus.elfring@web.de;
+	bh=7IzVVHSpxcWsNZBSF/6rNrBgwtKHD1dv8bhImPHkkjs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=C9SQsR3q2jfi+ogC4gfzlFdA8DbYYKRBiPGiHore82/BMIAQJxzJV1LecWpPVUH/
+	 mJkujBZ8YdNwB6gPMjISQN7jDyOyy7xcm2IojhnF/TY59oDVk2e/S2TYOebCn21rW
+	 b3ra4OE9LiMOAamtEjxBUULq0CAG542I442UOUD3Pj7WgGedeHkTJCIJpF5S5xFxq
+	 FcFj9JGfTvT+vhCENWpIp29QyVuW4UP3sHT6nZhEZy9HhbwAJM5w9M9w4V9j0f7a0
+	 /no95p7PnXNPE6T+0DKJ+iiZCyO+zIAgKsJYuQR7bcR6dL3YjvE/XwOcNHXTQbErB
+	 vTFNQYiISOEdlz8+vw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.200]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MhWkj-1uyUdD1Fch-00pJlo; Tue, 24
+ Jun 2025 17:40:20 +0200
+Message-ID: <e9b363cb-1223-41fa-8613-73ff9a1d4a30@web.de>
+Date: Tue, 24 Jun 2025 17:40:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Peter Chen <peter.chen@kernel.org>
+Content-Language: en-GB, de-DE
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Chen Ni <nichen@iscas.ac.cn>, Xu Yang <xu.yang_2@nxp.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: chipidea: udc: Use usb_endpoint_is_isoc_in() rather than
+ duplicating its implementation
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KKLBC0KeDk9cb83s9frQtEzj8eZlxGZ+sDxSz6O/DMAQhcKiACL
+ 6Gh1so3bdkY8FCVhBDuG30DhtEDib3lWt15Pjv0hnCmcqQRnezx98oO7DuhW4uhmJaLSa28
+ EQ0pUbqfVSOv/pyh40xSUQqTaHoz+SD7kSm++hIdsHbMGGWM6NaYSLk1oH0wzEAjBIUdOlu
+ bUZdV+iEXu3l5HTgIhz7Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:3I47LezIaP8=;TLmIqAwZrmbN6ARpCJeomLhReap
+ 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
+ wkCaAAdEzzAG/eyO356c5J6aVaAzw==
 
-Hi all,
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Tue, 24 Jun 2025 17:30:52 +0200
 
-On the TI AM62 when using a USB OTG port, I found some unexpected
-behaviour when booting with this port in host mode.
+Reuse existing functionality from usb_endpoint_is_isoc_in() instead of
+keeping duplicate source code.
 
-This happens, for example, when booting with a USB pen drive inserted.
-When the pen drive is later removed, the OTG port correctly switches
-to "device" mode instead of "host" mode, but the related USB gadget
-does not come up (in my case, a CDC NCM configuration).
+The source code was transformed by using the Coccinelle software.
 
-This issue only occurs when CONFIG_USB_CONN_GPIO and
-CONFIG_USB_DWC3_AM62 are set to m and not when these modules are
-built-in.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/chipidea/udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tried to find the differences in their setup using ftrace and printk.
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 64a421ae0f05..75705089136c 100644
+=2D-- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1992,7 +1992,7 @@ static struct usb_ep *ci_udc_match_ep(struct usb_gad=
+get *gadget,
+ 	struct ci_hdrc *ci =3D container_of(gadget, struct ci_hdrc, gadget);
+ 	struct usb_ep *ep;
+=20
+-	if (usb_endpoint_xfer_isoc(desc) && usb_endpoint_dir_in(desc)) {
++	if (usb_endpoint_is_isoc_in(desc)) {
+ 		list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
+ 			if (ep->caps.dir_in && !ep->claimed)
+ 				return ep;
+=2D-=20
+2.50.0
 
-When they are built-in, I can see that the USB connector module
-(usb-conn-gpio) is always probed (usb_conn_probe()) after dwc3-am62.
-
-When built as modules, usb_conn_probe can happen before the probe of
-dwc3-am62 is finished. This is problematic since the USB Role Switch
-device needs to be registered first by DWC3. Namely, `dwc3_drd_init()`
-calls `usb_role_switch_register()`, and `usb_conn_probe()` gets it with
-`usb_role_switch_get()`. When `usb_conn_probe()` cannot get the role
-switch device, it defers its probe until it can. This logic seems to
-be working well, so the only difference here seems to be probe order.
-
-In both cases:
- * The (last) usb_conn_probe gets the correct usb role switch.
- * The dual role mode is the same, and switches as expected
-
-When the pen drive is unplugged, the USB OTG port correctly switches
-to device mode for both cases. `dwc3_gadget_init()` is then called, but
-when built as modules, strange things seem to happen once this method
-hits `usb_add_gadget()`. Ftrace shows that it is executed, and executes
-its body and returns, but my printk's after this point don't end up in
-the kernel log anymore.
-
-Ftrace snippet in working (builtin) case:
-[...]
-     kworker/1:2-52      [001] .....    80.070233: dwc3_gadget_init <-__dwc3_set_mode
-     kworker/1:2-52      [001] .....    80.073332: usb_initialize_gadget <-dwc3_gadget_init
-[...]
-     kworker/1:2-52      [001] .....    80.855694: dwc3_debugfs_create_endpoint_dir <-dwc3_gadget_init
-     kworker/1:2-52      [001] .....    80.875767: usb_add_gadget <-dwc3_gadget_init
-     kworker/1:2-52      [001] .....    80.896299: usb_udc_uevent <-dev_uevent
-   systemd-udevd-132     [000] .....    80.898973: usb_udc_uevent <-dev_uevent
-   (udev-worker)-469     [000] .....    80.899839: usb_udc_uevent <-dev_uevent
-     kworker/1:3-53      [001] .....    80.900302: usb_gadget_state_work <-process_one_work
-   gadget-import-512     [000] .....    80.963264: gadgets_make <-configfs_mkdir
-[...]
-
-Ftrace snippet in nonworking (modules) case:
-[...]
-     kworker/0:4-60      [000] .....   104.112791: dwc3_gadget_init <-__dwc3_set_mode
-     kworker/0:4-60      [000] .....   104.115912: usb_initialize_gadget <-dwc3_gadget_init
-[...]
-     kworker/0:4-60      [000] .....   104.918814: usb_add_gadget <-dwc3_gadget_init
-     kworker/0:4-60      [000] .....   104.939290: usb_udc_uevent <-dev_uevent
-   systemd-udevd-127     [000] .....   104.943682: usb_udc_uevent <-dev_uevent
-     kworker/0:0-9       [000] .....   104.944201: usb_gadget_state_work <-process_one_work
-   (udev-worker)-417     [001] .....   104.944411: usb_udc_uevent <-dev_uevent
-[end of ]
-
-When built as modules, gadgets_make() is never called, and the resulting
-chain of gadget events thus does not happen.
-
-My printk logging after unplugging the pen drive shows the following:
-
-Builtin:
-usb_conn_isr
-usb_conn_queue_dwork
-usb_conn_detect_cable
-usb_role_string
-usb_role_string
-usb_conn_detect_cable role host -> device, gpios: id 1, vbus 1
-usb_role_switch_set_role
-usb_role_switch_get_drvdata
-dwc3_usb_role_switch_set, role: 2
-usb_role_switch_uevent
-__dwc3_set_mode: dwc->current_dr_role: 1
-__dwc3_set_mode: desired_dr_role: 2
-usb_role_switch_uevent
-usb_role_switch_uevent
-dwc3_gadget_init
-dwc3_gadget_init: usb_initialize_gadget
-dwc3_gadget_init: dwc3_gadget_init_endpoints
-dwc3_gadget_init: usb_add_gadget
-dwc3_gadget_check_config
-dwc3_gadget_start
-__dwc3_gadget_start
-dwc3_gadget_start_config, resource_index: 0
-dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 9, params: 0000000013236000
-__dwc3_gadget_ep_enable, dep: ep0out, action: 0
-dwc3_gadget_set_ep_config, dep: ep0out, action: 0
-dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 1, params: 0000000013236000
-dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 2, params: 0000000013236000
-__dwc3_gadget_ep_enable, dep: ep0in, action: 0
-dwc3_gadget_set_ep_config, dep: ep0in, action: 0
-dwc3_send_gadget_ep_cmd, dep: ep0in, cmd: 1, params: 0000000013236000
-dwc3_send_gadget_ep_cmd, dep: ep0in, cmd: 2, params: 0000000013236000
-dwc3_send_gadget_ep_cmd, dep: ep0out, cmd: 6, params: 00000000c3883fbf
-dwc3_gadget_run_stop: start
-
-Modules:
-usb_conn_isr
-usb_conn_queue_dwork
-usb_conn_detect_cable
-usb_role_string
-usb_role_string
-usb_conn_detect_cable role host -> device, gpios: id 1, vbus 1
-usb_role_switch_set_role
-usb_role_switch_get_drvdata
-dwc3_usb_role_switch_set, role: 2
-usb_role_switch_uevent
-__dwc3_set_mode: dwc->current_dr_role: 1
-usb_role_switch_uevent
-__dwc3_set_mode: desired_dr_role: 2
-usb_role_switch_uevent
-dwc3_gadget_init
-dwc3_gadget_init: usb_initialize_gadget
-dwc3_gadget_init: dwc3_gadget_init_endpoints
-
-
-Logs before the unplug are identical to each other except for the
-usb_conn_probe that can happen earlier in the boot and potentially get
-deferred.
-
-I will be investigating this further, any input is more than welcome.
-
-Thanks,
-Ernest
 
