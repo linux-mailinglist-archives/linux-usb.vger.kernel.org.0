@@ -1,207 +1,221 @@
-Return-Path: <linux-usb+bounces-25051-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25052-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5026AAE60C7
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:24:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59685AE60FF
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 11:39:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 764493BDBCC
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:23:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3CAC168382
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 09:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC9927AC2E;
-	Tue, 24 Jun 2025 09:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A545827AC3C;
+	Tue, 24 Jun 2025 09:39:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E95Zh1OK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gwg2VZdl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B6B42056;
-	Tue, 24 Jun 2025 09:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B04A22D78A
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 09:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750757029; cv=none; b=PPpLVLQvY7+rEje9sukciDuppU5rLrUuuv3ev8pggQcl9jnUaYwYd33iwQUp9PVO3WuNikDZyx3o5OAYHcucSQpBcrA6Kp3lQ+bMDa/WkuqtRBGi8pI+8f40a3fidvRzeBe8INjYsf7KMUFhbUUALOp9Wvom2e2We0zolKpbEkQ=
+	t=1750757943; cv=none; b=b/jMjHKn2RWcBb+BShk0PAQ2rRvmH+nXBSMuhynE0hzcixX9gUma9Sx1WUvyYLGtZf+wCR8s+ns/RPlJ/XudaSiRglNv+KwYM87KQqPVH+UEvW7VBo7oRjhbnuQAQbyyb5oS932STxE2IdAWKKHm2Nd4+/CXeYesgqAB9YL4cUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750757029; c=relaxed/simple;
-	bh=dhth3qJigOYuFKtx08jfd4tK7Y/6UJuY4WpKxFOp6XM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1H2jC+lhQZ91tnm9epeSMCzGmLsbH3XAhtsmYeJRUEXGEIZAPqulgMZN7uV6vp8Y7P1ggS0oTLmKSjl3EInJVpJe8FHeAQEwKlUWmB5pRzWNMRnO8zU8HcDYMCn1R9ldv7PkvybBfpsx0CMRx1PMz8GKbtacf6V6oo3N8XNVNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E95Zh1OK; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1750757943; c=relaxed/simple;
+	bh=h1gLVB/e3Ify7j5aVbzPovG6ztLBT8H6mk7eqru8iGM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=lo1dJOEasAQ+LbqgP7ofEEFCDB3q9Izy1dA7JXdrmAIYz37YSZFV6Yf6R6QLoiNyYqkkNF2c9kZqwUuRy3rZcL74ZLwYuY6C/8OGA5T/MeWxgtVpjLpEnTBKG6lkxzACKzpb1P0KVrvP4TgxC+aTjCbz5+gzxU/0E8wl04Igrsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gwg2VZdl; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750757028; x=1782293028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dhth3qJigOYuFKtx08jfd4tK7Y/6UJuY4WpKxFOp6XM=;
-  b=E95Zh1OKGS44Zqp+frZs657CrGVepeu4lMJLJP2smRDEAfDi9JpmbUKO
-   DGbCGo+R7nAgyUtGHUYz5kI0L8NX9EMWZ6ZfO9jo+T1z6KJ41s8apZGbU
-   B31aLje9QJlCC6+IzcKU1NH3agMZBCEcwTIDgx+jdWiKgOluBz3eqlSnP
-   rU+lF0UJrqGvV3g6fnpSN+8I+iSBhOo+ZE9DMIdJ9eniQwW5N3xWHH34m
-   42/BlsNhlxOItRdh9+K09uFFqlxJnbBnfgBpKY2BT1exSKhubWINqfbOY
-   j+juvsAjlaMMvdAnWEDyG7b496pCOkQd8hhNN+xi1ZWtH1sWkrW6sAq7w
-   Q==;
-X-CSE-ConnectionGUID: YDaEc1ZQTKmZcH8VSZnIBQ==
-X-CSE-MsgGUID: +DTll/9KTjGdZSli8Ci9MA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="53124882"
+  t=1750757941; x=1782293941;
+  h=date:from:to:cc:subject:message-id;
+  bh=h1gLVB/e3Ify7j5aVbzPovG6ztLBT8H6mk7eqru8iGM=;
+  b=Gwg2VZdlJM3ZvFekMqaFlo3/f5yfIlnE3155TTwfd4H3oCCnJXRb3337
+   tfVTzG9QCO0oZxEFuqWYsIGlYR/IN4+ANZVF/ud/dB3k669lfLO9O819g
+   K6MnWT2ex0T00NAcnz5iOLjkccuVM2SGwjXt5nMJcxoDsJAh3dTLGMPms
+   YzHV/vqmxIeGRw3FjBJC61oYASMtH2D/clDO8OIwefj/vz2KhRNmWTYpj
+   Khw3uuuEo7BjeF2uZoFAmbQPaogZT7rQuuy+5gsUgL452wr3f+STuR8TX
+   8RWG+GyYcNxY4VDdcJ51+RvqLU7KXbd8PpZXAcJ3xsKUNf/y7czMIkDVL
+   w==;
+X-CSE-ConnectionGUID: nQZWZXVzRG6k6go9wPRGtQ==
+X-CSE-MsgGUID: IoPqfH/pQ8yJhnFh+N0l0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="40605352"
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="53124882"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:23:47 -0700
-X-CSE-ConnectionGUID: oTh/KndoR8WjjA89tlA9YA==
-X-CSE-MsgGUID: zYpdrGNzQNS8JhAPMuTglA==
+   d="scan'208";a="40605352"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 02:39:00 -0700
+X-CSE-ConnectionGUID: 1LU3Lo8wQAWp45d0w7P82A==
+X-CSE-MsgGUID: Qb18MMj4TxmQ7bO7t/sRNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="157367536"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa004.fm.intel.com with SMTP; 24 Jun 2025 02:23:44 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 12:23:43 +0300
-Date: Tue, 24 Jun 2025 12:23:43 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: badhri@google.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: altmodes/displayport: add irq_hpd to sysfs
-Message-ID: <aFpunwaDQKVNs86J@kuha.fi.intel.com>
-References: <20250623204947.732915-2-rdbabiera@google.com>
+   d="scan'208";a="175468854"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Jun 2025 02:39:00 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uU07F-000RzD-2S;
+	Tue, 24 Jun 2025 09:38:57 +0000
+Date: Tue, 24 Jun 2025 17:38:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ 2cdde91c14ec358087f43287513946d493aef940
+Message-ID: <202506241752.4E0ulfU4-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250623204947.732915-2-rdbabiera@google.com>
 
-On Mon, Jun 23, 2025 at 08:49:45PM +0000, RD Babiera wrote:
-> Add irq_hpd sysfs node to displayport driver. This allows the userspace
-> to subscribe to irq events similar to how it can subscribe to changes in
-> hpd.
-> 
-> irq_hpd is read only and returns the number of irq events generated since
-> driver probe. pending_irq_hpd is added so that a sysfs_emit can be
-> generated if the HPD high event belonging to the same status message
-> is delayed until a successful configuration.
-> 
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: 2cdde91c14ec358087f43287513946d493aef940  thunderbolt: Fix bit masking in tb_dp_port_set_hops()
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+elapsed time: 1361m
 
-> ---
-> Changes since v1:
-> * fixed bracket styling error
-> ---
->  .../testing/sysfs-driver-typec-displayport    | 10 +++++++
->  drivers/usb/typec/altmodes/displayport.c      | 28 +++++++++++++++++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-typec-displayport b/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> index 256c87c5219a..314acd54e13e 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> +++ b/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> @@ -62,3 +62,13 @@ Description:
->  			     by VESA DisplayPort Alt Mode on USB Type-C Standard.
->  			- 0 when HPD’s logical state is low (HPD_Low) as defined by
->  			     VESA DisplayPort Alt Mode on USB Type-C Standard.
-> +
-> +What:		/sys/bus/typec/devices/.../displayport/irq_hpd
-> +Date:		June 2025
-> +Contact:	RD Babiera <rdbabiera@google.com>
-> +Description:
-> +		IRQ_HPD events are sent over the USB PD protocol in Status Update and
-> +		Attention messages. IRQ_HPD can only be asserted when HPD is high,
-> +		and is asserted when an IRQ_HPD has been issued since the last Status
-> +		Update. This is a read only node that returns the number of IRQ events
-> +		raised in the driver's lifetime.
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index b09b58d7311d..7f9f1f98f450 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -65,6 +65,13 @@ struct dp_altmode {
->  	enum dp_state state;
->  	bool hpd;
->  	bool pending_hpd;
-> +	u32 irq_hpd_count;
-> +	/*
-> +	 * hpd is mandatory for irq_hpd assertion, so irq_hpd also needs its own pending flag if
-> +	 * both hpd and irq_hpd are asserted in the first Status Update before the pin assignment
-> +	 * is configured.
-> +	 */
-> +	bool pending_irq_hpd;
->  
->  	struct mutex lock; /* device lock */
->  	struct work_struct work;
-> @@ -151,6 +158,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  {
->  	bool configured = !!DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
->  	bool hpd = !!(dp->data.status & DP_STATUS_HPD_STATE);
-> +	bool irq_hpd = !!(dp->data.status & DP_STATUS_IRQ_HPD);
->  	u8 con = DP_STATUS_CONNECTION(dp->data.status);
->  	int ret = 0;
->  
-> @@ -170,6 +178,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  				dp->hpd = hpd;
->  				dp->pending_hpd = true;
->  			}
-> +			if (dp->hpd && dp->pending_hpd && irq_hpd)
-> +				dp->pending_irq_hpd = true;
->  		}
->  	} else {
->  		drm_connector_oob_hotplug_event(dp->connector_fwnode,
-> @@ -177,6 +187,10 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  						      connector_status_disconnected);
->  		dp->hpd = hpd;
->  		sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
-> +		if (hpd && irq_hpd) {
-> +			dp->irq_hpd_count++;
-> +			sysfs_notify(&dp->alt->dev.kobj, "displayport", "irq_hpd");
-> +		}
->  	}
->  
->  	return ret;
-> @@ -196,6 +210,11 @@ static int dp_altmode_configured(struct dp_altmode *dp)
->  						connector_status_connected);
->  		sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
->  		dp->pending_hpd = false;
-> +		if (dp->pending_irq_hpd) {
-> +			dp->irq_hpd_count++;
-> +			sysfs_notify(&dp->alt->dev.kobj, "displayport", "irq_hpd");
-> +			dp->pending_irq_hpd = false;
-> +		}
->  	}
->  
->  	return dp_altmode_notify(dp);
-> @@ -707,10 +726,19 @@ static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char
->  }
->  static DEVICE_ATTR_RO(hpd);
->  
-> +static ssize_t irq_hpd_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct dp_altmode *dp = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", dp->irq_hpd_count);
-> +}
-> +static DEVICE_ATTR_RO(irq_hpd);
-> +
->  static struct attribute *displayport_attrs[] = {
->  	&dev_attr_configuration.attr,
->  	&dev_attr_pin_assignment.attr,
->  	&dev_attr_hpd.attr,
-> +	&dev_attr_irq_hpd.attr,
->  	NULL
->  };
->  
-> 
-> base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
-> -- 
-> 2.50.0.rc2.761.g2dc52ea45b-goog
+configs tested: 128
+configs skipped: 3
 
--- 
-heikki
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-15.1.0
+arc                   randconfig-001-20250623    gcc-10.5.0
+arc                   randconfig-001-20250624    gcc-8.5.0
+arc                   randconfig-002-20250623    gcc-8.5.0
+arc                   randconfig-002-20250624    gcc-8.5.0
+arm                              allmodconfig    clang-19
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                               allnoconfig    gcc-15.1.0
+arm                              allyesconfig    clang-19
+arm                              allyesconfig    gcc-15.1.0
+arm                   randconfig-001-20250623    gcc-10.5.0
+arm                   randconfig-001-20250624    gcc-8.5.0
+arm                   randconfig-002-20250623    clang-21
+arm                   randconfig-002-20250624    gcc-8.5.0
+arm                   randconfig-003-20250623    gcc-8.5.0
+arm                   randconfig-003-20250624    gcc-8.5.0
+arm                   randconfig-004-20250623    gcc-10.5.0
+arm                   randconfig-004-20250624    gcc-8.5.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250623    gcc-14.3.0
+arm64                 randconfig-001-20250624    gcc-8.5.0
+arm64                 randconfig-002-20250623    gcc-14.3.0
+arm64                 randconfig-002-20250624    gcc-8.5.0
+arm64                 randconfig-003-20250623    gcc-9.5.0
+arm64                 randconfig-003-20250624    gcc-8.5.0
+arm64                 randconfig-004-20250623    clang-16
+arm64                 randconfig-004-20250624    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-21
+hexagon                           allnoconfig    gcc-15.1.0
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-21
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250623    clang-20
+i386        buildonly-randconfig-001-20250624    gcc-12
+i386        buildonly-randconfig-002-20250623    gcc-11
+i386        buildonly-randconfig-002-20250624    gcc-12
+i386        buildonly-randconfig-003-20250623    gcc-12
+i386        buildonly-randconfig-003-20250624    gcc-12
+i386        buildonly-randconfig-004-20250623    clang-20
+i386        buildonly-randconfig-004-20250624    gcc-12
+i386        buildonly-randconfig-005-20250623    gcc-12
+i386        buildonly-randconfig-005-20250624    gcc-12
+i386        buildonly-randconfig-006-20250623    gcc-11
+i386        buildonly-randconfig-006-20250624    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-15.1.0
+loongarch                         allnoconfig    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-15.1.0
+openrisc                          allnoconfig    clang-21
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-21
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-21
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-21
+powerpc                          allyesconfig    gcc-15.1.0
+riscv                            allmodconfig    clang-21
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    gcc-15.1.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250623    clang-20
+x86_64      buildonly-randconfig-001-20250624    clang-20
+x86_64      buildonly-randconfig-002-20250623    gcc-12
+x86_64      buildonly-randconfig-002-20250624    clang-20
+x86_64      buildonly-randconfig-003-20250623    gcc-12
+x86_64      buildonly-randconfig-003-20250624    clang-20
+x86_64      buildonly-randconfig-004-20250623    gcc-12
+x86_64      buildonly-randconfig-004-20250624    clang-20
+x86_64      buildonly-randconfig-005-20250623    gcc-12
+x86_64      buildonly-randconfig-005-20250624    clang-20
+x86_64      buildonly-randconfig-006-20250623    clang-20
+x86_64      buildonly-randconfig-006-20250624    clang-20
+x86_64                              defconfig    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-12
+x86_64                         rhel-9.4-kunit    gcc-12
+x86_64                           rhel-9.4-ltp    gcc-12
+x86_64                          rhel-9.4-rust    clang-18
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
