@@ -1,122 +1,133 @@
-Return-Path: <linux-usb+bounces-25066-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25067-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 601A1AE67AF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 16:03:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A244AE67DE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 16:10:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A5591894723
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 14:00:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6608F3A7403
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Jun 2025 14:09:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70472D5439;
-	Tue, 24 Jun 2025 13:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3282C325C;
+	Tue, 24 Jun 2025 14:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azZyXKoV"
+	dkim=pass (2048-bit key) header.d=zetier.com header.i=@zetier.com header.b="SWvRsrU7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854772C326D;
-	Tue, 24 Jun 2025 13:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9692828ECE2
+	for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 14:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750773492; cv=none; b=YtwihO/+1LVNi1AtOr0fqW5Rjxj5ftCbZPB+krFYKZ1YbxskSKOFgirbuogE4q/opwOXh27hvrsFuDpI1PudS0Pym6Opxnv1JnERV4nk1Ge43YaUUh1GtiDQnIKv40RobiSTPDBktO88HKHClfpEgu8Dnu2ZeO4lq9N7BzmtmA4=
+	t=1750774195; cv=none; b=reNHi3LELaTpipv79qFF0Nk/97mXnViwj53jfCEI193zd1/IiriTCQlEBrX3DySFMw1RzEzrdPz4jJE3w/N6JOPyo6JAJN7tTYAH87neCdwGCoI85oNB3cfqIzmhyleQdmoH+Of0xusBKPaHbkK8VMm+Vm1X6CAij6S+ePlFL9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750773492; c=relaxed/simple;
-	bh=OLw91X2Is9NUg8+hRFRl/+1tGGpqwE/F/LmJScfzltU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KZ1Xp2RVBpe1NK1OucFWy7pV7RZWo/dW1086n1Qds0Kx/S+uqzocveHK4QAVuutuPvQvnTdLtqpG7nAwFlfbqSnyt+KMR2dFQ6Zvho1dxazCmJdR12lVg2tX71lgHxpyfU0FsNw9bD/iid/ULnAn0x58fGa1qDWNv1Y+6SJt1wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azZyXKoV; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750773490; x=1782309490;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OLw91X2Is9NUg8+hRFRl/+1tGGpqwE/F/LmJScfzltU=;
-  b=azZyXKoV8d6wKOupLSDVLivy1se6bywVrY0XeQxv3YEKYA/GTJPTP7ED
-   JmNKpBfAqZK4zNdhFLGmP+R6MDiIXZ07WqhYRt6VKfAYm/X5FygGid6W2
-   tb/IGxVvBthMWTMFGUOMnq2gjuwizEIxLF5D19Ygb3mK8QO9HTnqANjRO
-   pC6+MBVVnbFh/31xHup8pziCqQ9A6he6KWEg8VVggg6H1kUPZAERgsoXm
-   fmT2novqIauXKOly12QKNbFVaics/cGDXuv3fD4bCEprzVcxYGA/ecg4K
-   n+MMl54Q161cqf6EgIPKV+J9NF6W7MoM6s5ftLCzmuNHflDSgYiYf1nr4
-   w==;
-X-CSE-ConnectionGUID: 1tP+JhaCSpCNFVOWmlH2hA==
-X-CSE-MsgGUID: 1DUvPXLST5aKzFrlnD+NHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="52949189"
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="52949189"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 06:58:10 -0700
-X-CSE-ConnectionGUID: 6aYS1MZYT+CDaHZJJpOeFw==
-X-CSE-MsgGUID: rzZicHZZQja4VxplZOuy5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="152043449"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa006.fm.intel.com with SMTP; 24 Jun 2025 06:58:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Jun 2025 16:58:06 +0300
-Date: Tue, 24 Jun 2025 16:58:06 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Jos Wang <joswang@lenovo.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: displayport: Fix potential deadlock
-Message-ID: <aFqu7jvCwajL2OOE@kuha.fi.intel.com>
-References: <20250624133246.3936737-1-akuchynski@chromium.org>
+	s=arc-20240116; t=1750774195; c=relaxed/simple;
+	bh=lC5cRjaojZ5t/DeqN4fUzCwenXZ0a0iWp5ap87muVhM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Lpv3cepNhq6KfX0bQEOITkH1Z+pWxxcnXfqelZ+rUOTs5waCDiDPIwZpGS3607FnBkzjz03Pb/L1VKBlobyTwvW/ig40UXS5b4N8OwZO4Y8G91wm6cK8GR7LGBtYJbhjXNnvvsn5r4r0pxucd6KfuA44Z5o1UMi214h6NQvAaR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zetier.com; spf=pass smtp.mailfrom=zetier.com; dkim=pass (2048-bit key) header.d=zetier.com header.i=@zetier.com header.b=SWvRsrU7; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zetier.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zetier.com
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b26f7d2c1f1so5792078a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 24 Jun 2025 07:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=zetier.com; s=gm; t=1750774193; x=1751378993; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ur3pkSe32TVriqGAIz7br9BFdD6ELIY4joveCHedb2Y=;
+        b=SWvRsrU72zhFSUL3An21JgXMNui1ef6wozDOevdKciWMA2Ho7t5vwQ/znPdcPUXTOr
+         l2rGTiai4tIIMsOVjziV4sxp/WljqQdk1Yil2mP+f8PdH8ueE68kvCFbnrB2RFPcQgvD
+         HBu2/mYGxwy5kNu7oxZ4jKOQZ1qraHHb9N5rD3hig1Wxw2D9yAGMSccpbSR3hLrU+VG4
+         uzUrRXJzWZ6DBuXX7GQ9N9y0nfbN7osCEJZbvETOrbuWiDRuQvSdKU5rMbYJEOV0Codp
+         W2sgVFP0guqMbRaoM4gNVc4g5FADYbWSg0a7id3bX0rIL8PdO3z/Q+SnJsZNrBV6DQNK
+         lSMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750774193; x=1751378993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ur3pkSe32TVriqGAIz7br9BFdD6ELIY4joveCHedb2Y=;
+        b=CLsL/Cm2BqqJedoqu9Cbc8FINV3v6TjH+ZPqOU8jgidfqma8L/dSOU6bRS6qCI0LiH
+         SpZcbnx0u16mFejPDXDpWqubTrLaF+rvbI+0kwrn1EiaqLe6v/Em0kWqzmFQ+qaIx2LR
+         kXlldmvMgk3td5gtRUsTNH6NoyXwrttnRRoC0BAh/CbVspUCHzDv5oEnUAntZasown2E
+         h+W4jVtuA26YxCGwVdzVlfDzGSYzNA0hrShl3+z30SiJTZG12YW73AMR4Kx23BUilvkl
+         nl2jhkAtHvdzTcHnjm8JT5mKx1FWld4uw711k9tlMexWOdqqm4tbrUpO8u6D6+okZSFS
+         HrtA==
+X-Gm-Message-State: AOJu0YzRJKawSGpw+2I7xFSOL1Fg76m3AEQ9KLy4TL2TyqS92/n9CF96
+	wFSJuam6eo9xyH6D1zaeXzyN1RhafAcxLqPwLCTLu6cY9Khklnsg0SkRiPSOeh8D/w==
+X-Gm-Gg: ASbGncvu0pmPQSmKC+Jrl9OyqpohL0k2sWtnS+wFz+LCAOUWXiKU8ZSIDqorPwV8G73
+	CYIsfdzTDjiOhJM9Il7hPFFhUxmYVyUtF6RyNu8tRzyquS+ibDLbdmP57U6DffIM10ja1sfDCxL
+	lRpDSsz9d0KyB9luPek0VoSF/UD9bJEH3L7A+ahG0RjBuQCCyckhL9h0kS/Mx1Ae2sIhUkNmvFV
+	9q2YUmT8ZcaTimKwGRWezbFRReKV2+pBSyK4/AwlfbaV2J8aWL3P7pRRf4T7GAJUhXAgM+XUXkM
+	y+6wHhru1AF2btYhSkmiSljYbmNzbvIoaFwmkMCNg4oHxzPe4LC73ehRLOQmHdS7Wn6ipioT4bO
+	Bm6xiIK3+LNTWwkw33XEyUJcQIW5EkZHwjgom/t8cfLfPux0nlwqx+f/nVZpI
+X-Google-Smtp-Source: AGHT+IEEg7l4G6SUorjlq4/b8X8X+akKFfbR+kWJrhsVArb1J01hupz0jyLFc8JQcBOKyckjtmGZIg==
+X-Received: by 2002:a05:6a20:7284:b0:1f5:72eb:8b62 with SMTP id adf61e73a8af0-22026f162a1mr24443721637.20.1750774192878;
+        Tue, 24 Jun 2025 07:09:52 -0700 (PDT)
+Received: from system.mynetworksettings.com (pool-71-126-161-43.washdc.fios.verizon.net. [71.126.161.43])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-749b5e42ad8sm1982115b3a.70.2025.06.24.07.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jun 2025 07:09:52 -0700 (PDT)
+From: Drew Hamilton <drew.hamilton@zetier.com>
+To: Bin Liu <b-liu@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Drew Hamilton <drew.hamilton@zetier.com>,
+	Yehowshua Immanuel <yehowshua.immanuel@twosixtech.com>
+Subject: [PATCH] usb: musb: fix gadget state on disconnect
+Date: Tue, 24 Jun 2025 10:09:30 -0400
+Message-Id: <20250624140930.25887-1-drew.hamilton@zetier.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250624133246.3936737-1-akuchynski@chromium.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 24, 2025 at 01:32:46PM +0000, Andrei Kuchynski wrote:
-> The deadlock can occur due to a recursive lock acquisition of
-> `cros_typec_altmode_data::mutex`.
-> The call chain is as follows:
-> 1. cros_typec_altmode_work() acquires the mutex
-> 2. typec_altmode_vdm() -> dp_altmode_vdm() ->
-> 3. typec_altmode_exit() -> cros_typec_altmode_exit()
-> 4. cros_typec_altmode_exit() attempts to acquire the mutex again
-> 
-> To prevent this, defer the `typec_altmode_exit()` call by scheduling
-> it rather than calling it directly from within the mutex-protected
-> context.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: b4b38ffb38c9 ("usb: typec: displayport: Receive DP Status Update NAK request exit dp altmode")
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+When unplugging the USB cable or disconnecting a gadget in usb peripheral mode with
+echo "" > /sys/kernel/config/usb_gadget/<your_gadget>/UDC,
+/sys/class/udc/musb-hdrc.0/state does not change from USB_STATE_CONFIGURED.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Testing on dwc2/3 shows they both update the state to USB_STATE_NOTATTACHED.
 
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index b09b58d7311d..2abbe4de3216 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -394,8 +394,7 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
->  	case CMDT_RSP_NAK:
->  		switch (cmd) {
->  		case DP_CMD_STATUS_UPDATE:
-> -			if (typec_altmode_exit(alt))
-> -				dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
-> +			dp->state = DP_STATE_EXIT;
->  			break;
->  		case DP_CMD_CONFIGURE:
->  			dp->data.conf = 0;
+Add calls to usb_gadget_set_state in musb_g_disconnect and musb_gadget_stop
+to fix both cases.
 
+Tested against 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3.
+
+Co-authored-by: Yehowshua Immanuel <yehowshua.immanuel@twosixtech.com>
+Signed-off-by: Yehowshua Immanuel <yehowshua.immanuel@twosixtech.com>
+Signed-off-by: Drew Hamilton <drew.hamilton@zetier.com>
+---
+ drivers/usb/musb/musb_gadget.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index 6869c58367f2..caf4d4cd4b75 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -1913,6 +1913,7 @@ static int musb_gadget_stop(struct usb_gadget *g)
+ 	 * gadget driver here and have everything work;
+ 	 * that currently misbehaves.
+ 	 */
++	usb_gadget_set_state(g, USB_STATE_NOTATTACHED);
+ 
+ 	/* Force check of devctl register for PM runtime */
+ 	pm_runtime_mark_last_busy(musb->controller);
+@@ -2019,6 +2020,7 @@ void musb_g_disconnect(struct musb *musb)
+ 	case OTG_STATE_B_PERIPHERAL:
+ 	case OTG_STATE_B_IDLE:
+ 		musb_set_state(musb, OTG_STATE_B_IDLE);
++		usb_gadget_set_state(&musb->g, USB_STATE_NOTATTACHED);
+ 		break;
+ 	case OTG_STATE_B_SRP_INIT:
+ 		break;
 -- 
-heikki
+2.34.1
+
 
