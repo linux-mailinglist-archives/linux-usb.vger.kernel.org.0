@@ -1,200 +1,207 @@
-Return-Path: <linux-usb+bounces-25101-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25102-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D002AE8728
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 16:53:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FA1AE8789
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 17:11:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B866C7A8CCD
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 14:52:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 362343A88D6
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 15:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E05265CDD;
-	Wed, 25 Jun 2025 14:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4A126A0BF;
+	Wed, 25 Jun 2025 15:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEVPBNft"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UY1Xpoop"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D1F1D5165;
-	Wed, 25 Jun 2025 14:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1107C263F40;
+	Wed, 25 Jun 2025 15:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750863209; cv=none; b=kU4zPKBm8njAFWmdB2XmLsZyVnDL64sEsZxyfZZONdNCOP+884WlIyUS1DpXY+2YdN7THbmsxabFVj3eV92/K/gQkJWEhZouk7iLCp+4zUPFt67K1Nta41DuogIXy/S7ZKTWN9ZOItIZczy6vWHo58kR5AMO9hykH0lxsokxsK0=
+	t=1750864274; cv=none; b=dk0cbm/C2EpMXQueLZiOFEXqyZJTJPxUqLHDoNNP3hhaytckzo4rTt+uAF6PSmEtrmV+T4AWLT0guYcrLHoWXjsko3Z0UiaoRup/+eka3FduoJdZmonKBFt+6zQ4l+mqYD/kn2MOqXOrNW7Ni/fX0ChREAK19/nmuVAmpLQjEpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750863209; c=relaxed/simple;
-	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nAt1tjPIzZkIJoIYkr0k3ztq16seMjP5OlFLwx5w6umNWdUV9k5Ks5ogMJWUTHt8beFoObIk1koseH25F2THMP2hqTb2m0V2ukh0WTZvtrdgqs3nWzP068ylvqTKb0036VMZg2aN7V23ciQOH1RtEjaY1k/a7J2ClgAslOUnkqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEVPBNft; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECC9C4CEEA;
-	Wed, 25 Jun 2025 14:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750863208;
-	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vEVPBNft67yFnyq10OuAhQPYNrznG7vdFztn5fo09zOvfI1ukOyexva0fcqBcgH1+
-	 Poc+Rb0Q5wYPAF/RBKgwIjSfT2BhCBTKF+H8lEqIVVYj1XhQ6eqImEr0zIkf9KMqw7
-	 wiDedspcBMpswvzBkjaXn7mWBDM8TOacEww3P7XsmLAiB3sIDsxxwTjSwKOjvnR7Q1
-	 1NxF/XUkzI+5ZbrxOPPItZejLHz6Wxesu97Cz+s5IctHQ6Mtt4IqKBjldDxRny3SM9
-	 0ysMFTmtKsCs2h7HEwnIh6QfiPwtGQI/kkcruqpQN+baPGTpL/7UmgHyPI+QBY9a7o
-	 2QdK6TZwf1GhQ==
-Date: Wed, 25 Jun 2025 15:53:21 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250625145321.GZ795775@google.com>
-References: <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com>
- <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com>
- <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <20250625090133.GP795775@google.com>
- <CAOoeyxWoxC-n3JjjFe8Ruq_VydXk=jev=mopKfL5B7gsaSg=Ag@mail.gmail.com>
- <20250625134634.GY795775@google.com>
- <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
+	s=arc-20240116; t=1750864274; c=relaxed/simple;
+	bh=ZvhfCYM3KxG47BaRpGbI8s1R7i1lYFhYIexVDWca3QQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Pchf5IMl9V0+M8EOLIkVUVNaZf4VBaCW0AXYtACQq+v5GBVSl5jR6bMIN6+GuuhIKvBPASevvbRiBVMt3vws5IMUqjKZ48Dak6oN8POsVHwOwCrXqT/GO9ye2wG/bP8ZBxicRHVB5NvL2Vj/aRV4Hf+8rOPuws101wOo1l9nKwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UY1Xpoop; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750864273; x=1782400273;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZvhfCYM3KxG47BaRpGbI8s1R7i1lYFhYIexVDWca3QQ=;
+  b=UY1Xpoopn4C3II3mz5NREPQPgTo6VfSyKAEg72Mun3XpiSAp41Tpz0m9
+   uFVexlFsvCdAIE7tcfOBAgvKNXMa9PtGSkttggs+KyGsmazuW7o0Hp9tW
+   Wky6YxJ1C2IH/hg4pO434OobIGHwYaIrmhdRjYOFd0rB+Mq42Jy3vgVAr
+   DQtUAtffeDX3BuAekUOFJ9y6dLAeUufFwweNgvbwoq67nBaah3kRqqol6
+   XBIk72aO0UzL2vnSQCHEggg2G2xA18y9bBTdkkjlg/pidP+CpWasFedpz
+   jAO5rAPxOCR9e9xxGznhEKnaf6nkNLfuxG3PMdoGCC1412SF68NszhSM4
+   Q==;
+X-CSE-ConnectionGUID: ixxZUyP0SwOUNeswruuTpw==
+X-CSE-MsgGUID: vRxsDw04TBmWTLiTf98iEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="56819558"
+X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
+   d="scan'208";a="56819558"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 08:11:13 -0700
+X-CSE-ConnectionGUID: GLP+cuaJQ2WG9gUA2C/qEw==
+X-CSE-MsgGUID: ES3/B24lTX2FPEgGJS1Knw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
+   d="scan'208";a="157742213"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Jun 2025 08:11:10 -0700
+Message-ID: <c9584bc8-bb9f-41f9-af3c-b606b4e4ee06@linux.intel.com>
+Date: Wed, 25 Jun 2025 18:11:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: hub: fix detection of high tier USB3 devices
+ behind suspended hubs
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
+ stable@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+References: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
+ <acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com>
+ <c8ea2d32-4e8e-49da-9d75-000d34f8e819@linux.intel.com>
+ <67d4d34a-a15f-47b1-9238-d4d6792b89e5@oss.qualcomm.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <67d4d34a-a15f-47b1-9238-d4d6792b89e5@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
 
-[...]
+On 24.6.2025 19.40, Konrad Dybcio wrote:
+> On 6/24/25 11:47 AM, Mathias Nyman wrote:
+>> On 23.6.2025 23.31, Konrad Dybcio wrote:
+>>> On 6/11/25 1:24 PM, Mathias Nyman wrote:
 
-> > > > > > In the code above you register 6 I2C devices.  Each device will be
-> > > > > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > > > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > > > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > > > > should be able to use IDA in .probe() to allocate those same device IDs
-> > > > > > 0 through 5.
-> > > > > >
-> > > > > > What am I missing here?
-> > > > > >
-> > > > >
-> > > > > You're absolutely right in the scenario where a single NCT6694 device
-> > > > > is present. However, I’m wondering how we should handle the case where
-> > > > > a second or even third NCT6694 device is bound to the same MFD driver.
-> > > > > In that situation, the sub-drivers using a static IDA will continue
-> > > > > allocating increasing IDs, rather than restarting from 0 for each
-> > > > > device. How should this be handled?
-> > > >
-> > > > I'd like to see the implementation of this before advising.
-> > > >
-> > > > In such a case, I assume there would be a differentiating factor between
-> > > > the two (or three) devices.  You would then use that to decide which IDA
-> > > > would need to be incremented.
-> > > >
-> > > > However, Greg is correct.  Hard-coding look-ups for userspace to use
-> > > > sounds like a terrible idea.
-> > > >
-> > >
-> > > I understand.
-> > > Do you think it would be better to pass the index via platform_data
-> > > and use PLATFORM_DEVID_AUTO together with mfd_add_hotplug_devices()
-> > > instead?
-> > > For example:
-> > > struct nct6694_platform_data {
-> > >     int index;
-> > > };
-> > >
-> > > static struct nct6694_platform_data i2c_data[] = {
-> > >     { .index = 0 }, { .index = 1 }, { .index = 2 }, { .index = 3 }, {
-> > > .index = 4 }, { .index = 5 },
-> > > };
-> > >
-> > > static const struct mfd_cell nct6694_devs[] = {
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[0], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[1], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[2], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[3], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[4], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[5], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > > };
-> > > ...
-> > > mfd_add_hotplug_devices(dev, nct6694_devs, ARRAY_SIZE(nct6694_devs));
-> > > ...
-> >
-> > No, that's clearly way worse.  =:-)
-> >
-> > The clean-up that this provides is probably not worth all of this
-> > discussion.  I _still_ think this enumeration should be done in the
-> > driver.  But if you really can't make it work, I'll accept the .id
-> > patch.
-> >
+>>> Hi, this patch seems to cause the following splat on QC
+>>> SC8280XP CRD board when resuming the system:
+>>>
+>>> [root@sc8280xp-crd ~]# ./suspend_test.sh
+>>> [   37.887029] PM: suspend entry (s2idle)
+>>> [   37.903850] Filesystems sync: 0.012 seconds
+>>> [   37.915071] Freezing user space processes
+>>> [   37.920925] Freezing user space processes completed (elapsed 0.001 seconds)
+>>> [   37.928138] OOM killer disabled.
+>>> [   37.931479] Freezing remaining freezable tasks
+>>> [   37.937476] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+>>> [   38.397272] Unable to handle kernel paging request at virtual address dead00000000012a
+>>> [   38.405444] Mem abort info:
+>>> [   38.408349]   ESR = 0x0000000096000044
+>>> [   38.412231]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>> [   38.417712]   SET = 0, FnV = 0
+>>> [   38.420873]   EA = 0, S1PTW = 0
+>>> [   38.424133]   FSC = 0x04: level 0 translation fault
+>>> [   38.429168] Data abort info:
+>>> [   38.432150]   ISV = 0, ISS = 0x00000044, ISS2 = 0x00000000
+>>> [   38.437804]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
+>>> [   38.443014]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+>>> [   38.448495] [dead00000000012a] address between user and kernel address ranges
+>>> [   38.455852] Internal error: Oops: 0000000096000044 [#1]  SMP
+>>> [   38.461693] Modules linked in:
+>>> [   38.464872] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.16.0-rc3-next-20250623-00003-g85d3e4a2835b #12226 NONE
+>>> [   38.475880] Hardware name: Qualcomm QRD, BIOS 6.0.230525.BOOT.MXF.1.1.c1-00114-MAKENA-1 05/25/2023
+>>> [   38.485096] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>> [   38.492263] pc : __run_timer_base+0x1e0/0x330
+>>> [   38.496784] lr : __run_timer_base+0x1c4/0x330
+>>> [   38.501291] sp : ffff800080003e80
+>>> [   38.504718] x29: ffff800080003ee0 x28: ffff800080003e98 x27: dead000000000122
+>>> [   38.512069] x26: 0000000000000000 x25: 0000000000000000 x24: ffffbc2c54fcdc80
+>>> [   38.519417] x23: 0000000000000101 x22: ffff0000871002d0 x21: 00000000ffff99c6
+>>> [   38.526766] x20: ffffbc2c54fc1f08 x19: ffff0001fef65dc0 x18: ffff800080005028
+>>> [   38.534113] x17: 0000000000000001 x16: ffff0001fef65e60 x15: ffff0001fef65e20
+>>> [   38.541472] x14: 0000000000000040 x13: ffff0000871002d0 x12: ffff800080003ea0
+>>> [   38.548819] x11: 00000000e0000cc7 x10: ffffbc2c54f647c8 x9 : ffff800080003e98
+>>> [   38.556178] x8 : dead000000000122 x7 : 0000000000000000 x6 : ffffbc2c5133c620
+>>> [   38.563526] x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+>>> [   38.570884] x2 : 0000000000000079 x1 : 000000000000007b x0 : 0000000000000001
+>>> [   38.578233] Call trace:
+>>> [   38.580771]  __run_timer_base+0x1e0/0x330 (P)
+>>> [   38.585279]  run_timer_softirq+0x40/0x78
+>>> [   38.589333]  handle_softirqs+0x14c/0x3dc
+>>> [   38.593404]  __do_softirq+0x1c/0x2c
+>>> [   38.597025]  ____do_softirq+0x18/0x28
+>>> [   38.600825]  call_on_irq_stack+0x3c/0x50
+>>> [   38.604890]  do_softirq_own_stack+0x24/0x34
+>>> [   38.609220]  __irq_exit_rcu+0xc4/0x174
+>>> [   38.613108]  irq_exit_rcu+0x18/0x40
+>>> [   38.616718]  el1_interrupt+0x40/0x5c
+>>> [   38.620423]  el1h_64_irq_handler+0x20/0x30
+>>> [   38.624662]  el1h_64_irq+0x6c/0x70
+>>> [   38.628181]  arch_local_irq_enable+0x8/0xc (P)
+>>> [   38.632787]  cpuidle_enter+0x40/0x5c
+>>> [   38.636484]  call_cpuidle+0x24/0x48
+>>> [   38.640104]  do_idle+0x1a8/0x228
+>>> [   38.643452]  cpu_startup_entry+0x3c/0x40
+>>> [   38.647507]  kernel_init+0x0/0x138
+>>> [   38.651026]  start_kernel+0x334/0x3f0
+>>> [   38.654828]  __primary_switched+0x90/0x98
+>>> [   38.658990] Code: 36000428 a94026c8 f9000128 b4000048 (f9000509)
+>>> [   38.665273] ---[ end trace 0000000000000000 ]---
+>>> [   38.670045] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+>>> [   38.677126] SMP: stopping secondary CPUs
+>>> Waiting for ssh to finish
+>>
+>> Thanks for the report.
+>> Does reverting this one patch fix the issue?
 > 
-> Okay, I would like to ask for your advice regarding the implementation of IDA.
+> It seems to, but the bug is not 100% reproducible (sometimes it takes
+> 2+ sus/res cycles to trigger). Alan's change doesn't seem to have a
+> consistent effect.
 > 
-> Using a global IDA in the sub-driver like this:
-> (in i2c-nct6694.c)
-> static DEFINE_IDA(nct6694_i2c_ida);
+>> What does ./suspend_test.sh look like?
 > 
-> static int nct6694_i2c_probe(struct platform_device *pdev)
-> {
->     ida_alloc(&nct6694_i2c_ida, GFP_KERNEL);
->     ...
-> }
+> Nothing special:
 > 
-> causes IDs to be globally incremented across all devices. For example,
-> the first NCT6694 device gets probed 6 times and receives IDs 0–5, but
-> when a second NCT6694 device is added, it receives IDs starting from
-> 6, rather than starting again from 0. This makes per-device ID mapping
-> unreliable.
+> # Set up RTC wakeup
+> echo +10 > /sys/class/rtc/rtc0/wakealarm;
+> # Go to sleep
+> echo mem > /sys/power/state
 > 
-> To solve this, I believe the right approach is to have each NCT6694
-> instance maintain its own IDA, managed by the MFD driver's private
-> data. As mentioned earlier, for example:
-> (in nct6694.c)
-> struct nct6694 {
->     struct device *dev;
->     struct ida i2c_ida;
-> };
+> # Dump the AOSS sleep stats
+> grep ^ /sys/kernel/debug/qcom_stats/*
 > 
-> static int nct6694_probe(struct platform_device *pdev)
-> {
->     ...
->     ida_init(&nct6694->i2c_ida);
->     ...
-> }
-> 
-> (in i2c-nct6694.c)
-> static int nct6694_i2c_probe(struct platform_device *pdev)
-> {
->     id = ida_alloc(&nct6694->i2c_ida, GFP_KERNEL);
-> }
-> 
-> This way, each device allocates IDs independently, and each set of
-> I2C/GPIO instances gets predictable IDs starting from 0 per device. I
-> think this resolves the original issue without relying on hardcoded
-> platform IDs.
-> Please let me know if this implementation aligns with what you had in mind.
 
-This sounds like an acceptable way forward.
+I added some memory debugging but wasn't able to trigger this.
 
--- 
-Lee Jones [李琼斯]
+Does this oneliner help? It's a shot in the dark.
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index d41a6c239953..1cc853c428fc 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1418,6 +1418,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
+  
+	/* Stop hub_wq and related activity */
+	timer_delete_sync(&hub->irq_urb_retry);
++	flush_delayed_work(&hub->init_work);
+	usb_kill_urb(hub->urb);
+	if (hub->has_indicators)
+		cancel_delayed_work_sync(&hub->leds);
+
+
+If not, then could you add 'initcall_debug' to kernel cmd line, and usb core
+dynamic debug before suspend test
+
+mount -t debugfs none /sys/kernel/debug
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+
+Also curious about lsusb -t output
+
+Thanks
+Mathias
+
 
