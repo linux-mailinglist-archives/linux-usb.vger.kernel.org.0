@@ -1,189 +1,212 @@
-Return-Path: <linux-usb+bounces-25083-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25084-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB7E4AE7AAA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 10:46:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8CD2AE7B4F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 11:03:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB7AF7B3F16
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 08:43:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68DC51BC81E5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Jun 2025 09:03:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B61427602C;
-	Wed, 25 Jun 2025 08:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AE9288CB7;
+	Wed, 25 Jun 2025 09:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fjBQfz+z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmWaOFjU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38A4214A94
-	for <linux-usb@vger.kernel.org>; Wed, 25 Jun 2025 08:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9A37E792;
+	Wed, 25 Jun 2025 09:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750841055; cv=none; b=SdDNZZWH5l+dDm39RPXRukhFDLWz06s90f/oB5U1OtV3en5MRHovBt/dtUqInHG040BP9yPd4kHS1jK89O7pwmYXlVSvUsFp6y4hcNCiHv0RuH0OJM/WMvpRnsAV9HhNL+yOcahmnE3tARjfJMJ2qJ1OyiL68Ga4zsJEUeY09l8=
+	t=1750842101; cv=none; b=ifo9NZ2Ng0YW2qk8Owyqx6J+gehrvQyVukJc3hsLXulN1vO33RoBJ9nmxIT6Q8bKGrpBjaaYIMtSkS3shjfg2mqRcrPkoJzULyfQ8DfkRS2iTRcgJrEgNisq5pJLWed9r9Ghk+lE2YruFP6vuwPOGGDKKzrRn+gxgpvV81+19dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750841055; c=relaxed/simple;
-	bh=BuPtxTX46Vl5aKmklojxxDpFZ1QJmGK5fW+w4L09fY0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tzKmaOEe2N8cALBrMWZp0pBCIAO2SrTO/qrakwA0Q/A/1EkWSqQorngVS5qLaeBEwqA+9HfsK57hWBYjVMeWyj4zpbipJMptXJu9ngDUU0jqVvubq34NQlEC5pk5y10YPuXMyWg23yqpZC7yajLLKeVVN48sm38ONJCs360dbjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fjBQfz+z; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750841054; x=1782377054;
-  h=date:from:to:cc:subject:message-id;
-  bh=BuPtxTX46Vl5aKmklojxxDpFZ1QJmGK5fW+w4L09fY0=;
-  b=fjBQfz+zvia3DFrHmVQloOgsbl0oMjSbGVrqysB168YeoqPxA8sAV27E
-   mb6W8xL/4QwUECXLGU5sGX8P0+LGDaXG7J2a7xcDRye7tar3F6e8yvw6i
-   nQi3FUMj8gfoJSZKAeOspKyMzK3UYbMGqJ36OiFasEg7dijTl5MJTaGxO
-   jNnHka45xgCSLFbBEJZWY4KiEa95ybXewycHVF6PYWs7emitXHq845jtQ
-   j6/aP2tCZivYhH29I3T9CyNFh1RxI88PPP/BZMiltrV0dPSjJzakg3rbS
-   bFNcBPVSLlnzTKo6a7ZLsHg82FI3b89aTHcRZwN1ijBfOQa4uQv1maSE/
-   w==;
-X-CSE-ConnectionGUID: l7oOonZRTteByGGOQ3pEAQ==
-X-CSE-MsgGUID: qw/1EKAPS7aquJb/EmqbSA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="53166069"
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="53166069"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 01:44:13 -0700
-X-CSE-ConnectionGUID: UE1iW12pT9uEM69og80caQ==
-X-CSE-MsgGUID: t8gRYa4XSf61g0hrssbYdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="152446260"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 25 Jun 2025 01:44:12 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uULjm-000Su8-1U;
-	Wed, 25 Jun 2025 08:44:10 +0000
-Date: Wed, 25 Jun 2025 16:43:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- eb90d36bfa0674ac2f1713a3376abacc5539ecd0
-Message-ID: <202506251631.Sxb7pP36-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1750842101; c=relaxed/simple;
+	bh=OhdgF55PyBEbfC8aXgc9N1rHxO4doVes6/sM5CeG1ZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=teMKDJDYBYBSDjpcayoA+WGPjv6AhAG0e6k1aHafTrr4D4gh5JAr953xLw6VLB0xuPVSLSovBLdYyJwf18FbI6xlKh8eS+UIr3ptSG9lX2SntSZnzk4zFEHXvkoP/u/es2kKujeL4AJUdQ4kPa8si5vG1llI7iHcXmPcI7g4Uok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmWaOFjU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9ADC4CEEA;
+	Wed, 25 Jun 2025 09:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750842100;
+	bh=OhdgF55PyBEbfC8aXgc9N1rHxO4doVes6/sM5CeG1ZU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kmWaOFjUT1wMib2gJdif3D7Ejx4H1upQdwnyg4IgRfaVtd5UkCyhMfOC76/FUKCgd
+	 vxAHh5XhTgPH4e9ON+kNB4QIpDFQ/8mWmCl83/GHhLyyjDp1vZvkEaecgSx8QtvX+a
+	 Sb6medYCTIPOU5fcM/Ff+yprIo/QdiK0Mjr3VOBABQvUXWYbkQksv7UAhdXb0ianvJ
+	 BRt0NEUZp8EKImSvLzdWddbpxzJqOo0edMBk+gtjyzAoRVhtTQMPeV+i6TGDdniD03
+	 uFi8a7/s5Fa5nOtywCjlBDJwWxf2Gmh8lUCG9O7yMGxOobFxqR4FXbXy6nSJAlQVcO
+	 wJyii3Wxvv+JA==
+Date: Wed, 25 Jun 2025 10:01:33 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250625090133.GP795775@google.com>
+References: <20250612140041.GF381401@google.com>
+ <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+ <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+ <20250619115345.GL587864@google.com>
+ <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
+ <20250619152814.GK795775@google.com>
+ <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: eb90d36bfa0674ac2f1713a3376abacc5539ecd0  usb: typec: ucsi: yoga-c630: register DRM HPD bridge
+On Fri, 20 Jun 2025, Ming Yu wrote:
 
-elapsed time: 1020m
+> Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午11:28寫道：
+> >
+> > On Thu, 19 Jun 2025, Ming Yu wrote:
+> >
+> > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
+> > > >
+> > > > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > > >
+> > > > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+> > > > > >
+> > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > > > > >
+> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
+> > > > > > > >
+> > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > > > > > > >
+> > > > > > > > > Dear Lee,
+> > > > > > > > >
+> > > > > > > > > Thank you for reviewing,
+> > > > > > > > >
+> > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
+> > > > > > > > > >
+> > > > > > > > > ...
+> > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > > > > > > +
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > > > > > > >
+> > > > > > > > > > Why have we gone back to this silly numbering scheme?
+> > > > > > > > > >
+> > > > > > > > > > What happened to using IDA in the child driver?
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > In a previous version, I tried to maintain a static IDA in each
+> > > > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
+> > > > > > > > > devices are bound to the same driver — in that case, the IDs are not
+> > > > > > > > > fixed and become unusable for my purpose.
+> > > > > > > >
+> > > > > > > > Not sure I understand.
+> > > > > > > >
+> > > > > > >
+> > > > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > > > > > > However, when a second NCT6694 device is connected to the system, it
+> > > > > > > will receive IDs 16~31.
+> > > > > > > Because of this behavior, I switched back to using platform_device->id.
+> > > > > >
+> > > > > > Each of the devices will probe once.
+> > > > > >
+> > > > > > The first one will be given 0, the second will be given 1, etc.
+> > > > > >
+> > > > > > Why would you give multiple IDs to a single device bound to a driver?
+> > > > > >
+> > > > >
+> > > > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
+> > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+> > > > > is independently addressable, has its own register region, and can
+> > > > > operate in isolation. The IDs are used to distinguish between these
+> > > > > instances.
+> > > > > For example, the GPIO driver will be probed 16 times, allocating 16
+> > > > > separate gpio_chip instances to control 8 GPIO lines each.
+> > > > >
+> > > > > If another device binds to this driver, it is expected to expose
+> > > > > peripherals with the same structure and behavior.
+> > > >
+> > > > I still don't see why having a per-device IDA wouldn't render each
+> > > > probed device with its own ID.  Just as you have above.
+> > > >
+> > >
+> > > For example, when the MFD driver and the I2C sub-driver are loaded,
+> > > connecting the first NCT6694 USB device to the system results in 6
+> > > nct6694-i2c platform devices being created and bound to the
+> > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
+> > >
+> > > However, when a second NCT6694 USB device is connected, its
+> > > corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
+> > > instead of 0 through 5 as I originally expected.
+> > >
+> > > If I've misunderstood something, please feel free to correct me. Thank you!
+> >
+> > In the code above you register 6 I2C devices.  Each device will be
+> > assigned a platform ID 0 through 5. The .probe() function in the I2C
+> > driver will be executed 6 times.  In each of those calls to .probe(),
+> > instead of pre-allocating a contiguous assignment of IDs here, you
+> > should be able to use IDA in .probe() to allocate those same device IDs
+> > 0 through 5.
+> >
+> > What am I missing here?
+> >
+> 
+> You're absolutely right in the scenario where a single NCT6694 device
+> is present. However, I’m wondering how we should handle the case where
+> a second or even third NCT6694 device is bound to the same MFD driver.
+> In that situation, the sub-drivers using a static IDA will continue
+> allocating increasing IDs, rather than restarting from 0 for each
+> device. How should this be handled?
 
-configs tested: 96
-configs skipped: 1
+I'd like to see the implementation of this before advising.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+In such a case, I assume there would be a differentiating factor between
+the two (or three) devices.  You would then use that to decide which IDA
+would need to be incremented.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-arc                              allmodconfig    clang-19
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                   randconfig-001-20250625    gcc-11.5.0
-arc                   randconfig-002-20250625    gcc-11.5.0
-arc                   randconfig-002-20250625    gcc-12.4.0
-arm                              allmodconfig    clang-19
-arm                               allnoconfig    clang-21
-arm                               allnoconfig    gcc-15.1.0
-arm                              allyesconfig    clang-19
-arm                   randconfig-001-20250625    clang-21
-arm                   randconfig-001-20250625    gcc-11.5.0
-arm                   randconfig-002-20250625    gcc-11.5.0
-arm                   randconfig-003-20250625    gcc-11.5.0
-arm                   randconfig-003-20250625    gcc-13.3.0
-arm                   randconfig-004-20250625    gcc-11.5.0
-arm                   randconfig-004-20250625    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250625    gcc-11.5.0
-arm64                 randconfig-002-20250625    clang-20
-arm64                 randconfig-002-20250625    gcc-11.5.0
-arm64                 randconfig-003-20250625    gcc-11.5.0
-arm64                 randconfig-003-20250625    gcc-12.3.0
-arm64                 randconfig-004-20250625    clang-20
-arm64                 randconfig-004-20250625    gcc-11.5.0
-csky                              allnoconfig    gcc-15.1.0
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-21
-hexagon                           allnoconfig    gcc-15.1.0
-hexagon                          allyesconfig    clang-19
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    clang-20
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20250625    clang-20
-i386        buildonly-randconfig-001-20250625    gcc-12
-i386        buildonly-randconfig-002-20250625    gcc-12
-i386        buildonly-randconfig-003-20250625    gcc-12
-i386        buildonly-randconfig-004-20250625    gcc-12
-i386        buildonly-randconfig-005-20250625    clang-20
-i386        buildonly-randconfig-005-20250625    gcc-12
-i386        buildonly-randconfig-006-20250625    clang-20
-i386        buildonly-randconfig-006-20250625    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-15.1.0
-loongarch                         allnoconfig    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-15.1.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    gcc-15.1.0
-riscv                            allmodconfig    gcc-15.1.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    gcc-15.1.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    clang-19
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250625    gcc-12
-x86_64      buildonly-randconfig-002-20250625    gcc-12
-x86_64      buildonly-randconfig-003-20250625    gcc-12
-x86_64      buildonly-randconfig-004-20250625    gcc-12
-x86_64      buildonly-randconfig-005-20250625    gcc-12
-x86_64      buildonly-randconfig-006-20250625    gcc-12
-x86_64                              defconfig    clang-20
-x86_64                                  kexec    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-12
-x86_64                         rhel-9.4-kunit    gcc-12
-x86_64                           rhel-9.4-ltp    gcc-12
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
+However, Greg is correct.  Hard-coding look-ups for userspace to use
+sounds like a terrible idea.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Lee Jones [李琼斯]
 
