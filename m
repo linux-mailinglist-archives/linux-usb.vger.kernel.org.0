@@ -1,138 +1,129 @@
-Return-Path: <linux-usb+bounces-25118-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25119-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E545AE9BB4
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 12:42:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18469AE9CAB
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 13:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D55C07BBBE3
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 10:38:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D383A1C2112B
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 11:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976F420E031;
-	Thu, 26 Jun 2025 10:39:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A83275112;
+	Thu, 26 Jun 2025 11:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CW70J5sP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2E816A94A
-	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 10:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25A273D65
+	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 11:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750934375; cv=none; b=GsWKaNwxWJ4gMADSQUBRwKgL6hvh2pcDOqcWIxa+WCLOigPgJy6aaAgns8q9w46yiLHAboF5qg/ERwxRguGMqCqtUROfFu/tSy7X4uJfVgO0t94fO5nadnTYmEYs59HB7I18Je2tleQhLDOVHyCcojc6jz59CkIlLAJK9ZcVb3Q=
+	t=1750937975; cv=none; b=tarBENsjxOtOcJxPn6BO8w6OTetj2JWGtb+q8BSy+gnC1buxGbYR3ANtLQC23A48CsUeJjlNxKt0kauPbA6ef+cIAqVHx8E2mY7sEx2I/IC/rx5V9A0j3d0CqBIW4hbTg+Cqyu/SSiPLtqpGRW9pE5GaXvPcbT50LTJVKlFczug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750934375; c=relaxed/simple;
-	bh=bImG1xdoz4PObOY1+0JSEfPyFhJ8Ll22tTHDNdOE3n4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlrB2zPzPwYFrvOAomPBI8UoZL+8CVrViAHuND+n32VLcNZGdy+ARFTThQ3wyijT48DwZ6a7OLeqazT9Qc41o5BsCixsq1jxumdTYieE/OrT7PD0bbkmm55+IzFX2nPuvb1nhYqSmh+oSU7KWNvJFAVMX0tDrv2wwOQ1/SnVWLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uUk0y-0005ST-Ao; Thu, 26 Jun 2025 12:39:32 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uUk0y-005Qu8-0Q;
-	Thu, 26 Jun 2025 12:39:32 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uUk0y-001YGV-05;
-	Thu, 26 Jun 2025 12:39:32 +0200
-Date: Thu, 26 Jun 2025 12:39:31 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [bug report] net: usb: lan78xx: Convert to PHYLINK for improved
- PHY and MAC management
-Message-ID: <aF0jY8gUPgYDSyew@pengutronix.de>
-References: <162f8d6d-b2ff-4ad4-96ad-5477a1bb4217@sabinyo.mountain>
+	s=arc-20240116; t=1750937975; c=relaxed/simple;
+	bh=gzus1+83/JfEqB+F2doC5nrGmagbsEh0ktRQ88QKu4I=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=MIqa/kEkAV6wQT6FXWtsh5DGgf3p5Bcict/Gh6GSgTLVeD9VjnA5UCsucDxc2SUqPCsJXW0ghhpukDzatkJwgfEovBE8JlvhLrkxWD+6eCR1UanNNbUt6wFLEfuEDhB6RKpY0rrB2ZTtO8c2qs14b4cQQypZke9KCxnVYrk1Yrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CW70J5sP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 566FAC4CEEB
+	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 11:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750937975;
+	bh=gzus1+83/JfEqB+F2doC5nrGmagbsEh0ktRQ88QKu4I=;
+	h=From:To:Subject:Date:From;
+	b=CW70J5sPQWcSJWpP7Lu9fP4G9+M2zLOLObCLhvgOE0DfQgaX2gOmn9Tx9L56cENhM
+	 aKvKeq1onDYKxAWH+3PQBQFc4F3oXO0lac3K+fhZhYYzeICgalVrZj0CvlO2k0HrkX
+	 KFsi8ha0QHVGQKV+rUJHb4KoqZki6qp8LzK92NTC21NAtDs+400iv18uUzzM9+ofQ2
+	 Pb6D07fBsb4VXeAsgkUPkUVuIeuDzjYPvppIGARO7LSdFo08/ie+GbULDoIlg7OWHx
+	 MOFQ5HLmc6LHvla7hmk2ysx0lzpw+Sj80Tdtwxf4MG38MVpikYwnK8rEioOfp9Y6JO
+	 P2zyO/S/KfQVA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 44197C433E1; Thu, 26 Jun 2025 11:39:35 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220272] New: Latent race condition in USB code unveiled with
+ optimized memset_64.S
+Date: Thu, 26 Jun 2025 11:39:35 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: m.seyfarth@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-220272-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <162f8d6d-b2ff-4ad4-96ad-5477a1bb4217@sabinyo.mountain>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Wed, Jun 25, 2025 at 10:22:54AM -0500, Dan Carpenter wrote:
-> Hello Oleksij Rempel,
-> 
-> The patch e110bc825897: "net: usb: lan78xx: Convert to PHYLINK for
-> improved PHY and MAC management" from Jun 18, 2025, leads to the
-> following static checker warning:
-> 
->     drivers/net/usb/lan78xx.c:2851 lan78xx_phy_init()
->     error: we previously assumed 'phydev' could be null (see line 2839)
-> 
-> drivers/net/usb/lan78xx.c
->     2817 static int lan78xx_phy_init(struct lan78xx_net *dev)
->     2818 {
->     2819 	struct phy_device *phydev;
->     2820 	int ret;
->     2821 
->     2822 	phydev = lan78xx_get_phy(dev);
->     2823 	/* phydev can be NULL if no PHY is found and the chip is LAN7801,
-> 
-> Assume phydev is NULL
-> 
->     2824 	 * which will use a fixed link later.
->     2825 	 * If an  error occurs, return the error code immediately.
->     2826 	 */
->     2827 	if (IS_ERR(phydev))
->     2828 		return PTR_ERR(phydev);
->     2829 
->     2830 	ret = lan78xx_phylink_setup(dev);
->     2831 	if (ret < 0)
->     2832 		return ret;
->     2833 
->     2834 	/* If no PHY is found, set up a fixed link. It is very specific to
->     2835 	 * the LAN7801 and is used in special cases like EVB-KSZ9897-1 where
->     2836 	 * LAN7801 acts as a USB-to-Ethernet interface to a switch without
->     2837 	 * a visible PHY.
->     2838 	 */
->     2839 	if (!phydev) {
->     2840 		ret = lan78xx_set_fixed_link(dev);
->     2841 		if (ret < 0)
->     2842 			goto phylink_uninit;
->     2843 	}
->     2844 
->     2845 	ret = lan78xx_mac_prepare_for_phy(dev);
->     2846 	if (ret < 0)
->     2847 		goto phylink_uninit;
->     2848 
->     2849 	/* if phyirq is not set, use polling mode in phylib */
->     2850 	if (dev->domain_data.phyirq > 0)
-> --> 2851 		phydev->irq = dev->domain_data.phyirq;
->     2852 	else
->     2853 		phydev->irq = PHY_POLL;
->     2854 	netdev_dbg(dev->net, "phydev->irq = %d\n", phydev->irq);
-> 
-> Then this block will crash.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
-Thank you for the bug report!
+            Bug ID: 220272
+           Summary: Latent race condition in USB code unveiled with
+                    optimized memset_64.S
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: m.seyfarth@gmail.com
+        Regression: No
 
-Here is the fix:
-https://lore.kernel.org/all/20250626103731.3986545-1-o.rempel@pengutronix.de
+Created attachment 308313
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308313&action=3Dedit
+Optimized memset_64.S for Intel Raptor Lake
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Experimenting with AI to tune memset_64.S (see the attached file) for my In=
+tel
+14700KF-system unveiled a race condition in the USB code.
+
+Once this significantly faster memset implementation is compiled-in, I've
+noticed that my USB mouse (Sharkoon Light2 100) is not recognized/detected =
+any
+longer after each re-boot. The USB mouse is placed in one of the top USB sl=
+ot
+next to my USB keyboard (which surprisingly still works fine) on my NZXT N5
+Z690 motherboard. Which one doesn't matter.
+
+I did not get any suspect dmesg entries, the mouse is simply not recognized=
+ at
+all.
+
+I first thought of a hardware issue or defective USB slot, but re-slotting =
+the
+mouse in a different USB slot did not fix the problem eventually. The mouse
+initially works fine there until the next reboot.
+
+It also starts to work fine in the same USB slot where it wasn't recognized
+after a reboot once I unplug it and plug it in the same USB slot again.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
