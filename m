@@ -1,95 +1,73 @@
-Return-Path: <linux-usb+bounces-25127-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25128-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 315CDAEA097
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 16:31:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEED5AEA218
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 17:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E4E95A72F1
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 14:30:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E0214E6178
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 15:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2162EA752;
-	Thu, 26 Jun 2025 14:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3162ED163;
+	Thu, 26 Jun 2025 14:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Du8N02/a"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nhg3GA+A"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A1A2EA492
-	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 14:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90C22EAD1D
+	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 14:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750948236; cv=none; b=r78xgg7WbOw/bNdIumCKL/rrIDUefBkaQkcw8wUKK6yRUgVt9xftpMhCo1n+6/Stz7l0GWncg68cXrvW//axFvjl1Xt/w6IZgmjnHRYrhGlc0sQiq5lC9igQ3vMyTsMTUVf36cAH/ZJF9EEltn6RkKS6ebr7gOllBHtfG4QA7c8=
+	t=1750949889; cv=none; b=D3FDFLSv3+FgYhMNPbOHTTdapUuEgOXZLFg2fpeXrTqrg/dppcZavffZh7PG6CkbRumAdqf3NzOexe8ZxDfjFN6SXN/BdjhkCp69HnOBd+KOdRp87yNsAHLcYpuPB6sKdBayITriG22wPPL37TLIjMyOuPlNi2pvNCr5DVWhiOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750948236; c=relaxed/simple;
-	bh=ES8AZ4INdbhrik/zU0eaHaRXXQ1YZQGt1mxwnbSqaVo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AIueOTMfuN3Z/BXRN14KBLy3b7k4ix/yHZy3NZToGaDBGf5eVebEPoq32YtoAYcKWL/S+YHYcNBTAQ+n+gafCtY5kLuYQPYCPY+Bogn/m1IMo7M6pZDn3CSaVOdUYQaeC9JB2W8D+QlBbGLD2lItvWo63U/wJPD9eRWhv1YAbhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Du8N02/a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4E88C4CEEB
-	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 14:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750948234;
-	bh=ES8AZ4INdbhrik/zU0eaHaRXXQ1YZQGt1mxwnbSqaVo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Du8N02/aMQkrzHbS4BsdWr7eeWlt8Oio4hW8D6oqN1tSsYi0ZT+4WfMZn18J3jVuv
-	 za2tYOh+I0eVPy9dw/x9l/ZhRxd8zWLRizJ1sAq9+nu6jWNJqs9ARu2cj7+N8Hx7K6
-	 SCimmYBqvvQ+9Fx0tOkI6hyFWv57XQW06IRg8txtKPrYlLCv3ruhEx9CRJoBDfpUCt
-	 EQezdW1yl1eSt9mdQKJf6EXoLnNMHG8Ps8ff8HO+638+sfNvqr6ucRKjgGo37+EMYj
-	 8f6RiouSYX0E44Z449sfu4cFAOQdwOnUMX8QDiqp+nc5Yte/CKkG0v92oKtUK+XpeT
-	 9TlmWTwuG452g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9B2E0C3279F; Thu, 26 Jun 2025 14:30:34 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220272] Latent race condition in USB code unveiled with
- optimized memset_64.S
-Date: Thu, 26 Jun 2025 14:30:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220272-208809-FMmzhw6lR7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
-References: <bug-220272-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1750949889; c=relaxed/simple;
+	bh=y3iq1kXhyZOEbcCYE21f0lZDxJ3vD2lCbwnmQI2dM5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XQVgJ1HrmUr5s4GHRhfwOhn/5UB4uyRg0YgZcoigd2JZZIhJgt62IGGqFdA1gxBYDsJZdej4Zhj4Y72SYGPa85gGDsK3/8ZXhhpLBDkyUNuLft/54ZXDmueTfJ6F1GA9DAa/sGGsgEUNRV4xELDQQR2BZLijaQ5NoAU4sr6zdAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nhg3GA+A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220B5C4CEEB;
+	Thu, 26 Jun 2025 14:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750949888;
+	bh=y3iq1kXhyZOEbcCYE21f0lZDxJ3vD2lCbwnmQI2dM5w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nhg3GA+A424/ac1nzb1Ez8X1PnIDuW2r2XihJn5gNpWYiLStYOHoF8zzQD+TjhjZV
+	 Rrp/2Vz8iWqpMaFvcBewiMcnLMG4I+vYZGLxihmrwBwDiiIS+RuiT+JOMWD+SfhSbI
+	 jkBh1GKMqLJlf9O0hmgR/QFUqMPon8duwjS7OAuo=
+Date: Thu, 26 Jun 2025 15:58:04 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
+	konrad.dybcio@oss.qualcomm.com
+Subject: Re: [PATCH 0/1] Fix "detection of high tier USB3 devices" patch in
+ usb-linus
+Message-ID: <2025062654-juggling-crown-8452@gregkh>
+References: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
+On Thu, Jun 26, 2025 at 04:01:01PM +0300, Mathias Nyman wrote:
+> Hi Greg
+> 
+> This is a fixup patch for
+> 8f5b7e2bec1c ("usb: hub: fix detection of high tier USB3 devices behind suspended hubs")
+> that is currently in your usb-linus branch.
+> 
+> Let me know if you instead of adding this fixup want to drop the original
+> and me to send a new 'squashed' patch instead.
 
---- Comment #2 from Alan Stern (stern@rowland.harvard.edu) ---
-What makes you think the mouse problem is caused by a race condition?
+This is good, I'll take it as-is, thanks!
 
-If you enable USB dynamic debugging, what shows up in the dmesg log when the
-mouse is plugged in (both successfully and unsuccessfully)?
-
-    echo module usbcore =3Dp >/sys/kernel/debug/dynamic_debug/control
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
 
