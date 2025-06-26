@@ -1,73 +1,204 @@
-Return-Path: <linux-usb+bounces-25128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEED5AEA218
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 17:13:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2629AEA299
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 17:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E0214E6178
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 15:06:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 883D9172A7D
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 15:32:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3162ED163;
-	Thu, 26 Jun 2025 14:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 407592ECEBE;
+	Thu, 26 Jun 2025 15:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nhg3GA+A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bKFFjvGl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90C22EAD1D
-	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 14:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5571F2ECD3E;
+	Thu, 26 Jun 2025 15:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750949889; cv=none; b=D3FDFLSv3+FgYhMNPbOHTTdapUuEgOXZLFg2fpeXrTqrg/dppcZavffZh7PG6CkbRumAdqf3NzOexe8ZxDfjFN6SXN/BdjhkCp69HnOBd+KOdRp87yNsAHLcYpuPB6sKdBayITriG22wPPL37TLIjMyOuPlNi2pvNCr5DVWhiOc=
+	t=1750951931; cv=none; b=DGO/QaX34ZaFnrHr5jobjk/wvVtMJ8fZ6YwXT+XSzFV39faDys5g2h5J/pUYlf3qwIKJJIOgDxIdna9cYuFKVVqmmm5cpbhIj6wnu3fPpGgsPLmyoVKM+aMfW/vt/6vCHIC25YD4oSnrnAjD//iA+qgMz6Lka6b6AHxWR2K5fnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750949889; c=relaxed/simple;
-	bh=y3iq1kXhyZOEbcCYE21f0lZDxJ3vD2lCbwnmQI2dM5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XQVgJ1HrmUr5s4GHRhfwOhn/5UB4uyRg0YgZcoigd2JZZIhJgt62IGGqFdA1gxBYDsJZdej4Zhj4Y72SYGPa85gGDsK3/8ZXhhpLBDkyUNuLft/54ZXDmueTfJ6F1GA9DAa/sGGsgEUNRV4xELDQQR2BZLijaQ5NoAU4sr6zdAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nhg3GA+A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220B5C4CEEB;
-	Thu, 26 Jun 2025 14:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750949888;
-	bh=y3iq1kXhyZOEbcCYE21f0lZDxJ3vD2lCbwnmQI2dM5w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nhg3GA+A424/ac1nzb1Ez8X1PnIDuW2r2XihJn5gNpWYiLStYOHoF8zzQD+TjhjZV
-	 Rrp/2Vz8iWqpMaFvcBewiMcnLMG4I+vYZGLxihmrwBwDiiIS+RuiT+JOMWD+SfhSbI
-	 jkBh1GKMqLJlf9O0hmgR/QFUqMPon8duwjS7OAuo=
-Date: Thu, 26 Jun 2025 15:58:04 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com
-Subject: Re: [PATCH 0/1] Fix "detection of high tier USB3 devices" patch in
- usb-linus
-Message-ID: <2025062654-juggling-crown-8452@gregkh>
-References: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1750951931; c=relaxed/simple;
+	bh=9cBzVZrNtKrfd33efqkWagZMjsWvvlG6F/Mn2eyIc6M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IZlXBaUX6PLGjKltCMcKStLml+1eLL2URgj88foA9/QoTAazXRIIBZSklika3DtoKXYU5RJITH+ltIz/oobTHpc4KEdD+WhIJu+Ow/pku6vTGQIoJIa6WjkkVDBZRaLR7pmoXG2YBeCnMaxmhqbz6BkHvVi6DqMXtC2/f2of+vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bKFFjvGl; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so1330111b3a.0;
+        Thu, 26 Jun 2025 08:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750951929; x=1751556729; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dOPju5AumU2Kn0t+yuh195AN33tJhLKQXSfJHeANdZI=;
+        b=bKFFjvGlw5i/Oe5DMEMUGH7Z9oxlwmwRKoRi17TGM4g/bygPxXhrh3H9ldqgnrQ2Ie
+         hqQ5B5lvb1KnWTQvMaSwMzlNpOmqQ4HVZquH6htqpGnmVTr+4jbZWIWumlK3RWu3m5Lz
+         3NctjxSzBGWSmwoj8a5R3qZhX0g3vmclsaPlq7tHQrFTI8GIT6WpvdVOIDPvWrQJT2nB
+         xo0IUJMcBwJ4XU6M1OFGTcK0f3d91S/hwWPEVYDyQV6aAhqYR9ScT7db3ok4Il/TE5Tz
+         vG5alV6xCDFVM1BmemQOg1zhsHRRtEqQHJ0xGcECSLRQRmtxI00KtwYhFSoYAJwXiWva
+         7qmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750951929; x=1751556729;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dOPju5AumU2Kn0t+yuh195AN33tJhLKQXSfJHeANdZI=;
+        b=J6+8J/R102+RkuEWnRG1E/crmRsC/YQ7C2SVMt1Ja0gf8zsGn91JdC+hsaSRUvpjg4
+         MaSZV0fLxk+MHXCxE3RD2i8QuiDYHtSchVs6OuOdWKEeuMk/cA1E9jn/U9OjyFe7B333
+         Kw2EmrVs2ZPt+Y1w+MkGwzmf7cgrkfgt2thnTCKZ8s6z6e/iVZieUAx724A3ugZZEz8l
+         7nyxG1R19yYHUkvgj0dyL0m/3G0r25lwEEQlLj9p8pQnnkQc3HZ0dUyTrteA89ai7OIf
+         XCrE32vpAY6ROBNaN1TvYjirVTcrgNnrOEsHWywfqL96Jh0CTaCqyw41/td/W41o70LR
+         SEgA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+xESvuSgbBlnIS/qkM7J3WBXMK0t7J9A92LOId72mAVXCiS2z9ALphPDFTnSh96cdHDCrRy6jWmjXpP8=@vger.kernel.org, AJvYcCXHzGqXtsJr4Vl4+Wrwjus+C1qEwf4aoSm6N1wGswMsqAkfgSKn306ooT46aFxfttQ5tUHFU6djKJgO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxrmrvli9UUEiDi4LsMwUi4G+ILjGnRjWsfit92cTtNnNxbLSvk
+	3ygxX6Kw0UhUcE9nv+jmfKoRMKnDf89cmKwywhJnHgIkHwftYvZqWhud
+X-Gm-Gg: ASbGnct/dtyFhDfECayYYxLMJKypJKSiQA0hfDddr8u3vv++KIQtaGfA94eNTYL8Dqx
+	5EGj1TcUjKY9Un9lyfdk2LUMHR2p4sVZMT2MV7F6H+WifeVDAII+98ED8Rd0XrnJtfzx6e7EstI
+	rj/X2RIHV0pvWE7JgLTrsyKL5tJlRUn4OibnY6p44Sw1+g5TGG8dBGwna4vo9veAyzopPT9D8MF
+	KFqZiBAxY3eX30gbEqw028L+SlBDfZgR1MCgiJlFPlkc0MLJTC0VCC/TtnuhrSJ2iKeMRHLqQLL
+	NXIm72Kf2Qy+n87y81CaU6pNLNpyNEph0oml9NcjYLh2xK/OeBS01+W1z6GxcaDHQhq+uO3cX7f
+	WGxV5g4bIt/gkO3L9VQ1a
+X-Google-Smtp-Source: AGHT+IGKqAPTE+91pLgSVbkrh/0uvi3JsBdef2MyY88JBpFky3mK+FDQw7En9IeOx8upC2PzlOgl2Q==
+X-Received: by 2002:a05:6a20:7d8b:b0:215:efed:acfc with SMTP id adf61e73a8af0-2207f14d5f6mr11290030637.7.1750951929356;
+        Thu, 26 Jun 2025 08:32:09 -0700 (PDT)
+Received: from avinash-INBOOK-Y2-PLUS.. ([2401:4900:88e3:29c5:7a4e:6494:9023:72af])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b34c44b4755sm1976776a12.73.2025.06.26.08.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jun 2025 08:32:08 -0700 (PDT)
+From: Abinash Singh <abinashlalotra@gmail.com>
+X-Google-Original-From: Abinash Singh <abinashsinghlalotra@gmail.com>
+To: oneukum@suse.com
+Cc: abinashlalotra@gmail.com,
+	abinashsinghlalotra@gmail.com,
+	gregkh@linuxfoundation.org,
+	johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: serial: usb_wwan: Fix data races by protecting dtr/rts state with a mutex
+Date: Thu, 26 Jun 2025 21:01:56 +0530
+Message-ID: <20250626153156.50131-1-abinashsinghlalotra@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <f2419bb9-2d81-4a6d-838d-b404e3ce7786@suse.com>
+References: <f2419bb9-2d81-4a6d-838d-b404e3ce7786@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 26, 2025 at 04:01:01PM +0300, Mathias Nyman wrote:
-> Hi Greg
-> 
-> This is a fixup patch for
-> 8f5b7e2bec1c ("usb: hub: fix detection of high tier USB3 devices behind suspended hubs")
-> that is currently in your usb-linus branch.
-> 
-> Let me know if you instead of adding this fixup want to drop the original
-> and me to send a new 'squashed' patch instead.
+Fix two previously noted locking-related issues in usb_wwan by introducing
+a mutex to serialize access to the shared `rts_state` and `dtr_state`
+fields in `struct usb_wwan_port_private`.
 
-This is good, I'll take it as-is, thanks!
+- In `usb_wwan_dtr_rts()`, the fields are now updated under the new
+  `portdata->lock` to prevent concurrent access.
+- In `usb_wwan_tiocmset()`, the same lock is used to protect both updates
+  to the modem control lines and the subsequent `usb_wwan_send_setup()`
+  call.
 
-greg k-h
+The mutex is initialized during `usb_wwan_port_probe()` when the port
+private data is allocated. This ensures consistent state and avoids
+data races when multiple threads attempt to modify control line state.
+
+This change resolves the two old `FIXME` comments and improves thread
+safety for modem control signal handling.
+
+Signed-off-by: Abinash Singh <abinashsinghlalotra@gmail.com>
+---
+Thank You very much for your feedback .
+You don't have to say sorry , your feedback
+is valueable for me.
+
+
+v2 :
+	initialized the mutex during probing
+	droping lock after returning from usb_wwan_send_setup()
+
+Regards
+Abinash
+---
+ drivers/usb/serial/usb-wwan.h |  1 +
+ drivers/usb/serial/usb_wwan.c | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
+index 519101945769..e8d042d9014f 100644
+--- a/drivers/usb/serial/usb-wwan.h
++++ b/drivers/usb/serial/usb-wwan.h
+@@ -59,6 +59,7 @@ struct usb_wwan_port_private {
+ 	int ri_state;
+ 
+ 	unsigned long tx_start_time[N_OUT_URB];
++	struct mutex lock;
+ };
+ 
+ #endif /* __LINUX_USB_USB_WWAN */
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index 0017f6e969e1..cd80fbd1dc6f 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -80,11 +80,12 @@ void usb_wwan_dtr_rts(struct usb_serial_port *port, int on)
+ 		return;
+ 
+ 	portdata = usb_get_serial_port_data(port);
+-	/* FIXME: locking */
++	mutex_lock(&portdata->lock);
+ 	portdata->rts_state = on;
+ 	portdata->dtr_state = on;
+ 
+ 	usb_wwan_send_setup(port);
++	mutex_unlock(&portdata->lock);
+ }
+ EXPORT_SYMBOL(usb_wwan_dtr_rts);
+ 
+@@ -113,6 +114,7 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
+ 	struct usb_serial_port *port = tty->driver_data;
+ 	struct usb_wwan_port_private *portdata;
+ 	struct usb_wwan_intf_private *intfdata;
++	int ret;
+ 
+ 	portdata = usb_get_serial_port_data(port);
+ 	intfdata = usb_get_serial_data(port->serial);
+@@ -120,7 +122,7 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
+ 	if (!intfdata->use_send_setup)
+ 		return -EINVAL;
+ 
+-	/* FIXME: what locks portdata fields ? */
++	mutex_lock(&portdata->lock);
+ 	if (set & TIOCM_RTS)
+ 		portdata->rts_state = 1;
+ 	if (set & TIOCM_DTR)
+@@ -130,7 +132,9 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
+ 		portdata->rts_state = 0;
+ 	if (clear & TIOCM_DTR)
+ 		portdata->dtr_state = 0;
+-	return usb_wwan_send_setup(port);
++	ret = usb_wwan_send_setup(port);
++	mutex_unlock(&portdata->lock);
++	return ret;
+ }
+ EXPORT_SYMBOL(usb_wwan_tiocmset);
+ 
+@@ -452,7 +456,7 @@ int usb_wwan_port_probe(struct usb_serial_port *port)
+ 	portdata = kzalloc(sizeof(*portdata), GFP_KERNEL);
+ 	if (!portdata)
+ 		return -ENOMEM;
+-
++	mutex_init(&portdata->lock);
+ 	init_usb_anchor(&portdata->delayed);
+ 
+ 	for (i = 0; i < N_IN_URB; i++) {
+-- 
+2.43.0
+
 
