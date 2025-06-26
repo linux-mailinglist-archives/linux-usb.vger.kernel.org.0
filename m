@@ -1,122 +1,101 @@
-Return-Path: <linux-usb+bounces-25121-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25122-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE73BAE9D53
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 14:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E69AAE9E11
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 15:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54B2B18983DC
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 12:18:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E264D1C41812
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 13:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB3C21882B;
-	Thu, 26 Jun 2025 12:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9462E5426;
+	Thu, 26 Jun 2025 13:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kUF3Sbwk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iGYy3Sjr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0782F1FE4;
-	Thu, 26 Jun 2025 12:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163002E540A
+	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 13:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750940314; cv=none; b=CbbBbYRMHYUbteGymtna7UFwzp7uLWSme7WK2kK93890nBYE2EqtD/o6eTK3APF6KWmTojBMu6t7tcYMXxsklkNHRmaMwN+E+5Vx8nBpoxV2Pu0IFQB2H+31glldxB+Xfx/Y4mzT8j5WY/fc0gPiclITQLUVMEGTgPLC54PAbL0=
+	t=1750942881; cv=none; b=bPD4LOMc/M346VocOqFRjnJfuxJOdfVEHBwvoGSo5aKjRjfnJBupC52iH+jU5iBvgrHh2zhwlpqIL1/5p2kOw/YmSRZKg0CCRU+r+Qk0dxArQMSCDruC2oe62OC/vp3HpEMdZW4iwnO6Rl645B9yZbaFJ+c8VcdXiihR5hdWySo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750940314; c=relaxed/simple;
-	bh=+854DTGaHzmD59BJyv6qjtpIdJD3yUDSZS1gxAQBm/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kAJdwhsbsNC6dKu9NJczHi9DJ91AzWD93yDUROHru+0KWC3LqzcN9QgOaIaiXj3o7l75XgxYhF0c+E4X72xw57HInfWtxz9DDYDq6Es1d77LVSK9FBn78IqMJLZFy35hmgDQ8vkRjnNLLQcRB2TsIl4pjI5oAyNtmsEw/KuUscM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kUF3Sbwk; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1750942881; c=relaxed/simple;
+	bh=FBmbNo4Tg7vWbeKZ+klQgFWJyf3Z6Cmzo9ip3P7QBRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mzwVbI4hfeIjJQDtEaIRfiIajxBSB4qrnfJvVoViF9he9yqJlmwg0uKuMocme59R2Sb451LxN6udxpvY6QyR8cTcDoRUoDTtMXyusiVPW9Rl7DroTwV2OaxGKgIZa9JGr0g0fLfmoE2oySrNBOvXHFYtbiV/LszgMEnJSPI/Jrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iGYy3Sjr; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750940312; x=1782476312;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+854DTGaHzmD59BJyv6qjtpIdJD3yUDSZS1gxAQBm/c=;
-  b=kUF3Sbwk9p7baJMqUAwJLw7siiWQx7BO06yA/fHGLp7rFpYddus+SPrb
-   hP8fmei+uAzwoMvMgRKo12IKEHBoqIdgKMdsboprOut62oMHG/hh3e62r
-   Ktpn5NWD6S0N5uQ4bHQ3cP8poTITNWFBJAxplykBsXJR/BlSxjHKLvve4
-   QMhbUXupFmVyDxMYzsbbLHHcphQUXrqUWw91l167nyYwYOkh6Hkkxz6OZ
-   XXS6utHWz3UBilhSOB9U+qgNeV5UYti3MzYue0xLOsZ9wqeWlVKHgCw8i
-   Ib4d2t6gkrFn59uugLOZg6JwmKPTqPCaFG9DWEALOuRvuBiGXeBYhVo1Q
-   w==;
-X-CSE-ConnectionGUID: pOqoong9QZ6LgRIg76YMlQ==
-X-CSE-MsgGUID: VA+3JIpYRcyZmCO4tKA+sQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="63490664"
+  t=1750942880; x=1782478880;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FBmbNo4Tg7vWbeKZ+klQgFWJyf3Z6Cmzo9ip3P7QBRw=;
+  b=iGYy3SjrXrFO3rYY2AGgZ3cj4pK8vlha/zaCYrOZsJbq7eTeg+spXIzI
+   QPova9tvi9qyfRB3+x6Zxd7tZ/cBER/HiWf6OdYHLeO4nrcHzA23urJUi
+   iqcBqRmkGVZhnAm12wL4WCereI39p4vTLhNBCZW46EPa0CJ8jzY8UK7JG
+   BXLsEN9ANIi7bS+/Ko3LtQqgRuerBmds1IwRRL6iNJPJO3vvz3WfBfeo/
+   QTmKmc11g04ihW4mDY7vjLHH9DFaE5o2hQPyoqZBZyWYrTrxM+Sz4zHFN
+   qdkw+bsR7x564l3igFIBNySKmBHlQ2sHgJvi65Wk8j1+hf1tBtuJFKdq9
+   A==;
+X-CSE-ConnectionGUID: SF+H4OIUTxW7K52EBYwLhw==
+X-CSE-MsgGUID: vop4ENNvRCaitPl9Ma4Z8A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="53370663"
 X-IronPort-AV: E=Sophos;i="6.16,267,1744095600"; 
-   d="scan'208";a="63490664"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 05:18:32 -0700
-X-CSE-ConnectionGUID: GzcCIKJTR0yVvCIf4G1a3Q==
-X-CSE-MsgGUID: XVbnHSYlR0OmT+Oq6AFwSw==
+   d="scan'208";a="53370663"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 06:01:19 -0700
+X-CSE-ConnectionGUID: PV97HFWyTv+5ToXSwlWyuA==
+X-CSE-MsgGUID: RAp4QKaBRj2+IYkIToC9dg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,267,1744095600"; 
-   d="scan'208";a="158256996"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa005.jf.intel.com with ESMTP; 26 Jun 2025 05:18:30 -0700
-Message-ID: <85c7024d-69e0-4297-9a02-3afa2d2861f7@linux.intel.com>
-Date: Thu, 26 Jun 2025 15:18:29 +0300
+   d="scan'208";a="152140059"
+Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Jun 2025 06:01:17 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	<stern@rowland.harvard.edu>,
+	oneukum@suse.com,
+	konrad.dybcio@oss.qualcomm.com,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/1] Fix "detection of high tier USB3 devices" patch in usb-linus
+Date: Thu, 26 Jun 2025 16:01:01 +0300
+Message-ID: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: hub: fix detection of high tier USB3 devices
- behind suspended hubs
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
- stable@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-References: <20250611112441.2267883-1-mathias.nyman@linux.intel.com>
- <acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com>
- <c8ea2d32-4e8e-49da-9d75-000d34f8e819@linux.intel.com>
- <67d4d34a-a15f-47b1-9238-d4d6792b89e5@oss.qualcomm.com>
- <c9584bc8-bb9f-41f9-af3c-b606b4e4ee06@linux.intel.com>
- <842ed535-ed0f-43d6-9b69-b5f9aeb853d2@oss.qualcomm.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <842ed535-ed0f-43d6-9b69-b5f9aeb853d2@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 25.6.2025 18.41, Konrad Dybcio wrote:
-> On 6/25/25 5:11 PM, Mathias Nyman wrote:
->> On 24.6.2025 19.40, Konrad Dybcio wrote:
->>> On 6/24/25 11:47 AM, Mathias Nyman wrote:
->>>> On 23.6.2025 23.31, Konrad Dybcio wrote:
->>>>> On 6/11/25 1:24 PM, Mathias Nyman wrote:
-> 
-> [...]
-> 
->> I added some memory debugging but wasn't able to trigger this.
->>
->> Does this oneliner help? It's a shot in the dark.
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index d41a6c239953..1cc853c428fc 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -1418,6 +1418,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
->>   
->>      /* Stop hub_wq and related activity */
->>      timer_delete_sync(&hub->irq_urb_retry);
->> +    flush_delayed_work(&hub->init_work);
->>      usb_kill_urb(hub->urb);
->>      if (hub->has_indicators)
->>          cancel_delayed_work_sync(&hub->leds);
-> 
-> I can't seem to trigger the bug anymore with this (and Alan's change)!
+Hi Greg
 
-Thanks for testing
+This is a fixup patch for
+8f5b7e2bec1c ("usb: hub: fix detection of high tier USB3 devices behind suspended hubs")
+that is currently in your usb-linus branch.
 
-I'll send a proper patch that does these changes
+Let me know if you instead of adding this fixup want to drop the original
+and me to send a new 'squashed' patch instead.
 
--Mathias
+Thanks
+Mathias
 
+Mathias Nyman (1):
+  usb: hub: Fix flushing and scheduling of delayed work that tunes
+    runtime pm
+
+ drivers/usb/core/hub.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+-- 
+2.43.0
 
 
