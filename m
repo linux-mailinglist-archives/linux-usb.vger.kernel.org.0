@@ -1,90 +1,94 @@
-Return-Path: <linux-usb+bounces-25124-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25125-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49866AE9E82
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 15:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35673AE9FDF
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 16:07:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D96303B18BD
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 13:21:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF9F63BFFC6
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Jun 2025 14:05:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1017B28C2A4;
-	Thu, 26 Jun 2025 13:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6D12E92B8;
+	Thu, 26 Jun 2025 14:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HD4GuiAG"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="nwR0HYFE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OgxiDQ3e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0121728982A
-	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 13:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63F72E718A
+	for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 14:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750944105; cv=none; b=Mtos+XK2dVcTxpZNV2EKjRirAtxTNcDdO+m2e7PS2NCrumwxeXGN1EFc5iZvUUBQKvuPYOBQAyTS2DQavuDQYYYaAohDQUCV3wMfjhooaPkg8BKTaalsnXw+J+18r8DY1SSK5wkjF206oVYlw314+W6QtLHDSMw3JWiOsX4ENKA=
+	t=1750946701; cv=none; b=nfUWQEowgv0dwN7ISrLTUa2h7laXYosu9OUTW6V+gkWoT3qF/d/ypLVGZ4W1wPWf9h2l0rKwvqFHzDlM1rwPhOcDBo3n7nq4ecVMenC11/LyKMiA+enyafQrZPorCY4uXdDo+wUJnyf2TQcPEM4CbrvWDK1ip0JClNU+xmlJyb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750944105; c=relaxed/simple;
-	bh=d2ynvgpLC9KJpAzvF0WB5ZbHDMmgOpXwsY5NyyE8fxg=;
+	s=arc-20240116; t=1750946701; c=relaxed/simple;
+	bh=BJ8QZzleztNjIsu9/THvi0uI0E5MsWXAmM8KhaXj/Po=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LaaHAYJDPfyAtxFQXYrWefTcX453DJ69JeqmNEq06tLSPeEKa1MO2hQVGT5hMp0Wb1Z9K5MonK/XomYN8hpgVrDZMZqoi8jOvmUjhxRR9LJXLmgw65e7VOTQUJGR9g39AgHUFPjo93zh6tIs8tfe9/74PChEgB6OReDWCuxXPZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HD4GuiAG; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-407a3913049so584462b6e.2
-        for <linux-usb@vger.kernel.org>; Thu, 26 Jun 2025 06:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750944103; x=1751548903; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOFVRCcBUw+mWK+/Dekm7KTQk+bIykTI3bUscdv9A2w=;
-        b=HD4GuiAGNq49KvM6T83C885B0zipbqFxxEVGRMbmbuW6qRSuaLdgmlAP7faMJKpYny
-         1ngzXEK4y90dAAWM+rDQxjP8eDVRUx9W7FScg6GTd300gZzJoo7qV5DszmTPiNQwQt9G
-         S/L5XQdfgHcSfv2ALF5LvX1B9DDd6+lc8dVejfw4SBYkzJOGE7bwQLMS+bsUpge2tXQE
-         o23rVZ2cIGoZciTTw+t9316b+MFiOVCazdL4csVh5YIAeAIi82BxGuR63XtUcjEoJ27y
-         aEFCX8DUCxa2gSq+6mMAfXar5EEb3pudqylUCz3aqcS25R7oH7EpAJ/mHMO5efUTnIFW
-         CtIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750944103; x=1751548903;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bOFVRCcBUw+mWK+/Dekm7KTQk+bIykTI3bUscdv9A2w=;
-        b=c26hrXFgYKasF+RimLFUsYn5TlKitW/MQosI9p5YoetEILXWy2p246HfXcU0gtF2AY
-         YvsTTTIj4YhqausmdxNCXg2OMUg3dGVujiyDC4D7m6M1FyZqmNKYcvP9AdH/bHcO/9lI
-         rnU/jxQ+6GFKtHbm2121oeIS599fd5+vSjgNea970OEeSg2iGMjrxopCNJ3kyEG3ewYi
-         FDvqTc58T8dcQJ6o4Ag4bekqSDvgkHzeuT69/TOl1qZ3aDpYFiocMDMnmcTH4OkWmvGn
-         OkVlimQmw6qwdftAP/7v2kj1hQ14tV+oj2M9r9+gsolrcHjzRmn+1NP0qPjzHpL8EjAg
-         sXqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXnwnQcyNxU9T48aWvnrccBpPOXStAW2mDGvIgU+S726rKaPoBsXbH1tWdDbClt0/hWeVuUxmYZDxk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuyLJVgoPCigExU7kPQf1DmKzdN1T2mgdlMas1HxAya+ljVfEs
-	oPglRgQo8a19IMW1r87tCuFf5nmKILC5vPNFMzCckA+wQHmTTd0PukYvydPcRLdbtQ9BhsBzXG7
-	62Tze
-X-Gm-Gg: ASbGncsd9RUPQHxiIMdBAFQ58cbvkz8qaDN+8bGFetFSqjVSMNvcQLneYMML/OnLfvr
-	krUdcdfiw+2s5EmJC2mAbnRNHb5T5bxxt3hsK8ZXxkUOLe1GaH9FeC0p2wFmCb1P0uY7eUH56O7
-	zyd7wHHZ1fBxZ2N9UCsG/6ZRHa+gHjlS1Eji2uFnU3bAQMtRoPVl0P8yRQM9oK7K6C3zEacqZIi
-	iwaXODVRoi3s8mAbSysUao6V9MfR4Nwocc1R9f1r+Ukxr/b6BSOfPsnpFkX6aFsxV2dJeFB/U06
-	ZhMAE1qHGG4gwjGo2KNulJES5l5/rbmtq5fi27yXtttIloieNyl6VNpsruryJAxtASU=
-X-Google-Smtp-Source: AGHT+IGvz6gUhA5u66fVOK5ErmCf+/tRiLHCvux4O1ovgU9jkUorXeS90Wph1Qw856JXzjrMzzPw4w==
-X-Received: by 2002:a05:6808:ec3:b0:406:6669:f4c8 with SMTP id 5614622812f47-40b1c3bdc99mr2599256b6e.36.1750944103075;
-        Thu, 26 Jun 2025 06:21:43 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700:3ee4:904:206f:ad8])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-40ac6c327c3sm2588372b6e.19.2025.06.26.06.21.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jun 2025 06:21:41 -0700 (PDT)
-Date: Thu, 26 Jun 2025 16:21:40 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lianqin Hu <hulianqin@vivo.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Michael Walle <mwalle@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_serial: remove some dead code
-Message-ID: <81a704b2-56c4-4ea7-bcce-831ad2e4d070@suswa.mountain>
-References: <685c1413.050a0220.1a8223.d0b9@mx.google.com>
- <fde57cbf-4367-4741-8d67-b569ecb9dc61@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RlxjmBBx6bwgYDM+/KyO67PYDkl9T0wyqJqZe83fOsmQFRHJmcR2oZBgJhU9KZlj5DQ4IGPpmLtSg3arcKU6nSaeCMbkQPbZxahie198JGs23XV4G+Hp0iW0NeZ8mkSYLX7y7uoM6AfbW+w7pVjYsjXE62QDA8DII6GC/6z9ymA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=nwR0HYFE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OgxiDQ3e; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 829DF7A0116;
+	Thu, 26 Jun 2025 10:04:57 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Thu, 26 Jun 2025 10:04:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1750946697; x=1751033097; bh=BJ8QZzlezt
+	NjIsu9/THvi0uI0E5MsWXAmM8KhaXj/Po=; b=nwR0HYFE5xjHkoOjPW21kRA93Y
+	yEG4qYRrXDYiOQgepkpOjC/8UiwUN6nZZY7QAhyUiZmP9w/s2LoYD7VbF9w6OY+/
+	g9abTsRnEdwmDtbvm/QdnDgq8yZYdJjDAmL0zNlITMscnmjmg7ue+NQGTSt4fUjX
+	bhxKpl5/Ccs34fJpp79XY6ZzwBzjwNgx9aaPkPYLzeLkaGd3pvk4CXwRlTW/0HP2
+	GTdsvWB3DpEplNJy2gdRtOBVBzbLQ/GWBEHm75MBiL261roxNr6yHdqBV80x4mDi
+	IVJq/spJWCNzByMR1Ig07PLsoV26SEwH1+JS/BNqJ4XoiGQdACu02veIA6cw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1750946697; x=1751033097; bh=BJ8QZzleztNjIsu9/THvi0uI0E5MsWXAmM8
+	KhaXj/Po=; b=OgxiDQ3eMv5hAV2yUUs4VtmJfi+qTBI83U96ChixBYCvgFJS38I
+	OAdX1TLxxB4V7AtUG4lkEgXCOC3bmsvjM0sCPCw3hV3DevjjQLw6x2EWoPpZOzjb
+	13osNVLeN4rhMrCm3H6MZWUGMmOr16qkjcLGXxedQsfUVl604ZQHcGBSmnA6aO54
+	YrBXsS6EM+COBOuhzYsewAZBwp6zktbHBaUI8IUefShDAEfvD2XiKqOTlwn7VjJg
+	OQFmPP0CCoB6MMZBtZNyoxuORT6GLDljn2LCRWjxhtkQ8pwvDQmoR3SqSVjCLY0D
+	ESpbyLsKyW728woJ2WdXr3/r9Zq0vpPKHpw==
+X-ME-Sender: <xms:iVNdaPPzvSdQmEnJ_lwaKEMzwSrGWuoy8HTgtUnxaZsCwCzzcacJIA>
+    <xme:iVNdaJ9MB3s0qLEetLVQfnAqHQZaybiYCrivz_uEKJ6w8pfL68gsxKH_m9YUbgSlb
+    -SPyahCPBLLOA>
+X-ME-Received: <xmr:iVNdaOTR5mw3e1eiJWIWQv3AjZhz4fdPAOH_Vc_zSIubHIgMLDsu3VqN8FM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegrihhl
+    ohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvd
+    enucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggft
+    rfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufe
+    fhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeegpdhmohguvgepsh
+    hmthhpohhuthdprhgtphhtthhopegsuhhgiihilhhlrgdquggrvghmohhnsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrd
+    horhhg
+X-ME-Proxy: <xmx:iVNdaDui7Tmjd9fiFEEGmdp9xZ6DTqQqKLFwCfeydNtKDan_hvl0Iw>
+    <xmx:iVNdaHfZlh6XIXMJOthZpIsE-_eiYkDg1_271xZe3lQEfu_BcdBDCw>
+    <xmx:iVNdaP0dNrrBdmiSSv1sLz8ufKKSXTM7aTx2FkHNviX12CfHFy3l_A>
+    <xmx:iVNdaD-k1WW_MzS4D5J7YIZOh2HCGwl7cJzQpHT4ixFpnIF5SQi9ZA>
+    <xmx:iVNdaDqiUM0Ta_88exIueQlpyIeWAhjG2J9lPhyJ8z3PgBE_zYpTPoB6>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Jun 2025 10:04:56 -0400 (EDT)
+Date: Thu, 26 Jun 2025 15:04:53 +0100
+From: Greg KH <greg@kroah.com>
+To: bugzilla-daemon@kernel.org
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [Bug 220272] New: Latent race condition in USB code unveiled
+ with optimized memset_64.S
+Message-ID: <2025062650-handling-brussels-9f92@gregkh>
+References: <bug-220272-208809@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,25 +97,15 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fde57cbf-4367-4741-8d67-b569ecb9dc61@oss.qualcomm.com>
+In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
 
-On Thu, Jun 26, 2025 at 11:53:05AM +0530, Prashanth K wrote:
-> 
-> 
-> On 6/25/2025 8:51 PM, Dan Carpenter wrote:
-> > There is no need to check if "port" is NULL.  We already verified that it
-> > is non-NULL.  It's a stack variable and can't be modified by a different
-> > thread.  Delete this dead code.
-> > 
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > ---
-> 
-> Perhaps you could add Closes and Fixes tag, but its up to you.
+On Thu, Jun 26, 2025 at 11:39:35AM +0000, bugzilla-daemon@kernel.org wrote:
+> Experimenting with AI to tune memset_64.S (see the attached file) for my Intel
+> 14700KF-system unveiled a race condition in the USB code.
 
-Fixes is only for bugs.  If I put a Closes tag, then I'd have to give
-myself reported by credit as well which is just being greedy for tags. :P
+Odds are this is because your memset code is buggy :)
 
-regards,
-dan carpenter
+As this isn't an existing kernel issue, there's not much we can do about
+this at the moment, sorry.
 
 
