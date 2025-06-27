@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-25181-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25182-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84071AEBB3D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 17:12:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EB67AEBB83
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 17:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A83677ACACE
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 15:10:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB79E642A4C
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 15:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9E62E9EBD;
-	Fri, 27 Jun 2025 15:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9972E54C8;
+	Fri, 27 Jun 2025 15:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTKNomC0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ej9rgalO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B97D2C325C
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 15:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A211B425C
+	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 15:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751037037; cv=none; b=PAyI22sZFaFwD+3lIXrICURgrGIucOj/DxZVeY6vdja+Q9ufeLnsHuUaDdz17QnKDAqYG6m+YRaKqVv4wLO9/plebKJ1/zN0Lk+u3cpIhufYjWYICB2TNL1fNgZtwpJyA6w43F8B7diGmm5ML56K9rBbBA+xJQpRduFmuAEXQHw=
+	t=1751037548; cv=none; b=bIsp59xXP049W+wb/bSwysGDzcYE44U/MxMA+zl897ORz6KLB3cNGW6Net94g6PEZlOnBoXR3G5ww2mVtUiHY8mugZpdCSh8iCaU4t0f9rGHJ+PmU99zrJubchTO70wbUilaXJ26K8fzDY0y96WWDM74svtvqPu3Q91IrAIXpJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751037037; c=relaxed/simple;
-	bh=j4E0zwyXpJ2E/68G1tU3ntUFyN2FgBUxyxH9BZTvhCc=;
+	s=arc-20240116; t=1751037548; c=relaxed/simple;
+	bh=iOmMdYR4iO5U/L89M4bG6bVSuKs90B8cc7DAldPhqD0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eeZhPeZTS81Khwxt9B4Qq75rgsAo32mYFjTjBcxCQL6e31yo/j2xyNTohQVRz0SeOvL6uYe3ThzR9p/ddZHwaIKwcy9145tFRtqzj3Jze2TTiNJhppWYDdXsfeoBXGWF0DF+8Z4xJzqcxeP8E5htR8mCC5wtDJRRg/bYCtjHDf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTKNomC0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F91C4CEE3;
-	Fri, 27 Jun 2025 15:10:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AF4JDkXfuTNiFhlNl9Ej9f3NxS5AanXcxrhenJsUS8u+q43MaVKG+AMN8fZtuNTVLyxP1/nuYHltTB7QwD/DoeaRDA0BoIWDsXkyflHiSgEMkuybq/yKT+vr8DP8YbSVWuAh7Hc9vRa4P1PD1ERMol9cAk7/cLhIirYJCLzG+Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ej9rgalO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF5DC4CEE3;
+	Fri, 27 Jun 2025 15:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751037037;
-	bh=j4E0zwyXpJ2E/68G1tU3ntUFyN2FgBUxyxH9BZTvhCc=;
+	s=k20201202; t=1751037547;
+	bh=iOmMdYR4iO5U/L89M4bG6bVSuKs90B8cc7DAldPhqD0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jTKNomC0Pnts+d/AFSmGfE4vAVgWEdEDtMSVrVWikwQmaGCrI0GoBzlQ/ukzTwyZH
-	 8nLCjS0YdN+7TDrXyZ6sHMzp25alwJs4rxuPQZlXraTPHCOul45844QcFwkYtqNP6S
-	 6Hmu5eDF3NlNpCVE3/zhBqfTRDBkY4mp8VF7G5wr2yGxgGcwjSVkZmthqJ6xgc2qyc
-	 6xQG26O7Vvk93TfdPaUKKZnQYrSVH2EFMUGbqwt0HmSUXLhtvBqlVOdRy+/OClM48X
-	 ggNaC8nCg/9KTjqg/acR6Wj81JWAsbXSViKlHBp4d5xQUkeVec+psHFRO4MdxyOzVm
-	 rSPYrVP4YFtJw==
-Date: Fri, 27 Jun 2025 16:10:32 +0100
+	b=ej9rgalODbEgm/4XAwa9HvrQVWJ59nnik5BUOB1OUFfslHma0OURrKj8/qDtS884R
+	 t3Br7iWqLGZmvXiBNr1ZLbxVsgXRYfVo39sIKvh5myg3yn1CXJaD3yWG37yxaDgyUs
+	 gGrJ/mJ3godsq7mT7a9lMbkvvD/enZu7GmSbHoeB5R1fJ+wvb/kTOBb6C3Q13QfYBj
+	 k5bV7mCChq8Li7QMFa0tlz4n73JXfyvhBCgYRgH2mXunIeWp8x4qNVP1KQDuTDHP2G
+	 jfWR/5wyD+BVWXihRzKZVpENV7GWVfnjmRjFZwvZwZ5wrz4iGQw/D7KdkEL4P6EYxb
+	 dg7i31TyuyCkA==
+Date: Fri, 27 Jun 2025 16:19:03 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Mathias Nyman <mathias.nyman@linux.intel.com>
 Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
@@ -49,11 +49,9 @@ Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
 	konrad.dybcio@oss.qualcomm.com, stable@kernel.org
 Subject: Re: [RFT PATCH v2 1/1] usb: hub: Fix flushing and scheduling of
  delayed work tuning runtime pm
-Message-ID: <865971d4-2c1f-4930-980d-951568e64fdf@sirena.org.uk>
+Message-ID: <3f24a333-48d9-4bb6-8180-fc0b8e8a9e43@sirena.org.uk>
 References: <20250627142044.3872229-1-mathias.nyman@linux.intel.com>
  <20250627142044.3872229-2-mathias.nyman@linux.intel.com>
- <e42dad63-cb3c-4bc8-9b1e-d43c8e976313@sirena.org.uk>
- <6f251f36-cdfb-4cf3-9066-e84d5842c875@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,47 +59,45 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QCeod6TRaBMtbPfu"
+	protocol="application/pgp-signature"; boundary="K5wcPGwrRw82X/RW"
 Content-Disposition: inline
-In-Reply-To: <6f251f36-cdfb-4cf3-9066-e84d5842c875@linux.intel.com>
+In-Reply-To: <20250627142044.3872229-2-mathias.nyman@linux.intel.com>
 X-Cookie: Avoid contact with eyes.
 
 
---QCeod6TRaBMtbPfu
+--K5wcPGwrRw82X/RW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jun 27, 2025 at 05:52:14PM +0300, Mathias Nyman wrote:
-> On 27.6.2025 17.34, Mark Brown wrote:
+On Fri, Jun 27, 2025 at 05:20:44PM +0300, Mathias Nyman wrote:
+> Delayed work to prevent USB3 hubs from runtime-suspending immediately
+> after resume was added in commit 8f5b7e2bec1c ("usb: hub: fix detection
+> of high tier USB3 devices behind suspended hubs").
 
-> > This doesn't apply for me against any of mainline, pending-fixes or
-> > -next.
+...
 
-> Ah, right, -next of course already has version 1 of  "usb: hub: Fix
-> flushing and scheduling of delayed work that tunes runtime pm"
+> Cc: stable@kernel.org
+> Fixes: 8f5b7e2bec1c ("usb: hub: fix detection of high tier USB3 devices behind suspended hubs")
 
-> I'll rebase this patch on top of that
+Tested-by: Mark Brown <broonie@kernel.org>
 
-No problem, that's why I tried mainline as well but I guess there's some
-other dependency.  I was able to get this version applied directly on
-the Fixes: commit (which I should've thought of before sending that
-mail, sorry) - a test result should emerge at some point in the next
-half hour or so.
+applied directly on the above commit, I'm happy to also test a rebased
+version.
 
---QCeod6TRaBMtbPfu
+--K5wcPGwrRw82X/RW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhetGgACgkQJNaLcl1U
-h9CKnwf/VnsS8B91oDYvrTpM3eCbzuDdXSgdK+XoU2wfqnso8SvMbHYvggPzxL+v
-JHMGtRKjuLv2wWhAisIdnaVrY1CQ8IVYq0Iabkou7+oJdq+lkfCpbaMOFE8QwU8K
-KbETpdJwj5pk4hGN1Tl92f/M+1n9tpJxEShjY25ivhJ1+UfxHewuMftv6krx4/Ul
-wg9s+K1RwY7g2si+4oOzwDSfF7E83Wg3keJyyS6edCG/wnfF49wscIxFFTf33BU4
-yNDV94XUpWIP4Tc/OMI4YTnRTcxsphNl5HAT09YfCdcRw/pQA8MLC+0Bbg6SbNH4
-/J+tmT0H0fXI5TS4oZ55ARx1p16Adg==
-=vFPg
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhetmYACgkQJNaLcl1U
+h9BXVgf7BVNibQBoygpwX70op82RMYQqNs9WWZCS1qWXoNndl3eBM9gM0s61Kpob
+V8uRaI+3VM28k8Ii2i0Gw5ozCalLNv0/SVkshHEa6iGFF6ZiAj1eg3/ZKoHf/WPI
+phl6kwjzLQ6gK8h9jQAWnM+3ZiOZbtCZ/NWSJ+JJsgHKwdwqxpKS9K98AEahidRe
+3dacHVeTUSvE91YSOT1/oqQty4cOQY4KP7d8rT1KzpefWrMMIGjlkCHzehJ1VXRO
+7rCPm3Ol2xzSHFo/RlY+PKGjIN2wPGmlorGy9tDjR3YHj3ECfLsSfxCypv1Jttv0
+0t5DYaRu2anuy+vtFN5XC7NVc8ZGBA==
+=JGrO
 -----END PGP SIGNATURE-----
 
---QCeod6TRaBMtbPfu--
+--K5wcPGwrRw82X/RW--
 
