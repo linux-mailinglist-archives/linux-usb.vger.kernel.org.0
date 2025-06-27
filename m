@@ -1,322 +1,290 @@
-Return-Path: <linux-usb+bounces-25151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBF7CAEB433
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 12:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04750AEB4A8
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 12:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B41B561A24
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 10:18:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAC59178FEA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 10:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFABA29C34B;
-	Fri, 27 Jun 2025 10:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8154D296145;
+	Fri, 27 Jun 2025 10:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="RlL8Rv6Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kiXu/qqz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011068.outbound.protection.outlook.com [52.101.70.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D41729B8DB;
-	Fri, 27 Jun 2025 10:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751019448; cv=fail; b=lmDSWJCFg/Arvzy3a5KJIIyCOC1Y7frmd3PDFn8vJac/sGhLeQcrnLX7nhUcLqvA3jCQn4yKCLKrN1p+whcR93HmyS0UbePjkxWm/114IgBDxNx8thKe0DJ/OWtYhLr16dCzEWd1RaumNAHfxAXn7f4blTyqLTtj24FgJCIoNnA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751019448; c=relaxed/simple;
-	bh=YpD+00G5mUuK/2EL9yntFNVXOVKYLCIE2bQITaOmDzA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RsDVVj6ChT5T6bA22qp5Jxkgc6CK23qaUk5wxPxW30MVXTmhNArRXTrRDCyuVmRmCwgLqVr59c8q3jnRMqby8fcoBAwViQv9mWEHEM3BoWXrLIlz+9U5CkS7CS3gVvmQyWsewPdulFTWRgj1aYbUpmE5Rt4rT4P57dkqCuNeCD0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=RlL8Rv6Q; arc=fail smtp.client-ip=52.101.70.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=V1h/e3J+OkIQeYMKGN++HCfU++UQnUVnZCtMYidtp7AfjJeq98+fPUAJU0tdViwGL1xq41m9HJBGLEPrHigiCjC2zpckb+wPkHCKkkgpJxcXs8lZkRGr5lrqchuRJMaQFhj0Il5wIKDTFH2ejBHRiZuQLEWH0OFmQqjDqYlkL64QNvmS4lfkQoJjiCDyDRq3Bq3s/Fo+03FqGNdfm13THKtBbzdCz1e/g0JaNng/gXojIki90/sZ0Dms0IvPVaJSeRS+rP7PkSJfoqtd7VJBsLd4r/a7yynQVhzYDNsOTmPsmudFpcsKXUfIsGcRFhs4wkrGYiVeKY8JdxKn/LXNog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B2yp9oOfAcD8c6c5qggGE9YtUJ3RQ6FOQ4jo9plSIwI=;
- b=pvcyQXz9sLdmmepBN+uP+q62KoRKijtm7Fic0pZtE71UFzIDjEO1nNmyWIbXhlgnNIvG5k82wP8/PYmQTDibmzShi7gJYMIi8ZRnzVWFf56q6vdanybOGiI7QZ9wejoosMGw2pHYojmDe5st+NnkT9TwXOT3gHN/uyP0Wy5YcxauqYaLZEFloNBdJ4uJhihMUpplnnSXBE/mSJzTphQZfYSqOF8K8g1fWpW1yWZKD/imBuaVW8mmGKtQi57X+h2JAdiDnkX8j3REmCr95mg+r7/De9PiAILdY2T0rM83B+GCGtjsQOD1mZZJ/+NgVcbc5Pi3hGkeE38HTE6WbsvMEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B2yp9oOfAcD8c6c5qggGE9YtUJ3RQ6FOQ4jo9plSIwI=;
- b=RlL8Rv6QC4Th/D+47LT34BVmLQa2vRD4bMlBbggX2TdrjeaZYw1CFmLB1C4+5CddRBLSYV/DG4RrTHw7DY8di+DCuPDakkTAc12QIUYH7mDy0WFCS1o2ESgztyQctb01IN/GkjW4R2M6fQbkuCMiQm23s9uEZ53t6HHcfEANik0zpMe1Vmf7pNKdAxAfVTMjgk0Jpldo4SnUmmO7yq1fKVgSAUb7bJoNZj9P91YIkbdjbrjQfpm54NR2kEQ2XeTsZ4Yj7apMWOay3LJice4wmNykJhsrnB2nipQGfeFizAiKNgl0R9paOkB6kv33OJNXyX9Xo53807JZ/spvJlcwIA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
- by VI1PR04MB6893.eurprd04.prod.outlook.com (2603:10a6:803:133::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.23; Fri, 27 Jun
- 2025 10:17:22 +0000
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::cdc5:713a:9592:f7ad]) by PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::cdc5:713a:9592:f7ad%6]) with mapi id 15.20.8857.026; Fri, 27 Jun 2025
- 10:17:22 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: ezequiel@vanguardiasur.com.ar,
-	mchehab@kernel.org,
-	laurent.pinchart@ideasonboard.com,
-	hdegoede@redhat.com,
-	gregkh@linuxfoundation.org,
-	xu.yang_2@nxp.com,
-	mingo@kernel.org,
-	tglx@linutronix.de,
-	andriy.shevchenko@linux.intel.com,
-	viro@zeniv.linux.org.uk,
-	thomas.weissschuh@linutronix.de
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279ED296152;
+	Fri, 27 Jun 2025 10:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751020065; cv=none; b=F8HEMQGZUprGtgV7g5OKrlUQpm3Q5F8+S2mmkfbIqNwSU1RJZJdzHCnQb5Nc78xTx3p9qbSaaAu94bloTm7J2I3fTPTOjOq9OvCNzw11IZgTwOpL+5gY8ULwptLbzs5C6BS1cDfLtRF3g54xeRBiY+Uqb2geDPGU/hJodX6zsMc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751020065; c=relaxed/simple;
+	bh=ilLYuWYgNvRme+vA8UIbLITDjndxSMNX17BRpkXRAyY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DVvStGtIx/keefXHrdPVmvSSQ193K9PfYjQStkLxWPbSktl+Sqsb0kbJ/wLOmy5yJTJVcoit2XIK5TP7wnMzuqfhD/lUvO9+jROgHW52nVffit1r2EzlofmEaEmwuwOfu1OPX8wsBDd1ZR43nm6vXqwEU2iyRiIAssBDg1sqctQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kiXu/qqz; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-234fcadde3eso29446215ad.0;
+        Fri, 27 Jun 2025 03:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751020061; x=1751624861; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ml+sJ3t+hrzE6M4hEh2cclrzvCQA7k6IfhA9JVfhJ04=;
+        b=kiXu/qqzOhcgA8XzYjf9adQah79lq2pPktCs69mGZYvSyJdpKD6yEDPPsxJuLTpTY9
+         Ls6Izr8GAV6qx/HB86kGvBOeHnmmWPQFDvQWmiVeYMwhuDP6gqMW8MCVuxG3DjfNi2Fx
+         rnqw068vIsofKhqupWbQdoENZAe09x+ixJ6QeIdCpkjWVdsLYHWbjeCQCWuYUyp6WA/D
+         Wt8q0sLswC4L8r4ECIntCfmTYrW2RRX8l5l2Dbsv7g4d6DPub6hBFd+xGlDfGxQa1D9+
+         trixTP6GQ86LR3ThjwO2KyZaXah/LBKI8830mInOim9+F/f8asrITDyIWGiFqhJ+euca
+         GLjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751020061; x=1751624861;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ml+sJ3t+hrzE6M4hEh2cclrzvCQA7k6IfhA9JVfhJ04=;
+        b=RK36Nx20C0jmyzW3mNxjtpOTqFjpwUpeqTH3xfKiGIwWYPXAcgMWCqQEH0Kt+enjW/
+         j3+Yb7dfSbOXyBXaonBarZjqpF7ooZZEJCWe1A7CzSQgzxfkkS4nmrri9ORWE4AGpb3e
+         RGX9BMQSOSNGZVVqhCC81hpiyY6OCdD5rT3IQOdsLzeamlPk+QfyETn7Hyusb1JHrM3F
+         eCQXUgbNwxqesFSg+YAEMehEkHZiGf8QEeNheORYJr1COGegXvU473afUM9X0k36RVKQ
+         F/mlZWfj/n2cNn1aBKBH+qu3/0aPbtUXagmsptsmNGnfuLhtGJZ/9gc+T2wkBawnZpO9
+         Rghw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQyen8OXWje+aBOU483e15rwMHDN6Ie3VUF9cbxPKfZRPWUpxahRp65ZvZ2mCSsfdkRYaHm6s/fq3V+cA=@vger.kernel.org, AJvYcCUX3QTY8ZdImbd9PGNmurymTlqPrfE2yw1uWVBnEy2r0rHaNqvJxumEytxxzpNz+KpyTTj84Mq19u7G@vger.kernel.org, AJvYcCUYQdWgZJr8Aske7Z/dP7jbp3WxjESyjnVIAt8RYN4j/HKjaRDIwCb0opjCYBKZiEV4zjHfFW4ttA/y@vger.kernel.org, AJvYcCUvTVf4tCCQ2UxyLmU4aqvMuaM+L6EebHgzJetkCZvwFDdNNW6VabrkonfxCS9NbPQB6HLXatFRDmuo3Csc8ns=@vger.kernel.org, AJvYcCUzbJAW2yOzI5BkxOOVmfuMFqGv9B12Y2nDDaPE2omslrDl1WyyCH1FOeM1jHHCAh78jM6D8jPr3XFx@vger.kernel.org, AJvYcCVes8YvA42J/iS2baVne7dy9Pu5D3mlYJyOCx3C6XIsnrcLGV8P5ym2IizEcRNqmtDexFo3Bgfl5eGsMA==@vger.kernel.org, AJvYcCWAT7pq+Gtw5bHdO5QEvIzBJ4C5upcp114eoBIzyUcq6+6BKXosYFDXYJK49HboU/sYbZ4oassCSwY=@vger.kernel.org, AJvYcCWgwT8GBm4us7CunjU6554MzzyKaryc9Q817j1c9EuhBInUmq3p++Fy+h83RKL63xagbhgofnEP@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2+TF3agbkQ2ezPG+R30GGCMjz+gsQY8kvtsXZSp3x7PGRNSIG
+	kJ1T3EWrqS8pAeXNrdtxscJovqhv7tgiBKIhFUmxDG+rpOgiMURxlPSt
+X-Gm-Gg: ASbGncuq6rzaUo80kNoeP4JG3dqNO/70okmk4NLwjfpI1iLTfGzMicd/ZvanHb9r7mD
+	hL+UlqWpXjmg+0H4+x+ZH1Fh6MWmVP4hnxxUuuitXM7Ib/Y7VwyVmyb4DxiB8QLV8Xh1FfUJ79D
+	nqTS+m2J4i6DB8Hdq83MayOaQ5l6SvVWilZuNJvNK56K1ki/E69rbmbCqMQNWzhs5eS1T1wkAiF
+	/or2eYrLVRGleOUVl2/bz6T6HYpDFhniY1ocljz+h578PECUGaVMOnDAUP+9nMUdBY6+J8Zpl5h
+	wrk0zietrvOGerx1Yh8RL0TkR7s2O5zfYB097qoARXxvo3uVnAnXyX/OZopDTsbCua/7p+mi9Vb
+	Bc2xn+63myPjPf3k3QODvnOfpS1YLAA==
+X-Google-Smtp-Source: AGHT+IEomNjpXipk2KD1fASP51+aM/Dp/3Q0RAuuc8il7L/rL7CjfwVnEnvP0FECYvzH0KBUv2WfhQ==
+X-Received: by 2002:a17:903:2d0:b0:235:f45f:ed55 with SMTP id d9443c01a7336-23ac3bffa49mr41579185ad.1.1751020061308;
+        Fri, 27 Jun 2025 03:27:41 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3bc495sm13845155ad.201.2025.06.27.03.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jun 2025 03:27:40 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	jun.li@nxp.com
-Subject: [PATCH v2 3/3] media: stk1160: use usb_alloc_noncoherent/usb_free_noncoherent()
-Date: Fri, 27 Jun 2025 18:19:39 +0800
-Message-Id: <20250627101939.3649295-4-xu.yang_2@nxp.com>
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v13 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Fri, 27 Jun 2025 18:27:23 +0800
+Message-Id: <20250627102730.71222-1-a0282524688@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250627101939.3649295-1-xu.yang_2@nxp.com>
-References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA0PR01CA0112.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:11d::15) To PAXPR04MB8829.eurprd04.prod.outlook.com
- (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|VI1PR04MB6893:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2a999b1-044b-4529-fc85-08ddb563cdfd
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?0Meud2lUOZbvRdpHNDqHIVYCClObBJtur3QixUrZpjzNtSkjpnLivceWU/g6?=
- =?us-ascii?Q?LAbUsRSN7Boi5B+HPLy27VrrIk9FCOHVPFdbP2d42r8y+J2LkKcUHI0hZEhj?=
- =?us-ascii?Q?pX1IJhYIZrQ9HFhqnkWRIsU1SwL7G9cwcohUHytYQ0711o2tEkLJeIGTdjqJ?=
- =?us-ascii?Q?s8DPOz4hahmysYPYK26zhnmdZ/1DGSDb5BZt/k9hWicHf4gz+GILYQ0gO2TT?=
- =?us-ascii?Q?8rrmhO2iBldPw9DHKLJtCe4bQoXbXb2K06nsmkPP4prjJlltrUsVfytlB4yq?=
- =?us-ascii?Q?smI2+tryG69UtM+fbbyiT+8j4S2/YgZTH8Q+KU4Goxjpsx23IfQnOZW8VIDb?=
- =?us-ascii?Q?RNgNYpk31I6c9B5Pkut15Ge2I0AL1yUD+MU2O/Ek1rbdPr7YdXcBbhzCVX28?=
- =?us-ascii?Q?1CnXOehRK6nTCXw6xDhb/1nS3L/SRM/q7suAfTlG1Lq8+0fWy5ghLvVLGZ78?=
- =?us-ascii?Q?T/iWFxAYWZTLDKCCl0cTiI2b+QzwXQBj6ujdZdI5TeadwAO+ey5MMHnWOl2F?=
- =?us-ascii?Q?rDBrKLaQneKTxsuxRVkbrLkhO+raJUwkaGDx+NrkG/DuuZ6IAhKaKvYSQayE?=
- =?us-ascii?Q?pOtWMTz5pJilVf5pIUwPX5z3yhrE1ZcTi7uA6yNCejag5cqIUYNDlzASFv+T?=
- =?us-ascii?Q?ax6nrwM8YjlvKDsfxER4gSckcJqVoul/9WODI/qkh0jPsXnUR+ZnlUKzG1Oz?=
- =?us-ascii?Q?/GzvzZ31wObcyTama4PqxngBW3rI0k50BiaOevyvHBtAMAbyl5YwMTYH8gkV?=
- =?us-ascii?Q?tFOCfZLfRb5rU+ght5Mw6CRaF3siuXgS0pxleJtCsKbMnbmPYRyod6gbR/2I?=
- =?us-ascii?Q?LfQiHs4vDqHKJZUkZJPY1GivtwXfyi/7QFGCVrgFoGTKeiv5G5fnxYpgGqEA?=
- =?us-ascii?Q?+CFsxOe6S3mVwM+TttdMdFbKguE8vsnZ5ukyirz6AZN2EXUh8QRVzCDpnc/B?=
- =?us-ascii?Q?z9183bfXYumiUBcn9Y8Bl8CAITvOyYM1KloOGUtxDvwurzA+PzclDuVJEIgM?=
- =?us-ascii?Q?la96qY7prqVadQjfD/FHUaX8nq6P+Z++N11jYSiEvaL/EOBNN0xWqSKzD8Vn?=
- =?us-ascii?Q?nOmL9iQ6JHwEj8c+8hoosT7ntZpPpinQFhaC3NJO0yN95z0wDqNzwiLRHyyw?=
- =?us-ascii?Q?umbdRWHNQAdM5r+KKuJVY4yijCVPWiy4zUUBL99e+4YwdBKkY88Ko1KCDJsm?=
- =?us-ascii?Q?i6+jGqSpmUbT0f+UemPnZnqN8a6ZCpPyR+I98H8Y6o5ZirbUMrW4MGsBhZiC?=
- =?us-ascii?Q?/Wbk5dIHh63p2rp9WA6ZrH6SbIcotylwOqCxrhY78QcfeAQxUJOy7f3GofLb?=
- =?us-ascii?Q?CBRdzp1WnHxRDZi8Z8w4nX5qR41mbmsRogxTx5GoCQhJgHXbk8Hq/1FMPKOn?=
- =?us-ascii?Q?g7rZWPN9twfBAcXYplzvnili5EE676YtiaMUcg3y/4T0zN1qDC/hmc+QcYnD?=
- =?us-ascii?Q?mnszXX633CKzk8Sy/F+YjtvIQJ0zqgJb5A3RZzRZ0arjjZTYVIlfv/Ptu2D3?=
- =?us-ascii?Q?m7XnzFTaYLKn7Tc=3D?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?us-ascii?Q?HMuWm2+lZ92xCnvXnpevk0fsaIxGVaI87dwSzK290ox94wnMcTXVP9xfyByJ?=
- =?us-ascii?Q?6DQrolU8SQlWaDfl30fCLKfDyNVuoWR8VaDYRntGiah1KYcX1cdScXUsFL7/?=
- =?us-ascii?Q?XYGpKKmFweHy+OfOI+DOwzGL1wZYw8bPoGCaVbTLt9Vw8eKlbw1ShoXhCnTC?=
- =?us-ascii?Q?NNhVV5HsVBRSu5NTMO4Fdmdx5Iqacer5C6LMlhuvRlQo4iS+u7jtTE7Rma1B?=
- =?us-ascii?Q?EasuK3H/CZFEheAHwIj+NNC573prCMDwU8tDqAvwbuqoPCEc+PWKkqw0IJiv?=
- =?us-ascii?Q?HVQOeFJyFWyb7GWmzljdDfYJWCWoOV/gSD3WNvgO2I9DWJ4AFyDJTpIjpJcb?=
- =?us-ascii?Q?5CDaE4dYaRnp1DSXOXAOymDTp2ntfPEr04K4UbSdkNQh1FcRv2Iyw24GCM9M?=
- =?us-ascii?Q?fFLvgGIiFi8H29muk/e+vpQt0N8wlk/+sZee1NStn71SbYN7o/qao0tDoHrF?=
- =?us-ascii?Q?N08pAL6dWYqEAYjz98oJpTuOgT1KuhIr6HH4xG4Tk4ERNzeT96yJ3ipebWw4?=
- =?us-ascii?Q?SDLuTh/OcGZwNBSxo38sgzNRBthVuZ9hxjZcbWyI5R3Vdjo5chU86RamYWI7?=
- =?us-ascii?Q?zD7PQxu1jbgQ2MwnwZLXBsPXp5ZCPcax5XB6T/4z4aezAbM884MJquzsf2qA?=
- =?us-ascii?Q?jOEdtjmxF/8a4Av8gVvAed+3MqhxeKJhiPiF+aUMXSbu070e65rvqNqZDL81?=
- =?us-ascii?Q?76qNP/JCQPJkMEKUqFLmiKMy8MD/o5rbdJCTFKtVKaLmiQXPZ4dIGmiKL0Y7?=
- =?us-ascii?Q?VUvUzm46erV7lIQdbopVszHOTWzLnSokr8IoeaNByrCu3GmtWY1sxg9Z6kso?=
- =?us-ascii?Q?r1KMgZtl0ersbyENNXMxZZsO+dMBsnU3An0/6HMqLSO84jqRrlIeaCZ9ERBA?=
- =?us-ascii?Q?ZGqS4xT4/QQnPTLt4Qbd3Cx0QFcVoJkCJt50cWu3m8vPxIWZ1TFJoJILsiAj?=
- =?us-ascii?Q?KYYVKK8TEV2WvPmHeMoDFhOoopX5z0lxmJvmwA5U0uxcumIo/srcUSWfT2qx?=
- =?us-ascii?Q?aCqre4kQnaW4w/iyXNS54NfYxbMF0l3M9AFNyYAn0a600a0rA6a3Wr2rJ2hP?=
- =?us-ascii?Q?ti05l6JkNiTd2h/IjSb28qlQP2F7awdNtCe7mg8vldZ6/uMcC+226UiFGPpQ?=
- =?us-ascii?Q?mVPE2ERlz8l5VAwjeXmuvd9p/L4JRGwPU17XOa4ZKewfMnHm4/VvtN1VWe6u?=
- =?us-ascii?Q?EkX+pr/jqKFvOCeKZtfriBrIwb4Rii6c07/jo+cH02lEyno+1ALPtdBFAyjP?=
- =?us-ascii?Q?I5x991Mysfmjrvrci2G4YFrKtN5S33H+ptAuwPVbzYFvFkCtlzqub4Y0vfzo?=
- =?us-ascii?Q?HKkaQzglZKZIVk/MkFJbCR7Lcmsb50tkoFSaPgXOYqunez2TDO0kmb6W+etI?=
- =?us-ascii?Q?17ivGiybgil84z1a44kOqRCzlHi34RjNcKMfN5p4BpCUlaogwJz9AswgLYQa?=
- =?us-ascii?Q?FvX4PmqIWXvdlb5+kb8x5sYEWqdW9o+RXN50o5QvP3FX3t5OHhprC7/ZNBqV?=
- =?us-ascii?Q?Ee9fZ6coJV9vK68rZhesRqaU9XcA+2+RWaEK70Z2roHEJgpormg4m7P9368F?=
- =?us-ascii?Q?/XMfarXiNFvKH+l90CiO32KbZlYr6erssl/hWaih?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2a999b1-044b-4529-fc85-08ddb563cdfd
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2025 10:17:22.1402
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rAX9cs6rnCrpfgs4CKsaWYIfApEtYDvC7pw6r3TPi4FeuK/MSqRmalNOhYzdK7Daef6208pA53cMCP3fX2X+Bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6893
+Content-Transfer-Encoding: 8bit
 
-This will use USB noncoherent API to alloc/free urb buffers, then
-stk1160 driver needn't to do dma sync operations by itself.
+From: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- drivers/media/usb/stk1160/stk1160-v4l.c   |  4 ---
- drivers/media/usb/stk1160/stk1160-video.c | 43 ++++++-----------------
- drivers/media/usb/stk1160/stk1160.h       |  7 ----
- 3 files changed, 11 insertions(+), 43 deletions(-)
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index 5ba3d9c4b3fb..715ce1dcb304 100644
---- a/drivers/media/usb/stk1160/stk1160-v4l.c
-+++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -232,10 +232,6 @@ static int stk1160_start_streaming(struct stk1160 *dev)
- 
- 	/* submit urbs and enables IRQ */
- 	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
--		struct stk1160_urb *stk_urb = &dev->isoc_ctl.urb_ctl[i];
--
--		dma_sync_sgtable_for_device(stk1160_get_dmadev(dev), stk_urb->sgt,
--					    DMA_FROM_DEVICE);
- 		rc = usb_submit_urb(dev->isoc_ctl.urb_ctl[i].urb, GFP_KERNEL);
- 		if (rc) {
- 			stk1160_err("cannot submit urb[%d] (%d)\n", i, rc);
-diff --git a/drivers/media/usb/stk1160/stk1160-video.c b/drivers/media/usb/stk1160/stk1160-video.c
-index 9cbd957ecc90..416cb74377eb 100644
---- a/drivers/media/usb/stk1160/stk1160-video.c
-+++ b/drivers/media/usb/stk1160/stk1160-video.c
-@@ -298,9 +298,7 @@ static void stk1160_process_isoc(struct stk1160 *dev, struct urb *urb)
- static void stk1160_isoc_irq(struct urb *urb)
- {
- 	int i, rc;
--	struct stk1160_urb *stk_urb = urb->context;
--	struct stk1160 *dev = stk_urb->dev;
--	struct device *dma_dev = stk1160_get_dmadev(dev);
-+	struct stk1160 *dev = urb->context;
- 
- 	switch (urb->status) {
- 	case 0:
-@@ -315,10 +313,6 @@ static void stk1160_isoc_irq(struct urb *urb)
- 		return;
- 	}
- 
--	invalidate_kernel_vmap_range(stk_urb->transfer_buffer,
--				     urb->transfer_buffer_length);
--	dma_sync_sgtable_for_cpu(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
--
- 	stk1160_process_isoc(dev, urb);
- 
- 	/* Reset urb buffers */
-@@ -327,7 +321,6 @@ static void stk1160_isoc_irq(struct urb *urb)
- 		urb->iso_frame_desc[i].actual_length = 0;
- 	}
- 
--	dma_sync_sgtable_for_device(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
- 	rc = usb_submit_urb(urb, GFP_ATOMIC);
- 	if (rc)
- 		stk1160_err("urb re-submit failed (%d)\n", rc);
-@@ -365,11 +358,9 @@ void stk1160_cancel_isoc(struct stk1160 *dev)
- 
- static void stk_free_urb(struct stk1160 *dev, struct stk1160_urb *stk_urb)
- {
--	struct device *dma_dev = stk1160_get_dmadev(dev);
--
--	dma_vunmap_noncontiguous(dma_dev, stk_urb->transfer_buffer);
--	dma_free_noncontiguous(dma_dev, stk_urb->urb->transfer_buffer_length,
--			       stk_urb->sgt, DMA_FROM_DEVICE);
-+	usb_free_noncoherent(dev->udev, stk_urb->urb->transfer_buffer_length,
-+			     stk_urb->transfer_buffer, DMA_FROM_DEVICE,
-+			     stk_urb->sgt);
- 	usb_free_urb(stk_urb->urb);
- 
- 	stk_urb->transfer_buffer = NULL;
-@@ -410,32 +401,19 @@ void stk1160_uninit_isoc(struct stk1160 *dev)
- static int stk1160_fill_urb(struct stk1160 *dev, struct stk1160_urb *stk_urb,
- 			    int sb_size, int max_packets)
- {
--	struct device *dma_dev = stk1160_get_dmadev(dev);
--
- 	stk_urb->urb = usb_alloc_urb(max_packets, GFP_KERNEL);
- 	if (!stk_urb->urb)
- 		return -ENOMEM;
--	stk_urb->sgt = dma_alloc_noncontiguous(dma_dev, sb_size,
--					       DMA_FROM_DEVICE, GFP_KERNEL, 0);
--
--	/*
--	 * If the buffer allocation failed, we exit but return 0 since
--	 * we allow the driver working with less buffers
--	 */
--	if (!stk_urb->sgt)
--		goto free_urb;
- 
--	stk_urb->transfer_buffer = dma_vmap_noncontiguous(dma_dev, sb_size,
--							  stk_urb->sgt);
-+	stk_urb->transfer_buffer = usb_alloc_noncoherent(dev->udev, sb_size,
-+							 GFP_KERNEL, &stk_urb->dma,
-+							 DMA_FROM_DEVICE, &stk_urb->sgt);
- 	if (!stk_urb->transfer_buffer)
--		goto free_sgt;
-+		goto free_urb;
- 
--	stk_urb->dma = stk_urb->sgt->sgl->dma_address;
- 	stk_urb->dev = dev;
- 	return 0;
--free_sgt:
--	dma_free_noncontiguous(dma_dev, sb_size, stk_urb->sgt, DMA_FROM_DEVICE);
--	stk_urb->sgt = NULL;
-+
- free_urb:
- 	usb_free_urb(stk_urb->urb);
- 	stk_urb->urb = NULL;
-@@ -494,12 +472,13 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
- 		urb->transfer_buffer = dev->isoc_ctl.urb_ctl[i].transfer_buffer;
- 		urb->transfer_buffer_length = sb_size;
- 		urb->complete = stk1160_isoc_irq;
--		urb->context = &dev->isoc_ctl.urb_ctl[i];
-+		urb->context = dev;
- 		urb->interval = 1;
- 		urb->start_frame = 0;
- 		urb->number_of_packets = max_packets;
- 		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
- 		urb->transfer_dma = dev->isoc_ctl.urb_ctl[i].dma;
-+		urb->sgt = dev->isoc_ctl.urb_ctl[i].sgt;
- 
- 		k = 0;
- 		for (j = 0; j < max_packets; j++) {
-diff --git a/drivers/media/usb/stk1160/stk1160.h b/drivers/media/usb/stk1160/stk1160.h
-index 7b498d14ed7a..4cbcb0a03bab 100644
---- a/drivers/media/usb/stk1160/stk1160.h
-+++ b/drivers/media/usb/stk1160/stk1160.h
-@@ -16,8 +16,6 @@
- #include <media/videobuf2-v4l2.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-ctrls.h>
--#include <linux/usb.h>
--#include <linux/usb/hcd.h>
- 
- #define STK1160_VERSION		"0.9.5"
- #define STK1160_VERSION_NUM	0x000905
-@@ -195,8 +193,3 @@ void stk1160_select_input(struct stk1160 *dev);
- 
- /* Provided by stk1160-ac97.c */
- void stk1160_ac97_setup(struct stk1160 *dev);
--
--static inline struct device *stk1160_get_dmadev(struct stk1160 *dev)
--{
--	return bus_to_hcd(dev->udev->bus)->self.sysdev;
--}
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
+
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 12:
+- Implement IDA in MFD driver to handle per-device IDs
+- Use spinlock to replace irq mutex lock
+- Use same email address in the signature
+
+Changes since version 11:
+- Use platform_device's id to replace IDA
+- Modify the irq_domain_add_simple() to irq_domain_create_simple() in
+  nct6694.c
+- Update struct data_bittiming_params related part in nct6694_canfd.c
+- Fix the typo in the header in nct6694-hwmon.c
+
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
+
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
+
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 192 ++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 390 ++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3667 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
 -- 
 2.34.1
 
