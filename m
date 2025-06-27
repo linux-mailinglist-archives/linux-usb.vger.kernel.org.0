@@ -1,212 +1,168 @@
-Return-Path: <linux-usb+bounces-25171-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25172-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77E6AAEB9AB
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 16:21:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8261AEB9CC
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 16:25:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0272188E665
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 14:21:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B1E77AE1BC
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 14:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6E92E2664;
-	Fri, 27 Jun 2025 14:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610A92E3361;
+	Fri, 27 Jun 2025 14:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nskIupWX"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ILV3+GMU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F142E2640
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 14:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446D42E2F00
+	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 14:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751034063; cv=none; b=JazP8KnfI9EyffJnNjLPxhOHiaOh8NRX+eAFgy/7t37v3q2HxMBFSHdB13FOgxYw+1NQeiT0Oq0eWmiewvoIwQyCTIOLm7E6PAWbJ+DQFnOkffBmaa2/OXhObo0hvKIUiHQBXZBUIGaz2IeV5EQMSkMfbZTEXz3wp2QMQKtlcDw=
+	t=1751034224; cv=none; b=PHZ1Z7LEq4eBhnGlMcLfXU3gybHmr14WJ7oNNhnCJA/7cjyEq8lk2YaxEmacEKRPb89sk+B02ys5I1gEVY8EB2U/QIwiplfbMB6BFA5vUFhDCylvae3aCLlVDzdJKCxurmH4CvZ3ZLGuWxySSLOW3DTdeSg7xFBe0ZI7JrXNDTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751034063; c=relaxed/simple;
-	bh=QxlBxxkMBz7Ra57R0fk4UEt/l15AUbR0yvi8R3eyZvU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=le34hwneofM+3SGLHbIa29Y3e+NIJvZFXhxZ8f8cvT4NBToy0p7uSvjOQQ8/LfCfirdpivrdhCRUYXzziOqn61F0wCHwdZvOaELu+N6hbQaLRZfiJOdqPZSz5IworR9gM1m2lqiPP1uU3ldTpkQc3yiTWKif+//4L5rWlMGecMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nskIupWX; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751034062; x=1782570062;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QxlBxxkMBz7Ra57R0fk4UEt/l15AUbR0yvi8R3eyZvU=;
-  b=nskIupWX2GSW9s1Dz84xSQb2dLcnhhuRVeLaVTMVs8AJLF5qaMghySq1
-   lautVUt/FC++7LfluBV9LDBbt0pI8izFIHsfSTWH9IVkTfppQcbcrCg4r
-   rAgdE4A8diDLm5Ubol8y541G1Vk+NhJ39dvY9oG+IT7dwS7gRB8RgZE2s
-   g+gHPdwK9jvfl1sRrraPJ/idfZrZhIRLMC/jMYb/io3TxuvJjJ806noIL
-   XysOkpYUt3CgQac/MYlmifXVCQ2V5h6mLmX3tdQPRfVzvIWgZr3veA1hj
-   jF+C5eBBMFmKF2L3jhDeaW42B5ZlHZScR53J8XOHmfEA9I57KTq1pWEt2
-   A==;
-X-CSE-ConnectionGUID: RYRWfM2cSoaRlvE8LPUplA==
-X-CSE-MsgGUID: Z7VaixnrRcy7ByHZ1JmypA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="53500565"
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="53500565"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 07:21:00 -0700
-X-CSE-ConnectionGUID: p/eMKuQWTiue4+wSzP776w==
-X-CSE-MsgGUID: NDfQthWjRkypkpCrGB7asw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="153531219"
-Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 27 Jun 2025 07:20:58 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	<stern@rowland.harvard.edu>,
-	oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com,
-	broonie@kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable@kernel.org
-Subject: [RFT PATCH v2 1/1] usb: hub: Fix flushing and scheduling of delayed work tuning runtime pm
-Date: Fri, 27 Jun 2025 17:20:44 +0300
-Message-ID: <20250627142044.3872229-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250627142044.3872229-1-mathias.nyman@linux.intel.com>
-References: <20250627142044.3872229-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1751034224; c=relaxed/simple;
+	bh=QXCsL7vS7mFvhzNXf8DjS7hrvdMO+odeJz0t39ie72o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CCPVK81N6ibs0GMYwmyEpqoqgaRDgKr2Jp4xzcs5ZqjAX7T3FcOntxjE7tEUxYDz99ORYP0Lp5SouCGwo4AVuzP2QXc4IEDfGdi9hSTAiTEp/qjKKav8ZaS1NyebXaFFACYRRlU0+dskDRWmfdLO7ewG+uJYLkZU9UedkeQiDfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ILV3+GMU; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6fd0a3cd326so27600786d6.1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 07:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1751034221; x=1751639021; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A9NXmX4vbwGCbqn6D1k17tKEXOD0obRo+KVbdSlDBXM=;
+        b=ILV3+GMU/ereFfjCZMFyOF9hl7nAAjs8oNGioqUir6XNotgStel0R8eR31yyG8kUV9
+         wF8JIga6vMiGsjXcFgi7/iK47QbRDZkoTABY+VVXfaai8vu4ISvW19hLjreboUe2uKe1
+         Mo2klwGWXwR8TXizZSg/F5JfbAZt2IzusSGvPsfCwAeB1ymk5hujKKP5Yz+su2RnZZem
+         EDcAzOBT2uYa+YgXfkWMa1q9AJ8Mx4v6336m6SdRqvSP92/VEoTwYKtwW/ifBGPLPpyn
+         kHjLrv19fTlWCVFpGzl646w52VfkIWWXuGZ72Sq4TfTDzqpjm5PkuqSQQAgV3ya7vRRb
+         sxnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751034221; x=1751639021;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A9NXmX4vbwGCbqn6D1k17tKEXOD0obRo+KVbdSlDBXM=;
+        b=OlkukOcB6m/NGBxqMoFSIjXI3WqU84/rYsZrE4FD2mYS8JEsbueg04Bt3srvMQ2mWp
+         WL+iaggGcxGX0ZrCaCx/MKeRNavETzaTL5oFLQSTlN6jKLqvFw9LqH5IsGD5hxrV+md8
+         yFVWyHvcdur8WsxeqZxJiF/yJFoedFQWwNdhkgbV+iWh8HOY0EQe+nPeP0uTMawpj096
+         gaZ7AXgThsr+aKmz+uRe2CYRBaQJu8SNC0KqMpEh9wK4kF9VyhvSrK5Ird/iiMRIfG2t
+         Zs+m837ZomyT6jwOfV4MhvoQrp+2w41y/kO4evIzSMJgiBQTpt5Euw4VD+iJQmSnyRdr
+         klWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJr40WHsuFSbS5ZIS294dFjFbMq53/PvI8YdqV6cohnQR8/XMQDdMQQUl7uzOMP3pvr+jzMJ5+5Ts=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8xJOfp4eji2Kb8LETLuSRn6761vRzT8YzaInmTy+1zmiBnhqS
+	1nqNzK8o2NcCA8d5SCqYin0b/Jq8C29G04dMcHe99EDfMKgM9Z9On1bE5zWkszEPPQ==
+X-Gm-Gg: ASbGncu4OToRbdn+icFGgixcuZzpwtamP5nLQLSJz7D06kowK+S9eetgXYHo5k7vUOX
+	Z7SxAGlqK5kmCIc7gPEOKUChRwFi4tijqOE8Wa9oe34frebogcgd/5eAJB+CDNgQFResBfRDGLg
+	psuvK/HvUCYVWTbgHSy5BAJWO9HeTYtEMucaoEnRkb5jfdaNaTkKAAoOvJ8Co1JOk34ZsPqd9q5
+	Qp6UqVtvReq8kXwAeZ0xSmxAtf5zWogs6gq5Bd1AMYg/Znd5AtevxtGaL0C7EerIg+yyooChCoA
+	lm1fMmLmxj6g3/jMkLdlo1HoHnTIt9HppBigAwXkUZ5hUbGUIiE4Fi3a8h88KEuiMl2bb59kRI4
+	Y5Mqk
+X-Google-Smtp-Source: AGHT+IGuzlQ4coveIb3aJO1JXLxRiAQiyFnfLoJRnxBPJ+E7GV+Z/ZfFSQcDG+29Z/ZESK2AT9OPdg==
+X-Received: by 2002:a05:6214:2468:b0:6fa:c5be:dad6 with SMTP id 6a1803df08f44-6ffed7a55fdmr51444156d6.6.1751034219846;
+        Fri, 27 Jun 2025 07:23:39 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d44313926asm137703185a.22.2025.06.27.07.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jun 2025 07:23:39 -0700 (PDT)
+Date: Fri, 27 Jun 2025 10:23:36 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
+	gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
+	andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
+	thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+Message-ID: <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
+References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
+ <20250627101939.3649295-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627101939.3649295-2-xu.yang_2@nxp.com>
 
-Delayed work to prevent USB3 hubs from runtime-suspending immediately
-after resume was added in commit 8f5b7e2bec1c ("usb: hub: fix detection
-of high tier USB3 devices behind suspended hubs").
+On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
+> This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> functions to support alloc and free buffer in a dma-noncoherent way.
+> 
+> To explicit manage the memory ownership for the kernel and device,
+> this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> and call it at proper time.  The management requires the user save
+> sg_table returned by usb_alloc_noncoherent() to urb->sgt.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/usb/core/hcd.c | 30 ++++++++++++++++
+>  drivers/usb/core/usb.c | 80 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb.h    |  9 +++++
+>  3 files changed, 119 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index c22de97432a0..5fa00d32afb8 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1496,6 +1496,34 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+>  }
+>  EXPORT_SYMBOL_GPL(usb_hcd_map_urb_for_dma);
+>  
+> +static void usb_dma_noncoherent_sync_for_cpu(struct usb_hcd *hcd,
+> +					     struct urb *urb)
+> +{
+> +	enum dma_data_direction dir;
+> +
+> +	if (!urb->sgt)
+> +		return;
+> +
+> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
 
-This delayed work needs be flushed if system suspends, or hub needs to
-be quiesced for other reasons right after resume. Not flushing it
-triggered issues on QC SC8280XP CRD board during suspend/resume testing.
+Are the following operations really necessary if the direction is OUT?  
+There are no bidirectional URBs, and an OUT transfer never modifies the 
+contents of the transfer buffer so the buffer contents will be the same 
+after the URB completes as they were when the URB was submitted.
 
-The same hub->init_work delayed work item is used for several purposes,
-and simply fushing it in hub_quiesce() causes other issues, so fix
-this by creating a dedicated work item for post resume work, and flush
-that in hub_quiesce()
+> +	invalidate_kernel_vmap_range(urb->transfer_buffer,
+> +				     urb->transfer_buffer_length);
+> +	dma_sync_sgtable_for_cpu(hcd->self.sysdev, urb->sgt, dir);
+> +}
 
-The delayed work item that allow hub runtime suspend is also scheduled
-just before calling autopm get. Alan pointed out there is a small risk
-that work is run before autopm get, which would call autopm put before
-get, and mess up the runtime pm usage order.
-Swap the order of work sheduling and calling autopm get to solve this.
+This entire routine should be inserted at the appropriate place in 
+usb_hcd_unmap_urb_for_dma() instead of being standalone.
 
-Cc: stable@kernel.org
-Fixes: 8f5b7e2bec1c ("usb: hub: fix detection of high tier USB3 devices behind suspended hubs")
-Reported-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Closes: https://lore.kernel.org/linux-usb/acaaa928-832c-48ca-b0ea-d202d5cd3d6c@oss.qualcomm.com
-Reported-by: Alan Stern <stern@rowland.harvard.edu>
-Closes: https://lore.kernel.org/linux-usb/c73fbead-66d7-497a-8fa1-75ea4761090a@rowland.harvard.edu
-Reported-by: Mark Brown <broonie@kernel.org>
-Closes: https://lore.kernel.org/linux-usb/aF5rNp1l0LWITnEB@finisterre.sirena.org.uk
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- v2:
- - Add and use dedicated delayed work struct for post resume work
- - Add commit message section about dedicated work
+> +static void usb_dma_noncoherent_sync_for_device(struct usb_hcd *hcd,
+> +						struct urb *urb)
+> +{
+> +	enum dma_data_direction dir;
+> +
+> +	if (!urb->sgt)
+> +		return;
+> +
+> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +	flush_kernel_vmap_range(urb->transfer_buffer,
+> +				urb->transfer_buffer_length);
+> +	dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
+> +}
 
- drivers/usb/core/hub.c | 23 ++++++++++-------------
- drivers/usb/core/hub.h |  1 +
- 2 files changed, 11 insertions(+), 13 deletions(-)
+Likewise, this code belongs inside usb_hcd_map_urb_for_dma().
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index f981e365be36..256fe8c86828 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1074,12 +1074,11 @@ int usb_remove_device(struct usb_device *udev)
- 
- enum hub_activation_type {
- 	HUB_INIT, HUB_INIT2, HUB_INIT3,		/* INITs must come first */
--	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME, HUB_POST_RESUME,
-+	HUB_POST_RESET, HUB_RESUME, HUB_RESET_RESUME,
- };
- 
- static void hub_init_func2(struct work_struct *ws);
- static void hub_init_func3(struct work_struct *ws);
--static void hub_post_resume(struct work_struct *ws);
- 
- static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- {
-@@ -1103,12 +1102,6 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 		goto init3;
- 	}
- 
--	if (type == HUB_POST_RESUME) {
--		usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
--		hub_put(hub);
--		return;
--	}
--
- 	hub_get(hub);
- 
- 	/* The superspeed hub except for root hub has to use Hub Depth
-@@ -1359,11 +1352,12 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 
- 	if (type == HUB_RESUME && hub_is_superspeed(hub->hdev)) {
- 		/* give usb3 downstream links training time after hub resume */
--		INIT_DELAYED_WORK(&hub->init_work, hub_post_resume);
--		queue_delayed_work(system_power_efficient_wq, &hub->init_work,
--				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
- 		usb_autopm_get_interface_no_resume(
- 			to_usb_interface(hub->intfdev));
-+
-+		queue_delayed_work(system_power_efficient_wq,
-+				   &hub->post_resume_work,
-+				   msecs_to_jiffies(USB_SS_PORT_U0_WAKE_TIME));
- 		return;
- 	}
- 
-@@ -1387,9 +1381,10 @@ static void hub_init_func3(struct work_struct *ws)
- 
- static void hub_post_resume(struct work_struct *ws)
- {
--	struct usb_hub *hub = container_of(ws, struct usb_hub, init_work.work);
-+	struct usb_hub *hub = container_of(ws, struct usb_hub, post_resume_work.work);
- 
--	hub_activate(hub, HUB_POST_RESUME);
-+	usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
-+	hub_put(hub);
- }
- 
- enum hub_quiescing_type {
-@@ -1417,6 +1412,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
- 
- 	/* Stop hub_wq and related activity */
- 	timer_delete_sync(&hub->irq_urb_retry);
-+	flush_delayed_work(&hub->post_resume_work);
- 	usb_kill_urb(hub->urb);
- 	if (hub->has_indicators)
- 		cancel_delayed_work_sync(&hub->leds);
-@@ -1975,6 +1971,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	hub->hdev = hdev;
- 	INIT_DELAYED_WORK(&hub->leds, led_work);
- 	INIT_DELAYED_WORK(&hub->init_work, NULL);
-+	INIT_DELAYED_WORK(&hub->post_resume_work, hub_post_resume);
- 	INIT_WORK(&hub->events, hub_event);
- 	INIT_LIST_HEAD(&hub->onboard_devs);
- 	spin_lock_init(&hub->irq_urb_lock);
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index e6ae73f8a95d..9ebc5ef54a32 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -70,6 +70,7 @@ struct usb_hub {
- 	u8			indicator[USB_MAXCHILDREN];
- 	struct delayed_work	leds;
- 	struct delayed_work	init_work;
-+	struct delayed_work	post_resume_work;
- 	struct work_struct      events;
- 	spinlock_t		irq_urb_lock;
- 	struct timer_list	irq_urb_retry;
--- 
-2.43.0
+Also, the material that this routine replaces in the uvc and stk1160 
+drivers do not call flush_kernel_vmap_range().  Why did you add that 
+here?  Was this omission a bug in those drivers?
 
+Alan Stern
 
