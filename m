@@ -1,97 +1,123 @@
-Return-Path: <linux-usb+bounces-25200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3738AEC234
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 23:42:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00849AEC248
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 23:48:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8F4A564D07
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 21:42:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FAF46E3EF1
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 21:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE1128A1DE;
-	Fri, 27 Jun 2025 21:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9160A28A3EC;
+	Fri, 27 Jun 2025 21:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWC75QS7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cgnf6ziA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E93171092
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 21:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610F61E521D;
+	Fri, 27 Jun 2025 21:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751060533; cv=none; b=KIPQNdu/p1CAknw8agy+szIefg13TzPs0DJ6x48OyEBY/yWVPYyW1UDQrHfFhjAMmHILG9GvAZ8FVP6WE3O2jydytRDAR3YN/Ozgc4LTHS8hsC1USHEuwKKcXCqu1/6aKX3zz7m7c2joJhqt3e8mEsWOBEo3sV8yeZppPpxy/qA=
+	t=1751060888; cv=none; b=Tem7/AAlHoWNh0R1D1gmhv/uMRsnnP+AN9tVsSjHlRVzed+R+z+oSvC2RcRezw5fDW9ybnOikEjb60MVwTEAfjkyIVgcjLyzY1E/tV0vIqqKOiqm/zRzgKRHiyEAnpX/g52z8hxMjDyaDUF7pbcaCwWrYvf5VeYZpRaqFrOFEuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751060533; c=relaxed/simple;
-	bh=25OUc9RKLtmwb5aCT5ukMuv8dz0jrYjR37FzRc1xc+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwYrgoOwYcmGI7M3uyDmTpta/tgNilvNAMT90YES3bPAfINgxImHa783d8PQQKtj8JTNxT92YYer4UjLcx9pMf6P+H5Ds6YsrGfpT3slv82OhD/T777m9iwijHTVSKAT/HnDrUCdzEE41fx8JfH41rxgg2Vw4kFx5C7/FyGK43c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWC75QS7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15B9C4CEE3;
-	Fri, 27 Jun 2025 21:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751060533;
-	bh=25OUc9RKLtmwb5aCT5ukMuv8dz0jrYjR37FzRc1xc+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SWC75QS77ioJBbKUc0z3WP5T893DAEchkBsR9bPj5MUIfl4FiHFSHcfbm94GLFDSX
-	 JyPu88V3nVR6XtaAwtSw7b5MGVojA7eS2oFzTRm+LWad+8NeVthQHGfLOlk93dcQ2A
-	 Ns/9hyVxYMX4VQ1xGPLsrlRiiPlVNrdNNIq+kME9oLu3XaZTY1drQjw0VZt+VNKhKD
-	 pT6P46zEBYLYqFmjn4FDY3iilhWVYpNdtKOKi0r+X42t/iJeOdhcUvIDb+lkGZJa2z
-	 6hSIrFJg1gzXHm+wDJwChhymgbt989oblhzfpTXnOQ/qmwXg9EOsO+W4FmA2KgsX8H
-	 kPYLuepWfQMsw==
-Date: Fri, 27 Jun 2025 22:42:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu, oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com, stable@kernel.org
-Subject: Re: [RFT PATCH v3 1/1] usb: hub: Fix flushing of delayed work used
- for post resume purposes
-Message-ID: <91e7b842-d23f-4adc-8912-4f2028152227@sirena.org.uk>
-References: <20250627164348.3982628-1-mathias.nyman@linux.intel.com>
- <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1751060888; c=relaxed/simple;
+	bh=KrT9visr8JuUFyc9dCKnyKiJKRMau3o6/bKp1lg+dTE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YlzGo7dZdrU7lnvDtzrmNCfELeBOJyxOd2+jBxH4oFf/h1OsC6URz1VFH7tbId80WmnHfjhR5PFCgyFTU4S7xzgiD1aNEwwZN0e1+8QgaYvAQ/+qX8Vv7HJo9tJ8xAOFk9aaJqUsvjDLqFqoa3b4higowSvPUdYC7cFPcfzEW0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cgnf6ziA; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751060887; x=1782596887;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KrT9visr8JuUFyc9dCKnyKiJKRMau3o6/bKp1lg+dTE=;
+  b=Cgnf6ziAWC3M5VO06/FeJ+DRkJhYPIpB75QgceWwYfyQ9uExIGN7qG67
+   peVmEDKkFGQi5+abl98I/0Ofy2dzg9xe1t2eLCVHWtvcbWuleruei9t6J
+   bOFiROuUlKT1VPbF0XLmpjrDF0gSqP6JLQcZzI31qH7wi4TBOD47nkzbC
+   HrKQS5CVIEFTVmnEqUWSvzWdNa+EldSjMWYX89firdvi63NFM0IPzWUGg
+   glSjH7MH9BuWjU+CX/qjt/j/qInKLWH87MZYVoJxGRs33/dXlJ0c9x3Bj
+   CYTsZI2EfRMZ2Z+n7nPkLaaG709k7TZ98PSTLjrl0p/a4ewQyElTwp9iy
+   Q==;
+X-CSE-ConnectionGUID: qcLNqlINQMaK3NI1zXO3dA==
+X-CSE-MsgGUID: iPNpC49BRAG6hroHHIO9Og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="53254365"
+X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
+   d="scan'208";a="53254365"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 14:48:05 -0700
+X-CSE-ConnectionGUID: dvCZF54UQ+WvtuBXGynaRw==
+X-CSE-MsgGUID: aMbgSoumSz+wLZCV6vgFHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
+   d="scan'208";a="153625860"
+Received: from lucas-s2600cw.jf.intel.com ([10.165.21.196])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 14:48:04 -0700
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: early: xhci-dbc: Fix early_ioremap leak
+Date: Fri, 27 Jun 2025 14:47:47 -0700
+Message-ID: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zoKC4889cQkJiSLd"
-Content-Disposition: inline
-In-Reply-To: <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
-X-Cookie: Avoid contact with eyes.
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20250627-xdbc-0fe0b64c9560
+X-Mailer: b4 0.15-dev-a7f9c
+Content-Transfer-Encoding: 8bit
+
+Using the kernel param earlyprintk=xdbc,keep without proper hardware
+setup leads to this:
+
+	[ ] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+	...
+	[ ] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+	...
+	[ ] calling  kmemleak_late_init+0x0/0xa0 @ 1
+	[ ] kmemleak: Kernel memory leak detector initialized (mem pool available: 14919)
+	[ ] kmemleak: Automatic memory scanning thread started
+	[ ] initcall kmemleak_late_init+0x0/0xa0 returned 0 after 417 usecs
+	[ ] calling  check_early_ioremap_leak+0x0/0x70 @ 1
+	[ ] ------------[ cut here ]------------
+	[ ] Debug warning: early ioremap leak of 1 areas detected.
+	    please boot with early_ioremap_debug and report the dmesg.
+	[ ] WARNING: CPU: 11 PID: 1 at mm/early_ioremap.c:90 check_early_ioremap_leak+0x4e/0x70
+
+When early_xdbc_setup_hardware() fails, make sure to call
+early_iounmap() since xdbc_init() won't handle it.
+
+Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+---
+ drivers/usb/early/xhci-dbc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index 341408410ed93..41118bba91978 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -681,6 +681,10 @@ int __init early_xdbc_setup_hardware(void)
+ 
+ 		xdbc.table_base = NULL;
+ 		xdbc.out_buf = NULL;
++
++		early_iounmap(xdbc.xhci_base, xdbc.xhci_length);
++		xdbc.xhci_base = NULL;
++		xdbc.xhci_length = 0;
+ 	}
+ 
+ 	return ret;
 
 
---zoKC4889cQkJiSLd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Jun 27, 2025 at 07:43:48PM +0300, Mathias Nyman wrote:
-> Delayed work that prevents USB3 hubs from runtime-suspending too early
-> needed to be flushed in hub_quiesce() to resolve issues detected on
-> QC SC8280XP CRD board during suspend resume testing.
-
-Tested-by: Mark Brown <broonie@kernel.org>
-
-on both the Raspberry Pi 3B+ and Libretech Alta.
-
---zoKC4889cQkJiSLd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhfECwACgkQJNaLcl1U
-h9CnSwf/U7Z5TmwIDh0Y9Zm2jo8nFQLGs4tTUfGebmqp4BXHHGsWBvnLM1UWjDAi
-wSACDtuAXEZMNzCq7+1T2LYJ/tDOPjKy1YSiUFSRNjEvDkNXsmscjBnJpvpa8X5o
-CBxsM+5ap8RmT604XloOidf6voNr05BGLQeA+Vq1WdfijDAfTePvCnf3pnfi0jHL
-N/Btpixan9o285g7gHPeKg30i1NaUjQ2qz4KntfwDGmLNZv+JUZo3gXqE8eIn12r
-EQerqgVtnT0WhzmT87JohfM/dI5Esd1yzcKbaYIWmdYFCsbxY1HqiL3Wfu79zYpq
-z07MwQISZ+kaKuItq3GtbP+edtxCsA==
-=ZWyV
------END PGP SIGNATURE-----
-
---zoKC4889cQkJiSLd--
 
