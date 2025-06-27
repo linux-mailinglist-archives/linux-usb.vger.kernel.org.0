@@ -1,96 +1,114 @@
-Return-Path: <linux-usb+bounces-25174-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25175-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E1C2AEBA00
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 16:35:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0509AEBA0F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 16:41:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49C6C4A4520
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 14:35:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 665143AECCE
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 14:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E988C2E2667;
-	Fri, 27 Jun 2025 14:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 410F22E54A2;
+	Fri, 27 Jun 2025 14:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FS73qVK3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ICxNbefK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7127E2E2656
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 14:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34123234
+	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 14:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751034897; cv=none; b=jUG63qr3lKxB8W1HoALGyC9WzLWJPje2q4GLZp5XFsDN4lqgogBtUZ2h83+iZuESkH58dI9y3xUDx2IKSxTodLKW52C2fJhI5YLyaqWer0nd6kWbpR2K9yrP0FjuMCJRdbZyfx6JJcX/YSEjozwhudavQRrA8TyqfhV7lywEyU0=
+	t=1751035293; cv=none; b=SkH+WZDiYN54rgJqkMLjHA2Ri2RWKkIv04+9panlBy1/t8whZaaIuruxc2W2ijDO/vg3u1WtVh3fVf72TXONeNGABkOI/k5PyeMoN4J0Mv9gQyEK8DLyuv85Yh0QbZnJAtXYvN6WeXEX+/l0rLXlRTZXgI2yXonpfVTY1mJQM/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751034897; c=relaxed/simple;
-	bh=MQ6Lgf5Zb/d6eVyZqpe8FRnABCHPl4J4myOuFZtoZAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iTeuxnrBymce7VrVF6NkRbM0YJuTWo2KijL1VK9rguI+wRzSpMFPDTJlDLhOtheJT33BjpSxKcM3fL3zKv86RGofMkc4jsdCfJNzBmCX5TvRcOp+kO3UKALO4WufQEZIYDLrPm22+ScxxfX/LIECwOTIDDdvo3UYrP5KL8ApUs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FS73qVK3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793E1C4CEE3;
-	Fri, 27 Jun 2025 14:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751034895;
-	bh=MQ6Lgf5Zb/d6eVyZqpe8FRnABCHPl4J4myOuFZtoZAQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FS73qVK3PoQbdeKzLGnlPP1An4L7dKj1X4fLPouzelKp/syRe7bx+TEQOT4tNGgFx
-	 JX5f5368PDkMGot6f8ekCd2j80Or9PsmMZivGZ6+30+h27+QP+9adS0Tzkkkxc1x9R
-	 aKZankJBB1raz9eGILNlh9/mN4huLNIiPYlapfrvyqKOCl0JqU1w3SAMVtgGMJrXfO
-	 jcQwx7/vBBdJq7QiCtQt+gqXi9bL8hSXQWM1ml0sbxFuTbbTGU/9egg0Si7SyKI/MV
-	 7568TMyHGAOQahl2pP8glRutZvtqOeJEvIaMlChKJMA3Qf89+Wi5qwwgUPokpZay06
-	 U1fKIYN3igQlw==
-Date: Fri, 27 Jun 2025 15:34:50 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu, oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com, stable@kernel.org
-Subject: Re: [RFT PATCH v2 1/1] usb: hub: Fix flushing and scheduling of
- delayed work tuning runtime pm
-Message-ID: <e42dad63-cb3c-4bc8-9b1e-d43c8e976313@sirena.org.uk>
-References: <20250627142044.3872229-1-mathias.nyman@linux.intel.com>
- <20250627142044.3872229-2-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1751035293; c=relaxed/simple;
+	bh=2kwclU33oRuhvT30GhK4lBNi8L1ZNaTlpbiYiDDPGlk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BDy9YaofK5oy8glVQ6rnnyFXcunqJVM89r6qiTdy9T6qNX+XCvswVaxNGmjkOC5OlEhXXgeL+Ecoa4VhyKf29b0bI1OPtAW/92EZrSH3kxJjuSlbnmquBGwaCNl+AjcHU62z5RPF8SlIesM1DGNK+UowtEg8Dy48i5BlnhBobfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ICxNbefK; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751035291; x=1782571291;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2kwclU33oRuhvT30GhK4lBNi8L1ZNaTlpbiYiDDPGlk=;
+  b=ICxNbefKomxlkse/vCBE8+FwUDiV4dJOGTQVIFMCjoWj9lbyWQKv7d80
+   ga+Lf0Q6PfY2dGNqQ6uWj+2BSBoA1VDgw4ppS9VM0RwhAxGpD15brJyJR
+   pkEATrFuIAjmgruLtjYAKIZx0+/DFoUfBJxUAWAYX0xllPNHpTwJgvzfo
+   tM19YNTZiHtPZCvCrAV/MNSMwA6a4nUccmSdB3u9swajgrfXVafxu/Fqo
+   lQuu2mK6X9XPCDgWraSb6r4BcfigxcY4/F53T1ynPgDFEsdBaqMYG6hw5
+   0dCWo2DUXH3Fd9oAuT1nuqpdB8ENGO/QB7Kk/gaTvStKtfbifdB6m28Dw
+   A==;
+X-CSE-ConnectionGUID: plMM3QXZQjChamJeGdvNrw==
+X-CSE-MsgGUID: M1u3Dy/BTFeYve0kdLVOhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="53444925"
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="53444925"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 07:41:31 -0700
+X-CSE-ConnectionGUID: /JkTUh1SSO2/5z3Wa1+3dw==
+X-CSE-MsgGUID: U7NxQFZUTSu8hHiXNErbgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="156872893"
+Received: from unknown (HELO mnyman-desk.fi.intel.com) ([10.237.72.199])
+  by fmviesa003.fm.intel.com with ESMTP; 27 Jun 2025 07:41:30 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/4] xhci fixes for usb-linus
+Date: Fri, 27 Jun 2025 17:41:18 +0300
+Message-ID: <20250627144127.3889714-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1CiIpXkTJB8pPKkX"
-Content-Disposition: inline
-In-Reply-To: <20250627142044.3872229-2-mathias.nyman@linux.intel.com>
-X-Cookie: Avoid contact with eyes.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi Greg
 
---1CiIpXkTJB8pPKkX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+A few xhci fixes for usb-linus, fixing DbC issues and some vendor specific
+quirks.
 
-On Fri, Jun 27, 2025 at 05:20:44PM +0300, Mathias Nyman wrote:
-> Delayed work to prevent USB3 hubs from runtime-suspending immediately
-> after resume was added in commit 8f5b7e2bec1c ("usb: hub: fix detection
-> of high tier USB3 devices behind suspended hubs").
+The "usb: xhci: quirk for data loss in ISOC transfers" Doesn't have a Fixes
+tag, but based on commit message it should go as far back as it can.
 
-This doesn't apply for me against any of mainline, pending-fixes or
--next.
+I'm planning on taking vacation next 3 weeks, but will take time to sort out
+issues with patches I currently have pending on the list.
 
---1CiIpXkTJB8pPKkX
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks
+Mathias
 
------BEGIN PGP SIGNATURE-----
+Hongyu Xie (1):
+  xhci: Disable stream for xHC controller with XHCI_BROKEN_STREAMS
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmherAkACgkQJNaLcl1U
-h9BHzQf+K+GmAVpywL8ZOMOkOabPymj7xEtoAEjU0XbchDd3b2DStPkECF5iqzSl
-dpSy+tJ5JTcDo1yc4DzKwgqdEKNMK4kns2izidXWlW/70NfcTZ+NJhn/vCiZ0rpA
-YM9H5tPuTS6NsUxQ5d9ErpLwVH+/uSFGW5V+cauUnLtH8cwKzVI0kzjyrDXHYQiQ
-SzqKwM9SF5ebGYOLE0wfZnQn4a1rISNXHwC53Hsu8kDY7sPoa5gWqUz7mrxWHKe8
-ulIeItQzBv1TDbBtTsvyUCBeZ1vxs/c7KTjQwhiNqIOkqQxLB5NwurQElzm3dPbo
-iRHzIe+t5+r2Q8BwKqSB1ZxqyMkMKw==
-=y1Up
------END PGP SIGNATURE-----
+Mathias Nyman (1):
+  xhci: dbc: Flush queued requests before stopping dbc
 
---1CiIpXkTJB8pPKkX--
+Raju Rangoju (1):
+  usb: xhci: quirk for data loss in ISOC transfers
+
+Łukasz Bartosik (1):
+  xhci: dbctty: disable ECHO flag by default
+
+ drivers/usb/host/xhci-dbgcap.c |  4 ++++
+ drivers/usb/host/xhci-dbgtty.c |  1 +
+ drivers/usb/host/xhci-mem.c    |  4 ++++
+ drivers/usb/host/xhci-pci.c    | 25 +++++++++++++++++++++++++
+ drivers/usb/host/xhci-plat.c   |  3 ++-
+ drivers/usb/host/xhci.h        |  1 +
+ 6 files changed, 37 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
+
 
