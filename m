@@ -1,118 +1,195 @@
-Return-Path: <linux-usb+bounces-25162-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A991AEB598
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 13:00:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 850C1AEB629
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 13:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFB2C562008
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 10:59:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B2AB173865
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 11:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5113F29B8EA;
-	Fri, 27 Jun 2025 11:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8596429B8FE;
+	Fri, 27 Jun 2025 11:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="c6urAryN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aRFg/cEz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA052AE6F
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 11:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BCF2951CE;
+	Fri, 27 Jun 2025 11:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751022006; cv=none; b=IKR8n50XkgwNymz9GoX8WJ4AfJiSkXxiN28rArVNd4StE27kn82uMZm/B5jpHLItndcZE/qkOi4XqM1t3eQr45/NUyraz8mA5MjKH4jaoIC/HLhqmGuqjKK4dyxniPzHek/vzyrFt0p3AjZJA9b9tfjVkgzr5JA5oWQ2Q5zhb+Y=
+	t=1751023389; cv=none; b=SvgZwLbudVA3UvddJB4WfKhtDJqpIC2jhj/eHRWz4dXw8HPJxjuSXlkukHFNKXAIf5b2OwWxj9qaMN4BG9niicxzmRzCHklUIjC8XjNMo2ITHJ/52cyCJMFRiy6ChDweER16FMhTyb2Z6jWeSg8AelxU7yHs9PpMaNFKy4iVqW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751022006; c=relaxed/simple;
-	bh=vLo5INOPS/WDpIxNx5EixrWME6bTViVtqYq5HO8ajvQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=qjkju0pnyjSc80+7f0DYfmVH7AzyM/TOXEgiKA3+5bGQOYqdrte0nl4axA1mYsUKVXoU0CdUfZZsklU+1wi00BtghBKt8hPFDss+FRTMFN8J2rED80rkfBln1rLOG3HIM64X6RV3bWr3PJs4Dg9CWKM5TJiUushpExbYCuUqqVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=c6urAryN; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250627110001epoutp031784a256b6e31adf185c7d30c7f37110~M4Tu62nMn0922709227epoutp03G
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 11:00:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250627110001epoutp031784a256b6e31adf185c7d30c7f37110~M4Tu62nMn0922709227epoutp03G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751022001;
-	bh=+ENfZgyXG6LRtkLsvTjegXsc5nM6Q4iQE+wp1eC5dN0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c6urAryNFOrLbEjPvy+dNYuBLBOACYyYsVD7KypMRs90ko1mcGgdm+K7/UUqIJM22
-	 9CdPopiDEALv2u/dDI3JOFQc15+eZ/lj6bv7ouR37IUsnq7Z6umaKMMUh8ctXlrd90
-	 20qN/G/YIKVKXrsBGpwesXbOD+oPVrgZje+xjX20=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas1p2.samsung.com (KnoxPortal) with ESMTPS id
-	20250627110001epcas1p21f2a1180b51fc82517facb6b9f247e14~M4TuV63LA0253702537epcas1p2E;
-	Fri, 27 Jun 2025 11:00:01 +0000 (GMT)
-Received: from epcas1p2.samsung.com (unknown [182.195.36.223]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4bTCJ057Wzz6B9m5; Fri, 27 Jun
-	2025 11:00:00 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250627105959epcas1p168bbbe460ee1f081e67723505e1f57c9~M4TsoWor_2955029550epcas1p1Z;
-	Fri, 27 Jun 2025 10:59:59 +0000 (GMT)
-Received: from U20PB1-1082.tn.corp.samsungelectronics.net (unknown
-	[10.91.135.33]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250627105959epsmtip21aa89321785c91e7dfb1e50c794acb7e~M4TsjuKwn3127031270epsmtip2N;
-	Fri, 27 Jun 2025 10:59:59 +0000 (GMT)
-From: "Peter GJ. Park" <gyujoon.park@samsung.com>
-To: pabeni@redhat.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	gyujoon.park@samsung.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, oneukum@suse.com
-Subject: [PATCH net v2] net: usb: usbnet: fix use-after-free in race on
- workqueue
-Date: Fri, 27 Jun 2025 19:59:53 +0900
-Message-Id: <20250627105953.2711808-1-gyujoon.park@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
+	s=arc-20240116; t=1751023389; c=relaxed/simple;
+	bh=4E766QcrHyc6FJQNUYWjsfGgdu/BRMSpFtNgERpjx+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CpOCZrYp7ihOK/ayuvN5eTP+xCznRRK9sTgT3hwRS6P46DhlOmNkWzWkNMmnnT33VveqTSNLZghrP1PXgKWHDhOpN+ugSsxgFXxh99XXO+74GjJj0VN49y4b0mgPo3IigSZBf7D/1xPst2ppfMFM1CpTaM8G3cTU6S9CtL8++Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aRFg/cEz; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751023387; x=1782559387;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4E766QcrHyc6FJQNUYWjsfGgdu/BRMSpFtNgERpjx+c=;
+  b=aRFg/cEzfp9Z/1eKoPTRubCTpm7vhkHtulKXVKzp8GOxHzPrX3KGzF6k
+   o94ORfDUGnAW+ajvdZkYMEoC3h/iAxaAqtA8zwNlB/HxHKhF8enLx6Ndk
+   mSRjz430leOnDOsAJDOY9zsbQafpcB7UTvxswoGzZZY3/Poe9AhXrpan4
+   MdfoBvPerCc78z4hkRFT0sMnbjBi4fJowrVeybO9/tIG050KiZDHEqFBR
+   vXcrXk2+uSvKfAP1LItfJYnNPu1/93FQYD52T+4h3MbjJ8Ub3T81H82o3
+   WQhMC0Z5mhLgsAih44DV3wG3fqkvulWG13wUvltCzCnoGbaxKJ2h17gai
+   g==;
+X-CSE-ConnectionGUID: 3b1jxNXFSZaVQMoFznQM6g==
+X-CSE-MsgGUID: C0X9IszmSlOBheNkF9f5Pw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="64774530"
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="64774530"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 04:23:07 -0700
+X-CSE-ConnectionGUID: pWmaIgjQRVmcrM9GMPJZOw==
+X-CSE-MsgGUID: sUZS+/A6QaWHE3H4M8P7Ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="153498611"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 04:23:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uV7Aa-0000000ASlm-1HHR;
+	Fri, 27 Jun 2025 14:23:00 +0300
+Date: Fri, 27 Jun 2025 14:22:59 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
+	gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
+	viro@zeniv.linux.org.uk, thomas.weissschuh@linutronix.de,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+Message-ID: <aF5_EwSHHMOOMRv9@smile.fi.intel.com>
+References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
+ <20250627101939.3649295-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250627105959epcas1p168bbbe460ee1f081e67723505e1f57c9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-cpgsPolicy: CPGSC10-711,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250627105959epcas1p168bbbe460ee1f081e67723505e1f57c9
-References: <87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
-	<CGME20250627105959epcas1p168bbbe460ee1f081e67723505e1f57c9@epcas1p1.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627101939.3649295-2-xu.yang_2@nxp.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-When usbnet_disconnect() queued while usbnet_probe() processing,
-it results to free_netdev before kevent gets to run on workqueue,
-thus workqueue does assign_work() with referencing freeed memory address.
+On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
+> This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> functions to support alloc and free buffer in a dma-noncoherent way.
+> 
+> To explicit manage the memory ownership for the kernel and device,
+> this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> and call it at proper time.  The management requires the user save
+> sg_table returned by usb_alloc_noncoherent() to urb->sgt.
 
-For graceful disconnect and to prevent use-after-free of netdev pointer,
-the fix adds canceling work and timer those are placed by usbnet_probe()
+...
 
-Signed-off-by: Peter GJ. Park <gyujoon.park@samsung.com>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
----
- drivers/net/usb/usbnet.c | 3 +++
- 1 file changed, 3 insertions(+)
+> +/**
+> + * usb_alloc_noncoherent - allocate dma-noncoherent buffer for URB_NO_xxx_DMA_MAP
+> + * @dev: device the buffer will be used with
+> + * @size: requested buffer size
+> + * @mem_flags: affect whether allocation may block
+> + * @dma: used to return DMA address of buffer
+> + * @dir: dma transfer direction
+> + * @table: used to return sg_table of allocated memory
+> + *
+> + * Return: Either null (indicating no buffer could be allocated), or the
+> + * cpu-space pointer to a buffer that may be used to perform DMA to the
+> + * specified device.  Such cpu-space buffers are returned along with the DMA
+> + * address (through the pointer provided).
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index c04e715a4c2a..3c5d9ba7fa66 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1660,6 +1660,9 @@ void usbnet_disconnect (struct usb_interface *intf)
- 	usb_free_urb(dev->interrupt);
- 	kfree(dev->padding_pkt);
+Return section should be last in the kernel-doc (this requirement is
+documented).
 
-+	timer_delete_sync(&dev->delay);
-+	tasklet_kill(&dev->bh);
-+	cancel_work_sync(&dev->kevent);
- 	free_netdev(net);
- }
- EXPORT_SYMBOL_GPL(usbnet_disconnect);
---
-2.25.1
+> + * To explicit manage the memory ownership for the kernel vs the device by
+> + * usb core, the user needs save sg_table to urb->sgt. Then usb core will
+> + * do dma sync for cpu and device properly.
+> + *
+> + * When the buffer is no longer used, free it with usb_free_noncoherent().
+
+Here and everywhere else in your series, pay respect to acronyms by using them
+as acronyms:
+
+dma --> DMA
+cpu --> CPU
+usb --> USB
+
+and so on...
+
+
+> + */
+> +void *usb_alloc_noncoherent(struct usb_device *dev, size_t size,
+> +			    gfp_t mem_flags, dma_addr_t *dma,
+> +			    enum dma_data_direction dir,
+> +			    struct sg_table **table)
+> +{
+> +	struct device *dmadev;
+> +	struct sg_table *sgt;
+> +	void *buffer;
+> +
+> +	if (!dev || !dev->bus)
+
+When !dev case is possible?
+
+> +		return NULL;
+> +
+> +	dmadev = bus_to_hcd(dev->bus)->self.sysdev;
+> +
+> +	sgt = dma_alloc_noncontiguous(dmadev, size, dir, mem_flags, 0);
+> +	if (!sgt)
+> +		return NULL;
+> +
+> +	buffer = dma_vmap_noncontiguous(dmadev, size, sgt);
+> +	if (!buffer) {
+> +		dma_free_noncontiguous(dmadev, size, sgt, dir);
+> +		return NULL;
+> +	}
+> +
+> +	*table = sgt;
+> +	*dma = sg_dma_address(sgt->sgl);
+> +
+> +	return buffer;
+> +}
+
+...
+
+> +void usb_free_noncoherent(struct usb_device *dev, size_t size,
+> +			  void *addr, enum dma_data_direction dir,
+> +			  struct sg_table *table)
+> +{
+> +	struct device *dmadev;
+> +
+> +	if (!dev || !dev->bus)
+
+Ditto.
+
+> +		return;
+> +	if (!addr)
+> +		return;
+> +
+> +	dmadev = bus_to_hcd(dev->bus)->self.sysdev;
+> +	dma_vunmap_noncontiguous(dmadev, addr);
+> +	dma_free_noncontiguous(dmadev, size, table, dir);
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
