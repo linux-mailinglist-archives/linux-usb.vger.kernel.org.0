@@ -1,99 +1,85 @@
-Return-Path: <linux-usb+bounces-25168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB30DAEB952
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 15:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1928BAEB99E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 16:19:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98F5D3A8607
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 13:55:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 789AF644210
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 14:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349C92DA745;
-	Fri, 27 Jun 2025 13:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5642E2E2660;
+	Fri, 27 Jun 2025 14:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoYN7Ydb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gqj10TmX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A308460
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 13:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A5D2E11CF
+	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 14:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751032575; cv=none; b=q77GPgpSjAtve950gKQkmWOYFXFyrXLIsX5wcW2Q2CzURBMHOtUnDZCV0tbyITqdpQxaQz97VD2sNGDKjiJoxeYqpy/G/O7PL0v7uHgpBbCCNhnEz1XIhDDexppFvjGivfQMRJqD2nclrPH81V0xIrLjnZbV1lqQatjhg/fSBy8=
+	t=1751033947; cv=none; b=jdeheLEoBRtXYc0Mo19EaxVnBkIJDYnV+2ZRbnfBlYl/c9CWDZxDU7cyHHw/1m5nZ6m6Y58A7fa/NlQMVqZHRULtylBixAP6z+pGc0lXaS53c7ASO/C6oSFNvoXpfLx9D1UMPXXIM9n9kfKZgzFMBKFL10U0adZnwmmWYFriAWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751032575; c=relaxed/simple;
-	bh=Ph3+8sN0YO+rRfWU59xQ0Ksx83eeoqrTCxno/6rSNsk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c8iKV8RTBCAo1pkvormLIj5ttKqZaOyesgGFQQEEFQPtoYB3c3A++9bIVX61v/V4tDDjrrHgl8RPirMHNStAp5IlE71iDE6pZ31EAoS31hWbPgrcDZ6BDDWIFsgYZD2ctWRxoQ6wxZi2A33zJmVqnMmymZUXEmogpUKABe+QLuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoYN7Ydb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB697C4CEE3;
-	Fri, 27 Jun 2025 13:56:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751032575;
-	bh=Ph3+8sN0YO+rRfWU59xQ0Ksx83eeoqrTCxno/6rSNsk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OoYN7YdbjVlMqyYUlH9DXbdgyr+A0aur/Ca1QUv7eJuIuSJ0A4EKdvDDQ/FYs147L
-	 cM5LZBi5zEa79IRvGsxfLvELbGe4GNScKl8Mpo4EA8ywKBS4EdkFMyKl8thnd9Nq3r
-	 X4LoeAEBXfumyG48H4XxCYU3aGqQhMZ3wy/w7ec/+mYNGL0bM1Fc9BDGpha5LHs6dd
-	 eaoOM5QErE0lQce0ieCGvNLgL7ahBYLhEPuV6gQSxdSQZzXImFZDjiSHETxx4ix6eX
-	 30KI5/pSF+njsqXCQE6pUjS/wLIPZoVMxjINge2va5Shdd8FBp3ijZLdGElF7JtGu0
-	 2aaD+RaRtILhg==
-Date: Fri, 27 Jun 2025 14:56:10 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu, oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com, stable@kernel.org
-Subject: Re: [PATCH 1/1] usb: hub: Fix flushing and scheduling of delayed
- work that tunes runtime pm
-Message-ID: <3ef15061-d06c-4fc7-a91a-92b54cca791c@sirena.org.uk>
-References: <20250626130102.3639861-1-mathias.nyman@linux.intel.com>
- <20250626130102.3639861-2-mathias.nyman@linux.intel.com>
- <aF5rNp1l0LWITnEB@finisterre.sirena.org.uk>
- <50cbe7a8-c103-4922-b06b-d183a37ee08d@linux.intel.com>
+	s=arc-20240116; t=1751033947; c=relaxed/simple;
+	bh=FEQQ4U5BXFAMSNmTLJpwqBlgAmoJKrkF1sG8ItGi2Lc=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KW8CQuYWQ37JbntsmQsZHpclbciAgPPrSJBKTi9BRjjDrnwe4Q6D1kMIZn3Audq/dBwNZ68Z5GQHK9+Niw8mW3NuWgoyIu1oPlFPqD6/q5Dqv35llj/YreiJbOiDiqpWqxJevMLQR1LClUnJy79uHr/Dy3P/HRV9JnaPpsyw8vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gqj10TmX; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751033946; x=1782569946;
+  h=date:from:to:subject:message-id:mime-version;
+  bh=FEQQ4U5BXFAMSNmTLJpwqBlgAmoJKrkF1sG8ItGi2Lc=;
+  b=gqj10TmXjgJj6DpRsyEt/BMgoZ/jENWENsBLzxVWK2PSGO6KSW6Hiqt0
+   UE0SSuGF2it41XT5enM7JlUpxrKYcEkN7Q2p0t2byOA5a5zczxcCafJU7
+   sKQe2FjB+U6RFiO5PhdDUWp+l5iXZFfH7dh4f/xRq6I5+qMDhLRmCN+XM
+   /56uwP4q7A0wmVlfQJogGS1OYrIFAGA/27HseYkQzGwjhb+67Zy3LZynk
+   C/qy7DwdWTMI0koauWgTAy7Nfgx4ZZPdHEniJExGb3nkLNU/gEk7yjxUe
+   PsmraHeNquAjKrEbVWf/wWrluOa47oGyeKh7VUBDcIRnNh8bbJ1TIyUGQ
+   w==;
+X-CSE-ConnectionGUID: OOQOOtHfR/yWPXRqWcBXVw==
+X-CSE-MsgGUID: P7nRQ6J2RNaApOns6bLMVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="52467185"
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="52467185"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 07:18:52 -0700
+X-CSE-ConnectionGUID: uXG0R5D4SGmTlWQxjwkIkQ==
+X-CSE-MsgGUID: aSOhMvA5QkanqCSQEtiHgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="158547859"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP; 27 Jun 2025 07:18:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id A477E2BA; Fri, 27 Jun 2025 17:18:49 +0300 (EEST)
+Date: Fri, 27 Jun 2025 17:18:49 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Subject: USB4/Thunderbolt maintenance on vacation most of July
+Message-ID: <20250627141849.GO2824380@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MJ/793XozXHKYtAf"
-Content-Disposition: inline
-In-Reply-To: <50cbe7a8-c103-4922-b06b-d183a37ee08d@linux.intel.com>
-X-Cookie: Avoid contact with eyes.
-
-
---MJ/793XozXHKYtAf
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 
-On Fri, Jun 27, 2025 at 04:51:34PM +0300, Mathias Nyman wrote:
+Hi all,
 
-> If I write a v2 patch that puts this post resume work into its own
-> dedicated work item, and only flushes that, could you try it out
-> on the Raspberry Pi 3B+
+My vacation starts today (27.6.2025) and lasts until 28.7.2025. Most of
+that time I have no access to any sort of computing device.
 
-Sure (and if it turns in -next it'll get tested regardless of if I take
-active steps!).
-
---MJ/793XozXHKYtAf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmheovoACgkQJNaLcl1U
-h9DzCwf/X071lQaYuI4fHu5gmgMvBWc9VjrqF18CvkeLLBLzsV0YLYCXHpVJ7Gf/
-zow1vxy7BS6+hir4xk9ruorbz4jrke2gKsKRHCe9vdqHKj8DHPU0X/5JYzcy1d1S
-Dd25iFvYfD7esWAWz4ztUc10hWHDaveP2SmhhPwZyrG/Et0QpwFCE0z6VtkLL6ki
-0QlqMngxpLZPmJRJftyxIFqCjB1QT1ZCKluiKKBKr8i4Dswfk4tnvDh8EBwo9LM4
-Q5e2STbouxkqanV/r8D+070vB3ipBUfdPG9WLph1hvzQZ60dyILcaFDdESaXEcFj
-M4nDGYzzD2MKs8/+0KU/QzSydYGjbw==
-=BIxK
------END PGP SIGNATURE-----
-
---MJ/793XozXHKYtAf--
+Have all relaxing summer. I'll see you again at the end of the July.
 
