@@ -1,78 +1,61 @@
-Return-Path: <linux-usb+bounces-25143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65975AEAFE9
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 09:14:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21DE4AEB04B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 09:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA39A3A65AA
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 07:14:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B3A44E1E64
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 07:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8C921B9DA;
-	Fri, 27 Jun 2025 07:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B106821CFFA;
+	Fri, 27 Jun 2025 07:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKSqKMVW"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="o3jMffDz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9BF21ABCF;
-	Fri, 27 Jun 2025 07:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5AA218E96;
+	Fri, 27 Jun 2025 07:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751008461; cv=none; b=TiJWkfNN2+R4TI7quKAefso0HJ0lZFoAni06+J6ieotyxj1L0K262adNtaixWsBMmBuCLqj2R7xLNGuxmFe2uhQMAcAu9zWGWLpEAtC3ZPfy4AJNzMglNxfkyXqWAn+qatfVI6W3nNLgXes5AQt5Uk4RfndnN1JnjoVwVADfCdU=
+	t=1751010063; cv=none; b=UaYGNmm/p0MALpX1TCQi/CxgnoeC8qYFaxtEa60YQxCmXDRsNcFMqicmQEjUJXY6gqFAHKduExVHjHIHjwpHSWIlgHwcbddII5DF7L3uj0UC36GzQF96HdongE+C8ZjyDH4DS9vlw8VdGF99GmnK1dhuz8EAtJXiA3kZ+uFPFEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751008461; c=relaxed/simple;
-	bh=r7WqAqDZvux8ILvAUvJ0zRMtKQ3KYersyvbrv0LPqXM=;
+	s=arc-20240116; t=1751010063; c=relaxed/simple;
+	bh=pQXBetwzjkrqKSNMwjSZQ9hPd/YeJp6iE27QEzNODtw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5vZUL57Xjsg0JOG0eQnJusB07gGqc5Sg5la6aIwJaAwwPPJcmufNDWmHKU7JowS0hagKvtlO+locNVZKcBMsAEcCYnV5pbzlqBOgHolJ6x5xhLL0cGlKkUJ19j8sKQ0f+pFUpRXYS988+SrBoQGHVdl/Rjw5h7c30zBOw6JeCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKSqKMVW; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751008460; x=1782544460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r7WqAqDZvux8ILvAUvJ0zRMtKQ3KYersyvbrv0LPqXM=;
-  b=XKSqKMVWbDc6tmvkDXUO+Hn7zcZP59EQT/XdgT4x66jHecfBjStPosvP
-   ZNa58W2PE39uR+NREUD1b491ZqLdhYeS0/4RuHFZkPXj4fKxGdWkDUwrt
-   bL+t4bv/J6GTW1Oq/Q0DIPFuWmaxzA7va3Mx+vSLGy8qvOIZQ/bKM1SLa
-   915VCfDggDFUy9rHf4efqQ1li1dChqnv12r0neV2TD4AKX4YXpsHlQCVk
-   to/cChyaXwTcHM1OTwUYp+OLnMZy7F8pJUSs/shdReyNn27+qXMpiLW2a
-   GcuNV20cSdIIgrfIHWdIGMaAbxlisZQviVNvMVG1VDmtrkWXVfvxF0u9C
-   g==;
-X-CSE-ConnectionGUID: swgDw5tzQ5W5IltR/BavhQ==
-X-CSE-MsgGUID: WmjrFVnlRqqS3/naYACJVw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="53413931"
-X-IronPort-AV: E=Sophos;i="6.16,269,1744095600"; 
-   d="scan'208";a="53413931"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 00:14:19 -0700
-X-CSE-ConnectionGUID: 8Z9o0froSrqnqnj4QFd/XQ==
-X-CSE-MsgGUID: gH+DYWqxQhilc/m8cjiI4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,269,1744095600"; 
-   d="scan'208";a="158468558"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Jun 2025 00:14:17 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uV3Hq-000VuA-2m;
-	Fri, 27 Jun 2025 07:14:14 +0000
-Date: Fri, 27 Jun 2025 15:13:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: hsyemail2@gmail.com, Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sheng-Yuan Huang <syhuang3@nuvoton.com>
-Subject: Re: [PATCH v3 1/1] USB: serial: nct_usb_serial: add support for
- Nuvoton USB adapter
-Message-ID: <202506271430.ZtD5WXck-lkp@intel.com>
-References: <20250623071713.12814-2-syhuang3@nuvoton.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZlnXhfg6PO34SbD22XuQus9l0JgWxusXWT8jr1E6b0+ZbRE+iO5NsVwNqpwZKbiCPLO4n94KWFhhK6sOAN1QteXnL6gPHse0YJCt3slhllQclwXkEbqjy2CXQcds2M56Li2GsSCbBwiHdB1J/7P6MNEVxuqqcIz4ldysuUJoYmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=o3jMffDz; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=Dq9r4/vRJXD7oP+lQlDQUBpcgLwmf+CxKSwpwG8T7s4=; b=o3jMffDzarI7BdX3If3Hm+2wrh
+	ZCMg2LLxNZFpBFmAd20Ub9V1X+Z5iD0CfA3N06eji5SQAzRWcX084dnYj54j4kbScfiP1qDZEqXOR
+	imA214e/K258h+MbYmUnnq4g9xz4RDnbelf+vBPRp82YyebGsCHtV+PG4h/1/7/uMNFw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uV3hU-00H7Nw-41; Fri, 27 Jun 2025 09:40:44 +0200
+Date: Fri, 27 Jun 2025 09:40:44 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: "Peter GJ. Park" <gyujoon.park@samsung.com>
+Cc: 'Paolo Abeni' <pabeni@redhat.com>, 'Oliver Neukum' <oneukum@suse.com>,
+	'Andrew Lunn' <andrew+netdev@lunn.ch>,
+	"'David S. Miller'" <davem@davemloft.net>,
+	'Eric Dumazet' <edumazet@google.com>,
+	'Jakub Kicinski' <kuba@kernel.org>, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: usb: usbnet: fix use-after-free in race on
+ workqueue
+Message-ID: <03658d2b-04c8-43f8-a486-33572a2e61df@lunn.ch>
+References: <CGME20250627061156epcas1p1dfe3323378b314d98b660de33f50e0c2@epcas1p1.samsung.com>
+ <00d001dbe72a$62281bc0$26785340$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,48 +64,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250623071713.12814-2-syhuang3@nuvoton.com>
+In-Reply-To: <00d001dbe72a$62281bc0$26785340$@samsung.com>
 
-Hi,
+On Fri, Jun 27, 2025 at 03:11:55PM +0900, Peter GJ. Park wrote:
+> >On 6/25/25 11:33 AM, Peter GJ. Park wrote:
+> >> When usbnet_disconnect() queued while usbnet_probe() processing, it 
+> >> results to free_netdev before kevent gets to run on workqueue, thus 
+> >> workqueue does assign_work() with referencing freeed memory address.
+> >> 
+> >> For graceful disconnect and to prevent use-after-free of netdev 
+> >> pointer, the fix adds canceling work and timer those are placed by 
+> >> usbnet_probe()
+> >> 
+> >> Signed-off-by: Peter GJ. Park <gyujoon.park@samsung.com>
+> >
+> >You should include a suitable fixes tag, and you should have specified the target tree ('net' in this case) in the prefix subjext
+> Prefix net added to subject, but for fixes tag, by looking git blame, the last line of usbnet_disconnect()are based on initial commit,
+> thus I couldn't put the fixes tag for it. Please let me know how can I handle this.
 
-kernel test robot noticed the following build warnings:
+By initial commit, do you mean:
 
-[auto build test WARNING on johan-usb-serial/usb-next]
-[also build test WARNING on johan-usb-serial/usb-linus usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.16-rc3 next-20250626]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+commit 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 (tag: v2.6.12-rc2)
+Author: Linus Torvalds <torvalds@ppc970.osdl.org>
+Date:   Sat Apr 16 15:20:36 2005 -0700
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hsyemail2-gmail-com/USB-serial-nct_usb_serial-add-support-for-Nuvoton-USB-adapter/20250623-151955
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20250623071713.12814-2-syhuang3%40nuvoton.com
-patch subject: [PATCH v3 1/1] USB: serial: nct_usb_serial: add support for Nuvoton USB adapter
-reproduce: (https://download.01.org/0day-ci/archive/20250627/202506271430.ZtD5WXck-lkp@intel.com/reproduce)
+    Linux-2.6.12-rc2
+    
+    Initial git repository build. I'm not bothering with the full history,
+    even though we have it. We can create a separate "historical" git
+    archive of that later if we want to, and in the meantime it's about
+    3.2GB when imported into git - space that would just make the early
+    git days unnecessarily complicated, when we don't have a lot of good
+    infrastructure for it.
+    
+    Let it rip!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506271430.ZtD5WXck-lkp@intel.com/
+Then use that as the Fixes: tag. The Fixes: tag is a guide to
+developers who do the backport. Nobody is going to backport this to
+2.6.12, but it does make it clear that LTS 5.4.294 could get this
+patch.
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/rustc-1.78.0-bindgen-0.65.1/cargo/bin:/opt/cross/clang-20/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make KCFLAGS= -fno-crash-diagnostics -Wno-error=return-type -Wreturn-type -funsigned-char -Wundef W=1 --keep-going LLVM=1 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/media/i2c/ov02c10.c: 12 linux/version.h not needed.
->> ./drivers/usb/serial/nct_usb_serial.c: 29 linux/version.h not needed.
-   ./samples/bpf/spintest.bpf.c: 8 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 432: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Andrew
 
