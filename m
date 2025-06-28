@@ -1,87 +1,60 @@
-Return-Path: <linux-usb+bounces-25203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 617B4AEC2B2
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 00:40:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47533AEC3AB
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 02:58:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87FF97B3A43
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Jun 2025 22:39:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44CFA1C263C5
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 00:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAC028F53F;
-	Fri, 27 Jun 2025 22:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DF5199EAD;
+	Sat, 28 Jun 2025 00:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="I+A2m45v"
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="sqyXtFpN";
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="sqyXtFpN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6939B215779
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 22:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9911C189905;
+	Sat, 28 Jun 2025 00:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751064042; cv=none; b=E97HihqegS6EFfcL0tE2rvXXZwohhJEAZiR0UMlbYvyLbifGhXLF7r9jGSWXok7jfhQDJjaJvqGWyx39LTR7edjdhKQP99EP+kYlMySfbXhBceLy8pq0XmU6dD8Ti2wBummAJlW6s6Urv7oMT/iksrIKrCne2JN50nnBFxb7oEA=
+	t=1751072275; cv=none; b=obVy0Qe4tORvx5cjRoAIvTz6OjVP6LCtoM7gHGfC9ds3ftMvz//bGjh5aEoQ6ZNdcXhCIJ6rFxQDKUuGr3p0d9/LIPeR88vtKSIuucJsZ242gd20Ro1iUO1Bhgkg3KT8DtxwKlK/dxzA0gQhsd1es19epJWkWka0U2aSsdmZLHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751064042; c=relaxed/simple;
-	bh=lbJ1OmwnJlc3oWxyOG8IrF+RShAKURvTbImRFOmwr8Y=;
+	s=arc-20240116; t=1751072275; c=relaxed/simple;
+	bh=57q1XTo9fskI3i3LRIZIGt9aWzBFNP8fj6KqbV6kdO8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dtSTEL949k5OHuV7zO20ubckskp0Bvqk58RzagGLx41WInh0r4F2QKsWAy5SmoBBc5dvMnULFfZcUjjYq7Y7bFljsMLePo16fnexX02DtT7IhcgI3xHDK4YxQGh0Z2BrnfXIouO+B4Hh4hBaEzbq3AIpQFOLMIFMv1Lovnhk4ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=I+A2m45v; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55RCAvTh027458
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 22:40:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ynhDr8TO1DRYwEkTDktMvb+gpG5cUe7NiyrnFd95L08=; b=I+A2m45vluNYGCkR
-	ye/T8DVzqtBjG2+d1beyBNAc+2rF86ymhOjzyoNnd+DxiKdhum+eOR1wAaqfMD0L
-	4dyoYU2M7Jd4g4+YuHJnJT18eZBn+xLTOHo+a8w0EhdLORsLeov6yRsR1ieYm+57
-	9IUMQP5kJrNS/3b4R2EeUz8WND2i832YWWOqHiGa4/fgj7MG9v5gq5hjF9inXXFb
-	QG8Ez0FiFTw24OkQTLinKrmHnxmicYmSikGsKvmwDSe6SGa/fulXyea1wEj+8wtU
-	zo6wtzNv5rvaJEGms7CxYx4WjZgmSEnj5fsJzrqow0XPP1rF68FY9JkBD+LJL54i
-	giU3hw==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ec26jje2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 22:40:40 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7d0a9d20c2eso49845285a.0
-        for <linux-usb@vger.kernel.org>; Fri, 27 Jun 2025 15:40:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751064039; x=1751668839;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ynhDr8TO1DRYwEkTDktMvb+gpG5cUe7NiyrnFd95L08=;
-        b=pOfgB1Dmzr+8HQT8HMza3/Av4S6gTRk+B/egr7j98Eh9Sw/MpSpGL305VObmlmZeG7
-         YzlyU3qIq8VsK+H+6QMrWux/Xm8RG6TQtYNkSaRGezOSWPBI+kXToxF13nNp9+xqlJCd
-         Uxeyy0rhZI6CHRDS78BNrioRHS/zXkByPffkujie6q78XJA/55jwYDm/3qv2YyvRNBJ1
-         PpQrCBmpmmrf6/xwL9a7tYMmIPL1xB3HpqpwSPdrpLblFznA8T7GUvxaV77Jp5f4xZ1R
-         dve0GMwQh1a2ucTaOnEe06lWYB9zgDCM2DkffjPLkpMYWSqMj8hcK6ApS42KegkSdu7D
-         INFw==
-X-Gm-Message-State: AOJu0YxdGZnELM3FllbdpjbE0NparVdHzAUrsXR8x8O4QNS0f+6kuptl
-	pRNbJg1kXcoBPIvM+YUnodRESWWiSsy4XqZ5IbQNX1pA8dFACX0e97UG0tbfEG0Bfrsb1wyRKTL
-	uqyVpq2GYyjtUcPf7NlVb44nBAs9BfBL6Yid7MQejk/5+uQDMBfbwBC9myGQ/+YA=
-X-Gm-Gg: ASbGncuVcsp360Sck+J5qmniQTdW3XIIfZZls49w5SnzkeQhp5MEmMAZdyih8N+tIzr
-	TV7hTWt5tIg9KE3XFo+OsAH98Rf0YE2wjpv0y0EIURUWfNoLaGY8n06kILvro3tFo+tD+rN1OY+
-	9Ze5U/R/DOO/Kw+ThOEBul3yZneR/oLgvICIWc601gIyQixy0CS06y/z8mQxqau8Hit8vIS5PZu
-	sxaIFVqYaK25m6R8OmG9tJTS093Jh0gIqRnB6csIdL5ytP/Pe5Vcvm/Zdo6XRkuISc8T506Qt+l
-	SaJkH745c8GwOeApU5V5X1JxMkjAOQ6FYI6vwFwvKg/t28f2QpH9SgE3IWkLNY0UTAHSPNBorcY
-	RSAQ=
-X-Received: by 2002:ac8:584b:0:b0:4a7:79e1:cd54 with SMTP id d75a77b69052e-4a807399500mr5954011cf.6.1751064039045;
-        Fri, 27 Jun 2025 15:40:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEc4+GNciTP/O9gtfh3RqHNMrG8oCqVbHIK2eGyIz6Jm8S3BUPnJK/v3oHFghVCD5OesMEqLw==
-X-Received: by 2002:ac8:584b:0:b0:4a7:79e1:cd54 with SMTP id d75a77b69052e-4a807399500mr5953911cf.6.1751064038563;
-        Fri, 27 Jun 2025 15:40:38 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c01636sm201208566b.105.2025.06.27.15.40.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 15:40:37 -0700 (PDT)
-Message-ID: <b03ce446-3932-4588-8392-eb5eae69388a@oss.qualcomm.com>
-Date: Sat, 28 Jun 2025 00:40:36 +0200
+	 In-Reply-To:Content-Type; b=ZeCya2HxmCuB0gnZstZy7MQtGTcmleGev6b3iclTij7z+mjr3LA1MD4UjZQiVZxTzifj44thebRmqEPIX+p05Dt4ijbr5NCGL5i3xoo88W6tVDXegS4O3/mOu7N7dneSmTuI84bkx+9KschxfsXp3aDZ6LljpyUCRDJADwJ5wiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=sqyXtFpN; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=sqyXtFpN; arc=none smtp.client-ip=178.79.152.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1751072266; bh=57q1XTo9fskI3i3LRIZIGt9aWzBFNP8fj6KqbV6kdO8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sqyXtFpN3eSkRFEtmv8vnpqiOcADUPU4b8VCu8pnT2OcrR32qudi+k6PyqJAlIyab
+	 OGQz64BWpA1KV8zA9b6Ws9icCYe6HstLmKcn9Vgxh2WnFssl8GpJ+BQxQDt0AmHv+k
+	 ytloKFip09LlPwvrYWD7MBk4AQTQGsXCA/H2a/yUJRmbyDRma/QHjmq0kf0mv9H8S/
+	 AKmsJqLInIp7supSMr/BAc+FmugXyo3lyu1s2GqqA3RPG4eUw2aeJmdbKnFtptfRdg
+	 zwlIjwtXfhnnjFvyNXp17qhOVy6VW/GuUKPLFPXHSWsJ5j2eDKJ3N9TibNWyh9Yn22
+	 H69Y5TUW/U3PA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 5BA6A3C4FE4;
+	Sat, 28 Jun 2025 00:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1751072266; bh=57q1XTo9fskI3i3LRIZIGt9aWzBFNP8fj6KqbV6kdO8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sqyXtFpN3eSkRFEtmv8vnpqiOcADUPU4b8VCu8pnT2OcrR32qudi+k6PyqJAlIyab
+	 OGQz64BWpA1KV8zA9b6Ws9icCYe6HstLmKcn9Vgxh2WnFssl8GpJ+BQxQDt0AmHv+k
+	 ytloKFip09LlPwvrYWD7MBk4AQTQGsXCA/H2a/yUJRmbyDRma/QHjmq0kf0mv9H8S/
+	 AKmsJqLInIp7supSMr/BAc+FmugXyo3lyu1s2GqqA3RPG4eUw2aeJmdbKnFtptfRdg
+	 zwlIjwtXfhnnjFvyNXp17qhOVy6VW/GuUKPLFPXHSWsJ5j2eDKJ3N9TibNWyh9Yn22
+	 H69Y5TUW/U3PA==
+Message-ID: <a15cbc55-f0ba-4c15-af27-44b05285bc16@mleia.com>
+Date: Sat, 28 Jun 2025 03:57:44 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,68 +62,78 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH v3 1/1] usb: hub: Fix flushing of delayed work used
- for post resume purposes
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
-        broonie@kernel.org, stable@kernel.org
-References: <20250627164348.3982628-1-mathias.nyman@linux.intel.com>
- <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2 1/1] dt-bindings: usb: convert lpc32xx-udc.txt to yaml
+ format
+To: Frank Li <Frank.Li@nxp.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+ "moderated list:ARM/LPC32XX SOC SUPPORT"
+ <linux-arm-kernel@lists.infradead.org>,
+ open list <linux-kernel@vger.kernel.org>
+Cc: imx@lists.linux.dev
+References: <20250625214357.2620682-1-Frank.Li@nxp.com>
+From: Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <20250625214357.2620682-1-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI3MDE4NCBTYWx0ZWRfX3ZmI8FnVTGOp
- CF5+yWAD5Bs6VJsxdEjsVFNmGRFXXpBJRPN0pRgDcQ+H9ZDblEDj5L2b+L6dChtsIMGQcyfT4p0
- wXH29bnuJzQtGeBrYGSNYlfmqUVnK292kdrvW1ullc1pW1kMMBN41skUdlIzvL9wG3IVgZpHX0k
- yZWnlfkVvDb6wz7pNHtZk7Zn0cS+xaVi4kcPiSHz/XMWcxGDoznpwiGZvUkrr5xY1KIdEnfPcnG
- nGB9vVxhHPUjSDVXOw5YtQZHDbqTC++kMBSme0HX6eRTQO6TZou+D681c6NkfnFQE0+MRPw0Ep1
- OkKdzcFRUAYAlgrcDOeJj7hrPepDwl9OAHvYdZ+8ntu6FsuiPsAhbBmbss+Ygh8fcCdU7i0Szbb
- 9sl1rsKGAWHT/V5g19kLBvFT0470t1lGgVbaxWzxrmxvQanKwou7dfSHJMzVQod3tUF0K5Gw
-X-Authority-Analysis: v=2.4 cv=XPQwSRhE c=1 sm=1 tr=0 ts=685f1de8 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=qNABUOcEAAAA:8
- a=QyXUC8HyAAAA:8 a=EUspDBNiAAAA:8 a=KvpN82ljDES4kvwgT-AA:9 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22 a=Ytm653ucTKQjCvbzLygB:22
-X-Proofpoint-GUID: CniV3bEvZzPyvmEi2MslUxKy48iDDYmv
-X-Proofpoint-ORIG-GUID: CniV3bEvZzPyvmEi2MslUxKy48iDDYmv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_05,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 adultscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506270184
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20250628_005746_395375_387E3A1C 
+X-CRM114-Status: UNSURE (   9.27  )
+X-CRM114-Notice: Please train this message. 
 
-On 6/27/25 6:43 PM, Mathias Nyman wrote:
-> Delayed work that prevents USB3 hubs from runtime-suspending too early
-> needed to be flushed in hub_quiesce() to resolve issues detected on
-> QC SC8280XP CRD board during suspend resume testing.
+Hi Frank.
+
+On 6/26/25 00:43, Frank Li wrote:
+> Convert lpc32xx-udc.txt to yaml format.
 > 
-> This flushing did however trigger new issues on Raspberry Pi 3B+, which
-> doesn't have USB3 ports, and doesn't queue any post resume delayed work.
+> Additional changes:
+> - add clocks and put it into required list to match existed lp32xx.dtsi.
+> - remove usb-transceiver@2c at examples.
 > 
-> The flushed 'hub->init_work' item is used for several purposes, and
-> is originally initialized with a 'NULL' work function. The work function
-> is also changed on the fly, which may contribute to the issue.
-> 
-> Solve this by creating a dedicated delayed work item for post resume work,
-> and flush that delayed work in hub_quiesce()
-> 
-> Cc: stable@kernel.org
-> Fixes: a49e1e2e785f ("usb: hub: Fix flushing and scheduling of delayed work that tunes runtime pm")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/linux-usb/aF5rNp1l0LWITnEB@finisterre.sirena.org.uk
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Still no issues, thanks for working on this!
+Thank you a lot for doing this massive conversion work of NXP LPC
+device tree bindings, I would appreciate, if you put me to CC for
+all such changes.
 
-Tested-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com> # SC8280XP CRD
+While you do one-to-one conversion, you do bring a lot of errors,
+because the .txt descriptions are broken.
 
-Konrad
+Please always reference to arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi
+and arch/arm/boot/dts/nxp/lpc/lpc18xx.dtsi, that's the correct
+version of NXP LPC DT bindings, otherwise something important
+can be missed by occasion.
 
+<snip>
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/lpc32xx-clock.h>
+> +
+> +    usbd@31020000 {
+> +        compatible = "nxp,lpc3220-udc";
+> +        reg = <0x31020000 0x300>;
+> +        interrupt-parent = <&mic>;
+
+interrupt-parent = <sic1>;
+
+> +        interrupts = <0x3d 0>, <0x3e 0>, <0x3c 0>, <0x3a 0>;
+
+Should subscribe 32 and correct the type:
+
+interrupts = <29 4>, <30 4>, <28 4>, <26 8>;
+
+> +        clocks = <&usbclk LPC32XX_USB_CLK_DEVICE>;
+> +        transceiver = <&isp1301>;
+> +    };
+
+-- 
+Best wishes,
+Vladimir
 
