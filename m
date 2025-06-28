@@ -1,161 +1,193 @@
-Return-Path: <linux-usb+bounces-25216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3057AEC782
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:01:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F40EAEC7A9
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:30:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A7FC1BC2AC3
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:01:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA4B87AE20A
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127C6221FBA;
-	Sat, 28 Jun 2025 14:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FEC1E260A;
+	Sat, 28 Jun 2025 14:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dMMjvxsB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eVaW43Sl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C561D517
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 14:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF39EEAA;
+	Sat, 28 Jun 2025 14:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751119264; cv=none; b=qskGJWV5mmJr47mB2mGUDQqfIUjZvEkXilbV8Gs+rBaxXYqmh5P4LW6miBDZSOqZ9ZPshOnEJ0EdzLQD1FtjHRtH1CePxSgFM8V6p6z4xCGbhV5f2FYOkiA7A4XDbc77Y3u/zjJDnxyUIvb+rHB9ZjfmOUbTwVHW1eHzlZTczss=
+	t=1751121047; cv=none; b=B71bJXd9T6d4L5Fch5CN9LDziP0racZnLWGnnSl7wsu3nPKjfBhrqdeyeMw8c0WNig+BkVXV/yeRAZVtdeTloqfipB1EyFDL/FvIIPJIanXtt8OVrM8BqqO2xEHvW/zfvwjp52TW8q5r3KRDUU27B5RmpIJjilK2n++ZmwFyOzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751119264; c=relaxed/simple;
-	bh=zsnb5IT4Nu73W2mBBV0UdtW39RJlWO97Dl+DazBOnfw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HTQTlQi7ErvXsA9lGcZ8vT6xqH16UTEl3DrE8jo8FCygKCK8rYGFGEzYhL/cYx6FZHfRycRdOmKB/1DBX4fTfZqlK8xuSKElxTzMLUUBP0jthpI6DdvGYawrsf3c4Ir9wlhmk3mRGE7/YUCR6cR1vfbeCTkIgq0Mjn0taPJ5/m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dMMjvxsB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55S5gskd008442
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 14:00:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	x3JT6wnm3HmMSxPGvGdApEvmBmbOzlzJHc7HEBGLfKs=; b=dMMjvxsBPlLz7znF
-	TyRro5S4OTjqx6mNav2awMV4rKk8IizEeJX5jI/W85puq+JPB/2vYVw+f5jCaYkJ
-	Bn5KtLfE0OHjQqkiKuN6Ht73GvcydlfDxGVZSZYLbnPooHjHCAPi4bVrB0PXnm3P
-	8zdwPX5SrEpo0+Cq5SUltCZQpwFa1xfqMeqpVPaj2k/+A7Utz+4uh6DiidfFKMh9
-	8kYAK+k5wQ5X+eWVcBRRNIw60QLruk00nuzKgh50oBG4f4x90A5opYRd5wub88lv
-	zkEku+rFxDtASDJW8nKrSo8E3BJ2x5toUzvN1JpsmdzWxKX3oP2vDmJyoROjXbcf
-	XhG3rw==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j801rrg0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 14:00:56 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a5b3aac5bfso8896351cf.3
-        for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 07:00:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751119256; x=1751724056;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x3JT6wnm3HmMSxPGvGdApEvmBmbOzlzJHc7HEBGLfKs=;
-        b=M5dVrBSDI5uWbiiXqkgqWCVM59LGPVOh47o7I/aZx4WTsrh8LKn6ZuOL0TRLhEmCVk
-         GGCnfCCiqxJBFtgVfU4wADQzYfArPX5+XepnJc/a9qPsgs3+jSLikbISEdIGCZ81C5Me
-         yxxyDd/nWj291nLwoJDgvOuOFvDXXQbg3IKDp57ar6Zzduflx/L/knrjTVkMZjRLlp+d
-         xlkOTcRPEQN66aNipcfgsKUhSlSTn3wZN6k0Kh1jSfYfmHHsorOfVleKEkSW1QWeOLod
-         eHGEf981TWdKkZsYNDr7kV2rxdHAs6clEWmJhvuJF9xE1dClV1pl/aC2X9r9KdJ6aEnu
-         LZNA==
-X-Forwarded-Encrypted: i=1; AJvYcCWej4k831BdCwYpwgc1Dj+VWd4N2kPAMBKZJ+K1gjNAdBDBI1PwN54B9LzsKDeJk/lpJc3QzrtJNWE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx602bJZbXv9DXW9z9FQgJpc94nB9s1e2nKHsR3xdFicDZVdlXZ
-	jD2H156BSTC/cn24TjuGzkl06Tv7xVtjnljDzJVwsxUtDT+FRIX2CcmaDHUe1esb5HvZ0idwCbk
-	jXuWEdO0mN7VC7/xT8++5F4qi8BTSG3D77JQRJHTjQMxOnjY0b1bGcMDza4ZVRuQ=
-X-Gm-Gg: ASbGnctAK0YGJEDUjMBLmdLxFaomHCnDt5cWcFzDNKHEdgO/DKj3psfFYkP3Jxi3df1
-	hal1JolzIU4uKBraRr3yJ7gI49gvf+iTGixwgVswKtUyYGRD3InQezzW9wuC45WIy3AZlZBcSDN
-	7H7GLKw75l0e0jmhKSa9LABI0pFL9FCpF8i7hwNP50ik14+JshZ6EQnoCundF0E2nMvPDzC9tCz
-	RK96pM+zT8Oas+kxz1j7DkmosGRk3bRuPM+y0LxGNnSSV7h8ANMaAz8ndIWyQikBPrO0U2DSCIN
-	2JB8up5xMP+qNSiJZXHkG9DdoCRbQh6D2C6njp3x52Dj+rNVSlbiT1rZ1Ahwhhjz4W6hJ7wya4O
-	+iRU=
-X-Received: by 2002:a05:620a:2729:b0:7d4:4372:c4aa with SMTP id af79cd13be357-7d44c24928dmr146913485a.8.1751119255474;
-        Sat, 28 Jun 2025 07:00:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGdQ1yZeX8lDjDdM01e59r5DUWZcp4ZcpJ6o87OE6ncVesod8eJLazoWlAAUYkOLQCQ3gI54A==
-X-Received: by 2002:a05:620a:2729:b0:7d4:4372:c4aa with SMTP id af79cd13be357-7d44c24928dmr146909385a.8.1751119254533;
-        Sat, 28 Jun 2025 07:00:54 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c0427bsm312587266b.84.2025.06.28.07.00.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Jun 2025 07:00:53 -0700 (PDT)
-Message-ID: <19507b60-ef03-4fac-96dc-f8700f74c0e1@oss.qualcomm.com>
-Date: Sat, 28 Jun 2025 16:00:51 +0200
+	s=arc-20240116; t=1751121047; c=relaxed/simple;
+	bh=Zjca297UPm9qRvcIWvdjcDdDUN0GQEN4ZAaapxXydnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m72Ew5ogiohc2znab4wMvevO66wpfeWL2rqBvY9aRH0sped2CW3lNrTsRMeyMQhSjPom6LtnpKiUx2t98v81tpvJxZbKLB07Y/GfyIbZj/jDcqNXqnpltn0xSRum4CweuUH2Nw2QXhmou5/T7Ik3kaaSp3AB5TCGWhT0itaNanI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eVaW43Sl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DC1C4CEEA;
+	Sat, 28 Jun 2025 14:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751121046;
+	bh=Zjca297UPm9qRvcIWvdjcDdDUN0GQEN4ZAaapxXydnI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eVaW43Sl/FlOO9tXaYKFjoHnVxXZvH0PCA3tsUNCALkdHjsEmxPo5473himU/xcKe
+	 6cf1OP0Pb2SVEArJeEkRitdgSgNNuVWwnhUcfZO/MdRQORUwRPsS37MbGLRWFO2afg
+	 594BZkclWAGh5TsenxRGZ3XzZKhXYXnmfLvofJTU=
+Date: Sat, 28 Jun 2025 16:30:44 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
+ secure calls
+Message-ID: <2025062833-sneak-ceremony-a06b@gregkh>
+References: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: misc: qcom_eud: Access EUD_MODE_MANAGER2 through
- secure calls
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Komal Bajaj <komal.bajaj@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-References: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com>
- <b7mv4u2parcyzrm67yufuor3cwx265kaoae23rksbbuu4aaayl@7a6xxfmganof>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <b7mv4u2parcyzrm67yufuor3cwx265kaoae23rksbbuu4aaayl@7a6xxfmganof>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: AxY8d0rvvCC9gjbOz_G1rL37Kghc0yVz
-X-Authority-Analysis: v=2.4 cv=YPWfyQGx c=1 sm=1 tr=0 ts=685ff598 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=QAmXqGSAIpqigZKsxncA:9
- a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-ORIG-GUID: AxY8d0rvvCC9gjbOz_G1rL37Kghc0yVz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI4MDExNyBTYWx0ZWRfX3a9H6sb8W3ey
- AwhE21gvzU5TYq9NuoIkBVSZ1OuKSBpJdclMF32RLWSIrrb1p9nL8s1Q6u5EA4PtwPTjNd0LKZu
- fPsSURsUk35DjemFYfoeQ7+lgQtt0YGS0cNhQsoQl/AKewQQLeQ2KKlxpxZGqLDMuyU6R3Z7nRJ
- vQ3xpIiZpd2cq2BirQI5jTd43m8H4/iNRrR+jX3xX4pS18kBKZ7hLcolLSk/KMp2yyYmJNtDBpC
- QxakIcRU7uzPi+eauciz4OtJ1MGPWzgNyEe9gtwQsBhkH5emr4ngADv0ZKNMJsHbQRHKBexxgJI
- uR2/fne0FII5f+J/MTw1qYDdP4a7+lx+VvQLbavfT/qkkobWB/oUrMr1NMYFCpdkmoVwX0RsL5q
- C/C1SxRx9eG8ABglmTPzBGZQNLRhvlbIn21IneQyKhQoP//cCjuIM+lci9yuf6Bzgot5yP0i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_05,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506280117
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627125131.27606-1-komal.bajaj@oss.qualcomm.com>
 
-On 6/28/25 7:44 AM, Dmitry Baryshkov wrote:
-> On Fri, Jun 27, 2025 at 06:21:31PM +0530, Komal Bajaj wrote:
->> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
->> as read-only for HLOS, enforcing access restrictions that prohibit
->> direct memory-mapped writes via writel().
->>
->> Attempts to write to this region from HLOS can result in silent failures
->> or memory access violations, particularly when toggling EUD (Embedded
->> USB Debugger) state. To ensure secure register access, modify the driver
->> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
->> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
->> protected memory regions, enabling reliable control over EUD state.
->>
->> SC7280, the only user of EUD is also affected, indicating that this could
->> never have worked on a properly fused device.
+On Fri, Jun 27, 2025 at 06:21:31PM +0530, Komal Bajaj wrote:
+> EUD_MODE_MANAGER2 register is mapped to a memory region that is marked
+> as read-only for HLOS, enforcing access restrictions that prohibit
+> direct memory-mapped writes via writel().
 > 
-> Most likely SC7280 Chrome platforms were fused differently or used a
-> different configuration of the TZ.
+> Attempts to write to this region from HLOS can result in silent failures
+> or memory access violations, particularly when toggling EUD (Embedded
+> USB Debugger) state. To ensure secure register access, modify the driver
+> to use qcom_scm_io_writel(), which routes the write operation to Qualcomm
+> Secure Channel Monitor (SCM). SCM has the necessary permissions to access
+> protected memory regions, enabling reliable control over EUD state.
+> 
+> SC7280, the only user of EUD is also affected, indicating that this could
+> never have worked on a properly fused device.
+> 
+> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> Signed-off-by: Komal Bajaj <komal.bajaj@oss.qualcomm.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> Changes in v2:
+> * Drop separate compatible to be added for secure eud
+> * Use secure call to access EUD mode manager register
+> * Link to v1: https://lore.kernel.org/all/20240807183205.803847-1-quic_molvera@quicinc.com/
+> 
+>  drivers/usb/misc/qcom_eud.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index 83079c414b4f..30c999c49eb0 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -16,6 +16,8 @@
+>  #include <linux/sysfs.h>
+>  #include <linux/usb/role.h>
+>  
+> +#include <linux/firmware/qcom/qcom_scm.h>
+> +
+>  #define EUD_REG_INT1_EN_MASK	0x0024
+>  #define EUD_REG_INT_STATUS_1	0x0044
+>  #define EUD_REG_CTL_OUT_1	0x0074
+> @@ -34,7 +36,7 @@ struct eud_chip {
+>  	struct device			*dev;
+>  	struct usb_role_switch		*role_sw;
+>  	void __iomem			*base;
+> -	void __iomem			*mode_mgr;
+> +	phys_addr_t			mode_mgr;
+>  	unsigned int			int_status;
+>  	int				irq;
+>  	bool				enabled;
+> @@ -43,10 +45,14 @@ struct eud_chip {
+>  
+>  static int enable_eud(struct eud_chip *priv)
+>  {
+> +	int ret;
+> +
+>  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+>  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
+>  			priv->base + EUD_REG_INT1_EN_MASK);
+> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+> +	ret = qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 1);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
+>  }
+> @@ -54,7 +60,7 @@ static int enable_eud(struct eud_chip *priv)
+>  static void disable_eud(struct eud_chip *priv)
+>  {
+>  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
+> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+> +	qcom_scm_io_writel(priv->mode_mgr + EUD_REG_EUD_EN2, 0);
+>  }
+>  
+>  static ssize_t enable_show(struct device *dev,
+> @@ -178,6 +184,7 @@ static void eud_role_switch_release(void *data)
+>  static int eud_probe(struct platform_device *pdev)
+>  {
+>  	struct eud_chip *chip;
+> +	struct resource *res;
+>  	int ret;
+>  
+>  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> @@ -200,9 +207,10 @@ static int eud_probe(struct platform_device *pdev)
+>  	if (IS_ERR(chip->base))
+>  		return PTR_ERR(chip->base);
+>  
+> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> -	if (IS_ERR(chip->mode_mgr))
+> -		return PTR_ERR(chip->mode_mgr);
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (!res)
+> +		return -ENODEV;
+> +	chip->mode_mgr = res->start;
+>  
+>  	chip->irq = platform_get_irq(pdev, 0);
+>  	if (chip->irq < 0)
+> -- 
+> 2.48.1
+> 
+> 
 
-They were not fused for production, as I understand
+Hi,
 
-> The question is whether there can be other platforms (e.g. SC7180 Chrome
-> or SDM845 Cheeza prototypes) which should use direct register access
-> instead of going through the SCM.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-TF-A currently needs an update to the SCM MMIO R/W address whitelist,
-but in any case, a write from !TZ is not going to be accepted by the
-hardware
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Konrad
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
