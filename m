@@ -1,50 +1,53 @@
-Return-Path: <linux-usb+bounces-25220-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25221-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDB53AEC7CB
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:47:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E157AEC7F2
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:52:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3293017C6A8
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:47:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63F3A3B04FB
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:52:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DDE248F68;
-	Sat, 28 Jun 2025 14:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E887C253B40;
+	Sat, 28 Jun 2025 14:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SRyIbceG"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ya1SPDOV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2A71FECB1;
-	Sat, 28 Jun 2025 14:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FD3248F70
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 14:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751122041; cv=none; b=pXCG0+xrjZXcOp2sbv6AS1ocI3ZK+1H2/fy9/vU9WQNbmC4KybxZlya6PJuSs9AJg6Hv3XhIlFL6qjP+R/94eZAMDmSmQxKgFfxflHdJy8IUOArhltdOJCpKdDohwDhs/KmK6RpUTb14+BT7iSzToTdnYGjrNrOwRj2UL75OHgY=
+	t=1751122319; cv=none; b=TXD18qKg8dB7QcjcQdP3HH2ylnzZxsf2D56wCsSZIThBoiKR+NYQaYUJr20uD3vVzr13yg7Jb/NGyKPdIGbluX1wwg9AO/7vBRQXySv2yaGVX/R7fBiullMGQzePuCESVLjBGoaPC3zcYY43fBnFoJOBU5Kqp1apbaswuNYO1sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751122041; c=relaxed/simple;
-	bh=hLylioSzQgDU1OnhtndHvFUnS91BYfTenHU/Hs5TH1A=;
+	s=arc-20240116; t=1751122319; c=relaxed/simple;
+	bh=od+mXCuGgMrNRM65GntUWjWhsuBzKhrx4BnjLNti+iM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CiD5J1l3EvNgkhG1h6tFi+7Y9gSutK2w8Un7YQKorB0WQ7CtcGzufoluaM8o/xODO6lG856DzvryjBwi5ILFACGCRdqi3ng8Dkut+8p7sKVTesVWoXEipXZXfQ+BZgbJwBbnFBCGihlOV72zheJhHcX2UaTEx00RBnwoCA/qRHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SRyIbceG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36464C4CEEA;
-	Sat, 28 Jun 2025 14:47:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/VN4CkJSqFEe0ew3K0DXibr63TgeyNwKKtsHSqo/s9TziqC+6YwfTvzSfk+f4knVHY7qLuOfgqF/uQ5dIEJnezgiMFZB28KE1IBv17qsnG3jV8oDPaydKXLCy1D5/oCLhNozYcBT8/yylq/MuOQ/zOxt5isdj2HW8w5mE0s2co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ya1SPDOV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C785C4CEF0;
+	Sat, 28 Jun 2025 14:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751122040;
-	bh=hLylioSzQgDU1OnhtndHvFUnS91BYfTenHU/Hs5TH1A=;
+	s=korg; t=1751122318;
+	bh=od+mXCuGgMrNRM65GntUWjWhsuBzKhrx4BnjLNti+iM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SRyIbceGBl4kRu8YsDaioR2mhUN6r+ZV63TItex0Uj605mKNuMFo/CBWtV57IVk+8
-	 Hf1+4+/Yv1EzT39kw4chlUybAsriADgfI0vfcHETC/GwXmBg284XOKIAmWs1ieiGte
-	 K69dlK+99Vqj3/lIpoxWsDRxSNC9FCMODLsZ3mKE=
-Date: Sat, 28 Jun 2025 16:47:17 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: early: xhci-dbc: Fix early_ioremap leak
-Message-ID: <2025062803-paver-octane-e038@gregkh>
-References: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
+	b=Ya1SPDOVg1urQHTTYlrfCVuZmy+UbjDgVVYrih95Oe/Nv9AqUuyVpkJhPTHPzT5Ra
+	 I6py/3T2nhHDGpUpnE/BGHd/FgUT3hr2cDoSjvVBurPBOHXL1aHuN848Y8AHdyIkgH
+	 jDitz9U/kOljLl/FjdxJteomENKNnjXuIHo35RQg=
+Date: Sat, 28 Jun 2025 16:51:56 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Pooja Katiyar <pooja.katiyar@intel.com>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
+	dmitry.baryshkov@oss.qualcomm.com
+Subject: Re: [PATCH v2 1/3] usb: typec: ucsi: Add support for message out
+ data structure
+Message-ID: <2025062813-untying-hesitancy-088a@gregkh>
+References: <cover.1751042810.git.pooja.katiyar@intel.com>
+ <cc0b7701c4ea3d1001fefeb3df65caeb3e624722.1751042810.git.pooja.katiyar@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,37 +56,61 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
+In-Reply-To: <cc0b7701c4ea3d1001fefeb3df65caeb3e624722.1751042810.git.pooja.katiyar@intel.com>
 
-On Fri, Jun 27, 2025 at 02:47:47PM -0700, Lucas De Marchi wrote:
-> Using the kernel param earlyprintk=xdbc,keep without proper hardware
-> setup leads to this:
+On Fri, Jun 27, 2025 at 11:10:10AM -0700, Pooja Katiyar wrote:
+> Add support for updating message out data structure for UCSI ACPI
+> interface for UCSI 2.1 and UCSI 3.0 commands such as Set PDOs and
+> LPM Firmware Update.
 > 
-> 	[ ] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> 	...
-> 	[ ] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
-> 	...
-> 	[ ] calling  kmemleak_late_init+0x0/0xa0 @ 1
-> 	[ ] kmemleak: Kernel memory leak detector initialized (mem pool available: 14919)
-> 	[ ] kmemleak: Automatic memory scanning thread started
-> 	[ ] initcall kmemleak_late_init+0x0/0xa0 returned 0 after 417 usecs
-> 	[ ] calling  check_early_ioremap_leak+0x0/0x70 @ 1
-> 	[ ] ------------[ cut here ]------------
-> 	[ ] Debug warning: early ioremap leak of 1 areas detected.
-> 	    please boot with early_ioremap_debug and report the dmesg.
-> 	[ ] WARNING: CPU: 11 PID: 1 at mm/early_ioremap.c:90 check_early_ioremap_leak+0x4e/0x70
-> 
-> When early_xdbc_setup_hardware() fails, make sure to call
-> early_iounmap() since xdbc_init() won't handle it.
-> 
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-> ---
->  drivers/usb/early/xhci-dbc.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Additionally, update ucsi_send_command to accept message_out data
+> and .sync_control function to pass message_out data to
+> write_message_out function if the command is UCSI_SET_PDOS.
 
-What commit id does this fix?
+Normally when you say "additionally" that implies that the patch should
+be split up into pieces.  Why not do that here?
 
-thanks,
+And do you _really_ need to add a new parameter to all of these
+functions?  It's now getting even worse, look at this:
+
+>  		ret = ucsi_send_command(ucsi, val,
+>  					&ucsi->debugfs->response,
+> -					sizeof(ucsi->debugfs->response));
+> +					sizeof(ucsi->debugfs->response), NULL);
+
+You can kind of guess what the parameters mean before the NULL change,
+but now you have to go look up "what is the last pointer for"
+everywhere.
+
+This feels very fragile and horrible to maintain over time, please
+reconsider this type of api change.
+
+
+
+>  		break;
+>  	default:
+>  		ret = -EOPNOTSUPP;
+> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
+> index 8aae80b457d7..93912719d915 100644
+> --- a/drivers/usb/typec/ucsi/displayport.c
+> +++ b/drivers/usb/typec/ucsi/displayport.c
+> @@ -67,7 +67,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt, u32 *vdo)
+>  	}
+>  
+>  	command = UCSI_GET_CURRENT_CAM | UCSI_CONNECTOR_NUMBER(dp->con->num);
+> -	ret = ucsi_send_command(ucsi, command, &cur, sizeof(cur));
+> +	ret = ucsi_send_command(ucsi, command, &cur, sizeof(cur), NULL);
+
+See, why NULL?  What does it have to do with a command?  And why can't
+whatever is in that pointer place be part of that command to start with?
+
+>  int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci,
+> -			     void *data, size_t size)
+> +			     void *data, size_t size, void *message_out)
+
+So what is the difference between command, cci, data, and message_out?
+
+Again, I think you need to reconsider this...
 
 greg k-h
 
