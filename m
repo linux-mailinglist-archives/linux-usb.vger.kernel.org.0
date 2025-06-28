@@ -1,139 +1,101 @@
-Return-Path: <linux-usb+bounces-25229-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25230-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1267AEC841
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 17:23:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDBC7AEC88F
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 18:11:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAC3B1BC1C65
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 15:24:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BB69189F386
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F59219A8A;
-	Sat, 28 Jun 2025 15:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88F821770D;
+	Sat, 28 Jun 2025 16:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="O2ns4kyq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+fMUAkG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332F21E0DCB;
-	Sat, 28 Jun 2025 15:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB572192F1
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 16:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751124225; cv=none; b=QyADfio4p1zMlSZr3P+VMWk9TXWCxNsL7RGiPAFYVdMDkOuubXT0GcLcWls8K+2Pvn1vcqC/yVdLO6DMcU9Wy+J5FgjQKpdSa4EDukABNoLgtD1tsHa63Dy7hRj/I9E9fVNkvZLoAz65GEe7TZcg1+ZKhejysM+8EwcIrqqVdmU=
+	t=1751127098; cv=none; b=toLBDVft96JMNzLX4av4K4I03ziTM6bUI67z3lWti9jPtM8MOuPHfo8C25yJD2j8ao76d9M51QNeK0+bG+qcVDJ+wmwX0GcbWZQQCjrfWKh+Ds+t3QndQVdfNKBRLO6cV9H9ZzHcQClkga4x6vdg+Kn1HwHXiCXXmnar3NJIUEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751124225; c=relaxed/simple;
-	bh=B9DbxsAd1qr7E4UnYaoJhFDAqOMpmYJ3s6bZID7MUAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=reicuJpsxJZRh6S9vm5aSLcOi2XmioKBkFg08hNLrBYrc7nV/pyeAqxgmIKSFbBLz+CmsgiQker7MH0j+4zAXdcqZjNC7akg7HwGnI3xTF+1unzAK9/Zl3IAj8PKRekdxB69ioI9/90jg2gJAngiYqqNFmeORyOUUeVEGew0XC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=O2ns4kyq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FB6C4CEEA;
-	Sat, 28 Jun 2025 15:23:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751124221;
-	bh=B9DbxsAd1qr7E4UnYaoJhFDAqOMpmYJ3s6bZID7MUAk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O2ns4kyqf6rV38yebG5IPLRVK2/8oSDSd/dQ1nS+X7+swqybaLJstl2JdSxPyF+ti
-	 ClydrYNRCcJjuUBVemwQKtihiIFyjEVZecXc3nEGaC6Gx2JLYJW5VPXwCb0pzlEcjL
-	 KZGp+iB2JrglvkvhxorpjlfHuqZHl5lO9YOySUbA=
-Date: Sat, 28 Jun 2025 17:23:39 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: SCHNEIDER Johannes <johannes.schneider@leica-geosystems.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Simplify TRB reclaim logic by
- removing redundant 'chain' argument
-Message-ID: <2025062825-equipment-barista-dabc@gregkh>
-References: <20250621-dwc3-fix-gadget-mtp-v1-0-a45e6def71bb@leica-geosystems.com>
- <20250621-dwc3-fix-gadget-mtp-v1-2-a45e6def71bb@leica-geosystems.com>
- <20250623224340.oszkgwnhcjhnibaz@synopsys.com>
- <AM8PR06MB752168CCAF31023017025DD5BC7BA@AM8PR06MB7521.eurprd06.prod.outlook.com>
+	s=arc-20240116; t=1751127098; c=relaxed/simple;
+	bh=pA2FU2ruUpb/nhcRe2GdoprrZYp6n5pygosz6eEyoL4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TEl9ohk1qszU6bIWXSdqfXxa9OgMTS49JGA8ywMOL0rcQXH9bOOcK91dWbDjeVoeH8TsRy3+s+Ql5hCIQJ8C1EmW5lzRemifYoAajlNlGFD0/SBH9VgBWWDdrBV41jbhMC5zm2SBGqth7YMYyk47p23O+WtMTjYV8C/eABEn+6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+fMUAkG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE516C4CEEA
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 16:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751127095;
+	bh=pA2FU2ruUpb/nhcRe2GdoprrZYp6n5pygosz6eEyoL4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=R+fMUAkGJVlAaQYHrdbAQ7LzMdpi9YIYeT14aYOaHkQfPR5L/3D7OFepIkNU90Nxr
+	 I2MOsYKT2qEjqNpsMV+2EX0XsX6irE4pSvvSaD/G+PJMmj5nm16/AcTwsuf8nT4ksV
+	 rUSIeaR9dTjZPCfMJ4v1XZsmsWF7GCJL3/zgaZqLBuH589QSkaQeDY6rQsdYLQri0v
+	 51OQabqXvbc9QN/1l114lX2pqkvXUm6HeGWzmeSvw+dJOlS8XUSEvDkSPFSKPUImU7
+	 S9h7fVzl+CiWh/eNIVKbnX0BBKVHOYKg15fvEAotMJc0VzmTaGXmOhGOVTtUL14cDn
+	 uYqwEd/9YimOA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id AE268C433E1; Sat, 28 Jun 2025 16:11:35 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220272] Latent race condition in USB code unveiled with
+ optimized memset_64.S
+Date: Sat, 28 Jun 2025 16:11:35 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220272-208809-dpxkyIQK2g@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
+References: <bug-220272-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM8PR06MB752168CCAF31023017025DD5BC7BA@AM8PR06MB7521.eurprd06.prod.outlook.com>
 
-On Wed, Jun 25, 2025 at 07:53:17AM +0000, SCHNEIDER Johannes wrote:
-> Now that the TRB reclaim logic always inspects the TRB's CHN (Chain) bit
-> directly to determine whether a TRB is part of a chain, the explicit
-> 'chain' parameter passed into dwc3_gadget_ep_reclaim_completed_trb()
-> is no longer necessary.
-> 
-> This cleanup simplifies the reclaim code by avoiding duplication of
-> chain state tracking, and makes the reclaim logic rely entirely on the
-> hardware descriptor flags — which are already present and accurate at
-> this stage.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.com>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
-> v3: no changes, re-submission as single patch
-> v2: no changes to the patch, "faulty" re-submission
-> v1: initial submission as part of a series
-> Link: https://lore.kernel.org/lkml/AM8PR06MB7521CFF1CD8A93622A537EEDBC78A@AM8PR06MB7521.eurprd06.prod.outlook.com/
-> 
->  drivers/usb/dwc3/gadget.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 99fbd29d8f46..a4a2bf273f94 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3497,7 +3497,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
->  
->  static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
->  		struct dwc3_request *req, struct dwc3_trb *trb,
-> -		const struct dwc3_event_depevt *event, int status, int chain)
-> +		const struct dwc3_event_depevt *event, int status)
->  {
->  	unsigned int		count;
->  
-> @@ -3549,7 +3549,8 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
->  	if ((trb->ctrl & DWC3_TRB_CTRL_HWO) && status != -ESHUTDOWN)
->  		return 1;
->  
-> -	if (event->status & DEPEVT_STATUS_SHORT && !chain)
-> +	if (event->status & DEPEVT_STATUS_SHORT &&
-> +	    !(trb->ctrl & DWC3_TRB_CTRL_CHN))
->  		return 1;
->  
->  	if ((trb->ctrl & DWC3_TRB_CTRL_ISP_IMI) &&
-> @@ -3576,8 +3577,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
->  		trb = &dep->trb_pool[dep->trb_dequeue];
->  
->  		ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
-> -				trb, event, status,
-> -				!!(trb->ctrl & DWC3_TRB_CTRL_CHN));
-> +				trb, event, status);
->  		if (ret)
->  			break;
->  	}
-> -- 
-> 2.43.0
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
-Applying just this patch I get:
+--- Comment #13 from Alan Stern (stern@rowland.harvard.edu) ---
+In a way, that's too bad.  I was hoping that the mouse still wouldn't work,=
+ so
+we would be able to do further debugging to try and figure out the real cau=
+se.
 
-  CC [M]  drivers/usb/dwc3/gadget.o
-drivers/usb/dwc3/gadget.c: In function ‘dwc3_gadget_ep_reclaim_completed_trb’:
-drivers/usb/dwc3/gadget.c:3517:13: error: ‘chain’ undeclared (first use in this function)
- 3517 |         if (chain && (trb->ctrl & DWC3_TRB_CTRL_HWO))
-      |             ^~~~~
-drivers/usb/dwc3/gadget.c:3517:13: note: each undeclared identifier is reported only once for each function it appears in
+Oh well, at least now you're better off than you were.
 
-So that's not going to work :(
+Note that the "1-8" in those commands will change when the mouse is plugged
+into a different USB port, so you'll have to be careful if you want to auto=
+mate
+this.  A udev script that triggers off the vendor ID and product ID should
+work.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
