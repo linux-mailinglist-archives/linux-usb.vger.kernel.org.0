@@ -1,119 +1,169 @@
-Return-Path: <linux-usb+bounces-25212-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60248AEC722
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:35:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24666AEC73E
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7D2C1BC266C
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 12:35:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F3DD3A84E5
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 12:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5182475F7;
-	Sat, 28 Jun 2025 12:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0A924888C;
+	Sat, 28 Jun 2025 12:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="d8BvBIo3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YI/Mb8u6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34082F1FF1;
-	Sat, 28 Jun 2025 12:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47703BE4A
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 12:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751114101; cv=none; b=RV5I+6OJGsgETEM4ndyL3aDaUTfpYKNAP8voHiylZUvs1DpXVffprQqFITDs+bkEaVQd6gskefr5LNPsG9H1uz6eNNdviOE9jh24d/l62t3sjWNOthNNfHdrOT9THjjveYGceSI6ESEmJmS4ML88K+c4kj5wByP8A9BMp9KrZiQ=
+	t=1751115221; cv=none; b=V0deHdivA3i575XwxzlytXGSLZD/yCY6tQT7kyda6iw77f27gqd1ZEk+mtHZa1T4PpWB4xxes0FT4BCD4aaKkJfEiD3odrvdzkjDdPyEAKEaVG4bfyKWKIv/Y2wsZw3//9B4IV1Yj87ZAGsHK+91qkNhLwN+VhxjkjIgpej9G7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751114101; c=relaxed/simple;
-	bh=fZb7LpjsVrzlP1r+wCxPxMIKpckAHDhxLgbdubvkivY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u97WmOnSc5Qs97ikmq4V63RNKeRusVopw0F/ut8KLvDyREbF0OObttiHcUmfHQMJ338B5f2ym0A3BQeEcau1Mk0pG0epoiErXnlrpMEdYqQUCifsxv0iXrRY0ZNZ2dGAKBe8vzKIL6WyUVVFjJxwkM3wHDGJZA35h/Wxykd6WLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4bTsN65C1Qz27hfZ;
-	Sat, 28 Jun 2025 20:35:50 +0800 (CST)
-Received: from kwepemk100010.china.huawei.com (unknown [7.202.194.58])
-	by mail.maildlp.com (Postfix) with ESMTPS id F39541402C1;
-	Sat, 28 Jun 2025 20:34:54 +0800 (CST)
-Received: from workspace-z00536909-5022804397323726849.huawei.com
- (7.151.123.135) by kwepemk100010.china.huawei.com (7.202.194.58) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 28 Jun
- 2025 20:34:54 +0800
-From: zhangjianrong <zhangjianrong5@huawei.com>
-To: <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
-	<mika.westerberg@linux.intel.com>, <YehezkelShB@gmail.com>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <guhengsheng@hisilicon.com>, <caiyadong@huawei.com>,
-	<xuetao09@huawei.com>, <lixinghang1@huawei.com>
-Subject: [PATCH v2] thunderbolt: Check whether bandwidth request needs asymmetric mode before check whether it can be done
-Date: Sat, 28 Jun 2025 20:34:53 +0800
-Message-ID: <20250628123453.770988-1-zhangjianrong5@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1751115221; c=relaxed/simple;
+	bh=RPTWfAerU3YqFi9jqzXG9kMIOoAPkljelX3gg4t5Q+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YjfjEXBw9e3ttNARkO+caJEgZfawFkEo3gHmH4A3kRXEky5xs2YCZGAIAaOSVFvJ2PvBj3wW2xua0t4mIOIgOfnNoZjT6jbY+lb4j3+e1W0dMHyscor480YQJSfOYZqXT8826cKBxcne205LmvxIE8MbYqz0faTb1vby8SyRu6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=d8BvBIo3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YI/Mb8u6; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 26AA9140020B;
+	Sat, 28 Jun 2025 08:53:37 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Sat, 28 Jun 2025 08:53:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1751115217; x=1751201617; bh=VHVKuKGAPV
+	KoI1l7NUOtuO0IqrKtntRvHVJ//HFzRV0=; b=d8BvBIo3u2tMvW788UT1Yg3AT8
+	NuB8FRnpxGCYsbsSpGG+EaEbiPY7QXh6bi8i2ErdQPRSaAgsqMfC8bD7o0NFQQma
+	9N7In19lOVJsym2EvIUkUJyXIbws+sKp0Cl3eVwUjoZQ5Mnb/MdbDF5p6onX28Tx
+	ZIR8Tgg9eivHHTor6uYaGq6uX+898ZqDVwUyePf6gvRprx5YSriAnDWgMllkoRhf
+	BXODnohl56NhtSjblU++RXDPX/U0wW6KiX0BebEHwA30q7rXTOTNdgoUAxHCORvW
+	jsRVfF3XJPrnNNBVBgW5y/GTSXRatm0dupyjwSgUfThWpq9/uJebVsH0WeYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1751115217; x=1751201617; bh=VHVKuKGAPVKoI1l7NUOtuO0IqrKtntRvHVJ
+	//HFzRV0=; b=YI/Mb8u6b0aOgHJUy9S6O0SzI5Zzd3CFt8nR8WY5H+bn6iYkNAh
+	Drv/bwSLvKUveqa04Pb/9oU3on/oVQUS2PP5PT2O6Nqhzm3TbX+b19aesPVwzxds
+	DyO2NrKDSDd2n9Kst4BnnDJzWKWow8UTSLlyNTaF5i3NhZHNkOhE9RnEny6N/UHz
+	X/bZANuR+k1DKhzQrLMRt+FVIXIZ1AHiqcuSd/gB5+ek/SS3ysYJpsB8NXFDDEj4
+	38XToxFAmrr4ZdA10hZrVjtaHsEP+uTyRysLRGVxSU822k4Qx+VBKKVbKfOwQqoV
+	Syqg0KyL1QHb83vkPOYT/18lN6wvF7FV9lQ==
+X-ME-Sender: <xms:0OVfaNwAnAGRWkrfTAT9AmwkLRmX4vweFtXr1DMegbeU2QUyC2MZKw>
+    <xme:0OVfaNQh-LLlbl8c24chbJvOLgppcTvOwhQlB1JOsCJPgJRYmsv7OuDoWq0mHu5so
+    SkTSNSHKbXKl1mcUw>
+X-ME-Received: <xmr:0OVfaHU32yDRLWavnn2cblWDcKD3fALe5RHMVfCNbKew76rzmT4d5NBn0jeJZE5ldt-LrT2Fue4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttd
+    dvnecuhfhrohhmpeetlhihshhsrgcutfhoshhsuceohhhisegrlhihshhsrgdrihhsqeen
+    ucggtffrrghtthgvrhhnpefhfedvgfeliedvudegueefleehudellefgleetudehveelhe
+    etiefgteegvddutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdr
+    tghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hhihesrghlhihsshgrrdhishdpnhgspghrtghpthhtohepfedpmhhouggvpehsmhhtphho
+    uhhtpdhrtghpthhtohepsghughiiihhllhgrqdgurggvmhhonheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdrlhhinhhugidruggv
+    vhdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:0OVfaPgm6csioXbB6DvgcxjrDIQfqP9VnunXlfxOAsRyM2TJBM8t_g>
+    <xmx:0OVfaPArLISqbiu6NL-wKpdnQK4yQpe9Evf2to0i2-DuabyCsjJIbA>
+    <xmx:0OVfaILxbhgu4qpoiwUDmwvIRPgBbRnMe1qD8aC-PTSkjlDnXkWgSw>
+    <xmx:0OVfaOAxrebK7kEQdCNYoEObvZ-L59m3Fx8HWYkwL8qsJMVEKu0Plg>
+    <xmx:0eVfaF7w_PdxAKsDFgssYPR2_1iTvStr8h-XPXYl7R-a5m1PQ0OO4vW5>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 Jun 2025 08:53:36 -0400 (EDT)
+Received: by sf.qyliss.net (Postfix, from userid 1000)
+	id 2320626426AEC; Sat, 28 Jun 2025 14:53:35 +0200 (CEST)
+Date: Sat, 28 Jun 2025 14:53:35 +0200
+From: Alyssa Ross <hi@alyssa.is>
+To: regressions@lists.linux.dev
+Cc: linux-usb@vger.kernel.org, bugzilla-daemon@kernel.org
+Subject: Re: [Bug 220284] New: USB4 / Thunderbolt not working after boot
+ until thunderbolt module is reloaded
+Message-ID: <gsq43mj473w7osdxpfwuvk5mmef63oc2t3mjem43lb2zmdzzo5@3i6x5pnodszg>
+References: <bug-220284-208809@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemk100010.china.huawei.com (7.202.194.58)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="55jbroev6njdmhfc"
+Content-Disposition: inline
+In-Reply-To: <bug-220284-208809@https.bugzilla.kernel.org/>
 
-Current implementation may cause allocation failures in
-tb_alloc_dp_bandwidth() in some cases. This will happen
-when requesting downstream bandwidth while total upstream
-bandwidth usage on the link exceeds TB_ASYM_MIN (36 Gbps).
-tb_configure_asym() will return -ENOBUFS while asymmetric
-mode isn't necessary.
 
-Fixes: 3e36528c1127 ("thunderbolt: Configure asymmetric link if needed and bandwidth allows")
-Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
----
-v2: update subject and commit message
-v1: initial submission
+--55jbroev6njdmhfc
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [Bug 220284] New: USB4 / Thunderbolt not working after boot
+ until thunderbolt module is reloaded
+MIME-Version: 1.0
 
- drivers/thunderbolt/tb.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Fri, Jun 27, 2025 at 05:29:56PM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=220284
+>
+>             Bug ID: 220284
+>            Summary: USB4 / Thunderbolt not working after boot until
+>                     thunderbolt module is reloaded
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 6.15.3
+>           Hardware: AMD
+>                 OS: Linux
+>             Status: NEW
+>           Severity: normal
+>           Priority: P3
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: kim.lindberger@gmail.com
+>         Regression: Yes
+>
+> Laptop: Lenovo ThinkPad T14s Gen 4, model 21F8CTO1WW (AMD)
+>
+>
+> When upgrading from 6.15.2 to 6.15.3 my ThinkPad Thunderbolt 4 Dock stopped
+> working, giving basically no signs of life even when unplugged and replugged.
+> It doesn't start working again until the thunderbolt module is unloaded and
+> reloaded while the dock is still connected. If I unload and reload while the
+> dock is disconnected, nothing happens.
+>
+> When booting, I can also see
+>
+> thunderbolt 0000:c5:00.6: probe with driver thunderbolt failed with error -110
+>
+> in the log, which wasn't printed with prior kernels.
+>
+> I don't boot with the dock connected.
+>
+> The issue persist with 6.15.4.
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index a7c6919fbf97..558455d9716b 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1039,6 +1039,9 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 			break;
- 
- 		if (downstream) {
-+			/* Does consumed + requested exceed the threshold */
-+			if (consumed_down + requested_down < asym_threshold)
-+				continue;
- 			/*
- 			 * Downstream so make sure upstream is within the 36G
- 			 * (40G - guard band 10%), and the requested is above
-@@ -1048,20 +1051,17 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 				ret = -ENOBUFS;
- 				break;
- 			}
--			/* Does consumed + requested exceed the threshold */
--			if (consumed_down + requested_down < asym_threshold)
--				continue;
- 
- 			width_up = TB_LINK_WIDTH_ASYM_RX;
- 			width_down = TB_LINK_WIDTH_ASYM_TX;
- 		} else {
- 			/* Upstream, the opposite of above */
-+			if (consumed_up + requested_up < asym_threshold)
-+				continue;
- 			if (consumed_down + requested_down >= TB_ASYM_MIN) {
- 				ret = -ENOBUFS;
- 				break;
- 			}
--			if (consumed_up + requested_up < asym_threshold)
--				continue;
- 
- 			width_up = TB_LINK_WIDTH_ASYM_TX;
- 			width_down = TB_LINK_WIDTH_ASYM_RX;
--- 
-2.34.1
+#regzbot introduced v6.15.2..v6.15.3 ^
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=220284
+#regzbot link: https://github.com/NixOS/nixpkgs/issues/420730
+#regzbot title USB4 / Thunderbolt not working after boot until thunderbolt module is reloaded
 
+--55jbroev6njdmhfc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRV/neXydHjZma5XLJbRZGEIw/wogUCaF/lzQAKCRBbRZGEIw/w
+ooP5AQDlE1/5JkjToRXOkSzQFfWr4k7eMvlAef06EyF5TM1xaQEA+mVJtTeNSOLT
+G/XoNJuqFy5BCYxpNJtRKt/I8Lh8yww=
+=7tOh
+-----END PGP SIGNATURE-----
+
+--55jbroev6njdmhfc--
 
