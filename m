@@ -1,94 +1,154 @@
-Return-Path: <linux-usb+bounces-25209-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25210-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A004FAEC58F
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 09:22:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 005F4AEC6EF
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 13:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0CCF189D83A
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 07:22:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D89AE7AC8C7
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 11:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923CD22127E;
-	Sat, 28 Jun 2025 07:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jntkWmjk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFAF245038;
+	Sat, 28 Jun 2025 11:59:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F621B192
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 07:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2F61799F;
+	Sat, 28 Jun 2025 11:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751095335; cv=none; b=Ztp2mqJfisJJUKXVCgQce9+/y6kreSQ0CbMwBJmUpaVUrJkG0iNIgnxqvrqeW2qlw6VjjMERJcXndVZOQ0Q1xLweT9jtOoI2g0sX3v7vXeIlSxBt2YY+rAslB4CfLl2i6F2n9K2be72+gb84qmUK7Sj87wfCWBTvl20DJHeGFHg=
+	t=1751111983; cv=none; b=h+9rVo5+oLrsMiaCsKf5LZFvys7E1rpM7VmS/uOMO3seWFjseL5vsn3wvy/fjulX6hAOpqSwmxU29JvcQLQXHLNr7K85I+JY4T3KqRUD7r00UUwg2OgK2brnhsDtLpKvllsKSM/gpNFTocV9W1Evx9QvP79Ma1J9o3ECk4Uec04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751095335; c=relaxed/simple;
-	bh=eHN3kPJObGyRKqcP2YrHZGPDwbB67SQyrh64tgj7Wk8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Qgz1y0glw/obMHgfgiSrn+cQ42wRSWu5BpWBe0JfX67vO9P9+O5VR2GwSP1hVkXGIaWtuw4eGJlkuVYJIA2Yk3jHVkZA4FMmvA3bLvlemAaaDjtUIUl2+yqV3bDjyNIjlO4J93Q4lVdPX/oh0cHWakGirKZ7RmQbbxiBlBDj6uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jntkWmjk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95138C4CEEA
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 07:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751095334;
-	bh=eHN3kPJObGyRKqcP2YrHZGPDwbB67SQyrh64tgj7Wk8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=jntkWmjk00EqYCMxpYNPW3QHtMNAiJjxPja1sp+N6pVvmsTQ4AbE2jc5VK9i1+/9b
-	 KkriJPpxEB6xpSFBTA7fMaYwOOZof18JyI/eFoTs4GjTi4blYujEKSVlYQSKhjcSOs
-	 cT+DFGiBqiUzgs85/m0C5FqSL/L4aAcPWB0MJn4Dl+CIMArM80FJ68kX8t7eFkRe4W
-	 QXneknTcpGjFPKBFsTN9bqYc5g6aVBTCqpbesCGNyqVkKRSJ9WpvVz2RkMmHsXVUmx
-	 b/8ncRpdQew27HN7PMXtl0LLDK145u+YaoGwM8yIyelWIy7nnf66rZguELlXwL4rc4
-	 Age8RqycAyOug==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 83452C3279F; Sat, 28 Jun 2025 07:22:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220272] Latent race condition in USB code unveiled with
- optimized memset_64.S
-Date: Sat, 28 Jun 2025 07:22:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: m.seyfarth@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220272-208809-oheiJIbjpQ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
-References: <bug-220272-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1751111983; c=relaxed/simple;
+	bh=Fg0/BiyR1g3lDUB2JV7W8UALU/okaFwpuib4Tj0FX1w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gWFQ781Cp/SM+ZydRvF9hNm7UPHZEptAmZ6b9LbEMbmk+XxqeXu7zipiRYSKsZ9ScGhBG9khWoDRhQXg/jYxM/OfZTgFAdNnmIfRbQtBJku4xlJKsn+LwnN7XD6nKZ8wGfP+kr0whBuiOuMyx8O4pI+1COzjGhZzIbkZb8ZBOUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4bTrWP1Lyqz1d17S;
+	Sat, 28 Jun 2025 19:57:05 +0800 (CST)
+Received: from kwepemk100010.china.huawei.com (unknown [7.202.194.58])
+	by mail.maildlp.com (Postfix) with ESMTPS id B116A140109;
+	Sat, 28 Jun 2025 19:59:29 +0800 (CST)
+Received: from [10.164.149.249] (10.164.149.249) by
+ kwepemk100010.china.huawei.com (7.202.194.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 28 Jun 2025 19:59:28 +0800
+Message-ID: <61cdc77e-ddcd-4914-9f4c-2d98c2b27156@huawei.com>
+Date: Sat, 28 Jun 2025 19:59:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: <zhangjianrong5@huawei.com>
+Subject: Re: [PATCH] thunderbolt: Confirm the necessity to configure asym link
+ first
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Charalampos Mitrodimas
+	<charmitro@posteo.net>
+CC: <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
+	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <guhengsheng@hisilicon.com>,
+	<caiyadong@huawei.com>, <xuetao09@huawei.com>, <lixinghang1@huawei.com>
+References: <20250626084107.2710306-1-zhangjianrong5@huawei.com>
+ <20250626093026.GJ2824380@black.fi.intel.com> <877c0ylo2f.fsf@posteo.net>
+ <20250627044615.GM2824380@black.fi.intel.com>
+Content-Language: en-US
+From: "zhangjianrong (E)" <zhangjianrong5@huawei.com>
+In-Reply-To: <20250627044615.GM2824380@black.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemk100010.china.huawei.com (7.202.194.58)
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
---- Comment #12 from Marcus Seyfarth (m.seyfarth@gmail.com) ---
-@Alen
 
-Thanks for the trick, these commands bring it back to life without plugging=
- it
-out and in again!
+On 6/27/2025 12:46 PM, Mika Westerberg wrote:
+> Hi,
+> 
+> On Thu, Jun 26, 2025 at 11:50:00AM +0000, Charalampos Mitrodimas wrote:
+>> Mika Westerberg <mika.westerberg@linux.intel.com> writes:
+>>
+>>> Hi,
+>>>
+>>> On Thu, Jun 26, 2025 at 04:41:07PM +0800, zhangjianrong wrote:
+>>>> Current implementation can cause allocation failures in
+>>>> tb_alloc_dp_bandwidth() in some cases. For example:
+>>>> allocated_down(30Gbps), allocated_up(50Gbps),
+>>>> requested_down(10Gbps).
+>>>
+>>> I'm not sure I understand the above.
+>>>
+>>> Can you describe in which real life situation this can happen?
+>>
+>> I suppose this can happen when reducing bandwidth while total upstream
+>> bandwidth usage on the link exceeds TB_ASYM_MIN (36 Gbps). The
+>> allocation fails at the asymmetric limit check before checking whether
+>> the downstream request actually needs asymmetric mode.
+> 
+> Right, but I would like to see here in the changelog explanation of the
+> situation and preferably parts of the dmesg showing the error as well.
 
---=20
-You may reply to this email to add a comment.
+OK, I will update the commit message, but I don't have the dmesg because 
+I can't find a host router that contains two dp adapters.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> 
+> @zhangjianrong, can you do that and resend?
+> 
+> Note, I will be on vacation after today so expect delay from my side.
+> 
+>>>>
+>>>> Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
+>>>> ---
+>>>>   drivers/thunderbolt/tb.c | 10 +++++-----
+>>>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+>>>> index a7c6919fbf97..558455d9716b 100644
+>>>> --- a/drivers/thunderbolt/tb.c
+>>>> +++ b/drivers/thunderbolt/tb.c
+>>>> @@ -1039,6 +1039,9 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
+>>>>   			break;
+>>>>   
+>>>>   		if (downstream) {
+>>>> +			/* Does consumed + requested exceed the threshold */
+>>>> +			if (consumed_down + requested_down < asym_threshold)
+>>>> +				continue;
+>>>>   			/*
+>>>>   			 * Downstream so make sure upstream is within the 36G
+>>>>   			 * (40G - guard band 10%), and the requested is above
+>>>> @@ -1048,20 +1051,17 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
+>>>>   				ret = -ENOBUFS;
+>>>>   				break;
+>>>>   			}
+>>>> -			/* Does consumed + requested exceed the threshold */
+>>>> -			if (consumed_down + requested_down < asym_threshold)
+>>>> -				continue;
+>>>>   
+>>>>   			width_up = TB_LINK_WIDTH_ASYM_RX;
+>>>>   			width_down = TB_LINK_WIDTH_ASYM_TX;
+>>>>   		} else {
+>>>>   			/* Upstream, the opposite of above */
+>>>> +			if (consumed_up + requested_up < asym_threshold)
+>>>> +				continue;
+>>>>   			if (consumed_down + requested_down >= TB_ASYM_MIN) {
+>>>>   				ret = -ENOBUFS;
+>>>>   				break;
+>>>>   			}
+>>>> -			if (consumed_up + requested_up < asym_threshold)
+>>>> -				continue;
+>>>>   
+>>>>   			width_up = TB_LINK_WIDTH_ASYM_TX;
+>>>>   			width_down = TB_LINK_WIDTH_ASYM_RX;
+>>>> -- 
+>>>> 2.34.1
+> 
+
 
