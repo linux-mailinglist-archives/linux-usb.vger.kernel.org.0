@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-25224-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25225-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5517AAEC822
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 17:05:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C71AEC832
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 17:16:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7655E7A480C
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 15:03:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 580791BC1972
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 15:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E83621FF36;
-	Sat, 28 Jun 2025 15:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB9821019C;
+	Sat, 28 Jun 2025 15:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mvXZ011K"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="i/QENAgF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CD713EFE3;
-	Sat, 28 Jun 2025 15:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513921D7989;
+	Sat, 28 Jun 2025 15:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751123096; cv=none; b=kfPD7T+8k/QTFmr0XaWR8j3Nd8IZUgA6sjP+hCeMhoeUf7635R/NiqvXRqjuksSjUfOs0/0B/cMCbHQtznBB9oziUnyedrq6+1f2yRJYDUoqgNfJfXli6mPj0DUxkadjJKbkx9csmWhDqfCE40Xr3Ti0tR9cEWBtD3eV4m6px8Y=
+	t=1751123762; cv=none; b=QVGOCyjAE/gu4dItBE12nDwVETaUeWR2/EmCHfGP59cc+hmBbegSYr5ez29AuaicRVmBEDGUYW+A9laPU9Q3+fGHP+qrrOmv3NSNM8i6R0c0We+Qt4LJRWE2QKOwQCnrxrCMN4HMC09Hziw4TTOLyDTdooBhz+jiYubFK+PeDrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751123096; c=relaxed/simple;
-	bh=0Uv+q8exRiL1GkMTHmMha2ITO2bvRewQYj2lGsHH2xk=;
+	s=arc-20240116; t=1751123762; c=relaxed/simple;
+	bh=gou9Z8xyn8tq2w3ereFBZj6X93kTTi3CeBaHKETqwHc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ExMN0ypESRXgdLJ/PHoj+mnrH8vceFEju9dpe7uGai4ptyjKTxFc9i7u+c8LQzCXxf7a/CAP5OeGV1AIBqcqn39K0IqL745T6GVqld3nukLz2gwsEjtUltJg7EjbTp/o5P9pA4Q5tKIj+SWnnFTyGZs4jxJ9QxGsuv9vHJJUyS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mvXZ011K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64264C4CEEA;
-	Sat, 28 Jun 2025 15:04:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IrLVehY/YUArADtecVtPG7QPIND9D/HVG476m/fwPTWXTIF+Xf/tOQEBlSz33qa7d2yEm4PldV7RxaulyIVdubuuWOWrv/4CMTiYkcRkDrZl185Xv0rNRjn7tiFD61vtPCdDTg3ZBfOrqua3vtm2V3pdKmeF7cuWnVoRZXYESgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=i/QENAgF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82FC2C4CEEA;
+	Sat, 28 Jun 2025 15:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751123095;
-	bh=0Uv+q8exRiL1GkMTHmMha2ITO2bvRewQYj2lGsHH2xk=;
+	s=korg; t=1751123761;
+	bh=gou9Z8xyn8tq2w3ereFBZj6X93kTTi3CeBaHKETqwHc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mvXZ011Klyqgb/e5srWsSfAhSZLWqO6EyuJeMz9PZaNkc2XVlqGX8zblovVR1s2Bt
-	 ZJkVi/EqQDqm19J7xUzgcN1kRGk0j2wgY2LYfqdSu5y8nVyepSQBPfh8hTNrQaOKTH
-	 1Sn9vO3Oz8a1SAlz8o49bFRQUagIwPe90w+j3Zsk=
-Date: Sat, 28 Jun 2025 17:04:53 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sergio Perez Gonzalez <sperezglz@gmail.com>
-Cc: michal.simek@amd.com, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	shuah@kernel.org
-Subject: Re: [PATCH] usb: gadget: udc-xilinx: validate ep number before
- indexing rambase[]
-Message-ID: <2025062834-botanist-crop-4aec@gregkh>
-References: <20250627060125.176663-1-sperezglz@gmail.com>
+	b=i/QENAgFbikJtMznSkjxvzgnKg2m2s2zJ8jQbp6rJFOjzZU9h+02FvpTj/4Ng5l/R
+	 bNZE3Sx+p7frS+ffsEJzi99ey9Odl9hOMR/9Gzspu9vzApFureXzwevFxeZTPvYn2L
+	 VM6Oo7BYl4MQgnJLD5JySyPHkkd/mpSQ91b9oFWc=
+Date: Sat, 28 Jun 2025 17:15:59 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: John Youn <John.Youn@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v 5] usb: dwc2: gadget: Fix enter to hibernation for
+ UTMI+ PHY
+Message-ID: <2025062839-scary-backroom-01d6@gregkh>
+References: <7cbf0262dd5f9a98824b573b27f724250ea9b2be.1750769936.git.Minas.Harutyunyan@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,42 +56,94 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250627060125.176663-1-sperezglz@gmail.com>
+In-Reply-To: <7cbf0262dd5f9a98824b573b27f724250ea9b2be.1750769936.git.Minas.Harutyunyan@synopsys.com>
 
-On Fri, Jun 27, 2025 at 12:01:22AM -0600, Sergio Perez Gonzalez wrote:
-> Issue flagged by coverity. The size of the rambase array is 8,
-> usb_enpoint_num() can return 0 to 15, prevent out of bounds reads.
-
-But how can that happen with this hardware?  As the array states, this
-hardware only has that many endpoints availble to it, so how can it ever
-be larger?
-
-> Link: https://scan7.scan.coverity.com/#/project-view/53936/11354?selectedIssue=1644635
-> Signed-off-by: Sergio Perez Gonzalez <sperezglz@gmail.com>
-
-What commit id does this fix?
-
-
-> ---
->  drivers/usb/gadget/udc/udc-xilinx.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Wed, Jun 25, 2025 at 05:50:21AM +0000, Minas Harutyunyan wrote:
+> For UTMI+ PHY, according to programming guide, first should be set
+> PMUACTV bit then STOPPCLK bit. Otherwise, when the device issues
+> Remote Wakeup, then host notices disconnect instead.
+> For ULPI PHY, above mentioned bits must be set in reversed order:
+> STOPPCLK then PMUACTV.
 > 
-> diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-> index 8d803a612bb1..0c3714de2e3b 100644
-> --- a/drivers/usb/gadget/udc/udc-xilinx.c
-> +++ b/drivers/usb/gadget/udc/udc-xilinx.c
-> @@ -814,6 +814,12 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
->  	ep->is_in = ((desc->bEndpointAddress & USB_DIR_IN) != 0);
->  	/* Bit 3...0:endpoint number */
->  	ep->epnumber = usb_endpoint_num(desc);
-> +	if (ep->epnumber >= XUSB_MAX_ENDPOINTS) {
-> +		dev_dbg(udc->dev, "bad endpoint index %d: only 0 to %d supported\n",
-> +				ep->epnumber, (XUSB_MAX_ENDPOINTS - 1));
-> +		return -EINVAL;
+> Fixes: 4483ef3c1685 ("usb: dwc2: Add hibernation updates for ULPI PHY")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+> ---
+>  Changes in v5:
+>  - Rebased on top of Linux 6.16-rc2
+>  Changes in v4:
+>  - Rebased on top of Linux 6.15-rc6
+>  Changes in v3:
+>  - Rebased on top of Linux 6.15-rc4
+>  Changes in v2:
+>  - Added Cc: stable@vger.kernel.org
+> 
+>  drivers/usb/dwc2/gadget.c | 38 ++++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index d5b622f78cf3..0637bfbc054e 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -5389,20 +5389,34 @@ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
+>         if (gusbcfg & GUSBCFG_ULPI_UTMI_SEL) {
+>                 /* ULPI interface */
+>                 gpwrdn |= GPWRDN_ULPI_LATCH_EN_DURING_HIB_ENTRY;
+> -       }
+> -       dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> -       udelay(10);
+> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> +               udelay(10);
+> 
+> -       /* Suspend the Phy Clock */
+> -       pcgcctl = dwc2_readl(hsotg, PCGCTL);
+> -       pcgcctl |= PCGCTL_STOPPCLK;
+> -       dwc2_writel(hsotg, pcgcctl, PCGCTL);
+> -       udelay(10);
+> +               /* Suspend the Phy Clock */
+> +               pcgcctl = dwc2_readl(hsotg, PCGCTL);
+> +               pcgcctl |= PCGCTL_STOPPCLK;
+> +               dwc2_writel(hsotg, pcgcctl, PCGCTL);
+> +               udelay(10);
+> 
+> -       gpwrdn = dwc2_readl(hsotg, GPWRDN);
+> -       gpwrdn |= GPWRDN_PMUACTV;
+> -       dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> -       udelay(10);
+> +               gpwrdn = dwc2_readl(hsotg, GPWRDN);
+> +               gpwrdn |= GPWRDN_PMUACTV;
+> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> +               udelay(10);
+> +       } else {
+> +               /* UTMI+ Interface */
+> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> +               udelay(10);
+> +
+> +               gpwrdn = dwc2_readl(hsotg, GPWRDN);
+> +               gpwrdn |= GPWRDN_PMUACTV;
+> +               dwc2_writel(hsotg, gpwrdn, GPWRDN);
+> +               udelay(10);
+> +
+> +               pcgcctl = dwc2_readl(hsotg, PCGCTL);
+> +               pcgcctl |= PCGCTL_STOPPCLK;
+> +               dwc2_writel(hsotg, pcgcctl, PCGCTL);
+> +               udelay(10);
+> +       }
+> 
+>         /* Set flag to indicate that we are in hibernation */
+>         hsotg->hibernated = 1;
+> 
+> base-commit: 7aed15379db9c6ec67999cdaf5c443b7be06ea73
+> --
+> 2.41.0
 
-Any hints as to how this was tested?
 
-thanks,
+
+Something is really wrong here, this doesn't apply at all to 6.16-rc2,
+or my usb-linus branch or my usb-next branch.  Are you sure you made
+this properly?  That "base commit" feels really odd...
+
+confused.
 
 greg k-h
 
