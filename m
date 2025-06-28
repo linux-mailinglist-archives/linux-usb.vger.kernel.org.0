@@ -1,54 +1,50 @@
-Return-Path: <linux-usb+bounces-25219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1B32AEC7C8
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:46:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB53AEC7CB
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:47:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D85827AEC8C
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3293017C6A8
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88C5246764;
-	Sat, 28 Jun 2025 14:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DDE248F68;
+	Sat, 28 Jun 2025 14:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NdUWRJ4P"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SRyIbceG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0762110
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 14:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2A71FECB1;
+	Sat, 28 Jun 2025 14:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751122002; cv=none; b=n+OMNVMjo6UjMdyPqSdoXblRuAZH7iA0jo5PusLCIpvNpU8ywDhJ5M6FS/8h7Byivh+vvnVbB/iZG0UbyKGhzxK8pHqRuxVtmfB1IpuOetEvnTpudq0AMmjPIap8Ukigh1CrMv2Oz0NZKA+WdtxejSyckBpreuIrLijGXFdndjE=
+	t=1751122041; cv=none; b=pXCG0+xrjZXcOp2sbv6AS1ocI3ZK+1H2/fy9/vU9WQNbmC4KybxZlya6PJuSs9AJg6Hv3XhIlFL6qjP+R/94eZAMDmSmQxKgFfxflHdJy8IUOArhltdOJCpKdDohwDhs/KmK6RpUTb14+BT7iSzToTdnYGjrNrOwRj2UL75OHgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751122002; c=relaxed/simple;
-	bh=2OKDhCukj462X61S/o5jVo0UTokAqK0gKvJWaYoVkis=;
+	s=arc-20240116; t=1751122041; c=relaxed/simple;
+	bh=hLylioSzQgDU1OnhtndHvFUnS91BYfTenHU/Hs5TH1A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FF3gQcnk68HiCROEvhl79HBVzJDwJ0fYwJFDnkLHzEfW+kMtp1ySo5tJWartMU1dtfHiexNnD9aF0HP5/AglBAUdQUt5Hn45Yen7E9ksCKmfLZwn2GdcrdflkLPuIajsqGQGoayyS4bfLrXXANDz1yQFdA+0rDA60xCsYzSQAAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NdUWRJ4P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AC9C4CEEA;
-	Sat, 28 Jun 2025 14:46:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CiD5J1l3EvNgkhG1h6tFi+7Y9gSutK2w8Un7YQKorB0WQ7CtcGzufoluaM8o/xODO6lG856DzvryjBwi5ILFACGCRdqi3ng8Dkut+8p7sKVTesVWoXEipXZXfQ+BZgbJwBbnFBCGihlOV72zheJhHcX2UaTEx00RBnwoCA/qRHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SRyIbceG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36464C4CEEA;
+	Sat, 28 Jun 2025 14:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751122001;
-	bh=2OKDhCukj462X61S/o5jVo0UTokAqK0gKvJWaYoVkis=;
+	s=korg; t=1751122040;
+	bh=hLylioSzQgDU1OnhtndHvFUnS91BYfTenHU/Hs5TH1A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NdUWRJ4Pq8xTk5YmIBtxc+tOzo8nMB7L7CwPMZYnOBSfOoj6khlDYAJY2Z/8nDQPq
-	 b8kereTszVKOd1dk0b06dCcUavybKgnT/cr+vJnA48Qqy5w6th8BSkcWOsvCr6V5ov
-	 G7ZZ1DxNz/HKibMMOmJIWTOUkXstqD4dwV4C1qcQ=
-Date: Sat, 28 Jun 2025 16:46:38 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu, oneukum@suse.com,
-	konrad.dybcio@oss.qualcomm.com, broonie@kernel.org,
-	stable@kernel.org
-Subject: Re: [RFT PATCH v3 1/1] usb: hub: Fix flushing of delayed work used
- for post resume purposes
-Message-ID: <2025062810-slush-trillion-b199@gregkh>
-References: <20250627164348.3982628-1-mathias.nyman@linux.intel.com>
- <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
+	b=SRyIbceGBl4kRu8YsDaioR2mhUN6r+ZV63TItex0Uj605mKNuMFo/CBWtV57IVk+8
+	 Hf1+4+/Yv1EzT39kw4chlUybAsriADgfI0vfcHETC/GwXmBg284XOKIAmWs1ieiGte
+	 K69dlK+99Vqj3/lIpoxWsDRxSNC9FCMODLsZ3mKE=
+Date: Sat, 28 Jun 2025 16:47:17 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: early: xhci-dbc: Fix early_ioremap leak
+Message-ID: <2025062803-paver-octane-e038@gregkh>
+References: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,40 +53,35 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250627164348.3982628-2-mathias.nyman@linux.intel.com>
+In-Reply-To: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
 
-On Fri, Jun 27, 2025 at 07:43:48PM +0300, Mathias Nyman wrote:
-> Delayed work that prevents USB3 hubs from runtime-suspending too early
-> needed to be flushed in hub_quiesce() to resolve issues detected on
-> QC SC8280XP CRD board during suspend resume testing.
+On Fri, Jun 27, 2025 at 02:47:47PM -0700, Lucas De Marchi wrote:
+> Using the kernel param earlyprintk=xdbc,keep without proper hardware
+> setup leads to this:
 > 
-> This flushing did however trigger new issues on Raspberry Pi 3B+, which
-> doesn't have USB3 ports, and doesn't queue any post resume delayed work.
+> 	[ ] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> 	...
+> 	[ ] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+> 	...
+> 	[ ] calling  kmemleak_late_init+0x0/0xa0 @ 1
+> 	[ ] kmemleak: Kernel memory leak detector initialized (mem pool available: 14919)
+> 	[ ] kmemleak: Automatic memory scanning thread started
+> 	[ ] initcall kmemleak_late_init+0x0/0xa0 returned 0 after 417 usecs
+> 	[ ] calling  check_early_ioremap_leak+0x0/0x70 @ 1
+> 	[ ] ------------[ cut here ]------------
+> 	[ ] Debug warning: early ioremap leak of 1 areas detected.
+> 	    please boot with early_ioremap_debug and report the dmesg.
+> 	[ ] WARNING: CPU: 11 PID: 1 at mm/early_ioremap.c:90 check_early_ioremap_leak+0x4e/0x70
 > 
-> The flushed 'hub->init_work' item is used for several purposes, and
-> is originally initialized with a 'NULL' work function. The work function
-> is also changed on the fly, which may contribute to the issue.
+> When early_xdbc_setup_hardware() fails, make sure to call
+> early_iounmap() since xdbc_init() won't handle it.
 > 
-> Solve this by creating a dedicated delayed work item for post resume work,
-> and flush that delayed work in hub_quiesce()
-> 
-> Cc: stable@kernel.org
-> Fixes: a49e1e2e785f ("usb: hub: Fix flushing and scheduling of delayed work that tunes runtime pm")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/linux-usb/aF5rNp1l0LWITnEB@finisterre.sirena.org.uk
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 > ---
-> v3:
->  - Rebase on top of a49e1e2e785f ("usb: hub: Fix flushing and scheduling of delayed work that tunes runtime pm")
->  - Rewrite commit message 
-> 
-> v2:
->  - Add and use dedicated delayed work struct for post resume work
->  - Add commit message section about dedicated work
+>  drivers/usb/early/xhci-dbc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-This seems to work, want me to take this, or are you going to submit
-another one?  I'll hold off on sending the pull request to Linus for
--rc4 because of this.
+What commit id does this fix?
 
 thanks,
 
