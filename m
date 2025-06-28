@@ -1,53 +1,58 @@
-Return-Path: <linux-usb+bounces-25222-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25223-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD3FAAEC7F8
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 16:54:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2B2BAEC80B
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 17:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F2E87A52CB
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:53:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 866AE3B91A3
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89BC124A06F;
-	Sat, 28 Jun 2025 14:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC23F2517A6;
+	Sat, 28 Jun 2025 15:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R+TtNdQv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UgNQjIlY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A7C247291;
-	Sat, 28 Jun 2025 14:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505411FBE80;
+	Sat, 28 Jun 2025 15:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751122479; cv=none; b=UOAER+LCR27Vo51NgpdiYbQWswDMrxYMnD9zCV8MzgbKYFhOy/Eeg0m0WiyeU3i4yAAthsrKpggAF7mF7NQLRqyVNZR1UzkblNdcCqWKZJg23RlKKn0zeCRaUC0fO50FvW/yK6Kkx4w1c73CL66QRy2CpfQfn9owyFPnqY4ccnI=
+	t=1751122802; cv=none; b=cgMhwbF5zuCviao5MBLGHYSHwaDv/HRdT8dX+1Xdxbsz6UUKzG7sOnajF0ettec9pMDg1bjL7x2Imq2MFVOVP/ITcZ5SlxTwKlm76kQBcjnzKZHzQurjrRERpOjLLnMk8vCMBtIkNII2OIHItYsGGVSRpBtqoCw1ID8sErlgs1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751122479; c=relaxed/simple;
-	bh=Aj+/ns36tbt/Z76fsAuEiVmykGmRcZ9L8AfHcCxkWOU=;
+	s=arc-20240116; t=1751122802; c=relaxed/simple;
+	bh=/nORueu+E/VVO56WfdHAYQMg0q9l9q7SiKKNWkhQly4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bEpDoqS13SZOJE+SLc1XU9Kp+VY+b16l29YBIOpi6/MoCtSrkT9QTcym8vkA+JKiHisiYwF32Ch4uTs27B9ajya3pYTc4XQEw67uQOuPIJCN2va90MDveM1magkTbvLr9XugKqtc/ORjVj4Jy1L47tMF2+e+QNlh4M1UG4HqHH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R+TtNdQv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1241BC4CEEA;
-	Sat, 28 Jun 2025 14:54:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ai9BOPRUpvDn+Gmn8CtMWXbjBLs4DH4jur1YrDXsagIbjEMRS9UhUy0GDriNLSTJJCFosRJEmlrfvtCgEqAmcuDnjJupnNRqaxmLweCHZwdV495ab4qLbKMgdjZW2bdsv/fwq/xzdz8y02T7kTZT9Qxfp0zxgTl/debz6CmsqlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UgNQjIlY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174D8C4CEEA;
+	Sat, 28 Jun 2025 15:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751122478;
-	bh=Aj+/ns36tbt/Z76fsAuEiVmykGmRcZ9L8AfHcCxkWOU=;
+	s=korg; t=1751122801;
+	bh=/nORueu+E/VVO56WfdHAYQMg0q9l9q7SiKKNWkhQly4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R+TtNdQvfARRqoPrm8weDJG787f2s4asB6HneccuByWzTW9mclav7rPMsG2bDiCWh
-	 33jw2fHHl34tri6W1pOAD4P04zWT45DX3akwFX05GnAEtQBgSuKW77Y+4JWahmsckL
-	 MAV0spAVaD/IkgIO1+ngG2kXPJXPdbB1+5igMmM0=
-Date: Sat, 28 Jun 2025 16:54:36 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Abinash Singh <abinashlalotra@gmail.com>
-Cc: oneukum@suse.com, abinashsinghlalotra@gmail.com, johan@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: serial: usb_wwan: Fix data races by protecting
- dtr/rts state with a mutex
-Message-ID: <2025062815-uninsured-twentieth-c41c@gregkh>
-References: <f2419bb9-2d81-4a6d-838d-b404e3ce7786@suse.com>
- <20250626153156.50131-1-abinashsinghlalotra@gmail.com>
+	b=UgNQjIlYmHLD6XG6SaVW4pdP+XeAJpiD/c3JxhB5Y/ACLEfwgeFk2IJLPQRVBFs3j
+	 oEhxcWRex8TYuDDhZNoYRJNq5/G5A6ZW1vdghMS1GhxegSOuyIzgOACMFaMprcqj7J
+	 krdSA9YXrE7CAbA4lSwNZZYn1p6FTP+MeVrmr87o=
+Date: Sat, 28 Jun 2025 16:59:58 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Akash Kumar <quic_akakum@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+	kernel@quicinc.com, Wesley Cheng <quic_wcheng@quicinc.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: Initialize color matching descriptors
+ for frame-based
+Message-ID: <2025062812-surging-defiant-934c@gregkh>
+References: <20250625101639.19788-1-quic_akakum@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,121 +61,99 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250626153156.50131-1-abinashsinghlalotra@gmail.com>
+In-Reply-To: <20250625101639.19788-1-quic_akakum@quicinc.com>
 
-On Thu, Jun 26, 2025 at 09:01:56PM +0530, Abinash Singh wrote:
-> Fix two previously noted locking-related issues in usb_wwan by introducing
-> a mutex to serialize access to the shared `rts_state` and `dtr_state`
-> fields in `struct usb_wwan_port_private`.
+On Wed, Jun 25, 2025 at 03:46:39PM +0530, Akash Kumar wrote:
+> Fix NULL pointer crash in uvcg_framebased_make due to uninitialize
+> color matching descriptor for frame-based format.
 > 
-> - In `usb_wwan_dtr_rts()`, the fields are now updated under the new
->   `portdata->lock` to prevent concurrent access.
-> - In `usb_wwan_tiocmset()`, the same lock is used to protect both updates
->   to the modem control lines and the subsequent `usb_wwan_send_setup()`
->   call.
-> 
-> The mutex is initialized during `usb_wwan_port_probe()` when the port
-> private data is allocated. This ensures consistent state and avoids
-> data races when multiple threads attempt to modify control line state.
-> 
-> This change resolves the two old `FIXME` comments and improves thread
-> safety for modem control signal handling.
+> [    2.771141][  T486] pc : __uvcg_fill_strm+0x198/0x2cc
+> [    2.771145][  T486] lr : __uvcg_iter_strm_cls+0xc8/0x17c
+> [    2.771146][  T486] sp : ffffffc08140bbb0
+> [    2.771146][  T486] x29: ffffffc08140bbb0 x28: ffffff803bc81380 x27: ffffff8023bbd250
+> [    2.771147][  T486] x26: ffffff8023bbd250 x25: ffffff803c361348 x24: ffffff803d8e6768
+> [    2.771148][  T486] x23: 0000000000000004 x22: 0000000000000003 x21: ffffffc08140bc48
+> [    2.771149][  T486] x20: 0000000000000000 x19: ffffffc08140bc48 x18: ffffffe9f8cf4a00
+> [    2.771150][  T486] x17: 000000001bf64ec3 x16: 000000001bf64ec3 x15: ffffff8023bbd250
+> [    2.771151][  T486] x14: 000000000000000f x13: 004c4b40000f4240 x12: 000a2c2a00051615
+> [    2.771152][  T486] x11: 000000000000004f x10: ffffffe9f76b40ec x9 : ffffffe9f7e389d0
+> [    2.771153][  T486] x8 : ffffff803d0d31ce x7 : 000f4240000a2c2a x6 : 0005161500028b0a
+> [    2.771154][  T486] x5 : ffffff803d0d31ce x4 : 0000000000000003 x3 : 0000000000000000
+> [    2.771155][  T486] x2 : ffffffc08140bc50 x1 : ffffffc08140bc48 x0 : 0000000000000000
+> [    2.771156][  T486] Call trace:
+> [    2.771157][  T486]  __uvcg_fill_strm+0x198/0x2cc
+> [    2.771157][  T486]  __uvcg_iter_strm_cls+0xc8/0x17c
+> [    2.771158][  T486]  uvcg_streaming_class_allow_link+0x240/0x290
+> [    2.771159][  T486]  configfs_symlink+0x1f8/0x630
+> [    2.771161][  T486]  vfs_symlink+0x114/0x1a0
+> [    2.771163][  T486]  do_symlinkat+0x94/0x28c
+> [    2.771164][  T486]  __arm64_sys_symlinkat+0x54/0x70
+> [    2.771164][  T486]  invoke_syscall+0x58/0x114
+> [    2.771166][  T486]  el0_svc_common+0x80/0xe0
+> [    2.771168][  T486]  do_el0_svc+0x1c/0x28
+> [    2.771169][  T486]  el0_svc+0x3c/0x70
+> [    2.771172][  T486]  el0t_64_sync_handler+0x68/0xbc
+> [    2.771173][  T486]  el0t_64_sync+0x1a8/0x1ac
 
-How was this tested?
+What is "[  T486]"?
+
+And where did the beginning of the crash report go?
+
+> Initialize color matching descriptor for frame-based format to prevent
+> NULL pointer crash.
+> This fix prevents a NULL pointer crash in uvcg_framebased_make due to
+> an uninitialized color matching descriptor.
+
+What causes an unitialized color matching descriptor to happen?  Do we
+have that in the kernel today?  Or is this userspace controlled?
+Hardware controlled?
 
 > 
-> Signed-off-by: Abinash Singh <abinashsinghlalotra@gmail.com>
+> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+
+What git id does this fix?
+
 > ---
-> Thank You very much for your feedback .
-> You don't have to say sorry , your feedback
-> is valueable for me.
+>  drivers/usb/gadget/function/uvc_configfs.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> 
-> v2 :
-> 	initialized the mutex during probing
-> 	droping lock after returning from usb_wwan_send_setup()
-
-You didn't list "v2" in the subject line, which makes this hard for our
-tools to track (and for you to track as well!)
-
-
-
-> 
-> Regards
-> Abinash
-> ---
->  drivers/usb/serial/usb-wwan.h |  1 +
->  drivers/usb/serial/usb_wwan.c | 12 ++++++++----
->  2 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
-> index 519101945769..e8d042d9014f 100644
-> --- a/drivers/usb/serial/usb-wwan.h
-> +++ b/drivers/usb/serial/usb-wwan.h
-> @@ -59,6 +59,7 @@ struct usb_wwan_port_private {
->  	int ri_state;
+> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+> index f131943254a4..a4a2d3dcb0d6 100644
+> --- a/drivers/usb/gadget/function/uvc_configfs.c
+> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+> @@ -2916,8 +2916,15 @@ static struct config_group *uvcg_framebased_make(struct config_group *group,
+>  		'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00,
+>  		0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
+>  	};
+> +	struct uvcg_color_matching *color_match;
+> +	struct config_item *streaming;
+>  	struct uvcg_framebased *h;
 >  
->  	unsigned long tx_start_time[N_OUT_URB];
-> +	struct mutex lock;
-
-You might want to document what this lock is for somewhere, right?
-
->  };
+> +	streaming = group->cg_item.ci_parent;
+> +	color_match = uvcg_format_get_default_color_match(streaming);
+> +	if (!color_match)
+> +		return ERR_PTR(-EINVAL);
+> +
+>  	h = kzalloc(sizeof(*h), GFP_KERNEL);
+>  	if (!h)
+>  		return ERR_PTR(-ENOMEM);
+> @@ -2936,6 +2943,9 @@ static struct config_group *uvcg_framebased_make(struct config_group *group,
 >  
->  #endif /* __LINUX_USB_USB_WWAN */
-> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-> index 0017f6e969e1..cd80fbd1dc6f 100644
-> --- a/drivers/usb/serial/usb_wwan.c
-> +++ b/drivers/usb/serial/usb_wwan.c
-> @@ -80,11 +80,12 @@ void usb_wwan_dtr_rts(struct usb_serial_port *port, int on)
->  		return;
->  
->  	portdata = usb_get_serial_port_data(port);
-> -	/* FIXME: locking */
-> +	mutex_lock(&portdata->lock);
->  	portdata->rts_state = on;
->  	portdata->dtr_state = on;
->  
->  	usb_wwan_send_setup(port);
+>  	INIT_LIST_HEAD(&h->fmt.frames);
+>  	h->fmt.type = UVCG_FRAMEBASED;
+> +
+> +	h->fmt.color_matching = color_match;
+> +	color_match->refcnt++;
 
-You are sure it's ok to call a function while the lock is held?  Is it
-now required?  If so, please add the proper static and runtime checking
-for that.  If not, then it's going to get messy very quickly :(
+reference counts are almost never done "by hand" like this, are you sure
+this is right?  I don't see the lock being held that is used when
+reading/writing this value elsewhere in the driver, why is this safe
+here?
 
-> +	mutex_unlock(&portdata->lock);
->  }
->  EXPORT_SYMBOL(usb_wwan_dtr_rts);
->  
-> @@ -113,6 +114,7 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
->  	struct usb_serial_port *port = tty->driver_data;
->  	struct usb_wwan_port_private *portdata;
->  	struct usb_wwan_intf_private *intfdata;
-> +	int ret;
->  
->  	portdata = usb_get_serial_port_data(port);
->  	intfdata = usb_get_serial_data(port->serial);
-> @@ -120,7 +122,7 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
->  	if (!intfdata->use_send_setup)
->  		return -EINVAL;
->  
-> -	/* FIXME: what locks portdata fields ? */
-> +	mutex_lock(&portdata->lock);
->  	if (set & TIOCM_RTS)
->  		portdata->rts_state = 1;
->  	if (set & TIOCM_DTR)
-> @@ -130,7 +132,9 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
->  		portdata->rts_state = 0;
->  	if (clear & TIOCM_DTR)
->  		portdata->dtr_state = 0;
-> -	return usb_wwan_send_setup(port);
-> +	ret = usb_wwan_send_setup(port);
-
-Again, is this ok to hold a lock across?
-
-> +	mutex_unlock(&portdata->lock);
-
-Why not use the guard() style for all of this to make it simpler
-overall?
+And shouldn't the changelog text be something like "mirror what we do in
+the uncompressed mode?"  Or the other modes?  Why is this one the only
+one that does not have this check in it today, was it just forgotten or
+was it intentional?
 
 thanks,
 
