@@ -1,118 +1,87 @@
-Return-Path: <linux-usb+bounces-25213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24666AEC73E
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:53:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51DEEAEC741
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 14:54:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F3DD3A84E5
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 12:53:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C81E84A19AD
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Jun 2025 12:53:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0A924888C;
-	Sat, 28 Jun 2025 12:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F386824DCF3;
+	Sat, 28 Jun 2025 12:53:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="d8BvBIo3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YI/Mb8u6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvjcwQqK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47703BE4A
-	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 12:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7180724A043
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 12:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751115221; cv=none; b=V0deHdivA3i575XwxzlytXGSLZD/yCY6tQT7kyda6iw77f27gqd1ZEk+mtHZa1T4PpWB4xxes0FT4BCD4aaKkJfEiD3odrvdzkjDdPyEAKEaVG4bfyKWKIv/Y2wsZw3//9B4IV1Yj87ZAGsHK+91qkNhLwN+VhxjkjIgpej9G7Y=
+	t=1751115223; cv=none; b=QlMWo4JJ/WWbqNNn5cGbPzCKSUEknOqAYkMXa0NFUUMgnzdZzznHE2fCUvUaPv7j6ipm8UPqWZckIfu1Yw303Y/tS1LH0/p3PdASKJaVKsvkYN4jAsvYd7yEgFAHBMMMUqgP+TJciuVP8Z7nK5zmgxfldE5AqkaI5w8nv8/1hmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751115221; c=relaxed/simple;
-	bh=RPTWfAerU3YqFi9jqzXG9kMIOoAPkljelX3gg4t5Q+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YjfjEXBw9e3ttNARkO+caJEgZfawFkEo3gHmH4A3kRXEky5xs2YCZGAIAaOSVFvJ2PvBj3wW2xua0t4mIOIgOfnNoZjT6jbY+lb4j3+e1W0dMHyscor480YQJSfOYZqXT8826cKBxcne205LmvxIE8MbYqz0faTb1vby8SyRu6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=d8BvBIo3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YI/Mb8u6; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 26AA9140020B;
-	Sat, 28 Jun 2025 08:53:37 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Sat, 28 Jun 2025 08:53:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1751115217; x=1751201617; bh=VHVKuKGAPV
-	KoI1l7NUOtuO0IqrKtntRvHVJ//HFzRV0=; b=d8BvBIo3u2tMvW788UT1Yg3AT8
-	NuB8FRnpxGCYsbsSpGG+EaEbiPY7QXh6bi8i2ErdQPRSaAgsqMfC8bD7o0NFQQma
-	9N7In19lOVJsym2EvIUkUJyXIbws+sKp0Cl3eVwUjoZQ5Mnb/MdbDF5p6onX28Tx
-	ZIR8Tgg9eivHHTor6uYaGq6uX+898ZqDVwUyePf6gvRprx5YSriAnDWgMllkoRhf
-	BXODnohl56NhtSjblU++RXDPX/U0wW6KiX0BebEHwA30q7rXTOTNdgoUAxHCORvW
-	jsRVfF3XJPrnNNBVBgW5y/GTSXRatm0dupyjwSgUfThWpq9/uJebVsH0WeYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1751115217; x=1751201617; bh=VHVKuKGAPVKoI1l7NUOtuO0IqrKtntRvHVJ
-	//HFzRV0=; b=YI/Mb8u6b0aOgHJUy9S6O0SzI5Zzd3CFt8nR8WY5H+bn6iYkNAh
-	Drv/bwSLvKUveqa04Pb/9oU3on/oVQUS2PP5PT2O6Nqhzm3TbX+b19aesPVwzxds
-	DyO2NrKDSDd2n9Kst4BnnDJzWKWow8UTSLlyNTaF5i3NhZHNkOhE9RnEny6N/UHz
-	X/bZANuR+k1DKhzQrLMRt+FVIXIZ1AHiqcuSd/gB5+ek/SS3ysYJpsB8NXFDDEj4
-	38XToxFAmrr4ZdA10hZrVjtaHsEP+uTyRysLRGVxSU822k4Qx+VBKKVbKfOwQqoV
-	Syqg0KyL1QHb83vkPOYT/18lN6wvF7FV9lQ==
-X-ME-Sender: <xms:0OVfaNwAnAGRWkrfTAT9AmwkLRmX4vweFtXr1DMegbeU2QUyC2MZKw>
-    <xme:0OVfaNQh-LLlbl8c24chbJvOLgppcTvOwhQlB1JOsCJPgJRYmsv7OuDoWq0mHu5so
-    SkTSNSHKbXKl1mcUw>
-X-ME-Received: <xmr:0OVfaHU32yDRLWavnn2cblWDcKD3fALe5RHMVfCNbKew76rzmT4d5NBn0jeJZE5ldt-LrT2Fue4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttd
-    dvnecuhfhrohhmpeetlhihshhsrgcutfhoshhsuceohhhisegrlhihshhsrgdrihhsqeen
-    ucggtffrrghtthgvrhhnpefhfedvgfeliedvudegueefleehudellefgleetudehveelhe
-    etiefgteegvddutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdr
-    tghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hhihesrghlhihsshgrrdhishdpnhgspghrtghpthhtohepfedpmhhouggvpehsmhhtphho
-    uhhtpdhrtghpthhtohepsghughiiihhllhgrqdgurggvmhhonheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdrlhhinhhugidruggv
-    vhdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:0OVfaPgm6csioXbB6DvgcxjrDIQfqP9VnunXlfxOAsRyM2TJBM8t_g>
-    <xmx:0OVfaPArLISqbiu6NL-wKpdnQK4yQpe9Evf2to0i2-DuabyCsjJIbA>
-    <xmx:0OVfaILxbhgu4qpoiwUDmwvIRPgBbRnMe1qD8aC-PTSkjlDnXkWgSw>
-    <xmx:0OVfaOAxrebK7kEQdCNYoEObvZ-L59m3Fx8HWYkwL8qsJMVEKu0Plg>
-    <xmx:0eVfaF7w_PdxAKsDFgssYPR2_1iTvStr8h-XPXYl7R-a5m1PQ0OO4vW5>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 Jun 2025 08:53:36 -0400 (EDT)
-Received: by sf.qyliss.net (Postfix, from userid 1000)
-	id 2320626426AEC; Sat, 28 Jun 2025 14:53:35 +0200 (CEST)
-Date: Sat, 28 Jun 2025 14:53:35 +0200
-From: Alyssa Ross <hi@alyssa.is>
-To: regressions@lists.linux.dev
-Cc: linux-usb@vger.kernel.org, bugzilla-daemon@kernel.org
-Subject: Re: [Bug 220284] New: USB4 / Thunderbolt not working after boot
- until thunderbolt module is reloaded
-Message-ID: <gsq43mj473w7osdxpfwuvk5mmef63oc2t3mjem43lb2zmdzzo5@3i6x5pnodszg>
+	s=arc-20240116; t=1751115223; c=relaxed/simple;
+	bh=rzh9b9OkOaL/E3WRwRbPug0TpQXISjZzdR/0LcuW6nI=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ANlnuRB3tJXlpnnrouQAlcorLclpc8xzM1ljQ5/OEZdWR9hFL/XnQi3uru/XfmQhbh7ZADjbL0uljlf8lqGJ9kVWDaQQdhEGfVuEcAuvF3SlZDza32MozQ7kAp19z9VnZjoH8OTlsI9Hzmq/VYZfet/X+1Ze3Mc7LE7+7y7bbAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvjcwQqK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AC5DC4CEEA
+	for <linux-usb@vger.kernel.org>; Sat, 28 Jun 2025 12:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751115223;
+	bh=rzh9b9OkOaL/E3WRwRbPug0TpQXISjZzdR/0LcuW6nI=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=GvjcwQqK4eDn0Pn8sUP7kSMOfmzhebCPzcxtkKWbHuR1rRPga/WY2VoZu+OVmvpvZ
+	 PnreKDXgHKjl8Lnh/0gJuePg/EnEjI0mtp0flVlioSF2qByuB/rUEzzuTEbBpagJly
+	 EXKbWEIiUtX8ZwCN/HDPkvTNDBnYmaloM/5TekZf5wsNhJ98iJ2PoFH7lUzJR4+ysY
+	 +7oVQ01womDNjBQIfqW65IhpkKL3Xlf2yzSgM2Lo9YLFW7nvYVWXxWnC4Z7PKGPDcU
+	 /Q8AZD3k1NoAGLyl/icQiFYMPbur0kFGaSAdte8aENVZsA8zWyaE5e+kejaijCMVoU
+	 f4cQsD3ulKd4w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id EE22AC3279F; Sat, 28 Jun 2025 12:53:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220284] USB4 / Thunderbolt not working after boot until
+ thunderbolt module is reloaded
+Date: Sat, 28 Jun 2025 12:53:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hi@alyssa.is
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220284-208809-5JsQn6bWzA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220284-208809@https.bugzilla.kernel.org/>
 References: <bug-220284-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="55jbroev6njdmhfc"
-Content-Disposition: inline
-In-Reply-To: <bug-220284-208809@https.bugzilla.kernel.org/>
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
 
---55jbroev6njdmhfc
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [Bug 220284] New: USB4 / Thunderbolt not working after boot
- until thunderbolt module is reloaded
-MIME-Version: 1.0
-
+--- Comment #1 from Alyssa Ross (hi@alyssa.is) ---
 On Fri, Jun 27, 2025 at 05:29:56PM +0000, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=220284
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
 >
 >             Bug ID: 220284
 >            Summary: USB4 / Thunderbolt not working after boot until
@@ -133,15 +102,20 @@ On Fri, Jun 27, 2025 at 05:29:56PM +0000, bugzilla-daemon@kernel.org wrote:
 > Laptop: Lenovo ThinkPad T14s Gen 4, model 21F8CTO1WW (AMD)
 >
 >
-> When upgrading from 6.15.2 to 6.15.3 my ThinkPad Thunderbolt 4 Dock stopped
-> working, giving basically no signs of life even when unplugged and replugged.
-> It doesn't start working again until the thunderbolt module is unloaded and
-> reloaded while the dock is still connected. If I unload and reload while the
+> When upgrading from 6.15.2 to 6.15.3 my ThinkPad Thunderbolt 4 Dock stopp=
+ed
+> working, giving basically no signs of life even when unplugged and replug=
+ged.
+> It doesn't start working again until the thunderbolt module is unloaded a=
+nd
+> reloaded while the dock is still connected. If I unload and reload while =
+the
 > dock is disconnected, nothing happens.
 >
 > When booting, I can also see
 >
-> thunderbolt 0000:c5:00.6: probe with driver thunderbolt failed with error -110
+> thunderbolt 0000:c5:00.6: probe with driver thunderbolt failed with error
+> -110
 >
 > in the log, which wasn't printed with prior kernels.
 >
@@ -150,20 +124,14 @@ On Fri, Jun 27, 2025 at 05:29:56PM +0000, bugzilla-daemon@kernel.org wrote:
 > The issue persist with 6.15.4.
 
 #regzbot introduced v6.15.2..v6.15.3 ^
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=220284
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
 #regzbot link: https://github.com/NixOS/nixpkgs/issues/420730
-#regzbot title USB4 / Thunderbolt not working after boot until thunderbolt module is reloaded
+#regzbot title USB4 / Thunderbolt not working after boot until thunderbolt
+module is reloaded
 
---55jbroev6njdmhfc
-Content-Type: application/pgp-signature; name="signature.asc"
+--=20
+You may reply to this email to add a comment.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRV/neXydHjZma5XLJbRZGEIw/wogUCaF/lzQAKCRBbRZGEIw/w
-ooP5AQDlE1/5JkjToRXOkSzQFfWr4k7eMvlAef06EyF5TM1xaQEA+mVJtTeNSOLT
-G/XoNJuqFy5BCYxpNJtRKt/I8Lh8yww=
-=7tOh
------END PGP SIGNATURE-----
-
---55jbroev6njdmhfc--
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
