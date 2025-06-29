@@ -1,117 +1,110 @@
-Return-Path: <linux-usb+bounces-25241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9509AECCE6
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 15:33:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B18AECDB7
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 16:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCAF4189682E
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 13:34:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2C167A1AF5
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 14:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB1522259B;
-	Sun, 29 Jun 2025 13:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489AC21A443;
+	Sun, 29 Jun 2025 14:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="CZDfRdZN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCgG09Q8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B36C78F2E
-	for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 13:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C178AEEAA
+	for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 14:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751204018; cv=none; b=ZnAbg9MiRPRkkYEMM/y64CKnJHqe83gSu8+/fnw6kwkXnS2qTlX2guImRgqdEvaKNQl5uG4O3EcVQggkCieLviUfebgmBtZPHujXAvljinmx6x7owVzJCW8bcTEpQ9D0Ahw0SrEa5tpwiQ4SJURAPloShah7hASTsMPxpdqElSY=
+	t=1751206794; cv=none; b=gTCYCm8BzmUOReZD4vqlCsPkDGi0YzT3pXPmmn67ko7eQ/hZZweRKVGNmMuigQOosVuo7JFYFIhmxTsHM6sfdsanZ9QIcY7i/MhhRQWBWTHS2K/RjfjTuwmEMFcavIJB9g1e1hDbQsmlc58USL1MHrj0+rcekX+nd23qGIPjeY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751204018; c=relaxed/simple;
-	bh=Im7fHsFArK/1tFdJMR16F4bXojfNIYbHDtzJEM1VqZ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJ7AONfyLutXnWT5QRHzG9bE2b0gshQo+ZLb8ENJBIidlhGUT/ykdlv9NjhdIjGWuJFw6a1TApNaIcu4eb8TVvY2oQ5lt+3tCv26z6posC2+Kx2dBwUe/SUkOdQjkLyvsURWYgAEwhY2pcCrUAXPLfdNvZXcHlWTKNahVjQ1nUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=CZDfRdZN; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4a43d2d5569so18060431cf.0
-        for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 06:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1751204015; x=1751808815; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Embj1Fy2DJouvQ91VRCrgqeiZxMI64cyuUrY1sXvYvw=;
-        b=CZDfRdZN2A95SQSZVsuAWImwF9/7gR81ahHop1sadT9ha3dUnRuwtpmrnJan4lPVTC
-         IhtNNYjK33ERpEIQPzMmBivYpRQKR/BTz/oPWrwgY7OBdFSYHCqv8TItTUpFa0GbeqSN
-         2WyAX7suNJYmo6adFrrjDw1VZtC/QDsrTtRV1Q3SU1e539hKMOvqz8PAqOZjUz1gtiXA
-         ALhhyhzi7J56IMwFh2mLqxXc/UP3QGTFskj3vk6vvIIaeVRGZ638y47AUzHtSY971eAA
-         weIWs6HFf6Z8qddhn4YgYzrxt5Vj3pdil/AxJJhCRPciAHx+53k72tdAA8DSAqPpCERM
-         wdUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751204015; x=1751808815;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Embj1Fy2DJouvQ91VRCrgqeiZxMI64cyuUrY1sXvYvw=;
-        b=tCZph5ZGGdb/zb+f7fuu4zlxDlJjotYmPdz+45xneHNWcdyHx4YcarS9eWOhYHc1vA
-         lh3LxmZcnWOUl14XhZeBKA4n81IZ0tt+EevZioo8L8vfyAdLVVVWlL65quXcEKtSV6/y
-         zQ4X1tc2+muP2TOrT/UoPdD3nS90BuSHB+SfpQ1VVXT8dkKzKTko/ASPJyXcsl6MZox1
-         FRKZEv4n+Mt+XfA5ziWfIq6ptIwN1QkmhjTrElmT0BKYMhSeCh1tlz+NkhL0yue4qf1+
-         W8dJHIkZh7yVB/9qYOrLqOJLzZ/jwvhpbGvgttrzO+G0ixu/M+rSaVYElUcl7iC0MfYi
-         u84A==
-X-Forwarded-Encrypted: i=1; AJvYcCXqyVMsU2s2Cng7fgjCTAVoExXKkvXF4x7jsGhLTyuhTlc8js+eTUvBhlOub56nBvpjxdtXsEf3O10=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3uMsO9GbqS+p2JI7K1AH4UwzpA4ZaXPptZPOsOiuhmvABWr0b
-	WC1cA58G0uDOW78v0jMRXDZp3C1JNV1jZZqnuTMe1d/Rsvdrf7GEMrZTdRGSZBgRzA==
-X-Gm-Gg: ASbGncs5LOF4ldSH1PwJguiWbKwjyyjafUXknd1lZYXRrwxPnqF3j+8ibyUeRJpoVlb
-	1cNue/NiEO2qJWHzPm4TXK5FEgkezQ7XvGli8AuBfxArG8G1Pki0Jkzej5BlgAVOFkyXBTwCppa
-	+g0OKIYlWvoHyWTI9KdJNEz+B4g5YVJCJ8Lvv4HG/TYf0kK7pJD6mAH+Can4rZtLoNhfGIJhpel
-	qCyQiDi3gEn8zYCzDQ7vBkhEDTnXn0X8VNeInIrlz75DC+vMJeG6UpNOTDBYZdiHfRH0pRnIIXO
-	eno9VyPem8xxxRIdoZNviKnQdmMUs9sAbP3GBAMwLD6UUnZbU8uJVn4+65MyOGY=
-X-Google-Smtp-Source: AGHT+IFkWV3qQJluABPlEDQqfcYO9N9MbOOl5fdQgXXCIVkXvMlt7C0IXV6g9l8Mna1o+i4IA+YrEg==
-X-Received: by 2002:a05:622a:2c9:b0:4a4:2d64:a7e4 with SMTP id d75a77b69052e-4a7fcaeecc0mr172064861cf.35.1751204015252;
-        Sun, 29 Jun 2025 06:33:35 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::76d8])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7fc5a3b92sm42853481cf.76.2025.06.29.06.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jun 2025 06:33:34 -0700 (PDT)
-Date: Sun, 29 Jun 2025 09:33:32 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Seungjin Bae <eeodqql09@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: m66592-udc: Ignore feature requests for EP0
-Message-ID: <cca54de8-db74-4df0-abfa-7275f8f2a8ac@rowland.harvard.edu>
-References: <20250629025951.17581-3-eeodqql09@gmail.com>
+	s=arc-20240116; t=1751206794; c=relaxed/simple;
+	bh=GzWZFW7yR2ucKSln5tpQ7PmR1veWd7qpGSUlMJZ88pI=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bJdRnukxBCuU4nK4ZlfuOsz61Y86OOziG+43t4BsTJ7lAyTURqmFjwZPIZMkKk0TuQol0bnkC4Rgn7tjzlSa6IDPA+OJ/bb6lVpxPaHmt/BGsQhKvDrsMb8R6+vFx5nGLvhtjlTsvbC8Bq3S5/gRwXn4MwGUENS181ChrF+Fbow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCgG09Q8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B1C0C4CEF0
+	for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 14:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751206794;
+	bh=GzWZFW7yR2ucKSln5tpQ7PmR1veWd7qpGSUlMJZ88pI=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=dCgG09Q8ZGSMHUvmXrCV2zpwp9jsY0pVFGbrGlWup+stGoEzyJv3bOq4IniOZ4QBB
+	 MlzOmyJ5wfWoZiU3p655Bxf6UCe20vfTFlguRu6X094f/YqPGvR7+Y6zmfO6Df/2Wz
+	 Pclioz1s9cv7LZFQwg1bJb2iE6x6h6impMcP3FnUVSOE9F/S1xDXLA/0x3+8w38ByD
+	 FKCsa+R59carbfyKjk3xguNODII/HN/s4BvJeCusJTmPhMQ0dn9Y3TKKn8OCEXDJiU
+	 cO4R4EGD9YmI0+ZYjwqYDWbuF/nQemrS+0B1y5rVSUjHH8fOeT/VsIdxqdDjVx3FY4
+	 2QoeYWPnrf1vQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4845EC433E1; Sun, 29 Jun 2025 14:19:54 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220272] Latent race condition in USB code unveiled with
+ optimized memset_64.S
+Date: Sun, 29 Jun 2025 14:19:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220272-208809-xVYCIZm2JO@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
+References: <bug-220272-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250629025951.17581-3-eeodqql09@gmail.com>
 
-On Sat, Jun 28, 2025 at 10:59:53PM -0400, Seungjin Bae wrote:
-> The `set_feature() and clear_feature() functions handle requests to set or clear the ENDPOINT_HALT feature.
-> Currently, these requests are processed for any endpoint, including the control endpoint (EP0).
-> 
-> The ENDPOINT_HALT feature is not defined for control endpoints according to the USB specification 9.4.5.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
-Actually that's not correct.  What the spec says is:
+--- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
+At the moment there's no way to know where the real problem lies.  It could=
+ be
+something wrong with your new memset code; it could be something wrong in t=
+he
+USB drivers; it even could be something wrong with the mouse itself.
 
-	It is neither required nor recommended that the Halt feature be 
-	implemented for the Default Control Pipe. However, devices may 
-	set the Halt feature of the Default Control Pipe in order to 
-	reflect a functional error condition. If the feature is set to 
-	one, the device will return STALL in the Data and Status stages 
-	of each standard request to the pipe except GetStatus(), 
-	SetFeature(), and ClearFeature() requests. The device need not 
-	return STALL for class-specific and vendor-specific requests.
+The only way to find out more is to record what happens when the mouse fail=
+s to
+work.  But doing that requires you either to issue commands before the prob=
+lem
+starts (that is, while the system is booting -- which can't be done) or els=
+e to
+use special (and expensive!) hardware to monitor the signals on the USB cab=
+le.
 
-Thus, it is valid for devices to support the ENDPOINT_HALT feature for 
-control endpoints.
+If you can come up with a way to cause a failure that involves plugging in =
+the
+mouse cable after the system is running, then we would have some hope.  But
+otherwise I'm afraid there's not much to try, other than guessing at possib=
+le
+solutions.
 
-Alan Stern
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
