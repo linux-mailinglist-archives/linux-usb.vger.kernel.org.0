@@ -1,375 +1,197 @@
-Return-Path: <linux-usb+bounces-25251-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25252-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9D0AECF52
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 19:51:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973E3AECF58
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 19:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 717C117309A
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 17:51:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A42293A79C8
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 17:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2501238143;
-	Sun, 29 Jun 2025 17:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3322367B9;
+	Sun, 29 Jun 2025 17:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iIQ1cyqn"
+	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="f5j4E4oj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YppB/KH0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9908C2576;
-	Sun, 29 Jun 2025 17:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1427C235074;
+	Sun, 29 Jun 2025 17:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751219473; cv=none; b=rRfkirOxFQ8ih8SdbM3tJyQdKA+np3RkSWXfeptMHGWeU5e9ONbfpBAvemGCyWbOou3FidcWU+AAGuhMB31srZHVGMFH9cnAUEh/knLS5n9xCIieFkLlqKUOY6KCJgFdRT39rghsMhW8JhpjM5e9xrnuWZGKQqjsbN9riubrV1M=
+	t=1751219569; cv=none; b=ENHEwxIAHmjNEtk8Cn6uPH53mb8uWFQN0WwbLE8rzeTHcbuWjH5zeILaHUFZqwIenfVTc6v2c/4dCoaoBrGz239VylVEuG6QQB3z2Dl2hpspQcbiDuFjH2Ww0aUY1/oTfC50xTyTVaIGyZGkes92o4EIRE4Ml32ZprOxNWn0ACE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751219473; c=relaxed/simple;
-	bh=2zTrY0TOKhOB0p6IOz/CNCGwyOObgFpK0NbXlzS4VVE=;
+	s=arc-20240116; t=1751219569; c=relaxed/simple;
+	bh=Jh3m77P3PQ/B7E+ACnzpZWeLOCGladQ4T7buUTuFBEQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EKWhZopwkvZZKSvMH/qe46kUqt/e24CjrYPKqiLra1ilx2ksORHq2mkuqeRxwN+GWccMu9yhMfsxHbFcvhOvgIVFAl8W955jagclTW5hnZZm+WuOVN7B0Mr9YNFSNr1qopC5CpwjNSa4kdIusMbo3abchi4++76c/FOZghEWfDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=iIQ1cyqn; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id A232616D7;
-	Sun, 29 Jun 2025 19:50:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1751219448;
-	bh=2zTrY0TOKhOB0p6IOz/CNCGwyOObgFpK0NbXlzS4VVE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iIQ1cyqnBtxYMgCxNg+Rzz1a6DNB43ASSP52RHveqItQMMe9cKTjmjcGfcyh5IixQ
-	 QHwZfw2jK3+WoUbP1tKv6Ha+ibrZ54fUv8k03rphS/tju1B+tFeZk/Zf9GhWEd+u1O
-	 /b6+kNvsFfuIYP+qT3bAsvSCrOJQfcG28h3wsRYI=
-Date: Sun, 29 Jun 2025 20:50:45 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 08/12] media: uvcvideo: Add support for
- V4L2_CID_CAMERA_ORIENTATION
-Message-ID: <20250629175045.GC6260@pendragon.ideasonboard.com>
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-8-5710f9d030aa@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fkjVs/neP3CoaenbAzN+I0HbunribfE2qzVl5/DDL6IrDPexw+lVmqNeiYhgj/7wImbe8RnwtvVQ/A4XdjYToJEvJHiOiOOD9LUGjWOEYTt4/dsyFz826vblCseDeTo5xURThDeJrVJH9quy0ayJmF+J7t3gvGL11XqgA7nF2n4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=f5j4E4oj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YppB/KH0; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B10927A007D;
+	Sun, 29 Jun 2025 13:52:44 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Sun, 29 Jun 2025 13:52:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1751219564; x=1751305964; bh=sTmHH/giVf
+	oxCmMF/goE2epW2Hw/LB/RMXLl9DOR2ro=; b=f5j4E4ojW2SFu3kpWV7gWwrIgb
+	XKy57GGZwWPIFPG3XB87e79r12RVIbQFAb/13M0L/wAmYZiSnTei6HWcmz6ret+Q
+	w3DjDxc/spcBglS8RKWZiTiVpIC9GITUs3wnSe/Mm7OElnVsNf91GFOP+VzHsuDw
+	Z9Z+7mfGJtOqj2Rgy4Wq2mM3Wz7YT6uqQDdnXcKezsdYmOdNDIL2h9jM1O4d1dxB
+	ZjY4E4FXJMZRhDWw7aoaPnRZP3gCD0UM/71KNtKEtxIiqAqjl9+Pw/DHVgXYT7hD
+	J+6GsN5jKNUNFJAK4sXfxIyZu34k2lL1M4hxF5jfVGwY3U6xqwNr0Y2PbXNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1751219564; x=1751305964; bh=sTmHH/giVfoxCmMF/goE2epW2Hw/LB/RMXL
+	l9DOR2ro=; b=YppB/KH0N+LG4+Cg78UnNp5bnpZJf08Rfw+ec+2j++kJL/NTFIa
+	+7ED9nXU8DZKbKlASMuxjmr7FAJYF5U12kzsu7ttxNCS0blJUEhSYWUVsHPTJIEs
+	shFSpJFZpHzoFCXiClddgYzirvkmmj10/ws+WGlo51eCCb6vgfZZRHWocfpj61Nv
+	CWcW1FLSyHqCLBvWTefjyFrD0FRK2ZdKDNu8AstO25JBG32AIhHPs6AhOYZaoPVu
+	ggqvBRZ7i3ye3N611q22AaM0lggGCRlkbG0DEd54DluFhLkq0N3ZPc+eBpFlhaXL
+	sJNkpLXtOIP4CWHQKbp3VM9vlqsx/PSCPdQ==
+X-ME-Sender: <xms:a31haKBd75CUdoCH8koM-xwpb-h3Yb6jja09aIa11AxcYdU01TNnfA>
+    <xme:a31haEi5fhuSCbKro6klStF3QSFHvfyFMbHzaPgwq_myh-mQcl9OeIdalwngADwCJ
+    HhSyiX01b2yAaYI4A>
+X-ME-Received: <xmr:a31haNnrK8Vh-2DRb2f5BMuxqj5DJCesWeNCD_cMTbM1llQcbPEUujD50B5lr87v4HhHGZmLwdDR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvfevuffkfhggtggujgesghdtsfertddtjeenucfhrhhomheptehlhihsshgrucft
+    ohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepledvvdejke
+    efhfegteeuuddvgfduueetgfevffetudehvddvgeehueetgeegtefgnecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihshhsrgdrihhspdhnsggp
+    rhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhgrrhhioh
+    drlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopeihvghhvgiikhgv
+    lhhshhgssehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrvggrshdrnhhovghvvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhimhdrlhhinhgusggvrhhgvghrsehg
+    mhgrihhlrdgtohhmpdhrtghpthhtohepmhhitghhrggvlhdrjhgrmhgvthesihhnthgvlh
+    drtghomhdprhgtphhtthhopehrrghjrghtrdhkhhgrnhguvghlfigrlhesihhnthgvlhdr
+    tghomhdprhgtphhtthhopehsrghshhgrlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    epshhuphgvrhhmudeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfigvshhtvghrihes
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:a31haIzNh0j_ejP-AvfP2DrnDp7KEuBkQREksGHKEoYaeydumDwFmg>
+    <xmx:a31haPQQ0gVd7zIou7hz8RCvRDASd2D9VE_FDeE9gLdkoK41Wyf12g>
+    <xmx:a31haDYMg-9eBAadpIg6DmdFXx7sEoN6d2JO6PpJRC37Lg3USvQ5zg>
+    <xmx:a31haIRIKkB5lw3tCcd5pLrIlOF6hStTBq-z9I42iLyGcfmU0c2L5A>
+    <xmx:bH1haCH8zel9jedTIdbMr8AZ6V4WqPeFXyazB_QDA7tASwDRRoW-VFrO>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 29 Jun 2025 13:52:43 -0400 (EDT)
+Received: by mbp.qyliss.net (Postfix, from userid 1000)
+	id E5C02C2C24F; Sun, 29 Jun 2025 19:52:41 +0200 (CEST)
+Date: Sun, 29 Jun 2025 19:52:41 +0200
+From: Alyssa Ross <hi@alyssa.is>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: mario.limonciello@amd.com, andreas.noever@gmail.com, 
+	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com, 
+	rajat.khandelwal@intel.com, mika.westerberg@linux.intel.com, linux-usb@vger.kernel.org, 
+	regressions@lists.linux.dev, kim.lindberger@gmail.com, linux@lunaa.ch, 
+	Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
+Message-ID: <cavyeum32dd7kxj65argtem6xh2575oq3gcv3svd3ubnvdc6cr@6nv7ieimfc5e>
+References: <20250411151446.4121877-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3u3w6kzefk6kcdxr"
 Content-Disposition: inline
-In-Reply-To: <20250605-uvc-orientation-v2-8-5710f9d030aa@chromium.org>
+In-Reply-To: <20250411151446.4121877-1-superm1@kernel.org>
 
-Hi Ricardo,
 
-On Thu, Jun 05, 2025 at 05:53:01PM +0000, Ricardo Ribalda wrote:
-> Fetch the orientation from the fwnode and map it into a control.
-> 
-> The uvc driver does not use the media controller, so we need to create a
-> virtual entity, like we previously did with the external gpio.
-> 
-> We do not re-purpose the external gpio entity because its is planned to
-> remove it.
+--3u3w6kzefk6kcdxr
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
+MIME-Version: 1.0
 
-Comparing the GUIDs for the EXT_GPIO_CONTROLLER and SWENTITY, we have
+On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
+> on USB4 ports") introduced a sysfs file to control wake up policy
+> for a given USB4 port that defaulted to disabled.
+>
+> However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
+> on connect and disconnect over suspend") I found that it was working
+> even without making changes to the power/wakeup file (which defaults
+> to disabled). This is because of a logic error doing a bitwise or
+> of the wake-on-connect flag with device_may_wakeup() which should
+> have been a logical AND.
+>
+> Adjust the logic so that policy is only applied when wakeup is
+> actually enabled.
+>
+> Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB=
+4 ports")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-#define UVC_GUID_EXT_GPIO_CONTROLLER \
-	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-#define UVC_GUID_SWENTITY \
-	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x04}
+Hi! There have been a couple of reports of a Thunderbolt regression in
+recent stable kernels, and one reporter has now bisected it to this
+change:
 
-The GUIDs don't carry any special meaning in their values. I agree with
-the plan to drop the existing features of the GPIO entity, but wouldn't
-it be easier to rename UVC_GUID_EXT_GPIO_CONTROLLER to UVC_GUID_SWENTITY
-and UVC_EXT_GPIO_UNIT* to UVC_SWENTITY_UNIT* (the macros are not exposed
-to userspace), and later drop the existing GPIO controls from the entity
-?
+ =E2=80=A2 https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
+ =E2=80=A2 https://github.com/NixOS/nixpkgs/issues/420730
 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Both reporters are CCed, and say it starts working after the module is
+reloaded.
+
+Link: https://lore.kernel.org/r/bug-220284-208809@https.bugzilla.kernel.org=
+%2F/
+(for regzbot)
+
 > ---
->  drivers/media/usb/uvc/Makefile       |  3 +-
->  drivers/media/usb/uvc/uvc_ctrl.c     | 21 +++++++++++
->  drivers/media/usb/uvc/uvc_driver.c   | 14 +++++--
->  drivers/media/usb/uvc/uvc_entity.c   |  1 +
->  drivers/media/usb/uvc/uvc_swentity.c | 73 ++++++++++++++++++++++++++++++++++++
->  drivers/media/usb/uvc/uvcvideo.h     | 14 +++++++
->  include/linux/usb/uvc.h              |  3 ++
->  7 files changed, 125 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/Makefile b/drivers/media/usb/uvc/Makefile
-> index 4f9eee4f81ab6436a8b90324a688a149b2c3bcd1..b4398177c4bb0a9bd49dfd4ca7f2e933b4a1d7df 100644
-> --- a/drivers/media/usb/uvc/Makefile
-> +++ b/drivers/media/usb/uvc/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  uvcvideo-objs  := uvc_driver.o uvc_queue.o uvc_v4l2.o uvc_video.o uvc_ctrl.o \
-> -		  uvc_status.o uvc_isight.o uvc_debugfs.o uvc_metadata.o
-> +		  uvc_status.o uvc_isight.o uvc_debugfs.o uvc_metadata.o \
-> +		  uvc_swentity.o
->  ifeq ($(CONFIG_MEDIA_CONTROLLER),y)
->  uvcvideo-objs  += uvc_entity.o
->  endif
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index 47e8ccc39234d1769384b55539a21df07f3d57c7..b2768080c08aafa85acb9b7f318672c043d84e55 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -376,6 +376,13 @@ static const struct uvc_control_info uvc_ctrls[] = {
->  				| UVC_CTRL_FLAG_GET_DEF
->  				| UVC_CTRL_FLAG_AUTO_UPDATE,
->  	},
-> +	{
-> +		.entity		= UVC_GUID_SWENTITY,
-> +		.selector	= 0,
-> +		.index		= 0,
-> +		.size		= 1,
-> +		.flags		= UVC_CTRL_FLAG_GET_CUR,
-> +	},
->  };
->  
->  static const u32 uvc_control_classes[] = {
-> @@ -975,6 +982,17 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
->  		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
->  		.name		= "Region of Interest Auto Ctrls",
->  	},
-> +	{
-> +		.id		= V4L2_CID_CAMERA_ORIENTATION,
-> +		.entity		= UVC_GUID_SWENTITY,
-> +		.selector	= 0,
-> +		.size		= 8,
-> +		.offset		= 0,
-> +		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
-> +		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-> +		.menu_mask	= GENMASK(V4L2_CAMERA_ORIENTATION_EXTERNAL,
-> +					  V4L2_CAMERA_ORIENTATION_FRONT),
-> +	},
->  };
->  
->  /* ------------------------------------------------------------------------
-> @@ -3210,6 +3228,9 @@ static int uvc_ctrl_init_chain(struct uvc_video_chain *chain)
->  		} else if (UVC_ENTITY_TYPE(entity) == UVC_EXT_GPIO_UNIT) {
->  			bmControls = entity->gpio.bmControls;
->  			bControlSize = entity->gpio.bControlSize;
-> +		} else if (UVC_ENTITY_TYPE(entity) == UVC_SWENTITY_UNIT) {
-> +			bmControls = entity->swentity.bmControls;
-> +			bControlSize = entity->swentity.bControlSize;
->  		}
->  
->  		/* Remove bogus/blacklisted controls */
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index bcc97f71fa1703aea1119469fb32659c17d9409a..96eeb3aee546487d15f3c30dfe1775189ddf7e47 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -1869,11 +1869,15 @@ static int uvc_scan_device(struct uvc_device *dev)
->  		return -1;
->  	}
->  
-> -	/* Add GPIO entity to the first chain. */
-> -	if (dev->gpio_unit) {
-> +	/* Add virtual entities to the first chain. */
-> +	if (dev->gpio_unit || dev->swentity_unit) {
->  		chain = list_first_entry(&dev->chains,
->  					 struct uvc_video_chain, list);
-> -		list_add_tail(&dev->gpio_unit->chain, &chain->entities);
-> +		if (dev->gpio_unit)
-> +			list_add_tail(&dev->gpio_unit->chain, &chain->entities);
-> +		if (dev->swentity_unit)
-> +			list_add_tail(&dev->swentity_unit->chain,
-> +				      &chain->entities);
->  	}
->  
->  	return 0;
-> @@ -2249,6 +2253,10 @@ static int uvc_probe(struct usb_interface *intf,
->  	if (ret < 0)
->  		goto error;
->  
-> +	ret = uvc_swentity_init(dev);
-> +	if (ret < 0)
-> +		goto error;
-> +
->  	dev_info(&dev->udev->dev, "Found UVC %u.%02x device %s (%04x:%04x)\n",
->  		 dev->uvc_version >> 8, dev->uvc_version & 0xff,
->  		 udev->product ? udev->product : "<unnamed>",
-> diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-> index cc68dd24eb42dce5b2846ca52a8dfa499c8aed96..d1a652ef35ec34801bd39a5124b834edf838a79e 100644
-> --- a/drivers/media/usb/uvc/uvc_entity.c
-> +++ b/drivers/media/usb/uvc/uvc_entity.c
-> @@ -106,6 +106,7 @@ static int uvc_mc_init_entity(struct uvc_video_chain *chain,
->  		case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
->  		case UVC_EXTERNAL_VENDOR_SPECIFIC:
->  		case UVC_EXT_GPIO_UNIT:
-> +		case UVC_SWENTITY_UNIT:
->  		default:
->  			function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
->  			break;
-> diff --git a/drivers/media/usb/uvc/uvc_swentity.c b/drivers/media/usb/uvc/uvc_swentity.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..702a2c26e029a0655dade177ed2a9b88d7a4136d
-> --- /dev/null
-> +++ b/drivers/media/usb/uvc/uvc_swentity.c
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *      uvc_swentity.c  --  USB Video Class driver
-> + *
-> + *      Copyright 2025 Google LLC
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/usb/uvc.h>
-> +#include <media/v4l2-fwnode.h>
-> +#include "uvcvideo.h"
+>  drivers/thunderbolt/usb4.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+> index e51d01671d8e7..3e96f1afd4268 100644
+> --- a/drivers/thunderbolt/usb4.c
+> +++ b/drivers/thunderbolt/usb4.c
+> @@ -440,10 +440,10 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsi=
+gned int flags)
+>  			bool configured =3D val & PORT_CS_19_PC;
+>  			usb4 =3D port->usb4;
+>
+> -			if (((flags & TB_WAKE_ON_CONNECT) |
+> +			if (((flags & TB_WAKE_ON_CONNECT) &&
+>  			      device_may_wakeup(&usb4->dev)) && !configured)
+>  				val |=3D PORT_CS_19_WOC;
+> -			if (((flags & TB_WAKE_ON_DISCONNECT) |
+> +			if (((flags & TB_WAKE_ON_DISCONNECT) &&
+>  			      device_may_wakeup(&usb4->dev)) && configured)
+>  				val |=3D PORT_CS_19_WOD;
+>  			if ((flags & TB_WAKE_ON_USB4) && configured)
+> --
+> 2.43.0
+>
 
-Blank lines between header groups would be nice.
+--3u3w6kzefk6kcdxr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +
-> +static int uvc_swentity_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
-> +				u8 cs, void *data, u16 size)
-> +{
-> +	if (size < 1)
-> +		return -EINVAL;
-> +
-> +	switch (entity->swentity.props.orientation) {
-> +	case V4L2_FWNODE_ORIENTATION_FRONT:
-> +		*(u8 *)data = V4L2_CAMERA_ORIENTATION_FRONT;
-> +		break;
-> +	case V4L2_FWNODE_ORIENTATION_BACK:
-> +		*(u8 *)data = V4L2_CAMERA_ORIENTATION_BACK;
-> +		break;
-> +	default:
-> +		*(u8 *)data = V4L2_CAMERA_ORIENTATION_EXTERNAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int uvc_swentity_get_info(struct uvc_device *dev,
-> +				 struct uvc_entity *entity, u8 cs, u8 *caps)
-> +{
-> +	*caps = UVC_CONTROL_CAP_GET;
-> +	return 0;
-> +}
-> +
-> +int uvc_swentity_init(struct uvc_device *dev)
-> +{
-> +	static const u8 uvc_swentity_guid[] = UVC_GUID_SWENTITY;
-> +	struct v4l2_fwnode_device_properties props;
-> +	struct uvc_entity *unit;
-> +	int ret;
-> +
-> +	ret = v4l2_fwnode_device_parse(&dev->udev->dev, &props);
-> +	if (ret)
-> +		return dev_err_probe(&dev->intf->dev, ret,
-> +				     "Can't parse fwnode\n");
-> +
-> +	if (props.orientation == V4L2_FWNODE_PROPERTY_UNSET)
-> +		return 0;
-> +
-> +	unit = uvc_alloc_entity(UVC_SWENTITY_UNIT, UVC_SWENTITY_UNIT_ID, 0, 1);
-> +	if (!unit)
-> +		return -ENOMEM;
-> +
-> +	memcpy(unit->guid, uvc_swentity_guid, sizeof(unit->guid));
-> +	unit->swentity.props = props;
-> +	unit->swentity.bControlSize = 1;
-> +	unit->swentity.bmControls = (u8 *)unit + sizeof(*unit);
-> +	unit->swentity.bmControls[0] = 1;
-> +	unit->get_cur = uvc_swentity_get_cur;
-> +	unit->get_info = uvc_swentity_get_info;
-> +	strscpy(unit->name, "SWENTITY", sizeof(unit->name));
-> +
-> +	list_add_tail(&unit->list, &dev->entities);
-> +
-> +	dev->swentity_unit = unit;
-> +
-> +	return 0;
-> +}
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index dc23d8a97340dc4615d4182232d395106e6d9ed5..a931750bdea25b9062dcc7644bf5f2ed89c1cb4c 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -19,6 +19,7 @@
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-fh.h>
->  #include <media/videobuf2-v4l2.h>
-> +#include <media/v4l2-fwnode.h>
+-----BEGIN PGP SIGNATURE-----
 
-Alphabetical order.
+iHUEABYKAB0WIQRV/neXydHjZma5XLJbRZGEIw/wogUCaGF9ZwAKCRBbRZGEIw/w
+okxoAQDBclWigTvBxa6JKIkkt52I4sMh08AHziTd+wt3Sl2g8QEAp6S/3yciQUx2
+pXrMwDIZuq7mBlrT3HJOmOu+FOqI8AQ=
+=B+2Q
+-----END PGP SIGNATURE-----
 
->  
->  /* --------------------------------------------------------------------------
->   * UVC constants
-> @@ -41,6 +42,9 @@
->  #define UVC_EXT_GPIO_UNIT		0x7ffe
->  #define UVC_EXT_GPIO_UNIT_ID		0x100
->  
-> +#define UVC_SWENTITY_UNIT		0x7ffd
-> +#define UVC_SWENTITY_UNIT_ID		0x101
-> +
->  /* ------------------------------------------------------------------------
->   * Driver specific constants.
->   */
-> @@ -242,6 +246,12 @@ struct uvc_entity {
->  			int irq;
->  			bool initialized;
->  		} gpio;
-> +
-> +		struct {
-> +			u8  bControlSize;
-> +			u8  *bmControls;
-> +			struct v4l2_fwnode_device_properties props;
-> +		} swentity;
->  	};
->  
->  	u8 bNrInPins;
-> @@ -617,6 +627,7 @@ struct uvc_device {
->  	} async_ctrl;
->  
->  	struct uvc_entity *gpio_unit;
-> +	struct uvc_entity *swentity_unit;
->  };
->  
->  enum uvc_handle_state {
-> @@ -836,4 +847,7 @@ void uvc_debugfs_cleanup_stream(struct uvc_streaming *stream);
->  size_t uvc_video_stats_dump(struct uvc_streaming *stream, char *buf,
->  			    size_t size);
->  
-> +/* swentity */
-> +int uvc_swentity_init(struct uvc_device *dev);
-> +
->  #endif
-> diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-> index bce95153e5a65613a710d7316fc17cf5462b5bce..88a23e8919d1294da4308e0e3ca0eccdc66a318f 100644
-> --- a/include/linux/usb/uvc.h
-> +++ b/include/linux/usb/uvc.h
-> @@ -29,6 +29,9 @@
->  #define UVC_GUID_EXT_GPIO_CONTROLLER \
->  	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
->  	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-> +#define UVC_GUID_SWENTITY \
-> +	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-> +	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x04}
->  
->  #define UVC_GUID_FORMAT_MJPEG \
->  	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
-
--- 
-Regards,
-
-Laurent Pinchart
+--3u3w6kzefk6kcdxr--
 
