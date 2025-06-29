@@ -1,156 +1,91 @@
-Return-Path: <linux-usb+bounces-25239-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25240-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C81DEAECBDF
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 11:06:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60745AECC0F
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 12:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 114E53A7D20
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 09:06:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B0FB18975C9
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 10:04:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78BA2040AB;
-	Sun, 29 Jun 2025 09:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E141C217F23;
+	Sun, 29 Jun 2025 10:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ElY8OPti"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OOC3vpun"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23ADC1F92A;
-	Sun, 29 Jun 2025 09:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F13290F;
+	Sun, 29 Jun 2025 10:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751187990; cv=none; b=t16UUEqns4fMCiQi+DtFIVSVt3/EIgDttL+PbqXWyxTuPOMPq5ZMeZWk3fLkh9WbbXsdaPWl5PFsYhK8uc7MBQureIng0WJinnQlihzf2gzDCuDg1uCKLUNy39EZbJUo+Q6K8L2r25TVOIAQLmwq7MYOozvD9lrRB0242FhMaUs=
+	t=1751191428; cv=none; b=t7sEbUmoTmXQHxXm9TaiXYxRkEYH6ZhuqZLi87xb6ZPNcA6lEU5gi20gNa0TR39y5zQQ37qaPgWFWRCieoVyhLIxDvc8uSmgT6USJS0VhhEUVoVG6r6XCgkBGJ4dHkzIqZfgOvQNBk6Q70Qeqjthqhkx/9tze2nyIF2xp9EBTtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751187990; c=relaxed/simple;
-	bh=lnka/eXLTDEG4SqUaPbOnCW7lS33jxlI3sBID2bvuFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CEHNKacz+Iid9ZqRlwgeYOk76tmM0Gp+XeLb/0My3So7CzJXSqDM+CW6vtiDLrOxLgOKvlsWPf2BR4zriN9R7P3lPUBaQYxKRd/y2h2rcyUx0W5XypGHkNWwyDJgrmBDrtDN8eJ9TSbZlu7R2S5VvfFnl9soHeMyAcFHu1BihKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ElY8OPti; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2AAC4CEEB;
-	Sun, 29 Jun 2025 09:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751187989;
-	bh=lnka/eXLTDEG4SqUaPbOnCW7lS33jxlI3sBID2bvuFk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ElY8OPtitxm3taEQ9Tj4he47WqgCjToNtLRHLQqlaJRTnKvihAC/1Coo2+RGBRLbd
-	 g6JYe8WyTpDGgbYXkbFV5bnqIHtRCLQjJ64C75GKkh5HR3Mdmxy1a/JGtTSU+9Heo8
-	 I+/xK2A14O75Vf8z98m0o5sOxNeox8h9qEN0GH6w=
-Date: Sun, 29 Jun 2025 11:06:27 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: SCHNEIDER Johannes <johannes.schneider@leica-geosystems.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Simplify TRB reclaim logic by
- removing redundant 'chain' argument
-Message-ID: <2025062945-expose-veteran-3c35@gregkh>
-References: <20250621-dwc3-fix-gadget-mtp-v1-0-a45e6def71bb@leica-geosystems.com>
- <20250621-dwc3-fix-gadget-mtp-v1-2-a45e6def71bb@leica-geosystems.com>
- <20250623224340.oszkgwnhcjhnibaz@synopsys.com>
- <AM8PR06MB752168CCAF31023017025DD5BC7BA@AM8PR06MB7521.eurprd06.prod.outlook.com>
- <2025062825-equipment-barista-dabc@gregkh>
- <AM8PR06MB7521915A5FB0DDD1DA38BA3ABC47A@AM8PR06MB7521.eurprd06.prod.outlook.com>
+	s=arc-20240116; t=1751191428; c=relaxed/simple;
+	bh=Kufurcy3kv6d6lbIKqCuZZPoftTwGTTowyf/MgdKHbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TnZ7mIsn1WzSTF9w6oZ16aL4Zhe4H33QYMZBd+Ce2jLVBSSSCEKbgyZ5AWCja0sHnWqgTwJ0oSOOL7pjQX5xsqjzehM2hZmirNrgZQ4DPXhuhJsrzBrSKyraC4MHjMk1wrEMXPCMyAeT+xeOvt00QLGGY1cgkI0LQB3BF3Wo8yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OOC3vpun; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1CFC4CEEF;
+	Sun, 29 Jun 2025 10:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751191427;
+	bh=Kufurcy3kv6d6lbIKqCuZZPoftTwGTTowyf/MgdKHbI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OOC3vpunncVsCJldtj9dVlq4A/8iGzkZuVtu/S/Fy1hoo8VGwq9Jaa4nYGmt+oXbS
+	 r5lfD5tJdMpNb+cwTiXbdz88lquH1ExYl4q2d1iO5AkCeJpY8rPIywRm4/+PwYort7
+	 tQFAfUWYAnMiN5dIlpe3F6EF6F5lq8ZPzARXTtjl8V/WpjOWmHZx9LxLdmBAa/JpZ8
+	 XzPFloCf2ulul6jwzDsOtmd+w6lLl6+yJOyowG55qI5JsGZNTds5crHc2C7MYKmmjq
+	 2ozEjoT7062AX68scgfXXWsvbrRInNJipbIbLxkjDDm8SPdf6M8K7XSAF+iD1gyly+
+	 OVvQ6hx76b8Zw==
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: disable platform lowlevel hw resources during shutdown
+Date: Sun, 29 Jun 2025 17:46:55 +0800
+Message-ID: <20250629094655.747-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM8PR06MB7521915A5FB0DDD1DA38BA3ABC47A@AM8PR06MB7521.eurprd06.prod.outlook.com>
 
-On Sun, Jun 29, 2025 at 08:45:45AM +0000, SCHNEIDER Johannes wrote:
-> Hoi Greg,
-> 
-> 
-> > > Now that the TRB reclaim logic always inspects the TRB's CHN (Chain) bit
-> > > directly to determine whether a TRB is part of a chain, the explicit
-> > > 'chain' parameter passed into dwc3_gadget_ep_reclaim_completed_trb()
-> > > is no longer necessary.
-> > >
-> > > This cleanup simplifies the reclaim code by avoiding duplication of
-> > > chain state tracking, and makes the reclaim logic rely entirely on the
-> > > hardware descriptor flags — which are already present and accurate at
-> > > this stage.
-> > >
-> > > No functional changes intended.
-> > >
-> > > Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.com>
-> > > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > > ---
-> > > v3: no changes, re-submission as single patch
-> > > v2: no changes to the patch, "faulty" re-submission
-> > > v1: initial submission as part of a series
-> > > Link:
-> > >
-> > >  drivers/usb/dwc3/gadget.c | 8 ++++----
-> > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index 99fbd29d8f46..a4a2bf273f94 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -3497,7 +3497,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
-> > >
-> > >  static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
-> > >               struct dwc3_request *req, struct dwc3_trb *trb,
-> > > -             const struct dwc3_event_depevt *event, int status, int chain)
-> > > +             const struct dwc3_event_depevt *event, int status)
-> > >  {
-> > >       unsigned int            count;
-> > >
-> > > @@ -3549,7 +3549,8 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
-> > >       if ((trb->ctrl & DWC3_TRB_CTRL_HWO) && status != -ESHUTDOWN)
-> > >               return 1;
-> > >
-> > > -     if (event->status & DEPEVT_STATUS_SHORT && !chain)
-> > > +     if (event->status & DEPEVT_STATUS_SHORT &&
-> > > +         !(trb->ctrl & DWC3_TRB_CTRL_CHN))
-> > >               return 1;
-> > >
-> > >       if ((trb->ctrl & DWC3_TRB_CTRL_ISP_IMI) &&
-> > > @@ -3576,8 +3577,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
-> > >               trb = &dep->trb_pool[dep->trb_dequeue];
-> > >
-> > >               ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
-> > > -                             trb, event, status,
-> > > -                             !!(trb->ctrl & DWC3_TRB_CTRL_CHN));
-> > > +                             trb, event, status);
-> > >               if (ret)
-> > >                       break;
-> > >       }
-> > > --
-> > > 2.43.0
-> > >
-> > 
-> > Applying just this patch I get:
-> > 
-> >   CC [M]  drivers/usb/dwc3/gadget.o
-> > drivers/usb/dwc3/gadget.c: In function ‘dwc3_gadget_ep_reclaim_completed_trb’:
-> > drivers/usb/dwc3/gadget.c:3517:13: error: ‘chain’ undeclared (first use in this function)
-> >  3517 |         if (chain && (trb->ctrl & DWC3_TRB_CTRL_HWO))
-> >       |             ^~~~~
-> > drivers/usb/dwc3/gadget.c:3517:13: note: each undeclared identifier is reported only once for each function it appears in
-> > 
-> > So that's not going to work :(
-> > 
-> 
-> Oh - sorry! i shouldn't have pulled the initial series apart :-(
-> 
-> I'll re-submit both patches together as v4 (this time both with cc-stable)
-> ... without b4 to have a new mail tread
+On some SoC platforms, in shutdown stage, most components' power is cut
+off, but there's still power supply to the so called always-on
+domain, so if the dwc2's regulator is from the always-on domain, we
+need to explicitly disable it to save power.
 
-The first patch is already in my tree, I can't drop that, sorry.  Just
-resend this one on it's own please.
+Disable platform lowlevel hw resources such as phy, clock and
+regulators etc. in device shutdown hook to reduce non-necessary power
+consumption when the platform enters shutdown stage.
 
-thanks,
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ drivers/usb/dwc2/platform.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 12b4dc07d08a..3f83ecc9fc23 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -371,6 +371,9 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
+ 
+ 	dwc2_disable_global_interrupts(hsotg);
+ 	synchronize_irq(hsotg->irq);
++
++	if (hsotg->ll_hw_enabled)
++		dwc2_lowlevel_hw_disable(hsotg);
+ }
+ 
+ /**
+-- 
+2.49.0
+
 
