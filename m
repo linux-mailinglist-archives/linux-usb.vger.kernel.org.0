@@ -1,142 +1,178 @@
-Return-Path: <linux-usb+bounces-25259-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25260-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E0DAED16F
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 23:54:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A514AED1D3
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 01:39:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83E1D174791
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 21:54:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1B553B336F
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 23:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A36117A305;
-	Sun, 29 Jun 2025 21:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C30241680;
+	Sun, 29 Jun 2025 23:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBs4oQol"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZscVSics"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7648A241114;
-	Sun, 29 Jun 2025 21:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982FD237707;
+	Sun, 29 Jun 2025 23:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751234048; cv=none; b=tZiOxIvFSDkgKifI1Mefw/JKKhc8unASLcyH236RNJTQsce7BN+sNsvdHK3yYyFua/4ISD9ktFofTGZE4YWSg563SG+p3Z7k5Ajxqv56M2mNPR0V/tGWvGzt+eHqUeBFZ52zUjjEmCdMikZiY1ijHvYOxvQJ0k9mJ7gzUeuGD0U=
+	t=1751240393; cv=none; b=q+fTl/j9rDgJGd4USDwGZelY/966RroT7rhWxYdYse+3Eq7rFu/KdmWun/pDjZrrBotepWJu40tcFkC1JpWeKhnH96F357M+VJPVUQ0WFgdosoBTHoAFiBMlixEJmy/ci4Sy4vum/euS8Ldas26AtwREDjdeMHYBmHdAtbl9g1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751234048; c=relaxed/simple;
-	bh=yCwguoRkXNC0/cqyRSOcs/kGHQRYviQaus+cpwdd2Ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=irinnHwcR6uPhwhGIeSoVGSHxFcAvEvAx/V0lEFFqCiUlxGsoOi9yF+64JnmcMqJwG9It0E4zOrk0jdTn4bgBep7NJ+c981vMfV6YxqYrAHoj1XSeELGqgvmYzdFSyI/Eq6+Gg+9WWITIWqgcptfgypygNxUvXjCfUkASDTpGnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBs4oQol; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6fad4a1dc33so15023296d6.1;
-        Sun, 29 Jun 2025 14:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751234045; x=1751838845; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wSoc6um4fj9fbTNru0L559gFTCmIRL8yZh5n8pLuklM=;
-        b=kBs4oQolLkmz/RK4K18KQTaatSBu/HPKfg0sgLtCYXo3zqj+iW707b2EgOtGljWb+H
-         Dr6AzwjpjCiku1LKi+9EuCNYdDYIWl8pXoBpE50gQ/7cC+5NnREnSpMjKIwoX9hVkt6N
-         61ugffUNKXADigr61yokoUBjnEUGsn2zsIu5NQ7sacs0JLPKF9UzJKB5MnfeJVcCI35u
-         CxXrmN7E/UU1KHp+V24hytKdEGt9FPZnHuzygJIsz+nJ5dvX6hNfzg02jHOBvp72Q5ZG
-         T4rBqcklpa8xMlYpfjxrvvqwCDLPlCa4vTsO3ZYuFmU3dbLUCJNrFxKCJB1fVOKVddM1
-         o7ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751234045; x=1751838845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wSoc6um4fj9fbTNru0L559gFTCmIRL8yZh5n8pLuklM=;
-        b=fOIMSovlPHpfv1f2tx4xAUePsPA9gkuA+mcl+FXlNLKUuZp7RGkZ+T2URpt10jjpso
-         CW3EsLZL24hVSLvuVgUNUxircvADbBoiXU0SGrKk2nYUgzIm9xpUaeaYSJzuNjTzVwEO
-         OMZh83ey3MIm8PsoL4eNOS6zH7p7XZo7h2EqbSATzkGvtaPwAipUF6LFTWcFQvqCEG+/
-         elT/lXSjHBc367e3LYRIs9FC4DOgyy6o1TDi41dspAQC0nX81tV2MfBXj2Zmyl4PO/iH
-         ifqYJnEb8fO2lX2FZv3liJE67dZkP8GcJsJHQgI1a8dC3gmoTGfPuS0NW8V6LaGk3/0Z
-         Jh4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVaPHHmfDoCxlI5Yxyl9jjq2IxLxbgEk1KRyTYFdvgfeyMra5TDdITbr8wZcX+a4PpQiTgMfuZ3@vger.kernel.org, AJvYcCWFM+7StfYkajjqRPSCGo2xwKU4GGRn0joAC61q+YI3HffkdOxJ98ctOPtE2Rkx3bkJbNnHem5gPKDLFGM=@vger.kernel.org, AJvYcCWlyGlnLKGam1w7ZT6uyhwaEGpYrRftUQORV7tPbVqEQLl+aAdkgR587MvOu8UW+ggNiydVm3SxkKT5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/+MluhWSR6xQQalga8BfuAH2CuHWsRITsUeJuvQPWr+P0ygwc
-	BxSFwZjtVy3++paCjGBbu68isx6Pd5TUmKk/YUKy2A1XYd0DcNgRuVKt
-X-Gm-Gg: ASbGncsWg35gRyMbAKWDAWWaCrTTVM0ccwY4V2SI5iGXlisfzfH1PVT/avYBNCyzB11
-	FDpo1J0Zx5WDfMAcujgWLDwagf09kZHBUmt8fvkowpcmEiq7fO8mFuMkP7eFY9eu08SxlRMU5RQ
-	+VOqZpu9JWhcwTXkakyOZLTCXEgrGLEAZOkUFOkNU2k4OzTrxbuxUJxLAu3zwxLtvbYJjbO/7KW
-	dfQkOSMzYHm7fqy6TbwrQk4tGcOvS4vM2hMwboQudBvzpkwpyTjM3j9nT6WXhjXOWEmwdTYKCmB
-	9P51St/GoNRcAvySbFQ2F9fZidV+U2uqnwsovUkEzgyXxsbyHcEpjKNbpNG2l6ImjbcVTnu+rZf
-	6Jw792VPFlT06NP/CS7AF1Tpss9peSVhmKB5quVJbt/BQSOaUwUuhm7NhWbb48zEtfARq
-X-Google-Smtp-Source: AGHT+IFJpNw6tlpwh806rj7OtEbWSnaeJ82dyANG/riA46oRJRHygpgtGapJTqqgsj6/APi15VmJKQ==
-X-Received: by 2002:a05:6214:540a:b0:6fd:5f35:9c84 with SMTP id 6a1803df08f44-7000174dc41mr206413746d6.9.1751234045446;
-        Sun, 29 Jun 2025 14:54:05 -0700 (PDT)
-Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.81])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd771b50e1sm56878656d6.34.2025.06.29.14.54.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jun 2025 14:54:05 -0700 (PDT)
-From: Seungjin Bae <eeodqql09@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: pip-izony <eeodqql09@gmail.com>,
-	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
-	Jassi Brar <jaswinder.singh@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2 2/2] usb: gadget: max3420_udc: Fix out-of-bounds endpoint index access
-Date: Sun, 29 Jun 2025 17:49:47 -0400
-Message-ID: <20250629214943.27893-6-eeodqql09@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250629201324.30726-4-eeodqql09@gmail.com>
-References: <20250629201324.30726-4-eeodqql09@gmail.com>
+	s=arc-20240116; t=1751240393; c=relaxed/simple;
+	bh=duyH01qOwJHRvyxCFaAsXWWg9+tURXrWgirrUu1Bvgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PGRO2mM9nFq4Xz1gkK+N9GkOSEL573JJq7qx9Uu5Qk89TaZOdf9TS7vKytRKOEUnB6DFeSkG3DdQBMu4EugfUHJ91u04bF7VRscwS8ukLFDSqtUAuKsFsAEuy9bBY9Caq3hGitbLa3DNXufuq678rCTc7PbLns+OobQuvVHnK4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ZscVSics; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 64511C78;
+	Mon, 30 Jun 2025 01:39:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1751240367;
+	bh=duyH01qOwJHRvyxCFaAsXWWg9+tURXrWgirrUu1Bvgs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZscVSicsm/wXkRud4SlMwFAe0Xv32SrHoGv9SmgA+5cxotxtcN8of3ToEP+/n9Fcf
+	 4F+GAoPz4couZYgiQHe2la+4BAQR+dS7Ubenxof0dLiE1ctcKu9PiuBDaUUgYHMhrf
+	 1/71UsCcD8xYj+KcvuZ3FjtLOq1v690uJh8yx4qw=
+Date: Mon, 30 Jun 2025 02:39:24 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Xu Yang <xu.yang_2@nxp.com>, ezequiel@vanguardiasur.com.ar,
+	mchehab@kernel.org, hdegoede@redhat.com, gregkh@linuxfoundation.org,
+	mingo@kernel.org, tglx@linutronix.de,
+	andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
+	thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com,
+	Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+Message-ID: <20250629233924.GC20732@pendragon.ideasonboard.com>
+References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
+ <20250627101939.3649295-2-xu.yang_2@nxp.com>
+ <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
 
-Similar to max3420_set_clear_feature() function, the max3420_getstatus() function also fails to validate the endpoint index
-from wIndex before using it to access the udc->ep array.
+On Fri, Jun 27, 2025 at 10:23:36AM -0400, Alan Stern wrote:
+> On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
+> > This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> > functions to support alloc and free buffer in a dma-noncoherent way.
+> > 
+> > To explicit manage the memory ownership for the kernel and device,
+> > this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> > and call it at proper time.  The management requires the user save
+> > sg_table returned by usb_alloc_noncoherent() to urb->sgt.
+> > 
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > ---
+> >  drivers/usb/core/hcd.c | 30 ++++++++++++++++
+> >  drivers/usb/core/usb.c | 80 ++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb.h    |  9 +++++
+> >  3 files changed, 119 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > index c22de97432a0..5fa00d32afb8 100644
+> > --- a/drivers/usb/core/hcd.c
+> > +++ b/drivers/usb/core/hcd.c
+> > @@ -1496,6 +1496,34 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_hcd_map_urb_for_dma);
+> >  
+> > +static void usb_dma_noncoherent_sync_for_cpu(struct usb_hcd *hcd,
+> > +					     struct urb *urb)
+> > +{
+> > +	enum dma_data_direction dir;
+> > +
+> > +	if (!urb->sgt)
+> > +		return;
+> > +
+> > +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> 
+> Are the following operations really necessary if the direction is OUT?  
+> There are no bidirectional URBs, and an OUT transfer never modifies the 
+> contents of the transfer buffer so the buffer contents will be the same 
+> after the URB completes as they were when the URB was submitted.
 
-The udc->ep array is initialized to handle 4 endpoints, but the index derived from the `wIndex & USB_ENDPOINT_NUMBER_MASK`
-can be up to 15. This can lead to an out-of-bounds access, causing memory corruption or a potential kernel crash.
-This bug was found by code inspection and has not been tested on hardware.
+The arch part of dma_sync_sgtable_for_cpu(DMA_TO_DEVICE) is a no-op on
+all architectures but microblaze, mips, parisc and powerpc (at least in
+some configurations of those architectures).
 
-Fixes: 48ba02b2e2b1a ("usb: gadget: add udc driver for max3420")
-Cc: stable@vger.kernel.org
-Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
----
- v1 -> v2: Added a second patch to fix an out-of-bounds bug in the max3420_getstatus() function.
- 
- drivers/usb/gadget/udc/max3420_udc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+The IOMMU DMA mapping backend calls into the arch-specific code, and
+also handles swiotlb, which is a no-op for DMA_TO_DEVICE. There's also
+some IOMMU-related arch-specific handling for sparc.
 
-diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
-index e4ecc7f7f3be..ff6c7f9d71d8 100644
---- a/drivers/usb/gadget/udc/max3420_udc.c
-+++ b/drivers/usb/gadget/udc/max3420_udc.c
-@@ -536,6 +536,7 @@ static void max3420_getstatus(struct max3420_udc *udc)
- {
- 	struct max3420_ep *ep;
- 	u16 status = 0;
-+	int id;
- 
- 	switch (udc->setup.bRequestType & USB_RECIP_MASK) {
- 	case USB_RECIP_DEVICE:
-@@ -548,7 +549,10 @@ static void max3420_getstatus(struct max3420_udc *udc)
- 			goto stall;
- 		break;
- 	case USB_RECIP_ENDPOINT:
--		ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
-+		id = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
-+		if (id >= MAX3420_MAX_EPS)
-+			goto stall;
-+		ep = &udc->ep[id];
- 		if (udc->setup.wIndex & USB_DIR_IN) {
- 			if (!ep->ep_usb.caps.dir_in)
- 				goto stall;
+I think dma_sync_sgtable_for_cpu() should be called for the
+DMA_TO_DEVICE direction, to ensure proper operation in those uncommon
+but real cases where platforms need to perform some operation. It has a
+non-zero cost on other platforms, as the CPU will need to go through a
+few function calls to end up in no-ops and then go back up the call
+stack.
+
+invalidate_kernel_vmap_range() may not be needed. I don't recall why it
+was added. The call was introduced in
+
+commit 20e1dbf2bbe2431072571000ed31dfef09359c08
+Author: Ricardo Ribalda <ribalda@chromium.org>
+Date:   Sat Mar 13 00:55:20 2021 +0100
+
+    media: uvcvideo: Use dma_alloc_noncontiguous API
+
+Ricardo, do we need to invalidate the vmap range in the DMA_TO_DEVICE
+case ?
+
+> > +	invalidate_kernel_vmap_range(urb->transfer_buffer,
+> > +				     urb->transfer_buffer_length);
+> > +	dma_sync_sgtable_for_cpu(hcd->self.sysdev, urb->sgt, dir);
+
+In the DMA_FROM_DEVICE case, shouldn't the vmap range should be
+invalidated after calling dma_sync_sgtable_for_cpu() ? Otherwise I think
+speculative reads coming between invalidation and dma sync could result
+in data corruption.
+
+> > +}
+> 
+> This entire routine should be inserted at the appropriate place in 
+> usb_hcd_unmap_urb_for_dma() instead of being standalone.
+> 
+> > +static void usb_dma_noncoherent_sync_for_device(struct usb_hcd *hcd,
+> > +						struct urb *urb)
+> > +{
+> > +	enum dma_data_direction dir;
+> > +
+> > +	if (!urb->sgt)
+> > +		return;
+> > +
+> > +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> > +	flush_kernel_vmap_range(urb->transfer_buffer,
+> > +				urb->transfer_buffer_length);
+> > +	dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
+> > +}
+> 
+> Likewise, this code belongs inside usb_hcd_map_urb_for_dma().
+> 
+> Also, the material that this routine replaces in the uvc and stk1160 
+> drivers do not call flush_kernel_vmap_range().  Why did you add that 
+> here?  Was this omission a bug in those drivers?
+> 
+> Alan Stern
+
 -- 
-2.43.0
+Regards,
 
+Laurent Pinchart
 
