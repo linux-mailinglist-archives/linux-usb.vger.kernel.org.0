@@ -1,197 +1,246 @@
-Return-Path: <linux-usb+bounces-25252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973E3AECF58
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 19:52:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A0EAECF62
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 20:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A42293A79C8
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 17:52:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F26181894DFF
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Jun 2025 18:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3322367B9;
-	Sun, 29 Jun 2025 17:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B16BC231856;
+	Sun, 29 Jun 2025 18:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="f5j4E4oj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YppB/KH0"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NKuYfKRg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1427C235074;
-	Sun, 29 Jun 2025 17:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B7C4A3C;
+	Sun, 29 Jun 2025 18:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751219569; cv=none; b=ENHEwxIAHmjNEtk8Cn6uPH53mb8uWFQN0WwbLE8rzeTHcbuWjH5zeILaHUFZqwIenfVTc6v2c/4dCoaoBrGz239VylVEuG6QQB3z2Dl2hpspQcbiDuFjH2Ww0aUY1/oTfC50xTyTVaIGyZGkes92o4EIRE4Ml32ZprOxNWn0ACE=
+	t=1751220108; cv=none; b=MbJh3/AR6WdtXEz1oggEpGqLhIWbIXXXDJyQDAGMVqBrCcPbQWzKC47ayMOT+GBMYcGgSw9B8Shny6tJRrMjzW/KqRV1B5khcrlaLmYDzWCRbo6jIVnODUCWupqOSz67G6B418TeiucRo29NT4j2tf5IBxoZmRrzS0VNqGKTz64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751219569; c=relaxed/simple;
-	bh=Jh3m77P3PQ/B7E+ACnzpZWeLOCGladQ4T7buUTuFBEQ=;
+	s=arc-20240116; t=1751220108; c=relaxed/simple;
+	bh=VVIZcmw3kGEOhZxUnEIWRa2PjCOG8sqv0cjaVfxJixE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fkjVs/neP3CoaenbAzN+I0HbunribfE2qzVl5/DDL6IrDPexw+lVmqNeiYhgj/7wImbe8RnwtvVQ/A4XdjYToJEvJHiOiOOD9LUGjWOEYTt4/dsyFz826vblCseDeTo5xURThDeJrVJH9quy0ayJmF+J7t3gvGL11XqgA7nF2n4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=f5j4E4oj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YppB/KH0; arc=none smtp.client-ip=202.12.124.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B10927A007D;
-	Sun, 29 Jun 2025 13:52:44 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Sun, 29 Jun 2025 13:52:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1751219564; x=1751305964; bh=sTmHH/giVf
-	oxCmMF/goE2epW2Hw/LB/RMXLl9DOR2ro=; b=f5j4E4ojW2SFu3kpWV7gWwrIgb
-	XKy57GGZwWPIFPG3XB87e79r12RVIbQFAb/13M0L/wAmYZiSnTei6HWcmz6ret+Q
-	w3DjDxc/spcBglS8RKWZiTiVpIC9GITUs3wnSe/Mm7OElnVsNf91GFOP+VzHsuDw
-	Z9Z+7mfGJtOqj2Rgy4Wq2mM3Wz7YT6uqQDdnXcKezsdYmOdNDIL2h9jM1O4d1dxB
-	ZjY4E4FXJMZRhDWw7aoaPnRZP3gCD0UM/71KNtKEtxIiqAqjl9+Pw/DHVgXYT7hD
-	J+6GsN5jKNUNFJAK4sXfxIyZu34k2lL1M4hxF5jfVGwY3U6xqwNr0Y2PbXNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1751219564; x=1751305964; bh=sTmHH/giVfoxCmMF/goE2epW2Hw/LB/RMXL
-	l9DOR2ro=; b=YppB/KH0N+LG4+Cg78UnNp5bnpZJf08Rfw+ec+2j++kJL/NTFIa
-	+7ED9nXU8DZKbKlASMuxjmr7FAJYF5U12kzsu7ttxNCS0blJUEhSYWUVsHPTJIEs
-	shFSpJFZpHzoFCXiClddgYzirvkmmj10/ws+WGlo51eCCb6vgfZZRHWocfpj61Nv
-	CWcW1FLSyHqCLBvWTefjyFrD0FRK2ZdKDNu8AstO25JBG32AIhHPs6AhOYZaoPVu
-	ggqvBRZ7i3ye3N611q22AaM0lggGCRlkbG0DEd54DluFhLkq0N3ZPc+eBpFlhaXL
-	sJNkpLXtOIP4CWHQKbp3VM9vlqsx/PSCPdQ==
-X-ME-Sender: <xms:a31haKBd75CUdoCH8koM-xwpb-h3Yb6jja09aIa11AxcYdU01TNnfA>
-    <xme:a31haEi5fhuSCbKro6klStF3QSFHvfyFMbHzaPgwq_myh-mQcl9OeIdalwngADwCJ
-    HhSyiX01b2yAaYI4A>
-X-ME-Received: <xmr:a31haNnrK8Vh-2DRb2f5BMuxqj5DJCesWeNCD_cMTbM1llQcbPEUujD50B5lr87v4HhHGZmLwdDR>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggujgesghdtsfertddtjeenucfhrhhomheptehlhihsshgrucft
-    ohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepledvvdejke
-    efhfegteeuuddvgfduueetgfevffetudehvddvgeehueetgeegtefgnecuffhomhgrihhn
-    pehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihshhsrgdrihhspdhnsggp
-    rhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhgrrhhioh
-    drlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopeihvghhvgiikhgv
-    lhhshhgssehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrvggrshdrnhhovghvvg
-    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhimhdrlhhinhgusggvrhhgvghrsehg
-    mhgrihhlrdgtohhmpdhrtghpthhtohepmhhitghhrggvlhdrjhgrmhgvthesihhnthgvlh
-    drtghomhdprhgtphhtthhopehrrghjrghtrdhkhhgrnhguvghlfigrlhesihhnthgvlhdr
-    tghomhdprhgtphhtthhopehsrghshhgrlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epshhuphgvrhhmudeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfigvshhtvghrihes
-    khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:a31haIzNh0j_ejP-AvfP2DrnDp7KEuBkQREksGHKEoYaeydumDwFmg>
-    <xmx:a31haPQQ0gVd7zIou7hz8RCvRDASd2D9VE_FDeE9gLdkoK41Wyf12g>
-    <xmx:a31haDYMg-9eBAadpIg6DmdFXx7sEoN6d2JO6PpJRC37Lg3USvQ5zg>
-    <xmx:a31haIRIKkB5lw3tCcd5pLrIlOF6hStTBq-z9I42iLyGcfmU0c2L5A>
-    <xmx:bH1haCH8zel9jedTIdbMr8AZ6V4WqPeFXyazB_QDA7tASwDRRoW-VFrO>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 29 Jun 2025 13:52:43 -0400 (EDT)
-Received: by mbp.qyliss.net (Postfix, from userid 1000)
-	id E5C02C2C24F; Sun, 29 Jun 2025 19:52:41 +0200 (CEST)
-Date: Sun, 29 Jun 2025 19:52:41 +0200
-From: Alyssa Ross <hi@alyssa.is>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com, 
-	michael.jamet@intel.com, westeri@kernel.org, YehezkelShB@gmail.com, 
-	rajat.khandelwal@intel.com, mika.westerberg@linux.intel.com, linux-usb@vger.kernel.org, 
-	regressions@lists.linux.dev, kim.lindberger@gmail.com, linux@lunaa.ch, 
-	Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
-Message-ID: <cavyeum32dd7kxj65argtem6xh2575oq3gcv3svd3ubnvdc6cr@6nv7ieimfc5e>
-References: <20250411151446.4121877-1-superm1@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=srXi4sC2Ebxx78ck/sJ/NngDvLYok/vmgzdcK/TxOgrYPBqLJOIC2IMoCN8DHLl3fISCmCuuyemOtkIYqO0N8wb3hYQb5h8uMDMIE7/6N2dhq+noRCPgNV8GuIq6SH/J0brgfEABrJLMMoKg60IQvHLJK4qIPkVfe009fzTl7ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=NKuYfKRg; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 1EB9A16D7;
+	Sun, 29 Jun 2025 20:01:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1751220082;
+	bh=VVIZcmw3kGEOhZxUnEIWRa2PjCOG8sqv0cjaVfxJixE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NKuYfKRg7s6e2TtlWzHZyBD0lJlnl0zulGimGGfx3FsfYTnMNTnCBjirQkRg0ujz3
+	 i2lhPdVCzZb5bTuKY438MLuKOAwIBqobYJmd4U15iBs2LauyEXb9ofOmh/97hhazoo
+	 R2owP5LXUk2yarMPR0rk6mMt9pzM/CEe7uORAh9o=
+Date: Sun, 29 Jun 2025 21:01:19 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 09/12] media: uvcvideo: Add uvc_ctrl_query_entity
+ helper
+Message-ID: <20250629180119.GD6260@pendragon.ideasonboard.com>
+References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
+ <20250605-uvc-orientation-v2-9-5710f9d030aa@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3u3w6kzefk6kcdxr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250411151446.4121877-1-superm1@kernel.org>
+In-Reply-To: <20250605-uvc-orientation-v2-9-5710f9d030aa@chromium.org>
 
+Hi Ricardo,
 
---3u3w6kzefk6kcdxr
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: [REGRESSION] thunderbolt: Fix a logic error in wake on connect
-MIME-Version: 1.0
-
-On Fri, Apr 11, 2025 at 10:14:44AM -0500, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
->
-> commit a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect
-> on USB4 ports") introduced a sysfs file to control wake up policy
-> for a given USB4 port that defaulted to disabled.
->
-> However when testing commit 4bfeea6ec1c02 ("thunderbolt: Use wake
-> on connect and disconnect over suspend") I found that it was working
-> even without making changes to the power/wakeup file (which defaults
-> to disabled). This is because of a logic error doing a bitwise or
-> of the wake-on-connect flag with device_may_wakeup() which should
-> have been a logical AND.
->
-> Adjust the logic so that policy is only applied when wakeup is
-> actually enabled.
->
-> Fixes: a5cfc9d65879c ("thunderbolt: Add wake on connect/disconnect on USB=
-4 ports")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Hi! There have been a couple of reports of a Thunderbolt regression in
-recent stable kernels, and one reporter has now bisected it to this
-change:
-
- =E2=80=A2 https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
- =E2=80=A2 https://github.com/NixOS/nixpkgs/issues/420730
-
-Both reporters are CCed, and say it starts working after the module is
-reloaded.
-
-Link: https://lore.kernel.org/r/bug-220284-208809@https.bugzilla.kernel.org=
-%2F/
-(for regzbot)
-
+On Thu, Jun 05, 2025 at 05:53:02PM +0000, Ricardo Ribalda wrote:
+> Create a helper function to query a control. The new function reduces
+> the number of arguments, calculates the length of the operation and
+> redirects the operation to the hardware or to the entity private
+> functions.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  drivers/thunderbolt/usb4.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-> index e51d01671d8e7..3e96f1afd4268 100644
-> --- a/drivers/thunderbolt/usb4.c
-> +++ b/drivers/thunderbolt/usb4.c
-> @@ -440,10 +440,10 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsi=
-gned int flags)
->  			bool configured =3D val & PORT_CS_19_PC;
->  			usb4 =3D port->usb4;
->
-> -			if (((flags & TB_WAKE_ON_CONNECT) |
-> +			if (((flags & TB_WAKE_ON_CONNECT) &&
->  			      device_may_wakeup(&usb4->dev)) && !configured)
->  				val |=3D PORT_CS_19_WOC;
-> -			if (((flags & TB_WAKE_ON_DISCONNECT) |
-> +			if (((flags & TB_WAKE_ON_DISCONNECT) &&
->  			      device_may_wakeup(&usb4->dev)) && configured)
->  				val |=3D PORT_CS_19_WOD;
->  			if ((flags & TB_WAKE_ON_USB4) && configured)
-> --
-> 2.43.0
->
+>  drivers/media/usb/uvc/uvc_ctrl.c | 81 ++++++++++++++++++++--------------------
+>  1 file changed, 41 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index b2768080c08aafa85acb9b7f318672c043d84e55..21ec7b978bc7aca21db7cb8fd5d135d876f3330c 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -576,6 +576,34 @@ static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc15 = {
+>  				  V4L2_CID_POWER_LINE_FREQUENCY_DISABLED),
+>  };
+>  
+> +static int uvc_ctrl_query_entity(struct uvc_device *dev,
+> +				 const struct uvc_control *ctrl, u8 query,
+> +				 void *data)
+> +{
+> +	u16 len;
+> +
+> +	switch (query) {
+> +	case UVC_GET_INFO:
+> +		len = 1;
+> +		break;
+> +	case UVC_GET_LEN:
+> +		len = 2;
+> +		break;
+> +	default:
+> +		len = ctrl->info.size;
 
---3u3w6kzefk6kcdxr
-Content-Type: application/pgp-signature; name="signature.asc"
+		break;
 
------BEGIN PGP SIGNATURE-----
+> +	}
+> +
+> +	if (query == UVC_GET_CUR && ctrl->entity->get_cur)
+> +		return ctrl->entity->get_cur(dev, ctrl->entity,
+> +					     ctrl->info.selector, data, len);
+> +	if (query == UVC_GET_INFO && ctrl->entity->get_info)
+> +		return ctrl->entity->get_info(dev, ctrl->entity,
+> +					      ctrl->info.selector, data);
+> +
+> +	return uvc_query_ctrl(dev, query, ctrl->entity->id, dev->intfnum,
+> +			      ctrl->info.selector, data, len);
+> +}
+> +
+>  static const struct uvc_control_mapping *uvc_ctrl_filter_plf_mapping(
+>  	struct uvc_video_chain *chain, struct uvc_control *ctrl)
+>  {
+> @@ -1222,35 +1250,27 @@ static int uvc_ctrl_populate_cache(struct uvc_video_chain *chain,
+>  	int ret;
+>  
+>  	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_DEF) {
+> -		ret = uvc_query_ctrl(chain->dev, UVC_GET_DEF, ctrl->entity->id,
+> -				     chain->dev->intfnum, ctrl->info.selector,
+> -				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF),
+> -				     ctrl->info.size);
+> +		ret = uvc_ctrl_query_entity(chain->dev, ctrl, UVC_GET_DEF,
+> +					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_DEF));
+>  		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+>  	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN) {
+> -		ret = uvc_query_ctrl(chain->dev, UVC_GET_MIN, ctrl->entity->id,
+> -				     chain->dev->intfnum, ctrl->info.selector,
+> -				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN),
+> -				     ctrl->info.size);
+> +		ret = uvc_ctrl_query_entity(chain->dev, ctrl, UVC_GET_MIN,
+> +					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+>  		if (ret < 0)
+>  			return ret;
+>  	}
+>  	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX) {
+> -		ret = uvc_query_ctrl(chain->dev, UVC_GET_MAX, ctrl->entity->id,
+> -				     chain->dev->intfnum, ctrl->info.selector,
+> -				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX),
+> -				     ctrl->info.size);
+> +		ret = uvc_ctrl_query_entity(chain->dev, ctrl, UVC_GET_MAX,
+> +					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+>  		if (ret < 0)
+>  			return ret;
+>  	}
+>  	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES) {
+> -		ret = uvc_query_ctrl(chain->dev, UVC_GET_RES, ctrl->entity->id,
+> -				     chain->dev->intfnum, ctrl->info.selector,
+> -				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES),
+> -				     ctrl->info.size);
+> +		ret = uvc_ctrl_query_entity(chain->dev, ctrl, UVC_GET_RES,
+> +					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+>  		if (ret < 0) {
+>  			if (UVC_ENTITY_TYPE(ctrl->entity) !=
+>  			    UVC_VC_EXTENSION_UNIT)
+> @@ -1291,16 +1311,7 @@ static int __uvc_ctrl_load_cur(struct uvc_video_chain *chain,
+>  		return 0;
+>  	}
+>  
+> -	if (ctrl->entity->get_cur)
+> -		ret = ctrl->entity->get_cur(chain->dev, ctrl->entity,
+> -					    ctrl->info.selector, data,
+> -					    ctrl->info.size);
+> -	else
+> -		ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
+> -				     ctrl->entity->id, chain->dev->intfnum,
+> -				     ctrl->info.selector, data,
+> -				     ctrl->info.size);
+> -
+> +	ret = uvc_ctrl_query_entity(chain->dev, ctrl, UVC_GET_CUR, data);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -2164,11 +2175,8 @@ static int uvc_ctrl_commit_entity(struct uvc_device *dev,
+>  			continue;
+>  
+>  		if (!rollback)
+> -			ret = uvc_query_ctrl(dev, UVC_SET_CUR, ctrl->entity->id,
+> -				dev->intfnum, ctrl->info.selector,
+> -				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
+> -				ctrl->info.size);
+> -
+> +			ret = uvc_ctrl_query_entity(dev, ctrl, UVC_SET_CUR,
+> +				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT));
+>  		if (!ret)
+>  			processed_ctrls++;
+>  
+> @@ -2570,13 +2578,7 @@ static int uvc_ctrl_get_flags(struct uvc_device *dev,
+>  	if (data == NULL)
+>  		return -ENOMEM;
+>  
+> -	if (ctrl->entity->get_info)
+> -		ret = ctrl->entity->get_info(dev, ctrl->entity,
+> -					     ctrl->info.selector, data);
+> -	else
+> -		ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id,
+> -				     dev->intfnum, info->selector, data, 1);
 
-iHUEABYKAB0WIQRV/neXydHjZma5XLJbRZGEIw/wogUCaGF9ZwAKCRBbRZGEIw/w
-okxoAQDBclWigTvBxa6JKIkkt52I4sMh08AHziTd+wt3Sl2g8QEAp6S/3yciQUx2
-pXrMwDIZuq7mBlrT3HJOmOu+FOqI8AQ=
-=B+2Q
------END PGP SIGNATURE-----
+Here ctrl->info isn't filled yet, so replacing info->selector with
+ctrl->info.selector won't work. Usage of ctrl->info.selector in the
+->get_info() branch looks like a bug.
 
---3u3w6kzefk6kcdxr--
+> -
+> +	ret = uvc_ctrl_query_entity(dev, ctrl, UVC_GET_INFO, data);
+>  	if (!ret) {
+>  		info->flags &= ~(UVC_CTRL_FLAG_GET_CUR |
+>  				 UVC_CTRL_FLAG_SET_CUR |
+> @@ -2654,8 +2656,7 @@ static int uvc_ctrl_fill_xu_info(struct uvc_device *dev,
+>  	info->selector = ctrl->index + 1;
+>  
+>  	/* Query and verify the control length (GET_LEN) */
+> -	ret = uvc_query_ctrl(dev, UVC_GET_LEN, ctrl->entity->id, dev->intfnum,
+> -			     info->selector, data, 2);
+> +	ret = uvc_ctrl_query_entity(dev, ctrl, UVC_GET_LEN, data);
+
+Same here.
+
+>  	if (ret < 0) {
+>  		uvc_dbg(dev, CONTROL,
+>  			"GET_LEN failed on control %pUl/%u (%d)\n",
+
+-- 
+Regards,
+
+Laurent Pinchart
 
