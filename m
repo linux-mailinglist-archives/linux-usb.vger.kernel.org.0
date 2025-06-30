@@ -1,132 +1,152 @@
-Return-Path: <linux-usb+bounces-25312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F004DAEE09D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:27:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBC1EAEE0A1
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:27:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48AAB3A357B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:26:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC0D716EC7B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B4D28BAA9;
-	Mon, 30 Jun 2025 14:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A5428C5AB;
+	Mon, 30 Jun 2025 14:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez8aFcbX"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EG/YWAIu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C71E28A73D
-	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3568228C013
+	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751293606; cv=none; b=BFC7GuMoo5eDum9bgh/OQ3xiV8PEMGsv9zrMC4pHzAg9bj1jOZwowTdRSz2XHxASrcVrFytSpZ3WhnhQdFqX5N7a5//hIGxQgYWm/+K7uKR3UyOY0dYO3x+wXDLIDG9pbjf3w4mAB22h44UIG1mto+c2HV6KcG6XX92JRIqsznM=
+	t=1751293622; cv=none; b=oDFggqfMLmUwmIWPWCCWxZoYvIXsDQukkseeGvHVu93jCKQz/Rdg+nUpwRFJHq/xCemywlwLBh+cbYYNh8IAsJOP2rrbJJYAX0Zx0aXrjPm4cnRbrmW0ualZk62/djnI3/9XK5S6k0V/ORKAKUScZWqnOYlPnM9nis0xc9un2pY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751293606; c=relaxed/simple;
-	bh=BOYTSgmLjr6dx23yzMmfIewjjG9D17Ft4GO6DSC0BxY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XjbJbbkRb0yVY1AMTRXF1rBvYozUNILTgtEK7mr3JkYGONxm5VsJ59M1FwjPVKgx5lYQyG46uaJI4TBl5asAEAHtmTvQzRAchLxhk4CQ0Z7eqSvYfdq1LGFH5/1eVL4evACgjgkuDRLF1myhZxcrvANmRP1gcGz/85S07/xkH88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ez8aFcbX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C4B4C4CEF0
-	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751293605;
-	bh=BOYTSgmLjr6dx23yzMmfIewjjG9D17Ft4GO6DSC0BxY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Ez8aFcbXnYMhy/jbRz5wIUEQXD1A3wzidXc8OYJo5r8hJc9XI9kHCg1v6VG9TmAYQ
-	 oy53cCmqMoI12eX/bTKDiCdWOlBdcg7bMxLelm2BG7QShjbnWHiVX+T1T6C4PLkMP5
-	 gkdWE2I0OzX45pS8FPzXQuwNC/6wkshiMNCdYe7UPEHaiD/DoXr6/U7uf6Lr2xKKZ5
-	 puSAssUOkEQl1sWry+LzZ8lL2BK8aipehGveyqBIXUKfHrrus5ISq+Og8f5kofWPg9
-	 /O+CcSz6Ul/QXDyrdTfddAvYlOFqOdyaHYKC3S1yon4zqn9RoyvWjhNA5Cz0f6gT0J
-	 yMd+hua+f9wow==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 80A48C41613; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220272] Latent race condition in USB code unveiled with
- optimized memset_64.S
-Date: Mon, 30 Jun 2025 14:26:45 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: m.seyfarth@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220272-208809-1q59UE57VH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
-References: <bug-220272-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1751293622; c=relaxed/simple;
+	bh=7df/gHAWH0M/f2MpyrA6jV7WVUOkgH08YWsrx7B+PdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NTkazLhb52THyjpT+uCfmrw/N1nG/0h5r/o7MKdTLiDyfy9x6gj0NWAy6L7yc92SXS5KHKjCAuAVn6W3RxzBhAsrxwyb1VXhGlgLmIU5FvflNINUNbVzv7Q2Q6/a2fsubU5NmLcCqB1YR8YmkLTcCPElokBDDjk2ZyZ8b0snAUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EG/YWAIu; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-70109af5f70so2185996d6.0
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 07:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1751293620; x=1751898420; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+xcDwEq0XwCHZxX9UAE0a2YYZ7EsQktIBuBGKcEcZU=;
+        b=EG/YWAIu/eCvqntLnComTkT8FFTNNvOcyWBxPXO/jLdWyw0I4NM7eMhFX1GDIqPe6V
+         jfhqx4oJJuIoiUCx4n93k86aVZ9yF1vt5lUbq1R+PAMFpbOp07E/+h0ZjDzz62h0LF6w
+         xjjgIH96yp36baoprivT3yUfFRMl54cy1gVUNqvDEZ8QjJoJVgFP63nWMN6YA82sb6xt
+         lPI7hjW7aY6njBca0TVPWKW2c35fAPB0RyoRHZBa4TU7btfpl2aE1aXBzZnZVUJ5D6VU
+         l+zNnFpNrTyznmx73pqBztHG2NxjnLcxDP2gEEE5Hla5Ozz+ElZ784ORLL7CF8LTDVtG
+         ieSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751293620; x=1751898420;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D+xcDwEq0XwCHZxX9UAE0a2YYZ7EsQktIBuBGKcEcZU=;
+        b=Hm5f+xjn1YeWN9pIXv8XFQYcmbdKX/W/cGQdQcmOS4M8jCBEUA6wSi2EZxIEwSHjXW
+         QO8rBgTZBnpjJAMthaIJAScbXg5p5M0d/cfw799JXVm4MRefcwfdYZE6NppWTVf4npr7
+         qxzUn0YBqUHJYUtB8BWR1RmuUcq2nytvFcQRCG+TGwGbM5jMwWo/MHYcURCFy7x603Lg
+         M/pg39HPv3MbF0PYftvTsK4SPijJRsbjhrzvnGvuFKS0mpk54VQF64jCrEFc06B2sU74
+         5ZU/NWrKr+cYcVdXsXEm9KFNyKLd125NCB8SDBCIup1yNhJutvvEL/VeK24u46uIhwHO
+         HGyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKTxFn0bNvLE+VDNoQ5gqvDFQLYGAM0oLVGsphcMNb9OtzfBC/wEAd8FzbO25DQs3sG9d1Ah0Zrr8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHMFGICy/Cgxu1Uyth6BflJlvywoEKl3yqBuQU+6dUpWeuVEhi
+	YT8q+tf+Xl+oThFjerM0VjPJta8suwvtKm01cbCMuLl4/aS0THm3W7i6JGiooNrfnWcgdalCFOC
+	MBPo=
+X-Gm-Gg: ASbGncvpekJaM3qB9F8Ix2r0ubiOqL7BC3vqirKOOfApaNnf+4OHMlWj6+BU/V/d6mX
+	Vmcd/Rd0m9GcBciuzwqAjrHIAoYzi+O51QTwb4Dj4ls8Gp9yat4r9gJv9jRh0BzqPjMTzwjXdVG
+	OA2sD1WElHb5Z8qqEhyQdDmxufZ3AVgmCt+VV4ob61/CkAiB9YAHyvI3C+fBhcmq8j/GGBOD2Dk
+	vJ+kNm5MdBkZRleiyEiGtILui45fpgZZVxjAtPnkMNX8Nu2wdr8RucPUfwjbm3FK5NiMc4n8cFO
+	c0Bb1eyfvq7HxUaNg2TWYj2lzbXpR5vjnvOrnZyihR4rrkhFnakvAVHFRkZVIgAiIFwGn8DciDz
+	lWeJx
+X-Google-Smtp-Source: AGHT+IGY71+jbGJGdpeo34rJwHVbWIWI7MBxdTgHTS5TcnXdjbDpLxKSROASFBgY8g61d7fTealGHQ==
+X-Received: by 2002:a05:6214:262f:b0:6fa:c55e:869 with SMTP id 6a1803df08f44-70002ee7d42mr264779196d6.23.1751293619811;
+        Mon, 30 Jun 2025 07:26:59 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd7730ae40sm68454576d6.106.2025.06.30.07.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 07:26:59 -0700 (PDT)
+Date: Mon, 30 Jun 2025 10:26:56 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] usb: mon_text: find valid buffer offset for iso transfer
+Message-ID: <57695560-d6ef-49bc-976e-836ddc903d13@rowland.harvard.edu>
+References: <20250627105651.3653231-1-xu.yang_2@nxp.com>
+ <8a251c8b-5ec6-4238-bdcd-8d8001fd06df@rowland.harvard.edu>
+ <zbxioq4jk2ykd3alu5j6igmgzmsuainlwelhvl5lhz3iczcqyv@uspbdfpyj36j>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zbxioq4jk2ykd3alu5j6igmgzmsuainlwelhvl5lhz3iczcqyv@uspbdfpyj36j>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
+On Mon, Jun 30, 2025 at 05:13:31PM +0800, Xu Yang wrote:
+> Hi Alan,
+> 
+> On Fri, Jun 27, 2025 at 10:28:53AM -0400, Alan Stern wrote:
+> > On Fri, Jun 27, 2025 at 06:56:51PM +0800, Xu Yang wrote:
+> > > The valid data doesn't always begin at the buffer head in case
+> > > iso_frame_desc is larger than 1. Otherwise, the output info will be
+> > > meaningless.
+> > 
+> > Not so.  usbmon intentionally copies the entire isochronous transfer 
+> > buffer, even if only part of it was used for the actual transfer.
+> 
+> Ah, I see USB monitor only copies DATA_MAX (32) bytes data for mon_text.
+> For mon_bin it copies entire transfer length data. So I think whether
+> the data is valid or not matters for mon_text.
 
---- Comment #18 from Marcus Seyfarth (m.seyfarth@gmail.com) ---
-(In reply to Micha=C5=82 Pecio from comment #16)
-> What if you disable and re-enable the whole USB bus?
-> Based on your logs, this should do it:
->=20
-> echo 0000:00:14.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
-> echo 0000:00:14.0 > /sys/bus/pci/drivers/xhci_hcd/bind
->=20
-> Note that if you have a keyboard on this bus it will stop working. You may
-> want to issue both commands at once: "echo xxxx ; echo yyyy".
+Given that nobody has complained about the way it works, after many 
+years, changing it probably isn't really necessary.
 
-I've just tested this and to my surprise, the mouse remained in a non-worki=
-ng
-state. The keyboard turned off and on again and was usable before and after.
+Furthermore, I suspect there are no usages where the transfer 
+doesn't start from the beginning of the buffer.
 
-(In reply to Micha=C5=82 Pecio from comment #17)
-> I also had a look at this LLM generated "report" and I can't see how the
-> alleged issues are supposed to be real.
->=20
-> 1. Replacing wmb() with dma_wmb() possibly makes sense, though on x86 wmb=
-()
-> is stronger than dma_wmb() so it can't be the cause of your problem. Other
-> PCI drivers made such change for performance rather than correctness.
->=20
-> 2. I'm not familiar with xhci->mutex use so no comment, but the alleged
-> deadlock probably doesn't exist as there is no asynchronous completion
-> callback here.
->=20
-> 3. Pedantry with no functional impact.
->=20
-> 4. The driver will abort a hanging command and signal the completion.
->=20
-> 5. We immediately return so we don't go to the out label. No bug.
->=20
-> 6. mutex !=3D spinlock. No bug.
->=20
-> 7. I see no bug. No static analyzer was run so that part is made up.
->=20
-> 8. Doesn't matter if the value is zero.
->=20
-> 9. No arithmetic is done on this variable.
+So overall, I guess this change won't make any noticeable difference.  
+But theoretically, how would the user know that the usbmon output didn't 
+start at the beginning of the buffer?  I think you would need to update 
+the documentation as well as the code.
 
-Thanks a lot for taking a look, even if only #1 ends up being worth of
-consideration.
+> > > +	if (usb_pipeisoc(urb->pipe)) {
+> > > +		isoc_desc = urb->iso_frame_desc;
+> > > +		for (i = 0; i < urb->number_of_packets &&
+> > > +		     !isoc_desc[i].actual_length; i++)
+> > > +			continue;
+> > > +		offset = isoc_desc[i].offset;
+> > > +	}
+> > > +
+> > >  	if (urb->num_sgs == 0) {
+> > > -		src = urb->transfer_buffer;
+> > > +		src = urb->transfer_buffer + offset;
+> > >  		if (src == NULL)
+> > >  			return 'Z';	/* '0' would be not as pretty. */
+> > >  	} else {
+> > 
+> > And how come you didn't modify this branch of the "if"?
+> 
+> I looked into it, but didn't find any ISO transfer usecase using sglist
+> to manage data, so I skipped it. I'm not sure if my understanding is
+> correct, do you have any ideas on sglist?
 
---=20
-You may reply to this email to add a comment.
+I'm not aware of any use cases like that either.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+By the way, this code runs for both IN and OUT transfers.  But for OUT 
+transfers, the actual_length field will always be 0 (because for OUT, 
+the buffer data is copied before the USB transfer occurs).  So the code 
+you're adding would skip the entire transfer buffer!
+
+Alan Stern
 
