@@ -1,284 +1,233 @@
-Return-Path: <linux-usb+bounces-25266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FB9AED4C2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 08:40:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C84AED4E6
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 08:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49E9A3AA820
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 06:40:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C27451643EC
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 06:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C841EE03B;
-	Mon, 30 Jun 2025 06:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A851FDE22;
+	Mon, 30 Jun 2025 06:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="BIrBbm3K";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="S3Z/d4/m";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="pmfNhNB/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MSczNZRH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AEE28F1;
-	Mon, 30 Jun 2025 06:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751265640; cv=fail; b=sB///D+gzvBmxIk3iATOqX4yul80SGJ6glCiRAz7bzYIseLweWtrvWuIX1DD3WOFJaPae3HmZ72i2+DV1rj7b/8/CJGB6WWt/xt51jpFfLLAaAHFMMOsn6bOmBY9XQovTKhX3F2RrF8pscnS6QYJD97QzW7tYNpT/7hCzmteBfc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751265640; c=relaxed/simple;
-	bh=U22yFgRSio1ChSKx0tIzABPMn0gCmv1DWAcEmsWG+r0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=RsO4WHNWNg1+UT6yg/Gek5uxfQlpNiFpuvq8eNOM0xIGBVoCUybl/vPiJ2WTJv9vC1rNWfyvlUHA8cgRCHbNjrODU5Dybn03avaL7MvpyRuH6YoZ7kAJ+f2yW6hXZN9IBIi70LHx+EZmrwcJ7A05aPfECnXEQ0lSFBR6FdRotLk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=BIrBbm3K; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=S3Z/d4/m; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=pmfNhNB/ reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0297265.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55U69163018603;
-	Sun, 29 Jun 2025 23:40:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	cc:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pfptdkimsnps; bh=U22yFgRSio1ChSKx0tIzABPMn0gCmv1DWAcEmsWG+r0=; b=
-	BIrBbm3K35k4of7qN5oU+OGTlJ2AesS72JU971xPcWjR8IVvx9DCpc4ughRwwODn
-	ODRkPHFo5SxG2V/2mY5tvzkPwyubAwo2uW9kith3YeHae3uVvkKvr4EHXBzFdZMD
-	aQ2p2Rent53dFlWUukuAb3ot6qvbIC44f2Zu+6TsxmZoMOtIa90QEi6pz6BB/z0u
-	4U0LH9tIxIMZv3H+yrj2iZ2w6qsQwXnc3TEV0BuOmxYPBQQau+tABABxkMWnyYYo
-	2fuVImx2fF0CgAXtStSMvJwQS7SOyeAk9en+qoia/3OJqSI3xkpWV1s1w5kz7Wy2
-	nWn8QHzby8wxbNGI+NS9YQ==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 47jfaw4j6e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 29 Jun 2025 23:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1751265609; bh=U22yFgRSio1ChSKx0tIzABPMn0gCmv1DWAcEmsWG+r0=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=S3Z/d4/mlTTS9eZkQnQx9wqNfAeMq1fmICGwYj9x8eI1LbC5Olb2RqDIjJZ24wkQT
-	 osaEnUeVmBrLoEBP6ujoZJkzv+Nu/3PFmXlo6uArjWdG73p+jiqrvebyO8AoW3jVkt
-	 rX4EMDSKDj2yERSXVmyvIIIxHQLh1GBJqb6oS7hRAf38U835azV+cmo/9hqjA8fss4
-	 grXLrM8KIRRKNm/ELyiAbV0OFxH4xUOwpiL7JzNivBYcBFG+GhSbns1ApfBLfzcb6A
-	 znxp+V5SfhrKLcT9lhbCJ9NUGvsErVzVPMAjqKovPX6Hrh/JRyJkTPlQFxIT6DkeZj
-	 a8SPdBs3WZFLg==
-Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6E63840107;
-	Mon, 30 Jun 2025 06:40:09 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (not verified))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id A7127A0070;
-	Mon, 30 Jun 2025 06:40:08 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=pmfNhNB/;
-	dkim-atps=neutral
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256
-	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id B691140467;
-	Mon, 30 Jun 2025 06:40:07 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Dk9v2aWGoU8lPM7jjpsbmHE+xp5TU5srnLPsPVB8D+y3ONcvMSDflJGEeVt0xRi3pAsrVK3XY/wLTuuGMvXRNfWqcd3dYxL6FiBZylRwFK98Co3RlthtRNm0cECtbMPZmn4iwPPsIXAKthastubTBrfWc1VObBIuEaYm+o1MQwBV8foiy7brpAzg//rySOz2jn1pU/mic96p837ueBV4BxGvcMi0imOy0DcXHplaquRTkf3Vr0Mxtg5nD3lMhcQ1AP2hCygDagomlbpnCOfhupfbTf7bmBRcV7/DHLEPB7qmioCbf53+j1h4mX0xyRzb7dRMCZDsIDcWJMXyI3TTbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U22yFgRSio1ChSKx0tIzABPMn0gCmv1DWAcEmsWG+r0=;
- b=eD1AmIjEMtzONJPFzwxLIh+j7U0cWsivnEQ47DwHE1dVGTOMBujQdPbXRwR2r2Gy1eZe3A2xlEQDVu7KcJl7XxgPrt50L8pWl0yFKRX4cs8bASNxVdaERam5gf1l0IcF1JVhqv/X+OwbLdEveFnO2MSko29TIeOH7TD0+d5tjF6Eg8OMhr8sZhElWTGvCyXwebt8Ndegt+qhkhXZ6n009/SaxzjE+6WcTafSLwIYobievP+47yOvpfZT1hT90X5/Cx+ZXMZvUC+7kDQYLUPt7vJAcxAoUAUYi5dU4+Jn3IxX2JTtWLyOQD4yhbvaYffjCbVVPAyKp84OCncd1Np3JA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U22yFgRSio1ChSKx0tIzABPMn0gCmv1DWAcEmsWG+r0=;
- b=pmfNhNB/15+N/dJxiswfDzF5WhqrVwww5aUf3Thq+WlkTf3cs6pVkiGugeDq6rAWpmABzHgzDORhHW77O/ag69Ocp9JLk0cjk2h8JKRB1ttJi4kRRExob7qUYsvqA/995JFo8SSFJvKbJ9u1GlOpG0JuzSSZyGCnXmr6ij+M0js=
-Received: from PH7PR12MB8796.namprd12.prod.outlook.com (2603:10b6:510:272::22)
- by MN0PR12MB6128.namprd12.prod.outlook.com (2603:10b6:208:3c4::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.23; Mon, 30 Jun
- 2025 06:40:02 +0000
-Received: from PH7PR12MB8796.namprd12.prod.outlook.com
- ([fe80::910f:c354:ea0d:1fd]) by PH7PR12MB8796.namprd12.prod.outlook.com
- ([fe80::910f:c354:ea0d:1fd%7]) with mapi id 15.20.8880.027; Mon, 30 Jun 2025
- 06:40:01 +0000
-X-SNPS-Relay: synopsys.com
-From: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To: Jisheng Zhang <jszhang@kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc2: disable platform lowlevel hw resources during
- shutdown
-Thread-Topic: [PATCH] usb: dwc2: disable platform lowlevel hw resources during
- shutdown
-Thread-Index: AQHb6N0eY5dL/cwZQkithSNBsnvzKbQbQd6A
-Date: Mon, 30 Jun 2025 06:40:01 +0000
-Message-ID: <cd7a3c4a-13fd-c87a-e410-48927f76a7b0@synopsys.com>
-References: <20250629094655.747-1-jszhang@kernel.org>
-In-Reply-To: <20250629094655.747-1-jszhang@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR12MB8796:EE_|MN0PR12MB6128:EE_
-x-ms-office365-filtering-correlation-id: 435949b9-6b81-47a4-1271-08ddb7a0f08e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?U1MvMWxvT29oeUxSTG1DMmlmdklaTDl0dmJhNXBYcFR3MmpucUs1SFVRekhU?=
- =?utf-8?B?OThoc1FJeUdoampRUHZWbkVRSWp4M01IMVBqdkRYWlJPS2JNay9OWjkzT2o2?=
- =?utf-8?B?bTV2aldubmp6QjlwSGpQd2tNRE9WemtTK0FLaWxDVi94eTJEZGdNOENTQ2xW?=
- =?utf-8?B?OHVWQTZmck5kdHFmYUNValg4c2ZRaGFjVnZ2bXZrK0ZFcU9aSjIrbnlVZm1D?=
- =?utf-8?B?bFJDbVZkYWlOY3lUUVpIVHlNV3NMWlpVVEZHdFlQQ0xyR3piMURsUkdYSEdR?=
- =?utf-8?B?d3BRYUxyaFRNZVV5b2VZdG96d2hER1dwbG41SGJNTS9YMUNHSUptK1NOaC9F?=
- =?utf-8?B?M2ROa0xHamdmUEx1WjVQd3R2bW1zUnJ5N1ViYmlmUVBPM1NTWCtFRVRXWGhm?=
- =?utf-8?B?NlZsb09HSDM2M25pSEQ0RXQwbTY4TTloWWVjMEg5QnRLTGpaUWZ5bklQZFJZ?=
- =?utf-8?B?VVkxcDJIWjhXMVY0VFRiTUhDUDQzTjZNaUJKNE82QW1LbjJtV2IxRWQ1Znlu?=
- =?utf-8?B?RFFLbzRaM2cxbWNkMDN1eFRTY2pTK1ZQekFES0dKZnVUWUJUcWFFLy9UOWll?=
- =?utf-8?B?eHZPSDlQc0lKWEdQaWxSbll4YmVBRG5GN0F6UnFrNEYzV3g4YU8ydnlIYkQ4?=
- =?utf-8?B?TUpNYTk0bUhNa1NIN0l6RU8yTlVnRWMwd2IvS09XL3pCNEVxaHAvZXg2d1hT?=
- =?utf-8?B?MnNRTHdnSlZqbFJueWFWa0htNHovR0E0UzRRTEZGQmxHZ00zdnJ6NnlEUFNF?=
- =?utf-8?B?NmpCZUgrdTFZUGlWdFM1S3JxREhFUWRZVXlSUCtsMjd2MDhWYWx5NnJ5SWYw?=
- =?utf-8?B?N2VOTDIvaWVCeGZoaXNOTFJlMHhDVHJ3V2pPMEN4NHE3clh1bmFBMHh6aEdm?=
- =?utf-8?B?SUdyQWk1WmZ0Kzl1ZmNyZ0dMTnh6b3E5T0krMlNiNFFGWEhYYmdXUjdIZnpF?=
- =?utf-8?B?eWx5dmtZVDErVlluaXlESnI3SDdJOFk5UjRsZk55dTJGVkMzRnh3V3N4Njk2?=
- =?utf-8?B?czVhSzZEQ2Yyc2ZCZElkdysyTk93RmdtSERjL3FkbDZmY29QeCs2R0J5SDg0?=
- =?utf-8?B?WG9kQk4xUmY3aWIvV3ExbFlXKyszWHdUNDh4VXJEMEhCNW5HdEJOaXNTZ2NW?=
- =?utf-8?B?NlA3Y1NUejhEc0hKa25MbGh2ZzNQQ1R6THFsVVc0VnEzYnJZL3AvRnQwanAw?=
- =?utf-8?B?dUZzR0YrNW5qdVlHa2ZRald5d2FqODNUM3RYVDhFcUZTT1doVUhxNFJGckRO?=
- =?utf-8?B?Wmp6bjVQMU1qaDVQR1Z5bFI4bEpsUGFaWmszbTVjcUZlcGh2MFBBKy9DTUZo?=
- =?utf-8?B?bSt6TnpSNUJmM1hJaUQ2U3l0VHNOVjBYcjY0elFIZ0pwaXlNUS9FZFFzNE9l?=
- =?utf-8?B?RW1wbFZYTDZPU0tLQWV1Sm0rLzdBSGt1N1BvQ2RLNWFQekNSUFQxS3ZiOUJJ?=
- =?utf-8?B?ak9razFsRkZ1UDk3aEQvVysrQysxaHBQZERTSytvc3lsTnhhTkoxUHg5NDIx?=
- =?utf-8?B?VEFIUll3N3ZwcUtITlBGR3ZGSTJTdFlQL2hGMko1bWM2SjhRdUhQeTQxR2hD?=
- =?utf-8?B?VFlpbjNUM0hxU3VISnQ5V3pIczJ3R2ltL0pVNm9YaE5oZWM2b2dnWFZrMkMw?=
- =?utf-8?B?ckR1TG1LdkhPQ3lSY3VuNkl1Z2dzSDhYckJ2c2J2RUtEVi8vZ092ZFFoQmRo?=
- =?utf-8?B?V09NYklvazUwQjYyYUowcnJNaUhKK2dBamRIOUhValpLWmUxVXN5bTRSWGhT?=
- =?utf-8?B?Vml2ZkFvaWpzSWxYQkVVbHUxZ3NoYjRQUVB0Sm1mdUVuc0JWempYNUN1ZHRj?=
- =?utf-8?B?U3Nvd2ErQ3hkQTliaG5FYXlRdUFUc2VJUHJwYk1EUkFpaHViRER2cStuWTVY?=
- =?utf-8?B?WlkvMUxBdDNNbGRZN3N1eUsrdDRlK1BzaGF4OGRsZmRwYWZMdnZXZlRNaERv?=
- =?utf-8?B?VzM3NnllbHhBYkpvbkJyVXplTXFMeE0rRExYY2NhTllLQ1hIZGNJVS9TN2pU?=
- =?utf-8?B?UHYyNzAwYzhBPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB8796.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?T01YZHlobkhFK0IwVFAwM1VNckhWNE1wRSt2UXRwZGtiWnZRd3E4bWJiTyt3?=
- =?utf-8?B?R2J0VGRHM2tvTHdsZXc3T2dVQlRjV1BBakJFc0NQQmNvMjUyVkNxTXBsd09R?=
- =?utf-8?B?T0NlbTN3ZldldEhKd2NUMEVrTUJUVVJYWDNtVlRPNVVvOTFIMWJhZS9JYnFB?=
- =?utf-8?B?bGxDRTc0eWgzWWp6UzlZNWFqbzFDcG9OU1lFaEN3NG9IcXhIalVpaFVWMTJF?=
- =?utf-8?B?MWs2WVVvNXBJZmtvdTJlQVNkT1dPZVRhWExVTTdJSGhMcmJUV1lhbXg3aGEr?=
- =?utf-8?B?bnNaV2VYYlc4Q0srU0U1TXZDOU94ODBSMGJJSXp3dVdqa2hZd1QwbkNTM3Bu?=
- =?utf-8?B?RS9rbXJsS21zYjNpM1lidHV4RCtUcUVVYjhnVmRtbDBCUjg4NS9LMzQ0RGNL?=
- =?utf-8?B?QVYzMlBBbWJ0RW5VVHVEa2pLWmxNdTFYeXdWVCtISTQrQ0IzUUxleEg2WENp?=
- =?utf-8?B?Uy9hUGNPaG8yYVZ6dTcwS0I4QWRobUFVaUZlN3ZIUGhBS3FNeHg0SWx0ZjJj?=
- =?utf-8?B?NFdHVmtqR2pPOEIzWkhqb2UwaUFPT0JZTzBlNGdGZXA3RXBZNVNwa3FoTjE0?=
- =?utf-8?B?aGxHRE1WMWdYZ1pyRFJMR3pCeDdraXZtT0NZNXJzbDQ1akFhbitIQTJHZk5F?=
- =?utf-8?B?cWd6eVJxQ3dzYmhleVR5VnR0cjZsYytWWVNhNzBzVmJvSzV3Sm5vbEVCOW1F?=
- =?utf-8?B?ZXRBMm55dUMyZ0czTnFzL0pxb0tNdGVBbjBYQXQzcFo1MmdwcFp5UjJhaUZW?=
- =?utf-8?B?Z2RLNUZNRVV3OHRma1R0ZXhTQzF1SkVDSnpUSG1mSlNVVE1DTTNpUUw5S2M5?=
- =?utf-8?B?Sm1pNXhGTW5YVWw4WHlxTFJYeE54QVJUVjBFSitJeXZZY2Vtc0t1dkxnZjhl?=
- =?utf-8?B?Q0lualNtSDRDUzZsMVVLZ21BVUcrSDNkdDZLeklTci9DWmplQU92N0xGRHUw?=
- =?utf-8?B?RDJBUU9ZY0lvdnc0Sk0rei9VRXdBWTdCY2srWUZNZysybFJLRXJUbjBuVVpV?=
- =?utf-8?B?ZU82cEx4Uzh3YmN1MVMvb0xGTlgxRmQ2TkluQUMzTFZoWXNOSUVvTDZqdGVT?=
- =?utf-8?B?WHN0enpnY1dxc1ZkWnBYTExHM2tiQVFzWmxDK0Zaa2wwZ3JMaWQvZzQ4OUN6?=
- =?utf-8?B?bmp4NlNiTFVKSHB0cnV4emlmY3Z5MWtQZUhuTmtqc095ZjI0TDg5bWhPelZ1?=
- =?utf-8?B?V0h4NnpvMEJEQUgrSHpvYzlnQ3BmTHlCQzdKanNlQmVxaUhyUW5KQXFZQXpK?=
- =?utf-8?B?MlZXWmdMbURjR202ZWd6VlhqYkVHc1BaWXp5aGdZYkpNVGg2K2xEN1R2RTVK?=
- =?utf-8?B?WlVEeFU0dXZMSWZmKzhUZ1ZIWnhWUEE2SjFpbk1zeVRjWVRFMDhPZmZOUjhr?=
- =?utf-8?B?WjliQVl1WVZtZUhRSndIWjJXdy9vYTV4NmJRS0phc2xJRWdSRCtxRlAzVnVK?=
- =?utf-8?B?Z2JKY1luY25CL2tXZTBoWXFObEpNWmxxTlViTHlzOTg4dW10cFV6RkFjSTdv?=
- =?utf-8?B?RkFieUxUMHRZTTgzZkZhRGp5S25LS29lT2tKYWk3WlNpSHdxdGhmRnBWWndT?=
- =?utf-8?B?TFlhaTVhZkQyM3ZkRU0ySFZhNTdBYk1IdEdSU3pzc0JxYTJBMVVhUEo4WmVZ?=
- =?utf-8?B?czNZY2ZsNUFVaURJTCtmZG1EZkpwOHUxN2krdGdiWnBoK2ljQlNpT0ZyZFRL?=
- =?utf-8?B?Z3JVTEdvTmErMUtjRzlJNjJzZHpJUFhVeWhxc1ZnbldGbXhLZk1xclB2T0hQ?=
- =?utf-8?B?dFRIYXp5anlwSFVKMjc1YVZFNnA4MmpucGhsdUxxaUZqMEZObS9LVHV3QVM0?=
- =?utf-8?B?OW9Oak5ORHBrU3FYWkErb3NhNnFjNWdqOVFDb1JERnV1RWhLYmwwUUFUR0Rt?=
- =?utf-8?B?b2M1QU94Z1pYZU41YmhzMmlUOFVnZ0tsRDc1dVV0TnE4M2R1aC9JUkxkTC8x?=
- =?utf-8?B?QUhaaGxKOXVOVkJJelRHOWlaZ3lKV0ViRkh1RVZJSGlCTHJ4Y2l1ZkpuRSti?=
- =?utf-8?B?QUpRRnFSRmQyRSthbkVDNTlJaDdDeDhHRG5xeDJZeTFnbm92TTIvR1VTMjRS?=
- =?utf-8?B?czJ1di9mQUM4UmQvOEZWREpGbU9qRFl4akk5K3JFRFozYnRyM1ZsM1BqbG5z?=
- =?utf-8?Q?+Zzfv50yI5h4CLAF4eevLdZcg?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <55E372AC3FCF8D4A88C985543E2EA30B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F411E5702
+	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 06:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751266123; cv=none; b=cBWqBEQYklgugiyspbzdNbsPCQ/fH4zQ07d/NBmJirr+ScpQdEAoASOdi/OpFAbXKrYzK9rCWK1nk9ctarEdJT7MB/tqURwlmxSNWDhM4hCChvKAvtkQWPQ2kwDa6nMCl6K8OHGCf/bWzMrxHaAU7gJHcCjFV2CWpQ1ys85kI7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751266123; c=relaxed/simple;
+	bh=W3/qUmYR6QyOvmumbF5zNgCLQg69m81T3y9dtD4rHzM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Az2Ch8udyLY0G4JZiX9KUrCN+xlucTMETbIjxtO1ZtwI/FQvez5S8LRW+5L5KsugUmVRUylutuWBaQf+GCfzmQs0cXqYtwyPQ87yUzz6PghbyfIzIbvWzv6Zrda7eO1zneUOkfD4U4I25b6SUS8f9ubx5gs3JDnr9hTqiZ8RpA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=MSczNZRH; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5551a770828so814135e87.1
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 23:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1751266119; x=1751870919; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pku19sNVP6VuOr/+3IUAfIt54nYSogJc7sn5HCCxY5g=;
+        b=MSczNZRHiw4DqU0S9f5kOy6d563U0yx5WA/asWam17R6sFevTzMrnrEgNxTEZBlQ1H
+         8gbdNKHXIpabSd/taOtXmnNIvz3Y7J6DkIstPf5DOAUsvbIh6SgGBHZC6ZwiBnis9sK2
+         kSRkfb1Fv7iHwWnCSc+vXEdmfZ6C5RBCEZzVE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751266119; x=1751870919;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pku19sNVP6VuOr/+3IUAfIt54nYSogJc7sn5HCCxY5g=;
+        b=Lcgb2KkhxnEdyuc3ULVinaCAfJPKqHxYoyde999h4lM8SFaP/0DInx0sXzrmS63UXn
+         /IaKmAWhL/oEL+/ldDjPmMbUcint0dkmf1vJdg5nCC46qZeXxMzkKlslF4wkAtOJs1Vp
+         GBgSc4pbnjE4bZmLo1VUE+kJURrzhe0n9fPAi5K7+8tNtkC38xhTkmDqf8Mxu/OeZe89
+         hUAILh+OmkBJ3s4PPe/YYKDrckRSRO5udeMwm2yzahx2DCyA3lOdDl3/eePqkvUslW2G
+         DP7UcAvPcs9p/E8qAKkn5c2yJfBO64KEdPgMFQBDfN3G74QE6xa5cvddC3VsNOgaxLWi
+         MJ2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXMNyMkjYFuHS3wwiuAe+DpQ6DGpwEhVA7fcLQdHDhzMFxXKJ8BUidcF3h9I+9Zf2TVn/JwGZUP3Ns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfoBxmQWQPJzINPTQVVj6iwfD5VmevNecwy/XCUXTygC4VZ/xh
+	6/L/FrRll26qPBul6XzQ+ArenzhXkRirZNU3U3N2vowAqrLcY0MwO+6UxyaUearxjUvjKm93UCE
+	/Avk=
+X-Gm-Gg: ASbGncsNYqMRF8YDneDIX1cQPG9b/ItAVvGvjGU9lBKFXgWD6o87LWweyRCq1eKaB3B
+	4J86HwJAg9l1XD7/0MpAM2VPTVm111AIWbMmybtmcVukutTnh1+wN0H2aifn7WjfzIOd+fWoexZ
+	/g+NMI9Fb9+QHE7frbD07cxKiatu6hu6F/v4FoMYIu0GDtBR8YG5FSky32gNk6EuyuWI/sFjEVi
+	YNHSM96gojqJROkJMrywwDJadr6mIsq3A7cP90oI/TvrPM0u7OYCrIM688kMfpq9aWZfkzaXlAk
+	eretXu2DLxfMT7sWFcd2BocofIBKstEycONi9kqAGSFIV9nCElRK/IC8QYwp4P1WsSw4azXSlS/
+	72gY/5+fd61toeyRBxxanhk1I
+X-Google-Smtp-Source: AGHT+IE94GMC8FnMxhjBxEaTLxXoA4YXb+cHWUpFD27oPIkX/O9CS3Xc1P7fAPQQ3vYm9NA9ofziNg==
+X-Received: by 2002:a05:6512:4011:b0:553:d122:f904 with SMTP id 2adb3069b0e04-5550b88e3b8mr3716094e87.23.1751266118836;
+        Sun, 29 Jun 2025 23:48:38 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2cefebsm1308127e87.184.2025.06.29.23.48.36
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jun 2025 23:48:36 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-553b51f5218so4277898e87.0
+        for <linux-usb@vger.kernel.org>; Sun, 29 Jun 2025 23:48:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUzVv41Xdy0RAxTl++LFaCJbTJjpHT7qa8iyK+u7Sa4lmEWxtdsYcSTh9lZNJtdTnGt5p/xo8Ap8do=@vger.kernel.org
+X-Received: by 2002:a05:6512:3e2a:b0:553:3770:c912 with SMTP id
+ 2adb3069b0e04-5550ba2bc7emr3296124e87.47.1751266115614; Sun, 29 Jun 2025
+ 23:48:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	TglOBcUwo1EVHwpuCw2Q5fQwCpMiupgvGuK1PB2wqiXKM7U1ln6ecxlEshIgfRM/h6sxLUbWtPBHFY2JiTEW3U9fBCIZ7SjdIwRpkvHIlum2Q+aA5SS9Gb30bwLd4WnuZPSQJYPBWwufT4d04c3fTEvnIRQaBzYkvfGlM5Aj18rSdDBiyGmDuj870LdQhIDBgWXbmokXE4G70ehozdWq+atPGBzUp6byt6prU278p/Yr2r0pRHPsDMBbwWdPfUKQekcKccnkMeW+7otFrx1cCRBzesDjv8eWed4AcP7IzA/d6O9aSKLIOLwUJn3sJNjsXM1oDx3g2I9AXjJgHkLWrbCsaXj7GZkICVwassP6I7aVvk6Y+TAowH0hismPu41F4/4Ynx5L4xNcLuqjU7kRj0Pg9MKWjqrkzVhtOmqMq/fSCVJH1jpzfuvGhvdVUoMQw1hOEnzwGT39cgptXtL+W801wa83ft+PJ/91d77tj542U344xqPf9QDooOz7mntlVs2S76KyHb1aqU3VOrBctrDqy4Wjc4X0JOQyfRMh2iefeDf4umtsQzkJQP5A0sQR2dsCpBJdOFu2lCCde3oDul2jq0PnA6SYUHt1lfVWmU4WKqTdV9z6J46tBuIRKh5q1q0Q3tA/yCkTpIu0r0Bi9w==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB8796.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 435949b9-6b81-47a4-1271-08ddb7a0f08e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2025 06:40:01.4441
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yBbv/m2m7lGbAjHVEDJ2ww/sjsGxVl/f82Rxf97GCpcbYAgYOXFcrtKgY+yiOQTL8vQI0+j5SGRziinCandR4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6128
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDA1NCBTYWx0ZWRfX7cSrV9MqsL8R
- RmQxccSKsTz46vgJAGN59iwAnDSi+zZmSJ5/3yxk/aIyhrn71nTrHLI87Gov+RqG/bVw7dcOMcu
- 0dLCS6s172JCHV1baEOBVCXh2Ndcrup6+NBltBCcTR2sdBxbVd5iarb9gACyO7OnkBq3uVJk+UP
- hhsrWy595vE4uBp6seM6z5EKJBpj9MHJ49vjak406dGGb7ddVVMqipTEEVgZzfJ76MvDKsGwC+Y
- 86J/oLnyyGdqDp+/XbRqwNTmEk5jhrybcN/fV6Kys5e70OV+X7uyoQFtgRcv2ff5odMFD9Gf/ys
- G7xF2KZ3/lDX3XrqEY+XDdKGqnZrCptaRuJPkzp3Hjwwi7RmpKKtlDM841C4rV5C81VHqU+DhiM
- pgxcLNPg6dxQR1XsdMeua0T6qHU+c62DphF8qdgAXo2AyDTy14rANJgP013WGjnq85ytpV2F
-X-Authority-Analysis: v=2.4 cv=Er3SrTcA c=1 sm=1 tr=0 ts=6862314a cx=c_pps
- a=t4gDRyhI9k+KZ5gXRQysFQ==:117 a=t4gDRyhI9k+KZ5gXRQysFQ==:17
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6IFa9wvqVegA:10 a=qPHU084jO2kA:10 a=VwQbUJbxAAAA:8 a=jIQo8A4GAAAA:8
- a=SDlr6Xcdu9MZ9iYQTi4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: O5OIyJdKlqK6DP_ptnFkFV4rpiV2rKKC
-X-Proofpoint-GUID: O5OIyJdKlqK6DP_ptnFkFV4rpiV2rKKC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_01,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
- policy=outbound_active_cloned score=0 mlxscore=0 impostorscore=0 phishscore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501 clxscore=1011
- mlxlogscore=999 adultscore=0 malwarescore=0 suspectscore=0 classifier=spam
- authscore=0 authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506300054
+References: <20250627101939.3649295-1-xu.yang_2@nxp.com> <20250627101939.3649295-2-xu.yang_2@nxp.com>
+ <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu> <20250629233924.GC20732@pendragon.ideasonboard.com>
+In-Reply-To: <20250629233924.GC20732@pendragon.ideasonboard.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 30 Jun 2025 08:48:23 +0200
+X-Gmail-Original-Message-ID: <CANiDSCswzMouJrRn2A3EAbGzHTf88q_qQ=DC_KX7dbf_LJzqBg@mail.gmail.com>
+X-Gm-Features: Ac12FXygHhnlFKiXR-4gqAGeNFFl6ex4EPtMW2SIZttm2I0yNPjkXicKbD_z69Y
+Message-ID: <CANiDSCswzMouJrRn2A3EAbGzHTf88q_qQ=DC_KX7dbf_LJzqBg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Christoph Hellwig <hch@lst.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Xu Yang <xu.yang_2@nxp.com>, 
+	ezequiel@vanguardiasur.com.ar, mchehab@kernel.org, hdegoede@redhat.com, 
+	gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de, 
+	andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk, 
+	thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
+	jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
 
-DQoNCk9uIDYvMjkvMjUgMTM6NDYsIEppc2hlbmcgWmhhbmcgd3JvdGU6DQo+IE9uIHNvbWUgU29D
-IHBsYXRmb3JtcywgaW4gc2h1dGRvd24gc3RhZ2UsIG1vc3QgY29tcG9uZW50cycgcG93ZXIgaXMg
-Y3V0DQo+IG9mZiwgYnV0IHRoZXJlJ3Mgc3RpbGwgcG93ZXIgc3VwcGx5IHRvIHRoZSBzbyBjYWxs
-ZWQgYWx3YXlzLW9uDQo+IGRvbWFpbiwgc28gaWYgdGhlIGR3YzIncyByZWd1bGF0b3IgaXMgZnJv
-bSB0aGUgYWx3YXlzLW9uIGRvbWFpbiwgd2UNCj4gbmVlZCB0byBleHBsaWNpdGx5IGRpc2FibGUg
-aXQgdG8gc2F2ZSBwb3dlci4NCj4gDQo+IERpc2FibGUgcGxhdGZvcm0gbG93bGV2ZWwgaHcgcmVz
-b3VyY2VzIHN1Y2ggYXMgcGh5LCBjbG9jayBhbmQNCj4gcmVndWxhdG9ycyBldGMuIGluIGRldmlj
-ZSBzaHV0ZG93biBob29rIHRvIHJlZHVjZSBub24tbmVjZXNzYXJ5IHBvd2VyDQo+IGNvbnN1bXB0
-aW9uIHdoZW4gdGhlIHBsYXRmb3JtIGVudGVycyBzaHV0ZG93biBzdGFnZS4NCj4gDQo+IFNpZ25l
-ZC1vZmYtYnk6IEppc2hlbmcgWmhhbmcgPGpzemhhbmdAa2VybmVsLm9yZz4NCg0KQWNrZWQtYnk6
-IE1pbmFzIEhhcnV0eXVueWFuIDxobWluYXNAc3lub3BzeXMuY29tPg0KDQo+IC0tLQ0KPiAgIGRy
-aXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYyB8IDMgKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMg
-aW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZv
-cm0uYyBiL2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYw0KPiBpbmRleCAxMmI0ZGMwN2QwOGEu
-LjNmODNlY2M5ZmMyMyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMi9wbGF0Zm9ybS5j
-DQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYw0KPiBAQCAtMzcxLDYgKzM3MSw5
-IEBAIHN0YXRpYyB2b2lkIGR3YzJfZHJpdmVyX3NodXRkb3duKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKmRldikNCj4gICANCj4gICAJZHdjMl9kaXNhYmxlX2dsb2JhbF9pbnRlcnJ1cHRzKGhzb3Rn
-KTsNCj4gICAJc3luY2hyb25pemVfaXJxKGhzb3RnLT5pcnEpOw0KPiArDQo+ICsJaWYgKGhzb3Rn
-LT5sbF9od19lbmFibGVkKQ0KPiArCQlkd2MyX2xvd2xldmVsX2h3X2Rpc2FibGUoaHNvdGcpOw0K
-PiAgIH0NCj4gICANCj4gICAvKio=
+On Mon, 30 Jun 2025 at 01:39, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Fri, Jun 27, 2025 at 10:23:36AM -0400, Alan Stern wrote:
+> > On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
+> > > This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> > > functions to support alloc and free buffer in a dma-noncoherent way.
+> > >
+> > > To explicit manage the memory ownership for the kernel and device,
+> > > this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> > > and call it at proper time.  The management requires the user save
+> > > sg_table returned by usb_alloc_noncoherent() to urb->sgt.
+> > >
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > ---
+> > >  drivers/usb/core/hcd.c | 30 ++++++++++++++++
+> > >  drivers/usb/core/usb.c | 80 ++++++++++++++++++++++++++++++++++++++++++
+> > >  include/linux/usb.h    |  9 +++++
+> > >  3 files changed, 119 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > > index c22de97432a0..5fa00d32afb8 100644
+> > > --- a/drivers/usb/core/hcd.c
+> > > +++ b/drivers/usb/core/hcd.c
+> > > @@ -1496,6 +1496,34 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(usb_hcd_map_urb_for_dma);
+> > >
+> > > +static void usb_dma_noncoherent_sync_for_cpu(struct usb_hcd *hcd,
+> > > +                                        struct urb *urb)
+> > > +{
+> > > +   enum dma_data_direction dir;
+> > > +
+> > > +   if (!urb->sgt)
+> > > +           return;
+> > > +
+> > > +   dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> >
+> > Are the following operations really necessary if the direction is OUT?
+> > There are no bidirectional URBs, and an OUT transfer never modifies the
+> > contents of the transfer buffer so the buffer contents will be the same
+> > after the URB completes as they were when the URB was submitted.
+>
+> The arch part of dma_sync_sgtable_for_cpu(DMA_TO_DEVICE) is a no-op on
+> all architectures but microblaze, mips, parisc and powerpc (at least in
+> some configurations of those architectures).
+>
+> The IOMMU DMA mapping backend calls into the arch-specific code, and
+> also handles swiotlb, which is a no-op for DMA_TO_DEVICE. There's also
+> some IOMMU-related arch-specific handling for sparc.
+>
+> I think dma_sync_sgtable_for_cpu() should be called for the
+> DMA_TO_DEVICE direction, to ensure proper operation in those uncommon
+> but real cases where platforms need to perform some operation. It has a
+> non-zero cost on other platforms, as the CPU will need to go through a
+> few function calls to end up in no-ops and then go back up the call
+> stack.
+>
+> invalidate_kernel_vmap_range() may not be needed. I don't recall why it
+> was added. The call was introduced in
+>
+> commit 20e1dbf2bbe2431072571000ed31dfef09359c08
+> Author: Ricardo Ribalda <ribalda@chromium.org>
+> Date:   Sat Mar 13 00:55:20 2021 +0100
+>
+>     media: uvcvideo: Use dma_alloc_noncontiguous API
+>
+> Ricardo, do we need to invalidate the vmap range in the DMA_TO_DEVICE
+> case ?
+
+That change came from Christoph
+https://lore.kernel.org/linux-media/20210128150955.GA30563@lst.de/
+
+"""
+
+Given that we vmap the addresses this also needs
+flush_kernel_vmap_range / invalidate_kernel_vmap_range calls for
+VIVT architectures.
+
+"""
+
+>
+> > > +   invalidate_kernel_vmap_range(urb->transfer_buffer,
+> > > +                                urb->transfer_buffer_length);
+> > > +   dma_sync_sgtable_for_cpu(hcd->self.sysdev, urb->sgt, dir);
+>
+> In the DMA_FROM_DEVICE case, shouldn't the vmap range should be
+> invalidated after calling dma_sync_sgtable_for_cpu() ? Otherwise I think
+> speculative reads coming between invalidation and dma sync could result
+> in data corruption.
+>
+> > > +}
+> >
+> > This entire routine should be inserted at the appropriate place in
+> > usb_hcd_unmap_urb_for_dma() instead of being standalone.
+> >
+> > > +static void usb_dma_noncoherent_sync_for_device(struct usb_hcd *hcd,
+> > > +                                           struct urb *urb)
+> > > +{
+> > > +   enum dma_data_direction dir;
+> > > +
+> > > +   if (!urb->sgt)
+> > > +           return;
+> > > +
+> > > +   dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> > > +   flush_kernel_vmap_range(urb->transfer_buffer,
+> > > +                           urb->transfer_buffer_length);
+> > > +   dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
+> > > +}
+> >
+> > Likewise, this code belongs inside usb_hcd_map_urb_for_dma().
+> >
+> > Also, the material that this routine replaces in the uvc and stk1160
+> > drivers do not call flush_kernel_vmap_range().  Why did you add that
+> > here?  Was this omission a bug in those drivers?
+> >
+> > Alan Stern
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+
+
+
+-- 
+Ricardo Ribalda
 
