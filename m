@@ -1,51 +1,54 @@
-Return-Path: <linux-usb+bounces-25296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31C7CAEDF44
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 15:37:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA4C9AEDF4F
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 15:39:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D41F16FBE7
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 13:37:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF6EE1891BBE
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 13:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BDBB28B4FE;
-	Mon, 30 Jun 2025 13:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEF628A738;
+	Mon, 30 Jun 2025 13:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xNxTpcC3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041D125B30D;
-	Mon, 30 Jun 2025 13:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5740F28B4F0;
+	Mon, 30 Jun 2025 13:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751290662; cv=none; b=Xq197WEJfft7DjcOraUvNDba4qSV0kvO0sZipMmwHuZpPFnJjUV7FYooQrlQWSOJyDp07+lrdPZM9orbdcZLYHMi5gxbNrv/Qx1vLKW9qbRoh4Rd4NesAdzqSZP68N8IUe7i3LxuVX6tmazlHjEvYBiXtB/OR5cUIolt7bX8hVE=
+	t=1751290751; cv=none; b=D9QCtJx9j7bUy/zIR6Xs4mP/lziCDzGd8/2bjIWOQjzqsFWwfTd6aBmuVxDkpY733UJ+JJqvasrkWqRWBfsGaHg/fl2Kvhax8KsMzp3n0+ZOJx0i7hSNSUfp5G0/6ky/DAfeHg/izCnqbQHKr2WXoQQBznMdRdYfxBh8OVKwJKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751290662; c=relaxed/simple;
-	bh=O4qRLRexRAuK+5ApxruyQ2/Nu+qVASNZCX7hgb3Bh1M=;
+	s=arc-20240116; t=1751290751; c=relaxed/simple;
+	bh=7izEr5Kx9Sy8CCJItblbtYpeYZEw6T/gngaq7I5hwsc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owIYBkKIyE7SQmq+TY56kclRKWdlC4BjsJF8FwWKKowAX+RISDkiytJMmQyyteh+XCvqQje7f5/xSg8fZOziZ1aP2myazz96sYy9CGdZb/FVlrX+FlSPsbdkbxOftEkZhZlJ0ZDlBTo2CbZlk4lYTzITrslcS3WWibtZmLgWxdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id DB46968AA6; Mon, 30 Jun 2025 15:37:34 +0200 (CEST)
-Date: Mon, 30 Jun 2025 15:37:34 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, Christoph Hellwig <hch@lst.de>,
-	Alan Stern <stern@rowland.harvard.edu>, Xu Yang <xu.yang_2@nxp.com>,
-	ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
-	hdegoede@redhat.com, gregkh@linuxfoundation.org, mingo@kernel.org,
-	tglx@linutronix.de, andriy.shevchenko@linux.intel.com,
-	viro@zeniv.linux.org.uk, thomas.weissschuh@linutronix.de,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
- free API
-Message-ID: <20250630133734.GA26768@lst.de>
-References: <20250627101939.3649295-1-xu.yang_2@nxp.com> <20250627101939.3649295-2-xu.yang_2@nxp.com> <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu> <20250629233924.GC20732@pendragon.ideasonboard.com> <CANiDSCswzMouJrRn2A3EAbGzHTf88q_qQ=DC_KX7dbf_LJzqBg@mail.gmail.com> <20250630082313.GB23516@pendragon.ideasonboard.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bGSvgUC5XoaTdZoa8K5p5a0qfQebIy9iKHtVilxEcT1SWx8OmeadmcS/qiR0TcMUzVnjVvSVLPuDwGAEiaXY1h28Uzv172aO9cAMYK8rsp727nw0UlBK5mZM76PMXGjgnIN0yvihr7QJMtWZd7uWTOYHtH82iWfdgCDE7KAowu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xNxTpcC3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6951BC4CEF0;
+	Mon, 30 Jun 2025 13:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751290750;
+	bh=7izEr5Kx9Sy8CCJItblbtYpeYZEw6T/gngaq7I5hwsc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xNxTpcC3wjqHFzrSjbOQ9WLKOnl+9oJQGIEr+JLGvuWXYwpIZ3syePvfxvIN7sNDf
+	 A/TwsQ2fbgdWYJIrIyLismPdq/93Px3RIEQJQ8AP0zaSkm5VW2vhAf0fttdkl+a3ZL
+	 1/s9L5wLi46Ay0MFxv+B7V+r5d9JEMeUF3UnE3Uc=
+Date: Mon, 30 Jun 2025 15:39:07 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Drew Hamilton <drew.hamilton@zetier.com>
+Cc: Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yehowshua Immanuel <yehowshua.immanuel@twosixtech.com>
+Subject: Re: [PATCH] usb: musb: fix gadget state on disconnect
+Message-ID: <2025063046-parchment-unstopped-4cf7@gregkh>
+References: <20250624140930.25887-1-drew.hamilton@zetier.com>
+ <2025062456-cameo-directly-fc66@gregkh>
+ <f8988d47-d84b-4cff-ba20-9b3341879354@zetier.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,18 +57,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250630082313.GB23516@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <f8988d47-d84b-4cff-ba20-9b3341879354@zetier.com>
 
-On Mon, Jun 30, 2025 at 11:23:13AM +0300, Laurent Pinchart wrote:
-> Christoph, you mentioned
+On Thu, Jun 26, 2025 at 01:35:39PM -0400, Drew Hamilton wrote:
+> On Tue, Jun 24, 2025 at 10:16:30AM -0400, Greg Kroah-Hartman wrote:
+> > What it does show is you missed the many thousands of changes that have
+> > gone into the tree since -rc6, is this still an issue in 6.16-rc3?
 > 
->   Right now we don't have a proper state machine for the
->   *_kernel_vmap_range, but we should probably add one once usage of this
->   grows.
+> Retested against v6.16-rc3 and confirmed both that without the patch the
+> issue is still present, as well as that the patch still resolves the issue.
 > 
-> Has there been any progress on that front ?
+> > What commit id does this fix?
+> 
+> It seems like this issue has existed for the MUSB driver since the UDC
+> 'state' sysfs attribute was defined in v3.1.
 
-None that I'm aware off anyway.
+Great, can you please fix up the changelog and add the needed Fixes: and
+cc: stable line to the patch and send a v2?
 
+thanks,
+
+greg k-h
 
