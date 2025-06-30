@@ -1,539 +1,232 @@
-Return-Path: <linux-usb+bounces-25298-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14864AEDF6F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 15:43:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 493CAAEDF86
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 15:48:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E1323B79E5
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 13:42:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97A0E1788BF
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 13:48:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2101128BA95;
-	Mon, 30 Jun 2025 13:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8139E289E00;
+	Mon, 30 Jun 2025 13:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khV04kkE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9ZjZ2Ga"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E86628B7E7;
-	Mon, 30 Jun 2025 13:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751290953; cv=none; b=KgILsEWIK9hcPwqbIYdsIxVMlHKrEjzXD0ze9/Hb+JPa3qjIXXtWTQd8b3eq6aD9D2xpLHPxlCf18gh1YlNsQjMSoRPrXdXoyT5mZPa59QlaUWQ2RJecVlt+gcON/eV6/suwM/HbS/F/gK0tw7Mx7+zsrWQOmALIycnQIvVW7vk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751290953; c=relaxed/simple;
-	bh=TWQr3l80bdH75AF85Up3zEwthw7njRiplmcLj0psS2I=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=nA1mpkETrbQUBRBip0v/WN0DfvvyaE1j1RD2OQRusG7UYuc7QYbXU9PVTuBwNcw+s6dVkWPpPpbVk3/6pwbNsfVGSH8tJ4nQSyTeNIujlFVV0MeTVIqF+/l3M5ZYTiCGHjJadYS68FsaxBK/XAlOWGNnXopKqPi0cEpnDVRfgMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khV04kkE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FAFC4CEF4;
-	Mon, 30 Jun 2025 13:42:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751290953;
-	bh=TWQr3l80bdH75AF85Up3zEwthw7njRiplmcLj0psS2I=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=khV04kkEUm9eglTC2q9Xktyr41FVcwaML8nhfUYrJ+e7BD/avu2zxsCFs6PUgE/SB
-	 WsBYKA0O0GUtGA9+tdmBHAT4N9bPCXYOHFElRCC0Kk6FSv9DyDWi14/3gnbgMqmlZI
-	 t25rEJaMRXaTTYw4X1+QhK9WwQhENJYYA1XiCewQGMvHoM7Y39jGR+ivgdk8rz6INQ
-	 pvoXTgEFcVfzT1pbSQhgXt2WFKzD7isEnwk1YaG/2rXZfdAX1D5s6agRbNYp/1z2tl
-	 8jKAkuXcfbs4bJ7lnDNXgdAlz21uQ5qP8wXgb+tIXEn4oZ+qcjHlpUl4QALZRFg1y5
-	 g3IC62Qu0iiNw==
-Date: Mon, 30 Jun 2025 08:42:32 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BA83D69;
+	Mon, 30 Jun 2025 13:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751291330; cv=fail; b=p6F5/5eu0pSfFKkueelcmDyfAmBqYHDvSG9wCtV/vT6qNFAiBZPlvWkLHfJ+SMQUphetJir7y9aV50RgPFP9f2nLpgQt/ZugQxaFeW9WuNFKuZeQxtp0Hai+DrGq0cmg+4FAFWmyMvushcmNSGssukJbnkkkDvHJ1DrV1R6ULdE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751291330; c=relaxed/simple;
+	bh=O4EdNWXEogBfmdLW7Q+SaR/1DIc+R3hvDZbz4nhsH5w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=tNK0yVMfzJi8NFbSljuHdGPTQFuwcRJbyEmy9UMVlvIZ3nKLCEXAa0AUIh0Ip4G12BffHOk2kQFtFMwsA125ES5Bkc9s8gwRtrJrf6C0mBxffxS2P7ebtOA1XqJOtudrE12MafZ75pKtvxVx2KmKWG44Mm9BnEupv3e/357kPfo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9ZjZ2Ga; arc=fail smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751291328; x=1782827328;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=O4EdNWXEogBfmdLW7Q+SaR/1DIc+R3hvDZbz4nhsH5w=;
+  b=X9ZjZ2GabD9OPOkOzdIYD5vphNgId2Hj9in2PAIE2vzah8kmguujDxzQ
+   1EAMwe6jnKWNDlWpS9odJJpXkbpXTS1kVYxr1Yc5nSLzjS2LdDkvPu4Ub
+   DPLxE/yECK3+0xxaKTMhleFkK0flyW6JpNqv/fiiULx/c3p5ycoZt1LKY
+   ky8H38WD4ZvF7xuzijy9RMfy5I/cdn4F55ACQ9zq8DnEBv2UZpFYY0/kM
+   woCuDjrSarv1JGTw5846xwZaZAO7bjBlcPkabFDtrOUAv1gjs7N+GFgEb
+   2DhAkE8pp4SUcIc3zKd16TlIb5hJNt9bVPdPPJbtKp/gEZ0lQP9ygPxOo
+   g==;
+X-CSE-ConnectionGUID: DyKygXdKR4WcfDtygBYaHA==
+X-CSE-MsgGUID: NSXsC/6WQLC+FDwpHLfk6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="64869740"
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="64869740"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 06:48:48 -0700
+X-CSE-ConnectionGUID: JvUduTnfQ+yH/LAa+VuRxg==
+X-CSE-MsgGUID: 6M0WV0fjRJ+gTXk4sfvCnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="158970216"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 06:48:48 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 30 Jun 2025 06:48:46 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Mon, 30 Jun 2025 06:48:46 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (40.107.244.40)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 30 Jun 2025 06:48:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FfDWJ+liuIjMHs8UFp5wZ7HcCkKRDsA3NntJbFPZDZTILEaZga+qwz6bw5wxPpkyuEoCGCxPIKonDiFmlI+qluJO54qrcV5wqxQwSIQ4sJUmYVQOxXS+GnfdxuETKxVHTGtj6rRBmlOhFKj1M+MjeWDTQ0bjxDQuE9oaAtSlePraHFAlo4uJbd54AHCejxFb/O24jCfNHrRa6dU4ao66GUUDfU9ocuxHEEjH97SzoIZcZIgv0WJkRZnfxn2O6lkRPqLUMWR5kot2v2TeJ7T/dS35BWtmLNah1vgwoqCk3zIVO+16TBVYUryF58gz9Ot0jfV88suYzjFuv7k5wrwb9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vJ+nyPeYUFylgsjaRr3DOGGYSqSuOtsQtq0gQVXCgTg=;
+ b=SDxOWoRdGWIFhP4rDKjTp1m2xQ4nZ71C2/NXPxUpiY0jzu9hggbINj5xaKN0ufRvMWajf0NRJPxA4Rs8rtRqa8HEUQfYU8YfjwSDt8YtVi6D3U1eKHyPD9s3FbVRj/HJQNRE9JQZvZSqGZ8LuzQGZr0qWT6bSfnk/Vt2EQuxk4Y92KmmPYzCXHPrk/mGnn3gShTRgwMRhEvZVg2NurdGa0D2RR6WEAXm6UYBafwu0BmZnM+GgsXFY+I2UvLzxJwIOS46tNdsDwn5IxVOo0qwUSDxlYcuA13DEnIpAvmkBU9QbTsJPTf0e1DQJ1oJcTZvVL3GFBYiNPSu8n5Pw1n9Cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by MW6PR11MB8438.namprd11.prod.outlook.com (2603:10b6:303:241::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.29; Mon, 30 Jun
+ 2025 13:48:16 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%5]) with mapi id 15.20.8857.022; Mon, 30 Jun 2025
+ 13:48:16 +0000
+Date: Mon, 30 Jun 2025 08:48:12 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: early: xhci-dbc: Fix early_ioremap leak
+Message-ID: <stfmkxxo2odewcw2i53rkrke2i3xecsuvhiagjna3blpw2keui@wqms2enxmkxf>
+References: <20250627-xdbc-v1-1-43cc8c317b1b@intel.com>
+ <2025062803-paver-octane-e038@gregkh>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <2025062803-paver-octane-e038@gregkh>
+X-ClientProxiedBy: SJ0PR03CA0153.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::8) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
- Matthias Kaehlcke <mka@chromium.org>, 
- Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org
-To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <20250629-tb16-dt-v7-0-35276341338f@oldschoolsolutions.biz>
-References: <20250629-tb16-dt-v7-0-35276341338f@oldschoolsolutions.biz>
-Message-Id: <175129088433.2459111.17436859993000408359.robh@kernel.org>
-Subject: Re: [PATCH v7 0/4] arm64: dts: qcom: Add Lenovo ThinkBook 16
- device tree
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|MW6PR11MB8438:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9d30c23c-8ca5-4a98-f21e-08ddb7dcc3b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?3nTopaK3TwuB3YBXK89iRuk+cIsf8B6gQuJaR7HgYVoG1f+vZgnFch8ntJ27?=
+ =?us-ascii?Q?wMoehfRtb5dTK/HWEoJyOxwCIH/859H5U6SHDCR5fP9phFC7Eqg4V4axxbUw?=
+ =?us-ascii?Q?40BA6qYXeCBXyjgQUcCDOqKmcc4UgKh+Qo8iLBa9X/q/GCFKB/vRHFfkQR/w?=
+ =?us-ascii?Q?bhyfE6JKIYtrnAroLyPaKoO7xr9qXn6FPI6192CCjsaA/u1qq5MffUn2juVb?=
+ =?us-ascii?Q?CUxOfP6eXFpFll7hQ8KJGUDjaEitFIpXqqbo3dmVBA3P2JNoU0UtmRroJLCF?=
+ =?us-ascii?Q?bR9vTvxgX4Dofh3PcKLtOl0O6r63+7vDLwdqc8W3M+2coHSxgefufZwx0UHe?=
+ =?us-ascii?Q?6fM2zgd0XyagBMGBJuoVAkttIT59GADuzNfsl6hcg1WZ18UBo1ERdLETEJ5S?=
+ =?us-ascii?Q?70gRotdYqIzqPcYzYAxoyk1RRSUTvJ5t9g4Gp29ka8L4gGoBVFz2mwMdtOnU?=
+ =?us-ascii?Q?2mYj+Gerr/lVMj2E1QAg5IkETt9KDjoQ1tqffHDh7kOP5jSMHfQYk4R2vjs8?=
+ =?us-ascii?Q?wcagHcnufTMveopVXOsOnHsXJ8FUFZXId1lnDbq/dJg4Y1NzXNTOeOJOocRC?=
+ =?us-ascii?Q?PKEx0T92oy3kOXuwyW3pZkWCQ9zHtE3WdxbUAIeOwrVzuriZtS5ivxc47ZCZ?=
+ =?us-ascii?Q?L7F5FYLdGDuTbshft4/kO7Z6x2itn8dnEtbMJw8dHbsu84lz0ikgrihqJfSq?=
+ =?us-ascii?Q?UD4zy+gB1t+PdH8BgZKxcMFrFUTd5x2I8SVcvk8DSc3jRzct+1ZqOnuJp+r3?=
+ =?us-ascii?Q?CtfIsynHrpc6DyBG+/au7FGY7QRtvsoTYHSxlX/0LGiLhnVMGCiO63df5Q/9?=
+ =?us-ascii?Q?09ZY20hmRJBMOtGKtyaAhXZ4z0cP4Rj1QJE+wrl0laX8G+LlpJsrNDjf/zJk?=
+ =?us-ascii?Q?8qiwUqwwegzpDm1mPdsgYExBZutW1TvL4WTXuev1iDwbbZ0CU/y8/InJJNSh?=
+ =?us-ascii?Q?RMxzQm9baRNS+eAWrneZXN7ohtJRzXln7sRAitkW+r55QCCP6AHi4qX4TCDb?=
+ =?us-ascii?Q?zschQ4hNnWnI5wztBVSPFls5E0m6k3q+UkKMKGXNlRhF84MdJbvK+HXnmd1F?=
+ =?us-ascii?Q?6yuo9wGnenDrppalmbkzroc/7TuvKf+UzSsKq+XVnurYEbEIa4xq7k1AGqOr?=
+ =?us-ascii?Q?lxIszFlHCEo5ZkJ+Di3p52dzBYDRd9D0YeDd4yvF4lE58xzqn8Kr9xqHkIfh?=
+ =?us-ascii?Q?CU2BSJ4SVkFgdzkBNC+p0scY9aZ4IpPUpse+fJz/9942NI0ups0YYNz8TKwx?=
+ =?us-ascii?Q?br8Mg0KGt0o53/IQS2nSGjXK9VK/j8arlhiLD60obT4TzoG+wJ7syk/J6xxr?=
+ =?us-ascii?Q?oG/oyoDCrZqeEaKbB/cnGVg2Ut3h3TUE2BIe5d/rYWa1ps9UV3KFCI+XhP37?=
+ =?us-ascii?Q?qg7Q9158xBnGsCMYa9I6w11KiLvhBaewqitYpATivN17gydihHtvNLrsph7c?=
+ =?us-ascii?Q?kpW5oxJq02c=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HZrBAJxuLfGR2zlb/3Ed1yNbM712Y7ctjM7T7thtU9WKUw6Ydw9myPOLE8yd?=
+ =?us-ascii?Q?K1AmOww+zDFEAq6NRdr8ii18tgC6l2ptiqVSNp4phJecbxr1vSf08/JIuPtV?=
+ =?us-ascii?Q?1BFjwxDoJDV7Xmdc9JjWd0sZUndp/AWG6QfFtclAfDrtIqrQpeH3Y9CwN7U2?=
+ =?us-ascii?Q?iyVjpXH6+tI6VciliGaK0WoGZHeVoXlAwfNAue6GGBC6+CFLuShEgrFnZeNF?=
+ =?us-ascii?Q?kv+0DMnFUI5vbgd45kHbIuJTf6CMnfnV0KxSS1COeK6BCQpp2dXovNSUECbn?=
+ =?us-ascii?Q?uMcuGvSRhJYsRJ2ulFNvAW7kn/xtK+IsjWTE0OF0RqHiNUs0+FGaQaMN8Y6o?=
+ =?us-ascii?Q?HTTOKfBNh+wVImoEGarqeEcUXDhJHeGcRtVTQ9YDNoUYwerx6j7aLtXQruvZ?=
+ =?us-ascii?Q?1mirLC9NQUmlusPhneX1MOe1FuJPTgxY9BrXl38F09ykIUwNYr63AWjQdFTe?=
+ =?us-ascii?Q?tds0ysrDg+cVIk3WO1mPSskyHimCEyHTx8UxF6QVKgVFWDGiaf8n1dOj4EqP?=
+ =?us-ascii?Q?e+DboBQivFF8tHiA9UJlQPLnIQiw8JSt2Wf7bAfVeXysDe84A5gYh/lspx6/?=
+ =?us-ascii?Q?OJ7IWUZpt9emfKXvOkP9FJ+bOS0tW/jR8shEVFQmGHLrL3g32gorHB0ylc6F?=
+ =?us-ascii?Q?ZC0fag6E2wepQZTua03UoflUl/Vhw3rbkSgIw1+aHKCmOQR6tsh9MLgrApUm?=
+ =?us-ascii?Q?XzVmfwfY1TBm0nGU2R53hRIEFwOvVZ4BPKCbS9+bNteyqQzy8wEvC3V4AvD3?=
+ =?us-ascii?Q?XXAwVBXPxgvc7ZZzXAHZZJnoD/pXYhfLcf0i6P0HTVnL0+K1FnJv17ISRA8K?=
+ =?us-ascii?Q?otaMThtZ1ljypu7BQs5x5sS/+bYDyY4vY/dM9/XvIexHwVqQiQV70bCu/jLG?=
+ =?us-ascii?Q?hWHVqix68Lvqr68dYEzuSxzLBCFjP1RUbSTj7Yk7ykS1+zpZ7rM53MRwsD0u?=
+ =?us-ascii?Q?xzK4j8lz0N230Bedv4bGn7/nUeu0ThkMpknsZND9r9LsFYV/UWXgL+TJMB9y?=
+ =?us-ascii?Q?5ksTExBp/c5jCqnrqUCGo8TT3pzWc0cCIZfplFsdHHlBlMbJcgNhb07wf8ov?=
+ =?us-ascii?Q?n9RNYKnajEh2RM78qIvmWegnGQFFQoM1beuLm5qFrNguRCkEbDk2RyEeQR4G?=
+ =?us-ascii?Q?M2uext6PWTvoHTMWNAGTJ3CRPzM/GgJF2TcLMJIuS/tKTITDykV6x6pkYNUL?=
+ =?us-ascii?Q?nMHvB+oD00d8BV8leCEOyJkKp12LAC7oJt7ArLgjxo9iF7D+eoj2bMwQ1KBI?=
+ =?us-ascii?Q?Wsn0koxNKQf4yEGlHtMhXivOecIR5tAiWniv10v79fqpFuafTQ+9AZpKfZPQ?=
+ =?us-ascii?Q?RuJrAm7XWKIIht9DsDsDeUci9RRC4vjaLhUskM09E75SCP9Nv3zDos1OHTqD?=
+ =?us-ascii?Q?DLOn7l49k2tytKpl5yU6VyE4CY4LEAg7edfv0Pyqd5mex8Yva++DwtjHWSCu?=
+ =?us-ascii?Q?aiy0LnenszJPWWjiDtWVVurUX165J3Rq411BnlxX0ZkkftcOmJD4hW7KnWVx?=
+ =?us-ascii?Q?kksJ4Q0jcsvzFLVzhi0I1ak1aAU9MuLORbEPr1CMlv/AiEspfQC4M/bii29D?=
+ =?us-ascii?Q?DzMTswqfNaNQJ4VqHbvPu/Q0l0jL3JzM8DdvRVpl5oZTtzh//yenwHHbA1IY?=
+ =?us-ascii?Q?lQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d30c23c-8ca5-4a98-f21e-08ddb7dcc3b4
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 13:48:16.3163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vMutEUHO5P8njfycZCz08aNKvfXlIaNBWnzzTHN2UDHUcS7A4idrdWn8vmQAMU31+tWJPzR1ULWko6Cfgf6NJRRkkRtptAxGuV3f3wwI8T0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR11MB8438
+X-OriginatorOrg: intel.com
 
+On Sat, Jun 28, 2025 at 04:47:17PM +0200, Greg Kroah-Hartman wrote:
+>On Fri, Jun 27, 2025 at 02:47:47PM -0700, Lucas De Marchi wrote:
+>> Using the kernel param earlyprintk=xdbc,keep without proper hardware
+>> setup leads to this:
+>>
+>> 	[ ] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+>> 	...
+>> 	[ ] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+>> 	...
+>> 	[ ] calling  kmemleak_late_init+0x0/0xa0 @ 1
+>> 	[ ] kmemleak: Kernel memory leak detector initialized (mem pool available: 14919)
+>> 	[ ] kmemleak: Automatic memory scanning thread started
+>> 	[ ] initcall kmemleak_late_init+0x0/0xa0 returned 0 after 417 usecs
+>> 	[ ] calling  check_early_ioremap_leak+0x0/0x70 @ 1
+>> 	[ ] ------------[ cut here ]------------
+>> 	[ ] Debug warning: early ioremap leak of 1 areas detected.
+>> 	    please boot with early_ioremap_debug and report the dmesg.
+>> 	[ ] WARNING: CPU: 11 PID: 1 at mm/early_ioremap.c:90 check_early_ioremap_leak+0x4e/0x70
+>>
+>> When early_xdbc_setup_hardware() fails, make sure to call
+>> early_iounmap() since xdbc_init() won't handle it.
+>>
+>> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>> ---
+>>  drivers/usb/early/xhci-dbc.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>
+>What commit id does this fix?
 
-On Sun, 29 Jun 2025 19:25:21 +0200, Jens Glathe wrote:
-> Device tree for the Lenovo Thinkbook 16 G7 QOY
-> 
-> The Laptop is a Snapdragon X1 / X1 Plus (Purwa) based device [1].
-> 
-> Supported features:
-> 
-> - USB type-c and type-a ports
-> - Keyboard
-> - Touchpad (all that are described in the dsdt)
-> - Touchscreen (described in the dsdt, no known SKUss)
-> - Display including PWM backlight control
-> - PCIe devices
-> - nvme
-> - SDHC card reader
-> - ath12k WCN7850 Wifi and Bluetooth
-> - ADSP and CDSP
-> - GPIO keys (Lid switch)
-> - Sound via internal speakers / DMIC / USB / headphone jack
-> - DP Altmode with 2 lanes (as all of these still do)
-> - Integrated fingerprint reader (FPC)
-> - Integrated UVC camera
-> - X1-45 GPU
-> 
-> Not supported yet:
-> 
-> - HDMI port.
-> - EC and some fn hotkeys.
-> 
-> Limited support yet:
-> 
-> - SDHC card reader is based on the on-chip sdhc_2 controller, but the driver from
-> the Snapdragon Dev Kit is only a partial match. It can do normal slow sd cards,
-> but not UHS-I (SD104) and UHS-II.
-> 
-> Notes:
-> 
-> - Putting the camera behind usb_2_dwc3 results in the camera switched off after 30
-> seconds. With the stand-alone node as previously defined it stays usable and
-> suspends, as intended. Sincethe sole reason for the USB camera to be in the
-> devicetree is the required extra supply (which is guessed, as mentioned), and
-> its handling by power management, I would propose to keep it this way.
-> 
-> - The gpi_dma nodes appear to be implicitly enabled when a serial device is used.
-> I added them, no change in behaviour, though. Since this would be the only X1
-> device adding them afaik, I left them out.
-> 
-> - The cma-memory is removed, it is not on all x1 devices as I assumed.
-> Haven't found a case where it is required.
-> 
-> - i2c2 defines the keyboard and 4 different touchpad interfaces. With the bundling
-> of the pinctrl it seems to work better. I've had issues with only clock and touchpad
-> pinctrl on the i2c2 node, and not keyboard.
-> 
-> This work was done without any schematics or non-public knowledge of the device.
-> So, it is based on the existing x1 device trees, dsdt analysis, using HWInfo
-> ARM64, and pure guesswork. It has been confirmed, however, that the device really
-> has 4 NXP PTN3222 eUSB2 repeaters, one of which doesn't have a reset GPIO (eusb5
-> @43).
-> 
-> I have brought up the Thinkbook over the last 5 months since the x1p42100-crd
-> patches were available. The laptop is very usable now, and quite solid as a dev/
-> test platform.
-> 
-> Big thanks to Aleksandrs Vinarskis for helping (and sort of persisting) on the
-> fingerprint, camera and HDMI issues.
-> 
-> [1]: https://psref.lenovo.com/syspool/Sys/PDF/ThinkBook/ThinkBook_16_G7_QOY/ThinkBook_16_G7_QOY_Spec.pdf
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> ---
-> Changes in v7:
-> - amended pinctrl order and indents where needed
-> - interchanged enable-gpios and select-gpios for usb-sbu-mux as they are
->   defined in the dsdt - dp altmode function confirmed in both orientations
-> - picked up reviewed-by and acked-by from Dmitry Baryshkob and Rob Herring
-> - Link to v6: https://lore.kernel.org/r/20250607-tb16-dt-v6-0-61a31914ee72@oldschoolsolutions.biz
-> 
-> Changes in v6:
-> - removed compatible for qcom,sm8550-pmic-glink" in pmic-glink
-> - fixed malformed gpu node
-> - Link to v5: https://lore.kernel.org/r/20250607-tb16-dt-v5-0-ae493364f525@oldschoolsolutions.biz
-> 
-> Changes in v5:
-> - removed patch for the CMN N160JCE-ELL panel, got reviewed
-> - re-ordered code in onboard_usb_dev as requested by Dmitry Baryshkov
-> - amended device tree with review notes from Dmitry Baryshkov where possible
->   and resuting in a working laptop - added notes section
-> - Link to v4: https://lore.kernel.org/r/20250524-tb16-dt-v4-0-2c1e6018d3f0@oldschoolsolutions.biz
-> 
-> Changes in v4:
-> - squashed Makefile and dts commits to one
-> - picked up r-b from Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> - Link to v3: https://lore.kernel.org/r/20250524-tb16-dt-v3-0-17e26d935e73@oldschoolsolutions.biz
-> 
-> Changes in v3:
-> - removed changes in x1e80100.dtsi and x1p42100.dtsi - resolved with [2]
-> - fixed schema errors with correct compatible string for the model
-> - added power management for the camera via onboard_usb_dev.c
-> - amended node ordering
-> - changed the panel driver used to edp-panel, added panel in the driver
-> - amended x1e80100.dtsi for exposing PM8010: This one is not present in the design,
->   added /delete-node/ for it.
-> - removed commented-out lines for sdhc, specified which don't work.
-> - corrected ZAP shader firmware name
-> - Link to v2: https://lore.kernel.org/r/20250516-tb16-dt-v2-0-7c4996d58ed6@oldschoolsolutions.biz
-> 
-> Changes in v2:
-> - removed nodes that gave DTC compile errors (pm8010_thermal, edp0_hpd_active)
-> - amended qcom.yaml
-> - shortened the commit titles to fit 75 chars
-> - Link to v1: https://lore.kernel.org/r/20250515-tb16-dt-v1-0-dc5846a25c48@oldschoolsolutions.biz
-> 
-> [2]: 20250520-topic-x1p4_tsens-v2-1-9687b789a4fb@oss.qualcomm.com
-> 
-> ---
-> Jens Glathe (4):
->       dt-bindings: arm: qcom: Add Lenovo TB16 support
->       usb: misc: onboard_usb_dev: Add Bison Electronics Inc. Integrated Camera
->       firmware: qcom: scm: Allow QSEECOM on Lenovo Thinkbook 16
->       arm64: dts: qcom: Add Lenovo ThinkBook 16 G7 QOY device tree
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
->  arch/arm64/boot/dts/qcom/Makefile                  |    2 +
->  arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi       |    2 +-
->  .../boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts | 1676 ++++++++++++++++++++
->  drivers/firmware/qcom/qcom_scm.c                   |    1 +
->  drivers/usb/misc/onboard_usb_dev.c                 |    2 +
->  drivers/usb/misc/onboard_usb_dev.h                 |    8 +
->  7 files changed, 1691 insertions(+), 1 deletion(-)
-> ---
-> base-commit: 2aeda9592360c200085898a258c4754bfe879921
-> change-id: 20250511-tb16-dt-e84c433d87b1
-> 
-> Best regards,
-> --
-> Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> 
-> 
-> 
+by inspection it seems this bug was always there since this was
+introduced, so:
 
+Fixes: aeb9dd1de98c ("usb/early: Add driver for xhci debug capability")
+Cc: <stable@vger.kernel.org>
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+It didn't seem a very important fix to propagate to stable, but I just
+noticed it applies cleanly on all versions back to 5.4.
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+thanks
+Lucas De Marchi
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: using specified base-commit 2aeda9592360c200085898a258c4754bfe879921
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/qcom/' for 20250629-tb16-dt-v7-0-35276341338f@oldschoolsolutions.biz:
-
-arch/arm64/boot/dts/qcom/x1e80100.dtsi:3010.37-3011.8: ERROR (phandle_references): /soc@0/phy@fdf000/ports/port@0/endpoint: Reference to non-existent node or label "dp_connector_in"
-  also defined at arch/arm64/boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts:1621.23-1623.3
-arch/arm64/boot/dts/qcom/x1e80100.dtsi:5549.45-5626.6: ERROR (phandle_references): /soc@0/display-subsystem@ae00000/displayport-controller@aea0000: Reference to non-existent node or label "edp0_hpd_active"
-  also defined at arch/arm64/boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts:1063.11-1103.3
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[3]: *** [scripts/Makefile.dtbs:131: arch/arm64/boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dtb] Error 2
-make[2]: *** [scripts/Makefile.build:554: arch/arm64/boot/dts/qcom] Error 2
-make[2]: Target 'arch/arm64/boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dtb' not remade because of errors.
-make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1478: qcom/x1p42100-lenovo-thinkbook-16.dtb] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
-make: Target 'qcom/apq8096-ifc6640.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-j3ltetw.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-fxtec-pro1.dtb' not remade because of errors.
-make: Target 'qcom/sm7325-nothing-spacewar.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-asus-zenbook-a14.dtb' not remade because of errors.
-make: Target 'qcom/sm7125-xiaomi-curtana.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-dell-xps13-9345.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-mtp.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-a5u-eur.dtb' not remade because of errors.
-make: Target 'qcom/sc8280xp-lenovo-thinkpad-x13s.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r3-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-crd-pro.dtb' not remade because of errors.
-make: Target 'qcom/sm6115p-lenovo-j606f.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-sony-xperia-yoshino-maple.dtb' not remade because of errors.
-make: Target 'qcom/ipq9574-rdp454.dtb' not remade because of errors.
-make: Target 'qcom/qcs6490-rb3gen2.dtb' not remade because of errors.
-make: Target 'qcom/msm8992-xiaomi-libra.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-r4.dtb' not remade because of errors.
-make: Target 'qcom/sdm450-motorola-ali.dtb' not remade because of errors.
-make: Target 'qcom/x1e78100-lenovo-thinkpad-t14s-oled.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-quackingstick-r0.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel360-wifi.dtb' not remade because of errors.
-make: Target 'qcom/sdm630-sony-xperia-ganges-kirin.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-coachz-r1-lte.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-lg-judyp.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-cheza-r3.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-wingtech-wt82918.dtb' not remade because of errors.
-make: Target 'qcom/qrb2210-rb1.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-mtp.dtb' not remade because of errors.
-make: Target 'qcom/sm8750-mtp.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-zombie.dtb' not remade because of errors.
-make: Target 'qcom/msm8992-lg-bullhead-rev-10.dtb' not remade because of errors.
-make: Target 'qcom/qrb5165-rb5.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-lenovo-yoga-slim7x.dtb' not remade because of errors.
-make: Target 'qcom/sm8550-qrd.dtb' not remade because of errors.
-make: Target 'qcom/sdm630-sony-xperia-nile-discovery.dtb' not remade because of errors.
-make: Target 'qcom/sm8550-sony-xperia-yodo-pdx234.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-huawei-kiwi.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-wormdingler-rev1-inx.dtb' not remade because of errors.
-make: Target 'qcom/sc8280xp-microsoft-arcata.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-oneplus-fajita.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dtb' not remade because of errors.
-make: Target 'qcom/sdm660-xiaomi-lavender.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-coachz-r1.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r10.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-wingtech-wt82918hd.dtb' not remade because of errors.
-make: Target 'qcom/ipq6018-cp01-c1.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-motorola-surnia.dtb' not remade because of errors.
-make: Target 'qcom/sm8350-microsoft-surface-duo2.dtb' not remade because of errors.
-make: Target 'qcom/qcm6490-idp.dtb' not remade because of errors.
-make: Target 'qcom/sm8550-mtp.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-a3u-eur.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-sony-xperia-tama-akari.dtb' not remade because of errors.
-make: Target 'qcom/x1p42100-crd.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-mtp.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-xiaomi-elish-csot.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-wingtech-wt88047.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-thwc-ufi001c.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-xiaomi-sagit.dtb' not remade because of errors.
-make: Target 'qcom/qcs8550-aim300-aiot.dtb' not remade because of errors.
-make: Target 'qcom/sdm450-lenovo-tbx605f.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-xiaomi-elish-boe.dtb' not remade because of errors.
-make: Target 'qcom/qcs404-evb-4000.dtb' not remade because of errors.
-make: Target 'qcom/qcs9100-ride.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-sony-xperia-tone-kagura.dtb' not remade because of errors.
-make: Target 'qcom/sm8150-sony-xperia-kumano-griffin.dtb' not remade because of errors.
-make: Target 'qcom/sdm670-google-sargo.dtb' not remade because of errors.
-make: Target 'qcom/x1e001de-devkit.dtb' not remade because of errors.
-make: Target 'qcom/sa8775p-ride.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-crd.dtb' not remade because of errors.
-make: Target 'qcom/ipq5424-rdp466.dtb' not remade because of errors.
-make: Target 'qcom/sc8180x-lenovo-flex-5g.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-lg-judyln.dtb' not remade because of errors.
-make: Target 'qcom/sm6125-xiaomi-ginkgo.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r3-kb.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-motorola-osprey.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-xiaomi-pipa.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-oneplus-enchilada.dtb' not remade because of errors.
-make: Target 'qcom/msm8956-sony-xperia-loire-suzu.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-idp.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-evoker-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-homestar-r4.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-rossa.dtb' not remade because of errors.
-make: Target 'qcom/apq8039-t2.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-motorola-harpia.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-e5.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-idp2.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-sony-xperia-kanuti-tulip.dtb' not remade because of errors.
-make: Target 'qcom/ipq8074-hk01.dtb' not remade because of errors.
-make: Target 'qcom/sm8150-mtp.dtb' not remade because of errors.
-make: Target 'qcom/ipq9574-rdp433.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-sony-xperia-tama-apollo.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-lenovo-miix-630.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-sony-xperia-kitakami-karin.dtb' not remade because of errors.
-make: Target 'qcom/sdm630-sony-xperia-nile-pioneer.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-grandmax.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-alcatel-idol347.dtb' not remade because of errors.
-make: Target 'qcom/ipq9574-rdp453.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-acer-aspire1.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-r1.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-e7.dtb' not remade because of errors.
-make: Target 'qcom/ipq5018-rdp432-c2.dtb' not remade because of errors.
-make: Target 'qcom/apq8016-schneider-hmibsc.dtb' not remade because of errors.
-make: Target 'qcom/qrb4210-rb2.dtb' not remade because of errors.
-make: Target 'qcom/ipq5018-tplink-archer-ax55-v1.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-evoker.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-kingoftown.dtb' not remade because of errors.
-make: Target 'qcom/sm4450-qrd.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-j5.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-asus-novago-tp370ql.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r2-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8992-lg-h815.dtb' not remade because of errors.
-make: Target 'qcom/sdx75-idp.dtb' not remade because of errors.
-make: Target 'qcom/sm8350-sony-xperia-sagami-pdx215.dtb' not remade because of errors.
-make: Target 'qcom/apq8096-db820c.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-sony-xperia-tone-keyaki.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-longcheer-l8150.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-sony-xperia-kitakami-suzuran.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-mtp.dtb' not remade because of errors.
-make: Target 'qcom/sm6375-sony-xperia-murray-pdx225.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-yiming-uz801v3.dtb' not remade because of errors.
-make: Target 'qcom/qcs9100-ride-r3.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-hp-omnibook-x14.dtb' not remade because of errors.
-make: Target 'qcom/msm8953-xiaomi-vince.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-cheza-r2.dtb' not remade because of errors.
-make: Target 'qcom/ipq5332-rdp441.dtb' not remade because of errors.
-make: Target 'qcom/msm8992-lg-bullhead-rev-101.dtb' not remade because of errors.
-make: Target 'qcom/msm8917-xiaomi-riva.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-xiaomi-gemini.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-r9.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-sony-xperia-yoshino-lilac.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-gprimeltecan.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel360-lte.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-shift-axolotl.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-oneplus3t.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-zombie-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r3.dtb' not remade because of errors.
-make: Target 'qcom/sar2130p-qar2130p.dtb' not remade because of errors.
-make: Target 'qcom/sm8650-hdk.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-herobrine-r1.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-longcheer-l8910.dtb' not remade because of errors.
-make: Target 'qcom/sdm630-sony-xperia-nile-voyager.dtb' not remade because of errors.
-make: Target 'qcom/sm8450-hdk.dtb' not remade because of errors.
-make: Target 'qcom/msm8929-wingtech-wt82918hd.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-sony-xperia-edo-pdx203.dtb' not remade because of errors.
-make: Target 'qcom/sm8350-hdk.dtb' not remade because of errors.
-make: Target 'qcom/ipq8074-hk10-c1.dtb' not remade because of errors.
-make: Target 'qcom/sm8450-qrd.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-lg-c50.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-sony-xperia-edo-pdx206.dtb' not remade because of errors.
-make: Target 'qcom/sm7225-fairphone-fp4.dtb' not remade because of errors.
-make: Target 'qcom/sa8155p-adp.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-qcp.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r1-kb.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-grandprimelte.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-zombie-nvme-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-homestar-r3.dtb' not remade because of errors.
-make: Target 'qcom/ipq5332-rdp474.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-asus-vivobook-s15.dtb' not remade because of errors.
-make: Target 'qcom/sm8150-microsoft-surface-duo.dtb' not remade because of errors.
-make: Target 'qcom/msm8996pro-xiaomi-scorpio.dtb' not remade because of errors.
-make: Target 'qcom/x1e78100-lenovo-thinkpad-t14s.dtb' not remade because of errors.
-make: Target 'qcom/sm8150-hdk.dtb' not remade because of errors.
-make: Target 'qcom/sc8180x-primus.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r10-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-j5x.dtb' not remade because of errors.
-make: Target 'qcom/x1p42100-asus-zenbook-a14.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-idp.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-mtp.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-hp-elitebook-ultra-g1q.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-r10.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-zombie-nvme.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-microsoft-romulus15.dtb' not remade because of errors.
-make: Target 'qcom/qru1000-idp.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-hp-envy-x2.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel-parade.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r9-kb.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-wormdingler-rev1-boe.dtb' not remade because of errors.
-make: Target 'qcom/qcs615-ride.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-coachz-r3-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-crd-r3.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-gt58.dtb' not remade because of errors.
-make: Target 'qcom/sa8775p-ride-r3.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-villager-r1.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel-ti.dtb' not remade because of errors.
-make: Target 'qcom/qcm6490-shift-otter.dtb' not remade because of errors.
-make: Target 'qcom/qcs8300-ride.dtb' not remade because of errors.
-make: Target 'qcom/apq8016-sbc.dtb' not remade because of errors.
-make: Target 'qcom/msm8996pro-xiaomi-natrium.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-samsung-starqltechn.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r1-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8953-xiaomi-tissot.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r9.dtb' not remade because of errors.
-make: Target 'qcom/sm6125-xiaomi-laurel-sprout.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-sony-xperia-kitakami-sumire.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-serranove.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-coachz-r3.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-sony-xperia-tama-akatsuki.dtb' not remade because of errors.
-make: Target 'qcom/ipq9574-rdp449.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-r1-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-lg-m216.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-crd.dtb' not remade because of errors.
-make: Target 'qcom/x1p42100-lenovo-thinkbook-16.dtb' not remade because of errors.
-make: Target 'qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r9-lte.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel-lte-ti.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-sony-xperia-tone-dora.dtb' not remade because of errors.
-make: Target 'qcom/sa8295p-adp.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-sony-xperia-kitakami-ivy.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-xiaomi-beryllium-ebbg.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r3.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-oneplus-dumpling.dtb' not remade because of errors.
-make: Target 'qcom/sm8650-mtp.dtb' not remade because of errors.
-make: Target 'qcom/msm8996-oneplus3.dtb' not remade because of errors.
-make: Target 'qcom/sm8550-hdk.dtb' not remade because of errors.
-make: Target 'qcom/x1e80100-microsoft-romulus13.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r1-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-samsung-a7.dtb' not remade because of errors.
-make: Target 'qcom/qcm6490-fairphone-fp5.dtb' not remade because of errors.
-make: Target 'qcom/sc8280xp-huawei-gaokun3.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb' not remade because of errors.
-make: Target 'qcom/msm8953-xiaomi-mido.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-asus-z00l.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r2.dtb' not remade because of errors.
-make: Target 'qcom/sm6350-sony-xperia-lena-pdx213.dtb' not remade because of errors.
-make: Target 'qcom/sdm632-fairphone-fp3.dtb' not remade because of errors.
-make: Target 'qcom/msm8953-motorola-potter.dtb' not remade because of errors.
-make: Target 'qcom/sda660-inforce-ifc6560.dtb' not remade because of errors.
-make: Target 'qcom/sm8150-sony-xperia-kumano-bahamut.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pazquel-lte-parade.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-homestar-r2.dtb' not remade because of errors.
-make: Target 'qcom/sm8250-hdk.dtb' not remade because of errors.
-make: Target 'qcom/sm8650-qrd.dtb' not remade because of errors.
-make: Target 'qcom/sc8280xp-microsoft-blackrock.dtb' not remade because of errors.
-make: Target 'qcom/ipq8074-hk10-c2.dtb' not remade because of errors.
-make: Target 'qcom/msm8953-xiaomi-daisy.dtb' not remade because of errors.
-make: Target 'qcom/sc8280xp-crd.dtb' not remade because of errors.
-make: Target 'qcom/sdm850-samsung-w737.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-samsung-gt510.dtb' not remade because of errors.
-make: Target 'qcom/sdm850-lenovo-yoga-c630.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-thwc-uf896.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r10-kb.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-sony-xperia-kitakami-satsuki.dtb' not remade because of errors.
-make: Target 'qcom/sdm632-motorola-ocean.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-villager-r1-lte.dtb' not remade because of errors.
-make: Target 'qcom/sm6115-fxtec-pro1x.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r3-lte.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-sony-xperia-yoshino-poplar.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-huawei-g7.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-wingtech-wt86518.dtb' not remade because of errors.
-make: Target 'qcom/sm8350-sony-xperia-sagami-pdx214.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-wingtech-wt86528.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-db845c.dtb' not remade because of errors.
-make: Target 'qcom/sa8540p-ride.dtb' not remade because of errors.
-make: Target 'qcom/msm8939-longcheer-l9100.dtb' not remade because of errors.
-make: Target 'qcom/qdu1000-idp.dtb' not remade because of errors.
-make: Target 'qcom/sm8550-samsung-q5q.dtb' not remade because of errors.
-make: Target 'qcom/msm8992-msft-lumia-octagon-talkman.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-gplus-fl8005a.dtb' not remade because of errors.
-make: Target 'qcom/sm8350-mtp.dtb' not remade because of errors.
-make: Target 'qcom/msm8956-sony-xperia-loire-kugo.dtb' not remade because of errors.
-make: Target 'qcom/msm8976-longcheer-l9360.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-r1.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-pompom-r1.dtb' not remade because of errors.
-make: Target 'qcom/msm8998-oneplus-cheeseburger.dtb' not remade because of errors.
-make: Target 'qcom/sc7280-herobrine-villager-r0.dtb' not remade because of errors.
-make: Target 'qcom/sm8750-qrd.dtb' not remade because of errors.
-make: Target 'qcom/sm4250-oneplus-billie2.dtb' not remade because of errors.
-make: Target 'qcom/sdm636-sony-xperia-ganges-mermaid.dtb' not remade because of errors.
-make: Target 'qcom/qcs404-evb-1000.dtb' not remade because of errors.
-make: Target 'qcom/ipq5332-rdp442.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-cheza-r1.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-msft-lumia-octagon-cityman.dtb' not remade because of errors.
-make: Target 'qcom/msm8916-acer-a1-724.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-xiaomi-beryllium-tianma.dtb' not remade because of errors.
-make: Target 'qcom/sm6125-sony-xperia-seine-pdx201.dtb' not remade because of errors.
-make: Target 'qcom/sdm845-xiaomi-polaris.dtb' not remade because of errors.
-make: Target 'qcom/ipq9574-rdp418.dtb' not remade because of errors.
-make: Target 'qcom/msm8216-samsung-fortuna3g.dtb' not remade because of errors.
-make: Target 'qcom/sm8450-sony-xperia-nagara-pdx223.dtb' not remade because of errors.
-make: Target 'qcom/sm8450-sony-xperia-nagara-pdx224.dtb' not remade because of errors.
-make: Target 'qcom/sm7125-xiaomi-joyeuse.dtb' not remade because of errors.
-make: Target 'qcom/msm8994-huawei-angler-rev-101.dtb' not remade because of errors.
-make: Target 'qcom/ipq5332-rdp468.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-lazor-limozeen-nots-r10.dtb' not remade because of errors.
-make: Target 'qcom/sc7180-trogdor-quackingstick-r0-lte.dtb' not remade because of errors.
-
-
-
-
-
+>
+>thanks,
+>
+>greg k-h
 
