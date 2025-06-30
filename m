@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-25332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8C99AEE920
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 23:02:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1826BAEE924
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 23:03:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BF08189D52A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 21:02:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 958AD3E1A8C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 21:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4192E716B;
-	Mon, 30 Jun 2025 21:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DE72E9753;
+	Mon, 30 Jun 2025 21:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdLvdKeT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DuGfzitu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9AE2629D;
-	Mon, 30 Jun 2025 21:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7382728F514;
+	Mon, 30 Jun 2025 21:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317291; cv=none; b=AxjPGcBwdL9UrsnBur2wZ0Zz3zkCfs2ccH52Mi+aM3IrgWA72/7vtEXiIKgo4aj2LRtEszhZgNIrmI1gUnK9Rt4MvS0MhQOZhU8gT8ogxpkxOeJMd4BOfhEmA7V6Ryie4vD5wR0nyJUgu+Og+BJ2ncbNHqz+eWJQoMhjGzfd9mE=
+	t=1751317313; cv=none; b=InqpLiakCXvJbtUTz/TgYRoN5T0l/PG5NmEy6kbn/jMuzbDKjnWX2/N3KUhkmQ+VwcDCiv9QOagvA6iwv16HW/zBqLTik6rfDnhwvLOSht0vpJgImhSlkaKQyMbIGzCKuUyCVjErXHAEYXq3Y8b/oJMn5ykLY35CCK9UrownWbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317291; c=relaxed/simple;
-	bh=VXSv/KS7ixKFffjIMR2L2/rajLtP1PiJqm1cCs8hZSA=;
+	s=arc-20240116; t=1751317313; c=relaxed/simple;
+	bh=F9iqrvW1kAnaiNVQAyqPay16hSnDeSIiMjfz+n115+s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gc7rvbIAQAXCH13hPQrOuHi1oojCELMj7nvsXtR2jJLX4YMuoTVxAVaBpvT/UpsZg2gl65Ty3snN/cEyiQhmcIRJKXNMB6wP4c2lHDArdN+OJLUaeoVibVKdXche9nR6T5JpjtOgwTT86nkiR9b0wqyN4p7fkHVUF3EKPsK70to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdLvdKeT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A112AC4CEE3;
-	Mon, 30 Jun 2025 21:01:30 +0000 (UTC)
+	 MIME-Version:Content-Type; b=s3dFsv9hL+7He5AsjvbAPcXygdFlS2AcZ/omepUUwmZ4GPPClEX/Wm5EOarnEI29HLrfyAuYaGWpGT+0MxjUKz4Gk7NlWmixm6d4LVfdrHSp9zl/+I5fwGVHUxaN+fCQJGB7HUA4fLpBpOfBy3pzSuw5XNKAikxXbOFoZZBB3Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DuGfzitu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC0CC4CEE3;
+	Mon, 30 Jun 2025 21:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751317291;
-	bh=VXSv/KS7ixKFffjIMR2L2/rajLtP1PiJqm1cCs8hZSA=;
+	s=k20201202; t=1751317313;
+	bh=F9iqrvW1kAnaiNVQAyqPay16hSnDeSIiMjfz+n115+s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PdLvdKeTPBilWrvQjOcvouClZNg2ASSc1XbkAJUHej1E1GVUee5RvvcrpvU06sY77
-	 OvuW6ecuTp1jzMPlNGTY7S6jZwJuuMr3CC8lH4r7+tOcFjNYUxYJP6ykfcUEQixOCK
-	 kWGSjk/p+bjLZNsKMC0zdAwzYR2LB5TzwJp1Pf3bKIdruvhZIt880oU0BT3UpsV5Ub
-	 kInY9dGboihQ7gY6vH91mRswsgh/u568GN5fkVobMRs54lml0mOzkV7o+a79UewbVB
-	 dm1vUTV5EWD8C/v9wtM+0TEvF2MZ/YQ7xfwXZ8D79C+Y3bZIjPkX853o7+yFC1qeOA
-	 sETPlKWZbH4wA==
+	b=DuGfzituTXUje5IjNLi0tSOg7/7YNNTCsB4wxgBawPrAXADvJg4zSSxI51huHhLDg
+	 XlPeUj1xfAT6uOCY6GhdlwbpUP8TpVNVQPGGj/wKGSh+8PxHPFHNfLWSBH/KOyQ3Ud
+	 VIuhJ6ZsAPz7cPSyIi2L/zp0I7DIOR0NiKo75a0E9HVi4Jkw2comHyShaRJN+tkJVD
+	 kokl819InFqlOxOoZldu5AQuPhaz9zQcitDZGSZHNnTthp77eG692kkNJV7TK8qZhl
+	 0IVnePLknkRrQY6kiFunYgfKuqXAZa/t2N4JMBA87gRLVvt323kkRGNxeLShtR2Ws7
+	 8CyA+ShmYhJiA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Xiaowei Li <xiaowei.li@simcom.com>,
 	Sasha Levin <sashal@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/10] net: usb: qmi_wwan: add SIMCom 8230C composition
-Date: Mon, 30 Jun 2025 16:47:12 -0400
-Message-Id: <20250630204718.1359222-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 3/7] net: usb: qmi_wwan: add SIMCom 8230C composition
+Date: Mon, 30 Jun 2025 17:01:40 -0400
+Message-Id: <20250630210144.1359448-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250630204718.1359222-1-sashal@kernel.org>
-References: <20250630204718.1359222-1-sashal@kernel.org>
+In-Reply-To: <20250630210144.1359448-1-sashal@kernel.org>
+References: <20250630210144.1359448-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.142
+X-stable-base: Linux 5.15.186
 Content-Transfer-Encoding: 8bit
 
 From: Xiaowei Li <xiaowei.li@simcom.com>
@@ -164,11 +164,11 @@ users need.
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index b4c0413c6522a..96656e56e809f 100644
+index 600a190f22128..d21d23f10d422 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -1431,6 +1431,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x22de, 0x9051, 2)}, /* Hucom Wireless HM-211S/K */
+@@ -1421,6 +1421,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
  	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
  	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9001, 5)},	/* SIMCom 7100E, 7230E, 7600E ++ */
 +	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9071, 3)},	/* SIMCom 8230C ++ */
