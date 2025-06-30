@@ -1,34 +1,34 @@
-Return-Path: <linux-usb+bounces-25291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329CBAEDCE6
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:35:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47205AEDD32
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:41:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A55097A7FD2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 12:33:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 496FC189C94D
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 12:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324F427055A;
-	Mon, 30 Jun 2025 12:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C0D28A72D;
+	Mon, 30 Jun 2025 12:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="c3dh3Tj3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="OCnzfRIY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from pf-012.whm.fr-par.scw.cloud (pf-012.whm.fr-par.scw.cloud [51.159.173.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98B527054C;
-	Mon, 30 Jun 2025 12:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53D028A701;
+	Mon, 30 Jun 2025 12:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.173.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751286857; cv=none; b=j6RhIXkMvx33LrUNDtIrtg0DVI/p5LkaZYeu+dRwkgKQ4cyQNZjfmP+epRpkQYvTfNl8nifQASQO1K8md0raluwScEJ+CDE7C6CUK20Hx/rVpradVGWxrNciOo4k8KqbP1t982eif3eyVla4rMLFVxFjKd8JtDIk9Eq3t746Bcw=
+	t=1751287098; cv=none; b=tOGeWSzd4jXvNeWjyqt7G2AV3HY0fu7cY58ZDnPyg+YXWttKVtpnmSmJQsx0u2OqTA9yV5B2moc0qJzijaeBhJUH+tycVh2cjIb/C1RxzYyNCLDCap1fCIhCNNucT/PKaFnQBtLZlb8YFd2cUeU77fyOYwNMtLik9741e+G5a1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751286857; c=relaxed/simple;
-	bh=YmvdTn3Yb59iQwNFWY3RaUBVLJtG9DvMo8XScgsgnsM=;
+	s=arc-20240116; t=1751287098; c=relaxed/simple;
+	bh=Gbu8i1eh6M5heNOkxAVxaz60Hdci3B5fWg6UDtGzEts=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J3hmwqV/noj+buF+6lFt9NWpJCtOnFQbsPeIpJMWGiBID7tzFKNivLF8UtFO+UcA8bkFcyg5r3+cShlVaKO2jxlLbxsYfWexOsHc3AgRuZQFlGodn1lbEyDf9v4QSYH0ku8W5HOr+jJ7HafnK8TSVf2pbF5fEhEbqFSdxK6URuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=c3dh3Tj3; arc=none smtp.client-ip=51.159.173.17
+	 In-Reply-To:Content-Type; b=XMiUmZ/w7UloiwwR0kA6IZTYkrS+nLQJHhUfa1cmeXAnHMvClARt0cYad4NbB51/bD7dxRm0kQoUcEZnYaz7oz05ksDgap5a9nXTG9H6mjAg1GABj0CeyykfgwAB0Jl4xxtSsR043ygB8R1NyAia7cdNDKv0ekokEA4izPIs8hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=OCnzfRIY; arc=none smtp.client-ip=51.159.173.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,20 +37,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=NGnf4bhFU/j1HOvGLBdTQiqonwf7x0+KACKFefOASB8=; b=c3dh3Tj342SZjQS/lvgmtgByhz
-	ONc3yL8o9CZVZXgPoxWSHqp8J9/sry28+pEvjFzWxo3rCb1sPHJHavrAfdRmN9gjIVa+wB9CCt9bg
-	05sgw/7Bx0SshXHYmiHUjhZlm15H9A6RURjn+5/ETyUp1nyL9UoywLk/G7Jm6SY3ibpJRU2XqB2U6
-	Jm1n5OwoezCenLC3XMtbMpqUWShmJ6eQgz33vKshf+tBJtS/WBi89bF+eKJf+YNFXNQTRqQmXPi41
-	GrzEHGTrUZEQDTTV+G7tEqs//kVJ2cKut93RyoOALA4mN/oonufSRaRF6t/fqPYYDsMHTo4TGpGSg
-	uvniamtw==;
-Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:27863 helo=[10.224.8.110])
+	bh=a/SvZhLDiw2GqeYM8RNajhdtaQZwGKHObQAt3Q8rsB8=; b=OCnzfRIY+7LnTN4JaSLJmnY0LG
+	bbTQQikXnOMvvvzY7epQfVq1U9FSZKYET9kTdPC7ZhfDPDkTfG+UyJmmtQ4PJY4Z/TRAeRm4QV2Px
+	NWu6awHQXcLCJnDF8t3UC4JHCNn7ecbRrfT9CsJkH71TEHEvwNDnNTJGShRYmd8ltPRPqjpREez7j
+	LpWVvyZdSnD4vFtPjs8b/On7v16+1Iihe0Xt+14e3mqHGuTxUQwkLHkwVfxQ+SgdhOXsQY7ia/xNV
+	ue8NAFWS6I9u9B91RpAzLHGul6bbkxANkqJwMsyhQwAypEiyvz19nvrTqmNkZRIM7eL5TX+GWP9px
+	i8dXjVTA==;
+Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:39897 helo=[10.224.8.110])
 	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
 	(Exim 4.98.2)
 	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
-	id 1uWDi9-00000000PNw-1JF9;
-	Mon, 30 Jun 2025 14:34:13 +0200
-Message-ID: <6dce47fd-01fb-4401-88a3-d9e85ee5529a@oss.cyber.gouv.fr>
-Date: Mon, 30 Jun 2025 14:34:12 +0200
+	id 1uWDm2-00000000RTw-0Bb0;
+	Mon, 30 Jun 2025 14:38:14 +0200
+Message-ID: <9af9cff1-9f23-48d5-adc2-53e438b68da2@oss.cyber.gouv.fr>
+Date: Mon, 30 Jun 2025 14:38:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/4] usb: core: Plug the usb authentication capability
+Subject: Re: [RFC PATCH 2/4] usb: core: Introduce usb authentication feature
 To: Oliver Neukum <oneukum@suse.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Alan Stern <stern@rowland.harvard.edu>,
@@ -73,11 +73,11 @@ Cc: Alan Stern <stern@rowland.harvard.edu>,
  Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 References: <20250620-usb_authentication-v1-0-0d92261a5779@ssi.gouv.fr>
- <20250620-usb_authentication-v1-3-0d92261a5779@ssi.gouv.fr>
- <94cd36e2-db7c-4693-9f43-01c855dc6891@suse.com>
+ <20250620-usb_authentication-v1-2-0d92261a5779@ssi.gouv.fr>
+ <e028a659-9535-4cf9-92c1-373f72fae3cf@suse.com>
 Content-Language: en-US
 From: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
-In-Reply-To: <94cd36e2-db7c-4693-9f43-01c855dc6891@suse.com>
+In-Reply-To: <e028a659-9535-4cf9-92c1-373f72fae3cf@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -93,71 +93,270 @@ X-Source-Dir:
 
 Hi Olivier,
 
-Thank you for your review.
+Thanks for the remarks on the style. We will take them into account in 
+the next
+patch version.
 
-Indeed our current implementation of the usb authentication is still a bit
-crude.
-Currently, most, if not all of usb devices can't handle authentication. 
-If we
-want to have an integration that doesn't break on current hosts, we need to
-have a fail safe. We are still working on the best way to handle the
-combination of authentication and authorization.
-See the reply to Alan [1].
+We started to include endianess conversion function but tests are still 
+ongoing
+with a physical device to ensure everything works as it should.
 
-[1]: 
-https://lore.kernel.org/linux-usb/8cc10112-23a7-41af-b81f-7fc0c097d34d@oss.cyber.gouv.fr/
-
-On 6/23/25 20:15, Oliver Neukum wrote:
-> Hi,
+On 6/25/25 11:59, Oliver Neukum wrote:
 >
-> I am afraid someone has to address this.
 >
 > On 20.06.25 16:27, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
 >
->> +    // Set a default value for authenticated at true in order not to 
->> block devices
->> +    // that do not support the authentication
->> +    dev->authenticated = 1;
+>> +/**
+>> + * usb_authent_req_digest - Check if device is known via its digest
+>> + * @dev:        [in]  pointer to the usb device to query
+>> + * @buffer:     [inout] buffer to hold request data
+>> + * @digest:     [out] device digest
+>> + *
+>> + * Context: task context, might sleep.
+>> + *
+>> + * This function sends a digest request to the usb device.
+>> + *
+>> + * Possible errors:
+>> + *  - ECOMM : failed to send or received a message to the device
+>> + *  - EINVAL : if buffer or mask is NULL
+>> + *
+>> + * Return: If successful, zero. Otherwise, a negative  error number.
+>> + */
+>> +static int usb_authent_req_digest(struct usb_device *dev, uint8_t 
+>> *const buffer,
 >
-> So the default is authenticated. OK.
+> How can buffer be const if it is used for output?
+Here, const operates on the left value which is the pointer, hence, the 
+address
+is constant, not the value pointed by the pointer.
 >
->> +    if (le16_to_cpu(dev->descriptor.bcdUSB) >= 0x0201) {
->> +        pr_notice("bcdUSB >= 0x0201\n");
->> +        retval = usb_get_bos_descriptor(dev);
->> +        if (!retval) {
->> +            pr_notice("found BOS\n");
->> +#ifdef CONFIG_USB_AUTHENTICATION
->> +            if (dev->bos->authent_cap) {
+> [..]
+>> +struct usb_auth_cert_req {
+>> +    uint16_t offset;
+>> +    uint16_t length;
+>> +} __packed;
 >
-> If the device claims not to support authentication ...
+> Endianness?
 >
->> +                /* If authentication cap is present, start device 
->> authent */
->> +                pr_notice("found Authent BOS\n");
->> +                retval = usb_authenticate_device(dev);
->> +                if (retval != 0) {
->> +                    pr_err("failed to authenticate the device: %d\n",
->> +                           retval);
->> +                } else if (!dev->authenticated) {
->> +                    pr_notice("device has been rejected\n");
->> +                    // return early from the configuration process
->> +                    return 0;
->> +                } else {
->> +                    pr_notice("device has been authorized\n");
->> +                }
->> +            } else {
->> +                // USB authentication unsupported
->> +                // Apply security policy on failed devices
->> +                pr_notice("no authentication capability\n");
 >
-> ... we do nothing about it. We enumerate.
+>> +/**
+>> + * usb_authent_read_certificate - Read a device certificate
+>> + * @dev:        [in] pointer to the usb device to query
+>> + * @buffer:        [inout] buffer to hold request data, caller 
+>> allocated
+>> + * @slot:        [in] certificate chain to be read
+>> + * @cert_der:   [out] buffer to hold received certificate chain
+>> + * @cert_len:   [out] length of received certificate
+>> + *
+>> + * Context: task context, might sleep.
+>> + *
+>> + * Possible errors:
+>> + *  - EINVAL : NULL pointer or invalid slot value
+>> + *  - ECOMM  : failed to send request to device
+>> + *  - ENOMEM : failed to allocate memory for certificate
+>> + *
+>> + * Return: If successful, zero. Otherwise, a negative  error number.
+>> + */
+>> +static int usb_authent_read_certificate(struct usb_device *dev, 
+>> uint8_t *const buffer,
+>> +                    uint8_t slot, uint8_t **cert_der, size_t *cert_len)
+>> +{
+>> +    uint16_t read_offset = 0;
+>> +    uint16_t read_length = 0;
+>> +    uint8_t chain_part[64] = { 0 };
+>> +
+>> +    if (unlikely(slot >= 8 || buffer == NULL || cert_der == NULL || 
+>> cert_len == NULL)) {
+>> +        pr_err("invalid arguments\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    // First request to get certificate chain length
+>> +    if (usb_auth_read_cert_part(dev, buffer, slot, 0,
+>> +                    USB_AUTH_CHAIN_HEADER_SIZE,
+>> +                    chain_part) != 0) {
+>> +        pr_err("Failed to get first certificate part\n");
+>> +        return -ECOMM;
+>> +    }
+>> +
+>> +    // Extract total length
+>> +    *cert_len = ((uint16_t *)chain_part)[0];
 >
-> The purpose of authentication is guarding against unknown or malicious 
-> devices,
-> isn't it? This behavior seems to be kind of incompatible with the goal.
+> Endianness
+>
+>
+>> +
+>> +/**
+>> + * usb_authent_challenge_dev - Challenge a device
+>> + * @dev:                [in] pointer to the usb device to query
+>> + * @buffer:            [in] pointer to the buffer allocated for USB 
+>> query
+>> + * @slot:                [in] certificate chain to be used
+>> + * @slot_mask:    [in] slot mask of the device
+>> + * @nonce:            [in] nonce to use for the challenge, 32 bytes 
+>> long
+>> + * @chall:            [out] buffer for chall response, 204 bytes 
+>> long, caller allocated
+>> + *
+>> + * Context: task context, might sleep.
+>> + *
+>> + * Possible errors:
+>> + *  - EINVAL : NULL input pointer or invalid slot value
+>> + *  - ECOMM  : failed to send or receive message from the device
+>> + *
+>> + * Return: If successful, zero. Otherwise, a negative  error number.
+>> + */
+>> +static int usb_authent_challenge_dev(struct usb_device *dev, uint8_t 
+>> *buffer,
+>> +    const uint8_t slot, const uint8_t slot_mask, const uint8_t 
+>> *const nonce,
+>> +    uint8_t *const chall)
+>> +{
+>> +    int ret = -1;
+>> +
+>> +    if (unlikely(buffer == NULL || slot >= 8 || nonce == NULL)) {
+>> +        pr_err("invalid arguments\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    // AUTH OUT challenge request transfer
+>> +    memcpy(buffer, nonce, 32);
+>> +    ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), AUTH_OUT,
+>> +                  USB_DIR_OUT,
+>> +                  (USB_SECURITY_PROTOCOL_VERSION << 8) +
+>> +                      USB_AUTHENT_CHALLENGE_REQ_TYPE,
+>> +                  (slot << 8), buffer, 32, USB_CTRL_GET_TIMEOUT);
+>> +    if (ret < 0) {
+>> +        pr_err("Failed to send challenge request: %d\n", ret);
+>> +        ret = -ECOMM;
+>> +        goto cleanup;
+>> +    }
+>> +
+>> +    // Complete the challenge with the request
+>> +    chall[1] = USB_SECURITY_PROTOCOL_VERSION;
+>> +    chall[0] = USB_AUTHENT_CHALLENGE_REQ_TYPE;
+>> +    chall[2] = slot;
+>> +    chall[3] = 0x00;
+>> +    memcpy(chall+4, nonce, 32);
+>
+> This may be worth a definition.
+>> +
+>> +    // AUTH IN challenge response transfer
+>> +    ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0), AUTH_IN, 
+>> USB_DIR_IN,
+>> +                  (USB_SECURITY_PROTOCOL_VERSION << 8) +
+>> +                      USB_AUTHENT_CHALLENGE_RESP_TYPE,
+>> +                  (slot << 8) + slot_mask, buffer, 168,
+>> +                  USB_CTRL_GET_TIMEOUT);
+>> +    if (ret < 0) {
+>> +        pr_err("Failed to get challenge response: %d\n", ret);
+>> +        ret = -ECOMM;
+>> +        goto cleanup;
+>> +    }
+>> +
+>> +    pr_notice("received challenge response\n");
+>> +
+>> +    // Complete last part of the challenge with what is returned by 
+>> the device
+>> +    memcpy(chall+USB_AUTH_CHAIN_HEADER_SIZE, buffer, 168);
+>
+> The 168 comes whence?
+>
+>> +
+>> +    ret = 0;
+>> +
+>> +cleanup:
+>> +
+>> +    return ret;
+>> +}
+>
+>
+>> +/**
+>> + * @brief Check that the authentication can resume after a sleep
+>> + *
+>> + * @param [in] dev : the usb device
+>> + * @param [in] hub : the parent hub
+>> + *
+>> + * Possible error codes:
+>> + *  - ENODEV : hub has been disconnected
+>> + *
+>> + * @return 0 if possible to resume, else an error code
+>> + */
+>> +static int usb_auth_try_resume(struct usb_device *dev, struct 
+>> usb_device *hub)
+>> +{
+>> +    // Test if the hub or the device has been disconnected
+>> +    if (unlikely(hub == NULL || dev == NULL ||
+>> +             dev->port_is_suspended == 1 ||
+>> +             dev->reset_in_progress == 1)) {
+>> +        return -ENODEV;
+>> +    }
+>> +
+>> +    // TODO: test if the device has not been disconnected
+>> +    // TODO: test if the device has not been disconnected then 
+>> replaced with another one
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +/**
+>> + * usb_authenticate_device - Challenge a device
+>> + * @dev:        [inout] pointer to device
+>> + *
+>> + * Context: task context, might sleep.
+>> + *
+>> + * Authentication is done in the following steps:
+>> + *  1. Get device certificates digest to determine if it is already 
+>> known
+>> + *       if yes, go to 3.
+>> + *  2. Get device certificates
+>> + *  3. Challenge device
+>> + *  4. Based on previous result, determine if device is allowed 
+>> under local
+>> + *     security policy.
+>> + *
+>> + * Possible error code:
+>> + *  - ENOMEM : failed to allocate memory for exchange
+>> + *  - TODO: complete all possible error case
+>> + *
+>> + * Return: If successful, zero. Otherwise, a negative  error number.
+>> + */
+>> +int usb_authenticate_device(struct usb_device *dev)
+>> +{
+>> +    int ret = 0;
+>> +
+>> +    uint8_t is_valid = 0;
+>> +    uint8_t is_known = 0;
+>> +    uint8_t is_blocked = 0;
+>> +    uint8_t chain_nb = 0;
+>> +    uint8_t slot_mask = 0;
+>> +    uint8_t slot = 0;
+>> +    uint8_t digests[256] = { 0 };
+>> +    uint8_t nonce[32] = {0};
+>> +    uint8_t chall[204] = {0};
+>> +    uint32_t dev_id = 0;
+>> +    size_t ctx_size = 0;
+>> +    int i = 0;
+>> +
+>> +    uint8_t *cert_der = NULL;
+>> +    size_t cert_len = 0;
+>> +
+>> +    if (unlikely(dev == NULL || dev->parent == NULL))
+>> +        return -ENODEV;
+>> +
+>> +    struct usb_device *hub = dev->parent;
+>> +
+>> +    // By default set authorization status at false
+>> +    dev->authorized = 0;
+>> +    dev->authenticated = 0;
+>> +
+>> +    uint8_t *buffer = NULL;
+>> +    // Buffer to hold responses
+>> +    buffer = kzalloc(512, GFP_KERNEL);
+>
+> Should this not be cached for comparison after resume?
 >
 >     Regards
 >         Oliver
->
 >
 
