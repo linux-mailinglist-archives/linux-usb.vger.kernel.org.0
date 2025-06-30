@@ -1,149 +1,132 @@
-Return-Path: <linux-usb+bounces-25311-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25312-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A232AEE050
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:16:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F004DAEE09D
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:27:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86F5C173B59
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:16:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48AAB3A357B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:26:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5DC227FB10;
-	Mon, 30 Jun 2025 14:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B4D28BAA9;
+	Mon, 30 Jun 2025 14:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="rhfBPB9v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez8aFcbX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC60217F29
-	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C71E28A73D
+	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751292996; cv=none; b=ekuPVS+k98OSCA6ovGiV/j/Qllo15WKOKJSkMsE1GLJwbB2Lin0tkc8/DG+bFuwKimQGTe6xtuyp6Lysnphq5pE+swjmwJQ2XowsrD6kin7QourAKSVbZ1XeJC5yQ1oPjSdMmIGtVO36xBesyP9hKev/OHhnJBftjVBSx+gvwO8=
+	t=1751293606; cv=none; b=BFC7GuMoo5eDum9bgh/OQ3xiV8PEMGsv9zrMC4pHzAg9bj1jOZwowTdRSz2XHxASrcVrFytSpZ3WhnhQdFqX5N7a5//hIGxQgYWm/+K7uKR3UyOY0dYO3x+wXDLIDG9pbjf3w4mAB22h44UIG1mto+c2HV6KcG6XX92JRIqsznM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751292996; c=relaxed/simple;
-	bh=uU4NWYJg1V5Vn9H6OG3dYNvVtaH+6cljDRAzH8j8WGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMNftT2wSdddfYYN5lkrPHmtxdlXaLRDcyvp60AJaEk37+avp6fmEsKZIrg5Jr27jr6jHE49ynHsg59oL8yvjFo2+qq35ITy/RDHcK+E1QJF05t9yYhCA5ailYtD2fsePQ2h054Xczg0dKQLwPif2QpCurcB04DmR3z9hcSyZZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=rhfBPB9v; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6fd0a7d3949so67751866d6.0
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 07:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1751292993; x=1751897793; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2s8kDcioPxvpOzyItFHoM4iqYzDE+tvgyvsTlB7SpgQ=;
-        b=rhfBPB9vhQ0qfVtYh3kbeQQ2Nc3S6zC1q6fJbCmRneEz997tmu/S0tIauTuKEvaZG4
-         Niab4xQ7P1YjMa+mvtFDlJmFOzv7t6n4bG2bKhLPB9A39RStkLYCGGckv19pCHQrFm8r
-         LD42esuaxUAE7pavYND12NTwXHdGvxdnrqsPu7cs6HTby/gz/ABddT6BWGhl0ArWQMX2
-         lkV+sSvMJTDFqnmNBVHy6FwcK3ynRx+SIS6GN/EI/k8dtcH/GBQR+3bRrledT8Te4Ens
-         jAqIxyXG7E65e5o62o5EqKfl3eTCTefOalWOHar5V7km6qUeIsnGFrPJDZZYGoi68G1J
-         wetA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751292993; x=1751897793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2s8kDcioPxvpOzyItFHoM4iqYzDE+tvgyvsTlB7SpgQ=;
-        b=vf/zoFLflT+IYzuWVVQRZR/a/5GoJ5l3bGfJ3e3no7eBRFqyjKkmiO4tElkbldy77v
-         IfDUWur045e3i4F+XZtdBdLOaUEovfUDOCWOPyl7sx/mD9lUH3xxfMurJjf5O2hntBew
-         xwATMtUfgvRY+lgDXzuJohUn3WLvrW86Xkd2Ayd27Pe/cOyWHAHAhAM4nPVZcQGc6jWA
-         hTrKi4FaDqCaEcoov8mabltqW0yWuSqh/nW8wz0rYo3wy0Qbi3PjvBJY8qaIgklipUgg
-         MT4dqFqXhZzfisxkBKHSz6nwwDpK+F3eCi0fzDaMy5s0l0Te7nE2kg7bxiHGMM95iJ2N
-         Er7A==
-X-Forwarded-Encrypted: i=1; AJvYcCV6vxEScTgx4VY5KRyX2YviaQjWrwJSVxxnXhYWODBnxQ3yURVD6tD+Pq22SIhn70LDrkpv4VfvJh0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ7M8gdqCwDN5BuF+VsEJD9OTMUrRkvH4qfP/sTVlhQl1RLcRU
-	TBNNUIe0PLLol3eN4FuNpWsMj1Z73uffvPVNjSjK6NqvuZCgx+mBjWOatvO840rkbA==
-X-Gm-Gg: ASbGncvJwgsxEq7bLKa+TbzKTC+C8KooT8/+4wTZYg+s6YyH9p0Yu/rkSdZcM/DCTPI
-	gg+08ZchWFtGOmjhQaHrH4eQqXHS6GjLyqt0YKDt8Z+KlMYj9Dqi7lOM8yCc0aL/c9CuShzmfeT
-	v5EGBPL496tMVjbARYjvwvDWbT4t/4IKEaK3S/LeBn1AufkGcs7cS2rQUhowdwCUKH3ufoz1hVV
-	WfSn6oGweNXyp4rbgPzXYfH8pTaU/50zZsJZFZESfb9P9/2rnxiNhKMDj9B98siuRTzKA0w+A2N
-	Lo5lVa7xIXMv5RjNslcY7TztpTRycpieGS0Fw8iJIRYK1kzSUr8ljNecFvQc++Ao59hRlihgXe5
-	6rjLo
-X-Google-Smtp-Source: AGHT+IGaIIkTev/B5UEJVGSeX7xX1oX3gVRWMPdbwKe6ttPOQvsQWLp4rii4GvhcrE/sVorKmumxgw==
-X-Received: by 2002:a05:6214:4b10:b0:701:894:2b91 with SMTP id 6a1803df08f44-70108942c74mr23152286d6.14.1751292993290;
-        Mon, 30 Jun 2025 07:16:33 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd772fc8f3sm67860476d6.84.2025.06.30.07.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 07:16:32 -0700 (PDT)
-Date: Mon, 30 Jun 2025 10:16:30 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Xu Yang <xu.yang_2@nxp.com>, Christoph Hellwig <hch@lst.de>
-Cc: ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
-	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com,
-	gregkh@linuxfoundation.org, mingo@kernel.org, tglx@linutronix.de,
-	andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
-	thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
- free API
-Message-ID: <e908261b-2acd-46ac-b3ef-92691eb50f88@rowland.harvard.edu>
-References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
- <20250627101939.3649295-2-xu.yang_2@nxp.com>
- <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
- <wddmyx4lccthln7mbngkd4zbh6y7mwetdba5e7ob6u4xevecmj@zopp65eqbeuu>
+	s=arc-20240116; t=1751293606; c=relaxed/simple;
+	bh=BOYTSgmLjr6dx23yzMmfIewjjG9D17Ft4GO6DSC0BxY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XjbJbbkRb0yVY1AMTRXF1rBvYozUNILTgtEK7mr3JkYGONxm5VsJ59M1FwjPVKgx5lYQyG46uaJI4TBl5asAEAHtmTvQzRAchLxhk4CQ0Z7eqSvYfdq1LGFH5/1eVL4evACgjgkuDRLF1myhZxcrvANmRP1gcGz/85S07/xkH88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ez8aFcbX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C4B4C4CEF0
+	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751293605;
+	bh=BOYTSgmLjr6dx23yzMmfIewjjG9D17Ft4GO6DSC0BxY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Ez8aFcbXnYMhy/jbRz5wIUEQXD1A3wzidXc8OYJo5r8hJc9XI9kHCg1v6VG9TmAYQ
+	 oy53cCmqMoI12eX/bTKDiCdWOlBdcg7bMxLelm2BG7QShjbnWHiVX+T1T6C4PLkMP5
+	 gkdWE2I0OzX45pS8FPzXQuwNC/6wkshiMNCdYe7UPEHaiD/DoXr6/U7uf6Lr2xKKZ5
+	 puSAssUOkEQl1sWry+LzZ8lL2BK8aipehGveyqBIXUKfHrrus5ISq+Og8f5kofWPg9
+	 /O+CcSz6Ul/QXDyrdTfddAvYlOFqOdyaHYKC3S1yon4zqn9RoyvWjhNA5Cz0f6gT0J
+	 yMd+hua+f9wow==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 80A48C41613; Mon, 30 Jun 2025 14:26:45 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220272] Latent race condition in USB code unveiled with
+ optimized memset_64.S
+Date: Mon, 30 Jun 2025 14:26:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: m.seyfarth@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220272-208809-1q59UE57VH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
+References: <bug-220272-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <wddmyx4lccthln7mbngkd4zbh6y7mwetdba5e7ob6u4xevecmj@zopp65eqbeuu>
 
-On Mon, Jun 30, 2025 at 04:18:51PM +0800, Xu Yang wrote:
-> > Also, the material that this routine replaces in the uvc and stk1160 
-> > drivers do not call flush_kernel_vmap_range().  Why did you add that 
-> > here?  Was this omission a bug in those drivers?
-> 
-> According to dma-api.rst:
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/tree/Documentation/core-api/dma-api.rst?h=linux-6.15.y#n664
-> 
-> "Once a non-contiguous allocation is mapped using this function, the
-> flush_kernel_vmap_range() and invalidate_kernel_vmap_range() APIs must
-> be used to manage the coherency between the kernel mapping, the device
-> and user space mappings (if any)."
-> 
-> Possibly the uvc and stk1160 missed calling it, but since they won't be
-> the only user of the USB core, so we'd better call these APIs.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
-Documentation/core-api/cachetbl.rst says:
+--- Comment #18 from Marcus Seyfarth (m.seyfarth@gmail.com) ---
+(In reply to Micha=C5=82 Pecio from comment #16)
+> What if you disable and re-enable the whole USB bus?
+> Based on your logs, this should do it:
+>=20
+> echo 0000:00:14.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
+> echo 0000:00:14.0 > /sys/bus/pci/drivers/xhci_hcd/bind
+>=20
+> Note that if you have a keyboard on this bus it will stop working. You may
+> want to issue both commands at once: "echo xxxx ; echo yyyy".
 
-  ``void flush_kernel_vmap_range(void *vaddr, int size)``
+I've just tested this and to my surprise, the mouse remained in a non-worki=
+ng
+state. The keyboard turned off and on again and was usable before and after.
 
-       flushes the kernel cache for a given virtual address range in
-       the vmap area.  This is to make sure that any data the kernel
-       modified in the vmap range is made visible to the physical
-       page.  The design is to make this area safe to perform I/O on.
-       Note that this API does *not* also flush the offset map alias
-       of the area.
+(In reply to Micha=C5=82 Pecio from comment #17)
+> I also had a look at this LLM generated "report" and I can't see how the
+> alleged issues are supposed to be real.
+>=20
+> 1. Replacing wmb() with dma_wmb() possibly makes sense, though on x86 wmb=
+()
+> is stronger than dma_wmb() so it can't be the cause of your problem. Other
+> PCI drivers made such change for performance rather than correctness.
+>=20
+> 2. I'm not familiar with xhci->mutex use so no comment, but the alleged
+> deadlock probably doesn't exist as there is no asynchronous completion
+> callback here.
+>=20
+> 3. Pedantry with no functional impact.
+>=20
+> 4. The driver will abort a hanging command and signal the completion.
+>=20
+> 5. We immediately return so we don't go to the out label. No bug.
+>=20
+> 6. mutex !=3D spinlock. No bug.
+>=20
+> 7. I see no bug. No static analyzer was run so that part is made up.
+>=20
+> 8. Doesn't matter if the value is zero.
+>=20
+> 9. No arithmetic is done on this variable.
 
-  ``void invalidate_kernel_vmap_range(void *vaddr, int size) invalidates``
+Thanks a lot for taking a look, even if only #1 ends up being worth of
+consideration.
 
-       the cache for a given virtual address range in the vmap area
-       which prevents the processor from making the cache stale by
-       speculatively reading data while the I/O was occurring to the
-       physical pages.  This is only necessary for data reads into the
-       vmap area.
+--=20
+You may reply to this email to add a comment.
 
-So invalidate_kernel_vmap_range() is not needed for data writes, that 
-is, for OUT transfers.  And ironically, flush_kernel_vmap_range() _is_ 
-needed (but only for OUT transfers).
-
-On the other hand, Christoph may think these call should be included 
-regardless.  Let's see what he recommends.  Christoph?
-
-(Actually, I would expect dma_sync_sgtable_for_cpu() and 
-dma_sync_sgtable_for_device() to handle all of this for us 
-automatically, but never mind...)
-
-Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
