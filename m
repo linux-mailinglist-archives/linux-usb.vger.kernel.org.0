@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-25304-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25305-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690CFAEE03D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:14:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2F5AEE042
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 16:15:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB447A2EB6
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:12:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4617F1886811
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 14:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCC228BABA;
-	Mon, 30 Jun 2025 14:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FE328D841;
+	Mon, 30 Jun 2025 14:13:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Nw6qpG6H"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WwzuidTP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831E428CF47
-	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862E028CF5F
+	for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 14:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751292782; cv=none; b=UwFwDXzRwp0gBVh0/A8VfSuUwN/27KNZDZmh5mMQFMXHO3jfVehT3zrq6k/G7PCInfoZ+l+X2gRfu/ED7LUTmvZ5JiURQmu9WdvwlQ1uaGJG6f5CBKx7IK/1CWnC2uneNYfh8mhOrrx/IDvduvzSQPW7l6GqYtWOjYfrluswr+E=
+	t=1751292785; cv=none; b=QQOENLV3VqDS/P0+YBq7VkuVInNpzqRgXLaOGk5Z+Y6t8lxwwrERjamrfNPhGJSiznDKhDKCw0lbT1J++J9ZDDWdgb2Ng1p5XH+yIRgD200/5vIj1GFuIkjzbqotoSNimECClBdgY4uD9zkm73GjDbrYdeFWbtS0eBQ8c+OOTas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751292782; c=relaxed/simple;
-	bh=fbFWhcTlNTRdWyl21dI+mXVR7oyksRyANGkxIYDmUH4=;
+	s=arc-20240116; t=1751292785; c=relaxed/simple;
+	bh=s/k5WYOwT5p+nmwNFgcSXpx6SWgklWpQaiFbLfMDTDE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rA6EeuqWyH5XuER4EirupFvhfoRX+xvFqiD0RiOo+XKSxOEKhZ+OMd8PvqGjSRcSkkjDqrSRBkn8ZQm5aN6Sl5+O7AS7YEP3mcEdfIWNBgLot6GeTcb6aui2pC2kYVog7RsiKUesGX7Nf2tv8O6092mnYvwxlnmI2IsSccqdMLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Nw6qpG6H; arc=none smtp.client-ip=209.85.218.46
+	 MIME-Version; b=p2/5NWsFy/86ISPjjnZO51CrXBkxjRPkH3bbcqFjB7HxmnzpPpYyZmtm1w7fWh82MXf6Jzx6aEvtqa1Bb8KXzrU2ABBVCzZrKtJidHedSRBw2BrkCTMDkM4pQ6vEtgHqFMKoVU+vOGLbny5ve8f/hUV1vI3EU6JrcM8EMC84Pk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WwzuidTP; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ae0e0271d82so767951266b.3
-        for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 07:12:59 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60cc11b34f6so2331708a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 30 Jun 2025 07:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1751292778; x=1751897578; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1751292781; x=1751897581; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zsuVofM4iWQWBL1t5ktFAF3YZKmCFx1yd4aN3Oe9hqM=;
-        b=Nw6qpG6H0m0w36R2VyUFp1rMCvoZbXPQpzoXfb0hP2DOLOmRTAi5JQEdefIJZ2cKGK
-         76rqvPd9068PomcY4r8yvNhMXGqL12Wa+U9dk7tI5f/WdK1EsQzrLHaRs9BFL2D/I0k5
-         P5aa0F7M3dzZ2OENhfDwQiiOWV8SkV4BDi4j0=
+        bh=EjogWbmRChrVg/U9/QBtp789lljuLZEtjuIUOjGjLMA=;
+        b=WwzuidTPT+epE7U00DUeRbDMCvcquOqAx3RxamW0Gi8f8qRZ8atjO9YtP/ox9a9vS3
+         4J5VC5lcHz9cTRShDXUhp7b+352YUvs+3jaMjXZFKAU9knRSdC2kcAAJl7ZLpkH9zJ/E
+         +fZ79VV8gDmEsuP1LlOq2t5rb/uBx7cAJwL0o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751292778; x=1751897578;
+        d=1e100.net; s=20230601; t=1751292781; x=1751897581;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zsuVofM4iWQWBL1t5ktFAF3YZKmCFx1yd4aN3Oe9hqM=;
-        b=aOurcEiHZ8lm4EUiTenmdYLGiwUXlFSVN4tAbXHlWWbFrFTTBM3QCQkMibShEcNzBD
-         5v9pBhbGqkMsU/IXKsrdxXN0/fkE8VPMyFlMoHnRC4oSvZoTXL7P6BzlekFElSmtnLTH
-         OqEjXi3qzIyIVxzK/7f2O2wwDI3n+BugdqG+K9SdadDO8GUquvuo0saY+kd1XB1GLhQB
-         PP0eVeH1Y0fo2OSZSmpzbTQp9K//q9MM9jN6hzTMhxmEky6Z8Hm8G/vzXZEZOPzhT6/7
-         4JIHBBVH/gT0tPLl0Sl7up2ZZ7a+mldmIiP+GGUgkTnWq2OqLTaW2/EUNr2/unsYzgBj
-         BC5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVXghUWIHKe8x/37EGX9rbX4XrIZsm0KDcu/lehAgySiCFyZ4k3KYYvLK+OZZv3tcygnZ3pBaOgmvU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3XtjcNdoReU0s1EkXeixsTy7H8q9Zv6+s/mKcgVvRTo9FgIvw
-	uutPw+9icxsaRE7pgLAAju50SMYxj3rEFoiQpfGh2wXEv3kI45WpQcYLhFACV2yc5w==
-X-Gm-Gg: ASbGncvX4W7hFA4lNi9Qtm3SiExvbcYXNw1gI3WJB+gIugfvPJplJdytRHfP6L87Dtu
-	7wK4fk17bGNEpdROrvORG03Ks+q1/Jn1ryYlS7C/2y6XXeEw/Om/NVIGziHGMnfrDMH0zHtKklb
-	nQ5LXPGYG5QWYpAb0G0SCXsMRlJQB7VKp+vc6OZfuMOotn6KVzo0dFjGpsQgbdxK8k+TqO5pEmS
-	jmYUgCNf3suOvp8FFZUMO1UYgakbkX4lx8fCnXZijdgwr/81DHuDgRbSS2ZxXQzFwfr+BeAumOD
-	IURGeyP6yBl82vHLpocTxYHeaX6d/EL6RQfDRcLJGgXVETXM+9kjL3tUkrOgOAYl8Q8da5YemLV
-	uTwUs/SoDadQ/HEdpVuUG/L4pd799DR6hR8b1U5CSrSPt8pHg2zOR
-X-Google-Smtp-Source: AGHT+IFng48vS8GwHtMSOPA8+nACXUmszhIUqjqoOz2PD+r5leUDPaXGLvaPuVpVb/IEbJD9uKO2Ow==
-X-Received: by 2002:a17:907:e885:b0:ade:4121:8d52 with SMTP id a640c23a62f3a-ae34fd6c415mr1272248866b.16.1751292777693;
-        Mon, 30 Jun 2025 07:12:57 -0700 (PDT)
+        bh=EjogWbmRChrVg/U9/QBtp789lljuLZEtjuIUOjGjLMA=;
+        b=kPfJwIwubSY6nT2ZASdiFUJsdNFrLHycjVnQ6u+n3M+ARbEshGmw41shkTaXkGaELo
+         OupiTSUUsHLWFgJdCWjoktYnlBJiOd39a3UPHW2emtQGk0YeN289oD7XfTZGVmSrckFO
+         Fdc5VuyS7+wl7m9ABkwMuYo27YBDDgJXjBRReeXzeEEz9YbSb+kHF2uIu9Elm9RFcoy4
+         w9SmVBh4ndZB03nDfq698plbhEVyp/ujqaag2pcDeMDfNAzoOyfiTcFNouTfPJemRCx/
+         5RDMbjWfzf6p4NHI3EMAQue7z7g5P7qKLH/toGzmWC4LuN+p0sgRlvDscgVBc78G5+f7
+         F+2A==
+X-Forwarded-Encrypted: i=1; AJvYcCW6WIdZPf8i+FYnaJ+W44bulxwLRWcXRbode4mca4EcdwGirofYhlLzG5OcHh3uMP6ETdyvOxqsroM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5oYyRQlxXsp6Fvv1/XTI84fpmuwGyC8uyU/o0jPl+Ozp11p0I
+	zOrY6PMiJsh9qBH25gbT2SCSRqqJFKaNK7ZP3G9eoLdYVSf9RrXWB6UBKuelBmyV3A==
+X-Gm-Gg: ASbGncthG8mxQlfsLjSRwkjLQ0nTjuh5YRCGYAnz6q/7umzYCjrcp9WGhaQTlWN1b49
+	ok3aXFMRcVw1dL+vCIzdpKGR/ho3KDOLYbKagVvR7Dxg6bnSbPFUAK2+ze35XHBJjvJqKN1xsp1
+	6kvBKCbbo76ij2162mfMIUlN5Bs+7hS8DYa7Mio5QMx6g/SqX6QqGrbvmu9iZ/5RYDhjPIlSi3n
+	8Hq3Lq+eT/fgZj24Bsz0zR+karIMbwcx1dgozzHUZjy91ldaTGqbI90iSvq2ELUAdaBu0xecK2D
+	O3XsCzJLAlUHl/Jiaqg3aNVxwn/x/i9ZIlvnY3hSnaR+/Sr3humr2f6JMTP/8PyVBnDWVTHRiDB
+	jhJbrTqH38G/nApL3hebxGQNrnwcGmplKu7wvZaUUwI0rEkynDNShZ5t4TpXcRkc=
+X-Google-Smtp-Source: AGHT+IHcLuKRmuowR4Ws5a+TXpVMjv8QGOB507cIESGE9ZRi1wNw2bdiobBj9vYSo52E+U4pHwEnMg==
+X-Received: by 2002:a17:907:d25:b0:ae3:5be2:d9c8 with SMTP id a640c23a62f3a-ae35be2df63mr1229074666b.3.1751292780471;
+        Mon, 30 Jun 2025 07:13:00 -0700 (PDT)
 Received: from akuchynski.c.googlers.com.com (72.144.91.34.bc.googleusercontent.com. [34.91.144.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35363b416sm670643866b.28.2025.06.30.07.12.55
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35363b416sm670643866b.28.2025.06.30.07.12.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 07:12:56 -0700 (PDT)
+        Mon, 30 Jun 2025 07:12:58 -0700 (PDT)
 From: Andrei Kuchynski <akuchynski@chromium.org>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
@@ -84,9 +84,9 @@ Cc: Guenter Roeck <groeck@chromium.org>,
 	"Christian A. Ehrhardt" <lk@c--e.de>,
 	linux-kernel@vger.kernel.org,
 	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: [PATCH v2 04/10] usb: typec: Expose mode priorities via sysfs
-Date: Mon, 30 Jun 2025 14:12:33 +0000
-Message-ID: <20250630141239.3174390-5-akuchynski@chromium.org>
+Subject: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+Date: Mon, 30 Jun 2025 14:12:34 +0000
+Message-ID: <20250630141239.3174390-6-akuchynski@chromium.org>
 X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
 In-Reply-To: <20250630141239.3174390-1-akuchynski@chromium.org>
 References: <20250630141239.3174390-1-akuchynski@chromium.org>
@@ -98,327 +98,716 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This sysfs attribute specifies the preferred order for enabling
-DisplayPort, Thunderbolt alternate modes, and USB4 mode.
+This commit introduces mode_selection sysfs attribute to control automated
+mode negotiation. Writing "yes" to this file activates the automated
+selection process for DisplayPort, Thunderbolt alternate modes, and USB4
+mode. Conversely, writing "no" will cancel any ongoing selection process
+and exit the currently active mode.
 
 Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 ---
- Documentation/ABI/testing/sysfs-class-typec |  16 +++
- drivers/usb/typec/Makefile                  |   2 +-
- drivers/usb/typec/class.c                   |  28 ++++-
- drivers/usb/typec/class.h                   |   4 +
- drivers/usb/typec/mode_selection.c          | 116 ++++++++++++++++++++
- drivers/usb/typec/mode_selection.h          |  19 ++++
- include/linux/usb/typec_altmode.h           |   7 ++
- 7 files changed, 190 insertions(+), 2 deletions(-)
- create mode 100644 drivers/usb/typec/mode_selection.c
- create mode 100644 drivers/usb/typec/mode_selection.h
+ Documentation/ABI/testing/sysfs-class-typec |  17 +
+ drivers/usb/typec/class.c                   |  52 ++-
+ drivers/usb/typec/class.h                   |  10 +
+ drivers/usb/typec/mode_selection.c          | 413 ++++++++++++++++++++
+ drivers/usb/typec/mode_selection.h          |  30 ++
+ include/linux/usb/pd_vdo.h                  |   2 +
+ include/linux/usb/typec_altmode.h           |   5 +
+ 7 files changed, 527 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index 38e101c17a00..ff3296ee8e1c 100644
+index ff3296ee8e1c..0ffc71a7c374 100644
 --- a/Documentation/ABI/testing/sysfs-class-typec
 +++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -162,6 +162,22 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
+@@ -263,6 +263,23 @@ Description:	The USB Modes that the partner device supports. The active mode
  		- usb3 (USB 3.2)
  		- usb4 (USB4)
  
-+What:		/sys/class/typec/<port>/mode_priorities
++What:		/sys/class/typec/<port>-partner/mode_selection
 +Date:		June 2025
 +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-+Description:	Lists the modes supported by the port, ordered by their
-+		activation priority. It defines the preferred sequence for activating
-+		modes such as Displayport alt-mode, Thunderbolt alt-mode and USB4 mode.
-+		The default order can be modified by writing a new sequence to this
-+		attribute. Any modes omitted from a user-provided list will be
-+		automatically placed at the end of the list.
++Description:	Lists the partner-supported alternate modes and mode entry
++		results with the currently entered mode bracketed. If a cable doesn't
++		support a mode, it's marked as 'nc'. An ellipsis indicates a mode
++		currently in progress. Automated mode selection is activated by writing
++		"yes" to the file. Conversely, writing "no" will cancel any ongoing
++		selection process and exit the currently active mode, if any.
 +
 +		Example values:
-+		- "USB4 TBT DP": default priority order
-+		- "USB4 DP TBT": modified priority order after writing "USB4 DP TBT" or
-+			"USB4 DP"
-+		- "DP": the port only supports Displayport alt-mode
++		- "DP TBT=... USB4=nc": The cable does not support USB4 mode,
++			The driver is currently attempting to enter Thunderbolt alt-mode.
++		- "[DP] TBT=-EOPNOTSUPP USB4=-ETIME": USB4 mode entry failed due to
++			a timeout, Thunderbolt failed with the result -EOPNOTSUPP,
++			and DisplayPort is the active alt-mode.
 +
- USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+ USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
  
- What:		/sys/class/typec/<port>-partner/accessory_mode
-diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-index 7a368fea61bc..8a6a1c663eb6 100644
---- a/drivers/usb/typec/Makefile
-+++ b/drivers/usb/typec/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_TYPEC)		+= typec.o
--typec-y				:= class.o mux.o bus.o pd.o retimer.o
-+typec-y				:= class.o mux.o bus.o pd.o retimer.o mode_selection.o
- typec-$(CONFIG_ACPI)		+= port-mapper.o
- obj-$(CONFIG_TYPEC)		+= altmodes/
- obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+ Note: Electronically Marked Cables will have a device also for one cable plug
 diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index a72325ff099a..93eadbcdd4c0 100644
+index 93eadbcdd4c0..8455e07a9934 100644
 --- a/drivers/usb/typec/class.c
 +++ b/drivers/usb/typec/class.c
-@@ -19,6 +19,7 @@
- #include "bus.h"
- #include "class.h"
- #include "pd.h"
-+#include "mode_selection.h"
- 
- static DEFINE_IDA(typec_index_ida);
- 
-@@ -540,7 +541,7 @@ static void typec_altmode_release(struct device *dev)
+@@ -741,6 +741,33 @@ static ssize_t number_of_alternate_modes_show(struct device *dev, struct device_
  }
+ static DEVICE_ATTR_RO(number_of_alternate_modes);
  
- const struct device_type typec_altmode_dev_type = {
--	.name = "typec_alternate_mode",
-+	.name = ALTERNATE_MODE_DEVICE_TYPE_NAME,
- 	.groups = typec_altmode_groups,
- 	.release = typec_altmode_release,
- };
-@@ -1942,6 +1943,25 @@ static ssize_t orientation_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(orientation);
- 
-+static ssize_t mode_priorities_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t size)
++static ssize_t mode_selection_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
 +{
-+	struct typec_port *port = to_typec_port(dev);
-+	int ret = typec_mode_priorities_set(port, buf);
++	struct typec_partner *partner = to_typec_partner(dev);
++
++	return typec_mode_selection_get(partner, buf);
++}
++
++static ssize_t mode_selection_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t size)
++{
++	struct typec_partner *partner = to_typec_partner(dev);
++	bool start;
++	int ret = kstrtobool(buf, &start);
++
++	if (!ret) {
++		if (start)
++			ret = typec_mode_selection_start(partner);
++		else
++			ret = typec_mode_selection_reset(partner);
++	}
 +
 +	return ret ? : size;
 +}
++static DEVICE_ATTR_RW(mode_selection);
 +
-+static ssize_t mode_priorities_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct typec_port *port = to_typec_port(dev);
-+
-+	return typec_mode_priorities_get(port, buf);
-+}
-+static DEVICE_ATTR_RW(mode_priorities);
-+
- static struct attribute *typec_attrs[] = {
- 	&dev_attr_data_role.attr,
- 	&dev_attr_power_operation_mode.attr,
-@@ -1954,6 +1974,7 @@ static struct attribute *typec_attrs[] = {
- 	&dev_attr_port_type.attr,
- 	&dev_attr_orientation.attr,
- 	&dev_attr_usb_capability.attr,
-+	&dev_attr_mode_priorities.attr,
- 	NULL,
+ static struct attribute *typec_partner_attrs[] = {
+ 	&dev_attr_accessory_mode.attr,
+ 	&dev_attr_supports_usb_power_delivery.attr,
+@@ -748,6 +775,7 @@ static struct attribute *typec_partner_attrs[] = {
+ 	&dev_attr_type.attr,
+ 	&dev_attr_usb_mode.attr,
+ 	&dev_attr_usb_power_delivery_revision.attr,
++	&dev_attr_mode_selection.attr,
+ 	NULL
  };
  
-@@ -1992,6 +2013,9 @@ static umode_t typec_attr_is_visible(struct kobject *kobj,
+@@ -772,6 +800,10 @@ static umode_t typec_partner_attr_is_visible(struct kobject *kobj, struct attrib
+ 		if (!get_pd_product_type(kobj_to_dev(kobj)))
  			return 0;
- 		if (!port->ops || !port->ops->default_usb_mode_set)
- 			return 0444;
-+	} else if (attr == &dev_attr_mode_priorities.attr) {
+ 
++	if (attr == &dev_attr_mode_selection.attr)
 +		if (!port->alt_mode_override)
 +			return 0;
++
+ 	return attr->mode;
+ }
+ 
+@@ -850,8 +882,10 @@ int typec_partner_set_identity(struct typec_partner *partner)
+ 			usb_capability |= USB_CAPABILITY_USB2;
+ 		if (devcap & DEV_USB3_CAPABLE)
+ 			usb_capability |= USB_CAPABILITY_USB3;
+-		if (devcap & DEV_USB4_CAPABLE)
++		if (devcap & DEV_USB4_CAPABLE) {
+ 			usb_capability |= USB_CAPABILITY_USB4;
++			typec_mode_selection_add_mode(partner, TYPEC_USB4_MODE);
++		}
+ 	} else {
+ 		usb_capability = PD_VDO_DFP_HOSTCAP(id->vdo[0]);
+ 	}
+@@ -971,7 +1005,12 @@ struct typec_altmode *
+ typec_partner_register_altmode(struct typec_partner *partner,
+ 			       const struct typec_altmode_desc *desc)
+ {
+-	return typec_register_altmode(&partner->dev, desc);
++	struct typec_altmode *alt = typec_register_altmode(&partner->dev, desc);
++
++	if (alt)
++		typec_mode_selection_add_mode(partner, typec_svid_to_altmode(alt->svid));
++
++	return alt;
+ }
+ EXPORT_SYMBOL_GPL(typec_partner_register_altmode);
+ 
+@@ -1075,6 +1114,8 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+ 		typec_partner_link_device(partner, port->usb3_dev);
+ 	mutex_unlock(&port->partner_link_lock);
+ 
++	typec_mode_selection_create(partner);
++
+ 	return partner;
+ }
+ EXPORT_SYMBOL_GPL(typec_register_partner);
+@@ -1092,6 +1133,7 @@ void typec_unregister_partner(struct typec_partner *partner)
+ 	if (IS_ERR_OR_NULL(partner))
+ 		return;
+ 
++	typec_mode_selection_destroy(partner);
+ 	port = to_typec_port(partner->dev.parent);
+ 
+ 	mutex_lock(&port->partner_link_lock);
+@@ -1360,6 +1402,7 @@ int typec_cable_set_identity(struct typec_cable *cable)
+ }
+ EXPORT_SYMBOL_GPL(typec_cable_set_identity);
+ 
++static struct typec_partner *typec_get_partner(struct typec_port *port);
+ /**
+  * typec_register_cable - Register a USB Type-C Cable
+  * @port: The USB Type-C Port the cable is connected to
+@@ -1374,6 +1417,7 @@ struct typec_cable *typec_register_cable(struct typec_port *port,
+ 					 struct typec_cable_desc *desc)
+ {
+ 	struct typec_cable *cable;
++	struct typec_partner *partner;
+ 	int ret;
+ 
+ 	cable = kzalloc(sizeof(*cable), GFP_KERNEL);
+@@ -1405,6 +1449,10 @@ struct typec_cable *typec_register_cable(struct typec_port *port,
+ 		return ERR_PTR(ret);
  	}
  
- 	return attr->mode;
-@@ -2652,6 +2676,8 @@ struct typec_port *typec_register_port(struct device *parent,
- 	else if (cap->usb_capability & USB_CAPABILITY_USB2)
- 		port->usb_mode = USB_MODE_USB2;
- 
-+	typec_mode_priorities_set(port, "");
++	partner = typec_get_partner(port);
++	typec_mode_selection_add_cable(partner, cable);
++	put_device(&partner->dev);
 +
- 	device_initialize(&port->dev);
- 	port->dev.class = &typec_class;
- 	port->dev.parent = parent;
+ 	return cable;
+ }
+ EXPORT_SYMBOL_GPL(typec_register_cable);
 diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index f05d9201c233..28b3c19a0632 100644
+index 28b3c19a0632..17efaacc2b8f 100644
 --- a/drivers/usb/typec/class.h
 +++ b/drivers/usb/typec/class.h
-@@ -5,6 +5,7 @@
- 
+@@ -6,6 +6,7 @@
  #include <linux/device.h>
  #include <linux/usb/typec.h>
-+#include <linux/usb/typec_altmode.h>
+ #include <linux/usb/typec_altmode.h>
++#include <linux/kfifo.h>
  
  struct typec_mux;
  struct typec_switch;
-@@ -82,6 +83,7 @@ struct typec_port {
- 	struct device			*usb3_dev;
- 
- 	bool				alt_mode_override;
-+	int				mode_priority_list[TYPEC_MODE_MAX];
+@@ -27,6 +28,8 @@ struct typec_cable {
+ 	enum usb_pd_svdm_ver		svdm_version;
  };
  
- #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-@@ -111,4 +113,6 @@ static inline int typec_link_ports(struct typec_port *connector) { return 0; }
- static inline void typec_unlink_ports(struct typec_port *connector) { }
- #endif
++struct mode_selection_state;
++
+ struct typec_partner {
+ 	struct device			dev;
+ 	unsigned int			usb_pd:1;
+@@ -41,6 +44,13 @@ struct typec_partner {
  
-+#define ALTERNATE_MODE_DEVICE_TYPE_NAME "typec_alternate_mode"
+ 	struct usb_power_delivery	*pd;
+ 
++	struct delayed_work mode_selection_work;
++	DECLARE_KFIFO(mode_sequence, struct mode_selection_state *,
++			roundup_pow_of_two(TYPEC_MODE_MAX));
++	struct mutex mode_sequence_lock;
++	struct mode_selection_state *mode_states;
++	struct mode_selection_state *active_mode;
 +
- #endif /* __USB_TYPEC_CLASS__ */
+ 	void (*attach)(struct typec_partner *partner, struct device *dev);
+ 	void (*deattach)(struct typec_partner *partner, struct device *dev);
+ };
 diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/mode_selection.c
-new file mode 100644
-index 000000000000..cb7ddf679037
---- /dev/null
+index cb7ddf679037..5b29ca0201ca 100644
+--- a/drivers/usb/typec/mode_selection.c
 +++ b/drivers/usb/typec/mode_selection.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright 2025 Google LLC.
-+ */
+@@ -5,9 +5,25 @@
+ 
+ #include <linux/usb/typec_altmode.h>
+ #include <linux/vmalloc.h>
++#include <linux/usb/pd_vdo.h>
++#include <linux/kfifo.h>
+ #include "mode_selection.h"
+ #include "class.h"
+ 
++static unsigned int mode_selection_timeout = 4000;
++module_param(mode_selection_timeout, uint, 0644);
++MODULE_PARM_DESC(mode_selection_timeout, "The timeout mode entry, ms");
 +
-+#include <linux/usb/typec_altmode.h>
-+#include <linux/vmalloc.h>
-+#include "mode_selection.h"
-+#include "class.h"
++static unsigned int mode_selection_delay = 1000;
++module_param(mode_selection_delay, uint, 0644);
++MODULE_PARM_DESC(mode_selection_delay,
++	"The delay between attempts to enter or exit a mode, ms");
 +
-+static const char * const mode_names[] = {
-+	[TYPEC_DP_ALTMODE] = "DP",
-+	[TYPEC_TBT_ALTMODE] = "TBT",
-+	[TYPEC_USB4_MODE] = "USB4",
++static unsigned int mode_selection_entry_attempts = 4;
++module_param(mode_selection_entry_attempts, uint, 0644);
++MODULE_PARM_DESC(mode_selection_entry_attempts,
++	"Max attempts to enter mode on BUSY result");
++
+ static const char * const mode_names[] = {
+ 	[TYPEC_DP_ALTMODE] = "DP",
+ 	[TYPEC_TBT_ALTMODE] = "TBT",
+@@ -15,6 +31,15 @@ static const char * const mode_names[] = {
+ };
+ static const char * const default_priorities = "USB4 TBT DP";
+ 
++struct mode_selection_state {
++	int mode;
++	bool enable;
++	bool cable_capability;
++	bool enter;
++	int attempt_count;
++	int result;
 +};
-+static const char * const default_priorities = "USB4 TBT DP";
++
+ /* -------------------------------------------------------------------------- */
+ /* port 'mode_priorities' attribute */
+ static int typec_mode_parse_priority_string(const char *str, int *list)
+@@ -114,3 +139,391 @@ int typec_mode_priorities_get(struct typec_port *port, char *buf)
+ 
+ 	return count + sysfs_emit_at(buf, count, "\n");
+ }
 +
 +/* -------------------------------------------------------------------------- */
-+/* port 'mode_priorities' attribute */
-+static int typec_mode_parse_priority_string(const char *str, int *list)
++/* partner 'mod_selection' attribute */
++
++/**
++ * mode_selection_next() - Process mode selection results and schedule next
++ * action
++ *
++ * This function evaluates the outcome of the previous mode entry or exit
++ * attempt. Based on this result, it determines the next mode to process and
++ * schedules `mode_selection_work()` if further actions are required.
++ *
++ * If the previous mode entry was successful, the mode selection sequence is
++ * considered complete for the current cycle.
++ *
++ * If the previous mode entry failed, this function schedules
++ * `mode_selection_work()` to attempt exiting the mode that was partially
++ * activated but not fully entered.
++ *
++ * If the previous operation was an exit (after a failed entry attempt),
++ * `mode_selection_next()` then advances the internal list of candidate
++ * modes to determine the next mode to enter.
++ */
++static void mode_selection_next(
++	struct typec_partner *partner, struct mode_selection_state *ms)
 +{
-+	const bool user_settings = list[0] == TYPEC_MODE_MAX;
-+	char *buf, *ptr;
-+	char *token;
-+	int ret = 0;
++	if (!ms->enter) {
++		kfifo_skip(&partner->mode_sequence);
++	} else if (!ms->result) {
++		dev_info(&partner->dev, "%s mode entered\n", mode_names[ms->mode]);
 +
-+	buf = vmalloc(strlen(str) + 1);
-+	if (!buf)
-+		return -ENOMEM;
-+	for (int i = 0; i <= strlen(str); i++)
-+		buf[i] = (str[i] == '\n') ? '\0' : str[i];
-+	ptr = buf;
++		partner->active_mode = ms;
++		kfifo_reset(&partner->mode_sequence);
++	} else {
++		dev_err(&partner->dev, "%s mode entry failed: %pe\n",
++			mode_names[ms->mode], ERR_PTR(ms->result));
 +
-+	while ((token = strsep(&ptr, " ")) && !ret) {
-+		if (strlen(token)) {
-+			int mode = 0;
++		if (ms->result != -EBUSY ||
++			ms->attempt_count >= mode_selection_entry_attempts)
++			ms->enter = false;
++	}
 +
-+			while ((mode < TYPEC_MODE_MAX) &&
-+				strcmp(token, mode_names[mode]))
-+				mode++;
-+			if (mode == TYPEC_MODE_MAX) {
-+				ret = -EINVAL;
-+				continue;
-+			}
++	if (!kfifo_is_empty(&partner->mode_sequence))
++		schedule_delayed_work(&partner->mode_selection_work,
++			msecs_to_jiffies(mode_selection_delay));
++}
 +
-+			for (int i = 0; i < TYPEC_MODE_MAX; i++) {
-+				if (list[i] == TYPEC_MODE_MAX) {
-+					list[i] = mode;
-+					break;
-+				}
-+				if (list[i] == mode) {
-+					if (user_settings)
-+						ret = -EINVAL;
-+					break;
-+				}
-+			}
++static void mode_selection_complete(struct typec_partner *partner,
++				const int mode, const int result)
++{
++	struct mode_selection_state *ms;
++
++	mutex_lock(&partner->mode_sequence_lock);
++	if (kfifo_peek(&partner->mode_sequence, &ms)) {
++		if (ms->mode == mode) {
++			ms->result = result;
++			cancel_delayed_work(&partner->mode_selection_work);
++			mode_selection_next(partner, ms);
 +		}
 +	}
-+	vfree(buf);
-+
-+	return ret;
++	mutex_unlock(&partner->mode_sequence_lock);
 +}
 +
-+int typec_mode_priorities_set(struct typec_port *port,
-+		const char *user_priorities)
++void typec_mode_selection_altmode_complete(struct typec_altmode *alt,
++				const int result)
 +{
-+	int list[TYPEC_MODE_MAX];
-+	int ret;
-+
-+	for (int i = 0; i < TYPEC_MODE_MAX; i++)
-+		list[i] = TYPEC_MODE_MAX;
-+
-+	ret = typec_mode_parse_priority_string(user_priorities, list);
-+	if (!ret)
-+		ret = typec_mode_parse_priority_string(default_priorities, list);
-+
-+	if (!ret)
-+		for (int i = 0; i < TYPEC_MODE_MAX; i++)
-+			port->mode_priority_list[i] = list[i];
-+
-+	return ret;
++	mode_selection_complete(to_typec_partner(alt->dev.parent),
++		typec_svid_to_altmode(alt->svid), result);
 +}
++EXPORT_SYMBOL_GPL(typec_mode_selection_altmode_complete);
 +
-+static int port_altmode_supported(struct device *dev, void *data)
++void typec_mode_selection_usb4_complete(struct typec_partner *partner,
++				const int result)
 +{
-+	if (!strcmp(dev->type->name, ALTERNATE_MODE_DEVICE_TYPE_NAME)) {
-+		struct typec_altmode *alt = to_typec_altmode(dev);
++	mode_selection_complete(partner, TYPEC_USB4_MODE, result);
++}
++EXPORT_SYMBOL_GPL(typec_mode_selection_usb4_complete);
 +
-+		if (*(int *)data == typec_svid_to_altmode(alt->svid))
-+			return 1;
++static void mode_selection_activate_usb4_mode(struct typec_partner *partner,
++	struct mode_selection_state *ms)
++{
++	struct typec_port *port = to_typec_port(partner->dev.parent);
++	int result = -EOPNOTSUPP;
++
++	if (port->ops && port->ops->enter_usb_mode) {
++		if (ms->enter && port->usb_mode != USB_MODE_USB4)
++			result = -EPERM;
++		else
++			result = port->ops->enter_usb_mode(port,
++				ms->enter ? USB_MODE_USB4 : USB_MODE_USB3);
 +	}
++
++	if (ms->enter)
++		ms->result = result;
++}
++
++static int mode_selection_activate_altmode(struct device *dev, void *data)
++{
++	struct typec_altmode *alt = to_typec_altmode(dev);
++	struct mode_selection_state *ms = (struct mode_selection_state *)data;
++	int result = -ENODEV;
++
++	if (!strcmp(dev->type->name, ALTERNATE_MODE_DEVICE_TYPE_NAME)) {
++		if (ms->mode == typec_svid_to_altmode(alt->svid)) {
++			if (alt->ops && alt->ops->activate)
++				result = alt->ops->activate(alt, ms->enter ? 1 : 0);
++			else
++				result = -EOPNOTSUPP;
++		}
++	}
++
++	if (ms->enter)
++		ms->result = result;
++
++	return result == -ENODEV ? 0 : 1;
++}
++
++static void mode_selection_activate_mode(struct typec_partner *partner,
++	struct mode_selection_state *ms)
++{
++	dev_info(&partner->dev, "%s %s mode\n",
++		ms->enter ? "Enter" : "Exit", mode_names[ms->mode]);
++
++	if (ms->enter)
++		ms->attempt_count++;
++
++	if (ms->mode == TYPEC_USB4_MODE)
++		mode_selection_activate_usb4_mode(partner, ms);
++	else
++		device_for_each_child(&partner->dev, ms,
++			mode_selection_activate_altmode);
++
++	if (ms->enter && ms->result)
++		dev_err(&partner->dev, "%s mode activation failed: %pe\n",
++			mode_names[ms->mode], ERR_PTR(ms->result));
++}
++
++/**
++ * mode_selection_work() - Activate entry into the upcoming mode
++ *
++ * This function works in conjunction with `mode_selection_next()`.
++ * It attempts to activate the next mode in the selection sequence.
++ *
++ * If the mode activation (`mode_selection_activate_mode()`) fails,
++ * `mode_selection_next()` will be called to initiate a new selection cycle.
++ *
++ * Otherwise, the result is temporarily set to -ETIME, and
++ * `mode_selection_activate_mode()` is scheduled for a subsequent entry after a
++ * timeout period. The alternate mode driver is expected to call back with the
++ * actual mode entry result. Upon this callback, `mode_selection_next()` will
++ * determine the subsequent mode and re-schedule mode_selection_work().
++ */
++static void mode_selection_work(struct work_struct *work)
++{
++	struct typec_partner *partner = container_of(work, struct typec_partner,
++						  mode_selection_work.work);
++	struct mode_selection_state *ms;
++
++	mutex_lock(&partner->mode_sequence_lock);
++	if (kfifo_peek(&partner->mode_sequence, &ms)) {
++		if (ms->enter && ms->result == -ETIME) {
++			mode_selection_next(partner, ms);
++		} else {
++			mode_selection_activate_mode(partner, ms);
++
++			if (ms->enter) {
++				if (!ms->result) {
++					ms->result = -ETIME;
++					schedule_delayed_work(&partner->mode_selection_work,
++						msecs_to_jiffies(mode_selection_timeout));
++				} else {
++					ms->enter = ms->result == -EBUSY;
++					mode_selection_next(partner, ms);
++				}
++			} else
++				mode_selection_next(partner, ms);
++		}
++	}
++	mutex_unlock(&partner->mode_sequence_lock);
++}
++
++static void mode_selection_init(struct typec_partner *partner)
++{
++	for (int i = 0; i < TYPEC_MODE_MAX; i++) {
++		partner->mode_states[i].mode = i;
++		partner->mode_states[i].enter = true;
++		partner->mode_states[i].result = 0;
++		partner->mode_states[i].attempt_count = 0;
++	}
++
++	kfifo_reset(&partner->mode_sequence);
++	partner->active_mode = NULL;
++}
++
++int typec_mode_selection_create(struct typec_partner *partner)
++{
++	partner->mode_states = vmalloc(
++		sizeof(struct mode_selection_state) * TYPEC_MODE_MAX);
++	if (!partner->mode_states)
++		return -ENOMEM;
++
++	INIT_KFIFO(partner->mode_sequence);
++	mutex_init(&partner->mode_sequence_lock);
++	mode_selection_init(partner);
++	INIT_DELAYED_WORK(&partner->mode_selection_work, mode_selection_work);
++
 +	return 0;
 +}
 +
-+static bool port_mode_supported(struct typec_port *port, int mode)
++void typec_mode_selection_add_mode(struct typec_partner *partner,
++		const int mode)
 +{
-+	if (mode >= TYPEC_MODE_MAX)
-+		return false;
-+	if (mode == TYPEC_USB4_MODE)
-+		return !!(port->cap->usb_capability & USB_CAPABILITY_USB4);
-+	return device_for_each_child(&port->dev, &mode, port_altmode_supported);
++	if (partner->mode_states)
++		partner->mode_states[mode].enable =
++			port_mode_supported(to_typec_port(partner->dev.parent), mode);
 +}
 +
-+int typec_mode_priorities_get(struct typec_port *port, char *buf)
++void typec_mode_selection_add_cable(struct typec_partner *partner,
++		struct typec_cable *cable)
++{
++	const u32 id_header = cable->identity->id_header;
++	const u32 vdo1 = cable->identity->vdo[0];
++	const u32 type = PD_IDH_PTYPE(id_header);
++	const u32 speed = VDO_TYPEC_CABLE_SPEED(vdo1);
++	bool capability[] = {
++		[TYPEC_DP_ALTMODE] = true,
++		[TYPEC_TBT_ALTMODE] = false,
++		[TYPEC_USB4_MODE] = false,
++	};
++
++	if (!partner->mode_states)
++		return;
++
++	if (type == IDH_PTYPE_PCABLE) {
++		capability[TYPEC_DP_ALTMODE] = (speed > CABLE_USB2_ONLY);
++		capability[TYPEC_TBT_ALTMODE] = (speed > CABLE_USB2_ONLY);
++		capability[TYPEC_USB4_MODE] = (speed > CABLE_USB2_ONLY);
++	} else if (type == IDH_PTYPE_ACABLE) {
++		const u32 vdo2 = cable->identity->vdo[1];
++		const u32 version = VDO_TYPEC_CABLE_VERSION(vdo1);
++		const bool usb4_support = VDO_TYPEC_CABLE_USB4_SUPP(vdo2);
++		const bool modal_support = PD_IDH_MODAL_SUPP(id_header);
++
++		capability[TYPEC_DP_ALTMODE] = modal_support;
++		capability[TYPEC_TBT_ALTMODE] = true;
++		if (version == CABLE_VDO_VER1_3)
++			capability[TYPEC_USB4_MODE] = usb4_support;
++		else
++			capability[TYPEC_USB4_MODE] = modal_support;
++	}
++
++	for (int i = 0; i < TYPEC_MODE_MAX; i++)
++		partner->mode_states[i].cable_capability = capability[i];
++}
++
++void typec_mode_selection_destroy(struct typec_partner *partner)
++{
++	if (!partner->mode_states)
++		return;
++
++	mutex_lock(&partner->mode_sequence_lock);
++	kfifo_reset(&partner->mode_sequence);
++	mutex_unlock(&partner->mode_sequence_lock);
++
++	cancel_delayed_work_sync(&partner->mode_selection_work);
++	mutex_destroy(&partner->mode_sequence_lock);
++	vfree(partner->mode_states);
++	partner->mode_states = NULL;
++}
++
++/**
++ * typec_mode_selection_start() - Starts the mode selection process.
++ *
++ * This function populates a 'mode_sequence' FIFO with pointers to
++ * `struct mode_selection_state` instances. The sequence is generated based on
++ * partner/cable capabilities and prioritized according to the port's settings.
++ */
++int typec_mode_selection_start(struct typec_partner *partner)
++{
++	struct typec_port *port = to_typec_port(partner->dev.parent);
++	int ret = 0;
++
++	if (!partner->mode_states)
++		return -ENOMEM;
++
++	mutex_lock(&partner->mode_sequence_lock);
++
++	if (!kfifo_is_empty(&partner->mode_sequence))
++		ret = -EINPROGRESS;
++	else if (partner->active_mode)
++		ret = -EALREADY;
++	else {
++		mode_selection_init(partner);
++
++		for (int i = 0; i < TYPEC_MODE_MAX; i++) {
++			const int mode = port->mode_priority_list[i];
++			struct mode_selection_state *ms;
++
++			if (mode < TYPEC_MODE_MAX) {
++				ms = &partner->mode_states[mode];
++				if (ms->enable && ms->cable_capability)
++					kfifo_put(&partner->mode_sequence, ms);
++			}
++		}
++
++		if (!kfifo_is_empty(&partner->mode_sequence))
++			schedule_delayed_work(&partner->mode_selection_work, 0);
++	}
++
++	mutex_unlock(&partner->mode_sequence_lock);
++
++	return ret;
++}
++
++/**
++ * typec_mode_selection_reset() - Reset the mode selection process.
++ *
++ * This function cancels ongoing mode selection and exits the currently active
++ * mode, if present.
++ * It returns -EINPROGRESS when a mode exit is already scheduled, or a mode
++ * entry is ongoing, indicating that the reset cannot immediately complete.
++ */
++int typec_mode_selection_reset(struct typec_partner *partner)
++{
++	struct mode_selection_state *ms;
++
++	if (!partner->mode_states)
++		return -ENOMEM;
++
++	mutex_lock(&partner->mode_sequence_lock);
++	if (kfifo_peek(&partner->mode_sequence, &ms)) {
++		kfifo_reset(&partner->mode_sequence);
++
++		if (!ms->enter || ms->result) {
++			ms->attempt_count = mode_selection_entry_attempts;
++			kfifo_put(&partner->mode_sequence, ms);
++			mutex_unlock(&partner->mode_sequence_lock);
++
++			return -EINPROGRESS;
++		}
++	}
++
++	if (partner->active_mode) {
++		partner->active_mode->enter = false;
++		mode_selection_activate_mode(partner, partner->active_mode);
++	}
++	mode_selection_init(partner);
++	mutex_unlock(&partner->mode_sequence_lock);
++
++	return 0;
++}
++
++int typec_mode_selection_get(struct typec_partner *partner, char *buf)
 +{
 +	ssize_t count = 0;
++	struct mode_selection_state *running_ms;
++
++	if (!partner->mode_states)
++		return -ENOMEM;
++
++	mutex_lock(&partner->mode_sequence_lock);
++	if (!kfifo_peek(&partner->mode_sequence, &running_ms))
++		running_ms = NULL;
 +
 +	for (int i = 0; i < TYPEC_MODE_MAX; i++) {
-+		int mode = port->mode_priority_list[i];
++		struct mode_selection_state *ms = &partner->mode_states[i];
 +
-+		if (port_mode_supported(port, mode))
-+			count += sysfs_emit_at(buf, count, "%s ", mode_names[mode]);
++		if (ms->enable) {
++			if (!ms->cable_capability)
++				count += sysfs_emit_at(buf, count, "%s=nc ", mode_names[i]);
++			else if (ms == running_ms)
++				count += sysfs_emit_at(buf, count, "%s=... ", mode_names[i]);
++			else if (ms->attempt_count == 0)
++				count += sysfs_emit_at(buf, count, "%s ", mode_names[i]);
++			else if (ms->result == 0)
++				count += sysfs_emit_at(buf, count, "[%s] ", mode_names[i]);
++			else
++				count += sysfs_emit_at(buf, count, "%s=%pe ", mode_names[i],
++					ERR_PTR(ms->result));
++		}
 +	}
++	mutex_unlock(&partner->mode_sequence_lock);
 +
-+	return count + sysfs_emit_at(buf, count, "\n");
++	if (count)
++		count += sysfs_emit_at(buf, count, "\n");
++
++	return count;
 +}
 diff --git a/drivers/usb/typec/mode_selection.h b/drivers/usb/typec/mode_selection.h
-new file mode 100644
-index 000000000000..c595c84e26a4
---- /dev/null
+index c595c84e26a4..6a54792a20db 100644
+--- a/drivers/usb/typec/mode_selection.h
 +++ b/drivers/usb/typec/mode_selection.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+@@ -17,3 +17,33 @@ static inline int typec_svid_to_altmode(const u16 svid)
+ int typec_mode_priorities_set(struct typec_port *port,
+ 		const char *user_priorities);
+ int typec_mode_priorities_get(struct typec_port *port, char *buf);
 +
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_tbt.h>
-+
-+static inline int typec_svid_to_altmode(const u16 svid)
-+{
-+	switch (svid) {
-+	case USB_TYPEC_DP_SID:
-+		return TYPEC_DP_ALTMODE;
-+	case USB_TYPEC_TBT_SID:
-+		return TYPEC_TBT_ALTMODE;
-+	}
-+	return TYPEC_MODE_MAX;
-+}
-+
-+int typec_mode_priorities_set(struct typec_port *port,
-+		const char *user_priorities);
-+int typec_mode_priorities_get(struct typec_port *port, char *buf);
++/**
++ * The mode selection process follows a lifecycle tied to the USB-C partner
++ * device. The API is designed to first build a set of desired modes and then
++ * trigger the selection process. The expected sequence of calls is as follows:
++ *
++ * Creation and Configuration:
++ * call typec_mode_selection_create() when the partner device is being set
++ * up. This allocates resources for the mode selection.
++ * After creation, call typec_mode_selection_add_mode() and
++ * typec_mode_selection_add_cable() to define the parameters for the
++ * selection process.
++ *
++ * Execution:
++ * Call typec_mode_selection_start() to trigger the mode selection.
++ * Call typec_mode_selection_reset() to prematurely stop the selection
++ * process and clear any stored results.
++ *
++ * Destruction:
++ * Before destroying a partner, call typec_mode_selection_destroy()
++ */
++int typec_mode_selection_create(struct typec_partner *partner);
++void typec_mode_selection_destroy(struct typec_partner *partner);
++int typec_mode_selection_start(struct typec_partner *partner);
++int typec_mode_selection_reset(struct typec_partner *partner);
++void typec_mode_selection_add_mode(struct typec_partner *partner,
++		const int mode);
++void typec_mode_selection_add_cable(struct typec_partner *partner,
++		struct typec_cable *cable);
++int typec_mode_selection_get(struct typec_partner *partner, char *buf);
+diff --git a/include/linux/usb/pd_vdo.h b/include/linux/usb/pd_vdo.h
+index 5c48e8a81403..20bcf37ad634 100644
+--- a/include/linux/usb/pd_vdo.h
++++ b/include/linux/usb/pd_vdo.h
+@@ -439,6 +439,8 @@
+ 	 | (trans) << 11 | (phy) << 10 | (ele) << 9 | (u4) << 8			\
+ 	 | ((hops) & 0x3) << 6 | (u2) << 5 | (u32) << 4 | (lane) << 3		\
+ 	 | (iso) << 2 | (gen))
++#define VDO_TYPEC_CABLE_VERSION(vdo) (((vdo) >> 21) & 0x7)
++#define VDO_TYPEC_CABLE_USB4_SUPP(vdo) (((vdo) & BIT(8)) == ACAB2_USB4_SUPP)
+ 
+ /*
+  * AMA VDO (PD Rev2.0)
 diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-index b3c0866ea70f..4f05c5f5c91d 100644
+index 4f05c5f5c91d..49213cf27565 100644
 --- a/include/linux/usb/typec_altmode.h
 +++ b/include/linux/usb/typec_altmode.h
-@@ -145,6 +145,13 @@ enum {
+@@ -225,4 +225,9 @@ void typec_altmode_unregister_driver(struct typec_altmode_driver *drv);
+ 	module_driver(__typec_altmode_driver, typec_altmode_register_driver, \
+ 		      typec_altmode_unregister_driver)
  
- #define TYPEC_MODAL_STATE(_state_)	((_state_) + TYPEC_STATE_MODAL)
- 
-+enum {
-+	TYPEC_DP_ALTMODE = 0,
-+	TYPEC_TBT_ALTMODE,
-+	TYPEC_USB4_MODE,
-+	TYPEC_MODE_MAX,
-+};
++void typec_mode_selection_altmode_complete(struct typec_altmode *alt,
++				const int result);
++void typec_mode_selection_usb4_complete(struct typec_partner *partner,
++				const int result);
 +
- struct typec_altmode *typec_altmode_get_plug(struct typec_altmode *altmode,
- 					     enum typec_plug_index index);
- void typec_altmode_put_plug(struct typec_altmode *plug);
+ #endif /* __USB_TYPEC_ALTMODE_H */
 -- 
 2.50.0.727.gbf7dc18ff4-goog
 
