@@ -1,159 +1,181 @@
-Return-Path: <linux-usb+bounces-25328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25329-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08F16AEE80C
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 22:21:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E4E1AEE8C0
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 22:59:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A141B44022F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 20:20:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D367442197
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 20:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC1522425E;
-	Mon, 30 Jun 2025 20:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A341291166;
+	Mon, 30 Jun 2025 20:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UB85TXtI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOkyhapM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A7A1D5ACE;
-	Mon, 30 Jun 2025 20:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7390525FA0A;
+	Mon, 30 Jun 2025 20:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751314849; cv=none; b=LvFpTjU+cZZ9phJUlLdMy/DBjhYMbwxd0mDgI8dIFKEwaId1ZnT0RS2JYur91fEOs6BD1+ycsXf2Rt0lkSLE25l8FlTIBoVBCgmbceywZQPa9ZZvWZWvAA9SANrUu5EjXqy8LztaSL9WgJHotKFHLbT/YLBk9+OqsCzLdnoDD1s=
+	t=1751317145; cv=none; b=HJS9CqeV2+njVoSOsGejSowi+v70dAL6HqDXFqFPWbnRaOSJ1rwxU4Xkgj3b/G//PcN+DzQ22jRNE5Wcz6O0EThyPRv5K1sU7/MZGd2DlwpJmlzQbdgX9GcyhziyEfJ33Z3qYvY8cK0qp2E27YFbrLEWKvH0V5lKgNxX/31HxTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751314849; c=relaxed/simple;
-	bh=S2IH6KjIm/4LuZF1gHkxEj+ipI+Fs4C7NraSYfjDgS4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S0ksur25QE9kU3X7oE9ot5eU3W3DLvGo5Y89qOyB5BE9TUOdZXTxWQcrLkRiBO1hSgQj5Sa3UL4NhqnIJtp+uJJx61PXKhf4b01M5V4Iy8Ia0mBBQeH0H/UIIBRTxK/afD4vkkbiQ7LWh7EMDUd8xsiwfnr/3AytGzgL030ds4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UB85TXtI; arc=none smtp.client-ip=209.85.222.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-87ec5e1cd4aso820464241.0;
-        Mon, 30 Jun 2025 13:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751314846; x=1751919646; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qc+90tprg0y+vgJUk7gGeUz39prtDolc690nnHVfeHE=;
-        b=UB85TXtIESdMgyGE7FLpW3VBpdAmo/bwVO2grDLeSMGqNvgYxcTcV58q/9Ad+jmE55
-         b+I2dqHODUWo6LECdJUNa8memLxUBfyZRUc9OkMhiireZ4zyJLNeMEerz3YlUx4T7R9J
-         Tq+/wBW2hHXfL7nCrBcTf1GQNx06WfSZ4MBQNTYP24VY51HCIjr9zEKtxuX/Cpl6UEzw
-         d6zZC6PAy0iUj5L4duynBMtVzfXfGNuYKTQFHAQEyvPrkPniWrlPEeajhpD5LoNRMN0g
-         SN38sle8RUbp+K9KZlTi8aeM/F/DlZSwVYCDhp+/LsZ50QObOUvz1wKwxEauNGm95oh1
-         5pzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751314846; x=1751919646;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qc+90tprg0y+vgJUk7gGeUz39prtDolc690nnHVfeHE=;
-        b=HBjLzM9VBxGKV1M5StboEjbtbWxSfESBk7fZxSnVgxet1uP//88LM9zy9keEojxHFL
-         /V8HMb9rzafYgKKD8P06cJHKeHAY9cDx3/OkA200rYL7TaymL+JzPyg2xYt+tIl+6WyO
-         86akdAHXTEqCeLtifBApYknNCY+dhkdupopkwncChonkbWqKoxTbRaMAKJKFhMfEYVaJ
-         tj10gju2Kxlit6hOA3XJabrMsmEsaxXHypJGktc3k08WyyNkIhPXy0d4OehTL8EFTNrF
-         ahd07kHUmmNCY/BlJf1qi4zA3711rrChyhbgCNBj1UdwyyNZaaS7dgQHWZfGqW9+ftlc
-         bHOg==
-X-Forwarded-Encrypted: i=1; AJvYcCVPqZytePMCA/8OlzNCPZZHZt+sanOHLj7v4C8jT5r3eGPYQuylQramb1nSjC1cfkrHIdrun4q9uKu2@vger.kernel.org, AJvYcCXMf9jJPbDFVl6ek5LDLjUl4iMwwbYX8zmhkxxjJP2gIYteHJjC8ojNSA0g5ikDlWIrfga6Xx/YKju5txE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/sT3ngJmHHMvSBLVBc7CIfVXsgROLcqhR/voXaWaSlmnPjmWm
-	qHV2prrfI8Sx8Zct6rASV0vgDLWBuiy4LUEX1hNKVFa3f7cP7wctElwnb/kpMq/udM/9Az3aNa7
-	DLcoxqhgVxVE8ViBCq2e8J1QxTMnciZU=
-X-Gm-Gg: ASbGncvidW3UhAWS8xaWcF7Y03iHk+sEBGbn0aPAz3JuaA6ctY8TRkd4PPONK4NsatH
-	raFoMYeWV/62JZ7QJwXs/kG8wpd7bhQCHJYsTcd7eOpTsXqC31bwP+V6J6La9DUR2/r9pOREb0t
-	NRCl8C6YQrmtgjRt5MVFJ+3+zasRSBXsTvavSsVzNFHISQldOJvy/Uq5goNDPnParDkApiiUQoX
-	tUA
-X-Google-Smtp-Source: AGHT+IEayYG4e2wKK0bX3ynrI0zopvwL0MJfOacs5i7fxmnOeVKHly04X/sXF4JVSfDE7ZGNHZeIp502W+AvgkQfZBU=
-X-Received: by 2002:a05:6102:5a94:b0:4e7:7787:1cf8 with SMTP id
- ada2fe7eead31-4ee4f51fd28mr9511558137.7.1751314846544; Mon, 30 Jun 2025
- 13:20:46 -0700 (PDT)
+	s=arc-20240116; t=1751317145; c=relaxed/simple;
+	bh=pCcZMaUHNWjzCW4wgN7WI/iWRmy+EhqyXPtrhaPDveA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=scEO6RKfny/3q1NcRq+SfODTN3Dd0PZqrXUgoa0H4mbQVrDKvlhxl73KP9gji+Zx9LZDW6BVgYVK9lEOCcOBapmzKwJlJnTVB3PYRVo8Y5MGx6Ek1su87X2tFYGzO8iQpKlr7NtPz8s1bXbZEUqM4f0e7q3QzUPma0drcp3Njcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOkyhapM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35123C4CEEB;
+	Mon, 30 Jun 2025 20:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751317145;
+	bh=pCcZMaUHNWjzCW4wgN7WI/iWRmy+EhqyXPtrhaPDveA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gOkyhapMv6YC0GQnOAgosilSo4vKIUnMvQQmcgWXFQslKxrX2EpNRanv7kXiSLTor
+	 UV9kcQFoa4YxmX5TtpQGw5o8UUFkwn1GbjbCQlX1EN65ReT6HWsXlEdk1RuBy8RNho
+	 f6CLfHJENvVfM8r6Mhq0nNf45rhvh2L1s7m4jlTgPRK2OPLqMaK4riE+pMPdNdWWSl
+	 aP6AP8Nq9HV0GQdi+2WhQ6qZTEOGYLwe0BLCnk/oFNyhZjLoroYVwN0FG7/wk5N57y
+	 aUCGeQJGQOg9AM4eQ/VBOykWi9ZrmWD7is3yhFL3pJp0K5QlpAFXMVssMHzvcTl5qW
+	 Kf6k7SAcgfY0A==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Xiaowei Li <xiaowei.li@simcom.com>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 13/23] net: usb: qmi_wwan: add SIMCom 8230C composition
+Date: Mon, 30 Jun 2025 16:44:18 -0400
+Message-Id: <20250630204429.1357695-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250630204429.1357695-1-sashal@kernel.org>
+References: <20250630204429.1357695-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250627060125.176663-1-sperezglz@gmail.com> <2025062834-botanist-crop-4aec@gregkh>
-In-Reply-To: <2025062834-botanist-crop-4aec@gregkh>
-From: =?UTF-8?Q?Sergio_P=C3=A9rez?= <sperezglz@gmail.com>
-Date: Mon, 30 Jun 2025 14:20:35 -0600
-X-Gm-Features: Ac12FXwAra0T6lIhtYOGlZlss7cI2Oo40Q8m5vxGWM0YoR60ugXuZAhBDQsLrpA
-Message-ID: <CAMCbnubpfO0y9oMnJnYHQ3ALTPmF1W80sPhbNPzaR59hy+cDQQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc-xilinx: validate ep number before
- indexing rambase[]
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: michal.simek@amd.com, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15.4
+Content-Transfer-Encoding: 8bit
 
-> On Fri, Jun 27, 2025 at 12:01:22AM -0600, Sergio Perez Gonzalez wrote:
-> > Issue flagged by coverity. The size of the rambase array is 8,
-> > usb_enpoint_num() can return 0 to 15, prevent out of bounds reads.
->
-> But how can that happen with this hardware?  As the array states, this
-> hardware only has that many endpoints availble to it, so how can it ever
-> be larger?
->
+From: Xiaowei Li <xiaowei.li@simcom.com>
 
-Hardware will likely behave and not report more endpoints than it
-supports, but I thought that there is still a possibility that this
-can be exploited, taking into account this patch:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f14c7227f342d9932f9b918893c8814f86d2a0d
+[ Upstream commit 0b39b055b5b48cbbdf5746a1ca6e3f6b0221e537 ]
 
-and this CVE:
-https://www.cvedetails.com/cve/CVE-2022-27223/
+Add support for SIMCom 8230C which is based on Qualcomm SDX35 chip.
+0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1e0e ProdID=9071 Rev= 5.15
+S:  Manufacturer=SIMCOM
+S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
+S:  SerialNumber=0123456789ABCDEF
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=none
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-However, looking more closely the above patch, the endpoint number is
-extracted from a struct different than the "usb_endpoint_descriptor":
-"epnum = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;"
-in contrast with the code that I'm touching. The CVE does not add more
-details to understand if the part of the code that I'm changing is not
-subject to the vulnerability.
+Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://patch.msgid.link/tencent_21D781FAA4969FEACA6ABB460362B52C9409@qq.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
+**YES**
 
-> > Link: https://scan7.scan.coverity.com/#/project-view/53936/11354?selectedIssue=1644635
-> > Signed-off-by: Sergio Perez Gonzalez <sperezglz@gmail.com>
->
-> What commit id does this fix?
+This commit should be backported to stable kernel trees. Here's my
+detailed analysis:
 
-The last commit that touches this code is : fd2f928a5f7bc2f9588 ("usb:
-gadget: udc-xilinx: Use USB API functions rather than constants") ,
-although, I think the previous code gives functionally the same
-behavior.
+## Rationale for Backporting:
 
->
->
-> > ---
-> >  drivers/usb/gadget/udc/udc-xilinx.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-> > index 8d803a612bb1..0c3714de2e3b 100644
-> > --- a/drivers/usb/gadget/udc/udc-xilinx.c
-> > +++ b/drivers/usb/gadget/udc/udc-xilinx.c
-> > @@ -814,6 +814,12 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
-> >       ep->is_in = ((desc->bEndpointAddress & USB_DIR_IN) != 0);
-> >       /* Bit 3...0:endpoint number */
-> >       ep->epnumber = usb_endpoint_num(desc);
-> > +     if (ep->epnumber >= XUSB_MAX_ENDPOINTS) {
-> > +             dev_dbg(udc->dev, "bad endpoint index %d: only 0 to %d supported\n",
-> > +                             ep->epnumber, (XUSB_MAX_ENDPOINTS - 1));
-> > +             return -EINVAL;
->
-> Any hints as to how this was tested?
+1. **Stable kernel rules explicitly allow device ID additions**:
+   According to Documentation/process/stable-kernel-rules.rst line 15,
+   patches must "either fix a real bug that bothers people or just add a
+   device ID." This commit clearly falls into the "add a device ID"
+   category.
 
-I don't have access to such xilinx hardware, given that it was marked
-as a high severity defect in coverity and it is basically extending a
-validation that was already added in other parts of the code, I
-decided to propose the patch without runtime testing.
+2. **Simple, low-risk change**: The commit adds exactly one line:
+  ```c
+  {QMI_QUIRK_SET_DTR(0x1e0e, 0x9071, 3)}, /* SIMCom 8230C ++ */
+  ```
+  This is a minimal change that only affects users with this specific
+  hardware (vendor ID 0x1e0e, product ID 0x9071).
 
+3. **Enables hardware that would otherwise not work**: Without this
+   device ID entry, users with the SIMCom 8230C modem cannot use their
+   hardware with the qmi_wwan driver. This directly impacts
+   functionality for those users.
 
-Thanks,
-Sergio
->
-> thanks,
->
-> greg k-h
+4. **Follows established patterns**: The commit uses `QMI_QUIRK_SET_DTR`
+   macro, consistent with the existing SIMCom entry at line 1428:
+  ```c
+  {QMI_QUIRK_SET_DTR(0x1e0e, 0x9001, 5)}, /* SIMCom 7100E, 7230E, 7600E
+  ++ */
+  ```
+  This shows the vendor has a history of requiring the DTR quirk for
+  their devices.
+
+5. **Historical precedent supports backporting**: Of the 5 similar
+   commits analyzed, 4 were backported to stable:
+   - Fibocom FG132 (YES)
+   - MeiG Smart SRM825L (YES)
+   - Telit FN912 compositions (YES)
+   - Telit FN920C04 compositions (YES)
+   - Quectel RG255C (NO)
+
+   The 80% backport rate for similar device ID additions suggests this
+type of change is generally considered appropriate for stable.
+
+6. **No risk to existing functionality**: The change only adds support
+   for a new device ID (0x9071) and doesn't modify any existing device
+   support or core driver functionality.
+
+The commit meets all criteria for stable backporting: it's obviously
+correct, tested (as evidenced by the detailed USB descriptor output in
+the commit message), small (1 line), and enables hardware support that
+users need.
+
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index b586b1c13a47f..f5647ee0addec 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1426,6 +1426,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x22de, 0x9051, 2)}, /* Hucom Wireless HM-211S/K */
+ 	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
+ 	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9001, 5)},	/* SIMCom 7100E, 7230E, 7600E ++ */
++	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9071, 3)},	/* SIMCom 8230C ++ */
+ 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0121, 4)},	/* Quectel EC21 Mini PCIe */
+ 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
+ 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0195, 4)},	/* Quectel EG95 */
+-- 
+2.39.5
+
 
