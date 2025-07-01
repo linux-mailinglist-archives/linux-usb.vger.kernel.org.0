@@ -1,300 +1,214 @@
-Return-Path: <linux-usb+bounces-25350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25348-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ECBAAEF4B7
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 12:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8C60AEF49B
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 12:12:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ED7B445ECF
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:15:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15FAA3A5E5F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEA327056F;
-	Tue,  1 Jul 2025 10:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4865825CC4B;
+	Tue,  1 Jul 2025 10:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="mOP5mUpQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660C92356CE;
-	Tue,  1 Jul 2025 10:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8DA24168D
+	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 10:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751364932; cv=none; b=NkBJ+EYELlxkuqHyyn9K+HIyy5HKikoECEKJMAkTV/s9ogsmjqQw8MdK+rjszm9QFtH3FRd+8Mw34QXi5WMRIAuShxGBG8YRmi6bobNDK9Rbv2u2qjVZBywbw1M+UMARXLMWSFNKXqWKc5HxUrjnMd6jpdFZWosC5GT9sG77upc=
+	t=1751364690; cv=none; b=qtQ6/JWN3UHR38jV0kDncBwV7BDKQ9pRVKCWsXFA+c7o6PNWZyGW0xk6mGhTzuWJlDwVl3DFd2mAE/6WmAxIX3/ywPvNsWK8vyLTRzZnLUqTmI6dAeEktcOQzyD88ZeYTpRGrR4R2jy6zimZuOhTK2nep8hqKQKDU51J0e686c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751364932; c=relaxed/simple;
-	bh=UER6UP57mrgWSjf4gyDsjMn+GpFS6MZjgA5BfuK8RzI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=umMW4GpDjzSs/GZE5iUr3wbsh/t7QACoJPUShv/edhAMkaxjP82GS8rCuI67LEO6ubu4/X14xJDykbQCGlbtYJh9VnJd/PsYHQeNo2kia/9Cter98EU5raSyB8N9Gf0pahU8v5e5SmfFQmjquxLKZGKYvW+hgQkFnKi32jUlvmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from localhost.localdomain (unknown [116.25.94.38])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1a8790b15;
-	Tue, 1 Jul 2025 18:00:08 +0800 (GMT+08:00)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Subject: [PATCH v2 1/1] USB: serial: option: add GosunCn GM800 series
-Date: Tue,  1 Jul 2025 18:00:02 +0800
-Message-Id: <20250701100002.798372-2-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250701100002.798372-1-amadeus@jmu.edu.cn>
-References: <20250701100002.798372-1-amadeus@jmu.edu.cn>
+	s=arc-20240116; t=1751364690; c=relaxed/simple;
+	bh=ge+GZUU/CI6knla0X986QodzqtPJytNNG0LNjZS6frE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qhYwiSJhkhAD+vwxbPHV7ASUFfF0EwtGm3W2bGkTjrvGLjr1Xqgoacft3/a3xUBuSE4XsTTCr75Fzcy9D01Gdc6EY3PqUPipM8D0ccQpedlR2VOLCWP3kyUddpfUI/9H4sMgOMXWHw7/8ZXPMIIH8lASj2quHteGc+Fwemhuhgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=mOP5mUpQ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 561A6Rj2029322
+	for <linux-usb@vger.kernel.org>; Tue, 1 Jul 2025 10:11:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	noF4ePrw5++C2TSwg4Yv8311cvCJ5IQU/kCQZIyESOU=; b=mOP5mUpQ4QAfY7YA
+	ve9jZUiB9Yqpv+MKXTkI/ZliJStDawmlDFl6kI1vRJMWY5uKSExTJWCxKsRqQS8G
+	DW1FZzcM5L+EEdmsOjB24mLckS1lTEc1JcHcDwLuTQsxOjiDqQYINhsTbNG3HLnD
+	5Oq1IQGD8yyHZii2lkunDKh1OlRst4c9N1cE/Pcb+7DNe3d4Ulkw9naSjHrmqjBa
+	tZ5HT6S6koLrrHfqgUHDMCcH9ckfoiE/rlowuY1d4Cn4xgR5tVCnbC4KtKn6y7+l
+	f1Mz/OqBL7rjDMLYxvRfj73Q5y3mawSvxEjjj+jbHVijIa+osnK8AXp1snobt1b+
+	W0//Ag==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j95j06n7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 10:11:28 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c5cd0f8961so642049785a.1
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 03:11:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751364687; x=1751969487;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=noF4ePrw5++C2TSwg4Yv8311cvCJ5IQU/kCQZIyESOU=;
+        b=oG2AcUvd7LbK6hQP5t78NqJnSqJ50FoGUmem1jVS2FBAJYH6+kWxQ90rde3tX+E8Rc
+         rrKUWJ+K6QgvJdUyAdqgDVLvo98ewex3VD0sIk9HlDYL6B6ndC1lV/eMFMIPWcuIpQMG
+         1byxdfmcsV6UQWp8B0A0mzv9EES1vx2Zx9pOaET3i2kmUKpsfOAoWa6FbK8wE4QV7eqM
+         go3/gRg15FYWnKCUX8n9G1S7DdOWAE+6qMxIJwWE3yGD43BadHxUcfcnVSnMV1QHYbbv
+         mIr8U1YFSKNfD7qCVteByFHMN+vGH4naBqfearKXBM7qNBXLxtSaVY/1XU3rRJAX3Tnz
+         X5gw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXEDK327/06uFG2M13xzY/9/B1SSjtwgEgY4q/0SFiZZbCt1/Hn0+j3XLSVcbOnEfPx+EMksoKzUs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpxyBpMewOovhC4eOMD1V3gus3V82Nyz+d5TcnDrrKHv2irvmz
+	pCmJSWKMH8UYSzgsT21wHFbvc3wublNQqhyv8CE5ZAoWhzQBGXWV6cF+2YUt7tG9SYPs5FjbCNc
+	2mbzDZ4zqdqnrHyadNJNsm2TcvcESz0NjCcw0y76Taxy0FmxabGLUImtuKHR7sSY=
+X-Gm-Gg: ASbGncsDMfcERdYnU7ZTcE7Th0x1225BZs4VMefrYnbzdKdzg3N1/Lrzrk/xyQF2Rbf
+	0dWPgq6eVDsoOm9uw36037K2BQzaCmLKtSQeVX2yGNIuX1aIdKFHTYkauL1gYczYRkQ8QjJdij8
+	VNTIBp5DTJnWN5jO2TMQYptSRDeF3Kdvj/fr1EuNtqYa0pXo0sjx+oMZk5YgX3lAL/l5yZcBgQ+
+	2O69/wPA4/FNsi5s7oq+NCkZHndzaGENiUprX+UqBHYkEqdTNwZnxUZAZVGkwlrBEiDcth4XxNe
+	ssMQsnJeFGF4itY/gZDAQ0XnBQgsoJ4k8eDcc2N8H/awOGw7Z/N5Whp2t24RGSm6eBi3Fjxhngl
+	2eW3PpoOeNo5OwkGQyqMuHQxV5Q==
+X-Received: by 2002:a05:620a:1a1b:b0:7d0:a096:cf80 with SMTP id af79cd13be357-7d44395460fmr2111033885a.31.1751364686627;
+        Tue, 01 Jul 2025 03:11:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGoyrn3pEbeuJ1CnrE1PCn1ptY2CQxI87hb9xtcRulRDdib3U4BxVuiXCQhU6FtIQnjWQiBzA==
+X-Received: by 2002:a05:620a:1a1b:b0:7d0:a096:cf80 with SMTP id af79cd13be357-7d44395460fmr2111028785a.31.1751364686023;
+        Tue, 01 Jul 2025 03:11:26 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0c3:3a00::55f? (2001-14ba-a0c3-3a00--55f.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::55f])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f2e22sm1746260e87.253.2025.07.01.03.11.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jul 2025 03:11:24 -0700 (PDT)
+Message-ID: <45d5003d-87e1-4e8c-9eda-b1f67c7e57f5@oss.qualcomm.com>
+Date: Tue, 1 Jul 2025 13:11:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSEMdVkIdSE1MGhhOQh9CS1YeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlKSk1VSU5VQk9VSENZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0tVSktLVUtZBg
-	++
-X-HM-Tid: 0a97c56dfbf203a2kunma1c93f498732f
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OC46Lio*TDE8EkscPE85CQMT
-	HlEKCzZVSlVKTE5KSE1PS0tCQkNNVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUpK
-	TVVJTlVCT1VIQ1lXWQgBWUFKSUlKQjcG
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] usb: typec: ucsi: Add support for message out data
+ structure
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+        Pooja Katiyar <pooja.katiyar@intel.com>, linux-usb@vger.kernel.org
+References: <cover.1751042810.git.pooja.katiyar@intel.com>
+ <cc0b7701c4ea3d1001fefeb3df65caeb3e624722.1751042810.git.pooja.katiyar@intel.com>
+ <2025062813-untying-hesitancy-088a@gregkh>
+ <aGOgeSIOK-nDRGHB@kuha.fi.intel.com>
+ <de4c73cc-2aaf-4987-a49c-dff2f38ba0f6@oss.qualcomm.com>
+ <aGOy0qEUXQ7Rl3Cw@kuha.fi.intel.com>
+Content-Language: en-US
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+In-Reply-To: <aGOy0qEUXQ7Rl3Cw@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAxMDA2MSBTYWx0ZWRfX0OixwSlcFp6y
+ 9ZVVyYJHfCr5a/WRVzFPbhWLM/YiGeadzQUDeVDhh14GvDqpLyXeEFeASQA4W7BRp5Ambgr2mPU
+ 6ldWGiZF1UATKr1vxDXYd322SN8YWqyvVasX2Vwwh/ao1K9cremehP9l869aTskIml0Z7ah/wD+
+ oaM1gzFqTrG0Fo6NSXY8FO2xBeDvPGoEvKV1EO2ob7KxjpgULpcHOMT9ZAGWETY/IRSBA/Gmbww
+ 6ESDDXe5Lx1d3ZTsfhWZ7SN9b1qGjybtBmiKKo/n/Ccf+74FSw4ryL7E6njdyLwea5fGOU1D8Nz
+ t4mZHxqKZ0CMoge4u2OJK/vCADCmHsVksPeeDbhGssVcG1S2TwJxDc2SOI6ZCoaiyzivUlC4kfE
+ yTEATjH+vIAh/60BN92KRI7cX0UnHHEuUe4drJYg+ymTfEp3xbJF1moCndkC2GOwwZ7Zl3ln
+X-Proofpoint-ORIG-GUID: O2twsPzFO_uXh2jlYyYphbSAgAfLjwy6
+X-Authority-Analysis: v=2.4 cv=EuHSrTcA c=1 sm=1 tr=0 ts=6863b450 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Wb1JkmetP80A:10 a=TBM0Gg9QePfM97DyvHoA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-GUID: O2twsPzFO_uXh2jlYyYphbSAgAfLjwy6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-01_02,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 mlxlogscore=999 malwarescore=0 mlxscore=0 phishscore=0
+ spamscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507010061
 
-Add support for GosunCn GM800 series which are based on Qualcomm
-SDX55 chip. The ID of MBIM/ECM/RNDIS mode is the same as GM500.
+On 01/07/2025 13:05, Heikki Krogerus wrote:
+> On Tue, Jul 01, 2025 at 11:50:21AM +0300, Dmitry Baryshkov wrote:
+>> On 01/07/2025 11:46, Heikki Krogerus wrote:
+>>> Hi,
+>>>
+>>> On Sat, Jun 28, 2025 at 04:51:56PM +0200, Greg KH wrote:
+>>>> On Fri, Jun 27, 2025 at 11:10:10AM -0700, Pooja Katiyar wrote:
+>>>>> Add support for updating message out data structure for UCSI ACPI
+>>>>> interface for UCSI 2.1 and UCSI 3.0 commands such as Set PDOs and
+>>>>> LPM Firmware Update.
+>>>>>
+>>>>> Additionally, update ucsi_send_command to accept message_out data
+>>>>> and .sync_control function to pass message_out data to
+>>>>> write_message_out function if the command is UCSI_SET_PDOS.
+>>>>
+>>>> Normally when you say "additionally" that implies that the patch should
+>>>> be split up into pieces.  Why not do that here?
+>>>>
+>>>> And do you _really_ need to add a new parameter to all of these
+>>>> functions?  It's now getting even worse, look at this:
+>>>>
+>>>>>    		ret = ucsi_send_command(ucsi, val,
+>>>>>    					&ucsi->debugfs->response,
+>>>>> -					sizeof(ucsi->debugfs->response));
+>>>>> +					sizeof(ucsi->debugfs->response), NULL);
+>>>>
+>>>> You can kind of guess what the parameters mean before the NULL change,
+>>>> but now you have to go look up "what is the last pointer for"
+>>>> everywhere.
+>>>>
+>>>> This feels very fragile and horrible to maintain over time, please
+>>>> reconsider this type of api change.
+>>>
+>>> So I think what Pooja was proposing in the first version of this
+>>> series, where you had a dedicated function for filling the
+>>> message_out, was better after all.
+>>>
+>>> Pooja, I'm really sorry about this, but can you revert back to that,
+>>> and send it as v3? Let's start over.
+>>
+>> But that breaks the sync_control logic - currently it is possible to handle
+>> the command in .sync_control completely. If for any reason we need to
+>> implement workarounds for commands using MESSAGE_OUT field, we'd have to
+>> introduce additional logic (which we just got rid of).
+> 
+> Okay. So how about a data structure for the entire mailbox that we can
+> pass to these functions?
+> 
+> struct ucsi_mailbox {
+>          u32 cci;
+>          u64 control;
+>          void *message_in;
+>          size_t message_in_size;
+>          void *message_out;
+>          size_t message_out_size;
+> };
 
-Download mode:
-0x1402: DIAG + AT + MODEM
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=305a ProdID=1402 Rev= 4.14
-S:  Manufacturer=GSW
-S:  Product=GSW_GM800_123456
-S:  SerialNumber=12345678
-C:* #Ifs= 3 Cfg#= 1 Atr=80 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+What about a slightly different proposal (following ucsi_ccg design):
 
-RmNet mode (old):
-0x1403: DIAG + AT + MODEM + RMNET + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1403 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-RNDIS mode:
-0x1404: DIAG + AT + MODEM + RNDIS + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1404 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+struct ucsi {
+    // .....
+    u32 cci;
+    u8 message_in[UCSI_MAX_MESSAGE_IN];
+    u8 message_out[UCSI_MAX_MESSAGE_OUT];
+};
 
-MBIM mode:
-0x1405: DIAG + AT + MODEM + MBIM + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1405 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+The caller will fill ucsi->message_out, call sync_control with a proper 
+length specified, then read UCSI_CCI_LENGTH(ucsi->cci) bytes from 
+ucsi->message_in.
 
-ECM mode:
-0x1406: DIAG + AT + MODEM + MBIM + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1406 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+Note: I'm positive that we can handle message buffers in this way. I'm 
+not so sure about the CCI, it might be too dynamic.
 
-RmNet mode:
-0x1421: DIAG + AT + MODEM + RMNET + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1421 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> thanks,
+> 
 
-EAP mode:
-0x1422: RNDIS + RMNET + IPC + DIAG + MODEM + AT + ADB
-T:  Bus=08 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=305a ProdID=1422 Rev= 4.14
-S:  Manufacturer=QCOM
-S:  Product=SDXPRAIRIE-MTP _SN:12345678
-S:  SerialNumber=12345678
-C:* #Ifs= 8 Cfg#= 1 Atr=80 MxPwr=896mA
-A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=83(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=89(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=06(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=8a(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
----
- drivers/usb/serial/option.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index c0c44e594d36..55347d973c60 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2382,9 +2382,13 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
--	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
--	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
--	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1402, 0xff, 0, 0) },		/* GosunCn GM800 (Download) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1403, 0xff, 0, 0) },		/* GosunCn GM800 (RMNET, old) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1404, 0xff, 0, 0) },		/* GosunCn GM500/GM800 RNDIS */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1405, 0xff, 0, 0) },		/* GosunCn GM500/GM800 MBIM */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1406, 0xff, 0, 0) },		/* GosunCn GM500/GM800 ECM */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1421, 0xff, 0, 0) },		/* GosunCn GM800 (RMNET) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x305a, 0x1422, 0xff, 0, 0) },		/* GosunCn GM800 (EAP) */
- 	{ USB_DEVICE(0x33f8, 0x0104),						/* Rolling RW101-GL (laptop RMNET) */
- 	  .driver_info = RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a2, 0xff) },			/* Rolling RW101-GL (laptop MBIM) */
 -- 
-2.25.1
-
+With best wishes
+Dmitry
 
