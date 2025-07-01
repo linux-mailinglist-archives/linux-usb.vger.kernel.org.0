@@ -1,238 +1,198 @@
-Return-Path: <linux-usb+bounces-25351-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25352-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188DAAEF4E8
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 12:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E526CAEF656
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 13:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC19817921E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:21:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33B554A2166
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 11:19:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335B826E6F1;
-	Tue,  1 Jul 2025 10:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 095DE26FDBF;
+	Tue,  1 Jul 2025 11:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="gpEIaeII"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="g7/XOHKJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010023.outbound.protection.outlook.com [52.101.84.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E2426CE10
-	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 10:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751365276; cv=fail; b=DIpci4DIUkNlohR10Pnbnrcos1gO6Hpynlp2oLii+mnY64gQeRo2YN5tcg/kgbSYeX0+NySCnjDE1eVskf04DUXXD2MMtPZIb/l2GIfcIN5VGV9078e6z+pBuBlQEgELyBKmnQZSnU1lEEL6HmHcEC8KGMHLZff0aRvoMsUEkJk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751365276; c=relaxed/simple;
-	bh=QcUmFoBQrdGiV5wCxLM+JV/5MCZRKOQKPdIBzDViOlY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=IS8/Jj1a5Xyz3nNiY2J6miGG5rAkVdOmnZuLaFb0uVSbyarH+NB/V1IpCjvdRD164rYuh4K4p402q8/FJv/YQ95fhSTOhxDqkyCxzVqUhc0HAy+UDdpntYT+/fKPxa90XVG48WJLZ/gOR2wVJENbGdWiHOGlKC0urjenPVo3T3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=gpEIaeII; arc=fail smtp.client-ip=52.101.84.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MYXLWPSU68LKGMuFUvZgyDB6zHK+349zLRvyA4ydVwFds//vZEdl9SGGt+VdRCD2OKQ1zO+5Q5HE30A9GEAvQaqnQ7ZygE4fRSm5GPHL+jY4ka6wtwhWHFdfOo/KtKv5zP2UvxXqlVv6JKrltYWdFDsBZFtfvAMMhmPOYcczdvCEXsH1aA+hQQFqsVYm+0O7FrmYdkSa9BvT5VxXQvdUjewksRIZpxahZ65pLrb2DWUjFYnlz+ucSOa9Z3BOld24HPTzDmyIdkLbdyXYnLvGkTgNfDjCyyb3BXGA3ZtPlRIx10rR0GK3p/mpDywdqi5C4Aa8p1FhUa81fi+au5eVlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OtGU2gixDByWglZsy5dn7ARCJsmzAJptUgtBEEu6vO8=;
- b=jgRD0X0ZRS4JdI4orPaIFBLJo1GetphMGDnV1e6VCTXjvOs1GdBWJEKwTnuWrIZMh0X5wK3LUVbXpRoYNfER2L0sXYbnj44zlHvBTztoSoXFoLwyMPnaemjPQNZXlYSI1dcKTQR5J1qdclcdlparKoB7bG6li/p8+52GhrnpTmSmU1dBMmv87SWRW6n1xNOJKphOM5x2/PGiiYcHTwvT6zUJsS9aFCARe1dukq2Su2v3t//SvET8lj0hQu01OXGMc3nHQyrc8taYkiPN/9f2hc6VTqo0KGBHmjsMTUvSC2+aJ5Go0iP/hlgvFkC12C36djjETjtLETcHMTPM/E3Z5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OtGU2gixDByWglZsy5dn7ARCJsmzAJptUgtBEEu6vO8=;
- b=gpEIaeII3ukqh/yLU0vHuB8+jpAJ+t7HWiQsrE5I5PBo8fZhjPaUE6O4sdg3Zgl87qOJFXjSdYJ+cFQmQMcXP6wbPD9G9+iVFbN1Z+Mcnetu7G6KD2reHFfsEBmoxj7owle29njKIALbteqBYz6CgmYV0Rnh9utm67C+s1Wkc2cvqqR8W17Gz4R9PkB1QV7a/Qgn5gakSwZ9DkVeZP1hK+vF8VFkxOtuT4Kbz5DITP/NNdYlJUCNNcJWyG9yARkscnetI/ZZ0F9D2A2jlg4/A72mJLmQmT2RGOFQOxPTgg2Nw9OK5DiT8RenDQV7Qh8DYdp7FrBZNUdYrffVwVPWrA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AS8PR04MB8931.eurprd04.prod.outlook.com (2603:10a6:20b:42e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.26; Tue, 1 Jul
- 2025 10:21:11 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8880.029; Tue, 1 Jul 2025
- 10:21:11 +0000
-Date: Tue, 1 Jul 2025 18:16:23 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk, 
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: mon_text: find valid buffer offset for iso transfer
-Message-ID: <fornnnolaxn5zbw2dnepq2higyf5vw4dkdn4uptgz6tuki4zoe@wnclvwajtila>
-References: <20250627105651.3653231-1-xu.yang_2@nxp.com>
- <8a251c8b-5ec6-4238-bdcd-8d8001fd06df@rowland.harvard.edu>
- <zbxioq4jk2ykd3alu5j6igmgzmsuainlwelhvl5lhz3iczcqyv@uspbdfpyj36j>
- <57695560-d6ef-49bc-976e-836ddc903d13@rowland.harvard.edu>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57695560-d6ef-49bc-976e-836ddc903d13@rowland.harvard.edu>
-X-ClientProxiedBy: FR4P281CA0374.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f8::6) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7ECD1FBCAF
+	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 11:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751368787; cv=none; b=fwhxXQAOnCAEftjxIqbZ518XbXAJnE7jONebklGKcOBlF0WCC3lVej9ZTdRDxO8rHx3nwIZC8zFAR1Koat9HABNhwN4fbbaxiCM+LAkMvVG+mu6nEFU/TDBFlgcmaAj7ebIdXgjcgSihKwvNu1yMGhWqkzv48UNpTyJV+G44+84=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751368787; c=relaxed/simple;
+	bh=FeqVp2yCUZ3ij1peE3WeZz1cWGh+QgySUCT2N/2Xbjo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZGtUlg2/OkYNaGKlDXV93iihxLgXAqFf5YnYO4L2L0mWciSsPQ6WpiCwx4j5wBznf5EedG08zqpjWFw5STpbpIECxSFaKZunG76iOC97m/8F1v0RqF2m79yzDIKT8JewXdL3JR8LN1kw01SpdTWNU2jgj+wS+AswrIo7RG968vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=g7/XOHKJ; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ae0bc7aa21bso686219266b.2
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 04:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1751368784; x=1751973584; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGjQ61S1++mVkf3/jYVKvuXkIa1IOFszhbgMmRDC9tQ=;
+        b=g7/XOHKJzG1jTM1qn1sP2Lhkr+duDH/4QnopMxSu1qaGeYZSCCK+IWhJ3JXE21fCeW
+         F4gBAHQk+utAGXfTcA0Fr+K5d9ziktlAneyiW5+Ev+uYGf3pSJfZrut2RFuEY6uD7uan
+         NnN0KPvZSF0GrtNy0vSrH0m6YBpD2FlRktq44=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751368784; x=1751973584;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bGjQ61S1++mVkf3/jYVKvuXkIa1IOFszhbgMmRDC9tQ=;
+        b=aNQJagzu8sUFKZr64ckG8HIZIvvD2O4hv8nlfqIq3FBZJFkxtTL6foe+FIMCCHyAIu
+         uvK0OSCtblehEtUaf0Wcoysavleg12R7bxU0wIuuM2MhYMuES2IX0yX8EMzsK2wv7xRx
+         A1G5elAomjDZWX+a0ndm6gwgJSst70uERrF/vPDlBLIO5+4Ngl13u+Ia7Oc9WD1gYb5C
+         huY//uy4h3Nd78EQrMAGjxwnek1zfB+rxOKM+yeXMaAjbKQvhQAorTv+SuM4IAPTYHro
+         sIi4eNmL2BtkZ6bfkbzpjWGDIHFqPh9BBZHJf3C2Sx6jLm5n2UKQZIL60Qyssub/ATZT
+         2mFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRigz8CQvU/3mSy5h/WepE6UrHTKD0VoCVarO9jhqEE8/bYOGW6MyySa8hpycPPKGS68LwPA1Inec=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8Fuskv+z8OQBtqZ8H2q1G/4auq4IP2hHY7VMkVXJzP919LTsm
+	lLmifr1eZbqJTUKLrFULGQ/pgLDToLCva2qIEIut6UcJOOJWDuHbcHnKDAm+V4jvPjHCx8SMn7K
+	Df1PoXA==
+X-Gm-Gg: ASbGncv2dzCMd1IqwhzdIM6T+LkU0tTix+lvBXqzEZVF/dJvUpZ45IcuHnmN0i2vxv+
+	tcaUQWAMaAi2dGJpoUJMwqPRb3N7hsRRCqYicGMgkqTyjX6NPtBfvQakxEEzz5EMwl6y3WsSY5i
+	ppUy2ZT8IlvUCH0NrqI5AaMny0JsEf9Ujzvk+hOUqwgCy5ebHhyDN1Km38Bg28OOBPcWsZQsEqR
+	gIIDNsiLh9imUFFX5sN4p5qVVWpYt5dSEUIyur8CixGVF7I/9iyS4EzVhrhz/3vzN7pua5Ul78C
+	XD1Krk454zglT7oh9KGfPdL2NHsddIAAmC2xB1LUXOmXzhm8SIvuEiRNZBfuKEPqGoq9KKX+/gC
+	gzc7mTIW1vu9cSqXxtx1d0sez
+X-Google-Smtp-Source: AGHT+IGAhLrR+CXj8rpiWc0S5B8HDt0NUwfY6n6onp0+ymVKRuY2R9wHjf1ER5OcRxd94N474csqjg==
+X-Received: by 2002:a17:907:7251:b0:ae3:b94b:36f5 with SMTP id a640c23a62f3a-ae3b94b3b3dmr27221766b.34.1751368783748;
+        Tue, 01 Jul 2025 04:19:43 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a95esm858726766b.59.2025.07.01.04.19.43
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jul 2025 04:19:43 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ade5b8aab41so651019966b.0
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 04:19:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUyzqsqOCQFvTYJ4EE3cKhAhpbgHMAWliephPEdAPVtqcDvxidvPkJA1fsPe6ZhJTg4QI4AfXBoUK0=@vger.kernel.org
+X-Received: by 2002:a05:6512:224b:b0:553:cf38:5ea1 with SMTP id
+ 2adb3069b0e04-5550b87b62cmr5806214e87.15.1751368403239; Tue, 01 Jul 2025
+ 04:13:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB8931:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9438e1ac-bc41-4f58-454c-08ddb889006d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|19092799006|38350700014|27256017;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wP4/vUvTX5+ULFFilH7wwrfsiwD2wG8dwUkwj0f6LyVtqf0Nbc/bsvEc5sSN?=
- =?us-ascii?Q?UrEwM3BXEAD017n3+hxytsIUJda+9oZhBOr8u00MR26y5iv3MnkjksjLGmJl?=
- =?us-ascii?Q?dfWE5xpSSs/e4fuXQ+vNaNZ0xKbrhtImy1x75JuLodSVLrLaMeoMeV39Dv8J?=
- =?us-ascii?Q?FGydiGNNyMKmsxpiVSQ61P7O2G6sfIvWaYnnVO+0o8O3RylE7EY1seArwXa+?=
- =?us-ascii?Q?P6Ahh9CW4IK/VX9WjzSJdsX2gJI2lChHEWZMNU74e0soDWHYeFLrjEDFBLdf?=
- =?us-ascii?Q?fTpMSRHAJD1EmuV32HG2z/DysV0SNfbRET13Kc94DOD7HTqk0jVOpXc0uHRB?=
- =?us-ascii?Q?k5asi7j15JIP32pWCEZSKwYJFNuwG+P/YAPq2/SIZlBe80SxiBtWcEpvrRE/?=
- =?us-ascii?Q?FXe83RhLGCDuRTGYW7H7ZrSfayrC2vGt3pReuiZcKooz+09kBxADjYmPA6OV?=
- =?us-ascii?Q?QA6Fvj0mStGDO8R8wspFLim3dyz0Dl/vnlhr4GCK17lzvuX4xuWm58h1/LD7?=
- =?us-ascii?Q?NcTAkp6rlmVBCiWtKKFc6JbwB+0JJ49dZQnUw9jRQLSG4Xv9XFM015vDLfsD?=
- =?us-ascii?Q?AcrGFaTTbd+tWx+N25doKZwk7BhViXK0UD68U0B8bKZw8fqzYVxY34EOdevH?=
- =?us-ascii?Q?CAW5oFYoSBxcQk8B5m3+/4osWRSCyBcZqbj1Bv1V/ohcE56gxDD8JSKFFqzi?=
- =?us-ascii?Q?iGbWo8LFOgdeV6cstcAla0VrFsGRMWGoAP8yZYnZ+Yxb7zpa5G0Mkp3UYnTi?=
- =?us-ascii?Q?nZfKQJj7i0D+pp2Sn1yx9udFpBtlkvIkmyCuyFkE/NCwnf5nxmJoytLt0YqV?=
- =?us-ascii?Q?y4dtitBIfiIXKmRioUSkBZpH3NFtYX2n3Nez79PQpQ0mUZXzSon1ZszC2ik+?=
- =?us-ascii?Q?/VRWTiS2tXWZ765hDzZDgaE6SihQk/AoCKtJr4yWJv/Se7Fk1/xxfzCrHAoR?=
- =?us-ascii?Q?0G8cHMtkcHUiHkDxtOGOQB8dCbQtbqn/AcWu4j/M/Chd/+2nxmub7WDDg7Md?=
- =?us-ascii?Q?Cu2RUD4YJLt1YNyS3YenwYn4sz2QUQnzv4JB5RfjP1aO1kzfJYmCsVxRg4Ym?=
- =?us-ascii?Q?OCeciugYs8C+5Kmz5AkGx25sbJm+Y/YXeMIKcv2cbScmLm6AP+JwaoVilIpN?=
- =?us-ascii?Q?1qx5sFaHIXDvAwVY9z5GLeDZJdRd+l2Bk/YZDFdrI28p6U/38Jk6n2Fe00U2?=
- =?us-ascii?Q?s8dXSRdsQZiRoQTLSo6vao2rhpGpN1tLzLYrc5KcDlNqY2n8QI+gvr9r/hfY?=
- =?us-ascii?Q?kmeEx1s4RsDDqMITbBEoVLxBGqwhaNAP2tfLf8OS5ywFgLyRYC6GNxDhi0J7?=
- =?us-ascii?Q?t0t8X1oXh9qRBZxRBWhwWfxfLbo2GnA7s8cVyauY8JQ8gCaETjAT4L8gTIaR?=
- =?us-ascii?Q?BnETB7ba6zqNs9Bg+YnRdaz4TTxXP6nU+Rp9Wr2SRkoGMvV/+Q56/nskKc4D?=
- =?us-ascii?Q?ilfIQrnHy60JGvhDXVSZTI+FHUkkrmb7+zwQzZH8YUOcYhsGlz/O5307mW3I?=
- =?us-ascii?Q?Vmvv+3o1ZNcuZrw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(19092799006)(38350700014)(27256017);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?VyoFVoVP7EB9/9Mr9YztQZ+sA+ga1XNn6DGTSJU+klSLEusEYiyLbTC60chs?=
- =?us-ascii?Q?ZRTAZOXKLB3dQfZvY3xuNSZ+EfWiVhWKgiTUwZMkYzjsKRy+VIYwCTwEmrn+?=
- =?us-ascii?Q?KI/jnc3ApSslx6U5aC5j7XF+eWqY7wmMKuuSF/no/uBFHsAPDP8YRzjygVld?=
- =?us-ascii?Q?TSX/E2TTE0CXjlDeiAdOMq/XEf1bI+GN/i8DIbbAVsP+x1GkfAw+BQkA8/n+?=
- =?us-ascii?Q?E4k2ZmqDcv6WN+rZohPyeK+xveyWJjh4GfMELD816xcvXvPTm0rUA+8yYBPr?=
- =?us-ascii?Q?wWutUI41VJL6j7T+lxiODJIa0b5SiN7qzIcjtuUQxgunZl4vvEM5TkDlbh6Y?=
- =?us-ascii?Q?K0veSieU/YBSfZFUwtr9dmxuUOjyRCBG/37c6FwqAoluDqYeK05Qqphj4rqZ?=
- =?us-ascii?Q?l5LkhFLqyoQy4iBf+AoAaN7es/pr+vFpw4F5nH9XM5/N06+HjGmT3YiLxyIU?=
- =?us-ascii?Q?HmJNazyXaUOEvDPSa3fYH675x3ArKHb4Lsq+WdMeM3Kmy6EsIG0fyQ8UB7Qr?=
- =?us-ascii?Q?qnyZENSMAqH2+/+hB6w2mNhx1jf6GNTDO2hKPWO1H1aAlDzMLyxZiP3gfIBE?=
- =?us-ascii?Q?m0b2NcXnvLbuaeLvHWXBVtBnpmJfDCGDxYk8QudwW2mbe8IgLZ3HmsyZ5KQD?=
- =?us-ascii?Q?3vTYIM8uq3nVBNj8j7ltGoPUfXwUcg1b26ZDn1wGTDq/Zim9nMLRGjcf7CyJ?=
- =?us-ascii?Q?0K17fCp9HYOH78KMgTLCHp/vWqzeiT+/PF+jFusmGvikZWhEljz5z3UE04Qq?=
- =?us-ascii?Q?vW4RpgFF+w35aSZ41wHZ9NdFqHjeLr7YNgxQVugRx/tcGTgY2Pw5efqZ6yMV?=
- =?us-ascii?Q?4Hyyebyyh1efASwIu0qvMHa5DKFmJ3VGENfGX4GDb3HPUiZrF97MARrryG6u?=
- =?us-ascii?Q?9btRDqX0CkQlZXq+DFhwz5dKRsoBhjKmidZP8iEF0o/goHQ9akUMT5xGtGdy?=
- =?us-ascii?Q?7I/0oM3taVOv5fviPPfNeLDQxIMqguDvfLQ/ZHJIl7AG5FL5Pkxliq9Tks0Y?=
- =?us-ascii?Q?tsZv4KvNq5jwBdwWHzHR91pJBIFHj/DwmUh+zG/cZid9IeJMZsEq5G9xy/b+?=
- =?us-ascii?Q?aUMSIimDiCY5QwSmrUXlwctjEfOmBAkFCTZ2T6Z4voW/J9F0IqJSK3WqukRK?=
- =?us-ascii?Q?Bg4vz7mrRYOqOlBJBtXYB5D+bFyIXqhFi4xc97cT37l35DnW3sgmUE4e9/lD?=
- =?us-ascii?Q?Qi2XE3SYjObehwE6dZv+HU/818yV5Vua0fAgxYYuE+aFGz/wNWvb9d9Z4k2C?=
- =?us-ascii?Q?M9jHmYVvjxQnTCWZ6UkvD2xkzxc3LhPJJz6fyZX4BtIUxOAirMnmaVzBXaBx?=
- =?us-ascii?Q?AT19W6cS+Z1iL/JMzwrVSNFHdoc4QPHYD0N+NqLp+YRgLSf0runBB4v0h6h7?=
- =?us-ascii?Q?kzYH238VBPnRfMcdEo7tAWklMEIqvUaWZGVIvbRM8vUjqi4FT3Ef6Yh13F0y?=
- =?us-ascii?Q?BGdPh5/uiOsBJPyeSGPw7M/k393RGYS6Y3hPyjF559+gOTYH/EdOTkF1DAOV?=
- =?us-ascii?Q?svWWy450hB0vC0SxndKpYXAjy09hBCYVGrl4IbyOH122cXvjHeWLTkkqtAp+?=
- =?us-ascii?Q?NNoE+43ze6N1zzonBedbmummvNnq85j5Y4jduuAX?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9438e1ac-bc41-4f58-454c-08ddb889006d
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2025 10:21:11.5923
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cp/y3/y7042PXaM4g46uOj8mHgIwxFTnU6UgOSNFasA6uGMZHyNXvQ3NKKskmDHHSeqoCCuNCo40MgHateTlYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8931
+References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
+ <20250605-uvc-orientation-v2-10-5710f9d030aa@chromium.org> <20250629181246.GE6260@pendragon.ideasonboard.com>
+In-Reply-To: <20250629181246.GE6260@pendragon.ideasonboard.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 1 Jul 2025 13:13:10 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsu0RT4dcGyBJRutP=9HTe+niUoohxTZE=qJ8O_9ez=+A@mail.gmail.com>
+X-Gm-Features: Ac12FXyUB7J2CzeHXupatytT-Rncr6S6tZS3kWRK4b67_iOG9R3ef-6_Er_0YxQ
+Message-ID: <CANiDSCsu0RT4dcGyBJRutP=9HTe+niUoohxTZE=qJ8O_9ez=+A@mail.gmail.com>
+Subject: Re: [PATCH v2 10/12] media: uvcvideo: Add get_* functions to uvc_entity
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Hans de Goede <hdegoede@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Hans Verkuil <hverkuil@xs4all.nl>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 30, 2025 at 10:26:56AM -0400, Alan Stern wrote:
-> On Mon, Jun 30, 2025 at 05:13:31PM +0800, Xu Yang wrote:
-> > Hi Alan,
-> > 
-> > On Fri, Jun 27, 2025 at 10:28:53AM -0400, Alan Stern wrote:
-> > > On Fri, Jun 27, 2025 at 06:56:51PM +0800, Xu Yang wrote:
-> > > > The valid data doesn't always begin at the buffer head in case
-> > > > iso_frame_desc is larger than 1. Otherwise, the output info will be
-> > > > meaningless.
-> > > 
-> > > Not so.  usbmon intentionally copies the entire isochronous transfer 
-> > > buffer, even if only part of it was used for the actual transfer.
-> > 
-> > Ah, I see USB monitor only copies DATA_MAX (32) bytes data for mon_text.
-> > For mon_bin it copies entire transfer length data. So I think whether
-> > the data is valid or not matters for mon_text.
-> 
-> Given that nobody has complained about the way it works, after many 
-> years, changing it probably isn't really necessary.
+Hi Laurent
 
-Okay. I just want to remove some strange info from the results.
-If so, we can simply skip this patch.
+On Sun, 29 Jun 2025 at 20:13, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> Thank you for the patch.
+>
+> On Thu, Jun 05, 2025 at 05:53:03PM +0000, Ricardo Ribalda wrote:
+> > Virtual entities need to provide more values than get_cur and get_cur
+>
+> I think you meant "get_info and get_cur".
+>
+> > for their controls. Add support for get_def, get_min, get_max and
+> > get_res.
+>
+> Do they ? The UVC specification defines controls that don't list
+> GET_DEF, GET_MIN, GET_MAX and GET_RES as mandatory requests. Can't we do
+> the same for the software controls ? This patch is meant to support the
+> UVC_SWENTITY_ORIENTATION and UVC_SWENTITY_ROTATION control in the next
+> patch, and those are read-only controls. Aren't GET_INFO and GET_CUR
+> enough ?
 
-> 
-> Furthermore, I suspect there are no usages where the transfer 
-> doesn't start from the beginning of the buffer.
+V4L2_CID_CAMERA_ROTATION has the type UVC_CTRL_DATA_TYPE_UNSIGNED,
+that time requires get_min and get_max.
+We can create a new type UVC_CTRL_DATA_TYPE_UNSIGNED_READ_ONLY that
+fakes min, max and res, but I think that it is cleaner this approach.
 
-I met it many times on uvcvideo use case. That's why I want to correct it.
-The UVC header is 8 bytes which will show very important information when
-debug the issue.
+>
+> >
+> > This is a preparation patch.
+> >
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  drivers/media/usb/uvc/uvc_ctrl.c | 12 ++++++++++++
+> >  drivers/media/usb/uvc/uvcvideo.h |  8 ++++++++
+> >  2 files changed, 20 insertions(+)
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index 21ec7b978bc7aca21db7cb8fd5d135d876f3330c..59be62ae24a4219fa9d7aacf2ae7382c95362178 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -596,6 +596,18 @@ static int uvc_ctrl_query_entity(struct uvc_device *dev,
+> >       if (query == UVC_GET_CUR && ctrl->entity->get_cur)
+> >               return ctrl->entity->get_cur(dev, ctrl->entity,
+> >                                            ctrl->info.selector, data, len);
+> > +     if (query == UVC_GET_DEF && ctrl->entity->get_def)
+> > +             return ctrl->entity->get_def(dev, ctrl->entity,
+> > +                                          ctrl->info.selector, data, len);
+> > +     if (query == UVC_GET_MIN && ctrl->entity->get_min)
+> > +             return ctrl->entity->get_min(dev, ctrl->entity,
+> > +                                          ctrl->info.selector, data, len);
+> > +     if (query == UVC_GET_MAX && ctrl->entity->get_max)
+> > +             return ctrl->entity->get_max(dev, ctrl->entity,
+> > +                                          ctrl->info.selector, data, len);
+> > +     if (query == UVC_GET_RES && ctrl->entity->get_res)
+> > +             return ctrl->entity->get_res(dev, ctrl->entity,
+> > +                                          ctrl->info.selector, data, len);
+> >       if (query == UVC_GET_INFO && ctrl->entity->get_info)
+> >               return ctrl->entity->get_info(dev, ctrl->entity,
+> >                                             ctrl->info.selector, data);
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index a931750bdea25b9062dcc7644bf5f2ed89c1cb4c..d6da8ed3ad4cf3377df49923e051fe04d83d2e38 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -261,6 +261,14 @@ struct uvc_entity {
+> >                       u8 cs, u8 *caps);
+> >       int (*get_cur)(struct uvc_device *dev, struct uvc_entity *entity,
+> >                      u8 cs, void *data, u16 size);
+> > +     int (*get_def)(struct uvc_device *dev, struct uvc_entity *entity,
+> > +                    u8 cs, void *data, u16 size);
+> > +     int (*get_min)(struct uvc_device *dev, struct uvc_entity *entity,
+> > +                    u8 cs, void *data, u16 size);
+> > +     int (*get_max)(struct uvc_device *dev, struct uvc_entity *entity,
+> > +                    u8 cs, void *data, u16 size);
+> > +     int (*get_res)(struct uvc_device *dev, struct uvc_entity *entity,
+> > +                    u8 cs, void *data, u16 size);
+> >
+> >       unsigned int ncontrols;
+> >       struct uvc_control *controls;
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
-> 
-> So overall, I guess this change won't make any noticeable difference.  
-> But theoretically, how would the user know that the usbmon output didn't 
-> start at the beginning of the buffer?  I think you would need to update 
-> the documentation as well as the code.
 
-Does the user need know such information? As a user, I don't need it at all.
-I just want to see the data transferred on the USB bus.
 
-> 
-> > > > +	if (usb_pipeisoc(urb->pipe)) {
-> > > > +		isoc_desc = urb->iso_frame_desc;
-> > > > +		for (i = 0; i < urb->number_of_packets &&
-> > > > +		     !isoc_desc[i].actual_length; i++)
-> > > > +			continue;
-> > > > +		offset = isoc_desc[i].offset;
-> > > > +	}
-> > > > +
-> > > >  	if (urb->num_sgs == 0) {
-> > > > -		src = urb->transfer_buffer;
-> > > > +		src = urb->transfer_buffer + offset;
-> > > >  		if (src == NULL)
-> > > >  			return 'Z';	/* '0' would be not as pretty. */
-> > > >  	} else {
-> > > 
-> > > And how come you didn't modify this branch of the "if"?
-> > 
-> > I looked into it, but didn't find any ISO transfer usecase using sglist
-> > to manage data, so I skipped it. I'm not sure if my understanding is
-> > correct, do you have any ideas on sglist?
-> 
-> I'm not aware of any use cases like that either.
-> 
-> By the way, this code runs for both IN and OUT transfers.  But for OUT 
-> transfers, the actual_length field will always be 0 (because for OUT, 
-> the buffer data is copied before the USB transfer occurs).  So the code 
-> you're adding would skip the entire transfer buffer!
-
-For OUT transfers, the offset will finally be 0 instead of the last offset.
-But it's better to check usb_pipein(urb->pipe).
-
-Anyway, many thanks for your comments!
-
-Thanks,
-Xu Yang
-
-> 
-> Alan Stern
+-- 
+Ricardo Ribalda
 
