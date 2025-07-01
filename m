@@ -1,220 +1,432 @@
-Return-Path: <linux-usb+bounces-25337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCAE7AEED36
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 06:19:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DF6EAEF127
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B8ED1755AA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 04:19:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D1AC3BD019
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 08:32:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB50419CD13;
-	Tue,  1 Jul 2025 04:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEA9269CE5;
+	Tue,  1 Jul 2025 08:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ICzDGa0Y"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y3uCNoRB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C711F37D3
-	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 04:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCA572602;
+	Tue,  1 Jul 2025 08:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751343551; cv=none; b=c+3cz27ajPG/pkmPqrWiKrWa51x6etrfPZ57xTeEMcL2xYEMlHw7cVoW6mD/SlUK2W0CIsIlrcJQiaFNN0RIxSHo2b4JtfPVVvUfU3ki88GX/dPrb4/zVBWGxweW7lbiUYAXpEtVFsgqPScGxBPP0f+2wDwYnADTAXZZG2GR8RA=
+	t=1751358739; cv=none; b=FkD2ZLHR1TmhT2FNhVLaHPp+XaDrdStaczgE9ewKTUeq7xvMFsoiFk2dKtycgVc58J/6yWcv8/tE4ZWK3wUmrk/yw9q1qOqV4A0RgnqVBbU0RskfRGy92HYDMw14hCijIgmgf2/TWVE7dLdl9rS7PtsKZ4HUTaROioDB9HyjHGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751343551; c=relaxed/simple;
-	bh=O97jXsQ3LXss1Hf1Wk/BaNtoM1HDPTGoTQFSxBBOj5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=HpUFkGqUjwfwnSSI1NI9FVgIqd495+gk95t4LFsb/C/NuiZMTIrrAkGV5UdLP/OMjw19H9q/2AyL5FOo8bEcmWYHmtjrNP29b8zpSsHbZkxoPXecmMRF8/zo5KD8P48fM2HU7fOkWRfmkVPZpYzqPnJg6WhUBxwygdoMuOjvu9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ICzDGa0Y; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250701041906epoutp04b1f2687b42009562d45f6e11ba0ac0d7~OBa1ORhle2597025970epoutp04N
-	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 04:19:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250701041906epoutp04b1f2687b42009562d45f6e11ba0ac0d7~OBa1ORhle2597025970epoutp04N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751343547;
-	bh=7gJBhY1hVleBBYsivSqZ/JL+GmeRtwkguYJw1y3Py30=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ICzDGa0Yhe9eFpk5r4xx1pvsvYxmA+e5n9gQNbHlHAT1HofyRAA/oXYEOk1EWHfCa
-	 wzCsar8q4dfQc2b5RzHODNtkhyHhPDscaOAzhS2zdfZv8cvs6Z/qw2CSeTCk5gjvvS
-	 YUFfDqMxFpe9pCttcSgp4y59QpzILIMfBPhkvBzY=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas1p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250701041906epcas1p4dd5f93364a7ed512e81c218aa5432673~OBa0yRoDQ1324313243epcas1p4q;
-	Tue,  1 Jul 2025 04:19:06 +0000 (GMT)
-Received: from epcas1p3.samsung.com (unknown [182.195.38.240]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4bWVCZ0LKFz3hhT9; Tue,  1 Jul
-	2025 04:19:06 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250701041905epcas1p427029655596144171f52db23fdc303a4~OBazsr8fw1324313243epcas1p4h;
-	Tue,  1 Jul 2025 04:19:05 +0000 (GMT)
-Received: from U20PB1-1082.tn.corp.samsungelectronics.net (unknown
-	[10.91.135.33]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250701041905epsmtip274923813d6a343fa1e97b7d6f6d08633~OBazqCClB2830828308epsmtip2G;
-	Tue,  1 Jul 2025 04:19:05 +0000 (GMT)
-Date: Tue, 1 Jul 2025 13:19:00 +0900
-From: "Peter GJ. Park" <gyujoon.park@samsung.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: usb: usbnet: fix use-after-free in race on
- workqueue
-Message-ID: <20250701041900.ruz5a6ymeyc3hgxf@U20PB1-1082.tn.corp.samsungelectronics.net>
+	s=arc-20240116; t=1751358739; c=relaxed/simple;
+	bh=HRKh4yc4dh+enOBD//jx5vaaO25FLftCjZwUXnx5iGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=so5l67QfcGOe9sXeSOWs+dHsxfZY9SoKFGblI8Gv2IWad9hvPEyXzrdNRC7ii/0JRnFC0TmsxPQYMzjyps/DLhuJdzgcNxt7yj1668eJbmIDvDMTtii/BgRJ/VObSoa6rzqDq5UABx+ztyWXt9UYbaF8bAyX/XcCFzznugMAgws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y3uCNoRB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA99C4CEEB;
+	Tue,  1 Jul 2025 08:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751358738;
+	bh=HRKh4yc4dh+enOBD//jx5vaaO25FLftCjZwUXnx5iGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y3uCNoRBdzVLyV1qZdLiDTZncyTp7yzBk1nv+BNEmMC1KkeCqmjgeraa8yp/1ZOCq
+	 bZYUG+Od8ZfOpTwm6HXJWQV41dw0o6CWUXBOXbvzMNembUDDiQ1Np/KhRQz6dmq0cf
+	 SmSzxN2a1se0hDrFPZai4Ra4QAeksIvCfECo8gw0=
+Date: Tue, 1 Jul 2025 10:32:15 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Guenter Roeck <groeck@chromium.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	"Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/10] usb: typec: Expose mode priorities via sysfs
+Message-ID: <2025070159-judgingly-baggage-042a@gregkh>
+References: <20250630141239.3174390-1-akuchynski@chromium.org>
+ <20250630141239.3174390-5-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
-X-CMS-MailID: 20250701041905epcas1p427029655596144171f52db23fdc303a4
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_"
-CMS-TYPE: 101P
-cpgsPolicy: CPGSC10-711,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250625093354epcas1p1c9817df6e1d1599e8b4eb16c5715a6fd
-References: <CGME20250625093354epcas1p1c9817df6e1d1599e8b4eb16c5715a6fd@epcas1p1.samsung.com>
-	<20250625-usbnet-uaf-fix-v1-1-421eb05ae6ea@samsung.com>
-	<87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
-
-------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250630141239.3174390-5-akuchynski@chromium.org>
 
-On Thu, Jun 26, 2025 at 11:21:39AM +0200, Paolo Abeni wrote:
-> On 6/25/25 11:33 AM, Peter GJ. Park wrote:
-> > When usbnet_disconnect() queued while usbnet_probe() processing,
-> > it results to free_netdev before kevent gets to run on workqueue,
-> > thus workqueue does assign_work() with referencing freeed memory address.
-> >
-> > For graceful disconnect and to prevent use-after-free of netdev pointer,
-> > the fix adds canceling work and timer those are placed by usbnet_probe()
-> >
-> > Signed-off-by: Peter GJ. Park <gyujoon.park@samsung.com>
->
-> You should include a suitable fixes tag, and you should have specified
-> the target tree ('net' in this case) in the prefix subjext
->
-It has been applied with v2 patch. Thank you for this.
-> > ---
-> >  drivers/net/usb/usbnet.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> > index c04e715a4c2ade3bc5587b0df71643a25cf88c55..3c5d9ba7fa6660273137c80106746103f84f5a37 100644
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -1660,6 +1660,9 @@ void usbnet_disconnect (struct usb_interface *intf)
-> >  	usb_free_urb(dev->interrupt);
-> >  	kfree(dev->padding_pkt);
-> >
-> > +	timer_delete_sync(&dev->delay);
-> > +	tasklet_kill(&dev->bh);
-> > +	cancel_work_sync(&dev->kevent);
-> >  	free_netdev(net);
->
-> This happens after unregister_netdev(), which calls usbnet_stop() that
-> already performs the above cleanup. How the race is supposed to take place?
->
-> /P
->
-This uaf detected while my syzkaller project for usb kernel driver.
+On Mon, Jun 30, 2025 at 02:12:33PM +0000, Andrei Kuchynski wrote:
+> This sysfs attribute specifies the preferred order for enabling
+> DisplayPort, Thunderbolt alternate modes, and USB4 mode.
+> 
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec |  16 +++
+>  drivers/usb/typec/Makefile                  |   2 +-
+>  drivers/usb/typec/class.c                   |  28 ++++-
+>  drivers/usb/typec/class.h                   |   4 +
+>  drivers/usb/typec/mode_selection.c          | 116 ++++++++++++++++++++
+>  drivers/usb/typec/mode_selection.h          |  19 ++++
+>  include/linux/usb/typec_altmode.h           |   7 ++
+>  7 files changed, 190 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/usb/typec/mode_selection.c
+>  create mode 100644 drivers/usb/typec/mode_selection.h
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 38e101c17a00..ff3296ee8e1c 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -162,6 +162,22 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
+>  		- usb3 (USB 3.2)
+>  		- usb4 (USB4)
+>  
+> +What:		/sys/class/typec/<port>/mode_priorities
+> +Date:		June 2025
+> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
+> +Description:	Lists the modes supported by the port, ordered by their
+> +		activation priority. It defines the preferred sequence for activating
+> +		modes such as Displayport alt-mode, Thunderbolt alt-mode and USB4 mode.
+> +		The default order can be modified by writing a new sequence to this
+> +		attribute. Any modes omitted from a user-provided list will be
+> +		automatically placed at the end of the list.
+> +
+> +		Example values:
+> +		- "USB4 TBT DP": default priority order
+> +		- "USB4 DP TBT": modified priority order after writing "USB4 DP TBT" or
+> +			"USB4 DP"
+> +		- "DP": the port only supports Displayport alt-mode
 
-First hub_event work:usb_new_device arrived and processing in wq,
-While second new hub_event work:usb_disconnect put into wq.
-Then third usbnet:kevent work put by first hub_event work.
+Multiple value sysfs files are generally frowned apon.  sysfs files that
+also have to be manually parsed in the kernel are also frowned apon.
+Are you _SURE_ there is no other way that you could possibly do this?
 
-Dev pointer free-ed by second work without preceding usbnet_stop(), so the usbnetkevent still queued in wq,
-Finally it detected by kasan as use-after-free when wq try to access that poiter.
+> +
+>  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+>  
+>  What:		/sys/class/typec/<port>-partner/accessory_mode
+> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
+> index 7a368fea61bc..8a6a1c663eb6 100644
+> --- a/drivers/usb/typec/Makefile
+> +++ b/drivers/usb/typec/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_TYPEC)		+= typec.o
+> -typec-y				:= class.o mux.o bus.o pd.o retimer.o
+> +typec-y				:= class.o mux.o bus.o pd.o retimer.o mode_selection.o
+>  typec-$(CONFIG_ACPI)		+= port-mapper.o
+>  obj-$(CONFIG_TYPEC)		+= altmodes/
+>  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index a72325ff099a..93eadbcdd4c0 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -19,6 +19,7 @@
+>  #include "bus.h"
+>  #include "class.h"
+>  #include "pd.h"
+> +#include "mode_selection.h"
+>  
+>  static DEFINE_IDA(typec_index_ida);
+>  
+> @@ -540,7 +541,7 @@ static void typec_altmode_release(struct device *dev)
+>  }
+>  
+>  const struct device_type typec_altmode_dev_type = {
+> -	.name = "typec_alternate_mode",
+> +	.name = ALTERNATE_MODE_DEVICE_TYPE_NAME,
+>  	.groups = typec_altmode_groups,
+>  	.release = typec_altmode_release,
+>  };
+> @@ -1942,6 +1943,25 @@ static ssize_t orientation_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(orientation);
+>  
+> +static ssize_t mode_priorities_store(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf, size_t size)
+> +{
+> +	struct typec_port *port = to_typec_port(dev);
+> +	int ret = typec_mode_priorities_set(port, buf);
 
-Here is log snippet.
+You don't pass in size here, what could go wrong...
 
-[ 3041.949116] [5:    kworker/5:1:  130] BUG: KASAN: slab-use-after-free in assign_work+0xe8/0x280
-[ 3041.949128] [5:    kworker/5:1:  130] Read of size 8 at addr ffffff88ef60ece8 by task kworker/5:1/130
-...
-[ 3041.949155] [5:    kworker/5:1:  130] Workqueue:  0x0 (usb_hub_wq)
-[ 3041.949167] [5:    kworker/5:1:  130] Call trace:
-[ 3041.949170] [5:    kworker/5:1:  130]  dump_backtrace+0x120/0x170
-[ 3041.949178] [5:    kworker/5:1:  130]  show_stack+0x2c/0x40
-[ 3041.949184] [5:    kworker/5:1:  130]  dump_stack_lvl+0x68/0x84
-[ 3041.949193] [5:    kworker/5:1:  130]  print_report+0x13c/0x6f8
-[ 3041.949203] [5:    kworker/5:1:  130]  kasan_report+0xdc/0x13c
-[ 3041.949211] [5:    kworker/5:1:  130]  __asan_load8+0x98/0xa0
-[ 3041.949216] [5:    kworker/5:1:  130]  assign_work+0xe8/0x280
-[ 3041.949224] [5:    kworker/5:1:  130]  worker_thread+0x458/0x670
-[ 3041.949231] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
-[ 3041.949238] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
+> +
+> +	return ret ? : size;
 
-[ 3041.949248] [5:    kworker/5:1:  130] Allocated by task 130:
-...
-[ 3041.949275] [5:    kworker/5:1:  130]  __kmalloc_node+0x74/0x194
-[ 3041.949282] [5:    kworker/5:1:  130]  kvmalloc_node+0x160/0x394
-[ 3041.949289] [5:    kworker/5:1:  130]  alloc_netdev_mqs+0x6c/0x718
-[ 3041.949298] [5:    kworker/5:1:  130]  alloc_etherdev_mqs+0x48/0x60
-[ 3041.949305] [5:    kworker/5:1:  130]  usbnet_probe+0xd8/0xf10 [usbnet]
-[ 3041.949348] [5:    kworker/5:1:  130]  usb_probe_interface+0x338/0x4fc
-...
-[ 3041.949516] [5:    kworker/5:1:  130]  usb_new_device+0x7c8/0xbdc
-[ 3041.949523] [5:    kworker/5:1:  130]  hub_event+0x1808/0x2564
-[ 3041.949530] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
-[ 3041.949538] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
-[ 3041.949546] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
-[ 3041.949552] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
+Please do not use ? : unless you have to.  Spell it out, it makes code
+easier to maintain.  Remember, we write code for people first, compilers
+second.
 
-[ 3041.949561] [5:    kworker/5:1:  130] Freed by task 130:
-...
-[ 3041.949604] [5:    kworker/5:1:  130]  __kmem_cache_free+0xa0/0x260
-[ 3041.949610] [5:    kworker/5:1:  130]  kfree+0x60/0x124
-[ 3041.949617] [5:    kworker/5:1:  130]  kvfree+0x40/0x54
-[ 3041.949622] [5:    kworker/5:1:  130]  netdev_freemem+0x2c/0x40
-[ 3041.949630] [5:    kworker/5:1:  130]  netdev_release+0x50/0x6c
-[ 3041.949638] [5:    kworker/5:1:  130]  device_release+0x74/0x13c
-[ 3041.949645] [5:    kworker/5:1:  130]  kobject_put+0xfc/0x1a8
-[ 3041.949654] [5:    kworker/5:1:  130]  put_device+0x28/0x40
-[ 3041.949660] [5:    kworker/5:1:  130]  free_netdev+0x234/0x284
-[ 3041.949667] [5:    kworker/5:1:  130]  usbnet_disconnect+0x18c/0x250 [usbnet]
-[ 3041.949706] [5:    kworker/5:1:  130]  usb_unbind_interface+0x130/0x414
-[ 3041.949713] [5:    kworker/5:1:  130]  device_release_driver_internal+0x2e8/0x494
-[ 3041.949721] [5:    kworker/5:1:  130]  device_release_driver+0x28/0x3c
-[ 3041.949730] [5:    kworker/5:1:  130]  bus_remove_device+0x250/0x268
-[ 3041.949737] [5:    kworker/5:1:  130]  device_del+0x304/0x530
-[ 3041.949744] [5:    kworker/5:1:  130]  usb_disable_device+0x1d8/0x340
-[ 3041.949750] [5:    kworker/5:1:  130]  usb_disconnect+0x1c4/0x4f0
-[ 3041.949757] [5:    kworker/5:1:  130]  hub_event+0x1200/0x2564
-[ 3041.949764] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
-[ 3041.949772] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
-[ 3041.949780] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
-[ 3041.949786] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
+> +}
+> +
+> +static ssize_t mode_priorities_show(struct device *dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	struct typec_port *port = to_typec_port(dev);
+> +
+> +	return typec_mode_priorities_get(port, buf);
+> +}
+> +static DEVICE_ATTR_RW(mode_priorities);
+> +
+>  static struct attribute *typec_attrs[] = {
+>  	&dev_attr_data_role.attr,
+>  	&dev_attr_power_operation_mode.attr,
+> @@ -1954,6 +1974,7 @@ static struct attribute *typec_attrs[] = {
+>  	&dev_attr_port_type.attr,
+>  	&dev_attr_orientation.attr,
+>  	&dev_attr_usb_capability.attr,
+> +	&dev_attr_mode_priorities.attr,
+>  	NULL,
+>  };
+>  
+> @@ -1992,6 +2013,9 @@ static umode_t typec_attr_is_visible(struct kobject *kobj,
+>  			return 0;
+>  		if (!port->ops || !port->ops->default_usb_mode_set)
+>  			return 0444;
+> +	} else if (attr == &dev_attr_mode_priorities.attr) {
+> +		if (!port->alt_mode_override)
+> +			return 0;
+>  	}
+>  
+>  	return attr->mode;
+> @@ -2652,6 +2676,8 @@ struct typec_port *typec_register_port(struct device *parent,
+>  	else if (cap->usb_capability & USB_CAPABILITY_USB2)
+>  		port->usb_mode = USB_MODE_USB2;
+>  
+> +	typec_mode_priorities_set(port, "");
+> +
+>  	device_initialize(&port->dev);
+>  	port->dev.class = &typec_class;
+>  	port->dev.parent = parent;
+> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+> index f05d9201c233..28b3c19a0632 100644
+> --- a/drivers/usb/typec/class.h
+> +++ b/drivers/usb/typec/class.h
+> @@ -5,6 +5,7 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/usb/typec.h>
+> +#include <linux/usb/typec_altmode.h>
+>  
+>  struct typec_mux;
+>  struct typec_switch;
+> @@ -82,6 +83,7 @@ struct typec_port {
+>  	struct device			*usb3_dev;
+>  
+>  	bool				alt_mode_override;
+> +	int				mode_priority_list[TYPEC_MODE_MAX];
+>  };
+>  
+>  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+> @@ -111,4 +113,6 @@ static inline int typec_link_ports(struct typec_port *connector) { return 0; }
+>  static inline void typec_unlink_ports(struct typec_port *connector) { }
+>  #endif
+>  
+> +#define ALTERNATE_MODE_DEVICE_TYPE_NAME "typec_alternate_mode"
+> +
+>  #endif /* __USB_TYPEC_CLASS__ */
+> diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/mode_selection.c
+> new file mode 100644
+> index 000000000000..cb7ddf679037
+> --- /dev/null
+> +++ b/drivers/usb/typec/mode_selection.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright 2025 Google LLC.
+> + */
+> +
+> +#include <linux/usb/typec_altmode.h>
+> +#include <linux/vmalloc.h>
+> +#include "mode_selection.h"
+> +#include "class.h"
+> +
+> +static const char * const mode_names[] = {
+> +	[TYPEC_DP_ALTMODE] = "DP",
+> +	[TYPEC_TBT_ALTMODE] = "TBT",
+> +	[TYPEC_USB4_MODE] = "USB4",
 
-[ 3041.949796] [5:    kworker/5:1:  130] Last potentially related work creation:
-...
-[ 3041.949820] [5:    kworker/5:1:  130]  __queue_work+0x5d0/0xaf4
-[ 3041.949827] [5:    kworker/5:1:  130]  queue_work_on+0x64/0xb0
-[ 3041.949833] [5:    kworker/5:1:  130]  usbnet_link_change+0xdc/0x13c [usbnet]
-[ 3041.949873] [5:    kworker/5:1:  130]  usbnet_probe+0xe5c/0xf10 [usbnet]
-...
-[ 3041.950078] [5:    kworker/5:1:  130]  usb_new_device+0x7c8/0xbdc
-[ 3041.950085] [5:    kworker/5:1:  130]  hub_event+0x1808/0x2564
-[ 3041.950092] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
-[ 3041.950100] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
-[ 3041.950107] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
-[ 3041.950113] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
+No TYPEC_MODE_MAX entry?  Why not?  This is going to get out of sync,
+see below for my comment about that.
 
-Best Regards,
-GJ
+> +};
+> +static const char * const default_priorities = "USB4 TBT DP";
 
-------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_
-Content-Type: text/plain; charset="utf-8"
+A comment here about what this is for?
+
+> +
+> +/* -------------------------------------------------------------------------- */
+> +/* port 'mode_priorities' attribute */
+> +static int typec_mode_parse_priority_string(const char *str, int *list)
+> +{
+> +	const bool user_settings = list[0] == TYPEC_MODE_MAX;
+> +	char *buf, *ptr;
+> +	char *token;
+> +	int ret = 0;
+> +
+> +	buf = vmalloc(strlen(str) + 1);
+
+Why vmalloc for such a small chunk of memory?
+
+> +	if (!buf)
+> +		return -ENOMEM;
+> +	for (int i = 0; i <= strlen(str); i++)
+> +		buf[i] = (str[i] == '\n') ? '\0' : str[i];
+
+Please spell out if statements, especially ones that do assignements in
+them.  This is going to be a pain to maintain over time, right?  Make it
+obvious what is happening please.
 
 
-------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_--
+> +	ptr = buf;
+> +
+> +	while ((token = strsep(&ptr, " ")) && !ret) {
+> +		if (strlen(token)) {
+> +			int mode = 0;
+> +
+> +			while ((mode < TYPEC_MODE_MAX) &&
+> +				strcmp(token, mode_names[mode]))
+> +				mode++;
+> +			if (mode == TYPEC_MODE_MAX) {
+> +				ret = -EINVAL;
+> +				continue;
+> +			}
+> +
+> +			for (int i = 0; i < TYPEC_MODE_MAX; i++) {
+> +				if (list[i] == TYPEC_MODE_MAX) {
+> +					list[i] = mode;
+> +					break;
+> +				}
+> +				if (list[i] == mode) {
+> +					if (user_settings)
+> +						ret = -EINVAL;
+> +					break;
+> +				}
+> +			}
+> +		}
+> +	}
+> +	vfree(buf);
+
+Why not just use a free() type model and that way your error paths above
+are much simpler?
+
+
+> +
+> +	return ret;
+> +}
+> +
+> +int typec_mode_priorities_set(struct typec_port *port,
+> +		const char *user_priorities)
+> +{
+> +	int list[TYPEC_MODE_MAX];
+> +	int ret;
+> +
+> +	for (int i = 0; i < TYPEC_MODE_MAX; i++)
+> +		list[i] = TYPEC_MODE_MAX;
+> +
+> +	ret = typec_mode_parse_priority_string(user_priorities, list);
+> +	if (!ret)
+> +		ret = typec_mode_parse_priority_string(default_priorities, list);
+> +
+> +	if (!ret)
+> +		for (int i = 0; i < TYPEC_MODE_MAX; i++)
+> +			port->mode_priority_list[i] = list[i];
+> +
+> +	return ret;
+> +}
+> +
+> +static int port_altmode_supported(struct device *dev, void *data)
+> +{
+> +	if (!strcmp(dev->type->name, ALTERNATE_MODE_DEVICE_TYPE_NAME)) {
+> +		struct typec_altmode *alt = to_typec_altmode(dev);
+> +
+> +		if (*(int *)data == typec_svid_to_altmode(alt->svid))
+> +			return 1;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static bool port_mode_supported(struct typec_port *port, int mode)
+> +{
+> +	if (mode >= TYPEC_MODE_MAX)
+> +		return false;
+> +	if (mode == TYPEC_USB4_MODE)
+> +		return !!(port->cap->usb_capability & USB_CAPABILITY_USB4);
+> +	return device_for_each_child(&port->dev, &mode, port_altmode_supported);
+> +}
+> +
+> +int typec_mode_priorities_get(struct typec_port *port, char *buf)
+> +{
+> +	ssize_t count = 0;
+> +
+> +	for (int i = 0; i < TYPEC_MODE_MAX; i++) {
+> +		int mode = port->mode_priority_list[i];
+> +
+> +		if (port_mode_supported(port, mode))
+> +			count += sysfs_emit_at(buf, count, "%s ", mode_names[mode]);
+> +	}
+> +
+> +	return count + sysfs_emit_at(buf, count, "\n");
+> +}
+> diff --git a/drivers/usb/typec/mode_selection.h b/drivers/usb/typec/mode_selection.h
+> new file mode 100644
+> index 000000000000..c595c84e26a4
+> --- /dev/null
+> +++ b/drivers/usb/typec/mode_selection.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#include <linux/usb/typec_dp.h>
+> +#include <linux/usb/typec_tbt.h>
+> +
+> +static inline int typec_svid_to_altmode(const u16 svid)
+> +{
+> +	switch (svid) {
+> +	case USB_TYPEC_DP_SID:
+> +		return TYPEC_DP_ALTMODE;
+> +	case USB_TYPEC_TBT_SID:
+> +		return TYPEC_TBT_ALTMODE;
+> +	}
+> +	return TYPEC_MODE_MAX;
+> +}
+> +
+> +int typec_mode_priorities_set(struct typec_port *port,
+> +		const char *user_priorities);
+> +int typec_mode_priorities_get(struct typec_port *port, char *buf);
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index b3c0866ea70f..4f05c5f5c91d 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -145,6 +145,13 @@ enum {
+>  
+>  #define TYPEC_MODAL_STATE(_state_)	((_state_) + TYPEC_STATE_MODAL)
+>  
+> +enum {
+> +	TYPEC_DP_ALTMODE = 0,
+> +	TYPEC_TBT_ALTMODE,
+> +	TYPEC_USB4_MODE,
+> +	TYPEC_MODE_MAX,
+
+This list is going to get out of order and sync with your string list
+elsewhere in the other .c file.  What is going to ensure that this does
+not happen?
+
+Again, I'm really not happy with this api, it feels fragile and tricky
+and will get out of sync very easily over time.  We need loads of
+justification for why this really is the only possible way this can be
+done, and some type of proof that this actually has been tested (and
+maybe fuzzed?)
+
+thanks,
+
+greg k-h
 
