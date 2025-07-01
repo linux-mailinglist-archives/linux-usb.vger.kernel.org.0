@@ -1,181 +1,127 @@
-Return-Path: <linux-usb+bounces-25335-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25336-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A7EAEE944
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 23:04:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 660CDAEED26
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 06:00:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2439A1BC40E0
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Jun 2025 21:03:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B83DF17AAAD
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 04:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC4F2EAB6B;
-	Mon, 30 Jun 2025 21:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70B11F4162;
+	Tue,  1 Jul 2025 04:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QONO5yDM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KvzQDbb7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E48528C03B;
-	Mon, 30 Jun 2025 21:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE55017C91;
+	Tue,  1 Jul 2025 04:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317344; cv=none; b=ZgbNBx0tFT33Z2Op+F+lCm/CnRAbVwFwUhNif8VpDOj8FA1vz7iVOquwRMNbD5MtgMW+Vss4z/4lY1xaCDdlKB5W7EN+XRh8ygOw8qYesbA9bGBWo57FZCFdONM8UJMAccJoVTt4/KzAkWox67oG/O37BU+2BZJ+kHBXs+rUlP0=
+	t=1751342436; cv=none; b=ToOkXmjcw1RpoKuC0DmLWnC8kybz+tSyk5VIljd4i/V6aHeQVmQRXLl0M3hZmq+QjHf2oY7XPpl3vEZjLgOoyt3NjB7ao+j0+iK3u0y1BbovWIsHS8VEse05oQuH/KQgWC1LgGLL7vRDmtNXPQf9JY83dDHTZaevfC3X6/AEc6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317344; c=relaxed/simple;
-	bh=Ptole0ErNiP5cPa6065jKTFUwsyE8Iv0nXX+V8Mi/9U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t8r7UR8XnVzp2u4E8ODE8dzKMqgXBcJcggXNBaCY5/OUWmfM+P4Bm5IFNsbMP5bBkJ3Ycv9pLPAhhhV8tBb1SUIsqFHOAgiHuP2AcGRHDTFfXpTvefjw8O8tI5mS62js9hdn3p+9gbsySUcWL9u5aJgUSNwWA8zq9kZTvYJ5mbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QONO5yDM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56098C4CEEB;
-	Mon, 30 Jun 2025 21:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751317344;
-	bh=Ptole0ErNiP5cPa6065jKTFUwsyE8Iv0nXX+V8Mi/9U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QONO5yDM66KB4yqWeMjJqa5Tm7QcqOZYnPSYbztC8RF88Mx7NbM9DafR1csBjLNrR
-	 Z17Z3zu15Uko1FYSe1OVy/2hMKXn4oiWdG996sF8+kqnww8adog8JNLXGsYI5biwOU
-	 ZgpOMfjIFhC1rykyWP+cjoSdpTIFVVb6Hs+KD+Ytwowutcb3VPS1NaHiZHPX4VBQ6x
-	 0Nifk9QnqkYlU1GyDJrsv4WhUL0y2wB8ktooCg9hPd6JVoJZRkYBN07+CbFcQsOfPA
-	 iQIAPoy7mqZTv6JGtYkfU65Gq9kRErWdjBbch6v1K+k/yLLYrS6mMcvDlvj+nHPl2R
-	 pS+/lx/ryekmQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Xiaowei Li <xiaowei.li@simcom.com>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 2/5] net: usb: qmi_wwan: add SIMCom 8230C composition
-Date: Mon, 30 Jun 2025 17:02:16 -0400
-Message-Id: <20250630210219.1359777-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250630210219.1359777-1-sashal@kernel.org>
-References: <20250630210219.1359777-1-sashal@kernel.org>
+	s=arc-20240116; t=1751342436; c=relaxed/simple;
+	bh=ZXOGPn1tYEEzAPUU3BWPEZ5qUnP7Mw93nwidwTHo2+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TX/n27j23b7btHBbJZmJ1rRK7i/IU4tAaAWsCMTJ43C0DGV8lCckYxWRi75eujJBusl9xnp4nEfOigQ2l4Z6QOqblnJCQWBf5l6FtFRxeCVV7ACrgxWnNgqBxsEK5QvwAIm7r9wM+r8uCRPcXtGPdYK3RVaipLMrnvgahohGD4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KvzQDbb7; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751342434; x=1782878434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZXOGPn1tYEEzAPUU3BWPEZ5qUnP7Mw93nwidwTHo2+c=;
+  b=KvzQDbb7TD4vC72hUR9Ajt9mMfbwX5Nz4O+ilVnx7r0zOxtDEmJzbfSp
+   c/cDqvfdvBTqt76Tm+UZH7PPu1q8bWC9Ua1R3kO1jqZ99fw1uXVhrVKJJ
+   LJ2G3sDK3NvLRUanob7HVJHYAHRVZ59Ez7N5EQHp/IQtEpySPejC7qjjr
+   pUXCJINOTI6nHOV4qnsdlndLqb+wpXUzvUGm7z0SWvJXlfXeohXkOVMIs
+   3RDMzuaXZlaMZXqZBxvQ1H622ckVqS7edM11cksE/iB7ggaNZZ3j6kNlu
+   0ajQsCJPShWEDMpWdD9o9+RK0WvT+f+6ddckKXYsomiL82qs610LP4ewO
+   g==;
+X-CSE-ConnectionGUID: bzwq2TAPTgOYpFaNlyz7Rw==
+X-CSE-MsgGUID: ZMTR7SWXTMOX0gJREoalPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="79027269"
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="79027269"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 21:00:33 -0700
+X-CSE-ConnectionGUID: /khQEmeRSLuaqQT9YKyfrw==
+X-CSE-MsgGUID: fozRp0UjRJKMM3SsZJMlmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="154132676"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 30 Jun 2025 21:00:30 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWSAV-000Zhi-1c;
+	Tue, 01 Jul 2025 04:00:27 +0000
+Date: Tue, 1 Jul 2025 11:59:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	"Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: Re: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+Message-ID: <202507011101.LAOe7nS8-lkp@intel.com>
+References: <20250630141239.3174390-6-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.295
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250630141239.3174390-6-akuchynski@chromium.org>
 
-From: Xiaowei Li <xiaowei.li@simcom.com>
+Hi Andrei,
 
-[ Upstream commit 0b39b055b5b48cbbdf5746a1ca6e3f6b0221e537 ]
+kernel test robot noticed the following build warnings:
 
-Add support for SIMCom 8230C which is based on Qualcomm SDX35 chip.
-0x9071: tty (DM) + tty (NMEA) + tty (AT) + rmnet
-T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1e0e ProdID=9071 Rev= 5.15
-S:  Manufacturer=SIMCOM
-S:  Product=SDXBAAGHA-IDP _SN:D744C4C5
-S:  SerialNumber=0123456789ABCDEF
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=none
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+[auto build test WARNING on usb/usb-linus]
+[also build test WARNING on chrome-platform/for-next chrome-platform/for-firmware-next linus/master v6.16-rc4 next-20250630]
+[cannot apply to usb/usb-testing usb/usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Xiaowei Li <xiaowei.li@simcom.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://patch.msgid.link/tencent_21D781FAA4969FEACA6ABB460362B52C9409@qq.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Kuchynski/usb-typec-Add-alt_mode_override-field-to-port-property/20250630-221822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+patch link:    https://lore.kernel.org/r/20250630141239.3174390-6-akuchynski%40chromium.org
+patch subject: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+config: arm-randconfig-r072-20250701 (https://download.01.org/0day-ci/archive/20250701/202507011101.LAOe7nS8-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507011101.LAOe7nS8-lkp@intel.com/reproduce)
 
-**YES**
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507011101.LAOe7nS8-lkp@intel.com/
 
-This commit should be backported to stable kernel trees. Here's my
-detailed analysis:
+All warnings (new ones prefixed by >>):
 
-## Rationale for Backporting:
+   Warning: drivers/usb/typec/mode_selection.c:166 function parameter 'partner' not described in 'mode_selection_next'
+   Warning: drivers/usb/typec/mode_selection.c:166 function parameter 'ms' not described in 'mode_selection_next'
+   Warning: drivers/usb/typec/mode_selection.c:294 function parameter 'work' not described in 'mode_selection_work'
+   Warning: drivers/usb/typec/mode_selection.c:419 function parameter 'partner' not described in 'typec_mode_selection_start'
+>> Warning: drivers/usb/typec/mode_selection.c:464 function parameter 'partner' not described in 'typec_mode_selection_reset'
 
-1. **Stable kernel rules explicitly allow device ID additions**:
-   According to Documentation/process/stable-kernel-rules.rst line 15,
-   patches must "either fix a real bug that bothers people or just add a
-   device ID." This commit clearly falls into the "add a device ID"
-   category.
-
-2. **Simple, low-risk change**: The commit adds exactly one line:
-  ```c
-  {QMI_QUIRK_SET_DTR(0x1e0e, 0x9071, 3)}, /* SIMCom 8230C ++ */
-  ```
-  This is a minimal change that only affects users with this specific
-  hardware (vendor ID 0x1e0e, product ID 0x9071).
-
-3. **Enables hardware that would otherwise not work**: Without this
-   device ID entry, users with the SIMCom 8230C modem cannot use their
-   hardware with the qmi_wwan driver. This directly impacts
-   functionality for those users.
-
-4. **Follows established patterns**: The commit uses `QMI_QUIRK_SET_DTR`
-   macro, consistent with the existing SIMCom entry at line 1428:
-  ```c
-  {QMI_QUIRK_SET_DTR(0x1e0e, 0x9001, 5)}, /* SIMCom 7100E, 7230E, 7600E
-  ++ */
-  ```
-  This shows the vendor has a history of requiring the DTR quirk for
-  their devices.
-
-5. **Historical precedent supports backporting**: Of the 5 similar
-   commits analyzed, 4 were backported to stable:
-   - Fibocom FG132 (YES)
-   - MeiG Smart SRM825L (YES)
-   - Telit FN912 compositions (YES)
-   - Telit FN920C04 compositions (YES)
-   - Quectel RG255C (NO)
-
-   The 80% backport rate for similar device ID additions suggests this
-type of change is generally considered appropriate for stable.
-
-6. **No risk to existing functionality**: The change only adds support
-   for a new device ID (0x9071) and doesn't modify any existing device
-   support or core driver functionality.
-
-The commit meets all criteria for stable backporting: it's obviously
-correct, tested (as evidenced by the detailed USB descriptor output in
-the commit message), small (1 line), and enables hardware support that
-users need.
-
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index d0032db3e9f40..496cff5f3d0a3 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1382,6 +1382,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
- 	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
- 	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9001, 5)},	/* SIMCom 7100E, 7230E, 7600E ++ */
-+	{QMI_QUIRK_SET_DTR(0x1e0e, 0x9071, 3)},	/* SIMCom 8230C ++ */
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0121, 4)},	/* Quectel EC21 Mini PCIe */
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0195, 4)},	/* Quectel EG95 */
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
