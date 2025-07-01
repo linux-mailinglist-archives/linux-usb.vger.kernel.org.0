@@ -1,127 +1,220 @@
-Return-Path: <linux-usb+bounces-25336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25337-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 660CDAEED26
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 06:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CCAE7AEED36
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 06:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B83DF17AAAD
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 04:00:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B8ED1755AA
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 04:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70B11F4162;
-	Tue,  1 Jul 2025 04:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB50419CD13;
+	Tue,  1 Jul 2025 04:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KvzQDbb7"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ICzDGa0Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE55017C91;
-	Tue,  1 Jul 2025 04:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C711F37D3
+	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 04:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751342436; cv=none; b=ToOkXmjcw1RpoKuC0DmLWnC8kybz+tSyk5VIljd4i/V6aHeQVmQRXLl0M3hZmq+QjHf2oY7XPpl3vEZjLgOoyt3NjB7ao+j0+iK3u0y1BbovWIsHS8VEse05oQuH/KQgWC1LgGLL7vRDmtNXPQf9JY83dDHTZaevfC3X6/AEc6I=
+	t=1751343551; cv=none; b=c+3cz27ajPG/pkmPqrWiKrWa51x6etrfPZ57xTeEMcL2xYEMlHw7cVoW6mD/SlUK2W0CIsIlrcJQiaFNN0RIxSHo2b4JtfPVVvUfU3ki88GX/dPrb4/zVBWGxweW7lbiUYAXpEtVFsgqPScGxBPP0f+2wDwYnADTAXZZG2GR8RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751342436; c=relaxed/simple;
-	bh=ZXOGPn1tYEEzAPUU3BWPEZ5qUnP7Mw93nwidwTHo2+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TX/n27j23b7btHBbJZmJ1rRK7i/IU4tAaAWsCMTJ43C0DGV8lCckYxWRi75eujJBusl9xnp4nEfOigQ2l4Z6QOqblnJCQWBf5l6FtFRxeCVV7ACrgxWnNgqBxsEK5QvwAIm7r9wM+r8uCRPcXtGPdYK3RVaipLMrnvgahohGD4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KvzQDbb7; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751342434; x=1782878434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZXOGPn1tYEEzAPUU3BWPEZ5qUnP7Mw93nwidwTHo2+c=;
-  b=KvzQDbb7TD4vC72hUR9Ajt9mMfbwX5Nz4O+ilVnx7r0zOxtDEmJzbfSp
-   c/cDqvfdvBTqt76Tm+UZH7PPu1q8bWC9Ua1R3kO1jqZ99fw1uXVhrVKJJ
-   LJ2G3sDK3NvLRUanob7HVJHYAHRVZ59Ez7N5EQHp/IQtEpySPejC7qjjr
-   pUXCJINOTI6nHOV4qnsdlndLqb+wpXUzvUGm7z0SWvJXlfXeohXkOVMIs
-   3RDMzuaXZlaMZXqZBxvQ1H622ckVqS7edM11cksE/iB7ggaNZZ3j6kNlu
-   0ajQsCJPShWEDMpWdD9o9+RK0WvT+f+6ddckKXYsomiL82qs610LP4ewO
-   g==;
-X-CSE-ConnectionGUID: bzwq2TAPTgOYpFaNlyz7Rw==
-X-CSE-MsgGUID: ZMTR7SWXTMOX0gJREoalPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="79027269"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="79027269"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 21:00:33 -0700
-X-CSE-ConnectionGUID: /khQEmeRSLuaqQT9YKyfrw==
-X-CSE-MsgGUID: fozRp0UjRJKMM3SsZJMlmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="154132676"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Jun 2025 21:00:30 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWSAV-000Zhi-1c;
-	Tue, 01 Jul 2025 04:00:27 +0000
-Date: Tue, 1 Jul 2025 11:59:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org,
-	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: Re: [PATCH v2 05/10] usb: typec: Implement automated mode selection
-Message-ID: <202507011101.LAOe7nS8-lkp@intel.com>
-References: <20250630141239.3174390-6-akuchynski@chromium.org>
+	s=arc-20240116; t=1751343551; c=relaxed/simple;
+	bh=O97jXsQ3LXss1Hf1Wk/BaNtoM1HDPTGoTQFSxBBOj5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=HpUFkGqUjwfwnSSI1NI9FVgIqd495+gk95t4LFsb/C/NuiZMTIrrAkGV5UdLP/OMjw19H9q/2AyL5FOo8bEcmWYHmtjrNP29b8zpSsHbZkxoPXecmMRF8/zo5KD8P48fM2HU7fOkWRfmkVPZpYzqPnJg6WhUBxwygdoMuOjvu9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ICzDGa0Y; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250701041906epoutp04b1f2687b42009562d45f6e11ba0ac0d7~OBa1ORhle2597025970epoutp04N
+	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 04:19:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250701041906epoutp04b1f2687b42009562d45f6e11ba0ac0d7~OBa1ORhle2597025970epoutp04N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1751343547;
+	bh=7gJBhY1hVleBBYsivSqZ/JL+GmeRtwkguYJw1y3Py30=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ICzDGa0Yhe9eFpk5r4xx1pvsvYxmA+e5n9gQNbHlHAT1HofyRAA/oXYEOk1EWHfCa
+	 wzCsar8q4dfQc2b5RzHODNtkhyHhPDscaOAzhS2zdfZv8cvs6Z/qw2CSeTCk5gjvvS
+	 YUFfDqMxFpe9pCttcSgp4y59QpzILIMfBPhkvBzY=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas1p4.samsung.com (KnoxPortal) with ESMTPS id
+	20250701041906epcas1p4dd5f93364a7ed512e81c218aa5432673~OBa0yRoDQ1324313243epcas1p4q;
+	Tue,  1 Jul 2025 04:19:06 +0000 (GMT)
+Received: from epcas1p3.samsung.com (unknown [182.195.38.240]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4bWVCZ0LKFz3hhT9; Tue,  1 Jul
+	2025 04:19:06 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250701041905epcas1p427029655596144171f52db23fdc303a4~OBazsr8fw1324313243epcas1p4h;
+	Tue,  1 Jul 2025 04:19:05 +0000 (GMT)
+Received: from U20PB1-1082.tn.corp.samsungelectronics.net (unknown
+	[10.91.135.33]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250701041905epsmtip274923813d6a343fa1e97b7d6f6d08633~OBazqCClB2830828308epsmtip2G;
+	Tue,  1 Jul 2025 04:19:05 +0000 (GMT)
+Date: Tue, 1 Jul 2025 13:19:00 +0900
+From: "Peter GJ. Park" <gyujoon.park@samsung.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: usb: usbnet: fix use-after-free in race on
+ workqueue
+Message-ID: <20250701041900.ruz5a6ymeyc3hgxf@U20PB1-1082.tn.corp.samsungelectronics.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
+X-CMS-MailID: 20250701041905epcas1p427029655596144171f52db23fdc303a4
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_"
+CMS-TYPE: 101P
+cpgsPolicy: CPGSC10-711,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250625093354epcas1p1c9817df6e1d1599e8b4eb16c5715a6fd
+References: <CGME20250625093354epcas1p1c9817df6e1d1599e8b4eb16c5715a6fd@epcas1p1.samsung.com>
+	<20250625-usbnet-uaf-fix-v1-1-421eb05ae6ea@samsung.com>
+	<87a7f8a6-71b1-4b90-abc7-0a680f2a99cf@redhat.com>
+
+------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250630141239.3174390-6-akuchynski@chromium.org>
 
-Hi Andrei,
+On Thu, Jun 26, 2025 at 11:21:39AM +0200, Paolo Abeni wrote:
+> On 6/25/25 11:33 AM, Peter GJ. Park wrote:
+> > When usbnet_disconnect() queued while usbnet_probe() processing,
+> > it results to free_netdev before kevent gets to run on workqueue,
+> > thus workqueue does assign_work() with referencing freeed memory address.
+> >
+> > For graceful disconnect and to prevent use-after-free of netdev pointer,
+> > the fix adds canceling work and timer those are placed by usbnet_probe()
+> >
+> > Signed-off-by: Peter GJ. Park <gyujoon.park@samsung.com>
+>
+> You should include a suitable fixes tag, and you should have specified
+> the target tree ('net' in this case) in the prefix subjext
+>
+It has been applied with v2 patch. Thank you for this.
+> > ---
+> >  drivers/net/usb/usbnet.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> > index c04e715a4c2ade3bc5587b0df71643a25cf88c55..3c5d9ba7fa6660273137c80106746103f84f5a37 100644
+> > --- a/drivers/net/usb/usbnet.c
+> > +++ b/drivers/net/usb/usbnet.c
+> > @@ -1660,6 +1660,9 @@ void usbnet_disconnect (struct usb_interface *intf)
+> >  	usb_free_urb(dev->interrupt);
+> >  	kfree(dev->padding_pkt);
+> >
+> > +	timer_delete_sync(&dev->delay);
+> > +	tasklet_kill(&dev->bh);
+> > +	cancel_work_sync(&dev->kevent);
+> >  	free_netdev(net);
+>
+> This happens after unregister_netdev(), which calls usbnet_stop() that
+> already performs the above cleanup. How the race is supposed to take place?
+>
+> /P
+>
+This uaf detected while my syzkaller project for usb kernel driver.
 
-kernel test robot noticed the following build warnings:
+First hub_event work:usb_new_device arrived and processing in wq,
+While second new hub_event work:usb_disconnect put into wq.
+Then third usbnet:kevent work put by first hub_event work.
 
-[auto build test WARNING on usb/usb-linus]
-[also build test WARNING on chrome-platform/for-next chrome-platform/for-firmware-next linus/master v6.16-rc4 next-20250630]
-[cannot apply to usb/usb-testing usb/usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Dev pointer free-ed by second work without preceding usbnet_stop(), so the usbnetkevent still queued in wq,
+Finally it detected by kasan as use-after-free when wq try to access that poiter.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Kuchynski/usb-typec-Add-alt_mode_override-field-to-port-property/20250630-221822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-patch link:    https://lore.kernel.org/r/20250630141239.3174390-6-akuchynski%40chromium.org
-patch subject: [PATCH v2 05/10] usb: typec: Implement automated mode selection
-config: arm-randconfig-r072-20250701 (https://download.01.org/0day-ci/archive/20250701/202507011101.LAOe7nS8-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507011101.LAOe7nS8-lkp@intel.com/reproduce)
+Here is log snippet.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507011101.LAOe7nS8-lkp@intel.com/
+[ 3041.949116] [5:    kworker/5:1:  130] BUG: KASAN: slab-use-after-free in assign_work+0xe8/0x280
+[ 3041.949128] [5:    kworker/5:1:  130] Read of size 8 at addr ffffff88ef60ece8 by task kworker/5:1/130
+...
+[ 3041.949155] [5:    kworker/5:1:  130] Workqueue:  0x0 (usb_hub_wq)
+[ 3041.949167] [5:    kworker/5:1:  130] Call trace:
+[ 3041.949170] [5:    kworker/5:1:  130]  dump_backtrace+0x120/0x170
+[ 3041.949178] [5:    kworker/5:1:  130]  show_stack+0x2c/0x40
+[ 3041.949184] [5:    kworker/5:1:  130]  dump_stack_lvl+0x68/0x84
+[ 3041.949193] [5:    kworker/5:1:  130]  print_report+0x13c/0x6f8
+[ 3041.949203] [5:    kworker/5:1:  130]  kasan_report+0xdc/0x13c
+[ 3041.949211] [5:    kworker/5:1:  130]  __asan_load8+0x98/0xa0
+[ 3041.949216] [5:    kworker/5:1:  130]  assign_work+0xe8/0x280
+[ 3041.949224] [5:    kworker/5:1:  130]  worker_thread+0x458/0x670
+[ 3041.949231] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
+[ 3041.949238] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
 
-All warnings (new ones prefixed by >>):
+[ 3041.949248] [5:    kworker/5:1:  130] Allocated by task 130:
+...
+[ 3041.949275] [5:    kworker/5:1:  130]  __kmalloc_node+0x74/0x194
+[ 3041.949282] [5:    kworker/5:1:  130]  kvmalloc_node+0x160/0x394
+[ 3041.949289] [5:    kworker/5:1:  130]  alloc_netdev_mqs+0x6c/0x718
+[ 3041.949298] [5:    kworker/5:1:  130]  alloc_etherdev_mqs+0x48/0x60
+[ 3041.949305] [5:    kworker/5:1:  130]  usbnet_probe+0xd8/0xf10 [usbnet]
+[ 3041.949348] [5:    kworker/5:1:  130]  usb_probe_interface+0x338/0x4fc
+...
+[ 3041.949516] [5:    kworker/5:1:  130]  usb_new_device+0x7c8/0xbdc
+[ 3041.949523] [5:    kworker/5:1:  130]  hub_event+0x1808/0x2564
+[ 3041.949530] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
+[ 3041.949538] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
+[ 3041.949546] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
+[ 3041.949552] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
 
-   Warning: drivers/usb/typec/mode_selection.c:166 function parameter 'partner' not described in 'mode_selection_next'
-   Warning: drivers/usb/typec/mode_selection.c:166 function parameter 'ms' not described in 'mode_selection_next'
-   Warning: drivers/usb/typec/mode_selection.c:294 function parameter 'work' not described in 'mode_selection_work'
-   Warning: drivers/usb/typec/mode_selection.c:419 function parameter 'partner' not described in 'typec_mode_selection_start'
->> Warning: drivers/usb/typec/mode_selection.c:464 function parameter 'partner' not described in 'typec_mode_selection_reset'
+[ 3041.949561] [5:    kworker/5:1:  130] Freed by task 130:
+...
+[ 3041.949604] [5:    kworker/5:1:  130]  __kmem_cache_free+0xa0/0x260
+[ 3041.949610] [5:    kworker/5:1:  130]  kfree+0x60/0x124
+[ 3041.949617] [5:    kworker/5:1:  130]  kvfree+0x40/0x54
+[ 3041.949622] [5:    kworker/5:1:  130]  netdev_freemem+0x2c/0x40
+[ 3041.949630] [5:    kworker/5:1:  130]  netdev_release+0x50/0x6c
+[ 3041.949638] [5:    kworker/5:1:  130]  device_release+0x74/0x13c
+[ 3041.949645] [5:    kworker/5:1:  130]  kobject_put+0xfc/0x1a8
+[ 3041.949654] [5:    kworker/5:1:  130]  put_device+0x28/0x40
+[ 3041.949660] [5:    kworker/5:1:  130]  free_netdev+0x234/0x284
+[ 3041.949667] [5:    kworker/5:1:  130]  usbnet_disconnect+0x18c/0x250 [usbnet]
+[ 3041.949706] [5:    kworker/5:1:  130]  usb_unbind_interface+0x130/0x414
+[ 3041.949713] [5:    kworker/5:1:  130]  device_release_driver_internal+0x2e8/0x494
+[ 3041.949721] [5:    kworker/5:1:  130]  device_release_driver+0x28/0x3c
+[ 3041.949730] [5:    kworker/5:1:  130]  bus_remove_device+0x250/0x268
+[ 3041.949737] [5:    kworker/5:1:  130]  device_del+0x304/0x530
+[ 3041.949744] [5:    kworker/5:1:  130]  usb_disable_device+0x1d8/0x340
+[ 3041.949750] [5:    kworker/5:1:  130]  usb_disconnect+0x1c4/0x4f0
+[ 3041.949757] [5:    kworker/5:1:  130]  hub_event+0x1200/0x2564
+[ 3041.949764] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
+[ 3041.949772] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
+[ 3041.949780] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
+[ 3041.949786] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[ 3041.949796] [5:    kworker/5:1:  130] Last potentially related work creation:
+...
+[ 3041.949820] [5:    kworker/5:1:  130]  __queue_work+0x5d0/0xaf4
+[ 3041.949827] [5:    kworker/5:1:  130]  queue_work_on+0x64/0xb0
+[ 3041.949833] [5:    kworker/5:1:  130]  usbnet_link_change+0xdc/0x13c [usbnet]
+[ 3041.949873] [5:    kworker/5:1:  130]  usbnet_probe+0xe5c/0xf10 [usbnet]
+...
+[ 3041.950078] [5:    kworker/5:1:  130]  usb_new_device+0x7c8/0xbdc
+[ 3041.950085] [5:    kworker/5:1:  130]  hub_event+0x1808/0x2564
+[ 3041.950092] [5:    kworker/5:1:  130]  process_scheduled_works+0x3cc/0x92c
+[ 3041.950100] [5:    kworker/5:1:  130]  worker_thread+0x468/0x670
+[ 3041.950107] [5:    kworker/5:1:  130]  kthread+0x1d8/0x298
+[ 3041.950113] [5:    kworker/5:1:  130]  ret_from_fork+0x10/0x20
+
+Best Regards,
+GJ
+
+------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_
+Content-Type: text/plain; charset="utf-8"
+
+
+------HF4QkBvyuwHAS03hBZdqIHLab6V36U2Ow6BTJ5ocD4Mu4QMF=_1e99e1_--
 
