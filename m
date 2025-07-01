@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-25338-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25339-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF6EAEF127
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:32:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92894AEF171
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 10:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D1AC3BD019
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 08:32:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46614A0C6E
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 08:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEA9269CE5;
-	Tue,  1 Jul 2025 08:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF5626B97F;
+	Tue,  1 Jul 2025 08:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y3uCNoRB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uRU8gKVe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCA572602;
-	Tue,  1 Jul 2025 08:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4181E5701;
+	Tue,  1 Jul 2025 08:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751358739; cv=none; b=FkD2ZLHR1TmhT2FNhVLaHPp+XaDrdStaczgE9ewKTUeq7xvMFsoiFk2dKtycgVc58J/6yWcv8/tE4ZWK3wUmrk/yw9q1qOqV4A0RgnqVBbU0RskfRGy92HYDMw14hCijIgmgf2/TWVE7dLdl9rS7PtsKZ4HUTaROioDB9HyjHGE=
+	t=1751359262; cv=none; b=NlrjNa39MD07Ltj4e99P5g1IavCLpWJ8nDqL5kkWejUv8h6IxgMN9jZTm8MV1u8vOpxb+dUWDMyZg2rTwLsgqRjP+TGTVNCfahwX7M3gf8f9aEErr1yY4xc9AfSz50iX64tH6qs3l7INI/eb/jriDQvd/Wii547KHo1fwL01zQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751358739; c=relaxed/simple;
-	bh=HRKh4yc4dh+enOBD//jx5vaaO25FLftCjZwUXnx5iGI=;
+	s=arc-20240116; t=1751359262; c=relaxed/simple;
+	bh=tWZD2bWInWhTEcro23yw6kYJY/BDBCCPXHAjzFsMGj0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=so5l67QfcGOe9sXeSOWs+dHsxfZY9SoKFGblI8Gv2IWad9hvPEyXzrdNRC7ii/0JRnFC0TmsxPQYMzjyps/DLhuJdzgcNxt7yj1668eJbmIDvDMTtii/BgRJ/VObSoa6rzqDq5UABx+ztyWXt9UYbaF8bAyX/XcCFzznugMAgws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y3uCNoRB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA99C4CEEB;
-	Tue,  1 Jul 2025 08:32:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=avmzwhBg4GpVoA3lDJWI/P21kct7Ohe6n3vbUe/04muA8vEaX6PWREyd/0J0wigfO2BvWOBhvN6FWEevdsl+mkRul5UNn2WwYwO23jSAGsJmgjPLmjoNsTZH61DG1ulrDaVFAeq4mmt+QJ/g5MdNaAPUMh26Tb1KRpzW06+m9dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uRU8gKVe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8E5C4CEEB;
+	Tue,  1 Jul 2025 08:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1751358738;
-	bh=HRKh4yc4dh+enOBD//jx5vaaO25FLftCjZwUXnx5iGI=;
+	s=korg; t=1751359261;
+	bh=tWZD2bWInWhTEcro23yw6kYJY/BDBCCPXHAjzFsMGj0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y3uCNoRBdzVLyV1qZdLiDTZncyTp7yzBk1nv+BNEmMC1KkeCqmjgeraa8yp/1ZOCq
-	 bZYUG+Od8ZfOpTwm6HXJWQV41dw0o6CWUXBOXbvzMNembUDDiQ1Np/KhRQz6dmq0cf
-	 SmSzxN2a1se0hDrFPZai4Ra4QAeksIvCfECo8gw0=
-Date: Tue, 1 Jul 2025 10:32:15 +0200
+	b=uRU8gKVe3FneEnnNSR54Woa9dV/eP+iKcWA9Rop2YLxTZlx4/rQvA38PUd9CVbgKh
+	 u5sRq37R1pbktVMyJS8AQZ8X7OR0sPmwWC+J0n1DRdco34WE57NDyghfF2TkxDOx25
+	 K99lMDtaZfwRxKHuJqqIe9BolU6aqEefv6uMKRcc=
+Date: Tue, 1 Jul 2025 10:40:58 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Andrei Kuchynski <akuchynski@chromium.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -50,10 +50,10 @@ Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Guenter Roeck <groeck@chromium.org>,
 	Dmitry Baryshkov <lumag@kernel.org>,
 	"Christian A. Ehrhardt" <lk@c--e.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/10] usb: typec: Expose mode priorities via sysfs
-Message-ID: <2025070159-judgingly-baggage-042a@gregkh>
+Subject: Re: [PATCH v2 05/10] usb: typec: Implement automated mode selection
+Message-ID: <2025070143-safeness-prewashed-6e9f@gregkh>
 References: <20250630141239.3174390-1-akuchynski@chromium.org>
- <20250630141239.3174390-5-akuchynski@chromium.org>
+ <20250630141239.3174390-6-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,369 +62,309 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250630141239.3174390-5-akuchynski@chromium.org>
+In-Reply-To: <20250630141239.3174390-6-akuchynski@chromium.org>
 
-On Mon, Jun 30, 2025 at 02:12:33PM +0000, Andrei Kuchynski wrote:
-> This sysfs attribute specifies the preferred order for enabling
-> DisplayPort, Thunderbolt alternate modes, and USB4 mode.
+On Mon, Jun 30, 2025 at 02:12:34PM +0000, Andrei Kuchynski wrote:
+> This commit introduces mode_selection sysfs attribute to control automated
+> mode negotiation. Writing "yes" to this file activates the automated
+> selection process for DisplayPort, Thunderbolt alternate modes, and USB4
+> mode. Conversely, writing "no" will cancel any ongoing selection process
+> and exit the currently active mode.
 > 
 > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
 > ---
->  Documentation/ABI/testing/sysfs-class-typec |  16 +++
->  drivers/usb/typec/Makefile                  |   2 +-
->  drivers/usb/typec/class.c                   |  28 ++++-
->  drivers/usb/typec/class.h                   |   4 +
->  drivers/usb/typec/mode_selection.c          | 116 ++++++++++++++++++++
->  drivers/usb/typec/mode_selection.h          |  19 ++++
->  include/linux/usb/typec_altmode.h           |   7 ++
->  7 files changed, 190 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/usb/typec/mode_selection.c
->  create mode 100644 drivers/usb/typec/mode_selection.h
+>  Documentation/ABI/testing/sysfs-class-typec |  17 +
+>  drivers/usb/typec/class.c                   |  52 ++-
+>  drivers/usb/typec/class.h                   |  10 +
+>  drivers/usb/typec/mode_selection.c          | 413 ++++++++++++++++++++
+>  drivers/usb/typec/mode_selection.h          |  30 ++
+>  include/linux/usb/pd_vdo.h                  |   2 +
+>  include/linux/usb/typec_altmode.h           |   5 +
+>  7 files changed, 527 insertions(+), 2 deletions(-)
 > 
 > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 38e101c17a00..ff3296ee8e1c 100644
+> index ff3296ee8e1c..0ffc71a7c374 100644
 > --- a/Documentation/ABI/testing/sysfs-class-typec
 > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -162,6 +162,22 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
+> @@ -263,6 +263,23 @@ Description:	The USB Modes that the partner device supports. The active mode
 >  		- usb3 (USB 3.2)
 >  		- usb4 (USB4)
 >  
-> +What:		/sys/class/typec/<port>/mode_priorities
+> +What:		/sys/class/typec/<port>-partner/mode_selection
 > +Date:		June 2025
 > +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-> +Description:	Lists the modes supported by the port, ordered by their
-> +		activation priority. It defines the preferred sequence for activating
-> +		modes such as Displayport alt-mode, Thunderbolt alt-mode and USB4 mode.
-> +		The default order can be modified by writing a new sequence to this
-> +		attribute. Any modes omitted from a user-provided list will be
-> +		automatically placed at the end of the list.
+> +Description:	Lists the partner-supported alternate modes and mode entry
+> +		results with the currently entered mode bracketed. If a cable doesn't
+> +		support a mode, it's marked as 'nc'. An ellipsis indicates a mode
+> +		currently in progress. Automated mode selection is activated by writing
+> +		"yes" to the file. Conversely, writing "no" will cancel any ongoing
+> +		selection process and exit the currently active mode, if any.
 > +
 > +		Example values:
-> +		- "USB4 TBT DP": default priority order
-> +		- "USB4 DP TBT": modified priority order after writing "USB4 DP TBT" or
-> +			"USB4 DP"
-> +		- "DP": the port only supports Displayport alt-mode
+> +		- "DP TBT=... USB4=nc": The cable does not support USB4 mode,
+> +			The driver is currently attempting to enter Thunderbolt alt-mode.
+> +		- "[DP] TBT=-EOPNOTSUPP USB4=-ETIME": USB4 mode entry failed due to
+> +			a timeout, Thunderbolt failed with the result -EOPNOTSUPP,
+> +			and DisplayPort is the active alt-mode.
 
-Multiple value sysfs files are generally frowned apon.  sysfs files that
-also have to be manually parsed in the kernel are also frowned apon.
-Are you _SURE_ there is no other way that you could possibly do this?
+We don't print error codes to userspace like this :(
+
+And "yes" and "no" are not the traditional sysfs apis for on/off, please
+use the in-kernel function for that instead that takes many more types
+of values.
+
+And again, multiple values in a sysfs file are not usually a good idea
+at all as now userspace has to parse them properly.  What userspace tool
+is going to do that?
 
 > +
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+>  USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
 >  
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> index 7a368fea61bc..8a6a1c663eb6 100644
-> --- a/drivers/usb/typec/Makefile
-> +++ b/drivers/usb/typec/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_TYPEC)		+= typec.o
-> -typec-y				:= class.o mux.o bus.o pd.o retimer.o
-> +typec-y				:= class.o mux.o bus.o pd.o retimer.o mode_selection.o
->  typec-$(CONFIG_ACPI)		+= port-mapper.o
->  obj-$(CONFIG_TYPEC)		+= altmodes/
->  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+>  Note: Electronically Marked Cables will have a device also for one cable plug
 > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index a72325ff099a..93eadbcdd4c0 100644
+> index 93eadbcdd4c0..8455e07a9934 100644
 > --- a/drivers/usb/typec/class.c
 > +++ b/drivers/usb/typec/class.c
-> @@ -19,6 +19,7 @@
->  #include "bus.h"
->  #include "class.h"
->  #include "pd.h"
-> +#include "mode_selection.h"
->  
->  static DEFINE_IDA(typec_index_ida);
->  
-> @@ -540,7 +541,7 @@ static void typec_altmode_release(struct device *dev)
+> @@ -741,6 +741,33 @@ static ssize_t number_of_alternate_modes_show(struct device *dev, struct device_
 >  }
+>  static DEVICE_ATTR_RO(number_of_alternate_modes);
 >  
->  const struct device_type typec_altmode_dev_type = {
-> -	.name = "typec_alternate_mode",
-> +	.name = ALTERNATE_MODE_DEVICE_TYPE_NAME,
->  	.groups = typec_altmode_groups,
->  	.release = typec_altmode_release,
->  };
-> @@ -1942,6 +1943,25 @@ static ssize_t orientation_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(orientation);
->  
-> +static ssize_t mode_priorities_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t size)
+> +static ssize_t mode_selection_show(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   char *buf)
 > +{
-> +	struct typec_port *port = to_typec_port(dev);
-> +	int ret = typec_mode_priorities_set(port, buf);
-
-You don't pass in size here, what could go wrong...
-
+> +	struct typec_partner *partner = to_typec_partner(dev);
+> +
+> +	return typec_mode_selection_get(partner, buf);
+> +}
+> +
+> +static ssize_t mode_selection_store(struct device *dev, struct device_attribute *attr,
+> +			      const char *buf, size_t size)
+> +{
+> +	struct typec_partner *partner = to_typec_partner(dev);
+> +	bool start;
+> +	int ret = kstrtobool(buf, &start);
+> +
+> +	if (!ret) {
+> +		if (start)
+> +			ret = typec_mode_selection_start(partner);
+> +		else
+> +			ret = typec_mode_selection_reset(partner);
+> +	}
 > +
 > +	return ret ? : size;
 
-Please do not use ? : unless you have to.  Spell it out, it makes code
-easier to maintain.  Remember, we write code for people first, compilers
-second.
+Again, only use ? : if you have to (hint, you don't have to here.)
 
-> +}
+> +static unsigned int mode_selection_timeout = 4000;
+> +module_param(mode_selection_timeout, uint, 0644);
+> +MODULE_PARM_DESC(mode_selection_timeout, "The timeout mode entry, ms");
 > +
-> +static ssize_t mode_priorities_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	struct typec_port *port = to_typec_port(dev);
+> +static unsigned int mode_selection_delay = 1000;
+> +module_param(mode_selection_delay, uint, 0644);
+> +MODULE_PARM_DESC(mode_selection_delay,
+> +	"The delay between attempts to enter or exit a mode, ms");
 > +
-> +	return typec_mode_priorities_get(port, buf);
-> +}
-> +static DEVICE_ATTR_RW(mode_priorities);
+> +static unsigned int mode_selection_entry_attempts = 4;
+> +module_param(mode_selection_entry_attempts, uint, 0644);
+> +MODULE_PARM_DESC(mode_selection_entry_attempts,
+> +	"Max attempts to enter mode on BUSY result");
+
+This is not the 1990's, please NEVER add new module parameters
+(especially ones that you never even documented in the changelog!)
+
+This just will not work, attributes for functionality either need to
+"just work properly" or you need to make them on a per-controller type
+basis as remember, systems have multiple controllers in them...
+
 > +
->  static struct attribute *typec_attrs[] = {
->  	&dev_attr_data_role.attr,
->  	&dev_attr_power_operation_mode.attr,
-> @@ -1954,6 +1974,7 @@ static struct attribute *typec_attrs[] = {
->  	&dev_attr_port_type.attr,
->  	&dev_attr_orientation.attr,
->  	&dev_attr_usb_capability.attr,
-> +	&dev_attr_mode_priorities.attr,
->  	NULL,
+>  static const char * const mode_names[] = {
+>  	[TYPEC_DP_ALTMODE] = "DP",
+>  	[TYPEC_TBT_ALTMODE] = "TBT",
+> @@ -15,6 +31,15 @@ static const char * const mode_names[] = {
 >  };
+>  static const char * const default_priorities = "USB4 TBT DP";
 >  
-> @@ -1992,6 +2013,9 @@ static umode_t typec_attr_is_visible(struct kobject *kobj,
->  			return 0;
->  		if (!port->ops || !port->ops->default_usb_mode_set)
->  			return 0444;
-> +	} else if (attr == &dev_attr_mode_priorities.attr) {
-> +		if (!port->alt_mode_override)
-> +			return 0;
->  	}
->  
->  	return attr->mode;
-> @@ -2652,6 +2676,8 @@ struct typec_port *typec_register_port(struct device *parent,
->  	else if (cap->usb_capability & USB_CAPABILITY_USB2)
->  		port->usb_mode = USB_MODE_USB2;
->  
-> +	typec_mode_priorities_set(port, "");
-> +
->  	device_initialize(&port->dev);
->  	port->dev.class = &typec_class;
->  	port->dev.parent = parent;
-> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> index f05d9201c233..28b3c19a0632 100644
-> --- a/drivers/usb/typec/class.h
-> +++ b/drivers/usb/typec/class.h
-> @@ -5,6 +5,7 @@
->  
->  #include <linux/device.h>
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/typec_altmode.h>
->  
->  struct typec_mux;
->  struct typec_switch;
-> @@ -82,6 +83,7 @@ struct typec_port {
->  	struct device			*usb3_dev;
->  
->  	bool				alt_mode_override;
-> +	int				mode_priority_list[TYPEC_MODE_MAX];
->  };
->  
->  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-> @@ -111,4 +113,6 @@ static inline int typec_link_ports(struct typec_port *connector) { return 0; }
->  static inline void typec_unlink_ports(struct typec_port *connector) { }
->  #endif
->  
-> +#define ALTERNATE_MODE_DEVICE_TYPE_NAME "typec_alternate_mode"
-> +
->  #endif /* __USB_TYPEC_CLASS__ */
-> diff --git a/drivers/usb/typec/mode_selection.c b/drivers/usb/typec/mode_selection.c
-> new file mode 100644
-> index 000000000000..cb7ddf679037
-> --- /dev/null
-> +++ b/drivers/usb/typec/mode_selection.c
-> @@ -0,0 +1,116 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2025 Google LLC.
-> + */
-> +
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/vmalloc.h>
-> +#include "mode_selection.h"
-> +#include "class.h"
-> +
-> +static const char * const mode_names[] = {
-> +	[TYPEC_DP_ALTMODE] = "DP",
-> +	[TYPEC_TBT_ALTMODE] = "TBT",
-> +	[TYPEC_USB4_MODE] = "USB4",
+> +struct mode_selection_state {
+> +	int mode;
 
-No TYPEC_MODE_MAX entry?  Why not?  This is going to get out of sync,
-see below for my comment about that.
+Shouldn't this be an enum?
 
+> +	bool enable;
+> +	bool cable_capability;
+> +	bool enter;
+> +	int attempt_count;
+> +	int result;
 > +};
-> +static const char * const default_priorities = "USB4 TBT DP";
 
-A comment here about what this is for?
+No documentation for what this structure is for?
 
+> +
+>  /* -------------------------------------------------------------------------- */
+>  /* port 'mode_priorities' attribute */
+>  static int typec_mode_parse_priority_string(const char *str, int *list)
+> @@ -114,3 +139,391 @@ int typec_mode_priorities_get(struct typec_port *port, char *buf)
+>  
+>  	return count + sysfs_emit_at(buf, count, "\n");
+>  }
 > +
 > +/* -------------------------------------------------------------------------- */
-> +/* port 'mode_priorities' attribute */
-> +static int typec_mode_parse_priority_string(const char *str, int *list)
+> +/* partner 'mod_selection' attribute */
+> +
+> +/**
+> + * mode_selection_next() - Process mode selection results and schedule next
+> + * action
+> + *
+> + * This function evaluates the outcome of the previous mode entry or exit
+> + * attempt. Based on this result, it determines the next mode to process and
+> + * schedules `mode_selection_work()` if further actions are required.
+> + *
+> + * If the previous mode entry was successful, the mode selection sequence is
+> + * considered complete for the current cycle.
+> + *
+> + * If the previous mode entry failed, this function schedules
+> + * `mode_selection_work()` to attempt exiting the mode that was partially
+> + * activated but not fully entered.
+> + *
+> + * If the previous operation was an exit (after a failed entry attempt),
+> + * `mode_selection_next()` then advances the internal list of candidate
+> + * modes to determine the next mode to enter.
+> + */
+> +static void mode_selection_next(
+> +	struct typec_partner *partner, struct mode_selection_state *ms)
 > +{
-> +	const bool user_settings = list[0] == TYPEC_MODE_MAX;
-> +	char *buf, *ptr;
-> +	char *token;
-> +	int ret = 0;
+> +	if (!ms->enter) {
+> +		kfifo_skip(&partner->mode_sequence);
+> +	} else if (!ms->result) {
+> +		dev_info(&partner->dev, "%s mode entered\n", mode_names[ms->mode]);
+
+Please remove debugging code.
+
 > +
-> +	buf = vmalloc(strlen(str) + 1);
+> +		partner->active_mode = ms;
+> +		kfifo_reset(&partner->mode_sequence);
+> +	} else {
+> +		dev_err(&partner->dev, "%s mode entry failed: %pe\n",
+> +			mode_names[ms->mode], ERR_PTR(ms->result));
 
-Why vmalloc for such a small chunk of memory?
+What can a user do with this error message?
 
-> +	if (!buf)
-> +		return -ENOMEM;
-> +	for (int i = 0; i <= strlen(str); i++)
-> +		buf[i] = (str[i] == '\n') ? '\0' : str[i];
-
-Please spell out if statements, especially ones that do assignements in
-them.  This is going to be a pain to maintain over time, right?  Make it
-obvious what is happening please.
-
-
-> +	ptr = buf;
 > +
-> +	while ((token = strsep(&ptr, " ")) && !ret) {
-> +		if (strlen(token)) {
-> +			int mode = 0;
+> +		if (ms->result != -EBUSY ||
+> +			ms->attempt_count >= mode_selection_entry_attempts)
+> +			ms->enter = false;
+> +	}
 > +
-> +			while ((mode < TYPEC_MODE_MAX) &&
-> +				strcmp(token, mode_names[mode]))
-> +				mode++;
-> +			if (mode == TYPEC_MODE_MAX) {
-> +				ret = -EINVAL;
-> +				continue;
-> +			}
+> +	if (!kfifo_is_empty(&partner->mode_sequence))
+> +		schedule_delayed_work(&partner->mode_selection_work,
+> +			msecs_to_jiffies(mode_selection_delay));
+> +}
 > +
-> +			for (int i = 0; i < TYPEC_MODE_MAX; i++) {
-> +				if (list[i] == TYPEC_MODE_MAX) {
-> +					list[i] = mode;
-> +					break;
-> +				}
-> +				if (list[i] == mode) {
-> +					if (user_settings)
-> +						ret = -EINVAL;
-> +					break;
-> +				}
-> +			}
+> +static void mode_selection_complete(struct typec_partner *partner,
+> +				const int mode, const int result)
+> +{
+> +	struct mode_selection_state *ms;
+> +
+> +	mutex_lock(&partner->mode_sequence_lock);
+
+You use a lock here, but not in the function above? Why?
+
+> +	if (kfifo_peek(&partner->mode_sequence, &ms)) {
+> +		if (ms->mode == mode) {
+> +			ms->result = result;
+> +			cancel_delayed_work(&partner->mode_selection_work);
+> +			mode_selection_next(partner, ms);
+
+Ah, you need to have the lock held, you didn't document that in text or
+in a way the compiler can verify/check it :(
+
+
 > +		}
 > +	}
-> +	vfree(buf);
-
-Why not just use a free() type model and that way your error paths above
-are much simpler?
-
-
-> +
-> +	return ret;
+> +	mutex_unlock(&partner->mode_sequence_lock);
 > +}
 > +
-> +int typec_mode_priorities_set(struct typec_port *port,
-> +		const char *user_priorities)
+> +void typec_mode_selection_altmode_complete(struct typec_altmode *alt,
+> +				const int result)
 > +{
-> +	int list[TYPEC_MODE_MAX];
-> +	int ret;
+> +	mode_selection_complete(to_typec_partner(alt->dev.parent),
+> +		typec_svid_to_altmode(alt->svid), result);
+> +}
+> +EXPORT_SYMBOL_GPL(typec_mode_selection_altmode_complete);
 > +
-> +	for (int i = 0; i < TYPEC_MODE_MAX; i++)
-> +		list[i] = TYPEC_MODE_MAX;
+> +void typec_mode_selection_usb4_complete(struct typec_partner *partner,
+> +				const int result)
+> +{
+> +	mode_selection_complete(partner, TYPEC_USB4_MODE, result);
+> +}
+> +EXPORT_SYMBOL_GPL(typec_mode_selection_usb4_complete);
 > +
-> +	ret = typec_mode_parse_priority_string(user_priorities, list);
-> +	if (!ret)
-> +		ret = typec_mode_parse_priority_string(default_priorities, list);
+> +static void mode_selection_activate_usb4_mode(struct typec_partner *partner,
+> +	struct mode_selection_state *ms)
+> +{
+> +	struct typec_port *port = to_typec_port(partner->dev.parent);
+> +	int result = -EOPNOTSUPP;
 > +
-> +	if (!ret)
-> +		for (int i = 0; i < TYPEC_MODE_MAX; i++)
-> +			port->mode_priority_list[i] = list[i];
+> +	if (port->ops && port->ops->enter_usb_mode) {
+> +		if (ms->enter && port->usb_mode != USB_MODE_USB4)
+> +			result = -EPERM;
+> +		else
+> +			result = port->ops->enter_usb_mode(port,
+> +				ms->enter ? USB_MODE_USB4 : USB_MODE_USB3);
+> +	}
 > +
-> +	return ret;
+> +	if (ms->enter)
+> +		ms->result = result;
 > +}
 > +
-> +static int port_altmode_supported(struct device *dev, void *data)
+> +static int mode_selection_activate_altmode(struct device *dev, void *data)
 > +{
+> +	struct typec_altmode *alt = to_typec_altmode(dev);
+> +	struct mode_selection_state *ms = (struct mode_selection_state *)data;
+> +	int result = -ENODEV;
+> +
 > +	if (!strcmp(dev->type->name, ALTERNATE_MODE_DEVICE_TYPE_NAME)) {
-> +		struct typec_altmode *alt = to_typec_altmode(dev);
-> +
-> +		if (*(int *)data == typec_svid_to_altmode(alt->svid))
-> +			return 1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static bool port_mode_supported(struct typec_port *port, int mode)
-> +{
-> +	if (mode >= TYPEC_MODE_MAX)
-> +		return false;
-> +	if (mode == TYPEC_USB4_MODE)
-> +		return !!(port->cap->usb_capability & USB_CAPABILITY_USB4);
-> +	return device_for_each_child(&port->dev, &mode, port_altmode_supported);
-> +}
-> +
-> +int typec_mode_priorities_get(struct typec_port *port, char *buf)
-> +{
-> +	ssize_t count = 0;
-> +
-> +	for (int i = 0; i < TYPEC_MODE_MAX; i++) {
-> +		int mode = port->mode_priority_list[i];
-> +
-> +		if (port_mode_supported(port, mode))
-> +			count += sysfs_emit_at(buf, count, "%s ", mode_names[mode]);
+> +		if (ms->mode == typec_svid_to_altmode(alt->svid)) {
+> +			if (alt->ops && alt->ops->activate)
+> +				result = alt->ops->activate(alt, ms->enter ? 1 : 0);
+> +			else
+> +				result = -EOPNOTSUPP;
+> +		}
 > +	}
 > +
-> +	return count + sysfs_emit_at(buf, count, "\n");
+> +	if (ms->enter)
+> +		ms->result = result;
+> +
+> +	return result == -ENODEV ? 0 : 1;
 > +}
-> diff --git a/drivers/usb/typec/mode_selection.h b/drivers/usb/typec/mode_selection.h
-> new file mode 100644
-> index 000000000000..c595c84e26a4
-> --- /dev/null
-> +++ b/drivers/usb/typec/mode_selection.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 > +
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_tbt.h>
-> +
-> +static inline int typec_svid_to_altmode(const u16 svid)
+> +static void mode_selection_activate_mode(struct typec_partner *partner,
+> +	struct mode_selection_state *ms)
 > +{
-> +	switch (svid) {
-> +	case USB_TYPEC_DP_SID:
-> +		return TYPEC_DP_ALTMODE;
-> +	case USB_TYPEC_TBT_SID:
-> +		return TYPEC_TBT_ALTMODE;
-> +	}
-> +	return TYPEC_MODE_MAX;
-> +}
-> +
-> +int typec_mode_priorities_set(struct typec_port *port,
-> +		const char *user_priorities);
-> +int typec_mode_priorities_get(struct typec_port *port, char *buf);
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index b3c0866ea70f..4f05c5f5c91d 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -145,6 +145,13 @@ enum {
->  
->  #define TYPEC_MODAL_STATE(_state_)	((_state_) + TYPEC_STATE_MODAL)
->  
-> +enum {
-> +	TYPEC_DP_ALTMODE = 0,
-> +	TYPEC_TBT_ALTMODE,
-> +	TYPEC_USB4_MODE,
-> +	TYPEC_MODE_MAX,
+> +	dev_info(&partner->dev, "%s %s mode\n",
+> +		ms->enter ? "Enter" : "Exit", mode_names[ms->mode]);
 
-This list is going to get out of order and sync with your string list
-elsewhere in the other .c file.  What is going to ensure that this does
-not happen?
+Again, please remove debugging code.
 
-Again, I'm really not happy with this api, it feels fragile and tricky
-and will get out of sync very easily over time.  We need loads of
-justification for why this really is the only possible way this can be
-done, and some type of proof that this actually has been tested (and
-maybe fuzzed?)
+When drivers work properly, they are quiet.
+
+And this really is the only valid use for ? : around, so that's ok here :)
+
+> +void typec_mode_selection_add_cable(struct typec_partner *partner,
+> +		struct typec_cable *cable)
+> +{
+> +	const u32 id_header = cable->identity->id_header;
+> +	const u32 vdo1 = cable->identity->vdo[0];
+> +	const u32 type = PD_IDH_PTYPE(id_header);
+> +	const u32 speed = VDO_TYPEC_CABLE_SPEED(vdo1);
+> +	bool capability[] = {
+> +		[TYPEC_DP_ALTMODE] = true,
+> +		[TYPEC_TBT_ALTMODE] = false,
+> +		[TYPEC_USB4_MODE] = false,
+> +	};
+
+Why are these the default capabilities?  Where is that documented?  Why
+these specific values to start with?
 
 thanks,
 
