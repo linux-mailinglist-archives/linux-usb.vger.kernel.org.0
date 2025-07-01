@@ -1,176 +1,236 @@
-Return-Path: <linux-usb+bounces-25380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EF0EAF025C
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 19:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4981FAF05EA
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 23:46:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4038B48556F
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 17:57:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB1D3AE469
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 21:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650B92820A7;
-	Tue,  1 Jul 2025 17:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F0C266591;
+	Tue,  1 Jul 2025 21:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUsIsFLR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeDGGSiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2792B3596B;
-	Tue,  1 Jul 2025 17:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5402C1465A1;
+	Tue,  1 Jul 2025 21:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751392662; cv=none; b=hieCgyydzGkjwPcD8uxGP22c05kiSoDYcvzKBR+6BnA9VJ2goKSQYjkhigzd7raXHIG9mOR96HX5cuMNKinC0oQTYft0fmBHTpnsSV7JCKmllFA4T+NNhCKDTBhys5KNXsSUSzxzUv2Ai2FNGushiQuXS/dKee+d+84raoi61/Q=
+	t=1751406357; cv=none; b=V9dzb8KPvdM9jfvj8xg5Q2oKtJjtBCV4LG70qArOhbSYIZxJM6/JqQs+x4H9qgI3fnK4nF8sG+m/zWsEJ6a8MfAJ3ApLKOs8H2ELO27YdraOv6qEN53ChRu2xF/cxlK2OZXgTmk0AUC4xcrZTj3MTbbQMl8+3AXKBRjHqEZlST4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751392662; c=relaxed/simple;
-	bh=Xcj3t8dS0FcmInmyKWAR0WJhIMN9tZ31T0nM7EtTJpo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSXhZya4XURCXoKlKZ2QVG4sUG50x0Ww+OmXOfg7ZBKh8r6EG6kZklDtTW0FsRJNa4Cjk8TcBCwVmpOIDs9KM8w8bAmezXKn7pyvCN0UIdsUlm95N1H2EWBkHWLVdhNg6t51QM/bQfDB6ftINs+mThT6dPW7nHogvlT5g81PwLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUsIsFLR; arc=none smtp.client-ip=209.85.218.53
+	s=arc-20240116; t=1751406357; c=relaxed/simple;
+	bh=wLIl6wjv9qZK62mh9qcB0+hf3Zv/Vi5btL4SPdy+N1M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aE7qb4lNMtdcXjFNhxi+GKP5ru/a2E7wON+YJit8MODZ7xi9OzFMCX7k8cjr1Z4FmlR3zgX6ovtDpeV/EmAd7C0KXGGT4uCj77iUxZ2mI3s9jEoCSWCV3Ziq+PNYKhiYJpdpFJfQtel7sxHVVfO4U1/2ku2C2/DCabW6gA3ev8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeDGGSiN; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ae360b6249fso750356066b.1;
-        Tue, 01 Jul 2025 10:57:40 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-749248d06faso6344810b3a.2;
+        Tue, 01 Jul 2025 14:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751392659; x=1751997459; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1751406355; x=1752011155; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pXjfR544OdpbJ9besQg+JvGQxJKjojQewq85hiTyzvw=;
-        b=iUsIsFLRo0peJdxeIvjPC8w2Xj21cg7MZDINLIla+fLfS+v6bxkabM0H5Q0Osishi6
-         UUZ0SIUnGa3fiaE92Kz9bd1QGsNVTiEUW7FC0cJAcQn8H2dWljRcmYm342h5SyAc7WYD
-         KqWdMNgAui9YjsBXz8kWTWXfusZPEsmVJ5W9YOuhJgjNMxn7LBHvK9uwRhHF2HBdkREW
-         JyaWKNDQFmkjUI1gVZGrzA0IRQP8ikXGo0yg/a2ayPKPWvncq08QgBIqPIhK2Vu3qLtd
-         iCvF63w9b454hh9W3pn+da87v1Icl0ZsNiR8NFKteNWoXUJAjGwMih5M48U+TeoxYK20
-         GaDQ==
+        bh=56uWvgX1GZPSULtDFX8jGEMGBZ+EASUKT10eiWNp9o0=;
+        b=jeDGGSiNtK6VuEqGmL+qCNiYekABco0H6bNPVqZ3TncMv2StmTK6NVkid6urFbAthe
+         iokzkqxHyXU4MvKpY+VOmKvsO6d63yNkGrZWJ5Q8hG/TZZ+F6blcVaTxSkBulAuhaYHj
+         aHO4It6xZR4eoEy4gePJpAfQI5PT4qIW9adoXJNXYQOfXTQA5bl+YzHp40ydnsqFeobM
+         czMoaFfq7n02E+VMPyWFHAG4LXE9K35HfHA2BeX4inZKkMtJNRz2eGEPqq+sVn9awFQm
+         qNNYi9kAd0JC60g6G08SN+p2ukA1zXpTh70LZztXcve74yT6Mbe1/ok+POeZD+ZDpFAW
+         byrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751392659; x=1751997459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1751406355; x=1752011155;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pXjfR544OdpbJ9besQg+JvGQxJKjojQewq85hiTyzvw=;
-        b=sVQ6LM1uKdTcWsRpvmMhCSfsZwekWzdzyAEGqF8nx/+e43poG2GrBssYpijs4DPwMB
-         QUNakoVVkmn225dhJ2Ah/fFMmeClmzouSEQzrdd1M2NfgHh4z4wniTIb26uWp7HYNR80
-         ypL/jFPrpSJBTaX4+QSggho1PaEY6+PhbjvGuDan5G+d0fG8sUrkV40y3sNQujk6p2LG
-         gLAELKO8H4/wwTSkqtFVN9qjeazgpAza5eA6DHLeS0JDX8JkVgZYLR3eu1KOMdf4BXWN
-         aqK4V1f01Ywyx4jzW6BmXAgYQAc11bgj79buSnm5gZ3SXEEJo+AxxZTRyo1R7amZYLWL
-         yTiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVy8txv5hM/+hSuI/nBkFn6sciUTOqmrIza6Z4MATGQRkWFZPHh6W7PFNMx62aS6WlENBSrOqzIqeG@vger.kernel.org, AJvYcCUYh/3YBv1eIHq8DRInHDBLAEmFMrOHWEueom13cLFsHpUWSBNjlr7B6a+L6qKXgil2tFStF96/ruPB@vger.kernel.org, AJvYcCUl/4+2LXagdrLUZ4u7f72e6Lw4rnyfO5dvFXvIj5SJV6GO9v66Gmgj5XJCgwld5BaBtigVz4Exz5csvw==@vger.kernel.org, AJvYcCVFajyBuFXmkHXMd12duyPWRVtLNot+iVJQ2/IPuCb0uJa6gCxkp4Xkk/ft5W0fJT69wnudFVsmiKLEeL8=@vger.kernel.org, AJvYcCVMM3qVPM93ghaLpM94wGg5djBKPtTjyghvV1y+wLFBTHwzMfa0QcrZJ3IT7iPcOPzh6XbhrlcJ@vger.kernel.org, AJvYcCVt3PauObtJgxRsytfRrfMRFYs7meOcw+YLXThV5ovyMad35OjbXCTm19HPF2x6XwLMSTY31TeHUin2@vger.kernel.org, AJvYcCWB9zAKg780CCcyghYnGyjDgwjPFyRtwiyVNldF8EJZDybh2g6wAI3sXIXtCCbbxCEM2rc5gx0I9QGd@vger.kernel.org, AJvYcCWTNg+wfy1z8mCD/919h9pxLk1WnuRvq7nQEHVTb+YIQlxIIMMcSaDFEScU+TWli8hRxmyvjL1rnjwj@vger.kernel.org, AJvYcCWTpf8edLOE12O7ljWgLR1PoBD5Q7pOH8XFMSO+qt2/9teyviBV2fMzn7mGHCIuU9DGKvZV4APecTn7DKhO@vger.kernel.org, AJvYcCWzLpehFBsFncirw4f3Yls10idYvrVYh6PTlarY
- FrlhboAOP9dq940VxmBDv6HlojJ4MnjRJgaw/EojpYg=@vger.kernel.org, AJvYcCX8hXB5mHBGjXE9tjVKBh1TE5C+51yE8VZwpkR2qotdZT0wmSKs2VYLJPSkhtwd3yf5cHdR46Uw8GncsOVa@vger.kernel.org, AJvYcCXDRYSqXJ9Ezu1RLo/SwxjSTIOa/G647ySbDPIqsfabcfI1xpy/1byYgi/ax+deLZwvzjkQxVtJO/8=@vger.kernel.org, AJvYcCXHNeWhtB4b5p5dsm0EflF1uQSI0DCPqiqflvwdZpVNDEoUPUnTeenoQg43EbD3X1JkuCC8J6x9j15Cq04v3L6T4yQ=@vger.kernel.org, AJvYcCXQAeJiMLfoDPN1XJ/5u6UnekWspCCP8LCUjucfOzv6fQofiveJmpcQjqKQVxTofwCIlK2J1vnSUX3y@vger.kernel.org, AJvYcCXrE5T3PSv+5HSh8qBMPdanjt4Q+ZYuWu0sb91nyrb0Nc90DWuATXDPnaGVQL53Hf582iw30kTfkbPqLQ==@vger.kernel.org, AJvYcCXrP5dOej6d3xvPVaf+mLWcS6a71IXhslX1x9UZphNsd6XgtvfbDD5VmpKc16cnh6EgdR7JjSx6YfxCpg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7MPPdXThqK15+abUr6j6KjvMcKc59g+Qv1fDXLHKI7HAX/iUd
-	y++Eq+5rPUGBreX7Jh1RwPNwHTEc+XB0b29HZJbs5/hVVzXp8FYlul82NNbM3MO4aM2ph4eWdXx
-	m50Vhz7xoDL74S+Ri/CTZZaS7IFVIswI=
-X-Gm-Gg: ASbGnctGtb3rAmJjJkxzrhubY3ksEybJjyB+5oLMHM8qciye+1xs+zPjo2zIb48G12U
-	PxQAG7NjFxDPU5bzK7Q3RFur/3s00DJBgthiyETtX3VTvj4o+HYi5OFKE+hDXqdACYbnOXOHVl+
-	hj7YhjckPnuLlO204B0V1gG7mAj5AhXebUfjMnqmXLjHM=
-X-Google-Smtp-Source: AGHT+IFi2mQZLuvuKUJ5Vmbx2bMFhgEtTB1rODdhMnUJkkTAqMfdBOcO66FNReafO5ChqP0c8B6r5Lro21q2uCkd3k4=
-X-Received: by 2002:a17:907:1c18:b0:ae0:4410:47e3 with SMTP id
- a640c23a62f3a-ae3501a58a6mr1915225466b.51.1751392659068; Tue, 01 Jul 2025
- 10:57:39 -0700 (PDT)
+        bh=56uWvgX1GZPSULtDFX8jGEMGBZ+EASUKT10eiWNp9o0=;
+        b=wxfGBwNYZwhwGXwgr5rVY/N5ERXqwoknuF9TFVHOTZ7QOGgeE6g5cp0eIXOB8YykxK
+         +B5qPZBzoAZfoO38zygLyRQUjTuXxy8bMAfF6r4Ht819nmE5Od4+LjzQLtlZwgtzooRZ
+         KCN1MgYKTXTO+G/qqlLBvYkfklgQ5LoDIPBdaPMbR7gxrx9JJ7qvb7PI66CbmjQah2tU
+         hA3AgaJ8PsVDm0G4WEdycsmF4IowQQD4SvRoJKwVyIPfM2LW3d0sLjnVE1GBkFa0/ndQ
+         f5uCprXFxQSTqUBYaGZIT3bxV4isXupJhe+AlCVSHbIYJphELPhUGAxgun2sg80aLjyC
+         0+ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUa3+V7ysjjSyQHl9nUYNW3F7ijhSDVmk3WGfcS8Xd6OrWsyBM37s3BDoRvK7hqjDqw58E8kzVlNBucLyk=@vger.kernel.org, AJvYcCVD2AwwYs2TL9XReGpxzasSyS3S2xX0Sj47A+/y699977ALxRJ6BLsFaWV5xY1rSmg3JwGFIDQUWjp1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4s0q4PTiOOfPA1iKrqUlO1HUsYviOnmNeRk0Bh+bKO7Y4irO+
+	7LJXBK2FsXLM8rKhrIYZsawmmmgF5np0IEOoN9w4Z2w+DqQIoF4WQ8Oe
+X-Gm-Gg: ASbGncsXRigZ7MANBIsoe9dgta9UIzKDLkvv5DcQYiCDOo/KZZfYautC5tPTDNWrFSg
+	G1lQVQuolrK41d9oPCa62+8udcI8jEUF2PBKoOevPVi+egCCUPROrfxXtIXb0Qt9UghOWby4+EW
+	Ng4mbjk2mhn1P2inGj4yeyT2FgUputqmTQsznHWhuROpa207aJ+rksyPB6N8nYvueG4ZJn7q/nc
+	MU3BdPl5D0eEFhlr7iSVcxfOQFZ6FHWGKtcKHPBnyslJc8wr5sIhtftk2Z7M4xXJklGDy79cjgu
+	uMkw9za/air+NeDhf1QMirB9l8YZN/OrjLoS10VHCkPTQkknGCEUToo6S7pLpT/uggjo3YaM1pv
+	y1w6TP8lMyoR6u7C3DOXz
+X-Google-Smtp-Source: AGHT+IFsFq4oeJLSYN3Z9KAPEGWIZkKkofdxqlHrJEK23rvGP8dMZGc+dV2BAXooJ1JiWFQwRrc88Q==
+X-Received: by 2002:a05:6a00:2312:b0:736:43d6:f008 with SMTP id d2e1a72fcca58-74b5104ce4bmr502787b3a.12.1751406355380;
+        Tue, 01 Jul 2025 14:45:55 -0700 (PDT)
+Received: from avinash-INBOOK-Y2-PLUS.. ([2401:4900:88f6:b5fe:79a8:925d:efc5:a1ba])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af56d49aesm13078858b3a.139.2025.07.01.14.45.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 14:45:54 -0700 (PDT)
+From: Abinash Singh <abinashlalotra@gmail.com>
+X-Google-Original-From: Abinash Singh <abinashsinghlalotra@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: abinashlalotra@gmail.com,
+	abinashsinghlalotra@gmail.com,
+	johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	oneukum@suse.com
+Subject: [PATCH v2] usb: serial: usb_wwan: Fix data races by protecting dtr/rts state with a mutex
+Date: Wed,  2 Jul 2025 03:15:32 +0530
+Message-ID: <20250701214543.981626-1-abinashsinghlalotra@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2025062815-uninsured-twentieth-c41c@gregkh>
+References: <2025062815-uninsured-twentieth-c41c@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <pnd7c0s6ji2.fsf@axis.com> <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
-In-Reply-To: <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 1 Jul 2025 20:57:02 +0300
-X-Gm-Features: Ac12FXyruF9twzstORuqQqTbcXFq7Oy0k32bhmiSfPFWKw8o7JRMkyPmwEAJIYk
-Message-ID: <CAHp75Ve=Zas8=6YKoPeTRrvjCaTyyRAyJG1gBLripqZgQpfg7g@mail.gmail.com>
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>
-Cc: Waqar Hameed <waqar.hameed@axis.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Julien Panis <jpanis@baylibre.com>, William Breathitt Gray <wbg@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Matteo Martelli <matteomartelli3@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Francesco Dolcini <francesco@dolcini.it>, 
-	=?UTF-8?Q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>, 
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>, Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>, 
-	Mudit Sharma <muditsharma.info@gmail.com>, Gerald Loacker <gerald.loacker@wolfvision.net>, 
-	Song Qiang <songqiang1304521@gmail.com>, Crt Mori <cmo@melexis.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Karol Gugala <kgugala@antmicro.com>, Mateusz Holenko <mholenko@antmicro.com>, 
-	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, 
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Sebastian Reichel <sre@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Han Xu <han.xu@nxp.com>, 
-	Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>, 
-	Bart Van Assche <bvanassche@acm.org>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Peter Ujfalusi <peter.ujfalusi@linux.intel.com>, 
-	Bard Liao <yung-chuan.liao@linux.intel.com>, 
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, kernel@axis.com, linux-iio@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, imx@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, sound-open-firmware@alsa-project.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 1, 2025 at 8:44=E2=80=AFPM Uwe Kleine-K=C3=B6nig <ukleinek@kern=
-el.org> wrote:
-> On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
+The rts_state and dtr_state fields in usb_wwan were updated without
+any locking, which could lead to data races if accessed from multiple
+threads.
 
-...
+Fixes proper locking using guard(mutex) to ensure
+safe access to these shared fields. To avoid holding the lock during
+USB control message transmission, the values are passed explicitly
+to usb_wwan_send_setup().
 
-> With that
->
->         ret =3D devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
->                                        meson->channels[i].clk);
->         if (ret)
->                 return dev_err_probe(dev, ret,
->                                      "Failed to add clk_put action\n");
->
-> from drivers/pwm/pwm-meson.c is optimized to
->
->         ret =3D devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
->                                        meson->channels[i].clk);
->         if (ret)
->                 return ret;
->
-> .
->
-> I would prefer this approach, because a) there is no need to drop all
-> dev_err_probe()s after devm_add_action_or_reset() and b) the
-> dev_err_probe()s could stay for consistency in the error paths of a
-> driver.
+This resolves two previously marked FIXME comments and improves
+the thread safety of modem control line handling.
 
-Why do we need a dev_err_probe() after devm_add_action*()? I would
-expect that the original call (if needed) can spit out a message.
+Signed-off-by: Abinash Singh <abinashsinghlalotra@gmail.com>
+---
+v2:
+- I missed the "v2" tag in the subject line earlier — added now, sorry about that.
+- Regarding the concern about locking while calling functions: I was unsure if
+  it’s safe to hold the lock across `usb_wwan_send_setup()`, since it may block.
+  To be safe, I’ve changed the function to take `rts_state` and `dtr_state` as
+  arguments, so it no longer accesses shared state directly.
+- I’ve now used `guard(mutex)` so the lock will automatically release when
+  `portdata` goes out of scope.
 
+   Is this the correct way to use gaurd if we don't want the lock held during
+   usb_wwan_send_setup() ?
 
---=20
-With Best Regards,
-Andy Shevchenko
+> How was this tested?
+
+I haven’t been able to test this patch due to lack of hardware access. If you
+have any suggestions on how to test this kind of change without actual hardware,
+I’d appreciate your guidance.
+
+Thanks for the feedback!
+---
+ drivers/usb/serial/usb-wwan.h |  1 +
+ drivers/usb/serial/usb_wwan.c | 29 ++++++++++++++++-------------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
+index 519101945769..5a990fc2e140 100644
+--- a/drivers/usb/serial/usb-wwan.h
++++ b/drivers/usb/serial/usb-wwan.h
+@@ -59,6 +59,7 @@ struct usb_wwan_port_private {
+ 	int ri_state;
+ 
+ 	unsigned long tx_start_time[N_OUT_URB];
++	struct mutex lock;  /* protects rts_state and dtr_state */
+ };
+ 
+ #endif /* __LINUX_USB_USB_WWAN */
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index 0017f6e969e1..042d63aa8ec6 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -38,19 +38,16 @@
+  * Generate DTR/RTS signals on the port using the SET_CONTROL_LINE_STATE request
+  * in CDC ACM.
+  */
+-static int usb_wwan_send_setup(struct usb_serial_port *port)
++static int usb_wwan_send_setup(struct usb_serial_port *port, int rts_state, int dtr_state)
+ {
+ 	struct usb_serial *serial = port->serial;
+-	struct usb_wwan_port_private *portdata;
+ 	int val = 0;
+ 	int ifnum;
+ 	int res;
+ 
+-	portdata = usb_get_serial_port_data(port);
+-
+-	if (portdata->dtr_state)
++	if (dtr_state)
+ 		val |= USB_CDC_CTRL_DTR;
+-	if (portdata->rts_state)
++	if (rts_state)
+ 		val |= USB_CDC_CTRL_RTS;
+ 
+ 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
+@@ -80,11 +77,12 @@ void usb_wwan_dtr_rts(struct usb_serial_port *port, int on)
+ 		return;
+ 
+ 	portdata = usb_get_serial_port_data(port);
+-	/* FIXME: locking */
++	{
++	guard(mutex)(&portdata->lock);
+ 	portdata->rts_state = on;
+ 	portdata->dtr_state = on;
+-
+-	usb_wwan_send_setup(port);
++	}
++	usb_wwan_send_setup(port,on,on);
+ }
+ EXPORT_SYMBOL(usb_wwan_dtr_rts);
+ 
+@@ -113,14 +111,15 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
+ 	struct usb_serial_port *port = tty->driver_data;
+ 	struct usb_wwan_port_private *portdata;
+ 	struct usb_wwan_intf_private *intfdata;
++	int rts, dtr;
+ 
+ 	portdata = usb_get_serial_port_data(port);
+ 	intfdata = usb_get_serial_data(port->serial);
+ 
+ 	if (!intfdata->use_send_setup)
+ 		return -EINVAL;
+-
+-	/* FIXME: what locks portdata fields ? */
++	{
++	guard(mutex)(&portdata->lock);
+ 	if (set & TIOCM_RTS)
+ 		portdata->rts_state = 1;
+ 	if (set & TIOCM_DTR)
+@@ -130,7 +129,11 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
+ 		portdata->rts_state = 0;
+ 	if (clear & TIOCM_DTR)
+ 		portdata->dtr_state = 0;
+-	return usb_wwan_send_setup(port);
++
++	rts = portdata->rts_state;
++	dtr = portdata->dtr_state;
++	}
++	return usb_wwan_send_setup(port, rts, dtr);
+ }
+ EXPORT_SYMBOL(usb_wwan_tiocmset);
+ 
+@@ -452,7 +455,7 @@ int usb_wwan_port_probe(struct usb_serial_port *port)
+ 	portdata = kzalloc(sizeof(*portdata), GFP_KERNEL);
+ 	if (!portdata)
+ 		return -ENOMEM;
+-
++	mutex_init(&portdata->lock);
+ 	init_usb_anchor(&portdata->delayed);
+ 
+ 	for (i = 0; i < N_IN_URB; i++) {
+-- 
+2.43.0
+
 
