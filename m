@@ -1,236 +1,267 @@
-Return-Path: <linux-usb+bounces-25381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4981FAF05EA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 23:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F6C3AF06BB
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 00:56:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB1D3AE469
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 21:45:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F7773ABBEF
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 22:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F0C266591;
-	Tue,  1 Jul 2025 21:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0FC302048;
+	Tue,  1 Jul 2025 22:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeDGGSiN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZrkImfTs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5402C1465A1;
-	Tue,  1 Jul 2025 21:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BD627EC7C
+	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 22:56:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751406357; cv=none; b=V9dzb8KPvdM9jfvj8xg5Q2oKtJjtBCV4LG70qArOhbSYIZxJM6/JqQs+x4H9qgI3fnK4nF8sG+m/zWsEJ6a8MfAJ3ApLKOs8H2ELO27YdraOv6qEN53ChRu2xF/cxlK2OZXgTmk0AUC4xcrZTj3MTbbQMl8+3AXKBRjHqEZlST4=
+	t=1751410590; cv=none; b=uM7b4wcVT0uMvLOhBYPf334wFUj0Cu5uWPL6g6eN2ZBMqsIkI/t8WgQOcFTQSyXqsxUcQ0UidA1cbvPg10eSkJ+U0ymBambBqvW/DJwvGs51JYP/QyqPUxTRibxsuLSgLCHMLcFnUzYcpyOA45n9/AnPOAKDJbxcnsyhxs7OkKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751406357; c=relaxed/simple;
-	bh=wLIl6wjv9qZK62mh9qcB0+hf3Zv/Vi5btL4SPdy+N1M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aE7qb4lNMtdcXjFNhxi+GKP5ru/a2E7wON+YJit8MODZ7xi9OzFMCX7k8cjr1Z4FmlR3zgX6ovtDpeV/EmAd7C0KXGGT4uCj77iUxZ2mI3s9jEoCSWCV3Ziq+PNYKhiYJpdpFJfQtel7sxHVVfO4U1/2ku2C2/DCabW6gA3ev8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeDGGSiN; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-749248d06faso6344810b3a.2;
-        Tue, 01 Jul 2025 14:45:56 -0700 (PDT)
+	s=arc-20240116; t=1751410590; c=relaxed/simple;
+	bh=BgZU7wVmbYt0bjtzW1FLF5K27xcxn8bgt1AOUJ7yHKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tQ6nd29o5/nXGEZQugJL9m/ZIRbRl/vAmjACaZqhYLyhJBfpapRZIducB69dluzsn2yio1tYLGwxWxnf9s3Ye+NZaO58A0AtumAdUp7v49QvKDPB8eHDLlIgTfo7eNt3DassIXu4o0rTl15G336Ptj6o22LD7TyLo0anPpqxFGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZrkImfTs; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-86d0c598433so113734139f.3
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 15:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751406355; x=1752011155; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=56uWvgX1GZPSULtDFX8jGEMGBZ+EASUKT10eiWNp9o0=;
-        b=jeDGGSiNtK6VuEqGmL+qCNiYekABco0H6bNPVqZ3TncMv2StmTK6NVkid6urFbAthe
-         iokzkqxHyXU4MvKpY+VOmKvsO6d63yNkGrZWJ5Q8hG/TZZ+F6blcVaTxSkBulAuhaYHj
-         aHO4It6xZR4eoEy4gePJpAfQI5PT4qIW9adoXJNXYQOfXTQA5bl+YzHp40ydnsqFeobM
-         czMoaFfq7n02E+VMPyWFHAG4LXE9K35HfHA2BeX4inZKkMtJNRz2eGEPqq+sVn9awFQm
-         qNNYi9kAd0JC60g6G08SN+p2ukA1zXpTh70LZztXcve74yT6Mbe1/ok+POeZD+ZDpFAW
-         byrA==
+        d=linuxfoundation.org; s=google; t=1751410588; x=1752015388; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+724LxPcgQ3n//latAGxva7GWNUREDCq52D1yJkNOU=;
+        b=ZrkImfTsAVagpCjnJCYzWro6Aw710ZNJxPkW4x2M8L4NWywTWFu2oRxsWTb6/N5Hgu
+         +YtDb6IFVLAECWcXAka2fseYkff5UNKRotnnQgdvXVR0YOOftwZRE+ivUXGooQnMymK9
+         UU0RsIt+KtUeH8BpaFJ0KuzIo42OOSEPv85vc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751406355; x=1752011155;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=56uWvgX1GZPSULtDFX8jGEMGBZ+EASUKT10eiWNp9o0=;
-        b=wxfGBwNYZwhwGXwgr5rVY/N5ERXqwoknuF9TFVHOTZ7QOGgeE6g5cp0eIXOB8YykxK
-         +B5qPZBzoAZfoO38zygLyRQUjTuXxy8bMAfF6r4Ht819nmE5Od4+LjzQLtlZwgtzooRZ
-         KCN1MgYKTXTO+G/qqlLBvYkfklgQ5LoDIPBdaPMbR7gxrx9JJ7qvb7PI66CbmjQah2tU
-         hA3AgaJ8PsVDm0G4WEdycsmF4IowQQD4SvRoJKwVyIPfM2LW3d0sLjnVE1GBkFa0/ndQ
-         f5uCprXFxQSTqUBYaGZIT3bxV4isXupJhe+AlCVSHbIYJphELPhUGAxgun2sg80aLjyC
-         0+ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUa3+V7ysjjSyQHl9nUYNW3F7ijhSDVmk3WGfcS8Xd6OrWsyBM37s3BDoRvK7hqjDqw58E8kzVlNBucLyk=@vger.kernel.org, AJvYcCVD2AwwYs2TL9XReGpxzasSyS3S2xX0Sj47A+/y699977ALxRJ6BLsFaWV5xY1rSmg3JwGFIDQUWjp1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4s0q4PTiOOfPA1iKrqUlO1HUsYviOnmNeRk0Bh+bKO7Y4irO+
-	7LJXBK2FsXLM8rKhrIYZsawmmmgF5np0IEOoN9w4Z2w+DqQIoF4WQ8Oe
-X-Gm-Gg: ASbGncsXRigZ7MANBIsoe9dgta9UIzKDLkvv5DcQYiCDOo/KZZfYautC5tPTDNWrFSg
-	G1lQVQuolrK41d9oPCa62+8udcI8jEUF2PBKoOevPVi+egCCUPROrfxXtIXb0Qt9UghOWby4+EW
-	Ng4mbjk2mhn1P2inGj4yeyT2FgUputqmTQsznHWhuROpa207aJ+rksyPB6N8nYvueG4ZJn7q/nc
-	MU3BdPl5D0eEFhlr7iSVcxfOQFZ6FHWGKtcKHPBnyslJc8wr5sIhtftk2Z7M4xXJklGDy79cjgu
-	uMkw9za/air+NeDhf1QMirB9l8YZN/OrjLoS10VHCkPTQkknGCEUToo6S7pLpT/uggjo3YaM1pv
-	y1w6TP8lMyoR6u7C3DOXz
-X-Google-Smtp-Source: AGHT+IFsFq4oeJLSYN3Z9KAPEGWIZkKkofdxqlHrJEK23rvGP8dMZGc+dV2BAXooJ1JiWFQwRrc88Q==
-X-Received: by 2002:a05:6a00:2312:b0:736:43d6:f008 with SMTP id d2e1a72fcca58-74b5104ce4bmr502787b3a.12.1751406355380;
-        Tue, 01 Jul 2025 14:45:55 -0700 (PDT)
-Received: from avinash-INBOOK-Y2-PLUS.. ([2401:4900:88f6:b5fe:79a8:925d:efc5:a1ba])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af56d49aesm13078858b3a.139.2025.07.01.14.45.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 14:45:54 -0700 (PDT)
-From: Abinash Singh <abinashlalotra@gmail.com>
-X-Google-Original-From: Abinash Singh <abinashsinghlalotra@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: abinashlalotra@gmail.com,
-	abinashsinghlalotra@gmail.com,
-	johan@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	oneukum@suse.com
-Subject: [PATCH v2] usb: serial: usb_wwan: Fix data races by protecting dtr/rts state with a mutex
-Date: Wed,  2 Jul 2025 03:15:32 +0530
-Message-ID: <20250701214543.981626-1-abinashsinghlalotra@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <2025062815-uninsured-twentieth-c41c@gregkh>
-References: <2025062815-uninsured-twentieth-c41c@gregkh>
+        d=1e100.net; s=20230601; t=1751410588; x=1752015388;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+724LxPcgQ3n//latAGxva7GWNUREDCq52D1yJkNOU=;
+        b=HZs+cuuq2V05vs4kYCeeNhpA9E6MkoDRbxR0N7tFMf2QecGhlQvui5GdWbXIJQu6Fn
+         kMYk5l2j9NMGq7PMZg2PzGUu+FTj3WcV2WI0UOQ3U8nwAtGX49qC8DYxY4Q022ANli40
+         UZm8foY6gH5gnIObSHZ9WPqwIAk81Sbl0R9Wx4IO8Z229yMyvLuV/7AQkDQQaUgmFEwx
+         VPNig9dGWJ2gfGK6KkhGI5voI55gJtZwzkFEY2MEHbZa7qFJAm2siNQvDZPMovFTC3OV
+         GpxLreEXWhOn5yJtMimRLEw6xVCJIXIHmmoFj+41mjGo1dQr7qzLrOXo72UXrnfHlMsS
+         3nIg==
+X-Forwarded-Encrypted: i=1; AJvYcCXk6oip0P4SsFNbXbZbonIjUaEijs1Rtf+V96rk9gucmNxgLPaSHWVfFkqOOvZW5MdZ5S8fkueFAHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfhVqG68nVQJ3gfdYVBlGHQZo0ie3y7SBjs5bgoMZuxu5j+3bS
+	xobEIwjVvL2IkU9l1LxTF9m2i4HUuE+qvYulXGYjNJXTrK6NYkaWHiten8vG6NcpM5M=
+X-Gm-Gg: ASbGnctsLoRi6CHib1aqxIgahQ2AJLHasKecDuO1UTwVmr/RaUC+EirgcqONpusVVxE
+	VhJjQIt7d0upy8d3SprYnNY3kqM/Qiqgy+GsdizKGysbwKNDv/pmSKkPR2D9yy4w1j/IZhAgUg9
+	d+dhq3o4oUVj423O6xLKqlmqEAfBUs0kLUQjXn5fF3qycCFnMV8HmWHvqAK9AJltbZy0IdbJQxB
+	gj4EgT75SSST472Cwq3GhOGP9lktRwfz4ZwQj5IssY/c0nECe9/X0BL40TktnD5Q+f/l28oxNST
+	NVFtW3IfYvTOVU3I4/gn3OJLP31nKy+eq/vqh104I7yaBLPWBlPj06OAR1be04+eK2zh8sLx6g=
+	=
+X-Google-Smtp-Source: AGHT+IFj/92g3whVxpQw6epJ8erxr41B6yeOCvcx7GO6lf54G69SSlkGJYeTUltMLbQjoibNN4lnuQ==
+X-Received: by 2002:a05:6e02:3005:b0:3dd:cbbb:b731 with SMTP id e9e14a558f8ab-3e054964204mr8903415ab.9.1751410587674;
+        Tue, 01 Jul 2025 15:56:27 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50204a537b3sm2634438173.69.2025.07.01.15.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jul 2025 15:56:27 -0700 (PDT)
+Message-ID: <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
+Date: Tue, 1 Jul 2025 16:56:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usbip: convert to use faux_device
+To: Zongmin Zhou <min_halo@163.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ zhouzongmin@kylinos.cn, Shuah Khan <skhan@linuxfoundation.org>
+References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+ <20250604065410.76069-1-min_halo@163.com>
+ <2025061926-paycheck-footnote-a2b8@gregkh>
+ <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
+ <2025062010-hardiness-flashily-cb0f@gregkh>
+ <9d95bb75-586c-48dc-9e34-432cc13fd99f@163.com>
+ <2025062004-navy-emboss-4743@gregkh>
+ <2e0bbc5a-e74a-4fb5-884c-686dbaf99caf@linuxfoundation.org>
+ <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The rts_state and dtr_state fields in usb_wwan were updated without
-any locking, which could lead to data races if accessed from multiple
-threads.
+On 6/23/25 21:21, Zongmin Zhou wrote:
+> 
+> On 2025/6/21 01:26, Shuah Khan wrote:
+>> On 6/20/25 03:27, Greg KH wrote:
+>>> On Fri, Jun 20, 2025 at 05:19:33PM +0800, Zongmin Zhou wrote:
+>>>>
+>>>> On 2025/6/20 12:29, Greg KH wrote:
+>>>>> On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
+>>>>>> On 2025/6/19 19:01, Greg KH wrote:
+>>>>>>> On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
+>>>>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>>>>
+>>>>>>>> The vhci driver does not need to create a platform device,
+>>>>>>>> it only did so because it was simple to do that in order to
+>>>>>>>> get a place in sysfs to hang some device-specific attributes.
+>>>>>>>> Now the faux device interface is more appropriate,change it
+>>>>>>>> over to use the faux bus instead.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+>>>>>>>> ---
+>>>>>>>> Changes in v2:
+>>>>>>>> - don't change faux create api,just call probe on vhci_hcd_init.
+>>>>>>>>
+>>>>>>>>     drivers/usb/usbip/vhci.h             |  4 +-
+>>>>>>>>     drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
+>>>>>>>>     drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
+>>>>>>>>     tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
+>>>>>>>>     4 files changed, 72 insertions(+), 88 deletions(-)
+>>>>>>> I get the following build errors from this patch:
+>>>>>>>
+>>>>>>> drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
+>>>>>>>     1462 | static int vhci_hcd_resume(struct faux_device *fdev)
+>>>>>>>          |            ^~~~~~~~~~~~~~~
+>>>>>>> drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
+>>>>>>>     1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
+>>>>>>>          |            ^~~~~~~~~~~~~~~~
+>>>>>>> cc1: all warnings being treated as errors
+>>>>>>>
+>>>>>>> Are you sure you tested this?
+>>>>>> I apologize for not enabling -Werror, which resulted in missing this error
+>>>>>> warning.
+>>>>>> I have tested usbip feature use the new patch,but not test system
+>>>>>> suspend/resume.
+>>>>>> The faux bus type don't add pm function,and vhci-hcd driver can't register
+>>>>>> it.
+>>>>>> Maybe have to add suspend/resume for it.like below:
+>>>>>> static const struct bus_type faux_bus_type = {
+>>>>>>       .name        = "faux",
+>>>>>>       .match        = faux_match,
+>>>>>>       .probe        = faux_probe,
+>>>>>>       .remove        = faux_remove,
+>>>>>>       .resume     = faux_resume,
+>>>>>>       .suspend    = faux_suspend,
+>>>>>> };
+>>>>>>
+>>>>>> Is that right?
+>>>>>> Your expertise would be greatly valued.
+>>>>> As this is not real hardware, why do you need the suspend/resume
+>>>>> callbacks at all?  What is happening here that requires them?
+>>>> @greg,
+>>>> The vhci_hcd_suspend/vhci_hcd_resume interfaces are not designed for this
+>>>> faux device, but rather to
+>>>> manipulate the HCD_FLAG_HW_ACCESSIBLE bit in the hcd flags associated with
+>>>> the faux device.
+>>>> For example:
+>>>> During system standby: clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>>>> During system wakeup: set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
+>>>>
+>>>> Previously, these two functions were registered through platform_driver,
+>>>> but faux bus does not have the relevant interface, so they were not called,
+>>>> resulting in this compilation warning error.
+>>>>
+>>>> This raises the question: Should the faux bus implement PM-related
+>>>> interface?
+>>>> I'm uncertain whether these functions are essential for the vhci-hcd driver
+>>>> or if they can be safely removed.
+>>>>
+>>>> However, during system standby/wakeup tests with remote USB devices bound to
+>>>> the vhci-hcd driver,
+>>>> I observed consistent failure scenarios across both the original platform
+>>>> bus and faux bus patch implementations.
+>>
+>> suspend and resume hooks have been in the code from beginning
+>> in the CONFIG_PM path. The original authors are skeptical about
+>> what should happen during suspend"
+>>
+>> /* what should happen for USB/IP under suspend/resume? */
+>> suspend hook checks for active connections and sends EBBUSY
+>> back to pm core.
+>>
+>> Active connection means any of the ports are in USB_PORT_STAT_CONNECTION
+>> state. So as long as there are active connections between vhci client
+>> and the host, suspend won't work. So we really don't know what happens
+>> to the active connections if there are no suspend/resume hooks.
+>>
+>> If there are no active connections, then it will clear the HCD_FLAG_HW_ACCESSIBLE
+>> bit and returns to pm core to continue with suspend.
+>>
+>> resume sets the HCD_FLAG_HW_ACCESSIBLE flag to indicate hardware is accessible
+>> and initiates port status poll.
+>>
+>> - suspend hook prevents suspend
+>>
+>> With faux device since there is no suspend and resume hook, I would expect
+>> these hooks are not a factor in suspend and resume.
+>>
+>> vhci_hcd is a special case virtual driver as it is a proxy for controlling
+>> hardware on the host.
+>>
+>> Zongmin,
+>>
+>> Do suspend/resume work when vhci_hcd is not loaded?
+>> What happens when when system suspends and resumes with faux device?
+>> Can you send me dmesg logs and pm logs?
+>>
+> Hi Greg,shuah
+> 
+> Yes, system with vhci_hcd unload or just load vhci_hcd driver
+> without usbip devices bound to vhci_hcd,system suspend/resume worked well.
+> Some logs for you.
 
-Fixes proper locking using guard(mutex) to ensure
-safe access to these shared fields. To avoid holding the lock during
-USB control message transmission, the values are passed explicitly
-to usb_wwan_send_setup().
+Sorry for the delay. I was at a conference last week.
+Thank you for sending these logs.
 
-This resolves two previously marked FIXME comments and improves
-the thread safety of modem control line handling.
+> 1.system with vhci_hcd driver load,but don't bound any usbip devices to vhci_hcd,suspend/resume worked well.
+> see dmesg-faux bus-load.log
 
-Signed-off-by: Abinash Singh <abinashsinghlalotra@gmail.com>
----
-v2:
-- I missed the "v2" tag in the subject line earlier — added now, sorry about that.
-- Regarding the concern about locking while calling functions: I was unsure if
-  it’s safe to hold the lock across `usb_wwan_send_setup()`, since it may block.
-  To be safe, I’ve changed the function to take `rts_state` and `dtr_state` as
-  arguments, so it no longer accesses shared state directly.
-- I’ve now used `guard(mutex)` so the lock will automatically release when
-  `portdata` goes out of scope.
 
-   Is this the correct way to use gaurd if we don't want the lock held during
-   usb_wwan_send_setup() ?
+> 
+> 2.usbip device bound to vhci_hcd,and do system suspend action,suspend/resume worked failed.
+> I observed two distinct failure scenario:
+> Scenario 1: System failed to enter suspend state,and will auto resume;
 
-> How was this tested?
 
-I haven’t been able to test this patch due to lack of hardware access. If you
-have any suggestions on how to test this kind of change without actual hardware,
-I’d appreciate your guidance.
+> the log for use platform bus:
+> dmesg-platform bus-device bound-auto resume.log
 
-Thanks for the feedback!
----
- drivers/usb/serial/usb-wwan.h |  1 +
- drivers/usb/serial/usb_wwan.c | 29 ++++++++++++++++-------------
- 2 files changed, 17 insertions(+), 13 deletions(-)
+This is clear from the suspend hook in the vhci_hcd.
+When it returns EBUSY, suspend will fail and move to
+auto resume.
 
-diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
-index 519101945769..5a990fc2e140 100644
---- a/drivers/usb/serial/usb-wwan.h
-+++ b/drivers/usb/serial/usb-wwan.h
-@@ -59,6 +59,7 @@ struct usb_wwan_port_private {
- 	int ri_state;
- 
- 	unsigned long tx_start_time[N_OUT_URB];
-+	struct mutex lock;  /* protects rts_state and dtr_state */
- };
- 
- #endif /* __LINUX_USB_USB_WWAN */
-diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-index 0017f6e969e1..042d63aa8ec6 100644
---- a/drivers/usb/serial/usb_wwan.c
-+++ b/drivers/usb/serial/usb_wwan.c
-@@ -38,19 +38,16 @@
-  * Generate DTR/RTS signals on the port using the SET_CONTROL_LINE_STATE request
-  * in CDC ACM.
-  */
--static int usb_wwan_send_setup(struct usb_serial_port *port)
-+static int usb_wwan_send_setup(struct usb_serial_port *port, int rts_state, int dtr_state)
- {
- 	struct usb_serial *serial = port->serial;
--	struct usb_wwan_port_private *portdata;
- 	int val = 0;
- 	int ifnum;
- 	int res;
- 
--	portdata = usb_get_serial_port_data(port);
--
--	if (portdata->dtr_state)
-+	if (dtr_state)
- 		val |= USB_CDC_CTRL_DTR;
--	if (portdata->rts_state)
-+	if (rts_state)
- 		val |= USB_CDC_CTRL_RTS;
- 
- 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
-@@ -80,11 +77,12 @@ void usb_wwan_dtr_rts(struct usb_serial_port *port, int on)
- 		return;
- 
- 	portdata = usb_get_serial_port_data(port);
--	/* FIXME: locking */
-+	{
-+	guard(mutex)(&portdata->lock);
- 	portdata->rts_state = on;
- 	portdata->dtr_state = on;
--
--	usb_wwan_send_setup(port);
-+	}
-+	usb_wwan_send_setup(port,on,on);
- }
- EXPORT_SYMBOL(usb_wwan_dtr_rts);
- 
-@@ -113,14 +111,15 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct usb_wwan_port_private *portdata;
- 	struct usb_wwan_intf_private *intfdata;
-+	int rts, dtr;
- 
- 	portdata = usb_get_serial_port_data(port);
- 	intfdata = usb_get_serial_data(port->serial);
- 
- 	if (!intfdata->use_send_setup)
- 		return -EINVAL;
--
--	/* FIXME: what locks portdata fields ? */
-+	{
-+	guard(mutex)(&portdata->lock);
- 	if (set & TIOCM_RTS)
- 		portdata->rts_state = 1;
- 	if (set & TIOCM_DTR)
-@@ -130,7 +129,11 @@ int usb_wwan_tiocmset(struct tty_struct *tty,
- 		portdata->rts_state = 0;
- 	if (clear & TIOCM_DTR)
- 		portdata->dtr_state = 0;
--	return usb_wwan_send_setup(port);
-+
-+	rts = portdata->rts_state;
-+	dtr = portdata->dtr_state;
-+	}
-+	return usb_wwan_send_setup(port, rts, dtr);
- }
- EXPORT_SYMBOL(usb_wwan_tiocmset);
- 
-@@ -452,7 +455,7 @@ int usb_wwan_port_probe(struct usb_serial_port *port)
- 	portdata = kzalloc(sizeof(*portdata), GFP_KERNEL);
- 	if (!portdata)
- 		return -ENOMEM;
--
-+	mutex_init(&portdata->lock);
- 	init_usb_anchor(&portdata->delayed);
- 
- 	for (i = 0; i < N_IN_URB; i++) {
--- 
-2.43.0
+> the log for use faux bus:
+> dmesg-faux bus-device bound-auto resume.log
 
+It is good that the behavior is same with faux bus even though
+suspend hook isn't called. I will take a look at the log.
+
+> 
+> Scenario 2: System resume failed with black screen freeze,a forced restart of the machine is require.
+> the log for use platform bus:
+> dmesg-platform bus-device bound-black screen.log
+> the log for use faux bus:
+> dmesg-faux bus-device bound-black screen.log
+
+That is bad. When does this happen? Is there a difference in
+configuration?
+
+The behavior same for platform bus and faux bus. Sounds like
+an existing problem that needs to be debugged separately.
+
+I will take a look at all these logs and get back to you in
+a day or two.
+
+thanks,
+-- Shuah
 
