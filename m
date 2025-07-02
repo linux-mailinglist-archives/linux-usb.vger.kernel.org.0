@@ -1,93 +1,111 @@
-Return-Path: <linux-usb+bounces-25414-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA765AF5E46
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 18:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EAB4AF5FD0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 19:21:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FC0A1C44168
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 16:15:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50A7F188A545
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 17:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADA02FC3C2;
-	Wed,  2 Jul 2025 16:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C289C30115C;
+	Wed,  2 Jul 2025 17:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVcxABRO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TujIKPls"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695E7277CBE;
-	Wed,  2 Jul 2025 16:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4900630114C
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751472921; cv=none; b=IqC37vJ+90fQIImmHeUPotgDwQAS+11sEyUgVyioSoVb//hLHgoze0/FTINyakQCanPddMNiAmzOsUeWmALkjh5Ht4JsByrnMShV81CcQUiGnkwzK8qh6Fp+cDld1PW8pw/mTbyaYOxs4itgWvMZKaV1oonpIIdN3lYFeO9zkL4=
+	t=1751476843; cv=none; b=JOATi8r0bAV+iBK6Wg7fedGOnIUkKp5ZnIxjhw32meT3HYnYrlG811NBKzrF+PBU9CpsLQDRm/L9mMTsoMyhSR1bEh2w++Jm2JcOtoNbJiqrpY6B1/MUc2wx/zcSyvnRNxLQQ8xbF4N2clVrjz0svHXyNuPx1A5wZ91H26L573Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751472921; c=relaxed/simple;
-	bh=Dljx2pfv9tt3uWe2/+5aVkyMUH3mjviIfFBiB+ou/sw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YLQ6WLW5me1SjyexrRHq6V4aDy+Z9wAhAIUPApoTb5bkC0ZKP4jbf56uxVsMsraqdHtfp0a5eRtzyKzoHBlUQ/p7/AiPCcvlIeIEV2TLeO+d0SjxGUS1j4EZziFa3YumYh6AdwZMp/nRrpnEzjEjDIDtZr9oV0lKh6xL+yCHkAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVcxABRO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B96C4CEE7;
-	Wed,  2 Jul 2025 16:15:16 +0000 (UTC)
+	s=arc-20240116; t=1751476843; c=relaxed/simple;
+	bh=hBRsTaZN3yhbrtxDCnm/9im/m52mRlSQjlRRRmBUWFE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=n2vNKRAc6q/ZpPdv8/26NsRzcmbc62nqFMDzpWJbLkiqyqU3qKs4qgEPNYvwj0msdCMN2P1OLR7BxR4hEB8lrYTg7whoCOqz5wdF1EH6aHT2fW2m0qRAehuOF5QlKdLrhYj+lZodwjkyIlOciW9d/VNgv21rRG0uRg0fdDKfNVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TujIKPls; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6C5EC4CEEF
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 17:20:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751472921;
-	bh=Dljx2pfv9tt3uWe2/+5aVkyMUH3mjviIfFBiB+ou/sw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mVcxABROauwkgiYFUK0hdy9hZPLhJElp0zPaIeWC/pycblt4/HAe/R7bCshYRi/tX
-	 Ko1bKhstV4slOuSRrCq+mZFygsUjSpy+HOTgPqy6A1NxBr1mPBTyucBadkTX1meNh1
-	 CF2uJAr2Na0WvKxdOKQeOIwnKEfVrom45NDWTOdrfVaZvrkM6d4XNSaNSMbAF5YhJM
-	 P8GyhluFKfuIuhpX5LlzgsEVGFXiT7srQiQER+0i6L9Tpdq6vTz43fffS1HIS8pvtS
-	 ZGf36NeRKjHSgYVC47jy7wZdJJQnS1bq/xPkg3nECNGLTuWnt9ylSZ6+sf+QXF0P+p
-	 Nl8Vrzvv4AW8w==
-Date: Wed, 2 Jul 2025 17:15:13 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250702161513.GX10134@google.com>
-References: <20250627102730.71222-1-a0282524688@gmail.com>
- <20250627102730.71222-2-a0282524688@gmail.com>
+	s=k20201202; t=1751476842;
+	bh=hBRsTaZN3yhbrtxDCnm/9im/m52mRlSQjlRRRmBUWFE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=TujIKPlsvwbH7vYeLkjjY/CR7TVp4JXWmgKpe0X7x0Pqlq+O/jJgr2nzhpmFX48dp
+	 ln0mET9cj9WtqmLoAwJwZ0j0wu+MaVvBNWYi7tM2WRjOTn2Ber8i0LtvJgukLPnCvO
+	 7cfJIP4sksBTUHz1EfmhZgp1bX6ZkxsrVN40KOV9bvEEedeh25Wur2gemXMUUtMBa0
+	 YQbbmeZhiQN8v2FfkfeOEM0fiurM9Sra0I5BZDqgwzW9jdvOyHdIXodcufaZdqXUz7
+	 SysXHzK2pTLfHZvQKS+kkjDHpP6YYIOpwhNLeNA0gRMcMldJyoUgV+olLaq5Kut86T
+	 e91Z7t+dgk/vQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id DF572C3279F; Wed,  2 Jul 2025 17:20:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220272] Latent race condition in USB code unveiled with
+ optimized memset_64.S
+Date: Wed, 02 Jul 2025 17:20:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: oliver@neukum.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220272-208809-cgfXkOpydN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220272-208809@https.bugzilla.kernel.org/>
+References: <bug-220272-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250627102730.71222-2-a0282524688@gmail.com>
 
-On Fri, 27 Jun 2025, a0282524688@gmail.com wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220272
 
-> From: Ming Yu <a0282524688@gmail.com>
-> 
-> The Nuvoton NCT6694 provides an USB interface to the host to
-> access its features.
-> 
-> Sub-devices can use the USB functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
-> 
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+--- Comment #28 from Oliver Neukum (oliver@neukum.org) ---
+(In reply to Alan Stern from comment #27)
+> But if that's the explanation then why does the driver work properly some=
+ of
+> the time?
 
-This looks okay now.
+Memory pressure on the cache. Sometimes cache lines will be invalidated.
+If you want to stay with the theory that this is a cache issue.
 
-Do you have all of the other Acks?  If not, please let me know when you do?
+Your diagnosis in #23 is correct. The driver is operating on a zeroed buffe=
+r.
+If we are also taking #25 then we'd have to assume that two different mice =
+fail
+in the same way, but inconsistently and only if a specific memset is used.
+Not really likely.
 
--- 
-Lee Jones [李琼斯]
+My first suspicion was that we are looking at an issue with HCD with short
+transfers, specifically that te buffer is not really used and the IO done to
+the rings, but I see no way how this would correlate with a change in memse=
+t.
+
+Do we need to memset the buffers to 0x00? How about a diagnostic patch that
+uses another value?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
