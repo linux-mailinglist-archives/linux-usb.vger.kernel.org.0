@@ -1,267 +1,344 @@
-Return-Path: <linux-usb+bounces-25382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-25383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F6C3AF06BB
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 00:56:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35BCAF077D
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 02:51:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F7773ABBEF
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jul 2025 22:56:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3A561C05231
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jul 2025 00:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0FC302048;
-	Tue,  1 Jul 2025 22:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZrkImfTs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B91B39ACC;
+	Wed,  2 Jul 2025 00:50:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BD627EC7C
-	for <linux-usb@vger.kernel.org>; Tue,  1 Jul 2025 22:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044D116419
+	for <linux-usb@vger.kernel.org>; Wed,  2 Jul 2025 00:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751410590; cv=none; b=uM7b4wcVT0uMvLOhBYPf334wFUj0Cu5uWPL6g6eN2ZBMqsIkI/t8WgQOcFTQSyXqsxUcQ0UidA1cbvPg10eSkJ+U0ymBambBqvW/DJwvGs51JYP/QyqPUxTRibxsuLSgLCHMLcFnUzYcpyOA45n9/AnPOAKDJbxcnsyhxs7OkKQ=
+	t=1751417431; cv=none; b=VZklnG8Sd5gN4pwI7MVnmvQKvqMr0FLlC+1qyVsdKpVVfRlVsTvrcoMdTu8X5A+siPtXbRsmxn+i1nFNeC3T/u8tZ0YjHFz4vKwh8tWEsqJ7EJulkwCMBIvwTQ4KzpLLf2F+pN8svrh6CO7mTlG8MZU305BRg2tUpyiEHxnbyIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751410590; c=relaxed/simple;
-	bh=BgZU7wVmbYt0bjtzW1FLF5K27xcxn8bgt1AOUJ7yHKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQ6nd29o5/nXGEZQugJL9m/ZIRbRl/vAmjACaZqhYLyhJBfpapRZIducB69dluzsn2yio1tYLGwxWxnf9s3Ye+NZaO58A0AtumAdUp7v49QvKDPB8eHDLlIgTfo7eNt3DassIXu4o0rTl15G336Ptj6o22LD7TyLo0anPpqxFGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZrkImfTs; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-86d0c598433so113734139f.3
-        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 15:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1751410588; x=1752015388; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R+724LxPcgQ3n//latAGxva7GWNUREDCq52D1yJkNOU=;
-        b=ZrkImfTsAVagpCjnJCYzWro6Aw710ZNJxPkW4x2M8L4NWywTWFu2oRxsWTb6/N5Hgu
-         +YtDb6IFVLAECWcXAka2fseYkff5UNKRotnnQgdvXVR0YOOftwZRE+ivUXGooQnMymK9
-         UU0RsIt+KtUeH8BpaFJ0KuzIo42OOSEPv85vc=
+	s=arc-20240116; t=1751417431; c=relaxed/simple;
+	bh=WtxjQABLiWwDdK86Pd4ijfUbe89NqYZo2yQG++IS5es=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RqpTzFZETM9Vh0phiAYpo6qMZby643Mq630pvr4Qvz6SwyBnzUs6hJWCIqzlXMebj27x2xSelDDyZ4K4RdYIgIXCxJWQyeqDnR5fCPIFva+iRnNMW38a+GDemK0qcuAQSuquYEdUS7vjXPhAClVsaNWlA7AhA6jSLDjMjcWqI88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3ddd03db21cso101507935ab.1
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jul 2025 17:50:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751410588; x=1752015388;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+724LxPcgQ3n//latAGxva7GWNUREDCq52D1yJkNOU=;
-        b=HZs+cuuq2V05vs4kYCeeNhpA9E6MkoDRbxR0N7tFMf2QecGhlQvui5GdWbXIJQu6Fn
-         kMYk5l2j9NMGq7PMZg2PzGUu+FTj3WcV2WI0UOQ3U8nwAtGX49qC8DYxY4Q022ANli40
-         UZm8foY6gH5gnIObSHZ9WPqwIAk81Sbl0R9Wx4IO8Z229yMyvLuV/7AQkDQQaUgmFEwx
-         VPNig9dGWJ2gfGK6KkhGI5voI55gJtZwzkFEY2MEHbZa7qFJAm2siNQvDZPMovFTC3OV
-         GpxLreEXWhOn5yJtMimRLEw6xVCJIXIHmmoFj+41mjGo1dQr7qzLrOXo72UXrnfHlMsS
-         3nIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXk6oip0P4SsFNbXbZbonIjUaEijs1Rtf+V96rk9gucmNxgLPaSHWVfFkqOOvZW5MdZ5S8fkueFAHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfhVqG68nVQJ3gfdYVBlGHQZo0ie3y7SBjs5bgoMZuxu5j+3bS
-	xobEIwjVvL2IkU9l1LxTF9m2i4HUuE+qvYulXGYjNJXTrK6NYkaWHiten8vG6NcpM5M=
-X-Gm-Gg: ASbGnctsLoRi6CHib1aqxIgahQ2AJLHasKecDuO1UTwVmr/RaUC+EirgcqONpusVVxE
-	VhJjQIt7d0upy8d3SprYnNY3kqM/Qiqgy+GsdizKGysbwKNDv/pmSKkPR2D9yy4w1j/IZhAgUg9
-	d+dhq3o4oUVj423O6xLKqlmqEAfBUs0kLUQjXn5fF3qycCFnMV8HmWHvqAK9AJltbZy0IdbJQxB
-	gj4EgT75SSST472Cwq3GhOGP9lktRwfz4ZwQj5IssY/c0nECe9/X0BL40TktnD5Q+f/l28oxNST
-	NVFtW3IfYvTOVU3I4/gn3OJLP31nKy+eq/vqh104I7yaBLPWBlPj06OAR1be04+eK2zh8sLx6g=
-	=
-X-Google-Smtp-Source: AGHT+IFj/92g3whVxpQw6epJ8erxr41B6yeOCvcx7GO6lf54G69SSlkGJYeTUltMLbQjoibNN4lnuQ==
-X-Received: by 2002:a05:6e02:3005:b0:3dd:cbbb:b731 with SMTP id e9e14a558f8ab-3e054964204mr8903415ab.9.1751410587674;
-        Tue, 01 Jul 2025 15:56:27 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50204a537b3sm2634438173.69.2025.07.01.15.56.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Jul 2025 15:56:27 -0700 (PDT)
-Message-ID: <fac026d8-12c8-4c1f-96a7-264ced8391f1@linuxfoundation.org>
-Date: Tue, 1 Jul 2025 16:56:26 -0600
+        d=1e100.net; s=20230601; t=1751417428; x=1752022228;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1UjWU9DgFQCNhvgTD5ruT/8327dSWQNCYceTI5PJtj8=;
+        b=lk3Q48NtcZJdWGeQFhIXZg9PaW+7is8qAxbr19+WJ9Gaey7W17/Y1zsbsEyUneUC9L
+         WV87KZ0Hj4miiKg405uhWNjBhVEu6j8+WrGqkNVdLUchlQ2RWITTyP7Qgc9t4UGDwbw2
+         MvxHcIyuhnw+I9+Fw0XXHsleY83a991H+oOFrTm4+pCi/FK+9eLUXKdUfFbMZKh2fzJh
+         b9hRtOmqpppYG2qH0LQHPEl661Xn+vFLvseEm2Syl286BRkVKCCOsv+Xl9gjFjTzybod
+         6qyZDicUuIFdLfznjaWPLCO69k5muBvwcbJ6m6QfJxNgFzG0WrnF134HKAEzmzfTVUg+
+         LtmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXZQkWst0yZFjYLJXIxSBjlHG34/Bu0cwmkcC4F3uYfU/iWM8aZ0G3imvn55wZHEPDyaLtRB+CEHu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxe2rDSs5YA2U2G4Tz6D+weOpjTc/Uy97Rg1uaUR2tiNWrzlaOK
+	RsjWPk6z8umVDeBKvbF7eNBqBd9Gqfyd3znFWs4Z64346tps/c6gE0x9jdV7o+ZnfE7AgiIbFsS
+	AKixm4F43OIx+D7qapYehwtoga5MISQFP5bd/ozQ2doGInYO38FmJhVsr0PQ=
+X-Google-Smtp-Source: AGHT+IHjjKHzNci4IOZNFW52Q91o1vdcxoa5AAK/qrEMCE+HHPohm3MUb06FEbUX7KMb+WjKJeapEvX8F9wdgwjdJMlaz9KutH6l
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: convert to use faux_device
-To: Zongmin Zhou <min_halo@163.com>, Greg KH <gregkh@linuxfoundation.org>
-Cc: shuah@kernel.org, valentina.manea.m@gmail.com, i@zenithal.me,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- zhouzongmin@kylinos.cn, Shuah Khan <skhan@linuxfoundation.org>
-References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
- <20250604065410.76069-1-min_halo@163.com>
- <2025061926-paycheck-footnote-a2b8@gregkh>
- <c7a2cc26-794e-49e1-bf8c-35617bb8060f@163.com>
- <2025062010-hardiness-flashily-cb0f@gregkh>
- <9d95bb75-586c-48dc-9e34-432cc13fd99f@163.com>
- <2025062004-navy-emboss-4743@gregkh>
- <2e0bbc5a-e74a-4fb5-884c-686dbaf99caf@linuxfoundation.org>
- <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <48ab511e-2847-4daa-98de-a234b8584b78@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:2287:b0:3dd:e7d6:18bb with SMTP id
+ e9e14a558f8ab-3e054a0eca1mr12733075ab.17.1751417428186; Tue, 01 Jul 2025
+ 17:50:28 -0700 (PDT)
+Date: Tue, 01 Jul 2025 17:50:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68648254.a70a0220.3b7e22.20c4.GAE@google.com>
+Subject: [syzbot] [usb?] INFO: task hung in hub_activate (3)
+From: syzbot <syzbot+d630bd89141124cc543e@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/23/25 21:21, Zongmin Zhou wrote:
-> 
-> On 2025/6/21 01:26, Shuah Khan wrote:
->> On 6/20/25 03:27, Greg KH wrote:
->>> On Fri, Jun 20, 2025 at 05:19:33PM +0800, Zongmin Zhou wrote:
->>>>
->>>> On 2025/6/20 12:29, Greg KH wrote:
->>>>> On Fri, Jun 20, 2025 at 10:16:16AM +0800, Zongmin Zhou wrote:
->>>>>> On 2025/6/19 19:01, Greg KH wrote:
->>>>>>> On Wed, Jun 04, 2025 at 02:54:10PM +0800, Zongmin Zhou wrote:
->>>>>>>> From: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>>>>>
->>>>>>>> The vhci driver does not need to create a platform device,
->>>>>>>> it only did so because it was simple to do that in order to
->>>>>>>> get a place in sysfs to hang some device-specific attributes.
->>>>>>>> Now the faux device interface is more appropriate,change it
->>>>>>>> over to use the faux bus instead.
->>>>>>>>
->>>>>>>> Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
->>>>>>>> ---
->>>>>>>> Changes in v2:
->>>>>>>> - don't change faux create api,just call probe on vhci_hcd_init.
->>>>>>>>
->>>>>>>>     drivers/usb/usbip/vhci.h             |  4 +-
->>>>>>>>     drivers/usb/usbip/vhci_hcd.c         | 86 +++++++++++-----------------
->>>>>>>>     drivers/usb/usbip/vhci_sysfs.c       | 68 +++++++++++-----------
->>>>>>>>     tools/usb/usbip/libsrc/vhci_driver.h |  2 +-
->>>>>>>>     4 files changed, 72 insertions(+), 88 deletions(-)
->>>>>>> I get the following build errors from this patch:
->>>>>>>
->>>>>>> drivers/usb/usbip/vhci_hcd.c:1462:12: error: ‘vhci_hcd_resume’ defined but not used [-Werror=unused-function]
->>>>>>>     1462 | static int vhci_hcd_resume(struct faux_device *fdev)
->>>>>>>          |            ^~~~~~~~~~~~~~~
->>>>>>> drivers/usb/usbip/vhci_hcd.c:1418:12: error: ‘vhci_hcd_suspend’ defined but not used [-Werror=unused-function]
->>>>>>>     1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
->>>>>>>          |            ^~~~~~~~~~~~~~~~
->>>>>>> cc1: all warnings being treated as errors
->>>>>>>
->>>>>>> Are you sure you tested this?
->>>>>> I apologize for not enabling -Werror, which resulted in missing this error
->>>>>> warning.
->>>>>> I have tested usbip feature use the new patch,but not test system
->>>>>> suspend/resume.
->>>>>> The faux bus type don't add pm function,and vhci-hcd driver can't register
->>>>>> it.
->>>>>> Maybe have to add suspend/resume for it.like below:
->>>>>> static const struct bus_type faux_bus_type = {
->>>>>>       .name        = "faux",
->>>>>>       .match        = faux_match,
->>>>>>       .probe        = faux_probe,
->>>>>>       .remove        = faux_remove,
->>>>>>       .resume     = faux_resume,
->>>>>>       .suspend    = faux_suspend,
->>>>>> };
->>>>>>
->>>>>> Is that right?
->>>>>> Your expertise would be greatly valued.
->>>>> As this is not real hardware, why do you need the suspend/resume
->>>>> callbacks at all?  What is happening here that requires them?
->>>> @greg,
->>>> The vhci_hcd_suspend/vhci_hcd_resume interfaces are not designed for this
->>>> faux device, but rather to
->>>> manipulate the HCD_FLAG_HW_ACCESSIBLE bit in the hcd flags associated with
->>>> the faux device.
->>>> For example:
->>>> During system standby: clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
->>>> During system wakeup: set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags)
->>>>
->>>> Previously, these two functions were registered through platform_driver,
->>>> but faux bus does not have the relevant interface, so they were not called,
->>>> resulting in this compilation warning error.
->>>>
->>>> This raises the question: Should the faux bus implement PM-related
->>>> interface?
->>>> I'm uncertain whether these functions are essential for the vhci-hcd driver
->>>> or if they can be safely removed.
->>>>
->>>> However, during system standby/wakeup tests with remote USB devices bound to
->>>> the vhci-hcd driver,
->>>> I observed consistent failure scenarios across both the original platform
->>>> bus and faux bus patch implementations.
->>
->> suspend and resume hooks have been in the code from beginning
->> in the CONFIG_PM path. The original authors are skeptical about
->> what should happen during suspend"
->>
->> /* what should happen for USB/IP under suspend/resume? */
->> suspend hook checks for active connections and sends EBBUSY
->> back to pm core.
->>
->> Active connection means any of the ports are in USB_PORT_STAT_CONNECTION
->> state. So as long as there are active connections between vhci client
->> and the host, suspend won't work. So we really don't know what happens
->> to the active connections if there are no suspend/resume hooks.
->>
->> If there are no active connections, then it will clear the HCD_FLAG_HW_ACCESSIBLE
->> bit and returns to pm core to continue with suspend.
->>
->> resume sets the HCD_FLAG_HW_ACCESSIBLE flag to indicate hardware is accessible
->> and initiates port status poll.
->>
->> - suspend hook prevents suspend
->>
->> With faux device since there is no suspend and resume hook, I would expect
->> these hooks are not a factor in suspend and resume.
->>
->> vhci_hcd is a special case virtual driver as it is a proxy for controlling
->> hardware on the host.
->>
->> Zongmin,
->>
->> Do suspend/resume work when vhci_hcd is not loaded?
->> What happens when when system suspends and resumes with faux device?
->> Can you send me dmesg logs and pm logs?
->>
-> Hi Greg,shuah
-> 
-> Yes, system with vhci_hcd unload or just load vhci_hcd driver
-> without usbip devices bound to vhci_hcd,system suspend/resume worked well.
-> Some logs for you.
+Hello,
 
-Sorry for the delay. I was at a conference last week.
-Thank you for sending these logs.
+syzbot found the following issue on:
 
-> 1.system with vhci_hcd driver load,but don't bound any usbip devices to vhci_hcd,suspend/resume worked well.
-> see dmesg-faux bus-load.log
+HEAD commit:    1343433ed389 Add linux-next specific files for 20250630
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d1f88c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=66357ac5b0466f16
+dashboard link: https://syzkaller.appspot.com/bug?extid=d630bd89141124cc543e
+compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e07757-1~exp1~20250514183223.118), Debian LLD 20.1.6
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b005e1db0f8c/disk-1343433e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cb3aa8bfd514/vmlinux-1343433e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e01227599a09/bzImage-1343433e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d630bd89141124cc543e@syzkaller.appspotmail.com
+
+INFO: task kworker/0:0:9 blocked for more than 143 seconds.
+      Not tainted 6.16.0-rc4-next-20250630-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:0     state:D stack:21240 pid:9     tgid:9     ppid:2      task_flags:0x4208060 flags:0x00004000
+Workqueue: events_power_efficient hub_init_func2
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5313 [inline]
+ __schedule+0x16f5/0x4d00 kernel/sched/core.c:6696
+ __schedule_loop kernel/sched/core.c:6774 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6789
+ schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6846
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0x724/0xe80 kernel/locking/mutex.c:747
+ device_lock include/linux/device.h:884 [inline]
+ hub_activate+0xb7/0x1ea0 drivers/usb/core/hub.c:1096
+ process_one_work kernel/workqueue.c:3239 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3322
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3403
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+INFO: task kworker/1:0:24 blocked for more than 143 seconds.
+      Not tainted 6.16.0-rc4-next-20250630-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:0     state:D stack:22792 pid:24    tgid:24    ppid:2      task_flags:0x4288060 flags:0x00004000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5313 [inline]
+ __schedule+0x16f5/0x4d00 kernel/sched/core.c:6696
+ __schedule_loop kernel/sched/core.c:6774 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6789
+ schedule_timeout+0x9a/0x270 kernel/time/sleep_timeout.c:75
+ do_wait_for_common kernel/sched/completion.c:100 [inline]
+ __wait_for_common kernel/sched/completion.c:121 [inline]
+ wait_for_common kernel/sched/completion.c:132 [inline]
+ wait_for_completion+0x2bf/0x5d0 kernel/sched/completion.c:153
+ __flush_work+0x9b9/0xbc0 kernel/workqueue.c:4247
+ flush_work kernel/workqueue.c:4268 [inline]
+ flush_delayed_work+0x13e/0x190 kernel/workqueue.c:4290
+ hub_quiesce+0x1f0/0x330 drivers/usb/core/hub.c:1421
+ hub_disconnect+0xc8/0x470 drivers/usb/core/hub.c:1821
+ usb_unbind_interface+0x26b/0x910 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x4d6/0x7c0 drivers/base/dd.c:1295
+ bus_remove_device+0x34d/0x410 drivers/base/bus.c:579
+ device_del+0x511/0x8e0 drivers/base/core.c:3880
+ usb_disable_device+0x3e9/0x8a0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x330/0x950 drivers/usb/core/hub.c:2349
+ hub_port_connect drivers/usb/core/hub.c:5411 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5711 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1cdb/0x4a00 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3239 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3322
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3403
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+INFO: task kworker/1:4:5881 blocked for more than 144 seconds.
+      Not tainted 6.16.0-rc4-next-20250630-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:4     state:D stack:21304 pid:5881  tgid:5881  ppid:2      task_flags:0x4208060 flags:0x00004000
+Workqueue: events_power_efficient hub_init_func2
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5313 [inline]
+ __schedule+0x16f5/0x4d00 kernel/sched/core.c:6696
+ __schedule_loop kernel/sched/core.c:6774 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6789
+ schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6846
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0x724/0xe80 kernel/locking/mutex.c:747
+ device_lock include/linux/device.h:884 [inline]
+ hub_activate+0xb7/0x1ea0 drivers/usb/core/hub.c:1096
+ process_one_work kernel/workqueue.c:3239 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3322
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3403
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+INFO: task kworker/0:5:5923 blocked for more than 144 seconds.
+      Not tainted 6.16.0-rc4-next-20250630-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:5     state:D stack:20840 pid:5923  tgid:5923  ppid:2      task_flags:0x4288060 flags:0x00004000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5313 [inline]
+ __schedule+0x16f5/0x4d00 kernel/sched/core.c:6696
+ __schedule_loop kernel/sched/core.c:6774 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6789
+ schedule_timeout+0x9a/0x270 kernel/time/sleep_timeout.c:75
+ do_wait_for_common kernel/sched/completion.c:100 [inline]
+ __wait_for_common kernel/sched/completion.c:121 [inline]
+ wait_for_common kernel/sched/completion.c:132 [inline]
+ wait_for_completion+0x2bf/0x5d0 kernel/sched/completion.c:153
+ __flush_work+0x9b9/0xbc0 kernel/workqueue.c:4247
+ flush_work kernel/workqueue.c:4268 [inline]
+ flush_delayed_work+0x13e/0x190 kernel/workqueue.c:4290
+ hub_quiesce+0x1f0/0x330 drivers/usb/core/hub.c:1421
+ hub_disconnect+0xc8/0x470 drivers/usb/core/hub.c:1821
+ usb_unbind_interface+0x26b/0x910 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x4d6/0x7c0 drivers/base/dd.c:1295
+ bus_remove_device+0x34d/0x410 drivers/base/bus.c:579
+ device_del+0x511/0x8e0 drivers/base/core.c:3880
+ usb_disable_device+0x3e9/0x8a0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x330/0x950 drivers/usb/core/hub.c:2349
+ hub_port_connect drivers/usb/core/hub.c:5411 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5711 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1cdb/0x4a00 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3239 [inline]
+ process_scheduled_works+0xae1/0x17b0 kernel/workqueue.c:3322
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3403
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+Showing all locks held in the system:
+3 locks held by kworker/0:0/9:
+ #0: ffff88801a882148 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #0: ffff88801a882148 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3322
+ #1: ffffc900000e7bc0 ((work_completion)(&(&hub->init_work)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3215 [inline]
+ #1: ffffc900000e7bc0 ((work_completion)(&(&hub->init_work)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3322
+ #2: ffff888023888198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #2: ffff888023888198 (&dev->mutex){....}-{4:4}, at: hub_activate+0xb7/0x1ea0 drivers/usb/core/hub.c:1096
+5 locks held by kworker/1:0/24:
+ #0: ffff8880216a2148 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #0: ffff8880216a2148 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3322
+ #1: ffffc900001e7bc0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3215 [inline]
+ #1: ffffc900001e7bc0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3322
+ #2: ffff8880287da198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #2: ffff8880287da198 (&dev->mutex){....}-{4:4}, at: hub_event+0x184/0x4a00 drivers/usb/core/hub.c:5899
+ #3: ffff888026f14198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #3: ffff888026f14198 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0xf8/0x950 drivers/usb/core/hub.c:2340
+ #4: ffff888078818160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #4: ffff888078818160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1094 [inline]
+ #4: ffff888078818160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xb6/0x7c0 drivers/base/dd.c:1292
+1 lock held by khungtaskd/31:
+ #0: ffffffff8e33bee0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #0: ffffffff8e33bee0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #0: ffffffff8e33bee0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x2e/0x180 kernel/locking/lockdep.c:6770
+2 locks held by getty/5593:
+ #0: ffff8880308ca0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
+ #1: ffffc9000331b2f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x43e/0x1400 drivers/tty/n_tty.c:2222
+3 locks held by kworker/1:4/5881:
+ #0: ffff88801a882148 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #0: ffff88801a882148 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3322
+ #1: ffffc90004347bc0 ((work_completion)(&(&hub->init_work)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3215 [inline]
+ #1: ffffc90004347bc0 ((work_completion)(&(&hub->init_work)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3322
+ #2: ffff888026f14198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #2: ffff888026f14198 (&dev->mutex){....}-{4:4}, at: hub_activate+0xb7/0x1ea0 drivers/usb/core/hub.c:1096
+5 locks held by kworker/0:5/5923:
+ #0: ffff8880216a2148 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3214 [inline]
+ #0: ffff8880216a2148 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3322
+ #1: ffffc90004587bc0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3215 [inline]
+ #1: ffffc90004587bc0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3322
+ #2: ffff8881443e8198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #2: ffff8881443e8198 (&dev->mutex){....}-{4:4}, at: hub_event+0x184/0x4a00 drivers/usb/core/hub.c:5899
+ #3: ffff888023888198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #3: ffff888023888198 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0xf8/0x950 drivers/usb/core/hub.c:2340
+ #4: ffff88807a6b6160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:884 [inline]
+ #4: ffff88807a6b6160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1094 [inline]
+ #4: ffff88807a6b6160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xb6/0x7c0 drivers/base/dd.c:1292
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 31 Comm: khungtaskd Not tainted 6.16.0-rc4-next-20250630-syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ nmi_cpu_backtrace+0x39e/0x3d0 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x17a/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:158 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:307 [inline]
+ watchdog+0xfee/0x1030 kernel/hung_task.c:470
+ kthread+0x70e/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 5820 Comm: syz-executor Not tainted 6.16.0-rc4-next-20250630-syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+RIP: 0010:arch_static_branch arch/x86/include/asm/jump_label.h:36 [inline]
+RIP: 0010:native_write_msr arch/x86/include/asm/msr.h:139 [inline]
+RIP: 0010:wrmsrq arch/x86/include/asm/msr.h:199 [inline]
+RIP: 0010:native_apic_msr_write+0x39/0x50 arch/x86/include/asm/apic.h:212
+Code: 74 2a 83 ff 30 74 25 eb 10 81 ff d0 00 00 00 74 1b 81 ff e0 00 00 00 74 13 c1 ef 04 81 c7 00 08 00 00 89 f9 89 f0 31 d2 0f 30 <66> 90 c3 cc cc cc cc cc f3 0f 1e fa 89 f6 31 d2 e9 42 c9 93 03 66
+RSP: 0018:ffffc90004027af8 EFLAGS: 00000046
+RAX: 0000000000010001 RBX: ffff8880b8623900 RCX: 0000000000000838
+RDX: 0000000000000000 RSI: 0000000000010001 RDI: 0000000000000838
+RBP: 0000000000000001 R08: 0000000000000000 R09: ffffffff81ae7cae
+R10: 0000000000000003 R11: ffffffff817054a0 R12: 0000000010004b7f
+R13: dffffc0000000000 R14: 0000000000010001 R15: 0000000000000020
+FS:  000055555dbfe500(0000) GS:ffff8881259e4000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9d3dd81178 CR3: 000000007685a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ apic_write arch/x86/include/asm/apic.h:405 [inline]
+ lapic_next_event+0x11/0x20 arch/x86/kernel/apic/apic.c:416
+ clockevents_program_event+0x1cc/0x360 kernel/time/clockevents.c:334
+ hrtimer_start_range_ns+0xda6/0x1080 kernel/time/hrtimer.c:1330
+ hrtimer_start_expires include/linux/hrtimer.h:277 [inline]
+ hrtimer_sleeper_start_expires kernel/time/hrtimer.c:2023 [inline]
+ do_nanosleep+0x191/0x600 kernel/time/hrtimer.c:2097
+ hrtimer_nanosleep+0x169/0x360 kernel/time/hrtimer.c:2147
+ __do_sys_clock_nanosleep kernel/time/posix-timers.c:1399 [inline]
+ __se_sys_clock_nanosleep+0x2ee/0x380 kernel/time/posix-timers.c:1376
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f14d39c11a3
+Code: 1f 84 00 00 00 00 00 83 ff 03 74 7b 83 ff 02 b8 fa ff ff ff 49 89 ca 0f 44 f8 80 3d 9e 43 1c 00 00 74 14 b8 e6 00 00 00 0f 05 <f7> d8 c3 66 2e 0f 1f 84 00 00 00 00 00 48 83 ec 28 48 89 54 24 10
+RSP: 002b:00007ffc771e7aa8 EFLAGS: 00000202 ORIG_RAX: 00000000000000e6
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f14d39c11a3
+RDX: 00007ffc771e7ac0 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 000000001cc70deb R09: 7fffffffffffffff
+R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc771e7f10
+R13: 0000000000000004 R14: 00007ffc771e7afc R15: 00007ffc771e7b90
+ </TASK>
 
 
-> 
-> 2.usbip device bound to vhci_hcd,and do system suspend action,suspend/resume worked failed.
-> I observed two distinct failure scenario:
-> Scenario 1: System failed to enter suspend state,and will auto resume;
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-> the log for use platform bus:
-> dmesg-platform bus-device bound-auto resume.log
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-This is clear from the suspend hook in the vhci_hcd.
-When it returns EBUSY, suspend will fail and move to
-auto resume.
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-> the log for use faux bus:
-> dmesg-faux bus-device bound-auto resume.log
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-It is good that the behavior is same with faux bus even though
-suspend hook isn't called. I will take a look at the log.
-
-> 
-> Scenario 2: System resume failed with black screen freeze,a forced restart of the machine is require.
-> the log for use platform bus:
-> dmesg-platform bus-device bound-black screen.log
-> the log for use faux bus:
-> dmesg-faux bus-device bound-black screen.log
-
-That is bad. When does this happen? Is there a difference in
-configuration?
-
-The behavior same for platform bus and faux bus. Sounds like
-an existing problem that needs to be debugged separately.
-
-I will take a look at all these logs and get back to you in
-a day or two.
-
-thanks,
--- Shuah
+If you want to undo deduplication, reply with:
+#syz undup
 
